@@ -468,7 +468,7 @@ class MultiWorld():
         return False
 
 
-class CollectionState(SMBoolManager):
+class CollectionState():
 
     def __init__(self, parent: MultiWorld):
         super().__init__()
@@ -520,6 +520,7 @@ class CollectionState(SMBoolManager):
 
     def copy(self) -> CollectionState:
         ret = CollectionState(self.world)
+        ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in range(1, self.world.players + 1)}
         ret.prog_items = self.prog_items.copy()
         ret.reachable_regions = {player: copy.copy(self.reachable_regions[player]) for player in
                                  range(1, self.world.players + 1)}

@@ -1,6 +1,8 @@
 import logging
 from typing import Set
 
+from logic.smboolmanager import SMBoolManager
+
 logger = logging.getLogger("Super Metroid")
 
 from .Locations import lookup_name_to_id as locations_lookup_name_to_id
@@ -45,7 +47,7 @@ class SMWorld(World):
         # Link regions
         #self.world.get_entrance('Landing Site', self.player).connect(self.world.get_region('Zebes', self.player))
 
-        self.itemManager = ItemManager('Chozo', self.qty, self.world.state, 100, easy)
+        self.itemManager = ItemManager('Chozo', self.qty, SMBoolManager(), 100, easy)
         self.itemManager.createItemPool()
         itemPool = self.itemManager.getItemPool()
         
@@ -143,7 +145,7 @@ class SMWorld(World):
         return slot_data
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        state.addItem(item.type)
+        state.smbm[self.player].addItem(item.type)
         if item.advancement:
             state.prog_items[item.name, item.player] += 1
             return True  # indicate that a logical state change has occured
