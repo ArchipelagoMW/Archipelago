@@ -230,8 +230,8 @@ def main(args, seed=None):
 
     ShopSlotFill(world)
 
-    #if world.players > 1:
-    #    balance_multiworld_progression(world)
+    if world.players > 1:
+        balance_multiworld_progression(world)
 
     logger.info('Generating output files.')
     outfilebase = 'AP_' + world.seed_name
