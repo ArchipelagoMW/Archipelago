@@ -1,6 +1,6 @@
 from __future__ import annotations
 # Factorio technologies are imported from a .json document in /data
-from typing import Dict, Set, FrozenSet, Tuple
+from typing import Dict, Set, FrozenSet, Tuple, Union, List
 from collections import Counter, defaultdict
 import os
 import json
@@ -285,7 +285,7 @@ def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe) -> Set[str
     return {tech.name for tech in techs}
 
 
-free_sample_blacklist = all_ingredient_names | {"rocket-part"}
+free_sample_blacklist: Set[str] = all_ingredient_names | {"rocket-part"}
 
 rocket_recipes = {
     Options.MaxSciencePack.option_space_science_pack:
@@ -308,7 +308,7 @@ advancement_technologies |= {tech.name for tech in required_technologies["rocket
 
 # progressive technologies
 # auto-progressive
-progressive_rows = {}
+progressive_rows: Dict[str, Union[List[str], Tuple[str, ...]]] = {}
 progressive_incs = set()
 for tech_name in tech_table:
     if tech_name.endswith("-1"):
@@ -346,7 +346,6 @@ for root in base_starts:
 # science packs
 progressive_rows["progressive-science-pack"] = tuple(Options.MaxSciencePack.get_ordered_science_packs())[1:]
 
-
 # manual progressive
 progressive_rows["progressive-processing"] = (
     "steel-processing",
@@ -373,18 +372,14 @@ progressive_rows["progressive-flamethrower"] = ("flamethrower",)  # leaving out 
 sorted_rows.append("progressive-flamethrower")
 
 # integrate into
-source_target_mapping = {
-    "progressive-braking-force" : "progressive-train-network",
+source_target_mapping: Dict[str, str] = {
+    "progressive-braking-force": "progressive-train-network",
     "progressive-inserter-capacity-bonus": "progressive-inserter",
     "progressive-flamethrower": "progressive-refined-flammables"
 }
 
 for source, target in source_target_mapping.items():
     progressive_rows[target] += progressive_rows[source]
-
-
-
-
 
 
 base_tech_table = tech_table.copy()  # without progressive techs
@@ -433,8 +428,8 @@ rel_cost = {
 }
 
 # forbid liquids for now, TODO: allow a single liquid per assembler
-blacklist = all_ingredient_names | {"rocket-part", "crude-oil", "water", "sulfuric-acid", "petroleum-gas", "light-oil",
-                                    "heavy-oil", "lubricant", "steam"}
+blacklist: Set[str] = all_ingredient_names | {"rocket-part", "crude-oil", "water", "sulfuric-acid", "petroleum-gas",
+                                              "light-oil", "heavy-oil", "lubricant", "steam"}
 
 @Utils.cache_argsless
 def get_science_pack_pools() -> Dict[str, Set[str]]:
