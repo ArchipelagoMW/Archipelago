@@ -11,6 +11,7 @@ LuaBool = Or(bool, And(int, lambda n: n in (0, 1)))
 
 class MaxSciencePack(Choice):
     """Maximum level of science pack required to complete the game."""
+    displayname = "Maximum Required Science Pack"
     option_automation_science_pack = 0
     option_logistic_science_pack = 1
     option_military_science_pack = 2
@@ -34,6 +35,7 @@ class MaxSciencePack(Choice):
 
 class TechCost(Choice):
     """How expensive are the technologies."""
+    displayname = "Technology Cost Scale"
     option_very_easy = 0
     option_easy = 1
     option_kind = 2
@@ -46,6 +48,7 @@ class TechCost(Choice):
 
 class Silo(Choice):
     """Ingredients to craft rocket silo or auto-place if set to spawn."""
+    displayname = "Rocket Silo"
     option_vanilla = 0
     option_randomize_recipe = 1
     option_spawn = 2
@@ -54,6 +57,7 @@ class Silo(Choice):
 
 class FreeSamples(Choice):
     """Get free items with your technologies."""
+    displayname = "Free Samples"
     option_none = 0
     option_single_craft = 1
     option_half_stack = 2
@@ -63,6 +67,7 @@ class FreeSamples(Choice):
 
 class TechTreeLayout(Choice):
     """Selects how the tech tree nodes are interwoven."""
+    displayname = "Technology Tree Layout"
     option_single = 0
     option_small_diamonds = 1
     option_medium_diamonds = 2
@@ -78,6 +83,7 @@ class TechTreeLayout(Choice):
 
 class TechTreeInformation(Choice):
     """How much information should be displayed in the tech tree."""
+    displayname = "Technology Tree Information"
     option_none = 0
     option_advancement = 1
     option_full = 2
@@ -86,6 +92,7 @@ class TechTreeInformation(Choice):
 
 class RecipeTime(Choice):
     """randomize the time it takes for any recipe to craft, this includes smelting, chemical lab, hand crafting etc."""
+    displayname = "Recipe Time"
     option_vanilla = 0
     option_fast = 1
     option_normal = 2
@@ -106,15 +113,18 @@ class Progressive(Choice):
 
 class RecipeIngredients(Choice):
     """Select if rocket, or rocket + science pack ingredients should be random."""
+    displayname = "Random Recipe Ingredients Level"
     option_rocket = 0
     option_science_pack = 1
 
 
 class FactorioStartItems(OptionDict):
+    displayname = "Starting Items"
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
 
 
 class FactorioWorldGen(OptionDict):
+    displayname = "World Generation"
     # FIXME: do we want default be a rando-optimized default or in-game DS?
     value: typing.Dict[str, typing.Dict[str, typing.Any]]
     default = {
@@ -245,6 +255,11 @@ class FactorioWorldGen(OptionDict):
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
+class ImportedBlueprint(DefaultOnToggle):
+    displayname = "Blueprints"
+
+class ProgressiveToggle(DefaultOnToggle):
+    displayname = "Progressive Technologies"
 
 factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,
@@ -256,7 +271,7 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "starting_items": FactorioStartItems,
     "recipe_time": RecipeTime,
     "recipe_ingredients": RecipeIngredients,
-    "imported_blueprints": DefaultOnToggle,
+    "imported_blueprints": ImportedBlueprint,
     "world_gen": FactorioWorldGen,
-    "progressive": DefaultOnToggle
+    "progressive": ProgressiveToggle
 }

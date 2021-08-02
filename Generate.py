@@ -754,5 +754,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
 if __name__ == '__main__':
     import atexit
-    atexit.register(input, "Press enter to close.")
+    confirmation = atexit.register(input, "Press enter to close.")
     main()
+    # in case of error-free exit should not need confirmation
+    atexit.unregister(confirmation)

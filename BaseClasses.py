@@ -1104,7 +1104,7 @@ class Item():
         return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
 
-class Spoiler(object):
+class Spoiler():
     world: MultiWorld
 
     def __init__(self, world):
@@ -1295,9 +1295,10 @@ class Spoiler(object):
                 outfile.write('Accessibility:                   %s\n' % self.metadata['accessibility'][player])
                 options = self.world.worlds[player].options
                 if options:
-                    for f_option in options:
+                    for f_option, option in options.items():
                         res = getattr(self.world, f_option)[player]
-                        outfile.write(f'{f_option+":":33}{bool_to_text(res) if type(res) == Options.Toggle else res.get_option_name()}\n')
+                        displayname = getattr(option, "displayname", f_option)
+                        outfile.write(f'{displayname+":":33}{bool_to_text(res) if type(res) == Options.Toggle else res.get_option_name()}\n')
 
                 if player in self.world.get_game_players("A Link to the Past"):
                     for team in range(self.world.teams):
