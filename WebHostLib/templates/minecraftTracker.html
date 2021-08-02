@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ player_name }}&apos;s Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/minecraftTracker.css") }}"/>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/playerTracker.js") }}"></script>
+</head>
+
+<body>
+    <div id="player-tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
+        <table id="inventory-table">
+            <tr>
+                <td><img src="{{ tools_url }}" class="{{ 'acquired' }}" title="Progressive Tools" /></td>
+                <td><img src="{{ weapons_url }}" class="{{ 'acquired' }}" title="Progressive Weapons" /></td>
+                <td><img src="{{ armor_url }}" class="{{ 'acquired' }}" title="Progressive Armor" /></td>
+                <td><img src="{{ icons['Iron Ingot'] }}" class="{{ 'acquired' if 'Ingot Crafting' in acquired_items }}" title="Ingot Crafting" /></td>
+                <td><img src="{{ icons['Brewing Stand'] }}" class="{{ 'acquired' if 'Brewing' in acquired_items }}" title="Brewing" /></td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Ender Pearl'] }}" class="{{ 'acquired' if '3 Ender Pearls' in acquired_items }}" title="Ender Pearls" />
+                        <div class="item-count">{{ pearls_count }}</div>
+                    </div>
+                </td>
+            <tr>
+                <td><img src="{{ icons['Bucket'] }}" class="{{ 'acquired' if 'Bucket' in acquired_items }}" title="Bucket" /></td>
+                <td><img src="{{ icons['Bow'] }}" class="{{ 'acquired' if 'Archery' in acquired_items }}" title="Archery" /></td>
+                <td><img src="{{ icons['Shield'] }}" class="{{ 'acquired' if 'Shield' in acquired_items }}" title="Shield" /></td>
+                <td><img src="{{ icons['Block of Iron'] }}" class="{{ 'acquired' if 'Resource Blocks' in acquired_items }}" title="Resource Blocks" /></td>
+                <td><img src="{{ icons['Red Bed'] }}" class="{{ 'acquired' if 'Bed' in acquired_items }}" title="Bed" /></td>
+                <td>
+                    <div class="counted-item">
+                        <img src="{{ icons['Netherite Scrap'] }}" class="{{ 'acquired' if '8 Netherite Scrap' in acquired_items }}" title="Netherite Scrap" />
+                        <div class="item-count">{{ scrap_count }}</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><img src="{{ icons['Flint and Steel'] }}" class="{{ 'acquired' if 'Flint and Steel' in acquired_items }}" title="Flint and Steel" /></td>
+                <td><img src="{{ icons['Enchanting Table'] }}" class="{{ 'acquired' if 'Enchanting' in acquired_items }}" title="Enchanting" /></td>
+                <td><img src="{{ icons['Fishing Rod'] }}" class="{{ 'acquired' if 'Fishing Rod' in acquired_items }}" title="Fishing Rod" /></td>
+                <td><img src="{{ icons['Campfire'] }}" class="{{ 'acquired' if 'Campfire' in acquired_items }}" title="Campfire" /></td>
+                <td><img src="{{ icons['Water Bottle'] }}" class="{{ 'acquired' if 'Bottles' in acquired_items }}" title="Bottles" /></td>
+                <td><img src="{{ icons['Dragon Head'] }}" class="{{ 'acquired' if game_finished }}" title="Ender Dragon" /></td>
+            <tr>
+        </table>
+        <table id="location-table">
+            <thead>
+            <tr>
+                <th>Location</th>
+                <th>Checked</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for name in checked_locations %}
+                <tr>
+                    <td>{{ name | location_name}}</td>
+                    <td>✔</td>
+                </tr>
+                {%- endfor -%}
+                {% for name in not_checked_locations %}
+                <tr>
+                    <td>{{ name | location_name}}</td>
+                    <td></td>
+                </tr>
+                {%- endfor -%}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
