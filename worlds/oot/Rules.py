@@ -201,19 +201,18 @@ def set_shop_rules(ootworld):
 
 # This function should be ran once after setting up entrances and before placing items
 # The goal is to automatically set item rules based on age requirements in case entrances were shuffled
-def set_entrances_based_rules(worlds):
+def set_entrances_based_rules(ootworld):
 
-    # Use the states with all items available in the pools for this seed
-    complete_itempool = [item for world in worlds for item in world.get_itempool_with_dungeon_items()]
-    search = Search([world.state for world in worlds])
-    search.collect_all(complete_itempool)
-    search.collect_locations()
+    if ootworld.world.accessibility == 'beatable': 
+        return
 
-    for world in worlds:
-        for location in world.get_locations():
-            if location.type == 'Shop':
-                # If All Locations Reachable is on, prevent shops only ever reachable as child from containing Buy Goron Tunic and Buy Zora Tunic items
-                if not world.check_beatable_only:
-                    if not search.can_reach(location.parent_region, age='adult'):
-                        forbid_item(location, 'Buy Goron Tunic')
-                        forbid_item(location, 'Buy Zora Tunic')
+    all_state = ootworld.world.get_all_state()
+    for item in ootworld.get_dungeon_items():
+        ootworld.collect(all_state, item)
+
+    for location in ootworld.get_locations():
+        # If a shop is not reachable as adult, it can't have Goron Tunic or Zora Tunic as child can't buy these
+        if location.type == 'Shop' and not all_state._oot_reach_as_age(location.parent_region.name, 'adult', ootworld.player):
+            forbid_item(location, 'Buy Goron Tunic', ootworld.player)
+            forbid_item(location, 'Buy Zora Tunic', ootworld.player)
+

@@ -7,10 +7,11 @@ logger = logging.getLogger("Ocarina of Time")
 
 from .Location import OOTLocation, LocationFactory
 from .Entrance import OOTEntrance
+from .EntranceShuffle import shuffle_random_entrances
 from .Items import OOTItem, item_table, oot_data_to_ap_id
 from .ItemPool import generate_itempool, get_junk_item, get_junk_pool
 from .Regions import OOTRegion, TimeOfDay
-from .Rules import set_rules, set_shop_rules
+from .Rules import set_rules, set_shop_rules, set_entrances_based_rules
 from .RuleParser import Rule_AST_Transformer
 from .Options import oot_options
 from .Utils import data_path, read_json
@@ -344,6 +345,9 @@ class OOTWorld(World):
         for region in self.regions:
             for exit in region.exits:
                 exit.connect(self.world.get_region(exit.vanilla_connected_region, self.player))
+        if self.entrance_shuffle:
+            shuffle_random_entrances(self)
+        set_entrances_based_rules(self)
 
 
     def set_rules(self): 
@@ -541,6 +545,9 @@ class OOTWorld(World):
 
 
     # Helper functions
+    def get_dungeon_items(self):
+        return [item for dungeon in self.dungeons for item in dungeon.all_items]
+
     def get_shuffled_entrances(self):
         return []
 
