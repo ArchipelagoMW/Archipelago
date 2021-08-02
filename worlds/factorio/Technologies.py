@@ -375,7 +375,7 @@ sorted_rows.append("progressive-flamethrower")
 source_target_mapping: Dict[str, str] = {
     "progressive-braking-force": "progressive-train-network",
     "progressive-inserter-capacity-bonus": "progressive-inserter",
-    "progressive-flamethrower": "progressive-refined-flammables"
+    "progressive-refined-flammables": "progressive-flamethrower"
 }
 
 for source, target in source_target_mapping.items():
