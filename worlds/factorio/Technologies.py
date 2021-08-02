@@ -355,16 +355,37 @@ progressive_rows["progressive-processing"] = (
 progressive_rows["progressive-rocketry"] = ("rocketry", "explosive-rocketry", "atomic-bomb")
 progressive_rows["progressive-vehicle"] = ("automobilism", "tank", "spidertron")
 progressive_rows["progressive-train-network"] = ("railway", "fluid-wagon",
-                                                 "automated-rail-transportation", "rail-signals") + progressive_rows["progressive-braking-force"]
-del(progressive_rows["progressive-braking-force"])
+                                                 "automated-rail-transportation", "rail-signals")
 progressive_rows["progressive-engine"] = ("engine", "electric-engine")
 progressive_rows["progressive-armor"] = ("heavy-armor", "modular-armor", "power-armor", "power-armor-mk2")
 progressive_rows["progressive-personal-battery"] = ("battery-equipment", "battery-mk2-equipment")
 progressive_rows["progressive-energy-shield"] = ("energy-shield-equipment", "energy-shield-mk2-equipment")
 progressive_rows["progressive-wall"] = ("stone-wall", "gate")
-progressive_rows["progressive-turret"] = ("gun-turret", "laser-turret")
 progressive_rows["progressive-follower"] = ("defender", "distractor", "destroyer")
 progressive_rows["progressive-inserter"] = ("fast-inserter", "stack-inserter")
+
+sorted_rows = sorted(progressive_rows)
+# to keep ID mappings the same.
+# If there's a breaking change at some point, then this should be moved in with the sorted ordering
+progressive_rows["progressive-turret"] = ("gun-turret", "laser-turret")
+sorted_rows.append("progressive-turret")
+progressive_rows["progressive-flamethrower"] = ("flamethrower",)  # leaving out flammables, as they do nothing
+sorted_rows.append("progressive-flamethrower")
+
+# integrate into
+source_target_mapping = {
+    "progressive-braking-force" : "progressive-train-network",
+    "progressive-inserter-capacity-bonus": "progressive-inserter",
+    "progressive-flamethrower": "progressive-refined-flammables"
+}
+
+for source, target in source_target_mapping.items():
+    progressive_rows[target] += progressive_rows[source]
+
+
+
+
+
 
 base_tech_table = tech_table.copy()  # without progressive techs
 base_technology_table = technology_table.copy()
@@ -372,7 +393,7 @@ base_technology_table = technology_table.copy()
 progressive_tech_table: Dict[str, int] = {}
 progressive_technology_table: Dict[str, Technology] = {}
 
-for root in sorted(progressive_rows):
+for root in sorted_rows:
     progressive = progressive_rows[root]
     assert all(tech in tech_table for tech in progressive)
     factorio_id += 1
@@ -385,8 +406,9 @@ for root in sorted(progressive_rows):
 
 tech_to_progressive_lookup: Dict[str, str] = {}
 for technology in progressive_technology_table.values():
-    for progressive in technology.progressive:
-        tech_to_progressive_lookup[progressive] = technology.name
+    if technology.name not in source_target_mapping:
+        for progressive in technology.progressive:
+            tech_to_progressive_lookup[progressive] = technology.name
 
 tech_table.update(progressive_tech_table)
 technology_table.update(progressive_technology_table)
