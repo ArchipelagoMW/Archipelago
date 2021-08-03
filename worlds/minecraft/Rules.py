@@ -30,27 +30,30 @@ class MinecraftLogic(LogicMixin):
     def _mc_fortress_loot(self, player: int): # saddles, blaze rods, wither skulls
         return self.can_reach('Nether Fortress', 'Region', player) and self._mc_basic_combat(player)
 
-    def _mc_can_brew_potions(self, player: int): 
+    def _mc_can_brew_potions(self, player: int):
         return self._mc_fortress_loot(player) and self.has('Brewing', player) and self._mc_has_bottle(player)
 
-    def _mc_can_piglin_trade(self, player: int): 
-        return self._mc_has_gold_ingots(player) and (self.can_reach('The Nether', 'Region', player) or self.can_reach('Bastion Remnant', 'Region', player))
+    def _mc_can_piglin_trade(self, player: int):
+        return self._mc_has_gold_ingots(player) and (
+                    self.can_reach('The Nether', 'Region', player) or self.can_reach('Bastion Remnant', 'Region',
+                                                                                     player))
 
-    def _mc_enter_stronghold(self, player: int): 
+    def _mc_enter_stronghold(self, player: int):
         return self._mc_fortress_loot(player) and self.has('Brewing', player) and self.has('3 Ender Pearls', player)
 
     # Difficulty-dependent functions
-    def _mc_combat_difficulty(self, player: int): 
-        return self.world.combat_difficulty[player].get_current_option_name()
+    def _mc_combat_difficulty(self, player: int):
+        return self.world.combat_difficulty[player].get_current_option_name().lower()
 
     def _mc_can_adventure(self, player: int):
-        if self._mc_combat_difficulty(player) == 'easy': 
+        if self._mc_combat_difficulty(player) == 'easy':
             return self.has('Progressive Weapons', player, 2) and self._mc_has_iron_ingots(player)
-        elif self._mc_combat_difficulty(player) == 'hard': 
+        elif self._mc_combat_difficulty(player) == 'hard':
             return True
-        return self.has('Progressive Weapons', player) and (self.has('Ingot Crafting', player) or self.has('Campfire', player))
+        return self.has('Progressive Weapons', player) and (
+                    self.has('Ingot Crafting', player) or self.has('Campfire', player))
 
-    def _mc_basic_combat(self, player: int): 
+    def _mc_basic_combat(self, player: int):
         if self._mc_combat_difficulty(player) == 'easy': 
             return self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and \
                    self.has('Shield', player) and self._mc_has_iron_ingots(player)
