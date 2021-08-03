@@ -42,12 +42,15 @@ class Option(metaclass=AssembleOptions):
     autodisplayname = False
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.get_option_name()})"
+        return f"{self.__class__.__name__}({self.get_current_option_name()})"
 
     def __hash__(self):
         return hash(self.value)
 
-    def get_option_name(self) -> str:
+    def get_current_option_name(self) -> str:
+        return self.get_option_name(self.value)
+
+    def get_option_name(self, value: typing.Any) -> str:
         if self.autodisplayname:
             return self.name_lookup[self.value].replace("_", " ").title()
         else:
@@ -104,8 +107,8 @@ class Toggle(Option):
     def __int__(self):
         return int(self.value)
 
-    def get_option_name(self):
-        return ["No", "Yes"][int(self.value)]
+    def get_option_name(self, value):
+        return ["No", "Yes"][int(value)]
 
 class DefaultOnToggle(Toggle):
     default = 1
@@ -164,7 +167,7 @@ class Range(Option, int):
             return cls(data)
         return cls.from_text(str(data))
 
-    def get_option_name(self):
+    def get_option_name(self, value):
         return str(self.value)
 
     def __str__(self):
@@ -201,8 +204,8 @@ class OptionDict(Option):
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
-    def get_option_name(self):
-        return str(self.value)
+    def get_option_name(self, value):
+        return str(value)
 
 
 local_objective = Toggle  # local triforce pieces, local dungeon prizes etc.

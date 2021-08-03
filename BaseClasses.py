@@ -1298,7 +1298,7 @@ class Spoiler():
                     for f_option, option in options.items():
                         res = getattr(self.world, f_option)[player]
                         displayname = getattr(option, "displayname", f_option)
-                        outfile.write(f'{displayname + ":":33}{res.get_option_name()}\n')
+                        outfile.write(f'{displayname + ":":33}{res.get_current_option_name()}\n')
 
                 if player in self.world.get_game_players("A Link to the Past"):
                     for team in range(self.world.teams):
