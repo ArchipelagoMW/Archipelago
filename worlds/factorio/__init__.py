@@ -1,3 +1,5 @@
+import collections
+
 from ..AutoWorld import World
 
 from BaseClasses import Region, Entrance, Location, Item
@@ -28,14 +30,14 @@ class Factorio(World):
     data_version = 3
 
     def generate_basic(self):
-        want_progressives = {}
+        want_progressives = collections.defaultdict(lambda: self.world.progressive[self.player].
+                                                    want_progressives(self.world.random))
         skip_silo = self.world.silo[self.player].value == Silo.option_spawn
         for tech_name in base_tech_table:
             if skip_silo and tech_name == "rocket-silo":
                 continue
             progressive_item_name = tech_to_progressive_lookup.get(tech_name, tech_name)
-            want_progressive = want_progressives.setdefault(progressive_item_name,
-                                                            self.world.progressive[self.player].want_progressives(self.world.random))
+            want_progressive = want_progressives[progressive_item_name]
             item_name = progressive_item_name if want_progressive else tech_name
             tech_item = self.create_item(item_name)
             if tech_name in self.static_nodes:

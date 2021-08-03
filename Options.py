@@ -7,6 +7,7 @@ class AssembleOptions(type):
     def __new__(mcs, name, bases, attrs):
         options = attrs["options"] = {}
         name_lookup = attrs["name_lookup"] = {}
+        # merge parent class options
         for base in bases:
             if hasattr(base, "options"):
                 options.update(base.options)
@@ -30,24 +31,32 @@ class AssembleOptions(type):
             attrs["__init__"] = validate_decorator(attrs["__init__"])
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
+
 class Option(metaclass=AssembleOptions):
     value: int
     name_lookup: typing.Dict[int, str]
     default = 0
 
-    def __repr__(self):
+    # convert option_name_long into Name Long as displayname, otherwise name_long is the result.
+    # Handled in get_option_name()
+    autodisplayname = False
+
+    def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.get_option_name()})"
 
     def __hash__(self):
         return hash(self.value)
 
-    def get_option_name(self):
-        return self.name_lookup[self.value]
+    def get_option_name(self) -> str:
+        if self.autodisplayname:
+            return self.name_lookup[self.value].replace("_", " ").title()
+        else:
+            return self.name_lookup[self.value]
 
-    def __int__(self):
+    def __int__(self) -> int:
         return self.value
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         return bool(self.value)
 
     @classmethod
@@ -96,12 +105,15 @@ class Toggle(Option):
         return int(self.value)
 
     def get_option_name(self):
-        return bool(self.value)
+        return ["No", "Yes"][int(self.value)]
 
 class DefaultOnToggle(Toggle):
     default = 1
 
+
 class Choice(Option):
+    autodisplayname = True
+
     def __init__(self, value: int):
         self.value: int = value
 
