@@ -40,6 +40,8 @@ class FactorioCommandProcessor(ClientCommandProcessor):
     def _cmd_factorio(self, text: str) -> bool:
         """Send the following command to the bound Factorio Server."""
         if self.ctx.rcon_client:
+            # TODO: Print the command non-silently only for race seeds, or otherwise block anything but /factorio /save in race seeds.
+            self.ctx.print_to_game(f"/factorio {text}")
             result = self.ctx.rcon_client.send_command(text)
             if result:
                 self.output(result)
