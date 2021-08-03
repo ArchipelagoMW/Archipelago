@@ -243,7 +243,7 @@ async def factorio_spinup_server(ctx: FactorioContext):
             while not factorio_queue.empty():
                 msg = factorio_queue.get()
                 factorio_server_logger.info(msg)
-                if "Loading mod AP-" and msg.endswith("(data.lua)"):
+                if "Loading mod AP-" in msg and msg.endswith("(data.lua)"):
                     parts = msg.split()
                     ctx.mod_version = Utils.Version(*(int(number) for number in parts[-2].split(".")))
                 if not rcon_client and "Starting RCON interface at IP ADDR:" in msg:
