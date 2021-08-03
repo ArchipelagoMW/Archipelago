@@ -28,14 +28,15 @@ class Factorio(World):
     data_version = 3
 
     def generate_basic(self):
+        want_progressives = {}
         skip_silo = self.world.silo[self.player].value == Silo.option_spawn
         for tech_name in base_tech_table:
             if skip_silo and tech_name == "rocket-silo":
                 continue
-            if self.world.progressive[self.player]:
-                item_name = tech_to_progressive_lookup.get(tech_name, tech_name)
-            else:
-                item_name = tech_name
+            progressive_item_name = tech_to_progressive_lookup.get(tech_name, tech_name)
+            want_progressive = want_progressives.setdefault(progressive_item_name,
+                                                            self.world.progressive[self.player].want_progressives(self.world.random))
+            item_name = progressive_item_name if want_progressive else tech_name
             tech_item = self.create_item(item_name)
             if tech_name in self.static_nodes:
                 self.world.get_location(tech_name, self.player).place_locked_item(tech_item)

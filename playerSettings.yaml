@@ -106,6 +106,7 @@ Factorio:
   progressive:
     on: 1
     off: 0
+    random: 0
   tech_tree_information:
     none: 0
     advancement: 0 # show which items are a logical advancement

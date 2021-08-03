@@ -100,11 +100,13 @@ class RecipeTime(Choice):
     option_chaos = 5
 
 
-# TODO: implement random
 class Progressive(Choice):
+    displayname = "Progressive Technologies"
     option_off = 0
     option_random = 1
     option_on = 2
+    alias_false = 0
+    alias_true = 2
     default = 2
 
     def want_progressives(self, random):
@@ -258,9 +260,6 @@ class FactorioWorldGen(OptionDict):
 class ImportedBlueprint(DefaultOnToggle):
     displayname = "Blueprints"
 
-class ProgressiveToggle(DefaultOnToggle):
-    displayname = "Progressive Technologies"
-
 factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,
     "tech_tree_layout": TechTreeLayout,
@@ -273,5 +272,5 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "recipe_ingredients": RecipeIngredients,
     "imported_blueprints": ImportedBlueprint,
     "world_gen": FactorioWorldGen,
-    "progressive": ProgressiveToggle
+    "progressive": Progressive
 }
