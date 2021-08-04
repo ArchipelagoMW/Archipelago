@@ -188,6 +188,11 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 factorio_server_logger.info(msg)
                 if not ctx.rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     ctx.rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
+                    # TODO: remove around version 0.2
+                    if ctx.mod_version < Utils.Version(0, 1, 6):
+                        ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
+                        ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
+
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
 
