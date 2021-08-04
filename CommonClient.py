@@ -14,6 +14,7 @@ from worlds import network_data_package, AutoWorldRegister
 
 logger = logging.getLogger("Client")
 
+
 class ClientCommandProcessor(CommandProcessor):
     def __init__(self, ctx: CommonContext):
         self.ctx = ctx
@@ -68,8 +69,6 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No missing location checks found.")
         return True
 
-
-
     def _cmd_ready(self):
         self.ctx.ready = not self.ctx.ready
         if self.ctx.ready:
@@ -82,6 +81,7 @@ class ClientCommandProcessor(CommandProcessor):
 
     def default(self, raw: str):
         asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]))
+
 
 class CommonContext():
     starting_reconnect_delay = 5
@@ -198,7 +198,7 @@ class CommonContext():
         self.input_requests += 1
         return await self.input_queue.get()
 
-    async def connect(self, address= None):
+    async def connect(self, address=None):
         await self.disconnect()
         self.server_task = asyncio.create_task(server_loop(self, address))
 
@@ -294,8 +294,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                 logger.info('Password required')
             logger.info(f"Forfeit setting: {args['forfeit_mode']}")
             logger.info(f"Remaining setting: {args['remaining_mode']}")
-            logger.info(f"A !hint costs {args['hint_cost']}% of checks points and you get {args['location_check_points']}"
-                         f" for each location checked. Use !hint for more information.")
+            logger.info(
+                f"A !hint costs {args['hint_cost']}% of your total location count as points"
+                f" and you get {args['location_check_points']}"
+                f" for each location checked. Use !hint for more information.")
             ctx.hint_cost = int(args['hint_cost'])
             ctx.check_points = int(args['location_check_points'])
             ctx.forfeit_mode = args['forfeit_mode']
