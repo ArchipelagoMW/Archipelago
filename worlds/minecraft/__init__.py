@@ -11,7 +11,7 @@ from BaseClasses import Region, Entrance, Item
 from .Options import minecraft_options
 from ..AutoWorld import World
 
-client_version = 5
+client_version = 6
 
 class MinecraftWorld(World):
     game: str = "Minecraft"
@@ -21,7 +21,7 @@ class MinecraftWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 2
+    data_version = 3
 
     def _get_mc_data(self):
         exits = [connection[0] for connection in default_connections]
