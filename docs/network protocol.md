@@ -371,6 +371,6 @@ Note:
 GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of documentation.
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| item_name_to_id | dict[int, str] | Mapping of all item names to their respective ID. |
+| item_name_to_id | dict[str, int] | Mapping of all item names to their respective ID. |
 | location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID. |
 | version | int | Version number of this game's data |
