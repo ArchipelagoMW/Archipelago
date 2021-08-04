@@ -1,5 +1,5 @@
 import os
-
+from math import ceil
 
 from .Items import MinecraftItem, item_table, required_items, junk_weights
 from .Locations import MinecraftAdvancement, advancement_table, exclusion_table, events_table
@@ -40,6 +40,7 @@ class MinecraftWorld(World):
 
         # Generate item pool
         itempool = []
+        junk_pool = junk_weights.copy()
         # Add all required progression items
         for (name, num) in required_items.items(): 
             itempool += [name] * num
@@ -49,10 +50,10 @@ class MinecraftWorld(World):
             for struct_name in structures:
                 itempool.append(f"Structure Compass ({struct_name})")
         # Add bee traps if desired
-        if self.world.bee_traps[self.player]:
-            itempool += ["Bee Trap (Minecraft)"] * 4
+        bee_trap_quantity = ceil(self.world.bee_traps[self.player] * (len(self.location_names)-len(itempool)) * 0.01)
+        itempool += ["Bee Trap (Minecraft)"] * bee_trap_quantity
         # Fill remaining items with randomly generated junk
-        itempool += self.world.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()), k=len(self.location_names)-len(itempool))
+        itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool))
         # Convert itempool into real items
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
 
