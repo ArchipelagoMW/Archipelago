@@ -15,6 +15,11 @@ class CombatDifficulty(Choice):
     default = 1
 
 
+class BeeTraps(Range): 
+    range_start = 0
+    range_end = 100
+
+
 minecraft_options: typing.Dict[str, type(Option)] = {
     "advancement_goal": AdvancementGoal,
     "combat_difficulty": CombatDifficulty,
@@ -23,5 +28,5 @@ minecraft_options: typing.Dict[str, type(Option)] = {
     "include_postgame_advancements": Toggle,
     "shuffle_structures": Toggle,
     "structure_compasses": Toggle,
-    "bee_traps": Toggle
+    "bee_traps": BeeTraps
 }

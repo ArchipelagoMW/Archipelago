@@ -98,33 +98,4 @@ junk_weights = {
     "32 Arrows": 1,
 }
 
-# If not listed here then has frequency 1
-item_frequencies = {
-    "Progressive Weapons": 3,
-    "Progressive Tools": 3, 
-    "Progressive Armor": 2,
-    "8 Netherite Scrap": 2, 
-    "8 Emeralds": 0,
-    "4 Emeralds": 8, 
-    "4 Diamond Ore": 4, 
-    "16 Iron Ore": 4, 
-    "500 XP": 0,
-    "100 XP": 0,
-    "50 XP": 21,
-    "3 Ender Pearls": 4, 
-    "4 Lapis Lazuli": 2, 
-    "16 Porkchops": 8, 
-    "8 Gold Ore": 4, 
-    "Rotten Flesh": 4, 
-    "Single Arrow": 0, 
-    "32 Arrows": 4,
-    "Structure Compass (Village)": 0,
-    "Structure Compass (Pillager Outpost)": 0,
-    "Structure Compass (Nether Fortress)": 0,
-    "Structure Compass (Bastion Remnant)": 0,
-    "Structure Compass (End City)": 0,
-    "Shulker Box": 0,
-    "Bee Trap (Minecraft)": 0,
-}
-
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
