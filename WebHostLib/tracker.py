@@ -438,12 +438,12 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
             "Iron Chestplate": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/31/Iron_Chestplate_JE2_BE2.png",
             "Diamond Chestplate": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e0/Diamond_Chestplate_JE3_BE2.png",
             "Iron Ingot": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Iron_Ingot_JE3_BE2.png",
+            "Block of Iron": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7e/Block_of_Iron_JE4_BE3.png",
             "Brewing Stand": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fa/Brewing_Stand.png",
             "Ender Pearl": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/f6/Ender_Pearl_JE3_BE2.png",
             "Bucket": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Bucket_JE2_BE2.png",
             "Bow": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/ab/Bow_%28Pull_2%29_JE1_BE1.png",
             "Shield": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c6/Shield_JE2_BE1.png",
-            "Block of Iron": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7e/Block_of_Iron_JE4_BE3.png",
             "Red Bed": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/dc/Red_Bed_JE4_BE3.png",
             "Netherite Scrap": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/33/Netherite_Scrap_JE2_BE1.png",
             "Flint and Steel": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/94/Flint_and_Steel_JE4_BE2.png",
@@ -472,17 +472,19 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         progressive_items = {
             "Progressive Tools": 45013,
             "Progressive Weapons": 45012,
-            "Progressive Armor": 45014
+            "Progressive Armor": 45014,
+            "Progressive Resource Crafting": 45001
         }
         progressive_names = {
             "Progressive Tools": ["Wooden Pickaxe", "Stone Pickaxe", "Iron Pickaxe", "Diamond Pickaxe"],
             "Progressive Weapons": ["Wooden Sword", "Stone Sword", "Iron Sword", "Diamond Sword"],
-            "Progressive Armor": ["Leather Tunic", "Iron Chestplate", "Diamond Chestplate"]
+            "Progressive Armor": ["Leather Tunic", "Iron Chestplate", "Diamond Chestplate"],
+            "Progressive Resource Crafting": ["Iron Ingot", "Iron Ingot", "Block of Iron"]
         }
         for item_name, item_id in progressive_items.items():
             level = min(inventory[item_id], len(progressive_names[item_name])-1)
             display_name = progressive_names[item_name][level]
-            base_name = item_name.split(maxsplit=1)[1].lower()
+            base_name = item_name.split(maxsplit=1)[1].lower().replace(' ', '_')
             display_data[base_name+"_url"] = minecraft_icons[display_name]
 
         # Multi-items
