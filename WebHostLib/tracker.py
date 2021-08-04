@@ -503,9 +503,9 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         # Turn location IDs into advancement tab counts
         checked_locations = multisave.get("location_checks", {}).get((tracked_team, tracked_player), set())
         lookup_name = lambda id: lookup_any_location_id_to_name[id]
-        location_info = {tab_name: {lookup_name(id): (lookup_name(id) in checked_locations) for id in tab_locations} 
+        location_info = {tab_name: {lookup_name(id): (id in checked_locations) for id in tab_locations} 
             for tab_name, tab_locations in minecraft_location_ids.items()}
-        checks_done = {tab_name: len([id for id in tab_locations if lookup_name(id) in checked_locations]) 
+        checks_done = {tab_name: len([id for id in tab_locations if id in checked_locations]) 
             for tab_name, tab_locations in minecraft_location_ids.items()}
         checks_done['Total'] = len(checked_locations)
         checks_in_area = {tab_name: len(tab_locations) for tab_name, tab_locations in minecraft_location_ids.items()}

@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <title>{{ player_name }}&apos;s Tracker</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/minecraftTracker.css") }}"/>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/playerTracker.js") }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/minecraftTracker.css') }}"/>
+    <script type="application/ecmascript" src="{{ url_for('static', filename='assets/minecraftTracker.js') }}"></script>
     <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/minecraftia" type="text/css"/>
 </head>
 
@@ -46,10 +46,18 @@
         </table>
         <table id="location-table">
             {% for area in checks_done %}
+            <tr class="location-category" id="{{area}}-header">
+                <td>{{ area }} {{'▼' if area != 'Total'}}</td>
+                <td class="counter">{{ checks_done[area] }} / {{ checks_in_area[area] }}</td>
+            </tr>
+            <tbody class="locations hide" id="{{area}}">
+                {% for location in location_info[area] %}
                 <tr>
-                    <td>{{ area }}</td>
-                    <td class="counter">{{ checks_done[area] }} / {{ checks_in_area[area] }}</td>
+                    <td class="location-name">{{ location }}</td>
+                    <td class="counter">{{ '✔' if location_info[area][location] else '' }}</td>
                 </tr>
+                {% endfor %}
+            </tbody>
             {% endfor %}
         </table>
     </div>
