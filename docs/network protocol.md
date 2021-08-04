@@ -155,7 +155,7 @@ Sent to clients after a client requested this message be sent to them, more info
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| Any | Any | The data in the Bounce package copied |
+| data | dict | The data in the Bounce package copied |
 
 
 ## (Client -> Server)
@@ -241,7 +241,7 @@ the server will forward the message to all those targets to which any one requir
 | games | list[str] | Optional. Game names that should receive this message |
 | slots | list[int] | Optional. Player IDs that should receive this message |
 | tags | list[str] | Optional. Client tags that should receive this message |
-| Any | Any | Any data you want to send |
+| data | dict | Any data you want to send |
 
 
 ## Appendix
