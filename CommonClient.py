@@ -141,16 +141,17 @@ class CommonContext():
             if local_package and local_package["version"] > network_data_package["version"]:
                 data_package: dict = local_package
         elif network:  # check if data from server is newer
-            for key, value in data_package.items():
-                if type(value) == dict:  # convert to int keys
-                    data_package[key] = \
-                        {int(subkey) if subkey.isdigit() else subkey: subvalue for subkey, subvalue in value.items()}
 
             if data_package["version"] > network_data_package["version"]:
                 Utils.persistent_store("datapackage", "latest", network_data_package)
 
-        item_lookup: dict = data_package["lookup_any_item_id_to_name"]
-        locations_lookup: dict = data_package["lookup_any_location_id_to_name"]
+        item_lookup: dict = {}
+        locations_lookup: dict = {}
+        for game, gamedata in data_package["games"].items():
+            for item_name, item_id in gamedata["item_name_to_id"].items():
+                item_lookup[item_id] = item_name
+            for location_name, location_id in gamedata["location_name_to_id"].items():
+                locations_lookup[location_id] = location_name
 
         def get_item_name_from_id(code: int):
             return item_lookup.get(code, f'Unknown item (ID:{code})')
