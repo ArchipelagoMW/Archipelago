@@ -4,7 +4,7 @@ from BaseClasses import MultiWorld
 from worlds import AutoWorld
 from worlds.minecraft import MinecraftWorld
 from worlds.minecraft.Items import MinecraftItem, item_table
-from worlds.minecraft.Options import AdvancementGoal, CombatDifficulty
+from worlds.minecraft.Options import AdvancementGoal, CombatDifficulty, BeeTraps
 from Options import Toggle
 
 # Converts the name of an item into an item object
@@ -36,7 +36,7 @@ class TestMinecraft(TestBase):
         setattr(self.world, "advancement_goal", {1: AdvancementGoal(30)})
         setattr(self.world, "shuffle_structures", {1: Toggle(False)})
         setattr(self.world, "combat_difficulty", {1: CombatDifficulty(1)}) # normal
-        setattr(self.world, "bee_traps", {1: Toggle(False)})
+        setattr(self.world, "bee_traps", {1: BeeTraps(0)})
         setattr(self.world, "structure_compasses", {1: Toggle(False)})
         AutoWorld.call_single(self.world, "create_regions", 1)
         AutoWorld.call_single(self.world, "generate_basic", 1)
