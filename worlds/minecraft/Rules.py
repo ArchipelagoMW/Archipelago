@@ -7,10 +7,10 @@ from ..AutoWorld import LogicMixin
 class MinecraftLogic(LogicMixin):
 
     def _mc_has_iron_ingots(self, player: int):
-        return self.has('Progressive Tools', player) and self.has('Ingot Crafting', player)
+        return self.has('Progressive Tools', player) and self.has('Progressive Resource Crafting', player)
 
     def _mc_has_gold_ingots(self, player: int): 
-        return self.has('Ingot Crafting', player) and (self.has('Progressive Tools', player, 2) or self.can_reach('The Nether', 'Region', player))
+        return self.has('Progressive Resource Crafting', player) and (self.has('Progressive Tools', player, 2) or self.can_reach('The Nether', 'Region', player))
 
     def _mc_has_diamond_pickaxe(self, player: int):
         return self.has('Progressive Tools', player, 3) and self._mc_has_iron_ingots(player)
@@ -19,13 +19,13 @@ class MinecraftLogic(LogicMixin):
         return self.has('Archery', player) and self._mc_has_iron_ingots(player)
 
     def _mc_has_bottle(self, player: int): 
-        return self.has('Bottles', player) and self.has('Ingot Crafting', player)
+        return self.has('Bottles', player) and self.has('Progressive Resource Crafting', player)
 
     def _mc_can_enchant(self, player: int): 
         return self.has('Enchanting', player) and self._mc_has_diamond_pickaxe(player) # mine obsidian and lapis
 
     def _mc_can_use_anvil(self, player: int): 
-        return self.has('Enchanting', player) and self.has('Resource Blocks', player) and self._mc_has_iron_ingots(player)
+        return self.has('Enchanting', player) and self.has('Progressive Resource Crafting', player, 2) and self._mc_has_iron_ingots(player)
 
     def _mc_fortress_loot(self, player: int): # saddles, blaze rods, wither skulls
         return self.can_reach('Nether Fortress', 'Region', player) and self._mc_basic_combat(player)
@@ -50,8 +50,7 @@ class MinecraftLogic(LogicMixin):
             return self.has('Progressive Weapons', player, 2) and self._mc_has_iron_ingots(player)
         elif self._mc_combat_difficulty(player) == 'hard':
             return True
-        return self.has('Progressive Weapons', player) and (
-                    self.has('Ingot Crafting', player) or self.has('Campfire', player))
+        return self.has('Progressive Weapons', player) and (self.has('Progressive Resource Crafting', player) or self.has('Campfire', player))
 
     def _mc_basic_combat(self, player: int):
         if self._mc_combat_difficulty(player) == 'easy': 
@@ -84,7 +83,7 @@ class MinecraftLogic(LogicMixin):
 
     def _mc_can_kill_ender_dragon(self, player: int):
         # Since it is possible to kill the dragon without getting any of the advancements related to it, we need to require that it can be respawned. 
-        respawn_dragon = self.can_reach('The Nether', 'Region', player) and self.has('Ingot Crafting', player)
+        respawn_dragon = self.can_reach('The Nether', 'Region', player) and self.has('Progressive Resource Crafting', player)
         if self._mc_combat_difficulty(player) == 'easy': 
             return respawn_dragon and self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and \
                    self.has('Archery', player) and self._mc_can_brew_potions(player) and self._mc_can_enchant(player)
@@ -150,7 +149,7 @@ def set_rules(world: MultiWorld, player: int):
                                                                              state.can_reach('Bring Home the Beacon', 'Location', player)) # Resistance
     set_rule(world.get_location("Best Friends Forever", player), lambda state: True)
     set_rule(world.get_location("Bring Home the Beacon", player), lambda state: state._mc_can_kill_wither(player) and 
-        state._mc_has_diamond_pickaxe(player) and state.has("Ingot Crafting", player) and state.has("Resource Blocks", player))
+        state._mc_has_diamond_pickaxe(player) and state.has("Progressive Resource Crafting", player, 2))
     set_rule(world.get_location("Not Today, Thank You", player), lambda state: state.has("Shield", player) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Isn't It Iron Pick", player), lambda state: state.has("Progressive Tools", player, 2) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Local Brewery", player), lambda state: state._mc_can_brew_potions(player))
@@ -190,10 +189,10 @@ def set_rules(world: MultiWorld, player: int):
                                                                      state._mc_can_use_anvil(player) and state._mc_can_enchant(player))
     set_rule(world.get_location("The End... Again...", player), lambda state: can_complete(state))
     set_rule(world.get_location("Acquire Hardware", player), lambda state: state._mc_has_iron_ingots(player))
-    set_rule(world.get_location("Not Quite \"Nine\" Lives", player), lambda state: state._mc_can_piglin_trade(player) and state.has("Resource Blocks", player))
+    set_rule(world.get_location("Not Quite \"Nine\" Lives", player), lambda state: state._mc_can_piglin_trade(player) and state.has("Progressive Resource Crafting", player, 2))
     set_rule(world.get_location("Cover Me With Diamonds", player), lambda state: state.has("Progressive Armor", player, 2) and state.can_reach("Diamonds!", "Location", player))
     set_rule(world.get_location("Sky's the Limit", player), lambda state: state._mc_basic_combat(player))
-    set_rule(world.get_location("Hired Help", player), lambda state: state.has("Resource Blocks", player) and state._mc_has_iron_ingots(player))
+    set_rule(world.get_location("Hired Help", player), lambda state: state.has("Progressive Resource Crafting", player, 2) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Return to Sender", player), lambda state: True)
     set_rule(world.get_location("Sweet Dreams", player), lambda state: state.has("Bed", player) or state.can_reach('Village', 'Region', player))
     set_rule(world.get_location("You Need a Mint", player), lambda state: can_complete(state) and state._mc_has_bottle(player))
@@ -212,10 +211,10 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Hero of the Village", player), lambda state: state._mc_complete_raid(player))
     set_rule(world.get_location("Hidden in the Depths", player), lambda state: state._mc_can_brew_potions(player) and state.has("Bed", player) and state._mc_has_diamond_pickaxe(player))  # bed mining :)
     set_rule(world.get_location("Beaconator", player), lambda state: state._mc_can_kill_wither(player) and state._mc_has_diamond_pickaxe(player) and
-                           state.has("Ingot Crafting", player) and state.has("Resource Blocks", player))
+                           state.has("Progressive Resource Crafting", player, 2))
     set_rule(world.get_location("Withering Heights", player), lambda state: state._mc_can_kill_wither(player))
     set_rule(world.get_location("A Balanced Diet", player), lambda state: state._mc_has_bottle(player) and state._mc_has_gold_ingots(player) and  # honey bottle; gapple
-                           state.has("Resource Blocks", player) and state.can_reach('The End', 'Region', player))  # notch apple, chorus fruit
+                           state.has("Progressive Resource Crafting", player, 2) and state.can_reach('The End', 'Region', player))  # notch apple, chorus fruit
     set_rule(world.get_location("Subspace Bubble", player), lambda state: state._mc_has_diamond_pickaxe(player))
     set_rule(world.get_location("Husbandry", player), lambda state: True)
     set_rule(world.get_location("Country Lode, Take Me Home", player), lambda state: state.can_reach("Hidden in the Depths", "Location", player) and state._mc_has_gold_ingots(player))
@@ -229,14 +228,14 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Sticky Situation", player), lambda state: state.has("Campfire", player) and state._mc_has_bottle(player))
     set_rule(world.get_location("Ol' Betsy", player), lambda state: state._mc_craft_crossbow(player))
     set_rule(world.get_location("Cover Me in Debris", player), lambda state: state.has("Progressive Armor", player, 2) and
-                           state.has("8 Netherite Scrap", player, 2) and state.has("Ingot Crafting", player) and
+                           state.has("8 Netherite Scrap", player, 2) and state.has("Progressive Resource Crafting", player) and
                            state.can_reach("Diamonds!", "Location", player) and state.can_reach("Hidden in the Depths", "Location", player))
     set_rule(world.get_location("The End?", player), lambda state: True)
     set_rule(world.get_location("The Parrots and the Bats", player), lambda state: True)
     set_rule(world.get_location("A Complete Catalogue", player), lambda state: True)  # kill fish for raw
     set_rule(world.get_location("Getting Wood", player), lambda state: True)
     set_rule(world.get_location("Time to Mine!", player), lambda state: True)
-    set_rule(world.get_location("Hot Topic", player), lambda state: state.has("Ingot Crafting", player))
+    set_rule(world.get_location("Hot Topic", player), lambda state: state.has("Progressive Resource Crafting", player))
     set_rule(world.get_location("Bake Bread", player), lambda state: True)
     set_rule(world.get_location("The Lie", player), lambda state: state._mc_has_iron_ingots(player) and state.has("Bucket", player))
     set_rule(world.get_location("On a Rail", player), lambda state: state._mc_has_iron_ingots(player) and state.has('Progressive Tools', player, 2))  # powered rails
@@ -247,4 +246,4 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Overkill", player), lambda state: state._mc_can_brew_potions(player) and 
         (state.has("Progressive Weapons", player) or state.can_reach('The Nether', 'Region', player)))  # strength 1 + stone axe crit OR strength 2 + wood axe crit
     set_rule(world.get_location("Librarian", player), lambda state: state.has("Enchanting", player))
-    set_rule(world.get_location("Overpowered", player), lambda state: state.has("Resource Blocks", player) and state._mc_has_gold_ingots(player))
+    set_rule(world.get_location("Overpowered", player), lambda state: state.has("Progressive Resource Crafting", player, 2) and state._mc_has_gold_ingots(player))

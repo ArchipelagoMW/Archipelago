@@ -13,8 +13,8 @@ class MinecraftItem(Item):
 
 item_table = {
     "Archery": ItemData(45000, True),
-    "Ingot Crafting": ItemData(45001, True),
-    "Resource Blocks": ItemData(45002, True),
+    "Progressive Resource Crafting": ItemData(45001, True),
+    # "Resource Blocks": ItemData(45002, True),
     "Brewing": ItemData(45003, True),
     "Enchanting": ItemData(45004, True),
     "Bucket": ItemData(45005, True),
@@ -62,8 +62,8 @@ item_table = {
 
 required_items = {
     "Archery": 1,
-    "Ingot Crafting": 1,
-    "Resource Blocks": 1,
+    "Progressive Resource Crafting": 2,
+    # "Resource Blocks": 1,
     "Brewing": 1,
     "Enchanting": 1,
     "Bucket": 1,
