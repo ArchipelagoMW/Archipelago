@@ -9,7 +9,7 @@
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     padding: 3px 3px 10px;
-    width: 324px;
+    width: 352px;
     background-color: #42b149;
 }
 
@@ -45,7 +45,7 @@
 }
 
 #location-table{
-    width: 324px;
+    width: 352px;
     border-left: 2px solid #000000;
     border-right: 2px solid #000000;
     border-bottom: 2px solid #000000;
@@ -55,6 +55,7 @@
     padding: 0 3px 3px;
     font-family: "Minecraftia", monospace;
     font-size: 14px;
+    cursor: default;
 }
 
 #location-table th{
@@ -69,11 +70,15 @@
     line-height: 20px;
 }
 
-#location-table td.counter{
+#location-table td.counter {
     text-align: right;
 }
 
-#location-table tr:last-child {
+#location-table td.toggle-arrow {
+    text-align: right;
+}
+
+#location-table tr.location-category:last-child {
     font-weight: bold;
 }
 
@@ -81,4 +86,16 @@
     height: 100%;
     max-width: 30px;
     max-height: 30px;
+}
+
+#location-table tbody.locations {
+    font-size: 12px;
+}
+
+#location-table td.location-name {
+    padding-left: 16px;
+}
+
+.hide {
+    display: none;
 }
