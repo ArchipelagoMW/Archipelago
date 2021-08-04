@@ -1,7 +1,7 @@
 from __future__ import annotations
 import typing
 
-from Options import Choice, OptionDict, Option, DefaultOnToggle
+from Options import Choice, OptionDict, Option, DefaultOnToggle, Range
 from schema import Schema, Optional, And, Or
 
 # schema helpers
@@ -123,6 +123,27 @@ class RecipeIngredients(Choice):
 class FactorioStartItems(OptionDict):
     displayname = "Starting Items"
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
+
+
+class TrapCount(Range):
+    range_end = 4
+
+
+class AttackTrapCount(TrapCount):
+    """Trap items that when received trigger an attack on your base."""
+    displayname = "Attack Traps"
+
+
+class EvolutionTrapCount(TrapCount):
+    """Trap items that when received increase the enemy evolution."""
+    displayname = "Evolution Traps"
+
+
+class EvolutionTrapIncrease(Range):
+    displayname = "Evolution Trap % Effect"
+    range_start = 1
+    default = 10
+    range_end = 100
 
 
 class FactorioWorldGen(OptionDict):
@@ -257,8 +278,10 @@ class FactorioWorldGen(OptionDict):
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
+
 class ImportedBlueprint(DefaultOnToggle):
     displayname = "Blueprints"
+
 
 factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,
@@ -272,5 +295,8 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "recipe_ingredients": RecipeIngredients,
     "imported_blueprints": ImportedBlueprint,
     "world_gen": FactorioWorldGen,
-    "progressive": Progressive
+    "progressive": Progressive,
+    "evolution_traps": EvolutionTrapCount,
+    "attack_traps": AttackTrapCount,
+    "evolution_trap_increase": EvolutionTrapIncrease,
 }

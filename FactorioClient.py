@@ -16,9 +16,9 @@ from MultiServer import mark_raw
 
 import Utils
 import random
-from NetUtils import RawJSONtoTextParser, NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
+from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
 
-from worlds.factorio.Technologies import lookup_id_to_name
+from worlds.factorio import Factorio
 
 os.makedirs("logs", exist_ok=True)
 
@@ -196,10 +196,10 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
                     item_id = transfer_item.item
                     player_name = ctx.player_names[transfer_item.player]
-                    if item_id not in lookup_id_to_name:
-                        logging.error(f"Cannot send unknown item ID: {item_id}")
+                    if item_id not in Factorio.item_id_to_name:
+                        factorio_server_logger.error(f"Cannot send unknown item ID: {item_id}")
                     else:
-                        item_name = lookup_id_to_name[item_id]
+                        item_name = Factorio.item_id_to_name[item_id]
                         factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
                         ctx.rcon_client.send_command(f'/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}')
                     ctx.send_index += 1

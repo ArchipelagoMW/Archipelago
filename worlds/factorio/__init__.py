@@ -6,7 +6,7 @@ from BaseClasses import Region, Entrance, Location, Item
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, advancement_technologies, \
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, rocket_recipes, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
-    get_science_pack_pools, Recipe, recipes, technology_table, tech_table
+    get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies
 from .Shapes import get_shapes
 from .Mod import generate_mod
 from .Options import factorio_options, Silo
@@ -18,35 +18,48 @@ class FactorioItem(Item):
     game = "Factorio"
 
 
+all_items = tech_table.copy()
+all_items["Attack Trap"] = factorio_base_id - 1
+all_items["Evolution Trap"] = factorio_base_id - 2
+
+
 class Factorio(World):
     game: str = "Factorio"
     static_nodes = {"automation", "logistics", "rocket-silo"}
     custom_recipes = {}
     additional_advancement_technologies = set()
 
-    item_name_to_id = tech_table
+    item_name_to_id = all_items
     location_name_to_id = base_tech_table
 
-    data_version = 3
+    data_version = 4
 
     def generate_basic(self):
-        want_progressives = collections.defaultdict(lambda: self.world.progressive[self.player].
+        player = self.player
+        want_progressives = collections.defaultdict(lambda: self.world.progressive[player].
                                                     want_progressives(self.world.random))
-        skip_silo = self.world.silo[self.player].value == Silo.option_spawn
+        skip_silo = self.world.silo[player].value == Silo.option_spawn
+        evolution_traps_wanted = self.world.evolution_traps[player].value
+        attack_traps_wanted = self.world.attack_traps[player].value
+        traps_wanted = ["Evolution Trap"] * evolution_traps_wanted + ["Attack Trap"] * attack_traps_wanted
+        self.world.random.shuffle(traps_wanted)
         for tech_name in base_tech_table:
-            if skip_silo and tech_name == "rocket-silo":
-                continue
-            progressive_item_name = tech_to_progressive_lookup.get(tech_name, tech_name)
-            want_progressive = want_progressives[progressive_item_name]
-            item_name = progressive_item_name if want_progressive else tech_name
-            tech_item = self.create_item(item_name)
-            if tech_name in self.static_nodes:
-                self.world.get_location(tech_name, self.player).place_locked_item(tech_item)
+            if traps_wanted and tech_name in useless_technologies:
+                self.world.itempool.append(self.create_item(traps_wanted.pop()))
+            elif skip_silo and tech_name == "rocket-silo":
+                pass
             else:
-                self.world.itempool.append(tech_item)
-        map_basic_settings = self.world.world_gen[self.player].value["basic"]
+                progressive_item_name = tech_to_progressive_lookup.get(tech_name, tech_name)
+                want_progressive = want_progressives[progressive_item_name]
+                item_name = progressive_item_name if want_progressive else tech_name
+                tech_item = self.create_item(item_name)
+                if tech_name in self.static_nodes:
+                    self.world.get_location(tech_name, player).place_locked_item(tech_item)
+                else:
+                    self.world.itempool.append(tech_item)
+        map_basic_settings = self.world.world_gen[player].value["basic"]
         if map_basic_settings.get("seed", None) is None:  # allow seed 0
-            map_basic_settings["seed"] = self.world.slot_seeds[self.player].randint(0, 2**32-1)  # 32 bit uint
+            map_basic_settings["seed"] = self.world.slot_seeds[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
 
     generate_output = generate_mod
 
@@ -263,7 +276,9 @@ class Factorio(World):
         self.additional_advancement_technologies |= prog_add
 
     def create_item(self, name: str) -> Item:
-        assert name in tech_table
-        return FactorioItem(name, name in advancement_technologies or
-                            name in self.additional_advancement_technologies,
-                            tech_table[name], self.player)
+        if name in tech_table:
+            return FactorioItem(name, name in advancement_technologies or
+                                name in self.additional_advancement_technologies,
+                                tech_table[name], self.player)
+        elif name in all_items:
+            return FactorioItem(name, False, all_items[name], self.player)

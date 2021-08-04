@@ -117,6 +117,40 @@ Factorio:
   starting_items:
     burner-mining-drill: 19
     stone-furnace: 19
+  # Note: Total amount of traps cannot exceed 4, if the sum of them is higher it will get automatically capped.
+  evolution_traps:
+    # Trap items that when received increase the enemy evolution.
+    0: 1
+    1: 0
+    2: 0
+    3: 0
+    4: 0
+    random: 0
+    random-low: 0
+    random-middle: 0
+    random-high: 0
+  evolution_trap_increase:
+    # If present, % increase of Evolution with each trap received.
+    5: 0
+    10: 1
+    15: 0
+    20: 0
+    100: 0
+    random: 0
+    random-low: 0
+    random-middle: 0
+    random-high: 0
+  attack_traps:
+    # Trap items that when received trigger an attack on your base.
+    0: 1
+    1: 0
+    2: 0
+    3: 0
+    4: 0
+    random: 0
+    random-low: 0
+    random-middle: 0
+    random-high: 0
   world_gen:
     # frequency, size, richness, terrain segmentation, starting area and water are all of https://wiki.factorio.com/Types/MapGenSize
     # inverse of water scale

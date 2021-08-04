@@ -7,6 +7,7 @@ FREE_SAMPLES = {{ free_samples }}
 SLOT_NAME = "{{ slot_name }}"
 SEED_NAME = "{{ seed_name }}"
 FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
+TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
 
 {% if not imported_blueprints -%}
 function set_permissions()
@@ -369,15 +370,15 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     local tech
     local force = game.forces["player"]
     chunks = split(call.parameter, "\t")
-    local tech_name = chunks[1]
+    local item_name = chunks[1]
     local index = chunks[2]
     local source = chunks[3] or "Archipelago"
-    if progressive_technologies[tech_name] ~= nil then
+    if progressive_technologies[item_name] ~= nil then
         if global.index_sync[index] == nil then -- not yet received prog item
-            global.index_sync[index] = tech_name
-            local tech_stack = progressive_technologies[tech_name]
-            for _, tech_name in ipairs(tech_stack) do
-                tech = force.technologies[tech_name]
+            global.index_sync[index] = item_name
+            local tech_stack = progressive_technologies[item_name]
+            for _, item_name in ipairs(tech_stack) do
+                tech = force.technologies[item_name]
                 if tech.researched ~= true then
                     game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
                     game.play_sound({path="utility/research_completed"})
@@ -386,8 +387,8 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
                 end
             end
         end
-    elseif force.technologies[tech_name] ~= nil then
-        tech = force.technologies[tech_name]
+    elseif force.technologies[item_name] ~= nil then
+        tech = force.technologies[item_name]
         if tech ~= nil then
             if global.index_sync[index] ~= nil and global.index_sync[index] ~= tech then
                 game.print("Warning: Desync Detected. Duplicate/Missing items may occur.")
@@ -399,8 +400,21 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
                 tech.researched = true
             end
         end
+    elseif item_name == "Attack Trap" then
+        if global.index_sync[index] == nil then -- not yet received trap
+            game.print({"", "Received Attack Trap from ", source})
+            global.index_sync[index] = item_name
+            local spawn_position = force.get_spawn_position(game.get_surface(1))
+            game.surfaces["nauvis"].build_enemy_base(spawn_position, 25)
+        end
+    elseif item_name == "Evolution Trap" then
+        if global.index_sync[index] == nil then -- not yet received trap
+            global.index_sync[index] = item_name
+            game.forces["enemy"].evolution_factor = game.forces["enemy"].evolution_factor + TRAP_EVO_FACTOR
+            game.print({"", "Received Evolution Trap from ", source, ". New factor:", game.forces["enemy"].evolution_factor})
+        end
     else
-        game.print("Unknown Technology " .. tech_name)
+        game.print("Unknown Item " .. item_name)
     end
 end)
 
