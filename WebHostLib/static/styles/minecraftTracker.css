@@ -38,11 +38,10 @@
 #inventory-table div.item-count {
     position: absolute;
     color: white;
-    font-family: "Courier New", monospace;
+    font-family: "Minecraftia", monospace;
     font-weight: bold;
-    font-size: 20px;
     bottom: 0px;
-    right: 4px;
+    right: 0px;
 }
 
 #location-table{
@@ -54,6 +53,8 @@
     border-bottom-right-radius: 4px;
     background-color: #42b149;
     padding: 0 3px 3px;
+    font-family: "Minecraftia", monospace;
+    font-size: 14px;
 }
 
 #location-table th{
@@ -65,13 +66,15 @@
 #location-table td{
     padding-top: 2px;
     padding-bottom: 2px;
-    padding-right: 5px;
     line-height: 20px;
 }
 
 #location-table td.counter{
-    padding-right: 8px;
     text-align: right;
+}
+
+#location-table tr:last-child {
+    font-weight: bold;
 }
 
 #location-table img{

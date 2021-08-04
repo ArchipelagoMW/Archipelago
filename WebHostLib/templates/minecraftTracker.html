@@ -4,6 +4,7 @@
     <title>{{ player_name }}&apos;s Tracker</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/minecraftTracker.css") }}"/>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/playerTracker.js") }}"></script>
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/minecraftia" type="text/css"/>
 </head>
 
 <body>
@@ -44,26 +45,12 @@
             <tr>
         </table>
         <table id="location-table">
-            <thead>
-            <tr>
-                <th>Location</th>
-                <th>Checked</th>
-            </tr>
-            </thead>
-            <tbody>
-                {% for name in checked_locations %}
+            {% for area in checks_done %}
                 <tr>
-                    <td>{{ name | location_name}}</td>
-                    <td>✔</td>
+                    <td>{{ area }}</td>
+                    <td class="counter">{{ checks_done[area] }} / {{ checks_in_area[area] }}</td>
                 </tr>
-                {%- endfor -%}
-                {% for name in not_checked_locations %}
-                <tr>
-                    <td>{{ name | location_name}}</td>
-                    <td></td>
-                </tr>
-                {%- endfor -%}
-            </tbody>
+            {% endfor %}
         </table>
     </div>
 </body>
