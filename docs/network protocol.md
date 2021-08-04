@@ -364,8 +364,13 @@ Note:
 #### Contents
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| games | dict[str, dict] | Mapping of all Games and their respective data |
-| games[<game_name>]["item_name_to_id"] | dict[int, str] | Mapping of all item names to their respective ID. |
-| games[<game_name>]["location_name_to_id"] | dict[str, int] | Mapping of all location names to their respective ID. |
-| games[<game_name>]["version"] | int | Version number of this game's data |
+| games | dict[str, GameData] | Mapping of all Games and their respective data |
 | version | int | Sum of all per-game version numbers, for clients that don't bother with per-game caching/updating. |
+
+#### GameData
+GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of documentation.
+| Name | Type | Notes |
+| ---- | ---- | ----- |
+| item_name_to_id | dict[int, str] | Mapping of all item names to their respective ID. |
+| location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID. |
+| version | int | Version number of this game's data |
