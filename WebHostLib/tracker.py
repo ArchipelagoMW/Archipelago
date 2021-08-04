@@ -454,6 +454,18 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
             "Dragon Head": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b6/Dragon_Head.png",
         }
 
+        minecraft_location_ids = {
+            "Story": [42073, 42080, 42081, 42023, 42082, 42027, 42039, 42085, 42002, 42009, 42010, 
+                      42070, 42041, 42049, 42090, 42004, 42031, 42025, 42029, 42051, 42077, 42089],
+            "Nether": [42017, 42044, 42069, 42058, 42034, 42060, 42066, 42076, 42064, 42071, 42021, 
+                       42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42014],
+            "The End": [42052, 42005, 42012, 42032, 42030, 42042, 42018, 42038, 42046],
+            "Adventure": [42047, 42086, 42087, 42050, 42059, 42055, 42072, 42003, 42035, 42016, 42020, 
+                          42048, 42054, 42068, 42043, 42074, 42075, 42024, 42026, 42037, 42045, 42056, 42088],
+            "Husbandry": [42065, 42067, 42078, 42022, 42007, 42079, 42013, 42028, 
+                          42036, 42057, 42063, 42053, 42083, 42084, 42091]
+        }
+
         display_data = {}
 
         # Determine display for progressive items
@@ -481,19 +493,28 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         for item_name, item_id in multi_items.items():
             base_name = item_name.split()[-1].lower()
             count = inventory[item_id]
-            if count > 0:
+            if count >= 0:
                 display_data[base_name+"_count"] = count
 
         # Victory condition
         game_state = multisave.get("client_game_state", {}).get((tracked_team, tracked_player), 0)
         display_data['game_finished'] = True if game_state == 30 else False  # found in NetUtils
 
-
+        # Turn location IDs into advancement tab counts
         checked_locations = multisave.get("location_checks", {}).get((tracked_team, tracked_player), set())
+        lookup_name = lambda id: lookup_any_location_id_to_name[id]
+        location_info = {tab_name: {lookup_name(id): (lookup_name(id) in checked_locations) for id in tab_locations} 
+            for tab_name, tab_locations in minecraft_location_ids.items()}
+        checks_done = {tab_name: len([id for id in tab_locations if lookup_name(id) in checked_locations]) 
+            for tab_name, tab_locations in minecraft_location_ids.items()}
+        checks_done['Total'] = len(checked_locations)
+        checks_in_area = {tab_name: len(tab_locations) for tab_name, tab_locations in minecraft_location_ids.items()}
+        checks_in_area['Total'] = sum(checks_in_area.values())
+
         return render_template("minecraftTracker.html", 
                                inventory=inventory, icons=minecraft_icons, acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
                                player=tracked_player, team=tracked_team, room=room, player_name=player_name,
-                               checked_locations=checked_locations, not_checked_locations=set(locations[tracked_player])-checked_locations,
+                               checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                                **display_data)
 
     else:
