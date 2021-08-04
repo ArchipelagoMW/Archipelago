@@ -78,7 +78,7 @@
     text-align: right;
 }
 
-#location-table tr.location-category:last-child {
+#location-table tr#Total-header {
     font-weight: bold;
 }
 
