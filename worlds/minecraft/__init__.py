@@ -1,4 +1,6 @@
 import os
+import json
+from base64 import b64encode, b64decode
 from math import ceil
 
 from .Items import MinecraftItem, item_table, required_items, junk_weights
@@ -88,9 +90,6 @@ class MinecraftWorld(World):
         link_minecraft_structures(self.world, self.player)
 
     def generate_output(self, output_directory: str):
-        import json
-        from base64 import b64encode
-
         data = self._get_mc_data()
         filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_names(self.player)}.apmc"
         with open(os.path.join(output_directory, filename), 'wb') as f:
@@ -110,3 +109,9 @@ class MinecraftWorld(World):
         if name in nonexcluded_items:  # prevent books from going on excluded locations
             item.never_exclude = True
         return item
+
+def mc_update_output(raw_data, server, port): 
+    data = json.loads(b64decode(raw_data))
+    data['server'] = server
+    data['port'] = port
+    return b64encode(bytes(json.dumps(data), 'utf-8'))
