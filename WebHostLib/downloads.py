@@ -45,10 +45,10 @@ def download_raw_patch(seed_id, player_id: int):
         fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](seed_id)}.apbp"
         return send_file(patch_data, as_attachment=True, attachment_filename=fname)
 
-@app.route("/slot_file/<suuid:seed_id>/<int:player_id>")
-def download_slot_file(seed_id, player_id: int):
-    seed = Seed.get(id=seed_id)
-    slot_data: Slot = select(patch for patch in seed.slots if
+@app.route("/slot_file/<suuid:room_id>/<int:player_id>")
+def download_slot_file(room_id, player_id: int):
+    room = Room.get(id=room_id)
+    slot_data: Slot = select(patch for patch in room.seed.slots if
                    patch.player_id == player_id).first()
 
     if not slot_data:
@@ -57,7 +57,10 @@ def download_slot_file(seed_id, player_id: int):
         import io
 
         if slot_data.game == "Minecraft":
-            fname = f"AP_{app.jinja_env.filters['suuid'](seed_id)}_P{slot_data.player_id}_{slot_data.player_name}.apmc"
+            from worlds.minecraft import mc_update_output
+            fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_P{slot_data.player_id}_{slot_data.player_name}.apmc"
+            data = mc_update_output(slot_data.data, server=app.config['PATCH_TARGET'], port=room.last_port)
+            return send_file(io.BytesIO(data), as_attachment=True, attachment_filename=fname)
         elif slot_data.game == "Factorio":
             with zipfile.ZipFile(io.BytesIO(slot_data.data)) as zf:
                 for name in zf.namelist():
