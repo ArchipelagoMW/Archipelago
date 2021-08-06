@@ -5,11 +5,12 @@ import sysconfig
 from pathlib import Path
 import cx_Freeze
 from kivy_deps import sdl2, glew
+from Utils import version_tuple
 
 is_64bits = sys.maxsize > 2 ** 32
 
 arch_folder = "exe.{platform}-{version}".format(platform=sysconfig.get_platform(),
-                                           version=sysconfig.get_python_version())
+                                                version=sysconfig.get_python_version())
 buildfolder = Path("build", arch_folder)
 sbuildfolder = str(buildfolder)
 libfolder = Path(buildfolder, "lib")
@@ -39,20 +40,25 @@ def _threaded_hash(filepath):
 os.makedirs(buildfolder, exist_ok=True)
 
 
-def manifest_creation(folder):
+def manifest_creation(folder, create_hashes=False):
+    # Since the setup is now split into components and the manifest is not,
+    # it makes most sense to just remove the hashes for now. Not aware of anyone using them.
     hashes = {}
     manifestpath = os.path.join(folder, "manifest.json")
-    from concurrent.futures import ThreadPoolExecutor
-    pool = ThreadPoolExecutor()
-    for dirpath, dirnames, filenames in os.walk(folder):
-        for filename in filenames:
-            path = os.path.join(dirpath, filename)
-            hashes[os.path.relpath(path, start=folder)] = pool.submit(_threaded_hash, path)
+    if create_hashes:
+        from concurrent.futures import ThreadPoolExecutor
+        pool = ThreadPoolExecutor()
+        for dirpath, dirnames, filenames in os.walk(folder):
+            for filename in filenames:
+                path = os.path.join(dirpath, filename)
+                hashes[os.path.relpath(path, start=folder)] = pool.submit(_threaded_hash, path)
+
     import json
-    from Utils import version_tuple
-    manifest = {"buildtime": buildtime.isoformat(sep=" ", timespec="seconds"),
-                "hashes": {path: hash.result() for path, hash in hashes.items()},
-                "version": version_tuple}
+    manifest = {
+        "buildtime": buildtime.isoformat(sep=" ", timespec="seconds"),
+        "hashes": {path: hash.result() for path, hash in hashes.items()},
+        "version": version_tuple}
+
     json.dump(manifest, open(manifestpath, "wt"), indent=4)
     print("Created Manifest")
 
@@ -90,7 +96,7 @@ buildtime = datetime.datetime.utcnow()
 
 cx_Freeze.setup(
     name="Archipelago",
-    version=f"{buildtime.year}.{buildtime.month}.{buildtime.day}.{buildtime.hour}",
+    version=f"{version_tuple.major}.{version_tuple.minor}.{version_tuple.build}",
     description="Archipelago",
     executables=exes,
     options={
@@ -124,7 +130,8 @@ def installfile(path, keep_content=False):
     else:
         print('Warning,', path, 'not found')
 
-for folder in sdl2.dep_bins+glew.dep_bins:
+
+for folder in sdl2.dep_bins + glew.dep_bins:
     shutil.copytree(folder, libfolder, dirs_exist_ok=True)
     print('copying', folder, '->', libfolder)
 

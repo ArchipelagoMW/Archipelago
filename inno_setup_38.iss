@@ -1,19 +1,25 @@
-#define sourcepath "build\exe.win-amd64-3.8\"
+#define sourcepath "build\exe.win-amd64-3.8"
 #define MyAppName "Archipelago"
 #define MyAppExeName "ArchipelagoServer.exe"
 #define MyAppIcon "data/icon.ico"
+#dim VersionTuple[4]
+#define MyAppVersion ParseVersion('build\exe.win-amd64-3.8\ArchipelagoServer.exe', VersionTuple[0], VersionTuple[1], VersionTuple[2], VersionTuple[3])
+#define MyAppVersionText Str(VersionTuple[0])+"."+Str(VersionTuple[1])+"."+Str(VersionTuple[2])
+
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 AppId={{918BA46A-FAB8-460C-9DFF-AE691E1C865B}}
 AppName={#MyAppName}
-AppVerName={#MyAppName}
+AppCopyright=Distributed under MIT License
+AppVerName={#MyAppName} {#MyAppVersionText}
+VersionInfoVersion={#MyAppVersion}
 DefaultDirName={commonappdata}\{#MyAppName}
 DisableProgramGroupPage=yes
 DefaultGroupName=Archipelago
 OutputDir=setups
-OutputBaseFilename=Setup {#MyAppName}
+OutputBaseFilename=Setup {#MyAppName} {#MyAppVersionText}
 Compression=lzma2
 SolidCompression=yes
 LZMANumBlockThreads=8
@@ -27,6 +33,7 @@ SignTool= signtool
 LicenseFile= LICENSE
 WizardStyle= modern
 SetupLogging=yes
+ShowComponentSizes=no
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -52,8 +59,8 @@ Name: "client/factorio"; Description: "Factorio"; Types: full playing
 NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-modify authusers-modify;
 
 [Files]
-Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"; Flags: external; Components: client/lttp or server
-Source: "{#sourcepath}*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, *exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"; Flags: external; Components: client/lttp or generator
+Source: "{#sourcepath}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, *exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#sourcepath}\SNI"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/lttp
 Source: "{#sourcepath}\EnemizerCLI"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator
 
@@ -77,7 +84,7 @@ Name: "{commondesktop}\{#MyAppName} Factorio Client"; Filename: "{app}\Archipela
 [Run]
 
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
-Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: client/lttp or server
+Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: client/lttp or generator
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"

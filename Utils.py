@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing
 
 
-def tuplize_version(version: str) -> typing.Tuple[int, ...]:
+def tuplize_version(version: str) -> Version:
     return Version(*(int(piece, 10) for piece in version.split(".")))
 
 
