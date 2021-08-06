@@ -347,7 +347,6 @@ class OOTWorld(World):
                 exit.connect(self.world.get_region(exit.vanilla_connected_region, self.player))
         if self.entrance_shuffle:
             shuffle_random_entrances(self)
-        set_entrances_based_rules(self)
 
 
     def set_rules(self): 
@@ -454,6 +453,8 @@ class OOTWorld(World):
         # Put all the remaining items into the general itempool
         self.world.itempool.extend(itempools['keysanity'])
 
+        # Now that keys are in the pool, we can forbid tunics from child-only shops 
+        set_entrances_based_rules(self)
 
         # Place songs
         # 5 built-in retries because this section can fail sometimes
@@ -545,9 +546,6 @@ class OOTWorld(World):
 
 
     # Helper functions
-    def get_dungeon_items(self):
-        return [item for dungeon in self.dungeons for item in dungeon.all_items]
-
     def get_shuffled_entrances(self):
         return []
 

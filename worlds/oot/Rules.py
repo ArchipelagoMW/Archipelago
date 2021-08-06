@@ -207,8 +207,6 @@ def set_entrances_based_rules(ootworld):
         return
 
     all_state = ootworld.world.get_all_state()
-    for item in ootworld.get_dungeon_items():
-        ootworld.collect(all_state, item)
 
     for location in ootworld.get_locations():
         # If a shop is not reachable as adult, it can't have Goron Tunic or Zora Tunic as child can't buy these
