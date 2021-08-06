@@ -29,12 +29,14 @@ class MinecraftWorld(World):
         exits = [connection[0] for connection in default_connections]
         return {
             'world_seed': self.world.slot_seeds[self.player].getrandbits(32),
-            # consistent and doesn't interfere with other generation
             'seed_name': self.world.seed_name,
             'player_name': self.world.get_player_names(self.player),
             'player_id': self.player,
             'client_version': client_version,
             'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits},
+            'advancement_goal': self.world.advancement_goal[self.player],
+            'egg_shards_required': self.world.egg_shards_required[self.player],
+            'egg_shards_available': self.world.egg_shards_available[self.player],
             'race': self.world.is_race
         }
 
@@ -51,6 +53,8 @@ class MinecraftWorld(World):
             structures = [connection[1] for connection in default_connections]
             for struct_name in structures:
                 itempool.append(f"Structure Compass ({struct_name})")
+        # Add dragon egg shards
+        itempool += ["Dragon Egg Shard"] * self.world.egg_shards_available[self.player]
         # Add bee traps if desired
         bee_trap_quantity = ceil(self.world.bee_traps[self.player] * (len(self.location_names)-len(itempool)) * 0.01)
         itempool += ["Bee Trap (Minecraft)"] * bee_trap_quantity

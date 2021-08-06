@@ -55,15 +55,16 @@ item_table = {
     "Structure Compass (Bastion Remnant)": ItemData(45040, True),
     "Structure Compass (End City)": ItemData(45041, True),
     "Shulker Box": ItemData(45042, False),
+    "Dragon Egg Shard": ItemData(45043, True),
     "Bee Trap (Minecraft)": ItemData(45100, False),
 
     "Victory": ItemData(None, True)
 }
 
+# 33 required items
 required_items = {
     "Archery": 1,
     "Progressive Resource Crafting": 2,
-    # "Resource Blocks": 1,
     "Brewing": 1,
     "Enchanting": 1,
     "Bucket": 1,
