@@ -117,8 +117,9 @@ def set_rules(world: MultiWorld, player: int):
     # 92 total advancements. Goal is to complete X advancements and then Free the End. 
     # There are 5 advancements which cannot be included for dragon spawning (4 postgame, Free the End)
     # Hence the true maximum is (92 - 5) = 87
-    goal = int(world.advancement_goal[player].value)
-    can_complete = lambda state: len(reachable_locations(state)) >= goal and state.can_reach('The End', 'Region', player) and state._mc_can_kill_ender_dragon(player)
+    goal = world.advancement_goal[player]
+    egg_shards = min(world.egg_shards_required[player], world.egg_shards_available[player])
+    can_complete = lambda state: len(reachable_locations(state)) >= goal and state.has("Dragon Egg Shard", player, egg_shards) and state.can_reach('The End', 'Region', player) and state._mc_can_kill_ender_dragon(player)
 
     if world.logic[player] != 'nologic':
         world.completion_condition[player] = lambda state: state.has('Victory', player)

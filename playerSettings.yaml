@@ -223,7 +223,17 @@ Factorio:
       min_expansion_cooldown: 14400 # 1 to 60 min in ticks
       max_expansion_cooldown: 216000 # 5 to 180 min in ticks
 Minecraft:
-  advancement_goal: 50 # Number of advancements required (out of 92 total) to spawn the Ender Dragon and complete the game.
+  advancement_goal: 50 # Number of advancements required (87 max) to spawn the Ender Dragon and complete the game.
+  egg_shards_required: # Number of dragon egg shards to collect (30 max) before the Ender Dragon will spawn. 
+    0: 1
+    5: 0
+    10: 0
+    20: 0
+  egg_shards_available: # Number of egg shards available in the pool (30 max). 
+    0: 1
+    5: 0
+    10: 0
+    20: 0
   combat_difficulty: # Modifies the level of items logically required for exploring dangerous areas and fighting bosses.
     easy: 0
     normal: 1
