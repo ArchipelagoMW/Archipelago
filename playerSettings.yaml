@@ -228,7 +228,7 @@ Minecraft:
     easy: 0
     normal: 1
     hard: 0
-  include_hard_advancements: # Junk-fills certain RNG-reliant or tedious advancements with XP rewards.
+  include_hard_advancements: # Junk-fills certain RNG-reliant or tedious advancements.
     on: 0
     off: 1
   include_insane_advancements: # Junk-fills extremely difficult advancements; this is only How Did We Get Here? and Adventuring Time.
@@ -243,9 +243,12 @@ Minecraft:
   structure_compasses: # Adds structure compasses to the item pool, which point to the nearest indicated structure.
     on: 0
     off: 1
-  bee_traps: # Adds bee traps to the item pool, which spawn multiple angered bees around every player when received.
-    on: 0
-    off: 1
+  bee_traps: # Replaces a percentage of junk items with bee traps, which spawn multiple angered bees around every player when received. 
+    0: 1
+    25: 0
+    50: 0
+    75: 0
+    100: 0
 A Link to the Past:
   ### Logic Section ###
   glitches_required: # Determine the logic required to complete the seed
