@@ -109,6 +109,12 @@ class FactorioContext(CommonContext):
             self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
                                           f"{text}")
 
+    def on_package(self, cmd: str, args: dict):
+        if cmd == "Connected":
+            # catch up sync anything that is already cleared.
+            for tech in args["checked_locations"]:
+                item_name = f"ap-{tech}-"
+                self.rcon_client.send_command(f'/ap-get-technology {item_name}\t-1')
 
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
