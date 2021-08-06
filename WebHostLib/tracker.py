@@ -500,7 +500,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
 
         # Victory condition
         game_state = multisave.get("client_game_state", {}).get((tracked_team, tracked_player), 0)
-        display_data['game_finished'] = True if game_state == 30 else False  # found in NetUtils
+        display_data['game_finished'] = game_state == 30
 
         # Turn location IDs into advancement tab counts
         checked_locations = multisave.get("location_checks", {}).get((tracked_team, tracked_player), set())
