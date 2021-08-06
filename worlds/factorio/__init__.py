@@ -32,7 +32,7 @@ class Factorio(World):
     item_name_to_id = all_items
     location_name_to_id = base_tech_table
 
-    data_version = 4
+    data_version = 5
 
     def generate_basic(self):
         player = self.player

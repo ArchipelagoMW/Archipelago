@@ -1,7 +1,7 @@
 from __future__ import annotations
 # Factorio technologies are imported from a .json document in /data
 from typing import Dict, Set, FrozenSet, Tuple, Union, List
-from collections import Counter, defaultdict
+from collections import Counter
 import os
 import json
 import string
@@ -386,7 +386,9 @@ progressive_rows["progressive-turret"] = ("gun-turret", "laser-turret")
 sorted_rows.append("progressive-turret")
 progressive_rows["progressive-flamethrower"] = ("flamethrower",)  # leaving out flammables, as they do nothing
 sorted_rows.append("progressive-flamethrower")
-
+progressive_rows["progressive-personal-roboport-equipment"] = ("personal-roboport-equipment",
+                                                               "personal-roboport-mk2-equipment")
+sorted_rows.append("progressive-personal-roboport-equipment")
 # integrate into
 source_target_mapping: Dict[str, str] = {
     "progressive-braking-force": "progressive-train-network",
