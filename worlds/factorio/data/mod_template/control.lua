@@ -24,7 +24,7 @@ function check_spawn_silo(force)
     if force.players and #force.players > 0 and force.get_entity_count("rocket-silo") < 1 then
         local surface = game.get_surface(1)
         local spawn_position = force.get_spawn_position(surface)
-        spawn_entity(surface, force, "rocket-silo", spawn_position.x, spawn_position.y, 80, true)
+        spawn_entity(surface, force, "rocket-silo", spawn_position.x, spawn_position.y, 80, true, true)
     end
 end
 
@@ -245,7 +245,7 @@ function chain_lookup(table, ...)
 end
 
 
-function spawn_entity(surface, force, name, x, y, radius, randomize)
+function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
     local prototype = game.entity_prototypes[name]
     local args = {  -- For can_place_entity and place_entity
         name = prototype.name,
@@ -262,13 +262,13 @@ function spawn_entity(surface, force, name, x, y, radius, randomize)
     }
     local entity_radius = math.ceil(math.max(dims.w, dims.h) / math.sqrt(2) / 2)
     local bounds = {
-        xmin = math.ceil(x - (radius - dims.w/2)),
-        xmax = math.floor(x + (radius - dims.w/2)),
-        ymin = math.ceil(y - (radius - dims.h/2)),
-        ymax = math.floor(y + (radius - dims.h/2))
+        xmin = math.ceil(x - radius - box.left_top.x),
+        xmax = math.floor(x + radius - box.right_bottom.x),
+        ymin = math.ceil(y - radius - box.left_top.y),
+        ymax = math.floor(y + radius - box.right_bottom.y)
     }
 
-    local entity = nil
+    local new_entity = nil
     local attempts = 1000
     for i = 1,attempts do  -- Try multiple times
         -- Find a position
@@ -288,7 +288,6 @@ function spawn_entity(surface, force, name, x, y, radius, randomize)
            not surface.is_chunk_generated({x = x2, y = y1}) or
            not surface.is_chunk_generated({x = x1, y = y2}) or
            not surface.is_chunk_generated({x = x2, y = y2}) then
-            --player.print("Generating chunk at " .. serpent.line(args.position) .. ", radius=" .. entity_radius)
             surface.request_to_generate_chunks(args.position, entity_radius)
             surface.force_generate_chunk_requests()
         end
@@ -298,40 +297,49 @@ function spawn_entity(surface, force, name, x, y, radius, randomize)
             local collision_area = {
                 {
                     args.position.x + prototype.collision_box.left_top.x,
-                    args.position.y + prototype.collision_box.left_top.x
+                    args.position.y + prototype.collision_box.left_top.y
                 },
                 {
                     args.position.x + prototype.collision_box.right_bottom.x,
-                    args.position.y + prototype.collision_box.right_bottom.x
+                    args.position.y + prototype.collision_box.right_bottom.y
                 }
             }
             local entities = surface.find_entities_filtered {
                 area = collision_area,
                 collision_mask = prototype.collision_mask
             }
-            local has_invalid_entities = false
+            local can_place = true
             for _, entity in pairs(entities) do
-                if entity.force and (entity.force.name ~= 'neutral') then
-                    has_invalid_entities = true
+                if entity.force and entity.force.name ~= 'neutral' then
+                    can_place = false
+                    break
                 end
             end
-            if not has_invalid_entities then
+            local allow_placement_on_resources = not avoid_ores or i > attempts/2
+            if can_place and not allow_placement_on_resources then
+                local resources = surface.find_entities_filtered {
+                    area = collision_area,
+                    type = 'resource'
+                }
+                can_place = (next(resources) == nil)
+            end
+            if can_place then
                 for _, entity in pairs(entities) do
                     entity.destroy({do_cliff_correction=true, raise_destroy=true})
                 end
                 args.build_check_type = defines.build_check_type.script
                 args.create_build_effect_smoke = false
-                entity = surface.create_entity(args)
-                if entity then
-                    entity.destructible = false
-                    entity.minable = false
-                    entity.rotatable = false
+                new_entity = surface.create_entity(args)
+                if new_entity then
+                    new_entity.destructible = false
+                    new_entity.minable = false
+                    new_entity.rotatable = false
                     break
                 end
             end
         end
     end
-    if entity == nil then
+    if new_entity == nil then
         force.print("Failed to place " .. args.name .. " in " .. serpent.line({x = x, y = y, radius = radius}))
     end
 end
@@ -434,7 +442,7 @@ end)
 
 {% if allow_cheats -%}
 commands.add_command("ap-spawn-silo", "Attempts to spawn a silo around 0,0", function(call)
-    spawn_entity(game.player.surface, game.player.force, "rocket-silo", 0, 0, 80, true)
+    spawn_entity(game.player.surface, game.player.force, "rocket-silo", 0, 0, 80, true, true)
 end)
 {% endif -%}
 
