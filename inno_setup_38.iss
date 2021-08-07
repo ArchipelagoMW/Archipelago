@@ -29,6 +29,7 @@ ArchitecturesAllowed=x64
 AllowNoIcons=yes
 SetupIconFile={#MyAppIcon}
 UninstallDisplayIcon={app}\{#MyAppExeName}
+; you will likely have to remove the following signtool line when testing/debugging localy. Don't include that change in PRs. 
 SignTool= signtool
 LicenseFile= LICENSE
 WizardStyle= modern
@@ -126,7 +127,6 @@ end;
 var ROMFilePage: TInputFileWizardPage;
 var R : longint;
 var rom: string;
-
 procedure InitializeWizard();
 begin
   rom := FileSearch('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', WizardDirValue());
@@ -144,7 +144,7 @@ begin
   rom := ''
   ROMFilePage :=
     CreateInputFilePage(
-      wpLicense,
+      wpSelectComponents,
       'Select ROM File',
       'Where is your Zelda no Densetsu - Kamigami no Triforce (Japan).sfc located?',
       'Select the file, then click Next.');
@@ -153,6 +153,13 @@ begin
     'Location of ROM file:',         
     'SNES ROM files|*.sfc|All files|*.*', 
     '.sfc');                             
+end;
+
+function ShouldSkipPage(PageID: Integer): Boolean;
+begin
+  Result := False;
+  if PageID = ROMFilePage.ID then
+    Result := not (WizardIsComponentSelected('client/lttp') or WizardIsComponentSelected('generator'));
 end;
 
 function GetROMPath(Param: string): string;
