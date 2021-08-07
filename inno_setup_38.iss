@@ -127,7 +127,8 @@ end;
 var ROMFilePage: TInputFileWizardPage;
 var R : longint;
 var rom: string;
-procedure InitializeWizard();
+
+procedure AddRomPage();
 begin
   rom := FileSearch('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', WizardDirValue());
   if Length(rom) > 0 then
@@ -152,13 +153,19 @@ begin
   ROMFilePage.Add(
     'Location of ROM file:',         
     'SNES ROM files|*.sfc|All files|*.*', 
-    '.sfc');                             
+    '.sfc');     
 end;
+
+procedure InitializeWizard();
+begin
+  AddRomPage();                      
+end;
+
 
 function ShouldSkipPage(PageID: Integer): Boolean;
 begin
   Result := False;
-  if PageID = ROMFilePage.ID then
+  if (assigned(ROMFilePage)) and (PageID = ROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('client/lttp') or WizardIsComponentSelected('generator'));
 end;
 
