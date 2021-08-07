@@ -376,12 +376,12 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     if index == -1 then -- for coop sync and restoring from an older savegame
         tech = force.technologies[item_name]
         if tech.researched ~= true then
-            game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked.")
+            game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
             game.play_sound({path="utility/research_completed"})
             tech.researched = true
             return
         end
-    elif progressive_technologies[item_name] ~= nil then
+    elseif progressive_technologies[item_name] ~= nil then
         if global.index_sync[index] == nil then -- not yet received prog item
             global.index_sync[index] = item_name
             local tech_stack = progressive_technologies[item_name]
