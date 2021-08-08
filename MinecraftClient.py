@@ -126,7 +126,7 @@ def run_forge_server(forge_dir, forge_server, heap_arg):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("apmc_file", default=None, help="Path to an Archipelago Minecraft data file (.apmc)")
+    parser.add_argument("apmc_file", default=None, nargs='?', help="Path to an Archipelago Minecraft data file (.apmc)")
 
     args = parser.parse_args()
     options = Utils.get_options()
