@@ -12,9 +12,9 @@ asar --no-title-check --symbols=wla --symbols-path=..\build\sm.sym ..\src\main.a
 python create_ips.py 00.sfc ff.sfc sm.ips
 del 00.sfc ff.sfc
 
-for %%f in (..\src\randopatches\ips\*.ips) do python merge_ips.py %%f sm.ips
+:: for %%f in (..\src\randopatches\ips\*.ips) do python merge_ips.py %%f sm.ips
 
-copy sm.ips ..\build\sm.ips > NUL
+copy sm.ips ..\..\variaRandomizer\patches\common\ips\multiworld.ips > NUL
 
 cd ..
 echo Done
