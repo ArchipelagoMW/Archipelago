@@ -2,7 +2,6 @@ from ..generic.Rules import set_rule, add_rule
 
 from graph.vanilla.graph_locations import locationsDict
 from logic.logic import Logic
-import logging
 
 def add_accessFrom_rule(location, player, accessFrom):
     add_rule(location, lambda state: any((state.can_reach(accessName, player=player) and rule(state.smbm[player])) for accessName, rule in accessFrom.items()))

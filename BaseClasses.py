@@ -10,10 +10,6 @@ from typing import List, Dict, Optional, Set, Iterable, Union, Any
 import secrets
 import random
 
-from variaRandomizer.logic.smboolmanager import SMBoolManager
-from variaRandomizer.logic.logic import Logic
-Logic.factory('vanilla')
-
 class MultiWorld():
     debug_types = False
     player_name: Dict[int, str]
@@ -471,8 +467,8 @@ class MultiWorld():
 class CollectionState():
 
     def __init__(self, parent: MultiWorld):
+        from worlds.sm.variaRandomizer.logic.smboolmanager import SMBoolManager
         super().__init__()
-        Logic.factory('vanilla')
         self.smbm = {player: SMBoolManager() for player in range(1, parent.players + 1)}
         self.prog_items = Counter()
         self.world = parent

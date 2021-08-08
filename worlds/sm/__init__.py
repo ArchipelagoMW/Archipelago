@@ -1,8 +1,6 @@
 import logging
 from typing import Set
 
-from logic.smboolmanager import SMBoolManager
-
 logger = logging.getLogger("Super Metroid")
 
 from .Locations import lookup_name_to_id as locations_lookup_name_to_id
@@ -14,11 +12,14 @@ from .Rules import set_rules
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
 from ..AutoWorld import World
 
+from logic.smboolmanager import SMBoolManager
 from rom.rompatcher import RomPatcher
 from graph.vanilla.graph_locations import locationsDict
 from rando.ItemLocContainer import ItemLocation
 from rando.Items import ItemManager
 from utils.parameters import *
+from logic.logic import Logic
+
 from Utils import output_path
 from shutil import copy2
 
@@ -42,10 +43,11 @@ class SMWorld(World):
     itemManager: ItemManager
 
     locations = {}
+
+    Logic.factory('vanilla')
     
     def generate_basic(self):
-        # Link regions
-        #self.world.get_entrance('Landing Site', self.player).connect(self.world.get_region('Zebes', self.player))
+        Logic.factory('vanilla')
 
         self.itemManager = ItemManager('Chozo', self.qty, SMBoolManager(), 100, easy)
         self.itemManager.createItemPool()
@@ -103,7 +105,6 @@ class SMWorld(World):
             outfilepname += f"_{self.world.player_names[player][0].replace(' ', '_')}" \
 
             outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
-#self.options["sm_options"]["rom_file"]
             copy2("Super Metroid (JU).sfc", outputFilename)
             romPatcher = RomPatcher(outputFilename, None)
 
@@ -133,8 +134,6 @@ class SMWorld(World):
 
             itemLocs = [ItemLocation(self.itemManager.Items[itemLoc.item.type if itemLoc.item.type in self.itemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == player]
             romPatcher.writeItemsLocs(itemLocs)
-            #romPatcher.writeSplitLocs(args.majorsSplit, itemLocs, progItemLocs)
-            #romPatcher.writeItemsNumber()
             romPatcher.end()
 
         pass

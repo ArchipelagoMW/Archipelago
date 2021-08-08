@@ -1,4 +1,4 @@
-from variaRandomizer.graph.location import locationsDict
+from worlds.sm.variaRandomizer.graph.location import locationsDict
 
 locations_start_id = 82000
 
