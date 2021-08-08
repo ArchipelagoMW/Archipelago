@@ -21,10 +21,25 @@
 !IStartDrawLoop = #i_start_draw_loop
 !IStartHiddenDrawLoop = #i_start_hidden_draw_loop
 
+!Click = $37			;Sound when selecting a HUD item
+
 !ITEM_RAM = $7E09A2
 
 ; SM Item Patches
 pushpc
+
+org $84FF00			;You can safely change this address to free space in bank $84 ($20000-$27FFF)
+SOUNDFX:
+	JSR SETFX
+	AND #$00FF
+	JSL $809049
+	RTS
+SETFX:
+	LDA #$0002
+	STA $05D7
+	LDA $0000,y
+	INY
+	RTS
 
 ;org $8095f7
 ;    jsl nmi_read_messages : nop
