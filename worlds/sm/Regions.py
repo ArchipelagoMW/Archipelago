@@ -3,9 +3,9 @@ def create_regions(self, world, player: int):
     from .Locations import lookup_name_to_id as location_lookup_name_to_id
     from BaseClasses import Entrance
 
-    from variaRandomizer.logic.logic import Logic
-    from variaRandomizer.graph.vanilla.graph_locations import locationsDict
-    from variaRandomizer.graph.graph_utils import vanillaTransitions, vanillaBossesTransitions
+    from logic.logic import Logic
+    from graph.vanilla.graph_locations import locationsDict
+    from graph.graph_utils import vanillaTransitions, vanillaBossesTransitions
 
     import logging
     regions = []

@@ -1,4 +1,4 @@
-from rando.Items import ItemManager
+from worlds.sm.variaRandomizer.rando.Items import ItemManager
 
 items_start_id = 83000
 
