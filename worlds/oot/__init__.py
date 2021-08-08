@@ -121,6 +121,7 @@ class OOTWorld(World):
 
         # Determine which dungeons are MQ
         # Possible future plan: allow user to pick which dungeons are MQ
+        self.mq_dungeons = 0  # temporary disable for client-side issues
         mq_dungeons = self.world.random.sample(dungeon_table, self.mq_dungeons)
         self.dungeon_mq = {item['name']: (item in mq_dungeons) for item in dungeon_table}
 
@@ -134,6 +135,8 @@ class OOTWorld(World):
         # Not implemented for now, but needed to placate the generator. Remove as they are implemented
         self.mq_dungeons_random = False  # this will be a deprecated option later
         self.hints = 'none'  # Hints will probably look very different in the future. disabled for now
+        # Disabled due to client-side implementation issues
+        self.big_poe_count = 1
         # These three are likely to never be implemented
         self.skip_child_zelda = False
         self.ocarina_songs = False

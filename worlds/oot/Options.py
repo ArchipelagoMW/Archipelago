@@ -81,7 +81,7 @@ world_options: typing.Dict[str, type(Option)] = {
     "triforce_hunt": Toggle, 
     "triforce_goal": make_range(1, 200, 20),
     "bombchus_in_logic": Toggle,
-    "mq_dungeons": make_range(0, 12),
+    # "mq_dungeons": make_range(0, 12),
 }
 
 class LACSCondition(Choice): 
@@ -215,7 +215,7 @@ timesavers_options: typing.Dict[str, type(Option)] = {
     "free_scarecrow": Toggle, 
     "fast_bunny_hood": Toggle, 
     "chicken_count": make_range(0, 7, 7),
-    "big_poe_count": make_range(1, 10, 1),
+    # "big_poe_count": make_range(1, 10, 1),
 }
 
 class Targeting(Choice): 
