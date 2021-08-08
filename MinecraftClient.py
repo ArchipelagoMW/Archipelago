@@ -73,7 +73,9 @@ def replace_apmc_files(forge_dir, apmc_file):
 
 
 # Check mod version, download new mod from GitHub releases page if needed. 
-def update_mod(forge_dir, ap_randomizer):
+def update_mod(forge_dir):
+    ap_randomizer = find_ap_randomizer_jar(forge_dir)
+
     client_releases_endpoint = "https://api.github.com/repos/KonoTyran/Minecraft_AP_Randomizer/releases"
     resp = requests.get(client_releases_endpoint)
     if resp.status_code == 200:  # OK
@@ -108,7 +110,9 @@ def update_mod(forge_dir, ap_randomizer):
 
 
 # Run the Forge server. Return process object
-def run_forge_server(forge_dir, forge_server, heap_arg):
+def run_forge_server(forge_dir, heap_arg):
+    forge_server = find_forge_jar(forge_dir)
+
     java_exe = os.path.abspath(os.path.join('jre8', 'bin', 'java.exe'))
     if not os.path.isfile(java_exe):
         java_exe = "java"  # try to fall back on java in the PATH
@@ -142,9 +146,7 @@ if __name__ == '__main__':
     if not max_heap_re.match(max_heap):
         raise Exception(f"Max heap size {max_heap} in incorrect format. Use a number followed by M or G, e.g. 512M or 2G.")
 
-    forge_server = find_forge_jar(forge_dir)
-    ap_randomizer = find_ap_randomizer_jar(forge_dir)
+    update_mod(forge_dir)
     replace_apmc_files(forge_dir, apmc_file)
-    update_mod(forge_dir, ap_randomizer)
-    server_process = run_forge_server(forge_dir, forge_server, max_heap)
+    server_process = run_forge_server(forge_dir, max_heap)
     server_process.wait()
