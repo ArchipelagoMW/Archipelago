@@ -5,7 +5,7 @@ import atexit
 from subprocess import Popen
 from shutil import copyfile
 from base64 import b64decode
-from json import loads
+from time import strftime
 
 import requests
 
@@ -106,7 +106,31 @@ def update_mod(forge_dir):
         print(f"Error checking for randomizer mod updates (status code {resp.status_code}).")
         print(f"If this was not expected, please report this issue on the Archipelago Discord server.")
         if not prompt_yes_no("Continue anyways?"):
-            sys.exit(1)
+            sys.exit(0)
+
+
+# Check if the EULA is agreed to, and prompt the user to read and agree if necessary.
+def check_eula(forge_dir):
+    eula_path = os.path.join(forge_dir, "eula.txt")
+    if not os.path.isfile(eula_path):
+        # Create eula.txt
+        with open(eula_path, 'w') as f:
+            f.write("#By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula).\n")
+            f.write(f"#{strftime('%a %b %d %X %Z %Y')}\n")
+            f.write("eula=false\n")
+    with open(eula_path, 'r+') as f:
+        text = f.read()
+        if 'false' in text:
+            # Prompt user to agree to the EULA
+            print("You need to agree to the Minecraft EULA in order to run the server.")
+            print("The EULA can be found at https://account.mojang.com/documents/minecraft_eula")
+            if prompt_yes_no("Do you agree to the EULA?"):
+                f.seek(0)
+                f.write(text.replace('false', 'true'))
+                f.truncate()
+                print(f"Set {eula_path} to true")
+            else:
+                sys.exit(0)
 
 
 # Run the Forge server. Return process object
@@ -151,5 +175,6 @@ if __name__ == '__main__':
 
     update_mod(forge_dir)
     replace_apmc_files(forge_dir, apmc_file)
+    check_eula(forge_dir)
     server_process = run_forge_server(forge_dir, max_heap)
     server_process.wait()
