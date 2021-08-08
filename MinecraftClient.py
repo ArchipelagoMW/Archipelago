@@ -69,7 +69,7 @@ def replace_apmc_files(forge_dir, apmc_file):
             os.remove(entry.path)
         print(f"Removed existing .apmc files in {apdata_dir}")
     copyfile(apmc_file, os.path.join(apdata_dir, os.path.basename(apmc_file)))
-    print(f"Copied {apmc_file} to {apdata_dir}")
+    print(f"Copied {os.path.basename(apmc_file)} to {apdata_dir}")
 
 
 # Check mod version, download new mod from GitHub releases page if needed. 
@@ -135,9 +135,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
     options = Utils.get_options()
 
-    apmc_file = args.apmc_file
+    apmc_file = os.path.abspath(args.apmc_file)
     forge_dir = options["minecraft_options"]["forge_directory"]
     max_heap = options["minecraft_options"]["max_heap_size"]
+
+    # Change to executable's working directory
+    os.chdir(os.path.abspath(os.path.dirname(sys.argv[0])))
 
     if apmc_file is not None and not os.path.isfile(apmc_file):
         raise FileNotFoundError(f"Path {apmc_file} does not exist or could not be accessed.")
