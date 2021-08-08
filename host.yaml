@@ -83,3 +83,6 @@ lttp_options:
   rom_start: true
 factorio_options:
   executable: "factorio\\bin\\x64\\factorio"
+minecraft_options: 
+  forge_directory: "Minecraft Forge server"
+  max_heap_size: "2G"
