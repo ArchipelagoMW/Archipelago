@@ -1,18 +1,21 @@
 import argparse
 import os, sys
 import re
-import requests
 import atexit
-import logging
 from subprocess import Popen
 from shutil import copyfile
 from base64 import b64decode
 from json import loads
 
+import requests
+
 import Utils
 
 atexit.register(input, "Press enter to exit.")
-logger = logging.getLogger(__name__)
+
+# 1 or more digits followed by m or g, then optional b
+max_heap_re = re.compile(r"^\d+[mMgG][bB]?$")
+
 
 def prompt_yes_no(prompt):
     yes_inputs = {'yes', 'ye', 'y'}
@@ -26,63 +29,51 @@ def prompt_yes_no(prompt):
         else:
             print('Please respond with "y" or "n".')
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument("apmc_file", default=None, help="Path to an Archipelago Minecraft data file (.apmc)")
 
-    args = parser.parse_args()
-    options = Utils.get_options()
-    max_heap_re = re.compile(r"^\d+[mMgG][bB]?$")
-
-    apmc_file = args.apmc_file
-    forge_dir = options["minecraft_options"]["forge_directory"]
-    max_heap = options["minecraft_options"]["max_heap_size"]
-
-    if apmc_file is not None and not os.path.isfile(apmc_file):
-        raise FileNotFoundError(f"Path {apmc_file} does not exist or could not be accessed.")
-    if not os.path.isdir(forge_dir):
-        raise NotADirectoryError(f"Path {forge_dir} does not exist.")
-    if not max_heap_re.match(max_heap):
-        raise Exception(f"Max heap size {max_heap} in incorrect format. Use a number followed by M or G, e.g. 512M or 2G.")
-
-    # Find forge .jar
-    forge_server = None
+# Find Forge jar file; raise error if not found 
+def find_forge_jar(forge_dir):
     for entry in os.scandir(forge_dir):
         if ".jar" in entry.name and "forge" in entry.name:
-            forge_server = entry.name
-            print(f"Found forge .jar: {forge_server}")
-    if forge_server is None:
-        raise FileNotFoundError(f"Could not find forge .jar in {forge_dir}.")
+            print(f"Found forge .jar: {entry.name}")
+            return entry.name
+    raise FileNotFoundError(f"Could not find forge .jar in {forge_dir}.")
 
-    # Find current randomizer mod, make mod dir if it doesn't already exist
+
+# Create mods folder if needed; find AP randomizer jar; return None if not found.
+def find_ap_randomizer_jar(forge_dir):
     mods_dir = os.path.join(forge_dir, 'mods')
-    ap_randomizer = None
     if os.path.isdir(mods_dir):
         ap_mod_re = re.compile(r"^aprandomizer-[\d\.]+\.jar$")
         for entry in os.scandir(mods_dir):
             match = ap_mod_re.match(entry.name)
-            if ap_mod_re.match(entry.name):
-                ap_randomizer = match.group()
-                print(f"Found AP randomizer mod: {ap_randomizer}")
-                break
+            if match:
+                print(f"Found AP randomizer mod: {match.group()}")
+                return match.group()
+        return None
     else:
         os.mkdir(mods_dir)
         print(f"Created mods folder in {forge_dir}")
+        return None
 
-    # If given an apmc file, remove any apmc files in APData and copy the new one in
-    if apmc_file is not None:
-        apdata_dir = os.path.join(forge_dir, 'APData')
-        if not os.path.isdir(apdata_dir):
-            os.mkdir(apdata_dir)
-            print(f"Created APData folder in {forge_dir}")
-        for entry in os.scandir(apdata_dir):
-            if ".apmc" in entry.name and entry.is_file():
-                os.remove(entry.path)
-            print(f"Removed existing .apmc files in {apdata_dir}")
-        copyfile(apmc_file, os.path.join(apdata_dir, os.path.basename(apmc_file)))
-        print(f"Copied new .apmc file to {apdata_dir}")
 
-    # Download new client if needed
+# Create APData folder if needed; clean .apmc files from APData; copy given .apmc into directory.
+def replace_apmc_files(forge_dir, apmc_file):
+    if apmc_file is None:
+        return
+    apdata_dir = os.path.join(forge_dir, 'APData')
+    if not os.path.isdir(apdata_dir):
+        os.mkdir(apdata_dir)
+        print(f"Created APData folder in {forge_dir}")
+    for entry in os.scandir(apdata_dir):
+        if ".apmc" in entry.name and entry.is_file():
+            os.remove(entry.path)
+        print(f"Removed existing .apmc files in {apdata_dir}")
+    copyfile(apmc_file, os.path.join(apdata_dir, os.path.basename(apmc_file)))
+    print(f"Copied {apmc_file} to {apdata_dir}")
+
+
+# Check mod version, download new mod from GitHub releases page if needed. 
+def update_mod(forge_dir, ap_randomizer):
     client_releases_endpoint = "https://api.github.com/repos/KonoTyran/Minecraft_AP_Randomizer/releases"
     resp = requests.get(client_releases_endpoint)
     if resp.status_code == 200:  # OK
@@ -106,10 +97,18 @@ if __name__ == '__main__':
                         os.remove(old_ap_mod)
                         print(f"Removed old mod file from {old_ap_mod}")
                 else:
-                    print(f"Error retrieving the randomizer mod (status code {apmod_resp.status_code}).\nPlease report this issue on the Archipelago Discord server.")
+                    print(f"Error retrieving the randomizer mod (status code {apmod_resp.status_code}).")
+                    print(f"Please report this issue on the Archipelago Discord server.")
                     sys.exit(1)
+    else:
+        print(f"Error checking for randomizer mod updates (status code {resp.status_code}).")
+        print(f"If this was not expected, please report this issue on the Archipelago Discord server.")
+        if not prompt_yes_no("Continue anyways?"):
+            sys.exit(1)
 
-    # Run forge server
+
+# Run the Forge server. Return process object
+def run_forge_server(forge_dir, forge_server, heap_arg):
     java_exe = os.path.abspath(os.path.join('jre8', 'bin', 'java.exe'))
     if not os.path.isfile(java_exe):
         java_exe = "java"  # try to fall back on java in the PATH
@@ -122,5 +121,30 @@ if __name__ == '__main__':
     argstring = ' '.join([java_exe, heap_arg, "-jar", forge_server, "-nogui"])
     print(f"Running Forge server: {argstring}")
     os.chdir(forge_dir)
-    server = Popen(argstring)
-    server.wait()
+    return Popen(argstring)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("apmc_file", default=None, help="Path to an Archipelago Minecraft data file (.apmc)")
+
+    args = parser.parse_args()
+    options = Utils.get_options()
+
+    apmc_file = args.apmc_file
+    forge_dir = options["minecraft_options"]["forge_directory"]
+    max_heap = options["minecraft_options"]["max_heap_size"]
+
+    if apmc_file is not None and not os.path.isfile(apmc_file):
+        raise FileNotFoundError(f"Path {apmc_file} does not exist or could not be accessed.")
+    if not os.path.isdir(forge_dir):
+        raise NotADirectoryError(f"Path {forge_dir} does not exist or could not be accessed.")
+    if not max_heap_re.match(max_heap):
+        raise Exception(f"Max heap size {max_heap} in incorrect format. Use a number followed by M or G, e.g. 512M or 2G.")
+
+    forge_server = find_forge_jar(forge_dir)
+    ap_randomizer = find_ap_randomizer_jar(forge_dir)
+    replace_apmc_files(forge_dir, apmc_file)
+    update_mod(forge_dir, ap_randomizer)
+    server_process = run_forge_server(forge_dir, forge_server, max_heap)
+    server_process.wait()
