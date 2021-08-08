@@ -159,16 +159,13 @@ def create_region(self, world: MultiWorld, player: int, name: str, locations=Non
     ret.world = world
     if locations:
         for loc in locations:
-            # loc_id = locations_lookup_name_to_id.get(loc, 0)
-            location = self.locations[loc] # SMLocation(player, location, loc_id, ret)
+            location = self.locations[loc]
             location.parent_regions.append(ret)
             location.parent_region = ret
             ret.locations.append(location)
     if exits:
         for exit in exits:
-            #entrance = Entrance(player, exit, ret) #TEST
             ret.exits.append(Entrance(player, exit, ret))
-            #entrance.connect(ret) #TEST
     return ret
 
 

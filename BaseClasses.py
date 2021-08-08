@@ -462,11 +462,10 @@ class MultiWorld():
         return False
 
 
-class CollectionState():
+class CollectionState(object):
 
     def __init__(self, parent: MultiWorld):
         from worlds.sm.variaRandomizer.logic.smboolmanager import SMBoolManager
-        super().__init__()
         self.smbm = {player: SMBoolManager() for player in range(1, parent.players + 1)}
         self.prog_items = Counter()
         self.world = parent
