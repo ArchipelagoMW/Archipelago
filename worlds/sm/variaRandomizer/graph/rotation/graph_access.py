@@ -15,7 +15,7 @@ accessPoints = [
                                            sm.canDestroyBombWalls()),
         'Keyhunter Room Bottom': lambda sm: sm.traverse('LandingSiteRight'),
         'Moat Right': lambda sm: sm.wand(sm.traverse('LandingSiteRight'),
-                                         sm.traverse('KihunterRight'))
+                                         sm.traverse('KihunterRight')),
         'Blue Brinstar Elevator Bottom': lambda sm: SMBool(True)
     }, internal=True,
        start={'spawn': 0x0000, 'doors':[0x32], 'patches':[RomPatches.BlueBrinstarBlueDoor], 'solveArea': "Crateria Landing Site"}),
@@ -28,8 +28,8 @@ accessPoints = [
     AccessPoint('Gauntlet Top', 'Crateria', {
         'Green Pirates Shaft Bottom Right': lambda sm: sm.wand(sm.haveItem('Morph'),
                                                                sm.canPassCrateriaGreenPirates()),
-        'Landing Site': sm.wand(sm.haveItem('Morph'),
-                                sm.canDestroyBombWalls())
+        'Landing Site': lambda sm:  sm.wand(sm.haveItem('Morph'),
+                                            sm.canDestroyBombWalls())
     }, internal=True,
        start={'spawn': 0x0006, 'solveArea': "Crateria Gauntlet", 'save':"Save_Gauntlet", 'forcedEarlyMorph':True}),
     AccessPoint('Lower Mushrooms Left', 'Crateria', {
@@ -41,7 +41,7 @@ accessPoints = [
        entryInfo = {'SamusX':0x36, 'SamusY':0x88, 'song': 0x9},
        dotOrientation = 'nw'),
     AccessPoint('Green Pirates Shaft Bottom Right', 'Crateria', {
-        'Lower Mushrooms Left': lambda sm: SMBool(True)
+        'Lower Mushrooms Left': lambda sm: SMBool(True),
         'Gauntlet Top': lambda sm: sm.wand(sm.haveItem('Morph'),
                                            sm.canPassCrateriaGreenPirates())
     }, traverse = lambda sm: sm.wor(RomPatches.has(RomPatches.AreaRandoMoreBlueDoors),
@@ -60,7 +60,7 @@ accessPoints = [
        entryInfo = {'SamusX':0x1cf, 'SamusY':0x88, 'song': 0xc},
        dotOrientation = 'ne'),
     AccessPoint('Keyhunter Room Bottom', 'Crateria', {
-        'Moat Right': lambda sm: sm.wand(sm.traverse('KihunterRight'), sm.haveItem('Morph'))
+        'Moat Right': lambda sm: sm.wand(sm.traverse('KihunterRight'), sm.haveItem('Morph')),
         'Landing Site': lambda sm: sm.haveItem('Morph')
     }, traverse = lambda sm: sm.wor(RomPatches.has(RomPatches.AreaRandoMoreBlueDoors),
                                     sm.traverse('KihunterBottom')),
@@ -172,7 +172,7 @@ accessPoints = [
         'West Ocean Left': lambda sm: sm.wand(sm.haveItem('Gravity'),
                                               sm.wor(sm.haveItem('Hijump'),
                                                      # TODO::check if the IBJ is not too hard
-                                                     sm.canFly()))
+                                                     sm.canFly())),
         'Wrecked Ship Back': Cache.ldeco('WSM_WSB', (
             # just have to fall through spongebath and spicky room
             lambda sm: sm.wand(sm.haveItem('Morph'),
@@ -548,21 +548,21 @@ accessPoints = [
     ### West Maridia
     AccessPoint('Main Street Bottom', 'WestMaridia', {
         # from the red fish door to the AP door just need gravity
-        'Red Fish Room Left': lambda sm: sm.haveItem('Gravity')
+        'Red Fish Room Left': lambda sm: sm.haveItem('Gravity'),
         'Crab Hole Bottom Left': Cache.ldeco('MSB_CHBL', (
             lambda sm: sm.wand(sm.haveItem('Morph'),
                                # door is blue in rotation
                                sm.traverse('MainStreetBottomRight'),
                                # exit through door on ceiling
                                sm.wor(sm.haveItem('Gravity'),
-                                      sm.canInfiniteBombJumpSuitless()
-        )
+                                      sm.canInfiniteBombJumpSuitless())))
+        ),
         # this transition leads to EastMaridia directly
         'Oasis Bottom': Cache.ldeco('MSB_OB', (
             # just fall, but slow down to avoid crabs and projectiles
             lambda sm: sm.wand(sm.wnot(RomPatches.has(RomPatches.MaridiaSandWarp)),
-                               sm.traverse('MainStreetBottomRight'))
-        )
+                               sm.traverse('MainStreetBottomRight')))
+        ),
         'Crab Shaft Left': lambda sm: SMBool(True) # possible suitless with some underwater walljumps
     }, roomInfo = {'RoomPtr':0xcfc9, "area": 0x4},
        exitInfo = {'DoorPtr':0xa39c, 'direction': 0x6, "cap": (0x6, 0x2), "bitFlag": 0x0,
@@ -579,7 +579,7 @@ accessPoints = [
         'Main Street Bottom': Cache.ldeco('CHBL_MSB', (
             lambda sm: sm.wor(sm.haveItem('Gravity'),
                               # quite long walljumps...
-                              sm.wand(sm.knowsGravLessLevel1(), sm.haveItem('HiJump'))
+                              sm.wand(sm.knowsGravLessLevel1(), sm.haveItem('HiJump'))))),
         # this transition leads to EastMaridia directly
         'Oasis Bottom': Cache.ldeco('CHBL_OB', (
             lambda sm: sm.wand(sm.wnot(RomPatches.has(RomPatches.MaridiaSandWarp)),
@@ -600,8 +600,8 @@ accessPoints = [
        dotOrientation = 'w'),
     AccessPoint('Crab Shaft Left', 'WestMaridia', {
                                          # go up Mt everest then left on main street
-        'Main Street Bottom': lambda sm: sm.canGoUpMtEverest()
-        'Beach': lambda sm: sm.haveItem('Morph')
+        'Main Street Bottom': lambda sm: sm.canGoUpMtEverest(),
+        'Beach': lambda sm: sm.haveItem('Morph'),
         'Crab Shaft Right': lambda sm: sm.canMorphJump()
     }, internal=True),
     AccessPoint('Watering Hole', 'WestMaridia', {
@@ -615,7 +615,7 @@ accessPoints = [
         'Watering Hole': lambda sm: sm.haveItem('Morph')
     }, internal=True),
     AccessPoint('Beach', 'WestMaridia', {
-        'Crab Shaft Left': lambda sm: sm.haveItem('Morph')
+        'Crab Shaft Left': lambda sm: sm.haveItem('Morph'),
         # TODO::try to pass the one block hole suitless with a springball jump
         'Watering Hole': lambda sm: sm.wor(sm.haveItem('Gravity'),
                                            # with hijump we can walljump high enough to pass the hole suitless
@@ -670,7 +670,7 @@ accessPoints = [
     AccessPoint('Aqueduct Bottom', 'EastMaridia', {
         'Aqueduct Top Left': lambda sm: sm.wand(sm.canUsePowerBombs(),
                                                 sm.wor(sm.haveItem('Gravity'),
-                                                       sm.wand(sm.knowsGravLessLevel1())))
+                                                       sm.wand(sm.knowsGravLessLevel1()))),
                                            # includes botwoon hallway conditions
         'Post Botwoon': lambda sm: sm.wor(sm.wand(sm.canDefeatBotwoon(),
                                                   # TODO::check for suitless beside IBJ (like with grapple)
@@ -679,9 +679,9 @@ accessPoints = [
                                                                  sm.haveItem('HiJump')))),
                                           # skip botwoon through the sandpits.
                                           # falling down "Below Botwoon Energy Tank" room looks like a softlock.
-                                          sm.canGravLessLevel1())
+                                          sm.canGravLessLevel1()),
                                                   
-        'Left Sandpit': lambda sm: sm.wand(sm.canGravLessLevel1(), sm.haveItem('Morph'))
+        'Left Sandpit': lambda sm: sm.wand(sm.canGravLessLevel1(), sm.haveItem('Morph')),
         'Right Sandpit': lambda sm: sm.wand(sm.canGravLessLevel1(), sm.haveItem('Morph')),
         'Aqueduct': lambda sm: sm.wor(sm.canEnterExitAqueduct(),
                                       # there's also pb blocks down in the hole, can't be used to comeback suitless to aqueduct bottom
@@ -698,7 +698,7 @@ accessPoints = [
                                              # TODO::test what happen when you do that while botwoon is still alive
                                              sm.canGravLessLevel1()),
         'Colosseum Top Right': lambda sm: sm.wand(sm.haveItem('Morph'),
-                                                  sm.canGravLessLevel1())
+                                                  sm.canGravLessLevel1()),
         'Toilet Top': lambda sm: sm.wand(sm.canReachCacatacAlleyFromBotowoon(),
                                          sm.canPassCacatacAlley())
     }, internal=True),
@@ -719,7 +719,7 @@ accessPoints = [
     AccessPoint('Left Sandpit', 'EastMaridia', {
         'West Sand Hall Left': lambda sm: sm.canTraverseSandPitsBottom(),
         # just fall and avoid projectiles
-        'Oasis Bottom': lambda sm: SMBool(True)
+        'Oasis Bottom': lambda sm: SMBool(True),
         'Aqueduct Bottom': lambda sm: sm.wand(sm.canGravLessLevel1(), sm.haveItem('Morph'))
     }, internal=True),
     AccessPoint('Oasis Bottom', 'EastMaridia', {
@@ -733,7 +733,7 @@ accessPoints = [
     }, internal=True),
     AccessPoint('Le Coude Right', 'EastMaridia', {
         'Toilet Top': lambda sm: sm.wor(sm.haveItem('Gravity'),
-                                        sm.wand(sm.knowsGravLessLevel1()
+                                        sm.wand(sm.knowsGravLessLevel1(),
                                                 # the final jump to exit the needle room,
                                                 # not an easy one, even with hijump...
                                                 # way easier with space jump
@@ -750,7 +750,7 @@ accessPoints = [
         'Le Coude Right': lambda sm: sm.canGravLessLevel1(),
         'Precious Room Top': Cache.ldeco('TT_PRT', (
             # just fall all the way
-            lambda sm: sm.canGravLessLevel1()
+            lambda sm: sm.canGravLessLevel1())
         )
     }, internal=True),
     AccessPoint('Colosseum Top Right', 'EastMaridia', {
@@ -758,7 +758,7 @@ accessPoints = [
         'Precious Room Top': lambda sm: sm.traverse('ColosseumBottomRight'), # go left
     }, internal = True),
     AccessPoint('Precious Room Top', 'EastMaridia', {
-        'Colosseum Top Right': lambda sm: sm.canGravLessLevel1()
+        'Colosseum Top Right': lambda sm: sm.canGravLessLevel1(),
         'DraygonRoomOut': lambda sm: sm.wand(sm.haveItem('Morph'), sm.canGravLessLevel1())
     }, internal = True),
 #    # boss APs
@@ -790,7 +790,7 @@ accessPoints = [
     AccessPoint('Red Tower Top Left', 'RedBrinstar', {
         # go right
         'Red Brinstar Elevator': lambda sm: sm.haveItem('Morph'),
-        'Caterpillar Room Top Right': lambda sm: sm.haveItem('Morph')
+        'Caterpillar Room Top Right': lambda sm: sm.haveItem('Morph'),
         # go left
         'East Tunnel Right': lambda sm: SMBool(True)
     }, roomInfo = {'RoomPtr':0xa253, "area": 0x1},
@@ -799,7 +799,7 @@ accessPoints = [
        entryInfo = {'SamusX':0x2f, 'SamusY':0x488},
        dotOrientation = 'w'),
     AccessPoint('Caterpillar Room Top Right', 'RedBrinstar', {
-        'Red Brinstar Elevator': lambda sm: SMBool(True) # wall jump up
+        'Red Brinstar Elevator': lambda sm: SMBool(True), # wall jump up
         'Red Tower Top Left': lambda sm: sm.wand(sm.wor(RomPatches.has(RomPatches.HellwayBlueDoor),
                                                         sm.traverse('RedTowerElevatorLeft')),
                                                  # pass shot block right of tower climb
