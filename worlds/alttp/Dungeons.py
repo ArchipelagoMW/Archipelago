@@ -44,75 +44,6 @@ def create_dungeons(world, player):
 
     world.dungeons += [ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, TR, GT]
 
-def fill_dungeons(world):
-    #All chests on the freebes list locked behind a key in room with no other exit
-    freebes = ['Ganons Tower - Map Chest', 'Palace of Darkness - Harmless Hellway', 'Palace of Darkness - Big Key Chest', 'Turtle Rock - Big Key Chest']
-
-    all_state_base = world.get_all_state()
-
-    dungeons = [(list(dungeon.regions), dungeon.big_key, list(dungeon.small_keys), list(dungeon.dungeon_items)) for dungeon in world.dungeons]
-
-    loopcnt = 0
-    while dungeons:
-        loopcnt += 1
-        dungeon_regions, big_key, small_keys, dungeon_items = dungeons.pop(0)
-        # this is what we need to fill
-        dungeon_locations = [location for location in world.get_unfilled_locations() if location.parent_region.name in dungeon_regions]
-        world.random.shuffle(dungeon_locations)
-
-        all_state = all_state_base.copy()
-
-        # first place big key
-        if big_key is not None:
-            bk_location = None
-            for location in dungeon_locations:
-                if location.item_rule(big_key):
-                    bk_location = location
-                    break
-
-            if bk_location is None:
-                raise RuntimeError('No suitable location for %s' % big_key)
-
-            world.push_item(bk_location, big_key, False)
-            bk_location.event = True
-            bk_location.locked = True
-            dungeon_locations.remove(bk_location)
-            big_key = None
-
-        # next place small keys
-        while small_keys:
-            small_key = small_keys.pop()
-            all_state.sweep_for_events()
-            sk_location = None
-            for location in dungeon_locations:
-                if location.name in freebes or (location.can_reach(all_state) and location.item_rule(small_key)):
-                    sk_location = location
-                    break
-
-            if sk_location is None:
-                # need to retry this later
-                small_keys.append(small_key)
-                dungeons.append((dungeon_regions, big_key, small_keys, dungeon_items))
-                # infinite regression protection
-                if loopcnt < (30 * world.players):
-                    break
-                else:
-                    raise RuntimeError('No suitable location for %s' % small_key)
-
-            world.push_item(sk_location, small_key, False)
-            sk_location.event = True
-            sk_location.locked = True
-            dungeon_locations.remove(sk_location)
-
-        if small_keys:
-            # key placement not finished, loop again
-            continue
-
-        # next place dungeon items
-        for dungeon_item in dungeon_items:
-            di_location = dungeon_locations.pop()
-            world.push_item(di_location, dungeon_item, False)
-
 
 def get_dungeon_item_pool(world):
     items = [item for dungeon in world.dungeons for item in dungeon.all_items]
@@ -120,28 +51,27 @@ def get_dungeon_item_pool(world):
         item.world = world
     return items
 
+
 def fill_dungeons_restrictive(world):
     """Places dungeon-native items into their dungeons, places nothing if everything is shuffled outside."""
-    restricted_players = {player for player, restricted in world.restrict_dungeon_item_on_boss.items() if restricted}
-
-    locations = [location for location in world.get_unfilled_dungeon_locations()
-                 if not (location.player in restricted_players and location.name in lookup_boss_drops)] # filter boss
-
-    world.random.shuffle(locations)
-    all_state_base = world.get_all_state()
-
-    # with shuffled dungeon items they are distributed as part of the normal item pool
-    for item in world.get_items():
-        if (item.smallkey and world.keyshuffle[item.player]) or (item.bigkey and world.bigkeyshuffle[item.player]):
-            all_state_base.collect(item, True)
-            item.advancement = True
-
-    dungeon_items = [item for item in get_dungeon_item_pool(world) if (((item.smallkey and not world.keyshuffle[item.player])
-                                                                       or (item.bigkey and not world.bigkeyshuffle[item.player])
-                                                                       or (item.map and not world.mapshuffle[item.player])
-                                                                       or (item.compass and not world.compassshuffle[item.player])
-                                                                        ) and world.goal[item.player] != 'icerodhunt')]  #
+    dungeon_items = [item for item in get_dungeon_item_pool(world) if
+                     (((item.smallkey and not world.keyshuffle[item.player])
+                       or (item.bigkey and not world.bigkeyshuffle[item.player])
+                       or (item.map and not world.mapshuffle[item.player])
+                       or (item.compass and not world.compassshuffle[item.player])
+                       ) and world.goal[item.player] != 'icerodhunt')]
     if dungeon_items:
+        restricted_players = {player for player, restricted in world.restrict_dungeon_item_on_boss.items() if restricted}
+        locations = [location for location in world.get_unfilled_dungeon_locations()
+                     if not (location.player in restricted_players and location.name in lookup_boss_drops)] # filter boss
+
+        world.random.shuffle(locations)
+        all_state_base = world.get_all_state()
+        # with shuffled dungeon items they are distributed as part of the normal item pool
+        for item in world.get_items():
+            if (item.smallkey and world.keyshuffle[item.player]) or (item.bigkey and world.bigkeyshuffle[item.player]):
+                all_state_base.collect(item, True)
+                item.advancement = True
         # sort in the order Big Key, Small Key, Other before placing dungeon items
         sort_order = {"BigKey": 3, "SmallKey": 2}
         dungeon_items.sort(key=lambda item: sort_order.get(item.type, 1))

@@ -14,7 +14,6 @@ from BaseClasses import MultiWorld, CollectionState, Region, Item
 from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from worlds.alttp.Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
-from worlds.alttp.Dungeons import fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from worlds.alttp.ItemPool import difficulties, fill_prizes
@@ -218,18 +217,9 @@ def main(args, seed=None):
 
     distribute_planned(world)
 
-    logger.info('Placing Dungeon Prizes.')
+    logger.info('Running Pre Main Fill.')
 
-    fill_prizes(world)
-
-    logger.info('Placing Dungeon Items.')
-
-    if world.algorithm in ['balanced', 'vt26'] or any(
-            list(args.mapshuffle.values()) + list(args.compassshuffle.values()) +
-            list(args.keyshuffle.values()) + list(args.bigkeyshuffle.values())):
-        fill_dungeons_restrictive(world)
-    else:
-        fill_dungeons(world)
+    AutoWorld.call_all(world, "pre_fill")
 
     logger.info('Fill the world.')
 

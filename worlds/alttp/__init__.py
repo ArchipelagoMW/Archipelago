@@ -1,4 +1,5 @@
 import random
+import logging
 
 from BaseClasses import Item, CollectionState
 from .SubClasses import ALttPItem
@@ -13,6 +14,8 @@ from .Dungeons import create_dungeons
 
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
+
+lttp_logger = logging.getLogger("A Link to the Past")
 
 class ALTTPWorld(World):
     game: str = "A Link to the Past"
@@ -130,6 +133,47 @@ class ALTTPWorld(World):
             state.prog_items[item.name, item.player] += 1
             return True
         return False
+
+    def pre_fill(self):
+        from Fill import fill_restrictive, FillError
+        attempts = 5
+        world = self.world
+        player = self.player
+        all_state = world.get_all_state(keys=True)
+        crystals = [self.create_item(name) for name in ['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6']]
+        crystal_locations = [world.get_location('Turtle Rock - Prize', player),
+                             world.get_location('Eastern Palace - Prize', player),
+                             world.get_location('Desert Palace - Prize', player),
+                             world.get_location('Tower of Hera - Prize', player),
+                             world.get_location('Palace of Darkness - Prize', player),
+                             world.get_location('Thieves\' Town - Prize', player),
+                             world.get_location('Skull Woods - Prize', player),
+                             world.get_location('Swamp Palace - Prize', player),
+                             world.get_location('Ice Palace - Prize', player),
+                             world.get_location('Misery Mire - Prize', player)]
+        placed_prizes = {loc.item.name for loc in crystal_locations if loc.item}
+        unplaced_prizes = [crystal for crystal in crystals if crystal.name not in placed_prizes]
+        empty_crystal_locations = [loc for loc in crystal_locations if not loc.item]
+        for attempt in range(attempts):
+            try:
+                prizepool = unplaced_prizes.copy()
+                prize_locs = empty_crystal_locations.copy()
+                world.random.shuffle(prize_locs)
+                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True)
+            except FillError as e:
+                lttp_logger.exception("Failed to place dungeon prizes (%s). Will retry %s more times", e,
+                                                attempts - attempt)
+                for location in empty_crystal_locations:
+                    location.item = None
+                continue
+            break
+        else:
+            raise FillError('Unable to place dungeon prizes')
+
+    @classmethod
+    def stage_pre_fill(cls, world):
+        from .Dungeons import fill_dungeons_restrictive
+        fill_dungeons_restrictive(world)
 
     def get_required_client_version(self) -> tuple:
         return max((0, 1, 4), super(ALTTPWorld, self).get_required_client_version())
