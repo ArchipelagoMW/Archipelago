@@ -10,7 +10,7 @@ import tempfile
 import zipfile
 from typing import Dict, Tuple
 
-from BaseClasses import MultiWorld, CollectionState, Region
+from BaseClasses import MultiWorld, CollectionState, Region, RegionType
 from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
@@ -257,7 +257,7 @@ def main(args, seed=None):
         # collect ER hint info
         er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
                         world.shuffle[player] != "vanilla" or world.retro[player]}
-        from worlds.alttp.Regions import RegionType
+
         for region in world.regions:
             if region.player in er_hint_data and region.locations:
                 main_entrance = get_entrance_to_region(region)
