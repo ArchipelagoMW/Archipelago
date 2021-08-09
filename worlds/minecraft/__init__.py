@@ -30,7 +30,7 @@ class MinecraftWorld(World):
         return {
             'world_seed': self.world.slot_seeds[self.player].getrandbits(32),
             'seed_name': self.world.seed_name,
-            'player_name': self.world.get_player_names(self.player),
+            'player_name': self.world.get_player_name(self.player),
             'player_id': self.player,
             'client_version': client_version,
             'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits},
@@ -95,7 +95,7 @@ class MinecraftWorld(World):
 
     def generate_output(self, output_directory: str):
         data = self._get_mc_data()
-        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_names(self.player)}.apmc"
+        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}.apmc"
         with open(os.path.join(output_directory, filename), 'wb') as f:
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 

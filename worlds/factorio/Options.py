@@ -103,14 +103,14 @@ class RecipeTime(Choice):
 class Progressive(Choice):
     displayname = "Progressive Technologies"
     option_off = 0
-    option_random = 1
+    option_grouped_random = 1
     option_on = 2
     alias_false = 0
     alias_true = 2
     default = 2
 
     def want_progressives(self, random):
-        return random.choice([True, False]) if self.value == self.option_random else int(self.value)
+        return random.choice([True, False]) if self.value == self.option_grouped_random else int(self.value)
 
 
 class RecipeIngredients(Choice):

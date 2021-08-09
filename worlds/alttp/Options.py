@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, Range, Option
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle
 
 
 class Logic(Choice):
@@ -70,8 +70,116 @@ class Enemies(Choice):
     option_shuffled = 1
     option_chaos = 2
 
+
+class Progressive(Choice):
+    displayname = "Progressive Items"
+    option_off = 0
+    option_grouped_random = 1
+    option_on = 2
+    alias_false = 0
+    alias_true = 2
+    default = 2
+
+    def want_progressives(self, random):
+        return random.choice([True, False]) if self.value == self.option_grouped_random else int(self.value)
+
+class Palette(Choice):
+    option_default = 0
+    option_good = 1
+    option_blackout = 2
+    option_puke = 3
+    option_classic = 4
+    option_grayscale = 5
+    option_negative = 6
+    option_dizzy = 7
+    option_sick = 8
+
+
+class OWPalette(Palette):
+    displayname = "Overworld Palette"
+
+
+class UWPalette(Palette):
+    displayname = "Underworld Palette"
+
+
+class HUDPalette(Palette):
+    displayname = "Menu Palette"
+
+
+class SwordPalette(Palette):
+    displayname = "Sword Palette"
+
+
+class ShieldPalette(Palette):
+    displayname = "Shield Palette"
+
+
+class LinkPalette(Palette):
+    displayname = "Link Palette"
+
+
+class HeartBeep(Choice):
+    displayname = "Heart Beep Rate"
+    option_normal = 0
+    option_double = 1
+    option_half = 2,
+    option_quarter = 3
+    option_off = 4
+
+
+class HeartColor(Choice):
+    displayname = "Heart Color"
+    option_red = 0
+    option_blue = 1
+    option_green = 2
+    option_yellow = 3
+
+
+class QuickSwap(DefaultOnToggle):
+    displayname = "L/R Quickswapping"
+
+
+class MenuSpeed(Choice):
+    displayname = "Menu Speed"
+    option_normal = 0
+    option_instant = 1,
+    option_double = 2
+    option_triple = 3
+    option_quadruple = 4
+    option_half = 5
+
+
+class Music(DefaultOnToggle):
+    displayname = "Play music"
+
+class ReduceFlashing(DefaultOnToggle):
+    displayname = "Reduce Screen Flashes"
+
+class TriforceHud(Choice):
+    displayname = "Display Method for Triforce Hunt"
+    option_normal = 0
+    option_hide_goal = 1
+    option_hide_required = 2
+    option_hide_both = 3
+
 alttp_options: typing.Dict[str, type(Option)] = {
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
+    "progressive": Progressive,
     "shop_item_slots": ShopItemSlots,
+    "ow_palettes": OWPalette,
+    "uw_palettes": UWPalette,
+    "hud_palettes": HUDPalette,
+    "sword_palettes": SwordPalette,
+    "shield_palettes": ShieldPalette,
+    "link_palettes": LinkPalette,
+    "heartbeep": HeartBeep,
+    "heartcolor": HeartColor,
+    "quickswap": QuickSwap,
+    "menuspeed": MenuSpeed,
+    "music": Music,
+    "reduceflashing": ReduceFlashing,
+    "triforcehud": TriforceHud
+
 }

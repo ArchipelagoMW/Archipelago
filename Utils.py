@@ -51,24 +51,6 @@ def snes_to_pc(value):
     return ((value & 0x7F0000) >> 1) | (value & 0x7FFF)
 
 
-def parse_player_names(names, players, teams):
-    names = tuple(n for n in (n.strip() for n in names.split(",")) if n)
-    if len(names) != len(set(names)):
-        name_counter = collections.Counter(names)
-        raise ValueError(f"Duplicate Player names is not supported, "
-                         f'found multiple "{name_counter.most_common(1)[0][0]}".')
-    ret = []
-    while names or len(ret) < teams:
-        team = [n[:16] for n in names[:players]]
-        # 16 bytes in rom per player, which will map to more in unicode, but those characters later get filtered
-        while len(team) != players:
-            team.append(f"Player{len(team) + 1}")
-        ret.append(team)
-
-        names = names[players:]
-    return ret
-
-
 def cache_argsless(function):
     if function.__code__.co_argcount:
         raise Exception("Can only cache 0 argument functions with this cache.")
@@ -308,7 +290,7 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
         adjuster_settings.rom = romfile
         adjuster_settings.baserom = Patch.get_base_rom_path()
         adjuster_settings.world = None
-        whitelist = {"disablemusic", "fastmenu", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
+        whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
                      "uw_palettes", "sprite"}
         printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
         if hasattr(adjuster_settings, "sprite_pool"):

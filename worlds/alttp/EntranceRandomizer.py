@@ -143,20 +143,7 @@ def parse_arguments(argv, no_defaults=False):
                                             off.
                              Off:           Dungeon counters are never shown.
                              ''')
-    parser.add_argument('--progressive', default=defval('on'), const='normal', nargs='?', choices=['on', 'off', 'random'],
-                        help='''\
-                             Select progressive equipment setting. Affects available itempool. (default: %(default)s)
-                             On:              Swords, Shields, Armor, and Gloves will
-                                              all be progressive equipment. Each subsequent
-                                              item of the same type the player finds will
-                                              upgrade that piece of equipment by one stage.
-                             Off:             Swords, Shields, Armor, and Gloves will not
-                                              be progressive equipment. Higher level items may
-                                              be found at any time. Downgrades are not possible.
-                             Random:          Swords, Shields, Armor, and Gloves will, per
-                                              category, be randomly progressive or not.
-                                              Link will die in one hit.
-                             ''')
+
     parser.add_argument('--algorithm', default=defval('balanced'), const='balanced', nargs='?',
                         choices=['freshness', 'flood', 'vt25', 'vt26', 'balanced'],
                         help='''\
@@ -218,22 +205,7 @@ def parse_arguments(argv, no_defaults=False):
                              --seed given will produce the same 10 (different) roms each
                              time).
                              ''', type=int)
-    parser.add_argument('--fastmenu', default=defval('normal'), const='normal', nargs='?',
-                        choices=['normal', 'instant', 'double', 'triple', 'quadruple', 'half'],
-                        help='''\
-                             Select the rate at which the menu opens and closes.
-                             (default: %(default)s)
-                             ''')
-    parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
-    parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
-    parser.add_argument('--triforcehud', default='hide_goal', const='hide_goal', nargs='?', choices=['normal', 'hide_goal', 'hide_required', 'hide_both'],
-                    help='''\
-                            Hide the triforce hud in certain circumstances.
-                            hide_goal will hide the hud until finding a triforce piece, hide_required will hide the total amount needed to win
-                            (Both can be revealed when speaking to Murahalda)
-                            (default: %(default)s)
-                            ''')
-    parser.add_argument('--enableflashing', help='Reenable flashing animations (unfriendly to epilepsy, always disabled in race roms)', action='store_false', dest="reduceflashing")
+
     parser.add_argument('--mapshuffle', default=defval(False),
                         help='Maps are no longer restricted to their dungeons, but can be anywhere',
                         action='store_true')
@@ -276,19 +248,6 @@ def parse_arguments(argv, no_defaults=False):
                              If set, the Pyramid Hole and Ganon's Tower are not
                              included entrance shuffle pool.
                              ''', action='store_false', dest='shuffleganon')
-    parser.add_argument('--heartbeep', default=defval('normal'), const='normal', nargs='?', choices=['double', 'normal', 'half', 'quarter', 'off'],
-                        help='''\
-                             Select the rate at which the heart beep sound is played at
-                             low health. (default: %(default)s)
-                             ''')
-    parser.add_argument('--heartcolor', default=defval('red'), const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow', 'random'],
-                        help='Select the color of Link\'s heart meter. (default: %(default)s)')
-    parser.add_argument('--ow_palettes', default=defval('default'), choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
-    parser.add_argument('--uw_palettes', default=defval('default'), choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
-    parser.add_argument('--hud_palettes', default=defval('default'), choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
-    parser.add_argument('--shield_palettes', default=defval('default'), choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
-    parser.add_argument('--sword_palettes', default=defval('default'), choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
-    parser.add_argument('--link_palettes', default=defval('default'), choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
 
     parser.add_argument('--sprite', help='''\
                              Path to a sprite sheet to use for Link. Needs to be in
@@ -380,15 +339,14 @@ def parse_arguments(argv, no_defaults=False):
                          'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
                          'local_items', 'non_local_items', 'retro', 'accessibility', 'hints', 'beemizer',
                          'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',
-                         'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
-                         'heartbeep', "progression_balancing", "triforce_pieces_available",
+                         'sprite',
+                         "progression_balancing", "triforce_pieces_available",
                          "triforce_pieces_required", "shop_shuffle",
                          "required_medallions", "start_hints",
                          "plando_items", "plando_texts", "plando_connections", "er_seeds",
-                         'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
+                         'dungeon_counters', 'glitch_boots', 'killable_thieves',
                          'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic',
-                         'restrict_dungeon_item_on_boss', 'reduceflashing', 'game',
-                         'hud_palettes', 'sword_palettes', 'shield_palettes', 'link_palettes', 'triforcehud']:
+                         'restrict_dungeon_item_on_boss', 'game']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})

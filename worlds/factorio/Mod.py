@@ -57,12 +57,12 @@ def generate_mod(world, output_directory: str):
             locale_template = template_env.get_template(r"locale/en/locale.cfg")
             control_template = template_env.get_template("control.lua")
     # get data for templates
-    player_names = {x: multiworld.player_names[x][0] for x in multiworld.player_ids}
+    player_names = {x: multiworld.player_name[x] for x in multiworld.player_ids}
     locations = []
     for location in multiworld.get_filled_locations(player):
         if location.address:
             locations.append((location.name, location.item.name, location.item.player, location.item.advancement))
-    mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.player_names[player][0]}"
+    mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.player_name[player]}"
     tech_cost_scale = {0: 0.1,
                        1: 0.25,
                        2: 0.5,
@@ -87,7 +87,7 @@ def generate_mod(world, output_directory: str):
                      "mod_name": mod_name, "allowed_science_packs": multiworld.max_science_pack[player].get_allowed_packs(),
                      "tech_cost_scale": tech_cost_scale, "custom_technologies": multiworld.worlds[player].custom_technologies,
                      "tech_tree_layout_prerequisites": multiworld.tech_tree_layout_prerequisites[player],
-                     "slot_name": multiworld.player_names[player][0], "seed_name": multiworld.seed_name,
+                     "slot_name": multiworld.player_name[player], "seed_name": multiworld.seed_name,
                      "starting_items": multiworld.starting_items[player], "recipes": recipes,
                      "random": random, "flop_random": flop_random,
                      "static_nodes": multiworld.worlds[player].static_nodes,

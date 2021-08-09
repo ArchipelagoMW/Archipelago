@@ -40,7 +40,6 @@ def mystery_argparse():
                         help="Input directory for player files.")
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults["players"], type=lambda value: min(max(int(value), 1), 255))
-    parser.add_argument('--teams', default=1, type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
     parser.add_argument('--rom', default=options["lttp_options"]["rom_file"], help="Path to the 1.0 JP LttP Baserom.")
     parser.add_argument('--enemizercli', default=defaults["enemizer_path"])
@@ -128,7 +127,6 @@ def main(args=None, callback=ERmain):
     erargs.skip_playthrough = args.spoiler < 2
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
-    erargs.teams = args.teams
 
     # set up logger
     if args.log_level:
@@ -179,6 +177,8 @@ def main(args=None, callback=ERmain):
                             getattr(erargs, k)[player] = v
                         except AttributeError:
                             setattr(erargs, k, {player: v})
+                        except Exception as e:
+                            raise Exception(f"Error setting {k} to {v} for player {player}") from e
             except Exception as e:
                 raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
         else:
@@ -189,8 +189,6 @@ def main(args=None, callback=ERmain):
             erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
         erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
 
-    erargs.names = ",".join(erargs.name[i] for i in range(1, args.multi + 1))
-    del (erargs.name)
     if args.yaml_output:
         import yaml
         important = {}
@@ -267,7 +265,7 @@ def handle_name(name: str, player: int, name_counter: Counter):
                                                                                                    name] > 1 else ''),
                                                                  player=player,
                                                                  PLAYER=(player if player > 1 else '')))
-    new_name = new_name.strip().replace(' ', '_')[:16]
+    new_name = new_name.strip()[:16]
     if new_name == "Archipelago":
         raise Exception(f"You cannot name yourself \"{new_name}\"")
     return new_name
@@ -610,7 +608,8 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     ret.enemy_damage = {None: 'default',
                         'default': 'default',
                         'shuffled': 'shuffled',
-                        'random': 'chaos'
+                        'random': 'chaos', # to be removed
+                        'chaos': 'chaos',
                         }[get_choice('enemy_damage', weights)]
 
     ret.enemy_health = get_choice('enemy_health', weights)
@@ -634,8 +633,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     ret.green_clock_time = int(get_choice('green_clock_time', weights, 4))
 
     ret.dungeon_counters = get_choice('dungeon_counters', weights, 'default')
-
-    ret.progressive = convert_to_on_off(get_choice('progressive', weights, 'on'))
 
     ret.shuffle_prizes = get_choice('shuffle_prizes', weights, "g")
 
@@ -736,20 +733,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                         ret.sprite_pool += ['random'] * int(value)
                     else:
                         ret.sprite_pool += [key] * int(value)
-
-    ret.disablemusic = get_choice('disablemusic', weights, False)
-    ret.triforcehud = get_choice('triforcehud', weights, 'hide_goal')
-    ret.quickswap = get_choice('quickswap', weights, True)
-    ret.fastmenu = get_choice('menuspeed', weights, "normal")
-    ret.reduceflashing = get_choice('reduceflashing', weights, False)
-    ret.heartcolor = get_choice('heartcolor', weights, "red")
-    ret.heartbeep = convert_to_on_off(get_choice('heartbeep', weights, "normal"))
-    ret.ow_palettes = get_choice('ow_palettes', weights, "default")
-    ret.uw_palettes = get_choice('uw_palettes', weights, "default")
-    ret.hud_palettes = get_choice('hud_palettes', weights, "default")
-    ret.sword_palettes = get_choice('sword_palettes', weights, "default")
-    ret.shield_palettes = get_choice('shield_palettes', weights, "default")
-    ret.link_palettes = get_choice('link_palettes', weights, "default")
 
 
 if __name__ == '__main__':

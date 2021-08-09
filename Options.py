@@ -11,9 +11,11 @@ class AssembleOptions(type):
         for base in bases:
             if hasattr(base, "options"):
                 options.update(base.options)
-                name_lookup.update(name_lookup)
+                name_lookup.update(base.name_lookup)
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
                        name.startswith("option_")}
+        if "random" in new_options:
+            raise Exception("Choice option 'random' cannot be manually assigned.")
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
 
@@ -47,7 +49,12 @@ class Option(metaclass=AssembleOptions):
     def __hash__(self):
         return hash(self.value)
 
+    @property
+    def current_key(self) -> str:
+        return self.name_lookup[self.value]
+
     def get_current_option_name(self) -> str:
+        """For display purposes."""
         return self.get_option_name(self.value)
 
     def get_option_name(self, value: typing.Any) -> str:
@@ -122,8 +129,13 @@ class Choice(Option):
 
     @classmethod
     def from_text(cls, text: str) -> Choice:
+        text = text.lower()
+        # TODO: turn on after most people have adjusted their yamls to no longer have suboptions with "random" in them
+        # maybe in 0.2?
+        # if text == "random":
+        #     return cls(random.choice(list(cls.options.values())))
         for optionname, value in cls.options.items():
-            if optionname == text.lower():
+            if optionname == text:
                 return cls(value)
         raise KeyError(
             f'Could not find option "{text}" for "{cls.__name__}", '

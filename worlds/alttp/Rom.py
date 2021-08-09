@@ -279,11 +279,11 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
                 rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
 
 
-def patch_enemizer(world, team: int, player: int, rom: LocalRom, enemizercli, output_directory):
+def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_directory):
     check_enemizer(enemizercli)
-    randopatch_path = os.path.abspath(os.path.join(output_directory, f'enemizer_randopatch_{team}_{player}.sfc'))
-    options_path = os.path.abspath(os.path.join(output_directory, f'enemizer_options_{team}_{player}.json'))
-    enemizer_output_path = os.path.abspath(os.path.join(output_directory, f'enemizer_output_{team}_{player}.sfc'))
+    randopatch_path = os.path.abspath(os.path.join(output_directory, f'enemizer_randopatch_{player}.sfc'))
+    options_path = os.path.abspath(os.path.join(output_directory, f'enemizer_options_{player}.json'))
+    enemizer_output_path = os.path.abspath(os.path.join(output_directory, f'enemizer_output_{player}.sfc'))
 
     # write options file for enemizer
     options = {
@@ -756,7 +756,7 @@ def get_nonnative_item_sprite(item: str) -> int:
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
 
 
-def patch_rom(world, rom, player, team, enemized):
+def patch_rom(world, rom, player, enemized):
     local_random = world.slot_seeds[player]
 
     # progressive bow silver arrow hint hack
@@ -1645,7 +1645,7 @@ def patch_rom(world, rom, player, team, enemized):
         rom.write_byte(0x4BA1D, tile_set.get_len())
         rom.write_bytes(0x4BA2A, tile_set.get_bytes())
 
-    write_strings(rom, world, player, team)
+    write_strings(rom, world, player)
 
     # remote items flag, does not currently work
     rom.write_byte(0x18637C, int(world.worlds[player].remote_items))
@@ -1654,13 +1654,13 @@ def patch_rom(world, rom, player, team, enemized):
     # 21 bytes
     from Main import __version__
     # TODO: Adjust Enemizer to accept AP and AD
-    rom.name = bytearray(f'BM{__version__.replace(".", "")[0:3]}_{team + 1}_{player}_{world.seed:09}\0', 'utf8')[:21]
+    rom.name = bytearray(f'BM{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
 
     # set player names
     for p in range(1, min(world.players, 255) + 1):
-        rom.write_bytes(0x195FFC + ((p - 1) * 32), hud_format_text(world.player_names[p][team]))
+        rom.write_bytes(0x195FFC + ((p - 1) * 32), hud_format_text(world.player_name[p]))
 
     # Write title screen Code
     hashint = int(rom.get_hash(), 16)
@@ -1756,13 +1756,13 @@ def hud_format_text(text):
     return output[:32]
 
 
-def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite: str, palettes_options,
+def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, palettes_options,
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
                        triforcehud: str = None):
     local_random = random if not world else world.slot_seeds[player]
-
+    disable_music: bool = music
     # enable instant item menu
-    if fastmenu == 'instant':
+    if menuspeed == 'instant':
         rom.write_byte(0x6DD9A, 0x20)
         rom.write_byte(0x6DF2A, 0x20)
         rom.write_byte(0x6E0E9, 0x20)
@@ -1770,15 +1770,15 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
         rom.write_byte(0x6DD9A, 0x11)
         rom.write_byte(0x6DF2A, 0x12)
         rom.write_byte(0x6E0E9, 0x12)
-    if fastmenu == 'instant':
+    if menuspeed == 'instant':
         rom.write_byte(0x180048, 0xE8)
-    elif fastmenu == 'double':
+    elif menuspeed == 'double':
         rom.write_byte(0x180048, 0x10)
-    elif fastmenu == 'triple':
+    elif menuspeed == 'triple':
         rom.write_byte(0x180048, 0x18)
-    elif fastmenu == 'quadruple':
+    elif menuspeed == 'quadruple':
         rom.write_byte(0x180048, 0x20)
-    elif fastmenu == 'half':
+    elif menuspeed == 'half':
         rom.write_byte(0x180048, 0x04)
     else:
         rom.write_byte(0x180048, 0x08)
@@ -1854,7 +1854,7 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
                 while True:
                     yield ColorF(local_random.random(), local_random.random(), local_random.random())
 
-            if mode == 'random':
+            if mode == 'good':
                 mode = 'maseya'
             z3pr.randomize(rom.buffer, mode, offset_collections=offsets_array, random_colors=next_color_generator())
 
@@ -2075,7 +2075,7 @@ def write_string_to_rom(rom, target, string):
     rom.write_bytes(address, MultiByteTextMapper.convert(string, maxbytes))
 
 
-def write_strings(rom, world, player, team):
+def write_strings(rom, world, player):
     local_random = world.slot_seeds[player]
 
     tt = TextTable()
@@ -2098,11 +2098,11 @@ def write_strings(rom, world, player, team):
             hint = dest.hint_text if dest.hint_text else "something"
         if dest.player != player:
             if ped_hint:
-                hint += f" for {world.player_names[dest.player][team]}!"
+                hint += f" for {world.player_name[dest.player]}!"
             elif type(dest) in [Region, ALttPLocation]:
-                hint += f" in {world.player_names[dest.player][team]}'s world"
+                hint += f" in {world.player_name[dest.player]}'s world"
             else:
-                hint += f" for {world.player_names[dest.player][team]}"
+                hint += f" for {world.player_name[dest.player]}"
         return hint
 
     # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.

@@ -106,7 +106,7 @@ Factorio:
   progressive:
     on: 1
     off: 0
-    random: 0
+    grouped_random: 0
   tech_tree_information:
     none: 0
     advancement: 0 # show which items are a logical advancement
@@ -307,7 +307,7 @@ A Link to the Past:
   progressive: # Enable or disable progressive items (swords, shields, bow)
     on: 50 # All items are progressive
     off: 0 # No items are progressive
-    random: 0 # Randomly decides for all items. Swords could be progressive, shields might not be
+    grouped_random: 0 # Randomly decides for all items. Swords could be progressive, shields might not be
   entrance_shuffle:
     none: 50 # Vanilla game map. All entrances and exits lead to their original locations. You probably want this option
     dungeonssimple: 0 # Shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon
@@ -596,7 +596,7 @@ A Link to the Past:
     off: 0
   ow_palettes: # Change the colors of the overworld
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
+    good: 0 # Shuffle the colors, with harmony in mind
     blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
@@ -606,7 +606,7 @@ A Link to the Past:
     puke: 0
   uw_palettes: # Change the colors of caves and dungeons
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
+    good: 0 # Shuffle the colors, with harmony in mind
     blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
@@ -616,7 +616,7 @@ A Link to the Past:
     puke: 0
   hud_palettes: # Change the colors of the hud
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
+    good: 0 # Shuffle the colors, with harmony in mind
     blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
@@ -626,7 +626,7 @@ A Link to the Past:
     puke: 0
   sword_palettes: # Change the colors of swords
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
+    good: 0 # Shuffle the colors, with harmony in mind
     blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
@@ -636,7 +636,7 @@ A Link to the Past:
     puke: 0
   shield_palettes: # Change the colors of shields
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
+    good: 0 # Shuffle the colors, with harmony in mind
     blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
@@ -693,7 +693,7 @@ linked_options:
           singularity: 1
         enemy_damage:
           shuffled: 1
-          random: 1
+          chaos: 1
         enemy_health:
           easy: 1
           hard: 1

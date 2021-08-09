@@ -13,7 +13,7 @@ import random
 
 class MultiWorld():
     debug_types = False
-    player_names: Dict[int, List[str]]
+    player_name: Dict[int, str]
     _region_cache: Dict[int, Dict[str, Region]]
     difficulty_requirements: dict
     required_medallions: dict
@@ -36,7 +36,6 @@ class MultiWorld():
     def __init__(self, players: int):
         self.random = random.Random()  # world-local random state is saved for multiple generations running concurrently
         self.players = players
-        self.teams = 1
         self.glitch_triforce = False
         self.algorithm = 'balanced'
         self.dungeons = []
@@ -83,11 +82,9 @@ class MultiWorld():
             set_player_attr('item_functionality', 'normal')
             set_player_attr('timer', False)
             set_player_attr('goal', 'ganon')
-            set_player_attr('progressive', 'on')
             set_player_attr('accessibility', 'items')
             set_player_attr('retro', False)
             set_player_attr('hints', True)
-            set_player_attr('player_names', [])
             set_player_attr('required_medallions', ['Ether', 'Quake'])
             set_player_attr('swamp_patch_required', False)
             set_player_attr('powder_patch_required', False)
@@ -162,10 +159,10 @@ class MultiWorld():
         return tuple(player for player in self.player_ids if self.game[player] == game_name)
 
     def get_name_string_for_object(self, obj) -> str:
-        return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
+        return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_name(obj.player)})'
 
-    def get_player_names(self, player: int) -> str:
-        return ", ".join(self.player_names[player])
+    def get_player_name(self, player: int) -> str:
+        return self.player_name[player]
 
     def initialize_regions(self, regions=None):
         for region in regions if regions else self.regions:
@@ -174,7 +171,7 @@ class MultiWorld():
 
     @functools.cached_property
     def world_name_lookup(self):
-        return {self.player_names[player_id][0]: player_id for player_id in self.player_ids}
+        return {self.player_name[player_id]: player_id for player_id in self.player_ids}
 
     def _recache(self):
         """Rebuild world cache"""
@@ -1132,8 +1129,8 @@ class Spoiler():
     def parse_data(self):
         self.medallions = OrderedDict()
         for player in self.world.get_game_players("A Link to the Past"):
-            self.medallions[f'Misery Mire ({self.world.get_player_names(player)})'] = self.world.required_medallions[player][0]
-            self.medallions[f'Turtle Rock ({self.world.get_player_names(player)})'] = self.world.required_medallions[player][1]
+            self.medallions[f'Misery Mire ({self.world.get_player_name(player)})'] = self.world.required_medallions[player][0]
+            self.medallions[f'Turtle Rock ({self.world.get_player_name(player)})'] = self.world.required_medallions[player][1]
 
         self.startinventory = list(map(str, self.world.precollected_items))
 
@@ -1241,7 +1238,6 @@ class Spoiler():
                          'progressive': self.world.progressive,
                          'shufflepots': self.world.shufflepots,
                          'players': self.world.players,
-                         'teams': self.world.teams,
                          'progression_balancing': self.world.progression_balancing,
                          'triforce_pieces_available': self.world.triforce_pieces_available,
                          'triforce_pieces_required': self.world.triforce_pieces_required,
@@ -1261,7 +1257,7 @@ class Spoiler():
         out['Starting Inventory'] = self.startinventory
         out['Special'] = self.medallions
         if self.hashes:
-            out['Hashes'] = {f"{self.world.player_names[player][team]} (Team {team+1})": hash for (player, team), hash in self.hashes.items()}
+            out['Hashes'] = self.hashes
         if self.shops:
             out['Shops'] = self.shops
         out['playthrough'] = self.playthrough
@@ -1286,10 +1282,10 @@ class Spoiler():
                     self.metadata['version'], self.world.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.world.algorithm)
             outfile.write('Players:                         %d\n' % self.world.players)
-            outfile.write('Teams:                           %d\n' % self.world.teams)
+
             for player in range(1, self.world.players + 1):
                 if self.world.players > 1:
-                    outfile.write('\nPlayer %d: %s\n' % (player, self.world.get_player_names(player)))
+                    outfile.write('\nPlayer %d: %s\n' % (player, self.world.get_player_name(player)))
                 outfile.write('Game:                            %s\n' % self.metadata['game'][player])
                 if self.world.players > 1:
                     outfile.write('Progression Balanced:            %s\n' % (
@@ -1303,11 +1299,7 @@ class Spoiler():
                         outfile.write(f'{displayname + ":":33}{res.get_current_option_name()}\n')
 
                 if player in self.world.get_game_players("A Link to the Past"):
-                    for team in range(self.world.teams):
-                        outfile.write('%s%s\n' % (
-                            f"Hash - {self.world.player_names[player][team]} (Team {team + 1}): " if
-                            (player in self.world.get_game_players("A Link to the Past") and self.world.teams > 1) else 'Hash: ',
-                            self.hashes[player, team]))
+                    outfile.write('%s%s\n' % ('Hash: ', self.hashes[player]))
 
                     outfile.write('Logic:                           %s\n' % self.metadata['logic'][player])
                     outfile.write('Dark Room Logic:                 %s\n' % self.metadata['dark_room_logic'][player])
@@ -1326,7 +1318,6 @@ class Spoiler():
                                       self.metadata["triforce_pieces_required"][player])
                     outfile.write('Difficulty:                      %s\n' % self.metadata['item_pool'][player])
                     outfile.write('Item Functionality:              %s\n' % self.metadata['item_functionality'][player])
-                    outfile.write('Item Progression:                %s\n' % self.metadata['progressive'][player])
                     outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'][player])
                     if self.metadata['shuffle'][player] != "vanilla":
                         outfile.write('Entrance Shuffle Seed            %s\n' % self.metadata['er_seeds'][player])
@@ -1369,7 +1360,7 @@ class Spoiler():
                                   self.metadata['shuffle_prizes'][player])
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
-                outfile.write('\n'.join(['%s%s %s %s' % (f'{self.world.get_player_names(entry["player"])}: '
+                outfile.write('\n'.join(['%s%s %s %s' % (f'{self.world.get_player_name(entry["player"])}: '
                                                          if self.world.players > 1 else '', entry['entrance'],
                                                          '<=>' if entry['direction'] == 'both' else
                                                          '<=' if entry['direction'] == 'exit' else '=>',
@@ -1383,7 +1374,7 @@ class Spoiler():
             if factorio_players:
                 outfile.write('\n\nRecipes:\n')
                 for player in factorio_players:
-                    name = self.world.get_player_names(player)
+                    name = self.world.get_player_name(player)
                     for recipe in self.world.worlds[player].custom_recipes.values():
                         outfile.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
 
@@ -1401,7 +1392,7 @@ class Spoiler():
             for player in self.world.get_game_players("A Link to the Past"):
                 if self.world.boss_shuffle[player] != 'none':
                     bossmap = self.bosses[str(player)] if self.world.players > 1 else self.bosses
-                    outfile.write(f'\n\nBosses{(f" ({self.world.get_player_names(player)})" if self.world.players > 1 else "")}:\n')
+                    outfile.write(f'\n\nBosses{(f" ({self.world.get_player_name(player)})" if self.world.players > 1 else "")}:\n')
                     outfile.write('    '+'\n    '.join([f'{x}: {y}' for x, y in bossmap.items()]))
             outfile.write('\n\nPlaythrough:\n\n')
             outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location, item) for (location, item) in sphere.items()] if sphere_nr != '0' else [f'  {item}' for item in sphere])) for (sphere_nr, sphere) in self.playthrough.items()]))

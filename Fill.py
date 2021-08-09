@@ -444,4 +444,4 @@ def distribute_planned(world: MultiWorld):
                     except ValueError:
                         placement.warn(f"Could not remove {item} from pool as it's already missing from it.")
         except Exception as e:
-            raise Exception(f"Error running plando for player {player} ({world.player_names[player]})") from e
+            raise Exception(f"Error running plando for player {player} ({world.player_name[player]})") from e

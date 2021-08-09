@@ -43,7 +43,7 @@ class MinecraftLogic(LogicMixin):
 
     # Difficulty-dependent functions
     def _mc_combat_difficulty(self, player: int):
-        return self.world.combat_difficulty[player].get_current_option_name().lower()
+        return self.world.combat_difficulty[player].current_key
 
     def _mc_can_adventure(self, player: int):
         if self._mc_combat_difficulty(player) == 'easy':

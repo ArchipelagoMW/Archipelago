@@ -51,7 +51,15 @@ def call_all(world: MultiWorld, method_name: str, *args):
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
-            stage_callable(world)
+            stage_callable(world, *args)
+
+
+def call_stage(world: MultiWorld, method_name: str, *args):
+    world_types = {world.worlds[player].__class__ for player in world.player_ids}
+    for world_type in world_types:
+        stage_callable = getattr(world_type, f"stage_{method_name}", None)
+        if stage_callable:
+            stage_callable(world, *args)
 
 
 class World(metaclass=AutoWorldRegister):
@@ -126,6 +134,10 @@ class World(metaclass=AutoWorldRegister):
     def fill_slot_data(self) -> dict:
         """Fill in the slot_data field in the Connected network package."""
         return {}
+
+    def modify_multidata(self, multidata: dict):
+        """For deeper modification of server multidata."""
+        pass
 
     def get_required_client_version(self) -> Tuple[int, int, int]:
         return 0, 0, 3

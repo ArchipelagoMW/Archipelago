@@ -13,7 +13,7 @@ def link_minecraft_structures(world, player):
     try: 
         assert len(exits) == len(structs)
     except AssertionError as e: # this should never happen
-        raise Exception(f"Could not obtain equal numbers of Minecraft exits and structures for player {player} ({world.player_names[player]})")
+        raise Exception(f"Could not obtain equal numbers of Minecraft exits and structures for player {player} ({world.player_name[player]})")
 
     pairs = {}
 
@@ -23,7 +23,7 @@ def link_minecraft_structures(world, player):
             exits.remove(exit)
             structs.remove(struct)
         else: 
-            raise Exception(f"Invalid connection: {exit} => {struct} for player {player} ({world.player_names[player]})")
+            raise Exception(f"Invalid connection: {exit} => {struct} for player {player} ({world.player_name[player]})")
 
     # Connect plando structures first
     if world.plando_connections[player]:
@@ -38,7 +38,7 @@ def link_minecraft_structures(world, player):
             try: 
                 exit = world.random.choice([e for e in exits if e not in illegal_connections.get(struct, [])])
             except IndexError: 
-                raise Exception(f"No valid structure placements remaining for player {player} ({world.player_names[player]})")
+                raise Exception(f"No valid structure placements remaining for player {player} ({world.player_name[player]})")
             set_pair(exit, struct)
     else: # write remaining default connections
         for (exit, struct) in default_connections: 
@@ -49,7 +49,7 @@ def link_minecraft_structures(world, player):
     try:
         assert len(exits) == len(structs) == 0
     except AssertionError: 
-        raise Exception(f"Failed to connect all Minecraft structures for player {player} ({world.player_names[player]})")
+        raise Exception(f"Failed to connect all Minecraft structures for player {player} ({world.player_name[player]})")
 
     for exit in exits_spoiler:
         world.get_entrance(exit, player).connect(world.get_region(pairs[exit], player))
