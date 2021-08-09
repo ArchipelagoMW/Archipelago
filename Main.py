@@ -271,13 +271,14 @@ def main(args, seed=None):
 
         world.spoiler.hashes[(player, team)] = get_hash_string(rom.hash)
 
-        palettes_options = {}
-        palettes_options['dungeon'] = args.uw_palettes[player]
-        palettes_options['overworld'] = args.ow_palettes[player]
-        palettes_options['hud'] = args.hud_palettes[player]
-        palettes_options['sword'] = args.sword_palettes[player]
-        palettes_options['shield'] = args.shield_palettes[player]
-        palettes_options['link'] = args.link_palettes[player]
+        palettes_options = {
+            'dungeon': args.uw_palettes[player],
+            'overworld': args.ow_palettes[player],
+            'hud': args.hud_palettes[player],
+            'sword': args.sword_palettes[player],
+            'shield': args.shield_palettes[player],
+            'link': args.link_palettes[player]
+        }
 
         apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player],
                            args.fastmenu[player], args.disablemusic[player], args.sprite[player],

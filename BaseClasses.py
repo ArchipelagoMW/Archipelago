@@ -197,14 +197,12 @@ class MultiWorld():
             self._recache()
             return self._region_cache[player][regionname]
 
-
     def get_entrance(self, entrance: str, player: int) -> Entrance:
         try:
             return self._entrance_cache[entrance, player]
         except KeyError:
             self._recache()
             return self._entrance_cache[entrance, player]
-
 
     def get_location(self, location: str, player: int) -> Location:
         try:
@@ -213,15 +211,18 @@ class MultiWorld():
             self._recache()
             return self._location_cache[location, player]
 
-
     def get_dungeon(self, dungeonname: str, player: int) -> Dungeon:
         for dungeon in self.dungeons:
             if dungeon.name == dungeonname and dungeon.player == player:
                 return dungeon
         raise KeyError('No such dungeon %s for player %d' % (dungeonname, player))
 
-
     def get_all_state(self, keys=False) -> CollectionState:
+        key = f"_all_state_{keys}"
+        cached = getattr(self, key, None)
+        if cached:
+            return cached.copy()
+
         ret = CollectionState(self)
 
         for item in self.itempool:
@@ -246,6 +247,7 @@ class MultiWorld():
                         p):
                     world.collect(ret, item)
         ret.sweep_for_events()
+        setattr(self, key, ret)
         return ret
 
     def get_items(self) -> list:
