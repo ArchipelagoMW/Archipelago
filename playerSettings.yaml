@@ -448,7 +448,7 @@ A Link to the Past:
   enemy_damage:
     default: 50 # Vanilla enemy damage
     shuffled: 0 # Enemies deal 0 to 4 hearts and armor helps
-    random: 0 # Enemies deal 0 to 8 hearts and armor just reshuffles the damage
+    chaos: 0 # Enemies deal 0 to 8 hearts and armor just reshuffles the damage
   enemy_health:
     default: 50 # Vanilla enemy HP
     easy: 0 # Enemies have reduced health

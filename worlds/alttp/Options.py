@@ -79,9 +79,10 @@ class Progressive(Choice):
     alias_false = 0
     alias_true = 2
     default = 2
+    alias_random = 1
 
     def want_progressives(self, random):
-        return random.choice([True, False]) if self.value == self.option_grouped_random else int(self.value)
+        return random.choice([True, False]) if self.value == self.option_grouped_random else bool(self.value)
 
 class Palette(Choice):
     option_default = 0
