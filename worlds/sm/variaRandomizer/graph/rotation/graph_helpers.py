@@ -145,7 +145,7 @@ class HelpersGraph(Helpers):
     @Cache.decorator
     def canPassForgottenHighway(self):
         sm = self.smbm
-        return wm.wand(sm.canMorphJump(),
+        return sm.wand(sm.canMorphJump(),
                        sm.wor(sm.haveItem('Gravity'),
                               sm.wand(sm.knowsGravLessLevel1(),
                                       sm.haveItem('HiJump'))))
@@ -289,7 +289,7 @@ class HelpersGraph(Helpers):
                        sm.wor(sm.canFly(),
                               # TODO::check with ice and hijump
                               sm.haveItem('Ice'),
-                              sm.haveItem('HiJump'))),
+                              sm.haveItem('HiJump')))
 
 #    @Cache.decorator
 #    def canEnterNorfairReserveAreaFromBubbleMoutainTop(self):
@@ -459,12 +459,12 @@ class HelpersGraph(Helpers):
 #
 #
 
-     @Cache.decorator
-     def canExitMamaTurtle(self):
-         sm = self.smbm
+    @Cache.decorator
+    def canExitMamaTurtle(self):
+        sm = self.smbm
                         # exit mama room
-         return sm.wand(sm.wor(sm.canFly(),
-                               sm.haveItem('HiJump')),
+        return sm.wand(sm.wor(sm.canFly(),
+                        sm.haveItem('HiJump')),
                         # go back to main street (use crounched jump over the pirates)
                         sm.canGravLessLevel1())
 
@@ -536,10 +536,10 @@ class HelpersGraph(Helpers):
         # only as sequence break for now as snails make lots of damage suitless
         sm = self.smbm
                        # break the pb and super blocks
-        return sm.wand(sm.canUsePowerBombs(), can.haveItem('Super'),
+        return sm.wand(sm.canUsePowerBombs(), sm.haveItem('Super'),
                        sm.wor(sm.wand(sm.haveItem('Gravity'),
                                       sm.wor(sm.canFly(),
-                                             sm.haveItem('HiJump')))
+                                             sm.haveItem('HiJump'))),
                               # IBJ underwater
                               sm.canInfiniteBombJumpSuitless()))
 

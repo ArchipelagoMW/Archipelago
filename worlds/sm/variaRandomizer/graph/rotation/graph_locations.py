@@ -287,7 +287,7 @@ locationsDict["Gravity Suit"].Available = (
 )
 locationsDict["Energy Tank, Mama turtle"].AccessFrom = {
     'Main Street Bottom': lambda sm: sm.wor(sm.traverse('FishTankRight'),
-                                            RomPatches.has(RomPatches.MamaTurtleBlueDoor))
+                                            RomPatches.has(RomPatches.MamaTurtleBlueDoor)),
     'Mama Turtle': lambda sm: SMBool(True)
 }
 locationsDict["Energy Tank, Mama turtle"].Available = (
@@ -325,9 +325,10 @@ locationsDict["Spring Ball"].AccessFrom = {
     'Oasis Bottom': lambda sm: SMBool(True)
 }
 locationsDict["Spring Ball"].Available = (
-    lambda sm.wand(sm.canUsePowerBombs(), # in Shaktool room to let Shaktool access the sand blocks
+    lambda sm: sm.wand(sm.canUsePowerBombs(), # in Shaktool room to let Shaktool access the sand blocks
                    sm.haveItem('Grapple'),
                    sm.canGravLessLevel1())
+)
 locationsDict["Spring Ball"].PostAvailable = (
     # to go back to oasis bottom
     lambda sm: sm.canTraverseSandPits()
@@ -652,7 +653,7 @@ locationsDict["Power Bomb (Crocomire)"].Available = (
     lambda sm: sm.wand(sm.traverse('PostCrocomireUpperLeft'),
                        sm.enoughStuffCroc(),
                        sm.wor(sm.canFly(),
-                              sm.wand(sm.haveItem('HiJump'), sm.haveItem('SpeedBooster'))
+                              sm.wand(sm.haveItem('HiJump'), sm.haveItem('SpeedBooster')),
                               sm.wand(sm.haveItem('HiJump'), sm.haveItem('Ice'), sm.knowsCrocPBsIce())))
 )
 locationsDict["Missile (below Crocomire)"].AccessFrom = {
@@ -818,7 +819,7 @@ locationsDict["Super Missile (green Maridia)"].Available = (
 locationsDict["Missile (green Maridia tatori)"].AccessFrom = {
     # it's possible to crounched jump over the pink pirate when suitless without taking damage
     'Main Street Bottom': lambda sm: sm.wand(sm.wor(sm.traverse('FishTankRight'),
-                                                    RomPatches.has(RomPatches.MamaTurtleBlueDoor)))
+                                                    RomPatches.has(RomPatches.MamaTurtleBlueDoor))),
     'Mama Turtle': lambda sm: SMBool(True)
 }
 locationsDict["Missile (green Maridia tatori)"].Available = (
