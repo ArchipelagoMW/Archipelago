@@ -285,64 +285,11 @@ def main(args, seed=None):
                            reduceflashing=args.reduceflashing[player] or args.race,
                            triforcehud=args.triforcehud[player])
 
-        mcsb_name = ''
-        if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],
-                world.bigkeyshuffle[player]]):
-            mcsb_name = '-keysanity'
-        elif [world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],
-              world.bigkeyshuffle[player]].count(True) == 1:
-            mcsb_name = '-mapshuffle' if world.mapshuffle[player] else \
-                '-compassshuffle' if world.compassshuffle[player] else \
-                    '-universal_keys' if world.keyshuffle[player] == "universal" else \
-                        '-keyshuffle' if world.keyshuffle[player] else '-bigkeyshuffle'
-        elif any([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],
-                  world.bigkeyshuffle[player]]):
-            mcsb_name = '-%s%s%s%sshuffle' % (
-                'M' if world.mapshuffle[player] else '', 'C' if world.compassshuffle[player] else '',
-                'U' if world.keyshuffle[player] == "universal" else 'S' if world.keyshuffle[player] else '',
-                'B' if world.bigkeyshuffle[player] else '')
-
         outfilepname = f'_P{player}'
         outfilepname += f"_{world.player_names[player][team].replace(' ', '_')}" \
             if world.player_names[player][team] != 'Player%d' % player else ''
-        outfilestuffs = {
-            "logic": world.logic[player],  # 0
-            "difficulty": world.difficulty[player],  # 1
-            "item_functionality": world.item_functionality[player],  # 2
-            "mode": world.mode[player],  # 3
-            "goal": world.goal[player],  # 4
-            "timer": str(world.timer[player]),  # 5
-            "shuffle": world.shuffle[player],  # 6
-            "algorithm": world.algorithm,  # 7
-            "mscb": mcsb_name,  # 8
-            "retro": world.retro[player],  # 9
-            "progressive": world.progressive,  # A
-            "hints": 'True' if world.hints[player] else 'False'  # B
-        }
-        #                  0  1  2  3  4 5  6  7 8 9 A B
-        outfilesuffix = ('_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (
-            #  0          1      2      3    4     5    6      7     8        9         A     B           C
-            # _noglitches_normal-normal-open-ganon-ohko_simple-balanced-keysanity-retro-prog_random-nohints
-            # _noglitches_normal-normal-open-ganon     _simple-balanced-keysanity-retro
-            # _noglitches_normal-normal-open-ganon     _simple-balanced-keysanity      -prog_random
-            # _noglitches_normal-normal-open-ganon     _simple-balanced-keysanity                  -nohints
-            outfilestuffs["logic"],  # 0
 
-            outfilestuffs["difficulty"],  # 1
-            outfilestuffs["item_functionality"],  # 2
-            outfilestuffs["mode"],  # 3
-            outfilestuffs["goal"],  # 4
-            "" if outfilestuffs["timer"] in ['False', 'none', 'display'] else "-" + outfilestuffs["timer"],  # 5
-
-            outfilestuffs["shuffle"],  # 6
-            outfilestuffs["algorithm"],  # 7
-            outfilestuffs["mscb"],  # 8
-
-            "-retro" if outfilestuffs["retro"] == "True" else "",  # 9
-            "-prog_" + outfilestuffs["progressive"] if outfilestuffs["progressive"] in ['off', 'random'] else "",  # A
-            "-nohints" if not outfilestuffs["hints"] == "True" else "")  # B
-                         ) if not args.outputname else ''
-        rompath = os.path.join(output_directory, f'{outfilebase}{outfilepname}{outfilesuffix}.sfc')
+        rompath = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
         rom.write_to_file(rompath, hide_enemizer=True)
         Patch.create_patch_file(rompath, player=player, player_name=world.player_names[player][team])
         os.unlink(rompath)
