@@ -50,7 +50,7 @@ class ClientCommandProcessor(CommandProcessor):
         """List all missing location checks, from your local game state"""
         count = 0
         checked_count = 0
-        for location, location_id in AutoWorldRegister.world_types[self.ctx.game].item_name_to_id.items():
+        for location, location_id in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id.items():
             if location_id < 0:
                 continue
             if location_id not in self.ctx.locations_checked:
