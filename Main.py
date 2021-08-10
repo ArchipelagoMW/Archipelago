@@ -218,12 +218,8 @@ def main(args, seed=None):
 
     if world.algorithm == 'flood':
         flood_items(world)  # different algo, biased towards early game progress items
-    elif world.algorithm == 'vt25':
-        distribute_items_restrictive(world, False)
-    elif world.algorithm == 'vt26':
-        distribute_items_restrictive(world, True)
     elif world.algorithm == 'balanced':
-        distribute_items_restrictive(world, True)
+        distribute_items_restrictive(world)
 
     logger.info("Filling Shop Slots")
 

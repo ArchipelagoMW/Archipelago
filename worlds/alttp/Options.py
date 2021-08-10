@@ -143,6 +143,7 @@ class HeartColor(Choice):
         # remove when this becomes a base Choice feature
         if text == "random":
             return cls(random.randint(0, 3))
+        return super(HeartColor, cls).from_text(text)
 
 class QuickSwap(DefaultOnToggle):
     displayname = "L/R Quickswapping"

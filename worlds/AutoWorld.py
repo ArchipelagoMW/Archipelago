@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import Dict, Set, Tuple
+from typing import Dict, Set, Tuple, List
 
-from BaseClasses import MultiWorld, Item, CollectionState
+from BaseClasses import MultiWorld, Item, CollectionState, Location
 
 
 class AutoWorldRegister(type):
@@ -124,6 +124,12 @@ class World(metaclass=AutoWorldRegister):
 
     def pre_fill(self):
         """Optional method that is supposed to be used for special fill stages. This is run *after* plando."""
+        pass
+
+    def fill_hook(cls, progitempool: List[Item], nonexcludeditempool: List[Item],
+                  localrestitempool: Dict[int, List[Item]], restitempool: List[Item], fill_locations: List[Location]):
+        """Special method that gets called as part of distribute_items_restrictive (main fill).
+        This gets called once per present world type."""
         pass
 
     def generate_output(self, output_directory: str):
