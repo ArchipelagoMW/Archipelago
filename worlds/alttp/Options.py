@@ -1,4 +1,5 @@
 import typing
+import random
 
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle
 
@@ -94,6 +95,7 @@ class Palette(Choice):
     option_negative = 6
     option_dizzy = 7
     option_sick = 8
+    alias_random = 1
 
 
 class OWPalette(Palette):
@@ -136,6 +138,11 @@ class HeartColor(Choice):
     option_green = 2
     option_yellow = 3
 
+    @classmethod
+    def from_text(cls, text: str) -> Choice:
+        # remove when this becomes a base Choice feature
+        if text == "random":
+            return cls(random.randint(0, 3))
 
 class QuickSwap(DefaultOnToggle):
     displayname = "L/R Quickswapping"

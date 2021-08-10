@@ -286,9 +286,9 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
 
     if adjuster_settings:
         import pprint
-        import Patch
+        from worlds.alttp.Rom import get_base_rom_path
         adjuster_settings.rom = romfile
-        adjuster_settings.baserom = Patch.get_base_rom_path()
+        adjuster_settings.baserom = get_base_rom_path()
         adjuster_settings.world = None
         whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
                      "uw_palettes", "sprite"}

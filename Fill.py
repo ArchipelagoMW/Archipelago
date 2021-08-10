@@ -130,7 +130,6 @@ def distribute_items_restrictive(world: MultiWorld, gftower_trash=False, fill_lo
         if world.mode[player] == 'standard' and world.keyshuffle[player] is True:
             standard_keyshuffle_players.add(player)
 
-
     # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
     if standard_keyshuffle_players:
         progitempool.sort(

@@ -852,9 +852,8 @@ class Region(object):
 
     def can_fill(self, item: Item):
         inside_dungeon_item = item.locked_dungeon_item
-        sewer_hack = self.world.mode[item.player] == 'standard' and item.name == 'Small Key (Hyrule Castle)'
-        if sewer_hack or inside_dungeon_item:
-            return self.dungeon and self.dungeon.is_dungeon_item(item) and item.player == self.player
+        if inside_dungeon_item:
+            return self.dungeon.is_dungeon_item(item) and item.player == self.player
 
         return True
 
