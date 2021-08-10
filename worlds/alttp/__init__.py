@@ -86,59 +86,46 @@ class ALTTPWorld(World):
         world.random = old_random
         plando_connect(world, player)
 
-    def collect(self, state: CollectionState, item: Item) -> bool:
+    def collect_item(self, state: CollectionState, item: Item):
         if item.name.startswith('Progressive '):
             if 'Sword' in item.name:
                 if state.has('Golden Sword', item.player):
                     pass
                 elif state.has('Tempered Sword', item.player) and self.world.difficulty_requirements[
                     item.player].progressive_sword_limit >= 4:
-                    state.prog_items['Golden Sword', item.player] += 1
-                    return True
+                    return 'Golden Sword'
                 elif state.has('Master Sword', item.player) and self.world.difficulty_requirements[
                     item.player].progressive_sword_limit >= 3:
-                    state.prog_items['Tempered Sword', item.player] += 1
-                    return True
+                    return 'Tempered Sword'
                 elif state.has('Fighter Sword', item.player) and self.world.difficulty_requirements[item.player].progressive_sword_limit >= 2:
-                    state.prog_items['Master Sword', item.player] += 1
-                    return True
+                    return 'Master Sword'
                 elif self.world.difficulty_requirements[item.player].progressive_sword_limit >= 1:
-                    state.prog_items['Fighter Sword', item.player] += 1
-                    return True
+                    return 'Fighter Sword'
             elif 'Glove' in item.name:
                 if state.has('Titans Mitts', item.player):
-                    pass
+                    return
                 elif state.has('Power Glove', item.player):
-                    state.prog_items['Titans Mitts', item.player] += 1
-                    return True
+                    return 'Titans Mitts'
                 else:
-                    state.prog_items['Power Glove', item.player] += 1
-                    return True
+                    return 'Power Glove'
             elif 'Shield' in item.name:
                 if state.has('Mirror Shield', item.player):
-                    pass
+                    return
                 elif state.has('Red Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 3:
-                    state.prog_items['Mirror Shield', item.player] += 1
-                    return True
+                    return 'Mirror Shield'
                 elif state.has('Blue Shield', item.player)  and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
-                    state.prog_items['Red Shield', item.player] += 1
-                    return True
+                    return 'Red Shield'
                 elif self.world.difficulty_requirements[item.player].progressive_shield_limit >= 1:
-                    state.prog_items['Blue Shield', item.player] += 1
-                    return True
+                    return 'Blue Shield'
             elif 'Bow' in item.name:
                 if state.has('Silver', item.player):
-                    pass
+                    return
                 elif state.has('Bow', item.player) and self.world.difficulty_requirements[item.player].progressive_bow_limit >= 2:
-                    state.prog_items['Silver Bow', item.player] += 1
-                    return True
+                    return 'Silver Bow'
                 elif self.world.difficulty_requirements[item.player].progressive_bow_limit >= 1:
-                    state.prog_items['Bow', item.player] += 1
-                    return True
-        elif item.advancement or item.smallkey or item.bigkey:
-            state.prog_items[item.name, item.player] += 1
-            return True
-        return False
+                    return 'Bow'
+        elif item.advancement:
+            return item.name
 
     def pre_fill(self):
         from Fill import fill_restrictive, FillError

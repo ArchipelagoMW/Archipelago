@@ -67,11 +67,6 @@ def fill_dungeons_restrictive(world):
 
         world.random.shuffle(locations)
         all_state_base = world.get_all_state()
-        # with shuffled dungeon items they are distributed as part of the normal item pool
-        for item in world.get_items():
-            if (item.smallkey and world.keyshuffle[item.player]) or (item.bigkey and world.bigkeyshuffle[item.player]):
-                all_state_base.collect(item, True)
-                item.advancement = True
         # sort in the order Big Key, Small Key, Other before placing dungeon items
         sort_order = {"BigKey": 3, "SmallKey": 2}
         dungeon_items.sort(key=lambda item: sort_order.get(item.type, 1))

@@ -263,8 +263,6 @@ class MultiWorld():
 
     def push_precollected(self, item: Item):
         item.world = self
-        if (item.smallkey and self.keyshuffle[item.player]) or (item.bigkey and self.bigkeyshuffle[item.player]):
-            item.advancement = True
         self.precollected_items.append(item)
         self.state.collect(item, True)
 
@@ -758,53 +756,12 @@ class CollectionState(object):
         return changed
 
     def remove(self, item):
-        if item.advancement:
-            to_remove = item.name
-            if item.game == "A Link to the Past" and to_remove.startswith('Progressive '):
-                if 'Sword' in to_remove:
-                    if self.has('Golden Sword', item.player):
-                        to_remove = 'Golden Sword'
-                    elif self.has('Tempered Sword', item.player):
-                        to_remove = 'Tempered Sword'
-                    elif self.has('Master Sword', item.player):
-                        to_remove = 'Master Sword'
-                    elif self.has('Fighter Sword', item.player):
-                        to_remove = 'Fighter Sword'
-                    else:
-                        to_remove = None
-                elif 'Glove' in item.name:
-                    if self.has('Titans Mitts', item.player):
-                        to_remove = 'Titans Mitts'
-                    elif self.has('Power Glove', item.player):
-                        to_remove = 'Power Glove'
-                    else:
-                        to_remove = None
-                elif 'Shield' in item.name:
-                    if self.has('Mirror Shield', item.player):
-                        to_remove = 'Mirror Shield'
-                    elif self.has('Red Shield', item.player):
-                        to_remove = 'Red Shield'
-                    elif self.has('Blue Shield', item.player):
-                        to_remove = 'Blue Shield'
-                    else:
-                        to_remove = None
-                elif 'Bow' in item.name:
-                    if self.has('Silver Bow', item.player):
-                        to_remove = 'Silver Bow'
-                    elif self.has('Bow', item.player):
-                        to_remove = 'Bow'
-                    else:
-                        to_remove = None
-
-            if to_remove:
-
-                self.prog_items[to_remove, item.player] -= 1
-                if self.prog_items[to_remove, item.player] < 1:
-                    del (self.prog_items[to_remove, item.player])
-                # invalidate caches, nothing can be trusted anymore now
-                self.reachable_regions[item.player] = set()
-                self.blocked_connections[item.player] = set()
-                self.stale[item.player] = True
+        changed = self.world.worlds[item.player].remove(self, item)
+        if changed:
+            # invalidate caches, nothing can be trusted anymore now
+            self.reachable_regions[item.player] = set()
+            self.blocked_connections[item.player] = set()
+            self.stale[item.player] = True
 
 @unique
 class RegionType(int, Enum):

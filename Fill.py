@@ -187,7 +187,7 @@ def flood_items(world: MultiWorld):
         location_list = world.get_reachable_locations()
         world.random.shuffle(location_list)
         for location in location_list:
-            if location.item is not None and not location.item.advancement and not location.item.smallkey and not location.item.bigkey:
+            if location.item is not None and not location.item.advancement:
                 # safe to replace
                 replace_item = location.item
                 replace_item.location = None
