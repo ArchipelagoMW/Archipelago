@@ -67,7 +67,7 @@ def replace_apmc_files(forge_dir, apmc_file):
     for entry in os.scandir(apdata_dir):
         if ".apmc" in entry.name and entry.is_file():
             os.remove(entry.path)
-        print(f"Removed existing .apmc files in {apdata_dir}")
+            print(f"Removed {entry.name} in {apdata_dir}")
     copyfile(apmc_file, os.path.join(apdata_dir, os.path.basename(apmc_file)))
     print(f"Copied {os.path.basename(apmc_file)} to {apdata_dir}")
 
