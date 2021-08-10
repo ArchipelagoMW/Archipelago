@@ -1191,7 +1191,6 @@ class Spoiler():
                          'tile_shuffle': self.world.tile_shuffle,
                          'bush_shuffle': self.world.bush_shuffle,
                          'beemizer': self.world.beemizer,
-                         'progressive': self.world.progressive,
                          'shufflepots': self.world.shufflepots,
                          'players': self.world.players,
                          'progression_balancing': self.world.progression_balancing,
@@ -1224,7 +1223,6 @@ class Spoiler():
         return json.dumps(out)
 
     def to_file(self, filename):
-        import Options
         self.parse_data()
 
         def bool_to_text(variable: Union[bool, str]) -> str:
@@ -1242,7 +1240,7 @@ class Spoiler():
             for player in range(1, self.world.players + 1):
                 if self.world.players > 1:
                     outfile.write('\nPlayer %d: %s\n' % (player, self.world.get_player_name(player)))
-                outfile.write('Game:                            %s\n' % self.metadata['game'][player])
+                outfile.write('Game:                            %s\n' % self.world.game[player])
                 if self.world.players > 1:
                     outfile.write('Progression Balanced:            %s\n' % (
                         'Yes' if self.metadata['progression_balancing'][player] else 'No'))
