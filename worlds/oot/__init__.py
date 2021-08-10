@@ -528,7 +528,7 @@ class OOTWorld(World):
 
     # For now we will always output a patch file.
     def generate_output(self, output_directory: str): 
-        outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_names(self.player)}"
+        outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}"
         patch_rom(self, self.rom)
         # patch cosmetics here
         self.rom.update_header()
