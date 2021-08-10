@@ -1323,7 +1323,7 @@ def patch_rom(world, rom):
     override_table = get_override_table(world)
     rom.write_bytes(rom.sym('cfg_item_overrides'), get_override_table_bytes(override_table))
     rom.write_byte(rom.sym('PLAYER_ID'), world.player) # Write player ID
-    rom.write_bytes(rom.sym('AP_PLAYER_NAME'), list(bytes(world.world.get_player_name(world.player), 'utf-8')))
+    rom.write_bytes(rom.sym('AP_PLAYER_NAME'), list(bytes(world.world.get_player_name(world.player), 'ascii')))
 
     # Revert Song Get Override Injection
     if not songs_as_items:
