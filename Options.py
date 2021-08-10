@@ -236,8 +236,8 @@ class OptionList(Option):
             return cls(data)
         return cls.from_text(str(data))
 
-    def get_option_name(self):
-        return str(self.value)
+    def get_option_name(self, value):
+        return str(value)
 
 
 
