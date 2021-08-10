@@ -23,13 +23,13 @@ name: YourName{number} # Your name in-game. Spaces will be replaced with undersc
 #{PLAYER} will be replaced with the player's slot number if that slot number is greater than 1.
 #{number} will be replaced with the counter value of the name.
 #{NUMBER} will be replaced with the counter value of the name if the counter value is greater than 1.
-game:
-  A Link to the Past: 1
-  Factorio: 1
-  Minecraft: 1
-  Subnautica: 1
+game: # Pick a game to play
+  A Link to the Past: 0
+  Factorio: 0
+  Minecraft: 0
+  Subnautica: 0
 requires:
-  version: 0.1.5 # Version of Archipelago required for this yaml to work as expected.
+  version: 0.1.6 # Version of Archipelago required for this yaml to work as expected.
 # Shared Options supported by all games:
 accessibility:
   items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
@@ -94,6 +94,10 @@ Factorio:
     hard : 0
     very_hard : 0
     insane : 0
+  silo:
+    vanilla: 1
+    randomize_recipe: 0
+    spawn: 0 # spawn silo near player spawn point
   free_samples:
     none: 1
     single_craft: 0
@@ -102,6 +106,7 @@ Factorio:
   progressive:
     on: 1
     off: 0
+    grouped_random: 0
   tech_tree_information:
     none: 0
     advancement: 0 # show which items are a logical advancement
@@ -112,6 +117,40 @@ Factorio:
   starting_items:
     burner-mining-drill: 19
     stone-furnace: 19
+  # Note: Total amount of traps cannot exceed 4, if the sum of them is higher it will get automatically capped.
+  evolution_traps:
+    # Trap items that when received increase the enemy evolution.
+    0: 1
+    1: 0
+    2: 0
+    3: 0
+    4: 0
+    random: 0
+    random-low: 0
+    random-middle: 0
+    random-high: 0
+  evolution_trap_increase:
+    # If present, % increase of Evolution with each trap received.
+    5: 0
+    10: 1
+    15: 0
+    20: 0
+    100: 0
+    random: 0
+    random-low: 0
+    random-middle: 0
+    random-high: 0
+  attack_traps:
+    # Trap items that when received trigger an attack on your base.
+    0: 1
+    1: 0
+    2: 0
+    3: 0
+    4: 0
+    random: 0
+    random-low: 0
+    random-middle: 0
+    random-high: 0
   world_gen:
     # frequency, size, richness, terrain segmentation, starting area and water are all of https://wiki.factorio.com/Types/MapGenSize
     # inverse of water scale
@@ -184,12 +223,22 @@ Factorio:
       min_expansion_cooldown: 14400 # 1 to 60 min in ticks
       max_expansion_cooldown: 216000 # 5 to 180 min in ticks
 Minecraft:
-  advancement_goal: 50 # Number of advancements required (out of 92 total) to spawn the Ender Dragon and complete the game.
+  advancement_goal: 50 # Number of advancements required (87 max) to spawn the Ender Dragon and complete the game.
+  egg_shards_required: # Number of dragon egg shards to collect (30 max) before the Ender Dragon will spawn. 
+    0: 1
+    5: 0
+    10: 0
+    20: 0
+  egg_shards_available: # Number of egg shards available in the pool (30 max). 
+    0: 1
+    5: 0
+    10: 0
+    20: 0
   combat_difficulty: # Modifies the level of items logically required for exploring dangerous areas and fighting bosses.
     easy: 0
     normal: 1
     hard: 0
-  include_hard_advancements: # Junk-fills certain RNG-reliant or tedious advancements with XP rewards.
+  include_hard_advancements: # Junk-fills certain RNG-reliant or tedious advancements.
     on: 0
     off: 1
   include_insane_advancements: # Junk-fills extremely difficult advancements; this is only How Did We Get Here? and Adventuring Time.
@@ -204,9 +253,12 @@ Minecraft:
   structure_compasses: # Adds structure compasses to the item pool, which point to the nearest indicated structure.
     on: 0
     off: 1
-  bee_traps: # Adds bee traps to the item pool, which spawn multiple angered bees around every player when received.
-    on: 0
-    off: 1
+  bee_traps: # Replaces a percentage of junk items with bee traps, which spawn multiple angered bees around every player when received. 
+    0: 1
+    25: 0
+    50: 0
+    75: 0
+    100: 0
 A Link to the Past:
   ### Logic Section ###
   glitches_required: # Determine the logic required to complete the seed
@@ -255,7 +307,7 @@ A Link to the Past:
   progressive: # Enable or disable progressive items (swords, shields, bow)
     on: 50 # All items are progressive
     off: 0 # No items are progressive
-    random: 0 # Randomly decides for all items. Swords could be progressive, shields might not be
+    grouped_random: 0 # Randomly decides for all items. Swords could be progressive, shields might not be
   entrance_shuffle:
     none: 50 # Vanilla game map. All entrances and exits lead to their original locations. You probably want this option
     dungeonssimple: 0 # Shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon
@@ -396,7 +448,7 @@ A Link to the Past:
   enemy_damage:
     default: 50 # Vanilla enemy damage
     shuffled: 0 # Enemies deal 0 to 4 hearts and armor helps
-    random: 0 # Enemies deal 0 to 8 hearts and armor just reshuffles the damage
+    chaos: 0 # Enemies deal 0 to 8 hearts and armor just reshuffles the damage
   enemy_health:
     default: 50 # Vanilla enemy HP
     easy: 0 # Enemies have reduced health
@@ -544,7 +596,7 @@ A Link to the Past:
     off: 0
   ow_palettes: # Change the colors of the overworld
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
+    good: 0 # Shuffle the colors, with harmony in mind
     blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
@@ -554,7 +606,7 @@ A Link to the Past:
     puke: 0
   uw_palettes: # Change the colors of caves and dungeons
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
+    good: 0 # Shuffle the colors, with harmony in mind
     blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
@@ -564,7 +616,7 @@ A Link to the Past:
     puke: 0
   hud_palettes: # Change the colors of the hud
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
+    good: 0 # Shuffle the colors, with harmony in mind
     blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
@@ -574,7 +626,7 @@ A Link to the Past:
     puke: 0
   sword_palettes: # Change the colors of swords
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
+    good: 0 # Shuffle the colors, with harmony in mind
     blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
@@ -584,7 +636,7 @@ A Link to the Past:
     puke: 0
   shield_palettes: # Change the colors of shields
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
+    good: 0 # Shuffle the colors, with harmony in mind
     blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
@@ -641,7 +693,7 @@ linked_options:
           singularity: 1
         enemy_damage:
           shuffled: 1
-          random: 1
+          chaos: 1
         enemy_health:
           easy: 1
           hard: 1

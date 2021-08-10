@@ -13,8 +13,8 @@ class MinecraftItem(Item):
 
 item_table = {
     "Archery": ItemData(45000, True),
-    "Ingot Crafting": ItemData(45001, True),
-    "Resource Blocks": ItemData(45002, True),
+    "Progressive Resource Crafting": ItemData(45001, True),
+    # "Resource Blocks": ItemData(45002, True),
     "Brewing": ItemData(45003, True),
     "Enchanting": ItemData(45004, True),
     "Bucket": ItemData(45005, True),
@@ -55,38 +55,48 @@ item_table = {
     "Structure Compass (Bastion Remnant)": ItemData(45040, True),
     "Structure Compass (End City)": ItemData(45041, True),
     "Shulker Box": ItemData(45042, False),
+    "Dragon Egg Shard": ItemData(45043, True),
     "Bee Trap (Minecraft)": ItemData(45100, False),
 
     "Victory": ItemData(None, True)
 }
 
-# If not listed here then has frequency 1
-item_frequencies = {
+# 33 required items
+required_items = {
+    "Archery": 1,
+    "Progressive Resource Crafting": 2,
+    "Brewing": 1,
+    "Enchanting": 1,
+    "Bucket": 1,
+    "Flint and Steel": 1,
+    "Bed": 1,
+    "Bottles": 1,
+    "Shield": 1,
+    "Fishing Rod": 1,
+    "Campfire": 1,
     "Progressive Weapons": 3,
-    "Progressive Tools": 3, 
+    "Progressive Tools": 3,
     "Progressive Armor": 2,
-    "8 Netherite Scrap": 2, 
-    "8 Emeralds": 0,
-    "4 Emeralds": 8, 
-    "4 Diamond Ore": 4, 
-    "16 Iron Ore": 4, 
-    "500 XP": 0,
-    "100 XP": 0,
-    "50 XP": 21,
-    "3 Ender Pearls": 4, 
-    "4 Lapis Lazuli": 2, 
-    "16 Porkchops": 8, 
-    "8 Gold Ore": 4, 
-    "Rotten Flesh": 4, 
-    "Single Arrow": 0, 
-    "32 Arrows": 4,
-    "Structure Compass (Village)": 0,
-    "Structure Compass (Pillager Outpost)": 0,
-    "Structure Compass (Nether Fortress)": 0,
-    "Structure Compass (Bastion Remnant)": 0,
-    "Structure Compass (End City)": 0,
-    "Shulker Box": 0,
-    "Bee Trap (Minecraft)": 0,
+    "8 Netherite Scrap": 2,
+    "Channeling Book": 1,
+    "Silk Touch Book": 1,
+    "Sharpness III Book": 1,
+    "Piercing IV Book": 1,
+    "Looting III Book": 1,
+    "Infinity Book": 1,
+    "3 Ender Pearls": 4,
+    "Saddle": 1,
+}
+
+junk_weights = {
+    "4 Emeralds": 2,
+    "4 Diamond Ore": 1,
+    "16 Iron Ore": 1,
+    "50 XP": 4,
+    "16 Porkchops": 2,
+    "8 Gold Ore": 1,
+    "Rotten Flesh": 1,
+    "32 Arrows": 1,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}

@@ -91,8 +91,6 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
                 erargs.name[player] = os.path.splitext(os.path.split(playerfile)[-1])[0]
             erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
 
-        erargs.names = ",".join(erargs.name[i] for i in range(1, playercount + 1))
-        del (erargs.name)
         ERmain(erargs, seed)
 
         return upload_to_db(target.name, owner, sid, race)

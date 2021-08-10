@@ -111,6 +111,7 @@ class Context(Node):
         self.games: typing.Dict[int, str] = {}
         self.minimum_client_versions: typing.Dict[int, Utils.Version] = {}
         self.seed_name = ""
+        self.random = random.Random()
 
     def get_hint_cost(self, slot):
         if self.hint_cost:
@@ -157,6 +158,7 @@ class Context(Node):
                 self.player_names[team, player] = name
                 self.player_name_lookup[name] = team, player
         self.seed_name = decoded_obj["seed_name"]
+        self.random.seed(self.seed_name)
         self.connect_names = decoded_obj['connect_names']
         self.remote_items = decoded_obj['remote_items']
         self.locations = decoded_obj['locations']
@@ -275,6 +277,7 @@ class Context(Node):
                 (key, value.timestamp()) for key, value in self.client_activity_timers.items()),
             "client_connection_timers": tuple(
                 (key, value.timestamp()) for key, value in self.client_connection_timers.items()),
+            "random_state": self.random.getstate()
         }
 
         return d
@@ -295,7 +298,8 @@ class Context(Node):
             {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
              in savedata["client_activity_timers"]})
         self.location_checks.update(savedata["location_checks"])
-
+        if "random_state" in savedata:
+            self.random.setstate(savedata["random_state"])
         logging.info(f'Loaded save file with {sum([len(p) for p in self.received_items.values()])} received items '
                      f'for {len(self.received_items)} players')
 
@@ -897,15 +901,18 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     @mark_raw
     def _cmd_hint(self, item_or_location: str = "") -> bool:
-        """Use !hint {item_name/location_name}, for example !hint Lamp or !hint Link's House. """
+        """Use !hint {item_name/location_name},
+        for example !hint Lamp or !hint Link's House to get a spoiler peek for that location or item.
+        If hint costs are on, this will only give you one new result,
+        you can rerun the command to get more in that case."""
         points_available = get_client_points(self.ctx, self.client)
         if not item_or_location:
-            self.output(f"A hint costs {self.ctx.get_hint_cost(self.client.slot)} points. "
-                        f"You have {points_available} points.")
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
             self.ctx.hints[self.client.team, self.client.slot] = hints
             notify_hints(self.ctx, self.client.team, list(hints))
+            self.output(f"A hint costs {self.ctx.get_hint_cost(self.client.slot)} points. "
+                        f"You have {points_available} points.")
             return True
         else:
             world = proxy_worlds[self.ctx.games[self.client.slot]]
@@ -937,11 +944,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
                         if not not_found_hints:  # everything's been found, no need to pay
                             can_pay = 1000
                         elif cost:
-                            can_pay = points_available // cost
+                            can_pay = int((points_available // cost) > 0)  # limit to 1 new hint per call
                         else:
                             can_pay = 1000
 
-                        random.shuffle(not_found_hints)
+                        self.ctx.random.shuffle(not_found_hints)
 
                         hints = found_hints
                         while can_pay > 0:
@@ -959,7 +966,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                         if not_found_hints:
                             if hints:
                                 self.output(
-                                    "Could not pay for everything. Rerun the hint later with more points to get the remaining hints.")
+                                    "There may be more hintables, you can rerun the command to find more.")
                             else:
                                 self.output(f"You can't afford the hint. "
                                             f"You have {points_available} points and need at least "
@@ -1111,12 +1118,25 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'StatusUpdate':
             update_client_status(ctx, client, args["status"])
 
-        if cmd == 'Say':
+        elif cmd == 'Say':
             if "text" not in args or type(args["text"]) is not str or not args["text"].isprintable():
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'Say'}])
                 return
 
             client.messageprocessor(args["text"])
+
+        elif cmd == "Bounce":
+            games = set(args.get("games", []))
+            tags = set(args.get("tags", []))
+            slots = set(args.get("slots", []))
+            args["cmd"] = "Bounced"
+            msg = ctx.dumper([args])
+
+            for bounceclient in ctx.endpoints:
+                if client.team == bounceclient.team and (ctx.games[bounceclient.slot] in games or
+                                                         set(bounceclient.tags) & tags or
+                                                         bounceclient.slot in slots):
+                    await ctx.send_encoded_msgs(bounceclient, msg)
 
 
 def update_client_status(ctx: Context, client: Client, new_status: ClientStatus):

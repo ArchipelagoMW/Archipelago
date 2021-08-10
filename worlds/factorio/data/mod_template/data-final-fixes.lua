@@ -51,19 +51,31 @@ function copy_factorio_icon(tech, tech_source)
     tech.icon_size = table.deepcopy(technologies[tech_source].icon_size)
 end
 
+{# This got complex, but seems to be required to hit all corner cases #}
 function adjust_energy(recipe_name, factor)
     local recipe = data.raw.recipe[recipe_name]
     local energy = recipe.energy_required
-    if (energy ~= nil) then
-        data.raw.recipe[recipe_name].energy_required = energy * factor
-    end
-    if (recipe.normal ~= nil and recipe.normal.energy_required ~= nil) then
-        energy = recipe.normal.energy_required
+
+    if (recipe.normal ~= nil) then
+        if (recipe.normal.energy_required == nil) then
+            energy = 0.5
+        else
+            energy = recipe.normal.energy_required
+        end
         recipe.normal.energy_required = energy * factor
     end
-    if (recipe.expensive ~= nil and recipe.expensive.energy_required ~= nil) then
-        energy = recipe.expensive.energy_required
+    if (recipe.expensive ~= nil) then
+        if (recipe.expensive.energy_required == nil) then
+            energy = 0.5
+        else
+            energy = recipe.expensive.energy_required
+        end
         recipe.expensive.energy_required = energy * factor
+    end
+    if (energy ~= nil) then
+        data.raw.recipe[recipe_name].energy_required = energy * factor
+    elseif (recipe.expensive == nil and recipe.normal == nil) then
+        data.raw.recipe[recipe_name].energy_required = 0.5 * factor
     end
 end
 
@@ -85,6 +97,11 @@ new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ 
 {%- if (tech_tree_information == 2 or original_tech_name in static_nodes) and item_name in base_tech_table -%}
 {#- copy Factorio Technology Icon -#}
 copy_factorio_icon(new_tree_copy, "{{ item_name }}")
+{%- if original_tech_name == "rocket-silo" and original_tech_name in static_nodes %}
+{%- for ingredient in custom_recipes["rocket-part"].ingredients %}
+table.insert(new_tree_copy.effects, {type = "nothing", effect_description = "Ingredient {{ loop.index }}: {{ ingredient }}"})
+{% endfor -%}
+{% endif -%}
 {%- elif (tech_tree_information == 2 or original_tech_name in static_nodes) and item_name in progressive_technology_table -%}
 copy_factorio_icon(new_tree_copy, "{{ progressive_technology_table[item_name][0] }}")
 {%- else -%}
@@ -103,7 +120,12 @@ data:extend{new_tree_copy}
 {% if recipe_time_scale %}
 {%- for recipe_name, recipe in recipes.items() %}
 {%- if recipe.category != "mining" %}
-adjust_energy("{{ recipe_name }}", {{ random.triangular(*recipe_time_scale) }})
+adjust_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_scale) }})
 {%- endif %}
 {%- endfor -%}
 {% endif %}
+
+{%- if silo==2 %}
+-- disable silo research for pre-placed silo
+technologies["rocket-silo"].hidden = true
+{%- endif %}

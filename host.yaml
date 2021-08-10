@@ -45,9 +45,6 @@ server_options:
   log_network: 0
 # Options for Generation
 generator:
-  # Teams
-  # Note that this feature is TODO: to move it to dynamic creation on server, not during generation
-  teams: 1
   # Location of your Enemizer CLI, available here: https://github.com/Ijwu/Enemizer/releases
   enemizer_path: "EnemizerCLI/EnemizerCLI.Core.exe"
   # Folder from which the player yaml files are pulled from

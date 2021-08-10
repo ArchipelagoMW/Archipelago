@@ -43,6 +43,7 @@ These packets are are sent from the multiworld server to the client. They are no
 * [Print](#Print)
 * [PrintJSON](#PrintJSON)
 * [DataPackage](#DataPackage)
+* [Bounced](#Bounced)
 
 ### RoomInfo
 Sent to clients when they connect to an Archipelago server.
@@ -148,6 +149,15 @@ Sent to clients to provide what is known as a 'data package' which contains info
 | ---- | ---- | ----- |
 | data | DataPackageObject | The data package as a JSON object. More details on its contents may be found at [Data Package Contents](#Data-Package-Contents) |
 
+### Bounced
+Sent to clients after a client requested this message be sent to them, more info in the Bounce package.
+
+#### Arguments
+| Name | Type | Notes |
+| ---- | ---- | ----- |
+| data | dict | The data in the Bounce package copied |
+
+
 ## (Client -> Server)
 These packets are sent purely from client to server. They are not accepted by clients.
 
@@ -158,6 +168,7 @@ These packets are sent purely from client to server. They are not accepted by cl
 * [StatusUpdate](#StatusUpdate)
 * [Say](#Say)
 * [GetDataPackage](#GetDataPackage)
+* [Bounce](#Bounce)
 
 ### Connect
 Sent by the client to initiate a connection to an Archipelago game session.
@@ -219,6 +230,19 @@ Requests the data package from the server. Does not require client authenticatio
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | exlusions | list[str]  | Optional. If specified, will not send back the specified data. Such as, ["Factorio"] -> Datapackage without Factorio data.|
+
+### Bounce
+Send this message to the server, tell it which clients should receive the message and 
+the server will forward the message to all those targets to which any one requirement applies.
+
+#### Arguments
+| Name | Type | Notes |
+| ------ | ----- | ------ |
+| games | list[str] | Optional. Game names that should receive this message |
+| slots | list[int] | Optional. Player IDs that should receive this message |
+| tags | list[str] | Optional. Client tags that should receive this message |
+| data | dict | Any data you want to send |
+
 
 ## Appendix
 ### NetworkPlayer
@@ -340,8 +364,13 @@ Note:
 #### Contents
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| games | dict[str, dict] | Mapping of all Games and their respective data |
-| games[<game_name>]["item_name_to_id"] | dict[int, str] | Mapping of all item names to their respective ID. |
-| games[<game_name>]["location_name_to_id"] | dict[str, int] | Mapping of all location names to their respective ID. |
-| games[<game_name>]["version"] | int | Version number of this game's data |
+| games | dict[str, GameData] | Mapping of all Games and their respective data |
 | version | int | Sum of all per-game version numbers, for clients that don't bother with per-game caching/updating. |
+
+#### GameData
+GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of documentation.
+| Name | Type | Notes |
+| ---- | ---- | ----- |
+| item_name_to_id | dict[str, int] | Mapping of all item names to their respective ID. |
+| location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID. |
+| version | int | Version number of this game's data |

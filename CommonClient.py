@@ -14,6 +14,7 @@ from worlds import network_data_package, AutoWorldRegister
 
 logger = logging.getLogger("Client")
 
+
 class ClientCommandProcessor(CommandProcessor):
     def __init__(self, ctx: CommonContext):
         self.ctx = ctx
@@ -68,8 +69,6 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No missing location checks found.")
         return True
 
-
-
     def _cmd_ready(self):
         self.ctx.ready = not self.ctx.ready
         if self.ctx.ready:
@@ -82,6 +81,7 @@ class ClientCommandProcessor(CommandProcessor):
 
     def default(self, raw: str):
         asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]))
+
 
 class CommonContext():
     starting_reconnect_delay = 5
@@ -141,16 +141,17 @@ class CommonContext():
             if local_package and local_package["version"] > network_data_package["version"]:
                 data_package: dict = local_package
         elif network:  # check if data from server is newer
-            for key, value in data_package.items():
-                if type(value) == dict:  # convert to int keys
-                    data_package[key] = \
-                        {int(subkey) if subkey.isdigit() else subkey: subvalue for subkey, subvalue in value.items()}
 
             if data_package["version"] > network_data_package["version"]:
                 Utils.persistent_store("datapackage", "latest", network_data_package)
 
-        item_lookup: dict = data_package["lookup_any_item_id_to_name"]
-        locations_lookup: dict = data_package["lookup_any_location_id_to_name"]
+        item_lookup: dict = {}
+        locations_lookup: dict = {}
+        for game, gamedata in data_package["games"].items():
+            for item_name, item_id in gamedata["item_name_to_id"].items():
+                item_lookup[item_id] = item_name
+            for location_name, location_id in gamedata["location_name_to_id"].items():
+                locations_lookup[location_id] = location_name
 
         def get_item_name_from_id(code: int):
             return item_lookup.get(code, f'Unknown item (ID:{code})')
@@ -197,7 +198,7 @@ class CommonContext():
         self.input_requests += 1
         return await self.input_queue.get()
 
-    async def connect(self, address= None):
+    async def connect(self, address=None):
         await self.disconnect()
         self.server_task = asyncio.create_task(server_loop(self, address))
 
@@ -210,6 +211,10 @@ class CommonContext():
         else:
             text = self.jsontotextparser(args["data"])
             logger.info(text)
+
+    def on_package(self, cmd: str, args: dict):
+        """For custom package handling in subclasses."""
+        pass
 
 
 async def server_loop(ctx: CommonContext, address=None):
@@ -289,8 +294,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                 logger.info('Password required')
             logger.info(f"Forfeit setting: {args['forfeit_mode']}")
             logger.info(f"Remaining setting: {args['remaining_mode']}")
-            logger.info(f"A !hint costs {args['hint_cost']}% of checks points and you get {args['location_check_points']}"
-                         f" for each location checked. Use !hint for more information.")
+            logger.info(
+                f"A !hint costs {args['hint_cost']}% of your total location count as points"
+                f" and you get {args['location_check_points']}"
+                f" for each location checked. Use !hint for more information.")
             ctx.hint_cost = int(args['hint_cost'])
             ctx.check_points = int(args['location_check_points'])
             ctx.forfeit_mode = args['forfeit_mode']
@@ -393,8 +400,13 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     elif cmd == 'InvalidPacket':
         logger.warning(f"Invalid Packet of {args['type']}: {args['text']}")
 
+    elif cmd == "Bounced":
+        pass
+
     else:
         logger.debug(f"unknown command {cmd}")
+
+    ctx.on_package(cmd, args)
 
 
 async def console_loop(ctx: CommonContext):
@@ -415,4 +427,4 @@ async def console_loop(ctx: CommonContext):
             if input_text:
                 commandprocessor(input_text)
         except Exception as e:
-            logging.exception(e)
+            logger.exception(e)

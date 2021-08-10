@@ -10,18 +10,15 @@ import tempfile
 import zipfile
 from typing import Dict, Tuple
 
-from BaseClasses import MultiWorld, CollectionState, Region, Item
+from BaseClasses import MultiWorld, CollectionState, Region, RegionType
 from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
-from worlds.alttp.Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
-from worlds.alttp.Dungeons import fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
-from worlds.alttp.ItemPool import difficulties, fill_prizes
-from Utils import output_path, parse_player_names, get_options, __version__, version_tuple
+from worlds.alttp.ItemPool import difficulties
+from Utils import output_path, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
-import Patch
 
 seeddigits = 20
 
@@ -67,7 +64,6 @@ def main(args, seed=None):
     world.difficulty = args.difficulty.copy()
     world.item_functionality = args.item_functionality.copy()
     world.timer = args.timer.copy()
-    world.progressive = args.progressive.copy()
     world.goal = args.goal.copy()
     world.local_items = args.local_items.copy()
     if hasattr(args, "algorithm"):  # current GUI options
@@ -100,7 +96,6 @@ def main(args, seed=None):
     world.blue_clock_time = args.blue_clock_time.copy()
     world.green_clock_time = args.green_clock_time.copy()
     world.shufflepots = args.shufflepots.copy()
-    world.progressive = args.progressive.copy()
     world.dungeon_counters = args.dungeon_counters.copy()
     world.glitch_boots = args.glitch_boots.copy()
     world.triforce_pieces_available = args.triforce_pieces_available.copy()
@@ -118,6 +113,10 @@ def main(args, seed=None):
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
     world.set_options(args)
+    world.player_name = args.name.copy()
+    world.alttp_rom = args.rom
+    world.enemizer = args.enemizercli
+    world.sprite = args.sprite.copy()
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
     world.slot_seeds = {player: random.Random(world.random.getrandbits(64)) for player in
@@ -149,13 +148,6 @@ def main(args, seed=None):
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
         logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} Items | {len(cls.location_names):3} Locations")
 
-    parsed_names = parse_player_names(args.names, world.players, args.teams)
-    world.teams = len(parsed_names)
-    for i, team in enumerate(parsed_names, 1):
-        if world.players > 1:
-            logger.info('%s%s', 'Team%d: ' % i if world.teams > 1 else 'Players: ', ', '.join(team))
-        for player, name in enumerate(team, 1):
-            world.player_names[player].append(name)
 
     logger.info('')
     for player in world.get_game_players("A Link to the Past"):
@@ -218,18 +210,9 @@ def main(args, seed=None):
 
     distribute_planned(world)
 
-    logger.info('Placing Dungeon Prizes.')
+    logger.info('Running Pre Main Fill.')
 
-    fill_prizes(world)
-
-    logger.info('Placing Dungeon Items.')
-
-    if world.algorithm in ['balanced', 'vt26'] or any(
-            list(args.mapshuffle.values()) + list(args.compassshuffle.values()) +
-            list(args.keyshuffle.values()) + list(args.bigkeyshuffle.values())):
-        fill_dungeons_restrictive(world)
-    else:
-        fill_dungeons(world)
+    AutoWorld.call_all(world, "pre_fill")
 
     logger.info('Fill the world.')
 
@@ -251,115 +234,18 @@ def main(args, seed=None):
 
     logger.info('Generating output files.')
     outfilebase = 'AP_' + world.seed_name
-    rom_names = []
-
-    def _gen_rom(team: int, player: int, output_directory:str):
-        use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
-                        or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                        or world.shufflepots[player] or world.bush_shuffle[player]
-                        or world.killable_thieves[player])
-
-        rom = LocalRom(args.rom)
-
-        patch_rom(world, rom, player, team, use_enemizer)
-
-        if use_enemizer:
-            patch_enemizer(world, team, player, rom, args.enemizercli, output_directory)
-
-        if args.race:
-            patch_race_rom(rom, world, player)
-
-        world.spoiler.hashes[(player, team)] = get_hash_string(rom.hash)
-
-        palettes_options = {}
-        palettes_options['dungeon'] = args.uw_palettes[player]
-        palettes_options['overworld'] = args.ow_palettes[player]
-        palettes_options['hud'] = args.hud_palettes[player]
-        palettes_options['sword'] = args.sword_palettes[player]
-        palettes_options['shield'] = args.shield_palettes[player]
-        palettes_options['link'] = args.link_palettes[player]
-
-        apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player],
-                           args.fastmenu[player], args.disablemusic[player], args.sprite[player],
-                           palettes_options, world, player, True,
-                           reduceflashing=args.reduceflashing[player] or args.race,
-                           triforcehud=args.triforcehud[player])
-
-        mcsb_name = ''
-        if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],
-                world.bigkeyshuffle[player]]):
-            mcsb_name = '-keysanity'
-        elif [world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],
-              world.bigkeyshuffle[player]].count(True) == 1:
-            mcsb_name = '-mapshuffle' if world.mapshuffle[player] else \
-                '-compassshuffle' if world.compassshuffle[player] else \
-                    '-universal_keys' if world.keyshuffle[player] == "universal" else \
-                        '-keyshuffle' if world.keyshuffle[player] else '-bigkeyshuffle'
-        elif any([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],
-                  world.bigkeyshuffle[player]]):
-            mcsb_name = '-%s%s%s%sshuffle' % (
-                'M' if world.mapshuffle[player] else '', 'C' if world.compassshuffle[player] else '',
-                'U' if world.keyshuffle[player] == "universal" else 'S' if world.keyshuffle[player] else '',
-                'B' if world.bigkeyshuffle[player] else '')
-
-        outfilepname = f'_P{player}'
-        outfilepname += f"_{world.player_names[player][team].replace(' ', '_')}" \
-            if world.player_names[player][team] != 'Player%d' % player else ''
-        outfilestuffs = {
-            "logic": world.logic[player],  # 0
-            "difficulty": world.difficulty[player],  # 1
-            "item_functionality": world.item_functionality[player],  # 2
-            "mode": world.mode[player],  # 3
-            "goal": world.goal[player],  # 4
-            "timer": str(world.timer[player]),  # 5
-            "shuffle": world.shuffle[player],  # 6
-            "algorithm": world.algorithm,  # 7
-            "mscb": mcsb_name,  # 8
-            "retro": world.retro[player],  # 9
-            "progressive": world.progressive,  # A
-            "hints": 'True' if world.hints[player] else 'False'  # B
-        }
-        #                  0  1  2  3  4 5  6  7 8 9 A B
-        outfilesuffix = ('_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (
-            #  0          1      2      3    4     5    6      7     8        9         A     B           C
-            # _noglitches_normal-normal-open-ganon-ohko_simple-balanced-keysanity-retro-prog_random-nohints
-            # _noglitches_normal-normal-open-ganon     _simple-balanced-keysanity-retro
-            # _noglitches_normal-normal-open-ganon     _simple-balanced-keysanity      -prog_random
-            # _noglitches_normal-normal-open-ganon     _simple-balanced-keysanity                  -nohints
-            outfilestuffs["logic"],  # 0
-
-            outfilestuffs["difficulty"],  # 1
-            outfilestuffs["item_functionality"],  # 2
-            outfilestuffs["mode"],  # 3
-            outfilestuffs["goal"],  # 4
-            "" if outfilestuffs["timer"] in ['False', 'none', 'display'] else "-" + outfilestuffs["timer"],  # 5
-
-            outfilestuffs["shuffle"],  # 6
-            outfilestuffs["algorithm"],  # 7
-            outfilestuffs["mscb"],  # 8
-
-            "-retro" if outfilestuffs["retro"] == "True" else "",  # 9
-            "-prog_" + outfilestuffs["progressive"] if outfilestuffs["progressive"] in ['off', 'random'] else "",  # A
-            "-nohints" if not outfilestuffs["hints"] == "True" else "")  # B
-                         ) if not args.outputname else ''
-        rompath = os.path.join(output_directory, f'{outfilebase}{outfilepname}{outfilesuffix}.sfc')
-        rom.write_to_file(rompath, hide_enemizer=True)
-        Patch.create_patch_file(rompath, player=player, player_name=world.player_names[player][team])
-        os.unlink(rompath)
-        return player, team, bytes(rom.name)
 
     pool = concurrent.futures.ThreadPoolExecutor()
 
     output = tempfile.TemporaryDirectory()
     with output as temp_dir:
         check_accessibility_task = pool.submit(world.fulfills_accessibility)
-        rom_futures = []
+
         output_file_futures = []
-        for team in range(world.teams):
-            for player in world.get_game_players("A Link to the Past"):
-                rom_futures.append(pool.submit(_gen_rom, team, player, temp_dir))
+
         for player in world.player_ids:
             output_file_futures.append(pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
+        output_file_futures.append(pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir))
 
         def get_entrance_to_region(region: Region):
             for entrance in region.entrances:
@@ -371,7 +257,7 @@ def main(args, seed=None):
         # collect ER hint info
         er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
                         world.shuffle[player] != "vanilla" or world.retro[player]}
-        from worlds.alttp.Regions import RegionType
+
         for region in world.regions:
             if region.player in er_hint_data and region.locations:
                 main_entrance = get_entrance_to_region(region)
@@ -427,12 +313,8 @@ def main(args, seed=None):
 
         FillDisabledShopSlots(world)
 
-        def write_multidata(roms, outputs):
-            import base64
+        def write_multidata():
             import NetUtils
-            for future in roms:
-                rom_name = future.result()
-                rom_names.append(rom_name)
             slot_data = {}
             client_versions = {}
             minimum_versions = {"server": (0, 1, 1), "clients": client_versions}
@@ -440,8 +322,6 @@ def main(args, seed=None):
             for slot in world.player_ids:
                 client_versions[slot] = world.worlds[slot].get_required_client_version()
                 games[slot] = world.game[slot]
-            connect_names = {base64.b64encode(rom_name).decode(): (team, slot) for
-                             slot, team, rom_name in rom_names}
             precollected_items = {player: [] for player in range(1, world.players + 1)}
             for item in world.precollected_items:
                 precollected_items[item.player].append(item.code)
@@ -451,11 +331,6 @@ def main(args, seed=None):
             for player in world.get_game_players("Factorio"):
                 if world.tech_tree_information[player].value == 2:
                     sending_visible_players.add(player)
-
-            for i, team in enumerate(parsed_names):
-                for player, name in enumerate(team, 1):
-                    if player not in world.get_game_players("A Link to the Past"):
-                        connect_names[name] = (i, player)
 
             for slot in world.player_ids:
                 slot_data[slot] = world.worlds[slot].fill_slot_data()
@@ -476,11 +351,11 @@ def main(args, seed=None):
                         precollected_hints[location.player].add(hint)
                         precollected_hints[location.item.player].add(hint)
 
-            multidata = zlib.compress(pickle.dumps({
+            multidata = {
                 "slot_data": slot_data,
                 "games": games,
-                "names": parsed_names,
-                "connect_names": connect_names,
+                "names": [{player: name for player, name in world.player_name.items()}],
+                "connect_names": {name: (0, player) for player, name in world.player_name.items()},
                 "remote_items": {player for player in world.player_ids if
                                  world.worlds[player].remote_items},
                 "locations": locations_data,
@@ -493,15 +368,17 @@ def main(args, seed=None):
                 "tags": ["AP"],
                 "minimum_versions": minimum_versions,
                 "seed_name": world.seed_name
-            }), 9)
+            }
+            AutoWorld.call_all(world, "modify_multidata", multidata)
 
-            with open(os.path.join(temp_dir, '%s.archipelago' % outfilebase), 'wb') as f:
+            multidata = zlib.compress(pickle.dumps(multidata), 9)
+
+            with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
                 f.write(bytes([1]))  # version of format
                 f.write(multidata)
-            for future in outputs:
-                future.result()  # collect errors if they occured
 
-        multidata_task = pool.submit(write_multidata, rom_futures, output_file_futures)
+
+        multidata_task = pool.submit(write_multidata)
         if not check_accessibility_task.result():
             if not world.can_beat_game():
                 raise Exception("Game appears as unbeatable. Aborting.")
@@ -513,8 +390,10 @@ def main(args, seed=None):
         if not args.skip_playthrough:
             logger.info('Calculating playthrough.')
             create_playthrough(world)
-        if args.create_spoiler:  # needs spoiler.hashes to be filled, that depend on rom_futures being done
+        if args.create_spoiler:
             world.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
+        for future in output_file_futures:
+            future.result()
         zipfilename = output_path(f"AP_{world.seed_name}.zip")
         logger.info(f'Creating final archive at {zipfilename}.')
         with zipfile.ZipFile(zipfilename, mode="w", compression=zipfile.ZIP_DEFLATED,

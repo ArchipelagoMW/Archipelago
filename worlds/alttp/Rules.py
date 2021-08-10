@@ -118,7 +118,7 @@ def mirrorless_path_to_castle_courtyard(world, player):
                 else:
                     queue.append((entrance.connected_region, new_path))
 
-    raise Exception(f"Could not find mirrorless path to castle courtyard for Player {player} ({world.get_player_names(player)})")
+    raise Exception(f"Could not find mirrorless path to castle courtyard for Player {player} ({world.get_player_name(player)})")
 
 
 def set_defeat_dungeon_boss_rule(location):

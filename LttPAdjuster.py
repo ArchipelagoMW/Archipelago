@@ -44,7 +44,7 @@ def main():
                         help='Path to an ALttP JAP(1.0) rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?',
                         choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
-    parser.add_argument('--fastmenu', default='normal', const='normal', nargs='?',
+    parser.add_argument('--menuspeed', default='normal', const='normal', nargs='?',
                         choices=['normal', 'instant', 'double', 'triple', 'quadruple', 'half'],
                         help='''\
                              Select the rate at which the menu opens and closes.
@@ -100,6 +100,7 @@ def main():
     parser.add_argument('--names', default='', type=str)
     parser.add_argument('--update_sprites', action='store_true', help='Update Sprite Database, then exit.')
     args = parser.parse_args()
+    args.music = not args.disablemusic
     if args.update_sprites:
         run_sprite_update()
         sys.exit()
@@ -150,7 +151,7 @@ def adjust(args):
     if hasattr(args, "world"):
         world = getattr(args, "world")
 
-    apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.fastmenu, args.disablemusic,
+    apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.menuspeed, args.music,
                        args.sprite, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world)
     path = output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc')
     rom.write_to_file(path)
@@ -195,14 +196,14 @@ def adjustGUI():
         guiargs = Namespace()
         guiargs.heartbeep = rom_vars.heartbeepVar.get()
         guiargs.heartcolor = rom_vars.heartcolorVar.get()
-        guiargs.fastmenu = rom_vars.fastMenuVar.get()
+        guiargs.menuspeed = rom_vars.menuspeedVar.get()
         guiargs.ow_palettes = rom_vars.owPalettesVar.get()
         guiargs.uw_palettes = rom_vars.uwPalettesVar.get()
         guiargs.hud_palettes = rom_vars.hudPalettesVar.get()
         guiargs.sword_palettes = rom_vars.swordPalettesVar.get()
         guiargs.shield_palettes = rom_vars.shieldPalettesVar.get()
         guiargs.quickswap = bool(rom_vars.quickSwapVar.get())
-        guiargs.disablemusic = bool(rom_vars.disableMusicVar.get())
+        guiargs.music = bool(rom_vars.MusicVar.get())
         guiargs.reduceflashing = bool(rom_vars.disableFlashingVar.get())
         guiargs.rom = romVar2.get()
         guiargs.baserom = romVar.get()
@@ -439,9 +440,10 @@ def get_rom_options_frame(parent=None):
         romOptionsFrame.rowconfigure(i, weight=1)
     vars = Namespace()
 
-    vars.disableMusicVar = IntVar()
-    disableMusicCheckbutton = Checkbutton(romOptionsFrame, text="Disable music", variable=vars.disableMusicVar)
-    disableMusicCheckbutton.grid(row=0, column=0, sticky=E)
+    vars.MusicVar = IntVar()
+    vars.MusicVar.set(1)
+    MusicCheckbutton = Checkbutton(romOptionsFrame, text="Music", variable=vars.MusicVar)
+    MusicCheckbutton.grid(row=0, column=0, sticky=E)
 
     vars.disableFlashingVar = IntVar(value=1)
     disableFlashingCheckbutton = Checkbutton(romOptionsFrame, text="Disable flashing (anti-epilepsy)", variable=vars.disableFlashingVar)
@@ -485,14 +487,14 @@ def get_rom_options_frame(parent=None):
     quickSwapCheckbutton = Checkbutton(romOptionsFrame, text="L/R Quickswapping", variable=vars.quickSwapVar)
     quickSwapCheckbutton.grid(row=1, column=0, sticky=E)
 
-    fastMenuFrame = Frame(romOptionsFrame)
-    fastMenuFrame.grid(row=1, column=1, sticky=E)
-    fastMenuLabel = Label(fastMenuFrame, text='Menu speed')
-    fastMenuLabel.pack(side=LEFT)
-    vars.fastMenuVar = StringVar()
-    vars.fastMenuVar.set('normal')
-    fastMenuOptionMenu = OptionMenu(fastMenuFrame, vars.fastMenuVar, 'normal', 'instant', 'double', 'triple', 'quadruple', 'half')
-    fastMenuOptionMenu.pack(side=LEFT)
+    menuspeedFrame = Frame(romOptionsFrame)
+    menuspeedFrame.grid(row=1, column=1, sticky=E)
+    menuspeedLabel = Label(menuspeedFrame, text='Menu speed')
+    menuspeedLabel.pack(side=LEFT)
+    vars.menuspeedVar = StringVar()
+    vars.menuspeedVar.set('normal')
+    menuspeedOptionMenu = OptionMenu(menuspeedFrame, vars.menuspeedVar, 'normal', 'instant', 'double', 'triple', 'quadruple', 'half')
+    menuspeedOptionMenu.pack(side=LEFT)
 
     heartcolorFrame = Frame(romOptionsFrame)
     heartcolorFrame.grid(row=2, column=0, sticky=E)
@@ -518,7 +520,7 @@ def get_rom_options_frame(parent=None):
     owPalettesLabel.pack(side=LEFT)
     vars.owPalettesVar = StringVar()
     vars.owPalettesVar.set('default')
-    owPalettesOptionMenu = OptionMenu(owPalettesFrame, vars.owPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    owPalettesOptionMenu = OptionMenu(owPalettesFrame, vars.owPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     owPalettesOptionMenu.pack(side=LEFT)
 
     uwPalettesFrame = Frame(romOptionsFrame)
@@ -527,7 +529,7 @@ def get_rom_options_frame(parent=None):
     uwPalettesLabel.pack(side=LEFT)
     vars.uwPalettesVar = StringVar()
     vars.uwPalettesVar.set('default')
-    uwPalettesOptionMenu = OptionMenu(uwPalettesFrame, vars.uwPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    uwPalettesOptionMenu = OptionMenu(uwPalettesFrame, vars.uwPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     uwPalettesOptionMenu.pack(side=LEFT)
 
     hudPalettesFrame = Frame(romOptionsFrame)
@@ -536,7 +538,7 @@ def get_rom_options_frame(parent=None):
     hudPalettesLabel.pack(side=LEFT)
     vars.hudPalettesVar = StringVar()
     vars.hudPalettesVar.set('default')
-    hudPalettesOptionMenu = OptionMenu(hudPalettesFrame, vars.hudPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    hudPalettesOptionMenu = OptionMenu(hudPalettesFrame, vars.hudPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     hudPalettesOptionMenu.pack(side=LEFT)
 
     swordPalettesFrame = Frame(romOptionsFrame)
@@ -545,7 +547,7 @@ def get_rom_options_frame(parent=None):
     swordPalettesLabel.pack(side=LEFT)
     vars.swordPalettesVar = StringVar()
     vars.swordPalettesVar.set('default')
-    swordPalettesOptionMenu = OptionMenu(swordPalettesFrame, vars.swordPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    swordPalettesOptionMenu = OptionMenu(swordPalettesFrame, vars.swordPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     swordPalettesOptionMenu.pack(side=LEFT)
 
     shieldPalettesFrame = Frame(romOptionsFrame)
@@ -554,7 +556,7 @@ def get_rom_options_frame(parent=None):
     shieldPalettesLabel.pack(side=LEFT)
     vars.shieldPalettesVar = StringVar()
     vars.shieldPalettesVar.set('default')
-    shieldPalettesOptionMenu = OptionMenu(shieldPalettesFrame, vars.shieldPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    shieldPalettesOptionMenu = OptionMenu(shieldPalettesFrame, vars.shieldPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     shieldPalettesOptionMenu.pack(side=LEFT)
 
     spritePoolFrame = Frame(romOptionsFrame)

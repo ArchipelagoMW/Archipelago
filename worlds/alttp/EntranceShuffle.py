@@ -1064,7 +1064,7 @@ def link_entrances(world, player):
         connect_doors(world, single_doors, door_targets, player)
     else:
         raise NotImplementedError(
-            f'{world.shuffle[player]} Shuffling not supported yet. Player {world.get_player_names(player)}')
+            f'{world.shuffle[player]} Shuffling not supported yet. Player {world.get_player_name(player)}')
 
     # mandatory hybrid major glitches connections
     if world.logic[player] in ['hybridglitches', 'nologic']:

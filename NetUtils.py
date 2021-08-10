@@ -244,7 +244,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_item_name(node)
 
     def _handle_entrance_name(self, node: JSONMessagePart):
-        node["color"] = 'white_bg;black'
+        node["color"] = 'blue'
         return self._handle_color(node)
 
 

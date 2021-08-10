@@ -16,9 +16,9 @@ from MultiServer import mark_raw
 
 import Utils
 import random
-from NetUtils import RawJSONtoTextParser, NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
+from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
 
-from worlds.factorio.Technologies import lookup_id_to_name
+from worlds.factorio import Factorio
 
 os.makedirs("logs", exist_ok=True)
 
@@ -40,6 +40,8 @@ class FactorioCommandProcessor(ClientCommandProcessor):
     def _cmd_factorio(self, text: str) -> bool:
         """Send the following command to the bound Factorio Server."""
         if self.ctx.rcon_client:
+            # TODO: Print the command non-silently only for race seeds, or otherwise block anything but /factorio /save in race seeds.
+            self.ctx.print_to_game(f"/factorio {text}")
             result = self.ctx.rcon_client.send_command(text)
             if result:
                 self.output(result)
@@ -107,6 +109,12 @@ class FactorioContext(CommonContext):
             self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
                                           f"{text}")
 
+    def on_package(self, cmd: str, args: dict):
+        if cmd == "Connected":
+            # catch up sync anything that is already cleared.
+            for tech in args["checked_locations"]:
+                item_name = f"ap-{tech}-"
+                self.rcon_client.send_command(f'/ap-get-technology {item_name}\t-1')
 
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
@@ -186,6 +194,11 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 factorio_server_logger.info(msg)
                 if not ctx.rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     ctx.rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
+                    # TODO: remove around version 0.2
+                    if ctx.mod_version < Utils.Version(0, 1, 6):
+                        ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
+                        ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
+
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
 
@@ -194,10 +207,10 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
                     item_id = transfer_item.item
                     player_name = ctx.player_names[transfer_item.player]
-                    if item_id not in lookup_id_to_name:
-                        logging.error(f"Cannot send unknown item ID: {item_id}")
+                    if item_id not in Factorio.item_id_to_name:
+                        factorio_server_logger.error(f"Cannot send unknown item ID: {item_id}")
                     else:
-                        item_name = lookup_id_to_name[item_id]
+                        item_name = Factorio.item_id_to_name[item_id]
                         factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
                         ctx.rcon_client.send_command(f'/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}')
                     ctx.send_index += 1
@@ -243,7 +256,7 @@ async def factorio_spinup_server(ctx: FactorioContext):
             while not factorio_queue.empty():
                 msg = factorio_queue.get()
                 factorio_server_logger.info(msg)
-                if "Loading mod AP-" and msg.endswith("(data.lua)"):
+                if "Loading mod AP-" in msg and msg.endswith("(data.lua)"):
                     parts = msg.split()
                     ctx.mod_version = Utils.Version(*(int(number) for number in parts[-2].split(".")))
                 if not rcon_client and "Starting RCON interface at IP ADDR:" in msg:
@@ -325,7 +338,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Optional arguments to FactorioClient follow. "
                                                  "Remaining arguments get passed into bound Factorio instance."
-                                                 "Refer to factorio --help for those.")
+                                                 "Refer to Factorio --help for those.")
     parser.add_argument('--rcon-port', default='24242', type=int, help='Port to use to communicate with Factorio')
     parser.add_argument('--rcon-password', help='Password to authenticate with RCON.')
     parser.add_argument('--connect', default=None, help='Address of the multiworld host.')

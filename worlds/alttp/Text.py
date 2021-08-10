@@ -127,7 +127,7 @@ Triforce_texts = [
     "\n   Honk.",
 ]
 BombShop2_texts = ['Bombs!\nBombs!\nBiggest!\nBestest!\nGreatest!\nBoomiest!']
-Sahasrahla2_texts = ['You already got my item, idiot.', 'Why are you still talking to me?', 'Have you met my brother, Hasarahshla?']
+Sahasrahla2_texts = ['You already have my item.', 'Why are you still talking to me?', 'Have you met my brother, Hasarahshla?']
 Blind_texts = [
     "I hate insect\npuns, they\nreally bug me.",
     "I haven't seen\nthe eye doctor\nin years.",

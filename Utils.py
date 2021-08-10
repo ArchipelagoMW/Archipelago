@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing
 
 
-def tuplize_version(version: str) -> typing.Tuple[int, ...]:
+def tuplize_version(version: str) -> Version:
     return Version(*(int(piece, 10) for piece in version.split(".")))
 
 
@@ -49,24 +49,6 @@ def pc_to_snes(value):
 
 def snes_to_pc(value):
     return ((value & 0x7F0000) >> 1) | (value & 0x7FFF)
-
-
-def parse_player_names(names, players, teams):
-    names = tuple(n for n in (n.strip() for n in names.split(",")) if n)
-    if len(names) != len(set(names)):
-        name_counter = collections.Counter(names)
-        raise ValueError(f"Duplicate Player names is not supported, "
-                         f'found multiple "{name_counter.most_common(1)[0][0]}".')
-    ret = []
-    while names or len(ret) < teams:
-        team = [n[:16] for n in names[:players]]
-        # 16 bytes in rom per player, which will map to more in unicode, but those characters later get filtered
-        while len(team) != players:
-            team.append(f"Player{len(team) + 1}")
-        ret.append(team)
-
-        names = names[players:]
-    return ret
 
 
 def cache_argsless(function):
@@ -308,7 +290,7 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
         adjuster_settings.rom = romfile
         adjuster_settings.baserom = Patch.get_base_rom_path()
         adjuster_settings.world = None
-        whitelist = {"disablemusic", "fastmenu", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
+        whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
                      "uw_palettes", "sprite"}
         printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
         if hasattr(adjuster_settings, "sprite_pool"):
@@ -353,6 +335,7 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
         get_adjuster_settings.adjust_wanted = adjust_wanted
         return romfile, adjusted
     return romfile, False
+
 
 @cache_argsless
 def get_unique_identifier():

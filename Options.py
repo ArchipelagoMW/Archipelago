@@ -7,12 +7,15 @@ class AssembleOptions(type):
     def __new__(mcs, name, bases, attrs):
         options = attrs["options"] = {}
         name_lookup = attrs["name_lookup"] = {}
+        # merge parent class options
         for base in bases:
             if hasattr(base, "options"):
                 options.update(base.options)
-                name_lookup.update(name_lookup)
+                name_lookup.update(base.name_lookup)
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
                        name.startswith("option_")}
+        if "random" in new_options:
+            raise Exception("Choice option 'random' cannot be manually assigned.")
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
 
@@ -30,24 +33,40 @@ class AssembleOptions(type):
             attrs["__init__"] = validate_decorator(attrs["__init__"])
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
+
 class Option(metaclass=AssembleOptions):
     value: int
     name_lookup: typing.Dict[int, str]
     default = 0
 
-    def __repr__(self):
-        return f"{self.__class__.__name__}({self.get_option_name()})"
+    # convert option_name_long into Name Long as displayname, otherwise name_long is the result.
+    # Handled in get_option_name()
+    autodisplayname = False
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.get_current_option_name()})"
 
     def __hash__(self):
         return hash(self.value)
 
-    def get_option_name(self):
+    @property
+    def current_key(self) -> str:
         return self.name_lookup[self.value]
 
-    def __int__(self):
+    def get_current_option_name(self) -> str:
+        """For display purposes."""
+        return self.get_option_name(self.value)
+
+    def get_option_name(self, value: typing.Any) -> str:
+        if self.autodisplayname:
+            return self.name_lookup[self.value].replace("_", " ").title()
+        else:
+            return self.name_lookup[self.value]
+
+    def __int__(self) -> int:
         return self.value
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         return bool(self.value)
 
     @classmethod
@@ -95,20 +114,28 @@ class Toggle(Option):
     def __int__(self):
         return int(self.value)
 
-    def get_option_name(self):
-        return bool(self.value)
+    def get_option_name(self, value):
+        return ["No", "Yes"][int(value)]
 
 class DefaultOnToggle(Toggle):
     default = 1
 
+
 class Choice(Option):
+    autodisplayname = True
+
     def __init__(self, value: int):
         self.value: int = value
 
     @classmethod
     def from_text(cls, text: str) -> Choice:
+        text = text.lower()
+        # TODO: turn on after most people have adjusted their yamls to no longer have suboptions with "random" in them
+        # maybe in 0.2?
+        # if text == "random":
+        #     return cls(random.choice(list(cls.options.values())))
         for optionname, value in cls.options.items():
-            if optionname == text.lower():
+            if optionname == text:
                 return cls(value)
         raise KeyError(
             f'Could not find option "{text}" for "{cls.__name__}", '
@@ -152,7 +179,7 @@ class Range(Option, int):
             return cls(data)
         return cls.from_text(str(data))
 
-    def get_option_name(self):
+    def get_option_name(self, value):
         return str(self.value)
 
     def __str__(self):
@@ -189,8 +216,8 @@ class OptionDict(Option):
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
-    def get_option_name(self):
-        return str(self.value)
+    def get_option_name(self, value):
+        return str(value)
 
 
 class OptionList(Option): 
