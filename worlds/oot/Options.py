@@ -117,7 +117,7 @@ class ShopShuffle(Choice):
     option_2 = 2
     option_3 = 3
     option_4 = 4
-    option_random = 5
+    option_random_value = 5
     option_off = 6
     default = 6
     alias_false = 6
@@ -133,11 +133,10 @@ class ScrubShuffle(Choice):
     option_off = 0
     option_low = 1
     option_regular = 2
-    option_random = 3
+    option_random_prices = 3
     alias_false = 0
     alias_affordable = 1
     alias_expensive = 2
-    alias_random_prices = 3
 
 shuffle_options: typing.Dict[str, type(Option)] = {
     "shuffle_song_items": SongShuffle,

@@ -24,7 +24,7 @@ from .N64Patch import create_patch_file
 
 import Utils
 from BaseClasses import MultiWorld, CollectionState
-from Options import Range, OptionList
+from Options import Range, Toggle, OptionList
 from Fill import fill_restrictive, FillError
 from ..AutoWorld import World
 
@@ -86,10 +86,12 @@ class OOTWorld(World):
             result = getattr(self.world, option_name)[self.player]
             if isinstance(result, Range): 
                 option_value = int(result)
+            elif isinstance(result, Toggle):
+                option_value = bool(result)
             elif isinstance(result, OptionList):
                 option_value = result.value
             else:
-                option_value = result.get_option_name()
+                option_value = result.current_key
             setattr(self, option_name, option_value)
         self.shop_prices = {}
         self.regions = []  # internal cache of regions for this world, used later
@@ -159,6 +161,8 @@ class OOTWorld(World):
         self.disable_trade_revert = (self.shuffle_interior_entrances != 'off') or self.shuffle_overworld_entrances
         self.shuffle_special_interior_entrances = self.shuffle_interior_entrances == 'all'
         self.starting_tod = self.starting_tod.replace('_', '-')  # Fixes starting time spelling: "witching_hour" -> "witching-hour"
+        self.shopsanity = self.shopsanity.replace('_value', '')  # can't set "random" manually
+        self.shuffle_scrubs = self.shuffle_scrubs.replace('_prices', '')
 
 
     def load_regions_from_json(self, file_path):
