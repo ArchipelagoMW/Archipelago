@@ -517,17 +517,13 @@ def create_playthrough(world):
              sphere if location.player == player})
         if player in world.get_game_players("A Link to the Past"):
             for path in dict(world.spoiler.paths).values():
-                if any(exit == 'Pyramid Fairy' for (_, exit) in path):
+                if any(exit_path == 'Pyramid Fairy' for (_, exit_path) in path):
                     if world.mode[player] != 'inverted':
-                        world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = get_path(state,
-                                                                                                       world.get_region(
-                                                                                                           'Big Bomb Shop',
-                                                                                                           player))
+                        world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = \
+                            get_path(state,world.get_region('Big Bomb Shop', player))
                     else:
-                        world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = get_path(state,
-                                                                                                                world.get_region(
-                                                                                                                    'Inverted Big Bomb Shop',
-                                                                                                                    player))
+                        world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = \
+                            get_path(state,world.get_region('Inverted Big Bomb Shop', player))
 
     # we can finally output our playthrough
     world.spoiler.playthrough = {"0": sorted([str(item) for item in world.precollected_items if item.advancement])}
