@@ -528,6 +528,11 @@ class OOTWorld(World):
         if not all_state.has('Bottle with Big Poe', self.player) and bigpoe not in reachable:
             bigpoe.parent_region.locations.remove(bigpoe)
         self.world.clear_location_cache()
+
+        # If fast scarecrow then we need to kill the Pierre location as it will be unreachable
+        if self.fast_scarecrow:
+            loc = self.world.get_location("Pierre", self.player)
+            loc.parent_region.locations.remove(loc)
             
 
     # For now we will always output a patch file.
