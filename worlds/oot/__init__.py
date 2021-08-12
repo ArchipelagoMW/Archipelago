@@ -79,6 +79,10 @@ class OOTWorld(World):
 
 
     def generate_early(self):
+        # Player name MUST be at most 16 bytes ascii-encoded, otherwise won't write to ROM correctly
+        if len(bytes(self.world.get_player_name(self.player), 'ascii')) > 16:
+            raise Exception(f"OoT: Player {self.player}'s name ({self.world.get_player_name(self.player)}) must be ASCII-compatible")
+
         self.rom = Rom(file=Utils.get_options()['oot_options']['rom_file'])  # a ROM must be provided, cannot produce patches without it
         self.parser = Rule_AST_Transformer(self, self.player)
 
