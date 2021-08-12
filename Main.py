@@ -350,7 +350,7 @@ def main(args, seed=None):
             multidata = {
                 "slot_data": slot_data,
                 "games": games,
-                "names": [{player: name for player, name in world.player_name.items()}],
+                "names": [[name for player, name in sorted(world.player_name.items())]],
                 "connect_names": {name: (0, player) for player, name in world.player_name.items()},
                 "remote_items": {player for player in world.player_ids if
                                  world.worlds[player].remote_items},
