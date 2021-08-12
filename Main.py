@@ -218,12 +218,8 @@ def main(args, seed=None):
 
     if world.algorithm == 'flood':
         flood_items(world)  # different algo, biased towards early game progress items
-    elif world.algorithm == 'vt25':
-        distribute_items_restrictive(world, False)
-    elif world.algorithm == 'vt26':
-        distribute_items_restrictive(world, True)
     elif world.algorithm == 'balanced':
-        distribute_items_restrictive(world, True)
+        distribute_items_restrictive(world)
 
     logger.info("Filling Shop Slots")
 
@@ -354,7 +350,7 @@ def main(args, seed=None):
             multidata = {
                 "slot_data": slot_data,
                 "games": games,
-                "names": [{player: name for player, name in world.player_name.items()}],
+                "names": [[name for player, name in sorted(world.player_name.items())]],
                 "connect_names": {name: (0, player) for player, name in world.player_name.items()},
                 "remote_items": {player for player in world.player_ids if
                                  world.worlds[player].remote_items},
@@ -521,17 +517,13 @@ def create_playthrough(world):
              sphere if location.player == player})
         if player in world.get_game_players("A Link to the Past"):
             for path in dict(world.spoiler.paths).values():
-                if any(exit == 'Pyramid Fairy' for (_, exit) in path):
+                if any(exit_path == 'Pyramid Fairy' for (_, exit_path) in path):
                     if world.mode[player] != 'inverted':
-                        world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = get_path(state,
-                                                                                                       world.get_region(
-                                                                                                           'Big Bomb Shop',
-                                                                                                           player))
+                        world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = \
+                            get_path(state,world.get_region('Big Bomb Shop', player))
                     else:
-                        world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = get_path(state,
-                                                                                                                world.get_region(
-                                                                                                                    'Inverted Big Bomb Shop',
-                                                                                                                    player))
+                        world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = \
+                            get_path(state,world.get_region('Inverted Big Bomb Shop', player))
 
     # we can finally output our playthrough
     world.spoiler.playthrough = {"0": sorted([str(item) for item in world.precollected_items if item.advancement])}

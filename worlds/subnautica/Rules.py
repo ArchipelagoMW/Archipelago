@@ -231,7 +231,6 @@ def set_location_rule(world, player, loc):
 
 
 def set_rules(world, player):
-    logging.warning(type(location_table))
     for loc in location_table:
         set_location_rule(world, player, loc)
 

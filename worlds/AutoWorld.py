@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import Dict, Set, Tuple
+from typing import Dict, Set, Tuple, List, Optional
 
-from BaseClasses import MultiWorld, Item, CollectionState
+from BaseClasses import MultiWorld, Item, CollectionState, Location
 
 
 class AutoWorldRegister(type):
@@ -126,6 +126,12 @@ class World(metaclass=AutoWorldRegister):
         """Optional method that is supposed to be used for special fill stages. This is run *after* plando."""
         pass
 
+    def fill_hook(cls, progitempool: List[Item], nonexcludeditempool: List[Item],
+                  localrestitempool: Dict[int, List[Item]], restitempool: List[Item], fill_locations: List[Location]):
+        """Special method that gets called as part of distribute_items_restrictive (main fill).
+        This gets called once per present world type."""
+        pass
+
     def generate_output(self, output_directory: str):
         """This method gets called from a threadpool, do not use world.random here.
         If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
@@ -144,18 +150,33 @@ class World(metaclass=AutoWorldRegister):
 
     # end of Main.py calls
 
-    def collect(self, state: CollectionState, item: Item) -> bool:
-        """Collect an item into state. For speed reasons items that aren't logically useful get skipped."""
+    def collect_item(self, state: CollectionState, item: Item) -> Optional[str]:
+        """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
+        Collect None to skip item."""
         if item.advancement:
-            state.prog_items[item.name, item.player] += 1
-            return True  # indicate that a logical state change has occured
-        return False
+            return item.name
 
     def create_item(self, name: str) -> Item:
         """Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer"""
         raise NotImplementedError
 
+    # following methods should not need to be overriden.
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        name = self.collect_item(state, item)
+        if name:
+            state.prog_items[name, item.player] += 1
+            return True
+        return False
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        name = self.collect_item(state, item)
+        if name:
+            state.prog_items[name, item.player] -= 1
+            if state.prog_items[name, item.player] < 1:
+                del (state.prog_items[name, item.player])
+            return True
+        return False
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together

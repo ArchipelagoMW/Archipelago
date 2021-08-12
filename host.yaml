@@ -83,6 +83,9 @@ lttp_options:
   rom_start: true
 factorio_options:
   executable: "factorio\\bin\\x64\\factorio"
+minecraft_options: 
+  forge_directory: "Minecraft Forge server"
+  max_heap_size: "2G"
 oot_options: 
   # File name of the OoT v1.0 ROM
   rom_file: "The Legend of Zelda - Ocarina of Time.z64"
