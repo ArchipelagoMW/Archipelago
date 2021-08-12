@@ -534,7 +534,7 @@ class OOTWorld(World):
         self.world.clear_location_cache()
 
         # If fast scarecrow then we need to kill the Pierre location as it will be unreachable
-        if self.fast_scarecrow:
+        if self.free_scarecrow:
             loc = self.world.get_location("Pierre", self.player)
             loc.parent_region.locations.remove(loc)
             
