@@ -1,1 +1,3 @@
-__version__ = '0.1.4 f.LUM'
+import Utils
+
+__version__ = Utils.__version__ + ' f.LUM'
