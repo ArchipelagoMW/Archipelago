@@ -271,7 +271,6 @@ class ALTTPWorld(World):
                 key = world.create_item("Small Key (Hyrule Castle)", player)
                 loc = viable.pop()
                 loc.place_locked_item(key)
-                logging.info(loc)
                 fill_locations.remove(loc)
             world.random.shuffle(fill_locations)
             # TODO: investigate not creating the key in the first place
