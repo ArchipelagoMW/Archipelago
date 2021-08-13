@@ -5,7 +5,7 @@ from collections import Counter
 
 logger = logging.getLogger("Ocarina of Time")
 
-from .Location import OOTLocation, LocationFactory
+from .Location import OOTLocation, LocationFactory, location_name_to_id
 from .Entrance import OOTEntrance
 from .EntranceShuffle import shuffle_random_entrances
 from .Items import OOTItem, item_table, oot_data_to_ap_id
@@ -35,8 +35,7 @@ class OOTWorld(World):
     options: dict = oot_options
     topology_present: bool = True
     item_name_to_id = {item_name: oot_data_to_ap_id(data, False) for item_name, data in item_table.items() if data[2] is not None}
-    location_name_to_id = {name: (location_id_offset + index) for (index, name) in enumerate(location_table) 
-        if location_table[name][0] not in ['Event', 'Drop', 'HintStone', 'Hint']}
+    location_name_to_id = location_name_to_id
     remote_items: bool = False
 
 

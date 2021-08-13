@@ -1356,7 +1356,7 @@ def patch_rom(world, rom):
     for location in world.world.get_filled_locations(world.player):
         item = location.item
         special = item.special if item.game == 'Ocarina of Time' else {}  # this shouldn't matter hopefully
-        locationaddress = location.address
+        locationaddress = location.address1
         secondaryaddress = location.address2
 
         if location.type == 'Song' and not songs_as_items:
@@ -2057,7 +2057,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
     for location in locations:
         if location.item.type == 'Shop':
             shop_objs.add(location.item.special['object'])
-            rom.write_int16(location.address, location.item.index)
+            rom.write_int16(location.address1, location.item.index)
         else:
             if location.item.looks_like_item is not None:
                 item_display = location.item.looks_like_item
@@ -2073,7 +2073,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
 
             shop_objs.add(rom_item['object_id'])
             shop_id = place_shop_items.shop_id
-            rom.write_int16(location.address, shop_id)
+            rom.write_int16(location.address1, shop_id)
             shop_item = shop_items[shop_id]
 
             shop_item.object = rom_item['object_id']
