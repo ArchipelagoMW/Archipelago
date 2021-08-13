@@ -21,6 +21,7 @@ from .LogicTricks import known_logic_tricks
 from .Rom import Rom, compress_rom_file
 from .Patches import patch_rom
 from .N64Patch import create_patch_file
+from .Cosmetics import patch_cosmetics
 
 import Utils
 from BaseClasses import MultiWorld, CollectionState
@@ -542,7 +543,7 @@ class OOTWorld(World):
     def generate_output(self, output_directory: str): 
         outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}"
         patch_rom(self, self.rom)
-        # patch cosmetics here
+        # patch_cosmetics(self, self.rom)
         self.rom.update_header()
 
         # make patch file
