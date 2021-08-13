@@ -13,7 +13,7 @@ from .ItemPool import generate_itempool, get_junk_item, get_junk_pool
 from .Regions import OOTRegion, TimeOfDay
 from .Rules import set_rules, set_shop_rules, set_entrances_based_rules
 from .RuleParser import Rule_AST_Transformer
-from .Options import oot_options
+from .Options import oot_options, cosmetic_options
 from .Utils import data_path, read_json
 from .LocationList import location_table, business_scrubs, set_drop_location_names
 from .DungeonList import dungeon_table, create_dungeons
@@ -543,7 +543,7 @@ class OOTWorld(World):
     def generate_output(self, output_directory: str): 
         outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}"
         patch_rom(self, self.rom)
-        # patch_cosmetics(self, self.rom)
+        patch_cosmetics(self, self.rom)
         self.rom.update_header()
 
         # make patch file

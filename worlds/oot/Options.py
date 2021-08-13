@@ -1,5 +1,7 @@
 import typing
 from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionList
+from .Colors import *
+import worlds.oot.Sounds as sfx
 
 # oot has way too many options D:
 # if default is not specified, it is option 0
@@ -217,10 +219,6 @@ timesavers_options: typing.Dict[str, type(Option)] = {
     # "big_poe_count": make_range(1, 10, 1),
 }
 
-class Targeting(Choice): 
-    option_hold = 0
-    option_switch = 1
-
 class Hints(Choice): 
     option_none = 0
     option_mask = 1
@@ -255,7 +253,6 @@ class StartingToD(Choice):
     option_witching_hour = 8
 
 misc_options: typing.Dict[str, type(Option)] = {
-    "default_targeting": Targeting, # move this to cosmetic options later
     "clearer_hints": DefaultOnToggle,
     # "hints": Hints,
     "text_shuffle": TextShuffle,
@@ -310,7 +307,89 @@ itempool_options: typing.Dict[str, type(Option)] = {
     "logic_latest_adult_trade": AdultTradeItem
 }
 
+# Start of cosmetic options
 
+def assemble_color_option(func, default_option: str, outer=False): 
+    color_options = func()
+    if outer:
+        color_options.append("Match Inner")
+    format_color = lambda color: color.replace(' ', '_').lower()
+    color_to_id = {format_color(color): index for index, color in enumerate(color_options)}
+    class ColorOption(Choice):
+        default = color_options.index(default_option)
+    ColorOption.options.update(color_to_id)
+    ColorOption.name_lookup.update({id: color for (color, id) in color_to_id.items()})
+    return ColorOption
+
+class Targeting(Choice): 
+    option_hold = 0
+    option_switch = 1
+
+class Music(Choice): 
+    option_normal = 0
+    option_off = 1
+    option_randomized = 2
+    alias_false = 1
+
+cosmetic_options: typing.Dict[str, type(Option)] = {
+    "default_targeting": Targeting,
+    "display_dpad": DefaultOnToggle,
+    "correct_model_colors": DefaultOnToggle,
+    "background_music": Music,
+    "fanfares": Music,
+    "kokiri_color": assemble_color_option(get_tunic_colors, "Kokiri Green"),
+    "goron_color":  assemble_color_option(get_tunic_colors, "Goron Red"),
+    "zora_color":   assemble_color_option(get_tunic_colors, "Zora Blue"),
+    "silver_gauntlets_color":   assemble_color_option(get_gauntlet_colors, "Silver"),
+    "golden_gauntlets_color":     assemble_color_option(get_gauntlet_colors, "Gold"),
+    "mirror_shield_frame_color": assemble_color_option(get_shield_frame_colors, "Red"),
+    "navi_color_default_inner": assemble_color_option(get_navi_colors, "White"),
+    "navi_color_default_outer": assemble_color_option(get_navi_colors, "Match Inner", outer=True),
+    "navi_color_enemy_inner":   assemble_color_option(get_navi_colors, "Yellow"),
+    "navi_color_enemy_outer":   assemble_color_option(get_navi_colors, "Match Inner", outer=True),
+    "navi_color_npc_inner":     assemble_color_option(get_navi_colors, "Light Blue"),
+    "navi_color_npc_outer":     assemble_color_option(get_navi_colors, "Match Inner", outer=True),
+    "navi_color_prop_inner":    assemble_color_option(get_navi_colors, "Green"),
+    "navi_color_prop_outer":    assemble_color_option(get_navi_colors, "Match Inner", outer=True),
+    "sword_trail_duration": make_range(4, 20, 4),
+    "sword_trail_color_inner": assemble_color_option(get_sword_trail_colors, "White"),
+    "sword_trail_color_outer": assemble_color_option(get_sword_trail_colors, "Match Inner", outer=True),
+    "bombchu_trail_color_inner": assemble_color_option(get_bombchu_trail_colors, "Red"),
+    "bombchu_trail_color_outer": assemble_color_option(get_bombchu_trail_colors, "Match Inner", outer=True),
+    "boomerang_trail_color_inner": assemble_color_option(get_boomerang_trail_colors, "Yellow"),
+    "boomerang_trail_color_outer": assemble_color_option(get_boomerang_trail_colors, "Match Inner", outer=True),
+    "heart_color":          assemble_color_option(get_heart_colors, "Red"),
+    "magic_color":          assemble_color_option(get_magic_colors, "Green"),
+    "a_button_color":       assemble_color_option(get_a_button_colors, "N64 Blue"),
+    "b_button_color":       assemble_color_option(get_b_button_colors, "N64 Green"),
+    "c_button_color":       assemble_color_option(get_c_button_colors, "Yellow"),
+    "start_button_color":   assemble_color_option(get_start_button_colors, "N64 Red"),
+}
+
+class SfxOcarina(Choice):
+    option_ocarina = 1
+    option_malon = 2
+    option_whistle = 3
+    option_harp = 4
+    option_grind_organ = 5
+    option_flute = 6
+    default = 1
+
+# Not sure how to handle ear-safe yet, won't expose these until it's safe
+sfx_options: typing.Dict[str, type(Option)] = {
+    # "sfx_navi_overworld": Sfx,
+    # "sfx_navi_enemy": Sfx,
+    # "sfx_low_hp": Sfx,
+    # "sfx_menu_cursor": Sfx,
+    # "sfx_menu_select": Sfx,
+    # "sfx_nightfall": Sfx,
+    # "sfx_horse_neight": Sfx,
+    # "sfx_hover_boots": Sfx,
+    "sfx_ocarina": SfxOcarina,
+}
+
+
+# All options assembled into a single dict
 oot_options: typing.Dict[str, type(Option)] = {
     "logic_rules": Logic, 
     "logic_no_night_tokens_without_suns_song": Toggle, 
@@ -323,5 +402,7 @@ oot_options: typing.Dict[str, type(Option)] = {
     **timesavers_options,
     **misc_options, 
     **itempool_options,
+    **cosmetic_options,
+    **sfx_options,
     "logic_tricks": OptionList,
 }

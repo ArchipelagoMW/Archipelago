@@ -3,15 +3,29 @@ from .Utils import data_path
 from .Colors import *
 # import random
 import logging
-import Music as music
-import Sounds as sfx
-import IconManip as icon
+import worlds.oot.Music as music
+import worlds.oot.Sounds as sfx
+import worlds.oot.IconManip as icon
 from .JSONDump import dump_obj, CollapseList, CollapseDict, AlignedDict, SortedDict
 # from SettingsList import setting_infos
 # from Plandomizer import InvalidFileException
 import json
 
 logger = logging.getLogger('')
+
+# Options are all lowercase and have underscores instead of spaces
+# this needs to be undone for the oot generator
+def format_cosmetic_option_result(option_result):
+    def format_word(word):
+        special_words = {
+            'nes': 'NES',
+            'gamecube': 'GameCube',
+            'of': 'of'
+        }
+        return special_words.get(word, word.capitalize())
+    words = option_result.split('_')
+    return ' '.join([format_word(word) for word in words])
+
 
 def patch_targeting(rom, ootworld, symbols):
     # Set default targeting option to Hold
@@ -84,7 +98,7 @@ def patch_tunic_colors(rom, ootworld, symbols):
     tunic_color_list = get_tunic_colors()
 
     for tunic, tunic_setting, address in tunics:
-        tunic_option = ootworld.__dict__[tunic_setting]
+        tunic_option = format_cosmetic_option_result(ootworld.__dict__[tunic_setting])
 
         # handle random
         if tunic_option == 'Random Choice':
@@ -134,8 +148,8 @@ def patch_navi_colors(rom, ootworld, symbols):
     rainbow_error = None
 
     for navi_action, navi_setting, navi_addresses, rainbow_inner_symbol, rainbow_outer_symbol in navi:
-        navi_option_inner = ootworld.__dict__[navi_setting+'_inner']
-        navi_option_outer = ootworld.__dict__[navi_setting+'_outer']
+        navi_option_inner = format_cosmetic_option_result(ootworld.__dict__[navi_setting+'_inner'])
+        navi_option_outer = format_cosmetic_option_result(ootworld.__dict__[navi_setting+'_outer'])
 
         # choose a random choice for the whole group
         if navi_option_inner == 'Random Choice':
@@ -143,7 +157,7 @@ def patch_navi_colors(rom, ootworld, symbols):
         if navi_option_outer == 'Random Choice':
             navi_option_outer = random.choice(navi_color_list)
 
-        if navi_option_outer == '[Same as Inner]':
+        if navi_option_outer == 'Match Inner':
             navi_option_outer = navi_option_inner
 
         colors = []
@@ -156,10 +170,6 @@ def patch_navi_colors(rom, ootworld, symbols):
                 ('outer', navi_option_outer, rainbow_outer_symbol),
             ]):
                 color = None
-
-                # Plando
-                if len(plando_colors) > address_index and plando_colors[address_index].get(navi_part, ''):
-                    color = hex_to_color(plando_colors[address_index][navi_part])
 
                 # set rainbow option
                 if rainbow_symbol is not None and option == 'Rainbow':
@@ -215,8 +225,8 @@ def patch_sword_trails(rom, ootworld, symbols):
     rainbow_error = None
 
     for trail_name, trail_setting, trail_addresses, rainbow_inner_symbol, rainbow_outer_symbol in sword_trails:
-        option_inner = ootworld.__dict__[trail_setting+'_inner']
-        option_outer = ootworld.__dict__[trail_setting+'_outer']
+        option_inner = format_cosmetic_option_result(ootworld.__dict__[trail_setting+'_inner'])
+        option_outer = format_cosmetic_option_result(ootworld.__dict__[trail_setting+'_outer'])
 
         # handle random choice
         if option_inner == 'Random Choice':
@@ -224,7 +234,7 @@ def patch_sword_trails(rom, ootworld, symbols):
         if option_outer == 'Random Choice':
             option_outer = random.choice(sword_trail_color_list)
 
-        if option_outer == '[Same as Inner]':
+        if option_outer == 'Match Inner':
             option_outer = option_inner
 
         colors = []
@@ -238,10 +248,6 @@ def patch_sword_trails(rom, ootworld, symbols):
                 ('outer', option_outer, rainbow_outer_symbol, outer_white_transparency, outer_transparency),
             ]):
                 color = None
-
-                # Plando
-                if len(plando_colors) > address_index and plando_colors[address_index].get(trail_part, ''):
-                    color = hex_to_color(plando_colors[address_index][trail_part])
 
                 # set rainbow option
                 if rainbow_symbol is not None and option == 'Rainbow':
@@ -312,8 +318,8 @@ def patch_boomerang_trails(rom, ootworld, symbols):
 def patch_trails(rom, ootworld, trails):
     for trail_name, trail_setting, trail_color_list, trail_color_dict, trail_symbols in trails:
         color_inner_symbol, color_outer_symbol, rainbow_inner_symbol, rainbow_outer_symbol = trail_symbols
-        option_inner = ootworld.__dict__[trail_setting+'_inner']
-        option_outer = ootworld.__dict__[trail_setting+'_outer']
+        option_inner = format_cosmetic_option_result(ootworld.__dict__[trail_setting+'_inner'])
+        option_outer = format_cosmetic_option_result(ootworld.__dict__[trail_setting+'_outer'])
 
         # handle random choice
         if option_inner == 'Random Choice':
@@ -321,7 +327,7 @@ def patch_trails(rom, ootworld, trails):
         if option_outer == 'Random Choice':
             option_outer = random.choice(trail_color_list)
 
-        if option_outer == '[Same as Inner]':
+        if option_outer == 'Match Inner':
             option_outer = option_inner
 
         option_dict = {}
@@ -332,10 +338,6 @@ def patch_trails(rom, ootworld, trails):
             ('outer', option_outer, rainbow_outer_symbol, color_outer_symbol),
         ]):
             color = None
-
-            # Plando
-            if len(plando_colors) > 0 and plando_colors[0].get(trail_part, ''):
-                color = hex_to_color(plando_colors[0][trail_part])
 
             # set rainbow option
             if option == 'Rainbow':
@@ -384,7 +386,7 @@ def patch_gauntlet_colors(rom, ootworld, symbols):
     gauntlet_color_list = get_gauntlet_colors()
 
     for gauntlet, gauntlet_setting, address, model_addresses in gauntlets:
-        gauntlet_option = ootworld.__dict__[gauntlet_setting]
+        gauntlet_option = format_cosmetic_option_result(ootworld.__dict__[gauntlet_setting])
 
         # handle random
         if gauntlet_option == 'Random Choice':
@@ -415,7 +417,7 @@ def patch_shield_frame_colors(rom, ootworld, symbols):
     shield_frame_color_list = get_shield_frame_colors()
 
     for shield_frame, shield_frame_setting, addresses, model_addresses in shield_frames:
-        shield_frame_option = ootworld.__dict__[shield_frame_setting]
+        shield_frame_option = format_cosmetic_option_result(ootworld.__dict__[shield_frame_setting])
 
         # handle random
         if shield_frame_option == 'Random Choice':
@@ -449,7 +451,7 @@ def patch_heart_colors(rom, ootworld, symbols):
     heart_color_list = get_heart_colors()
 
     for heart, heart_setting, symbol, file_select_address, model_addresses in hearts:
-        heart_option = ootworld.__dict__[heart_setting]
+        heart_option = format_cosmetic_option_result(ootworld.__dict__[heart_setting])
 
         # handle random
         if heart_option == 'Random Choice':
@@ -487,7 +489,7 @@ def patch_magic_colors(rom, ootworld, symbols):
     magic_color_list = get_magic_colors()
 
     for magic_color, magic_setting, symbol, model_addresses in magic:
-        magic_option = ootworld.__dict__[magic_setting]
+        magic_option = format_cosmetic_option_result(ootworld.__dict__[magic_setting])
 
         if magic_option == 'Random Choice':
            magic_option = random.choice(magic_color_list)
@@ -548,7 +550,7 @@ def patch_button_colors(rom, ootworld, symbols):
     ]
 
     for button, button_setting, button_colors, patches in buttons:
-        button_option = ootworld.__dict__[button_setting]
+        button_option = format_cosmetic_option_result(ootworld.__dict__[button_setting])
         color_set = None
         colors = {}
 
@@ -573,9 +575,7 @@ def patch_button_colors(rom, ootworld, symbols):
 
         # apply all button color patches
         for i, (patch, symbol, byte_addresses) in enumerate(patches):
-            if plando_colors.get(patch, ''):
-                colors[patch] = hex_to_color(plando_colors[patch])
-            elif color_set is not None and len(color_set) > i and color_set[i]:
+            if color_set is not None and len(color_set) > i and color_set[i]:
                 colors[patch] = color_set[i]
             else:
                 colors[patch] = color
@@ -591,6 +591,8 @@ def patch_button_colors(rom, ootworld, symbols):
 
 
 def patch_sfx(rom, ootworld, symbols):
+    # temporary override, REMOVE WHEN IMPLEMENTED
+    return
     # Configurable Sound Effects
     sfx_config = [
           ('sfx_navi_overworld', sfx.SoundHooks.NAVI_OVERWORLD),
@@ -634,12 +636,10 @@ def patch_instrument(rom, ootworld, symbols):
             'malon':           0x02,
             'whistle':         0x03,
             'harp':            0x04,
-            'grind-organ':     0x05,
+            'grind_organ':     0x05,
             'flute':           0x06,
            #'another_ocarina': 0x07,
     }
-    ocarina_options = [setting.choices for setting in setting_infos if setting.name == 'sfx_ocarina'][0]
-    ocarina_options_inv = {v: k for k, v in ocarina_options.items()}
 
     choice = ootworld.sfx_ocarina
     if choice == 'random-choice':
