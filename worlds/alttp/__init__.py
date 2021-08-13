@@ -258,10 +258,26 @@ class ALTTPWorld(World):
                 trash_counts[player] = world.random.randint(0, world.crystals_needed_for_gt[player] * 2)
 
         # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
+        # TODO: this might be worthwhile to introduce as generic option for various games and then optimize it
         if standard_keyshuffle_players:
-            progitempool.sort(
-                key=lambda item: 1 if item.name == 'Small Key (Hyrule Castle)' and
-                                      item.player in standard_keyshuffle_players else 0)
+            viable = []
+            for location in world.get_locations():
+                if location.player in standard_keyshuffle_players \
+                        and location.item is None \
+                        and location.can_reach(world.state):
+                    viable.append(location)
+            world.random.shuffle(viable)
+            for player in standard_keyshuffle_players:
+                key = world.create_item("Small Key (Hyrule Castle)", player)
+                loc = viable.pop()
+                loc.place_locked_item(key)
+                logging.info(loc)
+                fill_locations.remove(loc)
+            world.random.shuffle(fill_locations)
+            # TODO: investigate not creating the key in the first place
+            progitempool[:] = [item for item in progitempool if
+                               item.player not in standard_keyshuffle_players or
+                               item.name != "Small Key (Hyrule Castle)"]
 
         if trash_counts:
             locations_mapping = {player: [] for player in trash_counts}
