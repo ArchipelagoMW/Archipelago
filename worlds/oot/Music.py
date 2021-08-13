@@ -2,7 +2,7 @@
 
 import random
 import os
-from Utils import compare_version, data_path
+from .Utils import compare_version, data_path
 
 
 # Format: (Title, Sequence ID)

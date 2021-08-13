@@ -1,14 +1,14 @@
-from version import __version__
-from Utils import data_path
-from Colors import *
-import random
+from .version import __version__
+from .Utils import data_path
+from .Colors import *
+# import random
 import logging
 import Music as music
 import Sounds as sfx
 import IconManip as icon
-from JSONDump import dump_obj, CollapseList, CollapseDict, AlignedDict, SortedDict
-from SettingsList import setting_infos
-from Plandomizer import InvalidFileException
+from .JSONDump import dump_obj, CollapseList, CollapseDict, AlignedDict, SortedDict
+# from SettingsList import setting_infos
+# from Plandomizer import InvalidFileException
 import json
 
 

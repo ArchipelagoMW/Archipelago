@@ -1,4 +1,4 @@
-from Utils import data_path
+from .Utils import data_path
 
 # TODO
 # Move the tunic to the generalized system

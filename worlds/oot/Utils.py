@@ -74,3 +74,21 @@ def get_version_bytes(a):
         version_bytes[i] = version_byte
 
     return version_bytes
+
+def compare_version(a, b):
+    if not a and not b:
+        return 0
+    elif a and not b:
+        return 1
+    elif not a and b:
+        return -1
+
+    sa = get_version_bytes(a)
+    sb = get_version_bytes(b)
+
+    for i in range(0,3):
+        if sa[i] > sb[i]:
+            return 1
+        if sa[i] < sb[i]:
+            return -1
+    return 0
