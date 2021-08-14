@@ -1,4 +1,5 @@
 import logging
+import copy
 from typing import Set
 
 logger = logging.getLogger("Super Metroid")
@@ -45,6 +46,28 @@ class SMWorld(World):
     locations = {}
 
     Logic.factory('vanilla')
+
+    def __new__(cls, world, player):
+        # Add necessary objects to CollectionState on initialization
+        orig_init = CollectionState.__init__
+        orig_copy = CollectionState.copy
+
+        def sm_init(self, parent: MultiWorld):
+            orig_init(self, parent)
+            self.smbm = {player: SMBoolManager() for player in range(1, parent.players + 1)}
+
+        def sm_copy(self):
+            ret = orig_copy(self)
+            ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in range(1, self.world.players + 1)}
+            return ret
+
+        CollectionState.__init__ = sm_init
+        CollectionState.copy = sm_copy
+        # also need to add the names to the passed MultiWorld's CollectionState, since it was initialized before we could get to it
+        if world:
+            world.state.smbm = {player: SMBoolManager() for player in range(1, world.players + 1)}
+
+        return super().__new__(cls)
     
     def generate_basic(self):
         Logic.factory('vanilla')
@@ -76,7 +99,7 @@ class SMWorld(World):
                     isAdvancement = False
 
             itemClass = self.itemManager.Items[item.Type].Class
-            smitem = SMItem(item.Name, isAdvancement, item.Type, self.item_name_to_id[item.Name], player = self.player)
+            smitem = SMItem(item.Name, isAdvancement, item.Type, None if itemClass == 'Boss' else self.item_name_to_id[item.Name], player = self.player)
             if itemClass == 'Boss':
                 locked_items[item.Name] = smitem
             else:
@@ -99,10 +122,10 @@ class SMWorld(World):
         return (w & 0x00FF, (w & 0xFF00) >> 8)
 
     def generate_output(self, output_directory: str):
-        for player in self.world.sm_player_ids:
+        for player in self.world.get_game_players("Super Metroid"):
             outfilebase = 'AP_' + self.world.seed_name
             outfilepname = f'_P{player}'
-            outfilepname += f"_{self.world.player_names[player][0].replace(' ', '_')}" \
+            outfilepname += f"_{self.world.player_name[player].replace(' ', '_')}" \
 
             outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
             copy2("Super Metroid (JU).sfc", outputFilename)
@@ -124,9 +147,9 @@ class SMWorld(World):
             patchDict = { 'MultiWorldLocations':  multiWorldLocations }
             romPatcher.applyIPSPatch('MultiWorldLocations', patchDict)
 
-            playerNames = {0x1C4F00 : self.world.player_names[player][0].encode()}
+            playerNames = {0x1C4F00 : self.world.player_name[player].encode()}
             for p in range(1, self.world.players + 1):
-                playerNames[0x1C5000 + (p - 1) * 16] = self.world.player_names[p][0][:12].upper().center(12).encode()
+                playerNames[0x1C5000 + (p - 1) * 16] = self.world.player_name[p][:12].upper().center(12).encode()
 
             romPatcher.applyIPSPatch('PlayerName', { 'PlayerName':  playerNames })
 
@@ -144,7 +167,7 @@ class SMWorld(World):
         return slot_data
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        state.smbm[self.player].addItem(item.type)
+        state.smbm[item.player].addItem(item.type)
         if item.advancement:
             state.prog_items[item.name, item.player] += 1
             return True  # indicate that a logical state change has occured

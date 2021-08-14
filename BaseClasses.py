@@ -107,6 +107,7 @@ class MultiWorld():
             set_player_attr('tile_shuffle', False)
             set_player_attr('bush_shuffle', False)
             set_player_attr('beemizer', 0)
+            set_player_attr('progressive', True)
             set_player_attr('escape_assist', [])
             set_player_attr('open_pyramid', False)
             set_player_attr('treasure_hunt_icon', 'Triforce Piece')
@@ -297,7 +298,7 @@ class MultiWorld():
 
     def get_locations(self) -> list:
         if self._cached_locations is None:
-            self._cached_locations = list(set([location for region in self.regions for location in region.locations]))
+            self._cached_locations = list(dict.fromkeys([location for region in self.regions for location in region.locations]))
         return self._cached_locations
 
     def clear_location_cache(self):
@@ -467,8 +468,6 @@ class MultiWorld():
 class CollectionState(object):
 
     def __init__(self, parent: MultiWorld):
-        from worlds.sm.variaRandomizer.logic.smboolmanager import SMBoolManager
-        self.smbm = {player: SMBoolManager() for player in range(1, parent.players + 1)}
         self.prog_items = Counter()
         self.world = parent
         self.reachable_regions = {player: set() for player in range(1, parent.players + 1)}
@@ -515,7 +514,6 @@ class CollectionState(object):
 
     def copy(self) -> CollectionState:
         ret = CollectionState(self.world)
-        ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in range(1, self.world.players + 1)}
         ret.prog_items = self.prog_items.copy()
         ret.reachable_regions = {player: copy.copy(self.reachable_regions[player]) for player in
                                  range(1, self.world.players + 1)}

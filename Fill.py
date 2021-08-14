@@ -57,7 +57,6 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
                     logging.warning(
                         f'Not all items placed. Game beatable anyway. (Could not place {item_to_place})')
                     continue
-
                 raise FillError(f'No more spots to place {item_to_place}, locations {locations} are invalid. '
                                 f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
 
@@ -137,8 +136,9 @@ def distribute_items_restrictive(world: MultiWorld, gftower_trash=False, fill_lo
             key=lambda item: 1 if item.name == 'Small Key (Hyrule Castle)' and
                                   item.player in standard_keyshuffle_players else 0)
 
-    progitempool.sort(
-        key=lambda item: 1 if (item.name == 'Morph Ball' or item.name == 'Speed Booster') else 0)
+    if world.get_game_players("Super Metroid"):
+        progitempool.sort(
+            key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
                                 
     world.random.shuffle(fill_locations)
     fill_restrictive(world, world.state, fill_locations, progitempool)
