@@ -5,7 +5,7 @@ import Utils
 from .version import __version__
 
 def data_path(*args): 
-    return Utils.local_path('data', 'oot', *args)
+    return Utils.local_path('worlds', 'oot', 'data', *args)
 
 def read_json(file_path):
     json_string = ""
