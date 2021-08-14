@@ -514,7 +514,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         checks_in_area['Total'] = sum(checks_in_area.values())
 
         return render_template("minecraftTracker.html", 
-                               inventory=inventory, icons=minecraft_icons, acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
+                               inventory=inventory, icons=minecraft_icons, acquired_items={lookup_any_item_id_to_name[id] for id in inventory if id in lookup_any_item_id_to_name},
                                player=tracked_player, team=tracked_team, room=room, player_name=player_name,
                                checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                                **display_data)
