@@ -388,8 +388,6 @@ class OOTWorld(World):
         if self.start_with_rupees: 
             self.starting_items['Rupees'] = 999
 
-        self.world.itempool += self.itempool
-
         # Uniquely rename drop locations for each region and erase them from the spoiler
         set_drop_location_names(self)
 
@@ -437,19 +435,19 @@ class OOTWorld(World):
                 if loc.item is None and (self.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations)]
             if itempools['dungeon']: # only do this if there's anything to shuffle
                 self.world.random.shuffle(dungeon_locations)
-                fill_restrictive(self.world, self.world.get_all_state(), dungeon_locations, itempools['dungeon'], True, True)
+                fill_restrictive(self.world, self.state_with_items(self.itempool), dungeon_locations, itempools['dungeon'], True, True)
             any_dungeon_locations.extend(dungeon_locations)  # adds only the unfilled locations
 
         # Now fill items that can go into any dungeon. Retrieve the Gerudo Fortress keys from the pool if necessary
         if self.shuffle_fortresskeys == 'any_dungeon': 
-            fortresskeys = list(filter(lambda item: item.player == self.player and item.type == 'FortressSmallKey', self.world.itempool))
+            fortresskeys = list(filter(lambda item: item.player == self.player and item.type == 'FortressSmallKey', self.itempool))
             itempools['any_dungeon'].extend(fortresskeys)
             for key in fortresskeys:
-                self.world.itempool.remove(key)
+                self.itempool.remove(key)
         if itempools['any_dungeon']:
             itempools['any_dungeon'].sort(key=lambda item: {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'FortressSmallKey': 1}.get(item.type, 0))
             self.world.random.shuffle(any_dungeon_locations)
-            fill_restrictive(self.world, self.world.get_all_state(), any_dungeon_locations, itempools['any_dungeon'], True, True)
+            fill_restrictive(self.world, self.state_with_items(self.itempool), any_dungeon_locations, itempools['any_dungeon'], True, True)
 
         # If anything is overworld-only, enforce them as local and not in the remaining dungeon locations
         if itempools['overworld'] or self.shuffle_fortresskeys == 'overworld':
@@ -459,10 +457,10 @@ class OOTWorld(World):
             for location in self.world.get_locations():
                 if location.player != self.player or location in any_dungeon_locations:
                     forbid_items_for_player(location, local_overworld_items, self.player)
-            self.world.itempool.extend(itempools['overworld'])
+            self.itempool.extend(itempools['overworld'])
 
-        # Put all the remaining items into the general itempool
-        self.world.itempool.extend(itempools['keysanity'])
+        # Dump keysanity items into the itempool
+        self.itempool.extend(itempools['keysanity'])
 
         # Now that keys are in the pool, we can forbid tunics from child-only shops 
         set_entrances_based_rules(self)
@@ -480,14 +478,14 @@ class OOTWorld(World):
             else:
                 raise Exception(f"Unknown song shuffle type: {self.shuffle_song_items}")
 
-            songs = list(filter(lambda item: item.player == self.player and item.type == 'Song', self.world.itempool))
+            songs = list(filter(lambda item: item.player == self.player and item.type == 'Song', self.itempool))
             for song in songs: 
-                self.world.itempool.remove(song)
+                self.itempool.remove(song)
             while tries:
                 try:
                     self.world.random.shuffle(songs) # shuffling songs makes it less likely to fail by placing ZL last
                     self.world.random.shuffle(song_locations)
-                    fill_restrictive(self.world, self.world.get_all_state(), song_locations[:], songs[:], True, True)
+                    fill_restrictive(self.world, self.state_with_items(self.itempool), song_locations[:], songs[:], True, True)
                     logger.debug(f"Successfully placed songs for player {self.player} after {6-tries} attempt(s)")
                     tries = 0
                 except FillError as e:
@@ -507,20 +505,21 @@ class OOTWorld(World):
         # Place shop items
         # fast fill will fail because there is some logic on the shop items. we'll gather them up and place the shop items
         if self.shopsanity != 'off': 
-            shop_items = list(filter(lambda item: item.player == self.player and item.type == 'Shop', self.world.itempool))
+            shop_items = list(filter(lambda item: item.player == self.player and item.type == 'Shop', self.itempool))
             shop_locations = list(filter(lambda location: location.type == 'Shop' and location.name not in self.shop_prices, 
                 self.world.get_unfilled_locations(player=self.player)))
             self.world.random.shuffle(shop_locations)
             for item in shop_items: 
                 self.world.itempool.remove(item)
-            fill_restrictive(self.world, self.world.get_all_state(), shop_locations, shop_items, True, True)
+            fill_restrictive(self.world, self.state_with_items(self.itempool), shop_locations, shop_items, True, True)
         set_shop_rules(self)
 
+        # Put all remaining items into the general itempool
+        self.world.itempool += self.itempool
 
         # Kill unreachable events that can't be gotten even with all items
         # Make sure to only kill actual internal events, not in-game "events"
-        all_state = self.world.get_all_state()
-        all_state.sweep_for_events()
+        all_state = self.state_with_items(self.itempool)
         all_locations = [loc for loc in self.world.get_locations() if loc.player == self.player]
         reachable = self.world.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if loc.internal and loc.event and loc.locked and loc not in reachable]
@@ -573,3 +572,10 @@ class OOTWorld(World):
 
     def get_region(self, region):
         return self.world.get_region(region, self.player)
+
+    def state_with_items(self, items):
+        ret = CollectionState(self.world)
+        for item in items:
+            self.collect(ret, item)
+        ret.sweep_for_events()
+        return ret
