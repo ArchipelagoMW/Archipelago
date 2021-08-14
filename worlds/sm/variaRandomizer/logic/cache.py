@@ -35,12 +35,12 @@ class VersionedCache(object):
 
     def _decorate(self, name, slot, func):
         def _decorator(arg):
-            ret = self.cache[slot]
-            if ret is not None:
-                return ret
-            else:
+            #ret = self.cache[slot]
+            #if ret is not None:
+            #    return ret
+            #else:
                 ret = func(arg)
-                self.cache[slot] = ret
+            #    self.cache[slot] = ret
                 return ret
         return _decorator
 

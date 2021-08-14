@@ -19,7 +19,7 @@ from worlds.alttp.ItemPool import difficulties
 from Utils import output_path, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
-from variaRandomizer.logic.logic import Logic
+from worlds.sm.variaRandomizer.logic.logic import Logic
 import Patch
 
 seeddigits = 20
