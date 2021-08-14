@@ -243,7 +243,8 @@ begin
       end;
     finally
       if( isJavaNeeded() ) then
-        UnZip(ExpandConstant('{tmp}')+'\java.zip',ExpandConstant('{app}'));
+        if(ForceDirectories(ExpandConstant('{app}'))) then
+          UnZip(ExpandConstant('{tmp}')+'\java.zip',ExpandConstant('{app}'));
       MinecraftDownloadPage.Hide;
     end;
     Result := True;
