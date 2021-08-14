@@ -551,12 +551,12 @@ class OOTWorld(World):
 
         # produce uncompressed file path, compress if desired
         # TODO: remove this once client can patch
-        filename_uncompressed = Utils.output_path(outfile_name+'.z64')
-        filename_compressed = Utils.output_path(outfile_name+'-comp.z64')
-        self.rom.write_to_file(filename_uncompressed)
-        logger.info(f"Compressing OOT ROM file for player {self.player}. This might take a while...")
-        compress_rom_file(filename_uncompressed, filename_compressed)
-        os.remove(filename_uncompressed)
+        # filename_uncompressed = Utils.output_path(outfile_name+'.z64')
+        # filename_compressed = Utils.output_path(outfile_name+'-comp.z64')
+        # self.rom.write_to_file(filename_uncompressed)
+        # logger.info(f"Compressing OOT ROM file for player {self.player}. This might take a while...")
+        # compress_rom_file(filename_uncompressed, filename_compressed)
+        # os.remove(filename_uncompressed)
 
         self.rom.restore()
 

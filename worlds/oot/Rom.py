@@ -96,7 +96,7 @@ class Rom(BigStream):
             if is_bundled():
                 sub_dir = "."
             else:
-                sub_dir = local_path("Decompress")
+                sub_dir = data_path("Decompress")
 
             if platform.system() == 'Windows':
                 if 8 * struct.calcsize("P") == 64:
@@ -306,7 +306,7 @@ def compress_rom_file(input_file, output_file):
     if is_bundled():
         compressor_path = "."
     else:
-        compressor_path = local_path("Compress")
+        compressor_path = data_path("Compress")
 
     if platform.system() == 'Windows':
         if 8 * struct.calcsize("P") == 64:
