@@ -337,6 +337,7 @@ cosmetic_options: typing.Dict[str, type(Option)] = {
     "correct_model_colors": DefaultOnToggle,
     "background_music": Music,
     "fanfares": Music,
+    "ocarina_fanfares": Toggle,
     "kokiri_color": assemble_color_option(get_tunic_colors, "Kokiri Green"),
     "goron_color":  assemble_color_option(get_tunic_colors, "Goron Red"),
     "zora_color":   assemble_color_option(get_tunic_colors, "Zora Blue"),
@@ -366,6 +367,15 @@ cosmetic_options: typing.Dict[str, type(Option)] = {
     "start_button_color":   assemble_color_option(get_start_button_colors, "N64 Red"),
 }
 
+def assemble_sfx_option(sound_hook: sfx.SoundHooks):
+    options = sfx.get_setting_choices(sound_hook).keys()
+    sfx_to_id = {sfx.replace('-', '_'): index for index, sfx in enumerate(options)}
+    class SfxOption(Choice):
+        pass
+    SfxOption.options.update(sfx_to_id)
+    SfxOption.name_lookup.update({id: sfx for (sfx, id) in sfx_to_id.items()})
+    return SfxOption
+
 class SfxOcarina(Choice):
     option_ocarina = 1
     option_malon = 2
@@ -375,17 +385,16 @@ class SfxOcarina(Choice):
     option_flute = 6
     default = 1
 
-# Not sure how to handle ear-safe yet, won't expose these until it's safe
 sfx_options: typing.Dict[str, type(Option)] = {
-    # "sfx_navi_overworld": Sfx,
-    # "sfx_navi_enemy": Sfx,
-    # "sfx_low_hp": Sfx,
-    # "sfx_menu_cursor": Sfx,
-    # "sfx_menu_select": Sfx,
-    # "sfx_nightfall": Sfx,
-    # "sfx_horse_neight": Sfx,
-    # "sfx_hover_boots": Sfx,
-    "sfx_ocarina": SfxOcarina,
+    "sfx_navi_overworld":   assemble_sfx_option(sfx.SoundHooks.NAVI_OVERWORLD),
+    "sfx_navi_enemy":       assemble_sfx_option(sfx.SoundHooks.NAVI_ENEMY),
+    "sfx_low_hp":           assemble_sfx_option(sfx.SoundHooks.HP_LOW),
+    "sfx_menu_cursor":      assemble_sfx_option(sfx.SoundHooks.MENU_CURSOR),
+    "sfx_menu_select":      assemble_sfx_option(sfx.SoundHooks.MENU_SELECT),
+    "sfx_nightfall":        assemble_sfx_option(sfx.SoundHooks.NIGHTFALL),
+    "sfx_horse_neigh":      assemble_sfx_option(sfx.SoundHooks.HORSE_NEIGH),
+    "sfx_hover_boots":      assemble_sfx_option(sfx.SoundHooks.BOOTS_HOVER),
+    "sfx_ocarina":          SfxOcarina,
 }
 
 

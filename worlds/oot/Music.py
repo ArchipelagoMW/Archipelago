@@ -359,7 +359,7 @@ def shuffle_pointers_table(rom, ids, music_mapping, log):
     return log
 
 
-def randomize_music(rom, settings, music_mapping):
+def randomize_music(rom, ootworld, music_mapping):
     log = {}
     errors = []
     sequences = []
@@ -380,14 +380,14 @@ def randomize_music(rom, settings, music_mapping):
     ocarina_mapped = any(ocarina[0] in music_mapping for ocarina in ocarina_sequence_ids)
 
     # Include ocarina songs in fanfare pool if checked
-    if settings.ocarina_fanfares or ocarina_mapped:
+    if ootworld.ocarina_fanfares or ocarina_mapped:
         ff_ids.extend(ocarina_sequence_ids)
 
     # Flag sequence locations that are set to off for disabling.
     disabled_ids = []
-    if settings.background_music == 'off':
+    if ootworld.background_music == 'off':
         disabled_ids += [music_id for music_id in bgm_ids]
-    if settings.fanfares == 'off':
+    if ootworld.fanfares == 'off':
         disabled_ids += [music_id for music_id in ff_ids]
         disabled_ids += [music_id for music_id in ocarina_sequence_ids]
     for bgm in [music_id for music_id in bgm_ids + ff_ids + ocarina_sequence_ids]:
@@ -400,11 +400,11 @@ def randomize_music(rom, settings, music_mapping):
 
     # Map music to itself if music is set to normal.
     normal_ids = []
-    if settings.background_music == 'normal' and bgm_mapped:
+    if ootworld.background_music == 'normal' and bgm_mapped:
         normal_ids += [music_id for music_id in bgm_ids]
-    if settings.fanfares == 'normal' and (ff_mapped or ocarina_mapped):
+    if ootworld.fanfares == 'normal' and (ff_mapped or ocarina_mapped):
         normal_ids += [music_id for music_id in ff_ids]
-    if not settings.ocarina_fanfares and settings.fanfares == 'normal' and ocarina_mapped:
+    if not ootworld.ocarina_fanfares and ootworld.fanfares == 'normal' and ocarina_mapped:
         normal_ids += [music_id for music_id in ocarina_sequence_ids]
     for bgm in normal_ids:
         if bgm[0] not in music_mapping:
@@ -412,37 +412,37 @@ def randomize_music(rom, settings, music_mapping):
 
     # If not creating patch file, shuffle audio sequences. Otherwise, shuffle pointer table
     # If generating from patch, also do a version check to make sure custom sequences are supported.
-    custom_sequences_enabled = settings.compress_rom != 'Patch'
-    if settings.patch_file != '':
-        rom_version_bytes = rom.read_bytes(0x35, 3)
-        rom_version = f'{rom_version_bytes[0]}.{rom_version_bytes[1]}.{rom_version_bytes[2]}'
-        if compare_version(rom_version, '4.11.13') < 0:
-            errors.append("Custom music is not supported by this patch version. Only randomizing vanilla music.")
-            custom_sequences_enabled = False
-    if custom_sequences_enabled:
-        if settings.background_music in ['random', 'random_custom_only'] or bgm_mapped:
-            process_sequences(rom, sequences, target_sequences, disabled_source_sequences, disabled_target_sequences, bgm_ids)
-            if settings.background_music == 'random_custom_only':
-                sequences = [seq for seq in sequences if seq.cosmetic_name not in [x[0] for x in bgm_ids] or seq.cosmetic_name in music_mapping.values()]
-            sequences, log = shuffle_music(sequences, target_sequences, music_mapping, log)
+    # custom_sequences_enabled = ootworld.compress_rom != 'Patch'
+    # if ootworld.patch_file != '':
+    #     rom_version_bytes = rom.read_bytes(0x35, 3)
+    #     rom_version = f'{rom_version_bytes[0]}.{rom_version_bytes[1]}.{rom_version_bytes[2]}'
+    #     if compare_version(rom_version, '4.11.13') < 0:
+    #         errors.append("Custom music is not supported by this patch version. Only randomizing vanilla music.")
+    #         custom_sequences_enabled = False
+    # if custom_sequences_enabled:
+    #     if ootworld.background_music in ['random', 'random_custom_only'] or bgm_mapped:
+    #         process_sequences(rom, sequences, target_sequences, disabled_source_sequences, disabled_target_sequences, bgm_ids)
+    #         if ootworld.background_music == 'random_custom_only':
+    #             sequences = [seq for seq in sequences if seq.cosmetic_name not in [x[0] for x in bgm_ids] or seq.cosmetic_name in music_mapping.values()]
+    #         sequences, log = shuffle_music(sequences, target_sequences, music_mapping, log)
 
-        if settings.fanfares in ['random', 'random_custom_only'] or ff_mapped or ocarina_mapped:
-            process_sequences(rom, fanfare_sequences, fanfare_target_sequences, disabled_source_sequences, disabled_target_sequences, ff_ids, 'fanfare')
-            if settings.fanfares == 'random_custom_only':
-                fanfare_sequences = [seq for seq in fanfare_sequences if seq.cosmetic_name not in [x[0] for x in fanfare_sequence_ids] or seq.cosmetic_name in music_mapping.values()]
-            fanfare_sequences, log = shuffle_music(fanfare_sequences, fanfare_target_sequences, music_mapping, log)
+    #     if ootworld.fanfares in ['random', 'random_custom_only'] or ff_mapped or ocarina_mapped:
+    #         process_sequences(rom, fanfare_sequences, fanfare_target_sequences, disabled_source_sequences, disabled_target_sequences, ff_ids, 'fanfare')
+    #         if ootworld.fanfares == 'random_custom_only':
+    #             fanfare_sequences = [seq for seq in fanfare_sequences if seq.cosmetic_name not in [x[0] for x in fanfare_sequence_ids] or seq.cosmetic_name in music_mapping.values()]
+    #         fanfare_sequences, log = shuffle_music(fanfare_sequences, fanfare_target_sequences, music_mapping, log)
 
-        if disabled_source_sequences:
-            log = disable_music(rom, disabled_source_sequences.values(), log)
+    #     if disabled_source_sequences:
+    #         log = disable_music(rom, disabled_source_sequences.values(), log)
 
-        rebuild_sequences(rom, sequences + fanfare_sequences)
-    else:
-        if settings.background_music == 'random' or bgm_mapped:
-            log = shuffle_pointers_table(rom, bgm_ids, music_mapping, log)
+    #     rebuild_sequences(rom, sequences + fanfare_sequences)
+    # else:
+    if ootworld.background_music == 'randomized' or bgm_mapped:
+        log = shuffle_pointers_table(rom, bgm_ids, music_mapping, log)
 
-        if settings.fanfares == 'random' or ff_mapped or ocarina_mapped:
-            log = shuffle_pointers_table(rom, ff_ids, music_mapping, log)
-
+    if ootworld.fanfares == 'randomized' or ff_mapped or ocarina_mapped:
+        log = shuffle_pointers_table(rom, ff_ids, music_mapping, log)
+    # end_else
     if disabled_target_sequences:
         log = disable_music(rom, disabled_target_sequences.values(), log)
 

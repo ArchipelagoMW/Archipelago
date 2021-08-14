@@ -48,7 +48,7 @@ def patch_music(rom, ootworld, symbols):
     # patch music
     if ootworld.background_music != 'normal' or ootworld.fanfares != 'normal':
         music.restore_music(rom)
-        _, errors = music.randomize_music(rom, ootworld, {})
+        log, errors = music.randomize_music(rom, ootworld, {})
         if errors:
             logger.error(errors)
     else:
@@ -591,8 +591,6 @@ def patch_button_colors(rom, ootworld, symbols):
 
 
 def patch_sfx(rom, ootworld, symbols):
-    # temporary override, REMOVE WHEN IMPLEMENTED
-    return
     # Configurable Sound Effects
     sfx_config = [
           ('sfx_navi_overworld', sfx.SoundHooks.NAVI_OVERWORLD),
@@ -609,7 +607,7 @@ def patch_sfx(rom, ootworld, symbols):
     sounds_label_keyword = {sound.value.label: sound.value.keyword for sound in sfx.Sounds}
 
     for setting, hook in sfx_config:
-        selection = ootworld.__dict__[setting]
+        selection = ootworld.__dict__[setting].replace('_', '-')
 
         if selection == 'default':
             for loc in hook.value.locations:
