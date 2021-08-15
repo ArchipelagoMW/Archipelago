@@ -159,7 +159,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     options = Utils.get_options()
 
-    apmc_file = os.path.abspath(args.apmc_file)
+    apmc_file = os.path.abspath(args.apmc_file) if args.apmc_file is not None else None
     forge_dir = options["minecraft_options"]["forge_directory"]
     max_heap = options["minecraft_options"]["max_heap_size"]
 
