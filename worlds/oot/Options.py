@@ -146,7 +146,7 @@ shuffle_options: typing.Dict[str, type(Option)] = {
     "tokensanity": TokenShuffle, 
     "shuffle_scrubs": ScrubShuffle,
     "shuffle_cows": Toggle, 
-    "shuffle_kokiri_sword": DefaultOnToggle,
+    "shuffle_kokiri_sword": Toggle,
     "shuffle_ocarinas": Toggle,
     "shuffle_weird_egg": Toggle,
     "shuffle_gerudo_card": Toggle,
