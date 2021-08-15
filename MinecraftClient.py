@@ -61,15 +61,20 @@ def replace_apmc_files(forge_dir, apmc_file):
     if apmc_file is None:
         return
     apdata_dir = os.path.join(forge_dir, 'APData')
+    copy_apmc = True
     if not os.path.isdir(apdata_dir):
         os.mkdir(apdata_dir)
         print(f"Created APData folder in {forge_dir}")
     for entry in os.scandir(apdata_dir):
-        if ".apmc" in entry.name and entry.is_file():
-            os.remove(entry.path)
-            print(f"Removed {entry.name} in {apdata_dir}")
-    copyfile(apmc_file, os.path.join(apdata_dir, os.path.basename(apmc_file)))
-    print(f"Copied {os.path.basename(apmc_file)} to {apdata_dir}")
+        if entry.name.endswith(".apmc") and entry.is_file():
+            if not os.path.samefile(apmc_file, entry.path):
+                os.remove(entry.path)
+                print(f"Removed {entry.name} in {apdata_dir}")
+            else: # apmc already in apdata
+                copy_apmc = False
+    if copy_apmc:
+        copyfile(apmc_file, os.path.join(apdata_dir, os.path.basename(apmc_file)))
+        print(f"Copied {os.path.basename(apmc_file)} to {apdata_dir}")
 
 
 # Check mod version, download new mod from GitHub releases page if needed. 
