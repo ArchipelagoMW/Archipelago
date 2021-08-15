@@ -245,7 +245,7 @@ start_button_colors = {
     "Orange":           Color(0xFF, 0x80, 0x00),
 }
 
-meta_color_choices = ["Random Choice", "Completely Random", "Custom Color"]
+meta_color_choices = ["Random Choice", "Completely Random"] #, "Custom Color"]
 
 
 def get_tunic_colors():
