@@ -157,14 +157,14 @@ if __name__ == '__main__':
     parser.add_argument("apmc_file", default=None, nargs='?', help="Path to an Archipelago Minecraft data file (.apmc)")
 
     args = parser.parse_args()
-    options = Utils.get_options()
-
     apmc_file = os.path.abspath(args.apmc_file) if args.apmc_file is not None else None
-    forge_dir = options["minecraft_options"]["forge_directory"]
-    max_heap = options["minecraft_options"]["max_heap_size"]
 
     # Change to executable's working directory
     os.chdir(os.path.abspath(os.path.dirname(sys.argv[0])))
+    
+    options = Utils.get_options()
+    forge_dir = options["minecraft_options"]["forge_directory"]
+    max_heap = options["minecraft_options"]["max_heap_size"]
 
     if apmc_file is not None and not os.path.isfile(apmc_file):
         raise FileNotFoundError(f"Path {apmc_file} does not exist or could not be accessed.")
