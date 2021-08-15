@@ -145,6 +145,7 @@ class HeartColor(Choice):
             return cls(random.randint(0, 3))
         return super(HeartColor, cls).from_text(text)
 
+
 class QuickSwap(DefaultOnToggle):
     displayname = "L/R Quickswapping"
 
@@ -162,8 +163,10 @@ class MenuSpeed(Choice):
 class Music(DefaultOnToggle):
     displayname = "Play music"
 
+
 class ReduceFlashing(DefaultOnToggle):
     displayname = "Reduce Screen Flashes"
+
 
 class TriforceHud(Choice):
     displayname = "Display Method for Triforce Hunt"
@@ -171,6 +174,7 @@ class TriforceHud(Choice):
     option_hide_goal = 1
     option_hide_required = 2
     option_hide_both = 3
+
 
 alttp_options: typing.Dict[str, type(Option)] = {
     "crystals_needed_for_gt": CrystalsTower,
