@@ -196,7 +196,11 @@ def get_default_options() -> dict:
             "glitch_triforce_room": 1,
             "race": 0,
             "plando_options": "bosses",
-        }
+        },
+        "minecraft_options": {
+            "forge_directory": "Minecraft Forge server",
+            "max_heap_size": "2G"
+        },
     }
 
     return options

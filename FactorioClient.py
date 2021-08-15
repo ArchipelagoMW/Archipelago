@@ -354,13 +354,13 @@ if __name__ == '__main__':
     factorio_server_logger = logging.getLogger("FactorioServer")
     options = Utils.get_options()
     executable = options["factorio_options"]["executable"]
-    bin_dir = os.path.dirname(executable)
-    if not os.path.exists(bin_dir):
-        raise FileNotFoundError(f"Path {bin_dir} does not exist or could not be accessed.")
-    if not os.path.isdir(bin_dir):
-        raise NotADirectoryError(f"Path {bin_dir} is not a directory.")
-    if not os.path.exists(executable):
-        if os.path.exists(executable + ".exe"):
+
+    if not os.path.exists(os.path.dirname(executable)):
+        raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
+    if os.path.isdir(executable):  # user entered a path to a directory, let's find the executable therein
+        executable = os.path.join(executable, "factorio")
+    if not os.path.isfile(executable):
+        if os.path.isfile(executable + ".exe"):
             executable = executable + ".exe"
         else:
             raise FileNotFoundError(f"Path {executable} is not an executable file.")

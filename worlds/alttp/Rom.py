@@ -1754,7 +1754,7 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
                        triforcehud: str = None):
     local_random = random if not world else world.slot_seeds[player]
-    disable_music: bool = music
+    disable_music: bool = not music
     # enable instant item menu
     if menuspeed == 'instant':
         rom.write_byte(0x6DD9A, 0x20)

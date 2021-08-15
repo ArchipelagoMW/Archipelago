@@ -18,6 +18,7 @@ library = Path(libfolder, "library.zip")
 print("Outputting to: " + sbuildfolder)
 
 icon = os.path.join("data", "icon.ico")
+mcicon = os.path.join("data", "mcicon.ico")
 
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
@@ -71,20 +72,20 @@ def remove_sprites_from_folder(folder):
 
 scripts = {
     # Core
-    "MultiServer.py": ("ArchipelagoServer", False),
-    "Generate.py": ("ArchipelagoGenerate", False),
+    "MultiServer.py": ("ArchipelagoServer", False, icon),
+    "Generate.py": ("ArchipelagoGenerate", False, icon),
     # LttP
-    "LttPClient.py": ("ArchipelagoLttPClient", True),
-    "LttPAdjuster.py": ("ArchipelagoLttPAdjuster", True),
+    "LttPClient.py": ("ArchipelagoLttPClient", True, icon),
+    "LttPAdjuster.py": ("ArchipelagoLttPAdjuster", True, icon),
     # Factorio
-    "FactorioClient.py": ("ArchipelagoFactorioClient", True),
+    "FactorioClient.py": ("ArchipelagoFactorioClient", True, icon),
     # Minecraft
-    "MinecraftClient.py": ("ArchipelagoMinecraftClient", False),
+    "MinecraftClient.py": ("ArchipelagoMinecraftClient", False, mcicon),
 }
 
 exes = []
 
-for script, (scriptname, gui) in scripts.items():
+for script, (scriptname, gui, icon) in scripts.items():
     exes.append(cx_Freeze.Executable(
         script=script,
         target_name=scriptname + ("" if sys.platform == "linux" else ".exe"),

@@ -561,9 +561,9 @@ A Link to the Past:
     # You can combine these events like this.  randomonhit-enter-exit  if you want it on hit, enter, exit.
     randomonall: 0 # Random sprite on any and all currently supported events. Refer to above for the supported events.
     Link: 50 # To add other sprites: open the gui/Creator, go to adjust, select a sprite and write down the name the gui calls it
-  disablemusic: # If "on", all in-game music will be disabled
-    on: 0
-    off: 50
+  music: # If "off", all in-game music will be disabled
+    on: 50
+    off: 0
   quickswap: # Enable switching items by pressing the L+R shoulder buttons
     on: 50
     off: 0
