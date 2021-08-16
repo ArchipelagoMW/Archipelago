@@ -512,7 +512,7 @@ class OOTWorld(World):
                 self.world.get_unfilled_locations(player=self.player)))
             self.world.random.shuffle(shop_locations)
             for item in shop_items: 
-                self.world.itempool.remove(item)
+                self.itempool.remove(item)
             fill_restrictive(self.world, self.state_with_items(self.itempool), shop_locations, shop_items, True, True)
         set_shop_rules(self)
 
@@ -537,6 +537,10 @@ class OOTWorld(World):
         # If fast scarecrow then we need to kill the Pierre location as it will be unreachable
         if self.free_scarecrow:
             loc = self.world.get_location("Pierre", self.player)
+            loc.parent_region.locations.remove(loc)
+        # If open zora's domain then we need to kill Deliver Rutos Letter
+        if self.zora_fountain == 'open':
+            loc = self.world.get_location("Deliver Rutos Letter", self.player)
             loc.parent_region.locations.remove(loc)
             
 
