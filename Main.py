@@ -145,9 +145,13 @@ def main(args, seed=None):
 
     logger.info("Found World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
+    numlength = 8
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
         logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} Items | {len(cls.location_names):3} Locations")
-
+        logger.info(f"  Item IDs: {min(cls.item_id_to_name):{numlength}} - "
+                    f"{max(cls.item_id_to_name):{numlength}} | "
+                    f"Location IDs: {min(cls.location_id_to_name):{numlength}} - "
+                    f"{max(cls.location_id_to_name):{numlength}}")
 
     logger.info('')
     for player in world.get_game_players("A Link to the Past"):
