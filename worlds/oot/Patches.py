@@ -2059,7 +2059,11 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             shop_objs.add(location.item.special['object'])
             rom.write_int16(location.address1, location.item.index)
         else:
-            if location.item.looks_like_item is not None:
+            if location.item.game != "Ocarina of Time": 
+                item_display = location.item
+                item_display.index = 0x0C # Ocarina of Time item
+                item_display.special = {}
+            elif location.item.looks_like_item is not None:
                 item_display = location.item.looks_like_item
             else:
                 item_display = location.item
@@ -2093,7 +2097,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             shuffle_messages.shop_item_messages.extend(
                 [shop_item.description_message, shop_item.purchase_message])
 
-            if getattr(item_display, 'dungeonitem', False):
+            if getattr(item_display, 'dungeonitem', False) and item.game == "Ocarina of Time":
                 split_item_name = item_display.name.split('(')
                 split_item_name[1] = '(' + split_item_name[1]
 
@@ -2101,18 +2105,21 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                     split_item_name[0] = create_fake_name(split_item_name[0])
 
                 if len(world.world.worlds) > 1: # OOTWorld.MultiWorld.AutoWorld[]
-                    description_text = '\x08\x05\x41%s  %d Rupees\x01%s\x01\x05\x42Player %d\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (split_item_name[0], location.price, split_item_name[1], location.item.player)
+                    description_text = '\x08\x05\x41%s  %d Rupees\x01%s\x01\x05\x42%s\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (split_item_name[0], location.price, split_item_name[1], world.world.get_player_name(location.item.player))
                 else:
                     description_text = '\x08\x05\x41%s  %d Rupees\x01%s\x01\x05\x40Special deal! ONE LEFT!\x01Get it while it lasts!\x09\x0A\x02' % (split_item_name[0], location.price, split_item_name[1])
                 purchase_text = '\x08%s  %d Rupees\x09\x01%s\x01\x1B\x05\x42Buy\x01Don\'t buy\x05\x40\x02' % (split_item_name[0], location.price, split_item_name[1])
             else:
-                shop_item_name = getSimpleHintNoPrefix(item_display)
+                if item_display.game == "Ocarina of Time":
+                    shop_item_name = getSimpleHintNoPrefix(item_display)
+                else:
+                    shop_item_name = item_display.name
 
                 if location.item.name == 'Ice Trap':
                     shop_item_name = create_fake_name(shop_item_name)
 
                 if len(world.world.worlds) > 1:
-                    description_text = '\x08\x05\x41%s  %d Rupees\x01\x05\x42Player %d\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (shop_item_name, location.price, location.item.player)
+                    description_text = '\x08\x05\x41%s  %d Rupees\x01\x05\x42%s\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (shop_item_name, location.price, world.world.get_player_name(location.item.player))
                 else:
                     description_text = '\x08\x05\x41%s  %d Rupees\x01\x05\x40Special deal! ONE LEFT!\x01Get it while it lasts!\x09\x0A\x02' % (shop_item_name, location.price)
                 purchase_text = '\x08%s  %d Rupees\x09\x01\x01\x1B\x05\x42Buy\x01Don\'t buy\x05\x40\x02' % (shop_item_name, location.price)
@@ -2126,7 +2133,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
 
 
 def create_fake_name(item_name):
-    return "???"
+    return item_name + "???"
 
 
 def boss_reward_index(world, boss_name):
