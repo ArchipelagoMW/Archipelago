@@ -518,14 +518,15 @@ class OOTWorld(World):
         set_shop_rules(self)
 
         # Make ice traps appear like other remaining items in the itempool
-        ice_traps = [item for item in self.itempool if item.name == 'Ice Trap']
-        fake_items = []
-        if self.ice_trap_appearance in ['major_only', 'anything']:
-            fake_items.extend([item for item in self.itempool if item.index and item.advancement])
-        if self.ice_trap_appearance in ['junk_only', 'anything']:
-            fake_items.extend([item for item in self.itempool if item.index and not item.advancement and item.name != 'Ice Trap'])
-        for trap in ice_traps:
-            trap.looks_like_item = self.create_item(self.world.random.choice(fake_items).name)
+        if self.junk_ice_traps != 'off':
+            ice_traps = [item for item in self.itempool if item.name == 'Ice Trap']
+            fake_items = []
+            if self.ice_trap_appearance in ['major_only', 'anything']:
+                fake_items.extend([item for item in self.itempool if item.index and item.advancement])
+            if self.ice_trap_appearance in ['junk_only', 'anything']:
+                fake_items.extend([item for item in self.itempool if item.index and not item.advancement and item.name != 'Ice Trap'])
+            for trap in ice_traps:
+                trap.looks_like_item = self.create_item(self.world.random.choice(fake_items).name)
 
         # Put all remaining items into the general itempool
         self.world.itempool += self.itempool
