@@ -99,6 +99,7 @@ class OOTWorld(World):
             else:
                 option_value = result.current_key
             setattr(self, option_name, option_value)
+
         self.shop_prices = {}
         self.regions = []  # internal cache of regions for this world, used later
         self.remove_from_start_inventory = []  # some items will be precollected but not in the inventory
@@ -121,6 +122,10 @@ class OOTWorld(World):
         if self.open_forest == 'closed': 
             self.starting_age = 'child'
 
+        # Skip child zelda and shuffle egg are not compatible; skip-zelda takes priority
+        if self.skip_child_zelda:
+            self.shuffle_weird_egg = False
+
         # Determine skipped trials in GT
         # This needs to be done before the logic rules in GT are parsed
         trial_list = ['Forest', 'Fire', 'Water', 'Spirit', 'Shadow', 'Light']
@@ -142,13 +147,10 @@ class OOTWorld(World):
 
         # Not implemented for now, but needed to placate the generator. Remove as they are implemented
         self.mq_dungeons_random = False  # this will be a deprecated option later
+        self.ocarina_songs = False # just need to pull in the OcarinaSongs module
         self.hints = 'none'  # Hints will probably look very different in the future. disabled for now
-        # Disabled due to client-side implementation issues
-        self.big_poe_count = 1
-        # These three are likely to never be implemented
-        self.skip_child_zelda = False
-        self.ocarina_songs = False
-        self.correct_chest_sizes = False
+        self.big_poe_count = 1  # disabled due to client-side issues for now
+        self.correct_chest_sizes = False  # will probably never be implemented since multiworld items are always major
         # ER options
         self.shuffle_interior_entrances = 'off'
         self.shuffle_grotto_entrances = False

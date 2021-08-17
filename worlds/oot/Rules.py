@@ -123,6 +123,7 @@ def set_rules(ootworld):
 
         if ootworld.skip_child_zelda and location.name == 'Song from Impa':
             limit_to_itemset(location, SaveContext.giveable_items)
+            add_item_rule(location, lambda item: item.player == location.player)
 
         if location.name == 'Forest Temple MQ First Room Chest' and ootworld.shuffle_bosskeys == 'dungeon' and ootworld.shuffle_smallkeys == 'dungeon' and ootworld.tokensanity == 'off':
             # This location needs to be a small key. Make sure the boss key isn't placed here.
@@ -157,7 +158,7 @@ def create_shop_rule(location, parser):
 
 def limit_to_itemset(location, itemset):
     old_rule = location.item_rule
-    location.item_rule = lambda item: item.name in itemset and old_rule(loc, item)
+    location.item_rule = lambda item: item.name in itemset and old_rule(item)
 
 
 # This function should be run once after the shop items are placed in the world.

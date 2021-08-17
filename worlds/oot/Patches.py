@@ -1003,10 +1003,9 @@ def patch_rom(world, rom):
 
     if world.skip_child_zelda:
         save_context.give_item('Zeldas Letter')
-        for w in world.world.worlds: # OOTWorld.MultiWorld.AutoWorld[]
-            item = w.get_location('Song from Impa').item
-            if world.id == item.world.id:
-                save_context.give_raw_item(item.name)
+        # Archipelago forces this item to be local so it can always be given to the player. Usually it's a song so it's no problem.
+        item = world.get_location('Song from Impa').item
+        save_context.give_raw_item(item.name)
         save_context.write_bits(0x0ED7, 0x04) # "Obtained Malon's Item"
         save_context.write_bits(0x0ED7, 0x08) # "Woke Talon in castle"
         save_context.write_bits(0x0ED7, 0x10) # "Talon has fled castle"

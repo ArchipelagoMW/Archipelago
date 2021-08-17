@@ -205,7 +205,7 @@ dungeon_items_options: typing.Dict[str, type(Option)] = {
 }
 
 timesavers_options: typing.Dict[str, type(Option)] = {
-    # "skip_child_zelda": Toggle, 
+    "skip_child_zelda": Toggle, 
     "no_escape_sequence": DefaultOnToggle, 
     "no_guard_stealth": DefaultOnToggle, 
     "no_epona_race": DefaultOnToggle, 
