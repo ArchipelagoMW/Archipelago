@@ -510,6 +510,7 @@ class OOTWorld(World):
             shop_items = list(filter(lambda item: item.player == self.player and item.type == 'Shop', self.itempool))
             shop_locations = list(filter(lambda location: location.type == 'Shop' and location.name not in self.shop_prices, 
                 self.world.get_unfilled_locations(player=self.player)))
+            shop_items.sort(key=lambda item: 1 if item.name in ["Buy Goron Tunic", "Buy Zora Tunic"] else 0)
             self.world.random.shuffle(shop_locations)
             for item in shop_items: 
                 self.itempool.remove(item)
