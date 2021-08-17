@@ -2097,8 +2097,8 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                 split_item_name = item_display.name.split('(')
                 split_item_name[1] = '(' + split_item_name[1]
 
-                # if location.item.name == 'Ice Trap':
-                #     split_item_name[0] = create_fake_name(split_item_name[0])
+                if location.item.name == 'Ice Trap':
+                    split_item_name[0] = create_fake_name(split_item_name[0])
 
                 if len(world.world.worlds) > 1: # OOTWorld.MultiWorld.AutoWorld[]
                     description_text = '\x08\x05\x41%s  %d Rupees\x01%s\x01\x05\x42Player %d\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (split_item_name[0], location.price, split_item_name[1], location.item.player)
@@ -2107,8 +2107,9 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                 purchase_text = '\x08%s  %d Rupees\x09\x01%s\x01\x1B\x05\x42Buy\x01Don\'t buy\x05\x40\x02' % (split_item_name[0], location.price, split_item_name[1])
             else:
                 shop_item_name = getSimpleHintNoPrefix(item_display)
-                # if location.item.name == 'Ice Trap':
-                #     shop_item_name = create_fake_name(shop_item_name)
+
+                if location.item.name == 'Ice Trap':
+                    shop_item_name = create_fake_name(shop_item_name)
 
                 if len(world.world.worlds) > 1:
                     description_text = '\x08\x05\x41%s  %d Rupees\x01\x05\x42Player %d\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (shop_item_name, location.price, location.item.player)
@@ -2122,6 +2123,10 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             place_shop_items.shop_id += 1
 
     return shop_objs
+
+
+def create_fake_name(item_name):
+    return "???"
 
 
 def boss_reward_index(world, boss_name):

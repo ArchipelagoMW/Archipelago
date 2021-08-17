@@ -517,6 +517,16 @@ class OOTWorld(World):
             fill_restrictive(self.world, self.state_with_items(self.itempool), shop_locations, shop_items, True, True)
         set_shop_rules(self)
 
+        # Make ice traps appear like other remaining items in the itempool
+        ice_traps = [item for item in self.itempool if item.name == 'Ice Trap']
+        fake_items = []
+        if self.ice_trap_appearance in ['major_only', 'anything']:
+            fake_items.extend([item for item in self.itempool if item.index and item.advancement])
+        if self.ice_trap_appearance in ['junk_only', 'anything']:
+            fake_items.extend([item for item in self.itempool if item.index and not item.progression and item.name != 'Ice Trap'])
+        for trap in ice_traps:
+            trap.looks_like_item = self.create_item(self.world.random.choice(fake_items).name)
+
         # Put all remaining items into the general itempool
         self.world.itempool += self.itempool
 
@@ -555,8 +565,7 @@ class OOTWorld(World):
         # make patch file
         create_patch_file(self.rom, Utils.output_path(output_directory, outfile_name+'.apz5'))
 
-        # produce uncompressed file path, compress if desired
-        # TODO: remove this once client can patch
+        # testing code: produce compressed file. uncomment when needed
         # filename_uncompressed = Utils.output_path(outfile_name+'.z64')
         # filename_compressed = Utils.output_path(outfile_name+'-comp.z64')
         # self.rom.write_to_file(filename_uncompressed)
