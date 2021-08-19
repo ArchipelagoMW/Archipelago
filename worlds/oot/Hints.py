@@ -1027,26 +1027,26 @@ def buildGanonText(world, messages):
     update_message_by_id(messages, 0x70CB, text)
 
     # light arrow hint or validation chest item
-    # if world.distribution.get_starting_item('Light Arrows') > 0:
-    #     text = get_raw_text(getHint('Light Arrow Location', world.clearer_hints).text)
-    #     text += "\x05\x42your pocket\x05\x40"
-    find_light_arrows = None
-    find_light_arrows = world.world.find_item('Light Arrows', world.player)
-    if find_light_arrows:
+    if world.starting_items['Light Arrows'] > 0:
         text = get_raw_text(getHint('Light Arrow Location', world.clearer_hints).text)
-        location = find_light_arrows
-        location_hint = get_hint_area(location)
-        if world.player != location.player:
-            text += "\x05\x42%s's\x05\x40 %s" % (world.world.get_player_name(location.player), get_raw_text(location_hint))
-        else:
-            location_hint = location_hint.replace('Ganon\'s Castle', 'my castle')
-            text += get_raw_text(location_hint)
+        text += "\x05\x42your pocket\x05\x40"
     else:
-        text = get_raw_text(getHint('Validation Line', world.clearer_hints).text)
-        for location in world.world.get_filled_locations(world.player):
-            if location.name == 'Ganons Tower Boss Key Chest':
-                text += get_raw_text(getHint(getItemGenericName(location.item), world.clearer_hints).text)
-                break
+        try:
+            find_light_arrows = world.world.find_item('Light Arrows', world.player)
+            text = get_raw_text(getHint('Light Arrow Location', world.clearer_hints).text)
+            location = find_light_arrows
+            location_hint = get_hint_area(location)
+            if world.player != location.player:
+                text += "\x05\x42%s's\x05\x40 %s" % (world.world.get_player_name(location.player), get_raw_text(location_hint))
+            else:
+                location_hint = location_hint.replace('Ganon\'s Castle', 'my castle')
+                text += get_raw_text(location_hint)
+        except StopIteration:
+            text = get_raw_text(getHint('Validation Line', world.clearer_hints).text)
+            for location in world.world.get_filled_locations(world.player):
+                if location.name == 'Ganons Tower Boss Key Chest':
+                    text += get_raw_text(getHint(getItemGenericName(location.item), world.clearer_hints).text)
+                    break
     text += '!'
 
     update_message_by_id(messages, 0x70CC, text)
