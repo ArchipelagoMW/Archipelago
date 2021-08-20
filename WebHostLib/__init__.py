@@ -138,7 +138,7 @@ def tutorial(game, file, lang):
     return render_template("tutorial.html", game=game, file=file, lang=lang)
 
 
-@app.route('/tutorial')
+@app.route('/tutorial/')
 def tutorial_landing():
     return render_template("tutorialLanding.html")
 
