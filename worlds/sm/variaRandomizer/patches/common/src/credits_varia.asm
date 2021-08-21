@@ -69,6 +69,11 @@ define check_new_game   $A1F210
 // routine in tracking.asm
 define update_and_store_region_time $A1EC00
 
+// Multiworld hook addresses
+define init_memory $b88000
+define mw_save_sram $b8813e
+define mw_load_sram $b8814d
+
 // Patch boot to init our stuff
 org $80844B
     jml boot1
@@ -84,6 +89,9 @@ org $81800d
 	jsr patch_save_start
 org $81807f
     jmp patch_save_end
+
+org $8180f7
+    jmp patch_load_multiworld
 
 org $81A24A
     jsl patch_load // patch load from menu only
@@ -202,6 +210,9 @@ boot1:
     sta {timer1}
     lda {timer_backup2}
     sta {timer2}
+
+    // Multiworld init
+    jsl {init_memory}
     // resume
     jml $808455
 
@@ -607,6 +618,7 @@ patch_save_end:
     sta {stats_timer}+2
     lda #$0001
     jsl save_stats
+    jsl {mw_save_sram}
 .end:
     ply
     plx
@@ -706,6 +718,7 @@ patch_load:
     // return carry clear
     clc
 .end:
+    jsl {mw_load_sram}
     ply
     plx
     plb
@@ -813,7 +826,18 @@ patch_clear:
 	lda $19b7	// hijacked code
 	rts
 
-//print "b81 end: ", org
+patch_load_multiworld:
+    lda $7e0952
+    clc
+    adc #$0010
+    jsl {mw_load_sram}  
+    ply
+    plx
+    clc
+    plb
+    rtl
+
+print "b81 end: ", org
 warnpc $81f29f
 ////////////////////////// CREDITS /////////////////////////////
 

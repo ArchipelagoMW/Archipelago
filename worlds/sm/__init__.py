@@ -173,6 +173,12 @@ class SMWorld(World):
             return True  # indicate that a logical state change has occured
         return False
 
+    @classmethod
+    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, restitempool, fill_locations):
+        if world.get_game_players("Super Metroid"):
+            progitempool.sort(
+                key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
+
 def create_locations(self, player: int):
     for name, id in locations_lookup_name_to_id.items():
         self.locations[name] = SMLocation(player, name, id)
