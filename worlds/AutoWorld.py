@@ -150,9 +150,10 @@ class World(metaclass=AutoWorldRegister):
 
     # end of Main.py calls
 
-    def collect_item(self, state: CollectionState, item: Item) -> Optional[str]:
+    def collect_item(self, state: CollectionState, item: Item, remove=False) -> Optional[str]:
         """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
-        Collect None to skip item."""
+        Collect None to skip item.
+        :param remove: indicate if this is meant to remove from state instead of adding."""
         if item.advancement:
             return item.name
 
@@ -170,13 +171,14 @@ class World(metaclass=AutoWorldRegister):
         return False
 
     def remove(self, state: CollectionState, item: Item) -> bool:
-        name = self.collect_item(state, item)
+        name = self.collect_item(state, item, True)
         if name:
             state.prog_items[name, item.player] -= 1
             if state.prog_items[name, item.player] < 1:
                 del (state.prog_items[name, item.player])
             return True
         return False
+
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together

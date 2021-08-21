@@ -58,7 +58,7 @@ def uploads():
                                                game="Minecraft"))
 
                             elif file.filename.endswith(".zip"):
-                                # Factorio mods needs a specific name or they do no function
+                                # Factorio mods needs a specific name or they do not function
                                 _, seed_name, slot_id, slot_name = file.filename.rsplit("_", 1)[0].split("-")
                                 slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
                                               player_id=int(slot_id[1:]), game="Factorio"))
