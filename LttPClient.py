@@ -3,7 +3,6 @@ import atexit
 exit_func = atexit.register(input, "Press enter to close.")
 import threading
 import time
-import sys
 import multiprocessing
 import os
 import subprocess
@@ -25,7 +24,7 @@ from NetUtils import *
 from worlds.alttp import Regions, Shops
 from worlds.alttp import Items
 import Utils
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled
 
 snes_logger = logging.getLogger("SNES")
 
@@ -34,7 +33,7 @@ from MultiServer import mark_raw
 os.makedirs("logs", exist_ok=True)
 
 # Log to file in gui case
-if getattr(sys, "frozen", False) and not "--nogui" in sys.argv:
+if gui_enabled:
     logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
                         filename=os.path.join("logs", "LttPClient.txt"), filemode="w", force=True)
 else:
@@ -901,7 +900,7 @@ async def main():
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
-    if Utils.is_frozen() or "--nogui" not in sys.argv:
+    if gui_enabled:
         input_task = None
         from kvui import LttPManager
         ctx.ui = LttPManager(ctx)

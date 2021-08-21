@@ -3,6 +3,7 @@ import logging
 import typing
 import asyncio
 import urllib.parse
+import sys
 
 import websockets
 
@@ -14,6 +15,7 @@ from worlds import network_data_package, AutoWorldRegister
 
 logger = logging.getLogger("Client")
 
+gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
 
 class ClientCommandProcessor(CommandProcessor):
     def __init__(self, ctx: CommonContext):

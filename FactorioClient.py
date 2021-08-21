@@ -4,14 +4,13 @@ import logging
 import json
 import string
 import copy
-import sys
 import subprocess
 import factorio_rcon
 
 import colorama
 import asyncio
 from queue import Queue
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled
 from MultiServer import mark_raw
 
 import Utils
@@ -22,15 +21,13 @@ from worlds.factorio import Factorio
 
 os.makedirs("logs", exist_ok=True)
 
-# Log to file in gui case
-if getattr(sys, "frozen", False) and not "--nogui" in sys.argv:
+
+if gui_enabled:
     logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
                         filename=os.path.join("logs", "FactorioClient.txt"), filemode="w", force=True)
 else:
     logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
     logging.getLogger().addHandler(logging.FileHandler(os.path.join("logs", "FactorioClient.txt"), "w"))
-
-gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
 
 
 class FactorioCommandProcessor(ClientCommandProcessor):
