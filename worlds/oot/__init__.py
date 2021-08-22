@@ -565,7 +565,18 @@ class OOTWorld(World):
         if self.zora_fountain == 'open':
             loc = self.world.get_location("Deliver Rutos Letter", self.player)
             loc.parent_region.locations.remove(loc)
-            
+
+    def pre_fill(self):
+        # If skip child zelda is active and Song from Impa is unfilled, put a local giveable item into it.
+        impa = self.world.get_location("Song from Impa", self.player)
+        if self.skip_child_zelda and impa.item is None:
+            from .SaveContext import SaveContext
+            item_to_place = self.world.random.choice([item for item in self.world.itempool 
+                if item.player == self.player and item.name in SaveContext.giveable_items])
+            self.world.push_item(impa, item_to_place, False)
+            impa.locked = True
+            impa.event = True
+            self.world.itempool.remove(item_to_place)
 
     # For now we will always output a patch file.
     def generate_output(self, output_directory: str): 
