@@ -284,7 +284,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
     def visit_BoolOp(self, node):
         # Everything else must be visited, then can be removed/reduced to.
         early_return = isinstance(node.op, ast.Or)
-        groupable = 'has_any_of' if early_return else 'has_all_of'
+        groupable = 'has_any' if early_return else 'has_all'
         items = set()
         new_values = []
         # if any elt is True(And)/False(Or), we can omit it
@@ -323,7 +323,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             node.values = [ast.Call(
                 func=ast.Attribute(
                     value=ast.Name(id='state', ctx=ast.Load()),
-                    attr='has_any_of' if early_return else 'has_all_of',
+                    attr='has_any' if early_return else 'has_all',
                     ctx=ast.Load()),
                 args=[ast.Tuple(elts=[ast.Str(i) for i in items], ctx=ast.Load()), ast.Constant(self.player)],
                 keywords=[])] + new_values
@@ -451,7 +451,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         if self.world.ensure_tod_access:
             # tod has DAY or (tod == NONE and (ss or find a path from a provider))
             # parsing is better than constructing this expression by hand
-            return ast.parse("(tod & TimeOfDay.DAY) if tod else (state.has_all_of(('Ocarina', 'Suns Song')) or state.search.can_reach(spot.parent_region, age=age, tod=TimeOfDay.DAY))", mode='eval').body
+            return ast.parse("(tod & TimeOfDay.DAY) if tod else (state.has_all(('Ocarina', 'Suns Song')) or state.search.can_reach(spot.parent_region, age=age, tod=TimeOfDay.DAY))", mode='eval').body
         return ast.NameConstant(True)
 
     def at_dampe_time(self, node):
@@ -468,7 +468,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         if self.world.ensure_tod_access:
             # tod has DAMPE or (tod == NONE and (ss or find a path from a provider))
             # parsing is better than constructing this expression by hand
-            return ast.parse("(tod & TimeOfDay.DAMPE) if tod else (state.has_all_of(('Ocarina', 'Suns Song')) or state.search.can_reach(spot.parent_region, age=age, tod=TimeOfDay.DAMPE))", mode='eval').body
+            return ast.parse("(tod & TimeOfDay.DAMPE) if tod else (state.has_all(('Ocarina', 'Suns Song')) or state.search.can_reach(spot.parent_region, age=age, tod=TimeOfDay.DAMPE))", mode='eval').body
         return ast.NameConstant(True)
 
 

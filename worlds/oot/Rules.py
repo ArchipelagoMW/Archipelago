@@ -11,22 +11,16 @@ from ..AutoWorld import LogicMixin
 class OOTLogic(LogicMixin):
 
     def _oot_has_stones(self, count, player): 
-        stones = ["Kokiri Emerald", "Goron Ruby", "Zora Sapphire"]
-        return self.count_of(stones, player) >= count
+        return self.has_group("stones", player, count)
 
     def _oot_has_medallions(self, count, player): 
-        medallions = ["Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion"]
-        return self.count_of(medallions, player) >= count
+        return self.has_group("medallions", player, count)
 
     def _oot_has_dungeon_rewards(self, count, player): 
-        stones = ["Kokiri Emerald", "Goron Ruby", "Zora Sapphire"]
-        medallions = ["Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion"]
-        return self.count_of(stones + medallions, player) >= count
+        return self.has_group("rewards", player, count)
 
     def _oot_has_bottle(self, player): 
-        oot_bottles = ["Bottle", "Bottle with Milk", "Deliver Letter", "Sell Big Poe", "Bottle with Red Potion", "Bottle with Green Potion", \
-            "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish", "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"]
-        return self.has_any_of(oot_bottles, player)
+        return self.has_group("bottles", player)
 
     # This function operates by assuming different behavior based on the "level of recursion", handled manually. 
     # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region. 

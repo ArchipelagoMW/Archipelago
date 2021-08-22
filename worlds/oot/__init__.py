@@ -107,6 +107,15 @@ class OOTWorld(World):
         self.starting_songs = False  # whether starting_items contains a song
         self.file_hash = [self.world.random.randint(0, 31) for i in range(5)]
 
+        self.item_name_groups = {
+            "medallions": {"Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion"},
+            "stones": {"Kokiri Emerald", "Goron Ruby", "Zora Sapphire"},
+            "rewards": {"Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion", \
+                "Kokiri Emerald", "Goron Ruby", "Zora Sapphire"},
+            "bottles": {"Bottle", "Bottle with Milk", "Deliver Letter", "Sell Big Poe", "Bottle with Red Potion", "Bottle with Green Potion", \
+                "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish", "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"}
+        }
+
         # Incompatible option handling
         # ER and glitched logic are not compatible; glitched takes priority
         if self.logic_rules == 'glitched':         

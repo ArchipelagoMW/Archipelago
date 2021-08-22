@@ -738,17 +738,6 @@ class CollectionState(object):
     def can_bomb_clip(self, region: Region, player: int) -> bool: 
         return self.is_not_bunny(region, player) and self.has('Pegasus Boots', player)
 
-    # These three functions originally were implemented for OoT, but they might be useful enough to keep around. 
-    def has_any_of(self, items, player):
-        return any([self.has(item, player) for item in items])
-
-    def has_all_of(self, items, player):
-        return all([self.has(item, player) for item in items])
-
-    def count_of(self, items, player): 
-        return len(list(filter(lambda item: self.has(item, player), items)))
-
-
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:
         if location:
             self.locations_checked.add(location)
