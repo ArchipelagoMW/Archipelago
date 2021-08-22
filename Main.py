@@ -276,7 +276,7 @@ def main(args, seed=None):
         for player in range(1, world.players + 1):
             checks_in_area[player]["Total"] = 0
 
-        for location in [loc for loc in world.get_filled_locations() if type(loc.address) is int and loc.game == 'A Link to the Past']:
+        for location in [loc for loc in world.get_filled_locations() if type(loc.address) is int]:
             main_entrance = get_entrance_to_region(location.parent_region)
             if location.game != "A Link to the Past":
                 checks_in_area[location.player]["Light World"].append(location.address)

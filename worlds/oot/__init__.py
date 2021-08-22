@@ -24,7 +24,7 @@ from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 
 import Utils
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import MultiWorld, CollectionState, RegionType
 from Options import Range, Toggle, OptionList
 from Fill import fill_restrictive, FillError
 from ..AutoWorld import World
@@ -186,7 +186,7 @@ class OOTWorld(World):
         region_json = read_json(file_path)
             
         for region in region_json:
-            new_region = OOTRegion(region['region_name'], None, None, self.player)
+            new_region = OOTRegion(region['region_name'], RegionType.Generic, None, self.player)
             new_region.world = self.world
             if 'scene' in region:
                 new_region.scene = region['scene']
