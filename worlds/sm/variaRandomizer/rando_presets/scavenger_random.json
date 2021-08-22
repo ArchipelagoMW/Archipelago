@@ -1,0 +1,8 @@
+{
+    "startLocation": "Landing Site",
+    "majorsSplit": "Scavenger",
+    "scavNumLocs": "random",
+    "hud": "on",
+    "scavRandomized": "on",
+    "progressionSpeed":"speedrun"
+}
