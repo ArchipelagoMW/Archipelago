@@ -2050,7 +2050,7 @@ def get_locked_doors(rom, world):
 
 def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=False):
     if init_shop_id:
-        place_shop_items.shop_id = 0x32
+        world.current_shop_id = 0x32
 
     shop_objs = { 0x0148 } # "Sold Out" object
     for location in locations:
@@ -2075,7 +2075,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                 rom_item = read_rom_item(rom, item_display.index)
 
             shop_objs.add(rom_item['object_id'])
-            shop_id = place_shop_items.shop_id
+            shop_id = world.current_shop_id
             rom.write_int16(location.address1, shop_id)
             shop_item = shop_items[shop_id]
 
@@ -2126,7 +2126,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             update_message_by_id(messages, shop_item.description_message, description_text, 0x03)
             update_message_by_id(messages, shop_item.purchase_message, purchase_text, 0x03)
 
-            place_shop_items.shop_id += 1
+            world.current_shop_id += 1
 
     return shop_objs
 
