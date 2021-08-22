@@ -78,7 +78,10 @@ class World(metaclass=AutoWorldRegister):
     # maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"}
     item_name_groups: Dict[str, Set[str]] = {}
 
-    data_version = 1  # increment this every time something in your world's names/id mappings changes.
+    # increment this every time something in your world's names/id mappings changes.
+    # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
+    # retrieved by clients on every connection.
+    data_version = 1
 
     hint_blacklist: Set[str] = frozenset()  # any names that should not be hintable
 
