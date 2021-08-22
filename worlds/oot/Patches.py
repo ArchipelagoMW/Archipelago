@@ -15,6 +15,7 @@ from .Messages import read_messages, update_message_by_id, read_shop_items, \
 # from OcarinaSongs import replace_songs
 from .MQ import patch_files, File, update_dmadata, insert_space, add_relocations
 from .SaveContext import SaveContext
+from .TextBox import character_table, NORMAL_LINE_WIDTH
 
 
 # "Spoiler" argument deleted; can probably be replaced with calls to world.world
@@ -2118,7 +2119,8 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                     shop_item_name = create_fake_name(shop_item_name)
 
                 if len(world.world.worlds) > 1:
-                    description_text = '\x08\x05\x41%s  %d Rupees\x01\x05\x42%s\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (shop_item_name, location.price, world.world.get_player_name(location.item.player))
+                    do_line_break = sum(character_table[char] for char in f"{shop_item_name}  {location.price} Rupees") > NORMAL_LINE_WIDTH
+                    description_text = '\x08\x05\x41%s%s%d Rupees\x01\x05\x42%s\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (shop_item_name, '\x01' if do_line_break else '  ', location.price, world.world.get_player_name(location.item.player))
                 else:
                     description_text = '\x08\x05\x41%s  %d Rupees\x01\x05\x40Special deal! ONE LEFT!\x01Get it while it lasts!\x09\x0A\x02' % (shop_item_name, location.price)
                 purchase_text = '\x08%s  %d Rupees\x09\x01\x01\x1B\x05\x42Buy\x01Don\'t buy\x05\x40\x02' % (shop_item_name, location.price)
