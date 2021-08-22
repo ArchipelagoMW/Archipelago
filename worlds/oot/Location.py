@@ -6,7 +6,7 @@ from BaseClasses import Location
 
 location_id_offset = 67000
 location_name_to_id = {name: (location_id_offset + index) for (index, name) in enumerate(location_table) 
-    if location_table[name][0] not in ['Event', 'Drop', 'HintStone', 'Hint']}
+    if location_table[name][0] not in ['Boss', 'Event', 'Drop', 'HintStone', 'Hint']}
 
 class DisableType(Enum): 
     ENABLED = 0

@@ -121,7 +121,7 @@ location_table = OrderedDict([
     ("Market Shooting Gallery Reward",                               ("NPC",          0x42,  0x60, None,                        'Slingshot',                             ("the Market", "Market", "Minigames"))),
     ("Market Bombchu Bowling First Prize",                           ("NPC",          0x4B,  0x34, None,                        'Bomb Bag',                              ("the Market", "Market", "Minigames"))),
     ("Market Bombchu Bowling Second Prize",                          ("NPC",          0x4B,  0x3E, None,                        'Piece of Heart',                        ("the Market", "Market", "Minigames"))),
-    ("Market Bombchu Bowling Bombchus",                              ("NPC",          0x4B,  None, None,                        'Bombchu Drop',                          ("the Market", "Market", "Minigames"))),
+    ("Market Bombchu Bowling Bombchus",                              ("Event",        0x4B,  None, None,                        'Bombchu Drop',                          ("the Market", "Market", "Minigames"))),
     ("Market Lost Dog",                                              ("NPC",          0x35,  0x3E, None,                        'Piece of Heart',                        ("the Market", "Market",))),
     ("Market Treasure Chest Game Reward",                            ("Chest",        0x10,  0x0A, None,                        'Piece of Heart (Treasure Chest Game)',  ("the Market", "Market", "Minigames"))),
     ("Market 10 Big Poes",                                           ("NPC",          0x4D,  0x0F, None,                        'Bottle',                                ("the Market", "Hyrule Castle",))),
