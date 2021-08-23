@@ -13,17 +13,17 @@ from .ItemPool import generate_itempool, get_junk_item, get_junk_pool
 from .Regions import OOTRegion, TimeOfDay
 from .Rules import set_rules, set_shop_rules, set_entrances_based_rules
 from .RuleParser import Rule_AST_Transformer
-from .Options import oot_options, cosmetic_options
+from .Options import oot_options
 from .Utils import data_path, read_json
-from .LocationList import location_table, business_scrubs, set_drop_location_names
+from .LocationList import business_scrubs, set_drop_location_names
 from .DungeonList import dungeon_table, create_dungeons
 from .LogicTricks import known_logic_tricks
-from .Rom import Rom, compress_rom_file
+from .Rom import Rom
 from .Patches import patch_rom
 from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 
-import Utils
+from Utils import get_options, output_path
 from BaseClasses import MultiWorld, CollectionState, RegionType
 from Options import Range, Toggle, OptionList
 from Fill import fill_restrictive, FillError
@@ -85,7 +85,7 @@ class OOTWorld(World):
         if len(bytes(self.world.get_player_name(self.player), 'ascii')) > 16:
             raise Exception(f"OoT: Player {self.player}'s name ({self.world.get_player_name(self.player)}) must be ASCII-compatible")
 
-        self.rom = Rom(file=Utils.get_options()['oot_options']['rom_file'])  # a ROM must be provided, cannot produce patches without it
+        self.rom = Rom(file=get_options()['oot_options']['rom_file'])  # a ROM must be provided, cannot produce patches without it
         self.parser = Rule_AST_Transformer(self, self.player)
 
         for (option_name, option) in oot_options.items(): 
@@ -587,11 +587,12 @@ class OOTWorld(World):
         self.rom.update_header()
 
         # make patch file
-        create_patch_file(self.rom, Utils.output_path(output_directory, outfile_name+'.apz5'))
+        create_patch_file(self.rom, output_path(output_directory, outfile_name+'.apz5'))
 
         # testing code: produce compressed file. uncomment when needed
-        # filename_uncompressed = Utils.output_path(outfile_name+'.z64')
-        # filename_compressed = Utils.output_path(outfile_name+'-comp.z64')
+        # from .Rom import compress_rom_file
+        # filename_uncompressed = output_path(outfile_name+'.z64')
+        # filename_compressed = output_path(outfile_name+'-comp.z64')
         # self.rom.write_to_file(filename_uncompressed)
         # logger.info(f"Compressing OOT ROM file for player {self.player}. This might take a while...")
         # compress_rom_file(filename_uncompressed, filename_compressed)
