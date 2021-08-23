@@ -10,14 +10,14 @@ class AdvancementGoal(Range):
     default = 50
 
 
-class EggShardsRequired(EggShards):
+class EggShardsRequired(Range):
     """Number of dragon egg shards to collect before the Ender Dragon will spawn."""
     displayname = "Egg Shards Required"
     range_start = 0
     range_end = 30
 
 
-class EggShardsAvailable(EggShards):
+class EggShardsAvailable(Range):
     """Number of dragon egg shards available to collect."""
     displayname = "Egg Shards Available"
     range_start = 0
@@ -29,7 +29,7 @@ class ShuffleStructures(Toggle):
     displayname = "Shuffle Structures"
 
 
-class StructureCompass(Toggle):
+class StructureCompasses(Toggle):
     """Adds structure compasses to the item pool, which point to the nearest indicated structure."""
     displayname = "Structure Compasses"
 
@@ -65,6 +65,11 @@ class PostgameAdvancements(Toggle):
     displayname = "Include Postgame Advancements"
 
 
+class SendDefeatedMobs(Toggle):
+    """Send killed mobs to other Minecraft worlds which have this option enabled."""
+    displayname = "Send Defeated Mobs"
+
+
 minecraft_options: typing.Dict[str, type(Option)] = {
     "advancement_goal":                 AdvancementGoal,
     "egg_shards_required":              EggShardsRequired,
@@ -76,4 +81,5 @@ minecraft_options: typing.Dict[str, type(Option)] = {
     "include_hard_advancements":        HardAdvancements,
     "include_insane_advancements":      InsaneAdvancements,
     "include_postgame_advancements":    PostgameAdvancements,
+    "send_defeated_mobs":               SendDefeatedMobs,
 }
