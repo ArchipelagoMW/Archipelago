@@ -37,6 +37,7 @@ class MinecraftWorld(World):
             'advancement_goal': self.world.advancement_goal[self.player],
             'egg_shards_required': self.world.egg_shards_required[self.player],
             'egg_shards_available': self.world.egg_shards_available[self.player],
+            'MC35': bool(self.world.send_defeated_mobs[self.player]),
             'race': self.world.is_race
         }
 
