@@ -2,11 +2,13 @@ import io, re, json
 import os, sys
 import subprocess
 import Utils
+from functools import lru_cache
 from .version import __version__
 
 def data_path(*args): 
     return Utils.local_path('worlds', 'oot', 'data', *args)
 
+@lru_cache(maxsize=13)  # Cache Overworld.json and the 12 dungeons
 def read_json(file_path):
     json_string = ""
     with io.open(file_path, 'r') as file:

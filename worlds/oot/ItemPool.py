@@ -1,5 +1,4 @@
 from collections import namedtuple
-import logging
 from itertools import chain
 from .Items import item_table
 from .LocationList import location_groups

@@ -1,14 +1,11 @@
 from .version import __version__
 from .Utils import data_path
 from .Colors import *
-# import random
 import logging
 import worlds.oot.Music as music
 import worlds.oot.Sounds as sfx
 import worlds.oot.IconManip as icon
 from .JSONDump import dump_obj, CollapseList, CollapseDict, AlignedDict, SortedDict
-# from SettingsList import setting_infos
-# from Plandomizer import InvalidFileException
 import json
 
 logger = logging.getLogger('')

@@ -8,8 +8,8 @@ import struct
 import subprocess
 import random
 import copy
-from Utils import local_path
-from .Utils import is_bundled, subprocess_args, data_path, get_version_bytes
+from Utils import local_path, is_frozen
+from .Utils import subprocess_args, data_path, get_version_bytes
 from .ntype import BigStream, uint32
 from .crc import calculate_crc
 from .version import __version__
@@ -93,10 +93,7 @@ class Rom(BigStream):
             # If Input ROM is compressed, then Decompress it
             subcall = []
 
-            if is_bundled():
-                sub_dir = "."
-            else:
-                sub_dir = data_path("Decompress")
+            sub_dir = data_path("Decompress")
 
             if platform.system() == 'Windows':
                 if 8 * struct.calcsize("P") == 64:
@@ -303,10 +300,7 @@ class Rom(BigStream):
 def compress_rom_file(input_file, output_file):
     subcall = []
 
-    if is_bundled():
-        compressor_path = "."
-    else:
-        compressor_path = data_path("Compress")
+    compressor_path = data_path("Compress")
 
     if platform.system() == 'Windows':
         if 8 * struct.calcsize("P") == 64:

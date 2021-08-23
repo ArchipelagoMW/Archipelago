@@ -1,9 +1,6 @@
 from enum import unique, Enum
 
 from BaseClasses import Region
-# from .Location import LocationFactory
-
-# probably move this out to Utils later
 
 
 # copied from OoT-Randomizer/Region.py

@@ -1,8 +1,8 @@
 from collections import deque
 import logging
-from .Location import DisableType
+
 from .SaveContext import SaveContext
-# from Search import Search
+
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item, item_in_locations
 from ..AutoWorld import LogicMixin
@@ -96,17 +96,6 @@ def set_rules(ootworld):
             if location.name in ootworld.shop_prices:
                 add_item_rule(location, lambda item: item.type != 'Shop')
                 location.price = ootworld.shop_prices[location.name]
-                # If price was specified in plando, use it here so access rule is set correctly.
-                # if location.name in world.distribution.locations and world.distribution.locations[location.name].price is not None:
-                #     price = world.distribution.locations[location.name].price
-                #     if price > 999: # Cap positive values above 999 so that they're not impossible.
-                #         world.distribution.locations[location.name].price = 999
-                #         price = 999
-                #     elif price < -32768: # Prices below this will error on patching.
-                #         world.distribution.locations[location.name].price = -32768
-                #         price = -32768
-                #     location.price = price
-                #     world.shop_prices[location.name] = price
                 add_rule(location, create_shop_rule(location, ootworld.parser))
             else:
                 add_item_rule(location, lambda item: item.type == 'Shop' and item.player == location.player)
@@ -129,13 +118,6 @@ def set_rules(ootworld):
 
         # if location.name in ootworld.always_hints:
             # location.add_rule(guarantee_hint)
-
-    # Handle this properly in the AP fill
-    # for location in world.disabled_locations:
-    #     try:
-    #         world.get_location(location).disabled = DisableType.PENDING
-    #     except:
-    #         logger.debug('Tried to disable location that does not exist: %s' % location)
 
 
 def create_shop_rule(location, parser):

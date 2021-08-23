@@ -85,7 +85,6 @@ class OOTWorld(World):
         if len(bytes(self.world.get_player_name(self.player), 'ascii')) > 16:
             raise Exception(f"OoT: Player {self.player}'s name ({self.world.get_player_name(self.player)}) must be ASCII-compatible")
 
-        self.rom = Rom(file=get_options()['oot_options']['rom_file'])  # a ROM must be provided, cannot produce patches without it
         self.parser = Rule_AST_Transformer(self, self.player)
 
         for (option_name, option) in oot_options.items(): 
@@ -582,12 +581,13 @@ class OOTWorld(World):
     # For now we will always output a patch file.
     def generate_output(self, output_directory: str): 
         outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}"
-        patch_rom(self, self.rom)
-        patch_cosmetics(self, self.rom)
-        self.rom.update_header()
+        rom = Rom(file=get_options()['oot_options']['rom_file'])  # a ROM must be provided, cannot produce patches without it
+        patch_rom(self, rom)
+        patch_cosmetics(self, rom)
+        rom.update_header()
 
         # make patch file
-        create_patch_file(self.rom, output_path(output_directory, outfile_name+'.apz5'))
+        create_patch_file(rom, output_path(output_directory, outfile_name+'.apz5'))
 
         # testing code: produce compressed file. uncomment when needed
         # from .Rom import compress_rom_file
@@ -598,7 +598,7 @@ class OOTWorld(World):
         # compress_rom_file(filename_uncompressed, filename_compressed)
         # os.remove(filename_uncompressed)
 
-        self.rom.restore()
+        rom.restore()
 
 
     # Helper functions
