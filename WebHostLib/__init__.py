@@ -106,6 +106,21 @@ games_list = {
                    an unknown bacteria. The planet's automatic quarantine will shoot you down if you try to leave.
                    You must find a cure for yourself, build an escape rocket, and leave the planet.
                    """),
+    "Ocarina of Time": ("The Legend of Zelda: Ocarina of Time",
+                        """
+                        The Legend of Zelda: Ocarina of Time was the first three dimensional Zelda game. Journey as
+                        Link as he quests to fulfil his destiny. Journey across Hyrule and defeat the evil masters of
+                        corrupted temples or seek out the pieces of the Triforce. Defeat the evil Ganondorf to become
+                        the Hero of Time and save Hyrule!
+                        """),
+    "Super Metroid": ("Super Metroid",
+                      """
+                      Samus is back in her first 16 bit adventure! Space pirates have attacked Ceres station and stolen
+                      the last living Metroid. Go to planet Zebes and search out the abilities you will need to power
+                      up your suit and defeat the villainous leader of the space pirates, Mother Brain.
+                      """),
+    # "Ori and the Blind Forest": ("Ori and the Blind Forest", "Coming Soon™"),
+    # "Hollow Knight": ("Hollow Knight", "Coming Soon™"),
 }
 
 
@@ -143,9 +158,9 @@ def tutorial_landing():
     return render_template("tutorialLanding.html")
 
 
-@app.route('/weighted-settings')
-def weighted_settings():
-    return render_template("weightedSettings.html")
+@app.route('/faq/<string:lang>/')
+def faq(lang):
+    return render_template("faq.html", lang=lang)
 
 
 @app.route('/seed/<suuid:seed>')
