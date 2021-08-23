@@ -162,7 +162,7 @@ if __name__ == '__main__':
     parser.add_argument("apmc_file", default=None, nargs='?', help="Path to an Archipelago Minecraft data file (.apmc)")
 
     args = parser.parse_args()
-    apmc_file = os.path.abspath(args.apmc_file) if args.apmc_file is not None else None
+    apmc_file = os.path.abspath(args.apmc_file) if args.apmc_file else None
 
     # Change to executable's working directory
     os.chdir(os.path.abspath(os.path.dirname(sys.argv[0])))
