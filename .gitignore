@@ -4,9 +4,12 @@
 *_Spoiler.txt
 *.bmbp
 *.apbp
+*.apz5
 *.pyc
 *.pyd
 *.sfc
+*.z64
+*.n64
 *.wixobj
 *.lck
 *.db3
