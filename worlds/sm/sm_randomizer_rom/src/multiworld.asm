@@ -238,11 +238,11 @@ write_placeholders:
     asl : tax               ; Put char table offset in X
     lda char_table-$40, x 
     tyx
-    sta.l $7e3314, x
+    sta.l $7e3310, x        ; 16 bytes player name now instead of 12
     iny #2
     plx
     inx
-    cpy #$0018
+    cpy #$0020              ; 16 bytes player name now instead of 12
     bne -
     rep #$30
 

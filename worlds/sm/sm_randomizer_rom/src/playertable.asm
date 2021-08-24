@@ -1,6 +1,7 @@
 ; Player table for multiworld
 ; 16-bytes per player (supports up to 256 players as is)
 ; (12-byte name, 4 bytes of data if needed)
+; all 16 bytes are now used for Player name
 
 rando_player_table:
     db "  PLAYER 1  " : dw $0000, $0000

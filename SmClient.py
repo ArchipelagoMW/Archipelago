@@ -108,7 +108,7 @@ class Context(CommonContext):
                 'No ROM detected, awaiting snes connection to authenticate to the multiworld server (/snes)')
             return
         self.awaiting_rom = False
-        auth = self.rom.decode("utf-8").split("\0")[0]
+        auth = self.rom.decode("utf-8")[0:16].rstrip('\x00')
         await self.send_msgs([{"cmd": 'Connect',
                               'password': self.password, 'name': auth, 'version': Utils.version_tuple,
                               'tags': get_tags(self),
@@ -482,7 +482,9 @@ async def game_watcher(ctx: Context):
         if itemOutPtr < len(ctx.items_received):
             item = ctx.items_received[itemOutPtr]
             itemId = item.item - items_start_id
-            snes_buffered_write(ctx, RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes([(item.player-1) & 0xFF, ((item.player-1) >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
+
+            playerID = (item.player-1) if item.player != 0 else (len(ctx.player_names)-1)
+            snes_buffered_write(ctx, RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes([playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
             itemOutPtr += 1
             snes_buffered_write(ctx, RECV_PROGRESS_ADDR + 0x602, bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
