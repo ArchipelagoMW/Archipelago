@@ -130,8 +130,3 @@ class RandoExec(object):
         for loc in unfilledLocs:
             loc.restricted = True
             itemLocs.append(ItemLocation(nothing, loc, False))
-
-        #TEST: place Archipelago item (Varia) at morphing ball
-        for loc in itemLocs:
-            if (loc.Location.Name == "Morphing Ball"):
-                loc.Item = ItemManager.getItem('ArchipelagoItem')

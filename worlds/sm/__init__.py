@@ -1,5 +1,6 @@
 import logging
 import copy
+import os
 from typing import Set
 
 logger = logging.getLogger("Super Metroid")
@@ -9,6 +10,7 @@ from .Items import lookup_id_to_name as items_lookup_id_to_name
 from .Items import lookup_name_to_id as items_lookup_name_to_id
 from .Regions import create_regions
 from .Rules import set_rules
+from .Options import sm_options
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
 from ..AutoWorld import World
@@ -20,6 +22,7 @@ from rando.ItemLocContainer import ItemLocation
 from rando.Items import ItemManager
 from utils.parameters import *
 from logic.logic import Logic
+from randomizer import VariaRandomizer
 
 from Utils import output_path
 from shutil import copy2
@@ -27,6 +30,7 @@ from shutil import copy2
 class SMWorld(World):
     game: str = "Super Metroid"
     topology_present = True
+    options = sm_options
     item_names: Set[str] = frozenset(items_lookup_name_to_id)
     location_names: Set[str] = frozenset(locations_lookup_name_to_id)
     item_name_to_id = items_lookup_name_to_id
@@ -47,7 +51,11 @@ class SMWorld(World):
 
     Logic.factory('vanilla')
 
+    def __init__(self, world: MultiWorld, player: int):
+        super().__init__(world, player)
+
     def __new__(cls, world, player):
+        
         # Add necessary objects to CollectionState on initialization
         orig_init = CollectionState.__init__
         orig_copy = CollectionState.copy
@@ -71,6 +79,8 @@ class SMWorld(World):
     
     def generate_basic(self):
         Logic.factory('vanilla')
+
+        self.variaRando = VariaRandomizer(self.world, self.player, self.world.sm_rom)
 
         self.itemManager = ItemManager('Chozo', self.qty, SMBoolManager(), 100, easy)
         self.itemManager.createItemPool()
@@ -122,42 +132,44 @@ class SMWorld(World):
         return (w & 0x00FF, (w & 0xFF00) >> 8)
 
     def generate_output(self, output_directory: str):
-        for player in self.world.get_game_players("Super Metroid"):
-            outfilebase = 'AP_' + self.world.seed_name
-            outfilepname = f'_P{player}'
-            outfilepname += f"_{self.world.player_name[player].replace(' ', '_')}" \
+        self.variaRando.PatchRom()
 
-            outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
-            copy2("Super Metroid (JU).sfc", outputFilename)
-            romPatcher = RomPatcher(outputFilename, None)
+        #for player in self.world.get_game_players("Super Metroid"):
+            # outfilebase = 'AP_' + self.world.seed_name
+            # outfilepname = f'_P{player}'
+            # outfilepname += f"_{self.world.player_name[player].replace(' ', '_')}" \
 
-            romPatcher.applyIPSPatches()
+            # outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
+            # copy2("Super Metroid (JU).sfc", outputFilename)
+            # romPatcher = RomPatcher(outputFilename, None)
 
-            multiWorldLocations = {}
-            for itemLoc in self.world.get_locations():
-                if itemLoc.player == player and locationsDict[itemLoc.name].Id != None:
-                    item = self.itemManager.Items[itemLoc.item.type if itemLoc.item.type in self.itemManager.Items else 'ArchipelagoItem']
-                    (w0, w1) = self.getWord(0 if itemLoc.item.player == player else 1)
-                    (w2, w3) = self.getWord(item.Id)
-                    (w4, w5) = self.getWord(itemLoc.item.player - 1)
-                    (w6, w7) = self.getWord(0)
-                    multiWorldLocations[0x1C6000 + locationsDict[itemLoc.name].Id*8] = [w0, w1, w2, w3, w4, w5, w6, w7]
+            # romPatcher.applyIPSPatches()
+
+            # multiWorldLocations = {}
+            # for itemLoc in self.world.get_locations():
+            #     if itemLoc.player == player and locationsDict[itemLoc.name].Id != None:
+            #         item = self.itemManager.Items[itemLoc.item.type if itemLoc.item.type in self.itemManager.Items else 'ArchipelagoItem']
+            #         (w0, w1) = self.getWord(0 if itemLoc.item.player == player else 1)
+            #         (w2, w3) = self.getWord(item.Id)
+            #         (w4, w5) = self.getWord(itemLoc.item.player - 1)
+            #         (w6, w7) = self.getWord(0)
+            #         multiWorldLocations[0x1C6000 + locationsDict[itemLoc.name].Id*8] = [w0, w1, w2, w3, w4, w5, w6, w7]
 
               
-            patchDict = { 'MultiWorldLocations':  multiWorldLocations }
-            romPatcher.applyIPSPatch('MultiWorldLocations', patchDict)
+            # patchDict = { 'MultiWorldLocations':  multiWorldLocations }
+            # romPatcher.applyIPSPatch('MultiWorldLocations', patchDict)
 
-            playerNames = {0x1C4F00 : self.world.player_name[player].encode()}
-            for p in range(1, self.world.players + 1):
-                playerNames[0x1C5000 + (p - 1) * 16] = self.world.player_name[p][:12].upper().center(12).encode()
+            # playerNames = {0x1C4F00 : self.world.player_name[player].encode()}
+            # for p in range(1, self.world.players + 1):
+            #     playerNames[0x1C5000 + (p - 1) * 16] = self.world.player_name[p][:12].upper().center(12).encode()
 
-            romPatcher.applyIPSPatch('PlayerName', { 'PlayerName':  playerNames })
+            # romPatcher.applyIPSPatch('PlayerName', { 'PlayerName':  playerNames })
 
-            romPatcher.commitIPS()
+            # romPatcher.commitIPS()
 
-            itemLocs = [ItemLocation(self.itemManager.Items[itemLoc.item.type if itemLoc.item.type in self.itemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == player]
-            romPatcher.writeItemsLocs(itemLocs)
-            romPatcher.end()
+            # itemLocs = [ItemLocation(self.itemManager.Items[itemLoc.item.type if itemLoc.item.type in self.itemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == player]
+            # romPatcher.writeItemsLocs(itemLocs)
+            # romPatcher.end()
 
         pass
 
@@ -178,6 +190,14 @@ class SMWorld(World):
         if world.get_game_players("Super Metroid"):
             progitempool.sort(
                 key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
+
+def get_base_rom_path(file_name: str = "") -> str:
+    options = Utils.get_options()
+    if not file_name:
+        file_name = options["lttp_options"]["rom_file"]
+    if not os.path.exists(file_name):
+        file_name = Utils.local_path(file_name)
+    return file_name
 
 def create_locations(self, player: int):
     for name, id in locations_lookup_name_to_id.items():

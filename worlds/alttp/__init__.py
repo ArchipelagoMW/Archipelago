@@ -177,7 +177,7 @@ class ALTTPWorld(World):
                             or world.shufflepots[player] or world.bush_shuffle[player]
                             or world.killable_thieves[player])
 
-            rom = LocalRom(world.alttp_rom)
+            rom = LocalRom(world.lttp_rom)
 
             patch_rom(world, rom, player, use_enemizer)
 
