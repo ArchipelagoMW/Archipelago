@@ -3,28 +3,19 @@ import typing
 from BaseClasses import Item
 
 def oot_data_to_ap_id(data, event): 
-    if event or data[2] is None: 
+    if event or data[2] is None or data[0] == 'Shop': 
         return None
     offset = 66000
     if data[0] in ['Item', 'BossKey', 'Compass', 'Map', 'SmallKey', 'Token', 'GanonBossKey', 'FortressSmallKey', 'Song']:
         return offset + data[2]
-    elif data[0] == 'Shop':  # not unique GID
-        shop_offset = 0xCB
-        return offset + shop_offset + data[2]
     else: 
         raise Exception(f'Unexpected OOT item type found: {data[0]}')
 
 def ap_id_to_oot_data(ap_id): 
     offset = 66000
-    shop_offset = 0xCB
     val = ap_id - offset
     try: 
-        if val < shop_offset: 
-            return list(filter(lambda d: d[1][0] == 'Item' and d[1][2] == val, item_table.items()))[0]
-        elif val - shop_offset < 0x32: 
-            return list(filter(lambda d: d[1][0] == 'Shop' and d[1][2] == val, item_table.items()))[0]
-        else: 
-            raise Exception(f'Attempted to convert non-OOT item ID: {ap_id}')
+        return list(filter(lambda d: d[1][0] == 'Item' and d[1][2] == val, item_table.items()))[0]
     except IndexError: 
         raise Exception(f'Could not find desired item ID: {ap_id}')
 
