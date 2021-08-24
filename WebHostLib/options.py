@@ -31,7 +31,7 @@ def create():
             if option.options:
                 this_option = {
                     "type": "select",
-                    "friendlyName": option.friendly_name if hasattr(option, "friendly_name") else option_name,
+                    "displayName": option.displayname if hasattr(option, "displayname") else option_name,
                     "description": option.__doc__ if option.__doc__ else "Please document me!",
                     "defaultValue": None,
                     "options": []
@@ -51,7 +51,7 @@ def create():
             elif hasattr(option, "range_start") and hasattr(option, "range_end"):
                 game_options[option_name] = {
                     "type": "range",
-                    "friendlyName": option.friendly_name if hasattr(option, "friendly_name") else option_name,
+                    "displayName": option.displayname if hasattr(option, "displayname") else option_name,
                     "description": option.__doc__ if option.__doc__ else "Please document me!",
                     "defaultValue": option.default if hasattr(option, "default") else option.range_start,
                     "min": option.range_start,
