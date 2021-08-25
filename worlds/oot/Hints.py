@@ -346,7 +346,7 @@ def get_hint_area(spot):
 def get_woth_hint(world, checked):
     locations = world.required_locations
     locations = list(filter(lambda location:
-        location.name not in checked
+        location.name not in checked[location.player]
         and not (world.woth_dungeon >= world.hint_dist_user['dungeons_woth_limit'] and location.parent_region.dungeon)
         and location.name not in world.hint_exclusions
         and location.name not in world.hint_type_overrides['woth']
@@ -357,7 +357,7 @@ def get_woth_hint(world, checked):
         return None
 
     location = world.hint_rng.choice(locations)
-    checked.add(location.name)
+    checked[location.player].add(location.name)
 
     if location.parent_region.dungeon:
         world.woth_dungeon += 1
@@ -376,7 +376,7 @@ def get_barren_hint(world, checked):
         world.get_barren_hint_prev = RegionRestriction.NONE
 
     areas = list(filter(lambda area:
-        area not in checked
+        area not in checked[world.player]
         and area not in world.hint_type_overrides['barren']
         and not (world.barren_dungeon >= world.hint_dist_user['dungeons_barren_limit'] and world.empty_areas[area]['dungeon']),
         world.empty_areas.keys()))
@@ -417,13 +417,13 @@ def get_barren_hint(world, checked):
     if world.empty_areas[area]['dungeon']:
         world.barren_dungeon += 1
 
-    checked.add(area)
+    checked[world.player].add(area)
 
     return (GossipText("plundering #%s# is a foolish choice." % area, ['Pink']), None)
 
 
 def is_not_checked(location, checked):
-    return not (location.name in checked or get_hint_area(location) in checked)
+    return not (location.name in checked[location.player] or get_hint_area(location) in checked)
 
 
 def get_good_item_hint(world, checked):
@@ -441,7 +441,7 @@ def get_good_item_hint(world, checked):
         return None
 
     location = world.hint_rng.choice(locations)
-    checked.add(location.name)
+    checked[location.player].add(location.name)
 
     item_text = getHint(getItemGenericName(location.item), world.clearer_hints).text
     if location.parent_region.dungeon:
@@ -484,7 +484,7 @@ def get_specific_item_hint(world, checked):
             return None
 
     location = world.hint_rng.choice(locations)
-    checked.add(location.name)
+    checked[location.player].add(location.name)
     item_text = getHint(getItemGenericName(location.item), world.clearer_hints).text
     
     if location.parent_region.dungeon:
@@ -517,7 +517,7 @@ def get_random_location_hint(world, checked):
         return None
 
     location = world.hint_rng.choice(locations)
-    checked.add(location.name)
+    checked[location.player].add(location.name)
     dungeon = location.parent_region.dungeon
 
     item_text = getHint(getItemGenericName(location.item), world.clearer_hints).text
@@ -539,7 +539,7 @@ def get_specific_hint(world, checked, type):
 
     hint = world.hint_rng.choice(hintGroup)
     location = world.get_location(hint.name)
-    checked.add(location.name)
+    checked[location.player].add(location.name)
 
     if location.name in world.hint_text_overrides:
         location_text = world.hint_text_overrides[location.name]
@@ -574,7 +574,7 @@ def get_entrance_hint(world, checked):
     if not world.entrance_shuffle:
         return None
 
-    entrance_hints = list(filter(lambda hint: hint.name not in checked, getHintGroup('entrance', world)))
+    entrance_hints = list(filter(lambda hint: hint.name not in checked[world.player], getHintGroup('entrance', world)))
     shuffled_entrance_hints = list(filter(lambda entrance_hint: world.get_entrance(entrance_hint.name).shuffled, entrance_hints))
 
     regions_with_hint = [hint.name for hint in getHintGroup('region', world)]
@@ -587,7 +587,7 @@ def get_entrance_hint(world, checked):
 
     entrance_hint = world.hint_rng.choice(valid_entrance_hints)
     entrance = world.get_entrance(entrance_hint.name)
-    checked.add(entrance.name)
+    checked[world.player].add(entrance.name)
 
     entrance_text = entrance_hint.text
 
@@ -608,12 +608,12 @@ def get_entrance_hint(world, checked):
 
 def get_junk_hint(world, checked):
     hints = getHintGroup('junk', world)
-    hints = list(filter(lambda hint: hint.name not in checked, hints))
+    hints = list(filter(lambda hint: hint.name not in checked[world.player], hints))
     if not hints:
         return None
 
     hint = world.hint_rng.choice(hints)
-    checked.add(hint.name)
+    checked[world.player].add(hint.name)
 
     return (GossipText(hint.text, prefix=''), None)
 
@@ -729,14 +729,14 @@ def buildWorldGossipHints(world, checkedLocations=None):
     #         and search.state_list[world.id].guarantee_hint())
 
     if checkedLocations is None:
-        checkedLocations = set()
+        checkedLocations = {player: set() for player in world.world.player_ids}
 
     # If Ganondorf can be reached without Light Arrows, add to checkedLocations to prevent extra hinting
     # Can only be forced with vanilla bridge
     if world.bridge != 'vanilla':
         try:
             light_arrow_location = world.world.find_item("Light Arrows", world.player)
-            checkedLocations.add(light_arrow_location.name)
+            checkedLocations[light_arrow_location.player].add(light_arrow_location.name)
         except StopIteration: # start with them
             pass
 
@@ -831,7 +831,7 @@ def buildWorldGossipHints(world, checkedLocations=None):
         alwaysLocations = getHintGroup('always', world)
         for hint in alwaysLocations:
             location = world.get_location(hint.name)
-            checkedLocations.add(hint.name)
+            checkedLocations[location.player].add(hint.name)
             if location.item.name in bingoBottlesForHints and world.hint_dist == 'bingo':
                 always_item = 'Bottle'
             else:
