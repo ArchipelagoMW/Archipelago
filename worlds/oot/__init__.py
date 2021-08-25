@@ -176,9 +176,9 @@ class OOTWorld(World):
         self.misc_hints = True  # this is just always on
         self.clearer_hints = True  # this is being enforced since non-oot items do not have non-clear hint text
         self.gossip_hints = {}
-        self.required_locations = set()
+        self.required_locations = []
         self.empty_areas = {}
-        self.major_item_locations = set()
+        self.major_item_locations = []
 
         # ER names
         self.ensure_tod_access = (self.shuffle_interior_entrances != 'off') or self.shuffle_overworld_entrances or self.spawn_positions
@@ -698,7 +698,8 @@ class OOTWorld(World):
         return True
 
 
-    # Run this once for to gather up all required locations (for WOTH), barren regions (for foolish), and location of major items
+    # Run this once for to gather up all required locations (for WOTH), barren regions (for foolish), and location of major items.
+    # required_locations and major_item_locations need to be ordered for deterministic hints.
     def gather_hint_data(self):
         if self.required_locations and self.empty_areas and self.major_item_locations:
             return
@@ -722,11 +723,11 @@ class OOTWorld(World):
                     state = CollectionState(self.world)
                     state.locations_checked.add(loc)
                     if not self.world.can_beat_game(state):
-                        self.required_locations.add(loc)
+                        self.required_locations.append(loc)
         self.empty_areas = {region: info for (region, info) in items_by_region.items() if not info['prog_items']}
         
         for loc in self.world.get_filled_locations():
             if (loc.item.player == self.player and self.is_major_item(loc.item) 
                     or (loc.item.player == self.player and loc.item.name in self.item_added_hint_types['item'])
                     or (loc.name in self.added_hint_types['item'] and loc.player == self.player)):
-                self.major_item_locations.add(loc)
+                self.major_item_locations.append(loc)
