@@ -151,6 +151,7 @@ def attach_name(text, hinted_object, world):
 
 
 def add_hint(world, groups, gossip_text, count, location=None, force_reachable=False):
+    print(f"Adding hint: {gossip_text}")
     world.hint_rng.shuffle(groups)
     skipped_groups = []
     duplicates = []
@@ -726,6 +727,15 @@ def buildWorldGossipHints(world, checkedLocations=None):
 
     if checkedLocations is None:
         checkedLocations = set()
+
+    # If Ganondorf can be reached without Light Arrows, add to checkedLocations to prevent extra hinting
+    # Can only be forced with vanilla bridge
+    if world.bridge != 'vanilla':
+        try:
+            light_arrow_location = world.world.find_item("Light Arrows", world.player)
+            checkedLocations.add(light_arrow_location.name)
+        except StopIteration:
+            pass
 
     stoneIDs = list(gossipLocations.keys())
 
