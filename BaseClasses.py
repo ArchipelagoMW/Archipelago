@@ -918,6 +918,7 @@ class Location():
     spot_type = 'Location'
     game: str = "Generic"
     show_in_spoiler: bool = True
+    excluded: bool = False
     crystal: bool = False
     always_allow = staticmethod(lambda item, state: False)
     access_rule = staticmethod(lambda state: True)
