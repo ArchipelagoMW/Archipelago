@@ -151,7 +151,6 @@ def attach_name(text, hinted_object, world):
 
 
 def add_hint(world, groups, gossip_text, count, location=None, force_reachable=False):
-    print(f"Adding hint: {gossip_text}")
     world.hint_rng.shuffle(groups)
     skipped_groups = []
     duplicates = []
@@ -320,24 +319,28 @@ class HintAreaNotFound(RuntimeError):
 
 # Peforms a breadth first search to find the closest hint area from a given spot (location or entrance)
 # May fail to find a hint if the given spot is only accessible from the root and not from any other region with a hint area
+# Returns the name of the location if the spot is not in OoT
 def get_hint_area(spot):
-    already_checked = []
-    spot_queue = [spot]
+    if spot.game == 'Ocarina of Time':
+        already_checked = []
+        spot_queue = [spot]
 
-    while spot_queue:
-        current_spot = spot_queue.pop(0)
-        already_checked.append(current_spot)
+        while spot_queue:
+            current_spot = spot_queue.pop(0)
+            already_checked.append(current_spot)
 
-        parent_region = current_spot.parent_region
-    
-        if parent_region.dungeon and getattr(parent_region, 'game', None) == 'Ocarina of Time':
-            return parent_region.dungeon.hint_text
-        elif parent_region.hint_text and (spot.parent_region.name == 'Root' or parent_region.name != 'Root'):
-            return parent_region.hint_text
+            parent_region = current_spot.parent_region
+        
+            if parent_region.dungeon:
+                return parent_region.dungeon.hint_text
+            elif parent_region.hint_text and (spot.parent_region.name == 'Root' or parent_region.name != 'Root'):
+                return parent_region.hint_text
 
-        spot_queue.extend(list(filter(lambda ent: ent not in already_checked, parent_region.entrances)))
+            spot_queue.extend(list(filter(lambda ent: ent not in already_checked, parent_region.entrances)))
 
-    raise HintAreaNotFound('No hint area could be found for %s [World %d]' % (spot, spot.world.id))
+        raise HintAreaNotFound('No hint area could be found for %s [World %d]' % (spot, spot.world.id))
+    else:
+        return spot.name
 
 
 def get_woth_hint(world, checked):
@@ -734,7 +737,7 @@ def buildWorldGossipHints(world, checkedLocations=None):
         try:
             light_arrow_location = world.world.find_item("Light Arrows", world.player)
             checkedLocations.add(light_arrow_location.name)
-        except StopIteration:
+        except StopIteration: # start with them
             pass
 
     stoneIDs = list(gossipLocations.keys())
