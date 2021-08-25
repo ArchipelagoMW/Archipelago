@@ -607,17 +607,18 @@ class AdultTradeItem(Choice):
     option_eyeball_frog = 7
     option_eyedrops = 8
     option_claim_check = 9
-    default = 0
 
 
 class EarlyTradeItem(AdultTradeItem):
     """Earliest item that can appear in the adult trade sequence."""
     displayname = "Adult Trade Sequence Earliest Item"
+    default = 6
 
 
 class LateTradeItem(AdultTradeItem):
     """Latest item that can appear in the adult trade sequence."""
     displayname = "Adult Trade Sequence Latest Item"
+    default = 9
 
 
 itempool_options: typing.Dict[str, type(Option)] = {
