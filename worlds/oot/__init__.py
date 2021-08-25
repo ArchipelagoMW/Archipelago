@@ -583,9 +583,9 @@ class OOTWorld(World):
             ice_traps = [item for item in self.itempool if item.name == 'Ice Trap']
             fake_items = []
             if self.ice_trap_appearance in ['major_only', 'anything']:
-                fake_items.extend([item for item in self.itempool if item.index and item.advancement])
+                fake_items.extend([item for item in self.itempool if item.index and self.is_major_item(item)])
             if self.ice_trap_appearance in ['junk_only', 'anything']:
-                fake_items.extend([item for item in self.itempool if item.index and not item.advancement and item.name != 'Ice Trap'])
+                fake_items.extend([item for item in self.itempool if item.index and not self.is_major_item(item) and item.name != 'Ice Trap'])
             for trap in ice_traps:
                 trap.looks_like_item = self.create_item(self.world.random.choice(fake_items).name)
 
