@@ -4,10 +4,6 @@ from BaseClasses import Item
 from typing import Dict
 
 
-class SpireItem(Item):
-    game: str = "Slay the Spire"
-
-
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     progression: bool

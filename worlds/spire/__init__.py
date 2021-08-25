@@ -22,15 +22,11 @@ class SpireWorld(World):
         return {
             'seed': "".join(self.world.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
             'character': self.world.character[self.player],
-            'games': self.world.games[self.player],
             'ascension': self.world.ascension[self.player],
             'heart_run': self.world.heart_run[self.player]
         }
 
     def generate_basic(self):
-        # link up our region with the entrance we made in Regions.py
-        self.world.get_entrance('Neow\'s Room', self.player).connect(self.world.get_region('The Spire', self.player))
-
         # Fill out our pool with our items from item_pool, assuming 1 item if not present in item_pool
         pool = []
         for name, data in item_table.items():

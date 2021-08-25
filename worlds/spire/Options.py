@@ -12,16 +12,8 @@ class Character(Choice):
     default = 0
 
 
-class Games(Range):
-    """The amount of games you will need to play."""
-    display_name = "Games"
-    range_start = 1
-    range_end = 5
-    default = 1
-
-
 class Ascension(Range):
-    """Pick What Character you wish to play with."""
+    """What Ascension do you wish to play with."""
     display_name = "Ascension"
     range_start = 0
     range_end = 20
@@ -39,7 +31,6 @@ class HeartRun(Toggle):
 
 spire_options: typing.Dict[str, type(Option)] = {
     "character": Character,
-    "games": Games,
     "ascension": Ascension,
     "heart_run": HeartRun
 }
