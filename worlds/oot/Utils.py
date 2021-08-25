@@ -3,7 +3,8 @@ import os, sys
 import subprocess
 import Utils
 from functools import lru_cache
-from .version import __version__
+
+__version__ = Utils.__version__ + ' f.LUM'
 
 def data_path(*args): 
     return Utils.local_path('worlds', 'oot', 'data', *args)

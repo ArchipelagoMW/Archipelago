@@ -9,10 +9,9 @@ import subprocess
 import random
 import copy
 from Utils import local_path, is_frozen
-from .Utils import subprocess_args, data_path, get_version_bytes
+from .Utils import subprocess_args, data_path, get_version_bytes, __version__
 from .ntype import BigStream, uint32
 from .crc import calculate_crc
-from .version import __version__
 
 DMADATA_START = 0x7430
 

@@ -1,5 +1,4 @@
-from .version import __version__
-from .Utils import data_path
+from .Utils import data_path, __version__
 from .Colors import *
 import logging
 import worlds.oot.Music as music
