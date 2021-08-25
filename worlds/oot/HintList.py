@@ -37,14 +37,19 @@ class Hint(object):
                 self.text = text[choice]
 
 
-def getHint(name, clearer_hint=False):
-    textOptions, clearText, type = hintTable[name]
-    if clearer_hint:
-        if clearText == None:
-            return Hint(name, textOptions, type, 0)
-        return Hint(name, clearText, type)
-    else:
-        return Hint(name, textOptions, type)
+def getHint(item, clearer_hint=False):
+    if item in hintTable:
+        textOptions, clearText, hintType = hintTable[item]
+        if clearer_hint:
+            if clearText == None:
+                return Hint(item, textOptions, hintType, 0)
+            return Hint(item, clearText, hintType)
+        else:
+            return Hint(item, textOptions, hintType)
+    elif type(item) is str:
+        return Hint(item, item, 'generic')
+    else: # is an Item
+        return Hint(item.name, item.hint_text, 'item')
 
 
 def getHintGroup(group, world):
@@ -1246,15 +1251,14 @@ hintTable = {
 
 # This specifies which hints will never appear due to either having known or known useless contents or due to the locations not existing.
 def hintExclusions(world, clear_cache=False):
-    if not clear_cache and hintExclusions.exclusions is not None:
-        return hintExclusions.exclusions
+    if not clear_cache and world.hint_exclusions is not None:
+        return world.hint_exclusions
 
-    hintExclusions.exclusions = []
-    hintExclusions.exclusions.extend(world.disabled_locations)
+    world.hint_exclusions = []
 
     for location in world.get_locations():
-        if location.locked:
-            hintExclusions.exclusions.append(location.name)
+        if location.locked or location.excluded:
+            world.hint_exclusions.append(location.name)
 
     world_location_names = [
         location.name for location in world.get_locations()]
@@ -1271,10 +1275,10 @@ def hintExclusions(world, clear_cache=False):
             location_hints.append(hint)
 
     for hint in location_hints:
-        if hint.name not in world_location_names and hint.name not in hintExclusions.exclusions:
-            hintExclusions.exclusions.append(hint.name)
+        if hint.name not in world_location_names and hint.name not in world.hint_exclusions:
+            world.hint_exclusions.append(hint.name)
 
-    return hintExclusions.exclusions
+    return world.hint_exclusions
 
 def nameIsLocation(name, hint_type, world):
     if isinstance(hint_type, (list, tuple)):

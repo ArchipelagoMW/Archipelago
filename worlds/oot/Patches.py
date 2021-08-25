@@ -1305,7 +1305,7 @@ def patch_rom(world, rom):
     if world.hints == 'none':
         rom.write_int32(symbol, 0)
     else:
-        writeGossipStoneHints(spoiler, world, messages)
+        writeGossipStoneHints(world, messages)
 
         if world.hints == 'mask':
             rom.write_int32(symbol, 0)

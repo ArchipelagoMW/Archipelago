@@ -489,6 +489,20 @@ class Hints(Choice):
     alias_false = 0
 
 
+class HintDistribution(Choice):
+    """Choose the hint distribution to use. Affects the frequency of strong hints, which items are always hinted, etc."""
+    displayname = "Hint Distribution"
+    option_balanced = 0
+    option_ddr = 1
+    option_league = 2
+    option_mw2 = 3
+    option_scrubs = 4
+    option_strong = 5
+    option_tournament = 6
+    option_useless = 7
+    option_very_strong = 8
+
+
 class TextShuffle(Choice): 
     """Randomizes text in the game for comedic effect."""
     displayname = "Text Shuffle"
@@ -540,7 +554,8 @@ class RupeeStart(Toggle):
 
 misc_options: typing.Dict[str, type(Option)] = {
     # "clearer_hints": DefaultOnToggle,
-    # "hints": Hints,
+    "hints": Hints,
+    "hint_dist": HintDistribution,
     "text_shuffle": TextShuffle,
     "damage_multiplier": DamageMultiplier,
     "no_collectible_hearts": HeroMode,

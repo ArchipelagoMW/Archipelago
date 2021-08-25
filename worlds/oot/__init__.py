@@ -22,6 +22,8 @@ from .Rom import Rom
 from .Patches import patch_rom
 from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
+from .Hints import hint_dist_keys, get_hint_area, buildWorldGossipHints
+from .HintList import getRequiredHints
 
 from Utils import get_options, output_path
 from BaseClasses import MultiWorld, CollectionState, RegionType
@@ -156,7 +158,6 @@ class OOTWorld(World):
         # Not implemented for now, but needed to placate the generator. Remove as they are implemented
         self.mq_dungeons_random = False  # this will be a deprecated option later
         self.ocarina_songs = False # just need to pull in the OcarinaSongs module
-        self.hints = 'none'  # Hints will probably look very different in the future. disabled for now
         self.big_poe_count = 1  # disabled due to client-side issues for now
         self.correct_chest_sizes = False  # will probably never be implemented since multiworld items are always major
         # ER options
@@ -170,16 +171,64 @@ class OOTWorld(World):
 
         # Set internal names used by the OoT generator
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld'] # only 'keysanity' and 'remove' implemented
+
+        # Hint stuff
         self.misc_hints = True  # this is just always on
         self.clearer_hints = True  # this is being enforced since non-oot items do not have non-clear hint text
+        self.gossip_hints = {}
+        self.required_locations = set()
+        self.empty_areas = {}
+        self.major_item_locations = set()
+
+        # ER names
         self.ensure_tod_access = (self.shuffle_interior_entrances != 'off') or self.shuffle_overworld_entrances or self.spawn_positions
         self.entrance_shuffle = (self.shuffle_interior_entrances != 'off') or self.shuffle_grotto_entrances or self.shuffle_dungeon_entrances or \
                                 self.shuffle_overworld_entrances or self.owl_drops or self.warp_songs or self.spawn_positions
         self.disable_trade_revert = (self.shuffle_interior_entrances != 'off') or self.shuffle_overworld_entrances
         self.shuffle_special_interior_entrances = self.shuffle_interior_entrances == 'all'
+
+        # fixing some options
         self.starting_tod = self.starting_tod.replace('_', '-')  # Fixes starting time spelling: "witching_hour" -> "witching-hour"
         self.shopsanity = self.shopsanity.replace('_value', '')  # can't set "random" manually
         self.shuffle_scrubs = self.shuffle_scrubs.replace('_prices', '')
+
+
+        # Get hint distribution
+        self.hint_dist_user = read_json(data_path('Hints', f'{self.hint_dist}.json'))
+
+        self.added_hint_types = {}
+        self.item_added_hint_types = {}
+        self.hint_exclusions = set()
+        if self.skip_child_zelda:
+            self.hint_exclusions.add('Song from Impa')
+        self.hint_type_overrides = {}
+        self.item_hint_type_overrides = {}
+
+        # unused hint stuff
+        self.named_item_pool = {}
+        self.hint_text_overrides = {}
+
+        for dist in hint_dist_keys:
+            self.added_hint_types[dist] = []
+            for loc in self.hint_dist_user['add_locations']:
+                if 'types' in loc:
+                    if dist in loc['types']:
+                        self.added_hint_types[dist].append(loc['location'])
+            self.item_added_hint_types[dist] = []
+            for i in self.hint_dist_user['add_items']:
+                if dist in i['types']:
+                    self.item_added_hint_types[dist].append(i['item'])
+            self.hint_type_overrides[dist] = []
+            for loc in self.hint_dist_user['remove_locations']:
+                if dist in loc['types']:
+                    self.hint_type_overrides[dist].append(loc['location'])
+            self.item_hint_type_overrides[dist] = []
+            for i in self.hint_dist_user['remove_items']:
+                if dist in i['types']:
+                    self.item_hint_type_overrides[dist].append(i['item'])
+
+        self.always_hints = [hint.name for hint in getRequiredHints(self)]
+
 
 
     def load_regions_from_json(self, file_path):
@@ -289,7 +338,7 @@ class OOTWorld(World):
                         self.shop_prices[location.name] = int(self.world.random.betavariate(1.5, 2) * 60) * 5
 
 
-    def fill_bosses(self, bossCount=9):    
+    def fill_bosses(self, bossCount=9): 
         rewardlist = (
             'Kokiri Emerald',
             'Goron Ruby',
@@ -336,6 +385,7 @@ class OOTWorld(World):
         if name in item_table: 
             return OOTItem(name, self.player, item_table[name], False)
         return OOTItem(name, self.player, ('Event', True, None, None), True)
+
 
     def make_event_item(self, name, location, item=None):
         if item is None:
@@ -582,6 +632,8 @@ class OOTWorld(World):
     def generate_output(self, output_directory: str): 
         outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}"
         rom = Rom(file=get_options()['oot_options']['rom_file'])  # a ROM must be provided, cannot produce patches without it
+        if self.hints != 'none':
+            buildWorldGossipHints(self)
         patch_rom(self, rom)
         patch_cosmetics(self, rom)
         rom.update_header()
@@ -605,6 +657,7 @@ class OOTWorld(World):
     def get_shuffled_entrances(self):
         return []
 
+    # make this a generator later?
     def get_locations(self):
         return [loc for region in self.regions for loc in region.locations]
 
@@ -620,3 +673,60 @@ class OOTWorld(World):
             self.collect(ret, item)
         ret.sweep_for_events()
         return ret
+
+    def is_major_item(self, item: OOTItem):
+        if item.type == 'Token':
+            return self.bridge == 'tokens' or self.lacs_condition == 'tokens'
+
+        if item.type in ('Drop', 'Event', 'Shop', 'DungeonReward') or not item.advancement:
+            return False
+
+        if item.name.startswith('Bombchus') and not self.bombchus_in_logic:
+            return False
+
+        if item.type in ['Map', 'Compass']:
+            return False
+        if item.type == 'SmallKey' and self.shuffle_smallkeys in ['dungeon', 'vanilla']:
+            return False
+        if item.type == 'FortressSmallKey' and self.shuffle_fortresskeys == 'vanilla':
+            return False
+        if item.type == 'BossKey' and self.shuffle_bosskeys in ['dungeon', 'vanilla']:
+            return False
+        if item.type == 'GanonBossKey' and self.shuffle_ganon_bosskey in ['dungeon', 'vanilla']:
+            return False
+
+        return True
+
+
+    # Run this once for to gather up all required locations (for WOTH), barren regions (for foolish), and location of major items
+    def gather_hint_data(self):
+        if self.required_locations and self.empty_areas and self.major_item_locations:
+            return
+
+        items_by_region = {}
+        for r in self.regions:
+            items_by_region[r.hint_text] = {'dungeon': False, 'weight': 0, 'prog_items': 0}
+        for d in self.dungeons:
+            items_by_region[d.hint_text] = {'dungeon': True, 'weight': 0, 'prog_items': 0}
+        del(items_by_region["Link's Pocket"])
+        del(items_by_region[None])
+
+        for loc in self.get_locations():
+            if loc.item.code: # is a real item
+                hint_area = get_hint_area(loc)
+                items_by_region[hint_area]['weight'] += 1
+                if loc.item.advancement and (not loc.locked or loc.item.type == 'Song'):
+                    # Non-locked progression. Increment counter
+                    items_by_region[hint_area]['prog_items'] += 1
+                    # Skip item at location and see if game is still beatable
+                    state = CollectionState(self.world)
+                    state.locations_checked.add(loc)
+                    if not self.world.can_beat_game(state):
+                        self.required_locations.add(loc)
+        self.empty_areas = {region: info for (region, info) in items_by_region.items() if not info['prog_items']}
+        
+        for loc in self.world.get_filled_locations():
+            if (loc.item.player == self.player and self.is_major_item(loc.item) 
+                    or (loc.item.player == self.player and loc.item.name in self.item_added_hint_types['item'])
+                    or (loc.name in self.added_hint_types['item'] and loc.player == self.player)):
+                self.major_item_locations.add(loc)
