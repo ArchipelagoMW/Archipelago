@@ -189,7 +189,7 @@ def main(args=None, callback=ERmain):
         erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
 
     if len(set(erargs.name.values())) != len(erargs.name):
-        raise Exception(f"Names have to unique. Names: {erargs.name}")
+        raise Exception(f"Names have to be unique. Names: {erargs.name}")
 
     if args.yaml_output:
         import yaml
