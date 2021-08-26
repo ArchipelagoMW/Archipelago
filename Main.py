@@ -377,7 +377,6 @@ def main(args, seed=None):
                 f.write(bytes([1]))  # version of format
                 f.write(multidata)
 
-
         multidata_task = pool.submit(write_multidata)
         if not check_accessibility_task.result():
             if not world.can_beat_game():

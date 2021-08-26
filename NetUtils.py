@@ -1,6 +1,4 @@
 from __future__ import annotations
-import asyncio
-import logging
 import typing
 import enum
 from json import JSONEncoder, JSONDecoder
@@ -93,52 +91,6 @@ def _object_hook(o: typing.Any) -> typing.Any:
 
 decode = JSONDecoder(object_hook=_object_hook).decode
 
-
-class Node:
-    endpoints: typing.List
-    dumper = staticmethod(encode)
-    loader = staticmethod(decode)
-
-    def __init__(self):
-        self.endpoints = []
-        super(Node, self).__init__()
-        self.log_network = 0
-
-    def broadcast_all(self, msgs):
-        msgs = self.dumper(msgs)
-        for endpoint in self.endpoints:
-            asyncio.create_task(self.send_encoded_msgs(endpoint, msgs))
-
-    async def send_msgs(self, endpoint: Endpoint, msgs: typing.Iterable[dict]) -> bool:
-        if not endpoint.socket or not endpoint.socket.open:
-            return False
-        msg = self.dumper(msgs)
-        try:
-            await endpoint.socket.send(msg)
-        except websockets.ConnectionClosed:
-            logging.exception(f"Exception during send_msgs, could not send {msg}")
-            await self.disconnect(endpoint)
-        else:
-            if self.log_network:
-                logging.info(f"Outgoing message: {msg}")
-            return True
-
-    async def send_encoded_msgs(self, endpoint: Endpoint, msg: str) -> bool:
-        if not endpoint.socket or not endpoint.socket.open:
-            return False
-        try:
-            await endpoint.socket.send(msg)
-        except websockets.ConnectionClosed:
-            logging.exception("Exception during send_encoded_msgs")
-            await self.disconnect(endpoint)
-        else:
-            if self.log_network:
-                logging.info(f"Outgoing message: {msg}")
-            return True
-
-    async def disconnect(self, endpoint):
-        if endpoint in self.endpoints:
-            self.endpoints.remove(endpoint)
 
 
 class Endpoint:
