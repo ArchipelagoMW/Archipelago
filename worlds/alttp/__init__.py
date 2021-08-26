@@ -155,9 +155,11 @@ class ALTTPWorld(World):
                     elif self.world.difficulty_requirements[item.player].progressive_shield_limit >= 1:
                         return 'Blue Shield'
                 elif 'Bow' in item_name:
-                    if state.has('Silver', item.player):
+                    if state.has('Silver Bow', item.player):
                         return
-                    elif state.has('Bow', item.player) and self.world.difficulty_requirements[item.player].progressive_bow_limit >= 2:
+                    elif state.has('Bow', item.player) and (self.world.difficulty_requirements[item.player].progressive_bow_limit >= 2 
+                        or self.world.logic[item.player] == 'noglitches' 
+                        or self.world.swordless[item.player]): # modes where silver bow is always required for ganon
                         return 'Silver Bow'
                     elif self.world.difficulty_requirements[item.player].progressive_bow_limit >= 1:
                         return 'Bow'
