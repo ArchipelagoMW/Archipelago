@@ -849,7 +849,7 @@ def toss_junk_item(world, player):
 
 def set_trock_key_rules(world, player):
     # First set all relevant locked doors to impassible.
-    for entrance in ['Turtle Rock Dark Room Staircase', 'Turtle Rock (Chain Chomp Room) (North)', 'Turtle Rock (Chain Chomp Room) (South)', 'Turtle Rock Pokey Room']:
+    for entrance in ['Turtle Rock Dark Room Staircase', 'Turtle Rock (Chain Chomp Room) (North)', 'Turtle Rock (Chain Chomp Room) (South)', 'Turtle Rock Pokey Room', 'Turtle Rock Big Key Door']:
         set_rule(world.get_entrance(entrance, player), lambda state: False)
 
     all_state = world.get_all_state(True)
@@ -876,6 +876,10 @@ def set_trock_key_rules(world, player):
 
 
     # The following represent the common key rules.
+
+    # Big key door requires the big key, obviously. We removed this rule in the previous section to flag front_locked_locations correctly,
+    # otherwise crystaroller room might not be properly marked as reachable through the back.
+    set_rule(world.get_entrance('Turtle Rock Big Key Door', player), lambda state: state.has('Big Key (Turtle Rock)', player))
 
     # No matter what, the key requirement for going from the middle to the bottom should be three keys.
     set_rule(world.get_entrance('Turtle Rock Dark Room Staircase', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 3))
