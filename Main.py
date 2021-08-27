@@ -15,7 +15,6 @@ from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
-from worlds.alttp.ItemPool import difficulties
 from Utils import output_path, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
@@ -28,15 +27,6 @@ def get_seed(seed=None):
         random.seed(None)
         return random.randint(0, pow(10, seeddigits) - 1)
     return seed
-
-
-def get_same_seed(world: MultiWorld, seed_def: tuple) -> str:
-    seeds: Dict[tuple, str] = getattr(world, "__named_seeds", {})
-    if seed_def in seeds:
-        return seeds[seed_def]
-    seeds[seed_def] = str(world.random.randint(0, 2 ** 64))
-    world.__named_seeds = seeds
-    return seeds[seed_def]
 
 
 def main(args, seed=None):
@@ -122,25 +112,6 @@ def main(args, seed=None):
     world.slot_seeds = {player: random.Random(world.random.getrandbits(64)) for player in
                         range(1, world.players + 1)}
 
-    AutoWorld.call_all(world, "generate_early")
-
-    # system for sharing ER layouts
-    for player in world.get_game_players("A Link to the Past"):
-        world.er_seeds[player] = str(world.random.randint(0, 2 ** 64))
-
-        if "-" in world.shuffle[player]:
-            shuffle, seed = world.shuffle[player].split("-", 1)
-            world.shuffle[player] = shuffle
-            if shuffle == "vanilla":
-                world.er_seeds[player] = "vanilla"
-            elif seed.startswith("group-") or args.race:
-                world.er_seeds[player] = get_same_seed(world, (
-                shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
-            else:  # not a race or group seed, use set seed as is.
-                world.er_seeds[player] = seed
-        elif world.shuffle[player] == "vanilla":
-            world.er_seeds[player] = "vanilla"
-
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, world.seed)
 
     logger.info("Found World Types:")
@@ -155,9 +126,9 @@ def main(args, seed=None):
                         f"Location IDs: {min(cls.location_id_to_name):{numlength}} - "
                         f"{max(cls.location_id_to_name):{numlength}}")
 
+    AutoWorld.call_all(world, "generate_early")
+
     logger.info('')
-    for player in world.get_game_players("A Link to the Past"):
-        world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
 
     for player in world.player_ids:
         for item_name in args.startinventory[player]:
