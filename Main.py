@@ -147,7 +147,7 @@ def main(args, seed=None):
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
     numlength = 8
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
-        if not getattr(cls, "hidden", False):
+        if not cls.hidden:
             logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} Items | "
                         f"{len(cls.location_names):3} Locations")
             logger.info(f"  Item IDs: {min(cls.item_id_to_name):{numlength}} - "
