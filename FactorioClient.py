@@ -110,7 +110,7 @@ class FactorioContext(CommonContext):
         if cmd == "Connected":
             # catch up sync anything that is already cleared.
             if args["checked_locations"]:
-                self.rcon_client.send_commands({item_name: f'/ap-get-technology {item_name}\t-1' for
+                self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
 
 
