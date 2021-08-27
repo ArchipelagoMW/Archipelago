@@ -123,11 +123,11 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
     world.random.shuffle(fill_locations)
 
     restitempool, fill_locations = fast_fill(world, restitempool, fill_locations)
-    unplaced = [item for item in progitempool + restitempool]
+    unplaced = progitempool + restitempool
     unfilled = [location.name for location in fill_locations]
 
     if unplaced or unfilled:
-        raise FillError(f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
+        logging.warning(f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
 
 
 def fast_fill(world: MultiWorld, item_pool: typing.List, fill_locations: typing.List) -> typing.Tuple[typing.List, typing.List]:

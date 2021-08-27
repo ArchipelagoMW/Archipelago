@@ -120,7 +120,6 @@ def main(args=None, callback=ERmain):
                         f"A mix is also permitted.")
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
-    erargs.name = {x: "" for x in range(1, args.multi + 1)}  # only so it can be overwrittin in mystery
     erargs.create_spoiler = args.spoiler > 0
     erargs.glitch_triforce = options["generator"]["glitch_triforce_room"]
     erargs.race = args.race
@@ -188,6 +187,9 @@ def main(args=None, callback=ERmain):
         elif not erargs.name[player]:  # if name was not specified, generate it from filename
             erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
         erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
+
+    if len(set(erargs.name.values())) != len(erargs.name):
+        raise Exception(f"Names have to be unique. Names: {erargs.name}")
 
     if args.yaml_output:
         import yaml

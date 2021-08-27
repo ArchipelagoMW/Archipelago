@@ -61,15 +61,20 @@ def replace_apmc_files(forge_dir, apmc_file):
     if apmc_file is None:
         return
     apdata_dir = os.path.join(forge_dir, 'APData')
+    copy_apmc = True
     if not os.path.isdir(apdata_dir):
         os.mkdir(apdata_dir)
         print(f"Created APData folder in {forge_dir}")
     for entry in os.scandir(apdata_dir):
-        if ".apmc" in entry.name and entry.is_file():
-            os.remove(entry.path)
-            print(f"Removed {entry.name} in {apdata_dir}")
-    copyfile(apmc_file, os.path.join(apdata_dir, os.path.basename(apmc_file)))
-    print(f"Copied {os.path.basename(apmc_file)} to {apdata_dir}")
+        if entry.name.endswith(".apmc") and entry.is_file():
+            if not os.path.samefile(apmc_file, entry.path):
+                os.remove(entry.path)
+                print(f"Removed {entry.name} in {apdata_dir}")
+            else: # apmc already in apdata
+                copy_apmc = False
+    if copy_apmc:
+        copyfile(apmc_file, os.path.join(apdata_dir, os.path.basename(apmc_file)))
+        print(f"Copied {os.path.basename(apmc_file)} to {apdata_dir}")
 
 
 # Check mod version, download new mod from GitHub releases page if needed. 
@@ -157,14 +162,14 @@ if __name__ == '__main__':
     parser.add_argument("apmc_file", default=None, nargs='?', help="Path to an Archipelago Minecraft data file (.apmc)")
 
     args = parser.parse_args()
-    options = Utils.get_options()
-
-    apmc_file = os.path.abspath(args.apmc_file)
-    forge_dir = options["minecraft_options"]["forge_directory"]
-    max_heap = options["minecraft_options"]["max_heap_size"]
+    apmc_file = os.path.abspath(args.apmc_file) if args.apmc_file else None
 
     # Change to executable's working directory
     os.chdir(os.path.abspath(os.path.dirname(sys.argv[0])))
+    
+    options = Utils.get_options()
+    forge_dir = options["minecraft_options"]["forge_directory"]
+    max_heap = options["minecraft_options"]["max_heap_size"]
 
     if apmc_file is not None and not os.path.isfile(apmc_file):
         raise FileNotFoundError(f"Path {apmc_file} does not exist or could not be accessed.")

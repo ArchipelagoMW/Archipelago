@@ -109,9 +109,10 @@ class FactorioContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
             # catch up sync anything that is already cleared.
-            for tech in args["checked_locations"]:
-                item_name = f"ap-{tech}-"
-                self.rcon_client.send_command(f'/ap-get-technology {item_name}\t-1')
+            if args["checked_locations"]:
+                self.rcon_client.send_commands({item_name: f'/ap-get-technology {item_name}\t-1' for
+                                                item_name in args["checked_locations"]})
+
 
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
@@ -195,11 +196,15 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     if ctx.mod_version < Utils.Version(0, 1, 6):
                         ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
                         ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
+                    if not ctx.server:
+                        logger.info("Established bridge to Factorio Server. "
+                                    "Ready to connect to Archipelago via /connect")
 
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
 
             if ctx.rcon_client:
+                commands = {}
                 while ctx.send_index < len(ctx.items_received):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
                     item_id = transfer_item.item
@@ -209,8 +214,10 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     else:
                         item_name = Factorio.item_id_to_name[item_id]
                         factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
-                        ctx.rcon_client.send_command(f'/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}')
+                        commands[ctx.send_index] = f'/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}'
                     ctx.send_index += 1
+                if commands:
+                    ctx.rcon_client.send_commands(commands)
             await asyncio.sleep(0.1)
 
     except Exception as e:
