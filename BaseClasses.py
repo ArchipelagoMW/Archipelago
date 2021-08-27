@@ -911,7 +911,8 @@ class Boss():
         return f"Boss({self.name})"
 
 class Location():
-    shop_slot: bool = False
+    # If given as integer, then this is the shop's inventory index
+    shop_slot: Optional[int] = None
     shop_slot_disabled: bool = False
     event: bool = False
     locked: bool = False

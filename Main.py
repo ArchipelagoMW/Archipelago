@@ -147,11 +147,13 @@ def main(args, seed=None):
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
     numlength = 8
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
-        logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} Items | {len(cls.location_names):3} Locations")
-        logger.info(f"  Item IDs: {min(cls.item_id_to_name):{numlength}} - "
-                    f"{max(cls.item_id_to_name):{numlength}} | "
-                    f"Location IDs: {min(cls.location_id_to_name):{numlength}} - "
-                    f"{max(cls.location_id_to_name):{numlength}}")
+        if not getattr(cls, "hidden", False):
+            logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} Items | "
+                        f"{len(cls.location_names):3} Locations")
+            logger.info(f"  Item IDs: {min(cls.item_id_to_name):{numlength}} - "
+                        f"{max(cls.item_id_to_name):{numlength}} | "
+                        f"Location IDs: {min(cls.location_id_to_name):{numlength}} - "
+                        f"{max(cls.location_id_to_name):{numlength}}")
 
     logger.info('')
     for player in world.get_game_players("A Link to the Past"):
@@ -383,22 +385,28 @@ def main(args, seed=None):
                 raise Exception("Game appears as unbeatable. Aborting.")
             else:
                 logger.warning("Location Accessibility requirements not fulfilled.")
+
+        # retrieve exceptions via .result() if they occured.
         if multidata_task:
-            multidata_task.result()  # retrieve exception if one exists
+            multidata_task.result()
+        for future in output_file_futures:
+            future.result()
+
         pool.shutdown()  # wait for all queued tasks to complete
+
         if not args.skip_playthrough:
             logger.info('Calculating playthrough.')
             create_playthrough(world)
+
         if args.create_spoiler:
             world.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
-        for future in output_file_futures:
-            future.result()
+
         zipfilename = output_path(f"AP_{world.seed_name}.zip")
         logger.info(f'Creating final archive at {zipfilename}.')
         with zipfile.ZipFile(zipfilename, mode="w", compression=zipfile.ZIP_DEFLATED,
                              compresslevel=9) as zf:
             for file in os.scandir(temp_dir):
-                zf.write(os.path.join(temp_dir, file), arcname=file.name)
+                zf.write(file.path, arcname=file.name)
 
     logger.info('Done. Enjoy. Total Time: %s', time.perf_counter() - start)
     return world

@@ -676,12 +676,10 @@ location_table: typing.Dict[str,
 
 from worlds.alttp.Shops import shop_table_by_location_id, shop_table_by_location
 lookup_id_to_name = {data[0]: name for name, data in location_table.items() if type(data[0]) == int}
-lookup_id_to_name = {**lookup_id_to_name, **{data[1]: name for name, data in key_drop_data.items()},
-                     -1: "Cheat Console", -2: "Server"}
+lookup_id_to_name = {**lookup_id_to_name, **{data[1]: name for name, data in key_drop_data.items()}}
 lookup_id_to_name.update(shop_table_by_location_id)
 lookup_name_to_id = {name: data[0] for name, data in location_table.items() if type(data[0]) == int}
-lookup_name_to_id = {**lookup_name_to_id, **{name: data[1] for name, data in key_drop_data.items()},
-                     "Cheat Console": -1, "Server": -2}
+lookup_name_to_id = {**lookup_name_to_id, **{name: data[1] for name, data in key_drop_data.items()}}
 lookup_name_to_id.update(shop_table_by_location)
 
 lookup_vanilla_location_to_entrance = {1572883: 'Kings Grave Inner Rocks', 191256: 'Kings Grave Inner Rocks',

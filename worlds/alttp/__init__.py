@@ -26,14 +26,12 @@ class ALTTPWorld(World):
     options = alttp_options
     topology_present = True
     item_name_groups = item_name_groups
-    item_names = frozenset(item_table)
-    location_names = frozenset(lookup_name_to_id)
     hint_blacklist = {"Triforce"}
 
     item_name_to_id = {name: data.item_code for name, data in item_table.items() if type(data.item_code) == int}
     location_name_to_id = lookup_name_to_id
 
-    data_version = 7
+    data_version = 8
     remote_items: bool = False
 
     set_rules = set_rules
