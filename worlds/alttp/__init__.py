@@ -62,6 +62,7 @@ class ALTTPWorld(World):
         world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
 
     def create_regions(self):
+        # noinspection PyAttributeOutsideInit
         self.rom_name_available_event = threading.Event()
 
         player = self.player

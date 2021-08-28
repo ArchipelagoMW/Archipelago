@@ -30,3 +30,48 @@ class ALttPItem(Item):
         self.magicshop_credit_text = witch_credit
         self.fluteboy_credit_text = flute_boy_credit
         self._hint_text = hint_text
+
+    @property
+    def crystal(self) -> bool:
+        return self.type == 'Crystal'
+
+    @property
+    def smallkey(self) -> bool:
+        return self.type == 'SmallKey'
+
+    @property
+    def bigkey(self) -> bool:
+        return self.type == 'BigKey'
+
+    @property
+    def map(self) -> bool:
+        return self.type == 'Map'
+
+    @property
+    def compass(self) -> bool:
+        return self.type == 'Compass'
+
+    @property
+    def dungeon_item(self) -> Optional[str]:
+        if self.game == "A Link to the Past" and self.type in {"SmallKey", "BigKey", "Map", "Compass"}:
+            return self.type
+
+    @property
+    def shuffled_dungeon_item(self) -> bool:
+        dungeon_item_type = self.dungeon_item
+        if dungeon_item_type:
+            return {"SmallKey" : self.world.keyshuffle,
+                    "BigKey": self.world.bigkeyshuffle,
+                    "Map": self.world.mapshuffle,
+                    "Compass": self.world.compassshuffle}[dungeon_item_type][self.player]
+        return False
+
+    @property
+    def locked_dungeon_item(self) -> bool:
+        dungeon_item_type = self.dungeon_item
+        if dungeon_item_type:
+            return not {"SmallKey" : self.world.keyshuffle,
+                        "BigKey": self.world.bigkeyshuffle,
+                        "Map": self.world.mapshuffle,
+                        "Compass": self.world.compassshuffle}[dungeon_item_type][self.player]
+        return False
