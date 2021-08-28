@@ -31,7 +31,7 @@ class MinecraftLogic(LogicMixin):
         return self.can_reach('Nether Fortress', 'Region', player) and self._mc_basic_combat(player)
 
     def _mc_can_brew_potions(self, player: int):
-        return self._mc_fortress_loot(player) and self.has('Brewing', player) and self._mc_has_bottle(player)
+        return self.has('Blaze Rods', player) and self.has('Brewing', player) and self._mc_has_bottle(player)
 
     def _mc_can_piglin_trade(self, player: int):
         return self._mc_has_gold_ingots(player) and (
@@ -39,7 +39,7 @@ class MinecraftLogic(LogicMixin):
                                                                                      player))
 
     def _mc_enter_stronghold(self, player: int):
-        return self._mc_fortress_loot(player) and self.has('Brewing', player) and self.has('3 Ender Pearls', player)
+        return self.has('Blaze Rods', player) and self.has('Brewing', player) and self.has('3 Ender Pearls', player)
 
     # Difficulty-dependent functions
     def _mc_combat_difficulty(self, player: int):
@@ -135,6 +135,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_entrance("The End Structure", player), lambda state: state._mc_can_adventure(player) and state._mc_has_structure_compass("The End Structure", player))
 
     set_rule(world.get_location("Ender Dragon", player), lambda state: can_complete(state))
+    set_rule(world.get_location("Blaze Spawner", player), lambda state: state._mc_fortress_loot(player))
 
     set_rule(world.get_location("Who is Cutting Onions?", player), lambda state: state._mc_can_piglin_trade(player))
     set_rule(world.get_location("Oh Shiny", player), lambda state: state._mc_can_piglin_trade(player))
