@@ -807,7 +807,10 @@ class Region(object):
                 return True
         return False
 
+    # look into moving this to ALttPLocation?
     def can_fill(self, item: Item):
+        if getattr(item, "locked_dungeon_item", False):
+            return item.player == self.player and self.dungeon.is_dungeon_item(item)
         return True
 
     def __repr__(self):
