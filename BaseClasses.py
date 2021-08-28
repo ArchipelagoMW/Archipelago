@@ -966,7 +966,10 @@ class Location():
 
     @property
     def hint_text(self):
-        return getattr(self, "_hint_text", self.name.replace("_", " ").replace("-", " "))
+        hint_text = getattr(self, "_hint_text", None)
+        if hint_text:
+            return hint_text
+        return "at " + self.name.replace("_", " ").replace("-", " ")
 
 
 class Item():

@@ -2087,9 +2087,9 @@ def write_strings(rom, world, player):
         if not dest:
             return "nothing"
         if ped_hint:
-            hint = dest.pedestal_hint_text if dest.pedestal_hint_text else "unknown item"
+            hint = dest.pedestal_hint_text
         else:
-            hint = dest.hint_text if dest.hint_text else "something"
+            hint = dest.hint_text
         if dest.player != player:
             if ped_hint:
                 hint += f" for {world.player_name[dest.player]}!"
