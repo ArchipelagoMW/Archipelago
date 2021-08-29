@@ -22,6 +22,16 @@ class OOTLogic(LogicMixin):
     def _oot_has_bottle(self, player): 
         return self.has_group("bottles", player)
 
+    # Used for fall damage and other situations where damage is unavoidable
+    def _oot_can_live_dmg(self, player, hearts):
+        mult = self.world.worlds[player].damage_multiplier
+        if hearts*4 >= 3:
+            return mult != 'ohko' and mult != 'quadruple'
+        elif hearts*4 < 3:
+            return mult != 'ohko'
+        else:
+            return True
+
     # This function operates by assuming different behavior based on the "level of recursion", handled manually. 
     # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region. 
     # If self.age[player] is not None, then it will compare it to the 'age' parameter, and return True iff they are equal. 

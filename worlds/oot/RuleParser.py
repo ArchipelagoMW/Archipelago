@@ -502,3 +502,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
 
     def has_bottle(self, node): 
         return ast.parse(f"state._oot_has_bottle({self.player})", mode='eval').body
+
+    def can_live_dmg(self, node):
+        return ast.parse(f"state._oot_can_live_dmg({self.player}, {node.args[0].value})", mode='eval').body
