@@ -239,7 +239,7 @@ def convert_to_on_off(value):
     return {True: "on", False: "off"}.get(value, value)
 
 
-def get_choice(option, root, value=None) -> typing.Any:
+def get_choice_legacy(option, root, value=None) -> typing.Any:
     if option not in root:
         return value
     if type(root[option]) is list:
@@ -251,6 +251,20 @@ def get_choice(option, root, value=None) -> typing.Any:
     if any(root[option].values()):
         return interpret_on_off(
             random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0])
+    raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
+
+
+def get_choice(option, root, value=None) -> typing.Any:
+    if option not in root:
+        return value
+    if type(root[option]) is list:
+        return random.choices(root[option])[0]
+    if type(root[option]) is not dict:
+        return root[option]
+    if not root[option]:
+        return value
+    if any(root[option].values()):
+        return random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0]
     raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
 
 
@@ -467,7 +481,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     inventoryweights = game_weights.get('start_inventory', {})
     startitems = []
     for item in inventoryweights.keys():
-        itemvalue = get_choice(item, inventoryweights)
+        itemvalue = get_choice_legacy(item, inventoryweights)
         if isinstance(itemvalue, int):
             for i in range(int(itemvalue)):
                 startitems.append(item)
@@ -515,7 +529,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
 
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
-    glitches_required = get_choice('glitches_required', weights)
+    glitches_required = get_choice_legacy('glitches_required', weights)
     if glitches_required not in [None, 'none', 'no_logic', 'overworld_glitches', 'hybrid_major_glitches', 'minor_glitches']:
         logging.warning("Only NMG, OWG, HMG and No Logic supported")
         glitches_required = 'none'
@@ -523,7 +537,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                  'minor_glitches': 'minorglitches', 'hybrid_major_glitches': 'hybridglitches'}[
         glitches_required]
 
-    ret.dark_room_logic = get_choice("dark_room_logic", weights, "lamp")
+    ret.dark_room_logic = get_choice_legacy("dark_room_logic", weights, "lamp")
     if not ret.dark_room_logic:  # None/False
         ret.dark_room_logic = "none"
     if ret.dark_room_logic == "sconces":
@@ -531,9 +545,9 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     if ret.dark_room_logic not in {"lamp", "torches", "none"}:
         raise ValueError(f"Unknown Dark Room Logic: \"{ret.dark_room_logic}\"")
 
-    ret.restrict_dungeon_item_on_boss = get_choice('restrict_dungeon_item_on_boss', weights, False)
+    ret.restrict_dungeon_item_on_boss = get_choice_legacy('restrict_dungeon_item_on_boss', weights, False)
 
-    dungeon_items = get_choice('dungeon_items', weights)
+    dungeon_items = get_choice_legacy('dungeon_items', weights)
     if dungeon_items == 'full' or dungeon_items == True:
         dungeon_items = 'mcsb'
     elif dungeon_items == 'standard':
@@ -543,82 +557,82 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     if "u" in dungeon_items:
         dungeon_items.replace("s", "")
 
-    ret.mapshuffle = get_choice('map_shuffle', weights, 'm' in dungeon_items)
-    ret.compassshuffle = get_choice('compass_shuffle', weights, 'c' in dungeon_items)
-    ret.keyshuffle = get_choice('smallkey_shuffle', weights,
+    ret.mapshuffle = get_choice_legacy('map_shuffle', weights, 'm' in dungeon_items)
+    ret.compassshuffle = get_choice_legacy('compass_shuffle', weights, 'c' in dungeon_items)
+    ret.keyshuffle = get_choice_legacy('smallkey_shuffle', weights,
                                 'universal' if 'u' in dungeon_items else 's' in dungeon_items)
-    ret.bigkeyshuffle = get_choice('bigkey_shuffle', weights, 'b' in dungeon_items)
+    ret.bigkeyshuffle = get_choice_legacy('bigkey_shuffle', weights, 'b' in dungeon_items)
 
-    entrance_shuffle = get_choice('entrance_shuffle', weights, 'vanilla')
+    entrance_shuffle = get_choice_legacy('entrance_shuffle', weights, 'vanilla')
     if entrance_shuffle.startswith('none-'):
         ret.shuffle = 'vanilla'
     else:
         ret.shuffle = entrance_shuffle if entrance_shuffle != 'none' else 'vanilla'
 
-    goal = get_choice('goals', weights, 'ganon')
+    goal = get_choice_legacy('goals', weights, 'ganon')
 
     ret.goal = goals[goal]
 
     # TODO consider moving open_pyramid to an automatic variable in the core roller, set to True when
     # fast ganon + ganon at hole
-    ret.open_pyramid = get_choice('open_pyramid', weights, 'goal')
+    ret.open_pyramid = get_choice_legacy('open_pyramid', weights, 'goal')
 
-    extra_pieces = get_choice('triforce_pieces_mode', weights, 'available')
+    extra_pieces = get_choice_legacy('triforce_pieces_mode', weights, 'available')
 
-    ret.triforce_pieces_required = LttPOptions.TriforcePieces.from_any(get_choice('triforce_pieces_required', weights, 20))
+    ret.triforce_pieces_required = LttPOptions.TriforcePieces.from_any(get_choice_legacy('triforce_pieces_required', weights, 20))
 
     # sum a percentage to required
     if extra_pieces == 'percentage':
-        percentage = max(100, float(get_choice('triforce_pieces_percentage', weights, 150))) / 100
+        percentage = max(100, float(get_choice_legacy('triforce_pieces_percentage', weights, 150))) / 100
         ret.triforce_pieces_available = int(round(ret.triforce_pieces_required * percentage, 0))
     # vanilla mode (specify how many pieces are)
     elif extra_pieces == 'available':
         ret.triforce_pieces_available = LttPOptions.TriforcePieces.from_any(
-            get_choice('triforce_pieces_available', weights, 30))
+            get_choice_legacy('triforce_pieces_available', weights, 30))
     # required pieces + fixed extra
     elif extra_pieces == 'extra':
-        extra_pieces = max(0, int(get_choice('triforce_pieces_extra', weights, 10)))
+        extra_pieces = max(0, int(get_choice_legacy('triforce_pieces_extra', weights, 10)))
         ret.triforce_pieces_available = ret.triforce_pieces_required + extra_pieces
 
     # change minimum to required pieces to avoid problems
     ret.triforce_pieces_available = min(max(ret.triforce_pieces_required, int(ret.triforce_pieces_available)), 90)
 
-    ret.shop_shuffle = get_choice('shop_shuffle', weights, '')
+    ret.shop_shuffle = get_choice_legacy('shop_shuffle', weights, '')
     if not ret.shop_shuffle:
         ret.shop_shuffle = ''
 
-    ret.mode = get_choice("mode", weights)
-    ret.retro = get_choice("retro", weights)
+    ret.mode = get_choice_legacy("mode", weights)
+    ret.retro = get_choice_legacy("retro", weights)
 
-    ret.hints = get_choice('hints', weights)
+    ret.hints = get_choice_legacy('hints', weights)
 
-    ret.swordless = get_choice('swordless', weights, False)
+    ret.swordless = get_choice_legacy('swordless', weights, False)
 
-    ret.difficulty = get_choice('item_pool', weights)
+    ret.difficulty = get_choice_legacy('item_pool', weights)
 
-    ret.item_functionality = get_choice('item_functionality', weights)
+    ret.item_functionality = get_choice_legacy('item_functionality', weights)
 
-    boss_shuffle = get_choice('boss_shuffle', weights)
+    boss_shuffle = get_choice_legacy('boss_shuffle', weights)
     ret.shufflebosses = get_plando_bosses(boss_shuffle, plando_options)
 
-    ret.enemy_shuffle = bool(get_choice('enemy_shuffle', weights, False))
+    ret.enemy_shuffle = bool(get_choice_legacy('enemy_shuffle', weights, False))
 
-    ret.killable_thieves = get_choice('killable_thieves', weights, False)
-    ret.tile_shuffle = get_choice('tile_shuffle', weights, False)
-    ret.bush_shuffle = get_choice('bush_shuffle', weights, False)
+    ret.killable_thieves = get_choice_legacy('killable_thieves', weights, False)
+    ret.tile_shuffle = get_choice_legacy('tile_shuffle', weights, False)
+    ret.bush_shuffle = get_choice_legacy('bush_shuffle', weights, False)
 
     ret.enemy_damage = {None: 'default',
                         'default': 'default',
                         'shuffled': 'shuffled',
                         'random': 'chaos', # to be removed
                         'chaos': 'chaos',
-                        }[get_choice('enemy_damage', weights)]
+                        }[get_choice_legacy('enemy_damage', weights)]
 
-    ret.enemy_health = get_choice('enemy_health', weights)
+    ret.enemy_health = get_choice_legacy('enemy_health', weights)
 
-    ret.shufflepots = get_choice('pot_shuffle', weights)
+    ret.shufflepots = get_choice_legacy('pot_shuffle', weights)
 
-    ret.beemizer = int(get_choice('beemizer', weights, 0))
+    ret.beemizer = int(get_choice_legacy('beemizer', weights, 0))
 
     ret.timer = {'none': False,
                  None: False,
@@ -627,19 +641,19 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                  'timed_ohko': 'timed-ohko',
                  'ohko': 'ohko',
                  'timed_countdown': 'timed-countdown',
-                 'display': 'display'}[get_choice('timer', weights, False)]
+                 'display': 'display'}[get_choice_legacy('timer', weights, False)]
 
-    ret.countdown_start_time = int(get_choice('countdown_start_time', weights, 10))
-    ret.red_clock_time = int(get_choice('red_clock_time', weights, -2))
-    ret.blue_clock_time = int(get_choice('blue_clock_time', weights, 2))
-    ret.green_clock_time = int(get_choice('green_clock_time', weights, 4))
+    ret.countdown_start_time = int(get_choice_legacy('countdown_start_time', weights, 10))
+    ret.red_clock_time = int(get_choice_legacy('red_clock_time', weights, -2))
+    ret.blue_clock_time = int(get_choice_legacy('blue_clock_time', weights, 2))
+    ret.green_clock_time = int(get_choice_legacy('green_clock_time', weights, 4))
 
-    ret.dungeon_counters = get_choice('dungeon_counters', weights, 'default')
+    ret.dungeon_counters = get_choice_legacy('dungeon_counters', weights, 'default')
 
-    ret.shuffle_prizes = get_choice('shuffle_prizes', weights, "g")
+    ret.shuffle_prizes = get_choice_legacy('shuffle_prizes', weights, "g")
 
-    ret.required_medallions = [get_choice("misery_mire_medallion", weights, "random"),
-                               get_choice("turtle_rock_medallion", weights, "random")]
+    ret.required_medallions = [get_choice_legacy("misery_mire_medallion", weights, "random"),
+                               get_choice_legacy("turtle_rock_medallion", weights, "random")]
 
     for index, medallion in enumerate(ret.required_medallions):
         ret.required_medallions[index] = {"ether": "Ether", "quake": "Quake", "bombos": "Bombos", "random": "random"} \
@@ -647,9 +661,9 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         if not ret.required_medallions[index]:
             raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
 
-    ret.glitch_boots = get_choice('glitch_boots', weights, True)
+    ret.glitch_boots = get_choice_legacy('glitch_boots', weights, True)
 
-    if get_choice("local_keys", weights, "l" in dungeon_items):
+    if get_choice_legacy("local_keys", weights, "l" in dungeon_items):
         # () important for ordering of commands, without them the Big Keys section is part of the Small Key else
         ret.local_items |= item_name_groups["Small Keys"] if ret.keyshuffle else set()
         ret.local_items |= item_name_groups["Big Keys"] if ret.bigkeyshuffle else set()
@@ -667,10 +681,10 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
         options = weights.get("plando_items", [])
         for placement in options:
-            if roll_percentage(get_choice("percentage", placement, 100)):
-                from_pool = get_choice("from_pool", placement, PlandoItem._field_defaults["from_pool"])
-                location_world = get_choice("world", placement, PlandoItem._field_defaults["world"])
-                force = str(get_choice("force", placement, PlandoItem._field_defaults["force"])).lower()
+            if roll_percentage(get_choice_legacy("percentage", placement, 100)):
+                from_pool = get_choice_legacy("from_pool", placement, PlandoItem._field_defaults["from_pool"])
+                location_world = get_choice_legacy("world", placement, PlandoItem._field_defaults["world"])
+                force = str(get_choice_legacy("force", placement, PlandoItem._field_defaults["force"])).lower()
                 if "items" in placement and "locations" in placement:
                     items = placement["items"]
                     locations = placement["locations"]
@@ -686,8 +700,8 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                     for item, location in zip(items, locations):
                         add_plando_item(item, location)
                 else:
-                    item = get_choice("item", placement, get_choice("items", placement))
-                    location = get_choice("location", placement)
+                    item = get_choice_legacy("item", placement, get_choice_legacy("items", placement))
+                    location = get_choice_legacy("location", placement)
                     add_plando_item(item, location)
 
     ret.plando_texts = {}
@@ -696,39 +710,39 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         tt.removeUnwantedText()
         options = weights.get("plando_texts", [])
         for placement in options:
-            if roll_percentage(get_choice("percentage", placement, 100)):
-                at = str(get_choice("at", placement))
+            if roll_percentage(get_choice_legacy("percentage", placement, 100)):
+                at = str(get_choice_legacy("at", placement))
                 if at not in tt:
                     raise Exception(f"No text target \"{at}\" found.")
-                ret.plando_texts[at] = str(get_choice("text", placement))
+                ret.plando_texts[at] = str(get_choice_legacy("text", placement))
 
     ret.plando_connections = []
     if "connections" in plando_options:
         options = weights.get("plando_connections", [])
         for placement in options:
-            if roll_percentage(get_choice("percentage", placement, 100)):
+            if roll_percentage(get_choice_legacy("percentage", placement, 100)):
                 ret.plando_connections.append(PlandoConnection(
-                    get_choice("entrance", placement),
-                    get_choice("exit", placement),
-                    get_choice("direction", placement, "both")
+                    get_choice_legacy("entrance", placement),
+                    get_choice_legacy("exit", placement),
+                    get_choice_legacy("direction", placement, "both")
                 ))
 
     ret.sprite_pool = weights.get('sprite_pool', [])
-    ret.sprite = get_choice('sprite', weights, "Link")
+    ret.sprite = get_choice_legacy('sprite', weights, "Link")
     if 'random_sprite_on_event' in weights:
         randomoneventweights = weights['random_sprite_on_event']
-        if get_choice('enabled', randomoneventweights, False):
+        if get_choice_legacy('enabled', randomoneventweights, False):
             ret.sprite = 'randomon'
-            ret.sprite += '-hit' if get_choice('on_hit', randomoneventweights, True) else ''
-            ret.sprite += '-enter' if get_choice('on_enter', randomoneventweights, False) else ''
-            ret.sprite += '-exit' if get_choice('on_exit', randomoneventweights, False) else ''
-            ret.sprite += '-slash' if get_choice('on_slash', randomoneventweights, False) else ''
-            ret.sprite += '-item' if get_choice('on_item', randomoneventweights, False) else ''
-            ret.sprite += '-bonk' if get_choice('on_bonk', randomoneventweights, False) else ''
-            ret.sprite = 'randomonall' if get_choice('on_everything', randomoneventweights, False) else ret.sprite
+            ret.sprite += '-hit' if get_choice_legacy('on_hit', randomoneventweights, True) else ''
+            ret.sprite += '-enter' if get_choice_legacy('on_enter', randomoneventweights, False) else ''
+            ret.sprite += '-exit' if get_choice_legacy('on_exit', randomoneventweights, False) else ''
+            ret.sprite += '-slash' if get_choice_legacy('on_slash', randomoneventweights, False) else ''
+            ret.sprite += '-item' if get_choice_legacy('on_item', randomoneventweights, False) else ''
+            ret.sprite += '-bonk' if get_choice_legacy('on_bonk', randomoneventweights, False) else ''
+            ret.sprite = 'randomonall' if get_choice_legacy('on_everything', randomoneventweights, False) else ret.sprite
             ret.sprite = 'randomonnone' if ret.sprite == 'randomon' else ret.sprite
 
-            if (not ret.sprite_pool or get_choice('use_weighted_sprite_pool', randomoneventweights, False)) \
+            if (not ret.sprite_pool or get_choice_legacy('use_weighted_sprite_pool', randomoneventweights, False)) \
                     and 'sprite' in weights:  # Use sprite as a weighted sprite pool, if a sprite pool is not already defined.
                 for key, value in weights['sprite'].items():
                     if key.startswith('random'):

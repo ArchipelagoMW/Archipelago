@@ -85,6 +85,7 @@ class Progressive(Choice):
     def want_progressives(self, random):
         return random.choice([True, False]) if self.value == self.option_grouped_random else bool(self.value)
 
+
 class Palette(Choice):
     option_default = 0
     option_good = 1
@@ -129,7 +130,7 @@ class HeartBeep(Choice):
     option_half = 2
     option_quarter = 3
     option_off = 4
-    alias_false = 5  # should be removable when interpret_on_off is no longer needed
+    alias_false = 4
 
 
 class HeartColor(Choice):
