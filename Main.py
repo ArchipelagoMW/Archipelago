@@ -312,6 +312,8 @@ def main(args, seed=None):
             locations_data: Dict[int, Dict[int, Tuple[int, int]]] = {player: {} for player in world.player_ids}
             for location in world.get_filled_locations():
                 if type(location.address) == int:
+                    # item code None should be event, location.address should then also be None
+                    assert location.item.code is not None
                     locations_data[location.player][location.address] = location.item.code, location.item.player
                     if location.player in sending_visible_players and location.item.player != location.player:
                         hint = NetUtils.Hint(location.item.player, location.player, location.address,
