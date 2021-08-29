@@ -579,6 +579,12 @@ class OOTWorld(World):
             fill_restrictive(self.world, self.state_with_items(self.itempool), shop_locations, shop_items, True, True)
         set_shop_rules(self)
 
+        # Locations which are not sendable must be converted to events
+        # This includes all locations for which show_in_spoiler is false, and shuffled shop items.
+        for loc in self.get_locations():
+            if loc.address is not None and not loc.show_in_spoiler or (loc.item is not None and loc.item.type == 'Shop'):
+                loc.address = None
+
         # Gather items for ice trap appearances
         self.fake_items = []
         if self.ice_trap_appearance in ['major_only', 'anything']:
