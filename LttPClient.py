@@ -510,7 +510,7 @@ async def get_snes_devices(ctx: Context):
     return devices
 
 
-async def snes_connect(ctx: Context, address):
+async def snes_connect(ctx: Context, address, deviceIndex = -1):
     global SNES_RECONNECT_DELAY
     if ctx.snes_socket is not None and ctx.snes_state == SNESState.SNES_CONNECTED:
         if ctx.rom:
@@ -539,13 +539,13 @@ async def snes_connect(ctx: Context, address):
                 device = devices[ctx.snes_attached_device[0]]
         elif numDevices > 1:
             if deviceIndex == -1:
-                logger.info("Found " + str(numDevices) + " SNES devices; connect to one with /snes <address> <device number>:")
+                snes_logger.info("Found " + str(numDevices) + " SNES devices; connect to one with /snes <address> <device number>:")
 
                 for idx, availableDevice in enumerate(devices):
-                    logger.info(str(idx + 1) + ": " + availableDevice)
+                    snes_logger.info(str(idx + 1) + ": " + availableDevice)
 
             elif (deviceIndex < 0) or (deviceIndex - 1) > numDevices:
-                logger.warning("SNES device number out of range")
+                snes_logger.warning("SNES device number out of range")
 
             else:
                 device = devices[deviceIndex - 1]
