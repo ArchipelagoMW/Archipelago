@@ -14,7 +14,7 @@ from BaseClasses import MultiWorld, CollectionState, Region, RegionType
 from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
-from worlds.alttp.Shops import ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
+from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from Utils import output_path, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
@@ -198,9 +198,7 @@ def main(args, seed=None):
     elif world.algorithm == 'balanced':
         distribute_items_restrictive(world)
 
-    logger.info("Filling Shop Slots")
-
-    ShopSlotFill(world)
+    AutoWorld.call_all(world, 'post_fill')
 
     if world.players > 1:
         balance_multiworld_progression(world)

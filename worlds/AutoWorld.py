@@ -138,6 +138,9 @@ class World(metaclass=AutoWorldRegister):
         This gets called once per present world type."""
         pass
 
+    def post_fill(self):
+        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation."""
+
     def generate_output(self, output_directory: str):
         """This method gets called from a threadpool, do not use world.random here.
         If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""

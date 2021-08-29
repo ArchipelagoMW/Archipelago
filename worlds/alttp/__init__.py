@@ -229,6 +229,10 @@ class ALTTPWorld(World):
         from .Dungeons import fill_dungeons_restrictive
         fill_dungeons_restrictive(world)
 
+    @classmethod
+    def stage_post_fill(cls, world):
+        Shops.ShopSlotFill(world)
+
     def generate_output(self, output_directory: str):
         world = self.world
         player = self.player
