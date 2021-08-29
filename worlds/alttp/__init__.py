@@ -2,6 +2,7 @@ import random
 import logging
 import os
 import threading
+import typing
 
 from BaseClasses import Item, CollectionState
 from .SubClasses import ALttPItem
@@ -10,7 +11,7 @@ from .Options import alttp_options
 from .Items import as_dict_item_table, item_name_groups, item_table
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
 from .Rules import set_rules
-from .ItemPool import generate_itempool
+from .ItemPool import generate_itempool, difficulties
 from .Shops import create_shops
 from .Dungeons import create_dungeons
 from .Rom import LocalRom, patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, get_hash_string
@@ -21,26 +22,47 @@ from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_con
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
+
 class ALTTPWorld(World):
     game: str = "A Link to the Past"
     options = alttp_options
     topology_present = True
     item_name_groups = item_name_groups
-    item_names = frozenset(item_table)
-    location_names = frozenset(lookup_name_to_id)
     hint_blacklist = {"Triforce"}
 
     item_name_to_id = {name: data.item_code for name, data in item_table.items() if type(data.item_code) == int}
     location_name_to_id = lookup_name_to_id
 
-    data_version = 7
+    data_version = 8
     remote_items: bool = False
 
     set_rules = set_rules
 
     create_items = generate_itempool
 
+    def generate_early(self):
+        player = self.player
+        world = self.world
+        # system for sharing ER layouts
+        world.er_seeds[player] = str(world.random.randint(0, 2 ** 64))
+
+        if "-" in world.shuffle[player]:
+            shuffle, seed = world.shuffle[player].split("-", 1)
+            world.shuffle[player] = shuffle
+            if shuffle == "vanilla":
+                world.er_seeds[player] = "vanilla"
+            elif seed.startswith("group-") or world.is_race:
+                world.er_seeds[player] = get_same_seed(world, (
+                    shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
+            else:  # not a race or group seed, use set seed as is.
+                world.er_seeds[player] = seed
+        elif world.shuffle[player] == "vanilla":
+            world.er_seeds[player] = "vanilla"
+
+        world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
+
     def create_regions(self):
+        # noinspection PyAttributeOutsideInit
         self.rom_name_available_event = threading.Event()
 
         player = self.player
@@ -343,3 +365,12 @@ class ALTTPWorld(World):
                     world.push_item(spot_to_fill, item_to_place, False)
                     fill_locations.remove(spot_to_fill)  # very slow, unfortunately
                     trash_count -= 1
+
+
+def get_same_seed(world, seed_def: tuple) -> str:
+    seeds: typing.Dict[tuple, str] = getattr(world, "__named_seeds", {})
+    if seed_def in seeds:
+        return seeds[seed_def]
+    seeds[seed_def] = str(world.random.randint(0, 2 ** 64))
+    world.__named_seeds = seeds
+    return seeds[seed_def]

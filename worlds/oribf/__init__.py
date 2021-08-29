@@ -19,6 +19,8 @@ class OriBlindForest(World):
 
     options = options
 
+    hidden = True
+
     def generate_early(self):
         logic_sets = {"casual-core"}
         for logic_set in location_rules:

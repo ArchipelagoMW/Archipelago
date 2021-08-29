@@ -807,11 +807,10 @@ class Region(object):
                 return True
         return False
 
+    # look into moving this to ALttPLocation?
     def can_fill(self, item: Item):
-        inside_dungeon_item = item.locked_dungeon_item
-        if inside_dungeon_item:
-            return self.dungeon.is_dungeon_item(item) and item.player == self.player
-
+        if getattr(item, "locked_dungeon_item", False):
+            return item.player == self.player and self.dungeon.is_dungeon_item(item)
         return True
 
     def __repr__(self):
@@ -911,7 +910,8 @@ class Boss():
         return f"Boss({self.name})"
 
 class Location():
-    shop_slot: bool = False
+    # If given as integer, then this is the shop's inventory index
+    shop_slot: Optional[int] = None
     shop_slot_disabled: bool = False
     event: bool = False
     locked: bool = False
@@ -968,21 +968,33 @@ class Location():
 
     @property
     def hint_text(self):
-        return getattr(self, "_hint_text", self.name.replace("_", " ").replace("-", " "))
+        hint_text = getattr(self, "_hint_text", None)
+        if hint_text:
+            return hint_text
+        return "at " + self.name.replace("_", " ").replace("-", " ")
 
 
 class Item():
     location: Optional[Location] = None
     world: Optional[MultiWorld] = None
+    code: Optional[str] = None  # an item with ID None is called an Event, and does not get written to multidata
     game: str = "Generic"
     type: str = None
-    never_exclude = False  # change manually to ensure that a specific nonprogression item never goes on an excluded location
+    # change manually to ensure that a specific non-progression item never goes on an excluded location
+    never_exclude = False
+
+    # need to find a decent place for these to live and to allow other games to register texts if they want.
     pedestal_credit_text: str = "and the Unknown Item"
     sickkid_credit_text: Optional[str] = None
     magicshop_credit_text: Optional[str] = None
     zora_credit_text: Optional[str] = None
     fluteboy_credit_text: Optional[str] = None
-    code: Optional[str] = None  # an item with ID None is called an Event, and does not get written to multidata
+
+    # hopefully temporary attributes to satisfy legacy LttP code, proper implementation in subclass ALttPItem
+    smallkey: bool = False
+    bigkey: bool = False
+    map: bool = False
+    compass: bool = False
 
     def __init__(self, name: str, advancement: bool, code: Optional[int], player: int):
         self.name = name
@@ -1008,51 +1020,6 @@ class Item():
 
     def __hash__(self):
         return hash((self.name, self.player))
-
-    @property
-    def crystal(self) -> bool:
-        return self.type == 'Crystal'
-
-    @property
-    def smallkey(self) -> bool:
-        return self.type == 'SmallKey'
-
-    @property
-    def bigkey(self) -> bool:
-        return self.type == 'BigKey'
-
-    @property
-    def map(self) -> bool:
-        return self.type == 'Map'
-
-    @property
-    def compass(self) -> bool:
-        return self.type == 'Compass'
-
-    @property
-    def dungeon_item(self) -> Optional[str]:
-        if self.game == "A Link to the Past" and self.type in {"SmallKey", "BigKey", "Map", "Compass"}:
-            return self.type
-
-    @property
-    def shuffled_dungeon_item(self) -> bool:
-        dungeon_item_type = self.dungeon_item
-        if dungeon_item_type:
-            return {"SmallKey" : self.world.keyshuffle,
-                    "BigKey": self.world.bigkeyshuffle,
-                    "Map": self.world.mapshuffle,
-                    "Compass": self.world.compassshuffle}[dungeon_item_type][self.player]
-        return False
-
-    @property
-    def locked_dungeon_item(self) -> bool:
-        dungeon_item_type = self.dungeon_item
-        if dungeon_item_type:
-            return not {"SmallKey" : self.world.keyshuffle,
-                        "BigKey": self.world.bigkeyshuffle,
-                        "Map": self.world.mapshuffle,
-                        "Compass": self.world.compassshuffle}[dungeon_item_type][self.player]
-        return False
 
     def __repr__(self):
         return self.__str__()

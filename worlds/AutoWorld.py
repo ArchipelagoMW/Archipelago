@@ -91,6 +91,9 @@ class World(metaclass=AutoWorldRegister):
     # the client finds its own items in its own world.
     remote_items: bool = True
 
+    # Hide World Type from various views. Does not remove functionality.
+    hidden = False
+
     # autoset on creation:
     world: MultiWorld
     player: int

@@ -500,14 +500,14 @@ def create_dynamic_shop_locations(world, player):
                 if item is None:
                     continue
                 if item['create_location']:
-                    loc = ALttPLocation(player, "{} Slot {}".format(shop.region.name, i + 1), parent=shop.region)
+                    loc = ALttPLocation(player, f"{shop.region.name} {shop.slot_names[i]}", parent=shop.region)
                     shop.region.locations.append(loc)
                     world.dynamic_locations.append(loc)
 
                     world.clear_location_cache()
 
                     world.push_item(loc, ItemFactory(item['item'], player), False)
-                    loc.shop_slot = True
+                    loc.shop_slot = i
                     loc.event = True
                     loc.locked = True
 
