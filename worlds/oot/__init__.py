@@ -17,7 +17,7 @@ from .Options import oot_options
 from .Utils import data_path, read_json
 from .LocationList import business_scrubs, set_drop_location_names
 from .DungeonList import dungeon_table, create_dungeons
-from .LogicTricks import known_logic_tricks
+from .LogicTricks import normalized_name_tricks
 from .Rom import Rom
 from .Patches import patch_rom
 from .N64Patch import create_patch_file
@@ -150,8 +150,9 @@ class OOTWorld(World):
 
         # Determine tricks in logic
         for trick in self.logic_tricks: 
-            if trick in known_logic_tricks: 
-                setattr(self, known_logic_tricks[trick]['name'], True)
+            normalized_name = trick.casefold()
+            if normalized_name in normalized_name_tricks: 
+                setattr(self, normalized_name_tricks[normalized_name]['name'], True)
             else:
                 raise Exception(f'Unknown OOT logic trick for player {self.player}: {trick}')
 

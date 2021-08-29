@@ -1355,3 +1355,5 @@ known_logic_tricks = {
                     in Spirit Temple.
                     '''},
 }
+
+normalized_name_tricks = {trick.casefold(): info for (trick, info) in known_logic_tricks.items()}
