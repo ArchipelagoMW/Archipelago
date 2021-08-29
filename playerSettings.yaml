@@ -819,11 +819,11 @@ Ocarina of Time:
     any: 0
   shopsanity: # Randomizes shop contents. Set to "off" to not shuffle shops; "0" shuffles shops but does not allow multiworld items in shops.
     off: 50
-    0: 0
-    1: 0
-    2: 0
-    3: 0
-    4: 0
+    "0": 0
+    "1": 0
+    "2": 0
+    "3": 0
+    "4": 0
     random_value: 0
   tokensanity: # Token rewards from Gold Skulltulas are shuffled into the pool.
     off: 50
