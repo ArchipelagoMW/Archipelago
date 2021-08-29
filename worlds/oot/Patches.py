@@ -2119,6 +2119,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                     shop_item_name = create_fake_name(shop_item_name)
 
                 if len(world.world.worlds) > 1:
+                    shop_item_name = ''.join(filter(lambda char: char in character_table, shop_item_name))
                     do_line_break = sum(character_table[char] for char in f"{shop_item_name}  {location.price} Rupees") > NORMAL_LINE_WIDTH
                     description_text = '\x08\x05\x41%s%s%d Rupees\x01\x05\x42%s\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (shop_item_name, '\x01' if do_line_break else '  ', location.price, world.world.get_player_name(location.item.player))
                 else:
