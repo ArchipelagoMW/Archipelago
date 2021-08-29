@@ -8,6 +8,8 @@ import os
 import subprocess
 import base64
 import shutil
+import logging
+import asyncio
 from json import loads, dumps
 
 from Utils import get_item_name_from_id
@@ -30,15 +32,16 @@ snes_logger = logging.getLogger("SNES")
 
 from MultiServer import mark_raw
 
-os.makedirs("logs", exist_ok=True)
+log_folder = Utils.local_path("logs")
+os.makedirs(log_folder, exist_ok=True)
 
 # Log to file in gui case
 if gui_enabled:
     logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
-                        filename=os.path.join("logs", "LttPClient.txt"), filemode="w", force=True)
+                        filename=os.path.join(log_folder, "LttPClient.txt"), filemode="w", force=True)
 else:
     logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
-    logging.getLogger().addHandler(logging.FileHandler(os.path.join("logs", "LttPClient.txt"), "w"))
+    logging.getLogger().addHandler(logging.FileHandler(os.path.join(log_folder, "LttPClient.txt"), "w"))
 
 
 class LttPCommandProcessor(ClientCommandProcessor):
