@@ -126,9 +126,10 @@ class HeartBeep(Choice):
     displayname = "Heart Beep Rate"
     option_normal = 0
     option_double = 1
-    option_half = 2,
+    option_half = 2
     option_quarter = 3
     option_off = 4
+    alias_false = 5  # should be removable when interpret_on_off is no longer needed
 
 
 class HeartColor(Choice):
