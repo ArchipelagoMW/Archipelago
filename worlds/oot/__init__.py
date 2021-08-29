@@ -579,16 +579,12 @@ class OOTWorld(World):
             fill_restrictive(self.world, self.state_with_items(self.itempool), shop_locations, shop_items, True, True)
         set_shop_rules(self)
 
-        # Make ice traps appear like other remaining items in the itempool
-        if self.junk_ice_traps != 'off':
-            ice_traps = [item for item in self.itempool if item.name == 'Ice Trap']
-            fake_items = []
-            if self.ice_trap_appearance in ['major_only', 'anything']:
-                fake_items.extend([item for item in self.itempool if item.index and self.is_major_item(item)])
-            if self.ice_trap_appearance in ['junk_only', 'anything']:
-                fake_items.extend([item for item in self.itempool if item.index and not self.is_major_item(item) and item.name != 'Ice Trap'])
-            for trap in ice_traps:
-                trap.looks_like_item = self.create_item(self.world.random.choice(fake_items).name)
+        # Gather items for ice trap appearances
+        self.fake_items = []
+        if self.ice_trap_appearance in ['major_only', 'anything']:
+            self.fake_items.extend([item for item in self.itempool if item.index and self.is_major_item(item)])
+        if self.ice_trap_appearance in ['junk_only', 'anything']:
+            self.fake_items.extend([item for item in self.itempool if item.index and not self.is_major_item(item) and item.name != 'Ice Trap'])
 
         # Put all remaining items into the general itempool
         self.world.itempool += self.itempool
@@ -631,6 +627,11 @@ class OOTWorld(World):
 
     # For now we will always output a patch file.
     def generate_output(self, output_directory: str): 
+        # Make ice traps appear as other random items
+        ice_traps = [loc.item for loc in self.get_locations() if loc.item.name == 'Ice Trap']
+        for trap in ice_traps:
+            trap.looks_like_item = self.create_item(self.world.slot_seeds[self.player].choice(self.fake_items).name)
+
         outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}"
         rom = Rom(file=get_options()['oot_options']['rom_file'])  # a ROM must be provided, cannot produce patches without it
         if self.hints != 'none':
