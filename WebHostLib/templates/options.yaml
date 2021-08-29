@@ -53,7 +53,7 @@ progression_balancing:
 #  - "Master Sword Pedestal"
 {{ game }}:
   {%- for option_name, option in options.items() %}
-  {{ option_name }}:{% if option.__doc__ %} # {{ option.__doc__ }}{% endif %}
+  {{ option_name }}:{% if option.__doc__ %} # {{ option.__doc__ | replace('\n', '\n#') | indent(4, first=False) }}{% endif %}
     {%- if option.range_start is defined  %}
     # you can add additional values between minimum and maximum
     {{ option.range_start }}: 0 # minimum value
