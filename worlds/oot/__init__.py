@@ -582,7 +582,8 @@ class OOTWorld(World):
         # Locations which are not sendable must be converted to events
         # This includes all locations for which show_in_spoiler is false, and shuffled shop items.
         for loc in self.get_locations():
-            if loc.address is not None and not loc.show_in_spoiler or (loc.item is not None and loc.item.type == 'Shop'):
+            if loc.address is not None and (not loc.show_in_spoiler or (loc.item is not None and loc.item.type == 'Shop')
+                or (self.skip_child_zelda and loc.name in ['HC Zeldas Letter', 'Song from Impa'])):
                 loc.address = None
 
         # Gather items for ice trap appearances

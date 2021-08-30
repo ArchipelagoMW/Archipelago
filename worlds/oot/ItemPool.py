@@ -845,6 +845,7 @@ def get_pool_core(world):
 
     if world.skip_child_zelda:
         placed_items['HC Malon Egg'] = 'Recovery Heart'
+        skip_in_spoiler_locations.append('HC Malon Egg')
     elif world.shuffle_weird_egg:
         pool.append('Weird Egg')
     else:
@@ -1078,12 +1079,14 @@ def get_pool_core(world):
         placed_items['GF North F2 Carpenter'] = 'Recovery Heart'
         placed_items['GF South F1 Carpenter'] = 'Recovery Heart'
         placed_items['GF South F2 Carpenter'] = 'Recovery Heart'
+        skip_in_spoiler_locations.extend(['GF North F1 Carpenter', 'GF North F2 Carpenter', 'GF South F1 Carpenter', 'GF South F2 Carpenter'])
     elif world.shuffle_fortresskeys in ['any_dungeon', 'overworld', 'keysanity']:
         if world.gerudo_fortress == 'fast':
             pool.append('Small Key (Gerudo Fortress)')
             placed_items['GF North F2 Carpenter'] = 'Recovery Heart'
             placed_items['GF South F1 Carpenter'] = 'Recovery Heart'
             placed_items['GF South F2 Carpenter'] = 'Recovery Heart'
+            skip_in_spoiler_locations.extend(['GF North F2 Carpenter', 'GF South F1 Carpenter', 'GF South F2 Carpenter'])
         else:
             pool.extend(['Small Key (Gerudo Fortress)'] * 4)
         if world.item_pool_value == 'plentiful':
@@ -1094,6 +1097,7 @@ def get_pool_core(world):
             placed_items['GF North F2 Carpenter'] = 'Recovery Heart'
             placed_items['GF South F1 Carpenter'] = 'Recovery Heart'
             placed_items['GF South F2 Carpenter'] = 'Recovery Heart'
+            skip_in_spoiler_locations.extend(['GF North F2 Carpenter', 'GF South F1 Carpenter', 'GF South F2 Carpenter'])
         else:
             placed_items['GF North F1 Carpenter'] = 'Small Key (Gerudo Fortress)'
             placed_items['GF North F2 Carpenter'] = 'Small Key (Gerudo Fortress)'
@@ -1105,6 +1109,7 @@ def get_pool_core(world):
     elif world.shuffle_gerudo_card:
         pending_junk_pool.append('Gerudo Membership Card')
         placed_items['GF Gerudo Membership Card'] = 'Ice Trap'
+        skip_in_spoiler_locations.append('GF Gerudo Membership Card')
     else:
         placed_items['GF Gerudo Membership Card'] = 'Gerudo Membership Card'
     if world.shuffle_gerudo_card and world.item_pool_value == 'plentiful':
