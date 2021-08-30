@@ -37,6 +37,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
 from Utils import local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen
 from worlds.alttp.Items import ItemFactory, item_table
 from worlds.alttp.EntranceShuffle import door_addresses
+from worlds.alttp.Options import smallkey_shuffle
 import Patch
 
 try:
@@ -1515,7 +1516,8 @@ def patch_rom(world, rom, player, enemized):
     # b - Big Key
     # a - Small Key
     #
-    rom.write_byte(0x180045, ((0x01 if world.smallkey_shuffle[player] is True else 0x00)
+    rom.write_byte(0x180045, ((0x00 if (world.smallkey_shuffle[player] == smallkey_shuffle.option_original_dungeon or
+                                        world.smallkey_shuffle[player] == smallkey_shuffle.option_universal) else 0x01)
                               | (0x02 if world.bigkey_shuffle[player] else 0x00)
                               | (0x04 if world.map_shuffle[player] else 0x00)
                               | (0x08 if world.compass_shuffle[player] else 0x00)))  # free roaming items in menu
@@ -1548,7 +1550,7 @@ def patch_rom(world, rom, player, enemized):
     rom.write_int16(0x18017C, get_reveal_bytes('Crystal 5') | get_reveal_bytes('Crystal 6') if world.map_shuffle[
         player] else 0x0000)  # Bomb Shop Reveal
 
-    rom.write_byte(0x180172, 0x01 if world.smallkey_shuffle[player] == "universal" else 0x00)  # universal keys
+    rom.write_byte(0x180172, 0x01 if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal else 0x00)  # universal keys
     rom.write_byte(0x18637E, 0x01 if world.retro[player] else 0x00)  # Skip quiver in item shops once bought
     rom.write_byte(0x180175, 0x01 if world.retro[player] else 0x00)  # rupee bow
     rom.write_byte(0x180176, 0x0A if world.retro[player] else 0x00)  # wood arrow cost

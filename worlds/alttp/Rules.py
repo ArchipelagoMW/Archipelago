@@ -8,6 +8,7 @@ from worlds.alttp.UnderworldGlitchRules import underworld_glitches_rules
 from worlds.alttp.Bosses import GanonDefeatRule
 from worlds.generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations, \
     item_name
+from worlds.alttp.Options import smallkey_shuffle
 
 
 def set_rules(world):
@@ -212,7 +213,7 @@ def global_rules(world, player):
 
     set_rule(world.get_entrance('Sewers Door', player),
              lambda state: state.has_key('Small Key (Hyrule Castle)', player) or (
-                         world.smallkey_shuffle[player] == "universal" and world.mode[
+                         world.smallkey_shuffle[player] == smallkey_shuffle.option_universal and world.mode[
                      player] == 'standard'))  # standard universal small keys cannot access the shop
     set_rule(world.get_entrance('Sewers Back Door', player),
              lambda state: state.has_key('Small Key (Hyrule Castle)', player))

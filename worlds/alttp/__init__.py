@@ -7,7 +7,7 @@ import typing
 from BaseClasses import Item, CollectionState
 from .SubClasses import ALttPItem
 from ..AutoWorld import World
-from .Options import alttp_options
+from .Options import alttp_options, smallkey_shuffle
 from .Items import as_dict_item_table, item_name_groups, item_table
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
 from .Rules import set_rules
@@ -325,7 +325,7 @@ class ALTTPWorld(World):
         standard_keyshuffle_players = set()
         for player in world.get_game_players("A Link to the Past"):
             if world.mode[player] == 'standard' and world.smallkey_shuffle[player] \
-                    and world.smallkey_shuffle[player] != "universal":
+                    and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal:
                 standard_keyshuffle_players.add(player)
             if not world.ganonstower_vanilla[player] or \
                     world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:
