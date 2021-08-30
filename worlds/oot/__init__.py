@@ -404,7 +404,7 @@ class OOTWorld(World):
             world_type = 'World'
         else:
             world_type = 'Glitched World'
-            overworld_data_path = data_path(world_type, 'Overworld.json')
+        overworld_data_path = data_path(world_type, 'Overworld.json')
         menu = OOTRegion('Menu', None, None, self.player)
         start = OOTEntrance(self.player, 'New Game', menu)
         menu.exits.append(start)
