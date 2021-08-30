@@ -41,7 +41,7 @@ class OOTWorld(World):
     location_name_to_id = location_name_to_id
     remote_items: bool = False
 
-    data_version = 0  # force download and don't save data package
+    data_version = 1
 
 
     def __new__(cls, world, player):
