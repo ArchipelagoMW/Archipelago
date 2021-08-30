@@ -101,16 +101,16 @@ def create_dungeons(ootworld):
         name = dungeon_info['name']
         hint = dungeon_info['hint'] if 'hint' in dungeon_info else name
         
-        if ootworld.logic_rules == 'glitched':
-            if not ootworld.dungeon_mq[name]:
-                dungeon_json = os.path.join(data_path('Glitched World'), name + '.json')
-            else:
-                dungeon_json = os.path.join(data_path('Glitched World'), name + ' MQ.json')
-        else:
+        if ootworld.logic_rules == 'glitchless':
             if not ootworld.dungeon_mq[name]:
                 dungeon_json = os.path.join(data_path('World'), name + '.json')
             else:
                 dungeon_json = os.path.join(data_path('World'), name + ' MQ.json')
+        else:
+            if not ootworld.dungeon_mq[name]:
+                dungeon_json = os.path.join(data_path('Glitched World'), name + '.json')
+            else:
+                dungeon_json = os.path.join(data_path('Glitched World'), name + ' MQ.json')
 
         
         ootworld.load_regions_from_json(dungeon_json)
