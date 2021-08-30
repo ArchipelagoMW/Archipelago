@@ -184,10 +184,7 @@ class Factorio(World):
                 max_energy = remaining_energy * 0.75
                 min_energy = (remaining_energy - max_energy) / remaining_num_ingredients
             ingredient = pool.pop()
-            if ingredient not in recipes:
-                logging.warning(f"missing recipe for {ingredient}")
-                continue
-            ingredient_recipe = recipes[ingredient]
+            ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
             ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
             ingredient_energy = ingredient_recipe.total_energy
             min_num_raw = min_raw/ingredient_raw
