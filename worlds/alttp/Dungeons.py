@@ -42,11 +42,12 @@ def create_dungeons(world, player):
     GT.bosses['middle'] = BossFactory('Lanmolas', player)
     GT.bosses['top'] = BossFactory('Moldorm', player)
 
-    world.dungeons += [ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, TR, GT]
+    for dungeon in [ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, TR, GT]:
+        world.dungeons[dungeon.name, dungeon.player] = dungeon
 
 
 def get_dungeon_item_pool(world):
-    items = [item for dungeon in world.dungeons for item in dungeon.all_items]
+    items = [item for dungeon in world.dungeons.values() for item in dungeon.all_items]
     for item in items:
         item.world = world
     return items

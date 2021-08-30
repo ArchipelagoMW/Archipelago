@@ -6,7 +6,7 @@ import logging
 import json
 import functools
 from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union, Any
+from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple
 import secrets
 import random
 
@@ -38,7 +38,7 @@ class MultiWorld():
         self.players = players
         self.glitch_triforce = False
         self.algorithm = 'balanced'
-        self.dungeons = []
+        self.dungeons: Dict[Tuple[str, int], Dungeon] = {}
         self.regions = []
         self.shops = []
         self.itempool = []
@@ -209,10 +209,10 @@ class MultiWorld():
             return self._location_cache[location, player]
 
     def get_dungeon(self, dungeonname: str, player: int) -> Dungeon:
-        for dungeon in self.dungeons:
-            if dungeon.name == dungeonname and dungeon.player == player:
-                return dungeon
-        raise KeyError('No such dungeon %s for player %d' % (dungeonname, player))
+        try:
+            return self.dungeons[dungeonname, player]
+        except KeyError as e:
+            raise KeyError('No such dungeon %s for player %d' % (dungeonname, player)) from e
 
     def get_all_state(self, keys=False) -> CollectionState:
         key = f"_all_state_{keys}"
@@ -1074,7 +1074,7 @@ class Spoiler():
         self.locations['Caves'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in cave_locations])
         listed_locations.update(cave_locations)
 
-        for dungeon in self.world.dungeons:
+        for dungeon in self.world.dungeons.values():
             dungeon_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.dungeon == dungeon and loc.show_in_spoiler]
             self.locations[str(dungeon)] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in dungeon_locations])
             listed_locations.update(dungeon_locations)

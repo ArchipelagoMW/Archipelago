@@ -78,13 +78,13 @@ mandatory_connections = [
     ('End Portal', 'The End')
 ]
 
-default_connections = {
+default_connections = [
     ('Overworld Structure 1', 'Village'),
     ('Overworld Structure 2', 'Pillager Outpost'),
     ('Nether Structure 1', 'Nether Fortress'),
     ('Nether Structure 2', 'Bastion Remnant'),
     ('The End Structure', 'End City')
-}
+]
 
 # Structure: illegal locations
 illegal_connections = {

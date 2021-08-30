@@ -12,7 +12,7 @@ from .Items import as_dict_item_table, item_name_groups, item_table
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
 from .Rules import set_rules
 from .ItemPool import generate_itempool, difficulties
-from .Shops import create_shops
+from .Shops import create_shops, ShopSlotFill
 from .Dungeons import create_dungeons
 from .Rom import LocalRom, patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, get_hash_string
 import Patch
@@ -228,6 +228,10 @@ class ALTTPWorld(World):
     def stage_pre_fill(cls, world):
         from .Dungeons import fill_dungeons_restrictive
         fill_dungeons_restrictive(world)
+
+    @classmethod
+    def stage_post_fill(cls, world):
+        ShopSlotFill(world)
 
     def generate_output(self, output_directory: str):
         world = self.world

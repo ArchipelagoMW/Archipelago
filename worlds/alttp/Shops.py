@@ -159,6 +159,7 @@ def ShopSlotFill(world):
         shop_slots -= removed
 
     if shop_slots:
+        logger.info("Filling LttP Shop Slots")
         del shop_slots
 
         from Fill import swap_location_item
