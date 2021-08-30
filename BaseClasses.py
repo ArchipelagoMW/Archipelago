@@ -9,7 +9,6 @@ from collections import OrderedDict, Counter, deque
 from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple
 import secrets
 import random
-from worlds.alttp.Options import smallkey_shuffle
 
 
 class MultiWorld():
@@ -566,13 +565,6 @@ class CollectionState(object):
         for item_name in self.world.worlds[player].item_name_groups[item_name_group]:
             found += self.prog_items[item_name, player]
         return found
-
-    def has_key(self, item, player, count: int = 1):
-        if self.world.logic[player] == 'nologic':
-            return True
-        if self.world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
-            return self.can_buy_unlimited('Small Key (Universal)', player)
-        return self.prog_items[item, player] >= count
 
     def can_buy_unlimited(self, item: str, player: int) -> bool:
         return any(shop.region.player == player and shop.has_unlimited(item) and shop.region.can_reach(self) for

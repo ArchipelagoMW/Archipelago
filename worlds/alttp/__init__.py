@@ -6,7 +6,7 @@ import typing
 
 from BaseClasses import Item, CollectionState
 from .SubClasses import ALttPItem
-from ..AutoWorld import World
+from ..AutoWorld import World, LogicMixin
 from .Options import alttp_options, smallkey_shuffle
 from .Items import as_dict_item_table, item_name_groups, item_table
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
@@ -392,3 +392,12 @@ def get_same_seed(world, seed_def: tuple) -> str:
     seeds[seed_def] = str(world.random.randint(0, 2 ** 64))
     world.__named_seeds = seeds
     return seeds[seed_def]
+
+
+class ALttPLogic(LogicMixin):
+    def _lttp_has_key(self, item, player, count: int = 1):
+        if self.world.logic[player] == 'nologic':
+            return True
+        if self.world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+            return self.can_buy_unlimited('Small Key (Universal)', player)
+        return self.prog_items[item, player] >= count
