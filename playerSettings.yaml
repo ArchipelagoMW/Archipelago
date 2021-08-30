@@ -1029,11 +1029,11 @@ Ocarina of Time:
     nes_green: 0
     dark_green: 0
     lumen: 0
-  goron_color: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  goron_color: # Choose a color. Uses the same options as "kokiri_color".
     random_choice: 0
     completely_random: 0
     goron_red: 50
-  zora_color: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  zora_color: # Choose a color. Uses the same options as "kokiri_color".
     random_choice: 0
     completely_random: 0
     zora_blue: 50
@@ -1053,7 +1053,7 @@ Ocarina of Time:
     orange: 0
     lime: 0
     purple: 0
-  golden_gauntlets_color: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  golden_gauntlets_color: # Choose a color. Uses the same options as "silver_gauntlets_color".
     random_choice: 0
     completely_random: 0
     gold: 50
@@ -1093,176 +1093,39 @@ Ocarina of Time:
     loftwing: 0
     midna: 0
     phantom_zelda: 0
-  navi_color_default_outer: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  navi_color_default_outer: # Choose a color. Uses the same options as "navi_color_default_inner" plus "match_inner".
     random_choice: 0
     completely_random: 0
-    rainbow: 0
-    gold: 0
-    white: 0
-    green: 0
-    light_blue: 0
-    yellow: 0
-    red: 0
-    magenta: 0
-    black: 0
-    tatl: 0
-    tael: 0
-    fi: 0
-    ciela: 0
-    epona: 0
-    ezlo: 0
-    king_of_red_lions: 0
-    linebeck: 0
-    loftwing: 0
-    midna: 0
-    phantom_zelda: 0
     match_inner: 50
-  navi_color_enemy_inner: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  navi_color_enemy_inner: # Choose a color. Uses the same options as "navi_color_default_inner".
     random_choice: 0
     completely_random: 0
-    rainbow: 0
-    gold: 0
-    white: 0
-    green: 0
-    light_blue: 0
     yellow: 50
-    red: 0
-    magenta: 0
-    black: 0
-    tatl: 0
-    tael: 0
-    fi: 0
-    ciela: 0
-    epona: 0
-    ezlo: 0
-    king_of_red_lions: 0
-    linebeck: 0
-    loftwing: 0
-    midna: 0
-    phantom_zelda: 0
-  navi_color_enemy_outer: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  navi_color_enemy_outer: # Choose a color. Uses the same options as "navi_color_default_inner" plus "match_inner".
     random_choice: 0
     completely_random: 0
-    rainbow: 0
-    gold: 0
-    white: 0
-    green: 0
-    light_blue: 0
-    yellow: 0
-    red: 0
-    magenta: 0
-    black: 0
-    tatl: 0
-    tael: 0
-    fi: 0
-    ciela: 0
-    epona: 0
-    ezlo: 0
-    king_of_red_lions: 0
-    linebeck: 0
-    loftwing: 0
-    midna: 0
-    phantom_zelda: 0
     match_inner: 50
-  navi_color_npc_inner: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  navi_color_npc_inner: # Choose a color. Uses the same options as "navi_color_default_inner".
     random_choice: 0
     completely_random: 0
-    rainbow: 0
-    gold: 0
-    white: 0
-    green: 0
     light_blue: 50
-    yellow: 0
-    red: 0
-    magenta: 0
-    black: 0
-    tatl: 0
-    tael: 0
-    fi: 0
-    ciela: 0
-    epona: 0
-    ezlo: 0
-    king_of_red_lions: 0
-    linebeck: 0
-    loftwing: 0
-    midna: 0
-    phantom_zelda: 0
-  navi_color_npc_outer: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  navi_color_npc_outer: # Choose a color. Uses the same options as "navi_color_default_inner" plus "match_inner".
     random_choice: 0
     completely_random: 0
-    rainbow: 0
-    gold: 0
-    white: 0
-    green: 0
-    light_blue: 0
-    yellow: 0
-    red: 0
-    magenta: 0
-    black: 0
-    tatl: 0
-    tael: 0
-    fi: 0
-    ciela: 0
-    epona: 0
-    ezlo: 0
-    king_of_red_lions: 0
-    linebeck: 0
-    loftwing: 0
-    midna: 0
-    phantom_zelda: 0
     match_inner: 50
-  navi_color_prop_inner: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  navi_color_prop_inner: # Choose a color. Uses the same options as "navi_color_default_inner".
     random_choice: 0
     completely_random: 0
-    rainbow: 0
-    gold: 0
-    white: 0
     green: 50
-    light_blue: 0
-    yellow: 0
-    red: 0
-    magenta: 0
-    black: 0
-    tatl: 0
-    tael: 0
-    fi: 0
-    ciela: 0
-    epona: 0
-    ezlo: 0
-    king_of_red_lions: 0
-    linebeck: 0
-    loftwing: 0
-    midna: 0
-    phantom_zelda: 0
-  navi_color_prop_outer: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  navi_color_prop_outer: # Choose a color. Uses the same options as "navi_color_default_inner" plus "match_inner".
     random_choice: 0
     completely_random: 0
-    rainbow: 0
-    gold: 0
-    white: 0
-    green: 0
-    light_blue: 0
-    yellow: 0
-    red: 0
-    magenta: 0
-    black: 0
-    tatl: 0
-    tael: 0
-    fi: 0
-    ciela: 0
-    epona: 0
-    ezlo: 0
-    king_of_red_lions: 0
-    linebeck: 0
-    loftwing: 0
-    midna: 0
-    phantom_zelda: 0
     match_inner: 50
   sword_trail_duration: # Set the duration for sword trails.
     # you can add additional values between minimum and maximum
-    4: 0 # minimum value
+    4: 50 # minimum value
     20: 0 # maximum value
-    random: 50
+    random: 0
     random-low: 0
     random-high: 0
   sword_trail_color_inner: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
@@ -1279,76 +1142,25 @@ Ocarina of Time:
     gold: 0
     purple: 0
     pink: 0
-  sword_trail_color_outer: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  sword_trail_color_outer: # Uses the same options as "sword_trail_color_inner" plus "match_inner".
     random_choice: 0
     completely_random: 0
-    rainbow: 0
-    white: 0
-    red: 0
-    green: 0
-    blue: 0
-    cyan: 0
-    magenta: 0
-    orange: 0
-    gold: 0
-    purple: 0
-    pink: 0
     match_inner: 50
-  bombchu_trail_color_inner: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  bombchu_trail_color_inner: # Uses the same options as "sword_trail_color_inner".
     random_choice: 0
     completely_random: 0
-    rainbow: 0
     red: 50
-    green: 0
-    blue: 0
-    cyan: 0
-    magenta: 0
-    orange: 0
-    gold: 0
-    purple: 0
-    pink: 0
-  bombchu_trail_color_outer: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  bombchu_trail_color_outer: # Uses the same options as "sword_trail_color_inner" plus "match_inner".
     random_choice: 0
     completely_random: 0
-    rainbow: 0
-    red: 0
-    green: 0
-    blue: 0
-    cyan: 0
-    magenta: 0
-    orange: 0
-    gold: 0
-    purple: 0
-    pink: 0
     match_inner: 50
-  boomerang_trail_color_inner: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  boomerang_trail_color_inner: # Uses the same options as "sword_trail_color_inner".
     random_choice: 0
     completely_random: 0
-    rainbow: 0
     yellow: 50
-    red: 0
-    green: 0
-    blue: 0
-    cyan: 0
-    magenta: 0
-    orange: 0
-    gold: 0
-    purple: 0
-    pink: 0
-  boomerang_trail_color_outer: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  boomerang_trail_color_outer: # Uses the same options as "sword_trail_color_inner" plus "match_inner".
     random_choice: 0
     completely_random: 0
-    rainbow: 0
-    yellow: 0
-    red: 0
-    green: 0
-    blue: 0
-    cyan: 0
-    magenta: 0
-    orange: 0
-    gold: 0
-    purple: 0
-    pink: 0
     match_inner: 50
   heart_color: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
     random_choice: 0
@@ -1386,339 +1198,65 @@ Ocarina of Time:
     cyan: 0
     purple: 0
     orange: 0
-  b_button_color: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  b_button_color: # Choose a color. Uses the same options as "a_button_color".
     random_choice: 0
     completely_random: 0
-    n64_blue: 0
     n64_green: 50
-    n64_red: 0
-    gamecube_green: 0
-    gamecube_red: 0
-    gamecube_grey: 0
-    yellow: 0
-    black: 0
-    white: 0
-    magenta: 0
-    ruby: 0
-    sapphire: 0
-    lime: 0
-    cyan: 0
-    purple: 0
-    orange: 0
-  c_button_color: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  c_button_color: # Choose a color. Uses the same options as "a_button_color".
     random_choice: 0
     completely_random: 0
-    n64_blue: 0
-    n64_green: 0
-    n64_red: 0
-    gamecube_green: 0
-    gamecube_red: 0
-    gamecube_grey: 0
     yellow: 50
-    black: 0
-    white: 0
-    magenta: 0
-    ruby: 0
-    sapphire: 0
-    lime: 0
-    cyan: 0
-    purple: 0
-    orange: 0
-  start_button_color: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
+  start_button_color: # Choose a color. Uses the same options as "a_button_color".
     random_choice: 0
     completely_random: 0
-    n64_blue: 0
-    n64_green: 0
     n64_red: 50
-    gamecube_green: 0
-    gamecube_red: 0
-    gamecube_grey: 0
-    yellow: 0
-    black: 0
-    white: 0
-    magenta: 0
-    ruby: 0
-    sapphire: 0
-    lime: 0
-    cyan: 0
-    purple: 0
-    orange: 0
   sfx_navi_overworld: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
     default: 50
     completely_random: 0
     random_ear_safe: 0
     random_choice: 0
     none: 0
-    bark: 0
-    business_scrub: 0
-    carrot_refill: 0
-    cluck: 0
-    cockadoodledoo: 0
-    dusk_howl: 0
-    exploding_crate: 0
-    explosion: 0
-    great_fairy: 0
-    guay: 0
-    low_health: 0
-    recover_health: 0
-    horse_neigh: 0
-    shattering_ice: 0
-    moo: 0
-    mweep: 0
-    navi_hello: 0
-    notification: 0
-    poe: 0
-    shattering_pot: 0
-    redead_scream: 0
-    ribbit: 0
-    ruto_giggle: 0
-    skulltula: 0
-    soft_beep: 0
-    tambourine: 0
-    timer: 0
-    adult_zelda_gasp: 0
   sfx_navi_enemy: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
     default: 50
     completely_random: 0
     random_ear_safe: 0
     random_choice: 0
     none: 0
-    bark: 0
-    business_scrub: 0
-    carrot_refill: 0
-    cluck: 0
-    cockadoodledoo: 0
-    dusk_howl: 0
-    exploding_crate: 0
-    explosion: 0
-    great_fairy: 0
-    guay: 0
-    low_health: 0
-    recover_health: 0
-    horse_neigh: 0
-    shattering_ice: 0
-    moo: 0
-    mweep: 0
-    navi_hello: 0
-    notification: 0
-    poe: 0
-    shattering_pot: 0
-    redead_scream: 0
-    ribbit: 0
-    ruto_giggle: 0
-    skulltula: 0
-    soft_beep: 0
-    tambourine: 0
-    timer: 0
-    adult_zelda_gasp: 0
   sfx_low_hp: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
     default: 50
     completely_random: 0
     random_ear_safe: 0
     random_choice: 0
     none: 0
-    bark: 0
-    bomb_bounce: 0
-    bongo_bongo_low: 0
-    bow_twang: 0
-    business_scrub: 0
-    carrot_refill: 0
-    cluck: 0
-    drawbridge_set: 0
-    guay: 0
-    recover_health: 0
-    horse_trot: 0
-    iron_boots: 0
-    moo: 0
-    mweep: 0
-    navi_hey: 0
-    navi_random: 0
-    notification: 0
-    shattering_pot: 0
-    ribbit: 0
-    silver_rupee: 0
-    soft_beep: 0
-    switch: 0
-    sword_bonk: 0
-    tambourine: 0
-    timer: 0
-    adult_zelda_gasp: 0
   sfx_menu_cursor: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
     default: 50
     completely_random: 0
     random_ear_safe: 0
     random_choice: 0
     none: 0
-    bark: 0
-    bomb_bounce: 0
-    bongo_bongo_high: 0
-    bongo_bongo_low: 0
-    bottle_cork: 0
-    bow_twang: 0
-    bubble_laugh: 0
-    carrot_refill: 0
-    change_item: 0
-    child_pant: 0
-    cluck: 0
-    deku_baba: 0
-    drawbridge_set: 0
-    dusk_howl: 0
-    fanfare_light: 0
-    fanfare_medium: 0
-    field_shrub: 0
-    flare_dancer_startled: 0
-    ganondorf_teh: 0
-    gohma_larva_croak: 0
-    gold_skull_token: 0
-    goron_wake: 0
-    guay: 0
-    gunshot: 0
-    low_health: 0
-    recover_health: 0
-    hammer_bonk: 0
-    horse_trot: 0
-    iron_boots: 0
-    iron_knuckle: 0
-    moo: 0
-    mweep: 0
-    notification: 0
-    phantom_ganon_laugh: 0
-    plant_explode: 0
-    shattering_pot: 0
-    redead_moan: 0
-    ribbit: 0
-    rupee: 0
-    silver_rupee: 0
-    ruto_crash: 0
-    ruto_lift: 0
-    ruto_thrown: 0
-    scrub_emerge: 0
-    shabom_bounce: 0
-    shabom_pop: 0
-    shellblade: 0
-    skulltula: 0
-    soft_beep: 0
-    spit_nut: 0
-    switch: 0
-    sword_bonk: 0
-    talon_hmm: 0
-    talon_snore: 0
-    talon_wtf: 0
-    tambourine: 0
-    target_enemy: 0
-    target_neutral: 0
-    thunder: 0
-    timer: 0
-    adult_zelda_gasp: 0
   sfx_menu_select: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
     default: 50
     completely_random: 0
     random_ear_safe: 0
     random_choice: 0
     none: 0
-    bark: 0
-    bomb_bounce: 0
-    bongo_bongo_high: 0
-    bongo_bongo_low: 0
-    bottle_cork: 0
-    bow_twang: 0
-    bubble_laugh: 0
-    carrot_refill: 0
-    change_item: 0
-    child_cringe: 0
-    child_pant: 0
-    child_scream: 0
-    cluck: 0
-    deku_baba: 0
-    drawbridge_set: 0
-    dusk_howl: 0
-    fanfare_light: 0
-    fanfare_medium: 0
-    field_shrub: 0
-    flare_dancer_startled: 0
-    ganondorf_teh: 0
-    gohma_larva_croak: 0
-    gold_skull_token: 0
-    goron_wake: 0
-    guay: 0
-    gunshot: 0
-    low_health: 0
-    recover_health: 0
-    hammer_bonk: 0
-    horse_trot: 0
-    iron_boots: 0
-    iron_knuckle: 0
-    moo: 0
-    mweep: 0
-    notification: 0
-    phantom_ganon_laugh: 0
-    plant_explode: 0
-    shattering_pot: 0
-    redead_moan: 0
-    ribbit: 0
-    rupee: 0
-    silver_rupee: 0
-    ruto_crash: 0
-    ruto_lift: 0
-    ruto_thrown: 0
-    scrub_emerge: 0
-    shabom_bounce: 0
-    shabom_pop: 0
-    shellblade: 0
-    skulltula: 0
-    soft_beep: 0
-    spit_nut: 0
-    switch: 0
-    sword_bonk: 0
-    talon_hmm: 0
-    talon_snore: 0
-    talon_wtf: 0
-    tambourine: 0
-    target_enemy: 0
-    target_neutral: 0
-    thunder: 0
-    timer: 0
-    adult_zelda_gasp: 0
   sfx_nightfall: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
     default: 50
     completely_random: 0
     random_ear_safe: 0
     random_choice: 0
     none: 0
-    cockadoodledoo: 0
-    gold_skull_token: 0
-    great_fairy: 0
-    moo: 0
-    mweep: 0
-    redead_moan: 0
-    talon_snore: 0
-    thunder: 0
   sfx_horse_neigh: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
     default: 50
     completely_random: 0
     random_ear_safe: 0
     random_choice: 0
     none: 0
-    armos: 0
-    child_scream: 0
-    great_fairy: 0
-    moo: 0
-    mweep: 0
-    redead_scream: 0
-    ruto_wiggle: 0
-    stalchild_attack: 0
   sfx_hover_boots: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
     default: 50
     completely_random: 0
     random_ear_safe: 0
     random_choice: 0
-    none: 0
-    bark: 0
-    cartoon_fall: 0
-    flare_dancer_laugh: 0
-    mweep: 0
-    shabom_pop: 0
-    tambourine: 0
   sfx_ocarina: # Change the sound of the ocarina.
     ocarina: 50
     malon: 0
