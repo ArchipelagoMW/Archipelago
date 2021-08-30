@@ -149,8 +149,10 @@ class Choice(Option):
 
     def __eq__(self, other):
         if type(other) == str:
+            assert other in self.options
             return other == self.current_key
         elif type(other) == int:
+            assert other in self.name_lookup
             return other == self.value
         elif type(other) == bool:
             return other == bool(self.value)
