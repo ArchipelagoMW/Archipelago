@@ -28,6 +28,46 @@ class Goal(Choice):
     option_hand_in = 2
 
 
+class DungeonItem(Choice):
+    value: int
+    option_original_dungeon = 0
+    option_own_dungeons = 1
+    option_own_world = 2
+    option_any_world = 3
+    option_different_world = 4
+    alias_true = 3
+    alias_false = 0
+
+    @property
+    def in_dungeon(self):
+        return self.value in {0, 1}
+
+
+class BigKeyShuffle(DungeonItem):
+    """Big Key Placement"""
+    item_name_group = "Big Keys"
+    displayname = "Big Key Shuffle"
+
+
+class SmallKeyShuffle(DungeonItem):
+    """Small Key Placement"""
+    option_universal = 5
+    item_name_group = "Small Keys"
+    displayname = "Small Key Shuffle"
+
+
+class CompassShuffle(DungeonItem):
+    """Compass Placement"""
+    item_name_group = "Compasses"
+    displayname = "Compass Shuffle"
+
+
+class MapShuffle(DungeonItem):
+    """Map Placement"""
+    item_name_group = "Maps"
+    displayname = "Map Shuffle"
+
+
 class Crystals(Range):
     range_start = 0
     range_end = 7
@@ -181,6 +221,10 @@ class TriforceHud(Choice):
 alttp_options: typing.Dict[str, type(Option)] = {
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
+    "bigkeyshuffle": BigKeyShuffle,
+    "smallkeyshuffle": SmallKeyShuffle,
+    "compassshuffle": CompassShuffle,
+    "mapshuffle": MapShuffle,
     "progressive": Progressive,
     "shop_item_slots": ShopItemSlots,
     "ow_palettes": OWPalette,
@@ -195,6 +239,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "menuspeed": MenuSpeed,
     "music": Music,
     "reduceflashing": ReduceFlashing,
-    "triforcehud": TriforceHud
+    "triforcehud": TriforceHud,
+    "glitch_boots": DefaultOnToggle
 
 }

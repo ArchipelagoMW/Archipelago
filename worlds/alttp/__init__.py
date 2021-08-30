@@ -40,9 +40,16 @@ class ALTTPWorld(World):
 
     create_items = generate_itempool
 
+    def __init__(self, *args, **kwargs):
+        self.dungeon_local_item_names = set()
+        self.dungeon_specific_item_names = set()
+        self.rom_name_available_event = threading.Event()
+        super(ALTTPWorld, self).__init__(*args, **kwargs)
+
     def generate_early(self):
         player = self.player
         world = self.world
+
         # system for sharing ER layouts
         world.er_seeds[player] = str(world.random.randint(0, 2 ** 64))
 
@@ -58,13 +65,20 @@ class ALTTPWorld(World):
                 world.er_seeds[player] = seed
         elif world.shuffle[player] == "vanilla":
             world.er_seeds[player] = "vanilla"
+        for dungeon_item in ["smallkeyshuffle", "bigkeyshuffle", "compassshuffle", "mapshuffle"]:
+            option = getattr(world, dungeon_item)[player]
+            if option == "own_world":
+                world.local_items[player] |= self.item_name_groups[option.item_name_group]
+            elif option == "different_world":
+                world.non_local_items[player] |= self.item_name_groups[option.item_name_group]
+            elif option.in_dungeon:
+                self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
+                if option == "original_dungeon":
+                    self.dungeon_specific_item_names |= self.item_name_groups[option.item_name_group]
 
         world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
 
     def create_regions(self):
-        # noinspection PyAttributeOutsideInit
-        self.rom_name_available_event = threading.Event()
-
         player = self.player
         world = self.world
         if world.open_pyramid[player] == 'goal':
@@ -88,7 +102,6 @@ class ALTTPWorld(World):
             create_inverted_regions(world, player)
         create_shops(world, player)
         create_dungeons(world, player)
-
 
         if world.logic[player] not in ["noglitches", "minorglitches"] and world.shuffle[player] in \
                 {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:
@@ -227,7 +240,7 @@ class ALTTPWorld(World):
     @classmethod
     def stage_pre_fill(cls, world):
         from .Dungeons import fill_dungeons_restrictive
-        fill_dungeons_restrictive(world)
+        fill_dungeons_restrictive(cls, world)
 
     @classmethod
     def stage_post_fill(cls, world):
@@ -311,7 +324,8 @@ class ALTTPWorld(World):
         trash_counts = {}
         standard_keyshuffle_players = set()
         for player in world.get_game_players("A Link to the Past"):
-            if world.mode[player] == 'standard' and world.keyshuffle[player] is True:
+            if world.mode[player] == 'standard' and world.smallkeyshuffle[player] \
+                    and world.smallkeyshuffle[player] != "universal":
                 standard_keyshuffle_players.add(player)
             if not world.ganonstower_vanilla[player] or \
                     world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:

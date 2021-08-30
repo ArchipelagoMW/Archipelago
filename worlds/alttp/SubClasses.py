@@ -18,6 +18,7 @@ class ALttPLocation(Location):
 
 class ALttPItem(Item):
     game: str = "A Link to the Past"
+    dungeon = None
 
     def __init__(self, name, player, advancement=False, type=None, item_code=None, pedestal_hint=None, pedestal_credit=None,
                  sick_kid_credit=None, zora_credit=None, witch_credit=None, flute_boy_credit=None, hint_text=None):
@@ -53,25 +54,9 @@ class ALttPItem(Item):
 
     @property
     def dungeon_item(self) -> Optional[str]:
-        if self.game == "A Link to the Past" and self.type in {"SmallKey", "BigKey", "Map", "Compass"}:
+        if self.type in {"SmallKey", "BigKey", "Map", "Compass"}:
             return self.type
 
     @property
-    def shuffled_dungeon_item(self) -> bool:
-        dungeon_item_type = self.dungeon_item
-        if dungeon_item_type:
-            return {"SmallKey" : self.world.keyshuffle,
-                    "BigKey": self.world.bigkeyshuffle,
-                    "Map": self.world.mapshuffle,
-                    "Compass": self.world.compassshuffle}[dungeon_item_type][self.player]
-        return False
-
-    @property
-    def locked_dungeon_item(self) -> bool:
-        dungeon_item_type = self.dungeon_item
-        if dungeon_item_type:
-            return not {"SmallKey" : self.world.keyshuffle,
-                        "BigKey": self.world.bigkeyshuffle,
-                        "Map": self.world.mapshuffle,
-                        "Compass": self.world.compassshuffle}[dungeon_item_type][self.player]
-        return False
+    def locked_dungeon_item(self):
+        return self.location.locked and self.dungeon_item

@@ -93,10 +93,10 @@ def launch_generator(pool: multiprocessing.pool.Pool, generation: Generation):
                           "sid": generation.id,
                           "owner": generation.owner},
                          handle_generation_success, handle_generation_failure)
-    except:
+    except Exception as e:
         generation.state = STATE_ERROR
         commit()
-        raise
+        logging.exception(e)
     else:
         generation.state = STATE_STARTED
 

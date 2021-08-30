@@ -9,7 +9,7 @@ class AssembleOptions(type):
         name_lookup = attrs["name_lookup"] = {}
         # merge parent class options
         for base in bases:
-            if hasattr(base, "options"):
+            if getattr(base, "options", None):
                 options.update(base.options)
                 name_lookup.update(base.name_lookup)
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
@@ -146,6 +146,16 @@ class Choice(Option):
         if type(data) == int and data in cls.options.values():
             return cls(data)
         return cls.from_text(str(data))
+
+    def __eq__(self, other):
+        if type(other) == str:
+            return other == self.current_key
+        elif type(other) == int:
+            return other == self.value
+        elif type(other) == bool:
+            return other == bool(self.value)
+        else:
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
 
 class Range(Option, int):

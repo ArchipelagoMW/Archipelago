@@ -99,7 +99,7 @@ def set_rules(world):
         add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.world.get_entrance('Ganons Tower Ascent', player).can_reach(state), 'or')
 
     set_bunny_rules(world, player, world.mode[player] == 'inverted')
-    
+
 
 def mirrorless_path_to_castle_courtyard(world, player):
     # If Agahnim is defeated then the courtyard needs to be accessible without using the mirror for the mirror offset glitch.
@@ -212,7 +212,7 @@ def global_rules(world, player):
 
     set_rule(world.get_entrance('Sewers Door', player),
              lambda state: state.has_key('Small Key (Hyrule Castle)', player) or (
-                         world.keyshuffle[player] == "universal" and world.mode[
+                         world.smallkeyshuffle[player] == "universal" and world.mode[
                      player] == 'standard'))  # standard universal small keys cannot access the shop
     set_rule(world.get_entrance('Sewers Back Door', player),
              lambda state: state.has_key('Small Key (Hyrule Castle)', player))
@@ -243,7 +243,7 @@ def global_rules(world, player):
     set_rule(world.get_location('Desert Palace - Boss', player), lambda state: state.has_key('Small Key (Desert Palace)', player) and state.has('Big Key (Desert Palace)', player) and state.has_fire_source(player) and state.world.get_location('Desert Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
 
     # logic patch to prevent placing a crystal in Desert that's required to reach the required keys
-    if not (world.keyshuffle[player] and world.bigkeyshuffle[player]):
+    if not (world.smallkeyshuffle[player] and world.bigkeyshuffle[player]):
         add_rule(world.get_location('Desert Palace - Prize', player), lambda state: state.world.get_region('Desert Palace Main (Outer)', player).can_reach(state))
 
     set_rule(world.get_entrance('Tower of Hera Small Key Door', player), lambda state: state.has_key('Small Key (Tower of Hera)', player) or item_name(state, 'Tower of Hera - Big Key Chest', player) == ('Small Key (Tower of Hera)', player))
@@ -260,7 +260,7 @@ def global_rules(world, player):
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Swamp Palace - Big Chest', player), lambda state, item: item.name == 'Big Key (Swamp Palace)' and item.player == player)
     set_rule(world.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player))
-    if not world.keyshuffle[player] and world.logic[player] != 'nologic':
+    if not world.smallkeyshuffle[player] and world.logic[player] != 'nologic':
         forbid_item(world.get_location('Swamp Palace - Entrance', player), 'Big Key (Swamp Palace)', player)
 
     set_rule(world.get_entrance('Thieves Town Big Key Door', player), lambda state: state.has('Big Key (Thieves Town)', player))
@@ -915,7 +915,7 @@ def set_trock_key_rules(world, player):
             return 4
 
         # If TR is only accessible from the middle, the big key must be further restricted to prevent softlock potential
-        if not can_reach_front and not world.keyshuffle[player]:
+        if not can_reach_front and not world.smallkeyshuffle[player]:
             # Must not go in the Big Key Chest - only 1 other chest available and 2+ keys required for all other chests
             forbid_item(world.get_location('Turtle Rock - Big Key Chest', player), 'Big Key (Turtle Rock)', player)
             if not can_reach_big_chest:

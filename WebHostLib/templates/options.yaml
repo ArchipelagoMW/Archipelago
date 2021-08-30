@@ -52,8 +52,8 @@ progression_balancing:
 # exclude_locations: # Force certain locations to never contain progression items, and always be filled with junk.
 #  - "Master Sword Pedestal"
 {{ game }}:
-  {%- for option_name, option in options.items() %}
-  {{ option_name }}:{% if option.__doc__ %} # {{ option.__doc__ | replace('\n', '\n#') | indent(4, first=False) }}{% endif %}
+  {%- for option_key, option in options.items() %}
+  {{ option_key }}:{% if option.__doc__ %} # {{ option.__doc__ | replace('\n', '\n#') | indent(4, first=False) }}{% endif %}
     {%- if option.range_start is defined  %}
     # you can add additional values between minimum and maximum
     {{ option.range_start }}: 0 # minimum value
@@ -62,7 +62,7 @@ progression_balancing:
     random-low: 0
     random-high: 0
     {%- elif option.options -%}
-    {%- for sub_option_name, suboption_option_id in option.options.items() %}
+    {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
     {{ sub_option_name }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
     {%- endfor -%}
     {%- else %}

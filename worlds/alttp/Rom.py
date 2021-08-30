@@ -1491,7 +1491,7 @@ def patch_rom(world, rom, player, enemized):
     # block HC upstairs doors in rain state in standard mode
     rom.write_byte(0x18008A, 0x01 if world.mode[player] == "standard" and world.shuffle[player] != 'vanilla' else 0x00)
 
-    rom.write_byte(0x18016A, 0x10 | ((0x01 if world.keyshuffle[player] is True else 0x00)
+    rom.write_byte(0x18016A, 0x10 | ((0x01 if world.smallkeyshuffle[player] else 0x00)
                                      | (0x02 if world.compassshuffle[player] else 0x00)
                                      | (0x04 if world.mapshuffle[player] else 0x00)
                                      | (0x08 if world.bigkeyshuffle[player] else 0x00)))  # free roaming item text boxes
@@ -1515,7 +1515,7 @@ def patch_rom(world, rom, player, enemized):
     # b - Big Key
     # a - Small Key
     #
-    rom.write_byte(0x180045, ((0x01 if world.keyshuffle[player] is True else 0x00)
+    rom.write_byte(0x180045, ((0x01 if world.smallkeyshuffle[player] is True else 0x00)
                               | (0x02 if world.bigkeyshuffle[player] else 0x00)
                               | (0x04 if world.mapshuffle[player] else 0x00)
                               | (0x08 if world.compassshuffle[player] else 0x00)))  # free roaming items in menu
@@ -1548,7 +1548,7 @@ def patch_rom(world, rom, player, enemized):
     rom.write_int16(0x18017C, get_reveal_bytes('Crystal 5') | get_reveal_bytes('Crystal 6') if world.mapshuffle[
         player] else 0x0000)  # Bomb Shop Reveal
 
-    rom.write_byte(0x180172, 0x01 if world.keyshuffle[player] == "universal" else 0x00)  # universal keys
+    rom.write_byte(0x180172, 0x01 if world.smallkeyshuffle[player] == "universal" else 0x00)  # universal keys
     rom.write_byte(0x18637E, 0x01 if world.retro[player] else 0x00)  # Skip quiver in item shops once bought
     rom.write_byte(0x180175, 0x01 if world.retro[player] else 0x00)  # rupee bow
     rom.write_byte(0x180176, 0x0A if world.retro[player] else 0x00)  # wood arrow cost
@@ -2247,7 +2247,7 @@ def write_strings(rom, world, player):
 
         # Lastly we write hints to show where certain interesting items are. It is done the way it is to re-use the silver code and also to give one hint per each type of item regardless of how many exist. This supports many settings well.
         items_to_hint = RelevantItems.copy()
-        if world.keyshuffle[player]:
+        if world.smallkeyshuffle[player]:
             items_to_hint.extend(SmallKeys)
         if world.bigkeyshuffle[player]:
             items_to_hint.extend(BigKeys)

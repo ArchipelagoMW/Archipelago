@@ -547,22 +547,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     ret.restrict_dungeon_item_on_boss = get_choice_legacy('restrict_dungeon_item_on_boss', weights, False)
 
-    dungeon_items = get_choice_legacy('dungeon_items', weights)
-    if dungeon_items == 'full' or dungeon_items == True:
-        dungeon_items = 'mcsb'
-    elif dungeon_items == 'standard':
-        dungeon_items = ""
-    elif not dungeon_items:
-        dungeon_items = ""
-    if "u" in dungeon_items:
-        dungeon_items.replace("s", "")
-
-    ret.mapshuffle = get_choice_legacy('map_shuffle', weights, 'm' in dungeon_items)
-    ret.compassshuffle = get_choice_legacy('compass_shuffle', weights, 'c' in dungeon_items)
-    ret.keyshuffle = get_choice_legacy('smallkey_shuffle', weights,
-                                'universal' if 'u' in dungeon_items else 's' in dungeon_items)
-    ret.bigkeyshuffle = get_choice_legacy('bigkey_shuffle', weights, 'b' in dungeon_items)
-
     entrance_shuffle = get_choice_legacy('entrance_shuffle', weights, 'vanilla')
     if entrance_shuffle.startswith('none-'):
         ret.shuffle = 'vanilla'
@@ -660,13 +644,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
             .get(medallion.lower(), None)
         if not ret.required_medallions[index]:
             raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
-
-    ret.glitch_boots = get_choice_legacy('glitch_boots', weights, True)
-
-    if get_choice_legacy("local_keys", weights, "l" in dungeon_items):
-        # () important for ordering of commands, without them the Big Keys section is part of the Small Key else
-        ret.local_items |= item_name_groups["Small Keys"] if ret.keyshuffle else set()
-        ret.local_items |= item_name_groups["Big Keys"] if ret.bigkeyshuffle else set()
 
     ret.plando_items = []
     if "items" in plando_options:

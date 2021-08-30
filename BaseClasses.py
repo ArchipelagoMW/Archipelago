@@ -95,10 +95,6 @@ class MultiWorld():
             set_player_attr('can_access_trock_big_chest', None)
             set_player_attr('can_access_trock_middle', None)
             set_player_attr('fix_fake_world', True)
-            set_player_attr('mapshuffle', False)
-            set_player_attr('compassshuffle', False)
-            set_player_attr('keyshuffle', False)
-            set_player_attr('bigkeyshuffle', False)
             set_player_attr('difficulty_requirements', None)
             set_player_attr('boss_shuffle', 'none')
             set_player_attr('enemy_shuffle', False)
@@ -118,7 +114,6 @@ class MultiWorld():
             set_player_attr('blue_clock_time', 2)
             set_player_attr('green_clock_time', 4)
             set_player_attr('can_take_damage', True)
-            set_player_attr('glitch_boots', True)
             set_player_attr('progression_balancing', True)
             set_player_attr('local_items', set())
             set_player_attr('non_local_items', set())
@@ -157,6 +152,10 @@ class MultiWorld():
     @functools.lru_cache()
     def get_game_players(self, game_name: str):
         return tuple(player for player in self.player_ids if self.game[player] == game_name)
+
+    @functools.lru_cache()
+    def get_game_worlds(self, game_name: str):
+        return tuple(world for player, world in self.worlds.items() if self.game[player] == game_name)
 
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_name(obj.player)})'
@@ -537,9 +536,7 @@ class CollectionState(object):
         locations = {location for location in locations if location.event}
         while new_locations:
             reachable_events = {location for location in locations if
-                                (not key_only or
-                                 (not self.world.keyshuffle[location.item.player] and location.item.smallkey)
-                                 or (not self.world.bigkeyshuffle[location.item.player] and location.item.bigkey))
+                                (not key_only or getattr(location.item, "locked_dungeon_item", False))
                                 and location.can_reach(self)}
             new_locations = reachable_events - self.events
             for event in new_locations:
@@ -572,7 +569,7 @@ class CollectionState(object):
     def has_key(self, item, player, count: int = 1):
         if self.world.logic[player] == 'nologic':
             return True
-        if self.world.keyshuffle[player] == "universal":
+        if self.world.smallkeyshuffle[player] == "universal":
             return self.can_buy_unlimited('Small Key (Universal)', player)
         return self.prog_items[item, player] >= count
 
@@ -807,12 +804,6 @@ class Region(object):
                 return True
         return False
 
-    # look into moving this to ALttPLocation?
-    def can_fill(self, item: Item):
-        if getattr(item, "locked_dungeon_item", False):
-            return item.player == self.player and self.dungeon.is_dungeon_item(item)
-        return True
-
     def __repr__(self):
         return self.__str__()
 
@@ -854,8 +845,8 @@ class Entrance(object):
         world = self.parent_region.world if self.parent_region else None
         return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
 
-class Dungeon(object):
 
+class Dungeon(object):
     def __init__(self, name: str, regions, big_key, small_keys, dungeon_items, player: int):
         self.name = name
         self.regions = regions
@@ -930,7 +921,7 @@ class Location():
         self.item: Optional[Item] = None
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return self.always_allow(state, item) or (self.parent_region.can_fill(item) and self.item_rule(item) and (not check_access or self.can_reach(state)))
+        return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
 
     def can_reach(self, state: CollectionState) -> bool:
         # self.access_rule computes faster on average, so placing it first for faster abort
@@ -1146,10 +1137,6 @@ class Spoiler():
                          'open_pyramid': self.world.open_pyramid,
                          'accessibility': self.world.accessibility,
                          'hints': self.world.hints,
-                         'mapshuffle': self.world.mapshuffle,
-                         'compassshuffle': self.world.compassshuffle,
-                         'keyshuffle': self.world.keyshuffle,
-                         'bigkeyshuffle': self.world.bigkeyshuffle,
                          'boss_shuffle': self.world.boss_shuffle,
                          'enemy_shuffle': self.world.enemy_shuffle,
                          'enemy_health': self.world.enemy_health,
@@ -1244,15 +1231,6 @@ class Spoiler():
                         outfile.write('Entrance Shuffle Seed            %s\n' % self.metadata['er_seeds'][player])
                     outfile.write('Pyramid hole pre-opened:         %s\n' % (
                         'Yes' if self.metadata['open_pyramid'][player] else 'No'))
-
-                    outfile.write('Map shuffle:                     %s\n' %
-                                  ('Yes' if self.metadata['mapshuffle'][player] else 'No'))
-                    outfile.write('Compass shuffle:                 %s\n' %
-                                  ('Yes' if self.metadata['compassshuffle'][player] else 'No'))
-                    outfile.write(
-                        'Small Key shuffle:               %s\n' % (bool_to_text(self.metadata['keyshuffle'][player])))
-                    outfile.write('Big Key shuffle:                 %s\n' % (
-                        'Yes' if self.metadata['bigkeyshuffle'][player] else 'No'))
                     outfile.write('Shop inventory shuffle:          %s\n' %
                                   bool_to_text("i" in self.metadata["shop_shuffle"][player]))
                     outfile.write('Shop price shuffle:              %s\n' %
