@@ -146,7 +146,7 @@ def fill_dungeons_restrictive(autoworld, world):
                     dungeon = location.parent_region.dungeon
                     orig_rule = location.item_rule
                     location.item_rule = lambda item, dungeon=dungeon, orig_rule=orig_rule: \
-                        (not (item.player, item.name) in dungeon_specific or item.dungeon is dungeon) and orig_rule
+                        (not (item.player, item.name) in dungeon_specific or item.dungeon is dungeon) and orig_rule(item)
 
             world.random.shuffle(locations)
             all_state_base = world.get_all_state()
