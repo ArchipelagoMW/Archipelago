@@ -28,6 +28,7 @@ game: # Pick a game to play
   Factorio: 0
   Minecraft: 0
   Subnautica: 0
+  Slay the Spire: 0
 requires:
   version: 0.1.6 # Version of Archipelago required for this yaml to work as expected.
 # Shared Options supported by all games:
@@ -56,7 +57,23 @@ progression_balancing:
 #  - "Master Sword Pedestal"
 
 Subnautica: {}
-
+Slay the Spire:
+  character: # Pick What Character you wish to play with.
+    ironclad: 50
+    silent: 50
+    defect: 50
+    watcher: 50
+  ascension: # What Ascension do you wish to play with.
+    # you can add additional values between minimum and maximum
+    0: 50 # minimum value
+    20: 0 # maximum value
+    random: 0
+    random-low: 0
+    random-high: 0
+  heart_run: # Whether or not you will need to collect they 3 keys to unlock the final act
+    #     and beat the heart to finish the game.
+    false: 50
+    true: 0
 Factorio:
   tech_tree_layout:
     single: 1
@@ -304,13 +321,6 @@ A Link to the Past:
     own_world: 0
     any_world: 0
     different_world: 0
-  dungeon_items: # Alternative to the 4 shuffles and local_keys above this, does nothing until the respective 4 shuffles and local_keys above are deleted
-    mc: 0 # Shuffle maps and compasses
-    none: 50 # Shuffle none of the 4
-    mcsb: 0 # Shuffle all of the 4, any combination of m, c, s and b will shuffle the respective item, or not if it's missing, so you can add more options here
-    lmcsb: 0 # Like mcsb above, but with keys kept local to your world. l is what makes your keys local, or not if it's missing
-    ub: 0 # universal small keys and shuffled big keys
-    # you can add more combos of these letters here
   dungeon_counters:
     on: 0 # Always display amount of items checked in a dungeon
     pickup: 50 # Show when compass is picked up
