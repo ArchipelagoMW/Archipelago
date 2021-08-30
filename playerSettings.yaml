@@ -279,22 +279,31 @@ A Link to the Past:
     on: 0 # prevents unshuffled compasses, maps and keys to be boss drops, they can still drop keysanity and other players' items
     off: 50
   ### End of Logic Section ###
-  map_shuffle: # Shuffle dungeon maps into the world and other dungeons, including other players' worlds
-    on: 0
-    off: 50
-  compass_shuffle: # Shuffle compasses into the world and other dungeons, including other players' worlds
-    on: 0
-    off: 50
-  smallkey_shuffle: # Shuffle small keys into the world and other dungeons, including other players' worlds
-    on: 0
-    universal: 0 # allows small keys to be used in any dungeon and adds shops to buy more
-    off: 50
-  bigkey_shuffle: # Shuffle big keys into the world and other dungeons, including other players' worlds
-    on: 0
-    off: 50
-  local_keys: # Keep small keys and big keys local to your world
-    on: 0
-    off: 50
+  bigkey_shuffle: # Big Key Placement
+    original_dungeon: 50
+    own_dungeons: 0
+    own_world: 0
+    any_world: 0
+    different_world: 0
+  smallkey_shuffle: # Small Key Placement
+    original_dungeon: 50
+    own_dungeons: 0
+    own_world: 0
+    any_world: 0
+    different_world: 0
+    universal: 0
+  compass_shuffle: # Compass Placement
+    original_dungeon: 50
+    own_dungeons: 0
+    own_world: 0
+    any_world: 0
+    different_world: 0
+  map_shuffle: # Map Placement
+    original_dungeon: 50
+    own_dungeons: 0
+    own_world: 0
+    any_world: 0
+    different_world: 0
   dungeon_items: # Alternative to the 4 shuffles and local_keys above this, does nothing until the respective 4 shuffles and local_keys above are deleted
     mc: 0 # Shuffle maps and compasses
     none: 50 # Shuffle none of the 4

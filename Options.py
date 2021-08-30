@@ -243,14 +243,14 @@ if __name__ == "__main__":
 
     from worlds.alttp.Options import Logic
     import argparse
-    mapshuffle = Toggle
-    compassshuffle = Toggle
+    map_shuffle = Toggle
+    compass_shuffle = Toggle
     keyshuffle = Toggle
-    bigkeyshuffle = Toggle
+    bigkey_shuffle = Toggle
     hints = Toggle
     test = argparse.Namespace()
     test.logic = Logic.from_text("no_logic")
-    test.mapshuffle = mapshuffle.from_text("ON")
+    test.map_shuffle = map_shuffle.from_text("ON")
     test.hints = hints.from_text('OFF')
     try:
         test.logic = Logic.from_text("overworld_glitches_typo")
@@ -260,7 +260,7 @@ if __name__ == "__main__":
         test.logic_owg = Logic.from_text("owg")
     except KeyError as e:
         print(e)
-    if test.mapshuffle:
-        print("Mapshuffle is on")
+    if test.map_shuffle:
+        print("map_shuffle is on")
     print(f"Hints are {bool(test.hints)}")
     print(test)

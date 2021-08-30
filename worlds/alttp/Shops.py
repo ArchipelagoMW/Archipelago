@@ -271,7 +271,7 @@ def create_shops(world, player: int):
         # make sure that blue potion is available in inverted, special case locked = None; lock when done.
         player_shop_table["Dark Lake Hylia Shop"] = \
             player_shop_table["Dark Lake Hylia Shop"]._replace(items=_inverted_hylia_shop_defaults, locked=None)
-    chance_100 = int(world.retro[player])*0.25+int(world.smallkeyshuffle[player] == "universal") * 0.5
+    chance_100 = int(world.retro[player])*0.25+int(world.smallkey_shuffle[player] == "universal") * 0.5
     for region_name, (room_id, type, shopkeeper, custom, locked, inventory, sram_offset) in player_shop_table.items():
         region = world.get_region(region_name, player)
         shop: Shop = shop_class_mapping[type](region, room_id, shopkeeper, custom, locked, sram_offset)
@@ -371,13 +371,13 @@ def set_up_shops(world, player: int):
         rss = world.get_region('Red Shield Shop', player).shop
         replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
                              ['Blue Shield', 50], ['Small Heart', 10]]  # Can't just replace the single arrow with 10 arrows as retro doesn't need them.
-        if world.smallkeyshuffle[player] == "universal":
+        if world.smallkey_shuffle[player] == "universal":
             replacement_items.append(['Small Key (Universal)', 100])
         replacement_item = world.random.choice(replacement_items)
         rss.add_inventory(2, 'Single Arrow', 80, 1, replacement_item[0], replacement_item[1])
         rss.locked = True
 
-    if world.smallkeyshuffle[player] == "universal" or world.retro[player]:
+    if world.smallkey_shuffle[player] == "universal" or world.retro[player]:
         for shop in world.random.sample([s for s in world.shops if
                                          s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
                                         5):
@@ -385,7 +385,7 @@ def set_up_shops(world, player: int):
             slots = [0, 1, 2]
             world.random.shuffle(slots)
             slots = iter(slots)
-            if world.smallkeyshuffle[player] == "universal":
+            if world.smallkey_shuffle[player] == "universal":
                 shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
             if world.retro[player]:
                 shop.push_inventory(next(slots), 'Single Arrow', 80)

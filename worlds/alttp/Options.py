@@ -43,26 +43,26 @@ class DungeonItem(Choice):
         return self.value in {0, 1}
 
 
-class BigKeyShuffle(DungeonItem):
+class bigkey_shuffle(DungeonItem):
     """Big Key Placement"""
     item_name_group = "Big Keys"
     displayname = "Big Key Shuffle"
 
 
-class SmallKeyShuffle(DungeonItem):
+class smallkey_shuffle(DungeonItem):
     """Small Key Placement"""
     option_universal = 5
     item_name_group = "Small Keys"
     displayname = "Small Key Shuffle"
 
 
-class CompassShuffle(DungeonItem):
+class compass_shuffle(DungeonItem):
     """Compass Placement"""
     item_name_group = "Compasses"
     displayname = "Compass Shuffle"
 
 
-class MapShuffle(DungeonItem):
+class map_shuffle(DungeonItem):
     """Map Placement"""
     item_name_group = "Maps"
     displayname = "Map Shuffle"
@@ -221,10 +221,10 @@ class TriforceHud(Choice):
 alttp_options: typing.Dict[str, type(Option)] = {
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
-    "bigkeyshuffle": BigKeyShuffle,
-    "smallkeyshuffle": SmallKeyShuffle,
-    "compassshuffle": CompassShuffle,
-    "mapshuffle": MapShuffle,
+    "bigkey_shuffle": bigkey_shuffle,
+    "smallkey_shuffle": smallkey_shuffle,
+    "compass_shuffle": compass_shuffle,
+    "map_shuffle": map_shuffle,
     "progressive": Progressive,
     "shop_item_slots": ShopItemSlots,
     "ow_palettes": OWPalette,

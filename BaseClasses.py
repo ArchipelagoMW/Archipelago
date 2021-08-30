@@ -569,7 +569,7 @@ class CollectionState(object):
     def has_key(self, item, player, count: int = 1):
         if self.world.logic[player] == 'nologic':
             return True
-        if self.world.smallkeyshuffle[player] == "universal":
+        if self.world.smallkey_shuffle[player] == "universal":
             return self.can_buy_unlimited('Small Key (Universal)', player)
         return self.prog_items[item, player] >= count
 

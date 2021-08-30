@@ -65,7 +65,7 @@ class ALTTPWorld(World):
                 world.er_seeds[player] = seed
         elif world.shuffle[player] == "vanilla":
             world.er_seeds[player] = "vanilla"
-        for dungeon_item in ["smallkeyshuffle", "bigkeyshuffle", "compassshuffle", "mapshuffle"]:
+        for dungeon_item in ["smallkey_shuffle", "bigkey_shuffle", "compass_shuffle", "map_shuffle"]:
             option = getattr(world, dungeon_item)[player]
             if option == "own_world":
                 world.local_items[player] |= self.item_name_groups[option.item_name_group]
@@ -324,8 +324,8 @@ class ALTTPWorld(World):
         trash_counts = {}
         standard_keyshuffle_players = set()
         for player in world.get_game_players("A Link to the Past"):
-            if world.mode[player] == 'standard' and world.smallkeyshuffle[player] \
-                    and world.smallkeyshuffle[player] != "universal":
+            if world.mode[player] == 'standard' and world.smallkey_shuffle[player] \
+                    and world.smallkey_shuffle[player] != "universal":
                 standard_keyshuffle_players.add(player)
             if not world.ganonstower_vanilla[player] or \
                     world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:
