@@ -133,7 +133,8 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def fill_hook(cls, progitempool: List[Item], nonexcludeditempool: List[Item],
-                  localrestitempool: Dict[int, List[Item]], restitempool: List[Item], fill_locations: List[Location]):
+                  localrestitempool: Dict[int, List[Item]], nonlocalrestitempool: Dict[int, List[Item]],
+                  restitempool: List[Item], fill_locations: List[Location]):
         """Special method that gets called as part of distribute_items_restrictive (main fill).
         This gets called once per present world type."""
         pass

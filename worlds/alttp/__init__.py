@@ -320,7 +320,8 @@ class ALTTPWorld(World):
         return ALttPItem(name, self.player, **as_dict_item_table[name])
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, restitempool, fill_locations):
+    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
+                        restitempool, fill_locations):
         trash_counts = {}
         standard_keyshuffle_players = set()
         for player in world.get_game_players("A Link to the Past"):
