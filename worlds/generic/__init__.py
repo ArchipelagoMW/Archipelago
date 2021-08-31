@@ -1,6 +1,20 @@
 from typing import NamedTuple, Union
 import logging
 
+from ..AutoWorld import World
+
+
+class GenericWorld(World):
+    game = "Archipelago"
+    topology_present = False
+    item_name_to_id = {
+        "Nothing": -1
+    }
+    location_name_to_id = {
+        "Cheat Console" : -1,
+        "Server": -2
+    }
+    hidden = True
 
 class PlandoItem(NamedTuple):
     item: str

@@ -19,15 +19,17 @@ from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePar
 
 from worlds.factorio import Factorio
 
-os.makedirs("logs", exist_ok=True)
+log_folder = Utils.local_path("logs")
+
+os.makedirs(log_folder, exist_ok=True)
 
 
 if gui_enabled:
     logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
-                        filename=os.path.join("logs", "FactorioClient.txt"), filemode="w", force=True)
+                        filename=os.path.join(log_folder, "FactorioClient.txt"), filemode="w", force=True)
 else:
     logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
-    logging.getLogger().addHandler(logging.FileHandler(os.path.join("logs", "FactorioClient.txt"), "w"))
+    logging.getLogger().addHandler(logging.FileHandler(os.path.join(log_folder, "FactorioClient.txt"), "w"))
 
 
 class FactorioCommandProcessor(ClientCommandProcessor):
@@ -110,7 +112,7 @@ class FactorioContext(CommonContext):
         if cmd == "Connected":
             # catch up sync anything that is already cleared.
             if args["checked_locations"]:
-                self.rcon_client.send_commands({item_name: f'/ap-get-technology {item_name}\t-1' for
+                self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
 
 

@@ -9,7 +9,7 @@ class AssembleOptions(type):
         name_lookup = attrs["name_lookup"] = {}
         # merge parent class options
         for base in bases:
-            if hasattr(base, "options"):
+            if getattr(base, "options", None):
                 options.update(base.options)
                 name_lookup.update(base.name_lookup)
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
@@ -147,6 +147,29 @@ class Choice(Option):
             return cls(data)
         return cls.from_text(str(data))
 
+    def __eq__(self, other):
+        if isinstance(other, str):
+            assert other in self.options
+            return other == self.current_key
+        elif isinstance(other, int):
+            assert other in self.name_lookup
+            return other == self.value
+        elif isinstance(other,  bool):
+            return other == bool(self.value)
+        else:
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
+    def __ne__(self, other):
+        if isinstance(other,  str):
+            assert other in self.options
+            return other != self.current_key
+        elif isinstance(other, int):
+            assert other in self.name_lookup
+            return other != self.value
+        elif isinstance(other, bool):
+            return other != bool(self.value)
+        else:
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
 class Range(Option, int):
     range_start = 0
@@ -233,14 +256,14 @@ if __name__ == "__main__":
 
     from worlds.alttp.Options import Logic
     import argparse
-    mapshuffle = Toggle
-    compassshuffle = Toggle
+    map_shuffle = Toggle
+    compass_shuffle = Toggle
     keyshuffle = Toggle
-    bigkeyshuffle = Toggle
+    bigkey_shuffle = Toggle
     hints = Toggle
     test = argparse.Namespace()
     test.logic = Logic.from_text("no_logic")
-    test.mapshuffle = mapshuffle.from_text("ON")
+    test.map_shuffle = map_shuffle.from_text("ON")
     test.hints = hints.from_text('OFF')
     try:
         test.logic = Logic.from_text("overworld_glitches_typo")
@@ -250,7 +273,7 @@ if __name__ == "__main__":
         test.logic_owg = Logic.from_text("owg")
     except KeyError as e:
         print(e)
-    if test.mapshuffle:
-        print("Mapshuffle is on")
+    if test.map_shuffle:
+        print("map_shuffle is on")
     print(f"Hints are {bool(test.hints)}")
     print(test)

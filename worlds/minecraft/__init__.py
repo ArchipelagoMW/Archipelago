@@ -72,9 +72,9 @@ class MinecraftWorld(World):
                 exclusion_pool.update(exclusion_table[key])
         exclusion_rules(self.world, self.player, exclusion_pool)
 
-        # Prefill the Ender Dragon with the completion condition
-        completion = self.create_item("Victory")
-        self.world.get_location("Ender Dragon", self.player).place_locked_item(completion)
+        # Prefill event locations with their events
+        self.world.get_location("Blaze Spawner", self.player).place_locked_item(self.create_item("Blaze Rods"))
+        self.world.get_location("Ender Dragon", self.player).place_locked_item(self.create_item("Victory"))
 
         self.world.itempool += itempool
 

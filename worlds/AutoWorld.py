@@ -91,6 +91,9 @@ class World(metaclass=AutoWorldRegister):
     # the client finds its own items in its own world.
     remote_items: bool = True
 
+    # Hide World Type from various views. Does not remove functionality.
+    hidden = False
+
     # autoset on creation:
     world: MultiWorld
     player: int
@@ -130,10 +133,14 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def fill_hook(cls, progitempool: List[Item], nonexcludeditempool: List[Item],
-                  localrestitempool: Dict[int, List[Item]], restitempool: List[Item], fill_locations: List[Location]):
+                  localrestitempool: Dict[int, List[Item]], nonlocalrestitempool: Dict[int, List[Item]],
+                  restitempool: List[Item], fill_locations: List[Location]):
         """Special method that gets called as part of distribute_items_restrictive (main fill).
         This gets called once per present world type."""
         pass
+
+    def post_fill(self):
+        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation."""
 
     def generate_output(self, output_directory: str):
         """This method gets called from a threadpool, do not use world.random here.
