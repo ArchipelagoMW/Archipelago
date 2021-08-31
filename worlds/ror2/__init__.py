@@ -19,6 +19,7 @@ class RiskOfRainWorld(World):
     location_name_to_id = {name: data for name, data in location_table.items()}
 
     data_version = 1
+    forced_auto_forfeit = True
 
     def generate_basic(self):
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
