@@ -15,6 +15,11 @@ from ..AutoWorld import World
 
 
 class SubnauticaWorld(World):
+    """
+    Subnautica is an undersea exploration game. Stranded on an alien world, you become infected by
+    an unknown bacteria. The planet's automatic quarantine will shoot you down if you try to leave.
+    You must find a cure for yourself, build an escape rocket, and leave the planet.
+    """
     game: str = "Subnautica"
 
     item_name_to_id = items_lookup_name_to_id
@@ -53,7 +58,7 @@ class SubnauticaWorld(World):
         pass
 
 
-    def fill_slot_data(self): 
+    def fill_slot_data(self):
         slot_data = {}
         return slot_data
 

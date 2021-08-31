@@ -48,7 +48,7 @@ def create():
 
                 for sub_option_name, sub_option_id in option.options.items():
                     this_option["options"].append({
-                        "name": sub_option_name,
+                        "name": option.get_option_name(sub_option_id),
                         "value": sub_option_name,
                     })
 
