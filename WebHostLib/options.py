@@ -10,16 +10,15 @@ target_folder = os.path.join("WebHostLib", "static", "generated")
 
 
 def create():
+    def dictify_range(option):
+        data = {option.range_start: 0, option.range_end: 0, "random": 0, "random-low": 0, "random-high": 0,
+                option.default: 50}
+        notes = {
+            option.range_start: "minimum value",
+            option.range_end: "maximum value"
+        }
+        return data, notes
     for game_name, world in AutoWorldRegister.world_types.items():
-        def dictify_range(option):
-            data = {option.range_start: 0, option.range_end: 0, "random": 0, "random-low": 0, "random-high": 0,
-                    option.default: 50}
-            notes = {
-                option.range_start: "minimum value",
-                option.range_end: "maximum value"
-            }
-            return data, notes
-
         res = Template(open(os.path.join("WebHostLib", "templates", "options.yaml")).read()).render(
             options=world.options, __version__=__version__, game=game_name, yaml_dump=yaml.dump,
             dictify_range=dictify_range

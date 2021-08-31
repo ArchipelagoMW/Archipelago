@@ -57,11 +57,12 @@ class Option(metaclass=AssembleOptions):
         """For display purposes."""
         return self.get_option_name(self.value)
 
-    def get_option_name(self, value: typing.Any) -> str:
-        if self.autodisplayname:
-            return self.name_lookup[self.value].replace("_", " ").title()
+    @classmethod
+    def get_option_name(cls, value: typing.Any) -> str:
+        if cls.autodisplayname:
+            return cls.name_lookup[value].replace("_", " ").title()
         else:
-            return self.name_lookup[self.value]
+            return cls.name_lookup[value]
 
     def __int__(self) -> int:
         return self.value
