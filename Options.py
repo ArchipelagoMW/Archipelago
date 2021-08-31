@@ -115,7 +115,8 @@ class Toggle(Option):
     def __int__(self):
         return int(self.value)
 
-    def get_option_name(self, value):
+    @classmethod
+    def get_option_name(cls, value):
         return ["No", "Yes"][int(value)]
 
 class DefaultOnToggle(Toggle):
