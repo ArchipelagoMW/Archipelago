@@ -91,6 +91,10 @@ class World(metaclass=AutoWorldRegister):
     # the client finds its own items in its own world.
     remote_items: bool = True
 
+    # For games where after a victory it is impossible to go back in and get additional/remaining Locations checked.
+    # this forces forfeit:  auto for those games.
+    forced_auto_forfeit: bool = False
+
     # Hide World Type from various views. Does not remove functionality.
     hidden = False
 

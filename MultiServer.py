@@ -1193,6 +1193,8 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
             ctx.notify_all(finished_msg)
             if "auto" in ctx.forfeit_mode:
                 forfeit_player(ctx, client.team, client.slot)
+            elif proxy_worlds[ctx.games[client.slot]].forced_auto_forfeit:
+                forfeit_player(ctx, client.team, client.slot)
 
         ctx.client_game_state[client.team, client.slot] = new_status
 
