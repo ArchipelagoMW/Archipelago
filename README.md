@@ -8,6 +8,7 @@ Currently, the following games are supported:
 * Minecraft
 * Subnautica
 * Slay the Spire
+* Risk of Rain 2
 
 For setup and instructions check out our [tutorials page](http://archipelago.gg:48484/tutorial).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
