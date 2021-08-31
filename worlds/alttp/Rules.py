@@ -56,11 +56,11 @@ def set_rules(world):
         # entrances. The overworld_glitches_rules set is primarily additive.
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
-        overworld_glitches_rules(world, player)
+        # overworld_glitches_rules(world, player)
     elif world.logic[player] in ['hybridglitches', 'nologic']: 
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
-        overworld_glitches_rules(world, player)
+        # overworld_glitches_rules(world, player)
         underworld_glitches_rules(world, player)
     elif world.logic[player] == 'minorglitches':
         no_glitches_rules(world, player)
