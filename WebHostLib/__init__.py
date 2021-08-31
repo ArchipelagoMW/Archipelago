@@ -119,6 +119,12 @@ games_list = {
                       the last living Metroid. Go to planet Zebes and search out the abilities you will need to power
                       up your suit and defeat the villainous leader of the space pirates, Mother Brain.
                       """),
+    "Risk of Rain 2": ("Risk of Rain 2",
+                       """
+                       Escape a chaotic alien planet by fighting through hordes of frenzied monsters – with your friends
+                       , or on your own. Combine loot in surprising ways and master each character until you become the 
+                       havoc you feared upon your first crash landing.
+                       """)
     # "Ori and the Blind Forest": ("Ori and the Blind Forest", "Coming Soon™"),
     # "Hollow Knight": ("Hollow Knight", "Coming Soon™"),
 }
