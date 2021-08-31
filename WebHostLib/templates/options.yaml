@@ -69,3 +69,4 @@ progression_balancing:
     {{ yaml_dump(option.default) | indent(4, first=False) }}
   {%- endif -%}
   {%- endfor -%}
+  {% if not options %}{}{% endif %}
