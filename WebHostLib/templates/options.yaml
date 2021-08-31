@@ -58,7 +58,7 @@ progression_balancing:
     {%- for entry, default in data.items() %}
     {{ entry }}: {{ default }}{% if notes[entry] %} # {{ notes[entry] }}{% endif %}
     {%- endfor -%}
-{%- endmacro -%}
+{% endmacro %}
 {{ game }}:
   {%- for option_key, option in options.items() %}
   {{ option_key }}:{% if option.__doc__ %} # {{ option.__doc__ | replace('\n', '\n#') | indent(4, first=False) }}{% endif %}
@@ -71,5 +71,5 @@ progression_balancing:
     {%- else %}
     {{ yaml_dump(option.default) | indent(4, first=False) }}
   {%- endif -%}
-  {%- endfor -%}
+  {%- endfor %}
   {% if not options %}{}{% endif %}
