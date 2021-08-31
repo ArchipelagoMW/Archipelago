@@ -1,0 +1,7857 @@
+[
+
+{
+"id": 1,
+"name": "Gypsy",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 2,
+"name": "Klondike",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 3,
+"name": "Irmgard",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 4,
+"name": "8 x 8",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 5,
+"name": "Relaxed FreeCell",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 6,
+"name": "Relaxed Seahaven Towers",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 7,
+"name": "Picture Gallery",
+"altnames": "Die Bildgallerie\nMod-3",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 8,
+"name": "FreeCell",
+"altnames": "Four Free",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 9,
+"name": "Seahaven Towers",
+"altnames": "Sea Towers\nTowers",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 10,
+"name": "Relaxed Spider",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 11,
+"name": "Spider",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 12,
+"name": "Braid",
+"altnames": "Der Zopf\nPlait\nPigtail",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 13,
+"name": "Forty Thieves",
+"altnames": "Napoleon at St. Helena\nLe Cadran",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 14,
+"name": "Grounds for a Divorce",
+"altnames": "Scheidungsgrund",
+"category": "French (Spider)"
+},
+
+{
+"id": 15,
+"name": "Big Harp",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 16,
+"name": "Eiffel Tower",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 17,
+"name": "Matriarchy",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 18,
+"name": "Klondike by Threes",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 19,
+"name": "Yukon",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 20,
+"name": "Russian Solitaire",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 21,
+"name": "Double Klondike",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 23,
+"name": "Forty and Eight",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 24,
+"name": "Spiderette",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 25,
+"name": "Gargantua",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 26,
+"name": "King Only Baker's Game",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 27,
+"name": "Odessa",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 28,
+"name": "Double Klondike by Threes",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 29,
+"name": "Scorpion",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 30,
+"name": "Windmill",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 31,
+"name": "Baker's Dozen",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 33,
+"name": "Westcliff",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 34,
+"name": "Beleaguered Castle",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 35,
+"name": "Union Square",
+"altnames": "British Square",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 36,
+"name": "Golf",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 37,
+"name": "Lara's Game",
+"altnames": "Thirteen Packs",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 38,
+"name": "Pyramid",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 39,
+"name": "Small Harp",
+"altnames": "Die kleine Harfe",
+"category": "French (Klondike)"
+},
+
+{
+"id": 40,
+"name": "Elevator",
+"altnames": "Egyptian Solitaire\nPyramid Golf",
+"category": "French (Golf)"
+},
+
+{
+"id": 41,
+"name": "PileOn",
+"altnames": "Fifteen Puzzle",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 42,
+"name": "Bristol",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 43,
+"name": "Chameleon",
+"altnames": "Kansas",
+"category": "French (Canfield)"
+},
+
+{
+"id": 45,
+"name": "Baker's Game",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 46,
+"name": "ForeCell",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 47,
+"name": "Baby Spiderette",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 48,
+"name": "Will o' the Wisp",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 49,
+"name": "Black Widow",
+"altnames": "Scarab",
+"category": "French (Spider)"
+},
+
+{
+"id": 50,
+"name": "Simple Simon",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 51,
+"name": "Steps",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 53,
+"name": "Montana",
+"altnames": "Gaps",
+"category": "French (Montana)"
+},
+
+{
+"id": 54,
+"name": "Royal Cotillion",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 55,
+"name": "Odd and Even",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 56,
+"name": "Fan",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 57,
+"name": "Shamrocks",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 58,
+"name": "Thumb and Pouch",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 59,
+"name": "Osmosis",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 60,
+"name": "Peek",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 61,
+"name": "Casino Klondike",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 62,
+"name": "Miss Milligan",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 63,
+"name": "Blue Moon",
+"altnames": "Rangoon",
+"category": "French (Montana)"
+},
+
+{
+"id": 64,
+"name": "Penguin",
+"altnames": "Beak and Flipper",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 65,
+"name": "Giant",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 66,
+"name": "Eastcliff",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 67,
+"name": "Whitehead",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 68,
+"name": "Lexington Harp",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 69,
+"name": "Indian",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 70,
+"name": "Number Ten",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 71,
+"name": "Rank and File",
+"altnames": "Dress Parade",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 73,
+"name": "Maria",
+"altnames": "Maria Luisa",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 74,
+"name": "Midshipman",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 76,
+"name": "Streets",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 77,
+"name": "Stalactites",
+"altnames": "Grampus\nOld Mole",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 78,
+"name": "Milligan Cell",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 79,
+"name": "Waning Moon",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 80,
+"name": "Busy Aces",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 81,
+"name": "Blind Alleys",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 83,
+"name": "Castles in Spain",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 84,
+"name": "Martha",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 85,
+"name": "Spanish Patience",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 86,
+"name": "Good Measure",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 87,
+"name": "Scotch Patience",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 88,
+"name": "Trefoil",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 89,
+"name": "Monte Carlo",
+"altnames": "Quilt",
+"category": "French (Pairing)"
+},
+
+{
+"id": 90,
+"name": "Simple Carlo",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 91,
+"name": "Simple Pairs",
+"altnames": "Jamestown",
+"category": "French (Pairing)"
+},
+
+{
+"id": 92,
+"name": "Neighbour",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 93,
+"name": "Royal East",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 94,
+"name": "Hopscotch",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 95,
+"name": "Auld Lang Syne",
+"altnames": "Patience",
+"category": "French (Numerica)"
+},
+
+{
+"id": 96,
+"name": "Fourteen",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 97,
+"name": "Carpet",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 98,
+"name": "Black Hole",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 99,
+"name": "Rainfall",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 100,
+"name": "Storehouse",
+"altnames": "Provisions\nStraight Up\nThirteen Up",
+"category": "French (Canfield)"
+},
+
+{
+"id": 101,
+"name": "Superior Canfield",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 102,
+"name": "Variegated Canfield",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 103,
+"name": "American Toad",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 104,
+"name": "Cruel",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 105,
+"name": "Canfield",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 106,
+"name": "Double Canfield",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 107,
+"name": "Pas Seul",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 108,
+"name": "Rainbow",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 109,
+"name": "Deuces",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 110,
+"name": "Courtyard",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 111,
+"name": "Doublets",
+"altnames": "Double or Quits",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 112,
+"name": "Eagle Wing",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 113,
+"name": "Zebra",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 114,
+"name": "Grandmother's Game",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 115,
+"name": "Little Forty",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 116,
+"name": "Spaces",
+"altnames": "Addiction",
+"category": "French (Montana)"
+},
+
+{
+"id": 117,
+"name": "Red Moon",
+"altnames": "",
+"category": "French (Montana)"
+},
+
+{
+"id": 118,
+"name": "Sieben bis As",
+"altnames": "",
+"category": "French (Montana)"
+},
+
+{
+"id": 119,
+"name": "Die Koenigsbergerin",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 120,
+"name": "Bad Seven",
+"altnames": "Die boese Sieben",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 121,
+"name": "Mississippi",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 122,
+"name": "Griffon",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 123,
+"name": "Interregnum",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 124,
+"name": "Tower of Hanoy",
+"altnames": "",
+"category": "French (Tower of Hanoi)"
+},
+
+{
+"id": 125,
+"name": "Lucas",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 126,
+"name": "Red and Black",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 127,
+"name": "Eight Times Eight",
+"altnames": "Achtmal Acht",
+"category": "French (Klondike)"
+},
+
+{
+"id": 128,
+"name": "Three Shuffles and a Draw",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 129,
+"name": "Vegas Klondike",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 130,
+"name": "Perpetual Motion",
+"altnames": "First Law",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 131,
+"name": "Double Rail",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 132,
+"name": "Super Flower Garden",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 133,
+"name": "Batsford",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 134,
+"name": "Betsy Ross",
+"altnames": "Fairest\nFour Kings\nMusical Patience\nQuadruple Alliance\nPlus Belle",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 135,
+"name": "Terrace",
+"altnames": "",
+"category": "French (Terrace)"
+},
+
+{
+"id": 136,
+"name": "General's Patience",
+"altnames": "",
+"category": "French (Terrace)"
+},
+
+{
+"id": 137,
+"name": "Blondes and Brunettes",
+"altnames": "",
+"category": "French (Terrace)"
+},
+
+{
+"id": 138,
+"name": "Falling Star",
+"altnames": "",
+"category": "French (Terrace)"
+},
+
+{
+"id": 139,
+"name": "Poker Square",
+"altnames": "",
+"category": "French (Poker)"
+},
+
+{
+"id": 140,
+"name": "Poker Shuffle",
+"altnames": "",
+"category": "French (Poker)"
+},
+
+{
+"id": 141,
+"name": "Cat's Tail",
+"altnames": "Der Katzenschwanz",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 142,
+"name": "Snake",
+"altnames": "Die Schlange",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 143,
+"name": "Kingdom",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 144,
+"name": "Maze",
+"altnames": "",
+"category": "French (Montana)"
+},
+
+{
+"id": 145,
+"name": "Citadel",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 146,
+"name": "Streets and Alleys",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 147,
+"name": "Fortress",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 148,
+"name": "Chessboard",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 149,
+"name": "Diplomat",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 150,
+"name": "Congress",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 151,
+"name": "Lady Palk",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 152,
+"name": "The Last Monarch",
+"altnames": "Der letzte Monarch",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 153,
+"name": "Pas de Deux",
+"altnames": "",
+"category": "French (Montana)"
+},
+
+{
+"id": 154,
+"name": "Brunswick",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 157,
+"name": "Wheel of Fortune",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 158,
+"name": "Imperial Trumps",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 159,
+"name": "Pagat",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 160,
+"name": "Skiz",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 161,
+"name": "Fifteen plus",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 162,
+"name": "Excuse",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 163,
+"name": "Grasshopper",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 164,
+"name": "Double Grasshopper",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 165,
+"name": "Bits n Bytes",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 166,
+"name": "Hex A Klon",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 167,
+"name": "Der kleine Napoleon",
+"altnames": "",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 168,
+"name": "Der freie Napoleon",
+"altnames": "",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 169,
+"name": "Napoleon",
+"altnames": "",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 170,
+"name": "Free Napoleon",
+"altnames": "",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 171,
+"name": "Lady Betty",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 172,
+"name": "Tam O'Shanter",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 173,
+"name": "Strategy",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 174,
+"name": "Russian Patience",
+"altnames": "Die Russische",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 175,
+"name": "Long Braid",
+"altnames": "Der lange Zopf",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 176,
+"name": "Memory 24",
+"altnames": "",
+"category": "French (Memory)"
+},
+
+{
+"id": 177,
+"name": "Memory 40",
+"altnames": "",
+"category": "French (Memory)"
+},
+
+{
+"id": 178,
+"name": "Concentration",
+"altnames": "",
+"category": "French (Memory)"
+},
+
+{
+"id": 179,
+"name": "Ponytail",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 180,
+"name": "Pegged Octagon",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 181,
+"name": "Pegged Cross 1",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 182,
+"name": "Pegged Cross 2",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 183,
+"name": "Pegged 6x6",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 184,
+"name": "Pegged 7x7",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 185,
+"name": "Wasp",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 186,
+"name": "Alaska",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 187,
+"name": "Chinese Discipline",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 188,
+"name": "Chinese Solitaire",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 189,
+"name": "Queenie",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 190,
+"name": "Rushdike",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 191,
+"name": "Russian Point",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 192,
+"name": "Abacus",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 193,
+"name": "Relaxed Pyramid",
+"altnames": "Pyramid's Stones",
+"category": "French (Pairing)"
+},
+
+{
+"id": 194,
+"name": "Rachel",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 195,
+"name": "Quadrangle",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 196,
+"name": "Corona",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 197,
+"name": "Triple Line",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 198,
+"name": "Napoleon's Exile",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 199,
+"name": "Single Rail",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 200,
+"name": "Nomad",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 201,
+"name": "Sanibel",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 202,
+"name": "Cavalier",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 203,
+"name": "Five Aces",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 204,
+"name": "Wicked",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 205,
+"name": "Nasty",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 206,
+"name": "Fortunes",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 207,
+"name": "Hanoi Puzzle 4",
+"altnames": "",
+"category": "French (Tower of Hanoi)"
+},
+
+{
+"id": 208,
+"name": "Hanoi Puzzle 5",
+"altnames": "",
+"category": "French (Tower of Hanoi)"
+},
+
+{
+"id": 209,
+"name": "Hanoi Puzzle 6",
+"altnames": "",
+"category": "French (Tower of Hanoi)"
+},
+
+{
+"id": 210,
+"name": "Pegged Triangle 1",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 211,
+"name": "Pegged Triangle 2",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 212,
+"name": "Weddings",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 213,
+"name": "Russian Aces",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 214,
+"name": "Belvedere",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 215,
+"name": "Somerset",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 216,
+"name": "Monte Carlo (2 decks)",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 217,
+"name": "Milligan Harp",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 218,
+"name": "Carlton",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 219,
+"name": "Memory 30",
+"altnames": "",
+"category": "French (Memory)"
+},
+
+{
+"id": 220,
+"name": "Rouge et Noir",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 221,
+"name": "Stonewall",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 222,
+"name": "Flower Garden",
+"altnames": "The Bouquet\nThe Garden",
+"category": "French (Raglan)"
+},
+
+{
+"id": 223,
+"name": "Brigade",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 224,
+"name": "Easthaven",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 225,
+"name": "Westhaven",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 226,
+"name": "Blockade",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 227,
+"name": "Intelligence",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 228,
+"name": "Limited",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 229,
+"name": "Agnes Sorel",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 230,
+"name": "Jane",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 231,
+"name": "Canister",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 232,
+"name": "Raglan",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 233,
+"name": "King Albert",
+"altnames": "Idiot's Delight",
+"category": "French (Raglan)"
+},
+
+{
+"id": 234,
+"name": "Alhambra",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 235,
+"name": "Nestor",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 236,
+"name": "Agnes Bernauer",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 256,
+"name": "Calculation",
+"altnames": "Progression",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 257,
+"name": "Numerica",
+"altnames": "Sir Tommy",
+"category": "French (Numerica)"
+},
+
+{
+"id": 258,
+"name": "Eight Off",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 259,
+"name": "Dead King Golf",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 260,
+"name": "Relaxed Golf",
+"altnames": "Putt Putt",
+"category": "French (Golf)"
+},
+
+{
+"id": 261,
+"name": "Grandfather's Clock",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 263,
+"name": "Phoenix",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 264,
+"name": "Double FreeCell",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 265,
+"name": "Triple FreeCell",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 266,
+"name": "Dover",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 267,
+"name": "Four Leaf Clovers",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 268,
+"name": "House in the Wood",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 269,
+"name": "Spider (1 suit)",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 270,
+"name": "Spider (2 suits)",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 271,
+"name": "Double Yukon",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 272,
+"name": "Triple Yukon",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 273,
+"name": "Triple Klondike",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 274,
+"name": "Triple Klondike by Threes",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 275,
+"name": "Galary",
+"altnames": "",
+"category": "French (Montana)"
+},
+
+{
+"id": 276,
+"name": "Moonlight",
+"altnames": "Free Parking",
+"category": "French (Montana)"
+},
+
+{
+"id": 277,
+"name": "Napoleon's Tomb",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 278,
+"name": "Grandfather",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 279,
+"name": "Kings",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 280,
+"name": "Camelot",
+"altnames": "Kings in the Corners",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 281,
+"name": "Escalator",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 282,
+"name": "Dutchess",
+"altnames": "Duchess\nGlenwood",
+"category": "French (Canfield)"
+},
+
+{
+"id": 283,
+"name": "Jumbo",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 284,
+"name": "Ten Across",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 285,
+"name": "Panopticon",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 286,
+"name": "Retinue",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 287,
+"name": "Push Pin",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 288,
+"name": "Royal Marriage",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 289,
+"name": "Small PileOn",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 290,
+"name": "Bisley",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 291,
+"name": "Royal Family",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 292,
+"name": "Capricieuse",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 293,
+"name": "Nationale",
+"altnames": "Zigzag Course",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 294,
+"name": "Curds and Whey",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 295,
+"name": "Napoleon's Square",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 296,
+"name": "Colorado",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 298,
+"name": "Open Peek",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 299,
+"name": "Salic Law",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 300,
+"name": "Stronghold",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 301,
+"name": "Fastness",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 302,
+"name": "St. Helena",
+"altnames": "Napoleon's Favorite\nWashington's Favorite",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 303,
+"name": "Tournament",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 304,
+"name": "La Nivernaise",
+"altnames": "Napoleon's Flank",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 305,
+"name": "Three Blind Mice",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 306,
+"name": "Zerline",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 307,
+"name": "Heads and Tails",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 308,
+"name": "Portuguese Solitaire",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 309,
+"name": "Mrs. Mop",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 310,
+"name": "Emperor",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 311,
+"name": "Dumfries",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 312,
+"name": "Galloway",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 313,
+"name": "Robin",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 314,
+"name": "Wave Motion",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 315,
+"name": "Gate",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 316,
+"name": "Little Gate",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 317,
+"name": "House on the Hill",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 318,
+"name": "Needle",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 319,
+"name": "Haystack",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 320,
+"name": "Clover Leaf",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 321,
+"name": "Carthage",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 322,
+"name": "Algerian Patience",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 323,
+"name": "Octave",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 324,
+"name": "Bastion",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 325,
+"name": "Ten by One",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 326,
+"name": "Lanes",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 327,
+"name": "Thirty Six",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 328,
+"name": "The Wish",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 329,
+"name": "The Wish (open)",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 330,
+"name": "Sultan",
+"altnames": "Sultan of Turkey",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 331,
+"name": "Sultan +",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 332,
+"name": "Mumbai",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 333,
+"name": "Open Jumbo",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 334,
+"name": "Take Away",
+"altnames": "Eliminator",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 335,
+"name": "Four Stacks",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 336,
+"name": "Challenge FreeCell",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 337,
+"name": "Super Challenge FreeCell",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 338,
+"name": "Buffalo Bill",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 339,
+"name": "Moosehide",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 340,
+"name": "Intelligence +",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 341,
+"name": "Cicely",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 342,
+"name": "Trillium",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 343,
+"name": "Lily",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 344,
+"name": "Chelicera",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 345,
+"name": "Scorpion Head",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 346,
+"name": "Scorpion Tail",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 347,
+"name": "Free Fan",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 348,
+"name": "Arachnida",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 349,
+"name": "Miss Muffet",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 350,
+"name": "Q.C.",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 351,
+"name": "Chequers",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 352,
+"name": "Nordic",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 353,
+"name": "Aces Up 5",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 354,
+"name": "Boudoir",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 355,
+"name": "Frog",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 356,
+"name": "Fly",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 357,
+"name": "Gnat",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 358,
+"name": "Fort",
+"altnames": "",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 359,
+"name": "Spider Web",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 360,
+"name": "Munger",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 361,
+"name": "Northwest Territory",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 362,
+"name": "Morehead",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 363,
+"name": "Spidercells",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 364,
+"name": "Seven by Four",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 365,
+"name": "Seven by Five",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 366,
+"name": "Simon Jester",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 367,
+"name": "Pitchfork",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 368,
+"name": "Vertical",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 369,
+"name": "Ripple Fan",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 370,
+"name": "Genesis",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 371,
+"name": "Genesis +",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 372,
+"name": "Double Bisley",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 373,
+"name": "Gloria",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 374,
+"name": "Realm",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 375,
+"name": "Mancunian",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 376,
+"name": "Backbone",
+"altnames": "",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 377,
+"name": "Backbone +",
+"altnames": "",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 378,
+"name": "Gloaming",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 379,
+"name": "Chamberlain",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 380,
+"name": "Jungle",
+"altnames": "",
+"category": "French (Montana)"
+},
+
+{
+"id": 381,
+"name": "Spaces and Aces",
+"altnames": "",
+"category": "French (Montana)"
+},
+
+{
+"id": 382,
+"name": "Applegate",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 383,
+"name": "Bath",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 384,
+"name": "Big Spider",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 385,
+"name": "Box Fan",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 386,
+"name": "Kingsdown Eights",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 387,
+"name": "Roslin",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 388,
+"name": "Senate",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 389,
+"name": "Senate +",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 390,
+"name": "Arizona",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 391,
+"name": "British Constitution",
+"altnames": "Constitution",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 392,
+"name": "New British Constitution",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 393,
+"name": "Castle of Indolence",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 394,
+"name": "Clink",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 395,
+"name": "Zerline (3 decks)",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 396,
+"name": "Triple Canfield",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 397,
+"name": "Great Wheel",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 398,
+"name": "Mount Olympus",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 399,
+"name": "Zeus",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 400,
+"name": "Rittenhouse",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 401,
+"name": "Big Divorce",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 402,
+"name": "Toad",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 403,
+"name": "Acme",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 404,
+"name": "Perseverance",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 405,
+"name": "All in a Row",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 406,
+"name": "Amazons",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 407,
+"name": "Aunt Mary",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 408,
+"name": "Box Kite",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 409,
+"name": "Bridesmaids",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 410,
+"name": "Captive Queens",
+"altnames": "Quadrille",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 411,
+"name": "Carre Napoleon",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 412,
+"name": "Cone",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 413,
+"name": "Duke",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 414,
+"name": "German Patience",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 415,
+"name": "Bavarian Patience",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 416,
+"name": "Fortune's Favor",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 417,
+"name": "Corners",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 418,
+"name": "Contradance",
+"altnames": "Cotillion",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 419,
+"name": "Idle Aces",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 420,
+"name": "Double Dot",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 421,
+"name": "Little Billie",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 422,
+"name": "Minerva",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 423,
+"name": "Lady of the Manor",
+"altnames": "Vassal\nLa Chatelaine",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 424,
+"name": "Matrimony",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 425,
+"name": "New York",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 426,
+"name": "Octagon",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 427,
+"name": "Opus",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 428,
+"name": "Parallels",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 429,
+"name": "Patriarchs",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 430,
+"name": "Puss in the Corner",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 431,
+"name": "Queen of Italy",
+"altnames": "",
+"category": "French (Terrace)"
+},
+
+{
+"id": 432,
+"name": "Robert",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 433,
+"name": "Rows of Four",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 434,
+"name": "Seven Devils",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 435,
+"name": "Shifting",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 436,
+"name": "Simplex",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 437,
+"name": "Simplicity",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 438,
+"name": "Sixes and Sevens",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 439,
+"name": "Solid Square",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 440,
+"name": "Squadron",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 441,
+"name": "York",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 442,
+"name": "Deep",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 443,
+"name": "Twenty",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 444,
+"name": "Big York",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 445,
+"name": "Big Spider (1 suit)",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 446,
+"name": "Big Spider (2 suits)",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 447,
+"name": "Australian Patience",
+"altnames": "Outback Patience",
+"category": "French (Yukon)"
+},
+
+{
+"id": 448,
+"name": "Repair",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 449,
+"name": "Spider 3x3",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 450,
+"name": "Raw Prawn",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 451,
+"name": "Cell 11",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 452,
+"name": "Double Easthaven",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 453,
+"name": "Triple Easthaven",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 454,
+"name": "Spider (4 decks)",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 455,
+"name": "Very Big Divorce",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 456,
+"name": "Bim Bom",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 457,
+"name": "Algerian Patience (3 decks)",
+"altnames": "",
+"category": "French (Three-Deck game)"
+},
+
+{
+"id": 458,
+"name": "Spidike",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 459,
+"name": "Fred's Spider",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 460,
+"name": "Fred's Spider (3 decks)",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 461,
+"name": "Open Spider",
+"altnames": "Beetle",
+"category": "French (Spider)"
+},
+
+{
+"id": 462,
+"name": "Josephine",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 463,
+"name": "Surprise",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 464,
+"name": "Four Colours",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 465,
+"name": "Granada",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 466,
+"name": "Double Russian Solitaire",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 467,
+"name": "Zodiac",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 468,
+"name": "Spike",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 469,
+"name": "Phantom Blockade",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 470,
+"name": "Moving Left",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 471,
+"name": "Souter",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 472,
+"name": "Strategerie",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 473,
+"name": "Big Forty",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 474,
+"name": "Ali Baba",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 475,
+"name": "Cassim",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 476,
+"name": "Demon",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 477,
+"name": "Corner Suite",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 478,
+"name": "Elba",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 479,
+"name": "Saratoga",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 480,
+"name": "Trusty Twelve",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 481,
+"name": "Knotty Nines",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 482,
+"name": "Sweet Sixteen",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 483,
+"name": "Czarina",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 484,
+"name": "Four Seasons",
+"altnames": "Corner Card\nVanishing Cross",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 485,
+"name": "Dieppe",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 486,
+"name": "Imperial Guards",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 487,
+"name": "Millie",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 488,
+"name": "Triple Russian Solitaire",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 489,
+"name": "Little Napoleon",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 490,
+"name": "Acquaintance",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 491,
+"name": "Whitehorse",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 492,
+"name": "Geoffrey",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 493,
+"name": "Marie Rose",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 494,
+"name": "Mystique",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 495,
+"name": "Lady Jane",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 496,
+"name": "Inquisitor",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 497,
+"name": "Arabella",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 498,
+"name": "Steve",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 499,
+"name": "Signora",
+"altnames": "",
+"category": "French (Terrace)"
+},
+
+{
+"id": 500,
+"name": "Madame",
+"altnames": "",
+"category": "French (Terrace)"
+},
+
+{
+"id": 501,
+"name": "Wake-Robin",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 502,
+"name": "Wake-Robin (3 decks)",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 503,
+"name": "Big Streets",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 504,
+"name": "Number Twelve",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 505,
+"name": "Big Courtyard",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 506,
+"name": "Express",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 507,
+"name": "Lightweight",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 508,
+"name": "Castle Mount",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 509,
+"name": "Big Cell",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 510,
+"name": "Big Braid",
+"altnames": "",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 511,
+"name": "Double Scorpion",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 512,
+"name": "Triple Scorpion",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 513,
+"name": "Ocean Towers",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 514,
+"name": "Carnation",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 515,
+"name": "Indefatigable",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 516,
+"name": "Troika",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 517,
+"name": "Quads",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 518,
+"name": "Boost",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 519,
+"name": "Gotham",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 520,
+"name": "German FreeCell",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 521,
+"name": "Canfield Rush",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 522,
+"name": "Artic Garden",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 523,
+"name": "Intrigue",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 524,
+"name": "Selective Castle",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 525,
+"name": "Queensland",
+"altnames": "",
+"category": "French (Yukon)"
+},
+
+{
+"id": 527,
+"name": "Doorway",
+"altnames": "Solstice",
+"category": "French (Klondike)"
+},
+
+{
+"id": 528,
+"name": "Final Battle",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 529,
+"name": "San Juan Hill",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 530,
+"name": "Russian Spider",
+"altnames": "Ukrainian Solitaire",
+"category": "French (Spider)"
+},
+
+{
+"id": 531,
+"name": "Double Russian Spider",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 532,
+"name": "Gold Rush",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 533,
+"name": "Mamy Susan",
+"altnames": "",
+"category": "French (Terrace)"
+},
+
+{
+"id": 534,
+"name": "Harvestman",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 535,
+"name": "Exiled Kings",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 536,
+"name": "Master",
+"altnames": "",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 537,
+"name": "The Little Corporal",
+"altnames": "",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 538,
+"name": "Bonaparte",
+"altnames": "",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 539,
+"name": "Usk",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 540,
+"name": "Waterloo",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 541,
+"name": "Batsford Again",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 542,
+"name": "KingCell",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 543,
+"name": "Farmer's Wife",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 544,
+"name": "How They Run",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 545,
+"name": "Big Deal",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 546,
+"name": "Royal Parade",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 547,
+"name": "Virginia Reel",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 548,
+"name": "Parliament",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 549,
+"name": "Wheatsheaf",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 550,
+"name": "One234",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 551,
+"name": "Diamond Mine",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 552,
+"name": "Cover",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 553,
+"name": "Scuffle",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 554,
+"name": "Foursome",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 555,
+"name": "Quartets",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 556,
+"name": "Junction",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 557,
+"name": "Grand Duchess",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 558,
+"name": "Numerica (2 decks)",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 559,
+"name": "Marshal",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 560,
+"name": "Double Acquaintance",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 561,
+"name": "Dutch Solitaire",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 562,
+"name": "Delivery",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 563,
+"name": "Twin Queens",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 564,
+"name": "The Spark",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 565,
+"name": "Royal Aids",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 566,
+"name": "Hypotenuse",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 567,
+"name": "Eternal Triangle",
+"altnames": "Lobachevsky",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 568,
+"name": "Right Triangle",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 569,
+"name": "Primrose",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 570,
+"name": "Long Tail",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 571,
+"name": "Short Tail",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 572,
+"name": "Gold Mine",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 573,
+"name": "Double Gold Mine",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 574,
+"name": "Interchange",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 575,
+"name": "Unlimited",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 576,
+"name": "Breakwater",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 577,
+"name": "Forty Nine",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 578,
+"name": "Indian Patience",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 579,
+"name": "Three Pirates",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 580,
+"name": "Trapdoor",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 581,
+"name": "Flamenco",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 582,
+"name": "Wood",
+"altnames": "",
+"category": "French (Terrace)"
+},
+
+{
+"id": 583,
+"name": "Firing Squad",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 584,
+"name": "Eclipse",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 585,
+"name": "Lucky Thirteen",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 586,
+"name": "Lucky Piles",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 587,
+"name": "Double Fives",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 588,
+"name": "Roosevelt",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 589,
+"name": "Last Chance",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 590,
+"name": "Chinese Klondike",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 591,
+"name": "Pantagruel",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 592,
+"name": "Giza",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 593,
+"name": "Thirteens",
+"altnames": "Helsinki",
+"category": "French (Pairing)"
+},
+
+{
+"id": 594,
+"name": "Elevens",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 595,
+"name": "Elevens Too",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 596,
+"name": "Suit Elevens",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 597,
+"name": "Fifteens",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 598,
+"name": "Picture Patience",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 599,
+"name": "Assembly",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 600,
+"name": "Anno Domini",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 601,
+"name": "American Canister",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 602,
+"name": "British Canister",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 603,
+"name": "Brisbane",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 604,
+"name": "Interment",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 605,
+"name": "Skippy",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 606,
+"name": "Strata",
+"altnames": "Persian Patience",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 607,
+"name": "Legion",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 608,
+"name": "Frames",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 609,
+"name": "Grant's Reinforcement",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 610,
+"name": "Sly Fox",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 611,
+"name": "Faerie Queen",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 612,
+"name": "Glencoe",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 613,
+"name": "Fanny",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 614,
+"name": "Open Sly Fox",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 615,
+"name": "British Blockade",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 616,
+"name": "Laggard Lady",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 617,
+"name": "Parisienne",
+"altnames": "La Parisienne\nParisian",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 618,
+"name": "Grand Duchess +",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 619,
+"name": "Triple Alliance",
+"altnames": "Triplets",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 620,
+"name": "Les Quatre Coins",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 621,
+"name": "Regal Family",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 622,
+"name": "Grandmamma's Patience",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 623,
+"name": "Princess Patience",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 624,
+"name": "Step-Up",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 625,
+"name": "Fascination Fan",
+"altnames": "Demon Fan",
+"category": "French (Fan)"
+},
+
+{
+"id": 626,
+"name": "Soother",
+"altnames": "",
+"category": "French (Four-Deck game)"
+},
+
+{
+"id": 627,
+"name": "Queen Victoria",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 628,
+"name": "Crossroads",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 629,
+"name": "Tuxedo",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 630,
+"name": "Big Bertha",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 631,
+"name": "Alternation",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 632,
+"name": "Floradora",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 633,
+"name": "Athena",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 634,
+"name": "Chinaman",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 635,
+"name": "Circle Eight",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 636,
+"name": "Strategy +",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 637,
+"name": "Bastille Day",
+"altnames": "",
+"category": "French (Terrace)"
+},
+
+{
+"id": 638,
+"name": "Royal Rendezvous",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 639,
+"name": "Shady Lanes",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 640,
+"name": "Brazilian Patience",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 641,
+"name": "Circle Nine",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 642,
+"name": "Lafayette",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 643,
+"name": "Measure",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 644,
+"name": "Double Measure",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 645,
+"name": "Saxony",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 646,
+"name": "Adela",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 647,
+"name": "Crescent",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 648,
+"name": "Headquarters",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 649,
+"name": "Doublets II",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 650,
+"name": "Castles End",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 651,
+"name": "Eight by Eight",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 652,
+"name": "Ladies Battle",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 653,
+"name": "Senior Wrangler",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 654,
+"name": "Striptease",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 655,
+"name": "Pharaohs",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 656,
+"name": "Bayan",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 657,
+"name": "Baroness",
+"altnames": "Five Piles",
+"category": "French (Pairing)"
+},
+
+{
+"id": 658,
+"name": "Apophis",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 659,
+"name": "Cheops",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 660,
+"name": "Toni",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 661,
+"name": "Dolphin",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 662,
+"name": "Double Dolphin",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 663,
+"name": "The Last Monarch II",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 664,
+"name": "Spanish Patience II",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 665,
+"name": "Penelope's Web",
+"altnames": "",
+"category": "French (Beleaguered Castle)"
+},
+
+{
+"id": 666,
+"name": "Trapdoor Spider",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 667,
+"name": "Kingsley",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 668,
+"name": "Double Kingsley",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 669,
+"name": "Scarp",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 670,
+"name": "Chinese Spider",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 671,
+"name": "Incompatibility",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 672,
+"name": "Scorpion II",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 673,
+"name": "Fifteen",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 674,
+"name": "Relaxed Exit",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 675,
+"name": "Four Winds",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 676,
+"name": "Boxing the Compass",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 677,
+"name": "Two Pyramids",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 678,
+"name": "Thieves of Egypt",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 679,
+"name": "Triple Interchange",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 680,
+"name": "Tarantula",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 681,
+"name": "King Tut",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 682,
+"name": "Dial",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 683,
+"name": "Famous Fifty",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 684,
+"name": "Deck",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 685,
+"name": "Fechter's Game",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 686,
+"name": "Hospital Patience",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 687,
+"name": "Glacier",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 688,
+"name": "Formic",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 689,
+"name": "Brush",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 690,
+"name": "Hemispheres",
+"altnames": "The Four Continents",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 691,
+"name": "Khedive",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 692,
+"name": "Board Patience",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 693,
+"name": "Colonel",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 694,
+"name": "Casket",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 695,
+"name": "The Red and the Black",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 696,
+"name": "Florentine Patience",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 697,
+"name": "Big Ben",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 698,
+"name": "Can Can",
+"altnames": "",
+"category": "French (Raglan)"
+},
+
+{
+"id": 699,
+"name": "Double Pyramid",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 700,
+"name": "Triangle",
+"altnames": "Yield",
+"category": "French (Pairing)"
+},
+
+{
+"id": 701,
+"name": "Up and Down",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 702,
+"name": "Double Line",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 703,
+"name": "Four by Four",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 704,
+"name": "S Patience",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 705,
+"name": "Busy Cards",
+"altnames": "",
+"category": "French (Napoleon)"
+},
+
+{
+"id": 706,
+"name": "Paganini",
+"altnames": "Long Trip",
+"category": "French (Montana)"
+},
+
+{
+"id": 707,
+"name": "Hawaiian",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 708,
+"name": "Barrier",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 709,
+"name": "Waterfall",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 710,
+"name": "Bebop",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 711,
+"name": "The Jolly Roger",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 712,
+"name": "Leprechaun",
+"altnames": "",
+"category": "French (Gypsy)"
+},
+
+{
+"id": 713,
+"name": "Flipper",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 714,
+"name": "Shamrocks II",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 715,
+"name": "Treasure Trove",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 716,
+"name": "Peek II",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 717,
+"name": "Well",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 718,
+"name": "Locked Cards",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 719,
+"name": "School",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 720,
+"name": "Vague",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 721,
+"name": "Thirty",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 722,
+"name": "Twelve Sleeping Maids",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 723,
+"name": "Devil's Solitaire",
+"altnames": "Banner",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 724,
+"name": "Eight Packs",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 725,
+"name": "Topsy-Turvy Queens",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 726,
+"name": "Eight Sages",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 727,
+"name": "Right and Left",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 728,
+"name": "Thirty Two Cards",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 729,
+"name": "Two Rings",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 730,
+"name": "Phalanx",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 731,
+"name": "Three Fir-trees",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 732,
+"name": "Wave",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 733,
+"name": "Napoleon Takes Moscow",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 734,
+"name": "Napoleon Leaves Moscow",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 735,
+"name": "Hurricane",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 736,
+"name": "Spoilt",
+"altnames": "",
+"category": "French (Montana)"
+},
+
+{
+"id": 737,
+"name": "Clock",
+"altnames": "Travellers",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 738,
+"name": "Boomerang",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 739,
+"name": "Forest Glade",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 740,
+"name": "Footling",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 741,
+"name": "Double Footling",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 742,
+"name": "Grandee",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 743,
+"name": "Turncoats",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 744,
+"name": "Voracious",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 745,
+"name": "Desert Island",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 746,
+"name": "Limpopo",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 747,
+"name": "Cringle",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 748,
+"name": "Twilight Zone",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 749,
+"name": "Flake",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 750,
+"name": "Flake (2 decks)",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 751,
+"name": "Blind Patience",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 752,
+"name": "Reserves",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 753,
+"name": "Flourish",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 754,
+"name": "Amphibian",
+"altnames": "",
+"category": "French (Numerica)"
+},
+
+{
+"id": 755,
+"name": "Choice",
+"altnames": "",
+"category": "French (Three-Deck game)"
+},
+
+{
+"id": 756,
+"name": "Tabby Cat",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 757,
+"name": "Manx",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 758,
+"name": "Maine Coon",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 759,
+"name": "Double Montana",
+"altnames": "",
+"category": "French (Montana)"
+},
+
+{
+"id": 760,
+"name": "Aglet",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 761,
+"name": "Catherine the Great",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 762,
+"name": "Four Packs",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 763,
+"name": "Wasatch",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 764,
+"name": "Beacon",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 765,
+"name": "Foothold",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 766,
+"name": "Kentish",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 767,
+"name": "Quads +",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 768,
+"name": "Relaxed Three Fir-trees",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 769,
+"name": "Hanoi Sequence",
+"altnames": "",
+"category": "French (Tower of Hanoi)"
+},
+
+{
+"id": 770,
+"name": "Double Blue Moon",
+"altnames": "",
+"category": "French (Montana)"
+},
+
+{
+"id": 771,
+"name": "Double Red Moon",
+"altnames": "",
+"category": "French (Montana)"
+},
+
+{
+"id": 772,
+"name": "Accordion",
+"altnames": "Idle Year\nMethuselah\nTower of Babel",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 773,
+"name": "Relaxed Accordion",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 774,
+"name": "Hit or Miss",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 775,
+"name": "Sixty Thieves",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 776,
+"name": "Eighty Thieves",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 777,
+"name": "Double Golf",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 778,
+"name": "Crossword",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 779,
+"name": "Hanoi Puzzle 3",
+"altnames": "",
+"category": "French (Tower of Hanoi)"
+},
+
+{
+"id": 780,
+"name": "Hanoi Puzzle 7",
+"altnames": "",
+"category": "French (Tower of Hanoi)"
+},
+
+{
+"id": 781,
+"name": "Hanoi Puzzle 8",
+"altnames": "",
+"category": "French (Tower of Hanoi)"
+},
+
+{
+"id": 782,
+"name": "Greater Wheel",
+"altnames": "",
+"category": "French (Four-Deck game)"
+},
+
+{
+"id": 783,
+"name": "Uintah",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 784,
+"name": "Take Away 8",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 785,
+"name": "Big Terrace",
+"altnames": "",
+"category": "French (Terrace)"
+},
+
+{
+"id": 786,
+"name": "Empress of Italy",
+"altnames": "",
+"category": "French (Terrace)"
+},
+
+{
+"id": 787,
+"name": "Admiral's Patience",
+"altnames": "",
+"category": "French (Terrace)"
+},
+
+{
+"id": 788,
+"name": "Autumn Leaves",
+"altnames": "",
+"category": "French (Spider)"
+},
+
+{
+"id": 789,
+"name": "Beehive",
+"altnames": "",
+"category": "French (Canfield)"
+},
+
+{
+"id": 790,
+"name": "Precedence",
+"altnames": "Order of Precedence",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 791,
+"name": "Precedence (No King)",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 792,
+"name": "King's Secrets",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 793,
+"name": "Relaxed PileOn",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 794,
+"name": "House of Commons",
+"altnames": "",
+"category": "French (Montana)"
+},
+
+{
+"id": 795,
+"name": "Pretzel",
+"altnames": "",
+"category": "French (Montana)"
+},
+
+{
+"id": 796,
+"name": "Exit",
+"altnames": "Gay Gordons",
+"category": "French (Pairing)"
+},
+
+{
+"id": 797,
+"name": "Poker Square (Waste)",
+"altnames": "",
+"category": "French (Poker)"
+},
+
+{
+"id": 798,
+"name": "Poker Square (1 Reserve)",
+"altnames": "",
+"category": "French (Poker)"
+},
+
+{
+"id": 799,
+"name": "Poker Square (2 Reserves)",
+"altnames": "",
+"category": "French (Poker)"
+},
+
+{
+"id": 800,
+"name": "Aces and Kings",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 801,
+"name": "Double Nestor",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 802,
+"name": "Triple Alliance (2 decks)",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 803,
+"name": "Big Parade",
+"altnames": "",
+"category": "French (Three-Deck game)"
+},
+
+{
+"id": 804,
+"name": "Three Up",
+"altnames": "",
+"category": "French (Three-Deck game)"
+},
+
+{
+"id": 805,
+"name": "Cribbage Square",
+"altnames": "",
+"category": "French (Cribbage)"
+},
+
+{
+"id": 806,
+"name": "Cribbage Square (Waste)",
+"altnames": "",
+"category": "French (Cribbage)"
+},
+
+{
+"id": 807,
+"name": "Cribbage Square (1 Reserve)",
+"altnames": "",
+"category": "French (Cribbage)"
+},
+
+{
+"id": 808,
+"name": "Cribbage Square (2 Reserves)",
+"altnames": "",
+"category": "French (Cribbage)"
+},
+
+{
+"id": 809,
+"name": "Cribbage Shuffle",
+"altnames": "",
+"category": "French (Cribbage)"
+},
+
+{
+"id": 810,
+"name": "Quatorze",
+"altnames": "",
+"category": "French (Pairing)"
+},
+
+{
+"id": 811,
+"name": "Accordion's Revenge",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 812,
+"name": "Sticko",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 813,
+"name": "Double FreeCell (Traditional)",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 814,
+"name": "Acey and Kingsley",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 815,
+"name": "Following",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 816,
+"name": "Decade",
+"altnames": "Ten Twenty Thirty",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 817,
+"name": "Maverick",
+"altnames": "",
+"category": "French (Poker)"
+},
+
+{
+"id": 818,
+"name": "Triple Rail",
+"altnames": "",
+"category": "French (Forty Thieves)"
+},
+
+{
+"id": 819,
+"name": "Bear River",
+"altnames": "",
+"category": "French (Fan)"
+},
+
+{
+"id": 820,
+"name": "Racing Aces",
+"altnames": "",
+"category": "French (Three-Deck game)"
+},
+
+{
+"id": 821,
+"name": "Trigon",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 822,
+"name": "Double Trigon",
+"altnames": "",
+"category": "French (Klondike)"
+},
+
+{
+"id": 823,
+"name": "Unusual",
+"altnames": "",
+"category": "French (Baker's Dozen)"
+},
+
+{
+"id": 901,
+"name": "La Belle Lucie",
+"altnames": "Fair Lucy\nMidnight Oil",
+"category": "French (Fan)"
+},
+
+{
+"id": 903,
+"name": "Aces Up",
+"altnames": "Aces High\nDrivel",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 1900,
+"name": "FreeCell (2 Reserves)",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 1901,
+"name": "FreeCell (No Reserve)",
+"altnames": "",
+"category": "French (FreeCell)"
+},
+
+{
+"id": 5001,
+"name": "Mahjongg Altar",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5002,
+"name": "Mahjongg Arena",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5003,
+"name": "Mahjongg Arena 2",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5004,
+"name": "Mahjongg Arrow",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5005,
+"name": "Mahjongg Art Moderne",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5006,
+"name": "Mahjongg Balance",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5007,
+"name": "Mahjongg Bat",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5008,
+"name": "Mahjongg Beatle",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5009,
+"name": "Mahjongg Big Hole",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5010,
+"name": "Mahjongg Bizarre",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5011,
+"name": "Mahjongg Boat",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5012,
+"name": "Mahjongg Bug",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5013,
+"name": "Mahjongg Butterfly",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5014,
+"name": "Mahjongg Castle",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5015,
+"name": "Mahjongg Cat and Mouse",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5016,
+"name": "Mahjongg Ceremonial",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5017,
+"name": "Mahjongg Checkered",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5018,
+"name": "Mahjongg Chip",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5019,
+"name": "Mahjongg Columns",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5020,
+"name": "Mahjongg Crown",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5021,
+"name": "Mahjongg Cupola",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5022,
+"name": "Mahjongg Deep Well",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5023,
+"name": "Mahjongg Dragon",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5024,
+"name": "Mahjongg Dude",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5026,
+"name": "Mahjongg Enterprise",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5027,
+"name": "Mahjongg Eye",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5028,
+"name": "Mahjongg F-15 Eagle",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5029,
+"name": "Mahjongg Farandole",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5030,
+"name": "Mahjongg Fish",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5031,
+"name": "Mahjongg Five Pyramids",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5033,
+"name": "Mahjongg Flowers",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5034,
+"name": "Mahjongg Flying Dragon",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5035,
+"name": "Mahjongg Fortress Towers",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5036,
+"name": "Mahjongg Full Vision",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5037,
+"name": "Mahjongg Full Vision 2",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5038,
+"name": "Mahjongg Future",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5039,
+"name": "Mahjongg Garden",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5040,
+"name": "Mahjongg Gayle's",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5041,
+"name": "Mahjongg Glade",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5042,
+"name": "Mahjongg H for Haga",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5044,
+"name": "Mahjongg Helios",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5045,
+"name": "Mahjongg High and Low",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5047,
+"name": "Mahjongg Inca",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5048,
+"name": "Mahjongg Inner Circle",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5049,
+"name": "Mahjongg Joker",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5050,
+"name": "Mahjongg K for Kyodai",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5052,
+"name": "Mahjongg Km",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5053,
+"name": "Mahjongg Kujaku",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5054,
+"name": "Mahjongg Labyrinth",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5055,
+"name": "Mahjongg Lion",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5056,
+"name": "Mahjongg Lost ",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5057,
+"name": "Mahjongg Maya",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5058,
+"name": "Mahjongg Mesh",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5059,
+"name": "Mahjongg Moth",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5060,
+"name": "Mahjongg N for Namida",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5063,
+"name": "Mahjongg New Layout",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5064,
+"name": "Mahjongg Order",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5065,
+"name": "Mahjongg Pattern",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5067,
+"name": "Mahjongg Portal",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5068,
+"name": "Mahjongg Rocket",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5069,
+"name": "Mahjongg Scorpion",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5070,
+"name": "Mahjongg Screw Up",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5071,
+"name": "Mahjongg Seven",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5072,
+"name": "Mahjongg Seven Pyramids",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5073,
+"name": "Mahjongg Shield",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5074,
+"name": "Mahjongg Siam",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5076,
+"name": "Mahjongg Square",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5077,
+"name": "Mahjongg Squares",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5078,
+"name": "Mahjongg Squaring",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5079,
+"name": "Mahjongg Stairs",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5080,
+"name": "Mahjongg Star Ship",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5081,
+"name": "Mahjongg Steps Pyramid",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5082,
+"name": "Mahjongg Stonehenge",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5083,
+"name": "Mahjongg SunMoon",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5084,
+"name": "Mahjongg Temple",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5086,
+"name": "Mahjongg The Door",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5087,
+"name": "Mahjongg The Great Wall",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5088,
+"name": "Mahjongg Theater",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5089,
+"name": "Mahjongg Tile Fighter",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5090,
+"name": "Mahjongg Tilepiles",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5091,
+"name": "Mahjongg Time Tunnel",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5092,
+"name": "Mahjongg Tomb",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5094,
+"name": "Mahjongg Traditional Reviewed",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5095,
+"name": "Mahjongg Tree of Life",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5096,
+"name": "Mahjongg Twin Temples",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5097,
+"name": "Mahjongg Vi",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5098,
+"name": "Mahjongg Victory Arrow",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5099,
+"name": "Mahjongg Wavelets",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5100,
+"name": "Mahjongg Well",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5102,
+"name": "Mahjongg Yummy",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5200,
+"name": "Mahjongg Another Round",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5201,
+"name": "Mahjongg Aqab's",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5202,
+"name": "Mahjongg Big Mountain",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5203,
+"name": "Mahjongg Bridge",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5204,
+"name": "Mahjongg Butterfly 2",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5205,
+"name": "Mahjongg ChessMania",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5206,
+"name": "Mahjongg Cross",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5207,
+"name": "Mahjongg Cupido's Heart",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5208,
+"name": "Mahjongg Diamond",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5209,
+"name": "Mahjongg Dragon 2",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5210,
+"name": "Mahjongg Empty Pyramids",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5211,
+"name": "Mahjongg Fish face",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5212,
+"name": "Mahjongg Floating City",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5215,
+"name": "Mahjongg Hidden Words",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5216,
+"name": "Mahjongg Hovercraft",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5217,
+"name": "Mahjongg Hurdles",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5218,
+"name": "Mahjongg Tornado",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5219,
+"name": "Mahjongg IloveU",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5220,
+"name": "Mahjongg Inazuma",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5221,
+"name": "Mahjongg JPs",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5222,
+"name": "Mahjongg Japan",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5223,
+"name": "Mahjongg Krebs",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5224,
+"name": "Mahjongg Kumo",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5225,
+"name": "Mahjongg Kyodai 14",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5226,
+"name": "Mahjongg Kyodai 17",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5227,
+"name": "Mahjongg Kyodai 18",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5228,
+"name": "Mahjongg Kyodai 20",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5229,
+"name": "Mahjongg Kyodai 23",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5230,
+"name": "Mahjongg Kyodai 24",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5231,
+"name": "Mahjongg Kyodai 25",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5232,
+"name": "Mahjongg Kyodai 26",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5233,
+"name": "Mahjongg Kyodai 27",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5234,
+"name": "Mahjongg Kyodai 28",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5235,
+"name": "Mahjongg Kyodai 41",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5236,
+"name": "Mahjongg Kyodai 42",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5237,
+"name": "Mahjongg Lattice",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5239,
+"name": "Mahjongg Loose Ends",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5240,
+"name": "Mahjongg Mini Traditional",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5241,
+"name": "Mahjongg Mini-Layout",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5242,
+"name": "Mahjongg Mission Impossible",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5243,
+"name": "Mahjongg Multi X",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5245,
+"name": "Mahjongg Okie's Nitemare",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5246,
+"name": "Mahjongg Orbital",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5247,
+"name": "Mahjongg Owl",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5248,
+"name": "Mahjongg Pantheon",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5249,
+"name": "Mahjongg Papillon",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5250,
+"name": "Mahjongg Pyramid 1",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5251,
+"name": "Mahjongg Pyramid 2",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5252,
+"name": "Mahjongg Quad",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5253,
+"name": "Mahjongg Rectangle",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5254,
+"name": "Mahjongg Reindeer",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5255,
+"name": "Mahjongg Rings",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5256,
+"name": "Mahjongg River Bridge",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5257,
+"name": "Mahjongg Roman Arena",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5258,
+"name": "Mahjongg Rugby",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5259,
+"name": "Mahjongg Shapeshifter",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5260,
+"name": "Mahjongg Space Bridge",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5261,
+"name": "Mahjongg Space Shuttle",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5262,
+"name": "Mahjongg Stage 1",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5263,
+"name": "Mahjongg Stage 2",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5264,
+"name": "Mahjongg Stairs 2",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5265,
+"name": "Mahjongg Stairs 3",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5266,
+"name": "Mahjongg Stargate",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5267,
+"name": "Mahjongg Sukis",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5268,
+"name": "Mahjongg Temple 1",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5269,
+"name": "Mahjongg Temple 2",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5270,
+"name": "Mahjongg Totally Random-Made",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5271,
+"name": "Mahjongg Trika",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5272,
+"name": "Mahjongg Twin",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5273,
+"name": "Mahjongg Two Domes",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5274,
+"name": "Mahjongg Vagues",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5275,
+"name": "Mahjongg Well2",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5276,
+"name": "Mahjongg Whatever",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5277,
+"name": "Mahjongg Win",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5278,
+"name": "Mahjongg X-Files",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5279,
+"name": "Mahjongg X-Shape",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5401,
+"name": "Mahjongg Taipei",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5402,
+"name": "Mahjongg Hare",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5403,
+"name": "Mahjongg Horse",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5404,
+"name": "Mahjongg Rat",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5405,
+"name": "Mahjongg Tiger",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5406,
+"name": "Mahjongg Ram",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5407,
+"name": "Mahjongg Wedges",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5408,
+"name": "Mahjongg Monkey",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5409,
+"name": "Mahjongg Rooster",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5410,
+"name": "Mahjongg Dog",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5411,
+"name": "Mahjongg Snake",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5412,
+"name": "Mahjongg Boar",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5413,
+"name": "Mahjongg Ox",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5414,
+"name": "Mahjongg Bridge 2",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5801,
+"name": "Double Mahjongg Faro",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5803,
+"name": "Double Mahjongg Two Squares",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5805,
+"name": "Double Mahjongg Twin Picks",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5806,
+"name": "Double Mahjongg Roost",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5807,
+"name": "Double Mahjongg Big Castle",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5808,
+"name": "Double Mahjongg Eight Squares",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5809,
+"name": "Double Mahjongg Big Flying Dragon",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5810,
+"name": "Double Mahjongg Sphere",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5901,
+"name": "Half Mahjongg Happy New Year",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5904,
+"name": "Half Mahjongg Smile",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 5905,
+"name": "Half Mahjongg Wall",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 11001,
+"name": "Shisen-Sho 14x6",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 11002,
+"name": "Shisen-Sho 18x8",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 11003,
+"name": "Shisen-Sho 24x12",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 11004,
+"name": "Shisen-Sho (No Gravity) 14x6",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 11005,
+"name": "Shisen-Sho (No Gravity) 18x8",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 11006,
+"name": "Shisen-Sho (No Gravity) 24x12",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 11011,
+"name": "Not Shisen-Sho 14x6",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 11012,
+"name": "Not Shisen-Sho 18x8",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 11013,
+"name": "Not Shisen-Sho 24x12",
+"altnames": "",
+"category": "Mahjongg"
+},
+
+{
+"id": 12345,
+"name": "Oonsoo",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12346,
+"name": "MatsuKiri",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12347,
+"name": "Gaji",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12348,
+"name": "Flower Clock",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12349,
+"name": "Pagoda",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12350,
+"name": "Samuri",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12351,
+"name": "Great Wall",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12352,
+"name": "Hanafuda Four Winds",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12353,
+"name": "Sumo",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12354,
+"name": "Big Sumo",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12355,
+"name": "Little Easy",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12356,
+"name": "Big Easy",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12357,
+"name": "Easy Supreme",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12358,
+"name": "Just For Fun",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12359,
+"name": "Firecracker",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12360,
+"name": "Easy x One",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12361,
+"name": "Relax",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12362,
+"name": "Double Samuri",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12363,
+"name": "Super Samuri",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12364,
+"name": "Double Your Fun",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12365,
+"name": "Cherry Bomb",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12366,
+"name": "Oonsoo Too",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12367,
+"name": "Oonsoo Strict",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12368,
+"name": "Oonsoo Open",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12369,
+"name": "Paulownia",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12370,
+"name": "Lesser Queue",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12371,
+"name": "Greater Queue",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12372,
+"name": "MatsuKiri Strict",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12373,
+"name": "Japanese Garden",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12374,
+"name": "Japanese Garden II",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12375,
+"name": "Six Sages",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12376,
+"name": "Six Tengus",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12377,
+"name": "Japanese Garden III",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12378,
+"name": "Hanafuda Four Seasons",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12379,
+"name": "Oonsoo Times Two",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12380,
+"name": "Eularia",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12381,
+"name": "Peony",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12382,
+"name": "Iris",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12383,
+"name": "Pine",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12384,
+"name": "Wisteria",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 12385,
+"name": "Flower Arrangement",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 13001,
+"name": "Katrina's Game",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 13002,
+"name": "Bridget's Game",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 13003,
+"name": "Fatimeh's Game",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 13004,
+"name": "Kali's Game",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 13005,
+"name": "Dojouji's Game",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 13006,
+"name": "Lara's Game Relaxed",
+"altnames": "",
+"category": "French (Two-Deck game)"
+},
+
+{
+"id": 13007,
+"name": "Lara's Game Doubled",
+"altnames": "",
+"category": "French (Four-Deck game)"
+},
+
+{
+"id": 13008,
+"name": "Katrina's Game Relaxed",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 13009,
+"name": "Katrina's Game Doubled",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 13010,
+"name": "Bridget's Game Doubled",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 13011,
+"name": "Kali's Game Relaxed",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 13012,
+"name": "Kali's Game Doubled",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 13013,
+"name": "Fatimeh's Game Relaxed",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 13014,
+"name": "Dojouji's Game Doubled",
+"altnames": "",
+"category": "Hanafuda"
+},
+
+{
+"id": 13163,
+"name": "Cockroach",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 13164,
+"name": "Double Cockroach",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 13165,
+"name": "Corkscrew",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 13166,
+"name": "Serpent",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 13167,
+"name": "Rambling",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 14401,
+"name": "Mughal Circles",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 14402,
+"name": "Ghulam",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 14403,
+"name": "Shamsher",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 14404,
+"name": "Eight Legions",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 14405,
+"name": "Ashrafi",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 14406,
+"name": "Tipati",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 14407,
+"name": "Ashwapati",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 14408,
+"name": "Gajapati",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 14409,
+"name": "Narpati",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 14410,
+"name": "Garhpati",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 14411,
+"name": "Dhanpati",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 14412,
+"name": "Akbar's Triumph",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 14413,
+"name": "Akbar's Conquest",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 15406,
+"name": "Matsya",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15407,
+"name": "Kurma",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15408,
+"name": "Varaha",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15409,
+"name": "Narasimha",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15410,
+"name": "Vamana",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15411,
+"name": "Parashurama",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15412,
+"name": "Ten Avatars",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15413,
+"name": "Dashavatara Circles",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15414,
+"name": "Balarama",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15415,
+"name": "Hayagriva",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15416,
+"name": "Shanka",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15417,
+"name": "Journey to Cuddapah",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15418,
+"name": "Long Journey to Cuddapah",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15419,
+"name": "Surukh",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15420,
+"name": "Appachan's Waterfall",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15421,
+"name": "Hiranyaksha",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 15422,
+"name": "Dashavatara",
+"altnames": "",
+"category": "Dashavatara Ganjifa"
+},
+
+{
+"id": 16000,
+"name": "Vajra",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 16001,
+"name": "Danda",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 16002,
+"name": "Khadga",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 16003,
+"name": "Makara",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 16004,
+"name": "Ashta Dikapala",
+"altnames": "",
+"category": "Mughal Ganjifa"
+},
+
+{
+"id": 16666,
+"name": "Klondike Plus 16",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16667,
+"name": "Hex A Klon by Threes",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16668,
+"name": "King Only Hex A Klon",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16669,
+"name": "The Familiar",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16670,
+"name": "Two Familiars",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16671,
+"name": "10 x 8",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16672,
+"name": "Drawbridge",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16673,
+"name": "Double Drawbridge",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16674,
+"name": "Hidden Passages",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16675,
+"name": "Cluitjar's Lair",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16676,
+"name": "Merlin's Meander",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16677,
+"name": "Mage's Game",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16678,
+"name": "Convolution",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16679,
+"name": "Hex Labyrinth",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16680,
+"name": "Snakestone",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 16681,
+"name": "Hex Yukon",
+"altnames": "",
+"category": "Hex A Deck"
+},
+
+{
+"id": 22216,
+"name": "Three Peaks (Scored)",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 22217,
+"name": "Three Peaks (Open)",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 22218,
+"name": "Three Peaks (Scored/Open)",
+"altnames": "",
+"category": "French (Golf)"
+},
+
+{
+"id": 22223,
+"name": " 3x3 Matrix",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 22224,
+"name": " 4x4 Matrix",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 22225,
+"name": " 5x5 Matrix",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 22226,
+"name": " 6x6 Matrix",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 22227,
+"name": " 7x7 Matrix",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 22228,
+"name": " 8x8 Matrix",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 22229,
+"name": " 9x9 Matrix",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 22230,
+"name": "10x10 Matrix",
+"altnames": "",
+"category": "Trumps only"
+},
+
+{
+"id": 22231,
+"name": "Three Peaks",
+"altnames": "Tri Peaks",
+"category": "French (Golf)"
+},
+
+{
+"id": 22232,
+"name": "Le Grande Teton",
+"altnames": "",
+"category": "Tarock"
+},
+
+{
+"id": 343001,
+"name": "Bisley 13",
+"altnames": "",
+"category": "French (One-Deck game)"
+},
+
+{
+"id": 555001,
+"name": "Daddy Longlegs",
+"altnames": "",
+"category": "French (Spider)"
+}
+
+]
