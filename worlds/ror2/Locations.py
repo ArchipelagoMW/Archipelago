@@ -6,7 +6,7 @@ class RiskOfRainLocation(Location):
 
 # 37000 - 38000
 base_location_table = {
-    "Victory": 37999,
+    "Victory": None,
     "Level One": 37001,
     "Level Two": 37002,
     "Level Three": 37003,
