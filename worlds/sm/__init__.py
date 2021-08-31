@@ -9,7 +9,7 @@ from .Locations import lookup_name_to_id as locations_lookup_name_to_id
 from .Items import lookup_id_to_name as items_lookup_id_to_name
 from .Items import lookup_name_to_id as items_lookup_name_to_id
 from .Regions import create_regions
-from .Rules import set_rules
+from .Rules import set_rules, add_entrance_rule
 from .Options import sm_options
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
@@ -18,6 +18,7 @@ from ..AutoWorld import World
 from logic.smboolmanager import SMBoolManager
 from rom.rompatcher import RomPatcher
 from graph.vanilla.graph_locations import locationsDict
+from graph.graph_utils import getAccessPoint
 from rando.ItemLocContainer import ItemLocation
 from rando.Items import ItemManager
 from utils.parameters import *
@@ -79,12 +80,10 @@ class SMWorld(World):
     
     def generate_basic(self):
         Logic.factory('vanilla')
-
-        self.variaRando = VariaRandomizer(self.world, self.player, self.world.sm_rom)
-
-        self.itemManager = ItemManager('Chozo', self.qty, SMBoolManager(), 100, easy)
-        self.itemManager.createItemPool()
-        itemPool = self.itemManager.getItemPool()
+        self.variaRando = VariaRandomizer(self.world.sm_rom, self.world.randoPreset[self.player])
+        #self.itemManager = ItemManager('Chozo', self.qty, SMBoolManager(), 100, easy)
+        #self.itemManager.createItemPool()
+        itemPool = self.variaRando.container.itemPool #self.itemManager.getItemPool()
         
         # Generate item pool
         pool = []
@@ -108,7 +107,7 @@ class SMWorld(World):
                 else:
                     isAdvancement = False
 
-            itemClass = self.itemManager.Items[item.Type].Class
+            itemClass = ItemManager.Items[item.Type].Class
             smitem = SMItem(item.Name, isAdvancement, item.Type, None if itemClass == 'Boss' else self.item_name_to_id[item.Name], player = self.player)
             if itemClass == 'Boss':
                 locked_items[item.Name] = smitem
@@ -119,6 +118,19 @@ class SMWorld(World):
 
         for (location, item) in locked_items.items():
             self.world.get_location(location, self.player).place_locked_item(item)
+
+        startAP = self.world.get_entrance('StartAP', self.player)
+        startAP.connect(self.world.get_region(self.variaRando.args.startLocation, self.player))
+
+        for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions:
+            src_region = self.world.get_region(src.Name, self.player)
+            dest_region = self.world.get_region(dest.Name, self.player)
+            src_region.exits.append(Entrance(self.player, src.Name + "|" + dest.Name, src_region))
+            srcDestEntrance = self.world.get_entrance(src.Name + "|" + dest.Name, self.player)
+            srcDestEntrance.connect(dest_region)
+
+            add_entrance_rule(self.world.get_entrance(src.Name + "|" + dest.Name, self.player), self.player, getAccessPoint(src.Name).traverse)
+            #add_entrance_rule(self.world.get_entrance(dest + "|" + src, self.player), self.player, getAccessPoint(dest).traverse)
 
     def set_rules(self):
         set_rules(self.world, self.player)
@@ -131,8 +143,40 @@ class SMWorld(World):
     def getWord(self, w):
         return (w & 0x00FF, (w & 0xFF00) >> 8)
 
+    def APPatchRom(self, romPatcher):
+        multiWorldLocations = {}
+        for itemLoc in self.world.get_locations():
+            if itemLoc.player == self.player and locationsDict[itemLoc.name].Id != None:
+                item = ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem']
+                (w0, w1) = self.getWord(0 if itemLoc.item.player == self.player else 1)
+                (w2, w3) = self.getWord(item.Id)
+                (w4, w5) = self.getWord(itemLoc.item.player - 1)
+                (w6, w7) = self.getWord(0)
+                multiWorldLocations[0x1C6000 + locationsDict[itemLoc.name].Id*8] = [w0, w1, w2, w3, w4, w5, w6, w7]
+
+            
+        patchDict = { 'MultiWorldLocations':  multiWorldLocations }
+        romPatcher.applyIPSPatch('MultiWorldLocations', patchDict)
+
+        playerNames = {0x1C4F00 : self.world.player_name[self.player].encode()}
+        for p in range(1, self.world.players + 1):
+            playerNames[0x1C5000 + (p - 1) * 16] = self.world.player_name[p][:12].upper().center(12).encode()
+
+        romPatcher.applyIPSPatch('PlayerName', { 'PlayerName':  playerNames })
+
+        romPatcher.commitIPS()
+
+        itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == self.player]
+        romPatcher.writeItemsLocs(itemLocs)
+
     def generate_output(self, output_directory: str):
-        self.variaRando.PatchRom()
+        outfilebase = 'AP_' + self.world.seed_name
+        outfilepname = f'_P{self.player}'
+        outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}" \
+        
+        outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
+        # copy2("Super Metroid (JU)[!].sfc", outputFilename)
+        self.variaRando.PatchRom(outputFilename, self.APPatchRom)
 
         #for player in self.world.get_game_players("Super Metroid"):
             # outfilebase = 'AP_' + self.world.seed_name
@@ -140,7 +184,7 @@ class SMWorld(World):
             # outfilepname += f"_{self.world.player_name[player].replace(' ', '_')}" \
 
             # outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
-            # copy2("Super Metroid (JU).sfc", outputFilename)
+            # copy2("Super Metroid (JU)[!].sfc", outputFilename)
             # romPatcher = RomPatcher(outputFilename, None)
 
             # romPatcher.applyIPSPatches()

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from Utils import output_path
 import argparse, os.path, json, sys, shutil, random
 
 from rando.RandoSettings import RandoSettings, GraphSettings
@@ -286,12 +287,13 @@ class VariaRandomizer:
     parser.add_argument('--hud', help='Enable VARIA hud', dest='hud',
                         nargs='?', const=True, default=False)
 
-    def __init__(self, world, player, rom):
+    def __init__(self, rom, randoPreset):
         # parse args       
         self.args = VariaRandomizer.parser.parse_args()
         args = self.args
         args.rom = rom
-        args.startLocation = to_pascal_case_with_space(world.startLocation[player].current_key)
+        args.randoPreset = randoPreset
+        # args.startLocation = to_pascal_case_with_space(world.startLocation[player].current_key)
 
         if args.output is None and args.rom is None:
             print("Need --output or --rom parameter")
@@ -531,12 +533,13 @@ class VariaRandomizer:
             seedCode = 'A'+seedCode
 
         # output ROM name
-        if args.patchOnly == False:
-            self.fileName = 'VARIA_Randomizer_' + seedCode + str(self.seed) + '_' + preset
-            if args.progressionSpeed != "random":
-                self.fileName += "_" + args.progressionSpeed
-        else:
-            self.fileName = 'VARIA' # TODO : find better way to name the file (argument?)
+        #if args.patchOnly == False:
+        #    self.fileName = 'VARIA_Randomizer_' + seedCode + str(self.seed) + '_' + preset
+        #    if args.progressionSpeed != "random":
+        #        self.fileName += "_" + args.progressionSpeed
+        #else:
+        #    self.fileName = 'VARIA' # TODO : find better way to name the file (argument?)
+        self.fileName = output_path
         seedName = self.fileName
         if args.directory != '.':
             self.fileName = args.directory + '/' + self.fileName
@@ -655,42 +658,43 @@ class VariaRandomizer:
             DoorsManager.setDoorsColor()
 
         self.escapeAttr = None
-        # if args.patchOnly == False:
-        #     try:
-        #         randoExec = RandoExec(seedName, args.vcr, randoSettings, graphSettings)
-        #         (stuck, itemLocs, progItemLocs) = randoExec.randomize()
-        #         # if we couldn't find an area layout then the escape graph is not created either
-        #         # and getDoorConnections will crash if random escape is activated.
-        #         if not stuck or args.vcr == True:
-        #             doors = GraphUtils.getDoorConnections(randoExec.areaGraph,
-        #                                                 args.area, args.bosses,
-        #                                                 args.escapeRando)
-        #             escapeAttr = randoExec.areaGraph.EscapeAttributes if args.escapeRando else None
-        #             if escapeAttr is not None:
-        #                 escapeAttr['patches'] = []
-        #                 if args.noRemoveEscapeEnemies == True:
-        #                     escapeAttr['patches'].append("Escape_Rando_Enable_Enemies")
-        #                 if args.scavEscape == True:
-        #                     escapeAttr['patches'].append('Escape_Scavenger')
-        #     except Exception as e:
-        #         import traceback
-        #         traceback.print_exc(file=sys.stdout)
-        #         dumpErrorMsg(args.output, "Error: {}".format(e))
-        #         sys.exit(-1)
-        # else:
-        #     stuck = False
-        #     itemLocs = []
-        #     progItemLocs = None
-        # if stuck == True:
-        #     dumpErrorMsg(args.output, randoExec.errorMsg)
-        #     print("Can't generate " + fileName + " with the given parameters: {}".format(randoExec.errorMsg))
-        #     # in vcr mode we still want the seed to be generated to analyze it
-        #     if args.vcr == False:
-        #         sys.exit(-1)
-        # if args.patchOnly == False:
-        #     randoExec.postProcessItemLocs(itemLocs, args.hideItems)
+        if args.patchOnly == False:
+            try:
+                self.randoExec = RandoExec(seedName, args.vcr, randoSettings, graphSettings)
+                self.container = self.randoExec.randomize()
+                # if we couldn't find an area layout then the escape graph is not created either
+                # and getDoorConnections will crash if random escape is activated.
+                stuck = False
+                if not stuck or args.vcr == True:
+                    self.doors = GraphUtils.getDoorConnections(self.randoExec.areaGraph,
+                                                        args.area, args.bosses,
+                                                        args.escapeRando)
+                    escapeAttr = self.randoExec.areaGraph.EscapeAttributes if args.escapeRando else None
+                    if escapeAttr is not None:
+                        escapeAttr['patches'] = []
+                        if args.noRemoveEscapeEnemies == True:
+                            escapeAttr['patches'].append("Escape_Rando_Enable_Enemies")
+                        if args.scavEscape == True:
+                            escapeAttr['patches'].append('Escape_Scavenger')
+            except Exception as e:
+                import traceback
+                traceback.print_exc(file=sys.stdout)
+                dumpErrorMsg(args.output, "Error: {}".format(e))
+                sys.exit(-1)
+        else:
+            stuck = False
+            itemLocs = []
+            progItemLocs = None
+        if stuck == True:
+            dumpErrorMsg(args.output, self.randoExec.errorMsg)
+            print("Can't generate " + fileName + " with the given parameters: {}".format(self.randoExec.errorMsg))
+            # in vcr mode we still want the seed to be generated to analyze it
+            if args.vcr == False:
+                sys.exit(-1)
+        #if args.patchOnly == False:
+        #    randoExec.postProcessItemLocs(itemLocs, args.hideItems)
 
-    def PatchRom(self):
+    def PatchRom(self, outputFilename, customPatchApply = None):
         args = self.args
         optErrMsgs = self.optErrMsgs
 
@@ -737,11 +741,9 @@ class VariaRandomizer:
             if args.rom is not None:
                 # patch local rom
                 romFileName = args.rom
-                outFileName = self.fileName + '.sfc'
-                shutil.copyfile(romFileName, outFileName)
-                romPatcher = RomPatcher(outFileName, magic=args.raceMagic)
+                shutil.copyfile(romFileName, outputFilename)
+                romPatcher = RomPatcher(outputFilename, magic=args.raceMagic)
             else:
-                outFileName = args.output
                 romPatcher = RomPatcher(magic=args.raceMagic)
 
             if args.hud == True or args.majorsSplit == "FullWithHUD":
@@ -754,7 +756,7 @@ class VariaRandomizer:
                                         self.escapeAttr, self.minimizerN, args.minimizerTourian,
                                         args.doorsColorsRando)
             else:
-                # from customizer permalink, apply previously generated seed ips first
+                 # from customizer permalink, apply previously generated seed ips first
                 if args.seedIps != None:
                     romPatcher.applyIPSPatch(args.seedIps)
 
@@ -766,10 +768,13 @@ class VariaRandomizer:
                 # don't color randomize custom ships
                 args.shift_ship_palette = False
 
+            if customPatchApply != None:
+                customPatchApply(romPatcher)
+
             # we have to write ips to ROM before doing our direct modifications which will rewrite some parts (like in credits),
             # but in web mode we only want to generate a global ips at the end
-            if args.rom != None:
-                romPatcher.commitIPS()
+#            if args.rom != None:
+#                romPatcher.commitIPS()
             if args.patchOnly == False:
 #                romPatcher.writeItemsLocs(itemLocs)
 #                romPatcher.writeSplitLocs(args.majorsSplit, itemLocs, progItemLocs)
@@ -777,7 +782,7 @@ class VariaRandomizer:
                  romPatcher.writeSeed(self.seed) # lol if race mode
 #                romPatcher.writeSpoiler(itemLocs, progItemLocs)
 #                romPatcher.writeRandoSettings(randoSettings, itemLocs)
-#                romPatcher.writeDoorConnections(doors)
+                 romPatcher.writeDoorConnections(self.doors)
                  romPatcher.writeVersion(displayedVersion)
             if self.ctrlDict is not None:
                 romPatcher.writeControls(self.ctrlDict)
@@ -786,28 +791,29 @@ class VariaRandomizer:
             if args.patchOnly == False:
                 romPatcher.writeMagic()
                 romPatcher.writeMajorsSplit(args.majorsSplit)
-            if args.palette == True:
-                paletteSettings = {
-                    "global_shift": None,
-                    "individual_suit_shift": None,
-                    "individual_tileset_shift": None,
-                    "match_ship_and_power": None,
-                    "seperate_enemy_palette_groups": None,
-                    "match_room_shift_with_boss": None,
-                    "shift_tileset_palette": None,
-                    "shift_boss_palettes": None,
-                    "shift_suit_palettes": None,
-                    "shift_enemy_palettes": None,
-                    "shift_beam_palettes": None,
-                    "shift_ship_palette": None,
-                    "min_degree": None,
-                    "max_degree": None,
-                    "invert": None,
-                    "no_blue_door_palette": None
-                }
-                for param in paletteSettings:
-                    paletteSettings[param] = getattr(args, param)
-                PaletteRando(romPatcher, paletteSettings, args.sprite).randomize()
+            # if args.palette == True:
+            #     paletteSettings = {
+            #         "global_shift": None,
+            #         "individual_suit_shift": None,
+            #         "individual_tileset_shift": None,
+            #         "match_ship_and_power": None,
+            #         "seperate_enemy_palette_groups": None,
+            #         "match_room_shift_with_boss": None,
+            #         "shift_tileset_palette": None,
+            #         "shift_boss_palettes": None,
+            #         "shift_suit_palettes": None,
+            #         "shift_enemy_palettes": None,
+            #         "shift_beam_palettes": None,
+            #         "shift_ship_palette": None,
+            #         "min_degree": None,
+            #         "max_degree": None,
+            #         "invert": None,
+            #         "no_blue_door_palette": None
+            #     }
+            #     for param in paletteSettings:
+            #         paletteSettings[param] = getattr(args, param)
+            #     PaletteRando(romPatcher, paletteSettings, args.sprite).randomize()
+
             # web mode, generate only one ips at the end
             if args.rom == None:
                 romPatcher.commitIPS()
@@ -830,7 +836,7 @@ class VariaRandomizer:
                 # replaced parameters to update stats in database
                 if len(self.forcedArgs) > 0:
                     data["forcedArgs"] = self.forcedArgs
-                with open(outFileName, 'w') as jsonFile:
+                with open(outputFilename, 'w') as jsonFile:
                     json.dump(data, jsonFile)
             else: # CLI mode
                 if msg != "":

@@ -122,6 +122,7 @@ class MultiWorld():
             set_player_attr('progression_balancing', True)
             set_player_attr('local_items', set())
             set_player_attr('non_local_items', set())
+            set_player_attr('randoPreset', 'worlds\\sm\\variaRandomizer\\rando_presets\\defaultTest.json')
             set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
             set_player_attr('shop_shuffle', 'off')

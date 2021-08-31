@@ -204,7 +204,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.presetFileName is None:
-        args.presetFileName = 'standard_presets/regular.json'
+        args.presetFileName = 'worlds/sm/variaRandomizer/standard_presets/regular.json'
 
     if args.raceMagic != None:
         if args.raceMagic <= 0 or args.raceMagic >= 0x10000:

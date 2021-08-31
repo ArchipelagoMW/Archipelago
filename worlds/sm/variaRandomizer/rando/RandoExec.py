@@ -88,19 +88,20 @@ class RandoExec(object):
                 self.errorMsg += "Could not find an area layout with these settings"
             else:
                 self.errorMsg += "Unable to process settings"
-            return (True, [], [])
+        #    return (True, [], [])
         self.areaGraph.printGraph()
-        filler = self.createFiller(container, endDate)
-        self.log.debug("ItemLocContainer dump before filling:\n"+container.dump())
-        ret = filler.generateItems(vcr=vcr)
-        if not ret[0]:
-            scavEscape = (ret[1], ret[2]) if self.restrictions.scavEscape else None
-            escapeOk = graphBuilder.escapeGraph(container, self.areaGraph, self.randoSettings.maxDiff, scavEscape)
-            if not escapeOk:
-                self.errorMsg += "Could not find a solution for escape"
-                ret = (True, ret[1], ret[2])
-        self.errorMsg += filler.errorMsg
-        return ret
+        return container
+        #filler = self.createFiller(container, endDate)
+        #self.log.debug("ItemLocContainer dump before filling:\n"+container.dump())
+        #ret = filler.generateItems(vcr=vcr)
+        #if not ret[0]:
+        #    scavEscape = (ret[1], ret[2]) if self.restrictions.scavEscape else None
+        #    escapeOk = graphBuilder.escapeGraph(container, self.areaGraph, self.randoSettings.maxDiff, scavEscape)
+        #    if not escapeOk:
+        #        self.errorMsg += "Could not find a solution for escape"
+        #        ret = (True, ret[1], ret[2])
+        #self.errorMsg += filler.errorMsg
+        #return ret
 
     def updateLocationsClass(self, split):
         if split != 'Full' and split != 'Scavenger':

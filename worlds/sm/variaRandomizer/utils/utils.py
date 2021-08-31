@@ -9,9 +9,9 @@ def isStdPreset(preset):
 
 def getPresetDir(preset):
     if isStdPreset(preset):
-        return 'standard_presets'
+        return 'worlds/sm/variaRandomizer/standard_presets'
     else:
-        return 'community_presets'
+        return 'worlds/sm/variaRandomizer/community_presets'
 
 def removeChars(string, toRemove):
     return re.sub('[{}]+'.format(toRemove), '', string)
