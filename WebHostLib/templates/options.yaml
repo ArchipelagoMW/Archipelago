@@ -18,7 +18,8 @@
 # http://www.yamllint.com/
 
 description: Default {{ game }} Template # Used to describe your yaml. Useful if you have multiple files
-name: YourName{number} # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
+# Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
+name: YourName{number}
 #{player} will be replaced with the player's slot number.
 #{PLAYER} will be replaced with the player's slot number if that slot number is greater than 1.
 #{number} will be replaced with the counter value of the name.
@@ -51,16 +52,18 @@ progression_balancing:
 #  - "Progressive Weapons"
 # exclude_locations: # Force certain locations to never contain progression items, and always be filled with junk.
 #  - "Master Sword Pedestal"
+{%- macro range_option(option) %}
+    # you can add additional values between minimum and maximum
+    {%- set data, notes = dictify_range(option) %}
+    {%- for entry, default in data.items() %}
+    {{ entry }}: {{ default }}{% if notes[entry] %} # {{ notes[entry] }}{% endif %}
+    {%- endfor -%}
+{%- endmacro -%}
 {{ game }}:
   {%- for option_key, option in options.items() %}
   {{ option_key }}:{% if option.__doc__ %} # {{ option.__doc__ | replace('\n', '\n#') | indent(4, first=False) }}{% endif %}
     {%- if option.range_start is defined  %}
-    # you can add additional values between minimum and maximum
-    {{ option.range_start }}: 0 # minimum value
-    {{ option.range_end }}: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
+    {{- range_option(option) -}}
     {%- elif option.options -%}
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
     {{ sub_option_name }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
