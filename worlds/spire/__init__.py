@@ -18,6 +18,8 @@ class SpireWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
 
+    forced_auto_forfeit = True
+
     def _get_slot_data(self):
         return {
             'seed': "".join(self.world.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
