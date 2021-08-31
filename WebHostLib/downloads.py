@@ -1,8 +1,8 @@
-from flask import send_file, Response
+from flask import send_file, Response, render_template
 from pony.orm import select
 
 from Patch import update_patch_data
-from WebHostLib import app, Slot, Room, Seed
+from WebHostLib import app, Slot, Room, Seed, cache
 import zipfile
 
 @app.route("/dl_patch/<suuid:room_id>/<int:patch_id>")
@@ -69,3 +69,13 @@ def download_slot_file(room_id, player_id: int):
         else:
             return "Game download not supported."
         return send_file(io.BytesIO(slot_data.data), as_attachment=True, attachment_filename=fname)
+
+@app.route("/templates")
+@cache.cached()
+def list_yaml_templates():
+    import os
+    files = []
+    for file in os.scandir(os.path.join(app.static_folder, "generated")):
+        if file.is_file() and file.name.endswith(".yaml"):
+            files.append(file.name)
+    return render_template("templates.html", files=files)
