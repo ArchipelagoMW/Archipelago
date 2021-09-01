@@ -9,6 +9,13 @@ class TotalLocations(Range):
     range_end = 50
     default = 15
 
+class TotalItems(Range):
+    """Number of items which are added to the multiworld on behalf of the Risk of Rain player."""
+    displayname = "Total Items"
+    range_start = 10
+    range_end = 50
+    default = 30
+
 
 class TotalRevivals(Range):
     """Number of `Dio's Best Friend` item put in the item pool."""
@@ -27,6 +34,10 @@ class ItemPickupStep(Range):
     range_end = 5
     default = 1
 
+class AllowLunarItems(Toggle):
+    """Allows Lunar items in the item pool."""
+    displayname = "Enable Lunar Item Shuffling"
+    default = True
 
 class StartWithRevive(Toggle):
     """Start the game with a `Dio's Best Friend` item."""
@@ -38,5 +49,7 @@ ror2_options: typing.Dict[str, type(Option)] = {
     "total_locations":      TotalLocations,
     "total_revivals":       TotalRevivals,
     "start_with_revive":    StartWithRevive,
-    "item_pickup_step":     ItemPickupStep
+    "item_pickup_step":     ItemPickupStep,
+    "total_items":          TotalItems,
+    "enable_lunar":         AllowLunarItems
 }

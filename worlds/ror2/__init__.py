@@ -33,9 +33,12 @@ class RiskOfRainWorld(World):
         # Add revive items for the player
         itempool += ["Dio's Best Friend"] * self.world.total_revivals[self.player]
 
+        if not self.world.enable_lunar[self.player]:
+            junk_pool.pop("Lunar Item")
+
         # Fill remaining items with randomly generated junk
         itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
-                                              k=self.world.total_locations[self.player] -
+                                              k=self.world.total_items[self.player] -
                                                 self.world.total_revivals[self.player])
 
         # Convert itempool into real items
@@ -53,7 +56,8 @@ class RiskOfRainWorld(World):
         return {
             "itemPickupStep": self.world.item_pickup_step[self.player].value,
             "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for i in range(16)),
-            "totalLocations": self.world.total_locations[self.player].value
+            "totalLocations": self.world.total_items[self.player].value,
+            "totalRevivals": self.world.total_revivals[self.player].value
         }
 
     def create_item(self, name: str) -> Item:
