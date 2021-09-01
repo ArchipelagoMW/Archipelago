@@ -11,6 +11,11 @@ client_version = 1
 
 
 class RiskOfRainWorld(World):
+    """
+     Escape a chaotic alien planet by fighting through hordes of frenzied monsters – with your friends, or on your own.
+     Combine loot in surprising ways and master each character until you become the havoc you feared upon your
+     first crash landing.
+    """
     game: str = "Risk of Rain 2"
     options = ror2_options
     topology_present = False
