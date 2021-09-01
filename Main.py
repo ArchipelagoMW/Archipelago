@@ -66,11 +66,6 @@ def main(args, seed=None):
     world.retro = args.retro.copy()
 
     world.hints = args.hints.copy()
-
-    world.mapshuffle = args.mapshuffle.copy()
-    world.compassshuffle = args.compassshuffle.copy()
-    world.keyshuffle = args.keyshuffle.copy()
-    world.bigkeyshuffle = args.bigkeyshuffle.copy()
     world.open_pyramid = args.open_pyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
     world.enemy_shuffle = args.enemy_shuffle.copy()
@@ -87,7 +82,6 @@ def main(args, seed=None):
     world.green_clock_time = args.green_clock_time.copy()
     world.shufflepots = args.shufflepots.copy()
     world.dungeon_counters = args.dungeon_counters.copy()
-    world.glitch_boots = args.glitch_boots.copy()
     world.triforce_pieces_available = args.triforce_pieces_available.copy()
     world.triforce_pieces_required = args.triforce_pieces_required.copy()
     world.shop_shuffle = args.shop_shuffle.copy()
@@ -139,21 +133,6 @@ def main(args, seed=None):
             # enforce pre-defined local items.
             if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
                 world.local_items[player].add('Triforce Piece')
-
-            # dungeon items can't be in non-local if the appropriate dungeon item shuffle setting is not set.
-            if not world.mapshuffle[player]:
-                world.non_local_items[player] -= item_name_groups['Maps']
-
-            if not world.compassshuffle[player]:
-                world.non_local_items[player] -= item_name_groups['Compasses']
-
-            if not world.keyshuffle[player]:
-                world.non_local_items[player] -= item_name_groups['Small Keys']
-            # This could probably use a more elegant solution.
-            elif world.keyshuffle[player] == True and world.mode[player] == "Standard":
-                world.local_items[player].add("Small Key (Hyrule Castle)")
-            if not world.bigkeyshuffle[player]:
-                world.non_local_items[player] -= item_name_groups['Big Keys']
 
             # Not possible to place pendants/crystals out side of boss prizes yet.
             world.non_local_items[player] -= item_name_groups['Pendants']

@@ -5,10 +5,11 @@ from BaseClasses import Region, RegionType
 from worlds.alttp.SubClasses import ALttPLocation
 from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops
 from worlds.alttp.Bosses import place_bosses
-from worlds.alttp.Dungeons import get_dungeon_item_pool
+from worlds.alttp.Dungeons import get_dungeon_item_pool_player
 from worlds.alttp.EntranceShuffle import connect_entrance
-from Fill import FillError, fill_restrictive
+from Fill import FillError
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
+from worlds.alttp.Options import smallkey_shuffle
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -274,7 +275,7 @@ def generate_itempool(world):
         itempool.extend(['Rupees (300)'] * 34)
         itempool.extend(['Bombs (10)'] * 5)
         itempool.extend(['Arrows (10)'] * 7)
-        if world.keyshuffle[player] == 'universal':
+        if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             itempool.extend(itemdiff.universal_keys)
             itempool.append('Small Key (Universal)')
 
@@ -362,12 +363,8 @@ def generate_itempool(world):
     if treasure_hunt_icon is not None:
         world.treasure_hunt_icon[player] = treasure_hunt_icon
 
-    dungeon_items = [item for item in get_dungeon_item_pool(world) if item.player == player
-                           and ((item.smallkey and world.keyshuffle[player])
-                                or (item.bigkey and world.bigkeyshuffle[player])
-                                or (item.map and world.mapshuffle[player])
-                                or (item.compass and world.compassshuffle[player])
-                                or world.goal[player] == 'icerodhunt')]
+    dungeon_items = [item for item in get_dungeon_item_pool_player(world, player)
+                     if item.name not in world.worlds[player].dungeon_local_item_names]
 
     if world.goal[player] == 'icerodhunt':
         for item in dungeon_items:
@@ -637,7 +634,7 @@ def get_pool_core(world, player: int):
     if retro:
         replace = {'Single Arrow', 'Arrows (10)', 'Arrow Upgrade (+5)', 'Arrow Upgrade (+10)'}
         pool = ['Rupees (5)' if item in replace else item for item in pool]
-    if world.keyshuffle[player] == "universal":
+    if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
         pool.extend(diff.universal_keys)
         item_to_place = 'Small Key (Universal)' if goal != 'icerodhunt' else 'Nothing'
         if mode == 'standard':
@@ -774,7 +771,7 @@ def make_custom_item_pool(world, player):
         itemtotal = itemtotal + 1
 
     if mode == 'standard':
-        if world.keyshuffle[player] == "universal":
+        if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             key_location = world.random.choice(
                 ['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest',
                  'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
@@ -797,7 +794,7 @@ def make_custom_item_pool(world, player):
         pool.extend(['Magic Mirror'] * customitemarray[22])
         pool.extend(['Moon Pearl'] * customitemarray[28])
 
-    if world.keyshuffle == "universal":
+    if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
         itemtotal = itemtotal - 28  # Corrects for small keys not being in item pool in Retro Mode
     if itemtotal < total_items_to_place:
         pool.extend(['Nothing'] * (total_items_to_place - itemtotal))

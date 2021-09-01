@@ -24,6 +24,11 @@ all_items["Evolution Trap"] = factorio_base_id - 2
 
 
 class Factorio(World):
+    """
+    Factorio is a game about automation. You play as an engineer who has crash landed on the planet
+    Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
+    research new technologies, and become more efficient in your quest to build a rocket and return home.
+    """
     game: str = "Factorio"
     static_nodes = {"automation", "logistics", "rocket-silo"}
     custom_recipes = {}
@@ -184,10 +189,7 @@ class Factorio(World):
                 max_energy = remaining_energy * 0.75
                 min_energy = (remaining_energy - max_energy) / remaining_num_ingredients
             ingredient = pool.pop()
-            if ingredient not in recipes:
-                logging.warning(f"missing recipe for {ingredient}")
-                continue
-            ingredient_recipe = recipes[ingredient]
+            ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
             ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
             ingredient_energy = ingredient_recipe.total_energy
             min_num_raw = min_raw/ingredient_raw

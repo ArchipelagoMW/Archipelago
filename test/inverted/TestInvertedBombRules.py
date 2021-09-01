@@ -1,4 +1,5 @@
 import unittest
+from argparse import Namespace
 
 from BaseClasses import MultiWorld
 from worlds.alttp.Dungeons import create_dungeons
@@ -7,6 +8,7 @@ from worlds.alttp.EntranceShuffle import connect_entrance, Inverted_LW_Entrances
 from worlds.alttp.InvertedRegions import create_inverted_regions
 from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Rules import set_inverted_big_bomb_rules
+from worlds import AutoWorld
 
 
 class TestInvertedBombRules(unittest.TestCase):
@@ -14,6 +16,10 @@ class TestInvertedBombRules(unittest.TestCase):
     def setUp(self):
         self.world = MultiWorld(1)
         self.world.mode[1] = "inverted"
+        args = Namespace
+        for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].options.items():
+            setattr(args, name, {1: option.from_any(option.default)})
+            self.world.set_options(args)
         self.world.difficulty_requirements[1] = difficulties['normal']
         create_inverted_regions(self.world, 1)
         create_dungeons(self.world, 1)

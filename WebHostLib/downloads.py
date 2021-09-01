@@ -1,8 +1,8 @@
-from flask import send_file, Response
+from flask import send_file, Response, render_template
 from pony.orm import select
 
 from Patch import update_patch_data
-from WebHostLib import app, Slot, Room, Seed
+from WebHostLib import app, Slot, Room, Seed, cache
 import zipfile
 
 @app.route("/dl_patch/<suuid:room_id>/<int:patch_id>")
@@ -71,3 +71,13 @@ def download_slot_file(room_id, player_id: int):
         else:
             return "Game download not supported."
         return send_file(io.BytesIO(slot_data.data), as_attachment=True, attachment_filename=fname)
+
+@app.route("/templates")
+@cache.cached()
+def list_yaml_templates():
+    files = []
+    from worlds.AutoWorld import AutoWorldRegister
+    for world_name, world in AutoWorldRegister.world_types.items():
+        if not world.hidden:
+            files.append(world_name)
+    return render_template("templates.html", files=files)

@@ -81,6 +81,7 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
     progitempool = []
     nonexcludeditempool = []
     localrestitempool = {player: [] for player in range(1, world.players + 1)}
+    nonlocalrestitempool = []
     restitempool = []
 
     for item in world.itempool:
@@ -90,11 +91,13 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
             nonexcludeditempool.append(item)
         elif item.name in world.local_items[item.player]:
             localrestitempool[item.player].append(item)
+        elif item.name in world.non_local_items[item.player]:
+            nonlocalrestitempool.append(item)
         else:
             restitempool.append(item)
 
     world.random.shuffle(fill_locations)
-    call_all(world, "fill_hook", progitempool, nonexcludeditempool, localrestitempool, restitempool, fill_locations)
+    call_all(world, "fill_hook", progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool, restitempool, fill_locations)
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
@@ -119,6 +122,14 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
                 spot_to_fill = player_local_locations.pop()
                 world.push_item(spot_to_fill, item_to_place, False)
                 fill_locations.remove(spot_to_fill)
+
+    for item_to_place in nonlocalrestitempool:
+        for i, location in enumerate(fill_locations):
+            if location.player != item_to_place.player:
+                world.push_item(fill_locations.pop(i), item_to_place, False)
+                break
+        else:
+            logging.warning(f"Could not place non_local_item {item_to_place} among {fill_locations}, tossing.")
 
     world.random.shuffle(fill_locations)
 

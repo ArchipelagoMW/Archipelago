@@ -139,5 +139,24 @@
         ]
       }
     ]
+  },
+  {
+    "gameTitle": "Risk of Rain 2",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Risk of Rain 2 integration for Archipelago multiworld games.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "ror2/setup_en.md",
+            "link": "ror2/setup/en",
+            "authors": [
+              "Ijwu"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

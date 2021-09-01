@@ -6,8 +6,8 @@ import typing
 
 from BaseClasses import Item, CollectionState
 from .SubClasses import ALttPItem
-from ..AutoWorld import World
-from .Options import alttp_options
+from ..AutoWorld import World, LogicMixin
+from .Options import alttp_options, smallkey_shuffle
 from .Items import as_dict_item_table, item_name_groups, item_table
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
 from .Rules import set_rules
@@ -24,6 +24,12 @@ lttp_logger = logging.getLogger("A Link to the Past")
 
 
 class ALTTPWorld(World):
+    """
+    The Legend of Zelda: A Link to the Past is an action/adventure game. Take on the role of
+    Link, a boy who is destined to save the land of Hyrule. Delve through three palaces and nine
+    dungeons on your quest to rescue the descendents of the seven wise men and defeat the evil
+    Ganon!
+    """
     game: str = "A Link to the Past"
     options = alttp_options
     topology_present = True
@@ -40,9 +46,16 @@ class ALTTPWorld(World):
 
     create_items = generate_itempool
 
+    def __init__(self, *args, **kwargs):
+        self.dungeon_local_item_names = set()
+        self.dungeon_specific_item_names = set()
+        self.rom_name_available_event = threading.Event()
+        super(ALTTPWorld, self).__init__(*args, **kwargs)
+
     def generate_early(self):
         player = self.player
         world = self.world
+
         # system for sharing ER layouts
         world.er_seeds[player] = str(world.random.randint(0, 2 ** 64))
 
@@ -58,13 +71,20 @@ class ALTTPWorld(World):
                 world.er_seeds[player] = seed
         elif world.shuffle[player] == "vanilla":
             world.er_seeds[player] = "vanilla"
+        for dungeon_item in ["smallkey_shuffle", "bigkey_shuffle", "compass_shuffle", "map_shuffle"]:
+            option = getattr(world, dungeon_item)[player]
+            if option == "own_world":
+                world.local_items[player] |= self.item_name_groups[option.item_name_group]
+            elif option == "different_world":
+                world.non_local_items[player] |= self.item_name_groups[option.item_name_group]
+            elif option.in_dungeon:
+                self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
+                if option == "original_dungeon":
+                    self.dungeon_specific_item_names |= self.item_name_groups[option.item_name_group]
 
         world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
 
     def create_regions(self):
-        # noinspection PyAttributeOutsideInit
-        self.rom_name_available_event = threading.Event()
-
         player = self.player
         world = self.world
         if world.open_pyramid[player] == 'goal':
@@ -88,7 +108,6 @@ class ALTTPWorld(World):
             create_inverted_regions(world, player)
         create_shops(world, player)
         create_dungeons(world, player)
-
 
         if world.logic[player] not in ["noglitches", "minorglitches"] and world.shuffle[player] in \
                 {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:
@@ -179,8 +198,8 @@ class ALTTPWorld(World):
                 elif 'Bow' in item_name:
                     if state.has('Silver Bow', item.player):
                         return
-                    elif state.has('Bow', item.player) and (self.world.difficulty_requirements[item.player].progressive_bow_limit >= 2 
-                        or self.world.logic[item.player] == 'noglitches' 
+                    elif state.has('Bow', item.player) and (self.world.difficulty_requirements[item.player].progressive_bow_limit >= 2
+                        or self.world.logic[item.player] == 'noglitches'
                         or self.world.swordless[item.player]): # modes where silver bow is always required for ganon
                         return 'Silver Bow'
                     elif self.world.difficulty_requirements[item.player].progressive_bow_limit >= 1:
@@ -193,7 +212,7 @@ class ALTTPWorld(World):
         attempts = 5
         world = self.world
         player = self.player
-        all_state = world.get_all_state(keys=True)
+        all_state = world.get_all_state()
         crystals = [self.create_item(name) for name in ['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6']]
         crystal_locations = [world.get_location('Turtle Rock - Prize', player),
                              world.get_location('Eastern Palace - Prize', player),
@@ -227,7 +246,7 @@ class ALTTPWorld(World):
     @classmethod
     def stage_pre_fill(cls, world):
         from .Dungeons import fill_dungeons_restrictive
-        fill_dungeons_restrictive(world)
+        fill_dungeons_restrictive(cls, world)
 
     @classmethod
     def stage_post_fill(cls, world):
@@ -307,11 +326,13 @@ class ALTTPWorld(World):
         return ALttPItem(name, self.player, **as_dict_item_table[name])
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, restitempool, fill_locations):
+    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
+                        restitempool, fill_locations):
         trash_counts = {}
         standard_keyshuffle_players = set()
         for player in world.get_game_players("A Link to the Past"):
-            if world.mode[player] == 'standard' and world.keyshuffle[player] is True:
+            if world.mode[player] == 'standard' and world.smallkey_shuffle[player] \
+                    and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal:
                 standard_keyshuffle_players.add(player)
             if not world.ganonstower_vanilla[player] or \
                     world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:
@@ -378,3 +399,12 @@ def get_same_seed(world, seed_def: tuple) -> str:
     seeds[seed_def] = str(world.random.randint(0, 2 ** 64))
     world.__named_seeds = seeds
     return seeds[seed_def]
+
+
+class ALttPLogic(LogicMixin):
+    def _lttp_has_key(self, item, player, count: int = 1):
+        if self.world.logic[player] == 'nologic':
+            return True
+        if self.world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+            return self.can_buy_unlimited('Small Key (Universal)', player)
+        return self.prog_items[item, player] >= count
