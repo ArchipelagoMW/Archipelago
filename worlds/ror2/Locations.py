@@ -7,11 +7,11 @@ class RiskOfRainLocation(Location):
 # 37000 - 38000
 base_location_table = {
     "Victory": None,
-    "Level One": 37001,
-    "Level Two": 37002,
-    "Level Three": 37003,
-    "Level Four": 37004,
-    "Level Five": 37005
+    "Level One": None,
+    "Level Two": None,
+    "Level Three": None,
+    "Level Four": None,
+    "Level Five": None
 }
 
 item_pickups = {
