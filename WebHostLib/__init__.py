@@ -8,6 +8,7 @@ from pony.flask import Pony
 from flask import Flask, request, redirect, url_for, render_template, Response, session, abort, send_from_directory
 from flask_caching import Cache
 from flask_compress import Compress
+from worlds.AutoWorld import AutoWorldRegister
 
 from .models import *
 
@@ -81,54 +82,6 @@ def page_not_found(err):
     return render_template('404.html'), 404
 
 
-games_list = {
-    "A Link to the Past": ("The Legend of Zelda: A Link to the Past",
-                           """
-                           The Legend of Zelda: A Link to the Past is an action/adventure game. Take on the role of
-                           Link, a boy who is destined to save the land of Hyrule. Delve through three palaces and nine
-                           dungeons on your quest to rescue the descendents of the seven wise men and defeat the evil
-                           Ganon!"""),
-    "Factorio": ("Factorio",
-                 """
-                 Factorio is a game about automation. You play as an engineer who has crash landed on the planet
-                 Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
-                 research new technologies, and become more efficient in your quest to build a rocket and return home.
-                 """),
-    "Minecraft": ("Minecraft",
-                  """
-                  Minecraft is a game about creativity. In a world made entirely of cubes, you explore, discover, mine,
-                  craft, and try not to explode. Delve deep into the earth and discover abandoned mines, ancient
-                  structures, and materials to create a portal to another world. Defeat the Ender Dragon, and claim
-                  victory!"""),
-    "Subnautica": ("Subnautica",
-                   """
-                   Subnautica is an undersea exploration game. Stranded on an alien world, you become infected by
-                   an unknown bacteria. The planet's automatic quarantine will shoot you down if you try to leave.
-                   You must find a cure for yourself, build an escape rocket, and leave the planet.
-                   """),
-    "Ocarina of Time": ("The Legend of Zelda: Ocarina of Time",
-                        """
-                        The Legend of Zelda: Ocarina of Time was the first three dimensional Zelda game. Journey as
-                        Link as he quests to fulfil his destiny. Journey across Hyrule and defeat the evil masters of
-                        corrupted temples or seek out the pieces of the Triforce. Defeat the evil Ganondorf to become
-                        the Hero of Time and save Hyrule!
-                        """),
-    "Super Metroid": ("Super Metroid",
-                      """
-                      Samus is back in her first 16 bit adventure! Space pirates have attacked Ceres station and stolen
-                      the last living Metroid. Go to planet Zebes and search out the abilities you will need to power
-                      up your suit and defeat the villainous leader of the space pirates, Mother Brain.
-                      """),
-    "Risk of Rain 2": ("Risk of Rain 2",
-                       """
-                       Escape a chaotic alien planet by fighting through hordes of frenzied monsters – with your friends
-                       , or on your own. Combine loot in surprising ways and master each character until you become the 
-                       havoc you feared upon your first crash landing.
-                       """)
-    # "Ori and the Blind Forest": ("Ori and the Blind Forest", "Coming Soon™"),
-    # "Hollow Knight": ("Hollow Knight", "Coming Soon™"),
-}
-
 
 # Player settings pages
 @app.route('/games/<string:game>/player-settings')
@@ -151,7 +104,11 @@ def game_page(game):
 # List of supported games
 @app.route('/games')
 def games():
-    return render_template("games/games.html", games_list=games_list)
+    worlds = {}
+    for game, world in AutoWorldRegister.world_types.items():
+        if not world.hidden:
+            worlds[game] = world.__doc__ if world.__doc__ else "No description provided."
+    return render_template("games/games.html", worlds=worlds)
 
 
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')

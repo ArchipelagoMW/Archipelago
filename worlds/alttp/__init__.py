@@ -24,6 +24,12 @@ lttp_logger = logging.getLogger("A Link to the Past")
 
 
 class ALTTPWorld(World):
+    """
+    The Legend of Zelda: A Link to the Past is an action/adventure game. Take on the role of
+    Link, a boy who is destined to save the land of Hyrule. Delve through three palaces and nine
+    dungeons on your quest to rescue the descendents of the seven wise men and defeat the evil
+    Ganon!
+    """
     game: str = "A Link to the Past"
     options = alttp_options
     topology_present = True
@@ -192,8 +198,8 @@ class ALTTPWorld(World):
                 elif 'Bow' in item_name:
                     if state.has('Silver Bow', item.player):
                         return
-                    elif state.has('Bow', item.player) and (self.world.difficulty_requirements[item.player].progressive_bow_limit >= 2 
-                        or self.world.logic[item.player] == 'noglitches' 
+                    elif state.has('Bow', item.player) and (self.world.difficulty_requirements[item.player].progressive_bow_limit >= 2
+                        or self.world.logic[item.player] == 'noglitches'
                         or self.world.swordless[item.player]): # modes where silver bow is always required for ganon
                         return 'Silver Bow'
                     elif self.world.difficulty_requirements[item.player].progressive_bow_limit >= 1:
@@ -206,7 +212,7 @@ class ALTTPWorld(World):
         attempts = 5
         world = self.world
         player = self.player
-        all_state = world.get_all_state(keys=True)
+        all_state = world.get_all_state()
         crystals = [self.create_item(name) for name in ['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6']]
         crystal_locations = [world.get_location('Turtle Rock - Prize', player),
                              world.get_location('Eastern Palace - Prize', player),

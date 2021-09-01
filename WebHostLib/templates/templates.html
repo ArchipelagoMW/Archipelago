@@ -1,0 +1,21 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    {% include 'header/grassHeader.html' %}
+    <title>Option Templates (YAML)</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"
+            integrity="sha512-L03kznCrNOfVxOUovR6ESfCz9Gfny7gihUX/huVbQB9zjODtYpxaVtIaAkpetoiyV2eqWbvxMH9fiSv5enX7bw=="
+            crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block body %}
+    <div>
+    <h1>Option Templates (YAML)</h1>
+    <ul>
+        {% for file in files %}
+        <li><a href="{{ url_for('static', filename="generated/"+file+".yaml") }}">{{ file }}</a></li>
+        {% endfor %}
+    </ul>
+    </div>
+{%  endblock %}

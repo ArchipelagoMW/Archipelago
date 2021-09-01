@@ -24,6 +24,11 @@ all_items["Evolution Trap"] = factorio_base_id - 2
 
 
 class Factorio(World):
+    """
+    Factorio is a game about automation. You play as an engineer who has crash landed on the planet
+    Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
+    research new technologies, and become more efficient in your quest to build a rocket and return home.
+    """
     game: str = "Factorio"
     static_nodes = {"automation", "logistics", "rocket-silo"}
     custom_recipes = {}
