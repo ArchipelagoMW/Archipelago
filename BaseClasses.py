@@ -228,6 +228,8 @@ class MultiWorld():
             if item.name in subworld.dungeon_local_item_names:
                 subworld.collect(ret, item)
         ret.sweep_for_events()
+        
+        self._all_state = ret
         return ret
 
     def get_items(self) -> list:
