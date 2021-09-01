@@ -212,7 +212,7 @@ class ALTTPWorld(World):
         attempts = 5
         world = self.world
         player = self.player
-        all_state = world.get_all_state()
+        all_state = world.get_all_state(use_cache=True)
         crystals = [self.create_item(name) for name in ['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6']]
         crystal_locations = [world.get_location('Turtle Rock - Prize', player),
                              world.get_location('Eastern Palace - Prize', player),
