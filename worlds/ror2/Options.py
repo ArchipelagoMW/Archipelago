@@ -9,13 +9,6 @@ class TotalLocations(Range):
     range_end = 50
     default = 15
 
-class TotalItems(Range):
-    """Number of items which are added to the multiworld on behalf of the Risk of Rain player."""
-    displayname = "Total Items"
-    range_start = 10
-    range_end = 50
-    default = 30
-
 
 class TotalRevivals(Range):
     """Number of `Dio's Best Friend` item put in the item pool."""
@@ -50,6 +43,5 @@ ror2_options: typing.Dict[str, type(Option)] = {
     "total_revivals":       TotalRevivals,
     "start_with_revive":    StartWithRevive,
     "item_pickup_step":     ItemPickupStep,
-    "total_items":          TotalItems,
     "enable_lunar":         AllowLunarItems
 }
