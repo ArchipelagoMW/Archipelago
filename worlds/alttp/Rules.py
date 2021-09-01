@@ -855,6 +855,7 @@ def set_trock_key_rules(world, player):
 
     all_state = world.get_all_state()
     all_state.reachable_regions[player] = set()  # wipe reachable regions so that the locked doors actually work
+    all_state.stale[player] = True
 
     # Check if each of the four main regions of the dungoen can be reached. The previous code section prevents key-costing moves within the dungeon.
     can_reach_back = all_state.can_reach(world.get_region('Turtle Rock (Eye Bridge)', player)) if world.can_access_trock_eyebridge[player] is None else world.can_access_trock_eyebridge[player]
