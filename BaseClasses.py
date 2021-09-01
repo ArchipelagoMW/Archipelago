@@ -213,7 +213,7 @@ class MultiWorld():
         except KeyError as e:
             raise KeyError('No such dungeon %s for player %d' % (dungeonname, player)) from e
 
-    def get_all_state(self) -> CollectionState:
+    def get_all_state(self, save_cache=True) -> CollectionState:
         cached = getattr(self, "_all_state", None)
         if cached:
             return cached.copy()
@@ -229,7 +229,8 @@ class MultiWorld():
                 subworld.collect(ret, item)
         ret.sweep_for_events()
         
-        self._all_state = ret
+        if save_cache:
+            self._all_state = ret
         return ret
 
     def get_items(self) -> list:
