@@ -213,9 +213,8 @@ class MultiWorld():
         except KeyError as e:
             raise KeyError('No such dungeon %s for player %d' % (dungeonname, player)) from e
 
-    def get_all_state(self, keys=False) -> CollectionState:
-        key = f"_all_state_{keys}"
-        cached = getattr(self, key, None)
+    def get_all_state(self) -> CollectionState:
+        cached = getattr(self, "_all_state", None)
         if cached:
             return cached.copy()
 
@@ -223,27 +222,12 @@ class MultiWorld():
 
         for item in self.itempool:
             self.worlds[item.player].collect(ret, item)
-
-        if keys:
-            for p in self.get_game_players("A Link to the Past"):
-                world = self.worlds[p]
-                from worlds.alttp.Items import ItemFactory
-                for item in ItemFactory(
-                        ['Small Key (Hyrule Castle)', 'Big Key (Eastern Palace)', 'Big Key (Desert Palace)',
-                         'Small Key (Desert Palace)', 'Big Key (Tower of Hera)', 'Small Key (Tower of Hera)',
-                         'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)',
-                         'Big Key (Palace of Darkness)'] + ['Small Key (Palace of Darkness)'] * 6 + [
-                            'Big Key (Thieves Town)', 'Small Key (Thieves Town)', 'Big Key (Skull Woods)'] + [
-                            'Small Key (Skull Woods)'] * 3 + ['Big Key (Swamp Palace)',
-                                                              'Small Key (Swamp Palace)', 'Big Key (Ice Palace)'] + [
-                            'Small Key (Ice Palace)'] * 2 + ['Big Key (Misery Mire)', 'Big Key (Turtle Rock)',
-                                                             'Big Key (Ganons Tower)'] + [
-                            'Small Key (Misery Mire)'] * 3 + ['Small Key (Turtle Rock)'] * 4 + [
-                            'Small Key (Ganons Tower)'] * 4,
-                        p):
-                    world.collect(ret, item)
+        from worlds.alttp.Dungeons import get_dungeon_item_pool
+        for item in get_dungeon_item_pool(self):
+            subworld = self.worlds[item.player]
+            if item.name in subworld.dungeon_local_item_names:
+                subworld.collect(ret, item)
         ret.sweep_for_events()
-        setattr(self, key, ret)
         return ret
 
     def get_items(self) -> list:
