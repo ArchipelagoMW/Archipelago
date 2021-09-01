@@ -157,6 +157,8 @@ def fill_dungeons_restrictive(autoworld, world):
             in_dungeon_items.sort(
                 key=lambda item: sort_order.get(item.type, 1) +
                                  (5 if (item.player, item.name) in dungeon_specific else 0))
+            for item in in_dungeon_items:
+                all_state_base.remove(item)
             fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True)
 
 
