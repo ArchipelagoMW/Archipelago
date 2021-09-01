@@ -83,12 +83,6 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
 class SubnauticaLocation(Location):
     game: str = "Subnautica"
 
-    def __init__(self, player: int, name: str, address=None, parent=None):
-        super(SubnauticaLocation, self).__init__(player, name, address, parent)
-
 
 class SubnauticaItem(Item):
     game = "Subnautica"
-
-    def __init__(self, name, advancement, code, player: int = None):
-        super(SubnauticaItem, self).__init__(name, advancement, code, player)
