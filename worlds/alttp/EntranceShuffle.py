@@ -1774,9 +1774,11 @@ def link_inverted_entrances(world, player):
     else:
         raise NotImplementedError('Shuffling not supported yet')
 
-    # mandatory hybrid major glitches connections
-    if world.logic[player] in ['hybridglitches', 'nologic']:
-        underworld_glitch_connections(world, player)
+    if world.logic[player] in ['owglitches', 'hybridglitches', 'nologic']:
+        overworld_glitch_connections(world, player)
+        # mandatory hybrid major glitches connections
+        if world.logic[player] in ['hybridglitches', 'nologic']:
+            underworld_glitch_connections(world, player)
 
     # patch swamp drain
     if world.get_entrance('Dam', player).connected_region.name != 'Dam' or world.get_entrance('Swamp Palace', player).connected_region.name != 'Swamp Palace (Entrance)':
