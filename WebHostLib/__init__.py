@@ -82,6 +82,7 @@ def page_not_found(err):
     return render_template('404.html'), 404
 
 
+
 # Player settings pages
 @app.route('/games/<string:game>/player-settings')
 def player_settings(game):
