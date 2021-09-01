@@ -285,7 +285,7 @@ def persistent_load() -> typing.Dict[dict]:
     return storage
 
 
-def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
+def get_adjuster_settings(romfile: str, skip_questions: bool = False) -> typing.Tuple[str, bool]:
     if hasattr(get_adjuster_settings, "adjuster_settings"):
         adjuster_settings = getattr(get_adjuster_settings, "adjuster_settings")
     else:
@@ -314,6 +314,8 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
         if hasattr(get_adjuster_settings, "adjust_wanted"):
             adjust_wanted = getattr(get_adjuster_settings, "adjust_wanted")
         elif persistent_load().get("adjuster", {}).get("never_adjust", False):  # never adjust, per user request
+            return romfile, False
+        elif skip_questions:
             return romfile, False
         else:
             adjust_wanted = input(f"Last used adjuster settings were found. Would you like to apply these? \n"

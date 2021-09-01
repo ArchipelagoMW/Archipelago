@@ -149,7 +149,7 @@ def fill_dungeons_restrictive(autoworld, world):
                         (not (item.player, item.name) in dungeon_specific or item.dungeon is dungeon) and orig_rule(item)
 
             world.random.shuffle(locations)
-            all_state_base = world.get_all_state()
+            all_state_base = world.get_all_state(use_cache=True)
             # Dungeon-locked items have to be placed first, to not run out of spaces for dungeon-locked items
             # subsort in the order Big Key, Small Key, Other before placing dungeon items
 

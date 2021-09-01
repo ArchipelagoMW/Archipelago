@@ -920,7 +920,7 @@ async def main():
         meta, romfile = Patch.create_rom_file(args.diff_file)
         args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
-        adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile)
+        adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile, gui_enabled)
         if adjusted:
             try:
                 shutil.move(adjustedromfile, romfile)

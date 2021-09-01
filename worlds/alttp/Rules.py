@@ -853,7 +853,7 @@ def set_trock_key_rules(world, player):
     for entrance in ['Turtle Rock Dark Room Staircase', 'Turtle Rock (Chain Chomp Room) (North)', 'Turtle Rock (Chain Chomp Room) (South)', 'Turtle Rock Pokey Room', 'Turtle Rock Big Key Door']:
         set_rule(world.get_entrance(entrance, player), lambda state: False)
 
-    all_state = world.get_all_state()
+    all_state = world.get_all_state(use_cache=False)
     all_state.reachable_regions[player] = set()  # wipe reachable regions so that the locked doors actually work
     all_state.stale[player] = True
 
