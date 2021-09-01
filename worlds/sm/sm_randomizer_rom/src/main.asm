@@ -42,7 +42,7 @@ incsrc config.asm
 ;incsrc randopatches/introskip.asm
 ;incsrc randopatches/wake_zebes.asm
 ;incsrc randopatches/misc.asm
-;incsrc randopatches/nofanfare.asm
+incsrc randopatches/nofanfare.asm
 ;incsrc randopatches/g4_skip.asm
 ;incsrc randopatches/credits.asm
 ;incsrc randopatches/tracking.asm
