@@ -17,5 +17,3 @@ class OOTEntrance(Entrance):
         self.primary = False
         self.always = False
         self.never = False
-
-    # there are other methods here but I might not need them idk

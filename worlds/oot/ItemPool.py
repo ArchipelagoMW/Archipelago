@@ -1392,16 +1392,6 @@ def get_pool_core(world):
 
     # Make sure our pending_junk_pool is empty. If not, remove some random junk here.
     if pending_junk_pool:
-        # for item in set(pending_junk_pool):
-        #     Ensure pending_junk_pool contents don't exceed values given by distribution file
-        #     if item in world.distribution.item_pool:
-        #         while pending_junk_pool.count(item) > world.distribution.item_pool[item].count:
-        #             pending_junk_pool.remove(item)
-        #         # Remove pending junk already added to the pool by alter_pool from the pending_junk_pool
-        #         if item in pool:
-        #             count = min(pool.count(item), pending_junk_pool.count(item))
-        #             for _ in range(count):
-        #                 pending_junk_pool.remove(item)
 
         remove_junk_pool, _ = zip(*junk_pool_base)
         # Omits Rupees (200) and Deku Nuts (10)
@@ -1416,8 +1406,5 @@ def get_pool_core(world):
             junk_candidates.remove(junk_item)
             pool.remove(junk_item)
             pool.append(pending_item)
-
-    # world.distribution.configure_starting_items_settings(world)
-    # world.distribution.collect_starters(world.state)
 
     return (pool, placed_items, skip_in_spoiler_locations)

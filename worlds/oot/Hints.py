@@ -11,9 +11,7 @@ import json
 from enum import Enum
 
 from .HintList import getHint, getHintGroup, Hint, hintExclusions
-# from .Items import MakeEventItem
 from .Messages import update_message_by_id
-# from .Search import Search
 from .TextBox import line_wrap
 from .Utils import data_path, read_json
 
@@ -232,19 +230,6 @@ def add_hint(world, groups, gossip_text, count, location=None, force_reachable=F
     return success
 
 
-# Unused in AP
-def can_reach_hint(worlds, hint_location, location):
-    if location == None:
-        return True
-
-    old_item = location.item
-    location.item = None
-    search = Search.max_explore([world.state for world in worlds])
-    location.item = old_item
-
-    return (search.spot_access(hint_location)
-            and (hint_location.type != 'HintStone' or search.state_list[location.world.id].guarantee_hint()))
-
 
 def writeGossipStoneHints(world, messages):
     for id, gossip_text in world.gossip_hints.items():
@@ -429,9 +414,6 @@ def is_not_checked(location, checked):
 def get_good_item_hint(world, checked):
     locations = list(filter(lambda location:
         is_not_checked(location, checked)
-        # and (location.item.majoritem
-        #     or location.name in world.added_hint_types['item']
-        #     or location.item.name in world.item_added_hint_types['item'])
         and not location.locked
         and location.name not in world.hint_exclusions
         and location.name not in world.hint_type_overrides['item']
@@ -652,62 +634,6 @@ hint_dist_keys = {
 }
 
 
-# def buildBingoHintList(boardURL):
-#     try:
-#         if len(boardURL) > 256:
-#             raise URLError(f"URL too large {len(boardURL)}")
-#         with urllib.request.urlopen(boardURL + "/board") as board:
-#             if board.length and 0 < board.length < 4096:
-#                 goalList = board.read()
-#             else:
-#                 raise HTTPError(f"Board of invalid size {board.length}")
-#     except (URLError, HTTPError) as e:
-#         logger = logging.getLogger('')
-#         logger.info(f"Could not retrieve board info. Using default bingo hints instead: {e}")
-#         genericBingo = read_json(data_path('Bingo/generic_bingo_hints.json'))
-#         return genericBingo['settings']['item_hints']
-
-#     # Goal list returned from Bingosync is a sequential list of all of the goals on the bingo board, starting at top-left and moving to the right.
-#     # Each goal is a dictionary with attributes for name, slot, and colours. The only one we use is the name
-#     goalList = [goal['name'] for goal in json.loads(goalList)]
-#     goalHintRequirements = read_json(data_path('Bingo/bingo_goals.json'))
-
-#     hintsToAdd = {}
-#     for goal in goalList:
-#         # Using 'get' here ensures some level of forward compatibility, where new goals added to randomiser bingo won't
-#         # cause the generator to crash (though those hints won't have item hints for them)
-#         requirements = goalHintRequirements.get(goal,{})
-#         if len(requirements) != 0:
-#             for item in requirements:
-#                 hintsToAdd[item] = max(hintsToAdd.get(item, 0), requirements[item]['count'])
-
-#     # Items to be hinted need to be included in the item_hints list once for each instance you want hinted
-#     # (e.g. if you want all three strength upgrades to be hintes it needs to be in the list three times)
-#     hints = []
-#     for key, value in hintsToAdd.items():
-#         for _ in range(value):
-#             hints.append(key)
-#     return hints
-
-
-
-# def buildGossipHints(world):
-#     checkedLocations = dict()
-#     # Add Light Arrow locations to "checked" locations if Ganondorf is reachable without it.
-#     for world in worlds:
-#         location = world.light_arrow_location
-#         if location is None:
-#             continue
-#         if world.misc_hints and can_reach_hint(worlds, world.get_location("Ganondorf Hint"), location):
-#             light_arrow_world = location.world
-#             if light_arrow_world.id not in checkedLocations:
-#                 checkedLocations[light_arrow_world.id] = set()
-#             checkedLocations[light_arrow_world.id].add(location.name)
-
-#     # Build all the hints.
-#     world.update_useless_areas()
-#     buildWorldGossipHints(world, checkedLocations.pop(world.id, None))
-
 
 # builds out general hints based on location and whether an item is required or not
 def buildWorldGossipHints(world, checkedLocations=None):
@@ -772,24 +698,6 @@ def buildWorldGossipHints(world, checkedLocations=None):
     stoneGroups.extend([[id] for id in stoneIDs])
 
     world.hint_rng.shuffle(stoneGroups)
-
-    # Create list of items for which we want hints. If Bingosync URL is supplied, include items specific to that bingo.
-    # If not (or if the URL is invalid), use generic bingo hints
-    # if world.hint_dist == "bingo":
-    #     bingoDefaults = read_json(data_path('Bingo/generic_bingo_hints.json'))
-    #     if world.bingosync_url is not None and world.bingosync_url.startswith("https://bingosync.com/"): # Verify that user actually entered a bingosync URL
-    #         logger = logging.getLogger('')
-    #         logger.info("Got Bingosync URL. Building board-specific goals.")
-    #         world.item_hints = buildBingoHintList(world.bingosync_url)
-    #     else:
-    #         world.item_hints = bingoDefaults['settings']['item_hints']
-
-    #     if world.tokensanity in ("overworld", "all") and "Suns Song" not in world.item_hints:
-    #         world.item_hints.append("Suns Song")
-
-    #     if world.shopsanity != "off" and "Progressive Wallet" not in world.item_hints:
-    #         world.item_hints.append("Progressive Wallet")
-    #     world.named_item_pool = list(world.item_hints)
 
 
     # Load hint distro from distribution file or pre-defined settings
@@ -1058,10 +966,6 @@ def buildGanonText(world, messages):
 
     # lines before battle
     ganonLines = getHintGroup('ganonLine', world)
-    ### Janky workaround ###
-    # ganonLineKeys = ['2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011']
-    # ganonLines = [getHint(name, world.clearer_hints) for name in ganonLineKeys]
-    ### End janky workaround
     world.hint_rng.shuffle(ganonLines)
     text = get_raw_text(ganonLines.pop().text)
     update_message_by_id(messages, 0x70CB, text)

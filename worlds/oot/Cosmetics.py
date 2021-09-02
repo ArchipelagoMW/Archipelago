@@ -770,9 +770,6 @@ def patch_cosmetics(ootworld, rom):
     # Use the world's slot seed for cosmetics
     random.seed(ootworld.world.slot_seeds[ootworld.player])
 
-    # Initialize log and load cosmetic plando.
-    # log = CosmeticsLog(ootworld)
-
     # try to detect the cosmetic patch data format
     versioned_patch_set = None
     cosmetic_context = rom.read_int32(rom.sym('RANDO_CONTEXT') + 4)
@@ -815,86 +812,3 @@ def patch_cosmetics(ootworld, rom):
 
         # Unknown patch format
         logger.error("Unable to patch some cosmetics. ROM uses unknown cosmetic patch format.")
-
-# Unused in AP. 
-class CosmeticsLog(object):
-
-    def __init__(self, ootworld):
-        self.ootworld = ootworld
-
-        self.equipment_colors = {}
-        self.ui_colors = {}
-        self.misc_colors = {}
-        self.sfx = {}
-        self.bgm = {}
-
-        self.src_dict = {}
-        self.errors = []
-
-        if self.ootworld.enable_cosmetic_file:
-            if self.ootworld.cosmetic_file:
-                try:
-                    if any(map(self.ootworld.cosmetic_file.endswith, ['.z64', '.n64', '.v64'])):
-                        raise InvalidFileException("Your Ocarina of Time ROM doesn't belong in the cosmetics plandomizer setting. If you don't know what this is for, or don't plan to use it, disable cosmetic plandomizer and try again.")
-                    with open(self.ootworld.cosmetic_file) as infile:
-                        self.src_dict = json.load(infile)
-                except json.decoder.JSONDecodeError as e:
-                    raise InvalidFileException(f"Invalid Cosmetic Plandomizer File. Make sure the file is a valid JSON file. Failure reason: {str(e)}") from None
-                except FileNotFoundError:
-                    message = "Cosmetic Plandomizer file not found at %s" % (self.ootworld.cosmetic_file)
-                    logging.getLogger('').warning(message)
-                    self.errors.append(message)
-                    self.ootworld.enable_cosmetic_file = False
-                except InvalidFileException as e:
-                    logging.getLogger('').warning(str(e))
-                    self.errors.append(str(e))
-                    self.ootworld.enable_cosmetic_file = False
-            else:
-                logging.getLogger('').warning("Cosmetic Plandomizer enabled, but no file provided.")
-                self.ootworld.enable_cosmetic_file = False
-
-        if self.src_dict.get('ootworld', {}):
-            valid_ootworld = []
-            for setting in setting_infos:
-                if setting.name not in self.src_dict['ootworld'] or not setting.cosmetic:
-                    continue
-                self.ootworld.__dict__[setting.name] = self.src_dict['ootworld'][setting.name]
-                valid_ootworld.append(setting.name)
-            for setting in list(self.src_dict['ootworld'].keys()):
-                if setting not in valid_ootworld:
-                    del self.src_dict['ootworld'][setting]
-            if self.src_dict['ootworld'].get('randomize_all_cosmetics', False):
-                ootworld.resolve_random_ootworld(cosmetic=True, randomize_key='randomize_all_cosmetics')
-            if self.src_dict['ootworld'].get('randomize_all_sfx', False):
-                ootworld.resolve_random_ootworld(cosmetic=True, randomize_key='randomize_all_sfx')
-
-
-    def to_json(self):
-        self_dict = {
-            ':version': __version__,
-            ':enable_cosmetic_file': True,
-            ':errors': self.errors,
-            'ootworld': self.ootworld.to_json_cosmetics(),
-            'equipment_colors': self.equipment_colors,
-            'ui_colors': self.ui_colors,
-            'misc_colors': self.misc_colors,
-            'sfx': self.sfx,
-            'bgm': self.bgm,
-        }
-
-        if (not self.ootworld.enable_cosmetic_file):
-            del self_dict[':enable_cosmetic_file'] # Done this way for ordering purposes.
-        if (not self.errors):
-            del self_dict[':errors']
-
-        return self_dict
-
-
-    def to_str(self):
-        return dump_obj(self.to_json(), ensure_ascii=False)
-
-
-    def to_file(self, filename):
-        json = self.to_str()
-        with open(filename, 'w') as outfile:
-            outfile.write(json)

@@ -650,19 +650,7 @@ class OOTWorld(World):
         patch_rom(self, rom)
         patch_cosmetics(self, rom)
         rom.update_header()
-
-        # make patch file
         create_patch_file(rom, output_path(output_directory, outfile_name+'.apz5'))
-
-        # testing code: produce compressed file. uncomment when needed
-        # from .Rom import compress_rom_file
-        # filename_uncompressed = output_path(outfile_name+'.z64')
-        # filename_compressed = output_path(outfile_name+'-comp.z64')
-        # self.rom.write_to_file(filename_uncompressed)
-        # logger.info(f"Compressing OOT ROM file for player {self.player}. This might take a while...")
-        # compress_rom_file(filename_uncompressed, filename_compressed)
-        # os.remove(filename_uncompressed)
-
         rom.restore()
 
 

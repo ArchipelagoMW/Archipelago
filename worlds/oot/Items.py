@@ -412,5 +412,3 @@ item_table = {
                                                 'object_id':  0x00BA,
                                             }),
 }
-
-# lookup_id_to_name: typing.Dict[int, str] = {oot_data_to_ap_id(data, False): item_name for item_name, data in item_table.items() if data[2] is not None}
