@@ -12,7 +12,6 @@ from .Messages import read_messages, update_message_by_id, read_shop_items, \
         write_shop_items, remove_unused_messages, make_player_message, \
         add_item_messages, repack_messages, shuffle_messages, \
         get_message_by_id
-# from OcarinaSongs import replace_songs
 from .MQ import patch_files, File, update_dmadata, insert_space, add_relocations
 from .SaveContext import SaveContext
 from .TextBox import character_table, NORMAL_LINE_WIDTH
@@ -1749,9 +1748,6 @@ def patch_rom(world, rom):
     if world.fast_bunny_hood:
         symbol = rom.sym('FAST_BUNNY_HOOD_ENABLED')
         rom.write_byte(symbol, 0x01)
-
-    if world.ocarina_songs:
-        replace_songs(rom)
 
     # actually write the save table to rom
     for (name, count) in world.starting_items.items():
