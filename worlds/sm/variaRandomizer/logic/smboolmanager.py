@@ -12,9 +12,11 @@ class SMBoolManager(object):
     items = ['ETank', 'Missile', 'Super', 'PowerBomb', 'Bomb', 'Charge', 'Ice', 'HiJump', 'SpeedBooster', 'Wave', 'Spazer', 'SpringBall', 'Varia', 'Plasma', 'Grapple', 'Morph', 'Reserve', 'Gravity', 'XRayScope', 'SpaceJump', 'ScrewAttack', 'Nothing', 'NoEnergy', 'MotherBrain', 'Hyper'] + Bosses.Golden4()
     countItems = ['Missile', 'Super', 'PowerBomb', 'ETank', 'Reserve']
 
-    def __init__(self):
+    def __init__(self, player=0):
         self._items = { }
         self._counts = { }
+
+        self.player = player
 
         # cache related
         self.cacheKey = 0
@@ -24,7 +26,7 @@ class SMBoolManager(object):
         self.helpers = Logic.HelpersGraph(self)
         self.doorsManager = DoorsManager()
         self.createFacadeFunctions()
-        self.createKnowsFunctions()
+        self.createKnowsFunctions(player)
         self.resetItems()
 
     def computeItemsPositions(self):
@@ -141,14 +143,20 @@ class SMBoolManager(object):
     def traverse(self, doorName):
         return self.doorsManager.traverse(self, doorName)
 
-    def createKnowsFunctions(self):
+    def createKnowsFunctions(self, player):
         # for each knows we have a function knowsKnows (ex: knowsAlcatrazEscape()) which
         # take no parameter
         for knows in Knows.__dict__:
             if isKnows(knows):
-                setattr(self, 'knows'+knows, lambda knows=knows: SMBool(Knows.__dict__[knows].bool,
-                                                                        Knows.__dict__[knows].difficulty,
-                                                                        knows=[knows]))
+                if knows in Knows.knowsDict[player].__dict__:
+                    setattr(self, 'knows'+knows, lambda knows=knows: SMBool(Knows.knowsDict[player].__dict__[knows].bool,
+                                                                            Knows.knowsDict[player].__dict__[knows].difficulty,
+                                                                            knows=[knows]))
+                else:
+                    # if knows not in preset, use default values
+                    setattr(self, 'knows'+knows, lambda knows=knows: SMBool(Knows.__dict__[knows].bool,
+                                                                            Knows.__dict__[knows].difficulty,
+                                                                            knows=[knows]))
 
     def isCountItem(self, item):
         return item in self.countItems

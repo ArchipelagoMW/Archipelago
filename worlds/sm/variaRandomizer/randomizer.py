@@ -287,9 +287,10 @@ class VariaRandomizer:
     parser.add_argument('--hud', help='Enable VARIA hud', dest='hud',
                         nargs='?', const=True, default=False)
 
-    def __init__(self, rom, randoPreset):
+    def __init__(self, rom, randoPreset, player):
         # parse args       
         self.args = VariaRandomizer.parser.parse_args()
+        self.player = player
         args = self.args
         args.rom = rom
         args.randoPreset = randoPreset
@@ -336,7 +337,7 @@ class VariaRandomizer:
 
         # if diff preset given, load it
         if args.paramsFileName is not None:
-            PresetLoader.factory(args.paramsFileName).load()
+            PresetLoader.factory(args.paramsFileName).load(self.player)
             preset = os.path.splitext(os.path.basename(args.paramsFileName))[0]
 
             if args.preset is not None:
@@ -474,7 +475,7 @@ class VariaRandomizer:
             forceArg('noLayout', False, "'Anti-softlock layout patches' forced to on", webValue='on')
             forceArg('suitsRestriction', False, "'Suits restriction' forced to off", webValue='off')
             forceArg('areaLayoutBase', False, "'Additional layout patches for easier navigation' forced to on", webValue='on')
-            possibleStartAPs, reasons = GraphUtils.getPossibleStartAPs(args.area, maxDifficulty, args.morphPlacement)
+            possibleStartAPs, reasons = GraphUtils.getPossibleStartAPs(args.area, maxDifficulty, args.morphPlacement, self.player)
             if args.startLocation == 'random':
                 if args.startLocationList != None:
                     # to be able to give the list in jm we had to replace ' ' with '_', do the opposite operation
@@ -660,7 +661,7 @@ class VariaRandomizer:
         self.escapeAttr = None
         if args.patchOnly == False:
             try:
-                self.randoExec = RandoExec(seedName, args.vcr, randoSettings, graphSettings)
+                self.randoExec = RandoExec(seedName, args.vcr, randoSettings, graphSettings, self.player)
                 self.container = self.randoExec.randomize()
                 # if we couldn't find an area layout then the escape graph is not created either
                 # and getDoorConnections will crash if random escape is activated.

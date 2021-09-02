@@ -63,7 +63,7 @@ class SMWorld(World):
 
         def sm_init(self, parent: MultiWorld):
             orig_init(self, parent)
-            self.smbm = {player: SMBoolManager() for player in range(1, parent.players + 1)}
+            self.smbm = {player: SMBoolManager(player) for player in range(1, parent.players + 1)}
 
         def sm_copy(self):
             ret = orig_copy(self)
@@ -72,18 +72,22 @@ class SMWorld(World):
 
         CollectionState.__init__ = sm_init
         CollectionState.copy = sm_copy
-        # also need to add the names to the passed MultiWorld's CollectionState, since it was initialized before we could get to it
+
         if world:
-            world.state.smbm = {player: SMBoolManager() for player in range(1, world.players + 1)}
+            world.state.smbm = None
 
         return super().__new__(cls)
     
     def generate_basic(self):
         Logic.factory('vanilla')
-        self.variaRando = VariaRandomizer(self.world.sm_rom, self.world.randoPreset[self.player])
-        #self.itemManager = ItemManager('Chozo', self.qty, SMBoolManager(), 100, easy)
-        #self.itemManager.createItemPool()
-        itemPool = self.variaRando.container.itemPool #self.itemManager.getItemPool()
+
+        self.variaRando = VariaRandomizer(self.world.sm_rom, self.world.randoPreset[self.player], self.player)
+
+        # also need to add the names to the passed MultiWorld's CollectionState, since it was initialized before we could get to it
+        if self.world.state.smbm == None:
+            self.world.state.smbm = {player: SMBoolManager(player) for player in range(1, self.world.players + 1)}
+
+        itemPool = self.variaRando.container.itemPool
         
         # Generate item pool
         pool = []
@@ -128,9 +132,7 @@ class SMWorld(World):
             src_region.exits.append(Entrance(self.player, src.Name + "|" + dest.Name, src_region))
             srcDestEntrance = self.world.get_entrance(src.Name + "|" + dest.Name, self.player)
             srcDestEntrance.connect(dest_region)
-
             add_entrance_rule(self.world.get_entrance(src.Name + "|" + dest.Name, self.player), self.player, getAccessPoint(src.Name).traverse)
-            #add_entrance_rule(self.world.get_entrance(dest + "|" + src, self.player), self.player, getAccessPoint(dest).traverse)
 
     def set_rules(self):
         set_rules(self.world, self.player)

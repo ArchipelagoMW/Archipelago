@@ -110,7 +110,7 @@ class GraphUtils:
     def isStandardStart(startApName):
         return startApName == 'Ceres' or startApName == 'Landing Site'
 
-    def getPossibleStartAPs(areaMode, maxDiff, morphPlacement):
+    def getPossibleStartAPs(areaMode, maxDiff, morphPlacement, player):
         ret = []
         refused = {}
         allStartAPs = GraphUtils.getStartAccessPointNames()
@@ -120,7 +120,7 @@ class GraphUtils:
             cause = ""
             if 'knows' in start:
                 for k in start['knows']:
-                    if not Knows.knows(k, maxDiff):
+                    if not Knows.knowsDict[player].knows(k, maxDiff):
                         ok = False
                         cause += Knows.desc[k]['display']+" is not known. "
                         break

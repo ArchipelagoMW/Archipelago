@@ -15,8 +15,8 @@ from utils.parameters import infinity
 # checks init conditions for the randomizer: processes super fun settings, graph, start location, special restrictions
 # the entry point is createItemLocContainer
 class RandoSetup(object):
-    def __init__(self, graphSettings, locations, services):
-        self.sm = SMBoolManager()
+    def __init__(self, graphSettings, locations, services, player):
+        self.sm = SMBoolManager(player)
         self.settings = services.settings
         self.graphSettings = graphSettings
         self.startAP = graphSettings.startAP

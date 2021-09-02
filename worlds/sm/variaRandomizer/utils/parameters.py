@@ -72,6 +72,7 @@ def isBossKnows(knows):
     return ret
 
 class Knows:
+    knowsDict = {}
     # the different technics to know (cf. http://deanyd.net/sm/index.php?title=Item_Randomizer)
     # and the personnal perceived difficulty.
     # False means: I can't do this technic or I don't know it.
@@ -746,14 +747,15 @@ class Knows:
         ]
     }
 
-    def knows(name, diff):
-        k = getattr(Knows, name)
+    def knows(self, name, diff):
+        k = getattr(self, name)
         return k.bool and k.difficulty <= diff
 
 def isSettings(settings):
     return settings[0:len('__')] != '__'
 
 class Settings:
+    SettingsDict = {}
     # boss difficulty tables :
     #
     # key is boss name. value is a dictionary where you define:
@@ -1149,6 +1151,7 @@ def isButton(button):
     return button[0:len('__')] != '__'
 
 class Controller:
+    ControllerDict = {}
     # controller mapping
     A = "Jump"
     B = "Dash"

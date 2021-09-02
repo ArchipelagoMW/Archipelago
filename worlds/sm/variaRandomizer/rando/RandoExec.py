@@ -18,13 +18,14 @@ from utils.doorsmanager import DoorsManager
 
 # entry point for rando execution ("randomize" method)
 class RandoExec(object):
-    def __init__(self, seedName, vcr, randoSettings, graphSettings):
+    def __init__(self, seedName, vcr, randoSettings, graphSettings, player):
         self.errorMsg = ""
         self.seedName = seedName
         self.vcr = vcr
         self.randoSettings = randoSettings
         self.graphSettings = graphSettings
         self.log = utils.log.get('RandoExec')
+        self.player = player
 
     def getFillerFactory(self, progSpeed, endDate):
         if self.restrictions.split != "Scavenger":
@@ -74,7 +75,7 @@ class RandoExec(object):
                 DoorsManager.randomize(self.graphSettings.allowGreyDoors)
             self.areaGraph = graphBuilder.createGraph()
             services = RandoServices(self.areaGraph, self.restrictions)
-            setup = RandoSetup(self.graphSettings, Logic.locations, services)
+            setup = RandoSetup(self.graphSettings, Logic.locations, services, self.player)
             container = setup.createItemLocContainer(endDate, vcr)
             if container is None:
                 sys.stdout.write('*')
