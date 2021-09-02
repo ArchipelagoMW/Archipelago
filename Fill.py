@@ -4,8 +4,6 @@ import collections
 import itertools
 
 from BaseClasses import CollectionState, Location, MultiWorld
-from worlds.alttp.Items import ItemFactory
-from worlds.alttp.Regions import key_drop_data
 from worlds.generic import PlandoItem
 from worlds.AutoWorld import call_all
 
@@ -339,6 +337,8 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked=
 
 
 def distribute_planned(world: MultiWorld):
+    # TODO: remove. Preferably by implementing key drop
+    from worlds.alttp.Regions import key_drop_data
     world_name_lookup = world.world_name_lookup
 
     for player in world.player_ids:
@@ -349,7 +349,7 @@ def distribute_planned(world: MultiWorld):
                     placement.warn(
                         f"Can't place '{placement.item}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
                     continue
-                item = ItemFactory(placement.item, player)
+                item = world.worlds[player].create_item(placement.item)
                 target_world: int = placement.world
                 if target_world is False or world.players == 1:
                     target_world = player  # in own world
