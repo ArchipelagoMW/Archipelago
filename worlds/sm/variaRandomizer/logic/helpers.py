@@ -50,7 +50,7 @@ class Helpers(object):
         hasVaria = sm.haveItem('Varia')
         hasGrav = sm.haveItem('Gravity')
         items = []
-        if RomPatches.has(RomPatches.NoGravityEnvProtection):
+        if RomPatches.has(sm.player, RomPatches.NoGravityEnvProtection):
             if hasVaria:
                 items = ['Varia']
                 if envDmg:
@@ -60,7 +60,7 @@ class Helpers(object):
             if hasGrav and not envDmg:
                 ret = 4.0
                 items = ['Gravity']
-        elif RomPatches.has(RomPatches.ProgressiveSuits):
+        elif RomPatches.has(sm.player, RomPatches.ProgressiveSuits):
             if hasVaria:
                 items.append('Varia')
                 ret *= 2
@@ -93,21 +93,22 @@ class Helpers(object):
     def heatProof(self):
         sm = self.smbm
         return sm.wor(sm.haveItem('Varia'),
-                      sm.wand(sm.wnot(RomPatches.has(RomPatches.NoGravityEnvProtection)),
-                              sm.wnot(RomPatches.has(RomPatches.ProgressiveSuits)),
+                      sm.wand(sm.wnot(RomPatches.has(sm.player, RomPatches.NoGravityEnvProtection)),
+                              sm.wnot(RomPatches.has(sm.player, RomPatches.ProgressiveSuits)),
                               sm.haveItem('Gravity')))
 
     # helper here because we can't define "sublambdas" in locations
     def getPiratesPseudoScrewCoeff(self):
+        sm = self.smbm
         ret = 1.0
-        if RomPatches.has(RomPatches.NerfedCharge).bool == True:
+        if RomPatches.has(sm.player, RomPatches.NerfedCharge).bool == True:
             ret = 4.0
         return ret
 
     @Cache.decorator
     def canFireChargedShots(self):
         sm = self.smbm
-        return sm.wor(sm.haveItem('Charge'), RomPatches.has(RomPatches.NerfedCharge))
+        return sm.wor(sm.haveItem('Charge'), RomPatches.has(sm.player, RomPatches.NerfedCharge))
 
     # higher values for mult means hell run is that much "easier" (HP mult)
     def canHellRun(self, hellRun, mult=1.0, minE=2):
@@ -117,7 +118,7 @@ class Helpers(object):
         isHeatProof = sm.heatProof()
         if isHeatProof == True:
             return isHeatProof
-        if sm.wand(RomPatches.has(RomPatches.ProgressiveSuits), sm.haveItem('Gravity')).bool == True:
+        if sm.wand(RomPatches.has(sm.player, RomPatches.ProgressiveSuits), sm.haveItem('Gravity')).bool == True:
             # half heat protection
             mult *= 2.0
             minE /= 2.0
@@ -196,14 +197,14 @@ class Helpers(object):
     @Cache.decorator
     def canOpenRedDoors(self):
         sm = self.smbm
-        return sm.wor(sm.wand(sm.wnot(RomPatches.has(RomPatches.RedDoorsMissileOnly)),
+        return sm.wor(sm.wand(sm.wnot(RomPatches.has(sm.player, RomPatches.RedDoorsMissileOnly)),
                               sm.haveMissileOrSuper()),
                       sm.haveItem('Missile'))
 
     @Cache.decorator
     def canOpenEyeDoors(self):
         sm = self.smbm
-        return sm.wor(RomPatches.has(RomPatches.NoGadoras),
+        return sm.wor(RomPatches.has(sm.player, RomPatches.NoGadoras),
                       sm.haveMissileOrSuper())
 
     @Cache.decorator
@@ -670,7 +671,7 @@ class Helpers(object):
 
     def mbEtankCheck(self):
         sm = self.smbm
-        if sm.wor(RomPatches.has(RomPatches.NerfedRainbowBeam), RomPatches.has(RomPatches.TourianSpeedup)):
+        if sm.wor(RomPatches.has(sm.player, RomPatches.NerfedRainbowBeam), RomPatches.has(sm.player, RomPatches.TourianSpeedup)):
             # "add" energy for difficulty calculations
             energy = 2.8 if sm.haveItem('Varia') else 2.6
             return (True, energy)
@@ -728,11 +729,11 @@ class Helpers(object):
     @Cache.decorator
     def enoughStuffTourian(self):
         sm = self.smbm
-        ret = self.smbm.wand(sm.wor(RomPatches.has(RomPatches.TourianSpeedup),
+        ret = self.smbm.wand(sm.wor(RomPatches.has(sm.player, RomPatches.TourianSpeedup),
                                     sm.wand(sm.canPassMetroids(), sm.canPassZebetites())),
                              sm.canOpenRedDoors(),
                              sm.enoughStuffsMotherbrain(),
-                             sm.wor(RomPatches.has(RomPatches.OpenZebetites), sm.haveItem('Morph')))
+                             sm.wor(RomPatches.has(sm.player, RomPatches.OpenZebetites), sm.haveItem('Morph')))
         return ret
 
 class Pickup:

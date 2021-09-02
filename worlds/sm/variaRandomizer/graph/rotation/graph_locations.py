@@ -39,10 +39,10 @@ locationsDict["Energy Tank, Terminator"].Available = (
     lambda sm: SMBool(True)
 )
 locationsDict["Reserve Tank, Brinstar"].AccessFrom = {
-    'Green Brinstar Elevator': lambda sm: sm.wor(RomPatches.has(RomPatches.BrinReserveBlueDoors), sm.traverse('MainShaftRight'))
+    'Green Brinstar Elevator': lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.BrinReserveBlueDoors), sm.traverse('MainShaftRight'))
 }
 locationsDict["Reserve Tank, Brinstar"].Available = (
-    lambda sm: sm.wor(RomPatches.has(RomPatches.BrinReserveBlueDoors), sm.traverse('EarlySupersRight'))
+    lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.BrinReserveBlueDoors), sm.traverse('EarlySupersRight'))
 )
 locationsDict["Charge Beam"].AccessFrom = {
     'Big Pink': lambda sm: sm.haveItem('Morph')
@@ -57,7 +57,7 @@ locationsDict["Morphing Ball"].Available = (
     lambda sm: SMBool(True)
 )
 locationsDict["Energy Tank, Brinstar Ceiling"].AccessFrom = {
-    'Blue Brinstar Elevator Bottom': lambda sm: sm.wor(RomPatches.has(RomPatches.BlueBrinstarBlueDoor), sm.traverse('ConstructionZoneRight'))
+    'Blue Brinstar Elevator Bottom': lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.BlueBrinstarBlueDoor), sm.traverse('ConstructionZoneRight'))
 }
 locationsDict["Energy Tank, Brinstar Ceiling"].Available = (
     lambda sm: SMBool(True)
@@ -101,12 +101,12 @@ locationsDict["Spazer"].Available = (
     lambda sm: sm.wand(sm.traverse('BelowSpazerTopRight'),
                        sm.wor(sm.canPassBombPassages(),
                               sm.wand(sm.haveItem('Morph'),
-                                      RomPatches.has(RomPatches.SpazerShotBlock))))
+                                      RomPatches.has(sm.player, RomPatches.SpazerShotBlock))))
 )
 locationsDict["Spazer"].PostAvailable = (
     # either with a bomb jump/springball to exit on top, or with bomb/pb to exit in the middle
     lambda sm: sm.wor(sm.canPassBombPassages(),
-                      sm.wand(RomPatches.has(RomPatches.SpazerShotBlock), sm.canUseSpringBall()))
+                      sm.wand(RomPatches.has(sm.player, RomPatches.SpazerShotBlock), sm.canUseSpringBall()))
 )
 locationsDict["Energy Tank, Kraid"].AccessFrom = {
     'Warehouse Zeela Room Left': lambda sm: sm.haveItem('Morph')
@@ -143,14 +143,14 @@ locationsDict["Energy Tank, Crocomire"].Available = (
                               sm.energyReserveCountOk(3/sm.getDmgReduction()[0])))
 )
 locationsDict["Hi-Jump Boots"].AccessFrom = {
-    'Business Center': lambda sm: sm.wor(RomPatches.has(RomPatches.HiJumpAreaBlueDoor), sm.traverse('BusinessCenterBottomLeft'))
+    'Business Center': lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.HiJumpAreaBlueDoor), sm.traverse('BusinessCenterBottomLeft'))
 }
 locationsDict["Hi-Jump Boots"].Available = (
     lambda sm: sm.canPassBombPassages()
 )
 locationsDict["Hi-Jump Boots"].PostAvailable = (
     lambda sm: sm.wor(sm.canPassBombPassages(),
-                      sm.wand(sm.haveItem('Morph'), RomPatches.has(RomPatches.HiJumpShotBlock)))
+                      sm.wand(sm.haveItem('Morph'), RomPatches.has(sm.player, RomPatches.HiJumpShotBlock)))
 )
 locationsDict["Grapple Beam"].AccessFrom = {
     'Crocomire Room Top': lambda sm: SMBool(True)
@@ -173,7 +173,7 @@ locationsDict["Grapple Beam"].Available = (
 #    lambda sm: sm.wand(sm.haveItem('Morph'), sm.canHellRun(**Settings.hellRunsTable['MainUpperNorfair']['Bubble -> Norfair Reserve']))
 #)
 locationsDict["Speed Booster"].AccessFrom = {
-    'Bubble Mountain Top': lambda sm: sm.wand(sm.wor(RomPatches.has(RomPatches.SpeedAreaBlueDoors),
+    'Bubble Mountain Top': lambda sm: sm.wand(sm.wor(RomPatches.has(sm.player, RomPatches.SpeedAreaBlueDoors),
                                                      sm.wand(sm.traverse('BubbleMountainTopRight'),
                                                              sm.traverse('SpeedBoosterHallRight'))),
                                               sm.haveItem('Morph'))
@@ -222,7 +222,7 @@ locationsDict["Wave Beam"].Available = (
 #    'Firefleas': lambda sm: SMBool(True)
 #}
 #locationsDict["Energy Tank, Firefleas"].Available = (
-#    lambda sm: sm.wor(RomPatches.has(RomPatches.FirefleasRemoveFune),
+#    lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.FirefleasRemoveFune),
 #                      # get past the fune
 #                                     sm.haveItem('Super'),
 #                      sm.canPassBombPassages(),
@@ -245,13 +245,13 @@ locationsDict["Reserve Tank, Wrecked Ship"].Available = (
                        sm.haveItem('Super'))
 )
 locationsDict["Energy Tank, Wrecked Ship"].AccessFrom = {
-    'Wrecked Ship Back': lambda sm: sm.wand(sm.wor(RomPatches.has(RomPatches.WsEtankBlueDoor),
+    'Wrecked Ship Back': lambda sm: sm.wand(sm.wor(RomPatches.has(sm.player, RomPatches.WsEtankBlueDoor),
                                                    sm.traverse('ElectricDeathRoomTopLeft')),
                                             sm.haveItem('Morph'))
 }
 locationsDict["Energy Tank, Wrecked Ship"].Available = (
     lambda sm: sm.wand(sm.wor(Bosses.bossDead(sm, 'Phantoon'),
-                              RomPatches.has(RomPatches.WsEtankPhantoonAlive)),
+                              RomPatches.has(sm.player, RomPatches.WsEtankPhantoonAlive)),
                        # TODO::add knows break free of the water line without gravity while walljumping
                        sm.knowsSuitlessBreakFree())
 )
@@ -287,7 +287,7 @@ locationsDict["Gravity Suit"].Available = (
 )
 locationsDict["Energy Tank, Mama turtle"].AccessFrom = {
     'Main Street Bottom': lambda sm: sm.wor(sm.traverse('FishTankRight'),
-                                            RomPatches.has(RomPatches.MamaTurtleBlueDoor)),
+                                            RomPatches.has(sm.player, RomPatches.MamaTurtleBlueDoor)),
     'Mama Turtle': lambda sm: SMBool(True)
 }
 locationsDict["Energy Tank, Mama turtle"].Available = (
@@ -486,23 +486,23 @@ locationsDict["Super Missile (pink Brinstar)"].PostAvailable = (
 # no technique for morph from walljump to exit after super missile (green brinstar top)
 # as you have to be able to 99% finish the hack before doing rando
 locationsDict["Missile (green Brinstar below super missile)"].AccessFrom = {
-    'Green Brinstar Elevator': lambda sm: sm.wor(RomPatches.has(RomPatches.BrinReserveBlueDoors), sm.traverse('MainShaftRight'))
+    'Green Brinstar Elevator': lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.BrinReserveBlueDoors), sm.traverse('MainShaftRight'))
 }
 locationsDict["Missile (green Brinstar below super missile)"].Available = (
     # TODO::check that we can destroy the block with screwattack
     lambda sm: sm.canDestroyBombWalls()
 )
 #locationsDict["Missile (green Brinstar below super missile)"].PostAvailable = (
-#    lambda sm: sm.wor(RomPatches.has(RomPatches.EarlySupersShotBlock), sm.canPassBombPassages())
+#    lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.EarlySupersShotBlock), sm.canPassBombPassages())
 #)
 locationsDict["Super Missile (green Brinstar top)"].AccessFrom = {
-    'Green Brinstar Elevator': lambda sm: sm.wor(RomPatches.has(RomPatches.BrinReserveBlueDoors), sm.traverse('MainShaftRight'))
+    'Green Brinstar Elevator': lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.BrinReserveBlueDoors), sm.traverse('MainShaftRight'))
 }
 locationsDict["Super Missile (green Brinstar top)"].Available = (
     lambda sm: sm.haveItem('Morph')
 )
 locationsDict["Missile (green Brinstar behind missile)"].AccessFrom = {
-    'Green Brinstar Elevator': lambda sm: sm.wor(RomPatches.has(RomPatches.BrinReserveBlueDoors), sm.traverse('MainShaftRight'))
+    'Green Brinstar Elevator': lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.BrinReserveBlueDoors), sm.traverse('MainShaftRight'))
 }
 locationsDict["Missile (green Brinstar behind missile)"].Available = (
     lambda sm: sm.wand(sm.traverse('EarlySupersRight'),
@@ -515,7 +515,7 @@ locationsDict["Missile (green Brinstar behind missile)"].PostAvailable = (
 
 )
 locationsDict["Missile (green Brinstar behind reserve tank)"].AccessFrom = {
-    'Green Brinstar Elevator': lambda sm: sm.wor(RomPatches.has(RomPatches.BrinReserveBlueDoors), sm.traverse('MainShaftRight'))
+    'Green Brinstar Elevator': lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.BrinReserveBlueDoors), sm.traverse('MainShaftRight'))
 }
 locationsDict["Missile (green Brinstar behind reserve tank)"].Available = (
     lambda sm: sm.traverse('EarlySupersRight')
@@ -558,7 +558,7 @@ locationsDict["Missile (blue Brinstar middle)"].AccessFrom = {
     'Blue Brinstar Elevator Bottom': lambda sm: SMBool(True)
 }
 locationsDict["Missile (blue Brinstar middle)"].Available = (
-    lambda sm: sm.wor(RomPatches.has(RomPatches.BlueBrinstarBlueDoor), sm.traverse('ConstructionZoneRight'))
+    lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.BlueBrinstarBlueDoor), sm.traverse('ConstructionZoneRight'))
 )
 locationsDict["Super Missile (green Brinstar bottom)"].AccessFrom = {
     'Etecoons Supers': lambda sm: SMBool(True)
@@ -635,13 +635,13 @@ locationsDict["Missile (below Ice Beam)"].Available = (
 #    lambda sm: sm.canGrappleEscape()
 #)
 locationsDict["Missile (Hi-Jump Boots)"].AccessFrom = {
-    'Business Center': lambda sm: sm.wor(RomPatches.has(RomPatches.HiJumpAreaBlueDoor), sm.traverse('BusinessCenterBottomLeft'))
+    'Business Center': lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.HiJumpAreaBlueDoor), sm.traverse('BusinessCenterBottomLeft'))
 }
 locationsDict["Missile (Hi-Jump Boots)"].Available = (
     lambda sm: sm.canPassBombPassages()
 )
 locationsDict["Energy Tank (Hi-Jump Boots)"].AccessFrom = {
-    'Business Center': lambda sm: sm.wor(RomPatches.has(RomPatches.HiJumpAreaBlueDoor), sm.traverse('BusinessCenterBottomLeft'))
+    'Business Center': lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.HiJumpAreaBlueDoor), sm.traverse('BusinessCenterBottomLeft'))
 }
 locationsDict["Energy Tank (Hi-Jump Boots)"].Available = (
     lambda sm: SMBool(True)
@@ -699,7 +699,7 @@ locationsDict["Missile (bubble Norfair)"].Available = (
     lambda sm: sm.canPassBombPassages()
 )
 locationsDict["Missile (Speed Booster)"].AccessFrom = {
-    'Bubble Mountain Top': lambda sm: sm.wand(sm.wor(RomPatches.has(RomPatches.SpeedAreaBlueDoors),
+    'Bubble Mountain Top': lambda sm: sm.wand(sm.wor(RomPatches.has(sm.player, RomPatches.SpeedAreaBlueDoors),
                                                      sm.traverse('BubbleMountainTopRight')),
                                               sm.haveItem('Morph'))
 }
@@ -819,7 +819,7 @@ locationsDict["Super Missile (green Maridia)"].Available = (
 locationsDict["Missile (green Maridia tatori)"].AccessFrom = {
     # it's possible to crounched jump over the pink pirate when suitless without taking damage
     'Main Street Bottom': lambda sm: sm.wand(sm.wor(sm.traverse('FishTankRight'),
-                                                    RomPatches.has(RomPatches.MamaTurtleBlueDoor))),
+                                                    RomPatches.has(sm.player, RomPatches.MamaTurtleBlueDoor))),
     'Mama Turtle': lambda sm: SMBool(True)
 }
 locationsDict["Missile (green Maridia tatori)"].Available = (

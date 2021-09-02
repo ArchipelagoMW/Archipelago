@@ -116,15 +116,15 @@ class RomPatches:
     Dessy = []
 
     ### Active patches
-    ActivePatches = []
+    ActivePatches = {}
 
     @staticmethod
-    def has(patch):
-        return SMBool(patch in RomPatches.ActivePatches)
+    def has(player, patch):
+        return SMBool(patch in RomPatches.ActivePatches[player])
 
     @staticmethod
     def setDefaultPatches(startLocation):
         # called by the isolver in seedless mode.
         # activate only layout patch (the most common one), red tower blue doors and the startLocation's patches.
         from graph.graph_utils import GraphUtils
-        RomPatches.ActivePatches = [RomPatches.RedTowerBlueDoors] + RomPatches.TotalLayout + GraphUtils.getGraphPatches(startLocation)
+        RomPatches.ActivePatches[0] = [RomPatches.RedTowerBlueDoors] + RomPatches.TotalLayout + GraphUtils.getGraphPatches(startLocation)

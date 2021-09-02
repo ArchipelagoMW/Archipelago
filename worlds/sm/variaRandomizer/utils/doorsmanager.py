@@ -251,29 +251,29 @@ class DoorsManager():
         return DoorsManager.doors[doorName].traverse(smbm)
 
     @staticmethod
-    def setDoorsColor():
+    def setDoorsColor(player=0):
         # depending on loaded patches, force some doors to blue, excluding them from randomization
-        if RomPatches.has(RomPatches.BlueBrinstarBlueDoor):
+        if RomPatches.has(player, RomPatches.BlueBrinstarBlueDoor):
             DoorsManager.doors['ConstructionZoneRight'].forceBlue()
-        if RomPatches.has(RomPatches.BrinReserveBlueDoors):
+        if RomPatches.has(player, RomPatches.BrinReserveBlueDoors):
             DoorsManager.doors['MainShaftRight'].forceBlue()
             DoorsManager.doors['EarlySupersRight'].forceBlue()
-        if RomPatches.has(RomPatches.EtecoonSupersBlueDoor):
+        if RomPatches.has(player, RomPatches.EtecoonSupersBlueDoor):
             DoorsManager.doors['EtecoonEnergyTankLeft'].forceBlue()
-        #if RomPatches.has(RomPatches.SpongeBathBlueDoor):
+        #if RomPatches.has(player, RomPatches.SpongeBathBlueDoor):
         #    DoorsManager.doors[''].forceBlue()
-        if RomPatches.has(RomPatches.HiJumpAreaBlueDoor):
+        if RomPatches.has(player, RomPatches.HiJumpAreaBlueDoor):
             DoorsManager.doors['BusinessCenterBottomLeft'].forceBlue()
-        if RomPatches.has(RomPatches.SpeedAreaBlueDoors):
+        if RomPatches.has(player, RomPatches.SpeedAreaBlueDoors):
             DoorsManager.doors['BubbleMountainTopRight'].forceBlue()
             DoorsManager.doors['SpeedBoosterHallRight'].forceBlue()
-        if RomPatches.has(RomPatches.MamaTurtleBlueDoor):
+        if RomPatches.has(player, RomPatches.MamaTurtleBlueDoor):
             DoorsManager.doors['FishTankRight'].forceBlue()
-        if RomPatches.has(RomPatches.HellwayBlueDoor):
+        if RomPatches.has(player, RomPatches.HellwayBlueDoor):
             DoorsManager.doors['RedTowerElevatorLeft'].forceBlue()
-        if RomPatches.has(RomPatches.RedTowerBlueDoors):
+        if RomPatches.has(player, RomPatches.RedTowerBlueDoors):
             DoorsManager.doors['RedBrinstarElevatorTop'].forceBlue()
-        if RomPatches.has(RomPatches.AreaRandoBlueDoors):
+        if RomPatches.has(player, RomPatches.AreaRandoBlueDoors):
             DoorsManager.doors['GreenHillZoneTopRight'].forceBlue()
             DoorsManager.doors['NoobBridgeRight'].forceBlue()
             DoorsManager.doors['LeCoudeBottom'].forceBlue()
@@ -283,12 +283,12 @@ class DoorsManager():
             DoorsManager.doors['GreenPiratesShaftBottomRight'].canGrey = False
             DoorsManager.doors['CrocomireSpeedwayBottom'].canGrey = False
             DoorsManager.doors['KronicBoostBottomLeft'].canGrey = False
-        if RomPatches.has(RomPatches.AreaRandoMoreBlueDoors):
+        if RomPatches.has(player, RomPatches.AreaRandoMoreBlueDoors):
             DoorsManager.doors['KihunterBottom'].forceBlue()
             DoorsManager.doors['GreenPiratesShaftBottomRight'].forceBlue()
-        if RomPatches.has(RomPatches.CrocBlueDoors):
+        if RomPatches.has(player, RomPatches.CrocBlueDoors):
             DoorsManager.doors['CrocomireSpeedwayBottom'].forceBlue()
-        if RomPatches.has(RomPatches.CrabShaftBlueDoor):
+        if RomPatches.has(player, RomPatches.CrabShaftBlueDoor):
             DoorsManager.doors['CrabShaftRight'].forceBlue()
 
     @staticmethod

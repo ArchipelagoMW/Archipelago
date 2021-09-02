@@ -545,23 +545,23 @@ class VariaRandomizer:
         if args.directory != '.':
             self.fileName = args.directory + '/' + self.fileName
         if args.noLayout == True:
-            RomPatches.ActivePatches = RomPatches.TotalBase
+            RomPatches.ActivePatches[self.player] = RomPatches.TotalBase
         else:
-            RomPatches.ActivePatches = RomPatches.Total
-        RomPatches.ActivePatches.remove(RomPatches.BlueBrinstarBlueDoor)
-        RomPatches.ActivePatches += GraphUtils.getGraphPatches(args.startLocation)
+            RomPatches.ActivePatches[self.player] = RomPatches.Total
+        RomPatches.ActivePatches[self.player].remove(RomPatches.BlueBrinstarBlueDoor)
+        RomPatches.ActivePatches[self.player] += GraphUtils.getGraphPatches(args.startLocation)
         if self.gravityBehaviour != "Balanced":
-            RomPatches.ActivePatches.remove(RomPatches.NoGravityEnvProtection)
+            RomPatches.ActivePatches[self.player].remove(RomPatches.NoGravityEnvProtection)
         if self.gravityBehaviour == "Progressive":
-            RomPatches.ActivePatches.append(RomPatches.ProgressiveSuits)
+            RomPatches.ActivePatches[self.player].append(RomPatches.ProgressiveSuits)
         if args.nerfedCharge == True:
-            RomPatches.ActivePatches.append(RomPatches.NerfedCharge)
+            RomPatches.ActivePatches[self.player].append(RomPatches.NerfedCharge)
         if args.noVariaTweaks == False:
-            RomPatches.ActivePatches += RomPatches.VariaTweaks
+            RomPatches.ActivePatches[self.player] += RomPatches.VariaTweaks
         if self.minimizerN is not None:
-            RomPatches.ActivePatches.append(RomPatches.NoGadoras)
+            RomPatches.ActivePatches[self.player].append(RomPatches.NoGadoras)
             if args.minimizerTourian == True:
-                RomPatches.ActivePatches += RomPatches.MinimizerTourian
+                RomPatches.ActivePatches[self.player] += RomPatches.MinimizerTourian
         missileQty = float(args.missileQty)
         superQty = float(args.superQty)
         powerBombQty = float(args.powerBombQty)
@@ -583,7 +583,7 @@ class VariaRandomizer:
             self.energyQty = random.choice(energyQties)
         if self.energyQty == 'ultra sparse':
             # add nerfed rainbow beam patch
-            RomPatches.ActivePatches.append(RomPatches.NerfedRainbowBeam)
+            RomPatches.ActivePatches[self.player].append(RomPatches.NerfedRainbowBeam)
         qty = {'energy': self.energyQty,
             'minors': minorQty,
             'ammo': { 'Missile': missileQty,
@@ -628,7 +628,7 @@ class VariaRandomizer:
             forceArg('progressionDifficulty', 'normal', "'Progression difficulty' forced to normal")
             progDiff = 'normal'
             args.plandoRando = json.loads(args.plandoRando)
-            RomPatches.ActivePatches = args.plandoRando["patches"]
+            RomPatches.ActivePatches[self.player] = args.plandoRando["patches"]
             DoorsManager.unserialize(args.plandoRando["doors"])
             plandoSettings = {"locsItems": args.plandoRando['locsItems'], "forbiddenItems": args.plandoRando['forbiddenItems']}
         randoSettings = RandoSettings(maxDifficulty, progSpeed, progDiff, qty,
@@ -646,17 +646,17 @@ class VariaRandomizer:
         if args.area == True:
             if args.dot == True:
                 dotFile = args.directory + '/' + seedName + '.dot'
-            RomPatches.ActivePatches += RomPatches.AreaBaseSet
+            RomPatches.ActivePatches[self.player] += RomPatches.AreaBaseSet
             if args.areaLayoutBase == False:
-                RomPatches.ActivePatches += RomPatches.AreaComfortSet
+                RomPatches.ActivePatches[self.player] += RomPatches.AreaComfortSet
         if args.doorsColorsRando == True:
-            RomPatches.ActivePatches.append(RomPatches.RedDoorsMissileOnly)
+            RomPatches.ActivePatches[self.player].append(RomPatches.RedDoorsMissileOnly)
         graphSettings = GraphSettings(args.startLocation, args.area, args.lightArea, args.bosses,
                                     args.escapeRando, self.minimizerN, dotFile, args.doorsColorsRando, args.allowGreyDoors,
                                     args.plandoRando["transitions"] if args.plandoRando != None else None)
 
         if args.plandoRando is None:
-            DoorsManager.setDoorsColor()
+            DoorsManager.setDoorsColor(self.player)
 
         self.escapeAttr = None
         if args.patchOnly == False:
