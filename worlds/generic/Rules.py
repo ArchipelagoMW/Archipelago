@@ -13,6 +13,7 @@ def exclusion_rules(world, player: int, excluded_locations: set):
     for loc_name in excluded_locations:
         location = world.get_location(loc_name, player)
         add_item_rule(location, lambda i: not (i.advancement or i.never_exclude))
+        location.excluded = True
 
 
 def set_rule(spot, rule):

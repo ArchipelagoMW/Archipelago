@@ -245,6 +245,27 @@ class OptionDict(Option):
         return str(value)
 
 
+class OptionList(Option): 
+    default = []
+
+    def __init__(self, value: typing.List[str, typing.Any]):
+        self.value = value
+
+    @classmethod
+    def from_text(cls, text: str):
+        return cls([option.strip() for option in text.split(",")])
+
+    @classmethod
+    def from_any(cls, data: typing.Any):
+        if type(data) == list:
+            return cls(data)
+        return cls.from_text(str(data))
+
+    def get_option_name(self, value):
+        return str(value)
+
+
+
 local_objective = Toggle  # local triforce pieces, local dungeon prizes etc.
 
 

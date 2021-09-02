@@ -1,0 +1,105 @@
+[
+    {
+        "region_name": "Dodongos Cavern Beginning",
+        "dungeon": "Dodongos Cavern",
+        "exits": {
+            "Death Mountain": "True",
+            "Dodongos Cavern Lobby": "
+                here(can_blast_or_smash or Progressive_Strength_Upgrade)"
+        }
+    },
+    {
+        "region_name": "Dodongos Cavern Lobby",
+        "dungeon": "Dodongos Cavern",
+        "locations": {
+            "Dodongos Cavern Map Chest": "True",
+            "Dodongos Cavern GS Side Room Near Lower Lizalfos": "
+                has_explosives or is_adult or Slingshot or 
+                Boomerang or Sticks or Kokiri_Sword",
+            "Dodongos Cavern GS Scarecrow": "
+                can_use(Scarecrow) or can_use(Longshot) or 
+                (logic_dc_scarecrow_gs and (is_adult or can_child_attack))",
+            "Dodongos Cavern Deku Scrub Side Room Near Dodongos": "
+                is_adult or Slingshot or Sticks or 
+                has_explosives or Kokiri_Sword",
+            "Dodongos Cavern Deku Scrub Lobby": "True",
+            "Dodongos Cavern Gossip Stone": "True",
+            "Gossip Stone Fairy": "can_summon_gossip_fairy and has_bottle"
+        },
+        "exits": {
+            "Dodongos Cavern Beginning": "True",
+            "Dodongos Cavern Staircase Room": "
+                here(is_adult or Sticks or
+                    (can_use(Dins_Fire) and (Slingshot or has_explosives or Kokiri_Sword)))",
+            "Dodongos Cavern Far Bridge": "at('Dodongos Cavern Far Bridge', True)"
+        }
+    },
+    {
+        "region_name": "Dodongos Cavern Staircase Room",
+        "dungeon": "Dodongos Cavern",
+        "locations": {
+            "Dodongos Cavern Compass Chest": "True",
+            "Dodongos Cavern GS Vines Above Stairs": "
+                has_explosives or Progressive_Strength_Upgrade or can_use(Dins_Fire) or
+                (logic_dc_staircase and can_use(Bow)) or
+                (logic_dc_vines_gs and can_use(Longshot))"
+        },
+        "exits": {
+            "Dodongos Cavern Lobby": "True",
+            "Dodongos Cavern Climb": "
+                has_explosives or Progressive_Strength_Upgrade or 
+                    can_use(Dins_Fire) or (logic_dc_staircase and can_use(Bow))"
+        }
+    },
+    {
+        "region_name": "Dodongos Cavern Climb",
+        "dungeon": "Dodongos Cavern",
+        "locations": {
+            "Dodongos Cavern Bomb Flower Platform Chest": "True",
+            "Dodongos Cavern Deku Scrub Near Bomb Bag Right": "
+                can_blast_or_smash or
+                (logic_dc_scrub_room and is_adult and Progressive_Strength_Upgrade)",
+            "Dodongos Cavern Deku Scrub Near Bomb Bag Left": "
+                can_blast_or_smash or
+                (logic_dc_scrub_room and is_adult and Progressive_Strength_Upgrade)"
+        },
+        "exits": {
+            "Dodongos Cavern Lobby": "True",
+            "Dodongos Cavern Far Bridge": "
+                (is_child and (Slingshot or
+                    (logic_dc_slingshot_skip and (Sticks or has_explosives or Kokiri_Sword)))) or 
+                (is_adult and (Bow or Hover_Boots or can_use(Longshot) or logic_dc_jump))"
+        }
+    },
+    {
+        "region_name": "Dodongos Cavern Far Bridge",
+        "dungeon": "Dodongos Cavern",
+        "locations": {
+            "Dodongos Cavern Bomb Bag Chest": "True",
+            "Dodongos Cavern End of Bridge Chest": "can_blast_or_smash",
+            "Dodongos Cavern GS Alcove Above Stairs": "can_use(Hookshot) or can_use(Boomerang)"
+        },
+        "exits": {
+            "Dodongos Cavern Boss Area": "has_explosives",
+            "Dodongos Cavern Lobby": "True"
+        }
+    },
+    {
+        "region_name": "Dodongos Cavern Boss Area",
+        "dungeon": "Dodongos Cavern",
+        "locations": {
+            "Dodongos Cavern Boss Room Chest": "True",
+            "Dodongos Cavern King Dodongo Heart": "
+                (Bombs or Progressive_Strength_Upgrade) and 
+                (is_adult or Sticks or Kokiri_Sword)",
+            "King Dodongo": "
+                (Bombs or Progressive_Strength_Upgrade) and 
+                (is_adult or Sticks or Kokiri_Sword)",
+            "Dodongos Cavern GS Back Room": "True",
+            "Fairy Pot": "has_bottle"
+        },
+        "exits": {
+            "Dodongos Cavern Lobby": "True"
+        }
+    }
+]
