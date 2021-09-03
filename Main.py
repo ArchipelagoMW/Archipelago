@@ -182,7 +182,7 @@ def main(args, seed=None):
     if world.players > 1:
         balance_multiworld_progression(world)
 
-    logger.info('Generating output files.')
+    logger.info(f'Beginning output...')
     outfilebase = 'AP_' + world.seed_name
 
     pool = concurrent.futures.ThreadPoolExecutor()
@@ -194,7 +194,9 @@ def main(args, seed=None):
         output_file_futures = []
 
         for player in world.player_ids:
-            output_file_futures.append(pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
+            # skip starting a thread for methods that say "pass".
+            if AutoWorld.World.generate_output.__code__ is not world.worlds[player].generate_output.__code__:
+                output_file_futures.append(pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
         output_file_futures.append(pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir))
 
         def get_entrance_to_region(region: Region):
@@ -340,7 +342,9 @@ def main(args, seed=None):
         # retrieve exceptions via .result() if they occured.
         if multidata_task:
             multidata_task.result()
-        for future in output_file_futures:
+        for i, future in enumerate(concurrent.futures.as_completed(output_file_futures)):
+            if i % 10 == 0:
+                logger.info(f'Generating output files ({i}/{len(output_file_futures)}).')
             future.result()
 
         pool.shutdown()  # wait for all queued tasks to complete

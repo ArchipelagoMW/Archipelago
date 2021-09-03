@@ -53,9 +53,6 @@ class SubnauticaWorld(World):
     def create_regions(self):
         create_regions(self.world, self.player)
 
-    def generate_output(self, output_directory: str):
-        pass
-
     def fill_slot_data(self):
         slot_data = {}
         return slot_data
