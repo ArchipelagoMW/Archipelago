@@ -545,9 +545,9 @@ class VariaRandomizer:
         if args.directory != '.':
             self.fileName = args.directory + '/' + self.fileName
         if args.noLayout == True:
-            RomPatches.ActivePatches[self.player] = RomPatches.TotalBase
+            RomPatches.ActivePatches[self.player] = RomPatches.TotalBase.copy()
         else:
-            RomPatches.ActivePatches[self.player] = RomPatches.Total
+            RomPatches.ActivePatches[self.player] = RomPatches.Total.copy()
         RomPatches.ActivePatches[self.player].remove(RomPatches.BlueBrinstarBlueDoor)
         RomPatches.ActivePatches[self.player] += GraphUtils.getGraphPatches(args.startLocation)
         if self.gravityBehaviour != "Balanced":

@@ -74,7 +74,7 @@ class SMWorld(World):
         CollectionState.copy = sm_copy
 
         if world:
-            world.state.smbm = None
+            world.state.smbm = {}
 
         return super().__new__(cls)
     
@@ -84,8 +84,7 @@ class SMWorld(World):
         self.variaRando = VariaRandomizer(self.world.sm_rom, self.world.randoPreset[self.player], self.player)
 
         # also need to add the names to the passed MultiWorld's CollectionState, since it was initialized before we could get to it
-        if self.world.state.smbm == None:
-            self.world.state.smbm = {player: SMBoolManager(player) for player in range(1, self.world.players + 1)}
+        self.world.state.smbm[self.player] = SMBoolManager(self.player)
 
         itemPool = self.variaRando.container.itemPool
         
@@ -175,7 +174,7 @@ class SMWorld(World):
         outfilebase = 'AP_' + self.world.seed_name
         outfilepname = f'_P{self.player}'
         outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}" \
-            
+
         outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
         self.variaRando.PatchRom(outputFilename, self.APPatchRom)
 
