@@ -4,7 +4,7 @@ import Utils
 from Patch import read_rom
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '13a75c5dd28055fbcf8f69bd8161871d'
+RANDOMIZERBASEHASH = 'e397fef0e947d1bd760c68c4fe99a600'
 
 import io
 import json
