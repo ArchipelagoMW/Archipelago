@@ -72,7 +72,7 @@ class RandoExec(object):
         while container is None and i < attempts and now <= endDate:
             self.restrictions = Restrictions(self.randoSettings)
             if self.graphSettings.doorsColorsRando == True:
-                DoorsManager.randomize(self.graphSettings.allowGreyDoors)
+                DoorsManager.randomize(self.graphSettings.allowGreyDoors, self.player)
             self.areaGraph = graphBuilder.createGraph()
             services = RandoServices(self.areaGraph, self.restrictions)
             setup = RandoSetup(self.graphSettings, Logic.locations, services, self.player)

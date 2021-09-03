@@ -175,47 +175,9 @@ class SMWorld(World):
         outfilebase = 'AP_' + self.world.seed_name
         outfilepname = f'_P{self.player}'
         outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}" \
-        
+            
         outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
-        # copy2("Super Metroid (JU)[!].sfc", outputFilename)
         self.variaRando.PatchRom(outputFilename, self.APPatchRom)
-
-        #for player in self.world.get_game_players("Super Metroid"):
-            # outfilebase = 'AP_' + self.world.seed_name
-            # outfilepname = f'_P{player}'
-            # outfilepname += f"_{self.world.player_name[player].replace(' ', '_')}" \
-
-            # outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
-            # copy2("Super Metroid (JU)[!].sfc", outputFilename)
-            # romPatcher = RomPatcher(outputFilename, None)
-
-            # romPatcher.applyIPSPatches()
-
-            # multiWorldLocations = {}
-            # for itemLoc in self.world.get_locations():
-            #     if itemLoc.player == player and locationsDict[itemLoc.name].Id != None:
-            #         item = self.itemManager.Items[itemLoc.item.type if itemLoc.item.type in self.itemManager.Items else 'ArchipelagoItem']
-            #         (w0, w1) = self.getWord(0 if itemLoc.item.player == player else 1)
-            #         (w2, w3) = self.getWord(item.Id)
-            #         (w4, w5) = self.getWord(itemLoc.item.player - 1)
-            #         (w6, w7) = self.getWord(0)
-            #         multiWorldLocations[0x1C6000 + locationsDict[itemLoc.name].Id*8] = [w0, w1, w2, w3, w4, w5, w6, w7]
-
-              
-            # patchDict = { 'MultiWorldLocations':  multiWorldLocations }
-            # romPatcher.applyIPSPatch('MultiWorldLocations', patchDict)
-
-            # playerNames = {0x1C4F00 : self.world.player_name[player].encode()}
-            # for p in range(1, self.world.players + 1):
-            #     playerNames[0x1C5000 + (p - 1) * 16] = self.world.player_name[p][:12].upper().center(12).encode()
-
-            # romPatcher.applyIPSPatch('PlayerName', { 'PlayerName':  playerNames })
-
-            # romPatcher.commitIPS()
-
-            # itemLocs = [ItemLocation(self.itemManager.Items[itemLoc.item.type if itemLoc.item.type in self.itemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == player]
-            # romPatcher.writeItemsLocs(itemLocs)
-            # romPatcher.end()
 
         pass
 

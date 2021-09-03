@@ -87,7 +87,7 @@ class RomPatcher:
         'DoorsColors': ['beam_doors_plms.ips', 'beam_doors_gfx.ips', 'red_doors.ips']
     }
 
-    def __init__(self, romFileName=None, magic=None, plando=False):
+    def __init__(self, romFileName=None, magic=None, plando=False, player=0):
         self.log = utils.log.get('RomPatcher')
         self.romFileName = romFileName
         self.race = None
@@ -115,6 +115,7 @@ class RomPatcher:
             0x93ea: self.forceRoomCRE
         }
         self.patchAccess = PatchAccess()
+        self.player = player
 
     def end(self):
         self.romFile.close()
@@ -268,7 +269,7 @@ class RomPatcher:
                 plms.append('WS_Save_Blinking_Door')
 
             doors = self.getStartDoors(plms, area, None)
-            self.writeDoorsColor(doors)
+            self.writeDoorsColor(doors, self.player)
             self.applyStartAP(startLocation, plms, doors)
 
             self.applyPLMs(plms)
@@ -357,7 +358,7 @@ class RomPatcher:
             if doorsColorsRando == True:
                 for patchName in RomPatcher.IPSPatches['DoorsColors']:
                     self.applyIPSPatch(patchName)
-                self.writeDoorsColor(doors)
+                self.writeDoorsColor(doors, self.player)
             self.applyStartAP(startLocation, plms, doors)
             self.applyPLMs(plms)
         except Exception as e:
@@ -1061,8 +1062,8 @@ class RomPatcher:
             for (i, char) in enumerate('rotation'):
                 self.setOamTile(i, rotationMiddle, char2tile[char], y=0x8e)
 
-    def writeDoorsColor(self, doors):
-        DoorsManager.writeDoorsColor(self.romFile, doors)
+    def writeDoorsColor(self, doors, player):
+        DoorsManager.writeDoorsColor(self.romFile, doors, player)
 
 # tile number in tileset
 char2tile = {

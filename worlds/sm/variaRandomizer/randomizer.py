@@ -743,7 +743,7 @@ class VariaRandomizer:
                 # patch local rom
                 romFileName = args.rom
                 shutil.copyfile(romFileName, outputFilename)
-                romPatcher = RomPatcher(outputFilename, magic=args.raceMagic)
+                romPatcher = RomPatcher(outputFilename, args.raceMagic, False, self.player)
             else:
                 romPatcher = RomPatcher(magic=args.raceMagic)
 

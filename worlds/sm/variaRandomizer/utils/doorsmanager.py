@@ -1,4 +1,5 @@
 import random
+import copy
 from logic.smbool import SMBool
 from rom.rom_patches import RomPatches
 import utils.log, logging
@@ -174,6 +175,7 @@ class Door(object):
         self.hidden = data[2]
 
 class DoorsManager():
+    doorsDict = {}
     doors = {
         # crateria
         'LandingSiteRight': Door('LandingSiteRight', 0x78018, 'green', Facing.Left, canGrey=True),
@@ -248,56 +250,60 @@ class DoorsManager():
 
     # call from logic
     def traverse(self, smbm, doorName):
-        return DoorsManager.doors[doorName].traverse(smbm)
+        return DoorsManager.doorsDict[smbm.player][doorName].traverse(smbm)
 
     @staticmethod
     def setDoorsColor(player=0):
+        if player not in DoorsManager.doorsDict.keys():
+            DoorsManager.doorsDict[player] = copy.deepcopy(DoorsManager.doors)
+        currentDoors = DoorsManager.doorsDict[player]
+
         # depending on loaded patches, force some doors to blue, excluding them from randomization
         if RomPatches.has(player, RomPatches.BlueBrinstarBlueDoor):
-            DoorsManager.doors['ConstructionZoneRight'].forceBlue()
+            currentDoors['ConstructionZoneRight'].forceBlue()
         if RomPatches.has(player, RomPatches.BrinReserveBlueDoors):
-            DoorsManager.doors['MainShaftRight'].forceBlue()
-            DoorsManager.doors['EarlySupersRight'].forceBlue()
+            currentDoors['MainShaftRight'].forceBlue()
+            currentDoors['EarlySupersRight'].forceBlue()
         if RomPatches.has(player, RomPatches.EtecoonSupersBlueDoor):
-            DoorsManager.doors['EtecoonEnergyTankLeft'].forceBlue()
+            currentDoors['EtecoonEnergyTankLeft'].forceBlue()
         #if RomPatches.has(player, RomPatches.SpongeBathBlueDoor):
-        #    DoorsManager.doors[''].forceBlue()
+        #    currentDoors[''].forceBlue()
         if RomPatches.has(player, RomPatches.HiJumpAreaBlueDoor):
-            DoorsManager.doors['BusinessCenterBottomLeft'].forceBlue()
+            currentDoors['BusinessCenterBottomLeft'].forceBlue()
         if RomPatches.has(player, RomPatches.SpeedAreaBlueDoors):
-            DoorsManager.doors['BubbleMountainTopRight'].forceBlue()
-            DoorsManager.doors['SpeedBoosterHallRight'].forceBlue()
+            currentDoors['BubbleMountainTopRight'].forceBlue()
+            currentDoors['SpeedBoosterHallRight'].forceBlue()
         if RomPatches.has(player, RomPatches.MamaTurtleBlueDoor):
-            DoorsManager.doors['FishTankRight'].forceBlue()
+            currentDoors['FishTankRight'].forceBlue()
         if RomPatches.has(player, RomPatches.HellwayBlueDoor):
-            DoorsManager.doors['RedTowerElevatorLeft'].forceBlue()
+            currentDoors['RedTowerElevatorLeft'].forceBlue()
         if RomPatches.has(player, RomPatches.RedTowerBlueDoors):
-            DoorsManager.doors['RedBrinstarElevatorTop'].forceBlue()
+            currentDoors['RedBrinstarElevatorTop'].forceBlue()
         if RomPatches.has(player, RomPatches.AreaRandoBlueDoors):
-            DoorsManager.doors['GreenHillZoneTopRight'].forceBlue()
-            DoorsManager.doors['NoobBridgeRight'].forceBlue()
-            DoorsManager.doors['LeCoudeBottom'].forceBlue()
-            DoorsManager.doors['KronicBoostBottomLeft'].forceBlue()
+            currentDoors['GreenHillZoneTopRight'].forceBlue()
+            currentDoors['NoobBridgeRight'].forceBlue()
+            currentDoors['LeCoudeBottom'].forceBlue()
+            currentDoors['KronicBoostBottomLeft'].forceBlue()
         else:
             # no area rando, prevent some doors to be in the grey doors pool
-            DoorsManager.doors['GreenPiratesShaftBottomRight'].canGrey = False
-            DoorsManager.doors['CrocomireSpeedwayBottom'].canGrey = False
-            DoorsManager.doors['KronicBoostBottomLeft'].canGrey = False
+            currentDoors['GreenPiratesShaftBottomRight'].canGrey = False
+            currentDoors['CrocomireSpeedwayBottom'].canGrey = False
+            currentDoors['KronicBoostBottomLeft'].canGrey = False
         if RomPatches.has(player, RomPatches.AreaRandoMoreBlueDoors):
-            DoorsManager.doors['KihunterBottom'].forceBlue()
-            DoorsManager.doors['GreenPiratesShaftBottomRight'].forceBlue()
+            currentDoors['KihunterBottom'].forceBlue()
+            currentDoors['GreenPiratesShaftBottomRight'].forceBlue()
         if RomPatches.has(player, RomPatches.CrocBlueDoors):
-            DoorsManager.doors['CrocomireSpeedwayBottom'].forceBlue()
+            currentDoors['CrocomireSpeedwayBottom'].forceBlue()
         if RomPatches.has(player, RomPatches.CrabShaftBlueDoor):
-            DoorsManager.doors['CrabShaftRight'].forceBlue()
+            currentDoors['CrabShaftRight'].forceBlue()
 
     @staticmethod
-    def randomize(allowGreyDoors):
-        for door in DoorsManager.doors.values():
+    def randomize(allowGreyDoors, player):
+        for door in DoorsManager.doorsDict[player].values():
             door.randomize(allowGreyDoors)
         # set both ends of toilet to the same color to avoid soft locking in area rando
-        toiletTop = DoorsManager.doors['PlasmaSparkBottom']
-        toiletBottom = DoorsManager.doors['OasisTop']
+        toiletTop = DoorsManager.doorsDict[player]['PlasmaSparkBottom']
+        toiletBottom = DoorsManager.doorsDict[player]['OasisTop']
         if toiletTop.color != toiletBottom.color:
             toiletBottom.setColor(toiletTop.color)
         DoorsManager.debugDoorsColor()
@@ -319,12 +325,12 @@ class DoorsManager():
         return isRandom
 
     @staticmethod
-    def isRandom():
-        return any(door.isRandom() for door in DoorsManager.doors.values())
+    def isRandom(player):
+        return any(door.isRandom() for door in DoorsManager.doorsDict[player].values())
 
     @staticmethod
-    def setRefillSaveToBlue():
-        for door in DoorsManager.doors.values():
+    def setRefillSaveToBlue(player):
+        for door in DoorsManager.doorsDict[player].values():
             if door.id is not None:
                 door.forceBlue()
 
@@ -336,8 +342,8 @@ class DoorsManager():
 
     # call from rom patcher
     @staticmethod
-    def writeDoorsColor(rom, doors):
-        for door in DoorsManager.doors.values():
+    def writeDoorsColor(rom, doors, player):
+        for door in DoorsManager.doorsDict[player].values():
             door.writeColor(rom)
             # also set save/refill doors to blue
             if door.id is not None:
