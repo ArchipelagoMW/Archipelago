@@ -185,169 +185,166 @@ def main(args, seed=None):
     logger.info(f'Beginning output...')
     outfilebase = 'AP_' + world.seed_name
 
-    pool = concurrent.futures.ThreadPoolExecutor()
-
     output = tempfile.TemporaryDirectory()
     with output as temp_dir:
-        check_accessibility_task = pool.submit(world.fulfills_accessibility)
+        with concurrent.futures.ThreadPoolExecutor() as pool:
+            check_accessibility_task = pool.submit(world.fulfills_accessibility)
 
-        output_file_futures = []
+            output_file_futures = []
 
-        for player in world.player_ids:
-            # skip starting a thread for methods that say "pass".
-            if AutoWorld.World.generate_output.__code__ is not world.worlds[player].generate_output.__code__:
-                output_file_futures.append(pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
-        output_file_futures.append(pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir))
+            for player in world.player_ids:
+                # skip starting a thread for methods that say "pass".
+                if AutoWorld.World.generate_output.__code__ is not world.worlds[player].generate_output.__code__:
+                    output_file_futures.append(pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
+            output_file_futures.append(pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir))
 
-        def get_entrance_to_region(region: Region):
-            for entrance in region.entrances:
-                if entrance.parent_region.type in (RegionType.DarkWorld, RegionType.LightWorld, RegionType.Generic):
-                    return entrance
-            for entrance in region.entrances:  # BFS might be better here, trying DFS for now.
-                return get_entrance_to_region(entrance.parent_region)
+            def get_entrance_to_region(region: Region):
+                for entrance in region.entrances:
+                    if entrance.parent_region.type in (RegionType.DarkWorld, RegionType.LightWorld, RegionType.Generic):
+                        return entrance
+                for entrance in region.entrances:  # BFS might be better here, trying DFS for now.
+                    return get_entrance_to_region(entrance.parent_region)
 
-        # collect ER hint info
-        er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
-                        world.shuffle[player] != "vanilla" or world.retro[player]}
+            # collect ER hint info
+            er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
+                            world.shuffle[player] != "vanilla" or world.retro[player]}
 
-        for region in world.regions:
-            if region.player in er_hint_data and region.locations:
-                main_entrance = get_entrance_to_region(region)
-                for location in region.locations:
-                    if type(location.address) == int:  # skips events and crystals
-                        if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
-                            er_hint_data[region.player][location.address] = main_entrance.name
+            for region in world.regions:
+                if region.player in er_hint_data and region.locations:
+                    main_entrance = get_entrance_to_region(region)
+                    for location in region.locations:
+                        if type(location.address) == int:  # skips events and crystals
+                            if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
+                                er_hint_data[region.player][location.address] = main_entrance.name
 
-        ordered_areas = ('Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
-                         'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
-                         'Misery Mire', 'Turtle Rock', 'Ganons Tower', "Total")
+            ordered_areas = ('Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
+                             'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
+                             'Misery Mire', 'Turtle Rock', 'Ganons Tower', "Total")
 
-        checks_in_area = {player: {area: list() for area in ordered_areas}
-                          for player in range(1, world.players + 1)}
+            checks_in_area = {player: {area: list() for area in ordered_areas}
+                              for player in range(1, world.players + 1)}
 
-        for player in range(1, world.players + 1):
-            checks_in_area[player]["Total"] = 0
+            for player in range(1, world.players + 1):
+                checks_in_area[player]["Total"] = 0
 
-        for location in world.get_filled_locations():
-            if type(location.address) is int:
-                main_entrance = get_entrance_to_region(location.parent_region)
-                if location.game != "A Link to the Past":
-                    checks_in_area[location.player]["Light World"].append(location.address)
-                elif location.parent_region.dungeon:
-                    dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
-                                   'Inverted Ganons Tower': 'Ganons Tower'} \
-                        .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
-                    checks_in_area[location.player][dungeonname].append(location.address)
-                elif main_entrance.parent_region.type == RegionType.LightWorld:
-                    checks_in_area[location.player]["Light World"].append(location.address)
-                elif main_entrance.parent_region.type == RegionType.DarkWorld:
-                    checks_in_area[location.player]["Dark World"].append(location.address)
-                checks_in_area[location.player]["Total"] += 1
-
-        oldmancaves = []
-        takeanyregions = ["Old Man Sword Cave", "Take-Any #1", "Take-Any #2", "Take-Any #3", "Take-Any #4"]
-        for index, take_any in enumerate(takeanyregions):
-            for region in [world.get_region(take_any, player) for player in range(1, world.players + 1) if
-                           world.retro[player]]:
-                item = world.create_item(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
-                                         region.player)
-                player = region.player
-                location_id = SHOP_ID_START + total_shop_slots + index
-
-                main_entrance = get_entrance_to_region(region)
-                if main_entrance.parent_region.type == RegionType.LightWorld:
-                    checks_in_area[player]["Light World"].append(location_id)
-                else:
-                    checks_in_area[player]["Dark World"].append(location_id)
-                checks_in_area[player]["Total"] += 1
-
-                er_hint_data[player][location_id] = main_entrance.name
-                oldmancaves.append(((location_id, player), (item.code, player)))
-
-        FillDisabledShopSlots(world)
-
-        def write_multidata():
-            import NetUtils
-            slot_data = {}
-            client_versions = {}
-            minimum_versions = {"server": (0, 1, 1), "clients": client_versions}
-            games = {}
-            for slot in world.player_ids:
-                client_versions[slot] = world.worlds[slot].get_required_client_version()
-                games[slot] = world.game[slot]
-            precollected_items = {player: [] for player in range(1, world.players + 1)}
-            for item in world.precollected_items:
-                precollected_items[item.player].append(item.code)
-            precollected_hints = {player: set() for player in range(1, world.players + 1)}
-            # for now special case Factorio tech_tree_information
-            sending_visible_players = set()
-            for player in world.get_game_players("Factorio"):
-                if world.tech_tree_information[player].value == 2:
-                    sending_visible_players.add(player)
-
-            for slot in world.player_ids:
-                slot_data[slot] = world.worlds[slot].fill_slot_data()
-
-            locations_data: Dict[int, Dict[int, Tuple[int, int]]] = {player: {} for player in world.player_ids}
             for location in world.get_filled_locations():
-                if type(location.address) == int:
-                    # item code None should be event, location.address should then also be None
-                    assert location.item.code is not None
-                    locations_data[location.player][location.address] = location.item.code, location.item.player
-                    if location.player in sending_visible_players and location.item.player != location.player:
-                        hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                             location.item.code, False)
-                        precollected_hints[location.player].add(hint)
-                        precollected_hints[location.item.player].add(hint)
-                    elif location.item.name in args.start_hints[location.item.player]:
-                        hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                             location.item.code, False,
-                                             er_hint_data.get(location.player, {}).get(location.address, ""))
-                        precollected_hints[location.player].add(hint)
-                        precollected_hints[location.item.player].add(hint)
+                if type(location.address) is int:
+                    main_entrance = get_entrance_to_region(location.parent_region)
+                    if location.game != "A Link to the Past":
+                        checks_in_area[location.player]["Light World"].append(location.address)
+                    elif location.parent_region.dungeon:
+                        dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
+                                       'Inverted Ganons Tower': 'Ganons Tower'} \
+                            .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
+                        checks_in_area[location.player][dungeonname].append(location.address)
+                    elif main_entrance.parent_region.type == RegionType.LightWorld:
+                        checks_in_area[location.player]["Light World"].append(location.address)
+                    elif main_entrance.parent_region.type == RegionType.DarkWorld:
+                        checks_in_area[location.player]["Dark World"].append(location.address)
+                    checks_in_area[location.player]["Total"] += 1
 
-            multidata = {
-                "slot_data": slot_data,
-                "games": games,
-                "names": [[name for player, name in sorted(world.player_name.items())]],
-                "connect_names": {name: (0, player) for player, name in world.player_name.items()},
-                "remote_items": {player for player in world.player_ids if
-                                 world.worlds[player].remote_items},
-                "locations": locations_data,
-                "checks_in_area": checks_in_area,
-                "server_options": get_options()["server_options"],
-                "er_hint_data": er_hint_data,
-                "precollected_items": precollected_items,
-                "precollected_hints": precollected_hints,
-                "version": tuple(version_tuple),
-                "tags": ["AP"],
-                "minimum_versions": minimum_versions,
-                "seed_name": world.seed_name
-            }
-            AutoWorld.call_all(world, "modify_multidata", multidata)
+            oldmancaves = []
+            takeanyregions = ["Old Man Sword Cave", "Take-Any #1", "Take-Any #2", "Take-Any #3", "Take-Any #4"]
+            for index, take_any in enumerate(takeanyregions):
+                for region in [world.get_region(take_any, player) for player in range(1, world.players + 1) if
+                               world.retro[player]]:
+                    item = world.create_item(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
+                                             region.player)
+                    player = region.player
+                    location_id = SHOP_ID_START + total_shop_slots + index
 
-            multidata = zlib.compress(pickle.dumps(multidata), 9)
+                    main_entrance = get_entrance_to_region(region)
+                    if main_entrance.parent_region.type == RegionType.LightWorld:
+                        checks_in_area[player]["Light World"].append(location_id)
+                    else:
+                        checks_in_area[player]["Dark World"].append(location_id)
+                    checks_in_area[player]["Total"] += 1
 
-            with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
-                f.write(bytes([1]))  # version of format
-                f.write(multidata)
+                    er_hint_data[player][location_id] = main_entrance.name
+                    oldmancaves.append(((location_id, player), (item.code, player)))
 
-        multidata_task = pool.submit(write_multidata)
-        if not check_accessibility_task.result():
-            if not world.can_beat_game():
-                raise Exception("Game appears as unbeatable. Aborting.")
-            else:
-                logger.warning("Location Accessibility requirements not fulfilled.")
+            FillDisabledShopSlots(world)
 
-        # retrieve exceptions via .result() if they occured.
-        if multidata_task:
-            multidata_task.result()
-        for i, future in enumerate(concurrent.futures.as_completed(output_file_futures)):
-            if i % 10 == 0:
-                logger.info(f'Generating output files ({i}/{len(output_file_futures)}).')
-            future.result()
+            def write_multidata():
+                import NetUtils
+                slot_data = {}
+                client_versions = {}
+                minimum_versions = {"server": (0, 1, 1), "clients": client_versions}
+                games = {}
+                for slot in world.player_ids:
+                    client_versions[slot] = world.worlds[slot].get_required_client_version()
+                    games[slot] = world.game[slot]
+                precollected_items = {player: [] for player in range(1, world.players + 1)}
+                for item in world.precollected_items:
+                    precollected_items[item.player].append(item.code)
+                precollected_hints = {player: set() for player in range(1, world.players + 1)}
+                # for now special case Factorio tech_tree_information
+                sending_visible_players = set()
+                for player in world.get_game_players("Factorio"):
+                    if world.tech_tree_information[player].value == 2:
+                        sending_visible_players.add(player)
 
-        pool.shutdown()  # wait for all queued tasks to complete
+                for slot in world.player_ids:
+                    slot_data[slot] = world.worlds[slot].fill_slot_data()
+
+                locations_data: Dict[int, Dict[int, Tuple[int, int]]] = {player: {} for player in world.player_ids}
+                for location in world.get_filled_locations():
+                    if type(location.address) == int:
+                        # item code None should be event, location.address should then also be None
+                        assert location.item.code is not None
+                        locations_data[location.player][location.address] = location.item.code, location.item.player
+                        if location.player in sending_visible_players and location.item.player != location.player:
+                            hint = NetUtils.Hint(location.item.player, location.player, location.address,
+                                                 location.item.code, False)
+                            precollected_hints[location.player].add(hint)
+                            precollected_hints[location.item.player].add(hint)
+                        elif location.item.name in args.start_hints[location.item.player]:
+                            hint = NetUtils.Hint(location.item.player, location.player, location.address,
+                                                 location.item.code, False,
+                                                 er_hint_data.get(location.player, {}).get(location.address, ""))
+                            precollected_hints[location.player].add(hint)
+                            precollected_hints[location.item.player].add(hint)
+
+                multidata = {
+                    "slot_data": slot_data,
+                    "games": games,
+                    "names": [[name for player, name in sorted(world.player_name.items())]],
+                    "connect_names": {name: (0, player) for player, name in world.player_name.items()},
+                    "remote_items": {player for player in world.player_ids if
+                                     world.worlds[player].remote_items},
+                    "locations": locations_data,
+                    "checks_in_area": checks_in_area,
+                    "server_options": get_options()["server_options"],
+                    "er_hint_data": er_hint_data,
+                    "precollected_items": precollected_items,
+                    "precollected_hints": precollected_hints,
+                    "version": tuple(version_tuple),
+                    "tags": ["AP"],
+                    "minimum_versions": minimum_versions,
+                    "seed_name": world.seed_name
+                }
+                AutoWorld.call_all(world, "modify_multidata", multidata)
+
+                multidata = zlib.compress(pickle.dumps(multidata), 9)
+
+                with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
+                    f.write(bytes([1]))  # version of format
+                    f.write(multidata)
+
+            multidata_task = pool.submit(write_multidata)
+            if not check_accessibility_task.result():
+                if not world.can_beat_game():
+                    raise Exception("Game appears as unbeatable. Aborting.")
+                else:
+                    logger.warning("Location Accessibility requirements not fulfilled.")
+
+            # retrieve exceptions via .result() if they occured.
+            if multidata_task:
+                multidata_task.result()
+            for i, future in enumerate(concurrent.futures.as_completed(output_file_futures)):
+                if i % 10 == 0:
+                    logger.info(f'Generating output files ({i}/{len(output_file_futures)}).')
+                future.result()
 
         if not args.skip_playthrough:
             logger.info('Calculating playthrough.')
