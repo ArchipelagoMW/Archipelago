@@ -19,7 +19,7 @@ from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
 import Options
-from worlds.alttp.Items import item_name_groups, item_table
+from worlds.alttp.Items import item_table
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
 from worlds.alttp.Regions import location_table, key_drop_data

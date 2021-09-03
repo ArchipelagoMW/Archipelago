@@ -6,8 +6,10 @@ from functools import lru_cache
 
 __version__ = Utils.__version__ + ' f.LUM'
 
-def data_path(*args): 
+
+def data_path(*args):
     return Utils.local_path('worlds', 'oot', 'data', *args)
+
 
 @lru_cache(maxsize=13)  # Cache Overworld.json and the 12 dungeons
 def read_json(file_path):
@@ -20,11 +22,9 @@ def read_json(file_path):
         return json.loads(json_string)
     except json.JSONDecodeError as error:
         raise Exception("JSON parse error around text:\n" + \
-                        json_string[error.pos-35:error.pos+35] + "\n" + \
+                        json_string[error.pos - 35:error.pos + 35] + "\n" + \
                         "                                   ^^\n")
 
-def is_bundled():
-    return getattr(sys, 'frozen', False)
 
 # From the pyinstaller Wiki: https://github.com/pyinstaller/pyinstaller/wiki/Recipe-subprocess
 # Create a set of arguments which make a ``subprocess.Popen`` (and
@@ -60,16 +60,17 @@ def subprocess_args(include_stdout=True):
     ret.update({'stdin': subprocess.PIPE,
                 'stderr': subprocess.PIPE,
                 'startupinfo': si,
-                'env': env })
+                'env': env})
     return ret
+
 
 def get_version_bytes(a):
     version_bytes = [0x00, 0x00, 0x00]
     if not a:
-        return version_bytes;
+        return version_bytes
     sa = a.replace('v', '').replace(' ', '.').split('.')
 
-    for i in range(0,3):
+    for i in range(0, 3):
         try:
             version_byte = int(sa[i])
         except ValueError:
@@ -77,6 +78,7 @@ def get_version_bytes(a):
         version_bytes[i] = version_byte
 
     return version_bytes
+
 
 def compare_version(a, b):
     if not a and not b:
@@ -89,7 +91,7 @@ def compare_version(a, b):
     sa = get_version_bytes(a)
     sb = get_version_bytes(b)
 
-    for i in range(0,3):
+    for i in range(0, 3):
         if sa[i] > sb[i]:
             return 1
         if sa[i] < sb[i]:
