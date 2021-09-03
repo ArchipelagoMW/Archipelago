@@ -35,6 +35,7 @@ location_id_offset = 67000
 
 # OoT's generate_output doesn't benefit from more than 2 threads, instead it uses a lot of memory.
 i_o_limiter = threading.Semaphore(2)
+hint_data_available = threading.Event()
 
 
 class OOTWorld(World):
@@ -646,8 +647,10 @@ class OOTWorld(World):
             impa.event = True
             self.world.itempool.remove(item_to_place)
 
-    # For now we will always output a patch file.
     def generate_output(self, output_directory: str):
+        if self.hints != 'none':
+            hint_data_available.wait()
+
         with i_o_limiter:
             # Make ice traps appear as other random items
             ice_traps = [loc.item for loc in self.get_locations() if loc.item.name == 'Ice Trap']
@@ -655,8 +658,7 @@ class OOTWorld(World):
                 trap.looks_like_item = self.create_item(self.world.slot_seeds[self.player].choice(self.fake_items).name)
 
             outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}"
-            rom = Rom(
-                file=get_options()['oot_options']['rom_file'])  # a ROM must be provided, cannot produce patches without it
+            rom = Rom(file=get_options()['oot_options']['rom_file'])
             if self.hints != 'none':
                 buildWorldGossipHints(self)
             patch_rom(self, rom)
@@ -664,6 +666,43 @@ class OOTWorld(World):
             rom.update_header()
             create_patch_file(rom, output_path(output_directory, outfile_name + '.apz5'))
             rom.restore()
+
+    # Gathers hint data for OoT. Loops over all world locations for woth, barren, and major item locations.
+    def stage_generate_output(world: MultiWorld, output_directory: str):
+        items_by_region = {player: {} for player in world.get_game_players("Ocarina of Time") if world.worlds[player].hints != 'none'}
+        if items_by_region:
+            for player in items_by_region:
+                for r in world.worlds[player].regions:
+                    items_by_region[player][r.hint_text] = {'dungeon': False, 'weight': 0, 'prog_items': 0}
+                for d in world.worlds[player].dungeons:
+                    items_by_region[player][d.hint_text] = {'dungeon': True, 'weight': 0, 'prog_items': 0}
+                del (items_by_region[player]["Link's Pocket"])
+                del (items_by_region[player][None])
+
+            for loc in world.get_locations():
+                player = loc.item.player
+                autoworld = world.worlds[player]
+                if ((player in items_by_region and (autoworld.is_major_item(loc.item) or loc.item.name in autoworld.item_added_hint_types['item'])) 
+                            or (loc.player in items_by_region and loc.name in autoworld.added_hint_types['item'])):
+                    autoworld.major_item_locations.append(loc)
+
+                if loc.game == "Ocarina of Time":
+                    if loc.item.code and (not loc.locked or loc.item.type == 'Song'):  # shuffled item
+                        hint_area = get_hint_area(loc)
+                        items_by_region[loc.player][hint_area]['weight'] += 1
+                        if loc.item.advancement:
+                            # Non-locked progression. Increment counter
+                            items_by_region[loc.player][hint_area]['prog_items'] += 1
+                            # Skip item at location and see if game is still beatable
+                            state = CollectionState(world)
+                            state.locations_checked.add(loc)
+                            if not world.can_beat_game(state):
+                                world.worlds[loc.player].required_locations.append(loc)
+
+            for autoworld in world.get_game_worlds("Ocarina of Time"):
+                autoworld.empty_areas = {region: info for (region, info) in items_by_region[autoworld.player].items() if not info['prog_items']}
+        hint_data_available.set()
+
 
     # Helper functions
     def get_shuffled_entrances(self):
@@ -708,37 +747,3 @@ class OOTWorld(World):
             return False
 
         return True
-
-    # Run this once for to gather up all required locations (for WOTH), barren regions (for foolish), and location of major items.
-    # required_locations and major_item_locations need to be ordered for deterministic hints.
-    def gather_hint_data(self):
-        if self.required_locations and self.empty_areas and self.major_item_locations:
-            return
-
-        items_by_region = {}
-        for r in self.regions:
-            items_by_region[r.hint_text] = {'dungeon': False, 'weight': 0, 'prog_items': 0}
-        for d in self.dungeons:
-            items_by_region[d.hint_text] = {'dungeon': True, 'weight': 0, 'prog_items': 0}
-        del (items_by_region["Link's Pocket"])
-        del (items_by_region[None])
-
-        for loc in self.get_locations():
-            if loc.item.code:  # is a real item
-                hint_area = get_hint_area(loc)
-                items_by_region[hint_area]['weight'] += 1
-                if loc.item.advancement and (not loc.locked or loc.item.type == 'Song'):
-                    # Non-locked progression. Increment counter
-                    items_by_region[hint_area]['prog_items'] += 1
-                    # Skip item at location and see if game is still beatable
-                    state = CollectionState(self.world)
-                    state.locations_checked.add(loc)
-                    if not self.world.can_beat_game(state):
-                        self.required_locations.append(loc)
-        self.empty_areas = {region: info for (region, info) in items_by_region.items() if not info['prog_items']}
-
-        for loc in self.world.get_filled_locations():
-            if (loc.item.player == self.player and self.is_major_item(loc.item)
-                    or (loc.item.player == self.player and loc.item.name in self.item_added_hint_types['item'])
-                    or (loc.name in self.added_hint_types['item'] and loc.player == self.player)):
-                self.major_item_locations.append(loc)

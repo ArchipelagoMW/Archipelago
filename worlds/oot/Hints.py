@@ -640,20 +640,11 @@ def buildWorldGossipHints(world, checkedLocations=None):
     # Seed the RNG
     world.hint_rng = world.world.slot_seeds[world.player]
 
-    # Gather woth, barren, major items
-    world.gather_hint_data()
-
     # rebuild hint exclusion list
     hintExclusions(world, clear_cache=True)
 
     world.barren_dungeon = 0
     world.woth_dungeon = 0
-
-    # search = Search.max_explore([w.state for w in orlds])
-    # for stone in gossipLocations.values():
-    #     stone.reachable = (
-    #         search.spot_access(world.get_location(stone.location))
-    #         and search.state_list[world.id].guarantee_hint())
 
     if checkedLocations is None:
         checkedLocations = {player: set() for player in world.world.player_ids}
@@ -668,8 +659,6 @@ def buildWorldGossipHints(world, checkedLocations=None):
             pass
 
     stoneIDs = list(gossipLocations.keys())
-
-    # world.distribution.configure_gossip(stoneIDs)
 
     if 'disabled' in world.hint_dist_user:
         for stone_name in world.hint_dist_user['disabled']:
