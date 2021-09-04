@@ -16,7 +16,7 @@ from utils.parameters import infinity
 # the entry point is createItemLocContainer
 class RandoSetup(object):
     def __init__(self, graphSettings, locations, services, player):
-        self.sm = SMBoolManager(player)
+        self.sm = SMBoolManager(player, services.settings.maxDiff)
         self.settings = services.settings
         self.graphSettings = graphSettings
         self.startAP = graphSettings.startAP

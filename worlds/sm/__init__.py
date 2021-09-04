@@ -63,7 +63,7 @@ class SMWorld(World):
 
         def sm_init(self, parent: MultiWorld):
             orig_init(self, parent)
-            self.smbm = {player: SMBoolManager(player) for player in range(1, parent.players + 1)}
+            self.smbm = {player: SMBoolManager(player, self.world.state.smbm[player].maxDiff) for player in range(1, parent.players + 1)}
 
         def sm_copy(self):
             ret = orig_copy(self)
@@ -84,7 +84,7 @@ class SMWorld(World):
         self.variaRando = VariaRandomizer(self.world.sm_rom, self.world.randoPreset[self.player], self.player)
 
         # also need to add the names to the passed MultiWorld's CollectionState, since it was initialized before we could get to it
-        self.world.state.smbm[self.player] = SMBoolManager(self.player)
+        self.world.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
 
         itemPool = self.variaRando.container.itemPool
         

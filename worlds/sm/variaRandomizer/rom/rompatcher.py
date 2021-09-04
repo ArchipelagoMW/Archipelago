@@ -63,7 +63,7 @@ class RomPatcher:
                    'nova_boost_platform.ips', 'red_tower.ips', 'spazer.ips',
                    'brinstar_map_room.ips', 'kraid_save.ips', 'mission_impossible.ips'],
         # comfort patches
-        'Optional': ['itemsounds.ips', 'rando_speed.ips', 'Infinite_Space_Jump', 'refill_before_save.ips',
+        'Optional': ['rando_speed.ips', 'Infinite_Space_Jump', 'refill_before_save.ips',
                      'spinjumprestart.ips', 'elevators_doors_speed.ips', 'No_Music', 'random_music.ips',
                      # animals 
                      'animal_enemies.ips', 'animals.ips', 'draygonimals.ips',
@@ -71,7 +71,7 @@ class RomPatcher:
                      'low_timer.ips', 'metalimals.ips', 'phantoonimals.ips', 'ridleyimals.ips',
                      'Escape_Animals_Change_Event', # ...end animals
                      # vanilla behaviour restore
-                     'remove_elevators_doors_speed.ips', 'remove_itemsounds.ips',
+                     'remove_elevators_doors_speed.ips',
                      'varia_hud.ips'],
         # base patchset+optional layout for area rando
         'Area': ['area_rando_layout.ips', 'door_transition.ips', 'area_rando_doors.ips',

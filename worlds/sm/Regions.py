@@ -21,35 +21,6 @@ def create_regions(self, world, player: int):
         for exit in world.get_region(accessPoint.Name, player).exits:
             exit.connect(world.get_region(exit.name.split("|")[1], player))
 
-    # for src, dest in vanillaTransitions:
-    #     src_region = world.get_region(src, player)
-    #     dest_region = world.get_region(dest, player)
-    #     src_region.exits.append(Entrance(player, src + "|" + dest, src_region))
-    #     srcDestEntrance = world.get_entrance(src + "|" + dest, player)
-    #     srcDestEntrance.connect(dest_region)
-
-    # for dest, src in vanillaTransitions:
-    #     src_region = world.get_region(src, player)
-    #     dest_region = world.get_region(dest, player)
-    #     src_region.exits.append(Entrance(player, src + "|" + dest, src_region))
-    #     srcDestEntrance = world.get_entrance(src + "|" + dest, player)
-    #     srcDestEntrance.connect(dest_region)
-
-    # for src, dest in vanillaBossesTransitions:
-    #     src_region = world.get_region(src, player)
-    #     dest_region = world.get_region(dest, player)
-    #     src_region.exits.append(Entrance(player, src + "|" + dest, src_region))
-    #     srcDestEntrance = world.get_entrance(src + "|" + dest, player)
-    #     srcDestEntrance.connect(dest_region)
-
-    # for dest, src in vanillaBossesTransitions:
-    #     src_region = world.get_region(src, player)
-    #     dest_region = world.get_region(dest, player)
-    #     src_region.exits.append(Entrance(player, src + "|" + dest, src_region))
-    #     srcDestEntrance = world.get_entrance(src + "|" + dest, player)
-    #     srcDestEntrance.connect(dest_region)
-
-
     world.regions += [
         create_region(self, world, player, 'Menu', None, ['StartAP'])
     ]

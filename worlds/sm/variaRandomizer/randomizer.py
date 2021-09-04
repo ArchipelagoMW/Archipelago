@@ -366,26 +366,26 @@ class VariaRandomizer:
         if args.maxDifficulty:
             if args.maxDifficulty == 'random':
                 diffs = ['easy', 'medium', 'hard', 'harder', 'hardcore', 'mania']
-                maxDifficulty = text2diff[random.choice(diffs)]
+                self.maxDifficulty = text2diff[random.choice(diffs)]
             else:
-                maxDifficulty = text2diff[args.maxDifficulty]
+                self.maxDifficulty = text2diff[args.maxDifficulty]
         else:
-            maxDifficulty = infinity
+            self.maxDifficulty = infinity
         # same as solver, increase max difficulty
-        threshold = maxDifficulty
+        threshold = self.maxDifficulty
         epsilon = 0.001
-        if maxDifficulty <= easy:
+        if self.maxDifficulty <= easy:
             threshold = medium - epsilon
-        elif maxDifficulty <= medium:
+        elif self.maxDifficulty <= medium:
             threshold = hard - epsilon
-        elif maxDifficulty <= hard:
+        elif self.maxDifficulty <= hard:
             threshold = harder - epsilon
-        elif maxDifficulty <= harder:
+        elif self.maxDifficulty <= harder:
             threshold = hardcore - epsilon
-        elif maxDifficulty <= hardcore:
+        elif self.maxDifficulty <= hardcore:
             threshold = mania - epsilon
         maxDifficulty = threshold
-        logger.debug("maxDifficulty: {}".format(maxDifficulty))
+        logger.debug("maxDifficulty: {}".format(self.maxDifficulty))
 
         # handle random parameters with dynamic pool of values
         (_, progSpeed) = randomMulti(args.__dict__, "progressionSpeed", speeds)
@@ -476,7 +476,7 @@ class VariaRandomizer:
             forceArg('noLayout', False, "'Anti-softlock layout patches' forced to on", webValue='on')
             forceArg('suitsRestriction', False, "'Suits restriction' forced to off", webValue='off')
             forceArg('areaLayoutBase', False, "'Additional layout patches for easier navigation' forced to on", webValue='on')
-            possibleStartAPs, reasons = GraphUtils.getPossibleStartAPs(args.area, maxDifficulty, args.morphPlacement, self.player)
+            possibleStartAPs, reasons = GraphUtils.getPossibleStartAPs(args.area, self.maxDifficulty, args.morphPlacement, self.player)
             if args.startLocation == 'random':
                 if args.startLocationList != None:
                     # to be able to give the list in jm we had to replace ' ' with '_', do the opposite operation
@@ -632,7 +632,7 @@ class VariaRandomizer:
             RomPatches.ActivePatches[self.player] = args.plandoRando["patches"]
             DoorsManager.unserialize(args.plandoRando["doors"])
             plandoSettings = {"locsItems": args.plandoRando['locsItems'], "forbiddenItems": args.plandoRando['forbiddenItems']}
-        randoSettings = RandoSettings(maxDifficulty, progSpeed, progDiff, qty,
+        randoSettings = RandoSettings(self.maxDifficulty, progSpeed, progDiff, qty,
                                     restrictions, args.superFun, args.runtimeLimit_s,
                                     plandoSettings, minDifficulty)
 
