@@ -18,13 +18,14 @@ from utils.doorsmanager import DoorsManager
 
 # entry point for rando execution ("randomize" method)
 class RandoExec(object):
-    def __init__(self, seedName, vcr, randoSettings, graphSettings):
+    def __init__(self, seedName, vcr, randoSettings, graphSettings, player):
         self.errorMsg = ""
         self.seedName = seedName
         self.vcr = vcr
         self.randoSettings = randoSettings
         self.graphSettings = graphSettings
         self.log = utils.log.get('RandoExec')
+        self.player = player
 
     def getFillerFactory(self, progSpeed, endDate):
         if self.restrictions.split != "Scavenger":
@@ -71,10 +72,10 @@ class RandoExec(object):
         while container is None and i < attempts and now <= endDate:
             self.restrictions = Restrictions(self.randoSettings)
             if self.graphSettings.doorsColorsRando == True:
-                DoorsManager.randomize(self.graphSettings.allowGreyDoors)
+                DoorsManager.randomize(self.graphSettings.allowGreyDoors, self.player)
             self.areaGraph = graphBuilder.createGraph()
             services = RandoServices(self.areaGraph, self.restrictions)
-            setup = RandoSetup(self.graphSettings, Logic.locations, services)
+            setup = RandoSetup(self.graphSettings, Logic.locations, services, self.player)
             container = setup.createItemLocContainer(endDate, vcr)
             if container is None:
                 sys.stdout.write('*')
@@ -88,19 +89,20 @@ class RandoExec(object):
                 self.errorMsg += "Could not find an area layout with these settings"
             else:
                 self.errorMsg += "Unable to process settings"
-            return (True, [], [])
+        #    return (True, [], [])
         self.areaGraph.printGraph()
-        filler = self.createFiller(container, endDate)
-        self.log.debug("ItemLocContainer dump before filling:\n"+container.dump())
-        ret = filler.generateItems(vcr=vcr)
-        if not ret[0]:
-            scavEscape = (ret[1], ret[2]) if self.restrictions.scavEscape else None
-            escapeOk = graphBuilder.escapeGraph(container, self.areaGraph, self.randoSettings.maxDiff, scavEscape)
-            if not escapeOk:
-                self.errorMsg += "Could not find a solution for escape"
-                ret = (True, ret[1], ret[2])
-        self.errorMsg += filler.errorMsg
-        return ret
+        return container
+        #filler = self.createFiller(container, endDate)
+        #self.log.debug("ItemLocContainer dump before filling:\n"+container.dump())
+        #ret = filler.generateItems(vcr=vcr)
+        #if not ret[0]:
+        #    scavEscape = (ret[1], ret[2]) if self.restrictions.scavEscape else None
+        #    escapeOk = graphBuilder.escapeGraph(container, self.areaGraph, self.randoSettings.maxDiff, scavEscape)
+        #    if not escapeOk:
+        #        self.errorMsg += "Could not find a solution for escape"
+        #        ret = (True, ret[1], ret[2])
+        #self.errorMsg += filler.errorMsg
+        #return ret
 
     def updateLocationsClass(self, split):
         if split != 'Full' and split != 'Scavenger':
@@ -130,8 +132,3 @@ class RandoExec(object):
         for loc in unfilledLocs:
             loc.restricted = True
             itemLocs.append(ItemLocation(nothing, loc, False))
-
-        #TEST: place Archipelago item (Varia) at morphing ball
-        for loc in itemLocs:
-            if (loc.Location.Name == "Morphing Ball"):
-                loc.Item = ItemManager.getItem('ArchipelagoItem')

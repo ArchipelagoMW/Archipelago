@@ -19,6 +19,40 @@ class RomPatcher:
     IPSPatches = {
         # applied on all seeds
         'Standard': [
+            # handles starting location and start blue doors
+            'new_game.ips',
+            # generic PLM spawner used for extra saves, blinking doors etc.
+            'plm_spawn.ips',
+            # needed fixes for VARIA
+            'vanilla_bugfixes.ips',
+            # use a byte in a unused room state header field to store area ID in the VARIA sense
+            'area_ids.ips',
+            # custom credits, backup save system, base tracking code
+            'credits_varia.ips',
+            # actual game hijacks to update tracking stats
+            'tracking.ips',
+            # enemy names in menu for seed ID
+            'seed_display.ips',
+            # door ASM to wake zebes early in blue brinstar
+            'wake_zebes.ips',
+            # door ASM to skip G4 cutscene when all 4 bosses are dead
+            'g4_skip.ips',
+            # faster MB cutscene transitions
+            'Mother_Brain_Cutscene_Edits',
+            # "Balanced" suit mode
+            'Removes_Gravity_Suit_heat_protection',
+            # use any button for angle up/down
+            'AimAnyButton.ips',
+            # credits item% based on actual number of items in the game
+            'endingtotals.ips',
+            # MSU-1 patch
+            'supermetroid_msu1.ips',
+            # displays max ammo 
+            'max_ammo_display.ips',
+            # VARIA logo on startup screen
+            'varia_logo.ips',
+            # new nothing plm
+            'nothing_item_plm.ips',
             # multiworld support
             'multiworld.ips'
         ],
@@ -29,7 +63,7 @@ class RomPatcher:
                    'nova_boost_platform.ips', 'red_tower.ips', 'spazer.ips',
                    'brinstar_map_room.ips', 'kraid_save.ips', 'mission_impossible.ips'],
         # comfort patches
-        'Optional': ['itemsounds.ips', 'rando_speed.ips', 'Infinite_Space_Jump', 'refill_before_save.ips',
+        'Optional': ['rando_speed.ips', 'Infinite_Space_Jump', 'refill_before_save.ips',
                      'spinjumprestart.ips', 'elevators_doors_speed.ips', 'No_Music', 'random_music.ips',
                      # animals 
                      'animal_enemies.ips', 'animals.ips', 'draygonimals.ips',
@@ -37,7 +71,7 @@ class RomPatcher:
                      'low_timer.ips', 'metalimals.ips', 'phantoonimals.ips', 'ridleyimals.ips',
                      'Escape_Animals_Change_Event', # ...end animals
                      # vanilla behaviour restore
-                     'remove_elevators_doors_speed.ips', 'remove_itemsounds.ips',
+                     'remove_elevators_doors_speed.ips',
                      'varia_hud.ips'],
         # base patchset+optional layout for area rando
         'Area': ['area_rando_layout.ips', 'door_transition.ips', 'area_rando_doors.ips',
@@ -53,7 +87,7 @@ class RomPatcher:
         'DoorsColors': ['beam_doors_plms.ips', 'beam_doors_gfx.ips', 'red_doors.ips']
     }
 
-    def __init__(self, romFileName=None, magic=None, plando=False):
+    def __init__(self, romFileName=None, magic=None, plando=False, player=0):
         self.log = utils.log.get('RomPatcher')
         self.romFileName = romFileName
         self.race = None
@@ -81,6 +115,7 @@ class RomPatcher:
             0x93ea: self.forceRoomCRE
         }
         self.patchAccess = PatchAccess()
+        self.player = player
 
     def end(self):
         self.romFile.close()
@@ -234,7 +269,7 @@ class RomPatcher:
                 plms.append('WS_Save_Blinking_Door')
 
             doors = self.getStartDoors(plms, area, None)
-            self.writeDoorsColor(doors)
+            self.writeDoorsColor(doors, self.player)
             self.applyStartAP(startLocation, plms, doors)
 
             self.applyPLMs(plms)
@@ -323,7 +358,7 @@ class RomPatcher:
             if doorsColorsRando == True:
                 for patchName in RomPatcher.IPSPatches['DoorsColors']:
                     self.applyIPSPatch(patchName)
-                self.writeDoorsColor(doors)
+                self.writeDoorsColor(doors, self.player)
             self.applyStartAP(startLocation, plms, doors)
             self.applyPLMs(plms)
         except Exception as e:
@@ -1027,8 +1062,8 @@ class RomPatcher:
             for (i, char) in enumerate('rotation'):
                 self.setOamTile(i, rotationMiddle, char2tile[char], y=0x8e)
 
-    def writeDoorsColor(self, doors):
-        DoorsManager.writeDoorsColor(self.romFile, doors)
+    def writeDoorsColor(self, doors, player):
+        DoorsManager.writeDoorsColor(self.romFile, doors, player)
 
 # tile number in tileset
 char2tile = {

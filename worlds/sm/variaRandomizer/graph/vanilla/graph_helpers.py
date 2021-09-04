@@ -68,7 +68,7 @@ class HelpersGraph(Helpers):
     @Cache.decorator
     def canAccessBillyMays(self):
         sm = self.smbm
-        return sm.wand(sm.wor(RomPatches.has(RomPatches.BlueBrinstarBlueDoor),
+        return sm.wand(sm.wor(RomPatches.has(sm.player, RomPatches.BlueBrinstarBlueDoor),
                               sm.traverse('ConstructionZoneRight')),
                        sm.canUsePowerBombs(),
                        sm.wor(sm.knowsBillyMays(),
@@ -123,7 +123,7 @@ class HelpersGraph(Helpers):
     @Cache.decorator
     def canPassMoatReverse(self):
         sm = self.smbm
-        return sm.wor(RomPatches.has(RomPatches.MoatShotBlock),
+        return sm.wor(RomPatches.has(sm.player, RomPatches.MoatShotBlock),
                       sm.haveItem('Grapple'),
                       sm.haveItem('SpaceJump'),
                       sm.haveItem('Gravity'),
@@ -167,7 +167,7 @@ class HelpersGraph(Helpers):
     def canPassForgottenHighway(self, fromWs):
         sm = self.smbm
         suitless = sm.wand(sm.haveItem('HiJump'), sm.knowsGravLessLevel1())
-        if fromWs is True and RomPatches.has(RomPatches.EastOceanPlatforms).bool is False:
+        if fromWs is True and RomPatches.has(sm.player, RomPatches.EastOceanPlatforms).bool is False:
             suitless = sm.wand(suitless,
                                sm.wor(sm.canSpringBallJump(), # two sbj on the far right
                                       # to break water line and go through the door on the right
@@ -206,20 +206,20 @@ class HelpersGraph(Helpers):
     def canPassMaridiaToRedTowerNode(self):
         sm = self.smbm
         return sm.wand(sm.haveItem('Morph'),
-                       sm.wor(RomPatches.has(RomPatches.AreaRandoGatesBase),
+                       sm.wor(RomPatches.has(sm.player, RomPatches.AreaRandoGatesBase),
                               sm.haveItem('Super')))
 
     @Cache.decorator
     def canPassRedTowerToMaridiaNode(self):
         sm = self.smbm
         return sm.wand(sm.haveItem('Morph'),
-                       RomPatches.has(RomPatches.AreaRandoGatesBase))
+                       RomPatches.has(sm.player, RomPatches.AreaRandoGatesBase))
 
     def canEnterCathedral(self, mult=1.0):
         sm = self.smbm
         return sm.wand(sm.traverse('CathedralEntranceRight'),
                        sm.wor(sm.wand(sm.canHellRun('MainUpperNorfair', mult),
-                                      sm.wor(sm.wor(RomPatches.has(RomPatches.CathedralEntranceWallJump),
+                                      sm.wor(sm.wor(RomPatches.has(sm.player, RomPatches.CathedralEntranceWallJump),
                                                     sm.haveItem('HiJump'),
                                                     sm.canFly()),
                                              sm.wor(sm.haveItem('SpeedBooster'), # spark
@@ -338,7 +338,7 @@ class HelpersGraph(Helpers):
         # to require one more CF if no heat protection because of distance to cover, wait times, acid...
         return sm.wand(sm.canHellRun(**Settings.hellRunsTable['LowerNorfair']['Entrance -> GT via Chozo']),
                        sm.canUsePowerBombs(),
-                       sm.wor(RomPatches.has(RomPatches.LNChozoSJCheckDisabled), sm.haveItem('SpaceJump')))
+                       sm.wor(RomPatches.has(sm.player, RomPatches.LNChozoSJCheckDisabled), sm.haveItem('SpaceJump')))
 
     @Cache.decorator
     def canExitScrewAttackArea(self):
@@ -476,7 +476,7 @@ class HelpersGraph(Helpers):
     @Cache.decorator
     def canClimbBottomRedTower(self):
         sm = self.smbm
-        return sm.wor(RomPatches.has(RomPatches.RedTowerLeftPassage),
+        return sm.wor(RomPatches.has(sm.player, RomPatches.RedTowerLeftPassage),
                       sm.haveItem('HiJump'),
                       sm.haveItem('Ice'),
                       sm.canFly(),
@@ -763,4 +763,4 @@ class HelpersGraph(Helpers):
         sm = self.smbm
         return sm.wand(sm.traverse('MainStreetBottomRight'),
                        sm.wor(sm.haveItem('Super'),
-                              RomPatches.has(RomPatches.AreaRandoGatesOther)))
+                              RomPatches.has(sm.player, RomPatches.AreaRandoGatesOther)))

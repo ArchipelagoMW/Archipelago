@@ -1,0 +1,11 @@
+{
+    "startLocation": "Landing Site",
+    "majorsSplit": "Scavenger",
+    "scavNumLocs": "4",
+    "hud": "on",
+    "progressionSpeed":"speedrun",
+    "scavRandomized": "on",
+    "scavEscape": "on",
+    "escapeRando": "on",
+    "removeEscapeEnemies": "off"
+}

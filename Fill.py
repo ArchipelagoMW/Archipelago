@@ -7,6 +7,7 @@ from BaseClasses import CollectionState, Location, MultiWorld
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import key_drop_data
 from worlds.generic import PlandoItem
+from worlds.AutoWorld import call_all
 
 
 class FillError(RuntimeError):
@@ -68,7 +69,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
     itempool.extend(unplaced_items)
 
 
-def distribute_items_restrictive(world: MultiWorld, gftower_trash=False, fill_locations=None):
+def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
     # If not passed in, then get a shuffled list of locations to fill in
     if not fill_locations:
         fill_locations = world.get_unfilled_locations()
@@ -91,56 +92,9 @@ def distribute_items_restrictive(world: MultiWorld, gftower_trash=False, fill_lo
         else:
             restitempool.append(item)
 
-    standard_keyshuffle_players = set()
-
-    # fill in gtower locations with trash first
-    for player in world.get_game_players("A Link to the Past"):
-        if not gftower_trash or not world.ganonstower_vanilla[player] or \
-                world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:
-            gtower_trash_count = 0
-        elif 'triforcehunt' in world.goal[player] and ('local' in world.goal[player] or world.players == 1):
-            gtower_trash_count = world.random.randint(world.crystals_needed_for_gt[player] * 2,
-                                                      world.crystals_needed_for_gt[player] * 4)
-        else:
-            gtower_trash_count = world.random.randint(0, world.crystals_needed_for_gt[player] * 2)
-
-        if gtower_trash_count:
-            gtower_locations = [location for location in fill_locations if
-                                'Ganons Tower' in location.name and location.player == player]
-            world.random.shuffle(gtower_locations)
-            trashcnt = 0
-            localrest = localrestitempool[player]
-            if localrest:
-                gt_item_pool = restitempool + localrest
-                world.random.shuffle(gt_item_pool)
-            else:
-                gt_item_pool = restitempool.copy()
-
-            while gtower_locations and gt_item_pool and trashcnt < gtower_trash_count:
-                spot_to_fill = gtower_locations.pop()
-                item_to_place = gt_item_pool.pop()
-                if item_to_place in localrest:
-                    localrest.remove(item_to_place)
-                else:
-                    restitempool.remove(item_to_place)
-                world.push_item(spot_to_fill, item_to_place, False)
-                fill_locations.remove(spot_to_fill)
-                trashcnt += 1
-        if world.mode[player] == 'standard' and world.keyshuffle[player] is True:
-            standard_keyshuffle_players.add(player)
-
-
-    # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
-    if standard_keyshuffle_players:
-        progitempool.sort(
-            key=lambda item: 1 if item.name == 'Small Key (Hyrule Castle)' and
-                                  item.player in standard_keyshuffle_players else 0)
-
-    if world.get_game_players("Super Metroid"):
-        progitempool.sort(
-            key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
-                                
     world.random.shuffle(fill_locations)
+    call_all(world, "fill_hook", progitempool, nonexcludeditempool, localrestitempool, restitempool, fill_locations)
+
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
     if nonexcludeditempool:
@@ -171,11 +125,8 @@ def distribute_items_restrictive(world: MultiWorld, gftower_trash=False, fill_lo
     unplaced = [item for item in progitempool + restitempool]
     unfilled = [location.name for location in fill_locations]
 
-    for location in fill_locations:
-        world.push_item(location, ItemFactory('Nothing', location.player), False)
-
     if unplaced or unfilled:
-        logging.warning(f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
+        raise FillError(f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
 
 
 def fast_fill(world: MultiWorld, item_pool: typing.List, fill_locations: typing.List) -> typing.Tuple[typing.List, typing.List]:
@@ -235,7 +186,7 @@ def flood_items(world: MultiWorld):
         location_list = world.get_reachable_locations()
         world.random.shuffle(location_list)
         for location in location_list:
-            if location.item is not None and not location.item.advancement and not location.item.smallkey and not location.item.bigkey:
+            if location.item is not None and not location.item.advancement:
                 # safe to replace
                 replace_item = location.item
                 replace_item.location = None

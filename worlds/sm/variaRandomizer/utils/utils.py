@@ -9,9 +9,9 @@ def isStdPreset(preset):
 
 def getPresetDir(preset):
     if isStdPreset(preset):
-        return 'standard_presets'
+        return 'worlds/sm/variaRandomizer/standard_presets'
     else:
-        return 'community_presets'
+        return 'worlds/sm/variaRandomizer/community_presets'
 
 def removeChars(string, toRemove):
     return re.sub('[{}]+'.format(toRemove), '', string)
@@ -93,35 +93,38 @@ class PresetLoader(object):
             self.params['Controller'] = {}
         self.params['score'] = self.computeScore()
 
-    def load(self):
+    def load(self, player):
         # update the parameters in the parameters classes: Knows, Settings
+        Knows.knowsDict[player] = Knows()
+        Settings.SettingsDict[player] = Settings()
+        Controller.ControllerDict[player] = Controller()
 
         # Knows
         for param in self.params['Knows']:
             if isKnows(param) and hasattr(Knows, param):
-                setattr(Knows, param, SMBool(self.params['Knows'][param][0],
-                                             self.params['Knows'][param][1],
-                                             ['{}'.format(param)]))
+                setattr(Knows.knowsDict[player], param, SMBool(  self.params['Knows'][param][0],
+                                                    self.params['Knows'][param][1],
+                                                    ['{}'.format(param)]))
         # Settings
         ## hard rooms
         for hardRoom in ['X-Ray', 'Gauntlet']:
             if hardRoom in self.params['Settings']:
-                Settings.hardRooms[hardRoom] = Settings.hardRoomsPresets[hardRoom][self.params['Settings'][hardRoom]]
+                Settings.SettingsDict[player].hardRooms[hardRoom] = Settings.hardRoomsPresets[hardRoom][self.params['Settings'][hardRoom]]
 
         ## bosses
         for boss in ['Kraid', 'Phantoon', 'Draygon', 'Ridley', 'MotherBrain']:
             if boss in self.params['Settings']:
-                Settings.bossesDifficulty[boss] = Settings.bossesDifficultyPresets[boss][self.params['Settings'][boss]]
+                Settings.SettingsDict[player].bossesDifficulty[boss] = Settings.bossesDifficultyPresets[boss][self.params['Settings'][boss]]
 
         ## hellruns
         for hellRun in ['Ice', 'MainUpperNorfair', 'LowerNorfair']:
             if hellRun in self.params['Settings']:
-                Settings.hellRuns[hellRun] = Settings.hellRunPresets[hellRun][self.params['Settings'][hellRun]]
+                Settings.SettingsDict[player].hellRuns[hellRun] = Settings.hellRunPresets[hellRun][self.params['Settings'][hellRun]]
 
         # Controller
         for button in self.params['Controller']:
             if isButton(button):
-                setattr(Controller, button, self.params['Controller'][button])
+                setattr(Controller.ControllerDict[player], button, self.params['Controller'][button])
 
     def dump(self, fileName):
         with open(fileName, 'w') as jsonFile:
@@ -340,7 +343,7 @@ def loadRandoPreset(randoPreset, args):
         else:
             args.superFun.append("SuitsRandom")
 
-    ipsPatches = ["itemsounds", "spinjumprestart", "rando_speed", "elevators_doors_speed", "refill_before_save"]
+    ipsPatches = ["spinjumprestart", "rando_speed", "elevators_doors_speed", "refill_before_save"]
     for patch in ipsPatches:
         if randoParams.get(patch, "off") == "on":
             args.patches.append(patch + '.ips')

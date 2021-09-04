@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import Utils
+from Patch import read_rom
+
 JAP10HASH = '03a63945398191337e896e5771f77173'
 RANDOMIZERBASEHASH = '13a75c5dd28055fbcf8f69bd8161871d'
 
@@ -31,7 +34,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
     DeathMountain_texts, \
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen
+from Utils import local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen
 from worlds.alttp.Items import ItemFactory, item_table
 from worlds.alttp.EntranceShuffle import door_addresses
 import Patch
@@ -166,14 +169,6 @@ class LocalRom(object):
     def write_int32s(self, startaddress: int, values):
         for i, value in enumerate(values):
             self.write_int32(startaddress + (i * 4), value)
-
-
-def read_rom(stream) -> bytearray:
-    "Reads rom into bytearray and strips off any smc header"
-    buffer = bytearray(stream.read())
-    if len(buffer) % 0x400 == 0x200:
-        buffer = buffer[0x200:]
-    return buffer
 
 
 check_lock = threading.Lock()
@@ -546,7 +541,6 @@ class Sprite():
             self.valid = False
 
     def get_vanilla_sprite_data(self):
-        from Patch import get_base_rom_path
         file_name = get_base_rom_path()
         base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
         Sprite.sprite = base_rom_bytes[0x80000:0x87000]
@@ -1760,7 +1754,7 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
                        triforcehud: str = None):
     local_random = random if not world else world.slot_seeds[player]
-    disable_music: bool = music
+    disable_music: bool = not music
     # enable instant item menu
     if menuspeed == 'instant':
         rom.write_byte(0x6DD9A, 0x20)
@@ -2934,3 +2928,27 @@ hash_alphabet = [
     "Lamp", "Hammer", "Shovel", "Flute", "Bug Net", "Book", "Bottle", "Potion", "Cane", "Cape", "Mirror", "Boots",
     "Gloves", "Flippers", "Pearl", "Shield", "Tunic", "Heart", "Map", "Compass", "Key"
 ]
+
+
+def get_base_rom_bytes(file_name: str = "") -> bytes:
+    base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
+    if not base_rom_bytes:
+        file_name = get_base_rom_path(file_name)
+        base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
+
+        basemd5 = hashlib.md5()
+        basemd5.update(base_rom_bytes)
+        if JAP10HASH != basemd5.hexdigest():
+            raise Exception('Supplied Base Rom does not match known MD5 for JAP(1.0) release. '
+                            'Get the correct game and version, then dump it')
+        get_base_rom_bytes.base_rom_bytes = base_rom_bytes
+    return base_rom_bytes
+
+
+def get_base_rom_path(file_name: str = "") -> str:
+    options = Utils.get_options()
+    if not file_name:
+        file_name = options["lttp_options"]["rom_file"]
+    if not os.path.exists(file_name):
+        file_name = Utils.local_path(file_name)
+    return file_name

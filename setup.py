@@ -78,6 +78,8 @@ scripts = {
     "LttPAdjuster.py": ("ArchipelagoLttPAdjuster", True),
     # Factorio
     "FactorioClient.py": ("ArchipelagoFactorioClient", True),
+    # Minecraft
+    "MinecraftClient.py": ("ArchipelagoMinecraftClient", False),
 }
 
 exes = []

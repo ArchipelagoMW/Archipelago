@@ -15,8 +15,8 @@ from utils.parameters import infinity
 # checks init conditions for the randomizer: processes super fun settings, graph, start location, special restrictions
 # the entry point is createItemLocContainer
 class RandoSetup(object):
-    def __init__(self, graphSettings, locations, services):
-        self.sm = SMBoolManager()
+    def __init__(self, graphSettings, locations, services, player):
+        self.sm = SMBoolManager(player, services.settings.maxDiff)
         self.settings = services.settings
         self.graphSettings = graphSettings
         self.startAP = graphSettings.startAP
@@ -84,18 +84,18 @@ class RandoSetup(object):
             self.container = None
             self.log.debug("createItemLocContainer: checkStart fail")
             return None
-        self.settings.collectAlreadyPlacedItemLocations(self.container)
-        self.fillRestrictedLocations()
-        if self.restrictions.split == 'Scavenger':
+        #self.settings.collectAlreadyPlacedItemLocations(self.container)
+        #self.fillRestrictedLocations()
+        #if self.restrictions.split == 'Scavenger':
             # initScavenger will actually fill up the container using random fill,
             # the scavenger "filler" will focus on determining mandatory route
-            self.container = self.initScavenger(endDate, vcr)
-            if self.container is None:
-                self.log.debug("createItemLocContainer: initScavenger fail")
-                return None
-        elif self.settings.progSpeed == 'speedrun':
+        #    self.container = self.initScavenger(endDate, vcr)
+        #    if self.container is None:
+        #        self.log.debug("createItemLocContainer: initScavenger fail")
+        #        return None
+        #elif self.settings.progSpeed == 'speedrun':
             # add placement restriction helpers for random fill
-            self.restrictions.setPlacementRestrictions(self.getRestrictionsDict())
+        #    self.restrictions.setPlacementRestrictions(self.getRestrictionsDict())
         self.settings.updateSuperFun(self.superFun)
         return self.container
 

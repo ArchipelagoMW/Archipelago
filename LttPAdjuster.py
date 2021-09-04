@@ -19,7 +19,7 @@ from tkinter import Tk, Frame, Label, StringVar, Entry, filedialog, messagebox, 
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
-from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings
+from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
 from Utils import output_path, local_path, open_file
 
 
@@ -222,7 +222,6 @@ def adjustGUI():
         else:
             messagebox.showinfo(title="Success", message=f"Rom patched successfully to {path}")
             from Utils import persistent_store
-            from worlds.alttp.Rom import Sprite
             if isinstance(guiargs.sprite, Sprite):
                 guiargs.sprite = guiargs.sprite.name
             persistent_store("adjuster", "last_settings_3", guiargs)
@@ -412,9 +411,8 @@ def get_rom_frame(parent=None):
 
     def RomSelect():
         rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc")), ("All Files", "*")])
-        import Patch
         try:
-            Patch.get_base_rom_bytes(rom)  # throws error on checksum fail
+            get_base_rom_bytes(rom)  # throws error on checksum fail
         except Exception as e:
             logging.exception(e)
             messagebox.showerror(title="Error while reading ROM", message=str(e))

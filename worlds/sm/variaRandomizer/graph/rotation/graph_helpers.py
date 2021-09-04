@@ -62,7 +62,7 @@ class HelpersGraph(Helpers):
     @Cache.decorator
     def canAccessBillyMays(self):
         sm = self.smbm
-        return sm.wand(sm.wor(RomPatches.has(RomPatches.BlueBrinstarBlueDoor),
+        return sm.wand(sm.wor(RomPatches.has(sm.player, RomPatches.BlueBrinstarBlueDoor),
                               sm.traverse('ConstructionZoneRight')),
                        sm.canUsePowerBombs(),
                        sm.canGravLessLevel1())
@@ -184,7 +184,7 @@ class HelpersGraph(Helpers):
 #    def canPassMaridiaToRedTowerNode(self):
 #        sm = self.smbm
 #        return sm.wand(sm.haveItem('Morph'),
-#                       sm.wor(RomPatches.has(RomPatches.AreaRandoGatesBase),
+#                       sm.wor(RomPatches.has(sm.player, RomPatches.AreaRandoGatesBase),
 #                              sm.haveItem('Super')))
 #
     def canEnterCathedral(self, mult=1.0):
@@ -192,7 +192,7 @@ class HelpersGraph(Helpers):
         return sm.wand(sm.traverse('CathedralEntranceRight'),
                        sm.haveItem('Morph'))
 #                       sm.wor(sm.wand(sm.canHellRun('MainUpperNorfair', mult),
-#                                      sm.wor(sm.wor(RomPatches.has(RomPatches.CathedralEntranceWallJump),
+#                                      sm.wor(sm.wor(RomPatches.has(sm.player, RomPatches.CathedralEntranceWallJump),
 #                                                    sm.haveItem('HiJump'),
 #                                                    sm.canFly()),
 #                                             sm.wor(sm.haveItem('SpeedBooster'), # spark
@@ -326,7 +326,7 @@ class HelpersGraph(Helpers):
 #        # to require one more CF if no heat protection because of distance to cover, wait times, acid...
 #        return sm.wand(sm.canHellRun(**Settings.hellRunsTable['LowerNorfair']['Entrance -> GT via Chozo']),
 #                       sm.canUsePowerBombs(),
-#                       sm.wor(RomPatches.has(RomPatches.LNChozoSJCheckDisabled), sm.haveItem('SpaceJump')))
+#                       sm.wor(RomPatches.has(sm.player, RomPatches.LNChozoSJCheckDisabled), sm.haveItem('SpaceJump')))
 #
 #    @Cache.decorator
 #    def canExitScrewAttackArea(self):

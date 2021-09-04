@@ -140,14 +140,14 @@ class Factorio(World):
 
         world.completion_condition[player] = lambda state: state.has('Victory', player)
 
-    def collect(self, state, item) -> bool:
+    def collect_item(self, state, item):
         if item.advancement and item.name in progressive_technology_table:
             prog_table = progressive_technology_table[item.name].progressive
             for item_name in prog_table:
                 if not state.has(item_name, item.player):
-                    state.prog_items[item_name, item.player] += 1
-                    return True
-        return super(Factorio, self).collect(state, item)
+                    return item_name
+
+        return super(Factorio, self).collect_item(state, item)
 
     def get_required_client_version(self) -> tuple:
         return max((0, 1, 6), super(Factorio, self).get_required_client_version())

@@ -2,7 +2,6 @@ import bsdiff4
 import yaml
 import os
 import lzma
-import hashlib
 import threading
 import concurrent.futures
 import zipfile
@@ -10,37 +9,13 @@ import sys
 from typing import Tuple, Optional
 
 import Utils
-from worlds.alttp.Rom import JAP10HASH
+
 
 current_patch_version = 2
 
 
-def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
-    if not file_name:
-        file_name = options["lttp_options"]["rom_file"]
-    if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
-    return file_name
-
-
-def get_base_rom_bytes(file_name: str = "") -> bytes:
-    from worlds.alttp.Rom import read_rom
-    base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
-    if not base_rom_bytes:
-        file_name = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
-
-        basemd5 = hashlib.md5()
-        basemd5.update(base_rom_bytes)
-        if JAP10HASH != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match known MD5 for JAP(1.0) release. '
-                            'Get the correct game and version, then dump it')
-        get_base_rom_bytes.base_rom_bytes = base_rom_bytes
-    return base_rom_bytes
-
-
 def generate_yaml(patch: bytes, metadata: Optional[dict] = None) -> bytes:
+    from worlds.alttp.Rom import JAP10HASH
     patch = yaml.dump({"meta": metadata,
                        "patch": patch,
                        "game": "A Link to the Past",
@@ -52,6 +27,7 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None) -> bytes:
 
 
 def generate_patch(rom: bytes, metadata: Optional[dict] = None) -> bytes:
+    from worlds.alttp.Rom import get_base_rom_bytes
     if metadata is None:
         metadata = {}
     patch = bsdiff4.diff(get_base_rom_bytes(), rom)
@@ -71,6 +47,7 @@ def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str
 
 
 def create_rom_bytes(patch_file: str, ignore_version: bool = False) -> Tuple[dict, str, bytearray]:
+    from worlds.alttp.Rom import get_base_rom_bytes
     data = Utils.parse_yaml(lzma.decompress(load_bytes(patch_file)).decode("utf-8-sig"))
     if not ignore_version and data["compatible_version"] > current_patch_version:
         raise RuntimeError("Patch file is incompatible with this patcher, likely an update is required.")
@@ -184,3 +161,11 @@ if __name__ == "__main__":
 
                 traceback.print_exc()
                 input("Press enter to close.")
+
+
+def read_rom(stream, strip_header=True) -> bytearray:
+    """Reads rom into bytearray and optionally strips off any smc header"""
+    buffer = bytearray(stream.read())
+    if strip_header and len(buffer) % 0x400 == 0x200:
+        return buffer[0x200:]
+    return buffer
