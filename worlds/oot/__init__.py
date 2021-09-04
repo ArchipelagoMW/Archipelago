@@ -669,39 +669,43 @@ class OOTWorld(World):
 
     # Gathers hint data for OoT. Loops over all world locations for woth, barren, and major item locations.
     def stage_generate_output(world: MultiWorld, output_directory: str):
-        items_by_region = {player: {} for player in world.get_game_players("Ocarina of Time") if world.worlds[player].hints != 'none'}
-        if items_by_region:
-            for player in items_by_region:
-                for r in world.worlds[player].regions:
-                    items_by_region[player][r.hint_text] = {'dungeon': False, 'weight': 0, 'prog_items': 0}
-                for d in world.worlds[player].dungeons:
-                    items_by_region[player][d.hint_text] = {'dungeon': True, 'weight': 0, 'prog_items': 0}
-                del (items_by_region[player]["Link's Pocket"])
-                del (items_by_region[player][None])
+        try:
+            items_by_region = {player: {} for player in world.get_game_players("Ocarina of Time") if world.worlds[player].hints != 'none'}
+            if items_by_region:
+                for player in items_by_region:
+                    for r in world.worlds[player].regions:
+                        items_by_region[player][r.hint_text] = {'dungeon': False, 'weight': 0, 'prog_items': 0}
+                    for d in world.worlds[player].dungeons:
+                        items_by_region[player][d.hint_text] = {'dungeon': True, 'weight': 0, 'prog_items': 0}
+                    del (items_by_region[player]["Link's Pocket"])
+                    del (items_by_region[player][None])
 
-            for loc in world.get_locations():
-                player = loc.item.player
-                autoworld = world.worlds[player]
-                if ((player in items_by_region and (autoworld.is_major_item(loc.item) or loc.item.name in autoworld.item_added_hint_types['item'])) 
-                            or (loc.player in items_by_region and loc.name in autoworld.added_hint_types['item'])):
-                    autoworld.major_item_locations.append(loc)
+                for loc in world.get_locations():
+                    player = loc.item.player
+                    autoworld = world.worlds[player]
+                    if ((player in items_by_region and (autoworld.is_major_item(loc.item) or loc.item.name in autoworld.item_added_hint_types['item'])) 
+                                or (loc.player in items_by_region and loc.name in world.worlds[loc.player].added_hint_types['item'])):
+                        autoworld.major_item_locations.append(loc)
 
-                if loc.game == "Ocarina of Time":
-                    if loc.item.code and (not loc.locked or loc.item.type == 'Song'):  # shuffled item
-                        hint_area = get_hint_area(loc)
-                        items_by_region[loc.player][hint_area]['weight'] += 1
-                        if loc.item.advancement:
-                            # Non-locked progression. Increment counter
-                            items_by_region[loc.player][hint_area]['prog_items'] += 1
-                            # Skip item at location and see if game is still beatable
-                            state = CollectionState(world)
-                            state.locations_checked.add(loc)
-                            if not world.can_beat_game(state):
-                                world.worlds[loc.player].required_locations.append(loc)
+                    if loc.game == "Ocarina of Time":
+                        if loc.item.code and (not loc.locked or loc.item.type == 'Song'):  # shuffled item
+                            hint_area = get_hint_area(loc)
+                            items_by_region[loc.player][hint_area]['weight'] += 1
+                            if loc.item.advancement:
+                                # Non-locked progression. Increment counter
+                                items_by_region[loc.player][hint_area]['prog_items'] += 1
+                                # Skip item at location and see if game is still beatable
+                                state = CollectionState(world)
+                                state.locations_checked.add(loc)
+                                if not world.can_beat_game(state):
+                                    world.worlds[loc.player].required_locations.append(loc)
 
-            for autoworld in world.get_game_worlds("Ocarina of Time"):
-                autoworld.empty_areas = {region: info for (region, info) in items_by_region[autoworld.player].items() if not info['prog_items']}
-        hint_data_available.set()
+                for autoworld in world.get_game_worlds("Ocarina of Time"):
+                    autoworld.empty_areas = {region: info for (region, info) in items_by_region[autoworld.player].items() if not info['prog_items']}
+        except Exception as e:
+            raise e
+        finally:
+            hint_data_available.set()
 
 
     # Helper functions
