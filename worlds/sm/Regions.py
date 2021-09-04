@@ -24,4 +24,3 @@ def create_regions(self, world, player: int):
     world.regions += [
         create_region(self, world, player, 'Menu', None, ['StartAP'])
     ]
-    ]
