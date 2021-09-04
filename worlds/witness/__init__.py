@@ -1,5 +1,6 @@
 from typing import NamedTuple, Union
 import logging
+import random
 
 from ..AutoWorld import World
 from .Items import item_table, event_item_pairs, junk_weights
@@ -14,6 +15,11 @@ class WitnessWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
     hidden = True
+    
+    def _get_slot_data(self):
+        return {
+            'seed': random.randint(0, 1000000)
+        }
     
     def generate_basic(self):
         # Link regions
@@ -50,7 +56,11 @@ class WitnessWorld(World):
     def create_item(self, name: str) -> Item:
         item = item_table[name]
         return WitnessItem(name, True, item, player=self.player)
-        
+    
+    def fill_slot_data(self) -> dict:
+        slot_data = self._get_slot_data()
+        #Redo this part (with StS reference) later
+        return slot_data
 
 class WitnessLocation(Location):
     game: str = "The Witness"
