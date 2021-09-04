@@ -88,15 +88,11 @@ class Rom(BigStream):
             raise RuntimeError('ROM file %s is not a valid OoT 1.0 US ROM.' % file)
         elif len(self.buffer) == 0x2000000:
             # If Input ROM is compressed, then Decompress it
-            subcall = []
 
             sub_dir = data_path("Decompress")
 
             if platform.system() == 'Windows':
-                if 8 * struct.calcsize("P") == 64:
-                    subcall = [sub_dir + "\\Decompress.exe", file, decomp_file]
-                else:
-                    subcall = [sub_dir + "\\Decompress32.exe", file, decomp_file]
+                subcall = [sub_dir + "\\Decompress.exe", file, decomp_file]
             elif platform.system() == 'Linux':
                 if platform.uname()[4] == 'aarch64' or platform.uname()[4] == 'arm64':
                     subcall = [sub_dir + "/Decompress_ARM64", file, decomp_file]
@@ -288,10 +284,7 @@ def compress_rom_file(input_file, output_file):
     compressor_path = data_path("Compress")
 
     if platform.system() == 'Windows':
-        if 8 * struct.calcsize("P") == 64:
-            compressor_path += "\\Compress.exe"
-        else:
-            compressor_path += "\\Compress32.exe"
+        compressor_path += "\\Compress.exe"
     elif platform.system() == 'Linux':
         if platform.uname()[4] == 'aarch64' or platform.uname()[4] == 'arm64':
             compressor_path += "/Compress_ARM64"
