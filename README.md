@@ -7,8 +7,11 @@ Currently, the following games are supported:
 * Factorio
 * Minecraft
 * Subnautica
+* Slay the Spire
+* Risk of Rain 2
+* The Legend of Zelda: Ocarina of Time
 
-For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial).
+For setup and instructions check out our [tutorials page](http://archipelago.gg:48484/tutorial).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
 windows binaries.
 
@@ -37,6 +40,7 @@ This project makes use of multiple other projects. We wouldn't be here without t
 
 * [z3randomizer](https://github.com/CaitSith2/z3randomizer)
 * [Enemizer](https://github.com/Ijwu/Enemizer)
+* [Ocarina of Time Randomizer](https://github.com/TestRunnerSRL/OoT-Randomizer)
 
 ## Contributing
 Contributions are welcome. We have a few asks of any new contributors.

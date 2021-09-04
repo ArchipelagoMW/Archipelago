@@ -19,6 +19,8 @@ class HKWorld(World):
     item_name_to_id = {name: data.id for name, data in item_table.items() if data.type != "Event"}
     location_name_to_id = lookup_name_to_id
 
+    hidden = True
+
     def generate_basic(self):
         # Link regions
         self.world.get_entrance('Hollow Nest S&Q', self.player).connect(self.world.get_region('Hollow Nest', self.player))

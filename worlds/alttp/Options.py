@@ -28,6 +28,46 @@ class Goal(Choice):
     option_hand_in = 2
 
 
+class DungeonItem(Choice):
+    value: int
+    option_original_dungeon = 0
+    option_own_dungeons = 1
+    option_own_world = 2
+    option_any_world = 3
+    option_different_world = 4
+    alias_true = 3
+    alias_false = 0
+
+    @property
+    def in_dungeon(self):
+        return self.value in {0, 1}
+
+
+class bigkey_shuffle(DungeonItem):
+    """Big Key Placement"""
+    item_name_group = "Big Keys"
+    displayname = "Big Key Shuffle"
+
+
+class smallkey_shuffle(DungeonItem):
+    """Small Key Placement"""
+    option_universal = 5
+    item_name_group = "Small Keys"
+    displayname = "Small Key Shuffle"
+
+
+class compass_shuffle(DungeonItem):
+    """Compass Placement"""
+    item_name_group = "Compasses"
+    displayname = "Compass Shuffle"
+
+
+class map_shuffle(DungeonItem):
+    """Map Placement"""
+    item_name_group = "Maps"
+    displayname = "Map Shuffle"
+
+
 class Crystals(Range):
     range_start = 0
     range_end = 7
@@ -85,6 +125,7 @@ class Progressive(Choice):
     def want_progressives(self, random):
         return random.choice([True, False]) if self.value == self.option_grouped_random else bool(self.value)
 
+
 class Palette(Choice):
     option_default = 0
     option_good = 1
@@ -126,9 +167,10 @@ class HeartBeep(Choice):
     displayname = "Heart Beep Rate"
     option_normal = 0
     option_double = 1
-    option_half = 2,
+    option_half = 2
     option_quarter = 3
     option_off = 4
+    alias_false = 4
 
 
 class HeartColor(Choice):
@@ -144,6 +186,7 @@ class HeartColor(Choice):
         if text == "random":
             return cls(random.randint(0, 3))
         return super(HeartColor, cls).from_text(text)
+
 
 class QuickSwap(DefaultOnToggle):
     displayname = "L/R Quickswapping"
@@ -162,8 +205,10 @@ class MenuSpeed(Choice):
 class Music(DefaultOnToggle):
     displayname = "Play music"
 
+
 class ReduceFlashing(DefaultOnToggle):
     displayname = "Reduce Screen Flashes"
+
 
 class TriforceHud(Choice):
     displayname = "Display Method for Triforce Hunt"
@@ -172,9 +217,14 @@ class TriforceHud(Choice):
     option_hide_required = 2
     option_hide_both = 3
 
+
 alttp_options: typing.Dict[str, type(Option)] = {
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
+    "bigkey_shuffle": bigkey_shuffle,
+    "smallkey_shuffle": smallkey_shuffle,
+    "compass_shuffle": compass_shuffle,
+    "map_shuffle": map_shuffle,
     "progressive": Progressive,
     "shop_item_slots": ShopItemSlots,
     "ow_palettes": OWPalette,
@@ -189,6 +239,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "menuspeed": MenuSpeed,
     "music": Music,
     "reduceflashing": ReduceFlashing,
-    "triforcehud": TriforceHud
+    "triforcehud": TriforceHud,
+    "glitch_boots": DefaultOnToggle
 
 }

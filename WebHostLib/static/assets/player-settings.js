@@ -83,7 +83,7 @@ const buildOptionsTable = (settings, romOpts = false) => {
     const label = document.createElement('label');
     label.setAttribute('for', setting);
     label.setAttribute('data-tooltip', settings[setting].description);
-    label.innerText = `${settings[setting].friendlyName}:`;
+    label.innerText = `${settings[setting].displayName}:`;
     tdl.appendChild(label);
     tr.appendChild(tdl);
 

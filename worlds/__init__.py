@@ -34,3 +34,7 @@ network_data_package = {
     "version": sum(world.data_version for world in AutoWorldRegister.world_types.values()),
     "games": games,
 }
+
+# Set entire datapackage to version 0 if any of them are set to 0
+if any(not world.data_version for world in AutoWorldRegister.world_types.values()):
+    network_data_package["version"] = 0

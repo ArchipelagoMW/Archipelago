@@ -109,6 +109,7 @@ advancement_table = {
     "Librarian": AdvData(42090, 'Overworld'),
     "Overpowered": AdvData(42091, 'Overworld'),
 
+    "Blaze Spawner": AdvData(None, 'Nether Fortress'),
     "Ender Dragon": AdvData(None, 'The End')
 }
 

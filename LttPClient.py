@@ -3,12 +3,13 @@ import atexit
 exit_func = atexit.register(input, "Press enter to close.")
 import threading
 import time
-import sys
 import multiprocessing
 import os
 import subprocess
 import base64
 import shutil
+import logging
+import asyncio
 from json import loads, dumps
 
 from Utils import get_item_name_from_id
@@ -25,21 +26,22 @@ from NetUtils import *
 from worlds.alttp import Regions, Shops
 from worlds.alttp import Items
 import Utils
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled
 
 snes_logger = logging.getLogger("SNES")
 
 from MultiServer import mark_raw
 
-os.makedirs("logs", exist_ok=True)
+log_folder = Utils.local_path("logs")
+os.makedirs(log_folder, exist_ok=True)
 
 # Log to file in gui case
-if getattr(sys, "frozen", False) and not "--nogui" in sys.argv:
+if gui_enabled:
     logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
-                        filename=os.path.join("logs", "LttPClient.txt"), filemode="w", force=True)
+                        filename=os.path.join(log_folder, "LttPClient.txt"), filemode="w", force=True)
 else:
     logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
-    logging.getLogger().addHandler(logging.FileHandler(os.path.join("logs", "LttPClient.txt"), "w"))
+    logging.getLogger().addHandler(logging.FileHandler(os.path.join(log_folder, "LttPClient.txt"), "w"))
 
 
 class LttPCommandProcessor(ClientCommandProcessor):
@@ -53,11 +55,26 @@ class LttPCommandProcessor(ClientCommandProcessor):
         self.output(f"Setting slow mode to {self.ctx.slow_mode}")
 
     @mark_raw
-    def _cmd_snes(self, snes_address: str = "") -> bool:
-        """Connect to a snes.
-        Optionally include network address of a snes to connect to, otherwise show available devices"""
+    def _cmd_snes(self, snes_options: str = "") -> bool:
+        """Connect to a snes. Optionally include network address of a snes to connect to, otherwise show available devices; and a SNES device number if more than one SNES is detected"""
+        
+        snes_address = self.ctx.snes_address
+        snes_device_number = -1
+        
+        options = snes_options.split()
+        num_options = len(options)
+        
+        if num_options > 0:
+            snes_address = options[0]
+            
+        if num_options > 1:
+            try:
+                snes_device_number = int(options[1])
+            except:
+                pass
+
         self.ctx.snes_reconnect_address = None
-        asyncio.create_task(snes_connect(self.ctx, snes_address if snes_address else self.ctx.snes_address))
+        asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number))
         return True
 
     def _cmd_snes_close(self) -> bool:
@@ -496,7 +513,7 @@ async def get_snes_devices(ctx: Context):
     return devices
 
 
-async def snes_connect(ctx: Context, address):
+async def snes_connect(ctx: Context, address, deviceIndex = -1):
     global SNES_RECONNECT_DELAY
     if ctx.snes_socket is not None and ctx.snes_state == SNESState.SNES_CONNECTED:
         if ctx.rom:
@@ -505,6 +522,7 @@ async def snes_connect(ctx: Context, address):
             snes_logger.error('Already connected to SNI, likely awaiting a device.')
         return
 
+    device = None
     recv_task = None
     ctx.snes_state = SNESState.SNES_CONNECTING
     socket = await _snes_connect(ctx, address)
@@ -513,15 +531,29 @@ async def snes_connect(ctx: Context, address):
 
     try:
         devices = await get_snes_devices(ctx)
+        numDevices = len(devices)
 
-        if len(devices) == 1:
+        if numDevices == 1:
             device = devices[0]
         elif ctx.snes_reconnect_address:
             if ctx.snes_attached_device[1] in devices:
                 device = ctx.snes_attached_device[1]
             else:
                 device = devices[ctx.snes_attached_device[0]]
-        else:
+        elif numDevices > 1:
+            if deviceIndex == -1:
+                snes_logger.info("Found " + str(numDevices) + " SNES devices; connect to one with /snes <address> <device number>:")
+
+                for idx, availableDevice in enumerate(devices):
+                    snes_logger.info(str(idx + 1) + ": " + availableDevice)
+
+            elif (deviceIndex < 0) or (deviceIndex - 1) > numDevices:
+                snes_logger.warning("SNES device number out of range")
+
+            else:
+                device = devices[deviceIndex - 1]
+            
+        if device is None:
             await snes_disconnect(ctx)
             return
 
@@ -888,7 +920,7 @@ async def main():
         meta, romfile = Patch.create_rom_file(args.diff_file)
         args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
-        adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile)
+        adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile, gui_enabled)
         if adjusted:
             try:
                 shutil.move(adjustedromfile, romfile)
@@ -901,7 +933,7 @@ async def main():
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
-    if Utils.is_frozen() or "--nogui" not in sys.argv:
+    if gui_enabled:
         input_task = None
         from kvui import LttPManager
         ctx.ui = LttPManager(ctx)

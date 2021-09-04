@@ -235,24 +235,41 @@ def no_logic_rules(world, player):
         create_no_logic_connections(player, world, get_mirror_offset_spots_lw(player))
 
 
+def overworld_glitch_connections(world, player):
+
+    # Boots-accessible locations.
+    create_owg_connections(player, world, get_boots_clip_exits_lw(world.mode[player] == 'inverted'))
+    create_owg_connections(player, world, get_boots_clip_exits_dw(world.mode[player] == 'inverted', player))
+
+    # Glitched speed drops.
+    create_owg_connections(player, world, get_glitched_speed_drops_dw(world.mode[player] == 'inverted'))
+
+    # Mirror clip spots.
+    if world.mode[player] != 'inverted':
+        create_owg_connections(player, world, get_mirror_clip_spots_dw())
+        create_owg_connections(player, world, get_mirror_offset_spots_dw())
+    else:
+        create_owg_connections(player, world, get_mirror_offset_spots_lw(player))
+
+
 def overworld_glitches_rules(world, player):
 
     # Boots-accessible locations.
-    create_owg_connections(player, world, get_boots_clip_exits_lw(world.mode[player] == 'inverted'), lambda state: state.can_boots_clip_lw(player))
-    create_owg_connections(player, world, get_boots_clip_exits_dw(world.mode[player] == 'inverted', player), lambda state: state.can_boots_clip_dw(player))
+    set_owg_connection_rules(player, world, get_boots_clip_exits_lw(world.mode[player] == 'inverted'), lambda state: state.can_boots_clip_lw(player))
+    set_owg_connection_rules(player, world, get_boots_clip_exits_dw(world.mode[player] == 'inverted', player), lambda state: state.can_boots_clip_dw(player))
 
     # Glitched speed drops.
-    create_owg_connections(player, world, get_glitched_speed_drops_dw(world.mode[player] == 'inverted'), lambda state: state.can_get_glitched_speed_dw(player))
+    set_owg_connection_rules(player, world, get_glitched_speed_drops_dw(world.mode[player] == 'inverted'), lambda state: state.can_get_glitched_speed_dw(player))
     # Dark Death Mountain Ledge Clip Spot also accessible with mirror.
     if world.mode[player] != 'inverted':
         add_alternate_rule(world.get_entrance('Dark Death Mountain Ledge Clip Spot', player), lambda state: state.has('Magic Mirror', player))
 
     # Mirror clip spots.
     if world.mode[player] != 'inverted':
-        create_owg_connections(player, world, get_mirror_clip_spots_dw(), lambda state: state.has('Magic Mirror', player))
-        create_owg_connections(player, world, get_mirror_offset_spots_dw(), lambda state: state.has('Magic Mirror', player) and state.can_boots_clip_lw(player))
+        set_owg_connection_rules(player, world, get_mirror_clip_spots_dw(), lambda state: state.has('Magic Mirror', player))
+        set_owg_connection_rules(player, world, get_mirror_offset_spots_dw(), lambda state: state.has('Magic Mirror', player) and state.can_boots_clip_lw(player))
     else:
-        create_owg_connections(player, world, get_mirror_offset_spots_lw(player), lambda state: state.has('Magic Mirror', player) and state.can_boots_clip_dw(player))
+        set_owg_connection_rules(player, world, get_mirror_offset_spots_lw(player), lambda state: state.has('Magic Mirror', player) and state.can_boots_clip_dw(player))
 
     # Regions that require the boots and some other stuff.
     if world.mode[player] != 'inverted':
@@ -282,12 +299,16 @@ def create_no_logic_connections(player, world, connections):
         parent.exits.append(connection)
         connection.connect(target)
 
-def create_owg_connections(player, world, connections, default_rule):
+def create_owg_connections(player, world, connections):
     for entrance, parent_region, target_region, *rule_override in connections:
         parent = world.get_region(parent_region, player)
         target = world.get_region(target_region, player)
         connection = Entrance(player, entrance, parent)
         parent.exits.append(connection)
         connection.connect(target)
+
+def set_owg_connection_rules(player, world, connections, default_rule):
+    for entrance, _, _, *rule_override in connections:
+        connection = world.get_entrance(entrance, player)
         rule = rule_override[0] if len(rule_override) > 0 else default_rule
         connection.access_rule = rule

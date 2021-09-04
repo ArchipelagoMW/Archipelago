@@ -16,6 +16,12 @@ from ..AutoWorld import World
 client_version = 6
 
 class MinecraftWorld(World):
+    """
+    Minecraft is a game about creativity. In a world made entirely of cubes, you explore, discover, mine,
+    craft, and try not to explode. Delve deep into the earth and discover abandoned mines, ancient
+    structures, and materials to create a portal to another world. Defeat the Ender Dragon, and claim
+    victory!
+    """
     game: str = "Minecraft"
     options = minecraft_options
     topology_present = True
@@ -37,6 +43,7 @@ class MinecraftWorld(World):
             'advancement_goal': self.world.advancement_goal[self.player],
             'egg_shards_required': self.world.egg_shards_required[self.player],
             'egg_shards_available': self.world.egg_shards_available[self.player],
+            'MC35': bool(self.world.send_defeated_mobs[self.player]),
             'race': self.world.is_race
         }
 
@@ -46,7 +53,7 @@ class MinecraftWorld(World):
         itempool = []
         junk_pool = junk_weights.copy()
         # Add all required progression items
-        for (name, num) in required_items.items(): 
+        for (name, num) in required_items.items():
             itempool += [name] * num
         # Add structure compasses if desired
         if self.world.structure_compasses[self.player]:
@@ -71,9 +78,9 @@ class MinecraftWorld(World):
                 exclusion_pool.update(exclusion_table[key])
         exclusion_rules(self.world, self.player, exclusion_pool)
 
-        # Prefill the Ender Dragon with the completion condition
-        completion = self.create_item("Victory")
-        self.world.get_location("Ender Dragon", self.player).place_locked_item(completion)
+        # Prefill event locations with their events
+        self.world.get_location("Blaze Spawner", self.player).place_locked_item(self.create_item("Blaze Rods"))
+        self.world.get_location("Ender Dragon", self.player).place_locked_item(self.create_item("Victory"))
 
         self.world.itempool += itempool
 
@@ -84,9 +91,9 @@ class MinecraftWorld(World):
         def MCRegion(region_name: str, exits=[]):
             ret = Region(region_name, None, region_name, self.player, self.world)
             ret.locations = [MinecraftAdvancement(self.player, loc_name, loc_data.id, ret)
-                for loc_name, loc_data in advancement_table.items() 
+                for loc_name, loc_data in advancement_table.items()
                 if loc_data.region == region_name]
-            for exit in exits: 
+            for exit in exits:
                 ret.exits.append(Entrance(self.player, exit, ret))
             return ret
 
@@ -99,7 +106,7 @@ class MinecraftWorld(World):
         with open(os.path.join(output_directory, filename), 'wb') as f:
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 
-    def fill_slot_data(self): 
+    def fill_slot_data(self):
         slot_data = self._get_mc_data()
         for option_name in minecraft_options:
             option = getattr(self.world, option_name)[self.player]
@@ -114,7 +121,7 @@ class MinecraftWorld(World):
             item.never_exclude = True
         return item
 
-def mc_update_output(raw_data, server, port): 
+def mc_update_output(raw_data, server, port):
     data = json.loads(b64decode(raw_data))
     data['server'] = server
     data['port'] = port

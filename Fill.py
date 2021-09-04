@@ -4,8 +4,6 @@ import collections
 import itertools
 
 from BaseClasses import CollectionState, Location, MultiWorld
-from worlds.alttp.Items import ItemFactory
-from worlds.alttp.Regions import key_drop_data
 from worlds.generic import PlandoItem
 from worlds.AutoWorld import call_all
 
@@ -80,6 +78,7 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
     progitempool = []
     nonexcludeditempool = []
     localrestitempool = {player: [] for player in range(1, world.players + 1)}
+    nonlocalrestitempool = []
     restitempool = []
 
     for item in world.itempool:
@@ -89,11 +88,13 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
             nonexcludeditempool.append(item)
         elif item.name in world.local_items[item.player]:
             localrestitempool[item.player].append(item)
+        elif item.name in world.non_local_items[item.player]:
+            nonlocalrestitempool.append(item)
         else:
             restitempool.append(item)
 
     world.random.shuffle(fill_locations)
-    call_all(world, "fill_hook", progitempool, nonexcludeditempool, localrestitempool, restitempool, fill_locations)
+    call_all(world, "fill_hook", progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool, restitempool, fill_locations)
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
@@ -119,14 +120,22 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
                 world.push_item(spot_to_fill, item_to_place, False)
                 fill_locations.remove(spot_to_fill)
 
+    for item_to_place in nonlocalrestitempool:
+        for i, location in enumerate(fill_locations):
+            if location.player != item_to_place.player:
+                world.push_item(fill_locations.pop(i), item_to_place, False)
+                break
+        else:
+            logging.warning(f"Could not place non_local_item {item_to_place} among {fill_locations}, tossing.")
+
     world.random.shuffle(fill_locations)
 
     restitempool, fill_locations = fast_fill(world, restitempool, fill_locations)
-    unplaced = [item for item in progitempool + restitempool]
+    unplaced = progitempool + restitempool
     unfilled = [location.name for location in fill_locations]
 
     if unplaced or unfilled:
-        raise FillError(f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
+        logging.warning(f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
 
 
 def fast_fill(world: MultiWorld, item_pool: typing.List, fill_locations: typing.List) -> typing.Tuple[typing.List, typing.List]:
@@ -327,6 +336,8 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked=
 
 
 def distribute_planned(world: MultiWorld):
+    # TODO: remove. Preferably by implementing key drop
+    from worlds.alttp.Regions import key_drop_data
     world_name_lookup = world.world_name_lookup
 
     for player in world.player_ids:
@@ -337,7 +348,7 @@ def distribute_planned(world: MultiWorld):
                     placement.warn(
                         f"Can't place '{placement.item}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
                     continue
-                item = ItemFactory(placement.item, player)
+                item = world.worlds[player].create_item(placement.item)
                 target_world: int = placement.world
                 if target_world is False or world.players == 1:
                     target_world = player  # in own world

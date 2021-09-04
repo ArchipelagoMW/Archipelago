@@ -1,0 +1,120 @@
+.markdown{
+    display: flex;
+    flex-direction: column;
+    max-width: 70rem;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 1rem 1rem 3rem;
+    color: #eeffeb;
+}
+
+.markdown img{
+    max-width: 100%;
+    border-radius: 6px;
+}
+
+.markdown p{
+    margin-top: 0;
+}
+
+.markdown a{
+    color: #ffef00;
+}
+
+.markdown h1{
+    font-size: 2.5rem;
+    font-weight: normal;
+    border-bottom: 1px solid #ffffff;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    text-shadow: 1px 1px 4px #000000;
+}
+
+.markdown h2{
+    font-size: 2rem;
+    font-weight: normal;
+    border-bottom: 1px solid #ffffff;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    color: #ffe993;
+    text-transform: lowercase;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+.markdown h3{
+    font-size: 1.70rem;
+    font-weight: normal;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.markdown h4{
+    font-size: 1.5rem;
+    font-weight: normal;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+}
+
+.markdown h5{
+    font-size: 1.25rem;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.markdown h6{
+    font-size: 1.25rem;
+    font-weight: normal;
+    cursor: pointer;
+    color: #434343;
+}
+
+.markdown h3, .markdown h4, .markdown h5,.markdown h6{
+    color: #ffffff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.markdown ul{
+
+}
+
+.markdown ol{
+
+}
+
+.markdown li{
+
+}
+
+.markdown pre{
+    margin-top: 0;
+    padding: 0.5rem 0.25rem;
+    background-color: #ffeeab;
+    border: 1px solid #9f916a;
+    border-radius: 6px;
+    color: #000000;
+}
+
+.markdown code{
+    background-color: #ffeeab;
+    border-radius: 4px;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    color: #000000;
+}
+
+.markdown #tutorial-video-container{
+    width: 100%;
+    text-align: center;
+}
+
+.markdown #language-selector-wrapper{
+    width: 100%;
+    text-align: right;
+}

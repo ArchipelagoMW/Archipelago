@@ -18,6 +18,7 @@ library = Path(libfolder, "library.zip")
 print("Outputting to: " + sbuildfolder)
 
 icon = os.path.join("data", "icon.ico")
+mcicon = os.path.join("data", "mcicon.ico")
 
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
@@ -71,20 +72,20 @@ def remove_sprites_from_folder(folder):
 
 scripts = {
     # Core
-    "MultiServer.py": ("ArchipelagoServer", False),
-    "Generate.py": ("ArchipelagoGenerate", False),
+    "MultiServer.py": ("ArchipelagoServer", False, icon),
+    "Generate.py": ("ArchipelagoGenerate", False, icon),
     # LttP
-    "LttPClient.py": ("ArchipelagoLttPClient", True),
-    "LttPAdjuster.py": ("ArchipelagoLttPAdjuster", True),
+    "LttPClient.py": ("ArchipelagoLttPClient", True, icon),
+    "LttPAdjuster.py": ("ArchipelagoLttPAdjuster", True, icon),
     # Factorio
-    "FactorioClient.py": ("ArchipelagoFactorioClient", True),
+    "FactorioClient.py": ("ArchipelagoFactorioClient", True, icon),
     # Minecraft
-    "MinecraftClient.py": ("ArchipelagoMinecraftClient", False),
+    "MinecraftClient.py": ("ArchipelagoMinecraftClient", False, mcicon),
 }
 
 exes = []
 
-for script, (scriptname, gui) in scripts.items():
+for script, (scriptname, gui, icon) in scripts.items():
     exes.append(cx_Freeze.Executable(
         script=script,
         target_name=scriptname + ("" if sys.platform == "linux" else ".exe"),
@@ -161,6 +162,9 @@ if signtool:
         os.system(signtool + os.path.join(buildfolder, exe.target_name))
     print(f"Signing SNI")
     os.system(signtool + os.path.join(buildfolder, "SNI", "SNI.exe"))
+    print(f"Signing OoT Utils")
+    for exe_path in (("Compress", "Compress.exe"), ("Decompress", "Decompress.exe")):
+        os.system(signtool + os.path.join(buildfolder, "lib", "worlds", "oot", "data", *exe_path))
 
 remove_sprites_from_folder(buildfolder / "data" / "sprites" / "alttpr")
 

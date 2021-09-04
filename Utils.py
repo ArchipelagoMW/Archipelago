@@ -13,7 +13,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.1.6"
+__version__ = "0.1.7"
 version_tuple = tuplize_version(__version__)
 
 import builtins
@@ -202,6 +202,13 @@ def get_default_options() -> dict:
             "glitch_triforce_room": 1,
             "race": 0,
             "plando_options": "bosses",
+        },
+        "minecraft_options": {
+            "forge_directory": "Minecraft Forge server",
+            "max_heap_size": "2G"
+        },
+        "oot_options": {
+            "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
         }
     }
 
@@ -284,7 +291,7 @@ def persistent_load() -> typing.Dict[dict]:
     return storage
 
 
-def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
+def get_adjuster_settings(romfile: str, skip_questions: bool = False) -> typing.Tuple[str, bool]:
     if hasattr(get_adjuster_settings, "adjuster_settings"):
         adjuster_settings = getattr(get_adjuster_settings, "adjuster_settings")
     else:
@@ -313,6 +320,8 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
         if hasattr(get_adjuster_settings, "adjust_wanted"):
             adjust_wanted = getattr(get_adjuster_settings, "adjust_wanted")
         elif persistent_load().get("adjuster", {}).get("never_adjust", False):  # never adjust, per user request
+            return romfile, False
+        elif skip_questions:
             return romfile, False
         else:
             adjust_wanted = input(f"Last used adjuster settings were found. Would you like to apply these? \n"

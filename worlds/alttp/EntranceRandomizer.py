@@ -206,26 +206,10 @@ def parse_arguments(argv, no_defaults=False):
                              time).
                              ''', type=int)
 
-    parser.add_argument('--mapshuffle', default=defval(False),
-                        help='Maps are no longer restricted to their dungeons, but can be anywhere',
-                        action='store_true')
-    parser.add_argument('--compassshuffle', default=defval(False),
-                        help='Compasses are no longer restricted to their dungeons, but can be anywhere',
-                        action='store_true')
-    parser.add_argument('--keyshuffle', default=defval("off"), help='\
-                        on: Small Keys are no longer restricted to their dungeons, but can be anywhere.\
-                        universal: Makes all Small Keys usable in any dungeon and places shops to buy more keys.',
-                        choices=["on", "universal", "off"])
-    parser.add_argument('--bigkeyshuffle', default=defval(False),
-                        help='Big Keys are no longer restricted to their dungeons, but can be anywhere',
-                        action='store_true')
-    parser.add_argument('--keysanity', default=defval(False), help=argparse.SUPPRESS, action='store_true')
     parser.add_argument('--retro', default=defval(False), help='''\
                              Keys are universal, shooting arrows costs rupees,
                              and a few other little things make this more like Zelda-1.
                              ''', action='store_true')
-    parser.add_argument('--startinventory', default=defval(''),
-                        help='Specifies a list of items that will be in your starting inventory (separated by commas)')
     parser.add_argument('--local_items', default=defval(''),
                         help='Specifies a list of items that will not spread across the multiworld (separated by commas)')
     parser.add_argument('--non_local_items', default=defval(''),
@@ -291,13 +275,10 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--restrict_dungeon_item_on_boss', default=defval(False), action="store_true")
     parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--names', default=defval(''))
-    parser.add_argument('--teams', default=defval(1), type=lambda value: max(int(value), 1))
     parser.add_argument('--outputpath')
     parser.add_argument('--game', default="A Link to the Past")
     parser.add_argument('--race', default=defval(False), action='store_true')
     parser.add_argument('--outputname')
-    parser.add_argument('--disable_glitch_boots', default=defval(False), action='store_true', help='''\
-    turns off starting with Pegasus Boots in glitched modes.''')
     parser.add_argument('--start_hints')
     if multiargs.multi:
         for player in range(1, multiargs.multi + 1):
@@ -314,7 +295,6 @@ def parse_arguments(argv, no_defaults=False):
     ret.plando_connections = []
     ret.er_seeds = {}
 
-    ret.glitch_boots = not ret.disable_glitch_boots
     if ret.timer == "none":
         ret.timer = False
     if ret.dungeon_counters == 'on':
@@ -322,12 +302,6 @@ def parse_arguments(argv, no_defaults=False):
     elif ret.dungeon_counters == 'off':
         ret.dungeon_counters = False
 
-    if ret.keysanity:
-        ret.mapshuffle = ret.compassshuffle = ret.keyshuffle = ret.bigkeyshuffle = True
-    elif ret.keyshuffle == "on":
-        ret.keyshuffle = True
-    elif ret.keyshuffle == "off":
-        ret.keyshuffle = False
     if multiargs.multi:
         defaults = copy.deepcopy(ret)
         for player in range(1, multiargs.multi + 1):
@@ -336,7 +310,6 @@ def parse_arguments(argv, no_defaults=False):
             for name in ['logic', 'mode', 'swordless', 'goal', 'difficulty', 'item_functionality',
                          'shuffle', 'open_pyramid', 'timer',
                          'countdown_start_time', 'red_clock_time', 'blue_clock_time', 'green_clock_time',
-                         'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
                          'local_items', 'non_local_items', 'retro', 'accessibility', 'hints', 'beemizer',
                          'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'sprite',
@@ -344,7 +317,7 @@ def parse_arguments(argv, no_defaults=False):
                          "triforce_pieces_required", "shop_shuffle",
                          "required_medallions", "start_hints",
                          "plando_items", "plando_texts", "plando_connections", "er_seeds",
-                         'dungeon_counters', 'glitch_boots', 'killable_thieves',
+                         'dungeon_counters', 'killable_thieves',
                          'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic',
                          'restrict_dungeon_item_on_boss', 'game']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)

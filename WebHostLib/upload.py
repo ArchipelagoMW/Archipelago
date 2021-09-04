@@ -58,10 +58,16 @@ def uploads():
                                                game="Minecraft"))
 
                             elif file.filename.endswith(".zip"):
-                                # Factorio mods needs a specific name or they do no function
+                                # Factorio mods needs a specific name or they do not function
                                 _, seed_name, slot_id, slot_name = file.filename.rsplit("_", 1)[0].split("-")
                                 slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
                                               player_id=int(slot_id[1:]), game="Factorio"))
+
+                            elif file.filename.endswith(".apz5"):
+                                # .apz5 must be named specifically since they don't contain any metadata
+                                _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
+                                slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
+                                              player_id=int(slot_id[1:]), game="Ocarina of Time"))
 
                             elif file.filename.endswith(".txt"):
                                 spoiler = zfile.open(file, "r").read().decode("utf-8-sig")

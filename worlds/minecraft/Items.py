@@ -58,6 +58,7 @@ item_table = {
     "Dragon Egg Shard": ItemData(45043, True),
     "Bee Trap (Minecraft)": ItemData(45100, False),
 
+    "Blaze Rods": ItemData(None, True),
     "Victory": ItemData(None, True)
 }
 

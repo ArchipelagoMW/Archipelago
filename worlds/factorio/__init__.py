@@ -24,6 +24,11 @@ all_items["Evolution Trap"] = factorio_base_id - 2
 
 
 class Factorio(World):
+    """
+    Factorio is a game about automation. You play as an engineer who has crash landed on the planet
+    Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
+    research new technologies, and become more efficient in your quest to build a rocket and return home.
+    """
     game: str = "Factorio"
     static_nodes = {"automation", "logistics", "rocket-silo"}
     custom_recipes = {}
@@ -140,14 +145,19 @@ class Factorio(World):
 
         world.completion_condition[player] = lambda state: state.has('Victory', player)
 
-    def collect_item(self, state, item):
+    def collect_item(self, state, item, remove=False):
         if item.advancement and item.name in progressive_technology_table:
             prog_table = progressive_technology_table[item.name].progressive
-            for item_name in prog_table:
-                if not state.has(item_name, item.player):
-                    return item_name
+            if remove:
+                for item_name in reversed(prog_table):
+                    if state.has(item_name, item.player):
+                        return item_name
+            else:
+                for item_name in prog_table:
+                    if not state.has(item_name, item.player):
+                        return item_name
 
-        return super(Factorio, self).collect_item(state, item)
+        return super(Factorio, self).collect_item(state, item, remove)
 
     def get_required_client_version(self) -> tuple:
         return max((0, 1, 6), super(Factorio, self).get_required_client_version())
@@ -179,10 +189,7 @@ class Factorio(World):
                 max_energy = remaining_energy * 0.75
                 min_energy = (remaining_energy - max_energy) / remaining_num_ingredients
             ingredient = pool.pop()
-            if ingredient not in recipes:
-                logging.warning(f"missing recipe for {ingredient}")
-                continue
-            ingredient_recipe = recipes[ingredient]
+            ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
             ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
             ingredient_energy = ingredient_recipe.total_energy
             min_num_raw = min_raw/ingredient_raw

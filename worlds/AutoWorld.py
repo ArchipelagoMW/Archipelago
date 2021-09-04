@@ -78,7 +78,10 @@ class World(metaclass=AutoWorldRegister):
     # maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"}
     item_name_groups: Dict[str, Set[str]] = {}
 
-    data_version = 1  # increment this every time something in your world's names/id mappings changes.
+    # increment this every time something in your world's names/id mappings changes.
+    # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
+    # retrieved by clients on every connection.
+    data_version = 1
 
     hint_blacklist: Set[str] = frozenset()  # any names that should not be hintable
 
@@ -87,6 +90,13 @@ class World(metaclass=AutoWorldRegister):
     # if a world is set to remote_items = False, then the server never sends an item where receiver == finder,
     # the client finds its own items in its own world.
     remote_items: bool = True
+
+    # For games where after a victory it is impossible to go back in and get additional/remaining Locations checked.
+    # this forces forfeit:  auto for those games.
+    forced_auto_forfeit: bool = False
+
+    # Hide World Type from various views. Does not remove functionality.
+    hidden = False
 
     # autoset on creation:
     world: MultiWorld
@@ -127,10 +137,14 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def fill_hook(cls, progitempool: List[Item], nonexcludeditempool: List[Item],
-                  localrestitempool: Dict[int, List[Item]], restitempool: List[Item], fill_locations: List[Location]):
+                  localrestitempool: Dict[int, List[Item]], nonlocalrestitempool: Dict[int, List[Item]],
+                  restitempool: List[Item], fill_locations: List[Location]):
         """Special method that gets called as part of distribute_items_restrictive (main fill).
         This gets called once per present world type."""
         pass
+
+    def post_fill(self):
+        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation."""
 
     def generate_output(self, output_directory: str):
         """This method gets called from a threadpool, do not use world.random here.
@@ -150,9 +164,10 @@ class World(metaclass=AutoWorldRegister):
 
     # end of Main.py calls
 
-    def collect_item(self, state: CollectionState, item: Item) -> Optional[str]:
+    def collect_item(self, state: CollectionState, item: Item, remove=False) -> Optional[str]:
         """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
-        Collect None to skip item."""
+        Collect None to skip item.
+        :param remove: indicate if this is meant to remove from state instead of adding."""
         if item.advancement:
             return item.name
 
@@ -170,13 +185,14 @@ class World(metaclass=AutoWorldRegister):
         return False
 
     def remove(self, state: CollectionState, item: Item) -> bool:
-        name = self.collect_item(state, item)
+        name = self.collect_item(state, item, True)
         if name:
             state.prog_items[name, item.player] -= 1
             if state.prog_items[name, item.player] < 1:
                 del (state.prog_items[name, item.player])
             return True
         return False
+
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together

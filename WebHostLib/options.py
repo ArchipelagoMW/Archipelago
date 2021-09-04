@@ -10,9 +10,18 @@ target_folder = os.path.join("WebHostLib", "static", "generated")
 
 
 def create():
+    def dictify_range(option):
+        data = {option.range_start: 0, option.range_end: 0, "random": 0, "random-low": 0, "random-high": 0,
+                option.default: 50}
+        notes = {
+            option.range_start: "minimum value",
+            option.range_end: "maximum value"
+        }
+        return data, notes
     for game_name, world in AutoWorldRegister.world_types.items():
         res = Template(open(os.path.join("WebHostLib", "templates", "options.yaml")).read()).render(
-            options=world.options, __version__=__version__, game=game_name, yaml_dump=yaml.dump
+            options=world.options, __version__=__version__, game=game_name, yaml_dump=yaml.dump,
+            dictify_range=dictify_range
         )
 
         with open(os.path.join(target_folder, game_name + ".yaml"), "w") as f:
@@ -31,7 +40,7 @@ def create():
             if option.options:
                 this_option = {
                     "type": "select",
-                    "friendlyName": option.friendly_name if hasattr(option, "friendly_name") else option_name,
+                    "displayName": option.displayname if hasattr(option, "displayname") else option_name,
                     "description": option.__doc__ if option.__doc__ else "Please document me!",
                     "defaultValue": None,
                     "options": []
@@ -39,7 +48,7 @@ def create():
 
                 for sub_option_name, sub_option_id in option.options.items():
                     this_option["options"].append({
-                        "name": sub_option_name,
+                        "name": option.get_option_name(sub_option_id),
                         "value": sub_option_name,
                     })
 
@@ -51,7 +60,7 @@ def create():
             elif hasattr(option, "range_start") and hasattr(option, "range_end"):
                 game_options[option_name] = {
                     "type": "range",
-                    "friendlyName": option.friendly_name if hasattr(option, "friendly_name") else option_name,
+                    "displayName": option.displayname if hasattr(option, "displayname") else option_name,
                     "description": option.__doc__ if option.__doc__ else "Please document me!",
                     "defaultValue": option.default if hasattr(option, "default") else option.range_start,
                     "min": option.range_start,

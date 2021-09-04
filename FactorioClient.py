@@ -4,14 +4,13 @@ import logging
 import json
 import string
 import copy
-import sys
 import subprocess
 import factorio_rcon
 
 import colorama
 import asyncio
 from queue import Queue
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled
 from MultiServer import mark_raw
 
 import Utils
@@ -20,17 +19,17 @@ from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePar
 
 from worlds.factorio import Factorio
 
-os.makedirs("logs", exist_ok=True)
+log_folder = Utils.local_path("logs")
 
-# Log to file in gui case
-if getattr(sys, "frozen", False) and not "--nogui" in sys.argv:
+os.makedirs(log_folder, exist_ok=True)
+
+
+if gui_enabled:
     logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
-                        filename=os.path.join("logs", "FactorioClient.txt"), filemode="w", force=True)
+                        filename=os.path.join(log_folder, "FactorioClient.txt"), filemode="w", force=True)
 else:
     logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
-    logging.getLogger().addHandler(logging.FileHandler(os.path.join("logs", "FactorioClient.txt"), "w"))
-
-gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
+    logging.getLogger().addHandler(logging.FileHandler(os.path.join(log_folder, "FactorioClient.txt"), "w"))
 
 
 class FactorioCommandProcessor(ClientCommandProcessor):
@@ -112,9 +111,10 @@ class FactorioContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
             # catch up sync anything that is already cleared.
-            for tech in args["checked_locations"]:
-                item_name = f"ap-{tech}-"
-                self.rcon_client.send_command(f'/ap-get-technology {item_name}\t-1')
+            if args["checked_locations"]:
+                self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
+                                                item_name in args["checked_locations"]})
+
 
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
@@ -198,11 +198,15 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     if ctx.mod_version < Utils.Version(0, 1, 6):
                         ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
                         ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
+                    if not ctx.server:
+                        logger.info("Established bridge to Factorio Server. "
+                                    "Ready to connect to Archipelago via /connect")
 
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
 
             if ctx.rcon_client:
+                commands = {}
                 while ctx.send_index < len(ctx.items_received):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
                     item_id = transfer_item.item
@@ -212,8 +216,10 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     else:
                         item_name = Factorio.item_id_to_name[item_id]
                         factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
-                        ctx.rcon_client.send_command(f'/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}')
+                        commands[ctx.send_index] = f'/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}'
                     ctx.send_index += 1
+                if commands:
+                    ctx.rcon_client.send_commands(commands)
             await asyncio.sleep(0.1)
 
     except Exception as e:
@@ -354,13 +360,13 @@ if __name__ == '__main__':
     factorio_server_logger = logging.getLogger("FactorioServer")
     options = Utils.get_options()
     executable = options["factorio_options"]["executable"]
-    bin_dir = os.path.dirname(executable)
-    if not os.path.exists(bin_dir):
-        raise FileNotFoundError(f"Path {bin_dir} does not exist or could not be accessed.")
-    if not os.path.isdir(bin_dir):
-        raise NotADirectoryError(f"Path {bin_dir} is not a directory.")
-    if not os.path.exists(executable):
-        if os.path.exists(executable + ".exe"):
+
+    if not os.path.exists(os.path.dirname(executable)):
+        raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
+    if os.path.isdir(executable):  # user entered a path to a directory, let's find the executable therein
+        executable = os.path.join(executable, "factorio")
+    if not os.path.isfile(executable):
+        if os.path.isfile(executable + ".exe"):
             executable = executable + ".exe"
         else:
             raise FileNotFoundError(f"Path {executable} is not an executable file.")

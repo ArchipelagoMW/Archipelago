@@ -53,22 +53,6 @@ can all have different options.
 The [Generate Game](/player-settings) page on the website allows you to configure your personal settings and
 export a YAML file from them.
 
-### Advanced YAML configuration
-A more advanced version of the YAML file can be created using the [Weighted Settings](/weighted-settings) page,
-which allows you to configure up to three presets. The Weighted Settings page has many options which are
-primarily represented with sliders. This allows you to choose how likely certain options are to occur relative
-to other options within a category.
-
-For example, imagine the generator creates a bucket labeled "Map Shuffle", and places folded pieces of paper
-into the bucket for each sub-option. Also imagine your chosen value for "On" is 20, and your value for "Off" is 40.
-
-In this example, sixty pieces of paper are put into the bucket. Twenty for "On" and forty for "Off". When the
-generator is deciding whether or not to turn on map shuffle for your game, it reaches into this bucket and pulls
-out a piece of paper at random. In this example, you are much more likely to have map shuffle turned off.
-
-If you never want an option to be chosen, simply set its value to zero. Remember that each setting must have at
-lease one option set to a number greater than zero.
-
 ### Verifying your YAML file
 If you would like to validate your YAML file to make sure it works, you may do so on the
 [YAML Validator](/mysterycheck) page.

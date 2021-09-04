@@ -6,6 +6,7 @@ import logging
 from worlds.alttp.SubClasses import ALttPLocation
 from worlds.alttp.EntranceShuffle import door_addresses
 from worlds.alttp.Items import item_name_groups, item_table, ItemFactory, trap_replaceable, GetBeemizerItem
+from worlds.alttp.Options import smallkey_shuffle
 from Utils import int16_as_bytes
 
 logger = logging.getLogger("Shops")
@@ -22,6 +23,11 @@ class Shop():
     slots: int = 3  # slot count is not dynamic in asm, however inventory can have None as empty slots
     blacklist: Set[str] = set()  # items that don't work, todo: actually check against this
     type = ShopType.Shop
+    slot_names: Dict[int, str] = {
+        0: "Left",
+        1: "Center",
+        2: "Right"
+    }
 
     def __init__(self, region, room_id: int, shopkeeper_config: int, custom: bool, locked: bool, sram_offset: int):
         self.region = region
@@ -131,23 +137,22 @@ shop_class_mapping = {ShopType.UpgradeShop: UpgradeShop,
 
 def FillDisabledShopSlots(world):
     shop_slots: Set[ALttPLocation] = {location for shop_locations in (shop.region.locations for shop in world.shops)
-                                      for location in shop_locations if location.shop_slot and location.shop_slot_disabled}
+                                      for location in shop_locations
+                                      if location.shop_slot is not None and location.shop_slot_disabled}
     for location in shop_slots:
         location.shop_slot_disabled = True
-        slot_num = int(location.name[-1]) - 1
         shop: Shop = location.parent_region.shop
-        location.item = ItemFactory(shop.inventory[slot_num]['item'], location.player)
+        location.item = ItemFactory(shop.inventory[location.shop_slot]['item'], location.player)
         location.item_rule = lambda item: item.name == location.item.name and item.player == location.player
 
 
 def ShopSlotFill(world):
     shop_slots: Set[ALttPLocation] = {location for shop_locations in (shop.region.locations for shop in world.shops)
-                                      for location in shop_locations if location.shop_slot}
+                                      for location in shop_locations if location.shop_slot is not None}
     removed = set()
     for location in shop_slots:
-        slot_num = int(location.name[-1]) - 1
         shop: Shop = location.parent_region.shop
-        if not shop.can_push_inventory(slot_num) or location.shop_slot_disabled:
+        if not shop.can_push_inventory(location.shop_slot) or location.shop_slot_disabled:
             location.shop_slot_disabled = True
             removed.add(location)
 
@@ -155,6 +160,7 @@ def ShopSlotFill(world):
         shop_slots -= removed
 
     if shop_slots:
+        logger.info("Filling LttP Shop Slots")
         del shop_slots
 
         from Fill import swap_location_item
@@ -179,7 +185,7 @@ def ShopSlotFill(world):
             shops_per_sphere.append(current_shops_slots)
             candidates_per_sphere.append(current_candidates)
             for location in sphere:
-                if location.shop_slot:
+                if location.shop_slot is not None:
                     if not location.shop_slot_disabled:
                         current_shops_slots.append(location)
                 elif not location.locked and not location.item.name in blacklist_words:
@@ -229,7 +235,7 @@ def ShopSlotFill(world):
                     else:
                         price = world.random.randrange(8, 56)
 
-                    shop.push_inventory(int(location.name[-1]) - 1, item_name, price * 5, 1,
+                    shop.push_inventory(location.shop_slot, item_name, price * 5, 1,
                                         location.item.player if location.item.player != location.player else 0)
 
 
@@ -266,7 +272,7 @@ def create_shops(world, player: int):
         # make sure that blue potion is available in inverted, special case locked = None; lock when done.
         player_shop_table["Dark Lake Hylia Shop"] = \
             player_shop_table["Dark Lake Hylia Shop"]._replace(items=_inverted_hylia_shop_defaults, locked=None)
-    chance_100 = int(world.retro[player])*0.25+int(world.keyshuffle[player] == "universal") * 0.5
+    chance_100 = int(world.retro[player])*0.25+int(world.smallkey_shuffle[player] == smallkey_shuffle.option_universal) * 0.5
     for region_name, (room_id, type, shopkeeper, custom, locked, inventory, sram_offset) in player_shop_table.items():
         region = world.get_region(region_name, player)
         shop: Shop = shop_class_mapping[type](region, room_id, shopkeeper, custom, locked, sram_offset)
@@ -278,10 +284,10 @@ def create_shops(world, player: int):
         for index, item in enumerate(inventory):
             shop.add_inventory(index, *item)
             if not locked and num_slots:
-                slot_name = "{} Slot {}".format(region.name, index + 1)
+                slot_name = f"{region.name} {shop.slot_names[index]}"
                 loc = ALttPLocation(player, slot_name, address=shop_table_by_location[slot_name],
                                     parent=region, hint_text="for sale")
-                loc.shop_slot = True
+                loc.shop_slot = index
                 loc.locked = True
                 if single_purchase_slots.pop():
                     if world.goal[player] != 'icerodhunt':
@@ -337,9 +343,10 @@ total_shop_slots = len(shop_table) * 3
 total_dynamic_shop_slots = sum(3 for shopname, data in shop_table.items() if not data[4])  # data[4] -> locked
 
 SHOP_ID_START = 0x400000
-shop_table_by_location_id = {cnt: s for cnt, s in enumerate(
-    (f"{name} Slot {num}" for name in [key for key, value in sorted(shop_table.items(), key=lambda item: item[1].sram_offset)]
-     for num in range(1, 4)), start=SHOP_ID_START)}
+shop_table_by_location_id = dict(enumerate(
+    (f"{name} {Shop.slot_names[num]}" for name, shop_data in sorted(shop_table.items(), key=lambda item: item[1].sram_offset)
+     for num in range(3)), start=SHOP_ID_START))
+
 shop_table_by_location_id[(SHOP_ID_START + total_shop_slots)] = "Old Man Sword Cave"
 shop_table_by_location_id[(SHOP_ID_START + total_shop_slots + 1)] = "Take-Any #1"
 shop_table_by_location_id[(SHOP_ID_START + total_shop_slots + 2)] = "Take-Any #2"
@@ -365,13 +372,13 @@ def set_up_shops(world, player: int):
         rss = world.get_region('Red Shield Shop', player).shop
         replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
                              ['Blue Shield', 50], ['Small Heart', 10]]  # Can't just replace the single arrow with 10 arrows as retro doesn't need them.
-        if world.keyshuffle[player] == "universal":
+        if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             replacement_items.append(['Small Key (Universal)', 100])
         replacement_item = world.random.choice(replacement_items)
         rss.add_inventory(2, 'Single Arrow', 80, 1, replacement_item[0], replacement_item[1])
         rss.locked = True
 
-    if world.keyshuffle[player] == "universal" or world.retro[player]:
+    if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal or world.retro[player]:
         for shop in world.random.sample([s for s in world.shops if
                                          s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
                                         5):
@@ -379,7 +386,7 @@ def set_up_shops(world, player: int):
             slots = [0, 1, 2]
             world.random.shuffle(slots)
             slots = iter(slots)
-            if world.keyshuffle[player] == "universal":
+            if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
                 shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
             if world.retro[player]:
                 shop.push_inventory(next(slots), 'Single Arrow', 80)

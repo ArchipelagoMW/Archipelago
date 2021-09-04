@@ -4,9 +4,13 @@
 *_Spoiler.txt
 *.bmbp
 *.apbp
+*.apmc
+*.apz5
 *.pyc
 *.pyd
 *.sfc
+*.z64
+*.n64
 *.wixobj
 *.lck
 *.db3
@@ -37,6 +41,7 @@ success.txt
 output/
 Output Logs/
 /factorio/
+/Minecraft Forge Server/
 /WebHostLib/static/generated
 
 # Byte-compiled / optimized / DLL files
