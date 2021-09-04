@@ -150,7 +150,9 @@ class Choice(Option):
         return cls.from_text(str(data))
 
     def __eq__(self, other):
-        if isinstance(other, str):
+        if isinstance(other, self.__class__):
+            return other.value == self.value
+        elif isinstance(other, str):
             assert other in self.options
             return other == self.current_key
         elif isinstance(other, int):
@@ -162,7 +164,9 @@ class Choice(Option):
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
     def __ne__(self, other):
-        if isinstance(other,  str):
+        if isinstance(other, self.__class__):
+            return other.value != self.value
+        elif isinstance(other, str):
             assert other in self.options
             return other != self.current_key
         elif isinstance(other, int):
