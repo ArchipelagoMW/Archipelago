@@ -121,6 +121,7 @@ class SMWorld(World):
 
         for (location, item) in locked_items.items():
             self.world.get_location(location, self.player).place_locked_item(item)
+            self.world.get_location(location, self.player).address = None
 
         startAP = self.world.get_entrance('StartAP', self.player)
         startAP.connect(self.world.get_region(self.variaRando.args.startLocation, self.player))
@@ -193,7 +194,8 @@ class SMWorld(World):
         return False
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, restitempool, fill_locations):
+    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
+                        restitempool, fill_locations):
         if world.get_game_players("Super Metroid"):
             progitempool.sort(
                 key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
@@ -233,7 +235,7 @@ class SMLocation(Location):
         super(SMLocation, self).__init__(player, name, address, parent)
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return self.always_allow(state, item) or (any(region.can_fill(item) for region in self.parent_regions) and self.item_rule(item) and (not check_access or self.can_reach(state)))
+        return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
 
     def can_reach(self, state: CollectionState) -> bool:
         # self.access_rule computes faster on average, so placing it first for faster abort
