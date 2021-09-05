@@ -63,11 +63,11 @@ class SMWorld(World):
 
         def sm_init(self, parent: MultiWorld):
             orig_init(self, parent)
-            self.smbm = {player: SMBoolManager(player, self.world.state.smbm[player].maxDiff) for player in range(1, parent.players + 1)}
+            self.smbm = {player: SMBoolManager(player, self.world.state.smbm[player].maxDiff) for player in self.world.get_game_players("Super Metroid")}
 
         def sm_copy(self):
             ret = orig_copy(self)
-            ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in range(1, self.world.players + 1)}
+            ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in self.world.get_game_players("Super Metroid")}
             return ret
 
         CollectionState.__init__ = sm_init
@@ -77,15 +77,16 @@ class SMWorld(World):
             world.state.smbm = {}
 
         return super().__new__(cls)
-    
-    def generate_basic(self):
+
+    def generate_early(self):
         Logic.factory('vanilla')
 
         self.variaRando = VariaRandomizer(self.world.sm_rom, self.world.randoPreset[self.player], self.player)
 
         # also need to add the names to the passed MultiWorld's CollectionState, since it was initialized before we could get to it
         self.world.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
-
+    
+    def generate_basic(self):
         itemPool = self.variaRando.container.itemPool
         
         # Generate item pool
@@ -164,7 +165,7 @@ class SMWorld(World):
         for p in range(1, self.world.players + 1):
             playerNames[0x1C5000 + (p - 1) * 16] = self.world.player_name[p][:16].upper().center(16).encode()
         playerNames[0x1C5000 + (self.world.players) * 16] = "Archipelago".upper().center(16).encode()
-        
+
         romPatcher.applyIPSPatch('PlayerName', { 'PlayerName':  playerNames })
 
         romPatcher.commitIPS()

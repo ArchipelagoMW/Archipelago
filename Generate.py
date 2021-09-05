@@ -491,7 +491,8 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             startitems.append(item)
     ret.startinventory = startitems
     ret.start_hints = set(game_weights.get('start_hints', []))
-    ret.randoPreset = game_weights.get('randoPreset', [])[0]
+    if ret.game == "Super Metroid":
+        ret.randoPreset = game_weights.get('randoPreset', [])[0]
 
     ret.excluded_locations = set()
     for location in game_weights.get('exclude_locations', []):
