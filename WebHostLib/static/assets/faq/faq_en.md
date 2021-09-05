@@ -2,7 +2,7 @@
 
 ## What is a randomizer?
 A randomizer is a modification of a video game which reorganizes the items required to progress through the game.
-A normal play-through of a game might require you to require item A to unlock item B, then C, and so forth. In a
+A normal play-through of a game might require you to use item A to unlock item B, then C, and so forth. In a
 randomized game, you might first find item C, then A, then B.
 
 This transforms games from a linear experience into a puzzle, presenting players with a new challenge each time they
