@@ -29,7 +29,7 @@ game: # Pick a game to play
   Minecraft: 0
   Subnautica: 0
   Slay the Spire: 0
-  Super Metroid: 1
+  Super Metroid: 0
   
 requires:
   version: 0.1.6 # Version of Archipelago required for this yaml to work as expected.
@@ -58,7 +58,9 @@ progression_balancing:
 # exclude_locations: # Force certain locations to never contain progression items, and always be filled with junk. 
 #  - "Master Sword Pedestal"
 
-Super Metroid: {}
+Super Metroid: 
+  randoPreset:
+   - "worlds\\sm\\variaRandomizer\\rando_presets\\default.json"
 
 Subnautica: {}
 Slay the Spire:
