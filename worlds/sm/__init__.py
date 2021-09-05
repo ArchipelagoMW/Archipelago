@@ -162,8 +162,9 @@ class SMWorld(World):
 
         playerNames = {0x1C4F00 : self.world.player_name[self.player].encode()}
         for p in range(1, self.world.players + 1):
-            playerNames[0x1C5000 + (p - 1) * 16] = self.world.player_name[p][:12].upper().center(12).encode()
-
+            playerNames[0x1C5000 + (p - 1) * 16] = self.world.player_name[p][:16].upper().center(16).encode()
+        playerNames[0x1C5000 + (self.world.players) * 16] = "Archipelago".upper().center(16).encode()
+        
         romPatcher.applyIPSPatch('PlayerName', { 'PlayerName':  playerNames })
 
         romPatcher.commitIPS()
