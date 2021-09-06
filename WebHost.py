@@ -36,7 +36,11 @@ if __name__ == "__main__":
     multiprocessing.freeze_support()
     multiprocessing.set_start_method('spawn')
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
-    update_sprites_lttp()
+    try:
+        update_sprites_lttp()
+    except Exception as e:
+        logging.exception(e)
+        logging.warning("Could not update LttP sprites.")
     app = get_app()
     create_options_files()
     if app.config["SELFLAUNCH"]:
