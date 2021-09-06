@@ -193,7 +193,7 @@ def set_entrances_based_rules(ootworld):
     if ootworld.world.accessibility == 'beatable': 
         return
 
-    all_state = ootworld.state_with_items(ootworld.itempool)
+    all_state = ootworld.world.get_all_state(False)
 
     for location in ootworld.get_locations():
         # If a shop is not reachable as adult, it can't have Goron Tunic or Zora Tunic as child can't buy these

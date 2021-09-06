@@ -762,26 +762,22 @@ def generate_itempool(ootworld):
 
     junk_pool = get_junk_pool(ootworld)
 
-    fixed_locations = list(filter(lambda loc: loc.name in fixedlocations, ootworld.get_locations()))
+    fixed_locations = filter(lambda loc: loc.name in fixedlocations, ootworld.get_locations())
     for location in fixed_locations:
         item = fixedlocations[location.name]
-        world.push_item(location, ootworld.create_item(item), collect=False)
-        location.locked = True
+        location.place_locked_item(ootworld.create_item(item))
 
-    drop_locations = list(filter(lambda loc: loc.type == 'Drop', ootworld.get_locations()))
+    drop_locations = filter(lambda loc: loc.type == 'Drop', ootworld.get_locations())
     for drop_location in drop_locations:
         item = droplocations[drop_location.name]
-        world.push_item(drop_location, ootworld.create_item(item), collect=False)
-        drop_location.locked = True
+        drop_location.place_locked_item(ootworld.create_item(item))
 
     # set up item pool
     (pool, placed_items, skip_in_spoiler_locations) = get_pool_core(ootworld)
     ootworld.itempool = [ootworld.create_item(item) for item in pool]
     for (location_name, item) in placed_items.items():
         location = world.get_location(location_name, player)
-        world.push_item(location, ootworld.create_item(item), collect=False)
-        location.locked = True
-        location.event = True  # make sure it's checked during fill
+        location.place_locked_item(ootworld.create_item(item))
         if location_name in skip_in_spoiler_locations:
             location.show_in_spoiler = False
 
@@ -1408,3 +1404,16 @@ def get_pool_core(world):
             pool.append(pending_item)
 
     return (pool, placed_items, skip_in_spoiler_locations)
+
+def add_dungeon_items(ootworld):
+    """Adds maps, compasses, small keys, boss keys, and Ganon boss key into item pool if they are not placed."""
+    skip_add_settings = {'remove', 'startwith', 'vanilla', 'on_lacs'}
+    for dungeon in ootworld.dungeons:
+        if ootworld.shuffle_mapcompass not in skip_add_settings:
+            ootworld.itempool.extend(dungeon.dungeon_items)
+        if ootworld.shuffle_smallkeys not in skip_add_settings:
+            ootworld.itempool.extend(dungeon.small_keys)
+        if dungeon.name != 'Ganons Castle' and ootworld.shuffle_bosskeys not in skip_add_settings:
+            ootworld.itempool.extend(dungeon.boss_key)
+        if dungeon.name == 'Ganons Castle' and ootworld.shuffle_ganon_bosskey not in skip_add_settings:
+            ootworld.itempool.extend(dungeon.boss_key)
