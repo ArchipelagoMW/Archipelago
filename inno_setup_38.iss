@@ -61,6 +61,7 @@ NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-mod
 
 [Files]
 Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"; Flags: external; Components: client/lttp or generator
+Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: generator
 Source: "{#sourcepath}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#sourcepath}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/lttp
 Source: "{#sourcepath}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator
@@ -186,6 +187,8 @@ end;
 var ROMFilePage: TInputFileWizardPage;
 var R : longint;
 var rom: string;
+var ootrom: string;
+var OoTROMFilePage: TInputFileWizardPage;
 var MinecraftDownloadPage: TDownloadWizardPage;
 
 procedure AddRomPage();
@@ -221,6 +224,36 @@ begin
   MinecraftDownloadPage := CreateDownloadPage(SetupMessage(msgWizardPreparing), SetupMessage(msgPreparingDesc), @OnDownloadMinecraftProgress);
 end;
 
+procedure AddOoTRomPage();
+begin
+  ootrom := FileSearch('The Legend of Zelda - Ocarina of Time.z64', WizardDirValue());
+  if Length(ootrom) > 0 then
+    begin
+      log('existing ROM found');
+      log(IntToStr(CompareStr(GetMD5OfFile(ootrom), '5bd1fe107bf8106b2ab6650abecd54d6'))); // normal
+      log(IntToStr(CompareStr(GetMD5OfFile(ootrom), '6697768a7a7df2dd27a692a2638ea90b'))); // byteswapped
+      log(IntToStr(CompareStr(GetMD5OfFile(ootrom), '05f0f3ebacbc8df9243b6148ffe4792f'))); // decompressed
+      if (CompareStr(GetMD5OfFile(ootrom), '5bd1fe107bf8106b2ab6650abecd54d6') = 0) or (CompareStr(GetMD5OfFile(ootrom), '6697768a7a7df2dd27a692a2638ea90b') = 0) or (CompareStr(GetMD5OfFile(ootrom), '05f0f3ebacbc8df9243b6148ffe4792f') = 0) then
+        begin
+        log('existing ROM verified');
+        exit;
+        end;
+      log('existing ROM failed verification');
+    end;
+  ootrom := ''
+  OoTROMFilePage :=
+    CreateInputFilePage(
+      wpSelectComponents,
+      'Select ROM File',
+      'Where is your OoT 1.0 ROM located?',
+      'Select the file, then click Next.');
+
+  OoTROMFilePage.Add(
+    'Location of ROM file:',
+    'N64 ROM files (*.z64, *.n64)|*.z64;*.n64|All files|*.*',
+    '.z64');
+end;
+
 function NextButtonClick(CurPageID: Integer): Boolean;
 begin
   if (CurPageID = wpReady) and (WizardIsComponentSelected('client/minecraft')) then begin
@@ -253,7 +286,8 @@ begin
 end;
 
 procedure InitializeWizard();
-begin
+begin                    
+  AddOoTRomPage();
   AddRomPage();
   AddMinecraftDownloads();
 end;
@@ -274,10 +308,26 @@ begin
     begin
       R := CompareStr(GetMD5OfFile(ROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
       if R <> 0 then
-        MsgBox('ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+        MsgBox('ALttP ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
   
       Result := ROMFilePage.Values[0]
     end
   else
     Result := '';
  end;
+
+function GetOoTROMPath(Param: string): string;
+begin
+  if Length(ootrom) > 0 then
+    Result := ootrom
+  else if Assigned(OoTROMFilePage) then
+    begin
+      R := CompareStr(GetMD5OfFile(OoTROMFilePage.Values[0]), '5bd1fe107bf8106b2ab6650abecd54d6') * CompareStr(GetMD5OfFile(OoTROMFilePage.Values[0]), '6697768a7a7df2dd27a692a2638ea90b') * CompareStr(GetMD5OfFile(OoTROMFilePage.Values[0]), '05f0f3ebacbc8df9243b6148ffe4792f');
+      if R <> 0 then
+        MsgBox('OoT ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+  
+      Result := OoTROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+end;
