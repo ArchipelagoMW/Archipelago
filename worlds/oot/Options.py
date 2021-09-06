@@ -237,17 +237,21 @@ class SongShuffle(Choice):
 
 
 class ShopShuffle(Choice): 
-    """Randomizes shop contents. Set to "off" to not shuffle shops; "0" shuffles shops but does not allow multiworld items in shops."""
+    """Randomizes shop contents. "fixed_number" randomizes a specific number of items per shop; 
+    "random_number" randomizes the value for each shop. """
     displayname = "Shopsanity"
-    option_0 = 0
-    option_1 = 1
-    option_2 = 2
-    option_3 = 3
-    option_4 = 4
-    option_random_value = 5
-    option_off = 6
-    default = 6
-    alias_false = 6
+    option_off = 0
+    option_fixed_number = 1
+    option_random_number = 2
+    alias_false = 0
+
+
+class ShopSlots(Range):
+    """Number of items per shop to be randomized into the main itempool. 
+    Only active if Shopsanity is set to "fixed_number." """
+    displayname = "Shuffled Shop Slots"
+    range_start = 0
+    range_end = 4
 
 
 class TokenShuffle(Choice): 
@@ -310,6 +314,7 @@ class ShuffleMedigoronCarpet(Toggle):
 shuffle_options: typing.Dict[str, type(Option)] = {
     "shuffle_song_items": SongShuffle,
     "shopsanity": ShopShuffle, 
+    "shop_slots": ShopSlots,
     "tokensanity": TokenShuffle, 
     "shuffle_scrubs": ScrubShuffle,
     "shuffle_cows": ShuffleCows, 

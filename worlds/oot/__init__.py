@@ -198,9 +198,14 @@ class OOTWorld(World):
         self.disable_trade_revert = (self.shuffle_interior_entrances != 'off') or self.shuffle_overworld_entrances
         self.shuffle_special_interior_entrances = self.shuffle_interior_entrances == 'all'
 
+        # Convert the double option used by shopsanity into a single option
+        if self.shopsanity == 'random_number':
+            self.shopsanity = 'random'
+        elif self.shopsanity == 'fixed_number':
+            self.shopsanity = str(self.shop_slots)
+
         # fixing some options
         self.starting_tod = self.starting_tod.replace('_', '-')  # Fixes starting time spelling: "witching_hour" -> "witching-hour"
-        self.shopsanity = self.shopsanity.replace('_value', '')  # can't set "random" manually
         self.shuffle_scrubs = self.shuffle_scrubs.replace('_prices', '')
 
         # Get hint distribution
@@ -465,14 +470,6 @@ class OOTWorld(World):
         # Uniquely rename drop locations for each region and erase them from the spoiler
         set_drop_location_names(self)
 
-        # Locations which are not sendable must be converted to events
-        # This includes all locations for which show_in_spoiler is false, and shuffled shop items.
-        for loc in self.get_locations():
-            if loc.address is not None and (
-                    not loc.show_in_spoiler or (loc.item is not None and loc.item.type == 'Shop')
-                    or (self.skip_child_zelda and loc.name in ['HC Zeldas Letter', 'Song from Impa'])):
-                loc.address = None
-
         # Gather items for ice trap appearances
         self.fake_items = []
         if self.ice_trap_appearance in ['major_only', 'anything']:
@@ -635,10 +632,16 @@ class OOTWorld(World):
             from .SaveContext import SaveContext
             item_to_place = self.world.random.choice(item for item in self.world.itempool if
                                                      item.player == self.player and item.name in SaveContext.giveable_items)
-            self.world.push_item(impa, item_to_place, False)
-            impa.locked = True
-            impa.event = True
+            impa.place_locked_item(item_to_place)
             self.world.itempool.remove(item_to_place)
+
+        # Locations which are not sendable must be converted to events
+        # This includes all locations for which show_in_spoiler is false, and shuffled shop items.
+        for loc in self.get_locations():
+            if loc.address is not None and (
+                    not loc.show_in_spoiler or (loc.item is not None and loc.item.type == 'Shop')
+                    or (self.skip_child_zelda and loc.name in ['HC Zeldas Letter', 'Song from Impa'])):
+                loc.address = None
 
     def generate_output(self, output_directory: str):
         if self.hints != 'none':
