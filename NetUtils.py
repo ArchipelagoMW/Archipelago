@@ -150,8 +150,8 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return "".join(self.handle_node(section) for section in input_object)
 
     def handle_node(self, node: JSONMessagePart):
-        type = node.get("type", None)
-        handler = self.handlers.get(type, self.handlers["text"])
+        node_type = node.get("type", None)
+        handler = self.handlers.get(node_type, self.handlers["text"])
         return handler(node)
 
     def _handle_color(self, node: JSONMessagePart):

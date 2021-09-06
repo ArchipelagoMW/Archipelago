@@ -1,0 +1,99 @@
+[
+    {
+        "region_name": "Shadow Temple Entryway",
+        "dungeon": "Shadow Temple",
+        "exits": {
+            "Shadow Temple Beginning": "
+                (logic_lens_shadow_mq or can_use(Lens_of_Truth)) and
+                (can_use(Hover_Boots) or can_use(Hookshot))"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Beginning",
+        "dungeon": "Shadow Temple",
+        "exits": {
+            "Shadow Temple Entryway": "True",
+            "Shadow Temple First Beamos": "can_use(Fire_Arrows) or Hover_Boots",
+            "Shadow Temple Dead Hand Area": "has_explosives and (Small_Key_Shadow_Temple, 6)"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Dead Hand Area",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple MQ Compass Chest": "True",
+            "Shadow Temple MQ Hover Boots Chest": "can_play(Song_of_Time) and Bow"
+        }
+    },
+    {
+        "region_name": "Shadow Temple First Beamos",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple MQ Map Chest": "True",
+            "Shadow Temple MQ Early Gibdos Chest": "True",
+            "Shadow Temple MQ Near Ship Invisible Chest": "True"
+        },
+        "exits": {
+            "Shadow Temple Huge Pit": "has_explosives and (Small_Key_Shadow_Temple, 2)"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Huge Pit",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple MQ Invisible Blades Visible Chest": "can_play(Song_of_Time)",
+            "Shadow Temple MQ Invisible Blades Invisible Chest": "can_play(Song_of_Time)",
+            "Shadow Temple MQ Beamos Silver Rupees Chest": "can_use(Longshot)",
+            "Shadow Temple MQ Falling Spikes Lower Chest": "True",
+            "Shadow Temple MQ Falling Spikes Upper Chest": "Progressive_Strength_Upgrade",
+            "Shadow Temple MQ Falling Spikes Switch Chest": "Progressive_Strength_Upgrade",
+            "Shadow Temple MQ Invisible Spikes Chest": "Hover_Boots and (Small_Key_Shadow_Temple, 3)",
+            "Shadow Temple MQ Stalfos Room Chest": "
+                Hover_Boots and (Small_Key_Shadow_Temple, 3) and Progressive_Hookshot",
+            "Shadow Temple MQ GS Falling Spikes Room": "Progressive_Hookshot"
+        },
+        "exits": {
+            "Shadow Temple Wind Tunnel": "
+                Hover_Boots and Progressive_Hookshot and (Small_Key_Shadow_Temple, 4)"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Wind Tunnel",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple MQ Wind Hint Chest": "True",
+            "Shadow Temple MQ After Wind Enemy Chest": "True",
+            "Shadow Temple MQ After Wind Hidden Chest": "True",
+            "Shadow Temple MQ GS Wind Hint Room": "True",
+            "Shadow Temple MQ GS After Wind": "True"
+        },
+        "exits": {
+            "Shadow Temple Beyond Boat": "
+                can_play(Zeldas_Lullaby) and (Small_Key_Shadow_Temple, 5)"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Beyond Boat",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple Bongo Bongo Heart": "Bow and Boss_Key_Shadow_Temple",
+            "Bongo Bongo": "Bow and Boss_Key_Shadow_Temple",
+            "Shadow Temple MQ GS After Ship": "True",
+            "Shadow Temple MQ GS Near Boss": "Bow"
+        },
+        "exits": {
+            "Shadow Temple Invisible Maze": "
+                Bow and can_play(Song_of_Time) and can_use(Longshot)"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Invisible Maze",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple MQ Spike Walls Left Chest": "(Small_Key_Shadow_Temple, 6)",
+            "Shadow Temple MQ Boss Key Chest": "(Small_Key_Shadow_Temple, 6)",
+            "Shadow Temple MQ Bomb Flower Chest": "True",
+            "Shadow Temple MQ Freestanding Key": "True"
+        }
+    }
+]

@@ -82,7 +82,6 @@ def page_not_found(err):
     return render_template('404.html'), 404
 
 
-
 # Player settings pages
 @app.route('/games/<string:game>/player-settings')
 def player_settings(game):
@@ -176,9 +175,11 @@ def hostRoom(room: UUID):
 
     return render_template("hostRoom.html", room=room)
 
+
 @app.route('/hosted/<suuid:room>', methods=['GET', 'POST'])
 def hostRoomRedirect(room: UUID):
     return redirect(url_for("hostRoom", room=room))
+
 
 @app.route('/favicon.ico')
 def favicon():

@@ -162,6 +162,9 @@ if signtool:
         os.system(signtool + os.path.join(buildfolder, exe.target_name))
     print(f"Signing SNI")
     os.system(signtool + os.path.join(buildfolder, "SNI", "SNI.exe"))
+    print(f"Signing OoT Utils")
+    for exe_path in (("Compress", "Compress.exe"), ("Decompress", "Decompress.exe")):
+        os.system(signtool + os.path.join(buildfolder, "lib", "worlds", "oot", "data", *exe_path))
 
 remove_sprites_from_folder(buildfolder / "data" / "sprites" / "alttpr")
 

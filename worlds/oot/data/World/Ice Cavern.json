@@ -1,0 +1,35 @@
+[
+    {
+        "region_name": "Ice Cavern Beginning",
+        "dungeon": "Ice Cavern",
+        "exits": {
+            "ZF Ice Ledge": "True",
+            #Frezzards are weird, they are immune to KS completely. Leave sticks out as 8/10 is a lot
+            "Ice Cavern": "here(is_adult or has_explosives or can_use(Dins_Fire))"
+        }
+    },
+    {
+        "region_name": "Ice Cavern",
+        "dungeon": "Ice Cavern",
+        "locations": {
+            "Ice Cavern Map Chest": "Blue_Fire and is_adult",
+            "Ice Cavern Compass Chest": "Blue_Fire",
+            "Ice Cavern Iron Boots Chest": "
+                Blue_Fire and 
+                (is_adult or Slingshot or Sticks or 
+                    Kokiri_Sword or can_use(Dins_Fire))",
+            "Sheik in Ice Cavern": "
+                Blue_Fire and 
+                (is_adult or Slingshot or Sticks or 
+                    Kokiri_Sword or can_use(Dins_Fire))",
+            "Ice Cavern Freestanding PoH": "Blue_Fire",
+            "Ice Cavern GS Spinning Scythe Room": "can_use(Hookshot) or can_use(Boomerang)",
+            "Ice Cavern GS Heart Piece Room": "
+                Blue_Fire and (can_use(Hookshot) or can_use(Boomerang))",
+            "Ice Cavern GS Push Block Room": "
+                Blue_Fire and (can_use(Hookshot) or can_use(Boomerang) or
+                    (logic_ice_block_gs and can_use(Hover_Boots)))",
+            "Blue Fire": "is_adult and has_bottle"
+        }
+    }
+]

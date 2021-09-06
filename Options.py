@@ -150,7 +150,9 @@ class Choice(Option):
         return cls.from_text(str(data))
 
     def __eq__(self, other):
-        if isinstance(other, str):
+        if isinstance(other, self.__class__):
+            return other.value == self.value
+        elif isinstance(other, str):
             assert other in self.options
             return other == self.current_key
         elif isinstance(other, int):
@@ -162,7 +164,9 @@ class Choice(Option):
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
     def __ne__(self, other):
-        if isinstance(other,  str):
+        if isinstance(other, self.__class__):
+            return other.value != self.value
+        elif isinstance(other, str):
             assert other in self.options
             return other != self.current_key
         elif isinstance(other, int):
@@ -243,6 +247,27 @@ class OptionDict(Option):
 
     def get_option_name(self, value):
         return str(value)
+
+
+class OptionList(Option): 
+    default = []
+
+    def __init__(self, value: typing.List[str, typing.Any]):
+        self.value = value
+
+    @classmethod
+    def from_text(cls, text: str):
+        return cls([option.strip() for option in text.split(",")])
+
+    @classmethod
+    def from_any(cls, data: typing.Any):
+        if type(data) == list:
+            return cls(data)
+        return cls.from_text(str(data))
+
+    def get_option_name(self, value):
+        return str(value)
+
 
 
 local_objective = Toggle  # local triforce pieces, local dungeon prizes etc.
