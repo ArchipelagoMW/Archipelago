@@ -9,7 +9,7 @@ from .Location import OOTLocation, LocationFactory, location_name_to_id
 from .Entrance import OOTEntrance
 from .EntranceShuffle import shuffle_random_entrances
 from .Items import OOTItem, item_table, oot_data_to_ap_id
-from .ItemPool import generate_itempool, get_junk_item, get_junk_pool
+from .ItemPool import generate_itempool, add_dungeon_items, get_junk_item, get_junk_pool
 from .Regions import OOTRegion, TimeOfDay
 from .Rules import set_rules, set_shop_rules, set_entrances_based_rules
 from .RuleParser import Rule_AST_Transformer
@@ -370,10 +370,8 @@ class OOTWorld(World):
         boss_locations = [self.world.get_location(loc, self.player) for loc in boss_location_names]
 
         placed_prizes = [loc.item.name for loc in boss_locations if loc.item is not None]
-        unplaced_prizes = [item for item in boss_rewards if item.name not in placed_prizes]
-        empty_boss_locations = [loc for loc in boss_locations if loc.item is None]
-        prizepool = list(unplaced_prizes)
-        prize_locs = list(empty_boss_locations)
+        prizepool = [item for item in boss_rewards if item.name not in placed_prizes]
+        prize_locs = [loc for loc in boss_locations if loc.item is None]
 
         while bossCount:
             bossCount -= 1
@@ -428,12 +426,10 @@ class OOTWorld(World):
         if self.entrance_shuffle:
             shuffle_random_entrances(self)
 
-    def set_rules(self):
-        set_rules(self)
-
-    def generate_basic(self):  # generate item pools, place fixed items
+    def create_items(self):
         # Generate itempool
         generate_itempool(self)
+        add_dungeon_items(self)
         junk_pool = get_junk_pool(self)
         # Determine starting items
         for item in self.world.precollected_items:
@@ -455,140 +451,19 @@ class OOTWorld(World):
         if self.start_with_rupees:
             self.starting_items['Rupees'] = 999
 
-        # Uniquely rename drop locations for each region and erase them from the spoiler
-        set_drop_location_names(self)
+        self.world.itempool += self.itempool
 
-        # Fill boss prizes
-        self.fill_bosses()
-
-        # relevant for both dungeon item fill and song fill
-        dungeon_song_locations = [
-            "Deku Tree Queen Gohma Heart",
-            "Dodongos Cavern King Dodongo Heart",
-            "Jabu Jabus Belly Barinade Heart",
-            "Forest Temple Phantom Ganon Heart",
-            "Fire Temple Volvagia Heart",
-            "Water Temple Morpha Heart",
-            "Shadow Temple Bongo Bongo Heart",
-            "Spirit Temple Twinrova Heart",
-            "Song from Impa",
-            "Sheik in Ice Cavern",
-            "Bottom of the Well Lens of Truth Chest", "Bottom of the Well MQ Lens of Truth Chest", # only one exists
-            "Gerudo Training Grounds Maze Path Final Chest", "Gerudo Training Grounds MQ Ice Arrows Chest", # only one exists
-        ]
-
-        # Place/set rules for dungeon items
-        itempools = {
-            'dungeon': [],
-            'overworld': [],
-            'any_dungeon': [],
-            'keysanity': [],
-        }
-        any_dungeon_locations = []
-        for dungeon in self.dungeons:
-            itempools['dungeon'] = []
-            # Put the dungeon items into their appropriate pools.
-            # Build in reverse order since we need to fill boss key first and pop() returns the last element
-            if self.shuffle_mapcompass in itempools:
-                itempools[self.shuffle_mapcompass].extend(dungeon.dungeon_items)
-            if self.shuffle_smallkeys in itempools:
-                itempools[self.shuffle_smallkeys].extend(dungeon.small_keys)
-            shufflebk = self.shuffle_bosskeys if dungeon.name != 'Ganons Castle' else self.shuffle_ganon_bosskey
-            if shufflebk in itempools:
-                itempools[shufflebk].extend(dungeon.boss_key)
-
-            # We can't put a dungeon item on the end of a dungeon if a song is supposed to go there. Make sure not to include it. 
-            dungeon_locations = [loc for region in dungeon.regions for loc in region.locations
-                                 if loc.item is None and (
-                                             self.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations)]
-            if itempools['dungeon']:  # only do this if there's anything to shuffle
-                self.world.random.shuffle(dungeon_locations)
-                fill_restrictive(self.world, self.state_with_items(self.itempool), dungeon_locations,
-                                 itempools['dungeon'], True, True)
-            any_dungeon_locations.extend(dungeon_locations)  # adds only the unfilled locations
-
-        # Now fill items that can go into any dungeon. Retrieve the Gerudo Fortress keys from the pool if necessary
-        if self.shuffle_fortresskeys == 'any_dungeon':
-            fortresskeys = list(
-                filter(lambda item: item.player == self.player and item.type == 'FortressSmallKey', self.itempool))
-            itempools['any_dungeon'].extend(fortresskeys)
-            for key in fortresskeys:
-                self.itempool.remove(key)
-        if itempools['any_dungeon']:
-            itempools['any_dungeon'].sort(
-                key=lambda item: {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'FortressSmallKey': 1}.get(item.type,
-                                                                                                             0))
-            self.world.random.shuffle(any_dungeon_locations)
-            fill_restrictive(self.world, self.state_with_items(self.itempool), any_dungeon_locations,
-                             itempools['any_dungeon'], True, True)
-
-        # If anything is overworld-only, enforce them as local and not in the remaining dungeon locations
-        if itempools['overworld'] or self.shuffle_fortresskeys == 'overworld':
-            from worlds.generic.Rules import forbid_items_for_player
-            fortresskeys = {'Small Key (Gerudo Fortress)'} if self.shuffle_fortresskeys == 'overworld' else set()
-            local_overworld_items = set(map(lambda item: item.name, itempools['overworld'])).union(fortresskeys)
-            for location in self.world.get_locations():
-                if location.player != self.player or location in any_dungeon_locations:
-                    forbid_items_for_player(location, local_overworld_items, self.player)
-            self.itempool.extend(itempools['overworld'])
-
-        # Dump keysanity items into the itempool
-        self.itempool.extend(itempools['keysanity'])
-
-        # Now that keys are in the pool, we can forbid tunics from child-only shops 
+    def set_rules(self):
+        set_rules(self)
         set_entrances_based_rules(self)
 
-        # Place songs
-        # 5 built-in retries because this section can fail sometimes
-        if self.shuffle_song_items != 'any':
-            tries = 5
-            if self.shuffle_song_items == 'song':
-                song_locations = list(filter(lambda location: location.type == 'Song',
-                                             self.world.get_unfilled_locations(player=self.player)))
-            elif self.shuffle_song_items == 'dungeon':
-                song_locations = list(filter(lambda location: location.name in dungeon_song_locations,
-                                             self.world.get_unfilled_locations(player=self.player)))
-            else:
-                raise Exception(f"Unknown song shuffle type: {self.shuffle_song_items}")
+    def generate_basic(self):  # mostly killing locations that shouldn't exist by settings
 
-            songs = list(filter(lambda item: item.player == self.player and item.type == 'Song', self.itempool))
-            for song in songs:
-                self.itempool.remove(song)
-            while tries:
-                try:
-                    self.world.random.shuffle(songs)  # shuffling songs makes it less likely to fail by placing ZL last
-                    self.world.random.shuffle(song_locations)
-                    fill_restrictive(self.world, self.state_with_items(self.itempool), song_locations[:], songs[:],
-                                     True, True)
-                    logger.debug(f"Successfully placed songs for player {self.player} after {6 - tries} attempt(s)")
-                    tries = 0
-                except FillError as e:
-                    tries -= 1
-                    if tries == 0:
-                        raise e
-                    logger.debug(f"Failed placing songs for player {self.player}. Retries left: {tries}")
-                    # undo what was done
-                    for song in songs:
-                        song.location = None
-                        song.world = None
-                    for location in song_locations:
-                        location.item = None
-                        location.locked = False
-                        location.event = False
+        # Fill boss prizes. needs to happen before killing unreachable locations
+        self.fill_bosses()
 
-        # Place shop items
-        # fast fill will fail because there is some logic on the shop items. we'll gather them up and place the shop items
-        if self.shopsanity != 'off':
-            shop_items = list(filter(lambda item: item.player == self.player and item.type == 'Shop', self.itempool))
-            shop_locations = list(
-                filter(lambda location: location.type == 'Shop' and location.name not in self.shop_prices,
-                       self.world.get_unfilled_locations(player=self.player)))
-            shop_items.sort(key=lambda item: 1 if item.name in ["Buy Goron Tunic", "Buy Zora Tunic"] else 0)
-            self.world.random.shuffle(shop_locations)
-            for item in shop_items:
-                self.itempool.remove(item)
-            fill_restrictive(self.world, self.state_with_items(self.itempool), shop_locations, shop_items, True, True)
-        set_shop_rules(self)
+        # Uniquely rename drop locations for each region and erase them from the spoiler
+        set_drop_location_names(self)
 
         # Locations which are not sendable must be converted to events
         # This includes all locations for which show_in_spoiler is false, and shuffled shop items.
@@ -601,18 +476,15 @@ class OOTWorld(World):
         # Gather items for ice trap appearances
         self.fake_items = []
         if self.ice_trap_appearance in ['major_only', 'anything']:
-            self.fake_items.extend([item for item in self.itempool if item.index and self.is_major_item(item)])
+            self.fake_items.extend(item for item in self.itempool if item.index and self.is_major_item(item))
         if self.ice_trap_appearance in ['junk_only', 'anything']:
-            self.fake_items.extend([item for item in self.itempool if
-                                    item.index and not self.is_major_item(item) and item.name != 'Ice Trap'])
-
-        # Put all remaining items into the general itempool
-        self.world.itempool += self.itempool
+            self.fake_items.extend(item for item in self.itempool if
+                                   item.index and not self.is_major_item(item) and item.name != 'Ice Trap')
 
         # Kill unreachable events that can't be gotten even with all items
         # Make sure to only kill actual internal events, not in-game "events"
-        all_state = self.state_with_items(self.itempool)
-        all_locations = [loc for loc in self.world.get_locations() if loc.player == self.player]
+        all_state = self.world.get_all_state(False)
+        all_locations = self.get_locations()
         reachable = self.world.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
                        loc.internal and loc.event and loc.locked and loc not in reachable]
@@ -635,13 +507,134 @@ class OOTWorld(World):
             loc.parent_region.locations.remove(loc)
 
     def pre_fill(self):
+
+        # relevant for both dungeon item fill and song fill
+        dungeon_song_locations = [
+            "Deku Tree Queen Gohma Heart",
+            "Dodongos Cavern King Dodongo Heart",
+            "Jabu Jabus Belly Barinade Heart",
+            "Forest Temple Phantom Ganon Heart",
+            "Fire Temple Volvagia Heart",
+            "Water Temple Morpha Heart",
+            "Shadow Temple Bongo Bongo Heart",
+            "Spirit Temple Twinrova Heart",
+            "Song from Impa",
+            "Sheik in Ice Cavern",
+            "Bottom of the Well Lens of Truth Chest", "Bottom of the Well MQ Lens of Truth Chest", # only one exists
+            "Gerudo Training Grounds Maze Path Final Chest", "Gerudo Training Grounds MQ Ice Arrows Chest", # only one exists
+        ]
+
+        # Place/set rules for dungeon items
+        itempools = {
+            'dungeon': [],
+            'overworld': [],
+            'any_dungeon': [],
+        }
+        any_dungeon_locations = []
+        for dungeon in self.dungeons:
+            itempools['dungeon'] = []
+            # Put the dungeon items into their appropriate pools.
+            # Build in reverse order since we need to fill boss key first and pop() returns the last element
+            if self.shuffle_mapcompass in itempools:
+                itempools[self.shuffle_mapcompass].extend(dungeon.dungeon_items)
+            if self.shuffle_smallkeys in itempools:
+                itempools[self.shuffle_smallkeys].extend(dungeon.small_keys)
+            shufflebk = self.shuffle_bosskeys if dungeon.name != 'Ganons Castle' else self.shuffle_ganon_bosskey
+            if shufflebk in itempools:
+                itempools[shufflebk].extend(dungeon.boss_key)
+
+            # We can't put a dungeon item on the end of a dungeon if a song is supposed to go there. Make sure not to include it. 
+            dungeon_locations = [loc for region in dungeon.regions for loc in region.locations
+                                 if loc.item is None and (
+                                             self.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations)]
+            if itempools['dungeon']:  # only do this if there's anything to shuffle
+                for item in itempools['dungeon']:
+                    self.world.itempool.remove(item)
+                self.world.random.shuffle(dungeon_locations)
+                fill_restrictive(self.world, self.world.get_all_state(False), dungeon_locations,
+                                 itempools['dungeon'], True, True)
+            any_dungeon_locations.extend(dungeon_locations)  # adds only the unfilled locations
+
+        # Now fill items that can go into any dungeon. Retrieve the Gerudo Fortress keys from the pool if necessary
+        if self.shuffle_fortresskeys == 'any_dungeon':
+            fortresskeys = filter(lambda item: item.player == self.player and item.type == 'FortressSmallKey', self.world.itempool)
+            itempools['any_dungeon'].extend(fortresskeys)
+        if itempools['any_dungeon']:
+            for item in itempools['any_dungeon']:
+                self.world.itempool.remove(item)
+            itempools['any_dungeon'].sort(key=lambda item: 
+                {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'FortressSmallKey': 1}.get(item.type, 0))
+            self.world.random.shuffle(any_dungeon_locations)
+            fill_restrictive(self.world, self.world.get_all_state(False), any_dungeon_locations,
+                             itempools['any_dungeon'], True, True)
+
+        # If anything is overworld-only, enforce them as local and not in the remaining dungeon locations
+        if itempools['overworld'] or self.shuffle_fortresskeys == 'overworld':
+            from worlds.generic.Rules import forbid_items_for_player
+            fortresskeys = {'Small Key (Gerudo Fortress)'} if self.shuffle_fortresskeys == 'overworld' else set()
+            local_overworld_items = set(map(lambda item: item.name, itempools['overworld'])).union(fortresskeys)
+            for location in self.world.get_locations():
+                if location.player != self.player or location in any_dungeon_locations:
+                    forbid_items_for_player(location, local_overworld_items, self.player)
+
+        # Place songs
+        # 5 built-in retries because this section can fail sometimes
+        if self.shuffle_song_items != 'any':
+            tries = 5
+            if self.shuffle_song_items == 'song':
+                song_locations = list(filter(lambda location: location.type == 'Song',
+                                             self.world.get_unfilled_locations(player=self.player)))
+            elif self.shuffle_song_items == 'dungeon':
+                song_locations = list(filter(lambda location: location.name in dungeon_song_locations,
+                                             self.world.get_unfilled_locations(player=self.player)))
+            else:
+                raise Exception(f"Unknown song shuffle type: {self.shuffle_song_items}")
+
+            songs = list(filter(lambda item: item.player == self.player and item.type == 'Song', self.world.itempool))
+            for song in songs:
+                self.world.itempool.remove(song)
+            while tries:
+                try:
+                    self.world.random.shuffle(songs)  # shuffling songs makes it less likely to fail by placing ZL last
+                    self.world.random.shuffle(song_locations)
+                    fill_restrictive(self.world, self.world.get_all_state(False), song_locations[:], songs[:],
+                                     True, True)
+                    logger.debug(f"Successfully placed songs for player {self.player} after {6 - tries} attempt(s)")
+                    tries = 0
+                except FillError as e:
+                    tries -= 1
+                    if tries == 0:
+                        raise e
+                    logger.debug(f"Failed placing songs for player {self.player}. Retries left: {tries}")
+                    # undo what was done
+                    for song in songs:
+                        song.location = None
+                        song.world = None
+                    for location in song_locations:
+                        location.item = None
+                        location.locked = False
+                        location.event = False
+
+        # Place shop items
+        # fast fill will fail because there is some logic on the shop items. we'll gather them up and place the shop items
+        if self.shopsanity != 'off':
+            shop_items = list(filter(lambda item: item.player == self.player and item.type == 'Shop', self.world.itempool))
+            shop_locations = list(
+                filter(lambda location: location.type == 'Shop' and location.name not in self.shop_prices,
+                       self.world.get_unfilled_locations(player=self.player)))
+            shop_items.sort(key=lambda item: 1 if item.name in {"Buy Goron Tunic", "Buy Zora Tunic"} else 0)
+            self.world.random.shuffle(shop_locations)
+            for item in shop_items:
+                self.world.itempool.remove(item)
+            fill_restrictive(self.world, self.world.get_all_state(False), shop_locations, shop_items, True, True)
+        set_shop_rules(self)  # sets wallet requirements on shop items, must be done after they are filled
+
         # If skip child zelda is active and Song from Impa is unfilled, put a local giveable item into it.
         impa = self.world.get_location("Song from Impa", self.player)
         if self.skip_child_zelda and impa.item is None:
             from .SaveContext import SaveContext
-            item_to_place = self.world.random.choice([item for item in self.world.itempool
-                                                      if
-                                                      item.player == self.player and item.name in SaveContext.giveable_items])
+            item_to_place = self.world.random.choice(item for item in self.world.itempool if
+                                                     item.player == self.player and item.name in SaveContext.giveable_items)
             self.world.push_item(impa, item_to_place, False)
             impa.locked = True
             impa.event = True
@@ -710,24 +703,18 @@ class OOTWorld(World):
 
     # Helper functions
     def get_shuffled_entrances(self):
-        return []
+        return []  # later this will return all entrances modified by ER. patching process needs it now though
 
-    # make this a generator later?
     def get_locations(self):
-        return [loc for region in self.regions for loc in region.locations]
+        for region in self.regions:
+            for loc in region.locations:
+                yield loc
 
     def get_location(self, location):
         return self.world.get_location(location, self.player)
 
     def get_region(self, region):
         return self.world.get_region(region, self.player)
-
-    def state_with_items(self, items):
-        ret = CollectionState(self.world)
-        for item in items:
-            self.collect(ret, item)
-        ret.sweep_for_events()
-        return ret
 
     def is_major_item(self, item: OOTItem):
         if item.type == 'Token':
