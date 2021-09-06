@@ -29,8 +29,9 @@ game: # Pick a game to play
   Minecraft: 0
   Subnautica: 0
   Slay the Spire: 0
+  Ocarina of Time: 0
 requires:
-  version: 0.1.6 # Version of Archipelago required for this yaml to work as expected.
+  version: 0.1.7 # Version of Archipelago required for this yaml to work as expected.
 # Shared Options supported by all games:
 accessibility:
   items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
@@ -836,14 +837,17 @@ Ocarina of Time:
     song: 50
     dungeon: 0
     any: 0
-  shopsanity: # Randomizes shop contents. Set to "off" to not shuffle shops; "0" shuffles shops but does not allow multiworld items in shops.
+  shopsanity: # Randomizes shop contents. "fixed_number" randomizes a specific number of items per shop; "random_number" randomizes the value for each shop.
     off: 50
-    "0": 0
-    "1": 0
-    "2": 0
-    "3": 0
-    "4": 0
-    random_value: 0
+    fixed_number: 0
+    random_number: 0
+  shop_slots: # Number of items per shop to be randomized into the main itempool. Only active if Shopsanity is set to "fixed_number."
+    # you can add additional values between minimum and maximum
+    0: 0 # minimum value
+    4: 0 # maximum value
+    random: 50
+    random-low: 0
+    random-high: 0
   tokensanity: # Token rewards from Gold Skulltulas are shuffled into the pool.
     off: 50
     dungeons: 0
@@ -1283,7 +1287,7 @@ Ocarina of Time:
     harp: 0
     grind_organ: 0
     flute: 0
-  logic_tricks:
+  logic_tricks: # Add logic tricks keyed by "nice" name, e.g. "Hidden Grottos without Stone of Agony"
     []
 
 # meta_ignore, linked_options and triggers work for any game
