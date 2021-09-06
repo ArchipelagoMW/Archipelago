@@ -175,8 +175,8 @@ class LacsTokens(Range):
     """Set the number of Gold Skulltula Tokens required for LACS."""
     displayname = "Tokens Required for LACS"
     range_start = 0
-    range_end = 100
-    default = 100
+    range_end = 40
+    default = 40
 
 
 lacs_options: typing.Dict[str, type(Option)] = {
@@ -216,8 +216,8 @@ class BridgeTokens(Range):
     """Set the number of Gold Skulltula Tokens required for the rainbow bridge."""
     displayname = "Tokens Required for Bridge"
     range_start = 0
-    range_end = 100
-    default = 100
+    range_end = 40
+    default = 40
 
 
 bridge_options: typing.Dict[str, type(Option)] = {
