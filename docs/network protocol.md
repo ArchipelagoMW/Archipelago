@@ -229,7 +229,7 @@ Requests the data package from the server. Does not require client authenticatio
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| exlusions | list[str]  | Optional. If specified, will not send back the specified data. Such as, ["Factorio"] -> Datapackage without Factorio data.|
+| exlcusions | list[str]  | Optional. If specified, will not send back the specified data. Such as, ["Factorio"] -> Datapackage without Factorio data.|
 
 ### Bounce
 Send this message to the server, tell it which clients should receive the message and 
