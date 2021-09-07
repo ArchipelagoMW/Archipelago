@@ -77,6 +77,8 @@ scripts = {
     # LttP
     "LttPClient.py": ("ArchipelagoLttPClient", True, icon),
     "LttPAdjuster.py": ("ArchipelagoLttPAdjuster", True, icon),
+    # SM
+    "SmClient.py": ("ArchipelagoSmClient", True, icon),
     # Factorio
     "FactorioClient.py": ("ArchipelagoFactorioClient", True, icon),
     # Minecraft
