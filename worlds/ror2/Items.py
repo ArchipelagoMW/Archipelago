@@ -2,7 +2,7 @@ from BaseClasses import Item
 import typing
 
 
-class RiskOfRainItem(Item):
+class RiskOfRain2Item(Item):
     game: str = "Risk of Rain 2"
 
 # 37000 - 38000
