@@ -30,10 +30,10 @@ pushpc
 ;    jsl nmi_read_messages : nop
 
 ; Add custom PLM that can asynchronously load in items
-org $84efe0
-    dw i_visible_item_setup, v_item       ;efe0
-    dw i_visible_item_setup, c_item       ;efe4
-    dw i_hidden_item_setup,  h_item       ;efe8
+org $84f870                               ; lordlou had to move this from original place ($84efe0) since it conflicts with VariaRandomizer's beam_doors_plms patch
+    dw i_visible_item_setup, v_item       ;f870
+    dw i_visible_item_setup, c_item       ;f874
+    dw i_hidden_item_setup,  h_item       ;f878
 
 v_item:
     dw !IVisibleItem
