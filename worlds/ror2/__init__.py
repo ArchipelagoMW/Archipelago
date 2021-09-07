@@ -1,10 +1,10 @@
 import string
-from .Items import RiskOfRainItem, item_table, junk_weights
+from .Items import RiskOfRain2Item, item_table, junk_weights
 from .Locations import location_table, RiskOfRainLocation, base_location_table
 from .Rules import set_rules
 
 from BaseClasses import Region, Entrance, Item, MultiWorld
-from .Options import ror2_options
+from .Options import ror2_options, ror2_weights
 from ..AutoWorld import World
 
 client_version = 1
@@ -31,15 +31,29 @@ class RiskOfRainWorld(World):
         if self.world.start_with_revive[self.player].value:
             self.world.push_precollected(self.world.create_item("Dio's Best Friend", self.player))
 
+        junk_pool ={
+                "Item Scrap, Green": self.world.green_scrap[self.player].value,
+                "Item Scrap, Red": self.world.red_scrap[self.player].value,
+                "Item Scrap, Yellow": self.world.yellow_scrap[self.player].value,
+                "Item Scrap, White": self.world.white_scrap[self.player].value,
+                "Common Item": self.world.common_item[self.player].value,
+                "Uncommon Item": self.world.uncommon_item[self.player].value,
+                "Legendary Item": self.world.legendary_item[self.player].value,
+                "Boss Item": self.world.boss_item[self.player].value,
+                "Lunar Item": self.world.lunar_item[self.player].value,
+                "Equipment": self.world.equipment[self.player].value
+            }
+
+
         # Generate item pool
         itempool = []
-        junk_pool = junk_weights.copy()
 
         # Add revive items for the player
         itempool += ["Dio's Best Friend"] * self.world.total_revivals[self.player]
 
         if not self.world.enable_lunar[self.player]:
             junk_pool.pop("Lunar Item")
+
 
         # Fill remaining items with randomly generated junk
         itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
@@ -68,7 +82,7 @@ class RiskOfRainWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
-        item = RiskOfRainItem(name, True, item_id, self.player)
+        item = RiskOfRain2Item(name, True, item_id, self.player)
         return item
 
 
@@ -81,12 +95,12 @@ def create_regions(world, player: int):
     ]
 
     world.get_entrance("Lobby", player).connect(world.get_region("Petrichor V", player))
-    world.get_location("Level One", player).place_locked_item(RiskOfRainItem("Beat Level One", True, None, player))
-    world.get_location("Level Two", player).place_locked_item(RiskOfRainItem("Beat Level Two", True, None, player))
-    world.get_location("Level Three", player).place_locked_item(RiskOfRainItem("Beat Level Three", True, None, player))
-    world.get_location("Level Four", player).place_locked_item(RiskOfRainItem("Beat Level Four", True, None, player))
-    world.get_location("Level Five", player).place_locked_item(RiskOfRainItem("Beat Level Five", True, None, player))
-    world.get_location("Victory", player).place_locked_item(RiskOfRainItem("Victory", True, None, player))
+    world.get_location("Level One", player).place_locked_item(RiskOfRain2Item("Beat Level One", True, None, player))
+    world.get_location("Level Two", player).place_locked_item(RiskOfRain2Item("Beat Level Two", True, None, player))
+    world.get_location("Level Three", player).place_locked_item(RiskOfRain2Item("Beat Level Three", True, None, player))
+    world.get_location("Level Four", player).place_locked_item(RiskOfRain2Item("Beat Level Four", True, None, player))
+    world.get_location("Level Five", player).place_locked_item(RiskOfRain2Item("Beat Level Five", True, None, player))
+    world.get_location("Victory", player).place_locked_item(RiskOfRain2Item("Victory", True, None, player))
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
