@@ -14,6 +14,8 @@ from .Options import sm_options
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
 from ..AutoWorld import World
+import Patch
+import Utils
 
 from logic.smboolmanager import SMBoolManager
 from rom.rompatcher import RomPatcher
@@ -24,6 +26,7 @@ from rando.Items import ItemManager
 from utils.parameters import *
 from logic.logic import Logic
 from randomizer import VariaRandomizer
+
 
 from Utils import output_path
 from shutil import copy2
@@ -181,6 +184,9 @@ class SMWorld(World):
         outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
         self.variaRando.PatchRom(outputFilename, self.APPatchRom)
 
+        Patch.create_patch_file(outputFilename, player=self.player, player_name=self.world.player_name[self.player], game=Patch.GAME_SM)
+        os.unlink(outputFilename)
+
         pass
 
 
@@ -201,14 +207,6 @@ class SMWorld(World):
         if world.get_game_players("Super Metroid"):
             progitempool.sort(
                 key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
-
-def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
-    if not file_name:
-        file_name = options["lttp_options"]["rom_file"]
-    if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
-    return file_name
 
 def create_locations(self, player: int):
     for name, id in locations_lookup_name_to_id.items():

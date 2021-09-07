@@ -4,14 +4,16 @@ from utils.parameters import Knows, Settings, Controller, isKnows, isSettings, i
 from utils.parameters import easy, medium, hard, harder, hardcore, mania
 from logic.smbool import SMBool
 
+from Utils import is_frozen
+
 def isStdPreset(preset):
     return preset in ['newbie', 'casual', 'regular', 'veteran', 'expert', 'master', 'samus', 'solution', 'Season_Races', 'SMRAT2021']
 
 def getPresetDir(preset):
     if isStdPreset(preset):
-        return 'worlds/sm/variaRandomizer/standard_presets'
+        return 'lib/worlds/sm/variaRandomizer/standard_presets' if is_frozen() else 'worlds/sm/variaRandomizer/standard_presets'
     else:
-        return 'worlds/sm/variaRandomizer/community_presets'
+        return 'lib/worlds/sm/variaRandomizer/community_presets' if is_frozen() else 'worlds/sm/variaRandomizer/community_presets'
 
 def removeChars(string, toRemove):
     return re.sub('[{}]+'.format(toRemove), '', string)

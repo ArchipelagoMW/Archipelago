@@ -2,15 +2,16 @@ import os, importlib
 from logic.logic import Logic
 from patches.common.patches import patches, additional_PLMs
 from utils.parameters import appDir
+from Utils import is_frozen
 
 class PatchAccess(object):
     def __init__(self):
         # load all ips patches
         self.patchesPath = {}
-        commonDir = os.path.join(appDir, 'worlds/sm/variaRandomizer/patches/common/ips/')
+        commonDir = os.path.join(appDir, 'lib' if is_frozen() else '', 'worlds/sm/variaRandomizer/patches/common/ips/')
         for patch in os.listdir(commonDir):
             self.patchesPath[patch] = commonDir
-        logicDir = os.path.join(appDir, 'worlds/sm/variaRandomizer/patches/{}/ips/'.format(Logic.patches))
+        logicDir = os.path.join(appDir, 'lib' if is_frozen() else '', 'worlds/sm/variaRandomizer/patches/{}/ips/'.format(Logic.patches))
         for patch in os.listdir(logicDir):
             self.patchesPath[patch] = logicDir
 
