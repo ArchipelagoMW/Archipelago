@@ -506,6 +506,7 @@ class HintDistribution(Choice):
     option_tournament = 6
     option_useless = 7
     option_very_strong = 8
+    option_async = 9
 
 
 class TextShuffle(Choice): 
