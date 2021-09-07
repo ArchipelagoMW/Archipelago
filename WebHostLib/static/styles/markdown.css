@@ -118,3 +118,21 @@
     width: 100%;
     text-align: right;
 }
+
+.markdown table{
+    border-collapse: collapse;
+    margin-bottom: 0.5rem;
+}
+
+.markdown table th{
+    text-align: left;
+    font-weight: bold;
+    border: 1px solid #eeffeb;
+    padding: 0.25rem;
+}
+
+.markdown table td{
+    text-align: left;
+    border: 1px solid #eeffeb;
+    padding: 0.25rem;
+}
