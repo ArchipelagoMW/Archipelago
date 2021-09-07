@@ -1257,7 +1257,7 @@ def hintExclusions(world, clear_cache=False):
     world.hint_exclusions = []
 
     for location in world.get_locations():
-        if location.locked or location.excluded:
+        if (location.locked and (location.item.type != 'Song' or world.shuffle_song_items != 'song')) or location.excluded:
             world.hint_exclusions.append(location.name)
 
     world_location_names = [
