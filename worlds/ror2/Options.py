@@ -1,5 +1,5 @@
 import typing
-from Options import Option, DefaultOnToggle, Range, OptionList
+from Options import Option, DefaultOnToggle, Range, Choice
 
 
 class TotalLocations(Range):
@@ -7,7 +7,7 @@ class TotalLocations(Range):
     displayname = "Total Locations"
     range_start = 10
     range_end = 50
-    default = 15
+    default = 20
 
 
 class TotalRevivals(Range):
@@ -25,7 +25,7 @@ class ItemPickupStep(Range):
     displayname = "Item Pickup Step"
     range_start = 0
     range_end = 5
-    default = 1
+    default = 2
 
 
 class AllowLunarItems(DefaultOnToggle):
@@ -43,7 +43,7 @@ class GreenScrap(Range):
     displayname = "Green Scraps"
     range_start = 0
     range_end = 100
-    default = 15
+    default = 16
 
 
 class RedScrap(Range):
@@ -51,7 +51,7 @@ class RedScrap(Range):
     displayname = "Red Scraps"
     range_start = 0
     range_end = 100
-    default = 5
+    default = 4
 
 
 class YellowScrap(Range):
@@ -67,7 +67,7 @@ class WhiteScrap(Range):
     displayname = "White Scraps"
     range_start = 0
     range_end = 100
-    default = 30
+    default = 32
 
 
 class CommonItem(Range):
@@ -75,7 +75,7 @@ class CommonItem(Range):
     displayname = "Common Items"
     range_start = 0
     range_end = 100
-    default = 75
+    default = 64
 
 
 class UncommonItem(Range):
@@ -83,7 +83,7 @@ class UncommonItem(Range):
     displayname = "Uncommon Items"
     range_start = 0
     range_end = 100
-    default = 40
+    default = 32
 
 
 class LegendaryItem(Range):
@@ -91,7 +91,7 @@ class LegendaryItem(Range):
     displayname = "Legendary Items"
     range_start = 0
     range_end = 100
-    default = 10
+    default = 8
 
 
 class BossItem(Range):
@@ -99,7 +99,7 @@ class BossItem(Range):
     displayname = "Boss Items"
     range_start = 0
     range_end = 100
-    default = 5
+    default = 4
 
 
 class LunarItem(Range):
@@ -107,7 +107,7 @@ class LunarItem(Range):
     displayname = "Lunar Items"
     range_start = 0
     range_end = 100
-    default = 15
+    default = 16
 
 
 class Equipment(Range):
@@ -115,9 +115,28 @@ class Equipment(Range):
     displayname = "Equipment"
     range_start = 0
     range_end = 100
-    default = 25
+    default = 32
 
 
+class ItemPoolPresetToggle(DefaultOnToggle):
+    """Will use the item weight presets when set to true, otherwise will use the custom set item pool weights."""
+    displayname = "Item Weight Presets"
+
+class ItemWeights(Choice):
+    """Preset choices for determining the weights of the item pool.
+    Only used if custom weights are unmodified or deleted."""
+    displayname = "Item Weights"
+    option_default = 0
+    option_new = 1
+    option_uncommon = 2
+    option_legendary = 3
+    option_lunartic = 4
+    option_chaos = 5
+    option_no_scraps = 6
+    option_even = 7
+    option_scraps_only = 8
+
+#define a dictionary for the weights of the generated item pool.
 ror2_weights: typing.Dict[str, type(Option)] = {
     "green_scrap":          GreenScrap,
     "red_scrap":            RedScrap,
@@ -137,5 +156,7 @@ ror2_options: typing.Dict[str, type(Option)] = {
     "start_with_revive":    StartWithRevive,
     "item_pickup_step":     ItemPickupStep,
     "enable_lunar":         AllowLunarItems,
+    "item_weights":         ItemWeights,
+    "item_pool_presets":    ItemPoolPresetToggle,
     **ror2_weights
 }

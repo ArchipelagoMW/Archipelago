@@ -1,10 +1,10 @@
 import string
-from .Items import RiskOfRain2Item, item_table, junk_weights
+from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import location_table, RiskOfRainLocation, base_location_table
 from .Rules import set_rules
 
 from BaseClasses import Region, Entrance, Item, MultiWorld
-from .Options import ror2_options, ror2_weights
+from .Options import ror2_options
 from ..AutoWorld import World
 
 client_version = 1
@@ -31,7 +31,8 @@ class RiskOfRainWorld(World):
         if self.world.start_with_revive[self.player].value:
             self.world.push_precollected(self.world.create_item("Dio's Best Friend", self.player))
 
-        junk_pool ={
+        # fills junk_pool with yaml weight values
+        junk_pool = {
                 "Item Scrap, Green": self.world.green_scrap[self.player].value,
                 "Item Scrap, Red": self.world.red_scrap[self.player].value,
                 "Item Scrap, Yellow": self.world.yellow_scrap[self.player].value,
@@ -44,6 +45,10 @@ class RiskOfRainWorld(World):
                 "Equipment": self.world.equipment[self.player].value
             }
 
+        # if presets are enabled generate junk_pool from the selected preset
+        if self.world.item_pool_presets[self.player].value:
+            pool_option = self.world.item_weights[self.player].value
+            junk_pool = item_pool_weights[pool_option]
 
         # Generate item pool
         itempool = []
@@ -58,7 +63,7 @@ class RiskOfRainWorld(World):
         # Fill remaining items with randomly generated junk
         itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
                                               k=self.world.total_locations[self.player] -
-                                                self.world.total_revivals[self.player])
+                                                self.world.total_revivals[self.player] - self.world.start_with_revive[self.player].value)
 
         # Convert itempool into real items
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
@@ -82,7 +87,7 @@ class RiskOfRainWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
-        item = RiskOfRain2Item(name, True, item_id, self.player)
+        item = RiskOfRainItem(name, True, item_id, self.player)
         return item
 
 
