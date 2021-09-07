@@ -124,7 +124,14 @@ class ItemPoolPresetToggle(DefaultOnToggle):
 
 class ItemWeights(Choice):
     """Preset choices for determining the weights of the item pool.
-    Only used if custom weights are unmodified or deleted."""
+    New is a test for a potential adjustment to the default weights.
+    Uncommon puts a large number of uncommon items in the pool.
+    Legendary puts a large number of legendary items in the pool.
+    lunartic makes everything a lunar item.
+    chaos generates the pool completely at random with rarer items having a slight cap to prevent this option being too easy.
+    no_scraps removes all scrap items from the item pool.
+    even generates the item pool with every item having an even weight.
+    scraps_only removes all non scrap items from the item pool."""
     displayname = "Item Weights"
     option_default = 0
     option_new = 1
