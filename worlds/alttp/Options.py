@@ -5,7 +5,6 @@ from Options import Choice, Range, Option, Toggle, DefaultOnToggle
 
 
 class Logic(Choice):
-    """Logic Rules used for item access."""
     option_no_glitches = 0
     option_minor_glitches = 1
     option_overworld_glitches = 2
@@ -24,7 +23,6 @@ class Objective(Choice):
 
 
 class Goal(Choice):
-    """Goal to win."""
     option_kill_ganon = 0
     option_kill_ganon_and_gt_agahnim = 1
     option_hand_in = 2
@@ -76,44 +74,31 @@ class Crystals(Range):
 
 
 class CrystalsTower(Crystals):
-    """Number of crystals required to open Ganon's Tower."""
     default = 7
 
 
 class CrystalsGanon(Crystals):
-    """Number of crystals required to harm Ganon."""
     default = 7
 
 
 class TriforcePieces(Range):
-    """Number of triforce pieces required to complete the goal."""
     default = 30
     range_start = 1
     range_end = 90
 
 
 class ShopItemSlots(Range):
-    """Amount of items placed in shops."""
     range_start = 0
     range_end = 30
 
 
 class WorldState(Choice):
-    """Starting world state. Standard starts with the Princess Escape sequence.
-    Open starts with full world access.
-    Inverted starts with Link's house in the dark world and some other
-    locations moved around for this altered world."""
     option_standard = 1
     option_open = 0
     option_inverted = 2
 
 
 class Bosses(Choice):
-    """Bosses get shuffled around. Simple will keep the number of appearances of each boss vanilla
-    but shuffle them around. Therefor there will be two sets of Armos Knights, Lanmolas' and Moldorm.
-    Full does the same as Simple except the 3 duplicated bosses are chosen randomly.
-    Chaos chooses bosses entirely at random. Singularity will choose a random boss and place it in every
-    location it can. If there are locations it can't put it in a second boss will be chosen for those locations."""
     option_vanilla = 0
     option_simple = 1
     option_full = 2
@@ -122,16 +107,12 @@ class Bosses(Choice):
 
 
 class Enemies(Choice):
-    """Enemies get shuffled around the game."""
     option_vanilla = 0
     option_shuffled = 1
     option_chaos = 2
 
 
 class Progressive(Choice):
-    """Determines if items that are usually progressive stay progressive.
-    For random, each category is grouped together then turned either progressive on or off.
-    The groups are swords, gloves, boomerangs, shields, and mail."""
     displayname = "Progressive Items"
     option_off = 0
     option_grouped_random = 1
@@ -159,37 +140,30 @@ class Palette(Choice):
 
 
 class OWPalette(Palette):
-    """The Palette definition for the Overworld."""
     displayname = "Overworld Palette"
 
 
 class UWPalette(Palette):
-    """The Palette definition for the Underworld."""
     displayname = "Underworld Palette"
 
 
 class HUDPalette(Palette):
-    """The Palette definition for the HUD."""
     displayname = "Menu Palette"
 
 
 class SwordPalette(Palette):
-    """The Palette definition for Link's Sword."""
     displayname = "Sword Palette"
 
 
 class ShieldPalette(Palette):
-    """The Palette definition for Link's Shield."""
     displayname = "Shield Palette"
 
 
 class LinkPalette(Palette):
-    """The Palette definition for Link."""
     displayname = "Link Palette"
 
 
 class HeartBeep(Choice):
-    """How fast or slow the heart beep at low health is."""
     displayname = "Heart Beep Rate"
     option_normal = 0
     option_double = 1
@@ -200,7 +174,6 @@ class HeartBeep(Choice):
 
 
 class HeartColor(Choice):
-    """The color of your hearts in the HUD."""
     displayname = "Heart Color"
     option_red = 0
     option_blue = 1
@@ -216,12 +189,10 @@ class HeartColor(Choice):
 
 
 class QuickSwap(DefaultOnToggle):
-    """Enable/Disable Quickswapping items with the L/R buttons."""
     displayname = "L/R Quickswapping"
 
 
 class MenuSpeed(Choice):
-    """How fast relative to vanilla the menu screen appears and disappears."""
     displayname = "Menu Speed"
     option_normal = 0
     option_instant = 1,
@@ -232,17 +203,14 @@ class MenuSpeed(Choice):
 
 
 class Music(DefaultOnToggle):
-    """Enable/Disable whether music plays in the game."""
     displayname = "Play music"
 
 
 class ReduceFlashing(DefaultOnToggle):
-    """Reduces flashing of certain scenes."""
     displayname = "Reduce Screen Flashes"
 
 
 class TriforceHud(Choice):
-    """Decides whether the HUD for Triforce hunt goal should appear."""
     displayname = "Display Method for Triforce Hunt"
     option_normal = 0
     option_hide_goal = 1
