@@ -118,12 +118,6 @@ class Equipment(Range):
     default = 25
 
 
-class WeightPresets(Choice):
-    """Preset item weight options."""
-    displayname = "Item Weight Preset"
-    option_default = 0
-
-
 ror2_weights: typing.Dict[str, type(Option)] = {
     "green_scrap":          GreenScrap,
     "red_scrap":            RedScrap,

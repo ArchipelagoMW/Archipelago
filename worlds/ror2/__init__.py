@@ -95,12 +95,12 @@ def create_regions(world, player: int):
     ]
 
     world.get_entrance("Lobby", player).connect(world.get_region("Petrichor V", player))
-    world.get_location("Level One", player).place_locked_item(RiskOfRain2Item("Beat Level One", True, None, player))
-    world.get_location("Level Two", player).place_locked_item(RiskOfRain2Item("Beat Level Two", True, None, player))
-    world.get_location("Level Three", player).place_locked_item(RiskOfRain2Item("Beat Level Three", True, None, player))
-    world.get_location("Level Four", player).place_locked_item(RiskOfRain2Item("Beat Level Four", True, None, player))
-    world.get_location("Level Five", player).place_locked_item(RiskOfRain2Item("Beat Level Five", True, None, player))
-    world.get_location("Victory", player).place_locked_item(RiskOfRain2Item("Victory", True, None, player))
+    world.get_location("Level One", player).place_locked_item(RiskOfRainItem("Beat Level One", True, None, player))
+    world.get_location("Level Two", player).place_locked_item(RiskOfRainItem("Beat Level Two", True, None, player))
+    world.get_location("Level Three", player).place_locked_item(RiskOfRainItem("Beat Level Three", True, None, player))
+    world.get_location("Level Four", player).place_locked_item(RiskOfRainItem("Beat Level Four", True, None, player))
+    world.get_location("Level Five", player).place_locked_item(RiskOfRainItem("Beat Level Five", True, None, player))
+    world.get_location("Victory", player).place_locked_item(RiskOfRainItem("Victory", True, None, player))
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
