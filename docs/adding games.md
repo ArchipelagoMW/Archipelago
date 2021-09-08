@@ -1,167 +1,341 @@
-# How do I add (Game) to Archipelago?  
+
+
+# How do I add a game to Archipelago?  
 This guide is going to try and be a broad summary of how you can do just that.  
 There are three key steps to incorporating a game into Archipelago:  
--Game Interface/Patcher  
--Generator  
--Server Interface  
+- Game Modification 
+- Archipelago Server Integration
+
+# Game Modification  
+One half of the work required to integrate a game into Archipelago is the development of the game client. This is 
+typically done through a modding API or other modification process, described further down.
+
+As an example, modifications to a game typically include (more on this later):
+- Hooking into when a 'location check' is completed.
+- Networking with the Archipelago server.
+- Optionally, UI or HUD updates to show status of the multiworld session or Archipelago server connection.
+
+In order to determine how to modify a game, refer to the following sections.
   
-# Game Interfaces/Patchers  
-This step is the most important. In order to add games to the Archipelago ecosystem, it is necessary to modify their code in order to incorporate the random elements and to allow game state to be queried. This process can look very different depending on the game, and can itself by divided into a few steps:  
-  
-# Engine Identification:  
+## Engine Identification  
 This is a good way to make the modding process much easier. Being able to identify what engine a game was made in is critical. The first step is to look at a game's files. Let's go over what some game files might look like. It’s important that you be able to see file extensions, so be sure to enable that feature in your file viewer of choice.  
-At a minimum, files for the games that run on your computer will look something like this:  
+Examples are provided below.
   
-![image](https://user-images.githubusercontent.com/87032239/132424627-6307da00-676d-4cce-b7ca-1f7cab1c990c.png)  
+### Creepy Castle
+![Creepy Castle Root Directory in Window's Explorer](./img/creepy-castle-directory.png)  
   
-This is the delightful title Creepy Castle, which is a fantastic game that I highly recommend. It’s also your worst-case scenario as a modder. All that’s present here is an executable file and some meta-information that Steam uses. You have basically nothing here to work with. If you want to change this game, the only option you have is to do some pretty nasty disassembly and reverse engineering work, which is outside the scope of this tutorial. Let’s look at some other examples of game releases.  
+This is the delightful title Creepy Castle, which is a fantastic game that I highly recommend. It’s also your worst-case
+scenario as a modder. All that’s present here is an executable file and some meta-information that Steam uses. You have 
+basically nothing here to work with. If you want to change this game, the only option you have is to do some pretty nasty 
+disassembly and reverse engineering work, which is outside the scope of this tutorial. Let’s look at some other examples 
+of game releases.  
+
+### Heavy Bullets
+![Heavy Bullets Root Directory in Window's Explorer](./img/heavy-bullets-directory.png)  
   
-![image](https://user-images.githubusercontent.com/87032239/132424512-ff1e033d-2899-4bdb-923a-2a65bc3efda1.png)  
+Here’s the release files for another game, Heavy Bullets. We see a .exe file, like expected, and a few more files. 
+“hello.txt” is a text file, which we can quickly skim in any text editor. Many games have them in some form, usually 
+with a name like README.txt, and they may contain information about a game, such as a EULA, terms of service, licensing 
+information, credits, and general info about the game. You usually won’t find anything too helpful here, but it never 
+hurts to check. In this case, it contains some credits and a changelog for the game, so nothing too important. 
+“steam_api.dll” is a file you can safely ignore, it’s just some code used to interface with Steam. 
+The directory “HEAVY_BULLETS_Data”, however, has some good news.  
   
-Here’s the release files for another game, Heavy Bullets. We see a .exe file, like expected, and a few more files. “hello.txt” is a text file, which we can quickly skim in any text editor. Many games have them in some form, usually with a name like README.txt, and they may contain information about a game, such as a EULA, terms of service, licensing information, credits, and general info about the game. You usually won’t find anything too helpful here, but it never hurts to check. In this case, it contains some credits and a changelog for the game, so nothing too important. “steam_api.dll” is a file you can safely ignore, it’s just some code used to interface with Steam. The directory “HEAVY_BULLETS_Data”, however, has some good news.  
+![Heavy Bullets Data Directory in Window's Explorer](./img/heavy-bullets-data-directory.png)  
   
-![image](https://user-images.githubusercontent.com/87032239/132424615-f87d716a-a482-4cff-99de-bf61f738aec4.png)  
+Jackpot! It might not be obvious what you’re looking at here, but I can instantly tell from this folder’s contents that 
+what we have is a game made in the Unity Engine. If you look in the sub-folders, you’ll seem some .dll files which affirm 
+our suspicions. Telltale signs for this are directories titled “Managed” and “Mono”, as well as the numbered, extension-less 
+level files and the sharedassets files. We’ll tell you a bit about why seeing a Unity game is such good news later, 
+but for now, this is what one looks like. Also keep your eyes out for an executable with a name like UnityCrashHandler, 
+that’s another dead giveaway.  
+
+### Stardew Valley
+![Stardew Valley Root Directory in Window's Explorer](./img/stardew-valley-directory.png)  
   
-Jackpot! It might not be obvious what you’re looking at here, but I can instantly tell from this folder’s contents that what we have is a game made in the Unity Engine. If you look in the subfolders, you’ll seem some .dll files which affirm our suspicions. Telltale signs for this are directories titled “Managed” and “Mono”, as well as the numbered, extentionless level files and the sharedassets files. We’ll tell you a bit about why seeing a Unity game is such good news later, but for now, this is what one looks like. Also keep your eyes out for an executable with a name like UnityCrashHandler, that’s another dead giveaway.  
+This is the game contents of Stardew Valley. A lot more to look at here, but some key takeaways. 
+Notice the .dll files which include “CSharp” in their name. This tells us that the game was made in C#, which is good news. 
+More on that later.  
+
+### Gato Roboto
+![Gato Roboto Root Directory in Window's Explorer](./img/gato-roboto-directory.png)  
   
-![image](https://user-images.githubusercontent.com/87032239/132424448-a9d7a165-ebfb-4ccc-9e3e-79e3d2abde4a.png)  
+Our last example is the game Gato Roboto. This game is made in GameMaker, which is another green flag to look out for. 
+The giveaway is the file titled "data.win". This immediately tips us off that this game was made in GameMaker.  
   
-This is the game contents of Stardew Valley. A lot more to look at here, but some key takeaways. Notice the .dll files which include “CSharp” in their name. This tells us that the game was made in C#, which is good news. More on that later.  
+This isn't all you'll ever see looking at game files, but it's a good place to start. 
+As a general rule, the more files a game has out in plain sight, the more you'll be able to change. 
+This especially applies in the case of code or script files - always keep a lookout for anything you can use to your 
+advantage!  
   
-![image](https://user-images.githubusercontent.com/87032239/132424440-8c04cc05-b205-42a9-a6f5-db10b0397c2a.png)  
+## Open or Leaked Source Games
+As a side note, many games have either been made open source, or have had source files leaked at some point. 
+This can be a boon to any would-be modder, for obvious reasons. 
+Always be sure to check - a quick internet search for "(Game) Source Code" might not give results often, but when it 
+does you're going to have a much better time.  
   
-Our last example is the game Gato Roboto. This game is made in GameMaker, which is another green flag to look out for. The giveaway is the file titled "data.win". This immediately tips us off that this game was made in GameMaker.  
+Be sure never to distribute source code for games that you decompile or find if you do not have express permission to do
+so, or to redistribute any materials obtained through similar methods, as this is illegal and unethical.
   
-This isn't all you'll ever see looking at game files, but it's a good place to start. As a general rule, the more files a game has out in plain sight, the more you'll be able to change. This especially applies in the case of code or script files - always keep a lookout for anything you can use to your advantage!  
+## Modifying Release Versions of Games  
+However, for now we'll assume you haven't been so lucky, and have to work with only what’s sitting in your install directory.
+Some developers are kind enough to deliberately leave you ways to alter their games, like modding tools, 
+but these are often not geared to the kind of work you'll be doing and may not help much. 
+
+As a general rule, any modding tool that lets you write actual code is something worth using.  
   
-## Open/Leaked Source Games:  
-As a sidenote, many games have either been made open source, or have had source files leaked at some point. This can be a boon to any would-be modder, for obvious reasons. Always be sure to check - a quick internet search for "(Game) Source Code" might not give results often, but when it does you're going to have a much better time.  
+### Research:  
+The first step is to research your game. Even if you've been dealt the worst hand in terms of engine modification, 
+it's possible other motivated parties have concocted useful tools for your game already. 
+Always be sure to search the Internet for the efforts of other modders.  
   
-Be sure never to distribute source code for games that you decompile or find if you do not have express permission to do so, or to redistribute any materials obtained through similar methods, as this is illegal and unethical.  
-  
-  
-# Modifying Release Versions of Games:  
-However, for now we'll assume you haven't been so lucky, and have to work with only what’s sitting in your install directory. Some developers are kind enough to deliberately leave you ways to alter their games, like modding tools, but these are often not geared to the kind of work you'll be doing and may not help much. As a general rule, any modding tool that lets you write actual code is something worth using.  
-  
-## Research:  
-The first step is to research your game. Even if you've been dealt the worst hand in terms of engine modification, it's possible other motivated parties have concocted useful tools for your game already. Always be sure to search the Internet for the efforts of other modders.  
-  
-## Analysis Tools:  
+### Analysis Tools:  
 Depending on the game’s underlying engine, there may be some tools you can use either in lieu of or in addition to existing game tools.  
   
-### [dnSpy:](https://github.com/dnSpy/dnSpy/releases)  
-The first tool in your toolbox is dnSpy. dnSpy is useful for opening and modifying code files, like .exe and .dll files, that were made in C#. This won't work for executable files made by other means, and obfuscated code (code which was deliberately made difficult to reverse engineer) will thwart it, but 9 times out of 10 this is exactly what you need. You'll want to avoid opening common library files in dnSpy, as these are unlikely to contain the data you're looking to modify. For Unity games, the file you’ll want to open will be the file (Data Folder)/Managed/Assembly-CSharp.dll, as pictured below:  
+#### [dnSpy](https://github.com/dnSpy/dnSpy/releases)  
+The first tool in your toolbox is dnSpy. 
+dnSpy is useful for opening and modifying code files, like .exe and .dll files, that were made in C#. 
+This won't work for executable files made by other means, and obfuscated code (code which was deliberately made 
+difficult to reverse engineer) will thwart it, but 9 times out of 10 this is exactly what you need. 
+You'll want to avoid opening common library files in dnSpy, as these are unlikely to contain the data you're looking to 
+modify. 
+
+For Unity games, the file you’ll want to open will be the file (Data Folder)/Managed/Assembly-CSharp.dll, as pictured below:  
   
-![image](https://user-images.githubusercontent.com/87032239/132424428-c45bddd1-76c6-4ceb-a5f9-4cd318907837.png)  
+![Heavy Bullets Managed Directory in Window's Explorer](./img/heavy-bullets-managed-directory.png)  
   
-This file will contain the data of the actual game. For other C# games, the file you want is usually just the executable itself.  
+This file will contain the data of the actual game. 
+For other C# games, the file you want is usually just the executable itself.  
   
-With dnSpy, you can view the game’s C# code, but the tool isn’t perfect. Although the names of classes, methods, variables, and more will be preserved, code structures may not remain entirely intact. This is because compilers will often subtly rewrite code to be more optimal, so that it works the same as the original code but uses fewer resources. Compiled C# files also lose comments and other documentation.  
+With dnSpy, you can view the game’s C# code, but the tool isn’t perfect. 
+Although the names of classes, methods, variables, and more will be preserved, code structures may not remain entirely intact. This is because compilers will often subtly rewrite code to be more optimal, so that it works the same as the original code but uses fewer resources. Compiled C# files also lose comments and other documentation.  
   
-### [UndertaleModTool:](https://github.com/krzys-h/UndertaleModTool/releases)  
-This is currently the best tool for modifying games made in GameMaker, and supports games made in both GMS 1 and 2. It allows you to modify code in GML, if the game wasn't made with the wrong compiler (usually something you don't have to worry about). This is a massive boon, to say the least. You'll want to open the data.win file, as this is where all the goods are kept. Like dnSpy, you won’t be able to see comments. In addition, you will be able to see and modify many hidden fields on items that GameMaker itself will often hide from creators. Fonts in particular are notoriously complex, and to add new sprites you may need to modify existing sprite sheets.  
+#### [UndertaleModTool](https://github.com/krzys-h/UndertaleModTool/releases)  
+This is currently the best tool for modifying games made in GameMaker, and supports games made in both GMS 1 and 2. 
+It allows you to modify code in GML, if the game wasn't made with the wrong compiler (usually something you don't have 
+to worry about). 
+
+You'll want to open the data.win file, as this is where all the goods are kept. 
+Like dnSpy, you won’t be able to see comments. 
+In addition, you will be able to see and modify many hidden fields on items that GameMaker itself will often hide from 
+creators. 
+
+Fonts in particular are notoriously complex, and to add new sprites you may need to modify existing sprite sheets.  
   
-### [CheatEngine:](https://cheatengine.org/)  
-CheatEngine is a tool with a very long and storied history. Be warned that because it performs live modifications to the memory of other processes, it will likely be flagged as malware (because this behavior is most commonly found in malware and rarely used by other programs). If you use CheatEngine, you need to have a deep understanding of how computers work at the nuts and bolts level, including binary data formats, addressing, and assembly language programming. The tool itself is highly complex and even I have not yet charted its expanses. However, it can also be a very powerful tool in the right hands, allowing you to query and modify gamestate without ever modifying the actual game itself. In theory it is compatible with any piece of software you can run on your computer, but there is no "easy way" to do anything with it.  
+#### [CheatEngine](https://cheatengine.org/)  
+CheatEngine is a tool with a very long and storied history. 
+Be warned that because it performs live modifications to the memory of other processes, it will likely be flagged as 
+malware (because this behavior is most commonly found in malware and rarely used by other programs). 
+If you use CheatEngine, you need to have a deep understanding of how computers work at the nuts and bolts level, 
+including binary data formats, addressing, and assembly language programming. 
+
+The tool itself is highly complex and even I have not yet charted its expanses. 
+However, it can also be a very powerful tool in the right hands, allowing you to query and modify gamestate without ever
+modifying the actual game itself. 
+In theory it is compatible with any piece of software you can run on your computer, but there is no "easy way" to do 
+anything with it.  
   
-## What Modifications You Should Make to the Game:  
+### What Modifications You Should Make to the Game:  
+We talked about this briefly in [Game Modification](#game-modification) section.
 The next step is to know what you need to make the game do now that you can modify it. Here are your key goals:  
--Modify the game so that checks are shuffled  
--Know when the player has completed a check, and react accordingly  
--Listen for messages from the Archipelago server  
--Modify the game to display messages from the Archipelago server  
--Add interface for connecting to the Archipelago server with passwords and sessions  
--Add commands for manually reawarding, resyncing, forfeiting, and other actions  
+- Modify the game so that checks are shuffled  
+- Know when the player has completed a check, and react accordingly  
+- Listen for messages from the Archipelago server  
+- Modify the game to display messages from the Archipelago server  
+- Add interface for connecting to the Archipelago server with passwords and sessions  
+- Add commands for manually rewarding, re-syncing, forfeiting, and other actions  
   
-To elaborate, you need to be able to inform the server whenever you check locations, print out messages that you receive from the server in-game so players can read them, award items when the server tells you to, sync and resync when necessary, avoid double-awarding items while still maintaining game file integrity, and allow players to manually enter commands in case the client or server make mistakes. Refer to the Network Protocol documentation for how to communicate with Archipelago's servers.  
+To elaborate, you need to be able to inform the server whenever you check locations, print out messages that you receive
+from the server in-game so players can read them, award items when the server tells you to, sync and re-sync when necessary,
+avoid double-awarding items while still maintaining game file integrity, and allow players to manually enter commands in
+case the client or server make mistakes. 
+
+Refer to the [Network Protocol documentation](./network%20protocol.md) for how to communicate with Archipelago's servers.  
   
-## But (Game) is a console game. Can I still add it?  
+## But my Game is a console game. Can I still add it?  
 That depends – what console?  
   
-### (Game) is a recent game for the PS4/Xbox-One/Nintendo Switch/etc  
-No. Don’t even try, it won’t happen. Even if it does, you’ll be sued into oblivion. Doesn’t matter if you think that what you did was legal, they will do everything they can to protect their platforms, and they will win. Unless you’re working with the explicit blessing of the developers and rights holders, stay well away.  
+### My Game is a recent game for the PS4/Xbox-One/Nintendo Switch/etc  
+Most games for recent generations of console platforms are inaccessible to the typical modder. It is generally advised
+that you do not attempt to work with these games as they are difficult to modify and are protected by their copyright
+holders. Most modern AAA game studios will provide a modding interface or otherwise deny modifications for their console games.
   
-### (Game) isn’t that old, it’s for the Wii/PS2/360/etc  
-This is very complex, but doable. If you don't have good knowledge of stuff like Assembly programming, this is not where you want to learn it. There exist many disassembly and debugging tools, but more recent content may have lackluster support.
+### My Game isn’t that old, it’s for the Wii/PS2/360/etc  
+This is very complex, but doable. 
+If you don't have good knowledge of stuff like Assembly programming, this is not where you want to learn it. 
+There exist many disassembly and debugging tools, but more recent content may have lackluster support.
   
-### (Game) is a classic for the SNES/Sega Genesis/etc  
-That’s a lot more feasible. There are many good tools available for understanding and modifying games on these older consoles, and the emulation community will have figured out the bulk of the console’s secrets. Look for debugging tools, but be ready to learn assembly. Old consoles usually have their own unique dialects of ASM you’ll need to get used to. Also make sure there’s a good way to interface with a running emulator, since that’s the only way you can connect these older consoles to the Internet. There are also hardware mods and flash carts, which can do the same things an emulator would when connected to a computer, but these will require the same sort of interface software to be written in order to work properly - from your perspective the two won't really look any different.  
+### My Game is a classic for the SNES/Sega Genesis/etc  
+That’s a lot more feasible. 
+There are many good tools available for understanding and modifying games on these older consoles, and the emulation 
+community will have figured out the bulk of the console’s secrets. 
+Look for debugging tools, but be ready to learn assembly. 
+Old consoles usually have their own unique dialects of ASM you’ll need to get used to. 
+
+Also make sure there’s a good way to interface with a running emulator, since that’s the only way you can connect these
+older consoles to the Internet.
+There are also hardware mods and flash carts, which can do the same things an emulator would when connected to a computer,
+but these will require the same sort of interface software to be written in order to work properly - from your perspective
+the two won't really look any different.  
   
-### (Game) is an exclusive for the Super Baby Magic Dream Boy. It’s this console from the Soviet Union that-  
-Unless you have a circuit schematic for the Super Baby Magic Dream Boy sitting on your desk, no. Obscurity is your enemy – there will likely be little to no emulator or modding information, and you’d essentially be working from scratch.  
+### My Game is an exclusive for the Super Baby Magic Dream Boy. It’s this console from the Soviet Union that-  
+Unless you have a circuit schematic for the Super Baby Magic Dream Boy sitting on your desk, no. 
+Obscurity is your enemy – there will likely be little to no emulator or modding information, and you’d essentially be
+working from scratch.  
   
 ## How to Distribute Game Modifications:  
-**NEVER EVER distribute anyone else's copyrighted work UNLESS THEY EXPLICITLY GIVE YOU PERMISSION TO DO SO!!!** This is a good way to get any project you're working on sued out from under you. The right way to distribute modified versions of a game's binaries, assuming that the licensing terms do not allow you to copy them wholesale, is as patches. There are many different formats, which I'll cover in brief. The common theme is that you can’t distribute anything that wasn’t made by you. Patches are files that describe how your modified file differs from the original one, thus avoiding the issue of distributing someone else’s original work. Users who have a copy of the game just need to apply the patch, and those who don’t are unable to play.  
+**NEVER EVER distribute anyone else's copyrighted work UNLESS THEY EXPLICITLY GIVE YOU PERMISSION TO DO SO!!!**
+
+This is a good way to get any project you're working on sued out from under you.
+The right way to distribute modified versions of a game's binaries, assuming that the licensing terms do not allow you
+to copy them wholesale, is as patches. 
+
+There are many patch formats, which I'll cover in brief. The common theme is that you can’t distribute anything that wasn't
+made by you. Patches are files that describe how your modified file differs from the original one, thus avoiding the
+issue of distributing someone else’s original work.
+
+Users who have a copy of the game just need to apply the patch, and those who don’t are unable to play.  
   
 ### IPS Patches:  
-This is an extremely simple, early patch format, but is limited to games of about 16 Megabytes in size or less. You will often find IPS patches being used to distribute mods for old video game ROMs. IPS patches are a delta patch format, which means they act only as a simple list of alterations that need to be made to an original file in order to produce a new one. Archipelago may use premade IPS patches to apply specific changes to a game, but will not create IPS patches as a means of distributing game modifications. Although IPS patches can be applied quickly, creating them is quite slow, so using them for distributing randomized games is not current practice. However, due to the format's simplicity, even patch files of this type can unintentionally include copyrighted data. This is because IPS patches don't have a good way to shift existing data in a file, and thus if data has to be moved forward x number of bytes, which might be necessary for data insertion, the patch will simply include a copy of the shifted bytes after the inserted ones. Increasing and decreasing file size is also not a universally supported operation, due to the patch format's age.  
+This is an extremely simple, early patch format, but is limited to games of about 16 Megabytes in size or less.
+You will often find IPS patches being used to distribute mods for old video game ROMs.
+IPS patches are a delta patch format, which means they act only as a simple list of alterations that need to be made to
+an original file in order to produce a new one.
+
+Archipelago may use pre-made IPS patches to apply specific changes to a game, but will not create IPS patches as a means
+of distributing game modifications. Although IPS patches can be applied quickly, creating them is quite slow, so using
+them for distributing randomized games is not current practice. 
+
+However, due to the format's simplicity, even patch files of this type can unintentionally include copyrighted data.
+This is because IPS patches don't have a good way to shift existing data in a file, and thus if data has to be moved
+forward x number of bytes, which might be necessary for data insertion, the patch will simply include a copy of the
+shifted bytes after the inserted ones. 
+Increasing and decreasing file size is also not a universally supported operation, due to the patch format's age.  
   
 ### BPS Patches:  
-BPS is the younger cousin of the IPS patch. More flexible and theoretically future-proofed for any file size, BPS patches are based on the idea of linear patching. Unlike IPS patches, which use a system called delta patching, linear patches act as a series of steps for creating a modified file from scratch through a combination of original data and patch data, which is appended onto the end of the modified game file as the patch progresses. This means that some operations, like inserting data into the middle of a file instead of simply overwriting it, are much easier to do. However, like IPS, it isn't a format well suited to randomizers, due to the asymmetric costs of creating and applying BPS patches.  
+BPS is the younger cousin of the IPS patch. 
+
+More flexible and theoretically future-proofed for any file size, BPS patches are based on the idea of linear patching.
+Unlike IPS patches, which use a system called delta patching, linear patches act as a series of steps for creating a
+modified file from scratch through a combination of original data and patch data, which is appended onto the end of the
+modified game file as the patch progresses.
+
+This means that some operations, like inserting data into the middle of a file instead of simply overwriting it,
+are much easier to do.
+However, like IPS, it isn't a format well suited to randomizers, due to the asymmetric costs of creating and applying
+BPS patches.  
   
 ### Xdelta Patches:  
-Xdelta is the true successor to IPS, featuring better optimization and verification, and manages to transcend many of the limitations of IPS. However, Xdelta patches are particularly expensive to create.  
+Xdelta is the true successor to IPS, featuring better optimization and verification, and manages to transcend many of
+the limitations of IPS. However, Xdelta patches are particularly expensive to create.  
   
 ### bsdiff  
-bsdiff is the current format adopted by Archipelago for creating and distributing patches. It is much faster to create patches of this variety, which is why it sees use in this application.
+bsdiff is the current format adopted by Archipelago for creating and distributing patches.
+It is much faster to create patches of this variety, which is why it sees use in this application.
   
 ### Mod files:  
-Games which support modding will usually just let you drag and drop the mod’s files into a folder somewhere. Mod files come in many forms, but the rules about not distributing other people's content remain the same.  
+Games which support modding will usually just let you drag and drop the mod’s files into a folder somewhere.
+Mod files come in many forms, but the rules about not distributing other people's content remain the same.  
   
 ## Archipelago Integration:  
-Integrating a randomizer into Archipelago involves a few steps. There are several things that may need to be done, but the most important is to create an implementation of the World class specific to your game. This encompasses most of the data for your game – the items available, what checks you have, the logic for reaching those checks, what options to offer for the player’s yaml file, and the code to intialize all this data. Here’s an example of what that looks like:  
+Integrating a randomizer into Archipelago involves a few steps.
+There are several things that may need to be done, but the most important is to create an implementation of the 
+`World` class specific to your game. This implementation should exist as a Python module within the `worlds` folder
+in the Archipelago file structure.
+
+This encompasses most of the data for your game – the items available, what checks you have, the logic for reaching those
+checks, what options to offer for the player’s yaml file, and the code to initialize all this data.
+
+Here’s an example of what your world module can look like:  
   
-![image](https://user-images.githubusercontent.com/87032239/132425529-9a6f3a98-bc56-4971-a3ff-71210192f7a6.png)  
+![Example world module directory open in Window's Explorer](./img/archipelago-world-directory-example.png)  
   
-Let's give a quick breakdown of what the contents for these files look like. This is just one example of an Archipelago world - the way things are done below is not an immutable property of Archipelago.  
+Let's give a quick breakdown of what the contents for these files look like.
+This is just one example of an Archipelago world - the way things are done below is not an immutable property of Archipelago.  
   
 ### Items.py  
 This file is used to define the items which exist in a given game.  
   
-![image](https://user-images.githubusercontent.com/87032239/132471569-f1bd44fe-5e76-442d-89b2-704fad6809a9.png)  
+![Example Items.py file open in Notepad++](./img/example-items-py-file.png)  
   
-Some important things to note here. The center of our Items.py file is the item_table, which individually lists every item in the game and associates them with an ItemData. This file is rather skeletal - most of the actual data has been stripped out for simplicity. Each ItemData gives a numeric ID to associate with the item and a boolean telling us whether the item might allow the player to do more than they would have been able to before.  
+Some important things to note here. The center of our Items.py file is the item_table, which individually lists every
+item in the game and associates them with an ItemData.
+
+This file is rather skeletal - most of the actual data has been stripped out for simplicity.
+Each ItemData gives a numeric ID to associate with the item and a boolean telling us whether the item might allow the
+player to do more than they would have been able to before.  
   
-Next there's the item_frequencies. This simply tells Archipelago how many times each item appears in the pool. Items that appear exactly once need not be listed - Archipelago will interpret absence from this dictionary as meaning that the item appears once.  
+Next there's the item_frequencies. This simply tells Archipelago how many times each item appears in the pool.
+Items that appear exactly once need not be listed - Archipelago will interpret absence from this dictionary as meaning
+that the item appears once.
   
-Also note that "Victory" is an item in the table. It is treated as an item.  
-  
-Lastly, note the lookup_id_to_name dictionary, which Archipelago needs to make things work. 
+Lastly, note the `lookup_id_to_name` dictionary, which is typically imported and used in your Archipelago `World`
+implementation. This is how Archipelago is told about the items in your world. 
 
 ### Locations.py
 This file lists all locations in the game.  
   
-![image](https://user-images.githubusercontent.com/87032239/132479039-de925948-f436-4667-9534-ff2d4d60b181.png)  
+![Example Locations.py file open in Notepad++](./img/example-locations-py-file.png)  
   
-First is the achievement_table. It lists each location, the region that it can be found in (more on regions later), and a numeric ID to associate with each location. The exclusion table is a series of dictionaries which are used to exclude certain checks from the pool of progression locations based on user settings, and the events table associates certain specific checks with specific items. lookup_id_to_name is also present for locations, though this is a separate dictionary, to be clear.  
+First is the achievement_table. It lists each location, the region that it can be found in (more on regions later),
+and a numeric ID to associate with each location.
+
+The exclusion table is a series of dictionaries which are used to exclude certain checks from the pool of progression
+locations based on user settings, and the events table associates certain specific checks with specific items.
+
+`lookup_id_to_name` is also present for locations, though this is a separate dictionary, to be clear.  
   
 ### Options.py  
 This file details options to be searched for in a player's YAML settings file.  
   
-![image](https://user-images.githubusercontent.com/87032239/132479783-140b3236-e912-4d51-af3a-3397f186cb25.png)  
+![Example Options.py file open in Notepad++](./img/example-options-py-file.png)  
   
-There are several different types of option Archipelago has support for. In our case, we have three separate choices a player can toggle, either On or Off. You can also have players choose between a number of predefined values, or have them provide a numeric value within a specified range. 
+There are several types of option Archipelago has support for.
+In our case, we have three separate choices a player can toggle, either On or Off.
+You can also have players choose between a number of predefined values, or have them provide a numeric value within a
+specified range. 
   
 ### Regions.py  
-This file contains data which defines the world's topology. In other words, it details how different regions of the game connect to each other.  
+This file contains data which defines the world's topology.
+In other words, it details how different regions of the game connect to each other.  
   
-![image](https://user-images.githubusercontent.com/87032239/132485371-fc2d91f9-aa57-4c62-9d97-236ab32dce0b.png)  
+![Example Regions.py file open in Notepad++](./img/example-regions-py-file.png)  
   
-terraria_regions contains a list of tuples. The first element of the tuple is the name of the region, and the second is a list of connections that lead out of the region. mandatory_connections describe where the connection leads. default_connections and illegal_connections are currently empty because they have not been used here. Above this data is a function called link_terraria_structures which uses our defined regions and connections to create something more usable for the computer, but this has been left out for clarity.  
+`terraria_regions` contains a list of tuples.
+The first element of the tuple is the name of the region, and the second is a list of connections that lead out of the region.
+
+`mandatory_connections` describe where the connection leads.
+
+Above this data is a function called `link_terraria_structures` which uses our defined regions and connections to create
+something more usable for Archipelago, but this has been left out for clarity.  
   
 ### Rules.py  
 This is the file that details rules for what players can and cannot logically be required to do, based on items and settings.  
   
-![image](https://user-images.githubusercontent.com/87032239/132486385-cb8f05cb-bf0e-40be-b45f-c622575f7ced.png)  
+![Example Rules.py file open in Notepad++](./img/example-rules-py-file.png)  
   
-This is the most complicated part of the job, and is one part of Archipelago that is likely to see some changes in the future. The first class, called TerrariaLogic, is an extension of the LogicMixin class. This is where you would want to define methods for evaluating certain conditions, which would then return a boolean to indicate whether conditions have been met. The method below, set_rules, is where you would assign these functions as "rules", using lambdas to associate these functions or combinations of them (or any other code that evaluates to a boolean, in my case just the placeholder True) to certain tasks, like checking locations or using entrances.  
+This is the most complicated part of the job, and is one part of Archipelago that is likely to see some changes in the future.
+The first class, called `TerrariaLogic`, is an extension of the `LogicMixin` class.
+This is where you would want to define methods for evaluating certain conditions, which would then return a boolean to
+indicate whether conditions have been met. Your rule definitions should start with some sort of identifier to delineate it
+from other games, as all rules are mixed together due to `LogicMixin`. In our case, `_terraria_rule` would be a better name.
+
+The method below, `set_rules()`, is where you would assign these functions as "rules", using lambdas to associate these
+functions or combinations of them (or any other code that evaluates to a boolean, in my case just the placeholder `True`)
+to certain tasks, like checking locations or using entrances.  
   
-### __init__.py  
-This is the file that actually extends the World class, and is where you expose functionality and data to Archipelago.  
+### \_\_init\_\_.py  
+This is the file that actually extends the `World` class, and is where you expose functionality and data to Archipelago.  
   
-![image](https://user-images.githubusercontent.com/87032239/132487288-6ba1761f-0617-4407-9182-c01499b1475b.png)  
+![Example \_\_init\_\_.py file open in Notepad++](./img/example-init-py-file.png)  
   
-This is the most important file for the implementation, and technically the only one you need, but it's best to keep this file as short as possible and use other script files to do most of the heavy lifting. If you've done things well, this will just be where you assign everything you set up in the other files to their associated fields in the class being extended. Besides that, this is also a good place to put game-specific quirky behavior that needs to be managed, as it tends to make things a bit cluttered if you put these things elsewhere.  
+This is the most important file for the implementation, and technically the only one you need, but it's best to keep this
+file as short as possible and use other script files to do most of the heavy lifting.
+If you've done things well, this will just be where you assign everything you set up in the other files to their associated
+fields in the class being extended.
+
+This is also a good place to put game-specific quirky behavior that needs to be managed, as it tends to make things a bit
+cluttered if you put these things elsewhere.  
   
-I recommend looking at existing implementations to see how all this works first-hand. But once you get all that, all that remains to do is test the game and publish your work.  
-  
+I recommend looking at existing implementations to see how all this works first-hand. 
+Once you get all that, all that remains to do is test the game and publish your work.
