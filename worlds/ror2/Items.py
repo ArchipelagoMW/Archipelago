@@ -117,19 +117,6 @@ even_weights = {
     "Equipment": 1
 }
 
-chaos_weights = {
-    "Item Scrap, Green": randint(0, 100),
-    "Item Scrap, Red": randint(0, 100),
-    "Item Scrap, Yellow": randint(0, 80),
-    "Item Scrap, White": randint(0, 100),
-    "Common Item": randint(0, 100),
-    "Uncommon Item": randint(0, 70),
-    "Legendary Item": randint(0, 25),
-    "Boss Item": randint(0, 10),
-    "Lunar Item": randint(0, 40),
-    "Equipment": randint(0, 40)
-}
-
 scraps_only_weights = {
     "Item Scrap, Green": 80,
     "Item Scrap, Red": 40,
@@ -149,7 +136,6 @@ item_pool_weights: typing.Dict[int, typing.Dict[str, int]] = {
     2: uncommon_weights,
     3: legendary_weights,
     4: lunartic_weights,
-    5: chaos_weights,
     6: no_scraps_weights,
     7: even_weights,
     8: scraps_only_weights

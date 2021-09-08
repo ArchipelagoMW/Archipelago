@@ -6,6 +6,7 @@ from .Rules import set_rules
 from BaseClasses import Region, Entrance, Item, MultiWorld
 from .Options import ror2_options
 from ..AutoWorld import World
+from random import randint
 
 client_version = 1
 
@@ -48,7 +49,22 @@ class RiskOfRainWorld(World):
         # if presets are enabled generate junk_pool from the selected preset
         if self.world.item_pool_presets[self.player].value:
             pool_option = self.world.item_weights[self.player].value
-            junk_pool = item_pool_weights[pool_option]
+            # generate chaos weights
+            if pool_option == 5:
+                junk_pool = {
+                    "item Scrap, Green": randint(0, 100),
+                    "Item Scrap, Red": randint(0, 100),
+                    "Item Scrap, Yellow": randint(0, 100),
+                    "Item Scrap, White": randint(0, 100),
+                    "Common Item": randint(0, 100),
+                    "Uncommon Item": randint(0, 70),
+                    "Legendary Item": randint(0, 25),
+                    "Boss Item": randint(0, 10),
+                    "Lunar Item": randint(0, 40),
+                    "Equipment": randint(0, 40)
+                }
+            else:
+                junk_pool = item_pool_weights[pool_option]
 
         # Generate item pool
         itempool = []
