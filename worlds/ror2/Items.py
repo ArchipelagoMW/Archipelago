@@ -1,6 +1,6 @@
 from BaseClasses import Item
 import typing
-
+from random import randint
 
 class RiskOfRainItem(Item):
     game: str = "Risk of Rain 2"
@@ -26,7 +26,7 @@ item_table = {
     "Beat Level Five": None,
 }
 
-junk_weights = {
+default_weights = {
     "Item Scrap, Green": 16,
     "Item Scrap, Red": 4,
     "Item Scrap, Yellow": 1,
@@ -36,7 +36,109 @@ junk_weights = {
     "Legendary Item": 8,
     "Boss Item": 4,
     "Lunar Item": 16,
-    "Equipment": 32,
+    "Equipment": 32
+}
+
+new_weights = {
+    "Item Scrap, Green": 15,
+    "Item Scrap, Red": 5,
+    "Item Scrap, Yellow": 1,
+    "Item Scrap, White": 30,
+    "Common Item": 75,
+    "Uncommon Item": 40,
+    "Legendary Item": 10,
+    "Boss Item": 5,
+    "Lunar Item": 15,
+    "Equipment": 25
+}
+
+uncommon_weights = {
+    "Item Scrap, Green": 15,
+    "Item Scrap, Red": 5,
+    "Item Scrap, Yellow": 1,
+    "Item Scrap, White": 30,
+    "Common Item": 45,
+    "Uncommon Item": 100,
+    "Legendary Item": 10,
+    "Boss Item": 5,
+    "Lunar Item": 15,
+    "Equipment": 25
+}
+
+legendary_weights = {
+    "Item Scrap, Green": 15,
+    "Item Scrap, Red": 5,
+    "Item Scrap, Yellow": 1,
+    "Item Scrap, White": 30,
+    "Common Item": 50,
+    "Uncommon Item": 25,
+    "Legendary Item": 100,
+    "Boss Item": 5,
+    "Lunar Item": 15,
+    "Equipment": 25
+}
+
+lunartic_weights = {
+    "Item Scrap, Green": 0,
+    "Item Scrap, Red": 0,
+    "Item Scrap, Yellow": 0,
+    "Item Scrap, White": 0,
+    "Common Item": 0,
+    "Uncommon Item": 0,
+    "Legendary Item": 0,
+    "Boss Item": 0,
+    "Lunar Item": 100,
+    "Equipment": 0
+}
+
+no_scraps_weights = {
+    "Item Scrap, Green": 0,
+    "Item Scrap, Red": 0,
+    "Item Scrap, Yellow": 0,
+    "Item Scrap, White": 0,
+    "Common Item": 80,
+    "Uncommon Item": 30,
+    "Legendary Item": 15,
+    "Boss Item": 5,
+    "Lunar Item": 10,
+    "Equipment": 25
+}
+
+even_weights = {
+    "Item Scrap, Green": 1,
+    "Item Scrap, Red": 1,
+    "Item Scrap, Yellow": 1,
+    "Item Scrap, White": 1,
+    "Common Item": 1,
+    "Uncommon Item": 1,
+    "Legendary Item": 1,
+    "Boss Item": 1,
+    "Lunar Item": 1,
+    "Equipment": 1
+}
+
+scraps_only_weights = {
+    "Item Scrap, Green": 80,
+    "Item Scrap, Red": 40,
+    "Item Scrap, Yellow": 10,
+    "Item Scrap, White": 100,
+    "Common Item": 0,
+    "Uncommon Item": 0,
+    "Legendary Item": 0,
+    "Boss Item": 0,
+    "Lunar Item": 0,
+    "Equipment": 0
+}
+
+item_pool_weights: typing.Dict[int, typing.Dict[str, int]] = {
+    0: default_weights,
+    1: new_weights,
+    2: uncommon_weights,
+    3: legendary_weights,
+    4: lunartic_weights,
+    6: no_scraps_weights,
+    7: even_weights,
+    8: scraps_only_weights
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {id: name for name, id in item_table.items() if id}
