@@ -84,12 +84,12 @@ but these are often not geared to the kind of work you'll be doing and may not h
 
 As a general rule, any modding tool that lets you write actual code is something worth using.  
   
-### Research:  
+### Research
 The first step is to research your game. Even if you've been dealt the worst hand in terms of engine modification, 
 it's possible other motivated parties have concocted useful tools for your game already. 
 Always be sure to search the Internet for the efforts of other modders.  
   
-### Analysis Tools:  
+### Analysis Tools
 Depending on the game’s underlying engine, there may be some tools you can use either in lieu of or in addition to existing game tools.  
   
 #### [dnSpy](https://github.com/dnSpy/dnSpy/releases)  
@@ -135,7 +135,7 @@ modifying the actual game itself.
 In theory it is compatible with any piece of software you can run on your computer, but there is no "easy way" to do 
 anything with it.  
   
-### What Modifications You Should Make to the Game:  
+### What Modifications You Should Make to the Game
 We talked about this briefly in [Game Modification](#game-modification) section.
 The next step is to know what you need to make the game do now that you can modify it. Here are your key goals:  
 - Modify the game so that checks are shuffled  
@@ -183,7 +183,7 @@ Unless you have a circuit schematic for the Super Baby Magic Dream Boy sitting o
 Obscurity is your enemy – there will likely be little to no emulator or modding information, and you’d essentially be
 working from scratch.  
   
-## How to Distribute Game Modifications:  
+## How to Distribute Game Modifications
 **NEVER EVER distribute anyone else's copyrighted work UNLESS THEY EXPLICITLY GIVE YOU PERMISSION TO DO SO!!!**
 
 This is a good way to get any project you're working on sued out from under you.
@@ -196,7 +196,7 @@ issue of distributing someone else’s original work.
 
 Users who have a copy of the game just need to apply the patch, and those who don’t are unable to play.  
   
-### IPS Patches:  
+### IPS Patches
 This is an extremely simple, early patch format, but is limited to games of about 16 Megabytes in size or less.
 You will often find IPS patches being used to distribute mods for old video game ROMs.
 IPS patches are a delta patch format, which means they act only as a simple list of alterations that need to be made to
@@ -212,7 +212,7 @@ forward x number of bytes, which might be necessary for data insertion, the patc
 shifted bytes after the inserted ones. 
 Increasing and decreasing file size is also not a universally supported operation, due to the patch format's age.  
   
-### BPS Patches:  
+### BPS Patches
 BPS is the younger cousin of the IPS patch. 
 
 More flexible and theoretically future-proofed for any file size, BPS patches are based on the idea of linear patching.
@@ -225,7 +225,7 @@ are much easier to do.
 However, like IPS, it isn't a format well suited to randomizers, due to the asymmetric costs of creating and applying
 BPS patches.  
   
-### Xdelta Patches:  
+### Xdelta Patches
 Xdelta is the true successor to IPS, featuring better optimization and verification, and manages to transcend many of
 the limitations of IPS. However, Xdelta patches are particularly expensive to create.  
   
@@ -233,11 +233,11 @@ the limitations of IPS. However, Xdelta patches are particularly expensive to cr
 bsdiff is the current format adopted by Archipelago for creating and distributing patches.
 It is much faster to create patches of this variety, which is why it sees use in this application.
   
-### Mod files:  
+### Mod files
 Games which support modding will usually just let you drag and drop the mod’s files into a folder somewhere.
 Mod files come in many forms, but the rules about not distributing other people's content remain the same.  
   
-## Archipelago Integration:  
+## Archipelago Integration
 Integrating a randomizer into Archipelago involves a few steps.
 There are several things that may need to be done, but the most important is to create an implementation of the 
 `World` class specific to your game. This implementation should exist as a Python module within the `worlds` folder
