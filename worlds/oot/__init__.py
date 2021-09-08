@@ -683,7 +683,8 @@ class OOTWorld(World):
             rom.restore()
 
     # Gathers hint data for OoT. Loops over all world locations for woth, barren, and major item locations.
-    def stage_generate_output(world: MultiWorld, output_directory: str):
+    @classmethod
+    def stage_generate_output(cls, world: MultiWorld, output_directory: str):
         def hint_type_players(hint_type: str) -> set:
             return {autoworld.player for autoworld in world.get_game_worlds("Ocarina of Time") 
                     if autoworld.hints != 'none' and autoworld.hint_dist_user['distribution'][hint_type]['copies'] > 0}
