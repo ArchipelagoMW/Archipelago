@@ -6,7 +6,6 @@ from .Rules import set_rules
 from BaseClasses import Region, Entrance, Item, MultiWorld
 from .Options import ror2_options
 from ..AutoWorld import World
-from random import randint
 
 client_version = 1
 
@@ -32,8 +31,27 @@ class RiskOfRainWorld(World):
         if self.world.start_with_revive[self.player].value:
             self.world.push_precollected(self.world.create_item("Dio's Best Friend", self.player))
 
-        # fills junk_pool with yaml weight values
-        junk_pool = {
+        # if presets are enabled generate junk_pool from the selected preset
+        if self.world.item_pool_presets[self.player].value:
+            pool_option = self.world.item_weights[self.player].value
+            # generate chaos weights if the preset is chosen
+            if pool_option == 5:
+                junk_pool = {
+                    "Item Scrap, Green": self.world.random.randint(0, 100),
+                    "Item Scrap, Red": self.world.random.randint(0, 100),
+                    "Item Scrap, Yellow": self.world.random.randint(0, 100),
+                    "Item Scrap, White": self.world.random.randint(0, 100),
+                    "Common Item": self.world.random.randint(0, 100),
+                    "Uncommon Item": self.world.random.randint(0, 70),
+                    "Legendary Item": self.world.random.randint(0, 45),
+                    "Boss Item": self.world.random.randint(0, 30),
+                    "Lunar Item": self.world.random.randint(0, 60),
+                    "Equipment": self.world.random.randint(0, 50)
+                }
+            else:
+                junk_pool = item_pool_weights[pool_option]
+        else:# generate junk pool from user created presets
+            junk_pool = {
                 "Item Scrap, Green": self.world.green_scrap[self.player].value,
                 "Item Scrap, Red": self.world.red_scrap[self.player].value,
                 "Item Scrap, Yellow": self.world.yellow_scrap[self.player].value,
@@ -45,26 +63,6 @@ class RiskOfRainWorld(World):
                 "Lunar Item": self.world.lunar_item[self.player].value,
                 "Equipment": self.world.equipment[self.player].value
             }
-
-        # if presets are enabled generate junk_pool from the selected preset
-        if self.world.item_pool_presets[self.player].value:
-            pool_option = self.world.item_weights[self.player].value
-            # generate chaos weights
-            if pool_option == 5:
-                junk_pool = {
-                    "item Scrap, Green": randint(0, 100),
-                    "Item Scrap, Red": randint(0, 100),
-                    "Item Scrap, Yellow": randint(0, 100),
-                    "Item Scrap, White": randint(0, 100),
-                    "Common Item": randint(0, 100),
-                    "Uncommon Item": randint(0, 70),
-                    "Legendary Item": randint(0, 25),
-                    "Boss Item": randint(0, 10),
-                    "Lunar Item": randint(0, 40),
-                    "Equipment": randint(0, 40)
-                }
-            else:
-                junk_pool = item_pool_weights[pool_option]
 
         # Generate item pool
         itempool = []
