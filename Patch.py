@@ -16,19 +16,18 @@ current_patch_version = 3
 GAME_ALTTP = 0
 GAME_SM = 1
 supported_games = ["A Link to the Past", "Super Metroid"]
-selected_game = GAME_ALTTP
 
-def generate_yaml(patch: bytes, metadata: Optional[dict] = None) -> bytes:
-    if selected_game == GAME_ALTTP:
+def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: int = GAME_ALTTP) -> bytes:
+    if game == GAME_ALTTP:
         from worlds.alttp.Rom import JAP10HASH
-    elif selected_game == GAME_SM:
+    elif game == GAME_SM:
         from worlds.sm.Rom import JAP10HASH
     else:
         raise RuntimeError("Selected game for base rom not found.")
 
     patch = yaml.dump({"meta": metadata,
                        "patch": patch,
-                       "game": supported_games[selected_game],
+                       "game": supported_games[game],
                        # minimum version of patch system expected for patching to be successful
                        "compatible_version": 1,
                        "version": current_patch_version,
@@ -36,10 +35,10 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None) -> bytes:
     return patch.encode(encoding="utf-8-sig")
 
 
-def generate_patch(rom: bytes, metadata: Optional[dict] = None) -> bytes:
-    if selected_game == GAME_ALTTP:
+def generate_patch(rom: bytes, metadata: Optional[dict] = None, game: int = GAME_ALTTP) -> bytes:
+    if game == GAME_ALTTP:
         from worlds.alttp.Rom import get_base_rom_bytes
-    elif selected_game == GAME_SM:
+    elif game == GAME_SM:
         from worlds.sm.Rom import get_base_rom_bytes
     else:
         raise RuntimeError("Selected game for base rom not found.")
@@ -47,18 +46,17 @@ def generate_patch(rom: bytes, metadata: Optional[dict] = None) -> bytes:
     if metadata is None:
         metadata = {}
     patch = bsdiff4.diff(get_base_rom_bytes(), rom)
-    return generate_yaml(patch, metadata)
+    return generate_yaml(patch, metadata, game)
 
 
 def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str = None,
                       player: int = 0, player_name: str = "", game: int = GAME_ALTTP) -> str:
-    global selected_game
-    selected_game = game
     meta = {"server": server, # allow immediate connection to server in multiworld. Empty string otherwise
             "player_id": player,
             "player_name": player_name}
     bytes = generate_patch(load_bytes(rom_file_to_patch),
-                           meta)
+                           meta,
+                           game)
     target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + ".apbp"
     write_lzma(bytes, target)
     return target
@@ -95,7 +93,7 @@ def create_rom_file(patch_file: str) -> Tuple[dict, str]:
 def update_patch_data(patch_data: bytes, server: str = "") -> bytes:
     data = Utils.parse_yaml(lzma.decompress(patch_data).decode("utf-8-sig"))
     data["meta"]["server"] = server
-    bytes = generate_yaml(data["patch"], data["meta"])
+    bytes = generate_yaml(data["patch"], data["meta"], data["game"])
     return lzma.compress(bytes)
 
 
