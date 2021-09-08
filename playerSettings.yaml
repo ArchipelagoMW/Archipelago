@@ -29,7 +29,6 @@ game: # Pick a game to play
   Minecraft: 0
   Subnautica: 0
   Slay the Spire: 0
-  Terraria: 0
 requires:
   version: 0.1.6 # Version of Archipelago required for this yaml to work as expected.
 # Shared Options supported by all games:
@@ -278,18 +277,6 @@ Minecraft:
     75: 0
     100: 0
   send_defeated_mobs: # Send killed mobs to other Minecraft worlds which have this option enabled.
-    on: 0
-    off: 1
-Terraria:
-  include_hardmode_achievements: # Junk-fills achievements which can only be obtained after defeating the Wall of Flesh.
-    on: 0
-    off: 1
-  # Junk-fills extremely difficult advancements; this is primarily for achievements which require completing large parts of the game 
-  # (such as gelatin world tour or Real Estate Agent) as well as the more advanced fishing quests.
-  include_insane_achievements: 
-    on: 0
-    off: 1
-  include_postgame_achievements: # Some achievements require defeating the Moon Lord first; this will junk-fill them so you won't have to finish to send some items.
     on: 0
     off: 1
 A Link to the Past:
