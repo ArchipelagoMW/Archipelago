@@ -244,6 +244,25 @@ class OOTWorld(World):
 
         self.always_hints = [hint.name for hint in getRequiredHints(self)]
 
+        # Determine items which are not considered advancement based on settings. They will never be excluded.
+        self.nonadvancement_items = {'Double Defense', 'Ice Arrows'}
+        if (self.damage_multiplier != 'ohko' and self.damage_multiplier != 'quadruple' and 
+                self.shuffle_scrubs == 'off' and not self.shuffle_grotto_entrances):
+            # nayru's love may be required to prevent forced damage
+            self.nonadvancement_items.add('Nayrus Love')
+        if getattr(self, 'logic_grottos_without_agony', False) and self.hints != 'agony':
+            # Stone of Agony skippable if not used for hints or grottos
+            self.nonadvancement_items.add('Stone of Agony')
+        if (not self.shuffle_special_interior_entrances and not self.shuffle_overworld_entrances and 
+                not self.warp_songs and not self.spawn_positions):
+            # Serenade and Prelude are never required unless one of those settings is enabled
+            self.nonadvancement_items.add('Serenade of Water')
+            self.nonadvancement_items.add('Prelude of Light')
+        if self.logic_rules == 'glitchless':
+            # Both two-handed swords can be required in glitch logic, so only consider them nonprogression in glitchless
+            self.nonadvancement_items.add('Biggoron Sword')
+            self.nonadvancement_items.add('Giants Knife')
+
     def load_regions_from_json(self, file_path):
         region_json = read_json(file_path)
 
@@ -390,8 +409,8 @@ class OOTWorld(World):
 
     def create_item(self, name: str):
         if name in item_table:
-            return OOTItem(name, self.player, item_table[name], False)
-        return OOTItem(name, self.player, ('Event', True, None, None), True)
+            return OOTItem(name, self.player, item_table[name], False, (name in self.nonadvancement_items))
+        return OOTItem(name, self.player, ('Event', True, None, None), True, False)
 
     def make_event_item(self, name, location, item=None):
         if item is None:
@@ -665,39 +684,61 @@ class OOTWorld(World):
 
     # Gathers hint data for OoT. Loops over all world locations for woth, barren, and major item locations.
     def stage_generate_output(world: MultiWorld, output_directory: str):
-        try:
-            items_by_region = {player: {} for player in world.get_game_players("Ocarina of Time") if world.worlds[player].hints != 'none'}
-            if items_by_region:
-                for player in items_by_region:
-                    for r in world.worlds[player].regions:
-                        items_by_region[player][r.hint_text] = {'dungeon': False, 'weight': 0, 'prog_items': 0}
-                    for d in world.worlds[player].dungeons:
-                        items_by_region[player][d.hint_text] = {'dungeon': True, 'weight': 0, 'prog_items': 0}
-                    del (items_by_region[player]["Link's Pocket"])
-                    del (items_by_region[player][None])
+        def hint_type_players(hint_type: str) -> set:
+            return {autoworld.player for autoworld in world.get_game_worlds("Ocarina of Time") 
+                    if autoworld.hints != 'none' and autoworld.hint_dist_user['distribution'][hint_type]['copies'] > 0}
 
+        try:
+            item_hint_players   = hint_type_players('item')
+            barren_hint_players = hint_type_players('barren')
+            woth_hint_players   = hint_type_players('woth')
+
+            items_by_region = {}
+            for player in barren_hint_players:
+                items_by_region[player] = {}
+                for r in world.worlds[player].regions:
+                    items_by_region[player][r.hint_text] = {'dungeon': False, 'weight': 0, 'is_barren': True}
+                for d in world.worlds[player].dungeons:
+                    items_by_region[player][d.hint_text] = {'dungeon': True, 'weight': 0, 'is_barren': True}
+                del (items_by_region[player]["Link's Pocket"])
+                del (items_by_region[player][None])
+
+            if item_hint_players:  # loop once over all locations to gather major items. Check oot locations for barren/woth if needed
                 for loc in world.get_locations():
                     player = loc.item.player
                     autoworld = world.worlds[player]
-                    if ((player in items_by_region and (autoworld.is_major_item(loc.item) or loc.item.name in autoworld.item_added_hint_types['item'])) 
-                                or (loc.player in items_by_region and loc.name in world.worlds[loc.player].added_hint_types['item'])):
+                    if ((player in item_hint_players and (autoworld.is_major_item(loc.item) or loc.item.name in autoworld.item_added_hint_types['item'])) 
+                                or (loc.player in item_hint_players and loc.name in world.worlds[loc.player].added_hint_types['item'])):
                         autoworld.major_item_locations.append(loc)
 
-                    if loc.game == "Ocarina of Time":
-                        if loc.item.code and (not loc.locked or loc.item.type == 'Song'):  # shuffled item
+                    if loc.game == "Ocarina of Time" and loc.item.code and (not loc.locked or loc.item.type == 'Song'):
+                        if loc.player in barren_hint_players:
                             hint_area = get_hint_area(loc)
                             items_by_region[loc.player][hint_area]['weight'] += 1
                             if loc.item.advancement:
-                                # Non-locked progression. Increment counter
-                                items_by_region[loc.player][hint_area]['prog_items'] += 1
-                                # Skip item at location and see if game is still beatable
+                                items_by_region[loc.player][hint_area]['is_barren'] = False
+                        if loc.player in woth_hint_players and loc.item.advancement:
+                            # Skip item at location and see if game is still beatable
+                            state = CollectionState(world)
+                            state.locations_checked.add(loc)
+                            if not world.can_beat_game(state):
+                                world.worlds[loc.player].required_locations.append(loc)
+            elif barren_hint_players or woth_hint_players:  # Check only relevant oot locations for barren/woth
+                for player in (barren_hint_players | woth_hint_players):
+                    for loc in world.worlds[player].get_locations():
+                        if loc.item.code and (not loc.locked or loc.item.type == 'Song'):
+                            if player in barren_hint_players:
+                                hint_area = get_hint_area(loc)
+                                items_by_region[player][hint_area]['weight'] += 1
+                                if loc.item.advancement:
+                                    items_by_region[player][hint_area]['is_barren'] = False
+                            if player in woth_hint_players and loc.item.advancement:
                                 state = CollectionState(world)
                                 state.locations_checked.add(loc)
                                 if not world.can_beat_game(state):
-                                    world.worlds[loc.player].required_locations.append(loc)
-
-                for autoworld in world.get_game_worlds("Ocarina of Time"):
-                    autoworld.empty_areas = {region: info for (region, info) in items_by_region[autoworld.player].items() if not info['prog_items']}
+                                    world.worlds[player].required_locations.append(loc)
+            for player in barren_hint_players:
+                world.worlds[player].empty_areas = {region: info for (region, info) in items_by_region[player].items() if info['is_barren']}
         except Exception as e:
             raise e
         finally:
@@ -722,6 +763,9 @@ class OOTWorld(World):
     def is_major_item(self, item: OOTItem):
         if item.type == 'Token':
             return self.bridge == 'tokens' or self.lacs_condition == 'tokens'
+
+        if item.name in self.nonadvancement_items:
+            return True
 
         if item.type in ('Drop', 'Event', 'Shop', 'DungeonReward') or not item.advancement:
             return False

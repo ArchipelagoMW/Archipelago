@@ -714,7 +714,6 @@ def buildWorldGossipHints(world, checkedLocations=None):
             fixed_num = world.hint_dist_user['distribution'][hint_type]['fixed']
             hint_weight = world.hint_dist_user['distribution'][hint_type]['weight']
         else:
-            logging.getLogger('').warning("Hint copies is zero for type %s. Assuming this hint type should be disabled.", hint_type)
             fixed_num = 0
             hint_weight = 0
         hint_dist[hint_type] = (hint_weight, world.hint_dist_user['distribution'][hint_type]['copies'])
