@@ -27,10 +27,8 @@ class OOTLogic(LogicMixin):
         mult = self.world.worlds[player].damage_multiplier
         if hearts*4 >= 3:
             return mult != 'ohko' and mult != 'quadruple'
-        elif hearts*4 < 3:
-            return mult != 'ohko'
         else:
-            return True
+            return mult != 'ohko'
 
     # This function operates by assuming different behavior based on the "level of recursion", handled manually. 
     # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region. 
