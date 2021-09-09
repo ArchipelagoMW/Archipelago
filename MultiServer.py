@@ -150,17 +150,33 @@ class Context:
                 logging.info(f"Outgoing message: {msg}")
             return True
 
+    async def broadcast_send_encoded_msgs(self, endpoints: typing.Iterable[Endpoint], msg: str) -> bool:
+        sockets = []
+        for endpoint in endpoints:
+            if endpoint.socket and endpoint.socket.open:
+                sockets.append(endpoint.socket)
+        try:
+            websockets.broadcast(sockets, msg)
+        except RuntimeError:
+            logging.exception("Exception during broadcast_send_encoded_msgs")
+        else:
+            if self.log_network:
+                logging.info(f"Outgoing broadcast: {msg}")
+            return True
+
     def broadcast_all(self, msgs):
         msgs = self.dumper(msgs)
-        for endpoint in self.endpoints:
-            if endpoint.auth:
-                asyncio.create_task(self.send_encoded_msgs(endpoint, msgs))
+        endpoints = (endpoint for endpoint in self.endpoints if endpoint.auth)
+        asyncio.create_task(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
-    def broadcast_team(self, team, msgs):
+    def broadcast_team(self, team: int, msgs):
         msgs = self.dumper(msgs)
-        for client in self.endpoints:
-            if client.auth and client.team == team:
-                asyncio.create_task(self.send_encoded_msgs(client, msgs))
+        endpoints = (endpoint for endpoint in self.endpoints if endpoint.auth and endpoint.team == team)
+        asyncio.create_task(self.broadcast_send_encoded_msgs(endpoints, msgs))
+
+    def broadcast(self, endpoints: typing.Iterable[Endpoint], msgs):
+        msgs = self.dumper(msgs)
+        asyncio.create_task(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
     async def disconnect(self, endpoint):
         if endpoint in self.endpoints:
