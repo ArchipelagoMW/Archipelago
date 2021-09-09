@@ -92,6 +92,8 @@ def set_rules(ootworld):
     # is_child = ootworld.parser.parse_rule('is_child')
     guarantee_hint = ootworld.parser.parse_rule('guarantee_hint')
 
+
+
     for location in ootworld.get_locations():
         if ootworld.shuffle_song_items == 'song':
             if location.type == 'Song':
@@ -157,33 +159,32 @@ def set_shop_rules(ootworld):
     found_bombchus = ootworld.parser.parse_rule('found_bombchus')
     wallet = ootworld.parser.parse_rule('Progressive_Wallet')
     wallet2 = ootworld.parser.parse_rule('(Progressive_Wallet, 2)')
-    for location in ootworld.world.get_filled_locations():
-        if location.player == ootworld.player and location.item.type == 'Shop':
-            # Add wallet requirements
-            if location.item.name in ['Buy Arrows (50)', 'Buy Fish', 'Buy Goron Tunic', 'Buy Bombchu (20)', 'Buy Bombs (30)']:
-                add_rule(location, wallet)
-            elif location.item.name in ['Buy Zora Tunic', 'Buy Blue Fire']:
-                add_rule(location, wallet2)
 
-            # Add adult only checks
-            if location.item.name in ['Buy Goron Tunic', 'Buy Zora Tunic']:
-                is_adult = ootworld.parser.parse_rule('is_adult', location)
-                add_rule(location, is_adult)
+    for location in filter(lambda location: location.item and location.item.type == 'Shop', ootworld.get_locations()):
+        # Add wallet requirements
+        if location.item.name in ['Buy Arrows (50)', 'Buy Fish', 'Buy Goron Tunic', 'Buy Bombchu (20)', 'Buy Bombs (30)']:
+            add_rule(location, wallet)
+        elif location.item.name in ['Buy Zora Tunic', 'Buy Blue Fire']:
+            add_rule(location, wallet2)
 
-            # Add item prerequisite checks
-            if location.item.name in ['Buy Blue Fire',
-                                      'Buy Blue Potion',
-                                      'Buy Bottle Bug',
-                                      'Buy Fish',
-                                      'Buy Green Potion',
-                                      'Buy Poe',
-                                      'Buy Red Potion [30]',
-                                      'Buy Red Potion [40]',
-                                      'Buy Red Potion [50]',
-                                      'Buy Fairy\'s Spirit']:
-                add_rule(location, lambda state: CollectionState._oot_has_bottle(state, ootworld.player))
-            if location.item.name in ['Buy Bombchu (10)', 'Buy Bombchu (20)', 'Buy Bombchu (5)']:
-                add_rule(location, found_bombchus)
+        # Add adult only checks
+        if location.item.name in ['Buy Goron Tunic', 'Buy Zora Tunic']:
+            add_rule(location, ootworld.parser.parse_rule('is_adult', location))
+
+        # Add item prerequisite checks
+        if location.item.name in ['Buy Blue Fire',
+                                  'Buy Blue Potion',
+                                  'Buy Bottle Bug',
+                                  'Buy Fish',
+                                  'Buy Green Potion',
+                                  'Buy Poe',
+                                  'Buy Red Potion [30]',
+                                  'Buy Red Potion [40]',
+                                  'Buy Red Potion [50]',
+                                  'Buy Fairy\'s Spirit']:
+            add_rule(location, lambda state: CollectionState._oot_has_bottle(state, ootworld.player))
+        if location.item.name in ['Buy Bombchu (10)', 'Buy Bombchu (20)', 'Buy Bombchu (5)']:
+            add_rule(location, found_bombchus)
 
 
 # This function should be ran once after setting up entrances and before placing items
