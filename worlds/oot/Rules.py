@@ -90,7 +90,7 @@ def set_rules(ootworld):
     world.get_location('Ganon', player).item_rule = lambda item: item.name == 'Triforce'
 
     # is_child = ootworld.parser.parse_rule('is_child')
-    # guarantee_hint = ootworld.parser.parse_rule('guarantee_hint')
+    guarantee_hint = ootworld.parser.parse_rule('guarantee_hint')
 
     for location in ootworld.get_locations():
         if ootworld.shuffle_song_items == 'song':
@@ -126,8 +126,8 @@ def set_rules(ootworld):
         # if location.type == 'HintStone' and ootworld.hints == 'mask':
         #     location.add_rule(is_child)
 
-        # if location.name in ootworld.always_hints:
-            # location.add_rule(guarantee_hint)
+        if location.name in ootworld.always_hints:
+            add_rule(location, guarantee_hint)
 
 
 def create_shop_rule(location, parser):
