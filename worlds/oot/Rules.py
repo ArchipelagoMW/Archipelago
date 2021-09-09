@@ -74,6 +74,7 @@ class OOTLogic(LogicMixin):
                     self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
 
+# Sets extra rules on various specific locations not handled by the rule parser.
 def set_rules(ootworld):
     logger = logging.getLogger('')
 
@@ -92,44 +93,22 @@ def set_rules(ootworld):
     # is_child = ootworld.parser.parse_rule('is_child')
     guarantee_hint = ootworld.parser.parse_rule('guarantee_hint')
 
-
-
-    for location in ootworld.get_locations():
-        if ootworld.shuffle_song_items == 'song':
-            if location.type == 'Song':
-                # must be a song, or there are songs in starting items; then it can be anything
-                add_item_rule(location, lambda item: 
-                    (ootworld.starting_songs and item.type != 'Song')
-                    or (item.type == 'Song' and item.player == location.player))
-            else:
-                add_item_rule(location, lambda item: item.type != 'Song')
-
+    for location in filter(lambda location: location.name in ootworld.shop_prices or 'Deku Scrub' in location.name, ootworld.get_locations()):
         if location.type == 'Shop':
-            if location.name in ootworld.shop_prices:
-                add_item_rule(location, lambda item: item.type != 'Shop')
-                location.price = ootworld.shop_prices[location.name]
-                add_rule(location, create_shop_rule(location, ootworld.parser))
-            else:
-                add_item_rule(location, lambda item: item.type == 'Shop' and item.player == location.player)
-        elif 'Deku Scrub' in location.name:
-            add_rule(location, create_shop_rule(location, ootworld.parser))
-        else:
-            add_item_rule(location, lambda item: item.type != 'Shop')
+            location.price = ootworld.shop_prices[location.name]
+        add_rule(location, create_shop_rule(location, ootworld.parser))
 
-        if ootworld.skip_child_zelda and location.name == 'Song from Impa':
-            limit_to_itemset(location, SaveContext.giveable_items)
-            add_item_rule(location, lambda item: item.player == location.player)
+    if ootworld.dungeon_mq['Forest Temple'] and ootworld.shuffle_bosskeys == 'dungeon' and ootworld.shuffle_smallkeys == 'dungeon' and ootworld.tokensanity == 'off':
+        # First room chest needs to be a small key. Make sure the boss key isn't placed here.
+        location = world.get_location('Forest Temple MQ First Room Chest', player)
+        forbid_item(location, 'Boss Key (Forest Temple)', ootworld.player)
 
-        if location.name == 'Forest Temple MQ First Room Chest' and ootworld.shuffle_bosskeys == 'dungeon' and ootworld.shuffle_smallkeys == 'dungeon' and ootworld.tokensanity == 'off':
-            # This location needs to be a small key. Make sure the boss key isn't placed here.
-            forbid_item(location, 'Boss Key (Forest Temple)', ootworld.player)
+    for name in ootworld.always_hints:
+        add_rule(world.get_location(name, player), guarantee_hint)
 
-        # TODO: re-add hints once they are working
-        # if location.type == 'HintStone' and ootworld.hints == 'mask':
-        #     location.add_rule(is_child)
-
-        if location.name in ootworld.always_hints:
-            add_rule(location, guarantee_hint)
+    # TODO: re-add hints once they are working
+    # if location.type == 'HintStone' and ootworld.hints == 'mask':
+    #     location.add_rule(is_child)
 
 
 def create_shop_rule(location, parser):
@@ -196,9 +175,9 @@ def set_entrances_based_rules(ootworld):
 
     all_state = ootworld.world.get_all_state(False)
 
-    for location in ootworld.get_locations():
+    for location in filter(lambda location: location.type == 'Shop', ootworld.get_locations()):
         # If a shop is not reachable as adult, it can't have Goron Tunic or Zora Tunic as child can't buy these
-        if location.type == 'Shop' and not all_state._oot_reach_as_age(location.parent_region.name, 'adult', ootworld.player):
+        if not all_state._oot_reach_as_age(location.parent_region.name, 'adult', ootworld.player):
             forbid_item(location, 'Buy Goron Tunic', ootworld.player)
             forbid_item(location, 'Buy Zora Tunic', ootworld.player)
 
