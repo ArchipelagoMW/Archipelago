@@ -1808,8 +1808,11 @@ def get_override_entry(location):
     player_id = location.item.player
     if location.item.game != 'Ocarina of Time': 
         # This is an AP sendable. It's guaranteed to not be None. 
-        item_id = 0x0C  # Ocarina of Time item, otherwise unused
         looks_like_item_id = 0
+        if location.item.advancement:
+            item_id = 0xCB
+        else:
+            item_id = 0xCC
     else: 
         item_id = location.item.index
         if None in [scene, default, item_id]:
@@ -2057,7 +2060,10 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
         else:
             if location.item.game != "Ocarina of Time": 
                 item_display = location.item
-                item_display.index = 0x0C # Ocarina of Time item
+                if location.item.advancement:
+                    item_display.index = 0xEF
+                else:
+                    item_display.index = 0xEF # these will be different later
                 item_display.special = {}
             elif location.item.looks_like_item is not None:
                 item_display = location.item.looks_like_item
