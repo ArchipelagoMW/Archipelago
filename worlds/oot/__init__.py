@@ -169,7 +169,6 @@ class OOTWorld(World):
         self.mq_dungeons_random = False  # this will be a deprecated option later
         self.ocarina_songs = False  # just need to pull in the OcarinaSongs module
         self.big_poe_count = 1  # disabled due to client-side issues for now
-        self.correct_chest_sizes = False  # will probably never be implemented since multiworld items are always major
         # ER options
         self.shuffle_interior_entrances = 'off'
         self.shuffle_grotto_entrances = False
@@ -180,8 +179,7 @@ class OOTWorld(World):
         self.spawn_positions = False
 
         # Set internal names used by the OoT generator
-        self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon',
-                                                    'overworld']  # only 'keysanity' and 'remove' implemented
+        self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld']
 
         # Hint stuff
         self.misc_hints = True  # this is just always on

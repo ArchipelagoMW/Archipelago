@@ -483,6 +483,11 @@ timesavers_options: typing.Dict[str, type(Option)] = {
 }
 
 
+class CSMC(Toggle):
+    """Changes chests containing progression into large chests, and nonprogression into small chests."""
+    displayname = "Chest Size Matches Contents"
+
+
 class Hints(Choice): 
     """Gossip Stones can give hints about item locations."""
     displayname = "Gossip Stones"
@@ -559,7 +564,7 @@ class RupeeStart(Toggle):
 
 
 misc_options: typing.Dict[str, type(Option)] = {
-    # "clearer_hints": DefaultOnToggle,
+    "correct_chest_sizes": CSMC,
     "hints": Hints,
     "hint_dist": HintDistribution,
     "text_shuffle": TextShuffle,
