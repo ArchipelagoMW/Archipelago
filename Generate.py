@@ -113,7 +113,8 @@ def main(args=None, callback=ERmain):
                 player_id += 1
 
     args.multi = max(player_id-1, args.multi)
-    print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed}")
+    print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed} with plando: "
+          f"{', '.join(args.plando)}")
 
     if not weights_cache:
         raise Exception(f"No weights found. Provide a general weights file ({args.weights_file_path}) or individual player files. "
@@ -498,7 +499,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             raise Exception(f"Could not exclude location {location}, as it was not recognized.")
 
     if ret.game in AutoWorldRegister.world_types:
-        for option_name, option in AutoWorldRegister.world_types[ret.game].options.items():
+        for option_name, option in world_type.options.items():
             if option_name in game_weights:
                 try:
                     if issubclass(option, Options.OptionDict) or issubclass(option, Options.OptionList):
@@ -509,6 +510,8 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                     raise Exception(f"Error generating option {option_name} in {ret.game}") from e
             else:
                 setattr(ret, option_name, option(option.default))
+        if "items" in plando_options:
+            ret.plando_items = roll_item_plando(world_type, game_weights)
         if ret.game == "Minecraft":
             # bad hardcoded behavior to make this work for now
             ret.plando_connections = []
@@ -526,6 +529,43 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     else:
         raise Exception(f"Unsupported game {ret.game}")
     return ret
+
+
+def roll_item_plando(world_type, weights):
+    plando_items = []
+    def add_plando_item(item: str, location: str):
+        if item not in world_type.item_name_to_id:
+            raise Exception(f"Could not plando item {item} as the item was not recognized")
+        if location not in world_type.location_name_to_id:
+            raise Exception(
+                f"Could not plando item {item} at location {location} as the location was not recognized")
+        plando_items.append(PlandoItem(item, location, location_world, from_pool, force))
+
+    options = weights.get("plando_items", [])
+    for placement in options:
+        if roll_percentage(get_choice_legacy("percentage", placement, 100)):
+            from_pool = get_choice_legacy("from_pool", placement, PlandoItem._field_defaults["from_pool"])
+            location_world = get_choice_legacy("world", placement, PlandoItem._field_defaults["world"])
+            force = str(get_choice_legacy("force", placement, PlandoItem._field_defaults["force"])).lower()
+            if "items" in placement and "locations" in placement:
+                items = placement["items"]
+                locations = placement["locations"]
+                if isinstance(items, dict):
+                    item_list = []
+                    for key, value in items.items():
+                        item_list += [key] * value
+                    items = item_list
+                if not items or not locations:
+                    raise Exception("You must specify at least one item and one location to place items.")
+                random.shuffle(items)
+                random.shuffle(locations)
+                for item, location in zip(items, locations):
+                    add_plando_item(item, location)
+            else:
+                item = get_choice_legacy("item", placement, get_choice_legacy("items", placement))
+                location = get_choice_legacy("location", placement)
+                add_plando_item(item, location)
+    return plando_items
 
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
@@ -646,42 +686,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
             .get(medallion.lower(), None)
         if not ret.required_medallions[index]:
             raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
-
-    ret.plando_items = []
-    if "items" in plando_options:
-
-        def add_plando_item(item: str, location: str):
-            if item not in item_table:
-                raise Exception(f"Could not plando item {item} as the item was not recognized")
-            if location not in location_table and location not in key_drop_data:
-                raise Exception(
-                    f"Could not plando item {item} at location {location} as the location was not recognized")
-            ret.plando_items.append(PlandoItem(item, location, location_world, from_pool, force))
-
-        options = weights.get("plando_items", [])
-        for placement in options:
-            if roll_percentage(get_choice_legacy("percentage", placement, 100)):
-                from_pool = get_choice_legacy("from_pool", placement, PlandoItem._field_defaults["from_pool"])
-                location_world = get_choice_legacy("world", placement, PlandoItem._field_defaults["world"])
-                force = str(get_choice_legacy("force", placement, PlandoItem._field_defaults["force"])).lower()
-                if "items" in placement and "locations" in placement:
-                    items = placement["items"]
-                    locations = placement["locations"]
-                    if isinstance(items, dict):
-                        item_list = []
-                        for key, value in items.items():
-                            item_list += [key] * value
-                        items = item_list
-                    if not items or not locations:
-                        raise Exception("You must specify at least one item and one location to place items.")
-                    random.shuffle(items)
-                    random.shuffle(locations)
-                    for item, location in zip(items, locations):
-                        add_plando_item(item, location)
-                else:
-                    item = get_choice_legacy("item", placement, get_choice_legacy("items", placement))
-                    location = get_choice_legacy("location", placement)
-                    add_plando_item(item, location)
 
     ret.plando_texts = {}
     if "texts" in plando_options:
