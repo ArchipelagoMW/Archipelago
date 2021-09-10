@@ -1287,8 +1287,26 @@ Ocarina of Time:
     harp: 0
     grind_organ: 0
     flute: 0
-  logic_tricks: # Add logic tricks keyed by "nice" name, e.g. "Hidden Grottos without Stone of Agony"
-    []
+
+  # Uncomment this section to enable logical tricks for Ocarina of Time.
+  # Add logic tricks keyed by "nice" name rather than internal name: "Hidden Grottos without Stone of Agony", not "logic_grottos_without_agony"
+  # The following is the typical set of racing tricks, though you can add or remove them as desired.
+  # logic_tricks: 
+  #   - Fewer Tunic Requirements
+  #   - Hidden Grottos without Stone of Agony
+  #   - Child Deadhand without Kokiri Sword
+  #   - Man on Roof without Hookshot
+  #   - Dodongo's Cavern Spike Trap Room Jump without Hover Boots
+  #   - Hammer Rusted Switches Through Walls
+  #   - Windmill PoH as Adult with Nothing
+  #   - Crater's Bean PoH with Hover Boots
+  #   - Forest Temple East Courtyard Vines with Hookshot
+  #   - Bottom of the Well without Lens of Truth
+  #   - Ganon's Castle without Lens of Truth
+  #   - Gerudo Training Grounds without Lens of Truth
+  #   - Shadow Temple before Invisible Moving Platform without Lens of Truth
+  #   - Shadow Temple beyond Invisible Moving Platform without Lens of Truth
+  #   - Spirit Temple without Lens of Truth
 
 # meta_ignore, linked_options and triggers work for any game
 meta_ignore: # Nullify options specified in the meta.yaml file. Adding an option here guarantees it will not occur in your seed, even if the .yaml file specifies it
