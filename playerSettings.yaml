@@ -916,6 +916,9 @@ Ocarina of Time:
     random: 50
     random-low: 0
     random-high: 0
+  correct_chest_sizes: # Changes chests containing progression into large chests, and nonprogression into small chests.
+    false: 50
+    true: 0
   hints: # Gossip Stones can give hints about item locations.
     none: 0
     mask: 0
