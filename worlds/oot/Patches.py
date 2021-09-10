@@ -2125,6 +2125,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             update_message_by_id(messages, shop_item.description_message, description_text, 0x03)
             update_message_by_id(messages, shop_item.purchase_message, purchase_text, 0x03)
 
+        if any(filter(lambda c: c in location.name, {'5', '6', '7', '8'})):
             world.current_shop_id += 1
 
     return shop_objs
