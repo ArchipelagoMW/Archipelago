@@ -49,7 +49,7 @@ class RiskOfRainWorld(World):
                     "Equipment": self.world.random.randint(0, 50)
                 }
             else:
-                junk_pool = item_pool_weights[pool_option]
+                junk_pool = item_pool_weights[pool_option].copy()
         else:# generate junk pool from user created presets
             junk_pool = {
                 "Item Scrap, Green": self.world.green_scrap[self.player].value,
