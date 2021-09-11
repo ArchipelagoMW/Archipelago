@@ -231,7 +231,6 @@ async def keep_alive(ctx: CommonContext):
         await asyncio.sleep(100)
         if ctx.server and ctx.slot:
             await ctx.send_msgs([{"cmd": "Bounce", "slots": [ctx.slot]}])
-            logger.info("Bouncy")
 
 
 async def server_loop(ctx: CommonContext, address=None):
