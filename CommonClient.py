@@ -17,6 +17,7 @@ logger = logging.getLogger("Client")
 
 gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
 
+
 class ClientCommandProcessor(CommandProcessor):
     def __init__(self, ctx: CommonContext):
         self.ctx = ctx
@@ -86,11 +87,12 @@ class ClientCommandProcessor(CommandProcessor):
 
 
 class CommonContext():
-    starting_reconnect_delay = 5
-    current_reconnect_delay = starting_reconnect_delay
-    command_processor = ClientCommandProcessor
-    game: None
-    ui: None
+    starting_reconnect_delay: int = 5
+    current_reconnect_delay: int = starting_reconnect_delay
+    command_processor: int = ClientCommandProcessor
+    game = None
+    ui = None
+    keep_alive_task = None
 
     def __init__(self, server_address, password):
         # server state
@@ -126,6 +128,9 @@ class CommonContext():
         self.slow_mode = False
         self.jsontotextparser = JSONtoTextParser(self)
         self.set_getters(network_data_package)
+
+        # execution
+        self.keep_alive_task = asyncio.create_task(keep_alive(self))
 
     async def connection_closed(self):
         self.auth = None
@@ -217,6 +222,16 @@ class CommonContext():
     def on_package(self, cmd: str, args: dict):
         """For custom package handling in subclasses."""
         pass
+
+
+async def keep_alive(ctx: CommonContext):
+    """ some ISPs/network configurations drop TCP connections if no payload is sent (ignore TCP-keep-alive)
+     so we send a payload to prevent drop and if we were dropped anyway this will cause a reconnect."""
+    while not ctx.exit_event.is_set():
+        await asyncio.sleep(100)
+        if ctx.server and ctx.slot:
+            await ctx.send_msgs([{"cmd": "Bounce", "slots": [ctx.slot]}])
+            logger.info("Bouncy")
 
 
 async def server_loop(ctx: CommonContext, address=None):
