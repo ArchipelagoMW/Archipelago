@@ -674,7 +674,6 @@ class OOTWorld(World):
             gc = next(filter(lambda dungeon: dungeon.name == 'Ganons Castle', self.dungeons))
             locations = [loc.name for region in gc.regions for loc in region.locations if loc.item is None]
             junk_fill_locations = self.world.random.sample(locations, round(len(locations) * ganon_junk_fill))
-            print(junk_fill_locations)
             exclusion_rules(self.world, self.player, junk_fill_locations)
 
         # Locations which are not sendable must be converted to events
