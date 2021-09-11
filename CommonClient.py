@@ -252,13 +252,13 @@ async def server_loop(ctx: CommonContext, address=None):
             logger.error('Unable to connect to multiworld server at cached address. '
                          'Please use the connect button above.')
         else:
-            logger.error('Connection refused by the multiworld server')
+            logger.exception('Connection refused by the multiworld server')
+    except websockets.InvalidURI:
+        logger.exception('Failed to connect to the multiworld server (invalid URI)')
     except (OSError, websockets.InvalidURI):
-        logger.error('Failed to connect to the multiworld server')
+        logger.exception('Failed to connect to the multiworld server')
     except Exception as e:
-        logger.error('Lost connection to the multiworld server, type /connect to reconnect')
-        if not isinstance(e, websockets.WebSocketException):
-            logger.exception(e)
+        logger.exception('Lost connection to the multiworld server, type /connect to reconnect')
     finally:
         await ctx.connection_closed()
         if ctx.server_address:
