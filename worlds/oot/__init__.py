@@ -647,8 +647,8 @@ class OOTWorld(World):
         impa = self.world.get_location("Song from Impa", self.player)
         if self.skip_child_zelda and impa.item is None:
             from .SaveContext import SaveContext
-            item_to_place = self.world.random.choice(item for item in self.world.itempool if
-                                                     item.player == self.player and item.name in SaveContext.giveable_items)
+            item_to_place = self.world.random.choice(list(item for item in self.world.itempool if
+                                                          item.player == self.player and item.name in SaveContext.giveable_items))
             impa.place_locked_item(item_to_place)
             self.world.itempool.remove(item_to_place)
 
