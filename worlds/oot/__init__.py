@@ -29,6 +29,7 @@ from Utils import get_options, output_path
 from BaseClasses import MultiWorld, CollectionState, RegionType
 from Options import Range, Toggle, OptionList
 from Fill import fill_restrictive, FillError
+from worlds.generic.Rules import exclusion_rules
 from ..AutoWorld import World
 
 location_id_offset = 67000
@@ -651,6 +652,28 @@ class OOTWorld(World):
                                                           item.player == self.player and item.name in SaveContext.giveable_items))
             impa.place_locked_item(item_to_place)
             self.world.itempool.remove(item_to_place)
+
+        # Exclude locations in Ganon's Castle proportional to the number of items required to make the bridge
+        if self.bridge == 'medallions':
+            ganon_junk_fill = self.bridge_medallions / 9
+        elif self.bridge == 'stones':
+            ganon_junk_fill = self.bridge_stones / 9
+        elif self.bridge == 'dungeons':
+            ganon_junk_fill = self.bridge_rewards / 9
+        elif self.bridge == 'vanilla':
+            ganon_junk_fill = 2 / 9
+        elif self.bridge == 'tokens':
+            ganon_junk_fill = self.bridge_tokens / 100
+        elif self.bridge == 'open':
+            ganon_junk_fill = 0
+        else:
+            raise Exception("Unexpected bridge setting")
+
+        gc = next(filter(lambda dungeon: dungeon.name == 'Ganons Castle', self.dungeons))
+        locations = [loc.name for region in gc.regions for loc in region.locations if loc.item is None]
+        junk_fill_locations = self.world.random.sample(locations, round(len(locations) * ganon_junk_fill))
+        print(junk_fill_locations)
+        exclusion_rules(self.world, self.player, junk_fill_locations)
 
         # Locations which are not sendable must be converted to events
         # This includes all locations for which show_in_spoiler is false, and shuffled shop items.
