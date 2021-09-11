@@ -50,7 +50,7 @@ class RiskOfRainWorld(World):
                 }
             else:
                 junk_pool = item_pool_weights[pool_option].copy()
-        else:# generate junk pool from user created presets
+        else:  # generate junk pool from user created presets
             junk_pool = {
                 "Item Scrap, Green": self.world.green_scrap[self.player].value,
                 "Item Scrap, Red": self.world.red_scrap[self.player].value,
@@ -73,14 +73,13 @@ class RiskOfRainWorld(World):
         if not self.world.enable_lunar[self.player]:
             junk_pool.pop("Lunar Item")
 
-
         # Fill remaining items with randomly generated junk
         itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
                                               k=self.world.total_locations[self.player] -
-                                                self.world.total_revivals[self.player] - self.world.start_with_revive[self.player].value)
+                                                self.world.total_revivals[self.player])
 
         # Convert itempool into real items
-        itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
+        itempool = list(map(lambda name: self.create_item(name), itempool))
 
         self.world.itempool += itempool
 
@@ -110,7 +109,7 @@ def create_regions(world, player: int):
         create_region(world, player, 'Menu', None, ['Lobby']),
         create_region(world, player, 'Petrichor V',
                       [location for location in base_location_table] +
-                      [f"ItemPickup{i}" for i in range(1, world.total_locations[player])])
+                      [f"ItemPickup{i}" for i in range(1, 1+world.total_locations[player])])
     ]
 
     world.get_entrance("Lobby", player).connect(world.get_region("Petrichor V", player))
@@ -127,7 +126,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     ret.world = world
     if locations:
         for location in locations:
-            loc_id = location_table.get(location, 0)
+            loc_id = location_table[location]
             location = RiskOfRainLocation(player, location, loc_id, ret)
             ret.locations.append(location)
     if exits:
