@@ -337,5 +337,6 @@ fields in the class being extended.
 This is also a good place to put game-specific quirky behavior that needs to be managed, as it tends to make things a bit
 cluttered if you put these things elsewhere.  
   
-I recommend looking at existing implementations to see how all this works first-hand. 
+The various methods and attributes are documented in `/worlds/AutoWorld.py[World]`, 
+though it is also recommended to look at existing implementations to see how all this works first-hand. 
 Once you get all that, all that remains to do is test the game and publish your work.
