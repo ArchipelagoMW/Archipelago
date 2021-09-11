@@ -490,6 +490,10 @@ async def on_client_joined(ctx: Context, client: Client):
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
         f"playing {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}).")
+    # TODO: remove with 0.2
+    if client.version < Version(0, 1, 7):
+        ctx.notify_client(client,
+                          "Warning: Your client's datapackage handling may be unsupported soon. (Version < 0.1.7)")
 
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
