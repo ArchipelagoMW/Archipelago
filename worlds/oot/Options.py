@@ -109,11 +109,19 @@ class TriforceHunt(Toggle):
 
 
 class TriforceGoal(Range):
-    """Number of Triforce pieces required to complete the game. Total number placed determined by the Item Pool setting."""
+    """Number of Triforce pieces required to complete the game."""
     displayname = "Required Triforce Pieces"
     range_start = 1
-    range_end = 50
+    range_end = 100
     default = 20
+
+
+class ExtraTriforces(Range):
+    """Percentage of additional Triforce pieces in the pool, separate from the item pool setting."""
+    displayname = "Percentage of Extra Triforce Pieces"
+    range_start = 0
+    range_end = 100
+    default = 50
 
 
 class LogicalChus(Toggle):
@@ -132,6 +140,7 @@ world_options: typing.Dict[str, type(Option)] = {
     # "spawn_positions": Toggle,
     "triforce_hunt": TriforceHunt, 
     "triforce_goal": TriforceGoal,
+    "extra_triforce_percentage": ExtraTriforces,
     "bombchus_in_logic": LogicalChus,
     # "mq_dungeons": make_range(0, 12),
 }

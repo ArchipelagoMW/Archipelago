@@ -115,13 +115,6 @@ item_difficulty_max = {
     },
 }
 
-TriforceCounts = {
-    'plentiful': Decimal(2.00),
-    'balanced':  Decimal(1.50),
-    'scarce':    Decimal(1.25),
-    'minimal':   Decimal(1.00),
-}
-
 DT_vanilla = (
     ['Recovery Heart'] * 2)
 
@@ -1356,7 +1349,7 @@ def get_pool_core(world):
         world.remove_from_start_inventory.append(item.name)
 
     if world.triforce_hunt:
-        triforce_count = int((TriforceCounts[world.item_pool_value] * world.triforce_goal).to_integral_value(rounding=ROUND_HALF_UP))
+        triforce_count = int((Decimal(100 + world.extra_triforce_percentage)/100 * world.triforce_goal).to_integral_value(rounding=ROUND_HALF_UP))
         pending_junk_pool.extend(['Triforce Piece'] * triforce_count)
 
     if world.shuffle_ganon_bosskey == 'on_lacs':

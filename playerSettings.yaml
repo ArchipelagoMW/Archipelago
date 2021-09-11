@@ -723,10 +723,17 @@ Ocarina of Time:
   triforce_hunt: # Gather pieces of the Triforce scattered around the world to complete the game.
     false: 50
     true: 0
-  triforce_goal: # Number of Triforce pieces required to complete the game. Total number placed determined by the Item Pool setting.
+  triforce_goal: # Number of Triforce pieces required to complete the game.
     # you can add additional values between minimum and maximum
     1: 0 # minimum value
     50: 0 # maximum value
+    random: 50
+    random-low: 0
+    random-high: 0
+  extra_triforce_percentage: # Percentage of additional Triforce pieces in the pool, separate from the item pool setting.
+    # you can add additional values between minimum and maximum
+    0: 0 # minimum value
+    100: 0 # maximum value
     random: 50
     random-low: 0
     random-high: 0
