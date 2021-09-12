@@ -2071,9 +2071,9 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             if location.item.game != "Ocarina of Time": 
                 item_display = location.item
                 if location.item.advancement:
-                    item_display.index = 0xEF
+                    item_display.index = 0xCB
                 else:
-                    item_display.index = 0xEF # these will be different later
+                    item_display.index = 0xCC
                 item_display.special = {}
             elif location.item.looks_like_item is not None:
                 item_display = location.item.looks_like_item
