@@ -224,13 +224,17 @@ class CommonContext():
         pass
 
 
-async def keep_alive(ctx: CommonContext):
-    """ some ISPs/network configurations drop TCP connections if no payload is sent (ignore TCP-keep-alive)
-     so we send a payload to prevent drop and if we were dropped anyway this will cause a reconnect."""
+async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
+    """some ISPs/network configurations drop TCP connections if no payload is sent (ignore TCP-keep-alive)
+     so we send a payload to prevent drop and if we were dropped anyway this will cause an auto-reconnect."""
+    seconds_elapsed = 0
     while not ctx.exit_event.is_set():
-        await asyncio.sleep(100)
+        await asyncio.sleep(1)  # short sleep to not block program shutdown
         if ctx.server and ctx.slot:
-            await ctx.send_msgs([{"cmd": "Bounce", "slots": [ctx.slot]}])
+            seconds_elapsed += 1
+            if seconds_elapsed > seconds_between_checks:
+                await ctx.send_msgs([{"cmd": "Bounce", "slots": [ctx.slot]}])
+                seconds_elapsed = 0
 
 
 async def server_loop(ctx: CommonContext, address=None):
