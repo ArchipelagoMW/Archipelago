@@ -22,7 +22,7 @@ from typing import Optional
 
 from BaseClasses import CollectionState, Region
 from worlds.alttp.SubClasses import ALttPLocation
-from worlds.alttp.Shops import ShopType
+from worlds.alttp.Shops import ShopType, ShopPriceType
 from worlds.alttp.Dungeons import dungeon_music_addresses
 from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
 from worlds.alttp.Text import MultiByteTextMapper, text_addresses, Credits, TextTable
@@ -1711,7 +1711,13 @@ def write_custom_shops(rom, world, player):
         for index, item in enumerate(shop.inventory):
             if item is None:
                 break
-            price_data = int16_as_bytes(0x8000 | 0x100 * (item["price_type"] - 1) | item['price'])
+            if item['price_type'] != ShopPriceType.Rupees:
+                # Set special price flag 0x8000
+                # Then set the type of price we're setting 0x7F00 (this starts from Hearts, not Rupees, subtract 1)
+                # Then append the price/index into the second byte 0x00FF
+                price_data = int16_as_bytes(0x8000 | 0x100 * (item["price_type"] - 1) | item['price'])
+            else:
+                price_data = int16_as_bytes(item['price'])
             slot = 0 if shop.type == ShopType.TakeAny else index
             if not item['item'] in item_table:  # item not native to ALTTP
                 item_code = get_nonnative_item_sprite(item['item'])
