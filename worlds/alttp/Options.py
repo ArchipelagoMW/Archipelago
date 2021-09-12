@@ -126,6 +126,59 @@ class Progressive(Choice):
         return random.choice([True, False]) if self.value == self.option_grouped_random else bool(self.value)
 
 
+class Swordless(Toggle):
+    """No swords. Curtains in Skull Woods and Agahnim\'s
+    Tower are removed, Agahnim\'s Tower barrier can be
+    destroyed with hammer. Misery Mire and Turtle Rock
+    can be opened without a sword. Hammer damages Ganon.
+    Ether and Bombos Tablet can be activated with Hammer
+    (and Book)."""
+    displayname = "Swordless"
+
+
+class Retro(Toggle):
+    """Zelda-1 like mode. You have to purchase a quiver to shoot arrows using rupees
+    and there are randomly placed take-any caves that contain one Sword and choices of Heart Container/Blue Potion."""
+    displayname = "Retro"
+
+
+class RestrictBossItem(Toggle):
+    """Don't place dungeon-native items on the dungeon's boss."""
+    displayname = "Prevent Dungeon Item on Boss"
+
+
+class Hints(DefaultOnToggle):
+    """Put item and entrance placement hints on telepathic tiles and some NPCs.
+    Additionally King Zora and Bottle Merchant say what they're selling."""
+    displayname = "Hints"
+
+
+class EnemyShuffle(Toggle):
+    """Randomize every enemy spawn.
+    If mode is Standard, Hyrule Castle is left out (may result in visually wrong enemy sprites in that area.)"""
+    displayname = "Enemy Shuffle"
+
+
+class KillableThieves(Toggle):
+    """Makes Thieves killable."""
+    displayname = "Killable Thieves"
+
+
+class BushShuffle(Toggle):
+    """Randomize chance that a bush contains an enemy as well as which enemy may spawn."""
+    displayname = "Bush Shuffle"
+
+
+class TileShuffle(Toggle):
+    """Randomize flying tiles floor patterns."""
+    displayname = "Tile Shuffle"
+
+
+class PotShuffle(Toggle):
+    """Shuffle contents of pots within "supertiles" (item will still be nearby original placement)."""
+    displayname = "Pot Shuffle"
+
+
 class Palette(Choice):
     option_default = 0
     option_good = 1
@@ -226,6 +279,13 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "compass_shuffle": compass_shuffle,
     "map_shuffle": map_shuffle,
     "progressive": Progressive,
+    "swordless": Swordless,
+    "hints": Hints,
+    "restrict_dungeon_item_on_boss": RestrictBossItem,
+    "pot_shuffle": PotShuffle,
+    "enemy_shuffle": EnemyShuffle,
+    "killable_thieves": KillableThieves,
+    "bush_shuffle": BushShuffle,
     "shop_item_slots": ShopItemSlots,
     "ow_palettes": OWPalette,
     "uw_palettes": UWPalette,

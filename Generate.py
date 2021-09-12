@@ -121,10 +121,9 @@ def main(args=None, callback=ERmain):
                         f"A mix is also permitted.")
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
-    erargs.create_spoiler = args.spoiler > 0
     erargs.glitch_triforce = options["generator"]["glitch_triforce_room"]
+    erargs.spoiler = args.spoiler
     erargs.race = args.race
-    erargs.skip_playthrough = args.spoiler < 2
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
 
@@ -587,8 +586,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     if ret.dark_room_logic not in {"lamp", "torches", "none"}:
         raise ValueError(f"Unknown Dark Room Logic: \"{ret.dark_room_logic}\"")
 
-    ret.restrict_dungeon_item_on_boss = get_choice_legacy('restrict_dungeon_item_on_boss', weights, False)
-
     entrance_shuffle = get_choice_legacy('entrance_shuffle', weights, 'vanilla')
     if entrance_shuffle.startswith('none-'):
         ret.shuffle = 'vanilla'
@@ -628,11 +625,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         ret.shop_shuffle = ''
 
     ret.mode = get_choice_legacy("mode", weights)
-    ret.retro = get_choice_legacy("retro", weights)
-
-    ret.hints = get_choice_legacy('hints', weights)
-
-    ret.swordless = get_choice_legacy('swordless', weights, False)
 
     ret.difficulty = get_choice_legacy('item_pool', weights)
 
@@ -640,12 +632,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     boss_shuffle = get_choice_legacy('boss_shuffle', weights)
     ret.shufflebosses = get_plando_bosses(boss_shuffle, plando_options)
-
-    ret.enemy_shuffle = bool(get_choice_legacy('enemy_shuffle', weights, False))
-
-    ret.killable_thieves = get_choice_legacy('killable_thieves', weights, False)
-    ret.tile_shuffle = get_choice_legacy('tile_shuffle', weights, False)
-    ret.bush_shuffle = get_choice_legacy('bush_shuffle', weights, False)
 
     ret.enemy_damage = {None: 'default',
                         'default': 'default',
@@ -655,8 +641,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                         }[get_choice_legacy('enemy_damage', weights)]
 
     ret.enemy_health = get_choice_legacy('enemy_health', weights)
-
-    ret.shufflepots = get_choice_legacy('pot_shuffle', weights)
 
     ret.beemizer = int(get_choice_legacy('beemizer', weights, 0))
 

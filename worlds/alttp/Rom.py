@@ -323,7 +323,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         'GrayscaleMode': False,
         'GenerateSpoilers': False,
         'RandomizeLinkSpritePalette': False,
-        'RandomizePots': world.shufflepots[player],
+        'RandomizePots': world.pot_shuffle[player],
         'ShuffleMusic': False,
         'BootlegMagic': True,
         'CustomBosses': False,

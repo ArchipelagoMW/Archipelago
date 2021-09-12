@@ -77,7 +77,6 @@ class MultiWorld():
             set_player_attr('shuffle', "vanilla")
             set_player_attr('logic', "noglitches")
             set_player_attr('mode', 'open')
-            set_player_attr('swordless', False)
             set_player_attr('difficulty', 'normal')
             set_player_attr('item_functionality', 'normal')
             set_player_attr('timer', False)
@@ -1127,7 +1126,7 @@ class Spoiler():
                          'tile_shuffle': self.world.tile_shuffle,
                          'bush_shuffle': self.world.bush_shuffle,
                          'beemizer': self.world.beemizer,
-                         'shufflepots': self.world.shufflepots,
+                         'pot_shuffle': self.world.pot_shuffle,
                          'players': self.world.players,
                          'progression_balancing': self.world.progression_balancing,
                          'triforce_pieces_available': self.world.triforce_pieces_available,
@@ -1193,13 +1192,7 @@ class Spoiler():
 
                     outfile.write('Logic:                           %s\n' % self.metadata['logic'][player])
                     outfile.write('Dark Room Logic:                 %s\n' % self.metadata['dark_room_logic'][player])
-                    outfile.write('Restricted Boss Drops:           %s\n' %
-                                  bool_to_text(self.metadata['restrict_dungeon_item_on_boss'][player]))
-
                     outfile.write('Mode:                            %s\n' % self.metadata['mode'][player])
-                    outfile.write('Retro:                           %s\n' %
-                                  ('Yes' if self.metadata['retro'][player] else 'No'))
-                    outfile.write('Swordless:                       %s\n' % ('Yes' if self.metadata['swordless'][player] else 'No'))
                     outfile.write('Goal:                            %s\n' % self.metadata['goal'][player])
                     if "triforce" in self.metadata["goal"][player]:  # triforce hunt
                         outfile.write("Pieces available for Triforce:   %s\n" %
@@ -1225,18 +1218,9 @@ class Spoiler():
                     outfile.write('Custom Potion Shop:              %s\n' %
                                   bool_to_text("w" in self.metadata["shop_shuffle"][player]))
                     outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'][player])
-                    outfile.write(
-                        'Enemy shuffle:                   %s\n' % bool_to_text(self.metadata['enemy_shuffle'][player]))
                     outfile.write('Enemy health:                    %s\n' % self.metadata['enemy_health'][player])
                     outfile.write('Enemy damage:                    %s\n' % self.metadata['enemy_damage'][player])
-                    outfile.write(f'Killable thieves:                {bool_to_text(self.metadata["killable_thieves"][player])}\n')
-                    outfile.write(f'Shuffled tiles:                  {bool_to_text(self.metadata["tile_shuffle"][player])}\n')
-                    outfile.write(f'Shuffled bushes:                 {bool_to_text(self.metadata["bush_shuffle"][player])}\n')
-                    outfile.write(
-                        'Hints:                           %s\n' % ('Yes' if self.metadata['hints'][player] else 'No'))
                     outfile.write('Beemizer:                        %s\n' % self.metadata['beemizer'][player])
-                    outfile.write('Pot shuffle                      %s\n'
-                                  % ('Yes' if self.metadata['shufflepots'][player] else 'No'))
                     outfile.write('Prize shuffle                    %s\n' %
                                   self.metadata['shuffle_prizes'][player])
             if self.entrances:
