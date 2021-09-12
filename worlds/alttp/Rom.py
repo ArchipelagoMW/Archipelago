@@ -1709,9 +1709,10 @@ def write_custom_shops(rom, world, player):
 
         # [id][item][price-low][price-high][max][repl_id][repl_price-low][repl_price-high][player]
         for index, item in enumerate(shop.inventory):
-            slot = 0 if shop.type == ShopType.TakeAny else index
             if item is None:
                 break
+            price_data = int16_as_bytes(0x8000 | 0x100 * (item["price_type"] - 1) | item['price'])
+            slot = 0 if shop.type == ShopType.TakeAny else index
             if not item['item'] in item_table:  # item not native to ALTTP
                 item_code = get_nonnative_item_sprite(item['item'])
             else:
@@ -1719,7 +1720,7 @@ def write_custom_shops(rom, world, player):
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro[player]:
                     rom.write_byte(0x186500 + shop.sram_offset + slot, arrow_mask)
 
-            item_data = [shop_id, item_code] + int16_as_bytes(item['price']) + \
+            item_data = [shop_id, item_code] + price_data + \
                         [item['max'], ItemFactory(item['replacement'], player).code if item['replacement'] else 0xFF] + \
                         int16_as_bytes(item['replacement_price']) + [0 if item['player'] == player else item['player']]
             items_data.extend(item_data)
