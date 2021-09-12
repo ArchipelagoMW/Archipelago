@@ -18,6 +18,19 @@ class ShopType(Enum):
     TakeAny = 1
     UpgradeShop = 2
 
+@unique
+class ShopPriceType(Enum):
+    Rupees = 0
+    Hearts = 1
+    Magic = 2
+    Bombs = 3
+    Arrows = 4
+    HeartContainer = 5
+    BombUpgrade = 6
+    ArrowUpgrade = 7
+    Keys = 8
+    Potion = 9
+    Item = 10
 
 class Shop():
     slots: int = 3  # slot count is not dynamic in asm, however inventory can have None as empty slots
@@ -87,10 +100,11 @@ class Shop():
 
     def add_inventory(self, slot: int, item: str, price: int, max: int = 0,
                       replacement: Optional[str] = None, replacement_price: int = 0, create_location: bool = False,
-                      player: int = 0):
+                      player: int = 0, price_type: int = ShopPriceType.Rupees):
         self.inventory[slot] = {
             'item': item,
             'price': price,
+            'price_type': price_type,
             'max': max,
             'replacement': replacement,
             'replacement_price': replacement_price,
@@ -98,7 +112,7 @@ class Shop():
             'player': player
         }
 
-    def push_inventory(self, slot: int, item: str, price: int, max: int = 1, player: int = 0):
+    def push_inventory(self, slot: int, item: str, price: int, max: int = 1, player: int = 0, price_type: int = ShopPriceType.Rupees):
         if not self.inventory[slot]:
             raise ValueError("Inventory can't be pushed back if it doesn't exist")
 
@@ -108,6 +122,7 @@ class Shop():
         self.inventory[slot] = {
             'item': item,
             'price': price,
+            'price_type': price_type,
             'max': max,
             'replacement': self.inventory[slot]["item"],
             'replacement_price': self.inventory[slot]["price"],
@@ -392,6 +407,7 @@ def set_up_shops(world, player: int):
                 shop.push_inventory(next(slots), 'Single Arrow', 80)
 
 
+
 def shuffle_shops(world, items, player: int):
     option = world.shop_shuffle[player]
     if 'u' in option:
@@ -461,6 +477,14 @@ def shuffle_shops(world, items, player: int):
                 for item in shop.inventory:
                     adjust_item(item)
 
+        if 'P' in option:
+            print('Making funny prices.')
+            for item in total_inventory:
+                price_to_funny_price(item, world, player)
+            for shop in upgrade_shops:
+                for item in shop.inventory:
+                    price_to_funny_price(item, world, player)
+
         if 'i' in option:
             world.random.shuffle(total_inventory)
 
@@ -469,3 +493,45 @@ def shuffle_shops(world, items, player: int):
                 slots = shop.slots
                 shop.inventory = total_inventory[i:i + slots]
                 i += slots
+
+price_blacklist = {
+    ShopPriceType.Rupees: {'Rupees'},
+    ShopPriceType.Hearts: {'Small Heart', 'Apple'},
+    ShopPriceType.Magic: {'Magic Jar'},
+    ShopPriceType.Bombs: {'Bombs', 'Single Bomb'},
+    ShopPriceType.Arrows: {'Arrows', 'Single Arrow'},
+    ShopPriceType.HeartContainer: {},
+    ShopPriceType.BombUpgrade: {},
+    ShopPriceType.ArrowUpgrade: {},
+    ShopPriceType.Keys: {},
+    ShopPriceType.Potion: {},
+    # ShopPriceType.Item: {}
+}
+
+price_chart = {
+    ShopPriceType.Rupees: lambda p: p,
+    ShopPriceType.Hearts: lambda p: min(1, p//5)*4,
+    ShopPriceType.Magic: lambda p: min(8, p//5)*4,
+    ShopPriceType.Bombs: lambda p: min(10, p//5),
+    ShopPriceType.Arrows: lambda p: min(30, p//5),
+    ShopPriceType.HeartContainer: lambda p: 0x8,
+    ShopPriceType.BombUpgrade: lambda p: 0x1,
+    ShopPriceType.ArrowUpgrade: lambda p: 0x1,
+    ShopPriceType.Keys: lambda p: min(3, (p//100)+1),
+    ShopPriceType.Potion: lambda p: (p//5)%5,
+    # ShopPriceType.Item: lambda p: 0,
+}
+
+def price_to_funny_price(item, world, player):
+    if item is None:
+        return
+    my_price_types = [x for x in price_blacklist]
+    my_choices = world.random.sample(my_price_types, len(my_price_types))
+    for p in my_choices:
+        if p in [ShopPriceType.Rupees, ShopPriceType.BombUpgrade, ShopPriceType.ArrowUpgrade] or (p in [ShopPriceType.Keys] and world.smallkey_shuffle[player] == smallkey_shuffle.option_universal):
+            return
+        if any(x in item['item'] for x in price_blacklist[p]):
+            continue
+        else:
+            item['price'] = 0x8000 | 0x100*(p.value-1) | price_chart[p](item['price'])
+        break
