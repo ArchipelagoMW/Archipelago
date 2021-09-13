@@ -4,7 +4,7 @@ import logging
 from .SaveContext import SaveContext
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item, item_in_locations
+from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item
 from ..AutoWorld import LogicMixin
 
 
@@ -100,6 +100,12 @@ def set_rules(ootworld):
         # First room chest needs to be a small key. Make sure the boss key isn't placed here.
         location = world.get_location('Forest Temple MQ First Room Chest', player)
         forbid_item(location, 'Boss Key (Forest Temple)', ootworld.player)
+
+    if ootworld.shuffle_song_items == 'song' and not ootworld.starting_songs:
+        # Sheik in Ice Cavern is the only song location in a dungeon; need to ensure that it cannot be anything else.
+        # This is required if map/compass included, or any_dungeon shuffle.
+        location = world.get_location('Sheik in Ice Cavern', player)
+        add_item_rule(location, lambda item: item.player == player and item.type == 'Song')
 
     for name in ootworld.always_hints:
         add_rule(world.get_location(name, player), guarantee_hint)
