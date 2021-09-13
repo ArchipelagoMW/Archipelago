@@ -258,7 +258,7 @@ class ALTTPWorld(World):
         try:
             use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
                             or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                            or world.shufflepots[player] or world.bush_shuffle[player]
+                            or world.pot_shuffle[player] or world.bush_shuffle[player]
                             or world.killable_thieves[player])
 
             rom = LocalRom(world.alttp_rom)
