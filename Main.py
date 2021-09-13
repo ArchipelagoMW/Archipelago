@@ -50,7 +50,6 @@ def main(args, seed=None):
     world.shuffle = args.shuffle.copy()
     world.logic = args.logic.copy()
     world.mode = args.mode.copy()
-    world.swordless = args.swordless.copy()
     world.difficulty = args.difficulty.copy()
     world.item_functionality = args.item_functionality.copy()
     world.timer = args.timer.copy()
@@ -65,7 +64,6 @@ def main(args, seed=None):
     world.accessibility = args.accessibility.copy()
     world.open_pyramid = args.open_pyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
-    world.enemy_shuffle = args.enemy_shuffle.copy()
     world.enemy_health = args.enemy_health.copy()
     world.enemy_damage = args.enemy_damage.copy()
     world.beemizer = args.beemizer.copy()
@@ -238,8 +236,8 @@ def main(args, seed=None):
             oldmancaves = []
             takeanyregions = ["Old Man Sword Cave", "Take-Any #1", "Take-Any #2", "Take-Any #3", "Take-Any #4"]
             for index, take_any in enumerate(takeanyregions):
-                for region in [world.get_region(take_any, player) for player in range(1, world.players + 1) if
-                               world.retro[player]]:
+                for region in [world.get_region(take_any, player) for player in
+                               world.get_game_players("A Link to the Past") if world.retro[player]]:
                     item = world.create_item(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
                                              region.player)
                     player = region.player
@@ -333,8 +331,8 @@ def main(args, seed=None):
             # retrieve exceptions via .result() if they occured.
             if multidata_task:
                 multidata_task.result()
-            for i, future in enumerate(concurrent.futures.as_completed(output_file_futures)):
-                if i % 10 == 0:
+            for i, future in enumerate(concurrent.futures.as_completed(output_file_futures), start=1):
+                if i % 10 == 0 or i == len(output_file_futures):
                     logger.info(f'Generating output files ({i}/{len(output_file_futures)}).')
                 future.result()
 
