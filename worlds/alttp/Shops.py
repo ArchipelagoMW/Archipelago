@@ -493,9 +493,6 @@ def shuffle_shops(world, items, player: int):
             # Don't apply to upgrade shops
             # Upgrade shop is only one place, and will generally be too easy to
             # replenish hearts and bombs
-            for shop in upgrade_shops:
-                for item in shop.inventory:
-                    pass
 
         if 'i' in option:
             world.random.shuffle(total_inventory)
