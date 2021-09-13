@@ -1157,7 +1157,7 @@ class Spoiler():
                                       self.world.triforce_pieces_available[player])
                         outfile.write("Pieces required for Triforce:    %s\n" %
                                       self.world.triforce_pieces_required[player])
-                    outfile.write('Difficulty:                      %s\n' % self.world.item_pool[player])
+                    outfile.write('Difficulty:                      %s\n' % self.world.difficulty[player])
                     outfile.write('Item Functionality:              %s\n' % self.world.item_functionality[player])
                     outfile.write('Entrance Shuffle:                %s\n' % self.world.shuffle[player])
                     if self.world.shuffle[player] != "vanilla":
