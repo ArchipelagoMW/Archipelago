@@ -141,6 +141,9 @@ def main(args, seed=None):
     if world.players > 1:
         for player in world.player_ids:
             locality_rules(world, player)
+    else:
+        world.non_local_items[1] = set()
+        world.local_items[1] = set()
 
     AutoWorld.call_all(world, "set_rules")
 

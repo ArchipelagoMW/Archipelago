@@ -108,7 +108,7 @@ class LocalRom(object):
         self.encrypt_range(0x180140, 32, key)
         self.encrypt_range(0xEDA1, 8, key)
 
-    def write_to_file(self, file, hide_enemizer=False):
+    def write_to_file(self, file):
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
 

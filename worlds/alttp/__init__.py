@@ -298,7 +298,7 @@ class ALTTPWorld(World):
                 if world.player_name[player] != 'Player%d' % player else ''
 
             rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
-            rom.write_to_file(rompath, hide_enemizer=True)
+            rom.write_to_file(rompath)
             Patch.create_patch_file(rompath, player=player, player_name=world.player_name[player])
             os.unlink(rompath)
             self.rom_name = rom.name
