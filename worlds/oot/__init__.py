@@ -454,12 +454,14 @@ class OOTWorld(World):
         generate_itempool(self)
         add_dungeon_items(self)
         junk_pool = get_junk_pool(self)
+        removed_items = []
         # Determine starting items
         for item in self.world.precollected_items:
             if item.player != self.player:
                 continue
             if item.name in self.remove_from_start_inventory:
                 self.remove_from_start_inventory.remove(item.name)
+                removed_items.append(item.name)
             else:
                 self.starting_items[item.name] += 1
                 if item.type == 'Song':
@@ -475,6 +477,7 @@ class OOTWorld(World):
             self.starting_items['Rupees'] = 999
 
         self.world.itempool += self.itempool
+        self.remove_from_start_inventory.extend(removed_items)
 
     def set_rules(self):
         set_rules(self)
@@ -766,6 +769,14 @@ class OOTWorld(World):
             raise e
         finally:
             hint_data_available.set()
+
+    def modify_multidata(self, multidata: dict):
+        for item_name in self.remove_from_start_inventory:
+            item_id = self.item_name_to_id.get(item_name, None)
+            try:
+                multidata["precollected_items"][self.player].remove(item_id)
+            except ValueError as e:
+                logger.warning(f"Attempted to remove nonexistent item id {item_id} from OoT precollected items ({item_name})")
 
 
     # Helper functions
