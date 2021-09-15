@@ -74,9 +74,8 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
         erargs = parse_arguments(['--multi', str(playercount)])
         erargs.seed = seed
         erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwrittin in mystery
-        erargs.create_spoiler = not race
+        erargs.spoiler = 0 if race else 2
         erargs.race = race
-        erargs.skip_playthrough = race
         erargs.outputname = seedname
         erargs.outputpath = target.name
         erargs.teams = 1

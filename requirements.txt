@@ -1,5 +1,5 @@
 colorama>=0.4.4
-websockets>=9.1
+websockets>=10.0
 PyYAML>=5.4.1
 fuzzywuzzy>=0.18.0
 prompt_toolkit>=3.0.20

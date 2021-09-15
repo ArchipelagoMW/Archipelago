@@ -108,7 +108,7 @@ class LocalRom(object):
         self.encrypt_range(0x180140, 32, key)
         self.encrypt_range(0xEDA1, 8, key)
 
-    def write_to_file(self, file, hide_enemizer=False):
+    def write_to_file(self, file):
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
 
@@ -283,9 +283,9 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
 
     # write options file for enemizer
     options = {
-        'RandomizeEnemies': world.enemy_shuffle[player],
+        'RandomizeEnemies': world.enemy_shuffle[player].value,
         'RandomizeEnemiesType': 3,
-        'RandomizeBushEnemyChance': world.bush_shuffle[player],
+        'RandomizeBushEnemyChance': world.bush_shuffle[player].value,
         'RandomizeEnemyHealthRange': world.enemy_health[player] != 'default',
         'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[
             world.enemy_health[player]],
@@ -323,7 +323,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         'GrayscaleMode': False,
         'GenerateSpoilers': False,
         'RandomizeLinkSpritePalette': False,
-        'RandomizePots': world.shufflepots[player],
+        'RandomizePots': world.pot_shuffle[player].value,
         'ShuffleMusic': False,
         'BootlegMagic': True,
         'CustomBosses': False,
@@ -336,7 +336,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         'BeesLevel': 0,
         'RandomizeTileTrapPattern': False,
         'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': world.killable_thieves[player],
+        'AllowKillableThief': world.killable_thieves[player].value,
         'RandomizeSpriteOnHit': False,
         'DebugMode': False,
         'DebugForceEnemy': False,

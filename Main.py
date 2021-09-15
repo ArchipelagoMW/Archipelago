@@ -50,7 +50,6 @@ def main(args, seed=None):
     world.shuffle = args.shuffle.copy()
     world.logic = args.logic.copy()
     world.mode = args.mode.copy()
-    world.swordless = args.swordless.copy()
     world.difficulty = args.difficulty.copy()
     world.item_functionality = args.item_functionality.copy()
     world.timer = args.timer.copy()
@@ -63,24 +62,16 @@ def main(args, seed=None):
         world.customitemarray = args.customitemarray
 
     world.accessibility = args.accessibility.copy()
-    world.retro = args.retro.copy()
-
-    world.hints = args.hints.copy()
     world.open_pyramid = args.open_pyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
-    world.enemy_shuffle = args.enemy_shuffle.copy()
     world.enemy_health = args.enemy_health.copy()
     world.enemy_damage = args.enemy_damage.copy()
-    world.killable_thieves = args.killable_thieves.copy()
-    world.bush_shuffle = args.bush_shuffle.copy()
-    world.tile_shuffle = args.tile_shuffle.copy()
     world.beemizer = args.beemizer.copy()
     world.timer = args.timer.copy()
     world.countdown_start_time = args.countdown_start_time.copy()
     world.red_clock_time = args.red_clock_time.copy()
     world.blue_clock_time = args.blue_clock_time.copy()
     world.green_clock_time = args.green_clock_time.copy()
-    world.shufflepots = args.shufflepots.copy()
     world.dungeon_counters = args.dungeon_counters.copy()
     world.triforce_pieces_available = args.triforce_pieces_available.copy()
     world.triforce_pieces_required = args.triforce_pieces_required.copy()
@@ -93,7 +84,6 @@ def main(args, seed=None):
     world.plando_texts = args.plando_texts.copy()
     world.plando_connections = args.plando_connections.copy()
     world.er_seeds = getattr(args, "er_seeds", {})
-    world.restrict_dungeon_item_on_boss = args.restrict_dungeon_item_on_boss.copy()
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
     world.set_options(args)
@@ -151,6 +141,9 @@ def main(args, seed=None):
     if world.players > 1:
         for player in world.player_ids:
             locality_rules(world, player)
+    else:
+        world.non_local_items[1] = set()
+        world.local_items[1] = set()
 
     AutoWorld.call_all(world, "set_rules")
 
@@ -246,8 +239,8 @@ def main(args, seed=None):
             oldmancaves = []
             takeanyregions = ["Old Man Sword Cave", "Take-Any #1", "Take-Any #2", "Take-Any #3", "Take-Any #4"]
             for index, take_any in enumerate(takeanyregions):
-                for region in [world.get_region(take_any, player) for player in range(1, world.players + 1) if
-                               world.retro[player]]:
+                for region in [world.get_region(take_any, player) for player in
+                               world.get_game_players("A Link to the Past") if world.retro[player]]:
                     item = world.create_item(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
                                              region.player)
                     player = region.player
@@ -341,16 +334,16 @@ def main(args, seed=None):
             # retrieve exceptions via .result() if they occured.
             if multidata_task:
                 multidata_task.result()
-            for i, future in enumerate(concurrent.futures.as_completed(output_file_futures)):
-                if i % 10 == 0:
+            for i, future in enumerate(concurrent.futures.as_completed(output_file_futures), start=1):
+                if i % 10 == 0 or i == len(output_file_futures):
                     logger.info(f'Generating output files ({i}/{len(output_file_futures)}).')
                 future.result()
 
-        if not args.skip_playthrough:
+        if args.spoiler > 1:
             logger.info('Calculating playthrough.')
             create_playthrough(world)
 
-        if args.create_spoiler:
+        if args.spoiler:
             world.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
 
         zipfilename = output_path(f"AP_{world.seed_name}.zip")
