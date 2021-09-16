@@ -474,7 +474,7 @@ async def game_watcher(ctx: Context):
             await ctx.disconnect()
 
         gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
-        if gamemode[0] in ENDGAME_MODES:
+        if gamemode is not None and gamemode[0] in ENDGAME_MODES:
             if not ctx.finished_game:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 ctx.finished_game = True

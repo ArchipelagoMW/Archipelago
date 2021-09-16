@@ -29,7 +29,7 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: int = GAM
                        "patch": patch,
                        "game": supported_games[game],
                        # minimum version of patch system expected for patching to be successful
-                       "compatible_version": 1,
+                       "compatible_version": 3,
                        "version": current_patch_version,
                        "base_checksum": JAP10HASH})
     return patch.encode(encoding="utf-8-sig")

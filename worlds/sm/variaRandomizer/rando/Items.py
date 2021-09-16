@@ -226,6 +226,7 @@ class ItemManager:
             Code=0xbae9, # new nothing plm
             Name="Nothing",
             Type='Nothing',
+            Id=22
         ),
         'NoEnergy': Item(
             Category='Nothing',

@@ -66,8 +66,9 @@ class SMWorld(World):
         orig_copy = CollectionState.copy
 
         def sm_init(self, parent: MultiWorld):
+            self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff) for player in parent.get_game_players("Super Metroid")}
             orig_init(self, parent)
-            self.smbm = {player: SMBoolManager(player, self.world.state.smbm[player].maxDiff) for player in self.world.get_game_players("Super Metroid")}
+
 
         def sm_copy(self):
             ret = orig_copy(self)
@@ -92,6 +93,10 @@ class SMWorld(World):
     
     def generate_basic(self):
         itemPool = self.variaRando.container.itemPool
+        self.startItems = [variaItem for item in self.world.precollected_items for variaItem in ItemManager.Items.values() if item.player == self.player and variaItem.Name == item.name]
+        for item in self.startItems:
+            itemPool.remove(item)
+            itemPool.append(ItemManager.Items['Nothing'])
         
         # Generate item pool
         pool = []
@@ -114,6 +119,8 @@ class SMWorld(World):
                     weaponCount[2] += 1
                 else:
                     isAdvancement = False
+            elif item.Type == 'Nothing':
+                isAdvancement = False
 
             itemClass = ItemManager.Items[item.Type].Class
             smitem = SMItem(item.Name, isAdvancement, item.Type, None if itemClass == 'Boss' else self.item_name_to_id[item.Name], player = self.player)
@@ -172,10 +179,81 @@ class SMWorld(World):
 
         romPatcher.applyIPSPatch('PlayerName', { 'PlayerName':  playerNames })
 
-        romPatcher.commitIPS()
-
         itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == self.player]
         romPatcher.writeItemsLocs(itemLocs)
+
+        startItemROMAddressBase = 0x2FD8B9
+
+        # current, base value or bitmask, max, base value or bitmask
+        startItemROMDict = {'ETank': [0x8, 0x64, 0xA, 0x64],
+                            'Missile': [0xC, 0x5, 0xE, 0x5],
+                            'Super': [0x10, 0x5, 0x12, 0x5],
+                            'PowerBomb': [0x14, 0x5, 0x16, 0x5],
+                            'Reserve': [0x26, 0x64, 0x24, 0x64],
+                            'Morph': [0x2, 0x4, 0x0, 0x4],
+                            'Bomb': [0x3, 0x10, 0x1, 0x10],
+                            'SpringBall': [0x2, 0x2, 0x0, 0x2],
+                            'HiJump': [0x3, 0x1, 0x1, 0x1],
+                            'Varia': [0x2, 0x1, 0x0, 0x1],
+                            'Gravity': [0x2, 0x20, 0x0, 0x20],
+                            'SpeedBooster': [0x3, 0x20, 0x1, 0x20],
+                            'SpaceJump': [0x3, 0x2, 0x1, 0x2],
+                            'ScrewAttack': [0x2, 0x8, 0x0, 0x8],
+                            'Charge': [0x7, 0x10, 0x5, 0x10],
+                            'Ice': [0x6, 0x2, 0x4, 0x2], 
+                            'Wave': [0x6, 0x1, 0x4, 0x1],
+                            'Spazer': [0x6, 0x4, 0x4, 0x4], 
+                            'Plasma': [0x6, 0x8, 0x4, 0x8],
+                            'Grapple': [0x3, 0x40, 0x1, 0x40],
+                            'XRayScope': [0x3, 0x80, 0x1, 0x80]
+                            }
+        mergedData = {}
+        hasETank = False
+        hasSpazer = False
+        hasPlasma = False
+        for startItem in self.startItems:
+            item = startItem.Type
+            if item == 'ETank': hasETank = True
+            if item == 'Spazer': hasSpazer = True
+            if item == 'Plasma': hasPlasma = True
+            if (item in ['ETank', 'Missile', 'Super', 'PowerBomb', 'Reserve']):
+                (currentValue, currentBase, maxValue, maxBase) = startItemROMDict[item]
+                if (startItemROMAddressBase + currentValue) in mergedData:
+                    mergedData[startItemROMAddressBase + currentValue] += currentBase
+                    mergedData[startItemROMAddressBase + maxValue] += maxBase
+                else:
+                    mergedData[startItemROMAddressBase + currentValue] = currentBase
+                    mergedData[startItemROMAddressBase + maxValue] = maxBase
+            else:
+                (collected, currentBitmask, equipped, maxBitmask) = startItemROMDict[item]
+                if (startItemROMAddressBase + collected) in mergedData:
+                    mergedData[startItemROMAddressBase + collected] |= currentBitmask
+                    mergedData[startItemROMAddressBase + equipped] |= maxBitmask
+                else:
+                    mergedData[startItemROMAddressBase + collected] = currentBitmask
+                    mergedData[startItemROMAddressBase + equipped] = maxBitmask
+
+        if hasETank:
+            mergedData[startItemROMAddressBase + 0x8] += 99
+            mergedData[startItemROMAddressBase + 0xA] += 99
+
+        if hasSpazer and hasPlasma:
+            mergedData[startItemROMAddressBase + 0x4] &= ~0x4
+
+        for key, value in mergedData.items():
+            if (key - startItemROMAddressBase > 7):
+                (w0, w1) = self.getWord(value)
+                mergedData[key] = [w0, w1]
+            else:
+                mergedData[key] = [value]
+            
+
+        startItemPatch = { 'startItemPatch':  mergedData }
+        romPatcher.applyIPSPatch('startItemPatch', startItemPatch)
+
+        romPatcher.commitIPS()
+
+        
 
     def generate_output(self, output_directory: str):
         outfilebase = 'AP_' + self.world.seed_name
@@ -201,6 +279,10 @@ class SMWorld(World):
             state.prog_items[item.name, item.player] += 1
             return True  # indicate that a logical state change has occured
         return False
+
+    def create_item(self, name: str) -> Item:
+        item = ItemManager.Items[name]
+        return SMItem(item.Name, True, item.Type, self.item_name_to_id[item.Name], player = self.player)
 
     @classmethod
     def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
