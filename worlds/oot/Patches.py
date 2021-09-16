@@ -1624,10 +1624,15 @@ def patch_rom(world, rom):
             chest_name = 'Spirit Temple Compass Chest'
             chest_address = 0x2B6B07C
             location = world.get_location(chest_name)
-            item = read_rom_item(rom, location.item.index)
-            if item['chest_type'] in (1, 3):
-                rom.write_int16(chest_address + 2, 0x0190) # X pos
-                rom.write_int16(chest_address + 6, 0xFABC) # Z pos
+            if location.item.game == 'Ocarina of Time':
+                item = read_rom_item(rom, location.item.index)
+                if item['chest_type'] in (1, 3):
+                    rom.write_int16(chest_address + 2, 0x0190) # X pos
+                    rom.write_int16(chest_address + 6, 0xFABC) # Z pos
+            else:
+                if location.item.advancement:
+                    rom.write_int16(chest_address + 2, 0x0190) # X pos
+                    rom.write_int16(chest_address + 6, 0xFABC) # Z pos
 
         # Move Silver Gauntlets chest if it is small so it is reachable from Spirit Hover Seam
         if world.logic_rules != 'glitchless':
@@ -1635,10 +1640,15 @@ def patch_rom(world, rom):
             chest_address_0 = 0x21A02D0  # Address in setup 0
             chest_address_2 = 0x21A06E4  # Address in setup 2
             location = world.get_location(chest_name)
-            item = read_rom_item(rom, location.item.index)
-            if item['chest_type'] in (1, 3):
-                rom.write_int16(chest_address_0 + 6, 0x0172)  # Z pos
-                rom.write_int16(chest_address_2 + 6, 0x0172)  # Z pos
+            if location.item.game == 'Ocarina of Time':
+                item = read_rom_item(rom, location.item.index)
+                if item['chest_type'] in (1, 3):
+                    rom.write_int16(chest_address_0 + 6, 0x0172)  # Z pos
+                    rom.write_int16(chest_address_2 + 6, 0x0172)  # Z pos
+            else:
+                if location.item.advancement:
+                    rom.write_int16(chest_address_0 + 6, 0x0172)  # Z pos
+                    rom.write_int16(chest_address_2 + 6, 0x0172)  # Z pos
 
     # give dungeon items the correct messages
     add_item_messages(messages, shop_items, world)
@@ -1808,8 +1818,11 @@ def get_override_entry(location):
     player_id = location.item.player
     if location.item.game != 'Ocarina of Time': 
         # This is an AP sendable. It's guaranteed to not be None. 
-        item_id = 0x0C  # Ocarina of Time item, otherwise unused
         looks_like_item_id = 0
+        if location.item.advancement:
+            item_id = 0xCB
+        else:
+            item_id = 0xCC
     else: 
         item_id = location.item.index
         if None in [scene, default, item_id]:
@@ -2057,7 +2070,10 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
         else:
             if location.item.game != "Ocarina of Time": 
                 item_display = location.item
-                item_display.index = 0x0C # Ocarina of Time item
+                if location.item.advancement:
+                    item_display.index = 0xCB
+                else:
+                    item_display.index = 0xCC
                 item_display.special = {}
             elif location.item.looks_like_item is not None:
                 item_display = location.item.looks_like_item
@@ -2125,6 +2141,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             update_message_by_id(messages, shop_item.description_message, description_text, 0x03)
             update_message_by_id(messages, shop_item.purchase_message, purchase_text, 0x03)
 
+        if any(filter(lambda c: c in location.name, {'5', '6', '7', '8'})):
             world.current_shop_id += 1
 
     return shop_objs

@@ -115,13 +115,6 @@ item_difficulty_max = {
     },
 }
 
-TriforceCounts = {
-    'plentiful': Decimal(2.00),
-    'balanced':  Decimal(1.50),
-    'scarce':    Decimal(1.25),
-    'minimal':   Decimal(1.00),
-}
-
 DT_vanilla = (
     ['Recovery Heart'] * 2)
 
@@ -762,26 +755,22 @@ def generate_itempool(ootworld):
 
     junk_pool = get_junk_pool(ootworld)
 
-    fixed_locations = list(filter(lambda loc: loc.name in fixedlocations, ootworld.get_locations()))
+    fixed_locations = filter(lambda loc: loc.name in fixedlocations, ootworld.get_locations())
     for location in fixed_locations:
         item = fixedlocations[location.name]
-        world.push_item(location, ootworld.create_item(item), collect=False)
-        location.locked = True
+        location.place_locked_item(ootworld.create_item(item))
 
-    drop_locations = list(filter(lambda loc: loc.type == 'Drop', ootworld.get_locations()))
+    drop_locations = filter(lambda loc: loc.type == 'Drop', ootworld.get_locations())
     for drop_location in drop_locations:
         item = droplocations[drop_location.name]
-        world.push_item(drop_location, ootworld.create_item(item), collect=False)
-        drop_location.locked = True
+        drop_location.place_locked_item(ootworld.create_item(item))
 
     # set up item pool
     (pool, placed_items, skip_in_spoiler_locations) = get_pool_core(ootworld)
     ootworld.itempool = [ootworld.create_item(item) for item in pool]
     for (location_name, item) in placed_items.items():
         location = world.get_location(location_name, player)
-        world.push_item(location, ootworld.create_item(item), collect=False)
-        location.locked = True
-        location.event = True  # make sure it's checked during fill
+        location.place_locked_item(ootworld.create_item(item))
         if location_name in skip_in_spoiler_locations:
             location.show_in_spoiler = False
 
@@ -1360,7 +1349,7 @@ def get_pool_core(world):
         world.remove_from_start_inventory.append(item.name)
 
     if world.triforce_hunt:
-        triforce_count = int((TriforceCounts[world.item_pool_value] * world.triforce_goal).to_integral_value(rounding=ROUND_HALF_UP))
+        triforce_count = int((Decimal(100 + world.extra_triforce_percentage)/100 * world.triforce_goal).to_integral_value(rounding=ROUND_HALF_UP))
         pending_junk_pool.extend(['Triforce Piece'] * triforce_count)
 
     if world.shuffle_ganon_bosskey == 'on_lacs':
@@ -1408,3 +1397,16 @@ def get_pool_core(world):
             pool.append(pending_item)
 
     return (pool, placed_items, skip_in_spoiler_locations)
+
+def add_dungeon_items(ootworld):
+    """Adds maps, compasses, small keys, boss keys, and Ganon boss key into item pool if they are not placed."""
+    skip_add_settings = {'remove', 'startwith', 'vanilla', 'on_lacs'}
+    for dungeon in ootworld.dungeons:
+        if ootworld.shuffle_mapcompass not in skip_add_settings:
+            ootworld.itempool.extend(dungeon.dungeon_items)
+        if ootworld.shuffle_smallkeys not in skip_add_settings:
+            ootworld.itempool.extend(dungeon.small_keys)
+        if dungeon.name != 'Ganons Castle' and ootworld.shuffle_bosskeys not in skip_add_settings:
+            ootworld.itempool.extend(dungeon.boss_key)
+        if dungeon.name == 'Ganons Castle' and ootworld.shuffle_ganon_bosskey not in skip_add_settings:
+            ootworld.itempool.extend(dungeon.boss_key)

@@ -17,6 +17,7 @@ logger = logging.getLogger("Client")
 
 gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
 
+
 class ClientCommandProcessor(CommandProcessor):
     def __init__(self, ctx: CommonContext):
         self.ctx = ctx
@@ -86,11 +87,12 @@ class ClientCommandProcessor(CommandProcessor):
 
 
 class CommonContext():
-    starting_reconnect_delay = 5
-    current_reconnect_delay = starting_reconnect_delay
-    command_processor = ClientCommandProcessor
-    game: None
-    ui: None
+    starting_reconnect_delay: int = 5
+    current_reconnect_delay: int = starting_reconnect_delay
+    command_processor: int = ClientCommandProcessor
+    game = None
+    ui = None
+    keep_alive_task = None
 
     def __init__(self, server_address, password):
         # server state
@@ -126,6 +128,9 @@ class CommonContext():
         self.slow_mode = False
         self.jsontotextparser = JSONtoTextParser(self)
         self.set_getters(network_data_package)
+
+        # execution
+        self.keep_alive_task = asyncio.create_task(keep_alive(self))
 
     async def connection_closed(self):
         self.auth = None
@@ -219,6 +224,19 @@ class CommonContext():
         pass
 
 
+async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
+    """some ISPs/network configurations drop TCP connections if no payload is sent (ignore TCP-keep-alive)
+     so we send a payload to prevent drop and if we were dropped anyway this will cause an auto-reconnect."""
+    seconds_elapsed = 0
+    while not ctx.exit_event.is_set():
+        await asyncio.sleep(1)  # short sleep to not block program shutdown
+        if ctx.server and ctx.slot:
+            seconds_elapsed += 1
+            if seconds_elapsed > seconds_between_checks:
+                await ctx.send_msgs([{"cmd": "Bounce", "slots": [ctx.slot]}])
+                seconds_elapsed = 0
+
+
 async def server_loop(ctx: CommonContext, address=None):
     cached_address = None
     if ctx.server and ctx.server.socket:
@@ -252,13 +270,13 @@ async def server_loop(ctx: CommonContext, address=None):
             logger.error('Unable to connect to multiworld server at cached address. '
                          'Please use the connect button above.')
         else:
-            logger.error('Connection refused by the multiworld server')
+            logger.exception('Connection refused by the multiworld server')
+    except websockets.InvalidURI:
+        logger.exception('Failed to connect to the multiworld server (invalid URI)')
     except (OSError, websockets.InvalidURI):
-        logger.error('Failed to connect to the multiworld server')
+        logger.exception('Failed to connect to the multiworld server')
     except Exception as e:
-        logger.error('Lost connection to the multiworld server, type /connect to reconnect')
-        if not isinstance(e, websockets.WebSocketException):
-            logger.exception(e)
+        logger.exception('Lost connection to the multiworld server, type /connect to reconnect')
     finally:
         await ctx.connection_closed()
         if ctx.server_address:

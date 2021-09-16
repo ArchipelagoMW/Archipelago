@@ -239,7 +239,7 @@ def get_info(ctx, rcon_client):
     ctx.seed_name = info["seed_name"]
 
 
-async def factorio_spinup_server(ctx: FactorioContext):
+async def factorio_spinup_server(ctx: FactorioContext) -> bool:
     savegame_name = os.path.abspath("Archipelago.zip")
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
@@ -267,24 +267,23 @@ async def factorio_spinup_server(ctx: FactorioContext):
                     ctx.mod_version = Utils.Version(*(int(number) for number in parts[-2].split(".")))
                 if not rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
+                    if ctx.mod_version == ctx.__class__.mod_version:
+                        raise Exception("No Archipelago mod was loaded. Aborting.")
                     get_info(ctx, rcon_client)
             await asyncio.sleep(0.01)
 
-        if ctx.mod_version == ctx.__class__.mod_version:
-            raise Exception("No Archipelago mod was loaded. Aborting.")
-
     except Exception as e:
-        logging.exception(e)
-        logging.error("Aborted Factorio Server Bridge")
+        logger.exception(e)
+        logger.error("Aborted Factorio Server Bridge")
         ctx.exit_event.set()
 
     else:
         logger.info(f"Got World Information from AP Mod {tuple(ctx.mod_version)} for seed {ctx.seed_name} in slot {ctx.auth}")
-
+        return True
     finally:
         factorio_process.terminate()
         factorio_process.wait(5)
-
+    return False
 
 async def main(args):
     ctx = FactorioContext(args.connect, args.password)
@@ -298,16 +297,17 @@ async def main(args):
         input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None
     factorio_server_task = asyncio.create_task(factorio_spinup_server(ctx), name="FactorioSpinupServer")
-    await factorio_server_task
-    factorio_server_task = asyncio.create_task(factorio_server_watcher(ctx), name="FactorioServer")
-    progression_watcher = asyncio.create_task(
-        game_watcher(ctx), name="FactorioProgressionWatcher")
+    succesful_launch = await factorio_server_task
+    if succesful_launch:
+        factorio_server_task = asyncio.create_task(factorio_server_watcher(ctx), name="FactorioServer")
+        progression_watcher = asyncio.create_task(
+            game_watcher(ctx), name="FactorioProgressionWatcher")
 
-    await ctx.exit_event.wait()
-    ctx.server_address = None
+        await ctx.exit_event.wait()
+        ctx.server_address = None
 
-    await progression_watcher
-    await factorio_server_task
+        await progression_watcher
+        await factorio_server_task
 
     if ctx.server and not ctx.server.socket.closed:
         await ctx.server.socket.close()
