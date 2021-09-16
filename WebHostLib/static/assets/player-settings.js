@@ -14,7 +14,7 @@ window.addEventListener('load', () => {
 
     // Event listeners
     document.getElementById('export-settings').addEventListener('click', () => exportSettings());
-    document.getElementById('generate-race').addEventListener('click', () => generateGame(true))
+    document.getElementById('generate-race').addEventListener('click', () => generateGame(true));
     document.getElementById('generate-game').addEventListener('click', () => generateGame());
 
     // Name input field
