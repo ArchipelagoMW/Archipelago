@@ -10,6 +10,7 @@ from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple
 import secrets
 import random
 
+import Options
 import Utils
 
 
@@ -83,7 +84,6 @@ class MultiWorld():
             set_player_attr('item_functionality', 'normal')
             set_player_attr('timer', False)
             set_player_attr('goal', 'ganon')
-            set_player_attr('accessibility', 'items')
             set_player_attr('required_medallions', ['Ether', 'Quake'])
             set_player_attr('swamp_patch_required', False)
             set_player_attr('powder_patch_required', False)
@@ -109,9 +109,6 @@ class MultiWorld():
             set_player_attr('blue_clock_time', 2)
             set_player_attr('green_clock_time', 4)
             set_player_attr('can_take_damage', True)
-            set_player_attr('progression_balancing', True)
-            set_player_attr('local_items', set())
-            set_player_attr('non_local_items', set())
             set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
             set_player_attr('shop_shuffle', 'off')
@@ -131,9 +128,20 @@ class MultiWorld():
         for player in self.player_ids:
             self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
-            for option in world_type.options:
-                setattr(self, option, getattr(args, option, {}))
+            for option_key in world_type.options:
+                setattr(self, option_key, getattr(args, option_key, {}))
+            for option_key in Options.common_options:
+                setattr(self, option_key, getattr(args, option_key, {}))
+            for option_key in Options.per_game_common_options:
+                setattr(self, option_key, getattr(args, option_key, {}))
             self.worlds[player] = world_type(self, player)
+
+    # intended for unittests
+    def set_default_common_options(self):
+        for option_key, option in Options.common_options.items():
+            setattr(self, option_key, {player_id: option(option.default) for player_id in self.player_ids})
+        for option_key, option in Options.per_game_common_options.items():
+            setattr(self, option_key, {player_id: option(option.default) for player_id in self.player_ids})
 
     def secure(self):
         self.random = secrets.SystemRandom()
@@ -384,17 +392,17 @@ class MultiWorld():
         """Check if accessibility rules are fulfilled with current or supplied state."""
         if not state:
             state = CollectionState(self)
-        players = {"none" : set(),
+        players = {"minimal" : set(),
                    "items": set(),
                    "locations": set()}
         for player, access in self.accessibility.items():
-            players[access].add(player)
+            players[access.current_key].add(player)
 
         beatable_fulfilled = False
 
         def location_conditition(location : Location):
             """Determine if this location has to be accessible, location is already filtered by location_relevant"""
-            if location.player in players["none"]:
+            if location.player in players["minimal"]:
                 return False
             return True
 
@@ -1003,7 +1011,7 @@ class Spoiler():
         self.medallions = {}
         self.playthrough = {}
         self.unreachables = []
-        self.startinventory = []
+        self.start_inventory = []
         self.locations = {}
         self.paths = {}
         self.shops = []
@@ -1021,7 +1029,7 @@ class Spoiler():
             self.medallions[f'Misery Mire ({self.world.get_player_name(player)})'] = self.world.required_medallions[player][0]
             self.medallions[f'Turtle Rock ({self.world.get_player_name(player)})'] = self.world.required_medallions[player][1]
 
-        self.startinventory = list(map(str, self.world.precollected_items))
+        self.start_inventory = list(map(str, self.world.precollected_items))
 
         self.locations = OrderedDict()
         listed_locations = set()
@@ -1103,7 +1111,7 @@ class Spoiler():
         out = OrderedDict()
         out['Entrances'] = list(self.entrances.values())
         out.update(self.locations)
-        out['Starting Inventory'] = self.startinventory
+        out['Starting Inventory'] = self.start_inventory
         out['Special'] = self.medallions
         if self.hashes:
             out['Hashes'] = self.hashes
@@ -1123,6 +1131,14 @@ class Spoiler():
                 return variable
             return 'Yes' if variable else 'No'
 
+        def write_option(option_key: str, option_obj: type(Options.Option)):
+            res = getattr(self.world, option_key)[player]
+            displayname = getattr(option_obj, "displayname", option_key)
+            try:
+                outfile.write(f'{displayname + ":":33}{res.get_current_option_name()}\n')
+            except:
+                raise Exception
+
         with open(filename, 'w', encoding="utf-8-sig") as outfile:
             outfile.write(
                 'Archipelago Version %s  -  Seed: %s\n\n' % (
@@ -1134,16 +1150,14 @@ class Spoiler():
                 if self.world.players > 1:
                     outfile.write('\nPlayer %d: %s\n' % (player, self.world.get_player_name(player)))
                 outfile.write('Game:                            %s\n' % self.world.game[player])
-                if self.world.players > 1:
-                    outfile.write('Progression Balanced:            %s\n' % (
-                        'Yes' if self.world.progression_balancing[player] else 'No'))
-                outfile.write('Accessibility:                   %s\n' % self.world.accessibility[player])
+                for f_option, option in Options.common_options.items():
+                    write_option(f_option, option)
+                for f_option, option in Options.per_game_common_options.items():
+                    write_option(f_option, option)
                 options = self.world.worlds[player].options
                 if options:
                     for f_option, option in options.items():
-                        res = getattr(self.world, f_option)[player]
-                        displayname = getattr(option, "displayname", f_option)
-                        outfile.write(f'{displayname + ":":33}{res.get_current_option_name()}\n')
+                        write_option(f_option, option)
 
                 if player in self.world.get_game_players("A Link to the Past"):
                     outfile.write('%s%s\n' % ('Hash: ', self.hashes[player]))
@@ -1201,9 +1215,9 @@ class Spoiler():
                     for recipe in self.world.worlds[player].custom_recipes.values():
                         outfile.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
 
-            if self.startinventory:
+            if self.start_inventory:
                 outfile.write('\n\nStarting Inventory:\n\n')
-                outfile.write('\n'.join(self.startinventory))
+                outfile.write('\n'.join(self.start_inventory))
 
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(['%s: %s' % (location, item) for grouping in self.locations.values() for (location, item) in grouping.items()]))

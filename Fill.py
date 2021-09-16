@@ -36,7 +36,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
         has_beaten_game = world.has_beaten_game(maximum_exploration_state)
 
         for item_to_place in items_to_place:
-            if world.accessibility[item_to_place.player] == 'none':
+            if world.accessibility[item_to_place.player] == 'minimal':
                 perform_access_check = not world.has_beaten_game(maximum_exploration_state,
                                                                  item_to_place.player) if single_player_placement else not has_beaten_game
             else:
@@ -52,7 +52,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
             else:
                 # we filled all reachable spots. Maybe the game can be beaten anyway?
                 unplaced_items.append(item_to_place)
-                if world.accessibility[item_to_place.player] != 'none' and world.can_beat_game():
+                if world.accessibility[item_to_place.player] != 'minimal' and world.can_beat_game():
                     logging.warning(
                         f'Not all items placed. Game beatable anyway. (Could not place {item_to_place})')
                     continue
@@ -87,9 +87,9 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
             progitempool.append(item)
         elif item.never_exclude:  # this only gets nonprogression items which should not appear in excluded locations
             nonexcludeditempool.append(item)
-        elif item.name in world.local_items[item.player]:
+        elif item.name in world.local_items[item.player].value:
             localrestitempool[item.player].append(item)
-        elif item.name in world.non_local_items[item.player]:
+        elif item.name in world.non_local_items[item.player].value:
             nonlocalrestitempool.append(item)
         else:
             restitempool.append(item)

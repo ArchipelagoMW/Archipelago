@@ -54,14 +54,13 @@ def main(args, seed=None):
     world.item_functionality = args.item_functionality.copy()
     world.timer = args.timer.copy()
     world.goal = args.goal.copy()
-    world.local_items = args.local_items.copy()
+
     if hasattr(args, "algorithm"):  # current GUI options
         world.algorithm = args.algorithm
         world.shuffleganon = args.shuffleganon
         world.custom = args.custom
         world.customitemarray = args.customitemarray
 
-    world.accessibility = args.accessibility.copy()
     world.open_pyramid = args.open_pyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
     world.enemy_health = args.enemy_health.copy()
@@ -76,7 +75,6 @@ def main(args, seed=None):
     world.triforce_pieces_available = args.triforce_pieces_available.copy()
     world.triforce_pieces_required = args.triforce_pieces_required.copy()
     world.shop_shuffle = args.shop_shuffle.copy()
-    world.progression_balancing = args.progression_balancing.copy()
     world.shuffle_prizes = args.shuffle_prizes.copy()
     world.sprite_pool = args.sprite_pool.copy()
     world.dark_room_logic = args.dark_room_logic.copy()
@@ -115,21 +113,21 @@ def main(args, seed=None):
     logger.info('')
 
     for player in world.player_ids:
-        for item_name in args.startinventory[player]:
+        for item_name in world.start_inventory[player].value:
             world.push_precollected(world.create_item(item_name, player))
 
     for player in world.player_ids:
         if player in world.get_game_players("A Link to the Past"):
             # enforce pre-defined local items.
             if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
-                world.local_items[player].add('Triforce Piece')
+                world.local_items[player].value.add('Triforce Piece')
 
             # Not possible to place pendants/crystals out side of boss prizes yet.
-            world.non_local_items[player] -= item_name_groups['Pendants']
-            world.non_local_items[player] -= item_name_groups['Crystals']
+            world.non_local_items[player].value -= item_name_groups['Pendants']
+            world.non_local_items[player].value -= item_name_groups['Crystals']
 
         # items can't be both local and non-local, prefer local
-        world.non_local_items[player] -= world.local_items[player]
+        world.non_local_items[player].value -= world.local_items[player].value
 
     logger.info('Creating World.')
     AutoWorld.call_all(world, "create_regions")
@@ -142,13 +140,13 @@ def main(args, seed=None):
         for player in world.player_ids:
             locality_rules(world, player)
     else:
-        world.non_local_items[1] = set()
-        world.local_items[1] = set()
+        world.non_local_items[1].value = set()
+        world.local_items[1].value = set()
 
     AutoWorld.call_all(world, "set_rules")
 
     for player in world.player_ids:
-        exclusion_rules(world, player, args.excluded_locations[player])
+        exclusion_rules(world, player, world.exclude_locations[player].value)
 
     AutoWorld.call_all(world, "generate_basic")
 
@@ -386,7 +384,7 @@ def create_playthrough(world):
             logging.debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (
                 location.item.name, location.item.player, location.name, location.player) for location in
                                                                            sphere_candidates])
-            if any([world.accessibility[location.item.player] != 'none' for location in sphere_candidates]):
+            if any([world.accessibility[location.item.player] != 'minimal' for location in sphere_candidates]):
                 raise RuntimeError(f'Not all progression items reachable ({sphere_candidates}). '
                                    f'Something went terribly wrong here.')
             else:

@@ -36,22 +36,7 @@ accessibility:
 progression_balancing:
   on: 50 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
   off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch/sequence break around missing items.
-  # The following 4 options can be uncommented and moved into a game's section they should affect
-  # start_inventory: # Begin the file with the listed items/upgrades
-  # Please only use items for the correct game, use triggers if need to be have seperated lists.
-  # Pegasus Boots: on
-  # Bomb Upgrade (+10): 4
-  # Arrow Upgrade (+10): 4
-# start_hints: # Begin the game with these items' locations revealed to you at the start of the game. Get the info via !hint in your client.
-#   - Moon Pearl
-# local_items: # Force certain items to appear in your world only, not across the multiworld. Recognizes some group names, like "Swords"
-#  - "Moon Pearl"
-#  - "Small Keys"
-#  - "Big Keys"
-# non_local_items: # Force certain items to appear outside your world only, unless in single-player. Recognizes some group names, like "Swords"
-#  - "Progressive Weapons"
-# exclude_locations: # Force certain locations to never contain progression items, and always be filled with junk.
-#  - "Master Sword Pedestal"
+
 {%- macro range_option(option) %}
     # you can add additional values between minimum and maximum
     {%- set data, notes = dictify_range(option) %}
@@ -69,7 +54,7 @@ progression_balancing:
     {{ sub_option_name }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
     {%- endfor -%}
     {%- else %}
-    {{ yaml_dump(option.default) | indent(4, first=False) }}
+    {{ yaml_dump(default_converter(option.default)) | indent(4, first=False) }}
   {%- endif -%}
   {%- endfor %}
   {% if not options %}{}{% endif %}

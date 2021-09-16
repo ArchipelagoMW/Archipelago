@@ -244,7 +244,7 @@ def generate_itempool(world):
         world.push_item(world.get_location('Ganon', player), ItemFactory('Triforce', player), False)
 
     if world.goal[player] == 'icerodhunt':
-        world.progression_balancing[player] = False
+        world.progression_balancing[player].value = False
         loc = world.get_location('Turtle Rock - Boss', player)
         world.push_item(loc, ItemFactory('Triforce Piece', player), False)
         world.treasure_hunt_count[player] = 1

@@ -74,9 +74,9 @@ class ALTTPWorld(World):
         for dungeon_item in ["smallkey_shuffle", "bigkey_shuffle", "compass_shuffle", "map_shuffle"]:
             option = getattr(world, dungeon_item)[player]
             if option == "own_world":
-                world.local_items[player] |= self.item_name_groups[option.item_name_group]
+                world.local_items[player].value |= self.item_name_groups[option.item_name_group]
             elif option == "different_world":
-                world.non_local_items[player] |= self.item_name_groups[option.item_name_group]
+                world.non_local_items[player].value |= self.item_name_groups[option.item_name_group]
             elif option.in_dungeon:
                 self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
                 if option == "original_dungeon":

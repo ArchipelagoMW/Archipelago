@@ -194,19 +194,8 @@ def parse_arguments(argv, no_defaults=False):
                              time).
                              ''', type=int)
 
-    parser.add_argument('--local_items', default=defval(''),
-                        help='Specifies a list of items that will not spread across the multiworld (separated by commas)')
-    parser.add_argument('--non_local_items', default=defval(''),
-                        help='Specifies a list of items that will spread across the multiworld (separated by commas)')
     parser.add_argument('--custom', default=defval(False), help='Not supported.')
     parser.add_argument('--customitemarray', default=defval(False), help='Not supported.')
-    parser.add_argument('--accessibility', default=defval('items'), const='items', nargs='?', choices=['items', 'locations', 'none'], help='''\
-                             Select Item/Location Accessibility. (default: %(default)s)
-                             Items:     You can reach all unique inventory items. No guarantees about
-                                        reaching all locations or all keys. 
-                             Locations: You will be able to reach every location in the game.
-                             None:      You will be able to reach enough locations to beat the game.
-                             ''')
     # included for backwards compatibility
     parser.add_argument('--shuffleganon', help=argparse.SUPPRESS, action='store_true', default=defval(True))
     parser.add_argument('--no-shuffleganon', help='''\
@@ -222,8 +211,7 @@ def parse_arguments(argv, no_defaults=False):
                              sprite that will be extracted.
                              ''')
     parser.add_argument('--gui', help='Launch the GUI', action='store_true')
-    parser.add_argument('--progression_balancing', action='store_true', default=defval(False),
-                        help="Enable Multiworld Progression balancing.")
+
     parser.add_argument('--enemizercli', default=defval('EnemizerCLI/EnemizerCLI.Core'))
     parser.add_argument('--shufflebosses', default=defval('none'), choices=['none', 'basic', 'normal', 'chaos',
                                                                             "singularity"])
@@ -285,10 +273,10 @@ def parse_arguments(argv, no_defaults=False):
             for name in ['logic', 'mode', 'goal', 'difficulty', 'item_functionality',
                          'shuffle', 'open_pyramid', 'timer',
                          'countdown_start_time', 'red_clock_time', 'blue_clock_time', 'green_clock_time',
-                         'local_items', 'non_local_items', 'accessibility', 'beemizer',
+                         'beemizer',
                          'shufflebosses', 'enemy_health', 'enemy_damage',
                          'sprite',
-                         "progression_balancing", "triforce_pieces_available",
+                         "triforce_pieces_available",
                          "triforce_pieces_required", "shop_shuffle",
                          "required_medallions", "start_hints",
                          "plando_items", "plando_texts", "plando_connections", "er_seeds",

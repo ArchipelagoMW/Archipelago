@@ -19,6 +19,7 @@ class TestDungeon(unittest.TestCase):
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].options.items():
             setattr(args, name, {1: option.from_any(option.default)})
         self.world.set_options(args)
+        self.world.set_default_common_options()
         self.starting_regions = []  # Where to start exploring
         self.remove_exits = []      # Block dungeon exits
         self.world.difficulty_requirements[1] = difficulties['normal']
