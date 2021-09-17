@@ -21,6 +21,7 @@ class TestInvertedOWG(TestBase):
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].options.items():
             setattr(args, name, {1: option.from_any(option.default)})
         self.world.set_options(args)
+        self.world.set_default_common_options()
         self.world.logic[1] = "owglitches"
         self.world.mode[1] = "inverted"
         self.world.difficulty_requirements[1] = difficulties['normal']

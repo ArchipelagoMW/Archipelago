@@ -274,6 +274,8 @@ ITEM_MESSAGES = {
     0x00F2: "\x08You got a \x05\x46Huge Rupee\x05\x40!\x01This Rupee is worth a whopping\x01\x05\x46two hundred Rupees\x05\x40!",
     0x00F9: "\x08\x13\x1EYou put a \x05\x41Big Poe \x05\x40in a bottle!\x01Let's sell it at the \x05\x41Ghost Shop\x05\x40!\x01Something good might happen!",
     0x9003: "\x08You found a piece of the \x05\x41Triforce\x05\x40!",
+    0x9097: "\x08You got an \x05\x41Archipelago item\x05\x40!\x01It seems \x05\x41important\x05\x40!",
+    0x9098: "\x08You got an \x05\x43Archipelago item\x05\x40!\x01Doesn't seem like it's needed.",
 }
 
 KEYSANITY_MESSAGES = {

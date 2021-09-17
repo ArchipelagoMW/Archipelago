@@ -150,17 +150,33 @@ class Context:
                 logging.info(f"Outgoing message: {msg}")
             return True
 
+    async def broadcast_send_encoded_msgs(self, endpoints: typing.Iterable[Endpoint], msg: str) -> bool:
+        sockets = []
+        for endpoint in endpoints:
+            if endpoint.socket and endpoint.socket.open:
+                sockets.append(endpoint.socket)
+        try:
+            websockets.broadcast(sockets, msg)
+        except RuntimeError:
+            logging.exception("Exception during broadcast_send_encoded_msgs")
+        else:
+            if self.log_network:
+                logging.info(f"Outgoing broadcast: {msg}")
+            return True
+
     def broadcast_all(self, msgs):
         msgs = self.dumper(msgs)
-        for endpoint in self.endpoints:
-            if endpoint.auth:
-                asyncio.create_task(self.send_encoded_msgs(endpoint, msgs))
+        endpoints = (endpoint for endpoint in self.endpoints if endpoint.auth)
+        asyncio.create_task(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
-    def broadcast_team(self, team, msgs):
+    def broadcast_team(self, team: int, msgs):
         msgs = self.dumper(msgs)
-        for client in self.endpoints:
-            if client.auth and client.team == team:
-                asyncio.create_task(self.send_encoded_msgs(client, msgs))
+        endpoints = (endpoint for endpoint in self.endpoints if endpoint.auth and endpoint.team == team)
+        asyncio.create_task(self.broadcast_send_encoded_msgs(endpoints, msgs))
+
+    def broadcast(self, endpoints: typing.Iterable[Endpoint], msgs):
+        msgs = self.dumper(msgs)
+        asyncio.create_task(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
     async def disconnect(self, endpoint):
         if endpoint in self.endpoints:
@@ -474,6 +490,10 @@ async def on_client_joined(ctx: Context, client: Client):
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
         f"playing {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}).")
+    # TODO: remove with 0.2
+    if client.version < Version(0, 1, 7):
+        ctx.notify_client(client,
+                          "Warning: Your client's datapackage handling may be unsupported soon. (Version < 0.1.7)")
 
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
@@ -1076,8 +1096,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
-            if args['game'] != game:
-                errors.add('InvalidSlot')
+            if "IgnoreGame" not in args["tags"] and args['game'] != game:
+                errors.add('InvalidGame')
             # this can only ever be 0 or 1 elements
             clients = [c for c in ctx.endpoints if c.auth and c.slot == slot and c.team == team]
             if clients:

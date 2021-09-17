@@ -650,8 +650,8 @@ def buildWorldGossipHints(world, checkedLocations=None):
         checkedLocations = {player: set() for player in world.world.player_ids}
 
     # If Ganondorf can be reached without Light Arrows, add to checkedLocations to prevent extra hinting
-    # Can only be forced with vanilla bridge
-    if world.bridge != 'vanilla':
+    # Can only be forced with vanilla bridge or trials
+    if world.bridge != 'vanilla' and world.trials == 0:
         try:
             light_arrow_location = world.world.find_item("Light Arrows", world.player)
             checkedLocations[light_arrow_location.player].add(light_arrow_location.name)
@@ -714,7 +714,6 @@ def buildWorldGossipHints(world, checkedLocations=None):
             fixed_num = world.hint_dist_user['distribution'][hint_type]['fixed']
             hint_weight = world.hint_dist_user['distribution'][hint_type]['weight']
         else:
-            logging.getLogger('').warning("Hint copies is zero for type %s. Assuming this hint type should be disabled.", hint_type)
             fixed_num = 0
             hint_weight = 0
         hint_dist[hint_type] = (hint_weight, world.hint_dist_user['distribution'][hint_type]['copies'])

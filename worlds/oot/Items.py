@@ -22,9 +22,10 @@ def ap_id_to_oot_data(ap_id):
 class OOTItem(Item):
     game: str = "Ocarina of Time"
 
-    def __init__(self, name, player, data, event):
+    def __init__(self, name, player, data, event, force_not_advancement):
         (type, advancement, index, special) = data
-        adv = True if advancement else False  # this looks silly but the table uses True, False, and None
+        # "advancement" is True, False or None; some items are not advancement based on settings
+        adv = bool(advancement) and not force_not_advancement
         super(OOTItem, self).__init__(name, adv, oot_data_to_ap_id(data, event), player)
         self.type = type
         self.index = index
@@ -32,6 +33,8 @@ class OOTItem(Item):
         self.looks_like_item = None
         self.price = special.get('price', None) if special else None
         self.internal = False
+        if force_not_advancement:
+            self.never_exclude = True
     
     # The playthrough calculation calls a function that uses "sweep_for_events(key_only=True)"
     # This checks if the item it's looking for is a small key, using the small key property. 

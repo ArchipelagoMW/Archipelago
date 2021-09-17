@@ -50,42 +50,31 @@ def main(args, seed=None):
     world.shuffle = args.shuffle.copy()
     world.logic = args.logic.copy()
     world.mode = args.mode.copy()
-    world.swordless = args.swordless.copy()
     world.difficulty = args.difficulty.copy()
     world.item_functionality = args.item_functionality.copy()
     world.timer = args.timer.copy()
     world.goal = args.goal.copy()
-    world.local_items = args.local_items.copy()
+
     if hasattr(args, "algorithm"):  # current GUI options
         world.algorithm = args.algorithm
         world.shuffleganon = args.shuffleganon
         world.custom = args.custom
         world.customitemarray = args.customitemarray
 
-    world.accessibility = args.accessibility.copy()
-    world.retro = args.retro.copy()
-
-    world.hints = args.hints.copy()
     world.open_pyramid = args.open_pyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
-    world.enemy_shuffle = args.enemy_shuffle.copy()
     world.enemy_health = args.enemy_health.copy()
     world.enemy_damage = args.enemy_damage.copy()
-    world.killable_thieves = args.killable_thieves.copy()
-    world.bush_shuffle = args.bush_shuffle.copy()
-    world.tile_shuffle = args.tile_shuffle.copy()
     world.beemizer = args.beemizer.copy()
     world.timer = args.timer.copy()
     world.countdown_start_time = args.countdown_start_time.copy()
     world.red_clock_time = args.red_clock_time.copy()
     world.blue_clock_time = args.blue_clock_time.copy()
     world.green_clock_time = args.green_clock_time.copy()
-    world.shufflepots = args.shufflepots.copy()
     world.dungeon_counters = args.dungeon_counters.copy()
     world.triforce_pieces_available = args.triforce_pieces_available.copy()
     world.triforce_pieces_required = args.triforce_pieces_required.copy()
     world.shop_shuffle = args.shop_shuffle.copy()
-    world.progression_balancing = args.progression_balancing.copy()
     world.shuffle_prizes = args.shuffle_prizes.copy()
     world.sprite_pool = args.sprite_pool.copy()
     world.dark_room_logic = args.dark_room_logic.copy()
@@ -93,7 +82,6 @@ def main(args, seed=None):
     world.plando_texts = args.plando_texts.copy()
     world.plando_connections = args.plando_connections.copy()
     world.er_seeds = getattr(args, "er_seeds", {})
-    world.restrict_dungeon_item_on_boss = args.restrict_dungeon_item_on_boss.copy()
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
     world.set_options(args)
@@ -125,21 +113,21 @@ def main(args, seed=None):
     logger.info('')
 
     for player in world.player_ids:
-        for item_name in args.startinventory[player]:
+        for item_name in world.start_inventory[player].value:
             world.push_precollected(world.create_item(item_name, player))
 
     for player in world.player_ids:
         if player in world.get_game_players("A Link to the Past"):
             # enforce pre-defined local items.
             if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
-                world.local_items[player].add('Triforce Piece')
+                world.local_items[player].value.add('Triforce Piece')
 
             # Not possible to place pendants/crystals out side of boss prizes yet.
-            world.non_local_items[player] -= item_name_groups['Pendants']
-            world.non_local_items[player] -= item_name_groups['Crystals']
+            world.non_local_items[player].value -= item_name_groups['Pendants']
+            world.non_local_items[player].value -= item_name_groups['Crystals']
 
         # items can't be both local and non-local, prefer local
-        world.non_local_items[player] -= world.local_items[player]
+        world.non_local_items[player].value -= world.local_items[player].value
 
     logger.info('Creating World.')
     AutoWorld.call_all(world, "create_regions")
@@ -151,11 +139,14 @@ def main(args, seed=None):
     if world.players > 1:
         for player in world.player_ids:
             locality_rules(world, player)
+    else:
+        world.non_local_items[1].value = set()
+        world.local_items[1].value = set()
 
     AutoWorld.call_all(world, "set_rules")
 
     for player in world.player_ids:
-        exclusion_rules(world, player, args.excluded_locations[player])
+        exclusion_rules(world, player, world.exclude_locations[player].value)
 
     AutoWorld.call_all(world, "generate_basic")
 
@@ -246,8 +237,8 @@ def main(args, seed=None):
             oldmancaves = []
             takeanyregions = ["Old Man Sword Cave", "Take-Any #1", "Take-Any #2", "Take-Any #3", "Take-Any #4"]
             for index, take_any in enumerate(takeanyregions):
-                for region in [world.get_region(take_any, player) for player in range(1, world.players + 1) if
-                               world.retro[player]]:
+                for region in [world.get_region(take_any, player) for player in
+                               world.get_game_players("A Link to the Past") if world.retro[player]]:
                     item = world.create_item(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
                                              region.player)
                     player = region.player
@@ -341,16 +332,16 @@ def main(args, seed=None):
             # retrieve exceptions via .result() if they occured.
             if multidata_task:
                 multidata_task.result()
-            for i, future in enumerate(concurrent.futures.as_completed(output_file_futures)):
-                if i % 10 == 0:
+            for i, future in enumerate(concurrent.futures.as_completed(output_file_futures), start=1):
+                if i % 10 == 0 or i == len(output_file_futures):
                     logger.info(f'Generating output files ({i}/{len(output_file_futures)}).')
                 future.result()
 
-        if not args.skip_playthrough:
+        if args.spoiler > 1:
             logger.info('Calculating playthrough.')
             create_playthrough(world)
 
-        if args.create_spoiler:
+        if args.spoiler:
             world.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
 
         zipfilename = output_path(f"AP_{world.seed_name}.zip")
@@ -393,7 +384,7 @@ def create_playthrough(world):
             logging.debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (
                 location.item.name, location.item.player, location.name, location.player) for location in
                                                                            sphere_candidates])
-            if any([world.accessibility[location.item.player] != 'none' for location in sphere_candidates]):
+            if any([world.accessibility[location.item.player] != 'minimal' for location in sphere_candidates]):
                 raise RuntimeError(f'Not all progression items reachable ({sphere_candidates}). '
                                    f'Something went terribly wrong here.')
             else:

@@ -127,24 +127,29 @@ function update_player(index)
     for name, count in pairs(samples) do
         stack.name = name
         stack.count = count
-        if character.can_insert(stack) then
-            sent = character.insert(stack)
-        else
-            sent = 0
-        end
-        if sent > 0 then
-            player.print("Received " .. sent .. "x [item=" .. name .. "]")
-            data.suppress_full_inventory_message = false
-        end
-        if sent ~= count then               -- Couldn't full send.
-            if not data.suppress_full_inventory_message then
-                player.print("Additional items will be sent when inventory space is available.", {r=1, g=1, b=0.25})
+        if game.item_prototypes[name] then
+            if character.can_insert(stack) then
+                sent = character.insert(stack)
+            else
+                sent = 0
             end
-            data.suppress_full_inventory_message = true -- Avoid spamming them with repeated full inventory messages.
-            samples[name] = count - sent    -- Buffer the remaining items
-            break                           -- Stop trying to send other things
+            if sent > 0 then
+                player.print("Received " .. sent .. "x [item=" .. name .. "]")
+                data.suppress_full_inventory_message = false
+            end
+            if sent ~= count then               -- Couldn't full send.
+                if not data.suppress_full_inventory_message then
+                    player.print("Additional items will be sent when inventory space is available.", {r=1, g=1, b=0.25})
+                end
+                data.suppress_full_inventory_message = true -- Avoid spamming them with repeated full inventory messages.
+                samples[name] = count - sent    -- Buffer the remaining items
+                break                           -- Stop trying to send other things
+            else
+                samples[name] = nil             -- Remove from the list
+            end
         else
-            samples[name] = nil             -- Remove from the list
+            player.print("Unable to receive " .. count .. "x [item=" .. name .. "] as this item does not exist.")
+			samples[name] = nil
         end
     end
 

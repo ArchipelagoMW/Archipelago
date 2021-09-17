@@ -1,16 +1,16 @@
 def locality_rules(world, player):
-    if world.local_items[player]:
+    if world.local_items[player].value:
         for location in world.get_locations():
             if location.player != player:
-                forbid_items_for_player(location, world.local_items[player], player)
-    if world.non_local_items[player]:
+                forbid_items_for_player(location, world.local_items[player].value, player)
+    if world.non_local_items[player].value:
         for location in world.get_locations():
             if location.player == player:
-                forbid_items_for_player(location, world.non_local_items[player], player)
+                forbid_items_for_player(location, world.non_local_items[player].value, player)
 
 
-def exclusion_rules(world, player: int, excluded_locations: set):
-    for loc_name in excluded_locations:
+def exclusion_rules(world, player: int, exclude_locations: set):
+    for loc_name in exclude_locations:
         location = world.get_location(loc_name, player)
         add_item_rule(location, lambda i: not (i.advancement or i.never_exclude))
         location.excluded = True

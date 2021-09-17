@@ -10,6 +10,9 @@ from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple
 import secrets
 import random
 
+import Options
+import Utils
+
 
 class MultiWorld():
     debug_types = False
@@ -77,14 +80,10 @@ class MultiWorld():
             set_player_attr('shuffle', "vanilla")
             set_player_attr('logic', "noglitches")
             set_player_attr('mode', 'open')
-            set_player_attr('swordless', False)
             set_player_attr('difficulty', 'normal')
             set_player_attr('item_functionality', 'normal')
             set_player_attr('timer', False)
             set_player_attr('goal', 'ganon')
-            set_player_attr('accessibility', 'items')
-            set_player_attr('retro', False)
-            set_player_attr('hints', True)
             set_player_attr('required_medallions', ['Ether', 'Quake'])
             set_player_attr('swamp_patch_required', False)
             set_player_attr('powder_patch_required', False)
@@ -97,12 +96,8 @@ class MultiWorld():
             set_player_attr('fix_fake_world', True)
             set_player_attr('difficulty_requirements', None)
             set_player_attr('boss_shuffle', 'none')
-            set_player_attr('enemy_shuffle', False)
             set_player_attr('enemy_health', 'default')
             set_player_attr('enemy_damage', 'default')
-            set_player_attr('killable_thieves', False)
-            set_player_attr('tile_shuffle', False)
-            set_player_attr('bush_shuffle', False)
             set_player_attr('beemizer', 0)
             set_player_attr('escape_assist', [])
             set_player_attr('open_pyramid', False)
@@ -114,16 +109,12 @@ class MultiWorld():
             set_player_attr('blue_clock_time', 2)
             set_player_attr('green_clock_time', 4)
             set_player_attr('can_take_damage', True)
-            set_player_attr('progression_balancing', True)
-            set_player_attr('local_items', set())
-            set_player_attr('non_local_items', set())
             set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
             set_player_attr('shop_shuffle', 'off')
             set_player_attr('shuffle_prizes', "g")
             set_player_attr('sprite_pool', [])
             set_player_attr('dark_room_logic', "lamp")
-            set_player_attr('restrict_dungeon_item_on_boss', False)
             set_player_attr('plando_items', [])
             set_player_attr('plando_texts', {})
             set_player_attr('plando_connections', [])
@@ -137,9 +128,20 @@ class MultiWorld():
         for player in self.player_ids:
             self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
-            for option in world_type.options:
-                setattr(self, option, getattr(args, option, {}))
+            for option_key in world_type.options:
+                setattr(self, option_key, getattr(args, option_key, {}))
+            for option_key in Options.common_options:
+                setattr(self, option_key, getattr(args, option_key, {}))
+            for option_key in Options.per_game_common_options:
+                setattr(self, option_key, getattr(args, option_key, {}))
             self.worlds[player] = world_type(self, player)
+
+    # intended for unittests
+    def set_default_common_options(self):
+        for option_key, option in Options.common_options.items():
+            setattr(self, option_key, {player_id: option(option.default) for player_id in self.player_ids})
+        for option_key, option in Options.per_game_common_options.items():
+            setattr(self, option_key, {player_id: option(option.default) for player_id in self.player_ids})
 
     def secure(self):
         self.random = secrets.SystemRandom()
@@ -390,17 +392,17 @@ class MultiWorld():
         """Check if accessibility rules are fulfilled with current or supplied state."""
         if not state:
             state = CollectionState(self)
-        players = {"none" : set(),
+        players = {"minimal" : set(),
                    "items": set(),
                    "locations": set()}
         for player, access in self.accessibility.items():
-            players[access].add(player)
+            players[access.current_key].add(player)
 
         beatable_fulfilled = False
 
         def location_conditition(location : Location):
             """Determine if this location has to be accessible, location is already filtered by location_relevant"""
-            if location.player in players["none"]:
+            if location.player in players["minimal"]:
                 return False
             return True
 
@@ -1009,10 +1011,9 @@ class Spoiler():
         self.medallions = {}
         self.playthrough = {}
         self.unreachables = []
-        self.startinventory = []
+        self.start_inventory = []
         self.locations = {}
         self.paths = {}
-        self.metadata = {}
         self.shops = []
         self.bosses = OrderedDict()
 
@@ -1028,7 +1029,7 @@ class Spoiler():
             self.medallions[f'Misery Mire ({self.world.get_player_name(player)})'] = self.world.required_medallions[player][0]
             self.medallions[f'Turtle Rock ({self.world.get_player_name(player)})'] = self.world.required_medallions[player][1]
 
-        self.startinventory = list(map(str, self.world.precollected_items))
+        self.start_inventory = list(map(str, self.world.precollected_items))
 
         self.locations = OrderedDict()
         listed_locations = set()
@@ -1105,47 +1106,12 @@ class Spoiler():
             self.bosses[str(player)]["Ganons Tower"] = "Agahnim 2"
             self.bosses[str(player)]["Ganon"] = "Ganon"
 
-        from Utils import __version__ as APVersion
-        self.metadata = {'version': APVersion,
-                         'logic': self.world.logic,
-                         'dark_room_logic': self.world.dark_room_logic,
-                         'mode': self.world.mode,
-                         'retro': self.world.retro,
-                         'swordless': self.world.swordless,
-                         'goal': self.world.goal,
-                         'shuffle': self.world.shuffle,
-                         'item_pool': self.world.difficulty,
-                         'item_functionality': self.world.item_functionality,
-                         'open_pyramid': self.world.open_pyramid,
-                         'accessibility': self.world.accessibility,
-                         'hints': self.world.hints,
-                         'boss_shuffle': self.world.boss_shuffle,
-                         'enemy_shuffle': self.world.enemy_shuffle,
-                         'enemy_health': self.world.enemy_health,
-                         'enemy_damage': self.world.enemy_damage,
-                         'killable_thieves': self.world.killable_thieves,
-                         'tile_shuffle': self.world.tile_shuffle,
-                         'bush_shuffle': self.world.bush_shuffle,
-                         'beemizer': self.world.beemizer,
-                         'shufflepots': self.world.shufflepots,
-                         'players': self.world.players,
-                         'progression_balancing': self.world.progression_balancing,
-                         'triforce_pieces_available': self.world.triforce_pieces_available,
-                         'triforce_pieces_required': self.world.triforce_pieces_required,
-                         'shop_shuffle': self.world.shop_shuffle,
-                         'shuffle_prizes': self.world.shuffle_prizes,
-                         'sprite_pool': self.world.sprite_pool,
-                         'restrict_dungeon_item_on_boss': self.world.restrict_dungeon_item_on_boss,
-                         'game': self.world.game,
-                         'er_seeds': self.world.er_seeds
-                         }
-
     def to_json(self):
         self.parse_data()
         out = OrderedDict()
         out['Entrances'] = list(self.entrances.values())
         out.update(self.locations)
-        out['Starting Inventory'] = self.startinventory
+        out['Starting Inventory'] = self.start_inventory
         out['Special'] = self.medallions
         if self.hashes:
             out['Hashes'] = self.hashes
@@ -1154,7 +1120,6 @@ class Spoiler():
         out['playthrough'] = self.playthrough
         out['paths'] = self.paths
         out['Bosses'] = self.bosses
-        out['meta'] = self.metadata
 
         return json.dumps(out)
 
@@ -1166,10 +1131,18 @@ class Spoiler():
                 return variable
             return 'Yes' if variable else 'No'
 
+        def write_option(option_key: str, option_obj: type(Options.Option)):
+            res = getattr(self.world, option_key)[player]
+            displayname = getattr(option_obj, "displayname", option_key)
+            try:
+                outfile.write(f'{displayname + ":":33}{res.get_current_option_name()}\n')
+            except:
+                raise Exception
+
         with open(filename, 'w', encoding="utf-8-sig") as outfile:
             outfile.write(
                 'Archipelago Version %s  -  Seed: %s\n\n' % (
-                    self.metadata['version'], self.world.seed))
+                    Utils.__version__, self.world.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.world.algorithm)
             outfile.write('Players:                         %d\n' % self.world.players)
 
@@ -1177,68 +1150,51 @@ class Spoiler():
                 if self.world.players > 1:
                     outfile.write('\nPlayer %d: %s\n' % (player, self.world.get_player_name(player)))
                 outfile.write('Game:                            %s\n' % self.world.game[player])
-                if self.world.players > 1:
-                    outfile.write('Progression Balanced:            %s\n' % (
-                        'Yes' if self.metadata['progression_balancing'][player] else 'No'))
-                outfile.write('Accessibility:                   %s\n' % self.metadata['accessibility'][player])
+                for f_option, option in Options.common_options.items():
+                    write_option(f_option, option)
+                for f_option, option in Options.per_game_common_options.items():
+                    write_option(f_option, option)
                 options = self.world.worlds[player].options
                 if options:
                     for f_option, option in options.items():
-                        res = getattr(self.world, f_option)[player]
-                        displayname = getattr(option, "displayname", f_option)
-                        outfile.write(f'{displayname + ":":33}{res.get_current_option_name()}\n')
+                        write_option(f_option, option)
 
                 if player in self.world.get_game_players("A Link to the Past"):
                     outfile.write('%s%s\n' % ('Hash: ', self.hashes[player]))
 
-                    outfile.write('Logic:                           %s\n' % self.metadata['logic'][player])
-                    outfile.write('Dark Room Logic:                 %s\n' % self.metadata['dark_room_logic'][player])
-                    outfile.write('Restricted Boss Drops:           %s\n' %
-                                  bool_to_text(self.metadata['restrict_dungeon_item_on_boss'][player]))
-
-                    outfile.write('Mode:                            %s\n' % self.metadata['mode'][player])
-                    outfile.write('Retro:                           %s\n' %
-                                  ('Yes' if self.metadata['retro'][player] else 'No'))
-                    outfile.write('Swordless:                       %s\n' % ('Yes' if self.metadata['swordless'][player] else 'No'))
-                    outfile.write('Goal:                            %s\n' % self.metadata['goal'][player])
-                    if "triforce" in self.metadata["goal"][player]:  # triforce hunt
+                    outfile.write('Logic:                           %s\n' % self.world.logic[player])
+                    outfile.write('Dark Room Logic:                 %s\n' % self.world.dark_room_logic[player])
+                    outfile.write('Mode:                            %s\n' % self.world.mode[player])
+                    outfile.write('Goal:                            %s\n' % self.world.goal[player])
+                    if "triforce" in self.world.goal[player]:  # triforce hunt
                         outfile.write("Pieces available for Triforce:   %s\n" %
-                                      self.metadata['triforce_pieces_available'][player])
+                                      self.world.triforce_pieces_available[player])
                         outfile.write("Pieces required for Triforce:    %s\n" %
-                                      self.metadata["triforce_pieces_required"][player])
-                    outfile.write('Difficulty:                      %s\n' % self.metadata['item_pool'][player])
-                    outfile.write('Item Functionality:              %s\n' % self.metadata['item_functionality'][player])
-                    outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'][player])
-                    if self.metadata['shuffle'][player] != "vanilla":
-                        outfile.write('Entrance Shuffle Seed            %s\n' % self.metadata['er_seeds'][player])
+                                      self.world.triforce_pieces_required[player])
+                    outfile.write('Difficulty:                      %s\n' % self.world.difficulty[player])
+                    outfile.write('Item Functionality:              %s\n' % self.world.item_functionality[player])
+                    outfile.write('Entrance Shuffle:                %s\n' % self.world.shuffle[player])
+                    if self.world.shuffle[player] != "vanilla":
+                        outfile.write('Entrance Shuffle Seed            %s\n' % self.world.er_seeds[player])
                     outfile.write('Pyramid hole pre-opened:         %s\n' % (
-                        'Yes' if self.metadata['open_pyramid'][player] else 'No'))
+                        'Yes' if self.world.open_pyramid[player] else 'No'))
                     outfile.write('Shop inventory shuffle:          %s\n' %
-                                  bool_to_text("i" in self.metadata["shop_shuffle"][player]))
+                                  bool_to_text("i" in self.world.shop_shuffle[player]))
                     outfile.write('Shop price shuffle:              %s\n' %
-                                  bool_to_text("p" in self.metadata["shop_shuffle"][player]))
+                                  bool_to_text("p" in self.world.shop_shuffle[player]))
                     outfile.write('Shop upgrade shuffle:            %s\n' %
-                                  bool_to_text("u" in self.metadata["shop_shuffle"][player]))
+                                  bool_to_text("u" in self.world.shop_shuffle[player]))
                     outfile.write('New Shop inventory:              %s\n' %
-                                  bool_to_text("g" in self.metadata["shop_shuffle"][player] or
-                                               "f" in self.metadata["shop_shuffle"][player]))
+                                  bool_to_text("g" in self.world.shop_shuffle[player] or
+                                               "f" in self.world.shop_shuffle[player]))
                     outfile.write('Custom Potion Shop:              %s\n' %
-                                  bool_to_text("w" in self.metadata["shop_shuffle"][player]))
-                    outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'][player])
-                    outfile.write(
-                        'Enemy shuffle:                   %s\n' % bool_to_text(self.metadata['enemy_shuffle'][player]))
-                    outfile.write('Enemy health:                    %s\n' % self.metadata['enemy_health'][player])
-                    outfile.write('Enemy damage:                    %s\n' % self.metadata['enemy_damage'][player])
-                    outfile.write(f'Killable thieves:                {bool_to_text(self.metadata["killable_thieves"][player])}\n')
-                    outfile.write(f'Shuffled tiles:                  {bool_to_text(self.metadata["tile_shuffle"][player])}\n')
-                    outfile.write(f'Shuffled bushes:                 {bool_to_text(self.metadata["bush_shuffle"][player])}\n')
-                    outfile.write(
-                        'Hints:                           %s\n' % ('Yes' if self.metadata['hints'][player] else 'No'))
-                    outfile.write('Beemizer:                        %s\n' % self.metadata['beemizer'][player])
-                    outfile.write('Pot shuffle                      %s\n'
-                                  % ('Yes' if self.metadata['shufflepots'][player] else 'No'))
+                                  bool_to_text("w" in self.world.shop_shuffle[player]))
+                    outfile.write('Boss shuffle:                    %s\n' % self.world.boss_shuffle[player])
+                    outfile.write('Enemy health:                    %s\n' % self.world.enemy_health[player])
+                    outfile.write('Enemy damage:                    %s\n' % self.world.enemy_damage[player])
+                    outfile.write('Beemizer:                        %s\n' % self.world.beemizer[player])
                     outfile.write('Prize shuffle                    %s\n' %
-                                  self.metadata['shuffle_prizes'][player])
+                                  self.world.shuffle_prizes[player])
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
                 outfile.write('\n'.join(['%s%s %s %s' % (f'{self.world.get_player_name(entry["player"])}: '
@@ -1259,9 +1215,9 @@ class Spoiler():
                     for recipe in self.world.worlds[player].custom_recipes.values():
                         outfile.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
 
-            if self.startinventory:
+            if self.start_inventory:
                 outfile.write('\n\nStarting Inventory:\n\n')
-                outfile.write('\n'.join(self.startinventory))
+                outfile.write('\n'.join(self.start_inventory))
 
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(['%s: %s' % (location, item) for grouping in self.locations.values() for (location, item) in grouping.items()]))

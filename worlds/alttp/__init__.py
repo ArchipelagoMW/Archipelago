@@ -74,9 +74,9 @@ class ALTTPWorld(World):
         for dungeon_item in ["smallkey_shuffle", "bigkey_shuffle", "compass_shuffle", "map_shuffle"]:
             option = getattr(world, dungeon_item)[player]
             if option == "own_world":
-                world.local_items[player] |= self.item_name_groups[option.item_name_group]
+                world.local_items[player].value |= self.item_name_groups[option.item_name_group]
             elif option == "different_world":
-                world.non_local_items[player] |= self.item_name_groups[option.item_name_group]
+                world.non_local_items[player].value |= self.item_name_groups[option.item_name_group]
             elif option.in_dungeon:
                 self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
                 if option == "original_dungeon":
@@ -258,7 +258,7 @@ class ALTTPWorld(World):
         try:
             use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
                             or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                            or world.shufflepots[player] or world.bush_shuffle[player]
+                            or world.pot_shuffle[player] or world.bush_shuffle[player]
                             or world.killable_thieves[player])
 
             rom = LocalRom(world.alttp_rom)
@@ -298,7 +298,7 @@ class ALTTPWorld(World):
                 if world.player_name[player] != 'Player%d' % player else ''
 
             rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
-            rom.write_to_file(rompath, hide_enemizer=True)
+            rom.write_to_file(rompath)
             Patch.create_patch_file(rompath, player=player, player_name=world.player_name[player])
             os.unlink(rompath)
             self.rom_name = rom.name

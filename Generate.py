@@ -19,10 +19,8 @@ from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
 import Options
-from worlds.alttp.Items import item_table
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
-from worlds.alttp.Regions import location_table, key_drop_data
 from worlds.AutoWorld import AutoWorldRegister
 
 categories = set(AutoWorldRegister.world_types)
@@ -113,17 +111,17 @@ def main(args=None, callback=ERmain):
                 player_id += 1
 
     args.multi = max(player_id-1, args.multi)
-    print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed}")
+    print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed} with plando: "
+          f"{', '.join(args.plando)}")
 
     if not weights_cache:
         raise Exception(f"No weights found. Provide a general weights file ({args.weights_file_path}) or individual player files. "
                         f"A mix is also permitted.")
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
-    erargs.create_spoiler = args.spoiler > 0
     erargs.glitch_triforce = options["generator"]["glitch_triforce_room"]
+    erargs.spoiler = args.spoiler
     erargs.race = args.race
-    erargs.skip_playthrough = args.spoiler < 2
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
 
@@ -426,6 +424,32 @@ def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str
         raise Exception(f"Boss Shuffle {boss_shuffle} is unknown and boss plando is turned off.")
 
 
+def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option)):
+    if option_key in game_weights:
+        try:
+            if not option.supports_weighting:
+                player_option = option.from_any(game_weights[option_key])
+            else:
+                player_option = option.from_any(get_choice(option_key, game_weights))
+            setattr(ret, option_key, player_option)
+        except Exception as e:
+            raise Exception(f"Error generating option {option_key} in {ret.game}") from e
+        else:
+            # verify item names existing
+            if getattr(player_option, "verify_item_name", False):
+                for item_name in player_option.value:
+                    if item_name not in AutoWorldRegister.world_types[ret.game].item_names:
+                        raise Exception(f"Item {item_name} from option {player_option} "
+                                        f"is not a valid item name from {ret.game}")
+            elif getattr(player_option, "verify_location_name", False):
+                for location_name in player_option.value:
+                    if location_name not in AutoWorldRegister.world_types[ret.game].location_names:
+                        raise Exception(f"Location {location_name} from option {player_option} "
+                                        f"is not a valid location name from {ret.game}")
+    else:
+        setattr(ret, option_key, option(option.default))
+
+
 def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses",))):
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
@@ -452,63 +476,26 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                                     f"which are not enabled.")
 
     ret = argparse.Namespace()
+    for option_key in Options.per_game_common_options:
+        if option_key in weights:
+            raise Exception(f"Option {option_key} has to be in a game's section, not on its own.")
+
     ret.name = get_choice('name', weights)
-    ret.accessibility = get_choice('accessibility', weights)
-    ret.progression_balancing = get_choice('progression_balancing', weights, True)
+    for option_key, option in Options.common_options.items():
+        setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
     ret.game = get_choice("game", weights)
     if ret.game not in weights:
         raise Exception(f"No game options for selected game \"{ret.game}\" found.")
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
-    ret.local_items = set()
-    for item_name in game_weights.get('local_items', []):
-        items = world_type.item_name_groups.get(item_name, {item_name})
-        for item in items:
-            if item in world_type.item_names:
-                ret.local_items.add(item)
-            else:
-                raise Exception(f"Could not force item {item} to be world-local, as it was not recognized.")
-
-    ret.non_local_items = set()
-    for item_name in game_weights.get('non_local_items', []):
-        items = world_type.item_name_groups.get(item_name, {item_name})
-        for item in items:
-            if item in world_type.item_names:
-                ret.non_local_items.add(item)
-            else:
-                raise Exception(f"Could not force item {item} to be world-non-local, as it was not recognized.")
-
-    inventoryweights = game_weights.get('start_inventory', {})
-    startitems = []
-    for item in inventoryweights.keys():
-        itemvalue = get_choice_legacy(item, inventoryweights)
-        if isinstance(itemvalue, int):
-            for i in range(int(itemvalue)):
-                startitems.append(item)
-        elif itemvalue:
-            startitems.append(item)
-    ret.startinventory = startitems
-    ret.start_hints = set(game_weights.get('start_hints', []))
-
-    ret.excluded_locations = set()
-    for location in game_weights.get('exclude_locations', []):
-        if location in world_type.location_names: 
-            ret.excluded_locations.add(location)
-        else:
-            raise Exception(f"Could not exclude location {location}, as it was not recognized.")
 
     if ret.game in AutoWorldRegister.world_types:
-        for option_name, option in AutoWorldRegister.world_types[ret.game].options.items():
-            if option_name in game_weights:
-                try:
-                    if issubclass(option, Options.OptionDict) or issubclass(option, Options.OptionList):
-                        setattr(ret, option_name, option.from_any(game_weights[option_name]))
-                    else:
-                        setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights)))
-                except Exception as e:
-                    raise Exception(f"Error generating option {option_name} in {ret.game}") from e
-            else:
-                setattr(ret, option_name, option(option.default))
+        for option_key, option in world_type.options.items():
+            handle_option(ret, game_weights, option_key, option)
+        for option_key, option in Options.per_game_common_options.items():
+            handle_option(ret, game_weights, option_key, option)
+        if "items" in plando_options:
+            ret.plando_items = roll_item_plando(world_type, game_weights)
         if ret.game == "Minecraft":
             # bad hardcoded behavior to make this work for now
             ret.plando_connections = []
@@ -526,6 +513,44 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     else:
         raise Exception(f"Unsupported game {ret.game}")
     return ret
+
+
+def roll_item_plando(world_type, weights):
+    plando_items = []
+
+    def add_plando_item(item: str, location: str):
+        if item not in world_type.item_name_to_id:
+            raise Exception(f"Could not plando item {item} as the item was not recognized")
+        if location not in world_type.location_name_to_id:
+            raise Exception(
+                f"Could not plando item {item} at location {location} as the location was not recognized")
+        plando_items.append(PlandoItem(item, location, location_world, from_pool, force))
+
+    options = weights.get("plando_items", [])
+    for placement in options:
+        if roll_percentage(get_choice_legacy("percentage", placement, 100)):
+            from_pool = get_choice_legacy("from_pool", placement, PlandoItem._field_defaults["from_pool"])
+            location_world = get_choice_legacy("world", placement, PlandoItem._field_defaults["world"])
+            force = str(get_choice_legacy("force", placement, PlandoItem._field_defaults["force"])).lower()
+            if "items" in placement and "locations" in placement:
+                items = placement["items"]
+                locations = placement["locations"]
+                if isinstance(items, dict):
+                    item_list = []
+                    for key, value in items.items():
+                        item_list += [key] * value
+                    items = item_list
+                if not items or not locations:
+                    raise Exception("You must specify at least one item and one location to place items.")
+                random.shuffle(items)
+                random.shuffle(locations)
+                for item, location in zip(items, locations):
+                    add_plando_item(item, location)
+            else:
+                item = get_choice_legacy("item", placement, get_choice_legacy("items", placement))
+                location = get_choice_legacy("location", placement)
+                add_plando_item(item, location)
+    return plando_items
 
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
@@ -546,8 +571,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         ret.dark_room_logic = "torches"
     if ret.dark_room_logic not in {"lamp", "torches", "none"}:
         raise ValueError(f"Unknown Dark Room Logic: \"{ret.dark_room_logic}\"")
-
-    ret.restrict_dungeon_item_on_boss = get_choice_legacy('restrict_dungeon_item_on_boss', weights, False)
 
     entrance_shuffle = get_choice_legacy('entrance_shuffle', weights, 'vanilla')
     if entrance_shuffle.startswith('none-'):
@@ -588,11 +611,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         ret.shop_shuffle = ''
 
     ret.mode = get_choice_legacy("mode", weights)
-    ret.retro = get_choice_legacy("retro", weights)
-
-    ret.hints = get_choice_legacy('hints', weights)
-
-    ret.swordless = get_choice_legacy('swordless', weights, False)
 
     ret.difficulty = get_choice_legacy('item_pool', weights)
 
@@ -600,12 +618,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     boss_shuffle = get_choice_legacy('boss_shuffle', weights)
     ret.shufflebosses = get_plando_bosses(boss_shuffle, plando_options)
-
-    ret.enemy_shuffle = bool(get_choice_legacy('enemy_shuffle', weights, False))
-
-    ret.killable_thieves = get_choice_legacy('killable_thieves', weights, False)
-    ret.tile_shuffle = get_choice_legacy('tile_shuffle', weights, False)
-    ret.bush_shuffle = get_choice_legacy('bush_shuffle', weights, False)
 
     ret.enemy_damage = {None: 'default',
                         'default': 'default',
@@ -615,8 +627,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                         }[get_choice_legacy('enemy_damage', weights)]
 
     ret.enemy_health = get_choice_legacy('enemy_health', weights)
-
-    ret.shufflepots = get_choice_legacy('pot_shuffle', weights)
 
     ret.beemizer = int(get_choice_legacy('beemizer', weights, 0))
 
@@ -646,42 +656,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
             .get(medallion.lower(), None)
         if not ret.required_medallions[index]:
             raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
-
-    ret.plando_items = []
-    if "items" in plando_options:
-
-        def add_plando_item(item: str, location: str):
-            if item not in item_table:
-                raise Exception(f"Could not plando item {item} as the item was not recognized")
-            if location not in location_table and location not in key_drop_data:
-                raise Exception(
-                    f"Could not plando item {item} at location {location} as the location was not recognized")
-            ret.plando_items.append(PlandoItem(item, location, location_world, from_pool, force))
-
-        options = weights.get("plando_items", [])
-        for placement in options:
-            if roll_percentage(get_choice_legacy("percentage", placement, 100)):
-                from_pool = get_choice_legacy("from_pool", placement, PlandoItem._field_defaults["from_pool"])
-                location_world = get_choice_legacy("world", placement, PlandoItem._field_defaults["world"])
-                force = str(get_choice_legacy("force", placement, PlandoItem._field_defaults["force"])).lower()
-                if "items" in placement and "locations" in placement:
-                    items = placement["items"]
-                    locations = placement["locations"]
-                    if isinstance(items, dict):
-                        item_list = []
-                        for key, value in items.items():
-                            item_list += [key] * value
-                        items = item_list
-                    if not items or not locations:
-                        raise Exception("You must specify at least one item and one location to place items.")
-                    random.shuffle(items)
-                    random.shuffle(locations)
-                    for item, location in zip(items, locations):
-                        add_plando_item(item, location)
-                else:
-                    item = get_choice_legacy("item", placement, get_choice_legacy("items", placement))
-                    location = get_choice_legacy("location", placement)
-                    add_plando_item(item, location)
 
     ret.plando_texts = {}
     if "texts" in plando_options:
