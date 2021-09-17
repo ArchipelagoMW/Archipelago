@@ -50,6 +50,8 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 [Components]
 Name: "core"; Description: "Core Files"; Types: full hosting playing custom; Flags: fixed
 Name: "generator"; Description: "Generator"; Types: full hosting
+Name: "generator/lttp"; Description: "A Link to the Past ROM Setup"; Types: full hosting
+Name: "generator/oot"; Description: "Ocarina of Time ROM Setup"; Types: full hosting
 Name: "server"; Description: "Server"; Types: full hosting
 Name: "client"; Description: "Clients"; Types: full playing
 Name: "client/lttp"; Description: "A Link to the Past"; Types: full playing hosting
@@ -60,8 +62,8 @@ Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDi
 NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-modify authusers-modify;
 
 [Files]
-Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"; Flags: external; Components: client/lttp or generator
-Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: generator
+Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"; Flags: external; Components: client/lttp or generator/lttp
+Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: generator/oot
 Source: "{#sourcepath}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#sourcepath}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/lttp
 Source: "{#sourcepath}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator
@@ -297,7 +299,9 @@ function ShouldSkipPage(PageID: Integer): Boolean;
 begin
   Result := False;
   if (assigned(ROMFilePage)) and (PageID = ROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('client/lttp') or WizardIsComponentSelected('generator'));
+    Result := not (WizardIsComponentSelected('client/lttp') or WizardIsComponentSelected('generator/lttp'));
+  if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('generator/oot'));
 end;
 
 function GetROMPath(Param: string): string;
