@@ -195,6 +195,9 @@ class CommonContext():
     def event_invalid_slot(self):
         raise Exception('Invalid Slot; please verify that you have connected to the correct world.')
 
+    def event_invalid_game(self):
+        raise Exception('Invalid Game; please verify that you connected with the right game to the correct world.')
+
     async def server_auth(self, password_requested):
         if password_requested and not self.password:
             logger.info('Enter the password required to join this game:')
@@ -345,7 +348,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         errors = args["errors"]
         if 'InvalidSlot' in errors:
             ctx.event_invalid_slot()
-
+        elif 'InvalidGame' in errors:
+            ctx.event_invalid_game()
         elif 'SlotAlreadyTaken' in errors:
             raise Exception('Player slot already in use for that team')
         elif 'IncompatibleVersion' in errors:
