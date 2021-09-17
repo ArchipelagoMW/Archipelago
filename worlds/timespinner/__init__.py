@@ -1,7 +1,7 @@
 import string
 
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance
-from .Items import item_table, melee_weapons, spells
+from .Items import item_table, starter_melee_weapons, starter_spells
 from .Locations import location_table
 from .Regions import create_regions
 from .Rules import set_rules
@@ -27,11 +27,11 @@ class TimespinnerWorld(World):
         }
 
     def generate_basic(self):
-        self.world.random.shuffle(melee_weapons)
-        self.world.random.shuffle(spells)
+        self.world.random.shuffle(starter_melee_weapons)
+        self.world.random.shuffle(starter_spells)
 
-        melee_weapon = TimespinnerWorldItem(melee_weapons.pop(), self.player)
-        spell = TimespinnerWorldItem(spells.pop(), self.player)
+        melee_weapon = TimespinnerWorldItem(starter_melee_weapons.pop(), self.player)
+        spell = TimespinnerWorldItem(starter_spells.pop(), self.player)
      
         self.world.get_location('Tutorial - Yo Momma 1', self.player).place_locked_item(melee_weapon)
         self.world.get_location('Tutorial - Yo Momma 2', self.player).place_locked_item(spell)
