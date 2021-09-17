@@ -95,7 +95,11 @@ class SMWorld(World):
         itemPool = self.variaRando.container.itemPool
         self.startItems = [variaItem for item in self.world.precollected_items for variaItem in ItemManager.Items.values() if item.player == self.player and variaItem.Name == item.name]
         for item in self.startItems:
-            itemPool.remove(item)
+            if (item in itemPool):
+                itemPool.remove(item)
+
+        missingPool = 105 - len(itemPool) + 1
+        for i in range(1, missingPool):
             itemPool.append(ItemManager.Items['Nothing'])
         
         # Generate item pool
@@ -189,7 +193,7 @@ class SMWorld(World):
                             'Missile': [0xC, 0x5, 0xE, 0x5],
                             'Super': [0x10, 0x5, 0x12, 0x5],
                             'PowerBomb': [0x14, 0x5, 0x16, 0x5],
-                            'Reserve': [0x26, 0x64, 0x24, 0x64],
+                            'Reserve': [0x1A, 0x64, 0x18, 0x64],
                             'Morph': [0x2, 0x4, 0x0, 0x4],
                             'Bomb': [0x3, 0x10, 0x1, 0x10],
                             'SpringBall': [0x2, 0x2, 0x0, 0x2],

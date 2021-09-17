@@ -359,6 +359,7 @@ new_save:
 	lda #$8000
 	sta $700002,x
 .end:
+    jsl start_item
 	rtl
 
 // save slot data:
@@ -1452,6 +1453,45 @@ load_stat:
     tax
     lda {stats_ram}, x
     plx
+    rtl
+
+print "start_item_data_major : ", org
+start_item_data_major:
+    dw $0000, $0000, $0000, $0000
+start_item_data_minor:
+    dw $0063, $0063, $0000, $0000
+    dw $0000, $0000, $0000, $0000
+start_item_data_reserve:
+    dw $0000, $0000
+
+start_item:
+    ldx #$0000
+-
+    lda start_item_data_major, x
+    sta $7E09A2, x
+    sta $700010, x
+    inx 
+    inx
+    cpx #$0008
+    bne -
+    ldx #$0000
+-
+    lda start_item_data_minor, x
+    sta $7E09C2, x
+    sta $700030, x
+    inx
+    inx
+    cpx #$0010
+    bne -
+    ldx #$0000
+-
+    lda start_item_data_reserve, x
+    sta $7E09D4, x
+    sta $700042, x
+    inx
+    inx
+    cpx #$0004
+    bne -
     rtl
 
 warnpc $dfd91a
