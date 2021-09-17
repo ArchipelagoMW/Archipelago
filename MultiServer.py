@@ -1096,7 +1096,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
-            if "IgnoreGame" in args["tags"] and args['game'] != game:
+            if "IgnoreGame" not in args["tags"] and args['game'] != game:
                 errors.add('InvalidGame')
             # this can only ever be 0 or 1 elements
             clients = [c for c in ctx.endpoints if c.auth and c.slot == slot and c.team == team]
