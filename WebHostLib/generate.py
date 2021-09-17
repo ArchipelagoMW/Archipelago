@@ -2,6 +2,7 @@ import os
 import tempfile
 import random
 import json
+import zipfile
 from collections import Counter
 
 from flask import request, flash, redirect, url_for, session, render_template
@@ -15,6 +16,7 @@ import pickle
 from .models import *
 from WebHostLib import app
 from .check import get_yaml_data, roll_options
+from .upload import upload_zip_to_db
 
 
 @app.route('/generate', methods=['GET', 'POST'])
@@ -69,7 +71,7 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
         if race:
             random.seed()  # reset to time-based random source
 
-        seedname = "M" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
+        seedname = "W" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
 
         erargs = parse_arguments(['--multi', str(playercount)])
         erargs.seed = seed
@@ -84,7 +86,10 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
             for k, v in settings.items():
                 if v is not None:
-                    getattr(erargs, k)[player] = v
+                    if hasattr(erargs, k):
+                        getattr(erargs, k)[player] = v
+                    else:
+                        setattr(erargs, k, {player: v})
 
             if not erargs.name[player]:
                 erargs.name[player] = os.path.splitext(os.path.split(playerfile)[-1])[0]
@@ -92,7 +97,7 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
 
         ERmain(erargs, seed)
 
-        return upload_to_db(target.name, owner, sid, race)
+        return upload_to_db(target.name, sid, owner, race)
     except BaseException as e:
         if sid:
             with db_session:
@@ -122,37 +127,19 @@ def wait_seed(seed: UUID):
     return render_template("waitSeed.html", seed_id=seed_id)
 
 
-def upload_to_db(folder, owner, sid, race:bool):
-    slots = set()
-    spoiler = ""
-
-    multidata = None
+def upload_to_db(folder, sid, owner, race):
     for file in os.listdir(folder):
         file = os.path.join(folder, file)
-        if file.endswith(".apbp"):
-            player_text = file.split("_P", 1)[1]
-            player_name = player_text.split("_", 1)[1].split(".", 1)[0]
-            player_id = int(player_text.split(".", 1)[0].split("_", 1)[0])
-            slots.add(Slot(data=open(file, "rb").read(),
-                             player_id=player_id, player_name = player_name, game = "A Link to the Past"))
-        elif file.endswith(".txt"):
-            spoiler = open(file, "rt", encoding="utf-8-sig").read()
-        elif file.endswith(".archipelago"):
-            multidata = open(file, "rb").read()
-    if multidata:
-        with db_session:
-            if sid:
-                seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner,
-                            id=sid, meta=json.dumps({"race": race, "tags": ["generated"]}))
-            else:
-                seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner,
-                            meta=json.dumps({"race": race, "tags": ["generated"]}))
-            for patch in slots:
-                patch.seed = seed
-            if sid:
-                gen = Generation.get(id=sid)
-                if gen is not None:
-                    gen.delete()
-        return seed.id
-    else:
-        raise Exception("Multidata required (.archipelago), but not found.")
+        if file.endswith(".zip"):
+            with db_session:
+                with zipfile.ZipFile(file) as zfile:
+                    res = upload_zip_to_db(zfile, owner, {"race": race}, sid)
+                if type(res) == "str":
+                    raise Exception(res)
+                elif res:
+                    seed = res
+                    gen = Generation.get(id=seed.id)
+                    if gen is not None:
+                        gen.delete()
+                    return seed.id
+    raise Exception("Generation zipfile not found.")
