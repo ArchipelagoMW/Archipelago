@@ -747,7 +747,7 @@ bonk_addresses = [0x4CF6C, 0x4CFBA, 0x4CFE0, 0x4CFFB, 0x4D018, 0x4D01B, 0x4D028,
 
 
 def get_nonnative_item_sprite(item: str) -> int:
-    return 0x6B # set all non-native sprites to Power Star as per 13 to 2 vote at
+    return 0x6B  # set all non-native sprites to Power Star as per 13 to 2 vote at
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
 
 
@@ -785,7 +785,7 @@ def patch_rom(world, rom, player, enemized):
                             itemid = 0x33
                         elif location.item.compass:
                             itemid = 0x25
-                if world.worlds[player].remote_items: # remote items does not currently work
+                if world.worlds[player].remote_items:  # remote items does not currently work
                     itemid = list(location_table.keys()).index(location.name) + 1
                     assert itemid < 0x100
                     rom.write_byte(location.player_address, 0xFF)
@@ -1495,7 +1495,8 @@ def patch_rom(world, rom, player, enemized):
     rom.write_byte(0x18016A, 0x10 | ((0x01 if world.smallkey_shuffle[player] else 0x00)
                                      | (0x02 if world.compass_shuffle[player] else 0x00)
                                      | (0x04 if world.map_shuffle[player] else 0x00)
-                                     | (0x08 if world.bigkey_shuffle[player] else 0x00)))  # free roaming item text boxes
+                                     | (0x08 if world.bigkey_shuffle[
+                player] else 0x00)))  # free roaming item text boxes
     rom.write_byte(0x18003B, 0x01 if world.map_shuffle[player] else 0x00)  # maps showing crystals on overworld
 
     # compasses showing dungeon count
@@ -1550,7 +1551,8 @@ def patch_rom(world, rom, player, enemized):
     rom.write_int16(0x18017C, get_reveal_bytes('Crystal 5') | get_reveal_bytes('Crystal 6') if world.map_shuffle[
         player] else 0x0000)  # Bomb Shop Reveal
 
-    rom.write_byte(0x180172, 0x01 if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal else 0x00)  # universal keys
+    rom.write_byte(0x180172, 0x01 if world.smallkey_shuffle[
+                                         player] == smallkey_shuffle.option_universal else 0x00)  # universal keys
     rom.write_byte(0x18637E, 0x01 if world.retro[player] else 0x00)  # Skip quiver in item shops once bought
     rom.write_byte(0x180175, 0x01 if world.retro[player] else 0x00)  # rupee bow
     rom.write_byte(0x180176, 0x0A if world.retro[player] else 0x00)  # wood arrow cost
@@ -2178,7 +2180,8 @@ def write_strings(rom, world, player):
                     entrances_to_hint.update({'Inverted Pyramid Entrance': 'The extra castle passage'})
                 else:
                     entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
-        hint_count = 4 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'] else 0
+        hint_count = 4 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull',
+                                                        'dungeonscrossed'] else 0
         for entrance in all_entrances:
             if entrance.name in entrances_to_hint:
                 if hint_count:
@@ -2195,7 +2198,8 @@ def write_strings(rom, world, player):
         if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']:
             locations_to_hint.extend(InconvenientVanillaLocations)
         local_random.shuffle(locations_to_hint)
-        hint_count = 3 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'] else 5
+        hint_count = 3 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull',
+                                                        'dungeonscrossed'] else 5
         for location in locations_to_hint[:hint_count]:
             if location == 'Swamp Left':
                 if local_random.randint(0, 1):
@@ -2254,7 +2258,8 @@ def write_strings(rom, world, player):
         if world.bigkey_shuffle[player]:
             items_to_hint.extend(BigKeys)
         local_random.shuffle(items_to_hint)
-        hint_count = 5 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'] else 8
+        hint_count = 5 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull',
+                                                        'dungeonscrossed'] else 8
         while hint_count > 0 and items_to_hint:
             this_item = items_to_hint.pop(0)
             this_location = world.find_items(this_item, player)
