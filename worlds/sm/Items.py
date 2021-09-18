@@ -11,4 +11,4 @@ def gen_special_id():
 gen_run = gen_special_id()
 
 lookup_id_to_name = dict((items_start_id + (value.Id if value.Id != None else next(gen_run)), value.Name) for key, value in ItemManager.Items.items())
-lookup_name_to_id = {location_name: location_id for location_id, location_name in lookup_id_to_name.items()}
+lookup_name_to_id = {item_name: item_id for item_id, item_name in lookup_id_to_name.items()}

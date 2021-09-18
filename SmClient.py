@@ -507,6 +507,9 @@ async def game_watcher(ctx: Context):
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
         data = await snes_read(ctx, RECV_PROGRESS_ADDR + 0x600, 4)
+        if data is None:
+            continue
+
         recv_itemOutPtr = data[0] | (data[1] << 8)
         itemOutPtr = data[2] | (data[3] << 8)
 
@@ -521,7 +524,7 @@ async def game_watcher(ctx: Context):
             snes_buffered_write(ctx, RECV_PROGRESS_ADDR + 0x602, bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
                 color(ctx.item_name_getter(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_name_getter(item.location), recv_index, len(ctx.items_received)))
+                ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
         await snes_flush_writes(ctx)
 
 async def run_game(romfile):

@@ -96,6 +96,8 @@ mw_display_item_sent:
 
 mw_receive_item:
     pha : phx
+    cmp #$0016
+    beq .end                      ; skip receiving if its a Nothing item
     asl #4 : tax
     lda.l sm_item_table+$2, x     ; Read item flag
     sta $cc
@@ -106,6 +108,7 @@ mw_receive_item:
     txa : clc : adc $ca : tax
     ldy #$00cc
     jsl mw_call_receive           ; Call original item receive code (reading the item to get from $cc-ce)
+.end
     plx : pla
     rts
 
@@ -205,6 +208,7 @@ item_names:
     dw "___       MORPHING BALL      ___"
     dw "___      A RESERVE TANK      ___"
     dw "___    A MULTI WORLD ITEM    ___"
+    dw "___         NOTHING          ___"
 cleartable
 
 
