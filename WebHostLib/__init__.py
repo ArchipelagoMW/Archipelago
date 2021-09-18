@@ -90,7 +90,7 @@ def player_settings(game):
 
 # Game Info Pages
 @app.route('/games/<string:game>/info/<string:lang>')
-def game_page(game, lang):
+def game_info(game, lang):
     return render_template('gameInfo.html', game=game, lang=lang)
 
 
