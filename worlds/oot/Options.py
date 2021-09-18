@@ -1,7 +1,6 @@
 import typing
 from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionList
-from .Colors import *
-import worlds.oot.Sounds as sfx
+from .ColorSFXOptions import *
 
 
 class Logic(Choice): 
@@ -651,21 +650,6 @@ itempool_options: typing.Dict[str, type(Option)] = {
 
 # Start of cosmetic options
 
-def assemble_color_option(func, display_name: str, default_option: str, outer=False): 
-    color_options = func()
-    if outer:
-        color_options.append("Match Inner")
-    format_color = lambda color: color.replace(' ', '_').lower()
-    color_to_id = {format_color(color): index for index, color in enumerate(color_options)}
-    class ColorOption(Choice):
-        """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-        displayname = display_name
-        default = color_options.index(default_option)
-    ColorOption.options.update(color_to_id)
-    ColorOption.name_lookup.update({id: color for (color, id) in color_to_id.items()})
-    return ColorOption
-
-
 class Targeting(Choice): 
     """Default targeting option."""
     displayname = "Default Targeting Option"
@@ -720,44 +704,34 @@ cosmetic_options: typing.Dict[str, type(Option)] = {
     "background_music": BackgroundMusic,
     "fanfares": Fanfares,
     "ocarina_fanfares": OcarinaFanfares,
-    "kokiri_color": assemble_color_option(get_tunic_color_options, "Kokiri Tunic", "Kokiri Green"),
-    "goron_color":  assemble_color_option(get_tunic_color_options, "Goron Tunic", "Goron Red"),
-    "zora_color":   assemble_color_option(get_tunic_color_options, "Zora Tunic", "Zora Blue"),
-    "silver_gauntlets_color":   assemble_color_option(get_gauntlet_color_options, "Silver Gauntlets Color", "Silver"),
-    "golden_gauntlets_color":   assemble_color_option(get_gauntlet_color_options, "Golden Gauntlets Color", "Gold"),
-    "mirror_shield_frame_color": assemble_color_option(get_shield_frame_color_options, "Mirror Shield Frame Color", "Red"),
-    "navi_color_default_inner": assemble_color_option(get_navi_color_options, "Navi Idle Inner", "White"),
-    "navi_color_default_outer": assemble_color_option(get_navi_color_options, "Navi Idle Outer", "Match Inner", outer=True),
-    "navi_color_enemy_inner":   assemble_color_option(get_navi_color_options, "Navi Targeting Enemy Inner", "Yellow"),
-    "navi_color_enemy_outer":   assemble_color_option(get_navi_color_options, "Navi Targeting Enemy Outer", "Match Inner", outer=True),
-    "navi_color_npc_inner":     assemble_color_option(get_navi_color_options, "Navi Targeting NPC Inner", "Light Blue"),
-    "navi_color_npc_outer":     assemble_color_option(get_navi_color_options, "Navi Targeting NPC Outer", "Match Inner", outer=True),
-    "navi_color_prop_inner":    assemble_color_option(get_navi_color_options, "Navi Targeting Prop Inner", "Green"),
-    "navi_color_prop_outer":    assemble_color_option(get_navi_color_options, "Navi Targeting Prop Outer", "Match Inner", outer=True),
+    "kokiri_color": kokiri_color,
+    "goron_color":  goron_color,
+    "zora_color":   zora_color,
+    "silver_gauntlets_color":   silver_gauntlets_color,
+    "golden_gauntlets_color":   golden_gauntlets_color,
+    "mirror_shield_frame_color": mirror_shield_frame_color,
+    "navi_color_default_inner": navi_color_default_inner,
+    "navi_color_default_outer": navi_color_default_outer,
+    "navi_color_enemy_inner":   navi_color_enemy_inner,
+    "navi_color_enemy_outer":   navi_color_enemy_outer,
+    "navi_color_npc_inner":     navi_color_npc_inner,
+    "navi_color_npc_outer":     navi_color_npc_outer,
+    "navi_color_prop_inner":    navi_color_prop_inner,
+    "navi_color_prop_outer":    navi_color_prop_outer,
     "sword_trail_duration": SwordTrailDuration,
-    "sword_trail_color_inner": assemble_color_option(get_sword_trail_color_options, "Sword Trail Inner", "White"),
-    "sword_trail_color_outer": assemble_color_option(get_sword_trail_color_options, "Sword Trail Outer", "Match Inner", outer=True),
-    "bombchu_trail_color_inner": assemble_color_option(get_bombchu_trail_color_options, "Bombchu Trail Inner", "Red"),
-    "bombchu_trail_color_outer": assemble_color_option(get_bombchu_trail_color_options, "Bombchu Trail Outer", "Match Inner", outer=True),
-    "boomerang_trail_color_inner": assemble_color_option(get_boomerang_trail_color_options, "Boomerang Trail Inner", "Yellow"),
-    "boomerang_trail_color_outer": assemble_color_option(get_boomerang_trail_color_options, "Boomerang Trail Outer", "Match Inner", outer=True),
-    "heart_color":          assemble_color_option(get_heart_color_options, "Heart Color", "Red"),
-    "magic_color":          assemble_color_option(get_magic_color_options, "Magic Color", "Green"),
-    "a_button_color":       assemble_color_option(get_a_button_color_options, "A Button Color", "N64 Blue"),
-    "b_button_color":       assemble_color_option(get_b_button_color_options, "B Button Color", "N64 Green"),
-    "c_button_color":       assemble_color_option(get_c_button_color_options, "C Button Color", "Yellow"),
-    "start_button_color":   assemble_color_option(get_start_button_color_options, "Start Button Color", "N64 Red"),
+    "sword_trail_color_inner": sword_trail_color_inner,
+    "sword_trail_color_outer": sword_trail_color_outer,
+    "bombchu_trail_color_inner": bombchu_trail_color_inner,
+    "bombchu_trail_color_outer": bombchu_trail_color_outer,
+    "boomerang_trail_color_inner": boomerang_trail_color_inner,
+    "boomerang_trail_color_outer": boomerang_trail_color_outer,
+    "heart_color":          heart_color,
+    "magic_color":          magic_color,
+    "a_button_color":       a_button_color,
+    "b_button_color":       b_button_color,
+    "c_button_color":       c_button_color,
+    "start_button_color":   start_button_color,
 }
-
-def assemble_sfx_option(sound_hook: sfx.SoundHooks, display_name: str):
-    options = sfx.get_setting_choices(sound_hook).keys()
-    sfx_to_id = {sfx.replace('-', '_'): index for index, sfx in enumerate(options)}
-    class SfxOption(Choice):
-        """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound."""
-        displayname = display_name
-    SfxOption.options.update(sfx_to_id)
-    SfxOption.name_lookup.update({id: sfx for (sfx, id) in sfx_to_id.items()})
-    return SfxOption
 
 class SfxOcarina(Choice):
     """Change the sound of the ocarina."""
@@ -771,14 +745,14 @@ class SfxOcarina(Choice):
     default = 1
 
 sfx_options: typing.Dict[str, type(Option)] = {
-    "sfx_navi_overworld":   assemble_sfx_option(sfx.SoundHooks.NAVI_OVERWORLD, "Navi Overworld"),
-    "sfx_navi_enemy":       assemble_sfx_option(sfx.SoundHooks.NAVI_ENEMY, "Navi Enemy"),
-    "sfx_low_hp":           assemble_sfx_option(sfx.SoundHooks.HP_LOW, "Low HP"),
-    "sfx_menu_cursor":      assemble_sfx_option(sfx.SoundHooks.MENU_CURSOR, "Menu Cursor"),
-    "sfx_menu_select":      assemble_sfx_option(sfx.SoundHooks.MENU_SELECT, "Menu Select"),
-    "sfx_nightfall":        assemble_sfx_option(sfx.SoundHooks.NIGHTFALL, "Nightfall"),
-    "sfx_horse_neigh":      assemble_sfx_option(sfx.SoundHooks.HORSE_NEIGH, "Horse"),
-    "sfx_hover_boots":      assemble_sfx_option(sfx.SoundHooks.BOOTS_HOVER, "Hover Boots"),
+    "sfx_navi_overworld":   sfx_navi_overworld,
+    "sfx_navi_enemy":       sfx_navi_enemy,
+    "sfx_low_hp":           sfx_low_hp,
+    "sfx_menu_cursor":      sfx_menu_cursor,
+    "sfx_menu_select":      sfx_menu_select,
+    "sfx_nightfall":        sfx_nightfall,
+    "sfx_horse_neigh":      sfx_horse_neigh,
+    "sfx_hover_boots":      sfx_hover_boots,
     "sfx_ocarina":          SfxOcarina,
 }
 
