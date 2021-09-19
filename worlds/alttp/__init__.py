@@ -14,7 +14,8 @@ from .Rules import set_rules
 from .ItemPool import generate_itempool, difficulties
 from .Shops import create_shops, ShopSlotFill
 from .Dungeons import create_dungeons
-from .Rom import LocalRom, patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, get_hash_string
+from .Rom import LocalRom, patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, get_hash_string, \
+    get_base_rom_path
 import Patch
 
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -261,7 +262,7 @@ class ALTTPWorld(World):
                             or world.pot_shuffle[player] or world.bush_shuffle[player]
                             or world.killable_thieves[player])
 
-            rom = LocalRom(world.alttp_rom)
+            rom = LocalRom(get_base_rom_path())
 
             patch_rom(world, rom, player, use_enemizer)
 

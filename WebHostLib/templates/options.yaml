@@ -47,7 +47,7 @@ progression_balancing:
 {{ game }}:
   {%- for option_key, option in options.items() %}
   {{ option_key }}:{% if option.__doc__ %} # {{ option.__doc__ | replace('\n', '\n#') | indent(4, first=False) }}{% endif %}
-    {%- if option.range_start is defined  %}
+    {%- if option.range_start is defined and option.range_start is number %}
     {{- range_option(option) -}}
     {%- elif option.options -%}
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}

@@ -1,28 +1,28 @@
 window.addEventListener('load', () => {
-    const tutorialWrapper = document.getElementById('faq-wrapper');
+    const gameInfo = document.getElementById('game-info');
     new Promise((resolve, reject) => {
         const ajax = new XMLHttpRequest();
         ajax.onreadystatechange = () => {
             if (ajax.readyState !== 4) { return; }
             if (ajax.status === 404) {
-                reject("Sorry, the tutorial is not available in that language yet.");
+                reject("Sorry, this game's info page is not available in that language yet.");
                 return;
             }
             if (ajax.status !== 200) {
-                reject("Something went wrong while loading the tutorial.");
+                reject("Something went wrong while loading the info page.");
                 return;
             }
             resolve(ajax.responseText);
         };
-        ajax.open('GET', `${window.location.origin}/static/assets/faq/` +
-          `faq_${tutorialWrapper.getAttribute('data-lang')}.md`, true);
+        ajax.open('GET', `${window.location.origin}/static/assets/gameInfo/` +
+          `${gameInfo.getAttribute('data-lang')}_${gameInfo.getAttribute('data-game')}.md`, true);
         ajax.send();
     }).then((results) => {
         // Populate page with HTML generated from markdown
         showdown.setOption('tables', true);
         showdown.setOption('strikethrough', true);
         showdown.setOption('literalMidWordUnderscores', true);
-        tutorialWrapper.innerHTML += (new showdown.Converter()).makeHtml(results);
+        gameInfo.innerHTML += (new showdown.Converter()).makeHtml(results);
         adjustHeaderWidth();
 
         // Reset the id of all header divs to something nicer
@@ -46,7 +46,7 @@ window.addEventListener('load', () => {
         }
     }).catch((error) => {
         console.error(error);
-        tutorialWrapper.innerHTML =
+        gameInfo.innerHTML =
             `<h2>This page is out of logic!</h2>
             <h3>Click <a href="${window.location.origin}">here</a> to return to safety.</h3>`;
     });

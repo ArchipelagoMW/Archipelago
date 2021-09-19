@@ -7,6 +7,22 @@ window.addEventListener('load', () => {
   document.getElementById('game-name').innerHTML = gameName;
 
   Promise.all([fetchSettingData()]).then((results) => {
+    let settingHash = localStorage.getItem(`${gameName}-hash`);
+    if (!settingHash) {
+      // If no hash data has been set before, set it now
+      localStorage.setItem(`${gameName}-hash`, md5(results[0]));
+      localStorage.removeItem(gameName);
+      settingHash = md5(results[0]);
+    }
+
+    if (settingHash !== md5(results[0])) {
+      const userMessage = document.getElementById('user-message');
+      userMessage.innerText = "Your settings are out of date! Click here to update them! Be aware this will reset " +
+        "them all to default.";
+      userMessage.style.display = "block";
+      userMessage.addEventListener('click', resetSettings);
+    }
+
     // Page setup
     createDefaultSettings(results[0]);
     buildUI(results[0]);
@@ -27,6 +43,12 @@ window.addEventListener('load', () => {
     window.location.replace(`${url.protocol}//${url.hostname}/page-not-found`);
   })
 });
+
+const resetSettings = () => {
+  localStorage.removeItem(gameName);
+  localStorage.removeItem(`${gameName}-hash`)
+  window.location.reload();
+};
 
 const fetchSettingData = () => new Promise((resolve, reject) => {
   const ajax = new XMLHttpRequest();

@@ -10,7 +10,7 @@
     <div id="games">
         <h1>Currently Supported Games</h1>
         {% for game, description in worlds.items() %}
-        <h3><a href="{{ url_for("game_page", game=game) }}/player-settings">{{ game }}</a></h3>
+        <h3><a href="{{ url_for("player_settings", game=game) }}">{{ game }}</a></h3>
         <p>{{ description }}</p>
         {% endfor %}
     </div>

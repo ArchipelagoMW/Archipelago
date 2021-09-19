@@ -1331,10 +1331,10 @@ def patch_rom(world, rom):
         rom.write_int32(0xAE5E04, 0xAD0F00A4)
         # requiem of spirit
         rom.write_int32s(0xAC9ABC, [0x3C010001, 0x00300821])
-        # sun song
-        rom.write_int32(0xE09F68, 0x8C6F00A4)
-        rom.write_int32(0xE09F74, 0x01CFC024)
-        rom.write_int32(0xE09FB0, 0x240F0001)
+        # sun song -- commented for AP to always set the relevant bit in event_chk_inf
+        # rom.write_int32(0xE09F68, 0x8C6F00A4)
+        # rom.write_int32(0xE09F74, 0x01CFC024)
+        # rom.write_int32(0xE09FB0, 0x240F0001)
         # song of time
         rom.write_int32(0xDB532C, 0x24050003)
 

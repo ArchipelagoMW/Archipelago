@@ -24,7 +24,7 @@ import pickle
 import functools
 import io
 import collections
-
+import importlib
 from yaml import load, dump, safe_load
 
 try:
@@ -365,16 +365,25 @@ safe_builtins = {
 
 
 class RestrictedUnpickler(pickle.Unpickler):
+    def __init__(self, *args, **kwargs):
+        super(RestrictedUnpickler, self).__init__(*args, **kwargs)
+        self.options_module = importlib.import_module("Options")
+        self.net_utils_module = importlib.import_module("NetUtils")
+
     def find_class(self, module, name):
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
+        # used by MultiServer -> savegame/multidata
         if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint"}:
-            import NetUtils
-            return getattr(NetUtils, name)
-        if module == "Options":
-            import Options
-            obj = getattr(Options, name)
-            if issubclass(obj, Options.Option):
+            return getattr(self.net_utils_module, name)
+        # Options are unpickled by WebHost -> Generate
+        if module.endswith("Options"):
+            if module == "Options":
+                mod = self.options_module
+            else:
+                mod = importlib.import_module(module)
+            obj = getattr(mod, name)
+            if issubclass(obj, self.options_module.Option):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError("global '%s.%s' is forbidden" %

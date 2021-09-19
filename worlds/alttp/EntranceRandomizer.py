@@ -182,8 +182,7 @@ def parse_arguments(argv, no_defaults=False):
                             yes - Always opens the pyramid hole.
                             no - Never opens the pyramid hole.
                              ''', choices=['auto', 'goal', 'yes', 'no'])
-    parser.add_argument('--rom', default=defval('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc'),
-                        help='Path to an ALttP JAP(1.0) rom to use as a base.')
+
     parser.add_argument('--loglevel', default=defval('info'), const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--count', help='''\

@@ -88,16 +88,10 @@ def player_settings(game):
     return render_template(f"player-settings.html", game=game)
 
 
-# Game sub-pages
-@app.route('/games/<string:game>/<string:page>')
-def game_pages(game, page):
-    return render_template(f"/games/{game}/{page}.html")
-
-
-# Game landing pages
-@app.route('/games/<game>')
-def game_page(game):
-    return render_template(f"/games/{game}/{game}.html")
+# Game Info Pages
+@app.route('/games/<string:game>/info/<string:lang>')
+def game_info(game, lang):
+    return render_template('gameInfo.html', game=game, lang=lang)
 
 
 # List of supported games
@@ -107,7 +101,7 @@ def games():
     for game, world in AutoWorldRegister.world_types.items():
         if not world.hidden:
             worlds[game] = world.__doc__ if world.__doc__ else "No description provided."
-    return render_template("games/games.html", worlds=worlds)
+    return render_template("supportedGames.html", worlds=worlds)
 
 
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
