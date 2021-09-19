@@ -201,10 +201,6 @@ downloadable_items: dict[str, LocationData] = {
     'Lab terminal right': LocationData('The lab' , 1337170)
 }
 
-events = {
-    'Killed Nightmare'
-}
-
 starter_progression_locations = [
     'Starter chest 2',
     'Starter chest 3',

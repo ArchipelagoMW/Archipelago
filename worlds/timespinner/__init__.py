@@ -3,7 +3,7 @@ import string
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance
 from ..AutoWorld import World
 from .Items import ItemData, item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
-from .Locations import location_table, downloadable_items, events, starter_progression_locations
+from .Locations import location_table, downloadable_items, starter_progression_locations
 from .Regions import create_regions
 from .Rules import set_rules, present_teleportation_gates, past_teleportation_gates
 from .Options import timespinner_options
@@ -15,7 +15,7 @@ class TimespinnerWorld(World):
     data_version = 1
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = { **location_table, **downloadable_items }
+    location_name_to_id = {name: data.code for name, data in { **location_table, **downloadable_items }.items()} 
 
     pyramid_unlock = None
 
@@ -32,18 +32,18 @@ class TimespinnerWorld(World):
 
     def generate_basic(self):
         self.item_name_groups = get_item_name_groups()
-        self.pyramid_unlock = get_pyramid_unlock(self.world)
+        self.pyramid_unlock = get_pyramid_unlock(self.world, self.player)
 
         excluded_items = get_excluded_items_based_on_options(self.world, self.player)
         locked_locations = []
 
         assign_starter_items(self.world, self.player, excluded_items, locked_locations)
 
-        if not is_option_enabled("QuickSeed") or not is_option_enabled("Inverted"):
-            place_first_progression_item(self.world, self.player, excluded_items)
+        if not is_option_enabled(self.world, self.player, "QuickSeed") or not is_option_enabled(self.world, self.player, "Inverted"):
+            place_first_progression_item(self.world, self.player, excluded_items, locked_locations)
 
         pool = get_item_pool(self.world, self.player, excluded_items)
-        pool = fill_item_pool_with_dummy_items(self.world, self.player, excluded_items, pool)
+        pool = fill_item_pool_with_dummy_items(self.world, self.player, locked_locations, pool)
 
         self.world.itempool += pool
 
@@ -87,24 +87,24 @@ class TimespinnerWorldItem(Item):
         item_data = item_table[name]
         super(TimespinnerWorldItem, self).__init__(name, item_data.progression, item_data.code, player)
 
-def get_item_name_groups() -> dict[str, set[str]]:
-    groups: dict[str, set[str]] = {}
+def get_item_name_groups() -> dict[str, list[str]]:
+    groups: dict[str, list[str]] = {}
 
     for name, data in item_table.items():
         if not data.category in groups:
-            groups[data.category] = {}
+            groups[data.category] = []
 
-        groups[data.category].add(name)
+        groups[data.category].append(name)
 
     return groups
 
-def get_pyramid_unlock(world: MultiWorld) -> str:
+def get_pyramid_unlock(world: MultiWorld, player: int) -> str:
     gates = []
 
-    if is_option_enabled("Inverted"):
+    if is_option_enabled(world, player, "Inverted"):
         gates = present_teleportation_gates
     else:
-        gates = {*past_teleportation_gates, *present_teleportation_gates}
+        gates = [*past_teleportation_gates, *present_teleportation_gates]
 
     world.random.shuffle(gates)
     
@@ -135,11 +135,11 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: list[st
     melee_weapon_item = TimespinnerWorldItem(melee_weapon, player)
     spell_item = TimespinnerWorldItem(spell, player)
     
-    world.get_location('Tutorial - Yo Momma 1', player).place_locked_item(melee_weapon_item)
-    world.get_location('Tutorial - Yo Momma 2', player).place_locked_item(spell_item)
+    world.get_location('Yo Momma 1', player).place_locked_item(melee_weapon_item)
+    world.get_location('Yo Momma 2', player).place_locked_item(spell_item)
 
-    locked_locations.append('Tutorial - Yo Momma 1')
-    locked_locations.append('Tutorial - Yo Momma 2')
+    locked_locations.append('Yo Momma 1')
+    locked_locations.append('Yo Momma 2')
 
 def get_item_pool(world: MultiWorld, player: int, excluded_items: list[str]) -> list[TimespinnerWorldItem]:
     pool = []
@@ -147,12 +147,12 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: list[str]) -> 
     for name, data in item_table.items():
         if not name in excluded_items:
             for _ in range(data.count):
-                item = update_progressive_state_based_flags(world, player, TimespinnerWorldItem(name, data, player))
+                item = update_progressive_state_based_flags(world, player, name, TimespinnerWorldItem(name, player))
                 pool.append(item)
 
     return pool
 
-def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, excluded_items: list[str], locked_locations: list[str], pool: list[TimespinnerWorldItem]) -> list[TimespinnerWorldItem]:
+def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locations: list[str], pool: list[TimespinnerWorldItem]) -> list[TimespinnerWorldItem]:
     for _ in range(get_number_of_locations(world, player) - len(locked_locations) - len(pool)):
         world.random.shuffle(filler_items)
 

@@ -255,3 +255,7 @@ filler_items = [
     'Antidote',
     'Chaos Rose'
 ]
+
+events = [
+    "Killed Nightmare"
+]
