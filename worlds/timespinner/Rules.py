@@ -68,3 +68,23 @@ def set_rules(world: MultiWorld, player: int):
     #set_rule(world.get_location("Boss Relic 3", player), lambda state: state.has("Beat Act 3 Boss", player))
 
     #set_rule(world.get_location("Heart Room", player), lambda state: state.has("Beat Act 3 Boss", player))
+
+
+present_teleportation_gates = {
+    "GateKittyBoss",
+    "GateLeftLibrary",
+    "GateMilitairyGate",
+    "GateSealedCaves",
+    "GateSealedSirensCave",
+    "GateLakeDesolation"
+}
+
+past_teleportation_gates = {
+    "GateLakeSirineRight",
+    "GateAccessToPast",
+    "GateCastleRamparts",
+    "GateCastleKeep",
+    "GateRoyalTowers",
+    "GateMaw",
+    "GateCavesOfBanishment"
+}

@@ -203,16 +203,17 @@ def is_option_enabled(world: MultiWorld, player: int, name: string) -> bool:
 
     return int(option[player].value) > 0
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, None, name, player)
-    ret.world = world
-    if locations:
-        for location in locations:
-            loc_id = location_table.get(location, 0)
-            location = TimespinnerWorldLocation(player, location, loc_id, ret)
-            ret.locations.append(location)
+def create_region(world: MultiWorld, player: int, name: str, exits=None) -> Region:
+    region = Region(name, None, name, player)
+    region.world = world
+
+    for location, data in location_table.items():
+        if data.region == name:
+            location = TimespinnerWorldLocation(player, location, data.code, region)
+            region.locations.append(location)
+
     if exits:
         for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
+            region.exits.append(Entrance(player, exit, region))
 
-    return ret
+    return region
