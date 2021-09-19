@@ -754,13 +754,6 @@ def get_nonnative_item_sprite(item: str) -> int:
 def patch_rom(world, rom, player, enemized):
     local_random = world.slot_seeds[player]
 
-    # progressive bow silver arrow hint hack
-    prog_bow_locs = world.find_items('Progressive Bow', player)
-    if len(prog_bow_locs) > 1:
-        # only pick a distingushed bow if we have at least two
-        distinguished_prog_bow_loc = local_random.choice(prog_bow_locs)
-        distinguished_prog_bow_loc.item.code = 0x65
-
     # patch items
 
     for location in world.get_locations():
@@ -2283,21 +2276,22 @@ def write_strings(rom, world, player):
             ' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
     tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
     tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
-
-    prog_bow_locs = world.find_items('Progressive Bow', player)
-    distinguished_prog_bow_loc = next((location for location in prog_bow_locs if location.item.code == 0x65), None)
-    progressive_silvers = world.difficulty_requirements[player].progressive_bow_limit >= 2 or (
-            world.swordless[player] or world.logic[player] == 'noglitches')
-    if distinguished_prog_bow_loc:
-        prog_bow_locs.remove(distinguished_prog_bow_loc)
-        silverarrow_hint = (' %s?' % hint_text(distinguished_prog_bow_loc).replace('Ganon\'s',
-                                                                                   'my')) if progressive_silvers else '?\nI think not!'
-        tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
-
-    if any(prog_bow_locs):
-        silverarrow_hint = (' %s?' % hint_text(local_random.choice(prog_bow_locs)).replace('Ganon\'s',
-                                                                                           'my')) if progressive_silvers else '?\nI think not!'
-        tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
+    if world.worlds[player].has_progressive_bows and (world.difficulty_requirements[player].progressive_bow_limit >= 2 or (
+            world.swordless[player] or world.logic[player] == 'noglitches')):
+        prog_bow_locs = world.find_items('Progressive Bow', player)
+        world.slot_seeds[player].shuffle(prog_bow_locs)
+        found_bow = False
+        found_bow_alt = False
+        while prog_bow_locs and not (found_bow and found_bow_alt):
+            bow_loc = prog_bow_locs.pop()
+            if bow_loc.item.code == 0x65:
+                found_bow_alt = True
+                target = 'ganon_phase_3_no_silvers'
+            else:
+                found_bow = True
+                target = 'ganon_phase_3_no_silvers_alt'
+            silverarrow_hint = (' %s?' % hint_text(bow_loc).replace('Ganon\'s', 'my'))
+            tt[target] = 'Did you find the silver arrows%s' % silverarrow_hint
 
     crystal5 = world.find_item('Crystal 5', player)
     crystal6 = world.find_item('Crystal 6', player)
