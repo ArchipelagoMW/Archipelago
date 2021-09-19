@@ -640,27 +640,18 @@ def buildWorldGossipHints(world, checkedLocations=None):
     # Seed the RNG
     world.hint_rng = world.world.slot_seeds[world.player]
 
-    # Gather woth, barren, major items
-    world.gather_hint_data()
-
     # rebuild hint exclusion list
     hintExclusions(world, clear_cache=True)
 
     world.barren_dungeon = 0
     world.woth_dungeon = 0
 
-    # search = Search.max_explore([w.state for w in orlds])
-    # for stone in gossipLocations.values():
-    #     stone.reachable = (
-    #         search.spot_access(world.get_location(stone.location))
-    #         and search.state_list[world.id].guarantee_hint())
-
     if checkedLocations is None:
         checkedLocations = {player: set() for player in world.world.player_ids}
 
     # If Ganondorf can be reached without Light Arrows, add to checkedLocations to prevent extra hinting
-    # Can only be forced with vanilla bridge
-    if world.bridge != 'vanilla':
+    # Can only be forced with vanilla bridge or trials
+    if world.bridge != 'vanilla' and world.trials == 0:
         try:
             light_arrow_location = world.world.find_item("Light Arrows", world.player)
             checkedLocations[light_arrow_location.player].add(light_arrow_location.name)
@@ -668,8 +659,6 @@ def buildWorldGossipHints(world, checkedLocations=None):
             pass
 
     stoneIDs = list(gossipLocations.keys())
-
-    # world.distribution.configure_gossip(stoneIDs)
 
     if 'disabled' in world.hint_dist_user:
         for stone_name in world.hint_dist_user['disabled']:
@@ -725,7 +714,6 @@ def buildWorldGossipHints(world, checkedLocations=None):
             fixed_num = world.hint_dist_user['distribution'][hint_type]['fixed']
             hint_weight = world.hint_dist_user['distribution'][hint_type]['weight']
         else:
-            logging.getLogger('').warning("Hint copies is zero for type %s. Assuming this hint type should be disabled.", hint_type)
             fixed_num = 0
             hint_weight = 0
         hint_dist[hint_type] = (hint_weight, world.hint_dist_user['distribution'][hint_type]['copies'])

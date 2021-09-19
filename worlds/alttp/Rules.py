@@ -27,8 +27,8 @@ def set_rules(world):
         else:
             # Set access rules according to max glitches for multiworld progression.
             # Set accessibility to none, and shuffle assuming the no logic players can always win
-            world.accessibility[player] = 'none'
-            world.progression_balancing[player] = False
+            world.accessibility[player] = world.accessibility[player].from_text("minimal")
+            world.progression_balancing[player].value = False
 
     else:
         world.completion_condition[player] = lambda state: state.has('Triforce', player)

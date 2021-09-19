@@ -3,6 +3,7 @@ import lzma
 import json
 import base64
 import MultiServer
+import uuid
 
 from flask import request, flash, redirect, url_for, session, render_template
 from pony.orm import flush, select
@@ -15,6 +16,68 @@ accepted_zip_contents = {"patches": ".apbp",
                          "multidata": ".archipelago"}
 
 banned_zip_contents = (".sfc",)
+
+
+def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, sid=None):
+    if not owner:
+        owner = session["_id"]
+    infolist = zfile.infolist()
+    slots = set()
+    spoiler = ""
+    multidata = None
+    for file in infolist:
+        if file.filename.endswith(banned_zip_contents):
+            return "Uploaded data contained a rom file, which is likely to contain copyrighted material. " \
+                   "Your file was deleted."
+        elif file.filename.endswith(".apbp"):
+            data = zfile.open(file, "r").read()
+            yaml_data = parse_yaml(lzma.decompress(data).decode("utf-8-sig"))
+            if yaml_data["version"] < 2:
+                return "Old format cannot be uploaded (outdated .apbp)", 500
+            metadata = yaml_data["meta"]
+            slots.add(Slot(data=data, player_name=metadata["player_name"],
+                           player_id=metadata["player_id"],
+                           game="A Link to the Past"))
+
+        elif file.filename.endswith(".apmc"):
+            data = zfile.open(file, "r").read()
+            metadata = json.loads(base64.b64decode(data).decode("utf-8"))
+            slots.add(Slot(data=data, player_name=metadata["player_name"],
+                           player_id=metadata["player_id"],
+                           game="Minecraft"))
+
+        elif file.filename.endswith(".zip"):
+            # Factorio mods need a specific name or they do not function
+            _, seed_name, slot_id, slot_name = file.filename.rsplit("_", 1)[0].split("-")
+            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
+                           player_id=int(slot_id[1:]), game="Factorio"))
+
+        elif file.filename.endswith(".apz5"):
+            # .apz5 must be named specifically since they don't contain any metadata
+            _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
+            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
+                           player_id=int(slot_id[1:]), game="Ocarina of Time"))
+
+        elif file.filename.endswith(".txt"):
+            spoiler = zfile.open(file, "r").read().decode("utf-8-sig")
+        elif file.filename.endswith(".archipelago"):
+            try:
+                multidata = zfile.open(file).read()
+                MultiServer.Context._decompress(multidata)
+            except:
+                flash("Could not load multidata. File may be corrupted or incompatible.")
+            else:
+                multidata = zfile.open(file).read()
+    if multidata:
+        flush()  # commit slots
+        seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner, meta=json.dumps(meta),
+                    id=sid if sid else uuid.uuid4())
+        flush()  # create seed
+        for slot in slots:
+            slot.seed = seed
+        return seed
+    else:
+        flash("No multidata was found in the zip file, which is required.")
 
 
 @app.route('/uploads', methods=['GET', 'POST'])
@@ -31,64 +94,12 @@ def uploads():
                 flash('No selected file')
             elif file and allowed_file(file.filename):
                 if file.filename.endswith(".zip"):
-                    slots = set()
-                    spoiler = ""
-                    multidata = None
                     with zipfile.ZipFile(file, 'r') as zfile:
-                        infolist = zfile.infolist()
-
-                        for file in infolist:
-                            if file.filename.endswith(banned_zip_contents):
-                                return "Uploaded data contained a rom file, which is likely to contain copyrighted material. Your file was deleted."
-                            elif file.filename.endswith(".apbp"):
-                                data = zfile.open(file, "r").read()
-                                yaml_data = parse_yaml(lzma.decompress(data).decode("utf-8-sig"))
-                                if yaml_data["version"] < 2:
-                                    return "Old format cannot be uploaded (outdated .apbp)", 500
-                                metadata = yaml_data["meta"]
-                                slots.add(Slot(data=data, player_name=metadata["player_name"],
-                                               player_id=metadata["player_id"],
-                                               game="A Link to the Past"))
-
-                            elif file.filename.endswith(".apmc"):
-                                data = zfile.open(file, "r").read()
-                                metadata = json.loads(base64.b64decode(data).decode("utf-8"))
-                                slots.add(Slot(data=data, player_name=metadata["player_name"],
-                                               player_id=metadata["player_id"],
-                                               game="Minecraft"))
-
-                            elif file.filename.endswith(".zip"):
-                                # Factorio mods needs a specific name or they do not function
-                                _, seed_name, slot_id, slot_name = file.filename.rsplit("_", 1)[0].split("-")
-                                slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
-                                              player_id=int(slot_id[1:]), game="Factorio"))
-
-                            elif file.filename.endswith(".apz5"):
-                                # .apz5 must be named specifically since they don't contain any metadata
-                                _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
-                                slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
-                                              player_id=int(slot_id[1:]), game="Ocarina of Time"))
-
-                            elif file.filename.endswith(".txt"):
-                                spoiler = zfile.open(file, "r").read().decode("utf-8-sig")
-                            elif file.filename.endswith(".archipelago"):
-                                try:
-                                    multidata = zfile.open(file).read()
-                                    MultiServer.Context._decompress(multidata)
-                                except:
-                                    flash("Could not load multidata. File may be corrupted or incompatible.")
-                                else:
-                                    multidata = zfile.open(file).read()
-                        if multidata:
-                            flush()  # commit slots
-                            seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=session["_id"])
-                            flush()  # create seed
-                            for slot in slots:
-                                slot.seed = seed
-
-                            return redirect(url_for("viewSeed", seed=seed.id))
-                        else:
-                            flash("No multidata was found in the zip file, which is required.")
+                        res = upload_zip_to_db(zfile)
+                        if type(res) == str:
+                            return res
+                        elif res:
+                            return redirect(url_for("viewSeed", seed=res.id))
                 else:
                     try:
                         multidata = file.read()

@@ -1,5 +1,5 @@
 import string
-from .Items import RiskOfRainItem, item_table, junk_weights
+from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import location_table, RiskOfRainLocation, base_location_table
 from .Rules import set_rules
 
@@ -31,9 +31,41 @@ class RiskOfRainWorld(World):
         if self.world.start_with_revive[self.player].value:
             self.world.push_precollected(self.world.create_item("Dio's Best Friend", self.player))
 
+        # if presets are enabled generate junk_pool from the selected preset
+        if self.world.item_pool_presets[self.player].value:
+            pool_option = self.world.item_weights[self.player].value
+            # generate chaos weights if the preset is chosen
+            if pool_option == 5:
+                junk_pool = {
+                    "Item Scrap, Green": self.world.random.randint(0, 100),
+                    "Item Scrap, Red": self.world.random.randint(0, 100),
+                    "Item Scrap, Yellow": self.world.random.randint(0, 100),
+                    "Item Scrap, White": self.world.random.randint(0, 100),
+                    "Common Item": self.world.random.randint(0, 100),
+                    "Uncommon Item": self.world.random.randint(0, 70),
+                    "Legendary Item": self.world.random.randint(0, 45),
+                    "Boss Item": self.world.random.randint(0, 30),
+                    "Lunar Item": self.world.random.randint(0, 60),
+                    "Equipment": self.world.random.randint(0, 50)
+                }
+            else:
+                junk_pool = item_pool_weights[pool_option].copy()
+        else:  # generate junk pool from user created presets
+            junk_pool = {
+                "Item Scrap, Green": self.world.green_scrap[self.player].value,
+                "Item Scrap, Red": self.world.red_scrap[self.player].value,
+                "Item Scrap, Yellow": self.world.yellow_scrap[self.player].value,
+                "Item Scrap, White": self.world.white_scrap[self.player].value,
+                "Common Item": self.world.common_item[self.player].value,
+                "Uncommon Item": self.world.uncommon_item[self.player].value,
+                "Legendary Item": self.world.legendary_item[self.player].value,
+                "Boss Item": self.world.boss_item[self.player].value,
+                "Lunar Item": self.world.lunar_item[self.player].value,
+                "Equipment": self.world.equipment[self.player].value
+            }
+
         # Generate item pool
         itempool = []
-        junk_pool = junk_weights.copy()
 
         # Add revive items for the player
         itempool += ["Dio's Best Friend"] * self.world.total_revivals[self.player]
@@ -47,7 +79,7 @@ class RiskOfRainWorld(World):
                                                 self.world.total_revivals[self.player])
 
         # Convert itempool into real items
-        itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
+        itempool = list(map(lambda name: self.create_item(name), itempool))
 
         self.world.itempool += itempool
 
@@ -62,7 +94,8 @@ class RiskOfRainWorld(World):
             "itemPickupStep": self.world.item_pickup_step[self.player].value,
             "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for i in range(16)),
             "totalLocations": self.world.total_locations[self.player].value,
-            "totalRevivals": self.world.total_revivals[self.player].value
+            "totalRevivals": self.world.total_revivals[self.player].value,
+            "startWithDio": self.world.start_with_revive[self.player].value
         }
 
     def create_item(self, name: str) -> Item:
@@ -76,7 +109,7 @@ def create_regions(world, player: int):
         create_region(world, player, 'Menu', None, ['Lobby']),
         create_region(world, player, 'Petrichor V',
                       [location for location in base_location_table] +
-                      [f"ItemPickup{i}" for i in range(1, world.total_locations[player])])
+                      [f"ItemPickup{i}" for i in range(1, 1+world.total_locations[player])])
     ]
 
     world.get_entrance("Lobby", player).connect(world.get_region("Petrichor V", player))
@@ -93,7 +126,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     ret.world = world
     if locations:
         for location in locations:
-            loc_id = location_table.get(location, 0)
+            loc_id = location_table[location]
             location = RiskOfRainLocation(player, location, loc_id, ret)
             ret.locations.append(location)
     if exits:

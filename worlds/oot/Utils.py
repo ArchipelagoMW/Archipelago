@@ -8,7 +8,7 @@ __version__ = Utils.__version__ + ' f.LUM'
 
 
 def data_path(*args):
-    return Utils.local_path('worlds', 'oot', 'data', *args)
+    return os.path.join(os.path.dirname(__file__), 'data', *args)
 
 
 @lru_cache(maxsize=13)  # Cache Overworld.json and the 12 dungeons

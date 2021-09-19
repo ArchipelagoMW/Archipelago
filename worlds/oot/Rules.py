@@ -4,7 +4,7 @@ import logging
 from .SaveContext import SaveContext
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item, item_in_locations
+from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item
 from ..AutoWorld import LogicMixin
 
 
@@ -27,10 +27,8 @@ class OOTLogic(LogicMixin):
         mult = self.world.worlds[player].damage_multiplier
         if hearts*4 >= 3:
             return mult != 'ohko' and mult != 'quadruple'
-        elif hearts*4 < 3:
-            return mult != 'ohko'
         else:
-            return True
+            return mult != 'ohko'
 
     # This function operates by assuming different behavior based on the "level of recursion", handled manually. 
     # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region. 
@@ -74,6 +72,7 @@ class OOTLogic(LogicMixin):
                     self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
 
+# Sets extra rules on various specific locations not handled by the rule parser.
 def set_rules(ootworld):
     logger = logging.getLogger('')
 
@@ -90,44 +89,30 @@ def set_rules(ootworld):
     world.get_location('Ganon', player).item_rule = lambda item: item.name == 'Triforce'
 
     # is_child = ootworld.parser.parse_rule('is_child')
-    # guarantee_hint = ootworld.parser.parse_rule('guarantee_hint')
+    guarantee_hint = ootworld.parser.parse_rule('guarantee_hint')
 
-    for location in ootworld.get_locations():
-        if ootworld.shuffle_song_items == 'song':
-            if location.type == 'Song':
-                # must be a song, or there are songs in starting items; then it can be anything
-                add_item_rule(location, lambda item: 
-                    (ootworld.starting_songs and item.type != 'Song')
-                    or (item.type == 'Song' and item.player == location.player))
-            else:
-                add_item_rule(location, lambda item: item.type != 'Song')
-
+    for location in filter(lambda location: location.name in ootworld.shop_prices or 'Deku Scrub' in location.name, ootworld.get_locations()):
         if location.type == 'Shop':
-            if location.name in ootworld.shop_prices:
-                add_item_rule(location, lambda item: item.type != 'Shop')
-                location.price = ootworld.shop_prices[location.name]
-                add_rule(location, create_shop_rule(location, ootworld.parser))
-            else:
-                add_item_rule(location, lambda item: item.type == 'Shop' and item.player == location.player)
-        elif 'Deku Scrub' in location.name:
-            add_rule(location, create_shop_rule(location, ootworld.parser))
-        else:
-            add_item_rule(location, lambda item: item.type != 'Shop')
+            location.price = ootworld.shop_prices[location.name]
+        add_rule(location, create_shop_rule(location, ootworld.parser))
 
-        if ootworld.skip_child_zelda and location.name == 'Song from Impa':
-            limit_to_itemset(location, SaveContext.giveable_items)
-            add_item_rule(location, lambda item: item.player == location.player)
+    if ootworld.dungeon_mq['Forest Temple'] and ootworld.shuffle_bosskeys == 'dungeon' and ootworld.shuffle_smallkeys == 'dungeon' and ootworld.tokensanity == 'off':
+        # First room chest needs to be a small key. Make sure the boss key isn't placed here.
+        location = world.get_location('Forest Temple MQ First Room Chest', player)
+        forbid_item(location, 'Boss Key (Forest Temple)', ootworld.player)
 
-        if location.name == 'Forest Temple MQ First Room Chest' and ootworld.shuffle_bosskeys == 'dungeon' and ootworld.shuffle_smallkeys == 'dungeon' and ootworld.tokensanity == 'off':
-            # This location needs to be a small key. Make sure the boss key isn't placed here.
-            forbid_item(location, 'Boss Key (Forest Temple)', ootworld.player)
+    if ootworld.shuffle_song_items == 'song' and not ootworld.starting_songs:
+        # Sheik in Ice Cavern is the only song location in a dungeon; need to ensure that it cannot be anything else.
+        # This is required if map/compass included, or any_dungeon shuffle.
+        location = world.get_location('Sheik in Ice Cavern', player)
+        add_item_rule(location, lambda item: item.player == player and item.type == 'Song')
 
-        # TODO: re-add hints once they are working
-        # if location.type == 'HintStone' and ootworld.hints == 'mask':
-        #     location.add_rule(is_child)
+    for name in ootworld.always_hints:
+        add_rule(world.get_location(name, player), guarantee_hint)
 
-        # if location.name in ootworld.always_hints:
-            # location.add_rule(guarantee_hint)
+    # TODO: re-add hints once they are working
+    # if location.type == 'HintStone' and ootworld.hints == 'mask':
+    #     location.add_rule(is_child)
 
 
 def create_shop_rule(location, parser):
@@ -157,33 +142,32 @@ def set_shop_rules(ootworld):
     found_bombchus = ootworld.parser.parse_rule('found_bombchus')
     wallet = ootworld.parser.parse_rule('Progressive_Wallet')
     wallet2 = ootworld.parser.parse_rule('(Progressive_Wallet, 2)')
-    for location in ootworld.world.get_filled_locations():
-        if location.player == ootworld.player and location.item.type == 'Shop':
-            # Add wallet requirements
-            if location.item.name in ['Buy Arrows (50)', 'Buy Fish', 'Buy Goron Tunic', 'Buy Bombchu (20)', 'Buy Bombs (30)']:
-                add_rule(location, wallet)
-            elif location.item.name in ['Buy Zora Tunic', 'Buy Blue Fire']:
-                add_rule(location, wallet2)
 
-            # Add adult only checks
-            if location.item.name in ['Buy Goron Tunic', 'Buy Zora Tunic']:
-                is_adult = ootworld.parser.parse_rule('is_adult', location)
-                add_rule(location, is_adult)
+    for location in filter(lambda location: location.item and location.item.type == 'Shop', ootworld.get_locations()):
+        # Add wallet requirements
+        if location.item.name in ['Buy Arrows (50)', 'Buy Fish', 'Buy Goron Tunic', 'Buy Bombchu (20)', 'Buy Bombs (30)']:
+            add_rule(location, wallet)
+        elif location.item.name in ['Buy Zora Tunic', 'Buy Blue Fire']:
+            add_rule(location, wallet2)
 
-            # Add item prerequisite checks
-            if location.item.name in ['Buy Blue Fire',
-                                      'Buy Blue Potion',
-                                      'Buy Bottle Bug',
-                                      'Buy Fish',
-                                      'Buy Green Potion',
-                                      'Buy Poe',
-                                      'Buy Red Potion [30]',
-                                      'Buy Red Potion [40]',
-                                      'Buy Red Potion [50]',
-                                      'Buy Fairy\'s Spirit']:
-                add_rule(location, lambda state: CollectionState._oot_has_bottle(state, ootworld.player))
-            if location.item.name in ['Buy Bombchu (10)', 'Buy Bombchu (20)', 'Buy Bombchu (5)']:
-                add_rule(location, found_bombchus)
+        # Add adult only checks
+        if location.item.name in ['Buy Goron Tunic', 'Buy Zora Tunic']:
+            add_rule(location, ootworld.parser.parse_rule('is_adult', location))
+
+        # Add item prerequisite checks
+        if location.item.name in ['Buy Blue Fire',
+                                  'Buy Blue Potion',
+                                  'Buy Bottle Bug',
+                                  'Buy Fish',
+                                  'Buy Green Potion',
+                                  'Buy Poe',
+                                  'Buy Red Potion [30]',
+                                  'Buy Red Potion [40]',
+                                  'Buy Red Potion [50]',
+                                  'Buy Fairy\'s Spirit']:
+            add_rule(location, lambda state: CollectionState._oot_has_bottle(state, ootworld.player))
+        if location.item.name in ['Buy Bombchu (10)', 'Buy Bombchu (20)', 'Buy Bombchu (5)']:
+            add_rule(location, found_bombchus)
 
 
 # This function should be ran once after setting up entrances and before placing items
@@ -193,11 +177,11 @@ def set_entrances_based_rules(ootworld):
     if ootworld.world.accessibility == 'beatable': 
         return
 
-    all_state = ootworld.state_with_items(ootworld.itempool)
+    all_state = ootworld.world.get_all_state(False)
 
-    for location in ootworld.get_locations():
+    for location in filter(lambda location: location.type == 'Shop', ootworld.get_locations()):
         # If a shop is not reachable as adult, it can't have Goron Tunic or Zora Tunic as child can't buy these
-        if location.type == 'Shop' and not all_state._oot_reach_as_age(location.parent_region.name, 'adult', ootworld.player):
+        if not all_state._oot_reach_as_age(location.parent_region.name, 'adult', ootworld.player):
             forbid_item(location, 'Buy Goron Tunic', ootworld.player)
             forbid_item(location, 'Buy Zora Tunic', ootworld.player)
 

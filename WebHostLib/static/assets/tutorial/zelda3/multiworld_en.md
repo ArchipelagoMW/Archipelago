@@ -8,9 +8,9 @@
 
 ## Required Software
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
-- [QUsb2Snes](https://github.com/Skarsnik/QUsb2snes/releases) (Included in the above Utilities)
+- [SNI](https://github.com/alttpo/sni/releases) (Included in Archipelago)
 - Hardware or software capable of loading and playing SNES ROM files
-    - An emulator capable of running Lua scripts
+    - An emulator capable of connecting to SNI
       ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
       [BizHawk](http://tasvideos.org/BizHawk.html))
     - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware
@@ -19,10 +19,9 @@
 ## Installation Procedures
 
 ### Windows Setup
-1. Download and install the MultiWorld Utilities from the link above, making sure to install the most recent version.
+1. Download and install Archipelago from the link above, making sure to install the most recent version.
 **The file is located in the assets section at the bottom of the version information**. If you intend to play normal
 multiworld games, you want `Setup.Archipelago.exe`
-    - If you intend to play the doors variant of multiworld, you will want to download the alternate doors file.
     - During the installation process, you will be asked to browse for your Japanese 1.0 ROM file. If you have
       installed this software before and are simply upgrading now, you will not be prompted to locate your
       ROM file a second time.
@@ -50,7 +49,7 @@ each player to enjoy an experience customized for their taste, and different pla
 can all have different options.
 
 ### Where do I get a YAML file?
-The [Generate Game](/player-settings) page on the website allows you to configure your personal settings and
+The [Generate Game](/games/A Link to the Past/player-settings) page on the website allows you to configure your personal settings and
 export a YAML file from them.
 
 ### Verifying your YAML file
@@ -68,7 +67,7 @@ If you would like to validate your YAML file to make sure it works, you may do s
 ### Obtain your patch file and create your ROM
 When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting. Once that
 is done, the host will provide you with either a link to download your patch file, or with a zip file containing
-everyone's patch files. Your patch file should have a `.bmbp` extension.
+everyone's patch files. Your patch file should have a `.apbp` extension.
 
 Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically
 launch the client, and will also create your ROM file in the same place as your patch file.
@@ -76,7 +75,7 @@ launch the client, and will also create your ROM file in the same place as your 
 ### Connect to the client
 
 #### With an emulator
-When the client launched automatically, QUsb2Snes should have also automatically launched in the background.
+When the client launched automatically, SNI should have also automatically launched in the background.
 If this is its first time launching, you may be prompted to allow it to communicate through the Windows
 Firewall.
 
@@ -98,8 +97,8 @@ Firewall.
 3. Click on the Tools menu and click on **Lua Console**
 4. Click the button to open a new Lua script.
 5. Browse to your MultiWorld Utilities installation directory, and into the following directories:  
-   `QUsb2Snes/Qusb2Snes/LuaBridge`
-6. Select `luabridge.lua` and click Open.
+   `SNI`
+6. Select `Connector.lua` and click Open.
 7. Observe a name has been assigned to you, and that the client shows "SNES Device: Connected", with that same
    name in the upper left corner. 
 

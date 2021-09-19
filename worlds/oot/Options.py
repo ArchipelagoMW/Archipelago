@@ -109,11 +109,19 @@ class TriforceHunt(Toggle):
 
 
 class TriforceGoal(Range):
-    """Number of Triforce pieces required to complete the game. Total number placed determined by the Item Pool setting."""
+    """Number of Triforce pieces required to complete the game."""
     displayname = "Required Triforce Pieces"
     range_start = 1
-    range_end = 50
+    range_end = 100
     default = 20
+
+
+class ExtraTriforces(Range):
+    """Percentage of additional Triforce pieces in the pool, separate from the item pool setting."""
+    displayname = "Percentage of Extra Triforce Pieces"
+    range_start = 0
+    range_end = 100
+    default = 50
 
 
 class LogicalChus(Toggle):
@@ -132,6 +140,7 @@ world_options: typing.Dict[str, type(Option)] = {
     # "spawn_positions": Toggle,
     "triforce_hunt": TriforceHunt, 
     "triforce_goal": TriforceGoal,
+    "extra_triforce_percentage": ExtraTriforces,
     "bombchus_in_logic": LogicalChus,
     # "mq_dungeons": make_range(0, 12),
 }
@@ -176,7 +185,7 @@ class LacsTokens(Range):
     displayname = "Tokens Required for LACS"
     range_start = 0
     range_end = 100
-    default = 100
+    default = 40
 
 
 lacs_options: typing.Dict[str, type(Option)] = {
@@ -217,7 +226,7 @@ class BridgeTokens(Range):
     displayname = "Tokens Required for Bridge"
     range_start = 0
     range_end = 100
-    default = 100
+    default = 40
 
 
 bridge_options: typing.Dict[str, type(Option)] = {
@@ -237,17 +246,21 @@ class SongShuffle(Choice):
 
 
 class ShopShuffle(Choice): 
-    """Randomizes shop contents. Set to "off" to not shuffle shops; "0" shuffles shops but does not allow multiworld items in shops."""
+    """Randomizes shop contents. "fixed_number" randomizes a specific number of items per shop; 
+    "random_number" randomizes the value for each shop. """
     displayname = "Shopsanity"
-    option_0 = 0
-    option_1 = 1
-    option_2 = 2
-    option_3 = 3
-    option_4 = 4
-    option_random_value = 5
-    option_off = 6
-    default = 6
-    alias_false = 6
+    option_off = 0
+    option_fixed_number = 1
+    option_random_number = 2
+    alias_false = 0
+
+
+class ShopSlots(Range):
+    """Number of items per shop to be randomized into the main itempool. 
+    Only active if Shopsanity is set to "fixed_number." """
+    displayname = "Shuffled Shop Slots"
+    range_start = 0
+    range_end = 4
 
 
 class TokenShuffle(Choice): 
@@ -310,6 +323,7 @@ class ShuffleMedigoronCarpet(Toggle):
 shuffle_options: typing.Dict[str, type(Option)] = {
     "shuffle_song_items": SongShuffle,
     "shopsanity": ShopShuffle, 
+    "shop_slots": ShopSlots,
     "tokensanity": TokenShuffle, 
     "shuffle_scrubs": ScrubShuffle,
     "shuffle_cows": ShuffleCows, 
@@ -478,6 +492,11 @@ timesavers_options: typing.Dict[str, type(Option)] = {
 }
 
 
+class CSMC(Toggle):
+    """Changes chests containing progression into large chests, and nonprogression into small chests."""
+    displayname = "Chest Size Matches Contents"
+
+
 class Hints(Choice): 
     """Gossip Stones can give hints about item locations."""
     displayname = "Gossip Stones"
@@ -501,6 +520,7 @@ class HintDistribution(Choice):
     option_tournament = 6
     option_useless = 7
     option_very_strong = 8
+    option_async = 9
 
 
 class TextShuffle(Choice): 
@@ -553,7 +573,7 @@ class RupeeStart(Toggle):
 
 
 misc_options: typing.Dict[str, type(Option)] = {
-    # "clearer_hints": DefaultOnToggle,
+    "correct_chest_sizes": CSMC,
     "hints": Hints,
     "hint_dist": HintDistribution,
     "text_shuffle": TextShuffle,

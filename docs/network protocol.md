@@ -83,7 +83,13 @@ Sent to clients when the server refuses connection. This is sent during the init
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| errors | list\[str\] | Optional. When provided, should contain any one of: `InvalidSlot`, `SlotAlreadyTaken`, `IncompatibleVersion`, or `InvalidPassword`. |
+| errors | list\[str\] | Optional. When provided, should contain any one of: `InvalidSlot`, `InvalidGame`, `SlotAlreadyTaken`, `IncompatibleVersion`, or `InvalidPassword`. |
+
+InvalidSlot indicates that the sent 'name' field did not match any auth entry on the server.
+InvalidGame indicates that a correctly named slot was found, but the game for it mismatched.
+SlotAlreadyTaken indicates a connection with a different uuid is already established.
+IncompatibleVersion indicates a version mismatch.
+InvalidPassword indicates the wrong, or no password when it was required, was sent.
 
 ### Connected
 Sent to clients when the connection handshake is successfully completed.
@@ -229,7 +235,7 @@ Requests the data package from the server. Does not require client authenticatio
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| exlusions | list[str]  | Optional. If specified, will not send back the specified data. Such as, ["Factorio"] -> Datapackage without Factorio data.|
+| exclusions | list[str]  | Optional. If specified, will not send back the specified data. Such as, ["Factorio"] -> Datapackage without Factorio data.|
 
 ### Bounce
 Send this message to the server, tell it which clients should receive the message and 

@@ -46,6 +46,28 @@ Risk of Rain 2:
   start_with_revive: true
   item_pickup_step: 1
   enable_lunar: true
+  item_weights:
+    default: 50
+    new: 0
+    uncommon: 0
+    legendary: 0
+    lunartic: 0
+    chaos: 0
+    no_scraps: 0
+    even: 0
+    scraps_only: 0
+  item_pool_presets: true
+  # custom item weights
+  green_scrap: 16
+  red_scrap: 4
+  yellow_scrap: 1
+  white_scrap: 32
+  common_item: 64
+  uncommon_item: 32
+  legendary_item: 8
+  boss_item: 4
+  lunar_item: 16
+  equipment: 32
 ```
 
 | Name | Description | Allowed values |
@@ -55,6 +77,10 @@ Risk of Rain 2:
 | start_with_revive | Starts the player off with a `Dio's Best Friend`. Functionally equivalent to putting a `Dio's Best Friend` in your `starting_inventory`. | true/false |
 | item_pickup_step | The number of item pickups which you are allowed to claim before they become an Archipelago location check. | 0 - 5 |
 | enable_lunar | Allows for lunar items to be shuffled into the item pool on behalf of the Risk of Rain player. | true/false |
+| item_weights | Each option here is a preset item weight that can be used to customize your generate item pool with certain settings. | default, new, uncommon, legendary, lunartic, chaos, no_scraps, even, scraps_only |
+| item_pool_presets | A simple toggle to determine whether the item_weight presets are used or the custom item pool as defined below | true/false |
+| custom item weights | Each defined item here is a single item in the pool that will have a weight against the other items when the item pool gets generated. These values can be modified to adjust how frequently certain items appear | 0-100|
+
 
 Using the example YAML above: the Risk of Rain 2 player will have 15 total items which they can pick up for other players. (total_locations = 15)
 
@@ -67,3 +93,5 @@ They will have 4 of the items which other players can grant them replaced with `
 The player will also start with a `Dio's Best Friend`. (start_with_revive = true)
 
 The player will have lunar items shuffled into the item pool on their behalf. (enable_lunar = true)
+
+The player will have the default preset generated item pool with the custom item weights being ignored. (item_weights: default and item_pool_presets: true)

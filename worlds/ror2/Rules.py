@@ -6,7 +6,8 @@ from ..generic.Rules import set_rule
 class RiskOfRainLogic(LogicMixin):
     def _ror_has_items(self, player: int, amount: int) -> bool:
         count: int = self.item_count("Common Item", player) + self.item_count("Uncommon Item", player) + \
-                     self.item_count("Legendary Item", player) + self.item_count("Boss Item", player)
+                     self.item_count("Legendary Item", player) + self.item_count("Boss Item", player) + \
+                     self.item_count("Lunar Item", player) + self.item_count("Equipment", player)
         return count >= amount
 
 

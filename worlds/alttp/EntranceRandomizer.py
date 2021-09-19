@@ -20,7 +20,6 @@ def parse_arguments(argv, no_defaults=False):
     multiargs, _ = parser.parse_known_args(argv)
 
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
     parser.add_argument('--logic', default=defval('noglitches'), const='noglitches', nargs='?', choices=['noglitches', 'minorglitches', 'owglitches', 'hybridglitches', 'nologic'],
                         help='''\
                              Select Enforcement of Item Requirements. (default: %(default)s)
@@ -45,17 +44,6 @@ def parse_arguments(argv, no_defaults=False):
                                         World or at Link's House, which is shuffled freely.
                                         Requires the moon pearl to be Link in the Light World
                                         instead of a bunny.
-                             ''')
-    parser.add_argument('--swordless', action='store_true',
-                        help='''\
-                             Toggles Swordless Mode
-                             Swordless: No swords. Curtains in Skull Woods and Agahnim\'s 
-                                        Tower are removed, Agahnim\'s Tower barrier can be
-                                        destroyed with hammer. Misery Mire and Turtle Rock
-                                        can be opened without a sword. Hammer damages Ganon.
-                                        Ether and Bombos Tablet can be activated with Hammer
-                                        (and Book). Bombos pads have been added in Ice
-                                        Palace, to allow for an alternative to firerod.
                              ''')
     parser.add_argument('--goal', default=defval('ganon'), const='ganon', nargs='?',
                         choices=['ganon', 'pedestal', 'bosses', 'triforcehunt', 'localtriforcehunt', 'ganontriforcehunt', 'localganontriforcehunt', 'crystals', 'ganonpedestal'],
@@ -194,8 +182,7 @@ def parse_arguments(argv, no_defaults=False):
                             yes - Always opens the pyramid hole.
                             no - Never opens the pyramid hole.
                              ''', choices=['auto', 'goal', 'yes', 'no'])
-    parser.add_argument('--rom', default=defval('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc'),
-                        help='Path to an ALttP JAP(1.0) rom to use as a base.')
+
     parser.add_argument('--loglevel', default=defval('info'), const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--count', help='''\
@@ -206,26 +193,8 @@ def parse_arguments(argv, no_defaults=False):
                              time).
                              ''', type=int)
 
-    parser.add_argument('--retro', default=defval(False), help='''\
-                             Keys are universal, shooting arrows costs rupees,
-                             and a few other little things make this more like Zelda-1.
-                             ''', action='store_true')
-    parser.add_argument('--local_items', default=defval(''),
-                        help='Specifies a list of items that will not spread across the multiworld (separated by commas)')
-    parser.add_argument('--non_local_items', default=defval(''),
-                        help='Specifies a list of items that will spread across the multiworld (separated by commas)')
     parser.add_argument('--custom', default=defval(False), help='Not supported.')
     parser.add_argument('--customitemarray', default=defval(False), help='Not supported.')
-    parser.add_argument('--accessibility', default=defval('items'), const='items', nargs='?', choices=['items', 'locations', 'none'], help='''\
-                             Select Item/Location Accessibility. (default: %(default)s)
-                             Items:     You can reach all unique inventory items. No guarantees about
-                                        reaching all locations or all keys. 
-                             Locations: You will be able to reach every location in the game.
-                             None:      You will be able to reach enough locations to beat the game.
-                             ''')
-    parser.add_argument('--hints', default=defval(False), help='''\
-                             Make telepathic tiles and storytellers give helpful hints.
-                             ''', action='store_true')
     # included for backwards compatibility
     parser.add_argument('--shuffleganon', help=argparse.SUPPRESS, action='store_true', default=defval(True))
     parser.add_argument('--no-shuffleganon', help='''\
@@ -241,20 +210,14 @@ def parse_arguments(argv, no_defaults=False):
                              sprite that will be extracted.
                              ''')
     parser.add_argument('--gui', help='Launch the GUI', action='store_true')
-    parser.add_argument('--progression_balancing', action='store_true', default=defval(False),
-                        help="Enable Multiworld Progression balancing.")
-    parser.add_argument('--skip_playthrough', action='store_true', default=defval(False))
+
     parser.add_argument('--enemizercli', default=defval('EnemizerCLI/EnemizerCLI.Core'))
     parser.add_argument('--shufflebosses', default=defval('none'), choices=['none', 'basic', 'normal', 'chaos',
                                                                             "singularity"])
-    parser.add_argument('--enemy_shuffle', action='store_true')
-    parser.add_argument('--killable_thieves', action='store_true')
-    parser.add_argument('--tile_shuffle', action='store_true')
-    parser.add_argument('--bush_shuffle', action='store_true')
+
     parser.add_argument('--enemy_health', default=defval('default'),
                         choices=['default', 'easy', 'normal', 'hard', 'expert'])
     parser.add_argument('--enemy_damage', default=defval('default'), choices=['default', 'shuffled', 'chaos'])
-    parser.add_argument('--shufflepots', default=defval(False), action='store_true')
     parser.add_argument('--beemizer', default=defval(0), type=lambda value: min(max(int(value), 0), 4))
     parser.add_argument('--shop_shuffle', default='', help='''\
     combine letters for options:
@@ -272,7 +235,6 @@ def parse_arguments(argv, no_defaults=False):
     For unlit dark rooms, require the Lamp to be considered in logic by default. 
     Torches means additionally easily accessible Torches that can be lit with Fire Rod are considered doable.
     None means full traversal through dark rooms without tools is considered doable.''')
-    parser.add_argument('--restrict_dungeon_item_on_boss', default=defval(False), action="store_true")
     parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--names', default=defval(''))
     parser.add_argument('--outputpath')
@@ -307,19 +269,19 @@ def parse_arguments(argv, no_defaults=False):
         for player in range(1, multiargs.multi + 1):
             playerargs = parse_arguments(shlex.split(getattr(ret, f"p{player}")), True)
 
-            for name in ['logic', 'mode', 'swordless', 'goal', 'difficulty', 'item_functionality',
+            for name in ['logic', 'mode', 'goal', 'difficulty', 'item_functionality',
                          'shuffle', 'open_pyramid', 'timer',
                          'countdown_start_time', 'red_clock_time', 'blue_clock_time', 'green_clock_time',
-                         'local_items', 'non_local_items', 'retro', 'accessibility', 'hints', 'beemizer',
-                         'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',
+                         'beemizer',
+                         'shufflebosses', 'enemy_health', 'enemy_damage',
                          'sprite',
-                         "progression_balancing", "triforce_pieces_available",
+                         "triforce_pieces_available",
                          "triforce_pieces_required", "shop_shuffle",
                          "required_medallions", "start_hints",
                          "plando_items", "plando_texts", "plando_connections", "er_seeds",
-                         'dungeon_counters', 'killable_thieves',
-                         'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic',
-                         'restrict_dungeon_item_on_boss', 'game']:
+                         'dungeon_counters',
+                         'shuffle_prizes', 'sprite_pool', 'dark_room_logic',
+                         'game']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})
