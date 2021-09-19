@@ -43,13 +43,6 @@ class SMWorld(World):
 
     remote_items: bool = False
 
-    qty = {'energy': 'vanilla',
-           'minors': 100,
-           'ammo': { 'Missile': 9,
-                     'Super': 9,
-                     'PowerBomb': 9 },
-           'strictMinors' : False }
-
     itemManager: ItemManager
 
     locations = {}
@@ -87,8 +80,6 @@ class SMWorld(World):
         Logic.factory('vanilla')
 
         self.variaRando = VariaRandomizer(self.world.sm_rom, self.world.randoPreset[self.player], self.player)
-
-        # also need to add the names to the passed MultiWorld's CollectionState, since it was initialized before we could get to it
         self.world.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
     
     def generate_basic(self):
@@ -285,7 +276,7 @@ class SMWorld(World):
         return False
 
     def create_item(self, name: str) -> Item:
-        item = ItemManager.Items[name]
+        item = next(x for x in ItemManager.Items.values() if x.Name == name)
         return SMItem(item.Name, True, item.Type, self.item_name_to_id[item.Name], player = self.player)
 
     @classmethod

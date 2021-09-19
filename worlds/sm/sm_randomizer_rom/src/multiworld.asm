@@ -98,6 +98,8 @@ mw_receive_item:
     pha : phx
     cmp #$0016
     beq .end                      ; skip receiving if its a Nothing item
+    cmp #$0017
+    beq .end                      ; skip receiving if its a No Energy item
     asl #4 : tax
     lda.l sm_item_table+$2, x     ; Read item flag
     sta $cc

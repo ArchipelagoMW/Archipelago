@@ -234,6 +234,7 @@ class ItemManager:
             Code=0xbae9, # see above
             Name="No Energy",
             Type='NoEnergy',
+            Id=23
         ),
         'Kraid': Item(
             Category='Boss',
