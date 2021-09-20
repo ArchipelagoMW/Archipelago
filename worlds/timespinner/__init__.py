@@ -17,7 +17,6 @@ class TimespinnerWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in { **location_table, **downloadable_items }.items()} 
-    item_name_groups = get_item_name_groups()
 
     pyramid_unlock = None
 
@@ -31,6 +30,19 @@ class TimespinnerWorld(World):
             #"SpecificKeycards": self.world.SpecificKeycards[self.player],
             #"Inverted": self.world.Inverted[self.player]
         }
+
+    def get_item_name_groups() -> typing.Dict[str, list[str]]:
+        groups: typing.Dict[str, list[str]] = {}
+
+        for name, data in item_table.items():
+            if not data.category in groups:
+                groups[data.category] = []
+
+            groups[data.category].append(name)
+
+        return groups
+
+    item_name_groups = get_item_name_groups()
 
     def generate_basic(self):
         self.pyramid_unlock = get_pyramid_unlock(self.world, self.player)
@@ -87,17 +99,6 @@ class TimespinnerWorldItem(Item):
     def __init__(self, name: str, player: int = None):
         item_data = item_table[name]
         super(TimespinnerWorldItem, self).__init__(name, item_data.progression, item_data.code, player)
-
-def get_item_name_groups() -> dict[str, list[str]]:
-    groups: dict[str, list[str]] = {}
-
-    for name, data in item_table.items():
-        if not data.category in groups:
-            groups[data.category] = []
-
-        groups[data.category].append(name)
-
-    return groups
 
 def get_pyramid_unlock(world: MultiWorld, player: int) -> str:
     gates = []
