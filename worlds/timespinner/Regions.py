@@ -15,7 +15,7 @@ def create_regions(world: MultiWorld, player: int):
         create_region(world, player, 'Varndagroth tower right (upper)', ['Varndagroth tower right (upper) > Varndagroth tower left', 'Varndagroth tower right (upper) > Varndagroth tower right (elevator)']),
         create_region(world, player, 'Varndagroth tower right (lower)', ['Varndagroth tower right (lower) > Varndagroth tower left', 'Varndagroth tower right (lower) > Varndagroth tower right (elevator)', 'Varndagroth tower right (lower) > Sealed Caves (Sirens)', 'Varndagroth tower right (lower) > Militairy Fortress']),
         create_region(world, player, 'Varndagroth tower right (elevator)', ['Varndagroth tower right (elevator) > Varndagroth tower right (upper)', 'Varndagroth tower right (elevator) > Varndagroth tower right (lower)']),
-        create_region(world, player, 'Sealed Caves (Sirens)', ['Sealed Caves (Sirens) > Varndagroth tower left']),
+        create_region(world, player, 'Sealed Caves (Sirens)', ['Sealed Caves (Sirens) > Varndagroth tower left', 'Sealed Caves (Sirens) > Varndagroth tower right (lower)']),
         create_region(world, player, 'Militairy Fortress', ['Militairy Fortress > Varndagroth tower right (lower)', 'Militairy Fortress > The lab']),
         create_region(world, player, 'The lab', ['The lab > Militairy Fortress', 'The lab > The lab (power off)']),
         create_region(world, player, 'The lab (power off)', ['The lab (power off) > The lab', 'The lab (power off) > The lab (upper)']),
@@ -41,9 +41,9 @@ def create_regions(world: MultiWorld, player: int):
 
     connectEntrance(world, player, 'Tutorial > Lake desolation')
 
-    connectEntrance(world, player, 'Lake desolation > Lower lake desolation', lambda state: True) #TODO (R.TimeStop | R.ForwardDash | R.GateKittyBoss | R.GateLeftLibrary)
-    connectEntrance(world, player, 'Lake desolation > Upper lake desolation') #TODO (UpperLakeSirine & R.AntiWeed)
-    connectEntrance(world, player, 'Lake desolation > Sealed Caves (Xarion)') #TODO R.DoubleJump & & R.CardA
+    connectEntrance(world, player, 'Lake desolation > Lower lake desolation', lambda state: state._timespinner_has_timestop(world, player or state.has('Talaria Attachment', player))) #TODO | R.GateKittyBoss | R.GateLeftLibrary)
+    connectEntrance(world, player, 'Lake desolation > Upper lake desolation', lambda state: state._timespinner_has_fire(world, player) and state.can_reach('Upper Lake Sirine', 'Region', player))
+    connectEntrance(world, player, 'Lake desolation > Sealed Caves (Xarion)', lambda state: state._timespinner_has_keycard_A(world, player) and state._timespinner_has_doublejump(world, player))
 
     connectEntrance(world, player, 'Upper lake desolation > Lake desolation')
     connectEntrance(world, player, 'Upper lake desolation > Lower lake desolation') 
@@ -52,42 +52,43 @@ def create_regions(world: MultiWorld, player: int):
     connectEntrance(world, player, 'Lower lake desolation > Libary') 
 
     connectEntrance(world, player, 'Libary > Lower lake desolation') 
-    connectEntrance(world, player, 'Libary > Libary top') #TODO (R.DoubleJump | R.ForwardDash) 
-    connectEntrance(world, player, 'Libary > Varndagroth tower left') #TODO (R.CardD)
+    connectEntrance(world, player, 'Libary > Libary top', lambda state: state._timespinner_has_doublejump(world, player) or state.has('Talaria Attachment', player)) 
+    connectEntrance(world, player, 'Libary > Varndagroth tower left', lambda state: state._timespinner_has_keycard_C(world, player))
 
     connectEntrance(world, player, 'Libary top > Libary')
 
     connectEntrance(world, player, 'Varndagroth tower left > Libary')
-    connectEntrance(world, player, 'Varndagroth tower left > Varndagroth tower right (upper)') #TODO R.CardC
-    connectEntrance(world, player, 'Varndagroth tower left > Varndagroth tower right (lower)') #TODO R.CardB
-    connectEntrance(world, player, 'Varndagroth tower left > Sealed Caves (Sirens)') #TODO R.CardB & R.CardE
-    connectEntrance(world, player, 'Varndagroth tower left > Refugee Camp') #TODO R.TimespinnerSpindle & R.TimespinnerWheel
+    connectEntrance(world, player, 'Varndagroth tower left > Varndagroth tower right (upper)', lambda state: state._timespinner_has_keycard_C(world, player))
+    connectEntrance(world, player, 'Varndagroth tower left > Varndagroth tower right (lower)', lambda state: state._timespinner_has_keycard_B(world, player))
+    connectEntrance(world, player, 'Varndagroth tower left > Sealed Caves (Sirens)', lambda state: state._timespinner_has_keycard_B(world, player) and state.has('Elevator Keycard', player))
+    connectEntrance(world, player, 'Varndagroth tower left > Refugee Camp', lambda state: state.has('Timespinner Wheel', player) and state.has('Timespinner Spindle', player))
 
     connectEntrance(world, player, 'Varndagroth tower right (upper) > Varndagroth tower left')
-    connectEntrance(world, player, 'Varndagroth tower right (upper) > Varndagroth tower right (elevator)') #TODO R.CardE
-
-    connectEntrance(world, player, 'Varndagroth tower right (lower) > Varndagroth tower left')
-    connectEntrance(world, player, 'Varndagroth tower right (lower) > Varndagroth tower right (elevator)') #TODO R.CardE
+    connectEntrance(world, player, 'Varndagroth tower right (upper) > Varndagroth tower right (elevator)', lambda state: state.has('Elevator Keycard', player))
 
     connectEntrance(world, player, 'Varndagroth tower right (elevator) > Varndagroth tower right (upper)')
     connectEntrance(world, player, 'Varndagroth tower right (elevator) > Varndagroth tower right (lower)')
-    connectEntrance(world, player, 'Varndagroth tower right (lower) > Sealed Caves (Sirens)') #TODO R.CardB & R.CardE
-    connectEntrance(world, player, 'Varndagroth tower right (lower) > Militairy Fortress') #TODO KillMaw & killTwins & killAelana;
 
-    connectEntrance(world, player, 'Sealed Caves (Sirens) > Varndagroth tower left') #TODO R.CardE
+    connectEntrance(world, player, 'Varndagroth tower right (lower) > Varndagroth tower left')
+    connectEntrance(world, player, 'Varndagroth tower right (lower) > Varndagroth tower right (elevator)', lambda state: state.has('Elevator Keycard', player))
+    connectEntrance(world, player, 'Varndagroth tower right (lower) > Sealed Caves (Sirens)', lambda state: state._timespinner_has_keycard_B(world, player) and state.has('Elevator Keycard', player))
+    connectEntrance(world, player, 'Varndagroth tower right (lower) > Militairy Fortress', lambda state: state._timespinner_can_kill_all_3_bosses(world, player))
 
-    connectEntrance(world, player, 'Militairy Fortress > Varndagroth tower right (lower)') #TODO KillMaw & killTwins & killAelana;
-    connectEntrance(world, player, 'Militairy Fortress > The lab') #TODO R.DoubleJump & R.CardB
+    connectEntrance(world, player, 'Sealed Caves (Sirens) > Varndagroth tower left', lambda state: state.has('Elevator Keycard', player))
+    connectEntrance(world, player, 'Sealed Caves (Sirens) > Varndagroth tower right (lower)', lambda state: state.has('Elevator Keycard', player))
+
+    connectEntrance(world, player, 'Militairy Fortress > Varndagroth tower right (lower)', lambda state: state._timespinner_can_kill_all_3_bosses(world, player))
+    connectEntrance(world, player, 'Militairy Fortress > The lab', lambda state: state._timespinner_has_keycard_B(world, player) and state._timespinner_has_doublejump(world, player))
 
     connectEntrance(world, player, 'The lab > Militairy Fortress')
-    connectEntrance(world, player, 'The lab > The lab (power off)') #TODO DoubleJumpOfNpc
+    connectEntrance(world, player, 'The lab > The lab (power off)', lambda state: state._timespinner_has_doublejump_of_npc(player, world))
 
     connectEntrance(world, player, 'The lab (power off) > The lab')
-    connectEntrance(world, player, 'The lab (power off) > The lab (upper)') #TODO ForwardDashDoubleJump
+    connectEntrance(world, player, 'The lab (power off) > The lab (upper)', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
 
     connectEntrance(world, player, 'The lab (upper) > The lab (power off)')
-    connectEntrance(world, player, 'The lab (upper) > Emperors tower') #TODO ForwardDashDoubleJump
-    connectEntrance(world, player, 'The lab (upper) > Ancient Pyramid (left)') #TODO R.TimespinnerWheel & R.TimespinnerSpindle & R.TimespinnerPiece1 & R.TimespinnerPiece2 & R.TimespinnerPiece3
+    connectEntrance(world, player, 'The lab (upper) > Emperors tower', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
+    connectEntrance(world, player, 'The lab (upper) > Ancient Pyramid (left)', lambda state: state._timespinner_can_kill_nightmare(world, player))
 
     connectEntrance(world, player, 'Emperors tower > The lab (upper)')
 
@@ -97,17 +98,17 @@ def create_regions(world: MultiWorld, player: int):
     connectEntrance(world, player, 'Refugee Camp > Libary')
 
     connectEntrance(world, player, 'Forest > Refugee Camp')
-    connectEntrance(world, player, 'Forest > Upper Lake Sirine')  #TODO R.TimespinnerWheel | R.ForwardDash | R.DoubleJump //to clear the moth R.TimeStop | R.Swimming //to clear bird height
+    connectEntrance(world, player, 'Forest > Upper Lake Sirine', lambda state: state.has_any(['Timespinner Wheel', 'Talaria Attachment'], player) or state._timespinner_has_doublejump(world, player)) #to clear the moth R.TimeStop | R.Swimming //to clear bird height
     connectEntrance(world, player, 'Forest > Caves of Banishment (Sirens)')
     connectEntrance(world, player, 'Forest > Caste Ramparts')
 
     connectEntrance(world, player, 'Upper Lake Sirine > Forest')
-    connectEntrance(world, player, 'Upper Lake Sirine > Lower Lake Sirine') #TODO R.WaterMask
+    connectEntrance(world, player, 'Upper Lake Sirine > Lower Lake Sirine', lambda state: state.has('Water Mask', player))
 
     connectEntrance(world, player, 'Lower Lake Sirine > Upper Lake Sirine')
     connectEntrance(world, player, 'Lower Lake Sirine > Caves of Banishment (Maw)')
 
-    connectEntrance(world, player, 'Caves of Banishment (Maw) > Lower Lake Sirine') #TODO R.WaterMask
+    connectEntrance(world, player, 'Caves of Banishment (Maw) > Lower Lake Sirine', lambda state: state.has('Water Mask', player))
     connectEntrance(world, player, 'Caves of Banishment (Maw) > Caves of Banishment (Sirens)')
 
     connectEntrance(world, player, 'Caves of Banishment (Sirens) > Forest')
@@ -116,18 +117,18 @@ def create_regions(world: MultiWorld, player: int):
     connectEntrance(world, player, 'Caste Ramparts > Caste Keep')
 
     connectEntrance(world, player, 'Caste Keep > Caste Ramparts')
-    connectEntrance(world, player, 'Caste Keep > Royal towers (lower)') #TODO R.DoubleJump
+    connectEntrance(world, player, 'Caste Keep > Royal towers (lower)', lambda state: state._timespinner_has_doublejump(world, player))
 
     connectEntrance(world, player, 'Royal towers (lower) > Caste Keep')
-    connectEntrance(world, player, 'Royal towers (lower) > Royal towers') #TODO MultipleSmallJumpsOfNpc | ForwardDashDoubleJump
+    connectEntrance(world, player, 'Royal towers (lower) > Royal towers', lambda state: state.has('Timespinner Wheel', player) or state._timespinner_has_forwarddash_doublejump(world, player))
 
     connectEntrance(world, player, 'Royal towers > Royal towers (lower)')
-    connectEntrance(world, player, 'Royal towers > Royal towers (upper)') #TODO R.DoubleJump
+    connectEntrance(world, player, 'Royal towers > Royal towers (upper)', lambda state: state._timespinner_has_doublejump(world, player))
 
     connectEntrance(world, player, 'Royal towers (upper) > Royal towers')
 
     connectEntrance(world, player, 'Ancient Pyramid (left) > The lab (upper)')
-    connectEntrance(world, player, 'Ancient Pyramid (left) > Ancient Pyramid (right)') #TODO R.UpwardDash
+    connectEntrance(world, player, 'Ancient Pyramid (left) > Ancient Pyramid (right)', lambda state: state._timespinner_has_upwarddash(world, player))
 
     connectEntrance(world, player, 'Ancient Pyramid (right) > Ancient Pyramid (left)')
 

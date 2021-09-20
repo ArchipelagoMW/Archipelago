@@ -1,4 +1,3 @@
-import string
 import typing
 
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance
@@ -27,7 +26,7 @@ class TimespinnerWorld(World):
             #"FacebookMode": self.world.FacebookMode[self.player],
             "StartWithMeyef": self.world.StartWithMeyef[self.player],
             "QuickSeed": self.world.QuickSeed[self.player],
-            #"SpecificKeycards": self.world.SpecificKeycards[self.player],
+            "SpecificKeycards": self.world.SpecificKeycards[self.player],
             #"Inverted": self.world.Inverted[self.player]
         }
 
@@ -180,7 +179,7 @@ def place_first_progression_item(world: MultiWorld, player: int, excluded_items:
 
     world.get_location(location, player).place_locked_item(item)
  
-def update_progressive_state_based_flags(world: MultiWorld, player: int, name: string, data: TimespinnerWorldItem) -> TimespinnerWorldItem:
+def update_progressive_state_based_flags(world: MultiWorld, player: int, name: str, data: TimespinnerWorldItem) -> TimespinnerWorldItem:
     if not data.advancement:
         return data
 
@@ -197,7 +196,7 @@ def get_number_of_locations(world: MultiWorld, player: int) -> int:
     else:
         return len(location_table)
 
-def is_option_enabled(world: MultiWorld, player: int, name: string) -> bool:
+def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
     option = getattr(world, name, None)
 
     if option == None:

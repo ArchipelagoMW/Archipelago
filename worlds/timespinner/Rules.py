@@ -3,11 +3,68 @@ from ..AutoWorld import LogicMixin
 from ..generic.Rules import set_rule
 
 class TimespinnerLogic(LogicMixin):
-    def _timespinner_has_relics(self, player: int, amount: int) -> bool:
-        count: int = self.item_count("Relic", player) + self.item_count("Boss Relic", player)
-        return count >= amount
+    def _timespinner_has_timestop(self, world: MultiWorld, player: int) -> bool:
+        return self.has_any(['Timespinner Wheel', 'Succubus Hairpin', 'Lightwall', 'Celestial Sash'], player)
+
+    def _timespinner_has_doublejump(self, world: MultiWorld, player: int) -> bool:
+        return self.has_any(['Succubus Hairpin', 'Lightwall', 'Celestial Sash'], player)
+
+    def _timespinner_has_forwarddash_doublejump(self, world: MultiWorld, player: int) -> bool:
+        return self.has('Celestial Sash', player) or (self._timespinner_has_doublejump(world, player) and self.has('Talaria Attachment', player))
+
+    def _timespinner_has_doublejump_of_npc(self, world: MultiWorld, player: int) -> bool:
+        return self.has('Celestial Sash', player) or (self._timespinner_has_doublejump(world, player) and self.has('Timespinner Wheel', player))
+
+    def _timespinner_has_upwarddash(self, world: MultiWorld, player: int) -> bool:
+        return self.has_any(['Lightwall', 'Celestial Sash'], player)
+    
+    def _timespinner_has_fire(self, world: MultiWorld, player: int) -> bool:
+        return self.has_any(['Fire Orb', 'Infernal Flames', 'Pyro Ring', 'Djinn Inferno'], player)
+
+    def _timespinner_has_keycard_A(self, world: MultiWorld, player: int) -> bool:
+        return self.has('Security Keycard A', player)
+
+    def _timespinner_has_keycard_B(self, world: MultiWorld, player: int) -> bool:
+        if self._timespinner_is_option_enabled(world, player, "SpecificKeycards"):
+            return self.has('Security Keycard B', player)
+        else:
+            return self.has_any(['Security Keycard A', 'Security Keycard B'], player)
+
+    def _timespinner_has_keycard_C(self, world: MultiWorld, player: int) -> bool:
+        if self._timespinner_is_option_enabled(world, player, "SpecificKeycards"):
+            return self.has('Security Keycard C', player)
+        else:
+            return self.has_any(['Security Keycard A', 'Security Keycard B', 'Security Keycard C'], player)
+
+    def _timespinner_has_keycard_D(self, world: MultiWorld, player: int) -> bool:
+        if self._timespinner_is_option_enabled(world, player, "SpecificKeycards"):
+            return self.has('Security Keycard D', player)
+        else:
+            return self.has_any(['Security Keycard A', 'Security Keycard B', 'Security Keycard C', 'Security Keycard D'], player)
+
+    def _timespinner_can_kill_all_3_bosses(self, world: MultiWorld, player: int) -> bool:
+        #return self.has_all(['Kill Maw', 'Kill Twins', 'Kill Aelana']) TODO convert to events
+        hasAccessToMaw = self.can_reach('Caves of Banishment (Maw)', 'Region', player) and self.has('Gas Mask', player)
+        hasAccessToTwins = self.can_reach('Caste Keep', 'Region', player) and self._timespinner_has_timestop(world, player)
+        hasAccessToAelana = self.can_reach('Royal towers (upper)', 'Region', player)
+
+        return hasAccessToMaw and hasAccessToTwins and hasAccessToAelana
+
+    def _timespinner_can_kill_nightmare(self, world: MultiWorld, player: int) -> bool:
+        return self.has_all(['Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'], player)
+
+    def _timespinner_is_option_enabled(self, world: MultiWorld, player: int, name: str) -> bool:
+        option = getattr(world, name, None)
+
+        if option == None:
+            return False
+
+        return int(option[player].value) > 0
+
 
 def set_rules(world: MultiWorld, player: int):
+    world.completion_condition[player] = lambda state: state.can_reach('Ancient Pyramid (left)', 'Region', player)
+
     pass
     # Act 1 Card Draws
     #set_rule(world.get_location("Card Draw 1", player), lambda state: True)

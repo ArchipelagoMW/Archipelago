@@ -29,9 +29,9 @@ class QuickSeed(Toggle):
     "Start with Talaria Attachment, Nyoom!"
     display_name = "Quick seed"
 
-#class SpecificKeycards(Toggle):
-#    "Keycards can only open corresponding doors"
-#    display_name = "Specific Keycards"
+class SpecificKeycards(Toggle):
+    "Keycards can only open corresponding doors"
+    display_name = "Specific Keycards"
 
 #class Inverted(Toggle):
 #    "Start in the past"
@@ -50,7 +50,7 @@ timespinner_options: typing.Dict[str, any] = {
     #"FacebookMode": FacebookMode,
     "StartWithMeyef": StartWithMeyef,
     "QuickSeed": QuickSeed,
-    #"SpecificKeycards": SpecificKeycards,
+    "SpecificKeycards": SpecificKeycards,
     #"Inverted": Inverted,
     #"StinkyMaw": StinkyMaw
 }
