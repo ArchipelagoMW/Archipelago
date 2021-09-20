@@ -91,6 +91,8 @@ def create_regions(world: MultiWorld, player: int):
 
     connectEntrance(world, player, 'Emperors tower > The lab (upper)')
 
+    connectEntrance(world, player, 'Sealed Caves (Xarion) > Lake desolation')
+
     connectEntrance(world, player, 'Refugee Camp > Forest')
     connectEntrance(world, player, 'Refugee Camp > Libary')
 
