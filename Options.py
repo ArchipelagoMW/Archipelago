@@ -43,6 +43,9 @@ class Option(metaclass=AssembleOptions):
     # Handled in get_option_name()
     autodisplayname = False
 
+    # can be weighted between selections
+    supports_weighting = True
+
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.get_current_option_name()})"
 
@@ -81,6 +84,7 @@ class Toggle(Option):
     default = 0
 
     def __init__(self, value: int):
+        assert value == 0 or value == 1
         self.value = value
 
     @classmethod
@@ -118,6 +122,7 @@ class Toggle(Option):
     @classmethod
     def get_option_name(cls, value):
         return ["No", "Yes"][int(value)]
+
 
 class DefaultOnToggle(Toggle):
     default = 1
@@ -158,7 +163,7 @@ class Choice(Option):
         elif isinstance(other, int):
             assert other in self.name_lookup
             return other == self.value
-        elif isinstance(other,  bool):
+        elif isinstance(other, bool):
             return other == bool(self.value)
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
@@ -176,6 +181,7 @@ class Choice(Option):
             return other != bool(self.value)
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
 
 class Range(Option, int):
     range_start = 0
@@ -234,6 +240,7 @@ class OptionNameSet(Option):
 
 class OptionDict(Option):
     default = {}
+    supports_weighting = False
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
         self.value: typing.Dict[str, typing.Any] = value
@@ -246,14 +253,17 @@ class OptionDict(Option):
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
     def get_option_name(self, value):
-        return str(value)
+        return ", ".join(f"{key}: {value}" for key, value in self.value.items())
 
 
-class OptionList(Option): 
+class OptionList(Option, list):
     default = []
+    supports_weighting = False
+    value: list
 
     def __init__(self, value: typing.List[str, typing.Any]):
         self.value = value
+        super(OptionList, self).__init__()
 
     @classmethod
     def from_text(cls, text: str):
@@ -266,23 +276,106 @@ class OptionList(Option):
         return cls.from_text(str(data))
 
     def get_option_name(self, value):
-        return str(value)
+        return ", ".join(self.value)
 
+
+class OptionSet(Option, set):
+    default = frozenset()
+    supports_weighting = False
+    value: set
+
+    def __init__(self, value: typing.Union[typing.Set[str, typing.Any], typing.List[str, typing.Any]]):
+        self.value = set(value)
+        super(OptionSet, self).__init__()
+
+    @classmethod
+    def from_text(cls, text: str):
+        return cls([option.strip() for option in text.split(",")])
+
+    @classmethod
+    def from_any(cls, data: typing.Any):
+        if type(data) == list:
+            return cls(data)
+        elif type(data) == set:
+            return cls(data)
+        return cls.from_text(str(data))
+
+    def get_option_name(self, value):
+        return ", ".join(self.value)
 
 
 local_objective = Toggle  # local triforce pieces, local dungeon prizes etc.
 
 
 class Accessibility(Choice):
+    """Set rules for reachability of your items/locations.
+    Locations: ensure everything can be reached and acquired.
+    Items: ensure all logically relevant items can be acquired.
+    Minimal: ensure what is needed to reach your goal can be acquired."""
+
     option_locations = 0
     option_items = 1
-    option_beatable = 2
+    option_minimal = 2
+    alias_none = 2
+    default = 1
 
+
+class ProgressionBalancing(DefaultOnToggle):
+    """A system that moves progression earlier, to try and prevent the player from getting stuck and bored early."""
+
+
+common_options = {
+    "progression_balancing": ProgressionBalancing,
+    "accessibility": Accessibility
+}
+
+
+class ItemSet(OptionSet):
+    # implemented by Generate
+    verify_item_name = True
+
+
+class LocalItems(ItemSet):
+    """Forces these items to be in their native world."""
+    displayname = "Local Items"
+
+
+class NonLocalItems(ItemSet):
+    """Forces these items to be outside their native world."""
+    displayname = "Not Local Items"
+
+
+class StartInventory(OptionDict):
+    """Start with these items."""
+    verify_item_name = True
+    displayname = "Start Inventory"
+
+
+class StartHints(ItemSet):
+    """Start with these item's locations prefilled into the !hint command."""
+    displayname = "Start Hints"
+
+
+class ExcludeLocations(OptionSet):
+    """Prevent these locations from having an important item"""
+    displayname = "Excluded Locations"
+    verify_location_name = True
+
+
+per_game_common_options = {
+    # placeholder until they're actually implemented
+    "local_items": LocalItems,
+    "non_local_items": NonLocalItems,
+    "start_inventory": StartInventory,
+    "start_hints": StartHints,
+    "exclude_locations": OptionSet
+}
 
 if __name__ == "__main__":
 
     from worlds.alttp.Options import Logic
     import argparse
+
     map_shuffle = Toggle
     compass_shuffle = Toggle
     keyshuffle = Toggle

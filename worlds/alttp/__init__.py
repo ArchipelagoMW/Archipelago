@@ -14,7 +14,8 @@ from .Rules import set_rules
 from .ItemPool import generate_itempool, difficulties
 from .Shops import create_shops, ShopSlotFill
 from .Dungeons import create_dungeons
-from .Rom import LocalRom, patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, get_hash_string
+from .Rom import LocalRom, patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, get_hash_string, \
+    get_base_rom_path
 import Patch
 
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -50,6 +51,7 @@ class ALTTPWorld(World):
         self.dungeon_local_item_names = set()
         self.dungeon_specific_item_names = set()
         self.rom_name_available_event = threading.Event()
+        self.has_progressive_bows = False
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     def generate_early(self):
@@ -74,9 +76,9 @@ class ALTTPWorld(World):
         for dungeon_item in ["smallkey_shuffle", "bigkey_shuffle", "compass_shuffle", "map_shuffle"]:
             option = getattr(world, dungeon_item)[player]
             if option == "own_world":
-                world.local_items[player] |= self.item_name_groups[option.item_name_group]
+                world.local_items[player].value |= self.item_name_groups[option.item_name_group]
             elif option == "different_world":
-                world.non_local_items[player] |= self.item_name_groups[option.item_name_group]
+                world.non_local_items[player].value |= self.item_name_groups[option.item_name_group]
             elif option.in_dungeon:
                 self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
                 if option == "original_dungeon":
@@ -258,10 +260,10 @@ class ALTTPWorld(World):
         try:
             use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
                             or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                            or world.shufflepots[player] or world.bush_shuffle[player]
+                            or world.pot_shuffle[player] or world.bush_shuffle[player]
                             or world.killable_thieves[player])
 
-            rom = LocalRom(world.lttp_rom)
+            rom = LocalRom(get_base_rom_path())
 
             patch_rom(world, rom, player, use_enemizer)
 
@@ -298,7 +300,7 @@ class ALTTPWorld(World):
                 if world.player_name[player] != 'Player%d' % player else ''
 
             rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
-            rom.write_to_file(rompath, hide_enemizer=True)
+            rom.write_to_file(rompath)
             Patch.create_patch_file(rompath, player=player, player_name=world.player_name[player])
             os.unlink(rompath)
             self.rom_name = rom.name

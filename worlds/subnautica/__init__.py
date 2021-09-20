@@ -1,14 +1,14 @@
 import logging
-from typing import Set
 
 logger = logging.getLogger("Subnautica")
 
 from .Locations import lookup_name_to_id as locations_lookup_name_to_id
-from .Items import item_table, lookup_name_to_item
+from .Items import item_table, lookup_name_to_item, advancement_item_names
 from .Items import lookup_name_to_id as items_lookup_name_to_id
 
 from .Regions import create_regions
 from .Rules import set_rules
+from .Options import options
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 from ..AutoWorld import World
@@ -24,6 +24,7 @@ class SubnauticaWorld(World):
 
     item_name_to_id = items_lookup_name_to_id
     location_name_to_id = locations_lookup_name_to_id
+    options = options
 
     def generate_basic(self):
         # Link regions
@@ -32,13 +33,21 @@ class SubnauticaWorld(World):
         # Generate item pool
         pool = []
         neptune_launch_platform = None
+        extras = 0
         for item in item_table:
             for i in range(item["count"]):
                 subnautica_item = self.create_item(item["name"])
                 if item["name"] == "Neptune Launch Platform":
                     neptune_launch_platform = subnautica_item
+                elif not item["progression"] and self.world.item_pool[self.player] == "valuable":
+                    self.world.push_precollected(subnautica_item)
+                    extras += 1
                 else:
                     pool.append(subnautica_item)
+        for item_name in self.world.random.choices(sorted(advancement_item_names - {"Neptune Launch Platform"}),
+                                                   k=extras):
+            pool.append(self.create_item(item_name))
+
         self.world.itempool += pool
 
         # Victory item

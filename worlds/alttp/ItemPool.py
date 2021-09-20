@@ -244,7 +244,7 @@ def generate_itempool(world):
         world.push_item(world.get_location('Ganon', player), ItemFactory('Triforce', player), False)
 
     if world.goal[player] == 'icerodhunt':
-        world.progression_balancing[player] = False
+        world.progression_balancing[player].value = False
         loc = world.get_location('Turtle Rock - Boss', player)
         world.push_item(loc, ItemFactory('Triforce Piece', player), False)
         world.treasure_hunt_count[player] = 1
@@ -354,6 +354,12 @@ def generate_itempool(world):
         world.get_location(location, player).place_locked_item(ItemFactory(item, player))
 
     items = ItemFactory(pool, player)
+    # convert one Progressive Bow into Progressive Bow (Alt), in ID only, for ganon silvers hint text
+    if world.worlds[player].has_progressive_bows:
+        for item in items:
+            if item.code == 0x64:  # Progressive Bow
+                item.code = 0x65  # Progressive Bow (Alt)
+                break
 
     if clock_mode is not None:
         world.clock_mode[player] = clock_mode
@@ -584,6 +590,7 @@ def get_pool_core(world, player: int):
 
     if want_progressives(world.random):
         pool.extend(diff.progressivebow)
+        world.worlds[player].has_progressive_bows = True
     elif (swordless or logic == 'noglitches') and goal != 'icerodhunt':
         swordless_bows = ['Bow', 'Silver Bow']
         if difficulty == "easy":

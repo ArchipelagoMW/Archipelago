@@ -22,7 +22,6 @@ window.addEventListener('load', () => {
         // Populate page with HTML generated from markdown
         showdown.setOption('tables', true);
         showdown.setOption('strikethrough', true);
-        showdown.setOption('simpleLineBreaks', true);
         showdown.setOption('literalMidWordUnderscores', true);
         tutorialWrapper.innerHTML += (new showdown.Converter()).makeHtml(results);
         adjustHeaderWidth();

@@ -17,6 +17,7 @@ logger = logging.getLogger("Client")
 
 gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
 
+
 class ClientCommandProcessor(CommandProcessor):
     def __init__(self, ctx: CommonContext):
         self.ctx = ctx
@@ -86,11 +87,12 @@ class ClientCommandProcessor(CommandProcessor):
 
 
 class CommonContext():
-    starting_reconnect_delay = 5
-    current_reconnect_delay = starting_reconnect_delay
-    command_processor = ClientCommandProcessor
-    game: None
-    ui: None
+    starting_reconnect_delay: int = 5
+    current_reconnect_delay: int = starting_reconnect_delay
+    command_processor: int = ClientCommandProcessor
+    game = None
+    ui = None
+    keep_alive_task = None
 
     def __init__(self, server_address, password):
         # server state
@@ -126,6 +128,9 @@ class CommonContext():
         self.slow_mode = False
         self.jsontotextparser = JSONtoTextParser(self)
         self.set_getters(network_data_package)
+
+        # execution
+        self.keep_alive_task = asyncio.create_task(keep_alive(self))
 
     async def connection_closed(self):
         self.auth = None
@@ -190,6 +195,9 @@ class CommonContext():
     def event_invalid_slot(self):
         raise Exception('Invalid Slot; please verify that you have connected to the correct world.')
 
+    def event_invalid_game(self):
+        raise Exception('Invalid Game; please verify that you connected with the right game to the correct world.')
+
     async def server_auth(self, password_requested):
         if password_requested and not self.password:
             logger.info('Enter the password required to join this game:')
@@ -217,6 +225,19 @@ class CommonContext():
     def on_package(self, cmd: str, args: dict):
         """For custom package handling in subclasses."""
         pass
+
+
+async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
+    """some ISPs/network configurations drop TCP connections if no payload is sent (ignore TCP-keep-alive)
+     so we send a payload to prevent drop and if we were dropped anyway this will cause an auto-reconnect."""
+    seconds_elapsed = 0
+    while not ctx.exit_event.is_set():
+        await asyncio.sleep(1)  # short sleep to not block program shutdown
+        if ctx.server and ctx.slot:
+            seconds_elapsed += 1
+            if seconds_elapsed > seconds_between_checks:
+                await ctx.send_msgs([{"cmd": "Bounce", "slots": [ctx.slot]}])
+                seconds_elapsed = 0
 
 
 async def server_loop(ctx: CommonContext, address=None):
@@ -327,7 +348,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         errors = args["errors"]
         if 'InvalidSlot' in errors:
             ctx.event_invalid_slot()
-
+        elif 'InvalidGame' in errors:
+            ctx.event_invalid_game()
         elif 'SlotAlreadyTaken' in errors:
             raise Exception('Player slot already in use for that team')
         elif 'IncompatibleVersion' in errors:

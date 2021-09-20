@@ -108,7 +108,7 @@ class LocalRom(object):
         self.encrypt_range(0x180140, 32, key)
         self.encrypt_range(0xEDA1, 8, key)
 
-    def write_to_file(self, file, hide_enemizer=False):
+    def write_to_file(self, file):
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
 
@@ -283,9 +283,9 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
 
     # write options file for enemizer
     options = {
-        'RandomizeEnemies': world.enemy_shuffle[player],
+        'RandomizeEnemies': world.enemy_shuffle[player].value,
         'RandomizeEnemiesType': 3,
-        'RandomizeBushEnemyChance': world.bush_shuffle[player],
+        'RandomizeBushEnemyChance': world.bush_shuffle[player].value,
         'RandomizeEnemyHealthRange': world.enemy_health[player] != 'default',
         'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[
             world.enemy_health[player]],
@@ -323,7 +323,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         'GrayscaleMode': False,
         'GenerateSpoilers': False,
         'RandomizeLinkSpritePalette': False,
-        'RandomizePots': world.shufflepots[player],
+        'RandomizePots': world.pot_shuffle[player].value,
         'ShuffleMusic': False,
         'BootlegMagic': True,
         'CustomBosses': False,
@@ -336,7 +336,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         'BeesLevel': 0,
         'RandomizeTileTrapPattern': False,
         'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': world.killable_thieves[player],
+        'AllowKillableThief': world.killable_thieves[player].value,
         'RandomizeSpriteOnHit': False,
         'DebugMode': False,
         'DebugForceEnemy': False,
@@ -747,19 +747,12 @@ bonk_addresses = [0x4CF6C, 0x4CFBA, 0x4CFE0, 0x4CFFB, 0x4D018, 0x4D01B, 0x4D028,
 
 
 def get_nonnative_item_sprite(item: str) -> int:
-    return 0x6B # set all non-native sprites to Power Star as per 13 to 2 vote at
+    return 0x6B  # set all non-native sprites to Power Star as per 13 to 2 vote at
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
 
 
 def patch_rom(world, rom, player, enemized):
     local_random = world.slot_seeds[player]
-
-    # progressive bow silver arrow hint hack
-    prog_bow_locs = world.find_items('Progressive Bow', player)
-    if len(prog_bow_locs) > 1:
-        # only pick a distingushed bow if we have at least two
-        distinguished_prog_bow_loc = local_random.choice(prog_bow_locs)
-        distinguished_prog_bow_loc.item.code = 0x65
 
     # patch items
 
@@ -785,7 +778,7 @@ def patch_rom(world, rom, player, enemized):
                             itemid = 0x33
                         elif location.item.compass:
                             itemid = 0x25
-                if world.worlds[player].remote_items: # remote items does not currently work
+                if world.worlds[player].remote_items:  # remote items does not currently work
                     itemid = list(location_table.keys()).index(location.name) + 1
                     assert itemid < 0x100
                     rom.write_byte(location.player_address, 0xFF)
@@ -1495,7 +1488,8 @@ def patch_rom(world, rom, player, enemized):
     rom.write_byte(0x18016A, 0x10 | ((0x01 if world.smallkey_shuffle[player] else 0x00)
                                      | (0x02 if world.compass_shuffle[player] else 0x00)
                                      | (0x04 if world.map_shuffle[player] else 0x00)
-                                     | (0x08 if world.bigkey_shuffle[player] else 0x00)))  # free roaming item text boxes
+                                     | (0x08 if world.bigkey_shuffle[
+                player] else 0x00)))  # free roaming item text boxes
     rom.write_byte(0x18003B, 0x01 if world.map_shuffle[player] else 0x00)  # maps showing crystals on overworld
 
     # compasses showing dungeon count
@@ -1550,7 +1544,8 @@ def patch_rom(world, rom, player, enemized):
     rom.write_int16(0x18017C, get_reveal_bytes('Crystal 5') | get_reveal_bytes('Crystal 6') if world.map_shuffle[
         player] else 0x0000)  # Bomb Shop Reveal
 
-    rom.write_byte(0x180172, 0x01 if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal else 0x00)  # universal keys
+    rom.write_byte(0x180172, 0x01 if world.smallkey_shuffle[
+                                         player] == smallkey_shuffle.option_universal else 0x00)  # universal keys
     rom.write_byte(0x18637E, 0x01 if world.retro[player] else 0x00)  # Skip quiver in item shops once bought
     rom.write_byte(0x180175, 0x01 if world.retro[player] else 0x00)  # rupee bow
     rom.write_byte(0x180176, 0x0A if world.retro[player] else 0x00)  # wood arrow cost
@@ -2178,7 +2173,8 @@ def write_strings(rom, world, player):
                     entrances_to_hint.update({'Inverted Pyramid Entrance': 'The extra castle passage'})
                 else:
                     entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
-        hint_count = 4 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'] else 0
+        hint_count = 4 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull',
+                                                        'dungeonscrossed'] else 0
         for entrance in all_entrances:
             if entrance.name in entrances_to_hint:
                 if hint_count:
@@ -2195,7 +2191,8 @@ def write_strings(rom, world, player):
         if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']:
             locations_to_hint.extend(InconvenientVanillaLocations)
         local_random.shuffle(locations_to_hint)
-        hint_count = 3 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'] else 5
+        hint_count = 3 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull',
+                                                        'dungeonscrossed'] else 5
         for location in locations_to_hint[:hint_count]:
             if location == 'Swamp Left':
                 if local_random.randint(0, 1):
@@ -2254,7 +2251,8 @@ def write_strings(rom, world, player):
         if world.bigkey_shuffle[player]:
             items_to_hint.extend(BigKeys)
         local_random.shuffle(items_to_hint)
-        hint_count = 5 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'] else 8
+        hint_count = 5 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull',
+                                                        'dungeonscrossed'] else 8
         while hint_count > 0 and items_to_hint:
             this_item = items_to_hint.pop(0)
             this_location = world.find_items(this_item, player)
@@ -2278,21 +2276,22 @@ def write_strings(rom, world, player):
             ' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
     tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
     tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
-
-    prog_bow_locs = world.find_items('Progressive Bow', player)
-    distinguished_prog_bow_loc = next((location for location in prog_bow_locs if location.item.code == 0x65), None)
-    progressive_silvers = world.difficulty_requirements[player].progressive_bow_limit >= 2 or (
-            world.swordless[player] or world.logic[player] == 'noglitches')
-    if distinguished_prog_bow_loc:
-        prog_bow_locs.remove(distinguished_prog_bow_loc)
-        silverarrow_hint = (' %s?' % hint_text(distinguished_prog_bow_loc).replace('Ganon\'s',
-                                                                                   'my')) if progressive_silvers else '?\nI think not!'
-        tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
-
-    if any(prog_bow_locs):
-        silverarrow_hint = (' %s?' % hint_text(local_random.choice(prog_bow_locs)).replace('Ganon\'s',
-                                                                                           'my')) if progressive_silvers else '?\nI think not!'
-        tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
+    if world.worlds[player].has_progressive_bows and (world.difficulty_requirements[player].progressive_bow_limit >= 2 or (
+            world.swordless[player] or world.logic[player] == 'noglitches')):
+        prog_bow_locs = world.find_items('Progressive Bow', player)
+        world.slot_seeds[player].shuffle(prog_bow_locs)
+        found_bow = False
+        found_bow_alt = False
+        while prog_bow_locs and not (found_bow and found_bow_alt):
+            bow_loc = prog_bow_locs.pop()
+            if bow_loc.item.code == 0x65:
+                found_bow_alt = True
+                target = 'ganon_phase_3_no_silvers'
+            else:
+                found_bow = True
+                target = 'ganon_phase_3_no_silvers_alt'
+            silverarrow_hint = (' %s?' % hint_text(bow_loc).replace('Ganon\'s', 'my'))
+            tt[target] = 'Did you find the silver arrows%s' % silverarrow_hint
 
     crystal5 = world.find_item('Crystal 5', player)
     crystal6 = world.find_item('Crystal 6', player)
