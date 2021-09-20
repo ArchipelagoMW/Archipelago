@@ -87,8 +87,6 @@ def main(args, seed=None):
     world.game = args.game.copy()
     world.set_options(args)
     world.player_name = args.name.copy()
-    world.lttp_rom = args.lttp_rom
-    world.sm_rom = args.sm_rom
     world.randoPreset = args.randoPreset
     world.enemizer = args.enemizercli
     world.sprite = args.sprite.copy()

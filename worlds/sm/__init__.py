@@ -11,6 +11,7 @@ from .Items import lookup_name_to_id as items_lookup_name_to_id
 from .Regions import create_regions
 from .Rules import set_rules, add_entrance_rule
 from .Options import sm_options
+from .Rom import get_base_rom_path
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
 from ..AutoWorld import World
@@ -79,7 +80,7 @@ class SMWorld(World):
     def generate_early(self):
         Logic.factory('vanilla')
 
-        self.variaRando = VariaRandomizer(self.world.sm_rom, self.world.randoPreset[self.player], self.player)
+        self.variaRando = VariaRandomizer(get_base_rom_path(), self.world.randoPreset[self.player], self.player)
         self.world.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
     
     def generate_basic(self):
