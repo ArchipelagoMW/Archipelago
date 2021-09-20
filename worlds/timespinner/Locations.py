@@ -4,7 +4,7 @@ class LocationData(typing.NamedTuple):
     region: str
     code: int
 
-location_table: dict[str, LocationData] = {
+location_table: typing.Dict[str, LocationData] = {
     # PresentItemLocations
     'Yo Momma 1': LocationData('Tutorial', 1337000),
     'Yo Momma 2': LocationData('Tutorial', 1337001),
@@ -49,7 +49,7 @@ location_table: dict[str, LocationData] = {
     'Air Vents right': LocationData('Varndagroth tower right (upper)' , 1337040),
     'Right side bottom floor': LocationData('Varndagroth tower right (lower)' , 1337041),
     'Varndagroth' : LocationData('Varndagroth tower right (elevator)' , 1337042),
-    'Spider hell': LocationData('Varndagroth tower right (elevator)' , 1337043),
+    'Varndagroth Spider hell': LocationData('Varndagroth tower right (elevator)' , 1337043),
     'Skeleton': LocationData('Lake desolation' , 1337044), # region changed from 'Sealed Caves (Xarion)' to ease entrance logic
     'Shroom jump room': LocationData('Sealed Caves (Xarion)' , 1337045),
     'Double shroom room': LocationData('Sealed Caves (Xarion)' , 1337046),
@@ -64,7 +64,7 @@ location_table: dict[str, LocationData] = {
     'Big siren Room left': LocationData('Sealed Caves (Sirens)' , 1337055),
     'Room after sirens chest 2': LocationData('Sealed Caves (Sirens)' , 1337056),
     'Room after sirens chest 1': LocationData('Sealed Caves (Sirens)' , 1337057),
-    'Bomber chest': LocationData('Militairy Fortress' , 1337058),
+    'Militairy Bomber chest': LocationData('Militairy Fortress' , 1337058),
     'Close combat room': LocationData('Militairy Fortress' , 1337059),
     'Bridge full of soldiers': LocationData('Militairy Fortress' , 1337060),
     'Giantess Room': LocationData('Militairy Fortress' , 1337061),
@@ -82,7 +82,7 @@ location_table: dict[str, LocationData] = {
     'Experiment #13': LocationData('The lab (power off)' , 1337073),
     'Download and chest room': LocationData('The lab (upper)' , 1337074),
     'Lab secret': LocationData('The lab (upper)' , 1337075),
-    'Spider hell': LocationData('The lab (power off)' , 1337076),
+    'Lab Spider hell': LocationData('The lab (power off)' , 1337076),
     'Bottom': LocationData('Emperors tower' , 1337077),
     'After Courtyard Floor Secret': LocationData('Emperors tower' , 1337078),
     'Top': LocationData('Emperors tower' , 1337079),
@@ -108,8 +108,8 @@ location_table: dict[str, LocationData] = {
     'Bridge Chest': LocationData('Forest' , 1337097),
     'Solitary bat room': LocationData('Forest' , 1337098),
     'Rat nest': LocationData('Upper Lake Sirine' , 1337099),
-    'Double jump cave platform': LocationData('Upper Lake Sirine' , 1337100),
-    'Double jump cave floor': LocationData('Upper Lake Sirine' , 1337101),
+    'Double jump cave platform (past)': LocationData('Upper Lake Sirine' , 1337100),
+    'Double jump cave floor (past)': LocationData('Upper Lake Sirine' , 1337101),
     'West lake serene cave secret': LocationData('Upper Lake Sirine' , 1337102),
     'Chest behind vines': LocationData('Upper Lake Sirine' , 1337103),
     'Pyramid keys room': LocationData('Upper Lake Sirine' , 1337104),
@@ -136,7 +136,7 @@ location_table: dict[str, LocationData] = {
     'Underwater sirens left': LocationData('Caves of Banishment (Sirens)' , 1337125),
     'Underwater sirens right': LocationData('Caves of Banishment (Sirens)' , 1337126),
     'Water hook': LocationData('Caves of Banishment (Sirens)' , 1337127),
-    'Bomber chest': LocationData('Caste Ramparts' , 1337128),
+    'Caste Bomber chest': LocationData('Caste Ramparts' , 1337128),
     'Freeze the engineer': LocationData('Caste Ramparts' , 1337129),
     'Giantess guarded room': LocationData('Caste Ramparts' , 1337130),
     'Knight and archer guarded room': LocationData('Caste Ramparts' , 1337131),
@@ -183,7 +183,7 @@ location_table: dict[str, LocationData] = {
     'Regret chest': LocationData('Ancient Pyramid (right)' , 1337249)
 }
 
-downloadable_items: dict[str, LocationData] = {
+downloadable_items: typing.Dict[str, LocationData] = {
     # DownloadTerminals
     'Library terminal 1': LocationData('Libary' , 1337157),
     'Library terminal 2': LocationData('Libary' , 1337156),
@@ -206,4 +206,8 @@ starter_progression_locations = [
     'Starter chest 3',
     'Starter chest 1',
     'Timespinner Wheel room'
+]
+
+events = [
+    "Killed Nightmare"
 ]

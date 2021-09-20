@@ -1,4 +1,5 @@
 import string
+import typing
 
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance
 from ..AutoWorld import World
@@ -16,6 +17,7 @@ class TimespinnerWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in { **location_table, **downloadable_items }.items()} 
+    item_name_groups = get_item_name_groups()
 
     pyramid_unlock = None
 
@@ -31,7 +33,6 @@ class TimespinnerWorld(World):
         }
 
     def generate_basic(self):
-        self.item_name_groups = get_item_name_groups()
         self.pyramid_unlock = get_pyramid_unlock(self.world, self.player)
 
         excluded_items = get_excluded_items_based_on_options(self.world, self.player)
@@ -57,7 +58,7 @@ class TimespinnerWorld(World):
     def create_regions(self):
         create_regions(self.world, self.player)
 
-    def fill_slot_data(self) -> dict:
+    def fill_slot_data(self) -> typing.Dict:
         slot_data = self._get_slot_data()
 
         for option_name in timespinner_options:
