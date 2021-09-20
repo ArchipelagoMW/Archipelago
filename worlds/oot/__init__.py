@@ -650,12 +650,16 @@ class OOTWorld(World):
 
         # If skip child zelda is active and Song from Impa is unfilled, put a local giveable item into it.
         impa = self.world.get_location("Song from Impa", self.player)
-        if self.skip_child_zelda and impa.item is None:
-            from .SaveContext import SaveContext
-            item_to_place = self.world.random.choice(list(item for item in self.world.itempool if
-                                                          item.player == self.player and item.name in SaveContext.giveable_items))
-            impa.place_locked_item(item_to_place)
-            self.world.itempool.remove(item_to_place)
+        if self.skip_child_zelda:
+            if impa.item is None:
+                from .SaveContext import SaveContext
+                item_to_place = self.world.random.choice(list(item for item in self.world.itempool if
+                                                              item.player == self.player and item.name in SaveContext.giveable_items))
+                impa.place_locked_item(item_to_place)
+                self.world.itempool.remove(item_to_place)
+            # Give items to startinventory
+            self.world.push_precollected(impa.item)
+            self.world.push_precollected(self.create_item("Zeldas Letter"))
 
         # Exclude locations in Ganon's Castle proportional to the number of items required to make the bridge
         # Check for dungeon ER later
