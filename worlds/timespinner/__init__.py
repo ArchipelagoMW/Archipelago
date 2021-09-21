@@ -2,20 +2,20 @@ import typing
 
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance
 from ..AutoWorld import World
-from .Items import ItemData, item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
-from .Locations import location_table, downloadable_items, starter_progression_locations
+from .Items import item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
+from .Locations import get_location_table, starter_progression_locations
 from .Regions import create_regions
 from .Rules import set_rules, present_teleportation_gates, past_teleportation_gates
-from .Options import timespinner_options, is_option_enabled
+from .Options import is_option_enabled, timespinner_options
 
 class TimespinnerWorld(World):
     options = timespinner_options
     game = "Timespinner"
-    topology_present = False
+    topology_present = True
     data_version = 1
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {name: data.code for name, data in { **location_table, **downloadable_items }.items()} 
+    location_name_to_id = {name: data.code for name, data in get_location_table(None, None).items()} 
 
     def _get_slot_data(self):
         return {
@@ -32,6 +32,16 @@ class TimespinnerWorld(World):
         self.world.timespinner_pyramid_keys_unlock = get_pyramid_unlock(self.world, self.player)
         self.item_name_groups = get_item_name_groups()
 
+    def create_regions(self):
+        create_regions(self.world, self.player)
+
+    def create_item(self, name: str) -> Item:
+        item_data = item_table[name]
+        return Item(name, item_data.progression, item_data.code, self.player)
+
+    def set_rules(self):
+        set_rules(self.world, self.player)
+
     def generate_basic(self):
         excluded_items = get_excluded_items_based_on_options(self.world, self.player)
         locked_locations = []
@@ -45,16 +55,6 @@ class TimespinnerWorld(World):
         pool = fill_item_pool_with_dummy_items(self.world, self.player, locked_locations, pool)
 
         self.world.itempool += pool
-
-    def set_rules(self):
-        set_rules(self.world, self.player)
-
-    def create_item(self, name: str) -> Item:
-        item_data = item_table[name]
-        return Item(name, item_data.progression, item_data.code, self.player)
-
-    def create_regions(self):
-        create_regions(self.world, self.player)
 
     def fill_slot_data(self) -> typing.Dict:
         slot_data = self._get_slot_data()
@@ -73,8 +73,9 @@ class TimespinnerWorld(World):
 class TimespinnerWorldLocation(Location):
     game: str = "Timespinner"
 
-    def __init__(self, player: int, name: str, id=None, parentRegion=None):
+    def __init__(self, player: int, name: str, id, parentRegion, rule):
         super(TimespinnerWorldLocation, self).__init__(player, name, id, parentRegion)
+        self.access_rule = rule
         if id is None:
             self.event = True
             self.locked = True
@@ -129,7 +130,7 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: typing.List[st
     return pool
 
 def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locations: typing.List[str], pool: typing.List[TimespinnerWorldItem]) -> typing.List[TimespinnerWorldItem]:
-    for _ in range(get_number_of_locations(world, player) - len(locked_locations) - len(pool)):
+    for _ in range(len(get_location_table(None, None)) - len(locked_locations) - len(pool)):
         world.random.shuffle(filler_items)
 
         item_name = filler_items.pop()
@@ -165,12 +166,6 @@ def update_progressive_state_based_flags(world: MultiWorld, player: int, name: s
 
     return data
 
-def get_number_of_locations(world: MultiWorld, player: int) -> int:
-    if is_option_enabled(world, player, "DownloadableItems"):
-        return len({**location_table, **downloadable_items })
-    else:
-        return len(location_table)
-
 def get_pyramid_unlock(world: MultiWorld, player: int) -> str:
     gates = []
 
@@ -187,9 +182,9 @@ def create_region(world: MultiWorld, player: int, name: str, exits=None) -> Regi
     region = Region(name, None, name, player)
     region.world = world
 
-    for location, data in location_table.items():
+    for location, data in get_location_table(world, player).items():
         if data.region == name:
-            location = TimespinnerWorldLocation(player, location, data.code, region)
+            location = TimespinnerWorldLocation(player, location, data.code, region, data.rule)
             region.locations.append(location)
 
     if exits:
