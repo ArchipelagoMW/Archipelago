@@ -81,14 +81,15 @@ def create_regions(world: MultiWorld, player: int):
     connectEntrance(world, player, 'Militairy Fortress > The lab', lambda state: state._timespinner_has_keycard_B(world, player) and state._timespinner_has_doublejump(world, player))
 
     connectEntrance(world, player, 'The lab > Militairy Fortress')
-    connectEntrance(world, player, 'The lab > The lab (power off)', lambda state: state._timespinner_has_doublejump_of_npc(player, world))
+    connectEntrance(world, player, 'The lab > The lab (power off)', lambda state: state._timespinner_has_doublejump_of_npc(world, player))
+    #connectEntrance(world, player, 'The lab > The lab (power off)', lambda state: True)
 
     connectEntrance(world, player, 'The lab (power off) > The lab')
     connectEntrance(world, player, 'The lab (power off) > The lab (upper)', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
 
     connectEntrance(world, player, 'The lab (upper) > The lab (power off)')
     connectEntrance(world, player, 'The lab (upper) > Emperors tower', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
-    connectEntrance(world, player, 'The lab (upper) > Ancient Pyramid (left)', lambda state: state._timespinner_can_kill_nightmare(world, player))
+    connectEntrance(world, player, 'The lab (upper) > Ancient Pyramid (left)', lambda state: state.has_all(['Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'], player))
 
     connectEntrance(world, player, 'Emperors tower > The lab (upper)')
 

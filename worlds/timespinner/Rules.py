@@ -50,9 +50,6 @@ class TimespinnerLogic(LogicMixin):
 
         return hasAccessToMaw and hasAccessToTwins and hasAccessToAelana
 
-    def _timespinner_can_kill_nightmare(self, world: MultiWorld, player: int) -> bool:
-        return self.has_all(['Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'], player)
-
     def _timespinner_is_option_enabled(self, world: MultiWorld, player: int, name: str) -> bool:
         option = getattr(world, name, None)
 
