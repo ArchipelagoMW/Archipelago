@@ -1,6 +1,8 @@
+from worlds.timespinner.Options import is_option_enabled
 from BaseClasses import MultiWorld
 from ..AutoWorld import LogicMixin
 from ..generic.Rules import set_rule
+from .Options import is_option_enabled
 
 class TimespinnerLogic(LogicMixin):
     def _timespinner_has_timestop(self, world: MultiWorld, player: int) -> bool:
@@ -25,19 +27,19 @@ class TimespinnerLogic(LogicMixin):
         return self.has('Security Keycard A', player)
 
     def _timespinner_has_keycard_B(self, world: MultiWorld, player: int) -> bool:
-        if self._timespinner_is_option_enabled(world, player, "SpecificKeycards"):
+        if is_option_enabled(world, player, "SpecificKeycards"):
             return self.has('Security Keycard B', player)
         else:
             return self.has_any(['Security Keycard A', 'Security Keycard B'], player)
 
     def _timespinner_has_keycard_C(self, world: MultiWorld, player: int) -> bool:
-        if self._timespinner_is_option_enabled(world, player, "SpecificKeycards"):
+        if is_option_enabled(world, player, "SpecificKeycards"):
             return self.has('Security Keycard C', player)
         else:
             return self.has_any(['Security Keycard A', 'Security Keycard B', 'Security Keycard C'], player)
 
     def _timespinner_has_keycard_D(self, world: MultiWorld, player: int) -> bool:
-        if self._timespinner_is_option_enabled(world, player, "SpecificKeycards"):
+        if is_option_enabled(world, player, "SpecificKeycards"):
             return self.has('Security Keycard D', player)
         else:
             return self.has_any(['Security Keycard A', 'Security Keycard B', 'Security Keycard C', 'Security Keycard D'], player)
@@ -50,13 +52,13 @@ class TimespinnerLogic(LogicMixin):
 
         return hasAccessToMaw and hasAccessToTwins and hasAccessToAelana
 
-    def _timespinner_is_option_enabled(self, world: MultiWorld, player: int, name: str) -> bool:
-        option = getattr(world, name, None)
-
-        if option == None:
-            return False
-
-        return int(option[player].value) > 0
+    #def _timespinner_is_option_enabled(self, world: MultiWorld, player: int, name: str) -> bool:
+    #    option = getattr(world, name, None)
+    #
+    #    if option == None:
+    #        return False
+    #
+    #    return int(option[player].value) > 0
 
 
 def set_rules(world: MultiWorld, player: int):

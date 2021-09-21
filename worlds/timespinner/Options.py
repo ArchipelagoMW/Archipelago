@@ -1,4 +1,6 @@
 import typing
+
+from BaseClasses import MultiWorld
 from Options import Toggle
 
 class StartWithJewelryBox(Toggle):
@@ -17,9 +19,9 @@ class DownloadableItems(Toggle):
     "With the tablet you will be able to download items at terminals"
     display_name = "Downloadable items"
 
-#class FacebookMode(Toggle):
-#    "With the tablet you will be able to download items at terminals"
-#    display_name = "Facebook mode"
+class FacebookMode(Toggle):
+    "With the tablet you will be able to download items at terminals"
+    display_name = "Facebook mode"
 
 class StartWithMeyef(Toggle):
     "Start with Meyef, ideal for when you want to play multiplayer."
@@ -33,9 +35,9 @@ class SpecificKeycards(Toggle):
     "Keycards can only open corresponding doors"
     display_name = "Specific Keycards"
 
-#class Inverted(Toggle):
-#    "Start in the past"
-#    display_name = "Inverted"
+class Inverted(Toggle):
+    "Start in the past"
+    display_name = "Inverted"
 
 #class StinkyMaw(Toggle):
 #    "Require gassmask for Maw"
@@ -47,10 +49,18 @@ timespinner_options: typing.Dict[str, any] = {
     #"ProgressiveVerticalMovement": ProgressiveVerticalMovement,
     #"ProgressiveKeycards": ProgressiveKeycards,
     "DownloadableItems": DownloadableItems,
-    #"FacebookMode": FacebookMode,
+    "FacebookMode": FacebookMode,
     "StartWithMeyef": StartWithMeyef,
     "QuickSeed": QuickSeed,
     "SpecificKeycards": SpecificKeycards,
-    #"Inverted": Inverted,
+    "Inverted": Inverted,
     #"StinkyMaw": StinkyMaw
 }
+
+def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
+    option = getattr(world, name, None)
+
+    if option == None:
+        return False
+
+    return int(option[player].value) > 0

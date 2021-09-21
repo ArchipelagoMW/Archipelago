@@ -106,7 +106,7 @@ location_table: typing.Dict[str, LocationData] = {
     'Waterfall chest 2': LocationData('Forest' , 1337095),
     'Batcave': LocationData('Forest' , 1337096),
     'Bridge Chest': LocationData('Forest' , 1337097),
-    'Solitary bat room': LocationData('Forest' , 1337098),
+    'Solitary bat room': LocationData('Left Side forest Caves' , 1337098),
     'Rat nest': LocationData('Upper Lake Sirine' , 1337099),
     'Double jump cave platform (past)': LocationData('Upper Lake Sirine' , 1337100),
     'Double jump cave floor (past)': LocationData('Upper Lake Sirine' , 1337101),
