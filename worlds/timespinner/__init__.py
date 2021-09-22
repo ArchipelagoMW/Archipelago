@@ -20,34 +20,37 @@ class TimespinnerWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)} 
 
-    locked_locations = []
+    locked_locations: Dict[int, List[str]] = {}
+    pyramid_keys_unlock: Dict[int, str] = {}
 
     def generate_early(self):
-        self.pyramid_keys_unlock = get_pyramid_keys_unlock(self.world, self.player)
+        self.locked_locations[self.player] = []
+        self.pyramid_keys_unlock[self.player] = get_pyramid_keys_unlock(self.world, self.player)
+        
         self.item_name_groups = get_item_name_groups()
 
     def create_regions(self):
-        create_regions(self.world, self.player, get_locations(self.world, self.player), self.pyramid_keys_unlock)
+        create_regions(self.world, self.player, get_locations(self.world, self.player), self.pyramid_keys_unlock[self.player])
 
     def create_item(self, name: str) -> Item:
         return create_item(name, self.player)
 
     def set_rules(self):
-        setup_events(self.world, self.player, self.locked_locations)
+        setup_events(self.world, self.player, self.locked_locations[self.player])
 
         self.world.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
 
     def generate_basic(self):
         excluded_items = get_excluded_items_based_on_options(self.world, self.player)
 
-        assign_starter_items(self.world, self.player, excluded_items, self.locked_locations)
+        assign_starter_items(self.world, self.player, excluded_items, self.locked_locations[self.player])
 
         if not is_option_enabled(self.world, self.player, "QuickSeed") or not is_option_enabled(self.world, self.player, "Inverted"):
-            place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations)
+            place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations[self.player])
 
         pool = get_item_pool(self.world, self.player, excluded_items)
         
-        fill_item_pool_with_dummy_items(self.world, self.player, self.locked_locations, pool)
+        fill_item_pool_with_dummy_items(self.world, self.player, self.locked_locations[self.player], pool)
 
         self.world.itempool += pool
 
@@ -61,7 +64,7 @@ class TimespinnerWorld(World):
         slot_data["StinkyMaw"] = 1
         slot_data["ProgressiveVerticalMovement"] = 0
         slot_data["ProgressiveKeycards"] = 0
-        slot_data["PyramidKeysGate"] = self.pyramid_keys_unlock
+        slot_data["PyramidKeysGate"] = self.pyramid_keys_unlock[self.player] 
 
         return slot_data
 
