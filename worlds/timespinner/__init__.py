@@ -8,9 +8,6 @@ from .Regions import create_regions
 from .Options import is_option_enabled, timespinner_options
 from .PyramidKeys import get_pyramid_keys_unlock
 
-#TODO 
-# use options without world properties
-
 class TimespinnerWorld(World):
     options = timespinner_options
     game = "Timespinner"
@@ -26,7 +23,7 @@ class TimespinnerWorld(World):
     def generate_early(self):
         self.locked_locations[self.player] = []
         self.pyramid_keys_unlock[self.player] = get_pyramid_keys_unlock(self.world, self.player)
-        
+
         self.item_name_groups = get_item_name_groups()
 
     def create_regions(self):
