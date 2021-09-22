@@ -6,7 +6,7 @@ class TotalLocations(Range):
     """Number of location checks which are added to the Risk of Rain playthrough."""
     displayname = "Total Locations"
     range_start = 10
-    range_end = 50
+    range_end = 150
     default = 20
 
 
