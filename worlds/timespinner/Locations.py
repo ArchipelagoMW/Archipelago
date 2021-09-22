@@ -26,9 +26,9 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('Upper lake desolation', 'Double jump cave floor',  1337012, lambda state: state._timespinner_has_doublejump(world, player)),
         LocationData('Upper lake desolation', 'Double jump cave platform',  1337013),
         LocationData('Upper lake desolation', 'Fire-Locked sparrow chest',  1337014),
-        LocationData('Upper lake desolation', 'Crash site pedestal',  1337015), # vvv TODO change into event vvv
-        LocationData('Upper lake desolation', 'Crash site chest 1',  1337016, lambda state: state.can_reach('Caves of Banishment (Maw)', 'Region', player) and state.has('Gas Mask', player)),
-        LocationData('Upper lake desolation', 'Crash site chest 2',  1337017, lambda state: state.can_reach('Caves of Banishment (Maw)', 'Region', player) and state.has('Gas Mask', player)),
+        LocationData('Upper lake desolation', 'Crash site pedestal',  1337015),
+        LocationData('Upper lake desolation', 'Crash site chest 1',  1337016, lambda state: state.has_all(['Killed Maw', 'Gas Mask'], player)),
+        LocationData('Upper lake desolation', 'Crash site chest 2',  1337017, lambda state: state.has_all(['Killed Maw', 'Gas Mask'], player)),
         LocationData('Upper lake desolation', 'Kitty Boss',  1337018),
         LocationData('Libary', 'Basement',  1337019),
         LocationData('Libary', 'Consolation',  1337020),
@@ -135,6 +135,7 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('Caves of Banishment (Maw)', 'Jackpot room chest 4',  1337119, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
         LocationData('Caves of Banishment (Maw)', 'Banishment pedestal',  1337120),
         LocationData('Caves of Banishment (Maw)', 'Last chance before Maw',  1337121, lambda state: state._timespinner_has_doublejump(world, player)),
+        LocationData('Caves of Banishment (Maw)', 'Killed Maw',  None, lambda state: state.has('Gas Mask', player)),
         LocationData('Caves of Banishment (Maw)', 'Mineshaft',  1337122, lambda state: state.has('Gas Mask', player)),
         LocationData('Caves of Banishment (Sirens)', 'Wyvern room',  1337123),
         LocationData('Caves of Banishment (Sirens)', 'Above water sirens',  1337124),
@@ -153,6 +154,7 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('Caste Keep', 'Omelette chest',  1337137),
         LocationData('Caste Keep', 'Just an egg',  1337138),
         LocationData('Caste Keep', 'Out of the way',  1337139),
+        LocationData('Caste Keep', 'Killed Twins',  None, lambda state: state._timespinner_has_timestop(world, player)),
         LocationData('Caste Keep', 'Twins',  1337140, lambda state: state._timespinner_has_timestop(world, player)),
         LocationData('Caste Keep', 'Royal guard tiny room',  1337141, lambda state: state._timespinner_has_doublejump(world, player)),
         LocationData('Royal towers (lower)', 'Royal tower floor secret',  1337142, lambda state: state._timespinner_has_doublejump(world, player) and state._timespinner_can_break_walls(world, player)),
@@ -166,6 +168,7 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('Royal towers (upper)', 'Above the cide mage',  1337150),
         LocationData('Royal towers (upper)', 'Royal guard big room',  1337151),
         LocationData('Royal towers (upper)', 'Before Aelana',  1337152),
+        LocationData('Royal towers (upper)', 'Killed Aelana',  None),
         LocationData('Royal towers (upper)', 'Statue room',  1337153, lambda state: state._timespinner_has_upwarddash(world, player)),
         LocationData('Royal towers (upper)', 'Aelana\'s pedestal',  1337154),
         LocationData('Royal towers (upper)', 'After Aelana',  1337155),
@@ -185,7 +188,8 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('Ancient Pyramid (left)', 'Why not it\'s right there',  1337246),
         LocationData('Ancient Pyramid (left)', 'Conviction guarded room',  1337247),
         LocationData('Ancient Pyramid (right)', 'Pit secret room',  1337248, lambda state: state._timespinner_can_break_walls(world, player)),
-        LocationData('Ancient Pyramid (right)', 'Regret chest',  1337249, lambda state: state._timespinner_can_break_walls(world, player))
+        LocationData('Ancient Pyramid (right)', 'Regret chest',  1337249, lambda state: state._timespinner_can_break_walls(world, player)),
+        LocationData('Ancient Pyramid (right)', 'Killed Nightmare',  None)
     }
 
     downloadable_items: Set[LocationData] = {
@@ -206,10 +210,12 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('The lab (power off)', 'Lab terminal right',  1337170, lambda state: state.has('Tablet', player))
     }
 
+
+
     if is_option_enabled(world, player, "DownloadableItems"):
-        return { *location_table, *downloadable_items }
+        return { *location_table, *downloadable_items, *events }
     else:
-        return location_table
+        return { location_table, *events }
 
 starter_progression_locations: Set[str] = {
     'Starter chest 2',
@@ -219,5 +225,8 @@ starter_progression_locations: Set[str] = {
 }
 
 events: Set[str] = {
-    "Killed Nightmare"
+    "Killed Maw",
+    "Killed Twins",
+    "Killed Aelana",
+    'Killed Nightmare',
 }

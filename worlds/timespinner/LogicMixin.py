@@ -55,9 +55,4 @@ class TimespinnerLogic(LogicMixin):
             return True
 
     def _timespinner_can_kill_all_3_bosses(self, world: MultiWorld, player: int) -> bool:
-        #return self.has_all(['Kill Maw', 'Kill Twins', 'Kill Aelana']) TODO convert to events
-        hasAccessToMaw = self.can_reach('Caves of Banishment (Maw)', 'Region', player) and self.has('Gas Mask', player)
-        hasAccessToTwins = self.can_reach('Caste Keep', 'Region', player) and self._timespinner_has_timestop(world, player)
-        hasAccessToAelana = self.can_reach('Royal towers (upper)', 'Region', player)
-
-        return hasAccessToMaw and hasAccessToTwins and hasAccessToAelana
+        return self.has_all(['Killed Maw', 'Killed Twins', 'Killed Aelana'])

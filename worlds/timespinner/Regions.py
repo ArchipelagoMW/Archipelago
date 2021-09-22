@@ -125,7 +125,7 @@ def create_regions(world: MultiWorld, player: int, locations: Set[LocationData],
     connect(world, player, 'Royal towers (upper)', 'Royal towers')
     connect(world, player, 'Ancient Pyramid (left)', 'The lab (upper)')
     connect(world, player, 'Ancient Pyramid (left)', 'Ancient Pyramid (right)', lambda state: state._timespinner_has_upwarddash(world, player))
-    connect(world, player, 'Ancient Pyramid (right)', 'Ancient Pyramid (left)')
+    connect(world, player, 'Ancient Pyramid (right)', 'Ancient Pyramid (left)', lambda state: state._timespinner_has_upwarddash(world, player))
     connect(world, player, 'Space time continuum', 'Lake desolation', lambda state: pyramid_keys_unlock == "GateLakeDesolation")
     connect(world, player, 'Space time continuum', 'Lower lake desolation', lambda state: pyramid_keys_unlock == "GateKittyBoss")
     connect(world, player, 'Space time continuum', 'Libary', lambda state: pyramid_keys_unlock == "GateLeftLibrary")
@@ -154,7 +154,7 @@ def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str
 
     for location_data in locations_per_region[name]:
         location = create_location(player, location_data.name, location_data.code, region, location_data.rule)
-        region.locations.append(location_data.name)
+        region.locations.append(location)
 
     return region
 

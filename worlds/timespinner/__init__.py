@@ -3,7 +3,7 @@ from BaseClasses import Item, MultiWorld
 from ..AutoWorld import World
 #from .Rules import TimespinnerLogic
 from .Items import item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
-from .Locations import get_locations, starter_progression_locations
+from .Locations import get_locations, starter_progression_locations, events
 from .Regions import create_regions
 from .Options import is_option_enabled, timespinner_options
 from .PyramidKeys import get_pyramid_keys_unlock
@@ -31,7 +31,9 @@ class TimespinnerWorld(World):
         return create_item(name, self.player)
 
     def set_rules(self):
-        self.world.completion_condition[self.player] = lambda state: state.can_reach('Ancient Pyramid (left)', 'Region', self.player)
+        setup_events(self.world, self.player)
+
+        self.world.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
 
     def generate_basic(self):
         excluded_items = get_excluded_items_based_on_options(self.world, self.player)
@@ -43,7 +45,8 @@ class TimespinnerWorld(World):
             place_first_progression_item(self.world, self.player, excluded_items, locked_locations)
 
         pool = get_item_pool(self.world, self.player, excluded_items)
-        pool = fill_item_pool_with_dummy_items(self.world, self.player, locked_locations, pool)
+        
+        fill_item_pool_with_dummy_items(self.world, self.player, locked_locations, pool)
 
         self.world.itempool += pool
 
@@ -104,12 +107,10 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: List[str]) -> 
 
     return pool
 
-def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locations: List[str], pool: List[Item]) -> List[Item]:
+def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locations: List[str], pool: List[Item]):
     for _ in range(len(get_locations(None, None)) - len(locked_locations) - len(pool)):
         item = create_item(world.random.choice(filler_items), player)
         pool.append(item)
-
-    return pool
 
 def place_first_progression_item(world: MultiWorld, player: int, excluded_items: List[str], locked_locations: List[str]):
     progression_item = world.random.choice(starter_progression_items)
@@ -132,6 +133,15 @@ def update_progressive_state_based_flags(world: MultiWorld, player: int, name: s
         data.advancement = False
 
     return data
+
+def setup_events(world: MultiWorld, player: int, locked_locations: List[str]):
+    for event in events:
+        location = world.get_location(event, player)
+        item = Item(event, True, None, player)
+
+        locked_locations.append(event)
+
+        location.place_locked_item(item)
 
 def get_item_name_groups() -> Dict[str, List[str]]:
     groups: Dict[str, List[str]] = {}
