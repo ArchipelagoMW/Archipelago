@@ -1,9 +1,9 @@
-from typing import List, Dict, Tuple, Optional, Callable
+from typing import List, Dict, Set, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Options import is_option_enabled
 from .Locations import LocationData
 
-def create_regions(world: MultiWorld, player: int, pyramid_keys_unlock: str, locations: Dict[str, LocationData]):
+def create_regions(world: MultiWorld, player: int, locations: Set[LocationData], pyramid_keys_unlock: str):
     locations_per_region = get_locations_per_region(locations)
 
     world.regions += [
@@ -148,14 +148,13 @@ def create_location(player: int, name: str, id: Optional[int], region: Region, r
         location.event = True
         location.locked = True
 
-def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[Tuple[str, LocationData]]], name: str) -> Region:
+def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]], name: str) -> Region:
     region = Region(name, None, name, player)
     region.world = world
 
-    for location, data in locations_per_region[name]:
-        if data.region == name:
-            location = create_location(player, location, data.code, region, data.rule)
-            region.locations.append(location)
+    for location_data in locations_per_region[name]:
+        location = create_location(player, location_data.name, location_data.code, region, location_data.rule)
+        region.locations.append(location_data.name)
 
     return region
 
@@ -193,10 +192,10 @@ def connect(world: MultiWorld, player: int, source: str, target: str, rule: Opti
     sourceRegion.exits.append(connection)
     connection.connect(targetRegion)
 
-def get_locations_per_region(locations: Dict[str, LocationData]) -> Dict[str, List[Tuple[str, LocationData]]]:
-    per_region: Dict[str, List[Tuple]]  = {}
+def get_locations_per_region(locations: Set[LocationData]) -> Dict[str, List[LocationData]]:
+    per_region: Dict[str, List[LocationData]]  = {}
 
-    for name, data in locations.items():
-        per_region[data.region] = [ ( name, data ) ] if data.region not in per_region else per_region[data.region] + ( name, data )
+    for location in locations:
+        per_region[location.region] = [ location ] if location.region not in per_region else per_region[location.region] + [ location ]
 
     return per_region

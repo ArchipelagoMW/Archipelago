@@ -3,7 +3,7 @@ from BaseClasses import Item, MultiWorld
 from ..AutoWorld import World
 #from .Rules import TimespinnerLogic
 from .Items import item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
-from .Locations import get_location_table, starter_progression_locations
+from .Locations import get_locations, starter_progression_locations
 from .Regions import create_regions
 from .Options import is_option_enabled, timespinner_options
 from .PyramidKeys import get_pyramid_keys_unlock
@@ -18,14 +18,14 @@ class TimespinnerWorld(World):
     data_version = 1
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {name: data.code for name, data in get_location_table(None, None).items()} 
+    location_name_to_id = {location.name: location.code for location in get_locations(None, None)} 
 
     def generate_early(self):
         self.pyramid_keys_unlock = get_pyramid_keys_unlock(self.world, self.player)
         self.item_name_groups = get_item_name_groups()
 
     def create_regions(self):
-        create_regions(self.world, self.player, get_location_table(self.world, self.player), self.pyramid_keys_unlock)
+        create_regions(self.world, self.player, get_locations(self.world, self.player), self.pyramid_keys_unlock)
 
     def create_item(self, name: str) -> Item:
         return create_item(name, self.player)
@@ -105,7 +105,7 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: List[str]) -> 
     return pool
 
 def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locations: List[str], pool: List[Item]) -> List[Item]:
-    for _ in range(len(get_location_table(None, None)) - len(locked_locations) - len(pool)):
+    for _ in range(len(get_locations(None, None)) - len(locked_locations) - len(pool)):
         item = create_item(world.random.choice(filler_items), player)
         pool.append(item)
 

@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Set
+from typing import Dict, List, Set, NamedTuple
 
 class ItemData(NamedTuple):
     category: str
@@ -229,7 +229,7 @@ starter_spells: Set[str] = {
 }
 
 # weighted
-starter_progression_items: Set[str] = {
+starter_progression_items: List[str] = [
     'Talaria Attachment',
     'Talaria Attachment',
     'Succubus Hairpin',
@@ -239,7 +239,7 @@ starter_progression_items: Set[str] = {
     'Twin Pyramid Key',
     'Celestial Sash',
     'Lightwall'
-}
+]
 
 filler_items: Set[str] = {
     'Potion',
