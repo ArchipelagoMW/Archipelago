@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Options import is_option_enabled
 from .Locations import LocationData
@@ -140,7 +140,7 @@ def create_regions(world: MultiWorld, player: int, pyramid_keys_unlock: str, loc
     connect(world, player, 'Space time continuum', 'Caves of Banishment (Maw)', lambda state: pyramid_keys_unlock == "GateMaw")
     connect(world, player, 'Space time continuum', 'Caves of Banishment (upper)', lambda state: pyramid_keys_unlock == "GateCavesOfBanishment")
 
-def create_location(player: int, name: str, id, region: Region, rule) -> Location:
+def create_location(player: int, name: str, id: Optional[int], region: Region, rule: Callable) -> Location:
     location = Location(player, name, id, region)
     location.access_rule = rule
 
@@ -148,7 +148,7 @@ def create_location(player: int, name: str, id, region: Region, rule) -> Locatio
         location.event = True
         location.locked = True
 
-def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[Tuple]], name: str) -> Region:
+def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[Tuple[str, LocationData]]], name: str) -> Region:
     region = Region(name, None, name, player)
     region.world = world
 
@@ -181,7 +181,7 @@ def connectStartingRegion(world: MultiWorld, player: int):
     teleport_back_to_start.connect(starting_region)
     space_time_continuum.exits.append(teleport_back_to_start)
 
-def connect(world: MultiWorld, player: int, source: str, target: str, rule=None):
+def connect(world: MultiWorld, player: int, source: str, target: str, rule: Optional[Callable] = None):
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
 
@@ -193,7 +193,7 @@ def connect(world: MultiWorld, player: int, source: str, target: str, rule=None)
     sourceRegion.exits.append(connection)
     connection.connect(targetRegion)
 
-def get_locations_per_region(locations: Dict[str, LocationData]) -> Dict[str, List[Tuple]]:
+def get_locations_per_region(locations: Dict[str, LocationData]) -> Dict[str, List[Tuple[str, LocationData]]]:
     per_region: Dict[str, List[Tuple]]  = {}
 
     for name, data in locations.items():
