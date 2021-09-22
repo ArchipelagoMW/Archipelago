@@ -1,15 +1,14 @@
-import typing
-
+from typing import Dict, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld
 from .Options import is_option_enabled
 
-class LocationData(typing.NamedTuple):
+class LocationData(NamedTuple):
     region: str
-    code: int
-    rule: typing.Callable = lambda state: True
+    code: Optional[int]
+    rule: Callable = lambda state: True
 
 def get_location_table(world: MultiWorld, player: int):
-    location_table: typing.Dict[str, LocationData] = {
+    location_table: Dict[str, LocationData] = {
         # PresentItemLocations
         'Yo Momma 1': LocationData('Tutorial', 1337000),
         'Yo Momma 2': LocationData('Tutorial', 1337001),
@@ -188,7 +187,7 @@ def get_location_table(world: MultiWorld, player: int):
         'Regret chest': LocationData('Ancient Pyramid (right)' , 1337249, lambda state: state._timespinner_can_break_walls(world, player))
     }
 
-    downloadable_items: typing.Dict[str, LocationData] = {
+    downloadable_items: Dict[str, LocationData] = {
         # DownloadTerminals
         'Library terminal 1': LocationData('Libary' , 1337157, lambda state: state.has('Tablet', player)),
         'Library terminal 2': LocationData('Libary' , 1337156, lambda state: state.has('Tablet', player)),

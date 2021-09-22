@@ -1,4 +1,3 @@
-from worlds.timespinner.Options import is_option_enabled
 from BaseClasses import MultiWorld
 from ..AutoWorld import LogicMixin
 from .Options import is_option_enabled
@@ -62,25 +61,3 @@ class TimespinnerLogic(LogicMixin):
         hasAccessToAelana = self.can_reach('Royal towers (upper)', 'Region', player)
 
         return hasAccessToMaw and hasAccessToTwins and hasAccessToAelana
-
-def set_rules(world: MultiWorld, player: int):
-    world.completion_condition[player] = lambda state: state.can_reach('Ancient Pyramid (left)', 'Region', player)
-
-present_teleportation_gates = {
-    "GateKittyBoss",
-    "GateLeftLibrary",
-    "GateMilitairyGate",
-    "GateSealedCaves",
-    "GateSealedSirensCave",
-    "GateLakeDesolation"
-}
-
-past_teleportation_gates = {
-    "GateLakeSirineRight",
-    "GateAccessToPast",
-    "GateCastleRamparts",
-    "GateCastleKeep",
-    "GateRoyalTowers",
-    "GateMaw",
-    "GateCavesOfBanishment"
-}

@@ -1,5 +1,4 @@
-import typing
-
+from typing import Dict
 from BaseClasses import MultiWorld
 from Options import Toggle
 
@@ -44,7 +43,7 @@ class Inverted(Toggle):
 #    display_name = "Stinky Maw"
 
 # Some options that are available in the timespinner randomizer arent currently implemented
-timespinner_options: typing.Dict[str, any] = {
+timespinner_options: Dict[str, any] = {
     "StartWithJewelryBox": StartWithJewelryBox,
     #"ProgressiveVerticalMovement": ProgressiveVerticalMovement,
     #"ProgressiveKeycards": ProgressiveKeycards,
