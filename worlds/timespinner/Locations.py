@@ -210,12 +210,10 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('The lab (power off)', 'Lab terminal right',  1337170, lambda state: state.has('Tablet', player))
     }
 
-
-
     if is_option_enabled(world, player, "DownloadableItems"):
-        return { *location_table, *downloadable_items, *events }
+        return { *location_table, *downloadable_items }
     else:
-        return { location_table, *events }
+        return location_table
 
 starter_progression_locations: Set[str] = {
     'Starter chest 2',
@@ -228,5 +226,5 @@ events: Set[str] = {
     "Killed Maw",
     "Killed Twins",
     "Killed Aelana",
-    'Killed Nightmare',
+    'Killed Nightmare'
 }
