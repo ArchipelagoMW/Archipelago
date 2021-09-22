@@ -1,7 +1,7 @@
 from typing import Dict, List
 from BaseClasses import Item, MultiWorld
 from ..AutoWorld import World
-#from .Rules import TimespinnerLogic
+from .LogicMixin import TimespinnerLogic
 from .Items import item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
 from .Locations import get_locations, starter_progression_locations, events
 from .Regions import create_regions
@@ -20,6 +20,8 @@ class TimespinnerWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)} 
 
+    locked_locations = []
+
     def generate_early(self):
         self.pyramid_keys_unlock = get_pyramid_keys_unlock(self.world, self.player)
         self.item_name_groups = get_item_name_groups()
@@ -31,22 +33,21 @@ class TimespinnerWorld(World):
         return create_item(name, self.player)
 
     def set_rules(self):
-        setup_events(self.world, self.player)
+        setup_events(self.world, self.player, self.locked_locations)
 
         self.world.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
 
     def generate_basic(self):
         excluded_items = get_excluded_items_based_on_options(self.world, self.player)
-        locked_locations = []
 
-        assign_starter_items(self.world, self.player, excluded_items, locked_locations)
+        assign_starter_items(self.world, self.player, excluded_items, self.locked_locations)
 
         if not is_option_enabled(self.world, self.player, "QuickSeed") or not is_option_enabled(self.world, self.player, "Inverted"):
-            place_first_progression_item(self.world, self.player, excluded_items, locked_locations)
+            place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations)
 
         pool = get_item_pool(self.world, self.player, excluded_items)
         
-        fill_item_pool_with_dummy_items(self.world, self.player, locked_locations, pool)
+        fill_item_pool_with_dummy_items(self.world, self.player, self.locked_locations, pool)
 
         self.world.itempool += pool
 
@@ -102,13 +103,13 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: List[str]) -> 
     for name, data in item_table.items():
         if not name in excluded_items:
             for _ in range(data.count):
-                item = update_progressive_state_based_flags(world, player, name, Item(name, player))
+                item = update_progressive_state_based_flags(world, player, name, create_item(name, player))
                 pool.append(item)
 
     return pool
 
 def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locations: List[str], pool: List[Item]):
-    for _ in range(len(get_locations(None, None)) - len(locked_locations) - len(pool)):
+    for _ in range(len(get_locations(world, player)) - len(locked_locations) - len(pool)):
         item = create_item(world.random.choice(filler_items), player)
         pool.append(item)
 

@@ -1,4 +1,4 @@
-from typing import Dict, List, Set, NamedTuple
+from typing import Dict, Tuple, NamedTuple
 
 class ItemData(NamedTuple):
     category: str
@@ -193,7 +193,7 @@ item_table: Dict[str, ItemData] = {
     'Max Sand': ItemData('Stat', 1337249, 14)
 }
 
-starter_melee_weapons: Set[str] = {
+starter_melee_weapons: Tuple[str] = (
     'Blue Orb',
     'Blade Orb',
     'Fire Orb',
@@ -209,9 +209,9 @@ starter_melee_weapons: Set[str] = {
     'Shattered Orb',
     'Nether Orb',
     'Radiant Orb'
-}
+)
 
-starter_spells: Set[str] = {
+starter_spells: Tuple[str] = (
     'Colossal Blade',
     'Infernal Flames',
     'Plasma Geyser',
@@ -226,10 +226,10 @@ starter_spells: Set[str] = {
     'Djinn Inferno',
     'Bombardment',
     'Corruption'
-}
+)
 
 # weighted
-starter_progression_items: List[str] = [
+starter_progression_items: Tuple[str] = (
     'Talaria Attachment',
     'Talaria Attachment',
     'Succubus Hairpin',
@@ -239,9 +239,9 @@ starter_progression_items: List[str] = [
     'Twin Pyramid Key',
     'Celestial Sash',
     'Lightwall'
-]
+)
 
-filler_items: Set[str] = {
+filler_items: Tuple[str] = (
     'Potion',
     'Ether',
     'Hi-Potion',
@@ -254,4 +254,4 @@ filler_items: Set[str] = {
     'Mind Refresh ULTRA',
     'Antidote',
     'Chaos Rose'
-}
+)

@@ -1,4 +1,4 @@
-from typing import Set, Optional, Callable, NamedTuple
+from typing import Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld
 from .Options import is_option_enabled
 
@@ -9,7 +9,7 @@ class LocationData(NamedTuple):
     rule: Callable = lambda state: True
 
 def get_locations(world: MultiWorld, player: int):
-    location_table: Set[LocationData] = {
+    location_table: Tuple[LocationData] = (
         # PresentItemLocations
         LocationData('Tutorial', 'Yo Momma 1',  1337000),
         LocationData('Tutorial', 'Yo Momma 2',  1337001),
@@ -55,7 +55,7 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('Varndagroth tower right (lower)', 'Right side bottom floor',  1337041),
         LocationData('Varndagroth tower right (elevator)', 'Varndagroth',  1337042, lambda state: state._timespinner_has_keycard_C(world, player)),
         LocationData('Varndagroth tower right (elevator)', 'Varndagroth Spider hell',  1337043, lambda state: state._timespinner_has_keycard_A(world, player)),
-        LocationData('Lake desolation', 'Skeleton',  1337044, lambda state: state._timespinner_has_doublejump(world, player)), # region changed from 'Sealed Caves (Xarion)' to ease entrance logic
+        LocationData('Skeleton Shaft', 'Skeleton',  1337044),
         LocationData('Sealed Caves (Xarion)', 'Shroom jump room',  1337045, lambda state: state._timespinner_has_timestop(world, player)),
         LocationData('Sealed Caves (Xarion)', 'Double shroom room',  1337046),
         LocationData('Sealed Caves (Xarion)', 'Mini jackpot room',  1337047, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
@@ -118,22 +118,22 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('Upper Lake Sirine', 'West lake serene cave secret',  1337102, lambda state: state._timespinner_can_break_walls(world, player)),
         LocationData('Upper Lake Sirine', 'Chest behind vines',  1337103),
         LocationData('Upper Lake Sirine', 'Pyramid keys room',  1337104),
-        LocationData('Upper Lake Sirine', 'Deep dive',  1337105),
-        LocationData('Upper Lake Sirine', 'Under the eels',  1337106),
-        LocationData('Upper Lake Sirine', 'Water spikes room',  1337107),
-        LocationData('Upper Lake Sirine', 'Underwater secret',  1337108, lambda state: state._timespinner_can_break_walls(world, player)),
-        LocationData('Upper Lake Sirine', 'T chest',  1337109),
-        LocationData('Upper Lake Sirine', 'Past the eels',  1337110),
-        LocationData('Upper Lake Sirine', 'Underwater pedestal',  1337111),
-        LocationData('Caves of Banishment (Maw)', 'Mushroom double jump',  1337112, lambda state: state._timespinner_has_doublejump(world, player)),
-        LocationData('Caves of Banishment (Maw)', 'Caves of banishment secret room',  1337113),
-        LocationData('Caves of Banishment (Maw)', 'Below caves of banishment secret',  1337114),
-        LocationData('Caves of Banishment (Maw)', 'Single shroom room',  1337115),
-        LocationData('Caves of Banishment (Maw)', 'Jackpot room chest 1',  1337116, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
-        LocationData('Caves of Banishment (Maw)', 'Jackpot room chest 2',  1337117, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
-        LocationData('Caves of Banishment (Maw)', 'Jackpot room chest 3',  1337118, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
-        LocationData('Caves of Banishment (Maw)', 'Jackpot room chest 4',  1337119, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
-        LocationData('Caves of Banishment (Maw)', 'Banishment pedestal',  1337120),
+        LocationData('Lower Lake Sirine', 'Deep dive',  1337105),
+        LocationData('Lower Lake Sirine', 'Under the eels',  1337106),
+        LocationData('Lower Lake Sirine', 'Water spikes room',  1337107),
+        LocationData('Lower Lake Sirine', 'Underwater secret',  1337108, lambda state: state._timespinner_can_break_walls(world, player)),
+        LocationData('Lower Lake Sirine', 'T chest',  1337109),
+        LocationData('Lower Lake Sirine', 'Past the eels',  1337110),
+        LocationData('Lower Lake Sirine', 'Underwater pedestal',  1337111),
+        LocationData('Caves of Banishment (upper)', 'Mushroom double jump',  1337112, lambda state: state._timespinner_has_doublejump(world, player)),
+        LocationData('Caves of Banishment (upper)', 'Caves of banishment secret room',  1337113),
+        LocationData('Caves of Banishment (upper)', 'Below caves of banishment secret',  1337114),
+        LocationData('Caves of Banishment (upper)', 'Single shroom room',  1337115),
+        LocationData('Caves of Banishment (upper)', 'Jackpot room chest 1',  1337116, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
+        LocationData('Caves of Banishment (upper)', 'Jackpot room chest 2',  1337117, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
+        LocationData('Caves of Banishment (upper)', 'Jackpot room chest 3',  1337118, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
+        LocationData('Caves of Banishment (upper)', 'Jackpot room chest 4',  1337119, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
+        LocationData('Caves of Banishment (upper)', 'Banishment pedestal',  1337120),
         LocationData('Caves of Banishment (Maw)', 'Last chance before Maw',  1337121, lambda state: state._timespinner_has_doublejump(world, player)),
         LocationData('Caves of Banishment (Maw)', 'Killed Maw',  None, lambda state: state.has('Gas Mask', player)),
         LocationData('Caves of Banishment (Maw)', 'Mineshaft',  1337122, lambda state: state.has('Gas Mask', player)),
@@ -190,9 +190,9 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('Ancient Pyramid (right)', 'Pit secret room',  1337248, lambda state: state._timespinner_can_break_walls(world, player)),
         LocationData('Ancient Pyramid (right)', 'Regret chest',  1337249, lambda state: state._timespinner_can_break_walls(world, player)),
         LocationData('Ancient Pyramid (right)', 'Killed Nightmare',  None)
-    }
+    )
 
-    downloadable_items: Set[LocationData] = {
+    downloadable_items: Tuple[LocationData] = (
         # DownloadTerminals
         LocationData('Libary', 'Library terminal 1',  1337157, lambda state: state.has('Tablet', player)),
         LocationData('Libary', 'Library terminal 2',  1337156, lambda state: state.has('Tablet', player)),
@@ -208,23 +208,23 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('The lab', 'Experiment 13 terminal',  1337168, lambda state: state.has('Tablet', player)),
         LocationData('The lab', 'Lab terminal left',  1337169, lambda state: state.has('Tablet', player)),
         LocationData('The lab (power off)', 'Lab terminal right',  1337170, lambda state: state.has('Tablet', player))
-    }
+    )
 
-    if is_option_enabled(world, player, "DownloadableItems"):
-        return { *location_table, *downloadable_items }
+    if not world or is_option_enabled(world, player, "DownloadableItems"):
+        return ( *location_table, *downloadable_items )
     else:
         return location_table
 
-starter_progression_locations: Set[str] = {
+starter_progression_locations: Tuple[str] = (
     'Starter chest 2',
     'Starter chest 3',
     'Starter chest 1',
     'Timespinner Wheel room'
-}
+)
 
-events: Set[str] = {
+events: Tuple[str] = (
     "Killed Maw",
     "Killed Twins",
     "Killed Aelana",
     'Killed Nightmare'
-}
+)

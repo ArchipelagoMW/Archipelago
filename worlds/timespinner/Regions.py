@@ -1,9 +1,9 @@
-from typing import List, Dict, Set, Optional, Callable
-from BaseClasses import MultiWorld, Region, Entrance, Location
+from typing import List, Dict, Tuple, Optional, Callable
+from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Options import is_option_enabled
 from .Locations import LocationData
 
-def create_regions(world: MultiWorld, player: int, locations: Set[LocationData], pyramid_keys_unlock: str):
+def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData], pyramid_keys_unlock: str):
     locations_per_region = get_locations_per_region(locations)
 
     world.regions += [
@@ -24,6 +24,8 @@ def create_regions(world: MultiWorld, player: int, locations: Set[LocationData],
         create_region(world, player, locations_per_region, 'The lab (power off)'),
         create_region(world, player, locations_per_region, 'The lab (upper)'),
         create_region(world, player, locations_per_region, 'Emperors tower'),
+        create_region(world, player, locations_per_region, 'Skeleton Shaft'),
+        create_region(world, player, locations_per_region, 'Sealed Caves (upper)'),
         create_region(world, player, locations_per_region, 'Sealed Caves (Xarion)'),
         create_region(world, player, locations_per_region, 'Refugee Camp'),
         create_region(world, player, locations_per_region, 'Forest'),
@@ -45,9 +47,9 @@ def create_regions(world: MultiWorld, player: int, locations: Set[LocationData],
 
     connectStartingRegion(world, player)
 
-    connect(world, player, 'Lake desolation', 'Lower lake desolation', lambda state: state._timespinner_has_timestop(world, player or state.has('Talaria Attachment', player))) #TODO | R.GateKittyBoss | R.GateLeftLibrary)
+    connect(world, player, 'Lake desolation', 'Lower lake desolation', lambda state: state._timespinner_has_timestop(world, player or state.has('Talaria Attachment', player)))
     connect(world, player, 'Lake desolation', 'Upper lake desolation', lambda state: state._timespinner_has_fire(world, player) and state.can_reach('Upper Lake Sirine', 'Region', player))
-    connect(world, player, 'Lake desolation', 'Sealed Caves (Xarion)', lambda state: state._timespinner_has_keycard_A(world, player) and state._timespinner_has_doublejump(world, player))
+    connect(world, player, 'Lake desolation', 'Skeleton Shaft', lambda state: state._timespinner_has_doublejump(world, player))
     connect(world, player, 'Lake desolation', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, 'Upper lake desolation', 'Lake desolation')
     connect(world, player, 'Upper lake desolation', 'Lower lake desolation') 
@@ -86,7 +88,12 @@ def create_regions(world: MultiWorld, player: int, locations: Set[LocationData],
     connect(world, player, 'The lab (upper)', 'Emperors tower', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
     connect(world, player, 'The lab (upper)', 'Ancient Pyramid (left)', lambda state: state.has_all(['Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'], player))
     connect(world, player, 'Emperors tower', 'The lab (upper)')
-    connect(world, player, 'Sealed Caves (Xarion)', 'Lake desolation')
+    connect(world, player, 'Skeleton Shaft', 'Lake desolation')
+    connect(world, player, 'Skeleton Shaft', 'Sealed Caves (upper)', lambda state: state._timespinner_has_keycard_A(world, player))
+    connect(world, player, 'Skeleton Shaft', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
+    connect(world, player, 'Sealed Caves (upper)', 'Skeleton Shaft')
+    connect(world, player, 'Sealed Caves (upper)', 'Sealed Caves (Xarion)', lambda state: state.has('Twin Pyramid Key', player) or state._timespinner_has_forwarddash_doublejump(world, player))
+    connect(world, player, 'Sealed Caves (Xarion)', 'Sealed Caves (upper)', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
     connect(world, player, 'Sealed Caves (Xarion)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, 'Refugee Camp', 'Forest')
     connect(world, player, 'Refugee Camp', 'Libary', lambda state: is_option_enabled(world, player, "Inverted"))
@@ -105,10 +112,10 @@ def create_regions(world: MultiWorld, player: int, locations: Set[LocationData],
     connect(world, player, 'Lower Lake Sirine', 'Left Side forest Caves')
     connect(world, player, 'Lower Lake Sirine', 'Caves of Banishment (upper)')
     connect(world, player, 'Caves of Banishment (upper)', 'Upper Lake Sirine', lambda state: state.has('Water Mask', player))
-    connect(world, player, 'Caves of Banishment (upper)', 'Caves of Banishment (Maw)')
+    connect(world, player, 'Caves of Banishment (upper)', 'Caves of Banishment (Maw)', lambda state: state.has('Twin Pyramid Key', player) or state._timespinner_has_forwarddash_doublejump(world, player))
     connect(world, player, 'Caves of Banishment (upper)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (upper)', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
-    connect(world, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (Sirens)')
+    connect(world, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (Sirens)', lambda state: state.has('Gas Mask', player))
     connect(world, player, 'Caves of Banishment (Maw)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, 'Caves of Banishment (Sirens)', 'Forest')
     connect(world, player, 'Caste Ramparts', 'Forest')
@@ -130,7 +137,7 @@ def create_regions(world: MultiWorld, player: int, locations: Set[LocationData],
     connect(world, player, 'Space time continuum', 'Lower lake desolation', lambda state: pyramid_keys_unlock == "GateKittyBoss")
     connect(world, player, 'Space time continuum', 'Libary', lambda state: pyramid_keys_unlock == "GateLeftLibrary")
     connect(world, player, 'Space time continuum', 'Varndagroth tower right (lower)', lambda state: pyramid_keys_unlock == "GateMilitairyGate")
-    connect(world, player, 'Space time continuum', 'Sealed Caves (Xarion)', lambda state: pyramid_keys_unlock == "GateSealedCaves")
+    connect(world, player, 'Space time continuum', 'Skeleton Shaft', lambda state: pyramid_keys_unlock == "GateSealedCaves")
     connect(world, player, 'Space time continuum', 'Sealed Caves (Sirens)', lambda state: pyramid_keys_unlock == "GateSealedSirensCave")
     connect(world, player, 'Space time continuum', 'Left Side forest Caves', lambda state: pyramid_keys_unlock == "GateLakeSirineRight")
     connect(world, player, 'Space time continuum', 'Refugee Camp', lambda state: pyramid_keys_unlock == "GateAccessToPast")
@@ -148,13 +155,16 @@ def create_location(player: int, name: str, id: Optional[int], region: Region, r
         location.event = True
         location.locked = True
 
+    return location
+
 def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]], name: str) -> Region:
-    region = Region(name, None, name, player)
+    region = Region(name, RegionType.Generic, name, player)
     region.world = world
 
-    for location_data in locations_per_region[name]:
-        location = create_location(player, location_data.name, location_data.code, region, location_data.rule)
-        region.locations.append(location)
+    if name in locations_per_region:
+        for location_data in locations_per_region[name]:
+            location = create_location(player, location_data.name, location_data.code, region, location_data.rule)
+            region.locations.append(location)
 
     return region
 
@@ -192,7 +202,7 @@ def connect(world: MultiWorld, player: int, source: str, target: str, rule: Opti
     sourceRegion.exits.append(connection)
     connection.connect(targetRegion)
 
-def get_locations_per_region(locations: Set[LocationData]) -> Dict[str, List[LocationData]]:
+def get_locations_per_region(locations: Tuple[LocationData]) -> Dict[str, List[LocationData]]:
     per_region: Dict[str, List[LocationData]]  = {}
 
     for location in locations:

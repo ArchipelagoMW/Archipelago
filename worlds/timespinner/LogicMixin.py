@@ -50,9 +50,9 @@ class TimespinnerLogic(LogicMixin):
 
     def _timespinner_can_break_walls(self, world: MultiWorld, player: int) -> bool:
         if is_option_enabled(world, player, "FacebookMode"):
-            return self.has('Oculus Ring')
+            return self.has('Oculus Ring', player)
         else:
             return True
 
     def _timespinner_can_kill_all_3_bosses(self, world: MultiWorld, player: int) -> bool:
-        return self.has_all(['Killed Maw', 'Killed Twins', 'Killed Aelana'])
+        return self.has_all(['Killed Maw', 'Killed Twins', 'Killed Aelana'], player)
