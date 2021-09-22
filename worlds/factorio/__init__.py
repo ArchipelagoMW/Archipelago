@@ -189,6 +189,8 @@ class Factorio(World):
                 max_energy = remaining_energy * 0.75
                 min_energy = (remaining_energy - max_energy) / remaining_num_ingredients
             ingredient = pool.pop()
+            if ingredient in ['stone', 'iron-ore', 'copper-ore', 'coal']:
+                continue
             ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
             ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
             ingredient_energy = ingredient_recipe.total_energy
