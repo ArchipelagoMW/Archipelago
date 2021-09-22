@@ -140,16 +140,13 @@ def create_regions(world: MultiWorld, player: int, pyramid_keys_unlock: str, loc
     connect(world, player, 'Space time continuum', 'Caves of Banishment (Maw)', lambda state: pyramid_keys_unlock == "GateMaw")
     connect(world, player, 'Space time continuum', 'Caves of Banishment (upper)', lambda state: pyramid_keys_unlock == "GateCavesOfBanishment")
 
-class TimespinnerWorldLocation(Location):
-    game: str = "Timespinner"
+def create_location(player: int, name: str, id, region: Region, rule) -> Location:
+    location = Location(player, name, id, region)
+    location.access_rule = rule
 
-    def __init__(self, player: int, name: str, id, parentRegion, rule):
-        super(TimespinnerWorldLocation, self).__init__(player, name, id, parentRegion)
-        self.access_rule = rule
-
-        if id is None:
-            self.event = True
-            self.locked = True
+    if id is None:
+        location.event = True
+        location.locked = True
 
 def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[Tuple]], name: str) -> Region:
     region = Region(name, None, name, player)
@@ -157,7 +154,7 @@ def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str
 
     for location, data in locations_per_region[name]:
         if data.region == name:
-            location = TimespinnerWorldLocation(player, location, data.code, region, data.rule)
+            location = create_location(player, location, data.code, region, data.rule)
             region.locations.append(location)
 
     return region

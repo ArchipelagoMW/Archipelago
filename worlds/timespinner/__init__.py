@@ -1,4 +1,3 @@
-
 from typing import Dict, List
 from BaseClasses import Item, MultiWorld
 from ..AutoWorld import World
@@ -11,7 +10,6 @@ from .PyramidKeys import get_pyramid_keys_unlock
 
 #TODO 
 # use options without world properties
-# check if create_item is used at all
 
 class TimespinnerWorld(World):
     options = timespinner_options
@@ -29,9 +27,8 @@ class TimespinnerWorld(World):
     def create_regions(self):
         create_regions(self.world, self.player, get_location_table(self.world, self.player), self.pyramid_keys_unlock)
 
-    #def create_item(self, name: str) -> Item:
-    #    item_data = item_table[name]
-    #    return Item(name, item_data.progression, item_data.code, self.player)
+    def create_item(self, name: str) -> Item:
+        return create_item(name, self.player)
 
     def set_rules(self):
         self.world.completion_condition[self.player] = lambda state: state.can_reach('Ancient Pyramid (left)', 'Region', self.player)
@@ -64,12 +61,9 @@ class TimespinnerWorld(World):
 
         return slot_data
 
-class TimespinnerWorldItem(Item):
-    game = "Timespinner"
-
-    def __init__(self, name: str, player: int = None):
-        item_data = item_table[name]
-        super(TimespinnerWorldItem, self).__init__(name, item_data.progression, item_data.code, player)
+def create_item(name: str, player: int) -> Item:
+    data = item_table[name]
+    return Item(name, data.progression, data.code, player)
 
 def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> List[str]:
     excluded_items = []
@@ -90,8 +84,8 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: List[st
     excluded_items.append(melee_weapon)
     excluded_items.append(spell)
 
-    melee_weapon_item = TimespinnerWorldItem(melee_weapon, player)
-    spell_item = TimespinnerWorldItem(spell, player)
+    melee_weapon_item = create_item(melee_weapon, player)
+    spell_item = create_item(spell, player)
     
     world.get_location('Yo Momma 1', player).place_locked_item(melee_weapon_item)
     world.get_location('Yo Momma 2', player).place_locked_item(spell_item)
@@ -99,20 +93,20 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: List[st
     locked_locations.append('Yo Momma 1')
     locked_locations.append('Yo Momma 2')
 
-def get_item_pool(world: MultiWorld, player: int, excluded_items: List[str]) -> List[TimespinnerWorldItem]:
+def get_item_pool(world: MultiWorld, player: int, excluded_items: List[str]) -> List[Item]:
     pool = []
 
     for name, data in item_table.items():
         if not name in excluded_items:
             for _ in range(data.count):
-                item = update_progressive_state_based_flags(world, player, name, TimespinnerWorldItem(name, player))
+                item = update_progressive_state_based_flags(world, player, name, Item(name, player))
                 pool.append(item)
 
     return pool
 
-def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locations: List[str], pool: List[TimespinnerWorldItem]) -> List[TimespinnerWorldItem]:
+def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locations: List[str], pool: List[Item]) -> List[Item]:
     for _ in range(len(get_location_table(None, None)) - len(locked_locations) - len(pool)):
-        item = TimespinnerWorldItem(world.random.choice(filler_items), player)
+        item = create_item(world.random.choice(filler_items), player)
         pool.append(item)
 
     return pool
@@ -124,11 +118,11 @@ def place_first_progression_item(world: MultiWorld, player: int, excluded_items:
     excluded_items.append(progression_item)
     locked_locations.append(location)
     
-    item = TimespinnerWorldItem(progression_item, player)
+    item = create_item(progression_item, player)
 
     world.get_location(location, player).place_locked_item(item)
  
-def update_progressive_state_based_flags(world: MultiWorld, player: int, name: str, data: TimespinnerWorldItem) -> TimespinnerWorldItem:
+def update_progressive_state_based_flags(world: MultiWorld, player: int, name: str, data: Item) -> Item:
     if not data.advancement:
         return data
 

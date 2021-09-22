@@ -239,7 +239,7 @@ starter_progression_items: Set[str] = {
     'Twin Pyramid Key',
     'Celestial Sash',
     'Lightwall'
-]
+}
 
 filler_items: Set[str] = {
     'Potion',
