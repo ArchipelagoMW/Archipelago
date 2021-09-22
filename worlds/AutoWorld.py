@@ -176,7 +176,7 @@ class World(metaclass=AutoWorldRegister):
         Warning: this may be called with self.world = None, for example by MultiServer"""
         raise NotImplementedError
 
-    # following methods should not need to be overriden.
+    # following methods should not need to be overridden.
     def collect(self, state: CollectionState, item: Item) -> bool:
         name = self.collect_item(state, item)
         if name:
