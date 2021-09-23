@@ -10,6 +10,7 @@ from WebHostLib import app, cache, Room
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
 
+
 def get_alttp_id(item_name):
     return Items.item_table[item_name][2]
 
@@ -283,6 +284,7 @@ def render_timedelta(delta: datetime.timedelta):
 
 _multidata_cache = {}
 
+
 def get_location_table(checks_table: dict) -> dict:
     loc_to_area = {}
     for area, locations in checks_table.items():
@@ -291,6 +293,7 @@ def get_location_table(checks_table: dict) -> dict:
         for location in locations:
             loc_to_area[location] = area
     return loc_to_area
+
 
 def get_static_room_data(room: Room):
     result = _multidata_cache.get(room.seed.id, None)
@@ -311,7 +314,7 @@ def get_static_room_data(room: Room):
         seed_checks_in_area["Total"] = 249
 
     player_checks_in_area = {playernumber: {areaname: len(multidata["checks_in_area"][playernumber][areaname])
-                                            if areaname != "Total" else multidata["checks_in_area"][playernumber]["Total"]
+    if areaname != "Total" else multidata["checks_in_area"][playernumber]["Total"]
                                             for areaname in ordered_areas}
                              for playernumber in range(1, len(names[0]) + 1)}
     player_location_to_area = {playernumber: get_location_table(multidata["checks_in_area"][playernumber])
@@ -373,9 +376,9 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
             for location in locations_checked:
                 if location in player_locations:
                     item, recipient = player_locations[location]
-                    if recipient == tracked_player: # a check done for the tracked player
+                    if recipient == tracked_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
-                    if ms_player == tracked_player: # a check done by the tracked player
+                    if ms_player == tracked_player:  # a check done by the tracked player
                         checks_done[location_to_area[location]] += 1
                         checks_done["Total"] += 1
     if games[tracked_player] == "A Link to the Past":
@@ -403,28 +406,28 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         # Determine which icon to use
         display_data = {}
         for item_name, item_id in progressive_items.items():
-            level = min(inventory[item_id], len(progressive_names[item_name])-1)
+            level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
             display_name = progressive_names[item_name][level]
             acquired = True
             if not display_name:
                 acquired = False
-                display_name = progressive_names[item_name][level+1]
+                display_name = progressive_names[item_name][level + 1]
             base_name = item_name.split(maxsplit=1)[1].lower()
-            display_data[base_name+"_acquired"] = acquired
-            display_data[base_name+"_url"] = icons[display_name]
-
+            display_data[base_name + "_acquired"] = acquired
+            display_data[base_name + "_url"] = icons[display_name]
 
         # The single player tracker doesn't care about overworld, underworld, and total checks. Maybe it should?
         sp_areas = ordered_areas[2:15]
 
         return render_template("lttpTracker.html", inventory=inventory,
                                player_name=player_name, room=room, icons=icons, checks_done=checks_done,
-                               checks_in_area=seed_checks_in_area[tracked_player], acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
+                               checks_in_area=seed_checks_in_area[tracked_player],
+                               acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
                                small_key_ids=small_key_ids, big_key_ids=big_key_ids, sp_areas=sp_areas,
                                key_locations=player_small_key_locations[tracked_player],
                                big_key_locations=player_big_key_locations[tracked_player],
                                **display_data)
-    elif games[tracked_player] == "Minecraft": 
+    elif games[tracked_player] == "Minecraft":
         minecraft_icons = {
             "Wooden Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d2/Wooden_Pickaxe_JE3_BE3.png",
             "Stone Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c4/Stone_Pickaxe_JE2_BE2.png",
@@ -455,14 +458,14 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         }
 
         minecraft_location_ids = {
-            "Story": [42073, 42080, 42081, 42023, 42082, 42027, 42039, 42085, 42002, 42009, 42010, 
+            "Story": [42073, 42080, 42081, 42023, 42082, 42027, 42039, 42085, 42002, 42009, 42010,
                       42070, 42041, 42049, 42090, 42004, 42031, 42025, 42029, 42051, 42077, 42089],
-            "Nether": [42017, 42044, 42069, 42058, 42034, 42060, 42066, 42076, 42064, 42071, 42021, 
+            "Nether": [42017, 42044, 42069, 42058, 42034, 42060, 42066, 42076, 42064, 42071, 42021,
                        42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42014],
             "The End": [42052, 42005, 42012, 42032, 42030, 42042, 42018, 42038, 42046],
-            "Adventure": [42047, 42086, 42087, 42050, 42059, 42055, 42072, 42003, 42035, 42016, 42020, 
+            "Adventure": [42047, 42086, 42087, 42050, 42059, 42055, 42072, 42003, 42035, 42016, 42020,
                           42048, 42054, 42068, 42043, 42074, 42075, 42024, 42026, 42037, 42045, 42056, 42088],
-            "Husbandry": [42065, 42067, 42078, 42022, 42007, 42079, 42013, 42028, 
+            "Husbandry": [42065, 42067, 42078, 42022, 42007, 42079, 42013, 42028,
                           42036, 42057, 42063, 42053, 42083, 42084, 42091]
         }
 
@@ -482,10 +485,10 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
             "Progressive Resource Crafting": ["Iron Ingot", "Iron Ingot", "Block of Iron"]
         }
         for item_name, item_id in progressive_items.items():
-            level = min(inventory[item_id], len(progressive_names[item_name])-1)
+            level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
             display_name = progressive_names[item_name][level]
             base_name = item_name.split(maxsplit=1)[1].lower().replace(' ', '_')
-            display_data[base_name+"_url"] = minecraft_icons[display_name]
+            display_data[base_name + "_url"] = minecraft_icons[display_name]
 
         # Multi-items
         multi_items = {
@@ -496,7 +499,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
             base_name = item_name.split()[-1].lower()
             count = inventory[item_id]
             if count >= 0:
-                display_data[base_name+"_count"] = count
+                display_data[base_name + "_count"] = count
 
         # Victory condition
         game_state = multisave.get("client_game_state", {}).get((tracked_team, tracked_player), 0)
@@ -505,16 +508,18 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         # Turn location IDs into advancement tab counts
         checked_locations = multisave.get("location_checks", {}).get((tracked_team, tracked_player), set())
         lookup_name = lambda id: lookup_any_location_id_to_name[id]
-        location_info = {tab_name: {lookup_name(id): (id in checked_locations) for id in tab_locations} 
-            for tab_name, tab_locations in minecraft_location_ids.items()}
-        checks_done = {tab_name: len([id for id in tab_locations if id in checked_locations]) 
-            for tab_name, tab_locations in minecraft_location_ids.items()}
+        location_info = {tab_name: {lookup_name(id): (id in checked_locations) for id in tab_locations}
+                         for tab_name, tab_locations in minecraft_location_ids.items()}
+        checks_done = {tab_name: len([id for id in tab_locations if id in checked_locations])
+                       for tab_name, tab_locations in minecraft_location_ids.items()}
         checks_done['Total'] = len(checked_locations)
         checks_in_area = {tab_name: len(tab_locations) for tab_name, tab_locations in minecraft_location_ids.items()}
         checks_in_area['Total'] = sum(checks_in_area.values())
 
-        return render_template("minecraftTracker.html", 
-                               inventory=inventory, icons=minecraft_icons, acquired_items={lookup_any_item_id_to_name[id] for id in inventory if id in lookup_any_item_id_to_name},
+        return render_template("minecraftTracker.html",
+                               inventory=inventory, icons=minecraft_icons,
+                               acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
+                                               id in lookup_any_item_id_to_name},
                                player=tracked_player, team=tracked_team, room=room, player_name=player_name,
                                checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                                **display_data)
@@ -522,13 +527,18 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
     else:
         checked_locations = multisave.get("location_checks", {}).get((tracked_team, tracked_player), set())
         player_received_items = {}
-        for order_index, networkItem in enumerate(multisave.get('received_items', {}).get((tracked_team, tracked_player), [])):
-            player_received_items[networkItem.item] = order_index + 1
+        for order_index, networkItem in enumerate(
+                multisave.get('received_items', {}).get((tracked_team, tracked_player), []),
+                start=1
+        ):
+            player_received_items[networkItem.item] = order_index
         return render_template("genericTracker.html",
                                inventory=inventory,
                                player=tracked_player, team=tracked_team, room=room, player_name=player_name,
-                               checked_locations=checked_locations, not_checked_locations=set(locations[tracked_player])-checked_locations,
+                               checked_locations=checked_locations,
+                               not_checked_locations=set(locations[tracked_player]) - checked_locations,
                                received_items=player_received_items)
+
 
 @app.route('/tracker/<suuid:tracker>')
 @cache.memoize(timeout=60)  # multisave is currently created at most every minute
@@ -605,4 +615,4 @@ def getTracker(tracker: UUID):
                            checks_in_area=seed_checks_in_area, activity_timers=activity_timers,
                            key_locations=group_key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
                            video=video, big_key_locations=group_big_key_locations,
-                           hints=hints, long_player_names = long_player_names)
+                           hints=hints, long_player_names=long_player_names)
