@@ -2,6 +2,8 @@ from typing import Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld
 from .Options import is_option_enabled
 
+EventId: Optional[int] = None
+
 class LocationData(NamedTuple):
     region: str
     name: str
@@ -135,7 +137,7 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('Caves of Banishment (upper)', 'Jackpot room chest 4',  1337119, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
         LocationData('Caves of Banishment (upper)', 'Banishment pedestal',  1337120),
         LocationData('Caves of Banishment (Maw)', 'Last chance before Maw',  1337121, lambda state: state._timespinner_has_doublejump(world, player)),
-        LocationData('Caves of Banishment (Maw)', 'Killed Maw',  None, lambda state: state.has('Gas Mask', player)),
+        LocationData('Caves of Banishment (Maw)', 'Killed Maw',  EventId, lambda state: state.has('Gas Mask', player)),
         LocationData('Caves of Banishment (Maw)', 'Mineshaft',  1337122, lambda state: state.has('Gas Mask', player)),
         LocationData('Caves of Banishment (Sirens)', 'Wyvern room',  1337123),
         LocationData('Caves of Banishment (Sirens)', 'Above water sirens',  1337124),
@@ -154,7 +156,7 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('Caste Keep', 'Omelette chest',  1337137),
         LocationData('Caste Keep', 'Just an egg',  1337138),
         LocationData('Caste Keep', 'Out of the way',  1337139),
-        LocationData('Caste Keep', 'Killed Twins',  None, lambda state: state._timespinner_has_timestop(world, player)),
+        LocationData('Caste Keep', 'Killed Twins',  EventId, lambda state: state._timespinner_has_timestop(world, player)),
         LocationData('Caste Keep', 'Twins',  1337140, lambda state: state._timespinner_has_timestop(world, player)),
         LocationData('Caste Keep', 'Royal guard tiny room',  1337141, lambda state: state._timespinner_has_doublejump(world, player)),
         LocationData('Royal towers (lower)', 'Royal tower floor secret',  1337142, lambda state: state._timespinner_has_doublejump(world, player) and state._timespinner_can_break_walls(world, player)),
@@ -168,7 +170,7 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('Royal towers (upper)', 'Above the cide mage',  1337150),
         LocationData('Royal towers (upper)', 'Royal guard big room',  1337151),
         LocationData('Royal towers (upper)', 'Before Aelana',  1337152),
-        LocationData('Royal towers (upper)', 'Killed Aelana',  None),
+        LocationData('Royal towers (upper)', 'Killed Aelana',  EventId),
         LocationData('Royal towers (upper)', 'Statue room',  1337153, lambda state: state._timespinner_has_upwarddash(world, player)),
         LocationData('Royal towers (upper)', 'Aelana\'s pedestal',  1337154),
         LocationData('Royal towers (upper)', 'After Aelana',  1337155),
@@ -189,7 +191,7 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('Ancient Pyramid (left)', 'Conviction guarded room',  1337247),
         LocationData('Ancient Pyramid (right)', 'Pit secret room',  1337248, lambda state: state._timespinner_can_break_walls(world, player)),
         LocationData('Ancient Pyramid (right)', 'Regret chest',  1337249, lambda state: state._timespinner_can_break_walls(world, player)),
-        LocationData('Ancient Pyramid (right)', 'Killed Nightmare',  None)
+        LocationData('Ancient Pyramid (right)', 'Killed Nightmare',  EventId)
     )
 
     downloadable_items: Tuple[LocationData] = (
@@ -220,11 +222,4 @@ starter_progression_locations: Tuple[str] = (
     'Starter chest 3',
     'Starter chest 1',
     'Timespinner Wheel room'
-)
-
-events: Tuple[str] = (
-    "Killed Maw",
-    "Killed Twins",
-    "Killed Aelana",
-    'Killed Nightmare'
 )

@@ -3,7 +3,7 @@ from BaseClasses import Item, MultiWorld
 from ..AutoWorld import World
 from .LogicMixin import TimespinnerLogic
 from .Items import item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
-from .Locations import get_locations, starter_progression_locations, events
+from .Locations import get_locations, starter_progression_locations, EventId
 from .Regions import create_regions
 from .Options import is_option_enabled, timespinner_options
 from .PyramidKeys import get_pyramid_keys_unlock
@@ -136,13 +136,14 @@ def update_progressive_state_based_flags(world: MultiWorld, player: int, name: s
     return data
 
 def setup_events(world: MultiWorld, player: int, locked_locations: List[str]):
-    for event in events:
-        location = world.get_location(event, player)
-        item = Item(event, True, None, player)
+    for location in get_locations(world, player):
+        if location.code == EventId:
+            location = world.get_location(location.name, player)
+            item = Item(location.name, True, EventId, player)
 
-        locked_locations.append(event)
+            locked_locations.append(location.name)
 
-        location.place_locked_item(item)
+            location.place_locked_item(item)
 
 def get_item_name_groups() -> Dict[str, List[str]]:
     groups: Dict[str, List[str]] = {}
