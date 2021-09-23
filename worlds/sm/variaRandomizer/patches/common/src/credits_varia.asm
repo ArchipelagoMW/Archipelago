@@ -359,6 +359,7 @@ new_save:
 	lda #$8000
 	sta $700002,x
 .end:
+    ldx #$0000
     jsl start_item
 	rtl
 
@@ -1430,6 +1431,24 @@ dec_stat:
     plx
     rtl
 
+update_graphic:
+    cmp #$0000
+    beq +
+    lda #$0001
+    sta $7E09C0
+ +   
+    lda $7E09A2
+    bit #$4000
+    beq +
+    jsl $809A2E
++    
+    bit #$8000
+    beq +
+    jsl $809A3E
++
+    jsl $90AC8D
+    rts
+
 warnpc $dfd87f
 // Store Statistic (value in A, stat in X)
 org $dfd880
@@ -1455,7 +1474,6 @@ load_stat:
     plx
     rtl
 
-print "start_item_data_major : ", org
 start_item_data_major:
     dw $0000, $0000, $0000, $0000
 start_item_data_minor:
@@ -1465,7 +1483,6 @@ start_item_data_reserve:
     dw $0000, $0000
 
 start_item:
-    ldx #$0000
 -
     lda start_item_data_major, x
     sta $7E09A2, x
@@ -1492,6 +1509,7 @@ start_item:
     inx
     cpx #$0004
     bne -
+    jsr update_graphic
     rtl
 
 warnpc $dfd91a
