@@ -522,11 +522,8 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
     else:
         checked_locations = multisave.get("location_checks", {}).get((tracked_team, tracked_player), set())
         player_received_items = {}
-        if len(multisave) > 0:
-            for key in multisave['received_items']:
-                if key[1] == tracked_player and len(multisave['received_items'][key]) > 0:
-                    for NetworkItem in multisave['received_items'][key]:
-                        player_received_items[NetworkItem.item] = multisave['received_items'][key].index(NetworkItem) + 1
+        for order_index, networkItem in enumerate(multisave.get('received_items', {}).get((tracked_team, tracked_player), [])):
+            player_received_items[networkItem.item] = order_index + 1
         return render_template("genericTracker.html",
                                inventory=inventory,
                                player=tracked_player, team=tracked_team, room=room, player_name=player_name,
