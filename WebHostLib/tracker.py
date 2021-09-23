@@ -521,11 +521,14 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
 
     else:
         checked_locations = multisave.get("location_checks", {}).get((tracked_team, tracked_player), set())
+        player_received_items = {}
+        for order_index, networkItem in enumerate(multisave.get('received_items', {}).get((tracked_team, tracked_player), [])):
+            player_received_items[networkItem.item] = order_index + 1
         return render_template("genericTracker.html",
                                inventory=inventory,
                                player=tracked_player, team=tracked_team, room=room, player_name=player_name,
-                               checked_locations= checked_locations, not_checked_locations = set(locations[tracked_player])-checked_locations)
-
+                               checked_locations=checked_locations, not_checked_locations=set(locations[tracked_player])-checked_locations,
+                               received_items=player_received_items)
 
 @app.route('/tracker/<suuid:tracker>')
 @cache.memoize(timeout=60)  # multisave is currently created at most every minute
