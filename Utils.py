@@ -375,6 +375,7 @@ class RestrictedUnpickler(pickle.Unpickler):
         super(RestrictedUnpickler, self).__init__(*args, **kwargs)
         self.options_module = importlib.import_module("Options")
         self.net_utils_module = importlib.import_module("NetUtils")
+        self.generic_properties_module = importlib.import_module("worlds.generic")
 
     def find_class(self, module, name):
         if module == "builtins" and name in safe_builtins:
@@ -382,7 +383,9 @@ class RestrictedUnpickler(pickle.Unpickler):
         # used by MultiServer -> savegame/multidata
         if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint"}:
             return getattr(self.net_utils_module, name)
-        # Options are unpickled by WebHost -> Generate
+        # Options and Plando are unpickled by WebHost -> Generate
+        if module == "worlds.generic" and name in {"PlandoItem", "PlandoConnection"}:
+            return getattr(self.generic_properties_module, name)
         if module.endswith("Options"):
             if module == "Options":
                 mod = self.options_module

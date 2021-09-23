@@ -113,7 +113,7 @@ class Factorio(World):
                 if self.world.recipe_ingredients[self.player]:
                     custom_recipe = self.custom_recipes[ingredient]
 
-                    location.access_rule = lambda state, ingredient=ingredient, custom_recipe = custom_recipe: \
+                    location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
                         (ingredient not in technology_table or state.has(ingredient, player)) and \
                         all(state.has(technology.name, player) for sub_ingredient in custom_recipe.ingredients
                             for technology in required_technologies[sub_ingredient])
@@ -134,9 +134,9 @@ class Factorio(World):
                                                     locations=locations: all(state.can_reach(loc) for loc in locations))
 
             silo_recipe = None if self.world.silo[self.player].value == Silo.option_spawn \
-                          else self.custom_recipes["rocket-silo"] \
-                          if "rocket-silo" in self.custom_recipes \
-                          else next(iter(all_product_sources.get("rocket-silo")))
+                else self.custom_recipes["rocket-silo"] \
+                if "rocket-silo" in self.custom_recipes \
+                else next(iter(all_product_sources.get("rocket-silo")))
             part_recipe = self.custom_recipes["rocket-part"]
             victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe)
             world.get_location("Rocket Launch", player).access_rule = lambda state: all(state.has(technology, player)
@@ -189,19 +189,24 @@ class Factorio(World):
                 max_energy = remaining_energy * 0.75
                 min_energy = (remaining_energy - max_energy) / remaining_num_ingredients
             ingredient = pool.pop()
-            ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
-            ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
-            ingredient_energy = ingredient_recipe.total_energy
-            min_num_raw = min_raw/ingredient_raw
-            max_num_raw = max_raw/ingredient_raw
-            min_num_energy = min_energy/ingredient_energy
-            max_num_energy = max_energy/ingredient_energy
+            if ingredient in all_product_sources:
+                ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
+                ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
+                ingredient_energy = ingredient_recipe.total_energy
+            else:
+                # assume simple ore TODO: remove if tree when mining data is harvested from Factorio
+                ingredient_raw = 1
+                ingredient_energy = 2
+            min_num_raw = min_raw / ingredient_raw
+            max_num_raw = max_raw / ingredient_raw
+            min_num_energy = min_energy / ingredient_energy
+            max_num_energy = max_energy / ingredient_energy
             min_num = int(max(1, min_num_raw, min_num_energy))
             max_num = int(min(1000, max_num_raw, max_num_energy))
             if min_num > max_num:
                 fallback_pool.append(ingredient)
-                continue # can't use that ingredient
-            num = self.world.random.randint(min_num,max_num)
+                continue  # can't use that ingredient
+            num = self.world.random.randint(min_num, max_num)
             new_ingredients[ingredient] = num
             remaining_raw -= num * ingredient_raw
             remaining_energy -= num * ingredient_energy
@@ -217,8 +222,8 @@ class Factorio(World):
             ingredient_recipe = recipes[ingredient]
             ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
             ingredient_energy = ingredient_recipe.total_energy
-            num_raw = remaining_raw/ingredient_raw/remaining_num_ingredients
-            num_energy = remaining_energy/ingredient_energy/remaining_num_ingredients
+            num_raw = remaining_raw / ingredient_raw / remaining_num_ingredients
+            num_energy = remaining_energy / ingredient_energy / remaining_num_ingredients
             num = int(min(num_raw, num_energy))
             if num < 1: continue
             new_ingredients[ingredient] = num
@@ -244,7 +249,7 @@ class Factorio(World):
         valid_pool = sorted(science_pack_pools[self.world.max_science_pack[self.player].get_max_pack()])
         self.world.random.shuffle(valid_pool)
         self.custom_recipes = {"rocket-part": Recipe("rocket-part", original_rocket_part.category,
-                                                     {valid_pool[x] : 10 for x in range(3)},
+                                                     {valid_pool[x]: 10 for x in range(3)},
                                                      original_rocket_part.products,
                                                      original_rocket_part.energy)}
         self.additional_advancement_technologies = {tech.name for tech in
@@ -255,7 +260,7 @@ class Factorio(World):
             for pack in self.world.max_science_pack[self.player].get_ordered_science_packs():
                 valid_pool += sorted(science_pack_pools[pack])
                 self.world.random.shuffle(valid_pool)
-                if pack in recipes: # skips over space science pack
+                if pack in recipes:  # skips over space science pack
                     original = recipes[pack]
                     new_ingredients = {}
                     for _ in original.ingredients:
@@ -270,7 +275,7 @@ class Factorio(World):
             for pack in self.world.max_science_pack[self.player].get_allowed_packs():
                 valid_pool += sorted(science_pack_pools[pack])
             new_recipe = self.make_balanced_recipe(recipes["rocket-silo"], valid_pool,
-                                                   factor = (self.world.max_science_pack[self.player].value+1)/7)
+                                                   factor=(self.world.max_science_pack[self.player].value + 1) / 7)
             self.additional_advancement_technologies |= {tech.name for tech in
                                                          new_recipe.recursive_unlocking_technologies}
             self.custom_recipes["rocket-silo"] = new_recipe

@@ -47,6 +47,7 @@ class OOTWorld(World):
                        data[2] is not None}
     location_name_to_id = location_name_to_id
     remote_items: bool = False
+    remote_start_inventory: bool = False
 
     data_version = 1
 

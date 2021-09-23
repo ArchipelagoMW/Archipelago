@@ -114,8 +114,9 @@ def main(args, seed=None):
     logger.info('')
 
     for player in world.player_ids:
-        for item_name in world.start_inventory[player].value:
-            world.push_precollected(world.create_item(item_name, player))
+        for item_name, count in world.start_inventory[player].value.items():
+            for _ in range(count):
+                world.push_precollected(world.create_item(item_name, player))
 
     for player in world.player_ids:
         if player in world.get_game_players("A Link to the Past"):
@@ -304,6 +305,8 @@ def main(args, seed=None):
                     "connect_names": {name: (0, player) for player, name in world.player_name.items()},
                     "remote_items": {player for player in world.player_ids if
                                      world.worlds[player].remote_items},
+                    "remote_start_inventory": {player for player in world.player_ids if
+                                               world.worlds[player].remote_start_inventory},
                     "locations": locations_data,
                     "checks_in_area": checks_in_area,
                     "server_options": get_options()["server_options"],
