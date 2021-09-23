@@ -91,6 +91,10 @@ class World(metaclass=AutoWorldRegister):
     # the client finds its own items in its own world.
     remote_items: bool = True
 
+    # If remote_start_inventory is true, the start_inventory/world.precollected_items is sent on connection,
+    # otherwise the world implementation is in charge of writing the items to their output data.
+    remote_start_inventory: bool = True
+
     # For games where after a victory it is impossible to go back in and get additional/remaining Locations checked.
     # this forces forfeit:  auto for those games.
     forced_auto_forfeit: bool = False
