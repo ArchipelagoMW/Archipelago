@@ -112,8 +112,9 @@ def main(args, seed=None):
     logger.info('')
 
     for player in world.player_ids:
-        for item_name in world.start_inventory[player].value:
-            world.push_precollected(world.create_item(item_name, player))
+        for item_name, count in world.start_inventory[player].value.items():
+            for _ in range(count):
+                world.push_precollected(world.create_item(item_name, player))
 
     for player in world.player_ids:
         if player in world.get_game_players("A Link to the Past"):
