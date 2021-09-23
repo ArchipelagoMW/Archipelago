@@ -150,4 +150,5 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 ExceptionManager.add_handler(E())
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
+Config.set('kivy', 'exit_on_escape', '0')
 Builder.load_file(Utils.local_path("data", "client.kv"))

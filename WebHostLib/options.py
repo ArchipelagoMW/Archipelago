@@ -55,7 +55,7 @@ def create():
                     "options": []
                 }
 
-                for sub_option_name, sub_option_id in option.options.items():
+                for sub_option_id, sub_option_name in option.name_lookup.items():
                     this_option["options"].append({
                         "name": option.get_option_name(sub_option_id),
                         "value": sub_option_name,

@@ -1011,7 +1011,6 @@ class Spoiler():
         self.medallions = {}
         self.playthrough = {}
         self.unreachables = []
-        self.start_inventory = []
         self.locations = {}
         self.paths = {}
         self.shops = []
@@ -1028,8 +1027,6 @@ class Spoiler():
         for player in self.world.get_game_players("A Link to the Past"):
             self.medallions[f'Misery Mire ({self.world.get_player_name(player)})'] = self.world.required_medallions[player][0]
             self.medallions[f'Turtle Rock ({self.world.get_player_name(player)})'] = self.world.required_medallions[player][1]
-
-        self.start_inventory = list(map(str, self.world.precollected_items))
 
         self.locations = OrderedDict()
         listed_locations = set()
@@ -1111,7 +1108,6 @@ class Spoiler():
         out = OrderedDict()
         out['Entrances'] = list(self.entrances.values())
         out.update(self.locations)
-        out['Starting Inventory'] = self.start_inventory
         out['Special'] = self.medallions
         if self.hashes:
             out['Hashes'] = self.hashes
@@ -1214,10 +1210,6 @@ class Spoiler():
                     name = self.world.get_player_name(player)
                     for recipe in self.world.worlds[player].custom_recipes.values():
                         outfile.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
-
-            if self.start_inventory:
-                outfile.write('\n\nStarting Inventory:\n\n')
-                outfile.write('\n'.join(self.start_inventory))
 
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(['%s: %s' % (location, item) for grouping in self.locations.values() for (location, item) in grouping.items()]))
