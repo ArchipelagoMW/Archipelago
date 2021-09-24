@@ -141,7 +141,6 @@ class ItemWeights(Choice):
     option_chaos = 5
     option_no_scraps = 6
     option_even = 7
-    option_scraps_only = 8
 
 #define a dictionary for the weights of the generated item pool.
 ror2_weights: typing.Dict[str, type(Option)] = {
