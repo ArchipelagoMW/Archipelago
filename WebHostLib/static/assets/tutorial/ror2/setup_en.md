@@ -2,15 +2,11 @@
 
 ## Install using r2modman
 ### Install r2modman
-Head on over to the r2modman page on Thunderstore and follow the installation instructions.
-
-https://thunderstore.io/package/ebkr/r2modman/
+Head on over to the [r2modman page](https://thunderstore.io/package/ebkr/r2modman/) on Thunderstore and follow the installation instructions.
 
 ### Install Archipelago Mod using r2modman
-You can install the Archipelago mod using r2modman in one of two ways. 
+You can install the [Archipelago mod](https://thunderstore.io/package/ArchipelagoMW/Archipelago/) using r2modman in one of two ways. 
 One, you can use the Thunderstore website and click on the "Install with Mod Manager" link.
-
-https://thunderstore.io/package/ArchipelagoMW/Archipelago/
 
 You can also search for the "Archipelago" mod in the r2modman interface.
 The mod manager should automatically install all necessary dependencies as well.
