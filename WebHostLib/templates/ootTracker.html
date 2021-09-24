@@ -3,7 +3,7 @@
 <head>
     <title>{{ player_name }}&apos;s Tracker</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/ootTracker.css') }}"/>
-    <script type="application/ecmascript" src="{{ url_for('static', filename='assets/minecraftTracker.js') }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename='assets/ootTracker.js') }}"></script>
 </head>
 
 <body>
@@ -159,8 +159,8 @@
             {% for area in checks_done %}
             <tr class="location-category" id="{{area}}-header">
                 <td>{{ area }} {{'▼' if area != 'Total'}}</td>
-                <td>{{ small_key_counts.get(area, '-') }}</td>
-                <td>{{ boss_key_counts.get(area, '-') }}</td>
+                <td class="smallkeys">{{ small_key_counts.get(area, '-') }}</td>
+                <td class="bosskeys">{{ boss_key_counts.get(area, '-') }}</td>
                 <td class="counter">{{ checks_done[area] }} / {{ checks_in_area[area] }}</td>
             </tr>
             <tbody class="locations hide" id="{{area}}">
