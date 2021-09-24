@@ -13,6 +13,7 @@ class TimespinnerWorld(World):
     game = "Timespinner"
     topology_present = True
     data_version = 1
+    hidden = True
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)} 
