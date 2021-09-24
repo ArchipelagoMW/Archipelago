@@ -175,9 +175,6 @@ class SMWorld(World):
 
         romPatcher.applyIPSPatch('PlayerName', { 'PlayerName':  playerNames })
 
-        itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == self.player]
-        romPatcher.writeItemsLocs(itemLocs)
-
         startItemROMAddressBase = 0x2FD8B9
 
         # current, base value or bitmask, max, base value or bitmask
@@ -248,6 +245,9 @@ class SMWorld(World):
         romPatcher.applyIPSPatch('startItemPatch', startItemPatch)
 
         romPatcher.commitIPS()
+
+        itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == self.player]
+        romPatcher.writeItemsLocs(itemLocs)
 
         
 
