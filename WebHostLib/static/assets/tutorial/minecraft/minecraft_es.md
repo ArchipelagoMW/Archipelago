@@ -113,6 +113,8 @@ Solo es requerido si quieres usar una instalacion de forge por ti mismo, recomen
 ###Software Requerido
 - [Minecraft Forge](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.5.html)
 - [Minecraft Archipelago Randomizer Mod](https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
+**NO INSTALES ESTO EN TU CLIENTE MINECRAFT**
+
 
 ### Instalación de servidor dedicado
 Solo una persona ha de realizar este proceso y hospedar un servidor dedicado para que los demas jueguen conectandose a él.
