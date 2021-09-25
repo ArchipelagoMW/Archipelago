@@ -99,6 +99,9 @@ def generate_mod(world, output_directory: str):
 
     for factorio_option in Options.factorio_options:
         template_data[factorio_option] = getattr(multiworld, factorio_option)[player].value
+        
+    if getattr(multiworld, "silo")[player].value == Options.Silo.option_randomize_recipe:
+        template_data["free_sample_blacklist"]["rocket-silo"] = 1
 
     control_code = control_template.render(**template_data)
     data_template_code = data_template.render(**template_data)
