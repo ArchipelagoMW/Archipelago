@@ -1435,18 +1435,19 @@ update_graphic:
     cmp #$0000
     beq +
     lda #$0001
-    sta $7E09C0
+    sta $7E09C0    
  +   
     lda $7E09A2
     bit #$4000
     beq +
-    jsl $809A2E
+    jsl $809A2E   // thanks PierRoulette
 +    
+    lda $7E09A2
     bit #$8000
     beq +
-    jsl $809A3E
+    jsl $809A3E   // thanks PierRoulette
 +
-    jsl $90AC8D
+    jsl $90AC8D   // thanks PierRoulette
     rts
 
 warnpc $dfd87f
