@@ -4,13 +4,11 @@ from .Options import is_option_enabled
 
 EventId: Optional[int] = None
 
-
 class LocationData(NamedTuple):
     region: str
     name: str
     code: Optional[int]
     rule: Callable = lambda state: True
-
 
 def get_locations(world: Optional[MultiWorld], player: Optional[int]):
     location_table: Tuple[LocationData, ...] = (
@@ -218,6 +216,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]):
         return ( *location_table, *downloadable_items )
     else:
         return location_table
+        
 
 starter_progression_locations: Tuple[str, ...] = (
     'Starter chest 2',

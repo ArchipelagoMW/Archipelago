@@ -3,7 +3,7 @@ from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Options import is_option_enabled
 from .Locations import LocationData
 
-def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData], pyramid_keys_unlock: str):
+def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], pyramid_keys_unlock: str):
     locations_per_region = get_locations_per_region(locations)
 
     world.regions += [
@@ -159,6 +159,7 @@ def create_location(player: int, name: str, id: Optional[int], region: Region, r
 
     return location
 
+
 def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]], name: str) -> Region:
     region = Region(name, RegionType.Generic, name, player)
     region.world = world
@@ -169,6 +170,7 @@ def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str
             region.locations.append(location)
 
     return region
+
 
 def connectStartingRegion(world: MultiWorld, player: int):
     menu = world.get_region('Menu', player)
@@ -192,6 +194,7 @@ def connectStartingRegion(world: MultiWorld, player: int):
     teleport_back_to_start.connect(starting_region)
     space_time_continuum.exits.append(teleport_back_to_start)
 
+
 def connect(world: MultiWorld, player: int, used_names : Dict[str, int], source: str, target: str, rule: Optional[Callable] = None):
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
@@ -211,10 +214,11 @@ def connect(world: MultiWorld, player: int, used_names : Dict[str, int], source:
     sourceRegion.exits.append(connection)
     connection.connect(targetRegion)
 
-def get_locations_per_region(locations: Tuple[LocationData]) -> Dict[str, List[LocationData]]:
+
+def get_locations_per_region(locations: Tuple[LocationData, ...]) -> Dict[str, List[LocationData]]:
     per_region: Dict[str, List[LocationData]]  = {}
 
     for location in locations:
-        per_region[location.region] = [ location ] if location.region not in per_region else per_region[location.region] + [ location ]
+        per_region.setdefault(location.region, []).append(location)
 
     return per_region

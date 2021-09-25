@@ -8,7 +8,6 @@ from .Regions import create_regions
 from .Options import is_option_enabled, timespinner_options
 from .PyramidKeys import get_pyramid_keys_unlock
 
-
 class TimespinnerWorld(World):
     options = timespinner_options
     game = "Timespinner"
@@ -26,26 +25,30 @@ class TimespinnerWorld(World):
         self.locked_locations[self.player] = []
         self.pyramid_keys_unlock[self.player] = get_pyramid_keys_unlock(self.world, self.player)
 
-        self.item_name_groups = get_item_name_groups()
+        self.item_name_groups = get_item_names_per_category()
+
 
     def create_regions(self):
         create_regions(self.world, self.player, get_locations(self.world, self.player),
                        self.pyramid_keys_unlock[self.player])
 
+
     def create_item(self, name: str) -> Item:
         return create_item(name, self.player)
+
 
     def set_rules(self):
         setup_events(self.world, self.player, self.locked_locations[self.player])
 
         self.world.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
 
+
     def generate_basic(self):
         excluded_items = get_excluded_items_based_on_options(self.world, self.player)
 
         assign_starter_items(self.world, self.player, excluded_items, self.locked_locations[self.player])
 
-        if not is_option_enabled(self.world, self.player, "QuickSeed") or \
+        if not is_option_enabled(self.world, self.player, "QuickSeed") and \
                 not is_option_enabled(self.world, self.player, "Inverted"):
             place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations[self.player])
 
@@ -55,12 +58,12 @@ class TimespinnerWorld(World):
 
         self.world.itempool += pool
 
+
     def fill_slot_data(self) -> Dict:
         slot_data = {}
 
         for option_name in timespinner_options:
-            option = getattr(self.world, option_name)[self.player]
-            slot_data[option_name] = int(option.value)
+            slot_data[option_name] = is_option_enabled(self.world, self.player, option_name)
 
         slot_data["StinkyMaw"] = 1
         slot_data["ProgressiveVerticalMovement"] = 0
@@ -159,10 +162,10 @@ def setup_events(world: MultiWorld, player: int, locked_locations: List[str]):
             location.place_locked_item(item)
 
 
-def get_item_name_groups() -> Dict[str, Set[str]]:
-    groups: Dict[str, Set[str]] = {}
+def get_item_names_per_category() -> Dict[str, Set[str]]:
+    categories: Dict[str, Set[str]] = {}
 
     for name, data in item_table.items():
-        groups.setdefault(data.category, set()).add(name)
+        categories.setdefault(data.category, set()).add(name)
 
-    return groups
+    return categories

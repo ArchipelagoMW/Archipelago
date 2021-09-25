@@ -193,7 +193,7 @@ item_table: Dict[str, ItemData] = {
     'Max Sand': ItemData('Stat', 1337249, 14)
 }
 
-starter_melee_weapons: Tuple[str] = (
+starter_melee_weapons: Tuple[str, ...] = (
     'Blue Orb',
     'Blade Orb',
     'Fire Orb',
@@ -211,7 +211,7 @@ starter_melee_weapons: Tuple[str] = (
     'Radiant Orb'
 )
 
-starter_spells: Tuple[str] = (
+starter_spells: Tuple[str, ...] = (
     'Colossal Blade',
     'Infernal Flames',
     'Plasma Geyser',
@@ -229,7 +229,7 @@ starter_spells: Tuple[str] = (
 )
 
 # weighted
-starter_progression_items: Tuple[str] = (
+starter_progression_items: Tuple[str, ...] = (
     'Talaria Attachment',
     'Talaria Attachment',
     'Succubus Hairpin',
@@ -241,7 +241,7 @@ starter_progression_items: Tuple[str] = (
     'Lightwall'
 )
 
-filler_items: Tuple[str] = (
+filler_items: Tuple[str, ...] = (
     'Potion',
     'Ether',
     'Hi-Potion',
