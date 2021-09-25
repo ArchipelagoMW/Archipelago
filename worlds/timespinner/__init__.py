@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Set
 from BaseClasses import Item, MultiWorld
 from ..AutoWorld import World
 from .LogicMixin import TimespinnerLogic
@@ -8,6 +8,7 @@ from .Regions import create_regions
 from .Options import is_option_enabled, timespinner_options
 from .PyramidKeys import get_pyramid_keys_unlock
 
+
 class TimespinnerWorld(World):
     options = timespinner_options
     game = "Timespinner"
@@ -16,7 +17,7 @@ class TimespinnerWorld(World):
     hidden = True
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {location.name: location.code for location in get_locations(None, None)} 
+    location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
 
     locked_locations: Dict[int, List[str]] = {}
     pyramid_keys_unlock: Dict[int, str] = {}
@@ -28,7 +29,8 @@ class TimespinnerWorld(World):
         self.item_name_groups = get_item_name_groups()
 
     def create_regions(self):
-        create_regions(self.world, self.player, get_locations(self.world, self.player), self.pyramid_keys_unlock[self.player])
+        create_regions(self.world, self.player, get_locations(self.world, self.player),
+                       self.pyramid_keys_unlock[self.player])
 
     def create_item(self, name: str) -> Item:
         return create_item(name, self.player)
@@ -43,11 +45,12 @@ class TimespinnerWorld(World):
 
         assign_starter_items(self.world, self.player, excluded_items, self.locked_locations[self.player])
 
-        if not is_option_enabled(self.world, self.player, "QuickSeed") or not is_option_enabled(self.world, self.player, "Inverted"):
+        if not is_option_enabled(self.world, self.player, "QuickSeed") or \
+                not is_option_enabled(self.world, self.player, "Inverted"):
             place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations[self.player])
 
         pool = get_item_pool(self.world, self.player, excluded_items)
-        
+
         fill_item_pool_with_dummy_items(self.world, self.player, self.locked_locations[self.player], pool)
 
         self.world.itempool += pool
@@ -62,13 +65,15 @@ class TimespinnerWorld(World):
         slot_data["StinkyMaw"] = 1
         slot_data["ProgressiveVerticalMovement"] = 0
         slot_data["ProgressiveKeycards"] = 0
-        slot_data["PyramidKeysGate"] = self.pyramid_keys_unlock[self.player] 
+        slot_data["PyramidKeysGate"] = self.pyramid_keys_unlock[self.player]
 
         return slot_data
+
 
 def create_item(name: str, player: int) -> Item:
     data = item_table[name]
     return Item(name, data.progression, data.code, player)
+
 
 def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> List[str]:
     excluded_items = []
@@ -79,8 +84,9 @@ def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> List[
         excluded_items.append('Meyef')
     if is_option_enabled(world, player, "QuickSeed"):
         excluded_items.append('Talaria Attachment')
-    
+
     return excluded_items
+
 
 def assign_starter_items(world: MultiWorld, player: int, excluded_items: List[str], locked_locations: List[str]):
     melee_weapon = world.random.choice(starter_melee_weapons)
@@ -91,12 +97,13 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: List[st
 
     melee_weapon_item = create_item(melee_weapon, player)
     spell_item = create_item(spell, player)
-    
+
     world.get_location('Yo Momma 1', player).place_locked_item(melee_weapon_item)
     world.get_location('Yo Momma 2', player).place_locked_item(spell_item)
 
     locked_locations.append('Yo Momma 1')
     locked_locations.append('Yo Momma 2')
+
 
 def get_item_pool(world: MultiWorld, player: int, excluded_items: List[str]) -> List[Item]:
     pool = []
@@ -109,22 +116,26 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: List[str]) -> 
 
     return pool
 
+
 def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locations: List[str], pool: List[Item]):
     for _ in range(len(get_locations(world, player)) - len(locked_locations) - len(pool)):
         item = create_item(world.random.choice(filler_items), player)
         pool.append(item)
 
-def place_first_progression_item(world: MultiWorld, player: int, excluded_items: List[str], locked_locations: List[str]):
+
+def place_first_progression_item(world: MultiWorld, player: int, excluded_items: List[str],
+                                 locked_locations: List[str]):
     progression_item = world.random.choice(starter_progression_items)
-    location =  world.random.choice(starter_progression_locations)
+    location = world.random.choice(starter_progression_locations)
 
     excluded_items.append(progression_item)
     locked_locations.append(location)
-    
+
     item = create_item(progression_item, player)
 
     world.get_location(location, player).place_locked_item(item)
- 
+
+
 def update_progressive_state_based_flags(world: MultiWorld, player: int, name: str, data: Item) -> Item:
     if not data.advancement:
         return data
@@ -136,6 +147,7 @@ def update_progressive_state_based_flags(world: MultiWorld, player: int, name: s
 
     return data
 
+
 def setup_events(world: MultiWorld, player: int, locked_locations: List[str]):
     for location in get_locations(world, player):
         if location.code == EventId:
@@ -146,10 +158,11 @@ def setup_events(world: MultiWorld, player: int, locked_locations: List[str]):
 
             location.place_locked_item(item)
 
-def get_item_name_groups() -> Dict[str, List[str]]:
-    groups: Dict[str, List[str]] = {}
+
+def get_item_name_groups() -> Dict[str, Set[str]]:
+    groups: Dict[str, Set[str]] = {}
 
     for name, data in item_table.items():
-        groups[data.category] = [ name ] if data.category not in groups else groups[data.category] + [ name ]
+        groups.setdefault(data.category, set()).add(name)
 
     return groups
