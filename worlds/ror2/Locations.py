@@ -15,7 +15,7 @@ base_location_table = {
 }
 
 item_pickups = {
-    f"ItemPickup{i}": 37005+i for i in range(1, 51)
+    f"ItemPickup{i}": 37005+i for i in range(1, 101)
 }
 
 location_table = {**base_location_table, **item_pickups}
