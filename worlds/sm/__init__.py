@@ -43,6 +43,7 @@ class SMWorld(World):
     location_name_to_id = locations_lookup_name_to_id
 
     remote_items: bool = False
+    remote_start_inventory: bool = False
 
     itemManager: ItemManager
 
@@ -82,13 +83,14 @@ class SMWorld(World):
 
         self.variaRando = VariaRandomizer(get_base_rom_path(), self.world.randoPreset[self.player], self.player)
         self.world.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
+
+        # keeps Nothing items local so no player will ever pickup Nothing
+        # doing so reduces contribution of this world to the Multiworld the more Nothing there is though
+        self.world.local_items[self.player].value.add('Nothing')
     
     def generate_basic(self):
         itemPool = self.variaRando.container.itemPool
         self.startItems = [variaItem for item in self.world.precollected_items for variaItem in ItemManager.Items.values() if item.player == self.player and variaItem.Name == item.name]
-        for item in self.startItems:
-            if (item in itemPool):
-                itemPool.remove(item)
 
         missingPool = 105 - len(itemPool) + 1
         for i in range(1, missingPool):

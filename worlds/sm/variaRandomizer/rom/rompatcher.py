@@ -338,12 +338,14 @@ class RomPatcher:
 
             # apply area patches
             if area == True:
-                if areaLayoutBase == True:
-                    for p in ['area_rando_layout.ips', 'Sponge_Bath_Blinking_Door', 'east_ocean.ips']:
-                       RomPatcher.IPSPatches['Area'].remove(p)
-                    RomPatcher.IPSPatches['Area'].append('area_rando_layout_base.ips')
                 for patchName in RomPatcher.IPSPatches['Area']:
+                    if areaLayoutBase == True and patchName in ['area_rando_layout.ips', 'Sponge_Bath_Blinking_Door', 'east_ocean.ips']:
+                        continue
                     self.applyIPSPatch(patchName)
+                if areaLayoutBase == True:
+                    self.applyIPSPatch('area_rando_layout_base.ips')
+
+                
             else:
                 self.applyIPSPatch('area_ids_alt.ips')
             if bosses == True:
