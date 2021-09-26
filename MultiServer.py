@@ -31,7 +31,7 @@ from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_
 import Utils
 from Utils import get_item_name_from_id, get_location_name_from_id, \
     version_tuple, restricted_loads, Version
-from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer
+from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission
 
 colorama.init()
 
@@ -469,8 +469,13 @@ async def on_client_connected(ctx: Context, client: Client):
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
         'version': Utils.version_tuple,
+        # TODO ~0.2.0 remove forfeit_mode and remaining_mode in favor of permissions
         'forfeit_mode': ctx.forfeit_mode,
         'remaining_mode': ctx.remaining_mode,
+        'permissions': {
+            "forfeit": Permission.from_text(ctx.forfeit_mode),
+            "remaining": Permission.from_text(ctx.remaining_mode),
+        },
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
         'datapackage_version': network_data_package["version"],
