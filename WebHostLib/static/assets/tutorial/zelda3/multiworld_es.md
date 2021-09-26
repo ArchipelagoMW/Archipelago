@@ -43,7 +43,7 @@ Cada jugador en una partida de multiworld proveerá su propio fichero YAML. Esta
 que cada jugador disfrute de una experiencia personalizada a su gusto, y cada jugador dentro de la misma partida de multiworld puede tener diferentes opciones.
 
 ### Donde puedo obtener un fichero YAML?
-La página "[Generate Game](/player-settings)" en el sitio web te permite configurar tu configuración personal y
+La página "[Generate Game](/games/A%20Link%20to%20the%20Past/player-settings)" en el sitio web te permite configurar tu configuración personal y
 descargar un fichero "YAML". 
 
 ### Configuración YAML avanzada
@@ -67,7 +67,7 @@ Si quieres validar que tu fichero YAML para asegurarte que funciona correctament
 [YAML Validator](/mysterycheck).
 
 ## Generar una partida para un jugador
-1. Navega a [la pagina Generate game](/player-settings), configura tus opciones, haz click en el boton "Generate game".
+1. Navega a [la pagina Generate game](/games/A%20Link%20to%20the%20Past/player-settings), configura tus opciones, haz click en el boton "Generate game".
 2. Se te redigirá a una pagina "Seed Info", donde puedes descargar tu archivo de parche.
 3. Haz doble click en tu fichero de parche, y el emulador debería ejecutar tu juego automáticamente. Como el
    Cliente no es necesario para partidas de un jugador, puedes cerrarlo junto a la pagina web (que tiene como titulo "Multiworld WebUI") que se ha abierto automáticamente.
