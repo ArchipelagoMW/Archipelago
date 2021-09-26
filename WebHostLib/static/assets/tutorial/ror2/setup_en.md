@@ -2,15 +2,11 @@
 
 ## Install using r2modman
 ### Install r2modman
-Head on over to the r2modman page on Thunderstore and follow the installation instructions.
-
-https://thunderstore.io/package/ebkr/r2modman/
+Head on over to the [r2modman page on Thunderstore](https://thunderstore.io/package/ebkr/r2modman/) and follow the installation instructions.
 
 ### Install Archipelago Mod using r2modman
-You can install the Archipelago mod using r2modman in one of two ways. 
+You can install the [Archipelago mod](https://thunderstore.io/package/ArchipelagoMW/Archipelago/) using r2modman in one of two ways. 
 One, you can use the Thunderstore website and click on the "Install with Mod Manager" link.
-
-https://thunderstore.io/package/ArchipelagoMW/Archipelago/
 
 You can also search for the "Archipelago" mod in the r2modman interface.
 The mod manager should automatically install all necessary dependencies as well.
@@ -72,7 +68,7 @@ Risk of Rain 2:
 
 | Name | Description | Allowed values |
 | ---- | ----------- | -------------- |
-| total_locations | The total number of location checks that will be attributed to the Risk of Rain player. This option is ALSO the total number of items in the item pool for the Risk of Rain player. | 10 - 50 |
+| total_locations | The total number of location checks that will be attributed to the Risk of Rain player. This option is ALSO the total number of items in the item pool for the Risk of Rain player. | 10 - 100 |
 | total_revivals | The total number of items in the Risk of Rain player's item pool (items other players pick up for them) replaced with `Dio's Best Friend`. | 0 - 5 |
 | start_with_revive | Starts the player off with a `Dio's Best Friend`. Functionally equivalent to putting a `Dio's Best Friend` in your `starting_inventory`. | true/false |
 | item_pickup_step | The number of item pickups which you are allowed to claim before they become an Archipelago location check. | 0 - 5 |
