@@ -37,16 +37,16 @@ class RiskOfRainWorld(World):
             # generate chaos weights if the preset is chosen
             if pool_option == 5:
                 junk_pool = {
-                    "Item Scrap, Green": self.world.random.randint(0, 100),
-                    "Item Scrap, Red": self.world.random.randint(0, 100),
-                    "Item Scrap, Yellow": self.world.random.randint(0, 100),
+                    "Item Scrap, Green": self.world.random.randint(0, 80),
+                    "Item Scrap, Red": self.world.random.randint(0, 40),
+                    "Item Scrap, Yellow": self.world.random.randint(0, 50),
                     "Item Scrap, White": self.world.random.randint(0, 100),
                     "Common Item": self.world.random.randint(0, 100),
                     "Uncommon Item": self.world.random.randint(0, 70),
                     "Legendary Item": self.world.random.randint(0, 45),
                     "Boss Item": self.world.random.randint(0, 30),
                     "Lunar Item": self.world.random.randint(0, 60),
-                    "Equipment": self.world.random.randint(0, 50)
+                    "Equipment": self.world.random.randint(0, 40)
                 }
             else:
                 junk_pool = item_pool_weights[pool_option].copy()
@@ -64,14 +64,14 @@ class RiskOfRainWorld(World):
                 "Equipment": self.world.equipment[self.player].value
             }
 
+        if not self.world.enable_lunar[self.player]:
+            junk_pool.pop("Lunar Item")
+
         # Generate item pool
         itempool = []
 
         # Add revive items for the player
         itempool += ["Dio's Best Friend"] * self.world.total_revivals[self.player]
-
-        if not self.world.enable_lunar[self.player]:
-            junk_pool.pop("Lunar Item")
 
         # Fill remaining items with randomly generated junk
         itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
@@ -109,7 +109,7 @@ def create_regions(world, player: int):
         create_region(world, player, 'Menu', None, ['Lobby']),
         create_region(world, player, 'Petrichor V',
                       [location for location in base_location_table] +
-                      [f"ItemPickup{i}" for i in range(1, 1+world.total_locations[player])])
+                      [f"Item Pickup {i}" for i in range(1, world.start_with_revive[player].value+world.total_locations[player])])
     ]
 
     world.get_entrance("Lobby", player).connect(world.get_region("Petrichor V", player))
