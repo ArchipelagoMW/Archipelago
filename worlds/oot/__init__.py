@@ -641,7 +641,7 @@ class OOTWorld(World):
             shop_locations = list(
                 filter(lambda location: location.type == 'Shop' and location.name not in self.shop_prices,
                        self.world.get_unfilled_locations(player=self.player)))
-            shop_items.sort(key=lambda item: 1 if item.name in {"Buy Goron Tunic", "Buy Zora Tunic"} else 0)
+            shop_items.sort(key=lambda item: int(item.advancement)) # place progression shop items first
             self.world.random.shuffle(shop_locations)
             for item in shop_items:
                 self.world.itempool.remove(item)
