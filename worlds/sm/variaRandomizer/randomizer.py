@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from Utils import output_path
-import argparse, os.path, json, sys, shutil, random
+import argparse, os.path, json, sys, shutil, random, copy
 
 from rando.RandoSettings import RandoSettings, GraphSettings
 from rando.RandoExec import RandoExec
@@ -289,7 +289,7 @@ class VariaRandomizer:
 
     def __init__(self, rom, randoPreset, player):
         # parse args       
-        self.args = VariaRandomizer.parser.parse_args()
+        self.args = copy.deepcopy(VariaRandomizer.parser.parse_args())
         self.player = player
         args = self.args
         args.rom = rom
