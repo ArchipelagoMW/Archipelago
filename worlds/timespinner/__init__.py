@@ -2,7 +2,7 @@ from typing import Dict, List, Set
 from BaseClasses import Item, MultiWorld
 from ..AutoWorld import World
 from .LogicMixin import TimespinnerLogic
-from .Items import item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
+from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
 from .Locations import get_locations, starter_progression_locations, EventId
 from .Regions import create_regions
 from .Options import is_option_enabled, timespinner_options
@@ -13,10 +13,10 @@ class TimespinnerWorld(World):
     game = "Timespinner"
     topology_present = True
     data_version = 1
-    hidden = True
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
+    item_name_groups = get_item_names_per_category()
 
     locked_locations: Dict[int, List[str]] = {}
     pyramid_keys_unlock: Dict[int, str] = {}
@@ -24,8 +24,6 @@ class TimespinnerWorld(World):
     def generate_early(self):
         self.locked_locations[self.player] = []
         self.pyramid_keys_unlock[self.player] = get_pyramid_keys_unlock(self.world, self.player)
-
-        self.item_name_groups = get_item_names_per_category()
 
 
     def create_regions(self):
@@ -160,12 +158,3 @@ def setup_events(world: MultiWorld, player: int, locked_locations: List[str]):
             locked_locations.append(location.name)
 
             location.place_locked_item(item)
-
-
-def get_item_names_per_category() -> Dict[str, Set[str]]:
-    categories: Dict[str, Set[str]] = {}
-
-    for name, data in item_table.items():
-        categories.setdefault(data.category, set()).add(name)
-
-    return categories

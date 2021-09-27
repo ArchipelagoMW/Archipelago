@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, NamedTuple
+from typing import Dict, Set, Tuple, NamedTuple
 
 class ItemData(NamedTuple):
     category: str
@@ -255,3 +255,11 @@ filler_items: Tuple[str, ...] = (
     'Antidote',
     'Chaos Rose'
 )
+
+def get_item_names_per_category() -> Dict[str, Set[str]]:
+    categories: Dict[str, Set[str]] = {}
+
+    for name, data in item_table.items():
+        categories.setdefault(data.category, set()).add(name)
+
+    return categories
