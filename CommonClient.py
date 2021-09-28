@@ -9,7 +9,7 @@ import websockets
 
 import Utils
 from MultiServer import CommandProcessor
-from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, color, ClientStatus
+from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
 from Utils import Version
 from worlds import network_data_package, AutoWorldRegister
 
@@ -315,8 +315,9 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             logger.info("Server protocol tags: " + ", ".join(args["tags"]))
             if args['password']:
                 logger.info('Password required')
-            logger.info(f"Forfeit setting: {args['forfeit_mode']}")
-            logger.info(f"Remaining setting: {args['remaining_mode']}")
+            for permission_name, permission_flag in args.get("permissions", {}).items():
+                flag = Permission(permission_flag)
+                logger.info(f"{permission_name.capitalize()} permission: {flag.name}")
             logger.info(
                 f"A !hint costs {args['hint_cost']}% of your total location count as points"
                 f" and you get {args['location_check_points']}"
