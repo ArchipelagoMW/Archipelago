@@ -57,7 +57,7 @@ If you would like to validate your YAML file to make sure it works, you may do s
 [YAML Validator](/mysterycheck) page.
 
 ## Generating a Single-Player Game
-1. Navigate to the [Generate Game](/player-settings), configure your options, and click the "Generate Game" button.
+1. Navigate to the [Player Settings](/games/A%20Link%20to%20the%20Past/player-settings) page, configure your options, and click the "Generate Game" button.
 2. You will be presented with a "Seed Info" page, where you can download your patch file.
 3. Double-click on your patch file, and the emulator should launch with your game automatically. As the
    Client is unnecessary for single player games, you may close it and the WebUI.

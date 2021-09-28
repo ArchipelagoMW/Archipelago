@@ -49,9 +49,7 @@ def get_yaml_data(file) -> Union[Dict[str, str], str]:
                 for file in infolist:
                     if file.filename.endswith(banned_zip_contents):
                         return "Uploaded data contained a rom file, which is likely to contain copyrighted material. Your file was deleted."
-                    elif file.filename.endswith(".yaml"):
-                        options[file.filename] = zfile.open(file, "r").read()
-                    elif file.filename.endswith(".txt"):
+                    elif file.filename.endswith((".yaml", ".json", ".yml", ".txt")):
                         options[file.filename] = zfile.open(file, "r").read()
         else:
             options = {file.filename: file.read()}

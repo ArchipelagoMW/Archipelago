@@ -27,6 +27,7 @@ server_options:
   # "enabled" -> clients can always forfeit
   # "auto" -> automatic forfeit on goal completion, "goal" -> clients can forfeit after achieving their goal
   # "auto-enabled" -> automatic forfeit on goal completion and manual forfeit is also enabled
+  # "goal" -> forfeit is allowed after goal completion
   forfeit_mode: "goal"
   # Remaining modes
   # !remaining handling, that tells a client which items remain in their pool
