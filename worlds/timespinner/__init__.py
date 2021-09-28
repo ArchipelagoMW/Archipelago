@@ -9,6 +9,11 @@ from .Options import is_option_enabled, timespinner_options
 from .PyramidKeys import get_pyramid_keys_unlock
 
 class TimespinnerWorld(World):
+    """
+    Timespinner is a beautiful metroidvania inspired by classic 90s action-platformers.
+    Travel back in time to change fate itself. Join timekeeper Lunais on her quest for revenge against the empire that killed her family.
+    """
+
     options = timespinner_options
     game = "Timespinner"
     topology_present = True
