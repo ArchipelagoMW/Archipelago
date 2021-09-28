@@ -1,5 +1,5 @@
 from typing import Dict, List, Set
-from BaseClasses import Item, MultiWorld
+from BaseClasses import Item, MultiWorld, Location
 from ..AutoWorld import World
 from .LogicMixin import TimespinnerLogic
 from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
@@ -25,15 +25,17 @@ class TimespinnerWorld(World):
 
     locked_locations: Dict[int, List[str]] = {}
     pyramid_keys_unlock: Dict[int, str] = {}
+    location_cache: Dict[int, List[str]] = {}
 
     def generate_early(self):
         self.locked_locations[self.player] = []
         self.pyramid_keys_unlock[self.player] = get_pyramid_keys_unlock(self.world, self.player)
+        self.location_cache[self.player] = []
 
 
     def create_regions(self):
-        create_regions(self.world, self.player, get_locations(self.world, self.player),
-                       self.pyramid_keys_unlock[self.player])
+        create_regions(self.world, self.player, get_locations(self.world, self.player), 
+                        self.location_cache[self.player], self.pyramid_keys_unlock[self.player])
 
 
     def create_item(self, name: str) -> Item:
@@ -72,6 +74,7 @@ class TimespinnerWorld(World):
         slot_data["ProgressiveVerticalMovement"] = 0
         slot_data["ProgressiveKeycards"] = 0
         slot_data["PyramidKeysGate"] = self.pyramid_keys_unlock[self.player]
+        slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache[self.player])
 
         return slot_data
 
@@ -112,7 +115,7 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: List[st
 
 
 def get_item_pool(world: MultiWorld, player: int, excluded_items: List[str]) -> List[Item]:
-    pool = []
+    pool: List[Item] = []
 
     for name, data in item_table.items():
         if not name in excluded_items:
@@ -163,3 +166,13 @@ def setup_events(world: MultiWorld, player: int, locked_locations: List[str]):
             locked_locations.append(location.name)
 
             location.place_locked_item(item)
+
+
+def get_personal_items(player: int, locations: List[Location]) -> Dict[int, int]:
+    personal_items: Dict[int, int] = {}
+
+    for location in locations:
+        if location.address and location.item and location.item.code and location.item.player == player:
+            personal_items[location.address] = location.item.code
+    
+    return personal_items
