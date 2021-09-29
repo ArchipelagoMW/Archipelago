@@ -1,6 +1,7 @@
 import logging
 import copy
 import os
+import threading
 from typing import Set
 
 logger = logging.getLogger("Super Metroid")
@@ -52,8 +53,9 @@ class SMWorld(World):
     Logic.factory('vanilla')
 
     def __init__(self, world: MultiWorld, player: int):
+        self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
-
+        
     def __new__(cls, world, player):
         
         # Add necessary objects to CollectionState on initialization
@@ -170,12 +172,19 @@ class SMWorld(World):
         patchDict = { 'MultiWorldLocations':  multiWorldLocations }
         romPatcher.applyIPSPatch('MultiWorldLocations', patchDict)
 
-        playerNames = {0x1C4F00 : self.world.player_name[self.player].encode()}
+        playerNames = {}
         for p in range(1, self.world.players + 1):
             playerNames[0x1C5000 + (p - 1) * 16] = self.world.player_name[p][:16].upper().center(16).encode()
         playerNames[0x1C5000 + (self.world.players) * 16] = "Archipelago".upper().center(16).encode()
 
         romPatcher.applyIPSPatch('PlayerName', { 'PlayerName':  playerNames })
+
+        # set rom name
+        # 21 bytes
+        from Main import __version__
+        self.romName = bytearray(f'BM{__version__.replace(".", "")[0:3]}_{self.player}_{self.world.seed:11}\0', 'utf8')[:21]
+        self.romName.extend([0] * (21 - len(self.romName)))
+        romPatcher.applyIPSPatch('ROMName', { 'ROMName':  {0x1C4F00 : self.romName, 0x007FC0 : self.romName} })
 
         startItemROMAddressBase = 0x2FD8B9
 
@@ -249,22 +258,36 @@ class SMWorld(World):
         romPatcher.commitIPS()
 
         itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == self.player]
-        romPatcher.writeItemsLocs(itemLocs)
-
-        
+        romPatcher.writeItemsLocs(itemLocs)    
 
     def generate_output(self, output_directory: str):
-        outfilebase = 'AP_' + self.world.seed_name
-        outfilepname = f'_P{self.player}'
-        outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}" \
+        try:
+            outfilebase = 'AP_' + self.world.seed_name
+            outfilepname = f'_P{self.player}'
+            outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}" \
 
-        outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
-        self.variaRando.PatchRom(outputFilename, self.APPatchRom)
+            outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
+            self.variaRando.PatchRom(outputFilename, self.APPatchRom)
 
-        Patch.create_patch_file(outputFilename, player=self.player, player_name=self.world.player_name[self.player], game=Patch.GAME_SM)
-        os.unlink(outputFilename)
+            Patch.create_patch_file(outputFilename, player=self.player, player_name=self.world.player_name[self.player], game=Patch.GAME_SM)
+            os.unlink(outputFilename)
+            self.rom_name = self.romName
+        except:
+            raise
+        finally:
+            self.rom_name_available_event.set() # make sure threading continues and errors are collected
 
-        pass
+    def modify_multidata(self, multidata: dict):
+        import base64
+        # wait for self.rom_name to be available.
+        self.rom_name_available_event.wait()
+        rom_name = getattr(self, "rom_name", None)
+        # we skip in case of error, so that the original error in the output thread is the one that gets raised
+        if rom_name:
+            new_name = base64.b64encode(bytes(self.rom_name)).decode()
+            payload = multidata["connect_names"][self.world.player_name[self.player]]
+            multidata["connect_names"][new_name] = payload
+            del (multidata["connect_names"][self.world.player_name[self.player]])
 
 
     def fill_slot_data(self): 

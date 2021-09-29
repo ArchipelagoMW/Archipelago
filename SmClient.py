@@ -125,7 +125,8 @@ class Context(CommonContext):
                 'No ROM detected, awaiting snes connection to authenticate to the multiworld server (/snes)')
             return
         self.awaiting_rom = False
-        auth = self.rom.decode("utf-8")[0:16].rstrip('\x00')
+        self.auth = self.rom
+        auth = base64.b64encode(self.rom).decode()
         await self.send_msgs([{"cmd": 'Connect',
                               'password': self.password, 'name': auth, 'version': Utils.version_tuple,
                               'tags': get_tags(self),
@@ -147,7 +148,7 @@ WRAM_SIZE = 0x20000
 SRAM_START = 0xE00000
 
 ROMNAME_START = 0x1C4F00
-ROMNAME_SIZE = 0x50
+ROMNAME_SIZE = 0x15
 
 INGAME_MODES = {0x07, 0x09, 0x0b}
 ENDGAME_MODES = {0x26, 0x27}
