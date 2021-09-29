@@ -954,6 +954,8 @@ class Item():
     name: str
     game: str = "Generic"
     type: str = None
+    # indicates if this is a negative impact item. Causes these to be handled differently by various games.
+    trap: bool = False
     # change manually to ensure that a specific non-progression item never goes on an excluded location
     never_exclude = False
 

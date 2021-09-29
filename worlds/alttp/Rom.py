@@ -766,7 +766,10 @@ def patch_rom(world, rom, player, enemized):
 
             if location.item is not None:
                 if not location.native_item:
-                    itemid = get_nonnative_item_sprite(location.item.game)
+                    if location.item.trap:
+                        itemid = 0x5A  # Nothing, which disguises
+                    else:
+                        itemid = get_nonnative_item_sprite(location.item.name)
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):
