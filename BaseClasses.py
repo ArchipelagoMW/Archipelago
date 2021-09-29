@@ -950,7 +950,8 @@ class Location():
 class Item():
     location: Optional[Location] = None
     world: Optional[MultiWorld] = None
-    code: Optional[str] = None  # an item with ID None is called an Event, and does not get written to multidata
+    code: Optional[int] = None  # an item with ID None is called an Event, and does not get written to multidata
+    name: str
     game: str = "Generic"
     type: str = None
     # change manually to ensure that a specific non-progression item never goes on an excluded location
