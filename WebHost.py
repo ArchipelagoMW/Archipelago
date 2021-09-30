@@ -48,6 +48,6 @@ if __name__ == "__main__":
     if app.config["SELFHOST"]:  # using WSGI, you just want to run get_app()
         if app.config["DEBUG"]:
             autohost(app.config)
-            app.run(debug=True, port=90)
+            app.run(debug=True, port=app.config["PORT"])
         else:
-            serve(app, port=90, threads=app.config["WAITRESS_THREADS"])
+            serve(app, port=app.config["PORT"], threads=app.config["WAITRESS_THREADS"])
