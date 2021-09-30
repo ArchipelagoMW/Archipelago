@@ -17,6 +17,7 @@ class TimespinnerWorld(World):
     options = timespinner_options
     game = "Timespinner"
     topology_present = True
+    remote_items = False
     data_version = 2
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -25,12 +26,12 @@ class TimespinnerWorld(World):
 
     locked_locations: Dict[int, List[str]] = {}
     pyramid_keys_unlock: Dict[int, str] = {}
-    location_cache: Dict[int, List[str]] = {}
+    location_cache: Dict[int, List[Location]] = {}
 
     def generate_early(self):
         self.locked_locations[self.player] = []
-        self.pyramid_keys_unlock[self.player] = get_pyramid_keys_unlock(self.world, self.player)
         self.location_cache[self.player] = []
+        self.pyramid_keys_unlock[self.player] = get_pyramid_keys_unlock(self.world, self.player)
 
 
     def create_regions(self):
@@ -53,8 +54,7 @@ class TimespinnerWorld(World):
 
         assign_starter_items(self.world, self.player, excluded_items, self.locked_locations[self.player])
 
-        if not is_option_enabled(self.world, self.player, "QuickSeed") and \
-                not is_option_enabled(self.world, self.player, "Inverted"):
+        if not is_option_enabled(self.world, self.player, "QuickSeed") and not is_option_enabled(self.world, self.player, "Inverted"):
             place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations[self.player])
 
         pool = get_item_pool(self.world, self.player, excluded_items)
@@ -70,9 +70,9 @@ class TimespinnerWorld(World):
         for option_name in timespinner_options:
             slot_data[option_name] = is_option_enabled(self.world, self.player, option_name)
 
-        slot_data["StinkyMaw"] = 1
-        slot_data["ProgressiveVerticalMovement"] = 0
-        slot_data["ProgressiveKeycards"] = 0
+        slot_data["StinkyMaw"] = True
+        slot_data["ProgressiveVerticalMovement"] = False
+        slot_data["ProgressiveKeycards"] = False
         slot_data["PyramidKeysGate"] = self.pyramid_keys_unlock[self.player]
         slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache[self.player])
 
