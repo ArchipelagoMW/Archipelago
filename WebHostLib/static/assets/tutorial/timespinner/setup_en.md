@@ -1,52 +1,60 @@
-# Factorio Randomizer Setup Guide
+# Timespinner Randomizer Setup Guide
 
 ## Required Software
 
-### Server Host
-- [Factorio](https://factorio.com)
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
-
-### Players
-- [Factorio](https://factorio.com)
+- [Timespinner (steam)](https://store.steampowered.com/app/368620/Timespinner/) or [Timespinner (drm free)](https://www.humblebundle.com/store/timespinner)
+- [Timespinner Randomizer](https://github.com/JarnoWesthof/TsRandomizer)
 
 ## General Concept
 
-One Server Host exists per Factorio World in an Archipelago Multiworld, any number of modded Factorio players can then connect to that world. From the view of Archipelago, this Factorio host is a client.
+The timespinner Randomizer loads Timespinner.exe from the same folder, and alters its state in memory to allow for randomization of the items
+
 ## Installation Procedures
 
-### Dedicated Server Setup
-You need a dedicated isolated Factorio installation that the FactorioClient can take control over. If you intend to both host a world and play on the same device, you will need two separate Factorio installations; one for the FactorioClient to hook into and control, and one for you to play on.
-The easiest and cheapest way to do so is to either buy or register a Factorio key on factorio.com, which allows you to download as many Factorio games as you want. If you own a steam copy already you can link your account on the website.
-1. Download the latest Factorio from https://factorio.com/download for your system, for Windows the recommendation is "win64-manual".
-
-2. Make sure the Factorio you play and the Factorio you use for hosting do not share paths. If you downloaded the "manual" version, this is already the case, otherwise, go into the hosting Factorio's folder and put the following text into its `config-path.cfg`:
-```ini
-config-path=__PATH__executable__/../../config
-use-system-read-write-data-directories=false
-```
-3. In this same folder if there are shortcuts named "mods" and "saves" delete these and replace with folders with the same names.
-4. Navigate to where you installed ArchipelagoFactorioClient and open the host.yaml file as text. Find the entry `executable` under `factorio_options` and set it to point to your hosting Factorio.exe. If you put Factorio into your Archipelago folder, this would already match.<br>
-ex.
-```yaml
-factorio_options:
-  executable:  C:\\Program Files\\factorio\\bin\\x64\\factorio"
-```
-### Player Setup
-- Manually install the AP mod for the correct world you want to join, then use Factorio's built-in multiplayer. If you're connecting to a FactorioClient on the same system you will connect to localhost
-
+Download latest version of [Timespinner Randomizer](https://github.com/JarnoWesthof/TsRandomizer) you can find the .zip files on the releases page, download the zip for your current platform. Then extract the zip to the folder where your Timespinner game is installed. Then just run TsRandomizer.exe instead of Timespinner.exe to start the game in randomized mode, for more info see the [readme](https://github.com/JarnoWesthof/TsRandomizer)
     
 ## Joining a MultiWorld Game
 
-1. Install the generated Factorio AP Mod (would be in /Mods after step 2 of Setup)
+1. Run TsRandomizer.exe
+2. Select "New Game"
+3. Switch "<< Select Seed >>" to "<< Archiplago >>" by pressing left on the controller or keyboard 
+4. Select "<< Archiplago >>" to open a new menu where you can enter your Archipelago login credentails
+	* NOTE: the input fields support Ctrl + V pasting of values
+5. Select "Connect"
+6. If all went well you will be taken back the difficulty selection menu and the game will start as soon as you select a difficulty
 
-2. Run FactorioClient, it should launch a Factorio server, which you can control with /factorio <original factorio commands>,
-
-	* It should start up, create a world and become ready for Factorio connections.
-3. In FactorioClient, do /connect <Archipelago Server Address> to join that multiworld. You can find further commands with /help as well as !help once connected.
-
-	* / commands are run on your local client, ! commands are requests for the AP server
-
-	* Players should be able to connect to your Factorio Server and begin playing.
-
-4. You can join yourself by connecting to address localhost, other people will need to connect to your IP and you may need to port forward for the Factorio Server for those connections.
-
+## YAML Settings
+An example YAML would look like this:
+```yaml
+description: Default Timespinner Template
+name: Lunais{number} # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
+game:
+  Timespinner: 1
+requires:
+  version: 0.1.8
+Timespinner:
+  StartWithJewelryBox: # Start with Jewelry Box unlocked
+    false: 50
+    true: 0
+  DownloadableItems: # With the tablet you will be able to download items at terminals
+    false: 50
+    true: 50
+  FacebookMode: # Requires Oculus Rift(ng) to spot the weakspots in walls and floors
+    false: 50
+    true: 0
+  StartWithMeyef: # Start with Meyef, ideal for when you want to play multiplayer
+    false: 50
+    true: 50
+  QuickSeed: # Start with Talaria Attachment, Nyoom!
+    false: 50
+    true: 0
+  SpecificKeycards: # Keycards can only open corresponding doors
+    false: 0
+    true: 50
+  Inverted: # Start in the past
+    false: 50
+    true: 50
+```
+* All Options are either enabled or not, if values are specified for both true & false the generator will select one based on weight
+* The Timespinner Randomizer option "StinkyMaw" is currently always enabled for Archipelago generated seeds
+* The Timespinner Randomizer options "ProgressiveVerticalMovement" & "ProgressiveKeycards" are currently not supported on Archipelago generated seeds
