@@ -469,9 +469,6 @@ async def on_client_connected(ctx: Context, client: Client):
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
         'version': Utils.version_tuple,
-        # TODO ~0.2.0 remove forfeit_mode and remaining_mode in favor of permissions
-        'forfeit_mode': ctx.forfeit_mode,
-        'remaining_mode': ctx.remaining_mode,
         'permissions': {
             "forfeit": Permission.from_text(ctx.forfeit_mode),
             "remaining": Permission.from_text(ctx.remaining_mode),
@@ -497,10 +494,6 @@ async def on_client_joined(ctx: Context, client: Client):
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
         f"playing {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}).")
-    # TODO: remove with 0.2
-    if client.version < Version(0, 1, 7):
-        ctx.notify_client(client,
-                          "Warning: Your client's datapackage handling may be unsupported soon. (Version < 0.1.7)")
 
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 

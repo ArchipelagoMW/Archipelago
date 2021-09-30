@@ -137,10 +137,8 @@ class Choice(Option):
     @classmethod
     def from_text(cls, text: str) -> Choice:
         text = text.lower()
-        # TODO: turn on after most people have adjusted their yamls to no longer have suboptions with "random" in them
-        # maybe in 0.2?
-        # if text == "random":
-        #     return cls(random.choice(list(cls.options.values())))
+        if text == "random":
+            return cls(random.choice(list(cls.name_lookup)))
         for optionname, value in cls.options.items():
             if optionname == text:
                 return cls(value)
