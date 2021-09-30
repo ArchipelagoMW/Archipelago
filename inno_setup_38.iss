@@ -50,8 +50,8 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 [Components]
 Name: "core"; Description: "Core Files"; Types: full hosting playing custom; Flags: fixed
 Name: "generator"; Description: "Generator"; Types: full hosting
-Name: "generator/lttp"; Description: "A Link to the Past ROM Setup"; Types: full hosting
-Name: "generator/oot"; Description: "Ocarina of Time ROM Setup"; Types: full hosting
+Name: "generator/lttp"; Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
+Name: "generator/oot"; Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296
 Name: "server"; Description: "Server"; Types: full hosting
 Name: "client"; Description: "Clients"; Types: full playing
 Name: "client/lttp"; Description: "A Link to the Past"; Types: full playing
@@ -67,7 +67,7 @@ Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Ka
 Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: generator/oot
 Source: "{#sourcepath}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#sourcepath}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/lttp
-Source: "{#sourcepath}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator
+Source: "{#sourcepath}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
 
 Source: "{#sourcepath}\ArchipelagoGenerate.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: generator
 Source: "{#sourcepath}\ArchipelagoServer.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: server
