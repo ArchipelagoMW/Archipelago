@@ -74,6 +74,7 @@ scripts = {
     # Core
     "MultiServer.py": ("ArchipelagoServer", False, icon),
     "Generate.py": ("ArchipelagoGenerate", False, icon),
+    "CommonClient.py": ("ArchipelagoTextClient", True, icon),
     # LttP
     "LttPClient.py": ("ArchipelagoLttPClient", True, icon),
     "LttPAdjuster.py": ("ArchipelagoLttPAdjuster", True, icon),
