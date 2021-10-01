@@ -641,7 +641,11 @@ class OOTWorld(World):
             shop_locations = list(
                 filter(lambda location: location.type == 'Shop' and location.name not in self.shop_prices,
                        self.world.get_unfilled_locations(player=self.player)))
-            shop_items.sort(key=lambda item: int(item.advancement)) # place progression shop items first
+            shop_items.sort(key=lambda item: {
+                'Buy Deku Shield': 3*int(self.open_forest == 'closed'), 
+                'Buy Goron Tunic': 2, 
+                'Buy Zora Tunic': 2
+            }.get(item.name, int(item.advancement)))  # place Deku Shields if needed, then tunics, then other advancement, then junk
             self.world.random.shuffle(shop_locations)
             for item in shop_items:
                 self.world.itempool.remove(item)
