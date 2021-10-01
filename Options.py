@@ -29,7 +29,9 @@ class AssembleOptions(type):
                 def validate(self, *args, **kwargs):
                     func(self, *args, **kwargs)
                     self.value = self.schema.validate(self.value)
+
                 return validate
+
             attrs["__init__"] = validate_decorator(attrs["__init__"])
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
@@ -241,9 +243,10 @@ class OptionNameSet(Option):
 class OptionDict(Option):
     default = {}
     supports_weighting = False
+    value: typing.Dict[str, typing.Any]
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
-        self.value: typing.Dict[str, typing.Any] = value
+        self.value = value
 
     @classmethod
     def from_any(cls, data: typing.Dict[str, typing.Any]) -> OptionDict:
@@ -255,8 +258,11 @@ class OptionDict(Option):
     def get_option_name(self, value):
         return ", ".join(f"{key}: {value}" for key, value in self.value.items())
 
+    def __contains__(self, item):
+        return item in self.value
 
-class OptionList(Option, list):
+
+class OptionList(Option):
     default = []
     supports_weighting = False
     value: list
@@ -278,8 +284,11 @@ class OptionList(Option, list):
     def get_option_name(self, value):
         return ", ".join(self.value)
 
+    def __contains__(self, item):
+        return item in self.value
 
-class OptionSet(Option, set):
+
+class OptionSet(Option):
     default = frozenset()
     supports_weighting = False
     value: set
@@ -302,6 +311,9 @@ class OptionSet(Option, set):
 
     def get_option_name(self, value):
         return ", ".join(self.value)
+
+    def __contains__(self, item):
+        return item in self.value
 
 
 local_objective = Toggle  # local triforce pieces, local dungeon prizes etc.

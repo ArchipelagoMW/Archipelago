@@ -291,7 +291,7 @@ def main(args, seed=None):
                                                  location.item.code, False)
                             precollected_hints[location.player].add(hint)
                             precollected_hints[location.item.player].add(hint)
-                        elif location.item.name in args.start_hints[location.item.player]:
+                        elif location.item.name in world.start_hints[location.item.player]:
                             hint = NetUtils.Hint(location.item.player, location.player, location.address,
                                                  location.item.code, False,
                                                  er_hint_data.get(location.player, {}).get(location.address, ""))

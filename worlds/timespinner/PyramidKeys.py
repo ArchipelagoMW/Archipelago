@@ -3,7 +3,7 @@ from BaseClasses import MultiWorld
 from .Options import is_option_enabled
 
 def get_pyramid_keys_unlock(world: MultiWorld, player: int) -> str:
-    present_teleportation_gates: Tuple[str] = (
+    present_teleportation_gates: Tuple[str, ...] = (
         "GateKittyBoss",
         "GateLeftLibrary",
         "GateMilitairyGate",
@@ -12,7 +12,7 @@ def get_pyramid_keys_unlock(world: MultiWorld, player: int) -> str:
         "GateLakeDesolation"
     )
 
-    past_teleportation_gates: Tuple[str] = (
+    past_teleportation_gates: Tuple[str, ...] = (
         "GateLakeSirineRight",
         "GateAccessToPast",
         "GateCastleRamparts",

@@ -1,52 +1,60 @@
 from typing import Dict, List, Set
-from BaseClasses import Item, MultiWorld
+from BaseClasses import Item, MultiWorld, Location
 from ..AutoWorld import World
 from .LogicMixin import TimespinnerLogic
-from .Items import item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
+from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
 from .Locations import get_locations, starter_progression_locations, EventId
 from .Regions import create_regions
 from .Options import is_option_enabled, timespinner_options
 from .PyramidKeys import get_pyramid_keys_unlock
 
-
 class TimespinnerWorld(World):
+    """
+    Timespinner is a beautiful metroidvania inspired by classic 90s action-platformers.
+    Travel back in time to change fate itself. Join timekeeper Lunais on her quest for revenge against the empire that killed her family.
+    """
+
     options = timespinner_options
     game = "Timespinner"
     topology_present = True
-    data_version = 1
-    hidden = True
+    remote_items = False
+    data_version = 2
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
+    item_name_groups = get_item_names_per_category()
 
     locked_locations: Dict[int, List[str]] = {}
     pyramid_keys_unlock: Dict[int, str] = {}
+    location_cache: Dict[int, List[Location]] = {}
 
     def generate_early(self):
         self.locked_locations[self.player] = []
+        self.location_cache[self.player] = []
         self.pyramid_keys_unlock[self.player] = get_pyramid_keys_unlock(self.world, self.player)
 
-        self.item_name_groups = get_item_name_groups()
 
     def create_regions(self):
-        create_regions(self.world, self.player, get_locations(self.world, self.player),
-                       self.pyramid_keys_unlock[self.player])
+        create_regions(self.world, self.player, get_locations(self.world, self.player), 
+                        self.location_cache[self.player], self.pyramid_keys_unlock[self.player])
+
 
     def create_item(self, name: str) -> Item:
         return create_item(name, self.player)
+
 
     def set_rules(self):
         setup_events(self.world, self.player, self.locked_locations[self.player])
 
         self.world.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
 
+
     def generate_basic(self):
         excluded_items = get_excluded_items_based_on_options(self.world, self.player)
 
         assign_starter_items(self.world, self.player, excluded_items, self.locked_locations[self.player])
 
-        if not is_option_enabled(self.world, self.player, "QuickSeed") or \
-                not is_option_enabled(self.world, self.player, "Inverted"):
+        if not is_option_enabled(self.world, self.player, "QuickSeed") and not is_option_enabled(self.world, self.player, "Inverted"):
             place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations[self.player])
 
         pool = get_item_pool(self.world, self.player, excluded_items)
@@ -55,17 +63,18 @@ class TimespinnerWorld(World):
 
         self.world.itempool += pool
 
+
     def fill_slot_data(self) -> Dict:
         slot_data = {}
 
         for option_name in timespinner_options:
-            option = getattr(self.world, option_name)[self.player]
-            slot_data[option_name] = int(option.value)
+            slot_data[option_name] = is_option_enabled(self.world, self.player, option_name)
 
-        slot_data["StinkyMaw"] = 1
-        slot_data["ProgressiveVerticalMovement"] = 0
-        slot_data["ProgressiveKeycards"] = 0
+        slot_data["StinkyMaw"] = True
+        slot_data["ProgressiveVerticalMovement"] = False
+        slot_data["ProgressiveKeycards"] = False
         slot_data["PyramidKeysGate"] = self.pyramid_keys_unlock[self.player]
+        slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache[self.player])
 
         return slot_data
 
@@ -106,7 +115,7 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: List[st
 
 
 def get_item_pool(world: MultiWorld, player: int, excluded_items: List[str]) -> List[Item]:
-    pool = []
+    pool: List[Item] = []
 
     for name, data in item_table.items():
         if not name in excluded_items:
@@ -159,10 +168,11 @@ def setup_events(world: MultiWorld, player: int, locked_locations: List[str]):
             location.place_locked_item(item)
 
 
-def get_item_name_groups() -> Dict[str, Set[str]]:
-    groups: Dict[str, Set[str]] = {}
+def get_personal_items(player: int, locations: List[Location]) -> Dict[int, int]:
+    personal_items: Dict[int, int] = {}
 
-    for name, data in item_table.items():
-        groups.setdefault(data.category, set()).add(name)
-
-    return groups
+    for location in locations:
+        if location.address and location.item and location.item.code and location.item.player == player:
+            personal_items[location.address] = location.item.code
+    
+    return personal_items

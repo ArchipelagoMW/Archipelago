@@ -10,7 +10,8 @@ import factorio_rcon
 import colorama
 import asyncio
 from queue import Queue
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled, \
+    init_logging
 from MultiServer import mark_raw
 
 import Utils
@@ -19,17 +20,7 @@ from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePar
 
 from worlds.factorio import Factorio
 
-log_folder = Utils.local_path("logs")
-
-os.makedirs(log_folder, exist_ok=True)
-
-
-if gui_enabled:
-    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
-                        filename=os.path.join(log_folder, "FactorioClient.txt"), filemode="w", force=True)
-else:
-    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
-    logging.getLogger().addHandler(logging.FileHandler(os.path.join(log_folder, "FactorioClient.txt"), "w"))
+init_logging("FactorioClient")
 
 
 class FactorioCommandProcessor(ClientCommandProcessor):
@@ -66,7 +57,7 @@ class FactorioContext(CommonContext):
         self.awaiting_bridge = False
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
 
-    async def server_auth(self, password_requested):
+    async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(FactorioContext, self).server_auth(password_requested)
 
@@ -100,7 +91,7 @@ class FactorioContext(CommonContext):
 
     def print_to_game(self, text):
         self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
-                                          f"{text}")
+                                      f"{text}")
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
@@ -268,12 +259,14 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
         ctx.exit_event.set()
 
     else:
-        logger.info(f"Got World Information from AP Mod {tuple(ctx.mod_version)} for seed {ctx.seed_name} in slot {ctx.auth}")
+        logger.info(
+            f"Got World Information from AP Mod {tuple(ctx.mod_version)} for seed {ctx.seed_name} in slot {ctx.auth}")
         return True
     finally:
         factorio_process.terminate()
         factorio_process.wait(5)
     return False
+
 
 async def main(args):
     ctx = FactorioContext(args.connect, args.password)
@@ -345,7 +338,8 @@ if __name__ == '__main__':
     args, rest = parser.parse_known_args()
     colorama.init()
     rcon_port = args.rcon_port
-    rcon_password = args.rcon_password if args.rcon_password else ''.join(random.choice(string.ascii_letters) for x in range(32))
+    rcon_password = args.rcon_password if args.rcon_password else ''.join(
+        random.choice(string.ascii_letters) for x in range(32))
 
     factorio_server_logger = logging.getLogger("FactorioServer")
     options = Utils.get_options()

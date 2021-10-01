@@ -766,7 +766,10 @@ def patch_rom(world, rom, player, enemized):
 
             if location.item is not None:
                 if not location.native_item:
-                    itemid = get_nonnative_item_sprite(location.item.game)
+                    if location.item.trap:
+                        itemid = 0x5A  # Nothing, which disguises
+                    else:
+                        itemid = get_nonnative_item_sprite(location.item.name)
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):
@@ -829,7 +832,9 @@ def patch_rom(world, rom, player, enemized):
                                           'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit',
                                           'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit',
                                           'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
-                                          'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)'}:
+                                          'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)'} and \
+                            (world.logic[player] not in ['hybridglitches', 'nologic'] or 
+                                exit.name not in {'Palace of Darkness Exit', 'Tower of Hera Exit', 'Swamp Palace Exit'}):
                         # For exits that connot be reached from another, no need to apply offset fixes.
                         rom.write_int16(0x15DB5 + 2 * offset, link_y)  # same as final else
                     elif room_id == 0x0059 and world.fix_skullwoods_exit[player]:

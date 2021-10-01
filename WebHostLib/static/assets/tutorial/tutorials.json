@@ -158,5 +158,24 @@
         ]
       }
     ]
+  },
+  {
+    "gameTitle": "Timespinner",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Timespinner randomizer connected to an Archipelago Multiworld",
+        "files": [
+          {
+            "language": "English",
+            "filename": "timespinner/setup_en.md",
+            "link": "timespinner/setup/en",
+            "authors": [
+              "Jarno"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

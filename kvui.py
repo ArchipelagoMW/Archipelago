@@ -16,6 +16,7 @@ from kivy.lang import Builder
 import Utils
 from NetUtils import JSONtoTextParser, JSONMessagePart
 
+
 class GameManager(App):
     logging_pairs = [
         ("Client", "Archipelago"),
@@ -83,12 +84,21 @@ class FactorioManager(GameManager):
     ]
     title = "Archipelago Factorio Client"
 
+
 class LttPManager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago"),
         ("SNES", "SNES"),
     ]
     title = "Archipelago LttP Client"
+
+
+class TextManager(GameManager):
+    logging_pairs = [
+        ("Client", "Archipelago")
+    ]
+    title = "Archipelago Text Client"
+
 
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):

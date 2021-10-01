@@ -292,5 +292,8 @@ class Factorio(World):
             return FactorioItem(name, name in advancement_technologies or
                                 name in self.additional_advancement_technologies,
                                 tech_table[name], self.player)
-        elif name in all_items:
-            return FactorioItem(name, False, all_items[name], self.player)
+
+        item = FactorioItem(name, False, all_items[name], self.player)
+        if "Trap" in name:
+            item.trap = True
+        return item
