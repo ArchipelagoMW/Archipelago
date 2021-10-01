@@ -157,6 +157,14 @@ class SMWorld(World):
     def getWord(self, w):
         return (w & 0x00FF, (w & 0xFF00) >> 8)
 
+    # used for remote location Credits Spoiler of local items
+    class DummyLocation:
+        def __init__(self, name):
+            self.Name = name
+
+        def isBoss(self):
+            return False
+
     def APPatchRom(self, romPatcher):
         multiWorldLocations = {}
         for itemLoc in self.world.get_locations():
@@ -258,7 +266,15 @@ class SMWorld(World):
         romPatcher.commitIPS()
 
         itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == self.player]
-        romPatcher.writeItemsLocs(itemLocs)    
+        romPatcher.writeItemsLocs(itemLocs) 
+
+        itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.world.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.world.get_locations() if itemLoc.item.player == self.player] 
+        progItemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.world.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.world.get_locations() if itemLoc.item.player == self.player and itemLoc.item.advancement == True] 
+        # progItemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == self.player and itemLoc.item.player == self.player and itemLoc.item.advancement == True]
+        
+        # romPatcher.writeSplitLocs(self.variaRando.args.majorsSplit, itemLocs, progItemLocs)
+        romPatcher.writeSpoiler(itemLocs, progItemLocs)
+        romPatcher.writeRandoSettings(self.variaRando.randoExec.randoSettings, itemLocs)
 
     def generate_output(self, output_directory: str):
         try:

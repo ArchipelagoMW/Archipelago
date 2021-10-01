@@ -780,10 +780,10 @@ class VariaRandomizer:
             if args.patchOnly == False:
 #                romPatcher.writeItemsLocs(itemLocs)
 #                romPatcher.writeSplitLocs(args.majorsSplit, itemLocs, progItemLocs)
-#                romPatcher.writeItemsNumber()
+                 romPatcher.writeItemsNumber()
                  romPatcher.writeSeed(self.seed) # lol if race mode
 #                romPatcher.writeSpoiler(itemLocs, progItemLocs)
-#                romPatcher.writeRandoSettings(randoSettings, itemLocs)
+#                romPatcher.writeRandoSettings(self.randoExec.randoSettings, itemLocs)
                  romPatcher.writeDoorConnections(self.doors)
                  romPatcher.writeVersion(displayedVersion)
             if self.ctrlDict is not None:
