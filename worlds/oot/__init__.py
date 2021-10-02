@@ -155,7 +155,6 @@ class OOTWorld(World):
 
         # Determine which dungeons are MQ
         # Possible future plan: allow user to pick which dungeons are MQ
-        self.mq_dungeons = 0  # temporary disable for client-side issues
         mq_dungeons = self.world.random.sample(dungeon_table, self.mq_dungeons)
         self.dungeon_mq = {item['name']: (item in mq_dungeons) for item in dungeon_table}
 

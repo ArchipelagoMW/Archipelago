@@ -128,6 +128,14 @@ class LogicalChus(Toggle):
     displayname = "Bombchus Considered in Logic"
 
 
+class MQDungeons(Range):
+    """Number of MQ dungeons. The dungeons to replace are randomly selected."""
+    displayname = "Number of MQ Dungeons"
+    range_start = 0
+    range_end = 12
+    default = 0
+
+
 world_options: typing.Dict[str, type(Option)] = {
     "starting_age": StartingAge,
     # "shuffle_interior_entrances": InteriorEntrances,
@@ -141,7 +149,7 @@ world_options: typing.Dict[str, type(Option)] = {
     "triforce_goal": TriforceGoal,
     "extra_triforce_percentage": ExtraTriforces,
     "bombchus_in_logic": LogicalChus,
-    # "mq_dungeons": make_range(0, 12),
+    "mq_dungeons": MQDungeons,
 }
 
 
