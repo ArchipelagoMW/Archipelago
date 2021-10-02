@@ -4,7 +4,7 @@ import Utils
 from Patch import read_rom
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '13a75c5dd28055fbcf8f69bd8161871d'
+RANDOMIZERBASEHASH = 'e397fef0e947d1bd760c68c4fe99a600'
 
 import io
 import json
@@ -22,7 +22,7 @@ from typing import Optional
 
 from BaseClasses import CollectionState, Region
 from worlds.alttp.SubClasses import ALttPLocation
-from worlds.alttp.Shops import ShopType
+from worlds.alttp.Shops import ShopType, ShopPriceType
 from worlds.alttp.Dungeons import dungeon_music_addresses
 from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
 from worlds.alttp.Text import MultiByteTextMapper, text_addresses, Credits, TextTable
@@ -1707,9 +1707,16 @@ def write_custom_shops(rom, world, player):
 
         # [id][item][price-low][price-high][max][repl_id][repl_price-low][repl_price-high][player]
         for index, item in enumerate(shop.inventory):
-            slot = 0 if shop.type == ShopType.TakeAny else index
             if item is None:
                 break
+            if item['price_type'] != ShopPriceType.Rupees:
+                # Set special price flag 0x8000
+                # Then set the type of price we're setting 0x7F00 (this starts from Hearts, not Rupees, subtract 1)
+                # Then append the price/index into the second byte 0x00FF
+                price_data = int16_as_bytes(0x8000 | 0x100 * (item["price_type"] - 1) | item['price'])
+            else:
+                price_data = int16_as_bytes(item['price'])
+            slot = 0 if shop.type == ShopType.TakeAny else index
             if not item['item'] in item_table:  # item not native to ALTTP
                 item_code = get_nonnative_item_sprite(item['item'])
             else:
@@ -1717,7 +1724,7 @@ def write_custom_shops(rom, world, player):
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro[player]:
                     rom.write_byte(0x186500 + shop.sram_offset + slot, arrow_mask)
 
-            item_data = [shop_id, item_code] + int16_as_bytes(item['price']) + \
+            item_data = [shop_id, item_code] + price_data + \
                         [item['max'], ItemFactory(item['replacement'], player).code if item['replacement'] else 0xFF] + \
                         int16_as_bytes(item['replacement_price']) + [0 if item['player'] == player else item['player']]
             items_data.extend(item_data)
