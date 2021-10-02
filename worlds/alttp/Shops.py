@@ -102,7 +102,8 @@ class Shop():
 
     def add_inventory(self, slot: int, item: str, price: int, max: int = 0,
                       replacement: Optional[str] = None, replacement_price: int = 0, create_location: bool = False,
-                      player: int = 0, price_type: int = ShopPriceType.Rupees):
+                      player: int = 0, price_type: int = ShopPriceType.Rupees,
+                      replacement_price_type: int = ShopPriceType.Rupees):
         self.inventory[slot] = {
             'item': item,
             'price': price,
@@ -110,6 +111,7 @@ class Shop():
             'max': max,
             'replacement': replacement,
             'replacement_price': replacement_price,
+            'replacement_price_type': replacement_price_type,
             'create_location': create_location,
             'player': player
         }
@@ -129,6 +131,7 @@ class Shop():
             'max': max,
             'replacement': self.inventory[slot]["item"],
             'replacement_price': self.inventory[slot]["price"],
+            'replacement_price_type': self.inventory[slot]["price_type"],
             'create_location': self.inventory[slot]["create_location"],
             'player': player
         }
@@ -257,6 +260,8 @@ def ShopSlotFill(world):
 
                     shop.push_inventory(location.shop_slot, item_name, price * 5, 1,
                                         location.item.player if location.item.player != location.player else 0)
+                    if 'P' in world.shop_shuffle[location.player]:
+                        price_to_funny_price(shop.inventory[location.shop_slot], world, location.player)
 
 
 def create_shops(world, player: int):

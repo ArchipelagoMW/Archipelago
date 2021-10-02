@@ -1678,6 +1678,16 @@ def patch_race_rom(rom, world, player):
     rom.encrypt(world, player)
 
 
+def get_price_data(price: int, price_type: int) -> bytes:
+    if price_type != ShopPriceType.Rupees:
+        # Set special price flag 0x8000
+        # Then set the type of price we're setting 0x7F00 (this starts from Hearts, not Rupees, subtract 1)
+        # Then append the price/index into the second byte 0x00FF
+        return int16_as_bytes(0x8000 | 0x100 * (price_type - 1) | price)
+    else:
+        return int16_as_bytes(price)
+
+
 def write_custom_shops(rom, world, player):
     shops = sorted([shop for shop in world.shops if shop.custom and shop.region.player == player],
                    key=lambda shop: shop.sram_offset)
@@ -1711,13 +1721,8 @@ def write_custom_shops(rom, world, player):
         for index, item in enumerate(shop.inventory):
             if item is None:
                 break
-            if item['price_type'] != ShopPriceType.Rupees:
-                # Set special price flag 0x8000
-                # Then set the type of price we're setting 0x7F00 (this starts from Hearts, not Rupees, subtract 1)
-                # Then append the price/index into the second byte 0x00FF
-                price_data = int16_as_bytes(0x8000 | 0x100 * (item["price_type"] - 1) | item['price'])
-            else:
-                price_data = int16_as_bytes(item['price'])
+            price_data = get_price_data(item['price'], item["price_type"])
+            replacement_price_data = get_price_data(item['replacement_price'], item['replacement_price_type'])
             slot = 0 if shop.type == ShopType.TakeAny else index
             if not item['item'] in item_table:  # item not native to ALTTP
                 item_code = get_nonnative_item_sprite(item['item'])
@@ -1728,7 +1733,7 @@ def write_custom_shops(rom, world, player):
 
             item_data = [shop_id, item_code] + price_data + \
                         [item['max'], ItemFactory(item['replacement'], player).code if item['replacement'] else 0xFF] + \
-                        int16_as_bytes(item['replacement_price']) + [0 if item['player'] == player else item['player']]
+                        replacement_price_data + [0 if item['player'] == player else item['player']]
             items_data.extend(item_data)
 
     rom.write_bytes(0x184800, shop_data)

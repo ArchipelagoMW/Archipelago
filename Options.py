@@ -375,7 +375,6 @@ class ExcludeLocations(OptionSet):
 
 
 per_game_common_options = {
-    # placeholder until they're actually implemented
     "local_items": LocalItems,
     "non_local_items": NonLocalItems,
     "start_inventory": StartInventory,

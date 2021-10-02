@@ -1080,7 +1080,7 @@ class Spoiler():
 
                 if item['replacement'] is None:
                     continue
-                shopdata['item_{}'.format(index)] += ", {} - {}".format(item['replacement'], item['replacement_price']) if item['replacement_price'] else item['replacement']
+                shopdata['item_{}'.format(index)] += f", {item['replacement']} - {item['replacement_price']} {price_type_display_name[item['replacement_price_type']]}"
             self.shops.append(shopdata)
 
         for player in self.world.get_game_players("A Link to the Past"):
