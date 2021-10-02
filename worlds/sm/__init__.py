@@ -165,20 +165,88 @@ class SMWorld(World):
         def isBoss(self):
             return False
 
+    def convertToROMItemName(self, itemName):
+        charMap = { "A" : 0x3CE0, 
+                    "B" : 0x3CE1,
+                    "C" : 0x3CE2,
+                    "D" : 0x3CE3,
+                    "E" : 0x3CE4,
+                    "F" : 0x3CE5,
+                    "G" : 0x3CE6,
+                    "H" : 0x3CE7,
+                    "I" : 0x3CE8,
+                    "J" : 0x3CE9,
+                    "K" : 0x3CEA,
+                    "L" : 0x3CEB,
+                    "M" : 0x3CEC,
+                    "N" : 0x3CED,
+                    "O" : 0x3CEE,
+                    "P" : 0x3CEF,
+                    "Q" : 0x3CF0,
+                    "R" : 0x3CF1,
+                    "S" : 0x3CF2,
+                    "T" : 0x3CF3,
+                    "U" : 0x3CF4,
+                    "V" : 0x3CF5,
+                    "W" : 0x3CF6,
+                    "X" : 0x3CF7,
+                    "Y" : 0x3CF8,
+                    "Z" : 0x3CF9,
+                    " " : 0x3C4E,
+                    "!" : 0x3CFF,
+                    "?" : 0x3CFE,
+                    "'" : 0x3CFD,
+                    "," : 0x3CFB,
+                    "." : 0x3CFA,
+                    "-" : 0x3CCF,
+                    "_" : 0x000E,
+                    "1" : 0x3C00,
+                    "2" : 0x3C01,
+                    "3" : 0x3C02,
+                    "4" : 0x3C03,
+                    "5" : 0x3C04,
+                    "6" : 0x3C05,
+                    "7" : 0x3C06,
+                    "8" : 0x3C07,
+                    "9" : 0x3C08,
+                    "0" : 0x3C09,
+                    "%" : 0x3C0A}
+        data = []
+
+        itemName = itemName.upper()[:26]
+        itemName = itemName.strip()
+        itemName = itemName.center(26, " ")    
+        itemName = "___" + itemName + "___"
+
+        for char in itemName:
+            (w0, w1) = self.getWord(charMap.get(char, 0x3C4E))
+            data.append(w0)
+            data.append(w1)
+        return data
+
     def APPatchRom(self, romPatcher):
         multiWorldLocations = {}
+        multiWorldItems = {}
+        idx = 0
+        itemId = 0
         for itemLoc in self.world.get_locations():
             if itemLoc.player == self.player and locationsDict[itemLoc.name].Id != None:
-                item = ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem']
+                if itemLoc.item.type in ItemManager.Items:
+                    itemId = ItemManager.Items[itemLoc.item.type].Id 
+                else:
+                    itemId = ItemManager.Items['ArchipelagoItem'].Id + idx
+                    multiWorldItems[0x029EA3 + idx*64] = self.convertToROMItemName(itemLoc.item.name)
+                    idx += 1
                 (w0, w1) = self.getWord(0 if itemLoc.item.player == self.player else 1)
-                (w2, w3) = self.getWord(item.Id)
+                (w2, w3) = self.getWord(itemId)
                 (w4, w5) = self.getWord(itemLoc.item.player - 1)
                 (w6, w7) = self.getWord(0)
                 multiWorldLocations[0x1C6000 + locationsDict[itemLoc.name].Id*8] = [w0, w1, w2, w3, w4, w5, w6, w7]
 
             
-        patchDict = { 'MultiWorldLocations':  multiWorldLocations }
-        romPatcher.applyIPSPatch('MultiWorldLocations', patchDict)
+        patchDict = {   'MultiWorldLocations':  multiWorldLocations,
+                        'MultiWorldItems': multiWorldItems }
+        romPatcher.applyIPSPatchDict(patchDict)
 
         playerNames = {}
         for p in range(1, self.world.players + 1):

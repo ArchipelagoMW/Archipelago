@@ -379,6 +379,12 @@ class RomPatcher:
             else:
                 patch = IPS_Patch.load(os.path.join(appDir, ipsDir, patchName))
         self.ipsPatches.append(patch)
+    
+    def applyIPSPatchDict(self, patchDict):
+        for patchName in patchDict.keys():
+            print("Apply patch {}".format(patchName))
+            patch = IPS_Patch(patchDict[patchName])
+            self.ipsPatches.append(patch)
 
     def getStartDoors(self, plms, area, minimizerN):
         doors = [0x10] # red brin elevator

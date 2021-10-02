@@ -203,6 +203,10 @@ i_start_draw_loop:
     lda $1dc7, x              ; Load PLM room argument
     asl #3 : tax
     lda.l rando_item_table+$2, x ; Load item id
+    cmp #$0015
+    bmi .local_item
+    lda.l #$0015              ; ids over 20 are only used to display off-world item names
+.local_item
     asl #4
     clc : adc #$000C
     tax
@@ -222,6 +226,10 @@ i_start_hidden_draw_loop:
     lda $1dc7, x              ; Load PLM room argument
     asl #3 : tax
     lda.l rando_item_table+$2, x ; Load item id
+    cmp #$0015
+    bmi .local_item
+    lda.l #$0015              ; ids over 20 are only used to display off-world item names
+.local_item
     asl #4
     clc : adc #$000E
     tax
@@ -241,6 +249,10 @@ i_load_custom_graphics:
     lda $1dc7, x              ; Load PLM room argument
     asl #3 : tax
     lda.l rando_item_table+$2, x ; Load item id
+    cmp #$0015
+    bmi .local_item
+    lda.l #$0015              ; ids over 20 are only used to display off-world item names
+.local_item
     plx
 
     %a8()
@@ -274,6 +286,10 @@ i_visible_item_setup:
     asl #3                          ; Multiply by 8 for table width
     tax
     lda.l rando_item_table+$2, x       ; Load item id from item table
+    cmp #$0015
+    bmi .local_item
+    lda.l #$0015              ; ids over 20 are only used to display off-world item names
+.local_item
     %a8()
     sta $4202
     lda #$0A
@@ -300,6 +316,10 @@ i_hidden_item_setup:
     asl #3                          ; Multiply by 8 for table width
     tax
     lda.l rando_item_table+$2, x       ; Load item id from item table
+    cmp #$0015
+    bmi .local_item
+    lda.l #$0015              ; ids over 20 are only used to display off-world item names
+.local_item
     %a8()
     sta $4202
     lda #$0A
@@ -348,6 +368,10 @@ i_live_pickup:
     tay
     lda.l rando_item_table+$2, x    ; Load original item id into X
     tax
+    cmp #$0015
+    bmi .local_item
+    lda.l #$0015              ; ids over 20 are only used to display off-world item names
+.local_item
     pla                             ; Multiworld item table id in A
     phx : phy : pha
     jsl mw_write_message            ; Send message
@@ -361,6 +385,10 @@ i_live_pickup:
 .own_item
     ply : pla
     lda.l rando_item_table+$2, x ; Load item id
+    cmp #$0015
+    bmi .local_item1
+    lda.l #$0015              ; ids over 20 are only used to display off-world item names
+.local_item1
     jsr receive_sm_item
     bra .end
 
