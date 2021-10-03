@@ -278,6 +278,12 @@ def main(args, seed=None):
                 for slot in world.player_ids:
                     slot_data[slot] = world.worlds[slot].fill_slot_data()
 
+                def precollect_hint(location):
+                    hint = NetUtils.Hint(location.item.player, location.player, location.address,
+                                         location.item.code, False)
+                    precollected_hints[location.player].add(hint)
+                    precollected_hints[location.item.player].add(hint)
+
                 locations_data: Dict[int, Dict[int, Tuple[int, int]]] = {player: {} for player in world.player_ids}
                 for location in world.get_filled_locations():
                     if type(location.address) == int:
@@ -285,16 +291,11 @@ def main(args, seed=None):
                         assert location.item.code is not None
                         locations_data[location.player][location.address] = location.item.code, location.item.player
                         if location.player in sending_visible_players and location.item.player != location.player:
-                            hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                                 location.item.code, False)
-                            precollected_hints[location.player].add(hint)
-                            precollected_hints[location.item.player].add(hint)
+                            precollect_hint(location)
+                        elif location.name in world.start_location_hints[location.player]:
+                            precollect_hint(location)
                         elif location.item.name in world.start_hints[location.item.player]:
-                            hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                                 location.item.code, False,
-                                                 er_hint_data.get(location.player, {}).get(location.address, ""))
-                            precollected_hints[location.player].add(hint)
-                            precollected_hints[location.item.player].add(hint)
+                            precollect_hint(location)
 
                 multidata = {
                     "slot_data": slot_data,
