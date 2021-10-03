@@ -47,7 +47,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
 
     connectStartingRegion(world, player)
 
-    names = {}
+    names: Dict[str, int] = {}
 
     connect(world, player, names, 'Lake desolation', 'Lower lake desolation', lambda state: state._timespinner_has_timestop(world, player or state.has('Talaria Attachment', player)))
     connect(world, player, names, 'Lake desolation', 'Upper lake desolation', lambda state: state._timespinner_has_fire(world, player) and state.can_reach('Upper Lake Sirine', 'Region', player))
@@ -60,7 +60,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Lower lake desolation', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Libary', 'Lower lake desolation') 
     connect(world, player, names, 'Libary', 'Libary top', lambda state: state._timespinner_has_doublejump(world, player) or state.has('Talaria Attachment', player)) 
-    connect(world, player, names, 'Libary', 'Varndagroth tower left', lambda state: state._timespinner_has_keycard_C(world, player))
+    connect(world, player, names, 'Libary', 'Varndagroth tower left', lambda state: state._timespinner_has_keycard_D(world, player))
     connect(world, player, names, 'Libary', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Libary top', 'Libary')
     connect(world, player, names, 'Varndagroth tower left', 'Libary')
@@ -149,6 +149,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Space time continuum', 'Caves of Banishment (Maw)', lambda state: pyramid_keys_unlock == "GateMaw")
     connect(world, player, names, 'Space time continuum', 'Caves of Banishment (upper)', lambda state: pyramid_keys_unlock == "GateCavesOfBanishment")
 
+
 def create_location(player: int, name: str, id: Optional[int], region: Region, rule: Callable, location_cache: List[Location]) -> Location:
     location = Location(player, name, id, region)
     location.access_rule = rule
@@ -197,7 +198,7 @@ def connectStartingRegion(world: MultiWorld, player: int):
     space_time_continuum.exits.append(teleport_back_to_start)
 
 
-def connect(world: MultiWorld, player: int, used_names : Dict[str, int], source: str, target: str, rule: Optional[Callable] = None):
+def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str, rule: Optional[Callable] = None):
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
 

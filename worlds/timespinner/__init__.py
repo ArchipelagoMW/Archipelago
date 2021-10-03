@@ -64,8 +64,8 @@ class TimespinnerWorld(World):
         self.world.itempool += pool
 
 
-    def fill_slot_data(self) -> Dict:
-        slot_data = {}
+    def fill_slot_data(self) -> Dict[str, object]:
+        slot_data: Dict[str, object] = {}
 
         for option_name in timespinner_options:
             slot_data[option_name] = is_option_enabled(self.world, self.player, option_name)
@@ -85,7 +85,7 @@ def create_item(name: str, player: int) -> Item:
 
 
 def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> List[str]:
-    excluded_items = []
+    excluded_items: List[str] = []
 
     if is_option_enabled(world, player, "StartWithJewelryBox"):
         excluded_items.append('Jewelry Box')
