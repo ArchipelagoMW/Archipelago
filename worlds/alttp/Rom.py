@@ -4,7 +4,7 @@ import Utils
 from Patch import read_rom
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '13a75c5dd28055fbcf8f69bd8161871d'
+RANDOMIZERBASEHASH = 'e397fef0e947d1bd760c68c4fe99a600'
 
 import io
 import json
@@ -22,7 +22,7 @@ from typing import Optional
 
 from BaseClasses import CollectionState, Region
 from worlds.alttp.SubClasses import ALttPLocation
-from worlds.alttp.Shops import ShopType
+from worlds.alttp.Shops import ShopType, ShopPriceType
 from worlds.alttp.Dungeons import dungeon_music_addresses
 from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
 from worlds.alttp.Text import MultiByteTextMapper, text_addresses, Credits, TextTable
@@ -766,7 +766,10 @@ def patch_rom(world, rom, player, enemized):
 
             if location.item is not None:
                 if not location.native_item:
-                    itemid = get_nonnative_item_sprite(location.item.game)
+                    if location.item.trap:
+                        itemid = 0x5A  # Nothing, which disguises
+                    else:
+                        itemid = get_nonnative_item_sprite(location.item.name)
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):
@@ -829,7 +832,9 @@ def patch_rom(world, rom, player, enemized):
                                           'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit',
                                           'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit',
                                           'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
-                                          'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)'}:
+                                          'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)'} and \
+                            (world.logic[player] not in ['hybridglitches', 'nologic'] or 
+                                exit.name not in {'Palace of Darkness Exit', 'Tower of Hera Exit', 'Swamp Palace Exit'}):
                         # For exits that connot be reached from another, no need to apply offset fixes.
                         rom.write_int16(0x15DB5 + 2 * offset, link_y)  # same as final else
                     elif room_id == 0x0059 and world.fix_skullwoods_exit[player]:
@@ -1673,6 +1678,16 @@ def patch_race_rom(rom, world, player):
     rom.encrypt(world, player)
 
 
+def get_price_data(price: int, price_type: int) -> bytes:
+    if price_type != ShopPriceType.Rupees:
+        # Set special price flag 0x8000
+        # Then set the type of price we're setting 0x7F00 (this starts from Hearts, not Rupees, subtract 1)
+        # Then append the price/index into the second byte 0x00FF
+        return int16_as_bytes(0x8000 | 0x100 * (price_type - 1) | price)
+    else:
+        return int16_as_bytes(price)
+
+
 def write_custom_shops(rom, world, player):
     shops = sorted([shop for shop in world.shops if shop.custom and shop.region.player == player],
                    key=lambda shop: shop.sram_offset)
@@ -1704,9 +1719,11 @@ def write_custom_shops(rom, world, player):
 
         # [id][item][price-low][price-high][max][repl_id][repl_price-low][repl_price-high][player]
         for index, item in enumerate(shop.inventory):
-            slot = 0 if shop.type == ShopType.TakeAny else index
             if item is None:
                 break
+            price_data = get_price_data(item['price'], item["price_type"])
+            replacement_price_data = get_price_data(item['replacement_price'], item['replacement_price_type'])
+            slot = 0 if shop.type == ShopType.TakeAny else index
             if not item['item'] in item_table:  # item not native to ALTTP
                 item_code = get_nonnative_item_sprite(item['item'])
             else:
@@ -1714,9 +1731,9 @@ def write_custom_shops(rom, world, player):
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro[player]:
                     rom.write_byte(0x186500 + shop.sram_offset + slot, arrow_mask)
 
-            item_data = [shop_id, item_code] + int16_as_bytes(item['price']) + \
+            item_data = [shop_id, item_code] + price_data + \
                         [item['max'], ItemFactory(item['replacement'], player).code if item['replacement'] else 0xFF] + \
-                        int16_as_bytes(item['replacement_price']) + [0 if item['player'] == player else item['player']]
+                        replacement_price_data + [0 if item['player'] == player else item['player']]
             items_data.extend(item_data)
 
     rom.write_bytes(0x184800, shop_data)

@@ -50,13 +50,14 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 [Components]
 Name: "core"; Description: "Core Files"; Types: full hosting playing custom; Flags: fixed
 Name: "generator"; Description: "Generator"; Types: full hosting
-Name: "generator/lttp"; Description: "A Link to the Past ROM Setup"; Types: full hosting
-Name: "generator/oot"; Description: "Ocarina of Time ROM Setup"; Types: full hosting
+Name: "generator/lttp"; Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
+Name: "generator/oot"; Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296
 Name: "server"; Description: "Server"; Types: full hosting
 Name: "client"; Description: "Clients"; Types: full playing
-Name: "client/lttp"; Description: "A Link to the Past"; Types: full playing hosting
+Name: "client/lttp"; Description: "A Link to the Past"; Types: full playing
 Name: "client/factorio"; Description: "Factorio"; Types: full playing
 Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
+Name: "client/text"; Description: "Text, to !command and chat"; Types: full playing
 
 [Dirs]
 NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-modify authusers-modify;
@@ -66,11 +67,12 @@ Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Ka
 Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: generator/oot
 Source: "{#sourcepath}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#sourcepath}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/lttp
-Source: "{#sourcepath}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator
+Source: "{#sourcepath}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
 
 Source: "{#sourcepath}\ArchipelagoGenerate.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: generator
 Source: "{#sourcepath}\ArchipelagoServer.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: server
 Source: "{#sourcepath}\ArchipelagoFactorioClient.exe";  DestDir: "{app}"; Flags: ignoreversion; Components: client/factorio
+Source: "{#sourcepath}\ArchipelagoTextClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/text
 Source: "{#sourcepath}\ArchipelagoLttPClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/lttp
 Source: "{#sourcepath}\ArchipelagoLttPAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/lttp
 Source: "{#sourcepath}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/minecraft
@@ -82,6 +84,7 @@ Source: "{tmp}\forge-installer.jar"; DestDir: "{app}"; Flags: skipifsourcedoesnt
 [Icons]
 Name: "{group}\{#MyAppName} Folder"; Filename: "{app}";
 Name: "{group}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Components: server
+Name: "{group}\{#MyAppName} Text Client"; Filename: "{app}\ArchipelagoTextClient.exe"; Components: client/lttp
 Name: "{group}\{#MyAppName} LttP Client"; Filename: "{app}\ArchipelagoLttPClient.exe"; Components: client/lttp
 Name: "{group}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Components: client/factorio
 Name: "{group}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinecraftClient.exe"; Components: client/minecraft

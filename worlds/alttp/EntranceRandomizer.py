@@ -4,11 +4,14 @@ import copy
 import textwrap
 import shlex
 
+"""Legacy module, undergoing dismantling."""
+
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 
     def _get_help_string(self, action):
         return textwrap.dedent(action.help)
+
 
 def parse_arguments(argv, no_defaults=False):
     def defval(value):
@@ -241,7 +244,6 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--game', default="A Link to the Past")
     parser.add_argument('--race', default=defval(False), action='store_true')
     parser.add_argument('--outputname')
-    parser.add_argument('--start_hints')
     if multiargs.multi:
         for player in range(1, multiargs.multi + 1):
             parser.add_argument(f'--p{player}', default=defval(''), help=argparse.SUPPRESS)
@@ -277,7 +279,7 @@ def parse_arguments(argv, no_defaults=False):
                          'sprite',
                          "triforce_pieces_available",
                          "triforce_pieces_required", "shop_shuffle",
-                         "required_medallions", "start_hints",
+                         "required_medallions",
                          "plando_items", "plando_texts", "plando_connections", "er_seeds",
                          'dungeon_counters',
                          'shuffle_prizes', 'sprite_pool', 'dark_room_logic',

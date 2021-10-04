@@ -117,19 +117,6 @@ even_weights = {
     "Equipment": 1
 }
 
-scraps_only_weights = {
-    "Item Scrap, Green": 80,
-    "Item Scrap, Red": 40,
-    "Item Scrap, Yellow": 10,
-    "Item Scrap, White": 100,
-    "Common Item": 0,
-    "Uncommon Item": 0,
-    "Legendary Item": 0,
-    "Boss Item": 0,
-    "Lunar Item": 0,
-    "Equipment": 0
-}
-
 item_pool_weights: typing.Dict[int, typing.Dict[str, int]] = {
     0: default_weights,
     1: new_weights,
@@ -137,8 +124,7 @@ item_pool_weights: typing.Dict[int, typing.Dict[str, int]] = {
     3: legendary_weights,
     4: lunartic_weights,
     6: no_scraps_weights,
-    7: even_weights,
-    8: scraps_only_weights
+    7: even_weights
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {id: name for name, id in item_table.items() if id}

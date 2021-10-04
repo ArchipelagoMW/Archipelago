@@ -155,7 +155,6 @@ class OOTWorld(World):
 
         # Determine which dungeons are MQ
         # Possible future plan: allow user to pick which dungeons are MQ
-        self.mq_dungeons = 0  # temporary disable for client-side issues
         mq_dungeons = self.world.random.sample(dungeon_table, self.mq_dungeons)
         self.dungeon_mq = {item['name']: (item in mq_dungeons) for item in dungeon_table}
 
@@ -641,7 +640,11 @@ class OOTWorld(World):
             shop_locations = list(
                 filter(lambda location: location.type == 'Shop' and location.name not in self.shop_prices,
                        self.world.get_unfilled_locations(player=self.player)))
-            shop_items.sort(key=lambda item: 1 if item.name in {"Buy Goron Tunic", "Buy Zora Tunic"} else 0)
+            shop_items.sort(key=lambda item: {
+                'Buy Deku Shield': 3*int(self.open_forest == 'closed'), 
+                'Buy Goron Tunic': 2, 
+                'Buy Zora Tunic': 2
+            }.get(item.name, int(item.advancement)))  # place Deku Shields if needed, then tunics, then other advancement, then junk
             self.world.random.shuffle(shop_locations)
             for item in shop_items:
                 self.world.itempool.remove(item)
@@ -650,12 +653,16 @@ class OOTWorld(World):
 
         # If skip child zelda is active and Song from Impa is unfilled, put a local giveable item into it.
         impa = self.world.get_location("Song from Impa", self.player)
-        if self.skip_child_zelda and impa.item is None:
-            from .SaveContext import SaveContext
-            item_to_place = self.world.random.choice(list(item for item in self.world.itempool if
-                                                          item.player == self.player and item.name in SaveContext.giveable_items))
-            impa.place_locked_item(item_to_place)
-            self.world.itempool.remove(item_to_place)
+        if self.skip_child_zelda:
+            if impa.item is None:
+                from .SaveContext import SaveContext
+                item_to_place = self.world.random.choice(list(item for item in self.world.itempool if
+                                                              item.player == self.player and item.name in SaveContext.giveable_items))
+                impa.place_locked_item(item_to_place)
+                self.world.itempool.remove(item_to_place)
+            # Give items to startinventory
+            self.world.push_precollected(impa.item)
+            self.world.push_precollected(self.create_item("Zeldas Letter"))
 
         # Exclude locations in Ganon's Castle proportional to the number of items required to make the bridge
         # Check for dungeon ER later

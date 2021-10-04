@@ -10,8 +10,8 @@ class LocationData(NamedTuple):
     code: Optional[int]
     rule: Callable = lambda state: True
 
-def get_locations(world: MultiWorld, player: int):
-    location_table: Tuple[LocationData] = (
+def get_locations(world: Optional[MultiWorld], player: Optional[int]):
+    location_table: Tuple[LocationData, ...] = (
         # PresentItemLocations
         LocationData('Tutorial', 'Yo Momma 1',  1337000),
         LocationData('Tutorial', 'Yo Momma 2',  1337001),
@@ -194,10 +194,11 @@ def get_locations(world: MultiWorld, player: int):
         LocationData('Ancient Pyramid (right)', 'Killed Nightmare',  EventId)
     )
 
-    downloadable_items: Tuple[LocationData] = (
+    downloadable_items: Tuple[LocationData, ...] = (
         # DownloadTerminals
         LocationData('Libary', 'Library terminal 1',  1337157, lambda state: state.has('Tablet', player)),
         LocationData('Libary', 'Library terminal 2',  1337156, lambda state: state.has('Tablet', player)),
+        # 1337158 Is Lost in time
         LocationData('Libary', 'Library terminal 3',  1337159, lambda state: state.has('Tablet', player)),
         LocationData('Libary', 'V terminal 1',  1337160, lambda state: state.has_all(['Tablet', 'Library Keycard V'], player)),
         LocationData('Libary', 'V terminal 2',  1337161, lambda state: state.has_all(['Tablet', 'Library Keycard V'], player)),
@@ -216,8 +217,9 @@ def get_locations(world: MultiWorld, player: int):
         return ( *location_table, *downloadable_items )
     else:
         return location_table
+        
 
-starter_progression_locations: Tuple[str] = (
+starter_progression_locations: Tuple[str, ...] = (
     'Starter chest 2',
     'Starter chest 3',
     'Starter chest 1',

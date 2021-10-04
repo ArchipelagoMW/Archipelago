@@ -53,8 +53,7 @@ Sent to clients when they connect to an Archipelago server.
 | version | NetworkVersion | Object denoting the version of Archipelago which the server is running. See [NetworkVersion](#NetworkVersion) for more details. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. Example: `WebHost` |
 | password | bool | Denoted whether a password is required to join this room.|
-| forfeit_mode | str | `auto`, `enabled`, `disabled`, `auto-enabled` or `goal`. |
-| remaining_mode | str | `enabled`, `disabled`, `goal` |
+| permissions | dict\[str, Permission\[int\]\] | Mapping of permission name to Permission, known names: "forfeit" and "remaining". |
 | hint_cost | int | The amount of points it costs to receive a hint from the server. |
 | location_check_points | int | The amount of hint points you receive per item/location check completed. ||
 | players | list\[NetworkPlayer\] | Sent only if the client is properly authenticated (see [Archipelago Connection Handshake](#Archipelago-Connection-Handshake)). Information on the players currently connected to the server. See [NetworkPlayer](#NetworkPlayer) for more details. |
@@ -219,7 +218,7 @@ Sent to the server to update on the sender's status. Examples include readiness 
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| status | int | One of [Client States](#Client-States). Follow the link for more information. |
+| status | ClientStatus\[int\] | One of [Client States](#Client-States). Send as int. Follow the link for more information. |
 
 ### Say
 Basic chat command which sends text to the server to be distributed to other clients.
@@ -341,7 +340,7 @@ An enumeration containing the possible client states that may be used to inform 
 
 ```python
 import enum
-class CLientStatus(enum.IntEnum):
+class ClientStatus(enum.IntEnum):
     CLIENT_UNKNOWN = 0
     CLIENT_READY = 10
     CLIENT_PLAYING = 20
@@ -356,6 +355,18 @@ class Version(NamedTuple):
     major: int
     minor: int
     build: int
+```
+
+### Permission
+An enumeration containing the possible command permission, for commands that may be restricted. 
+```python
+import enum
+class Permission(enum.IntEnum):
+    disabled = 0b000  # 0, completely disables access
+    enabled = 0b001  # 1, allows manual use
+    goal = 0b010  # 2, allows manual use after goal completion
+    auto = 0b110  # 6, forces use after goal completion, only works for forfeit
+    auto_enabled = 0b111  # 7, forces use after goal completion, allows manual use any time
 ```
 
 ### Data Package Contents

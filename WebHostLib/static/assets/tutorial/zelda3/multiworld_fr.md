@@ -49,7 +49,7 @@ sur comment il devrait générer votre seed. Chaque joueur d'un multiwolrd devra
 joueur d'apprécier une expérience customisée selon ses goûts, et les différents joueurs d'un même multiworld peuvent avoir différentes options.
 
 ### Où est-ce que j'obtiens un fichier YAML ?
-La page [Génération de partie](/player-settings) vous permet de configurer vos paramètres personnels et de les exporter vers un fichier YAML.
+La page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-settings) vous permet de configurer vos paramètres personnels et de les exporter vers un fichier YAML.
 
 ### Configuration avancée du fichier YAML
 Une version plus avancée du fichier YAML peut être créée en utilisant la page des [paramètres de pondération](/weighted-settings), qui vous permet
@@ -71,7 +71,7 @@ Si vous voulez valider votre fichier YAML pour être sûr qu'il fonctionne, vous
 [Validateur de YAML](/mysterycheck).
 
 ## Générer une partie pour un joueur
-1. Aller sur la page [Génération de partie](/player-settings), configurez vos options, et cliquez sur le bouton "Generate Game".
+1. Aller sur la page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-settings), configurez vos options, et cliquez sur le bouton "Generate Game".
 2. Il vous sera alors présenté une page d'informations sur la seed, où vous pourrez télécharger votre patch.
 3. Double-cliquez sur le patch et l'émulateur devrait se lancer automatiquement avec la seed. Etant donné que le client
 n'est pas requis pour les parties à un joueur, vous pouvez le fermer ainsi que l'interface Web (WebUI).

@@ -6,7 +6,7 @@ class TotalLocations(Range):
     """Number of location checks which are added to the Risk of Rain playthrough."""
     displayname = "Total Locations"
     range_start = 10
-    range_end = 50
+    range_end = 100
     default = 20
 
 
@@ -123,15 +123,14 @@ class ItemPoolPresetToggle(DefaultOnToggle):
     displayname = "Item Weight Presets"
 
 class ItemWeights(Choice):
-    """Preset choices for determining the weights of the item pool.
-    New is a test for a potential adjustment to the default weights.
-    Uncommon puts a large number of uncommon items in the pool.
-    Legendary puts a large number of legendary items in the pool.
-    lunartic makes everything a lunar item.
-    chaos generates the pool completely at random with rarer items having a slight cap to prevent this option being too easy.
-    no_scraps removes all scrap items from the item pool.
-    even generates the item pool with every item having an even weight.
-    scraps_only removes all non scrap items from the item pool."""
+    """Preset choices for determining the weights of the item pool.<br>
+    New is a test for a potential adjustment to the default weights.<br>
+    Uncommon puts a large number of uncommon items in the pool.<br>
+    Legendary puts a large number of legendary items in the pool.<br>
+    Lunartic makes everything a lunar item.<br>
+    Chaos generates the pool completely at random with rarer items having a slight cap to prevent this option being too easy.<br>
+    No Scraps removes all scrap items from the item pool.<br>
+    Even generates the item pool with every item having an even weight."""
     displayname = "Item Weights"
     option_default = 0
     option_new = 1
@@ -141,7 +140,6 @@ class ItemWeights(Choice):
     option_chaos = 5
     option_no_scraps = 6
     option_even = 7
-    option_scraps_only = 8
 
 #define a dictionary for the weights of the generated item pool.
 ror2_weights: typing.Dict[str, type(Option)] = {

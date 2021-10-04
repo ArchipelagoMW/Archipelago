@@ -25,6 +25,25 @@ class ClientStatus(enum.IntEnum):
     CLIENT_GOAL = 30
 
 
+class Permission(enum.IntEnum):
+    disabled = 0b000  # 0, completely disables access
+    enabled = 0b001  # 1, allows manual use
+    goal = 0b010  # 2, allows manual use after goal completion
+    auto = 0b110  # 6, forces use after goal completion, only works for forfeit
+    auto_enabled = 0b111  # 7, forces use after goal completion, allows manual use any time
+
+    @staticmethod
+    def from_text(text: str):
+        data = 0
+        if "auto" in text:
+            data |= 0b110
+        elif "goal" in text:
+            data |= 0b010
+        if "enabled" in text:
+            data |= 0b001
+        return Permission(data)
+
+
 class NetworkPlayer(typing.NamedTuple):
     team: int
     slot: int

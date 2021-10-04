@@ -4,18 +4,22 @@ import typing
 import asyncio
 import urllib.parse
 import sys
+import os
 
 import websockets
 
 import Utils
 from MultiServer import CommandProcessor
-from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, color, ClientStatus
+from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
 from Utils import Version
 from worlds import network_data_package, AutoWorldRegister
 
 logger = logging.getLogger("Client")
 
 gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
+
+log_folder = Utils.local_path("logs")
+os.makedirs(log_folder, exist_ok=True)
 
 
 class ClientCommandProcessor(CommandProcessor):
@@ -198,7 +202,7 @@ class CommonContext():
     def event_invalid_game(self):
         raise Exception('Invalid Game; please verify that you connected with the right game to the correct world.')
 
-    async def server_auth(self, password_requested):
+    async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             logger.info('Enter the password required to join this game:')
             self.password = await self.console_input()
@@ -315,16 +319,17 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             logger.info("Server protocol tags: " + ", ".join(args["tags"]))
             if args['password']:
                 logger.info('Password required')
-            logger.info(f"Forfeit setting: {args['forfeit_mode']}")
-            logger.info(f"Remaining setting: {args['remaining_mode']}")
+
+            for permission_name, permission_flag in args.get("permissions", {}).items():
+                flag = Permission(permission_flag)
+                logger.info(f"{permission_name.capitalize()} permission: {flag.name}")
             logger.info(
                 f"A !hint costs {args['hint_cost']}% of your total location count as points"
                 f" and you get {args['location_check_points']}"
                 f" for each location checked. Use !hint for more information.")
             ctx.hint_cost = int(args['hint_cost'])
             ctx.check_points = int(args['location_check_points'])
-            ctx.forfeit_mode = args['forfeit_mode']
-            ctx.remaining_mode = args['remaining_mode']
+
             if len(args['players']) < 1:
                 logger.info('No player connected')
             else:
@@ -452,3 +457,78 @@ async def console_loop(ctx: CommonContext):
                 commandprocessor(input_text)
         except Exception as e:
             logger.exception(e)
+
+
+def init_logging(name: str):
+    if gui_enabled:
+        logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
+                            filename=os.path.join(log_folder, f"{name}.txt"), filemode="w", force=True)
+    else:
+        logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
+        logging.getLogger().addHandler(logging.FileHandler(os.path.join(log_folder, f"{name}.txt"), "w"))
+
+
+if __name__ == '__main__':
+    # Text Mode to use !hint and such with games that have no text entry
+    init_logging("TextClient")
+
+    class TextContext(CommonContext):
+        async def server_auth(self, password_requested: bool = False):
+            if password_requested and not self.password:
+                await super(TextContext, self).server_auth(password_requested)
+            if not self.auth:
+                logger.info('Enter slot name:')
+                self.auth = await self.console_input()
+
+            await self.send_msgs([{"cmd": 'Connect',
+                                   'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
+                                   'tags': ['AP', 'IgnoreGame'],
+                                   'uuid': Utils.get_unique_identifier(), 'game': self.game
+                                   }])
+
+    async def main(args):
+        ctx = TextContext(args.connect, args.password)
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+        if gui_enabled:
+            input_task = None
+            from kvui import TextManager
+            ctx.ui = TextManager(ctx)
+            ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
+        else:
+            input_task = asyncio.create_task(console_loop(ctx), name="Input")
+            ui_task = None
+        await ctx.exit_event.wait()
+
+        ctx.server_address = None
+        if ctx.server and not ctx.server.socket.closed:
+            await ctx.server.socket.close()
+        if ctx.server_task:
+            await ctx.server_task
+
+        while ctx.input_requests > 0:
+            ctx.input_queue.put_nowait(None)
+            ctx.input_requests -= 1
+
+        if ui_task:
+            await ui_task
+
+        if input_task:
+            input_task.cancel()
+
+
+    import argparse
+    import colorama
+
+    parser = argparse.ArgumentParser(description="Gameless Archipelago Client, for text interfaction.")
+    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
+    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
+    if not Utils.is_frozen():  # Frozen state has no cmd window in the first place
+        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
+
+    args, rest = parser.parse_known_args()
+    colorama.init()
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main(args))
+    loop.close()
+    colorama.deinit()

@@ -19,7 +19,7 @@ class DownloadableItems(Toggle):
     display_name = "Downloadable items"
 
 class FacebookMode(Toggle):
-    "With the tablet you will be able to download items at terminals"
+    "Requires Oculus Rift(ng) to spot the weakspots in walls and floors"
     display_name = "Facebook mode"
 
 class StartWithMeyef(Toggle):

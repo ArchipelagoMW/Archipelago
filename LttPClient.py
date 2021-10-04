@@ -26,23 +26,13 @@ from NetUtils import *
 from worlds.alttp import Regions, Shops
 from worlds.alttp import Items
 import Utils
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, init_logging
+
+init_logging("LttPClient")
 
 snes_logger = logging.getLogger("SNES")
 
 from MultiServer import mark_raw
-
-log_folder = Utils.local_path("logs")
-os.makedirs(log_folder, exist_ok=True)
-
-# Log to file in gui case
-if gui_enabled:
-    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
-                        filename=os.path.join(log_folder, "LttPClient.txt"), filemode="w", force=True)
-else:
-    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
-    logging.getLogger().addHandler(logging.FileHandler(os.path.join(log_folder, "LttPClient.txt"), "w"))
-
 
 class LttPCommandProcessor(ClientCommandProcessor):
     def _cmd_slow_mode(self, toggle: str = ""):

@@ -81,7 +81,7 @@ class World(metaclass=AutoWorldRegister):
     # increment this every time something in your world's names/id mappings changes.
     # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
     # retrieved by clients on every connection.
-    data_version = 1
+    data_version: int = 1
 
     hint_blacklist: Set[str] = frozenset()  # any names that should not be hintable
 
@@ -100,7 +100,7 @@ class World(metaclass=AutoWorldRegister):
     forced_auto_forfeit: bool = False
 
     # Hide World Type from various views. Does not remove functionality.
-    hidden = False
+    hidden: bool = False
 
     # autoset on creation:
     world: MultiWorld
