@@ -375,7 +375,7 @@ When you join a multiworld game, you will be asked to provide your YAML file to 
 is done, the host will provide you with either a link to download your data file, or with a zip file containing
 everyone's data files. Your data file should have a `.z5ap` extension.
 
-Double click on your `.z5ap` file to start Z5Client and start the ROM patch process. Once the process is finished (this can take a while), emulator will be started automatically (If we associated the extension to the emulator like we already recommended)
+Double click on your `.z5ap` file to start Z5Client and start the ROM patch process. Once the process is finished (this can take a while), the emulator will be started automatically (If we associated the extension to the emulator as recommended)
 
 ### Connect to multiserver
 Once both the Z5Client and the emulator are started we must connect them. Within the emulator we click on the "Tools" menu and select "Lua console". In the new window click on the folder icon and look for the ootMulti.lua file. Once the file is loaded it will connect automatically to Z5Client.
