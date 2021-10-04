@@ -7,6 +7,7 @@ Run the exe file, and after accepting the license agreement you will be prompted
 ## Generating a game
 ### Gather all player YAMLS
 All players that wish to play in the generated multiworld must have a YAML file which contains all of the settings that they wish to play with.
+A YAML is a file which contains human readable markup. In other words, this is a settings file kind of like an INI file or a TOML file. 
 Each player can go to the game's player settings page in order to determine the settings how they want them and then download a YAML file containing these settings.
 After getting all of the YAML files these can all either be placed together in the `Archipelago\Players` folder or compressed into a ZIP folder to then be uploaded to the [website generator](http://archipelago.gg:48484/generate).
 If rolling locally ensure that the folder is clear of any files you do not wish to include in the game such as the included default player settings files.
