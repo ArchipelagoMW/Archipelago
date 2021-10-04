@@ -32,11 +32,7 @@ A basic OOT yaml will look like this. (There are lots of cosmetic options that h
 ```yaml
 description: Default Ocarina of Time Template # Used to describe your yaml. Useful if you have multiple files
 # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
-name: YourName{number}
-#{player} will be replaced with the player's slot number.
-#{PLAYER} will be replaced with the player's slot number if that slot number is greater than 1.
-#{number} will be replaced with the counter value of the name.
-#{NUMBER} will be replaced with the counter value of the name if the counter value is greater than 1.
+name: YourName
 game:
   Ocarina of Time: 1
 requires:
@@ -49,22 +45,6 @@ accessibility:
 progression_balancing:
   on: 50 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
   off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch/sequence break around missing items.
-  # The following 4 options can be uncommented and moved into a game's section they should affect
-  # start_inventory: # Begin the file with the listed items/upgrades
-  # Please only use items for the correct game, use triggers if need to be have seperated lists.
-  # Pegasus Boots: on
-  # Bomb Upgrade (+10): 4
-  # Arrow Upgrade (+10): 4
-# start_hints: # Begin the game with these items' locations revealed to you at the start of the game. Get the info via !hint in your client.
-#   - Moon Pearl
-# local_items: # Force certain items to appear in your world only, not across the multiworld. Recognizes some group names, like "Swords"
-#  - "Moon Pearl"
-#  - "Small Keys"
-#  - "Big Keys"
-# non_local_items: # Force certain items to appear outside your world only, unless in single-player. Recognizes some group names, like "Swords"
-#  - "Progressive Weapons"
-# exclude_locations: # Force certain locations to never contain progression items, and always be filled with junk.
-#  - "Master Sword Pedestal"
 Ocarina of Time:
   logic_rules: # Set the logic used for the generator.
     glitchless: 50
@@ -395,13 +375,13 @@ When you join a multiworld game, you will be asked to provide your YAML file to 
 is done, the host will provide you with either a link to download your data file, or with a zip file containing
 everyone's data files. Your data file should have a `.z5ap` extension.
 
-Double click on your `.z5ap` file to start Z5Client and start the ROM patch process. Once the process is finished (this can take a while) emulator will be started automatically (If we associated the extension to the emulator like we already recommended)
+Double click on your `.z5ap` file to start Z5Client and start the ROM patch process. Once the process is finished (this can take a while), emulator will be started automatically (If we associated the extension to the emulator like we already recommended)
 
 ### Connect to multiserver
 Once both Z5Client and emulator are started we must connect them, to do so we just simply click on the "Tools" menu and select "Lua console". On the new window, click on the folder icon and look for the ootMulti.lua file. Once the file is loaded it will conect automatically to Z5Client.
 
-Note: We strongly advise you don't open any emulator menu while it and Z5client are connected, as the script will halt and disconnects can happen.
+Note: We strongly advise you don't open any emulator menu while it and Z5client are connected, as the script will halt and disconnects can happen. If you get disconnected just double click on the script again.
 
-To connect the client to the multiserver simple put address:port on the textfield on top and press enter (if the server uses password, type on the bottom textfield /connect address:puerto contraseña, to connect) 
+To connect the client to the multiserver simply put address:port on the textfield on top and press enter (if the server uses password, type on the bottom textfield /connect address:puerto contraseña, to connect) 
 
 And you are ready to start your adventure in Hyrule.
