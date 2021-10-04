@@ -10,7 +10,7 @@ As we are using Z5Client and Bizhawk, this guide is only applicable to Windows.
 
 ## Install Emulator and client
 
-Download getBizhawk.ps1 from previous link. Place it on the folder where you want your emulator to be installed, right click on it and select "Run with PowerShell". This will download all the needed dependencies used by the emulator. Can take a while.
+Download getBizhawk.ps1 from previous link. Place it on the folder where you want your emulator to be installed, right click on it and select "Run with PowerShell". This will download all the needed dependencies used by the emulator. This can take a while.
 
 It's strongly recommended to associate N64 rom extension (\*.n64) to the Bizhawk we've just installed. To do so, we simple have to search any N64 we happened to own, right click and select "Open with...", we unfold the list that appears and select the bottom option "Look for another application", we browse to Bizhawk folder and select EmuHawk.exe
 
