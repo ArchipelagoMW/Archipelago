@@ -163,7 +163,6 @@ def get_default_options() -> dict:
         },
         "sm_options": {
             "rom_file": "Super Metroid (JU)[!].sfc",
-            "randoPreset": "worlds\\sm\\variaRandomizer\\rando_presets\\defaultTest.json",
             "sni": "SNI",
             "rom_start": True,
         },

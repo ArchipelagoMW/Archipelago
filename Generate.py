@@ -490,8 +490,6 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         raise Exception(f"No game options for selected game \"{ret.game}\" found.")
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
-    if ret.game == "Super Metroid":
-        ret.randoPreset = game_weights.get('randoPreset', [])[0]
 
     if ret.game in AutoWorldRegister.world_types:
         for option_key, option in world_type.options.items():

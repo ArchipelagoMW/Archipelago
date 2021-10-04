@@ -83,7 +83,7 @@ class SMWorld(World):
     def generate_early(self):
         Logic.factory('vanilla')
 
-        self.variaRando = VariaRandomizer(get_base_rom_path(), self.world.randoPreset[self.player], self.player)
+        self.variaRando = VariaRandomizer(self.world, get_base_rom_path(), self.player)
         self.world.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
 
         # keeps Nothing items local so no player will ever pickup Nothing

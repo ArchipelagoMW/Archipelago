@@ -110,7 +110,6 @@ class MultiWorld():
             set_player_attr('blue_clock_time', 2)
             set_player_attr('green_clock_time', 4)
             set_player_attr('can_take_damage', True)
-            set_player_attr('randoPreset', 'worlds\\sm\\variaRandomizer\\rando_presets\\defaultTest.json')
             set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
             set_player_attr('shop_shuffle', 'off')

@@ -287,13 +287,12 @@ class VariaRandomizer:
     parser.add_argument('--hud', help='Enable VARIA hud', dest='hud',
                         nargs='?', const=True, default=False)
 
-    def __init__(self, rom, randoPreset, player):
+    def __init__(self, world, rom, player):
         # parse args       
         self.args = copy.deepcopy(VariaRandomizer.parser.parse_args())
         self.player = player
         args = self.args
         args.rom = rom
-        args.randoPreset = randoPreset
         # args.startLocation = to_pascal_case_with_space(world.startLocation[player].current_key)
 
         if args.output is None and args.rom is None:
@@ -328,12 +327,10 @@ class VariaRandomizer:
                 print(msg)
                 optErrMsgs.append(msg)
 
-        # if rando preset given, load it first
-        if args.randoPreset != None:
-            preset = loadRandoPreset(args.randoPreset, args)
-            # use the skill preset from the rando preset
-            if preset is not None and args.paramsFileName is None:
-                args.paramsFileName = '{}/{}/{}.json'.format(appDir, getPresetDir(preset), preset)
+        preset = loadRandoPreset(world, self.player, args)
+        # use the skill preset from the rando preset
+        if preset is not None and preset != 'custom' and args.paramsFileName is None:
+            args.paramsFileName = '{}/{}/{}.json'.format(appDir, getPresetDir(preset), preset)
 
         # if diff preset given, load it
         if args.paramsFileName is not None:
@@ -343,8 +340,13 @@ class VariaRandomizer:
             if args.preset is not None:
                 preset = args.preset
         else:
-            preset = 'default'
-            PresetLoader.factory('{}/{}/{}.json'.format(appDir, getPresetDir('casual'), 'casual')).load(self.player)
+            if preset == 'custom':
+                PresetLoader.factory(world.customPreset[player].value).load(self.player)
+            else:
+                preset = 'default'
+                PresetLoader.factory('{}/{}/{}.json'.format(appDir, getPresetDir('casual'), 'casual')).load(self.player)
+
+        
 
         logger.debug("preset: {}".format(preset))
 

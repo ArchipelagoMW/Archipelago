@@ -59,10 +59,311 @@ progression_balancing:
 # exclude_locations: # Force certain locations to never contain progression items, and always be filled with junk. 
 #  - "Master Sword Pedestal"
 
-Super Metroid: 
-  randoPreset:
-   - "worlds\\sm\\variaRandomizer\\rando_presets\\default.json"
-
+Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer advanced tab for detailed info on each option 
+#  start_inventory: # Begin the file with the listed items/upgrades
+#    Screw Attack: 1
+#    Bomb: 1
+#    Speed Booster: 1
+#    Grappling Beam: 1
+#    Space Jump: 1
+#    Hi-Jump Boots: 1
+#    Spring Ball: 1
+#    Charge Beam: 1
+#    Ice Beam: 1
+#    Spazer: 1
+#    Reserve Tank: 4
+#    Missile: 46
+#    Super Missile: 20
+#    Power Bomb: 20
+#    Energy Tank: 14
+#    Morph Ball: 1
+#    X-Ray Scope: 1
+#    Wave Beam: 1
+#    Plasma Beam: 1
+#    Varia Suit: 1
+#    Gravity Suit: 1
+  preset: # choose one of the preset or specify "custom" to use customPreset option
+    newbie: 0
+    casual: 0
+    regular: 1
+    veteran: 0
+    expert: 0
+    master: 0
+    samus: 0
+    Season_Races: 0
+    SMRAT2021: 0
+    solution: 0
+    custom: 0   # see https://randommetroidsolver.pythonanywhere.com/presets for detailed info on each preset settings
+  startLocation:
+    Cere: 0
+    Landing_Site: 1
+    Gauntlet_Top: 0
+    Green_Brinstar_Elevator: 0
+    Big_Pink: 0
+    Etecoons_Supers: 0
+    Wrecked_Ship_Main: 0
+    Firefleas_Top: 0
+    Business_Center: 0
+    Bubble_Mountain: 0
+    Mama_Turtle: 0
+    Watering_Hole: 0
+    Aqueduct: 0
+    Red_Brinstar_Elevator: 0
+    Golden_Four: 0
+  maxDifficulty:
+    baby: 0
+    easy: 0
+    medium: 0
+    hard: 0
+    harder: 0
+    very_hard: 0
+    hardcore: 1
+    mania: 0
+    god: 0
+    samus: 0
+    impossibru: 0
+    infinity: 0
+  suitsRestriction:
+    on: 1
+    off: 0  
+  strictMinors:
+    on: 0
+    off: 1
+  missileQty:
+    1: 0
+    2: 0
+    3: 1
+    4: 0
+    5: 0
+    6: 0
+    7: 0
+    8: 0
+    9: 0
+  superQty:
+    1: 0
+    2: 1
+    3: 0
+    4: 0
+    5: 0
+    6: 0
+    7: 0
+    8: 0
+    9: 0
+  powerBombQty:
+    1: 1
+    2: 0
+    3: 0
+    4: 0
+    5: 0
+    6: 0
+    7: 0
+    8: 0
+    9: 0
+  minorQty:
+    7: 0
+    10: 0
+    15: 0
+    20: 0
+    25: 0
+    30: 0
+    35: 0
+    40: 0
+    45: 0
+    50: 0
+    55: 0
+    60: 0
+    65: 0
+    70: 0
+    75: 0
+    80: 0
+    85: 0
+    90: 0
+    95: 0
+    100: 1
+  energyQty:
+    ultra_sparse: 0
+    sparse: 0
+    medium: 0
+    vanilla: 1
+  areaRandomization:
+    on: 0
+    off: 1
+  lightAreaRandomization:
+    on: 0
+    off: 1
+  areaLayout:
+    on: 0
+    off: 1
+  doorsColorsRando:
+    on: 0
+    off: 1
+  allowGreyDoors:
+    on: 0
+    off: 1
+  bossRandomization:
+    on: 0
+    off: 1
+  funCombat:
+    on: 0
+    off: 1
+  funMovement:
+    on: 0
+    off: 1
+  funSuits:
+    on: 0
+    off: 1
+  layoutPatches:
+    on: 1
+    off: 0
+  variaTweaks:
+    on: 0
+    off: 1
+  nerfedCharge:
+    on: 0
+    off: 1
+  gravityBehaviour:
+    Vanilla: 0
+    Balanced: 1
+    Progressive: 0
+  elevators_doors_speed:
+    on: 1
+    off: 0
+  spinjumprestart:
+    on: 0
+    off: 1
+  Infinite_Space_Jump:
+    on: 0
+    off: 1
+  refill_before_save:
+    on: 0
+    off: 1
+  hud:
+    on: 0
+    off: 1
+  animals:
+    on: 0
+    off: 1
+  No_Music:
+    on: 0
+    off: 1
+  random_music:
+    on: 0
+    off: 1
+  #itemsounds: always forced on due to a conflict in patching
+  #majorsSplit: not implemented always "Full"
+  #scavNumLocs: not implemented always off
+  #scavRandomized: not implemented always off
+  #scavEscape: not implemented always off
+  #progressionSpeed: not implemented always random
+  #progressionDifficulty: not implemented always random
+  #morphPlacement: not implemented yet always random
+  #hideItems: not implemented always off
+  #minimizer: not implemented always off
+  #minimizerQty: not implemented always off
+  #minimizerTourian: not implemented always off
+  #escapeRando: not implemented always off
+  #removeEscapeEnemies: not implemented always off
+  #rando_speed: not implemented always off
+  customPreset:  # see https://randommetroidsolver.pythonanywhere.com/presets for detailed info on each preset settings
+    Knows: # each skill (know) has a pair [can use, perceived difficulty 1 (easy) to 100 (mania)]
+      WallJump: [False, 0]
+      ShineSpark: [False, 0]
+      MidAirMorph: [False, 0]
+      CrouchJump: [False, 0]
+      Mockball: [True, 1]
+      SimpleShortCharge: [True, 1]
+      InfiniteBombJump: [True, 5]
+      GreenGateGlitch: [True, 5]
+      ShortCharge: [False, 0]
+      GravityJump: [True, 10]
+      SpringBallJump: [True, 10]
+      SpringBallJumpFromWall: [False, 0]
+      GetAroundWallJump: [True, 10]
+      DraygonGrappleKill: [True, 5]
+      DraygonSparkKill: [False, 0]
+      MicrowaveDraygon: [True, 1]
+      MicrowavePhantoon: [True, 5]
+      IceZebSkip: [False, 0]
+      SpeedZebSkip: [False, 0]
+      HiJumpMamaTurtle: [False, 0]
+      GravLessLevel1: [True, 50]
+      GravLessLevel2: [False, 0]
+      GravLessLevel3: [False, 0]
+      CeilingDBoost: [True, 1]
+      BillyMays: [True, 1]
+      AlcatrazEscape: [True, 25]
+      ReverseGateGlitch: [True, 5]
+      ReverseGateGlitchHiJumpLess: [False, 0]
+      EarlyKraid: [True, 1]
+      XrayDboost: [False, 0]
+      XrayIce: [True, 10]
+      RedTowerClimb: [True, 25]
+      RonPopeilScrew: [False, 0]
+      OldMBWithSpeed: [False, 0]
+      Moondance: [False, 0]
+      HiJumpLessGauntletAccess: [True, 50]
+      HiJumpGauntletAccess: [True, 25]
+      LowGauntlet: [False, 0]
+      IceEscape: [False, 0]
+      WallJumpCathedralExit: [True, 5]
+      BubbleMountainWallJump: [True, 5]
+      NovaBoost: [False, 0]
+      NorfairReserveDBoost: [False, 0]
+      CrocPBsDBoost: [False, 0]
+      CrocPBsIce: [False, 0]
+      IceMissileFromCroc: [False, 0]
+      FrogSpeedwayWithoutSpeed: [False, 0]
+      LavaDive: [True, 50]
+      LavaDiveNoHiJump: [False, 0]
+      WorstRoomIceCharge: [False, 0]
+      ScrewAttackExit: [False, 0]
+      ScrewAttackExitWithoutScrew: [False, 0]
+      FirefleasWalljump: [True, 25]
+      ContinuousWallJump: [False, 0]
+      DiagonalBombJump: [False, 0]
+      MockballWs: [False, 0]
+      SpongeBathBombJump: [False, 0]
+      SpongeBathHiJump: [True, 1]
+      SpongeBathSpeed: [True, 5]
+      TediousMountEverest: [False, 0]
+      DoubleSpringBallJump: [False, 0]
+      BotwoonToDraygonWithIce: [False, 0]
+      DraygonRoomGrappleExit: [False, 0]
+      DraygonRoomCrystalFlash: [False, 0]
+      PreciousRoomXRayExit: [False, 0]
+      MochtroidClip: [True, 5]
+      PuyoClip: [False, 0]
+      PuyoClipXRay: [False, 0]
+      SnailClip: [False, 0]
+      SuitlessPuyoClip: [False, 0]
+      KillPlasmaPiratesWithSpark: [False, 0]
+      KillPlasmaPiratesWithCharge: [True, 5]
+      AccessSpringBallWithHiJump: [True, 1]
+      AccessSpringBallWithSpringBallBombJumps: [True, 10]
+      AccessSpringBallWithBombJumps: [False, 0]
+      AccessSpringBallWithSpringBallJump: [False, 0]
+      AccessSpringBallWithXRayClimb: [False, 0]
+      AccessSpringBallWithGravJump: [False, 0]
+    Controller:
+      A: Jump
+      B: Dash
+      X: Shoot
+      Y: Item Cancel
+      L: Angle Down
+      R: Angle Up
+      Select: Item Select
+      Moonwalk: False
+    Settings:
+      Ice: "Gimme energy"
+      MainUpperNorfair: "Gimme energy"
+      LowerNorfair: "Default"
+      Kraid: "Default"
+      Phantoon: "Default"
+      Draygon: "Default"
+      Ridley: "Default"
+      MotherBrain: "Default"
+      X-Ray: "I don't like spikes"
+      Gauntlet: "I don't like acid"
 Subnautica: {}
 Slay the Spire:
   character: # Pick What Character you wish to play with.

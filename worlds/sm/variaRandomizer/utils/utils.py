@@ -1,7 +1,7 @@
 import os, json, sys, re, random
 
 from utils.parameters import Knows, Settings, Controller, isKnows, isSettings, isButton
-from utils.parameters import easy, medium, hard, harder, hardcore, mania
+from utils.parameters import easy, medium, hard, harder, hardcore, mania, text2diff
 from logic.smbool import SMBool
 
 from Utils import is_frozen
@@ -269,6 +269,21 @@ def getDefaultMultiValues():
     }
     return defaultMultiValues
 
+def getPresetValues():
+    return [
+        "newbie",
+        "casual",
+        "regular",
+        "veteran",
+        "expert",
+        "master",
+        "samus",
+        "Season_Races",
+        "SMRAT2021",
+        "solution",
+        "custom"
+    ]
+
 # from web to cli
 def convertParam(randoParams, param, inverse=False):
     value = randoParams.get(param, "off" if inverse == False else "on")
@@ -280,143 +295,64 @@ def convertParam(randoParams, param, inverse=False):
         return "random"
     raise Exception("invalid value for parameter {}".format(param))
 
-def loadRandoPreset(randoPreset, args):
-    # load the rando preset json file and add the parameters inside it to the args parser
-    with open(randoPreset) as randoPresetFile:
-        randoParams = json.load(randoPresetFile)
+def loadRandoPreset(world, player, args):
+    defaultMultiValues = getDefaultMultiValues()
+    diffs = [key for key in text2diff.keys()]
+    presetValues = getPresetValues()
 
-    if randoParams.get("seed") != None:
-        args.seed = int(randoParams["seed"])
-
-    if randoParams.get("animals", "off") == "on":
-        args.animals = True
-    if randoParams.get("variaTweaks", "on") == "off":
-        args.noVariaTweaks = True
-    if randoParams.get("maxDifficulty", "no difficulty cap") != "no difficulty cap":
-        args.maxDifficulty = randoParams["maxDifficulty"]
-    if randoParams.get("suitsRestriction", "off") != "off":
-        if randoParams["suitsRestriction"] == "on":
-            args.suitsRestriction = True
-        else:
-            args.suitsRestriction = "random"
-    if randoParams.get("hideItems", "off") != "off":
-        if randoParams["hideItems"] == "on":
-            args.hideItems = True
-        else:
-            args.hideItems = "random"
-    if randoParams.get("strictMinors", "off") != "off":
-        if randoParams["strictMinors"] == "on":
-            args.strictMinors = True
-        else:
-            args.strictMinors = "random"
-
-    if randoParams.get("layoutPatches", "on") == "off":
-        args.noLayout = True
-    if "gravityBehaviour" in randoParams:
-        args.gravityBehaviour = randoParams["gravityBehaviour"]
-    if randoParams.get("nerfedCharge", "off") == "on":
-        args.nerfedCharge = True
-
-    args.area = convertParam(randoParams, "areaRandomization")
-    if args.area == True:
-        args.areaLayoutBase = convertParam(randoParams, "areaLayout", inverse=True)
-        args.lightArea = convertParam(randoParams, "lightAreaRandomization")
-    args.escapeRando = convertParam(randoParams, "escapeRando")
-    if args.escapeRando == True:
-        args.noRemoveEscapeEnemies = convertParam(randoParams, "removeEscapeEnemies", inverse=True)
-
-    args.doorsColorsRando = convertParam(randoParams, "doorsColorsRando")
-    args.allowGreyDoors = convertParam(randoParams, "allowGreyDoors")
-    args.bosses = convertParam(randoParams, "bossRandomization")
-
-    if randoParams.get("funCombat", "off") != "off":
-        if randoParams["funCombat"] == "on":
-            args.superFun.append("Combat")
-        else:
-            args.superFun.append("CombatRandom")
-    if randoParams.get("funMovement", "off") != "off":
-        if randoParams["funMovement"] == "on":
-            args.superFun.append("Movement")
-        else:
-            args.superFun.append("MovementRandom")
-    if randoParams.get("funSuits", "off") != "off":
-        if randoParams["funSuits"] == "on":
-            args.superFun.append("Suits")
-        else:
-            args.superFun.append("SuitsRandom")
+    args.animals = world.animals[player].value
+    args.noVariaTweaks = not world.variaTweaks[player].value
+    args.maxDifficulty = diffs[world.maxDifficulty[player].value]
+    args.suitsRestriction = world.suitsRestriction[player].value
+    #args.hideItems = world.hideItems[player].value
+    args.strictMinors = world.strictMinors[player].value
+    args.noLayout = world.layoutPatches[player].value
+    args.gravityBehaviour = defaultMultiValues["gravityBehaviour"][world.gravityBehaviour[player].value]
+    args.nerfedCharge = world.nerfedCharge[player].value
+    args.area = world.areaRandomization[player].value
+    if args.area:
+        args.areaLayoutBase = not world.areaLayout[player].value
+        args.lightArea = world.lightAreaRandomization[player].value
+    #args.escapeRando
+    #args.noRemoveEscapeEnemies
+    args.doorsColorsRando = world.doorsColorsRando[player].value
+    args.allowGreyDoors = world.allowGreyDoors[player].value
+    args.bosses = world.bossRandomization[player].value
+    if world.funCombat[player].value:
+        args.superFun.append("Combat")
+    if world.funMovement[player].value:
+        args.superFun.append("Movement")
+    if world.funSuits[player].value:
+        args.superFun.append("Suits") 
 
     ipsPatches = ["spinjumprestart", "rando_speed", "elevators_doors_speed", "refill_before_save"]
     for patch in ipsPatches:
-        if randoParams.get(patch, "off") == "on":
+        if hasattr(world, patch) and getattr(world, patch)[player].value:
             args.patches.append(patch + '.ips')
 
     patches = ["No_Music", "Infinite_Space_Jump"]
     for patch in patches:
-        if randoParams.get(patch, "off") == "on":
+        if hasattr(world, patch) and getattr(world, patch)[player].value:
             args.patches.append(patch)
+             
+    args.hud = world.hud[player].value
+    #args.morphPlacement
+    #args.majorsSplit
+    #args.scavNumLocs
+    #args.scavRandomized
+    #args.scavEscape
+    args.startLocation = defaultMultiValues["startLocation"][world.startLocation[player].value]
+    #args.progressionDifficulty
+    #args.progressionSpeed
+    args.missileQty = world.missileQty[player].value
+    args.superQty = world.superQty[player].value
+    args.powerBombQty = world.powerBombQty[player].value
+    args.minorQty = world.minorQty[player].value
+    args.energyQty = defaultMultiValues["energyQty"][world.energyQty[player].value]
+    #args.minimizerN
+    #args.minimizerTourian
 
-    if randoParams.get("hud", "off") == "on":
-        args.hud = True
-
-    if "morphPlacement" in randoParams:
-        args.morphPlacement = randoParams["morphPlacement"]
-    if "majorsSplit" in randoParams:
-        args.majorsSplit = randoParams["majorsSplit"]
-        if randoParams["majorsSplit"] == "Scavenger":
-            if "scavNumLocs" in randoParams:
-                if randoParams["scavNumLocs"] == "random":
-                    args.scavNumLocs = 0
-                else:
-                    args.scavNumLocs = randoParams["scavNumLocs"]
-            if "scavRandomized" in randoParams:
-                args.scavRandomized = randoParams["scavRandomized"] == "on"
-            if "scavEscape" in randoParams:
-                args.scavEscape = randoParams["scavEscape"] == "on"
-    if "startLocation" in randoParams:
-        args.startLocation = randoParams["startLocation"]
-    if "progressionDifficulty" in randoParams:
-        args.progressionDifficulty = randoParams["progressionDifficulty"]
-
-    if "progressionSpeed" in randoParams:
-        args.progressionSpeed = randoParams["progressionSpeed"]
-
-    if "missileQty" in randoParams:
-        if randoParams["missileQty"] == "random":
-            args.missileQty = 0
-        else:
-            args.missileQty = randoParams["missileQty"]
-    if "superQty" in randoParams:
-        if randoParams["superQty"] == "random":
-            args.superQty = 0
-        else:
-            args.superQty = randoParams["superQty"]
-    if "powerBombQty" in randoParams:
-        if randoParams["powerBombQty"] == "random":
-            args.powerBombQty = 0
-        else:
-            args.powerBombQty = randoParams["powerBombQty"]
-    if "minorQty" in randoParams:
-        if randoParams["minorQty"] == "random":
-            args.minorQty = 0
-        else:
-            args.minorQty = randoParams["minorQty"]
-    if "energyQty" in randoParams:
-        args.energyQty = randoParams["energyQty"]
-
-    if randoParams.get("minimizer", "off") == "on" and "minimizerQty" in randoParams:
-        args.minimizerN = randoParams["minimizerQty"]
-        if randoParams.get("minimizerTourian", "off") == "on":
-            args.minimizerTourian = True
-
-    defaultMultiValues = getDefaultMultiValues()
-    multiElems = ["majorsSplit", "startLocation", "energyQty", "morphPlacement", "progressionDifficulty", "progressionSpeed", "gravityBehaviour"]
-    for multiElem in multiElems:
-        if multiElem+'MultiSelect' in randoParams:
-            setattr(args, multiElem+'List', ','.join(randoParams[multiElem+'MultiSelect']))
-        else:
-            setattr(args, multiElem+'List', ','.join(defaultMultiValues[multiElem]))
-
-    return randoParams.get("preset")
+    return presetValues[world.preset[player].value]
 
 def getRandomizerDefaultParameters():
     defaultParams = {}

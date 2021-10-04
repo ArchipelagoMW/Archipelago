@@ -87,7 +87,6 @@ def main(args, seed=None):
     world.game = args.game.copy()
     world.set_options(args)
     world.player_name = args.name.copy()
-    world.randoPreset = args.randoPreset
     world.enemizer = args.enemizercli
     world.sprite = args.sprite.copy()
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
