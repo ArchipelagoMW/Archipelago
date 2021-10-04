@@ -384,4 +384,4 @@ Note: We strongly advise you don't open any emulator menu while it and Z5client 
 
 To connect the client to the multiserver simply put address:port on the textfield on top and press enter (if the server uses password, type on the bottom textfield /connect address:puerto contraseña, to connect) 
 
-And you are ready to start your adventure in Hyrule.
+Now you are ready to start your adventure in Hyrule.
