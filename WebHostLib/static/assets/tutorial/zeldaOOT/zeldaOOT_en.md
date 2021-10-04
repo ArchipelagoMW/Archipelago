@@ -378,7 +378,7 @@ everyone's data files. Your data file should have a `.z5ap` extension.
 Double click on your `.z5ap` file to start Z5Client and start the ROM patch process. Once the process is finished (this can take a while), emulator will be started automatically (If we associated the extension to the emulator like we already recommended)
 
 ### Connect to multiserver
-Once both Z5Client and emulator are started we must connect them, to do so we just simply click on the "Tools" menu and select "Lua console". On the new window, click on the folder icon and look for the ootMulti.lua file. Once the file is loaded it will conect automatically to Z5Client.
+Once both the Z5Client and the emulator are started we must connect them. Within the emulator we click on the "Tools" menu and select "Lua console". In the new window click on the folder icon and look for the ootMulti.lua file. Once the file is loaded it will connect automatically to Z5Client.
 
 Note: We strongly advise you don't open any emulator menu while it and Z5client are connected, as the script will halt and disconnects can happen. If you get disconnected just double click on the script again.
 
