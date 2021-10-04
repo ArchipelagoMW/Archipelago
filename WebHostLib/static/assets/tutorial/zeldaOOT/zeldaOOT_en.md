@@ -4,7 +4,7 @@
 
 As we are using Z5Client and Bizhawk, this guide is only applicable to Windows.
 
-## Required Software Requerido
+## Required Software
 
 - [bizhawk+script+Z5Client](https://github.com/ArchipelagoMW/Z5Client/releases) We recommend download Z5Client-setup as it makes some steps automatic.
 
