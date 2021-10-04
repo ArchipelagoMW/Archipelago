@@ -368,6 +368,10 @@ class StartHints(ItemSet):
     displayname = "Start Hints"
 
 
+class StartLocationHints(OptionSet):
+    displayname = "Start Location Hints"
+
+
 class ExcludeLocations(OptionSet):
     """Prevent these locations from having an important item"""
     displayname = "Excluded Locations"
@@ -375,11 +379,11 @@ class ExcludeLocations(OptionSet):
 
 
 per_game_common_options = {
-    # placeholder until they're actually implemented
     "local_items": LocalItems,
     "non_local_items": NonLocalItems,
     "start_inventory": StartInventory,
     "start_hints": StartHints,
+    "start_location_hints": StartLocationHints,
     "exclude_locations": OptionSet
 }
 

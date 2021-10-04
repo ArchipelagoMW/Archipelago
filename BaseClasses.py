@@ -1064,17 +1064,19 @@ class Spoiler():
             listed_locations.update(other_locations)
 
         self.shops = []
-        from worlds.alttp.Shops import ShopType
+        from worlds.alttp.Shops import ShopType, price_type_display_name, price_rate_display
         for shop in self.world.shops:
             if not shop.custom:
                 continue
-            shopdata = {'location': str(shop.region),
-                        'type': 'Take Any' if shop.type == ShopType.TakeAny else 'Shop'
-                       }
+            shopdata = {
+                'location': str(shop.region),
+                'type': 'Take Any' if shop.type == ShopType.TakeAny else 'Shop'
+            }
             for index, item in enumerate(shop.inventory):
                 if item is None:
                     continue
-                shopdata['item_{}'.format(index)] = "{} — {}".format(item['item'], item['price']) if item['price'] else item['item']
+                my_price = item['price'] // price_rate_display.get(item['price_type'], 1)
+                shopdata['item_{}'.format(index)] = f"{item['item']} — {my_price} {price_type_display_name[item['price_type']]}"
 
                 if item['player'] > 0:
                     shopdata['item_{}'.format(index)] = shopdata['item_{}'.format(index)].replace('—', '(Player {}) — '.format(item['player']))
@@ -1085,7 +1087,7 @@ class Spoiler():
 
                 if item['replacement'] is None:
                     continue
-                shopdata['item_{}'.format(index)] += ", {} - {}".format(item['replacement'], item['replacement_price']) if item['replacement_price'] else item['replacement']
+                shopdata['item_{}'.format(index)] += f", {item['replacement']} - {item['replacement_price']} {price_type_display_name[item['replacement_price_type']]}"
             self.shops.append(shopdata)
 
         for player in self.world.get_game_players("A Link to the Past"):

@@ -39,7 +39,7 @@ If you are running Archipelago from a non-Windows system then the likely scenari
 ## Related Repositories
 This project makes use of multiple other projects. We wouldn't be here without these other repositories and the contributions of their developers, past and present.
 
-* [z3randomizer](https://github.com/CaitSith2/z3randomizer)
+* [z3randomizer](https://github.com/ArchipelagoMW/z3randomizer)
 * [Enemizer](https://github.com/Ijwu/Enemizer)
 * [Ocarina of Time Randomizer](https://github.com/TestRunnerSRL/OoT-Randomizer)
 
