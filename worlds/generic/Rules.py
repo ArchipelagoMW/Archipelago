@@ -29,7 +29,7 @@ def exclusion_rules(world, player: int, exclude_locations: typing.Set[str]):
             location.excluded = True
         except KeyError as e:  # failed to find the given location. Check if it's a legitimate location
             if loc_name not in world.worlds[player].location_name_to_id:
-                raise Exception(f"Could not find location {loc_name} in player {player}'s world.") from e
+                raise Exception(f"Unable to exclude location {loc_name} in player {player}'s world.") from e
 
 def set_rule(spot, rule: CollectionRule):
     spot.access_rule = rule
