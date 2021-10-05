@@ -25,11 +25,12 @@ def exclusion_rules(world, player: int, exclude_locations: typing.Set[str]):
     for loc_name in exclude_locations:
         try:
             location = world.get_location(loc_name, player)
-            add_item_rule(location, lambda i: not (i.advancement or i.never_exclude))
-            location.excluded = True
         except KeyError as e:  # failed to find the given location. Check if it's a legitimate location
             if loc_name not in world.worlds[player].location_name_to_id:
                 raise Exception(f"Unable to exclude location {loc_name} in player {player}'s world.") from e
+        else: 
+            add_item_rule(location, lambda i: not (i.advancement or i.never_exclude))
+            location.excluded = True
 
 def set_rule(spot, rule: CollectionRule):
     spot.access_rule = rule
