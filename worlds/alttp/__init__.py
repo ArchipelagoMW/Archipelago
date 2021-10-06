@@ -60,20 +60,20 @@ class ALTTPWorld(World):
         world = self.world
 
         # system for sharing ER layouts
-        world.er_seeds[player] = str(world.random.randint(0, 2 ** 64))
+        self.er_seed = str(world.random.randint(0, 2 ** 64))
 
         if "-" in world.shuffle[player]:
             shuffle, seed = world.shuffle[player].split("-", 1)
             world.shuffle[player] = shuffle
             if shuffle == "vanilla":
-                world.er_seeds[player] = "vanilla"
+                self.er_seed = "vanilla"
             elif seed.startswith("group-") or world.is_race:
-                world.er_seeds[player] = get_same_seed(world, (
+                self.er_seed = get_same_seed(world, (
                     shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
             else:  # not a race or group seed, use set seed as is.
-                world.er_seeds[player] = seed
+                self.er_seed = seed
         elif world.shuffle[player] == "vanilla":
-            world.er_seeds[player] = "vanilla"
+            self.er_seed = "vanilla"
         for dungeon_item in ["smallkey_shuffle", "bigkey_shuffle", "compass_shuffle", "map_shuffle"]:
             option = getattr(world, dungeon_item)[player]
             if option == "own_world":
@@ -118,7 +118,7 @@ class ALTTPWorld(World):
 
         # seeded entrance shuffle
         old_random = world.random
-        world.random = random.Random(world.er_seeds[player])
+        world.random = random.Random(self.er_seed)
 
         if world.mode[player] != 'inverted':
             link_entrances(world, player)

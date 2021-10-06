@@ -48,6 +48,7 @@ def call_all(world: MultiWorld, method_name: str, *args):
     for player in world.player_ids:
         world_types.add(world.worlds[player].__class__)
         call_single(world, method_name, player, *args)
+
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
