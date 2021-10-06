@@ -1,2303 +1,1004 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--Created by yFiles for HTML 2.4.0.3-->
-<graphml xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml.html/2.0/ygraphml.xsd " xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:demostyle="http://www.yworks.com/yFilesHTML/demos/FlatDemoStyle/1.0" xmlns:icon-style="http://www.yworks.com/yed-live/icon-style/1.0" xmlns:bpmn="http://www.yworks.com/xml/yfiles-bpmn/2.0" xmlns:demotablestyle="http://www.yworks.com/yFilesHTML/demos/FlatDemoTableStyle/1.0" xmlns:uml="http://www.yworks.com/yFilesHTML/demos/UMLDemoStyle/1.0" xmlns:GraphvizNodeStyle="http://www.yworks.com/yFilesHTML/graphviz-node-style/1.0" xmlns:VuejsNodeStyle="http://www.yworks.com/demos/yfiles-vuejs-node-style/1.0" xmlns:explorer-style="http://www.yworks.com/data-explorer/1.0" xmlns:y="http://www.yworks.com/xml/yfiles-common/3.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/3.0" xmlns:yjs="http://www.yworks.com/xml/yfiles-for-html/2.0/xaml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<key id="d0" for="node" attr.type="int" attr.name="zOrder" y:attr.uri="http://www.yworks.com/xml/yfiles-z-order/1.0/zOrder"/>
-	<key id="d1" for="node" attr.type="boolean" attr.name="Expanded" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/Expanded">
-		<default>true</default>
-	</key>
-	<key id="d2" for="node" attr.type="string" attr.name="url"/>
-	<key id="d3" for="node" attr.type="string" attr.name="description"/>
-	<key id="d4" for="node" attr.name="NodeLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeLabels"/>
-	<key id="d5" for="node" attr.name="NodeGeometry" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeGeometry"/>
-	<key id="d6" for="all" attr.name="UserTags" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/UserTags"/>
-	<key id="d7" for="node" attr.name="NodeStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeStyle"/>
-	<key id="d8" for="node" attr.name="NodeViewState" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/1.1/NodeViewState"/>
-	<key id="d9" for="edge" attr.type="string" attr.name="url"/>
-	<key id="d10" for="edge" attr.type="string" attr.name="description"/>
-	<key id="d11" for="edge" attr.name="EdgeLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeLabels"/>
-	<key id="d12" for="edge" attr.name="EdgeGeometry" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeGeometry"/>
-	<key id="d13" for="edge" attr.name="EdgeStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeStyle"/>
-	<key id="d14" for="edge" attr.name="EdgeViewState" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/1.1/EdgeViewState"/>
-	<key id="d15" for="port" attr.name="PortLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortLabels"/>
-	<key id="d16" for="port" attr.name="PortLocationParameter" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortLocationParameter">
-		<default>
-			<x:Static Member="y:FreeNodePortLocationModel.NodeCenterAnchored"/>
-		</default>
-	</key>
-	<key id="d17" for="port" attr.name="PortStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortStyle">
-		<default>
-			<x:Static Member="y:VoidPortStyle.Instance"/>
-		</default>
-	</key>
-	<key id="d18" for="port" attr.name="PortViewState" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/1.1/PortViewState"/>
-	<key id="d19" attr.name="SharedData" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/SharedData"/>
-	<data key="d19">
-		<y:SharedData>
-			<yjs:DashStyle x:Key="1" dashes="6 2" offset="0"/>
-			<yjs:SolidColorFill x:Key="2" color="Black"/>
-			<yjs:Arrow x:Key="3" stroke="#FF000000" fill="{y:GraphMLReference 2}"/>
-			<yjs:SolidColorFill x:Key="4" color="Black"/>
-			<yjs:SolidColorFill x:Key="5" color="Black"/>
-			<yjs:Arrow x:Key="6" type="NONE"/>
-			<yjs:SolidColorFill x:Key="7" color="Black"/>
-			<yjs:Arrow x:Key="8" stroke="#FF000000" fill="{y:GraphMLReference 7}"/>
-			<yjs:SolidColorFill x:Key="9" color="Black"/>
-			<yjs:Arrow x:Key="10" stroke="#FF000000" fill="{y:GraphMLReference 9}"/>
-			<yjs:Color x:Key="11" value="#FF68B0E3"/>
-			<yjs:SolidColorFill x:Key="12" color="Black"/>
-			<yjs:SolidColorFill x:Key="13" color="Black"/>
-			<yjs:SolidColorFill x:Key="14" color="Black"/>
-			<yjs:SolidColorFill x:Key="15" color="Black"/>
-			<yjs:SolidColorFill x:Key="16" color="Black"/>
-			<yjs:SolidColorFill x:Key="17" color="Black"/>
-			<yjs:SolidColorFill x:Key="18" color="Black"/>
-			<yjs:Font x:Key="19" fontSize="15" fontFamily="'Arial'"/>
-			<yjs:ShapeNodeStyle x:Key="20" fill="#FFF5F5F5" shape="ROUND_RECTANGLE">
-				<yjs:ShapeNodeStyle.stroke>
-					<yjs:Stroke fill="#FF000000" dashStyle="{y:GraphMLReference 1}" miterLimit="1.45"/>
-				</yjs:ShapeNodeStyle.stroke>
-			</yjs:ShapeNodeStyle>
-			<yjs:SolidColorFill x:Key="21" color="Black"/>
-			<yjs:Font x:Key="22" fontSize="15" fontFamily="'Arial'"/>
-			<yjs:ShapeNodeStyle x:Key="23" fill="#FFF5F5F5" shape="ROUND_RECTANGLE">
-				<yjs:ShapeNodeStyle.stroke>
-					<yjs:Stroke fill="#FF000000" dashStyle="{y:GraphMLReference 1}" miterLimit="1.45"/>
-				</yjs:ShapeNodeStyle.stroke>
-			</yjs:ShapeNodeStyle>
-			<y:RatioAnchoredLabelModelParameter x:Key="24" LayoutOffset="69.81234374999997,17.88941406250001"/>
-			<yjs:SolidColorFill x:Key="25" color="Black"/>
-			<yjs:Font x:Key="26" fontSize="12" fontFamily="'Arial'"/>
-			<yjs:SolidColorFill x:Key="27" color="#FFFFCC00"/>
-			<yjs:Stroke x:Key="28" fill="#FF000000" miterLimit="1.45"/>
-			<yjs:SolidColorFill x:Key="29" color="Black"/>
-			<yjs:Font x:Key="30" fontSize="12" fontFamily="'Arial'"/>
-			<yjs:SolidColorFill x:Key="31" color="Black"/>
-			<yjs:Arrow x:Key="32" stroke="#FF000000" fill="{y:GraphMLReference 31}"/>
-			<yjs:Arrow x:Key="33" stroke="#FF000000" fill="#FF000000"/>
-			<yjs:PolylineEdgeStyle x:Key="34" targetArrow="{y:GraphMLReference 33}" sourceArrow="{y:GraphMLReference 33}">
-				<yjs:PolylineEdgeStyle.stroke>
-					<yjs:Stroke fill="#FF000000" thickness="0.75"/>
-				</yjs:PolylineEdgeStyle.stroke>
-			</yjs:PolylineEdgeStyle>
-			<yjs:SolidColorFill x:Key="35" color="Black"/>
-			<yjs:SolidColorFill x:Key="36" color="Black"/>
-			<yjs:SolidColorFill x:Key="37" color="Black"/>
-			<yjs:Arrow x:Key="38" stroke="#FF000000" fill="{y:GraphMLReference 37}"/>
-			<yjs:SolidColorFill x:Key="39" color="Black"/>
-			<yjs:Arrow x:Key="40" stroke="#FF000000" fill="{y:GraphMLReference 39}"/>
-			<yjs:SolidColorFill x:Key="41" color="Black"/>
-			<yjs:SolidColorFill x:Key="42" color="Black"/>
-			<yjs:SolidColorFill x:Key="43" color="Black"/>
-			<yjs:SolidColorFill x:Key="44" color="Black"/>
-			<yjs:SolidColorFill x:Key="45" color="Black"/>
-			<yjs:Arrow x:Key="46" stroke="#FF000000" fill="{y:GraphMLReference 45}"/>
-			<yjs:SolidColorFill x:Key="47" color="Black"/>
-			<yjs:Arrow x:Key="48" stroke="#FF000000" fill="{y:GraphMLReference 47}"/>
-			<yjs:SolidColorFill x:Key="49" color="Black"/>
-			<yjs:Arrow x:Key="50" stroke="#FF000000" fill="{y:GraphMLReference 49}"/>
-			<yjs:SolidColorFill x:Key="51" color="Black"/>
-			<yjs:SolidColorFill x:Key="52" color="Black"/>
-			<yjs:SolidColorFill x:Key="53" color="Black"/>
-			<yjs:SolidColorFill x:Key="54" color="Black"/>
-			<yjs:Arrow x:Key="55" stroke="#FF000000" fill="{y:GraphMLReference 54}"/>
-			<yjs:SolidColorFill x:Key="56" color="Black"/>
-			<yjs:Arrow x:Key="57" stroke="#FF000000" fill="{y:GraphMLReference 56}"/>
-			<yjs:SolidColorFill x:Key="58" color="Black"/>
-			<yjs:Arrow x:Key="59" stroke="#FF000000" fill="{y:GraphMLReference 58}"/>
-			<yjs:SolidColorFill x:Key="60" color="Black"/>
-			<yjs:Arrow x:Key="61" stroke="#FF000000" fill="{y:GraphMLReference 60}"/>
-			<yjs:SolidColorFill x:Key="62" color="Black"/>
-			<yjs:Arrow x:Key="63" stroke="#FF000000" fill="{y:GraphMLReference 62}"/>
-			<yjs:SolidColorFill x:Key="64" color="Black"/>
-			<yjs:Arrow x:Key="65" stroke="#FF000000" fill="{y:GraphMLReference 64}"/>
-		</y:SharedData>
-	</data>
-	<graph id="G" edgedefault="directed">
-		<data key="d6">
-			<y:Json>{"version":"2.0.0","theme":{"name":"light","version":"1.0.0"}}</y:Json>
-		</data>
-		<node id="n0">
-			<data key="d0">0</data>
-			<data key="d4">
-				<x:List>
-					<y:Label>
-						<y:Label.Text><![CDATA[Archipelago Server]]></y:Label.Text>
-						<y:Label.LayoutParameter>
-							<y:RatioAnchoredLabelModelParameter LayoutOffset="211.34710481250045,17.88941406250001"/>
-						</y:Label.LayoutParameter>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d5">
-				<y:RectD X="298.1461119999983" Y="400.2375040000002" Width="524.7469440000009" Height="50.48000000000002"/>
-			</data>
-			<data key="d7">
-				<yjs:ShapeNodeStyle fill="#FFFFCC00">
-					<yjs:ShapeNodeStyle.stroke>
-						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-					</yjs:ShapeNodeStyle.stroke>
-				</yjs:ShapeNodeStyle>
-			</data>
-			<port name="p0">
-				<data key="d16">
-					<y:FreeNodePortLocationModelParameter Ratio="0.7957872814215002,0.00009277931853859347"/>
-				</data>
-			</port>
-			<port name="p1">
-				<data key="d16">
-					<y:FreeNodePortLocationModelParameter Ratio="0.7957872814215002,0.3419670364500757"/>
-				</data>
-			</port>
-			<port name="p2">
-				<data key="d16">
-					<y:FreeNodePortLocationModelParameter Ratio="0.7957872814215002,0.42120633914421196"/>
-				</data>
-			</port>
-			<port name="p3">
-				<data key="d16">
-					<y:FreeNodePortLocationModelParameter Ratio="0.2327979255463749,0.5"/>
-				</data>
-			</port>
-			<port name="p4">
-				<data key="d16">
-					<y:FreeNodePortLocationModelParameter Ratio="0.256758152744952,0.441016164817746"/>
-				</data>
-			</port>
-			<port name="p5"/>
-			<port name="p6">
-				<data key="d16">
-					<y:FreeNodePortLocationModelParameter Ratio="0.25677986225679156,0.5994947702060186"/>
-				</data>
-			</port>
-		</node>
-		<node id="n1">
-			<data key="d0">1</data>
-			<data key="d2"><![CDATA[]]></data>
-			<data key="d4">
-				<x:List>
-					<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-						<y:Label.Text>Factorio</y:Label.Text>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" autoFlip="false" textFill="#FF000000" textSize="15">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="15" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d5">
-				<y:RectD X="1227.445695999997" Y="362.8610391562502" Width="495.5861119999986" Height="371.93147284375027"/>
-			</data>
-			<data key="d7">
-				<yjs:CollapsibleNodeStyleDecorator>
-					<yjs:ShapeNodeStyle fill="#FFF5F5F5" shape="ROUND_RECTANGLE">
-						<yjs:ShapeNodeStyle.stroke>
-							<yjs:Stroke fill="#FF000000" dashStyle="{y:GraphMLReference 1}" miterLimit="1.45"/>
-						</yjs:ShapeNodeStyle.stroke>
-					</yjs:ShapeNodeStyle>
-				</yjs:CollapsibleNodeStyleDecorator>
-			</data>
-			<data key="d8">
-				<y:ViewState>
-					<y:FolderNodeState x:Key="c|view" Layout="0,60,50,50">
-						<y:FolderNodeState.Labels>
-							<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-								<y:Label.Text><![CDATA[Folder 1]]></y:Label.Text>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" autoFlip="false" textFill="#FF000000" textSize="15">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="15" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</y:FolderNodeState.Labels>
-						<y:FolderNodeState.Style>
-							<yjs:CollapsibleNodeStyleDecorator>
-								<yjs:ShapeNodeStyle fill="#FFF5F5F5" shape="ROUND_RECTANGLE">
-									<yjs:ShapeNodeStyle.stroke>
-										<yjs:Stroke fill="#FF000000" dashStyle="{y:GraphMLReference 1}" miterLimit="1.45"/>
-									</yjs:ShapeNodeStyle.stroke>
-								</yjs:ShapeNodeStyle>
-							</yjs:CollapsibleNodeStyleDecorator>
-						</y:FolderNodeState.Style>
-					</y:FolderNodeState>
-				</y:ViewState>
-			</data>
-			<graph id="n1:" edgedefault="directed">
-				<node id="n1::n0">
-					<data key="d0">0</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>FactorioClient</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="70.14632812499985,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="1242.445695999997" Y="400.2375040000002" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.49999999999999944,0.5"/>
-						</data>
-					</port>
-					<port name="p1">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.49999999999999944,0.5"/>
-						</data>
-					</port>
-				</node>
-				<node id="n1::n1">
-					<data key="d0">1</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[Factorio Server]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="66.14730468749985,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="1242.445695999997" Y="550.637504" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.49999999999999944,0.5"/>
-						</data>
-					</port>
-					<port name="p1">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.49999999999999944,0.5"/>
-						</data>
-					</port>
-					<port name="p2">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.49999999999999944,0.5"/>
-						</data>
-					</port>
-					<port name="p3">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.49999999999999944,0.5"/>
-						</data>
-					</port>
-				</node>
-				<node id="n1::n2">
-					<data key="d0">2</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[Factorio Games]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="64.48031249999985,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="1242.445695999997" Y="669.3125120000004" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.49999999999999944,0.5"/>
-						</data>
-					</port>
-					<port name="p1">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.49999999999999944,0.5"/>
-						</data>
-					</port>
-					<port name="p2">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.49999999999999944,0.5"/>
-						</data>
-					</port>
-				</node>
-				<node id="n1::n3">
-					<data key="d0">3</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[Generated AP Factorio Mod]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="32.45589843750008,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="1493.7118079999957" Y="609.9750080000002" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.5000000000000006,0.5"/>
-						</data>
-					</port>
-					<port name="p1">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.5000000000000006,0.5"/>
-						</data>
-					</port>
-				</node>
-				<edge id="n1::e0" source="n1::n0" target="n1::n1" sourceport="p0" targetport="p0">
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>RCON</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.5362996259541065" Distance="28.398791066298372"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d12">
-						<x:List>
-							<y:Bend Location="1349.605695999997,500.5"/>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 3}" sourceArrow="{y:GraphMLReference 3}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 2}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n1::e1" source="n1::n1" target="n1::n2" sourceport="p1" targetport="p0">
-					<data key="d13">
-						<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 4}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-							<yjs:PolylineEdgeStyle.targetArrow>
-								<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 4}"/>
-							</yjs:PolylineEdgeStyle.targetArrow>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n1::e2" source="n1::n2" target="n1::n1" sourceport="p1" targetport="p2">
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>UDP</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.4999998988835086" Distance="29.999983109371897"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 5}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-							<yjs:PolylineEdgeStyle.targetArrow>
-								<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 5}"/>
-							</yjs:PolylineEdgeStyle.targetArrow>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n1::e3" source="n1::n3" target="n1::n2" sourceport="p0" targetport="p2">
-					<data key="d10"><![CDATA[]]></data>
-					<data key="d12">
-						<x:List>
-							<y:Bend Location="1600.8718079999958,694.5525120000004"/>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 8}" sourceArrow="{y:GraphMLReference 8}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 7}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n1::e4" source="n1::n3" target="n1::n1" sourceport="p1" targetport="p3">
-					<data key="d10"><![CDATA[]]></data>
-					<data key="d12">
-						<x:List>
-							<y:Bend Location="1600.8718079999958,575.877504"/>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 10}" sourceArrow="{y:GraphMLReference 10}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 9}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-			</graph>
-		</node>
-		<node id="n2">
-			<data key="d0">2</data>
-			<data key="d2"><![CDATA[]]></data>
-			<data key="d4">
-				<x:List>
-					<y:Label>
-						<y:Label.Text><![CDATA[WebHost (archipelago.gg)]]></y:Label.Text>
-						<y:Label.LayoutParameter>
-							<y:InteriorStretchLabelModelParameter>
-								<y:InteriorStretchLabelModelParameter.Model>
-									<y:InteriorStretchLabelModel Insets="20,0,0,0"/>
-								</y:InteriorStretchLabelModelParameter.Model>
-							</y:InteriorStretchLabelModelParameter>
-						</y:Label.LayoutParameter>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" autoFlip="false" textFill="#FFFFFFFF" textSize="16">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="16" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d5">
-				<y:RectD X="593.5730559999993" Y="76.87344550000034" Width="574.4661119999987" Height="258.96281049999993"/>
-			</data>
-			<data key="d7">
-				<yjs:CollapsibleNodeStyleDecorator>
-					<yjs:PanelNodeStyle color="{y:GraphMLReference 11}" labelInsetsColor="{y:GraphMLReference 11}"/>
-				</yjs:CollapsibleNodeStyleDecorator>
-			</data>
-			<data key="d8">
-				<y:ViewState>
-					<y:FolderNodeState x:Key="c|view" Layout="0,60,50,50">
-						<y:FolderNodeState.Labels>
-							<y:Label>
-								<y:Label.Text><![CDATA[Folder 3]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:InteriorStretchLabelModelParameter>
-										<y:InteriorStretchLabelModelParameter.Model>
-											<y:InteriorStretchLabelModel Insets="20,0,0,0"/>
-										</y:InteriorStretchLabelModelParameter.Model>
-									</y:InteriorStretchLabelModelParameter>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" autoFlip="false" textFill="#FF000000" textSize="15">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="15" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</y:FolderNodeState.Labels>
-						<y:FolderNodeState.Style>
-							<yjs:CollapsibleNodeStyleDecorator>
-								<yjs:ShapeNodeStyle fill="#FFF5F5F5" shape="ROUND_RECTANGLE">
-									<yjs:ShapeNodeStyle.stroke>
-										<yjs:Stroke fill="#FF000000" dashStyle="{y:GraphMLReference 1}" miterLimit="1.45"/>
-									</yjs:ShapeNodeStyle.stroke>
-								</yjs:ShapeNodeStyle>
-							</yjs:CollapsibleNodeStyleDecorator>
-						</y:FolderNodeState.Style>
-					</y:FolderNodeState>
-				</y:ViewState>
-			</data>
-			<graph id="n2:" edgedefault="directed">
-				<node id="n2::n0">
-					<data key="d0">0</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>WebHost</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="82.48617187499997,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="608.5730559999993" Y="139.47500800000034" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0"/>
-					<port name="p1"/>
-				</node>
-				<node id="n2::n1">
-					<data key="d0">1</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[Flask WebContent]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="57.80648437500008,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="938.719167999998" Y="139.47500800000034" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.5000000000000006,0.5"/>
-						</data>
-					</port>
-					<port name="p1">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.5000000000000006,0.5"/>
-						</data>
-					</port>
-					<port name="p2">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.5000000000000006,0.5"/>
-						</data>
-					</port>
-				</node>
-				<node id="n2::n2">
-					<data key="d0">2</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>AutoHoster</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="77.14535156249997,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="608.5730559999993" Y="270.35625600000026" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0"/>
-					<port name="p1"/>
-					<port name="p2"/>
-					<port name="p3"/>
-				</node>
-				<node id="n2::n3">
-					<data key="d0">3</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[PonyORM DB]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="69.48421874999997,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="938.7191679999981" Y="269.85625600000026" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0"/>
-					<port name="p1"/>
-					<port name="p2"/>
-					<port name="p3"/>
-				</node>
-				<edge id="n2::e0" source="n2::n0" target="n2::n1" sourceport="p0" targetport="p0">
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[Configurable (waitress, gunicorn, flask)]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.5176430658488235" Distance="-50.28160359667933"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 12}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-							<yjs:PolylineEdgeStyle.targetArrow>
-								<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 12}"/>
-							</yjs:PolylineEdgeStyle.targetArrow>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n2::e1" source="n2::n0" target="n2::n2" sourceport="p1" targetport="p0">
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>Subprocess</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.5000000471339154" Distance="-64.00002377343674"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 13}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-							<yjs:PolylineEdgeStyle.targetArrow>
-								<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 13}"/>
-							</yjs:PolylineEdgeStyle.targetArrow>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n2::e2" source="n2::n3" target="n2::n1" sourceport="p0" targetport="p1">
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>SQL</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.500000047606777" Distance="30.000017609373117"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 14}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-							<yjs:PolylineEdgeStyle.targetArrow>
-								<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 14}"/>
-							</yjs:PolylineEdgeStyle.targetArrow>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n2::e3" source="n2::n1" target="n2::n3" sourceport="p2" targetport="p1">
-					<data key="d13">
-						<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 15}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-							<yjs:PolylineEdgeStyle.targetArrow>
-								<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 15}"/>
-							</yjs:PolylineEdgeStyle.targetArrow>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n2::e4" source="n2::n3" target="n2::n2" sourceport="p2" targetport="p2">
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>SQL</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.4998624090226021" Distance="29.99999715641582"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 16}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-							<yjs:PolylineEdgeStyle.targetArrow>
-								<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 16}"/>
-							</yjs:PolylineEdgeStyle.targetArrow>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n2::e5" source="n2::n2" target="n2::n3" sourceport="p3" targetport="p3">
-					<data key="d13">
-						<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 17}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-							<yjs:PolylineEdgeStyle.targetArrow>
-								<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 17}"/>
-							</yjs:PolylineEdgeStyle.targetArrow>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-			</graph>
-		</node>
-		<node id="n3">
-			<data key="d0">3</data>
-			<data key="d2"><![CDATA[]]></data>
-			<data key="d3"><![CDATA[]]></data>
-			<data key="d4">
-				<x:List>
-					<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-						<y:Label.Text>.Net</y:Label.Text>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" autoFlip="false" textFill="#FF000000" textSize="15">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="15" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d5">
-				<y:RectD X="-367.62500000000045" Y="261.4398955781252" Width="567.0699999999999" Height="232.29396884375012"/>
-			</data>
-			<data key="d7">
-				<yjs:CollapsibleNodeStyleDecorator>
-					<yjs:ShapeNodeStyle fill="#FFF5F5F5" shape="ROUND_RECTANGLE">
-						<yjs:ShapeNodeStyle.stroke>
-							<yjs:Stroke fill="#FF000000" dashStyle="{y:GraphMLReference 1}" miterLimit="1.45"/>
-						</yjs:ShapeNodeStyle.stroke>
-					</yjs:ShapeNodeStyle>
-				</yjs:CollapsibleNodeStyleDecorator>
-			</data>
-			<data key="d8">
-				<y:ViewState>
-					<y:FolderNodeState x:Key="c|view" Layout="0,60,50,50">
-						<y:FolderNodeState.Labels>
-							<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-								<y:Label.Text><![CDATA[Folder 5]]></y:Label.Text>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" autoFlip="false" textFill="#FF000000" textSize="15">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="15" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</y:FolderNodeState.Labels>
-						<y:FolderNodeState.Style>
-							<yjs:CollapsibleNodeStyleDecorator>
-								<yjs:ShapeNodeStyle fill="#FFF5F5F5" shape="ROUND_RECTANGLE">
-									<yjs:ShapeNodeStyle.stroke>
-										<yjs:Stroke fill="#FF000000" dashStyle="{y:GraphMLReference 1}" miterLimit="1.45"/>
-									</yjs:ShapeNodeStyle.stroke>
-								</yjs:ShapeNodeStyle>
-							</yjs:CollapsibleNodeStyleDecorator>
-						</y:FolderNodeState.Style>
-					</y:FolderNodeState>
-				</y:ViewState>
-			</data>
-			<graph id="n3:" edgedefault="directed">
-				<node id="n3::n0">
-					<data key="d0">0</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[Mod with Archipelago.MultiClient.Net]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="9.118007812499968,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="-49.875000000000455" Y="400.2375040000002" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0"/>
-					<port name="p1"/>
-					<port name="p2">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.004622781065088732,0.5"/>
-						</data>
-					</port>
-					<port name="p3">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.5,0.019054878048780477"/>
-						</data>
-					</port>
-				</node>
-				<node id="n3::n1">
-					<data key="d0">3</data>
-					<data key="d2"><![CDATA[]]></data>
-					<data key="d4">
-						<x:List>
-							<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-								<y:Label.Text>Unity</y:Label.Text>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" font="{y:GraphMLReference 19}" autoFlip="false" textFill="{y:GraphMLReference 18}" textSize="15"/>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="-339.37500000000045" Y="277.4398955781252" Width="244.31999999999994" Height="191.29396884375012"/>
-					</data>
-					<data key="d7">
-						<yjs:CollapsibleNodeStyleDecorator wrapped="{y:GraphMLReference 20}"/>
-					</data>
-					<data key="d8">
-						<y:ViewState>
-							<y:FolderNodeState x:Key="c|view" Layout="-352.4691679999978,-551.9927208437501,50,50">
-								<y:FolderNodeState.Labels>
-									<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-										<y:Label.Text><![CDATA[Folder 4]]></y:Label.Text>
-										<y:Label.Style>
-											<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" font="{y:GraphMLReference 22}" autoFlip="false" textFill="{y:GraphMLReference 21}" textSize="15"/>
-										</y:Label.Style>
-									</y:Label>
-								</y:FolderNodeState.Labels>
-								<y:FolderNodeState.Style>
-									<yjs:CollapsibleNodeStyleDecorator wrapped="{y:GraphMLReference 23}"/>
-								</y:FolderNodeState.Style>
-							</y:FolderNodeState>
-						</y:ViewState>
-					</data>
-					<graph id="n3::n1:" edgedefault="directed">
-						<node id="n3::n1::n0">
-							<data key="d0">0</data>
-							<data key="d4">
-								<x:List>
-									<y:Label LayoutParameter="{y:GraphMLReference 24}">
-										<y:Label.Text><![CDATA[Risk of Rain 2]]></y:Label.Text>
-										<y:Label.Style>
-											<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" font="{y:GraphMLReference 26}" autoFlip="false" textFill="{y:GraphMLReference 25}"/>
-										</y:Label.Style>
-									</y:Label>
-								</x:List>
-							</data>
-							<data key="d5">
-								<y:RectD X="-324.37500000000045" Y="302.5827208437504" Width="214.31999999999994" Height="50.48000000000002"/>
-							</data>
-							<data key="d7">
-								<yjs:ShapeNodeStyle stroke="{y:GraphMLReference 28}" fill="{y:GraphMLReference 27}"/>
-							</data>
-							<port name="p0">
-								<data key="d16">
-									<y:FreeNodePortLocationModelParameter Ratio="0.9953772189349113,0.5"/>
-								</data>
-							</port>
-						</node>
-						<node id="n3::n1::n1">
-							<data key="d0">1</data>
-							<data key="d4">
-								<x:List>
-									<y:Label>
-										<y:Label.Text>Subnautica</y:Label.Text>
-										<y:Label.LayoutParameter>
-											<y:RatioAnchoredLabelModelParameter LayoutOffset="77.13656249999997,17.88941406250001"/>
-										</y:Label.LayoutParameter>
-										<y:Label.Style>
-											<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-												<yjs:DefaultLabelStyle.font>
-													<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-												</yjs:DefaultLabelStyle.font>
-											</yjs:DefaultLabelStyle>
-										</y:Label.Style>
-									</y:Label>
-								</x:List>
-							</data>
-							<data key="d5">
-								<y:RectD X="-324.37500000000045" Y="400.2375040000002" Width="214.31999999999994" Height="50.48000000000002"/>
-							</data>
-							<data key="d7">
-								<yjs:ShapeNodeStyle fill="#FFFFCC00">
-									<yjs:ShapeNodeStyle.stroke>
-										<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-									</yjs:ShapeNodeStyle.stroke>
-								</yjs:ShapeNodeStyle>
-							</data>
-							<port name="p0"/>
-						</node>
-					</graph>
-				</node>
-				<node id="n3::n2">
-					<data key="d0">4</data>
-					<data key="d2"><![CDATA[]]></data>
-					<data key="d4">
-						<x:List>
-							<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-								<y:Label.Text>FNA</y:Label.Text>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" font="{y:GraphMLReference 19}" autoFlip="false" textFill="{y:GraphMLReference 18}" textSize="15"/>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="-64.87500000000045" Y="277.4398955781252" Width="244.31999999999994" Height="79.76198442187507"/>
-					</data>
-					<data key="d7">
-						<yjs:CollapsibleNodeStyleDecorator wrapped="{y:GraphMLReference 20}"/>
-					</data>
-					<data key="d8">
-						<y:ViewState>
-							<y:FolderNodeState x:Key="c|view" Layout="-337.4691679999978,-536.9927208437501,50,50">
-								<y:FolderNodeState.Labels>
-									<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-										<y:Label.Text><![CDATA[Folder 4]]></y:Label.Text>
-										<y:Label.Style>
-											<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" font="{y:GraphMLReference 22}" autoFlip="false" textFill="{y:GraphMLReference 21}" textSize="15"/>
-										</y:Label.Style>
-									</y:Label>
-								</y:FolderNodeState.Labels>
-								<y:FolderNodeState.Style>
-									<yjs:CollapsibleNodeStyleDecorator wrapped="{y:GraphMLReference 23}"/>
-								</y:FolderNodeState.Style>
-							</y:FolderNodeState>
-						</y:ViewState>
-					</data>
-					<graph id="n3::n2:" edgedefault="directed">
-						<node id="n3::n2::n0">
-							<data key="d0">0</data>
-							<data key="d4">
-								<x:List>
-									<y:Label LayoutParameter="{y:GraphMLReference 24}">
-										<y:Label.Text>Timespinner</y:Label.Text>
-										<y:Label.Style>
-											<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" font="{y:GraphMLReference 26}" autoFlip="false" textFill="{y:GraphMLReference 25}"/>
-										</y:Label.Style>
-									</y:Label>
-								</x:List>
-							</data>
-							<data key="d5">
-								<y:RectD X="-49.875000000000455" Y="293.4398955781252" Width="214.31999999999994" Height="50.48000000000002"/>
-							</data>
-							<data key="d7">
-								<yjs:ShapeNodeStyle stroke="{y:GraphMLReference 28}" fill="{y:GraphMLReference 27}"/>
-							</data>
-							<port name="p0">
-								<data key="d16">
-									<y:FreeNodePortLocationModelParameter Ratio="0.5,0.9809451219512195"/>
-								</data>
-							</port>
-						</node>
-					</graph>
-				</node>
-				<edge id="n3::e0" source="n3::n1::n1" target="n3::n0" sourceport="p0" targetport="p1">
-					<data key="d10"><![CDATA[]]></data>
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>QModLoader</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.602462309070451" Distance="41.999997651848616"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" font="{y:GraphMLReference 30}" textFill="{y:GraphMLReference 29}"/>
-								</y:Label.Style>
-							</y:Label>
-							<y:Label>
-								<y:Label.Text>BepInEx</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.5974532016023271" Distance="-49.500002348151384"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" font="{y:GraphMLReference 30}" textFill="{y:GraphMLReference 29}"/>
-								</y:Label.Style>
-							</y:Label>
-							<y:Label>
-								<y:Label.Text>TsRandomizer</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="1.161205478469358" Distance="-49.750002348151384"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" font="{y:GraphMLReference 30}" textFill="{y:GraphMLReference 29}"/>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 32}" sourceArrow="{y:GraphMLReference 32}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 31}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n3::e1" source="n3::n0" target="n3::n1::n0" sourceport="p2" targetport="p0">
-					<data key="d13">
-						<y:GraphMLReference ResourceKey="34"/>
-					</data>
-				</edge>
-				<edge id="n3::e2" source="n3::n2::n0" target="n3::n0" sourceport="p0" targetport="p3">
-					<data key="d13">
-						<y:GraphMLReference ResourceKey="34"/>
-					</data>
-				</edge>
-			</graph>
-		</node>
-		<node id="n4">
-			<data key="d0">4</data>
-			<data key="d2"><![CDATA[]]></data>
-			<data key="d3"><![CDATA[]]></data>
-			<data key="d4">
-				<x:List>
-					<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-						<y:Label.Text>Java</y:Label.Text>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" autoFlip="false" textFill="#FF000000" textSize="15">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="15" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d5">
-				<y:RectD X="42.86527999999544" Y="515.1187520000001" Width="532.0391679999973" Height="394.1644025312502"/>
-			</data>
-			<data key="d7">
-				<yjs:CollapsibleNodeStyleDecorator>
-					<yjs:ShapeNodeStyle fill="#FFF5F5F5" shape="ROUND_RECTANGLE">
-						<yjs:ShapeNodeStyle.stroke>
-							<yjs:Stroke fill="#FF000000" dashStyle="{y:GraphMLReference 1}" miterLimit="1.45"/>
-						</yjs:ShapeNodeStyle.stroke>
-					</yjs:ShapeNodeStyle>
-				</yjs:CollapsibleNodeStyleDecorator>
-			</data>
-			<data key="d8">
-				<y:ViewState>
-					<y:FolderNodeState x:Key="c|view" Layout="0,60,50,50">
-						<y:FolderNodeState.Labels>
-							<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-								<y:Label.Text><![CDATA[Folder 6]]></y:Label.Text>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" autoFlip="false" textFill="#FF000000" textSize="15">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="15" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</y:FolderNodeState.Labels>
-						<y:FolderNodeState.Style>
-							<yjs:CollapsibleNodeStyleDecorator>
-								<yjs:ShapeNodeStyle fill="#FFF5F5F5" shape="ROUND_RECTANGLE">
-									<yjs:ShapeNodeStyle.stroke>
-										<yjs:Stroke fill="#FF000000" dashStyle="{y:GraphMLReference 1}" miterLimit="1.45"/>
-									</yjs:ShapeNodeStyle.stroke>
-								</yjs:ShapeNodeStyle>
-							</yjs:CollapsibleNodeStyleDecorator>
-						</y:FolderNodeState.Style>
-					</y:FolderNodeState>
-				</y:ViewState>
-			</data>
-			<graph id="n4:" edgedefault="directed">
-				<node id="n4::n0">
-					<data key="d0">0</data>
-					<data key="d2"><![CDATA[]]></data>
-					<data key="d4">
-						<x:List>
-							<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-								<y:Label.Text>Minecraft</y:Label.Text>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" font="{y:GraphMLReference 19}" autoFlip="false" textFill="{y:GraphMLReference 18}" textSize="15"/>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="310.71916799999735" Y="681.1281465312501" Width="244.31999999999994" Height="211.29396884375012"/>
-					</data>
-					<data key="d7">
-						<yjs:CollapsibleNodeStyleDecorator wrapped="{y:GraphMLReference 20}"/>
-					</data>
-					<data key="d8">
-						<y:ViewState>
-							<y:FolderNodeState x:Key="c|view" Layout="0,60,50,50">
-								<y:FolderNodeState.Labels>
-									<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-										<y:Label.Text><![CDATA[Folder 4]]></y:Label.Text>
-										<y:Label.Style>
-											<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" font="{y:GraphMLReference 22}" autoFlip="false" textFill="{y:GraphMLReference 21}" textSize="15"/>
-										</y:Label.Style>
-									</y:Label>
-								</y:FolderNodeState.Labels>
-								<y:FolderNodeState.Style>
-									<yjs:CollapsibleNodeStyleDecorator wrapped="{y:GraphMLReference 23}"/>
-								</y:FolderNodeState.Style>
-							</y:FolderNodeState>
-						</y:ViewState>
-					</data>
-					<graph id="n4::n0:" edgedefault="directed">
-						<node id="n4::n0::n0">
-							<data key="d0">0</data>
-							<data key="d4">
-								<x:List>
-									<y:Label>
-										<y:Label.Text><![CDATA[Minecraft Forge Server]]></y:Label.Text>
-										<y:Label.LayoutParameter>
-											<y:RatioAnchoredLabelModelParameter LayoutOffset="45.80648437499997,17.88941406250001"/>
-										</y:Label.LayoutParameter>
-										<y:Label.Style>
-											<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-												<yjs:DefaultLabelStyle.font>
-													<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-												</yjs:DefaultLabelStyle.font>
-											</yjs:DefaultLabelStyle>
-										</y:Label.Style>
-									</y:Label>
-								</x:List>
-							</data>
-							<data key="d5">
-								<y:RectD X="325.71916799999735" Y="718.5046113750001" Width="214.31999999999994" Height="50.48000000000002"/>
-							</data>
-							<data key="d7">
-								<yjs:ShapeNodeStyle fill="#FFFFCC00">
-									<yjs:ShapeNodeStyle.stroke>
-										<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-									</yjs:ShapeNodeStyle.stroke>
-								</yjs:ShapeNodeStyle>
-							</data>
-							<port name="p0"/>
-							<port name="p1"/>
-							<port name="p2"/>
-						</node>
-						<node id="n4::n0::n1">
-							<data key="d0">1</data>
-							<data key="d4">
-								<x:List>
-									<y:Label>
-										<y:Label.Text><![CDATA[Any Java Minecraft Clients]]></y:Label.Text>
-										<y:Label.LayoutParameter>
-											<y:RatioAnchoredLabelModelParameter LayoutOffset="36.13265624999997,17.88941406250001"/>
-										</y:Label.LayoutParameter>
-										<y:Label.Style>
-											<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-												<yjs:DefaultLabelStyle.font>
-													<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-												</yjs:DefaultLabelStyle.font>
-											</yjs:DefaultLabelStyle>
-										</y:Label.Style>
-									</y:Label>
-								</x:List>
-							</data>
-							<data key="d5">
-								<y:RectD X="325.7191679999973" Y="826.942115375" Width="214.31999999999994" Height="50.48000000000002"/>
-							</data>
-							<data key="d7">
-								<yjs:ShapeNodeStyle fill="#FFFFCC00">
-									<yjs:ShapeNodeStyle.stroke>
-										<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-									</yjs:ShapeNodeStyle.stroke>
-								</yjs:ShapeNodeStyle>
-							</data>
-							<port name="p0"/>
-							<port name="p1"/>
-						</node>
-						<edge id="n4::n0::e0" source="n4::n0::n0" target="n4::n0::n1" sourceport="p0" targetport="p0">
-							<data key="d13">
-								<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-									<yjs:PolylineEdgeStyle.stroke>
-										<yjs:Stroke fill="{y:GraphMLReference 35}" miterLimit="1.45"/>
-									</yjs:PolylineEdgeStyle.stroke>
-									<yjs:PolylineEdgeStyle.targetArrow>
-										<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 35}"/>
-									</yjs:PolylineEdgeStyle.targetArrow>
-								</yjs:PolylineEdgeStyle>
-							</data>
-						</edge>
-						<edge id="n4::n0::e1" source="n4::n0::n1" target="n4::n0::n0" sourceport="p1" targetport="p1">
-							<data key="d11">
-								<x:List>
-									<y:Label>
-										<y:Label.Text>TCP</y:Label.Text>
-										<y:Label.LayoutParameter>
-											<y:FreeEdgeLabelModelParameter Ratio="0.5000001595100785" Distance="29.999987091794253"/>
-										</y:Label.LayoutParameter>
-										<y:Label.Style>
-											<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-												<yjs:DefaultLabelStyle.font>
-													<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-												</yjs:DefaultLabelStyle.font>
-											</yjs:DefaultLabelStyle>
-										</y:Label.Style>
-									</y:Label>
-								</x:List>
-							</data>
-							<data key="d13">
-								<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-									<yjs:PolylineEdgeStyle.stroke>
-										<yjs:Stroke fill="{y:GraphMLReference 36}" miterLimit="1.45"/>
-									</yjs:PolylineEdgeStyle.stroke>
-									<yjs:PolylineEdgeStyle.targetArrow>
-										<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 36}"/>
-									</yjs:PolylineEdgeStyle.targetArrow>
-								</yjs:PolylineEdgeStyle>
-							</data>
-						</edge>
-					</graph>
-				</node>
-				<node id="n4::n1">
-					<data key="d0">1</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[Mod with Archipelago.MultiClient.Java]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="5.781093749999968,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="325.71916799999735" Y="564.61064253125" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0"/>
-					<port name="p1"/>
-					<port name="p2"/>
-				</node>
-				<node id="n4::n2">
-					<data key="d0">2</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[Slay the Spire]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="69.80648437499997,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="57.86527999999544" Y="564.61064253125" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0"/>
-				</node>
-				<edge id="n4::e0" source="n4::n2" target="n4::n1" sourceport="p0" targetport="p0">
-					<data key="d10"><![CDATA[]]></data>
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[Mod the Spire]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.5261336799531484" Distance="30.000001558593794"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 38}" sourceArrow="{y:GraphMLReference 38}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 37}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n4::e1" source="n4::n0::n0" target="n4::n1" sourceport="p2" targetport="p1">
-					<data key="d10"><![CDATA[]]></data>
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[Forge Mod Loader]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.6364577277111912" Distance="67.99998709179408"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 40}" sourceArrow="{y:GraphMLReference 40}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 39}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-			</graph>
-		</node>
-		<node id="n5">
-			<data key="d0">5</data>
-			<data key="d4">
-				<x:List>
-					<y:Label>
-						<y:Label.Text>CommonClient.py</y:Label.Text>
-						<y:Label.LayoutParameter>
-							<y:RatioAnchoredLabelModelParameter LayoutOffset="59.47640625000008,17.88941406250001"/>
-						</y:Label.LayoutParameter>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d5">
-				<y:RectD X="938.719167999998" Y="400.2375040000002" Width="214.31999999999994" Height="50.48000000000002"/>
-			</data>
-			<data key="d7">
-				<yjs:ShapeNodeStyle fill="#FFFFCC00">
-					<yjs:ShapeNodeStyle.stroke>
-						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-					</yjs:ShapeNodeStyle.stroke>
-				</yjs:ShapeNodeStyle>
-			</data>
-			<port name="p0">
-				<data key="d16">
-					<y:FreeNodePortLocationModelParameter Ratio="0.5000000000000006,0.5"/>
-				</data>
-			</port>
-			<port name="p1">
-				<data key="d16">
-					<y:FreeNodePortLocationModelParameter Ratio="0.5000000000000006,0.5"/>
-				</data>
-			</port>
-			<port name="p2">
-				<data key="d16">
-					<y:FreeNodePortLocationModelParameter Ratio="0.5000000000000006,0.5"/>
-				</data>
-			</port>
-		</node>
-		<node id="n6">
-			<data key="d0">6</data>
-			<data key="d2"><![CDATA[]]></data>
-			<data key="d4">
-				<x:List>
-					<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-						<y:Label.Text><![CDATA[A Link to the Past]]></y:Label.Text>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" autoFlip="false" textFill="#FF000000" textSize="15">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="15" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d5">
-				<y:RectD X="593.5730559999993" Y="513.26103915625" Width="603.8726399999978" Height="335.8914728437501"/>
-			</data>
-			<data key="d7">
-				<yjs:CollapsibleNodeStyleDecorator>
-					<yjs:ShapeNodeStyle fill="#FFF5F5F5" shape="ROUND_RECTANGLE">
-						<yjs:ShapeNodeStyle.stroke>
-							<yjs:Stroke fill="#FF000000" dashStyle="{y:GraphMLReference 1}" miterLimit="1.45"/>
-						</yjs:ShapeNodeStyle.stroke>
-					</yjs:ShapeNodeStyle>
-				</yjs:CollapsibleNodeStyleDecorator>
-			</data>
-			<data key="d8">
-				<y:ViewState>
-					<y:FolderNodeState x:Key="c|view" Layout="0,60,50,50">
-						<y:FolderNodeState.Labels>
-							<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-								<y:Label.Text><![CDATA[Folder 2]]></y:Label.Text>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" autoFlip="false" textFill="#FF000000" textSize="15">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="15" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</y:FolderNodeState.Labels>
-						<y:FolderNodeState.Style>
-							<yjs:CollapsibleNodeStyleDecorator>
-								<yjs:ShapeNodeStyle fill="#FFF5F5F5" shape="ROUND_RECTANGLE">
-									<yjs:ShapeNodeStyle.stroke>
-										<yjs:Stroke fill="#FF000000" dashStyle="{y:GraphMLReference 1}" miterLimit="1.45"/>
-									</yjs:ShapeNodeStyle.stroke>
-								</yjs:ShapeNodeStyle>
-							</yjs:CollapsibleNodeStyleDecorator>
-						</y:FolderNodeState.Style>
-					</y:FolderNodeState>
-				</y:ViewState>
-			</data>
-			<graph id="n6:" edgedefault="directed">
-				<node id="n6::n0">
-					<data key="d0">0</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>Z3Client</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="84.81820312499997,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="608.5730559999993" Y="550.637504" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0"/>
-					<port name="p1"/>
-					<port name="p2"/>
-					<port name="p3"/>
-				</node>
-				<node id="n6::n1">
-					<data key="d0">1</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>SNI</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="97.15804687499997,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="773.6461119999987" Y="667.1550080000001" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0"/>
-					<port name="p1"/>
-					<port name="p2"/>
-					<port name="p3"/>
-					<port name="p4"/>
-				</node>
-				<node id="n6::n2">
-					<data key="d0">2</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>SNES</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="90.82113281249997,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="773.6461119999987" Y="783.6725120000001" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0"/>
-					<port name="p1"/>
-				</node>
-				<node id="n6::n3">
-					<data key="d0">3</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>LttPClient</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="81.14730468749985,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="938.7191679999983" Y="550.637504" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.49999999999999944,0.5"/>
-						</data>
-					</port>
-					<port name="p1">
-						<data key="d16">
-							<y:FreeNodePortLocationModelParameter Ratio="0.49999999999999944,0.5"/>
-						</data>
-					</port>
-				</node>
-				<edge id="n6::e0" source="n6::n0" target="n6::n1" sourceport="p2" targetport="p0">
-					<data key="d13">
-						<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 41}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-							<yjs:PolylineEdgeStyle.targetArrow>
-								<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 41}"/>
-							</yjs:PolylineEdgeStyle.targetArrow>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n6::e1" source="n6::n1" target="n6::n0" sourceport="p1" targetport="p3">
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>gRPC</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.3583100375124446" Distance="30.000007427095017"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 42}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-							<yjs:PolylineEdgeStyle.targetArrow>
-								<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 42}"/>
-							</yjs:PolylineEdgeStyle.targetArrow>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n6::e2" source="n6::n1" target="n6::n2" sourceport="p2" targetport="p0">
-					<data key="d13">
-						<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 43}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-							<yjs:PolylineEdgeStyle.targetArrow>
-								<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 43}"/>
-							</yjs:PolylineEdgeStyle.targetArrow>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n6::e3" source="n6::n2" target="n6::n1" sourceport="p1" targetport="p3">
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[Various, depends on SNES device type]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.49999977129240897" Distance="0.000020691404870376573"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 44}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-							<yjs:PolylineEdgeStyle.targetArrow>
-								<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 44}"/>
-							</yjs:PolylineEdgeStyle.targetArrow>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n6::e4" source="n6::n3" target="n6::n1" sourceport="p0" targetport="p4">
-					<data key="d10"><![CDATA[]]></data>
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>WebSocket</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.6713853767881545" Distance="30.000002497661328"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 46}" sourceArrow="{y:GraphMLReference 46}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 45}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-			</graph>
-		</node>
-		<node id="n7">
-			<data key="d0">7</data>
-			<data key="d2"><![CDATA[]]></data>
-			<data key="d3"><![CDATA[]]></data>
-			<data key="d4">
-				<x:List>
-					<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-						<y:Label.Text><![CDATA[Ocarina of Time]]></y:Label.Text>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" autoFlip="false" textFill="#FF000000" textSize="15">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="15" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d5">
-				<y:RectD X="320.7305599999909" Y="28.098543156250358" Width="224.31999999999994" Height="297.73771284374993"/>
-			</data>
-			<data key="d7">
-				<yjs:CollapsibleNodeStyleDecorator>
-					<yjs:ShapeNodeStyle fill="#FFF5F5F5" shape="ROUND_RECTANGLE">
-						<yjs:ShapeNodeStyle.stroke>
-							<yjs:Stroke fill="#FF000000" dashStyle="{y:GraphMLReference 1}" miterLimit="1.45"/>
-						</yjs:ShapeNodeStyle.stroke>
-					</yjs:ShapeNodeStyle>
-				</yjs:CollapsibleNodeStyleDecorator>
-			</data>
-			<data key="d8">
-				<y:ViewState>
-					<y:FolderNodeState x:Key="c|view" Layout="-10.668608000006543,14.925000000000239,581.2,358.96281049999993">
-						<y:FolderNodeState.Labels>
-							<y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.North}">
-								<y:Label.Text>1</y:Label.Text>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="RIGHT" autoFlip="false" textFill="#FF000000" textSize="15">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="15" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</y:FolderNodeState.Labels>
-						<y:FolderNodeState.Style>
-							<yjs:CollapsibleNodeStyleDecorator>
-								<yjs:ShapeNodeStyle fill="#FFF5F5F5" shape="ROUND_RECTANGLE">
-									<yjs:ShapeNodeStyle.stroke>
-										<yjs:Stroke fill="#FF000000" dashStyle="{y:GraphMLReference 1}" miterLimit="1.45"/>
-									</yjs:ShapeNodeStyle.stroke>
-								</yjs:ShapeNodeStyle>
-							</yjs:CollapsibleNodeStyleDecorator>
-						</y:FolderNodeState.Style>
-					</y:FolderNodeState>
-				</y:ViewState>
-			</data>
-			<graph id="n7:" edgedefault="directed">
-				<node id="n7::n0">
-					<data key="d0">0</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>Z5Client</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="84.81820312499997,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="325.7305599999909" Y="270.35625600000026" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0"/>
-					<port name="p1"/>
-				</node>
-				<node id="n7::n1">
-					<data key="d0">1</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[Lua Connector]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="67.79964843749997,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="325.7305599999909" Y="162.9156320000003" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0"/>
-					<port name="p1"/>
-				</node>
-				<node id="n7::n2">
-					<data key="d0">2</data>
-					<data key="d4">
-						<x:List>
-							<y:Label>
-								<y:Label.Text><![CDATA[BizHawk with Ocarina of Time loaded]]></y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:RatioAnchoredLabelModelParameter LayoutOffset="7.453945312499968,17.88941406250001"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d5">
-						<y:RectD X="325.7305599999909" Y="55.47500800000036" Width="214.31999999999994" Height="50.48000000000002"/>
-					</data>
-					<data key="d7">
-						<yjs:ShapeNodeStyle fill="#FFFFCC00">
-							<yjs:ShapeNodeStyle.stroke>
-								<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
-							</yjs:ShapeNodeStyle.stroke>
-						</yjs:ShapeNodeStyle>
-					</data>
-					<port name="p0"/>
-				</node>
-				<edge id="n7::e0" source="n7::n1" target="n7::n0" sourceport="p0" targetport="p1">
-					<data key="d10"><![CDATA[]]></data>
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.Text>LuaSockets</y:Label.Text>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.5465373518045448" Distance="-63.99999603514709"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 48}" sourceArrow="{y:GraphMLReference 48}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 47}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-				<edge id="n7::e1" source="n7::n2" target="n7::n1" sourceport="p0" targetport="p1">
-					<data key="d10"><![CDATA[]]></data>
-					<data key="d11">
-						<x:List>
-							<y:Label>
-								<y:Label.LayoutParameter>
-									<y:FreeEdgeLabelModelParameter Ratio="0.5558447849255896" Distance="30.000003964852908"/>
-								</y:Label.LayoutParameter>
-								<y:Label.Style>
-									<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-										<yjs:DefaultLabelStyle.font>
-											<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-										</yjs:DefaultLabelStyle.font>
-									</yjs:DefaultLabelStyle>
-								</y:Label.Style>
-							</y:Label>
-						</x:List>
-					</data>
-					<data key="d13">
-						<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 50}" sourceArrow="{y:GraphMLReference 50}">
-							<yjs:PolylineEdgeStyle.stroke>
-								<yjs:Stroke fill="{y:GraphMLReference 49}" miterLimit="1.45"/>
-							</yjs:PolylineEdgeStyle.stroke>
-						</yjs:PolylineEdgeStyle>
-					</data>
-				</edge>
-			</graph>
-		</node>
-		<edge id="e0" source="n6::n0" target="n0" sourceport="p0" targetport="p0">
-			<data key="d12">
-				<x:List>
-					<y:Bend Location="715.7330559999992,458.5"/>
-				</x:List>
-			</data>
-			<data key="d13">
-				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-					<yjs:PolylineEdgeStyle.stroke>
-						<yjs:Stroke fill="{y:GraphMLReference 51}" miterLimit="1.45"/>
-					</yjs:PolylineEdgeStyle.stroke>
-					<yjs:PolylineEdgeStyle.targetArrow>
-						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 51}"/>
-					</yjs:PolylineEdgeStyle.targetArrow>
-				</yjs:PolylineEdgeStyle>
-			</data>
-		</edge>
-		<edge id="e1" source="n0" target="n6::n0" sourceport="p1" targetport="p1">
-			<data key="d11">
-				<x:List>
-					<y:Label>
-						<y:Label.Text>WebSocket</y:Label.Text>
-						<y:Label.LayoutParameter>
-							<y:FreeEdgeLabelModelParameter Ratio="0.42418013795755977" Distance="-61.000023773436396"/>
-						</y:Label.LayoutParameter>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d13">
-				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-					<yjs:PolylineEdgeStyle.stroke>
-						<yjs:Stroke fill="{y:GraphMLReference 52}" miterLimit="1.45"/>
-					</yjs:PolylineEdgeStyle.stroke>
-					<yjs:PolylineEdgeStyle.targetArrow>
-						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 52}"/>
-					</yjs:PolylineEdgeStyle.targetArrow>
-				</yjs:PolylineEdgeStyle>
-			</data>
-		</edge>
-		<edge id="e2" source="n2::n2" target="n0" sourceport="p1" targetport="p2">
-			<data key="d11">
-				<x:List>
-					<y:Label>
-						<y:Label.Text>Subprocesses</y:Label.Text>
-						<y:Label.LayoutParameter>
-							<y:FreeEdgeLabelModelParameter Ratio="0.5157959188586093" Distance="-68.00002377343674"/>
-						</y:Label.LayoutParameter>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d13">
-				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 6}">
-					<yjs:PolylineEdgeStyle.stroke>
-						<yjs:Stroke fill="{y:GraphMLReference 53}" miterLimit="1.45"/>
-					</yjs:PolylineEdgeStyle.stroke>
-					<yjs:PolylineEdgeStyle.targetArrow>
-						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 53}"/>
-					</yjs:PolylineEdgeStyle.targetArrow>
-				</yjs:PolylineEdgeStyle>
-			</data>
-		</edge>
-		<edge id="e3" source="n3::n0" target="n0" sourceport="p0" targetport="p3">
-			<data key="d10"><![CDATA[]]></data>
-			<data key="d11">
-				<x:List>
-					<y:Label>
-						<y:Label.Text>WebSocket</y:Label.Text>
-						<y:Label.LayoutParameter>
-							<y:FreeEdgeLabelModelParameter Ratio="0.497212593366556" Distance="29.99999545507825"/>
-						</y:Label.LayoutParameter>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d13">
-				<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 55}" sourceArrow="{y:GraphMLReference 55}">
-					<yjs:PolylineEdgeStyle.stroke>
-						<yjs:Stroke fill="{y:GraphMLReference 54}" miterLimit="1.45"/>
-					</yjs:PolylineEdgeStyle.stroke>
-				</yjs:PolylineEdgeStyle>
-			</data>
-		</edge>
-		<edge id="e4" source="n4::n1" target="n0" sourceport="p2" targetport="p4">
-			<data key="d10"><![CDATA[]]></data>
-			<data key="d11">
-				<x:List>
-					<y:Label>
-						<y:Label.Text>WebSocket</y:Label.Text>
-						<y:Label.LayoutParameter>
-							<y:FreeEdgeLabelModelParameter Ratio="0.6272106775647563" Distance="66.9999870917942"/>
-						</y:Label.LayoutParameter>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d13">
-				<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 57}" sourceArrow="{y:GraphMLReference 57}">
-					<yjs:PolylineEdgeStyle.stroke>
-						<yjs:Stroke fill="{y:GraphMLReference 56}" miterLimit="1.45"/>
-					</yjs:PolylineEdgeStyle.stroke>
-				</yjs:PolylineEdgeStyle>
-			</data>
-		</edge>
-		<edge id="e5" source="n0" target="n5" sourceport="p5" targetport="p0">
-			<data key="d10"><![CDATA[]]></data>
-			<data key="d11">
-				<x:List>
-					<y:Label>
-						<y:Label.Text>WebSocket</y:Label.Text>
-						<y:Label.LayoutParameter>
-							<y:FreeEdgeLabelModelParameter Ratio="0.672257287895132" Distance="29.999995455078306"/>
-						</y:Label.LayoutParameter>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d13">
-				<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 59}" sourceArrow="{y:GraphMLReference 59}">
-					<yjs:PolylineEdgeStyle.stroke>
-						<yjs:Stroke fill="{y:GraphMLReference 58}" miterLimit="1.45"/>
-					</yjs:PolylineEdgeStyle.stroke>
-				</yjs:PolylineEdgeStyle>
-			</data>
-		</edge>
-		<edge id="e6" source="n6::n3" target="n5" sourceport="p1" targetport="p1">
-			<data key="d10"><![CDATA[]]></data>
-			<data key="d11">
-				<x:List>
-					<y:Label>
-						<y:Label.Text>Integrated</y:Label.Text>
-						<y:Label.LayoutParameter>
-							<y:FreeEdgeLabelModelParameter Ratio="0.641656595595421" Distance="30.000017609373117"/>
-						</y:Label.LayoutParameter>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d13">
-				<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 61}" sourceArrow="{y:GraphMLReference 61}">
-					<yjs:PolylineEdgeStyle.stroke>
-						<yjs:Stroke fill="{y:GraphMLReference 60}" miterLimit="1.45"/>
-					</yjs:PolylineEdgeStyle.stroke>
-				</yjs:PolylineEdgeStyle>
-			</data>
-		</edge>
-		<edge id="e7" source="n1::n0" target="n5" sourceport="p1" targetport="p2">
-			<data key="d10"><![CDATA[]]></data>
-			<data key="d11">
-				<x:List>
-					<y:Label>
-						<y:Label.Text>Integrated</y:Label.Text>
-						<y:Label.LayoutParameter>
-							<y:FreeEdgeLabelModelParameter Ratio="0.5197545560160635" Distance="30.000004544921694"/>
-						</y:Label.LayoutParameter>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d13">
-				<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 63}" sourceArrow="{y:GraphMLReference 63}">
-					<yjs:PolylineEdgeStyle.stroke>
-						<yjs:Stroke fill="{y:GraphMLReference 62}" miterLimit="1.45"/>
-					</yjs:PolylineEdgeStyle.stroke>
-				</yjs:PolylineEdgeStyle>
-			</data>
-		</edge>
-		<edge id="e8" source="n7::n0" target="n0" sourceport="p0" targetport="p6">
-			<data key="d10"><![CDATA[]]></data>
-			<data key="d11">
-				<x:List>
-					<y:Label>
-						<y:Label.Text>WebSocket</y:Label.Text>
-						<y:Label.LayoutParameter>
-							<y:FreeEdgeLabelModelParameter Ratio="0.5258611452934852" Distance="-65.99999603514709"/>
-						</y:Label.LayoutParameter>
-						<y:Label.Style>
-							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" textFill="#FF000000">
-								<yjs:DefaultLabelStyle.font>
-									<yjs:Font fontSize="12" fontFamily="'Arial'"/>
-								</yjs:DefaultLabelStyle.font>
-							</yjs:DefaultLabelStyle>
-						</y:Label.Style>
-					</y:Label>
-				</x:List>
-			</data>
-			<data key="d13">
-				<yjs:PolylineEdgeStyle targetArrow="{y:GraphMLReference 65}" sourceArrow="{y:GraphMLReference 65}">
-					<yjs:PolylineEdgeStyle.stroke>
-						<yjs:Stroke fill="{y:GraphMLReference 64}" miterLimit="1.45"/>
-					</yjs:PolylineEdgeStyle.stroke>
-				</yjs:PolylineEdgeStyle>
-			</data>
-		</edge>
-	</graph>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:java="http://www.yworks.com/xml/yfiles-common/1.0/java" xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
+  <!--Created by yEd 3.21.1-->
+  <key for="port" id="d0" yfiles.type="portgraphics"/>
+  <key for="port" id="d1" yfiles.type="portgeometry"/>
+  <key for="port" id="d2" yfiles.type="portuserdata"/>
+  <key attr.name="url" attr.type="string" for="node" id="d3"/>
+  <key attr.name="description" attr.type="string" for="node" id="d4"/>
+  <key for="node" id="d5" yfiles.type="nodegraphics"/>
+  <key for="graphml" id="d6" yfiles.type="resources"/>
+  <key attr.name="url" attr.type="string" for="edge" id="d7"/>
+  <key attr.name="description" attr.type="string" for="edge" id="d8"/>
+  <key for="edge" id="d9" yfiles.type="edgegraphics"/>
+  <graph edgedefault="directed" id="G">
+    <node id="n0">
+      <data key="d4"/>
+      <data key="d5">
+        <y:ShapeNode>
+          <y:Geometry height="50.48000000000002" width="524.7469440000009" x="298.1461119999983" y="400.2375040000002"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="106.052734375" x="211.82073762500045" xml:space="preserve" y="18.18824218750001">Archipelago Server<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.004713953727189302" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n1" yfiles.foldertype="group">
+      <data key="d3" xml:space="preserve"/>
+      <data key="d4"/>
+      <data key="d5">
+        <y:ProxyAutoBoundsNode>
+          <y:Realizers active="0">
+            <y:GroupNode>
+              <y:Geometry height="371.93147284375027" width="495.5861119999986" x="1227.445695999997" y="362.8610391562502"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="495.5861119999986" x="0.0" xml:space="preserve" y="0.0">Factorio<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="-0.5" nodeRatioY="-0.5" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="false" closedHeight="80.0" closedWidth="100.0" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="22" topF="22.37646484375"/>
+            </y:GroupNode>
+            <y:GroupNode>
+              <y:Geometry height="50.0" width="50.0" x="0.0" y="60.0"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="59.02685546875" x="-4.513427734375" xml:space="preserve" y="0.311767578125">Folder 1<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="-0.5" nodeRatioX="0.0" nodeRatioY="-0.4937646484375" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="true" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+            </y:GroupNode>
+          </y:Realizers>
+        </y:ProxyAutoBoundsNode>
+      </data>
+      <graph edgedefault="directed" id="n1:">
+        <node id="n1::n0">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="1242.445695999997" y="400.2375040000002"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="78.02734375" x="71.13265624999963" xml:space="preserve" y="18.18824218750001">FactorioClient<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.013933968481709025" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n1::n1">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="1242.445695999997" y="550.637504"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="86.025390625" x="66.13460937499963" xml:space="preserve" y="18.03882812500001">Factorio Server<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.009272604924878136" nodeRatioY="0.2278129952456418" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n1::n2">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="1242.445695999997" y="669.3125120000004"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="89.359375" x="65.80062499999985" xml:space="preserve" y="18.18824218750001">Factorio Games<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.015492312896602689" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n1::n3">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="1493.7118079999957" y="609.9750080000002"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="153.408203125" x="32.25179687500031" xml:space="preserve" y="18.03882812500001">Generated AP Factorio Mod<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.008379518652016249" nodeRatioY="0.2278129952456418" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+      </graph>
+    </node>
+    <node id="n2" yfiles.foldertype="group">
+      <data key="d3" xml:space="preserve"/>
+      <data key="d4"/>
+      <data key="d5">
+        <y:ProxyAutoBoundsNode>
+          <y:Realizers active="0">
+            <y:GenericGroupNode configuration="PanelNode">
+              <y:Geometry height="258.96281049999993" width="574.4661119999987" x="593.5730559999993" y="76.87344550000034"/>
+              <y:Fill color="#68B0E3" color2="#68B0E3" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="content" fontFamily="'Arial'" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="23.6015625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#FFFFFF" verticalTextPosition="bottom" visible="true" width="189.8671875" x="384.5989244999987" xml:space="preserve" y="0.0">WebHost (archipelago.gg)<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.5" labelRatioY="-0.5" nodeRatioX="0.5" nodeRatioY="-0.5" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:State autoResize="true" closed="false" closedHeight="80.0" closedWidth="100.0"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="48" topF="47.6015625"/>
+            </y:GenericGroupNode>
+            <y:GroupNode>
+              <y:Geometry height="50.0" width="50.0" x="0.0" y="60.0"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="content" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="59.02685546875" x="5.486572265625" xml:space="preserve" y="0.311767578125">Folder 3<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.25412161770910024" labelRatioY="-0.5" nodeRatioX="0.5" nodeRatioY="-0.4937646484375" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="true" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+            </y:GroupNode>
+          </y:Realizers>
+        </y:ProxyAutoBoundsNode>
+      </data>
+      <graph edgedefault="directed" id="n2:">
+        <node id="n2::n0">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="608.5730559999993" y="139.47500800000034"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="53.34765625" x="83.31234374999997" xml:space="preserve" y="18.18824218750001">WebHost<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.013186692212579287" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n2::n1">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="938.719167999998" y="139.47500800000034"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="102.70703125" x="58.95296875000031" xml:space="preserve" y="18.18824218750001">Flask WebContent<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.014681244750840428" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n2::n2">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="608.5730559999993" y="270.35625600000026"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="64.029296875" x="78.11605468749997" xml:space="preserve" y="18.18824218750001">AutoHoster<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.5" labelRatioY="0.5" nodeRatioX="0.16323885574141472" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n2::n3">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="938.7191679999981" y="269.85625600000026"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="79.3515625" x="68.80843749999997" xml:space="preserve" y="18.03882812500001">PonyORM DB<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.006178698908174685" nodeRatioY="0.2278129952456418" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+      </graph>
+    </node>
+    <node id="n3" yfiles.foldertype="group">
+      <data key="d3" xml:space="preserve"/>
+      <data key="d5">
+        <y:ProxyAutoBoundsNode>
+          <y:Realizers active="0">
+            <y:GroupNode>
+              <y:Geometry height="254.17125968040352" width="567.0699999999999" x="-367.62500000000045" y="239.56260474147177"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="567.0699999999999" x="0.0" xml:space="preserve" y="0.0">.Net<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="-0.5" nodeRatioY="-0.5" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="false" closedHeight="80.0" closedWidth="100.0" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="10" bottomF="10.0" left="13" leftF="13.25" right="5" rightF="5.0" top="15" topF="15.293651258528485"/>
+            </y:GroupNode>
+            <y:GroupNode>
+              <y:Geometry height="50.0" width="50.0" x="0.0" y="60.0"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="59.02685546875" x="-4.513427734375" xml:space="preserve" y="0.311767578125">Folder 5<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="-0.5" nodeRatioX="0.0" nodeRatioY="-0.4937646484375" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="true" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+            </y:GroupNode>
+          </y:Realizers>
+        </y:ProxyAutoBoundsNode>
+      </data>
+      <graph edgedefault="directed" id="n3:">
+        <node id="n3::n0">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="-49.875000000000455" y="400.2375040000002"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="200.083984375" x="10.076015624999961" xml:space="preserve" y="18.18824218750001">Mod with Archipelago.MultiClient.Net<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.013801828165826757" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n3::n1" yfiles.foldertype="group">
+          <data key="d3" xml:space="preserve"/>
+          <data key="d4"/>
+          <data key="d5">
+            <y:ProxyAutoBoundsNode>
+              <y:Realizers active="0">
+                <y:GroupNode>
+                  <y:Geometry height="198.37760842187504" width="244.31999999999994" x="-339.37500000000045" y="270.35625600000026"/>
+                  <y:Fill color="#F5F5F5" transparent="false"/>
+                  <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+                  <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="244.31999999999994" x="0.0" xml:space="preserve" y="0.0">Unity<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="-0.5" nodeRatioY="-0.5" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+                  <y:Shape type="roundrectangle"/>
+                  <y:State closed="false" closedHeight="80.0" closedWidth="100.0" innerGraphDisplayEnabled="false"/>
+                  <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+                  <y:BorderInsets bottom="3" bottomF="3.016360421875106" left="0" leftF="0.0" right="0" rightF="0.0" top="17" topF="17.226464843750136"/>
+                </y:GroupNode>
+                <y:GroupNode>
+                  <y:Geometry height="50.0" width="50.0" x="-352.4691679999978" y="-551.9927208437501"/>
+                  <y:Fill color="#F5F5F5" transparent="false"/>
+                  <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+                  <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="59.02685546875" x="-4.513427734375" xml:space="preserve" y="0.311767578125">Folder 4<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="-0.5" nodeRatioX="0.0" nodeRatioY="-0.4937646484375" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+                  <y:Shape type="roundrectangle"/>
+                  <y:State closed="true" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
+                  <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+                  <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+                </y:GroupNode>
+              </y:Realizers>
+            </y:ProxyAutoBoundsNode>
+          </data>
+          <graph edgedefault="directed" id="n3::n1:">
+            <node id="n3::n1::n0">
+              <data key="d4"/>
+              <data key="d5">
+                <y:ShapeNode>
+                  <y:Geometry height="50.48000000000002" width="214.31999999999994" x="-324.37500000000045" y="302.5827208437504"/>
+                  <y:Fill color="#FFCC00" transparent="false"/>
+                  <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+                  <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="78.6953125" x="70.96468749999997" xml:space="preserve" y="18.18824218750001">Risk of Rain 2<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.014708584126539748" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+                  <y:Shape type="rectangle"/>
+                </y:ShapeNode>
+              </data>
+            </node>
+            <node id="n3::n1::n1">
+              <data key="d4"/>
+              <data key="d5">
+                <y:ShapeNode>
+                  <y:Geometry height="50.48000000000002" width="214.31999999999994" x="-324.37500000000045" y="400.2375040000002"/>
+                  <y:Fill color="#FFCC00" transparent="false"/>
+                  <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+                  <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="64.046875" x="79.08968749999997" xml:space="preserve" y="18.18824218750001">Subnautica<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.5" labelRatioY="0.5" nodeRatioX="0.16786376679731252" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+                  <y:Shape type="rectangle"/>
+                </y:ShapeNode>
+              </data>
+            </node>
+          </graph>
+        </node>
+        <node id="n3::n2" yfiles.foldertype="group">
+          <data key="d3" xml:space="preserve"/>
+          <data key="d4"/>
+          <data key="d5">
+            <y:ProxyAutoBoundsNode>
+              <y:Realizers active="0">
+                <y:GroupNode>
+                  <y:Geometry height="89.06363957812493" width="244.31999999999994" x="-64.87500000000045" y="269.85625600000026"/>
+                  <y:Fill color="#F5F5F5" transparent="false"/>
+                  <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+                  <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="244.31999999999994" x="0.0" xml:space="preserve" y="0.0">FNA<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="-0.5" nodeRatioY="-0.5" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+                  <y:Shape type="roundrectangle"/>
+                  <y:State closed="false" closedHeight="80.0" closedWidth="100.0" innerGraphDisplayEnabled="false"/>
+                  <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+                  <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="9" topF="8.583639578124917"/>
+                </y:GroupNode>
+                <y:GroupNode>
+                  <y:Geometry height="50.0" width="50.0" x="-337.4691679999978" y="-536.9927208437501"/>
+                  <y:Fill color="#F5F5F5" transparent="false"/>
+                  <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+                  <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="59.02685546875" x="-4.513427734375" xml:space="preserve" y="0.311767578125">Folder 4<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="-0.5" nodeRatioX="0.0" nodeRatioY="-0.4937646484375" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+                  <y:Shape type="roundrectangle"/>
+                  <y:State closed="true" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
+                  <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+                  <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+                </y:GroupNode>
+              </y:Realizers>
+            </y:ProxyAutoBoundsNode>
+          </data>
+          <graph edgedefault="directed" id="n3::n2:">
+            <node id="n3::n2::n0">
+              <data key="d4"/>
+              <data key="d5">
+                <y:ShapeNode>
+                  <y:Geometry height="50.48000000000002" width="214.31999999999994" x="-49.875000000000455" y="293.4398955781252"/>
+                  <y:Fill color="#FFCC00" transparent="false"/>
+                  <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+                  <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="70.0234375" x="71.80062499999997" xml:space="preserve" y="18.18824218750001">Timespinner<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="-0.001622136291526688" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+                  <y:Shape type="rectangle"/>
+                </y:ShapeNode>
+              </data>
+            </node>
+          </graph>
+        </node>
+      </graph>
+    </node>
+    <node id="n4" yfiles.foldertype="group">
+      <data key="d3" xml:space="preserve"/>
+      <data key="d5">
+        <y:ProxyAutoBoundsNode>
+          <y:Realizers active="0">
+            <y:GroupNode>
+              <y:Geometry height="394.1644025312502" width="532.0391679999973" x="42.86527999999544" y="515.1187520000001"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="532.0391679999973" x="0.0" xml:space="preserve" y="0.0">Java<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="-0.5" nodeRatioY="-0.5" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="false" closedHeight="80.0" closedWidth="100.0" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="2" bottomF="1.8610391562500581" left="0" leftF="0.0" right="5" rightF="4.865279999995437" top="34" topF="34.491890531249965"/>
+            </y:GroupNode>
+            <y:GroupNode>
+              <y:Geometry height="50.0" width="50.0" x="0.0" y="60.0"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="59.02685546875" x="-4.513427734375" xml:space="preserve" y="0.311767578125">Folder 6<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="-0.5" nodeRatioX="0.0" nodeRatioY="-0.4937646484375" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="true" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+            </y:GroupNode>
+          </y:Realizers>
+        </y:ProxyAutoBoundsNode>
+      </data>
+      <graph edgedefault="directed" id="n4:">
+        <node id="n4::n0" yfiles.foldertype="group">
+          <data key="d3" xml:space="preserve"/>
+          <data key="d4"/>
+          <data key="d5">
+            <y:ProxyAutoBoundsNode>
+              <y:Realizers active="0">
+                <y:GroupNode>
+                  <y:Geometry height="211.29396884375012" width="244.32" x="310.7191679999973" y="681.1281465312501"/>
+                  <y:Fill color="#F5F5F5" transparent="false"/>
+                  <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+                  <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="244.32" x="5.6843418860808015E-14" xml:space="preserve" y="1.1368683772161603E-13">Minecraft<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="-0.5" nodeRatioY="-0.5" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+                  <y:Shape type="roundrectangle"/>
+                  <y:State closed="false" closedHeight="80.0" closedWidth="100.0" innerGraphDisplayEnabled="false"/>
+                  <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+                  <y:BorderInsets bottom="0" bottomF="2.2737367544323206E-13" left="0" leftF="0.0" right="0" rightF="0.0" top="22" topF="22.37646484375"/>
+                </y:GroupNode>
+                <y:GroupNode>
+                  <y:Geometry height="50.0" width="50.0" x="0.0" y="60.0"/>
+                  <y:Fill color="#F5F5F5" transparent="false"/>
+                  <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+                  <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="59.02685546875" x="-4.513427734375" xml:space="preserve" y="0.311767578125">Folder 4<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="-0.5" nodeRatioX="0.0" nodeRatioY="-0.4937646484375" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+                  <y:Shape type="roundrectangle"/>
+                  <y:State closed="true" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
+                  <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+                  <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+                </y:GroupNode>
+              </y:Realizers>
+            </y:ProxyAutoBoundsNode>
+          </data>
+          <graph edgedefault="directed" id="n4::n0:">
+            <node id="n4::n0::n0">
+              <data key="d4"/>
+              <data key="d5">
+                <y:ShapeNode>
+                  <y:Geometry height="50.48000000000002" width="214.31999999999994" x="325.71916799999735" y="718.5046113750001"/>
+                  <y:Fill color="#FFCC00" transparent="false"/>
+                  <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+                  <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="126.70703125" x="45.45296874999997" xml:space="preserve" y="18.03882812500001">Minecraft Forge Server<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.007682364571668487" nodeRatioY="0.2278129952456418" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+                  <y:Shape type="rectangle"/>
+                </y:ShapeNode>
+              </data>
+            </node>
+            <node id="n4::n0::n1">
+              <data key="d4"/>
+              <data key="d5">
+                <y:ShapeNode>
+                  <y:Geometry height="50.48000000000002" width="214.31999999999994" x="325.7191679999973" y="826.942115375"/>
+                  <y:Fill color="#FFCC00" transparent="false"/>
+                  <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+                  <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="146.0546875" x="35.60531249999997" xml:space="preserve" y="18.03882812500001">Any Java Minecraft Clients<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.006871296425905227" nodeRatioY="0.2278129952456418" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+                  <y:Shape type="rectangle"/>
+                </y:ShapeNode>
+              </data>
+            </node>
+          </graph>
+        </node>
+        <node id="n4::n1">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="325.71916799999735" y="564.61064253125"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="206.7578125" x="6.402187499999968" xml:space="preserve" y="18.18824218750001">Mod with Archipelago.MultiClient.Java<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.01222981406308321" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n4::n2">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="57.86527999999544" y="564.61064253125"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="78.70703125" x="69.95296874999997" xml:space="preserve" y="18.18824218750001">Slay the Spire<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.01001532463139232" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+      </graph>
+    </node>
+    <node id="n5">
+      <data key="d4"/>
+      <data key="d5">
+        <y:ShapeNode>
+          <y:Geometry height="50.48000000000002" width="214.31999999999994" x="938.719167999998" y="400.2375040000002"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="99.3671875" x="61.29281250000031" xml:space="preserve" y="18.18824218750001">CommonClient.py<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.017807046705860974" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n6" yfiles.foldertype="group">
+      <data key="d3" xml:space="preserve"/>
+      <data key="d4"/>
+      <data key="d5">
+        <y:ProxyAutoBoundsNode>
+          <y:Realizers active="0">
+            <y:GroupNode>
+              <y:Geometry height="335.8914728437501" width="603.8726399999978" x="593.5730559999993" y="513.26103915625"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="603.8726399999978" x="0.0" xml:space="preserve" y="0.0">A Link to the Past<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="-0.5" nodeRatioY="-0.5" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="false" closedHeight="80.0" closedWidth="100.0" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="29" rightF="29.406527999998843" top="22" topF="22.37646484375"/>
+            </y:GroupNode>
+            <y:GroupNode>
+              <y:Geometry height="50.0" width="50.0" x="0.0" y="60.0"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="59.02685546875" x="-4.513427734375" xml:space="preserve" y="0.311767578125">Folder 2<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="-0.5" nodeRatioX="0.0" nodeRatioY="-0.4937646484375" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="true" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+            </y:GroupNode>
+          </y:Realizers>
+        </y:ProxyAutoBoundsNode>
+      </data>
+      <graph edgedefault="directed" id="n6:">
+        <node id="n6::n0">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="608.5730559999993" y="550.637504"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="48.68359375" x="85.47640624999997" xml:space="preserve" y="18.18824218750001">Z3Client<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.012402963442515902" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n6::n1">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="773.6461119999987" y="667.1550080000001"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="24.00390625" x="97.15609374999997" xml:space="preserve" y="18.03882812500001">SNI<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.009322727113661777" nodeRatioY="0.2278129952456418" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n6::n2">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="773.6461119999987" y="783.6725120000001"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="36.677734375" x="90.98226562499997" xml:space="preserve" y="18.18824218750001">SNES<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.010083673070642063" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n6::n3">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="938.7191679999983" y="550.637504"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="56.025390625" x="81.63460937499985" xml:space="preserve" y="18.18824218750001">LttPClient<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.011605564984601968" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+      </graph>
+    </node>
+    <node id="n7" yfiles.foldertype="group">
+      <data key="d3" xml:space="preserve"/>
+      <data key="d5">
+        <y:ProxyAutoBoundsNode>
+          <y:Realizers active="0">
+            <y:GroupNode>
+              <y:Geometry height="307.73771284374993" width="244.45162366452428" x="310.7305599999909" y="28.098543156250344"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="244.45162366452428" x="0.0" xml:space="preserve" y="0.0">Ocarina of Time<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="-0.5" nodeRatioY="-0.5" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="false" closedHeight="80.0" closedWidth="100.0" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="12" topF="12.376464843750014"/>
+            </y:GroupNode>
+            <y:GroupNode>
+              <y:Geometry height="358.96281049999993" width="581.2" x="-10.668608000006543" y="14.925000000000239"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle cap="2" color="#000000" dash="6.0, 2.0" dashPhase="0.0" join="0" miterLimit="1.4500000476837158" raised="false" type="custom" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" fontFamily="'Arial'" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="581.2" x="0.0" xml:space="preserve" y="0.0">1<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="-0.5" nodeRatioY="-0.5" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="true" closedHeight="358.96281049999993" closedWidth="581.2" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+            </y:GroupNode>
+          </y:Realizers>
+        </y:ProxyAutoBoundsNode>
+      </data>
+      <graph edgedefault="directed" id="n7:">
+        <node id="n7::n0">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="325.7305599999909" y="270.35625600000026"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="48.68359375" x="85.47640624999997" xml:space="preserve" y="18.18824218750001">Z5Client<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.012402963442515902" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n7::n1">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="325.7305599999909" y="162.9156320000003"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="82.720703125" x="68.93929687499997" xml:space="preserve" y="18.18824218750001">Lua Connector<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.5" nodeRatioX="0.014649348812523333" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n7::n2">
+          <data key="d4"/>
+          <data key="d5">
+            <y:ShapeNode>
+              <y:Geometry height="50.48000000000002" width="214.31999999999994" x="325.7305599999909" y="55.47500800000036"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="203.412109375" x="11.03951428952422" xml:space="preserve" y="18.18824218750001">BizHawk with Ocarina of Time loaded<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.499352921195652" labelRatioY="0.5" nodeRatioX="0.5" nodeRatioY="0.23077286177694123" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="rectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+      </graph>
+    </node>
+    <edge id="n1::e0" source="n1::n0" target="n1::n1">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
+            <y:Point x="1349.605695999997" y="500.5"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="39.33203125" x="-47.730839206926476" xml:space="preserve" y="46.092516619298635">RCON<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="8.398791066298369" distanceToCenter="false" position="right" ratio="0.15817515568704613" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n1::e1" source="n1::n1" target="n1::n2">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n1::e2" source="n1::n2" target="n1::n1">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="29.3359375" x="14.999966218743793" xml:space="preserve" y="-43.44806584600974">UDP<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="14.999983109371891" distanceToCenter="false" position="right" ratio="0.4999996938385515" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n1::e3" source="n1::n3" target="n1::n2">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
+            <y:Point x="1600.8718079999958" y="694.5525120000004"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n1::e4" source="n1::n3" target="n1::n1">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
+            <y:Point x="1600.8718079999958" y="575.877504"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n2::e0" source="n2::n0" target="n2::n1">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="211.421875" x="-41.973102312502306" xml:space="preserve" y="-59.48277906835867">Configurable (waitress, gunicorn, flask)<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="40.78160359667933" distanceToCenter="false" position="left" ratio="0.5502890884721153" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n2::e1" source="n2::n0" target="n2::n2">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="67.369140625" x="28.500047546873475" xml:space="preserve" y="30.850050436255287">Subprocess<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="28.500023773436737" distanceToCenter="false" position="left" ratio="0.5000001200154843" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n2::e2" source="n2::n3" target="n2::n1">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="28.01171875" x="15.994175843746234" xml:space="preserve" y="-49.30122235156193">SQL<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="15.994158234373124" distanceToCenter="false" position="right" ratio="0.5000001212308938" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n2::e3" source="n2::n1" target="n2::n3">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n2::e4" source="n2::n3" target="n2::n2">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="28.01171875" x="-71.91893386719994" xml:space="preserve" y="-39.26290640655304">SQL<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="20.62821035939644" distanceToCenter="false" position="right" ratio="0.5000001188225526" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n2::e5" source="n2::n2" target="n2::n3">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n3::e0" source="n3::n1::n1" target="n3::n0">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="130.732421875" x="22.299892410701318" xml:space="preserve" y="39.231467210512506">QModLoader (BepInEx)<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="39.2314717554342" distanceToCenter="false" position="right" ratio="27.48610304302599" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="49.36328125" x="32.159263520014065" xml:space="preserve" y="-58.85059283057308">BepInEx<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="40.14941641065139" distanceToCenter="false" position="left" ratio="0.9445148527723287" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="82.0234375" x="170.57918539501406" xml:space="preserve" y="-58.95117876807319">TsRandomizer<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="40.250002348151476" distanceToCenter="false" position="left" ratio="151.41090383983874" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n3::e1" source="n3::n0" target="n3::n1::n0">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="-106.16924556213016" sy="0.0" tx="106.16924556213016" ty="0.0"/>
+          <y:LineStyle cap="0" color="#000000" dashPhase="0.0" join="0" miterLimit="10.0" type="custom" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n3::e2" source="n3::n2::n0" target="n3::n0">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="24.278109756097592" tx="0.0" ty="-24.278109756097592"/>
+          <y:LineStyle cap="0" color="#000000" dashPhase="0.0" join="0" miterLimit="10.0" type="custom" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n4::n0::e0" source="n4::n0::n0" target="n4::n0::n1">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n4::n0::e1" source="n4::n0::n1" target="n4::n0::n0">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="28.0" x="15.999974183588392" xml:space="preserve" y="-38.32937870974547">TCP<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="15.999987091794262" distanceToCenter="false" position="right" ratio="0.500000597319257" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n4::e0" source="n4::n2" target="n4::n1">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="78.70703125" x="-5.586556058602014" xml:space="preserve" y="20.499997117187604">Mod the Spire<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="20.500001558593794" distanceToCenter="false" position="right" ratio="6.000007783198498" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n4::e1" source="n4::n0::n0" target="n4::n1">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="102.724609375" x="15.999974183588222" xml:space="preserve" y="-82.14194985344659">Forge Mod Loader<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="15.999987091794106" distanceToCenter="false" position="right" ratio="0.7822053657824591" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n6::e0" source="n6::n0" target="n6::n1">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n6::e1" source="n6::n1" target="n6::n0">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="36.009765625" x="-24.329141165018314" xml:space="preserve" y="-50.0363766233404">gRPC<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="11.570354857766246" distanceToCenter="false" position="right" ratio="0.5000004612256828" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n6::e2" source="n6::n1" target="n6::n2">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n6::e3" source="n6::n2" target="n6::n1">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="214.12890625" x="-107.06443243359513" xml:space="preserve" y="-42.369284425618275">Various, depends on SNES device type<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="10.0" distanceToCenter="false" position="center" ratio="0.4999992805012548" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n6::e4" source="n6::n3" target="n6::n1">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="65.359375" x="-124.87237407217322" xml:space="preserve" y="19.378844661894846">WebSocket<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="3.208666439973131" distanceToCenter="false" position="right" ratio="0.6047895549006604" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n7::e0" source="n7::n1" target="n7::n0">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="66.70703125" x="29.499992070294184" xml:space="preserve" y="24.183167632811887">LuaSockets<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="29.499996035147092" distanceToCenter="false" position="left" ratio="0.6788229803879853" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n7::e1" source="n7::n2" target="n7::n1">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="-32.000007929705816" y="32.480309079102256">
+            <y:LabelModel>
+              <y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="28.000003964852908" distanceToCenter="false" position="right" ratio="0.6396627418528917" segment="-1"/>
+            </y:ModelParameter>
+            <y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
+          </y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e0" source="n6::n0" target="n0">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="155.21347200000048" ty="-25.23531650000018">
+            <y:Point x="715.7330559999992" y="458.5"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e1" source="n0" target="n6::n0">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="155.21347200000048" sy="-7.977504000000181" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="65.359375" x="28.000047546872906" xml:space="preserve" y="24.548184551454085">WebSocket<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="28.000023773436393" distanceToCenter="false" position="left" ratio="0.2744372179370255" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e2" source="n2::n2" target="n0">
+      <data key="d8"/>
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="155.21347200000048" ty="-3.977504000000181"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="80.04296875" x="25.500047546873475" xml:space="preserve" y="30.35006478993705">Subprocesses<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="25.500023773436734" distanceToCenter="false" position="left" ratio="0.500000264362879" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e3" source="n3::n0" target="n0">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="-140.21347200000048" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="65.359375" x="40.73100781017706" xml:space="preserve" y="20.499990910156555">WebSocket<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="20.499995455078245" distanceToCenter="false" position="right" ratio="0.6124434576638855" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e4" source="n4::n1" target="n0">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="-127.64041600000144" ty="-2.977504000000181"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="65.359375" x="33.999974183588336" xml:space="preserve" y="-89.15488812811617">WebSocket<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="33.99998709179416" distanceToCenter="false" position="right" ratio="0.7683083818242055" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e5" source="n0" target="n5">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="65.359375" x="31.329860832780355" xml:space="preserve" y="20.499990910156612">WebSocket<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="20.49999545507831" distanceToCenter="false" position="right" ratio="0.6506546658069304" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e6" source="n6::n3" target="n5">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="58.041015625" x="0.5000352187448698" xml:space="preserve" y="-80.70551739419602">Integrated<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="0.5000176093718005" distanceToCenter="false" position="right" ratio="0.8004110543929971" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e7" source="n1::n0" target="n5">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="58.041015625" x="-80.00570042135973" xml:space="preserve" y="-39.20118096484339">Integrated<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="20.50000454492169" distanceToCenter="false" position="right" ratio="0.794022712287986" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e8" source="n7::n0" target="n0">
+      <data key="d9">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="-127.62902400000792" ty="5.022495999999819"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="'Arial'" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="65.359375" x="32.999992070294184" xml:space="preserve" y="36.38563868584538">WebSocket<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="32.999996035147085" distanceToCenter="false" position="left" ratio="0.6190449356376858" segment="-1"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+  </graph>
+  <data key="d6">
+    <y:Resources/>
+  </data>
 </graphml>
