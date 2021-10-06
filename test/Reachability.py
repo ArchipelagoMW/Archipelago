@@ -27,6 +27,4 @@ class TestBase(unittest.TestCase):
                     state = world.get_all_state(False)
                     for location in world.get_locations():
                         with self.subTest("Location should be reached", location=location):
-                            if not location.can_reach(state):
-                                print("Bla!")
                             self.assertTrue(location.can_reach(state))
