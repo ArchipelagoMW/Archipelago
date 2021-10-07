@@ -488,19 +488,19 @@ def set_rules(self):
     # location generation or everything is in generate_basic
 
     # set a simple rule for an region
-    set_rule(self.world.get_entrance("Boss Door", self.player),\
+    set_rule(self.world.get_entrance("Boss Door", self.player),
              lambda state: state.has("Boss Key", self.player))
     # combine rules to require two items
-    add_rule(self.world.get_location("Chest2", self.player),\
+    add_rule(self.world.get_location("Chest2", self.player),
              lambda state: state.has("Sword", self.player))
-    add_rule(self.world.get_location("Chest2", self.player),\
+    add_rule(self.world.get_location("Chest2", self.player),
              lambda state: state.has("Shield", self.player))
     # or simply combine yourself
-    set_rule(self.world.get_location("Chest2", self.player),\
+    set_rule(self.world.get_location("Chest2", self.player),
              lambda state: state.has("Sword", self.player) and
                            state.has("Shield", self.player))
     # require two of an item
-    set_rule(self.world.get_location("Chest3", self.player),\
+    set_rule(self.world.get_location("Chest3", self.player),
              lambda state: state.has("Key", self.player, 2))
     # set_rule is likely to be a bit faster than add_rule
     # state also has .item_count() for items and .has_any(), .has_all() for sets
@@ -510,11 +510,11 @@ def set_rules(self):
     # disallow placing a specific local item at a specific location
     forbid_item(self.world.get_location("Chest4", self.player), "Sword")
     # disallow placing items with a specific property
-    add_item_rule(self.world.get_location("Chest5", self.player),\
+    add_item_rule(self.world.get_location("Chest5", self.player),
                   lambda item: get_item_type(item) == "weapon")
     # get_item_type needs to take player/world into account
     # if MyGameItem has a type property, a more direct implementation would be
-    add_item_rule(self.world.get_location("Chest5", self.player),\
+    add_item_rule(self.world.get_location("Chest5", self.player),
                   lambda item: item.player != self.player or\
                                item.my_type == "weapon")
     # location.item_rule = ... is likely to be a bit faster
@@ -550,7 +550,7 @@ class MyGameLogic(LogicMixin):
     def _mygame_has_key(self, world: MultiWorld, player: int):
         # Arguments above are free to choose
         # it may make sense to use World as argument instead of MultiWorld
-        return True  # or whatever
+        return self.has('key', player)  # or whatever
 ```
 ```python
 # __init__.py
@@ -561,7 +561,7 @@ import .Logic  # apply the mixin by importing its file
 class MyGameWorld(World):
     # ...
     def set_rules(self):
-        set_rule(self.world.get_location("A Door"),
+        set_rule(self.world.get_location("A Door", self.player),
                  lamda state: state._myworld_has_key(self.world, self.player))
 ```
 
