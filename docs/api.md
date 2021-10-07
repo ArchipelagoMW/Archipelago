@@ -85,10 +85,10 @@ Special locations with ID `None` can hold events (read below).
 Items are all things that can "drop" for your game. This may be RPG items like
 weapons, could as well be technologies you normally research in a research tree.
 
-Each item has a name and an ID (also "code"), a `progression` flag and will
-be assigned to a location when rolling a seed. Items with `progression` will be
-placed early and moved around to produce some balancing. Name has to be unique
-in each game, the ID needs to be unique accross all games.
+Each item has a name and an ID (also "code"), a `advancement` flag and will
+be assigned to a location when rolling a seed. Advancement items will be
+assigned to locations with higher priority and moved around to meet defined
+rules and `progression_balancing`.
 
 Special items with ID `None` can mark events (read below).
 
