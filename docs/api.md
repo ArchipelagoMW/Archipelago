@@ -66,7 +66,7 @@ of valid options has to be provided in `self.options`. More on that later.
 Any AP installation can provide settings for a world, for example a ROM file,
 accessible through `Utils.get_options()['<world>_options']['<option>']`.
 
-User can set those in their `host.yaml` file.
+Users can set those in their `host.yaml` file.
 
 ### Locations
 
@@ -85,7 +85,7 @@ Special locations with ID `None` can hold events (read below).
 Items are all things that can "drop" for your game. This may be RPG items like
 weapons, could as well be technologies you normally research in a research tree.
 
-Each item has a name and an ID (also "code"), a `advancement` flag and will
+Each item has a name and an ID (also "code"), an `advancement` flag and will
 be assigned to a location when rolling a seed. Advancement items will be
 assigned to locations with higher priority and moved around to meet defined
 rules and `progression_balancing`.
@@ -94,17 +94,17 @@ Special items with ID `None` can mark events (read below).
 
 ### Events
 
-Events will mark some progress. You define a event location (see above), an
+Events will mark some progress. You define an event location (see above), an
 event item (see above), strap some rules to the location (i.e. hold certain
 items) and manually place the event item at the event location.
 
 Events can be used to either simplify the logic or to get better spoiler logs.
 Events will show up in the play through.
 
-There is one special case for events: Victory. The get the win condition to show
-up in the spoiler log, you create an event item for, and place it at an event
+There is one special case for events: Victory. To get the win condition to show
+up in the spoiler log, you create an event item and place it at an event
 location with the access_rules for game completion. Once that's done, the
-world's win condition can be a simple check for that item.
+world's win condition can be as simple as checking for that item.
 
 By convention the victory event is called `"Victory"`. It can be placed at one
 or more event locations based on player options.
@@ -357,6 +357,8 @@ The world has to provide the following things for generation
   if there is output to be generated (i.e. `remote_items = False`). When this is
   called, `self.world.get_locations()` has all locations for all players, with
   properties `item` pointing to the item and `player` identifying the player.
+  `self.world.get_filled_locations(self.player)` will filter for this world.
+  `item.player` can be used to see if it's a local item.
 
 In addition the following methods can be implemented
 
@@ -402,6 +404,10 @@ def create_item(self, item: str):
     # when you call it from your own code.
     return MyGameItem(item, is_progression(item), self.item_name_to_id[item],
                       self.player)
+
+def create_event(self, event: str):
+    # while we are at it, we can also add a helper to create events
+    return MyGameItem(event, True, None, self.player)
 ```
 
 #### create_items
@@ -415,6 +421,7 @@ def create_items(self):
     for item in mygame_items:
         self.world.itempool += self.create_item(item)
 ```
+**FIXME**: item groups? is that a generic thing?
 
 #### create_regions
 
@@ -442,10 +449,10 @@ def create_regions(self):
     
     # If entrances are not randomized, they should be connected here, otherwise
     # they can also be connected at a later stage.
-    self.world.get_entrance('New Game', self.player)\
-        .connect(self.world.get_region('Main Area', self.player))
-    self.world.get_entrance('Boss Door', self.player)\
-        .connect(self.world.get_region('Boss Room', self.player))
+    self.world.get_entrance("New Game", self.player)\
+        .connect(self.world.get_region("Main Area", self.player))
+    self.world.get_entrance("Boss Door", self.player)\
+        .connect(self.world.get_region("Boss Room", self.player))
     
     # If setting location access rules from data is easier here, set_rules can
     # possibly omitted.
@@ -455,35 +462,139 @@ def create_regions(self):
 
 ```python
 def generate_basic(self):
-    # Place item Herb into location Chest1
-    self.world.get_location("Chest1", self.player)\
-        .place_locked_item(self.create_item("Herb"))
+    # place "Victory" at "Final Boss" and set collection as win condition
+    self.world.get_location("Final Boss", self.player)\
+        .place_locked_item(self.create_event("Victory"))
+    self.world.completion_condition[self.player] = \
+        lambda state: state.has("Victory", self.player)
+
+    # place item Herb into location Chest1 for some reason
+    item = self.create_item("Herb")
+    self.world.get_location("Chest1", self.player).place_locked_item(item)
+    # in most cases it's better to do this at the same time the itempool is
+    # filled to avoid accidental duplicates:
+    # manually placed and still in the itempool
 ```
 
 ### Setting rules
 
 ```python
+from ..generic.Rules import add_rule, set_rule, forbid_item
+from Items import get_item_type
+
 def set_rules(self):
     # For some worlds this step can be omitted if either a Logic mixin 
-    # (see below) is used or it's easier to apply the rules from data during
-    # location generation.
-    pass
+    # (see below) is used, it's easier to apply the rules from data during
+    # location generation or everything is in generate_basic
+
+    # set a simple rule for an region
+    set_rule(self.world.get_entrance("Boss Door", self.player),\
+             lambda state: state.has("Boss Key", self.player))
+    # combine rules to require two items
+    add_rule(self.world.get_location("Chest2", self.player),\
+             lambda state: state.has("Sword", self.player))
+    add_rule(self.world.get_location("Chest2", self.player),\
+             lambda state: state.has("Shield", self.player))
+    # or simply combine yourself
+    set_rule(self.world.get_location("Chest2", self.player),\
+             lambda state: state.has("Sword", self.player) and
+                           state.has("Shield", self.player))
+    # require two of an item
+    set_rule(self.world.get_location("Chest3", self.player),\
+             lambda state: state.has("Key", self.player, 2))
+    # set_rule is likely to be a bit faster than add_rule
+    # state also has .item_count() for items and .has_any(), .has_all() for sets
+
+    # FIXME: has_group, count_group ?
+
+    # disallow placing a specific local item at a specific location
+    forbid_item(self.world.get_location("Chest4", self.player), "Sword")
+    # disallow placing items with a specific property
+    add_item_rule(self.world.get_location("Chest5", self.player),\
+                  lambda item: get_item_type(item) == "weapon")
+    # get_item_type needs to take player/world into account
+    # if MyGameItem has a type property, a more direct implementation would be
+    add_item_rule(self.world.get_location("Chest5", self.player),\
+                  lambda item: item.player != self.player or\
+                               item.my_type == "weapon")
+    # location.item_rule = ... is likely to be a bit faster
 ```
-**TODO:** actually set some rules
 
 ### Logic mixin
 
-**TODO:** features of and conventions for logic mixin
+While lambdas and events could do pretty much anything, by convention we
+implement more complex logic in Logic mixins, even if there is no need to add
+properties to the `BaseClasses.CollectionState` state object.
+
+Wenn importing a file that defines a class that inherits from
+`..AutoWorld.LogicMixin` the state object's class is automatically extended by
+the mixin's members. By convention those are prefixed with `_world_`.
+
+Typical uses are defining methods that are used instead of `state.has`
+in lambdas, e.g.`state._mygame_has(custom, world, player)` or recurring checks
+like `state._mygame_can_do_something(world, player)` to simplify lambdas.
+
+More advanced uses could be to add additional variables to the state object,
+override `World.collect(self, state, item)` and `remove(self, state, item)`
+to update the state object, and check those added variables in added methods.
+Please do this with caution and only when neccessary.
+
+#### Sample
+
+```python
+# Logic.py
+
+from ..AutoWorld import LogicMixin
+
+class MyGameLogic(LogicMixin):
+    def _mygame_has_key(self, world: MultiWorld, player: int):
+        # Arguments above are free to choose
+        # it may make sense to use World as argument instead of MultiWorld
+        return True  # or whatever
+```
+```python
+# __init__.py
+
+from ..generic.Rules import set_rule
+import .Logic  # apply the mixin by importing its file
+
+class MyGameWorld(World):
+    # ...
+    def set_rules(self):
+        set_rule(self.world.get_location("A Door"),
+                 lamda state: state._myworld_has_key(self.world, self.player))
+```
 
 ### Generate output
 
-
 ```python
+from .Mod import generate_mod
+
 def generate_output(self, output_directory: str):
-    # How to generate the mod or ROM highly depends on the game, here is a dummy
-    from .Mod import generate_mod
-    # TODO: data = {...}
-    generate_mod(data)
+    # How to generate the mod or ROM highly depends on the game
+    # if the mod is written in Lua, Jinja can be used to fill a template
+    # if the mod reads a json file, `json.dump()` can be used to generate that
+    # code below is a dummy
+    data = {
+        "seed": self.world.seed_name,  # to verify the server's multiworld
+        "slot": self.world.player_name[self.player],  # to connect to server
+        "items": {location.name: location.item.name
+                  if location.item.player == self.player else "Remote"
+                  for location in self.world.get_filled_locations(self.player)},
+        "final_boss_hp": self.final_boss_hp,
+        # store option name "easy", "normal" or "hard" for difficuly
+        "difficulty": self.world.difficulty[self.player].current_key,
+        # store option value True or False for fixing a glitch
+        "fix_xyz_glitch": self.world.fix_xyz_glitch[self.player].value
+    }
+    # point to a ROM specified by the installation
+    src = Utils.get_options()["mygame_options"]["rom_file"]
+    # or point to worlds/mygame/data/mod_template
+    src = os.path.join(os.path.dirname(__file__), "data", "mod_template")
+    # generate output path
+    mod_name = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}"
+    out_file = os.path.join(output_directory, mod_name + ".zip")
+    # generate the file
+    generate_mod(src, out_file, data)
 ```
 
-**TODO:** generate data dict from locations and settings
