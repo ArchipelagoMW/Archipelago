@@ -1226,7 +1226,7 @@ class Spoiler():
                     outfile.write('Item Functionality:              %s\n' % self.world.item_functionality[player])
                     outfile.write('Entrance Shuffle:                %s\n' % self.world.shuffle[player])
                     if self.world.shuffle[player] != "vanilla":
-                        outfile.write('Entrance Shuffle Seed            %s\n' % self.world.er_seeds[player])
+                        outfile.write('Entrance Shuffle Seed            %s\n' % self.world.worlds[player].er_seed)
                     outfile.write('Pyramid hole pre-opened:         %s\n' % (
                         'Yes' if self.world.open_pyramid[player] else 'No'))
                     outfile.write('Shop inventory shuffle:          %s\n' %
