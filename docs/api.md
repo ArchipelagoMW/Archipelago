@@ -1,0 +1,489 @@
+# Archipelago API
+
+This document tries to explain some internals required to implement a game for
+Archipelago's generation and server. Once generated a client or mod is
+required to send and receive items between game and the server.
+
+Client implementation is out of scope of this document. Please refer to an
+existing game that provides a similar API to yours or read the
+[network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
+
+Archipelago will be abbreviated as "AP" below.
+
+
+## Language
+
+AP uses python3 for generation, server and web host. The seed generation will be
+written in python3, the client that connects to the server to sync items can be
+in any language that allows using websockets.
+
+
+## Codeing style
+
+AP follows all the PEPs. When in doubt use an IDE with coding style
+linter, for example PyCharm Community Edition.
+
+
+## Doc strings
+
+Doc strings are strings attached to an object in python that describe what the
+object is supposed to be. Certain doc strings will be picked up and used by AP.
+They are assigned by writing a string without any assigment right below a
+defition. e.g.
+```python
+class MyGameWorld(World):
+    """This is the description of My Game that will be displayed on the AP
+       website."""
+```
+
+
+## Definitions
+
+### World class
+
+A world class is the class with all the specifics of a certain game to be
+included. It will be instantiated for each player that rolls a seed for that
+game.
+
+### MultiWorld object
+
+The multiworld object references the whole multiworld (all items and locations
+for all players) and is accessible through `self.world` inside a World object.
+
+### Player
+
+The player is just an integer in AP and is accessible through `self.player`
+inside a World object.
+
+### Player options
+
+Players provide customized settings for their World in the form of yamls.
+Those are accessible through `self.world.option_name[self.player]`. A dict
+of valid options has to be provided in `self.options`. More on that later.
+
+### World options
+
+Any AP installation can provide settings for a world, for example a ROM file,
+accessible through `Utils.get_options()['<world>_options']['<option>']`.
+
+User can set those in their `host.yaml` file.
+
+### Locations
+
+Locations are places where items can be located in your game. This may be chests
+or boss drops for RPG-like games but could also be progress in a research tree.
+
+Each location has a name and an ID (also "code", also "address"), is placed in a
+Region and has (access) rules.
+The name needs to be unique in each game, the ID needs to be unique accross all
+games and is best in the same range as the item IDs (see below).
+
+Special locations with ID `None` can hold events (read below).
+
+### Items
+
+Items are all things that can "drop" for your game. This may be RPG items like
+weapons, could as well be technologies you normally research in a research tree.
+
+Each item has a name and an ID (also "code"), a `progression` flag and will
+be assigned to a location when rolling a seed. Items with `progression` will be
+placed early and moved around to produce some balancing. Name has to be unique
+in each game, the ID needs to be unique accross all games.
+
+Special items with ID `None` can mark events (read below).
+
+### Events
+
+Events will mark some progress. You define a event location (see above), an
+event item (see above), strap some rules to the location (i.e. hold certain
+items) and manually place the event item at the event location.
+
+Events can be used to either simplify the logic or to get better spoiler logs.
+Events will show up in the play through.
+
+There is one special case for events: Victory. The get the win condition to show
+up in the spoiler log, you create an event item for, and place it at an event
+location with the access_rules for game completion. Once that's done, the
+world's win condition can be a simple check for that item.
+
+By convention the victory event is called `"Victory"`. It can be placed at one
+or more event locations based on player options.
+
+### Regions
+
+Regions are logical groups of locations that share some common access rules. If
+location logic is written from scratch, using regions greatly simplifies the
+definition and allow to somewhat easily implement things like entrance
+randomizer in logic.
+
+Regions have a list exits that are Entrances (see below) to other regions.
+
+There has to be one special region `"Menu"` from which the logic unfolds. AP
+assumes that a player will always be able to return to the `"Menu"` region by
+resetting the game ("Save and quit").
+
+### Entrances
+
+An entrance connects to a region, is assigned to region's exits and has rules
+to define if it and thus the connected region is accessible.
+They can be static (regular logic) or be defined/connected during generation
+(entrance randomizer).
+
+### Access rules
+
+An access rule is a function that returns `True` or `False` for a `spot` based
+on the the current `state` (items that can be collected).
+
+`spot` is either Location, Entrance
+
+### Item rules
+
+An item rule is a function that returns `True` or `False` for a Location based
+on a single item. It can be used to reject placement of an item there.
+
+### Plando
+
+Plando allows a player to place certain items in certain locations through their
+player options. While specifics are not covered here, plando is automatically
+possible by providing a complete world with a working create_item method.
+
+
+## Implementation
+
+### Your World
+
+Your world lives in `world/[world_name]/__init__.py` and is a class that
+inherits from `..AutoWorld.World`. The generation progress will automatically
+pick it up.
+
+### Requirements
+
+If your world needs specific python packages, they can be listed in
+`world/[world_name]/requirements.txt`.
+See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format)
+
+### Relative imports
+
+AP will only import the `__init__.py`. Depending on code size it makes sense to
+use multiple files and use relative imports to access them.
+
+e.g. `from .Options import mygame_options` from your `__init__.py` will load
+`world/[world_name]/Options.py` and make its `mygame_options` accesible.
+
+When imported names pile up it may be easier to use `from . import Options`
+and access the variable as `Options.mygame_options`.
+
+### Your item type
+
+Each world uses its own subclass of `BaseClasses.Item`. The constuctor can be
+overridden to attach additional data to it, e.g. "price in shop".
+Since the constructor is only ever called from your code, you can add whatever
+arguments you like to the constructor.
+
+In its simplest form we only set the game name and use the default constuctor
+```python
+from BaseClasses import Item
+
+class MyGameItem(Item):
+    game: str = "My Game"
+```
+By convention this class definition will either be placed in your `__init__.py`
+or your `Items.py`. For a more elaborate example see `worlds/oot/Items.py`.
+
+### Your location type
+
+The same we have done for items above, we will do for locations
+```python
+from BasClasses import Location
+
+class MyGameLocation(Location):
+    game: str = "My Game"
+```
+in your `__init__.py` or your `Locations.py`.
+
+**FIXME**: Is setting Location.event actually required? Minecraft and OoT
+do that. Factorio does not. What's the goal of doing that? When factorio places
+a locked item this will do Location.event = item.advancement.
+
+### Options
+
+By convention options are defined in `Options.py` and will be used when parsing
+the players' yaml files.
+
+Each option has its own class, inherits from a base option type, has a doc
+string to describe it and a displayname property for display on the website.
+
+The actual name as used in the yaml is defined in a dict[str, Option], that is
+assigned to the world.
+
+Common option types are Toggle, DefaultOnToggle, Choice, Range. For more see
+`Options.py` in AP's base directory.
+
+#### Toggle, DefaultOnToggle
+
+Those don't need any additional properties defined. After parsing the option,
+its `value` will either be True or False.
+
+#### Range
+
+Define properties `range_start`, `range_end` and `default`. Ranges will be
+displayed as sliders on the website and can be set to random in the yaml.
+
+#### Choice
+
+Choices are like toggles, but have more options than just True and False.
+Define a property `option_<name> = <number>` per selectable value and
+`default = <number>` to set the default selection. Aliases can be set by
+defining a property `alias_<name> = <same number>`.
+
+One special case where aliases are required is when option name is `yes`, `no`,
+`on` or `off` because they parse to `True` or `False`:
+```python
+option_off = 0
+option_on = 1
+option_some = 2
+alias_false = 0
+alias_true = 1
+default = 0
+```
+
+#### Sample
+```python
+# Options.py
+
+from Options import Toggle, Range, Choice
+import typing
+
+class Difficulty(Choice):
+    """Sets overall game difficulty."""
+    displayname = "Difficulty"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    alias_beginner = 0  # same as easy
+    alias_expert = 2  # same as hard
+    default = 1  # default to normal
+
+class FinalBossHP(Range):
+    """Sets the HP of the final boss"""
+    displayname = "Final Boss HP"
+    range_start = 100
+    range_end = 10000
+    default = 2000
+
+class FixXYZGlitch(Toggle):
+    """Fixes ABC when you do XYZ"""
+    displayname = "Fix XYZ Glitch"
+
+# By convention we call the options dict variable `<world>_options`.
+mygame_options: typing.Dict[str, type(Option)] = {
+    "difficulty": Difficulty,
+    "final_boss_hp": FinalBossHP,
+    "fix_xyz_glitch": FixXYZGlitch
+}
+```
+```python
+# __init__.py
+
+from ..AutoWorld import World
+from .Options import mygame_options  # import the options dict
+
+class MyGameWorld(World):
+    #...
+    options = mygame_options  # assign the options dict to the world
+    #...
+```
+    
+### Local or Remote
+
+A world with `remote_items` set to `True` gets all items items from the server
+and no item from the local game. So for an RPG opening a chest would not add
+any item to your inventory, instead the server will send you what was in that
+chest. The advantage is that a generic mod can be used that does not need to
+know anything about the seed.
+
+A world with `remote_items` set to `False` will locally reward its local items.
+For console games this can remove delay and make script/animation/dialog flow
+more natural.
+
+### A World class skeleton
+
+```python
+# world/mygame/__init__.py
+
+from .Options import mygame_options  # the options we defined earlier
+from .Items import mygame_items  # data used below to add items to the World
+from .Locations import mygame_locations  # same as above
+from ..AutoWorld import World
+from BaseClasses import Region, Location, Entrance, Item
+from Utils import get_options, output_path
+
+class MyGameItem(Item):  # or from Items import MyGameItem
+    game = "My Game"  # name of the game/world this item is from
+
+class MyGameLocation(Location):  # or from Locations import MyGameLocation
+    game = "My Game"  # name of the game/world this location is in
+
+class MyGameWorld(World):
+    """Insert description of the world/game here."""
+    game: str = "My Game"  # name of the game/world
+    options = mygame_options  # options the player can set
+    topology_present: bool = True  # show path to victory in spoiler
+    remote_items: bool = False  # True if all items come from the server
+
+    # ID of first item and location, can be hard-coded but code may be easier
+    # to read with this as a propery
+    start_id = 1234
+
+    # The following two dicts are required for the generation to know which
+    # items exist. They could be generated from json or something else. They can
+    # include events, but don't have to since events will be placed manually.
+    item_name_to_id = {name: id for
+                       id, name in enumerate(mygame_items, start_id)}
+    location_name_to_id = {name: id for
+                           id, name in enumerate(mygame_locations, start_id)}
+```
+
+### Generation
+
+The world has to provide the following things for generation
+
+* the properties mentioned above 
+* additions to the item pool
+* additions to the regions list: at least one called "Menu"
+* locations placed inside those regions
+* a `def create_item(self, item: str) -> MyGameItem` for plando/manual placing
+* a `def generate_output(self, output_directory: str)` that creates the output
+  if there is output to be generated (i.e. `remote_items = False`). When this is
+  called, `self.world.get_locations()` has all locations for all players, with
+  properties `item` pointing to the item and `player` identifying the player.
+
+In addition the following methods can be implemented
+
+* `def generate_early(self)`
+  called per player before any items or locations are created. You can set
+  properties on your world here. Already has access to player options and RNG.
+* `def create_regions(self)`
+  called to place player's regions into the MultiWorld's regions list. If it's
+  hard to separate, this can be done during `generate_early` or `basic` as well.
+* `def create_items(self)`
+  called to place player's items into the MultiWorld's itempool.
+* `def set_rules(self)`
+  called to set access and item rules on locations and entrances.
+* `def generate_basic(self)`
+  called after the previous steps. Some placement and player specific
+  randomizations can be done here. After this step all regions and items have
+  to be in the MultiWorld's regions and itempool.
+* `pre_fill`, `fill_hook` and `post_fill` are called to modify item placement
+  before, during and after the regular fill process, before `generate_output`.
+* `fill_slot_data` and `modify_multidata` can be used to modify the data that
+  will be used by the server to host the MultiWorld.
+* `def get_required_client_version(self)`
+  can return a tuple of 3 ints to make sure the client is compatible to this
+  world (e.g. item IDs) when connecting.
+
+#### generate_early
+
+```python
+def generate_early(self):
+    # read player settings to world instance
+    self.final_boss_hp = self.world.final_boss_hp[self.player].value
+```
+
+#### create_item
+
+```python
+# we need a way to know if an item provides progress in the game ("key item")
+# this can be part of the items definition, or depend on recipe randomization
+from .Items import is_pregression  # this is just a dummy
+
+def create_item(self, item: str):
+    # This is called when AP wants to create an item by name (for plando) or
+    # when you call it from your own code.
+    return MyGameItem(item, is_progression(item), self.item_name_to_id[item],
+                      self.player)
+```
+
+#### create_items
+
+```python
+def create_items(self):
+    # Add items to the Multiworld.
+    # If there are two of the same item, the item has to be twice in the pool.
+    # Which items are added to the pool may depend on player settings,
+    # e.g. custom win condition like triforce hunt.
+    for item in mygame_items:
+        self.world.itempool += self.create_item(item)
+```
+
+#### create_regions
+
+```python
+def create_regions(self):
+    # Add regions to the multiworld. "Menu" is the required starting point.
+    # Arguments to Region() are name, type, human_readable_name, player, world
+    r = Region("Menu", None, "Menu", self.player, self.world)
+    # Set Region.exits to a list of entrances that are reachable from region
+    r.exits = [Entrance(self.player, "New game", r)]  # or use r.exits.append
+    # Append region to MultiWorld's regions
+    self.world.regions.append(r)  # or use += [r...]
+    
+    r = Region("Main Area", None, "Main Area", self.player, self.world)
+    # Add main area's locations to main area (all but final boss)
+    r.locations = [MyGameLocation(self.player, location.name,
+                   self.location_name_to_id[location.name], r)]
+    r.exits = [Entrance(self.player, "Boss Door", r)]
+    self.world.regions.append(r)
+    
+    r = Region("Boss Room", None, "Boss Room", self.player, self.world)
+    # add event to Boss Room
+    r.locations = [MyGameLocation(self.player, "Final Boss", None, r)]
+    self.world.regions.append(r)
+    
+    # If entrances are not randomized, they should be connected here, otherwise
+    # they can also be connected at a later stage.
+    self.world.get_entrance('New Game', self.player)\
+        .connect(self.world.get_region('Main Area', self.player))
+    self.world.get_entrance('Boss Door', self.player)\
+        .connect(self.world.get_region('Boss Room', self.player))
+    
+    # If setting location access rules from data is easier here, set_rules can
+    # possibly omitted.
+```
+
+#### generate_basic
+
+```python
+def generate_basic(self):
+    # Place item Herb into location Chest1
+    self.world.get_location("Chest1", self.player)\
+        .place_locked_item(self.create_item("Herb"))
+```
+
+### Setting rules
+
+```python
+def set_rules(self):
+    # For some worlds this step can be omitted if either a Logic mixin 
+    # (see below) is used or it's easier to apply the rules from data during
+    # location generation.
+    pass
+```
+**TODO:** actually set some rules
+
+### Logic mixin
+
+**TODO:** features of and conventions for logic mixin
+
+### Generate output
+
+
+```python
+def generate_output(self, output_directory: str):
+    # How to generate the mod or ROM highly depends on the game, here is a dummy
+    from .Mod import generate_mod
+    # TODO: data = {...}
+    generate_mod(data)
+```
+
+**TODO:** generate data dict from locations and settings
