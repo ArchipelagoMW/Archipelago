@@ -17,7 +17,7 @@ from worlds.generic import PlandoItem, PlandoConnection
 from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
-from Main import get_seed, seeddigits
+from BaseClasses import seeddigits, get_seed
 import Options
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
