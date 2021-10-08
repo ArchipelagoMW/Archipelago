@@ -2,7 +2,7 @@
 
 # How do I add a game to Archipelago?  
 This guide is going to try and be a broad summary of how you can do just that.  
-There are three key steps to incorporating a game into Archipelago:  
+There are two key steps to incorporating a game into Archipelago:  
 - Game Modification 
 - Archipelago Server Integration
 
