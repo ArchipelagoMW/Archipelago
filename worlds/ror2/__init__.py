@@ -32,8 +32,8 @@ class RiskOfRainWorld(World):
             self.world.push_precollected(self.world.create_item("Dio's Best Friend", self.player))
 
         # if presets are enabled generate junk_pool from the selected preset
+        pool_option = self.world.item_weights[self.player].value
         if self.world.item_pool_presets[self.player].value:
-            pool_option = self.world.item_weights[self.player].value
             # generate chaos weights if the preset is chosen
             if pool_option == 5:
                 junk_pool = {
@@ -43,7 +43,7 @@ class RiskOfRainWorld(World):
                     "Item Scrap, White": self.world.random.randint(0, 100),
                     "Common Item": self.world.random.randint(0, 100),
                     "Uncommon Item": self.world.random.randint(0, 70),
-                    "Legendary Item": self.world.random.randint(0, 300),
+                    "Legendary Item": self.world.random.randint(0, 30),
                     "Boss Item": self.world.random.randint(0, 20),
                     "Lunar Item": self.world.random.randint(0, 60),
                     "Equipment": self.world.random.randint(0, 40)
@@ -110,7 +110,7 @@ def create_regions(world, player: int):
         create_region(world, player, 'Menu', None, ['Lobby']),
         create_region(world, player, 'Petrichor V',
                       [location for location in base_location_table] +
-                      [f"Item Pickup {i}" for i in range(1, world.start_with_revive[player].value+world.total_locations[player])])
+                      [f"Item Pickup {i}" for i in range(1, 1 + world.total_locations[player])]) # i don't understand this line but it works
     ]
 
     world.get_entrance("Lobby", player).connect(world.get_region("Petrichor V", player))
