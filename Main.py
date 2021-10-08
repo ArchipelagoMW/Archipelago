@@ -18,8 +18,6 @@ from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShop
 from Utils import output_path, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
-from worlds.sm.variaRandomizer.logic.logic import Logic
-import Patch
 
 seeddigits = 20
 

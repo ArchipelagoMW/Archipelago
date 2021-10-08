@@ -141,10 +141,10 @@ class SMWorld(World):
         for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions:
             src_region = self.world.get_region(src.Name, self.player)
             dest_region = self.world.get_region(dest.Name, self.player)
-            src_region.exits.append(Entrance(self.player, src.Name + "|" + dest.Name, src_region))
-            srcDestEntrance = self.world.get_entrance(src.Name + "|" + dest.Name, self.player)
+            src_region.exits.append(Entrance(self.player, src.Name + "->" + dest.Name, src_region))
+            srcDestEntrance = self.world.get_entrance(src.Name + "->" + dest.Name, self.player)
             srcDestEntrance.connect(dest_region)
-            add_entrance_rule(self.world.get_entrance(src.Name + "|" + dest.Name, self.player), self.player, getAccessPoint(src.Name).traverse)
+            add_entrance_rule(self.world.get_entrance(src.Name + "->" + dest.Name, self.player), self.player, getAccessPoint(src.Name).traverse)
 
     def set_rules(self):
         set_rules(self.world, self.player)
@@ -406,7 +406,6 @@ def create_region(self, world: MultiWorld, player: int, name: str, locations=Non
     if locations:
         for loc in locations:
             location = self.locations[loc]
-            location.parent_regions.append(ret)
             location.parent_region = ret
             ret.locations.append(location)
     if exits:
@@ -419,17 +418,10 @@ class SMLocation(Location):
     game: str = "Super Metroid"
 
     def __init__(self, player: int, name: str, address=None, parent=None):
-        self.parent_regions = []
         super(SMLocation, self).__init__(player, name, address, parent)
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
         return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
-
-    def can_reach(self, state: CollectionState) -> bool:
-        # self.access_rule computes faster on average, so placing it first for faster abort
-        if self.access_rule(state) and any(region.can_reach(state) for region in self.parent_regions):
-            return True
-        return False
 
 
 class SMItem(Item):

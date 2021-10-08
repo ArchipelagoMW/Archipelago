@@ -37,4 +37,4 @@ def set_rules(world, player):
             
     for accessPoint in Logic.accessPoints:
         for key, value1 in accessPoint.intraTransitions.items():
-            set_entrance_rule(world.get_entrance(accessPoint.Name + "|" + key, player), player, value1)
+            set_entrance_rule(world.get_entrance(accessPoint.Name + "->" + key, player), player, value1)

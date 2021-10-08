@@ -99,7 +99,6 @@ class MultiWorld():
             set_player_attr('enemy_health', 'default')
             set_player_attr('enemy_damage', 'default')
             set_player_attr('beemizer', 0)
-            set_player_attr('progressive', True)
             set_player_attr('escape_assist', [])
             set_player_attr('open_pyramid', False)
             set_player_attr('treasure_hunt_icon', 'Triforce Piece')
@@ -281,7 +280,7 @@ class MultiWorld():
 
     def get_locations(self) -> list:
         if self._cached_locations is None:
-            self._cached_locations = list(dict.fromkeys([location for region in self.regions for location in region.locations]))
+            self._cached_locations = [location for region in self.regions for location in region.locations]
         return self._cached_locations
 
     def clear_location_cache(self):
@@ -934,12 +933,6 @@ class Location():
 
     def __lt__(self, other):
         return (self.player, self.name) < (other.player, other.name)
-
-    def __eq__(self, other):
-        if isinstance(other, Location):
-            return ((self.name == other.name) and (self.player == other.player))
-        else:
-            return False
 
     @property
     def native_item(self) -> bool:
