@@ -43,7 +43,7 @@ class RiskOfRainWorld(World):
                     "Item Scrap, White": self.world.random.randint(0, 100),
                     "Common Item": self.world.random.randint(0, 100),
                     "Uncommon Item": self.world.random.randint(0, 70),
-                    "Legendary Item": self.world.random.randint(0, 300),
+                    "Legendary Item": self.world.random.randint(0, 30),
                     "Boss Item": self.world.random.randint(0, 20),
                     "Lunar Item": self.world.random.randint(0, 60),
                     "Equipment": self.world.random.randint(0, 40)
