@@ -1,14 +1,14 @@
 # Archipelago API
 
 This document tries to explain some internals required to implement a game for
-Archipelago's generation and server. Once generated a client or mod is
-required to send and receive items between game and the server.
+Archipelago's generation and server. Once a seed is generated, a client or mod is 
+required to send and receive items between the game and server.
 
 Client implementation is out of scope of this document. Please refer to an
 existing game that provides a similar API to yours or read the
 [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
 
-Archipelago will be abbreviated as "AP" below.
+Archipelago will be abbreviated as "AP" from now on.
 
 
 ## Language
@@ -18,18 +18,19 @@ written in python3, the client that connects to the server to sync items can be
 in any language that allows using websockets.
 
 
-## Codeing style
+## Coding style
 
 AP follows all the PEPs. When in doubt use an IDE with coding style
 linter, for example PyCharm Community Edition.
 
 
-## Doc strings
+## Docstrings
 
-Doc strings are strings attached to an object in python that describe what the
-object is supposed to be. Certain doc strings will be picked up and used by AP.
-They are assigned by writing a string without any assigment right below a
-defition. e.g.
+Docstrings are strings attached to an object in Python that describe what the
+object is supposed to be. Certain docstrings will be picked up and used by AP.
+They are assigned by writing a string without any assignment right below a
+definition. The string must be a triple-quoted string.
+Example:
 ```python
 class MyGameWorld(World):
     """This is the description of My Game that will be displayed on the AP
@@ -39,29 +40,30 @@ class MyGameWorld(World):
 
 ## Definitions
 
-### World class
+### World Class
 
-A world class is the class with all the specifics of a certain game to be
+A `World` class is the class with all the specifics of a certain game to be
 included. It will be instantiated for each player that rolls a seed for that
 game.
 
-### MultiWorld object
+### MultiWorld Object
 
-The multiworld object references the whole multiworld (all items and locations
-for all players) and is accessible through `self.world` inside a World object.
+The `MultiWorld` object references the whole multiworld (all items and locations
+for all players) and is accessible through `self.world` inside a `World` object.
 
 ### Player
 
 The player is just an integer in AP and is accessible through `self.player`
 inside a World object.
 
-### Player options
+### Player Options
 
 Players provide customized settings for their World in the form of yamls.
-Those are accessible through `self.world.option_name[self.player]`. A dict
-of valid options has to be provided in `self.options`. More on that later.
+Those are accessible through `self.world.<option_name>[self.player]`. A dict
+of valid options has to be provided in `self.options`. Options are automatically
+added to the `World` object for easy access.
 
-### World options
+### World Options
 
 Any AP installation can provide settings for a world, for example a ROM file,
 accessible through `Utils.get_options()['<world>_options']['<option>']`.
@@ -73,12 +75,12 @@ Users can set those in their `host.yaml` file.
 Locations are places where items can be located in your game. This may be chests
 or boss drops for RPG-like games but could also be progress in a research tree.
 
-Each location has a name and an ID (also "code", also "address"), is placed in a
-Region and has (access) rules.
-The name needs to be unique in each game, the ID needs to be unique accross all
-games and is best in the same range as the item IDs (see below).
+Each location has a `name` and an `id` (a.k.a. "code" or "address"), is placed in a
+Region and has access rules.
+The name needs to be unique in each game, the ID needs to be unique across all
+games and is best in the same range as the item IDs.
 
-Special locations with ID `None` can hold events (read below).
+Special locations with ID `None` can hold events.
 
 ### Items
 
@@ -94,16 +96,17 @@ Special items with ID `None` can mark events (read below).
 
 ### Events
 
-Events will mark some progress. You define an event location (see above), an
-event item (see above), strap some rules to the location (i.e. hold certain
+Events will mark some progress. You define an event location, an
+event item, strap some rules to the location (i.e. hold certain
 items) and manually place the event item at the event location.
 
 Events can be used to either simplify the logic or to get better spoiler logs.
-Events will show up in the play through.
+Events will show up in the spoiler playthrough but they do not represent actual
+items or locations within the game.
 
 There is one special case for events: Victory. To get the win condition to show
 up in the spoiler log, you create an event item and place it at an event
-location with the access_rules for game completion. Once that's done, the
+location with the `access_rules` for game completion. Once that's done, the
 world's win condition can be as simple as checking for that item.
 
 By convention the victory event is called `"Victory"`. It can be placed at one
@@ -116,29 +119,27 @@ location logic is written from scratch, using regions greatly simplifies the
 definition and allow to somewhat easily implement things like entrance
 randomizer in logic.
 
-Regions have a list exits that are Entrances (see below) to other regions.
+Regions have a list called `exits` which are `Entrance` objects representing transitions to other regions.
 
-There has to be one special region `"Menu"` from which the logic unfolds. AP
-assumes that a player will always be able to return to the `"Menu"` region by
+There has to be one special region "Menu" from which the logic unfolds. AP
+assumes that a player will always be able to return to the "Menu" region by
 resetting the game ("Save and quit").
 
 ### Entrances
 
-An entrance connects to a region, is assigned to region's exits and has rules
+An `Entrance` connects to a region, is assigned to region's exits and has rules
 to define if it and thus the connected region is accessible.
 They can be static (regular logic) or be defined/connected during generation
 (entrance randomizer).
 
-### Access rules
+### Access Rules
 
-An access rule is a function that returns `True` or `False` for a `spot` based
+An access rule is a function that returns `True` or `False` for a `Location` or `Entrance` based
 on the the current `state` (items that can be collected).
 
-`spot` is either Location, Entrance
+### Item Rules
 
-### Item rules
-
-An item rule is a function that returns `True` or `False` for a Location based
+An item rule is a function that returns `True` or `False` for a `Location` based
 on a single item. It can be used to reject placement of an item there.
 
 ### Plando
@@ -162,7 +163,7 @@ If your world needs specific python packages, they can be listed in
 `world/[world_name]/requirements.txt`.
 See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format)
 
-### Relative imports
+### Relative Imports
 
 AP will only import the `__init__.py`. Depending on code size it makes sense to
 use multiple files and use relative imports to access them.
@@ -173,7 +174,7 @@ e.g. `from .Options import mygame_options` from your `__init__.py` will load
 When imported names pile up it may be easier to use `from . import Options`
 and access the variable as `Options.mygame_options`.
 
-### Your item type
+### Your Item Type
 
 Each world uses its own subclass of `BaseClasses.Item`. The constuctor can be
 overridden to attach additional data to it, e.g. "price in shop".
@@ -210,13 +211,13 @@ a locked item this will do Location.event = item.advancement.
 By convention options are defined in `Options.py` and will be used when parsing
 the players' yaml files.
 
-Each option has its own class, inherits from a base option type, has a doc
-string to describe it and a displayname property for display on the website.
+Each option has its own class, inherits from a base option type, has a docstring 
+to describe it and a `displayname` property for display on the website.
 
 The actual name as used in the yaml is defined in a dict[str, Option], that is
 assigned to the world.
 
-Common option types are Toggle, DefaultOnToggle, Choice, Range. For more see
+Common option types are `Toggle`, `DefaultOnToggle`, `Choice`, `Range`. For more see
 `Options.py` in AP's base directory.
 
 #### Toggle, DefaultOnToggle
@@ -304,9 +305,9 @@ know anything about the seed.
 
 A world with `remote_items` set to `False` will locally reward its local items.
 For console games this can remove delay and make script/animation/dialog flow
-more natural.
+more natural. These games typically have been edited to 'bake in' the items.
 
-### A World class skeleton
+### A World Class Skeleton
 
 ```python
 # world/mygame/__init__.py
@@ -476,7 +477,7 @@ def generate_basic(self):
     # manually placed and still in the itempool
 ```
 
-### Setting rules
+### Setting Rules
 
 ```python
 from ..generic.Rules import add_rule, set_rule, forbid_item
@@ -520,7 +521,7 @@ def set_rules(self):
     # location.item_rule = ... is likely to be a bit faster
 ```
 
-### Logic mixin
+### Logic Mixin
 
 While lambdas and events could do pretty much anything, by convention we
 implement more complex logic in Logic mixins, even if there is no need to add
@@ -565,7 +566,7 @@ class MyGameWorld(World):
                  lamda state: state._myworld_has_key(self.world, self.player))
 ```
 
-### Generate output
+### Generate Output
 
 ```python
 from .Mod import generate_mod
