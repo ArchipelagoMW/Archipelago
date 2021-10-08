@@ -15,7 +15,21 @@
             ]
           }
         ]
-      }
+      },
+      {
+        "name": "Archipelago Triggers Usage Guide",
+        "description": "A Guide to setting up and using triggers in your game settings.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/triggers_en.md",
+            "link": "archipelago/triggers/en",
+            "authors": [
+              "alwaysintreble"
+            ]
+          }
+          ]
+        }
     ]
   },
   {
