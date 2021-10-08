@@ -59,21 +59,21 @@ class StrictMinors(Toggle):
 
 class MissileQty(Range):
     displayname = "Missile Quantity"
-    range_start = 1
-    range_end = 9
-    default = 3
+    range_start = 10
+    range_end = 90
+    default = 30
 
 class SuperQty(Range):
     displayname = "Super Quantity"
-    range_start = 1
-    range_end = 9
-    default = 2
+    range_start = 10
+    range_end = 90
+    default = 20
 
 class PowerBombQty(Range):
     displayname = "Power Bomb Quantity"
-    range_start = 1
-    range_end = 9
-    default = 1
+    range_start = 10
+    range_end = 90
+    default = 10
 
 class MinorQty(Range):
     displayname = "Minor Quantity"
@@ -89,11 +89,14 @@ class EnergyQty(Choice):
     option_vanilla = 3
     default = 3
 
-class AreaRandomization(Toggle):
+class AreaRandomization(Choice):
     displayname = "Area Randomization"
-
-class LightAreaRandomization(Toggle):
-    displayname = "Light Area Randomization"
+    option_off = 0
+    option_light = 1
+    option_on = 2
+    alias_false = 0
+    alias_true = 2
+    default = 0
 
 class AreaLayout(Toggle):
     displayname = "Area Layout"
@@ -181,7 +184,6 @@ sm_options: typing.Dict[str, type(Option)] = {
     "minorQty": MinorQty,
     "energyQty": EnergyQty,
     "areaRandomization": AreaRandomization,
-    "lightAreaRandomization": LightAreaRandomization,
     "areaLayout": AreaLayout,
     "doorsColorsRando": DoorsColorsRando,
     "allowGreyDoors": AllowGreyDoors,

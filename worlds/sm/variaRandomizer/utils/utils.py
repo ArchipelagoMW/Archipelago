@@ -306,13 +306,13 @@ def loadRandoPreset(world, player, args):
     args.suitsRestriction = world.suitsRestriction[player].value
     #args.hideItems = world.hideItems[player].value
     args.strictMinors = world.strictMinors[player].value
-    args.noLayout = world.layoutPatches[player].value
+    args.noLayout = not world.layoutPatches[player].value
     args.gravityBehaviour = defaultMultiValues["gravityBehaviour"][world.gravityBehaviour[player].value]
     args.nerfedCharge = world.nerfedCharge[player].value
-    args.area = world.areaRandomization[player].value
+    args.area = world.areaRandomization[player].value != 0
     if args.area:
         args.areaLayoutBase = not world.areaLayout[player].value
-        args.lightArea = world.lightAreaRandomization[player].value
+        args.lightArea = world.areaRandomization[player].value == 1
     #args.escapeRando
     #args.noRemoveEscapeEnemies
     args.doorsColorsRando = world.doorsColorsRando[player].value
@@ -344,9 +344,9 @@ def loadRandoPreset(world, player, args):
     args.startLocation = defaultMultiValues["startLocation"][world.startLocation[player].value]
     #args.progressionDifficulty
     #args.progressionSpeed
-    args.missileQty = world.missileQty[player].value
-    args.superQty = world.superQty[player].value
-    args.powerBombQty = world.powerBombQty[player].value
+    args.missileQty = world.missileQty[player].value / float(10)
+    args.superQty = world.superQty[player].value / float(10)
+    args.powerBombQty = world.powerBombQty[player].value / float(10)
     args.minorQty = world.minorQty[player].value
     args.energyQty = defaultMultiValues["energyQty"][world.energyQty[player].value]
     #args.minimizerN
