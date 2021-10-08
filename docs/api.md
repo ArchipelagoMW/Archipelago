@@ -5,8 +5,10 @@ Archipelago's generation and server. Once a seed is generated, a client or mod i
 required to send and receive items between the game and server.
 
 Client implementation is out of scope of this document. Please refer to an
-existing game that provides a similar API to yours or read the
-[network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
+existing game that provides a similar API to yours.
+Refer to the following documents as well:
+    * [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
+    * [adding games.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/adding%20games.md)
 
 Archipelago will be abbreviated as "AP" from now on.
 
@@ -141,12 +143,6 @@ on the the current `state` (items that can be collected).
 
 An item rule is a function that returns `True` or `False` for a `Location` based
 on a single item. It can be used to reject placement of an item there.
-
-### Plando
-
-Plando allows a player to place certain items in certain locations through their
-player options. While specifics are not covered here, plando is automatically
-possible by providing a complete world with a working create_item method.
 
 
 ## Implementation
