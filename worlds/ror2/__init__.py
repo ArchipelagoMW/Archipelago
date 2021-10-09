@@ -32,8 +32,8 @@ class RiskOfRainWorld(World):
             self.world.push_precollected(self.world.create_item("Dio's Best Friend", self.player))
 
         # if presets are enabled generate junk_pool from the selected preset
+        pool_option = self.world.item_weights[self.player].value
         if self.world.item_pool_presets[self.player].value:
-            pool_option = self.world.item_weights[self.player].value
             # generate chaos weights if the preset is chosen
             if pool_option == 5:
                 junk_pool = {
@@ -104,13 +104,13 @@ class RiskOfRainWorld(World):
         item = RiskOfRainItem(name, True, item_id, self.player)
         return item
 
-
+# generate locations based on player setting
 def create_regions(world, player: int):
     world.regions += [
         create_region(world, player, 'Menu', None, ['Lobby']),
         create_region(world, player, 'Petrichor V',
                       [location for location in base_location_table] +
-                      [f"Item Pickup {i}" for i in range(1, world.start_with_revive[player].value+world.total_locations[player])])
+                      [f"Item Pickup {i}" for i in range(1, 1 + world.total_locations[player])])
     ]
 
     world.get_entrance("Lobby", player).connect(world.get_region("Petrichor V", player))
