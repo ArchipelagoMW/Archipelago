@@ -215,7 +215,8 @@ By convention options are defined in `Options.py` and will be used when parsing
 the players' yaml files.
 
 Each option has its own class, inherits from a base option type, has a docstring 
-to describe it and a `displayname` property for display on the website.
+to describe it and a `displayname` property for display on the website and in
+spoiler logs.
 
 The actual name as used in the yaml is defined in a `dict[str, Option]`, that is
 assigned to the world under `self.options`.
@@ -332,8 +333,9 @@ class MyGameWorld(World):
     """Insert description of the world/game here."""
     game: str = "My Game"  # name of the game/world
     options = mygame_options  # options the player can set
-    topology_present: bool = True  # show path to victory in spoiler
+    topology_present: bool = True  # show path to required location checks in spoiler
     remote_items: bool = False  # True if all items come from the server
+    remote_start_inventory: bool = False  # True if start inventory comes from the server
 
     # ID of first item and location, can be hard-coded but code may be easier
     # to read with this as a propery
@@ -346,6 +348,12 @@ class MyGameWorld(World):
                        id, name in enumerate(mygame_items, start_id)}
     location_name_to_id = {name: id for
                            id, name in enumerate(mygame_locations, start_id)}
+
+    # Items can be grouped using their names to allow easy checking if any item
+    # from that group has been collected. Group names can also be used for !hint
+    item_name_groups = {
+        "weapons": {"sword", "lance"}
+    }
 ```
 
 ### Generation
@@ -358,7 +366,9 @@ The world has to provide the following things for generation
 * locations placed inside those regions
 * a `def create_item(self, item: str) -> MyGameItem` for plando/manual placing
 * a `def generate_output(self, output_directory: str)` that creates the output
-  if there is output to be generated (i.e. `remote_items = False`). When this is
+  if there is output to be generated. If only items are randomized and
+  `remote_items = True` it is possible to have a generic mod and output
+  generation can be skipped. In all other cases this is required. When this is
   called, `self.world.get_locations()` has all locations for all players, with
   properties `item` pointing to the item and `player` identifying the player.
   `self.world.get_filled_locations(self.player)` will filter for this world.
@@ -401,7 +411,7 @@ def generate_early(self):
 ```python
 # we need a way to know if an item provides progress in the game ("key item")
 # this can be part of the items definition, or depend on recipe randomization
-from .Items import is_pregression  # this is just a dummy
+from .Items import is_progression  # this is just a dummy
 
 def create_item(self, item: str):
     # This is called when AP wants to create an item by name (for plando) or
@@ -424,13 +434,6 @@ def create_items(self):
     # e.g. custom win condition like triforce hunt.
     for item in mygame_items:
         self.world.itempool += self.create_item(item)
-
-    # items can be grouped by name to allow easy checking if any item from that
-    # group has been collected. if item groups are used extensively it may be
-    # better to define them in generate_early instead
-    self.item_name_groups = {
-        "weapons": {"sword", "lance"}
-    }
 ```
 
 #### create_regions
