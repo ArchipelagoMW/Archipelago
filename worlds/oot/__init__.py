@@ -586,14 +586,20 @@ class OOTWorld(World):
             fill_restrictive(self.world, self.world.get_all_state(False), any_dungeon_locations,
                              itempools['any_dungeon'], True, True)
 
-        # If anything is overworld-only, enforce them as local and not in the remaining dungeon locations
-        if itempools['overworld'] or self.shuffle_fortresskeys == 'overworld':
-            from worlds.generic.Rules import forbid_items_for_player
-            fortresskeys = {'Small Key (Gerudo Fortress)'} if self.shuffle_fortresskeys == 'overworld' else set()
-            local_overworld_items = set(map(lambda item: item.name, itempools['overworld'])).union(fortresskeys)
-            for location in self.world.get_locations():
-                if location.player != self.player or location in any_dungeon_locations:
-                    forbid_items_for_player(location, local_overworld_items, self.player)
+        # If anything is overworld-only, fill into local non-dungeon locations
+        if self.shuffle_fortresskeys == 'overworld':
+            fortresskeys = filter(lambda item: item.player == self.player and item.type == 'FortressSmallKey', self.world.itempool)
+            itempools['overworld'].extend(fortresskeys)
+        if itempools['overworld']:
+            for item in itempools['overworld']:
+                self.world.itempool.remove(item)
+            itempools['overworld'].sort(key=lambda item: 
+                {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'FortressSmallKey': 1}.get(item.type, 0))
+            non_dungeon_locations = [loc for loc in self.get_locations() if not loc.item and loc not in any_dungeon_locations 
+                and loc.type != 'Shop' and (loc.type != 'Song' or self.shuffle_song_items != 'song')]
+            self.world.random.shuffle(non_dungeon_locations)
+            fill_restrictive(self.world, self.world.get_all_state(False), non_dungeon_locations,
+                             itempools['overworld'], True, True)
 
         # Place songs
         # 5 built-in retries because this section can fail sometimes
