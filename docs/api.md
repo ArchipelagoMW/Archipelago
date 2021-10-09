@@ -371,6 +371,8 @@ The world has to provide the following things for generation
 * additions to the regions list: at least one called "Menu"
 * locations placed inside those regions
 * a `def create_item(self, item: str) -> MyGameItem` for plando/manual placing
+* applying `self.world.precollected_items` for plando/start inventory
+  if not using a `remote_start_inventory`
 * a `def generate_output(self, output_directory: str)` that creates the output
   if there is output to be generated. If only items are randomized and
   `remote_items = True` it is possible to have a generic mod and output
