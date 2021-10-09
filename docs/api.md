@@ -337,17 +337,23 @@ class MyGameWorld(World):
     remote_items: bool = False  # True if all items come from the server
     remote_start_inventory: bool = False  # True if start inventory comes from the server
 
-    # ID of first item and location, can be hard-coded but code may be easier
-    # to read with this as a propery
-    start_id = 1234
+    # data_version is used to signal that items, locations or their names
+    # changed. Set this to 0 during development so other games' clients do not
+    # cache any texts, then increase by 1 for each release that makes changes.
+    data_version = 0
+
+    # ID of first item and location, could be hard-coded but code may be easier
+    # to read with this as a propery.
+    base_id = 1234
+    # Instead of dynamic numbering, IDs could be part of data.
 
     # The following two dicts are required for the generation to know which
     # items exist. They could be generated from json or something else. They can
     # include events, but don't have to since events will be placed manually.
     item_name_to_id = {name: id for
-                       id, name in enumerate(mygame_items, start_id)}
+                       id, name in enumerate(mygame_items, base_id)}
     location_name_to_id = {name: id for
-                           id, name in enumerate(mygame_locations, start_id)}
+                           id, name in enumerate(mygame_locations, base_id)}
 
     # Items can be grouped using their names to allow easy checking if any item
     # from that group has been collected. Group names can also be used for !hint
@@ -598,6 +604,9 @@ def generate_output(self, output_directory: str):
         "items": {location.name: location.item.name
                   if location.item.player == self.player else "Remote"
                   for location in self.world.get_filled_locations(self.player)},
+        # store start_inventory from player's .yaml
+        "starter_items": [item.name for item in self.world.precollected_items
+                          for item.player == self.player],
         "final_boss_hp": self.final_boss_hp,
         # store option name "easy", "normal" or "hard" for difficuly
         "difficulty": self.world.difficulty[self.player].current_key,
