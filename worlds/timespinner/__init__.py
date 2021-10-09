@@ -85,7 +85,7 @@ def create_item(name: str, player: int) -> Item:
 
 
 def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> Set[str]:
-    excluded_items: Set[str] = []
+    excluded_items: Set[str] = set()
 
     if is_option_enabled(world, player, "StartWithJewelryBox"):
         excluded_items.add('Jewelry Box')
