@@ -10,7 +10,7 @@ class LocationData(NamedTuple):
     code: Optional[int]
     rule: Callable = lambda state: True
 
-def get_locations(world: Optional[MultiWorld], player: Optional[int]):
+def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[LocationData, ...]:
     location_table: Tuple[LocationData, ...] = (
         # PresentItemLocations
         LocationData('Tutorial', 'Yo Momma 1',  1337000),

@@ -84,25 +84,25 @@ def create_item(name: str, player: int) -> Item:
     return Item(name, data.progression, data.code, player)
 
 
-def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> List[str]:
-    excluded_items: List[str] = []
+def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> Set[str]:
+    excluded_items: Set[str] = []
 
     if is_option_enabled(world, player, "StartWithJewelryBox"):
-        excluded_items.append('Jewelry Box')
+        excluded_items.add('Jewelry Box')
     if is_option_enabled(world, player, "StartWithMeyef"):
-        excluded_items.append('Meyef')
+        excluded_items.add('Meyef')
     if is_option_enabled(world, player, "QuickSeed"):
-        excluded_items.append('Talaria Attachment')
+        excluded_items.add('Talaria Attachment')
 
     return excluded_items
 
 
-def assign_starter_items(world: MultiWorld, player: int, excluded_items: List[str], locked_locations: List[str]):
+def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
     melee_weapon = world.random.choice(starter_melee_weapons)
     spell = world.random.choice(starter_spells)
 
-    excluded_items.append(melee_weapon)
-    excluded_items.append(spell)
+    excluded_items.add(melee_weapon)
+    excluded_items.add(spell)
 
     melee_weapon_item = create_item(melee_weapon, player)
     spell_item = create_item(spell, player)
@@ -114,7 +114,7 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: List[st
     locked_locations.append('Yo Momma 2')
 
 
-def get_item_pool(world: MultiWorld, player: int, excluded_items: List[str]) -> List[Item]:
+def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
     pool: List[Item] = []
 
     for name, data in item_table.items():
@@ -132,12 +132,11 @@ def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locat
         pool.append(item)
 
 
-def place_first_progression_item(world: MultiWorld, player: int, excluded_items: List[str],
-                                 locked_locations: List[str]):
+def place_first_progression_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
     progression_item = world.random.choice(starter_progression_items)
     location = world.random.choice(starter_progression_locations)
 
-    excluded_items.append(progression_item)
+    excluded_items.add(progression_item)
     locked_locations.append(location)
 
     item = create_item(progression_item, player)
