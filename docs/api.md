@@ -15,7 +15,7 @@ Archipelago will be abbreviated as "AP" from now on.
 
 ## Language
 
-AP world are written in python3.
+AP worlds are written in python3.
 Clients that connect to the server to sync items can be in any language that
 allows using WebSockets.
 
@@ -77,8 +77,8 @@ Users can set those in their `host.yaml` file.
 Locations are places where items can be located in your game. This may be chests
 or boss drops for RPG-like games but could also be progress in a research tree.
 
-Each location has a `name` and an `id` (a.k.a. "code" or "address"), is placed in a
-Region and has access rules.
+Each location has a `name` and an `id` (a.k.a. "code" or "address"), is placed
+in a Region and has access rules.
 The name needs to be unique in each game, the ID needs to be unique across all
 games and is best in the same range as the item IDs.
 
@@ -122,7 +122,8 @@ location logic is written from scratch, using regions greatly simplifies the
 definition and allow to somewhat easily implement things like entrance
 randomizer in logic.
 
-Regions have a list called `exits` which are `Entrance` objects representing transitions to other regions.
+Regions have a list called `exits` which are `Entrance` objects representing
+transitions to other regions.
 
 There has to be one special region "Menu" from which the logic unfolds. AP
 assumes that a player will always be able to return to the "Menu" region by
@@ -137,8 +138,8 @@ They can be static (regular logic) or be defined/connected during generation
 
 ### Access Rules
 
-An access rule is a function that returns `True` or `False` for a `Location` or `Entrance` based
-on the the current `state` (items that can be collected).
+An access rule is a function that returns `True` or `False` for a `Location` or
+`Entrance` based on the the current `state` (items that can be collected).
 
 ### Item Rules
 
@@ -214,8 +215,8 @@ to describe it and a `displayname` property for display on the website.
 The actual name as used in the yaml is defined in a `dict[str, Option]`, that is
 assigned to the world under `self.options`.
 
-Common option types are `Toggle`, `DefaultOnToggle`, `Choice`, `Range`. For more see
-`Options.py` in AP's base directory.
+Common option types are `Toggle`, `DefaultOnToggle`, `Choice`, `Range`.
+For more see `Options.py` in AP's base directory.
 
 #### Toggle, DefaultOnToggle
 
@@ -418,8 +419,14 @@ def create_items(self):
     # e.g. custom win condition like triforce hunt.
     for item in mygame_items:
         self.world.itempool += self.create_item(item)
+
+    # items can be grouped by name to allow easy checking if any item from that
+    # group has been collected. if item groups are used extensively it may be
+    # better to define them in generate_early instead
+    self.item_name_groups = {
+        "weapons": {"sword", "lance"}
+    }
 ```
-**FIXME**: item groups? is that a generic thing?
 
 #### create_regions
 
@@ -500,10 +507,12 @@ def set_rules(self):
     # require two of an item
     set_rule(self.world.get_location("Chest3", self.player),
              lambda state: state.has("Key", self.player, 2))
+    # require one item from an item group
+    add_rule(self.world.get_location("Chest3", self.player),
+             lambda state: state.has_group("weapons", self.player))
+    # state also has .item_count() for items, .has_any() and.has_all() for sets
+    # and .count_group() for groups
     # set_rule is likely to be a bit faster than add_rule
-    # state also has .item_count() for items and .has_any(), .has_all() for sets
-
-    # FIXME: has_group, count_group ?
 
     # disallow placing a specific local item at a specific location
     forbid_item(self.world.get_location("Chest4", self.player), "Sword")
