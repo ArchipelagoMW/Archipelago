@@ -15,9 +15,9 @@ Archipelago will be abbreviated as "AP" from now on.
 
 ## Language
 
-AP uses python3 for generation, server and web host. The seed generation will be
-written in python3, the client that connects to the server to sync items can be
-in any language that allows using websockets.
+AP world are written in python3.
+Clients that connect to the server to sync items can be in any language that
+allows using WebSockets.
 
 
 ## Coding style
@@ -89,10 +89,11 @@ Special locations with ID `None` can hold events.
 Items are all things that can "drop" for your game. This may be RPG items like
 weapons, could as well be technologies you normally research in a research tree.
 
-Each item has a name and an ID (also "code"), an `advancement` flag and will
-be assigned to a location when rolling a seed. Advancement items will be
-assigned to locations with higher priority and moved around to meet defined
-rules and `progression_balancing`.
+Each item has a `name`, an `id` (can be known as "code"), and an `advancement`
+flag. An advancement item is an item which a player may require to advance in
+their world. Advancement items will be assigned to locations with higher
+priority and moved around to meet defined rules and accomplish progression
+balancing.
 
 Special items with ID `None` can mark events (read below).
 
@@ -210,8 +211,8 @@ the players' yaml files.
 Each option has its own class, inherits from a base option type, has a docstring 
 to describe it and a `displayname` property for display on the website.
 
-The actual name as used in the yaml is defined in a dict[str, Option], that is
-assigned to the world.
+The actual name as used in the yaml is defined in a `dict[str, Option]`, that is
+assigned to the world under `self.options`.
 
 Common option types are `Toggle`, `DefaultOnToggle`, `Choice`, `Range`. For more see
 `Options.py` in AP's base directory.
@@ -520,12 +521,14 @@ def set_rules(self):
 ### Logic Mixin
 
 While lambdas and events could do pretty much anything, by convention we
-implement more complex logic in Logic mixins, even if there is no need to add
+implement more complex logic in logic mixins, even if there is no need to add
 properties to the `BaseClasses.CollectionState` state object.
 
-Wenn importing a file that defines a class that inherits from
+When importing a file that defines a class that inherits from
 `..AutoWorld.LogicMixin` the state object's class is automatically extended by
-the mixin's members. By convention those are prefixed with `_world_`.
+the mixin's members. These members should be prefixed with underscore following
+the name of the implementing world. This is due to sharing a namespace with all
+other logic mixins.
 
 Typical uses are defining methods that are used instead of `state.has`
 in lambdas, e.g.`state._mygame_has(custom, world, player)` or recurring checks
