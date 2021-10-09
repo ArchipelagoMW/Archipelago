@@ -31,8 +31,8 @@ another option also gets selected or placing an item in a certain location.
     start_inventory: 
       Rupees (300): 2
   ```
+This format must be:
 
-    - This format must be:
   ```yaml
   root option:
     option to change:
@@ -53,7 +53,8 @@ The above examples all together will end up looking like this:
   ```
 
 For this example if the generator happens to roll 15 shuffled in shop item slots for your game you'll be granted 600 rupees at the beginning.
-These can also be used to change other options.\
+These can also be used to change other options.
+
 For example:
   ```yaml
   triggers:
