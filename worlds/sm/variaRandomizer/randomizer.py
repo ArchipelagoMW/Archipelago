@@ -691,7 +691,7 @@ class VariaRandomizer:
             progItemLocs = None
         if stuck == True:
             dumpErrorMsg(args.output, self.randoExec.errorMsg)
-            print("Can't generate " + fileName + " with the given parameters: {}".format(self.randoExec.errorMsg))
+            print("Can't generate " + self.fileName + " with the given parameters: {}".format(self.randoExec.errorMsg))
             # in vcr mode we still want the seed to be generated to analyze it
             if args.vcr == False:
                 sys.exit(-1)
@@ -848,7 +848,7 @@ class VariaRandomizer:
         except Exception as e:
             import traceback
             traceback.print_exc(file=sys.stdout)
-            msg = "Error patching {}: ({}: {})".format(outFileName, type(e).__name__, e)
+            msg = "Error patching {}: ({}: {})".format(outputFilename, type(e).__name__, e)
             dumpErrorMsg(args.output, msg)
             sys.exit(-1)
 

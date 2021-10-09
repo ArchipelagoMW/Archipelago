@@ -82,6 +82,9 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
 #    Plasma Beam: 1
 #    Varia Suit: 1
 #    Gravity Suit: 1
+  start_inventory_removes_from_pool:
+    on: 0
+    off: 1      
   preset: # choose one of the preset or specify "custom" to use customPreset option
     newbie: 0
     casual: 0
@@ -94,8 +97,8 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
     SMRAT2021: 0
     solution: 0
     custom: 0   # see https://randommetroidsolver.pythonanywhere.com/presets for detailed info on each preset settings
-  startLocation:
-    Cere: 0
+  start_location:
+    Ceres: 0
     Landing_Site: 1
     Gauntlet_Top: 0
     Green_Brinstar_Elevator: 0
@@ -110,7 +113,7 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
     Aqueduct: 0
     Red_Brinstar_Elevator: 0
     Golden_Four: 0
-  maxDifficulty:
+  max_difficulty:
     baby: 0
     easy: 0
     medium: 0
@@ -123,66 +126,66 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
     samus: 0
     impossibru: 0
     infinity: 0
-  suitsRestriction:
+  suits_restriction:
     on: 1
     off: 0  
-  strictMinors:
+  strict_minors:
     on: 0
     off: 1
-  missileQty: 30    # a range between 10 and 90 that is divided by 10 as a float
-  superQty: 20      # a range between 10 and 90 that is divided by 10 as a float
-  powerBombQty: 10  # a range between 10 and 90 that is divided by 10 as a float
-  minorQty: 100     # a range between 7 (minimum to beat the game) and 100
-  energyQty:
+  missile_qty: 30    # a range between 10 and 90 that is divided by 10 as a float
+  super_qty: 20      # a range between 10 and 90 that is divided by 10 as a float
+  power_bomb_qty: 10  # a range between 10 and 90 that is divided by 10 as a float
+  minor_qty: 100     # a range between 7 (minimum to beat the game) and 100
+  energy_qty:
     ultra_sparse: 0
     sparse: 0
     medium: 0
     vanilla: 1
-  areaRandomization:
+  area_randomization:
     on: 0
     light: 0
     off: 1
-  areaLayout:
+  area_layout:
     on: 0
     off: 1
-  doorsColorsRando:
+  doors_color_rando:
     on: 0
     off: 1
-  allowGreyDoors:
+  allow_grey_doors:
     on: 0
     off: 1
-  bossRandomization:
+  boss_randomization:
     on: 0
     off: 1
-  funCombat:
+  fun_combat:
     on: 0
     off: 1
-  funMovement:
+  fun_movement:
     on: 0
     off: 1
-  funSuits:
+  fun_suits:
     on: 0
     off: 1
-  layoutPatches:
+  layout_patches:
     on: 1
     off: 0
-  variaTweaks:
+  varia_tweaks:
     on: 0
     off: 1
-  nerfedCharge:
+  nerfed_charge:
     on: 0
     off: 1
-  gravityBehaviour:
+  gravity_behaviour:
     Vanilla: 0
     Balanced: 1
     Progressive: 0
   elevators_doors_speed:
     on: 1
     off: 0
-  spinjumprestart:
+  spin_jump_restart:
     on: 0
     off: 1
-  Infinite_Space_Jump:
+  infinite_space_jump:
     on: 0
     off: 1
   refill_before_save:
@@ -194,28 +197,28 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
   animals:
     on: 0
     off: 1
-  No_Music:
+  no_music:
     on: 0
     off: 1
   random_music:
     on: 0
     off: 1
-  #itemsounds: always forced on due to a conflict in patching
-  #majorsSplit: not implemented always "Full"
-  #scavNumLocs: not implemented always off
-  #scavRandomized: not implemented always off
-  #scavEscape: not implemented always off
-  #progressionSpeed: not implemented always random
-  #progressionDifficulty: not implemented always random
-  #morphPlacement: not implemented yet always random
-  #hideItems: not implemented always off
-  #minimizer: not implemented always off
-  #minimizerQty: not implemented always off
-  #minimizerTourian: not implemented always off
-  #escapeRando: not implemented always off
-  #removeEscapeEnemies: not implemented always off
-  #rando_speed: not implemented always off
-  customPreset:  # see https://randommetroidsolver.pythonanywhere.com/presets for detailed info on each preset settings
+  #item_sounds: always forced on due to a conflict in patching
+  #majors_split: not supported always "Full"
+  #scav_num_locs: not supported always off
+  #scav_randomized: not supported always off
+  #scav_escape: not supported always off
+  #progression_speed: not supported always random
+  #progression_difficulty: not supported always random
+  #morph_placement: not supported yet always random
+  #hide_items: not supported always off
+  #minimizer: not supported always off
+  #minimizer_qty: not supported always off
+  #minimizer_tourian: not supported always off
+  #escape_rando: not supported always off
+  #remove_escape_enemies: not supported always off
+  #rando_speed: not supported always off
+  custom_preset:  # see https://randommetroidsolver.pythonanywhere.com/presets for detailed info on each preset settings
     Knows: # each skill (know) has a pair [can use, perceived difficulty 1 (easy) to 100 (mania)]
       WallJump: [False, 0]
       ShineSpark: [False, 0]

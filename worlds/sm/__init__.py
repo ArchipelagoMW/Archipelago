@@ -7,7 +7,6 @@ from typing import Set
 logger = logging.getLogger("Super Metroid")
 
 from .Locations import lookup_name_to_id as locations_lookup_name_to_id
-from .Items import lookup_id_to_name as items_lookup_id_to_name
 from .Items import lookup_name_to_id as items_lookup_name_to_id
 from .Regions import create_regions
 from .Rules import set_rules, add_entrance_rule
@@ -17,10 +16,8 @@ from .Rom import get_base_rom_path
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
 from ..AutoWorld import World
 import Patch
-import Utils
 
 from logic.smboolmanager import SMBoolManager
-from rom.rompatcher import RomPatcher
 from graph.vanilla.graph_locations import locationsDict
 from graph.graph_utils import getAccessPoint
 from rando.ItemLocContainer import ItemLocation
@@ -93,6 +90,10 @@ class SMWorld(World):
     def generate_basic(self):
         itemPool = self.variaRando.container.itemPool
         self.startItems = [variaItem for item in self.world.precollected_items for variaItem in ItemManager.Items.values() if item.player == self.player and variaItem.Name == item.name]
+        if self.world.start_inventory_removes_from_pool[self.player]:
+            for item in self.startItems:
+                if (item in itemPool):
+                    itemPool.remove(item)
 
         missingPool = 105 - len(itemPool) + 1
         for i in range(1, missingPool):

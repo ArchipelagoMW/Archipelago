@@ -301,39 +301,39 @@ def loadRandoPreset(world, player, args):
     presetValues = getPresetValues()
 
     args.animals = world.animals[player].value
-    args.noVariaTweaks = not world.variaTweaks[player].value
-    args.maxDifficulty = diffs[world.maxDifficulty[player].value]
-    args.suitsRestriction = world.suitsRestriction[player].value
-    #args.hideItems = world.hideItems[player].value
-    args.strictMinors = world.strictMinors[player].value
-    args.noLayout = not world.layoutPatches[player].value
-    args.gravityBehaviour = defaultMultiValues["gravityBehaviour"][world.gravityBehaviour[player].value]
-    args.nerfedCharge = world.nerfedCharge[player].value
-    args.area = world.areaRandomization[player].value != 0
+    args.noVariaTweaks = not world.varia_tweaks[player].value
+    args.maxDifficulty = diffs[world.max_difficulty[player].value]
+    args.suitsRestriction = world.suits_restriction[player].value
+    #args.hideItems = world.hide_items[player].value
+    args.strictMinors = world.strict_minors[player].value
+    args.noLayout = not world.layout_patches[player].value
+    args.gravityBehaviour = defaultMultiValues["gravityBehaviour"][world.gravity_behaviour[player].value]
+    args.nerfedCharge = world.nerfed_charge[player].value
+    args.area = world.area_randomization[player].value != 0
     if args.area:
-        args.areaLayoutBase = not world.areaLayout[player].value
-        args.lightArea = world.areaRandomization[player].value == 1
+        args.areaLayoutBase = not world.area_layout[player].value
+        args.lightArea = world.area_randomization[player].value == 1
     #args.escapeRando
     #args.noRemoveEscapeEnemies
-    args.doorsColorsRando = world.doorsColorsRando[player].value
-    args.allowGreyDoors = world.allowGreyDoors[player].value
-    args.bosses = world.bossRandomization[player].value
-    if world.funCombat[player].value:
+    args.doorsColorsRando = world.doors_colors_rando[player].value
+    args.allowGreyDoors = world.allow_grey_doors[player].value
+    args.bosses = world.boss_randomization[player].value
+    if world.fun_combat[player].value:
         args.superFun.append("Combat")
-    if world.funMovement[player].value:
+    if world.fun_movement[player].value:
         args.superFun.append("Movement")
-    if world.funSuits[player].value:
+    if world.fun_suits[player].value:
         args.superFun.append("Suits") 
 
-    ipsPatches = ["spinjumprestart", "rando_speed", "elevators_doors_speed", "refill_before_save"]
-    for patch in ipsPatches:
-        if hasattr(world, patch) and getattr(world, patch)[player].value:
-            args.patches.append(patch + '.ips')
+    ipsPatches = {"spin_jump_restart":"spinjumprestart", "rando_speed":"rando_speed", "elevators_doors_speed":"elevators_doors_speed", "refill_before_save":"refill_before_save"}
+    for settingName, patchName in ipsPatches.items():
+        if hasattr(world, settingName) and getattr(world, settingName)[player].value:
+            args.patches.append(patchName + '.ips')
 
-    patches = ["No_Music", "Infinite_Space_Jump"]
-    for patch in patches:
-        if hasattr(world, patch) and getattr(world, patch)[player].value:
-            args.patches.append(patch)
+    patches = {"no_music":"No_Music", "infinite_space_jump":"Infinite_Space_Jump"}
+    for settingName, patchName in patches.items():
+        if hasattr(world, settingName) and getattr(world, settingName)[player].value:
+            args.patches.append(patchName)
              
     args.hud = world.hud[player].value
     #args.morphPlacement
@@ -341,14 +341,14 @@ def loadRandoPreset(world, player, args):
     #args.scavNumLocs
     #args.scavRandomized
     #args.scavEscape
-    args.startLocation = defaultMultiValues["startLocation"][world.startLocation[player].value]
+    args.startLocation = defaultMultiValues["startLocation"][world.start_location[player].value]
     #args.progressionDifficulty
     #args.progressionSpeed
-    args.missileQty = world.missileQty[player].value / float(10)
-    args.superQty = world.superQty[player].value / float(10)
-    args.powerBombQty = world.powerBombQty[player].value / float(10)
-    args.minorQty = world.minorQty[player].value
-    args.energyQty = defaultMultiValues["energyQty"][world.energyQty[player].value]
+    args.missileQty = world.missile_qty[player].value / float(10)
+    args.superQty = world.super_qty[player].value / float(10)
+    args.powerBombQty = world.power_bomb_qty[player].value / float(10)
+    args.minorQty = world.minor_qty[player].value
+    args.energyQty = defaultMultiValues["energyQty"][world.energy_qty[player].value]
     #args.minimizerN
     #args.minimizerTourian
 
