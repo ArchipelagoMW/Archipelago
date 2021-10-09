@@ -26,41 +26,42 @@ results you would need multiple triggers for this.
 - `options` is where you define what will happen when this is detected. This can be something as simple as ensuring 
 another option also gets selected or placing an item in a certain location. 
     - Example: 
-```yaml
-A Link to the Past:
-  start_inventory: 
-    Rupees (300): 2
-```
+  ```yaml
+  A Link to the Past:
+    start_inventory: 
+      Rupees (300): 2
+  ```
+
     - This format must be:
-```yaml
- root option:
-  option to change:
-    desired result
-```
+  ```yaml
+  root option:
+    option to change:
+      desired result
+  ```
 
 ### Example
 The above examples all together will end up looking like this:
-```yaml
-triggers:
-  - option_category: A Link to the Past
-    option_name: shop_item_slots
-    option_result: 15
-    options:
-      A Link to the Past:
-        start_inventory:
-          Rupees(300): 2
-```
+  ```yaml
+  triggers:
+    - option_category: A Link to the Past
+      option_name: shop_item_slots
+      option_result: 15
+      options:
+        A Link to the Past:
+          start_inventory:
+            Rupees(300): 2
+  ```
 
 For this example if the generator happens to roll 15 shuffled in shop item slots for your game you'll be granted 600 rupees at the beginning.
 These can also be used to change other options.\
 For example:
-```yaml
-triggers:
-  - option_category: Timespinner
-    option_name: SpecificKeycards
-    option_result: true
-    options:
-      Timespinner:
-        Inverted: true
-```
+  ```yaml
+  triggers:
+    - option_category: Timespinner
+      option_name: SpecificKeycards
+      option_result: true
+      options:
+        Timespinner:
+          Inverted: true
+  ```
 In this example if your world happens to roll SpecificKeycards then your game will also start in inverted.
