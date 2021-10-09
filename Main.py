@@ -30,7 +30,7 @@ def main(args, seed=None):
     world = MultiWorld(args.multi)
 
     logger = logging.getLogger()
-    world.set_seed(secure=args.race, name=str(args.outputname if args.outputname else world.seed))
+    world.set_seed(seed, args.race, str(args.outputname if args.outputname else world.seed))
 
     world.shuffle = args.shuffle.copy()
     world.logic = args.logic.copy()
