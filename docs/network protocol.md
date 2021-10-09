@@ -53,7 +53,7 @@ Sent to clients when they connect to an Archipelago server.
 | version | NetworkVersion | Object denoting the version of Archipelago which the server is running. See [NetworkVersion](#NetworkVersion) for more details. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. Example: `WebHost` |
 | password | bool | Denoted whether a password is required to join this room.|
-| permissions | dict\[str, Permission\[int\]\] | Mapping of permission name to Permission, known names: "forfeit" and "remaining". |
+| permissions | dict\[str, Permission\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "forfeit" and "remaining". |
 | hint_cost | int | The amount of points it costs to receive a hint from the server. |
 | location_check_points | int | The amount of hint points you receive per item/location check completed. ||
 | players | list\[NetworkPlayer\] | Sent only if the client is properly authenticated (see [Archipelago Connection Handshake](#Archipelago-Connection-Handshake)). Information on the players currently connected to the server. See [NetworkPlayer](#NetworkPlayer) for more details. |
