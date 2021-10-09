@@ -151,9 +151,14 @@ on a single item. It can be used to reject placement of an item there.
 
 ### Your World
 
-Your world lives in `world/[world_name]/__init__.py` and is a class that
-inherits from `..AutoWorld.World`. The generation progress will automatically
-pick it up.
+All code for your world implementation should be placed in a python package in
+the `/worlds` directory. The starting point for the package is `__init.py__`.
+Conventionally, your world class is placed in that file.
+
+World classes must inherit from the `World` class in `/worlds/AutoWorld.py`,
+which can be imported as `..AutoWorld.World` from your package.
+
+AP will pick up your world automatically due to the `AutoWorld` implementation.
 
 ### Requirements
 
