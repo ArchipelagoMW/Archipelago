@@ -180,6 +180,9 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static/static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+@app.route('/discord')
+def discord():
+    return redirect("https://discord.gg/archipelago")
 
 from WebHostLib.customserver import run_server_process
 from . import tracker, upload, landing, check, generate, downloads, api  # to trigger app routing picking up on it
