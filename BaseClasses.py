@@ -27,6 +27,7 @@ class MultiWorld():
     plando_connections: List
     worlds: Dict[int, Any]
     is_race: bool = False
+    precollected_items: Dict[int, List[Item]]
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -46,7 +47,7 @@ class MultiWorld():
         self.itempool = []
         self.seed = None
         self.seed_name: str = "Unavailable"
-        self.precollected_items = []
+        self.precollected_items = {player: [] for player in self.player_ids}
         self.state = CollectionState(self)
         self._cached_entrances = None
         self._cached_locations = None
@@ -266,7 +267,7 @@ class MultiWorld():
 
     def push_precollected(self, item: Item):
         item.world = self
-        self.precollected_items.append(item)
+        self.precollected_items[item.player].append(item)
         self.state.collect(item, True)
 
     def push_item(self, location: Location, item: Item, collect: bool = True):
@@ -473,8 +474,9 @@ class CollectionState(object):
         self.path = {}
         self.locations_checked = set()
         self.stale = {player: True for player in range(1, parent.players + 1)}
-        for item in parent.precollected_items:
-            self.collect(item, True)
+        for items in parent.precollected_items.values():
+            for item in items:
+                self.collect(item, True)
 
     def update_reachable_regions(self, player: int):
         from worlds.alttp.EntranceShuffle import indirect_connections

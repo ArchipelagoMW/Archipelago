@@ -1,4 +1,4 @@
-from itertools import zip_longest
+from itertools import zip_longest, chain
 import logging
 import os
 import time
@@ -159,16 +159,15 @@ def main(args, seed=None):
 
     output = tempfile.TemporaryDirectory()
     with output as temp_dir:
-        with concurrent.futures.ThreadPoolExecutor() as pool:
+        with concurrent.futures.ThreadPoolExecutor(world.players+2) as pool:
             check_accessibility_task = pool.submit(world.fulfills_accessibility)
 
-            output_file_futures = []
-
+            output_file_futures = [pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir)]
             for player in world.player_ids:
                 # skip starting a thread for methods that say "pass".
                 if AutoWorld.World.generate_output.__code__ is not world.worlds[player].generate_output.__code__:
                     output_file_futures.append(pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
-            output_file_futures.append(pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir))
+
 
             def get_entrance_to_region(region: Region):
                 for entrance in region.entrances:
@@ -246,9 +245,8 @@ def main(args, seed=None):
                 for slot in world.player_ids:
                     client_versions[slot] = world.worlds[slot].get_required_client_version()
                     games[slot] = world.game[slot]
-                precollected_items = {player: [] for player in range(1, world.players + 1)}
-                for item in world.precollected_items:
-                    precollected_items[item.player].append(item.code)
+                precollected_items = {player: [item.code for item in world_precollected]
+                                      for player, world_precollected in world.precollected_items.items()}
                 precollected_hints = {player: set() for player in range(1, world.players + 1)}
                 # for now special case Factorio tech_tree_information
                 sending_visible_players = set()
@@ -397,7 +395,7 @@ def create_playthrough(world):
 
     # second phase, sphere 0
     removed_precollected = []
-    for item in (i for i in world.precollected_items if i.advancement):
+    for item in (i for i in chain(world.precollected_items.values()) if i.advancement):
         logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
         world.precollected_items.remove(item)
         world.state.remove(item)
@@ -463,7 +461,8 @@ def create_playthrough(world):
                         get_path(state, world.get_region('Inverted Big Bomb Shop', player))
 
     # we can finally output our playthrough
-    world.spoiler.playthrough = {"0": sorted([str(item) for item in world.precollected_items if item.advancement])}
+    world.spoiler.playthrough = {"0": sorted([str(item) for item in chain(world.precollected_items.values())
+                                              if item.advancement])}
 
     for i, sphere in enumerate(collection_spheres):
         world.spoiler.playthrough[str(i + 1)] = {str(location): str(location.item) for location in sorted(sphere)}
