@@ -405,7 +405,7 @@ def create_playthrough(world):
     removed_precollected = []
     for item in (i for i in chain.from_iterable(world.precollected_items.values()) if i.advancement):
         logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
-        world.precollected_items.remove(item)
+        world.precollected_items[item.player].remove(item)
         world.state.remove(item)
         if not world.can_beat_game():
             world.push_precollected(item)
