@@ -441,11 +441,11 @@ def create_items(self):
     # If there are two of the same item, the item has to be twice in the pool.
     # Which items are added to the pool may depend on player settings,
     # e.g. custom win condition like triforce hunt.
-
     # Having an item in the start inventory won't remove it from the pool.
     # If an item can't have duplicates it has to be excluded manually.
-    exclude = [item for item in self.world.precollected_items
-               if item.player == self.player]  # list of items to exclude
+
+    # List of items to exclude, as a copy since it will be destroyed below
+    exclude = [item for item in self.world.precollected_items[self.player]]
 
     for item in map(self.create_item, mygame_items):
         if item in exclude:
@@ -623,8 +623,8 @@ def generate_output(self, output_directory: str):
                   if location.item.player == self.player else "Remote"
                   for location in self.world.get_filled_locations(self.player)},
         # store start_inventory from player's .yaml
-        "starter_items": [item.name for item in self.world.precollected_items
-                          if item.player == self.player],
+        "starter_items": [item.name for item
+                          in self.world.precollected_items[self.player]],
         "final_boss_hp": self.final_boss_hp,
         # store option name "easy", "normal" or "hard" for difficuly
         "difficulty": self.world.difficulty[self.player].current_key,
