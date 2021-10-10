@@ -144,7 +144,9 @@ def create_item_with_correct_settings(world: MultiWorld, player: int, name: str)
     data = item_table[name]
 
     item = Item(name, data.progression, data.code, player)
-    item.never_exclude = data.never_exclude
+
+    if world.exclude_locations[player]: # Doubles performance to not set item exclusion when its not required
+        item.never_exclude = data.never_exclude
 
     if not item.advancement:
         return item
