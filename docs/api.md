@@ -202,12 +202,13 @@ from BasClasses import Location
 
 class MyGameLocation(Location):
     game: str = "My Game"
+
+    # override constructor to automatically mark event locations as such
+    def __init__(self, player: int, name = '', code = None, parent = None):
+        super(MyGameLocation, self).__init__(player, name, code, parent)
+        self.event = code is None
 ```
 in your `__init__.py` or your `Locations.py`.
-
-**FIXME**: Is setting Location.event actually required? Minecraft and OoT
-do that. Factorio does not. What's the goal of doing that? When factorio places
-a locked item this will do Location.event = item.advancement.
 
 ### Options
 
