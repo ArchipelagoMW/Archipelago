@@ -14,8 +14,9 @@
             <h1>Upload Config{% if race %} (Race Mode){% endif %}</h1>
             <p>
                 This page allows you to generate a game by uploading a yaml file or a zip file containing yaml files.
-                If you do not have a config (yaml) file yet, you may create one on the
-                <a href="/player-settings">Player Settings</a> page.
+                If you do not have a config (yaml) file yet, you may create one on the game's settings page,
+                which you can find via the
+                <a href="{{ url_for("games") }}">Game List</a>.
             </p>
             <p>
                 {% if race -%}
