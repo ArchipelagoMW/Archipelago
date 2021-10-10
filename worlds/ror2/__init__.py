@@ -110,7 +110,7 @@ def create_regions(world, player: int):
         create_region(world, player, 'Menu', None, ['Lobby']),
         create_region(world, player, 'Petrichor V',
                       [location for location in base_location_table] +
-                      [f"Item Pickup {i}" for i in range(1, 1 + world.total_locations[player])])
+                      [f"ItemPickup{i}" for i in range(1, 1 + world.total_locations[player])])
     ]
 
     world.get_entrance("Lobby", player).connect(world.get_region("Petrichor V", player))
