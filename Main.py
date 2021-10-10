@@ -270,7 +270,7 @@ def main(args, seed=None):
                         # item code None should be event, location.address should then also be None
                         assert location.item.code is not None
                         locations_data[location.player][location.address] = location.item.code, location.item.player
-                        if location.player in sending_visible_players and location.item.player != location.player:
+                        if location.player in sending_visible_players:
                             precollect_hint(location)
                         elif location.name in world.start_location_hints[location.player]:
                             precollect_hint(location)
