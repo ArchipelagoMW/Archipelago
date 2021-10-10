@@ -395,7 +395,7 @@ def create_playthrough(world):
 
     # second phase, sphere 0
     removed_precollected = []
-    for item in (i for i in chain(world.precollected_items.values()) if i.advancement):
+    for item in (i for i in chain.from_iterable(world.precollected_items.values()) if i.advancement):
         logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
         world.precollected_items.remove(item)
         world.state.remove(item)
@@ -461,7 +461,8 @@ def create_playthrough(world):
                         get_path(state, world.get_region('Inverted Big Bomb Shop', player))
 
     # we can finally output our playthrough
-    world.spoiler.playthrough = {"0": sorted([str(item) for item in chain(world.precollected_items.values())
+    world.spoiler.playthrough = {"0": sorted([str(item) for item in
+                                              chain.from_iterable(world.precollected_items.values())
                                               if item.advancement])}
 
     for i, sphere in enumerate(collection_spheres):
