@@ -66,6 +66,9 @@ class Factorio(World):
         if map_basic_settings.get("seed", None) is None:  # allow seed 0
             map_basic_settings["seed"] = self.world.slot_seeds[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
 
+        self.sending_visible = self.world.tech_tree_information[player] == Options.TechTreeInformation.option_full
+
+
     generate_output = generate_mod
 
     def create_regions(self):

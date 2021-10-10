@@ -252,12 +252,11 @@ def main(args, seed=None):
                 precollected_hints = {player: set() for player in range(1, world.players + 1)}
                 # for now special case Factorio tech_tree_information
                 sending_visible_players = set()
-                for player in world.get_game_players("Factorio"):
-                    if world.tech_tree_information[player].value == 2:
-                        sending_visible_players.add(player)
 
                 for slot in world.player_ids:
                     slot_data[slot] = world.worlds[slot].fill_slot_data()
+                    if world.worlds[slot].sending_visible:
+                        sending_visible_players.add(slot)
 
                 def precollect_hint(location):
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
