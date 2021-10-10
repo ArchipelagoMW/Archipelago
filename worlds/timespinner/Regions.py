@@ -150,9 +150,9 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Space time continuum', 'Caves of Banishment (upper)', lambda state: pyramid_keys_unlock == "GateCavesOfBanishment")
 
 
-def create_location(player: int, name: str, id: Optional[int], region: Region, rule: Callable, location_cache: List[Location]) -> Location:
-    location = Location(player, name, id, region)
-    location.access_rule = rule
+def create_location(player: int, location_data: LocationData, region: Region, location_cache: List[Location]) -> Location:
+    location = Location(player, location_data.name, location_data.code, region)
+    location.access_rule = location_data.rule
 
     if id is None:
         location.event = True
@@ -169,7 +169,7 @@ def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str
 
     if name in locations_per_region:
         for location_data in locations_per_region[name]:
-            location = create_location(player, location_data.name, location_data.code, region, location_data.rule, location_cache)
+            location = create_location(player, location_data, region, location_cache)
             region.locations.append(location)
 
     return region

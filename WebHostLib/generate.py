@@ -9,7 +9,7 @@ from flask import request, flash, redirect, url_for, session, render_template
 
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
-from Main import get_seed, seeddigits
+from BaseClasses import seeddigits, get_seed
 from Generate import handle_name
 import pickle
 

@@ -26,6 +26,7 @@ from prompt_toolkit.patch_stdout import patch_stdout
 from fuzzywuzzy import process as fuzzy_process
 
 from worlds.AutoWorld import AutoWorldRegister
+
 proxy_worlds = {name: world(None, 0) for name, world in AutoWorldRegister.world_types.items()}
 from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_location_id_to_name
 import Utils
@@ -293,7 +294,7 @@ class Context:
             if not self.save_filename:
                 import os
                 name, ext = os.path.splitext(self.data_filename)
-                self.save_filename = name + '.apsave' if ext.lower() in ('.archipelago','.zip') \
+                self.save_filename = name + '.apsave' if ext.lower() in ('.archipelago', '.zip') \
                     else self.data_filename + '_' + 'apsave'
             try:
                 with open(self.save_filename, 'rb') as f:
@@ -472,10 +473,7 @@ async def on_client_connected(ctx: Context, client: Client):
         # TODO ~0.2.0 remove forfeit_mode and remaining_mode in favor of permissions
         'forfeit_mode': ctx.forfeit_mode,
         'remaining_mode': ctx.remaining_mode,
-        'permissions': {
-            "forfeit": Permission.from_text(ctx.forfeit_mode),
-            "remaining": Permission.from_text(ctx.remaining_mode),
-        },
+        'permissions': get_permissions(ctx),
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
         'datapackage_version': network_data_package["version"],
@@ -483,6 +481,13 @@ async def on_client_connected(ctx: Context, client: Client):
                                  in network_data_package["games"].items()},
         'seed_name': ctx.seed_name
     }])
+
+
+def get_permissions(ctx) -> typing.Dict[str, Permission]:
+    return {
+        "forfeit": Permission.from_text(ctx.forfeit_mode),
+        "remaining": Permission.from_text(ctx.remaining_mode),
+    }
 
 
 async def on_client_disconnected(ctx: Context, client: Client):
@@ -1181,7 +1186,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             locs = []
             for location in args["locations"]:
                 if type(location) is not int or location not in lookup_any_location_id_to_name:
-                    await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts'}])
+                    await ctx.send_msgs(client,
+                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts'}])
                     return
                 target_item, target_player = ctx.locations[client.slot][location]
                 locs.append(NetworkItem(target_item, location, target_player))
@@ -1407,6 +1413,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     return input_text
             setattr(self.ctx, option_name, attrtype(option))
             self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
+            if option_name in {"forfeit_mode", "remaining_mode"}:
+                self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
             return True
         else:
             known = (f"{option}:{otype}" for option, otype in self.ctx.simple_options.items())

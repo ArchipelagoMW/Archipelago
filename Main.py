@@ -1,7 +1,6 @@
 from itertools import zip_longest
 import logging
 import os
-import random
 import time
 import zlib
 import concurrent.futures
@@ -19,15 +18,6 @@ from Utils import output_path, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
 
-seeddigits = 20
-
-
-def get_seed(seed=None):
-    if seed is None:
-        random.seed(None)
-        return random.randint(0, pow(10, seeddigits) - 1)
-    return seed
-
 
 def main(args, seed=None):
     if args.outputpath:
@@ -38,13 +28,8 @@ def main(args, seed=None):
     # initialize the world
     world = MultiWorld(args.multi)
 
-    logger = logging.getLogger('')
-    world.seed = get_seed(seed)
-    if args.race:
-        world.secure()
-    else:
-        world.random.seed(world.seed)
-    world.seed_name = str(args.outputname if args.outputname else world.seed)
+    logger = logging.getLogger()
+    world.set_seed(seed, args.race, str(args.outputname if args.outputname else world.seed))
 
     world.shuffle = args.shuffle.copy()
     world.logic = args.logic.copy()
@@ -80,7 +65,6 @@ def main(args, seed=None):
     world.plando_items = args.plando_items.copy()
     world.plando_texts = args.plando_texts.copy()
     world.plando_connections = args.plando_connections.copy()
-    world.er_seeds = getattr(args, "er_seeds", {})
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
     world.set_options(args)
@@ -88,9 +72,6 @@ def main(args, seed=None):
     world.enemizer = args.enemizercli
     world.sprite = args.sprite.copy()
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
-
-    world.slot_seeds = {player: random.Random(world.random.getrandbits(64)) for player in
-                        range(1, world.players + 1)}
 
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, world.seed)
 

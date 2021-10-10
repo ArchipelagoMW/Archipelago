@@ -1801,12 +1801,16 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
         rom.write_bytes(0x123FE, [0x72])  # set lightning flash in misery mire (and standard) to brightness 0x72
         rom.write_bytes(0x3FA7B, [0x80, 0xac - 0x7b])  # branch from palette writing lightning on death mountain
         rom.write_byte(0x10817F, 0x01)  # internal rom option
+        rom.write_byte(0x3FAB6, 0x80)  # GT flashing
+        rom.write_byte(0x3FAC2, 0x80)  # GT flashing
     else:
         rom.write_bytes(0x17E07, [0x00])
         rom.write_bytes(0x17EAB, [0x85, 0x00, 0x29, 0x1F, 0x00, 0x18])
         rom.write_bytes(0x123FE, [0x32])  # original weather flash value
         rom.write_bytes(0x3FA7B, [0xc2, 0x20])  # rep #$20
         rom.write_byte(0x10817F, 0x00)  # internal rom option
+        rom.write_byte(0x3FAB6, 0xF0)  # GT flashing
+        rom.write_byte(0x3FAC2, 0xD0)  # GT flashing
 
     rom.write_byte(0x18004B, 0x01 if quickswap else 0x00)
 

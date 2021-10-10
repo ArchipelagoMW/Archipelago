@@ -257,7 +257,6 @@ def parse_arguments(argv, no_defaults=False):
     ret.plando_items = []
     ret.plando_texts = {}
     ret.plando_connections = []
-    ret.er_seeds = {}
 
     if ret.timer == "none":
         ret.timer = False
@@ -280,7 +279,7 @@ def parse_arguments(argv, no_defaults=False):
                          "triforce_pieces_available",
                          "triforce_pieces_required", "shop_shuffle",
                          "required_medallions",
-                         "plando_items", "plando_texts", "plando_connections", "er_seeds",
+                         "plando_items", "plando_texts", "plando_connections",
                          'dungeon_counters',
                          'shuffle_prizes', 'sprite_pool', 'dark_room_logic',
                          'game']:
