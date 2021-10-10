@@ -7,7 +7,7 @@ import concurrent.futures
 import pickle
 import tempfile
 import zipfile
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
 from BaseClasses import MultiWorld, CollectionState, Region, RegionType
 from worlds.alttp.Items import item_name_groups
@@ -19,7 +19,16 @@ from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
 
 
-def main(args, seed=None):
+ordered_areas = (
+    'Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
+    'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
+    'Misery Mire', 'Turtle Rock', 'Ganons Tower', "Total"
+)
+
+
+def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = None):
+    if not baked_server_options:
+        baked_server_options = get_options()["server_options"]
     if args.outputpath:
         os.makedirs(args.outputpath, exist_ok=True)
         output_path.cached_path = args.outputpath
@@ -159,15 +168,15 @@ def main(args, seed=None):
 
     output = tempfile.TemporaryDirectory()
     with output as temp_dir:
-        with concurrent.futures.ThreadPoolExecutor(world.players+2) as pool:
+        with concurrent.futures.ThreadPoolExecutor(world.players + 2) as pool:
             check_accessibility_task = pool.submit(world.fulfills_accessibility)
 
             output_file_futures = [pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir)]
             for player in world.player_ids:
                 # skip starting a thread for methods that say "pass".
                 if AutoWorld.World.generate_output.__code__ is not world.worlds[player].generate_output.__code__:
-                    output_file_futures.append(pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
-
+                    output_file_futures.append(
+                        pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
 
             def get_entrance_to_region(region: Region):
                 for entrance in region.entrances:
@@ -188,9 +197,7 @@ def main(args, seed=None):
                             if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
                                 er_hint_data[region.player][location.address] = main_entrance.name
 
-            ordered_areas = ('Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
-                             'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
-                             'Misery Mire', 'Turtle Rock', 'Ganons Tower', "Total")
+
 
             checks_in_area = {player: {area: list() for area in ordered_areas}
                               for player in range(1, world.players + 1)}
@@ -219,8 +226,9 @@ def main(args, seed=None):
             for index, take_any in enumerate(takeanyregions):
                 for region in [world.get_region(take_any, player) for player in
                                world.get_game_players("A Link to the Past") if world.retro[player]]:
-                    item = world.create_item(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
-                                             region.player)
+                    item = world.create_item(
+                        region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
+                        region.player)
                     player = region.player
                     location_id = SHOP_ID_START + total_shop_slots + index
 
@@ -286,7 +294,7 @@ def main(args, seed=None):
                                                world.worlds[player].remote_start_inventory},
                     "locations": locations_data,
                     "checks_in_area": checks_in_area,
-                    "server_options": get_options()["server_options"],
+                    "server_options": baked_server_options,
                     "er_hint_data": er_hint_data,
                     "precollected_items": precollected_items,
                     "precollected_hints": precollected_hints,

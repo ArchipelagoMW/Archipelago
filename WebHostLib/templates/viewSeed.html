@@ -12,10 +12,6 @@
     <div id="view-seed-wrapper">
         <div id="view-seed" class="grass-island">
             <h1>Seed Info</h1>
-            {% if not seed.multidata and not seed.spoiler %}
-                <p>Single Player Race Rom: No spoiler or multidata exists, parts of the rom are encrypted and rooms
-                    cannot be created.</p>
-            {% endif %}
             <table>
                 <tbody>
                 <tr>
@@ -33,18 +29,6 @@
                     </tr>
                 {% endif %}
                 {% if seed.multidata %}
-                    <tr>
-                        <td>Players:&nbsp;</td>
-                        <td>
-                            <ul>
-                                {% for patch in seed.slots|sort(attribute='player_id') %}
-                                <li>
-                                    <a href="{{ url_for("download_raw_patch", seed_id=seed.id, player_id=patch.player_id) }}">{{ patch.player_name }}</a>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </td>
-                    </tr>
                     <tr>
                         <td>Rooms:&nbsp;</td>
                     <td>

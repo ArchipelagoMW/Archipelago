@@ -37,6 +37,18 @@
             <div id="generate-game-form-wrapper">
                 <form id="generate-game-form" method="post" enctype="multipart/form-data">
                     <input id="file-input" type="file" name="file">
+                    <label data-tooltip="After gathering this many checks, players can !hint <itemname> to get the location of that item." for="hint_cost">Hint Cost:</label><select name="hint_cost" id="hint_cost">
+                        {% for n in range(0, 110, 5) %}
+                        <option {% if n == 10 %}selected="selected" {% endif %} value="{{ n }}">{% if n > 100 %}Off{% else %}{{ n }}%{% endif %}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="forfeit_mode">Forfeit Permission:</label><select name="forfeit_mode" id="forfeit_mode">
+                        <option value="auto">Automatic on goal completion</option>
+                        <option value="goal">Allow !forfeit after goal completion</option>
+                        <option value="auto-enabled">Automatic on goal completion and manual !forfeit</option>
+                        <option value="enabled">Manual !forfeit</option>
+                        <option value="disabled">Disabled</option>
+                    </select>
                 </form>
                 <button id="generate-game-button">Upload</button>
             </div>
