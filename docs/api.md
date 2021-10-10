@@ -440,8 +440,23 @@ def create_items(self):
     # If there are two of the same item, the item has to be twice in the pool.
     # Which items are added to the pool may depend on player settings,
     # e.g. custom win condition like triforce hunt.
-    for item in mygame_items:
-        self.world.itempool += self.create_item(item)
+
+    # Having an item in the start inventory won't remove it from the pool.
+    # If an item can't have duplicates it has to be excluded manually.
+    exclude = [item for item in self.world.precollected_items
+               if item.player == self.player]  # list of items to exclude
+
+    for item in map(self.create_item, mygame_items):
+        if item in exclude:
+            exclude.remove(item)  # this is destructive. create unique list above
+            self.world.itempool.append(self.create_item('nothing'))
+        else:
+            self.world.itempool.append(item)
+
+    # itempool and number of locations should match up.
+    # If this is not the case we want to fill the itempool with junk.
+    junk = 0  # calculate this based on player settings
+    self.world.itempool += [self.create_item('nothing') for _ in range(junk)]
 ```
 
 #### create_regions
@@ -608,7 +623,7 @@ def generate_output(self, output_directory: str):
                   for location in self.world.get_filled_locations(self.player)},
         # store start_inventory from player's .yaml
         "starter_items": [item.name for item in self.world.precollected_items
-                          for item.player == self.player],
+                          if item.player == self.player],
         "final_boss_hp": self.final_boss_hp,
         # store option name "easy", "normal" or "hard" for difficuly
         "difficulty": self.world.difficulty[self.player].current_key,
