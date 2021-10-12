@@ -48,6 +48,7 @@ def call_all(world: MultiWorld, method_name: str, *args):
     for player in world.player_ids:
         world_types.add(world.worlds[player].__class__)
         call_single(world, method_name, player, *args)
+
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
@@ -112,6 +113,9 @@ class World(metaclass=AutoWorldRegister):
 
     item_names: Set[str]  # set of all potential item names
     location_names: Set[str]  # set of all potential location names
+
+    # If there is visibility in what is being sent, this is where it will be known.
+    sending_visible: bool = False
 
     def __init__(self, world: MultiWorld, player: int):
         self.world = world

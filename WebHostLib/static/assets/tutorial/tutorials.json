@@ -1,5 +1,24 @@
 [
   {
+    "gameTitle": "Archipelago",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Tutorial",
+        "description": "A Guide to setting up the Archipelago software to generate multiworld games on your computer.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/setup_en.md",
+            "link": "archipelago/setup/en",
+            "authors": [
+              "alwaysintreble"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "gameTitle": "The Legend of Zelda: A Link to the Past",
     "tutorials": [
       {
@@ -80,6 +99,33 @@
             "link": "zelda3/plando/en",
             "authors": [
               "Berserker"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "The Legend of Zelda: Ocarina of Time",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Tutorial",
+        "description": "A guide to setting up the Archipelago Ocarina of Time software on your computer.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "zelda5/setup_en.md",
+            "link": "zelda5/setup/en",
+            "authors": [
+              "Edos"
+            ]
+          },
+          {
+            "language": "Spanish",
+            "filename": "zelda5/setup_es.md",
+            "link": "zelda5/setup/es",
+            "authors": [
+              "Edos"
             ]
           }
         ]

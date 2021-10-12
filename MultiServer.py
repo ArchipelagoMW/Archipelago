@@ -26,6 +26,7 @@ from prompt_toolkit.patch_stdout import patch_stdout
 from fuzzywuzzy import process as fuzzy_process
 
 from worlds.AutoWorld import AutoWorldRegister
+
 proxy_worlds = {name: world(None, 0) for name, world in AutoWorldRegister.world_types.items()}
 from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_location_id_to_name
 import Utils
@@ -293,7 +294,7 @@ class Context:
             if not self.save_filename:
                 import os
                 name, ext = os.path.splitext(self.data_filename)
-                self.save_filename = name + '.apsave' if ext.lower() in ('.archipelago','.zip') \
+                self.save_filename = name + '.apsave' if ext.lower() in ('.archipelago', '.zip') \
                     else self.data_filename + '_' + 'apsave'
             try:
                 with open(self.save_filename, 'rb') as f:
@@ -472,10 +473,7 @@ async def on_client_connected(ctx: Context, client: Client):
         # TODO ~0.2.0 remove forfeit_mode and remaining_mode in favor of permissions
         'forfeit_mode': ctx.forfeit_mode,
         'remaining_mode': ctx.remaining_mode,
-        'permissions': {
-            "forfeit": Permission.from_text(ctx.forfeit_mode),
-            "remaining": Permission.from_text(ctx.remaining_mode),
-        },
+        'permissions': get_permissions(ctx),
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
         'datapackage_version': network_data_package["version"],
@@ -483,6 +481,13 @@ async def on_client_connected(ctx: Context, client: Client):
                                  in network_data_package["games"].items()},
         'seed_name': ctx.seed_name
     }])
+
+
+def get_permissions(ctx) -> typing.Dict[str, Permission]:
+    return {
+        "forfeit": Permission.from_text(ctx.forfeit_mode),
+        "remaining": Permission.from_text(ctx.remaining_mode),
+    }
 
 
 async def on_client_disconnected(ctx: Context, client: Client):
@@ -972,14 +977,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output("Cheating is disabled.")
             return False
 
-    @mark_raw
-    def _cmd_hint(self, item_or_location: str = "") -> bool:
-        """Use !hint {item_name/location_name},
-        for example !hint Lamp or !hint Link's House to get a spoiler peek for that location or item.
-        If hint costs are on, this will only give you one new result,
-        you can rerun the command to get more in that case."""
+    def get_hints(self, input_text: str, explicit_location: bool = False) -> bool:
         points_available = get_client_points(self.ctx, self.client)
-        if not item_or_location:
+        if not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
             self.ctx.hints[self.client.team, self.client.slot] = hints
@@ -989,16 +989,16 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return True
         else:
             world = proxy_worlds[self.ctx.games[self.client.slot]]
-            item_name, usable, response = get_intended_text(item_or_location, world.all_names)
+            item_name, usable, response = get_intended_text(input_text, world.all_names if not explicit_location else world.location_names)
             if usable:
                 if item_name in world.hint_blacklist:
                     self.output(f"Sorry, \"{item_name}\" is marked as non-hintable.")
                     hints = []
-                elif item_name in world.item_name_groups:
+                elif item_name in world.item_name_groups and not explicit_location:
                     hints = []
                     for item in world.item_name_groups[item_name]:
                         hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
-                elif item_name in world.item_names:  # item name
+                elif item_name in world.item_names and not explicit_location:  # item name
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, item_name)
                 else:  # location name
                     hints = collect_hints_location(self.ctx, self.client.team, self.client.slot, item_name)
@@ -1031,19 +1031,25 @@ class ClientMessageProcessor(CommonCommandProcessor):
                             hints.append(hint)
                             can_pay -= 1
                             self.ctx.hints_used[self.client.team, self.client.slot] += 1
+                            points_available = get_client_points(self.ctx, self.client)
 
                             if not hint.found:
                                 self.ctx.hints[self.client.team, hint.finding_player].add(hint)
                                 self.ctx.hints[self.client.team, hint.receiving_player].add(hint)
 
                         if not_found_hints:
-                            if hints:
+                            if hints and cost and int((points_available // cost) == 0):
+                                self.output(
+                                    f"There may be more hintables, however, you cannot afford to pay for any more. "
+                                    f" You have {points_available} and need at least "
+                                    f"{self.ctx.get_hint_cost(self.client.slot)}.")
+                            elif hints:
                                 self.output(
                                     "There may be more hintables, you can rerun the command to find more.")
                             else:
                                 self.output(f"You can't afford the hint. "
                                             f"You have {points_available} points and need at least "
-                                            f"{self.ctx.get_hint_cost(self.client.slot)}")
+                                            f"{self.ctx.get_hint_cost(self.client.slot)}.")
                         notify_hints(self.ctx, self.client.team, hints)
                         self.ctx.save()
                         return True
@@ -1054,6 +1060,22 @@ class ClientMessageProcessor(CommonCommandProcessor):
             else:
                 self.output(response)
                 return False
+
+    @mark_raw
+    def _cmd_hint(self, item_or_location: str = "") -> bool:
+        """Use !hint {item_name/location_name},
+        for example !hint Lamp or !hint Link's House to get a spoiler peek for that location or item.
+        If hint costs are on, this will only give you one new result,
+        you can rerun the command to get more in that case."""
+        return self.get_hints(item_or_location)
+
+    @mark_raw
+    def _cmd_hint_location(self, location: str = "") -> bool:
+        """Use !hint_location {location_name},
+        for example !hint atomic-bomb to get a spoiler peek for that location.
+        (In the case of factorio, or any other game where item names and location names are identical,
+        this command must be used explicitly.)"""
+        return self.get_hints(location, True)
 
 
 def get_checked_checks(ctx: Context, client: Client) -> typing.List[int]:
@@ -1181,7 +1203,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             locs = []
             for location in args["locations"]:
                 if type(location) is not int or location not in lookup_any_location_id_to_name:
-                    await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts'}])
+                    await ctx.send_msgs(client,
+                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts'}])
                     return
                 target_item, target_player = ctx.locations[client.slot][location]
                 locs.append(NetworkItem(target_item, location, target_player))
@@ -1407,6 +1430,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     return input_text
             setattr(self.ctx, option_name, attrtype(option))
             self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
+            if option_name in {"forfeit_mode", "remaining_mode"}:
+                self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
             return True
         else:
             known = (f"{option}:{otype}" for option, otype in self.ctx.simple_options.items())

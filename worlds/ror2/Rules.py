@@ -8,7 +8,9 @@ class RiskOfRainLogic(LogicMixin):
         count: int = self.item_count("Common Item", player) + self.item_count("Uncommon Item", player) + \
                      self.item_count("Legendary Item", player) + self.item_count("Boss Item", player) + \
                      self.item_count("Lunar Item", player) + self.item_count("Equipment", player) + \
-                     self.item_count("Dio's Best Friend", player)
+                     self.item_count("Dio's Best Friend", player) + self.item_count("Item Scrap, White", player) + \
+                     self.item_count("Item Scrap, Green", player) + self.item_count("Item Scrap, Red", player) + \
+                     self.item_count("Item Scrap, Yellow", player)
         return count >= amount
 
 
