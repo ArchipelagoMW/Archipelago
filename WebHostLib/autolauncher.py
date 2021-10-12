@@ -89,7 +89,7 @@ def launch_generator(pool: multiprocessing.pool.Pool, generation: Generation):
         options = restricted_loads(generation.options)
         logging.info(f"Generating {generation.id} for {len(options)} players")
         pool.apply_async(gen_game, (options,),
-                         {"race": meta["race"],
+                         {"meta": meta,
                           "sid": generation.id,
                           "owner": generation.owner},
                          handle_generation_success, handle_generation_failure)

@@ -1315,9 +1315,7 @@ def patch_rom(world, rom, player, enemized):
         equip[0x37B] = 1
         equip[0x36E] = 0x80
 
-    for item in world.precollected_items:
-        if item.player != player:
-            continue
+    for item in world.precollected_items[player]:
 
         if item.name in {'Bow', 'Silver Bow', 'Silver Arrows', 'Progressive Bow', 'Progressive Bow (Alt)',
                          'Titans Mitts', 'Power Glove', 'Progressive Glove',

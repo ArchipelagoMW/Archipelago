@@ -25,6 +25,21 @@
     margin-bottom: 1rem;
 }
 
-#generate-game-form{
+#generate-game-form-wrapper table td{
+    text-align: left;
+    padding-right: 0.5rem;
+}
+
+#generate-form-button-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#file-input{
     display: none;
+}
+
+.interactive{
+    color: #ffef00;
 }

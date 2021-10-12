@@ -82,6 +82,12 @@ def page_not_found(err):
     return render_template('404.html'), 404
 
 
+# Start Playing Page
+@app.route('/start-playing')
+def start_playing():
+    return render_template(f"startPlaying.html")
+
+
 # Player settings pages
 @app.route('/games/<string:game>/player-settings')
 def player_settings(game):
@@ -180,6 +186,9 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static/static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+@app.route('/discord')
+def discord():
+    return redirect("https://discord.gg/archipelago")
 
 from WebHostLib.customserver import run_server_process
 from . import tracker, upload, landing, check, generate, downloads, api  # to trigger app routing picking up on it
