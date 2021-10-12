@@ -1,0 +1,35 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    {{ super() }}
+    <title>Start Playing</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/startPlaying.css") }}" />
+{% endblock %}
+
+{% block body %}
+    {% include 'header/oceanHeader.html' %}
+
+    <div id="start-playing-wrapper">
+        <div id="start-playing" class="grass-island {% if rooms %}wider{% endif %}">
+            <h1>Start Playing</h1>
+            <p>
+                To start playing a game, you'll first need to generate a randomized game. You can do that on this
+                website, by clicking the button below labeled &apos;Generate and Host&apos;.
+                <br /><br />
+                If you have already generated a game and would just like to host it on this site, click the button
+                labeled &apos;Host Only&apos;
+                <br /><br />
+                If you have no idea what any of that means, don't worry! We have a page full of tutorials for each
+                game that will get you started properly. To get there, click on the button labeled
+                &apos;Tutorials&apos;.
+            </p>
+            <div id="start-playing-button-row">
+                <a href="/uploads"><button>Host Only</button></a>
+                <a href="/generate"><button>Generate and Host</button></a>
+                <a href="/tutorials"><button>Tutorials</button></a>
+            </div>
+        </div>
+    </div>
+
+    {% include 'islandFooter.html' %}
+{% endblock %}
