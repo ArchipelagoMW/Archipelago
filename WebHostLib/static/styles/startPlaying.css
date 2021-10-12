@@ -10,9 +10,3 @@
     min-height: 240px;
     text-align: center;
 }
-
-#start-playing-button-row{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-}
