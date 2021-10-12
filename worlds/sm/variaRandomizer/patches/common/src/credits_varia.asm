@@ -294,6 +294,27 @@ save_index:
 .end:
     rtl
 
+update_checksum:
+    rep #$30
+    clc
+    lda #$0000
+    ldx #$0000
+-
+    adc $700010, x
+    bcc +
+    dec
++   
+    inx
+    inx
+    cpx #$065C
+    bne -
+    sta $700000
+    sta $701FF0
+    eor #$FFFF
+    sta $700008
+    sta $701FF8
+    rtl
+
 warnpc $80ffbf
 
 
@@ -1431,7 +1452,7 @@ dec_stat:
     plx
     rtl
 
-update_graphic:
+update_graphic_checksum:
     cmp #$0000
     beq +
     lda #$0001
@@ -1448,6 +1469,7 @@ update_graphic:
     jsl $809A3E   // thanks PierRoulette
 +
     jsl $90AC8D   // thanks PierRoulette
+    jsl update_checksum
     rts
 
 warnpc $dfd87f
@@ -1510,7 +1532,7 @@ start_item:
     inx
     cpx #$0004
     bne -
-    jsr update_graphic
+    jsr update_graphic_checksum
     rtl
 
 warnpc $dfd91a
