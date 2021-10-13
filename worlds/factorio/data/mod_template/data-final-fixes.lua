@@ -127,5 +127,6 @@ adjust_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_scale) }})
 
 {%- if silo==2 %}
 -- disable silo research for pre-placed silo
-technologies["rocket-silo"].hidden = true
+technologies["rocket-silo"].enabled = false
+technologies["rocket-silo"].visible_when_disabled = false
 {%- endif %}
