@@ -354,6 +354,8 @@ class SMWorld(World):
             outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
             self.variaRando.PatchRom(outputFilename, self.APPatchRom)
 
+            self.write_crc(outputFilename)
+
             Patch.create_patch_file(outputFilename, player=self.player, player_name=self.world.player_name[self.player], game=Patch.GAME_SM)
             os.unlink(outputFilename)
             self.rom_name = self.romName
@@ -361,6 +363,37 @@ class SMWorld(World):
             raise
         finally:
             self.rom_name_available_event.set() # make sure threading continues and errors are collected
+
+    def checksum_mirror_sum(self, start, length, mask = 0x800000):
+        while (not(length & mask) and mask):
+            mask >>= 1
+
+        part1 = sum(start[:mask]) & 0xFFFF
+        part2 = 0
+
+        next_length = length - mask
+        if next_length:
+            part2 = self.checksum_mirror_sum(start[mask:], next_length, mask >> 1)
+
+            while (next_length < mask):
+                next_length += next_length
+                part2 += part2
+
+            length = mask + mask
+
+        return (part1 + part2) & 0xFFFF
+
+    def write_bytes(self, buffer, startaddress: int, values):
+        buffer[startaddress:startaddress + len(values)] = values
+
+    def write_crc(self, romName):
+        with open(romName, 'rb') as stream:
+            buffer = bytearray(stream.read())
+            crc = self.checksum_mirror_sum(buffer, len(buffer))
+            inv = crc ^ 0xFFFF
+            self.write_bytes(buffer, 0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
+        with open(romName, 'wb') as outfile:
+            outfile.write(buffer)
 
     def modify_multidata(self, multidata: dict):
         import base64
