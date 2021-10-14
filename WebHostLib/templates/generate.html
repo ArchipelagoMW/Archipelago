@@ -19,13 +19,14 @@
             </p>
             <p>
                 {% if race -%}
-                    This game will be generated in race mode, meaning the spoiler log will be unavailable,
-                    roms will be encrypted, and single-player games will have no multidata files.
+                    This game will be generated in race mode,
+                    meaning the spoiler log will be unavailable and game specific protections will be in place,
+                    like ROM encryption or cheat mode removal.
                 {%- else -%}
                     If you would like to generate a race game,
                     <a href="{{ url_for("generate", race=True) }}">click here.</a><br />
-                    Race games are generated without a spoiler log, the ROMs are encrypted, and single-player games
-                    will not include a multidata file.
+                    Race games are generated without a spoiler log and game specific protections will be in place,
+                    like ROM encryption or cheat mode removal.
                 {%- endif -%}
             </p>
             <div id="generate-game-form-wrapper">
