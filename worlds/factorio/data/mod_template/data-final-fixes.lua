@@ -30,6 +30,7 @@ function prep_copy(new_copy, old_tech)
     local ingredient_filter = allowed_ingredients[old_tech.name]
     if ingredient_filter ~= nil then
         new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients, ingredient_filter)
+        new_copy.unit.ingredients = add_ingredients(new_copy.unit.ingredients, ingredient_filter)
     end
 end
 
