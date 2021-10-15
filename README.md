@@ -12,7 +12,7 @@ Currently, the following games are supported:
 * The Legend of Zelda: Ocarina of Time
 * Timespinner
 
-For setup and instructions check out our [tutorials page](http://archipelago.gg:48484/tutorial).
+For setup and instructions check out our [tutorials page](/tutorial).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
 windows binaries.
 

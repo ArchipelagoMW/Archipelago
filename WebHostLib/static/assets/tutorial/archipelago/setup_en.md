@@ -9,7 +9,7 @@ Run the exe file, and after accepting the license agreement you will be prompted
 All players that wish to play in the generated multiworld must have a YAML file which contains all of the settings that they wish to play with.
 A YAML is a file which contains human readable markup. In other words, this is a settings file kind of like an INI file or a TOML file. 
 Each player can go to the game's player settings page in order to determine the settings how they want them and then download a YAML file containing these settings.
-After getting all of the YAML files these can all either be placed together in the `Archipelago\Players` folder or compressed into a ZIP folder to then be uploaded to the [website generator](http://archipelago.gg:48484/generate).
+After getting all of the YAML files these can all either be placed together in the `Archipelago\Players` folder or compressed into a ZIP folder to then be uploaded to the [website generator](/generate).
 If rolling locally ensure that the folder is clear of any files you do not wish to include in the game such as the included default player settings files.
 
 ### Rolling the seed
@@ -20,7 +20,7 @@ Sometimes there are various settings that you may want to change before rolling 
 
 ## Hosting a multiworld
 ### Uploading the seed to the website
-The easiest and most recommended method is to upload the zip file that you generated to the website [here](http://archipelago.gg:48484/uploads). This will give a page with the seed info and have a link to the spoiler if it exists. Click on Create New room and then share the link fo rhe room with the other players so that they can download their patches or mods. The room will also have a link to a Multiworld Tracker and tell you what the players need to connect to from their clients. 
+The easiest and most recommended method is to upload the zip file that you generated to the website [here](/uploads). This will give a page with the seed info and have a link to the spoiler if it exists. Click on Create New room and then share the link fo rhe room with the other players so that they can download their patches or mods. The room will also have a link to a Multiworld Tracker and tell you what the players need to connect to from their clients. 
 
 ### Hosting a seed locally
 For this we'll assume you have already port forwarding `38281` and have generated a seed that is still in the `outputs` folder. Next, you'll want to run `ArchipelagoServer.exe`. A window will open in order to open the multiworld data for the game. You can either use the generated zip folder or extract the .archipelago file and use it. If everything worked correctly the console window should tell you it's now hosting a game with the IP, port, and password that clients will need in order to connect.
