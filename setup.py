@@ -145,7 +145,14 @@ for data in extra_data:
     installfile(Path(data))
 
 os.makedirs(buildfolder / "Players", exist_ok=True)
-shutil.copyfile("playerSettings.yaml", buildfolder / "Players" / "weightedSettings.yaml")
+from WebHostLib.options import create
+create()
+from worlds.AutoWorld import AutoWorldRegister
+for worldname, worldtype in AutoWorldRegister.world_types.items():
+    if not worldtype.hidden:
+        file_name = worldname+".yaml"
+        shutil.copyfile(os.path.join("WebHostLib", "static", "generated", "configs", file_name),
+                        buildfolder / "Players" / file_name)
 
 try:
     from maseya import z3pr
