@@ -461,7 +461,7 @@ async def server(websocket, path, ctx: Context):
 async def on_client_connected(ctx: Context, client: Client):
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
-        'password': ctx.password is not None,
+        'password': bool(ctx.password),
         'players': [
             NetworkPlayer(client.team, client.slot, ctx.name_aliases.get((client.team, client.slot), client.name),
                           client.name) for client

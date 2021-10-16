@@ -20,15 +20,15 @@ def set_rules(world: MultiWorld, player: int):
 
     # lock item pickup access based on level completion
     for i in range(1, items_per_level):
-        set_rule(world.get_location(f"Item Pickup {i}", player), lambda state: True)
+        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: True)
     for i in range(items_per_level, 2*items_per_level):
-        set_rule(world.get_location(f"Item Pickup {i}", player), lambda state: state.has("Beat Level One", player))
+        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: state.has("Beat Level One", player))
     for i in range(2*items_per_level, 3*items_per_level):
-        set_rule(world.get_location(f"Item Pickup {i}", player), lambda state: state.has("Beat Level Two", player))
+        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: state.has("Beat Level Two", player))
     for i in range(3*items_per_level, 4*items_per_level):
-        set_rule(world.get_location(f"Item Pickup {i}", player), lambda state: state.has("Beat Level Three", player))
-    for i in range(4*items_per_level, world.total_locations[player]+1):
-        set_rule(world.get_location(f"Item Pickup {i}", player), lambda state: state.has("Beat Level Four", player))
+        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: state.has("Beat Level Three", player))
+    for i in range(4*items_per_level, world.total_locations[player] + 1):
+        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: state.has("Beat Level Four", player))
 
     # require items to beat each stage
     set_rule(world.get_location("Level Two", player),
