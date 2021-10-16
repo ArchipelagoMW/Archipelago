@@ -141,7 +141,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Space time continuum', 'Varndagroth tower right (lower)', lambda state: pyramid_keys_unlock == "GateMilitairyGate")
     connect(world, player, names, 'Space time continuum', 'Skeleton Shaft', lambda state: pyramid_keys_unlock == "GateSealedCaves")
     connect(world, player, names, 'Space time continuum', 'Sealed Caves (Sirens)', lambda state: pyramid_keys_unlock == "GateSealedSirensCave")
-    connect(world, player, names, 'Space time continuum', 'Left Side forest Caves', lambda state: pyramid_keys_unlock == "GateLakeSereneRight")
+    connect(world, player, names, 'Space time continuum', 'Left Side forest Caves', lambda state: pyramid_keys_unlock == "GateLakeSirineRight")
     connect(world, player, names, 'Space time continuum', 'Refugee Camp', lambda state: pyramid_keys_unlock == "GateAccessToPast")
     connect(world, player, names, 'Space time continuum', 'Castle Ramparts', lambda state: pyramid_keys_unlock == "GateCastleRamparts")
     connect(world, player, names, 'Space time continuum', 'Castle Keep', lambda state: pyramid_keys_unlock == "GateCastleKeep")
