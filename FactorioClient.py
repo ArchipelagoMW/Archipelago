@@ -55,6 +55,7 @@ class FactorioContext(CommonContext):
         self.send_index = 0
         self.rcon_client = None
         self.awaiting_bridge = False
+        self.write_data_path = None
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
 
     async def server_auth(self, password_requested: bool = False):
@@ -250,6 +251,12 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
                 if "Loading mod AP-" in msg and msg.endswith("(data.lua)"):
                     parts = msg.split()
                     ctx.mod_version = Utils.Version(*(int(number) for number in parts[-2].split(".")))
+                elif "Write data path: " in msg:
+                    ctx.write_data_path = Utils.get_text_between(msg, "Write data path: ", " [")
+                    if "AppData" in ctx.write_data_path:
+                        logger.warning("It appears your mods are loaded from Appdata, "
+                                       "this can lead to problems with multiple Factorio instances. "
+                                       "If this is the case, you will get a file locked error running Factorio.")
                 if not rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     if ctx.mod_version == ctx.__class__.mod_version:

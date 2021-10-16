@@ -310,7 +310,6 @@ def get_adjuster_settings(romfile: str, skip_questions: bool = False) -> typing.
             if sprite_pool:
                 printed_options["sprite_pool"] = sprite_pool
 
-
         if hasattr(get_adjuster_settings, "adjust_wanted"):
             adjust_wanted = getattr(get_adjuster_settings, "adjust_wanted")
         elif persistent_load().get("adjuster", {}).get("never_adjust", False):  # never adjust, per user request
@@ -402,3 +401,7 @@ class KeyedDefaultDict(collections.defaultdict):
     def __missing__(self, key):
         self[key] = value = self.default_factory(key)
         return value
+
+
+def get_text_between(text: str, start: str, end: str) -> str:
+    return text[text.index(start) + len(start): text.rindex(end)]

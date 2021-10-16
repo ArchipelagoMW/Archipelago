@@ -25,7 +25,7 @@ config-path=__PATH__executable__/../../config
 use-system-read-write-data-directories=false
 ```
 3. In this same folder if there are shortcuts named "mods" and "saves" delete these and replace with folders with the same names.
-4. Navigate to where you installed ArchipelagoFactorioClient and open the host.yaml file as text. Find the entry `executable` under `factorio_options` and set it to point to your hosting Factorio.exe. If you put Factorio into your Archipelago folder, this would already match.<br>
+4. Navigate to where you installed Archipelago and open the host.yaml file as text. Find the entry `executable` under `factorio_options` and set it to point to your hosting Factorio.exe. If you put Factorio into your Archipelago folder, this would already match.<br>
 ex.
 ```yaml
 factorio_options:
@@ -50,3 +50,6 @@ factorio_options:
 
 4. You can join yourself by connecting to address localhost, other people will need to connect to your IP and you may need to port forward for the Factorio Server for those connections.
 
+## Problems
+
+FactorioClient will create a FactorioClient.txt in /logs, contents of this logfile may help you troubleshoot an issue on your own and is vital for us to help you with issues.
