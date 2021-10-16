@@ -28,7 +28,7 @@ app.config["SELFLAUNCH"] = True
 app.config["DEBUG"] = False
 app.config["PORT"] = 80
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4 megabyte limit
+app.config['MAX_CONTENT_LENGTH'] = 64 * 1024 * 1024  # 64 megabyte limit
 # if you want to deploy, make sure you have a non-guessable secret key
 app.config["SECRET_KEY"] = bytes(socket.gethostname(), encoding="utf-8")
 # at what amount of worlds should scheduling be used, instead of rolling in the webthread
