@@ -359,10 +359,10 @@ def roll_linked_options(weights: dict) -> dict:
     return weights
 
 
-def roll_triggers(weights: dict) -> dict:
+def roll_triggers(weights: dict, triggers: list) -> dict:
     weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = "Archipelago"  # Some means for triggers to know if the seed is on main or doors.
-    for i, option_set in enumerate(weights["triggers"]):
+    for i, option_set in enumerate(triggers):
         try:
             currently_targeted_weights = weights
             category = option_set.get("option_category", None)
@@ -455,7 +455,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         weights = roll_linked_options(weights)
 
     if "triggers" in weights:
-        weights = roll_triggers(weights)
+        weights = roll_triggers(weights, weights["triggers"])
 
     requirements = weights.get("requires", {})
     if requirements:
@@ -480,14 +480,20 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         if option_key in weights:
             raise Exception(f"Option {option_key} has to be in a game's section, not on its own.")
 
-    ret.name = get_choice('name', weights)
-    for option_key, option in Options.common_options.items():
-        setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
     ret.game = get_choice("game", weights)
     if ret.game not in weights:
         raise Exception(f"No game options for selected game \"{ret.game}\" found.")
+
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
+
+    if "triggers" in game_weights:
+        weights = roll_triggers(weights, game_weights["triggers"])
+        game_weights = weights[ret.game]
+
+    ret.name = get_choice('name', weights)
+    for option_key, option in Options.common_options.items():
+        setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
     if ret.game in AutoWorldRegister.world_types:
         for option_key, option in world_type.options.items():

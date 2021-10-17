@@ -92,7 +92,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         if not cls.hidden:
             logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} Items | "
                         f"{len(cls.location_names):3} Locations")
-            logger.info(f"  Item IDs: {min(cls.item_id_to_name):{numlength}} - "
+            logger.info(f"   Item IDs: {min(cls.item_id_to_name):{numlength}} - "
                         f"{max(cls.item_id_to_name):{numlength}} | "
                         f"Location IDs: {min(cls.location_id_to_name):{numlength}} - "
                         f"{max(cls.location_id_to_name):{numlength}}")
@@ -151,7 +151,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     AutoWorld.call_all(world, "pre_fill")
 
-    logger.info('Fill the world.')
+    logger.info(f'Filling the world with {len(world.itempool)} items.')
 
     if world.algorithm == 'flood':
         flood_items(world)  # different algo, biased towards early game progress items
