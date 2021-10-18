@@ -1,7 +1,7 @@
-# A Link to the Past Randomizer Setup Guide
+# Super Metroid Setup Guide
 
 ## Required Software
-- [Z3Client](https://github.com/ArchipelagoMW/Z3Client/releases)
+- [Super Metroid Client](https://github.com/ArchipelagoMW/SuperMetroidClient/releases)
 - **sniConnector.lua** (located on the client download page)
 - [SNI](https://github.com/alttpo/sni/releases) (Included in the Super Metroid Client)
 - Hardware or software capable of loading and playing SNES ROM files
@@ -9,16 +9,15 @@
       ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
       [BizHawk](http://tasvideos.org/BizHawk.html))
     - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware
-- Your Japanese v1.0 ROM file, probably named `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
+- Your Super Metroid ROM file, probably named `Super Metroid (Japan, USA).sfc`
 
 ## Installation Procedures
 
 ### Windows Setup
-1. Download and install the Z3Client from the link above, making sure to install the most recent version.
+1. Download and install the Super Metroid Client from the link above, making sure to install the most recent version.
 **The file is located in the assets section at the bottom of the version information**.
-    - During setup, you will be asked to locate your base ROM file. This is your Japanese Link to the Past ROM file.
-
-2. If you are using an emulator, you should assign your Lua capable emulator as your default program
+2. During setup, you will be asked to locate your base ROM file. This is your Super Metroid ROM file.
+3. If you are using an emulator, you should assign your Lua capable emulator as your default program
 for launching ROM files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember. 
     2. Right-click on a ROM file and select **Open with...**
@@ -39,16 +38,16 @@ each player to enjoy an experience customized for their taste, and different pla
 can all have different options.
 
 ### Where do I get a config file?
-The [Player Settings](/games/A%20Link%20to%20the%20Past/player-settings) page on the website allows you to configure
-your personal settings and export a config file from them.
+The [Player Settings](/games/Super%20Metroid/player-settings) page on the website allows you to configure your
+personal settings and export a config file from them.
 
 ### Verifying your config file
 If you would like to validate your config file to make sure it works, you may do so on the
 [YAML Validator](/mysterycheck) page.
 
 ## Generating a Single-Player Game
-1. Navigate to the [Player Settings](/games/A%20Link%20to%20the%20Past/player-settings) page, configure your options,
-   and click the "Generate Game" button.
+1. Navigate to the [Player Settings](/games/Super%20Metroid/player-settings) page, configure your options, and click
+   the "Generate Game" button.
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your patch file.
@@ -61,7 +60,7 @@ If you would like to validate your config file to make sure it works, you may do
 ### Obtain your patch file and create your ROM
 When you join a multiworld game, you will be asked to provide your config file to whoever is hosting. Once that
 is done, the host will provide you with either a link to download your patch file, or with a zip file containing
-everyone's patch files. Your patch file should have a `.apbp` extension.
+everyone's patch files. Your patch file should have a `.apm3` extension.
 
 Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically
 launch the client, and will also create your ROM in the same place as your patch file.
