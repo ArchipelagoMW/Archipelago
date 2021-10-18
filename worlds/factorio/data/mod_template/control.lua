@@ -57,7 +57,6 @@ function on_force_created(event)
     local data = {}
     data['earned_samples'] = {{ dict_to_lua(starting_items) }}
     data["victory"] = 0
-    data["checked_technologies"] = {}
     global.forcedata[event.force] = data
 {%- if silo == 2 %}
     check_spawn_silo(force)
@@ -202,9 +201,7 @@ script.on_event(defines.events.on_research_finished, function(event)
     local technology = event.research
     if technology.researched and string.find(technology.name, "ap%-") == 1 then
         -- check if it came from the server anyway, then we don't need to double send.
-        if global.forcedata[technology.force.name]["checked_technologies"][technology.name] ~= nil then
-            dumpInfo(technology.force) --is sendable
-        end
+        dumpInfo(technology.force) --is sendable
     else
         if FREE_SAMPLES == 0 then
             return  -- Nothing else to do
@@ -393,7 +390,6 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     if index == -1 then -- for coop sync and restoring from an older savegame
         tech = force.technologies[item_name]
         if tech.researched ~= true then
-            global.forcedata[force.name]["checked_technologies"][tech.name] = 1 -- mark as don't send again
             game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
             game.play_sound({path="utility/research_completed"})
             tech.researched = true

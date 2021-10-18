@@ -915,7 +915,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     " You can ask the server admin for a /forfeit")
                 return False
 
-    def _cmd_forfeit(self) -> bool:
+    def _cmd_collect(self) -> bool:
         """Send your remaining items to yourself"""
         if "enabled" in self.ctx.collect_mode:
             collect_player(self.ctx, self.client.team, self.client.slot)

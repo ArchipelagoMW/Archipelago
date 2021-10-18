@@ -5,6 +5,8 @@ import json
 import string
 import copy
 import subprocess
+import time
+
 import factorio_rcon
 
 import colorama
@@ -109,9 +111,11 @@ class FactorioContext(CommonContext):
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
     from worlds.factorio.Technologies import lookup_id_to_name
+    last_bridge = time.perf_counter()
     try:
         while not ctx.exit_event.is_set():
-            if ctx.awaiting_bridge and ctx.rcon_client:
+            if ctx.awaiting_bridge and ctx.rcon_client and time.perf_counter() + 1 < last_bridge:
+                last_bridge = time.perf_counter()
                 ctx.awaiting_bridge = False
                 data = json.loads(ctx.rcon_client.send_command("/ap-sync"))
                 if data["slot_name"] != ctx.auth:
@@ -135,7 +139,7 @@ async def game_watcher(ctx: FactorioContext):
                             f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.1)
 
     except Exception as e:
         logging.exception(e)
