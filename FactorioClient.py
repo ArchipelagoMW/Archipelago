@@ -111,11 +111,11 @@ class FactorioContext(CommonContext):
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
     from worlds.factorio.Technologies import lookup_id_to_name
-    last_bridge = time.perf_counter()
+    next_bridge = time.perf_counter() + 1
     try:
         while not ctx.exit_event.is_set():
-            if ctx.awaiting_bridge and ctx.rcon_client and time.perf_counter() + 1 < last_bridge:
-                last_bridge = time.perf_counter()
+            if ctx.awaiting_bridge and ctx.rcon_client and time.perf_counter() > next_bridge:
+                next_bridge = time.perf_counter() + 1
                 ctx.awaiting_bridge = False
                 data = json.loads(ctx.rcon_client.send_command("/ap-sync"))
                 if data["slot_name"] != ctx.auth:
