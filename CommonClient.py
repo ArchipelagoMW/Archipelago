@@ -117,8 +117,8 @@ class CommonContext():
         self.locations_checked: typing.Set[int] = set()
         self.locations_scouted: typing.Set[int] = set()
         self.items_received = []
-        self.missing_locations: typing.List[int] = []
-        self.checked_locations: typing.List[int] = []
+        self.missing_locations: typing.Set[int] = set()
+        self.checked_locations: typing.Set[int] = set()
         self.locations_info = {}
 
         self.input_queue = asyncio.Queue()
@@ -389,8 +389,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # This list is used to only send to the server what is reported as ACTUALLY Missing.
         # This also serves to allow an easy visual of what locations were already checked previously
         # when /missing is used for the client side view of what is missing.
-        ctx.missing_locations = args["missing_locations"]
-        ctx.checked_locations = args["checked_locations"]
+        ctx.missing_locations = set(args["missing_locations"])
+        ctx.checked_locations = set(args["checked_locations"])
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]

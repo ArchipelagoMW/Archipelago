@@ -180,6 +180,7 @@ def get_default_options() -> dict:
             "location_check_points": 1,
             "hint_cost": 10,
             "forfeit_mode": "goal",
+            "collect_mode": "disabled",
             "remaining_mode": "goal",
             "auto_shutdown": 0,
             "compatibility": 2,

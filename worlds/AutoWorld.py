@@ -168,7 +168,7 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def get_required_client_version(self) -> Tuple[int, int, int]:
-        return 0, 0, 3
+        return 0, 1, 6
 
     # end of Main.py calls
 

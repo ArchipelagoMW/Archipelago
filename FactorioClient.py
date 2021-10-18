@@ -99,9 +99,9 @@ class FactorioContext(CommonContext):
                                       f"{text}")
 
     def on_package(self, cmd: str, args: dict):
-        if cmd == "Connected":
+        if cmd in {"Connected", "RoomUpdate"}:
             # catch up sync anything that is already cleared.
-            if args["checked_locations"]:
+            if "checked_locations" in args and args["checked_locations"]:
                 self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
 
