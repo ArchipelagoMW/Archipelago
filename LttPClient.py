@@ -714,9 +714,12 @@ async def track_locations(ctx: Context, roomid, roomdata):
 
     def new_check(location_id):
         new_locations.append(location_id)
-        ctx.locations_checked.add(location_id)
-        location = ctx.location_name_getter(location_id)
-        snes_logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+
+    def apply_checks():
+        for location_id in new_locations:
+            ctx.locations_checked.add(location_id)
+            location = ctx.location_name_getter(location_id)
+            snes_logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
 
     try:
         if roomid in location_shop_ids:
@@ -748,12 +751,13 @@ async def track_locations(ctx: Context, roomid, roomdata):
 
     if uw_begin < uw_end:
         uw_data = await snes_read(ctx, SAVEDATA_START + (uw_begin * 2), (uw_end - uw_begin) * 2)
-        if uw_data is not None:
-            for location_id, (roomid, mask) in uw_unchecked.items():
-                offset = (roomid - uw_begin) * 2
-                roomdata = uw_data[offset] | (uw_data[offset + 1] << 8)
-                if roomdata & mask != 0:
-                    new_check(location_id)
+        if uw_data is None:
+            return  # bad read -> invalid state
+        for location_id, (roomid, mask) in uw_unchecked.items():
+            offset = (roomid - uw_begin) * 2
+            roomdata = uw_data[offset] | (uw_data[offset + 1] << 8)
+            if roomdata & mask != 0:
+                new_check(location_id)
 
     ow_begin = 0x82
     ow_unchecked = {}
@@ -765,29 +769,36 @@ async def track_locations(ctx: Context, roomid, roomdata):
 
     if ow_begin < ow_end:
         ow_data = await snes_read(ctx, SAVEDATA_START + 0x280 + ow_begin, ow_end - ow_begin)
-        if ow_data is not None:
-            for location_id, screenid in ow_unchecked.items():
-                if ow_data[screenid - ow_begin] & 0x40 != 0:
-                    new_check(location_id)
+        if ow_data is None:
+            return  # bad read -> invalid state
+        for location_id, screenid in ow_unchecked.items():
+            if ow_data[screenid - ow_begin] & 0x40 != 0:
+                new_check(location_id)
 
     if not ctx.locations_checked.issuperset(location_table_npc_id):
         npc_data = await snes_read(ctx, SAVEDATA_START + 0x410, 2)
-        if npc_data is not None:
-            npc_value = npc_data[0] | (npc_data[1] << 8)
-            for location_id, mask in location_table_npc_id.items():
-                if npc_value & mask != 0 and location_id not in ctx.locations_checked:
-                    new_check(location_id)
+        if npc_data is None:
+            return  # bad read -> invalid state
+        npc_value = npc_data[0] | (npc_data[1] << 8)
+        for location_id, mask in location_table_npc_id.items():
+            if npc_value & mask != 0 and location_id not in ctx.locations_checked:
+                new_check(location_id)
 
     if not ctx.locations_checked.issuperset(location_table_misc_id):
         misc_data = await snes_read(ctx, SAVEDATA_START + 0x3c6, 4)
-        if misc_data is not None:
-            for location_id, (offset, mask) in location_table_misc_id.items():
-                assert (0x3c6 <= offset <= 0x3c9)
-                if misc_data[offset - 0x3c6] & mask != 0 and location_id not in ctx.locations_checked:
-                    new_check(location_id)
-
+        if misc_data is None:
+            return  # bad read -> invalid state
+        for location_id, (offset, mask) in location_table_misc_id.items():
+            assert (0x3c6 <= offset <= 0x3c9)
+            if misc_data[offset - 0x3c6] & mask != 0 and location_id not in ctx.locations_checked:
+                new_check(location_id)
 
     if new_locations:
+        # validate game state by reading game mode again
+        gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
+        if gamemode is None or (gamemode[0] not in INGAME_MODES and gamemode[0] not in ENDGAME_MODES):
+            return
+        apply_checks()
         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": new_locations}])
 
 
