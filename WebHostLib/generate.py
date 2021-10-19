@@ -4,6 +4,7 @@ import random
 import json
 import zipfile
 from collections import Counter
+from typing import Dict, Optional as TypeOptional
 
 from flask import request, flash, redirect, url_for, session, render_template
 
@@ -33,6 +34,14 @@ def generate(race=False):
                 flash(options)
             else:
                 results, gen_options = roll_options(options)
+                # get form data -> server settings
+                hint_cost = int(request.form.get("hint_cost", 10))
+                forfeit_mode = request.form.get("forfeit_mode", "goal")
+                meta = {"race": race, "hint_cost": hint_cost, "forfeit_mode": forfeit_mode}
+                if race:
+                    meta["item_cheat"] = False
+                    meta["remaining"] = False
+
                 if any(type(result) == str for result in results.values()):
                     return render_template("checkResult.html", results=results)
                 elif len(gen_options) > app.config["MAX_ROLL"]:
@@ -42,7 +51,8 @@ def generate(race=False):
                     gen = Generation(
                         options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
                         # convert to json compatible
-                        meta=json.dumps({"race": race}), state=STATE_QUEUED,
+                        meta=json.dumps(meta),
+                        state=STATE_QUEUED,
                         owner=session["_id"])
                     commit()
 
@@ -50,18 +60,24 @@ def generate(race=False):
                 else:
                     try:
                         seed_id = gen_game({name: vars(options) for name, options in gen_options.items()},
-                                           race=race, owner=session["_id"].int)
+                                           meta=meta, owner=session["_id"].int)
                     except BaseException as e:
                         from .autolauncher import handle_generation_failure
                         handle_generation_failure(e)
-                        return render_template("seedError.html", seed_error=(e.__class__.__name__ + ": "+ str(e)))
+                        return render_template("seedError.html", seed_error=(e.__class__.__name__ + ": " + str(e)))
 
                     return redirect(url_for("viewSeed", seed=seed_id))
 
     return render_template("generate.html", race=race)
 
 
-def gen_game(gen_options, race=False, owner=None, sid=None):
+def gen_game(gen_options, meta: TypeOptional[Dict[str, object]] = None, owner=None, sid=None):
+    if not meta:
+        meta: Dict[str, object] = {}
+
+    meta.setdefault("hint_cost", 10)
+    race = meta.get("race", False)
+    del (meta["race"])
     try:
         target = tempfile.TemporaryDirectory()
         playercount = len(gen_options)
@@ -95,7 +111,7 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
                 erargs.name[player] = os.path.splitext(os.path.split(playerfile)[-1])[0]
             erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
 
-        ERmain(erargs, seed)
+        ERmain(erargs, seed, baked_server_options=meta)
 
         return upload_to_db(target.name, sid, owner, race)
     except BaseException as e:
@@ -105,7 +121,7 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
                 if gen is not None:
                     gen.state = STATE_ERROR
                     meta = json.loads(gen.meta)
-                    meta["error"] = (e.__class__.__name__ + ": "+ str(e))
+                    meta["error"] = (e.__class__.__name__ + ": " + str(e))
                     gen.meta = json.dumps(meta)
 
                     commit()

@@ -1,0 +1,12 @@
+#start-playing-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#start-playing{
+    width: 700px;
+    min-height: 240px;
+    text-align: center;
+}

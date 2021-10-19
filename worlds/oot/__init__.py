@@ -36,7 +36,6 @@ location_id_offset = 67000
 
 # OoT's generate_output doesn't benefit from more than 2 threads, instead it uses a lot of memory.
 i_o_limiter = threading.Semaphore(2)
-hint_data_available = threading.Event()
 
 
 class OOTWorld(World):
@@ -88,6 +87,10 @@ class OOTWorld(World):
 
         return super().__new__(cls)
 
+    def __init__(self, world, player):
+        self.hint_data_available = threading.Event()
+        super(OOTWorld, self).__init__(world, player)
+    
     def generate_early(self):
         # Player name MUST be at most 16 bytes ascii-encoded, otherwise won't write to ROM correctly
         if len(bytes(self.world.get_player_name(self.player), 'ascii')) > 16:
@@ -261,7 +264,7 @@ class OOTWorld(World):
             # Both two-handed swords can be required in glitch logic, so only consider them nonprogression in glitchless
             self.nonadvancement_items.add('Biggoron Sword')
             self.nonadvancement_items.add('Giants Knife')
-
+  
     def load_regions_from_json(self, file_path):
         region_json = read_json(file_path)
 
@@ -456,9 +459,7 @@ class OOTWorld(World):
         junk_pool = get_junk_pool(self)
         removed_items = []
         # Determine starting items
-        for item in self.world.precollected_items:
-            if item.player != self.player:
-                continue
+        for item in self.world.precollected_items[self.player]:
             if item.name in self.remove_from_start_inventory:
                 self.remove_from_start_inventory.remove(item.name)
                 removed_items.append(item.name)
@@ -703,7 +704,7 @@ class OOTWorld(World):
 
     def generate_output(self, output_directory: str):
         if self.hints != 'none':
-            hint_data_available.wait()
+            self.hint_data_available.wait()
 
         with i_o_limiter:
             # Make ice traps appear as other random items
@@ -782,7 +783,8 @@ class OOTWorld(World):
         except Exception as e:
             raise e
         finally:
-            hint_data_available.set()
+            for autoworld in world.get_game_worlds("Ocarina of Time"):
+                autoworld.hint_data_available.set()
 
     def modify_multidata(self, multidata: dict):
         for item_name in self.remove_from_start_inventory:

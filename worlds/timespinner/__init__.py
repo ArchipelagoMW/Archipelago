@@ -18,7 +18,7 @@ class TimespinnerWorld(World):
     game = "Timespinner"
     topology_present = True
     remote_items = False
-    data_version = 2
+    data_version = 3
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
@@ -40,11 +40,11 @@ class TimespinnerWorld(World):
 
 
     def create_item(self, name: str) -> Item:
-        return create_item(name, self.player)
+        return create_item_with_correct_settings(self.world, self.player, name)
 
 
     def set_rules(self):
-        setup_events(self.world, self.player, self.locked_locations[self.player])
+        setup_events(self.world, self.player, self.locked_locations[self.player], self.location_cache[self.player])
 
         self.world.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
 
@@ -59,7 +59,7 @@ class TimespinnerWorld(World):
 
         pool = get_item_pool(self.world, self.player, excluded_items)
 
-        fill_item_pool_with_dummy_items(self.world, self.player, self.locked_locations[self.player], pool)
+        fill_item_pool_with_dummy_items(self.world, self.player, self.locked_locations[self.player], self.location_cache[self.player], pool)
 
         self.world.itempool += pool
 
@@ -77,11 +77,6 @@ class TimespinnerWorld(World):
         slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache[self.player])
 
         return slot_data
-
-
-def create_item(name: str, player: int) -> Item:
-    data = item_table[name]
-    return Item(name, data.progression, data.code, player)
 
 
 def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> Set[str]:
@@ -104,8 +99,8 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str
     excluded_items.add(melee_weapon)
     excluded_items.add(spell)
 
-    melee_weapon_item = create_item(melee_weapon, player)
-    spell_item = create_item(spell, player)
+    melee_weapon_item = create_item_with_correct_settings(world, player, melee_weapon)
+    spell_item = create_item_with_correct_settings(world, player, spell)
 
     world.get_location('Yo Momma 1', player).place_locked_item(melee_weapon_item)
     world.get_location('Yo Momma 2', player).place_locked_item(spell_item)
@@ -120,15 +115,16 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> L
     for name, data in item_table.items():
         if not name in excluded_items:
             for _ in range(data.count):
-                item = update_progressive_state_based_flags(world, player, name, create_item(name, player))
+                item = create_item_with_correct_settings(world, player, name)
                 pool.append(item)
 
     return pool
 
 
-def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locations: List[str], pool: List[Item]):
-    for _ in range(len(get_locations(world, player)) - len(locked_locations) - len(pool)):
-        item = create_item(world.random.choice(filler_items), player)
+def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locations: List[str],
+                                    location_cache: List[Location], pool: List[Item]):
+    for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
+        item = create_item_with_correct_settings(world, player, world.random.choice(filler_items))
         pool.append(item)
 
 
@@ -139,27 +135,31 @@ def place_first_progression_item(world: MultiWorld, player: int, excluded_items:
     excluded_items.add(progression_item)
     locked_locations.append(location)
 
-    item = create_item(progression_item, player)
+    item = create_item_with_correct_settings(world, player, progression_item)
 
     world.get_location(location, player).place_locked_item(item)
 
 
-def update_progressive_state_based_flags(world: MultiWorld, player: int, name: str, data: Item) -> Item:
-    if not data.advancement:
-        return data
+def create_item_with_correct_settings(world: MultiWorld, player: int, name: str) -> Item:
+    data = item_table[name]
+
+    item = Item(name, data.progression, data.code, player)
+    item.never_exclude = data.never_exclude
+
+    if not item.advancement:
+        return item
 
     if (name == 'Tablet' or name == 'Library Keycard V') and not is_option_enabled(world, player, "DownloadableItems"):
-        data.advancement = False
+        item.advancement = False
     if name == 'Oculus Ring' and not is_option_enabled(world, player, "FacebookMode"):
-        data.advancement = False
+        item.advancement = False
 
-    return data
+    return item
 
 
-def setup_events(world: MultiWorld, player: int, locked_locations: List[str]):
-    for location in get_locations(world, player):
-        if location.code == EventId:
-            location = world.get_location(location.name, player)
+def setup_events(world: MultiWorld, player: int, locked_locations: List[str], location_cache: List[Location]):
+    for location in location_cache:
+        if location.address == EventId:
             item = Item(location.name, True, EventId, player)
 
             locked_locations.append(location.name)

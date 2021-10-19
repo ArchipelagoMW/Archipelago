@@ -231,13 +231,6 @@ class HeartColor(Choice):
     option_green = 2
     option_yellow = 3
 
-    @classmethod
-    def from_text(cls, text: str) -> Choice:
-        # remove when this becomes a base Choice feature
-        if text == "random":
-            return cls(random.randint(0, 3))
-        return super(HeartColor, cls).from_text(text)
-
 
 class QuickSwap(DefaultOnToggle):
     displayname = "L/R Quickswapping"

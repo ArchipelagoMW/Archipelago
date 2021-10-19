@@ -48,7 +48,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
 
         elif file.filename.endswith(".zip"):
             # Factorio mods need a specific name or they do not function
-            _, seed_name, slot_id, slot_name = file.filename.rsplit("_", 1)[0].split("-")
+            _, seed_name, slot_id, slot_name = file.filename.rsplit("_", 1)[0].split("-", 3)
             slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
                            player_id=int(slot_id[1:]), game="Factorio"))
 
@@ -112,7 +112,7 @@ def uploads():
                         flush()  # place into DB and generate ids
                         return redirect(url_for("viewSeed", seed=seed.id))
             else:
-                flash("Not recognized file format. Awaiting a .multidata file.")
+                flash("Not recognized file format. Awaiting a .archipelago file or .zip containing one.")
     return render_template("hostGame.html")
 
 

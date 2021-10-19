@@ -61,7 +61,7 @@ const fetchSettingData = () => new Promise((resolve, reject) => {
     try{ resolve(JSON.parse(ajax.responseText)); }
     catch(error){ reject(error); }
   };
-  ajax.open('GET', `${window.location.origin}/static/generated/${gameName}.json`, true);
+  ajax.open('GET', `${window.location.origin}/static/generated/player-settings/${gameName}.json`, true);
   ajax.send();
 });
 

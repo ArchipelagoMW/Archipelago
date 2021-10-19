@@ -200,6 +200,7 @@ end)
 script.on_event(defines.events.on_research_finished, function(event)
     local technology = event.research
     if technology.researched and string.find(technology.name, "ap%-") == 1 then
+        -- check if it came from the server anyway, then we don't need to double send.
         dumpInfo(technology.force) --is sendable
     else
         if FREE_SAMPLES == 0 then

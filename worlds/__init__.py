@@ -27,10 +27,6 @@ for world_name, world in AutoWorldRegister.world_types.items():
     lookup_any_location_id_to_name.update(world.location_id_to_name)
 
 network_data_package = {
-    # Remove with 0.2.0
-    "lookup_any_location_id_to_name": lookup_any_location_id_to_name,  # legacy, to be removed
-    "lookup_any_item_id_to_name": lookup_any_item_id_to_name,  # legacy, to be removed
-
     "version": sum(world.data_version for world in AutoWorldRegister.world_types.values()),
     "games": games,
 }

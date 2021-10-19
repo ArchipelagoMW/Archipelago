@@ -53,7 +53,7 @@ Sent to clients when they connect to an Archipelago server.
 | version | NetworkVersion | Object denoting the version of Archipelago which the server is running. See [NetworkVersion](#NetworkVersion) for more details. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. Example: `WebHost` |
 | password | bool | Denoted whether a password is required to join this room.|
-| permissions | dict\[str, Permission\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "forfeit" and "remaining". |
+| permissions | dict\[str, Permission\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "forfeit", "collect" and "remaining". |
 | hint_cost | int | The amount of points it costs to receive a hint from the server. |
 | location_check_points | int | The amount of hint points you receive per item/location check completed. ||
 | players | list\[NetworkPlayer\] | Sent only if the client is properly authenticated (see [Archipelago Connection Handshake](#Archipelago-Connection-Handshake)). Information on the players currently connected to the server. See [NetworkPlayer](#NetworkPlayer) for more details. |
@@ -61,7 +61,7 @@ Sent to clients when they connect to an Archipelago server.
 | datapackage_versions | dict[str, int] | Data versions of the individual games' data packages the server will send. |
 | seed_name | str | uniquely identifying name of this generation |
 
-#### forfeit_mode
+#### forfeit
 Dictates what is allowed when it comes to a player forfeiting their run. A forfeit is an action which distributes the rest of the items in a player's run to those other players awaiting them.
 
 * `auto`: Distributes a player's items to other players when they complete their goal.
@@ -70,7 +70,17 @@ Dictates what is allowed when it comes to a player forfeiting their run. A forfe
 * `disabled`: All forfeit modes disabled.
 * `goal`: Allows for manual use of forfeit command once a player completes their goal. (Disabled until goal completion)
 
-#### remaining_mode
+#### collect
+Dictates what is allowed when it comes to a player collecting their run. A collect is an action which sends the rest of the items in a player's run.
+
+* `auto`: Automatically when they complete their goal.
+* `enabled`: Denotes that players may !collect at any time in the game.
+* `auto-enabled`: Both of the above options together.
+* `disabled`: All collect modes disabled.
+* `goal`: Allows for manual use of collect command once a player completes their goal. (Disabled until goal completion)
+
+
+#### remaining
 Dictates what is allowed when it comes to a player querying the items remaining in their run.
 
 * `goal`: Allows a player to query for items remaining in their run but only after they completed their own goal.
@@ -365,7 +375,7 @@ class Permission(enum.IntEnum):
     disabled = 0b000  # 0, completely disables access
     enabled = 0b001  # 1, allows manual use
     goal = 0b010  # 2, allows manual use after goal completion
-    auto = 0b110  # 6, forces use after goal completion, only works for forfeit
+    auto = 0b110  # 6, forces use after goal completion, only works for forfeit and collect
     auto_enabled = 0b111  # 7, forces use after goal completion, allows manual use any time
 ```
 

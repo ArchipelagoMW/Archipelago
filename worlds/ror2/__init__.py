@@ -64,6 +64,7 @@ class RiskOfRainWorld(World):
                 "Equipment": self.world.equipment[self.player].value
             }
 
+        # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
         if not self.world.enable_lunar[self.player]:
             if not pool_option == 4:
                 junk_pool.pop("Lunar Item")

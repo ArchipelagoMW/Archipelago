@@ -139,10 +139,8 @@ class Choice(Option):
     @classmethod
     def from_text(cls, text: str) -> Choice:
         text = text.lower()
-        # TODO: turn on after most people have adjusted their yamls to no longer have suboptions with "random" in them
-        # maybe in 0.2?
-        # if text == "random":
-        #     return cls(random.choice(list(cls.options.values())))
+        if text == "random":
+            return cls(random.choice(list(cls.name_lookup)))
         for optionname, value in cls.options.items():
             if optionname == text:
                 return cls(value)
@@ -181,6 +179,8 @@ class Choice(Option):
             return other != self.value
         elif isinstance(other, bool):
             return other != bool(self.value)
+        elif other is None:
+            return False
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
@@ -217,7 +217,7 @@ class Range(Option, int):
         return cls.from_text(str(data))
 
     def get_option_name(self, value):
-        return str(self.value)
+        return str(value)
 
     def __str__(self):
         return str(self.value)
@@ -256,7 +256,7 @@ class OptionDict(Option):
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
     def get_option_name(self, value):
-        return ", ".join(f"{key}: {value}" for key, value in self.value.items())
+        return ", ".join(f"{key}: {v}" for key, v in value.items())
 
     def __contains__(self, item):
         return item in self.value
@@ -282,7 +282,7 @@ class OptionList(Option):
         return cls.from_text(str(data))
 
     def get_option_name(self, value):
-        return ", ".join(self.value)
+        return ", ".join(value)
 
     def __contains__(self, item):
         return item in self.value
@@ -310,7 +310,7 @@ class OptionSet(Option):
         return cls.from_text(str(data))
 
     def get_option_name(self, value):
-        return ", ".join(self.value)
+        return ", ".join(value)
 
     def __contains__(self, item):
         return item in self.value

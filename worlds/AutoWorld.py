@@ -114,6 +114,9 @@ class World(metaclass=AutoWorldRegister):
     item_names: Set[str]  # set of all potential item names
     location_names: Set[str]  # set of all potential location names
 
+    # If there is visibility in what is being sent, this is where it will be known.
+    sending_visible: bool = False
+
     def __init__(self, world: MultiWorld, player: int):
         self.world = world
         self.player = player
@@ -165,7 +168,7 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def get_required_client_version(self) -> Tuple[int, int, int]:
-        return 0, 0, 3
+        return 0, 1, 6
 
     # end of Main.py calls
 

@@ -84,11 +84,17 @@ class CustomTechnology(Technology):
 
     def __init__(self, origin: Technology, world, allowed_packs: Set[str], player: int):
         ingredients = origin.ingredients & allowed_packs
+        military_allowed = "military-science-pack" in allowed_packs \
+                           and (ingredients & {"chemical-science-pack", "production-science-pack", "utility-science-pack"})
         self.player = player
         if origin.name not in world.worlds[player].static_nodes:
+            if military_allowed:
+                ingredients.add("military-science-pack")
             ingredients = list(ingredients)
             ingredients.sort()  # deterministic sample
             ingredients = world.random.sample(ingredients, world.random.randint(1, len(ingredients)))
+        elif origin.name == "rocket-silo" and military_allowed:
+            ingredients.add("military-science-pack")
         super(CustomTechnology, self).__init__(origin.name, ingredients, origin.factorio_id)
 
 

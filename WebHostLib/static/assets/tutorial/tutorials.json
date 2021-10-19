@@ -223,5 +223,43 @@
         ]
       }
     ]
+  },
+  {
+    "gameTitle": "Subnautica",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Subnautica randomizer connected to an Archipelago Multiworld",
+        "files": [
+          {
+            "language": "English",
+            "filename": "Subnautica/setup_en.md",
+            "link": "Subnautica/setup/en",
+            "authors": [
+              "Berserker"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Super Metroid",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Super Metroid Client on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "super-metroid/multiworld_en.md",
+            "link": "super-metroid/multiworld/en",
+            "authors": [
+              "Farrak Kilhn"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

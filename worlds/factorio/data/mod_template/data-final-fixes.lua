@@ -30,6 +30,7 @@ function prep_copy(new_copy, old_tech)
     local ingredient_filter = allowed_ingredients[old_tech.name]
     if ingredient_filter ~= nil then
         new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients, ingredient_filter)
+        new_copy.unit.ingredients = add_ingredients(new_copy.unit.ingredients, ingredient_filter)
     end
 end
 
@@ -127,5 +128,6 @@ adjust_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_scale) }})
 
 {%- if silo==2 %}
 -- disable silo research for pre-placed silo
-technologies["rocket-silo"].hidden = true
+technologies["rocket-silo"].enabled = false
+technologies["rocket-silo"].visible_when_disabled = false
 {%- endif %}

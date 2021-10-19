@@ -66,12 +66,14 @@ class Context:
                       "password": str,
                       "forfeit_mode": str,
                       "remaining_mode": str,
+                      "collect_mode": str,
                       "item_cheat": bool,
                       "compatibility": int}
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
-                 hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", remaining_mode: str = "disabled",
-                 auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2, log_network: bool = False):
+                 hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
+                 remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2,
+                 log_network: bool = False):
         super(Context, self).__init__()
         self.log_network = log_network
         self.endpoints = []
@@ -86,6 +88,7 @@ class Context:
         self.allow_forfeits = {}
         self.remote_items = set()
         self.remote_start_inventory = set()
+        #                          player          location_id     item_id  target_player_id
         self.locations: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int]]] = {}
         self.host = host
         self.port = port
@@ -102,6 +105,7 @@ class Context:
         self.hints: typing.Dict[team_slot, typing.Set[NetUtils.Hint]] = collections.defaultdict(set)
         self.forfeit_mode: str = forfeit_mode
         self.remaining_mode: str = remaining_mode
+        self.collect_mode: str = collect_mode
         self.item_cheat = item_cheat
         self.running = True
         self.client_activity_timers: typing.Dict[
@@ -461,7 +465,7 @@ async def server(websocket, path, ctx: Context):
 async def on_client_connected(ctx: Context, client: Client):
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
-        'password': ctx.password is not None,
+        'password': bool(ctx.password),
         'players': [
             NetworkPlayer(client.team, client.slot, ctx.name_aliases.get((client.team, client.slot), client.name),
                           client.name) for client
@@ -470,9 +474,6 @@ async def on_client_connected(ctx: Context, client: Client):
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
         'version': Utils.version_tuple,
-        # TODO ~0.2.0 remove forfeit_mode and remaining_mode in favor of permissions
-        'forfeit_mode': ctx.forfeit_mode,
-        'remaining_mode': ctx.remaining_mode,
         'permissions': get_permissions(ctx),
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
@@ -487,6 +488,7 @@ def get_permissions(ctx) -> typing.Dict[str, Permission]:
     return {
         "forfeit": Permission.from_text(ctx.forfeit_mode),
         "remaining": Permission.from_text(ctx.remaining_mode),
+        "collect": Permission.from_text(ctx.collect_mode)
     }
 
 
@@ -502,10 +504,6 @@ async def on_client_joined(ctx: Context, client: Client):
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
         f"playing {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}).")
-    # TODO: remove with 0.2
-    if client.version < Version(0, 1, 7):
-        ctx.notify_client(client,
-                          "Warning: Your client's datapackage handling may be unsupported soon. (Version < 0.1.7)")
 
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
@@ -565,11 +563,32 @@ def send_new_items(ctx: Context):
                 client.send_index = len(items)
 
 
+def update_checked_locations(ctx: Context, team: int, slot: int):
+    for client in ctx.endpoints:
+        if client.team == team and client.slot == slot:
+            ctx.send_msgs(client, [{"cmd": "RoomUpdate", "checked_locations": get_checked_checks(ctx, client)}])
+
+
 def forfeit_player(ctx: Context, team: int, slot: int):
-    # register any locations that are in the multidata
+    """register any locations that are in the multidata"""
     all_locations = set(ctx.locations[slot])
     ctx.notify_all("%s (Team #%d) has forfeited" % (ctx.player_names[(team, slot)], team + 1))
     register_location_checks(ctx, team, slot, all_locations)
+    update_checked_locations(ctx, team, slot)
+
+
+def collect_player(ctx: Context, team: int, slot: int):
+    """register any locations that are in the multidata, pointing towards this player"""
+    all_locations = collections.defaultdict(set)
+    for source_slot, location_data in ctx.locations.items():
+        for location_id, (item_id, target_player_id) in location_data.items():
+            if target_player_id == slot:
+                all_locations[source_slot].add(location_id)
+
+    ctx.notify_all("%s (Team #%d) has collected" % (ctx.player_names[(team, slot)], team + 1))
+    for source_player, location_ids in all_locations.items():
+        register_location_checks(ctx, team, source_player, location_ids)
+        update_checked_locations(ctx, team, source_player)
 
 
 def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
@@ -896,6 +915,25 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     " You can ask the server admin for a /forfeit")
                 return False
 
+    def _cmd_collect(self) -> bool:
+        """Send your remaining items to yourself"""
+        if "enabled" in self.ctx.collect_mode:
+            collect_player(self.ctx, self.client.team, self.client.slot)
+            return True
+        elif "disabled" in self.ctx.collect_mode:
+            self.output(
+                "Sorry, client collecting has been disabled on this server. You can ask the server admin for a /collect")
+            return False
+        else:  # is auto or goal
+            if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
+                collect_player(self.ctx, self.client.team, self.client.slot)
+                return True
+            else:
+                self.output(
+                    "Sorry, client collecting requires you to have beaten the game on this server."
+                    " You can ask the server admin for a /collect")
+                return False
+
     def _cmd_remaining(self) -> bool:
         """List remaining items in your game, but not their location or recipient"""
         if self.ctx.remaining_mode == "enabled":
@@ -977,14 +1015,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output("Cheating is disabled.")
             return False
 
-    @mark_raw
-    def _cmd_hint(self, item_or_location: str = "") -> bool:
-        """Use !hint {item_name/location_name},
-        for example !hint Lamp or !hint Link's House to get a spoiler peek for that location or item.
-        If hint costs are on, this will only give you one new result,
-        you can rerun the command to get more in that case."""
+    def get_hints(self, input_text: str, explicit_location: bool = False) -> bool:
         points_available = get_client_points(self.ctx, self.client)
-        if not item_or_location:
+        if not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
             self.ctx.hints[self.client.team, self.client.slot] = hints
@@ -994,16 +1027,17 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return True
         else:
             world = proxy_worlds[self.ctx.games[self.client.slot]]
-            item_name, usable, response = get_intended_text(item_or_location, world.all_names)
+            item_name, usable, response = get_intended_text(input_text,
+                                                            world.all_names if not explicit_location else world.location_names)
             if usable:
                 if item_name in world.hint_blacklist:
                     self.output(f"Sorry, \"{item_name}\" is marked as non-hintable.")
                     hints = []
-                elif item_name in world.item_name_groups:
+                elif item_name in world.item_name_groups and not explicit_location:
                     hints = []
                     for item in world.item_name_groups[item_name]:
                         hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
-                elif item_name in world.item_names:  # item name
+                elif item_name in world.item_names and not explicit_location:  # item name
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, item_name)
                 else:  # location name
                     hints = collect_hints_location(self.ctx, self.client.team, self.client.slot, item_name)
@@ -1036,19 +1070,25 @@ class ClientMessageProcessor(CommonCommandProcessor):
                             hints.append(hint)
                             can_pay -= 1
                             self.ctx.hints_used[self.client.team, self.client.slot] += 1
+                            points_available = get_client_points(self.ctx, self.client)
 
                             if not hint.found:
                                 self.ctx.hints[self.client.team, hint.finding_player].add(hint)
                                 self.ctx.hints[self.client.team, hint.receiving_player].add(hint)
 
                         if not_found_hints:
-                            if hints:
+                            if hints and cost and int((points_available // cost) == 0):
+                                self.output(
+                                    f"There may be more hintables, however, you cannot afford to pay for any more. "
+                                    f" You have {points_available} and need at least "
+                                    f"{self.ctx.get_hint_cost(self.client.slot)}.")
+                            elif hints:
                                 self.output(
                                     "There may be more hintables, you can rerun the command to find more.")
                             else:
                                 self.output(f"You can't afford the hint. "
                                             f"You have {points_available} points and need at least "
-                                            f"{self.ctx.get_hint_cost(self.client.slot)}")
+                                            f"{self.ctx.get_hint_cost(self.client.slot)}.")
                         notify_hints(self.ctx, self.client.team, hints)
                         self.ctx.save()
                         return True
@@ -1059,6 +1099,22 @@ class ClientMessageProcessor(CommonCommandProcessor):
             else:
                 self.output(response)
                 return False
+
+    @mark_raw
+    def _cmd_hint(self, item_or_location: str = "") -> bool:
+        """Use !hint {item_name/location_name},
+        for example !hint Lamp or !hint Link's House to get a spoiler peek for that location or item.
+        If hint costs are on, this will only give you one new result,
+        you can rerun the command to get more in that case."""
+        return self.get_hints(item_or_location)
+
+    @mark_raw
+    def _cmd_hint_location(self, location: str = "") -> bool:
+        """Use !hint_location {location_name},
+        for example !hint atomic-bomb to get a spoiler peek for that location.
+        (In the case of factorio, or any other game where item names and location names are identical,
+        this command must be used explicitly.)"""
+        return self.get_hints(location, True)
 
 
 def get_checked_checks(ctx: Context, client: Client) -> typing.List[int]:
@@ -1228,6 +1284,8 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
                 forfeit_player(ctx, client.team, client.slot)
             elif proxy_worlds[ctx.games[client.slot]].forced_auto_forfeit:
                 forfeit_player(ctx, client.team, client.slot)
+            if "auto" in ctx.collect_mode:
+                collect_player(ctx, client.team, client.slot)
 
         ctx.client_game_state[client.team, client.slot] = new_status
 
@@ -1308,8 +1366,20 @@ class ServerCommandProcessor(CommonCommandProcessor):
             return False
 
     @mark_raw
+    def _cmd_collect(self, player_name: str) -> bool:
+        """Send out the remaining items to player."""
+        seeked_player = player_name.lower()
+        for (team, slot), name in self.ctx.player_names.items():
+            if name.lower() == seeked_player:
+                collect_player(self.ctx, team, slot)
+                return True
+
+        self.output(f"Could not find player {player_name} to collect")
+        return False
+
+    @mark_raw
     def _cmd_forfeit(self, player_name: str) -> bool:
-        """Send out the remaining items from a player's game to their intended recipients"""
+        """Send out the remaining items from a player to their intended recipients"""
         seeked_player = player_name.lower()
         for (team, slot), name in self.ctx.player_names.items():
             if name.lower() == seeked_player:
@@ -1413,7 +1483,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     return input_text
             setattr(self.ctx, option_name, attrtype(option))
             self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
-            if option_name in {"forfeit_mode", "remaining_mode"}:
+            if option_name in {"forfeit_mode", "remaining_mode", "collect_mode"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
             return True
         else:
@@ -1458,6 +1528,15 @@ def parse_args() -> argparse.Namespace:
                              disabled: !forfeit is never available
                              goal:     !forfeit can be used after goal completion
                              auto-enabled: !forfeit is available and automatically triggered on goal completion
+                             ''')
+    parser.add_argument('--collect_mode', default=defaults["collect_mode"], nargs='?',
+                        choices=['auto', 'enabled', 'disabled', "goal", "auto-enabled"], help='''\
+                             Select !collect Accessibility. (default: %(default)s)
+                             auto:     Automatic "collect" on goal completion
+                             enabled:  !collect is always available
+                             disabled: !collect is never available
+                             goal:     !collect can be used after goal completion
+                             auto-enabled: !collect is available and automatically triggered on goal completion
                              ''')
     parser.add_argument('--remaining_mode', default=defaults["remaining_mode"], nargs='?',
                         choices=['enabled', 'disabled', "goal"], help='''\
@@ -1513,7 +1592,8 @@ async def main(args: argparse.Namespace):
                         format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
-                  args.hint_cost, not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode,
+                  args.hint_cost, not args.disable_item_cheat, args.forfeit_mode, args.collect_mode,
+                  args.remaining_mode,
                   args.auto_shutdown, args.compatibility, args.log_network)
     data_filename = args.multidata
 
