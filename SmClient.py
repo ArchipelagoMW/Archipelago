@@ -558,14 +558,7 @@ async def main():
         meta, romfile = Patch.create_rom_file(args.diff_file)
         args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
-        adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile)
-        if adjusted:
-            try:
-                shutil.move(adjustedromfile, romfile)
-                adjustedromfile = romfile
-            except Exception as e:
-                logging.exception(e)
-        asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
+        asyncio.create_task(run_game(romfile))
 
     ctx = Context(args.snes, args.connect, args.password)
     if ctx.server_task is None:

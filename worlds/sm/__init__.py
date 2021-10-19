@@ -90,7 +90,7 @@ class SMWorld(World):
     
     def generate_basic(self):
         itemPool = self.variaRando.container.itemPool
-        self.startItems = [variaItem for item in self.world.precollected_items for variaItem in ItemManager.Items.values() if item.player == self.player and variaItem.Name == item.name]
+        self.startItems = [variaItem for item in self.world.precollected_items[self.player] for variaItem in ItemManager.Items.values() if variaItem.Name == item.name]
         if self.world.start_inventory_removes_from_pool[self.player]:
             for item in self.startItems:
                 if (item in itemPool):

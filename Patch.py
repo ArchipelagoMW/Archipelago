@@ -57,7 +57,7 @@ def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str
     bytes = generate_patch(load_bytes(rom_file_to_patch),
                            meta,
                            game)
-    target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + ".apbp"
+    target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + (".apbp" if game == GAME_ALTTP else ".apm3")
     write_lzma(bytes, target)
     return target
 
@@ -138,7 +138,13 @@ if __name__ == "__main__":
                     if 'server' in data:
                         Utils.persistent_store("servers", data['hash'], data['server'])
                         print(f"Host is {data['server']}")
-
+                elif rom.endswith(".apm3"):
+                    print(f"Applying patch {rom}")
+                    data, target = create_rom_file(rom)
+                    print(f"Created rom {target}.")
+                    if 'server' in data:
+                        Utils.persistent_store("servers", data['hash'], data['server'])
+                        print(f"Host is {data['server']}")
                 elif rom.endswith(".archipelago"):
                     import json
                     import zlib
@@ -164,7 +170,7 @@ if __name__ == "__main__":
 
                     def _handle_zip_file_entry(zfinfo: zipfile.ZipInfo, server: str):
                         data = zfr.read(zfinfo)
-                        if zfinfo.filename.endswith(".apbp"):
+                        if zfinfo.filename.endswith(".apbp") or zfinfo.filename.endswith(".apm3"):
                             data = update_patch_data(data, server)
                         with ziplock:
                             zfw.writestr(zfinfo, data)
