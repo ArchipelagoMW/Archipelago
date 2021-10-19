@@ -66,7 +66,8 @@ sm_item_graphics:
     dw $8500 : db $00, $00, $00, $00, $00, $00, $00, $00    ; Screw attack
     dw $8700 : db $00, $00, $00, $00, $00, $00, $00, $00    ; Morph ball
     dw $9000 : db $00, $00, $00, $00, $00, $00, $00, $00    ; Reserve tank
-    dw $8700 : db $00, $00, $00, $00, $00, $00, $00, $00    ; Multiworld item: Morph ball
+    dw $9100 : db $00, $00, $00, $00, $00, $00, $00, $00    ; off-world progression item
+    dw $9200 : db $00, $00, $00, $00, $00, $00, $00, $00    ; off-world item
 
 sm_item_table:
     ; pickup, qty,   msg,   type,  ext2,  ext3,  loop,  hloop
@@ -92,7 +93,8 @@ sm_item_table:
     dw $88F3, $0008, $000A, $0004, $0000, $0000, $0000, $0000      ; Screw attack
     dw $88F3, $0004, $0009, $0004, $0000, $0000, $0000, $0000      ; Morph ball
     dw $8986, $0064, $0000, $0006, $0000, $0000, $0000, $0000      ; Reserve tank
-    dw $88F3, $0004, $0009, $0004, $0000, $0000, $0000, $0000      ; Multiworld item: Morph ball
+    dw $88F3, $0004, $0009, $0004, $0000, $0000, $0000, $0000      ; off-world progression item
+    dw $88F3, $0004, $0009, $0004, $0000, $0000, $0000, $0000      ; off-world item
 
 i_visible_item:
     lda #$0006
@@ -206,6 +208,7 @@ i_start_draw_loop:
     cmp #$0015
     bmi .local_item
     lda.l #$0015              ; ids over 20 are only used to display off-world item names
+    clc : adc rando_item_table+$6, x      ; add one if off-world item isnt progression
 .local_item
     asl #4
     clc : adc #$000C
@@ -229,6 +232,7 @@ i_start_hidden_draw_loop:
     cmp #$0015
     bmi .local_item
     lda.l #$0015              ; ids over 20 are only used to display off-world item names
+    clc : adc rando_item_table+$6, x      ; add one if off-world item isnt progression
 .local_item
     asl #4
     clc : adc #$000E
@@ -252,6 +256,7 @@ i_load_custom_graphics:
     cmp #$0015
     bmi .local_item
     lda.l #$0015              ; ids over 20 are only used to display off-world item names
+    clc : adc rando_item_table+$6, x      ; add one if off-world item isnt progression
 .local_item
     plx
 
@@ -289,6 +294,7 @@ i_visible_item_setup:
     cmp #$0015
     bmi .local_item
     lda.l #$0015              ; ids over 20 are only used to display off-world item names
+    clc : adc rando_item_table+$6, x      ; add one if off-world item isnt progression
 .local_item
     %a8()
     sta $4202
@@ -319,6 +325,7 @@ i_hidden_item_setup:
     cmp #$0015
     bmi .local_item
     lda.l #$0015              ; ids over 20 are only used to display off-world item names
+    clc : adc rando_item_table+$6, x      ; add one if off-world item isnt progression
 .local_item
     %a8()
     sta $4202

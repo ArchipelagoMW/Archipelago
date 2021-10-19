@@ -5,7 +5,8 @@
 ; Type = Type of item ($0000 = regular old SM item, $0001 = other players item)
 ; Item Id = Item id that this location holds
 ; Owner = Owner of this item in a multiworld scenario
-; Reserved = Reserved for future use (bitflags maybe)
+; Reserved = value is added to ItemID clamped at 21 if its higher than 20 to show proper item sprite 
+; (progression or not) while keeping the index for displaying item name
 
 rando_item_table:
 	dw $0000, $0001, $0000, $0000 ; 0 - Power Bomb (Crateria surface)

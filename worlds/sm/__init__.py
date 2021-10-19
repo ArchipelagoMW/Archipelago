@@ -12,6 +12,7 @@ from .Regions import create_regions
 from .Rules import set_rules, add_entrance_rule
 from .Options import sm_options
 from .Rom import get_base_rom_path
+import Utils
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
 from ..AutoWorld import World
@@ -241,12 +242,23 @@ class SMWorld(World):
                 (w0, w1) = self.getWord(0 if itemLoc.item.player == self.player else 1)
                 (w2, w3) = self.getWord(itemId)
                 (w4, w5) = self.getWord(itemLoc.item.player - 1)
-                (w6, w7) = self.getWord(0)
+                (w6, w7) = self.getWord(0 if itemLoc.item.advancement else 1)
                 multiWorldLocations[0x1C6000 + locationsDict[itemLoc.name].Id*8] = [w0, w1, w2, w3, w4, w5, w6, w7]
 
+
+        itemSprites = ["off_world_prog_item.bin", "off_world_item.bin"]
+        idx = 0
+        offworldSprites = {}
+        for fileName in itemSprites:
+            with open(Utils.local_path("worlds/sm/data/custom_sprite/" + fileName), 'rb') as stream:
+                buffer = bytearray(stream.read())
+                offworldSprites[0x027882 + 10*(21 + idx) + 2] = buffer[0:8]
+                offworldSprites[0x049100 + idx*256] = buffer[8:264]
+                idx += 1
             
-        patchDict = {   'MultiWorldLocations':  multiWorldLocations,
-                        'MultiWorldItems': multiWorldItems }
+        patchDict = {   'MultiWorldLocations': multiWorldLocations,
+                        'MultiWorldItems': multiWorldItems,
+                        'offworldSprites': offworldSprites }
         romPatcher.applyIPSPatchDict(patchDict)
 
         playerNames = {}
