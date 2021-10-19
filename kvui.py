@@ -1,28 +1,42 @@
 import os
 import logging
+import typing
+import asyncio
 
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
 from kivy.app import App
-from kivy.base import ExceptionHandler, ExceptionManager, Config
+from kivy.base import ExceptionHandler, ExceptionManager, Config, Clock
+from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
 from kivy.utils import escape_markup
 from kivy.lang import Builder
 
 import Utils
 from NetUtils import JSONtoTextParser, JSONMessagePart
 
+if typing.TYPE_CHECKING:
+    import CommonClient
+
+    context_type = CommonClient.CommonContext
+else:
+    context_type = object
+
 
 class GameManager(App):
     logging_pairs = [
         ("Client", "Archipelago"),
     ]
+    base_title = "Archipelago Client"
 
-    def __init__(self, ctx):
+    def __init__(self, ctx: context_type):
+        self.title = self.base_title
         self.ctx = ctx
         self.commandprocessor = ctx.command_processor(ctx)
         self.icon = r"data/icon.png"
@@ -33,10 +47,18 @@ class GameManager(App):
     def build(self):
         self.grid = GridLayout()
         self.grid.cols = 1
+        connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
+        server_label = Label(text="Server:", size_hint_x=None)
+        connect_layout.add_widget(server_label)
+        self.server_connect_bar = TextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False)
+        connect_layout.add_widget(self.server_connect_bar)
+        self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
+        self.server_connect_button.bind(on_press=self.connect_button_action)
+        connect_layout.add_widget(self.server_connect_button)
 
-        self.tabs = TabbedPanel()
+        self.grid.add_widget(connect_layout)
+        self.tabs = TabbedPanel(size_hint_y=1)
         self.tabs.default_tab_text = "All"
-
         self.log_panels["All"] = self.tabs.default_tab_content = UILog(*(logging.getLogger(logger_name)
                                                                          for logger_name, name in
                                                                          self.logging_pairs))
@@ -52,7 +74,23 @@ class GameManager(App):
         textinput.bind(on_text_validate=self.on_message)
         self.grid.add_widget(textinput)
         self.commandprocessor("/help")
+        Clock.schedule_interval(self.update_texts, 1 / 30)
         return self.grid
+
+    def update_texts(self, dt):
+        if self.ctx.server:
+            self.title = self.base_title+f" | Connected to: {self.ctx.server_address}"
+            self.server_connect_button.text = "Disconnect"
+        else:
+            self.server_connect_button.text = "Connect"
+            self.title = self.base_title
+
+    def connect_button_action(self, button):
+        if self.ctx.server:
+            self.ctx.server_address = None
+            asyncio.create_task(self.ctx.disconnect())
+        else:
+            asyncio.create_task(self.ctx.connect(self.server_connect_bar.text))
 
     def on_stop(self):
         self.ctx.exit_event.set()
@@ -82,7 +120,7 @@ class FactorioManager(GameManager):
         ("FactorioServer", "Factorio Server Log"),
         ("FactorioWatcher", "Bridge Data Log"),
     ]
-    title = "Archipelago Factorio Client"
+    base_title = "Archipelago Factorio Client"
 
 
 class LttPManager(GameManager):
@@ -90,14 +128,14 @@ class LttPManager(GameManager):
         ("Client", "Archipelago"),
         ("SNES", "SNES"),
     ]
-    title = "Archipelago LttP Client"
+    base_title = "Archipelago LttP Client"
 
 
 class TextManager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago")
     ]
-    title = "Archipelago Text Client"
+    base_title = "Archipelago Text Client"
 
 
 class LogtoUI(logging.Handler):
