@@ -32,8 +32,7 @@ def create():
             dictify_range=dictify_range, default_converter=default_converter,
         )
 
-        if not os.path.isdir(os.path.join(target_folder, 'configs')):
-            os.mkdir(os.path.join(target_folder, 'configs'))
+        os.makedirs(os.path.join(target_folder, 'configs'), exist_ok=True)
 
         with open(os.path.join(target_folder, 'configs', game_name + ".yaml"), "w") as f:
             f.write(res)
@@ -81,8 +80,7 @@ def create():
 
         player_settings["gameOptions"] = game_options
 
-        if not os.path.isdir(os.path.join(target_folder, 'player-settings')):
-            os.mkdir(os.path.join(target_folder, 'player-settings'))
+        os.makedirs(os.path.join(target_folder, 'player-settings'), exist_ok=True)
 
         with open(os.path.join(target_folder, 'player-settings', game_name + ".json"), "w") as f:
             f.write(json.dumps(player_settings, indent=2, separators=(',', ': ')))
