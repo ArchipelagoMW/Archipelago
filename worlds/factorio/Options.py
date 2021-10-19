@@ -124,6 +124,12 @@ class FactorioStartItems(OptionDict):
     displayname = "Starting Items"
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
 
+    def __init__(self, value: typing.Dict[str, typing.Any]):
+        print(value)
+        if any(item_count < 1 for item_count in value.values()):
+            raise Exception("Cannot have non-positive item counts.")
+        super().__init__(value)
+
 
 class TrapCount(Range):
     range_end = 4

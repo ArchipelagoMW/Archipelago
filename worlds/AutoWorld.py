@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Dict, Set, Tuple, List, Optional
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
+from Options import Option
 
 
 class AutoWorldRegister(type):
@@ -67,7 +68,7 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    options: dict = {}  # link your Options mapping
+    options: Dict[str, type(Option)] = {}  # link your Options mapping
     game: str  # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
     all_names: Set[str] = frozenset()  # gets automatically populated with all item, item group and location names
@@ -170,9 +171,9 @@ class World(metaclass=AutoWorldRegister):
     def get_required_client_version(self) -> Tuple[int, int, int]:
         return 0, 1, 6
 
-    # end of Main.py calls
+    # end of ordered Main.py calls
 
-    def collect_item(self, state: CollectionState, item: Item, remove=False) -> Optional[str]:
+    def collect_item(self, state: CollectionState, item: Item, remove: bool = False) -> Optional[str]:
         """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
         Collect None to skip item.
         :param remove: indicate if this is meant to remove from state instead of adding."""
