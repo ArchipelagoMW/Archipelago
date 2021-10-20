@@ -1144,7 +1144,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_hint_location(self, location: str = "") -> bool:
         """Use !hint_location {location_name},
-        for example !hint atomic-bomb to get a spoiler peek for that location.
+        for example !hint_location atomic-bomb to get a spoiler peek for that location.
         (In the case of factorio, or any other game where item names and location names are identical,
         this command must be used explicitly.)"""
         return self.get_hints(location, True)
