@@ -995,6 +995,19 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output("No missing location checks found.")
         return True
 
+    def _cmd_checked(self) -> bool:
+        """List all done location checks from the server's perspective"""
+
+        locations = get_checked_checks(self.ctx, self.client.team, self.client.slot)
+
+        if locations:
+            texts = [f'Checked: {get_location_name_from_id(location)}' for location in locations]
+            texts.append(f"Found {len(locations)} done location checks")
+            self.ctx.notify_client_multiple(self.client, texts)
+        else:
+            self.output("No done location checks found.")
+        return True
+
     @mark_raw
     def _cmd_alias(self, alias_name: str = ""):
         """Set your alias to the passed name."""
