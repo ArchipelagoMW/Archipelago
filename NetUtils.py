@@ -62,7 +62,7 @@ def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
         data = obj._asdict()
         data["class"] = obj.__class__.__name__
         return data
-    if isinstance(obj, (tuple, list)):
+    if isinstance(obj, (tuple, list, set)):
         return tuple(_scan_for_TypedTuples(o) for o in obj)
     if isinstance(obj, dict):
         return {key: _scan_for_TypedTuples(value) for key, value in obj.items()}
