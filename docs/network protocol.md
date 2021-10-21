@@ -129,15 +129,18 @@ Sent to clients to acknowledge a received [LocationScouts](#LocationScouts) pack
 
 ### RoomUpdate
 Sent when there is a need to update information about the present game session. Generally useful for async games.
+Once authenticated (received Connected), this may also contain data from Connected.
 #### Arguments
-The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring two:
+The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
 
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | hint_points | int | New argument. The client's current hint points. |
 | players | list\[NetworkPlayer\] | Changed argument. Always sends all players, whether connected or not. |
+| checked_locations | May be a partial update, containing new locations that were checked. |
+| missing_locations | Should never be sent as an update, if needed is the inverse of checked_locations. |
 
-All arguments for this packet are optional.
+All arguments for this packet are optional, only changes are sent.
 
 ### Print
 Sent to clients purely to display a message to the player.
@@ -260,6 +263,15 @@ the server will forward the message to all those targets to which any one requir
 
 
 ## Appendix
+
+### Coop
+Coop in Archipelago is automatically facilitated by the server, however some of the default behaviour may not be what you desire.
+
+If the game in question is a remote-items game (attribute on AutoWorld), then all items will always be sent and received.
+If the game in question is not a remote-items game, then any items that are placed within the same world will not be send by the server.
+
+To manually react to others in the same player slot doing checks, listen to [RoomUpdate](#RoomUpdate) -> checked_locations.
+
 ### NetworkPlayer
 A list of objects. Each object denotes one player. Each object has four fields about the player, in this order: `team`, `slot`, `alias`, and `name`. `team` and `slot` are ints, `alias` and `name` are strs.
 
