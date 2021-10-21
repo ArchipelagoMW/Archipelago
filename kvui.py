@@ -70,6 +70,14 @@ class GameManager(App):
             self.tabs.add_widget(panel)
 
         self.grid.add_widget(self.tabs)
+
+        if len(self.logging_pairs) == 1:
+            # Hide Tab selection if only one tab
+            self.tabs.clear_tabs()
+            self.tabs.do_default_tab = False
+            self.tabs.current_tab.height = 0
+            self.tabs.tab_height = 0
+
         textinput = TextInput(size_hint_y=None, height=30, multiline=False)
         textinput.bind(on_text_validate=self.on_message)
         self.grid.add_widget(textinput)
@@ -79,7 +87,7 @@ class GameManager(App):
 
     def update_texts(self, dt):
         if self.ctx.server:
-            self.title = self.base_title+f" | Connected to: {self.ctx.server_address}"
+            self.title = self.base_title + f" | Connected to: {self.ctx.server_address}"
             self.server_connect_button.text = "Disconnect"
         else:
             self.server_connect_button.text = "Connect"
@@ -90,7 +98,7 @@ class GameManager(App):
             self.ctx.server_address = None
             asyncio.create_task(self.ctx.disconnect())
         else:
-            asyncio.create_task(self.ctx.connect(self.server_connect_bar.text))
+            asyncio.create_task(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
 
     def on_stop(self):
         self.ctx.exit_event.set()
