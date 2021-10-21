@@ -15,8 +15,10 @@ def set_rules(world):
     player = world.player
     world = world.world
     if world.logic[player] == 'nologic':
-        logging.info(
-            'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
+        if player == next(player_id for player_id in world.get_game_players("A Link to the Past")
+                          if world.logic[player_id] == 'nologic'):  # only warn one time
+            logging.info(
+                'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
 
         if world.players == 1:
             world.get_region('Menu', player).can_reach_private = lambda state: True

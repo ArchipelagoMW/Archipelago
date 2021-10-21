@@ -19,7 +19,7 @@ def parse_arguments(argv, no_defaults=False):
 
     # we need to know how many players we have first
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
+    parser.add_argument('--multi', default=defval(1), type=lambda value: max(int(value), 1))
     multiargs, _ = parser.parse_known_args(argv)
 
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
@@ -238,7 +238,7 @@ def parse_arguments(argv, no_defaults=False):
     For unlit dark rooms, require the Lamp to be considered in logic by default. 
     Torches means additionally easily accessible Torches that can be lit with Fire Rod are considered doable.
     None means full traversal through dark rooms without tools is considered doable.''')
-    parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
+    parser.add_argument('--multi', default=defval(1), type=lambda value: max(int(value), 1))
     parser.add_argument('--names', default=defval(''))
     parser.add_argument('--outputpath')
     parser.add_argument('--game', default="A Link to the Past")

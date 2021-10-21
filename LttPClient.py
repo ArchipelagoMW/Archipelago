@@ -25,6 +25,7 @@ from NetUtils import *
 
 from worlds.alttp import Regions, Shops
 from worlds.alttp import Items
+from worlds.alttp.Rom import ROM_PLAYER_LIMIT
 import Utils
 from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, init_logging
 
@@ -867,7 +868,8 @@ async def game_watcher(ctx: Context):
 
             snes_buffered_write(ctx, RECV_PROGRESS_ADDR, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
             snes_buffered_write(ctx, RECV_ITEM_ADDR, bytes([item.item]))
-            snes_buffered_write(ctx, RECV_ITEM_PLAYER_ADDR, bytes([item.player if item.player != ctx.slot else 0]))
+            snes_buffered_write(ctx, RECV_ITEM_PLAYER_ADDR,
+                                bytes([min(ROM_PLAYER_LIMIT, item.player) if item.player != ctx.slot else 0]))
         if scout_location > 0 and scout_location in ctx.locations_info:
             snes_buffered_write(ctx, SCOUTREPLY_LOCATION_ADDR, bytes([scout_location]))
             snes_buffered_write(ctx, SCOUTREPLY_ITEM_ADDR, bytes([ctx.locations_info[scout_location][0]]))
@@ -899,8 +901,6 @@ async def main():
     parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
     parser.add_argument('--password', default=None, help='Password of the multiworld host.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
-    parser.add_argument('--founditems', default=False, action='store_true',
-                        help='Show items found by other players for themselves.')
     if not Utils.is_frozen():  # Frozen state has no cmd window in the first place
         parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
     args = parser.parse_args()

@@ -37,7 +37,7 @@ def mystery_argparse():
     parser.add_argument('--player_files_path', default=defaults["player_files_path"],
                         help="Input directory for player files.")
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
-    parser.add_argument('--multi', default=defaults["players"], type=lambda value: min(max(int(value), 1), 255))
+    parser.add_argument('--multi', default=defaults["players"], type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
     parser.add_argument('--rom', default=options["lttp_options"]["rom_file"], help="Path to the 1.0 JP LttP Baserom.")
     parser.add_argument('--enemizercli', default=defaults["enemizer_path"])
@@ -46,7 +46,7 @@ def mystery_argparse():
     parser.add_argument('--meta_file_path', default=defaults["meta_file_path"])
     parser.add_argument('--log_output_path', help='Path to store output log')
     parser.add_argument('--log_level', default='info', help='Sets log level')
-    parser.add_argument('--yaml_output', default=0, type=lambda value: min(max(int(value), 0), 255),
+    parser.add_argument('--yaml_output', default=0, type=lambda value: max(int(value), 0),
                         help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
     parser.add_argument('--plando', default=defaults["plando_options"],
                         help='List of options that can be set manually. Can be combined, for example "bosses, items"')
