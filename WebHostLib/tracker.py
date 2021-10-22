@@ -1,4 +1,5 @@
 import collections
+from typing import Counter, Optional, Dict, Any, Tuple
 
 from flask import render_template
 from werkzeug.exceptions import abort
@@ -17,116 +18,6 @@ def get_alttp_id(item_name):
 
 app.jinja_env.filters["location_name"] = lambda location: lookup_any_location_id_to_name.get(location, location)
 app.jinja_env.filters['item_name'] = lambda id: lookup_any_item_id_to_name.get(id, id)
-
-icons = {
-    "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
-    "Red Shield": r"https://www.zeldadungeon.net/wiki/images/5/55/Fire-Shield.png",
-    "Mirror Shield": r"https://www.zeldadungeon.net/wiki/images/8/84/Mirror-Shield.png",
-    "Fighter Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/4/40/SFighterSword.png?width=1920",
-    "Master Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/6/65/SMasterSword.png?width=1920",
-    "Tempered Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/9/92/STemperedSword.png?width=1920",
-    "Golden Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/2/28/SGoldenSword.png?width=1920",
-    "Bow": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Bow_%26_Arrows_Sprite.png?version=5f85a70e6366bf473544ef93b274f74c",
-    "Silver Bow": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/6/65/Bow.png?width=1920",
-    "Green Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/c/c9/SGreenTunic.png?width=1920",
-    "Blue Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/9/98/SBlueTunic.png?width=1920",
-    "Red Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/7/74/SRedTunic.png?width=1920",
-    "Power Glove": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/f/f5/SPowerGlove.png?width=1920",
-    "Titan Mitts": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/c/c1/STitanMitt.png?width=1920",
-    "Progressive Sword":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/c/cc/ALttP_Master_Sword_Sprite.png?version=55869db2a20e157cd3b5c8f556097725",
-    "Pegasus Boots":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/ed/ALttP_Pegasus_Shoes_Sprite.png?version=405f42f97240c9dcd2b71ffc4bebc7f9",
-    "Progressive Glove":
-        r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/c/c1/STitanMitt.png?width=1920",
-    "Flippers":
-        r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/4/4c/ZoraFlippers.png?width=1920",
-    "Moon Pearl":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/6/63/ALttP_Moon_Pearl_Sprite.png?version=d601542d5abcc3e006ee163254bea77e",
-    "Progressive Bow":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Bow_%26_Arrows_Sprite.png?version=cfb7648b3714cccc80e2b17b2adf00ed",
-    "Blue Boomerang":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/c/c3/ALttP_Boomerang_Sprite.png?version=96127d163759395eb510b81a556d500e",
-    "Red Boomerang":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/b9/ALttP_Magical_Boomerang_Sprite.png?version=47cddce7a07bc3e4c2c10727b491f400",
-    "Hookshot":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/2/24/Hookshot.png?version=c90bc8e07a52e8090377bd6ef854c18b",
-    "Mushroom":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/35/ALttP_Mushroom_Sprite.png?version=1f1acb30d71bd96b60a3491e54bbfe59",
-    "Magic Powder":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e5/ALttP_Magic_Powder_Sprite.png?version=c24e38effbd4f80496d35830ce8ff4ec",
-    "Fire Rod":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d6/FireRod.png?version=6eabc9f24d25697e2c4cd43ddc8207c0",
-    "Ice Rod":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d7/ALttP_Ice_Rod_Sprite.png?version=1f944148223d91cfc6a615c92286c3bc",
-    "Bombos":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/8/8c/ALttP_Bombos_Medallion_Sprite.png?version=f4d6aba47fb69375e090178f0fc33b26",
-    "Ether":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/3c/Ether.png?version=34027651a5565fcc5a83189178ab17b5",
-    "Quake":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/5/56/ALttP_Quake_Medallion_Sprite.png?version=efd64d451b1831bd59f7b7d6b61b5879",
-    "Lamp":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/6/63/ALttP_Lantern_Sprite.png?version=e76eaa1ec509c9a5efb2916698d5a4ce",
-    "Hammer":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d1/ALttP_Hammer_Sprite.png?version=e0adec227193818dcaedf587eba34500",
-    "Shovel":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/c/c4/ALttP_Shovel_Sprite.png?version=e73d1ce0115c2c70eaca15b014bd6f05",
-    "Flute":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/db/Flute.png?version=ec4982b31c56da2c0c010905c5c60390",
-    "Bug Catching Net":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/5/54/Bug-CatchingNet.png?version=4d40e0ee015b687ff75b333b968d8be6",
-    "Book of Mudora":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/2/22/ALttP_Book_of_Mudora_Sprite.png?version=11e4632bba54f6b9bf921df06ac93744",
-    "Bottle":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/ef/ALttP_Magic_Bottle_Sprite.png?version=fd98ab04db775270cbe79fce0235777b",
-    "Cane of Somaria":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e1/ALttP_Cane_of_Somaria_Sprite.png?version=8cc1900dfd887890badffc903bb87943",
-    "Cane of Byrna":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Cane_of_Byrna_Sprite.png?version=758b607c8cbe2cf1900d42a0b3d0fb54",
-    "Cape":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/1/1c/ALttP_Magic_Cape_Sprite.png?version=6b77f0d609aab0c751307fc124736832",
-    "Magic Mirror":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e5/ALttP_Magic_Mirror_Sprite.png?version=e035dbc9cbe2a3bd44aa6d047762b0cc",
-    "Triforce":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/4/4e/TriforceALttPTitle.png?version=dc398e1293177581c16303e4f9d12a48",
-    "Small Key":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/f/f1/ALttP_Small_Key_Sprite.png?version=4f35d92842f0de39d969181eea03774e",
-    "Big Key":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/33/ALttP_Big_Key_Sprite.png?version=136dfa418ba76c8b4e270f466fc12f4d",
-    "Chest":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/7/73/ALttP_Treasure_Chest_Sprite.png?version=5f530ecd98dcb22251e146e8049c0dda",
-
-    "Light World":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e7/ALttP_Soldier_Green_Sprite.png?version=d650d417934cd707a47e496489c268a6",
-    "Dark World":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/9/94/ALttP_Moblin_Sprite.png?version=ebf50e33f4657c377d1606bcc0886ddc",
-    "Hyrule Castle":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d3/ALttP_Ball_and_Chain_Trooper_Sprite.png?version=1768a87c06d29cc8e7ddd80b9fa516be",
-    "Agahnims Tower":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/1/1e/ALttP_Agahnim_Sprite.png?version=365956e61b0c2191eae4eddbe591dab5",
-    "Desert Palace":
-        r"https://www.zeldadungeon.net/wiki/images/2/25/Lanmola-ALTTP-Sprite.png",
-    "Eastern Palace":
-        r"https://www.zeldadungeon.net/wiki/images/d/dc/RedArmosKnight.png",
-    "Tower of Hera":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/3c/ALttP_Moldorm_Sprite.png?version=c588257bdc2543468e008a6b30f262a7",
-    "Palace of Darkness":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/ed/ALttP_Helmasaur_King_Sprite.png?version=ab8a4a1cfd91d4fc43466c56cba30022",
-    "Swamp Palace":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/7/73/ALttP_Arrghus_Sprite.png?version=b098be3122e53f751b74f4a5ef9184b5",
-    "Skull Woods":
-        r"https://alttp-wiki.net/images/6/6a/Mothula.png",
-    "Thieves Town":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/8/86/ALttP_Blind_the_Thief_Sprite.png?version=3833021bfcd112be54e7390679047222",
-    "Ice Palace":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/33/ALttP_Kholdstare_Sprite.png?version=e5a1b0e8b2298e550d85f90bf97045c0",
-    "Misery Mire":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/8/85/ALttP_Vitreous_Sprite.png?version=92b2e9cb0aa63f831760f08041d8d8d8",
-    "Turtle Rock":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/9/91/ALttP_Trinexx_Sprite.png?version=0cc867d513952aa03edd155597a0c0be",
-    "Ganons Tower":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/b9/ALttP_Ganon_Sprite.png?version=956f51f054954dfff53c1a9d4f929c74"
-}
 
 links = {"Bow": "Progressive Bow",
          "Silver Arrows": "Progressive Bow",
@@ -212,12 +103,13 @@ key_only_locations = {
     'Total': set()
 }
 
-key_locations = {"Desert Palace", "Eastern Palace", "Hyrule Castle", "Agahnims Tower", "Tower of Hera", "Swamp Palace",
-                 "Thieves Town", "Skull Woods", "Ice Palace", "Misery Mire", "Turtle Rock", "Palace of Darkness",
-                 "Ganons Tower"}
+#key_locations = {"Desert Palace", "Eastern Palace", "Hyrule Castle", "Agahnims Tower", "Tower of Hera", "Swamp Palace",
+#                 "Thieves Town", "Skull Woods", "Ice Palace", "Misery Mire", "Turtle Rock", "Palace of Darkness",
+#                 "Ganons Tower"}
+#
+#big_key_locations = {"Desert Palace", "Eastern Palace", "Tower of Hera", "Swamp Palace", "Thieves Town", "Skull Woods",
+#                     "Ice Palace", "Misery Mire", "Turtle Rock", "Palace of Darkness", "Ganons Tower"}
 
-big_key_locations = {"Desert Palace", "Eastern Palace", "Tower of Hera", "Swamp Palace", "Thieves Town", "Skull Woods",
-                     "Ice Palace", "Misery Mire", "Turtle Rock", "Palace of Darkness", "Ganons Tower"}
 location_to_area = {}
 for area, locations in default_locations.items():
     for location in locations:
@@ -301,8 +193,8 @@ def get_static_room_data(room: Room):
         return result
     multidata = Context._decompress(room.seed.multidata)
     # in > 100 players this can take a bit of time and is the main reason for the cache
-    locations = multidata['locations']
-    names = multidata["names"]
+    locations: Dict[int, Dict[int, Tuple[int, int]]] = multidata['locations']
+    names: Dict[int, Dict[int, str]] = multidata["names"]
     seed_checks_in_area = checks_in_area.copy()
 
     use_door_tracker = False
@@ -320,17 +212,8 @@ def get_static_room_data(room: Room):
     player_location_to_area = {playernumber: get_location_table(multidata["checks_in_area"][playernumber])
                                for playernumber in range(1, len(names[0]) + 1)}
 
-    player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
-    player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
-    for loc_data in locations.values():
-        for item_id, item_player in loc_data.values():
-            if item_id in ids_big_key:
-                player_big_key_locations[item_player].add(ids_big_key[item_id])
-            elif item_id in ids_small_key:
-                player_small_key_locations[item_player].add(ids_small_key[item_id])
-
     result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area, \
-             player_big_key_locations, player_small_key_locations, multidata["precollected_items"], \
+             multidata["precollected_items"], \
              multidata["games"]
     _multidata_cache[room.seed.id] = result
     return result
@@ -343,13 +226,13 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
     if tracked_team < 0 or tracked_player < 1:
         abort(404)
 
-    room = Room.get(tracker=tracker)
+    room: Optional[Room] = Room.get(tracker=tracker)
     if not room:
         abort(404)
 
     # Collect seed information and pare it down to a single player
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
-    player_big_key_locations, player_small_key_locations, precollected_items, games = get_static_room_data(room)
+        precollected_items, games = get_static_room_data(room)
     player_name = names[tracked_team][tracked_player - 1]
     location_to_area = player_location_to_area[tracked_player]
     inventory = collections.Counter()
@@ -362,13 +245,12 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
             attribute_item_solo(inventory, item_id)
 
     if room.multisave:
-        multisave = restricted_loads(room.multisave)
+        multisave: Dict[str, Any] = restricted_loads(room.multisave)
     else:
-        multisave = {}
+        multisave: Dict[str, Any] = {}
 
     # Add items to player inventory
     for (ms_team, ms_player), locations_checked in multisave.get("location_checks", {}).items():
-        # logging.info(f"{ms_team}, {ms_player}, {locations_checked}")
         # Skip teams and players not matching the request
         player_locations = locations[ms_player]
         if ms_team == tracked_team:
@@ -381,351 +263,453 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
                     if ms_player == tracked_player:  # a check done by the tracked player
                         checks_done[location_to_area[location]] += 1
                         checks_done["Total"] += 1
+                        
     if games[tracked_player] == "A Link to the Past":
-        # Note the presence of the triforce item
-        game_state = multisave.get("client_game_state", {}).get((tracked_team, tracked_player), 0)
-        if game_state == 30:
-            inventory[106] = 1  # Triforce
-
-        # Progressive items need special handling for icons and class
-        progressive_items = {
-            "Progressive Sword": 94,
-            "Progressive Glove": 97,
-            "Progressive Bow": 100,
-            "Progressive Mail": 96,
-            "Progressive Shield": 95,
-        }
-        progressive_names = {
-            "Progressive Sword": [None, 'Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
-            "Progressive Glove": [None, 'Power Glove', 'Titan Mitts'],
-            "Progressive Bow": [None, "Bow", "Silver Bow"],
-            "Progressive Mail": ["Green Mail", "Blue Mail", "Red Mail"],
-            "Progressive Shield": [None, "Blue Shield", "Red Shield", "Mirror Shield"]
-        }
-
-        # Determine which icon to use
-        display_data = {}
-        for item_name, item_id in progressive_items.items():
-            level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
-            display_name = progressive_names[item_name][level]
-            acquired = True
-            if not display_name:
-                acquired = False
-                display_name = progressive_names[item_name][level + 1]
-            base_name = item_name.split(maxsplit=1)[1].lower()
-            display_data[base_name + "_acquired"] = acquired
-            display_data[base_name + "_url"] = icons[display_name]
-
-        # The single player tracker doesn't care about overworld, underworld, and total checks. Maybe it should?
-        sp_areas = ordered_areas[2:15]
-
-        return render_template("lttpTracker.html", inventory=inventory,
-                               player_name=player_name, room=room, icons=icons, checks_done=checks_done,
-                               checks_in_area=seed_checks_in_area[tracked_player],
-                               acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
-                               small_key_ids=small_key_ids, big_key_ids=big_key_ids, sp_areas=sp_areas,
-                               key_locations=player_small_key_locations[tracked_player],
-                               big_key_locations=player_big_key_locations[tracked_player],
-                               **display_data)
+        return __RenderAlttpTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name, \
+            seed_checks_in_area, checks_done)
     elif games[tracked_player] == "Minecraft":
-        minecraft_icons = {
-            "Wooden Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d2/Wooden_Pickaxe_JE3_BE3.png",
-            "Stone Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c4/Stone_Pickaxe_JE2_BE2.png",
-            "Iron Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d1/Iron_Pickaxe_JE3_BE2.png",
-            "Diamond Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e7/Diamond_Pickaxe_JE3_BE3.png",
-            "Wooden Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d5/Wooden_Sword_JE2_BE2.png",
-            "Stone Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b1/Stone_Sword_JE2_BE2.png",
-            "Iron Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/8/8e/Iron_Sword_JE2_BE2.png",
-            "Diamond Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/4/44/Diamond_Sword_JE3_BE3.png",
-            "Leather Tunic": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b7/Leather_Tunic_JE4_BE2.png",
-            "Iron Chestplate": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/31/Iron_Chestplate_JE2_BE2.png",
-            "Diamond Chestplate": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e0/Diamond_Chestplate_JE3_BE2.png",
-            "Iron Ingot": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Iron_Ingot_JE3_BE2.png",
-            "Block of Iron": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7e/Block_of_Iron_JE4_BE3.png",
-            "Brewing Stand": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fa/Brewing_Stand.png",
-            "Ender Pearl": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/f6/Ender_Pearl_JE3_BE2.png",
-            "Bucket": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Bucket_JE2_BE2.png",
-            "Bow": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/ab/Bow_%28Pull_2%29_JE1_BE1.png",
-            "Shield": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c6/Shield_JE2_BE1.png",
-            "Red Bed": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/dc/Red_Bed_JE4_BE3.png",
-            "Netherite Scrap": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/33/Netherite_Scrap_JE2_BE1.png",
-            "Flint and Steel": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/94/Flint_and_Steel_JE4_BE2.png",
-            "Enchanting Table": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/31/Enchanting_Table.gif",
-            "Fishing Rod": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7f/Fishing_Rod_JE2_BE2.png",
-            "Campfire": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/91/Campfire_JE2_BE2.gif",
-            "Water Bottle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/75/Water_Bottle_JE2_BE2.png",
-            "Dragon Head": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b6/Dragon_Head.png",
-        }
-
-        minecraft_location_ids = {
-            "Story": [42073, 42080, 42081, 42023, 42082, 42027, 42039, 42085, 42002, 42009, 42010,
-                      42070, 42041, 42049, 42090, 42004, 42031, 42025, 42029, 42051, 42077, 42089],
-            "Nether": [42017, 42044, 42069, 42058, 42034, 42060, 42066, 42076, 42064, 42071, 42021,
-                       42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42014],
-            "The End": [42052, 42005, 42012, 42032, 42030, 42042, 42018, 42038, 42046],
-            "Adventure": [42047, 42086, 42087, 42050, 42059, 42055, 42072, 42003, 42035, 42016, 42020,
-                          42048, 42054, 42068, 42043, 42074, 42075, 42024, 42026, 42037, 42045, 42056, 42088],
-            "Husbandry": [42065, 42067, 42078, 42022, 42007, 42079, 42013, 42028,
-                          42036, 42057, 42063, 42053, 42083, 42084, 42091]
-        }
-
-        display_data = {}
-
-        # Determine display for progressive items
-        progressive_items = {
-            "Progressive Tools": 45013,
-            "Progressive Weapons": 45012,
-            "Progressive Armor": 45014,
-            "Progressive Resource Crafting": 45001
-        }
-        progressive_names = {
-            "Progressive Tools": ["Wooden Pickaxe", "Stone Pickaxe", "Iron Pickaxe", "Diamond Pickaxe"],
-            "Progressive Weapons": ["Wooden Sword", "Stone Sword", "Iron Sword", "Diamond Sword"],
-            "Progressive Armor": ["Leather Tunic", "Iron Chestplate", "Diamond Chestplate"],
-            "Progressive Resource Crafting": ["Iron Ingot", "Iron Ingot", "Block of Iron"]
-        }
-        for item_name, item_id in progressive_items.items():
-            level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
-            display_name = progressive_names[item_name][level]
-            base_name = item_name.split(maxsplit=1)[1].lower().replace(' ', '_')
-            display_data[base_name + "_url"] = minecraft_icons[display_name]
-
-        # Multi-items
-        multi_items = {
-            "3 Ender Pearls": 45029,
-            "8 Netherite Scrap": 45015
-        }
-        for item_name, item_id in multi_items.items():
-            base_name = item_name.split()[-1].lower()
-            count = inventory[item_id]
-            if count >= 0:
-                display_data[base_name + "_count"] = count
-
-        # Victory condition
-        game_state = multisave.get("client_game_state", {}).get((tracked_team, tracked_player), 0)
-        display_data['game_finished'] = game_state == 30
-
-        # Turn location IDs into advancement tab counts
-        checked_locations = multisave.get("location_checks", {}).get((tracked_team, tracked_player), set())
-        lookup_name = lambda id: lookup_any_location_id_to_name[id]
-        location_info = {tab_name: {lookup_name(id): (id in checked_locations) for id in tab_locations}
-                         for tab_name, tab_locations in minecraft_location_ids.items()}
-        checks_done = {tab_name: len([id for id in tab_locations if id in checked_locations])
-                       for tab_name, tab_locations in minecraft_location_ids.items()}
-        checks_done['Total'] = len(checked_locations)
-        checks_in_area = {tab_name: len(tab_locations) for tab_name, tab_locations in minecraft_location_ids.items()}
-        checks_in_area['Total'] = sum(checks_in_area.values())
-
-        return render_template("minecraftTracker.html",
-                               inventory=inventory, icons=minecraft_icons,
-                               acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
-                                               id in lookup_any_item_id_to_name},
-                               player=tracked_player, team=tracked_team, room=room, player_name=player_name,
-                               checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
-                               **display_data)
-
+        return __RenderMinecraftTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
     elif games[tracked_player] == "Ocarina of Time":
-        oot_icons = {
-            "Fairy Ocarina":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/OoT_Fairy_Ocarina_Icon.png",
-            "Ocarina of Time":          "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/4e/OoT_Ocarina_of_Time_Icon.png",
-            "Slingshot":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/32/OoT_Fairy_Slingshot_Icon.png",
-            "Boomerang":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/d/d5/OoT_Boomerang_Icon.png",
-            "Bottle":                   "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/f/fc/OoT_Bottle_Icon.png",
-            "Rutos Letter":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/OoT_Letter_Icon.png",
-            "Bombs":                    "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/11/OoT_Bomb_Icon.png",
-            "Bombchus":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/36/OoT_Bombchu_Icon.png",
-            "Lens of Truth":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/0/05/OoT_Lens_of_Truth_Icon.png",
-            "Bow":                      "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/9a/OoT_Fairy_Bow_Icon.png",
-            "Hookshot":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/7/77/OoT_Hookshot_Icon.png",
-            "Longshot":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/a/a4/OoT_Longshot_Icon.png",
-            "Megaton Hammer":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/93/OoT_Megaton_Hammer_Icon.png",
-            "Fire Arrows":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/1e/OoT_Fire_Arrow_Icon.png",
-            "Ice Arrows":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/3c/OoT_Ice_Arrow_Icon.png",
-            "Light Arrows":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/7/76/OoT_Light_Arrow_Icon.png",
-            "Dins Fire":                r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/d/da/OoT_Din%27s_Fire_Icon.png",
-            "Farores Wind":             r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/7/7a/OoT_Farore%27s_Wind_Icon.png",
-            "Nayrus Love":              r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/be/OoT_Nayru%27s_Love_Icon.png",
-            "Kokiri Sword":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/5/53/OoT_Kokiri_Sword_Icon.png",
-            "Biggoron Sword":           r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/2e/OoT_Giant%27s_Knife_Icon.png",
-            "Mirror Shield":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/b0/OoT_Mirror_Shield_Icon_2.png",
-            "Goron Bracelet":           r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/b7/OoT_Goron%27s_Bracelet_Icon.png",
-            "Silver Gauntlets":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/b9/OoT_Silver_Gauntlets_Icon.png",
-            "Golden Gauntlets":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/6/6a/OoT_Golden_Gauntlets_Icon.png",
-            "Goron Tunic":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/1c/OoT_Goron_Tunic_Icon.png",
-            "Zora Tunic":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/2c/OoT_Zora_Tunic_Icon.png",
-            "Silver Scale":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/4e/OoT_Silver_Scale_Icon.png",
-            "Gold Scale":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/95/OoT_Golden_Scale_Icon.png",
-            "Iron Boots":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/34/OoT_Iron_Boots_Icon.png",
-            "Hover Boots":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/22/OoT_Hover_Boots_Icon.png",
-            "Adults Wallet":            r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/f/f9/OoT_Adult%27s_Wallet_Icon.png",
-            "Giants Wallet":            r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/8/87/OoT_Giant%27s_Wallet_Icon.png",
-            "Small Magic":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/9f/OoT3D_Magic_Jar_Icon.png",
-            "Large Magic":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/3e/OoT3D_Large_Magic_Jar_Icon.png",
-            "Gerudo Membership Card":   "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/4e/OoT_Gerudo_Token_Icon.png",
-            "Gold Skulltula Token":     "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/47/OoT_Token_Icon.png",
-            "Triforce Piece":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/0/0b/SS_Triforce_Piece_Icon.png",
-            "Triforce":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/6/68/ALttP_Triforce_Title_Sprite.png",
-            "Zeldas Lullaby":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
-            "Eponas Song":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
-            "Sarias Song":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
-            "Suns Song":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
-            "Song of Time":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
-            "Song of Storms":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
-            "Minuet of Forest":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/e/e4/Green_Note.png",
-            "Bolero of Fire":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/f/f0/Red_Note.png",
-            "Serenade of Water":        "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/0/0f/Blue_Note.png",
-            "Requiem of Spirit":        "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/a/a4/Orange_Note.png",
-            "Nocturne of Shadow":       "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/Purple_Note.png",
-            "Prelude of Light":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/90/Yellow_Note.png",
-            "Small Key":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/e/e5/OoT_Small_Key_Icon.png",
-            "Boss Key":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/40/OoT_Boss_Key_Icon.png",
-        }
-
-        display_data = {}
-
-        # Determine display for progressive items
-        progressive_items = {
-            "Progressive Hookshot": 66128,
-            "Progressive Strength Upgrade": 66129,
-            "Progressive Wallet": 66133,
-            "Progressive Scale": 66134,
-            "Magic Meter": 66138,
-            "Ocarina": 66139,
-        }
-        progressive_names = {
-            "Progressive Hookshot": ["Hookshot", "Hookshot", "Longshot"],
-            "Progressive Strength Upgrade": ["Goron Bracelet", "Goron Bracelet", "Silver Gauntlets", "Golden Gauntlets"],
-            "Progressive Wallet": ["Adults Wallet", "Adults Wallet", "Giants Wallet", "Giants Wallet"],
-            "Progressive Scale": ["Silver Scale", "Silver Scale", "Gold Scale"],
-            "Magic Meter": ["Small Magic", "Small Magic", "Large Magic"],
-            "Ocarina": ["Fairy Ocarina", "Fairy Ocarina", "Ocarina of Time"]
-        }
-        for item_name, item_id in progressive_items.items():
-            level = min(inventory[item_id], len(progressive_names[item_name])-1)
-            display_name = progressive_names[item_name][level]
-            if item_name.startswith("Progressive"):
-                base_name = item_name.split(maxsplit=1)[1].lower().replace(' ', '_')
-            else:
-                base_name = item_name.lower().replace(' ', '_')
-            display_data[base_name+"_url"] = oot_icons[display_name]
-
-            if base_name == "hookshot":
-                display_data['hookshot_length'] = {0: '', 1: 'H', 2: 'L'}.get(level)
-            if base_name == "wallet": 
-                display_data['wallet_size'] = {0: '99', 1: '200', 2: '500', 3: '999'}.get(level)
-
-        # Determine display for bottles. Show letter if it's obtained, determine bottle count
-        bottle_ids = [66015, 66020, 66021, 66140, 66141, 66142, 66143, 66144, 66145, 66146, 66147, 66148]
-        display_data['bottle_count'] = min(sum(map(lambda item_id: inventory[item_id], bottle_ids)), 4)
-        display_data['bottle_url'] = oot_icons['Rutos Letter'] if inventory[66021] > 0 else oot_icons['Bottle']
-
-        # Determine bombchu display
-        display_data['has_bombchus'] = any(map(lambda item_id: inventory[item_id] > 0, [66003, 66106, 66107, 66137]))
-
-        # Multi-items
-        multi_items = {
-            "Gold Skulltula Token": 66091,
-            "Triforce Piece": 66202,
-        }
-        for item_name, item_id in multi_items.items():
-            base_name = item_name.split()[-1].lower()
-            count = inventory[item_id]
-            display_data[base_name+"_count"] = inventory[item_id]
-
-        # Gather dungeon locations
-        area_id_ranges = {
-            "Overworld":                (67000, 67280),
-            "Deku Tree":                (67281, 67303),
-            "Dodongo's Cavern":         (67304, 67334),
-            "Jabu Jabu's Belly":        (67335, 67359),
-            "Bottom of the Well":       (67360, 67384),
-            "Forest Temple":            (67385, 67420),
-            "Fire Temple":              (67421, 67457),
-            "Water Temple":             (67458, 67484),
-            "Shadow Temple":            (67485, 67532),
-            "Spirit Temple":            (67533, 67582),
-            "Ice Cavern":               (67583, 67596),
-            "Gerudo Training Grounds":  (67597, 67635),
-            "Ganon's Castle":           (67636, 67673),
-        }
-        def lookup_and_trim(id, area):
-            full_name = lookup_any_location_id_to_name[id]
-            if id == 67673:
-                return full_name[13:] # Ganons Tower Boss Key Chest
-            if area != 'Overworld':
-                return full_name[len(area):] # trim dungeon name. leaves an extra space that doesn't display, or trims fully for DC/Jabu/GC
-            return full_name
-
-        checked_locations = multisave.get("location_checks", {}).get((tracked_team, tracked_player), set()).intersection(set(locations[tracked_player]))
-        location_info = {area: {lookup_and_trim(id, area): id in checked_locations for id in range(min_id, max_id+1) if id in locations[tracked_player]} 
-            for area, (min_id, max_id) in area_id_ranges.items()}
-        checks_done = {area: len(list(filter(lambda x: x, location_info[area].values()))) for area in area_id_ranges}
-        checks_in_area = {area: len([id for id in range(min_id, max_id+1) if id in locations[tracked_player]]) 
-            for area, (min_id, max_id) in area_id_ranges.items()}
-        checks_done['Total'] = sum(checks_done.values())
-        checks_in_area['Total'] = sum(checks_in_area.values())
-
-        # Give skulltulas on non-tracked locations
-        non_tracked_locations = multisave.get("location_checks", {}).get((tracked_team, tracked_player), set()).difference(set(locations[tracked_player]))
-        for id in non_tracked_locations:
-            if "GS" in lookup_and_trim(id, ''):
-                display_data["token_count"] += 1
-
-        # Gather small and boss key info
-        small_key_counts = {
-            "Forest Temple":            inventory[66175],
-            "Fire Temple":              inventory[66176],
-            "Water Temple":             inventory[66177],
-            "Spirit Temple":            inventory[66178],
-            "Shadow Temple":            inventory[66179],
-            "Bottom of the Well":       inventory[66180],
-            "Gerudo Training Grounds":  inventory[66181],
-            "Ganon's Castle":           inventory[66183],
-        }
-        boss_key_counts = {
-            "Forest Temple":            '✔' if inventory[66149] else '✕',
-            "Fire Temple":              '✔' if inventory[66150] else '✕',
-            "Water Temple":             '✔' if inventory[66151] else '✕',
-            "Spirit Temple":            '✔' if inventory[66152] else '✕',
-            "Shadow Temple":            '✔' if inventory[66153] else '✕',
-            "Ganon's Castle":           '✔' if inventory[66154] else '✕',
-        }
-
-        # Victory condition
-        game_state = multisave.get("client_game_state", {}).get((tracked_team, tracked_player), 0)
-        display_data['game_finished'] = game_state == 30
-
-        return render_template("ootTracker.html",
-                               inventory=inventory, player=tracked_player, team=tracked_team, room=room, player_name=player_name,
-                               icons=oot_icons, acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
-                               checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
-                               small_key_counts=small_key_counts, boss_key_counts=boss_key_counts,
-                               **display_data)
-
+        return __RenderOoTTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
     else:
-        checked_locations = multisave.get("location_checks", {}).get((tracked_team, tracked_player), set())
-        player_received_items = {}
-        for order_index, networkItem in enumerate(
-                multisave.get('received_items', {}).get((tracked_team, tracked_player), []),
-                start=1
-        ):
-            player_received_items[networkItem.item] = order_index
-        return render_template("genericTracker.html",
-                               inventory=inventory,
-                               player=tracked_player, team=tracked_team, room=room, player_name=player_name,
-                               checked_locations=checked_locations,
-                               not_checked_locations=set(locations[tracked_player]) - checked_locations,
-                               received_items=player_received_items)
+        return __RenderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
+
+
+def __RenderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+        inventory: Counter, team: int, player: int, playerName: str, 
+        seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
+
+    icons = {
+        "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
+        "Red Shield": r"https://www.zeldadungeon.net/wiki/images/5/55/Fire-Shield.png",
+        "Mirror Shield": r"https://www.zeldadungeon.net/wiki/images/8/84/Mirror-Shield.png",
+        "Fighter Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/4/40/SFighterSword.png?width=1920",
+        "Master Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/6/65/SMasterSword.png?width=1920",
+        "Tempered Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/9/92/STemperedSword.png?width=1920",
+        "Golden Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/2/28/SGoldenSword.png?width=1920",
+        "Bow": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Bow_%26_Arrows_Sprite.png?version=5f85a70e6366bf473544ef93b274f74c",
+        "Silver Bow": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/6/65/Bow.png?width=1920",
+        "Green Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/c/c9/SGreenTunic.png?width=1920",
+        "Blue Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/9/98/SBlueTunic.png?width=1920",
+        "Red Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/7/74/SRedTunic.png?width=1920",
+        "Power Glove": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/f/f5/SPowerGlove.png?width=1920",
+        "Titan Mitts": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/c/c1/STitanMitt.png?width=1920",
+        "Progressive Sword": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/c/cc/ALttP_Master_Sword_Sprite.png?version=55869db2a20e157cd3b5c8f556097725",
+        "Pegasus Boots": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/ed/ALttP_Pegasus_Shoes_Sprite.png?version=405f42f97240c9dcd2b71ffc4bebc7f9",
+        "Progressive Glove": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/c/c1/STitanMitt.png?width=1920",
+        "Flippers": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/4/4c/ZoraFlippers.png?width=1920",
+        "Moon Pearl": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/6/63/ALttP_Moon_Pearl_Sprite.png?version=d601542d5abcc3e006ee163254bea77e",
+        "Progressive Bow": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Bow_%26_Arrows_Sprite.png?version=cfb7648b3714cccc80e2b17b2adf00ed",
+        "Blue Boomerang": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/c/c3/ALttP_Boomerang_Sprite.png?version=96127d163759395eb510b81a556d500e",
+        "Red Boomerang": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/b9/ALttP_Magical_Boomerang_Sprite.png?version=47cddce7a07bc3e4c2c10727b491f400",
+        "Hookshot": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/2/24/Hookshot.png?version=c90bc8e07a52e8090377bd6ef854c18b",
+        "Mushroom": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/35/ALttP_Mushroom_Sprite.png?version=1f1acb30d71bd96b60a3491e54bbfe59",
+        "Magic Powder": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e5/ALttP_Magic_Powder_Sprite.png?version=c24e38effbd4f80496d35830ce8ff4ec",
+        "Fire Rod": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d6/FireRod.png?version=6eabc9f24d25697e2c4cd43ddc8207c0",
+        "Ice Rod": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d7/ALttP_Ice_Rod_Sprite.png?version=1f944148223d91cfc6a615c92286c3bc",
+        "Bombos": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/8/8c/ALttP_Bombos_Medallion_Sprite.png?version=f4d6aba47fb69375e090178f0fc33b26",
+        "Ether": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/3c/Ether.png?version=34027651a5565fcc5a83189178ab17b5",
+        "Quake": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/5/56/ALttP_Quake_Medallion_Sprite.png?version=efd64d451b1831bd59f7b7d6b61b5879",
+        "Lamp": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/6/63/ALttP_Lantern_Sprite.png?version=e76eaa1ec509c9a5efb2916698d5a4ce",
+        "Hammer": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d1/ALttP_Hammer_Sprite.png?version=e0adec227193818dcaedf587eba34500",
+        "Shovel": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/c/c4/ALttP_Shovel_Sprite.png?version=e73d1ce0115c2c70eaca15b014bd6f05",
+        "Flute": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/db/Flute.png?version=ec4982b31c56da2c0c010905c5c60390",
+        "Bug Catching Net": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/5/54/Bug-CatchingNet.png?version=4d40e0ee015b687ff75b333b968d8be6",
+        "Book of Mudora": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/2/22/ALttP_Book_of_Mudora_Sprite.png?version=11e4632bba54f6b9bf921df06ac93744",
+        "Bottle": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/ef/ALttP_Magic_Bottle_Sprite.png?version=fd98ab04db775270cbe79fce0235777b",
+        "Cane of Somaria": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e1/ALttP_Cane_of_Somaria_Sprite.png?version=8cc1900dfd887890badffc903bb87943",
+        "Cane of Byrna": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Cane_of_Byrna_Sprite.png?version=758b607c8cbe2cf1900d42a0b3d0fb54",
+        "Cape": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/1/1c/ALttP_Magic_Cape_Sprite.png?version=6b77f0d609aab0c751307fc124736832",
+        "Magic Mirror": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e5/ALttP_Magic_Mirror_Sprite.png?version=e035dbc9cbe2a3bd44aa6d047762b0cc",
+        "Triforce": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/4/4e/TriforceALttPTitle.png?version=dc398e1293177581c16303e4f9d12a48",
+        "Small Key": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/f/f1/ALttP_Small_Key_Sprite.png?version=4f35d92842f0de39d969181eea03774e",
+        "Big Key": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/33/ALttP_Big_Key_Sprite.png?version=136dfa418ba76c8b4e270f466fc12f4d",
+        "Chest": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/7/73/ALttP_Treasure_Chest_Sprite.png?version=5f530ecd98dcb22251e146e8049c0dda",
+        "Light World": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e7/ALttP_Soldier_Green_Sprite.png?version=d650d417934cd707a47e496489c268a6",
+        "Dark World": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/9/94/ALttP_Moblin_Sprite.png?version=ebf50e33f4657c377d1606bcc0886ddc",
+        "Hyrule Castle": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d3/ALttP_Ball_and_Chain_Trooper_Sprite.png?version=1768a87c06d29cc8e7ddd80b9fa516be",
+        "Agahnims Tower": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/1/1e/ALttP_Agahnim_Sprite.png?version=365956e61b0c2191eae4eddbe591dab5",
+        "Desert Palace": r"https://www.zeldadungeon.net/wiki/images/2/25/Lanmola-ALTTP-Sprite.png",
+        "Eastern Palace": r"https://www.zeldadungeon.net/wiki/images/d/dc/RedArmosKnight.png",
+        "Tower of Hera": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/3c/ALttP_Moldorm_Sprite.png?version=c588257bdc2543468e008a6b30f262a7",
+        "Palace of Darkness": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/ed/ALttP_Helmasaur_King_Sprite.png?version=ab8a4a1cfd91d4fc43466c56cba30022",
+        "Swamp Palace": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/7/73/ALttP_Arrghus_Sprite.png?version=b098be3122e53f751b74f4a5ef9184b5",
+        "Skull Woods": r"https://alttp-wiki.net/images/6/6a/Mothula.png",
+        "Thieves Town": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/8/86/ALttP_Blind_the_Thief_Sprite.png?version=3833021bfcd112be54e7390679047222",
+        "Ice Palace": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/33/ALttP_Kholdstare_Sprite.png?version=e5a1b0e8b2298e550d85f90bf97045c0",
+        "Misery Mire": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/8/85/ALttP_Vitreous_Sprite.png?version=92b2e9cb0aa63f831760f08041d8d8d8",
+        "Turtle Rock": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/9/91/ALttP_Trinexx_Sprite.png?version=0cc867d513952aa03edd155597a0c0be",
+        "Ganons Tower": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/b9/ALttP_Ganon_Sprite.png?version=956f51f054954dfff53c1a9d4f929c74"
+    }
+
+    # Note the presence of the triforce item
+    game_state = multisave.get("client_game_state", {}).get((team, player), 0)
+    if game_state == 30:
+        inventory[106] = 1  # Triforce
+
+    # Progressive items need special handling for icons and class
+    progressive_items = {
+        "Progressive Sword": 94,
+        "Progressive Glove": 97,
+        "Progressive Bow": 100,
+        "Progressive Mail": 96,
+        "Progressive Shield": 95,
+    }
+    progressive_names = {
+        "Progressive Sword": [None, 'Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
+        "Progressive Glove": [None, 'Power Glove', 'Titan Mitts'],
+        "Progressive Bow": [None, "Bow", "Silver Bow"],
+        "Progressive Mail": ["Green Mail", "Blue Mail", "Red Mail"],
+        "Progressive Shield": [None, "Blue Shield", "Red Shield", "Mirror Shield"]
+    }
+
+    # Determine which icon to use
+    display_data = {}
+    for item_name, item_id in progressive_items.items():
+        level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
+        display_name = progressive_names[item_name][level]
+        acquired = True
+        if not display_name:
+            acquired = False
+            display_name = progressive_names[item_name][level + 1]
+        base_name = item_name.split(maxsplit=1)[1].lower()
+        display_data[base_name + "_acquired"] = acquired
+        display_data[base_name + "_url"] = icons[display_name]
+
+    # The single player tracker doesn't care about overworld, underworld, and total checks. Maybe it should?
+    sp_areas = ordered_areas[2:15]
+
+    player_big_key_locations = set()
+    player_small_key_locations = set()
+    for loc_data in locations.values():
+        for item_id, item_player in loc_data.values():
+            if item_player == player:
+                if item_id in ids_big_key:
+                    player_big_key_locations.add(ids_big_key[item_id])
+                elif item_id in ids_small_key:
+                    player_small_key_locations.add(ids_small_key[item_id])
+
+    return render_template("lttpTracker.html", inventory=inventory,
+                            player_name=playerName, room=room, icons=icons, checks_done=checks_done,
+                            checks_in_area=seed_checks_in_area[player],
+                            acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
+                            small_key_ids=small_key_ids, big_key_ids=big_key_ids, sp_areas=sp_areas,
+                            key_locations=player_small_key_locations,
+                            big_key_locations=player_big_key_locations,
+                            **display_data)
+
+
+def __RenderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+        inventory: Counter, team: int, player: int, playerName: str) -> str:
+
+    icons = {
+        "Wooden Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d2/Wooden_Pickaxe_JE3_BE3.png",
+        "Stone Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c4/Stone_Pickaxe_JE2_BE2.png",
+        "Iron Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d1/Iron_Pickaxe_JE3_BE2.png",
+        "Diamond Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e7/Diamond_Pickaxe_JE3_BE3.png",
+        "Wooden Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d5/Wooden_Sword_JE2_BE2.png",
+        "Stone Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b1/Stone_Sword_JE2_BE2.png",
+        "Iron Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/8/8e/Iron_Sword_JE2_BE2.png",
+        "Diamond Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/4/44/Diamond_Sword_JE3_BE3.png",
+        "Leather Tunic": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b7/Leather_Tunic_JE4_BE2.png",
+        "Iron Chestplate": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/31/Iron_Chestplate_JE2_BE2.png",
+        "Diamond Chestplate": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e0/Diamond_Chestplate_JE3_BE2.png",
+        "Iron Ingot": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Iron_Ingot_JE3_BE2.png",
+        "Block of Iron": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7e/Block_of_Iron_JE4_BE3.png",
+        "Brewing Stand": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fa/Brewing_Stand.png",
+        "Ender Pearl": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/f6/Ender_Pearl_JE3_BE2.png",
+        "Bucket": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Bucket_JE2_BE2.png",
+        "Bow": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/ab/Bow_%28Pull_2%29_JE1_BE1.png",
+        "Shield": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c6/Shield_JE2_BE1.png",
+        "Red Bed": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/dc/Red_Bed_JE4_BE3.png",
+        "Netherite Scrap": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/33/Netherite_Scrap_JE2_BE1.png",
+        "Flint and Steel": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/94/Flint_and_Steel_JE4_BE2.png",
+        "Enchanting Table": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/31/Enchanting_Table.gif",
+        "Fishing Rod": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7f/Fishing_Rod_JE2_BE2.png",
+        "Campfire": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/91/Campfire_JE2_BE2.gif",
+        "Water Bottle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/75/Water_Bottle_JE2_BE2.png",
+        "Dragon Head": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b6/Dragon_Head.png",
+    }
+
+    minecraft_location_ids = {
+        "Story": [42073, 42080, 42081, 42023, 42082, 42027, 42039, 42085, 42002, 42009, 42010,
+                    42070, 42041, 42049, 42090, 42004, 42031, 42025, 42029, 42051, 42077, 42089],
+        "Nether": [42017, 42044, 42069, 42058, 42034, 42060, 42066, 42076, 42064, 42071, 42021,
+                    42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42014],
+        "The End": [42052, 42005, 42012, 42032, 42030, 42042, 42018, 42038, 42046],
+        "Adventure": [42047, 42086, 42087, 42050, 42059, 42055, 42072, 42003, 42035, 42016, 42020,
+                        42048, 42054, 42068, 42043, 42074, 42075, 42024, 42026, 42037, 42045, 42056, 42088],
+        "Husbandry": [42065, 42067, 42078, 42022, 42007, 42079, 42013, 42028,
+                        42036, 42057, 42063, 42053, 42083, 42084, 42091]
+    }
+
+    display_data = {}
+
+    # Determine display for progressive items
+    progressive_items = {
+        "Progressive Tools": 45013,
+        "Progressive Weapons": 45012,
+        "Progressive Armor": 45014,
+        "Progressive Resource Crafting": 45001
+    }
+    progressive_names = {
+        "Progressive Tools": ["Wooden Pickaxe", "Stone Pickaxe", "Iron Pickaxe", "Diamond Pickaxe"],
+        "Progressive Weapons": ["Wooden Sword", "Stone Sword", "Iron Sword", "Diamond Sword"],
+        "Progressive Armor": ["Leather Tunic", "Iron Chestplate", "Diamond Chestplate"],
+        "Progressive Resource Crafting": ["Iron Ingot", "Iron Ingot", "Block of Iron"]
+    }
+    for item_name, item_id in progressive_items.items():
+        level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
+        display_name = progressive_names[item_name][level]
+        base_name = item_name.split(maxsplit=1)[1].lower().replace(' ', '_')
+        display_data[base_name + "_url"] = icons[display_name]
+
+    # Multi-items
+    multi_items = {
+        "3 Ender Pearls": 45029,
+        "8 Netherite Scrap": 45015
+    }
+    for item_name, item_id in multi_items.items():
+        base_name = item_name.split()[-1].lower()
+        count = inventory[item_id]
+        if count >= 0:
+            display_data[base_name + "_count"] = count
+
+    # Victory condition
+    game_state = multisave.get("client_game_state", {}).get((team, player), 0)
+    display_data['game_finished'] = game_state == 30
+
+    # Turn location IDs into advancement tab counts
+    checked_locations = multisave.get("location_checks", {}).get((team, player), set())
+    lookup_name = lambda id: lookup_any_location_id_to_name[id]
+    location_info = {tab_name: {lookup_name(id): (id in checked_locations) for id in tab_locations}
+                        for tab_name, tab_locations in minecraft_location_ids.items()}
+    checks_done = {tab_name: len([id for id in tab_locations if id in checked_locations])
+                    for tab_name, tab_locations in minecraft_location_ids.items()}
+    checks_done['Total'] = len(checked_locations)
+    checks_in_area = {tab_name: len(tab_locations) for tab_name, tab_locations in minecraft_location_ids.items()}
+    checks_in_area['Total'] = sum(checks_in_area.values())
+
+    return render_template("minecraftTracker.html",
+                            inventory=inventory, icons=icons,
+                            acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
+                                            id in lookup_any_item_id_to_name},
+                            player=player, team=team, room=room, player_name=playerName,
+                            checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
+                            **display_data)
+
+
+def __RenderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+        inventory: Counter, team: int, player: int, playerName: str) -> str:
+
+    icons = {
+        "Fairy Ocarina":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/OoT_Fairy_Ocarina_Icon.png",
+        "Ocarina of Time":          "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/4e/OoT_Ocarina_of_Time_Icon.png",
+        "Slingshot":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/32/OoT_Fairy_Slingshot_Icon.png",
+        "Boomerang":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/d/d5/OoT_Boomerang_Icon.png",
+        "Bottle":                   "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/f/fc/OoT_Bottle_Icon.png",
+        "Rutos Letter":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/OoT_Letter_Icon.png",
+        "Bombs":                    "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/11/OoT_Bomb_Icon.png",
+        "Bombchus":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/36/OoT_Bombchu_Icon.png",
+        "Lens of Truth":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/0/05/OoT_Lens_of_Truth_Icon.png",
+        "Bow":                      "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/9a/OoT_Fairy_Bow_Icon.png",
+        "Hookshot":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/7/77/OoT_Hookshot_Icon.png",
+        "Longshot":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/a/a4/OoT_Longshot_Icon.png",
+        "Megaton Hammer":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/93/OoT_Megaton_Hammer_Icon.png",
+        "Fire Arrows":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/1e/OoT_Fire_Arrow_Icon.png",
+        "Ice Arrows":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/3c/OoT_Ice_Arrow_Icon.png",
+        "Light Arrows":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/7/76/OoT_Light_Arrow_Icon.png",
+        "Dins Fire":                r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/d/da/OoT_Din%27s_Fire_Icon.png",
+        "Farores Wind":             r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/7/7a/OoT_Farore%27s_Wind_Icon.png",
+        "Nayrus Love":              r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/be/OoT_Nayru%27s_Love_Icon.png",
+        "Kokiri Sword":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/5/53/OoT_Kokiri_Sword_Icon.png",
+        "Biggoron Sword":           r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/2e/OoT_Giant%27s_Knife_Icon.png",
+        "Mirror Shield":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/b0/OoT_Mirror_Shield_Icon_2.png",
+        "Goron Bracelet":           r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/b7/OoT_Goron%27s_Bracelet_Icon.png",
+        "Silver Gauntlets":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/b9/OoT_Silver_Gauntlets_Icon.png",
+        "Golden Gauntlets":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/6/6a/OoT_Golden_Gauntlets_Icon.png",
+        "Goron Tunic":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/1c/OoT_Goron_Tunic_Icon.png",
+        "Zora Tunic":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/2c/OoT_Zora_Tunic_Icon.png",
+        "Silver Scale":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/4e/OoT_Silver_Scale_Icon.png",
+        "Gold Scale":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/95/OoT_Golden_Scale_Icon.png",
+        "Iron Boots":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/34/OoT_Iron_Boots_Icon.png",
+        "Hover Boots":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/22/OoT_Hover_Boots_Icon.png",
+        "Adults Wallet":            r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/f/f9/OoT_Adult%27s_Wallet_Icon.png",
+        "Giants Wallet":            r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/8/87/OoT_Giant%27s_Wallet_Icon.png",
+        "Small Magic":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/9f/OoT3D_Magic_Jar_Icon.png",
+        "Large Magic":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/3e/OoT3D_Large_Magic_Jar_Icon.png",
+        "Gerudo Membership Card":   "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/4e/OoT_Gerudo_Token_Icon.png",
+        "Gold Skulltula Token":     "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/47/OoT_Token_Icon.png",
+        "Triforce Piece":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/0/0b/SS_Triforce_Piece_Icon.png",
+        "Triforce":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/6/68/ALttP_Triforce_Title_Sprite.png",
+        "Zeldas Lullaby":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
+        "Eponas Song":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
+        "Sarias Song":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
+        "Suns Song":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
+        "Song of Time":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
+        "Song of Storms":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
+        "Minuet of Forest":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/e/e4/Green_Note.png",
+        "Bolero of Fire":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/f/f0/Red_Note.png",
+        "Serenade of Water":        "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/0/0f/Blue_Note.png",
+        "Requiem of Spirit":        "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/a/a4/Orange_Note.png",
+        "Nocturne of Shadow":       "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/Purple_Note.png",
+        "Prelude of Light":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/90/Yellow_Note.png",
+        "Small Key":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/e/e5/OoT_Small_Key_Icon.png",
+        "Boss Key":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/40/OoT_Boss_Key_Icon.png",
+    }
+
+    display_data = {}
+
+    # Determine display for progressive items
+    progressive_items = {
+        "Progressive Hookshot": 66128,
+        "Progressive Strength Upgrade": 66129,
+        "Progressive Wallet": 66133,
+        "Progressive Scale": 66134,
+        "Magic Meter": 66138,
+        "Ocarina": 66139,
+    }
+
+    progressive_names = {
+        "Progressive Hookshot": ["Hookshot", "Hookshot", "Longshot"],
+        "Progressive Strength Upgrade": ["Goron Bracelet", "Goron Bracelet", "Silver Gauntlets", "Golden Gauntlets"],
+        "Progressive Wallet": ["Adults Wallet", "Adults Wallet", "Giants Wallet", "Giants Wallet"],
+        "Progressive Scale": ["Silver Scale", "Silver Scale", "Gold Scale"],
+        "Magic Meter": ["Small Magic", "Small Magic", "Large Magic"],
+        "Ocarina": ["Fairy Ocarina", "Fairy Ocarina", "Ocarina of Time"]
+    }
+
+    for item_name, item_id in progressive_items.items():
+        level = min(inventory[item_id], len(progressive_names[item_name])-1)
+        display_name = progressive_names[item_name][level]
+        if item_name.startswith("Progressive"):
+            base_name = item_name.split(maxsplit=1)[1].lower().replace(' ', '_')
+        else:
+            base_name = item_name.lower().replace(' ', '_')
+        display_data[base_name+"_url"] = icons[display_name]
+
+        if base_name == "hookshot":
+            display_data['hookshot_length'] = {0: '', 1: 'H', 2: 'L'}.get(level)
+        if base_name == "wallet": 
+            display_data['wallet_size'] = {0: '99', 1: '200', 2: '500', 3: '999'}.get(level)
+
+    # Determine display for bottles. Show letter if it's obtained, determine bottle count
+    bottle_ids = [66015, 66020, 66021, 66140, 66141, 66142, 66143, 66144, 66145, 66146, 66147, 66148]
+    display_data['bottle_count'] = min(sum(map(lambda item_id: inventory[item_id], bottle_ids)), 4)
+    display_data['bottle_url'] = icons['Rutos Letter'] if inventory[66021] > 0 else icons['Bottle']
+
+    # Determine bombchu display
+    display_data['has_bombchus'] = any(map(lambda item_id: inventory[item_id] > 0, [66003, 66106, 66107, 66137]))
+
+    # Multi-items
+    multi_items = {
+        "Gold Skulltula Token": 66091,
+        "Triforce Piece": 66202,
+    }
+    for item_name, item_id in multi_items.items():
+        base_name = item_name.split()[-1].lower()
+        count = inventory[item_id]
+        display_data[base_name+"_count"] = inventory[item_id]
+
+    # Gather dungeon locations
+    area_id_ranges = {
+        "Overworld":                (67000, 67280),
+        "Deku Tree":                (67281, 67303),
+        "Dodongo's Cavern":         (67304, 67334),
+        "Jabu Jabu's Belly":        (67335, 67359),
+        "Bottom of the Well":       (67360, 67384),
+        "Forest Temple":            (67385, 67420),
+        "Fire Temple":              (67421, 67457),
+        "Water Temple":             (67458, 67484),
+        "Shadow Temple":            (67485, 67532),
+        "Spirit Temple":            (67533, 67582),
+        "Ice Cavern":               (67583, 67596),
+        "Gerudo Training Grounds":  (67597, 67635),
+        "Ganon's Castle":           (67636, 67673),
+    }
+    def lookup_and_trim(id, area):
+        full_name = lookup_any_location_id_to_name[id]
+        if id == 67673:
+            return full_name[13:] # Ganons Tower Boss Key Chest
+        if area != 'Overworld':
+            return full_name[len(area):] # trim dungeon name. leaves an extra space that doesn't display, or trims fully for DC/Jabu/GC
+        return full_name
+
+    checked_locations = multisave.get("location_checks", {}).get((team, player), set()).intersection(set(locations[player]))
+    location_info = {area: {lookup_and_trim(id, area): id in checked_locations for id in range(min_id, max_id+1) if id in locations[player]} 
+        for area, (min_id, max_id) in area_id_ranges.items()}
+    checks_done = {area: len(list(filter(lambda x: x, location_info[area].values()))) for area in area_id_ranges}
+    checks_in_area = {area: len([id for id in range(min_id, max_id+1) if id in locations[player]]) 
+        for area, (min_id, max_id) in area_id_ranges.items()}
+    checks_done['Total'] = sum(checks_done.values())
+    checks_in_area['Total'] = sum(checks_in_area.values())
+
+    # Give skulltulas on non-tracked locations
+    non_tracked_locations = multisave.get("location_checks", {}).get((team, player), set()).difference(set(locations[player]))
+    for id in non_tracked_locations:
+        if "GS" in lookup_and_trim(id, ''):
+            display_data["token_count"] += 1
+
+    # Gather small and boss key info
+    small_key_counts = {
+        "Forest Temple":            inventory[66175],
+        "Fire Temple":              inventory[66176],
+        "Water Temple":             inventory[66177],
+        "Spirit Temple":            inventory[66178],
+        "Shadow Temple":            inventory[66179],
+        "Bottom of the Well":       inventory[66180],
+        "Gerudo Training Grounds":  inventory[66181],
+        "Ganon's Castle":           inventory[66183],
+    }
+    boss_key_counts = {
+        "Forest Temple":            '✔' if inventory[66149] else '✕',
+        "Fire Temple":              '✔' if inventory[66150] else '✕',
+        "Water Temple":             '✔' if inventory[66151] else '✕',
+        "Spirit Temple":            '✔' if inventory[66152] else '✕',
+        "Shadow Temple":            '✔' if inventory[66153] else '✕',
+        "Ganon's Castle":           '✔' if inventory[66154] else '✕',
+    }
+
+    # Victory condition
+    game_state = multisave.get("client_game_state", {}).get((team, player), 0)
+    display_data['game_finished'] = game_state == 30
+
+    return render_template("ootTracker.html",
+                            inventory=inventory, player=player, team=team, room=room, player_name=playerName,
+                            icons=icons, acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
+                            checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
+                            small_key_counts=small_key_counts, boss_key_counts=boss_key_counts,
+                            **display_data)
+
+
+def __RenderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+        inventory: Counter, team: int, player: int, playerName: str) -> str:
+
+    checked_locations = multisave.get("location_checks", {}).get((team, player), set())
+    player_received_items = {}
+
+    for order_index, networkItem in enumerate(
+            multisave.get('received_items', {}).get((team, player), []),
+            start=1
+    ):
+        player_received_items[networkItem.item] = order_index
+
+    return render_template("genericTracker.html",
+                            inventory=inventory,
+                            player=player, team=team, room=room, player_name=playerName,
+                            checked_locations=checked_locations,
+                            not_checked_locations=set(locations[player]) - checked_locations,
+                            received_items=player_received_items)
 
 
 @app.route('/tracker/<suuid:tracker>')
 @cache.memoize(timeout=60)  # multisave is currently created at most every minute
 def getTracker(tracker: UUID):
-    room = Room.get(tracker=tracker)
+    room: Room = Room.get(tracker=tracker)
     if not room:
         abort(404)
-    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, player_big_key_locations, \
-    player_small_key_locations, precollected_items, games = get_static_room_data(room)
+    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
+        precollected_items, games = get_static_room_data(room)
 
     inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
                  for teamnumber, team in enumerate(names)}
@@ -761,6 +745,15 @@ def getTracker(tracker: UUID):
     for (team, player), game_state in multisave.get("client_game_state", {}).items():
         if game_state == 30:
             inventory[team][player][106] = 1  # Triforce
+
+    player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
+    player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
+    for loc_data in locations.values():
+        for item_id, item_player in loc_data.values():
+            if item_id in ids_big_key:
+                player_big_key_locations[item_player].add(ids_big_key[item_id])
+            elif item_id in ids_small_key:
+                player_small_key_locations[item_player].add(ids_small_key[item_id])
 
     group_big_key_locations = set()
     group_key_locations = set()
