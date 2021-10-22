@@ -289,7 +289,7 @@ class VariaRandomizer:
 
     def __init__(self, world, rom, player):
         # parse args       
-        self.args = copy.deepcopy(VariaRandomizer.parser.parse_args())
+        self.args = copy.deepcopy(VariaRandomizer.parser.parse_args(["--logic", "varia"])) #dummy custom args to skip parsing _sys.argv while still get default values
         self.player = player
         args = self.args
         args.rom = rom

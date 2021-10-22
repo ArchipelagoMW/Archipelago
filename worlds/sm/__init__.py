@@ -61,7 +61,8 @@ class SMWorld(World):
         orig_copy = CollectionState.copy
 
         def sm_init(self, parent: MultiWorld):
-            self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff) for player in parent.get_game_players("Super Metroid")}
+            if (hasattr(parent, "state")): # for unit tests where MultiWorld is instanciated before worlds
+                self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff) for player in parent.get_game_players("Super Metroid")}
             orig_init(self, parent)
 
 
