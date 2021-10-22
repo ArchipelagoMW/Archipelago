@@ -22,7 +22,7 @@ player's game, they may find items which belong to the other player. If player A
 player B, the item will be sent to player B's world over the internet.
 
 This creates a cooperative experience during multi-world games, requiring players to rely upon each other to complete
-their game. Currently, a maximum of 255 players can participate in a single multi-world.
+their game.
 
 ## What happens if a person has to leave early?
 If a player must leave early, they can use Archipelago's forfeit system. When a player forfeits their game, all

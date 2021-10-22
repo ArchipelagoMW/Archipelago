@@ -34,8 +34,8 @@ server_options:
   # A Collect sends the remaining items *to* a world that collects
   # "disabled" -> clients can't collect,
   # "enabled" -> clients can always collect
-  # "auto" -> automatic collect on goal completion, "goal" -> clients can forfeit after achieving their goal
-  # "auto-enabled" -> automatic collect on goal completion and collect forfeit is also enabled
+  # "auto" -> automatic collect on goal completion
+  # "auto-enabled" -> automatic collect on goal completion and manual collect is also enabled
   # "goal" -> collect is allowed after goal completion
   collect_mode: "disabled"
   # Remaining modes

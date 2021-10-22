@@ -5,6 +5,7 @@ from Patch import read_rom
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
 RANDOMIZERBASEHASH = 'e397fef0e947d1bd760c68c4fe99a600'
+ROM_PLAYER_LIMIT = 255
 
 import io
 import json
@@ -787,7 +788,7 @@ def patch_rom(world, rom, player, enemized):
                     rom.write_byte(location.player_address, 0xFF)
                 elif location.item.player != player:
                     if location.player_address is not None:
-                        rom.write_byte(location.player_address, location.item.player)
+                        rom.write_byte(location.player_address, min(location.item.player, ROM_PLAYER_LIMIT))
                     else:
                         itemid = 0x5A
             location_address = old_location_address_to_new_location_address.get(location.address, location.address)
@@ -1653,8 +1654,10 @@ def patch_rom(world, rom, player, enemized):
     rom.write_bytes(0x7FC0, rom.name)
 
     # set player names
-    for p in range(1, min(world.players, 255) + 1):
+    for p in range(1, min(world.players, ROM_PLAYER_LIMIT) + 1):
         rom.write_bytes(0x195FFC + ((p - 1) * 32), hud_format_text(world.player_name[p]))
+    if world.players > ROM_PLAYER_LIMIT:
+        rom.write_bytes(0x195FFC + ((ROM_PLAYER_LIMIT - 1) * 32), hud_format_text("Archipelago"))
 
     # Write title screen Code
     hashint = int(rom.get_hash(), 16)
@@ -1731,7 +1734,7 @@ def write_custom_shops(rom, world, player):
 
             item_data = [shop_id, item_code] + price_data + \
                         [item['max'], ItemFactory(item['replacement'], player).code if item['replacement'] else 0xFF] + \
-                        replacement_price_data + [0 if item['player'] == player else item['player']]
+                        replacement_price_data + [0 if item['player'] == player else min(ROM_PLAYER_LIMIT, item['player'])]
             items_data.extend(item_data)
 
     rom.write_bytes(0x184800, shop_data)
