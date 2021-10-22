@@ -57,8 +57,9 @@ Sent to clients when they connect to an Archipelago server.
 | hint_cost | int | The amount of points it costs to receive a hint from the server. |
 | location_check_points | int | The amount of hint points you receive per item/location check completed. ||
 | players | list\[NetworkPlayer\] | Sent only if the client is properly authenticated (see [Archipelago Connection Handshake](#Archipelago-Connection-Handshake)). Information on the players currently connected to the server. See [NetworkPlayer](#NetworkPlayer) for more details. |
+| games | list\[str\] | sorted list of game names for the players, so first player's game will be games\[0\]. Matches game names in datapackage. |
 | datapackage_version | int | Data version of the [data package](#Data Package Contents) the server will send. Used to update the client's (optional) local cache. |
-| datapackage_versions | dict[str, int] | Data versions of the individual games' data packages the server will send. |
+| datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. |
 | seed_name | str | uniquely identifying name of this generation |
 
 #### forfeit
@@ -247,7 +248,7 @@ Requests the data package from the server. Does not require client authenticatio
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| exclusions | list[str]  | Optional. If specified, will not send back the specified data. Such as, ["Factorio"] -> Datapackage without Factorio data.|
+| exclusions | list\[str\]  | Optional. If specified, will not send back the specified data. Such as, \["Factorio"\] -> Datapackage without Factorio data.|
 
 ### Bounce
 Send this message to the server, tell it which clients should receive the message and 
@@ -256,9 +257,9 @@ the server will forward the message to all those targets to which any one requir
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| games | list[str] | Optional. Game names that should receive this message |
-| slots | list[int] | Optional. Player IDs that should receive this message |
-| tags | list[str] | Optional. Client tags that should receive this message |
+| games | list\[str\] | Optional. Game names that should receive this message |
+| slots | list\[int\] | Optional. Player IDs that should receive this message |
+| tags | list\[str\] | Optional. Client tags that should receive this message |
 | data | dict | Any data you want to send |
 
 

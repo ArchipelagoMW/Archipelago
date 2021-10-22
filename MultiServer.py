@@ -489,6 +489,7 @@ async def on_client_connected(ctx: Context, client: Client):
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
         'players': players,
+        'games': [ctx.games[x] for x in range(1, len(ctx.games)+1)],
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
