@@ -15,6 +15,7 @@ from kivy.uix.recycleview import RecycleView
 from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
+from kivy.uix.progressbar import ProgressBar
 from kivy.utils import escape_markup
 from kivy.lang import Builder
 
@@ -48,6 +49,7 @@ class GameManager(App):
         self.grid = GridLayout()
         self.grid.cols = 1
         connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
+        # top part
         server_label = Label(text="Server:", size_hint_x=None)
         connect_layout.add_widget(server_label)
         self.server_connect_bar = TextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False)
@@ -55,8 +57,11 @@ class GameManager(App):
         self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
         self.server_connect_button.bind(on_press=self.connect_button_action)
         connect_layout.add_widget(self.server_connect_button)
-
         self.grid.add_widget(connect_layout)
+        self.progressbar = ProgressBar(size_hint_y=None, height=3)
+        self.grid.add_widget(self.progressbar)
+
+        # middle part
         self.tabs = TabbedPanel(size_hint_y=1)
         self.tabs.default_tab_text = "All"
         self.log_panels["All"] = self.tabs.default_tab_content = UILog(*(logging.getLogger(logger_name)
@@ -78,9 +83,16 @@ class GameManager(App):
             self.tabs.current_tab.height = 0
             self.tabs.tab_height = 0
 
+        # bottom part
+        bottom_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
+        info_button = Button(height=30, text="Command:", size_hint_x=None)
+        info_button.bind(on_release=lambda button: logging.getLogger("Client").info(
+            "/help for client commands and !help for server commands."))
+        bottom_layout.add_widget(info_button)
         textinput = TextInput(size_hint_y=None, height=30, multiline=False)
         textinput.bind(on_text_validate=self.on_message)
-        self.grid.add_widget(textinput)
+        bottom_layout.add_widget(textinput)
+        self.grid.add_widget(bottom_layout)
         self.commandprocessor("/help")
         Clock.schedule_interval(self.update_texts, 1 / 30)
         return self.grid
@@ -89,9 +101,12 @@ class GameManager(App):
         if self.ctx.server:
             self.title = self.base_title + f" | Connected to: {self.ctx.server_address}"
             self.server_connect_button.text = "Disconnect"
+            self.progressbar.max = len(self.ctx.checked_locations) + len(self.ctx.missing_locations)
+            self.progressbar.value = len(self.ctx.checked_locations)
         else:
             self.server_connect_button.text = "Connect"
             self.title = self.base_title
+            self.progressbar.value = 0
 
     def connect_button_action(self, button):
         if self.ctx.server:

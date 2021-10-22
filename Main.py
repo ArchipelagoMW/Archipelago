@@ -248,7 +248,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 import NetUtils
                 slot_data = {}
                 client_versions = {}
-                minimum_versions = {"server": (0, 1, 1), "clients": client_versions}
+                minimum_versions = {"server": (0, 1, 8), "clients": client_versions}
                 games = {}
                 for slot in world.player_ids:
                     client_versions[slot] = world.worlds[slot].get_required_client_version()

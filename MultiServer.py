@@ -1230,8 +1230,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 "players": ctx.get_players_package(),
                 "missing_locations": get_missing_checks(ctx, team, slot),
                 "checked_locations": get_checked_checks(ctx, team, slot),
-                # get is needed for old multidata that was sparsely populated
-                "slot_data": ctx.slot_data.get(client.slot, {})
+                "slot_data": ctx.slot_data[client.slot]
             }]
             items = get_received_items(ctx, client.team, client.slot)
             if items:
