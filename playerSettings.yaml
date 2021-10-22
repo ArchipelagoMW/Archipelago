@@ -126,6 +126,9 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
     samus: 0
     impossibru: 0
     infinity: 0
+  morph_placement:
+    early: 1
+    normal: 0
   suits_restriction:
     on: 1
     off: 0  
@@ -210,7 +213,6 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
   #scav_escape: not supported always off
   #progression_speed: not supported always random
   #progression_difficulty: not supported always random
-  #morph_placement: not supported yet always random
   #hide_items: not supported always off
   #minimizer: not supported always off
   #minimizer_qty: not supported always off

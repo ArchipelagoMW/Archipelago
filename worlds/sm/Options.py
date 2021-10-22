@@ -54,6 +54,12 @@ class MaxDifficulty(Choice):
     option_infinity = 11
     default = 6
 
+class MorphPlacement(Choice):
+    displayname = "Morph Placement"
+    option_early = 0
+    option_normal = 1
+    default = 0
+
 class SuitsRestriction(DefaultOnToggle):
     displayname = "Suits Restriction"
 
@@ -178,7 +184,7 @@ sm_options: typing.Dict[str, type(Option)] = {
     "max_difficulty": MaxDifficulty,
     #"progression_speed": "medium",
     #"progression_difficulty": "normal",
-    #"morph_placement": "early",
+    "morph_placement": MorphPlacement,
     "suits_restriction": SuitsRestriction,
     #"hide_items": "off",
     "strict_minors": StrictMinors,

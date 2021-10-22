@@ -263,7 +263,7 @@ def getDefaultMultiValues():
         'majorsSplit': ['Full', 'FullWithHUD', 'Major', 'Chozo', 'Scavenger'],
         'progressionSpeed': ['slowest', 'slow', 'medium', 'fast', 'fastest', 'basic', 'VARIAble', 'speedrun'],
         'progressionDifficulty': ['easier', 'normal', 'harder'],
-        'morphPlacement': ['early', 'late', 'normal'],
+        'morphPlacement': ['early', 'normal'], #['early', 'late', 'normal'],
         'energyQty': ['ultra sparse', 'sparse', 'medium', 'vanilla'],
         'gravityBehaviour': ['Vanilla', 'Balanced', 'Progressive']
     }
@@ -336,7 +336,7 @@ def loadRandoPreset(world, player, args):
             args.patches.append(patchName)
              
     args.hud = world.hud[player].value
-    #args.morphPlacement
+    args.morphPlacement = defaultMultiValues["morphPlacement"][world.morph_placement[player].value]
     #args.majorsSplit
     #args.scavNumLocs
     #args.scavRandomized

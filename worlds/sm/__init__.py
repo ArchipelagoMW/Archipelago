@@ -87,6 +87,9 @@ class SMWorld(World):
         # keeps Nothing items local so no player will ever pickup Nothing
         # doing so reduces contribution of this world to the Multiworld the more Nothing there is though
         self.world.local_items[self.player].value.add('Nothing')
+
+        if (self.variaRando.args.morphPlacement == "early"):
+            self.world.local_items[self.player].value.add('Morph')
     
     def generate_basic(self):
         itemPool = self.variaRando.container.itemPool
@@ -435,9 +438,25 @@ class SMWorld(World):
         item = next(x for x in ItemManager.Items.values() if x.Name == name)
         return SMItem(item.Name, True, item.Type, self.item_name_to_id[item.Name], player = self.player)
 
+    def pre_fill(self):
+        if (self.variaRando.args.morphPlacement == "early") and next((item for item in self.world.itempool if item.player == self.player and item.name == "Morph Ball"), False):
+            viable = []
+            for location in self.world.get_locations():
+                if location.player == self.player \
+                        and location.item is None \
+                        and location.can_reach(self.world.state):
+                    viable.append(location)
+            self.world.random.shuffle(viable)
+            key = self.world.create_item("Morph Ball", self.player)
+            loc = viable.pop()
+            loc.place_locked_item(key)
+            self.world.itempool[:] = [item for item in self.world.itempool if
+                                        item.player != self.player or
+                                        item.name != "Morph Ball"] 
+
     @classmethod
     def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
-                        restitempool, fill_locations):
+                        restitempool, fill_locations):      
         if world.get_game_players("Super Metroid"):
             progitempool.sort(
                 key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
