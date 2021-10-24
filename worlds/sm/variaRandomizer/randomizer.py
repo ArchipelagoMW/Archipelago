@@ -341,7 +341,7 @@ class VariaRandomizer:
                 preset = args.preset
         else:
             if preset == 'custom':
-                PresetLoader.factory(world.customPreset[player].value).load(self.player)
+                PresetLoader.factory(world.custom_preset[player].value).load(self.player)
             else:
                 preset = 'default'
                 PresetLoader.factory('{}/{}/{}.json'.format(appDir, getPresetDir('casual'), 'casual')).load(self.player)
