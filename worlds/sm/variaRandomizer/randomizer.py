@@ -16,7 +16,6 @@ from utils.doorsmanager import DoorsManager
 from logic.logic import Logic
 
 import utils.log
-import utils.db as db
 
 # we need to know the logic before doing anything else
 def getLogic():
