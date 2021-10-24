@@ -86,8 +86,7 @@ class GameManager(App):
         # bottom part
         bottom_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
         info_button = Button(height=30, text="Command:", size_hint_x=None)
-        info_button.bind(on_release=lambda button: logging.getLogger("Client").info(
-            "/help for client commands and !help for server commands."))
+        info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
         textinput = TextInput(size_hint_y=None, height=30, multiline=False)
         textinput.bind(on_text_validate=self.on_message)
@@ -107,6 +106,9 @@ class GameManager(App):
             self.server_connect_button.text = "Connect"
             self.title = self.base_title
             self.progressbar.value = 0
+
+    def command_button_action(self, button):
+        logging.getLogger("Client").info("/help for client commands and !help for server commands.")
 
     def connect_button_action(self, button):
         if self.ctx.server:

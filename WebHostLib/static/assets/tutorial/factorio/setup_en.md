@@ -11,7 +11,20 @@
 
 ## General Concept
 
-One Server Host exists per Factorio World in an Archipelago Multiworld, any number of modded Factorio players can then connect to that world. From the view of Archipelago, this Factorio host is a client.
+One Server Host exists per Factorio World in an Archipelago Multiworld, any number of modded Factorio players can then connect to that world. 
+From the view of Archipelago, this Factorio host is a client.
+
+The final state you're looking for to play is:
+ * The generated Factorio Mod (part of Generate's output)
+ * An Archipelago Server.
+ * An (or multiple for multiworld) ArchipelagoFactorioClient, that is connected to that Archipelago Server.
+ * A Factorio Server that is started by the ArchipelagoFactorioClient automatically.
+    *  Installed and enabled to this server is an AP_* mod that got generated alongside the generation.
+ * A Factorio Game (or multiple for coop) that then connect to that embedded Factorio Server.
+    * Installed and enabled to these games is an AP_* mod that got generated alongside the generation.
+
+Note: There is an Archipelago mod on the Factorio Mod Portal, this mod is mostly for developers, not for play.
+
 ## Installation Procedures
 
 ### Dedicated Server Setup

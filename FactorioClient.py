@@ -94,7 +94,7 @@ class FactorioContext(CommonContext):
 
     @property
     def savegame_name(self) -> str:
-        return f"AP_{self.seed_name}_{self.auth}.zip"
+        return f"AP_{self.seed_name}_{self.auth}_Save.zip"
 
     def print_to_game(self, text):
         self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
