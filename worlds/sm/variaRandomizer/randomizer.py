@@ -5,12 +5,10 @@ import argparse, os.path, json, sys, shutil, random, copy
 
 from rando.RandoSettings import RandoSettings, GraphSettings
 from rando.RandoExec import RandoExec
-from rom.PaletteRando import PaletteRando
 from graph.graph_utils import vanillaTransitions, vanillaBossesTransitions, GraphUtils, getAccessPoint
 from utils.parameters import Knows, easy, medium, hard, harder, hardcore, mania, infinity, text2diff, diff2text, appDir
 from rom.rom_patches import RomPatches
 from rom.rompatcher import RomPatcher
-from rom.rom import FakeROM
 from utils.utils import PresetLoader, loadRandoPreset, getDefaultMultiValues, getPresetDir
 from utils.version import displayedVersion
 from logic.smbool import SMBool

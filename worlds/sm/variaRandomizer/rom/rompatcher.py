@@ -1,12 +1,11 @@
 import os, random, re
 
 from rando.Items import ItemManager
-from rom.compression import Compressor
 from rom.ips import IPS_Patch
 from utils.doorsmanager import DoorsManager
 from graph.graph_utils import GraphUtils, getAccessPoint, locIdsByAreaAddresses
 from logic.logic import Logic
-from rom.rom import RealROM, FakeROM, snes_to_pc
+from rom.rom import RealROM, snes_to_pc
 from patches.patchaccess import PatchAccess
 from utils.parameters import appDir
 import utils.log
@@ -91,10 +90,7 @@ class RomPatcher:
         self.log = utils.log.get('RomPatcher')
         self.romFileName = romFileName
         self.race = None
-        if romFileName == None:
-            self.romFile = FakeROM()
-        else:
-            self.romFile = RealROM(romFileName)
+        self.romFile = RealROM(romFileName)
         if magic is not None:
             from rom.race_mode import RaceModePatcher
             self.race = RaceModePatcher(self, magic, plando)
@@ -1018,18 +1014,6 @@ class RomPatcher:
     def enableMoonWalk(self):
         # replace STZ with STA since A is non-zero at this point
         self.romFile.writeByte(0x8D, 0xB35D)
-
-    def compress(self, address, data):
-        # data: [] of 256 int
-        # address: the address where the compressed bytes will be written
-        # return the size of the compressed data
-        compressedData = Compressor().compress(data)
-
-        self.romFile.seek(address)
-        for byte in compressedData:
-            self.romFile.writeByte(byte)
-
-        return len(compressedData)
 
     def setOamTile(self, nth, middle, newTile, y=0xFC):
         # an oam entry is made of five bytes: (s000000 xxxxxxxxx) (yyyyyyyy) (YXpp000t tttttttt)

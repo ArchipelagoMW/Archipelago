@@ -6,9 +6,7 @@ from logic.smboolmanager import SMBoolManager
 from logic.helpers import Bosses
 from graph.graph_utils import getAccessPoint, GraphUtils
 from rando.Filler import FrontFiller
-from rando.FillerRandom import FillerRandomSpeedrun
 from rando.ItemLocContainer import ItemLocContainer, getLocListStr, ItemLocation, getItemListStr
-from rando.Chozo import isChozoItem
 from rando.Restrictions import Restrictions
 from utils.parameters import infinity
 
@@ -84,18 +82,6 @@ class RandoSetup(object):
             self.container = None
             self.log.debug("createItemLocContainer: checkStart fail")
             return None
-        #self.settings.collectAlreadyPlacedItemLocations(self.container)
-        #self.fillRestrictedLocations()
-        #if self.restrictions.split == 'Scavenger':
-            # initScavenger will actually fill up the container using random fill,
-            # the scavenger "filler" will focus on determining mandatory route
-        #    self.container = self.initScavenger(endDate, vcr)
-        #    if self.container is None:
-        #        self.log.debug("createItemLocContainer: initScavenger fail")
-        #        return None
-        #elif self.settings.progSpeed == 'speedrun':
-            # add placement restriction helpers for random fill
-        #    self.restrictions.setPlacementRestrictions(self.getRestrictionsDict())
         self.settings.updateSuperFun(self.superFun)
         return self.container
 
@@ -125,52 +111,6 @@ class RandoSetup(object):
                 else:
                     locDict['Morph'] = set()
         return restrictionDict
-
-    def initScavenger(self, endDate, vcr=None):
-        attempts = 30 if self.restrictions.scavIsVanilla else 1
-        majorLocs = [loc for loc in self.container.unusedLocations if self.restrictions.isLocMajor(loc) and (not self.restrictions.scavIsVanilla or (loc.VanillaItemType not in self.forbiddenItems and self.container.getNextItemInPool(loc.VanillaItemType) is not None))]
-        nLocs = min(self.settings.restrictions['ScavengerParams']['numLocs'], len(majorLocs))
-        self.log.debug("initScavenger. nLocs="+str(nLocs))
-        cont = None
-        restr = None
-        i = 0
-        def checkRestrictionsDict(r):
-            # check if there are items impossible to place
-            allTypes = []
-            okTypes = []
-            for area, entry in r.items():
-                for itemType, locs in entry.items():
-                    if itemType not in allTypes:
-                        allTypes.append(itemType)
-                    if itemType not in okTypes and len(locs) > 0:
-                        okTypes.append(itemType)
-            self.log.debug("checkRestrictionsDict. allTypes="+str(allTypes))
-            self.log.debug("checkRestrictionsDict. okTypes="+str(okTypes))
-            return len(okTypes) == len(allTypes)
-        if len(majorLocs) > nLocs:
-            while restr is None and i < attempts:
-                random.shuffle(majorLocs)
-                self.restrictions.setScavengerLocs(majorLocs[:nLocs])
-                self.log.debug("initScavenger. attempt "+str(i)+", scavLocs="+getLocListStr(self.restrictions.scavLocs))
-                r = self.getRestrictionsDict()
-                if checkRestrictionsDict(r):
-                    restr = r
-                i += 1
-        else:
-            self.restrictions.setScavengerLocs(majorLocs)
-            r = self.getRestrictionsDict()
-            if checkRestrictionsDict(r):
-                restr = r
-        if restr is not None:
-            self.log.debug("initScavenger. got list after "+str(i+1)+" attempts")
-            # finally, actually do the randomization using a speedrun filler (50 attempts heuristic)
-            self.restrictions.setPlacementRestrictions(restr)
-            filler = FillerRandomSpeedrun(self.graphSettings, self.areaGraph, self.restrictions, self.container, endDate=endDate, diffSteps=50)
-            stepCond = filler.createStepCountCondition(50)
-            filler.generateItems(condition=lambda: filler.itemPoolCondition() and stepCond(), vcr=vcr)
-            if not filler.itemPoolCondition():
-                cont = filler.container
-        return cont
 
     # fill up unreachable locations with "junk" to maximize the chance of the ROM
     # to be finishable
@@ -248,12 +188,6 @@ class RandoSetup(object):
             return False
         # restrict item pool in chozo: game should be finishable with chozo items only
         contPool = []
-        if self.restrictions.isChozo():
-            container.restrictItemPool(isChozoItem)
-            missile = container.getNextItemInPool('Missile')
-            if missile is not None:
-                # add missile (if zeb skip not known)
-                contPool.append(missile)
         contPool += [item for item in pool if item in container.itemPool]
         # give us everything and beat every boss to see what we can access
         self.disableBossChecks()

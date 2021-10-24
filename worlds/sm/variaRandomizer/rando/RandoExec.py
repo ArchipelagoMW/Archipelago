@@ -6,11 +6,6 @@ from rando.Restrictions import Restrictions
 from rando.RandoServices import RandoServices
 from rando.GraphBuilder import GraphBuilder
 from rando.RandoSetup import RandoSetup
-from rando.Filler import FrontFiller
-from rando.FillerProgSpeed import FillerProgSpeed, FillerProgSpeedChozoSecondPhase
-from rando.FillerRandom import FillerRandom, FillerRandomSpeedrun
-from rando.FillerScavenger import FillerScavenger
-from rando.Chozo import ChozoFillerFactory, ChozoWrapperFiller
 from rando.Items import ItemManager
 from rando.ItemLocContainer import ItemLocation
 from utils.vcr import VCR
@@ -27,35 +22,10 @@ class RandoExec(object):
         self.log = utils.log.get('RandoExec')
         self.player = player
 
-    def getFillerFactory(self, progSpeed, endDate):
-        if self.restrictions.split != "Scavenger":
-            if progSpeed == "basic":
-                return lambda cont: FrontFiller(self.graphSettings.startAP, self.areaGraph, self.restrictions, cont, endDate)
-            elif progSpeed == "speedrun":
-                return lambda cont: FillerRandomSpeedrun(self.graphSettings, self.areaGraph, self.restrictions, cont, endDate)
-            else:
-                return lambda cont: FillerProgSpeed(self.graphSettings, self.areaGraph, self.restrictions, cont, endDate)
-        else:
-            return lambda cont: FillerScavenger(self.graphSettings.startAP, self.areaGraph, self.restrictions, cont, endDate)
-
-    def createFiller(self, container, endDate):
-        progSpeed = self.randoSettings.progSpeed
-        fact = self.getFillerFactory(progSpeed, endDate)
-        if self.randoSettings.restrictions['MajorMinor'] != "Chozo":
-            return fact(container)
-        else:
-            if progSpeed in ['basic', 'speedrun']:
-                secondPhase = lambda cont, prog: FillerRandom(self.graphSettings.startAP, self.areaGraph, self.restrictions, cont, endDate, diffSteps=100)
-            else:
-                secondPhase = lambda cont, prog: FillerProgSpeedChozoSecondPhase(self.graphSettings.startAP, self.areaGraph, self.restrictions, cont, endDate)
-            chozoFact = ChozoFillerFactory(fact, secondPhase)
-            return ChozoWrapperFiller(self.randoSettings, container, chozoFact)
-
     # processes settings to :
     # - create Restrictions and GraphBuilder objects
     # - create graph and item loc container using a RandoSetup instance: in area rando, if it fails, iterate on possible graph layouts
-    # - create filler based on progression speed and run it
-    # return (isStuck, itemLocs, progItemLocs)
+    # return container
     def randomize(self):
         vcr = VCR(self.seedName, 'rando') if self.vcr == True else None
         self.errorMsg = ""
@@ -89,20 +59,8 @@ class RandoExec(object):
                 self.errorMsg += "Could not find an area layout with these settings"
             else:
                 self.errorMsg += "Unable to process settings"
-        #    return (True, [], [])
         self.areaGraph.printGraph()
         return container
-        #filler = self.createFiller(container, endDate)
-        #self.log.debug("ItemLocContainer dump before filling:\n"+container.dump())
-        #ret = filler.generateItems(vcr=vcr)
-        #if not ret[0]:
-        #    scavEscape = (ret[1], ret[2]) if self.restrictions.scavEscape else None
-        #    escapeOk = graphBuilder.escapeGraph(container, self.areaGraph, self.randoSettings.maxDiff, scavEscape)
-        #    if not escapeOk:
-        #        self.errorMsg += "Could not find a solution for escape"
-        #        ret = (True, ret[1], ret[2])
-        #self.errorMsg += filler.errorMsg
-        #return ret
 
     def updateLocationsClass(self, split):
         if split != 'Full' and split != 'Scavenger':
