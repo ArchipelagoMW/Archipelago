@@ -105,6 +105,11 @@ class CommonContext():
         self.server_task = None
         self.server: typing.Optional[Endpoint] = None
         self.server_version = Version(0, 0, 0)
+        self.permissions = {
+            "forfeit": "disabled",
+            "collect": "disabled",
+            "remaining": "disabled",
+        }
 
         # own state
         self.finished_game = False
@@ -230,6 +235,15 @@ class CommonContext():
         """For custom package handling in subclasses."""
         pass
 
+    def update_permissions(self, permissions: typing.Dict[str, int]):
+        for permission_name, permission_flag in permissions.items():
+            try:
+                flag = Permission(permission_flag)
+                logger.info(f"{permission_name.capitalize()} permission: {flag.name}")
+                self.permissions[permission_name] = flag.name
+            except Exception as e:  # safeguard against permissions that may be implemented in the future
+                logger.exception(e)
+
 
 async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
     """some ISPs/network configurations drop TCP connections if no payload is sent (ignore TCP-keep-alive)
@@ -319,10 +333,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             logger.info("Server protocol tags: " + ", ".join(args["tags"]))
             if args['password']:
                 logger.info('Password required')
-
-            for permission_name, permission_flag in args.get("permissions", {}).items():
-                flag = Permission(permission_flag)
-                logger.info(f"{permission_name.capitalize()} permission: {flag.name}")
+            ctx.update_permissions(args.get("permissions", {}))
             logger.info(
                 f"A !hint costs {args['hint_cost']}% of your total location count as points"
                 f" and you get {args['location_check_points']}"
@@ -419,6 +430,12 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             ctx.consume_players_package(args["players"])
         if "hint_points" in args:
             ctx.hint_points = args['hint_points']
+        if "checked_locations" in args:
+            checked = set(args["checked_locations"])
+            ctx.checked_locations |= checked
+            ctx.missing_locations -= checked
+        if "permissions" in args:
+            ctx.update_permissions(args["permissions"])
 
     elif cmd == 'Print':
         ctx.on_print(args)

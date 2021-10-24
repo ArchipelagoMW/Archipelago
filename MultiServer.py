@@ -489,6 +489,7 @@ async def on_client_connected(ctx: Context, client: Client):
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
         'players': players,
+        'games': [ctx.games[x] for x in range(1, len(ctx.games)+1)],
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
@@ -1229,8 +1230,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 "players": ctx.get_players_package(),
                 "missing_locations": get_missing_checks(ctx, team, slot),
                 "checked_locations": get_checked_checks(ctx, team, slot),
-                # get is needed for old multidata that was sparsely populated
-                "slot_data": ctx.slot_data.get(client.slot, {})
+                "slot_data": ctx.slot_data[client.slot]
             }]
             items = get_received_items(ctx, client.team, client.slot)
             if items:
