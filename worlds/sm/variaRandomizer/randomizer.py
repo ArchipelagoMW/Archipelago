@@ -762,10 +762,6 @@ class VariaRandomizer:
                     romPatcher.applyIPSPatch(args.seedIps)
 
                 romPatcher.addIPSPatches(args.patches)
-            if args.sprite is not None:
-                romPatcher.customSprite(args.sprite, args.customItemNames, args.noSpinAttack) # adds another IPS
-            if args.ship is not None:
-                romPatcher.customShip(args.ship) # adds another IPS
                 # don't color randomize custom ships
                 args.shift_ship_palette = False
 

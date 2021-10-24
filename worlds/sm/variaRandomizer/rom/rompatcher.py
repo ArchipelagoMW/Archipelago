@@ -18,42 +18,44 @@ class RomPatcher:
     IPSPatches = {
         # applied on all seeds
         'Standard': [
-            # handles starting location and start blue doors
-            'new_game.ips',
-            # generic PLM spawner used for extra saves, blinking doors etc.
-            'plm_spawn.ips',
-            # needed fixes for VARIA
-            'vanilla_bugfixes.ips',
-            # use a byte in a unused room state header field to store area ID in the VARIA sense
-            'area_ids.ips',
-            # custom credits, backup save system, base tracking code
-            'credits_varia.ips',
-            # actual game hijacks to update tracking stats
-            'tracking.ips',
-            # enemy names in menu for seed ID
-            'seed_display.ips',
-            # door ASM to wake zebes early in blue brinstar
-            'wake_zebes.ips',
-            # door ASM to skip G4 cutscene when all 4 bosses are dead
-            'g4_skip.ips',
             # faster MB cutscene transitions
             'Mother_Brain_Cutscene_Edits',
             # "Balanced" suit mode
             'Removes_Gravity_Suit_heat_protection',
+            # basepatch includes all the following:
+            # handles starting location and start blue doors
+            #'new_game.ips',
+            # generic PLM spawner used for extra saves, blinking doors etc.
+            #'plm_spawn.ips',
+            # needed fixes for VARIA
+            #'vanilla_bugfixes.ips',
+            # use a byte in a unused room state header field to store area ID in the VARIA sense
+            #'area_ids.ips',
+            # custom credits, backup save system, base tracking code
+            #'credits_varia.ips',
+            # actual game hijacks to update tracking stats
+            #'tracking.ips',
+            # enemy names in menu for seed ID
+            #'seed_display.ips',
+            # door ASM to wake zebes early in blue brinstar
+            #'wake_zebes.ips',
+            # door ASM to skip G4 cutscene when all 4 bosses are dead
+            #'g4_skip.ips',
             # use any button for angle up/down
-            'AimAnyButton.ips',
+            #'AimAnyButton.ips',
             # credits item% based on actual number of items in the game
-            'endingtotals.ips',
+            #'endingtotals.ips',
             # MSU-1 patch
-            'supermetroid_msu1.ips',
+            #'supermetroid_msu1.ips',
             # displays max ammo 
-            'max_ammo_display.ips',
+            #'max_ammo_display.ips',
             # VARIA logo on startup screen
-            'varia_logo.ips',
+            #'varia_logo.ips',
             # new nothing plm
-            'nothing_item_plm.ips',
+            #'nothing_item_plm.ips',
             # multiworld support
-            'multiworld.ips'
+            #'multiworld.ips',
+            'basepatch.ips'
         ],
         # VARIA tweaks
         'VariaTweaks' : ['WS_Etank', 'LN_Chozo_SpaceJump_Check_Disable', 'ln_chozo_platform.ips', 'bomb_torizo.ips'],
@@ -91,9 +93,9 @@ class RomPatcher:
         self.romFileName = romFileName
         self.race = None
         self.romFile = RealROM(romFileName)
-        if magic is not None:
-            from rom.race_mode import RaceModePatcher
-            self.race = RaceModePatcher(self, magic, plando)
+        #if magic is not None:
+        #    from rom.race_mode import RaceModePatcher
+        #    self.race = RaceModePatcher(self, magic, plando)
         # IPS_Patch objects list
         self.ipsPatches = []
         # loc name to alternate address. we still write to original
@@ -232,31 +234,6 @@ class RomPatcher:
     def addIPSPatches(self, patches):
         for patchName in patches:
             self.applyIPSPatch(patchName)
-
-    def customShip(self, ship):
-        self.applyIPSPatch(ship, ipsDir='varia_custom_sprites/patches')
-
-    def customSprite(self, sprite, customNames, noSpinAttack):
-        self.applyIPSPatch(sprite, ipsDir='varia_custom_sprites/patches')
-        if noSpinAttack == True:
-            self.applyIPSPatch('SpriteSomething_Disable_Spin_Attack')
-
-        if not customNames:
-            return
-
-        from varia_custom_sprites.custom_sprites import messageBoxes
-
-        messageBoxes['samus_upside_down_and_backwards.ips'] = messageBoxes['samus_backwards.ips']
-        vFlip = ['samus_upside_down.ips', 'samus_upside_down_and_backwards.ips']
-        hFlip = ['samus_backwards.ips']
-        doVFlip = sprite in vFlip
-        doHFlip = sprite in hFlip
-        if (doVFlip or doHFlip) and sprite not in messageBoxes:
-            sprite = 'vanilla'
-        if sprite in messageBoxes:
-            messageBox = MessageBox(self.romFile)
-            for (messageKey, newMessage) in messageBoxes[sprite].items():
-                messageBox.updateMessage(messageKey, newMessage, doVFlip, doHFlip)
 
     def writePlmTable(self, plms, area, bosses, startLocation):
         # called when saving a plando
