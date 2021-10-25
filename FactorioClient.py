@@ -54,10 +54,12 @@ class FactorioContext(CommonContext):
 
     def __init__(self, server_address, password):
         super(FactorioContext, self).__init__(server_address, password)
-        self.send_index = 0
+        self.send_index: int = 0
         self.rcon_client = None
         self.awaiting_bridge = False
         self.write_data_path = None
+        self.last_death_link: float = time.time()  # last send/received death link on AP layer
+        self.death_link_tick: int = 0  # last send death link on Factorio layer
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
 
     async def server_auth(self, password_requested: bool = False):
@@ -76,13 +78,13 @@ class FactorioContext(CommonContext):
             'password': self.password,
             'name': self.auth,
             'version': Utils.version_tuple,
-            'tags': ['AP'],
+            'tags': self.tags,
             'uuid': Utils.get_unique_identifier(),
             'game': "Factorio"
         }])
 
     def on_print(self, args: dict):
-        logger.info(args["text"])
+        super(FactorioContext, self).on_print(args)
         if self.rcon_client:
             self.print_to_game(args['text'])
 
@@ -106,6 +108,12 @@ class FactorioContext(CommonContext):
             if "checked_locations" in args and args["checked_locations"]:
                 self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
+
+        elif cmd == "Bounced":
+            if self.rcon_client:
+                tags = args.get("tags", [])
+                if "DeathLink" in tags and self.last_death_link != args["data"]["time"]:
+                    self.rcon_client.send_command(f"/ap-deathlink {args['data']['source']}")
 
 
 async def game_watcher(ctx: FactorioContext):
@@ -139,6 +147,17 @@ async def game_watcher(ctx: FactorioContext):
                             f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
+                    death_link_tick = data.get("death_link_tick", 0)
+                    if death_link_tick != ctx.death_link_tick:
+                        ctx.death_link_tick = death_link_tick
+                        ctx.last_death_link = time.time()
+                        await ctx.send_msgs([{
+                            "cmd": "Bounce", "tags": ["DeathLink"],
+                            "data": {
+                                "time": ctx.last_death_link,
+                                "source": ctx.player_names[ctx.slot]
+                            }
+                        }])
             await asyncio.sleep(0.1)
 
     except Exception as e:
@@ -227,6 +246,10 @@ def get_info(ctx, rcon_client):
     info = json.loads(rcon_client.send_command("/ap-rcon-info"))
     ctx.auth = info["slot_name"]
     ctx.seed_name = info["seed_name"]
+    # 0.2.0 addition, not present earlier
+    death_link = bool(info.get("death_link", False))
+    if death_link:
+        ctx.tags.add("DeathLink")
 
 
 async def factorio_spinup_server(ctx: FactorioContext) -> bool:

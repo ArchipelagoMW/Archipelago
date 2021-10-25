@@ -122,7 +122,7 @@ class Context(CommonContext):
         auth = base64.b64encode(self.rom).decode()
         await self.send_msgs([{"cmd": 'Connect',
                               'password': self.password, 'name': auth, 'version': Utils.version_tuple,
-                              'tags': get_tags(self),
+                              'tags': self.tags,
                               'uuid': Utils.get_unique_identifier(), 'game': "A Link to the Past"
                               }])
 
@@ -703,12 +703,6 @@ async def snes_flush_writes(ctx: Context):
     # swap buffers
     ctx.snes_write_buffer, writes = [], ctx.snes_write_buffer
     await snes_write(ctx, writes)
-
-
-# kept as function for easier wrapping by plugins
-def get_tags(ctx: Context):
-    tags = ['AP']
-    return tags
 
 
 async def track_locations(ctx: Context, roomid, roomdata):

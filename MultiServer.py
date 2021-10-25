@@ -489,7 +489,7 @@ async def on_client_connected(ctx: Context, client: Client):
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
         'players': players,
-        'games': [ctx.games[x] for x in range(1, len(ctx.games)+1)],
+        'games': [ctx.games[x] for x in range(1, len(ctx.games) + 1)],
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
@@ -1244,7 +1244,6 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 await on_client_joined(ctx, client)
 
             await ctx.send_msgs(client, reply)
-
 
     elif cmd == "GetDataPackage":
         exclusions = set(args.get("exclusions", []))

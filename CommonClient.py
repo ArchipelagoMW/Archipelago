@@ -5,6 +5,7 @@ import asyncio
 import urllib.parse
 import sys
 import os
+import typing
 
 import websockets
 
@@ -91,6 +92,7 @@ class ClientCommandProcessor(CommandProcessor):
 
 
 class CommonContext():
+    tags:typing.Set[str] = {"AP"}
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
     command_processor: int = ClientCommandProcessor
@@ -489,7 +491,10 @@ if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
     init_logging("TextClient")
 
+
     class TextContext(CommonContext):
+        tags = {"AP", "IgnoreGame"}
+
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:
                 await super(TextContext, self).server_auth(password_requested)
@@ -499,9 +504,10 @@ if __name__ == '__main__':
 
             await self.send_msgs([{"cmd": 'Connect',
                                    'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
-                                   'tags': ['AP', 'IgnoreGame'],
+                                   'tags': self.tags,
                                    'uuid': Utils.get_unique_identifier(), 'game': self.game
                                    }])
+
 
     async def main(args):
         ctx = TextContext(args.connect, args.password)
