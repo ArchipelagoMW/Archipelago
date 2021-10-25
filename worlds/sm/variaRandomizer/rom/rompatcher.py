@@ -22,6 +22,8 @@ class RomPatcher:
             'Mother_Brain_Cutscene_Edits',
             # "Balanced" suit mode
             'Removes_Gravity_Suit_heat_protection',
+            # door ASM to skip G4 cutscene when all 4 bosses are dead
+            'g4_skip.ips',
             # basepatch is generated from https://github.com/lordlou/SMBasepatch
             'basepatch.ips'
         ],
