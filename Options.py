@@ -262,6 +262,16 @@ class OptionDict(Option):
         return item in self.value
 
 
+class ItemDict(OptionDict):
+    # implemented by Generate
+    verify_item_name = True
+
+    def __init__(self, value: typing.Dict[str, int]):
+        if any(item_count < 1 for item_count in value.values()):
+            raise Exception("Cannot have non-positive item counts.")
+        super(ItemDict, self).__init__(value)
+
+
 class OptionList(Option):
     default = []
     supports_weighting = False
@@ -357,7 +367,7 @@ class NonLocalItems(ItemSet):
     displayname = "Not Local Items"
 
 
-class StartInventory(OptionDict):
+class StartInventory(ItemDict):
     """Start with these items."""
     verify_item_name = True
     displayname = "Start Inventory"
