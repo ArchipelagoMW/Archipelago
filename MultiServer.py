@@ -1240,9 +1240,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 reply.append({"cmd": 'ReceivedItems', "index": 0, "items": items})
                 client.send_index = len(items)
             if not client.auth:  # if this was a Re-Connect, don't print to console
-                await on_client_joined(ctx, client)
-            else:
                 client.auth = True
+                await on_client_joined(ctx, client)
+
             await ctx.send_msgs(client, reply)
 
 
