@@ -1,5 +1,4 @@
 import typing
-import random
 
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle
 

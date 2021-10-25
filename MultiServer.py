@@ -1214,13 +1214,16 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, [{"cmd": "ConnectionRefused", "errors": list(errors)}])
         else:
             team, slot = ctx.connect_names[args['name']]
+            if client.auth and client.team is not None and client.slot in ctx.clients[client.team]:
+                ctx.clients[team][slot].remove(client)  # re-auth, remove old entry
+                if client.team != team or client.slot != slot:
+                    client.auth = False  # swapping Team/Slot
             client.team = team
             client.slot = slot
             minver = ctx.minimum_client_versions[slot]
             if minver > args['version']:
                 errors.add('IncompatibleVersion')
             ctx.client_ids[client.team, client.slot] = args["uuid"]
-            client.auth = True
             ctx.clients[team][slot].append(client)
             client.version = args['version']
             client.tags = args['tags']
@@ -1236,9 +1239,12 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             if items:
                 reply.append({"cmd": 'ReceivedItems', "index": 0, "items": items})
                 client.send_index = len(items)
-
+            if not client.auth:  # if this was a Re-Connect, don't print to console
+                await on_client_joined(ctx, client)
+            else:
+                client.auth = True
             await ctx.send_msgs(client, reply)
-            await on_client_joined(ctx, client)
+
 
     elif cmd == "GetDataPackage":
         exclusions = set(args.get("exclusions", []))
