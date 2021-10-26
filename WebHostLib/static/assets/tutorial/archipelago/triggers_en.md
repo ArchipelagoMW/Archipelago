@@ -5,7 +5,7 @@ Triggers allow you to customize your game settings by allowing you to define cer
 settings to occur or "trigger" whenever a certain condition happens. A good example of what you can do with triggers is the custom 
 [mercenary mode](https://github.com/alwaysintreble/Archipelago-yaml-dump/blob/main/Snippets/Mercenary%20Mode%20Snippet.yaml) 
 that was created using entirely triggers and plando. For more information on plando you can reference 
-[this guide](http://archipelago.gg:48484/tutorial/zelda3/plando/en).
+[this guide](http://archipelago.gg/tutorial/zelda3/plando/en).
 
 ## Trigger use
 Triggers have to be defined in the root of the yaml file meaning it must be outside of a game section. 
