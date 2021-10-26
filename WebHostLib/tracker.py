@@ -165,13 +165,6 @@ key_only_locations = {
     'Total': set()
 }
 
-#key_locations = {"Desert Palace", "Eastern Palace", "Hyrule Castle", "Agahnims Tower", "Tower of Hera", "Swamp Palace",
-#                 "Thieves Town", "Skull Woods", "Ice Palace", "Misery Mire", "Turtle Rock", "Palace of Darkness",
-#                 "Ganons Tower"}
-#
-#big_key_locations = {"Desert Palace", "Eastern Palace", "Tower of Hera", "Swamp Palace", "Thieves Town", "Skull Woods",
-#                     "Ice Palace", "Misery Mire", "Turtle Rock", "Palace of Darkness", "Ganons Tower"}
-
 location_to_area = {}
 for area, locations in default_locations.items():
     for location in locations:
@@ -327,19 +320,19 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
                         checks_done["Total"] += 1
                         
     if games[tracked_player] == "A Link to the Past":
-        return __RenderAlttpTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name, \
+        return __renderAlttpTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name, \
             seed_checks_in_area, checks_done)
     elif games[tracked_player] == "Minecraft":
-        return __RenderMinecraftTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
+        return __renderMinecraftTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
     elif games[tracked_player] == "Ocarina of Time":
-        return __RenderOoTTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
+        return __renderOoTTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
     elif games[tracked_player] == "Timespinner":
-        return __RenderTimespinnerTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
+        return __renderTimespinnerTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
     else:
-        return __RenderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
+        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
 
 
-def __RenderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
         inventory: Counter, team: int, player: int, playerName: str, 
         seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
@@ -400,7 +393,7 @@ def __RenderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[
                             **display_data)
 
 
-def __RenderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
         inventory: Counter, team: int, player: int, playerName: str) -> str:
 
     icons = {
@@ -500,7 +493,7 @@ def __RenderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
                             **display_data)
 
 
-def __RenderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
         inventory: Counter, team: int, player: int, playerName: str) -> str:
 
     icons = {
@@ -682,7 +675,7 @@ def __RenderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
                             small_key_counts=small_key_counts, boss_key_counts=boss_key_counts,
                             **display_data)
 
-def __RenderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
         inventory: Counter, team: int, player: int, playerName: str) -> str:
 
     icons = {
@@ -766,7 +759,7 @@ def __RenderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
                             **display_data)
 
 
-def __RenderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
         inventory: Counter, team: int, player: int, playerName: str) -> str:
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set())
