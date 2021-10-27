@@ -693,7 +693,7 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
         "Security Keycard C":   "https://timespinnerwiki.com/mediawiki/images/e/e5/Security_Keycard_C.png",
         "Security Keycard B":   "https://timespinnerwiki.com/mediawiki/images/f/f6/Security_Keycard_B.png",
         "Security Keycard A":   "https://timespinnerwiki.com/mediawiki/images/b/b9/Security_Keycard_A.png",
-        "Security Keycard V":   "https://timespinnerwiki.com/mediawiki/images/5/50/Library_Keycard_V.png",
+        "Library Keycard V":    "https://timespinnerwiki.com/mediawiki/images/5/50/Library_Keycard_V.png",
         "Tablet":               "https://timespinnerwiki.com/mediawiki/images/a/a0/Tablet.png",
         "Elevator Keycard":     "https://timespinnerwiki.com/mediawiki/images/5/55/Elevator_Keycard.png",
         "Oculus Ring":          "https://timespinnerwiki.com/mediawiki/images/8/8d/Oculus_Ring.png",
