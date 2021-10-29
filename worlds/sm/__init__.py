@@ -260,9 +260,11 @@ class SMWorld(World):
                 offworldSprites[0x049100 + idx*256] = buffer[8:264]
                 idx += 1
             
+        openTourianGreyDoors = {0x07C823 + 5: [0x0C], 0x07C831 + 5: [0x0C]}
         patchDict = {   'MultiWorldLocations': multiWorldLocations,
                         'MultiWorldItems': multiWorldItems,
-                        'offworldSprites': offworldSprites }
+                        'offworldSprites': offworldSprites,
+                        'openTourianGreyDoors': openTourianGreyDoors}
         romPatcher.applyIPSPatchDict(patchDict)
 
         playerNames = {}
