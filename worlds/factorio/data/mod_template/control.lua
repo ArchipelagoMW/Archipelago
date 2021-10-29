@@ -8,6 +8,9 @@ SLOT_NAME = "{{ slot_name }}"
 SEED_NAME = "{{ seed_name }}"
 FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
 TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
+DEATH_LINK = {{ death_link | int }}
+
+CURRENTLY_DEATH_LOCK = 0
 
 {% if not imported_blueprints -%}
 function set_permissions()
@@ -57,6 +60,7 @@ function on_force_created(event)
     local data = {}
     data['earned_samples'] = {{ dict_to_lua(starting_items) }}
     data["victory"] = 0
+    data["death_link_tick"] = 0
     global.forcedata[event.force] = data
 {%- if silo == 2 %}
     check_spawn_silo(force)
@@ -250,6 +254,17 @@ function chain_lookup(table, ...)
     return table
 end
 
+function kill_players(force)
+    CURRENTLY_DEATH_LOCK = 1
+    local current_character = nil
+    for _, player in ipairs(force.players) do
+        current_character = player.character
+        if current_character ~= nil then
+            current_character.die()
+        end
+    end
+    CURRENTLY_DEATH_LOCK = 0
+end
 
 function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
     local prototype = game.entity_prototypes[name]
@@ -351,6 +366,20 @@ function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
 end
 
 
+if DEATH_LINK == 1 then
+    script.on_event(defines.events.on_entity_died, function(event)
+        if CURRENTLY_DEATH_LOCK == 1 then -- don't re-trigger on same event
+            return
+        end
+
+        local force = event.entity.force
+        global.forcedata[force.name].death_link_tick = game.tick
+        dumpInfo(force)
+        kill_players(force)
+    end, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "character"}})
+end
+
+
 -- add / commands
 commands.add_command("ap-sync", "Used by the Archipelago client to get progress information", function(call)
     local force
@@ -363,7 +392,8 @@ commands.add_command("ap-sync", "Used by the Archipelago client to get progress 
     local data_collection = {
         ["research_done"] = research_done,
         ["victory"] = chain_lookup(global, "forcedata", force.name, "victory"),
-        }
+        ["death_link_tick"] = chain_lookup(global, "forcedata", force.name, "death_link_tick")
+    }
 
     for tech_name, tech in pairs(force.technologies) do
         if tech.researched and string.find(tech_name, "ap%-") == 1 then
@@ -442,7 +472,7 @@ end)
 
 
 commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
-    rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME}))
+    rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME, ["death_link"] = DEATH_LINK}))
 end)
 
 
@@ -451,6 +481,14 @@ commands.add_command("ap-spawn-silo", "Attempts to spawn a silo around 0,0", fun
     spawn_entity(game.player.surface, game.player.force, "rocket-silo", 0, 0, 80, true, true)
 end)
 {% endif -%}
+
+
+commands.add_command("ap-deathlink", "Kill all players", function(call)
+    local force = game.forces["player"]
+    local source = call.parameter or "Archipelago"
+    kill_players(force)
+    game.print("Death was granted by " .. source)
+end)
 
 
 -- data

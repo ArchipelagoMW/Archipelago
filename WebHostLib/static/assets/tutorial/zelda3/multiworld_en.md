@@ -3,7 +3,7 @@
 ## Required Software
 - [Z3Client](https://github.com/ArchipelagoMW/Z3Client/releases)
 - **sniConnector.lua** (located on the client download page)
-- [SNI](https://github.com/alttpo/sni/releases) (Included in the Super Metroid Client)
+- [SNI](https://github.com/alttpo/sni/releases) (Included in the Z3Client)
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
       ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
@@ -52,7 +52,7 @@ If you would like to validate your config file to make sure it works, you may do
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your patch file.
-5. Double-click on your patch file, and the Super Metroid Client will launch automatically, create your ROM from
+5. Double-click on your patch file, and the Z3Client will launch automatically, create your ROM from
    the patch file, and open your emulator for you.
 6. Since this is a single-player game, you will no longer need the client, so feel free to close it.
 

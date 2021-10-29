@@ -1,7 +1,7 @@
 from __future__ import annotations
 import typing
 
-from Options import Choice, OptionDict, Option, DefaultOnToggle, Range
+from Options import Choice, OptionDict, ItemDict, Option, DefaultOnToggle, Range, Toggle
 from schema import Schema, Optional, And, Or
 
 # schema helpers
@@ -120,14 +120,10 @@ class RecipeIngredients(Choice):
     option_science_pack = 1
 
 
-class FactorioStartItems(OptionDict):
+class FactorioStartItems(ItemDict):
     displayname = "Starting Items"
+    verify_item_name = False
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
-
-    def __init__(self, value: typing.Dict[str, typing.Any]):
-        if any(item_count < 1 for item_count in value.values()):
-            raise Exception("Cannot have non-positive item counts.")
-        super().__init__(value)
 
 
 class TrapCount(Range):
@@ -288,6 +284,11 @@ class ImportedBlueprint(DefaultOnToggle):
     displayname = "Blueprints"
 
 
+class DeathLink(Toggle):
+    """When you die, everyone dies. Of course the reverse is true too."""
+    displayname = "Death Link"
+
+
 factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,
     "tech_tree_layout": TechTreeLayout,
@@ -304,4 +305,5 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "evolution_traps": EvolutionTrapCount,
     "attack_traps": AttackTrapCount,
     "evolution_trap_increase": EvolutionTrapIncrease,
+    "death_link": DeathLink
 }
