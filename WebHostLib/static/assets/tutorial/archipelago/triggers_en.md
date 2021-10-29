@@ -2,7 +2,7 @@
 
 ## What are triggers?
 Triggers allow you to customize your game settings by allowing you to define certain options or even a variety of 
-settings to occur or "trigger" under certain conditions. These are essentially "if, then statements" for options. 
+settings to occur or "trigger" under certain conditions. These are essentially "if, then statements" for options in your game. 
 A good example of what you can do with triggers is the custom 
 [mercenary mode](https://github.com/alwaysintreble/Archipelago-yaml-dump/blob/main/Snippets/Mercenary%20Mode%20Snippet.yaml) 
 that was created using entirely triggers and plando. For more information on plando you can reference 
