@@ -1,6 +1,5 @@
 from __future__ import annotations
 import logging
-import typing
 import asyncio
 import urllib.parse
 import sys
@@ -92,7 +91,7 @@ class ClientCommandProcessor(CommandProcessor):
 
 
 class CommonContext():
-    tags:typing.Set[str] = {"AP"}
+    tags: typing.Set[str] = {"AP"}
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
     command_processor: int = ClientCommandProcessor
@@ -107,6 +106,7 @@ class CommonContext():
         self.server_task = None
         self.server: typing.Optional[Endpoint] = None
         self.server_version = Version(0, 0, 0)
+        self.hint_cost: typing.Optional[int] = None
         self.permissions = {
             "forfeit": "disabled",
             "collect": "disabled",
@@ -121,11 +121,11 @@ class CommonContext():
         self.auth = None
         self.seed_name = None
 
-        self.locations_checked: typing.Set[int] = set()
+        self.locations_checked: typing.Set[int] = set()  # local state
         self.locations_scouted: typing.Set[int] = set()
         self.items_received = []
         self.missing_locations: typing.Set[int] = set()
-        self.checked_locations: typing.Set[int] = set()
+        self.checked_locations: typing.Set[int] = set()  # server state
         self.locations_info = {}
 
         self.input_queue = asyncio.Queue()
@@ -142,6 +142,12 @@ class CommonContext():
 
         # execution
         self.keep_alive_task = asyncio.create_task(keep_alive(self))
+
+    @property
+    def total_locations(self) -> typing.Optional[int]:
+        """Will return None until connected."""
+        if self.checked_locations or self.missing_locations:
+            return len(self.checked_locations | self.missing_locations)
 
     async def connection_closed(self):
         self.auth = None

@@ -6,14 +6,19 @@ import asyncio
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
+
 from kivy.app import App
+from kivy.core.window import Window
 from kivy.base import ExceptionHandler, ExceptionManager, Config, Clock
+from kivy.factory import Factory
+from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.progressbar import ProgressBar
 from kivy.utils import escape_markup
@@ -28,6 +33,102 @@ if typing.TYPE_CHECKING:
     context_type = CommonClient.CommonContext
 else:
     context_type = object
+
+
+# I was surprised to find this didn't already exist in kivy :(
+class HoverBehavior(object):
+    """from https://stackoverflow.com/a/605348110"""
+    hovered = BooleanProperty(False)
+    border_point = ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        self.register_event_type('on_enter')
+        self.register_event_type('on_leave')
+        Window.bind(mouse_pos=self.on_mouse_pos)
+        super(HoverBehavior, self).__init__(**kwargs)
+
+    def on_mouse_pos(self, *args):
+        if not self.get_root_window():
+            return  # do proceed if I'm not displayed <=> If have no parent
+        pos = args[1]
+        # Next line to_widget allow to compensate for relative layout
+        inside = self.collide_point(*self.to_widget(*pos))
+        if self.hovered == inside:
+            return  # We have already done what was needed
+        self.border_point = pos
+        self.hovered = inside
+
+        if inside:
+            self.dispatch("on_enter")
+        else:
+            self.dispatch("on_leave")
+
+
+Factory.register('HoverBehavior', HoverBehavior)
+
+
+class ServerToolTip(Label):
+    pass
+
+
+class ServerLabel(HoverBehavior, Label):
+    hover_text = """"""
+
+    def __init__(self, *args, **kwargs):
+        super(ServerLabel, self).__init__(*args, **kwargs)
+        self.layout = FloatLayout()
+        self.popuplabel = ServerToolTip(text="Test")
+        self.layout.add_widget(self.popuplabel)
+
+    def on_enter(self):
+        self.popuplabel.text = self.get_text()
+        App.get_running_app().root.add_widget(self.layout)
+
+    def on_leave(self):
+        App.get_running_app().root.remove_widget(self.layout)
+
+    def get_text(self):
+        if self.ctx.server:
+            ctx = self.ctx
+            text = f"Connected to: {ctx.server_address}."
+            if ctx.slot is not None:
+                text += f"\nYou are Slot Number {ctx.slot} in Team Number {ctx.team}, named {ctx.player_names[ctx.slot]}."
+                if ctx.items_received:
+                    text += f"\nYou have received {len(ctx.items_received)} items. " \
+                            f"You can list them in order with /received."
+                if ctx.total_locations:
+                    text += f"\nYou have checked {len(ctx.checked_locations)} " \
+                            f"out of {ctx.total_locations} locations. " \
+                            f"You can get more info on missing checks with /missing."
+                if ctx.permissions:
+                    text += "\nPermissions:"
+                    for permission_name, permission_data in ctx.permissions.items():
+                        text += f"\n    {permission_name}: {permission_data}"
+                if ctx.hint_cost is not None:
+                    text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
+                            f"For you this means every {max(0, int(ctx.hint_cost * 0.01 * ctx.total_locations))} location checks."
+                elif ctx.hint_cost == 0:
+                    text += "\n!hint is free to use."
+
+            else:
+                text += f"\nYou are not authenticated yet."
+
+            return text
+
+        else:
+            return "No current server connection. \nPlease connect to an Archipelago server."
+
+    @property
+    def ctx(self) -> context_type:
+        return App.get_running_app().ctx
+
+
+class MainLayout(GridLayout):
+    pass
+
+
+class ContainerLayout(FloatLayout):
+    pass
 
 
 class GameManager(App):
@@ -46,11 +147,13 @@ class GameManager(App):
         super(GameManager, self).__init__()
 
     def build(self):
-        self.grid = GridLayout()
+        self.container = ContainerLayout()
+
+        self.grid = MainLayout()
         self.grid.cols = 1
         connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
         # top part
-        server_label = Label(text="Server:", size_hint_x=None)
+        server_label = ServerLabel()
         connect_layout.add_widget(server_label)
         self.server_connect_bar = TextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False)
         connect_layout.add_widget(self.server_connect_bar)
@@ -94,7 +197,8 @@ class GameManager(App):
         self.grid.add_widget(bottom_layout)
         self.commandprocessor("/help")
         Clock.schedule_interval(self.update_texts, 1 / 30)
-        return self.grid
+        self.container.add_widget(self.grid)
+        return self.container
 
     def update_texts(self, dt):
         if self.ctx.server:
@@ -118,6 +222,11 @@ class GameManager(App):
             asyncio.create_task(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
 
     def on_stop(self):
+        # "kill" input tasks
+        for x in range(self.ctx.input_requests):
+            self.ctx.input_queue.put_nowait("")
+        self.ctx.input_requests = 0
+
         self.ctx.exit_event.set()
 
     def on_message(self, textinput: TextInput):
