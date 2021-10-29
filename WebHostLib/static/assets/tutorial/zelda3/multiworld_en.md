@@ -1,9 +1,10 @@
 # A Link to the Past Randomizer Setup Guide
 
 ## Required Software
-- [Z3Client](https://github.com/ArchipelagoMW/Z3Client/releases)
-- **sniConnector.lua** (located on the client download page)
-- [SNI](https://github.com/alttpo/sni/releases) (Included in the Z3Client)
+- [Z3Client](https://github.com/ArchipelagoMW/Z3Client/releases) or the LttPClient included with
+[Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
+    - If installing Archipelago, make sure to check the box for LttPClient during install, or SNI will not be included
+- [SNI](https://github.com/alttpo/sni/releases) (Included in both Z3Client and LttPClient)
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
       ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
@@ -12,10 +13,8 @@
 - Your Japanese v1.0 ROM file, probably named `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
 
 ## Installation Procedures
-
-### Windows Setup
-1. Download and install the Z3Client from the link above, making sure to install the most recent version.
-**The file is located in the assets section at the bottom of the version information**.
+1. Download and install your preferred client from the link above, making sure to install the most recent version.
+**The installer file is located in the assets section at the bottom of the version information**.
     - During setup, you will be asked to locate your base ROM file. This is your Japanese Link to the Past ROM file.
 
 2. If you are using an emulator, you should assign your Lua capable emulator as your default program
@@ -26,9 +25,6 @@ for launching ROM files.
     4. Scroll to the bottom of the list and click the grey text **Look for another App on this PC**
     5. Browse for your emulator's `.exe` file and click **Open**. This file should be located inside
        the folder you extracted in step one.
-
-### Macintosh Setup
-- We need volunteers to help fill this section! Please contact **Farrak Kilhn** on Discord if you want to help.
 
 ## Create a Config (.yaml) File
 
@@ -78,7 +74,9 @@ Firewall.
 2. Click on the File menu and hover on **Lua Scripting**
 3. Click on **New Lua Script Window...**
 4. In the new window, click **Browse...**
-5. Select the `sniConnector.lua` file you downloaded above
+5. Select the connector lua file included with your client
+     - Z3Client users should download `sniConnector.lua` from the client download page
+     - LttPClient users should look in their Archipelago folder for `/sni/Connector.lua`
 
 ##### BizHawk
 1. Ensure you have the BSNES core loaded. You may do this by clicking on the Tools menu in BizHawk and following
@@ -89,6 +87,8 @@ Firewall.
 3. Click on the Tools menu and click on **Lua Console**
 4. Click the button to open a new Lua script.
 5. Select the `sniConnector.lua` file you downloaded above
+     - Z3Client users should download `sniConnector.lua` from the client download page
+     - LttPClient users should look in their Archipelago folder for `/sni/Connector.lua`
 
 #### With hardware
 This guide assumes you have downloaded the correct firmware for your device. If you have not
