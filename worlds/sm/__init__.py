@@ -254,7 +254,7 @@ class SMWorld(World):
         idx = 0
         offworldSprites = {}
         for fileName in itemSprites:
-            with open(Utils.local_path("worlds/sm/data/custom_sprite/" + fileName), 'rb') as stream:
+            with open(Utils.local_path("lib", "worlds", "sm", "data", "custom_sprite", fileName) if Utils.is_frozen() else Utils.local_path("worlds", "sm", "data", "custom_sprite", fileName), 'rb') as stream:
                 buffer = bytearray(stream.read())
                 offworldSprites[0x027882 + 10*(21 + idx) + 2] = buffer[0:8]
                 offworldSprites[0x049100 + idx*256] = buffer[8:264]
