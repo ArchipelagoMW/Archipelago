@@ -40,19 +40,14 @@ class StartLocation(Choice):
 
 class MaxDifficulty(Choice):
     displayname = "Maximum Difficulty"
-    option_baby = 0
-    option_easy = 1
-    option_medium = 2
-    option_hard = 3
-    option_harder = 4
-    option_very_hard = 5
-    option_hardcore = 6
-    option_mania = 7
-    option_god = 8
-    option_samus = 9
-    option_impossibru = 10
-    option_infinity = 11
-    default = 6
+    option_easy = 0
+    option_medium = 1
+    option_hard = 2
+    option_harder = 3
+    option_hardcore = 4
+    option_mania = 5
+    option_infinity = 6
+    default = 4
 
 class MorphPlacement(Choice):
     displayname = "Morph Placement"

@@ -114,17 +114,12 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
     Red_Brinstar_Elevator: 0
     Golden_Four: 0
   max_difficulty:
-    baby: 0
     easy: 0
     medium: 0
     hard: 0
     harder: 0
-    very_hard: 0
     hardcore: 1
     mania: 0
-    god: 0
-    samus: 0
-    impossibru: 0
     infinity: 0
   morph_placement:
     early: 1
@@ -221,11 +216,13 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
   #remove_escape_enemies: not supported always off
   #rando_speed: not supported always off
   custom_preset:  # see https://randommetroidsolver.pythonanywhere.com/presets for detailed info on each preset settings
-    Knows: # each skill (know) has a pair [can use, perceived difficulty 1 (easy) to 100 (mania)]
-      WallJump: [False, 0]
-      ShineSpark: [False, 0]
-      MidAirMorph: [False, 0]
-      CrouchJump: [False, 0]
+    Knows:  # each skill (know) has a pair [can use, perceived difficulty 1 (easy) to 100 (mania)]
+            # easy = 1
+            # medium = 5
+            # hard = 10
+            # harder = 25
+            # hardcore = 50
+            # mania = 100
       Mockball: [True, 1]
       SimpleShortCharge: [True, 1]
       InfiniteBombJump: [True, 5]
