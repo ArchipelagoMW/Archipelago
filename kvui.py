@@ -202,13 +202,15 @@ class GameManager(App):
 
     def update_texts(self, dt):
         if self.ctx.server:
-            self.title = self.base_title + f" | Connected to: {self.ctx.server_address}"
+            self.title = self.base_title + " " + Utils.__version__ + \
+                         f" | Connected to: {self.ctx.server_address} " \
+                         f"{'.'.join(str(e) for e in self.ctx.server_version)}"
             self.server_connect_button.text = "Disconnect"
             self.progressbar.max = len(self.ctx.checked_locations) + len(self.ctx.missing_locations)
             self.progressbar.value = len(self.ctx.checked_locations)
         else:
             self.server_connect_button.text = "Connect"
-            self.title = self.base_title
+            self.title = self.base_title + " " + Utils.__version__
             self.progressbar.value = 0
 
     def command_button_action(self, button):
