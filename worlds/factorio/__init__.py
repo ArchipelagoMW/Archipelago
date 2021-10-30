@@ -9,7 +9,7 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies
 from .Shapes import get_shapes
 from .Mod import generate_mod
-from .Options import factorio_options, Silo
+from .Options import factorio_options, Silo, TechTreeInformation
 
 import logging
 
@@ -65,6 +65,9 @@ class Factorio(World):
         map_basic_settings = self.world.world_gen[player].value["basic"]
         if map_basic_settings.get("seed", None) is None:  # allow seed 0
             map_basic_settings["seed"] = self.world.slot_seeds[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
+
+        self.sending_visible = self.world.tech_tree_information[player] == TechTreeInformation.option_full
+
 
     generate_output = generate_mod
 

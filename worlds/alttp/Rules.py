@@ -15,8 +15,10 @@ def set_rules(world):
     player = world.player
     world = world.world
     if world.logic[player] == 'nologic':
-        logging.info(
-            'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
+        if player == next(player_id for player_id in world.get_game_players("A Link to the Past")
+                          if world.logic[player_id] == 'nologic'):  # only warn one time
+            logging.info(
+                'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
 
         if world.players == 1:
             world.get_region('Menu', player).can_reach_private = lambda state: True
@@ -934,8 +936,9 @@ def set_trock_key_rules(world, player):
                     # A key is required in the Big Key Chest to prevent a possible softlock.  Place an extra key to ensure 100% locations still works
                     item = ItemFactory('Small Key (Turtle Rock)', player)
                     item.world = world
-                    world.push_item(world.get_location('Turtle Rock - Big Key Chest', player), item, False)
-                    world.get_location('Turtle Rock - Big Key Chest', player).event = True
+                    location = world.get_location('Turtle Rock - Big Key Chest', player)
+                    location.place_locked_item(item)
+                    location.event = True
                     toss_junk_item(world, player)
 
     if world.accessibility[player] != 'locations':

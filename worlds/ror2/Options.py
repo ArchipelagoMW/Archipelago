@@ -130,7 +130,8 @@ class ItemWeights(Choice):
     Lunartic makes everything a lunar item.<br>
     Chaos generates the pool completely at random with rarer items having a slight cap to prevent this option being too easy.<br>
     No Scraps removes all scrap items from the item pool.<br>
-    Even generates the item pool with every item having an even weight."""
+    Even generates the item pool with every item having an even weight.<br>
+    Scraps Only will be only scrap items in the item pool."""
     displayname = "Item Weights"
     option_default = 0
     option_new = 1
@@ -140,6 +141,7 @@ class ItemWeights(Choice):
     option_chaos = 5
     option_no_scraps = 6
     option_even = 7
+    option_scraps_only = 8
 
 #define a dictionary for the weights of the generated item pool.
 ror2_weights: typing.Dict[str, type(Option)] = {

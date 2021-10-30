@@ -1,10 +1,10 @@
 from __future__ import annotations
 import logging
-import typing
 import asyncio
 import urllib.parse
 import sys
 import os
+import typing
 
 import websockets
 
@@ -55,6 +55,9 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_missing(self) -> bool:
         """List all missing location checks, from your local game state"""
+        if not self.ctx.game:
+            self.output("No game set, cannot determine missing checks.")
+            return
         count = 0
         checked_count = 0
         for location, location_id in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id.items():
@@ -91,6 +94,7 @@ class ClientCommandProcessor(CommandProcessor):
 
 
 class CommonContext():
+    tags: typing.Set[str] = {"AP"}
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
     command_processor: int = ClientCommandProcessor
@@ -105,6 +109,13 @@ class CommonContext():
         self.server_task = None
         self.server: typing.Optional[Endpoint] = None
         self.server_version = Version(0, 0, 0)
+        self.hint_cost: typing.Optional[int] = None
+        self.games: typing.Dict[int, str] = {}
+        self.permissions = {
+            "forfeit": "disabled",
+            "collect": "disabled",
+            "remaining": "disabled",
+        }
 
         # own state
         self.finished_game = False
@@ -114,11 +125,11 @@ class CommonContext():
         self.auth = None
         self.seed_name = None
 
-        self.locations_checked: typing.Set[int] = set()
+        self.locations_checked: typing.Set[int] = set()  # local state
         self.locations_scouted: typing.Set[int] = set()
         self.items_received = []
-        self.missing_locations: typing.List[int] = []
-        self.checked_locations: typing.List[int] = []
+        self.missing_locations: typing.Set[int] = set()
+        self.checked_locations: typing.Set[int] = set()  # server state
         self.locations_info = {}
 
         self.input_queue = asyncio.Queue()
@@ -135,6 +146,12 @@ class CommonContext():
 
         # execution
         self.keep_alive_task = asyncio.create_task(keep_alive(self))
+
+    @property
+    def total_locations(self) -> typing.Optional[int]:
+        """Will return None until connected."""
+        if self.checked_locations or self.missing_locations:
+            return len(self.checked_locations | self.missing_locations)
 
     async def connection_closed(self):
         self.auth = None
@@ -230,6 +247,15 @@ class CommonContext():
         """For custom package handling in subclasses."""
         pass
 
+    def update_permissions(self, permissions: typing.Dict[str, int]):
+        for permission_name, permission_flag in permissions.items():
+            try:
+                flag = Permission(permission_flag)
+                logger.info(f"{permission_name.capitalize()} permission: {flag.name}")
+                self.permissions[permission_name] = flag.name
+            except Exception as e:  # safeguard against permissions that may be implemented in the future
+                logger.exception(e)
+
 
 async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
     """some ISPs/network configurations drop TCP connections if no payload is sent (ignore TCP-keep-alive)
@@ -319,10 +345,9 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             logger.info("Server protocol tags: " + ", ".join(args["tags"]))
             if args['password']:
                 logger.info('Password required')
-
-            for permission_name, permission_flag in args.get("permissions", {}).items():
-                flag = Permission(permission_flag)
-                logger.info(f"{permission_name.capitalize()} permission: {flag.name}")
+            ctx.update_permissions(args.get("permissions", {}))
+            if "games" in args:
+                ctx.games = {x: game for x, game in enumerate(args["games"], start=1)}
             logger.info(
                 f"A !hint costs {args['hint_cost']}% of your total location count as points"
                 f" and you get {args['location_check_points']}"
@@ -389,8 +414,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # This list is used to only send to the server what is reported as ACTUALLY Missing.
         # This also serves to allow an easy visual of what locations were already checked previously
         # when /missing is used for the client side view of what is missing.
-        ctx.missing_locations = args["missing_locations"]
-        ctx.checked_locations = args["checked_locations"]
+        ctx.missing_locations = set(args["missing_locations"])
+        ctx.checked_locations = set(args["checked_locations"])
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
@@ -419,6 +444,12 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             ctx.consume_players_package(args["players"])
         if "hint_points" in args:
             ctx.hint_points = args['hint_points']
+        if "checked_locations" in args:
+            checked = set(args["checked_locations"])
+            ctx.checked_locations |= checked
+            ctx.missing_locations -= checked
+        if "permissions" in args:
+            ctx.update_permissions(args["permissions"])
 
     elif cmd == 'Print':
         ctx.on_print(args)
@@ -472,7 +503,10 @@ if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
     init_logging("TextClient")
 
+
     class TextContext(CommonContext):
+        tags = {"AP", "IgnoreGame"}
+
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:
                 await super(TextContext, self).server_auth(password_requested)
@@ -482,9 +516,14 @@ if __name__ == '__main__':
 
             await self.send_msgs([{"cmd": 'Connect',
                                    'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
-                                   'tags': ['AP', 'IgnoreGame'],
+                                   'tags': self.tags,
                                    'uuid': Utils.get_unique_identifier(), 'game': self.game
                                    }])
+
+        def on_package(self, cmd: str, args: dict):
+            if cmd == "Connected":
+                self.game = self.games.get(self.slot, None)
+
 
     async def main(args):
         ctx = TextContext(args.connect, args.password)

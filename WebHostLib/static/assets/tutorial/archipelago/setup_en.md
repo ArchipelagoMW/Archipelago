@@ -54,7 +54,7 @@ This contains the patch files and relevant mods for the players as well as the s
 ### Uploading the seed to the website
 The easiest and most recommended method is to generate the game on the website which will allow you to create a private
 room with all the necessary files you can share, as well as hosting the game and supporting item trackers for various games. 
-If for some reason the seed was rolled on a machine then either the resulting zip file or the resulting `AP_XXXXX.archipelago`
+If for some reason the seed was rolled on a machine, then either the resulting zip file or the resulting `AP_XXXXX.archipelago`
 inside the zip file can be uploaded to the [upload page](/uploads). This will give a page with the seed info and have a 
 link to the spoiler if it exists. Click on Create New room and then share the link for the room with the other players 
 so that they can download their patches or mods. The room will also have a link to a Multiworld Tracker and tell you 

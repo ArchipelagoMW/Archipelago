@@ -53,15 +53,16 @@ Sent to clients when they connect to an Archipelago server.
 | version | NetworkVersion | Object denoting the version of Archipelago which the server is running. See [NetworkVersion](#NetworkVersion) for more details. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. Example: `WebHost` |
 | password | bool | Denoted whether a password is required to join this room.|
-| permissions | dict\[str, Permission\[int\]\] | Mapping of permission name to Permission, known names: "forfeit" and "remaining". |
+| permissions | dict\[str, Permission\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "forfeit", "collect" and "remaining". |
 | hint_cost | int | The amount of points it costs to receive a hint from the server. |
 | location_check_points | int | The amount of hint points you receive per item/location check completed. ||
 | players | list\[NetworkPlayer\] | Sent only if the client is properly authenticated (see [Archipelago Connection Handshake](#Archipelago-Connection-Handshake)). Information on the players currently connected to the server. See [NetworkPlayer](#NetworkPlayer) for more details. |
-| datapackage_version | int | Data version of the [data package](#Data Package Contents) the server will send. Used to update the client's (optional) local cache. |
-| datapackage_versions | dict[str, int] | Data versions of the individual games' data packages the server will send. |
+| games | list\[str\] | sorted list of game names for the players, so first player's game will be games\[0\]. Matches game names in datapackage. |
+| datapackage_version | int | Data version of the [data package](#Data-Package-Contents) the server will send. Used to update the client's (optional) local cache. |
+| datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. |
 | seed_name | str | uniquely identifying name of this generation |
 
-#### forfeit_mode
+#### forfeit
 Dictates what is allowed when it comes to a player forfeiting their run. A forfeit is an action which distributes the rest of the items in a player's run to those other players awaiting them.
 
 * `auto`: Distributes a player's items to other players when they complete their goal.
@@ -70,7 +71,17 @@ Dictates what is allowed when it comes to a player forfeiting their run. A forfe
 * `disabled`: All forfeit modes disabled.
 * `goal`: Allows for manual use of forfeit command once a player completes their goal. (Disabled until goal completion)
 
-#### remaining_mode
+#### collect
+Dictates what is allowed when it comes to a player collecting their run. A collect is an action which sends the rest of the items in a player's run.
+
+* `auto`: Automatically when they complete their goal.
+* `enabled`: Denotes that players may !collect at any time in the game.
+* `auto-enabled`: Both of the above options together.
+* `disabled`: All collect modes disabled.
+* `goal`: Allows for manual use of collect command once a player completes their goal. (Disabled until goal completion)
+
+
+#### remaining
 Dictates what is allowed when it comes to a player querying the items remaining in their run.
 
 * `goal`: Allows a player to query for items remaining in their run but only after they completed their own goal.
@@ -119,15 +130,18 @@ Sent to clients to acknowledge a received [LocationScouts](#LocationScouts) pack
 
 ### RoomUpdate
 Sent when there is a need to update information about the present game session. Generally useful for async games.
+Once authenticated (received Connected), this may also contain data from Connected.
 #### Arguments
-The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring two:
+The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
 
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | hint_points | int | New argument. The client's current hint points. |
 | players | list\[NetworkPlayer\] | Changed argument. Always sends all players, whether connected or not. |
+| checked_locations | May be a partial update, containing new locations that were checked. |
+| missing_locations | Should never be sent as an update, if needed is the inverse of checked_locations. |
 
-All arguments for this packet are optional.
+All arguments for this packet are optional, only changes are sent.
 
 ### Print
 Sent to clients purely to display a message to the player.
@@ -234,7 +248,7 @@ Requests the data package from the server. Does not require client authenticatio
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| exclusions | list[str]  | Optional. If specified, will not send back the specified data. Such as, ["Factorio"] -> Datapackage without Factorio data.|
+| exclusions | list\[str\]  | Optional. If specified, will not send back the specified data. Such as, \["Factorio"\] -> Datapackage without Factorio data.|
 
 ### Bounce
 Send this message to the server, tell it which clients should receive the message and 
@@ -243,13 +257,22 @@ the server will forward the message to all those targets to which any one requir
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| games | list[str] | Optional. Game names that should receive this message |
-| slots | list[int] | Optional. Player IDs that should receive this message |
-| tags | list[str] | Optional. Client tags that should receive this message |
+| games | list\[str\] | Optional. Game names that should receive this message |
+| slots | list\[int\] | Optional. Player IDs that should receive this message |
+| tags | list\[str\] | Optional. Client tags that should receive this message |
 | data | dict | Any data you want to send |
 
 
 ## Appendix
+
+### Coop
+Coop in Archipelago is automatically facilitated by the server, however some of the default behaviour may not be what you desire.
+
+If the game in question is a remote-items game (attribute on AutoWorld), then all items will always be sent and received.
+If the game in question is not a remote-items game, then any items that are placed within the same world will not be send by the server.
+
+To manually react to others in the same player slot doing checks, listen to [RoomUpdate](#RoomUpdate) -> checked_locations.
+
 ### NetworkPlayer
 A list of objects. Each object denotes one player. Each object has four fields about the player, in this order: `team`, `slot`, `alias`, and `name`. `team` and `slot` are ints, `alias` and `name` are strs.
 
@@ -365,7 +388,7 @@ class Permission(enum.IntEnum):
     disabled = 0b000  # 0, completely disables access
     enabled = 0b001  # 1, allows manual use
     goal = 0b010  # 2, allows manual use after goal completion
-    auto = 0b110  # 6, forces use after goal completion, only works for forfeit
+    auto = 0b110  # 6, forces use after goal completion, only works for forfeit and collect
     auto_enabled = 0b111  # 7, forces use after goal completion, allows manual use any time
 ```
 

@@ -28,7 +28,7 @@ app.config["SELFLAUNCH"] = True
 app.config["DEBUG"] = False
 app.config["PORT"] = 80
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4 megabyte limit
+app.config['MAX_CONTENT_LENGTH'] = 64 * 1024 * 1024  # 64 megabyte limit
 # if you want to deploy, make sure you have a non-guessable secret key
 app.config["SECRET_KEY"] = bytes(socket.gethostname(), encoding="utf-8")
 # at what amount of worlds should scheduling be used, instead of rolling in the webthread
@@ -80,6 +80,12 @@ def register_session():
 @app.errorhandler(jinja2.exceptions.TemplateNotFound)
 def page_not_found(err):
     return render_template('404.html'), 404
+
+
+# Start Playing Page
+@app.route('/start-playing')
+def start_playing():
+    return render_template(f"startPlaying.html")
 
 
 # Player settings pages
@@ -180,6 +186,9 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static/static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+@app.route('/discord')
+def discord():
+    return redirect("https://discord.gg/archipelago")
 
 from WebHostLib.customserver import run_server_process
 from . import tracker, upload, landing, check, generate, downloads, api  # to trigger app routing picking up on it

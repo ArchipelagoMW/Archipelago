@@ -39,7 +39,7 @@ class Inverted(Toggle):
     display_name = "Inverted"
 
 #class StinkyMaw(Toggle):
-#    "Require gassmask for Maw"
+#    "Require gasmask for Maw"
 #    display_name = "Stinky Maw"
 
 # Some options that are available in the timespinner randomizer arent currently implemented

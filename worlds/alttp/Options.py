@@ -1,5 +1,4 @@
 import typing
-import random
 
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle
 
@@ -230,13 +229,6 @@ class HeartColor(Choice):
     option_blue = 1
     option_green = 2
     option_yellow = 3
-
-    @classmethod
-    def from_text(cls, text: str) -> Choice:
-        # remove when this becomes a base Choice feature
-        if text == "random":
-            return cls(random.randint(0, 3))
-        return super(HeartColor, cls).from_text(text)
 
 
 class QuickSwap(DefaultOnToggle):

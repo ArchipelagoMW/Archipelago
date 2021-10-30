@@ -17,7 +17,7 @@ from worlds.generic import PlandoItem, PlandoConnection
 from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
-from Main import get_seed, seeddigits
+from BaseClasses import seeddigits, get_seed
 import Options
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
@@ -37,7 +37,7 @@ def mystery_argparse():
     parser.add_argument('--player_files_path', default=defaults["player_files_path"],
                         help="Input directory for player files.")
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
-    parser.add_argument('--multi', default=defaults["players"], type=lambda value: min(max(int(value), 1), 255))
+    parser.add_argument('--multi', default=defaults["players"], type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
     parser.add_argument('--rom', default=options["lttp_options"]["rom_file"], help="Path to the 1.0 JP LttP Baserom.")
     parser.add_argument('--enemizercli', default=defaults["enemizer_path"])
@@ -46,7 +46,7 @@ def mystery_argparse():
     parser.add_argument('--meta_file_path', default=defaults["meta_file_path"])
     parser.add_argument('--log_output_path', help='Path to store output log')
     parser.add_argument('--log_level', default='info', help='Sets log level')
-    parser.add_argument('--yaml_output', default=0, type=lambda value: min(max(int(value), 0), 255),
+    parser.add_argument('--yaml_output', default=0, type=lambda value: max(int(value), 0),
                         help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
     parser.add_argument('--plando', default=defaults["plando_options"],
                         help='List of options that can be set manually. Can be combined, for example "bosses, items"')
@@ -359,10 +359,10 @@ def roll_linked_options(weights: dict) -> dict:
     return weights
 
 
-def roll_triggers(weights: dict) -> dict:
+def roll_triggers(weights: dict, triggers: list) -> dict:
     weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = "Archipelago"  # Some means for triggers to know if the seed is on main or doors.
-    for i, option_set in enumerate(weights["triggers"]):
+    for i, option_set in enumerate(triggers):
         try:
             currently_targeted_weights = weights
             category = option_set.get("option_category", None)
@@ -455,7 +455,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         weights = roll_linked_options(weights)
 
     if "triggers" in weights:
-        weights = roll_triggers(weights)
+        weights = roll_triggers(weights, weights["triggers"])
 
     requirements = weights.get("requires", {})
     if requirements:
@@ -480,14 +480,20 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         if option_key in weights:
             raise Exception(f"Option {option_key} has to be in a game's section, not on its own.")
 
-    ret.name = get_choice('name', weights)
-    for option_key, option in Options.common_options.items():
-        setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
     ret.game = get_choice("game", weights)
     if ret.game not in weights:
         raise Exception(f"No game options for selected game \"{ret.game}\" found.")
+
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
+
+    if "triggers" in game_weights:
+        weights = roll_triggers(weights, game_weights["triggers"])
+        game_weights = weights[ret.game]
+
+    ret.name = get_choice('name', weights)
+    for option_key, option in Options.common_options.items():
+        setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
     if ret.game in AutoWorldRegister.world_types:
         for option_key, option in world_type.options.items():

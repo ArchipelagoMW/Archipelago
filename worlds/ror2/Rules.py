@@ -8,7 +8,9 @@ class RiskOfRainLogic(LogicMixin):
         count: int = self.item_count("Common Item", player) + self.item_count("Uncommon Item", player) + \
                      self.item_count("Legendary Item", player) + self.item_count("Boss Item", player) + \
                      self.item_count("Lunar Item", player) + self.item_count("Equipment", player) + \
-                     self.item_count("Dio's Best Friend", player)
+                     self.item_count("Dio's Best Friend", player) + self.item_count("Item Scrap, White", player) + \
+                     self.item_count("Item Scrap, Green", player) + self.item_count("Item Scrap, Red", player) + \
+                     self.item_count("Item Scrap, Yellow", player)
         return count >= amount
 
 
@@ -18,15 +20,15 @@ def set_rules(world: MultiWorld, player: int):
 
     # lock item pickup access based on level completion
     for i in range(1, items_per_level):
-        set_rule(world.get_location(f"Item Pickup {i}", player), lambda state: True)
+        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: True)
     for i in range(items_per_level, 2*items_per_level):
-        set_rule(world.get_location(f"Item Pickup {i}", player), lambda state: state.has("Beat Level One", player))
+        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: state.has("Beat Level One", player))
     for i in range(2*items_per_level, 3*items_per_level):
-        set_rule(world.get_location(f"Item Pickup {i}", player), lambda state: state.has("Beat Level Two", player))
+        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: state.has("Beat Level Two", player))
     for i in range(3*items_per_level, 4*items_per_level):
-        set_rule(world.get_location(f"Item Pickup {i}", player), lambda state: state.has("Beat Level Three", player))
-    for i in range(4*items_per_level, world.total_locations[player]+1):
-        set_rule(world.get_location(f"Item Pickup {i}", player), lambda state: state.has("Beat Level Four", player))
+        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: state.has("Beat Level Three", player))
+    for i in range(4*items_per_level, world.total_locations[player] + 1):
+        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: state.has("Beat Level Four", player))
 
     # require items to beat each stage
     set_rule(world.get_location("Level Two", player),

@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Dict, Set, Tuple, List, Optional
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
+from Options import Option
 
 
 class AutoWorldRegister(type):
@@ -48,6 +49,7 @@ def call_all(world: MultiWorld, method_name: str, *args):
     for player in world.player_ids:
         world_types.add(world.worlds[player].__class__)
         call_single(world, method_name, player, *args)
+
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
@@ -66,7 +68,7 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    options: dict = {}  # link your Options mapping
+    options: Dict[str, type(Option)] = {}  # link your Options mapping
     game: str  # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
     all_names: Set[str] = frozenset()  # gets automatically populated with all item, item group and location names
@@ -113,6 +115,9 @@ class World(metaclass=AutoWorldRegister):
     item_names: Set[str]  # set of all potential item names
     location_names: Set[str]  # set of all potential location names
 
+    # If there is visibility in what is being sent, this is where it will be known.
+    sending_visible: bool = False
+
     def __init__(self, world: MultiWorld, player: int):
         self.world = world
         self.player = player
@@ -140,6 +145,7 @@ class World(metaclass=AutoWorldRegister):
         """Optional method that is supposed to be used for special fill stages. This is run *after* plando."""
         pass
 
+    @classmethod
     def fill_hook(cls, progitempool: List[Item], nonexcludeditempool: List[Item],
                   localrestitempool: Dict[int, List[Item]], nonlocalrestitempool: Dict[int, List[Item]],
                   restitempool: List[Item], fill_locations: List[Location]):
@@ -164,11 +170,11 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def get_required_client_version(self) -> Tuple[int, int, int]:
-        return 0, 0, 3
+        return 0, 1, 6
 
-    # end of Main.py calls
+    # end of ordered Main.py calls
 
-    def collect_item(self, state: CollectionState, item: Item, remove=False) -> Optional[str]:
+    def collect_item(self, state: CollectionState, item: Item, remove: bool = False) -> Optional[str]:
         """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
         Collect None to skip item.
         :param remove: indicate if this is meant to remove from state instead of adding."""

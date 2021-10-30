@@ -583,6 +583,6 @@ def price_to_funny_price(item: dict, world, player: int):
             if any(x in item['item'] for x in price_blacklist[p_type]):
                 continue
             else:
-                item['price'] = min(price_chart[p_type](item['price']) , 255)
+                item['price'] = min(price_chart[p_type](item['price']), 255)
                 item['price_type'] = p_type
             break
