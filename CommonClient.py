@@ -55,6 +55,9 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_missing(self) -> bool:
         """List all missing location checks, from your local game state"""
+        if not self.ctx.game:
+            self.output("No game set, cannot determine missing checks.")
+            return
         count = 0
         checked_count = 0
         for location, location_id in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id.items():
@@ -107,6 +110,7 @@ class CommonContext():
         self.server: typing.Optional[Endpoint] = None
         self.server_version = Version(0, 0, 0)
         self.hint_cost: typing.Optional[int] = None
+        self.games: typing.Dict[int, str] = {}
         self.permissions = {
             "forfeit": "disabled",
             "collect": "disabled",
@@ -342,6 +346,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             if args['password']:
                 logger.info('Password required')
             ctx.update_permissions(args.get("permissions", {}))
+            if "games" in args:
+                ctx.games = {x: game for x, game in enumerate(args["games"], start=1)}
             logger.info(
                 f"A !hint costs {args['hint_cost']}% of your total location count as points"
                 f" and you get {args['location_check_points']}"
@@ -513,6 +519,10 @@ if __name__ == '__main__':
                                    'tags': self.tags,
                                    'uuid': Utils.get_unique_identifier(), 'game': self.game
                                    }])
+
+        def on_package(self, cmd: str, args: dict):
+            if cmd == "Connected":
+                self.game = self.games.get(self.slot, None)
 
 
     async def main(args):
