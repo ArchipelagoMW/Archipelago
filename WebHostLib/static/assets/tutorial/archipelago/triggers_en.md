@@ -1,4 +1,4 @@
-# Archipelago Triggers Usage Guide
+# Archipelago Triggers Guide
 
 ## What are triggers?
 Triggers allow you to customize your game settings by allowing you to define certain options or even a variety of 
@@ -40,7 +40,7 @@ This format must be:
       desired result
   ```
 
-### Example
+### Examples
 The above examples all together will end up looking like this:
   ```yaml
   triggers:
