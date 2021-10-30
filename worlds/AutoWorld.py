@@ -145,6 +145,7 @@ class World(metaclass=AutoWorldRegister):
         """Optional method that is supposed to be used for special fill stages. This is run *after* plando."""
         pass
 
+    @classmethod
     def fill_hook(cls, progitempool: List[Item], nonexcludeditempool: List[Item],
                   localrestitempool: Dict[int, List[Item]], nonlocalrestitempool: Dict[int, List[Item]],
                   restitempool: List[Item], fill_locations: List[Location]):

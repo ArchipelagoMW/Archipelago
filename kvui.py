@@ -72,8 +72,6 @@ class ServerToolTip(Label):
 
 
 class ServerLabel(HoverBehavior, Label):
-    hover_text = """"""
-
     def __init__(self, *args, **kwargs):
         super(ServerLabel, self).__init__(*args, **kwargs)
         self.layout = FloatLayout()
@@ -92,7 +90,8 @@ class ServerLabel(HoverBehavior, Label):
             ctx = self.ctx
             text = f"Connected to: {ctx.server_address}."
             if ctx.slot is not None:
-                text += f"\nYou are Slot Number {ctx.slot} in Team Number {ctx.team}, named {ctx.player_names[ctx.slot]}."
+                text += f"\nYou are Slot Number {ctx.slot} in Team Number {ctx.team}, " \
+                        f"named {ctx.player_names[ctx.slot]}."
                 if ctx.items_received:
                     text += f"\nYou have received {len(ctx.items_received)} items. " \
                             f"You can list them in order with /received."
@@ -106,7 +105,8 @@ class ServerLabel(HoverBehavior, Label):
                         text += f"\n    {permission_name}: {permission_data}"
                 if ctx.hint_cost is not None:
                     text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
-                            f"For you this means every {max(0, int(ctx.hint_cost * 0.01 * ctx.total_locations))} location checks."
+                            f"For you this means every {max(0, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
+                            "location checks."
                 elif ctx.hint_cost == 0:
                     text += "\n!hint is free to use."
 
