@@ -277,7 +277,7 @@ class SMWorld(World):
         # set rom name
         # 21 bytes
         from Main import __version__
-        self.romName = bytearray(f'BM{__version__.replace(".", "")[0:3]}_{self.player}_{self.world.seed:11}\0', 'utf8')[:21]
+        self.romName = bytearray(f'SM{__version__.replace(".", "")[0:3]}_{self.player}_{self.world.seed:11}\0', 'utf8')[:21]
         self.romName.extend([0] * (21 - len(self.romName)))
         romPatcher.applyIPSPatch('ROMName', { 'ROMName':  {0x1C4F00 : self.romName, 0x007FC0 : self.romName} })
 
