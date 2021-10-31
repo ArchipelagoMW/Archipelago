@@ -45,6 +45,7 @@ class HoverBehavior(object):
         self.register_event_type('on_enter')
         self.register_event_type('on_leave')
         Window.bind(mouse_pos=self.on_mouse_pos)
+        Window.bind(on_cursor_leave=self.on_cursor_leave)
         super(HoverBehavior, self).__init__(**kwargs)
 
     def on_mouse_pos(self, *args):
@@ -62,6 +63,12 @@ class HoverBehavior(object):
             self.dispatch("on_enter")
         else:
             self.dispatch("on_leave")
+
+    def on_cursor_leave(self, *args):
+        # if the mouse left the window, it is obviously no longer inside the hover label.
+        self.hovered = BooleanProperty(False)
+        self.border_point = ObjectProperty(None)
+        self.dispatch("on_leave")
 
 
 Factory.register('HoverBehavior', HoverBehavior)
