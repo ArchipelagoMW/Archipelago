@@ -23,3 +23,20 @@
         height: self.minimum_height
         orientation: 'vertical'
         spacing: dp(3)
+<ServerLabel>:
+    text: "Server:"
+    size_hint_x: None
+<ContainerLayout>:
+    size_hint_x: 1
+    size_hint_y: 1
+    pos: (0, 0)
+<ServerToolTip>:
+    size: self.texture_size
+    pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+    halign: "left"
+    canvas.before:
+        Color:
+            rgba: 0.2, 0.2, 0.2, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos

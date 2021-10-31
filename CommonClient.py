@@ -1,6 +1,5 @@
 from __future__ import annotations
 import logging
-import typing
 import asyncio
 import urllib.parse
 import sys
@@ -56,6 +55,9 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_missing(self) -> bool:
         """List all missing location checks, from your local game state"""
+        if not self.ctx.game:
+            self.output("No game set, cannot determine missing checks.")
+            return
         count = 0
         checked_count = 0
         for location, location_id in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id.items():
@@ -92,7 +94,7 @@ class ClientCommandProcessor(CommandProcessor):
 
 
 class CommonContext():
-    tags:typing.Set[str] = {"AP"}
+    tags: typing.Set[str] = {"AP"}
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
     command_processor: int = ClientCommandProcessor
@@ -107,6 +109,8 @@ class CommonContext():
         self.server_task = None
         self.server: typing.Optional[Endpoint] = None
         self.server_version = Version(0, 0, 0)
+        self.hint_cost: typing.Optional[int] = None
+        self.games: typing.Dict[int, str] = {}
         self.permissions = {
             "forfeit": "disabled",
             "collect": "disabled",
@@ -121,11 +125,11 @@ class CommonContext():
         self.auth = None
         self.seed_name = None
 
-        self.locations_checked: typing.Set[int] = set()
+        self.locations_checked: typing.Set[int] = set()  # local state
         self.locations_scouted: typing.Set[int] = set()
         self.items_received = []
         self.missing_locations: typing.Set[int] = set()
-        self.checked_locations: typing.Set[int] = set()
+        self.checked_locations: typing.Set[int] = set()  # server state
         self.locations_info = {}
 
         self.input_queue = asyncio.Queue()
@@ -142,6 +146,12 @@ class CommonContext():
 
         # execution
         self.keep_alive_task = asyncio.create_task(keep_alive(self))
+
+    @property
+    def total_locations(self) -> typing.Optional[int]:
+        """Will return None until connected."""
+        if self.checked_locations or self.missing_locations:
+            return len(self.checked_locations | self.missing_locations)
 
     async def connection_closed(self):
         self.auth = None
@@ -336,6 +346,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             if args['password']:
                 logger.info('Password required')
             ctx.update_permissions(args.get("permissions", {}))
+            if "games" in args:
+                ctx.games = {x: game for x, game in enumerate(args["games"], start=1)}
             logger.info(
                 f"A !hint costs {args['hint_cost']}% of your total location count as points"
                 f" and you get {args['location_check_points']}"
@@ -507,6 +519,10 @@ if __name__ == '__main__':
                                    'tags': self.tags,
                                    'uuid': Utils.get_unique_identifier(), 'game': self.game
                                    }])
+
+        def on_package(self, cmd: str, args: dict):
+            if cmd == "Connected":
+                self.game = self.games.get(self.slot, None)
 
 
     async def main(args):
