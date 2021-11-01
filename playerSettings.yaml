@@ -96,7 +96,10 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
     Season_Races: 0
     SMRAT2021: 0
     solution: 0
-    custom: 0   # see https://randommetroidsolver.pythonanywhere.com/presets for detailed info on each preset settings
+    custom: 0          # see https://randommetroidsolver.pythonanywhere.com/presets for detailed info on each preset settings
+    varia_custom: 0    # use an entry from the preset list on https://randommetroidsolver.pythonanywhere.com/presets
+  varia_custom_preset: # use an entry from the preset list on https://randommetroidsolver.pythonanywhere.com/presets
+    regular
   start_location:
     Ceres: 0
     Landing_Site: 1

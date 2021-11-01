@@ -281,7 +281,8 @@ def getPresetValues():
         "Season_Races",
         "SMRAT2021",
         "solution",
-        "custom"
+        "custom",
+        "varia_custom"
     ]
 
 # from web to cli

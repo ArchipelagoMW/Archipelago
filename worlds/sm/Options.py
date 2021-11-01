@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Range, OptionDict, Option, Toggle, DefaultOnToggle
+from Options import Choice, Range, OptionDict, OptionList, Option, Toggle, DefaultOnToggle
 
 class StartItemsRemovesFromPool(Toggle):
     displayname = "StartItems Removes From Item Pool"
@@ -17,6 +17,7 @@ class Preset(Choice):
     option_SMRAT2021 = 8
     option_solution = 9
     option_custom = 10
+    option_varia_custom = 11
     default = 2
 
 class StartLocation(Choice):
@@ -167,6 +168,10 @@ class CustomPreset(OptionDict):
     displayname = "Custom Preset"
     default = { "knows": {}, "settings": {}, "controller": {} }
 
+class VariaCustomPreset(OptionList):
+    displayname = "Varia Custom Preset"  
+    default = {}
+
 
 sm_options: typing.Dict[str, type(Option)] = {
     "start_inventory_removes_from_pool": StartItemsRemovesFromPool,
@@ -215,5 +220,6 @@ sm_options: typing.Dict[str, type(Option)] = {
     "animals": Animals,
     "no_music": NoMusic,
     "random_music": RandomMusic,
-    "custom_preset": CustomPreset
+    "custom_preset": CustomPreset,
+    "varia_custom_preset": VariaCustomPreset
     }

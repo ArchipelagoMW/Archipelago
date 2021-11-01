@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from Utils import output_path
-import argparse, os.path, json, sys, shutil, random, copy
+import argparse, os.path, json, sys, shutil, random, copy, requests
 
 from rando.RandoSettings import RandoSettings, GraphSettings
 from rando.RandoExec import RandoExec
@@ -326,7 +326,7 @@ class VariaRandomizer:
 
         preset = loadRandoPreset(world, self.player, args)
         # use the skill preset from the rando preset
-        if preset is not None and preset != 'custom' and args.paramsFileName is None:
+        if preset is not None and preset != 'custom' and preset != 'varia_custom' and args.paramsFileName is None:
             args.paramsFileName = '{}/{}/{}.json'.format(appDir, getPresetDir(preset), preset)
 
         # if diff preset given, load it
@@ -339,6 +339,17 @@ class VariaRandomizer:
         else:
             if preset == 'custom':
                 PresetLoader.factory(world.custom_preset[player].value).load(self.player)
+            elif preset == 'varia_custom':
+                url = 'https://randommetroidsolver.pythonanywhere.com/presetWebService'
+                preset_name = next(iter(world.varia_custom_preset[player].value))
+                payload = '{{"preset": "{}"}}'.format(preset_name)
+                headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+                response = requests.post(url, data=payload, headers=headers)
+                if response.ok:
+                    PresetLoader.factory(json.loads(response.text)).load(self.player)
+                else:
+                    print("Got error {} {} {} from trying to fetch varia custom preset named {}".format(response.status_code, response.reason, response.text, preset_name))
+                    sys.exit(-1)
             else:
                 preset = 'default'
                 PresetLoader.factory('{}/{}/{}.json'.format(appDir, getPresetDir('casual'), 'casual')).load(self.player)
