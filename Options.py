@@ -388,6 +388,11 @@ class ExcludeLocations(OptionSet):
     verify_location_name = True
 
 
+class DeathLink(Toggle):
+    """When you die, everyone dies. Of course the reverse is true too."""
+    displayname = "Death Link"
+
+
 per_game_common_options = {
     "local_items": LocalItems,
     "non_local_items": NonLocalItems,
