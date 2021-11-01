@@ -481,13 +481,20 @@ A Link to the Past:
     'on': 0 # Keys, items, and buttons hidden under pots in dungeons are shuffled with other pots in their supertile
     'off': 50 # Default pot item locations
   ### End of Enemizer Section ###
-  beemizer: # Remove items from the global item pool and replace them with single bees (fill bottles) and bee traps
-    0: 50 # No bee traps are placed
-    1: 0 # 25% of rupees, bombs and arrows are replaced with bees, of which 60% are traps and 40% single bees
-    2: 0 # 50% of rupees, bombs and arrows are replaced with bees, of which 70% are traps and 30% single bees
-    3: 0 # 75% of rupees, bombs and arrows are replaced with bees, of which 80% are traps and 20% single bees
-    4: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 90% are traps and 10% single bees
-    5: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 100% are traps and 0% single bees
+  ### Beemizer ###
+  # can add weights for any whole number between 0 and 100
+  beemizer_total_chance: # Remove items from the global item pool and replace them with single bees (fill bottles) and bee traps
+    0: 50   # No junk fill items are replaced (Beemizer is off)
+    25: 0   # 25% chance for each junk fill item (rupees, bombs and arrows) to be replaced with bees
+    50: 0   # 50% chance for each junk fill item (rupees, bombs and arrows) to be replaced with bees
+    75: 0   # 75% chance for each junk fill item (rupees, bombs and arrows) to be replaced with bees
+    100: 0  # All junk fill items (rupees, bombs and arrows) are replaced with bees 
+  beemizer_trap_chance:
+    60: 50  # 60% chance for each beemizer replacement to be a trap, 40% chance to be a single bee
+    70: 0   # 70% chance for each beemizer replacement to be a trap, 30% chance to be a single bee
+    80: 0   # 80% chance for each beemizer replacement to be a trap, 20% chance to be a single bee
+    90: 0   # 90% chance for each beemizer replacement to be a trap, 10% chance to be a single bee
+    100: 0  # All beemizer replacements are traps
   ### Shop Settings ###
   shop_item_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
     0: 50
