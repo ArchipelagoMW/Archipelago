@@ -830,8 +830,7 @@ async def game_watcher(ctx: Context):
                 else:
                     ctx.tags -= {"DeathLink"}
                 if old_tags != ctx.tags and ctx.server and not ctx.server.socket.closed:
-                    snes_logger.info("Forcing reconnect to set DeathLink state.")
-                    await ctx.disconnect()  # set correct tags
+                    await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
                 ctx.locations_scouted = set()

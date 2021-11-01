@@ -1258,7 +1258,15 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
                                           "data": network_data_package}])
     elif client.auth:
-        if cmd == 'Sync':
+        if cmd == "ConnectUpdate":
+            if not args:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': cmd}])
+                return
+
+            if "tags" in args:
+                client.tags = args["tags"]
+
+        elif cmd == 'Sync':
             items = get_received_items(ctx, client.team, client.slot)
             if items:
                 client.send_index = len(items)
