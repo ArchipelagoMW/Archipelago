@@ -1,19 +1,20 @@
 import typing
 
-
 def GetBeemizerItem(world, player, item):
     item_name = item if isinstance(item, str) else item.name
-    if world.beemizer[player] and item_name in trap_replaceable:
-        if world.random.random() < world.beemizer[player] * 0.25:
-            if world.random.random() < (0.5 + world.beemizer[player] * 0.1):
-                return "Bee Trap" if isinstance(item, str) else world.create_item("Bee Trap", player)
-            else:
-                return "Bee" if isinstance(item, str) else world.create_item("Bee", player)
-        else:
-            return item
-    else:
+
+    if item_name not in trap_replaceable:
         return item
 
+    # first roll - replaceable item should be replaced, within beemizer_total_chance
+    if not world.beemizer_total_chance[player] or world.random.random() > (world.beemizer_total_chance[player] / 100):
+        return item
+
+    # second roll - bee replacement should be trap, within beemizer_trap_chance
+    if not world.beemizer_trap_chance[player] or world.random.random() > (world.beemizer_trap_chance[player] / 100):
+        return "Bee" if isinstance(item, str) else world.create_item("Bee", player)
+    else:
+        return "Bee Trap" if isinstance(item, str) else world.create_item("Bee Trap", player)        
 
 # should be replaced with direct world.create_item(item) call in the future
 def ItemFactory(items, player: int):
