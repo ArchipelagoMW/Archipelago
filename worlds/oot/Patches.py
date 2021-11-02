@@ -1321,7 +1321,7 @@ def patch_rom(world, rom):
     # Write item overrides
     override_table = get_override_table(world)
     rom.write_bytes(rom.sym('cfg_item_overrides'), get_override_table_bytes(override_table))
-    rom.write_byte(rom.sym('PLAYER_ID'), world.player) # Write player ID
+    rom.write_byte(rom.sym('PLAYER_ID'), min(world.player, 255)) # Write player ID
     rom.write_bytes(rom.sym('AP_PLAYER_NAME'), bytearray(world.world.get_player_name(world.player), 'ascii'))
 
     # Revert Song Get Override Injection
@@ -1815,7 +1815,7 @@ def get_override_table_bytes(override_table):
 def get_override_entry(location):
     scene = location.scene
     default = location.default
-    player_id = location.item.player
+    player_id = min(location.item.player, 255)
     if location.item.game != 'Ocarina of Time': 
         # This is an AP sendable. It's guaranteed to not be None. 
         looks_like_item_id = 0
