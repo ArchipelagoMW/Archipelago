@@ -1177,6 +1177,7 @@ class Spoiler():
         return json.dumps(out)
 
     def to_file(self, filename):
+        from worlds.AutoWorld import call_all, call_single, call_stage
         self.parse_data()
 
         def bool_to_text(variable: Union[bool, str]) -> str:
@@ -1198,6 +1199,7 @@ class Spoiler():
                     Utils.__version__, self.world.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.world.algorithm)
             outfile.write('Players:                         %d\n' % self.world.players)
+            call_stage(self.world, "write_spoiler_header", outfile)
 
             for player in range(1, self.world.players + 1):
                 if self.world.players > 1:
@@ -1211,6 +1213,7 @@ class Spoiler():
                 if options:
                     for f_option, option in options.items():
                         write_option(f_option, option)
+                call_single(self.world, "write_spoiler_header", player, outfile)
 
                 if player in self.world.get_game_players("A Link to the Past"):
                     outfile.write('%s%s\n' % ('Hash: ', self.hashes[player]))
@@ -1260,13 +1263,8 @@ class Spoiler():
                 outfile.write('\n\nMedallions:\n')
                 for dungeon, medallion in self.medallions.items():
                     outfile.write(f'\n{dungeon}: {medallion}')
-            factorio_players = self.world.get_game_players("Factorio")
-            if factorio_players:
-                outfile.write('\n\nRecipes:\n')
-                for player in factorio_players:
-                    name = self.world.get_player_name(player)
-                    for recipe in self.world.worlds[player].custom_recipes.values():
-                        outfile.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
+
+            call_all(self.world, "write_spoiler", outfile)
 
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(
@@ -1307,6 +1305,7 @@ class Spoiler():
                     path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
 
                 outfile.write('\n'.join(path_listings))
+            call_all(self.world, "write_spoiler_end", outfile)
 
 
 seeddigits = 20

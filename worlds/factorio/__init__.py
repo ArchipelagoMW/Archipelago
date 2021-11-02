@@ -167,6 +167,15 @@ class Factorio(World):
 
     options = factorio_options
 
+    @classmethod
+    def stage_write_spoiler(cls, world, spoiler_handle):
+        factorio_players = world.get_game_players(cls.game)
+        spoiler_handle.write('\n\nFactorio Recipes:\n')
+        for player in factorio_players:
+            name = world.get_player_name(player)
+            for recipe in world.worlds[player].custom_recipes.values():
+                spoiler_handle.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
+
     def make_balanced_recipe(self, original: Recipe, pool: list, factor: float = 1) -> Recipe:
         """Generate a recipe from pool with time and cost similar to original * factor"""
         new_ingredients = {}

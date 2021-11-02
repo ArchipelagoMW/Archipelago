@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Dict, Set, Tuple, List, Optional
+from typing import Dict, Set, Tuple, List, Optional, TextIO
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
@@ -172,6 +172,20 @@ class World(metaclass=AutoWorldRegister):
     def get_required_client_version(self) -> Tuple[int, int, int]:
         return 0, 1, 6
 
+    # Spoiler writing is optional, these may not get called.
+    def write_spoiler_header(self, spoiler_handle: TextIO):
+        """Write to the spoiler header. If individual it's right at the end of that player's options,
+        if as stage it's right under the common header before per-player options."""
+        pass
+
+    def write_spoiler(self, spoiler_handle: TextIO):
+        """Write to the spoiler "middle", this is after the per-player options and before locations,
+        meant for useful or interesting info."""
+        pass
+
+    def write_spoiler_end(self, spoiler_handle: TextIO):
+        """Write to the end of the spoiler"""
+        pass
     # end of ordered Main.py calls
 
     def collect_item(self, state: CollectionState, item: Item, remove: bool = False) -> Optional[str]:
