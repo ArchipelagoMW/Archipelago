@@ -1,7 +1,7 @@
 from __future__ import annotations
 import typing
 
-from Options import Choice, OptionDict, ItemDict, Option, DefaultOnToggle, Range, Toggle
+from Options import Choice, OptionDict, ItemDict, Option, DefaultOnToggle, Range, DeathLink
 from schema import Schema, Optional, And, Or
 
 # schema helpers
@@ -282,11 +282,6 @@ class FactorioWorldGen(OptionDict):
 
 class ImportedBlueprint(DefaultOnToggle):
     displayname = "Blueprints"
-
-
-class DeathLink(Toggle):
-    """When you die, everyone dies. Of course the reverse is true too."""
-    displayname = "Death Link"
 
 
 factorio_options: typing.Dict[str, type(Option)] = {

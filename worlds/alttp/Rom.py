@@ -1645,6 +1645,7 @@ def patch_rom(world, rom, player, enemized):
     # remote items flag, does not currently work
     rom.write_byte(0x18637C, int(world.worlds[player].remote_items))
 
+    rom.write_byte(0x18008D, int(world.death_link[player]))
     # set rom name
     # 21 bytes
     from Main import __version__

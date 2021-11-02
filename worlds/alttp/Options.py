@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink
 
 
 class Logic(Choice):
@@ -314,5 +314,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "triforcehud": TriforceHud,
     "glitch_boots": DefaultOnToggle,
     "beemizer_total_chance": BeemizerTotalChance,
-    "beemizer_trap_chance": BeemizerTrapChance
+    "beemizer_trap_chance": BeemizerTrapChance,
+    "death_link": DeathLink
+
 }

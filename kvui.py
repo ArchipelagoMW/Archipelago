@@ -2,6 +2,7 @@ import os
 import logging
 import typing
 import asyncio
+import sys
 
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
@@ -163,6 +164,7 @@ class GameManager(App):
         server_label = ServerLabel()
         connect_layout.add_widget(server_label)
         self.server_connect_bar = TextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False)
+        self.server_connect_bar.bind(on_text_validate=self.connect_button_action)
         connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
         self.server_connect_button.bind(on_press=self.connect_button_action)
@@ -205,7 +207,25 @@ class GameManager(App):
         self.commandprocessor("/help")
         Clock.schedule_interval(self.update_texts, 1 / 30)
         self.container.add_widget(self.grid)
+        self.catch_unhandled_exceptions()
         return self.container
+
+    def catch_unhandled_exceptions(self):
+        """Relay unhandled exceptions to UI logger."""
+        if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
+            orig_hook = sys.excepthook
+
+            def handle_exception(exc_type, exc_value, exc_traceback):
+                if issubclass(exc_type, KeyboardInterrupt):
+                    sys.__excepthook__(exc_type, exc_value, exc_traceback)
+                    return
+                logging.getLogger("Client").exception("Uncaught exception",
+                                                      exc_info=(exc_type, exc_value, exc_traceback))
+                return orig_hook(exc_type, exc_value, exc_traceback)
+
+            handle_exception._wrapped = True
+
+            sys.excepthook = handle_exception
 
     def update_texts(self, dt):
         if self.ctx.server:
@@ -287,7 +307,7 @@ class LogtoUI(logging.Handler):
         self.on_log = on_log
 
     def handle(self, record: logging.LogRecord) -> None:
-        self.on_log(record)
+        self.on_log(self.format(record))
 
 
 class UILog(RecycleView):
@@ -299,8 +319,8 @@ class UILog(RecycleView):
         for logger in loggers_to_handle:
             logger.addHandler(LogtoUI(self.on_log))
 
-    def on_log(self, record: logging.LogRecord) -> None:
-        self.data.append({"text": escape_markup(record.getMessage())})
+    def on_log(self, record: str) -> None:
+        self.data.append({"text": escape_markup(record)})
 
     def on_message_markup(self, text):
         self.data.append({"text": text})
@@ -310,8 +330,8 @@ class E(ExceptionHandler):
     logger = logging.getLogger("Client")
 
     def handle_exception(self, inst):
-        self.logger.exception(inst)
-        return ExceptionManager.RAISE
+        self.logger.exception("Uncaught Exception:", exc_info=inst)
+        return ExceptionManager.PASS
 
 
 class KivyJSONtoTextParser(JSONtoTextParser):

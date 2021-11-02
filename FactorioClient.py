@@ -58,7 +58,6 @@ class FactorioContext(CommonContext):
         self.rcon_client = None
         self.awaiting_bridge = False
         self.write_data_path = None
-        self.last_death_link: float = time.time()  # last send/received death link on AP layer
         self.death_link_tick: int = 0  # last send death link on Factorio layer
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
 
@@ -102,18 +101,16 @@ class FactorioContext(CommonContext):
         self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
                                       f"{text}")
 
+    def on_deathlink(self, data: dict):
+        if self.rcon_client:
+            self.rcon_client.send_command(f"/ap-deathlink {data['source']}")
+
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected", "RoomUpdate"}:
             # catch up sync anything that is already cleared.
             if "checked_locations" in args and args["checked_locations"]:
                 self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
-
-        elif cmd == "Bounced":
-            if self.rcon_client:
-                tags = args.get("tags", [])
-                if "DeathLink" in tags and self.last_death_link != args["data"]["time"]:
-                    self.rcon_client.send_command(f"/ap-deathlink {args['data']['source']}")
 
 
 async def game_watcher(ctx: FactorioContext):
@@ -150,14 +147,8 @@ async def game_watcher(ctx: FactorioContext):
                     death_link_tick = data.get("death_link_tick", 0)
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick
-                        ctx.last_death_link = time.time()
-                        await ctx.send_msgs([{
-                            "cmd": "Bounce", "tags": ["DeathLink"],
-                            "data": {
-                                "time": ctx.last_death_link,
-                                "source": ctx.player_names[ctx.slot]
-                            }
-                        }])
+                        await ctx.send_death()
+
             await asyncio.sleep(0.1)
 
     except Exception as e:
