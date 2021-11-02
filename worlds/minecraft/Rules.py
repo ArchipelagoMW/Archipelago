@@ -101,7 +101,6 @@ class MinecraftLogic(LogicMixin):
 def set_rules(world: MultiWorld, player: int):
     def reachable_locations(state):
         postgame_advancements = exclusion_table['postgame'].copy()
-        postgame_advancements.add('Free the End')
         for event in events_table.keys():
             postgame_advancements.add(event)
         return [location for location in world.get_locations() if

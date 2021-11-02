@@ -116,6 +116,7 @@ advancement_table = {
 exclusion_table = {
     "hard": {
         "Very Very Frightening",
+        "A Furious Cocktail",
         "Two by Two",
         "Two Birds, One Arrow",
         "Arbalistic",
@@ -132,6 +133,7 @@ exclusion_table = {
         "Adventuring Time",
     },
     "postgame": {
+        "Free the End",
         "The Next Generation",
         "The End... Again...",
         "You Need a Mint",
