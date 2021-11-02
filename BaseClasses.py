@@ -1246,8 +1246,6 @@ class Spoiler():
                     outfile.write('Boss shuffle:                    %s\n' % self.world.boss_shuffle[player])
                     outfile.write('Enemy health:                    %s\n' % self.world.enemy_health[player])
                     outfile.write('Enemy damage:                    %s\n' % self.world.enemy_damage[player])
-                    outfile.write('Beemizer total chance:           %s\n' % self.world.beemizer_total_chance[player])
-                    outfile.write('Beemizer trap chance:            %s\n' % self.world.beemizer_trap_chance[player])
                     outfile.write('Prize shuffle                    %s\n' %
                                   self.world.shuffle_prizes[player])
             if self.entrances:

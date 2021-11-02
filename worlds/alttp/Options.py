@@ -261,6 +261,26 @@ class TriforceHud(Choice):
     option_hide_both = 3
 
 
+class BeemizerRange(Range):
+    value: int
+    range_start = 0
+    range_end = 100
+
+
+class BeemizerTotalChance(BeemizerRange):
+    """Percentage chance for each junk-fill item (rupees, bombs, arrows) to be
+    replaced with either a bee swarm trap or a single bottle-filling bee."""
+    default = 0
+    displayname = "Beemizer Total Chance"
+
+
+class BeemizerTrapChance(BeemizerRange):
+    """Percentage chance for each replaced junk-fill item to be a bee swarm
+    trap; all other replaced items are single bottle-filling bees."""
+    default = 60
+    displayname = "Beemizer Trap Chance"
+
+
 alttp_options: typing.Dict[str, type(Option)] = {
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
@@ -292,6 +312,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "music": Music,
     "reduceflashing": ReduceFlashing,
     "triforcehud": TriforceHud,
-    "glitch_boots": DefaultOnToggle
-
+    "glitch_boots": DefaultOnToggle,
+    "beemizer_total_chance": BeemizerTotalChance,
+    "beemizer_trap_chance": BeemizerTrapChance
 }
