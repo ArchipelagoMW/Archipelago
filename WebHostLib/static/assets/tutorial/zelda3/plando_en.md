@@ -31,8 +31,8 @@
         - Example: `simple`
           - Runs a particular boss shuffle mode to finish construction instead of vanilla placement, typically used as
             a last instruction.
-- [Available Bosses](https://github.com/Berserker66/MultiWorld-Utilities/blob/65fa39df95c90c9b66141aee8b16b7e560d00819/Bosses.py#L135)
-- [Available Arenas](https://github.com/Berserker66/MultiWorld-Utilities/blob/65fa39df95c90c9b66141aee8b16b7e560d00819/Bosses.py#L186)
+- [Available Bosses](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Bosses.py#L135)
+- [Available Arenas](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Bosses.py#L150)
 
 #### Examples
 ```yaml
@@ -79,8 +79,8 @@ boss_shuffle:
     - placements are picked randomly, not sorted in any way
 - Warning: Placing non-Dungeon Prizes on Prize locations and 
   Prizes on non-Prize locations will break the game in various ways.
-- [Available Items](https://github.com/Berserker66/MultiWorld-Utilities/blob/3b5ba161dea223b96e9b1fc890e03469d9c6eb59/Items.py#L26)
-- [Available Locations](https://github.com/Berserker66/MultiWorld-Utilities/blob/3b5ba161dea223b96e9b1fc890e03469d9c6eb59/Regions.py#L418)
+- [Available Items](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Items.py#L52)
+- [Available Locations](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Regions.py#L434)
 
 #### Examples
 ```yaml
@@ -133,10 +133,10 @@ Link's House and removes the picked item from the item pool.
     - `\n` is a newline. 
     - `@` is the entered player's name.
     - Warning: Text Mapper does not support full unicode.
-    - [Alphabet](https://github.com/Berserker66/MultiWorld-Utilities/blob/65fa39df95c90c9b66141aee8b16b7e560d00819/Text.py#L756)
+    - [Alphabet](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Text.py#L758)
 - at is the location within the game to attach the text to.
     - can be weighted.
-    - [List of targets](https://github.com/Berserker66/MultiWorld-Utilities/blob/65fa39df95c90c9b66141aee8b16b7e560d00819/Text.py#L1498)
+    - [List of targets](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Text.py#L1499)
    
 #### Example
 ```yaml
@@ -160,7 +160,7 @@ This has a 50% chance to trigger at all. If it does, it throws a coin between `u
 - entrance is the overworld door
 - exit is the underworld exit
 - direction can be `both`, `entrance` or `exit`
-- doors can be found in [this file](https://github.com/Berserker66/MultiWorld-Utilities/blob/main/EntranceShuffle.py)
+- doors can be found in [this file](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/EntranceShuffle.py#L3852)
 
 
 #### Example
