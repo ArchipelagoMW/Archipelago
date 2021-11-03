@@ -65,6 +65,8 @@ case. The locations are "ItemPickup[number]" up to the maximum set in the yaml.
 * [Subnautica](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/subnautica/locations.json)
 * [Timespinner](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/timespinner/Locations.py#L13)
 
+
+A list of all available items and locations can also be found in the [server's datapackage](/api/datapackage).
 ### Examples
 ```yaml
 plando_items:
