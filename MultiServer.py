@@ -420,9 +420,15 @@ class Context:
 
     def get_aliased_name(self, team: int, slot: int):
         if (team, slot) in self.name_aliases:
-            return f"{self.name_aliases[team, slot]} ({self.player_names[team, slot]})"
+            if self.client_game_state[team,slot] == ClientStatus.CLIENT_GOAL:
+                return f"*{self.name_aliases[team, slot]}* ({self.player_names[team, slot]})"
+            else:
+                return f"{self.name_aliases[team, slot]} ({self.player_names[team, slot]})"
         else:
-            return self.player_names[team, slot]
+            if self.client_game_state[team,slot] == ClientStatus.CLIENT_GOAL:
+                return f"*{self.player_names[team, slot]}*"
+            else:
+                return self.player_names[team,slot]
 
 
 def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint]):
