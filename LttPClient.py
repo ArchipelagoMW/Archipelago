@@ -15,6 +15,7 @@ import asyncio
 from json import loads, dumps
 
 import ModuleUpdate
+
 ModuleUpdate.update()
 
 from Utils import get_item_name_from_id
@@ -143,8 +144,8 @@ class Context(CommonContext):
                                }])
 
     def on_deathlink(self, data: dict):
-        snes_buffered_write(self, WRAM_START+0xF36D, bytes([0]))
-        snes_buffered_write(self, WRAM_START+0x0373, bytes([8]))
+        snes_buffered_write(self, WRAM_START + 0xF36D, bytes([0]))
+        snes_buffered_write(self, WRAM_START + 0x0373, bytes([8]))
         asyncio.create_task(snes_flush_writes(self))
         self.death_state = True
         snes_logger.info(f"Received DeathLink from {data['source']}")
@@ -527,9 +528,20 @@ async def get_snes_devices(ctx: Context):
             await socket.send(dumps(DeviceList_Request))
             reply = loads(await socket.recv())
             devices = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else None
-
+    await verify_snes_app(socket)
     await socket.close()
     return devices
+
+
+async def verify_snes_app(socket):
+    AppVersion_Request = {
+        "Opcode": "AppVersion",
+    }
+    await socket.send(dumps(AppVersion_Request))
+
+    app: str = loads(await socket.recv())["Results"][0]
+    if not "SNI" in app:
+        snes_logger.warning(f"Warning: Did not find SNI as the endpoint, instead {app} was found.")
 
 
 async def snes_connect(ctx: Context, address, deviceIndex=-1):
