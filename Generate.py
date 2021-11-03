@@ -634,8 +634,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     ret.enemy_health = get_choice_legacy('enemy_health', weights)
 
-    ret.beemizer = int(get_choice_legacy('beemizer', weights, 0))
-
     ret.timer = {'none': False,
                  None: False,
                  False: False,

@@ -221,7 +221,8 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--enemy_health', default=defval('default'),
                         choices=['default', 'easy', 'normal', 'hard', 'expert'])
     parser.add_argument('--enemy_damage', default=defval('default'), choices=['default', 'shuffled', 'chaos'])
-    parser.add_argument('--beemizer', default=defval(0), type=lambda value: min(max(int(value), 0), 4))
+    parser.add_argument('--beemizer_total_chance', default=defval(0), type=lambda value: min(max(int(value), 0), 100))
+    parser.add_argument('--beemizer_trap_chance', default=defval(0), type=lambda value: min(max(int(value), 0), 100))
     parser.add_argument('--shop_shuffle', default='', help='''\
     combine letters for options:
     g: generate default inventories for light and dark world shops, and unique shops
@@ -273,7 +274,7 @@ def parse_arguments(argv, no_defaults=False):
             for name in ['logic', 'mode', 'goal', 'difficulty', 'item_functionality',
                          'shuffle', 'open_pyramid', 'timer',
                          'countdown_start_time', 'red_clock_time', 'blue_clock_time', 'green_clock_time',
-                         'beemizer',
+                         'beemizer_total_chance', 'beemizer_trap_chance',
                          'shufflebosses', 'enemy_health', 'enemy_damage',
                          'sprite',
                          "triforce_pieces_available",

@@ -1,12 +1,12 @@
 {
   "gameOptions": {
     "description": {
-    "keyString": "description",
-    "friendlyName": "Description",
-    "inputType": "text",
-    "description": "A short description of this preset. Useful if you have multiple files",
-    "defaultValue": "Preset Name"
-  },
+      "keyString": "description",
+      "friendlyName": "Description",
+      "inputType": "text",
+      "description": "A short description of this preset. Useful if you have multiple files",
+      "defaultValue": "Preset Name"
+    },
     "name": {
       "keyString": "name",
       "friendlyName": "Player Name",
@@ -476,8 +476,8 @@
         }
       }
     },
-	"triforce_pieces_mode": {
-	  "keyString": "triforce_pieces_mode",
+    "triforce_pieces_mode": {
+      "keyString": "triforce_pieces_mode",
       "friendlyName": "Triforce Piece Availability Mode",
       "description": "Determines which of the following three options will be used to determine the total available triforce pieces.",
       "inputType": "range",
@@ -501,7 +501,7 @@
           "defaultValue": 0
         }
       }
-	},
+    },
     "triforce_pieces_available": {
       "keyString": "triforce_pieces_available",
       "friendlyName": "Exact Number (Triforce Hunt)",
@@ -534,7 +534,7 @@
         }
       }
     },
-	"triforce_pieces_extra": {
+    "triforce_pieces_extra": {
       "keyString": "triforce_pieces_extra",
       "friendlyName": "Required Plus (Triforce Hunt)",
       "description": "Only used if enabled in Triforce Piece Availability Mode.",
@@ -564,7 +564,7 @@
           "description": "15 extra Triforce pieces will be hidden throughout Hyrule",
           "defaultValue": 0
         },
-		"20": {
+        "20": {
           "keyString": "triforce_pieces_extra.20",
           "friendlyName": 20,
           "description": "20 extra Triforce pieces will be hidden throughout Hyrule",
@@ -572,7 +572,7 @@
         }
       }
     },
-	"triforce_pieces_percentage": {
+    "triforce_pieces_percentage": {
       "keyString": "triforce_pieces_percentage",
       "friendlyName": "Percentage (Triforce Hunt)",
       "description": "Only used if enabled in Triforce Piece Availability Mode.",
@@ -1164,41 +1164,79 @@
         }
       }
     },
-    "beemizer": {
-      "keyString": "beemizer",
-      "friendlyName": "Beemizer",
-      "description": "Remove non-health items from the global item pool and replace them with single bees and bee traps.",
+    "beemizer_total_chance": {
+      "keyString": "beemizer_total_chance",
+      "friendlyName": "Beemizer - Total Chance",
+      "description": "Chance to replace junk-fill items in the global item pool with single bees and bee traps.",
       "inputType": "range",
       "subOptions": {
         "0": {
-          "keyString": "beemizer.0",
+          "keyString": "beemizer_total_chance.0",
           "friendlyName": "Level 0",
           "description": "No bee traps are placed.",
           "defaultValue": 50
         },
-        "1": {
-          "keyString": "beemizer.1",
+        "25": {
+          "keyString": "beemizer_total_chance.25",
           "friendlyName": "Level 1",
-          "description": "25% of rupees, bombs and arrows are replaced with bees, of which 60% are traps and 40% single bees",
-          "defaultValue": 1
+          "description": "25% chance for each junk-fill item (rupees, bombs and arrows) to be replaced with bees.",
+          "defaultValue": 0
         },
-        "2": {
-          "keyString": "beemizer.2",
+        "50": {
+          "keyString": "beemizer_total_chance.50",
           "friendlyName": "Level 2",
-          "description": "50% of rupees, bombs and arrows are replaced with bees, of which 70% are traps and 30% single bees",
-          "defaultValue": 2
+          "description": "50% chance for each junk-fill item (rupees, bombs and arrows) to be replaced with bees.",
+          "defaultValue": 0
         },
-        "3": {
-          "keyString": "beemizer.3",
+        "75": {
+          "keyString": "beemizer_total_chance.75",
           "friendlyName": "Level 3",
-          "description": "75% of rupees, bombs and arrows are replaced with bees, of which 80% are traps and 20% single bees",
-          "defaultValue": 3
+          "description": "75% chance for each junk-fill item (rupees, bombs and arrows) to be replaced with bees.",
+          "defaultValue": 0
         },
-        "4": {
-          "keyString": "beemizer.4",
+        "100": {
+          "keyString": "beemizer_total_chance.100",
           "friendlyName": "Level 4",
-          "description": "100% of rupees, bombs and arrows are replaced with bees, of which 90% are traps and 10% single bees",
-          "defaultValue": 4
+          "description": "All junk-fill items (rupees, bombs and arrows) are replaced with bees.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "beemizer_trap_chance": {
+      "keyString": "beemizer_trap_chance",
+      "friendlyName": "Beemizer - Trap Chance",
+      "description": "Chance that replaced junk-fill items are bee traps.",
+      "inputType": "range",
+      "subOptions": {
+        "60": {
+          "keyString": "beemizer_trap_chance.60",
+          "friendlyName": "Level 0",
+          "description": "60% chance for each beemizer replacement to be a trap (40% chance of a single bee).",
+          "defaultValue": 50
+        },
+        "70": {
+          "keyString": "beemizer_trap_chance.70",
+          "friendlyName": "Level 1",
+          "description": "70% chance for each beemizer replacement to be a trap (30% chance of a single bee).",
+          "defaultValue": 0
+        },
+        "80": {
+          "keyString": "beemizer_trap_chance.80",
+          "friendlyName": "Level 2",
+          "description": "80% chance for each beemizer replacement to be a trap (20% chance of a single bee).",
+          "defaultValue": 0
+        },
+        "90": {
+          "keyString": "beemizer_trap_chance.90",
+          "friendlyName": "Level 3",
+          "description": "90% chance for each beemizer replacement to be a trap (10% chance of a single bee).",
+          "defaultValue": 0
+        },
+        "100": {
+          "keyString": "beemizer_trap_chance.100",
+          "friendlyName": "Level 4",
+          "description": "All beemizer replacements are traps (no single bees).",
+          "defaultValue": 0
         }
       }
     },
@@ -1818,37 +1856,37 @@
           "description": "Never use this. Makes all overworld palette colors black.",
           "defaultValue": 0
         },
-		"grayscale": {
+        "grayscale": {
           "keyString": "rom.ow_palettes.grayscale",
           "friendlyName": "Grayscale",
           "description": "Removes all saturation of colors.",
           "defaultValue": 0
         },
-		"negative": {
+        "negative": {
           "keyString": "rom.ow_palettes.negative",
           "friendlyName": "Negative",
           "description": "Invert all colors",
           "defaultValue": 0
         },
-		"classic": {
+        "classic": {
           "keyString": "rom.ow_palettes.classic",
           "friendlyName": "Classic",
           "description": "Produces results similar to the website.",
           "defaultValue": 0
         },
-		"dizzy": {
+        "dizzy": {
           "keyString": "rom.ow_palettes.dizzy",
           "friendlyName": "Dizzy",
           "description": "No logic in colors but saturation and lightness are conserved.",
           "defaultValue": 0
         },
-		"sick": {
+        "sick": {
           "keyString": "rom.ow_palettes.sick",
           "friendlyName": "Sick",
           "description": "No logic in colors but lightness is conserved.",
           "defaultValue": 0
         },
-		"puke": {
+        "puke": {
           "keyString": "rom.ow_palettes.puke",
           "friendlyName": "Puke",
           "description": "No logic at all.",
@@ -1880,37 +1918,37 @@
           "description": "Never use this. Makes all underworld palette colors black.",
           "defaultValue": 0
         },
-		"grayscale": {
+        "grayscale": {
           "keyString": "rom.uw_palettes.grayscale",
           "friendlyName": "Grayscale",
           "description": "Removes all saturation of colors.",
           "defaultValue": 0
         },
-		"negative": {
+        "negative": {
           "keyString": "rom.uw_palettes.negative",
           "friendlyName": "Negative",
           "description": "Invert all colors",
           "defaultValue": 0
         },
-		"classic": {
+        "classic": {
           "keyString": "rom.uw_palettes.classic",
           "friendlyName": "Classic",
           "description": "Produces results similar to the website.",
           "defaultValue": 0
         },
-		"dizzy": {
+        "dizzy": {
           "keyString": "rom.uw_palettes.dizzy",
           "friendlyName": "Dizzy",
           "description": "No logic in colors but saturation and lightness are conserved.",
           "defaultValue": 0
         },
-		"sick": {
+        "sick": {
           "keyString": "rom.uw_palettes.sick",
           "friendlyName": "Sick",
           "description": "No logic in colors but lightness is conserved.",
           "defaultValue": 0
         },
-		"puke": {
+        "puke": {
           "keyString": "rom.uw_palettes.puke",
           "friendlyName": "Puke",
           "description": "No logic at all.",
@@ -1918,7 +1956,7 @@
         }
       }
     },
-	"hud_palettes": {
+    "hud_palettes": {
       "keyString": "rom.hud_palettes",
       "friendlyName": "HUD Palettes",
       "description": "Randomize the colors of the HUD (user interface), within reason.",
@@ -1942,37 +1980,37 @@
           "description": "Never use this. Makes all HUD palette colors black.",
           "defaultValue": 0
         },
-		"grayscale": {
+        "grayscale": {
           "keyString": "rom.hud_palettes.grayscale",
           "friendlyName": "Grayscale",
           "description": "Removes all saturation of colors.",
           "defaultValue": 0
         },
-		"negative": {
+        "negative": {
           "keyString": "rom.hud_palettes.negative",
           "friendlyName": "Negative",
           "description": "Invert all colors",
           "defaultValue": 0
         },
-		"classic": {
+        "classic": {
           "keyString": "rom.hud_palettes.classic",
           "friendlyName": "Classic",
           "description": "Produces results similar to the website.",
           "defaultValue": 0
         },
-		"dizzy": {
+        "dizzy": {
           "keyString": "rom.hud_palettes.dizzy",
           "friendlyName": "Dizzy",
           "description": "No logic in colors but saturation and lightness are conserved.",
           "defaultValue": 0
         },
-		"sick": {
+        "sick": {
           "keyString": "rom.hud_palettes.sick",
           "friendlyName": "Sick",
           "description": "No logic in colors but lightness is conserved.",
           "defaultValue": 0
         },
-		"puke": {
+        "puke": {
           "keyString": "rom.hud_palettes.puke",
           "friendlyName": "Puke",
           "description": "No logic at all.",
@@ -1980,7 +2018,7 @@
         }
       }
     },
-	"shield_palettes": {
+    "shield_palettes": {
       "keyString": "rom.shield_palettes",
       "friendlyName": "Shield Palettes",
       "description": "Randomize the colors of the shield, within reason.",
@@ -2004,37 +2042,37 @@
           "description": "Never use this. Makes all shield palette colors black.",
           "defaultValue": 0
         },
-		"grayscale": {
+        "grayscale": {
           "keyString": "rom.shield_palettes.grayscale",
           "friendlyName": "Grayscale",
           "description": "Removes all saturation of colors.",
           "defaultValue": 0
         },
-		"negative": {
+        "negative": {
           "keyString": "rom.shield_palettes.negative",
           "friendlyName": "Negative",
           "description": "Invert all colors",
           "defaultValue": 0
         },
-		"classic": {
+        "classic": {
           "keyString": "rom.shield_palettes.classic",
           "friendlyName": "Classic",
           "description": "Produces results similar to the website.",
           "defaultValue": 0
         },
-		"dizzy": {
+        "dizzy": {
           "keyString": "rom.shield_palettes.dizzy",
           "friendlyName": "Dizzy",
           "description": "No logic in colors but saturation and lightness are conserved.",
           "defaultValue": 0
         },
-		"sick": {
+        "sick": {
           "keyString": "rom.shield_palettes.sick",
           "friendlyName": "Sick",
           "description": "No logic in colors but lightness is conserved.",
           "defaultValue": 0
         },
-		"puke": {
+        "puke": {
           "keyString": "rom.shield_palettes.puke",
           "friendlyName": "Puke",
           "description": "No logic at all.",
@@ -2042,7 +2080,7 @@
         }
       }
     },
-	"sword_palettes": {
+    "sword_palettes": {
       "keyString": "rom.sword_palettes",
       "friendlyName": "Sword Palettes",
       "description": "Randomize the colors of the sword, within reason.",
@@ -2066,37 +2104,37 @@
           "description": "Never use this. Makes all sword palette colors black.",
           "defaultValue": 0
         },
-		"grayscale": {
+        "grayscale": {
           "keyString": "rom.sword_palettes.grayscale",
           "friendlyName": "Grayscale",
           "description": "Removes all saturation of colors.",
           "defaultValue": 0
         },
-		"negative": {
+        "negative": {
           "keyString": "rom.sword_palettes.negative",
           "friendlyName": "Negative",
           "description": "Invert all colors",
           "defaultValue": 0
         },
-		"classic": {
+        "classic": {
           "keyString": "rom.sword_palettes.classic",
           "friendlyName": "Classic",
           "description": "Produces results similar to the website.",
           "defaultValue": 0
         },
-		"dizzy": {
+        "dizzy": {
           "keyString": "rom.sword_palettes.dizzy",
           "friendlyName": "Dizzy",
           "description": "No logic in colors but saturation and lightness are conserved.",
           "defaultValue": 0
         },
-		"sick": {
+        "sick": {
           "keyString": "rom.sword_palettes.sick",
           "friendlyName": "Sick",
           "description": "No logic in colors but lightness is conserved.",
           "defaultValue": 0
         },
-		"puke": {
+        "puke": {
           "keyString": "rom.sword_palettes.puke",
           "friendlyName": "Puke",
           "description": "No logic at all.",
