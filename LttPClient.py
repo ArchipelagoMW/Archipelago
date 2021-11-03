@@ -716,7 +716,6 @@ async def snes_write(ctx: Context, write_list):
             for address, data in write_list:
                 PutAddress_Request['Operands'] = [hex(address)[2:], hex(len(data))[2:]]
                 if ctx.snes_socket is not None:
-                    snes_logger.info((PutAddress_Request, data))
                     await ctx.snes_socket.send(dumps(PutAddress_Request))
                     await ctx.snes_socket.send(data)
                 else:
