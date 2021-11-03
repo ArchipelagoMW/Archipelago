@@ -869,7 +869,6 @@ async def game_watcher(ctx: Context):
 
         gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
         if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
-            snes_logger.info((ctx.last_death_link + 1 < time.time(), ctx.last_death_link, time.time()))
             if gamemode[0] in DEATH_MODES:
                 if not ctx.death_state:  # new death
                     await ctx.send_death()
