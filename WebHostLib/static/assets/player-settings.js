@@ -4,7 +4,7 @@ window.addEventListener('load', () => {
   gameName = document.getElementById('player-settings').getAttribute('data-game');
 
   // Update game name on page
-  document.getElementById('game-name').innerHTML = gameName;
+  document.getElementById('game-name').innerText = gameName;
 
   Promise.all([fetchSettingData()]).then((results) => {
     let settingHash = localStorage.getItem(`${gameName}-hash`);
