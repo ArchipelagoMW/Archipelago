@@ -7,8 +7,6 @@ import cx_Freeze
 from kivy_deps import sdl2, glew
 from Utils import version_tuple
 
-is_64bits = sys.maxsize > 2 ** 32
-
 arch_folder = "exe.{platform}-{version}".format(platform=sysconfig.get_platform(),
                                                 version=sysconfig.get_python_version())
 buildfolder = Path("build", arch_folder)
