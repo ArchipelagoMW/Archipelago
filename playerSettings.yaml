@@ -219,7 +219,7 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
   #remove_escape_enemies: not supported always off
   #rando_speed: not supported always off
   custom_preset:  # see https://randommetroidsolver.pythonanywhere.com/presets for detailed info on each preset settings
-    Knows:  # each skill (know) has a pair [can use, perceived difficulty 1 (easy) to 100 (mania)]
+    Knows:  # each skill (know) has a pair [can use, perceived difficulty using one of the following values]
             # easy = 1
             # medium = 5
             # hard = 10
