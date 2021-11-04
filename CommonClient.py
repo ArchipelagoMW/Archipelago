@@ -166,6 +166,7 @@ class CommonContext():
         self.server = None
         self.server_task = None
 
+    # noinspection PyAttributeOutsideInit
     def set_getters(self, data_package: dict, network=False):
         if not network:  # local data; check if newer data was already downloaded
             local_package = Utils.persistent_load().get("datapackage", {}).get("latest", {})

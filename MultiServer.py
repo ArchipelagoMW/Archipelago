@@ -420,15 +420,9 @@ class Context:
 
     def get_aliased_name(self, team: int, slot: int):
         if (team, slot) in self.name_aliases:
-            if self.client_game_state[team,slot] == ClientStatus.CLIENT_GOAL:
-                return f"*{self.name_aliases[team, slot]}* ({self.player_names[team, slot]})"
-            else:
-                return f"{self.name_aliases[team, slot]} ({self.player_names[team, slot]})"
+            return f"{self.name_aliases[team, slot]} ({self.player_names[team, slot]})"
         else:
-            if self.client_game_state[team,slot] == ClientStatus.CLIENT_GOAL:
-                return f"*{self.player_names[team, slot]}*"
-            else:
-                return self.player_names[team,slot]
+            return self.player_names[team, slot]
 
 
 def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint]):
@@ -571,6 +565,18 @@ def get_players_string(ctx: Context):
         else:
             text += f'({player_name}) '
     return f'{len(auth_clients)} players of {len(ctx.player_names)} connected ' + text[:-1]
+
+
+def get_status_string(ctx: Context, team):
+    text = "Player Status on your team:"
+    for team in ctx.clients:
+        for slot in ctx.locations:
+            connected = len(ctx.clients[team][slot])
+            completion_text = f"({len(ctx.location_checks[team, slot])}/{len(ctx.locations[slot])})"
+            goal_text = " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else "."
+            text += f"\n{ctx.get_aliased_name(team, slot)} has {connected} connection{'' if connected == 1 else 's'}" \
+                    f"{goal_text} {completion_text}"
+    return text
 
 
 def get_received_items(ctx: Context, team: int, player: int) -> typing.List[NetworkItem]:
@@ -918,6 +924,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.ctx.notify_all(get_players_string(self.ctx))
         else:
             self.output(get_players_string(self.ctx))
+        return True
+
+    def _cmd_status(self) -> bool:
+        """Get status information about your team."""
+        self.output(get_status_string(self.ctx, self.client.team))
         return True
 
     def _cmd_forfeit(self) -> bool:
