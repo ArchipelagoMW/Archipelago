@@ -15,6 +15,34 @@
             ]
           }
         ]
+      },
+      {
+        "name": "Archipelago Triggers Guide",
+        "description": "A Guide to setting up and using triggers in your game settings.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/triggers_en.md",
+            "link": "archipelago/triggers/en",
+            "authors": [
+              "alwaysintreble"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Archipelago Plando Guide",
+        "description": "A guide to understanding and using plando for your game.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/plando_en.md",
+            "link": "archipelago/plando/en",
+            "authors": [
+              "alwaysintreble"
+            ]
+          }
+        ]
       }
     ]
   },

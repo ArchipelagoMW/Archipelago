@@ -5,6 +5,7 @@ import urllib.parse
 import sys
 import os
 import typing
+import time
 
 import websockets
 
@@ -135,6 +136,8 @@ class CommonContext():
         self.input_queue = asyncio.Queue()
         self.input_requests = 0
 
+        self.last_death_link: float = time.time()  # last send/received death link on AP layer
+
         # game state
         self.player_names: typing.Dict[int: str] = {0: "Archipelago"}
         self.exit_event = asyncio.Event()
@@ -163,6 +166,7 @@ class CommonContext():
         self.server = None
         self.server_task = None
 
+    # noinspection PyAttributeOutsideInit
     def set_getters(self, data_package: dict, network=False):
         if not network:  # local data; check if newer data was already downloaded
             local_package = Utils.persistent_load().get("datapackage", {}).get("latest", {})
@@ -255,6 +259,20 @@ class CommonContext():
                 self.permissions[permission_name] = flag.name
             except Exception as e:  # safeguard against permissions that may be implemented in the future
                 logger.exception(e)
+
+    def on_deathlink(self, data: dict):
+        """Gets dispatched when a new DeathLink is triggered by another linked player."""
+        self.last_death_link = max(data["time"], self.last_death_link)
+
+    async def send_death(self):
+        self.last_death_link = time.time()
+        await self.send_msgs([{
+            "cmd": "Bounce", "tags": ["DeathLink"],
+            "data": {
+                "time": self.last_death_link,
+                "source": self.player_names[self.slot]
+            }
+        }])
 
 
 async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
@@ -461,7 +479,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         logger.warning(f"Invalid Packet of {args['type']}: {args['text']}")
 
     elif cmd == "Bounced":
-        pass
+        tags = args.get("tags", [])
+        # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
+        if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
+            ctx.on_deathlink(args["data"])
 
     else:
         logger.debug(f"unknown command {cmd}")

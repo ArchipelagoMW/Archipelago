@@ -176,7 +176,13 @@ Sent to clients after a client requested this message be sent to them, more info
 | ---- | ---- | ----- |
 | data | dict | The data in the Bounce package copied |
 
+### InvalidPacket
+Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
 
+| Name | Type | Notes |
+| ---- | ---- | ----- |
+| type | string | "cmd" if the Packet isn't available/allowed, "arguments" if the problem is with the package data. |
+| text | string | Error text explaining the caught error. |
 ## (Client -> Server)
 These packets are sent purely from client to server. They are not accepted by clients.
 
@@ -200,7 +206,7 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | name | str | The player name for this client. |
 | uuid | str | Unique identifier for player client. |
 | version | NetworkVersion | An object representing the Archipelago version this client supports. |
-| tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. |
+| tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
 
 #### Authentication
 Many, if not all, other packets require a successfully authenticated client. This is described in more detail in [Archipelago Connection Handshake](#Archipelago-Connection-Handshake).
@@ -409,8 +415,28 @@ Note:
 
 #### GameData
 GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of documentation.
+
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | item_name_to_id | dict[str, int] | Mapping of all item names to their respective ID. |
 | location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID. |
 | version | int | Version number of this game's data |
+
+### Tags
+Tags are represented as a list of strings, the common Client tags follow:
+
+| Name | Notes |
+| ----- | ---- |
+| AP | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily. |
+| IgnoreGame | Tells the server to ignore the "game" attribute in the [Connect](#Connect) packet. |
+| DeathLink | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets |
+| Tracker | Tells the server that this client is actually a Tracker and will refuse new locations from this client. |
+
+### DeathLink
+A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:
+
+| Name | Type | Notes |
+| ---- | ---- | ---- |
+| time | float | Unix Time Stamp of time of death. |
+| cause | str | Optional. Text to explain the cause of death, ex. "Berserker was run over by a train." |
+| source | str | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game. |

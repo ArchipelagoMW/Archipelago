@@ -103,7 +103,8 @@ class MultiWorld():
             set_player_attr('boss_shuffle', 'none')
             set_player_attr('enemy_health', 'default')
             set_player_attr('enemy_damage', 'default')
-            set_player_attr('beemizer', 0)
+            set_player_attr('beemizer_total_chance', 0)
+            set_player_attr('beemizer_trap_chance', 0)
             set_player_attr('escape_assist', [])
             set_player_attr('open_pyramid', False)
             set_player_attr('treasure_hunt_icon', 'Triforce Piece')
@@ -1177,6 +1178,7 @@ class Spoiler():
         return json.dumps(out)
 
     def to_file(self, filename):
+        from worlds.AutoWorld import call_all, call_single, call_stage
         self.parse_data()
 
         def bool_to_text(variable: Union[bool, str]) -> str:
@@ -1198,6 +1200,7 @@ class Spoiler():
                     Utils.__version__, self.world.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.world.algorithm)
             outfile.write('Players:                         %d\n' % self.world.players)
+            call_stage(self.world, "write_spoiler_header", outfile)
 
             for player in range(1, self.world.players + 1):
                 if self.world.players > 1:
@@ -1211,6 +1214,7 @@ class Spoiler():
                 if options:
                     for f_option, option in options.items():
                         write_option(f_option, option)
+                call_single(self.world, "write_spoiler_header", player, outfile)
 
                 if player in self.world.get_game_players("A Link to the Past"):
                     outfile.write('%s%s\n' % ('Hash: ', self.hashes[player]))
@@ -1245,7 +1249,6 @@ class Spoiler():
                     outfile.write('Boss shuffle:                    %s\n' % self.world.boss_shuffle[player])
                     outfile.write('Enemy health:                    %s\n' % self.world.enemy_health[player])
                     outfile.write('Enemy damage:                    %s\n' % self.world.enemy_damage[player])
-                    outfile.write('Beemizer:                        %s\n' % self.world.beemizer[player])
                     outfile.write('Prize shuffle                    %s\n' %
                                   self.world.shuffle_prizes[player])
             if self.entrances:
@@ -1260,13 +1263,8 @@ class Spoiler():
                 outfile.write('\n\nMedallions:\n')
                 for dungeon, medallion in self.medallions.items():
                     outfile.write(f'\n{dungeon}: {medallion}')
-            factorio_players = self.world.get_game_players("Factorio")
-            if factorio_players:
-                outfile.write('\n\nRecipes:\n')
-                for player in factorio_players:
-                    name = self.world.get_player_name(player)
-                    for recipe in self.world.worlds[player].custom_recipes.values():
-                        outfile.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
+
+            call_all(self.world, "write_spoiler", outfile)
 
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(
@@ -1307,6 +1305,7 @@ class Spoiler():
                     path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
 
                 outfile.write('\n'.join(path_listings))
+            call_all(self.world, "write_spoiler_end", outfile)
 
 
 seeddigits = 20

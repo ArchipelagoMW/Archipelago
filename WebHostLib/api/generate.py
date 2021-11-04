@@ -16,7 +16,7 @@ def generate_api():
     try:
         options = {}
         race = False
-
+        meta_options_source = {}
         if 'file' in request.files:
             file = request.files['file']
             options = get_yaml_data(file)
@@ -24,14 +24,20 @@ def generate_api():
                 return {"text": options}, 400
             if "race" in request.form:
                 race = bool(0 if request.form["race"] in {"false"} else int(request.form["race"]))
+            meta_options_source = request.form
 
         json_data = request.get_json()
         if json_data:
+            meta_options_source = json_data
             if 'weights' in json_data:
                 # example: options = {"player1weights" : {<weightsdata>}}
                 options = json_data["weights"]
             if "race" in json_data:
                 race = bool(0 if json_data["race"] in {"false"} else int(json_data["race"]))
+
+        hint_cost = int(meta_options_source.get("hint_cost", 10))
+        forfeit_mode = meta_options_source.get("forfeit_mode", "goal")
+
         if not options:
             return {"text": "No options found. Expected file attachment or json weights."
                     }, 400
@@ -48,7 +54,7 @@ def generate_api():
             gen = Generation(
                 options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
                 # convert to json compatible
-                meta=json.dumps({"race": race}), state=STATE_QUEUED,
+                meta=json.dumps({"race": race, "hint_cost": hint_cost, "forfeit_mode": forfeit_mode}), state=STATE_QUEUED,
                 owner=session["_id"])
             commit()
             return {"text": f"Generation of seed {gen.id} started successfully.",

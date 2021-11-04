@@ -520,9 +520,10 @@ async def on_client_disconnected(ctx: Context, client: Client):
 async def on_client_joined(ctx: Context, client: Client):
     update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
+    verb = "tracking" if "Tracker" in client.tags else "playing"
     ctx.notify_all(
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
-        f"playing {ctx.games[client.slot]} has joined. "
+        f"{verb} {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}).")
 
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
@@ -565,6 +566,17 @@ def get_players_string(ctx: Context):
         else:
             text += f'({player_name}) '
     return f'{len(auth_clients)} players of {len(ctx.player_names)} connected ' + text[:-1]
+
+
+def get_status_string(ctx: Context, team: int):
+    text = "Player Status on your team:"
+    for slot in ctx.locations:
+        connected = len(ctx.clients[team][slot])
+        completion_text = f"({len(ctx.location_checks[team, slot])}/{len(ctx.locations[slot])})"
+        goal_text = " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else "."
+        text += f"\n{ctx.get_aliased_name(team, slot)} has {connected} connection{'' if connected == 1 else 's'}" \
+                f"{goal_text} {completion_text}"
+    return text
 
 
 def get_received_items(ctx: Context, team: int, player: int) -> typing.List[NetworkItem]:
@@ -914,6 +926,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output(get_players_string(self.ctx))
         return True
 
+    def _cmd_status(self) -> bool:
+        """Get status information about your team."""
+        self.output(get_status_string(self.ctx, self.client.team))
+        return True
+
     def _cmd_forfeit(self) -> bool:
         """Surrender and send your remaining items out to their recipients"""
         if self.ctx.allow_forfeits.get((self.client.team, self.client.slot), False):
@@ -1258,7 +1275,15 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
                                           "data": network_data_package}])
     elif client.auth:
-        if cmd == 'Sync':
+        if cmd == "ConnectUpdate":
+            if not args:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': cmd}])
+                return
+
+            if "tags" in args:
+                client.tags = args["tags"]
+
+        elif cmd == 'Sync':
             items = get_received_items(ctx, client.team, client.slot)
             if items:
                 client.send_index = len(items)
@@ -1266,7 +1291,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                               "items": items}])
 
         elif cmd == 'LocationChecks':
-            register_location_checks(ctx, client.team, client.slot, args["locations"])
+            if "Tracker" in client.tags:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+                                              "text": "Trackers can't register new Location Checks"}])
+            else:
+                register_location_checks(ctx, client.team, client.slot, args["locations"])
 
         elif cmd == 'LocationScouts':
             locs = []
