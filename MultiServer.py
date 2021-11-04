@@ -562,14 +562,14 @@ def get_players_string(ctx: Context):
     current_team = -1
     text = ''
     for team, slot in player_names:
-        player_name = ctx.player_names[team, slot]
+        player_name = ctx.get_aliased_name(team, slot)
         if team != current_team:
             text += f':: Team #{team + 1}: '
             current_team = team
         if (team, slot) in auth_clients:
             text += f'{player_name} '
         else:
-            text += f'({player_name}) '
+            text += f'[{player_name}] '
     return f'{len(auth_clients)} players of {len(ctx.player_names)} connected ' + text[:-1]
 
 
