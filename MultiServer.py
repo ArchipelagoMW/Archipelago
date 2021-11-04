@@ -567,15 +567,14 @@ def get_players_string(ctx: Context):
     return f'{len(auth_clients)} players of {len(ctx.player_names)} connected ' + text[:-1]
 
 
-def get_status_string(ctx: Context, team):
+def get_status_string(ctx: Context, team: int):
     text = "Player Status on your team:"
-    for team in ctx.clients:
-        for slot in ctx.locations:
-            connected = len(ctx.clients[team][slot])
-            completion_text = f"({len(ctx.location_checks[team, slot])}/{len(ctx.locations[slot])})"
-            goal_text = " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else "."
-            text += f"\n{ctx.get_aliased_name(team, slot)} has {connected} connection{'' if connected == 1 else 's'}" \
-                    f"{goal_text} {completion_text}"
+    for slot in ctx.locations:
+        connected = len(ctx.clients[team][slot])
+        completion_text = f"({len(ctx.location_checks[team, slot])}/{len(ctx.locations[slot])})"
+        goal_text = " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else "."
+        text += f"\n{ctx.get_aliased_name(team, slot)} has {connected} connection{'' if connected == 1 else 's'}" \
+                f"{goal_text} {completion_text}"
     return text
 
 
