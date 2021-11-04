@@ -149,6 +149,7 @@ class Context(CommonContext):
         asyncio.create_task(snes_flush_writes(self))
         self.death_state = True
         snes_logger.info(f"Received DeathLink from {data['source']}")
+        super(Context, self).on_deathlink(data)
 
 
 def color_item(item_id: int, green: bool = False) -> str:

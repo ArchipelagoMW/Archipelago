@@ -34,6 +34,7 @@ They are assigned by writing a string without any assignment right below a
 definition. The string must be a triple-quoted string.
 Example:
 ```python
+from worlds.AutoWorld import World
 class MyGameWorld(World):
     """This is the description of My Game that will be displayed on the AP
        website."""
@@ -198,7 +199,7 @@ or your `Items.py`. For a more elaborate example see `worlds/oot/Items.py`.
 
 The same we have done for items above, we will do for locations
 ```python
-from BasClasses import Location
+from BaseClasses import Location
 
 class MyGameLocation(Location):
     game: str = "My Game"
@@ -257,7 +258,7 @@ default = 0
 ```python
 # Options.py
 
-from Options import Toggle, Range, Choice
+from Options import Toggle, Range, Choice, Option
 import typing
 
 class Difficulty(Choice):

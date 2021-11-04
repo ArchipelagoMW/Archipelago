@@ -520,9 +520,10 @@ async def on_client_disconnected(ctx: Context, client: Client):
 async def on_client_joined(ctx: Context, client: Client):
     update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
+    verb = "tracking" if "Tracker" in client.tags else "playing"
     ctx.notify_all(
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
-        f"playing {ctx.games[client.slot]} has joined. "
+        f"{verb} {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}).")
 
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
@@ -1290,7 +1291,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                               "items": items}])
 
         elif cmd == 'LocationChecks':
-            register_location_checks(ctx, client.team, client.slot, args["locations"])
+            if "Tracker" in client.tags:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+                                              "text": "Trackers can't register new Location Checks"}])
+            else:
+                register_location_checks(ctx, client.team, client.slot, args["locations"])
 
         elif cmd == 'LocationScouts':
             locs = []

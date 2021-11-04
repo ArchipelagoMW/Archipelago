@@ -104,6 +104,7 @@ class FactorioContext(CommonContext):
     def on_deathlink(self, data: dict):
         if self.rcon_client:
             self.rcon_client.send_command(f"/ap-deathlink {data['source']}")
+        super(FactorioContext, self).on_deathlink(data)
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected", "RoomUpdate"}:
