@@ -84,7 +84,10 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
 #    Gravity Suit: 1
   start_inventory_removes_from_pool:
     on: 0
-    off: 1      
+    off: 1
+  death_link:
+    on: 0
+    off: 1
   preset: # choose one of the preset or specify "custom" to use customPreset option
     newbie: 0
     casual: 0

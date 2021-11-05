@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Range, OptionDict, OptionList, Option, Toggle, DefaultOnToggle
+from Options import Choice, Range, OptionDict, OptionList, Option, Toggle, DefaultOnToggle, DeathLink
 
 class StartItemsRemovesFromPool(Toggle):
     displayname = "StartItems Removes From Item Pool"
@@ -177,6 +177,7 @@ sm_options: typing.Dict[str, type(Option)] = {
     "start_inventory_removes_from_pool": StartItemsRemovesFromPool,
     "preset": Preset,
     "start_location": StartLocation,
+    "death_link": DeathLink,
     #"majors_split": "Full",
     #"scav_num_locs": "10",
     #"scav_randomized": "off",

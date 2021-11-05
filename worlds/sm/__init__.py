@@ -261,10 +261,13 @@ class SMWorld(World):
                 idx += 1
             
         openTourianGreyDoors = {0x07C823 + 5: [0x0C], 0x07C831 + 5: [0x0C]}
+
+        deathLink = {0x277f04: [int(self.world.death_link[self.player])]}
         patchDict = {   'MultiWorldLocations': multiWorldLocations,
                         'MultiWorldItems': multiWorldItems,
                         'offworldSprites': offworldSprites,
-                        'openTourianGreyDoors': openTourianGreyDoors}
+                        'openTourianGreyDoors': openTourianGreyDoors,
+                        'deathLink': deathLink}
         romPatcher.applyIPSPatchDict(patchDict)
 
         playerNames = {}
