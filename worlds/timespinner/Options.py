@@ -42,6 +42,10 @@ class Inverted(Toggle):
 #    "Require gasmask for Maw"
 #    display_name = "Stinky Maw"
 
+class DeathLink(Toggle):
+    "Participate in the DeathLink mechanic"
+    display_name = "DeathLink"
+
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Toggle] = {
     "StartWithJewelryBox": StartWithJewelryBox,
@@ -53,7 +57,8 @@ timespinner_options: Dict[str, Toggle] = {
     "QuickSeed": QuickSeed,
     "SpecificKeycards": SpecificKeycards,
     "Inverted": Inverted,
-    #"StinkyMaw": StinkyMaw
+    #"StinkyMaw": StinkyMaw,
+    "DeathLink": DeathLink,
 }
 
 def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
