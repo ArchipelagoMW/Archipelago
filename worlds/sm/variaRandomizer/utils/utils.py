@@ -298,7 +298,7 @@ def convertParam(randoParams, param, inverse=False):
 
 def loadRandoPreset(world, player, args):
     defaultMultiValues = getDefaultMultiValues()
-    diffs = [key for key in text2diff.keys()]
+    diffs = ["easy", "medium", "hard", "harder", "hardcore", "mania"]
     presetValues = getPresetValues()
 
     args.animals = world.animals[player].value

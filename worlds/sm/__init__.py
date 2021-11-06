@@ -106,7 +106,7 @@ class SMWorld(World):
         
         # Generate item pool
         pool = []
-        locked_items = {}
+        self.locked_items = {}
         weaponCount = [0, 0, 0]
         for item in itemPool:
             isAdvancement = True
@@ -131,13 +131,13 @@ class SMWorld(World):
             itemClass = ItemManager.Items[item.Type].Class
             smitem = SMItem(item.Name, isAdvancement, item.Type, None if itemClass == 'Boss' else self.item_name_to_id[item.Name], player = self.player)
             if itemClass == 'Boss':
-                locked_items[item.Name] = smitem
+                self.locked_items[item.Name] = smitem
             else:
                 pool.append(smitem)
 
         self.world.itempool += pool
 
-        for (location, item) in locked_items.items():
+        for (location, item) in self.locked_items.items():
             self.world.get_location(location, self.player).place_locked_item(item)
             self.world.get_location(location, self.player).address = None
 
@@ -459,6 +459,17 @@ class SMWorld(World):
             self.world.itempool[:] = [item for item in self.world.itempool if
                                         item.player != self.player or
                                         item.name != "Morph Ball"] 
+
+    def post_fill(self):
+        # increase maxDifficulty if only bosses is too difficult to beat game
+        new_state = CollectionState(self.world)
+        for item in self.world.itempool:
+            if item.player == self.player:
+                new_state.collect(item, True)
+        new_state.sweep_for_events()
+        if (any(not self.world.get_location(bossLoc, self.player).can_reach(new_state) for bossLoc in self.locked_items)):
+            if (self.variaRando.randoExec.setup.services.onlyBossesLeft(self.variaRando.randoExec.setup.startAP, self.variaRando.randoExec.setup.container)):
+                self.world.state.smbm[self.player].maxDiff = infinity
 
     @classmethod
     def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,

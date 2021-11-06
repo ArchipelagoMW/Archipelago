@@ -46,6 +46,7 @@ class RandoExec(object):
             self.areaGraph = graphBuilder.createGraph()
             services = RandoServices(self.areaGraph, self.restrictions)
             setup = RandoSetup(self.graphSettings, Logic.locations, services, self.player)
+            self.setup = setup
             container = setup.createItemLocContainer(endDate, vcr)
             if container is None:
                 sys.stdout.write('*')
