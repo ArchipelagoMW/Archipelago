@@ -1,5 +1,5 @@
 import typing
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionList
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionList, DeathLink
 from .ColorSFXOptions import *
 
 
@@ -788,4 +788,5 @@ oot_options: typing.Dict[str, type(Option)] = {
     **cosmetic_options,
     **sfx_options,
     "logic_tricks": LogicTricks,
+    "death_link": DeathLink,
 }
