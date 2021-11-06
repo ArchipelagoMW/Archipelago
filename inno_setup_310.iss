@@ -29,7 +29,7 @@ ArchitecturesAllowed=x64
 AllowNoIcons=yes
 SetupIconFile={#MyAppIcon}
 UninstallDisplayIcon={app}\{#MyAppExeName}
-; you will likely have to remove the following signtool line when testing/debugging localy. Don't include that change in PRs.
+; you will likely have to remove the following signtool line when testing/debugging locally. Don't include that change in PRs.
 SignTool= signtool
 LicenseFile= LICENSE
 WizardStyle= modern

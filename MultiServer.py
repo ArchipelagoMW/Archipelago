@@ -78,6 +78,7 @@ class Context:
                       "compatibility": int}
     # team -> slot id -> list of clients authenticated to slot.
     clients: typing.Dict[int, typing.Dict[int, typing.List[Client]]]
+    locations: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int]]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
@@ -99,7 +100,7 @@ class Context:
         self.remote_items = set()
         self.remote_start_inventory = set()
         #                          player          location_id     item_id  target_player_id
-        self.locations: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int]]] = {}
+        self.locations = {}
         self.host = host
         self.port = port
         self.server_password = server_password
@@ -279,6 +280,11 @@ class Context:
                     self.received_items[team, slot] = [NetworkItem(item_code, -2, 0) for item_code in item_codes]
             for slot, hints in decoded_obj["precollected_hints"].items():
                 self.hints[team, slot].update(hints)
+        # declare slots without checks as done, as they're assumed to be spectators
+        for slot, locations in self.locations.items():
+            if not locations:
+                for team in self.clients:
+                    self.client_game_state[team, slot] = ClientStatus.CLIENT_GOAL
         if use_embedded_server_options:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
