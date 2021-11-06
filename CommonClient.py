@@ -263,6 +263,11 @@ class CommonContext():
     def on_deathlink(self, data: dict):
         """Gets dispatched when a new DeathLink is triggered by another linked player."""
         self.last_death_link = max(data["time"], self.last_death_link)
+        text = data.get("cause", "")
+        if text:
+            logger.info(f"DeathLink: {text}")
+        else:
+            logger.info(f"DeathLink: Received from {data['source']}")
 
     async def send_death(self):
         self.last_death_link = time.time()

@@ -148,7 +148,6 @@ class Context(CommonContext):
         snes_buffered_write(self, WRAM_START + 0x0373, bytes([8]))
         asyncio.create_task(snes_flush_writes(self))
         self.death_state = True
-        snes_logger.info(f"Received DeathLink from {data['source']}")
         super(Context, self).on_deathlink(data)
 
 
