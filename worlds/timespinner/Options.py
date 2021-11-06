@@ -1,6 +1,6 @@
 from typing import Dict
 from BaseClasses import MultiWorld
-from Options import Toggle
+from Options import Toggle, DeathLink
 
 class StartWithJewelryBox(Toggle):
     "Start with Jewelry Box unlocked"
@@ -41,10 +41,6 @@ class Inverted(Toggle):
 #class StinkyMaw(Toggle):
 #    "Require gasmask for Maw"
 #    display_name = "Stinky Maw"
-
-class DeathLink(Toggle):
-    "Participate in the DeathLink mechanic"
-    display_name = "DeathLink"
 
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Toggle] = {
