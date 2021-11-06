@@ -1,9 +1,0 @@
-{
-  "majorsSplit": "random",
-  "majorsSplitMultiSelect": ["Major", "Chozo"],
-  "progressionSpeed": "random",
-  "progressionSpeedMultiSelect": ["speedrun", "medium", "VARIAble"],
-  "startLocation": "random",
-  "startLocationMultiSelect": ["Gauntlet Top","Green Brinstar Elevator","Big Pink","Etecoons Supers","Wrecked Ship Main","Firefleas Top","Business Center","Bubble Mountain","Mama Turtle","Watering Hole", "Aqueduct"],
-  "hud": "on"
-}
