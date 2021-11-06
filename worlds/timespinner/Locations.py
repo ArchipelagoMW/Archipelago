@@ -143,7 +143,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Caves of Banishment (Sirens)', 'Above water sirens',  1337124),
         LocationData('Caves of Banishment (Sirens)', 'Underwater sirens left',  1337125, lambda state: state.has('Water Mask', player)),
         LocationData('Caves of Banishment (Sirens)', 'Underwater sirens right',  1337126, lambda state: state.has('Water Mask', player)),
-        LocationData('Caves of Banishment (Sirens)', 'Water hook',  1337127),
+        LocationData('Caves of Banishment (Sirens)', 'Water hook',  1337127, lambda state: state.has('Water Mask', player)),
         LocationData('Castle Ramparts', 'Castle Bomber chest',  1337128, lambda state: state._timespinner_has_multiple_small_jumps_of_npc(world, player)),
         LocationData('Castle Ramparts', 'Freeze the engineer',  1337129, lambda state: state.has('Talaria Attachment', player) or state._timespinner_has_timestop(world, player)),
         LocationData('Castle Ramparts', 'Giantess guarded room',  1337130),
