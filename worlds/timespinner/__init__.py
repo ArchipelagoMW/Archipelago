@@ -1,4 +1,4 @@
-from typing import Dict, List, Set
+from typing import Dict, List, Set, TextIO
 from BaseClasses import Item, MultiWorld, Location
 from ..AutoWorld import World
 from .LogicMixin import TimespinnerLogic
@@ -77,7 +77,11 @@ class TimespinnerWorld(World):
         slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache[self.player])
 
         return slot_data
+        
 
+    def write_spoiler_header(self, spoiler_handle: TextIO):
+        spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % (self.pyramid_keys_unlock[self.player]))
+        
 
 def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> Set[str]:
     excluded_items: Set[str] = set()
