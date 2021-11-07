@@ -25,7 +25,7 @@ class MinecraftLogic(LogicMixin):
         return self.has('Bottles', player) and self.has('Progressive Resource Crafting', player)
 
     def _mc_has_spyglass(self, player: int):
-        return self._mc_has_copper_ingots(player) and self.has('Spyglass', player)
+        return self._mc_has_copper_ingots(player) and self.has('Spyglass', player) and self._mc_can_adventure(player)
 
     def _mc_can_enchant(self, player: int): 
         return self.has('Enchanting', player) and self._mc_has_diamond_pickaxe(player) # mine obsidian and lapis
@@ -230,7 +230,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Uneasy Alliance", player), lambda state: state._mc_has_diamond_pickaxe(player) and state.has('Fishing Rod', player))
     set_rule(world.get_location("Diamonds!", player), lambda state: state.has("Progressive Tools", player, 2) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("A Terrible Fortress", player), lambda state: True)  # since you don't have to fight anything
-    set_rule(world.get_location("A Throwaway Joke", player), lambda state: True)  # kill drowned
+    set_rule(world.get_location("A Throwaway Joke", player), lambda state: state._mc_can_adventure(player))  # kill drowned
     set_rule(world.get_location("Minecraft", player), lambda state: True)
     set_rule(world.get_location("Sticky Situation", player), lambda state: state.has("Campfire", player) and state._mc_has_bottle(player))
     set_rule(world.get_location("Ol' Betsy", player), lambda state: state._mc_craft_crossbow(player))
