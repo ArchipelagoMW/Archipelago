@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Option, Toggle, Range
+from Options import Choice, Option, Toggle, Range, DeathLink
 
 
 class AdvancementGoal(Range):
@@ -82,4 +82,5 @@ minecraft_options: typing.Dict[str, type(Option)] = {
     "include_insane_advancements":      InsaneAdvancements,
     "include_postgame_advancements":    PostgameAdvancements,
     "send_defeated_mobs":               SendDefeatedMobs,
+    "death_link":                       DeathLink,
 }

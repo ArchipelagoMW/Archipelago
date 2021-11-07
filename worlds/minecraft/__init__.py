@@ -44,6 +44,7 @@ class MinecraftWorld(World):
             'egg_shards_required': min(self.world.egg_shards_required[self.player], self.world.egg_shards_available[self.player]),
             'egg_shards_available': self.world.egg_shards_available[self.player],
             'MC35': bool(self.world.send_defeated_mobs[self.player]),
+            'death_link': bool(self.world.death_link[self.player]),
             'race': self.world.is_race
         }
 
