@@ -39,6 +39,11 @@ i_o_limiter = threading.Semaphore(2)
 
 
 class OOTWorld(World):
+    """
+    The Legend of Zelda: Ocarina of Time is a 3D action/adventure game. Travel through Hyrule in two time periods, 
+    learn magical ocarina songs, and explore twelve dungeons on your quest. Use Link's many items and abilities 
+    to rescue the Seven Sages, and then confront Ganondorf to save Hyrule!
+    """
     game: str = "Ocarina of Time"
     options: dict = oot_options
     topology_present: bool = True
