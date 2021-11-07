@@ -1325,6 +1325,9 @@ def patch_rom(world, rom):
     rom.write_byte(rom.sym('PLAYER_ID'), min(world.player, 255)) # Write player ID
     rom.write_bytes(rom.sym('AP_PLAYER_NAME'), bytearray(world.world.get_player_name(world.player), 'ascii'))
 
+    if world.death_link:
+        rom.write_byte(rom.sym('DEATH_LINK'), 0x01)
+
     # Revert Song Get Override Injection
     if not songs_as_items:
         # general get song
