@@ -93,15 +93,14 @@ class SoEWorld(World):
     """
     game: str = "Secret of Evermore"
     options = soe_options
-    topology_present: bool = True
-    remote_items: bool = False  # True only for testing
-    data_version = 0
+    topology_present: bool = False
+    remote_items: bool = False
+    data_version = 1
 
     item_name_to_id, item_id_to_raw = _get_item_mapping()
     location_name_to_id, location_id_to_raw = _get_location_mapping()
 
     evermizer_seed: int
-    restrict_item_placement: bool = False  # placeholder to force certain item types to certain pools
     connect_name: str
 
     def __init__(self, *args, **kwargs):
@@ -136,8 +135,7 @@ class SoEWorld(World):
         if type(self.world.precollected_items) is dict:
             self.world.precollected_items[self.player] = []
         # add items to the pool
-        self.world.itempool += [item for item in
-                                map(lambda item: self.create_item(item, self.restrict_item_placement), _items)]
+        self.world.itempool += list(map(lambda item: self.create_item(item), _items))
 
     def set_rules(self):
         self.world.completion_condition[self.player] = lambda state: state.has('Victory', self.player)
@@ -148,9 +146,6 @@ class SoEWorld(World):
         for loc in _locations:
             location = self.world.get_location(loc.name, self.player)
             set_rule(location, self.make_rule(loc.requires))
-            # limit location pool by item type
-            if self.restrict_item_placement:
-                add_item_rule(location, self.make_item_type_limit_rule(loc.type))
 
     def make_rule(self, requires: typing.List[typing.Tuple[int]]) -> typing.Callable[[typing.Any], bool]:
         def rule(state) -> bool:
@@ -169,14 +164,6 @@ class SoEWorld(World):
         self.world.get_location('Done', self.player).place_locked_item(self.create_event('Victory'))
         # generate stuff for later
         self.evermizer_seed = self.world.random.randint(0, 2**16-1)  # TODO: make this an option for "full" plando?
-
-    def post_fill(self):
-        # fix up the advancement property of items so they are displayed correctly in other games
-        if self.restrict_item_placement:
-            for location in self.world.get_locations():
-                item = location.item
-                if item.code and item.player == self.player and not self.item_id_to_raw[location.item.code].progression:
-                    item.advancement = False
 
     def generate_output(self, output_directory: str):
         player_name = self.world.get_player_name(self.player)
