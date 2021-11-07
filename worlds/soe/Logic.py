@@ -1,7 +1,6 @@
 from BaseClasses import MultiWorld
 from ..AutoWorld import LogicMixin
 from typing import Set
-# TODO: import Options
 # TODO: Options may preset certain progress steps (i.e. P_ROCK_SKIP), set in generate_early?
 
 from . import pyevermizer
@@ -19,8 +18,8 @@ items = [item for item in filter(lambda item: item.progression, pyevermizer.get_
 class SecretOfEvermoreLogic(LogicMixin):
     def _soe_count(self, progress: int, world: MultiWorld, player: int, max_count: int = 0) -> int:
         """
-        Returns reached count of one of evermizer's progress steps based on
-        collected items. i.e. returns 0-3 for P_DE based on items giving CHECK_BOSS,DIAMOND_EYE_DROP
+        Returns reached count of one of evermizer's progress steps based on collected items.
+        i.e. returns 0-3 for P_DE based on items providing CHECK_BOSS,DIAMOND_EYE_DROP
         """
         n = 0
         for item in items:
@@ -46,7 +45,6 @@ class SecretOfEvermoreLogic(LogicMixin):
 
     def _soe_has(self, progress: int, world: MultiWorld, player: int, count: int = 1) -> bool:
         """
-        Returns True if count of an evermizer progress steps are reached based
-        on collected items. i.e. 2 * P_DE
+        Returns True if count of one of evermizer's progress steps is reached based on collected items. i.e. 2 * P_DE
         """
         return self._soe_count(progress, world, player, count) >= count
