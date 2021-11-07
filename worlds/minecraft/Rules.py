@@ -263,7 +263,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("The Healing Power of Friendship", player), lambda state: state._mc_has_iron_ingots(player) and state.has('Bucket', player))
     set_rule(world.get_location("Is It a Bird?", player), lambda state: state._mc_has_spyglass(player) and state._mc_can_adventure(player))
     set_rule(world.get_location("Is It a Balloon?", player), lambda state: state._mc_has_spyglass(player))
-    set_rule(world.get_location("Is It a Bird?", player), lambda state: state._mc_has_spyglass(player) and can_complete(state))
+    set_rule(world.get_location("Is It a Plane?", player), lambda state: state._mc_has_spyglass(player) and can_complete(state))
     set_rule(world.get_location("Surge Protector", player), lambda state: state.has("Channeling Book", player) and state._mc_can_use_anvil(player) and state._mc_can_enchant(player) and \
         ((world.get_region('Village', player).entrances[0].parent_region.name != 'The End' and state.can_reach('Village', 'Region', player)) or state.can_reach('Zombie Doctor', 'Location', player)))
     set_rule(world.get_location("Light as a Rabbit", player), lambda state: state._mc_can_adventure(player) and state._mc_has_iron_ingots(player) and state.has('Bucket', player))
