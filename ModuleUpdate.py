@@ -35,18 +35,25 @@ def update(yes = False, force = False):
             if not os.path.exists(path):
                 path = os.path.join(os.path.dirname(__file__), req_file)
             with open(path) as requirementsfile:
-                requirements = pkg_resources.parse_requirements(requirementsfile)
-                for requirement in requirements:
-                    requirement = str(requirement)
-                    try:
-                        pkg_resources.require(requirement)
-                    except pkg_resources.ResolutionError:
-                        if not yes:
-                            import traceback
-                            traceback.print_exc()
-                            input(f'Requirement {requirement} is not satisfied, press enter to install it')
-                        update_command()
-                        return
+                for line in requirementsfile:
+                    if line.startswith('https://'):
+                        # extract name and version from url
+                        url = line.split(';')[0]
+                        wheel = line.split('/')[-1]
+                        name, version, _ = wheel.split('-',2)
+                        line = f'{name}=={version}'
+                    requirements = pkg_resources.parse_requirements(line)
+                    for requirement in requirements:
+                        requirement = str(requirement)
+                        try:
+                            pkg_resources.require(requirement)
+                        except pkg_resources.ResolutionError:
+                            if not yes:
+                                import traceback
+                                traceback.print_exc()
+                                input(f'Requirement {requirement} is not satisfied, press enter to install it')
+                            update_command()
+                            return
 
 
 if __name__ == "__main__":
