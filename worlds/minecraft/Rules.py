@@ -9,6 +9,9 @@ class MinecraftLogic(LogicMixin):
     def _mc_has_iron_ingots(self, player: int):
         return self.has('Progressive Tools', player) and self.has('Progressive Resource Crafting', player)
 
+    def _mc_has_copper_ingots(self, player: int):
+        return self.has('Progressive Tools', player) and self.has('Progressive Resource Crafting', player)
+
     def _mc_has_gold_ingots(self, player: int): 
         return self.has('Progressive Resource Crafting', player) and (self.has('Progressive Tools', player, 2) or self.can_reach('The Nether', 'Region', player))
 
@@ -20,6 +23,9 @@ class MinecraftLogic(LogicMixin):
 
     def _mc_has_bottle(self, player: int): 
         return self.has('Bottles', player) and self.has('Progressive Resource Crafting', player)
+
+    def _mc_has_spyglass(self, player: int):
+        return self._mc_has_copper_ingots(player) and self.has('Spyglass', player)
 
     def _mc_can_enchant(self, player: int): 
         return self.has('Enchanting', player) and self._mc_has_diamond_pickaxe(player) # mine obsidian and lapis
@@ -249,3 +255,17 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Librarian", player), lambda state: state.has("Enchanting", player))
     set_rule(world.get_location("Overpowered", player), lambda state: state._mc_has_iron_ingots(player) and 
         state.has('Progressive Tools', player, 2) and state._mc_basic_combat(player))  # mine gold blocks w/ iron pick
+    set_rule(world.get_location("Wax On", player), lambda state: state._mc_has_copper_ingots(player) and state.has('Campfire', player) and
+        state.has('Progressive Resource Crafting', player, 2))
+    set_rule(world.get_location("Wax Off", player), lambda state: state._mc_has_copper_ingots(player) and state.has('Campfire', player) and
+        state.has('Progressive Resource Crafting', player, 2))
+    set_rule(world.get_location("The Cutest Predator", player), lambda state: state._mc_has_iron_ingots(player) and state.has('Bucket', player))
+    set_rule(world.get_location("The Healing Power of Friendship", player), lambda state: state._mc_has_iron_ingots(player) and state.has('Bucket', player))
+    set_rule(world.get_location("Is It a Bird?", player), lambda state: state._mc_has_spyglass(player) and state._mc_can_adventure(player))
+    set_rule(world.get_location("Is It a Balloon?", player), lambda state: state._mc_has_spyglass(player))
+    set_rule(world.get_location("Is It a Bird?", player), lambda state: state._mc_has_spyglass(player) and can_complete(state))
+    set_rule(world.get_location("Surge Protector", player), lambda state: state.has("Channeling Book", player) and state._mc_can_use_anvil(player) and state._mc_can_enchant(player) and \
+        ((world.get_region('Village', player).entrances[0].parent_region.name != 'The End' and state.can_reach('Village', 'Region', player)) or state.can_reach('Zombie Doctor', 'Location', player)))
+    set_rule(world.get_location("Light as a Rabbit", player), lambda state: state._mc_can_adventure(player) and state._mc_has_iron_ingots(player) and state.has('Bucket', player))
+    set_rule(world.get_location("Glow and Behold!", player), lambda state: state._mc_can_adventure(player))
+    set_rule(world.get_location("Whatever Floats Your Goat!", player), lambda state: state._mc_can_adventure(player))

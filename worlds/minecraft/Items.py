@@ -56,6 +56,7 @@ item_table = {
     "Structure Compass (End City)": ItemData(45041, True),
     "Shulker Box": ItemData(45042, False),
     "Dragon Egg Shard": ItemData(45043, True),
+    "Spyglass": ItemData(45044, True),
     "Bee Trap (Minecraft)": ItemData(45100, False),
 
     "Blaze Rods": ItemData(None, True),

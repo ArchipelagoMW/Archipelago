@@ -6,22 +6,22 @@ class AdvancementGoal(Range):
     """Number of advancements required to spawn the Ender Dragon."""
     displayname = "Advancement Goal"
     range_start = 0
-    range_end = 87
-    default = 50
+    range_end = 97
+    default = 40
 
 
 class EggShardsRequired(Range):
     """Number of dragon egg shards to collect before the Ender Dragon will spawn."""
     displayname = "Egg Shards Required"
     range_start = 0
-    range_end = 30
+    range_end = 40
 
 
 class EggShardsAvailable(Range):
     """Number of dragon egg shards available to collect."""
     displayname = "Egg Shards Available"
     range_start = 0
-    range_end = 30
+    range_end = 40
 
 
 class ShuffleStructures(Toggle):

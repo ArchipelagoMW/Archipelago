@@ -108,6 +108,17 @@ advancement_table = {
     "Overkill": AdvData(42089, 'Nether Fortress'),
     "Librarian": AdvData(42090, 'Overworld'),
     "Overpowered": AdvData(42091, 'Bastion Remnant'),
+    "Wax On": AdvData(42092, 'Overworld'),
+    "Wax Off": AdvData(42093, 'Overworld'),
+    "The Cutest Predator": AdvData(42094, 'Overworld'),
+    "The Healing Power of Friendship": AdvData(42095, 'Overworld'),
+    "Is It a Bird?": AdvData(42096, 'Overworld'),
+    "Is It a Balloon?": AdvData(42097, 'The Nether'),
+    "Is It a Plane?": AdvData(42098, 'The End'),
+    "Surge Protector": AdvData(42099, 'Overworld'),
+    "Light as a Rabbit": AdvData(42100, 'Overworld'),
+    "Glow and Behold!": AdvData(42101, 'Overworld'),
+    "Whatever Floats Your Goat!": AdvData(42102, 'Overworld'),
 
     "Blaze Spawner": AdvData(None, 'Nether Fortress'),
     "Ender Dragon": AdvData(None, 'The End')
@@ -126,6 +137,7 @@ exclusion_table = {
         "Uneasy Alliance",
         "Cover Me in Debris",
         "A Complete Catalogue",
+        "Surge Protector",
     },
     "insane": {
         "How Did We Get Here?",
@@ -137,6 +149,7 @@ exclusion_table = {
         "The End... Again...",
         "You Need a Mint",
         "Monsters Hunted",
+        "Is It a Plane?",
     }
 }
 
