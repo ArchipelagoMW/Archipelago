@@ -333,6 +333,7 @@ class JSONMessagePart(TypedDict):
     type: Optional[str]
     color: Optional[str]
     text: Optional[str]
+    player: Optional[int] # marks owning player id for location/item
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
@@ -340,6 +341,7 @@ Possible values for `type` include:
 * player_id
 * item_id
 * location_id
+* entrance_name
 
 `color` is used to denote a console color to display the message part with. This is limited to console colors due to backwards compatibility needs with games such as ALttP. Although background colors as well as foreground colors are listed, only one may be applied to a [JSONMessagePart](#JSONMessagePart) at a time.
 

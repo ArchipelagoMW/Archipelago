@@ -15,6 +15,8 @@ class JSONMessagePart(typing.TypedDict, total=False):
     color: str
     # mainly for items, optional
     found: bool
+    # owning player for location/item
+    player: int
 
 
 class ClientStatus(enum.IntEnum):
@@ -109,7 +111,6 @@ def _object_hook(o: typing.Any) -> typing.Any:
 
 
 decode = JSONDecoder(object_hook=_object_hook).decode
-
 
 
 class Endpoint:
@@ -241,6 +242,14 @@ def add_json_text(parts: list, text: typing.Any, **kwargs) -> None:
     parts.append({"text": str(text), **kwargs})
 
 
+def add_json_item(parts: list, item_id: int, player: int = 0, **kwargs) -> None:
+    parts.append({"text": str(item_id), "player": player, "type": JSONTypes.item_id, **kwargs})
+
+
+def add_json_location(parts: list, item_id: int, player: int = 0, **kwargs) -> None:
+    parts.append({"text": str(item_id), "player": player, "type": JSONTypes.location_id, **kwargs})
+
+
 class Hint(typing.NamedTuple):
     receiving_player: int
     finding_player: int
@@ -265,9 +274,9 @@ class Hint(typing.NamedTuple):
         add_json_text(parts, "[Hint]: ")
         add_json_text(parts, self.receiving_player, type="player_id")
         add_json_text(parts, "'s ")
-        add_json_text(parts, self.item, type="item_id", found=self.found)
+        add_json_item(parts, self.item, self.receiving_player, found=self.found)
         add_json_text(parts, " is at ")
-        add_json_text(parts, self.location, type="location_id")
+        add_json_location(parts, self.location, self.finding_player)
         add_json_text(parts, " in ")
         add_json_text(parts, self.finding_player, type="player_id")
         if self.entrance:
