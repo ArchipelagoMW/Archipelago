@@ -88,6 +88,7 @@ required_items = {
     "Infinity Book": 1,
     "3 Ender Pearls": 4,
     "Saddle": 1,
+    "Spyglass": 1,
 }
 
 junk_weights = {
