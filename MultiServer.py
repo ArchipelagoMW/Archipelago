@@ -14,9 +14,9 @@ import threading
 import random
 import pickle
 import itertools
+import time
 
 import ModuleUpdate
-import NetUtils
 
 ModuleUpdate.update()
 
@@ -26,6 +26,7 @@ import prompt_toolkit
 from prompt_toolkit.patch_stdout import patch_stdout
 from fuzzywuzzy import process as fuzzy_process
 
+import NetUtils
 from worlds.AutoWorld import AutoWorldRegister
 
 proxy_worlds = {name: world(None, 0) for name, world in AutoWorldRegister.world_types.items()}
@@ -506,7 +507,8 @@ async def on_client_connected(ctx: Context, client: Client):
         'datapackage_version': network_data_package["version"],
         'datapackage_versions': {game: game_data["version"] for game, game_data
                                  in network_data_package["games"].items()},
-        'seed_name': ctx.seed_name
+        'seed_name': ctx.seed_name,
+        'time': time.time(),
     }])
 
 

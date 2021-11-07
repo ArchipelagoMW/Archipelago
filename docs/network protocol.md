@@ -61,6 +61,7 @@ Sent to clients when they connect to an Archipelago server.
 | datapackage_version | int | Data version of the [data package](#Data-Package-Contents) the server will send. Used to update the client's (optional) local cache. |
 | datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. |
 | seed_name | str | uniquely identifying name of this generation |
+| time | float | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce. |
 
 #### forfeit
 Dictates what is allowed when it comes to a player forfeiting their run. A forfeit is an action which distributes the rest of the items in a player's run to those other players awaiting them.
