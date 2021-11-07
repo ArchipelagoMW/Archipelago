@@ -637,8 +637,6 @@ hint_dist_keys = {
 
 # builds out general hints based on location and whether an item is required or not
 def buildWorldGossipHints(world, checkedLocations=None):
-    # Seed the RNG
-    world.hint_rng = world.world.slot_seeds[world.player]
 
     # rebuild hint exclusion list
     hintExclusions(world, clear_cache=True)
