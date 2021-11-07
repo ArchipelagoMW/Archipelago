@@ -3,6 +3,7 @@ import itertools
 import re
 import zlib
 from collections import defaultdict
+from functools import partial
 
 from .LocationList import business_scrubs
 from .Hints import writeGossipStoneHints, buildAltarHints, \
@@ -1804,7 +1805,7 @@ def write_rom_item(rom, item_id, item):
 
 
 def get_override_table(world):
-    return list(filter(lambda val: val != None, map(get_override_entry, world.world.get_filled_locations(world.player))))
+    return list(filter(lambda val: val != None, map(partial(get_override_entry, world.player), world.world.get_filled_locations(world.player))))
 
 
 override_struct = struct.Struct('>xBBBHBB') # match override_t in get_items.c
@@ -1812,10 +1813,10 @@ def get_override_table_bytes(override_table):
     return b''.join(sorted(itertools.starmap(override_struct.pack, override_table)))
 
 
-def get_override_entry(location):
+def get_override_entry(player_id, location):
     scene = location.scene
     default = location.default
-    player_id = min(location.item.player, 255)
+    player_id = 0 if player_id == location.item.player else min(location.item.player, 255)
     if location.item.game != 'Ocarina of Time': 
         # This is an AP sendable. It's guaranteed to not be None. 
         looks_like_item_id = 0
