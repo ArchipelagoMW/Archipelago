@@ -102,6 +102,7 @@ class SoEWorld(World):
 
     evermizer_seed: int
     restrict_item_placement: bool = False  # placeholder to force certain item types to certain pools
+    connect_name: str
 
     def __init__(self, *args, **kwargs):
         self.connect_name_available_event = threading.Event()
@@ -226,6 +227,16 @@ class SoEWorld(World):
                 os.unlink(out_file[:-4]+'_SPOILER.log')
             except:
                 pass
+
+    def modify_multidata(self, multidata: dict):
+        # wait for self.connect_name to be available.
+        self.connect_name_available_event.wait()
+        # we skip in case of error, so that the original error in the output thread is the one that gets raised
+        if self.connect_name and self.connect_name != self.world.player_name[self.player]:
+            payload = multidata["connect_names"][self.world.player_name[self.player]]
+            multidata["connect_names"][self.connect_name] = payload
+            del (multidata["connect_names"][self.world.player_name[self.player]])
+
 
 class SoEItem(Item):
     game: str = "Secret of Evermore"
