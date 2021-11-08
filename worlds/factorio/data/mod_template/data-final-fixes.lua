@@ -26,11 +26,31 @@ template_tech.prerequisites = {}
 
 function prep_copy(new_copy, old_tech)
     old_tech.hidden = true
-    new_copy.unit = table.deepcopy(old_tech.unit)
     local ingredient_filter = allowed_ingredients[old_tech.name]
     if ingredient_filter ~= nil then
-        new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients, ingredient_filter)
-        new_copy.unit.ingredients = add_ingredients(new_copy.unit.ingredients, ingredient_filter)
+	    if mods["science-not-invited"] then
+			local weights = {
+				["automation-science-pack"] =   0, -- Red science
+				["logistic-science-pack"]   =   0, -- Green science
+				["military-science-pack"]   =   0, -- Black science
+				["chemical-science-pack"]   =   0, -- Blue science
+				["production-science-pack"] =   0, -- Purple science
+				["utility-science-pack"]    =   0, -- Yellow science
+				["space-science-pack"]      =   0  -- Space science
+			}
+			for key, value in pairs(ingredient_filter) do
+				weights[key] = value
+			end
+			SNI.setWeights(weights)
+			SNI.sendInvite(old_tech)
+			-- SCIENCE-not-invited could potentially make tech cost 9.223e+18.
+			old_tech.unit.count = math.min(10000, old_tech.unit.count)
+		end
+		new_copy.unit = table.deepcopy(old_tech.unit)
+		new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients, ingredient_filter)
+		new_copy.unit.ingredients = add_ingredients(new_copy.unit.ingredients, ingredient_filter)
+    else
+        new_copy.unit = table.deepcopy(old_tech.unit)
     end
 end
 
