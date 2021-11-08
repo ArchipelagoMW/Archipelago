@@ -213,6 +213,14 @@ Sent by the client to initiate a connection to an Archipelago game session.
 #### Authentication
 Many, if not all, other packets require a successfully authenticated client. This is described in more detail in [Archipelago Connection Handshake](#Archipelago-Connection-Handshake).
 
+### ConnectUpdate
+Update arguments from the Connect package, currently only updating tags is supported.
+
+#### Arguments
+| Name | Type | Notes |
+| ---- | ---- | ----- |
+| tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
+
 ### Sync
 Sent to server to request a [ReceivedItems](#ReceivedItems) packet to synchronize items.
 #### Arguments

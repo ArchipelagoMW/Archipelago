@@ -1292,7 +1292,12 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 return
 
             if "tags" in args:
+                old_tags = client.tags
                 client.tags = args["tags"]
+                if set(old_tags) != set(client.tags):
+                    ctx.notify_all(
+                        f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
+                        f"from {old_tags} to {client.tags}.")
 
         elif cmd == 'Sync':
             items = get_received_items(ctx, client.team, client.slot)
