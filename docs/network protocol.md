@@ -44,6 +44,7 @@ These packets are are sent from the multiworld server to the client. They are no
 * [PrintJSON](#PrintJSON)
 * [DataPackage](#DataPackage)
 * [Bounced](#Bounced)
+* [InvalidPacket](#InvalidPacket)
 
 ### RoomInfo
 Sent to clients when they connect to an Archipelago server.
