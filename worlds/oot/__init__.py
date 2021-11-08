@@ -514,7 +514,7 @@ class OOTWorld(World):
         all_locations = self.get_locations()
         reachable = self.world.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
-                       loc.internal and loc.event and loc.locked and loc not in reachable]
+                       (loc.internal or loc.type == 'Drop') and loc.event and loc.locked and loc not in reachable]
         for loc in unreachable:
             loc.parent_region.locations.remove(loc)
         # Exception: Sell Big Poe is an event which is only reachable if Bottle with Big Poe is in the item pool. 
@@ -822,6 +822,9 @@ class OOTWorld(World):
 
     def get_region(self, region):
         return self.world.get_region(region, self.player)
+
+    def get_entrance(self, entrance):
+        return self.world.get_entrance(entrance, self.player)
 
     def is_major_item(self, item: OOTItem):
         if item.type == 'Token':

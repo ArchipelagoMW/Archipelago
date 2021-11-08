@@ -6,7 +6,6 @@ from worlds.generic.Rules import set_rule
 from .Hints import get_hint_area, HintAreaNotFound
 
 
-# probably broken?
 def set_all_entrances_data(world, player):
     for type, forward_entry, *return_entry in entrance_shuffle_table:
         forward_entrance = world.get_entrance(forward_entry[0], player)
@@ -350,7 +349,7 @@ def shuffle_random_entrances(ootworld):
 
     # Gather locations to keep reachable for validation
     all_state = world.get_all_state(use_cache=True)
-    locations_to_ensure_reachable = {loc for loc in world.get_reachable_locations(all_state, player) if loc.type not in {'Drop', 'Event'}}
+    locations_to_ensure_reachable = {loc for loc in world.get_reachable_locations(all_state, player)}# if loc.type not in {'Drop', 'Event'}}
 
     # Set entrance data for all entrances
     set_all_entrances_data(world, player)
@@ -376,7 +375,7 @@ def shuffle_random_entrances(ootworld):
         entrance_pools['Dungeon'] = ootworld.get_shufflable_entrances(type='Dungeon', only_primary=True)
         if ootworld.open_forest == 'closed':
             entrance_pools['Dungeon'].remove(world.get_entrance('KF Outside Deku Tree -> Deku Tree Lobby', player))
-    if ootworld.shuffle_interior_entrances:
+    if ootworld.shuffle_interior_entrances != 'off':
         entrance_pools['Interior'] = ootworld.get_shufflable_entrances(type='Interior', only_primary=True)
         if ootworld.shuffle_special_interior_entrances:
             entrance_pools['Interior'] += ootworld.get_shufflable_entrances(type='SpecialInterior', only_primary=True)
@@ -399,7 +398,7 @@ def shuffle_random_entrances(ootworld):
             valid_target_types = ('WarpSong', 'OwlDrop', 'Overworld', 'Extra')
             one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, valid_target_types, exclude=['Prelude of Light Warp -> Temple of Time'])
             for target in one_way_target_entrance_pools[pool_type]:
-                target.set_rule(lambda state: state._oot_reach_as_age(target.parent_region, 'child', player))
+                set_rule(target, lambda state: state._oot_reach_as_age(target.parent_region, 'child', player))
         elif pool_type in {'Spawn', 'WarpSong'}: 
             valid_target_types = ('Spawn', 'WarpSong', 'OwlDrop', 'Overworld', 'Interior', 'SpecialInterior', 'Extra')
             one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, valid_target_types)
@@ -437,12 +436,29 @@ def shuffle_random_entrances(ootworld):
         if remaining_target.replaces in replaced_entrances:
             delete_target_entrance(remaining_target)
 
+    for pool_type, entrance_pool in one_way_entrance_pools.items():
+        shuffle_entrance_pool(ootworld, entrance_pool, one_way_target_entrance_pools[pool_type], locations_to_ensure_reachable, all_state, none_state, check_all=True, retry_count=5)
+        replaced_entrances = [entrance.replaces for entrance in entrance_pool]
+        for remaining_target in chain.from_iterable(one_way_target_entrance_pools.values()):
+            if remaining_target.replaces in replaced_entrances:
+                delete_target_entrance(remaining_target)
+        for unused_target in one_way_target_entrance_pools[pool_type]:
+            delete_target_entrance(unused_target)
+
     # Shuffle all entrance pools, in order
     for pool_type, entrance_pool in entrance_pools.items():
         shuffle_entrance_pool(ootworld, entrance_pool, target_entrance_pools[pool_type], locations_to_ensure_reachable, all_state, none_state)
 
     # Verification steps: 
-    # All entrances are properly connected to a region
+    for entrance in ootworld.get_shuffled_entrances():
+        if entrance.connected_region == None:
+            logging.getLogger('').error(f'{entrance} was shuffled but is not connected to any region')
+        if entrance.replaces == None:
+            logging.getLogger('').error(f'{entrance} was shuffled but does not replace any entrance')
+    if len(ootworld.get_region('Root Exits').exits) > 8:
+        for exit in ootworld.get_region('Root Exits').exits:
+            logging.getLogger('').error(f'Root Exit: {exit} -> {exit.connected_region}')
+        logging.getLogger('').error(f'Root has too many entrances left after shuffling entrances')
     # Game is beatable
     if not ootworld.world.can_beat_game(all_state):
         raise EntranceShuffleError('Cannot beat game')
@@ -540,14 +556,18 @@ def shuffle_entrances(ootworld, entrances, target_entrances, rollbacks, location
 
 # Check to ensure the world is valid. 
 # TODO: improve this function
-def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all_state, none_state):
+def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all_state_orig, none_state_orig):
 
     world = ootworld.world
     player = ootworld.player
 
+    all_state = all_state_orig.copy()
+    none_state = none_state_orig.copy()
+
     if ootworld.shuffle_interior_entrances or ootworld.shuffle_overworld_entrances or ootworld.spawn_positions:
         time_travel_state = none_state.copy()
         time_travel_state.collect(ootworld.create_item('Time Travel'), event=True)
+        time_travel_state._oot_update_age_reachable_regions(player)
 
     # For various reasons, we don't want the player to end up through certain entrances as the wrong age
     # This means we need to hard check that none of the relevant entrances are ever reachable as that age
