@@ -184,6 +184,7 @@ Sent to clients if the server caught a problem with a packet. This only occurs f
 | ---- | ---- | ----- |
 | type | string | "cmd" if the Packet isn't available/allowed, "arguments" if the problem is with the package data. |
 | text | string | Error text explaining the caught error. |
+| original_cmd | string | Echoes the cmd it failed on. May be null if the cmd was not found.
 ## (Client -> Server)
 These packets are sent purely from client to server. They are not accepted by clients.
 

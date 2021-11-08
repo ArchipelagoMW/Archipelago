@@ -144,8 +144,8 @@ class Context(CommonContext):
                                }])
 
     def on_deathlink(self, data: dict):
-        snes_buffered_write(self, WRAM_START + 0xF36D, bytes([0]))
-        snes_buffered_write(self, WRAM_START + 0x0373, bytes([8]))
+        snes_buffered_write(self, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
+        snes_buffered_write(self, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
         asyncio.create_task(snes_flush_writes(self))
         self.death_state = True
         super(Context, self).on_deathlink(data)

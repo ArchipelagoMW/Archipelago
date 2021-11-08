@@ -1203,19 +1203,20 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         cmd: str = args["cmd"]
     except:
         logging.exception(f"Could not get command from {args}")
-        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd", "original_cmd": None,
                                       "text": f"Could not get command from {args} at `cmd`"}])
         raise
 
     if type(cmd) is not str:
-        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd", "original_cmd": None,
                                       "text": f"Command should be str, got {type(cmd)}"}])
         return
 
     if cmd == 'Connect':
         if not args or 'password' not in args or type(args['password']) not in [str, type(None)] or \
                 'game' not in args:
-            await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': 'Connect'}])
+            await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': 'Connect',
+                                          "original_cmd": cmd}])
             return
 
         errors = set()
@@ -1285,7 +1286,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
     elif client.auth:
         if cmd == "ConnectUpdate":
             if not args:
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': cmd}])
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': cmd,
+                                              "original_cmd": cmd}])
                 return
 
             if "tags" in args:
@@ -1301,7 +1303,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'LocationChecks':
             if "Tracker" in client.tags:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
-                                              "text": "Trackers can't register new Location Checks"}])
+                                              "text": "Trackers can't register new Location Checks",
+                                              "original_cmd": cmd}])
             else:
                 register_location_checks(ctx, client.team, client.slot, args["locations"])
 
@@ -1310,7 +1313,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for location in args["locations"]:
                 if type(location) is not int or location not in lookup_any_location_id_to_name:
                     await ctx.send_msgs(client,
-                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts'}])
+                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
+                                          "original_cmd": cmd}])
                     return
                 target_item, target_player = ctx.locations[client.slot][location]
                 locs.append(NetworkItem(target_item, location, target_player))
@@ -1322,7 +1326,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
         elif cmd == 'Say':
             if "text" not in args or type(args["text"]) is not str or not args["text"].isprintable():
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'Say'}])
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'Say',
+                                              "original_cmd": cmd}])
                 return
 
             client.messageprocessor(args["text"])
