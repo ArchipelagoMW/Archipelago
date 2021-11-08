@@ -158,9 +158,10 @@ Sent to clients purely to display a message to the player. This packet differs f
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | data | list\[JSONMessagePart\] | See [JSONMessagePart](#JSONMessagePart) for more details on this type. |
-| type | str | May be present to indicate the nature of this message. Known types are Hint and ItemSend.
-| receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID.
-| item | NetworkItem | Is present if type is Hint or ItemSend and marks the source player id, location id and item id.
+| type | str | May be present to indicate the nature of this message. Known types are Hint and ItemSend. |
+| receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID. |
+| item | NetworkItem | Is present if type is Hint or ItemSend and marks the source player id, location id and item id. |
+| found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
 
 ### DataPackage
 Sent to clients to provide what is known as a 'data package' which contains information to enable a client to most easily communicate with the Archipelago server. Contents include things like location id to name mappings, among others; see [Data Package Contents](#Data-Package-Contents) for more info.
