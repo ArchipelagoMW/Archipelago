@@ -13,8 +13,6 @@ class JSONMessagePart(typing.TypedDict, total=False):
     # optional
     type: str
     color: str
-    # mainly for items, optional
-    found: bool
     # owning player for location/item
     player: int
 
@@ -274,7 +272,7 @@ class Hint(typing.NamedTuple):
         add_json_text(parts, "[Hint]: ")
         add_json_text(parts, self.receiving_player, type="player_id")
         add_json_text(parts, "'s ")
-        add_json_item(parts, self.item, self.receiving_player, found=self.found)
+        add_json_item(parts, self.item, self.receiving_player)
         add_json_text(parts, " is at ")
         add_json_location(parts, self.location, self.finding_player)
         add_json_text(parts, " in ")
@@ -291,7 +289,8 @@ class Hint(typing.NamedTuple):
 
         return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
                 "receiving": self.receiving_player,
-                "item": NetworkItem(self.item, self.location, self.finding_player)}
+                "item": NetworkItem(self.item, self.location, self.finding_player),
+                "found": self.found}
 
     @property
     def local(self):
