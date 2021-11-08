@@ -914,13 +914,13 @@ class RomPatcher:
     }
 
     controls = {
-        "Shot"       : [0xb331, 0x1722d],
-        "Jump"       : [0xb325, 0x17233],
-        "Dash"       : [0xb32b, 0x17239],
-        "ItemSelect" : [0xb33d, 0x17245],
-        "ItemCancel" : [0xb337, 0x1723f],
-        "AngleUp"    : [0xb343, 0x1724b],
-        "AngleDown"  : [0xb349, 0x17251]
+        "Shoot"       : [0xb331, 0x1722d],
+        "Jump"        : [0xb325, 0x17233],
+        "Dash"        : [0xb32b, 0x17239],
+        "Item Select" : [0xb33d, 0x17245],
+        "Item Cancel" : [0xb337, 0x1723f],
+        "Angle Up"    : [0xb343, 0x1724b],
+        "Angle Down"  : [0xb349, 0x17251]
     }
 
     # write custom contols to ROM.

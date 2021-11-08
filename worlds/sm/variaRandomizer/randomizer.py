@@ -6,7 +6,7 @@ import argparse, os.path, json, sys, shutil, random, copy, requests
 from rando.RandoSettings import RandoSettings, GraphSettings
 from rando.RandoExec import RandoExec
 from graph.graph_utils import vanillaTransitions, vanillaBossesTransitions, GraphUtils, getAccessPoint
-from utils.parameters import Knows, easy, medium, hard, harder, hardcore, mania, infinity, text2diff, diff2text, appDir
+from utils.parameters import Knows, Controller, easy, medium, hard, harder, hardcore, mania, infinity, text2diff, diff2text, appDir
 from rom.rom_patches import RomPatches
 from rom.rompatcher import RomPatcher
 from utils.utils import PresetLoader, loadRandoPreset, getDefaultMultiValues, getPresetDir
@@ -613,22 +613,11 @@ class VariaRandomizer:
                     superFun.append(fun)
             args.superFun = superFun
         logger.debug("superFun: {}".format(args.superFun))
-
-        self.ctrlDict = None
-        if args.controls:
-            ctrlList = args.controls.split(',')
-            if len(ctrlList) != 7:
-                raise ValueError("Invalid control list size")
-            ctrlKeys = ["Shot", "Jump", "Dash", "ItemSelect", "ItemCancel", "AngleUp", "AngleDown"]
-            self.ctrlDict = {}
-            i = 0
-            for k in ctrlKeys:
-                b = ctrlList[i]
-                if b in RomPatcher.buttons:
-                    self.ctrlDict[k] = b
-                    i += 1
-                else:
-                    raise ValueError("Invalid button name : " + str(b))
+  
+        ctrlButton = ["A", "B", "X", "Y", "L", "R", "Select"]
+        ctrl = Controller.ControllerDict[self.player]
+        self.ctrlDict = { getattr(ctrl, button) : button for button in ctrlButton }
+        args.moonWalk = ctrl.Moonwalk
 
         plandoSettings = None
         if args.plandoRando is not None:

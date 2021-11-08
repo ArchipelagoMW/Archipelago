@@ -88,11 +88,20 @@ class PresetLoader(object):
 
     def __init__(self):
         if 'Knows' not in self.params:
-            self.params['Knows'] = {}
+            if 'knows' in self.params:     
+                self.params['Knows'] = self.params['knows']
+            else:
+                self.params['Knows'] = {}
         if 'Settings' not in self.params:
-            self.params['Settings'] = {}
+            if 'settings' in self.params:     
+                self.params['Settings'] = self.params['settings']
+            else:
+                self.params['Settings'] = {}
         if 'Controller' not in self.params:
-            self.params['Controller'] = {}
+            if 'controller' in self.params:     
+                self.params['Controller'] = self.params['controller']
+            else:
+                self.params['Controller'] = {}
         self.params['score'] = self.computeScore()
 
     def load(self, player):
