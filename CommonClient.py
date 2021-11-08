@@ -22,7 +22,6 @@ gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
 log_folder = Utils.local_path("logs")
 os.makedirs(log_folder, exist_ok=True)
 
-
 class ClientCommandProcessor(CommandProcessor):
     def __init__(self, ctx: CommonContext):
         self.ctx = ctx
@@ -518,12 +517,18 @@ async def console_loop(ctx: CommonContext):
 
 
 def init_logging(name: str):
-    if gui_enabled:
-        logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
-                            filename=os.path.join(log_folder, f"{name}.txt"), filemode="w", force=True)
-    else:
-        logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
-        logging.getLogger().addHandler(logging.FileHandler(os.path.join(log_folder, f"{name}.txt"), "w"))
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+    file_handler = logging.FileHandler(
+        os.path.join(log_folder, f"{name}.txt"),
+        "w",
+        encoding="utf-8-sig")
+    file_handler.setFormatter(logging.Formatter("[%(name)s]: %(message)s"))
+    root_logger.addHandler(file_handler)
+    if sys.stdout:
+        root_logger.addHandler(
+            logging.StreamHandler(sys.stdout)
+        )
 
 
 if __name__ == '__main__':
