@@ -1645,7 +1645,6 @@ def patch_rom(world, rom, player, enemized):
     # remote items flag, does not currently work
     rom.write_byte(0x18637C, int(world.worlds[player].remote_items))
 
-    rom.write_byte(0x18008D, int(world.death_link[player]))
     # set rom name
     # 21 bytes
     from Main import __version__
@@ -1768,7 +1767,7 @@ def hud_format_text(text):
 
 def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, palettes_options,
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
-                       triforcehud: str = None):
+                       triforcehud: str = None, deathlink: bool = False):
     local_random = random if not world else world.slot_seeds[player]
     disable_music: bool = not music
     # enable instant item menu
@@ -1901,6 +1900,8 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
             blackout_uw_palettes(rom)
         elif palettes_options['dungeon'] == 'random':
             randomize_uw_palettes(rom, local_random)
+
+    rom.write_byte(0x18008D, int(deathlink))
 
     apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event,
                                  world.sprite_pool[player] if world else [])

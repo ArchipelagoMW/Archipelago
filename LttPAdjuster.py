@@ -15,7 +15,7 @@ from argparse import Namespace
 from concurrent.futures import as_completed, ThreadPoolExecutor
 from glob import glob
 from tkinter import Tk, Frame, Label, StringVar, Entry, filedialog, messagebox, Button, LEFT, X, TOP, LabelFrame, \
-    IntVar, Checkbutton, E, OptionMenu, Toplevel, BOTTOM, RIGHT, font as font, PhotoImage
+    IntVar, Checkbutton, E, W, OptionMenu, Toplevel, BOTTOM, RIGHT, font as font, PhotoImage
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
@@ -51,6 +51,7 @@ def main():
                              (default: %(default)s)
                              ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
+    parser.add_argument('--deathlink', help='Enable DeathLink system.', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
     parser.add_argument('--triforcehud', default='hide_goal', const='hide_goal', nargs='?',
                         choices=['normal', 'hide_goal', 'hide_required', 'hide_both'],
@@ -152,7 +153,8 @@ def adjust(args):
         world = getattr(args, "world")
 
     apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.menuspeed, args.music,
-                       args.sprite, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world)
+                       args.sprite, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world,
+                       deathlink=args.deathlink)
     path = output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc')
     rom.write_to_file(path)
 
@@ -205,6 +207,7 @@ def adjustGUI():
         guiargs.quickswap = bool(rom_vars.quickSwapVar.get())
         guiargs.music = bool(rom_vars.MusicVar.get())
         guiargs.reduceflashing = bool(rom_vars.disableFlashingVar.get())
+        guiargs.deathlink = bool(rom_vars.DeathLinkVar.get())
         guiargs.rom = romVar2.get()
         guiargs.baserom = romVar.get()
         guiargs.sprite = rom_vars.sprite
@@ -272,16 +275,17 @@ def update_sprites(task, on_finish=None):
         current_sprites = [os.path.basename(file) for file in glob(sprite_dir + '/*')]
         alttpr_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path))
                           for sprite in sprites_arr if sprite["author"] != "Nintendo"]
-        needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in alttpr_sprites if filename not in current_sprites]
+        needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in alttpr_sprites if
+                          filename not in current_sprites]
 
         alttpr_filenames = [filename for (_, filename) in alttpr_sprites]
         obsolete_sprites = [sprite for sprite in current_sprites if sprite not in alttpr_filenames]
     except Exception as e:
-        resultmessage = "Error Determining which sprites to update. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
+        resultmessage = "Error Determining which sprites to update. Sprites not updated.\n\n%s: %s" % (
+        type(e).__name__, e)
         successful = False
         task.queue_event(finished)
         return
-
 
     def dl(sprite_url, filename):
         target = os.path.join(sprite_dir, filename)
@@ -290,7 +294,6 @@ def update_sprites(task, on_finish=None):
 
     def rem(sprite):
         os.remove(os.path.join(sprite_dir, sprite))
-
 
     with ThreadPoolExecutor() as pool:
         dl_tasks = []
@@ -313,7 +316,7 @@ def update_sprites(task, on_finish=None):
             except Exception as e:
                 logging.exception(e)
                 resultmessage = "Error downloading sprite. Not all sprites updated.\n\n%s: %s" % (
-                type(e).__name__, e)
+                    type(e).__name__, e)
                 successful = False
 
         for rem_task in as_completed(rem_tasks):
@@ -324,7 +327,7 @@ def update_sprites(task, on_finish=None):
             except Exception as e:
                 logging.exception(e)
                 resultmessage = "Error removing obsolete sprite. Not all sprites updated.\n\n%s: %s" % (
-                type(e).__name__, e)
+                    type(e).__name__, e)
                 successful = False
 
     if successful:
@@ -362,7 +365,7 @@ class BackgroundTask(object):
                 event = self.queue.get_nowait()
                 event()
                 if self.running:
-                    #if self is no longer running self.window may no longer be valid
+                    # if self is no longer running self.window may no longer be valid
                     self.window.update_idletasks()
         except queue.Empty:
             pass
@@ -420,6 +423,7 @@ def get_rom_frame(parent=None):
             romVar.set(rom)
             romSelectButton['state'] = "disabled"
             romSelectButton["text"] = "ROM verified"
+
     romSelectButton = Button(romFrame, text='Select Rom', command=RomSelect)
 
     baseRomLabel.pack(side=LEFT)
@@ -444,17 +448,21 @@ def get_rom_options_frame(parent=None):
     MusicCheckbutton.grid(row=0, column=0, sticky=E)
 
     vars.disableFlashingVar = IntVar(value=1)
-    disableFlashingCheckbutton = Checkbutton(romOptionsFrame, text="Disable flashing (anti-epilepsy)", variable=vars.disableFlashingVar)
-    disableFlashingCheckbutton.grid(row=6, column=0, sticky=E)
+    disableFlashingCheckbutton = Checkbutton(romOptionsFrame, text="Disable flashing (anti-epilepsy)",
+                                             variable=vars.disableFlashingVar)
+    disableFlashingCheckbutton.grid(row=6, column=0, sticky=W)
+
+    vars.DeathLinkVar = IntVar(value=0)
+    DeathLinkCheckbutton = Checkbutton(romOptionsFrame, text="DeathLink (Team Deaths)", variable=vars.DeathLinkVar)
+    DeathLinkCheckbutton.grid(row=7, column=0, sticky=W)
 
     spriteDialogFrame = Frame(romOptionsFrame)
     spriteDialogFrame.grid(row=0, column=1)
     baseSpriteLabel = Label(spriteDialogFrame, text='Sprite:')
 
-
-
     vars.spriteNameVar = StringVar()
     vars.sprite = None
+
     def set_sprite(sprite_param):
         nonlocal vars
         if isinstance(sprite_param, str):
@@ -491,7 +499,8 @@ def get_rom_options_frame(parent=None):
     menuspeedLabel.pack(side=LEFT)
     vars.menuspeedVar = StringVar()
     vars.menuspeedVar.set('normal')
-    menuspeedOptionMenu = OptionMenu(menuspeedFrame, vars.menuspeedVar, 'normal', 'instant', 'double', 'triple', 'quadruple', 'half')
+    menuspeedOptionMenu = OptionMenu(menuspeedFrame, vars.menuspeedVar, 'normal', 'instant', 'double', 'triple',
+                                     'quadruple', 'half')
     menuspeedOptionMenu.pack(side=LEFT)
 
     heartcolorFrame = Frame(romOptionsFrame)
@@ -518,7 +527,8 @@ def get_rom_options_frame(parent=None):
     owPalettesLabel.pack(side=LEFT)
     vars.owPalettesVar = StringVar()
     vars.owPalettesVar.set('default')
-    owPalettesOptionMenu = OptionMenu(owPalettesFrame, vars.owPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    owPalettesOptionMenu = OptionMenu(owPalettesFrame, vars.owPalettesVar, 'default', 'good', 'blackout', 'grayscale',
+                                      'negative', 'classic', 'dizzy', 'sick', 'puke')
     owPalettesOptionMenu.pack(side=LEFT)
 
     uwPalettesFrame = Frame(romOptionsFrame)
@@ -527,7 +537,8 @@ def get_rom_options_frame(parent=None):
     uwPalettesLabel.pack(side=LEFT)
     vars.uwPalettesVar = StringVar()
     vars.uwPalettesVar.set('default')
-    uwPalettesOptionMenu = OptionMenu(uwPalettesFrame, vars.uwPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    uwPalettesOptionMenu = OptionMenu(uwPalettesFrame, vars.uwPalettesVar, 'default', 'good', 'blackout', 'grayscale',
+                                      'negative', 'classic', 'dizzy', 'sick', 'puke')
     uwPalettesOptionMenu.pack(side=LEFT)
 
     hudPalettesFrame = Frame(romOptionsFrame)
@@ -536,7 +547,8 @@ def get_rom_options_frame(parent=None):
     hudPalettesLabel.pack(side=LEFT)
     vars.hudPalettesVar = StringVar()
     vars.hudPalettesVar.set('default')
-    hudPalettesOptionMenu = OptionMenu(hudPalettesFrame, vars.hudPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    hudPalettesOptionMenu = OptionMenu(hudPalettesFrame, vars.hudPalettesVar, 'default', 'good', 'blackout',
+                                       'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     hudPalettesOptionMenu.pack(side=LEFT)
 
     swordPalettesFrame = Frame(romOptionsFrame)
@@ -545,7 +557,8 @@ def get_rom_options_frame(parent=None):
     swordPalettesLabel.pack(side=LEFT)
     vars.swordPalettesVar = StringVar()
     vars.swordPalettesVar.set('default')
-    swordPalettesOptionMenu = OptionMenu(swordPalettesFrame, vars.swordPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    swordPalettesOptionMenu = OptionMenu(swordPalettesFrame, vars.swordPalettesVar, 'default', 'good', 'blackout',
+                                         'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     swordPalettesOptionMenu.pack(side=LEFT)
 
     shieldPalettesFrame = Frame(romOptionsFrame)
@@ -554,7 +567,8 @@ def get_rom_options_frame(parent=None):
     shieldPalettesLabel.pack(side=LEFT)
     vars.shieldPalettesVar = StringVar()
     vars.shieldPalettesVar.set('default')
-    shieldPalettesOptionMenu = OptionMenu(shieldPalettesFrame, vars.shieldPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    shieldPalettesOptionMenu = OptionMenu(shieldPalettesFrame, vars.shieldPalettesVar, 'default', 'good', 'blackout',
+                                          'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     shieldPalettesOptionMenu.pack(side=LEFT)
 
     spritePoolFrame = Frame(romOptionsFrame)
@@ -563,6 +577,7 @@ def get_rom_options_frame(parent=None):
 
     vars.spritePoolCountVar = StringVar()
     vars.sprite_pool = []
+
     def set_sprite_pool(sprite_param):
         nonlocal vars
         operation = "add"
@@ -632,8 +647,10 @@ class SpriteSelector():
         title_link.pack(side=LEFT)
         title_link.bind("<Button-1>", open_custom_sprite_dir)
 
-        self.icon_section(alttpr_frametitle, self.alttpr_sprite_dir, 'ALTTPR sprites not found. Click "Update alttpr sprites" to download them.')
-        self.icon_section(custom_frametitle, self.custom_sprite_dir, 'Put sprites in the custom sprites folder (see open link above) to have them appear here.')
+        self.icon_section(alttpr_frametitle, self.alttpr_sprite_dir,
+                          'ALTTPR sprites not found. Click "Update alttpr sprites" to download them.')
+        self.icon_section(custom_frametitle, self.custom_sprite_dir,
+                          'Put sprites in the custom sprites folder (see open link above) to have them appear here.')
         if not randomOnEvent:
             self.sprite_pool_section(spritePool)
 
@@ -683,7 +700,8 @@ class SpriteSelector():
             button = Checkbutton(frame, text="Bonk", command=self.update_random_button, variable=self.randomOnBonkVar)
             button.pack(side=LEFT, padx=(0, 5))
 
-            button = Checkbutton(frame, text="Random", command=self.update_random_button, variable=self.randomOnRandomVar)
+            button = Checkbutton(frame, text="Random", command=self.update_random_button,
+                                 variable=self.randomOnRandomVar)
             button.pack(side=LEFT, padx=(0, 5))
 
         if adjuster:
@@ -805,7 +823,6 @@ class SpriteSelector():
 
         BackgroundTaskProgress(self.parent, update_sprites, "Updating Sprites", on_finish)
 
-
     def browse_for_sprite(self):
         sprite = filedialog.askopenfilename(
             filetypes=[("All Sprite Sources", (".zspr", ".spr", ".sfc", ".smc")),
@@ -818,7 +835,6 @@ class SpriteSelector():
         except Exception:
             self.callback(None)
         self.window.destroy()
-
 
     def use_default_sprite(self):
         self.callback(None)
@@ -923,7 +939,8 @@ def get_image_for_sprite(sprite, gif_only: bool = False):
         gif_lsd = bytearray(7)
         gif_lsd[0] = width
         gif_lsd[2] = height
-        gif_lsd[4] = 0xF4  # 32 color palette follows.  transparant + 15 for sprite + 1 for shadow=17 which rounds up to 32 as nearest power of 2
+        gif_lsd[
+            4] = 0xF4  # 32 color palette follows.  transparant + 15 for sprite + 1 for shadow=17 which rounds up to 32 as nearest power of 2
         gif_lsd[5] = 0  # background color is zero
         gif_lsd[6] = 0  # aspect raio not specified
         gif_gct = bytearray(3 * 32)
@@ -943,7 +960,8 @@ def get_image_for_sprite(sprite, gif_only: bool = False):
         gif_id[7] = height
         gif_id[9] = 0  # no local color table
 
-        gif_img_minimum_code_size = bytes([7])  # we choose 7 bits, so that each pixel is represented by a byte, for conviennce.
+        gif_img_minimum_code_size = bytes(
+            [7])  # we choose 7 bits, so that each pixel is represented by a byte, for conviennce.
 
         clear = 0x80
         stop = 0x81
@@ -1099,6 +1117,7 @@ class ToolTips(object):
         if cls.after_id:
             widget.after_cancel(cls.after_id)
             cls.after_id = None
+
 
 if __name__ == '__main__':
     main()
