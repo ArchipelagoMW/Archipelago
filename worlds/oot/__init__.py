@@ -631,7 +631,7 @@ class OOTWorld(World):
                 self.warp_songs or self.spawn_positions)
             song_order = {
                 'Zeldas Lullaby': 1,
-                'Eponas Song': 1
+                'Eponas Song': 1,
                 'Sarias Song': 3 if important_warps else 0,
                 'Suns Song': 0,
                 'Song of Time': 0,
