@@ -5,6 +5,7 @@ class StartItemsRemovesFromPool(Toggle):
     displayname = "StartItems Removes From Item Pool"
 
 class Preset(Choice):
+    """choose one of the preset or specify "varia_custom" to use varia_custom_preset option or specify "custom" to use custom_preset option"""
     displayname = "Preset"
     option_newbie = 0
     option_casual = 1
@@ -165,10 +166,20 @@ class RandomMusic(Toggle):
     displayname = "Random Music"
 
 class CustomPreset(OptionDict):
+    """
+    see https://randommetroidsolver.pythonanywhere.com/presets for detailed info on each preset settings
+    knows: each skill (know) has a pair [can use, perceived difficulty using one of 1, 5, 10, 25, 50 or 100 each one matching a max_difficulty]
+    settings: hard rooms, hellruns and bosses settings
+    controller: predefined controller mapping and moon walk setting
+    """
     displayname = "Custom Preset"
-    default = { "knows": {}, "settings": {}, "controller": {} }
+    default = {  "knows": {},
+                 "settings": {},
+                 "controller": {}
+              }
 
 class VariaCustomPreset(OptionList):
+    """use an entry from the preset list on https://randommetroidsolver.pythonanywhere.com/presets"""
     displayname = "Varia Custom Preset"  
     default = {}
 
