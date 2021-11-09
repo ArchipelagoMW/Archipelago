@@ -47,7 +47,7 @@ class OOTLogic(LogicMixin):
         name_map = {
             TimeOfDay.DAY: self.day_reachable_regions[player],
             TimeOfDay.DAMPE: self.dampe_reachable_regions[player],
-            TimeOfDay.ALL: self.day_reachable_regions[player].union(self.dampe_reachable_regions[player])
+            TimeOfDay.ALL: self.day_reachable_regions[player].intersection(self.dampe_reachable_regions[player])
         }
         if regionname in name_map[player]:
             return True

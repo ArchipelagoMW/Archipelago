@@ -4,6 +4,7 @@ import logging
 from worlds.generic.Rules import set_rule
 
 from .Hints import get_hint_area, HintAreaNotFound
+from .Regions import TimeOfDay
 
 
 def set_all_entrances_data(world, player):
@@ -502,16 +503,18 @@ def shuffle_one_way_priority_entrances(ootworld, one_way_priorities, one_way_ent
 
 def place_one_way_priority_entrance(ootworld, priority_name, allowed_regions, allowed_types, rollbacks, locations_to_ensure_reachable,
     all_state, none_state, one_way_entrance_pools, one_way_target_entrance_pools):
+
     avail_pool = list(chain.from_iterable(one_way_entrance_pools[t] for t in allowed_types if t in one_way_entrance_pools))
     ootworld.world.random.shuffle(avail_pool)
+
     for entrance in avail_pool:
         if entrance.replaces:
             continue
-        if entrance.parent_region.name == 'Adult Spawn' and (priority_name != 'Nocturne' or entrance.world.hints == 'mask'):
+        if entrance.parent_region.name == 'Adult Spawn' and (priority_name != 'Nocturne' or ootworld.hints == 'mask'):
             continue
-        if not entrance.world.shuffle_dungeon_entrances and priority_name == 'Nocturne' and \
-            entrance.type != 'WarpSong' and entrance.parent_region.name != 'Adult Spawn':
-            continue
+        if not ootworld.shuffle_dungeon_entrances and priority_name == 'Nocturne':
+            if entrance.type != 'WarpSong' and entrance.parent_region.name != 'Adult Spawn':
+                continue
         for target in one_way_target_entrance_pools[entrance.type]:
             if target.connected_region and target.connected_region.name in allowed_regions:
                 if replace_entrance(ootworld, entrance, target, rollbacks, locations_to_ensure_reachable, all_state, none_state):
@@ -521,13 +524,19 @@ def place_one_way_priority_entrance(ootworld, priority_name, allowed_regions, al
 
 
 def shuffle_entrance_pool(ootworld, entrance_pool, target_entrances, locations_to_ensure_reachable, all_state, none_state, check_all=False, retry_count=20):
-    # Split entrances by requirements?
+    
+    restrictive_entrances, soft_entrances = split_entrances_by_requirements(ootworld, entrance_pool, target_entrances)
 
     while retry_count:
         retry_count -= 1
         rollbacks = []
         try:
-            shuffle_entrances(ootworld, entrance_pool, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state)
+            shuffle_entrances(ootworld, restrictive_entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state)
+            if check_all:
+                shuffle_entrances(ootworld, soft_entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state)
+            else:
+                shuffle_entrances(ootworld, soft_entrances, target_entrances, rollbacks, set(), all_state, none_state)
+
             validate_world(ootworld, None, locations_to_ensure_reachable, all_state, none_state)
             for entrance, target in rollbacks: 
                 confirm_replacement(entrance, target)
@@ -552,6 +561,45 @@ def shuffle_entrances(ootworld, entrances, target_entrances, rollbacks, location
                 break
         if entrance.connected_region == None:
             raise EntranceShuffleError('No more valid entrances')
+
+
+def split_entrances_by_requirements(ootworld, entrances_to_split, assumed_entrances):
+    world = ootworld.world
+    player = ootworld.player
+
+    # Disconnect all root assumed entrances and save original connections
+    original_connected_regions = {}
+    entrances_to_disconnect = set(assumed_entrances).union(entrance.reverse for entrance in assumed_entrances if entrance.reverse)
+    for entrance in entrances_to_disconnect:
+        if entrance.connected_region:
+            original_connected_regions[entrance] = entrance.disconnect()
+
+    all_state = world.get_all_state(use_cache=False)
+
+    restrictive_entrances = []
+    soft_entrances = []
+
+    for entrance in entrances_to_split:
+        all_state.age[player] = 'child'
+        if not all_state.can_reach(entrance, 'Entrance', player):
+            restrictive_entrances.append(entrance)
+            continue
+        all_state.age[player] = 'adult'
+        if not all_state.can_reach(entrance, 'Entrance', player):
+            restrictive_entrances.append(entrance)
+            continue
+        all_state.age[player] = None
+        if not all_state._oot_reach_at_time(entrance.parent_region.name, TimeOfDay.ALL, [], player):
+            restrictive_entrances.append(entrance)
+            continue
+        soft_entrances.append(entrance)
+
+    # Reconnect assumed entrances
+    for entrance in entrances_to_disconnect:
+        if entrance in original_connected_regions:
+            entrance.connect(original_connected_regions[entrance])
+
+    return restrictive_entrances, soft_entrances
 
 
 # Check to ensure the world is valid. 
