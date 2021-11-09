@@ -450,7 +450,8 @@ def shuffle_random_entrances(ootworld):
     for pool_type, entrance_pool in entrance_pools.items():
         shuffle_entrance_pool(ootworld, entrance_pool, target_entrance_pools[pool_type], locations_to_ensure_reachable, all_state, none_state)
 
-    # Verification steps: 
+    # Multiple checks after shuffling to ensure everything is OK
+    # Check that all entrances hook up correctly
     for entrance in ootworld.get_shuffled_entrances():
         if entrance.connected_region == None:
             logging.getLogger('').error(f'{entrance} was shuffled but is not connected to any region')
@@ -461,7 +462,8 @@ def shuffle_random_entrances(ootworld):
             logging.getLogger('').error(f'Root Exit: {exit} -> {exit.connected_region}')
         logging.getLogger('').error(f'Root has too many entrances left after shuffling entrances')
     # Game is beatable
-    if not ootworld.world.can_beat_game(all_state):
+    new_all_state = world.get_all_state(use_cache=False)
+    if not world.has_beaten_game(new_all_state, player):
         raise EntranceShuffleError('Cannot beat game')
     # Validate world
     validate_world(ootworld, None, locations_to_ensure_reachable, all_state, none_state)
