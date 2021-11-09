@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import Dict, NamedTuple, List, Optional
 
-from BaseClasses import Region, RegionType, MultiWorld, Location
+from BaseClasses import Region, RegionType, Location
 
 EventId: Optional[int] = None
 CHAOS_TERMINATED_EVENT = 'Terminated Chaos'
