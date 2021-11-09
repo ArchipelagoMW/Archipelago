@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from typing import Dict, Set, NamedTuple, List
 
 from BaseClasses import Item
@@ -33,7 +34,9 @@ class FF1Items:
     _item_table_lookup: Dict[str, ItemData] = {}
 
     def _populate_item_table_from_data(self):
-        with open('worlds/ff1/data/items.json') as file:
+        base_path = Path(__file__).parent
+        file_path = (base_path / "data/items.json").resolve()
+        with open(file_path) as file:
             items = json.load(file)
             # Hardcode progression and categories for now
             self._item_table = [ItemData(name, code, "FF1Item", name in FF1_PROGRESSION_LIST)

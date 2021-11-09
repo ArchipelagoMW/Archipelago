@@ -49,9 +49,11 @@ class FF1World(World):
 
     def generate_basic(self):
         items = get_options(self.world, 'items')
-        progression_item = self.world.random.choice([name for name in FF1_STARTER_ITEMS if name in items.keys()])
-        self._place_first_item(progression_item)
-        items = [self.create_item(name) for name in items.keys() if name != progression_item]
+        progression_item = None
+        if items:
+            progression_item = self.world.random.choice([name for name in FF1_STARTER_ITEMS if name in items.keys()])
+            self._place_first_item(progression_item)
+        items = [self.create_item(name) for name in items.keys() if not progression_item or name != progression_item]
 
         self.world.itempool += items
 
@@ -59,8 +61,10 @@ class FF1World(World):
         if progression_item:
             rules = get_options(self.world, 'rules')
             starter_locations = [name for name, rules in rules.items() if rules and len(rules[0]) == 0]
-            initial_location = self.world.random.choice(starter_locations)
-            self.world.get_location(initial_location, self.player).place_locked_item(self.create_item(progression_item))
+            if starter_locations:
+                initial_location = self.world.random.choice(starter_locations)
+                self.world.get_location(initial_location, self.player).place_locked_item(
+                    self.create_item(progression_item))
 
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}

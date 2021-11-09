@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from typing import Dict, NamedTuple, List, Optional
 
 from BaseClasses import Region, RegionType, MultiWorld, Location
@@ -17,7 +18,9 @@ class FF1Locations:
     _location_table_lookup: Dict[str, LocationData] = {}
 
     def _populate_item_table_from_data(self):
-        with open('worlds/ff1/data/locations.json') as file:
+        base_path = Path(__file__).parent
+        file_path = (base_path / "data/locations.json").resolve()
+        with open(file_path) as file:
             locations = json.load(file)
             # Hardcode progression and categories for now
             self._location_table = [LocationData(name, code) for name, code in locations.items()]
