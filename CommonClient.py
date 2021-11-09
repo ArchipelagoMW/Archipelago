@@ -17,7 +17,8 @@ from worlds import network_data_package, AutoWorldRegister
 
 logger = logging.getLogger("Client")
 
-gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
+# without terminal we have to use gui mode
+gui_enabled = not sys.stdout or "--nogui" not in sys.argv
 
 log_folder = Utils.local_path("logs")
 os.makedirs(log_folder, exist_ok=True)
@@ -57,7 +58,7 @@ class ClientCommandProcessor(CommandProcessor):
         """List all missing location checks, from your local game state"""
         if not self.ctx.game:
             self.output("No game set, cannot determine missing checks.")
-            return
+            return False
         count = 0
         checked_count = 0
         for location, location_id in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id.items():
@@ -531,10 +532,19 @@ def init_logging(name: str):
         )
 
 
+def get_base_parser(description=None):
+    import argparse
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
+    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
+    if sys.stdout:  # If terminal output exists, offer gui-less mode
+        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
+    return parser
+
+
 if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
     init_logging("TextClient")
-
 
     class TextContext(CommonContext):
         tags = {"AP", "IgnoreGame"}
@@ -586,15 +596,9 @@ if __name__ == '__main__':
         if input_task:
             input_task.cancel()
 
-
-    import argparse
     import colorama
 
-    parser = argparse.ArgumentParser(description="Gameless Archipelago Client, for text interfaction.")
-    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
-    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
-    if not Utils.is_frozen():  # Frozen state has no cmd window in the first place
-        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
+    parser = get_base_parser(description="Gameless Archipelago Client, for text interfaction.")
 
     args, rest = parser.parse_known_args()
     colorama.init()
