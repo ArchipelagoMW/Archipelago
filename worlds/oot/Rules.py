@@ -49,7 +49,7 @@ class OOTLogic(LogicMixin):
             TimeOfDay.DAMPE: self.dampe_reachable_regions[player],
             TimeOfDay.ALL: self.day_reachable_regions[player].intersection(self.dampe_reachable_regions[player])
         }
-        if regionname in name_map[player]:
+        if regionname in name_map[tod]:
             return True
         region = self.world.get_region(regionname, player)
         if region.provides_time == TimeOfDay.ALL:
