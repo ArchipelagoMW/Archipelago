@@ -350,7 +350,7 @@ def shuffle_random_entrances(ootworld):
 
     # Gather locations to keep reachable for validation
     all_state = world.get_all_state(use_cache=True)
-    locations_to_ensure_reachable = {loc for loc in world.get_reachable_locations(all_state, player) if loc.type not in {'Drop', 'Event'}}
+    locations_to_ensure_reachable = {loc for loc in world.get_reachable_locations(all_state, player) if not (loc.type == 'Drop' or (loc.type == 'Event' and 'Subrule' in loc.name))}
 
     # Set entrance data for all entrances
     set_all_entrances_data(world, player)
