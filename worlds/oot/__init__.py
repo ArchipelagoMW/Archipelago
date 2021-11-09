@@ -631,13 +631,17 @@ class OOTWorld(World):
                 self.warp_songs or self.spawn_positions)
             song_order = {
                 'Zeldas Lullaby': 1,
+                'Eponas Song': 1
+                'Sarias Song': 3 if important_warps else 0,
+                'Suns Song': 0,
+                'Song of Time': 0,
+                'Song of Storms': 3,
                 'Minuet of Forest': 2 if important_warps else 0,
                 'Bolero of Fire': 2 if important_warps else 0,
                 'Serenade of Water': 2 if important_warps else 0,
                 'Requiem of Spirit': 2,
                 'Nocturne of Shadow': 2,
                 'Prelude of Light': 2 if important_warps else 0,
-                'Song of Storms': 3
             }
             songs.sort(key=lambda song: song_order.get(song.name, 0))
 
@@ -651,7 +655,7 @@ class OOTWorld(World):
                 except FillError as e:
                     tries -= 1
                     if tries == 0:
-                        raise e
+                        raise Exception(f"Failed placing songs for player {self.player}. Error cause: {e}")
                     logger.debug(f"Failed placing songs for player {self.player}. Retries left: {tries}")
                     # undo what was done
                     for song in songs:
