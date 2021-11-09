@@ -6,7 +6,7 @@ def get_pyramid_keys_unlock(world: MultiWorld, player: int) -> str:
     present_teleportation_gates: Tuple[str, ...] = (
         "GateKittyBoss",
         "GateLeftLibrary",
-        "GateMilitaryGate",
+        "GateMilitairyGate",
         "GateSealedCaves",
         "GateSealedSirensCave",
         "GateLakeDesolation"
