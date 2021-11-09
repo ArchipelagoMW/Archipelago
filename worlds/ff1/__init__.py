@@ -1,6 +1,6 @@
 from typing import Dict
 from BaseClasses import Item, Location, MultiWorld
-from .Items import ItemData, FF1Items, FF1_STARTER_ITEMS, FF1_PROGRESSION_LIST
+from .Items import ItemData, FF1Items, FF1_STARTER_ITEMS, FF1_PROGRESSION_LIST, FF1_BRIDGE
 from .Locations import EventId, FF1Locations, generate_rule, CHAOS_TERMINATED_EVENT
 from .Options import ff1_options
 from ..AutoWorld import World
@@ -23,6 +23,11 @@ class FF1World(World):
     item_name_groups = ff1_items.get_item_names_per_category()
     item_name_to_id = ff1_items.get_item_name_to_code_dict()
     location_name_to_id = ff1_locations.get_location_name_to_address_dict()
+
+    def __init__(self, world: MultiWorld, player: int):
+        super().__init__(world, player)
+        self.locked_items = []
+        self.locked_locations = []
 
     def generate_early(self):
         return
@@ -49,22 +54,28 @@ class FF1World(World):
 
     def generate_basic(self):
         items = get_options(self.world, 'items')
-        progression_item = None
+        if FF1_BRIDGE in items.keys():
+            self._place_locked_item_in_sphere1(FF1_BRIDGE)
         if items:
-            progression_item = self.world.random.choice([name for name in FF1_STARTER_ITEMS if name in items.keys()])
-            self._place_first_item(progression_item)
-        items = [self.create_item(name) for name in items.keys() if not progression_item or name != progression_item]
+            possible_early_items = [name for name in FF1_STARTER_ITEMS if name in items.keys()]
+            if possible_early_items:
+                progression_item = self.world.random.choice(possible_early_items)
+                self._place_locked_item_in_sphere1(progression_item)
+        items = [self.create_item(name) for name in items.keys() if name not in self.locked_items]
 
         self.world.itempool += items
 
-    def _place_first_item(self, progression_item: str):
+    def _place_locked_item_in_sphere1(self, progression_item: str):
         if progression_item:
             rules = get_options(self.world, 'rules')
-            starter_locations = [name for name, rules in rules.items() if rules and len(rules[0]) == 0]
-            if starter_locations:
-                initial_location = self.world.random.choice(starter_locations)
-                self.world.get_location(initial_location, self.player).place_locked_item(
-                    self.create_item(progression_item))
+            sphere_0_locations = [name for name, rules in rules.items()
+                                  if rules and len(rules[0]) == 0 and name not in self.locked_locations]
+            if sphere_0_locations:
+                initial_location = self.world.random.choice(sphere_0_locations)
+                locked_location = self.world.get_location(initial_location, self.player)
+                locked_location.place_locked_item(self.create_item(progression_item))
+                self.locked_items.append(progression_item)
+                self.locked_locations.append(locked_location.name)
 
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}

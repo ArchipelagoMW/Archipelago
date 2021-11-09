@@ -12,13 +12,11 @@ class ItemData(NamedTuple):
     progression: bool
 
 
+FF1_BRIDGE = 'Bridge'
+
+
 FF1_STARTER_ITEMS = [
-    "Ship",
-    "Ship",
-    "Bridge",
-    "Bridge",
-    "Canoe",
-    "Key"
+    "Ship"
 ]
 
 FF1_PROGRESSION_LIST = [
