@@ -11,6 +11,23 @@ class ItemData(NamedTuple):
     progression: bool
 
 
+FF1_STARTER_ITEMS = [
+    "Ship",
+    "Ship",
+    "Bridge",
+    "Bridge",
+    "Canoe",
+    "Key"
+]
+
+FF1_PROGRESSION_LIST = [
+    "Rod", "Cube", "Lute", "Key", "Chime", "Oxyale",
+    "Ship", "Canoe", "Floater", "Canal",
+    "Crown", "Crystal", "Herb", "Tnt", "Adamant", "Slab", "Ruby", "Bottle", "Shard",
+    "EarthOrb", "FireOrb", "WaterOrb", "AirOrb"
+]
+
+
 class FF1Items:
     _item_table: List[ItemData] = []
     _item_table_lookup: Dict[str, ItemData] = {}
@@ -19,7 +36,8 @@ class FF1Items:
         with open('worlds/ff1/data/items.json') as file:
             items = json.load(file)
             # Hardcode progression and categories for now
-            self._item_table = [ItemData(name, code, "FF1Item", True) for name, code in items.items()]
+            self._item_table = [ItemData(name, code, "FF1Item", name in FF1_PROGRESSION_LIST)
+                                for name, code in items.items()]
             self._item_table_lookup = {item.name: item for item in self._item_table}
 
     def _get_item_table(self) -> List[ItemData]:

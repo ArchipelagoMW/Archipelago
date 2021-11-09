@@ -4,6 +4,7 @@ from typing import Dict, NamedTuple, List, Optional
 from BaseClasses import Region, RegionType, MultiWorld, Location
 
 EventId: Optional[int] = None
+CHAOS_TERMINATED_EVENT = 'Terminated Chaos'
 
 
 class LocationData(NamedTuple):
@@ -33,7 +34,9 @@ class FF1Locations:
         return self._location_table_lookup
 
     def get_location_name_to_address_dict(self) -> Dict[str, int]:
-        return {name: location.address for name, location in self._get_location_table_lookup().items()}
+        data = {name: location.address for name, location in self._get_location_table_lookup().items()}
+        data[CHAOS_TERMINATED_EVENT] = EventId
+        return data
 
     @staticmethod
     def create_menu_region(player: int, locations: Dict[str, int],
