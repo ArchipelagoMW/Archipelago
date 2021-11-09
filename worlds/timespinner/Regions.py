@@ -19,7 +19,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'Varndagroth tower right (lower)'),
         create_region(world, player, locations_per_region, location_cache, 'Varndagroth tower right (elevator)'),
         create_region(world, player, locations_per_region, location_cache, 'Sealed Caves (Sirens)'),
-        create_region(world, player, locations_per_region, location_cache, 'Militairy Fortress'),
+        create_region(world, player, locations_per_region, location_cache, 'Military Fortress'),
         create_region(world, player, locations_per_region, location_cache, 'The lab'),
         create_region(world, player, locations_per_region, location_cache, 'The lab (power off)'),
         create_region(world, player, locations_per_region, location_cache, 'The lab (upper)'),
@@ -75,14 +75,14 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Varndagroth tower right (lower)', 'Varndagroth tower left', lambda state: state._timespinner_has_keycard_B(world, player))
     connect(world, player, names, 'Varndagroth tower right (lower)', 'Varndagroth tower right (elevator)', lambda state: state.has('Elevator Keycard', player))
     connect(world, player, names, 'Varndagroth tower right (lower)', 'Sealed Caves (Sirens)', lambda state: state._timespinner_has_keycard_B(world, player) and state.has('Elevator Keycard', player))
-    connect(world, player, names, 'Varndagroth tower right (lower)', 'Militairy Fortress', lambda state: state._timespinner_can_kill_all_3_bosses(world, player))
+    connect(world, player, names, 'Varndagroth tower right (lower)', 'Military Fortress', lambda state: state._timespinner_can_kill_all_3_bosses(world, player))
     connect(world, player, names, 'Varndagroth tower right (lower)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Sealed Caves (Sirens)', 'Varndagroth tower left', lambda state: state.has('Elevator Keycard', player))
     connect(world, player, names, 'Sealed Caves (Sirens)', 'Varndagroth tower right (lower)', lambda state: state.has('Elevator Keycard', player))
     connect(world, player, names, 'Sealed Caves (Sirens)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
-    connect(world, player, names, 'Militairy Fortress', 'Varndagroth tower right (lower)', lambda state: state._timespinner_can_kill_all_3_bosses(world, player))
-    connect(world, player, names, 'Militairy Fortress', 'The lab', lambda state: state._timespinner_has_keycard_B(world, player) and state._timespinner_has_doublejump(world, player))
-    connect(world, player, names, 'The lab', 'Militairy Fortress')
+    connect(world, player, names, 'Military Fortress', 'Varndagroth tower right (lower)', lambda state: state._timespinner_can_kill_all_3_bosses(world, player))
+    connect(world, player, names, 'Military Fortress', 'The lab', lambda state: state._timespinner_has_keycard_B(world, player) and state._timespinner_has_doublejump(world, player))
+    connect(world, player, names, 'The lab', 'Military Fortress')
     connect(world, player, names, 'The lab', 'The lab (power off)', lambda state: state._timespinner_has_doublejump_of_npc(world, player))
     connect(world, player, names, 'The lab (power off)', 'The lab')
     connect(world, player, names, 'The lab (power off)', 'The lab (upper)', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
@@ -138,7 +138,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Space time continuum', 'Lake desolation', lambda state: pyramid_keys_unlock == "GateLakeDesolation")
     connect(world, player, names, 'Space time continuum', 'Lower lake desolation', lambda state: pyramid_keys_unlock == "GateKittyBoss")
     connect(world, player, names, 'Space time continuum', 'Library', lambda state: pyramid_keys_unlock == "GateLeftLibrary")
-    connect(world, player, names, 'Space time continuum', 'Varndagroth tower right (lower)', lambda state: pyramid_keys_unlock == "GateMilitairyGate")
+    connect(world, player, names, 'Space time continuum', 'Varndagroth tower right (lower)', lambda state: pyramid_keys_unlock == "GateMilitaryGate")
     connect(world, player, names, 'Space time continuum', 'Skeleton Shaft', lambda state: pyramid_keys_unlock == "GateSealedCaves")
     connect(world, player, names, 'Space time continuum', 'Sealed Caves (Sirens)', lambda state: pyramid_keys_unlock == "GateSealedSirensCave")
     connect(world, player, names, 'Space time continuum', 'Left Side forest Caves', lambda state: pyramid_keys_unlock == "GateLakeSirineRight")
