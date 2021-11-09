@@ -485,6 +485,9 @@ def replace_entrance(ootworld, entrance, target, rollbacks, locations_to_ensure_
 
 def shuffle_one_way_priority_entrances(ootworld, one_way_priorities, one_way_entrance_pools, one_way_target_entrance_pools,
     locations_to_ensure_reachable, all_state, none_state, retry_count=2):
+
+    ootworld.priority_entrances = []
+
     while retry_count:
         retry_count -= 1
         rollbacks = []
@@ -521,6 +524,7 @@ def place_one_way_priority_entrance(ootworld, priority_name, allowed_regions, al
             if target.connected_region and target.connected_region.name in allowed_regions:
                 if replace_entrance(ootworld, entrance, target, rollbacks, locations_to_ensure_reachable, all_state, none_state):
                     logging.getLogger('').debug(f'Priority placing {entrance} as {target} for {priority_name}')
+                    ootworld.priority_entrances.append(entrance)
                     return
     raise EntranceShuffleError(f'Unable to place priority one-way entrance for {priority_name} in world {ootworld.player}')
 
@@ -671,9 +675,9 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
                 any(region for region in time_travel_state.adult_reachable_regions[player] if region.time_passes)):
             raise EntranceShuffleError('Time passing is not guaranteed as both ages')
 
-        if world.starting_age == 'child' and not (world.get_region('Temple of Time', player) in time_travel_state.adult_reachable_regions[player]):
+        if ootworld.starting_age == 'child' and (world.get_region('Temple of Time', player) not in time_travel_state.adult_reachable_regions[player]):
             raise EntranceShuffleError('Path to ToT as adult not guaranteed')
-        if world.starting_age == 'adult' and not (world.get_region('Temple of Time', player) in time_travel_state.child_reachable_regions[player]):
+        if ootworld.starting_age == 'adult' and (world.get_region('Temple of Time', player) not in time_travel_state.child_reachable_regions[player]):
             raise EntranceShuffleError('Path to ToT as child not guaranteed')
 
     if (ootworld.shuffle_interior_entrances or ootworld.shuffle_overworld_entrances) and \
