@@ -628,7 +628,19 @@ class OOTWorld(World):
                 self.world.itempool.remove(song)
             while tries:
                 try:
-                    self.world.random.shuffle(songs)  # shuffling songs makes it less likely to fail by placing ZL last
+                    important_warps = (self.shuffle_special_interior_entrances or self.shuffle_overworld_entrances or 
+                        self.warp_songs or self.spawn_positions)
+                    song_order = {
+                        'Zeldas Lullaby': 1,
+                        'Minuet of Forest': 2 if important_warps else 0,
+                        'Bolero of Fire': 2 if important_warps else 0,
+                        'Serenade of Water': 2 if important_warps else 0,
+                        'Requiem of Spirit': 2,
+                        'Nocturne of Shadow': 2,
+                        'Prelude of Light': 2 if important_warps else 0,
+                        'Song of Storms': 3
+                    }
+                    songs.sort(key=lambda song: song_order.get(song.name, 0))
                     self.world.random.shuffle(song_locations)
                     fill_restrictive(self.world, self.world.get_all_state(False), song_locations[:], songs[:],
                                      True, True)
