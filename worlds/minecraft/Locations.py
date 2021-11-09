@@ -107,7 +107,7 @@ advancement_table = {
     "When Pigs Fly": AdvData(42088, 'Overworld'),
     "Overkill": AdvData(42089, 'Nether Fortress'),
     "Librarian": AdvData(42090, 'Overworld'),
-    "Overpowered": AdvData(42091, 'Overworld'),
+    "Overpowered": AdvData(42091, 'Bastion Remnant'),
 
     "Blaze Spawner": AdvData(None, 'Nether Fortress'),
     "Ender Dragon": AdvData(None, 'The End')
@@ -126,7 +126,6 @@ exclusion_table = {
         "Uneasy Alliance",
         "Cover Me in Debris",
         "A Complete Catalogue",
-        "Overpowered",
     },
     "insane": {
         "How Did We Get Here?",

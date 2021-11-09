@@ -39,6 +39,11 @@ i_o_limiter = threading.Semaphore(2)
 
 
 class OOTWorld(World):
+    """
+    The Legend of Zelda: Ocarina of Time is a 3D action/adventure game. Travel through Hyrule in two time periods, 
+    learn magical ocarina songs, and explore twelve dungeons on your quest. Use Link's many items and abilities 
+    to rescue the Seven Sages, and then confront Ganondorf to save Hyrule!
+    """
     game: str = "Ocarina of Time"
     options: dict = oot_options
     topology_present: bool = True
@@ -711,6 +716,9 @@ class OOTWorld(World):
             ice_traps = [loc.item for loc in self.get_locations() if loc.item.name == 'Ice Trap']
             for trap in ice_traps:
                 trap.looks_like_item = self.create_item(self.world.slot_seeds[self.player].choice(self.fake_items).name)
+
+            # Seed hint RNG, used for ganon text lines also
+            self.hint_rng = self.world.slot_seeds[self.player]
 
             outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}"
             rom = Rom(file=get_options()['oot_options']['rom_file'])

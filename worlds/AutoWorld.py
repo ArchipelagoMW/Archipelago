@@ -123,7 +123,7 @@ class World(metaclass=AutoWorldRegister):
         self.player = player
 
     # overridable methods that get called by Main.py, sorted by execution order
-    # can also be implemented as a classmethod and called "stage_<original_name",
+    # can also be implemented as a classmethod and called "stage_<original_name>",
     # in that case the MultiWorld object is passed as an argument and it gets called once for the entire multiworld.
     # An example of this can be found in alttp as stage_pre_fill
     def generate_early(self):

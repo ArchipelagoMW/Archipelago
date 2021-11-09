@@ -17,11 +17,11 @@ from worlds import network_data_package, AutoWorldRegister
 
 logger = logging.getLogger("Client")
 
-gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
+# without terminal we have to use gui mode
+gui_enabled = not sys.stdout or "--nogui" not in sys.argv
 
 log_folder = Utils.local_path("logs")
 os.makedirs(log_folder, exist_ok=True)
-
 
 class ClientCommandProcessor(CommandProcessor):
     def __init__(self, ctx: CommonContext):
@@ -58,7 +58,7 @@ class ClientCommandProcessor(CommandProcessor):
         """List all missing location checks, from your local game state"""
         if not self.ctx.game:
             self.output("No game set, cannot determine missing checks.")
-            return
+            return False
         count = 0
         checked_count = 0
         for location, location_id in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id.items():
@@ -263,14 +263,20 @@ class CommonContext():
     def on_deathlink(self, data: dict):
         """Gets dispatched when a new DeathLink is triggered by another linked player."""
         self.last_death_link = max(data["time"], self.last_death_link)
+        text = data.get("cause", "")
+        if text:
+            logger.info(f"DeathLink: {text}")
+        else:
+            logger.info(f"DeathLink: Received from {data['source']}")
 
-    async def send_death(self):
+    async def send_death(self, death_text: str = ""):
         self.last_death_link = time.time()
         await self.send_msgs([{
             "cmd": "Bounce", "tags": ["DeathLink"],
             "data": {
                 "time": self.last_death_link,
-                "source": self.player_names[self.slot]
+                "source": self.player_names[self.slot],
+                "cause": death_text
             }
         }])
 
@@ -512,18 +518,33 @@ async def console_loop(ctx: CommonContext):
 
 
 def init_logging(name: str):
-    if gui_enabled:
-        logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
-                            filename=os.path.join(log_folder, f"{name}.txt"), filemode="w", force=True)
-    else:
-        logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
-        logging.getLogger().addHandler(logging.FileHandler(os.path.join(log_folder, f"{name}.txt"), "w"))
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+    file_handler = logging.FileHandler(
+        os.path.join(log_folder, f"{name}.txt"),
+        "w",
+        encoding="utf-8-sig")
+    file_handler.setFormatter(logging.Formatter("[%(name)s]: %(message)s"))
+    root_logger.addHandler(file_handler)
+    if sys.stdout:
+        root_logger.addHandler(
+            logging.StreamHandler(sys.stdout)
+        )
+
+
+def get_base_parser(description=None):
+    import argparse
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
+    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
+    if sys.stdout:  # If terminal output exists, offer gui-less mode
+        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
+    return parser
 
 
 if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
     init_logging("TextClient")
-
 
     class TextContext(CommonContext):
         tags = {"AP", "IgnoreGame"}
@@ -575,15 +596,9 @@ if __name__ == '__main__':
         if input_task:
             input_task.cancel()
 
-
-    import argparse
     import colorama
 
-    parser = argparse.ArgumentParser(description="Gameless Archipelago Client, for text interfaction.")
-    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
-    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
-    if not Utils.is_frozen():  # Frozen state has no cmd window in the first place
-        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
+    parser = get_base_parser(description="Gameless Archipelago Client, for text interfaction.")
 
     args, rest = parser.parse_known_args()
     colorama.init()

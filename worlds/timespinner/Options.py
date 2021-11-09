@@ -1,6 +1,6 @@
 from typing import Dict
 from BaseClasses import MultiWorld
-from Options import Toggle
+from Options import Toggle, DeathLink
 
 class StartWithJewelryBox(Toggle):
     "Start with Jewelry Box unlocked"
@@ -53,7 +53,8 @@ timespinner_options: Dict[str, Toggle] = {
     "QuickSeed": QuickSeed,
     "SpecificKeycards": SpecificKeycards,
     "Inverted": Inverted,
-    #"StinkyMaw": StinkyMaw
+    #"StinkyMaw": StinkyMaw,
+    "DeathLink": DeathLink,
 }
 
 def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:

@@ -156,10 +156,13 @@ class Recipe(FactorioElement):
         total_energy = self.energy
         for ingredient, cost in self.ingredients.items():
             if ingredient in all_product_sources:
-                for ingredient_recipe in all_product_sources[ingredient]:  # FIXME: this may select the wrong recipe
+                selected_recipe_energy = float('inf')
+                for ingredient_recipe in all_product_sources[ingredient]:
                     craft_count = max((n for name, n in ingredient_recipe.products.items() if name == ingredient))
-                    total_energy += ingredient_recipe.total_energy / craft_count * cost
-                    break
+                    recipe_energy = ingredient_recipe.total_energy / craft_count * cost
+                    if recipe_energy < selected_recipe_energy:
+                        selected_recipe_energy = recipe_energy
+                total_energy += selected_recipe_energy
         return total_energy
 
 

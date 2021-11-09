@@ -7,6 +7,7 @@ import sys
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
+os.environ["KIVY_LOG_ENABLE"] = "0"
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -111,7 +112,7 @@ class ServerLabel(HoverBehavior, Label):
                     text += "\nPermissions:"
                     for permission_name, permission_data in ctx.permissions.items():
                         text += f"\n    {permission_name}: {permission_data}"
-                if ctx.hint_cost is not None:
+                if ctx.hint_cost is not None and ctx.total_locations:
                     text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
                             f"For you this means every {max(0, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
                             "location checks."

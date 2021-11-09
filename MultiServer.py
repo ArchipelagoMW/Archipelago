@@ -14,9 +14,9 @@ import threading
 import random
 import pickle
 import itertools
+import time
 
 import ModuleUpdate
-import NetUtils
 
 ModuleUpdate.update()
 
@@ -26,6 +26,7 @@ import prompt_toolkit
 from prompt_toolkit.patch_stdout import patch_stdout
 from fuzzywuzzy import process as fuzzy_process
 
+import NetUtils
 from worlds.AutoWorld import AutoWorldRegister
 
 proxy_worlds = {name: world(None, 0) for name, world in AutoWorldRegister.world_types.items()}
@@ -78,6 +79,7 @@ class Context:
                       "compatibility": int}
     # team -> slot id -> list of clients authenticated to slot.
     clients: typing.Dict[int, typing.Dict[int, typing.List[Client]]]
+    locations: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int]]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
@@ -99,7 +101,7 @@ class Context:
         self.remote_items = set()
         self.remote_start_inventory = set()
         #                          player          location_id     item_id  target_player_id
-        self.locations: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int]]] = {}
+        self.locations = {}
         self.host = host
         self.port = port
         self.server_password = server_password
@@ -279,6 +281,11 @@ class Context:
                     self.received_items[team, slot] = [NetworkItem(item_code, -2, 0) for item_code in item_codes]
             for slot, hints in decoded_obj["precollected_hints"].items():
                 self.hints[team, slot].update(hints)
+        # declare slots without checks as done, as they're assumed to be spectators
+        for slot, locations in self.locations.items():
+            if not locations:
+                for team in self.clients:
+                    self.client_game_state[team, slot] = ClientStatus.CLIENT_GOAL
         if use_embedded_server_options:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
@@ -500,7 +507,8 @@ async def on_client_connected(ctx: Context, client: Client):
         'datapackage_version': network_data_package["version"],
         'datapackage_versions': {game: game_data["version"] for game, game_data
                                  in network_data_package["games"].items()},
-        'seed_name': ctx.seed_name
+        'seed_name': ctx.seed_name,
+        'time': time.time(),
     }])
 
 
@@ -704,15 +712,15 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
     NetUtils.add_json_text(parts, net_item.player, type=NetUtils.JSONTypes.player_id)
     if net_item.player == receiving_player:
         NetUtils.add_json_text(parts, " found their ")
-        NetUtils.add_json_text(parts, net_item.item, type=NetUtils.JSONTypes.item_id)
+        NetUtils.add_json_item(parts, net_item.item, net_item.player)
     else:
         NetUtils.add_json_text(parts, " sent ")
-        NetUtils.add_json_text(parts, net_item.item, type=NetUtils.JSONTypes.item_id)
+        NetUtils.add_json_item(parts, net_item.item, receiving_player)
         NetUtils.add_json_text(parts, " to ")
         NetUtils.add_json_text(parts, receiving_player, type=NetUtils.JSONTypes.player_id)
 
     NetUtils.add_json_text(parts, " (")
-    NetUtils.add_json_text(parts, net_item.location, type=NetUtils.JSONTypes.location_id)
+    NetUtils.add_json_location(parts, net_item.location, net_item.player)
     NetUtils.add_json_text(parts, ")")
 
     return {"cmd": "PrintJSON", "data": parts, "type": "ItemSend",
@@ -1195,19 +1203,20 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         cmd: str = args["cmd"]
     except:
         logging.exception(f"Could not get command from {args}")
-        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd", "original_cmd": None,
                                       "text": f"Could not get command from {args} at `cmd`"}])
         raise
 
     if type(cmd) is not str:
-        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd", "original_cmd": None,
                                       "text": f"Command should be str, got {type(cmd)}"}])
         return
 
     if cmd == 'Connect':
         if not args or 'password' not in args or type(args['password']) not in [str, type(None)] or \
                 'game' not in args:
-            await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': 'Connect'}])
+            await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': 'Connect',
+                                          "original_cmd": cmd}])
             return
 
         errors = set()
@@ -1274,14 +1283,21 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
                                           "data": network_data_package}])
+
     elif client.auth:
         if cmd == "ConnectUpdate":
             if not args:
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': cmd}])
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': cmd,
+                                              "original_cmd": cmd}])
                 return
 
             if "tags" in args:
+                old_tags = client.tags
                 client.tags = args["tags"]
+                if set(old_tags) != set(client.tags):
+                    ctx.notify_all(
+                        f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
+                        f"from {old_tags} to {client.tags}.")
 
         elif cmd == 'Sync':
             items = get_received_items(ctx, client.team, client.slot)
@@ -1293,7 +1309,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'LocationChecks':
             if "Tracker" in client.tags:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
-                                              "text": "Trackers can't register new Location Checks"}])
+                                              "text": "Trackers can't register new Location Checks",
+                                              "original_cmd": cmd}])
             else:
                 register_location_checks(ctx, client.team, client.slot, args["locations"])
 
@@ -1302,7 +1319,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for location in args["locations"]:
                 if type(location) is not int or location not in lookup_any_location_id_to_name:
                     await ctx.send_msgs(client,
-                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts'}])
+                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
+                                          "original_cmd": cmd}])
                     return
                 target_item, target_player = ctx.locations[client.slot][location]
                 locs.append(NetworkItem(target_item, location, target_player))
@@ -1314,7 +1332,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
         elif cmd == 'Say':
             if "text" not in args or type(args["text"]) is not str or not args["text"].isprintable():
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'Say'}])
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'Say',
+                                              "original_cmd": cmd}])
                 return
 
             client.messageprocessor(args["text"])

@@ -1,5 +1,5 @@
 import typing
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionList
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionList, DeathLink
 from .ColorSFXOptions import *
 
 
@@ -765,6 +765,13 @@ sfx_options: typing.Dict[str, type(Option)] = {
 }
 
 
+class LogicTricks(OptionList):
+    """Set various tricks for logic in Ocarina of Time. 
+Format as a comma-separated list of "nice" names: ["Fewer Tunic Requirements", "Hidden Grottos without Stone of Agony"].
+A full list of supported tricks can be found at https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py"""
+    displayname = "Logic Tricks"
+
+
 # All options assembled into a single dict
 oot_options: typing.Dict[str, type(Option)] = {
     "logic_rules": Logic, 
@@ -780,5 +787,6 @@ oot_options: typing.Dict[str, type(Option)] = {
     **itempool_options,
     **cosmetic_options,
     **sfx_options,
-    "logic_tricks": OptionList,
+    "logic_tricks": LogicTricks,
+    "death_link": DeathLink,
 }

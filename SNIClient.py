@@ -1,5 +1,4 @@
 from __future__ import annotations
-import argparse
 import atexit
 
 exit_func = atexit.register(input, "Press enter to close.")
@@ -27,7 +26,8 @@ from worlds.alttp import Regions, Shops
 from worlds.alttp import Items
 from worlds.alttp.Rom import ROM_PLAYER_LIMIT
 import Utils
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, init_logging
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, init_logging, \
+    get_base_parser
 from Patch import GAME_ALTTP, GAME_SM
 
 init_logging("LttPClient")
@@ -147,16 +147,15 @@ class Context(CommonContext):
 
     def on_deathlink(self, data: dict):
         if self.gameID == GAME_ALTTP:
-            snes_buffered_write(self, WRAM_START + 0xF36D, bytes([0]))
-            snes_buffered_write(self, WRAM_START + 0x0373, bytes([8]))
+            snes_buffered_write(self, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
+            snes_buffered_write(self, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
         elif self.gameID == GAME_SM:
-            snes_buffered_write(self, WRAM_START + 0x09C2, bytes([0, 0]))
+            snes_buffered_write(self, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
         else:
             snes_logger.info(f"No compatible game detected when receiving deathlink")
             return
         asyncio.create_task(snes_flush_writes(self))
         self.death_state = True
-        snes_logger.info(f"Received DeathLink from {data['source']}")
         super(Context, self).on_deathlink(data)
 
 
@@ -496,8 +495,8 @@ def launch_sni(ctx: Context):
 
     if os.path.isfile(sni_path):
         snes_logger.info(f"Attempting to start {sni_path}")
-        import subprocess
-        if Utils.is_frozen():  # if it spawns a visible console, may as well populate it
+        import sys
+        if not sys.stdout:  # if it spawns a visible console, may as well populate it
             subprocess.Popen(sni_path, cwd=os.path.dirname(sni_path))
         else:
             subprocess.Popen(sni_path, cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL,
@@ -1043,17 +1042,13 @@ async def run_game(romfile):
 
 async def main():
     multiprocessing.freeze_support()
-    parser = argparse.ArgumentParser()
+    parser = get_base_parser()
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a Archipelago Binary Patch file')
     parser.add_argument('--snes', default='localhost:8080', help='Address of the SNI server.')
-    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
-    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
-    if not Utils.is_frozen():  # Frozen state has no cmd window in the first place
-        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
     args = parser.parse_args()
-    logging.basicConfig(format='%(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
+
     if args.diff_file:
         import Patch
         logging.info("Patch file was supplied. Creating sfc rom..")

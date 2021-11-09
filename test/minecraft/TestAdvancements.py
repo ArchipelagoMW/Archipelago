@@ -1132,9 +1132,14 @@ class TestAdvancements(TestMinecraft):
     def test_42091(self):
         self.run_location_tests([
             ["Overpowered", False, []],
-            ["Overpowered", False, ['Progressive Resource Crafting'], ['Progressive Resource Crafting']],
-            ["Overpowered", False, ['Progressive Tools'], ['Flint and Steel', 'Progressive Tools', 'Progressive Tools']],
-            ["Overpowered", True, ['Progressive Resource Crafting', 'Progressive Resource Crafting', 'Progressive Tools', 'Progressive Tools']],
-            ["Overpowered", True, ['Progressive Resource Crafting', 'Progressive Resource Crafting', 'Progressive Tools', 'Bucket', 'Flint and Steel']],
+            ["Overpowered", False, [], ['Progressive Resource Crafting']],
+            ["Overpowered", False, [], ['Flint and Steel']],
+            ["Overpowered", False, ['Progressive Tools', 'Progressive Tools', 'Bucket', 'Flint and Steel']],
+            ["Overpowered", False, [], ['Progressive Weapons']],
+            ["Overpowered", False, [], ['Progressive Armor', 'Shield']],
+            ["Overpowered", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor']],
+            ["Overpowered", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor']],
+            ["Overpowered", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Weapons', 'Shield']],
+            ["Overpowered", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Shield']],
             ])
 

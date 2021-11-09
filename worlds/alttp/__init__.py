@@ -294,7 +294,8 @@ class ALTTPWorld(World):
                                world.sprite[player],
                                palettes_options, world, player, True,
                                reduceflashing=world.reduceflashing[player] or world.is_race,
-                               triforcehud=world.triforcehud[player].current_key)
+                               triforcehud=world.triforcehud[player].current_key,
+                               deathlink=world.death_link[player])
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
