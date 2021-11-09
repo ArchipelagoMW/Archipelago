@@ -525,7 +525,7 @@ def place_one_way_priority_entrance(ootworld, priority_name, allowed_regions, al
     raise EntranceShuffleError(f'Unable to place priority one-way entrance for {priority_name} in world {ootworld.player}')
 
 
-def shuffle_entrance_pool(ootworld, entrance_pool, target_entrances, locations_to_ensure_reachable, all_state, none_state, check_all=False, retry_count=20):
+def shuffle_entrance_pool(ootworld, entrance_pool, target_entrances, locations_to_ensure_reachable, all_state, none_state, check_all=False, retry_count=100):
     
     restrictive_entrances, soft_entrances = split_entrances_by_requirements(ootworld, entrance_pool, target_entrances)
 
@@ -546,7 +546,7 @@ def shuffle_entrance_pool(ootworld, entrance_pool, target_entrances, locations_t
         except EntranceShuffleError as e:
             for entrance, target in rollbacks:
                 restore_connections(entrance, target)
-                logging.getLogger('').debug(f'Failed to place all entrances in pool, retrying {retry_count} more times')
+            logging.getLogger('').debug(f'Failed to place all entrances in pool, retrying {retry_count} more times')
 
     raise EntranceShuffleError(f'Entrance placement attempt count exceeded for world {ootworld.player}')
 
@@ -676,11 +676,18 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
         if world.starting_age == 'adult' and not (world.get_region('Temple of Time', player) in time_travel_state.child_reachable_regions[player]):
             raise EntranceShuffleError('Path to ToT as child not guaranteed')
 
-    # Ensure big poe shop is always reachable as adult
     if (ootworld.shuffle_interior_entrances or ootworld.shuffle_overworld_entrances) and \
         (entrance_placed == None or entrance_placed.type in ['Interior', 'SpecialInterior', 'Overworld', 'Spawn', 'WarpSong', 'OwlDrop']):
+        # Ensure big poe shop is always reachable as adult
         if world.get_region('Market Guard House', player) not in time_travel_state.adult_reachable_regions[player]:
             raise EntranceShuffleError('Big Poe Shop access not guaranteed as adult')
+        if ootworld.shopsanity == 'off':
+            # Ensure that Goron and Zora shops are accessible as adult
+            if world.get_region('GC Shop', player) not in all_state.adult_reachable_regions[player]:
+                raise EntranceShuffleError('Goron City Shop not accessible as adult')
+            if world.get_region('ZD Shop', player) not in all_state.adult_reachable_regions[player]:
+                raise EntranceShuffleError('Zora\'s Domain Shop not accessible as adult')
+
 
 
 # Recursively check if a given entrance is unreachable as a given age
