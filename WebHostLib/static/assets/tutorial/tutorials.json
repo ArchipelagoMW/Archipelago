@@ -4,7 +4,7 @@
     "tutorials": [
       {
         "name": "Multiworld Setup Tutorial",
-        "description": "A Guide to setting up the Archipelago software to generate multiworld games on your computer.",
+        "description": "A guide to setting up the Archipelago software to generate and host multiworld games on your computer and using the website.",
         "files": [
           {
             "language": "English",
@@ -17,8 +17,22 @@
         ]
       },
       {
+        "name": "Using Advanced Settings",
+        "description": "A guide to reading yaml files and editing them to fully customize your game.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/advanced_settings_en.md",
+            "link": "archipelago/advanced_settings/en",
+            "authors": [
+              "alwaysintreble"
+            ]
+          }
+        ]
+      },
+      {
         "name": "Archipelago Triggers Guide",
-        "description": "A Guide to setting up and using triggers in your game settings.",
+        "description": "A guide to setting up and using triggers in your game settings.",
         "files": [
           {
             "language": "English",
