@@ -52,7 +52,7 @@ class OOTLogic(LogicMixin):
         if regionname in name_map[tod]:
             return True
         region = self.world.get_region(regionname, player)
-        if region.provides_time == TimeOfDay.ALL:
+        if region.provides_time == TimeOfDay.ALL or regionname == 'Root':
             self.day_reachable_regions[player].add(regionname)
             self.dampe_reachable_regions[player].add(regionname)
             return True
@@ -63,6 +63,13 @@ class OOTLogic(LogicMixin):
             if entrance.parent_region.name in already_checked:
                 continue
             if self._oot_reach_at_time(entrance.parent_region.name, tod, already_checked + [regionname], player):
+                if tod == TimeOfDay.DAY:
+                    self.day_reachable_regions[player].add(regionname)
+                elif tod == TimeOfDay.DAMPE:
+                    self.dampe_reachable_regions[player].add(regionname)
+                elif tod == TimeOfDay.ALL:
+                    self.day_reachable_regions[player].add(regionname)
+                    self.dampe_reachable_regions[player].add(regionname)
                 return True
         return False
 
