@@ -25,6 +25,8 @@ import functools
 import io
 import collections
 import importlib
+import logging
+
 from yaml import load, dump, safe_load
 
 try:
@@ -124,7 +126,6 @@ unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 def get_public_ipv4() -> str:
     import socket
     import urllib.request
-    import logging
     ip = socket.gethostbyname(socket.gethostname())
     try:
         ip = urllib.request.urlopen('https://checkip.amazonaws.com/').read().decode('utf8').strip()
@@ -141,7 +142,6 @@ def get_public_ipv4() -> str:
 def get_public_ipv6() -> str:
     import socket
     import urllib.request
-    import logging
     ip = socket.gethostbyname(socket.gethostname())
     try:
         ip = urllib.request.urlopen('https://v6.ident.me').read().decode('utf8').strip()
@@ -211,7 +211,6 @@ def get_default_options() -> dict:
 
 
 def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
-    import logging
     for key, value in src.items():
         new_keys = keys.copy()
         new_keys.append(key)
@@ -278,7 +277,6 @@ def persistent_load() -> typing.Dict[dict]:
             with open(path, "r") as f:
                 storage = unsafe_parse_yaml(f.read())
         except Exception as e:
-            import logging
             logging.debug(f"Could not read store: {e}")
     if storage is None:
         storage = {}
@@ -337,7 +335,6 @@ def get_adjuster_settings(romfile: str, skip_questions: bool = False) -> typing.
             return romfile, False
         else:
             adjusted = False
-            import logging
             if not hasattr(get_adjuster_settings, "adjust_wanted"):
                 logging.info(f"Skipping post-patch adjustment")
         get_adjuster_settings.adjuster_settings = adjuster_settings
@@ -406,3 +403,28 @@ class KeyedDefaultDict(collections.defaultdict):
 
 def get_text_between(text: str, start: str, end: str) -> str:
     return text[text.index(start) + len(start): text.rindex(end)]
+
+
+loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}
+
+
+def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
+                 log_format: str = "[%(name)s]: %(message)s"):
+    loglevel: int = loglevel_mapping.get(loglevel, loglevel)
+    log_folder = local_path("logs")
+    os.makedirs(log_folder, exist_ok=True)
+    root_logger = logging.getLogger()
+    for handler in root_logger.handlers[:]:
+        root_logger.removeHandler(handler)
+        handler.close()
+    root_logger.setLevel(loglevel)
+    file_handler = logging.FileHandler(
+        os.path.join(log_folder, f"{name}.txt"),
+        write_mode,
+        encoding="utf-8-sig")
+    file_handler.setFormatter(logging.Formatter(log_format))
+    root_logger.addHandler(file_handler)
+    if sys.stdout:
+        root_logger.addHandler(
+            logging.StreamHandler(sys.stdout)
+        )

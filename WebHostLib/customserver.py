@@ -11,7 +11,7 @@ import time
 import random
 import pickle
 
-
+import Utils
 from .models import *
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor
@@ -111,11 +111,7 @@ def run_server_process(room_id, ponyconfig: dict):
     db.generate_mapping(check_tables=False)
 
     async def main():
-
-        logging.basicConfig(format='[%(asctime)s] %(message)s',
-                            level=logging.INFO,
-                            handlers=[
-                                logging.FileHandler(os.path.join(LOGS_FOLDER, f"{room_id}.txt"), 'a', 'utf-8-sig')])
+        Utils.init_logging(str(room_id), write_mode="a")
         ctx = WebHostContext()
         ctx.load(room_id)
         ctx.init_save()

@@ -9,6 +9,7 @@ from collections import Counter
 import string
 
 import ModuleUpdate
+import Utils
 
 ModuleUpdate.update()
 
@@ -44,7 +45,6 @@ def mystery_argparse():
     parser.add_argument('--outputpath', default=options["general_options"]["output_path"])
     parser.add_argument('--race', action='store_true', default=defaults["race"])
     parser.add_argument('--meta_file_path', default=defaults["meta_file_path"])
-    parser.add_argument('--log_output_path', help='Path to store output log')
     parser.add_argument('--log_level', default='info', help='Sets log level')
     parser.add_argument('--yaml_output', default=0, type=lambda value: max(int(value), 0),
                         help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
@@ -125,18 +125,7 @@ def main(args=None, callback=ERmain):
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
 
-    # set up logger
-    if args.log_level:
-        erargs.loglevel = args.log_level
-    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
-        erargs.loglevel]
-
-    if args.log_output_path:
-        os.makedirs(args.log_output_path, exist_ok=True)
-        logging.basicConfig(format='%(message)s', level=loglevel, force=True,
-                            filename=os.path.join(args.log_output_path, f"{seed}.log"))
-    else:
-        logging.basicConfig(format='%(message)s', level=loglevel, force=True)
+    Utils.init_logging(f"Generate_{seed}.txt", loglevel=args.log_level)
 
     erargs.rom = args.rom
     erargs.enemizercli = args.enemizercli

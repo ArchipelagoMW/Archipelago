@@ -1,7 +1,6 @@
 from __future__ import annotations
-import atexit
 
-exit_func = atexit.register(input, "Press enter to close.")
+import atexit
 import threading
 import time
 import multiprocessing
@@ -13,23 +12,20 @@ import logging
 import asyncio
 from json import loads, dumps
 
-import ModuleUpdate
+from Utils import get_item_name_from_id, init_logging
 
-ModuleUpdate.update()
+if __name__ == "__main__":
+    init_logging("LttPClient")
 
-from Utils import get_item_name_from_id
 import colorama
 
 from NetUtils import *
-
 from worlds.alttp import Regions, Shops
 from worlds.alttp import Items
 from worlds.alttp.Rom import ROM_PLAYER_LIMIT
 import Utils
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, init_logging, \
-    get_base_parser
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 
-init_logging("LttPClient")
 
 snes_logger = logging.getLogger("SNES")
 
@@ -1022,4 +1018,3 @@ if __name__ == '__main__':
     loop.run_until_complete(main())
     loop.close()
     colorama.deinit()
-    atexit.unregister(exit_func)
