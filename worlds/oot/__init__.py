@@ -7,7 +7,7 @@ logger = logging.getLogger("Ocarina of Time")
 
 from .Location import OOTLocation, LocationFactory, location_name_to_id
 from .Entrance import OOTEntrance
-from .EntranceShuffle import shuffle_random_entrances
+from .EntranceShuffle import shuffle_random_entrances, entrance_shuffle_table
 from .Items import OOTItem, item_table, oot_data_to_ap_id
 from .ItemPool import generate_itempool, add_dungeon_items, get_junk_item, get_junk_pool
 from .Regions import OOTRegion, TimeOfDay
@@ -181,14 +181,6 @@ class OOTWorld(World):
         self.mq_dungeons_random = False  # this will be a deprecated option later
         self.ocarina_songs = False  # just need to pull in the OcarinaSongs module
         self.big_poe_count = 1  # disabled due to client-side issues for now
-        # ER options
-        # self.shuffle_interior_entrances = 'off'
-        # self.shuffle_grotto_entrances = False
-        # self.shuffle_dungeon_entrances = False
-        # self.shuffle_overworld_entrances = False
-        # self.owl_drops = False
-        # self.warp_songs = False
-        # self.spawn_positions = False
 
         # Set internal names used by the OoT generator
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld']
@@ -825,12 +817,40 @@ class OOTWorld(World):
                 autoworld.hint_data_available.set()
 
     def modify_multidata(self, multidata: dict):
+
+        hint_entrances = set()
+        for entrance in entrance_shuffle_table:
+            hint_entrances.add(entrance[1][0])
+            if len(entrance) > 2:
+                hint_entrances.add(entrance[2][0])
+
+        def get_entrance_to_region(region):
+            if region.name == 'Root': 
+                return None
+            for entrance in region.entrances:
+                if entrance.name in hint_entrances:
+                    return entrance
+            for entrance in region.entrances:
+                return get_entrance_to_region(entrance.parent_region)
+
+        # Remove undesired items from start_inventory
         for item_name in self.remove_from_start_inventory:
             item_id = self.item_name_to_id.get(item_name, None)
             try:
                 multidata["precollected_items"][self.player].remove(item_id)
             except ValueError as e:
                 logger.warning(f"Attempted to remove nonexistent item id {item_id} from OoT precollected items ({item_name})")
+
+        # Add ER hint data
+        if self.shuffle_interior_entrances != 'off' or self.shuffle_dungeon_entrances or self.shuffle_grotto_entrances:
+            er_hint_data = {}
+            for region in self.regions:
+                main_entrance = get_entrance_to_region(region)
+                if main_entrance is not None and main_entrance.shuffled:
+                    for location in region.locations:
+                        if type(location.address) == int:
+                            er_hint_data[location.address] = main_entrance.name
+            multidata['er_hint_data'][self.player] = er_hint_data
 
 
     # Helper functions
