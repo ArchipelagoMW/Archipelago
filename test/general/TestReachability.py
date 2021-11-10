@@ -6,7 +6,6 @@ from worlds.AutoWorld import AutoWorldRegister
 from . import setup_default_world
 
 class TestBase(unittest.TestCase):
-    _state_cache = {}
     gen_steps = ["generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill"]
 
     def testAllStateCanReachEverything(self):
