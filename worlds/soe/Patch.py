@@ -4,6 +4,10 @@ from typing import Optional
 import Utils
 
 
+USHASH = '6e9c94511d04fac6e0a1e582c170be3a'
+current_patch_version = 2
+
+
 def read_rom(stream, strip_header=True) -> bytes:
     """Reads rom into bytearray and optionally strips off any smc header"""
     data = stream.read()
@@ -18,7 +22,8 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None) -> bytes:
                        "game": "Secret of Evermore",
                        # minimum version of patch system expected for patching to be successful
                        "compatible_version": 1,
-                       "version": 1})
+                       "version": current_patch_version,
+                       "base_checksum": USHASH})
     return patch.encode(encoding="utf-8-sig")
 
 
