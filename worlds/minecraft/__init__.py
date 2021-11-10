@@ -111,7 +111,8 @@ class MinecraftWorld(World):
         slot_data = self._get_mc_data()
         for option_name in minecraft_options:
             option = getattr(self.world, option_name)[self.player]
-            slot_data[option_name] = int(option.value)
+            if slot_data.get(option_name, None) is None:
+                slot_data[option_name] = int(option.value)
         return slot_data
 
     def create_item(self, name: str) -> Item:
