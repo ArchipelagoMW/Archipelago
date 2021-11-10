@@ -1,6 +1,8 @@
 from typing import NamedTuple, Union
 import logging
 
+from BaseClasses import Item
+
 from ..AutoWorld import World
 
 
@@ -15,6 +17,12 @@ class GenericWorld(World):
         "Server": -2
     }
     hidden = True
+
+    def create_item(self, name: str) -> Item:
+        if name == "Nothing":
+            return Item(name, False, -1, self.player)
+        raise KeyError(name)
+
 
 class PlandoItem(NamedTuple):
     item: str
