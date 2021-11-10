@@ -488,6 +488,18 @@ class OOTWorld(World):
         # This has to run AFTER creating items but BEFORE set_entrances_based_rules
         if self.entrance_shuffle:
             shuffle_random_entrances(self)
+            all_entrances = self.get_shuffled_entrances()
+            all_entrances.sort(key=lambda x: x.name)
+            all_entrances.sort(key=lambda x: x.type)
+            for loadzone in all_entrances:
+                if loadzone.primary:
+                    entrance = loadzone
+                else:
+                    entrance = loadzone.reverse
+                if entrance.reverse is not None:
+                    self.world.spoiler.set_entrance(entrance, entrance.replaces, 'both', self.player)
+                else:
+                    self.world.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
 
         set_rules(self)
         set_entrances_based_rules(self)
