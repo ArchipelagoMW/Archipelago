@@ -891,11 +891,11 @@ async def game_watcher(ctx: Context):
                     ctx.death_state = DeathState.dead
                     await ctx.send_death()
             # in this state we care about confirming a kill, to move state to dead
-            elif DeathState.killing_player:
+            elif ctx.death_state == DeathState.killing_player:
                 # this is being handled in deathlink_kill_player(ctx) already
                 pass
             # in this state we wait until the player is alive again
-            elif DeathState.dead:
+            elif ctx.death_state == DeathState.dead:
                 if not currently_dead:
                     ctx.death_state = DeathState.alive
 
