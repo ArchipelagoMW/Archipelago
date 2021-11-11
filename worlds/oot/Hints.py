@@ -397,6 +397,8 @@ def get_barren_hint(world, checked):
         return None
 
     area_weights = [world.empty_areas[area]['weight'] for area in areas]
+    if not any(area_weights):
+        return None
 
     area = world.hint_rng.choices(areas, weights=area_weights)[0]
     if world.empty_areas[area]['dungeon']:
