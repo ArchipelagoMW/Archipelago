@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import atexit
 import threading
 import time
 import multiprocessing
@@ -30,6 +29,12 @@ from CommonClient import CommonContext, server_loop, console_loop, ClientCommand
 snes_logger = logging.getLogger("SNES")
 
 from MultiServer import mark_raw
+
+
+class DeathState(enum.IntEnum):
+    killing_player = 1
+    alive = 2
+    dead = 3
 
 
 class LttPCommandProcessor(ClientCommandProcessor):
@@ -88,6 +93,10 @@ class LttPCommandProcessor(ClientCommandProcessor):
         self.output("Data Sent")
         return True
 
+    def _cmd_test_death(self):
+        self.ctx.on_deathlink({"source": "Console",
+                               "time": time.time()})
+
 
 class Context(CommonContext):
     command_processor = LttPCommandProcessor
@@ -106,7 +115,7 @@ class Context(CommonContext):
         self.snes_request_lock = asyncio.Lock()
         self.snes_write_buffer = []
         self.snes_connector_lock = threading.Lock()
-        self.death_state = False  # for death link flop behaviour
+        self.death_state = DeathState.alive  # for death link flop behaviour
 
         self.awaiting_rom = False
         self.rom = None
@@ -140,11 +149,15 @@ class Context(CommonContext):
                                }])
 
     def on_deathlink(self, data: dict):
-        snes_buffered_write(self, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
-        snes_buffered_write(self, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
-        asyncio.create_task(snes_flush_writes(self))
-        self.death_state = True
+        asyncio.create_task(deathlink_kill_player(self))
+        self.death_state = DeathState.killing_player
         super(Context, self).on_deathlink(data)
+
+
+async def deathlink_kill_player(ctx: Context):
+    snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
+    snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
+    await snes_flush_writes(ctx)
 
 
 def color_item(item_id: int, green: bool = False) -> str:
@@ -842,7 +855,7 @@ async def game_watcher(ctx: Context):
             ctx.rom = rom
             death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR, 1)
             if death_link:
-                death_link = bool(death_link[0])
+                death_link = bool(death_link[0] & 0b1)
                 old_tags = ctx.tags.copy()
                 if death_link:
                     ctx.tags.add("DeathLink")
@@ -864,12 +877,24 @@ async def game_watcher(ctx: Context):
 
         gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
         if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
-            if gamemode[0] in DEATH_MODES:
-                if not ctx.death_state:  # new death
+            currently_dead = gamemode[0] in DEATH_MODES
+            # in this state we only care about triggering a death send
+            if ctx.death_state == DeathState.alive:
+                if currently_dead:
+                    ctx.death_state = DeathState.dead
                     await ctx.send_death()
-                ctx.death_state = True
-            else:
-                ctx.death_state = False  # reset death state, so next death can trigger
+            # in this state we care about confirming a kill, to move state to dead
+            elif DeathState.killing_player:
+                if currently_dead:
+                    ctx.death_state = DeathState.dead
+                else:
+                    await deathlink_kill_player(ctx)  # try again
+                ctx.last_death_link = time.time()  # delay handling
+            # in this state we wait until the player is alive again
+            elif DeathState.dead:
+                if not currently_dead:
+                    ctx.death_state = DeathState.alive
+
         gameend = await snes_read(ctx, SAVEDATA_START + 0x443, 1)
         game_timer = await snes_read(ctx, SAVEDATA_START + 0x42E, 4)
         if gamemode is None or gameend is None or game_timer is None or \

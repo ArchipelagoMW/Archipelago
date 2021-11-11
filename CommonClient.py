@@ -271,6 +271,7 @@ class CommonContext():
             logger.info(f"DeathLink: Received from {data['source']}")
 
     async def send_death(self, death_text: str = ""):
+        logger.info("Sending death to your friends...")
         self.last_death_link = time.time()
         await self.send_msgs([{
             "cmd": "Bounce", "tags": ["DeathLink"],
