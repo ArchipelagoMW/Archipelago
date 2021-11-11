@@ -150,14 +150,21 @@ class Context(CommonContext):
 
     def on_deathlink(self, data: dict):
         asyncio.create_task(deathlink_kill_player(self))
-        self.death_state = DeathState.killing_player
         super(Context, self).on_deathlink(data)
 
 
 async def deathlink_kill_player(ctx: Context):
-    snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
-    snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
-    await snes_flush_writes(ctx)
+    ctx.death_state = DeathState.killing_player
+    while ctx.death_state == DeathState.killing_player:
+        snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
+        snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
+        await snes_flush_writes(ctx)
+        await asyncio.sleep(1)
+        gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
+        if gamemode[0] in DEATH_MODES:
+            ctx.death_state = DeathState.dead
+        ctx.last_death_link = time.time()
+
 
 
 def color_item(item_id: int, green: bool = False) -> str:
@@ -196,7 +203,7 @@ SCOUTREPLY_ITEM_ADDR = SAVEDATA_START + 0x4D9       # 1 byte
 SCOUTREPLY_PLAYER_ADDR = SAVEDATA_START + 0x4DA     # 1 byte
 SHOP_ADDR = SAVEDATA_START + 0x302                  # 2 bytes
 
-DEATH_LINK_ACTIVE_ADDR = ROM_START + 0x18008D  # 1 byte
+DEATH_LINK_ACTIVE_ADDR = ROMNAME_START + 0x15  # 1 byte
 
 location_shop_ids = set([info[0] for name, info in Shops.shop_table.items()])
 
@@ -885,11 +892,8 @@ async def game_watcher(ctx: Context):
                     await ctx.send_death()
             # in this state we care about confirming a kill, to move state to dead
             elif DeathState.killing_player:
-                if currently_dead:
-                    ctx.death_state = DeathState.dead
-                else:
-                    await deathlink_kill_player(ctx)  # try again
-                ctx.last_death_link = time.time()  # delay handling
+                # this is being handled in deathlink_kill_player(ctx) already
+                pass
             # in this state we wait until the player is alive again
             elif DeathState.dead:
                 if not currently_dead:
