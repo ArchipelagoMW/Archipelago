@@ -116,6 +116,7 @@ class Context(CommonContext):
         self.snes_write_buffer = []
         self.snes_connector_lock = threading.Lock()
         self.death_state = DeathState.alive  # for death link flop behaviour
+        self.killing_player_task = None
 
         self.awaiting_rom = False
         self.rom = None
@@ -149,21 +150,24 @@ class Context(CommonContext):
                                }])
 
     def on_deathlink(self, data: dict):
-        asyncio.create_task(deathlink_kill_player(self))
+        if not self.killing_player_task or self.killing_player_task.done():
+            self.killing_player_task = asyncio.create_task(deathlink_kill_player(self))
         super(Context, self).on_deathlink(data)
 
 
 async def deathlink_kill_player(ctx: Context):
     ctx.death_state = DeathState.killing_player
-    while ctx.death_state == DeathState.killing_player:
+    while ctx.death_state == DeathState.killing_player and \
+            ctx.snes_state == SNESState.SNES_ATTACHED:
         snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
         snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
         await snes_flush_writes(ctx)
         await asyncio.sleep(1)
         gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
-        if gamemode[0] in DEATH_MODES:
+        if not gamemode or gamemode[0] in DEATH_MODES:
             ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
+
 
 
 
