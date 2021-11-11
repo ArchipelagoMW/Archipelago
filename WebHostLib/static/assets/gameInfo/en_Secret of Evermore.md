@@ -1,26 +1,29 @@
 # Secret of Evermore
 
 ## Where is the settings page?
-The player settings page for this game is located <a href="../player-settings">here</a>. It contains all the options
-you need to configure and export a config file.
+The player settings page for this game is located <a href="../player-settings">here</a>. It contains all options
+necessary to configure and export a config file.
 
 ## What does randomization do to this game?
-Items which the player would normally acquire throughout the game have been moved around. Logic remains, so the game
-is always able to be completed, but because of the item shuffle the player may need to access certain areas before
-they would in the vanilla game.
+Items which would normally be acquired throughout the game have been moved around! Progression logic remains,
+so the game is always able to be completed. However, because of the item shuffle, the player may need to access certain
+areas before they would in the vanilla game. For example, the Windwalker (flying machine) is accessible as soon as any
+weapon is obtained.
+
+Additional help can be found in the [guide](https://github.com/black-sliver/evermizer/blob/feat-mw/guide.md).
 
 ## What items and locations get shuffled?
-All gourds/chests/pots, boss drops and alchemists are shuffled. Additionally you may choose to also shuffle alchemy
-ingredients, sniff spot items, call bead spells and the dog.
+All gourds/chests/pots, boss drops and alchemists are shuffled. Alchemy ingredients, sniff spot items, call bead spells
+and the dog can be randomized using yaml options.
 
 ## Which items can be in another player's world?
-Any of the items which can be shuffled may also be placed into another player's world. It is possible to choose to
-limit certain items to your own world.
+Any of the items which can be shuffled may also be placed in another player's world.
+Specific items can be limited to your own world using plando.
 
 ## What does another world's item look like in Secret of Evermore?
-Secret of Evermore will just display "Sent an Item". Check the client output if you want to know which.
+Secret of Evermore will display "Sent an Item". Check the client output if you want to know which.
 
-## When the player receives an item, what happens?
-When the player receives an item, a borderless text will appear to show which item was received. You can not receive
-items while a script is active, for example in Nobilia Market or during most Boss Fights. You will receive the items
-once no more scripts are running.
+## What happens when the player receives an item?
+When the player receives an item, a popup will appear to show which item was received. Items won't be recieved while a
+script is active such as when visiting Nobilia Market or during most Boss Fights. Once all scripts have ended, items
+will be recieved.

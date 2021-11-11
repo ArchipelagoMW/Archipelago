@@ -97,9 +97,9 @@ Enter `/connect server:port` in the client's command prompt and press enter. You
 that had the patch file.
 
 ### Play the game
-When the game is loaded but not yet past the intro, the "Game" status is yellow. The intro can be skipped pressing
-START. When the client shows both "Game" and "AP" as green, you're ready to play.
-Congratulations on successfully joining a multiworld game!
+When the game is loaded but not yet past the intro cutscene, the "Game" status is yellow. When the client shows "AP" as
+green and "Game" as yellow, you're ready to play. The intro can be skipped pressing the START button and "Game" should
+change to green. Congratulations on successfully joining a multiworld game!
 
 ## Hosting a MultiWorld game
 The recommended way to host a game is to use our [hosting service](/generate). The process is relatively simple:
