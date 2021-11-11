@@ -13,7 +13,7 @@ class GenericWorld(World):
         "Nothing": -1
     }
     location_name_to_id = {
-        "Cheat Console" : -1,
+        "Cheat Console": -1,
         "Server": -2
     }
     hidden = True
