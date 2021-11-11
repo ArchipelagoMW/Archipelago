@@ -416,7 +416,8 @@ class OOTWorld(World):
 
     def create_item(self, name: str):
         if name in item_table:
-            return OOTItem(name, self.player, item_table[name], False, (name in self.nonadvancement_items))
+            return OOTItem(name, self.player, item_table[name], False, 
+                (name in self.nonadvancement_items if getattr(self, 'nonadvancement_items', None) else False))
         return OOTItem(name, self.player, ('Event', True, None, None), True, False)
 
     def make_event_item(self, name, location, item=None):
