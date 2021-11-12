@@ -156,6 +156,21 @@ class Context(CommonContext):
             self.killing_player_task = asyncio.create_task(deathlink_kill_player(self))
         super(Context, self).on_deathlink(data)
 
+    def handle_deathlink_state(self, currently_dead: bool):
+        # in this state we only care about triggering a death send
+        if self.death_state == DeathState.alive:
+            if currently_dead:
+                self.death_state = DeathState.dead
+                await self.send_death()
+        # in this state we care about confirming a kill, to move state to dead
+        elif self.death_state == DeathState.killing_player:
+            # this is being handled in deathlink_kill_player(ctx) already
+            pass
+        # in this state we wait until the player is alive again
+        elif self.death_state == DeathState.dead:
+            if not currently_dead:
+                self.death_state = DeathState.alive
+
 
 async def deathlink_kill_player(ctx: Context):
     ctx.death_state = DeathState.killing_player
@@ -581,7 +596,7 @@ async def verify_snes_app(socket):
     await socket.send(dumps(AppVersion_Request))
 
     app: str = loads(await socket.recv())["Results"][0]
-    if not "SNI" in app:
+    if "SNI" not in app:
         snes_logger.warning(f"Warning: Did not find SNI as the endpoint, instead {app} was found.")
 
 
@@ -920,19 +935,7 @@ async def game_watcher(ctx: Context):
             gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
             if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
                 currently_dead = gamemode[0] in DEATH_MODES
-                # in this state we only care about triggering a death send
-                if ctx.death_state == DeathState.alive:
-                    if currently_dead:
-                        ctx.death_state = DeathState.dead
-                        await ctx.send_death()
-                # in this state we care about confirming a kill, to move state to dead
-                elif ctx.death_state == DeathState.killing_player:
-                    # this is being handled in deathlink_kill_player(ctx) already
-                    pass
-                # in this state we wait until the player is alive again
-                elif ctx.death_state == DeathState.dead:
-                    if not currently_dead:
-                        ctx.death_state = DeathState.alive
+                ctx.handle_deathlink_state(currently_dead)
 
             gameend = await snes_read(ctx, SAVEDATA_START + 0x443, 1)
             game_timer = await snes_read(ctx, SAVEDATA_START + 0x42E, 4)
@@ -1001,19 +1004,7 @@ async def game_watcher(ctx: Context):
             gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
             if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
                 currently_dead = gamemode[0] in SM_DEATH_MODES
-                # in this state we only care about triggering a death send
-                if ctx.death_state == DeathState.alive:
-                    if currently_dead:
-                        ctx.death_state = DeathState.dead
-                        await ctx.send_death()
-                # in this state we care about confirming a kill, to move state to dead
-                elif ctx.death_state == DeathState.killing_player:
-                    # this is being handled in deathlink_kill_player(ctx) already
-                    pass
-                # in this state we wait until the player is alive again
-                elif ctx.death_state == DeathState.dead:
-                    if not currently_dead:
-                        ctx.death_state = DeathState.alive
+                ctx.handle_deathlink_state(currently_dead)
             if gamemode is not None and gamemode[0] in SM_ENDGAME_MODES:
                 if not ctx.finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -1030,10 +1021,9 @@ async def game_watcher(ctx: Context):
             while (recv_index < recv_item):
                 itemAdress = recv_index * 8
                 message = await snes_read(ctx, SM_RECV_PROGRESS_ADDR + 0x700 + itemAdress, 8)
-                worldId = message[0] | (message[1] << 8)
-                itemId = message[2] | (message[3] << 8)
+                # worldId = message[0] | (message[1] << 8)  # unused
+                # itemId = message[2] | (message[3] << 8)  # unused
                 itemIndex = (message[4] | (message[5] << 8)) >> 3
-                seq = recv_index
 
                 recv_index += 1
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x680, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
@@ -1050,7 +1040,7 @@ async def game_watcher(ctx: Context):
             if data is None:
                 continue
 
-            recv_itemOutPtr = data[0] | (data[1] << 8)
+            # recv_itemOutPtr = data[0] | (data[1] << 8) # unused
             itemOutPtr = data[2] | (data[3] << 8)
 
             from worlds.sm.Items import items_start_id
@@ -1066,6 +1056,7 @@ async def game_watcher(ctx: Context):
                     color(ctx.item_name_getter(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
                     ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
+
 
 async def run_game(romfile):
     auto_start = Utils.get_options()["lttp_options"].get("rom_start", True)
