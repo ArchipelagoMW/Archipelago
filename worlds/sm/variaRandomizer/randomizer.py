@@ -321,8 +321,8 @@ class VariaRandomizer:
             if argDict[arg] not in okValues:
                 argDict[arg] = value
                 self.forcedArgs[webArg if webArg != None else arg] = webValue if webValue != None else value
-                print(msg)
-                optErrMsgs.append(msg)
+                # print(msg)
+                # optErrMsgs.append(msg)
 
         preset = loadRandoPreset(world, self.player, args)
         # use the skill preset from the rando preset
@@ -516,8 +516,8 @@ class VariaRandomizer:
                     forceArg('morphPlacement', 'normal', "'Morph Placement' forced to normal for custom start location")
             if args.majorsSplit == 'Chozo' and args.morphPlacement == "late":
                 forceArg('morphPlacement', 'normal', "'Morph Placement' forced to normal for Chozo")
-        if args.patchOnly == False:
-            print("SEED: " + str(self.seed))
+        #if args.patchOnly == False:
+        #    print("SEED: " + str(self.seed))
 
         # fill restrictions dict
         restrictions = { 'Suits' : args.suitsRestriction, 'Morph' : args.morphPlacement, "doors": "normal" if not args.doorsColorsRando else "late" }
@@ -848,4 +848,4 @@ class VariaRandomizer:
 #        if stuck == True:
 #            print("Rom generated for debug purpose: {}".format(self.fileName))
 #        else:
-        print("Rom generated: {}".format(self.fileName))
+        # print("Rom generated: {}".format(self.fileName))

@@ -312,7 +312,7 @@ class RomPatcher:
     def applyIPSPatch(self, patchName, patchDict=None, ipsDir=None):
         if patchDict is None:
             patchDict = self.patchAccess.getDictPatches()
-        print("Apply patch {}".format(patchName))
+        # print("Apply patch {}".format(patchName))
         if patchName in patchDict:
             patch = IPS_Patch(patchDict[patchName])
         else:
@@ -325,7 +325,7 @@ class RomPatcher:
     
     def applyIPSPatchDict(self, patchDict):
         for patchName in patchDict.keys():
-            print("Apply patch {}".format(patchName))
+            # print("Apply patch {}".format(patchName))
             patch = IPS_Patch(patchDict[patchName])
             self.ipsPatches.append(patch)
 
