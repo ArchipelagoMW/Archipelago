@@ -413,14 +413,7 @@ def shuffle_random_entrances(ootworld):
         target_entrance_pools[pool_type] = assume_entrance_pool(entrance_pool, ootworld)
 
     # Build all_state and none_state
-    all_state = world.get_all_state(use_cache=False)
-    all_state.child_reachable_regions[player] = set()
-    all_state.adult_reachable_regions[player] = set()
-    all_state.child_blocked_connections[player] = set()
-    all_state.adult_blocked_connections[player] = set()
-    all_state.day_reachable_regions[player] = set()
-    all_state.dampe_reachable_regions[player] = set()
-    all_state.stale[player] = True
+    all_state = ootworld.get_state_with_complete_itempool()
     none_state = all_state.copy()
     for item_tuple in none_state.prog_items:
         if item_tuple[1] == player:
@@ -529,7 +522,7 @@ def place_one_way_priority_entrance(ootworld, priority_name, allowed_regions, al
     raise EntranceShuffleError(f'Unable to place priority one-way entrance for {priority_name} in world {ootworld.player}')
 
 
-def shuffle_entrance_pool(ootworld, entrance_pool, target_entrances, locations_to_ensure_reachable, all_state, none_state, check_all=False, retry_count=100):
+def shuffle_entrance_pool(ootworld, entrance_pool, target_entrances, locations_to_ensure_reachable, all_state, none_state, check_all=False, retry_count=20):
     
     restrictive_entrances, soft_entrances = split_entrances_by_requirements(ootworld, entrance_pool, target_entrances)
 
@@ -617,6 +610,9 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
 
     all_state = all_state_orig.copy()
     none_state = none_state_orig.copy()
+
+    all_state.sweep_for_events()
+    none_state.sweep_for_events()
 
     if ootworld.shuffle_interior_entrances or ootworld.shuffle_overworld_entrances or ootworld.spawn_positions:
         time_travel_state = none_state.copy()

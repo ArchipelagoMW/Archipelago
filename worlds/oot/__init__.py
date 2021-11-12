@@ -7,7 +7,7 @@ logger = logging.getLogger("Ocarina of Time")
 
 from .Location import OOTLocation, LocationFactory, location_name_to_id
 from .Entrance import OOTEntrance
-from .EntranceShuffle import shuffle_random_entrances, entrance_shuffle_table
+from .EntranceShuffle import shuffle_random_entrances, entrance_shuffle_table, EntranceShuffleError
 from .Items import OOTItem, item_table, oot_data_to_ap_id
 from .ItemPool import generate_itempool, add_dungeon_items, get_junk_item, get_junk_pool
 from .Regions import OOTRegion, TimeOfDay
@@ -186,8 +186,6 @@ class OOTWorld(World):
         self.mq_dungeons_random = False  # this will be a deprecated option later
         self.ocarina_songs = False  # just need to pull in the OcarinaSongs module
         self.big_poe_count = 1  # disabled due to client-side issues for now
-        self.shuffle_interior_entrances = 'off'
-        self.shuffle_overworld_entrances = False  # disabled due to stability issues
 
         # Set internal names used by the OoT generator
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld']
@@ -487,7 +485,35 @@ class OOTWorld(World):
     def set_rules(self):
         # This has to run AFTER creating items but BEFORE set_entrances_based_rules
         if self.entrance_shuffle:
-            shuffle_random_entrances(self)
+            # 10 attempts at shuffling entrances
+            tries = 10
+            while tries:
+                try:
+                    shuffle_random_entrances(self)
+                except EntranceShuffleError as e:
+                    tries -= 1
+                    logging.getLogger('').debug(f"Failed shuffling entrances for world {self.player}, retrying {tries} more times")
+                    if tries == 0:
+                        raise e
+                    # Restore original state and delete assumed entrances
+                    for entrance in self.get_shuffled_entrances():
+                        entrance.connect(self.world.get_region(entrance.vanilla_connected_region, self.player))
+                        if entrance.assumed:
+                            assumed_entrance = entrance.assumed
+                            if assumed_entrance.connected_region is not None:
+                                assumed_entrance.disconnect()
+                            del assumed_entrance
+                        entrance.reverse = None
+                        entrance.replaces = None
+                        entrance.assumed = None
+                        entrance.shuffled = False
+                    # Clean up root entrances
+                    root = self.get_region("Root Exits")
+                    root.exits = root.exits[:8]
+                else:
+                    break
+
+            # Write entrances to spoiler log
             all_entrances = self.get_shuffled_entrances()
             all_entrances.sort(key=lambda x: x.name)
             all_entrances.sort(key=lambda x: x.type)
@@ -663,7 +689,6 @@ class OOTWorld(World):
                     fill_restrictive(self.world, self.world.get_all_state(False), song_locations[:], songs[:],
                                      True, True)
                     logger.debug(f"Successfully placed songs for player {self.player} after {6 - tries} attempt(s)")
-                    tries = 0
                 except FillError as e:
                     tries -= 1
                     if tries == 0:
@@ -677,6 +702,8 @@ class OOTWorld(World):
                         location.item = None
                         location.locked = False
                         location.event = False
+                else:
+                    break
 
         # Place shop items
         # fast fill will fail because there is some logic on the shop items. we'll gather them up and place the shop items
@@ -912,3 +939,26 @@ class OOTWorld(World):
             return False
 
         return True
+
+    # Specifically ensures that only real items are gotten, not any events.
+    # In particular, ensures that Time Travel needs to be found.
+    def get_state_with_complete_itempool(self):
+        all_state = self.world.get_all_state(use_cache=False)
+        # Remove event progression items
+        for item, player in all_state.prog_items:
+            if (item not in item_table or item_table[item][2] is None) and player == self.player:
+                all_state.prog_items[(item, player)] = 0
+        # Remove all events and checked locations
+        all_state.locations_checked = {loc for loc in all_state.locations_checked if loc.player != self.player}
+        all_state.events = {loc for loc in all_state.events if loc.player != self.player}
+
+        # Invalidate caches
+        all_state.child_reachable_regions[self.player] = set()
+        all_state.adult_reachable_regions[self.player] = set()
+        all_state.child_blocked_connections[self.player] = set()
+        all_state.adult_blocked_connections[self.player] = set()
+        all_state.day_reachable_regions[self.player] = set()
+        all_state.dampe_reachable_regions[self.player] = set()
+        all_state.stale[self.player] = True
+
+        return all_state

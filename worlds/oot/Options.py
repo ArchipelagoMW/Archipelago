@@ -163,10 +163,10 @@ class MQDungeons(Range):
 
 world_options: typing.Dict[str, type(Option)] = {
     "starting_age": StartingAge,
-    # "shuffle_interior_entrances": InteriorEntrances,
+    "shuffle_interior_entrances": InteriorEntrances,
     "shuffle_grotto_entrances": GrottoEntrances,
     "shuffle_dungeon_entrances": DungeonEntrances,
-    # "shuffle_overworld_entrances": OverworldEntrances,
+    "shuffle_overworld_entrances": OverworldEntrances,
     "owl_drops": OwlDrops,
     "warp_songs": WarpSongs,
     "spawn_positions": SpawnPositions,
