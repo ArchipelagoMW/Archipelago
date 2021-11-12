@@ -951,6 +951,9 @@ class OOTWorld(World):
         # Remove all events and checked locations
         all_state.locations_checked = {loc for loc in all_state.locations_checked if loc.player != self.player}
         all_state.events = {loc for loc in all_state.events if loc.player != self.player}
+        # If free_scarecrow give Scarecrow Song
+        if self.free_scarecrow:
+            all_state.collect(self.create_item("Scarecrow Song"), event=True)
 
         # Invalidate caches
         all_state.child_reachable_regions[self.player] = set()
