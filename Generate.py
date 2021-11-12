@@ -12,6 +12,7 @@ import ModuleUpdate
 
 ModuleUpdate.update()
 
+import Utils
 from worlds.alttp import Options as LttPOptions
 from worlds.generic import PlandoItem, PlandoConnection
 from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options
@@ -39,12 +40,12 @@ def mystery_argparse():
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults["players"], type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
-    parser.add_argument('--rom', default=options["lttp_options"]["rom_file"], help="Path to the 1.0 JP LttP Baserom.")
+    parser.add_argument('--lttp_rom', default=options["lttp_options"]["rom_file"], help="Path to the 1.0 JP LttP Baserom.")
+    parser.add_argument('--sm_rom', default=options["sm_options"]["rom_file"], help="Path to the 1.0 JP SM Baserom.")
     parser.add_argument('--enemizercli', default=defaults["enemizer_path"])
     parser.add_argument('--outputpath', default=options["general_options"]["output_path"])
     parser.add_argument('--race', action='store_true', default=defaults["race"])
     parser.add_argument('--meta_file_path', default=defaults["meta_file_path"])
-    parser.add_argument('--log_output_path', help='Path to store output log')
     parser.add_argument('--log_level', default='info', help='Sets log level')
     parser.add_argument('--yaml_output', default=0, type=lambda value: max(int(value), 0),
                         help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
@@ -125,20 +126,10 @@ def main(args=None, callback=ERmain):
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
 
-    # set up logger
-    if args.log_level:
-        erargs.loglevel = args.log_level
-    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
-        erargs.loglevel]
+    Utils.init_logging(f"Generate_{seed}.txt", loglevel=args.log_level)
 
-    if args.log_output_path:
-        os.makedirs(args.log_output_path, exist_ok=True)
-        logging.basicConfig(format='%(message)s', level=loglevel, force=True,
-                            filename=os.path.join(args.log_output_path, f"{seed}.log"))
-    else:
-        logging.basicConfig(format='%(message)s', level=loglevel, force=True)
-
-    erargs.rom = args.rom
+    erargs.lttp_rom = args.lttp_rom
+    erargs.sm_rom = args.sm_rom
     erargs.enemizercli = args.enemizercli
 
     settings_cache = {k: (roll_settings(v, args.plando) if args.samesettings else None)

@@ -1720,7 +1720,8 @@
             "Lake Hylia": "is_child and can_dive",
             "ZD Behind King Zora": "
                 Deliver_Letter or zora_fountain == 'open' or
-                (zora_fountain == 'adult' and is_adult)",
+                (zora_fountain == 'adult' and is_adult) or
+                (logic_king_zora_skip and is_adult)",
             "ZD Shop": "is_child or Blue_Fire",
             "ZD Storms Grotto": "can_open_storm_grotto"
         }

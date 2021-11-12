@@ -29,7 +29,11 @@ base_info = {
     "author": "Berserker",
     "homepage": "https://archipelago.gg",
     "description": "Integration client for the Archipelago Randomizer",
-    "factorio_version": "1.1"
+    "factorio_version": "1.1",
+    "dependencies": [
+        "base >= 1.1.0",
+        "? science-not-invited"
+    ]
 }
 
 recipe_time_scales = {
@@ -95,7 +99,8 @@ def generate_mod(world, output_directory: str):
                      "free_sample_blacklist": {item : 1 for item in free_sample_blacklist},
                      "progressive_technology_table": {tech.name : tech.progressive for tech in
                                                       progressive_technology_table.values()},
-                     "custom_recipes": world.custom_recipes}
+                     "custom_recipes": world.custom_recipes,
+                     "max_science_pack": multiworld.max_science_pack[player].value}
 
     for factorio_option in Options.factorio_options:
         template_data[factorio_option] = getattr(multiworld, factorio_option)[player].value

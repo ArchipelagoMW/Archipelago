@@ -1,12 +1,8 @@
 import unittest
-from BaseClasses import MultiWorld
 from worlds.AutoWorld import AutoWorldRegister
 
 
 class TestBase(unittest.TestCase):
-    world: MultiWorld
-    _state_cache = {}
-
     def testUniqueItems(self):
         known_item_ids = set()
         for gamename, world_type in AutoWorldRegister.world_types.items():

@@ -431,6 +431,17 @@ class Context:
         else:
             return self.player_names[team, slot]
 
+    def on_goal_achieved(self, client: Client):
+        finished_msg = f'{self.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1})' \
+                       f' has completed their goal.'
+        self.notify_all(finished_msg)
+        if "auto" in self.forfeit_mode:
+            forfeit_player(self, client.team, client.slot)
+        elif proxy_worlds[self.games[client.slot]].forced_auto_forfeit:
+            forfeit_player(self, client.team, client.slot)
+        if "auto" in self.collect_mode:
+            collect_player(self, client.team, client.slot)
+
 
 def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint]):
     concerns = collections.defaultdict(list)
@@ -1203,19 +1214,20 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         cmd: str = args["cmd"]
     except:
         logging.exception(f"Could not get command from {args}")
-        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd", "original_cmd": None,
                                       "text": f"Could not get command from {args} at `cmd`"}])
         raise
 
     if type(cmd) is not str:
-        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd", "original_cmd": None,
                                       "text": f"Command should be str, got {type(cmd)}"}])
         return
 
     if cmd == 'Connect':
         if not args or 'password' not in args or type(args['password']) not in [str, type(None)] or \
                 'game' not in args:
-            await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': 'Connect'}])
+            await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': 'Connect',
+                                          "original_cmd": cmd}])
             return
 
         errors = set()
@@ -1282,14 +1294,21 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
                                           "data": network_data_package}])
+
     elif client.auth:
         if cmd == "ConnectUpdate":
             if not args:
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': cmd}])
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': cmd,
+                                              "original_cmd": cmd}])
                 return
 
             if "tags" in args:
+                old_tags = client.tags
                 client.tags = args["tags"]
+                if set(old_tags) != set(client.tags):
+                    ctx.notify_all(
+                        f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
+                        f"from {old_tags} to {client.tags}.")
 
         elif cmd == 'Sync':
             items = get_received_items(ctx, client.team, client.slot)
@@ -1301,7 +1320,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'LocationChecks':
             if "Tracker" in client.tags:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
-                                              "text": "Trackers can't register new Location Checks"}])
+                                              "text": "Trackers can't register new Location Checks",
+                                              "original_cmd": cmd}])
             else:
                 register_location_checks(ctx, client.team, client.slot, args["locations"])
 
@@ -1310,7 +1330,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for location in args["locations"]:
                 if type(location) is not int or location not in lookup_any_location_id_to_name:
                     await ctx.send_msgs(client,
-                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts'}])
+                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
+                                          "original_cmd": cmd}])
                     return
                 target_item, target_player = ctx.locations[client.slot][location]
                 locs.append(NetworkItem(target_item, location, target_player))
@@ -1322,7 +1343,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
         elif cmd == 'Say':
             if "text" not in args or type(args["text"]) is not str or not args["text"].isprintable():
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'Say'}])
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'Say',
+                                              "original_cmd": cmd}])
                 return
 
             client.messageprocessor(args["text"])
@@ -1345,14 +1367,7 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
     current = ctx.client_game_state[client.team, client.slot]
     if current != ClientStatus.CLIENT_GOAL:  # can't undo goal completion
         if new_status == ClientStatus.CLIENT_GOAL:
-            finished_msg = f'{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has completed their goal.'
-            ctx.notify_all(finished_msg)
-            if "auto" in ctx.forfeit_mode:
-                forfeit_player(ctx, client.team, client.slot)
-            elif proxy_worlds[ctx.games[client.slot]].forced_auto_forfeit:
-                forfeit_player(ctx, client.team, client.slot)
-            if "auto" in ctx.collect_mode:
-                collect_player(ctx, client.team, client.slot)
+            ctx.on_goal_achieved(client)
 
         ctx.client_game_state[client.team, client.slot] = new_status
 
@@ -1641,8 +1656,7 @@ async def auto_shutdown(ctx, to_cancel=None):
 
 
 async def main(args: argparse.Namespace):
-    logging.basicConfig(force=True,
-                        format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
+    Utils.init_logging("Server", loglevel=args.loglevel.lower())
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.forfeit_mode, args.collect_mode,

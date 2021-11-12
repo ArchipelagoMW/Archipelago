@@ -3,6 +3,7 @@ import itertools
 import re
 import zlib
 from collections import defaultdict
+from functools import partial
 
 from .LocationList import business_scrubs
 from .Hints import writeGossipStoneHints, buildAltarHints, \
@@ -1321,8 +1322,11 @@ def patch_rom(world, rom):
     # Write item overrides
     override_table = get_override_table(world)
     rom.write_bytes(rom.sym('cfg_item_overrides'), get_override_table_bytes(override_table))
-    rom.write_byte(rom.sym('PLAYER_ID'), world.player) # Write player ID
+    rom.write_byte(rom.sym('PLAYER_ID'), min(world.player, 255)) # Write player ID
     rom.write_bytes(rom.sym('AP_PLAYER_NAME'), bytearray(world.world.get_player_name(world.player), 'ascii'))
+
+    if world.death_link:
+        rom.write_byte(rom.sym('DEATH_LINK'), 0x01)
 
     # Revert Song Get Override Injection
     if not songs_as_items:
@@ -1804,7 +1808,7 @@ def write_rom_item(rom, item_id, item):
 
 
 def get_override_table(world):
-    return list(filter(lambda val: val != None, map(get_override_entry, world.world.get_filled_locations(world.player))))
+    return list(filter(lambda val: val != None, map(partial(get_override_entry, world.player), world.world.get_filled_locations(world.player))))
 
 
 override_struct = struct.Struct('>xBBBHBB') # match override_t in get_items.c
@@ -1812,10 +1816,10 @@ def get_override_table_bytes(override_table):
     return b''.join(sorted(itertools.starmap(override_struct.pack, override_table)))
 
 
-def get_override_entry(location):
+def get_override_entry(player_id, location):
     scene = location.scene
     default = location.default
-    player_id = location.item.player
+    player_id = 0 if player_id == location.item.player else min(location.item.player, 255)
     if location.item.game != 'Ocarina of Time': 
         # This is an AP sendable. It's guaranteed to not be None. 
         looks_like_item_id = 0

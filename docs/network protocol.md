@@ -44,6 +44,7 @@ These packets are are sent from the multiworld server to the client. They are no
 * [PrintJSON](#PrintJSON)
 * [DataPackage](#DataPackage)
 * [Bounced](#Bounced)
+* [InvalidPacket](#InvalidPacket)
 
 ### RoomInfo
 Sent to clients when they connect to an Archipelago server.
@@ -157,9 +158,10 @@ Sent to clients purely to display a message to the player. This packet differs f
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | data | list\[JSONMessagePart\] | See [JSONMessagePart](#JSONMessagePart) for more details on this type. |
-| type | str | May be present to indicate the nature of this message. Known types are Hint and ItemSend.
-| receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID.
-| item | NetworkItem | Is present if type is Hint or ItemSend and marks the source player id, location id and item id.
+| type | str | May be present to indicate the nature of this message. Known types are Hint and ItemSend. |
+| receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID. |
+| item | NetworkItem | Is present if type is Hint or ItemSend and marks the source player id, location id and item id. |
+| found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
 
 ### DataPackage
 Sent to clients to provide what is known as a 'data package' which contains information to enable a client to most easily communicate with the Archipelago server. Contents include things like location id to name mappings, among others; see [Data Package Contents](#Data-Package-Contents) for more info.
@@ -184,6 +186,7 @@ Sent to clients if the server caught a problem with a packet. This only occurs f
 | ---- | ---- | ----- |
 | type | string | "cmd" if the Packet isn't available/allowed, "arguments" if the problem is with the package data. |
 | text | string | Error text explaining the caught error. |
+| original_cmd | string | Echoes the cmd it failed on. May be null if the cmd was not found.
 ## (Client -> Server)
 These packets are sent purely from client to server. They are not accepted by clients.
 
@@ -211,6 +214,14 @@ Sent by the client to initiate a connection to an Archipelago game session.
 
 #### Authentication
 Many, if not all, other packets require a successfully authenticated client. This is described in more detail in [Archipelago Connection Handshake](#Archipelago-Connection-Handshake).
+
+### ConnectUpdate
+Update arguments from the Connect package, currently only updating tags is supported.
+
+#### Arguments
+| Name | Type | Notes |
+| ---- | ---- | ----- |
+| tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
 
 ### Sync
 Sent to server to request a [ReceivedItems](#ReceivedItems) packet to synchronize items.
@@ -409,6 +420,8 @@ We encourage clients to cache the data package they receive on disk, or otherwis
 Note: 
  * Any ID is unique to its type across AP: Item 56 only exists once and Location 56 only exists once.
  * Any Name is unique to its type across its own Game only: Single Arrow can exist in two games.
+ * The IDs from the game "Archipelago" may be used in any other game. 
+   Especially Location ID -1: Cheat Console and -2: Server (typically Remote Start Inventory)
 
 #### Contents
 | Name | Type | Notes |

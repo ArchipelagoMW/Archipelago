@@ -7,6 +7,7 @@ import sys
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
+os.environ["KIVY_LOG_ENABLE"] = "0"
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -286,12 +287,12 @@ class FactorioManager(GameManager):
     base_title = "Archipelago Factorio Client"
 
 
-class LttPManager(GameManager):
+class SNIManager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago"),
         ("SNES", "SNES"),
     ]
-    base_title = "Archipelago LttP Client"
+    base_title = "Archipelago SNI Client"
 
 
 class TextManager(GameManager):

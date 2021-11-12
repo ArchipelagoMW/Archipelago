@@ -6,23 +6,23 @@ import string
 import copy
 import subprocess
 import time
+import random
 
 import factorio_rcon
-
 import colorama
 import asyncio
 from queue import Queue
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled, \
-    init_logging
-from MultiServer import mark_raw
-
 import Utils
-import random
+
+if __name__ == "__main__":
+    Utils.init_logging("FactorioClient")
+
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled, \
+     get_base_parser
+from MultiServer import mark_raw
 from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
 
 from worlds.factorio import Factorio
-
-init_logging("FactorioClient")
 
 
 class FactorioCommandProcessor(ClientCommandProcessor):
@@ -353,17 +353,11 @@ class FactorioJSONtoTextParser(JSONtoTextParser):
 
 
 if __name__ == '__main__':
-    import argparse
-
-    parser = argparse.ArgumentParser(description="Optional arguments to FactorioClient follow. "
-                                                 "Remaining arguments get passed into bound Factorio instance."
-                                                 "Refer to Factorio --help for those.")
+    parser = get_base_parser(description="Optional arguments to FactorioClient follow. "
+                                         "Remaining arguments get passed into bound Factorio instance."
+                                         "Refer to Factorio --help for those.")
     parser.add_argument('--rcon-port', default='24242', type=int, help='Port to use to communicate with Factorio')
     parser.add_argument('--rcon-password', help='Password to authenticate with RCON.')
-    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
-    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
-    if not Utils.is_frozen():  # Frozen state has no cmd window in the first place
-        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
 
     args, rest = parser.parse_known_args()
     colorama.init()

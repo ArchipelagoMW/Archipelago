@@ -294,7 +294,8 @@ class ALTTPWorld(World):
                                world.sprite[player],
                                palettes_options, world, player, True,
                                reduceflashing=world.reduceflashing[player] or world.is_race,
-                               triforcehud=world.triforcehud[player].current_key)
+                               triforcehud=world.triforcehud[player].current_key,
+                               deathlink=world.death_link[player])
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
@@ -323,7 +324,7 @@ class ALTTPWorld(World):
             del (multidata["connect_names"][self.world.player_name[self.player]])
 
     def get_required_client_version(self) -> tuple:
-        return max((0, 1, 4), super(ALTTPWorld, self).get_required_client_version())
+        return max((0, 2, 0), super(ALTTPWorld, self).get_required_client_version())
 
     def create_item(self, name: str) -> Item:
         return ALttPItem(name, self.player, **as_dict_item_table[name])

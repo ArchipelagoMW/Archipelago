@@ -397,6 +397,8 @@ def get_barren_hint(world, checked):
         return None
 
     area_weights = [world.empty_areas[area]['weight'] for area in areas]
+    if not any(area_weights):
+        return None
 
     area = world.hint_rng.choices(areas, weights=area_weights)[0]
     if world.empty_areas[area]['dungeon']:
@@ -637,8 +639,6 @@ hint_dist_keys = {
 
 # builds out general hints based on location and whether an item is required or not
 def buildWorldGossipHints(world, checkedLocations=None):
-    # Seed the RNG
-    world.hint_rng = world.world.slot_seeds[world.player]
 
     # rebuild hint exclusion list
     hintExclusions(world, clear_cache=True)
