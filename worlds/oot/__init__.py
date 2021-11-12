@@ -490,7 +490,6 @@ class OOTWorld(World):
             while tries:
                 try:
                     shuffle_random_entrances(self)
-                    break
                 except EntranceShuffleError as e:
                     tries -= 1
                     logging.getLogger('').debug(f"Failed shuffling entrances for world {self.player}, retrying {tries} more times")
@@ -511,6 +510,8 @@ class OOTWorld(World):
                     # Clean up root entrances
                     root = self.get_region("Root Exits")
                     root.exits = root.exits[:8]
+                else:
+                    break
 
             # Write entrances to spoiler log
             all_entrances = self.get_shuffled_entrances()
@@ -688,7 +689,6 @@ class OOTWorld(World):
                     fill_restrictive(self.world, self.world.get_all_state(False), song_locations[:], songs[:],
                                      True, True)
                     logger.debug(f"Successfully placed songs for player {self.player} after {6 - tries} attempt(s)")
-                    tries = 0
                 except FillError as e:
                     tries -= 1
                     if tries == 0:
@@ -702,6 +702,8 @@ class OOTWorld(World):
                         location.item = None
                         location.locked = False
                         location.event = False
+                else:
+                    break
 
         # Place shop items
         # fast fill will fail because there is some logic on the shop items. we'll gather them up and place the shop items
