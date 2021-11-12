@@ -946,26 +946,17 @@ class OOTWorld(World):
         for item, player in all_state.prog_items:
             if (item not in item_table or item_table[item][2] is None) and player == self.player:
                 all_state.prog_items[(item, player)] = 0
-        # Remove all locations checked
-        to_remove = set()
-        for loc in all_state.locations_checked:
-            if loc.player == self.player:
-                to_remove.add(loc)
-        all_state.locations_checked -= to_remove
-        # Remove all events
-        to_remove = set()
-        for event in all_state.events:
-            if event.player == self.player:
-                to_remove.add(event)
-        all_state.events -= to_remove
+        # Remove all events and checked locations
+        all_state.locations_checked = {loc for loc in all_state.locations_checked if loc.player != self.player}
+        all_state.events = {loc for loc in all_state.events if loc.player != self.player}
 
         # Invalidate caches
-        all_state.child_reachable_regions[player] = set()
-        all_state.adult_reachable_regions[player] = set()
-        all_state.child_blocked_connections[player] = set()
-        all_state.adult_blocked_connections[player] = set()
-        all_state.day_reachable_regions[player] = set()
-        all_state.dampe_reachable_regions[player] = set()
-        all_state.stale[player] = True
+        all_state.child_reachable_regions[self.player] = set()
+        all_state.adult_reachable_regions[self.player] = set()
+        all_state.child_blocked_connections[self.player] = set()
+        all_state.adult_blocked_connections[self.player] = set()
+        all_state.day_reachable_regions[self.player] = set()
+        all_state.dampe_reachable_regions[self.player] = set()
+        all_state.stale[self.player] = True
 
         return all_state
