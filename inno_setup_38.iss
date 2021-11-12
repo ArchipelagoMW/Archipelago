@@ -89,7 +89,7 @@ Source: "{tmp}\forge-installer.jar"; DestDir: "{app}"; Flags: skipifsourcedoesnt
 Name: "{group}\{#MyAppName} Folder"; Filename: "{app}";
 Name: "{group}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Components: server
 Name: "{group}\{#MyAppName} Text Client"; Filename: "{app}\ArchipelagoTextClient.exe"; Components: client/text
-Name: "{group}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoLttPClient.exe"; Components: client/sni
+Name: "{group}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoSNIClient.exe"; Components: client/sni
 Name: "{group}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Components: client/factorio
 Name: "{group}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinecraftClient.exe"; Components: client/minecraft
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
@@ -105,6 +105,9 @@ Filename: "{app}\jre8\bin\java.exe"; Parameters: "-jar ""{app}\forge-installer.j
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"
+
+[InstallDelete]
+Type: files; Name: "{app}\ArchipelagoLttPClient.exe"
 
 [Registry]
 
