@@ -156,7 +156,7 @@ class Context(CommonContext):
             self.killing_player_task = asyncio.create_task(deathlink_kill_player(self))
         super(Context, self).on_deathlink(data)
 
-    def handle_deathlink_state(self, currently_dead: bool):
+    async def handle_deathlink_state(self, currently_dead: bool):
         # in this state we only care about triggering a death send
         if self.death_state == DeathState.alive:
             if currently_dead:
@@ -935,7 +935,7 @@ async def game_watcher(ctx: Context):
             gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
             if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
                 currently_dead = gamemode[0] in DEATH_MODES
-                ctx.handle_deathlink_state(currently_dead)
+                await ctx.handle_deathlink_state(currently_dead)
 
             gameend = await snes_read(ctx, SAVEDATA_START + 0x443, 1)
             game_timer = await snes_read(ctx, SAVEDATA_START + 0x42E, 4)
@@ -1004,7 +1004,7 @@ async def game_watcher(ctx: Context):
             gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
             if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
                 currently_dead = gamemode[0] in SM_DEATH_MODES
-                ctx.handle_deathlink_state(currently_dead)
+                await ctx.handle_deathlink_state(currently_dead)
             if gamemode is not None and gamemode[0] in SM_ENDGAME_MODES:
                 if not ctx.finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
