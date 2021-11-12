@@ -28,13 +28,10 @@ from logic.logic import Logic
 from randomizer import VariaRandomizer
 
 
-from Utils import output_path
-from shutil import copy2
-
 class SMWorld(World):
     game: str = "Super Metroid"
     topology_present = True
-    data_version = 0
+    data_version = 1
     options = sm_options
     item_names: Set[str] = frozenset(items_lookup_name_to_id)
     location_names: Set[str] = frozenset(locations_lookup_name_to_id)

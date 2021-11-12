@@ -122,7 +122,6 @@ class Context(CommonContext):
         self.awaiting_rom = False
         self.rom = None
         self.prev_rom = None
-        self.gameID = None
 
     async def connection_closed(self):
         await super(Context, self).connection_closed()
@@ -148,7 +147,8 @@ class Context(CommonContext):
         await self.send_msgs([{"cmd": 'Connect',
                                'password': self.password, 'name': auth, 'version': Utils.version_tuple,
                                'tags': self.tags,
-                               'uuid': Utils.get_unique_identifier(), 'game': "Super Metroid" if self.rom[:2] == b"SM" else "A Link to the Past"
+                               'uuid': Utils.get_unique_identifier(),
+                               'game': self.game
                                }])
 
     def on_deathlink(self, data: dict):
@@ -161,23 +161,21 @@ async def deathlink_kill_player(ctx: Context):
     ctx.death_state = DeathState.killing_player
     while ctx.death_state == DeathState.killing_player and \
             ctx.snes_state == SNESState.SNES_ATTACHED:
-        if ctx.gameID == GAME_ALTTP:
-        	snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
-        	snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
-        elif ctx.gameID == GAME_SM:
-        	snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
+        if ctx.game == GAME_ALTTP:
+            snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
+            snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
+        elif ctx.game == GAME_SM:
+            snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
         await snes_flush_writes(ctx)
         await asyncio.sleep(1)
         gamemode = None
-        if ctx.gameID == GAME_ALTTP:
-        	gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
-        elif ctx.gameID == GAME_SM:
-        	gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
-        if not gamemode or gamemode[0] in (DEATH_MODES if ctx.gameID == GAME_ALTTP else SM_DEATH_MODES):
+        if ctx.game == GAME_ALTTP:
+            gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
+        elif ctx.game == GAME_SM:
+            gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
+        if not gamemode or gamemode[0] in (DEATH_MODES if ctx.game == GAME_ALTTP else SM_DEATH_MODES):
             ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
-
-
 
 
 def color_item(item_id: int, green: bool = False) -> str:
@@ -886,16 +884,17 @@ async def game_watcher(ctx: Context):
             if gameName is None:
                 continue
             elif gameName == b"SM":
-                ctx.gameID = GAME_SM
+                ctx.game = GAME_SM
             else:
-                ctx.gameID = GAME_ALTTP
+                ctx.game = GAME_ALTTP
 
-            rom = await snes_read(ctx, SM_ROMNAME_START if ctx.gameID == GAME_SM else ROMNAME_START, ROMNAME_SIZE)
+            rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else ROMNAME_START, ROMNAME_SIZE)
             if rom is None or rom == bytes([0] * ROMNAME_SIZE):
                 continue
 
             ctx.rom = rom
-            death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.gameID == GAME_ALTTP else SM_DEATH_LINK_ACTIVE_ADDR, 1)
+            death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
+                                         SM_DEATH_LINK_ACTIVE_ADDR, 1)
             if death_link:
                 death_link = bool(death_link[0] & 0b1)
                 old_tags = ctx.tags.copy()
@@ -917,7 +916,7 @@ async def game_watcher(ctx: Context):
             snes_logger.warning("ROM change detected, please reconnect to the multiworld server")
             await ctx.disconnect()
 
-        if ctx.gameID == GAME_ALTTP:
+        if ctx.game == GAME_ALTTP:
             gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
             if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
                 currently_dead = gamemode[0] in DEATH_MODES
@@ -998,7 +997,7 @@ async def game_watcher(ctx: Context):
                 ctx.locations_scouted.add(scout_location)
                 await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [scout_location]}])
             await track_locations(ctx, roomid, roomdata)        
-        elif ctx.gameID == GAME_SM:
+        elif ctx.game == GAME_SM:
             gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
             if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
                 currently_dead = gamemode[0] in SM_DEATH_MODES
