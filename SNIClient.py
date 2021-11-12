@@ -23,8 +23,7 @@ from worlds.alttp import Regions, Shops
 from worlds.alttp import Items
 from worlds.alttp.Rom import ROM_PLAYER_LIMIT
 import Utils
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, init_logging, \
-    get_base_parser
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Patch import GAME_ALTTP, GAME_SM
 
 
@@ -165,14 +164,14 @@ async def deathlink_kill_player(ctx: Context):
         if ctx.gameID == GAME_ALTTP:
         	snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
         	snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
-        elif self.gameID == GAME_SM:
-        	snes_buffered_write(self, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
+        elif ctx.gameID == GAME_SM:
+        	snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
         await snes_flush_writes(ctx)
         await asyncio.sleep(1)
         gamemode = None
         if ctx.gameID == GAME_ALTTP:
         	gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
-        elif self.gameID == GAME_SM:
+        elif ctx.gameID == GAME_SM:
         	gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
         if not gamemode or gamemode[0] in (DEATH_MODES if ctx.gameID == GAME_ALTTP else SM_DEATH_MODES):
             ctx.death_state = DeathState.dead
