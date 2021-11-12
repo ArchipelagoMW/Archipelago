@@ -287,12 +287,12 @@ class FactorioManager(GameManager):
     base_title = "Archipelago Factorio Client"
 
 
-class LttPManager(GameManager):
+class SNIManager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago"),
         ("SNES", "SNES"),
     ]
-    base_title = "Archipelago LttP Client"
+    base_title = "Archipelago SNI Client"
 
 
 class TextManager(GameManager):
