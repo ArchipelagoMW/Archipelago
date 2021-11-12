@@ -3,13 +3,16 @@ import logging
 import asyncio
 import urllib.parse
 import sys
-import os
 import typing
 import time
 
 import websockets
 
 import Utils
+
+if __name__ == "__main__":
+    Utils.init_logging("TextClient")
+
 from MultiServer import CommandProcessor
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
 from Utils import Version
@@ -20,8 +23,6 @@ logger = logging.getLogger("Client")
 # without terminal we have to use gui mode
 gui_enabled = not sys.stdout or "--nogui" not in sys.argv
 
-log_folder = Utils.local_path("logs")
-os.makedirs(log_folder, exist_ok=True)
 
 class ClientCommandProcessor(CommandProcessor):
     def __init__(self, ctx: CommonContext):
@@ -270,6 +271,7 @@ class CommonContext():
             logger.info(f"DeathLink: Received from {data['source']}")
 
     async def send_death(self, death_text: str = ""):
+        logger.info("Sending death to your friends...")
         self.last_death_link = time.time()
         await self.send_msgs([{
             "cmd": "Bounce", "tags": ["DeathLink"],
@@ -517,21 +519,6 @@ async def console_loop(ctx: CommonContext):
             logger.exception(e)
 
 
-def init_logging(name: str):
-    root_logger = logging.getLogger()
-    root_logger.setLevel(logging.INFO)
-    file_handler = logging.FileHandler(
-        os.path.join(log_folder, f"{name}.txt"),
-        "w",
-        encoding="utf-8-sig")
-    file_handler.setFormatter(logging.Formatter("[%(name)s]: %(message)s"))
-    root_logger.addHandler(file_handler)
-    if sys.stdout:
-        root_logger.addHandler(
-            logging.StreamHandler(sys.stdout)
-        )
-
-
 def get_base_parser(description=None):
     import argparse
     parser = argparse.ArgumentParser(description=description)
@@ -544,7 +531,6 @@ def get_base_parser(description=None):
 
 if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
-    init_logging("TextClient")
 
     class TextContext(CommonContext):
         tags = {"AP", "IgnoreGame"}

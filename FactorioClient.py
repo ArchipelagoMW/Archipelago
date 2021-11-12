@@ -6,23 +6,23 @@ import string
 import copy
 import subprocess
 import time
+import random
 
 import factorio_rcon
-
 import colorama
 import asyncio
 from queue import Queue
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled, \
-    init_logging, get_base_parser
-from MultiServer import mark_raw
-
 import Utils
-import random
+
+if __name__ == "__main__":
+    Utils.init_logging("FactorioClient")
+
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled, \
+     get_base_parser
+from MultiServer import mark_raw
 from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
 
 from worlds.factorio import Factorio
-
-init_logging("FactorioClient")
 
 
 class FactorioCommandProcessor(ClientCommandProcessor):

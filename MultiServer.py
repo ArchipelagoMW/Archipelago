@@ -431,6 +431,17 @@ class Context:
         else:
             return self.player_names[team, slot]
 
+    def on_goal_achieved(self, client: Client):
+        finished_msg = f'{self.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1})' \
+                       f' has completed their goal.'
+        self.notify_all(finished_msg)
+        if "auto" in self.forfeit_mode:
+            forfeit_player(self, client.team, client.slot)
+        elif proxy_worlds[self.games[client.slot]].forced_auto_forfeit:
+            forfeit_player(self, client.team, client.slot)
+        if "auto" in self.collect_mode:
+            collect_player(self, client.team, client.slot)
+
 
 def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint]):
     concerns = collections.defaultdict(list)
@@ -1356,14 +1367,7 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
     current = ctx.client_game_state[client.team, client.slot]
     if current != ClientStatus.CLIENT_GOAL:  # can't undo goal completion
         if new_status == ClientStatus.CLIENT_GOAL:
-            finished_msg = f'{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has completed their goal.'
-            ctx.notify_all(finished_msg)
-            if "auto" in ctx.forfeit_mode:
-                forfeit_player(ctx, client.team, client.slot)
-            elif proxy_worlds[ctx.games[client.slot]].forced_auto_forfeit:
-                forfeit_player(ctx, client.team, client.slot)
-            if "auto" in ctx.collect_mode:
-                collect_player(ctx, client.team, client.slot)
+            ctx.on_goal_achieved(client)
 
         ctx.client_game_state[client.team, client.slot] = new_status
 
@@ -1652,8 +1656,7 @@ async def auto_shutdown(ctx, to_cancel=None):
 
 
 async def main(args: argparse.Namespace):
-    logging.basicConfig(force=True,
-                        format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
+    Utils.init_logging("Server", loglevel=args.loglevel.lower())
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.forfeit_mode, args.collect_mode,
