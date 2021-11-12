@@ -87,7 +87,7 @@ done so already, please do this now. SD2SNES and FXPak Pro users may download th
 2. Load the ROM file from the menu.
 
 ### Open the client
-Open [ap-soeclient](https://evermizer.com/apclient) in a modern browser. Do not switch tabs, open it in a new window
+Open [ap-soeclient](http://evermizer.com/apclient) in a modern browser. Do not switch tabs, open it in a new window
 if you want to use the browser while playing. Do not minimize the window with the client.
 
 The client should automatically connect to SNI, the "SNES" status should change to green.
