@@ -204,7 +204,12 @@ class SoEWorld(World):
                                  flags, money, exp)):
                 raise RuntimeError()
             with lzma.LZMAFile(patch_file, 'wb') as f:
-                f.write(generate_patch(rom_file, out_file))
+                f.write(generate_patch(rom_file, out_file,
+                                       {
+                                           # used by WebHost
+                                           "player_name": self.world.player_name[self.player],
+                                           "player_id": self.player
+                                       }))
         except:
             raise
         finally:

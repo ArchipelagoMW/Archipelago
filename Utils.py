@@ -166,6 +166,9 @@ def get_default_options() -> dict:
             "sni": "SNI",
             "rom_start": True,
         },
+        "soe_options": {
+            "rom_file": "Secret of Evermore (USA).sfc",
+        },
         "lttp_options": {
             "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
             "sni": "SNI",
