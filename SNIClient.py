@@ -22,6 +22,7 @@ from NetUtils import *
 from worlds.alttp import Regions, Shops
 from worlds.alttp import Items
 from worlds.alttp.Rom import ROM_PLAYER_LIMIT
+from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
 import Utils
 from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Patch import GAME_ALTTP, GAME_SM
@@ -156,7 +157,7 @@ class Context(CommonContext):
             self.killing_player_task = asyncio.create_task(deathlink_kill_player(self))
         super(Context, self).on_deathlink(data)
 
-    def handle_deathlink_state(self, currently_dead: bool):
+    async def handle_deathlink_state(self, currently_dead: bool):
         # in this state we only care about triggering a death send
         if self.death_state == DeathState.alive:
             if currently_dead:
@@ -935,7 +936,7 @@ async def game_watcher(ctx: Context):
             gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
             if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
                 currently_dead = gamemode[0] in DEATH_MODES
-                ctx.handle_deathlink_state(currently_dead)
+                await ctx.handle_deathlink_state(currently_dead)
 
             gameend = await snes_read(ctx, SAVEDATA_START + 0x443, 1)
             game_timer = await snes_read(ctx, SAVEDATA_START + 0x42E, 4)
@@ -1004,7 +1005,7 @@ async def game_watcher(ctx: Context):
             gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
             if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
                 currently_dead = gamemode[0] in SM_DEATH_MODES
-                ctx.handle_deathlink_state(currently_dead)
+                await ctx.handle_deathlink_state(currently_dead)
             if gamemode is not None and gamemode[0] in SM_ENDGAME_MODES:
                 if not ctx.finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -1048,7 +1049,7 @@ async def game_watcher(ctx: Context):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
 
-                playerID = (item.player-1) if item.player != 0 else (len(ctx.player_names)-1)
+                playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes([playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
                 itemOutPtr += 1
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x602, bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
@@ -1056,7 +1057,6 @@ async def game_watcher(ctx: Context):
                     color(ctx.item_name_getter(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
                     ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
-
 
 async def run_game(romfile):
     auto_start = Utils.get_options()["lttp_options"].get("rom_start", True)

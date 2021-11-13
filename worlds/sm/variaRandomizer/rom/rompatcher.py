@@ -573,12 +573,12 @@ class RomPatcher:
         self.writeCreditsStringBig(address, line, top=False)
         address += 0x80
 
-        value = " "+settings.progSpeed.upper()
+        value = " "+"NA" # settings.progSpeed.upper()
         line = " PROGRESSION SPEED ....%s " % value.rjust(8, '.')
         self.writeCreditsString(address, 0x04, line)
         address += 0x40
 
-        line = " PROGRESSION DIFFICULTY  %s " % settings.progDiff.upper()
+        line = " PROGRESSION DIFFICULTY %s " % value.rjust(7, '.') # settings.progDiff.upper()
         self.writeCreditsString(address, 0x04, line)
         address += 0x80 # skip item distrib title
 

@@ -50,11 +50,15 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 [Components]
 Name: "core"; Description: "Core Files"; Types: full hosting playing custom; Flags: fixed
 Name: "generator"; Description: "Generator"; Types: full hosting
+Name: "generator/sm"; Description: "Super Metroid ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728
+Name: "generator/soe"; Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728
 Name: "generator/lttp"; Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
 Name: "generator/oot"; Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296
 Name: "server"; Description: "Server"; Types: full hosting
 Name: "client"; Description: "Clients"; Types: full playing
-Name: "client/lttp"; Description: "A Link to the Past"; Types: full playing
+Name: "client/sni"; Description: "SNI Client"; Types: full playing
+Name: "client/sni/lttp"; Description: "SNI Client - A Link to the Past Patch Setup"; Types: full playing
+Name: "client/sni/sm"; Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing
 Name: "client/factorio"; Description: "Factorio"; Types: full playing
 Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
 Name: "client/text"; Description: "Text, to !command and chat"; Types: full playing
@@ -63,18 +67,20 @@ Name: "client/text"; Description: "Text, to !command and chat"; Types: full play
 NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-modify authusers-modify;
 
 [Files]
-Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"; Flags: external; Components: client/lttp or generator/lttp
+Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"; Flags: external; Components: client/sni/lttp or generator/lttp
+Source: "{code:GetSMROMPath}"; DestDir: "{app}"; DestName: "Super Metroid (JU).sfc"; Flags: external; Components: client/sni/sm or generator/sm
+Source: "{code:GetSoEROMPath}"; DestDir: "{app}"; DestName: "Secret of Evermore (USA).sfc"; Flags: external; Components: generator/soe
 Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: generator/oot
 Source: "{#sourcepath}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#sourcepath}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/lttp
+Source: "{#sourcepath}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
 Source: "{#sourcepath}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
 
 Source: "{#sourcepath}\ArchipelagoGenerate.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: generator
 Source: "{#sourcepath}\ArchipelagoServer.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: server
 Source: "{#sourcepath}\ArchipelagoFactorioClient.exe";  DestDir: "{app}"; Flags: ignoreversion; Components: client/factorio
 Source: "{#sourcepath}\ArchipelagoTextClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/text
-Source: "{#sourcepath}\ArchipelagoLttPClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/lttp
-Source: "{#sourcepath}\ArchipelagoLttPAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/lttp or generator/lttp
+Source: "{#sourcepath}\ArchipelagoSNIClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni
+Source: "{#sourcepath}\ArchipelagoLttPAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni/lttp or generator/lttp
 Source: "{#sourcepath}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/minecraft
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
@@ -84,30 +90,38 @@ Source: "{tmp}\forge-installer.jar"; DestDir: "{app}"; Flags: skipifsourcedoesnt
 [Icons]
 Name: "{group}\{#MyAppName} Folder"; Filename: "{app}";
 Name: "{group}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Components: server
-Name: "{group}\{#MyAppName} Text Client"; Filename: "{app}\ArchipelagoTextClient.exe"; Components: client/lttp
-Name: "{group}\{#MyAppName} LttP Client"; Filename: "{app}\ArchipelagoLttPClient.exe"; Components: client/lttp
+Name: "{group}\{#MyAppName} Text Client"; Filename: "{app}\ArchipelagoTextClient.exe"; Components: client/text
+Name: "{group}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoSNIClient.exe"; Components: client/sni
 Name: "{group}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Components: client/factorio
 Name: "{group}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinecraftClient.exe"; Components: client/minecraft
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
 Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Components: server
-Name: "{commondesktop}\{#MyAppName} LttP Client"; Filename: "{app}\ArchipelagoLttPClient.exe"; Tasks: desktopicon; Components: client/lttp
+Name: "{commondesktop}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoSNIClient.exe"; Tasks: desktopicon; Components: client/sni
 Name: "{commondesktop}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Tasks: desktopicon; Components: client/factorio
 
 [Run]
 
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
-Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: client/lttp or generator/lttp
+Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: client/sni/lttp or generator/lttp
 Filename: "{app}\jre8\bin\java.exe"; Parameters: "-jar ""{app}\forge-installer.jar"" --installServer ""{app}\Minecraft Forge server"""; Flags: runhidden; Check: IsForgeNeeded(); StatusMsg: "Installing Forge Server..."; Components: client/minecraft
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"
 
+[InstallDelete]
+Type: files; Name: "{app}\ArchipelagoLttPClient.exe"
+
 [Registry]
 
-Root: HKCR; Subkey: ".apbp";                                 ValueData: "{#MyAppName}patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/lttp
-Root: HKCR; Subkey: "{#MyAppName}patch";                     ValueData: "Archipelago Binary Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/lttp
-Root: HKCR; Subkey: "{#MyAppName}patch\DefaultIcon";         ValueData: "{app}\ArchipelagoLttPClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/lttp
-Root: HKCR; Subkey: "{#MyAppName}patch\shell\open\command";  ValueData: """{app}\ArchipelagoLttPClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/lttp
+Root: HKCR; Subkey: ".apbp";                                 ValueData: "{#MyAppName}patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}patch";                     ValueData: "Archipelago Binary Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
+
+Root: HKCR; Subkey: ".apm3";                                 ValueData: "{#MyAppName}smpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}smpatch";                     ValueData: "Archipelago Super Metroid Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}smpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}smpatch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
 
 Root: HKCR; Subkey: ".apmc";                                  ValueData: "{#MyAppName}mcdata";         Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/minecraft
 Root: HKCR; Subkey: "{#MyAppName}mcdata";                     ValueData: "Archipelago Minecraft Data"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/minecraft
@@ -189,38 +203,53 @@ begin
     ZipFile.Items, SHCONTCH_NOPROGRESSBOX or SHCONTCH_RESPONDYESTOALL);
 end;
 
-var ROMFilePage: TInputFileWizardPage;
 var R : longint;
-var rom: string;
+
+var lttprom: string;
+var LttPROMFilePage: TInputFileWizardPage;
+
+var smrom: string;
+var SMRomFilePage: TInputFileWizardPage;
+
+var soerom: string;
+var SoERomFilePage: TInputFileWizardPage;
+
 var ootrom: string;
 var OoTROMFilePage: TInputFileWizardPage;
+
 var MinecraftDownloadPage: TDownloadWizardPage;
 
-procedure AddRomPage();
+function CheckRom(name: string; hash: string): string;
+var rom: string;
 begin
-  rom := FileSearch('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', WizardDirValue());
+  log('Handling ' + name)
+  rom := FileSearch(name, WizardDirValue());
   if Length(rom) > 0 then
     begin
       log('existing ROM found');
-      log(IntToStr(CompareStr(GetMD5OfFile(rom), '03a63945398191337e896e5771f77173')));
-      if CompareStr(GetMD5OfFile(rom), '03a63945398191337e896e5771f77173') = 0 then
+      log(IntToStr(CompareStr(GetMD5OfFile(rom), hash)));
+      if CompareStr(GetMD5OfFile(rom), hash) = 0 then
         begin
         log('existing ROM verified');
+        Result := rom;
         exit;
         end;
       log('existing ROM failed verification');
     end;
-  rom := ''
-  ROMFilePage :=
+end;
+
+function AddRomPage(name: string): TInputFileWizardPage;
+begin
+  Result :=
     CreateInputFilePage(
       wpSelectComponents,
       'Select ROM File',
-      'Where is your Zelda no Densetsu - Kamigami no Triforce (Japan).sfc located?',
+      'Where is your ' + name + ' located?',
       'Select the file, then click Next.');
 
-  ROMFilePage.Add(
+  Result.Add(
     'Location of ROM file:',
-    'SNES ROM files|*.sfc|All files|*.*',
+    'SNES ROM files|*.sfc;*.smc|All files|*.*',
     '.sfc');
 end;
 
@@ -290,34 +319,50 @@ begin
     Result := True;
 end;
 
-procedure InitializeWizard();
-begin                    
-  AddOoTRomPage();
-  AddRomPage();
-  AddMinecraftDownloads();
-end;
-
-
-function ShouldSkipPage(PageID: Integer): Boolean;
-begin
-  Result := False;
-  if (assigned(ROMFilePage)) and (PageID = ROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('client/lttp') or WizardIsComponentSelected('generator/lttp'));
-  if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('generator/oot'));
-end;
-
 function GetROMPath(Param: string): string;
 begin
-  if Length(rom) > 0 then
-    Result := rom
-  else if Assigned(RomFilePage) then
+  if Length(lttprom) > 0 then
+    Result := lttprom
+  else if Assigned(LttPRomFilePage) then
     begin
-      R := CompareStr(GetMD5OfFile(ROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
+      R := CompareStr(GetMD5OfFile(LttPROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
       if R <> 0 then
         MsgBox('ALttP ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
   
-      Result := ROMFilePage.Values[0]
+      Result := LttPROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
+
+function GetSMROMPath(Param: string): string;
+begin
+  if Length(smrom) > 0 then
+    Result := smrom
+  else if Assigned(SMRomFilePage) then
+    begin
+      R := CompareStr(GetMD5OfFile(SMROMFilePage.Values[0]), '21f3e98df4780ee1c667b84e57d88675')
+      if R <> 0 then
+        MsgBox('Super Metroid ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := SMROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
+
+function GetSoEROMPath(Param: string): string;
+begin
+  if Length(soerom) > 0 then
+    Result := soerom
+  else if Assigned(SoERomFilePage) then
+    begin
+      R := CompareStr(GetMD5OfFile(SoEROMFilePage.Values[0]), '6e9c94511d04fac6e0a1e582c170be3a')
+      log(GetMD5OfFile(SoEROMFilePage.Values[0]))
+      if R <> 0 then
+        MsgBox('Secret of Evermore ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := SoEROMFilePage.Values[0]
     end
   else
     Result := '';
@@ -337,4 +382,37 @@ begin
     end
   else
     Result := '';
+end;
+
+procedure InitializeWizard();
+begin                    
+  AddOoTRomPage();
+
+  lttprom := CheckRom('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', '03a63945398191337e896e5771f77173');
+  if Length(lttprom) = 0 then
+    LttPROMFilePage:= AddRomPage('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc');
+
+  smrom := CheckRom('Super Metroid (JU).sfc', '21f3e98df4780ee1c667b84e57d88675');
+  if Length(smrom) = 0 then
+    SMRomFilePage:= AddRomPage('Super Metroid (JU).sfc');
+
+  soerom := CheckRom('Secret of Evermore (USA).sfc', '6e9c94511d04fac6e0a1e582c170be3a');
+  if Length(soerom) = 0 then
+    SoEROMFilePage:= AddRomPage('Secret of Evermore (USA).sfc');
+
+  AddMinecraftDownloads();
+end;
+
+
+function ShouldSkipPage(PageID: Integer): Boolean;
+begin
+  Result := False;
+  if (assigned(LttPROMFilePage)) and (PageID = LttPROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('client/sni/lttp') or WizardIsComponentSelected('generator/lttp'));
+  if (assigned(SMROMFilePage)) and (PageID = SMROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('client/sni/sm') or WizardIsComponentSelected('generator/sm'));
+  if (assigned(SoEROMFilePage)) and (PageID = SoEROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('generator/soe'));
+  if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('generator/oot'));
 end;

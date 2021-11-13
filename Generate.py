@@ -9,10 +9,10 @@ from collections import Counter
 import string
 
 import ModuleUpdate
-import Utils
 
 ModuleUpdate.update()
 
+import Utils
 from worlds.alttp import Options as LttPOptions
 from worlds.generic import PlandoItem, PlandoConnection
 from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options
