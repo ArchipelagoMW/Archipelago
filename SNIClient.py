@@ -22,6 +22,7 @@ from NetUtils import *
 from worlds.alttp import Regions, Shops
 from worlds.alttp import Items
 from worlds.alttp.Rom import ROM_PLAYER_LIMIT
+from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
 import Utils
 from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Patch import GAME_ALTTP, GAME_SM
@@ -1048,7 +1049,7 @@ async def game_watcher(ctx: Context):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
 
-                playerID = (item.player-1) if item.player != 0 else (len(ctx.player_names)-1)
+                playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes([playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
                 itemOutPtr += 1
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x602, bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
@@ -1056,7 +1057,6 @@ async def game_watcher(ctx: Context):
                     color(ctx.item_name_getter(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
                     ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
-
 
 async def run_game(romfile):
     auto_start = Utils.get_options()["lttp_options"].get("rom_start", True)
