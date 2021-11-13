@@ -122,16 +122,25 @@ parse_yaml = safe_load
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
 
+def get_cert_none_ssl_context():
+    import ssl
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    return ctx
+
+
 @cache_argsless
 def get_public_ipv4() -> str:
     import socket
     import urllib.request
     ip = socket.gethostbyname(socket.gethostname())
+    ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen('https://checkip.amazonaws.com/').read().decode('utf8').strip()
+        ip = urllib.request.urlopen('https://checkip.amazonaws.com/', context=ctx).read().decode('utf8').strip()
     except Exception as e:
         try:
-            ip = urllib.request.urlopen('https://v4.ident.me').read().decode('utf8').strip()
+            ip = urllib.request.urlopen('https://v4.ident.me', context=ctx).read().decode('utf8').strip()
         except:
             logging.exception(e)
             pass  # we could be offline, in a local game, so no point in erroring out
@@ -143,8 +152,9 @@ def get_public_ipv6() -> str:
     import socket
     import urllib.request
     ip = socket.gethostbyname(socket.gethostname())
+    ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen('https://v6.ident.me').read().decode('utf8').strip()
+        ip = urllib.request.urlopen('https://v6.ident.me', context=ctx).read().decode('utf8').strip()
     except Exception as e:
         logging.exception(e)
         pass  # we could be offline, in a local game, or ipv6 may not be available
