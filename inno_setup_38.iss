@@ -205,8 +205,8 @@ end;
 
 var R : longint;
 
-var rom: string;
-var ROMFilePage: TInputFileWizardPage;
+var lttprom: string;
+var LttPROMFilePage: TInputFileWizardPage;
 
 var smrom: string;
 var SMRomFilePage: TInputFileWizardPage;
@@ -219,87 +219,37 @@ var OoTROMFilePage: TInputFileWizardPage;
 
 var MinecraftDownloadPage: TDownloadWizardPage;
 
-procedure AddRomPage();
+function CheckRom(name: string; hash: string): string;
+var rom: string;
 begin
-  rom := FileSearch('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', WizardDirValue());
+  log('Handling ' + name)
+  rom := FileSearch(name, WizardDirValue());
   if Length(rom) > 0 then
     begin
       log('existing ROM found');
-      log(IntToStr(CompareStr(GetMD5OfFile(rom), '03a63945398191337e896e5771f77173')));
-      if CompareStr(GetMD5OfFile(rom), '03a63945398191337e896e5771f77173') = 0 then
+      log(IntToStr(CompareStr(GetMD5OfFile(rom), hash)));
+      if CompareStr(GetMD5OfFile(rom), hash) = 0 then
         begin
         log('existing ROM verified');
+        Result := rom;
         exit;
         end;
       log('existing ROM failed verification');
     end;
-  rom := ''
-  ROMFilePage :=
+end;
+
+function AddRomPage(name: string): TInputFileWizardPage;
+begin
+  Result :=
     CreateInputFilePage(
       wpSelectComponents,
       'Select ROM File',
-      'Where is your Zelda no Densetsu - Kamigami no Triforce (Japan).sfc located?',
+      'Where is your ' + name + ' located?',
       'Select the file, then click Next.');
 
-  ROMFilePage.Add(
+  Result.Add(
     'Location of ROM file:',
-    'SNES ROM files|*.sfc|All files|*.*',
-    '.sfc');
-end;
-
-procedure AddSMRomPage();
-begin
-  smrom := FileSearch('Super Metroid (JU).sfc', WizardDirValue());
-  if Length(smrom) > 0 then
-    begin
-      log('existing SM ROM found');
-      log(IntToStr(CompareStr(GetMD5OfFile(smrom), '21f3e98df4780ee1c667b84e57d88675')));
-      if CompareStr(GetMD5OfFile(smrom), '21f3e98df4780ee1c667b84e57d88675') = 0 then
-        begin
-        log('existing SM ROM verified');
-        exit;
-        end;
-      log('existing SM ROM failed verification');
-    end;
-  smrom := ''
-  SMROMFilePage :=
-    CreateInputFilePage(
-      wpSelectComponents,
-      'Select ROM File',
-      'Where is your Super Metroid located?',
-      'Select the file, then click Next.');
-
-  SMROMFilePage.Add(
-    'Location of Super Metroid ROM file:',
-    'SNES ROM files|*.sfc|All files|*.*',
-    '.sfc');
-end;
-
-procedure AddSoERomPage();
-begin
-  soerom := FileSearch('Secret of Evermore (USA).sfc', WizardDirValue());
-  if Length(soerom) > 0 then
-    begin
-      log('existing SoE ROM found');
-      log(IntToStr(CompareStr(GetMD5OfFile(soerom), '6e9c94511d04fac6e0a1e582c170be3a')));
-      if CompareStr(GetMD5OfFile(soerom), '6e9c94511d04fac6e0a1e582c170be3a') = 0 then
-        begin
-        log('existing SoE ROM verified');
-        exit;
-        end;
-      log('existing SM ROM failed verification');
-    end;
-  soerom := ''
-  SoEROMFilePage :=
-    CreateInputFilePage(
-      wpSelectComponents,
-      'Select ROM File',
-      'Where is your Secret of Evermore located?',
-      'Select the file, then click Next.');
-
-  SoEROMFilePage.Add(
-    'Location of Secret of Evermore ROM file:',
-    'SNES ROM files|*.sfc|All files|*.*',
+    'SNES ROM files|*.sfc;*.smc|All files|*.*',
     '.sfc');
 end;
 
@@ -369,40 +319,17 @@ begin
     Result := True;
 end;
 
-procedure InitializeWizard();
-begin                    
-  AddOoTRomPage();
-  AddRomPage();
-  AddSMRomPage();
-  AddSoeRomPage;
-  AddMinecraftDownloads();
-end;
-
-
-function ShouldSkipPage(PageID: Integer): Boolean;
-begin
-  Result := False;
-  if (assigned(ROMFilePage)) and (PageID = ROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('client/sni/lttp') or WizardIsComponentSelected('generator/lttp'));
-  if (assigned(SMROMFilePage)) and (PageID = SMROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('client/sni/sm') or WizardIsComponentSelected('generator/sm'));
-  if (assigned(SoEROMFilePage)) and (PageID = SoEROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('generator/soe'));
-  if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('generator/oot'));
-end;
-
 function GetROMPath(Param: string): string;
 begin
-  if Length(rom) > 0 then
-    Result := rom
-  else if Assigned(RomFilePage) then
+  if Length(lttprom) > 0 then
+    Result := lttprom
+  else if Assigned(LttPRomFilePage) then
     begin
-      R := CompareStr(GetMD5OfFile(ROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
+      R := CompareStr(GetMD5OfFile(LttPROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
       if R <> 0 then
         MsgBox('ALttP ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
   
-      Result := ROMFilePage.Values[0]
+      Result := LttPROMFilePage.Values[0]
     end
   else
     Result := '';
@@ -455,4 +382,37 @@ begin
     end
   else
     Result := '';
+end;
+
+procedure InitializeWizard();
+begin                    
+  AddOoTRomPage();
+
+  lttprom := CheckRom('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', '03a63945398191337e896e5771f77173');
+  if Length(lttprom) = 0 then
+    LttPROMFilePage:= AddRomPage('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc');
+
+  smrom := CheckRom('Super Metroid (JU).sfc', '21f3e98df4780ee1c667b84e57d88675');
+  if Length(smrom) = 0 then
+    SMRomFilePage:= AddRomPage('Super Metroid (JU).sfc');
+
+  soerom := CheckRom('Secret of Evermore (USA).sfc', '6e9c94511d04fac6e0a1e582c170be3a');
+  if Length(soerom) = 0 then
+    SoEROMFilePage:= AddRomPage('Secret of Evermore (USA).sfc');
+
+  AddMinecraftDownloads();
+end;
+
+
+function ShouldSkipPage(PageID: Integer): Boolean;
+begin
+  Result := False;
+  if (assigned(LttPROMFilePage)) and (PageID = LttPROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('client/sni/lttp') or WizardIsComponentSelected('generator/lttp'));
+  if (assigned(SMROMFilePage)) and (PageID = SMROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('client/sni/sm') or WizardIsComponentSelected('generator/sm'));
+  if (assigned(SoEROMFilePage)) and (PageID = SoEROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('generator/soe'));
+  if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('generator/oot'));
 end;
