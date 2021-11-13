@@ -11,7 +11,7 @@ from .Items import lookup_name_to_id as items_lookup_name_to_id
 from .Regions import create_regions
 from .Rules import set_rules, add_entrance_rule
 from .Options import sm_options
-from .Rom import get_base_rom_path
+from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT
 import Utils
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
@@ -245,7 +245,7 @@ class SMWorld(World):
                     idx += 1
                 (w0, w1) = self.getWord(0 if itemLoc.item.player == self.player else 1)
                 (w2, w3) = self.getWord(itemId)
-                (w4, w5) = self.getWord(itemLoc.item.player - 1)
+                (w4, w5) = self.getWord(itemLoc.item.player if itemLoc.item.player <= ROM_PLAYER_LIMIT else 0)
                 (w6, w7) = self.getWord(0 if itemLoc.item.advancement else 1)
                 multiWorldLocations[0x1C6000 + locationsDict[itemLoc.name].Id*8] = [w0, w1, w2, w3, w4, w5, w6, w7]
 
@@ -271,9 +271,10 @@ class SMWorld(World):
         romPatcher.applyIPSPatchDict(patchDict)
 
         playerNames = {}
-        for p in range(1, self.world.players + 1):
-            playerNames[0x1C5000 + (p - 1) * 16] = self.world.player_name[p][:16].upper().center(16).encode()
-        playerNames[0x1C5000 + (self.world.players) * 16] = "Archipelago".upper().center(16).encode()
+        playerNames[0x1C5000] = "Archipelago".upper().center(16).encode()
+        for p in range(1, min(self.world.players, ROM_PLAYER_LIMIT) + 1):
+            playerNames[0x1C5000 + p * 16] = self.world.player_name[p][:16].upper().center(16).encode()
+        
 
         romPatcher.applyIPSPatch('PlayerName', { 'PlayerName':  playerNames })
 

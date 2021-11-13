@@ -2,6 +2,7 @@ import Utils
 from Patch import read_rom
 
 JAP10HASH = '21f3e98df4780ee1c667b84e57d88675'
+ROM_PLAYER_LIMIT = 255
 
 import hashlib
 import os
