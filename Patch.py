@@ -10,14 +10,14 @@ from typing import Tuple, Optional
 
 import Utils
 
-
 current_patch_version = 3
 
-GAME_ALTTP = 0
-GAME_SM = 1
-supported_games = ["A Link to the Past", "Super Metroid"]
+GAME_ALTTP = "A Link to the Past"
+GAME_SM = "Super Metroid"
+supported_games = {"A Link to the Past", "Super Metroid"}
 
-def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: int = GAME_ALTTP) -> bytes:
+
+def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: str = GAME_ALTTP) -> bytes:
     if game == GAME_ALTTP:
         from worlds.alttp.Rom import JAP10HASH
     elif game == GAME_SM:
@@ -27,7 +27,7 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: int = GAM
 
     patch = yaml.dump({"meta": metadata,
                        "patch": patch,
-                       "game": supported_games[game],
+                       "game": game,
                        # minimum version of patch system expected for patching to be successful
                        "compatible_version": 3,
                        "version": current_patch_version,
@@ -35,7 +35,7 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: int = GAM
     return patch.encode(encoding="utf-8-sig")
 
 
-def generate_patch(rom: bytes, metadata: Optional[dict] = None, game: int = GAME_ALTTP) -> bytes:
+def generate_patch(rom: bytes, metadata: Optional[dict] = None, game: str = GAME_ALTTP) -> bytes:
     if game == GAME_ALTTP:
         from worlds.alttp.Rom import get_base_rom_bytes
     elif game == GAME_SM:
@@ -50,14 +50,15 @@ def generate_patch(rom: bytes, metadata: Optional[dict] = None, game: int = GAME
 
 
 def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str = None,
-                      player: int = 0, player_name: str = "", game: int = GAME_ALTTP) -> str:
-    meta = {"server": server, # allow immediate connection to server in multiworld. Empty string otherwise
+                      player: int = 0, player_name: str = "", game: str = GAME_ALTTP) -> str:
+    meta = {"server": server,  # allow immediate connection to server in multiworld. Empty string otherwise
             "player_id": player,
             "player_name": player_name}
     bytes = generate_patch(load_bytes(rom_file_to_patch),
                            meta,
                            game)
-    target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + (".apbp" if game == GAME_ALTTP else ".apm3")
+    target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + (
+        ".apbp" if game == GAME_ALTTP else ".apm3")
     write_lzma(bytes, target)
     return target
 
@@ -66,13 +67,16 @@ def create_rom_bytes(patch_file: str, ignore_version: bool = False) -> Tuple[dic
     data = Utils.parse_yaml(lzma.decompress(load_bytes(patch_file)).decode("utf-8-sig"))
     game_name = data["game"]
     if game_name in supported_games:
-        game_index = supported_games.index(game_name)
-        if game_index == GAME_ALTTP:
+        if game_name == GAME_ALTTP:
             from worlds.alttp.Rom import get_base_rom_bytes
-        elif game_index == GAME_SM:
+        elif game_name == GAME_SM:
             from worlds.sm.Rom import get_base_rom_bytes
-    else:
+        else:
+            raise Exception(f"No Patch handler for game {game_name}")
+    elif game_name == "alttp":  # old version for A Link to the Past
         from worlds.alttp.Rom import get_base_rom_bytes
+    else:
+        raise Exception(f"Cannot handle game {game_name}")
 
     if not ignore_version and data["compatible_version"] > current_patch_version:
         raise RuntimeError("Patch file is incompatible with this patcher, likely an update is required.")
@@ -105,6 +109,14 @@ def load_bytes(path: str) -> bytes:
 def write_lzma(data: bytes, path: str):
     with lzma.LZMAFile(path, 'wb') as f:
         f.write(data)
+
+
+def read_rom(stream, strip_header=True) -> bytearray:
+    """Reads rom into bytearray and optionally strips off any smc header"""
+    buffer = bytearray(stream.read())
+    if strip_header and len(buffer) % 0x400 == 0x200:
+        return buffer[0x200:]
+    return buffer
 
 
 if __name__ == "__main__":
@@ -192,11 +204,3 @@ if __name__ == "__main__":
 
                 traceback.print_exc()
                 input("Press enter to close.")
-
-
-def read_rom(stream, strip_header=True) -> bytearray:
-    """Reads rom into bytearray and optionally strips off any smc header"""
-    buffer = bytearray(stream.read())
-    if strip_header and len(buffer) % 0x400 == 0x200:
-        return buffer[0x200:]
-    return buffer

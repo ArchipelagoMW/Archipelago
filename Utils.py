@@ -13,7 +13,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.1.9"
+__version__ = "0.2.0"
 version_tuple = tuplize_version(__version__)
 
 import builtins
@@ -162,7 +162,7 @@ def get_default_options() -> dict:
             "executable": "factorio\\bin\\x64\\factorio",
         },
         "sm_options": {
-            "rom_file": "Super Metroid (JU)[!].sfc",
+            "rom_file": "Super Metroid (JU).sfc",
             "sni": "SNI",
             "rom_start": True,
         },

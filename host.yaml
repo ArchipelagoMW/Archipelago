@@ -93,7 +93,7 @@ lttp_options:
   rom_start: true
 sm_options:
   # File name of the v1.0 J rom
-  rom_file: "Super Metroid (JU)[!].sfc"   
+  rom_file: "Super Metroid (JU).sfc"
   # Set this to your SNI folder location if you want the MultiClient to attempt an auto start, does nothing if not found
   sni: "SNI"
   # Set this to false to never autostart a rom (such as after patching)
@@ -108,4 +108,6 @@ minecraft_options:
 oot_options: 
   # File name of the OoT v1.0 ROM
   rom_file: "The Legend of Zelda - Ocarina of Time.z64"
-  rom_file: "The Legend of Zelda - Ocarina of Time.z64"
+soe_options:
+  # File name of the SoE US ROM
+  rom_file: "Secret of Evermore (USA).sfc"
