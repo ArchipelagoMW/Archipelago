@@ -123,7 +123,6 @@ class Context(CommonContext):
         self.awaiting_rom = False
         self.rom = None
         self.prev_rom = None
-        self.gameID = None
 
     async def connection_closed(self):
         await super(Context, self).connection_closed()
