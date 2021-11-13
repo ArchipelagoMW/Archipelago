@@ -51,6 +51,7 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 Name: "core"; Description: "Core Files"; Types: full hosting playing custom; Flags: fixed
 Name: "generator"; Description: "Generator"; Types: full hosting
 Name: "generator/sm"; Description: "Super Metroid ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728
+Name: "generator/soe"; Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728
 Name: "generator/lttp"; Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
 Name: "generator/oot"; Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296
 Name: "server"; Description: "Server"; Types: full hosting
@@ -68,6 +69,7 @@ NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-mod
 [Files]
 Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"; Flags: external; Components: client/sni/lttp or generator/lttp
 Source: "{code:GetSMROMPath}"; DestDir: "{app}"; DestName: "Super Metroid (JU).sfc"; Flags: external; Components: client/sni/sm or generator/sm
+Source: "{code:GetSoEROMPath}"; DestDir: "{app}"; DestName: "Secret of Evermore (USA).sfc"; Flags: external; Components: generator/soe
 Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: generator/oot
 Source: "{#sourcepath}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#sourcepath}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
@@ -117,9 +119,9 @@ Root: HKCR; Subkey: "{#MyAppName}patch\DefaultIcon";         ValueData: "{app}\A
 Root: HKCR; Subkey: "{#MyAppName}patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
 
 Root: HKCR; Subkey: ".apm3";                                 ValueData: "{#MyAppName}smpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
-Root: HKCR; Subkey: "{#MyAppName}patch";                     ValueData: "Archipelago Super Metroid Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
-Root: HKCR; Subkey: "{#MyAppName}patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
-Root: HKCR; Subkey: "{#MyAppName}patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}smpatch";                     ValueData: "Archipelago Super Metroid Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}smpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}smpatch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
 
 Root: HKCR; Subkey: ".apmc";                                  ValueData: "{#MyAppName}mcdata";         Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/minecraft
 Root: HKCR; Subkey: "{#MyAppName}mcdata";                     ValueData: "Archipelago Minecraft Data"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/minecraft
@@ -209,6 +211,9 @@ var ROMFilePage: TInputFileWizardPage;
 var smrom: string;
 var SMRomFilePage: TInputFileWizardPage;
 
+var soerom: string;
+var SoERomFilePage: TInputFileWizardPage;
+
 var ootrom: string;
 var OoTROMFilePage: TInputFileWizardPage;
 
@@ -266,6 +271,34 @@ begin
 
   SMROMFilePage.Add(
     'Location of Super Metroid ROM file:',
+    'SNES ROM files|*.sfc|All files|*.*',
+    '.sfc');
+end;
+
+procedure AddSoERomPage();
+begin
+  soerom := FileSearch('Secret of Evermore (USA).sfc', WizardDirValue());
+  if Length(soerom) > 0 then
+    begin
+      log('existing SoE ROM found');
+      log(IntToStr(CompareStr(GetMD5OfFile(soerom), '6e9c94511d04fac6e0a1e582c170be3a')));
+      if CompareStr(GetMD5OfFile(soerom), '6e9c94511d04fac6e0a1e582c170be3a') = 0 then
+        begin
+        log('existing SoE ROM verified');
+        exit;
+        end;
+      log('existing SM ROM failed verification');
+    end;
+  soerom := ''
+  SoEROMFilePage :=
+    CreateInputFilePage(
+      wpSelectComponents,
+      'Select ROM File',
+      'Where is your Secret of Evermore located?',
+      'Select the file, then click Next.');
+
+  SoEROMFilePage.Add(
+    'Location of Secret of Evermore ROM file:',
     'SNES ROM files|*.sfc|All files|*.*',
     '.sfc');
 end;
@@ -337,10 +370,11 @@ begin
 end;
 
 procedure InitializeWizard();
-begin                    
+begin
   AddOoTRomPage();
   AddRomPage();
   AddSMRomPage();
+  AddSoeRomPage;
   AddMinecraftDownloads();
 end;
 
@@ -352,6 +386,8 @@ begin
     Result := not (WizardIsComponentSelected('client/sni/lttp') or WizardIsComponentSelected('generator/lttp'));
   if (assigned(SMROMFilePage)) and (PageID = SMROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('client/sni/sm') or WizardIsComponentSelected('generator/sm'));
+  if (assigned(SoEROMFilePage)) and (PageID = SoEROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('generator/soe'));
   if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/oot'));
 end;
@@ -365,7 +401,7 @@ begin
       R := CompareStr(GetMD5OfFile(ROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
       if R <> 0 then
         MsgBox('ALttP ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
-  
+
       Result := ROMFilePage.Values[0]
     end
   else
@@ -383,6 +419,23 @@ begin
         MsgBox('Super Metroid ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 
       Result := SMROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
+
+function GetSoEROMPath(Param: string): string;
+begin
+  if Length(soerom) > 0 then
+    Result := soerom
+  else if Assigned(SoERomFilePage) then
+    begin
+      R := CompareStr(GetMD5OfFile(SoEROMFilePage.Values[0]), '6e9c94511d04fac6e0a1e582c170be3a')
+      log(GetMD5OfFile(SoEROMFilePage.Values[0]))
+      if R <> 0 then
+        MsgBox('Secret of Evermore ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := SoEROMFilePage.Values[0]
     end
   else
     Result := '';
