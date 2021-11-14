@@ -102,7 +102,7 @@ class WebHostContext(Context):
         return d
 
 def get_random_port():
-    return random.randint(60530, 60535)
+    return random.randint(49152, 65535)
 
 
 def run_server_process(room_id, ponyconfig: dict):
@@ -129,7 +129,7 @@ def run_server_process(room_id, ponyconfig: dict):
         for wssocket in ctx.server.ws_server.sockets:
             socketname = wssocket.getsockname()
             if wssocket.family == socket.AF_INET6:
-                # logging.info(f'Hosting game at [{get_public_ipv6()}]:{socketname[1]}')
+                logging.info(f'Hosting game at [{get_public_ipv6()}]:{socketname[1]}')
                 with db_session:
                     room = Room.get(id=ctx.room_id)
                     room.last_port = socketname[1]

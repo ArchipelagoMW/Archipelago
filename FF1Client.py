@@ -144,7 +144,7 @@ async def nes_sync_task(ctx: FF1Context):
                     # 1. A keepalive response of \n
                     # 2. A message "TERMINATED_CHAOS" for endgame
                     # 3. An array representing the memory values of the locations area
-                    data = await asyncio.wait_for(reader.readline(), timeout=1.35)
+                    data = await asyncio.wait_for(reader.readline(), timeout=5)
                     if ctx.game is not None:
                         if data == b'TERMINATED_CHAOS\n':
                             # Victory condition! No more items will be sent
