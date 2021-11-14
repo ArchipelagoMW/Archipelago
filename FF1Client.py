@@ -144,7 +144,7 @@ async def nes_sync_task(ctx: FF1Context):
                     # 1. A keepalive response of \n
                     # 2. A message "TERMINATED_CHAOS" for endgame
                     # 3. An array representing the memory values of the locations area
-                    data = await asyncio.wait_for(reader.readline(), timeout=1.5)
+                    data = await asyncio.wait_for(reader.readline(), timeout=1.35)
                     if ctx.game is not None:
                         if data == b'TERMINATED_CHAOS\n':
                             # Victory condition! No more items will be sent
@@ -167,7 +167,7 @@ async def nes_sync_task(ctx: FF1Context):
                     error_status = CONNECTION_RESET_STATUS
                     writer.close()
                     ctx.nes_streams = None
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 logger.debug("Connection Timed Out, Reconnecting")
                 error_status = CONNECTION_TIMING_OUT_STATUS
                 writer.close()
@@ -186,11 +186,10 @@ async def nes_sync_task(ctx: FF1Context):
             elif error_status:
                 ctx.nes_status = error_status
                 logger.info("Lost connection to nes and attempting to reconnect. Use /nes for status updates")
-            await asyncio.sleep(0.5)
         else:
             try:
                 logger.debug("Attempting to connect to NES")
-                ctx.nes_streams = await asyncio.wait_for(asyncio.open_connection("localhost", 52980), timeout=5.0)
+                ctx.nes_streams = await asyncio.wait_for(asyncio.open_connection("localhost", 52980), timeout=10)
                 ctx.nes_status = CONNECTION_TENTATIVE_STATUS
             except TimeoutError:
                 logger.debug("Connection Timed Out, Trying Again")

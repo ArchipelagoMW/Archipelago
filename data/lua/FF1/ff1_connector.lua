@@ -213,7 +213,9 @@ end
 function receiveKeepAliveOrVictory()
     l, e = ff1Socket:receive()
     if e == 'closed' then
-        print("Connection closed")
+        if curstate == "OK" then
+            print("Connection closed")
+        end
         curstate = "Uninitialized"
         return
     elseif e == 'timeout' then
@@ -229,6 +231,12 @@ function receiveKeepAliveOrVictory()
     local ret, error = ff1Socket:send(msg);
     if ret == nil then
         print(error);
+    elseif curstate == "Initial Connection Made" then
+        curstate = "Tentatively Connected"
+    elseif curstate == "Tentatively Connected" then
+        print("Connected!")
+        itemMessages["(0,0)"] = {TTL=240, message="Connected", color="green"};
+        curstate = "OK"
     end
 end
 
@@ -253,10 +261,10 @@ function main()
         frame = frame + 1;
         drawMessages();
         if not (curstate == prevstate) then
-            console.log("Current state: "..curstate)
+            -- console.log("Current state: "..curstate)
             prevstate = curstate
         end
-        if (curstate == "OK") then
+        if (curstate == "OK") or (curstate == "Initial Connection Made") or (curstate == "Tentatively Connected") then
             if StateOKForMainLoop() then
                 if (frame % 60 == 0) then
                     gui.drawEllipse(248, 9, 6, 6, "Black", "Blue");
@@ -287,9 +295,8 @@ function main()
                 print("Attempting to connect")
                 local client, timeout = server:accept()
                 if timeout == nil then
-                    print('Connection established')
-                    itemMessages["(0,0)"] = {TTL=240, message="Connected", color="green"};
-                    curstate = "OK"
+                    -- print('Initial Connection Made')
+                    curstate = "Initial Connection Made"
                     ff1Socket = client
                     ff1Socket:settimeout(0)
                 end
