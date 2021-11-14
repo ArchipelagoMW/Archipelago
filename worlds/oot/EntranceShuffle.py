@@ -31,10 +31,11 @@ def assume_entrance_pool(entrance_pool, ootworld):
         assumed_forward = entrance.assume_reachable()
         if entrance.reverse != None:
             assumed_return = entrance.reverse.assume_reachable()
-            if (entrance.type in ('Dungeon', 'Grotto', 'Grave') and entrance.reverse.name != 'Spirit Temple Lobby -> Desert Colossus From Spirit Lobby') or \
-               (entrance.type == 'Interior' and ootworld.shuffle_special_interior_entrances):
-                # In most cases, Dungeon, Grotto/Grave and Simple Interior exits shouldn't be assumed able to give access to their parent region
-                set_rule(assumed_return, lambda state, **kwargs: False)
+            if not (ootworld.mix_entrance_pools != 'off' and (ootworld.shuffle_overworld_entrances or ootworld.shuffle_special_interior_entrances)):
+                if (entrance.type in ('Dungeon', 'Grotto', 'Grave') and entrance.reverse.name != 'Spirit Temple Lobby -> Desert Colossus From Spirit Lobby') or \
+                   (entrance.type == 'Interior' and ootworld.shuffle_special_interior_entrances):
+                    # In most cases, Dungeon, Grotto/Grave and Simple Interior exits shouldn't be assumed able to give access to their parent region
+                    set_rule(assumed_return, lambda state, **kwargs: False)
             assumed_forward.bind_two_way(assumed_return)
         assumed_pool.append(assumed_forward)
     return assumed_pool
@@ -384,13 +385,24 @@ def shuffle_random_entrances(ootworld):
         entrance_pools['GrottoGrave'] = ootworld.get_shufflable_entrances(type='Grotto', only_primary=True)
         entrance_pools['GrottoGrave'] += ootworld.get_shufflable_entrances(type='Grave', only_primary=True)
     if ootworld.shuffle_overworld_entrances:
-        entrance_pools['Overworld'] = ootworld.get_shufflable_entrances(type='Overworld')
+        exclude_overworld_reverse = ootworld.mix_entrance_pools == 'all' and not ootworld.decouple_entrances
+        entrance_pools['Overworld'] = ootworld.get_shufflable_entrances(type='Overworld', only_primary=exclude_overworld_reverse)
 
     # Mark shuffled entrances
     for entrance in chain(chain.from_iterable(one_way_entrance_pools.values()), chain.from_iterable(entrance_pools.values())):
         entrance.shuffled = True
         if entrance.reverse:
             entrance.reverse.shuffled = True
+
+    # Combine all entrance pools if mixing
+    if ootworld.mix_entrance_pools == 'all':
+        entrance_pools = {'Mixed': list(chain.from_iterable(entrance_pools.values()))}
+    elif ootworld.mix_entrance_pools == 'indoor':
+        if ootworld.shuffle_overworld_entrances:
+            ow_pool = entrance_pools['Overworld']
+        entrance_pools = {'Mixed': list(filter(lambda entrance: entrance.type != 'Overworld', chain.from_iterable(entrance_pools.values())))}
+        if ootworld.shuffle_overworld_entrances:
+            entrance_pools['Overworld'] = ow_pool
 
     # Build target entrance pools
     one_way_target_entrance_pools = {}
