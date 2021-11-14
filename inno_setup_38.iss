@@ -239,7 +239,7 @@ begin
   if Length(rom) > 0 then
     begin
       log('existing ROM found');
-      log(IntToStr(CompareStr(GetMD5OfFile(rom), hash)));
+      log(IntToStr(CompareStr(GetSNESMD5OfFile(rom), hash)));
       if CompareStr(GetSNESMD5OfFile(rom), hash) = 0 then
         begin
         log('existing ROM verified');
@@ -337,7 +337,7 @@ begin
     Result := lttprom
   else if Assigned(LttPRomFilePage) then
     begin
-      R := CompareStr(GetMD5OfFile(LttPROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
+      R := CompareStr(GetSNESMD5OfFile(LttPROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
       if R <> 0 then
         MsgBox('ALttP ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
   
@@ -353,7 +353,7 @@ begin
     Result := smrom
   else if Assigned(SMRomFilePage) then
     begin
-      R := CompareStr(GetMD5OfFile(SMROMFilePage.Values[0]), '21f3e98df4780ee1c667b84e57d88675')
+      R := CompareStr(GetSNESMD5OfFile(SMROMFilePage.Values[0]), '21f3e98df4780ee1c667b84e57d88675')
       if R <> 0 then
         MsgBox('Super Metroid ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 
@@ -369,8 +369,7 @@ begin
     Result := soerom
   else if Assigned(SoERomFilePage) then
     begin
-      R := CompareStr(GetMD5OfFile(SoEROMFilePage.Values[0]), '6e9c94511d04fac6e0a1e582c170be3a')
-      log(GetMD5OfFile(SoEROMFilePage.Values[0]))
+      R := CompareStr(GetSNESMD5OfFile(SoEROMFilePage.Values[0]), '6e9c94511d04fac6e0a1e582c170be3a')
       if R <> 0 then
         MsgBox('Secret of Evermore ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 
