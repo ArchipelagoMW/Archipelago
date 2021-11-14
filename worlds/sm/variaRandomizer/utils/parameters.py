@@ -1,6 +1,7 @@
 from logic.smbool import SMBool
 import os
 import sys
+from pathlib import Path
 
 # the different difficulties available
 easy = 1
@@ -60,7 +61,7 @@ def diff4solver(difficulty):
         return "mania"
 
 # allow multiple local repo
-appDir = sys.path[0]
+appDir = Path(__file__).parents[4]
 
 def isKnows(knows):
     return knows[0:len('__')] != '__' and knows[0] == knows[0].upper()
