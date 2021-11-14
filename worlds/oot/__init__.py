@@ -513,20 +513,6 @@ class OOTWorld(World):
                 else:
                     break
 
-            # Write entrances to spoiler log
-            all_entrances = self.get_shuffled_entrances()
-            all_entrances.sort(key=lambda x: x.name)
-            all_entrances.sort(key=lambda x: x.type)
-            for loadzone in all_entrances:
-                if loadzone.primary:
-                    entrance = loadzone
-                else:
-                    entrance = loadzone.reverse
-                if entrance.reverse is not None:
-                    self.world.spoiler.set_entrance(entrance, entrance.replaces, 'both', self.player)
-                else:
-                    self.world.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
-
         set_rules(self)
         set_entrances_based_rules(self)
 
@@ -789,6 +775,24 @@ class OOTWorld(World):
             rom.update_header()
             create_patch_file(rom, output_path(output_directory, outfile_name + '.apz5'))
             rom.restore()
+
+            # Write entrances to spoiler log
+            all_entrances = self.get_shuffled_entrances()
+            all_entrances.sort(key=lambda x: x.name)
+            all_entrances.sort(key=lambda x: x.type)
+            if not self.decouple_entrances:
+                for loadzone in all_entrances:
+                    if loadzone.primary:
+                        entrance = loadzone
+                    else:
+                        entrance = loadzone.reverse
+                    if entrance.reverse is not None:
+                        self.world.spoiler.set_entrance(entrance, entrance.replaces, 'both', self.player)
+                    else:
+                        self.world.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
+            else:
+                for entrance in all_entrances:
+                    self.world.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
 
     # Gathers hint data for OoT. Loops over all world locations for woth, barren, and major item locations.
     @classmethod
