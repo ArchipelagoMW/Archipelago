@@ -327,7 +327,16 @@ begin
       MinecraftDownloadPage.Hide;
     end;
     Result := True;
-  end else
+    end
+  else if (assigned(LttPROMFilePage)) and (CurPageID = LttPROMFilePage.ID) then
+    Result := not (LttPROMFilePage.Values[0] = '')
+  else if (assigned(SMROMFilePage)) and (CurPageID = SMROMFilePage.ID) then
+    Result := not (SMROMFilePage.Values[0] = '')
+  else if (assigned(SoEROMFilePage)) and (CurPageID = SoEROMFilePage.ID) then
+    Result := not (SoEROMFilePage.Values[0] = '')
+  else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
+    Result := not (OoTROMFilePage.Values[0] = '')
+  else
     Result := True;
 end;
 
@@ -383,7 +392,7 @@ function GetOoTROMPath(Param: string): string;
 begin
   if Length(ootrom) > 0 then
     Result := ootrom
-  else if Assigned(OoTROMFilePage) then
+  else if (Assigned(OoTROMFilePage)) then
     begin
       R := CompareStr(GetMD5OfFile(OoTROMFilePage.Values[0]), '5bd1fe107bf8106b2ab6650abecd54d6') * CompareStr(GetMD5OfFile(OoTROMFilePage.Values[0]), '6697768a7a7df2dd27a692a2638ea90b') * CompareStr(GetMD5OfFile(OoTROMFilePage.Values[0]), '05f0f3ebacbc8df9243b6148ffe4792f');
       if R <> 0 then

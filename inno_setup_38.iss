@@ -327,7 +327,16 @@ begin
       MinecraftDownloadPage.Hide;
     end;
     Result := True;
-  end else
+    end
+  else if (assigned(LttPROMFilePage)) and (CurPageID = LttPROMFilePage.ID) then
+    Result := not (LttPROMFilePage.Values[0] = '')
+  else if (assigned(SMROMFilePage)) and (CurPageID = SMROMFilePage.ID) then
+    Result := not (SMROMFilePage.Values[0] = '')
+  else if (assigned(SoEROMFilePage)) and (CurPageID = SoEROMFilePage.ID) then
+    Result := not (SoEROMFilePage.Values[0] = '')
+  else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
+    Result := not (OoTROMFilePage.Values[0] = '')
+  else
     Result := True;
 end;
 
