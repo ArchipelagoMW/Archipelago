@@ -159,6 +159,9 @@ class SMWorld(World):
 
     def getWord(self, w):
         return (w & 0x00FF, (w & 0xFF00) >> 8)
+    
+    def getWordArray(self, w):
+        return [w & 0x00FF, (w & 0xFF00) >> 8]
 
     # used for remote location Credits Spoiler of local items
     class DummyLocation:
@@ -232,7 +235,10 @@ class SMWorld(World):
         multiWorldItems = {}
         idx = 0
         itemId = 0
+        self.playerIDMap = {}
+        playerIDCount = 0 # 0 is for "Archipelago" server
         for itemLoc in self.world.get_locations():
+            romPlayerID = itemLoc.item.player if itemLoc.item.player <= ROM_PLAYER_LIMIT else 0
             if itemLoc.player == self.player and locationsDict[itemLoc.name].Id != None:
                 if itemLoc.item.type in ItemManager.Items:
                     itemId = ItemManager.Items[itemLoc.item.type].Id 
@@ -240,12 +246,21 @@ class SMWorld(World):
                     itemId = ItemManager.Items['ArchipelagoItem'].Id + idx
                     multiWorldItems[0x029EA3 + idx*64] = self.convertToROMItemName(itemLoc.item.name)
                     idx += 1
+                
+                if (romPlayerID > 0 and romPlayerID not in self.playerIDMap.keys()):
+                    playerIDCount += 1
+                    self.playerIDMap[romPlayerID] = playerIDCount
+
                 (w0, w1) = self.getWord(0 if itemLoc.item.player == self.player else 1)
                 (w2, w3) = self.getWord(itemId)
-                (w4, w5) = self.getWord(itemLoc.item.player if itemLoc.item.player <= ROM_PLAYER_LIMIT else 0)
+                (w4, w5) = self.getWord(romPlayerID)
                 (w6, w7) = self.getWord(0 if itemLoc.item.advancement else 1)
                 multiWorldLocations[0x1C6000 + locationsDict[itemLoc.name].Id*8] = [w0, w1, w2, w3, w4, w5, w6, w7]
 
+            if itemLoc.item.player == self.player:
+                if (romPlayerID > 0 and romPlayerID not in self.playerIDMap.keys()):
+                    playerIDCount += 1
+                    self.playerIDMap[romPlayerID] = playerIDCount
 
         itemSprites = ["off_world_prog_item.bin", "off_world_item.bin"]
         idx = 0
@@ -260,20 +275,23 @@ class SMWorld(World):
         openTourianGreyDoors = {0x07C823 + 5: [0x0C], 0x07C831 + 5: [0x0C]}
 
         deathLink = {0x277f04: [int(self.world.death_link[self.player])]}
+
+        playerNames = {}
+        playerNameIDMap = {}
+        playerNames[0x1C5000] = "Archipelago".upper().center(16).encode()
+        playerNameIDMap[0x1C5800] = self.getWordArray(0)
+        for key,value in self.playerIDMap.items():
+            playerNames[0x1C5000 + value * 16] = self.world.player_name[key][:16].upper().center(16).encode()
+            playerNameIDMap[0x1C5800 + value * 2] = self.getWordArray(key)
+
         patchDict = {   'MultiWorldLocations': multiWorldLocations,
                         'MultiWorldItems': multiWorldItems,
                         'offworldSprites': offworldSprites,
                         'openTourianGreyDoors': openTourianGreyDoors,
-                        'deathLink': deathLink}
+                        'deathLink': deathLink,
+                        'PlayerName':  playerNames,
+                        'PlayerNameIDMap':  playerNameIDMap}
         romPatcher.applyIPSPatchDict(patchDict)
-
-        playerNames = {}
-        playerNames[0x1C5000] = "Archipelago".upper().center(16).encode()
-        for p in range(1, min(self.world.players, ROM_PLAYER_LIMIT) + 1):
-            playerNames[0x1C5000 + p * 16] = self.world.player_name[p][:16].upper().center(16).encode()
-        
-
-        romPatcher.applyIPSPatch('PlayerName', { 'PlayerName':  playerNames })
 
         # set rom name
         # 21 bytes
