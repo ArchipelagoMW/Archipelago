@@ -15,6 +15,9 @@ class TimespinnerLogic(LogicMixin):
     def _timespinner_has_doublejump_of_npc(self, world: MultiWorld, player: int) -> bool:
         return self._timespinner_has_upwarddash(world, player) or (self.has('Timespinner Wheel', player) and self._timespinner_has_doublejump(world, player))
 
+    def _timespinner_has_fastjump_on_npc(self, world: MultiWorld, player: int) -> bool:
+        return self.has_all(['Timespinner Wheel', 'Talaria Attachment'], player)
+
     def _timespinner_has_multiple_small_jumps_of_npc(self, world: MultiWorld, player: int) -> bool:
         return self.has('Timespinner Wheel', player) or self._timespinner_has_upwarddash(world, player)
 
