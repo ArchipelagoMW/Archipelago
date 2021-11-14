@@ -139,11 +139,11 @@ function processBlock(block)
             -- Minus the offset and add to the correct domain
             local memory_location = v
             memDomain.saveram();
-            if v > 0x1E0 then
-                -- This is a regular key item
+            if v >= 0x1E0 then
+                -- This is a movement item
                 memory_location = memory_location - 0x1E0
             else
-                -- This is a movement item
+                -- This is a regular key item
                 memory_location = memory_location - 0x0E0
             end
             if itemsReceived[memory_location] == nil then
