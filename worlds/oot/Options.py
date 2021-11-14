@@ -96,6 +96,7 @@ class StartingAge(Choice):
 
 class InteriorEntrances(Choice): 
     """Shuffles interior entrances. "Simple" shuffles houses and Great Fairies; "All" includes Windmill, Link's House, Temple of Time, and Kak potion shop."""
+    displayname = "Shuffle Interior Entrances"
     option_off = 0
     option_simple = 1
     option_all = 2
@@ -105,26 +106,32 @@ class InteriorEntrances(Choice):
 
 class GrottoEntrances(Toggle):
     """Shuffles grotto and grave entrances."""
+    displayname = "Shuffle Grotto/Grave Entrances"
 
 
 class DungeonEntrances(Toggle):
     """Shuffles dungeon entrances, excluding Ganon's Castle. Opens Deku, Fire and BotW to both ages."""
+    displayname = "Shuffle Dungeon Entrances"
 
 
 class OverworldEntrances(Toggle):
     """Shuffles overworld loading zones."""
+    displayname = "Shuffle Overworld Entrances"
 
 
 class OwlDrops(Toggle):
     """Randomizes owl drops from Lake Hylia or Death Mountain Trail as child."""
+    displayname = "Randomize Owl Drops"
 
 
 class WarpSongs(Toggle):
     """Randomizes warp song destinations."""
+    displayname = "Randomize Warp Songs"
 
 
 class SpawnPositions(Toggle):
     """Randomizes the starting position on loading a save. Consistent between savewarps."""
+    displayname = "Randomize Spawn Positions"
 
 
 class TriforceHunt(Toggle):
