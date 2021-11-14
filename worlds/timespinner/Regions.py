@@ -72,7 +72,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Varndagroth tower right (upper)', 'Varndagroth tower right (elevator)', lambda state: state.has('Elevator Keycard', player))
     connect(world, player, names, 'Varndagroth tower right (elevator)', 'Varndagroth tower right (upper)')
     connect(world, player, names, 'Varndagroth tower right (elevator)', 'Varndagroth tower right (lower)')
-    connect(world, player, names, 'Varndagroth tower right (lower)', 'Varndagroth tower left')
+    connect(world, player, names, 'Varndagroth tower right (lower)', 'Varndagroth tower left', lambda state: state._timespinner_has_keycard_B(world, player))
     connect(world, player, names, 'Varndagroth tower right (lower)', 'Varndagroth tower right (elevator)', lambda state: state.has('Elevator Keycard', player))
     connect(world, player, names, 'Varndagroth tower right (lower)', 'Sealed Caves (Sirens)', lambda state: state._timespinner_has_keycard_B(world, player) and state.has('Elevator Keycard', player))
     connect(world, player, names, 'Varndagroth tower right (lower)', 'Militairy Fortress', lambda state: state._timespinner_can_kill_all_3_bosses(world, player))
