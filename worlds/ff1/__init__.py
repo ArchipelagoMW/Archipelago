@@ -33,14 +33,14 @@ class FF1World(World):
         return
 
     def create_regions(self):
-        locations = get_options(self.world, 'locations')
-        rules = get_options(self.world, 'rules')
+        locations = get_options(self.world, 'locations', self.player)
+        rules = get_options(self.world, 'rules', self.player)
         menu_region = self.ff1_locations.create_menu_region(self.player, locations, rules)
         terminated_event = Location(self.player, CHAOS_TERMINATED_EVENT, EventId, menu_region)
         terminated_item = Item(CHAOS_TERMINATED_EVENT, True, EventId, self.player)
         terminated_event.place_locked_item(terminated_item)
 
-        items = get_options(self.world, 'items')
+        items = get_options(self.world, 'items', self.player)
         terminated_event.access_rule = generate_rule([[name for name in items.keys() if name in FF1_PROGRESSION_LIST]],
                                                      self.player)
         menu_region.locations.append(terminated_event)
@@ -53,7 +53,7 @@ class FF1World(World):
         self.world.completion_condition[self.player] = lambda state: state.has(CHAOS_TERMINATED_EVENT, self.player)
 
     def generate_basic(self):
-        items = get_options(self.world, 'items')
+        items = get_options(self.world, 'items', self.player)
         if FF1_BRIDGE in items.keys():
             self._place_locked_item_in_sphere1(FF1_BRIDGE)
         if items:
@@ -67,7 +67,7 @@ class FF1World(World):
 
     def _place_locked_item_in_sphere1(self, progression_item: str):
         if progression_item:
-            rules = get_options(self.world, 'rules')
+            rules = get_options(self.world, 'rules', self.player)
             sphere_0_locations = [name for name, rules in rules.items()
                                   if rules and len(rules[0]) == 0 and name not in self.locked_locations]
             if sphere_0_locations:
@@ -83,5 +83,5 @@ class FF1World(World):
         return slot_data
 
 
-def get_options(world: MultiWorld, name: str):
-    return getattr(world, name, None)[1].value
+def get_options(world: MultiWorld, name: str, player: int):
+    return getattr(world, name, None)[player].value
