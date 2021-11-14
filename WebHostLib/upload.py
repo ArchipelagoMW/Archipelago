@@ -10,10 +10,7 @@ from pony.orm import flush, select
 
 from WebHostLib import app, Seed, Room, Slot
 from Utils import parse_yaml
-
-accepted_zip_contents = {"patches": ".apbp",
-                         "spoiler": ".txt",
-                         "multidata": ".archipelago"}
+from Patch import preferred_endings
 
 banned_zip_contents = (".sfc",)
 
@@ -29,15 +26,17 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         if file.filename.endswith(banned_zip_contents):
             return "Uploaded data contained a rom file, which is likely to contain copyrighted material. " \
                    "Your file was deleted."
-        elif file.filename.endswith(".apbp"):
+        elif file.filename.endswith(tuple(preferred_endings.values())):
             data = zfile.open(file, "r").read()
             yaml_data = parse_yaml(lzma.decompress(data).decode("utf-8-sig"))
             if yaml_data["version"] < 2:
-                return "Old format cannot be uploaded (outdated .apbp)", 500
+                return "Old format cannot be uploaded (outdated .apbp)"
             metadata = yaml_data["meta"]
-            slots.add(Slot(data=data, player_name=metadata["player_name"],
+
+            slots.add(Slot(data=data,
+                           player_name=metadata["player_name"],
                            player_id=metadata["player_id"],
-                           game="A Link to the Past"))
+                           game=yaml_data["game"]))
 
         elif file.filename.endswith(".apmc"):
             data = zfile.open(file, "r").read()

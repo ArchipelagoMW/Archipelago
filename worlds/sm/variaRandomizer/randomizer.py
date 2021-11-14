@@ -327,7 +327,7 @@ class VariaRandomizer:
         preset = loadRandoPreset(world, self.player, args)
         # use the skill preset from the rando preset
         if preset is not None and preset != 'custom' and preset != 'varia_custom' and args.paramsFileName is None:
-            args.paramsFileName = '{}/{}/{}.json'.format(appDir, getPresetDir(preset), preset)
+            args.paramsFileName = os.path.join(appDir, getPresetDir(preset), preset+".json")
 
         # if diff preset given, load it
         if args.paramsFileName is not None:

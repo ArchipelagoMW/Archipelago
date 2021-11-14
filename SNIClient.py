@@ -84,20 +84,17 @@ class LttPCommandProcessor(ClientCommandProcessor):
         else:
             return False
 
-    def _cmd_snes_write(self, address, data):
-        """Write the specified byte (base10) to the SNES' memory address (base16)."""
-        if self.ctx.snes_state != SNESState.SNES_ATTACHED:
-            self.output("No attached SNES Device.")
-            return False
-
-        snes_buffered_write(self.ctx, int(address, 16), bytes([int(data)]))
-        asyncio.create_task(snes_flush_writes(self.ctx))
-        self.output("Data Sent")
-        return True
-
-    def _cmd_test_death(self):
-        self.ctx.on_deathlink({"source": "Console",
-                               "time": time.time()})
+    # Left here for quick re-addition for debugging.
+    # def _cmd_snes_write(self, address, data):
+    #     """Write the specified byte (base10) to the SNES' memory address (base16)."""
+    #     if self.ctx.snes_state != SNESState.SNES_ATTACHED:
+    #         self.output("No attached SNES Device.")
+    #         return False
+    #
+    #     snes_buffered_write(self.ctx, int(address, 16), bytes([int(data)]))
+    #     asyncio.create_task(snes_flush_writes(self.ctx))
+    #     self.output("Data Sent")
+    #     return True
 
 
 class Context(CommonContext):

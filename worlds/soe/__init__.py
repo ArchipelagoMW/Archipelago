@@ -5,6 +5,7 @@ from Utils import get_options, output_path
 import typing
 import lzma
 import os
+import os.path
 import threading
 
 try:
@@ -200,11 +201,18 @@ class SoEWorld(World):
                         line = f'{loc.type},{loc.index}:{item.type},{item.index}\n'
                     f.write(line.encode('utf-8'))
 
-            if (pyevermizer.main(rom_file, out_file, placement_file, self.world.seed_name, self.connect_name, self.evermizer_seed,
-                                 flags, money, exp)):
+            if not os.path.exists(rom_file):
+                raise FileNotFoundError(rom_file)
+            if (pyevermizer.main(rom_file, out_file, placement_file, self.world.seed_name, self.connect_name,
+                                 self.evermizer_seed, flags, money, exp)):
                 raise RuntimeError()
             with lzma.LZMAFile(patch_file, 'wb') as f:
-                f.write(generate_patch(rom_file, out_file))
+                f.write(generate_patch(rom_file, out_file,
+                                       {
+                                           # used by WebHost
+                                           "player_name": self.world.player_name[self.player],
+                                           "player_id": self.player
+                                       }))
         except:
             raise
         finally:

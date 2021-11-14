@@ -423,8 +423,8 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
             game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
             game.play_sound({path="utility/research_completed"})
             tech.researched = true
-            return
         end
+        return
     elseif progressive_technologies[item_name] ~= nil then
         if global.index_sync[index] == nil then -- not yet received prog item
             global.index_sync[index] = item_name
