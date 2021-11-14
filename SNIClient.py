@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 import threading
 import time
 import multiprocessing
@@ -1080,14 +1081,24 @@ async def main():
         meta, romfile = Patch.create_rom_file(args.diff_file)
         args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
-        adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile, gui_enabled)
-        if adjusted:
-            try:
-                shutil.move(adjustedromfile, romfile)
-                adjustedromfile = romfile
-            except Exception as e:
-                logging.exception(e)
-        asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
+        if args.diff_file.endswith(".apsoe"):
+            import webbrowser
+            webbrowser.open("http://www.evermizer.com/apclient/")
+            logging.info("Starting Evermizer Client in your Browser...")
+            import time
+            time.sleep(3)
+            sys.exit()
+        elif args.diff_file.endswith((".apbp", "apz3")):
+            adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile, gui_enabled)
+            if adjusted:
+                try:
+                    shutil.move(adjustedromfile, romfile)
+                    adjustedromfile = romfile
+                except Exception as e:
+                    logging.exception(e)
+            asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
+        else:
+            asyncio.create_task(run_game(romfile))
 
     ctx = Context(args.snes, args.connect, args.password)
     if ctx.server_task is None:
