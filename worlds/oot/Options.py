@@ -134,6 +134,20 @@ class SpawnPositions(Toggle):
     displayname = "Randomize Spawn Positions"
 
 
+class MixEntrancePools(Choice):
+    """Shuffles entrances into a mixed pool instead of separate ones. "indoor" keeps overworld entrances separate; "all" mixes them in."""
+    displayname = "Mix Entrance Pools"
+    option_off = 0
+    option_indoor = 1
+    option_all = 2
+    alias_false = 0
+
+
+class DecoupleEntrances(Toggle):
+    """Decouple entrances when shuffling them. Also adds the one-way entrance from Gerudo Valley to Lake Hylia if overworld is shuffled."""
+    displayname = "Decouple Entrances"
+
+
 class TriforceHunt(Toggle):
     """Gather pieces of the Triforce scattered around the world to complete the game."""
     displayname = "Triforce Hunt"
@@ -177,6 +191,8 @@ world_options: typing.Dict[str, type(Option)] = {
     "owl_drops": OwlDrops,
     "warp_songs": WarpSongs,
     "spawn_positions": SpawnPositions,
+    "mix_entrance_pools": MixEntrancePools,
+    "decouple_entrances": DecoupleEntrances,
     "triforce_hunt": TriforceHunt, 
     "triforce_goal": TriforceGoal,
     "extra_triforce_percentage": ExtraTriforces,
