@@ -73,8 +73,8 @@ scripts = {
     "MultiServer.py": ("ArchipelagoServer", False, icon),
     "Generate.py": ("ArchipelagoGenerate", False, icon),
     "CommonClient.py": ("ArchipelagoTextClient", True, icon),
-    # LttP
-    "LttPClient.py": ("ArchipelagoLttPClient", True, icon),
+    # SNI
+    "SNIClient.py": ("ArchipelagoSNIClient", True, icon),
     "LttPAdjuster.py": ("ArchipelagoLttPAdjuster", True, icon),
     # Factorio
     "FactorioClient.py": ("ArchipelagoFactorioClient", True, icon),

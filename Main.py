@@ -34,7 +34,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         output_path.cached_path = args.outputpath
 
     start = time.perf_counter()
-
     # initialize the world
     world = MultiWorld(args.multi)
 

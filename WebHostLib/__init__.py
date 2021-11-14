@@ -155,7 +155,6 @@ def _read_log(path: str):
 
 @app.route('/log/<suuid:room>')
 def display_log(room: UUID):
-    # noinspection PyTypeChecker
     return Response(_read_log(os.path.join("logs", str(room) + ".txt")), mimetype="text/plain;charset=UTF-8")
 
 

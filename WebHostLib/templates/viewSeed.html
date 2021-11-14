@@ -28,34 +28,16 @@
                         <td><a href="{{ url_for("download_spoiler", seed_id=seed.id) }}">Download</a></td>
                     </tr>
                 {% endif %}
-                {% if seed.multidata %}
-                    <tr>
-                        <td>Rooms:&nbsp;</td>
-                    <td>
-                            {% call macros.list_rooms(rooms) %}
-                                <li>
-                                    <a href="{{ url_for("new_room", seed=seed.id) }}">Create New Room</a>
-                                </li>
-                            {% endcall %}
-                        </td>
-                    </tr>
-                {% else  %}
                 <tr>
-                    <td>Files:&nbsp;</td>
-                    <td>
-                        <ul>
-                            {% for slot in seed.slots %}
-
+                    <td>Rooms:&nbsp;</td>
+                <td>
+                        {% call macros.list_rooms(rooms) %}
                             <li>
-                                <a href="{{ url_for("download_raw_patch", seed_id=seed.id, player_id=slot.player_id) }}">Player {{ slot.player_name }}</a>
+                                <a href="{{ url_for("new_room", seed=seed.id) }}">Create New Room</a>
                             </li>
-
-
-                            {% endfor %}
-                        </ul>
+                        {% endcall %}
                     </td>
                 </tr>
-                {% endif %}
                 </tbody>
             </table>
         </div>

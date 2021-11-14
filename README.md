@@ -11,6 +11,8 @@ Currently, the following games are supported:
 * Risk of Rain 2
 * The Legend of Zelda: Ocarina of Time
 * Timespinner
+* Super Metroid
+* Secret of Evermore
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
@@ -34,7 +36,7 @@ Archipelago was directly forked from bonta0's `multiworld_31` branch of ALttPEnt
 ## Running Archipelago
 For most people all you need to do is head over to the [releases](https://github.com/ArchipelagoMW/Archipelago/releases) page then download and run the appropriate installer. The installers function on Windows only.
 
-If you are running Archipelago from a non-Windows system then the likely scenario is that you are comfortable running source code directly. Please see our wiki page on [running Archipelago from source](https://github.com/Berserker66/MultiWorld-Utilities/wiki/Running-from-source).
+If you are running Archipelago from a non-Windows system then the likely scenario is that you are comfortable running source code directly. Please see our wiki page on [running Archipelago from source](https://github.com/ArchipelagoMW/Archipelago/wiki/Running-from-source).
 
 ## Related Repositories
 This project makes use of multiple other projects. We wouldn't be here without these other repositories and the contributions of their developers, past and present.

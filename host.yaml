@@ -91,6 +91,15 @@ lttp_options:
   # True for operating system default program
   # Alternatively, a path to a program to open the .sfc file with
   rom_start: true
+sm_options:
+  # File name of the v1.0 J rom
+  rom_file: "Super Metroid (JU).sfc"
+  # Set this to your SNI folder location if you want the MultiClient to attempt an auto start, does nothing if not found
+  sni: "SNI"
+  # Set this to false to never autostart a rom (such as after patching)
+  # True for operating system default program
+  # Alternatively, a path to a program to open the .sfc file with
+  rom_start: true
 factorio_options:
   executable: "factorio\\bin\\x64\\factorio"
 minecraft_options: 
@@ -99,3 +108,6 @@ minecraft_options:
 oot_options: 
   # File name of the OoT v1.0 ROM
   rom_file: "The Legend of Zelda - Ocarina of Time.z64"
+soe_options:
+  # File name of the SoE US ROM
+  rom_file: "Secret of Evermore (USA).sfc"

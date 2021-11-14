@@ -247,4 +247,5 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Overkill", player), lambda state: state._mc_can_brew_potions(player) and 
         (state.has("Progressive Weapons", player) or state.can_reach('The Nether', 'Region', player)))  # strength 1 + stone axe crit OR strength 2 + wood axe crit
     set_rule(world.get_location("Librarian", player), lambda state: state.has("Enchanting", player))
-    set_rule(world.get_location("Overpowered", player), lambda state: state.has("Progressive Resource Crafting", player, 2) and state._mc_has_gold_ingots(player))
+    set_rule(world.get_location("Overpowered", player), lambda state: state._mc_has_iron_ingots(player) and 
+        state.has('Progressive Tools', player, 2) and state._mc_basic_combat(player))  # mine gold blocks w/ iron pick
