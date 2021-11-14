@@ -352,7 +352,7 @@ class VariaRandomizer:
                     sys.exit(-1)
             else:
                 preset = 'default'
-                PresetLoader.factory('{}/{}/{}.json'.format(appDir, getPresetDir('casual'), 'casual')).load(self.player)
+                PresetLoader.factory(os.path.join(appDir, getPresetDir('casual'), 'casual.json')).load(self.player)
 
         
 
