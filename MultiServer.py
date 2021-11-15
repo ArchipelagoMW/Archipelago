@@ -469,7 +469,7 @@ def update_aliases(ctx: Context, team: int):
             asyncio.create_task(ctx.send_encoded_msgs(client, cmd))
 
 
-async def server(websocket, path, ctx: Context):
+async def server(websocket, path: str = "/", ctx: Context = None):
     client = Client(websocket, ctx)
     ctx.endpoints.append(client)
 
@@ -1680,7 +1680,7 @@ async def main(args: argparse.Namespace):
 
     ctx.init_save(not args.disable_save)
 
-    ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ping_timeout=None,
+    ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ping_timeout=None,
                                   ping_interval=None)
     ip = args.host if args.host else Utils.get_public_ipv4()
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
