@@ -1640,7 +1640,7 @@ def patch_rom(world, rom):
                     rom.write_int16(chest_address + 2, 0x0190) # X pos
                     rom.write_int16(chest_address + 6, 0xFABC) # Z pos
             else:
-                if location.item.advancement:
+                if not location.item.advancement:
                     rom.write_int16(chest_address + 2, 0x0190) # X pos
                     rom.write_int16(chest_address + 6, 0xFABC) # Z pos
 
@@ -1656,7 +1656,7 @@ def patch_rom(world, rom):
                     rom.write_int16(chest_address_0 + 6, 0x0172)  # Z pos
                     rom.write_int16(chest_address_2 + 6, 0x0172)  # Z pos
             else:
-                if location.item.advancement:
+                if not location.item.advancement:
                     rom.write_int16(chest_address_0 + 6, 0x0172)  # Z pos
                     rom.write_int16(chest_address_2 + 6, 0x0172)  # Z pos
 
