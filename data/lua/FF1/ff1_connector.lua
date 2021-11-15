@@ -194,7 +194,7 @@ function receive()
     local hasWonFlag = bit.band(hasWon, 0x02)
     local msg = "\n"
     locations = generateLocationChecked()
-    if hasWonFlag > 0 and #difference(locations, pastLocations) <= 3 then
+    if hasWonFlag > 0 and hasWon < 0x10 and #difference(locations, pastLocations) <= 3 then
         -- VICTORY!
         msg = "TERMINATED_CHAOS\n";
         pastLocations = locations
