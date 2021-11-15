@@ -188,10 +188,11 @@ def install_forge(directory: str):
             install_process.wait()
             os.remove(forge_install_jar)
 
+
 # Run the Forge server. Return process object
 def run_forge_server(forge_dir: str, heap_arg):
 
-    java_exe = os.path.abspath(os.path.join('jdk16.0.2_7', 'bin', 'java.exe'))
+    java_exe = find_jdk()
     if not os.path.isfile(java_exe):
         java_exe = "java"  # try to fall back on java in the PATH
 
