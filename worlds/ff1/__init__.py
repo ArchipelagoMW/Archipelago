@@ -8,10 +8,10 @@ from ..AutoWorld import World
 
 class FF1World(World):
     """
-    Final Fantasy 1, originally released on the NES on 1987, is the game that started the beloved, long running series
+    Final Fantasy 1, originally released on the NES on 1987, is the game that started the beloved, long running series.
     The randomizer takes the original 8-bit Final Fantasy game for NES (USA edition) and allows you to
     shuffle important aspects like the location of key items, the difficulty of monsters and fiends,
-    and even the location of towns and dungeons (To be supported in AP Soon!).
+    and even the location of towns and dungeons.
     Part puzzle and part speed-run, it breathes new life into one of the most influential games ever made.
     """
 
