@@ -78,9 +78,6 @@ Source: "{#sourcepath}\ArchipelagoLttPAdjuster.exe"; DestDir: "{app}"; Flags: ig
 Source: "{#sourcepath}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/minecraft
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
-;minecraft temp files
-Source: "{tmp}\forge-installer.jar"; DestDir: "{app}"; Flags: skipifsourcedoesntexist external deleteafterinstall; Components: client/minecraft
-
 [Icons]
 Name: "{group}\{#MyAppName} Folder"; Filename: "{app}";
 Name: "{group}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Components: server
@@ -97,7 +94,7 @@ Name: "{commondesktop}\{#MyAppName} Factorio Client"; Filename: "{app}\Archipela
 
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
 Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: client/lttp or generator/lttp
-Filename: "{app}\jre8\bin\java.exe"; Parameters: "-jar ""{app}\forge-installer.jar"" --installServer ""{app}\Minecraft Forge server"""; Flags: runhidden; Check: IsForgeNeeded(); StatusMsg: "Installing Forge Server..."; Components: client/minecraft
+Filename: "{app}\ArchipelagoMinecraftClient.exe"; Parameters: "--install"; StatusMsg: "Installing Forge Server..."; Components: client/minecraft
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"
@@ -161,40 +158,12 @@ begin
     Result := False;
 end;
 
-function OnDownloadMinecraftProgress(const Url, FileName: String; const Progress, ProgressMax: Int64): Boolean;
-begin
-  if Progress = ProgressMax then
-    Log(Format('Successfully downloaded Minecraft additional files to {tmp}: %s', [FileName]));
-  Result := True;
-end;
-
-procedure UnZip(ZipPath, TargetPath: string);
-var
-  Shell: Variant;
-  ZipFile: Variant;
-  TargetFolder: Variant;
-begin
-  Shell := CreateOleObject('Shell.Application');
-
-  ZipFile := Shell.NameSpace(ZipPath);
-  if VarIsClear(ZipFile) then
-    RaiseException(
-      Format('ZIP file "%s" does not exist or cannot be opened', [ZipPath]));
-
-  TargetFolder := Shell.NameSpace(TargetPath);
-  if VarIsClear(TargetFolder) then
-    RaiseException(Format('Target path "%s" does not exist', [TargetPath]));
-
-  TargetFolder.CopyHere(
-    ZipFile.Items, SHCONTCH_NOPROGRESSBOX or SHCONTCH_RESPONDYESTOALL);
-end;
 
 var ROMFilePage: TInputFileWizardPage;
 var R : longint;
 var rom: string;
 var ootrom: string;
 var OoTROMFilePage: TInputFileWizardPage;
-var MinecraftDownloadPage: TDownloadWizardPage;
 
 procedure AddRomPage();
 begin
@@ -222,11 +191,6 @@ begin
     'Location of ROM file:',
     'SNES ROM files|*.sfc|All files|*.*',
     '.sfc');
-end;
-
-procedure AddMinecraftDownloads();
-begin
-  MinecraftDownloadPage := CreateDownloadPage(SetupMessage(msgWizardPreparing), SetupMessage(msgPreparingDesc), @OnDownloadMinecraftProgress);
 end;
 
 procedure AddOoTRomPage();
@@ -259,42 +223,10 @@ begin
     '.z64');
 end;
 
-function NextButtonClick(CurPageID: Integer): Boolean;
-begin
-  if (CurPageID = wpReady) and (WizardIsComponentSelected('client/minecraft')) then begin
-    MinecraftDownloadPage.Clear;
-    if(IsForgeNeeded()) then
-      MinecraftDownloadPage.Add('https://maven.minecraftforge.net/net/minecraftforge/forge/'+FORGE_VERSION+'/forge-'+FORGE_VERSION+'-installer.jar','forge-installer.jar','');
-    if(IsJavaNeedeD()) then
-      MinecraftDownloadPage.Add('https://corretto.aws/downloads/latest/amazon-corretto-8-x64-windows-jre.zip','java.zip','');
-    MinecraftDownloadPage.Show;
-    try
-      try
-        MinecraftDownloadPage.Download;
-        Result := True;
-      except
-        if MinecraftDownloadPage.AbortedByUser then
-          Log('Aborted by user.')
-        else
-          SuppressibleMsgBox(AddPeriod(GetExceptionMessage), mbCriticalError, MB_OK, IDOK);
-        Result := False;
-      end;
-    finally
-      if( isJavaNeeded() ) then
-        if(ForceDirectories(ExpandConstant('{app}'))) then
-          UnZip(ExpandConstant('{tmp}')+'\java.zip',ExpandConstant('{app}'));
-      MinecraftDownloadPage.Hide;
-    end;
-    Result := True;
-  end else
-    Result := True;
-end;
-
 procedure InitializeWizard();
 begin                    
   AddOoTRomPage();
   AddRomPage();
-  AddMinecraftDownloads();
 end;
 
 
