@@ -13,11 +13,7 @@ Pot or some armor. There are plenty of other things that can be randomized on ou
 [main randomizer site](https://finalfantasyrandomizer.com/)
 
 Some features are not currently supported by AP. A non-exhaustive list includes:
-- Entrance/Floor Shuffle (Coming Soon!)
-- The shop item is removed entirely
 - Shard Hunt
-- Experience Chests
-- Proc Gen Overworld
 - Deep Dungeon
 
 ## What Final Fantasy items can appear in other players' worlds?

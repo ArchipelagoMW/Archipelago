@@ -111,5 +111,5 @@ to earn a hint. You can check how many you have by just running `!hint`
 - `!forfeit` If you didn't turn on auto-forfeit or you allowed forfeiting prior to goal completion. Remember that
 "forfeiting" actually means sending out your remaining items in your world
 
-#### HOST ONLY ON THE WEBSITE
+#### Host only (on Archipelago.gg)
 `/forfeit <Player Name>` Forfeits someone regardless of settings and game completion status
