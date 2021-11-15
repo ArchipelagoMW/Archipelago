@@ -649,9 +649,9 @@ def buildWorldGossipHints(world, checkedLocations=None):
     if checkedLocations is None:
         checkedLocations = {player: set() for player in world.world.player_ids}
 
-    # If Ganondorf can be reached without Light Arrows, add to checkedLocations to prevent extra hinting
+    # If Ganondorf hints Light Arrows and is reachable without them, add to checkedLocations to prevent extra hinting
     # Can only be forced with vanilla bridge or trials
-    if world.bridge != 'vanilla' and world.trials == 0:
+    if world.bridge != 'vanilla' and world.trials == 0 and world.misc_hints:
         try:
             light_arrow_location = world.world.find_item("Light Arrows", world.player)
             checkedLocations[light_arrow_location.player].add(light_arrow_location.name)

@@ -191,7 +191,6 @@ class OOTWorld(World):
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld']
 
         # Hint stuff
-        self.misc_hints = True  # this is just always on
         self.clearer_hints = True  # this is being enforced since non-oot items do not have non-clear hint text
         self.gossip_hints = {}
         self.required_locations = []

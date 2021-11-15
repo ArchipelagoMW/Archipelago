@@ -563,6 +563,11 @@ class Hints(Choice):
     alias_false = 0
 
 
+class MiscHints(DefaultOnToggle):
+    """Controls whether the Temple of Time altar gives dungeon prize info and whether Ganondorf hints the Light Arrows."""
+    displayname = "Misc Hints"
+
+
 class HintDistribution(Choice):
     """Choose the hint distribution to use. Affects the frequency of strong hints, which items are always hinted, etc."""
     displayname = "Hint Distribution"
