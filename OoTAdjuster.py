@@ -1,5 +1,4 @@
 import tkinter as tk
-import shutil
 import argparse
 import logging
 import random
@@ -9,11 +8,11 @@ from itertools import chain
 from BaseClasses import MultiWorld
 from Options import Choice, Range, Toggle
 from worlds.oot import OOTWorld
-from worlds.oot.Cosmetics import patch_cosmetics, format_cosmetic_option_result
+from worlds.oot.Cosmetics import patch_cosmetics
 from worlds.oot.Options import cosmetic_options, sfx_options
 from worlds.oot.Rom import Rom, compress_rom_file
 from worlds.oot.N64Patch import apply_patch_file
-from Utils import output_path, local_path, open_file
+from Utils import local_path
 
 logger = logging.getLogger('OoTAdjuster')
 
@@ -220,6 +219,8 @@ def adjust(args):
         rom = Rom(file=args.vanilla_rom, force_use=True)
         # Patch file
         apply_patch_file(rom, args.rom)
+    else:
+        raise Exception("Invalid file extension; requires .n64, .z64, .apz5")
     # Call patch_cosmetics
     patch_cosmetics(ootworld, rom)
     # Output new file
