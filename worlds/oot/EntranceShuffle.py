@@ -668,7 +668,8 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
                 if not all_state.can_reach(loc, 'Location', player):
                     raise EntranceShuffleError(f'{loc} is unreachable')
 
-    if ootworld.shuffle_interior_entrances and (entrance_placed == None or entrance_placed.type in ['Interior', 'SpecialInterior']):
+    if ootworld.shuffle_interior_entrances and (ootworld.misc_hints or ootworld.hints != 'none') and \
+        (entrance_placed == None or entrance_placed.type in ['Interior', 'SpecialInterior']):
         # Ensure Kak Potion Shop entrances are in the same hint area so there is no ambiguity as to which entrance is used for hints
         potion_front_entrance = get_entrance_replacing(world.get_region('Kak Potion Shop Front', player), 'Kakariko Village -> Kak Potion Shop Front', player)
         potion_back_entrance = get_entrance_replacing(world.get_region('Kak Potion Shop Back', player), 'Kak Backyard -> Kak Potion Shop Back', player)
