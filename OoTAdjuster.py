@@ -223,6 +223,7 @@ def adjust(args):
         raise Exception("Invalid file extension; requires .n64, .z64, .apz5")
     # Call patch_cosmetics
     patch_cosmetics(ootworld, rom)
+    rom.write_byte(rom.sym('DEATH_LINK'), args.deathlink)
     # Output new file
     path_pieces = os.path.splitext(args.rom)
     decomp_path = path_pieces[0] + '-adjusted.n64'
