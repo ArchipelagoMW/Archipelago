@@ -80,6 +80,8 @@ scripts = {
     "FactorioClient.py": ("ArchipelagoFactorioClient", True, icon),
     # Minecraft
     "MinecraftClient.py": ("ArchipelagoMinecraftClient", False, mcicon),
+    # Ocarina of Time
+    "OoTAdjuster.py": ("ArchipelagoOoTAdjuster", True, icon),
 }
 
 exes = []
