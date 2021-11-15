@@ -12,6 +12,7 @@ from worlds.oot import OOTWorld
 from worlds.oot.Cosmetics import patch_cosmetics, format_cosmetic_option_result
 from worlds.oot.Options import cosmetic_options, sfx_options
 from worlds.oot.Rom import Rom, compress_rom_file
+from worlds.oot.N64Patch import apply_patch_file
 from Utils import output_path, local_path, open_file
 
 logger = logging.getLogger('OoTAdjuster')
@@ -21,6 +22,8 @@ def main():
 
     parser.add_argument('--rom', default='', 
         help='Path to an OoT randomized ROM to adjust.')
+    parser.add_argument('--vanilla_rom', default='',
+        help='Path to a vanilla OoT ROM for patching.')
     for name, option in chain(cosmetic_options.items(), sfx_options.items()):
         parser.add_argument('--'+name, default=None,
             help=option.__doc__)
@@ -46,25 +49,36 @@ def adjustGUI():
     window.wm_title(f"Archipelago {MWVersion} OoT Adjuster")
     set_icon(window)
 
+    opts = Namespace()
+
     # Select ROM
     romDialogFrame = Frame(window)
-    romLabel = Label(romDialogFrame, text='Rom to adjust')
-    romVar = StringVar()
-    romEntry = Entry(romDialogFrame, textvariable=romVar)
+    romLabel = Label(romDialogFrame, text='Rom/patch to adjust')
+    vanillaLabel = Label(romDialogFrame, text='OoT Base Rom')
+    opts.rom = StringVar()
+    opts.vanilla_rom = StringVar(value="The Legend of Zelda - Ocarina of Time.z64")
+    romEntry = Entry(romDialogFrame, textvariable=opts.rom)
+    vanillaEntry = Entry(romDialogFrame, textvariable=opts.vanilla_rom)
 
     def RomSelect():
+        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".z64", ".n64", ".apz5")), ("All Files", "*")])
+        opts.rom.set(rom)
+    def VanillaSelect():
         rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".z64", ".n64")), ("All Files", "*")])
-        romVar.set(rom)
+        opts.vanilla_rom.set(rom)
 
     romSelectButton = Button(romDialogFrame, text='Select Rom', command=RomSelect)
+    vanillaSelectButton = Button(romDialogFrame, text='Select Rom', command=VanillaSelect)
     romDialogFrame.pack(side=TOP, expand=True, fill=X)
     romLabel.pack(side=LEFT)
     romEntry.pack(side=LEFT, expand=True, fill=X)
     romSelectButton.pack(side=LEFT)
+    vanillaLabel.pack(side=LEFT)
+    vanillaEntry.pack(side=LEFT, expand=True, fill=X)
+    vanillaSelectButton.pack(side=LEFT)
 
     # Cosmetic options
     romSettingsFrame = Frame(window)
-    opts = Namespace()
 
     def dropdown_option(type, option_name, row, column):
         if type == 'cosmetic':
@@ -151,7 +165,6 @@ def adjustGUI():
     def adjustRom():
         try:
             guiargs = Namespace()
-            guiargs.rom = romVar.get()
             options = vars(opts)
             for o in options:
                 result = options[o].get()
@@ -198,14 +211,21 @@ def adjust(args):
         setattr(ootworld, name, result)
     ootworld.logic_rules = 'glitched' if args.is_glitched else 'glitchless'
     ootworld.death_link = args.deathlink
-    # Load up the ROM
-    rom = Rom(file=args.rom, force_use=True)
+
+    if os.path.splitext(args.rom)[-1] in ['.z64', '.n64']:
+        # Load up the ROM
+        rom = Rom(file=args.rom, force_use=True)
+    elif os.path.splitext(args.rom)[-1] == '.apz5':
+        # Load vanilla ROM
+        rom = Rom(file=args.vanilla_rom, force_use=True)
+        # Patch file
+        apply_patch_file(rom, args.rom)
     # Call patch_cosmetics
     patch_cosmetics(ootworld, rom)
     # Output new file
     path_pieces = os.path.splitext(args.rom)
-    decomp_path = path_pieces[0] + '-adjusted' + path_pieces[1]
-    comp_path = path_pieces[0] + '-adjusted-comp' + path_pieces[1]
+    decomp_path = path_pieces[0] + '-adjusted.n64'
+    comp_path = path_pieces[0] + '-adjusted-comp.n64'
     rom.write_to_file(decomp_path)
     compress_rom_file(decomp_path, comp_path)
     os.remove(decomp_path)
