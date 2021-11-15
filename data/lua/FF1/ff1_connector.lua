@@ -1,10 +1,17 @@
 local socket = require("socket")
 local json = require('json')
 
-itemMessages = {}
-pastLocations = nil
-itemsReceived = {}
-frame = 0
+local STATE_OK = "Ok"
+local STATE_TENTATIVELY_CONNECTED = "Tentatively Connected"
+local STATE_INITIAL_CONNECTION_MADE = "Initial Connection Made"
+local STATE_UNINITIALIZED = "Uninitialized"
+
+local itemMessages = {}
+local itemsReceived = {}
+local prevstate = ""
+local curstate =  STATE_UNINITIALIZED
+local ff1Socket = nil
+local frame = 0
 
 local u8 = nil
 local wU8 = nil
@@ -16,7 +23,7 @@ local function defineMemoryFunctions()
 	local domains = memory.getmemorydomainlist()
 	if domains[1] == "System Bus" then
 		--NesHawk
-		isNesHawk = true;
+		isNesHawk = true
 		memDomain["systembus"] = function() memory.usememorydomain("System Bus") end
 		memDomain["saveram"]   = function() memory.usememorydomain("Battery RAM") end
 		memDomain["rom"]       = function() memory.usememorydomain("PRG ROM") end
@@ -34,13 +41,12 @@ u8 = memory.read_u8
 wU8 = memory.write_u8
 uRange = memory.readbyterange
 
-
 local function StateOKForMainLoop()
     memDomain.saveram()
     local A = u8(0x102) -- Party Made
-    local B = u8(0x0FC) -- Not in Battle
+    local B = u8(0x0FC)
     local C = u8(0x0A3)
-    return A ~= 0x00 and B ~= 0x0B and B ~= 0x0C and not (A== 0xF2 and B == 0xF2 and C == 0xF2)
+    return A ~= 0x00 and not (A== 0xF2 and B == 0xF2 and C == 0xF2)
 end
 
 function table.empty (self)
@@ -65,7 +71,7 @@ local function drawText(x, y, message, color)
     if is23Or24 then
         gui.addmessage(message)
     elseif is25To27 then
-        gui.drawText(x, y, message, color, 0xB0000000, 18, "Courier New", nil, nil, nil, "client");
+        gui.drawText(x, y, message, color, 0xB0000000, 18, "Courier New", nil, nil, nil, "client")
     end
 end
 
@@ -82,7 +88,7 @@ local function drawMessages()
         clearScreen()
         return
     end
-    local y = 10;
+    local y = 10
     found = false
     maxMessageLength = getMaxMessageLength()
     for k, v in pairs(itemMessages) do
@@ -90,7 +96,7 @@ local function drawMessages()
             message = v["message"]
             while true do
                 drawText(5, y, message:sub(1, maxMessageLength), v["color"])
-                y = y + 16;
+                y = y + 16
 
                 message = message:sub(maxMessageLength + 1, message:len())
                 if message:len() == 0 then
@@ -99,7 +105,7 @@ local function drawMessages()
             end
             newTTL = 0
             if is25To27 then
-                newTTL = itemMessages[k]["TTL"] - 1;
+                newTTL = itemMessages[k]["TTL"] - 1
             end
             itemMessages[k]["TTL"] = newTTL
             found = true
@@ -110,12 +116,6 @@ local function drawMessages()
     end
 end
 
-
-local prevstate = ""
-local curstate =  "Uninitialized"
-local statusColor = ""
-local ff1Socket = nil;
-
 function generateLocationChecked()
     memDomain.saveram()
     data = uRange(0x01FF, 0x101)
@@ -124,12 +124,12 @@ function generateLocationChecked()
 end
 
 function processBlock(block)
-    local msg_block = block['messages'];
+    local msg_block = block['messages']
     if msg_block ~= nil then
         for i, v in pairs(msg_block) do
             if itemMessages[i] == nil then
-                local msg = {TTL=450, message=v, color=0xFFFF0000};
-                itemMessages[i] = msg;
+                local msg = {TTL=450, message=v, color=0xFFFF0000}
+                itemMessages[i] = msg
             end
         end
     end
@@ -138,7 +138,7 @@ function processBlock(block)
         for i, v in pairs(items_block) do
             -- Minus the offset and add to the correct domain
             local memory_location = v
-            memDomain.saveram();
+            memDomain.saveram()
             if v >= 0x1E0 then
                 -- This is a movement item
                 memory_location = memory_location - 0x1E0
@@ -147,7 +147,7 @@ function processBlock(block)
                 memory_location = memory_location - 0x0E0
             end
             if itemsReceived[memory_location] == nil then
-                itemsReceived[memory_location] = memory_location;
+                itemsReceived[memory_location] = memory_location
                 value = 0x01
                 -- Canal is a flipped bit
                 if memory_location == 0x0C then
@@ -177,117 +177,69 @@ end
 function receive()
     l, e = ff1Socket:receive()
     if e == 'closed' then
-        print("Connection closed")
-        curstate = "Uninitialized"
+        if curstate == STATE_OK then
+            print("Connection closed")
+        end
+        curstate = STATE_UNINITIALIZED
         return
     elseif e == 'timeout' then
         print("timeout")
         return
     elseif e ~= nil then
-        print(e);
-        curstate = "Uninitialized";
+        print(e)
+        curstate = STATE_UNINITIALIZED
         return
     end
     processBlock(json.decode(l))
-    memDomain.systembus()
-    local hasWon = u8(0x62FE);
-    local hasWonFlag = bit.band(hasWon, 0x02)
+
+    -- Determine Message to send back
     local msg = "\n"
-    locations = generateLocationChecked()
-    if hasWonFlag > 0 and hasWon < 0x10 and #difference(locations, pastLocations) <= 3 then
-        -- VICTORY!
-        msg = "TERMINATED_CHAOS\n";
-        pastLocations = locations
-    else
-        if pastLocations == nil or #difference(locations, pastLocations) <= 3 then
-            msg = json.encode(locations).."\n"
-            pastLocations = locations
-        end
+    if StateOKForMainLoop() then
+        locations = generateLocationChecked()
+        msg = json.encode(locations).."\n"
     end
+
     local ret, error = ff1Socket:send(msg)
     if ret == nil then
         print(error)
-    end
-end
-
-function receiveKeepAliveOrVictory()
-    l, e = ff1Socket:receive()
-    if e == 'closed' then
-        if curstate == "OK" then
-            print("Connection closed")
-        end
-        curstate = "Uninitialized"
-        return
-    elseif e == 'timeout' then
-        print("timeout")
-        return
-    elseif e ~= nil then
-        print(e);
-        curstate = "Uninitialized";
-        return
-    end
-    processBlock(json.decode(l))
-    local msg = '\n'
-    local ret, error = ff1Socket:send(msg);
-    if ret == nil then
-        print(error);
-    elseif curstate == "Initial Connection Made" then
-        curstate = "Tentatively Connected"
-    elseif curstate == "Tentatively Connected" then
+    elseif curstate == STATE_INITIAL_CONNECTION_MADE then
+        curstate = STATE_TENTATIVELY_CONNECTED
+    elseif curstate == STATE_TENTATIVELY_CONNECTED then
         print("Connected!")
-        itemMessages["(0,0)"] = {TTL=240, message="Connected", color="green"};
-        curstate = "OK"
-    end
-end
-
-server = nil
-
-function close_server()
-    if server ~= nil then
-        print("CLOSING SERVER")
-        server:close()
+        itemMessages["(0,0)"] = {TTL=240, message="Connected", color="green"}
+        curstate = STATE_OK
     end
 end
 
 function main()
     if (is23Or24 or is25To27) == false then
-        print("Must use a version of bizhawk higher than 2.3.0")
+        print("Must use a version of bizhawk 2.3.1 or higher")
         return
     end
     server, error = socket.bind('localhost', 52980)
 
     while true do
-        gui.drawEllipse(248, 9, 6, 6, "Black", "Yellow");
-        frame = frame + 1;
-        drawMessages();
+        gui.drawEllipse(248, 9, 6, 6, "Black", "Yellow")
+        frame = frame + 1
+        drawMessages()
         if not (curstate == prevstate) then
             -- console.log("Current state: "..curstate)
             prevstate = curstate
         end
-        if (curstate == "OK") or (curstate == "Initial Connection Made") or (curstate == "Tentatively Connected") then
-            if StateOKForMainLoop() then
-                if (frame % 60 == 0) then
-                    gui.drawEllipse(248, 9, 6, 6, "Black", "Blue");
-                    receive()
-                else
-                    gui.drawEllipse(248, 9, 6, 6, "Black", "Green");
-                end
+        if (curstate == STATE_OK) or (curstate == STATE_INITIAL_CONNECTION_MADE) or (curstate == STATE_TENTATIVELY_CONNECTED) then
+            if (frame % 60 == 0) then
+                gui.drawEllipse(248, 9, 6, 6, "Black", "Blue")
+                receive()
             else
-                gui.drawEllipse(248, 9, 6, 6, "Black", "Green");
-                if (frame % 60 == 0) then
-                    gui.drawEllipse(248, 9, 6, 6, "Black", "Blue");
-                    receiveKeepAliveOrVictory()
-                end
+                gui.drawEllipse(248, 9, 6, 6, "Black", "Green")
             end
-        elseif (curstate == "Error") then
-            gui.drawEllipse(248, 9, 6, 6, "Black", "Red");
-        elseif (curstate == "Uninitialized") then
-            gui.drawEllipse(248, 9, 6, 6, "Black", "White");
+        elseif (curstate == STATE_UNINITIALIZED) then
+            gui.drawEllipse(248, 9, 6, 6, "Black", "White")
             if  (frame % 60 == 0) then
-                gui.drawEllipse(248, 9, 6, 6, "Black", "Yellow");
+                gui.drawEllipse(248, 9, 6, 6, "Black", "Yellow")
 
-                drawText(5, 8, "Waiting for client", 0xFFFF0000);
-                drawText(5, 32, "Please start FF1Client.exe", 0xFFFF0000);
+                drawText(5, 8, "Waiting for client", 0xFFFF0000)
+                drawText(5, 32, "Please start FF1Client.exe", 0xFFFF0000)
 
                 -- Advance so the messages are drawn
                 emu.frameadvance()
@@ -296,17 +248,14 @@ function main()
                 local client, timeout = server:accept()
                 if timeout == nil then
                     -- print('Initial Connection Made')
-                    curstate = "Initial Connection Made"
+                    curstate = STATE_INITIAL_CONNECTION_MADE
                     ff1Socket = client
                     ff1Socket:settimeout(0)
                 end
             end
         end
-        --debug_log(string.format("whole loop executed in %.3f ms", os.clock() - lc))
-        emu.frameadvance();
+        emu.frameadvance()
     end
 end
 
-event.unregisterbyname("ff1-socket-onexit")
-event.onexit(close_server, "ff1-socket-onexit")
 main()

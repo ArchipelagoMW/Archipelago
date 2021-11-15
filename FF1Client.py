@@ -9,6 +9,8 @@ from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, 
 
 SYSTEM_MESSAGE_ID = 0
 
+DATA_KEEP_ALIVE = b'\n'
+
 CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator then restart ff1_connector.lua"
 CONNECTION_REFUSED_STATUS = "Connection Refused. Please start your emulator make sure ff1_connector.lua is running"
 CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator then restart ff1_connector.lua"
@@ -82,7 +84,11 @@ class FF1Context(CommonContext):
                     else:
                         msg = f"You sent {self.item_name_getter(item.item)} to {receiving_player_name}"
                 else:
-                    msg = f"{sending_player_name} sent {self.item_name_getter(item.item)} to {receiving_player_name}"
+                    if receiving_player_id == sending_player_id:
+                        msg = f"{sending_player_name} found their {self.item_name_getter(item.item)}"
+                    else:
+                        msg = f"{sending_player_name} sent {self.item_name_getter(item.item)} to " \
+                              f"{receiving_player_name}"
                 self._set_message(msg, item.item)
 
 
@@ -91,7 +97,8 @@ def get_payload(ctx: FF1Context):
     return json.dumps(
         {
             "items": [item.item for item in ctx.items_received],
-            "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items() if key[0] > current_time - 10}
+            "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
+                         if key[0] > current_time - 10}
         }
     )
 
@@ -103,6 +110,12 @@ async def parse_locations(locations_array: List[int], ctx: FF1Context):
         # print("New values")
         ctx.locations_array = locations_array
         locations_checked = []
+        if locations_array[0xFE] & 0x02 != 0 and not ctx.finished_game:
+            await ctx.send_msgs([
+                {"cmd": "StatusUpdate",
+                 "status": 30}
+            ])
+            ctx.finished_game = True
         for location in ctx.missing_locations:
             # index will be - 0x100 or 0x200
             index = location
@@ -140,23 +153,14 @@ async def nes_sync_task(ctx: FF1Context):
             try:
                 await asyncio.wait_for(writer.drain(), timeout=1.5)
                 try:
-                    # Data will return one of 3 things:
+                    # Data will return one of 2 things:
                     # 1. A keepalive response of \n
-                    # 2. A message "TERMINATED_CHAOS" for endgame
-                    # 3. An array representing the memory values of the locations area
+                    # 2. An array representing the memory values of the locations area
                     data = await asyncio.wait_for(reader.readline(), timeout=5)
-                    if ctx.game is not None:
-                        if data == b'TERMINATED_CHAOS\n':
-                            # Victory condition! No more items will be sent
-                            if not ctx.finished_game:
-                                await ctx.send_msgs([
-                                    {"cmd": "StatusUpdate",
-                                    "status": 30}
-                                ])
-                                ctx.finished_game = True
-                        elif data != b'\n':
-                            # Not just a keep alive ping, parse
-                            asyncio.create_task(parse_locations(json.loads(data.decode()), ctx))
+                    # print(data)
+                    if ctx.game is not None and data != DATA_KEEP_ALIVE:
+                        # Not just a keep alive ping, parse
+                        asyncio.create_task(parse_locations(json.loads(data.decode()), ctx))
                 except asyncio.TimeoutError:
                     logger.debug("Read Timed Out, Reconnecting")
                     error_status = CONNECTION_TIMING_OUT_STATUS
