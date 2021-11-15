@@ -4,21 +4,24 @@
 - The FF1Client which is bundled with [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
 - The [BizHawk](http://tasvideos.org/BizHawk.html) emulator. Versions 2.3.1 and higher are supported. 
   Version 2.7 is recommended
-- Your Final Fantasy (USA Edotopm) ROM file, probably named `Final Fantasy (USA).nes`
+- Your Final Fantasy (USA Edition) ROM file, probably named `Final Fantasy (USA).nes`. Archipelago.gg nor the Final
+  Fantasy Randomizer Community can supply you with this.
 
 ## Installation Procedures
 1. Download and install the latest version of [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
+   1. On Windows, download Setup.Archipelago.<HighestVersion>.exe and run it
 2. Assign Bizhawk version 2.3.1 or higher as your default program for launching `.nes` files.
-    1. Extract your Bizhawk folder to your Desktop, or somewhere you will remember.
-    2. Right-click on a ROM file and select **Open with...**
-    3. Check the box next to **Always use this app to open .nes files**
-    4. Scroll to the bottom of the list and click the grey text **Look for another App on this PC**
-    5. Browse for `EmuHawk.exe` located inside your Bizhawk folder (from step 1) and click **Open**.
+    1. Extract your Bizhawk folder to your Desktop, or somewhere you will remember. Below are optional additional
+       steps for loading ROMs more conveniently
+       1. Right-click on a ROM file and select **Open with...**
+       2. Check the box next to **Always use this app to open .nes files**
+       3. Scroll to the bottom of the list and click the grey text **Look for another App on this PC**
+       4. Browse for `EmuHawk.exe` located inside your Bizhawk folder (from step 1) and click **Open**.
 
 ## Playing a Multiworld
 Playing a multiworld on Archipelago.gg has 3 key components:
 1. The Server which is hosting a game for all players.
-2. The Client Program. For Final Fantasy 1 it is a standalone program but other randomizers may build it in.
+2. The Client Program. For Final Fantasy 1, it is a standalone program but other randomizers may build it in.
 3. The Game itself, in this case running on Bizhawk, which then connects to the Client running on your computer.
 
 To set this up the following steps are required:
@@ -32,12 +35,12 @@ To set this up the following steps are required:
 ### Obtaining your Archipelago yaml file and randomized ROM
 Unlike most other Archipelago.gg games Final Fantasy 1 is randomized by the 
 [main randomizer](https://finalfantasyrandomizer.com/). Generate a game by going to the site and performing the
-following steps
+following steps:
 1. Select the randomization options (also known as `Flags` in the community) of your choice. If you do not know what 
 you prefer, or it is your first time playing select the "Archipelago" preset on the main page.
 2. Go to the `Beta` tab and ensure `Archipelago` is enabled. Set your player name to any name that represents you.
 3. Upload you `Final Fantasy(USA).nes` (and click `Remember ROM` for the future!)
-4. Press the `NEW` button below `Seed` a few times
+4. Press the `NEW` button beside `Seed` a few times
 5. Click `GENERATE ROM`
 
 It should download two files. One is the `*.nes` file which your emulator will run and the other is the yaml file
@@ -91,17 +94,22 @@ When the client shows both NES and server are connected you are good to go. You 
 NES at any time by running `/nes`
 
 ### Helpful Commands
-`/nes` Shows the current status of the NES connection
-`/received` Displays all the items you have found or been sent
-`/missing` Displays all the locations along with their current status (checked/missing)
-`!hint <item name>` Tells you at which location in whose game your Item is. Note you need to have checked some locations
+Commands are broken into two types: `/` and `!` commands. The difference is that `/commands` are local to your machine
+and game whereas `!` commands ask the server. Most of the time you can use local commands.
+
+#### Local Commands
+- `/connect <address with port number>` connect to the multiworld server
+- `/disconnect` if you accidentally connected to the wrong port run this to disconnect and then reconnect using
+- `/nes` Shows the current status of the NES connection
+- `/received` Displays all the items you have found or been sent
+- `/missing` Displays all the locations along with their current status (checked/missing)
+- Just typing anything will broadcast a message to all players
+
+#### Remote Commands
+- `!hint <item name>` Tells you at which location in whose game your Item is. Note you need to have checked some locations
 to earn a hint. You can check how many you have by just running `!hint`
-`!forfeit` If you didn't turn on auto-forfeit or you allowed forfeiting prior to goal completion. Remember that
+- `!forfeit` If you didn't turn on auto-forfeit or you allowed forfeiting prior to goal completion. Remember that
 "forfeiting" actually means sending out your remaining items in your world
-`/disconnect` if you accidentally connected to the wrong port run this to disconnect and then reconnect using
-`/connect <address with port number>` connect to the multiworld server
 
-Just typing anything will broadcast a message to all players
-
-HOST ONLY ON THE WEBSITE
+#### HOST ONLY ON THE WEBSITE
 `/forfeit <Player Name>` Forfeits someone regardless of settings and game completion status
