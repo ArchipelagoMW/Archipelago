@@ -635,6 +635,7 @@ class RupeeStart(Toggle):
 misc_options: typing.Dict[str, type(Option)] = {
     "correct_chest_sizes": CSMC,
     "hints": Hints,
+    "misc_hints": MiscHints,
     "hint_dist": HintDistribution,
     "text_shuffle": TextShuffle,
     "damage_multiplier": DamageMultiplier,
