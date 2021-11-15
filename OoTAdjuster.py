@@ -226,8 +226,8 @@ def adjust(args):
     rom.write_byte(rom.sym('DEATH_LINK'), args.deathlink)
     # Output new file
     path_pieces = os.path.splitext(args.rom)
-    decomp_path = path_pieces[0] + '-adjusted.n64'
-    comp_path = path_pieces[0] + '-adjusted-comp.n64'
+    decomp_path = path_pieces[0] + '-adjusted-decomp.n64'
+    comp_path = path_pieces[0] + '-adjusted.n64'
     rom.write_to_file(decomp_path)
     compress_rom_file(decomp_path, comp_path)
     os.remove(decomp_path)
