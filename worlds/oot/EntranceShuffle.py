@@ -1,7 +1,7 @@
 from itertools import chain
 import logging
 
-from worlds.generic.Rules import set_rule
+from worlds.generic.Rules import set_rule, add_rule
 
 from .Hints import get_hint_area, HintAreaNotFound
 from .Regions import TimeOfDay
@@ -425,7 +425,9 @@ def shuffle_random_entrances(ootworld):
         elif pool_type in {'Spawn', 'WarpSong'}: 
             valid_target_types = ('Spawn', 'WarpSong', 'OwlDrop', 'Overworld', 'Interior', 'SpecialInterior', 'Extra')
             one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, valid_target_types)
-        # Ensure that the last entrance doesn't assume the rest of the targets are reachable?
+        # Ensure that the last entrance doesn't assume the rest of the targets are reachable
+        for target in one_way_target_entrance_pools[pool_type]:
+            add_rule(target, (lambda entrances=entrance_pool: (lambda state: any(entrance.connected_region == None for entrance in entrances)))())
     # Disconnect one-way entrances for priority placement
     for entrance in chain.from_iterable(one_way_entrance_pools.values()):
         entrance.disconnect()
