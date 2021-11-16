@@ -216,7 +216,8 @@ def run_forge_server(forge_dir: str, heap_arg):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("apmc_file", default=None, nargs='?', help="Path to an Archipelago Minecraft data file (.apmc)")
-    parser.add_argument('--install', '-i', dest='install', default=False,action='store_true' ,help="download and install java and minecraft forge")
+    parser.add_argument('--install', '-i', dest='install', default=False, action='store_true', 
+        help="Download and install Java and the Forge server. Does not launch the client afterwards.")
 
     args = parser.parse_args()
     apmc_file = os.path.abspath(args.apmc_file) if args.apmc_file else None
