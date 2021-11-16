@@ -171,8 +171,6 @@ def hostRoom(room: UUID):
 
     with db_session:
         room.last_activity = datetime.utcnow()  # will trigger a spinup, if it's not already running
-        
-    room.server = app.config['PATCH_TARGET']
 
     return render_template("hostRoom.html", room=room)
 
