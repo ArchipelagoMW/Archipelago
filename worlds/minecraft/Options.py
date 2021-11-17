@@ -71,7 +71,7 @@ class InsaneAdvancements(Toggle):
 
 
 class PostgameAdvancements(Toggle):
-    """Enables advancements that require spawning and defeating the Ender Dragon."""
+    """Enables advancements that require spawning and defeating the required bosses."""
     displayname = "Include Postgame Advancements"
 
 
