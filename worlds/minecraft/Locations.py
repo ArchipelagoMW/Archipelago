@@ -121,7 +121,8 @@ advancement_table = {
     "Whatever Floats Your Goat!": AdvData(42102, 'Overworld'),
 
     "Blaze Spawner": AdvData(None, 'Nether Fortress'),
-    "Ender Dragon": AdvData(None, 'The End')
+    "Ender Dragon": AdvData(None, 'The End'),
+    "Wither": AdvData(None, 'Nether Fortress'),
 }
 
 exclusion_table = {
@@ -153,9 +154,30 @@ exclusion_table = {
     }
 }
 
-events_table = {
-    "Ender Dragon": "Victory"
-}
+def get_postgame_advancements(required_bosses):
 
-lookup_id_to_name: typing.Dict[int, str] = {loc_data.id: loc_name for loc_name, loc_data in advancement_table.items() if
-                                            loc_data.id}
+    postgame_advancements = {
+        "ender_dragon": {
+            "Free the End",
+            "The Next Generation",
+            "The End... Again...",
+            "You Need a Mint",
+            "Monsters Hunted",
+            "Is It a Plane?",
+        },
+        "wither": {
+            "Withering Heights",
+            "Bring Home the Beacon",
+            "Beaconator",
+            "A Furious Cocktail",
+            "How Did We Get Here?",
+            "Monsters Hunted",
+        }
+    }
+
+    advancements = set()
+    if required_bosses in {"ender_dragon", "both"}:
+        advancements.update(postgame_advancements["ender_dragon"])
+    if required_bosses in {"wither", "both"}:
+        advancements.update(postgame_advancements["wither"])
+    return advancements

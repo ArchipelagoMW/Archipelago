@@ -4,9 +4,9 @@ from base64 import b64encode, b64decode
 from math import ceil
 
 from .Items import MinecraftItem, item_table, required_items, junk_weights
-from .Locations import MinecraftAdvancement, advancement_table, exclusion_table, events_table
+from .Locations import MinecraftAdvancement, advancement_table, exclusion_table, get_postgame_advancements
 from .Regions import mc_regions, link_minecraft_structures, default_connections
-from .Rules import set_rules
+from .Rules import set_advancement_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 
 from BaseClasses import Region, Entrance, Item
@@ -43,6 +43,7 @@ class MinecraftWorld(World):
             'advancement_goal': self.world.advancement_goal[self.player],
             'egg_shards_required': min(self.world.egg_shards_required[self.player], self.world.egg_shards_available[self.player]),
             'egg_shards_available': self.world.egg_shards_available[self.player],
+            'required_bosses': self.world.required_bosses[self.player].current_key,
             'MC35': bool(self.world.send_defeated_mobs[self.player]),
             'death_link': bool(self.world.death_link[self.player]),
             'race': self.world.is_race
@@ -73,20 +74,24 @@ class MinecraftWorld(World):
 
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
-        exclusion_types = ['hard', 'insane', 'postgame']
+        exclusion_types = ['hard', 'insane']
         for key in exclusion_types:
             if not getattr(self.world, f"include_{key}_advancements")[self.player]:
                 exclusion_pool.update(exclusion_table[key])
+        # For postgame advancements, check with the boss goal
+        exclusion_pool.update(get_postgame_advancements(self.world.required_bosses[self.player].current_key))
         exclusion_rules(self.world, self.player, exclusion_pool)
 
         # Prefill event locations with their events
         self.world.get_location("Blaze Spawner", self.player).place_locked_item(self.create_item("Blaze Rods"))
-        self.world.get_location("Ender Dragon", self.player).place_locked_item(self.create_item("Victory"))
+        self.world.get_location("Ender Dragon", self.player).place_locked_item(self.create_item("Defeat Ender Dragon"))
+        self.world.get_location("Wither", self.player).place_locked_item(self.create_item("Defeat Wither"))
 
         self.world.itempool += itempool
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        set_advancement_rules(self.world, self.player)
+        set_completion_rules(self.world, self.player)
 
     def create_regions(self):
         def MCRegion(region_name: str, exits=[]):

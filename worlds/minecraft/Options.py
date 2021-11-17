@@ -6,7 +6,7 @@ class AdvancementGoal(Range):
     """Number of advancements required to spawn the Ender Dragon."""
     displayname = "Advancement Goal"
     range_start = 0
-    range_end = 97
+    range_end = 92
     default = 40
 
 
@@ -22,6 +22,16 @@ class EggShardsAvailable(Range):
     displayname = "Egg Shards Available"
     range_start = 0
     range_end = 40
+
+
+class BossGoal(Choice):
+    """Bosses which must be defeated to finish the game."""
+    displayname = "Required Bosses"
+    option_none = 0
+    option_ender_dragon = 1
+    option_wither = 2
+    option_both = 3
+    default = 1
 
 
 class ShuffleStructures(Toggle):
@@ -74,6 +84,7 @@ minecraft_options: typing.Dict[str, type(Option)] = {
     "advancement_goal":                 AdvancementGoal,
     "egg_shards_required":              EggShardsRequired,
     "egg_shards_available":             EggShardsAvailable,
+    "required_bosses":                  BossGoal,
     "shuffle_structures":               ShuffleStructures,
     "structure_compasses":              StructureCompasses,
     "bee_traps":                        BeeTraps,

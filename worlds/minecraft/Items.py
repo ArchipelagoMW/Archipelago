@@ -60,7 +60,8 @@ item_table = {
     "Bee Trap (Minecraft)": ItemData(45100, False),
 
     "Blaze Rods": ItemData(None, True),
-    "Victory": ItemData(None, True)
+    "Defeat Ender Dragon": ItemData(None, True),
+    "Defeat Wither": ItemData(None, True),
 }
 
 # 33 required items
