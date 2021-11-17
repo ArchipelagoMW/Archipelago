@@ -292,7 +292,7 @@ class OptionList(Option):
         return cls.from_text(str(data))
 
     def get_option_name(self, value):
-        return ", ".join(value)
+        return str(value)
 
     def __contains__(self, item):
         return item in self.value
