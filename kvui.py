@@ -208,25 +208,7 @@ class GameManager(App):
         self.commandprocessor("/help")
         Clock.schedule_interval(self.update_texts, 1 / 30)
         self.container.add_widget(self.grid)
-        self.catch_unhandled_exceptions()
         return self.container
-
-    def catch_unhandled_exceptions(self):
-        """Relay unhandled exceptions to UI logger."""
-        if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
-            orig_hook = sys.excepthook
-
-            def handle_exception(exc_type, exc_value, exc_traceback):
-                if issubclass(exc_type, KeyboardInterrupt):
-                    sys.__excepthook__(exc_type, exc_value, exc_traceback)
-                    return
-                logging.getLogger("Client").exception("Uncaught exception",
-                                                      exc_info=(exc_type, exc_value, exc_traceback))
-                return orig_hook(exc_type, exc_value, exc_traceback)
-
-            handle_exception._wrapped = True
-
-            sys.excepthook = handle_exception
 
     def update_texts(self, dt):
         if self.ctx.server:
@@ -304,7 +286,7 @@ class TextManager(GameManager):
 
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
-        super(LogtoUI, self).__init__(logging.DEBUG)
+        super(LogtoUI, self).__init__(logging.INFO)
         self.on_log = on_log
 
     def handle(self, record: logging.LogRecord) -> None:

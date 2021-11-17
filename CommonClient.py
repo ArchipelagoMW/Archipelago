@@ -11,7 +11,7 @@ import websockets
 import Utils
 
 if __name__ == "__main__":
-    Utils.init_logging("TextClient")
+    Utils.init_logging("TextClient", exception_logger="Client")
 
 from MultiServer import CommandProcessor
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
@@ -271,7 +271,7 @@ class CommonContext():
             logger.info(f"DeathLink: Received from {data['source']}")
 
     async def send_death(self, death_text: str = ""):
-        logger.info("Sending death to your friends...")
+        logger.info("DeathLink: Sending death to your friends...")
         self.last_death_link = time.time()
         await self.send_msgs([{
             "cmd": "Bounce", "tags": ["DeathLink"],

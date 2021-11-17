@@ -15,7 +15,7 @@ from queue import Queue
 import Utils
 
 if __name__ == "__main__":
-    Utils.init_logging("FactorioClient")
+    Utils.init_logging("FactorioClient", exception_logger="Client")
 
 from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled, \
      get_base_parser

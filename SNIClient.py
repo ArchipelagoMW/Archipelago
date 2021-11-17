@@ -15,7 +15,7 @@ from json import loads, dumps
 from Utils import get_item_name_from_id, init_logging
 
 if __name__ == "__main__":
-    init_logging("SNIClient")
+    init_logging("SNIClient", exception_logger="Client")
 
 import colorama
 
