@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Option, Toggle, Range, DeathLink
+from Options import Choice, Option, Toggle, Range, OptionList, DeathLink
 
 
 class AdvancementGoal(Range):
@@ -80,6 +80,11 @@ class SendDefeatedMobs(Toggle):
     displayname = "Send Defeated Mobs"
 
 
+class StartingItems(OptionList):
+    """Start with these items. Each entry should be of this format: {item: "item_name", amount: #, nbt: "nbt_string"}"""
+    displayname = "Starting Items"
+
+
 minecraft_options: typing.Dict[str, type(Option)] = {
     "advancement_goal":                 AdvancementGoal,
     "egg_shards_required":              EggShardsRequired,
@@ -93,5 +98,6 @@ minecraft_options: typing.Dict[str, type(Option)] = {
     "include_insane_advancements":      InsaneAdvancements,
     "include_postgame_advancements":    PostgameAdvancements,
     "send_defeated_mobs":               SendDefeatedMobs,
+    "starting_items":                   StartingItems,
     "death_link":                       DeathLink,
 }

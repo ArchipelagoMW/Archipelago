@@ -46,7 +46,8 @@ class MinecraftWorld(World):
             'required_bosses': self.world.required_bosses[self.player].current_key,
             'MC35': bool(self.world.send_defeated_mobs[self.player]),
             'death_link': bool(self.world.death_link[self.player]),
-            'race': self.world.is_race
+            'starting_items': str(self.world.starting_items[self.player].value),
+            'race': self.world.is_race,
         }
 
     def generate_basic(self):
@@ -116,7 +117,7 @@ class MinecraftWorld(World):
         slot_data = self._get_mc_data()
         for option_name in minecraft_options:
             option = getattr(self.world, option_name)[self.player]
-            if slot_data.get(option_name, None) is None:
+            if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
         return slot_data
 
