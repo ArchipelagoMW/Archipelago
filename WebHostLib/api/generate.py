@@ -9,6 +9,7 @@ from pony.orm import commit
 
 from WebHostLib import app, Generation, STATE_QUEUED, Seed, STATE_ERROR
 from WebHostLib.check import get_yaml_data, roll_options
+from WebHostLib.generate import get_meta
 
 
 @api_endpoints.route('/generate', methods=['POST'])
@@ -35,9 +36,6 @@ def generate_api():
             if "race" in json_data:
                 race = bool(0 if json_data["race"] in {"false"} else int(json_data["race"]))
 
-        hint_cost = int(meta_options_source.get("hint_cost", 10))
-        forfeit_mode = meta_options_source.get("forfeit_mode", "goal")
-
         if not options:
             return {"text": "No options found. Expected file attachment or json weights."
                     }, 400
@@ -45,7 +43,8 @@ def generate_api():
         if len(options) > app.config["MAX_ROLL"]:
             return {"text": "Max size of multiworld exceeded",
                     "detail": app.config["MAX_ROLL"]}, 409
-
+        meta = get_meta(meta_options_source)
+        meta["race"] = race
         results, gen_options = roll_options(options)
         if any(type(result) == str for result in results.values()):
             return {"text": str(results),
@@ -54,7 +53,7 @@ def generate_api():
             gen = Generation(
                 options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
                 # convert to json compatible
-                meta=json.dumps({"race": race, "hint_cost": hint_cost, "forfeit_mode": forfeit_mode}), state=STATE_QUEUED,
+                meta=json.dumps(meta), state=STATE_QUEUED,
                 owner=session["_id"])
             commit()
             return {"text": f"Generation of seed {gen.id} started successfully.",
