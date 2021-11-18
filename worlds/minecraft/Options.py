@@ -3,7 +3,7 @@ from Options import Choice, Option, Toggle, Range, OptionList, DeathLink
 
 
 class AdvancementGoal(Range):
-    """Number of advancements required to spawn the Ender Dragon."""
+    """Number of advancements required to spawn bosses."""
     displayname = "Advancement Goal"
     range_start = 0
     range_end = 92
@@ -11,7 +11,7 @@ class AdvancementGoal(Range):
 
 
 class EggShardsRequired(Range):
-    """Number of dragon egg shards to collect before the Ender Dragon will spawn."""
+    """Number of dragon egg shards to collect to spawn bosses."""
     displayname = "Egg Shards Required"
     range_start = 0
     range_end = 40
