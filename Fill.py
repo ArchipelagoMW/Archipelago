@@ -234,14 +234,14 @@ def balance_multiworld_progression(world: MultiWorld):
                 if not location.locked:
                     reachable_locations_count[location.player] += 1
 
-            logging.info(f"Sphere {sphere_num}")#: {sphere_locations}")
-            logging.info(f"Reachable locations: {reachable_locations_count}")
-            logging.info(f"Reachable percentages: { {player: round(item_percentage(player, num), 2) for player, num in reachable_locations_count.items()} }")
-            logging.info(f"")
+            logging.debug(f"Sphere {sphere_num}")#: {sphere_locations}")
+            logging.debug(f"Reachable locations: {reachable_locations_count}")
+            logging.debug(f"Reachable percentages: { {player: round(item_percentage(player, num), 2) for player, num in reachable_locations_count.items()} }")
+            logging.debug(f"")
             sphere_num += 1
 
             if checked_locations:
-                threshold_percentage = max(map(lambda p: item_percentage(p, reachable_locations_count[p]), filter(lambda p: p not in world.get_game_players('Risk of Rain 2'), reachable_locations_count))) - 0.10
+                threshold_percentage = max(map(lambda p: item_percentage(p, reachable_locations_count[p]), reachable_locations_count)) - 0.10
                 logging.info(threshold_percentage)
                 balancing_players = {player for player, reachables in reachable_locations_count.items() if
                                      item_percentage(player, reachables) < threshold_percentage and player in balanceable_players}
