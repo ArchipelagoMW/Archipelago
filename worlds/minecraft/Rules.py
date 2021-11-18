@@ -87,17 +87,18 @@ class MinecraftLogic(LogicMixin):
             return self._mc_fortress_loot(player) and (normal_kill or self.can_reach('The Nether', 'Region', player) or self.can_reach('The End', 'Region', player))
         return self._mc_fortress_loot(player) and normal_kill
 
+    def _mc_can_respawn_ender_dragon(self, player: int):
+        return self.can_reach('The Nether', 'Region', player) and self.can_reach('The End', 'Region', player) and \
+            self.has('Progressive Resource Crafting', player) # smelt sand into glass
+
     def _mc_can_kill_ender_dragon(self, player: int):
-        # Since it is possible to kill the dragon without getting any of the advancements related to it, we need to require that it can be respawned. 
-        respawn_dragon = self.can_reach('The Nether', 'Region', player) and self.can_reach('The End', 'Region', player) and \
-            self.has('Progressive Resource Crafting', player)
         if self._mc_combat_difficulty(player) == 'easy': 
-            return respawn_dragon and self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and \
+            return self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and \
                    self.has('Archery', player) and self._mc_can_brew_potions(player) and self._mc_can_enchant(player)
         if self._mc_combat_difficulty(player) == 'hard': 
-            return respawn_dragon and ((self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player)) or \
-                   (self.has('Progressive Weapons', player, 1) and self.has('Bed', player)))
-        return respawn_dragon and self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
+            return (self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player)) or \
+                   (self.has('Progressive Weapons', player, 1) and self.has('Bed', player))
+        return self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
 
     def _mc_has_structure_compass(self, entrance_name: str, player: int):
         if not self.world.structure_compasses[player]:
@@ -132,7 +133,7 @@ def set_advancement_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Very Very Frightening", player), lambda state: state.has("Channeling Book", player) and state._mc_can_use_anvil(player) and state._mc_can_enchant(player) and \
         ((world.get_region('Village', player).entrances[0].parent_region.name != 'The End' and state.can_reach('Village', 'Region', player)) or state.can_reach('Zombie Doctor', 'Location', player))) # need villager into the overworld for lightning strike
     set_rule(world.get_location("Hot Stuff", player), lambda state: state.has("Bucket", player) and state._mc_has_iron_ingots(player))
-    set_rule(world.get_location("Free the End", player), lambda state: state._mc_can_kill_ender_dragon(player))
+    set_rule(world.get_location("Free the End", player), lambda state: state._mc_can_respawn_ender_dragon(player) and state._mc_can_kill_ender_dragon(player))
     set_rule(world.get_location("A Furious Cocktail", player), lambda state: state._mc_can_brew_potions(player) and 
                                                                              state.has("Fishing Rod", player) and # Water Breathing
                                                                              state.can_reach('The Nether', 'Region', player) and # Regeneration, Fire Resistance, gold nuggets
@@ -178,7 +179,7 @@ def set_advancement_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Total Beelocation", player), lambda state: state.has("Silk Touch Book", player) and state._mc_can_use_anvil(player) and state._mc_can_enchant(player))
     set_rule(world.get_location("Arbalistic", player), lambda state: state._mc_craft_crossbow(player) and state.has("Piercing IV Book", player) and 
                                                                      state._mc_can_use_anvil(player) and state._mc_can_enchant(player))
-    set_rule(world.get_location("The End... Again...", player), lambda state: state._mc_can_kill_ender_dragon(player))
+    set_rule(world.get_location("The End... Again...", player), lambda state: state._mc_can_respawn_ender_dragon(player) and state._mc_can_kill_ender_dragon(player))
     set_rule(world.get_location("Acquire Hardware", player), lambda state: state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Not Quite \"Nine\" Lives", player), lambda state: state._mc_can_piglin_trade(player) and state.has("Progressive Resource Crafting", player, 2))
     set_rule(world.get_location("Cover Me With Diamonds", player), lambda state: state.has("Progressive Armor", player, 2) and state.can_reach("Diamonds!", "Location", player))
@@ -186,9 +187,10 @@ def set_advancement_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Hired Help", player), lambda state: state.has("Progressive Resource Crafting", player, 2) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Return to Sender", player), lambda state: True)
     set_rule(world.get_location("Sweet Dreams", player), lambda state: state.has("Bed", player) or state.can_reach('Village', 'Region', player))
-    set_rule(world.get_location("You Need a Mint", player), lambda state: state._mc_can_kill_ender_dragon(player) and state._mc_has_bottle(player))
+    set_rule(world.get_location("You Need a Mint", player), lambda state: state._mc_can_respawn_ender_dragon(player) and state._mc_has_bottle(player))
     set_rule(world.get_location("Adventure", player), lambda state: True)
-    set_rule(world.get_location("Monsters Hunted", player), lambda state: state._mc_can_kill_ender_dragon(player) and state._mc_can_kill_wither(player) and state.has("Fishing Rod", player))  # pufferfish for Water Breathing
+    set_rule(world.get_location("Monsters Hunted", player), lambda state: state._mc_can_respawn_ender_dragon(player) and state._mc_can_kill_ender_dragon(player) and 
+        state._mc_can_kill_wither(player) and state.has("Fishing Rod", player))  # pufferfish for Water Breathing
     set_rule(world.get_location("Enchanter", player), lambda state: state._mc_can_enchant(player))
     set_rule(world.get_location("Voluntary Exile", player), lambda state: state._mc_basic_combat(player))
     set_rule(world.get_location("Eye Spy", player), lambda state: state._mc_enter_stronghold(player))
@@ -247,7 +249,7 @@ def set_advancement_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("The Healing Power of Friendship", player), lambda state: state._mc_has_iron_ingots(player) and state.has('Bucket', player))
     set_rule(world.get_location("Is It a Bird?", player), lambda state: state._mc_has_spyglass(player) and state._mc_can_adventure(player))
     set_rule(world.get_location("Is It a Balloon?", player), lambda state: state._mc_has_spyglass(player))
-    set_rule(world.get_location("Is It a Plane?", player), lambda state: state._mc_has_spyglass(player))
+    set_rule(world.get_location("Is It a Plane?", player), lambda state: state._mc_has_spyglass(player) and state._mc_can_respawn_ender_dragon(player))
     set_rule(world.get_location("Surge Protector", player), lambda state: state.has("Channeling Book", player) and state._mc_can_use_anvil(player) and state._mc_can_enchant(player) and \
         ((world.get_region('Village', player).entrances[0].parent_region.name != 'The End' and state.can_reach('Village', 'Region', player)) or state.can_reach('Zombie Doctor', 'Location', player)))
     set_rule(world.get_location("Light as a Rabbit", player), lambda state: state._mc_can_adventure(player) and state._mc_has_iron_ingots(player) and state.has('Bucket', player))
