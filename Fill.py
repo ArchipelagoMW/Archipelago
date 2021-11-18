@@ -206,6 +206,12 @@ def flood_items(world: MultiWorld):
 
 
 def balance_multiworld_progression(world: MultiWorld):
+    # A system to reduce situations where players have no checks remaining, popularly known as "BK mode."
+    # Overall progression balancing algorithm: 
+    # Gather up all locations in a sphere.
+    # Define a threshold value based on the player with the most available locations.
+    # If other players are below the threshold value, swap progression in this sphere into earlier spheres,
+    #   which gives more locations available by this sphere.
     balanceable_players = {player for player in range(1, world.players + 1) if world.progression_balancing[player]}
     if not balanceable_players:
         logging.info('Skipping multiworld progression balancing.')
@@ -228,21 +234,23 @@ def balance_multiworld_progression(world: MultiWorld):
             return num / total_locations_count[player]
 
         while True:
+            # Gather non-locked locations. This ensures that only shuffled locations get counted for progression balancing, 
+            #   i.e. the items the players will be checking.
             sphere_locations = get_sphere_locations(state, unchecked_locations)
             for location in sphere_locations:
                 unchecked_locations.remove(location)
                 if not location.locked:
                     reachable_locations_count[location.player] += 1
 
-            logging.debug(f"Sphere {sphere_num}")#: {sphere_locations}")
+            logging.debug(f"Sphere {sphere_num}")
             logging.debug(f"Reachable locations: {reachable_locations_count}")
-            logging.debug(f"Reachable percentages: { {player: round(item_percentage(player, num), 2) for player, num in reachable_locations_count.items()} }")
-            logging.debug(f"")
+            logging.debug(f"Reachable percentages: { {player: round(item_percentage(player, num), 2) for player, num in reachable_locations_count.items()} }\n")
             sphere_num += 1
 
             if checked_locations:
+                # The 10% threshold can be modified for "progression balancing strength" -- right now it approximates the old 20/216 bound.
                 threshold_percentage = max(map(lambda p: item_percentage(p, reachable_locations_count[p]), reachable_locations_count)) - 0.10
-                logging.info(threshold_percentage)
+                logging.debug(f"Threshold: {threshold_percentage}")
                 balancing_players = {player for player, reachables in reachable_locations_count.items() if
                                      item_percentage(player, reachables) < threshold_percentage and player in balanceable_players}
                 if balancing_players:
@@ -252,6 +260,7 @@ def balance_multiworld_progression(world: MultiWorld):
                     balancing_sphere = sphere_locations.copy()
                     candidate_items = collections.defaultdict(set)
                     while True:
+                        # Check locations in the current sphere and gather progression items to swap earlier
                         for location in balancing_sphere:
                             if location.event:
                                 balancing_state.collect(location.item, True, location)
@@ -259,6 +268,7 @@ def balance_multiworld_progression(world: MultiWorld):
                                 # only replace items that end up in another player's world
                                 if not location.locked and player in balancing_players and location.player != player:
                                     candidate_items[player].add(location)
+                                    logging.debug(f"Candidate item: {location.name}, {location.item.name}")
                         balancing_sphere = get_sphere_locations(balancing_state, balancing_unchecked_locations)
                         for location in balancing_sphere:
                             balancing_unchecked_locations.remove(location)
@@ -270,6 +280,7 @@ def balance_multiworld_progression(world: MultiWorld):
                             break
                         elif not balancing_sphere:
                             raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
+                    # Gather a set of locations which we can swap items into
                     unlocked_locations = collections.defaultdict(set)
                     for l in unchecked_locations:
                         if l not in balancing_unchecked_locations:
@@ -304,6 +315,7 @@ def balance_multiworld_progression(world: MultiWorld):
                     items_to_replace.sort()
                     world.random.shuffle(items_to_replace)
 
+                    # Start swapping items. Since we swap into earlier spheres, no need for accessibility checks. 
                     while replacement_locations and items_to_replace:
                         old_location = items_to_replace.pop()
                         for new_location in replacement_locations:
@@ -311,7 +323,7 @@ def balance_multiworld_progression(world: MultiWorld):
                                     old_location.can_fill(state, new_location.item, False):
                                 replacement_locations.remove(new_location)
                                 swap_location_item(old_location, new_location)
-                                logging.info(f"Progression balancing moved {new_location.item} to {new_location}, "
+                                logging.debug(f"Progression balancing moved {new_location.item} to {new_location}, "
                                               f"displacing {old_location.item} into {old_location}")
                                 moved_item_count += 1
                                 state.collect(new_location.item, True, new_location)
@@ -321,7 +333,7 @@ def balance_multiworld_progression(world: MultiWorld):
                             logging.warning(f"Could not Progression Balance {old_location.item}")
 
                     if replaced_items:
-                        logging.info(f"Moved {moved_item_count} items so far\n")
+                        logging.debug(f"Moved {moved_item_count} items so far\n")
                         unlocked = {fresh for player in balancing_players for fresh in unlocked_locations[player]}
                         for location in get_sphere_locations(state, unlocked):
                             unchecked_locations.remove(location)
