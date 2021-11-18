@@ -35,6 +35,8 @@ class OOTItem(Item):
         self.internal = False
         if force_not_advancement:
             self.never_exclude = True
+        if name == 'Gold Skulltula Token':
+            self.skip_in_prog_balancing = True
     
     # The playthrough calculation calls a function that uses "sweep_for_events(key_only=True)"
     # This checks if the item it's looking for is a small key, using the small key property. 
