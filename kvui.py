@@ -2,7 +2,6 @@ import os
 import logging
 import typing
 import asyncio
-import sys
 
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
@@ -11,6 +10,7 @@ os.environ["KIVY_LOG_ENABLE"] = "0"
 
 from kivy.app import App
 from kivy.core.window import Window
+from kivy.core.clipboard import Clipboard
 from kivy.base import ExceptionHandler, ExceptionManager, Config, Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
@@ -25,6 +25,10 @@ from kivy.uix.label import Label
 from kivy.uix.progressbar import ProgressBar
 from kivy.utils import escape_markup
 from kivy.lang import Builder
+from kivy.uix.recycleview.views import RecycleDataViewBehavior
+from kivy.uix.behaviors import FocusBehavior
+from kivy.uix.recycleboxlayout import RecycleBoxLayout
+from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 
 import Utils
 from NetUtils import JSONtoTextParser, JSONMessagePart
@@ -140,6 +144,36 @@ class ContainerLayout(FloatLayout):
     pass
 
 
+class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
+                                 RecycleBoxLayout):
+    """ Adds selection and focus behaviour to the view. """
+
+
+class SelectableLabel(RecycleDataViewBehavior, Label):
+    """ Add selection support to the Label """
+    index = None
+    selected = BooleanProperty(False)
+
+    def refresh_view_attrs(self, rv, index, data):
+        """ Catch and handle the view changes """
+        self.index = index
+        return super(SelectableLabel, self).refresh_view_attrs(
+            rv, index, data)
+
+    def on_touch_down(self, touch):
+        """ Add selection on touch down """
+        if super(SelectableLabel, self).on_touch_down(touch):
+            return True
+        if self.collide_point(*touch.pos):
+            return self.parent.select_with_touch(self.index, touch)
+
+    def apply_selection(self, rv, index, is_selected):
+        """ Respond to the selection of items in the view. """
+        self.selected = is_selected
+        if is_selected:
+            Clipboard.copy(self.text)
+
+
 class GameManager(App):
     logging_pairs = [
         ("Client", "Archipelago"),
@@ -224,7 +258,11 @@ class GameManager(App):
             self.progressbar.value = 0
 
     def command_button_action(self, button):
-        logging.getLogger("Client").info("/help for client commands and !help for server commands.")
+        if self.ctx.server:
+            logging.getLogger("Client").info("/help for client commands and !help for server commands.")
+        else:
+            logging.getLogger("Client").info("/help for client commands and once you are connected, "
+                                             "!help for server commands.")
 
     def connect_button_action(self, button):
         if self.ctx.server:
