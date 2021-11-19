@@ -32,12 +32,16 @@ class Factorio(World):
     game: str = "Factorio"
     static_nodes = {"automation", "logistics", "rocket-silo"}
     custom_recipes = {}
-    additional_advancement_technologies = set()
+    additional_advancement_technologies: set
 
     item_name_to_id = all_items
     location_name_to_id = base_tech_table
 
     data_version = 5
+
+    def __init__(self, world, player: int):
+        super(Factorio, self).__init__(world, player)
+        self.additional_advancement_technologies = set()
 
     def generate_basic(self):
         player = self.player
@@ -189,7 +193,7 @@ class Factorio(World):
         fallback_pool = []
 
         # fill all but one slot with random ingredients, last with a good match
-        while remaining_num_ingredients > 0 and len(pool) > 0:
+        while remaining_num_ingredients > 0 and pool:
             if remaining_num_ingredients == 1:
                 max_raw = 1.1 * remaining_raw
                 min_raw = 0.9 * remaining_raw
@@ -226,7 +230,7 @@ class Factorio(World):
 
         # fill failed slots with whatever we got
         pool = fallback_pool
-        while remaining_num_ingredients > 0 and len(pool) > 0:
+        while remaining_num_ingredients > 0 and pool:
             ingredient = pool.pop()
             if ingredient not in recipes:
                 logging.warning(f"missing recipe for {ingredient}")
