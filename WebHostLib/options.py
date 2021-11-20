@@ -49,7 +49,7 @@ def create():
         game_options = {}
         for option_name, option in world.options.items():
             if option.options:
-                this_option = {
+                game_options[option_name] = this_option = {
                     "type": "select",
                     "displayName": option.displayname if hasattr(option, "displayname") else option_name,
                     "description": option.__doc__ if option.__doc__ else "Please document me!",
@@ -66,7 +66,10 @@ def create():
                     if sub_option_id == option.default:
                         this_option["defaultValue"] = sub_option_name
 
-                game_options[option_name] = this_option
+                this_option["options"].append({
+                    "name": "Random",
+                    "value": "random",
+                })
 
             elif hasattr(option, "range_start") and hasattr(option, "range_end"):
                 game_options[option_name] = {
