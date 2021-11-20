@@ -443,7 +443,52 @@ def shuffle_random_entrances(ootworld):
         if item_tuple[1] == player:
             none_state.prog_items[item_tuple] = 0
 
-    # Plando entrances?
+    # Plando entrances
+    if world.plando_connections[player]:
+        rollbacks = []
+        all_targets = {**one_way_target_entrance_pools, **target_entrance_pools}
+        for conn in world.plando_connections[player]:
+            try:
+                entrance = ootworld.get_entrance(conn.entrance)
+                exit = ootworld.get_entrance(conn.exit)
+                if entrance is None:
+                    raise EntranceShuffleError(f"Could not find entrance to plando: {conn.entrance}")
+                if exit is None:
+                    raise EntranceShuffleError(f"Could not find entrance to plando: {conn.exit}")
+                target_region = exit.name.split(' -> ')[1]
+                target_parent = exit.parent_region.name
+                pool_type = entrance.type
+                matched_targets_to_region = list(filter(lambda target: target.connected_region and target.connected_region.name == target_region,
+                                                        all_targets[pool_type]))
+                target = next(filter(lambda target: target.replaces.parent_region.name == target_parent, matched_targets_to_region))
+
+                replace_entrance(ootworld, entrance, target, rollbacks, locations_to_ensure_reachable, all_state, none_state)
+                if conn.direction == 'both' and entrance.reverse and ootworld.decouple_entrances:
+                    replace_entrance(ootworld, entrance.reverse, target.reverse, rollbacks, locations_to_ensure_reachable, all_state, none_state)
+            except EntranceShuffleError as e:
+                raise RuntimeError(f"Failed to plando OoT entrances. Reason: {e}")
+            except StopIteration:
+                raise RuntimeError(f"Could not find entrance to plando: {conn.entrance} => {conn.exit}")
+            finally:
+                for (entrance, target) in rollbacks:
+                    confirm_replacement(entrance, target)
+
+    # Check placed one way entrances and trim.
+    # The placed entrances are already pointing at their new regions.
+    placed_entrances = [entrance for entrance in chain.from_iterable(one_way_entrance_pools.values())
+                        if entrance.replaces is not None]
+    replaced_entrances = [entrance.replaces for entrance in placed_entrances]
+    # Remove replaced entrances so we don't place two in one target.
+    for remaining_target in chain.from_iterable(one_way_target_entrance_pools.values()):
+        if remaining_target.replaces and remaining_target.replaces in replaced_entrances:
+            delete_target_entrance(remaining_target)
+    # Remove priority targets if any placed entrances point at their region(s).
+    for key, (regions, _) in priority_entrance_table.items():
+        if key in one_way_priorities:
+            for entrance in placed_entrances:
+                if entrance.connected_region and entrance.connected_region.name in regions:
+                    del one_way_priorities[key]
+                    break
 
     # Place priority entrances
     shuffle_one_way_priority_entrances(ootworld, one_way_priorities, one_way_entrance_pools, one_way_target_entrance_pools, locations_to_ensure_reachable, all_state, none_state, retry_count=2)
