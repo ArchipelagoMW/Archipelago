@@ -300,13 +300,16 @@ for category_name, machine_name in machine_per_category.items():
 required_technologies: Dict[str, FrozenSet[Technology]] = Utils.KeyedDefaultDict(lambda ingredient_name: frozenset(
     recursively_get_unlocking_technologies(ingredient_name, unlock_func=unlock)))
 
-def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe) -> Set[str]:
+def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe, satellite_recipe: Recipe) -> Set[str]:
     techs = set()
     if silo_recipe:
         for ingredient in silo_recipe.ingredients:
             techs |= recursively_get_unlocking_technologies(ingredient)
     for ingredient in part_recipe.ingredients:
         techs |= recursively_get_unlocking_technologies(ingredient)
+    if satellite_recipe:
+        for ingredient in satellite_recipe.ingredients:
+            techs |= recursively_get_unlocking_technologies(ingredient)
     return {tech.name for tech in techs}
 
 

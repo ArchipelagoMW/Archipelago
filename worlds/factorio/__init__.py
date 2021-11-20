@@ -10,7 +10,7 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies
 from .Shapes import get_shapes
 from .Mod import generate_mod
-from .Options import factorio_options, Silo, TechTreeInformation
+from .Options import factorio_options, MaxSciencePack, Silo, TechTreeInformation
 
 import logging
 
@@ -142,11 +142,13 @@ class Factorio(World):
                                                     locations=locations: all(state.can_reach(loc) for loc in locations))
 
             silo_recipe = None if self.world.silo[self.player].value == Silo.option_spawn \
-                else self.custom_recipes["rocket-silo"] \
-                if "rocket-silo" in self.custom_recipes \
+                else self.custom_recipes["rocket-silo"] if "rocket-silo" in self.custom_recipes \
                 else next(iter(all_product_sources.get("rocket-silo")))
             part_recipe = self.custom_recipes["rocket-part"]
-            victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe)
+            satellite_recipe = None if self.world.max_science_pack[self.player].value != MaxSciencePack.option_space_science_pack \
+                else self.custom_recipes["satellite"] if "satellite" in self.custom_recipes \
+                else next(iter(all_product_sources.get("satellite")))
+            victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe)
             world.get_location("Rocket Launch", player).access_rule = lambda state: all(state.has(technology, player)
                                                                                         for technology in
                                                                                         victory_tech_names)
@@ -292,6 +294,8 @@ class Factorio(World):
             self.custom_recipes["rocket-silo"] = new_recipe
 
         needed_recipes = self.world.max_science_pack[self.player].get_allowed_packs() | {"rocket-silo", "rocket-part"}
+        if self.world.max_science_pack[self.player].value == MaxSciencePack.option_space_science_pack:
+            needed_recipes |= {"satellite"}
 
         for recipe in needed_recipes:
             recipe = self.custom_recipes.get(recipe, recipes[recipe])
