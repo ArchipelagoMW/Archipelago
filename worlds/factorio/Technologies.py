@@ -59,8 +59,8 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
     def build_rule(self, player: int):
         logging.debug(f"Building rules for {self.name}")
 
-        return lambda state, technologies=technologies: all(state.has(f"Automated {ingredient}", player)
-                                                            for ingredient in self.ingredients)
+        return lambda state: all(state.has(f"Automated {ingredient}", player)
+                                 for ingredient in self.ingredients)
 
     def get_prior_technologies(self) -> Set[Technology]:
         """Get Technologies that have to precede this one to resolve tree connections."""
@@ -300,12 +300,6 @@ for category_name, machine_name in machine_per_category.items():
 required_technologies: Dict[str, FrozenSet[Technology]] = Utils.KeyedDefaultDict(lambda ingredient_name: frozenset(
     recursively_get_unlocking_technologies(ingredient_name, unlock_func=unlock)))
 
-advancement_technologies: Set[str] = set()
-for ingredient_name in all_ingredient_names:
-    technologies = required_technologies[ingredient_name]
-    advancement_technologies |= {technology.name for technology in technologies}
-
-
 def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe) -> Set[str]:
     techs = set()
     if silo_recipe:
@@ -334,8 +328,6 @@ rocket_recipes = {
     Options.MaxSciencePack.option_automation_science_pack:
         {"copper-cable": 10, "iron-plate": 10, "wood": 10}
 }
-
-advancement_technologies |= {tech.name for tech in required_technologies["rocket-silo"]}
 
 # progressive technologies
 # auto-progressive
@@ -430,8 +422,6 @@ for root in sorted_rows:
                                         unlocks=any(technology_table[tech].unlocks for tech in progressive))
     progressive_tech_table[root] = progressive_technology.factorio_id
     progressive_technology_table[root] = progressive_technology
-    if any(tech in advancement_technologies for tech in progressive):
-        advancement_technologies.add(root)
 
 tech_to_progressive_lookup: Dict[str, str] = {}
 for technology in progressive_technology_table.values():

@@ -1,9 +1,10 @@
 import collections
+import typing
 
 from ..AutoWorld import World
 
 from BaseClasses import Region, Entrance, Location, Item
-from .Technologies import base_tech_table, recipe_sources, base_technology_table, advancement_technologies, \
+from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, rocket_recipes, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies
@@ -32,7 +33,7 @@ class Factorio(World):
     game: str = "Factorio"
     static_nodes = {"automation", "logistics", "rocket-silo"}
     custom_recipes = {}
-    additional_advancement_technologies: set
+    advancement_technologies: typing.Set[str]
 
     item_name_to_id = all_items
     location_name_to_id = base_tech_table
@@ -41,7 +42,7 @@ class Factorio(World):
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
-        self.additional_advancement_technologies = set()
+        self.advancement_technologies = set()
 
     def generate_basic(self):
         player = self.player
@@ -268,8 +269,6 @@ class Factorio(World):
                                                      {valid_pool[x]: 10 for x in range(3)},
                                                      original_rocket_part.products,
                                                      original_rocket_part.energy)}
-        self.additional_advancement_technologies = {tech.name for tech in
-                                                    self.custom_recipes["rocket-part"].recursive_unlocking_technologies}
 
         if self.world.recipe_ingredients[self.player]:
             valid_pool = []
@@ -282,8 +281,6 @@ class Factorio(World):
                     for _ in original.ingredients:
                         new_ingredients[valid_pool.pop()] = 1
                     new_recipe = Recipe(pack, original.category, new_ingredients, original.products, original.energy)
-                    self.additional_advancement_technologies |= {tech.name for tech in
-                                                                 new_recipe.recursive_unlocking_technologies}
                     self.custom_recipes[pack] = new_recipe
 
         if self.world.silo[self.player].value == Silo.option_randomize_recipe:
@@ -292,21 +289,24 @@ class Factorio(World):
                 valid_pool += sorted(science_pack_pools[pack])
             new_recipe = self.make_balanced_recipe(recipes["rocket-silo"], valid_pool,
                                                    factor=(self.world.max_science_pack[self.player].value + 1) / 7)
-            self.additional_advancement_technologies |= {tech.name for tech in
-                                                         new_recipe.recursive_unlocking_technologies}
             self.custom_recipes["rocket-silo"] = new_recipe
+
+        needed_recipes = self.world.max_science_pack[self.player].get_allowed_packs() | {"rocket-silo", "rocket-part"}
+
+        for recipe in needed_recipes:
+            recipe = self.custom_recipes.get(recipe, recipes[recipe])
+            self.advancement_technologies |= {tech.name for tech in recipe.recursive_unlocking_technologies}
 
         # handle marking progressive techs as advancement
         prog_add = set()
-        for tech in self.additional_advancement_technologies:
+        for tech in self.advancement_technologies:
             if tech in tech_to_progressive_lookup:
                 prog_add.add(tech_to_progressive_lookup[tech])
-        self.additional_advancement_technologies |= prog_add
+        self.advancement_technologies |= prog_add
 
     def create_item(self, name: str) -> Item:
         if name in tech_table:
-            return FactorioItem(name, name in advancement_technologies or
-                                name in self.additional_advancement_technologies,
+            return FactorioItem(name, name in self.advancement_technologies,
                                 tech_table[name], self.player)
 
         item = FactorioItem(name, False, all_items[name], self.player)
