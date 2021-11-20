@@ -275,6 +275,10 @@ class OOTWorld(World):
         for region in region_json:
             new_region = OOTRegion(region['region_name'], RegionType.Generic, None, self.player)
             new_region.world = self.world
+            if 'pretty_name' in region:
+                new_region.pretty_name = region['pretty_name']
+            if 'font_color' in region:
+                new_region.font_color = region['font_color']
             if 'scene' in region:
                 new_region.scene = region['scene']
             if 'hint' in region:

@@ -9,7 +9,7 @@ from .LocationList import business_scrubs
 from .Hints import writeGossipStoneHints, buildAltarHints, \
         buildGanonText, getSimpleHintNoPrefix
 from .Utils import data_path
-from .Messages import read_messages, update_message_by_id, read_shop_items, \
+from .Messages import read_messages, update_message_by_id, read_shop_items, update_warp_song_text, \
         write_shop_items, remove_unused_messages, make_player_message, \
         add_item_messages, repack_messages, shuffle_messages, \
         get_message_by_id
@@ -1746,6 +1746,10 @@ def patch_rom(world, rom):
         permutation = shuffle_messages(messages, except_hints=True)
     elif world.text_shuffle == 'complete':
         permutation = shuffle_messages(messages, except_hints=False)
+
+    # If Warp Song ER is on, update text boxes
+    if world.warp_songs:
+        update_warp_song_text(messages, world)
 
     repack_messages(rom, messages, permutation)
 
