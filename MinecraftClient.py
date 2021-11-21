@@ -134,7 +134,7 @@ def check_eula(forge_dir):
 def find_jdk_dir() -> str:
     for entry in os.listdir():
         if os.path.isdir(entry) and entry.startswith("jdk16"):
-            return entry
+            return os.path.abspath(entry)
 
 
 # get the java exe location
