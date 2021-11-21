@@ -70,13 +70,13 @@ def replace_apmc_files(forge_dir, apmc_file):
 
 
 # Check mod version, download new mod from GitHub releases page if needed. 
-def update_mod(forge_dir):
+def update_mod(forge_dir, get_prereleases=False):
     ap_randomizer = find_ap_randomizer_jar(forge_dir)
 
     client_releases_endpoint = "https://api.github.com/repos/KonoTyran/Minecraft_AP_Randomizer/releases"
     resp = requests.get(client_releases_endpoint)
     if resp.status_code == 200:  # OK
-        latest_release = resp.json()[0]
+        latest_release = next(filter(lambda release: not release['prerelease'] or get_prereleases, resp.json()))
         if ap_randomizer != latest_release['assets'][0]['name']:
             print(f"A new release of the Minecraft AP randomizer mod was found: {latest_release['assets'][0]['name']}")
             if ap_randomizer is not None:
@@ -218,6 +218,8 @@ if __name__ == '__main__':
     parser.add_argument("apmc_file", default=None, nargs='?', help="Path to an Archipelago Minecraft data file (.apmc)")
     parser.add_argument('--install', '-i', dest='install', default=False, action='store_true', 
         help="Download and install Java and the Forge server. Does not launch the client afterwards.")
+    parser.add_argument('--prerelease', default=False, action='store_true',
+        help="Auto-update prerelease versions.")
 
     args = parser.parse_args()
     apmc_file = os.path.abspath(args.apmc_file) if args.apmc_file else None
@@ -242,7 +244,7 @@ if __name__ == '__main__':
     if not max_heap_re.match(max_heap):
         raise Exception(f"Max heap size {max_heap} in incorrect format. Use a number followed by M or G, e.g. 512M or 2G.")
 
-    update_mod(forge_dir)
+    update_mod(forge_dir, args.prerelease)
     replace_apmc_files(forge_dir, apmc_file)
     check_eula(forge_dir)
     server_process = run_forge_server(forge_dir, max_heap)
