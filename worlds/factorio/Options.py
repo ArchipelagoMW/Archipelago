@@ -58,7 +58,7 @@ class Silo(Choice):
 class Satellite(Choice):
     """Ingredients to craft satellite."""
     displayname = "Satellite"
-    options_vanilla = 0
+    option_vanilla = 0
     option_randomize_recipe = 1
     default = 0
 
