@@ -143,12 +143,7 @@ class Context(CommonContext):
         self.awaiting_rom = False
         self.auth = self.rom
         auth = base64.b64encode(self.rom).decode()
-        await self.send_msgs([{"cmd": 'Connect',
-                               'password': self.password, 'name': auth, 'version': Utils.version_tuple,
-                               'tags': self.tags,
-                               'uuid': Utils.get_unique_identifier(),
-                               'game': self.game
-                               }])
+        await self.send_connect(name=auth)
 
     def on_deathlink(self, data: dict):
         if not self.killing_player_task or self.killing_player_task.done():

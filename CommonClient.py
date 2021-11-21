@@ -230,6 +230,17 @@ class CommonContext():
             self.password = await self.console_input()
             return self.password
 
+    async def send_connect(self, **kwargs):
+        payload = {
+            "cmd": 'Connect',
+            'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
+            'tags': self.tags,
+            'uuid': Utils.get_unique_identifier(), 'game': self.game
+        }
+        if kwargs:
+            payload.update(kwargs)
+        await self.send_msgs([payload])
+
     async def console_input(self):
         self.input_requests += 1
         return await self.input_queue.get()
@@ -554,11 +565,7 @@ if __name__ == '__main__':
                 logger.info('Enter slot name:')
                 self.auth = await self.console_input()
 
-            await self.send_msgs([{"cmd": 'Connect',
-                                   'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
-                                   'tags': self.tags,
-                                   'uuid': Utils.get_unique_identifier(), 'game': self.game
-                                   }])
+            await self.send_connect()
 
         def on_package(self, cmd: str, args: dict):
             if cmd == "Connected":

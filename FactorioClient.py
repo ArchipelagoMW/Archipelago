@@ -72,15 +72,7 @@ class FactorioContext(CommonContext):
                 raise Exception("Cannot connect to a server with unknown own identity, "
                                 "bridge to Factorio first.")
 
-        await self.send_msgs([{
-            "cmd": 'Connect',
-            'password': self.password,
-            'name': self.auth,
-            'version': Utils.version_tuple,
-            'tags': self.tags,
-            'uuid': Utils.get_unique_identifier(),
-            'game': "Factorio"
-        }])
+        await self.send_connect()
 
     def on_print(self, args: dict):
         super(FactorioContext, self).on_print(args)
