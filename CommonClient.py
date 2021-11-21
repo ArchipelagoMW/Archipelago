@@ -39,13 +39,13 @@ class ClientCommandProcessor(CommandProcessor):
     def _cmd_connect(self, address: str = "") -> bool:
         """Connect to a MultiWorld Server"""
         self.ctx.server_address = None
-        asyncio.create_task(self.ctx.connect(address if address else None))
+        asyncio.create_task(self.ctx.connect(address if address else None), name="connecting")
         return True
 
     def _cmd_disconnect(self) -> bool:
         """Disconnect from a MultiWorld Server"""
         self.ctx.server_address = None
-        asyncio.create_task(self.ctx.disconnect())
+        asyncio.create_task(self.ctx.disconnect(), name="disconnecting")
         return True
 
     def _cmd_received(self) -> bool:
@@ -89,10 +89,10 @@ class ClientCommandProcessor(CommandProcessor):
         else:
             state = ClientStatus.CLIENT_CONNECTED
             self.output("Unreadied.")
-        asyncio.create_task(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]))
+        asyncio.create_task(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
 
     def default(self, raw: str):
-        asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]))
+        asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]), name="send Say")
 
 
 class CommonContext():
@@ -149,7 +149,7 @@ class CommonContext():
         self.set_getters(network_data_package)
 
         # execution
-        self.keep_alive_task = asyncio.create_task(keep_alive(self))
+        self.keep_alive_task = asyncio.create_task(keep_alive(self), name="Bouncy")
 
     @property
     def total_locations(self) -> typing.Optional[int]:
@@ -236,7 +236,7 @@ class CommonContext():
 
     async def connect(self, address=None):
         await self.disconnect()
-        self.server_task = asyncio.create_task(server_loop(self, address))
+        self.server_task = asyncio.create_task(server_loop(self, address), name="server loop")
 
     def on_print(self, args: dict):
         logger.info(args["text"])
@@ -281,6 +281,18 @@ class CommonContext():
                 "cause": death_text
             }
         }])
+
+    async def shutdown(self):
+        self.server_address = None
+        if self.server and not self.server.socket.closed:
+            await self.server.socket.close()
+        if self.server_task:
+            await self.server_task
+
+        while self.input_requests > 0:
+            self.input_queue.put_nowait(None)
+            self.input_requests -= 1
+        self.keep_alive_task.cancel()
 
 
 async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
@@ -340,14 +352,14 @@ async def server_loop(ctx: CommonContext, address=None):
         await ctx.connection_closed()
         if ctx.server_address:
             logger.info(f"... reconnecting in {ctx.current_reconnect_delay}s")
-            asyncio.create_task(server_autoreconnect(ctx))
+            asyncio.create_task(server_autoreconnect(ctx), name="server auto reconnect")
         ctx.current_reconnect_delay *= 2
 
 
 async def server_autoreconnect(ctx: CommonContext):
     await asyncio.sleep(ctx.current_reconnect_delay)
     if ctx.server_address and ctx.server_task is None:
-        ctx.server_task = asyncio.create_task(server_loop(ctx))
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
 
 async def process_server_cmd(ctx: CommonContext, args: dict):
@@ -555,7 +567,7 @@ if __name__ == '__main__':
 
     async def main(args):
         ctx = TextContext(args.connect, args.password)
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         if gui_enabled:
             input_task = None
             from kvui import TextManager
@@ -566,16 +578,7 @@ if __name__ == '__main__':
             ui_task = None
         await ctx.exit_event.wait()
 
-        ctx.server_address = None
-        if ctx.server and not ctx.server.socket.closed:
-            await ctx.server.socket.close()
-        if ctx.server_task:
-            await ctx.server_task
-
-        while ctx.input_requests > 0:
-            ctx.input_queue.put_nowait(None)
-            ctx.input_requests -= 1
-
+        await ctx.shutdown()
         if ui_task:
             await ui_task
 

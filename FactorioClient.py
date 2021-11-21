@@ -322,14 +322,7 @@ async def main(args):
         await progression_watcher
         await factorio_server_task
 
-    if ctx.server and not ctx.server.socket.closed:
-        await ctx.server.socket.close()
-    if ctx.server_task:
-        await ctx.server_task
-
-    while ctx.input_requests > 0:
-        ctx.input_queue.put_nowait(None)
-        ctx.input_requests -= 1
+    await ctx.shutdown()
 
     if ui_task:
         await ui_task

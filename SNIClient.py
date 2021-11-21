@@ -73,7 +73,7 @@ class LttPCommandProcessor(ClientCommandProcessor):
                 pass
 
         self.ctx.snes_reconnect_address = None
-        asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number))
+        asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number), name="SNES Connect")
         return True
 
     def _cmd_snes_close(self) -> bool:
@@ -1113,28 +1113,19 @@ async def main():
         input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None
 
-    snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address))
+    snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address), name="SNES Connect")
     watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
 
     await ctx.exit_event.wait()
-    if snes_connect_task:
-        snes_connect_task.cancel()
+
     ctx.server_address = None
     ctx.snes_reconnect_address = None
-
-    await watcher_task
-
-    if ctx.server and not ctx.server.socket.closed:
-        await ctx.server.socket.close()
-    if ctx.server_task:
-        await ctx.server_task
-
     if ctx.snes_socket is not None and not ctx.snes_socket.closed:
         await ctx.snes_socket.close()
-
-    while ctx.input_requests > 0:
-        ctx.input_queue.put_nowait(None)
-        ctx.input_requests -= 1
+    if snes_connect_task:
+        snes_connect_task.cancel()
+    await watcher_task
+    await ctx.shutdown()
 
     if ui_task:
         await ui_task
