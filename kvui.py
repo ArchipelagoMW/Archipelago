@@ -198,7 +198,8 @@ class GameManager(App):
         # top part
         server_label = ServerLabel()
         connect_layout.add_widget(server_label)
-        self.server_connect_bar = TextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False)
+        self.server_connect_bar = TextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False,
+                                            write_tab=False)
         self.server_connect_bar.bind(on_text_validate=self.connect_button_action)
         connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
@@ -235,8 +236,14 @@ class GameManager(App):
         info_button = Button(height=30, text="Command:", size_hint_x=None)
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
-        textinput = TextInput(size_hint_y=None, height=30, multiline=False)
+        textinput = TextInput(size_hint_y=None, height=30, multiline=False, write_tab=False)
         textinput.bind(on_text_validate=self.on_message)
+
+        def text_focus(event):
+            """Needs to be set via delay, as unfocusing happens after on_message"""
+            textinput.focus = True
+
+        textinput.text_focus = text_focus
         bottom_layout.add_widget(textinput)
         self.grid.add_widget(bottom_layout)
         self.commandprocessor("/help")
@@ -289,6 +296,9 @@ class GameManager(App):
                 self.ctx.input_queue.put_nowait(input_text)
             elif input_text:
                 self.commandprocessor(input_text)
+
+            Clock.schedule_once(textinput.text_focus)
+
         except Exception as e:
             logging.getLogger("Client").exception(e)
 
