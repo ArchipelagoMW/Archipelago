@@ -45,8 +45,13 @@ class FF1World(World):
         terminated_event.place_locked_item(terminated_item)
 
         items = get_options(self.world, 'items', self.player)
-        terminated_event.access_rule = generate_rule([[name for name in items.keys() if name in FF1_PROGRESSION_LIST]],
-                                                     self.player)
+        goal_rule = generate_rule([[name for name in items.keys() if name in FF1_PROGRESSION_LIST and name != "Shard"]],
+                                  self.player)
+        if "Shard" in items.keys():
+            def goal_rule_and_shards(state):
+                return goal_rule(state) and state.has("Shard", self.player, 32)
+            terminated_event.access_rule = goal_rule_and_shards
+
         menu_region.locations.append(terminated_event)
         self.world.regions += [menu_region]
 
@@ -59,17 +64,18 @@ class FF1World(World):
     def generate_basic(self):
         items = get_options(self.world, 'items', self.player)
         if FF1_BRIDGE in items.keys():
-            self._place_locked_item_in_sphere1(FF1_BRIDGE)
+            self._place_locked_item_in_sphere0(FF1_BRIDGE)
         if items:
             possible_early_items = [name for name in FF1_STARTER_ITEMS if name in items.keys()]
             if possible_early_items:
                 progression_item = self.world.random.choice(possible_early_items)
-                self._place_locked_item_in_sphere1(progression_item)
-        items = [self.create_item(name) for name in items.keys() if name not in self.locked_items]
+                self._place_locked_item_in_sphere0(progression_item)
+        items = [self.create_item(name) for name, data in items.items() for x in range(data['count']) if name not in
+                 self.locked_items]
 
         self.world.itempool += items
 
-    def _place_locked_item_in_sphere1(self, progression_item: str):
+    def _place_locked_item_in_sphere0(self, progression_item: str):
         if progression_item:
             rules = get_options(self.world, 'rules', self.player)
             sphere_0_locations = [name for name, rules in rules.items()

@@ -1,13 +1,104 @@
 local socket = require("socket")
 local json = require('json')
+local math = require('math')
 
 local STATE_OK = "Ok"
 local STATE_TENTATIVELY_CONNECTED = "Tentatively Connected"
 local STATE_INITIAL_CONNECTION_MADE = "Initial Connection Made"
 local STATE_UNINITIALIZED = "Uninitialized"
 
+local ITEM_INDEX = 0x03
+local ARMOR_INDEX = 0x07
+local WEAPON_INDEX = 0x0B
+
+local goldLookup = {
+    [0x16C] = 10,
+    [0x16D] = 20,
+    [0x16E] = 25,
+    [0x16F] = 30,
+    [0x170] = 55,
+    [0x171] = 70,
+    [0x172] = 85,
+    [0x173] = 110,
+    [0x174] = 135,
+    [0x175] = 155,
+    [0x176] = 160,
+    [0x177] = 180,
+    [0x178] = 240,
+    [0x179] = 255,
+    [0x17A] = 260,
+    [0x17B] = 295,
+    [0x17C] = 300,
+    [0x17D] = 315,
+    [0x17E] = 330,
+    [0x17F] = 350,
+    [0x180] = 385,
+    [0x181] = 400,
+    [0x182] = 450,
+    [0x183] = 500,
+    [0x184] = 530,
+    [0x185] = 575,
+    [0x186] = 620,
+    [0x187] = 680,
+    [0x188] = 750,
+    [0x189] = 795,
+    [0x18A] = 880,
+    [0x18B] = 1020,
+    [0x18C] = 1250,
+    [0x18D] = 1455,
+    [0x18E] = 1520,
+    [0x18F] = 1760,
+    [0x190] = 1975,
+    [0x191] = 2000,
+    [0x192] = 2750,
+    [0x193] = 3400,
+    [0x194] = 4150,
+    [0x195] = 5000,
+    [0x196] = 5450,
+    [0x197] = 6400,
+    [0x198] = 6720,
+    [0x199] = 7340,
+    [0x19A] = 7690,
+    [0x19B] = 7900,
+    [0x19C] = 8135,
+    [0x19D] = 9000,
+    [0x19E] = 9300,
+    [0x19F] = 9500,
+    [0x1A0] = 9900,
+    [0x1A1] = 10000,
+    [0x1A2] = 12350,
+    [0x1A3] = 13000,
+    [0x1A4] = 13450,
+    [0x1A5] = 14050,
+    [0x1A6] = 14720,
+    [0x1A7] = 15000,
+    [0x1A8] = 17490,
+    [0x1A9] = 18010,
+    [0x1AA] = 19990,
+    [0x1AB] = 20000,
+    [0x1AC] = 20010,
+    [0x1AD] = 26000,
+    [0x1AE] = 45000,
+    [0x1AF] = 65000
+}
+
+local extensionConsumableLookup = {
+    [432] = 0x3C,
+    [436] = 0x3C,
+    [440] = 0x3C,
+    [433] = 0x3D,
+    [437] = 0x3D,
+    [441] = 0x3D,
+    [434] = 0x3E,
+    [438] = 0x3E,
+    [442] = 0x3E,
+    [435] = 0x3F,
+    [439] = 0x3F,
+    [443] = 0x3F
+}
+
 local itemMessages = {}
-local itemsReceived = {}
+local consumableStacks = nil
 local prevstate = ""
 local curstate =  STATE_UNINITIALIZED
 local ff1Socket = nil
@@ -16,6 +107,7 @@ local frame = 0
 local u8 = nil
 local wU8 = nil
 local isNesHawk = false
+
 
 --Sets correct memory access functions based on whether NesHawk or QuickNES is loaded
 local function defineMemoryFunctions()
@@ -55,6 +147,16 @@ function table.empty (self)
     end
     return true
 end
+
+function slice (tbl, s, e)
+    local pos, new = 1, {}
+    for i = s + 1, e do
+        new[pos] = tbl[i]
+        pos = pos + 1
+    end
+    return new
+end
+
 local bizhawk_version = client.getversion()
 local is23Or24Or25 = (bizhawk_version=="2.3.1") or (bizhawk_version:sub(1,3)=="2.4") or (bizhawk_version:sub(1,3)=="2.5")
 local is26To27 =  (bizhawk_version:sub(1,3)=="2.6") or (bizhawk_version:sub(1,3)=="2.7")
@@ -123,41 +225,100 @@ function generateLocationChecked()
     return data
 end
 
+function setConsumableStacks()
+    memDomain.rom()
+    consumableStacks = {}
+    -- In order shards, tent, cabin, house, heal, pure, soft, ext1, ext2, ext3, ex4
+    consumableStacks[0x35] = 1
+    consumableStacks[0x36] = u8(0x47400) + 1
+    consumableStacks[0x37] = u8(0x47401) + 1
+    consumableStacks[0x38] = u8(0x47402) + 1
+    consumableStacks[0x39] = u8(0x47403) + 1
+    consumableStacks[0x3A] = u8(0x47404) + 1
+    consumableStacks[0x3B] = u8(0x47405) + 1
+    consumableStacks[0x3C] = u8(0x47406) + 1
+    consumableStacks[0x3D] = u8(0x47407) + 1
+    consumableStacks[0x3E] = u8(0x47408) + 1
+    consumableStacks[0x3F] = u8(0x47409) + 1
+end
+
 function processBlock(block)
-    local msg_block = block['messages']
-    if msg_block ~= nil then
-        for i, v in pairs(msg_block) do
+    local msgBlock = block['messages']
+    if msgBlock ~= nil then
+        for i, v in pairs(msgBlock) do
             if itemMessages[i] == nil then
                 local msg = {TTL=450, message=v, color=0xFFFF0000}
                 itemMessages[i] = msg
             end
         end
     end
-    local items_block = block["items"]
-    if items_block ~= nil then
-        for i, v in pairs(items_block) do
+    local itemsBlock = block["items"]
+    if itemsBlock ~= nil then
+        if consumableStacks == nil then
+            setConsumableStacks()
+        end
+        memDomain.saveram()
+--         print('ITEMBLOCK: ')
+--         print(itemsBlock)
+        itemIndex = u8(ITEM_INDEX)
+--         print('ITEMINDEX: '..itemIndex)
+        for i, v in pairs(slice(itemsBlock, itemIndex, #itemsBlock)) do
             -- Minus the offset and add to the correct domain
-            local memory_location = v
-            memDomain.saveram()
-            if v >= 0x1E0 then
+            local memoryLocation = v
+            if v >= 0x100 and v <= 0x114 then
+                -- This is a key item
+                memoryLocation = memoryLocation - 0x0E0
+                wU8(memoryLocation, 0x01)
+            elseif v >= 0x1E0 then
                 -- This is a movement item
-                memory_location = memory_location - 0x1E0
-            else
-                -- This is a regular key item
-                memory_location = memory_location - 0x0E0
-            end
-            if itemsReceived[memory_location] == nil then
-                itemsReceived[memory_location] = memory_location
-                value = 0x01
+                -- Minus Offset (0x100) - movement offset (0xE0)
+                memoryLocation = memoryLocation - 0x1E0
                 -- Canal is a flipped bit
-                if memory_location == 0x0C then
-                    value = 0x00
+                if memoryLocation == 0x0C then
+                    wU8(memoryLocation, 0x00)
+                else
+                    wU8(memoryLocation, 0x01)
                 end
-                itemsReceived[memory_location] = value
-                wU8(memory_location, value)
-            elseif u8(memory_location) ~= itemsReceived[memory_location] then
-                wU8(memory_location, itemsReceived[memory_location])
+
+            elseif v >= 0x16C and v <= 0x1AF then
+                -- This is a gold item
+                amountToAdd = goldLookup[v]
+                biggest = u8(0x01E)
+                medium = u8(0x01D)
+                smallest = u8(0x01C)
+                currentValue = 0x10000 * biggest + 0x100 * medium + smallest
+                newValue = currentValue + amountToAdd
+                newBiggest = math.floor(newValue / 0x10000)
+                newMedium = math.floor(math.fmod(newValue, 0x10000) / 0x100)
+                newSmallest = math.floor(math.fmod(newValue, 0x100))
+                wU8(0x01E, newBiggest)
+                wU8(0x01D, newMedium)
+                wU8(0x01C, newSmallest)
+            elseif v >= 0x115 and v <= 0x11B then
+                -- This is a regular consumable OR a shard
+                -- Minus Offset (0x100) + item offset (0x20)
+                memoryLocation = memoryLocation - 0x0E0
+                currentValue = u8(memoryLocation)
+                amountToAdd = consumableStacks[memoryLocation]
+                if currentValue < 99 then
+                    wU8(memoryLocation, currentValue + amountToAdd)
+                end
+            elseif v >= 0x1B0  and v <= 0x1BB then
+                -- This is an extension consumable
+                memoryLocation = extensionConsumableLookup[v]
+                currentValue = u8(memoryLocation)
+                amountToAdd = consumableStacks[memoryLocation]
+                if currentValue < 99 then
+                    value = currentValue + amountToAdd
+                    if value > 99 then
+                        value = 99
+                    end
+                    wU8(memoryLocation, value)
+                end
             end
+        end
+        if #itemsBlock ~= itemIndex then
+            wU8(ITEM_INDEX, #itemsBlock)
         end
     end
 end

@@ -47,7 +47,13 @@ class FF1Locations:
         menu_region = Region("Menu", RegionType.Generic, "Menu", player)
         for name, address in locations.items():
             location = Location(player, name, address, menu_region)
-            if name in rules:
+            ## TODO REMOVE WHEN LOGIC FOR TOFR IS CORRECT
+            if "ToFR" in name:
+                rules_list = [["Rod", "Cube", "Lute", "Key", "Chime", "Oxyale",
+                               "Ship", "Canoe", "Floater", "Canal",
+                               "Crown", "Crystal", "Herb", "Tnt", "Adamant", "Slab", "Ruby", "Bottle"]]
+                location.access_rule = generate_rule(rules_list, player)
+            elif name in rules:
                 rules_list = rules[name]
                 location.access_rule = generate_rule(rules_list, player)
             menu_region.locations.append(location)
