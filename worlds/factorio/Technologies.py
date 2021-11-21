@@ -308,6 +308,7 @@ def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe, satellite_
     for ingredient in part_recipe.ingredients:
         techs |= recursively_get_unlocking_technologies(ingredient)
     if satellite_recipe:
+        techs |= satellite_recipe.unlocking_technologies
         for ingredient in satellite_recipe.ingredients:
             techs |= recursively_get_unlocking_technologies(ingredient)
     return {tech.name for tech in techs}

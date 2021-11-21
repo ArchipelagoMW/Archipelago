@@ -10,7 +10,7 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies
 from .Shapes import get_shapes
 from .Mod import generate_mod
-from .Options import factorio_options, MaxSciencePack, Silo, TechTreeInformation
+from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation
 
 import logging
 
@@ -285,20 +285,31 @@ class Factorio(World):
                     new_recipe = Recipe(pack, original.category, new_ingredients, original.products, original.energy)
                     self.custom_recipes[pack] = new_recipe
 
-        if self.world.silo[self.player].value == Silo.option_randomize_recipe:
+        if self.world.silo[self.player].value == Silo.option_randomize_recipe \
+                or self.world.satellite[self.player].value == Satellite.option_randomize_recipe:
             valid_pool = []
             for pack in sorted(self.world.max_science_pack[self.player].get_allowed_packs()):
                 valid_pool += sorted(science_pack_pools[pack])
-            new_recipe = self.make_balanced_recipe(recipes["rocket-silo"], valid_pool,
-                                                   factor=(self.world.max_science_pack[self.player].value + 1) / 7)
-            self.custom_recipes["rocket-silo"] = new_recipe
 
-        needed_recipes = self.world.max_science_pack[self.player].get_allowed_packs() | {"rocket-silo", "rocket-part"}
+            if self.world.silo[self.player].value == Silo.option_randomize_recipe:
+                new_recipe = self.make_balanced_recipe(recipes["rocket-silo"], valid_pool,
+                                                       factor=(self.world.max_science_pack[self.player].value + 1) / 7)
+                self.custom_recipes["rocket-silo"] = new_recipe
+
+            if self.world.satellite[self.player].value == Satellite.option_randomize_recipe:
+                new_recipe = self.make_balanced_recipe(recipes["satellite"], valid_pool,
+                                                       factor=(self.world.max_science_pack[self.player].value + 1) / 7)
+                self.custom_recipes["satellite"] = new_recipe
+
+        needed_recipes = self.world.max_science_pack[self.player].get_allowed_packs() | {"rocket-part"}
+        if self.world.silo[self.player] != Silo.option_spawn:
+            needed_recipes |= {"rocket-silo"}
         if self.world.max_science_pack[self.player].value == MaxSciencePack.option_space_science_pack:
             needed_recipes |= {"satellite"}
 
         for recipe in needed_recipes:
             recipe = self.custom_recipes.get(recipe, recipes[recipe])
+            self.advancement_technologies |= {tech.name for tech in recipe.unlocking_technologies}
             self.advancement_technologies |= {tech.name for tech in recipe.recursive_unlocking_technologies}
 
         # handle marking progressive techs as advancement
