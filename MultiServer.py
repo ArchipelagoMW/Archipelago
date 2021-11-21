@@ -1285,8 +1285,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, reply)
 
     elif cmd == "GetDataPackage":
-        exclusions = set(args.get("exclusions", []))
+        exclusions = args.get("exclusions", [])
         if exclusions:
+            exclusions = set(exclusions)
             games = {name: game_data for name, game_data in network_data_package["games"].items()
                      if name not in exclusions}
             package = network_data_package.copy()
