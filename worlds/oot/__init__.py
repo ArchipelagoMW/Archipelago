@@ -147,7 +147,7 @@ class OOTWorld(World):
         # Incompatible option handling
         # ER and glitched logic are not compatible; glitched takes priority
         if self.logic_rules == 'glitched':
-            self.shuffle_interior_entrances = False
+            self.shuffle_interior_entrances = 'off'
             self.shuffle_grotto_entrances = False
             self.shuffle_dungeon_entrances = False
             self.shuffle_overworld_entrances = False

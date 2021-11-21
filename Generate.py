@@ -126,7 +126,7 @@ def main(args=None, callback=ERmain):
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
 
-    Utils.init_logging(f"Generate_{seed}.txt", loglevel=args.log_level)
+    Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
 
     erargs.lttp_rom = args.lttp_rom
     erargs.sm_rom = args.sm_rom

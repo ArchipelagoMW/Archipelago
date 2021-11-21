@@ -28,7 +28,7 @@ can all have different options.
 
 ### Where do I get a YAML file?
 
-A basic OOT yaml will look like this. (There are lots of cosmetic options that have been removed for the sake of this tutorial, if you want to see a complete list, download (Archipelago)[https://github.com/ArchipelagoMW/Archipelago/releases] and look for the sample file in the "Players" folder))
+A basic OOT yaml will look like this. There are lots of cosmetic options that have been removed for the sake of this tutorial, if you want to see a complete list, download [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) and look for the sample file in the "Players" folder.
 ```yaml
 description: Default Ocarina of Time Template # Used to describe your yaml. Useful if you have multiple files
 # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit

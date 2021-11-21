@@ -2,7 +2,6 @@ import os
 import logging
 import typing
 import asyncio
-import sys
 
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
@@ -11,6 +10,7 @@ os.environ["KIVY_LOG_ENABLE"] = "0"
 
 from kivy.app import App
 from kivy.core.window import Window
+from kivy.core.clipboard import Clipboard
 from kivy.base import ExceptionHandler, ExceptionManager, Config, Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
@@ -25,6 +25,10 @@ from kivy.uix.label import Label
 from kivy.uix.progressbar import ProgressBar
 from kivy.utils import escape_markup
 from kivy.lang import Builder
+from kivy.uix.recycleview.views import RecycleDataViewBehavior
+from kivy.uix.behaviors import FocusBehavior
+from kivy.uix.recycleboxlayout import RecycleBoxLayout
+from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 
 import Utils
 from NetUtils import JSONtoTextParser, JSONMessagePart
@@ -140,6 +144,36 @@ class ContainerLayout(FloatLayout):
     pass
 
 
+class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
+                                 RecycleBoxLayout):
+    """ Adds selection and focus behaviour to the view. """
+
+
+class SelectableLabel(RecycleDataViewBehavior, Label):
+    """ Add selection support to the Label """
+    index = None
+    selected = BooleanProperty(False)
+
+    def refresh_view_attrs(self, rv, index, data):
+        """ Catch and handle the view changes """
+        self.index = index
+        return super(SelectableLabel, self).refresh_view_attrs(
+            rv, index, data)
+
+    def on_touch_down(self, touch):
+        """ Add selection on touch down """
+        if super(SelectableLabel, self).on_touch_down(touch):
+            return True
+        if self.collide_point(*touch.pos):
+            return self.parent.select_with_touch(self.index, touch)
+
+    def apply_selection(self, rv, index, is_selected):
+        """ Respond to the selection of items in the view. """
+        self.selected = is_selected
+        if is_selected:
+            Clipboard.copy(self.text)
+
+
 class GameManager(App):
     logging_pairs = [
         ("Client", "Archipelago"),
@@ -164,7 +198,8 @@ class GameManager(App):
         # top part
         server_label = ServerLabel()
         connect_layout.add_widget(server_label)
-        self.server_connect_bar = TextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False)
+        self.server_connect_bar = TextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False,
+                                            write_tab=False)
         self.server_connect_bar.bind(on_text_validate=self.connect_button_action)
         connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
@@ -201,32 +236,20 @@ class GameManager(App):
         info_button = Button(height=30, text="Command:", size_hint_x=None)
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
-        textinput = TextInput(size_hint_y=None, height=30, multiline=False)
+        textinput = TextInput(size_hint_y=None, height=30, multiline=False, write_tab=False)
         textinput.bind(on_text_validate=self.on_message)
+
+        def text_focus(event):
+            """Needs to be set via delay, as unfocusing happens after on_message"""
+            textinput.focus = True
+
+        textinput.text_focus = text_focus
         bottom_layout.add_widget(textinput)
         self.grid.add_widget(bottom_layout)
         self.commandprocessor("/help")
         Clock.schedule_interval(self.update_texts, 1 / 30)
         self.container.add_widget(self.grid)
-        self.catch_unhandled_exceptions()
         return self.container
-
-    def catch_unhandled_exceptions(self):
-        """Relay unhandled exceptions to UI logger."""
-        if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
-            orig_hook = sys.excepthook
-
-            def handle_exception(exc_type, exc_value, exc_traceback):
-                if issubclass(exc_type, KeyboardInterrupt):
-                    sys.__excepthook__(exc_type, exc_value, exc_traceback)
-                    return
-                logging.getLogger("Client").exception("Uncaught exception",
-                                                      exc_info=(exc_type, exc_value, exc_traceback))
-                return orig_hook(exc_type, exc_value, exc_traceback)
-
-            handle_exception._wrapped = True
-
-            sys.excepthook = handle_exception
 
     def update_texts(self, dt):
         if self.ctx.server:
@@ -242,7 +265,11 @@ class GameManager(App):
             self.progressbar.value = 0
 
     def command_button_action(self, button):
-        logging.getLogger("Client").info("/help for client commands and !help for server commands.")
+        if self.ctx.server:
+            logging.getLogger("Client").info("/help for client commands and !help for server commands.")
+        else:
+            logging.getLogger("Client").info("/help for client commands and once you are connected, "
+                                             "!help for server commands.")
 
     def connect_button_action(self, button):
         if self.ctx.server:
@@ -269,6 +296,9 @@ class GameManager(App):
                 self.ctx.input_queue.put_nowait(input_text)
             elif input_text:
                 self.commandprocessor(input_text)
+
+            Clock.schedule_once(textinput.text_focus)
+
         except Exception as e:
             logging.getLogger("Client").exception(e)
 
@@ -304,7 +334,7 @@ class TextManager(GameManager):
 
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
-        super(LogtoUI, self).__init__(logging.DEBUG)
+        super(LogtoUI, self).__init__(logging.INFO)
         self.on_log = on_log
 
     def handle(self, record: logging.LogRecord) -> None:

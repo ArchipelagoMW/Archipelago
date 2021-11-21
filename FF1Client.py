@@ -37,6 +37,7 @@ class FF1Context(CommonContext):
         self.messages = {}
         self.locations_array = None
         self.nes_status = CONNECTION_INITIAL_STATUS
+        self.game = 'Final Fantasy'
 
     command_processor = FF1CommandProcessor
 
@@ -47,11 +48,7 @@ class FF1Context(CommonContext):
             logger.info('Enter slot name:')
             self.auth = await self.console_input()
 
-        await self.send_msgs([{"cmd": 'Connect',
-                               'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
-                               'tags': {},
-                               'uuid': Utils.get_unique_identifier(), 'game': 'Final Fantasy'
-                               }])
+        await self.send_connect()
 
     def _set_message(self, msg: str, msg_id: int):
         self.messages[(time.time(), msg_id)] = msg

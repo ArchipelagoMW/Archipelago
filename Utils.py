@@ -427,7 +427,7 @@ loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': log
 
 
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
-                 log_format: str = "[%(name)s]: %(message)s"):
+                 log_format: str = "[%(name)s]: %(message)s", exception_logger: str = ""):
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = local_path("logs")
     os.makedirs(log_folder, exist_ok=True)
@@ -446,3 +446,19 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         root_logger.addHandler(
             logging.StreamHandler(sys.stdout)
         )
+
+    # Relay unhandled exceptions to logger.
+    if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
+        orig_hook = sys.excepthook
+
+        def handle_exception(exc_type, exc_value, exc_traceback):
+            if issubclass(exc_type, KeyboardInterrupt):
+                sys.__excepthook__(exc_type, exc_value, exc_traceback)
+                return
+            logging.getLogger(exception_logger).exception("Uncaught exception",
+                                                          exc_info=(exc_type, exc_value, exc_traceback))
+            return orig_hook(exc_type, exc_value, exc_traceback)
+
+        handle_exception._wrapped = True
+
+        sys.excepthook = handle_exception

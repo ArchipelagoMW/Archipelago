@@ -55,6 +55,14 @@ class Silo(Choice):
     default = 0
 
 
+class Satellite(Choice):
+    """Ingredients to craft satellite."""
+    displayname = "Satellite"
+    option_vanilla = 0
+    option_randomize_recipe = 1
+    default = 0
+
+
 class FreeSamples(Choice):
     """Get free items with your technologies."""
     displayname = "Free Samples"
@@ -289,6 +297,7 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "tech_tree_layout": TechTreeLayout,
     "tech_cost": TechCost,
     "silo": Silo,
+    "satellite": Satellite,
     "free_samples": FreeSamples,
     "tech_tree_information": TechTreeInformation,
     "starting_items": FactorioStartItems,

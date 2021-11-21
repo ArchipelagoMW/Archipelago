@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 import threading
 import time
 import multiprocessing
@@ -14,7 +15,7 @@ from json import loads, dumps
 from Utils import get_item_name_from_id, init_logging
 
 if __name__ == "__main__":
-    init_logging("SNIClient")
+    init_logging("SNIClient", exception_logger="Client")
 
 import colorama
 
@@ -72,7 +73,7 @@ class LttPCommandProcessor(ClientCommandProcessor):
                 pass
 
         self.ctx.snes_reconnect_address = None
-        asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number))
+        asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number), name="SNES Connect")
         return True
 
     def _cmd_snes_close(self) -> bool:
@@ -142,12 +143,7 @@ class Context(CommonContext):
         self.awaiting_rom = False
         self.auth = self.rom
         auth = base64.b64encode(self.rom).decode()
-        await self.send_msgs([{"cmd": 'Connect',
-                               'password': self.password, 'name': auth, 'version': Utils.version_tuple,
-                               'tags': self.tags,
-                               'uuid': Utils.get_unique_identifier(),
-                               'game': self.game
-                               }])
+        await self.send_connect(name=auth)
 
     def on_deathlink(self, data: dict):
         if not self.killing_player_task or self.killing_player_task.done():
@@ -1080,14 +1076,24 @@ async def main():
         meta, romfile = Patch.create_rom_file(args.diff_file)
         args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
-        adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile, gui_enabled)
-        if adjusted:
-            try:
-                shutil.move(adjustedromfile, romfile)
-                adjustedromfile = romfile
-            except Exception as e:
-                logging.exception(e)
-        asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
+        if args.diff_file.endswith(".apsoe"):
+            import webbrowser
+            webbrowser.open("http://www.evermizer.com/apclient/")
+            logging.info("Starting Evermizer Client in your Browser...")
+            import time
+            time.sleep(3)
+            sys.exit()
+        elif args.diff_file.endswith((".apbp", "apz3")):
+            adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile, gui_enabled)
+            if adjusted:
+                try:
+                    shutil.move(adjustedromfile, romfile)
+                    adjustedromfile = romfile
+                except Exception as e:
+                    logging.exception(e)
+            asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
+        else:
+            asyncio.create_task(run_game(romfile))
 
     ctx = Context(args.snes, args.connect, args.password)
     if ctx.server_task is None:
@@ -1102,28 +1108,19 @@ async def main():
         input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None
 
-    snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address))
+    snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address), name="SNES Connect")
     watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
 
     await ctx.exit_event.wait()
-    if snes_connect_task:
-        snes_connect_task.cancel()
+
     ctx.server_address = None
     ctx.snes_reconnect_address = None
-
-    await watcher_task
-
-    if ctx.server and not ctx.server.socket.closed:
-        await ctx.server.socket.close()
-    if ctx.server_task:
-        await ctx.server_task
-
     if ctx.snes_socket is not None and not ctx.snes_socket.closed:
         await ctx.snes_socket.close()
-
-    while ctx.input_requests > 0:
-        ctx.input_queue.put_nowait(None)
-        ctx.input_requests -= 1
+    if snes_connect_task:
+        snes_connect_task.cancel()
+    await watcher_task
+    await ctx.shutdown()
 
     if ui_task:
         await ui_task

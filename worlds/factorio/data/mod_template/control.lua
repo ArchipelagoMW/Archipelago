@@ -8,6 +8,7 @@ SLOT_NAME = "{{ slot_name }}"
 SEED_NAME = "{{ seed_name }}"
 FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
 TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
+MAX_SCIENCE_PACK = {{ max_science_pack }}
 DEATH_LINK = {{ death_link | int }}
 
 CURRENTLY_DEATH_LOCK = 0
@@ -107,8 +108,19 @@ end
 script.on_event(defines.events.on_player_removed, on_player_removed)
 
 function on_rocket_launched(event)
-    global.forcedata[event.rocket.force.name]['victory'] = 1
-    dumpInfo(event.rocket.force)
+    if event.rocket and event.rocket.valid and global.forcedata[event.rocket.force.name]['victory'] == 0 then
+		if event.rocket.get_item_count("satellite") > 0 or MAX_SCIENCE_PACK < 6 then
+			global.forcedata[event.rocket.force.name]['victory'] = 1
+            dumpInfo(event.rocket.force)
+            game.set_game_state
+            {
+                game_finished = true,
+                player_won = true,
+                can_continue = true,
+                victorious_force = event.rocket.force
+            }
+		end
+	end
 end
 script.on_event(defines.events.on_rocket_launched, on_rocket_launched)
 
@@ -197,6 +209,10 @@ script.on_init(function()
     for index, _ in pairs(game.players) do
         e.player_index = index
         on_player_created(e)
+    end
+
+    if remote.interfaces["silo_script"] then
+        remote.call("silo_script", "set_no_victory", true)
     end
 end)
 
@@ -423,8 +439,8 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
             game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
             game.play_sound({path="utility/research_completed"})
             tech.researched = true
-            return
         end
+        return
     elseif progressive_technologies[item_name] ~= nil then
         if global.index_sync[index] == nil then -- not yet received prog item
             global.index_sync[index] = item_name

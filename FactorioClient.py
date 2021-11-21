@@ -15,7 +15,7 @@ from queue import Queue
 import Utils
 
 if __name__ == "__main__":
-    Utils.init_logging("FactorioClient")
+    Utils.init_logging("FactorioClient", exception_logger="Client")
 
 from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled, \
      get_base_parser
@@ -72,15 +72,7 @@ class FactorioContext(CommonContext):
                 raise Exception("Cannot connect to a server with unknown own identity, "
                                 "bridge to Factorio first.")
 
-        await self.send_msgs([{
-            "cmd": 'Connect',
-            'password': self.password,
-            'name': self.auth,
-            'version': Utils.version_tuple,
-            'tags': self.tags,
-            'uuid': Utils.get_unique_identifier(),
-            'game': "Factorio"
-        }])
+        await self.send_connect()
 
     def on_print(self, args: dict):
         super(FactorioContext, self).on_print(args)
@@ -322,14 +314,7 @@ async def main(args):
         await progression_watcher
         await factorio_server_task
 
-    if ctx.server and not ctx.server.socket.closed:
-        await ctx.server.socket.close()
-    if ctx.server_task:
-        await ctx.server_task
-
-    while ctx.input_requests > 0:
-        ctx.input_queue.put_nowait(None)
-        ctx.input_requests -= 1
+    await ctx.shutdown()
 
     if ui_task:
         await ui_task
