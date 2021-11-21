@@ -4,12 +4,11 @@ import time
 from asyncio import StreamReader, StreamWriter
 from typing import List
 
+
 import Utils
 from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, ClientCommandProcessor, logger
 
 SYSTEM_MESSAGE_ID = 0
-
-DATA_KEEP_ALIVE = b'\n'
 
 CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator then restart ff1_connector.lua"
 CONNECTION_REFUSED_STATUS = "Connection Refused. Please start your emulator make sure ff1_connector.lua is running"
@@ -38,6 +37,7 @@ class FF1Context(CommonContext):
         self.locations_array = None
         self.nes_status = CONNECTION_INITIAL_STATUS
         self.game = 'Final Fantasy'
+        self.awaiting_rom = False
 
     command_processor = FF1CommandProcessor
 
@@ -45,8 +45,9 @@ class FF1Context(CommonContext):
         if password_requested and not self.password:
             await super(FF1Context, self).server_auth(password_requested)
         if not self.auth:
-            logger.info('Enter slot name:')
-            self.auth = await self.console_input()
+            self.awaiting_rom = True
+            logger.info('Awaiting connection to NES to get Player information')
+            return
 
         await self.send_connect()
 
@@ -56,6 +57,7 @@ class FF1Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
             self.game = self.games.get(self.slot, None)
+            asyncio.create_task(parse_locations(self.locations_array, self, True))
         elif cmd == 'Print':
             msg = args['text']
             if ': !' not in msg:
@@ -100,8 +102,8 @@ def get_payload(ctx: FF1Context):
     )
 
 
-async def parse_locations(locations_array: List[int], ctx: FF1Context):
-    if locations_array == ctx.locations_array:
+async def parse_locations(locations_array: List[int], ctx: FF1Context, force: bool):
+    if locations_array == ctx.locations_array and not force:
         return
     else:
         # print("New values")
@@ -150,14 +152,19 @@ async def nes_sync_task(ctx: FF1Context):
             try:
                 await asyncio.wait_for(writer.drain(), timeout=1.5)
                 try:
-                    # Data will return one of 2 things:
-                    # 1. A keepalive response of \n
-                    # 2. An array representing the memory values of the locations area
+                    # Data will return a dict with up to two fields:
+                    # 1. A keepalive response of the Players Name (always)
+                    # 2. An array representing the memory values of the locations area (if in game)
                     data = await asyncio.wait_for(reader.readline(), timeout=5)
-                    # print(data)
-                    if ctx.game is not None and data != DATA_KEEP_ALIVE:
+                    data_decoded = json.loads(data.decode())
+                    # print(data_decoded)
+                    if ctx.game is not None and 'locations' in data_decoded:
                         # Not just a keep alive ping, parse
-                        asyncio.create_task(parse_locations(json.loads(data.decode()), ctx))
+                        asyncio.create_task(parse_locations(data_decoded['locations'], ctx, False))
+                    if not ctx.auth:
+                        ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
+                        if ctx.awaiting_rom:
+                            await ctx.server_auth(False)
                 except asyncio.TimeoutError:
                     logger.debug("Read Timed Out, Reconnecting")
                     error_status = CONNECTION_TIMING_OUT_STATUS

@@ -354,12 +354,15 @@ function receive()
     processBlock(json.decode(l))
 
     -- Determine Message to send back
-    local msg = "\n"
+    memDomain.rom()
+    local playerName = uRange(0x7BCBF, 0x41)
+    playerName[0] = nil
+    local retTable = {}
+    retTable["playerName"] = playerName
     if StateOKForMainLoop() then
-        locations = generateLocationChecked()
-        msg = json.encode(locations).."\n"
+        retTable["locations"] = generateLocationChecked()
     end
-
+    msg = json.encode(retTable).."\n"
     local ret, error = ff1Socket:send(msg)
     if ret == nil then
         print(error)
