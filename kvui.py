@@ -11,6 +11,7 @@ os.environ["KIVY_LOG_ENABLE"] = "0"
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
+from kivy.core.text.markup import MarkupLabel
 from kivy.base import ExceptionHandler, ExceptionManager, Config, Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
@@ -171,7 +172,10 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
         """ Respond to the selection of items in the view. """
         self.selected = is_selected
         if is_selected:
-            Clipboard.copy(self.text)
+            # Not a fan of the following 2 lines, but they work.
+            temp = MarkupLabel(text=self.text).markup
+            text = "".join(part for part in temp if not part.startswith(("[color", "[/color]")))
+            Clipboard.copy(text)
 
 
 class GameManager(App):
