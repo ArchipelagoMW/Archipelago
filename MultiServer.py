@@ -591,10 +591,12 @@ def get_status_string(ctx: Context, team: int):
     text = "Player Status on your team:"
     for slot in ctx.locations:
         connected = len(ctx.clients[team][slot])
+        death_link = len([client for client in ctx.clients[team][slot] if "DeathLink" in client.tags])
         completion_text = f"({len(ctx.location_checks[team, slot])}/{len(ctx.locations[slot])})"
+        death_text = f" {death_link} of which are death link" if connected else ""
         goal_text = " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else "."
         text += f"\n{ctx.get_aliased_name(team, slot)} has {connected} connection{'' if connected == 1 else 's'}" \
-                f"{goal_text} {completion_text}"
+                f"{death_text}{goal_text} {completion_text}"
     return text
 
 
