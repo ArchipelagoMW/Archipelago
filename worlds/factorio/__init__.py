@@ -292,7 +292,7 @@ class Factorio(World):
                 valid_pool += sorted(science_pack_pools[pack])
 
             if self.world.silo[self.player].value == Silo.option_randomize_recipe:
-                new_recipe = self.make_balanced_recipe(recipes["rocket-silo"], valid_pool,
+                new_recipe = self.make_balanced_recipe(recipes["rocket-silo"], valid_pool.copy(),
                                                        factor=(self.world.max_science_pack[self.player].value + 1) / 7)
                 self.custom_recipes["rocket-silo"] = new_recipe
 
