@@ -166,16 +166,23 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
         if super(SelectableLabel, self).on_touch_down(touch):
             return True
         if self.collide_point(*touch.pos):
-            return self.parent.select_with_touch(self.index, touch)
+            if self.selected:
+                self.parent.clear_selection()
+            else:
+                # Not a fan of the following few lines, but they work.
+                temp = MarkupLabel(text=self.text).markup
+                text = "".join(part for part in temp if not part.startswith(("[color", "[/color]")))
+                cmdinput = App.get_running_app().textinput
+                if not cmdinput.text and text.startswith("Didn't find something that closely matches, did you mean "):
+                    name = Utils.get_text_between(text, "Didn't find something that closely matches, did you mean ",
+                                                  "? (")
+                    cmdinput.text = f"!hint {name}"
+                Clipboard.copy(text)
+                return self.parent.select_with_touch(self.index, touch)
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
         self.selected = is_selected
-        if is_selected:
-            # Not a fan of the following 2 lines, but they work.
-            temp = MarkupLabel(text=self.text).markup
-            text = "".join(part for part in temp if not part.startswith(("[color", "[/color]")))
-            Clipboard.copy(text)
 
 
 class GameManager(App):
@@ -240,15 +247,15 @@ class GameManager(App):
         info_button = Button(height=30, text="Command:", size_hint_x=None)
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
-        textinput = TextInput(size_hint_y=None, height=30, multiline=False, write_tab=False)
-        textinput.bind(on_text_validate=self.on_message)
+        self.textinput = TextInput(size_hint_y=None, height=30, multiline=False, write_tab=False)
+        self.textinput.bind(on_text_validate=self.on_message)
 
         def text_focus(event):
             """Needs to be set via delay, as unfocusing happens after on_message"""
-            textinput.focus = True
+            self.textinput.focus = True
 
-        textinput.text_focus = text_focus
-        bottom_layout.add_widget(textinput)
+        self.textinput.text_focus = text_focus
+        bottom_layout.add_widget(self.textinput)
         self.grid.add_widget(bottom_layout)
         self.commandprocessor("/help")
         Clock.schedule_interval(self.update_texts, 1 / 30)
