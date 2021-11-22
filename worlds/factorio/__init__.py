@@ -201,7 +201,7 @@ class Factorio(World):
                 max_raw = 1.1 * remaining_raw
                 min_raw = 0.9 * remaining_raw
                 max_energy = 1.1 * remaining_energy
-                min_energy = 1.1 * remaining_energy
+                min_energy = 0.9 * remaining_energy
             else:
                 max_raw = remaining_raw * 0.75
                 min_raw = (remaining_raw - max_raw) / remaining_num_ingredients
