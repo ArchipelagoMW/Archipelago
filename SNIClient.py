@@ -889,10 +889,10 @@ async def game_watcher(ctx: Context):
 
         if not ctx.rom:
             ctx.finished_game = False
-            gameName = await snes_read(ctx, SM_ROMNAME_START, 2)
-            if gameName is None:
+            game_name = await snes_read(ctx, SM_ROMNAME_START, 2)
+            if game_name is None:
                 continue
-            elif gameName == b"SM":
+            elif game_name == b"SM":
                 ctx.game = GAME_SM
             else:
                 ctx.game = GAME_ALTTP

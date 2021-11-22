@@ -1244,6 +1244,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             game = ctx.games[slot]
             if "IgnoreGame" not in args["tags"] and args['game'] != game:
                 errors.add('InvalidGame')
+            minver = ctx.minimum_client_versions[slot]
+            if minver > args['version']:
+                errors.add('IncompatibleVersion')
 
         # only exact version match allowed
         if ctx.compatibility == 0 and args['version'] != version_tuple:
@@ -1259,9 +1262,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     client.auth = False  # swapping Team/Slot
             client.team = team
             client.slot = slot
-            minver = ctx.minimum_client_versions[slot]
-            if minver > args['version']:
-                errors.add('IncompatibleVersion')
+
             ctx.client_ids[client.team, client.slot] = args["uuid"]
             ctx.clients[team][slot].append(client)
             client.version = args['version']
