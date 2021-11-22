@@ -139,19 +139,12 @@ exclusion_table = {
         "Cover Me in Debris",
         "A Complete Catalogue",
         "Surge Protector",
+        "Light as a Rabbit", # will be normal in 1.18
     },
     "insane": {
         "How Did We Get Here?",
         "Adventuring Time",
     },
-    "postgame": {
-        "Free the End",
-        "The Next Generation",
-        "The End... Again...",
-        "You Need a Mint",
-        "Monsters Hunted",
-        "Is It a Plane?",
-    }
 }
 
 def get_postgame_advancements(required_bosses):
