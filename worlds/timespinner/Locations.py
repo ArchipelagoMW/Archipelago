@@ -177,16 +177,17 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
 
         # 1337157 - 1337170 Downloads
 
-        # 1337171 - 1337238 Reserved
+        # 1337171 - 1337236 Reserved
+
+        # 1337237 - 1337238 GyreArchives
 
         # PyramidItemLocations
-        #LocationData('Temporal Gyre', 'Transition chest 1',  1337239),
-        #LocationData('Temporal Gyre', 'Transition chest 2',  1337240),
-        #LocationData('Temporal Gyre', 'Transition chest 3',  1337241),
-        #LocationData('Temporal Gyre', 'Ravenlord pre fight',  1337242),
-        #LocationData('Temporal Gyre', 'Ravenlord post fight',  1337243),
-        #LocationData('Temporal Gyre', 'Ifrid pre fight',  1337244),
-        #LocationData('Temporal Gyre', 'Ifrid post fight',  1337245),
+        LocationData('Ancient Pyramid (right)', 'Transition chest 1',  1337239),
+        LocationData('Ancient Pyramid (right)', 'Transition chest 2',  1337240),
+        LocationData('Ancient Pyramid (right)', 'Transition chest 3',  1337241),
+
+        # 1337242 - 1337245 GyreArchives
+
         LocationData('Ancient Pyramid (left)', 'Why not it\'s right there',  1337246),
         LocationData('Ancient Pyramid (left)', 'Conviction guarded room',  1337247),
         LocationData('Ancient Pyramid (right)', 'Pit secret room',  1337248, lambda state: state._timespinner_can_break_walls(world, player)),
@@ -194,7 +195,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Ancient Pyramid (right)', 'Killed Nightmare',  EventId)
     )
 
-    downloadable_items: Tuple[LocationData, ...] = (
+    downloadable_locations: Tuple[LocationData, ...] = (
         # DownloadTerminals
         LocationData('Library', 'Library terminal 1',  1337157, lambda state: state.has('Tablet', player)),
         LocationData('Library', 'Library terminal 2',  1337156, lambda state: state.has('Tablet', player)),
@@ -213,8 +214,21 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('The lab (power off)', 'Lab terminal right',  1337170, lambda state: state.has('Tablet', player))
     )
 
-    if not world or is_option_enabled(world, player, "DownloadableItems"):
-        return ( *location_table, *downloadable_items )
+    gyre_archives_locations: Tuple[LocationData, ...] = (
+        LocationData('Temporal Gyre', 'Ravenlord post fight (pedestal)',  1337237),
+        LocationData('Temporal Gyre', 'Ifrit post fight (pedestal)',  1337238),
+        LocationData('Temporal Gyre', 'Ravenlord pre fight',  1337242),
+        LocationData('Temporal Gyre', 'Ravenlord post fight (chest)',  1337243),
+        LocationData('Temporal Gyre', 'Ifrit pre fight',  1337244),
+        LocationData('Temporal Gyre', 'Ifrit post fight (chest)',  1337245),
+    )
+
+    #TODO gyre_archives_locations
+
+    if not world or (is_option_enabled(world, player, "DownloadableItems") and is_option_enabled(world, player, "GyreArchives")):
+        return ( *location_table, *downloadable_locations, *gyre_archives_locations )
+    elif is_option_enabled(world, player, "DownloadableItems") and !is_option_enabled(world, player, "GyreArchives"):
+        return ( *location_table, *downloadable_locations )
     else:
         return location_table
         

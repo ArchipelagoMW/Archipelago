@@ -42,6 +42,10 @@ class Inverted(Toggle):
 #    "Require gasmask for Maw"
 #    display_name = "Stinky Maw"
 
+class GyreArchives(Toggle):
+    "Gyre locations are in logic. New warps are gated by Merchant Crow and Kobo."
+    display_name = "Gyre Archives"
+
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Toggle] = {
     "StartWithJewelryBox": StartWithJewelryBox,
@@ -54,6 +58,7 @@ timespinner_options: Dict[str, Toggle] = {
     "SpecificKeycards": SpecificKeycards,
     "Inverted": Inverted,
     #"StinkyMaw": StinkyMaw,
+    "GyreArchives": GyreArchives,
     "DeathLink": DeathLink,
 }
 
