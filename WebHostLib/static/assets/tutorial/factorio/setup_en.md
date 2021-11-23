@@ -107,6 +107,9 @@ Archipelago if you chose to include it during the installation process.
 10. Enter `localhost` into the server address box
 11. Click "Connect"
 
+For additional client features, issue the `/help` command in the Archipelago Client. Once connected to the AP
+server, you can also issue the `!help` command to learn about additional commands like `!hint`. 
+
 ## Allowing Other People to Join Your Game
 1. Ensure your Archipelago Client is running.
 2. Ensure port `34197` is forwarded to the computer running the Archipelago Client.
