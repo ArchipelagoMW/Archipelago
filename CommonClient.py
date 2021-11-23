@@ -81,6 +81,16 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No missing location checks found.")
         return True
 
+    def _cmd_items(self):
+        self.output(f"Item Names for {self.ctx.game}")
+        for item_name in AutoWorldRegister.world_types[self.ctx.game].item_name_to_id:
+            self.output(item_name)
+
+    def _cmd_locations(self):
+        self.output(f"Location Names for {self.ctx.game}")
+        for location_name in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id:
+            self.output(location_name)
+
     def _cmd_ready(self):
         self.ctx.ready = not self.ctx.ready
         if self.ctx.ready:
@@ -557,6 +567,7 @@ if __name__ == '__main__':
 
     class TextContext(CommonContext):
         tags = {"AP", "IgnoreGame"}
+        game = "Archipelago"
 
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:
