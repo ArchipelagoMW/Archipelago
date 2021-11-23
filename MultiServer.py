@@ -654,27 +654,27 @@ def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
 
 def register_location_checks(ctx: Context, team: int, slot: int, locations: typing.Iterable[int]):
     new_locations = set(locations) - ctx.location_checks[team, slot]
+    new_locations.intersection_update(ctx.locations[slot])  # ignore location IDs unknown to this multidata
     if new_locations:
         ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
         for location in new_locations:
-            if location in ctx.locations[slot]:
-                item_id, target_player = ctx.locations[slot][location]
-                new_item = NetworkItem(item_id, location, slot)
-                if target_player != slot or slot in ctx.remote_items:
-                    get_received_items(ctx, team, target_player).append(new_item)
+            item_id, target_player = ctx.locations[slot][location]
+            new_item = NetworkItem(item_id, location, slot)
+            if target_player != slot or slot in ctx.remote_items:
+                get_received_items(ctx, team, target_player).append(new_item)
 
-                logging.info('(Team #%d) %s sent %s to %s (%s)' % (
-                    team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(item_id),
-                    ctx.player_names[(team, target_player)], get_location_name_from_id(location)))
-                info_text = json_format_send_event(new_item, target_player)
-                ctx.broadcast_team(team, [info_text])
+            logging.info('(Team #%d) %s sent %s to %s (%s)' % (
+                team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(item_id),
+                ctx.player_names[(team, target_player)], get_location_name_from_id(location)))
+            info_text = json_format_send_event(new_item, target_player)
+            ctx.broadcast_team(team, [info_text])
 
         ctx.location_checks[team, slot] |= new_locations
         send_new_items(ctx)
         ctx.broadcast(ctx.clients[team][slot], [{
             "cmd": "RoomUpdate",
             "hint_points": get_slot_points(ctx, team, slot),
-            "checked_locations": locations,  # duplicated data, but used for coop
+            "checked_locations": new_locations,  # send back new checks only
         }])
 
         ctx.save()
