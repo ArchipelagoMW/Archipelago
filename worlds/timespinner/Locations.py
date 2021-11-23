@@ -118,8 +118,10 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Upper Lake Serene', 'Double jump cave platform (past)',  1337100, lambda state: state._timespinner_has_doublejump(world, player)),
         LocationData('Upper Lake Serene', 'Double jump cave floor (past)',  1337101),
         LocationData('Upper Lake Serene', 'West lake serene cave secret',  1337102, lambda state: state._timespinner_can_break_walls(world, player)),
+        LocationData('Upper Lake Serene', 'Before Big Bird',  1337175),
         LocationData('Upper Lake Serene', 'Chest behind vines',  1337103),
         LocationData('Upper Lake Serene', 'Pyramid keys room',  1337104),
+        LocationData('Upper Lake Serene', 'Chicken ledge',  1337174),
         LocationData('Lower Lake Serene', 'Deep dive',  1337105),
         LocationData('Lower Lake Serene', 'Under the eels',  1337106),
         LocationData('Lower Lake Serene', 'Water spikes room',  1337107),
@@ -137,12 +139,14 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Caves of Banishment (upper)', 'Jackpot room chest 4',  1337119, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
         LocationData('Caves of Banishment (upper)', 'Banishment pedestal',  1337120),
         LocationData('Caves of Banishment (Maw)', 'Last chance before Maw',  1337121, lambda state: state._timespinner_has_doublejump(world, player)),
+        LocationData('Caves of Banishment (Maw)', 'Plasma Crystal',  1337173, lambda state: state.has_any(['Gas Mask', 'Talaria Attachment'], player)),
         LocationData('Caves of Banishment (Maw)', 'Killed Maw',  EventId, lambda state: state.has('Gas Mask', player)),
         LocationData('Caves of Banishment (Maw)', 'Mineshaft',  1337122, lambda state: state.has('Gas Mask', player)),
         LocationData('Caves of Banishment (Sirens)', 'Wyvern room',  1337123),
         LocationData('Caves of Banishment (Sirens)', 'Above water sirens',  1337124),
         LocationData('Caves of Banishment (Sirens)', 'Underwater sirens left',  1337125, lambda state: state.has('Water Mask', player)),
         LocationData('Caves of Banishment (Sirens)', 'Underwater sirens right',  1337126, lambda state: state.has('Water Mask', player)),
+        LocationData('Caves of Banishment (Sirens)', 'Underwater sirens right ground',  1337172, lambda state: state.has('Water Mask', player)),
         LocationData('Caves of Banishment (Sirens)', 'Water hook',  1337127, lambda state: state.has('Water Mask', player)),
         LocationData('Castle Ramparts', 'Castle Bomber chest',  1337128, lambda state: state._timespinner_has_multiple_small_jumps_of_npc(world, player)),
         LocationData('Castle Ramparts', 'Freeze the engineer',  1337129, lambda state: state.has('Talaria Attachment', player) or state._timespinner_has_timestop(world, player)),
@@ -156,6 +160,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Castle Keep', 'Omelette chest',  1337137),
         LocationData('Castle Keep', 'Just an egg',  1337138),
         LocationData('Castle Keep', 'Out of the way',  1337139),
+        LocationData('Castle Keep', 'Advisor jump',  1337171, lambda state: state._timespinner_has_timestop(world, player)),
         LocationData('Castle Keep', 'Killed Twins',  EventId, lambda state: state._timespinner_has_timestop(world, player)),
         LocationData('Castle Keep', 'Twins',  1337140, lambda state: state._timespinner_has_timestop(world, player)),
         LocationData('Castle Keep', 'Royal guard tiny room', 1337141, lambda state: state._timespinner_has_doublejump(world, player) or state._timespinner_has_fastjump_on_npc(world,player)),
@@ -177,7 +182,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
 
         # 1337157 - 1337170 Downloads
 
-        # 1337171 - 1337236 Reserved
+        # 1337176 - 1337236 Reserved
 
         # 1337237 - 1337238 GyreArchives
 
@@ -215,20 +220,20 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
     )
 
     gyre_archives_locations: Tuple[LocationData, ...] = (
-        LocationData('Temporal Gyre', 'Ravenlord post fight (pedestal)',  1337237),
-        LocationData('Temporal Gyre', 'Ifrit post fight (pedestal)',  1337238),
-        LocationData('Temporal Gyre', 'Ravenlord pre fight',  1337242),
-        LocationData('Temporal Gyre', 'Ravenlord post fight (chest)',  1337243),
-        LocationData('Temporal Gyre', 'Ifrit pre fight',  1337244),
-        LocationData('Temporal Gyre', 'Ifrit post fight (chest)',  1337245),
+        LocationData('The lab (upper)', 'Ravenlord post fight (pedestal)',  1337237, lambda state: state.has('Merchant Crow', player)),
+        LocationData('Library top', 'Ifrit post fight (pedestal)',  1337238, lambda state: state.has('Kobo', player)),
+        LocationData('The lab (upper)', 'Ravenlord pre fight',  1337242, lambda state: state.has('Merchant Crow', player)),
+        LocationData('The lab (upper)', 'Ravenlord post fight (chest)',  1337243, lambda state: state.has('Merchant Crow', player)),
+        LocationData('Library top', 'Ifrit pre fight',  1337244, lambda state: state.has('Kobo', player)),
+        LocationData('Library top', 'Ifrit post fight (chest)',  1337245, lambda state: state.has('Kobo', player)),
     )
-
-    #TODO gyre_archives_locations
 
     if not world or (is_option_enabled(world, player, "DownloadableItems") and is_option_enabled(world, player, "GyreArchives")):
         return ( *location_table, *downloadable_locations, *gyre_archives_locations )
-    elif is_option_enabled(world, player, "DownloadableItems") and !is_option_enabled(world, player, "GyreArchives"):
+    elif is_option_enabled(world, player, "DownloadableItems") and not is_option_enabled(world, player, "GyreArchives"):
         return ( *location_table, *downloadable_locations )
+    elif is_option_enabled(world, player, "GyreArchives"):
+        return ( *location_table, *gyre_archives_locations )
     else:
         return location_table
         
