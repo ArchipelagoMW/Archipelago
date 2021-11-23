@@ -458,9 +458,6 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     elseif force.technologies[item_name] ~= nil then
         tech = force.technologies[item_name]
         if tech ~= nil then
-            if global.index_sync[index] ~= nil and global.index_sync[index] ~= tech then
-                game.print("Warning: Desync Detected. Duplicate/Missing items may occur.")
-            end
             global.index_sync[index] = tech
             if tech.researched ~= true then
                 game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
