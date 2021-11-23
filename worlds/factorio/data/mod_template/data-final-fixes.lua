@@ -100,6 +100,20 @@ function adjust_energy(recipe_name, factor)
     end
 end
 
+function set_energy(recipe_name, energy)
+    local recipe = data.raw.recipe[recipe_name]
+
+    if (recipe.normal ~= nil) then
+        recipe.normal.energy_required = energy
+    end
+    if (recipe.expensive ~= nil) then
+        recipe.expensive.energy_required = energy
+    end
+    if (recipe.expensive == nil and recipe.normal == nil) then
+        recipe.energy_required = energy
+    end
+end
+
 data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-2"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-1"].fluid_boxes = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes)
@@ -142,6 +156,12 @@ data:extend{new_tree_copy}
 {%- for recipe_name, recipe in recipes.items() %}
 {%- if recipe.category != "mining" %}
 adjust_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_scale) }})
+{%- endif %}
+{%- endfor -%}
+{% elif recipe_time_range %}
+{%- for recipe_name, recipe in recipes.items() %}
+{%- if recipe.category != "mining" %}
+set_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_range) }})
 {%- endif %}
 {%- endfor -%}
 {% endif %}

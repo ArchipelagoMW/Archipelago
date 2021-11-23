@@ -47,6 +47,12 @@ recipe_time_scales = {
     Options.RecipeTime.option_vanilla: None
 }
 
+recipe_time_ranges = {
+    Options.RecipeTime.option_new_fast: (0.25, 2),
+    Options.RecipeTime.option_new_normal: (0.25, 10),
+    Options.RecipeTime.option_slow: (5, 10)
+}
+
 def generate_mod(world, output_directory: str):
     player = world.player
     multiworld = world.world
@@ -95,7 +101,8 @@ def generate_mod(world, output_directory: str):
                      "starting_items": multiworld.starting_items[player], "recipes": recipes,
                      "random": random, "flop_random": flop_random,
                      "static_nodes": multiworld.worlds[player].static_nodes,
-                     "recipe_time_scale": recipe_time_scales[multiworld.recipe_time[player].value],
+                     "recipe_time_scale": recipe_time_scales.get(multiworld.recipe_time[player].value, None),
+                     "recipe_time_range": recipe_time_ranges.get(multiworld.recipe_time[player].value, None),
                      "free_sample_blacklist": {item : 1 for item in free_sample_blacklist},
                      "progressive_technology_table": {tech.name : tech.progressive for tech in
                                                       progressive_technology_table.values()},

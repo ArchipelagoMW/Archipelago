@@ -99,13 +99,25 @@ class TechTreeInformation(Choice):
 
 
 class RecipeTime(Choice):
-    """randomize the time it takes for any recipe to craft, this includes smelting, chemical lab, hand crafting etc."""
+    """Randomize the time it takes for any recipe to craft, this includes smelting, chemical lab, hand crafting etc.
+    Fast: 0.25X - 1X
+    Normal: 0.5X - 2X
+    Slow: 1X - 4X
+    Chaos: 0.25X - 4X
+    New category: ignores vanilla recipe time and rolls new one
+    New Fast: 0.25 - 2 seconds
+    New Normal: 0.25 - 10 seconds
+    New Slow:  5 - 10 seconds
+    """
     displayname = "Recipe Time"
     option_vanilla = 0
     option_fast = 1
     option_normal = 2
     option_slow = 4
     option_chaos = 5
+    option_new_fast = 6
+    option_new_normal = 7
+    option_new_slow = 8
 
 
 class Progressive(Choice):
