@@ -7,8 +7,6 @@ class ItemData(NamedTuple):
     progression: bool = False
     never_exclude: bool = False
 
-#TODO alter items in pool
-
 # A lot of items arent normally dropped by the randomizer as they are mostly enemy drops, but they can be enabled if desired
 item_table: Dict[str, ItemData] = {
     'Eternal Crown': ItemData('Equipment', 1337000, never_exclude=True),
@@ -26,9 +24,9 @@ item_table: Dict[str, ItemData] = {
     'Lab Glasses': ItemData('Equipment', 1337012),
     'Empire Crown': ItemData('Equipment', 1337013),
     'Viletian Crown': ItemData('Equipment', 1337014),
-    'Sunglasses': ItemData('Equipment', 1337015, 0),
+    'Sunglasses': ItemData('Equipment', 1337015),
     'Old Coat': ItemData('Equipment', 1337016),
-    'Trendy Jacket': ItemData('Equipment', 1337017, 0),
+    'Trendy Jacket': ItemData('Equipment', 1337017),
     'Security Vest': ItemData('Equipment', 1337018, 0),
     'Leather Jerkin': ItemData('Equipment', 1337019, 0),
     'Copper Breastplate': ItemData('Equipment', 1337020, 0),
@@ -55,7 +53,7 @@ item_table: Dict[str, ItemData] = {
     'Filigree Clasp': ItemData('Equipment', 1337041),
     'Azure Stole': ItemData('Equipment', 1337042, 0),
     'Ancient Coin': ItemData('Equipment', 1337043),
-    'Shiny Rock': ItemData('Equipment', 1337044, 0),
+    'Shiny Rock': ItemData('Equipment', 1337044),
     'Galaxy Earrings': ItemData('Equipment', 1337045, never_exclude=True),
     'Selen\'s Bangle': ItemData('Equipment', 1337046, never_exclude=True),
     'Glass Pumpkin': ItemData('Equipment', 1337047, never_exclude=True),
