@@ -93,7 +93,7 @@ item_table: Dict[str, ItemData] = {
     'Filigree Tea': ItemData('UseItem', 1337081),
     'Empress Cake': ItemData('UseItem', 1337082, 0),
     'Rotten Tail': ItemData('UseItem', 1337083, 0),
-    'Alchemy Tools': ItemData('UseItem', 1337084, 0),
+    'Alchemy Tools': ItemData('UseItem', 1337084),
     'Galaxy Stone': ItemData('UseItem', 1337085),
     # 1337086 Used interally
     'Essence Crystal': ItemData('UseItem', 1337087, 0),
@@ -101,7 +101,7 @@ item_table: Dict[str, ItemData] = {
     'Gold Necklace': ItemData('UseItem', 1337089, 0),
     'Herb': ItemData('UseItem', 1337090),
     'Mushroom': ItemData('UseItem', 1337091, 0),
-    'Plasma Crystal': ItemData('UseItem', 1337092, 0),
+    'Plasma Crystal': ItemData('UseItem', 1337092),
     'Plasma IV Bag': ItemData('UseItem', 1337093),
     'Cheveur Drumstick': ItemData('UseItem', 1337094, 0),
     'Wyvern Tail': ItemData('UseItem', 1337095, 0),

@@ -1,4 +1,4 @@
-from typing import Tuple, Optional, Callable, NamedTuple
+from typing import List, Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld
 from .Options import is_option_enabled
 
@@ -11,7 +11,7 @@ class LocationData(NamedTuple):
     rule: Callable = lambda state: True
 
 def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[LocationData, ...]:
-    location_table: Tuple[LocationData, ...] = (
+    location_table: List[LocationData] = [
         # PresentItemLocations
         LocationData('Tutorial', 'Yo Momma 1',  1337000),
         LocationData('Tutorial', 'Yo Momma 2',  1337001),
@@ -29,8 +29,8 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Upper lake desolation', 'Double jump cave platform',  1337013),
         LocationData('Upper lake desolation', 'Fire-Locked sparrow chest',  1337014),
         LocationData('Upper lake desolation', 'Crash site pedestal',  1337015),
-        LocationData('Upper lake desolation', 'Crash site chest 1',  1337016, lambda state: state.has_all(['Killed Maw', 'Gas Mask'], player)),
-        LocationData('Upper lake desolation', 'Crash site chest 2',  1337017, lambda state: state.has_all(['Killed Maw', 'Gas Mask'], player)),
+        LocationData('Upper lake desolation', 'Crash site chest 1',  1337016, lambda state: state.has_all({'Killed Maw', 'Gas Mask'}, player)),
+        LocationData('Upper lake desolation', 'Crash site chest 2',  1337017, lambda state: state.has_all({'Killed Maw', 'Gas Mask'}, player)),
         LocationData('Upper lake desolation', 'Kitty Boss',  1337018),
         LocationData('Library', 'Basement',  1337019),
         LocationData('Library', 'Consolation',  1337020),
@@ -182,7 +182,9 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
 
         # 1337157 - 1337170 Downloads
 
-        # 1337176 - 1337236 Reserved
+        # 1337176 - 1337176 Cantoran
+
+        # 1337177 - 1337236 Reserved
 
         # 1337237 - 1337238 GyreArchives
 
@@ -198,7 +200,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Ancient Pyramid (right)', 'Pit secret room',  1337248, lambda state: state._timespinner_can_break_walls(world, player)),
         LocationData('Ancient Pyramid (right)', 'Regret chest',  1337249, lambda state: state._timespinner_can_break_walls(world, player)),
         LocationData('Ancient Pyramid (right)', 'Killed Nightmare',  EventId)
-    )
+    ]
 
     downloadable_locations: Tuple[LocationData, ...] = (
         # DownloadTerminals
@@ -206,9 +208,9 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Library', 'Library terminal 2',  1337156, lambda state: state.has('Tablet', player)),
         # 1337158 Is Lost in time
         LocationData('Library', 'Library terminal 3',  1337159, lambda state: state.has('Tablet', player)),
-        LocationData('Library', 'V terminal 1',  1337160, lambda state: state.has_all(['Tablet', 'Library Keycard V'], player)),
-        LocationData('Library', 'V terminal 2',  1337161, lambda state: state.has_all(['Tablet', 'Library Keycard V'], player)),
-        LocationData('Library', 'V terminal 3',  1337162, lambda state: state.has_all(['Tablet', 'Library Keycard V'], player)),
+        LocationData('Library', 'V terminal 1',  1337160, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
+        LocationData('Library', 'V terminal 2',  1337161, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
+        LocationData('Library', 'V terminal 3',  1337162, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
         LocationData('Library top', 'Backer room terminal',  1337163, lambda state: state.has('Tablet', player)),
         LocationData('Varndagroth tower right (elevator)', 'Medbay',  1337164, lambda state: state.has('Tablet', player) and state._timespinner_has_keycard_B(world, player)),
         LocationData('The lab (upper)', 'Chest and download terminal',  1337165, lambda state: state.has('Tablet', player)),
@@ -236,13 +238,13 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         return ( *location_table, *downloadable_locations, *gyre_archives_locations, *cantoran_locations )
 
     if is_option_enabled(world, player, "DownloadableItems"):
-        location_table = ( *location_table, *downloadable_locations )
+        location_table.extend(downloadable_locations)
     if is_option_enabled(world, player, "GyreArchives"):
-        location_table = ( *location_table, *gyre_archives_locations )
+        location_table.extend(gyre_archives_locations)
     if is_option_enabled(world, player, "Cantoran"):
-        location_table = ( *location_table, *cantoran_locations )
+        location_table.extend(cantoran_locations)
 
-    return location_table
+    return tuple(location_table)
         
 
 starter_progression_locations: Tuple[str, ...] = (
