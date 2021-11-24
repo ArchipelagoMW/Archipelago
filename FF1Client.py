@@ -109,7 +109,7 @@ async def parse_locations(locations_array: List[int], ctx: FF1Context, force: bo
         # print("New values")
         ctx.locations_array = locations_array
         locations_checked = []
-        if locations_array[0xFE] & 0x02 != 0 and not ctx.finished_game:
+        if len(locations_array) > 0xFE and locations_array[0xFE] & 0x02 != 0 and not ctx.finished_game:
             await ctx.send_msgs([
                 {"cmd": "StatusUpdate",
                  "status": 30}

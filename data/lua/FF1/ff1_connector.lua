@@ -8,8 +8,8 @@ local STATE_INITIAL_CONNECTION_MADE = "Initial Connection Made"
 local STATE_UNINITIALIZED = "Uninitialized"
 
 local ITEM_INDEX = 0x03
-local ARMOR_INDEX = 0x07
-local WEAPON_INDEX = 0x0B
+local WEAPON_INDEX = 0x07
+local ARMOR_INDEX = 0x0B
 
 local goldLookup = {
     [0x16C] = 10,
@@ -242,6 +242,76 @@ function setConsumableStacks()
     consumableStacks[0x3F] = u8(0x47409) + 1
 end
 
+function getEmptyWeaponSlots()
+    memDomain.saveram()
+    ret = {}
+    count = 1
+    slot1 = uRange(0x118, 0x4)
+    slot2 = uRange(0x158, 0x4)
+    slot3 = uRange(0x198, 0x4)
+    slot4 = uRange(0x1D8, 0x4)
+    for i,v in pairs(slot1) do
+        if v == 0 then
+            ret[count] = 0x118 + i
+            count = count + 1
+        end
+    end
+    for i,v in pairs(slot2) do
+        if v == 0 then
+            ret[count] = 0x158 + i
+            count = count + 1
+        end
+    end
+    for i,v in pairs(slot3) do
+        if v == 0 then
+            ret[count] = 0x198 + i
+            count = count + 1
+        end
+    end
+    for i,v in pairs(slot4) do
+        if v == 0 then
+            ret[count] = 0x1D8 + i
+            count = count + 1
+        end
+    end
+    return ret
+end
+
+function getEmptyArmorSlots()
+    memDomain.saveram()
+    ret = {}
+    count = 1
+    slot1 = uRange(0x11C, 0x4)
+    slot2 = uRange(0x15C, 0x4)
+    slot3 = uRange(0x19C, 0x4)
+    slot4 = uRange(0x1DC, 0x4)
+    for i,v in pairs(slot1) do
+        if v == 0 then
+            ret[count] = 0x11C + i
+            count = count + 1
+        end
+    end
+    for i,v in pairs(slot2) do
+        if v == 0 then
+            ret[count] = 0x15C + i
+            count = count + 1
+        end
+    end
+    for i,v in pairs(slot3) do
+        if v == 0 then
+            ret[count] = 0x19C + i
+            count = count + 1
+        end
+    end
+    for i,v in pairs(slot4) do
+        if v == 0 then
+            ret[count] = 0x1DC + i
+            count = count + 1
+        end
+    end
+    return ret
+end
+
 function processBlock(block)
     local msgBlock = block['messages']
     if msgBlock ~= nil then
@@ -253,7 +323,9 @@ function processBlock(block)
         end
     end
     local itemsBlock = block["items"]
-    if itemsBlock ~= nil then
+    memDomain.saveram()
+    isInGame = u8(0x102)
+    if itemsBlock ~= nil and isInGame ~= 0x00 then
         if consumableStacks == nil then
             setConsumableStacks()
         end
@@ -319,6 +391,51 @@ function processBlock(block)
         end
         if #itemsBlock ~= itemIndex then
             wU8(ITEM_INDEX, #itemsBlock)
+        end
+
+        memDomain.saveram()
+        weaponIndex = u8(WEAPON_INDEX)
+        emptyWeaponSlots = getEmptyWeaponSlots()
+        lastUsedWeaponIndex = weaponIndex
+--         print('WEAPON_INDEX: '.. weaponIndex)
+        memDomain.saveram()
+        for i, v in pairs(slice(itemsBlock, weaponIndex, #itemsBlock)) do
+            if v >= 0x11C and v <= 0x143 then
+                -- Minus the offset and add to the correct domain
+                local itemValue = v - 0x11B
+                if #emptyWeaponSlots > 0 then
+                    slot = table.remove(emptyWeaponSlots, 1)
+                    wU8(slot, itemValue)
+                    lastUsedWeaponIndex = weaponIndex + i
+                else
+                    break
+                end
+            end
+        end
+        if lastUsedWeaponIndex ~= weaponIndex then
+            wU8(WEAPON_INDEX, lastUsedWeaponIndex)
+        end
+        memDomain.saveram()
+        armorIndex = u8(ARMOR_INDEX)
+        emptyArmorSlots = getEmptyArmorSlots()
+        lastUsedArmorIndex = armorIndex
+--         print('ARMOR_INDEX: '.. armorIndex)
+        memDomain.saveram()
+        for i, v in pairs(slice(itemsBlock, armorIndex, #itemsBlock)) do
+            if v >= 0x144 and v <= 0x16B then
+                -- Minus the offset and add to the correct domain
+                local itemValue = v - 0x143
+                if #emptyArmorSlots > 0 then
+                    slot = table.remove(emptyArmorSlots, 1)
+                    wU8(slot, itemValue)
+                    lastUsedArmorIndex = armorIndex + i
+                else
+                    break
+                end
+            end
+        end
+        if lastUsedArmorIndex ~= armorIndex then
+            wU8(ARMOR_INDEX, lastUsedArmorIndex)
         end
     end
 end
