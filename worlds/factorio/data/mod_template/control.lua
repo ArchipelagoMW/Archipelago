@@ -9,7 +9,13 @@ SEED_NAME = "{{ seed_name }}"
 FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
 TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
 MAX_SCIENCE_PACK = {{ max_science_pack }}
-DEATH_LINK = {{ death_link | int }}
+ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
+
+if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
+    DEATH_LINK = 1
+else
+    DEATH_LINK = 0
+end
 
 CURRENTLY_DEATH_LOCK = 0
 
@@ -76,6 +82,27 @@ function on_force_destroyed(event)
 {%- endif %}
     global.forcedata[event.force.name] = nil
 end
+
+function on_runtime_mod_setting_changed(event)
+    local force
+    if event.player_index == nil then
+        force = game.forces.player
+    else
+        force = game.players[event.player_index].force
+    end
+
+    if event.setting == ARCHIPELAGO_DEATH_LINK_SETTING then
+        if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
+            DEATH_LINK = 1
+        else
+            DEATH_LINK = 0
+        end
+        if force ~= nil then
+            dumpInfo(force)
+        end
+    end
+end
+script.on_event(defines.events.on_runtime_mod_setting_changed, on_runtime_mod_setting_changed)
 
 -- Initialize player data, either from them joining the game or them already being part of the game when the mod was
 -- added.`
@@ -382,18 +409,19 @@ function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
 end
 
 
-if DEATH_LINK == 1 then
-    script.on_event(defines.events.on_entity_died, function(event)
-        if CURRENTLY_DEATH_LOCK == 1 then -- don't re-trigger on same event
-            return
-        end
+script.on_event(defines.events.on_entity_died, function(event)
+    if DEATH_LINK == 0 then
+        return
+    end
+    if CURRENTLY_DEATH_LOCK == 1 then -- don't re-trigger on same event
+        return
+    end
 
-        local force = event.entity.force
-        global.forcedata[force.name].death_link_tick = game.tick
-        dumpInfo(force)
-        kill_players(force)
-    end, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "character"}})
-end
+    local force = event.entity.force
+    global.forcedata[force.name].death_link_tick = game.tick
+    dumpInfo(force)
+    kill_players(force)
+end, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "character"}})
 
 
 -- add / commands
@@ -408,7 +436,8 @@ commands.add_command("ap-sync", "Used by the Archipelago client to get progress 
     local data_collection = {
         ["research_done"] = research_done,
         ["victory"] = chain_lookup(global, "forcedata", force.name, "victory"),
-        ["death_link_tick"] = chain_lookup(global, "forcedata", force.name, "death_link_tick")
+        ["death_link_tick"] = chain_lookup(global, "forcedata", force.name, "death_link_tick"),
+        ["death_link"] = DEATH_LINK
     }
 
     for tech_name, tech in pairs(force.technologies) do
