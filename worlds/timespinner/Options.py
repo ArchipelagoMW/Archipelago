@@ -43,8 +43,12 @@ class Inverted(Toggle):
 #    display_name = "Stinky Maw"
 
 class GyreArchives(Toggle):
-    "Gyre locations are in logic. New warps are gated by Merchant Crow and Kobo."
+    "Gyre locations are in logic. New warps are gated by Merchant Crow and Kobo"
     display_name = "Gyre Archives"
+
+class Cantoran(Toggle):
+    "Cantoran's fight and check are available upon revisiting his room"
+    display_name = "Cantoran"
 
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Toggle] = {
@@ -59,6 +63,7 @@ timespinner_options: Dict[str, Toggle] = {
     "Inverted": Inverted,
     #"StinkyMaw": StinkyMaw,
     "GyreArchives": GyreArchives,
+    "Cantoran": Cantoran,
     "DeathLink": DeathLink,
 }
 

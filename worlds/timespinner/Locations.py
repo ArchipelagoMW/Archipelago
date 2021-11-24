@@ -228,14 +228,21 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Library top', 'Ifrit post fight (chest)',  1337245, lambda state: state.has('Kobo', player)),
     )
 
-    if not world or (is_option_enabled(world, player, "DownloadableItems") and is_option_enabled(world, player, "GyreArchives")):
-        return ( *location_table, *downloadable_locations, *gyre_archives_locations )
-    elif is_option_enabled(world, player, "DownloadableItems") and not is_option_enabled(world, player, "GyreArchives"):
-        return ( *location_table, *downloadable_locations )
-    elif is_option_enabled(world, player, "GyreArchives"):
-        return ( *location_table, *gyre_archives_locations )
-    else:
-        return location_table
+    cantoran_locations: Tuple[LocationData, ...] = (
+        LocationData('Left Side forest Caves', 'Cantoran',  1337176),
+    )
+
+    if not world:
+        return ( *location_table, *downloadable_locations, *gyre_archives_locations, *cantoran_locations )
+
+    if is_option_enabled(world, player, "DownloadableItems"):
+        location_table = ( *location_table, *downloadable_locations )
+    if is_option_enabled(world, player, "GyreArchives"):
+        location_table = ( *location_table, *gyre_archives_locations )
+    if is_option_enabled(world, player, "Cantoran"):
+        location_table = ( *location_table, *cantoran_locations )
+
+    return location_table
         
 
 starter_progression_locations: Tuple[str, ...] = (
