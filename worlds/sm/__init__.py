@@ -2,7 +2,7 @@ import logging
 import copy
 import os
 import threading
-from typing import Set
+from typing import Set, List
 
 logger = logging.getLogger("Super Metroid")
 
@@ -482,7 +482,7 @@ class SMWorld(World):
         for item in self.world.itempool:
             if item.player == self.player:
                 new_state.collect(item, True)
-        new_state.sweep_for_events()
+        # new_state.sweep_for_events()
         if (any(not self.world.get_location(bossLoc, self.player).can_reach(new_state) for bossLoc in self.locked_items)):
             if (self.variaRando.randoExec.setup.services.onlyBossesLeft(self.variaRando.randoExec.setup.startAP, self.variaRando.randoExec.setup.container)):
                 self.world.state.smbm[self.player].maxDiff = infinity
@@ -493,6 +493,29 @@ class SMWorld(World):
         if world.get_game_players("Super Metroid"):
             progitempool.sort(
                 key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
+
+    def accessibility_adjustment(self, unaccessible_locations: List[Location], state: CollectionState):
+        copy_state = state.copy()
+        original_max_diff = copy_state.smbm[self.player].maxDiff
+        copy_state.smbm[self.player].maxDiff = infinity
+
+        while unaccessible_locations:
+            sphere = set()
+            for location in unaccessible_locations:
+                copy_state.smbm[self.player].maxDiff = infinity if location.event else original_max_diff
+                if location.can_reach(copy_state):
+                    sphere.add(location)
+
+            if not sphere:
+                return False
+
+            for location in sphere:
+                unaccessible_locations.remove(location)
+                copy_state.collect(location.item, True, location)
+
+        state.smbm[self.player].maxDiff = infinity
+        self.world.state.smbm[self.player].maxDiff = infinity
+        return True
 
 def create_locations(self, player: int):
     for name, id in locations_lookup_name_to_id.items():

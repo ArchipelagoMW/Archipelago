@@ -156,6 +156,11 @@ class World(metaclass=AutoWorldRegister):
     def post_fill(self):
         """Optional Method that is called after regular fill. Can be used to do adjustments before output generation."""
 
+    def accessibility_adjustment(self, unaccessible_locations: List[Location], state: CollectionState):
+        """Optional Method that is called when reaching end of accessibility_fulfil with unaccessible locations left. 
+        Can be used to do adjustments to accessibility."""
+        return False
+
     def generate_output(self, output_directory: str):
         """This method gets called from a threadpool, do not use world.random here.
         If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
