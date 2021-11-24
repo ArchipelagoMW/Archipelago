@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 import threading
 import time
 import multiprocessing
@@ -14,7 +15,7 @@ from json import loads, dumps
 from Utils import get_item_name_from_id, init_logging
 
 if __name__ == "__main__":
-    init_logging("SNIClient")
+    init_logging("SNIClient", exception_logger="Client")
 
 import colorama
 
@@ -72,7 +73,7 @@ class LttPCommandProcessor(ClientCommandProcessor):
                 pass
 
         self.ctx.snes_reconnect_address = None
-        asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number))
+        asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number), name="SNES Connect")
         return True
 
     def _cmd_snes_close(self) -> bool:
@@ -84,20 +85,17 @@ class LttPCommandProcessor(ClientCommandProcessor):
         else:
             return False
 
-    def _cmd_snes_write(self, address, data):
-        """Write the specified byte (base10) to the SNES' memory address (base16)."""
-        if self.ctx.snes_state != SNESState.SNES_ATTACHED:
-            self.output("No attached SNES Device.")
-            return False
-
-        snes_buffered_write(self.ctx, int(address, 16), bytes([int(data)]))
-        asyncio.create_task(snes_flush_writes(self.ctx))
-        self.output("Data Sent")
-        return True
-
-    def _cmd_test_death(self):
-        self.ctx.on_deathlink({"source": "Console",
-                               "time": time.time()})
+    # Left here for quick re-addition for debugging.
+    # def _cmd_snes_write(self, address, data):
+    #     """Write the specified byte (base10) to the SNES' memory address (base16)."""
+    #     if self.ctx.snes_state != SNESState.SNES_ATTACHED:
+    #         self.output("No attached SNES Device.")
+    #         return False
+    #
+    #     snes_buffered_write(self.ctx, int(address, 16), bytes([int(data)]))
+    #     asyncio.create_task(snes_flush_writes(self.ctx))
+    #     self.output("Data Sent")
+    #     return True
 
 
 class Context(CommonContext):
@@ -145,12 +143,7 @@ class Context(CommonContext):
         self.awaiting_rom = False
         self.auth = self.rom
         auth = base64.b64encode(self.rom).decode()
-        await self.send_msgs([{"cmd": 'Connect',
-                               'password': self.password, 'name': auth, 'version': Utils.version_tuple,
-                               'tags': self.tags,
-                               'uuid': Utils.get_unique_identifier(),
-                               'game': self.game
-                               }])
+        await self.send_connect(name=auth)
 
     def on_deathlink(self, data: dict):
         if not self.killing_player_task or self.killing_player_task.done():
@@ -896,10 +889,10 @@ async def game_watcher(ctx: Context):
 
         if not ctx.rom:
             ctx.finished_game = False
-            gameName = await snes_read(ctx, SM_ROMNAME_START, 2)
-            if gameName is None:
+            game_name = await snes_read(ctx, SM_ROMNAME_START, 2)
+            if game_name is None:
                 continue
-            elif gameName == b"SM":
+            elif game_name == b"SM":
                 ctx.game = GAME_SM
             else:
                 ctx.game = GAME_ALTTP
@@ -912,14 +905,7 @@ async def game_watcher(ctx: Context):
             death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
                                          SM_DEATH_LINK_ACTIVE_ADDR, 1)
             if death_link:
-                death_link = bool(death_link[0] & 0b1)
-                old_tags = ctx.tags.copy()
-                if death_link:
-                    ctx.tags.add("DeathLink")
-                else:
-                    ctx.tags -= {"DeathLink"}
-                if old_tags != ctx.tags and ctx.server and not ctx.server.socket.closed:
-                    await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
+                await ctx.update_death_link(bool(death_link[0] & 0b1))
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
                 ctx.locations_scouted = set()
@@ -1083,14 +1069,24 @@ async def main():
         meta, romfile = Patch.create_rom_file(args.diff_file)
         args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
-        adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile, gui_enabled)
-        if adjusted:
-            try:
-                shutil.move(adjustedromfile, romfile)
-                adjustedromfile = romfile
-            except Exception as e:
-                logging.exception(e)
-        asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
+        if args.diff_file.endswith(".apsoe"):
+            import webbrowser
+            webbrowser.open("http://www.evermizer.com/apclient/")
+            logging.info("Starting Evermizer Client in your Browser...")
+            import time
+            time.sleep(3)
+            sys.exit()
+        elif args.diff_file.endswith((".apbp", "apz3")):
+            adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile, gui_enabled)
+            if adjusted:
+                try:
+                    shutil.move(adjustedromfile, romfile)
+                    adjustedromfile = romfile
+                except Exception as e:
+                    logging.exception(e)
+            asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
+        else:
+            asyncio.create_task(run_game(romfile))
 
     ctx = Context(args.snes, args.connect, args.password)
     if ctx.server_task is None:
@@ -1105,28 +1101,19 @@ async def main():
         input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None
 
-    snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address))
+    snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address), name="SNES Connect")
     watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
 
     await ctx.exit_event.wait()
-    if snes_connect_task:
-        snes_connect_task.cancel()
+
     ctx.server_address = None
     ctx.snes_reconnect_address = None
-
-    await watcher_task
-
-    if ctx.server and not ctx.server.socket.closed:
-        await ctx.server.socket.close()
-    if ctx.server_task:
-        await ctx.server_task
-
     if ctx.snes_socket is not None and not ctx.snes_socket.closed:
         await ctx.snes_socket.close()
-
-    while ctx.input_requests > 0:
-        ctx.input_queue.put_nowait(None)
-        ctx.input_requests -= 1
+    if snes_connect_task:
+        snes_connect_task.cancel()
+    await watcher_task
+    await ctx.shutdown()
 
     if ui_task:
         await ui_task

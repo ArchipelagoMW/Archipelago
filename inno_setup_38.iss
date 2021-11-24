@@ -48,21 +48,21 @@ Name: "playing"; Description: "Installation for playing purposes"
 Name: "custom"; Description: "Custom installation"; Flags: iscustom
 
 [Components]
-Name: "core"; Description: "Core Files"; Types: full hosting playing custom; Flags: fixed
-Name: "generator"; Description: "Generator"; Types: full hosting
-Name: "generator/sm"; Description: "Super Metroid ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728
-Name: "generator/soe"; Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728
-Name: "generator/lttp"; Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
-Name: "generator/oot"; Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296
-Name: "server"; Description: "Server"; Types: full hosting
-Name: "client"; Description: "Clients"; Types: full playing
-Name: "client/sni"; Description: "SNI Client"; Types: full playing
-Name: "client/sni/lttp"; Description: "SNI Client - A Link to the Past Patch Setup"; Types: full playing
-Name: "client/sni/sm"; Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing
-Name: "client/factorio"; Description: "Factorio"; Types: full playing
+Name: "core";             Description: "Core Files"; Types: full hosting playing custom; Flags: fixed
+Name: "generator";        Description: "Generator"; Types: full hosting
+Name: "generator/sm";     Description: "Super Metroid ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/soe";    Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
+Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
+Name: "server";           Description: "Server"; Types: full hosting
+Name: "client";           Description: "Clients"; Types: full playing
+Name: "client/sni";       Description: "SNI Client"; Types: full playing
+Name: "client/sni/lttp";  Description: "SNI Client - A Link to the Past Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/factorio";  Description: "Factorio"; Types: full playing
 Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
-Name: "client/oot"; Description: "Ocarina of Time Adjuster"; Types: full playing
-Name: "client/text"; Description: "Text, to !command and chat"; Types: full playing
+Name: "client/oot";       Description: "Ocarina of Time Adjuster"; Types: full playing
+Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
 
 [Dirs]
 NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-modify authusers-modify;
@@ -134,7 +134,6 @@ Root: HKCR; Subkey: ".archipelago";                              ValueData: "{#M
 Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Archipelago Server Data";       Flags: uninsdeletekey;  ValueType: string;  ValueName: ""; Components: server
 Root: HKCR; Subkey: "{#MyAppName}multidata\DefaultIcon";         ValueData: "{app}\ArchipelagoServer.exe,0";                         ValueType: string;  ValueName: ""; Components: server
 Root: HKCR; Subkey: "{#MyAppName}multidata\shell\open\command";  ValueData: """{app}\ArchipelagoServer.exe"" ""%1""";                ValueType: string;  ValueName: ""; Components: server
-
 
 
 [Code]
@@ -221,6 +220,19 @@ var OoTROMFilePage: TInputFileWizardPage;
 
 var MinecraftDownloadPage: TDownloadWizardPage;
 
+function GetSNESMD5OfFile(const rom: string): string;
+var data: AnsiString;
+begin
+  if LoadStringFromFile(rom, data) then
+  begin
+      if Length(data) mod 1024 = 512 then
+      begin
+        data := copy(data, 513, Length(data)-512);
+      end;
+      Result := GetMD5OfString(data);
+  end;
+end;
+
 function CheckRom(name: string; hash: string): string;
 var rom: string;
 begin
@@ -229,8 +241,8 @@ begin
   if Length(rom) > 0 then
     begin
       log('existing ROM found');
-      log(IntToStr(CompareStr(GetMD5OfFile(rom), hash)));
-      if CompareStr(GetMD5OfFile(rom), hash) = 0 then
+      log(IntToStr(CompareStr(GetSNESMD5OfFile(rom), hash)));
+      if CompareStr(GetSNESMD5OfFile(rom), hash) = 0 then
         begin
         log('existing ROM verified');
         Result := rom;
@@ -317,7 +329,16 @@ begin
       MinecraftDownloadPage.Hide;
     end;
     Result := True;
-  end else
+    end
+  else if (assigned(LttPROMFilePage)) and (CurPageID = LttPROMFilePage.ID) then
+    Result := not (LttPROMFilePage.Values[0] = '')
+  else if (assigned(SMROMFilePage)) and (CurPageID = SMROMFilePage.ID) then
+    Result := not (SMROMFilePage.Values[0] = '')
+  else if (assigned(SoEROMFilePage)) and (CurPageID = SoEROMFilePage.ID) then
+    Result := not (SoEROMFilePage.Values[0] = '')
+  else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
+    Result := not (OoTROMFilePage.Values[0] = '')
+  else
     Result := True;
 end;
 
@@ -327,7 +348,7 @@ begin
     Result := lttprom
   else if Assigned(LttPRomFilePage) then
     begin
-      R := CompareStr(GetMD5OfFile(LttPROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
+      R := CompareStr(GetSNESMD5OfFile(LttPROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
       if R <> 0 then
         MsgBox('ALttP ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
   
@@ -343,7 +364,7 @@ begin
     Result := smrom
   else if Assigned(SMRomFilePage) then
     begin
-      R := CompareStr(GetMD5OfFile(SMROMFilePage.Values[0]), '21f3e98df4780ee1c667b84e57d88675')
+      R := CompareStr(GetSNESMD5OfFile(SMROMFilePage.Values[0]), '21f3e98df4780ee1c667b84e57d88675')
       if R <> 0 then
         MsgBox('Super Metroid ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 
@@ -359,8 +380,7 @@ begin
     Result := soerom
   else if Assigned(SoERomFilePage) then
     begin
-      R := CompareStr(GetMD5OfFile(SoEROMFilePage.Values[0]), '6e9c94511d04fac6e0a1e582c170be3a')
-      log(GetMD5OfFile(SoEROMFilePage.Values[0]))
+      R := CompareStr(GetSNESMD5OfFile(SoEROMFilePage.Values[0]), '6e9c94511d04fac6e0a1e582c170be3a')
       if R <> 0 then
         MsgBox('Secret of Evermore ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 

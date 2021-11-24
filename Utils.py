@@ -122,16 +122,25 @@ parse_yaml = safe_load
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
 
+def get_cert_none_ssl_context():
+    import ssl
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    return ctx
+
+
 @cache_argsless
 def get_public_ipv4() -> str:
     import socket
     import urllib.request
     ip = socket.gethostbyname(socket.gethostname())
+    ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen('https://checkip.amazonaws.com/').read().decode('utf8').strip()
+        ip = urllib.request.urlopen('https://checkip.amazonaws.com/', context=ctx).read().decode('utf8').strip()
     except Exception as e:
         try:
-            ip = urllib.request.urlopen('https://v4.ident.me').read().decode('utf8').strip()
+            ip = urllib.request.urlopen('https://v4.ident.me', context=ctx).read().decode('utf8').strip()
         except:
             logging.exception(e)
             pass  # we could be offline, in a local game, so no point in erroring out
@@ -143,8 +152,9 @@ def get_public_ipv6() -> str:
     import socket
     import urllib.request
     ip = socket.gethostbyname(socket.gethostname())
+    ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen('https://v6.ident.me').read().decode('utf8').strip()
+        ip = urllib.request.urlopen('https://v6.ident.me', context=ctx).read().decode('utf8').strip()
     except Exception as e:
         logging.exception(e)
         pass  # we could be offline, in a local game, or ipv6 may not be available
@@ -165,6 +175,9 @@ def get_default_options() -> dict:
             "rom_file": "Super Metroid (JU).sfc",
             "sni": "SNI",
             "rom_start": True,
+        },
+        "soe_options": {
+            "rom_file": "Secret of Evermore (USA).sfc",
         },
         "lttp_options": {
             "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
@@ -414,7 +427,7 @@ loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': log
 
 
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
-                 log_format: str = "[%(name)s]: %(message)s"):
+                 log_format: str = "[%(name)s]: %(message)s", exception_logger: str = ""):
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = local_path("logs")
     os.makedirs(log_folder, exist_ok=True)
@@ -433,3 +446,19 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         root_logger.addHandler(
             logging.StreamHandler(sys.stdout)
         )
+
+    # Relay unhandled exceptions to logger.
+    if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
+        orig_hook = sys.excepthook
+
+        def handle_exception(exc_type, exc_value, exc_traceback):
+            if issubclass(exc_type, KeyboardInterrupt):
+                sys.__excepthook__(exc_type, exc_value, exc_traceback)
+                return
+            logging.getLogger(exception_logger).exception("Uncaught exception",
+                                                          exc_info=(exc_type, exc_value, exc_traceback))
+            return orig_hook(exc_type, exc_value, exc_traceback)
+
+        handle_exception._wrapped = True
+
+        sys.excepthook = handle_exception

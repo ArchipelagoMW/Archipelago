@@ -284,7 +284,7 @@ junk_texts = [
     "{C:GREEN}\nThere’s always\nmoney in the\nBanana Stand>",
     "{C:GREEN}\n \nJust walk away\n            >",
     "{C:GREEN}\neverybody is\nlooking for\nsomething   >",
-    "{C:GREEN}\nSpring Ball\nare behind\nRidley      >",
+    # "{C:GREEN}\nSpring Ball\nare behind\nRidley      >",  removed as people may assume it's a real hint
     "{C:GREEN}\nThe gnome asks\nyou to guess\nhis name.   >",
     "{C:GREEN}\nI heard beans\non toast is a\ngreat meal. >",
     "{C:GREEN}\n> Sweetcorn\non pizza is a\ngreat choice.",
