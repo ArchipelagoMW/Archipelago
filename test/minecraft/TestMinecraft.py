@@ -30,7 +30,7 @@ class TestMinecraft(TestBase):
         self.world = MultiWorld(1)
         self.world.game[1] = "Minecraft"
         self.world.worlds[1] = MinecraftWorld(self.world, 1)
-        exclusion_pools = ['hard', 'insane', 'postgame']
+        exclusion_pools = ['hard', 'unreasonable', 'postgame']
         for pool in exclusion_pools:
             setattr(self.world, f"include_{pool}_advancements", {1: False})
         setattr(self.world, "advancement_goal", {1: AdvancementGoal(30)})

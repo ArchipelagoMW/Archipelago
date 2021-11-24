@@ -141,7 +141,7 @@ exclusion_table = {
         "Surge Protector",
         "Light as a Rabbit", # will be normal in 1.18
     },
-    "insane": {
+    "unreasonable": {
         "How Did We Get Here?",
         "Adventuring Time",
     },

@@ -65,9 +65,9 @@ class HardAdvancements(Toggle):
     displayname = "Include Hard Advancements"
 
 
-class InsaneAdvancements(Toggle):
+class UnreasonableAdvancements(Toggle):
     """Enables the extremely difficult advancements "How Did We Get Here?" and "Adventuring Time.\""""
-    displayname = "Include Insane Advancements"
+    displayname = "Include Unreasonable Advancements"
 
 
 class PostgameAdvancements(Toggle):
@@ -86,18 +86,18 @@ class StartingItems(OptionList):
 
 
 minecraft_options: typing.Dict[str, type(Option)] = {
-    "advancement_goal":                 AdvancementGoal,
-    "egg_shards_required":              EggShardsRequired,
-    "egg_shards_available":             EggShardsAvailable,
-    "required_bosses":                  BossGoal,
-    "shuffle_structures":               ShuffleStructures,
-    "structure_compasses":              StructureCompasses,
-    "bee_traps":                        BeeTraps,
-    "combat_difficulty":                CombatDifficulty,
-    "include_hard_advancements":        HardAdvancements,
-    "include_insane_advancements":      InsaneAdvancements,
-    "include_postgame_advancements":    PostgameAdvancements,
-    "send_defeated_mobs":               SendDefeatedMobs,
-    "starting_items":                   StartingItems,
-    "death_link":                       DeathLink,
+    "advancement_goal":                     AdvancementGoal,
+    "egg_shards_required":                  EggShardsRequired,
+    "egg_shards_available":                 EggShardsAvailable,
+    "required_bosses":                      BossGoal,
+    "shuffle_structures":                   ShuffleStructures,
+    "structure_compasses":                  StructureCompasses,
+    "bee_traps":                            BeeTraps,
+    "combat_difficulty":                    CombatDifficulty,
+    "include_hard_advancements":            HardAdvancements,
+    "include_unreasonable_advancements":    UnreasonableAdvancements,
+    "include_postgame_advancements":        PostgameAdvancements,
+    "send_defeated_mobs":                   SendDefeatedMobs,
+    "starting_items":                       StartingItems,
+    "death_link":                           DeathLink,
 }

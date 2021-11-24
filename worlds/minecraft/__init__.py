@@ -75,7 +75,7 @@ class MinecraftWorld(World):
 
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
-        exclusion_types = ['hard', 'insane']
+        exclusion_types = ['hard', 'unreasonable']
         for key in exclusion_types:
             if not getattr(self.world, f"include_{key}_advancements")[self.player]:
                 exclusion_pool.update(exclusion_table[key])
