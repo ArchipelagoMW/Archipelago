@@ -7,6 +7,8 @@ class ItemData(NamedTuple):
     progression: bool = False
     never_exclude: bool = False
 
+#TODO alter items in pool
+
 # A lot of items arent normally dropped by the randomizer as they are mostly enemy drops, but they can be enabled if desired
 item_table: Dict[str, ItemData] = {
     'Eternal Crown': ItemData('Equipment', 1337000, never_exclude=True),
@@ -60,8 +62,8 @@ item_table: Dict[str, ItemData] = {
     'Gilded Egg': ItemData('Equipment', 1337048, never_exclude=True),
     'Meyef': ItemData('Familiar', 1337049),
     'Griffin': ItemData('Familiar', 1337050),
-    'Merchant Crow': ItemData('Familiar', 1337051),
-    'Kobo': ItemData('Familiar', 1337052),
+    'Merchant Crow': ItemData('Familiar', 1337051, progression=True),
+    'Kobo': ItemData('Familiar', 1337052, progression=True),
     'Sprite': ItemData('Familiar', 1337053),
     'Demon': ItemData('Familiar', 1337054),
     'Potion': ItemData('UseItem', 1337055, 0),
