@@ -325,12 +325,11 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
                         checks_done["Total"] += 1
     specific_tracker = game_specific_trackers.get(games[tracked_player], None)
     if specific_tracker:
-        specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
-    elif games[tracked_player] == "A Link to the Past":
-        return __renderAlttpTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                    seed_checks_in_area, checks_done)
+        return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
+                                seed_checks_in_area, checks_done)
     else:
-        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
+        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
+                                      seed_checks_in_area, checks_done)
 
 
 def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
@@ -395,7 +394,8 @@ def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[
 
 
 def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
-        inventory: Counter, team: int, player: int, playerName: str) -> str:
+                             inventory: Counter, team: int, player: int, playerName: str,
+                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
     icons = {
         "Wooden Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d2/Wooden_Pickaxe_JE3_BE3.png",
@@ -495,7 +495,8 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
 
 
 def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
-        inventory: Counter, team: int, player: int, playerName: str) -> str:
+                       inventory: Counter, team: int, player: int, playerName: str,
+                       seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
     icons = {
         "Fairy Ocarina":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/OoT_Fairy_Ocarina_Icon.png",
@@ -680,7 +681,8 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
 
 
 def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
-        inventory: Counter, team: int, player: int, playerName: str) -> str:
+                               inventory: Counter, team: int, player: int, playerName: str,
+                               seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
     icons = {
         "Timespinner Wheel":    "https://timespinnerwiki.com/mediawiki/images/7/76/Timespinner_Wheel.png",
@@ -764,7 +766,8 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
 
 
 def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
-        inventory: Counter, team: int, player: int, playerName: str) -> str:
+                           inventory: Counter, team: int, player: int, playerName: str,
+                           seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set())
     player_received_items = {}
@@ -873,5 +876,6 @@ def getTracker(tracker: UUID):
 game_specific_trackers: typing.Dict[str, typing.Callable] = {
     "Minecraft": __renderMinecraftTracker,
     "Ocarina of Time": __renderOoTTracker,
-    "Timespinner": __renderTimespinnerTracker
+    "Timespinner": __renderTimespinnerTracker,
+    "A Link to the Past": __renderAlttpTracker
 }
