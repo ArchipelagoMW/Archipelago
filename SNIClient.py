@@ -889,10 +889,10 @@ async def game_watcher(ctx: Context):
 
         if not ctx.rom:
             ctx.finished_game = False
-            gameName = await snes_read(ctx, SM_ROMNAME_START, 2)
-            if gameName is None:
+            game_name = await snes_read(ctx, SM_ROMNAME_START, 2)
+            if game_name is None:
                 continue
-            elif gameName == b"SM":
+            elif game_name == b"SM":
                 ctx.game = GAME_SM
             else:
                 ctx.game = GAME_ALTTP
@@ -905,14 +905,7 @@ async def game_watcher(ctx: Context):
             death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
                                          SM_DEATH_LINK_ACTIVE_ADDR, 1)
             if death_link:
-                death_link = bool(death_link[0] & 0b1)
-                old_tags = ctx.tags.copy()
-                if death_link:
-                    ctx.tags.add("DeathLink")
-                else:
-                    ctx.tags -= {"DeathLink"}
-                if old_tags != ctx.tags and ctx.server and not ctx.server.socket.closed:
-                    await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
+                await ctx.update_death_link(bool(death_link[0] & 0b1))
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
                 ctx.locations_scouted = set()

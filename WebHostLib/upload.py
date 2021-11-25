@@ -65,8 +65,8 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                 MultiServer.Context._decompress(multidata)
             except:
                 flash("Could not load multidata. File may be corrupted or incompatible.")
-            else:
-                multidata = zfile.open(file).read()
+                multidata = None
+
     if multidata:
         flush()  # commit slots
         seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner, meta=json.dumps(meta),

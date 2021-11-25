@@ -7,7 +7,8 @@ from BaseClasses import Region, Entrance, Location, Item
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, rocket_recipes, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
-    get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies
+    get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
+    liquids
 from .Shapes import get_shapes
 from .Mod import generate_mod
 from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation
@@ -194,6 +195,8 @@ class Factorio(World):
         remaining_energy = target_energy
         remaining_num_ingredients = target_num_ingredients
         fallback_pool = []
+        liquids_used = 0
+        category = original.category
 
         # fill all but one slot with random ingredients, last with a good match
         while remaining_num_ingredients > 0 and pool:
@@ -201,7 +204,7 @@ class Factorio(World):
                 max_raw = 1.1 * remaining_raw
                 min_raw = 0.9 * remaining_raw
                 max_energy = 1.1 * remaining_energy
-                min_energy = 1.1 * remaining_energy
+                min_energy = 0.9 * remaining_energy
             else:
                 max_raw = remaining_raw * 0.75
                 min_raw = (remaining_raw - max_raw) / remaining_num_ingredients
@@ -225,11 +228,19 @@ class Factorio(World):
             if min_num > max_num:
                 fallback_pool.append(ingredient)
                 continue  # can't use that ingredient
+            if liquids_used == 2 and ingredient in liquids:
+                continue    # can't use this ingredient as we already have a liquid in our recipe.
             num = self.world.random.randint(min_num, max_num)
             new_ingredients[ingredient] = num
             remaining_raw -= num * ingredient_raw
             remaining_energy -= num * ingredient_energy
             remaining_num_ingredients -= 1
+            if ingredient in liquids:
+                if liquids_used == 0:
+                    category = "crafting-with-fluid"
+                elif liquids_used == 1:
+                    category = "chemistry"
+                liquids_used += 1
 
         # fill failed slots with whatever we got
         pool = fallback_pool
@@ -245,15 +256,23 @@ class Factorio(World):
             num_energy = remaining_energy / ingredient_energy / remaining_num_ingredients
             num = int(min(num_raw, num_energy))
             if num < 1: continue
+            if liquids_used == 2 and ingredient in liquids:
+                continue    # can't use this ingredient as we already have a liquid in our recipe.
             new_ingredients[ingredient] = num
             remaining_raw -= num * ingredient_raw
             remaining_energy -= num * ingredient_energy
             remaining_num_ingredients -= 1
+            if ingredient in liquids:
+                if liquids_used == 0:
+                    category = "crafting-with-fluid"
+                elif liquids_used == 1:
+                    category = "chemistry"
+                liquids_used += 1
 
         if remaining_num_ingredients > 1:
             logging.warning("could not randomize recipe")
 
-        return Recipe(original.name, original.category, new_ingredients, original.products, original.energy)
+        return Recipe(original.name, category, new_ingredients, original.products, original.energy)
 
     def set_custom_technologies(self):
         custom_technologies = {}
@@ -267,6 +286,8 @@ class Factorio(World):
         science_pack_pools = get_science_pack_pools()
         valid_pool = sorted(science_pack_pools[self.world.max_science_pack[self.player].get_max_pack()])
         self.world.random.shuffle(valid_pool)
+        while any([valid_pool[x] in liquids for x in range(3)]):
+            self.world.random.shuffle(valid_pool)
         self.custom_recipes = {"rocket-part": Recipe("rocket-part", original_rocket_part.category,
                                                      {valid_pool[x]: 10 for x in range(3)},
                                                      original_rocket_part.products,
@@ -280,9 +301,22 @@ class Factorio(World):
                 if pack in recipes:  # skips over space science pack
                     original = recipes[pack]
                     new_ingredients = {}
+                    liquids_used = 0
+                    category = original.category
                     for _ in original.ingredients:
-                        new_ingredients[valid_pool.pop()] = 1
-                    new_recipe = Recipe(pack, original.category, new_ingredients, original.products, original.energy)
+                        new_ingredient = valid_pool.pop()
+                        if new_ingredient in liquids:
+                            while liquids_used == 2 and new_ingredient in liquids:
+                                valid_pool.append(new_ingredient)
+                                self.world.random.shuffle(valid_pool)
+                                new_ingredient = valid_pool.pop()
+                            if liquids_used == 0:
+                                category = "crafting-with-fluid"
+                            elif liquids_used == 1:
+                                category = "chemistry"
+                            liquids_used += 1
+                        new_ingredients[new_ingredient] = 1
+                    new_recipe = Recipe(pack, category, new_ingredients, original.products, original.energy)
                     self.custom_recipes[pack] = new_recipe
 
         if self.world.silo[self.player].value == Silo.option_randomize_recipe \
@@ -292,7 +326,7 @@ class Factorio(World):
                 valid_pool += sorted(science_pack_pools[pack])
 
             if self.world.silo[self.player].value == Silo.option_randomize_recipe:
-                new_recipe = self.make_balanced_recipe(recipes["rocket-silo"], valid_pool,
+                new_recipe = self.make_balanced_recipe(recipes["rocket-silo"], valid_pool.copy(),
                                                        factor=(self.world.max_science_pack[self.player].value + 1) / 7)
                 self.custom_recipes["rocket-silo"] = new_recipe
 

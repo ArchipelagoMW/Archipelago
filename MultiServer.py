@@ -654,27 +654,27 @@ def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
 
 def register_location_checks(ctx: Context, team: int, slot: int, locations: typing.Iterable[int]):
     new_locations = set(locations) - ctx.location_checks[team, slot]
+    new_locations.intersection_update(ctx.locations[slot])  # ignore location IDs unknown to this multidata
     if new_locations:
         ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
         for location in new_locations:
-            if location in ctx.locations[slot]:
-                item_id, target_player = ctx.locations[slot][location]
-                new_item = NetworkItem(item_id, location, slot)
-                if target_player != slot or slot in ctx.remote_items:
-                    get_received_items(ctx, team, target_player).append(new_item)
+            item_id, target_player = ctx.locations[slot][location]
+            new_item = NetworkItem(item_id, location, slot)
+            if target_player != slot or slot in ctx.remote_items:
+                get_received_items(ctx, team, target_player).append(new_item)
 
-                logging.info('(Team #%d) %s sent %s to %s (%s)' % (
-                    team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(item_id),
-                    ctx.player_names[(team, target_player)], get_location_name_from_id(location)))
-                info_text = json_format_send_event(new_item, target_player)
-                ctx.broadcast_team(team, [info_text])
+            logging.info('(Team #%d) %s sent %s to %s (%s)' % (
+                team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(item_id),
+                ctx.player_names[(team, target_player)], get_location_name_from_id(location)))
+            info_text = json_format_send_event(new_item, target_player)
+            ctx.broadcast_team(team, [info_text])
 
         ctx.location_checks[team, slot] |= new_locations
         send_new_items(ctx)
         ctx.broadcast(ctx.clients[team][slot], [{
             "cmd": "RoomUpdate",
             "hint_points": get_slot_points(ctx, team, slot),
-            "checked_locations": locations,  # duplicated data, but used for coop
+            "checked_locations": new_locations,  # send back new checks only
         }])
 
         ctx.save()
@@ -1244,6 +1244,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             game = ctx.games[slot]
             if "IgnoreGame" not in args["tags"] and args['game'] != game:
                 errors.add('InvalidGame')
+            minver = ctx.minimum_client_versions[slot]
+            if minver > args['version']:
+                errors.add('IncompatibleVersion')
 
         # only exact version match allowed
         if ctx.compatibility == 0 and args['version'] != version_tuple:
@@ -1259,9 +1262,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     client.auth = False  # swapping Team/Slot
             client.team = team
             client.slot = slot
-            minver = ctx.minimum_client_versions[slot]
-            if minver > args['version']:
-                errors.add('IncompatibleVersion')
+
             ctx.client_ids[client.team, client.slot] = args["uuid"]
             ctx.clients[team][slot].append(client)
             client.version = args['version']
@@ -1285,8 +1286,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, reply)
 
     elif cmd == "GetDataPackage":
-        exclusions = set(args.get("exclusions", []))
+        exclusions = args.get("exclusions", [])
         if exclusions:
+            exclusions = set(exclusions)
             games = {name: game_data for name, game_data in network_data_package["games"].items()
                      if name not in exclusions}
             package = network_data_package.copy()
