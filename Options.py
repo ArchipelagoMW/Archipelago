@@ -379,6 +379,7 @@ class StartHints(ItemSet):
 
 
 class StartLocationHints(OptionSet):
+    """Start with these locations and their item prefilled into the !hint command"""
     displayname = "Start Location Hints"
 
 
@@ -399,7 +400,7 @@ per_game_common_options = {
     "start_inventory": StartInventory,
     "start_hints": StartHints,
     "start_location_hints": StartLocationHints,
-    "exclude_locations": OptionSet
+    "exclude_locations": ExcludeLocations
 }
 
 if __name__ == "__main__":

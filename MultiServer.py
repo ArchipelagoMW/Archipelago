@@ -431,6 +431,17 @@ class Context:
         else:
             return self.player_names[team, slot]
 
+    def on_goal_achieved(self, client: Client):
+        finished_msg = f'{self.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1})' \
+                       f' has completed their goal.'
+        self.notify_all(finished_msg)
+        if "auto" in self.forfeit_mode:
+            forfeit_player(self, client.team, client.slot)
+        elif proxy_worlds[self.games[client.slot]].forced_auto_forfeit:
+            forfeit_player(self, client.team, client.slot)
+        if "auto" in self.collect_mode:
+            collect_player(self, client.team, client.slot)
+
 
 def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint]):
     concerns = collections.defaultdict(list)
@@ -458,7 +469,7 @@ def update_aliases(ctx: Context, team: int):
             asyncio.create_task(ctx.send_encoded_msgs(client, cmd))
 
 
-async def server(websocket, path, ctx: Context):
+async def server(websocket, path: str = "/", ctx: Context = None):
     client = Client(websocket, ctx)
     ctx.endpoints.append(client)
 
@@ -580,10 +591,12 @@ def get_status_string(ctx: Context, team: int):
     text = "Player Status on your team:"
     for slot in ctx.locations:
         connected = len(ctx.clients[team][slot])
+        death_link = len([client for client in ctx.clients[team][slot] if "DeathLink" in client.tags])
         completion_text = f"({len(ctx.location_checks[team, slot])}/{len(ctx.locations[slot])})"
+        death_text = f" {death_link} of which are death link" if connected else ""
         goal_text = " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else "."
         text += f"\n{ctx.get_aliased_name(team, slot)} has {connected} connection{'' if connected == 1 else 's'}" \
-                f"{goal_text} {completion_text}"
+                f"{death_text}{goal_text} {completion_text}"
     return text
 
 
@@ -641,27 +654,27 @@ def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
 
 def register_location_checks(ctx: Context, team: int, slot: int, locations: typing.Iterable[int]):
     new_locations = set(locations) - ctx.location_checks[team, slot]
+    new_locations.intersection_update(ctx.locations[slot])  # ignore location IDs unknown to this multidata
     if new_locations:
         ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
         for location in new_locations:
-            if location in ctx.locations[slot]:
-                item_id, target_player = ctx.locations[slot][location]
-                new_item = NetworkItem(item_id, location, slot)
-                if target_player != slot or slot in ctx.remote_items:
-                    get_received_items(ctx, team, target_player).append(new_item)
+            item_id, target_player = ctx.locations[slot][location]
+            new_item = NetworkItem(item_id, location, slot)
+            if target_player != slot or slot in ctx.remote_items:
+                get_received_items(ctx, team, target_player).append(new_item)
 
-                logging.info('(Team #%d) %s sent %s to %s (%s)' % (
-                    team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(item_id),
-                    ctx.player_names[(team, target_player)], get_location_name_from_id(location)))
-                info_text = json_format_send_event(new_item, target_player)
-                ctx.broadcast_team(team, [info_text])
+            logging.info('(Team #%d) %s sent %s to %s (%s)' % (
+                team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(item_id),
+                ctx.player_names[(team, target_player)], get_location_name_from_id(location)))
+            info_text = json_format_send_event(new_item, target_player)
+            ctx.broadcast_team(team, [info_text])
 
         ctx.location_checks[team, slot] |= new_locations
         send_new_items(ctx)
         ctx.broadcast(ctx.clients[team][slot], [{
             "cmd": "RoomUpdate",
             "hint_points": get_slot_points(ctx, team, slot),
-            "checked_locations": locations,  # duplicated data, but used for coop
+            "checked_locations": new_locations,  # send back new checks only
         }])
 
         ctx.save()
@@ -1203,19 +1216,20 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         cmd: str = args["cmd"]
     except:
         logging.exception(f"Could not get command from {args}")
-        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd", "original_cmd": None,
                                       "text": f"Could not get command from {args} at `cmd`"}])
         raise
 
     if type(cmd) is not str:
-        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd", "original_cmd": None,
                                       "text": f"Command should be str, got {type(cmd)}"}])
         return
 
     if cmd == 'Connect':
         if not args or 'password' not in args or type(args['password']) not in [str, type(None)] or \
                 'game' not in args:
-            await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': 'Connect'}])
+            await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': 'Connect',
+                                          "original_cmd": cmd}])
             return
 
         errors = set()
@@ -1230,6 +1244,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             game = ctx.games[slot]
             if "IgnoreGame" not in args["tags"] and args['game'] != game:
                 errors.add('InvalidGame')
+            minver = ctx.minimum_client_versions[slot]
+            if minver > args['version']:
+                errors.add('IncompatibleVersion')
 
         # only exact version match allowed
         if ctx.compatibility == 0 and args['version'] != version_tuple:
@@ -1245,9 +1262,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     client.auth = False  # swapping Team/Slot
             client.team = team
             client.slot = slot
-            minver = ctx.minimum_client_versions[slot]
-            if minver > args['version']:
-                errors.add('IncompatibleVersion')
+
             ctx.client_ids[client.team, client.slot] = args["uuid"]
             ctx.clients[team][slot].append(client)
             client.version = args['version']
@@ -1271,8 +1286,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, reply)
 
     elif cmd == "GetDataPackage":
-        exclusions = set(args.get("exclusions", []))
+        exclusions = args.get("exclusions", [])
         if exclusions:
+            exclusions = set(exclusions)
             games = {name: game_data for name, game_data in network_data_package["games"].items()
                      if name not in exclusions}
             package = network_data_package.copy()
@@ -1282,14 +1298,21 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
                                           "data": network_data_package}])
+
     elif client.auth:
         if cmd == "ConnectUpdate":
             if not args:
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': cmd}])
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': cmd,
+                                              "original_cmd": cmd}])
                 return
 
             if "tags" in args:
+                old_tags = client.tags
                 client.tags = args["tags"]
+                if set(old_tags) != set(client.tags):
+                    ctx.notify_all(
+                        f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
+                        f"from {old_tags} to {client.tags}.")
 
         elif cmd == 'Sync':
             items = get_received_items(ctx, client.team, client.slot)
@@ -1301,7 +1324,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'LocationChecks':
             if "Tracker" in client.tags:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
-                                              "text": "Trackers can't register new Location Checks"}])
+                                              "text": "Trackers can't register new Location Checks",
+                                              "original_cmd": cmd}])
             else:
                 register_location_checks(ctx, client.team, client.slot, args["locations"])
 
@@ -1310,7 +1334,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for location in args["locations"]:
                 if type(location) is not int or location not in lookup_any_location_id_to_name:
                     await ctx.send_msgs(client,
-                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts'}])
+                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
+                                          "original_cmd": cmd}])
                     return
                 target_item, target_player = ctx.locations[client.slot][location]
                 locs.append(NetworkItem(target_item, location, target_player))
@@ -1322,7 +1347,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
         elif cmd == 'Say':
             if "text" not in args or type(args["text"]) is not str or not args["text"].isprintable():
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'Say'}])
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'Say',
+                                              "original_cmd": cmd}])
                 return
 
             client.messageprocessor(args["text"])
@@ -1345,14 +1371,7 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
     current = ctx.client_game_state[client.team, client.slot]
     if current != ClientStatus.CLIENT_GOAL:  # can't undo goal completion
         if new_status == ClientStatus.CLIENT_GOAL:
-            finished_msg = f'{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has completed their goal.'
-            ctx.notify_all(finished_msg)
-            if "auto" in ctx.forfeit_mode:
-                forfeit_player(ctx, client.team, client.slot)
-            elif proxy_worlds[ctx.games[client.slot]].forced_auto_forfeit:
-                forfeit_player(ctx, client.team, client.slot)
-            if "auto" in ctx.collect_mode:
-                collect_player(ctx, client.team, client.slot)
+            ctx.on_goal_achieved(client)
 
         ctx.client_game_state[client.team, client.slot] = new_status
 
@@ -1641,8 +1660,7 @@ async def auto_shutdown(ctx, to_cancel=None):
 
 
 async def main(args: argparse.Namespace):
-    logging.basicConfig(force=True,
-                        format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
+    Utils.init_logging("Server", loglevel=args.loglevel.lower())
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.forfeit_mode, args.collect_mode,
@@ -1666,7 +1684,7 @@ async def main(args: argparse.Namespace):
 
     ctx.init_save(not args.disable_save)
 
-    ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ping_timeout=None,
+    ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ping_timeout=None,
                                   ping_interval=None)
     ip = args.host if args.host else Utils.get_public_ipv4()
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,

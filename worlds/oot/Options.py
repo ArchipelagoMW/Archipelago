@@ -1,5 +1,5 @@
 import typing
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionList
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionList, DeathLink
 from .ColorSFXOptions import *
 
 
@@ -94,12 +94,58 @@ class StartingAge(Choice):
     option_adult = 1
 
 
-# TODO: document and name ER options
 class InteriorEntrances(Choice): 
+    """Shuffles interior entrances. "Simple" shuffles houses and Great Fairies; "All" includes Windmill, Link's House, Temple of Time, and Kak potion shop."""
+    displayname = "Shuffle Interior Entrances"
     option_off = 0
     option_simple = 1
     option_all = 2
     alias_false = 0
+    alias_true = 2
+
+
+class GrottoEntrances(Toggle):
+    """Shuffles grotto and grave entrances."""
+    displayname = "Shuffle Grotto/Grave Entrances"
+
+
+class DungeonEntrances(Toggle):
+    """Shuffles dungeon entrances, excluding Ganon's Castle. Opens Deku, Fire and BotW to both ages."""
+    displayname = "Shuffle Dungeon Entrances"
+
+
+class OverworldEntrances(Toggle):
+    """Shuffles overworld loading zones."""
+    displayname = "Shuffle Overworld Entrances"
+
+
+class OwlDrops(Toggle):
+    """Randomizes owl drops from Lake Hylia or Death Mountain Trail as child."""
+    displayname = "Randomize Owl Drops"
+
+
+class WarpSongs(Toggle):
+    """Randomizes warp song destinations."""
+    displayname = "Randomize Warp Songs"
+
+
+class SpawnPositions(Toggle):
+    """Randomizes the starting position on loading a save. Consistent between savewarps."""
+    displayname = "Randomize Spawn Positions"
+
+
+class MixEntrancePools(Choice):
+    """Shuffles entrances into a mixed pool instead of separate ones. "indoor" keeps overworld entrances separate; "all" mixes them in."""
+    displayname = "Mix Entrance Pools"
+    option_off = 0
+    option_indoor = 1
+    option_all = 2
+    alias_false = 0
+
+
+class DecoupleEntrances(Toggle):
+    """Decouple entrances when shuffling them. Also adds the one-way entrance from Gerudo Valley to Lake Hylia if overworld is shuffled."""
+    displayname = "Decouple Entrances"
 
 
 class TriforceHunt(Toggle):
@@ -138,13 +184,15 @@ class MQDungeons(Range):
 
 world_options: typing.Dict[str, type(Option)] = {
     "starting_age": StartingAge,
-    # "shuffle_interior_entrances": InteriorEntrances,
-    # "shuffle_grotto_entrances": Toggle,
-    # "shuffle_dungeon_entrances": Toggle,
-    # "shuffle_overworld_entrances": Toggle,
-    # "owl_drops": Toggle,
-    # "warp_songs": Toggle,
-    # "spawn_positions": Toggle,
+    "shuffle_interior_entrances": InteriorEntrances,
+    "shuffle_grotto_entrances": GrottoEntrances,
+    "shuffle_dungeon_entrances": DungeonEntrances,
+    "shuffle_overworld_entrances": OverworldEntrances,
+    "owl_drops": OwlDrops,
+    "warp_songs": WarpSongs,
+    "spawn_positions": SpawnPositions,
+    "mix_entrance_pools": MixEntrancePools,
+    "decouple_entrances": DecoupleEntrances,
     "triforce_hunt": TriforceHunt, 
     "triforce_goal": TriforceGoal,
     "extra_triforce_percentage": ExtraTriforces,
@@ -515,6 +563,11 @@ class Hints(Choice):
     alias_false = 0
 
 
+class MiscHints(DefaultOnToggle):
+    """Controls whether the Temple of Time altar gives dungeon prize info and whether Ganondorf hints the Light Arrows."""
+    displayname = "Misc Hints"
+
+
 class HintDistribution(Choice):
     """Choose the hint distribution to use. Affects the frequency of strong hints, which items are always hinted, etc."""
     displayname = "Hint Distribution"
@@ -582,6 +635,7 @@ class RupeeStart(Toggle):
 misc_options: typing.Dict[str, type(Option)] = {
     "correct_chest_sizes": CSMC,
     "hints": Hints,
+    "misc_hints": MiscHints,
     "hint_dist": HintDistribution,
     "text_shuffle": TextShuffle,
     "damage_multiplier": DamageMultiplier,
@@ -765,6 +819,13 @@ sfx_options: typing.Dict[str, type(Option)] = {
 }
 
 
+class LogicTricks(OptionList):
+    """Set various tricks for logic in Ocarina of Time. 
+Format as a comma-separated list of "nice" names: ["Fewer Tunic Requirements", "Hidden Grottos without Stone of Agony"].
+A full list of supported tricks can be found at https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py"""
+    displayname = "Logic Tricks"
+
+
 # All options assembled into a single dict
 oot_options: typing.Dict[str, type(Option)] = {
     "logic_rules": Logic, 
@@ -780,5 +841,6 @@ oot_options: typing.Dict[str, type(Option)] = {
     **itempool_options,
     **cosmetic_options,
     **sfx_options,
-    "logic_tricks": OptionList,
+    "logic_tricks": LogicTricks,
+    "death_link": DeathLink,
 }

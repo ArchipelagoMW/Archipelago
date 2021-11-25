@@ -20,6 +20,16 @@ from .check import get_yaml_data, roll_options
 from .upload import upload_zip_to_db
 
 
+def get_meta(options_source: dict) -> dict:
+    meta = {
+        "hint_cost": int(options_source.get("hint_cost", 10)),
+        "forfeit_mode": options_source.get("forfeit_mode", "goal"),
+        "remaining_mode": options_source.get("forfeit_mode", "disabled"),
+        "collect_mode": options_source.get("collect_mode", "disabled"),
+    }
+    return meta
+
+
 @app.route('/generate', methods=['GET', 'POST'])
 @app.route('/generate/<race>', methods=['GET', 'POST'])
 def generate(race=False):
@@ -35,9 +45,9 @@ def generate(race=False):
             else:
                 results, gen_options = roll_options(options)
                 # get form data -> server settings
-                hint_cost = int(request.form.get("hint_cost", 10))
-                forfeit_mode = request.form.get("forfeit_mode", "goal")
-                meta = {"race": race, "hint_cost": hint_cost, "forfeit_mode": forfeit_mode}
+                meta = get_meta(request.form)
+                meta["race"] = race
+
                 if race:
                     meta["item_cheat"] = False
                     meta["remaining"] = False

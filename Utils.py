@@ -13,7 +13,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.1.9"
+__version__ = "0.2.0"
 version_tuple = tuplize_version(__version__)
 
 import builtins
@@ -25,6 +25,8 @@ import functools
 import io
 import collections
 import importlib
+import logging
+
 from yaml import load, dump, safe_load
 
 try:
@@ -120,17 +122,25 @@ parse_yaml = safe_load
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
 
+def get_cert_none_ssl_context():
+    import ssl
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    return ctx
+
+
 @cache_argsless
 def get_public_ipv4() -> str:
     import socket
     import urllib.request
-    import logging
     ip = socket.gethostbyname(socket.gethostname())
+    ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen('https://checkip.amazonaws.com/').read().decode('utf8').strip()
+        ip = urllib.request.urlopen('https://checkip.amazonaws.com/', context=ctx).read().decode('utf8').strip()
     except Exception as e:
         try:
-            ip = urllib.request.urlopen('https://v4.ident.me').read().decode('utf8').strip()
+            ip = urllib.request.urlopen('https://v4.ident.me', context=ctx).read().decode('utf8').strip()
         except:
             logging.exception(e)
             pass  # we could be offline, in a local game, so no point in erroring out
@@ -141,10 +151,10 @@ def get_public_ipv4() -> str:
 def get_public_ipv6() -> str:
     import socket
     import urllib.request
-    import logging
     ip = socket.gethostbyname(socket.gethostname())
+    ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen('https://v6.ident.me').read().decode('utf8').strip()
+        ip = urllib.request.urlopen('https://v6.ident.me', context=ctx).read().decode('utf8').strip()
     except Exception as e:
         logging.exception(e)
         pass  # we could be offline, in a local game, or ipv6 may not be available
@@ -160,6 +170,14 @@ def get_default_options() -> dict:
         },
         "factorio_options": {
             "executable": "factorio\\bin\\x64\\factorio",
+        },
+        "sm_options": {
+            "rom_file": "Super Metroid (JU).sfc",
+            "sni": "SNI",
+            "rom_start": True,
+        },
+        "soe_options": {
+            "rom_file": "Secret of Evermore (USA).sfc",
         },
         "lttp_options": {
             "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
@@ -211,7 +229,6 @@ def get_default_options() -> dict:
 
 
 def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
-    import logging
     for key, value in src.items():
         new_keys = keys.copy()
         new_keys.append(key)
@@ -278,7 +295,6 @@ def persistent_load() -> typing.Dict[dict]:
             with open(path, "r") as f:
                 storage = unsafe_parse_yaml(f.read())
         except Exception as e:
-            import logging
             logging.debug(f"Could not read store: {e}")
     if storage is None:
         storage = {}
@@ -337,7 +353,6 @@ def get_adjuster_settings(romfile: str, skip_questions: bool = False) -> typing.
             return romfile, False
         else:
             adjusted = False
-            import logging
             if not hasattr(get_adjuster_settings, "adjust_wanted"):
                 logging.info(f"Skipping post-patch adjustment")
         get_adjuster_settings.adjuster_settings = adjuster_settings
@@ -406,3 +421,44 @@ class KeyedDefaultDict(collections.defaultdict):
 
 def get_text_between(text: str, start: str, end: str) -> str:
     return text[text.index(start) + len(start): text.rindex(end)]
+
+
+loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}
+
+
+def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
+                 log_format: str = "[%(name)s]: %(message)s", exception_logger: str = ""):
+    loglevel: int = loglevel_mapping.get(loglevel, loglevel)
+    log_folder = local_path("logs")
+    os.makedirs(log_folder, exist_ok=True)
+    root_logger = logging.getLogger()
+    for handler in root_logger.handlers[:]:
+        root_logger.removeHandler(handler)
+        handler.close()
+    root_logger.setLevel(loglevel)
+    file_handler = logging.FileHandler(
+        os.path.join(log_folder, f"{name}.txt"),
+        write_mode,
+        encoding="utf-8-sig")
+    file_handler.setFormatter(logging.Formatter(log_format))
+    root_logger.addHandler(file_handler)
+    if sys.stdout:
+        root_logger.addHandler(
+            logging.StreamHandler(sys.stdout)
+        )
+
+    # Relay unhandled exceptions to logger.
+    if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
+        orig_hook = sys.excepthook
+
+        def handle_exception(exc_type, exc_value, exc_traceback):
+            if issubclass(exc_type, KeyboardInterrupt):
+                sys.__excepthook__(exc_type, exc_value, exc_traceback)
+                return
+            logging.getLogger(exception_logger).exception("Uncaught exception",
+                                                          exc_info=(exc_type, exc_value, exc_traceback))
+            return orig_hook(exc_type, exc_value, exc_traceback)
+
+        handle_exception._wrapped = True
+
+        sys.excepthook = handle_exception

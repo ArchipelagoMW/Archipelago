@@ -12,6 +12,7 @@ import ModuleUpdate
 
 ModuleUpdate.update()
 
+import Utils
 from worlds.alttp import Options as LttPOptions
 from worlds.generic import PlandoItem, PlandoConnection
 from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options
@@ -39,12 +40,12 @@ def mystery_argparse():
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults["players"], type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
-    parser.add_argument('--rom', default=options["lttp_options"]["rom_file"], help="Path to the 1.0 JP LttP Baserom.")
+    parser.add_argument('--lttp_rom', default=options["lttp_options"]["rom_file"], help="Path to the 1.0 JP LttP Baserom.")
+    parser.add_argument('--sm_rom', default=options["sm_options"]["rom_file"], help="Path to the 1.0 JP SM Baserom.")
     parser.add_argument('--enemizercli', default=defaults["enemizer_path"])
     parser.add_argument('--outputpath', default=options["general_options"]["output_path"])
     parser.add_argument('--race', action='store_true', default=defaults["race"])
     parser.add_argument('--meta_file_path', default=defaults["meta_file_path"])
-    parser.add_argument('--log_output_path', help='Path to store output log')
     parser.add_argument('--log_level', default='info', help='Sets log level')
     parser.add_argument('--yaml_output', default=0, type=lambda value: max(int(value), 0),
                         help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
@@ -89,7 +90,8 @@ def main(args=None, callback=ERmain):
         except Exception as e:
             raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
         meta_weights = weights_cache[args.meta_file_path]
-        print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights, 'No description specified')}")
+        print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
+        del(meta_weights["meta_description"])
         if args.samesettings:
             raise Exception("Cannot mix --samesettings with --meta")
     else:
@@ -125,20 +127,10 @@ def main(args=None, callback=ERmain):
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
 
-    # set up logger
-    if args.log_level:
-        erargs.loglevel = args.log_level
-    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
-        erargs.loglevel]
+    Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
 
-    if args.log_output_path:
-        os.makedirs(args.log_output_path, exist_ok=True)
-        logging.basicConfig(format='%(message)s', level=loglevel, force=True,
-                            filename=os.path.join(args.log_output_path, f"{seed}.log"))
-    else:
-        logging.basicConfig(format='%(message)s', level=loglevel, force=True)
-
-    erargs.rom = args.rom
+    erargs.lttp_rom = args.lttp_rom
+    erargs.sm_rom = args.sm_rom
     erargs.enemizercli = args.enemizercli
 
     settings_cache = {k: (roll_settings(v, args.plando) if args.samesettings else None)
@@ -148,17 +140,17 @@ def main(args=None, callback=ERmain):
         player_path_cache[player] = player_files.get(player, args.weights_file_path)
 
     if meta_weights:
-        for player, path in player_path_cache.items():
-            weights_cache[path].setdefault("meta_ignore", [])
-        for key in meta_weights:
-            option = get_choice(key, meta_weights)
-            if option is not None:
-                for player, path in player_path_cache.items():
-                    players_meta = weights_cache[path].get("meta_ignore", [])
-                    if key not in players_meta:
-                        weights_cache[path][key] = option
-                    elif type(players_meta) == dict and players_meta[key] and option not in players_meta[key]:
-                        weights_cache[path][key] = option
+        for category_name, category_dict in meta_weights.items():
+            for key in category_dict:
+                option = get_choice(key, category_dict)
+                if option is not None:
+                    for player, path in player_path_cache.items():
+                        if category_name is None:
+                            weights_cache[path][key] = option
+                        elif category_name not in weights_cache[path]:
+                            raise Exception(f"Meta: Category {category_name} is not present in {path}.")
+                        else:
+                            weights_cache[path][category_name][key] = option
 
     name_counter = Counter()
     erargs.player_settings = {}
@@ -502,7 +494,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             handle_option(ret, game_weights, option_key, option)
         if "items" in plando_options:
             ret.plando_items = roll_item_plando(world_type, game_weights)
-        if ret.game == "Minecraft":
+        if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
             # bad hardcoded behavior to make this work for now
             ret.plando_connections = []
             if "connections" in plando_options:
@@ -512,7 +504,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                         ret.plando_connections.append(PlandoConnection(
                             get_choice("entrance", placement),
                             get_choice("exit", placement),
-                            get_choice("direction", placement, "both")
+                            get_choice("direction", placement)
                         ))
         elif ret.game == "A Link to the Past":
             roll_alttp_settings(ret, game_weights, plando_options)

@@ -1,3 +1,5 @@
+# TODO: convert this into a system like AutoWorld
+
 import bsdiff4
 import yaml
 import os
@@ -10,52 +12,86 @@ from typing import Tuple, Optional
 
 import Utils
 
+current_patch_version = 3
 
-current_patch_version = 2
+GAME_ALTTP = "A Link to the Past"
+GAME_SM = "Super Metroid"
+GAME_SOE = "Secret of Evermore"
+supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore"}
+
+preferred_endings = {
+    GAME_ALTTP: "apbp",
+    GAME_SM: "apm3",
+    GAME_SOE: "apsoe"
+}
 
 
-def generate_yaml(patch: bytes, metadata: Optional[dict] = None) -> bytes:
-    from worlds.alttp.Rom import JAP10HASH
+def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: str = GAME_ALTTP) -> bytes:
+    if game == GAME_ALTTP:
+        from worlds.alttp.Rom import JAP10HASH as HASH
+    elif game == GAME_SM:
+        from worlds.sm.Rom import JAP10HASH as HASH
+    elif game == GAME_SOE:
+        from worlds.soe.Patch import USHASH as HASH
+    else:
+        raise RuntimeError(f"Selected game {game} for base rom not found.")
+
     patch = yaml.dump({"meta": metadata,
                        "patch": patch,
-                       "game": "A Link to the Past",
+                       "game": game,
                        # minimum version of patch system expected for patching to be successful
-                       "compatible_version": 1,
+                       "compatible_version": 3,
                        "version": current_patch_version,
-                       "base_checksum": JAP10HASH})
+                       "base_checksum": HASH})
     return patch.encode(encoding="utf-8-sig")
 
 
-def generate_patch(rom: bytes, metadata: Optional[dict] = None) -> bytes:
-    from worlds.alttp.Rom import get_base_rom_bytes
+def generate_patch(rom: bytes, metadata: Optional[dict] = None, game: str = GAME_ALTTP) -> bytes:
     if metadata is None:
         metadata = {}
-    patch = bsdiff4.diff(get_base_rom_bytes(), rom)
-    return generate_yaml(patch, metadata)
+    patch = bsdiff4.diff(get_base_rom_data(game), rom)
+    return generate_yaml(patch, metadata, game)
 
 
 def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str = None,
-                      player: int = 0, player_name: str = "") -> str:
-    meta = {"server": server, # allow immediate connection to server in multiworld. Empty string otherwise
+                      player: int = 0, player_name: str = "", game: str = GAME_ALTTP) -> str:
+    meta = {"server": server,  # allow immediate connection to server in multiworld. Empty string otherwise
             "player_id": player,
             "player_name": player_name}
     bytes = generate_patch(load_bytes(rom_file_to_patch),
-                           meta)
-    target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + ".apbp"
+                           meta,
+                           game)
+    target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + (
+        ".apbp" if game == GAME_ALTTP else ".apm3")
     write_lzma(bytes, target)
     return target
 
 
 def create_rom_bytes(patch_file: str, ignore_version: bool = False) -> Tuple[dict, str, bytearray]:
-    from worlds.alttp.Rom import get_base_rom_bytes
     data = Utils.parse_yaml(lzma.decompress(load_bytes(patch_file)).decode("utf-8-sig"))
+    game_name = data["game"]
     if not ignore_version and data["compatible_version"] > current_patch_version:
         raise RuntimeError("Patch file is incompatible with this patcher, likely an update is required.")
-    patched_data = bsdiff4.patch(get_base_rom_bytes(), data["patch"])
+    patched_data = bsdiff4.patch(get_base_rom_data(game_name), data["patch"])
     rom_hash = patched_data[int(0x7FC0):int(0x7FD5)]
     data["meta"]["hash"] = "".join(chr(x) for x in rom_hash)
     target = os.path.splitext(patch_file)[0] + ".sfc"
     return data["meta"], target, patched_data
+
+
+def get_base_rom_data(game: str):
+    if game == GAME_ALTTP:
+        from worlds.alttp.Rom import get_base_rom_bytes
+    elif game == "alttp":  # old version for A Link to the Past
+        from worlds.alttp.Rom import get_base_rom_bytes
+    elif game == GAME_SM:
+        from worlds.sm.Rom import get_base_rom_bytes
+    elif game == GAME_SOE:
+        file_name = Utils.get_options()["soe_options"]["rom"]
+        get_base_rom_bytes = lambda: bytes(read_rom(open(file_name, "rb")))
+    else:
+        raise RuntimeError("Selected game for base rom not found.")
+    return get_base_rom_bytes()
 
 
 def create_rom_file(patch_file: str) -> Tuple[dict, str]:
@@ -68,7 +104,7 @@ def create_rom_file(patch_file: str) -> Tuple[dict, str]:
 def update_patch_data(patch_data: bytes, server: str = "") -> bytes:
     data = Utils.parse_yaml(lzma.decompress(patch_data).decode("utf-8-sig"))
     data["meta"]["server"] = server
-    bytes = generate_yaml(data["patch"], data["meta"])
+    bytes = generate_yaml(data["patch"], data["meta"], data["game"])
     return lzma.compress(bytes)
 
 
@@ -80,6 +116,14 @@ def load_bytes(path: str) -> bytes:
 def write_lzma(data: bytes, path: str):
     with lzma.LZMAFile(path, 'wb') as f:
         f.write(data)
+
+
+def read_rom(stream, strip_header=True) -> bytearray:
+    """Reads rom into bytearray and optionally strips off any smc header"""
+    buffer = bytearray(stream.read())
+    if strip_header and len(buffer) % 0x400 == 0x200:
+        return buffer[0x200:]
+    return buffer
 
 
 if __name__ == "__main__":
@@ -113,7 +157,13 @@ if __name__ == "__main__":
                     if 'server' in data:
                         Utils.persistent_store("servers", data['hash'], data['server'])
                         print(f"Host is {data['server']}")
-
+                elif rom.endswith(".apm3"):
+                    print(f"Applying patch {rom}")
+                    data, target = create_rom_file(rom)
+                    print(f"Created rom {target}.")
+                    if 'server' in data:
+                        Utils.persistent_store("servers", data['hash'], data['server'])
+                        print(f"Host is {data['server']}")
                 elif rom.endswith(".archipelago"):
                     import json
                     import zlib
@@ -139,7 +189,7 @@ if __name__ == "__main__":
 
                     def _handle_zip_file_entry(zfinfo: zipfile.ZipInfo, server: str):
                         data = zfr.read(zfinfo)
-                        if zfinfo.filename.endswith(".apbp"):
+                        if zfinfo.filename.endswith(".apbp") or zfinfo.filename.endswith(".apm3"):
                             data = update_patch_data(data, server)
                         with ziplock:
                             zfw.writestr(zfinfo, data)
@@ -161,11 +211,3 @@ if __name__ == "__main__":
 
                 traceback.print_exc()
                 input("Press enter to close.")
-
-
-def read_rom(stream, strip_header=True) -> bytearray:
-    """Reads rom into bytearray and optionally strips off any smc header"""
-    buffer = bytearray(stream.read())
-    if strip_header and len(buffer) % 0x400 == 0x200:
-        return buffer[0x200:]
-    return buffer

@@ -6,23 +6,23 @@ import string
 import copy
 import subprocess
 import time
+import random
 
 import factorio_rcon
-
 import colorama
 import asyncio
 from queue import Queue
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled, \
-    init_logging
-from MultiServer import mark_raw
-
 import Utils
-import random
+
+if __name__ == "__main__":
+    Utils.init_logging("FactorioClient", exception_logger="Client")
+
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled, \
+     get_base_parser
+from MultiServer import mark_raw
 from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
 
 from worlds.factorio import Factorio
-
-init_logging("FactorioClient")
 
 
 class FactorioCommandProcessor(ClientCommandProcessor):
@@ -65,22 +65,13 @@ class FactorioContext(CommonContext):
         if password_requested and not self.password:
             await super(FactorioContext, self).server_auth(password_requested)
 
-        if not self.auth:
-            if self.rcon_client:
-                get_info(self, self.rcon_client)  # retrieve current auth code
-            else:
-                raise Exception("Cannot connect to a server with unknown own identity, "
-                                "bridge to Factorio first.")
+        if self.rcon_client:
+            await get_info(self, self.rcon_client)  # retrieve current auth code
+        else:
+            raise Exception("Cannot connect to a server with unknown own identity, "
+                            "bridge to Factorio first.")
 
-        await self.send_msgs([{
-            "cmd": 'Connect',
-            'password': self.password,
-            'name': self.auth,
-            'version': Utils.version_tuple,
-            'tags': self.tags,
-            'uuid': Utils.get_unique_identifier(),
-            'game': "Factorio"
-        }])
+        await self.send_connect()
 
     def on_print(self, args: dict):
         super(FactorioContext, self).on_print(args)
@@ -134,6 +125,8 @@ async def game_watcher(ctx: FactorioContext):
                     research_data = data["research_done"]
                     research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                     victory = data["victory"]
+                    if "death_link" in data:    # TODO: Remove this if statement around version 0.2.4 or so
+                        await ctx.update_death_link(data["death_link"])
 
                     if not ctx.finished_game and victory:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -148,7 +141,8 @@ async def game_watcher(ctx: FactorioContext):
                     death_link_tick = data.get("death_link_tick", 0)
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick
-                        await ctx.send_death()
+                        if "DeathLink" in ctx.tags:
+                            await ctx.send_death()
 
             await asyncio.sleep(0.1)
 
@@ -234,14 +228,13 @@ async def factorio_server_watcher(ctx: FactorioContext):
         factorio_process.wait(5)
 
 
-def get_info(ctx, rcon_client):
+async def get_info(ctx, rcon_client):
     info = json.loads(rcon_client.send_command("/ap-rcon-info"))
     ctx.auth = info["slot_name"]
     ctx.seed_name = info["seed_name"]
     # 0.2.0 addition, not present earlier
     death_link = bool(info.get("death_link", False))
-    if death_link:
-        ctx.tags.add("DeathLink")
+    await ctx.update_death_link(death_link)
 
 
 async def factorio_spinup_server(ctx: FactorioContext) -> bool:
@@ -280,7 +273,7 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
                     rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     if ctx.mod_version == ctx.__class__.mod_version:
                         raise Exception("No Archipelago mod was loaded. Aborting.")
-                    get_info(ctx, rcon_client)
+                    await get_info(ctx, rcon_client)
             await asyncio.sleep(0.01)
 
     except Exception as e:
@@ -322,14 +315,7 @@ async def main(args):
         await progression_watcher
         await factorio_server_task
 
-    if ctx.server and not ctx.server.socket.closed:
-        await ctx.server.socket.close()
-    if ctx.server_task:
-        await ctx.server_task
-
-    while ctx.input_requests > 0:
-        ctx.input_queue.put_nowait(None)
-        ctx.input_requests -= 1
+    await ctx.shutdown()
 
     if ui_task:
         await ui_task
@@ -353,17 +339,11 @@ class FactorioJSONtoTextParser(JSONtoTextParser):
 
 
 if __name__ == '__main__':
-    import argparse
-
-    parser = argparse.ArgumentParser(description="Optional arguments to FactorioClient follow. "
-                                                 "Remaining arguments get passed into bound Factorio instance."
-                                                 "Refer to Factorio --help for those.")
+    parser = get_base_parser(description="Optional arguments to FactorioClient follow. "
+                                         "Remaining arguments get passed into bound Factorio instance."
+                                         "Refer to Factorio --help for those.")
     parser.add_argument('--rcon-port', default='24242', type=int, help='Port to use to communicate with Factorio')
     parser.add_argument('--rcon-password', help='Password to authenticate with RCON.')
-    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
-    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
-    if not Utils.is_frozen():  # Frozen state has no cmd window in the first place
-        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
 
     args, rest = parser.parse_known_args()
     colorama.init()

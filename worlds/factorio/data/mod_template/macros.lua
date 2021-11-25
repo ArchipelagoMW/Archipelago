@@ -20,10 +20,10 @@
 {%- else -%} {{ value | safe }}
 {%- endif -%}
 {%- endmacro -%}
-{% macro dict_to_recipe(dict) -%}
+{% macro dict_to_recipe(dict, liquids) -%}
 {
 {%- for key, value in dict.items() -%}
-    {"{{ key }}", {{ value | safe }}}{% if not loop.last %},{% endif %}
+    {type = {% if key in liquids %}"fluid"{% else %}"item"{% endif %}, name = "{{ key }}", amount = {{ value | safe }}}{% if not loop.last %},{% endif %}
 {% endfor -%}
 }
 {%- endmacro %}

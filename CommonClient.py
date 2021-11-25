@@ -3,13 +3,16 @@ import logging
 import asyncio
 import urllib.parse
 import sys
-import os
 import typing
 import time
 
 import websockets
 
 import Utils
+
+if __name__ == "__main__":
+    Utils.init_logging("TextClient", exception_logger="Client")
+
 from MultiServer import CommandProcessor
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
 from Utils import Version
@@ -17,10 +20,8 @@ from worlds import network_data_package, AutoWorldRegister
 
 logger = logging.getLogger("Client")
 
-gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
-
-log_folder = Utils.local_path("logs")
-os.makedirs(log_folder, exist_ok=True)
+# without terminal we have to use gui mode
+gui_enabled = not sys.stdout or "--nogui" not in sys.argv
 
 
 class ClientCommandProcessor(CommandProcessor):
@@ -38,13 +39,13 @@ class ClientCommandProcessor(CommandProcessor):
     def _cmd_connect(self, address: str = "") -> bool:
         """Connect to a MultiWorld Server"""
         self.ctx.server_address = None
-        asyncio.create_task(self.ctx.connect(address if address else None))
+        asyncio.create_task(self.ctx.connect(address if address else None), name="connecting")
         return True
 
     def _cmd_disconnect(self) -> bool:
         """Disconnect from a MultiWorld Server"""
         self.ctx.server_address = None
-        asyncio.create_task(self.ctx.disconnect())
+        asyncio.create_task(self.ctx.disconnect(), name="disconnecting")
         return True
 
     def _cmd_received(self) -> bool:
@@ -58,7 +59,7 @@ class ClientCommandProcessor(CommandProcessor):
         """List all missing location checks, from your local game state"""
         if not self.ctx.game:
             self.output("No game set, cannot determine missing checks.")
-            return
+            return False
         count = 0
         checked_count = 0
         for location, location_id in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id.items():
@@ -80,6 +81,16 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No missing location checks found.")
         return True
 
+    def _cmd_items(self):
+        self.output(f"Item Names for {self.ctx.game}")
+        for item_name in AutoWorldRegister.world_types[self.ctx.game].item_name_to_id:
+            self.output(item_name)
+
+    def _cmd_locations(self):
+        self.output(f"Location Names for {self.ctx.game}")
+        for location_name in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id:
+            self.output(location_name)
+
     def _cmd_ready(self):
         self.ctx.ready = not self.ctx.ready
         if self.ctx.ready:
@@ -88,10 +99,10 @@ class ClientCommandProcessor(CommandProcessor):
         else:
             state = ClientStatus.CLIENT_CONNECTED
             self.output("Unreadied.")
-        asyncio.create_task(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]))
+        asyncio.create_task(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
 
     def default(self, raw: str):
-        asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]))
+        asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]), name="send Say")
 
 
 class CommonContext():
@@ -148,7 +159,7 @@ class CommonContext():
         self.set_getters(network_data_package)
 
         # execution
-        self.keep_alive_task = asyncio.create_task(keep_alive(self))
+        self.keep_alive_task = asyncio.create_task(keep_alive(self), name="Bouncy")
 
     @property
     def total_locations(self) -> typing.Optional[int]:
@@ -229,13 +240,24 @@ class CommonContext():
             self.password = await self.console_input()
             return self.password
 
+    async def send_connect(self, **kwargs):
+        payload = {
+            "cmd": 'Connect',
+            'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
+            'tags': self.tags,
+            'uuid': Utils.get_unique_identifier(), 'game': self.game
+        }
+        if kwargs:
+            payload.update(kwargs)
+        await self.send_msgs([payload])
+
     async def console_input(self):
         self.input_requests += 1
         return await self.input_queue.get()
 
     async def connect(self, address=None):
         await self.disconnect()
-        self.server_task = asyncio.create_task(server_loop(self, address))
+        self.server_task = asyncio.create_task(server_loop(self, address), name="server loop")
 
     def on_print(self, args: dict):
         logger.info(args["text"])
@@ -270,6 +292,7 @@ class CommonContext():
             logger.info(f"DeathLink: Received from {data['source']}")
 
     async def send_death(self, death_text: str = ""):
+        logger.info("DeathLink: Sending death to your friends...")
         self.last_death_link = time.time()
         await self.send_msgs([{
             "cmd": "Bounce", "tags": ["DeathLink"],
@@ -279,6 +302,27 @@ class CommonContext():
                 "cause": death_text
             }
         }])
+
+    async def shutdown(self):
+        self.server_address = None
+        if self.server and not self.server.socket.closed:
+            await self.server.socket.close()
+        if self.server_task:
+            await self.server_task
+
+        while self.input_requests > 0:
+            self.input_queue.put_nowait(None)
+            self.input_requests -= 1
+        self.keep_alive_task.cancel()
+
+    async def update_death_link(self, death_link):
+        old_tags = self.tags.copy()
+        if death_link:
+            self.tags.add("DeathLink")
+        else:
+            self.tags -= {"DeathLink"}
+        if old_tags != self.tags and self.server and not self.server.socket.closed:
+            await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
 
 async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
@@ -338,14 +382,14 @@ async def server_loop(ctx: CommonContext, address=None):
         await ctx.connection_closed()
         if ctx.server_address:
             logger.info(f"... reconnecting in {ctx.current_reconnect_delay}s")
-            asyncio.create_task(server_autoreconnect(ctx))
+            asyncio.create_task(server_autoreconnect(ctx), name="server auto reconnect")
         ctx.current_reconnect_delay *= 2
 
 
 async def server_autoreconnect(ctx: CommonContext):
     await asyncio.sleep(ctx.current_reconnect_delay)
     if ctx.server_address and ctx.server_task is None:
-        ctx.server_task = asyncio.create_task(server_loop(ctx))
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
 
 async def process_server_cmd(ctx: CommonContext, args: dict):
@@ -517,22 +561,22 @@ async def console_loop(ctx: CommonContext):
             logger.exception(e)
 
 
-def init_logging(name: str):
-    if gui_enabled:
-        logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
-                            filename=os.path.join(log_folder, f"{name}.txt"), filemode="w", force=True)
-    else:
-        logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
-        logging.getLogger().addHandler(logging.FileHandler(os.path.join(log_folder, f"{name}.txt"), "w"))
+def get_base_parser(description=None):
+    import argparse
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
+    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
+    if sys.stdout:  # If terminal output exists, offer gui-less mode
+        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
+    return parser
 
 
 if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
-    init_logging("TextClient")
-
 
     class TextContext(CommonContext):
         tags = {"AP", "IgnoreGame"}
+        game = "Archipelago"
 
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:
@@ -541,11 +585,7 @@ if __name__ == '__main__':
                 logger.info('Enter slot name:')
                 self.auth = await self.console_input()
 
-            await self.send_msgs([{"cmd": 'Connect',
-                                   'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
-                                   'tags': self.tags,
-                                   'uuid': Utils.get_unique_identifier(), 'game': self.game
-                                   }])
+            await self.send_connect()
 
         def on_package(self, cmd: str, args: dict):
             if cmd == "Connected":
@@ -554,7 +594,7 @@ if __name__ == '__main__':
 
     async def main(args):
         ctx = TextContext(args.connect, args.password)
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         if gui_enabled:
             input_task = None
             from kvui import TextManager
@@ -565,31 +605,16 @@ if __name__ == '__main__':
             ui_task = None
         await ctx.exit_event.wait()
 
-        ctx.server_address = None
-        if ctx.server and not ctx.server.socket.closed:
-            await ctx.server.socket.close()
-        if ctx.server_task:
-            await ctx.server_task
-
-        while ctx.input_requests > 0:
-            ctx.input_queue.put_nowait(None)
-            ctx.input_requests -= 1
-
+        await ctx.shutdown()
         if ui_task:
             await ui_task
 
         if input_task:
             input_task.cancel()
 
-
-    import argparse
     import colorama
 
-    parser = argparse.ArgumentParser(description="Gameless Archipelago Client, for text interfaction.")
-    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
-    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
-    if not Utils.is_frozen():  # Frozen state has no cmd window in the first place
-        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
+    parser = get_base_parser(description="Gameless Archipelago Client, for text interfaction.")
 
     args, rest = parser.parse_known_args()
     colorama.init()

@@ -3,7 +3,8 @@
 require('lib')
 
 {%- for recipe_name, recipe in custom_recipes.items() %}
-data.raw["recipe"]["{{recipe_name}}"].ingredients = {{ dict_to_recipe(recipe.ingredients) }}
+data.raw["recipe"]["{{recipe_name}}"].category = "{{recipe.category}}"
+data.raw["recipe"]["{{recipe_name}}"].ingredients = {{ dict_to_recipe(recipe.ingredients, liquids) }}
 {%- endfor %}
 
 local technologies = data.raw["technology"]
@@ -26,11 +27,31 @@ template_tech.prerequisites = {}
 
 function prep_copy(new_copy, old_tech)
     old_tech.hidden = true
-    new_copy.unit = table.deepcopy(old_tech.unit)
     local ingredient_filter = allowed_ingredients[old_tech.name]
     if ingredient_filter ~= nil then
-        new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients, ingredient_filter)
-        new_copy.unit.ingredients = add_ingredients(new_copy.unit.ingredients, ingredient_filter)
+	    if mods["science-not-invited"] then
+			local weights = {
+				["automation-science-pack"] =   0, -- Red science
+				["logistic-science-pack"]   =   0, -- Green science
+				["military-science-pack"]   =   0, -- Black science
+				["chemical-science-pack"]   =   0, -- Blue science
+				["production-science-pack"] =   0, -- Purple science
+				["utility-science-pack"]    =   0, -- Yellow science
+				["space-science-pack"]      =   0  -- Space science
+			}
+			for key, value in pairs(ingredient_filter) do
+				weights[key] = value
+			end
+			SNI.setWeights(weights)
+			SNI.sendInvite(old_tech)
+			-- SCIENCE-not-invited could potentially make tech cost 9.223e+18.
+			old_tech.unit.count = math.min(10000, old_tech.unit.count)
+		end
+		new_copy.unit = table.deepcopy(old_tech.unit)
+		new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients, ingredient_filter)
+		new_copy.unit.ingredients = add_ingredients(new_copy.unit.ingredients, ingredient_filter)
+    else
+        new_copy.unit = table.deepcopy(old_tech.unit)
     end
 end
 
@@ -80,6 +101,20 @@ function adjust_energy(recipe_name, factor)
     end
 end
 
+function set_energy(recipe_name, energy)
+    local recipe = data.raw.recipe[recipe_name]
+
+    if (recipe.normal ~= nil) then
+        recipe.normal.energy_required = energy
+    end
+    if (recipe.expensive ~= nil) then
+        recipe.expensive.energy_required = energy
+    end
+    if (recipe.expensive == nil and recipe.normal == nil) then
+        recipe.energy_required = energy
+    end
+end
+
 data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-2"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-1"].fluid_boxes = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes)
@@ -122,6 +157,12 @@ data:extend{new_tree_copy}
 {%- for recipe_name, recipe in recipes.items() %}
 {%- if recipe.category != "mining" %}
 adjust_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_scale) }})
+{%- endif %}
+{%- endfor -%}
+{% elif recipe_time_range %}
+{%- for recipe_name, recipe in recipes.items() %}
+{%- if recipe.category != "mining" %}
+set_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_range) }})
 {%- endif %}
 {%- endfor -%}
 {% endif %}

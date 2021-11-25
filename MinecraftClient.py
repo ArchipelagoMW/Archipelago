@@ -4,8 +4,8 @@ import re
 import atexit
 from subprocess import Popen
 from shutil import copyfile
-from base64 import b64decode
 from time import strftime
+import logging
 
 import requests
 
@@ -39,12 +39,12 @@ def find_ap_randomizer_jar(forge_dir):
         for entry in os.scandir(mods_dir):
             match = ap_mod_re.match(entry.name)
             if match:
-                print(f"Found AP randomizer mod: {match.group()}")
+                logging.info(f"Found AP randomizer mod: {match.group()}")
                 return match.group()
         return None
     else:
         os.mkdir(mods_dir)
-        print(f"Created mods folder in {forge_dir}")
+        logging.info(f"Created mods folder in {forge_dir}")
         return None
 
 
@@ -56,17 +56,17 @@ def replace_apmc_files(forge_dir, apmc_file):
     copy_apmc = True
     if not os.path.isdir(apdata_dir):
         os.mkdir(apdata_dir)
-        print(f"Created APData folder in {forge_dir}")
+        logging.info(f"Created APData folder in {forge_dir}")
     for entry in os.scandir(apdata_dir):
         if entry.name.endswith(".apmc") and entry.is_file():
             if not os.path.samefile(apmc_file, entry.path):
                 os.remove(entry.path)
-                print(f"Removed {entry.name} in {apdata_dir}")
+                logging.info(f"Removed {entry.name} in {apdata_dir}")
             else: # apmc already in apdata
                 copy_apmc = False
     if copy_apmc:
         copyfile(apmc_file, os.path.join(apdata_dir, os.path.basename(apmc_file)))
-        print(f"Copied {os.path.basename(apmc_file)} to {apdata_dir}")
+        logging.info(f"Copied {os.path.basename(apmc_file)} to {apdata_dir}")
 
 
 # Check mod version, download new mod from GitHub releases page if needed. 
@@ -78,30 +78,31 @@ def update_mod(forge_dir, get_prereleases=False):
     if resp.status_code == 200:  # OK
         latest_release = next(filter(lambda release: not release['prerelease'] or get_prereleases, resp.json()))
         if ap_randomizer != latest_release['assets'][0]['name']:
-            print(f"A new release of the Minecraft AP randomizer mod was found: {latest_release['assets'][0]['name']}")
+            logging.info(f"A new release of the Minecraft AP randomizer mod was found: "
+                         f"{latest_release['assets'][0]['name']}")
             if ap_randomizer is not None:
-                print(f"Your current mod is {ap_randomizer}.")
+                logging.info(f"Your current mod is {ap_randomizer}.")
             else:
-                print(f"You do not have the AP randomizer mod installed.")
+                logging.info(f"You do not have the AP randomizer mod installed.")
             if prompt_yes_no("Would you like to update?"):
                 old_ap_mod = os.path.join(forge_dir, 'mods', ap_randomizer) if ap_randomizer is not None else None
                 new_ap_mod = os.path.join(forge_dir, 'mods', latest_release['assets'][0]['name'])
-                print("Downloading AP randomizer mod. This may take a moment...")
+                logging.info("Downloading AP randomizer mod. This may take a moment...")
                 apmod_resp = requests.get(latest_release['assets'][0]['browser_download_url'])
                 if apmod_resp.status_code == 200: 
                     with open(new_ap_mod, 'wb') as f:
                         f.write(apmod_resp.content)
-                        print(f"Wrote new mod file to {new_ap_mod}")
+                        logging.info(f"Wrote new mod file to {new_ap_mod}")
                     if old_ap_mod is not None:
                         os.remove(old_ap_mod)
-                        print(f"Removed old mod file from {old_ap_mod}")
+                        logging.info(f"Removed old mod file from {old_ap_mod}")
                 else:
-                    print(f"Error retrieving the randomizer mod (status code {apmod_resp.status_code}).")
-                    print(f"Please report this issue on the Archipelago Discord server.")
+                    logging.error(f"Error retrieving the randomizer mod (status code {apmod_resp.status_code}).")
+                    logging.error(f"Please report this issue on the Archipelago Discord server.")
                     sys.exit(1)
     else:
-        print(f"Error checking for randomizer mod updates (status code {resp.status_code}).")
-        print(f"If this was not expected, please report this issue on the Archipelago Discord server.")
+        logging.error(f"Error checking for randomizer mod updates (status code {resp.status_code}).")
+        logging.error(f"If this was not expected, please report this issue on the Archipelago Discord server.")
         if not prompt_yes_no("Continue anyways?"):
             sys.exit(0)
 
@@ -119,13 +120,13 @@ def check_eula(forge_dir):
         text = f.read()
         if 'false' in text:
             # Prompt user to agree to the EULA
-            print("You need to agree to the Minecraft EULA in order to run the server.")
-            print("The EULA can be found at https://account.mojang.com/documents/minecraft_eula")
+            logging.info("You need to agree to the Minecraft EULA in order to run the server.")
+            logging.info("The EULA can be found at https://account.mojang.com/documents/minecraft_eula")
             if prompt_yes_no("Do you agree to the EULA?"):
                 f.seek(0)
                 f.write(text.replace('false', 'true'))
                 f.truncate()
-                print(f"Set {eula_path} to true")
+                logging.info(f"Set {eula_path} to true")
             else:
                 sys.exit(0)
 
@@ -208,12 +209,13 @@ def run_forge_server(forge_dir: str, heap_arg):
             win_args.append(line.strip())
 
     argstring = ' '.join([java_exe, heap_arg] + win_args + ["-nogui"])
-    print(f"Running Forge server: {argstring}")
+    logging.info(f"Running Forge server: {argstring}")
     os.chdir(forge_dir)
     return Popen(argstring)
 
 
 if __name__ == '__main__':
+    Utils.init_logging("MinecraftClient")
     parser = argparse.ArgumentParser()
     parser.add_argument("apmc_file", default=None, nargs='?', help="Path to an Archipelago Minecraft data file (.apmc)")
     parser.add_argument('--install', '-i', dest='install', default=False, action='store_true', 
