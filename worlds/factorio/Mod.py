@@ -12,7 +12,7 @@ import shutil
 from . import Options
 from BaseClasses import MultiWorld
 from .Technologies import tech_table, rocket_recipes, recipes, free_sample_blacklist, progressive_technology_table, \
-    base_tech_table, tech_to_progressive_lookup, progressive_tech_table
+    base_tech_table, tech_to_progressive_lookup, progressive_tech_table, liquids
 
 template_env: Optional[jinja2.Environment] = None
 
@@ -108,7 +108,8 @@ def generate_mod(world, output_directory: str):
                      "progressive_technology_table": {tech.name : tech.progressive for tech in
                                                       progressive_technology_table.values()},
                      "custom_recipes": world.custom_recipes,
-                     "max_science_pack": multiworld.max_science_pack[player].value}
+                     "max_science_pack": multiworld.max_science_pack[player].value,
+                     "liquids": liquids}
 
     for factorio_option in Options.factorio_options:
         template_data[factorio_option] = getattr(multiworld, factorio_option)[player].value

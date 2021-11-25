@@ -458,9 +458,8 @@ rel_cost = {
     "used-up-uranium-fuel-cell": 1000
 }
 
-# forbid liquids for now, TODO: allow a single liquid per assembler
-blacklist: Set[str] = all_ingredient_names | {"rocket-part", "crude-oil", "water", "sulfuric-acid", "petroleum-gas",
-                                              "light-oil", "heavy-oil", "lubricant", "steam"}
+blacklist: Set[str] = all_ingredient_names | {"rocket-part"}
+liquids: Set[str] = {"crude-oil", "water", "sulfuric-acid", "petroleum-gas", "light-oil", "heavy-oil", "lubricant", "steam"}
 
 
 @Utils.cache_argsless
@@ -484,6 +483,8 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
                 current |= set(recipe.products)
         if science_pack == "automation-science-pack":
             current |= {"iron-ore", "copper-ore", "coal", "stone"}
+        elif science_pack == "logistic-science-pack":
+            current |= {"water", "steam", "crude-oil"}
         current -= already_taken
         already_taken |= current
         current_difficulty *= 2

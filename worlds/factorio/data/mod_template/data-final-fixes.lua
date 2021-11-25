@@ -3,7 +3,8 @@
 require('lib')
 
 {%- for recipe_name, recipe in custom_recipes.items() %}
-data.raw["recipe"]["{{recipe_name}}"].ingredients = {{ dict_to_recipe(recipe.ingredients) }}
+data.raw["recipe"]["{{recipe_name}}"].category = "{{recipe.category}}"
+data.raw["recipe"]["{{recipe_name}}"].ingredients = {{ dict_to_recipe(recipe.ingredients, liquids) }}
 {%- endfor %}
 
 local technologies = data.raw["technology"]
