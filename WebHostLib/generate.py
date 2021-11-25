@@ -76,7 +76,7 @@ def generate(race=False):
                         handle_generation_failure(e)
                         return render_template("seedError.html", seed_error=(e.__class__.__name__ + ": " + str(e)))
 
-                    return redirect(url_for("viewSeed", seed=seed_id))
+                    return redirect(url_for("view_seed", seed=seed_id))
 
     return render_template("generate.html", race=race)
 
@@ -143,7 +143,7 @@ def wait_seed(seed: UUID):
     seed_id = seed
     seed = Seed.get(id=seed_id)
     if seed:
-        return redirect(url_for("viewSeed", seed=seed_id))
+        return redirect(url_for("view_seed", seed=seed_id))
     generation = Generation.get(id=seed_id)
 
     if not generation:

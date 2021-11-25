@@ -126,7 +126,7 @@ def faq(lang):
 
 
 @app.route('/seed/<suuid:seed>')
-def viewSeed(seed: UUID):
+def view_seed(seed: UUID):
     seed = Seed.get(id=seed)
     if not seed:
         abort(404)
