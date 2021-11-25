@@ -36,8 +36,8 @@ accessibility:
 progression_balancing:
   on: 50 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
   off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch/sequence break around missing items.
-  # The following 4 options can be uncommented and moved into a game's section they should affect
-  # start_inventory: # Begin the file with the listed items/upgrades
+# The following 4 options can be uncommented and moved into a game's section they should affect
+# start_inventory: # Begin the file with the listed items/upgrades
   # Please only use items for the correct game, use triggers if need to be have seperated lists.
   # Pegasus Boots: on
   # Bomb Upgrade (+10): 4

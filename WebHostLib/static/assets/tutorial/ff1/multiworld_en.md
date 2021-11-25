@@ -76,7 +76,6 @@ in the `output` directory
    ***** are numbers)
 3. Type the connect command into the client OR add the port to the pre-populated address on the top bar (it should
    already say `archipelago.gg`) and click `connect`
-4. Enter your **Slot Name** which is what you choose during Step 2 of the Obtaining ROM step as your **Player Name**
 
 #### Running Your Game and Connecting to the Client Program
 1. Open Bizhawk 2.3.1 or higher and load your ROM OR 
@@ -86,7 +85,7 @@ in the `output` directory
 4. Navigate to the location you installed Archipelago to. Open data/lua/FF1/ff1_connector.lua
    1. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
    close your emulator entirely, restart it and re-run these steps
-   2. If it says `Must use a version of bizhawk 2.3.1 or higher`, double check your Bizhawk version by clicking 
+   2. If it says `Must use a version of bizhawk 2.3.1 or higher`, double-check your Bizhawk version by clicking 
    **Help** -> **About**
 
 ### Play the game
