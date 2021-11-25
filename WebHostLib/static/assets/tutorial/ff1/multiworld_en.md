@@ -4,8 +4,8 @@
 - The FF1Client which is bundled with [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
 - The [BizHawk](http://tasvideos.org/BizHawk.html) emulator. Versions 2.3.1 and higher are supported. 
   Version 2.7 is recommended
-- Your Final Fantasy (USA Edition) ROM file, probably named `Final Fantasy (USA).nes`. Archipelago.gg nor the Final
-  Fantasy Randomizer Community can supply you with this.
+- Your Final Fantasy (USA Edition) ROM file, probably named `Final Fantasy (USA).nes`. Neither Archipelago.gg nor the 
+  Final Fantasy Randomizer Community can supply you with this.
 
 ## Installation Procedures
 1. Download and install the latest version of [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)

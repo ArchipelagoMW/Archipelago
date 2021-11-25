@@ -6,7 +6,8 @@ from typing import List
 
 
 import Utils
-from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, ClientCommandProcessor, logger
+from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, ClientCommandProcessor, logger, \
+    get_base_parser
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -211,7 +212,7 @@ async def nes_sync_task(ctx: FF1Context):
 
 if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
-    Utils.init_logging("TextClient")
+    Utils.init_logging("FF1Client")
 
     async def main(args):
         ctx = FF1Context(args.connect, args.password)
@@ -247,15 +248,9 @@ if __name__ == '__main__':
             input_task.cancel()
 
 
-    import argparse
     import colorama
 
-    parser = argparse.ArgumentParser(description="FF1 Archipelago Client")
-    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
-    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
-    if not Utils.is_frozen():  # Frozen state has no cmd window in the first place
-        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
-
+    parser = get_base_parser()
     args, rest = parser.parse_known_args()
     colorama.init()
 
