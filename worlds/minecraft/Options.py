@@ -15,6 +15,7 @@ class EggShardsRequired(Range):
     displayname = "Egg Shards Required"
     range_start = 0
     range_end = 40
+    default = 0
 
 
 class EggShardsAvailable(Range):
@@ -22,6 +23,7 @@ class EggShardsAvailable(Range):
     displayname = "Egg Shards Available"
     range_start = 0
     range_end = 40
+    default = 0
 
 
 class BossGoal(Choice):
@@ -37,11 +39,13 @@ class BossGoal(Choice):
 class ShuffleStructures(Toggle):
     """Enables shuffling of villages, outposts, fortresses, bastions, and end cities."""
     displayname = "Shuffle Structures"
+    default = 1
 
 
 class StructureCompasses(Toggle):
     """Adds structure compasses to the item pool, which point to the nearest indicated structure."""
     displayname = "Structure Compasses"
+    default = 1
 
 
 class BeeTraps(Range): 
@@ -49,6 +53,7 @@ class BeeTraps(Range):
     displayname = "Bee Trap Percentage"
     range_start = 0
     range_end = 100
+    default = 0
 
 
 class CombatDifficulty(Choice):
@@ -63,26 +68,31 @@ class CombatDifficulty(Choice):
 class HardAdvancements(Toggle):
     """Enables certain RNG-reliant or tedious advancements."""
     displayname = "Include Hard Advancements"
+    default = 0
 
 
 class UnreasonableAdvancements(Toggle):
     """Enables the extremely difficult advancements "How Did We Get Here?" and "Adventuring Time.\""""
     displayname = "Include Unreasonable Advancements"
+    default = 0
 
 
 class PostgameAdvancements(Toggle):
     """Enables advancements that require spawning and defeating the required bosses."""
     displayname = "Include Postgame Advancements"
+    default = 0
 
 
 class SendDefeatedMobs(Toggle):
     """Send killed mobs to other Minecraft worlds which have this option enabled."""
     displayname = "Send Defeated Mobs"
+    default = 0
 
 
 class StartingItems(OptionList):
     """Start with these items. Each entry should be of this format: {item: "item_name", amount: #, nbt: "nbt_string"}"""
     displayname = "Starting Items"
+    default = 0
 
 
 minecraft_options: typing.Dict[str, type(Option)] = {
