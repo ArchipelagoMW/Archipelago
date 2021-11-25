@@ -3,7 +3,7 @@
 ## Required Software
 
 - [Minecraft Java Edition](https://www.minecraft.net/en-us/store/minecraft-java-edition) (update 1.17.1)
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) (select `Minecraft Client` durring installation.)
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) (select `Minecraft Client` during installation.)
 
 ## Configuring your YAML file
 
