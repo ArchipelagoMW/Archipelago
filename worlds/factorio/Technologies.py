@@ -483,6 +483,7 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
                 current |= set(recipe.products)
         if science_pack == "automation-science-pack":
             current |= {"iron-ore", "copper-ore", "coal", "stone"}
+            current -= liquids  # Can't hand craft automation science if liquids end up in its recipe, making the seed impossible.
         elif science_pack == "logistic-science-pack":
             current |= {"water", "steam", "crude-oil"}
         current -= already_taken
