@@ -184,7 +184,8 @@ class Factorio(World):
             for recipe in world.worlds[player].custom_recipes.values():
                 spoiler_handle.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
 
-    def make_balanced_recipe(self, original: Recipe, pool: list, factor: float = 1) -> Recipe:
+    def make_balanced_recipe(self, original: Recipe, pool: list, factor: float = 1, allow_liquids: int = 2) -> \
+            Recipe:
         """Generate a recipe from pool with time and cost similar to original * factor"""
         new_ingredients = {}
         self.world.random.shuffle(pool)
@@ -200,6 +201,17 @@ class Factorio(World):
 
         # fill all but one slot with random ingredients, last with a good match
         while remaining_num_ingredients > 0 and pool:
+            ingredient = pool.pop()
+            if liquids_used == allow_liquids and ingredient in liquids:
+                continue   # can't use this ingredient as we already have maximum liquid in our recipe.
+            if ingredient in all_product_sources:
+                ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
+                ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
+                ingredient_energy = ingredient_recipe.total_energy
+            else:
+                # assume simple ore TODO: remove if tree when mining data is harvested from Factorio
+                ingredient_raw = 1
+                ingredient_energy = 2
             if remaining_num_ingredients == 1:
                 max_raw = 1.1 * remaining_raw
                 min_raw = 0.9 * remaining_raw
@@ -210,15 +222,6 @@ class Factorio(World):
                 min_raw = (remaining_raw - max_raw) / remaining_num_ingredients
                 max_energy = remaining_energy * 0.75
                 min_energy = (remaining_energy - max_energy) / remaining_num_ingredients
-            ingredient = pool.pop()
-            if ingredient in all_product_sources:
-                ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
-                ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
-                ingredient_energy = ingredient_recipe.total_energy
-            else:
-                # assume simple ore TODO: remove if tree when mining data is harvested from Factorio
-                ingredient_raw = 1
-                ingredient_energy = 2
             min_num_raw = min_raw / ingredient_raw
             max_num_raw = max_raw / ingredient_raw
             min_num_energy = min_energy / ingredient_energy
@@ -228,8 +231,6 @@ class Factorio(World):
             if min_num > max_num:
                 fallback_pool.append(ingredient)
                 continue  # can't use that ingredient
-            if liquids_used == 2 and ingredient in liquids:
-                continue    # can't use this ingredient as we already have a liquid in our recipe.
             num = self.world.random.randint(min_num, max_num)
             new_ingredients[ingredient] = num
             remaining_raw -= num * ingredient_raw
@@ -246,6 +247,9 @@ class Factorio(World):
         pool = fallback_pool
         while remaining_num_ingredients > 0 and pool:
             ingredient = pool.pop()
+            if liquids_used == allow_liquids and ingredient in liquids:
+                continue  # can't use this ingredient as we already have maximum liquid in our recipe.
+
             ingredient_recipe = recipes.get(ingredient, None)
             if not ingredient_recipe and ingredient.endswith("-barrel"):
                 ingredient_recipe = recipes.get(f"fill-{ingredient}", None)
@@ -257,9 +261,9 @@ class Factorio(World):
             num_raw = remaining_raw / ingredient_raw / remaining_num_ingredients
             num_energy = remaining_energy / ingredient_energy / remaining_num_ingredients
             num = int(min(num_raw, num_energy))
-            if num < 1: continue
-            if liquids_used == 2 and ingredient in liquids:
-                continue    # can't use this ingredient as we already have a liquid in our recipe.
+            if num < 1:
+                continue
+
             new_ingredients[ingredient] = num
             remaining_raw -= num * ingredient_raw
             remaining_energy -= num * ingredient_energy
@@ -343,12 +347,8 @@ class Factorio(World):
         if self.world.max_science_pack[self.player].value == MaxSciencePack.option_space_science_pack:
             needed_recipes |= {"satellite"}
 
-        if any([recipe.category == "chemistry" for _, recipe in self.custom_recipes.items()]):
-            needed_recipes |= {"chemical-plant"}
-
         for recipe in needed_recipes:
             recipe = self.custom_recipes.get(recipe, recipes[recipe])
-            self.advancement_technologies |= {tech.name for tech in recipe.unlocking_technologies}
             self.advancement_technologies |= {tech.name for tech in recipe.recursive_unlocking_technologies}
 
         # handle marking progressive techs as advancement
