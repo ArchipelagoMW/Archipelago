@@ -343,6 +343,9 @@ class Factorio(World):
         if self.world.max_science_pack[self.player].value == MaxSciencePack.option_space_science_pack:
             needed_recipes |= {"satellite"}
 
+        if any([recipe.category == "chemistry" for _, recipe in self.custom_recipes.items()]):
+            needed_recipes |= {"chemical-plant"}
+
         for recipe in needed_recipes:
             recipe = self.custom_recipes.get(recipe, recipes[recipe])
             self.advancement_technologies |= {tech.name for tech in recipe.unlocking_technologies}
