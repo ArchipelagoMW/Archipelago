@@ -139,7 +139,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Caves of Banishment (upper)', 'Jackpot room chest 4',  1337119, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
         LocationData('Caves of Banishment (upper)', 'Banishment pedestal',  1337120),
         LocationData('Caves of Banishment (Maw)', 'Last chance before Maw',  1337121, lambda state: state._timespinner_has_doublejump(world, player)),
-        LocationData('Caves of Banishment (Maw)', 'Plasma Crystal',  1337173, lambda state: state.has_any(['Gas Mask', 'Talaria Attachment'], player)),
+        LocationData('Caves of Banishment (Maw)', 'Plasma Crystal',  1337173, lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player)),
         LocationData('Caves of Banishment (Maw)', 'Killed Maw',  EventId, lambda state: state.has('Gas Mask', player)),
         LocationData('Caves of Banishment (Maw)', 'Mineshaft',  1337122, lambda state: state.has('Gas Mask', player)),
         LocationData('Caves of Banishment (Sirens)', 'Wyvern room',  1337123),
