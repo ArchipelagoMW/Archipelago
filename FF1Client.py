@@ -227,19 +227,14 @@ if __name__ == '__main__':
             ui_task = None
 
         ctx.nes_sync_task = asyncio.create_task(nes_sync_task(ctx), name="NES Sync")
-        await ctx.exit_event.wait()
 
+        await ctx.exit_event.wait()
         ctx.server_address = None
-        if ctx.server and not ctx.server.socket.closed:
-            await ctx.server.socket.close()
-        if ctx.server_task:
-            await ctx.server_task
+
+        await ctx.shutdown()
+
         if ctx.nes_sync_task:
             await ctx.nes_sync_task
-
-        while ctx.input_requests > 0:
-            ctx.input_queue.put_nowait(None)
-            ctx.input_requests -= 1
 
         if ui_task:
             await ui_task
