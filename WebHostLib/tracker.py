@@ -1,4 +1,5 @@
 import collections
+import typing
 from typing import Counter, Optional, Dict, Any, Tuple
 
 from flask import render_template
@@ -10,6 +11,7 @@ from worlds.alttp import Items
 from WebHostLib import app, cache, Room
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
+from MultiServer import get_item_name_from_id, Context
 
 alttp_icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
@@ -73,6 +75,7 @@ alttp_icons = {
     "Turtle Rock": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/9/91/ALttP_Trinexx_Sprite.png?version=0cc867d513952aa03edd155597a0c0be",
     "Ganons Tower": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/b9/ALttP_Ganon_Sprite.png?version=956f51f054954dfff53c1a9d4f929c74"
 }
+
 
 def get_alttp_id(item_name):
     return Items.item_table[item_name][2]
@@ -201,7 +204,10 @@ for item_name, data in Items.item_table.items():
             big_key_ids[area] = data[2]
             ids_big_key[data[2]] = area
 
-from MultiServer import get_item_name_from_id, Context
+# cleanup global namespace
+del item_name
+del data
+del item
 
 
 def attribute_item(inventory, team, recipient, item):
@@ -268,8 +274,7 @@ def get_static_room_data(room: Room):
                                for playernumber in range(1, len(names[0]) + 1)}
 
     result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area, \
-             multidata["precollected_items"], \
-             multidata["games"]
+             multidata["precollected_items"], multidata["games"]
     _multidata_cache[room.seed.id] = result
     return result
 
@@ -318,23 +323,18 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
                     if ms_player == tracked_player:  # a check done by the tracked player
                         checks_done[location_to_area[location]] += 1
                         checks_done["Total"] += 1
-                        
-    if games[tracked_player] == "A Link to the Past":
-        return __renderAlttpTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name, \
-            seed_checks_in_area, checks_done)
-    elif games[tracked_player] == "Minecraft":
-        return __renderMinecraftTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
-    elif games[tracked_player] == "Ocarina of Time":
-        return __renderOoTTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
-    elif games[tracked_player] == "Timespinner":
-        return __renderTimespinnerTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
+    specific_tracker = game_specific_trackers.get(games[tracked_player], None)
+    if specific_tracker:
+        return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
+                                seed_checks_in_area, checks_done)
     else:
-        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
+        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
+                                      seed_checks_in_area, checks_done)
 
 
 def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
-        inventory: Counter, team: int, player: int, playerName: str, 
-        seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
+                         inventory: Counter, team: int, player: int, player_name: str,
+                         seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
     # Note the presence of the triforce item
     game_state = multisave.get("client_game_state", {}).get((team, player), 0)
@@ -384,7 +384,7 @@ def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[
                     player_small_key_locations.add(ids_small_key[item_id])
 
     return render_template("lttpTracker.html", inventory=inventory,
-                            player_name=playerName, room=room, icons=alttp_icons, checks_done=checks_done,
+                            player_name=player_name, room=room, icons=alttp_icons, checks_done=checks_done,
                             checks_in_area=seed_checks_in_area[player],
                             acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
                             small_key_ids=small_key_ids, big_key_ids=big_key_ids, sp_areas=sp_areas,
@@ -394,7 +394,8 @@ def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[
 
 
 def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
-        inventory: Counter, team: int, player: int, playerName: str) -> str:
+                             inventory: Counter, team: int, player: int, playerName: str,
+                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
     icons = {
         "Wooden Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d2/Wooden_Pickaxe_JE3_BE3.png",
@@ -494,7 +495,8 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
 
 
 def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
-        inventory: Counter, team: int, player: int, playerName: str) -> str:
+                       inventory: Counter, team: int, player: int, playerName: str,
+                       seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
     icons = {
         "Fairy Ocarina":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/OoT_Fairy_Ocarina_Icon.png",
@@ -621,12 +623,14 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
         "Gerudo Training Grounds":  (67597, 67635),
         "Ganon's Castle":           (67636, 67673),
     }
+
     def lookup_and_trim(id, area):
         full_name = lookup_any_location_id_to_name[id]
         if id == 67673:
-            return full_name[13:] # Ganons Tower Boss Key Chest
+            return full_name[13:]  # Ganons Tower Boss Key Chest
         if area != 'Overworld':
-            return full_name[len(area):] # trim dungeon name. leaves an extra space that doesn't display, or trims fully for DC/Jabu/GC
+            # trim dungeon name. leaves an extra space that doesn't display, or trims fully for DC/Jabu/GC
+            return full_name[len(area):]
         return full_name
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set()).intersection(set(locations[player]))
@@ -669,14 +673,16 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
     display_data['game_finished'] = game_state == 30
 
     return render_template("ootTracker.html",
-                            inventory=inventory, player=player, team=team, room=room, player_name=playerName,
-                            icons=icons, acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
-                            checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
-                            small_key_counts=small_key_counts, boss_key_counts=boss_key_counts,
-                            **display_data)
+                           inventory=inventory, player=player, team=team, room=room, player_name=playerName,
+                           icons=icons, acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
+                           checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
+                           small_key_counts=small_key_counts, boss_key_counts=boss_key_counts,
+                           **display_data)
+
 
 def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
-        inventory: Counter, team: int, player: int, playerName: str) -> str:
+                               inventory: Counter, team: int, player: int, playerName: str,
+                               seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
     icons = {
         "Timespinner Wheel":    "https://timespinnerwiki.com/mediawiki/images/7/76/Timespinner_Wheel.png",
@@ -760,7 +766,8 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
 
 
 def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
-        inventory: Counter, team: int, player: int, playerName: str) -> str:
+                           inventory: Counter, team: int, player: int, playerName: str,
+                           seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set())
     player_received_items = {}
@@ -864,3 +871,11 @@ def getTracker(tracker: UUID):
                            key_locations=group_key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
                            video=video, big_key_locations=group_big_key_locations,
                            hints=hints, long_player_names=long_player_names)
+
+
+game_specific_trackers: typing.Dict[str, typing.Callable] = {
+    "Minecraft": __renderMinecraftTracker,
+    "Ocarina of Time": __renderOoTTracker,
+    "Timespinner": __renderTimespinnerTracker,
+    "A Link to the Past": __renderAlttpTracker
+}
