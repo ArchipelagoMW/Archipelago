@@ -184,6 +184,27 @@ class Factorio(World):
             for recipe in world.worlds[player].custom_recipes.values():
                 spoiler_handle.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
 
+    @staticmethod
+    def get_category(category: str, liquids: int) -> str:
+        categories = {1: "crafting-with-fluid",
+                      2: "chemistry"}
+        return categories.get(liquids, category)
+
+    def make_quick_recipe(self, original: Recipe, pool: list, allow_liquids: int = 2) -> Recipe:
+        new_ingredients = {}
+        liquids_used = 0
+        for _ in original.ingredients:
+            new_ingredient = pool.pop()
+            if new_ingredient in liquids:
+                while liquids_used == allow_liquids and new_ingredient in liquids:
+                    # liquids already at max for current recipe. Return the liquid to the pool, shuffle, and get a new ingredient.
+                    pool.append(new_ingredient)
+                    self.world.random.shuffle(pool)
+                    new_ingredient = pool.pop()
+                liquids_used += 1
+            new_ingredients[new_ingredient] = 1
+        return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients, original.products, original.energy)
+
     def make_balanced_recipe(self, original: Recipe, pool: list, factor: float = 1, allow_liquids: int = 2) -> \
             Recipe:
         """Generate a recipe from pool with time and cost similar to original * factor"""
@@ -197,7 +218,6 @@ class Factorio(World):
         remaining_num_ingredients = target_num_ingredients
         fallback_pool = []
         liquids_used = 0
-        category = original.category
 
         # fill all but one slot with random ingredients, last with a good match
         while remaining_num_ingredients > 0 and pool:
@@ -237,10 +257,6 @@ class Factorio(World):
             remaining_energy -= num * ingredient_energy
             remaining_num_ingredients -= 1
             if ingredient in liquids:
-                if liquids_used == 0:
-                    category = "crafting-with-fluid"
-                elif liquids_used == 1:
-                    category = "chemistry"
                 liquids_used += 1
 
         # fill failed slots with whatever we got
@@ -269,16 +285,12 @@ class Factorio(World):
             remaining_energy -= num * ingredient_energy
             remaining_num_ingredients -= 1
             if ingredient in liquids:
-                if liquids_used == 0:
-                    category = "crafting-with-fluid"
-                elif liquids_used == 1:
-                    category = "chemistry"
                 liquids_used += 1
 
         if remaining_num_ingredients > 1:
             logging.warning("could not randomize recipe")
 
-        return Recipe(original.name, category, new_ingredients, original.products, original.energy)
+        return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients, original.products, original.energy)
 
     def set_custom_technologies(self):
         custom_technologies = {}
@@ -305,24 +317,7 @@ class Factorio(World):
                 valid_pool += sorted(science_pack_pools[pack])
                 self.world.random.shuffle(valid_pool)
                 if pack in recipes:  # skips over space science pack
-                    original = recipes[pack]
-                    new_ingredients = {}
-                    liquids_used = 0
-                    category = original.category
-                    for _ in original.ingredients:
-                        new_ingredient = valid_pool.pop()
-                        if new_ingredient in liquids:
-                            while liquids_used == 2 and new_ingredient in liquids:
-                                valid_pool.append(new_ingredient)
-                                self.world.random.shuffle(valid_pool)
-                                new_ingredient = valid_pool.pop()
-                            if liquids_used == 0:
-                                category = "crafting-with-fluid"
-                            elif liquids_used == 1:
-                                category = "chemistry"
-                            liquids_used += 1
-                        new_ingredients[new_ingredient] = 1
-                    new_recipe = Recipe(pack, category, new_ingredients, original.products, original.energy)
+                    new_recipe = self.make_quick_recipe(recipes[pack], valid_pool)
                     self.custom_recipes[pack] = new_recipe
 
         if self.world.silo[self.player].value == Silo.option_randomize_recipe \
