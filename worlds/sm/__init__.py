@@ -59,7 +59,7 @@ class SMWorld(World):
 
         def sm_init(self, parent: MultiWorld):
             if (hasattr(parent, "state")): # for unit tests where MultiWorld is instanciated before worlds
-                self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff) for player in parent.get_game_players("Super Metroid")}
+                self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff, parent.state.smbm[player].onlyBossLeft) for player in parent.get_game_players("Super Metroid")}
             orig_init(self, parent)
 
 
@@ -476,17 +476,6 @@ class SMWorld(World):
                                         item.player != self.player or
                                         item.name != "Morph Ball"] 
 
-    def post_fill(self):
-        # increase maxDifficulty if only bosses is too difficult to beat game
-        new_state = CollectionState(self.world)
-        for item in self.world.itempool:
-            if item.player == self.player:
-                new_state.collect(item, True)
-        # new_state.sweep_for_events()
-        if (any(not self.world.get_location(bossLoc, self.player).can_reach(new_state) for bossLoc in self.locked_items)):
-            if (self.variaRando.randoExec.setup.services.onlyBossesLeft(self.variaRando.randoExec.setup.startAP, self.variaRando.randoExec.setup.container)):
-                self.world.state.smbm[self.player].maxDiff = infinity
-
     @classmethod
     def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
                         restitempool, fill_locations):      
@@ -496,13 +485,12 @@ class SMWorld(World):
 
     def accessibility_adjustment(self, unaccessible_locations: List[Location], state: CollectionState):
         copy_state = state.copy()
-        original_max_diff = copy_state.smbm[self.player].maxDiff
-        copy_state.smbm[self.player].maxDiff = infinity
-
         while unaccessible_locations:
             sphere = set()
             for location in unaccessible_locations:
-                copy_state.smbm[self.player].maxDiff = infinity if location.event else original_max_diff
+                copy_state.smbm[self.player].onlyBossLeft = location.event
+                if (location.event):
+                    copy_state.stale[self.player] = True
                 if location.can_reach(copy_state):
                     sphere.add(location)
 
@@ -513,8 +501,8 @@ class SMWorld(World):
                 unaccessible_locations.remove(location)
                 copy_state.collect(location.item, True, location)
 
-        state.smbm[self.player].maxDiff = infinity
-        self.world.state.smbm[self.player].maxDiff = infinity
+        state.smbm[self.player].onlyBossLeft = True
+        self.world.state.smbm[self.player].onlyBossLeft = True
         return True
 
 def create_locations(self, player: int):

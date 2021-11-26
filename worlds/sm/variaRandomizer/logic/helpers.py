@@ -566,6 +566,8 @@ class Helpers(object):
         # print('RIDLEY', ammoMargin, secs)
         (diff, defenseItems) = self.computeBossDifficulty(ammoMargin, secs,
                                                           Settings.bossesDifficulty['Ridley'])
+        if (sm.onlyBossLeft):
+            diff = 1
         if diff < 0:
             return smboolFalse
         else:
@@ -580,6 +582,8 @@ class Helpers(object):
         #print('KRAID True ', ammoMargin, secs)
         (diff, defenseItems) = self.computeBossDifficulty(ammoMargin, secs,
                                                           Settings.bossesDifficulty['Kraid'])
+        if (sm.onlyBossLeft):
+            diff = 1
         if diff < 0:
             return smboolFalse
 
@@ -621,6 +625,8 @@ class Helpers(object):
             if sm.haveItem('Gravity') and sm.haveItem('ScrewAttack'):
                 fight.difficulty /= Settings.algoSettings['draygonScrewBonus']
             fight.difficulty = self.adjustHealthDropDiff(fight.difficulty)
+            if (sm.onlyBossLeft):
+                fight.difficulty = 1
         else:
             fight = smboolFalse
         # for grapple kill considers energy drained by wall socket + 2 spankings by Dray
@@ -661,6 +667,8 @@ class Helpers(object):
         elif not hasCharge and sm.itemCount('Missile') <= 2: # few missiles is harder
             difficulty *= Settings.algoSettings['phantoonLowMissileMalus']
         difficulty = self.adjustHealthDropDiff(difficulty)
+        if (sm.onlyBossLeft):
+            difficulty = 1
         fight = SMBool(True, difficulty, items=ammoItems+defenseItems)
 
         return sm.wor(fight,
@@ -707,6 +715,8 @@ class Helpers(object):
         # print('MB2', ammoMargin, secs)
         #print("ammoMargin: {}, secs: {}, settings: {}, energyDiff: {}".format(ammoMargin, secs, Settings.bossesDifficulty['MotherBrain'], energyDiff))
         (diff, defenseItems) = self.computeBossDifficulty(ammoMargin, secs, Settings.bossesDifficulty['MotherBrain'], energyDiff)
+        if (sm.onlyBossLeft):
+            diff = 1
         if diff < 0:
             return smboolFalse
         return SMBool(True, diff, items=ammoItems+defenseItems)
