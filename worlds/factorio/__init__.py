@@ -246,10 +246,12 @@ class Factorio(World):
         pool = fallback_pool
         while remaining_num_ingredients > 0 and pool:
             ingredient = pool.pop()
-            if ingredient not in recipes:
+            ingredient_recipe = recipes.get(ingredient, None)
+            if not ingredient_recipe and ingredient.endswith("-barrel"):
+                ingredient_recipe = recipes.get(f"fill-{ingredient}", None)
+            if not ingredient_recipe:
                 logging.warning(f"missing recipe for {ingredient}")
                 continue
-            ingredient_recipe = recipes[ingredient]
             ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
             ingredient_energy = ingredient_recipe.total_energy
             num_raw = remaining_raw / ingredient_raw / remaining_num_ingredients
