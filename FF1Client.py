@@ -64,7 +64,7 @@ class FF1Context(CommonContext):
             if ': !' not in msg:
                 self._set_message(msg, SYSTEM_MESSAGE_ID)
         elif cmd == "ReceivedItems":
-            msg = f"Recieved {', '.join([self.item_name_getter(item.item) for item in args['items']])}"
+            msg = f"Received {', '.join([self.item_name_getter(item.item) for item in args['items']])}"
             self._set_message(msg, SYSTEM_MESSAGE_ID)
         elif cmd == 'PrintJSON':
             print_type = args['type']
