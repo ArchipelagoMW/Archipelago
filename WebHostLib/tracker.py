@@ -706,6 +706,8 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
         "Royal Ring":           "https://timespinnerwiki.com/mediawiki/images/f/f3/Royal_Ring.png",
         "Plasma Geyser":        "https://timespinnerwiki.com/mediawiki/images/1/12/Plasma_Geyser.png",
         "Plasma Orb":           "https://timespinnerwiki.com/mediawiki/images/4/44/Plasma_Orb.png",
+        "Kobo":                 "https://timespinnerwiki.com/mediawiki/images/c/c6/Familiar_Kobo.png",
+        "Merchant Crow":        "https://timespinnerwiki.com/mediawiki/images/4/4e/Familiar_Crow.png",
     }
 
     timespinner_location_ids = {
@@ -720,7 +722,7 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
             1337070, 1337071, 1337072, 1337073, 1337074, 1337075, 1337076, 1337077, 1337078, 1337079,
             1337080, 1337081, 1337082, 1337083, 1337084, 1337085, 1337156, 1337157,          1337159, 
             1337160, 1337161, 1337162, 1337163, 1337164, 1337165, 1337166, 1337167, 1337168, 1337169, 
-            1337170],
+            1337170, 1337237, 1337238],
         "Past": [
             1337086, 1337087, 1337088, 1337089,
             1337090, 1337091, 1337092, 1337093, 1337094, 1337095, 1337096, 1337097, 1337098, 1337099,
@@ -729,7 +731,8 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
             1337120, 1337121, 1337122, 1337123, 1337124, 1337125, 1337126, 1337127, 1337128, 1337129,
             1337130, 1337131, 1337132, 1337133, 1337134, 1337135, 1337136, 1337137, 1337138, 1337139,
             1337140, 1337141, 1337142, 1337143, 1337144, 1337145, 1337146, 1337147, 1337148, 1337149,
-            1337150, 1337151, 1337152, 1337153, 1337154, 1337155],
+            1337150, 1337151, 1337152, 1337153, 1337154, 1337155,
+            1337171, 1337172, 1337173, 1337174, 1337175, 1337176],
         "Ancient Pyramid": [1337246, 1337247, 1337248, 1337249]
     }
 
