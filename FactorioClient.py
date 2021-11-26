@@ -5,6 +5,7 @@ import json
 import string
 import copy
 import subprocess
+import sys
 import time
 import random
 
@@ -294,14 +295,15 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
 async def main(args):
     ctx = FactorioContext(args.connect, args.password)
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+    input_task = None
     if gui_enabled:
-        input_task = None
         from kvui import FactorioManager
         ctx.ui = FactorioManager(ctx)
         ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
     else:
-        input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None
+    if sys.stdin:
+        input_task = asyncio.create_task(console_loop(ctx), name="Input")
     factorio_server_task = asyncio.create_task(factorio_spinup_server(ctx), name="FactorioSpinupServer")
     succesful_launch = await factorio_server_task
     if succesful_launch:

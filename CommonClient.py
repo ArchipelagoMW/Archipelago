@@ -595,14 +595,15 @@ if __name__ == '__main__':
     async def main(args):
         ctx = TextContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+        input_task = None
         if gui_enabled:
-            input_task = None
             from kvui import TextManager
             ctx.ui = TextManager(ctx)
             ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
         else:
-            input_task = asyncio.create_task(console_loop(ctx), name="Input")
             ui_task = None
+        if sys.stdin:
+            input_task = asyncio.create_task(console_loop(ctx), name="Input")
         await ctx.exit_event.wait()
 
         await ctx.shutdown()
@@ -614,7 +615,7 @@ if __name__ == '__main__':
 
     import colorama
 
-    parser = get_base_parser(description="Gameless Archipelago Client, for text interfaction.")
+    parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
 
     args, rest = parser.parse_known_args()
     colorama.init()
