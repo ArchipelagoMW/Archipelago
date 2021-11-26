@@ -43,9 +43,12 @@ function prep_copy(new_copy, old_tech)
 				weights[key] = value
 			end
 			SNI.setWeights(weights)
+            -- Just in case an ingredient is being added to an existing tech. Found the root cause of the 9.223e+18 problem.
+            -- Turns out science-not-invited was ultimately dividing by zero, due to it being unaware of there being added ingredients.
+            old_tech.unit.ingredients = add_ingredients(old_tech.unit.ingredients, ingredient_filter)
 			SNI.sendInvite(old_tech)
 			-- SCIENCE-not-invited could potentially make tech cost 9.223e+18.
-			old_tech.unit.count = math.min(10000, old_tech.unit.count)
+			old_tech.unit.count = math.min(100000, old_tech.unit.count)
 		end
 		new_copy.unit = table.deepcopy(old_tech.unit)
 		new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients, ingredient_filter)
