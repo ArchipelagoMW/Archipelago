@@ -88,6 +88,10 @@ class SMWorld(World):
 
         if (self.variaRando.args.morphPlacement == "early"):
             self.world.local_items[self.player].value.add('Morph')
+
+        if (len(self.variaRando.randoExec.setup.restrictedLocs) > 0):
+            self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("items")
+            logger.warning(f"accessibility forced to 'items' for player {self.world.get_player_name(self.player)} because of 'fun' settings")
     
     def generate_basic(self):
         itemPool = self.variaRando.container.itemPool
