@@ -130,9 +130,6 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
   morph_placement:
     early: 1
     normal: 0
-  suits_restriction:
-    on: 1
-    off: 0  
   strict_minors:
     on: 0
     off: 1
@@ -161,13 +158,13 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
   boss_randomization:
     on: 0
     off: 1
-  fun_combat:
+  fun_combat: # if used, might force 'items' accessibility
     on: 0
     off: 1
-  fun_movement:
+  fun_movement: # if used, might force 'items' accessibility
     on: 0
     off: 1
-  fun_suits:
+  fun_suits: # if used, might force 'items' accessibility
     on: 0
     off: 1
   layout_patches:
@@ -207,6 +204,7 @@ Super Metroid: # see https://randommetroidsolver.pythonanywhere.com/randomizer a
   random_music:
     on: 0
     off: 1
+  #suits_restriction: not supported always off
   #item_sounds: always forced on due to a conflict in patching
   #majors_split: not supported always "Full"
   #scav_num_locs: not supported always off
