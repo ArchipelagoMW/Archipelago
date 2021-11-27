@@ -137,7 +137,6 @@ Root: HKCR; Subkey: "{#MyAppName}multidata\shell\open\command";  ValueData: """{
 const
   SHCONTCH_NOPROGRESSBOX = 4;
   SHCONTCH_RESPONDYESTOALL = 16;
-  FORGE_VERSION = '1.16.5-36.2.0';
 
 // See: https://stackoverflow.com/a/51614652/2287576
 function IsVCRedist64BitNeeded(): boolean;
