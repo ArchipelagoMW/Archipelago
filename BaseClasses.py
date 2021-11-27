@@ -255,13 +255,17 @@ class MultiWorld():
     def get_items(self) -> list:
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
-    def find_items(self, item, player: int) -> List[Location]:
+    def find_item_locations(self, item, player: int) -> List[Location]:
         return [location for location in self.get_locations() if
-                location.item is not None and location.item.name == item and location.item.player == player]
+                location.item and location.item.name == item and location.item.player == player]
 
     def find_item(self, item, player: int) -> Location:
         return next(location for location in self.get_locations() if
                     location.item and location.item.name == item and location.item.player == player)
+
+    def find_items_in_locations(self, items: Set[str], player: int) -> List[Location]:
+        return [location for location in self.get_locations() if
+                location.item and location.item.name in items and location.item.player == player]
 
     def create_item(self, item_name: str, player: int) -> Item:
         return self.worlds[player].create_item(item_name)
