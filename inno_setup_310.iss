@@ -159,6 +159,7 @@ begin
   end;
 end;
 
+var ROMFilePage: TInputFileWizardPage;
 var R : longint;
 
 var lttprom: string;
@@ -250,11 +251,29 @@ begin
     '.z64');
 end;
 
-procedure InitializeWizard();
-begin                    
-  AddOoTRomPage();
-  AddRomPage();
+function NextButtonClick(CurPageID: Integer): Boolean;
+begin
+  if (assigned(LttPROMFilePage)) and (CurPageID = LttPROMFilePage.ID) then
+    Result := not (LttPROMFilePage.Values[0] = '')
+  else if (assigned(SMROMFilePage)) and (CurPageID = SMROMFilePage.ID) then
+    Result := not (SMROMFilePage.Values[0] = '')
+  else if (assigned(SoEROMFilePage)) and (CurPageID = SoEROMFilePage.ID) then
+    Result := not (SoEROMFilePage.Values[0] = '')
+  else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
+    Result := not (OoTROMFilePage.Values[0] = '')
+  else
+    Result := True;
 end;
+
+function GetROMPath(Param: string): string;
+begin
+  if Length(lttprom) > 0 then
+    Result := lttprom
+  else if Assigned(LttPRomFilePage) then
+    begin
+      R := CompareStr(GetSNESMD5OfFile(LttPROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
+      if R <> 0 then
+        MsgBox('ALttP ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 
       Result := LttPROMFilePage.Values[0]
     end
@@ -325,8 +344,6 @@ begin
   soerom := CheckRom('Secret of Evermore (USA).sfc', '6e9c94511d04fac6e0a1e582c170be3a');
   if Length(soerom) = 0 then
     SoEROMFilePage:= AddRomPage('Secret of Evermore (USA).sfc');
-
-  AddMinecraftDownloads();
 end;
 
 

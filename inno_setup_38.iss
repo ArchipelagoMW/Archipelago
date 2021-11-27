@@ -159,21 +159,6 @@ begin
   end;
 end;
 
-function IsForgeNeeded(): boolean;
-begin
-  Result := True;
-  if (FileExists(ExpandConstant('{app}')+'\Minecraft Forge Server\forge-'+FORGE_VERSION+'.jar')) then
-    Result := False;
-end;
-
-function IsJavaNeeded(): boolean;
-begin
-  Result := True;
-  if (FileExists(ExpandConstant('{app}')+'\jre8\bin\java.exe')) then
-    Result := False;
-end;
-
-
 var R : longint;
 
 var lttprom: string;
@@ -265,20 +250,18 @@ begin
     '.z64');
 end;
 
-procedure InitializeWizard();
-begin                    
-  AddOoTRomPage();
-  AddRomPage();
-end;
-
-
-function ShouldSkipPage(PageID: Integer): Boolean;
+function NextButtonClick(CurPageID: Integer): Boolean;
 begin
-  Result := False;
-  if (assigned(ROMFilePage)) and (PageID = ROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('client/lttp') or WizardIsComponentSelected('generator/lttp'));
-  if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('generator/oot'));
+  if (assigned(LttPROMFilePage)) and (CurPageID = LttPROMFilePage.ID) then
+    Result := not (LttPROMFilePage.Values[0] = '')
+  else if (assigned(SMROMFilePage)) and (CurPageID = SMROMFilePage.ID) then
+    Result := not (SMROMFilePage.Values[0] = '')
+  else if (assigned(SoEROMFilePage)) and (CurPageID = SoEROMFilePage.ID) then
+    Result := not (SoEROMFilePage.Values[0] = '')
+  else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
+    Result := not (OoTROMFilePage.Values[0] = '')
+  else
+    Result := True;
 end;
 
 function GetROMPath(Param: string): string;
@@ -290,7 +273,7 @@ begin
       R := CompareStr(GetSNESMD5OfFile(LttPROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
       if R <> 0 then
         MsgBox('ALttP ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
-  
+
       Result := LttPROMFilePage.Values[0]
     end
   else
@@ -338,7 +321,7 @@ begin
       R := CompareStr(GetMD5OfFile(OoTROMFilePage.Values[0]), '5bd1fe107bf8106b2ab6650abecd54d6') * CompareStr(GetMD5OfFile(OoTROMFilePage.Values[0]), '6697768a7a7df2dd27a692a2638ea90b') * CompareStr(GetMD5OfFile(OoTROMFilePage.Values[0]), '05f0f3ebacbc8df9243b6148ffe4792f');
       if R <> 0 then
         MsgBox('OoT ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
-  
+
       Result := OoTROMFilePage.Values[0]
     end
   else
@@ -346,7 +329,7 @@ begin
 end;
 
 procedure InitializeWizard();
-begin                    
+begin
   AddOoTRomPage();
 
   lttprom := CheckRom('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', '03a63945398191337e896e5771f77173');
@@ -360,8 +343,6 @@ begin
   soerom := CheckRom('Secret of Evermore (USA).sfc', '6e9c94511d04fac6e0a1e582c170be3a');
   if Length(soerom) = 0 then
     SoEROMFilePage:= AddRomPage('Secret of Evermore (USA).sfc');
-
-  AddMinecraftDownloads();
 end;
 
 
