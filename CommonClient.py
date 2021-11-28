@@ -540,14 +540,26 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     ctx.on_package(cmd, args)
 
 
+def stream_input(stream, queue):
+    def queuer():
+        text = stream.readline().strip()
+        if text:
+            queue.put_nowait(text)
+
+    from threading import Thread
+    thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
+    thread.start()
+    return thread
+
+
 async def console_loop(ctx: CommonContext):
     import sys
     commandprocessor = ctx.command_processor(ctx)
+    queue = asyncio.Queue()
+    stream_input(sys.stdin, queue)
     while not ctx.exit_event.is_set():
         try:
-            input_text = await asyncio.get_event_loop().run_in_executor(
-                None, sys.stdin.readline
-            )
+            input_text = await queue.get()
             input_text = input_text.strip()
 
             if ctx.input_requests > 0:
