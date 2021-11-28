@@ -680,11 +680,6 @@ async def snes_disconnect(ctx: Context):
 
 
 async def snes_autoreconnect(ctx: Context):
-    # unfortunately currently broken. See: https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1033
-    # with prompt_toolkit.shortcuts.ProgressBar() as pb:
-    #    for _ in pb(range(100)):
-    #        await asyncio.sleep(RECONNECT_DELAY/100)
-
     await asyncio.sleep(SNES_RECONNECT_DELAY)
     if ctx.snes_reconnect_address and ctx.snes_socket is None:
         await snes_connect(ctx, ctx.snes_reconnect_address)

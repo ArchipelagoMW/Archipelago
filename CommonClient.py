@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
 from MultiServer import CommandProcessor
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
-from Utils import Version
+from Utils import Version, stream_input
 from worlds import network_data_package, AutoWorldRegister
 
 logger = logging.getLogger("Client")
@@ -540,18 +540,6 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     ctx.on_package(cmd, args)
 
 
-def stream_input(stream, queue):
-    def queuer():
-        text = stream.readline().strip()
-        if text:
-            queue.put_nowait(text)
-
-    from threading import Thread
-    thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
-    thread.start()
-    return thread
-
-
 async def console_loop(ctx: CommonContext):
     import sys
     commandprocessor = ctx.command_processor(ctx)
@@ -560,7 +548,7 @@ async def console_loop(ctx: CommonContext):
     while not ctx.exit_event.is_set():
         try:
             input_text = await queue.get()
-            input_text = input_text.strip()
+            queue.task_done()
 
             if ctx.input_requests > 0:
                 ctx.input_requests -= 1
