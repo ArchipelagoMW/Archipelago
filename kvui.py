@@ -173,10 +173,15 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
                 temp = MarkupLabel(text=self.text).markup
                 text = "".join(part for part in temp if not part.startswith(("[color", "[/color]")))
                 cmdinput = App.get_running_app().textinput
-                if not cmdinput.text and text.startswith("Didn't find something that closely matches, did you mean "):
-                    name = Utils.get_text_between(text, "Didn't find something that closely matches, did you mean ",
-                                                  "? (")
-                    cmdinput.text = f"!hint {name}"
+                if not cmdinput.text and " did you mean " in text:
+                    for question in ("Didn't find something that closely matches, did you mean ",
+                                     "Too many close matches, did you mean "):
+                        if text.startswith(question):
+                            name = Utils.get_text_between(text, question,
+                                                          "? (")
+                            cmdinput.text = f"!hint {name}"
+                            break
+
                 Clipboard.copy(text)
                 return self.parent.select_with_touch(self.index, touch)
 
