@@ -353,7 +353,7 @@ def roll_linked_options(weights: dict) -> dict:
 
 def roll_triggers(weights: dict, triggers: list) -> dict:
     weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
-    weights["_Generator_Version"] = "Archipelago"  # Some means for triggers to know if the seed is on main or doors.
+    weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
         try:
             currently_targeted_weights = weights
