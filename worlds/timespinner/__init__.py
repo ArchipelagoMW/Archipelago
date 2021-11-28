@@ -18,7 +18,7 @@ class TimespinnerWorld(World):
     game = "Timespinner"
     topology_present = True
     remote_items = False
-    data_version = 3
+    data_version = 4
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
@@ -92,7 +92,7 @@ def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> Set[s
         excluded_items.add('Meyef')
     if is_option_enabled(world, player, "QuickSeed"):
         excluded_items.add('Talaria Attachment')
-
+    
     return excluded_items
 
 
@@ -155,7 +155,9 @@ def create_item_with_correct_settings(world: MultiWorld, player: int, name: str)
 
     if (name == 'Tablet' or name == 'Library Keycard V') and not is_option_enabled(world, player, "DownloadableItems"):
         item.advancement = False
-    if name == 'Oculus Ring' and not is_option_enabled(world, player, "FacebookMode"):
+    elif name == 'Oculus Ring' and not is_option_enabled(world, player, "FacebookMode"):
+        item.advancement = False
+    elif (name == 'Kobo' or name == 'Merchant Crow') and not is_option_enabled(world, player, "GyreArchives"):
         item.advancement = False
 
     return item

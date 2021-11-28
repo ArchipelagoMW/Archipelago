@@ -1,4 +1,4 @@
-from typing import Tuple, Optional, Callable, NamedTuple
+from typing import List, Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld
 from .Options import is_option_enabled
 
@@ -11,7 +11,7 @@ class LocationData(NamedTuple):
     rule: Callable = lambda state: True
 
 def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[LocationData, ...]:
-    location_table: Tuple[LocationData, ...] = (
+    location_table: List[LocationData] = [
         # PresentItemLocations
         LocationData('Tutorial', 'Yo Momma 1',  1337000),
         LocationData('Tutorial', 'Yo Momma 2',  1337001),
@@ -29,8 +29,8 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Upper lake desolation', 'Upper desolation double jump cave platform',  1337013),
         LocationData('Upper lake desolation', 'Fire-Locked sparrow chest',  1337014),
         LocationData('Upper lake desolation', 'Crash site pedestal',  1337015),
-        LocationData('Upper lake desolation', 'Crash site chest 1',  1337016, lambda state: state.has_all(['Killed Maw', 'Gas Mask'], player)),
-        LocationData('Upper lake desolation', 'Crash site chest 2',  1337017, lambda state: state.has_all(['Killed Maw', 'Gas Mask'], player)),
+        LocationData('Upper lake desolation', 'Crash site chest 1',  1337016, lambda state: state.has_all({'Killed Maw', 'Gas Mask'}, player)),
+        LocationData('Upper lake desolation', 'Crash site chest 2',  1337017, lambda state: state.has_all({'Killed Maw', 'Gas Mask'}, player)),
         LocationData('Upper lake desolation', 'Kitty Boss',  1337018),
         LocationData('Library', 'Library Basement',  1337019),
         LocationData('Library', 'Library warp gate',  1337020),
@@ -118,8 +118,10 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Upper Lake Serene', 'Upper Serene double jump cave platform',  1337100, lambda state: state._timespinner_has_doublejump(world, player)),
         LocationData('Upper Lake Serene', 'Upper Serene double jump cave floor',  1337101),
         LocationData('Upper Lake Serene', 'Upper Serene cave secret',  1337102, lambda state: state._timespinner_can_break_walls(world, player)),
+        LocationData('Upper Lake Serene', 'Before Big Bird', 1337175),
         LocationData('Upper Lake Serene', 'Serene behind the vines',  1337103),
         LocationData('Upper Lake Serene', 'Pyramid keys room',  1337104),
+        LocationData('Upper Lake Serene', 'Chicken ledge', 1337174),
         LocationData('Lower Lake Serene', 'Deep dive',  1337105),
         LocationData('Lower Lake Serene', 'Under the eels',  1337106),
         LocationData('Lower Lake Serene', 'Water spikes room',  1337107),
@@ -137,12 +139,14 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Caves of Banishment (upper)', 'Banishment jackpot room chest 4',  1337119, lambda state: state._timespinner_has_forwarddash_doublejump(world, player)),
         LocationData('Caves of Banishment (upper)', 'Banishment pedestal',  1337120),
         LocationData('Caves of Banishment (Maw)', 'Last chance before Maw',  1337121, lambda state: state._timespinner_has_doublejump(world, player)),
+        LocationData('Caves of Banishment (Maw)', 'Plasma Crystal', 1337173, lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player)),
         LocationData('Caves of Banishment (Maw)', 'Killed Maw',  EventId, lambda state: state.has('Gas Mask', player)),
         LocationData('Caves of Banishment (Maw)', 'Mineshaft',  1337122, lambda state: state.has('Gas Mask', player)),
         LocationData('Caves of Banishment (Sirens)', 'Wyvern room',  1337123),
         LocationData('Caves of Banishment (Sirens)', 'Upper banishment above sirens',  1337124),
         LocationData('Caves of Banishment (Sirens)', 'Under banishment sirens left',  1337125, lambda state: state.has('Water Mask', player)),
         LocationData('Caves of Banishment (Sirens)', 'Under banishment sirens right',  1337126, lambda state: state.has('Water Mask', player)),
+        LocationData('Caves of Banishment (Sirens)', 'Underwater banishment sirens right ground', 1337172, lambda state: state.has('Water Mask', player)),
         LocationData('Caves of Banishment (Sirens)', 'Banishment water hook',  1337127, lambda state: state.has('Water Mask', player)),
         LocationData('Castle Ramparts', 'Castle bomber chest',  1337128, lambda state: state._timespinner_has_multiple_small_jumps_of_npc(world, player)),
         LocationData('Castle Ramparts', 'Ramparts Freeze the engineer',  1337129, lambda state: state.has('Talaria Attachment', player) or state._timespinner_has_timestop(world, player)),
@@ -157,6 +161,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Castle Keep', 'Just an egg',  1337138),
         LocationData('Castle Keep', 'Under the twins',  1337139),
         LocationData('Castle Keep', 'Killed Twins',  EventId, lambda state: state._timespinner_has_timestop(world, player)),
+        LocationData('Castle Keep', 'Advisor jump', 1337171, lambda state: state._timespinner_has_timestop(world, player)),
         LocationData('Castle Keep', 'Twins',  1337140, lambda state: state._timespinner_has_timestop(world, player)),
         LocationData('Castle Keep', 'Royal guard tiny room',  1337141, lambda state: state._timespinner_has_doublejump(world, player) or state._timespinner_has_fastjump_on_npc(world,player)),
         LocationData('Royal towers (lower)', 'Royal tower floor secret',  1337142, lambda state: state._timespinner_has_doublejump(world, player) and state._timespinner_can_break_walls(world, player)),
@@ -175,34 +180,35 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Royal towers (upper)', 'Aelana\'s pedestal',  1337154),
         LocationData('Royal towers (upper)', 'Aelana\'s chest',  1337155),
 
-        # 1337157 - 1337170 Downloads
+        # 1337176 - 1337176 Cantoran
 
-        # 1337171 - 1337238 Reserved
+        # 1337177 - 1337236 Reserved
+
+        # 1337237 - 1337238 GyreArchives
 
         # PyramidItemLocations
-        #LocationData('Temporal Gyre', 'Transition chest 1',  1337239),
-        #LocationData('Temporal Gyre', 'Transition chest 2',  1337240),
-        #LocationData('Temporal Gyre', 'Transition chest 3',  1337241),
-        #LocationData('Temporal Gyre', 'Ravenlord pre fight',  1337242),
-        #LocationData('Temporal Gyre', 'Ravenlord post fight',  1337243),
-        #LocationData('Temporal Gyre', 'Ifrid pre fight',  1337244),
-        #LocationData('Temporal Gyre', 'Ifrid post fight',  1337245),
+        LocationData('Ancient Pyramid (right)', 'Transition chest 1',  1337239),
+        LocationData('Ancient Pyramid (right)', 'Transition chest 2',  1337240),
+        LocationData('Ancient Pyramid (right)', 'Transition chest 3',  1337241),
+
+        # 1337242 - 1337245 GyreArchives
+
         LocationData('Ancient Pyramid (left)', 'Why not it\'s right there',  1337246),
         LocationData('Ancient Pyramid (left)', 'Conviction guarded room',  1337247),
         LocationData('Ancient Pyramid (right)', 'Pit secret room',  1337248, lambda state: state._timespinner_can_break_walls(world, player)),
         LocationData('Ancient Pyramid (right)', 'Regret chest',  1337249, lambda state: state._timespinner_can_break_walls(world, player)),
         LocationData('Ancient Pyramid (right)', 'Killed Nightmare',  EventId)
-    )
+    ]
 
-    downloadable_items: Tuple[LocationData, ...] = (
+    downloadable_locations: Tuple[LocationData, ...] = (
         # DownloadTerminals
         LocationData('Library', 'Library terminal 1',  1337157, lambda state: state.has('Tablet', player)),
         LocationData('Library', 'Library terminal 2',  1337156, lambda state: state.has('Tablet', player)),
         # 1337158 Is Lost in time
         LocationData('Library', 'Library terminal 3',  1337159, lambda state: state.has('Tablet', player)),
-        LocationData('Library', 'V terminal 1',  1337160, lambda state: state.has_all(['Tablet', 'Library Keycard V'], player)),
-        LocationData('Library', 'V terminal 2',  1337161, lambda state: state.has_all(['Tablet', 'Library Keycard V'], player)),
-        LocationData('Library', 'V terminal 3',  1337162, lambda state: state.has_all(['Tablet', 'Library Keycard V'], player)),
+        LocationData('Library', 'V terminal 1',  1337160, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
+        LocationData('Library', 'V terminal 2',  1337161, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
+        LocationData('Library', 'V terminal 3',  1337162, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
         LocationData('Library top', 'Backer room terminal',  1337163, lambda state: state.has('Tablet', player)),
         LocationData('Varndagroth tower right (elevator)', 'Medbay',  1337164, lambda state: state.has('Tablet', player) and state._timespinner_has_keycard_B(world, player)),
         LocationData('The lab (upper)', 'Chest and download terminal',  1337165, lambda state: state.has('Tablet', player)),
@@ -213,10 +219,30 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('The lab (power off)', 'Lab terminal right',  1337170, lambda state: state.has('Tablet', player))
     )
 
-    if not world or is_option_enabled(world, player, "DownloadableItems"):
-        return ( *location_table, *downloadable_items )
-    else:
-        return location_table
+    gyre_archives_locations: Tuple[LocationData, ...] = (
+        LocationData('The lab (upper)', 'Ravenlord post fight (pedestal)',  1337237, lambda state: state.has('Merchant Crow', player)),
+        LocationData('Library top', 'Ifrit post fight (pedestal)',  1337238, lambda state: state.has('Kobo', player)),
+        LocationData('The lab (upper)', 'Ravenlord pre fight',  1337242, lambda state: state.has('Merchant Crow', player)),
+        LocationData('The lab (upper)', 'Ravenlord post fight (chest)',  1337243, lambda state: state.has('Merchant Crow', player)),
+        LocationData('Library top', 'Ifrit pre fight',  1337244, lambda state: state.has('Kobo', player)),
+        LocationData('Library top', 'Ifrit post fight (chest)',  1337245, lambda state: state.has('Kobo', player)),
+    )
+
+    cantoran_locations: Tuple[LocationData, ...] = (
+        LocationData('Left Side forest Caves', 'Cantoran',  1337176),
+    )
+
+    if not world:
+        return ( *location_table, *downloadable_locations, *gyre_archives_locations, *cantoran_locations )
+
+    if is_option_enabled(world, player, "DownloadableItems"):
+        location_table.extend(downloadable_locations)
+    if is_option_enabled(world, player, "GyreArchives"):
+        location_table.extend(gyre_archives_locations)
+    if is_option_enabled(world, player, "Cantoran"):
+        location_table.extend(cantoran_locations)
+
+    return tuple(location_table)
         
 
 starter_progression_locations: Tuple[str, ...] = (
