@@ -50,7 +50,7 @@ progression_balancing:
 #  - "Big Keys"
 # non_local_items: # Force certain items to appear outside your world only, unless in single-player. Recognizes some group names, like "Swords"
 #  - "Progressive Weapons"
-# exclude_locations: # Force certain locations to never contain progression items, and always be filled with junk. 
+# exclude_locations: # Force certain locations to never contain progression items, and always be filled with junk.
 #  - "Master Sword Pedestal"
 
 A Link to the Past:
@@ -261,7 +261,7 @@ A Link to the Past:
     25: 0   # 25% chance for each junk fill item (rupees, bombs and arrows) to be replaced with bees
     50: 0   # 50% chance for each junk fill item (rupees, bombs and arrows) to be replaced with bees
     75: 0   # 75% chance for each junk fill item (rupees, bombs and arrows) to be replaced with bees
-    100: 0  # All junk fill items (rupees, bombs and arrows) are replaced with bees 
+    100: 0  # All junk fill items (rupees, bombs and arrows) are replaced with bees
   beemizer_trap_chance:
     60: 50  # 60% chance for each beemizer replacement to be a trap, 40% chance to be a single bee
     70: 0   # 70% chance for each beemizer replacement to be a trap, 30% chance to be a single bee
