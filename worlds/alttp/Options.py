@@ -145,10 +145,17 @@ class RestrictBossItem(Toggle):
     displayname = "Prevent Dungeon Item on Boss"
 
 
-class Hints(DefaultOnToggle):
-    """Put item and entrance placement hints on telepathic tiles and some NPCs.
-    Additionally King Zora and Bottle Merchant say what they're selling."""
+class Hints(Choice):
+    """Vendors: King Zora and Bottle Merchant say what they're selling.
+    On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints."""
     displayname = "Hints"
+    option_off = 0
+    option_vendors = 1
+    option_on = 2
+    option_full = 3
+    default = 2
+    alias_false = 0
+    alias_true = 2
 
 
 class EnemyShuffle(Toggle):

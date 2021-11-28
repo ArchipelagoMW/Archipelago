@@ -12,7 +12,7 @@ import shutil
 from . import Options
 from BaseClasses import MultiWorld
 from .Technologies import tech_table, rocket_recipes, recipes, free_sample_blacklist, progressive_technology_table, \
-    base_tech_table, tech_to_progressive_lookup, progressive_tech_table
+    base_tech_table, tech_to_progressive_lookup, progressive_tech_table, liquids
 
 template_env: Optional[jinja2.Environment] = None
 
@@ -56,7 +56,7 @@ recipe_time_ranges = {
 def generate_mod(world, output_directory: str):
     player = world.player
     multiworld = world.world
-    global data_final_template, locale_template, control_template, data_template
+    global data_final_template, locale_template, control_template, data_template, settings_template
     with template_load_lock:
         if not data_final_template:
             mod_template_folder = os.path.join(os.path.dirname(__file__), "data", "mod_template")
@@ -66,6 +66,7 @@ def generate_mod(world, output_directory: str):
             data_final_template = template_env.get_template("data-final-fixes.lua")
             locale_template = template_env.get_template(r"locale/en/locale.cfg")
             control_template = template_env.get_template("control.lua")
+            settings_template = template_env.get_template("settings.lua")
     # get data for templates
     player_names = {x: multiworld.player_name[x] for x in multiworld.player_ids}
     locations = []
@@ -97,7 +98,7 @@ def generate_mod(world, output_directory: str):
                      "mod_name": mod_name, "allowed_science_packs": multiworld.max_science_pack[player].get_allowed_packs(),
                      "tech_cost_scale": tech_cost_scale, "custom_technologies": multiworld.worlds[player].custom_technologies,
                      "tech_tree_layout_prerequisites": multiworld.tech_tree_layout_prerequisites[player],
-                     "slot_name": multiworld.player_name[player], "seed_name": multiworld.seed_name,
+                     "slot_name": multiworld.player_name[player], "seed_name": multiworld.seed_name, "slot_player": player,
                      "starting_items": multiworld.starting_items[player], "recipes": recipes,
                      "random": random, "flop_random": flop_random,
                      "static_nodes": multiworld.worlds[player].static_nodes,
@@ -107,7 +108,8 @@ def generate_mod(world, output_directory: str):
                      "progressive_technology_table": {tech.name : tech.progressive for tech in
                                                       progressive_technology_table.values()},
                      "custom_recipes": world.custom_recipes,
-                     "max_science_pack": multiworld.max_science_pack[player].value}
+                     "max_science_pack": multiworld.max_science_pack[player].value,
+                     "liquids": liquids}
 
     for factorio_option in Options.factorio_options:
         template_data[factorio_option] = getattr(multiworld, factorio_option)[player].value
@@ -121,6 +123,7 @@ def generate_mod(world, output_directory: str):
     control_code = control_template.render(**template_data)
     data_template_code = data_template.render(**template_data)
     data_final_fixes_code = data_final_template.render(**template_data)
+    settings_code = settings_template.render(**template_data)
 
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
     en_locale_dir = os.path.join(mod_dir, "locale", "en")
@@ -132,6 +135,8 @@ def generate_mod(world, output_directory: str):
         f.write(data_final_fixes_code)
     with open(os.path.join(mod_dir, "control.lua"), "wt") as f:
         f.write(control_code)
+    with open(os.path.join(mod_dir, "settings.lua"), "wt") as f:
+        f.write(settings_code)
     locale_content = locale_template.render(**template_data)
     with open(os.path.join(en_locale_dir, "locale.cfg"), "wt") as f:
         f.write(locale_content)

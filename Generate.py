@@ -353,7 +353,7 @@ def roll_linked_options(weights: dict) -> dict:
 
 def roll_triggers(weights: dict, triggers: list) -> dict:
     weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
-    weights["_Generator_Version"] = "Archipelago"  # Some means for triggers to know if the seed is on main or doors.
+    weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
         try:
             currently_targeted_weights = weights
@@ -494,7 +494,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             handle_option(ret, game_weights, option_key, option)
         if "items" in plando_options:
             ret.plando_items = roll_item_plando(world_type, game_weights)
-        if ret.game == "Minecraft":
+        if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
             # bad hardcoded behavior to make this work for now
             ret.plando_connections = []
             if "connections" in plando_options:
@@ -504,7 +504,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                         ret.plando_connections.append(PlandoConnection(
                             get_choice("entrance", placement),
                             get_choice("exit", placement),
-                            get_choice("direction", placement, "both")
+                            get_choice("direction", placement)
                         ))
         elif ret.game == "A Link to the Past":
             roll_alttp_settings(ret, game_weights, plando_options)

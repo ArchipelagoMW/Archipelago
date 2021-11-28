@@ -323,5 +323,24 @@
         ]
       }
     ]
+  },
+  {
+    "gameTitle": "Final Fantasy",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to playing Final Fantasy multiworld. This guide only covers playing multiworld.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "ff1/multiworld_en.md",
+            "link": "ff1/multiworld/en",
+            "authors": [
+              "jat2980"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

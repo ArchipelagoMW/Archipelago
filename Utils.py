@@ -1,6 +1,16 @@
 from __future__ import annotations
 
 import typing
+import builtins
+import os
+import subprocess
+import sys
+import pickle
+import functools
+import io
+import collections
+import importlib
+import logging
 
 
 def tuplize_version(version: str) -> Version:
@@ -15,17 +25,6 @@ class Version(typing.NamedTuple):
 
 __version__ = "0.2.0"
 version_tuple = tuplize_version(__version__)
-
-import builtins
-import os
-import subprocess
-import sys
-import pickle
-import functools
-import io
-import collections
-import importlib
-import logging
 
 from yaml import load, dump, safe_load
 
@@ -462,3 +461,16 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         handle_exception._wrapped = True
 
         sys.excepthook = handle_exception
+
+
+def stream_input(stream, queue):
+    def queuer():
+        while 1:
+            text = stream.readline().strip()
+            if text:
+                queue.put_nowait(text)
+
+    from threading import Thread
+    thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
+    thread.start()
+    return thread

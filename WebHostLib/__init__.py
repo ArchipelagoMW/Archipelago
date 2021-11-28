@@ -126,7 +126,7 @@ def faq(lang):
 
 
 @app.route('/seed/<suuid:seed>')
-def viewSeed(seed: UUID):
+def view_seed(seed: UUID):
     seed = Seed.get(id=seed)
     if not seed:
         abort(404)
@@ -141,7 +141,7 @@ def new_room(seed: UUID):
         abort(404)
     room = Room(seed=seed, owner=session["_id"], tracker=uuid4())
     commit()
-    return redirect(url_for("hostRoom", room=room.id))
+    return redirect(url_for("host_room", room=room.id))
 
 
 def _read_log(path: str):
@@ -159,7 +159,7 @@ def display_log(room: UUID):
 
 
 @app.route('/room/<suuid:room>', methods=['GET', 'POST'])
-def hostRoom(room: UUID):
+def host_room(room: UUID):
     room = Room.get(id=room)
     if room is None:
         return abort(404)
@@ -175,19 +175,16 @@ def hostRoom(room: UUID):
     return render_template("hostRoom.html", room=room)
 
 
-@app.route('/hosted/<suuid:room>', methods=['GET', 'POST'])
-def hostRoomRedirect(room: UUID):
-    return redirect(url_for("hostRoom", room=room))
-
-
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static/static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+
 @app.route('/discord')
 def discord():
     return redirect("https://discord.gg/archipelago")
+
 
 from WebHostLib.customserver import run_server_process
 from . import tracker, upload, landing, check, generate, downloads, api  # to trigger app routing picking up on it

@@ -119,7 +119,7 @@ class Context:
         self.remaining_mode: str = remaining_mode
         self.collect_mode: str = collect_mode
         self.item_cheat = item_cheat
-        self.running = True
+        self.exit_event = asyncio.Event()
         self.client_activity_timers: typing.Dict[
             team_slot, datetime.datetime] = {}  # datetime of last new item check
         self.client_connection_timers: typing.Dict[
@@ -336,7 +336,7 @@ class Context:
         if not self.auto_saver_thread:
             def save_regularly():
                 import time
-                while self.running:
+                while not self.exit_event.is_set():
                     time.sleep(self.auto_save_interval)
                     if self.save_dirty:
                         logging.debug("Saving via thread.")
@@ -1409,7 +1409,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         asyncio.create_task(self.ctx.server.ws_server._close())
         if self.ctx.shutdown_task:
             self.ctx.shutdown_task.cancel()
-        self.ctx.running = False
+        self.ctx.exit_event.set()
         return True
 
     @mark_raw
@@ -1566,11 +1566,17 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
 
 async def console(ctx: Context):
-    session = prompt_toolkit.PromptSession()
-    while ctx.running:
-        with patch_stdout():
-            input_text = await session.prompt_async()
+    import sys
+    queue = asyncio.Queue()
+    Utils.stream_input(sys.stdin, queue)
+    while not ctx.exit_event.is_set():
         try:
+            # I don't get why this while loop is needed. Works fine without it on clients,
+            # but the queue.get() for server never fulfills if the queue is empty when entering the await.
+            while queue.qsize() == 0:
+                await asyncio.sleep(0.05)
+            input_text = await queue.get()
+            queue.task_done()
             ctx.commandprocessor(input_text)
         except:
             import traceback
@@ -1636,10 +1642,10 @@ def parse_args() -> argparse.Namespace:
 
 async def auto_shutdown(ctx, to_cancel=None):
     await asyncio.sleep(ctx.auto_shutdown)
-    while ctx.running:
+    while not ctx.exit_event.is_set():
         if not ctx.client_activity_timers.values():
             asyncio.create_task(ctx.server.ws_server._close())
-            ctx.running = False
+            ctx.exit_event.set()
             if to_cancel:
                 for task in to_cancel:
                     task.cancel()
@@ -1650,7 +1656,7 @@ async def auto_shutdown(ctx, to_cancel=None):
             seconds = ctx.auto_shutdown - delta.total_seconds()
             if seconds < 0:
                 asyncio.create_task(ctx.server.ws_server._close())
-                ctx.running = False
+                ctx.exit_event.set()
                 if to_cancel:
                     for task in to_cancel:
                         task.cancel()
@@ -1694,7 +1700,8 @@ async def main(args: argparse.Namespace):
     console_task = asyncio.create_task(console(ctx))
     if ctx.auto_shutdown:
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, [console_task]))
-    await console_task
+    await ctx.exit_event.wait()
+    console_task.cancel()
     if ctx.shutdown_task:
         await ctx.shutdown_task
 

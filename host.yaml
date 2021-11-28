@@ -37,7 +37,7 @@ server_options:
   # "auto" -> automatic collect on goal completion
   # "auto-enabled" -> automatic collect on goal completion and manual collect is also enabled
   # "goal" -> collect is allowed after goal completion
-  collect_mode: "disabled"
+  collect_mode: "goal"
   # Remaining modes
   # !remaining handling, that tells a client which items remain in their pool
   # "enabled" -> Client can always ask for remaining items

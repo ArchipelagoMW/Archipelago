@@ -7,7 +7,8 @@ from BaseClasses import Region, Entrance, Location, Item
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, rocket_recipes, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
-    get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies
+    get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
+    liquids
 from .Shapes import get_shapes
 from .Mod import generate_mod
 from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation
@@ -183,7 +184,29 @@ class Factorio(World):
             for recipe in world.worlds[player].custom_recipes.values():
                 spoiler_handle.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
 
-    def make_balanced_recipe(self, original: Recipe, pool: list, factor: float = 1) -> Recipe:
+    @staticmethod
+    def get_category(category: str, liquids: int) -> str:
+        categories = {1: "crafting-with-fluid",
+                      2: "chemistry"}
+        return categories.get(liquids, category)
+
+    def make_quick_recipe(self, original: Recipe, pool: list, allow_liquids: int = 2) -> Recipe:
+        new_ingredients = {}
+        liquids_used = 0
+        for _ in original.ingredients:
+            new_ingredient = pool.pop()
+            if new_ingredient in liquids:
+                while liquids_used == allow_liquids and new_ingredient in liquids:
+                    # liquids already at max for current recipe. Return the liquid to the pool, shuffle, and get a new ingredient.
+                    pool.append(new_ingredient)
+                    self.world.random.shuffle(pool)
+                    new_ingredient = pool.pop()
+                liquids_used += 1
+            new_ingredients[new_ingredient] = 1
+        return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients, original.products, original.energy)
+
+    def make_balanced_recipe(self, original: Recipe, pool: list, factor: float = 1, allow_liquids: int = 2) -> \
+            Recipe:
         """Generate a recipe from pool with time and cost similar to original * factor"""
         new_ingredients = {}
         self.world.random.shuffle(pool)
@@ -194,9 +217,21 @@ class Factorio(World):
         remaining_energy = target_energy
         remaining_num_ingredients = target_num_ingredients
         fallback_pool = []
+        liquids_used = 0
 
         # fill all but one slot with random ingredients, last with a good match
         while remaining_num_ingredients > 0 and pool:
+            ingredient = pool.pop()
+            if liquids_used == allow_liquids and ingredient in liquids:
+                continue   # can't use this ingredient as we already have maximum liquid in our recipe.
+            if ingredient in all_product_sources:
+                ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
+                ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
+                ingredient_energy = ingredient_recipe.total_energy
+            else:
+                # assume simple ore TODO: remove if tree when mining data is harvested from Factorio
+                ingredient_raw = 1
+                ingredient_energy = 2
             if remaining_num_ingredients == 1:
                 max_raw = 1.1 * remaining_raw
                 min_raw = 0.9 * remaining_raw
@@ -207,15 +242,6 @@ class Factorio(World):
                 min_raw = (remaining_raw - max_raw) / remaining_num_ingredients
                 max_energy = remaining_energy * 0.75
                 min_energy = (remaining_energy - max_energy) / remaining_num_ingredients
-            ingredient = pool.pop()
-            if ingredient in all_product_sources:
-                ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
-                ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
-                ingredient_energy = ingredient_recipe.total_energy
-            else:
-                # assume simple ore TODO: remove if tree when mining data is harvested from Factorio
-                ingredient_raw = 1
-                ingredient_energy = 2
             min_num_raw = min_raw / ingredient_raw
             max_num_raw = max_raw / ingredient_raw
             min_num_energy = min_energy / ingredient_energy
@@ -230,30 +256,41 @@ class Factorio(World):
             remaining_raw -= num * ingredient_raw
             remaining_energy -= num * ingredient_energy
             remaining_num_ingredients -= 1
+            if ingredient in liquids:
+                liquids_used += 1
 
         # fill failed slots with whatever we got
         pool = fallback_pool
         while remaining_num_ingredients > 0 and pool:
             ingredient = pool.pop()
-            if ingredient not in recipes:
+            if liquids_used == allow_liquids and ingredient in liquids:
+                continue  # can't use this ingredient as we already have maximum liquid in our recipe.
+
+            ingredient_recipe = recipes.get(ingredient, None)
+            if not ingredient_recipe and ingredient.endswith("-barrel"):
+                ingredient_recipe = recipes.get(f"fill-{ingredient}", None)
+            if not ingredient_recipe:
                 logging.warning(f"missing recipe for {ingredient}")
                 continue
-            ingredient_recipe = recipes[ingredient]
             ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
             ingredient_energy = ingredient_recipe.total_energy
             num_raw = remaining_raw / ingredient_raw / remaining_num_ingredients
             num_energy = remaining_energy / ingredient_energy / remaining_num_ingredients
             num = int(min(num_raw, num_energy))
-            if num < 1: continue
+            if num < 1:
+                continue
+
             new_ingredients[ingredient] = num
             remaining_raw -= num * ingredient_raw
             remaining_energy -= num * ingredient_energy
             remaining_num_ingredients -= 1
+            if ingredient in liquids:
+                liquids_used += 1
 
         if remaining_num_ingredients > 1:
             logging.warning("could not randomize recipe")
 
-        return Recipe(original.name, original.category, new_ingredients, original.products, original.energy)
+        return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients, original.products, original.energy)
 
     def set_custom_technologies(self):
         custom_technologies = {}
@@ -267,6 +304,8 @@ class Factorio(World):
         science_pack_pools = get_science_pack_pools()
         valid_pool = sorted(science_pack_pools[self.world.max_science_pack[self.player].get_max_pack()])
         self.world.random.shuffle(valid_pool)
+        while any([valid_pool[x] in liquids for x in range(3)]):
+            self.world.random.shuffle(valid_pool)
         self.custom_recipes = {"rocket-part": Recipe("rocket-part", original_rocket_part.category,
                                                      {valid_pool[x]: 10 for x in range(3)},
                                                      original_rocket_part.products,
@@ -278,11 +317,7 @@ class Factorio(World):
                 valid_pool += sorted(science_pack_pools[pack])
                 self.world.random.shuffle(valid_pool)
                 if pack in recipes:  # skips over space science pack
-                    original = recipes[pack]
-                    new_ingredients = {}
-                    for _ in original.ingredients:
-                        new_ingredients[valid_pool.pop()] = 1
-                    new_recipe = Recipe(pack, original.category, new_ingredients, original.products, original.energy)
+                    new_recipe = self.make_quick_recipe(recipes[pack], valid_pool)
                     self.custom_recipes[pack] = new_recipe
 
         if self.world.silo[self.player].value == Silo.option_randomize_recipe \
@@ -309,7 +344,6 @@ class Factorio(World):
 
         for recipe in needed_recipes:
             recipe = self.custom_recipes.get(recipe, recipes[recipe])
-            self.advancement_technologies |= {tech.name for tech in recipe.unlocking_technologies}
             self.advancement_technologies |= {tech.name for tech in recipe.recursive_unlocking_technologies}
 
         # handle marking progressive techs as advancement

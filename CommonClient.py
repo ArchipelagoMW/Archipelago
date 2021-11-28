@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
 from MultiServer import CommandProcessor
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
-from Utils import Version
+from Utils import Version, stream_input
 from worlds import network_data_package, AutoWorldRegister
 
 logger = logging.getLogger("Client")
@@ -315,6 +315,15 @@ class CommonContext():
             self.input_requests -= 1
         self.keep_alive_task.cancel()
 
+    async def update_death_link(self, death_link):
+        old_tags = self.tags.copy()
+        if death_link:
+            self.tags.add("DeathLink")
+        else:
+            self.tags -= {"DeathLink"}
+        if old_tags != self.tags and self.server and not self.server.socket.closed:
+            await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
+
 
 async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
     """some ISPs/network configurations drop TCP connections if no payload is sent (ignore TCP-keep-alive)
@@ -534,12 +543,12 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 async def console_loop(ctx: CommonContext):
     import sys
     commandprocessor = ctx.command_processor(ctx)
+    queue = asyncio.Queue()
+    stream_input(sys.stdin, queue)
     while not ctx.exit_event.is_set():
         try:
-            input_text = await asyncio.get_event_loop().run_in_executor(
-                None, sys.stdin.readline
-            )
-            input_text = input_text.strip()
+            input_text = await queue.get()
+            queue.task_done()
 
             if ctx.input_requests > 0:
                 ctx.input_requests -= 1
@@ -586,14 +595,15 @@ if __name__ == '__main__':
     async def main(args):
         ctx = TextContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+        input_task = None
         if gui_enabled:
-            input_task = None
             from kvui import TextManager
             ctx.ui = TextManager(ctx)
             ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
         else:
-            input_task = asyncio.create_task(console_loop(ctx), name="Input")
             ui_task = None
+        if sys.stdin:
+            input_task = asyncio.create_task(console_loop(ctx), name="Input")
         await ctx.exit_event.wait()
 
         await ctx.shutdown()
@@ -605,7 +615,7 @@ if __name__ == '__main__':
 
     import colorama
 
-    parser = get_base_parser(description="Gameless Archipelago Client, for text interfaction.")
+    parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
 
     args, rest = parser.parse_known_args()
     colorama.init()

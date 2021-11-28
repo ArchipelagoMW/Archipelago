@@ -56,7 +56,7 @@ class WebHostContext(Context):
     def listen_to_db_commands(self):
         cmdprocessor = DBCommandProcessor(self)
 
-        while self.running:
+        while not self.exit_event.is_set():
             with db_session:
                 commands = select(command for command in Command if command.room.id == self.room_id)
                 if commands:

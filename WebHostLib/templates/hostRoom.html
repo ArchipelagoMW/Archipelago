@@ -9,7 +9,7 @@
     {% include 'header/grassHeader.html' %}
     <div id="host-room">
         {% if room.owner == session["_id"] %}
-            Room created from <a href="{{ url_for("viewSeed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
+            Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
             <br>
         {% endif %}
         {% if room.tracker %}

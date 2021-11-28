@@ -131,6 +131,7 @@ class Recipe(FactorioElement):
         base = {technology_table[tech_name] for tech_name in recipe_sources.get(self.name, ())}
         for ingredient in self.ingredients:
             base |= required_technologies[ingredient]
+        base |= required_technologies[self.crafting_machine]
         return base
 
     @property
@@ -458,9 +459,8 @@ rel_cost = {
     "used-up-uranium-fuel-cell": 1000
 }
 
-# forbid liquids for now, TODO: allow a single liquid per assembler
-blacklist: Set[str] = all_ingredient_names | {"rocket-part", "crude-oil", "water", "sulfuric-acid", "petroleum-gas",
-                                              "light-oil", "heavy-oil", "lubricant", "steam"}
+blacklist: Set[str] = all_ingredient_names | {"rocket-part"}
+liquids: Set[str] = {"crude-oil", "water", "sulfuric-acid", "petroleum-gas", "light-oil", "heavy-oil", "lubricant", "steam"}
 
 
 @Utils.cache_argsless
@@ -473,7 +473,7 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
             cost += rel_cost.get(ingredient_name, 1) * amount
         return cost
 
-    science_pack_pools = {}
+    science_pack_pools: Dict[str, Set[str]] = {}
     already_taken = blacklist.copy()
     current_difficulty = 5
     for science_pack in Options.MaxSciencePack.get_ordered_science_packs():
@@ -484,6 +484,10 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
                 current |= set(recipe.products)
         if science_pack == "automation-science-pack":
             current |= {"iron-ore", "copper-ore", "coal", "stone"}
+            # Can't hand craft automation science if liquids end up in its recipe, making the seed impossible.
+            current -= liquids
+        elif science_pack == "logistic-science-pack":
+            current |= {"steam"}
         current -= already_taken
         already_taken |= current
         current_difficulty *= 2

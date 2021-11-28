@@ -5,6 +5,7 @@ import json
 import string
 import copy
 import subprocess
+import sys
 import time
 import random
 
@@ -65,12 +66,11 @@ class FactorioContext(CommonContext):
         if password_requested and not self.password:
             await super(FactorioContext, self).server_auth(password_requested)
 
-        if not self.auth:
-            if self.rcon_client:
-                get_info(self, self.rcon_client)  # retrieve current auth code
-            else:
-                raise Exception("Cannot connect to a server with unknown own identity, "
-                                "bridge to Factorio first.")
+        if self.rcon_client:
+            await get_info(self, self.rcon_client)  # retrieve current auth code
+        else:
+            raise Exception("Cannot connect to a server with unknown own identity, "
+                            "bridge to Factorio first.")
 
         await self.send_connect()
 
@@ -126,6 +126,8 @@ async def game_watcher(ctx: FactorioContext):
                     research_data = data["research_done"]
                     research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                     victory = data["victory"]
+                    if "death_link" in data:    # TODO: Remove this if statement around version 0.2.4 or so
+                        await ctx.update_death_link(data["death_link"])
 
                     if not ctx.finished_game and victory:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -140,7 +142,8 @@ async def game_watcher(ctx: FactorioContext):
                     death_link_tick = data.get("death_link_tick", 0)
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick
-                        await ctx.send_death()
+                        if "DeathLink" in ctx.tags:
+                            await ctx.send_death()
 
             await asyncio.sleep(0.1)
 
@@ -188,6 +191,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
 
             while not factorio_queue.empty():
                 msg = factorio_queue.get()
+                factorio_queue.task_done()
                 factorio_server_logger.info(msg)
                 if not ctx.rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     ctx.rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
@@ -226,14 +230,13 @@ async def factorio_server_watcher(ctx: FactorioContext):
         factorio_process.wait(5)
 
 
-def get_info(ctx, rcon_client):
+async def get_info(ctx, rcon_client):
     info = json.loads(rcon_client.send_command("/ap-rcon-info"))
     ctx.auth = info["slot_name"]
     ctx.seed_name = info["seed_name"]
     # 0.2.0 addition, not present earlier
     death_link = bool(info.get("death_link", False))
-    if death_link:
-        ctx.tags.add("DeathLink")
+    await ctx.update_death_link(death_link)
 
 
 async def factorio_spinup_server(ctx: FactorioContext) -> bool:
@@ -272,7 +275,7 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
                     rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     if ctx.mod_version == ctx.__class__.mod_version:
                         raise Exception("No Archipelago mod was loaded. Aborting.")
-                    get_info(ctx, rcon_client)
+                    await get_info(ctx, rcon_client)
             await asyncio.sleep(0.01)
 
     except Exception as e:
@@ -293,14 +296,15 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
 async def main(args):
     ctx = FactorioContext(args.connect, args.password)
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+    input_task = None
     if gui_enabled:
-        input_task = None
         from kvui import FactorioManager
         ctx.ui = FactorioManager(ctx)
         ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
     else:
-        input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None
+    if sys.stdin:
+        input_task = asyncio.create_task(console_loop(ctx), name="Input")
     factorio_server_task = asyncio.create_task(factorio_spinup_server(ctx), name="FactorioSpinupServer")
     succesful_launch = await factorio_server_task
     if succesful_launch:

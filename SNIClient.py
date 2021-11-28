@@ -680,11 +680,6 @@ async def snes_disconnect(ctx: Context):
 
 
 async def snes_autoreconnect(ctx: Context):
-    # unfortunately currently broken. See: https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1033
-    # with prompt_toolkit.shortcuts.ProgressBar() as pb:
-    #    for _ in pb(range(100)):
-    #        await asyncio.sleep(RECONNECT_DELAY/100)
-
     await asyncio.sleep(SNES_RECONNECT_DELAY)
     if ctx.snes_reconnect_address and ctx.snes_socket is None:
         await snes_connect(ctx, ctx.snes_reconnect_address)
@@ -905,14 +900,7 @@ async def game_watcher(ctx: Context):
             death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
                                          SM_DEATH_LINK_ACTIVE_ADDR, 1)
             if death_link:
-                death_link = bool(death_link[0] & 0b1)
-                old_tags = ctx.tags.copy()
-                if death_link:
-                    ctx.tags.add("DeathLink")
-                else:
-                    ctx.tags -= {"DeathLink"}
-                if old_tags != ctx.tags and ctx.server and not ctx.server.socket.closed:
-                    await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
+                await ctx.update_death_link(bool(death_link[0] & 0b1))
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
                 ctx.locations_scouted = set()
@@ -1098,15 +1086,15 @@ async def main():
     ctx = Context(args.snes, args.connect, args.password)
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-
+    input_task = None
     if gui_enabled:
-        input_task = None
         from kvui import SNIManager
         ctx.ui = SNIManager(ctx)
         ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
     else:
-        input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None
+    if sys.stdin:
+        input_task = asyncio.create_task(console_loop(ctx), name="Input")
 
     snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address), name="SNES Connect")
     watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
