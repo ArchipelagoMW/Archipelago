@@ -179,7 +179,7 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
                         if text.startswith(question):
                             name = Utils.get_text_between(text, question,
                                                           "? (")
-                            cmdinput.text = f"!hint {name}"
+                            cmdinput.text = f"!{App.get_running_app().last_autofillable_command} {name}"
                             break
 
                 Clipboard.copy(text)
@@ -194,7 +194,8 @@ class GameManager(App):
     logging_pairs = [
         ("Client", "Archipelago"),
     ]
-    base_title = "Archipelago Client"
+    base_title: str = "Archipelago Client"
+    last_autofillable_command: str
 
     def __init__(self, ctx: context_type):
         self.title = self.base_title
@@ -203,6 +204,22 @@ class GameManager(App):
         self.icon = r"data/icon.png"
         self.json_to_kivy_parser = KivyJSONtoTextParser(ctx)
         self.log_panels = {}
+
+        # keep track of last used command to autofill on click
+        self.last_autofillable_command = "hint"
+        autofillable_commands = ("hint", "getitem")
+        original_say = ctx.on_user_say
+
+        def intercept_say(text):
+            text = original_say(text)
+            if text:
+                for command in autofillable_commands:
+                    if text.startswith("!"+command):
+                        self.last_autofillable_command = command
+                        break
+            return text
+        ctx.on_user_say = intercept_say
+
         super(GameManager, self).__init__()
 
     def build(self):

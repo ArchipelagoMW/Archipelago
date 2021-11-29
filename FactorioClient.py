@@ -134,7 +134,7 @@ async def game_watcher(ctx: FactorioContext):
                         ctx.finished_game = True
 
                     if ctx.locations_checked != research_data:
-                        bridge_logger.info(
+                        bridge_logger.debug(
                             f"New researches done: "
                             f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
@@ -192,7 +192,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
             while not factorio_queue.empty():
                 msg = factorio_queue.get()
                 factorio_queue.task_done()
-                factorio_server_logger.info(msg)
+
                 if not ctx.rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     ctx.rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     if not ctx.server:
@@ -201,7 +201,9 @@ async def factorio_server_watcher(ctx: FactorioContext):
 
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
-
+                    factorio_server_logger.debug(msg)
+                else:
+                    factorio_server_logger.info(msg)
             if ctx.rcon_client:
                 commands = {}
                 while ctx.send_index < len(ctx.items_received):

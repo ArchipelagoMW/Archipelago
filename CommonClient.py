@@ -102,7 +102,9 @@ class ClientCommandProcessor(CommandProcessor):
         asyncio.create_task(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
 
     def default(self, raw: str):
-        asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]), name="send Say")
+        raw = self.ctx.on_user_say(raw)
+        if raw:
+            asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]), name="send Say")
 
 
 class CommonContext():
@@ -273,6 +275,11 @@ class CommonContext():
         """For custom package handling in subclasses."""
         pass
 
+    def on_user_say(self, text: str) -> typing.Optional[str]:
+        """Gets called before sending a Say to the server from the user.
+        Returned text is sent, or sending is aborted if None is returned."""
+        return text
+
     def update_permissions(self, permissions: typing.Dict[str, int]):
         for permission_name, permission_flag in permissions.items():
             try:
@@ -281,6 +288,20 @@ class CommonContext():
                 self.permissions[permission_name] = flag.name
             except Exception as e:  # safeguard against permissions that may be implemented in the future
                 logger.exception(e)
+
+    async def shutdown(self):
+        self.server_address = None
+        if self.server and not self.server.socket.closed:
+            await self.server.socket.close()
+        if self.server_task:
+            await self.server_task
+
+        while self.input_requests > 0:
+            self.input_queue.put_nowait(None)
+            self.input_requests -= 1
+        self.keep_alive_task.cancel()
+
+    # DeathLink hooks
 
     def on_deathlink(self, data: dict):
         """Gets dispatched when a new DeathLink is triggered by another linked player."""
@@ -302,18 +323,6 @@ class CommonContext():
                 "cause": death_text
             }
         }])
-
-    async def shutdown(self):
-        self.server_address = None
-        if self.server and not self.server.socket.closed:
-            await self.server.socket.close()
-        if self.server_task:
-            await self.server_task
-
-        while self.input_requests > 0:
-            self.input_queue.put_nowait(None)
-            self.input_requests -= 1
-        self.keep_alive_task.cancel()
 
     async def update_death_link(self, death_link):
         old_tags = self.tags.copy()
