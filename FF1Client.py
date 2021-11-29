@@ -28,6 +28,11 @@ class FF1CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, FF1Context):
             logger.info(f"NES Status: {self.ctx.nes_status}")
 
+    def _cmd_narcissist(self):
+        """Toggle narcissist mode on or off (only see messages relating to yourself)"""
+        self.ctx.is_narcissistic = not self.ctx.is_narcissistic
+        logger.info(f"Narcissistic Mode is now {self.ctx.is_narcissistic}")
+
 
 class FF1Context(CommonContext):
     def __init__(self, server_address, password):
@@ -39,6 +44,7 @@ class FF1Context(CommonContext):
         self.nes_status = CONNECTION_INITIAL_STATUS
         self.game = 'Final Fantasy'
         self.awaiting_rom = False
+        self.is_narcissistic: bool = False
 
     command_processor = FF1CommandProcessor
 
@@ -54,6 +60,17 @@ class FF1Context(CommonContext):
 
     def _set_message(self, msg: str, msg_id: int):
         self.messages[(time.time(), msg_id)] = msg
+
+    def on_print_json(self, args: dict):
+        if self.ui:
+            item = args['item']
+            receiving_player_id = args['receiving']
+            sending_player_id = item.player
+            if not self.is_narcissistic or receiving_player_id == self.slot or sending_player_id == self.slot:
+                self.ui.print_json(args["data"])
+        else:
+            text = self.jsontotextparser(args["data"])
+            logger.info(text)
 
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
@@ -74,8 +91,12 @@ class FF1Context(CommonContext):
             sending_player_id = item.player
             sending_player_name = self.player_names[item.player]
             if print_type == 'Hint':
-                msg = f"Hint: Your {self.item_name_getter(item.item)} is at" \
-                      f" {self.player_names[item.player]}'s {self.location_name_getter(item.location)}"
+                if sending_player_id == self.slot:
+                    msg = f"Hint: Your {self.item_name_getter(item.item)} is at" \
+                          f" {self.player_names[item.player]}'s {self.location_name_getter(item.location)}"
+                else:
+                    msg = f"Hint: {receiving_player_name}'s {self.item_name_getter(item.item)} is at" \
+                          f" your {self.location_name_getter(item.location)}"
                 self._set_message(msg, item.item)
             elif print_type == 'ItemSend' and receiving_player_id != self.slot:
                 if sending_player_id == self.slot:
@@ -83,13 +104,14 @@ class FF1Context(CommonContext):
                         msg = f"You found your own {self.item_name_getter(item.item)}"
                     else:
                         msg = f"You sent {self.item_name_getter(item.item)} to {receiving_player_name}"
-                else:
+                    self._set_message(msg, item.item)
+                elif not self.is_narcissistic:
                     if receiving_player_id == sending_player_id:
                         msg = f"{sending_player_name} found their {self.item_name_getter(item.item)}"
                     else:
                         msg = f"{sending_player_name} sent {self.item_name_getter(item.item)} to " \
                               f"{receiving_player_name}"
-                self._set_message(msg, item.item)
+                    self._set_message(msg, item.item)
 
 
 def get_payload(ctx: FF1Context):
