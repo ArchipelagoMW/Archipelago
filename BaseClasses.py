@@ -446,13 +446,6 @@ class MultiWorld():
                     sphere.add(location)
 
             if not sphere:
-                location_world = {loc.player : [loc1 for loc1 in locations if loc.player == loc1.player] for loc in locations}
-                passTest = True
-                for k, v in location_world.items():
-                    passTest &= self.worlds[k].accessibility_adjustment(v, state)
-                
-                if (passTest):
-                    continue
                 # ran out of places and did not finish yet, quit
                 logging.warning(f"Could not access required locations for accessibility check."
                                 f" Missing: {locations}")

@@ -487,27 +487,21 @@ class SMWorld(World):
             progitempool.sort(
                 key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
 
-    def accessibility_adjustment(self, unaccessible_locations: List[Location], state: CollectionState):
-        copy_state = state.copy()
-        while unaccessible_locations:
-            sphere = set()
-            for location in unaccessible_locations:
-                copy_state.smbm[self.player].onlyBossLeft = location.event
-                if (location.event):
-                    copy_state.stale[self.player] = True
-                if location.can_reach(copy_state):
-                    sphere.add(location)
+    def post_fill(self):
+        new_state = CollectionState(self.world)
+        progitempool = []
+        for item in self.world.itempool:
+            if item.player == self.player and item.advancement:
+                progitempool.append(item)
 
-            if not sphere:
-                return False
+        for item in progitempool:
+            new_state.collect(item, True)
 
-            for location in sphere:
-                unaccessible_locations.remove(location)
-                copy_state.collect(location.item, True, location)
-
-        state.smbm[self.player].onlyBossLeft = True
-        self.world.state.smbm[self.player].onlyBossLeft = True
-        return True
+        bossesLoc = ['Draygon', 'Kraid', 'Ridley', 'Phantoon', 'Mother Brain']
+        for bossLoc in bossesLoc:
+            if (not self.world.get_location(bossLoc, self.player).can_reach(new_state)):
+                self.world.state.smbm[self.player].onlyBossLeft = True
+                break
 
 def create_locations(self, player: int):
     for name, id in locations_lookup_name_to_id.items():
