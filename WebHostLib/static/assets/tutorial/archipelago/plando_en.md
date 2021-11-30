@@ -2,25 +2,20 @@
 
 ## What is Plando?
 The purposes of randomizers is to randomize the items in a game to give a new experience.
-Plando takes this concept and changes it up by allowing you to plan out certain aspects of the game by placing certain 
-items in certain locations, certain bosses in certain rooms, edit text for certain NPCs/signs, or even force certain region
-connections. Each of these options are going to be detailed separately as `item plando`, `boss plando`, `text plando`, 
-and `connection plando`. Every game in archipelago supports item plando but the other plando options are only supported 
+Plando takes this concept and changes it up by allowing you to plan out certain aspects of the game by placing certain items in certain locations, certain bosses in certain rooms, edit text for certain NPCs/signs, or even force certain region
+connections. Each of these options are going to be detailed separately as `item plando`, `boss plando`, `text plando`, and `connection plando`. Every game in archipelago supports item plando but the other plando options are only supported 
 by certain games. Currently, Minecraft and LTTP both support connection plando, but only LTTP supports text and boss plando.
 
 ### Enabling Plando
 On the website plando will already be enabled. If you will be generating the game locally plando features must be enabled (opt-in).
-* To opt-in go to the archipelago installation (default: `C:\ProgramData\Archipelago`), open the host.yaml with a text
-editor and find the `plando_options` key. The available plando modules can be enabled by adding them after this such as
-`plando_options: bosses, items, texts, connections`.
+* To opt-in go to the archipelago installation (default: `C:\ProgramData\Archipelago`), open the host.yaml with a text editor and find the `plando_options` key. The available plando modules can be enabled by adding them after this such as `plando_options: bosses, items, texts, connections`.
 
 ## Item Plando
-Item plando allows a player to place an item in a specific location or specific locations, place multiple items into
-a list of specific locations both in their own game or in another player's game. **Note that there's a very good chance that
+Item plando allows a player to place an item in a specific location or specific locations, place multiple items into a list of specific locations both in their own game or in another player's game. **Note that there's a very good chance that
 cross-game plando could very well be broken i.e. placing on of your items in someone else's world playing a different game.**
+
 * The options for item plando are `from_pool`, `world`, `percentage`, `force`, and either item and location, or items and locations.
-  * `from_pool` determines if the item should be taken *from* the item pool or *added* to it. This can be true or false
-and defaults to true if omitted.
+  * `from_pool` determines if the item should be taken *from* the item pool or *added* to it. This can be true or false and defaults to true if omitted.
   * `world` is the target world to place the item in.
     * It gets ignored if only one world is generated.
     * Can be a number, name, true, false, or null. False is the default.
@@ -29,13 +24,11 @@ and defaults to true if omitted.
       * If set to true it will be any player's world besides your own.
       * If set to false it will target your own world.
       * If set to null it will target a random world in the multiworld.
-  * `force` determines whether the generator will fail if the item can't be placed in the location can be true, false, 
-or silent. Silent is the default.
+  * `force` determines whether the generator will fail if the item can't be placed in the location can be true, false, or silent. Silent is the default.
     * If set to true the item must be placed and the generator will throw an error if it is unable to do so.
     * If set to false the generator will log a warning if the placement can't be done but will still generate.
     * If set to silent and the placement fails it will be ignored entirely.
-  * `percentage` is the percentage chance for the relevant block to trigger. This can be any value from 0 to 100 and if 
-omitted will default to 100.
+  * `percentage` is the percentage chance for the relevant block to trigger. This can be any value from 0 to 100 and if omitted will default to 100.
   * Single Placement is when you use a plando block to place a single item at a single location.
     * `item` is the item you would like to place and `location` is the location to place it.
   * Multi Placement uses a plando block to place multiple items in multiple locations until either list is exhausted.
@@ -120,26 +113,19 @@ plando_items:
     percentage: 80
     force: true
 ```
-1. This block has a 50% chance to occur, and if it does will place either the Empire Orb or Radiant Orb on another player's
-Starter Chest 1 and removes the chosen item from the item pool.
-2. This block will always trigger and will place the player's swords, bow, magic meter, strength upgrades, and hookshots
-in their own dungeon major item chests.
+1. This block has a 50% chance to occur, and if it does will place either the Empire Orb or Radiant Orb on another player's Starter Chest 1 and removes the chosen item from the item pool.
+2. This block will always trigger and will place the player's swords, bow, magic meter, strength upgrades, and hookshots in their own dungeon major item chests.
 3. This block will always trigger and will lock boss relics on the bosses.
-4. This block has an 80% chance of occuring and when it does will place all but 1 of the items randomly among the four
-locations chosen here.
+4. This block has an 80% chance of occuring and when it does will place all but 1 of the items randomly among the four locations chosen here.
 
 ## Boss Plando
-As this is currently only supported by A Link to the Past instead of explaining here please refer to the 
-[relevant guide](/tutorial/zelda3/plando/en)
+As this is currently only supported by A Link to the Past instead of explaining here please refer to the [relevant guide](/tutorial/zelda3/plando/en)
 
 ## Text Plando
-As this is currently only supported by A Link to the Past instead of explaining here please refer to the
-[relevant guide](/tutorial/zelda3/plando/en)
+As this is currently only supported by A Link to the Past instead of explaining here please refer to the [relevant guide](/tutorial/zelda3/plando/en)
 
 ## Connections Plando
-This is currently only supported by Minecraft and A Link to the Past. As the way that these games interact with
-their connections is different I will only explain the basics here while more specifics for Link to the Past connection
-plando can be found in its plando guide.
+This is currently only supported by Minecraft and A Link to the Past. As the way that these games interact with their connections is different I will only explain the basics here while more specifics for Link to the Past connection plando can be found in its plando guide.
 * The options for connections are `percentage`, `entrance`, `exit`, and `direction`. Each of these options support subweights.
 * `percentage` is the percentage chance for this connection from 0 to 100 and defaults to 100.
 * Every connection has an `entrance` and an `exit`. These can be unlinked like in A Link to the Past insanity entrance shuffle.
@@ -172,9 +158,5 @@ plando_connections:
     direction: both
 ```
 
-1. These connections are decoupled so going into the lake hylia cave shop will take you to the inside of cave 45 and
-when you leave the interior you will exit to the cave 45 ledge. Going into the cave 45 entrance will then take you to the
-lake hylia cave shop. Walking into the entrance for the old man cave and Agahnim's Tower entrance will both take you to
-their locations as normal but leaving old man cave will exit at Agahnim's Tower.
-2. This will force a nether fortress and a village to be the overworld structures for your game. Note that for the Minecraft
-connection plando to work structure shuffle must be enabled.
+1. These connections are decoupled so going into the lake hylia cave shop will take you to the inside of cave 45 and when you leave the interior you will exit to the cave 45 ledge. Going into the cave 45 entrance will then take you to the lake hylia cave shop. Walking into the entrance for the old man cave and Agahnim's Tower entrance will both take you to their locations as normal but leaving old man cave will exit at Agahnim's Tower.
+2. This will force a nether fortress and a village to be the overworld structures for your game. Note that for the Minecraft connection plando to work structure shuffle must be enabled.

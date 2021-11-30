@@ -2,20 +2,14 @@
 This guide is intended to provide an overview of how to install, set up, and run the Archipelago multiworld software. This guide should take about 5 minutes to read.
 
 ## Installing the Archipelago software
-The most recent public release of Archipelago can be found [here](https://github.com/ArchipelagoMW/Archipelago/releases).
-Run the exe file, and after accepting the license agreement you will be prompted on which components you would like to install.
+The most recent public release of Archipelago can be found [here](https://github.com/ArchipelagoMW/Archipelago/releases). Run the exe file, and after accepting the license agreement you will be prompted on which components you would like to install.
 
-The generator allows you to generate multiworld games on your computer. The ROM setups are required if 
-anyone in the game that you generate wants to play any of those games as they are needed to generate the relevant patch 
-files. 
+The generator allows you to generate multiworld games on your computer. The ROM setups are required if anyone in the game that you generate wants to play any of those games as they are needed to generate the relevant patch files. 
 
-The server will allow you to host the multiworld on your machine. Hosting on your machine requires forwarding the port you are hosting on. The 
-default port for Archipelago is `38281`. If you are unsure how to do this there are plenty of other guides on the internet 
-that will be more suited to your hardware. 
+The server will allow you to host the multiworld on your machine. Hosting on your machine requires forwarding the port you are hosting on. The default port for Archipelago is `38281`. If you are unsure how to do this there are plenty of other guides on the internet that will be more suited to your hardware. 
 
 The `Clients` are what are used to connect your game to the multiworld. If the 
-game/games you plan to play are available here go ahead and install these as well. If the game you choose to play is 
-supported by Archipelago but not listed in the installation check the setup guide for that game. Installing a client for a ROM based game requires you to have a legally obtained ROM for that game as well.
+game/games you plan to play are available here go ahead and install these as well. If the game you choose to play is supported by Archipelago but not listed in the installation check the setup guide for that game. Installing a client for a ROM based game requires you to have a legally obtained ROM for that game as well.
 
 ## Generating a game
 
@@ -27,13 +21,9 @@ YAML is a format very similar to JSON however it is made to be more human-readab
 ### Creating a YAML
 YAML files may be generated on the Archipelago website by visiting the games page and clicking the "Settings Page" link under any game. Clicking "Export Settings" in a game's settings page will download the YAML to your system. Games page: https://archipelago.gg/games
 
-In a multiworld there must be one YAML per world. Any number of players can play on each world using either the game's
-native coop system or using Archipelago's coop support. Each world will hold one slot in the multiworld and will have a
-slot name and, if the relevant game requires it, files to associate it with that multiworld. 
+In a multiworld there must be one YAML per world. Any number of players can play on each world using either the game's native coop system or using Archipelago's coop support. Each world will hold one slot in the multiworld and will have a slot name and, if the relevant game requires it, files to associate it with that multiworld. 
 
-If multiple people plan to
-play in one world cooperatively then they will only need one YAML for their coop world. If each player is planning on
-playing their own game then they will each need a YAML.
+If multiple people plan to play in one world cooperatively then they will only need one YAML for their coop world. If each player is planning on playing their own game then they will each need a YAML.
 
 ### Gather All Player YAMLs
 All players that wish to play in the generated multiworld must have a YAML file which contains the settings that they wish to play with.
@@ -49,10 +39,6 @@ After filling the `Players` folder the `ArchipelagoGenerate.exe` program should 
 The `.AP` file may be run locally in order to host the multiworld on the local machine. This is done by running `ArchipelagoServer.exe` and pointing the resulting file selection prompt to the `.archipelago` file that was generated.
 
 #### Changing local host settings for generation
-Sometimes there are various settings that you may want to change before rolling a seed such as enabling race mode, 
-auto-forfeit, plando support, or setting a password. 
+Sometimes there are various settings that you may want to change before rolling a seed such as enabling race mode, auto-forfeit, plando support, or setting a password. 
 
-All of these settings plus other options are able to be changed by 
-modifying the `host.yaml` file in the Archipelago installation folder. The settings chosen here are baked into
-the `.archipelago` file that gets output with the other files after generation so if rolling locally ensure this file is edited
-to your liking *before* rolling the seed.
+All of these settings plus other options are able to be changed by modifying the `host.yaml` file in the Archipelago installation folder. The settings chosen here are baked into the `.archipelago` file that gets output with the other files after generation so if rolling locally ensure this file is edited to your liking *before* rolling the seed.
