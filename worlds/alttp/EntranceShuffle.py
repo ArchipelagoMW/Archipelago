@@ -1796,6 +1796,7 @@ def link_inverted_entrances(world, player):
     if world.get_entrance('Inverted Ganons Tower', player).connected_region.name != 'Ganons Tower (Entrance)':
         world.ganonstower_vanilla[player] = False
 
+
 def connect_simple(world, exitname, regionname, player):
     world.get_entrance(exitname, player).connect(world.get_region(regionname, player))
 
@@ -1819,6 +1820,7 @@ def connect_entrance(world, entrancename: str, exitname: str, player: int):
 
     entrance.connect(region, addresses, target)
     world.spoiler.set_entrance(entrance.name, exit.name if exit is not None else region.name, 'entrance', player)
+
 
 def connect_exit(world, exitname, entrancename, player):
     entrance = world.get_entrance(entrancename, player)
