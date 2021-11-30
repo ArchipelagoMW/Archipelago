@@ -352,7 +352,7 @@ Possible values for `type` include:
 
 | Name | Notes |
 | ---- | ----- |
-| text | Regular text content |
+| text | Regular text content. Is the default type and as such may be omitted. |
 | player_id | player ID of someone on your team, should be resolved to Player Name |
 | player_name | Player Name, could be a player within a multiplayer game or from another team, not ID resolvable |
 | item_id | Item ID, should be resolved to Item Name |
