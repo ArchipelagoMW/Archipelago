@@ -17,7 +17,21 @@
         ]
       },
       {
-        "name": "Using Advanced Settings",
+        "name": "Archipelago Website User Guide",
+        "description": "A guide to using the Archipelago website to generate multiworlds or host pre-generated multiworlds.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/using_website.md",
+            "link": "archipelago/using_website/en",
+            "authors": [
+              "alwaysintreble"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Advanced YAML Guide",
         "description": "A guide to reading yaml files and editing them to fully customize your game.",
         "files": [
           {
