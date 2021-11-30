@@ -280,11 +280,10 @@ class Hint(typing.NamedTuple):
             add_json_text(parts, self.entrance, type="entrance_name")
         else:
             add_json_text(parts, "'s World")
+        add_json_text(parts, ". ")
         if self.found:
-            add_json_text(parts, ". ")
             add_json_text(parts, "(found)", type="color", color="green")
         else:
-            add_json_text(parts, ". ")
             add_json_text(parts, "(not found)", type="color", color="red")
 
         return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
