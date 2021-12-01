@@ -62,6 +62,7 @@ Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup";
 Name: "client/factorio";  Description: "Factorio"; Types: full playing
 Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
 Name: "client/oot";       Description: "Ocarina of Time Adjuster"; Types: full playing
+Name: "client/ff1";       Description: "Final Fantasy 1"; Types: full playing
 Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
 
 [Dirs]
@@ -84,6 +85,7 @@ Source: "{#sourcepath}\ArchipelagoSNIClient.exe"; DestDir: "{app}"; Flags: ignor
 Source: "{#sourcepath}\ArchipelagoLttPAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni/lttp or generator/lttp
 Source: "{#sourcepath}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/minecraft
 Source: "{#sourcepath}\ArchipelagoOoTAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
+Source: "{#sourcepath}\ArchipelagoFF1Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ff1
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 [Icons]
@@ -93,10 +95,13 @@ Name: "{group}\{#MyAppName} Text Client"; Filename: "{app}\ArchipelagoTextClient
 Name: "{group}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoSNIClient.exe"; Components: client/sni
 Name: "{group}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Components: client/factorio
 Name: "{group}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinecraftClient.exe"; Components: client/minecraft
+Name: "{group}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Components: client/ff1
+
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
 Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Components: server
 Name: "{commondesktop}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoSNIClient.exe"; Tasks: desktopicon; Components: client/sni
 Name: "{commondesktop}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Tasks: desktopicon; Components: client/factorio
+Name: "{commondesktop}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Tasks: desktopicon; Components: client/factorio
 
 [Run]
 
@@ -320,7 +325,7 @@ function GetOoTROMPath(Param: string): string;
 begin
   if Length(ootrom) > 0 then
     Result := ootrom
-  else if (Assigned(OoTROMFilePage)) then
+  else if Assigned(OoTROMFilePage) then
     begin
       R := CompareStr(GetMD5OfFile(OoTROMFilePage.Values[0]), '5bd1fe107bf8106b2ab6650abecd54d6') * CompareStr(GetMD5OfFile(OoTROMFilePage.Values[0]), '6697768a7a7df2dd27a692a2638ea90b') * CompareStr(GetMD5OfFile(OoTROMFilePage.Values[0]), '05f0f3ebacbc8df9243b6148ffe4792f');
       if R <> 0 then
