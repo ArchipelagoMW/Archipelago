@@ -87,7 +87,7 @@ def get_base_rom_data(game: str):
     elif game == GAME_SM:
         from worlds.sm.Rom import get_base_rom_bytes
     elif game == GAME_SOE:
-        file_name = Utils.get_options()["soe_options"]["rom"]
+        file_name = Utils.get_options()["soe_options"]["rom_file"]
         get_base_rom_bytes = lambda: bytes(read_rom(open(file_name, "rb")))
     else:
         raise RuntimeError("Selected game for base rom not found.")

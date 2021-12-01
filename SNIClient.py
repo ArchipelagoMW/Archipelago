@@ -1062,7 +1062,8 @@ async def main():
         import Patch
         logging.info("Patch file was supplied. Creating sfc rom..")
         meta, romfile = Patch.create_rom_file(args.diff_file)
-        args.connect = meta["server"]
+        if "server" in meta:
+            args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
         if args.diff_file.endswith(".apsoe"):
             import webbrowser
