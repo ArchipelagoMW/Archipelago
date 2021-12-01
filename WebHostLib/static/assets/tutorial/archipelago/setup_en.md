@@ -36,11 +36,14 @@ Typically, a single participant of the multiworld will gather the YAML files fro
 
 It is possible to roll the multiworld locally, using a local Archipelago installation. This is done by entering the installation directory of the Archipelago installation and placing each YAML file in the `Players` folder. If the folder does not exist then it can be created manually.
 
-After filling the `Players` folder the `ArchipelagoGenerate.exe` program should be run in order to generate a multiworld. The output of this process is placed in the `output` folder. The output wll be a `.archipelago` file which can be subsequently uploaded to the Archipelago host game page. Archipelago host game page: [https://archipelago.gg/uploads](https://archipelago.gg/uploads)
-
-The `.AP` file may be run locally in order to host the multiworld on the local machine. This is done by running `ArchipelagoServer.exe` and pointing the resulting file selection prompt to the `.archipelago` file that was generated.
+After filling the `Players` folder the `ArchipelagoGenerate.exe` program should be run in order to generate a multiworld. The output of this process is placed in the `output` folder. 
 
 #### Changing local host settings for generation
 Sometimes there are various settings that you may want to change before rolling a seed such as enabling race mode, auto-forfeit, plando support, or setting a password. 
 
 All of these settings plus other options are able to be changed by modifying the `host.yaml` file in the Archipelago installation folder. The settings chosen here are baked into the `.archipelago` file that gets output with the other files after generation so if rolling locally ensure this file is edited to your liking *before* rolling the seed.
+
+## Hosting an Archipelago Server
+The output of rolling a YAML will be a `.archipelago` file which can be subsequently uploaded to the Archipelago host game page. Archipelago host game page: [https://archipelago.gg/uploads](https://archipelago.gg/uploads)
+
+The `.archipelago` file may be run locally in order to host the multiworld on the local machine. This is done by running `ArchipelagoServer.exe` and pointing the resulting file selection prompt to the `.archipelago` file that was generated.
