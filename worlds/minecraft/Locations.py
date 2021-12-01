@@ -108,9 +108,21 @@ advancement_table = {
     "Overkill": AdvData(42089, 'Nether Fortress'),
     "Librarian": AdvData(42090, 'Overworld'),
     "Overpowered": AdvData(42091, 'Bastion Remnant'),
+    "Wax On": AdvData(42092, 'Overworld'),
+    "Wax Off": AdvData(42093, 'Overworld'),
+    "The Cutest Predator": AdvData(42094, 'Overworld'),
+    "The Healing Power of Friendship": AdvData(42095, 'Overworld'),
+    "Is It a Bird?": AdvData(42096, 'Overworld'),
+    "Is It a Balloon?": AdvData(42097, 'The Nether'),
+    "Is It a Plane?": AdvData(42098, 'The End'),
+    "Surge Protector": AdvData(42099, 'Overworld'),
+    "Light as a Rabbit": AdvData(42100, 'Overworld'),
+    "Glow and Behold!": AdvData(42101, 'Overworld'),
+    "Whatever Floats Your Goat!": AdvData(42102, 'Overworld'),
 
     "Blaze Spawner": AdvData(None, 'Nether Fortress'),
-    "Ender Dragon": AdvData(None, 'The End')
+    "Ender Dragon": AdvData(None, 'The End'),
+    "Wither": AdvData(None, 'Nether Fortress'),
 }
 
 exclusion_table = {
@@ -126,23 +138,39 @@ exclusion_table = {
         "Uneasy Alliance",
         "Cover Me in Debris",
         "A Complete Catalogue",
+        "Surge Protector",
+        "Light as a Rabbit", # will be normal in 1.18
     },
-    "insane": {
+    "unreasonable": {
         "How Did We Get Here?",
         "Adventuring Time",
     },
-    "postgame": {
-        "Free the End",
-        "The Next Generation",
-        "The End... Again...",
-        "You Need a Mint",
-        "Monsters Hunted",
+}
+
+def get_postgame_advancements(required_bosses):
+
+    postgame_advancements = {
+        "ender_dragon": {
+            "Free the End",
+            "The Next Generation",
+            "The End... Again...",
+            "You Need a Mint",
+            "Monsters Hunted",
+            "Is It a Plane?",
+        },
+        "wither": {
+            "Withering Heights",
+            "Bring Home the Beacon",
+            "Beaconator",
+            "A Furious Cocktail",
+            "How Did We Get Here?",
+            "Monsters Hunted",
+        }
     }
-}
 
-events_table = {
-    "Ender Dragon": "Victory"
-}
-
-lookup_id_to_name: typing.Dict[int, str] = {loc_data.id: loc_name for loc_name, loc_data in advancement_table.items() if
-                                            loc_data.id}
+    advancements = set()
+    if required_bosses in {"ender_dragon", "both"}:
+        advancements.update(postgame_advancements["ender_dragon"])
+    if required_bosses in {"wither", "both"}:
+        advancements.update(postgame_advancements["wither"])
+    return advancements

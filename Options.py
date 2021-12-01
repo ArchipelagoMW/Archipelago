@@ -277,8 +277,8 @@ class OptionList(Option):
     supports_weighting = False
     value: list
 
-    def __init__(self, value: typing.List[str, typing.Any]):
-        self.value = value
+    def __init__(self, value: typing.List[typing.Any]):
+        self.value = value or []
         super(OptionList, self).__init__()
 
     @classmethod

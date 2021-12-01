@@ -86,9 +86,6 @@ Source: "{#sourcepath}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags:
 Source: "{#sourcepath}\ArchipelagoOoTAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
-;minecraft temp files
-Source: "{tmp}\forge-installer.jar"; DestDir: "{app}"; Flags: skipifsourcedoesntexist external deleteafterinstall; Components: client/minecraft
-
 [Icons]
 Name: "{group}\{#MyAppName} Folder"; Filename: "{app}";
 Name: "{group}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Components: server
@@ -105,7 +102,7 @@ Name: "{commondesktop}\{#MyAppName} Factorio Client"; Filename: "{app}\Archipela
 
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
 Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: client/sni/lttp or generator/lttp
-Filename: "{app}\jre8\bin\java.exe"; Parameters: "-jar ""{app}\forge-installer.jar"" --installServer ""{app}\Minecraft Forge server"""; Flags: runhidden; Check: IsForgeNeeded(); StatusMsg: "Installing Forge Server..."; Components: client/minecraft
+Filename: "{app}\ArchipelagoMinecraftClient.exe"; Parameters: "--install"; StatusMsg: "Installing Forge Server..."; Components: client/minecraft
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"
@@ -145,7 +142,6 @@ Root: HKCR; Subkey: "{#MyAppName}multidata\shell\open\command";  ValueData: """{
 const
   SHCONTCH_NOPROGRESSBOX = 4;
   SHCONTCH_RESPONDYESTOALL = 16;
-  FORGE_VERSION = '1.16.5-36.2.0';
 
 // See: https://stackoverflow.com/a/51614652/2287576
 function IsVCRedist64BitNeeded(): boolean;
@@ -167,48 +163,6 @@ begin
   end;
 end;
 
-function IsForgeNeeded(): boolean;
-begin
-  Result := True;
-  if (FileExists(ExpandConstant('{app}')+'\Minecraft Forge Server\forge-'+FORGE_VERSION+'.jar')) then
-    Result := False;
-end;
-
-function IsJavaNeeded(): boolean;
-begin
-  Result := True;
-  if (FileExists(ExpandConstant('{app}')+'\jre8\bin\java.exe')) then
-    Result := False;
-end;
-
-function OnDownloadMinecraftProgress(const Url, FileName: String; const Progress, ProgressMax: Int64): Boolean;
-begin
-  if Progress = ProgressMax then
-    Log(Format('Successfully downloaded Minecraft additional files to {tmp}: %s', [FileName]));
-  Result := True;
-end;
-
-procedure UnZip(ZipPath, TargetPath: string);
-var
-  Shell: Variant;
-  ZipFile: Variant;
-  TargetFolder: Variant;
-begin
-  Shell := CreateOleObject('Shell.Application');
-
-  ZipFile := Shell.NameSpace(ZipPath);
-  if VarIsClear(ZipFile) then
-    RaiseException(
-      Format('ZIP file "%s" does not exist or cannot be opened', [ZipPath]));
-
-  TargetFolder := Shell.NameSpace(TargetPath);
-  if VarIsClear(TargetFolder) then
-    RaiseException(Format('Target path "%s" does not exist', [TargetPath]));
-
-  TargetFolder.CopyHere(
-    ZipFile.Items, SHCONTCH_NOPROGRESSBOX or SHCONTCH_RESPONDYESTOALL);
-end;
-
 var R : longint;
 
 var lttprom: string;
@@ -222,8 +176,6 @@ var SoERomFilePage: TInputFileWizardPage;
 
 var ootrom: string;
 var OoTROMFilePage: TInputFileWizardPage;
-
-var MinecraftDownloadPage: TDownloadWizardPage;
 
 function GetSNESMD5OfFile(const rom: string): string;
 var data: AnsiString;
@@ -272,11 +224,6 @@ begin
     '.sfc');
 end;
 
-procedure AddMinecraftDownloads();
-begin
-  MinecraftDownloadPage := CreateDownloadPage(SetupMessage(msgWizardPreparing), SetupMessage(msgPreparingDesc), @OnDownloadMinecraftProgress);
-end;
-
 procedure AddOoTRomPage();
 begin
   ootrom := FileSearch('The Legend of Zelda - Ocarina of Time.z64', WizardDirValue());
@@ -309,33 +256,7 @@ end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
 begin
-  if (CurPageID = wpReady) and (WizardIsComponentSelected('client/minecraft')) then begin
-    MinecraftDownloadPage.Clear;
-    if(IsForgeNeeded()) then
-      MinecraftDownloadPage.Add('https://maven.minecraftforge.net/net/minecraftforge/forge/'+FORGE_VERSION+'/forge-'+FORGE_VERSION+'-installer.jar','forge-installer.jar','');
-    if(IsJavaNeedeD()) then
-      MinecraftDownloadPage.Add('https://corretto.aws/downloads/latest/amazon-corretto-8-x64-windows-jre.zip','java.zip','');
-    MinecraftDownloadPage.Show;
-    try
-      try
-        MinecraftDownloadPage.Download;
-        Result := True;
-      except
-        if MinecraftDownloadPage.AbortedByUser then
-          Log('Aborted by user.')
-        else
-          SuppressibleMsgBox(AddPeriod(GetExceptionMessage), mbCriticalError, MB_OK, IDOK);
-        Result := False;
-      end;
-    finally
-      if( isJavaNeeded() ) then
-        if(ForceDirectories(ExpandConstant('{app}'))) then
-          UnZip(ExpandConstant('{tmp}')+'\java.zip',ExpandConstant('{app}'));
-      MinecraftDownloadPage.Hide;
-    end;
-    Result := True;
-    end
-  else if (assigned(LttPROMFilePage)) and (CurPageID = LttPROMFilePage.ID) then
+  if (assigned(LttPROMFilePage)) and (CurPageID = LttPROMFilePage.ID) then
     Result := not (LttPROMFilePage.Values[0] = '')
   else if (assigned(SMROMFilePage)) and (CurPageID = SMROMFilePage.ID) then
     Result := not (SMROMFilePage.Values[0] = '')
@@ -426,8 +347,6 @@ begin
   soerom := CheckRom('Secret of Evermore (USA).sfc', '6e9c94511d04fac6e0a1e582c170be3a');
   if Length(soerom) = 0 then
     SoEROMFilePage:= AddRomPage('Secret of Evermore (USA).sfc');
-
-  AddMinecraftDownloads();
 end;
 
 
