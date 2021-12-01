@@ -1,8 +1,7 @@
 # Minecraft
 
 ## Where is the settings page?
-The player settings page for this game is located <a href="../player-settings">here</a>. It contains all the options
-you need to configure and export a config file.
+The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [click here](../player-settings).
 
 ## What does randomization do to this game?
 Recipes are removed from the crafting book and shuffled into the item pool. It can also optionally change which

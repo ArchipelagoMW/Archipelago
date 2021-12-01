@@ -1,8 +1,7 @@
 # Ocarina of Time
 
 ## Where is the settings page?
-The player settings page for this game is located <a href="../player-settings">here</a>. It contains all the options
-you need to configure and export a config file.
+The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [click here](../player-settings).
 
 ## What does randomization do to this game?
 Items which the player would normally acquire throughout the game have been moved around. Logic remains, so the game
