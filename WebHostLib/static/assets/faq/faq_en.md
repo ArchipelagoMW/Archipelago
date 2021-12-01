@@ -1,8 +1,7 @@
 # Frequently Asked Questions
 
 ## What is a randomizer?
-A randomizer is a modification of a video game which reorganizes the items required to progress through the game.
-A normal play-through of a game might require you to use item A to unlock item B, then C, and so forth. In a randomized game, you might first find item C, then A, then B.
+A randomizer is a modification of a video game which reorganizes the items required to progress through the game. A normal play-through of a game might require you to use item A to unlock item B, then C, and so forth. In a randomized game, you might first find item C, then A, then B.
 
 This transforms games from a linear experience into a puzzle, presenting players with a new challenge each time they play a randomized game. Putting items in non-standard locations can require the player to think about the game world and the items they encounter in new and interesting ways.
 
@@ -28,10 +27,10 @@ If you are ready to start randomizing games, or want to start playing your favor
 you might have.
 
 ## I want to add a game to the Archipelago randomizer. How do I do that?
-The best way to get started is to take a look at our code on GitHub at https://github.com/ArchipelagoMW/Archipelago.
+The best way to get started is to take a look at our code on GitHub at [https://github.com/ArchipelagoMW/Archipelago](https://github.com/ArchipelagoMW/Archipelago).
 
-There you will find examples of games in the worlds folder at https://github.com/ArchipelagoMW/Archipelago/tree/main/worlds.
+There you will find examples of games in the worlds folder at [https://github.com/ArchipelagoMW/Archipelago/tree/main/worlds](https://github.com/ArchipelagoMW/Archipelago/tree/main/worlds).
 
-You may also find developer documentation in the docs folder at https://github.com/ArchipelagoMW/Archipelago/tree/main/docs.
+You may also find developer documentation in the docs folder at [https://github.com/ArchipelagoMW/Archipelago/tree/main/docs](https://github.com/ArchipelagoMW/Archipelago/tree/main/docs).
 
 If you have more questions, feel free to ask in the **#archipelago-dev** channel on our Discord.

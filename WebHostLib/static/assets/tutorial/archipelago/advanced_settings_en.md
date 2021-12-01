@@ -3,7 +3,7 @@ This guide covers more the more advanced options available in YAML files. This g
 
 If you would like to generate a basic, fully playable, YAML without editing a file then visit the settings page for the game you intend to play.
 
-The settings page can be found on the supported games page, just click the "Settings Page" link under the name of the game you would like. Supported games page: https://archipelago.gg/games
+The settings page can be found on the supported games page, just click the "Settings Page" link under the name of the game you would like. Supported games page: [https://archipelago.gg/games](https://archipelago.gg/games)
 
 Clicking on the "Export Settings" button at the bottom-left will provide you with a pre-filled YAML with your options. The player settings page also has an option to download a fully filled out yaml containing every option with every available setting for the available options.
 
@@ -13,7 +13,7 @@ The Archipelago system generates games using player configuration files as input
 ## YAML Formatting
 YAML files are a format of human-readable config files. The basic syntax of a yaml file will have a `root` node and then different levels of `nested` nodes that the generator reads in order to determine your settings. 
 
-To nest text, the correct syntax is to indent **two spaces over** from its root option. A YAML file can be edited with whatever text editor you choose to use though I personally recommend that you use Sublime Text. Sublime text website: https://www.sublimetext.com
+To nest text, the correct syntax is to indent **two spaces over** from its root option. A YAML file can be edited with whatever text editor you choose to use though I personally recommend that you use Sublime Text. Sublime text website: [https://www.sublimetext.com](https://www.sublimetext.com)
 
 This program out of the box supports the correct formatting for the YAML file, so you will be able to use the tab key and get proper highlighting for any potential errors made while editing the file. If using any other text editor you should ensure your indentation is done correctly with two spaces. 
 
@@ -55,7 +55,7 @@ in a dungeon in ALTTP making it impossible to get and finish the dungeon.
 
 * `progression_balancing` is a system the Archipelago generator uses to try and reduce "BK mode" as much as possible. This primarily involves moving necessary progression items into earlier logic spheres to make the games more accessible so that players almost always have something to do. This can be turned `on` or `off` and is `on` by default.
 
-* `triggers` is one of the more advanced options that allows you to create conditional adjustments. You can read more triggers in the triggers guide. Triggers guide: https://archipelago.gg/tutorial/archipelago/triggers/en
+  * `triggers` is one of the more advanced options that allows you to create conditional adjustments. You can read more triggers in the triggers guide. Triggers guide: [https://archipelago.gg/tutorial/archipelago/triggers/en](https://archipelago.gg/tutorial/archipelago/triggers/en)
 
 ### Game Options
 
@@ -67,7 +67,7 @@ Some options in Archipelago can be used by every game but must still be placed w
 
 Currently, these options are `start_inventory`, `start_hints`, `local_items`, `non_local_items`, `start_location_hints`, `exclude_locations`, and various plando options. 
 
-See the plando guide for more info on plando options. Plando guide: https://archipelago.gg/tutorial/archipelago/plando/en
+See the plando guide for more info on plando options. Plando guide: [https://archipelago.gg/tutorial/archipelago/plando/en](https://archipelago.gg/tutorial/archipelago/plando/en)
 
 * `start_inventory` will give any items defined here to you at the beginning of your game. The format for this must be the name as it appears in the game files and the amount you would like to start with. For example `Rupees(5): 6` which will give you the item `Rupees(5)` six times, totalling 30 rupees.
 
