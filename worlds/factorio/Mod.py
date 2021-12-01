@@ -109,7 +109,8 @@ def generate_mod(world, output_directory: str):
                                                       progressive_technology_table.values()},
                      "custom_recipes": world.custom_recipes,
                      "max_science_pack": multiworld.max_science_pack[player].value,
-                     "liquids": liquids}
+                     "liquids": liquids,
+                     "goal": multiworld.goal[player].value}
 
     for factorio_option in Options.factorio_options:
         template_data[factorio_option] = getattr(multiworld, factorio_option)[player].value

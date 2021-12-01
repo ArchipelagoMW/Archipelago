@@ -11,7 +11,7 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     liquids
 from .Shapes import get_shapes
 from .Mod import generate_mod
-from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation
+from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal
 
 import logging
 
@@ -146,7 +146,7 @@ class Factorio(World):
                 else self.custom_recipes["rocket-silo"] if "rocket-silo" in self.custom_recipes \
                 else next(iter(all_product_sources.get("rocket-silo")))
             part_recipe = self.custom_recipes["rocket-part"]
-            satellite_recipe = None if self.world.max_science_pack[self.player].value != MaxSciencePack.option_space_science_pack \
+            satellite_recipe = None if self.world.goal[self.player].value != Goal.option_rocket \
                 else self.custom_recipes["satellite"] if "satellite" in self.custom_recipes \
                 else next(iter(all_product_sources.get("satellite")))
             victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe)

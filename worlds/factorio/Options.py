@@ -33,6 +33,14 @@ class MaxSciencePack(Choice):
         return self.get_ordered_science_packs()[self.value].replace("_", "-")
 
 
+class Goal(Choice):
+    """Goal required to complete the game."""
+    displayname = "Goal"
+    option_rocket = 0
+    option_satellite = 1
+    default = 0
+
+
 class TechCost(Choice):
     """How expensive are the technologies."""
     displayname = "Technology Cost Scale"
@@ -306,6 +314,7 @@ class ImportedBlueprint(DefaultOnToggle):
 
 factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,
+    "goal": Goal,
     "tech_tree_layout": TechTreeLayout,
     "tech_cost": TechCost,
     "silo": Silo,
