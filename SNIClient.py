@@ -1067,7 +1067,8 @@ async def main():
         logging.info(f"Wrote rom file to {romfile}")
         if args.diff_file.endswith(".apsoe"):
             import webbrowser
-            webbrowser.open("http://www.evermizer.com/apclient/")
+            webbrowser.open("http://www.evermizer.com/apclient/" +
+                            (f"#server={meta['server']}" if "server" in meta else ""))
             logging.info("Starting Evermizer Client in your Browser...")
             import time
             time.sleep(3)
