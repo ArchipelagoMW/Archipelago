@@ -14,6 +14,7 @@ from .Options import minecraft_options
 from ..AutoWorld import World
 
 client_version = 7
+minecraft_version = "1.17.1"
 
 class MinecraftWorld(World):
     """
@@ -39,6 +40,7 @@ class MinecraftWorld(World):
             'player_name': self.world.get_player_name(self.player),
             'player_id': self.player,
             'client_version': client_version,
+            'minecraft_version': minecraft_version,
             'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits},
             'advancement_goal': self.world.advancement_goal[self.player],
             'egg_shards_required': min(self.world.egg_shards_required[self.player], self.world.egg_shards_available[self.player]),
