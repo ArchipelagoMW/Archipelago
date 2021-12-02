@@ -57,9 +57,6 @@ class MorphPlacement(Choice):
     option_normal = 1
     default = 0
 
-class SuitsRestriction(DefaultOnToggle):
-    displayname = "Suits Restriction"
-
 class StrictMinors(Toggle):
     displayname = "Strict Minors"
 
@@ -117,12 +114,15 @@ class BossRandomization(Toggle):
     displayname = "Boss Randomization"
 
 class FunCombat(Toggle):
+    """if used, might force 'items' accessibility"""
     displayname = "Fun Combat"
 
 class FunMovement(Toggle):
+    """if used, might force 'items' accessibility"""
     displayname = "Fun Movement"
 
 class FunSuits(Toggle):
+    """if used, might force 'items' accessibility"""
     displayname = "Fun Suits"
 
 class LayoutPatches(DefaultOnToggle):
@@ -197,7 +197,7 @@ sm_options: typing.Dict[str, type(Option)] = {
     #"progression_speed": "medium",
     #"progression_difficulty": "normal",
     "morph_placement": MorphPlacement,
-    "suits_restriction": SuitsRestriction,
+    #"suits_restriction": SuitsRestriction,
     #"hide_items": "off",
     "strict_minors": StrictMinors,
     "missile_qty": MissileQty,

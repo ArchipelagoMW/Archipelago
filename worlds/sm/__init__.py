@@ -2,7 +2,7 @@ import logging
 import copy
 import os
 import threading
-from typing import Set
+from typing import Set, List
 
 logger = logging.getLogger("Super Metroid")
 
@@ -59,7 +59,7 @@ class SMWorld(World):
 
         def sm_init(self, parent: MultiWorld):
             if (hasattr(parent, "state")): # for unit tests where MultiWorld is instanciated before worlds
-                self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff) for player in parent.get_game_players("Super Metroid")}
+                self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff, parent.state.smbm[player].onlyBossLeft) for player in parent.get_game_players("Super Metroid")}
             orig_init(self, parent)
 
 
@@ -88,6 +88,10 @@ class SMWorld(World):
 
         if (self.variaRando.args.morphPlacement == "early"):
             self.world.local_items[self.player].value.add('Morph')
+
+        if (len(self.variaRando.randoExec.setup.restrictedLocs) > 0):
+            self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("items")
+            logger.warning(f"accessibility forced to 'items' for player {self.world.get_player_name(self.player)} because of 'fun' settings")
     
     def generate_basic(self):
         itemPool = self.variaRando.container.itemPool
@@ -476,23 +480,28 @@ class SMWorld(World):
                                         item.player != self.player or
                                         item.name != "Morph Ball"] 
 
-    def post_fill(self):
-        # increase maxDifficulty if only bosses is too difficult to beat game
-        new_state = CollectionState(self.world)
-        for item in self.world.itempool:
-            if item.player == self.player:
-                new_state.collect(item, True)
-        new_state.sweep_for_events()
-        if (any(not self.world.get_location(bossLoc, self.player).can_reach(new_state) for bossLoc in self.locked_items)):
-            if (self.variaRando.randoExec.setup.services.onlyBossesLeft(self.variaRando.randoExec.setup.startAP, self.variaRando.randoExec.setup.container)):
-                self.world.state.smbm[self.player].maxDiff = infinity
-
     @classmethod
     def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
                         restitempool, fill_locations):      
         if world.get_game_players("Super Metroid"):
             progitempool.sort(
                 key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
+
+    def post_fill(self):
+        new_state = CollectionState(self.world)
+        progitempool = []
+        for item in self.world.itempool:
+            if item.player == self.player and item.advancement:
+                progitempool.append(item)
+
+        for item in progitempool:
+            new_state.collect(item, True)
+
+        bossesLoc = ['Draygon', 'Kraid', 'Ridley', 'Phantoon', 'Mother Brain']
+        for bossLoc in bossesLoc:
+            if (not self.world.get_location(bossLoc, self.player).can_reach(new_state)):
+                self.world.state.smbm[self.player].onlyBossLeft = True
+                break
 
 def create_locations(self, player: int):
     for name, id in locations_lookup_name_to_id.items():
