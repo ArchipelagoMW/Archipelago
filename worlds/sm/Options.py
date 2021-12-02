@@ -40,6 +40,14 @@ class StartLocation(Choice):
     option_Golden_Four = 14
     default = 1
 
+class DeathLinkSurvive(Choice):
+    """When DeathLink is enabled and someone dies, you can survive with (enable_survive) if you have non-empty reserve tank."""
+    displayname = "Death Link Survive"
+    option_disable = 0
+    option_enable = 1
+    option_enable_survive = 3
+    default = 0
+
 class MaxDifficulty(Choice):
     displayname = "Maximum Difficulty"
     option_easy = 0
@@ -56,9 +64,6 @@ class MorphPlacement(Choice):
     option_early = 0
     option_normal = 1
     default = 0
-
-class SuitsRestriction(DefaultOnToggle):
-    displayname = "Suits Restriction"
 
 class StrictMinors(Toggle):
     displayname = "Strict Minors"
@@ -117,12 +122,15 @@ class BossRandomization(Toggle):
     displayname = "Boss Randomization"
 
 class FunCombat(Toggle):
+    """if used, might force 'items' accessibility"""
     displayname = "Fun Combat"
 
 class FunMovement(Toggle):
+    """if used, might force 'items' accessibility"""
     displayname = "Fun Movement"
 
 class FunSuits(Toggle):
+    """if used, might force 'items' accessibility"""
     displayname = "Fun Suits"
 
 class LayoutPatches(DefaultOnToggle):
@@ -188,7 +196,7 @@ sm_options: typing.Dict[str, type(Option)] = {
     "start_inventory_removes_from_pool": StartItemsRemovesFromPool,
     "preset": Preset,
     "start_location": StartLocation,
-    "death_link": DeathLink,
+    "death_link_survive": DeathLinkSurvive,
     #"majors_split": "Full",
     #"scav_num_locs": "10",
     #"scav_randomized": "off",
@@ -197,7 +205,7 @@ sm_options: typing.Dict[str, type(Option)] = {
     #"progression_speed": "medium",
     #"progression_difficulty": "normal",
     "morph_placement": MorphPlacement,
-    "suits_restriction": SuitsRestriction,
+    #"suits_restriction": SuitsRestriction,
     #"hide_items": "off",
     "strict_minors": StrictMinors,
     "missile_qty": MissileQty,
