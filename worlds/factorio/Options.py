@@ -154,6 +154,18 @@ class FactorioStartItems(ItemDict):
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
 
 
+class FactorioFreeSampleBlacklist(OptionDict):
+    """any non-zero value means that item is blacklisted from free samples.  zero overrides the built-in blacklist"""
+    displayname = "Free Sample Blacklist"
+
+    def __init__(self, value: typing.Dict[str, int]):
+        self.value = value or {}
+        if any(type(value) not in [int, bool] for value in self.value.values()):
+            raise Exception("Cannot have non-number blacklist options")
+        for key in self.value.keys():
+            self.value[key] = 1 if self.value[key] else 0
+
+
 class TrapCount(Range):
     range_end = 4
 
@@ -322,6 +334,7 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "free_samples": FreeSamples,
     "tech_tree_information": TechTreeInformation,
     "starting_items": FactorioStartItems,
+    "free_sample_blacklist": FactorioFreeSampleBlacklist,
     "recipe_time": RecipeTime,
     "recipe_ingredients": RecipeIngredients,
     "imported_blueprints": ImportedBlueprint,

@@ -113,6 +113,8 @@ def generate_mod(world, output_directory: str):
                      "goal": multiworld.goal[player].value}
 
     for factorio_option in Options.factorio_options:
+        if factorio_option == "free_sample_blacklist":
+            continue
         template_data[factorio_option] = getattr(multiworld, factorio_option)[player].value
         
     if getattr(multiworld, "silo")[player].value == Options.Silo.option_randomize_recipe:
@@ -120,6 +122,8 @@ def generate_mod(world, output_directory: str):
     
     if getattr(multiworld, "satellite")[player].value == Options.Satellite.option_randomize_recipe:
         template_data["free_sample_blacklist"]["satellite"] = 1
+
+    template_data["free_sample_blacklist"].update(multiworld.free_sample_blacklist[player].value)
 
     control_code = control_template.render(**template_data)
     data_template_code = data_template.render(**template_data)
