@@ -40,9 +40,13 @@ class StartLocation(Choice):
     option_Golden_Four = 14
     default = 1
 
-class DeathLinkSurvive(Toggle):
-    """When DeathLink is enabled and someone dies, you can survive if you have non-empty reserve tank."""
+class DeathLinkSurvive(Choice):
+    """When DeathLink is enabled and someone dies, you can survive with (enable_survive) if you have non-empty reserve tank."""
     displayname = "Death Link Survive"
+    option_disable = 0
+    option_enable = 1
+    option_enable_survive = 3
+    default = 0
 
 class MaxDifficulty(Choice):
     displayname = "Maximum Difficulty"
@@ -192,7 +196,6 @@ sm_options: typing.Dict[str, type(Option)] = {
     "start_inventory_removes_from_pool": StartItemsRemovesFromPool,
     "preset": Preset,
     "start_location": StartLocation,
-    "death_link": DeathLink,
     "death_link_survive": DeathLinkSurvive,
     #"majors_split": "Full",
     #"scav_num_locs": "10",
