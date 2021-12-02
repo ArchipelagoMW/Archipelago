@@ -11,9 +11,9 @@ from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, 
 
 SYSTEM_MESSAGE_ID = 0
 
-CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator then restart ff1_connector.lua"
-CONNECTION_REFUSED_STATUS = "Connection Refused. Please start your emulator make sure ff1_connector.lua is running"
-CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator then restart ff1_connector.lua"
+CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart ff1_connector.lua"
+CONNECTION_REFUSED_STATUS = "Connection Refused. Please start your emulator and make sure ff1_connector.lua is running"
+CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart ff1_connector.lua"
 CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
@@ -219,8 +219,8 @@ if __name__ == '__main__':
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:
             input_task = None
-            from kvui import TextManager
-            ctx.ui = TextManager(ctx)
+            from kvui import FF1Manager
+            ctx.ui = FF1Manager(ctx)
             ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
         else:
             input_task = asyncio.create_task(console_loop(ctx), name="Input")

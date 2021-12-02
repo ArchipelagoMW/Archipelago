@@ -365,6 +365,13 @@ class TextManager(GameManager):
     base_title = "Archipelago Text Client"
 
 
+class FF1Manager(GameManager):
+    logging_pairs = [
+        ("Client", "Archipelago")
+    ]
+    base_title = "Archipelago Final Fantasy 1 Client"
+
+
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
         super(LogtoUI, self).__init__(logging.INFO)
