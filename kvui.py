@@ -207,7 +207,7 @@ class GameManager(App):
 
         # keep track of last used command to autofill on click
         self.last_autofillable_command = "hint"
-        autofillable_commands = ("hint", "getitem")
+        autofillable_commands = ("hint_location", "hint", "getitem")
         original_say = ctx.on_user_say
 
         def intercept_say(text):
