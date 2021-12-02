@@ -40,6 +40,10 @@ class StartLocation(Choice):
     option_Golden_Four = 14
     default = 1
 
+class DeathLinkSurvive(Toggle):
+    """When DeathLink is enabled and someone dies, you can survive if you have non-empty reserve tank."""
+    displayname = "Death Link Survive"
+
 class MaxDifficulty(Choice):
     displayname = "Maximum Difficulty"
     option_easy = 0
@@ -189,6 +193,7 @@ sm_options: typing.Dict[str, type(Option)] = {
     "preset": Preset,
     "start_location": StartLocation,
     "death_link": DeathLink,
+    "death_link_survive": DeathLinkSurvive,
     #"majors_split": "Full",
     #"scav_num_locs": "10",
     #"scav_randomized": "off",
