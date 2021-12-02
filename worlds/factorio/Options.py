@@ -1,7 +1,7 @@
 from __future__ import annotations
 import typing
 
-from Options import Choice, OptionDict, ItemDict, Option, DefaultOnToggle, Range, DeathLink
+from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink
 from schema import Schema, Optional, And, Or
 
 # schema helpers
@@ -154,16 +154,8 @@ class FactorioStartItems(ItemDict):
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
 
 
-class FactorioFreeSampleBlacklist(OptionDict):
-    """any non-zero value means that item is blacklisted from free samples.  zero overrides the built-in blacklist"""
+class FactorioFreeSampleBlacklist(OptionSet):
     displayname = "Free Sample Blacklist"
-
-    def __init__(self, value: typing.Dict[str, int]):
-        self.value = value or {}
-        if any(type(value) not in [int, bool] for value in self.value.values()):
-            raise Exception("Cannot have non-number blacklist options")
-        for key in self.value.keys():
-            self.value[key] = 1 if self.value[key] else 0
 
 
 class TrapCount(Range):

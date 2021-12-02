@@ -123,7 +123,7 @@ def generate_mod(world, output_directory: str):
     if getattr(multiworld, "satellite")[player].value == Options.Satellite.option_randomize_recipe:
         template_data["free_sample_blacklist"]["satellite"] = 1
 
-    template_data["free_sample_blacklist"].update(multiworld.free_sample_blacklist[player].value)
+    template_data["free_sample_blacklist"].update({item: 1 for item in multiworld.free_sample_blacklist[player].value})
 
     control_code = control_template.render(**template_data)
     data_template_code = data_template.render(**template_data)
