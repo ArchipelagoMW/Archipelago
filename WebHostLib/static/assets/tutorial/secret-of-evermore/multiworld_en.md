@@ -1,14 +1,12 @@
 # Secret of Evermore Setup Guide
 
 ## Required Software
-- [SNI](https://github.com/alttpo/sni/releases) (included in Archipelago if already installed)
+- [SNI](https://github.com/alttpo/sni/releases) v0.0.59 or newer (included in Archipelago 0.2.1 setup)
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI with ROM access
-        - [snes9x-rr win32.zip](https://github.com/gocha/snes9x-rr/releases) +
-          [socket.dll](http://www.nyo.fr/~skarsnik/socket.dll) +
-          [connector.lua](https://raw.githubusercontent.com/alttpo/sni/main/lua/Connector.lua)
-        - or [BizHawk](http://tasvideos.org/BizHawk.html)
-        - or [bsnes-plus-nwa](https://github.com/black-sliver/bsnes-plus)
+        - [snes9x-rr](https://github.com/gocha/snes9x-rr/releases) or
+        - [BizHawk](http://tasvideos.org/BizHawk.html) or
+        - [bsnes-plus-nwa](https://github.com/black-sliver/bsnes-plus)
     - Or SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware
 - Your Secret of Evermore US ROM file, probably named `Secret of Evermore (USA).sfc`
 
@@ -60,8 +58,13 @@ If this is its first time launching, you may be prompted to allow it to communic
 2. Click on the File menu and hover on **Lua Scripting**
 3. Click on **New Lua Script Window...**
 4. In the new window, click **Browse...**
-5. Select the `Connector.lua` file you downloaded above
-6. If the script window complains about missing `socket.dll` make sure the DLL is in snes9x or the lua file's directory.
+5. Select the `Connector.lua` file from your SNI installation:
+    * `SNI/lua/x86/Connector.lua` for 32bit snes9x-rr or
+    * `SNI/lua/x64/Connector.lua` for "x64" snes9x-rr
+6. Leave the Lua window open while you are playing.
+
+* If the script window complains about missing `socket.dll` make sure it is in the lua directory.
+* If the script window complains about "Bad EXE format", use the other Connector above (x86 <-> x64)
 
 ##### BizHawk
 1. Ensure you have the BSNES core loaded. You may do this by clicking on the Tools menu in BizHawk and following
@@ -71,7 +74,7 @@ If this is its first time launching, you may be prompted to allow it to communic
 2. Load your ROM file if it hasn't already been loaded.
 3. Click on the Tools menu and click on **Lua Console**
 4. Click the button to open a new Lua script.
-5. Select the `Connector.lua` file you downloaded above
+5. Select any `Connector.lua` file from your SNI installation
 
 ##### bsnes-plus-nwa
 This should automatically connect to SNI.

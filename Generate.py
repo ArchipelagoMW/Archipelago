@@ -90,7 +90,8 @@ def main(args=None, callback=ERmain):
         except Exception as e:
             raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
         meta_weights = weights_cache[args.meta_file_path]
-        print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights, 'No description specified')}")
+        print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
+        del(meta_weights["meta_description"])
         if args.samesettings:
             raise Exception("Cannot mix --samesettings with --meta")
     else:
@@ -126,7 +127,7 @@ def main(args=None, callback=ERmain):
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
 
-    Utils.init_logging(f"Generate_{seed}.txt", loglevel=args.log_level)
+    Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
 
     erargs.lttp_rom = args.lttp_rom
     erargs.sm_rom = args.sm_rom
@@ -139,17 +140,17 @@ def main(args=None, callback=ERmain):
         player_path_cache[player] = player_files.get(player, args.weights_file_path)
 
     if meta_weights:
-        for player, path in player_path_cache.items():
-            weights_cache[path].setdefault("meta_ignore", [])
-        for key in meta_weights:
-            option = get_choice(key, meta_weights)
-            if option is not None:
-                for player, path in player_path_cache.items():
-                    players_meta = weights_cache[path].get("meta_ignore", [])
-                    if key not in players_meta:
-                        weights_cache[path][key] = option
-                    elif type(players_meta) == dict and players_meta[key] and option not in players_meta[key]:
-                        weights_cache[path][key] = option
+        for category_name, category_dict in meta_weights.items():
+            for key in category_dict:
+                option = get_choice(key, category_dict)
+                if option is not None:
+                    for player, path in player_path_cache.items():
+                        if category_name is None:
+                            weights_cache[path][key] = option
+                        elif category_name not in weights_cache[path]:
+                            raise Exception(f"Meta: Category {category_name} is not present in {path}.")
+                        else:
+                            weights_cache[path][category_name][key] = option
 
     name_counter = Counter()
     erargs.player_settings = {}
@@ -352,7 +353,7 @@ def roll_linked_options(weights: dict) -> dict:
 
 def roll_triggers(weights: dict, triggers: list) -> dict:
     weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
-    weights["_Generator_Version"] = "Archipelago"  # Some means for triggers to know if the seed is on main or doors.
+    weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
         try:
             currently_targeted_weights = weights
@@ -493,7 +494,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             handle_option(ret, game_weights, option_key, option)
         if "items" in plando_options:
             ret.plando_items = roll_item_plando(world_type, game_weights)
-        if ret.game == "Minecraft":
+        if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
             # bad hardcoded behavior to make this work for now
             ret.plando_connections = []
             if "connections" in plando_options:
@@ -503,7 +504,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                         ret.plando_connections.append(PlandoConnection(
                             get_choice("entrance", placement),
                             get_choice("exit", placement),
-                            get_choice("direction", placement, "both")
+                            get_choice("direction", placement)
                         ))
         elif ret.game == "A Link to the Past":
             roll_alttp_settings(ret, game_weights, plando_options)

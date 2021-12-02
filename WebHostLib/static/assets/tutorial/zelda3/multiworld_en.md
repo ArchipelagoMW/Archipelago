@@ -1,10 +1,10 @@
 # A Link to the Past Randomizer Setup Guide
 
 ## Required Software
-- [Z3Client](https://github.com/ArchipelagoMW/Z3Client/releases) or the LttPClient included with
+- [Z3Client](https://github.com/ArchipelagoMW/Z3Client/releases) or the SNIClient included with
 [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
-    - If installing Archipelago, make sure to check the box for LttPClient during install, or SNI will not be included
-- [SNI](https://github.com/alttpo/sni/releases) (Included in both Z3Client and LttPClient)
+    - If installing Archipelago, make sure to check the box for SNIClient -> A Link to the Past Patch Setup during install, or SNI will not be included
+- [SNI](https://github.com/alttpo/sni/releases) (Included in both Z3Client and SNIClient)
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
       ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
@@ -76,7 +76,7 @@ Firewall.
 4. In the new window, click **Browse...**
 5. Select the connector lua file included with your client
      - Z3Client users should download `sniConnector.lua` from the client download page
-     - LttPClient users should look in their Archipelago folder for `/sni/Connector.lua`
+     - SNIClient users should look in their Archipelago folder for `/sni/Connector.lua`
 
 ##### BizHawk
 1. Ensure you have the BSNES core loaded. You may do this by clicking on the Tools menu in BizHawk and following
@@ -88,7 +88,7 @@ Firewall.
 4. Click the button to open a new Lua script.
 5. Select the `sniConnector.lua` file you downloaded above
      - Z3Client users should download `sniConnector.lua` from the client download page
-     - LttPClient users should look in their Archipelago folder for `/sni/Connector.lua`
+     - SNIClient users should look in their Archipelago folder for `/sni/Connector.lua`
 
 #### With hardware
 This guide assumes you have downloaded the correct firmware for your device. If you have not

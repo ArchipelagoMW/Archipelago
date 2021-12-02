@@ -5,6 +5,7 @@ import json
 import string
 import copy
 import subprocess
+import sys
 import time
 import random
 
@@ -15,7 +16,7 @@ from queue import Queue
 import Utils
 
 if __name__ == "__main__":
-    Utils.init_logging("FactorioClient")
+    Utils.init_logging("FactorioClient", exception_logger="Client")
 
 from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled, \
      get_base_parser
@@ -65,22 +66,13 @@ class FactorioContext(CommonContext):
         if password_requested and not self.password:
             await super(FactorioContext, self).server_auth(password_requested)
 
-        if not self.auth:
-            if self.rcon_client:
-                get_info(self, self.rcon_client)  # retrieve current auth code
-            else:
-                raise Exception("Cannot connect to a server with unknown own identity, "
-                                "bridge to Factorio first.")
+        if self.rcon_client:
+            await get_info(self, self.rcon_client)  # retrieve current auth code
+        else:
+            raise Exception("Cannot connect to a server with unknown own identity, "
+                            "bridge to Factorio first.")
 
-        await self.send_msgs([{
-            "cmd": 'Connect',
-            'password': self.password,
-            'name': self.auth,
-            'version': Utils.version_tuple,
-            'tags': self.tags,
-            'uuid': Utils.get_unique_identifier(),
-            'game': "Factorio"
-        }])
+        await self.send_connect()
 
     def on_print(self, args: dict):
         super(FactorioContext, self).on_print(args)
@@ -134,13 +126,15 @@ async def game_watcher(ctx: FactorioContext):
                     research_data = data["research_done"]
                     research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                     victory = data["victory"]
+                    if "death_link" in data:    # TODO: Remove this if statement around version 0.2.4 or so
+                        await ctx.update_death_link(data["death_link"])
 
                     if not ctx.finished_game and victory:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                         ctx.finished_game = True
 
                     if ctx.locations_checked != research_data:
-                        bridge_logger.info(
+                        bridge_logger.debug(
                             f"New researches done: "
                             f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
@@ -148,7 +142,8 @@ async def game_watcher(ctx: FactorioContext):
                     death_link_tick = data.get("death_link_tick", 0)
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick
-                        await ctx.send_death()
+                        if "DeathLink" in ctx.tags:
+                            await ctx.send_death()
 
             await asyncio.sleep(0.1)
 
@@ -196,7 +191,8 @@ async def factorio_server_watcher(ctx: FactorioContext):
 
             while not factorio_queue.empty():
                 msg = factorio_queue.get()
-                factorio_server_logger.info(msg)
+                factorio_queue.task_done()
+
                 if not ctx.rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     ctx.rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     if not ctx.server:
@@ -205,7 +201,9 @@ async def factorio_server_watcher(ctx: FactorioContext):
 
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
-
+                    factorio_server_logger.debug(msg)
+                else:
+                    factorio_server_logger.info(msg)
             if ctx.rcon_client:
                 commands = {}
                 while ctx.send_index < len(ctx.items_received):
@@ -234,14 +232,13 @@ async def factorio_server_watcher(ctx: FactorioContext):
         factorio_process.wait(5)
 
 
-def get_info(ctx, rcon_client):
+async def get_info(ctx, rcon_client):
     info = json.loads(rcon_client.send_command("/ap-rcon-info"))
     ctx.auth = info["slot_name"]
     ctx.seed_name = info["seed_name"]
     # 0.2.0 addition, not present earlier
     death_link = bool(info.get("death_link", False))
-    if death_link:
-        ctx.tags.add("DeathLink")
+    await ctx.update_death_link(death_link)
 
 
 async def factorio_spinup_server(ctx: FactorioContext) -> bool:
@@ -280,7 +277,7 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
                     rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     if ctx.mod_version == ctx.__class__.mod_version:
                         raise Exception("No Archipelago mod was loaded. Aborting.")
-                    get_info(ctx, rcon_client)
+                    await get_info(ctx, rcon_client)
             await asyncio.sleep(0.01)
 
     except Exception as e:
@@ -301,14 +298,15 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
 async def main(args):
     ctx = FactorioContext(args.connect, args.password)
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+    input_task = None
     if gui_enabled:
-        input_task = None
         from kvui import FactorioManager
         ctx.ui = FactorioManager(ctx)
         ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
     else:
-        input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None
+    if sys.stdin:
+        input_task = asyncio.create_task(console_loop(ctx), name="Input")
     factorio_server_task = asyncio.create_task(factorio_spinup_server(ctx), name="FactorioSpinupServer")
     succesful_launch = await factorio_server_task
     if succesful_launch:
@@ -322,14 +320,7 @@ async def main(args):
         await progression_watcher
         await factorio_server_task
 
-    if ctx.server and not ctx.server.socket.closed:
-        await ctx.server.socket.close()
-    if ctx.server_task:
-        await ctx.server_task
-
-    while ctx.input_requests > 0:
-        ctx.input_queue.put_nowait(None)
-        ctx.input_requests -= 1
+    await ctx.shutdown()
 
     if ui_task:
         await ui_task

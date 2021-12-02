@@ -19,7 +19,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'Varndagroth tower right (lower)'),
         create_region(world, player, locations_per_region, location_cache, 'Varndagroth tower right (elevator)'),
         create_region(world, player, locations_per_region, location_cache, 'Sealed Caves (Sirens)'),
-        create_region(world, player, locations_per_region, location_cache, 'Militairy Fortress'),
+        create_region(world, player, locations_per_region, location_cache, 'Military Fortress'),
         create_region(world, player, locations_per_region, location_cache, 'The lab'),
         create_region(world, player, locations_per_region, location_cache, 'The lab (power off)'),
         create_region(world, player, locations_per_region, location_cache, 'The lab (upper)'),
@@ -75,20 +75,20 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Varndagroth tower right (lower)', 'Varndagroth tower left', lambda state: state._timespinner_has_keycard_B(world, player))
     connect(world, player, names, 'Varndagroth tower right (lower)', 'Varndagroth tower right (elevator)', lambda state: state.has('Elevator Keycard', player))
     connect(world, player, names, 'Varndagroth tower right (lower)', 'Sealed Caves (Sirens)', lambda state: state._timespinner_has_keycard_B(world, player) and state.has('Elevator Keycard', player))
-    connect(world, player, names, 'Varndagroth tower right (lower)', 'Militairy Fortress', lambda state: state._timespinner_can_kill_all_3_bosses(world, player))
+    connect(world, player, names, 'Varndagroth tower right (lower)', 'Military Fortress', lambda state: state._timespinner_can_kill_all_3_bosses(world, player))
     connect(world, player, names, 'Varndagroth tower right (lower)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Sealed Caves (Sirens)', 'Varndagroth tower left', lambda state: state.has('Elevator Keycard', player))
     connect(world, player, names, 'Sealed Caves (Sirens)', 'Varndagroth tower right (lower)', lambda state: state.has('Elevator Keycard', player))
     connect(world, player, names, 'Sealed Caves (Sirens)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
-    connect(world, player, names, 'Militairy Fortress', 'Varndagroth tower right (lower)', lambda state: state._timespinner_can_kill_all_3_bosses(world, player))
-    connect(world, player, names, 'Militairy Fortress', 'The lab', lambda state: state._timespinner_has_keycard_B(world, player) and state._timespinner_has_doublejump(world, player))
-    connect(world, player, names, 'The lab', 'Militairy Fortress')
+    connect(world, player, names, 'Military Fortress', 'Varndagroth tower right (lower)', lambda state: state._timespinner_can_kill_all_3_bosses(world, player))
+    connect(world, player, names, 'Military Fortress', 'The lab', lambda state: state._timespinner_has_keycard_B(world, player) and state._timespinner_has_doublejump(world, player))
+    connect(world, player, names, 'The lab', 'Military Fortress')
     connect(world, player, names, 'The lab', 'The lab (power off)', lambda state: state._timespinner_has_doublejump_of_npc(world, player))
     connect(world, player, names, 'The lab (power off)', 'The lab')
     connect(world, player, names, 'The lab (power off)', 'The lab (upper)', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
     connect(world, player, names, 'The lab (upper)', 'The lab (power off)')
     connect(world, player, names, 'The lab (upper)', 'Emperors tower', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
-    connect(world, player, names, 'The lab (upper)', 'Ancient Pyramid (left)', lambda state: state.has_all(['Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'], player))
+    connect(world, player, names, 'The lab (upper)', 'Ancient Pyramid (left)', lambda state: state.has_all({'Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'}, player))
     connect(world, player, names, 'Emperors tower', 'The lab (upper)')
     connect(world, player, names, 'Skeleton Shaft', 'Lake desolation')
     connect(world, player, names, 'Skeleton Shaft', 'Sealed Caves (upper)', lambda state: state._timespinner_has_keycard_A(world, player))

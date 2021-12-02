@@ -140,7 +140,7 @@ The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
 | ---- | ---- | ----- |
 | hint_points | int | New argument. The client's current hint points. |
 | players | list\[NetworkPlayer\] | Changed argument. Always sends all players, whether connected or not. |
-| checked_locations | May be a partial update, containing new locations that were checked. |
+| checked_locations | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
 | missing_locations | Should never be sent as an update, if needed is the inverse of checked_locations. |
 
 All arguments for this packet are optional, only changes are sent.
@@ -349,12 +349,21 @@ class JSONMessagePart(TypedDict):
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
 Possible values for `type` include:
-* player_id
-* item_id
-* location_id
-* entrance_name
 
-`color` is used to denote a console color to display the message part with. This is limited to console colors due to backwards compatibility needs with games such as ALttP. Although background colors as well as foreground colors are listed, only one may be applied to a [JSONMessagePart](#JSONMessagePart) at a time.
+| Name | Notes |
+| ---- | ----- |
+| text | Regular text content. Is the default type and as such may be omitted. |
+| player_id | player ID of someone on your team, should be resolved to Player Name |
+| player_name | Player Name, could be a player within a multiplayer game or from another team, not ID resolvable |
+| item_id | Item ID, should be resolved to Item Name |
+| item_name | Item Name, not currently used over network, but supported by reference Clients. |
+| location_id | Location ID, should be resolved to Location Name |
+| location_name |Location Name, not currently used over network, but supported by reference Clients. |
+| entrance_name | Entrance Name. No ID mapping exists. |
+| color | Regular text that should be colored. Only `type` that will contain `color` data. |
+
+
+`color` is used to denote a console color to display the message part with and is only send if the `type` is `color`. This is limited to console colors due to backwards compatibility needs with games such as ALttP. Although background colors as well as foreground colors are listed, only one may be applied to a [JSONMessagePart](#JSONMessagePart) at a time.
 
 Color options:
 * bold

@@ -152,3 +152,7 @@ dmypy.json
 cython_debug/
 
 Archipelago.zip
+
+#minecraft server stuff
+jdk*/
+minecraft*/

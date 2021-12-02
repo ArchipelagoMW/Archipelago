@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import logging
 import typing
 import enum
 from json import JSONEncoder, JSONDecoder
@@ -138,11 +140,11 @@ class HandlerMeta(type):
                     break
 
         def __init__(self, *args, **kwargs):
+            if orig_init:
+                orig_init(self, *args, **kwargs)
             # turn functions into bound methods
             self.handlers = {name: method.__get__(self, type(self)) for name, method in
                              handlers.items()}
-            if orig_init:
-                orig_init(self, *args, **kwargs)
 
         attrs['__init__'] = __init__
         return super(HandlerMeta, mcs).__new__(mcs, name, bases, attrs)
@@ -192,11 +194,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_color(node)
 
     def _handle_item_name(self, node: JSONMessagePart):
-        # todo: use a better info source
-        from worlds.alttp.Items import progression_items
-        node["color"] = 'green' if node.get("found", False) else 'cyan'
-        if node["text"] in progression_items:
-            node["color"] += ";white_bg"
+        node["color"] = 'cyan'
         return self._handle_color(node)
 
     def _handle_item_id(self, node: JSONMessagePart):
@@ -205,13 +203,13 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_item_name(node)
 
     def _handle_location_name(self, node: JSONMessagePart):
-        node["color"] = 'blue_bg;white'
+        node["color"] = 'green'
         return self._handle_color(node)
 
     def _handle_location_id(self, node: JSONMessagePart):
         item_id = int(node["text"])
         node["text"] = self.ctx.location_name_getter(item_id)
-        return self._handle_item_name(node)
+        return self._handle_location_name(node)
 
     def _handle_entrance_name(self, node: JSONMessagePart):
         node["color"] = 'blue'
@@ -282,10 +280,11 @@ class Hint(typing.NamedTuple):
             add_json_text(parts, self.entrance, type="entrance_name")
         else:
             add_json_text(parts, "'s World")
+        add_json_text(parts, ". ")
         if self.found:
-            add_json_text(parts, ". (found)")
+            add_json_text(parts, "(found)", type="color", color="green")
         else:
-            add_json_text(parts, ".")
+            add_json_text(parts, "(not found)", type="color", color="red")
 
         return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
                 "receiving": self.receiving_player,

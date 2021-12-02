@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 import threading
 import time
 import multiprocessing
@@ -14,7 +15,7 @@ from json import loads, dumps
 from Utils import get_item_name_from_id, init_logging
 
 if __name__ == "__main__":
-    init_logging("SNIClient")
+    init_logging("SNIClient", exception_logger="Client")
 
 import colorama
 
@@ -72,7 +73,7 @@ class LttPCommandProcessor(ClientCommandProcessor):
                 pass
 
         self.ctx.snes_reconnect_address = None
-        asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number))
+        asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number), name="SNES Connect")
         return True
 
     def _cmd_snes_close(self) -> bool:
@@ -142,12 +143,7 @@ class Context(CommonContext):
         self.awaiting_rom = False
         self.auth = self.rom
         auth = base64.b64encode(self.rom).decode()
-        await self.send_msgs([{"cmd": 'Connect',
-                               'password': self.password, 'name': auth, 'version': Utils.version_tuple,
-                               'tags': self.tags,
-                               'uuid': Utils.get_unique_identifier(),
-                               'game': self.game
-                               }])
+        await self.send_connect(name=auth)
 
     def on_deathlink(self, data: dict):
         if not self.killing_player_task or self.killing_player_task.done():
@@ -684,11 +680,6 @@ async def snes_disconnect(ctx: Context):
 
 
 async def snes_autoreconnect(ctx: Context):
-    # unfortunately currently broken. See: https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1033
-    # with prompt_toolkit.shortcuts.ProgressBar() as pb:
-    #    for _ in pb(range(100)):
-    #        await asyncio.sleep(RECONNECT_DELAY/100)
-
     await asyncio.sleep(SNES_RECONNECT_DELAY)
     if ctx.snes_reconnect_address and ctx.snes_socket is None:
         await snes_connect(ctx, ctx.snes_reconnect_address)
@@ -893,10 +884,10 @@ async def game_watcher(ctx: Context):
 
         if not ctx.rom:
             ctx.finished_game = False
-            gameName = await snes_read(ctx, SM_ROMNAME_START, 2)
-            if gameName is None:
+            game_name = await snes_read(ctx, SM_ROMNAME_START, 2)
+            if game_name is None:
                 continue
-            elif gameName == b"SM":
+            elif game_name == b"SM":
                 ctx.game = GAME_SM
             else:
                 ctx.game = GAME_ALTTP
@@ -909,14 +900,7 @@ async def game_watcher(ctx: Context):
             death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
                                          SM_DEATH_LINK_ACTIVE_ADDR, 1)
             if death_link:
-                death_link = bool(death_link[0] & 0b1)
-                old_tags = ctx.tags.copy()
-                if death_link:
-                    ctx.tags.add("DeathLink")
-                else:
-                    ctx.tags -= {"DeathLink"}
-                if old_tags != ctx.tags and ctx.server and not ctx.server.socket.closed:
-                    await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
+                await ctx.update_death_link(bool(death_link[0] & 0b1))
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
                 ctx.locations_scouted = set()
@@ -1078,52 +1062,54 @@ async def main():
         import Patch
         logging.info("Patch file was supplied. Creating sfc rom..")
         meta, romfile = Patch.create_rom_file(args.diff_file)
-        args.connect = meta["server"]
+        if "server" in meta:
+            args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
-        adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile, gui_enabled)
-        if adjusted:
-            try:
-                shutil.move(adjustedromfile, romfile)
-                adjustedromfile = romfile
-            except Exception as e:
-                logging.exception(e)
-        asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
+        if args.diff_file.endswith(".apsoe"):
+            import webbrowser
+            webbrowser.open("http://www.evermizer.com/apclient/")
+            logging.info("Starting Evermizer Client in your Browser...")
+            import time
+            time.sleep(3)
+            sys.exit()
+        elif args.diff_file.endswith((".apbp", "apz3")):
+            adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile, gui_enabled)
+            if adjusted:
+                try:
+                    shutil.move(adjustedromfile, romfile)
+                    adjustedromfile = romfile
+                except Exception as e:
+                    logging.exception(e)
+            asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
+        else:
+            asyncio.create_task(run_game(romfile))
 
     ctx = Context(args.snes, args.connect, args.password)
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-
+    input_task = None
     if gui_enabled:
-        input_task = None
         from kvui import SNIManager
         ctx.ui = SNIManager(ctx)
         ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
     else:
-        input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None
+    if sys.stdin:
+        input_task = asyncio.create_task(console_loop(ctx), name="Input")
 
-    snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address))
+    snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address), name="SNES Connect")
     watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
 
     await ctx.exit_event.wait()
-    if snes_connect_task:
-        snes_connect_task.cancel()
+
     ctx.server_address = None
     ctx.snes_reconnect_address = None
-
-    await watcher_task
-
-    if ctx.server and not ctx.server.socket.closed:
-        await ctx.server.socket.close()
-    if ctx.server_task:
-        await ctx.server_task
-
     if ctx.snes_socket is not None and not ctx.snes_socket.closed:
         await ctx.snes_socket.close()
-
-    while ctx.input_requests > 0:
-        ctx.input_queue.put_nowait(None)
-        ctx.input_requests -= 1
+    if snes_connect_task:
+        snes_connect_task.cancel()
+    await watcher_task
+    await ctx.shutdown()
 
     if ui_task:
         await ui_task

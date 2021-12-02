@@ -9,7 +9,7 @@
     {% include 'header/grassHeader.html' %}
     <div id="host-room">
         {% if room.owner == session["_id"] %}
-            Room created from <a href="{{ url_for("viewSeed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
+            Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
             <br>
         {% endif %}
         {% if room.tracker %}
@@ -20,7 +20,7 @@
         later,
         you can simply refresh this page and the server will be started again.<br>
         {% if room.last_port %}
-            You can connect to this room by using '/connect archipelago.gg:{{ room.last_port }}'
+            You can connect to this room by using '/connect {{ config['PATCH_TARGET'] }}:{{ room.last_port }}'
             in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>{% endif %}
         {{ macros.list_patches_room(room) }}
         {% if room.owner == session["_id"] %}

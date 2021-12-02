@@ -65,8 +65,8 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                 MultiServer.Context._decompress(multidata)
             except:
                 flash("Could not load multidata. File may be corrupted or incompatible.")
-            else:
-                multidata = zfile.open(file).read()
+                multidata = None
+
     if multidata:
         flush()  # commit slots
         seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner, meta=json.dumps(meta),
@@ -98,7 +98,7 @@ def uploads():
                         if type(res) == str:
                             return res
                         elif res:
-                            return redirect(url_for("viewSeed", seed=res.id))
+                            return redirect(url_for("view_seed", seed=res.id))
                 else:
                     try:
                         multidata = file.read()
@@ -109,7 +109,7 @@ def uploads():
                     else:
                         seed = Seed(multidata=multidata, owner=session["_id"])
                         flush()  # place into DB and generate ids
-                        return redirect(url_for("viewSeed", seed=seed.id))
+                        return redirect(url_for("view_seed", seed=seed.id))
             else:
                 flash("Not recognized file format. Awaiting a .archipelago file or .zip containing one.")
     return render_template("hostGame.html")

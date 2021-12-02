@@ -33,6 +33,14 @@ class MaxSciencePack(Choice):
         return self.get_ordered_science_packs()[self.value].replace("_", "-")
 
 
+class Goal(Choice):
+    """Goal required to complete the game."""
+    displayname = "Goal"
+    option_rocket = 0
+    option_satellite = 1
+    default = 0
+
+
 class TechCost(Choice):
     """How expensive are the technologies."""
     displayname = "Technology Cost Scale"
@@ -52,6 +60,14 @@ class Silo(Choice):
     option_vanilla = 0
     option_randomize_recipe = 1
     option_spawn = 2
+    default = 0
+
+
+class Satellite(Choice):
+    """Ingredients to craft satellite."""
+    displayname = "Satellite"
+    option_vanilla = 0
+    option_randomize_recipe = 1
     default = 0
 
 
@@ -91,13 +107,25 @@ class TechTreeInformation(Choice):
 
 
 class RecipeTime(Choice):
-    """randomize the time it takes for any recipe to craft, this includes smelting, chemical lab, hand crafting etc."""
+    """Randomize the time it takes for any recipe to craft, this includes smelting, chemical lab, hand crafting etc.
+    Fast: 0.25X - 1X
+    Normal: 0.5X - 2X
+    Slow: 1X - 4X
+    Chaos: 0.25X - 4X
+    New category: ignores vanilla recipe time and rolls new one
+    New Fast: 0.25 - 2 seconds
+    New Normal: 0.25 - 10 seconds
+    New Slow:  5 - 10 seconds
+    """
     displayname = "Recipe Time"
     option_vanilla = 0
     option_fast = 1
     option_normal = 2
     option_slow = 4
     option_chaos = 5
+    option_new_fast = 6
+    option_new_normal = 7
+    option_new_slow = 8
 
 
 class Progressive(Choice):
@@ -286,9 +314,11 @@ class ImportedBlueprint(DefaultOnToggle):
 
 factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,
+    "goal": Goal,
     "tech_tree_layout": TechTreeLayout,
     "tech_cost": TechCost,
     "silo": Silo,
+    "satellite": Satellite,
     "free_samples": FreeSamples,
     "tech_tree_information": TechTreeInformation,
     "starting_items": FactorioStartItems,

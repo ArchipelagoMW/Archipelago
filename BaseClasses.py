@@ -255,13 +255,17 @@ class MultiWorld():
     def get_items(self) -> list:
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
-    def find_items(self, item, player: int) -> List[Location]:
+    def find_item_locations(self, item, player: int) -> List[Location]:
         return [location for location in self.get_locations() if
-                location.item is not None and location.item.name == item and location.item.player == player]
+                location.item and location.item.name == item and location.item.player == player]
 
     def find_item(self, item, player: int) -> Location:
         return next(location for location in self.get_locations() if
                     location.item and location.item.name == item and location.item.player == player)
+
+    def find_items_in_locations(self, items: Set[str], player: int) -> List[Location]:
+        return [location for location in self.get_locations() if
+                location.item and location.item.name in items and location.item.player == player]
 
     def create_item(self, item_name: str, player: int) -> Item:
         return self.worlds[player].create_item(item_name)
@@ -582,7 +586,7 @@ class CollectionState(object):
         return any(shop.region.player == player and shop.has(item) and shop.region.can_reach(self) for
                    shop in self.world.shops)
 
-    def item_count(self, item, player: int) -> int:
+    def item_count(self, item: str, player: int) -> int:
         return self.prog_items[item, player]
 
     def has_triforce_pieces(self, count: int, player: int) -> bool:
@@ -709,23 +713,23 @@ class CollectionState(object):
     def has_turtle_rock_medallion(self, player: int) -> bool:
         return self.has(self.world.required_medallions[player][1], player)
 
-    def can_boots_clip_lw(self, player):
+    def can_boots_clip_lw(self, player: int):
         if self.world.mode[player] == 'inverted':
             return self.has('Pegasus Boots', player) and self.has('Moon Pearl', player)
         return self.has('Pegasus Boots', player)
 
-    def can_boots_clip_dw(self, player):
+    def can_boots_clip_dw(self, player: int):
         if self.world.mode[player] != 'inverted':
             return self.has('Pegasus Boots', player) and self.has('Moon Pearl', player)
         return self.has('Pegasus Boots', player)
 
-    def can_get_glitched_speed_lw(self, player):
+    def can_get_glitched_speed_lw(self, player: int):
         rules = [self.has('Pegasus Boots', player), any([self.has('Hookshot', player), self.has_sword(player)])]
         if self.world.mode[player] == 'inverted':
             rules.append(self.has('Moon Pearl', player))
         return all(rules)
 
-    def can_superbunny_mirror_with_sword(self, player):
+    def can_superbunny_mirror_with_sword(self, player: int):
         return self.has('Magic Mirror', player) and self.has_sword(player)
 
     def can_get_glitched_speed_dw(self, player: int):
@@ -754,7 +758,7 @@ class CollectionState(object):
 
         return changed
 
-    def remove(self, item):
+    def remove(self, item: Item):
         changed = self.world.worlds[item.player].remove(self, item)
         if changed:
             # invalidate caches, nothing can be trusted anymore now
@@ -772,14 +776,14 @@ class RegionType(int, Enum):
     Dungeon = 4
 
     @property
-    def is_indoors(self):
+    def is_indoors(self) -> bool:
         """Shorthand for checking if Cave or Dungeon"""
         return self in (RegionType.Cave, RegionType.Dungeon)
 
 
 class Region(object):
 
-    def __init__(self, name: str, type, hint, player: int, world: Optional[MultiWorld] = None):
+    def __init__(self, name: str, type: str, hint, player: int, world: Optional[MultiWorld] = None):
         self.name = name
         self.type = type
         self.entrances = []
@@ -794,12 +798,12 @@ class Region(object):
         self.hint_text = hint
         self.player = player
 
-    def can_reach(self, state: CollectionState):
+    def can_reach(self, state: CollectionState) -> bool:
         if state.stale[self.player]:
             state.update_reachable_regions(self.player)
         return self in state.reachable_regions[self.player]
 
-    def can_reach_private(self, state: CollectionState):
+    def can_reach_private(self, state: CollectionState) -> bool:
         for entrance in self.entrances:
             if entrance.can_reach(state):
                 if not self in state.path:
@@ -827,7 +831,7 @@ class Entrance(object):
         self.player = player
         self.hide_path = False
 
-    def can_reach(self, state):
+    def can_reach(self, state: CollectionState) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
             if not self.hide_path and not self in state.path:
                 state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
@@ -835,7 +839,7 @@ class Entrance(object):
 
         return False
 
-    def connect(self, region, addresses=None, target=None):
+    def connect(self, region: Region, addresses=None, target = None):
         self.connected_region = region
         self.target = target
         self.addresses = addresses
@@ -861,11 +865,11 @@ class Dungeon(object):
         self.world = None
 
     @property
-    def boss(self):
+    def boss(self) -> Optional[Boss]:
         return self.bosses.get(None, None)
 
     @boss.setter
-    def boss(self, value):
+    def boss(self, value: Optional[Boss]):
         self.bosses[None] = value
 
     @property
@@ -892,7 +896,7 @@ class Dungeon(object):
 
 
 class Boss():
-    def __init__(self, name, enemizer_name, defeat_rule, player: int):
+    def __init__(self, name: str, enemizer_name: str, defeat_rule, player: int):
         self.name = name
         self.enemizer_name = enemizer_name
         self.defeat_rule = defeat_rule

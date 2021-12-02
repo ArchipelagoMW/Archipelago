@@ -38,26 +38,29 @@
                 <td><img src="{{ icons['Gas Mask'] }}" class="{{ 'acquired' if 'Gas Mask' in acquired_items }}" title="Gas Mask" /></td>
             </tr>
             <tr>
-                {% if 'Fire Orb' in acquired_items %}
+                <td><img src="{{ icons['Kobo'] }}" class="{{ 'acquired' if 'Kobo' in acquired_items }}" title="Kobo" /></td>
+                <td><img src="{{ icons['Merchant Crow'] }}" class="{{ 'acquired' if 'Merchant Crow' in acquired_items }}" title="Merchant Crow" /></td>
+
+                {% if 'Djinn Inferno' in acquired_items %}
+                    <td><img src="{{ icons['Djinn Inferno'] }}" class="acquired" title="Djinn Inferno" /></td>
+                {% elif 'Pyro Ring' in acquired_items %}
+                    <td><img src="{{ icons['Pyro Ring'] }}" class="acquired" title="Pyro Ring" /></td>
+                {% elif 'Fire Orb' in acquired_items %}
                     <td><img src="{{ icons['Fire Orb'] }}" class="acquired" title="Fire Orb" /></td>
                 {% elif 'Infernal Flames' in acquired_items %}
                     <td><img src="{{ icons['Infernal Flames'] }}" class="acquired" title="Infernal Flames" /></td>
-                {% elif 'Pyro Ring' in acquired_items %}
-                    <td><img src="{{ icons['Pyro Ring'] }}" class="acquired" title="Pyro Ring" /></td>
-                {% elif 'Pyro Ring' in acquired_items %}
-                    <td><img src="{{ icons['Djinn Inferno'] }}" class="acquired" title="Djinn Inferno" /></td>
                 {% else %}
-                    <td><img src="{{ icons['Fire Orb'] }}" title="Fire Orb" /></td>
+                    <td><img src="{{ icons['Djinn Inferno'] }}" title="Djinn Inferno" /></td>
                 {% endif %}
 
-                {% if 'Plasma Orb' in acquired_items %}
-                    <td><img src="{{ icons['Plasma Orb'] }}" class="acquired" title="Plasma Orb" /></td>
+                {% if 'Royal Ring' in acquired_items %}
+                    <td><img src="{{ icons['Royal Ring'] }}" class="acquired" title="Royal Ring" /></td>
                 {% elif 'Plasma Geyser' in acquired_items %}
                     <td><img src="{{ icons['Plasma Geyser'] }}" class="acquired" title="Plasma Geyser" /></td>
-                {% elif 'Royal Ring' in acquired_items %}
-                    <td><img src="{{ icons['Royal Ring'] }}" class="acquired" title="Royal Ring" /></td>
+                {% elif 'Plasma Orb' in acquired_items %}
+                    <td><img src="{{ icons['Plasma Orb'] }}" class="acquired" title="Plasma Orb" /></td>
                 {% else %}
-                    <td><img src="{{ icons['Plasma Orb'] }}" title="Plasma Orb" /></td>
+                    <td><img src="{{ icons['Royal Ring'] }}" title="Royal Ring" /></td>
                 {% endif %}
             </tr>
         </table>

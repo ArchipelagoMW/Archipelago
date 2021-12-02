@@ -24,6 +24,6 @@ Specific items can be limited to your own world using plando.
 Secret of Evermore will display "Sent an Item". Check the client output if you want to know which.
 
 ## What happens when the player receives an item?
-When the player receives an item, a popup will appear to show which item was received. Items won't be recieved while a
+When the player receives an item, a popup will appear to show which item was received. Items won't be received while a
 script is active such as when visiting Nobilia Market or during most Boss Fights. Once all scripts have ended, items
-will be recieved.
+will be received.

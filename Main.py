@@ -197,8 +197,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                             if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
                                 er_hint_data[region.player][location.address] = main_entrance.name
 
-
-
             checks_in_area = {player: {area: list() for area in ordered_areas}
                               for player in range(1, world.players + 1)}
 
@@ -215,6 +213,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                                        'Inverted Ganons Tower': 'Ganons Tower'} \
                             .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
                         checks_in_area[location.player][dungeonname].append(location.address)
+                    elif location.parent_region.type == RegionType.LightWorld:
+                        checks_in_area[location.player]["Light World"].append(location.address)
+                    elif location.parent_region.type == RegionType.DarkWorld:
+                        checks_in_area[location.player]["Dark World"].append(location.address)
                     elif main_entrance.parent_region.type == RegionType.LightWorld:
                         checks_in_area[location.player]["Light World"].append(location.address)
                     elif main_entrance.parent_region.type == RegionType.DarkWorld:
@@ -319,8 +321,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     logger.warning("Location Accessibility requirements not fulfilled.")
 
             # retrieve exceptions via .result() if they occured.
-            if multidata_task:
-                multidata_task.result()
+            multidata_task.result()
             for i, future in enumerate(concurrent.futures.as_completed(output_file_futures), start=1):
                 if i % 10 == 0 or i == len(output_file_futures):
                     logger.info(f'Generating output files ({i}/{len(output_file_futures)}).')

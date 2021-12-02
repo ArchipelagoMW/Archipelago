@@ -48,20 +48,22 @@ Name: "playing"; Description: "Installation for playing purposes"
 Name: "custom"; Description: "Custom installation"; Flags: iscustom
 
 [Components]
-Name: "core"; Description: "Core Files"; Types: full hosting playing custom; Flags: fixed
-Name: "generator"; Description: "Generator"; Types: full hosting
-Name: "generator/sm"; Description: "Super Metroid ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728
-Name: "generator/soe"; Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728
-Name: "generator/lttp"; Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
-Name: "generator/oot"; Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296
-Name: "server"; Description: "Server"; Types: full hosting
-Name: "client"; Description: "Clients"; Types: full playing
-Name: "client/sni"; Description: "SNI Client"; Types: full playing
-Name: "client/sni/lttp"; Description: "SNI Client - A Link to the Past Patch Setup"; Types: full playing
-Name: "client/sni/sm"; Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing
-Name: "client/factorio"; Description: "Factorio"; Types: full playing
+Name: "core";             Description: "Core Files"; Types: full hosting playing custom; Flags: fixed
+Name: "generator";        Description: "Generator"; Types: full hosting
+Name: "generator/sm";     Description: "Super Metroid ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/soe";    Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
+Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
+Name: "server";           Description: "Server"; Types: full hosting
+Name: "client";           Description: "Clients"; Types: full playing
+Name: "client/sni";       Description: "SNI Client"; Types: full playing
+Name: "client/sni/lttp";  Description: "SNI Client - A Link to the Past Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/factorio";  Description: "Factorio"; Types: full playing
 Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
-Name: "client/text"; Description: "Text, to !command and chat"; Types: full playing
+Name: "client/oot";       Description: "Ocarina of Time Adjuster"; Types: full playing
+Name: "client/ff1";       Description: "Final Fantasy 1"; Types: full playing
+Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
 
 [Dirs]
 NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-modify authusers-modify;
@@ -82,10 +84,9 @@ Source: "{#sourcepath}\ArchipelagoTextClient.exe"; DestDir: "{app}"; Flags: igno
 Source: "{#sourcepath}\ArchipelagoSNIClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni
 Source: "{#sourcepath}\ArchipelagoLttPAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni/lttp or generator/lttp
 Source: "{#sourcepath}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/minecraft
+Source: "{#sourcepath}\ArchipelagoOoTAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
+Source: "{#sourcepath}\ArchipelagoFF1Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ff1
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
-
-;minecraft temp files
-Source: "{tmp}\forge-installer.jar"; DestDir: "{app}"; Flags: skipifsourcedoesntexist external deleteafterinstall; Components: client/minecraft
 
 [Icons]
 Name: "{group}\{#MyAppName} Folder"; Filename: "{app}";
@@ -94,16 +95,19 @@ Name: "{group}\{#MyAppName} Text Client"; Filename: "{app}\ArchipelagoTextClient
 Name: "{group}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoSNIClient.exe"; Components: client/sni
 Name: "{group}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Components: client/factorio
 Name: "{group}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinecraftClient.exe"; Components: client/minecraft
+Name: "{group}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Components: client/ff1
+
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
 Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Components: server
 Name: "{commondesktop}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoSNIClient.exe"; Tasks: desktopicon; Components: client/sni
 Name: "{commondesktop}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Tasks: desktopicon; Components: client/factorio
+Name: "{commondesktop}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Tasks: desktopicon; Components: client/factorio
 
 [Run]
 
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
 Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: client/sni/lttp or generator/lttp
-Filename: "{app}\jre8\bin\java.exe"; Parameters: "-jar ""{app}\forge-installer.jar"" --installServer ""{app}\Minecraft Forge server"""; Flags: runhidden; Check: IsForgeNeeded(); StatusMsg: "Installing Forge Server..."; Components: client/minecraft
+Filename: "{app}\ArchipelagoMinecraftClient.exe"; Parameters: "--install"; StatusMsg: "Installing Forge Server..."; Components: client/minecraft
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"
@@ -123,6 +127,11 @@ Root: HKCR; Subkey: "{#MyAppName}smpatch";                     ValueData: "Archi
 Root: HKCR; Subkey: "{#MyAppName}smpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}smpatch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
 
+Root: HKCR; Subkey: ".apsoe";                                 ValueData: "{#MyAppName}soepatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}soepatch";                     ValueData: "Archipelago Secret of Evermore Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}soepatch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}soepatch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";
+
 Root: HKCR; Subkey: ".apmc";                                  ValueData: "{#MyAppName}mcdata";         Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/minecraft
 Root: HKCR; Subkey: "{#MyAppName}mcdata";                     ValueData: "Archipelago Minecraft Data"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/minecraft
 Root: HKCR; Subkey: "{#MyAppName}mcdata\DefaultIcon";         ValueData: "{app}\ArchipelagoMinecraftClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/minecraft
@@ -134,12 +143,10 @@ Root: HKCR; Subkey: "{#MyAppName}multidata\DefaultIcon";         ValueData: "{ap
 Root: HKCR; Subkey: "{#MyAppName}multidata\shell\open\command";  ValueData: """{app}\ArchipelagoServer.exe"" ""%1""";                ValueType: string;  ValueName: ""; Components: server
 
 
-
 [Code]
 const
   SHCONTCH_NOPROGRESSBOX = 4;
   SHCONTCH_RESPONDYESTOALL = 16;
-  FORGE_VERSION = '1.16.5-36.2.0';
 
 // See: https://stackoverflow.com/a/51614652/2287576
 function IsVCRedist64BitNeeded(): boolean;
@@ -161,48 +168,6 @@ begin
   end;
 end;
 
-function IsForgeNeeded(): boolean;
-begin
-  Result := True;
-  if (FileExists(ExpandConstant('{app}')+'\Minecraft Forge Server\forge-'+FORGE_VERSION+'.jar')) then
-    Result := False;
-end;
-
-function IsJavaNeeded(): boolean;
-begin
-  Result := True;
-  if (FileExists(ExpandConstant('{app}')+'\jre8\bin\java.exe')) then
-    Result := False;
-end;
-
-function OnDownloadMinecraftProgress(const Url, FileName: String; const Progress, ProgressMax: Int64): Boolean;
-begin
-  if Progress = ProgressMax then
-    Log(Format('Successfully downloaded Minecraft additional files to {tmp}: %s', [FileName]));
-  Result := True;
-end;
-
-procedure UnZip(ZipPath, TargetPath: string);
-var
-  Shell: Variant;
-  ZipFile: Variant;
-  TargetFolder: Variant;
-begin
-  Shell := CreateOleObject('Shell.Application');
-
-  ZipFile := Shell.NameSpace(ZipPath);
-  if VarIsClear(ZipFile) then
-    RaiseException(
-      Format('ZIP file "%s" does not exist or cannot be opened', [ZipPath]));
-
-  TargetFolder := Shell.NameSpace(TargetPath);
-  if VarIsClear(TargetFolder) then
-    RaiseException(Format('Target path "%s" does not exist', [TargetPath]));
-
-  TargetFolder.CopyHere(
-    ZipFile.Items, SHCONTCH_NOPROGRESSBOX or SHCONTCH_RESPONDYESTOALL);
-end;
-
 var R : longint;
 
 var lttprom: string;
@@ -217,7 +182,18 @@ var SoERomFilePage: TInputFileWizardPage;
 var ootrom: string;
 var OoTROMFilePage: TInputFileWizardPage;
 
-var MinecraftDownloadPage: TDownloadWizardPage;
+function GetSNESMD5OfFile(const rom: string): string;
+var data: AnsiString;
+begin
+  if LoadStringFromFile(rom, data) then
+  begin
+      if Length(data) mod 1024 = 512 then
+      begin
+        data := copy(data, 513, Length(data)-512);
+      end;
+      Result := GetMD5OfString(data);
+  end;
+end;
 
 function CheckRom(name: string; hash: string): string;
 var rom: string;
@@ -227,8 +203,8 @@ begin
   if Length(rom) > 0 then
     begin
       log('existing ROM found');
-      log(IntToStr(CompareStr(GetMD5OfFile(rom), hash)));
-      if CompareStr(GetMD5OfFile(rom), hash) = 0 then
+      log(IntToStr(CompareStr(GetSNESMD5OfFile(rom), hash)));
+      if CompareStr(GetSNESMD5OfFile(rom), hash) = 0 then
         begin
         log('existing ROM verified');
         Result := rom;
@@ -251,11 +227,6 @@ begin
     'Location of ROM file:',
     'SNES ROM files|*.sfc;*.smc|All files|*.*',
     '.sfc');
-end;
-
-procedure AddMinecraftDownloads();
-begin
-  MinecraftDownloadPage := CreateDownloadPage(SetupMessage(msgWizardPreparing), SetupMessage(msgPreparingDesc), @OnDownloadMinecraftProgress);
 end;
 
 procedure AddOoTRomPage();
@@ -290,32 +261,15 @@ end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
 begin
-  if (CurPageID = wpReady) and (WizardIsComponentSelected('client/minecraft')) then begin
-    MinecraftDownloadPage.Clear;
-    if(IsForgeNeeded()) then
-      MinecraftDownloadPage.Add('https://maven.minecraftforge.net/net/minecraftforge/forge/'+FORGE_VERSION+'/forge-'+FORGE_VERSION+'-installer.jar','forge-installer.jar','');
-    if(IsJavaNeedeD()) then
-      MinecraftDownloadPage.Add('https://corretto.aws/downloads/latest/amazon-corretto-8-x64-windows-jre.zip','java.zip','');
-    MinecraftDownloadPage.Show;
-    try
-      try
-        MinecraftDownloadPage.Download;
-        Result := True;
-      except
-        if MinecraftDownloadPage.AbortedByUser then
-          Log('Aborted by user.')
-        else
-          SuppressibleMsgBox(AddPeriod(GetExceptionMessage), mbCriticalError, MB_OK, IDOK);
-        Result := False;
-      end;
-    finally
-      if( isJavaNeeded() ) then
-        if(ForceDirectories(ExpandConstant('{app}'))) then
-          UnZip(ExpandConstant('{tmp}')+'\java.zip',ExpandConstant('{app}'));
-      MinecraftDownloadPage.Hide;
-    end;
-    Result := True;
-  end else
+  if (assigned(LttPROMFilePage)) and (CurPageID = LttPROMFilePage.ID) then
+    Result := not (LttPROMFilePage.Values[0] = '')
+  else if (assigned(SMROMFilePage)) and (CurPageID = SMROMFilePage.ID) then
+    Result := not (SMROMFilePage.Values[0] = '')
+  else if (assigned(SoEROMFilePage)) and (CurPageID = SoEROMFilePage.ID) then
+    Result := not (SoEROMFilePage.Values[0] = '')
+  else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
+    Result := not (OoTROMFilePage.Values[0] = '')
+  else
     Result := True;
 end;
 
@@ -325,7 +279,7 @@ begin
     Result := lttprom
   else if Assigned(LttPRomFilePage) then
     begin
-      R := CompareStr(GetMD5OfFile(LttPROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
+      R := CompareStr(GetSNESMD5OfFile(LttPROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
       if R <> 0 then
         MsgBox('ALttP ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 
@@ -341,7 +295,7 @@ begin
     Result := smrom
   else if Assigned(SMRomFilePage) then
     begin
-      R := CompareStr(GetMD5OfFile(SMROMFilePage.Values[0]), '21f3e98df4780ee1c667b84e57d88675')
+      R := CompareStr(GetSNESMD5OfFile(SMROMFilePage.Values[0]), '21f3e98df4780ee1c667b84e57d88675')
       if R <> 0 then
         MsgBox('Super Metroid ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 
@@ -357,8 +311,7 @@ begin
     Result := soerom
   else if Assigned(SoERomFilePage) then
     begin
-      R := CompareStr(GetMD5OfFile(SoEROMFilePage.Values[0]), '6e9c94511d04fac6e0a1e582c170be3a')
-      log(GetMD5OfFile(SoEROMFilePage.Values[0]))
+      R := CompareStr(GetSNESMD5OfFile(SoEROMFilePage.Values[0]), '6e9c94511d04fac6e0a1e582c170be3a')
       if R <> 0 then
         MsgBox('Secret of Evermore ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 
@@ -399,8 +352,6 @@ begin
   soerom := CheckRom('Secret of Evermore (USA).sfc', '6e9c94511d04fac6e0a1e582c170be3a');
   if Length(soerom) = 0 then
     SoEROMFilePage:= AddRomPage('Secret of Evermore (USA).sfc');
-
-  AddMinecraftDownloads();
 end;
 
 

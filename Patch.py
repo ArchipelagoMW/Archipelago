@@ -47,19 +47,9 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: str = GAM
 
 
 def generate_patch(rom: bytes, metadata: Optional[dict] = None, game: str = GAME_ALTTP) -> bytes:
-    if game == GAME_ALTTP:
-        from worlds.alttp.Rom import get_base_rom_bytes
-    elif game == GAME_SM:
-        from worlds.sm.Rom import get_base_rom_bytes
-    elif game == GAME_SOE:
-        file_name = Utils.get_options()["soe_options"]["rom"]
-        get_base_rom_bytes = lambda: bytes(read_rom(open(file_name, "rb")))
-    else:
-        raise RuntimeError("Selected game for base rom not found.")
-
     if metadata is None:
         metadata = {}
-    patch = bsdiff4.diff(get_base_rom_bytes(), rom)
+    patch = bsdiff4.diff(get_base_rom_data(game), rom)
     return generate_yaml(patch, metadata, game)
 
 
@@ -80,25 +70,28 @@ def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str
 def create_rom_bytes(patch_file: str, ignore_version: bool = False) -> Tuple[dict, str, bytearray]:
     data = Utils.parse_yaml(lzma.decompress(load_bytes(patch_file)).decode("utf-8-sig"))
     game_name = data["game"]
-    if game_name in supported_games:
-        if game_name == GAME_ALTTP:
-            from worlds.alttp.Rom import get_base_rom_bytes
-        elif game_name == GAME_SM:
-            from worlds.sm.Rom import get_base_rom_bytes
-        else:
-            raise Exception(f"No Patch handler for game {game_name}")
-    elif game_name == "alttp":  # old version for A Link to the Past
-        from worlds.alttp.Rom import get_base_rom_bytes
-    else:
-        raise Exception(f"Cannot handle game {game_name}")
-
     if not ignore_version and data["compatible_version"] > current_patch_version:
         raise RuntimeError("Patch file is incompatible with this patcher, likely an update is required.")
-    patched_data = bsdiff4.patch(get_base_rom_bytes(), data["patch"])
+    patched_data = bsdiff4.patch(get_base_rom_data(game_name), data["patch"])
     rom_hash = patched_data[int(0x7FC0):int(0x7FD5)]
     data["meta"]["hash"] = "".join(chr(x) for x in rom_hash)
     target = os.path.splitext(patch_file)[0] + ".sfc"
     return data["meta"], target, patched_data
+
+
+def get_base_rom_data(game: str):
+    if game == GAME_ALTTP:
+        from worlds.alttp.Rom import get_base_rom_bytes
+    elif game == "alttp":  # old version for A Link to the Past
+        from worlds.alttp.Rom import get_base_rom_bytes
+    elif game == GAME_SM:
+        from worlds.sm.Rom import get_base_rom_bytes
+    elif game == GAME_SOE:
+        file_name = Utils.get_options()["soe_options"]["rom_file"]
+        get_base_rom_bytes = lambda: bytes(read_rom(open(file_name, "rb")))
+    else:
+        raise RuntimeError("Selected game for base rom not found.")
+    return get_base_rom_bytes()
 
 
 def create_rom_file(patch_file: str) -> Tuple[dict, str]:

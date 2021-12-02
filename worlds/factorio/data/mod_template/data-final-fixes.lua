@@ -3,7 +3,8 @@
 require('lib')
 
 {%- for recipe_name, recipe in custom_recipes.items() %}
-data.raw["recipe"]["{{recipe_name}}"].ingredients = {{ dict_to_recipe(recipe.ingredients) }}
+data.raw["recipe"]["{{recipe_name}}"].category = "{{recipe.category}}"
+data.raw["recipe"]["{{recipe_name}}"].ingredients = {{ dict_to_recipe(recipe.ingredients, liquids) }}
 {%- endfor %}
 
 local technologies = data.raw["technology"]
@@ -24,6 +25,26 @@ template_tech.upgrade = false
 template_tech.effects = {}
 template_tech.prerequisites = {}
 
+{%- if max_science_pack < 6 %}
+    technologies["space-science-pack"].effects = {}
+    {%- if max_science_pack == 0 %}
+        table.insert (technologies["automation"].effects, {type = "unlock-recipe", recipe = "satellite"})
+    {%- elif max_science_pack == 1 %}
+        table.insert (technologies["logistic-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
+    {%- elif max_science_pack == 2 %}
+        table.insert (technologies["military-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
+    {%- elif max_science_pack == 3 %}
+        table.insert (technologies["chemical-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
+    {%- elif max_science_pack == 4 %}
+        table.insert (technologies["production-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
+    {%- elif max_science_pack == 5 %}
+        table.insert (technologies["utility-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
+    {% endif %}
+{% endif %}
+{%- if silo == 2 %}
+    data.raw["recipe"]["rocket-silo"].enabled = true
+{% endif %}
+
 function prep_copy(new_copy, old_tech)
     old_tech.hidden = true
     local ingredient_filter = allowed_ingredients[old_tech.name]
@@ -42,9 +63,12 @@ function prep_copy(new_copy, old_tech)
 				weights[key] = value
 			end
 			SNI.setWeights(weights)
+            -- Just in case an ingredient is being added to an existing tech. Found the root cause of the 9.223e+18 problem.
+            -- Turns out science-not-invited was ultimately dividing by zero, due to it being unaware of there being added ingredients.
+            old_tech.unit.ingredients = add_ingredients(old_tech.unit.ingredients, ingredient_filter)
 			SNI.sendInvite(old_tech)
 			-- SCIENCE-not-invited could potentially make tech cost 9.223e+18.
-			old_tech.unit.count = math.min(10000, old_tech.unit.count)
+			old_tech.unit.count = math.min(100000, old_tech.unit.count)
 		end
 		new_copy.unit = table.deepcopy(old_tech.unit)
 		new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients, ingredient_filter)
@@ -100,6 +124,20 @@ function adjust_energy(recipe_name, factor)
     end
 end
 
+function set_energy(recipe_name, energy)
+    local recipe = data.raw.recipe[recipe_name]
+
+    if (recipe.normal ~= nil) then
+        recipe.normal.energy_required = energy
+    end
+    if (recipe.expensive ~= nil) then
+        recipe.expensive.energy_required = energy
+    end
+    if (recipe.expensive == nil and recipe.normal == nil) then
+        recipe.energy_required = energy
+    end
+end
+
 data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-2"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-1"].fluid_boxes = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes)
@@ -142,6 +180,12 @@ data:extend{new_tree_copy}
 {%- for recipe_name, recipe in recipes.items() %}
 {%- if recipe.category != "mining" %}
 adjust_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_scale) }})
+{%- endif %}
+{%- endfor -%}
+{% elif recipe_time_range %}
+{%- for recipe_name, recipe in recipes.items() %}
+{%- if recipe.category != "mining" %}
+set_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_range) }})
 {%- endif %}
 {%- endfor -%}
 {% endif %}

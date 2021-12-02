@@ -1,6 +1,16 @@
 from __future__ import annotations
 
 import typing
+import builtins
+import os
+import subprocess
+import sys
+import pickle
+import functools
+import io
+import collections
+import importlib
+import logging
 
 
 def tuplize_version(version: str) -> Version:
@@ -13,19 +23,8 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 version_tuple = tuplize_version(__version__)
-
-import builtins
-import os
-import subprocess
-import sys
-import pickle
-import functools
-import io
-import collections
-import importlib
-import logging
 
 from yaml import load, dump, safe_load
 
@@ -427,7 +426,7 @@ loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': log
 
 
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
-                 log_format: str = "[%(name)s]: %(message)s"):
+                 log_format: str = "[%(name)s]: %(message)s", exception_logger: str = ""):
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = local_path("logs")
     os.makedirs(log_folder, exist_ok=True)
@@ -446,3 +445,32 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         root_logger.addHandler(
             logging.StreamHandler(sys.stdout)
         )
+
+    # Relay unhandled exceptions to logger.
+    if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
+        orig_hook = sys.excepthook
+
+        def handle_exception(exc_type, exc_value, exc_traceback):
+            if issubclass(exc_type, KeyboardInterrupt):
+                sys.__excepthook__(exc_type, exc_value, exc_traceback)
+                return
+            logging.getLogger(exception_logger).exception("Uncaught exception",
+                                                          exc_info=(exc_type, exc_value, exc_traceback))
+            return orig_hook(exc_type, exc_value, exc_traceback)
+
+        handle_exception._wrapped = True
+
+        sys.excepthook = handle_exception
+
+
+def stream_input(stream, queue):
+    def queuer():
+        while 1:
+            text = stream.readline().strip()
+            if text:
+                queue.put_nowait(text)
+
+    from threading import Thread
+    thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
+    thread.start()
+    return thread
