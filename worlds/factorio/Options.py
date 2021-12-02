@@ -158,6 +158,11 @@ class FactorioFreeSampleBlacklist(OptionSet):
     displayname = "Free Sample Blacklist"
 
 
+class FactorioFreeSampleWhitelist(OptionSet):
+    """overrides any free sample blacklist present. This may ruin the balance of the mod, be forewarned."""
+    displayname = "Free Sample Whitelist"
+
+
 class TrapCount(Range):
     range_end = 4
 
@@ -327,6 +332,7 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "tech_tree_information": TechTreeInformation,
     "starting_items": FactorioStartItems,
     "free_sample_blacklist": FactorioFreeSampleBlacklist,
+    "free_sample_whitelist": FactorioFreeSampleWhitelist,
     "recipe_time": RecipeTime,
     "recipe_ingredients": RecipeIngredients,
     "imported_blueprints": ImportedBlueprint,
