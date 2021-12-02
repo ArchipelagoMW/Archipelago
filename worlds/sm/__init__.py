@@ -161,6 +161,10 @@ class SMWorld(World):
         create_locations(self, self.player)
         create_regions(self, self.world, self.player)
 
+    def get_required_client_version(self):
+        # changes to client DeathLink handling for 0.2.1
+        return max(super(SMWorld, self).get_required_client_version(), (0, 2, 1))
+
     def getWord(self, w):
         return (w & 0x00FF, (w & 0xFF00) >> 8)
     
