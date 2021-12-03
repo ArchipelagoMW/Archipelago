@@ -2,9 +2,9 @@
 
 ## Required Software
 
-- [Subnautica](https://store.steampowered.com/app/264710/Subnautica/)
-- [QModManager4](https://www.nexusmods.com/subnautica/mods/201)
-- [Archipelago Mod for Subnautica](https://github.com/Berserker66/ArchipelagoSubnauticaModSrc/releases)
+- Subnautica from: [https://store.steampowered.com/app/264710/Subnautica/](https://store.steampowered.com/app/264710/Subnautica/)
+- QModManager4 from: [https://www.nexusmods.com/subnautica/mods/201](https://www.nexusmods.com/subnautica/mods/201)
+- Archipelago Mod for Subnautica from: [https://github.com/Berserker66/ArchipelagoSubnauticaModSrc/releases](https://github.com/Berserker66/ArchipelagoSubnauticaModSrc/releases)
 
 
 ## Installation Procedures
@@ -29,4 +29,4 @@ If you don't see the connect window check that you see a qmodmanager_log-Subnaut
 
 3. In PlayerName enter your "name" field from the yaml, or website config.
 
-4. Hit Connect. If it says succesfully authenticated you can now create a new savegame or resume the correct savegame.
+4. Hit Connect. If it says successfully authenticated you can now create a new savegame or resume the correct savegame.
