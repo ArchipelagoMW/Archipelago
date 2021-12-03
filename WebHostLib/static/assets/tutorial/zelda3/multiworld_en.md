@@ -85,11 +85,11 @@ Firewall.
    Once you have changed the loaded core, you must restart BizHawk.
 2. Load your ROM file if it hasn't already been loaded.
 3. Click on the Tools menu and click on **Lua Console**
-4. Click Script -> Open Scipt...
+4. Click Script -> Open Script...
 5. Select the `Connector.lua` file you downloaded above
      - Z3Client users should download `sniConnector.lua` from the client download page
      - SNIClient users should look in their Archipelago folder for `/sni/lua`
-6. Run the script by double clicking it in the listing
+6. Run the script by double-clicking it in the listing
 
 #### With hardware
 This guide assumes you have downloaded the correct firmware for your device. If you have not

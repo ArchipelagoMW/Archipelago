@@ -94,6 +94,7 @@ class ClientCommandProcessor(CommandProcessor):
             self.output(location_name)
 
     def _cmd_ready(self):
+        """Send ready status to server."""
         self.ctx.ready = not self.ctx.ready
         if self.ctx.ready:
             state = ClientStatus.CLIENT_READY
