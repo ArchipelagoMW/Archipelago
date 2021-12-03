@@ -146,7 +146,7 @@ extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI", "meta.yaml"]
 for data in extra_data:
     installfile(Path(data))
 
-os.makedirs(buildfolder / "Players", exist_ok=True)
+os.makedirs(buildfolder / "Players" / "Templates", exist_ok=True)
 from WebHostLib.options import create
 create()
 from worlds.AutoWorld import AutoWorldRegister
@@ -154,7 +154,7 @@ for worldname, worldtype in AutoWorldRegister.world_types.items():
     if not worldtype.hidden:
         file_name = worldname+".yaml"
         shutil.copyfile(os.path.join("WebHostLib", "static", "generated", "configs", file_name),
-                        buildfolder / "Players" / file_name)
+                        buildfolder / "Players" / "Templates" / file_name)
 
 try:
     from maseya import z3pr
