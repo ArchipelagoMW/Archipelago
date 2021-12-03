@@ -281,7 +281,7 @@ def get_static_room_data(room: Room):
 
 @app.route('/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
 @cache.memoize(timeout=60)  # multisave is currently created at most every minute
-def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
+def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool = False):
     # Team and player must be positive and greater than zero
     if tracked_team < 0 or tracked_player < 1:
         abort(404)
@@ -324,12 +324,17 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
                         checks_done[location_to_area[location]] += 1
                         checks_done["Total"] += 1
     specific_tracker = game_specific_trackers.get(games[tracked_player], None)
-    if specific_tracker:
+    if specific_tracker and not want_generic:
         return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
                                 seed_checks_in_area, checks_done)
     else:
         return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
                                       seed_checks_in_area, checks_done)
+
+
+@app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
+def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
+    return getPlayerTracker(tracker, tracked_team, tracked_player, True)
 
 
 def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
