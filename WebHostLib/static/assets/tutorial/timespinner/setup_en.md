@@ -2,16 +2,22 @@
 
 ## Required Software
 
-- [Timespinner (steam)](https://store.steampowered.com/app/368620/Timespinner/) or [Timespinner (drm free)](https://www.humblebundle.com/store/timespinner)
-- [Timespinner Randomizer](https://github.com/JarnoWesthof/TsRandomizer)
+- One of:
+  - Timespinner (steam) from: [https://store.steampowered.com/app/368620/Timespinner/](https://store.steampowered.com/app/368620/Timespinner/)
+  - Timespinner (drm free) from: [https://www.humblebundle.com/store/timespinner](https://www.humblebundle.com/store/timespinner)
+- Timespinner Randomizer from: [https://github.com/JarnoWesthof/TsRandomizer](https://github.com/JarnoWesthof/TsRandomizer)
 
 ## General Concept
 
-The timespinner Randomizer loads Timespinner.exe from the same folder, and alters its state in memory to allow for randomization of the items
+The timespinner Randomizer loads Timespinner.exe from the same folder, and alters its state in memory to allow for randomization of the items.
 
 ## Installation Procedures
 
-Download latest version of [Timespinner Randomizer](https://github.com/JarnoWesthof/TsRandomizer) you can find the .zip files on the releases page, download the zip for your current platform. Then extract the zip to the folder where your Timespinner game is installed. Then just run TsRandomizer.exe instead of Timespinner.exe to start the game in randomized mode, for more info see the [readme](https://github.com/JarnoWesthof/TsRandomizer)
+Download latest version of Timespinner randomizer you can find the .zip files on the releases page, download the zip for your current platform. Then extract the zip to the folder where your Timespinner game is installed. Then just run TsRandomizer.exe instead of Timespinner.exe to start the game in randomized mode, for more info see the Timespinner randomizer readme.
+
+Timespinner Randomizer downloads page: [https://github.com/JarnoWesthof/TsRandomizer](https://github.com/JarnoWesthof/TsRandomizer)
+
+Timespinner Randomizer readme page: [https://github.com/JarnoWesthof/TsRandomizer](https://github.com/JarnoWesthof/TsRandomizer)
     
 ## Joining a MultiWorld Game
 
