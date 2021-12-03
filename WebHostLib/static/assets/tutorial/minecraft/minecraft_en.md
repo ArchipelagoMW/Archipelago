@@ -1,17 +1,17 @@
 # Minecraft Randomizer Setup Guide
 
 #Automatic Hosting Install
-- Download and install Archipelago at: [https://github.com/ArchipelagoMW/Archipelago/releases](https://github.com/ArchipelagoMW/Archipelago/releases) 
+- Download and install Archipelago at: [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases) 
   - Choose the `Minecraft Client` module during the installation.
 
 ## Required Software
 
-- Minecraft Java Edition from: [https://www.minecraft.net/en-us/store/minecraft-java-edition](https://www.minecraft.net/en-us/store/minecraft-java-edition)
+- Minecraft Java Edition from: [Minecraft Java Edition Store Page](https://www.minecraft.net/en-us/store/minecraft-java-edition)
 
 ## Configuring your YAML file
 
 ### What is a YAML file and why do I need one?
-See the guide on setting up a basic YAML at the Archipelago setup guide: [click here](/tutorial/archipelago/setup/en)
+See the guide on setting up a basic YAML at the Archipelago setup guide: [Basic Multiworld Setup Guide](/tutorial/archipelago/setup/en)
 
 ### What Does a YAML Look Like for Minecraft?
 A basic minecraft yaml will look like this.
@@ -104,8 +104,8 @@ When the console tells you that you have joined the room, you're ready to begin 
 This is only required if you wish to set up a forge install yourself, it's recommended to just use the Archipelago Installer.
 
 ###Required Software
-- Minecraft Forge from: [https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.5.html](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.5.html)
-- Minecraft Archipelago Randomizer Mod from: [https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases](https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
+- Minecraft Forge from: [Minecraft Forge Download Page](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.5.html)
+- Minecraft Archipelago Randomizer Mod from: [AP Randomizer Forge Server Mod Releases Page](https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
   - **DO NOT INSTALL THIS ON YOUR CLIENT**
 ### Dedicated Server Setup
 Only one person has to do this setup and host a dedicated server for everyone else playing to connect to.

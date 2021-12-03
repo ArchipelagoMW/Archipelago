@@ -2,9 +2,9 @@
 
 ## Required Software
 
-- Subnautica from: [https://store.steampowered.com/app/264710/Subnautica/](https://store.steampowered.com/app/264710/Subnautica/)
-- QModManager4 from: [https://www.nexusmods.com/subnautica/mods/201](https://www.nexusmods.com/subnautica/mods/201)
-- Archipelago Mod for Subnautica from: [https://github.com/Berserker66/ArchipelagoSubnauticaModSrc/releases](https://github.com/Berserker66/ArchipelagoSubnauticaModSrc/releases)
+- Subnautica from: [Subnautica Steam Store Page](https://store.steampowered.com/app/264710/Subnautica/)
+- QModManager4 from: [QModManager4 Nexus Mods Page](https://www.nexusmods.com/subnautica/mods/201)
+- Archipelago Mod for Subnautica from: [Subnautica Archipelago Mod Releases Page](https://github.com/Berserker66/ArchipelagoSubnauticaModSrc/releases)
 
 
 ## Installation Procedures

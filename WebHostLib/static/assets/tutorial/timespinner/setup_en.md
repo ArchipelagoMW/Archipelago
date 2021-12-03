@@ -3,9 +3,9 @@
 ## Required Software
 
 - One of:
-  - Timespinner (steam) from: [https://store.steampowered.com/app/368620/Timespinner/](https://store.steampowered.com/app/368620/Timespinner/)
-  - Timespinner (drm free) from: [https://www.humblebundle.com/store/timespinner](https://www.humblebundle.com/store/timespinner)
-- Timespinner Randomizer from: [https://github.com/JarnoWesthof/TsRandomizer](https://github.com/JarnoWesthof/TsRandomizer)
+  - Timespinner (steam) from: [Timespinner Steam Store Page](https://store.steampowered.com/app/368620/Timespinner/)
+  - Timespinner (drm free) from: [Timespinner Humble Store Page](https://www.humblebundle.com/store/timespinner)
+- Timespinner Randomizer from: [Timespinner Randomizer GitHub](https://github.com/JarnoWesthof/TsRandomizer)
 
 ## General Concept
 
@@ -15,9 +15,9 @@ The timespinner Randomizer loads Timespinner.exe from the same folder, and alter
 
 Download latest version of Timespinner randomizer you can find the .zip files on the releases page, download the zip for your current platform. Then extract the zip to the folder where your Timespinner game is installed. Then just run TsRandomizer.exe instead of Timespinner.exe to start the game in randomized mode, for more info see the Timespinner randomizer readme.
 
-Timespinner Randomizer downloads page: [https://github.com/JarnoWesthof/TsRandomizer](https://github.com/JarnoWesthof/TsRandomizer)
+Timespinner Randomizer downloads page: [Timespinner Randomizer Releases](https://github.com/JarnoWesthof/TsRandomizer/releases)
 
-Timespinner Randomizer readme page: [https://github.com/JarnoWesthof/TsRandomizer](https://github.com/JarnoWesthof/TsRandomizer)
+Timespinner Randomizer readme page: [Timespinner Randomizer GitHub](https://github.com/JarnoWesthof/TsRandomizer)
     
 ## Joining a MultiWorld Game
 

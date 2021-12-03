@@ -1,15 +1,15 @@
 # Super Metroid Setup Guide
 
 ## Required Software
-- Super Metroid Client from: [https://github.com/ArchipelagoMW/SuperMetroidClient/releases](https://github.com/ArchipelagoMW/SuperMetroidClient/releases)
+- Super Metroid Client from: [Super Metroid Client Releases Page](https://github.com/ArchipelagoMW/SuperMetroidClient/releases)
 - **sniConnector.lua** (located on the client download page)
-- SNI from: [https://github.com/alttpo/sni/releases](https://github.com/alttpo/sni/releases)
+- SNI from: [SNI Releases Page](https://github.com/alttpo/sni/releases)
   - Included in the Super Metroid Client
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI such as:
-      - snes9x Multitroid from: [https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
-      - BizHawk from: [http://tasvideos.org/BizHawk.html](http://tasvideos.org/BizHawk.html)
-    - An SD2SNES, FXPak Pro ([https://krikzz.com/store/home/54-fxpak-pro.html](https://krikzz.com/store/home/54-fxpak-pro.html)), or other compatible hardware
+      - snes9x Multitroid from: [snes9x Multitroid Download](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
+      - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
+    - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other compatible hardware
 - Your legally obtained Super Metroid ROM file, probably named `Super Metroid (Japan, USA).sfc`
 
 ## Installation Procedures
@@ -33,18 +33,18 @@ for launching ROM files.
 ## Create a Config (.yaml) File
 
 ### What is a config file and why do I need one?
-See the guide on setting up a basic YAML at the Archipelago setup guide: [click here](/tutorial/archipelago/setup/en)
+See the guide on setting up a basic YAML at the Archipelago setup guide: [Basic Multiworld Setup Guide](/tutorial/archipelago/setup/en)
 
 ### Where do I get a config file?
-The Player Settings page on the website allows you to configure your personal settings and export a config file from them. Player settings page: [click here](/games/Super%20Metroid/player-settings)
+The Player Settings page on the website allows you to configure your personal settings and export a config file from them. Player settings page: [Super Metroid Player Settings Page](/games/Super%20Metroid/player-settings)
 
 ### Verifying your config file
-If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML validator page: [click here](/mysterycheck)
+If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML validator page: [YAML Validation page](/mysterycheck)
 
 ## Generating a Single-Player Game
 1. Navigate to the Player Settings page, configure your options, and click
    the "Generate Game" button.
-   - Player Settings page: [click here](/games/Super%20Metroid/player-settings)
+   - Player Settings page: [Super Metroid Player Settings Page](/games/Super%20Metroid/player-settings)
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your patch file.
@@ -81,9 +81,9 @@ When the client launched automatically, SNI should have also automatically launc
 5. Select the `sniConnector.lua` file you downloaded above
 
 #### With hardware
-This guide assumes you have downloaded the correct firmware for your device. If you have not done so already, please do this now. SD2SNES and FXPak Pro users may download the appropriate firmware on the SD2SNES releases page. SD2SNES releases page: [https://github.com/RedGuyyyy/sd2snes/releases](https://github.com/RedGuyyyy/sd2snes/releases)
+This guide assumes you have downloaded the correct firmware for your device. If you have not done so already, please do this now. SD2SNES and FXPak Pro users may download the appropriate firmware on the SD2SNES releases page. SD2SNES releases page: [SD2SNES Releases Page](https://github.com/RedGuyyyy/sd2snes/releases)
 
-Other hardware may find helpful information on the usb2snes platforms page: [http://usb2snes.com/#supported-platforms](http://usb2snes.com/#supported-platforms)
+Other hardware may find helpful information on the usb2snes platforms page: [usb2snes Supported Platforms Page](http://usb2snes.com/#supported-platforms)
 
 1. Close your emulator, which may have auto-launched.
 2. Power on your device and load the ROM.
@@ -102,7 +102,7 @@ The recommended way to host a game is to use our hosting service. The process is
 1. Collect config files from your players.
 2. Create a zip file containing your players' config files.
 3. Upload that zip file to the Generate page above.
-   - Generate page: [click here](/generate)
+   - Generate page: [WebHost Seed Generation Page](/generate)
 4. Wait a moment while the seed is generated.
 5. When the seed is generated, you will be redirected to a "Seed Info" page.
 6. Click "Create New Room". This will take you to the server page. Provide the link to this page to your players,
