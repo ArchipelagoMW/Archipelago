@@ -282,7 +282,7 @@ class SMWorld(World):
             
         openTourianGreyDoors = {0x07C823 + 5: [0x0C], 0x07C831 + 5: [0x0C]}
 
-        deathLink = {0x277f04: [self.world.death_link_survive[self.player].value]}
+        deathLink = {0x277f04: [self.world.death_link[self.player].value]}
 
         playerNames = {}
         playerNameIDMap = {}

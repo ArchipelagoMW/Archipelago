@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Range, OptionDict, OptionList, Option, Toggle, DefaultOnToggle, DeathLink
+from Options import Choice, Range, OptionDict, OptionList, Option, Toggle, DefaultOnToggle
 
 class StartItemsRemovesFromPool(Toggle):
     displayname = "StartItems Removes From Item Pool"
@@ -40,8 +40,8 @@ class StartLocation(Choice):
     option_Golden_Four = 14
     default = 1
 
-class DeathLinkSurvive(Choice):
-    """When DeathLink is enabled and someone dies, you can survive with (enable_survive) if you have non-empty reserve tank."""
+class DeathLink(Choice):
+    """When DeathLink is enabled and someone dies, you will die. With survive reserve tanks can save you."""
     displayname = "Death Link Survive"
     option_disable = 0
     option_enable = 1
@@ -196,7 +196,7 @@ sm_options: typing.Dict[str, type(Option)] = {
     "start_inventory_removes_from_pool": StartItemsRemovesFromPool,
     "preset": Preset,
     "start_location": StartLocation,
-    "death_link_survive": DeathLinkSurvive,
+    "death_link": DeathLink,
     #"majors_split": "Full",
     #"scav_num_locs": "10",
     #"scav_randomized": "off",
