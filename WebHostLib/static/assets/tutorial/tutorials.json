@@ -31,6 +31,21 @@
         ]
       },
       {
+        "name": "Archipelago Server and Client Commands",
+        "description": "A guide detailing the commands available to the user when participating in an Archipelago session.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/commands_en.md",
+            "link": "archipelago/commands/en",
+            "authors": [
+              "jat2980",
+              "Ijwu"
+            ]
+          }
+        ]
+      },
+      {
         "name": "Advanced YAML Guide",
         "description": "A guide to reading yaml files and editing them to fully customize your game.",
         "files": [
