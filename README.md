@@ -13,6 +13,7 @@ Currently, the following games are supported:
 * Timespinner
 * Super Metroid
 * Secret of Evermore
+* Final Fantasy
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
