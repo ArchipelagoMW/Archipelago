@@ -1,21 +1,19 @@
 # Minecraft Randomizer Setup Guide
 
 #Automatic Hosting Install
-- download and install [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) and choose the `Minecraft Client` module
+- Download and install Archipelago at: [https://github.com/ArchipelagoMW/Archipelago/releases](https://github.com/ArchipelagoMW/Archipelago/releases) 
+  - Choose the `Minecraft Client` module during the installation.
 
 ## Required Software
 
-- [Minecraft Java Edition](https://www.minecraft.net/en-us/store/minecraft-java-edition)
+- Minecraft Java Edition from: [https://www.minecraft.net/en-us/store/minecraft-java-edition](https://www.minecraft.net/en-us/store/minecraft-java-edition)
 
 ## Configuring your YAML file
 
 ### What is a YAML file and why do I need one?
-Your YAML file contains a set of configuration options which provide the generator with information about how
-it should generate your game. Each player of a multiworld will provide their own YAML file. This setup allows
-each player to enjoy an experience customized for their taste, and different players in the same multiworld
-can all have different options.
+See the guide on setting up a basic YAML at the Archipelago setup guide: [click here](/tutorial/archipelago/setup/en)
 
-### Where do I get a YAML file?
+### What Does a YAML Look Like for Minecraft?
 A basic minecraft yaml will look like this.
 ```yaml
 description: Basic Minecraft Yaml
@@ -86,35 +84,29 @@ Minecraft:
 
 ## Joining a MultiWorld Game
 
-### Obtain your Minecraft data file
+### Obtain Your Minecraft Data File
 **Only one yaml file needs to be submitted per minecraft world regardless of how many players play on it.**
 
-When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting. Once that
-is done, the host will provide you with either a link to download your data file, or with a zip file containing
-everyone's data files. Your data file should have a `.apmc` extension.
+When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting. Once that is done, the host will provide you with either a link to download your data file, or with a zip file containing everyone's data files. Your data file should have a `.apmc` extension.
 
-double click on your `.apmc` file to have the minecraft client auto-launch the installed forge server.
+Double-click on your `.apmc` file to have the minecraft client auto-launch the installed forge server.
 
 ### Connect to the MultiServer
-After having placed your data file in the `APData` folder, start the Forge server and make sure you have OP
-status by typing `/op YourMinecraftUsername` in the forge server console then connecting in your Minecraft client.
+If you are running Forge manually, you must place the `.apmc` file in your `APData` folder in the Forge installation directory. If the `APData` folder does not exist then you may create it. After having placed your data file in the `APData` folder, start the Forge server and make sure you have OP status by typing `/op YourMinecraftUsername` in the forge server console then connecting in your Minecraft client.
 
-Once in game type `/connect <AP-Address> (Port) (Password)` where `<AP-Address>` is the address of the
-Archipelago server. `(Port)` is only required if the Archipelago server is not using the default port of 38281. `(Password)`
-is only required if the Archipleago server you are using has a password set.
+In all cases, no matter how the Forge server is hosted: once you are in game type `/connect <AP-Address> (Port) (Password)` where `<AP-Address>` is the address of the Archipelago server. `(Port)` is only required if the Archipelago server is not using the default port of 38281. `(Password)` is only required if the Archipelago server you are using has a password set.
 
 ### Play the game
-When the console tells you that you have joined the room, you're ready to begin playing. Congratulations
-on successfully joining a multiworld game! At this point any additional minecraft players may connect to your
-forge server.
+When the console tells you that you have joined the room, you're ready to begin playing. Congratulations on successfully joining a multiworld game! At this point any additional minecraft players may connect to your forge server. When you are ready to start the game use the `/start` command within the Minecraft game.
 
 
 ## Manual Installation Procedures
-this is only required if you wish to set up a forge install yourself, its recommended to just use the Archipelago Installer.
+This is only required if you wish to set up a forge install yourself, it's recommended to just use the Archipelago Installer.
+
 ###Required Software
-- [Minecraft Forge](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.5.html)
-- [Minecraft Archipelago Randomizer Mod](https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
-**DO NOT INSTALL THIS ON YOUR CLIENT**
+- Minecraft Forge from: [https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.5.html](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.5.html)
+- Minecraft Archipelago Randomizer Mod from: [https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases](https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
+  - **DO NOT INSTALL THIS ON YOUR CLIENT**
 ### Dedicated Server Setup
 Only one person has to do this setup and host a dedicated server for everyone else playing to connect to.
 1. Download the 1.16.5 **Minecraft Forge** installer from the link above, making sure to download the most recent recommended version.
