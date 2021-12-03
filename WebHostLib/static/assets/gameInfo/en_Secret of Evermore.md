@@ -1,12 +1,12 @@
 # Secret of Evermore
 
 ## Where is the settings page?
-The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [click here](../player-settings).
+The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [Secret of Evermore Player Settings Page](../player-settings).
 
 ## What does randomization do to this game?
 Items which would normally be acquired throughout the game have been moved around! Progression logic remains, so the game is always able to be completed. However, because of the item shuffle, the player may need to access certain areas before they would in the vanilla game. For example, the Windwalker (flying machine) is accessible as soon as any weapon is obtained.
 
-Additional help can be found in the Evermizer guide: [https://github.com/black-sliver/evermizer/blob/feat-mw/guide.md](https://github.com/black-sliver/evermizer/blob/feat-mw/guide.md).
+Additional help can be found in the [Evermizer guide](https://github.com/black-sliver/evermizer/blob/feat-mw/guide.md).
 
 ## What items and locations get shuffled?
 All gourds/chests/pots, boss drops and alchemists are shuffled. Alchemy ingredients, sniff spot items, call bead spells and the dog can be randomized using yaml options.

@@ -1,7 +1,7 @@
 # Risk of Rain 2
 
 ## Where is the settings page?
-The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [click here](../player-settings).
+The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [Risk of Rain 2 Player Settings Page](../player-settings).
 
 ## What does randomization do to this game?
 Risk of Rain is already a random game, by virtue of being a roguelite. The Archipelago mod implements pure multiworld functionality in which certain chests (made clear via a location check progress bar) will send an item out to the multiworld. The items that _would have been_ in those chests will be returned to the Risk of Rain player via grants by other players in other worlds.

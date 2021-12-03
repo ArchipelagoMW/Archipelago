@@ -1,7 +1,7 @@
 # Timespinner
 
 ## Where is the settings page?
-The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [click here](../player-settings).
+The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [Timespinner Player Settings Page](../player-settings).
 
 ## What does randomization do to this game?
 Items which the player would normally acquire throughout the game have been moved around. Logic remains, so the game is always able to be completed, but because of the item shuffle the player may need to access certain areas before they would in the vanilla game. All rings and spells are also randomized into those item locations, therefore you can no longer craft them at the alchemist
@@ -16,7 +16,7 @@ All main inventory items, orbs, collectables, and familiars can be shuffled, and
 Any of the items which can be shuffled may also be placed into another player's world. It is possible to choose to limit certain items to your own world.
 
 ## What does another world's item look like in Timespinner?
-Items belonging to other worlds are represented by the vanilla item Elemental Beads \([Wiki Link](https://timespinnerwiki.com/Use_Items)\), Elemental Beads have no use in the randomizer.
+Items belonging to other worlds are represented by the vanilla item Elemental Beads ([Elemental Beads Wiki Page](https://timespinnerwiki.com/Use_Items)), Elemental Beads have no use in the randomizer.
 
 ## When the player receives an item, what happens?
 When the player receives an item, the same items popup will be displayed as when you would normally obtain the item.

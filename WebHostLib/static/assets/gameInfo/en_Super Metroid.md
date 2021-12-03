@@ -1,7 +1,7 @@
 # Super Metroid
 
 ## Where is the settings page?
-The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [click here](../player-settings).
+The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [Super Metroid Player Settings Page](../player-settings).
 
 ## What does randomization do to this game?
 Items which the player would normally acquire throughout the game have been moved around. Logic remains, so the game is always able to be completed, but because of the item shuffle the player may need to access certain areas before they would in the vanilla game.

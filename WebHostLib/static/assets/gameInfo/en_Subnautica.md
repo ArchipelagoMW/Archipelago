@@ -1,7 +1,7 @@
 # Subnautica
 
 ## Where is the settings page?
-The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [click here](../player-settings).
+The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [Subnautica Player Settings Page](../player-settings).
 
 ## What does randomization do to this game?
 The most noticeable change is the complete removal of freestanding technologies. The technology blueprints normally awarded from scanning those items have been shuffled into location checks throughout the AP item pool.

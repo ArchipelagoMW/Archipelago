@@ -1,7 +1,7 @@
 # Factorio
 
 ## Where is the settings page?
-The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [click here](../player-settings).
+The player settings page for this game contains all the options you need to configure and export a config file. Player settings page link: [Factorio Player Settings Page](../player-settings).
 
 ## What does randomization do to this game?
 In Factorio, the research tree is shuffled, causing certain technologies to be obtained in a non-standard order. Recipe costs, technology requirements, and science pack requirements may also be shuffled at the player's discretion.
