@@ -3,7 +3,7 @@ This guide encompasses the use cases for rolling and hosting multiworld games on
 
 ## Rolling the Seed On the Website
 1. After gathering the YAML files together in one location, select all the files and compress them into a `.ZIP` file. 
-2. Next go to the "Generate Game" page. Generate game page: [https://archipelago.gg/generate](https://archipelago.gg/generate). Here, you can adjust some server settings such as forfeit rules and the cost for a player to use a hint before generation. 
+2. Next go to the "Generate Game" page. Generate game page: [Archipelago Seed Generation Page](https://archipelago.gg/generate). Here, you can adjust some server settings such as forfeit rules and the cost for a player to use a hint before generation. 
 3. After adjusting the host settings to your liking click on the Upload File button and using the explorer window that opens, 
 navigate to the location where you zipped the player files and upload this zip. The page will generate your game and refresh
 multiple times to check on completion status. 
@@ -18,7 +18,7 @@ The easiest and most recommended method is to generate the game on the website w
 room with all the necessary files you can share, as well as hosting the game and supporting item trackers for various games. 
 
 If for some reason the seed was rolled on a machine, then either the resulting zip file or the resulting `AP_XXXXX.archipelago`
-inside the zip file can be uploaded to the host game page. Host game page: [https://archipelago.gg/uploads](https://archipelago.gg/uploads) 
+inside the zip file can be uploaded to the host game page. Host game page: [Archipelago Seed Upload Page](https://archipelago.gg/uploads) 
 
 This will give a page with the seed info and a 
 link to the spoiler log, if it exists. Click on "Create New Room" and then share the link to the resulting page the other players 

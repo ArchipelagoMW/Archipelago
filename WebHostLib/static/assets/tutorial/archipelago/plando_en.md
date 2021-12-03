@@ -34,30 +34,31 @@ cross-game plando could very well be broken i.e. placing on of your items in som
     * Using the multi placement method, placements are picked randomly.
 
 ### Available Items
-* A Link to the Past: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Items.py#L52](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Items.py#L52)
-* Factorio Non-Progressive: [https://wiki.factorio.com/Technologies](https://wiki.factorio.com/Technologies) 
+* A Link to the Past: [Link to the Past Item List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Items.py#L52)
+* Factorio Non-Progressive: [Factorio Technologies Wiki List](https://wiki.factorio.com/Technologies) 
   * Note that these use the *internal names*. For example, `advanced-electronics`
-* Factorio Progressive: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/factorio/Technologies.py#L374](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/factorio/Technologies.py#L374)
-* Minecraft: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Items.py#L14](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Items.py#L14)
-* Ocarina of Time: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/Items.py#L61](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/Items.py#L61)
-* Risk of Rain 2: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ror2/Items.py#L8](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ror2/Items.py#L8)
-* Slay the Spire: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/spire/Items.py#L13](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/spire/Items.py#L13)
-* Subnautica: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/subnautica/items.json](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/subnautica/items.json)
-* Timespinner: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/timespinner/Items.py#L11](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/timespinner/Items.py#L11)
+* Factorio Progressive: [Factorio Progressive Technologies List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/factorio/Technologies.py#L374)
+* Minecraft: [Minecraft Items List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Items.py#L14)
+* Ocarina of Time: [Ocarina of Time Items List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/Items.py#L61)
+* Risk of Rain 2: [Risk of Rain 2 Items List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ror2/Items.py#L8)
+* Slay the Spire: [Slay the Spire Items List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/spire/Items.py#L13)
+* Subnautica: [Subnautica Items List JSON File](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/subnautica/items.json)
+* Timespinner: [Timespinner Items List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/timespinner/Items.py#L11)
 
 ### Available Locations
-* A Link to the Past: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Regions.py#L429](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Regions.py#L429)
-* Factorio: [https://wiki.factorio.com/Technologies](https://wiki.factorio.com/Technologies)
-* Minecraft: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Locations.py#L18](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Locations.py#L18)
-* Ocarina of Time: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LocationList.py#L38](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LocationList.py#L38)
-* Risk of Rain 2: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ror2/Locations.py#L17](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ror2/Locations.py#L17) 
+* A Link to the Past: [Link to the Past Locations List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Regions.py#L429)
+* Factorio: [Factorio Technologies List Wiki](https://wiki.factorio.com/Technologies)
+  * In Factorio the location names are the same as the item names.
+* Minecraft: [Minecraft Locations List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Locations.py#L18)
+* Ocarina of Time: [Ocarina of Time Locations List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LocationList.py#L38)
+* Risk of Rain 2: [Risk of Rain 2 Locations List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ror2/Locations.py#L17) 
   * This is a special case. The locations are "ItemPickup[number]" up to the maximum set in the yaml.
-* Slay the Spire: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/spire/Locations.py](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/spire/Locations.py)
-* Subnautica: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/subnautica/locations.json](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/subnautica/locations.json)
-* Timespinner: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/timespinner/Locations.py#L13](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/timespinner/Locations.py#L13)
+* Slay the Spire: [Slay the Spire Locations List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/spire/Locations.py)
+* Subnautica: [Subnautica Locations List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/subnautica/locations.json)
+* Timespinner: [Timespinner Locations List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/timespinner/Locations.py#L13)
 
 
-A list of all available items and locations can also be found in the server's datapackage. Data package JSON: [click here](/api/datapackage).
+A list of all available items and locations can also be found in the server's datapackage. Data package JSON: [DataPackage JSON](/api/datapackage).
 ### Examples
 ```yaml
 plando_items:
@@ -117,10 +118,10 @@ plando_items:
 4. This block has an 80% chance of occuring and when it does will place all but 1 of the items randomly among the four locations chosen here.
 
 ## Boss Plando
-As this is currently only supported by A Link to the Past instead of explaining here please refer to the Z3 plando guide. Z3 plando guide: [click here](/tutorial/zelda3/plando/en)
+As this is currently only supported by A Link to the Past instead of explaining here please refer to the Z3 plando guide. Z3 plando guide: [LttP Plando Guide](/tutorial/zelda3/plando/en)
 
 ## Text Plando
-As this is currently only supported by A Link to the Past instead of explaining here please refer to the Z3 plando guide. Z3 plando guide: [click here](/tutorial/zelda3/plando/en)
+As this is currently only supported by A Link to the Past instead of explaining here please refer to the Z3 plando guide. Z3 plando guide: [LttP Plando Guide](/tutorial/zelda3/plando/en)
 
 ## Connections Plando
 This is currently only supported by Minecraft and A Link to the Past. As the way that these games interact with their connections is different I will only explain the basics here while more specifics for Link to the Past connection plando can be found in its plando guide.
@@ -129,9 +130,9 @@ This is currently only supported by Minecraft and A Link to the Past. As the way
 * Every connection has an `entrance` and an `exit`. These can be unlinked like in A Link to the Past insanity entrance shuffle.
 * `direction` can be `both`, `entrance`, or `exit` and determines in which direction this connection will operate.
 
-Link to the Past connections: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/EntranceShuffle.py#L3852](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/EntranceShuffle.py#L3852)
+Link to the Past connections: [Link to the Past Connections List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/EntranceShuffle.py#L3852)
 
-Minecraft connections: [https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Regions.py#L62](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Regions.py#L62)
+Minecraft connections: [Minecraft Connections List in the Code](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Regions.py#L62)
 
 ### Examples
 ```yaml

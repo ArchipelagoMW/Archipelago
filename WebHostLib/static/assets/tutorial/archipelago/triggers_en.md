@@ -5,13 +5,13 @@ This guide details the use of the Archipelago YAML trigger system. This guide is
 Triggers allow you to customize your game settings by allowing you to define one or many options which only occur under specific conditions. These are essentially "if, then" statements for options in your game. 
 A good example of what you can do with triggers is the custom mercenary mode YAML that was created using entirely triggers and plando. 
 
-Mercenary mode YAML: [https://github.com/alwaysintreble/Archipelago-yaml-dump/blob/main/Snippets/Mercenary%20Mode%20Snippet.yaml](https://github.com/alwaysintreble/Archipelago-yaml-dump/blob/main/Snippets/Mercenary%20Mode%20Snippet.yaml) 
+Mercenary mode YAML: [Mercenary Mode YAML on GitHub](https://github.com/alwaysintreble/Archipelago-yaml-dump/blob/main/Snippets/Mercenary%20Mode%20Snippet.yaml) 
 
 For more information on plando you can reference the general plando guide or the Link to the Past plando guide. 
 
-General plando guide: [click here](/tutorial/archipelago/plando/en)
+General plando guide: [Archipelago Plando Guide](/tutorial/archipelago/plando/en)
 
-Link to the Past plando guide: [click here](/tutorial/zelda3/plando/en)
+Link to the Past plando guide: [LttP Plando Guide](/tutorial/zelda3/plando/en)
 
 ## Trigger use
 Triggers have to be defined in the root of the yaml file meaning it must be outside a game section. 
