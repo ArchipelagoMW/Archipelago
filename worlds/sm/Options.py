@@ -46,6 +46,8 @@ class DeathLink(Choice):
     option_disable = 0
     option_enable = 1
     option_enable_survive = 3
+    alias_false = 0
+    alias_true = 1
     default = 0
 
 class MaxDifficulty(Choice):
