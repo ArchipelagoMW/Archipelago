@@ -341,7 +341,7 @@ class Factorio(World):
         needed_recipes = self.world.max_science_pack[self.player].get_allowed_packs() | {"rocket-part"}
         if self.world.silo[self.player] != Silo.option_spawn:
             needed_recipes |= {"rocket-silo"}
-        if self.world.max_science_pack[self.player].value == MaxSciencePack.option_space_science_pack:
+        if self.world.goal[self.player].value == Goal.option_satellite:
             needed_recipes |= {"satellite"}
 
         for recipe in needed_recipes:
