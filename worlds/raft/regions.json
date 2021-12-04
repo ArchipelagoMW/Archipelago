@@ -1,0 +1,8 @@
+{
+	"Menu": ["Raft"],
+	"Raft": ["Radio Tower", "Research Table"],
+	"Radio Tower": ["Vasagatan"],
+	"Vasagatan": ["Balboa Island"],
+	"Balboa Island": ["Caravan Island"],
+	"Caravan Island": ["Tangaroa"]
+}
