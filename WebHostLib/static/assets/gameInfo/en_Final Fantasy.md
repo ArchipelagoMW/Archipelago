@@ -12,12 +12,8 @@ locations. So ,for example, Princess Sarah may have the CANOE instead of the LUT
 Pot or some armor. There are plenty of other things that can be randomized on our 
 [main randomizer site](https://finalfantasyrandomizer.com/)
 
-Some features are not currently supported by AP. A non-exhaustive list includes:
-- Shard Hunt
-- Deep Dungeon
-
 ## What Final Fantasy items can appear in other players' worlds?
-Currently, only progression items can appear in other players' worlds. Armor, Weapons and Consumable Items can not.
+All items can appear in other players worlds. This includes consumables, shards, weapons, armor and of course key items.
 
 ## What does another world's item look like in Final Fantasy
 All local and remote items appear the same. It will say that you received an item and then BOTH the client log and
