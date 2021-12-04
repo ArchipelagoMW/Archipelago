@@ -142,12 +142,14 @@ class Factorio(World):
                     Rules.add_rule(location, lambda state,
                                                     locations=locations: all(state.can_reach(loc) for loc in locations))
 
-            silo_recipe = None if self.world.silo[self.player].value == Silo.option_spawn \
-                else self.custom_recipes["rocket-silo"] if "rocket-silo" in self.custom_recipes \
+            silo_recipe = None
+            if self.world.silo[self.player] == Silo.option_spawn:
+                silo_recipe = self.custom_recipes["rocket-silo"] if "rocket-silo" in self.custom_recipes \
                 else next(iter(all_product_sources.get("rocket-silo")))
             part_recipe = self.custom_recipes["rocket-part"]
-            satellite_recipe = None if self.world.goal[self.player].value != Goal.option_rocket \
-                else self.custom_recipes["satellite"] if "satellite" in self.custom_recipes \
+            satellite_recipe = None
+            if self.world.goal[self.player] == Goal.option_satellite:
+                satellite_recipe = self.custom_recipes["satellite"] if "satellite" in self.custom_recipes \
                 else next(iter(all_product_sources.get("satellite")))
             victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe)
             world.get_location("Rocket Launch", player).access_rule = lambda state: all(state.has(technology, player)
