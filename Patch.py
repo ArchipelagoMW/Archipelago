@@ -18,12 +18,14 @@ current_patch_version = 3
 GAME_ALTTP = "A Link to the Past"
 GAME_SM = "Super Metroid"
 GAME_SOE = "Secret of Evermore"
-supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore"}
+GAME_SMZ3 = "SMZ3"
+supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore", "SMZ3"}
 
 preferred_endings = {
     GAME_ALTTP: "apbp",
     GAME_SM: "apm3",
-    GAME_SOE: "apsoe"
+    GAME_SOE: "apsoe",
+    GAME_SMZ3: "apzsm"
 }
 
 
@@ -90,6 +92,8 @@ def get_base_rom_data(game: str):
     elif game == GAME_SOE:
         file_name = Utils.get_options()["soe_options"]["rom_file"]
         get_base_rom_bytes = lambda: bytes(read_rom(open(file_name, "rb")))
+    elif game == GAME_SMZ3:
+        from worlds.smz3.Rom import get_base_rom_bytes
     else:
         raise RuntimeError("Selected game for base rom not found.")
     return get_base_rom_bytes()
