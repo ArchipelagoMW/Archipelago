@@ -60,7 +60,7 @@ def combine_smz3_rom(sm_rom: bytes, lttp_rom: bytes):
 
     # SM lo bank
     pos = 0
-    for i in range(0x40):
+    for i in range(0x20):
         combined[pos:pos + 0x8000] = sm_rom[srcpos:srcpos + 0x8000]
         srcpos += 0x8000
         pos += 0x10000
