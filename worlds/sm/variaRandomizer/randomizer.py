@@ -348,8 +348,7 @@ class VariaRandomizer:
                 if response.ok:
                     PresetLoader.factory(json.loads(response.text)).load(self.player)
                 else:
-                    print("Got error {} {} {} from trying to fetch varia custom preset named {}".format(response.status_code, response.reason, response.text, preset_name))
-                    sys.exit(-1)
+                    raise Exception("Got error {} {} {} from trying to fetch varia custom preset named {}".format(response.status_code, response.reason, response.text, preset_name))
             else:
                 preset = 'default'
                 PresetLoader.factory(os.path.join(appDir, getPresetDir('casual'), 'casual.json')).load(self.player)
