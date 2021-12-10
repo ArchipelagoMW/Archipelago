@@ -76,7 +76,7 @@ that can be rolled by these settings. If a game can be rolled it **must** have a
 
 Some options in Archipelago can be used by every game but must still be placed within the relevant game's section.
 Currently, these options are `start_inventory`, `start_hints`, `local_items`, `non_local_items`, `start_location_hints`, 
-`exclude_locations`, and various [plando options](tutorial/archipelago/plando/en).
+`exclude_locations`, and various [plando options](/tutorial/archipelago/plando/en).
 * `start_inventory` will give any items defined here to you at the beginning of your game. The format for this must be
 the name as it appears in the game files and the amount you would like to start with. For example `Rupees(5): 6` which
 will give you 30 rupees.
