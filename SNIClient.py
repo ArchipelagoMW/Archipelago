@@ -1048,6 +1048,7 @@ async def game_watcher(ctx: Context):
                     ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
 
+
 async def run_game(romfile):
     auto_start = Utils.get_options()["lttp_options"].get("rom_start", True)
     if auto_start is True:
