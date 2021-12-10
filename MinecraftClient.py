@@ -15,7 +15,7 @@ atexit.register(input, "Press enter to exit.")
 
 # 1 or more digits followed by m or g, then optional b
 max_heap_re = re.compile(r"^\d+[mMgG][bB]?$")
-forge_version = "1.17.1-37.0.109"
+forge_version = "1.17.1-37.1.1"
 
 
 def prompt_yes_no(prompt):
