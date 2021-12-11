@@ -24,19 +24,32 @@ class TimespinnerWorld(World):
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
     item_name_groups = get_item_names_per_category()
 
-    locked_locations: Dict[int, List[str]] = {}
-    pyramid_keys_unlock: Dict[int, str] = {}
-    location_cache: Dict[int, List[Location]] = {}
+    locked_locations: List[str]
+    pyramid_keys_unlock: str
+    location_cache: List[Location]
+
+    def __init__(self, world: MultiWorld, player: int):
+        super().__init__(world, player)
+
+        self.locked_locations = []
+        self.location_cache = []
+        self.pyramid_keys_unlock = get_pyramid_keys_unlock(world, player)
+
+    # for item in self.world.precollected_items[self.player]:
+    # if item.name in self.remove_from_start_inventory:
 
     def generate_early(self):
-        self.locked_locations[self.player] = []
-        self.location_cache[self.player] = []
-        self.pyramid_keys_unlock[self.player] = get_pyramid_keys_unlock(self.world, self.player)
+        if self.world.start_inventory[self.player].value.pop('Meyef', 0) > 0:
+            self.world.StartWithMeyef[self.player].value = self.world.StartWithMeyef[self.player].option_true
+        if self.world.start_inventory[self.player].value.pop('Talaria Attachment', 0) > 0:
+            self.world.QuickSeed[self.player].value = self.world.QuickSeed[self.player].option_true
+        if self.world.start_inventory[self.player].value.pop('Jewelry Box', 0) > 0:
+            self.world.StartWithJewelryBox[self.player].value = self.world.StartWithJewelryBox[self.player].option_true
 
 
     def create_regions(self):
         create_regions(self.world, self.player, get_locations(self.world, self.player), 
-                        self.location_cache[self.player], self.pyramid_keys_unlock[self.player])
+                        self.location_cache, self.pyramid_keys_unlock)
 
 
     def create_item(self, name: str) -> Item:
@@ -44,7 +57,7 @@ class TimespinnerWorld(World):
 
 
     def set_rules(self):
-        setup_events(self.world, self.player, self.locked_locations[self.player], self.location_cache[self.player])
+        setup_events(self.world, self.player, self.locked_locations, self.location_cache)
 
         self.world.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
 
@@ -52,14 +65,14 @@ class TimespinnerWorld(World):
     def generate_basic(self):
         excluded_items = get_excluded_items_based_on_options(self.world, self.player)
 
-        assign_starter_items(self.world, self.player, excluded_items, self.locked_locations[self.player])
+        assign_starter_items(self.world, self.player, excluded_items, self.locked_locations)
 
         if not is_option_enabled(self.world, self.player, "QuickSeed") and not is_option_enabled(self.world, self.player, "Inverted"):
-            place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations[self.player])
+            place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations)
 
         pool = get_item_pool(self.world, self.player, excluded_items)
 
-        fill_item_pool_with_dummy_items(self.world, self.player, self.locked_locations[self.player], self.location_cache[self.player], pool)
+        fill_item_pool_with_dummy_items(self.world, self.player, self.locked_locations, self.location_cache, pool)
 
         self.world.itempool += pool
 
@@ -73,15 +86,15 @@ class TimespinnerWorld(World):
         slot_data["StinkyMaw"] = True
         slot_data["ProgressiveVerticalMovement"] = False
         slot_data["ProgressiveKeycards"] = False
-        slot_data["PyramidKeysGate"] = self.pyramid_keys_unlock[self.player]
-        slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache[self.player])
+        slot_data["PyramidKeysGate"] = self.pyramid_keys_unlock
+        slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache)
 
         return slot_data
         
 
     def write_spoiler_header(self, spoiler_handle: TextIO):
-        spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % (self.pyramid_keys_unlock[self.player]))
-        
+        spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % (self.pyramid_keys_unlock))
+
 
 def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> Set[str]:
     excluded_items: Set[str] = set()
