@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple, Optional, Callable
+from typing import List, Set, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Options import is_option_enabled
 from .Locations import LocationData
@@ -6,7 +6,7 @@ from .Locations import LocationData
 def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location], pyramid_keys_unlock: str):
     locations_per_region = get_locations_per_region(locations)
 
-    world.regions += [
+    regions = [
         create_region(world, player, locations_per_region, location_cache, 'Menu'),
         create_region(world, player, locations_per_region, location_cache, 'Tutorial'),
         create_region(world, player, locations_per_region, location_cache, 'Lake desolation'),
@@ -44,6 +44,10 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'Ancient Pyramid (right)'),
         create_region(world, player, locations_per_region, location_cache, 'Space time continuum')
     ]
+
+    throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
+
+    world.regions += regions
 
     connectStartingRegion(world, player)
 
@@ -148,6 +152,16 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Space time continuum', 'Royal towers (lower)', lambda state: pyramid_keys_unlock == "GateRoyalTowers")
     connect(world, player, names, 'Space time continuum', 'Caves of Banishment (Maw)', lambda state: pyramid_keys_unlock == "GateMaw")
     connect(world, player, names, 'Space time continuum', 'Caves of Banishment (upper)', lambda state: pyramid_keys_unlock == "GateCavesOfBanishment")
+
+
+def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames: Set[str]):
+    existingRegions = set()
+
+    for region in regions:
+        existingRegions.add(region.name)
+
+    if (regionNames - existingRegions):
+        raise Exception("Tiemspinner: the following regions are used in locations: {}, but no such region exists".format(regionNames - existingRegions))
 
 
 def create_location(player: int, location_data: LocationData, region: Region, location_cache: List[Location]) -> Location:
