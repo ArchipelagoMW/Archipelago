@@ -818,7 +818,7 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
     }
 
     supermetroid_location_ids = {
-        'Crateria': [82005, 82007, 82008, 82026, 82029,
+        'Crateria/Blue Brinstar': [82005, 82007, 82008, 82026, 82029,
                      82000, 82004, 82006, 82009, 82010,
                      82011, 82012, 82027, 82028, 82034,
                      82036, 82037],
