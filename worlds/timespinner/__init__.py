@@ -35,8 +35,9 @@ class TimespinnerWorld(World):
         self.location_cache = []
         self.pyramid_keys_unlock = get_pyramid_keys_unlock(world, player)
 
-    # for item in self.world.precollected_items[self.player]:
-    # if item.name in self.remove_from_start_inventory:
+#TODO
+#Non local items not getting rewarded locally
+#Do not reward starting progression item if you already got one as your starting item
 
     def generate_early(self):
         if self.world.start_inventory[self.player].value.pop('Meyef', 0) > 0:
@@ -63,7 +64,7 @@ class TimespinnerWorld(World):
 
 
     def generate_basic(self):
-        excluded_items = get_excluded_items_based_on_options(self.world, self.player)
+        excluded_items = get_excluded_items_based(self, self.world, self.player)
 
         assign_starter_items(self.world, self.player, excluded_items, self.locked_locations)
 
@@ -96,7 +97,7 @@ class TimespinnerWorld(World):
         spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % (self.pyramid_keys_unlock))
 
 
-def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> Set[str]:
+def get_excluded_items_based(self: TimespinnerWorld, world: MultiWorld, player: int) -> Set[str]:
     excluded_items: Set[str] = set()
 
     if is_option_enabled(world, player, "StartWithJewelryBox"):
@@ -105,6 +106,10 @@ def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> Set[s
         excluded_items.add('Meyef')
     if is_option_enabled(world, player, "QuickSeed"):
         excluded_items.add('Talaria Attachment')
+
+    for item in world.precollected_items[player]:
+        if item.name not in self.item_name_groups['UseItem']:
+            excluded_items.add(item.name)
     
     return excluded_items
 
