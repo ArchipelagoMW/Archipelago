@@ -37,9 +37,9 @@ class TimespinnerWorld(World):
 
 #TODO
 #Non local items not getting rewarded locally
-#Do not reward starting progression item if you already got one as your starting item
 
     def generate_early(self):
+        # in generate_early the start_inventory isnt copied over to precollected_items, so we can still moffify the options directly
         if self.world.start_inventory[self.player].value.pop('Meyef', 0) > 0:
             self.world.StartWithMeyef[self.player].value = self.world.StartWithMeyef[self.player].option_true
         if self.world.start_inventory[self.player].value.pop('Talaria Attachment', 0) > 0:
@@ -64,7 +64,7 @@ class TimespinnerWorld(World):
 
 
     def generate_basic(self):
-        excluded_items = get_excluded_items_based(self, self.world, self.player)
+        excluded_items = get_excluded_items(self, self.world, self.player)
 
         assign_starter_items(self.world, self.player, excluded_items, self.locked_locations)
 
@@ -97,7 +97,7 @@ class TimespinnerWorld(World):
         spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % (self.pyramid_keys_unlock))
 
 
-def get_excluded_items_based(self: TimespinnerWorld, world: MultiWorld, player: int) -> Set[str]:
+def get_excluded_items(self: TimespinnerWorld, world: MultiWorld, player: int) -> Set[str]:
     excluded_items: Set[str] = set()
 
     if is_option_enabled(world, player, "StartWithJewelryBox"):
@@ -151,6 +151,10 @@ def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locat
 
 
 def place_first_progression_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
+    for item in world.precollected_items[player]:
+        if item.name in starter_progression_items:
+            return
+    
     progression_item = world.random.choice(starter_progression_items)
     location = world.random.choice(starter_progression_locations)
 
