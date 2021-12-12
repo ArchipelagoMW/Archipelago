@@ -35,8 +35,6 @@ class TimespinnerWorld(World):
         self.location_cache = []
         self.pyramid_keys_unlock = get_pyramid_keys_unlock(world, player)
 
-#TODO
-#Non local items not getting rewarded locally
 
     def generate_early(self):
         # in generate_early the start_inventory isnt copied over to precollected_items, so we can still moffify the options directly
