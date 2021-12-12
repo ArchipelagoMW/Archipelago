@@ -141,7 +141,7 @@ for folder in sdl2.dep_bins + glew.dep_bins:
     shutil.copytree(folder, libfolder, dirs_exist_ok=True)
     print('copying', folder, '->', libfolder)
 
-extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI", "meta.yaml"]
+extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI"]
 
 for data in extra_data:
     installfile(Path(data))
@@ -155,6 +155,7 @@ for worldname, worldtype in AutoWorldRegister.world_types.items():
         file_name = worldname+".yaml"
         shutil.copyfile(os.path.join("WebHostLib", "static", "generated", "configs", file_name),
                         buildfolder / "Players" / "Templates" / file_name)
+shutil.copyfile("meta.yaml", buildfolder / "Players" / "Templates" / "meta.yaml")
 
 try:
     from maseya import z3pr

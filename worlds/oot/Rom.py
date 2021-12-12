@@ -282,22 +282,22 @@ class Rom(BigStream):
 
 
 def compress_rom_file(input_file, output_file):
-    subcall = []
-
     compressor_path = data_path("Compress")
 
     if platform.system() == 'Windows':
-        compressor_path += "\\Compress.exe"
+        executable_path = "Compress.exe"
     elif platform.system() == 'Linux':
         if platform.uname()[4] == 'aarch64' or platform.uname()[4] == 'arm64':
-            compressor_path += "/Compress_ARM64"
+            executable_path = "Compress_ARM64"
         else:
-            compressor_path += "/Compress"
+            executable_path = "Compress"
     elif platform.system() == 'Darwin':
-        compressor_path += "/Compress.out"
+        executable_path = "Compress.out"
     else:
         raise RuntimeError('Unsupported operating system for compression.')
-
+    compressor_path = os.path.join(compressor_path, executable_path)
     if not os.path.exists(compressor_path):
         raise RuntimeError(f'Compressor does not exist! Please place it at {compressor_path}.')
-    process = subprocess.call([compressor_path, input_file, output_file], **subprocess_args(include_stdout=False))
+    import logging
+    logging.info(subprocess.check_output([compressor_path, input_file, output_file],
+                                             **subprocess_args(include_stdout=False)))
