@@ -166,8 +166,9 @@ def host_room(room: UUID):
     if request.method == "POST":
         if room.owner == session["_id"]:
             cmd = request.form["cmd"]
-            Command(room=room, commandtext=cmd)
-            commit()
+            if cmd:
+                Command(room=room, commandtext=cmd)
+                commit()
 
     with db_session:
         room.last_activity = datetime.utcnow()  # will trigger a spinup, if it's not already running
