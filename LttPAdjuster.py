@@ -102,13 +102,14 @@ def main():
     parser.add_argument('--update_sprites', action='store_true', help='Update Sprite Database, then exit.')
     args = parser.parse_args()
     args.music = not args.disablemusic
-    if args.update_sprites:
-        run_sprite_update()
-        sys.exit()
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
         args.loglevel]
     logging.basicConfig(format='%(message)s', level=loglevel)
+
+    if args.update_sprites:
+        run_sprite_update()
+        sys.exit()
 
     if not os.path.isfile(args.rom):
         adjustGUI()
@@ -241,12 +242,16 @@ def adjustGUI():
 def run_sprite_update():
     import threading
     done = threading.Event()
-    top = Tk()
-    top.withdraw()
-    BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
+    try:
+        top = Tk()
+    except:
+        task = BackgroundTaskProgressNullWindow(update_sprites, lambda successful, resultmessage: done.set())
+    else:
+        top.withdraw()
+        task = BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
     while not done.isSet():
-        top.update()
-    print("Done updating sprites")
+        task.do_events()
+    logging.info("Done updating sprites")
 
 
 def update_sprites(task, on_finish=None):
@@ -400,10 +405,37 @@ class BackgroundTaskProgress(BackgroundTask):
     def update_status(self, text):
         self.queue_event(lambda: self.label_var.set(text))
 
+    def do_events(self):
+        self.parent.update()
+
     # only call this in an event callback
     def close_window(self):
         self.stop()
         self.window.destroy()
+
+
+class BackgroundTaskProgressNullWindow(BackgroundTask):
+    def __init__(self, code_to_run, *args):
+        super().__init__(None, code_to_run, *args)
+
+    def process_queue(self):
+        try:
+            while True:
+                if not self.running:
+                    return
+                event = self.queue.get_nowait()
+                event()
+        except queue.Empty:
+            pass
+
+    def do_events(self):
+        self.process_queue()
+
+    def update_status(self, text):
+        self.queue_event(lambda: logging.info(text))
+
+    def close_window(self):
+        self.stop()
 
 
 def get_rom_frame(parent=None):
