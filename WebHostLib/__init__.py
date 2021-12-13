@@ -22,9 +22,10 @@ Pony(app)
 app.jinja_env.filters['any'] = any
 app.jinja_env.filters['all'] = all
 
-app.config["SELFHOST"] = True
+app.config["SELFHOST"] = True  # application process is in charge of running the websites
 app.config["GENERATORS"] = 8  # maximum concurrent world gens
-app.config["SELFLAUNCH"] = True
+app.config["SELFLAUNCH"] = True  # application process is in charge of launching Rooms.
+app.config["SELFGEN"] = True  # application process is in charge of scheduling Generations.
 app.config["DEBUG"] = False
 app.config["PORT"] = 80
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
