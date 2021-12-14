@@ -45,7 +45,8 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'Space time continuum')
     ]
 
-    throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
+    if __debug__:
+        throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
 
     world.regions += regions
 
