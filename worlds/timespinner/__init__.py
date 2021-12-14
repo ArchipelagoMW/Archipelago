@@ -37,7 +37,7 @@ class TimespinnerWorld(World):
 
 
     def generate_early(self):
-        # in generate_early the start_inventory isnt copied over to precollected_items, so we can still moffify the options directly
+        # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
         if self.world.start_inventory[self.player].value.pop('Meyef', 0) > 0:
             self.world.StartWithMeyef[self.player].value = self.world.StartWithMeyef[self.player].option_true
         if self.world.start_inventory[self.player].value.pop('Talaria Attachment', 0) > 0:
