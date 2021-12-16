@@ -12,14 +12,6 @@ from ..AutoWorld import World
 from .Rom import get_base_rom_bytes
 from .ips import IPS_Patch
 
-#sys.path.append(r"E:\Github\Archipelago\worlds\smz3")
-#import clr
-#import System
-#import System.Runtime
-#SWF = clr.AddReference("Randomizer.Shared")
-#print (SWF.Location)
-#from Randomizer.Shared.Models import World as TestWorld
-
 class SMZ3World(World):
     game: str = "SMZ3"
     topology_present = True
