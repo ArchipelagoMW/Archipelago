@@ -20,7 +20,7 @@ from urllib.parse import urlparse
 from urllib.request import urlopen
 
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
-from Utils import output_path, local_path, open_file
+from Utils import output_path, local_path, open_file, get_cert_none_ssl_context, persistent_store
 
 
 class AdjusterWorld(object):
@@ -119,7 +119,6 @@ def main():
             sys.exit(1)
 
         args, path = adjust(args=args)
-        from Utils import persistent_store
         if isinstance(args.sprite, Sprite):
             args.sprite = args.sprite.name
         persistent_store("adjuster", "last_settings_3", args)
@@ -225,7 +224,6 @@ def adjustGUI():
             messagebox.showerror(title="Error while adjusting Rom", message=str(e))
         else:
             messagebox.showinfo(title="Success", message=f"Rom patched successfully to {path}")
-            from Utils import persistent_store
             if isinstance(guiargs.sprite, Sprite):
                 guiargs.sprite = guiargs.sprite.name
             persistent_store("adjuster", "last_settings_3", guiargs)
@@ -259,7 +257,7 @@ def update_sprites(task, on_finish=None):
     successful = True
     sprite_dir = local_path("data", "sprites", "alttpr")
     os.makedirs(sprite_dir, exist_ok=True)
-
+    ctx = get_cert_none_ssl_context()
     def finished():
         task.close_window()
         if on_finish:
@@ -267,7 +265,7 @@ def update_sprites(task, on_finish=None):
 
     try:
         task.update_status("Downloading alttpr sprites list")
-        with urlopen('https://alttpr.com/sprites') as response:
+        with urlopen('https://alttpr.com/sprites', context=ctx) as response:
             sprites_arr = json.loads(response.read().decode("utf-8"))
     except Exception as e:
         resultmessage = "Error getting list of alttpr sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
@@ -294,7 +292,7 @@ def update_sprites(task, on_finish=None):
 
     def dl(sprite_url, filename):
         target = os.path.join(sprite_dir, filename)
-        with urlopen(sprite_url) as response, open(target, 'wb') as out:
+        with urlopen(sprite_url, context=ctx) as response, open(target, 'wb') as out:
             shutil.copyfileobj(response, out)
 
     def rem(sprite):
