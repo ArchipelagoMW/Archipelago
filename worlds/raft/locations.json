@@ -1,5 +1,242 @@
-[
-    { "id": 48000, "name": "Item Name", "location": "IslandNameOrResearchTableOrBlueprint",
-		"region": "Research Table"
+[{
+        "id": 48001,
+        "name": "Metal Spear",
+        "location": "MetalSpear",
+        "region": "ResearchTable"
+    }, {
+        "id": 48002,
+        "name": "Paint Brush",
+        "location": "PaintBrush",
+        "region": "ResearchTable"
+    }, {
+        "id": 48003,
+        "name": "Scrap Hook",
+        "location": "ScrapHook",
+        "region": "ResearchTable"
+    }, {
+        "id": 48004,
+        "name": "Metal Axe",
+        "location": "MetalAxe",
+        "region": "ResearchTable"
+    }, {
+        "id": 48005,
+        "name": "Metal Fishing Rod",
+        "location": "MetalFishingRod",
+        "region": "ResearchTable"
+    }, {
+        "id": 48006,
+        "name": "Basic Bow",
+        "location": "BasicBow",
+        "region": "ResearchTable"
+    }, {
+        "id": 48007,
+        "name": "Binoculars",
+        "location": "Binoculars",
+        "region": "ResearchTable"
+    }, {
+        "id": 48008,
+        "name": "Stone Arrow",
+        "location": "StoneArrow",
+        "region": "ResearchTable"
+    }, {
+        "id": 48009,
+        "name": "Table",
+        "location": "Table",
+        "region": "ResearchTable"
+    }, {
+        "id": 48010,
+        "name": "Rug",
+        "location": "Rug",
+        "region": "ResearchTable"
+    }, {
+        "id": 48011,
+        "name": "Paint Mill",
+        "location": "PaintMill",
+        "region": "ResearchTable"
+    }, {
+        "id": 48012,
+        "name": "Lantern",
+        "location": "Lantern",
+        "region": "ResearchTable"
+    }, {
+        "id": 48013,
+        "name": "Clock",
+        "location": "Clock",
+        "region": "ResearchTable"
+    }, {
+        "id": 48014,
+        "name": "Chair",
+        "location": "Chair",
+        "region": "ResearchTable"
+    }, {
+        "id": 48015,
+        "name": "Storage",
+        "location": "Storage",
+        "region": "ResearchTable"
+    }, {
+        "id": 48016,
+        "name": "Collection Net",
+        "location": "CollectionNet",
+        "region": "ResearchTable"
+    }, {
+        "id": 48017,
+        "name": "Smelter",
+        "location": "Smelter",
+        "region": "ResearchTable"
+    }, {
+        "id": 48018,
+        "name": "Birds Nest",
+        "location": "BirdsNest",
+        "region": "ResearchTable"
+    }, {
+        "id": 48019,
+        "name": "Hammock",
+        "location": "Hammock",
+        "region": "ResearchTable"
+    }, {
+        "id": 48020,
+        "name": "Stationary Anchor",
+        "location": "StationaryAnchor",
+        "region": "ResearchTable"
+    }, {
+        "id": 48021,
+        "name": "Scarecrow",
+        "location": "Scarecrow",
+        "region": "ResearchTable"
+    }, {
+        "id": 48022,
+        "name": "Large Crop Plot",
+        "location": "LargeCropPlot",
+        "region": "ResearchTable"
+    }, {
+        "id": 48023,
+        "name": "Medium Crop Plot",
+        "location": "MediumCropPlot",
+        "region": "ResearchTable"
+    }, {
+        "id": 48024,
+        "name": "Advanced Purifier",
+        "location": "AdvancedPurifier",
+        "region": "ResearchTable"
+    }, {
+        "id": 48025,
+        "name": "Advanced Grill",
+        "location": "AdvancedGrill",
+        "region": "ResearchTable"
+    }, {
+        "id": 48026,
+        "name": "Empty Bottle",
+        "location": "EmptyBottle",
+        "region": "ResearchTable"
+    }, {
+        "id": 48027,
+        "name": "Flippers",
+        "location": "Flippers",
+        "region": "ResearchTable"
+    }, {
+        "id": 48028,
+        "name": "Oxygen Bottle",
+        "location": "OxygenBottle",
+        "region": "ResearchTable"
+    }, {
+        "id": 48029,
+        "name": "Hinge",
+        "location": "Hinge",
+        "region": "ResearchTable"
+    }, {
+        "id": 48030,
+        "name": "Circuit Board",
+        "location": "CircuitBoard",
+        "region": "ResearchTable"
+    }, {
+        "id": 48031,
+        "name": "Bolt",
+        "location": "Bolt",
+        "region": "ResearchTable"
+    }, {
+        "id": 48032,
+        "name": "Battery",
+        "location": "Battery",
+        "region": "ResearchTable"
+    }, {
+        "id": 48033,
+        "name": "Cooking Pot",
+        "location": "CookingPot",
+        "region": "ResearchTable"
+    }, {
+        "id": 48034,
+        "name": "Clay Bowl",
+        "location": "ClayBowl",
+        "region": "ResearchTable"
+    }, {
+        "id": 48035,
+        "name": "Net Launcher",
+        "location": "NetLauncher",
+        "region": "ResearchTable"
+    }, {
+        "id": 48036,
+        "name": "Shovel",
+        "location": "Shovel",
+        "region": "ResearchTable"
+    }, {
+        "id": 48037,
+        "name": "Shear",
+        "location": "Shear",
+        "region": "ResearchTable"
+    }, {
+        "id": 48038,
+        "name": "Bucket",
+        "location": "Bucket",
+        "region": "ResearchTable"
+    }, {
+        "id": 48039,
+        "name": "Net Canister",
+        "location": "NetCanister",
+        "region": "ResearchTable"
+    }, {
+        "id": 48040,
+        "name": "Healing Salve",
+        "location": "HealingSalve",
+        "region": "ResearchTable"
+    }, {
+        "id": 48041,
+        "name": "Good Healing Salve",
+        "location": "GoodHealingSalve",
+        "region": "ResearchTable"
+    }, {
+        "id": 48042,
+        "name": "Grass Plot",
+        "location": "GrassPlot",
+        "region": "ResearchTable"
+    }, {
+        "id": 48043,
+        "name": "Sprinkler",
+        "location": "Sprinkler",
+        "region": "ResearchTable"
+    }, {
+        "id": 48044,
+        "name": "Backpack",
+        "location": "Backpack",
+        "region": "ResearchTable"
+    }, {
+        "id": 48045,
+        "name": "Leather Helmet",
+        "location": "LeatherHelmet",
+        "region": "ResearchTable"
+    }, {
+        "id": 48046,
+        "name": "Leather Body Armor",
+        "location": "LeatherBodyArmor",
+        "region": "ResearchTable"
+    }, {
+        "id": 48047,
+        "name": "Leather Greaves",
+        "location": "LeatherGreaves",
+        "region": "ResearchTable"
+    }, {
+        "id": 48048,
+        "name": "Beehive",
+        "location": "Beehive",
+        "region": "ResearchTable"
     }
 ]
