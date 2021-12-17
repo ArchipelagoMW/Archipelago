@@ -238,5 +238,25 @@
         "name": "Beehive",
         "location": "Beehive",
         "region": "ResearchTable"
+    }, {
+        "id": 48049,
+        "name": "Radio Tower Diary 1",
+        "location": "RadioTowerDiary1",
+        "region": "RadioTower"
+    }, {
+        "id": 48050,
+        "name": "Radio Tower Diary 2",
+        "location": "RadioTowerDiary2",
+        "region": "RadioTower"
+    }, {
+        "id": 48051,
+        "name": "Radio Tower Diary 3",
+        "location": "RadioTowerDiary3",
+        "region": "RadioTower"
+    }, {
+        "id": 48052,
+        "name": "Radio Tower Radio Transcription",
+        "location": "RadioTowerRadioTranscription",
+        "region": "RadioTower"
     }
 ]
