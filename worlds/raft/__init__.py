@@ -1,7 +1,7 @@
 import logging
 import typing
 
-from .Locations import lookup_name_to_id as locations_lookup_name_to_id
+from .Locations import location_table, lookup_name_to_id as locations_lookup_name_to_id
 from .Items import item_table, lookup_name_to_item, advancement_item_names
 from .Items import lookup_name_to_id as items_lookup_name_to_id
 
@@ -28,15 +28,18 @@ class RaftWorld(World):
     data_version = 2
 
     def generate_basic(self):
+
+
         # Link regions together
         for region in regionMap:
             for linkedRegion in regionMap[region]:
-                self.world.get_entrance(region, self.player).connect(self.world.get_region(linkedRegion, self.player))
+                self.world.get_entrance(linkedRegion, self.player).connect(self.world.get_region(linkedRegion, self.player))
 
         # Generate item pool
         pool = []
         extras = 0
         for item in item_table:
+            raft_item = self.create_item(item["name"])
             for i in range(item["count"]):
                 pool.append(raft_item)
 
@@ -50,8 +53,9 @@ class RaftWorld(World):
         self.world.itempool += pool
 
         # Victory item
-        self.world.get_location("FinalTacondarogaLocation", self.player).place_locked_item(
-            RaftItem("Victory", True, None, player=self.player))
+        self.world.get_location("RadioTowerRadioTranscription", self.player).place_locked_item( #TODO: Add actual victory location
+            RaftItem("Victory", True, None, player=self.player)
+        )
 
     def set_rules(self):
         set_rules(self.world, self.player)
@@ -80,7 +84,9 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
             location = RaftLocation(player, location, loc_id, ret)
             ret.locations.append(location)
     if exits:
+        print(exits)
         for exit in exits:
+            print("Exit: ", exit)
             ret.exits.append(Entrance(player, exit, ret))
 
     return ret
