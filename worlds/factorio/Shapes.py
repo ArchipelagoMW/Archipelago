@@ -22,7 +22,9 @@ def get_shapes(factorio_world) -> Dict[str, List[str]]:
     tech_names.sort()
     world.random.shuffle(tech_names)
 
-    if layout == TechTreeLayout.option_small_diamonds:
+    if layout == TechTreeLayout.option_single:
+        pass
+    elif layout == TechTreeLayout.option_small_diamonds:
         slice_size = 4
         while len(tech_names) > slice_size:
             slice = tech_names[:slice_size]
