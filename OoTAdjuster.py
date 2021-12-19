@@ -211,9 +211,11 @@ def adjust(args):
     ootworld.logic_rules = 'glitched' if args.is_glitched else 'glitchless'
     ootworld.death_link = args.deathlink
 
+    delete_zootdec = False
     if os.path.splitext(args.rom)[-1] in ['.z64', '.n64']:
         # Load up the ROM
         rom = Rom(file=args.rom, force_use=True)
+        delete_zootdec = True
     elif os.path.splitext(args.rom)[-1] == '.apz5':
         # Load vanilla ROM
         rom = Rom(file=args.vanilla_rom, force_use=True)
@@ -231,6 +233,8 @@ def adjust(args):
     rom.write_to_file(decomp_path)
     compress_rom_file(decomp_path, comp_path)
     os.remove(decomp_path)
+    if delete_zootdec:
+        os.remove("ZOOTDEC.z64")
     return comp_path
 
 if __name__ == '__main__':
