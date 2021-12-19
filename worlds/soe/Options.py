@@ -16,10 +16,11 @@ class EvermizerFlag:
         return self.flag if self.value != self.default else ''
 
 
-class OffOnChaosChoice(Choice):
+class OffOnFullChoice(Choice):
     option_off = 0
     option_on = 1
-    option_chaos = 2
+    option_full = 2
+    alias_chaos = 2
     alias_false = 0
     alias_true = 1
 
@@ -89,27 +90,27 @@ class ShorterDialogs(EvermizerFlag, Toggle):
 
 
 class ShortBossRush(EvermizerFlag, Toggle):
-    """Start boss rush at Magmar, cut HP in half"""
+    """Start boss rush at Metal Magmar, cut enemy HP in half"""
     displayname = "Short Boss Rush"
     flag = 'f'
 
 
-class Ingredienizer(EvermizerFlags, OffOnChaosChoice):
-    """Shuffles or randomizes spell ingredients"""
+class Ingredienizer(EvermizerFlags, OffOnFullChoice):
+    """On Shuffles, Full randomizes spell ingredients"""
     displayname = "Ingredienizer"
     default = 1
     flags = ['i', '', 'I']
 
 
-class Sniffamizer(EvermizerFlags, OffOnChaosChoice):
-    """Shuffles or randomizes drops in sniff locations"""
+class Sniffamizer(EvermizerFlags, OffOnFullChoice):
+    """On Shuffles, Full randomizes drops in sniff locations"""
     displayname = "Sniffamizer"
     default = 1
     flags = ['s', '', 'S']
 
 
-class Callbeadamizer(EvermizerFlags, OffOnChaosChoice):
-    """Shuffles call bead characters or spells"""
+class Callbeadamizer(EvermizerFlags, OffOnFullChoice):
+    """On Shuffles call bead characters, Full shuffles individual spells"""
     displayname = "Callbeadamizer"
     default = 1
     flags = ['c', '', 'C']
@@ -121,8 +122,8 @@ class Musicmizer(EvermizerFlag, Toggle):
     flag = 'm'
 
 
-class Doggomizer(EvermizerFlags, OffOnChaosChoice):
-    """On shuffles dog per act, Chaos randomizes dog per screen, Pupdunk gives you Everpupper everywhere"""
+class Doggomizer(EvermizerFlags, OffOnFullChoice):
+    """On shuffles dog per act, Full randomizes dog per screen, Pupdunk gives you Everpupper everywhere"""
     displayname = "Doggomizer"
     option_pupdunk = 3
     default = 0
