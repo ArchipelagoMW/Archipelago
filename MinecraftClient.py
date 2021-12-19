@@ -35,12 +35,10 @@ def prompt_yes_no(prompt):
 def find_ap_randomizer_jar(forge_dir):
     mods_dir = os.path.join(forge_dir, 'mods')
     if os.path.isdir(mods_dir):
-        ap_mod_re = re.compile(r"^aprandomizer-[\d\.]+\.jar$")
         for entry in os.scandir(mods_dir):
-            match = ap_mod_re.match(entry.name)
-            if match:
-                logging.info(f"Found AP randomizer mod: {match.group()}")
-                return match.group()
+            if entry.name.startswith("aprandomizer") and entry.name.endswith(".jar"):
+                logging.info(f"Found AP randomizer mod: {entry.name}")
+                return entry.name
         return None
     else:
         os.mkdir(mods_dir)
