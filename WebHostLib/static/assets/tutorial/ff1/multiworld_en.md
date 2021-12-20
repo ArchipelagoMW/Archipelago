@@ -19,8 +19,7 @@
        4. Browse for `EmuHawk.exe` located inside your Bizhawk folder (from step 1) and click **Open**.
 
 ## Obtaining your Archipelago yaml file and randomized ROM
-Unlike most other Archipelago.gg games Final Fantasy 1 is randomized by the 
-main randomizer at [https://finalfantasyrandomizer.com/](https://finalfantasyrandomizer.com/). 
+Unlike most other Archipelago.gg games Final Fantasy 1 is randomized by the main randomizer at [https://finalfantasyrandomizer.com/](https://finalfantasyrandomizer.com/). 
 
 Generate a game by going to the site and performing the following steps:
 1. Select the randomization options (also known as `Flags` in the community) of your choice. If you do not know what you prefer, or it is your first time playing select the "Archipelago" preset on the main page.

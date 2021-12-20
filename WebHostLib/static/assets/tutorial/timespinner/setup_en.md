@@ -9,7 +9,7 @@
 
 ## General Concept
 
-The timespinner Randomizer loads Timespinner.exe from the same folder, and alters its state in memory to allow for randomization of the items.
+The Timespinner Randomizer loads Timespinner.exe from the same folder, and alters its state in memory to allow for randomization of the items.
 
 ## Installation Procedures
 

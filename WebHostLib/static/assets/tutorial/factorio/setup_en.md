@@ -105,8 +105,7 @@ server, you can also issue the `!help` command to learn about additional command
 "Connecting to Someone Else's Factorio Game" above.
 
 ## Troubleshooting
-In case any problems should occur, the Archipelago Client will create a file `FactorioClient.txt` in the `/logs`.
-The contents of this file may help you troubleshoot an issue on your own and is vital for requesting help from other
+In case any problems should occur, the Archipelago Client will create a file `FactorioClient.txt` in the `/logs`. The contents of this file may help you troubleshoot an issue on your own and is vital for requesting help from other
 people in Archipelago.
 
 ## Additional Resources

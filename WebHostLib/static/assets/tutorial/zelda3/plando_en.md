@@ -2,22 +2,17 @@
 
 ## Configuration
 1. Plando features have to be enabled first, before they can be used (opt-in).
-2. To do so, go to your installation directory (Windows default: `C:\ProgramData\Archipelago`), 
-   then open the host.yaml file with a text editor.
-3. In it, you're looking for the option key `plando_options`. To enable all plando modules you can set the
-   value to  
-   `bosses, items, texts, connections`
+2. To do so, go to your installation directory (Windows default: `C:\ProgramData\Archipelago`), then open the host.yaml file with a text editor.
+3. In it, you're looking for the option key `plando_options`. To enable all plando modules you can set the value to `bosses, items, texts, connections`
 
 ## Modules
 
 ### Bosses
 
-- This module is enabled by default and available to be used on 
-  [https://archipelago.gg/generate](/generate)
+- This module is enabled by default and available to be used on [https://archipelago.gg/generate](/generate)
 - Plando versions of boss shuffles can be added like any other boss shuffle option in a yaml and weighted.
-- Boss Plando works as a list of instructions from left to right, if any arenas are empty at the end, 
-  it defaults to vanilla
-- Instructions are separated by a semicolon
+- Boss Plando works as a list of instructions from left to right, if any arenas are empty at the end, it defaults to vanilla.
+- Instructions are separated by a semicolon.
 - Available Instructions:
     -  Direct Placement:
         - Example: `Eastern Palace-Trinexx`
@@ -119,8 +114,7 @@ plando_items:
     from_pool: true
 ```
 
-1. has a 50% chance to occur, which if it does places either the Lamp or Fire Rod in one's own 
-Link's House and removes the picked item from the item pool.
+1. has a 50% chance to occur, which if it does places either the Lamp or Fire Rod in one's own Link's House and removes the picked item from the item pool.
 2. Always triggers and places the Swords and Bows into one's own Big Chests
 3. Locks Pendants to The Light World and therefore Crystals to dark world
 
@@ -147,9 +141,8 @@ plando_texts:
       uncle_dying_sewer: 1
     percentage: 50
 ```
-![Uncle Example](https://cdn.discordapp.com/attachments/731214280439103580/794953870903083058/unknown.png)
-This has a 50% chance to trigger at all. If it does, it throws a coin between `uncle_leaving_text` and
-`uncle_dying_sewer`, then places the text "This is a plando. You've been warned." at that location.
+![Example plando text at Uncle](https://cdn.discordapp.com/attachments/731214280439103580/794953870903083058/unknown.png)
+This has a 50% chance to trigger at all. If it does, it throws a coin between `uncle_leaving_text` and `uncle_dying_sewer`, then places the text "This is a plando. You've been warned." at that location.
 
 ### Connections
 - This module is disabled by default.
@@ -177,5 +170,4 @@ plando_connections:
 The first block connects the overworld entrance that normally leads to Link's House
 to put you into the HC West Wing instead, exiting from within there will put you at the Overworld exiting Link's House.
 
-Without the second block, you'd still exit from within Link's House to outside Link's House and the left side 
-Balcony Entrance would still lead into HC West Wing
+Without the second block, you'd still exit from within Link's House to outside Link's House and the left side Balcony Entrance would still lead into HC West Wing

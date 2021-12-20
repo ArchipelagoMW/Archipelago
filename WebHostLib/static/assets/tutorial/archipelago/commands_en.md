@@ -15,10 +15,9 @@ The following list is a list of client commands which may be available to you th
 - Just typing anything will broadcast a message to all players
 
 #### Remote Commands
-- `!hint <item name>` Tells you at which location in whose game your Item is. Note you need to have checked some locations
-to earn a hint. You can check how many you have by just running `!hint`
-- `!forfeit` If you didn't turn on auto-forfeit or you allowed forfeiting prior to goal completion. Remember that "forfeiting" actually means sending out your remaining items in your world.
-- `!collect` Grants you all of the remaining checks in your world. Can only be used after your goal is complete or you have forfeited.
+- `!hint <item name>` Tells you at which location in whose game your Item is. Note you need to have checked some locations to earn a hint. You can check how many you have by just running `!hint`
+- `!forfeit` If you didn't turn on auto-forfeit or if you allowed forfeiting prior to goal completion. Remember that "forfeiting" actually means sending out your remaining items in your world.
+- `!collect` Grants you all the remaining checks in your world. Can only be used after your goal is complete or when you have forfeited.
 
 #### Host only (on Archipelago.gg or in your server console)
 - `/forfeit <Player Name>` Forfeits someone regardless of settings and game completion status

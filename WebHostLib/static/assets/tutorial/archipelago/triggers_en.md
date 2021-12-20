@@ -2,8 +2,7 @@
 This guide details the use of the Archipelago YAML trigger system. This guide is intended for a more advanced user with more in-depth knowledge of Archipelago YAML options as well as experience editing YAML files. This guide should take about 5 minutes to read.
 
 ## What are triggers?
-Triggers allow you to customize your game settings by allowing you to define one or many options which only occur under specific conditions. These are essentially "if, then" statements for options in your game. 
-A good example of what you can do with triggers is the custom mercenary mode YAML that was created using entirely triggers and plando. 
+Triggers allow you to customize your game settings by allowing you to define one or many options which only occur under specific conditions. These are essentially "if, then" statements for options in your game. A good example of what you can do with triggers is the custom mercenary mode YAML that was created using entirely triggers and plando. 
 
 Mercenary mode YAML: [Mercenary Mode YAML on GitHub](https://github.com/alwaysintreble/Archipelago-yaml-dump/blob/main/Snippets/Mercenary%20Mode%20Snippet.yaml) 
 
