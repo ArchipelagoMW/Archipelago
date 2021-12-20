@@ -23,8 +23,7 @@ While a multi-world game traditionally requires all players to be playing the sa
 Yes. All our supported games can be generated as single-player experiences, and so long as you download the software, the website is not required to generate them.
 
 ## How do I get started?
-If you are ready to start randomizing games, or want to start playing your favorite randomizer with others, please join our discord server at the [Archipelago Discord](https://discord.gg/archipelago). There are always people ready to answer any questions
-you might have.
+If you are ready to start randomizing games, or want to start playing your favorite randomizer with others, please join our discord server at the [Archipelago Discord](https://discord.gg/archipelago). There are always people ready to answer any questions you might have.
 
 ## I want to add a game to the Archipelago randomizer. How do I do that?
 The best way to get started is to take a look at our code on GitHub at [Archipelago GitHub Page](https://github.com/ArchipelagoMW/Archipelago).
