@@ -30,7 +30,9 @@ def generate_locations(count: int, player_id: int, address: int = None, region: 
     locations = []
     for i in range(count):
         name = "player" + str(player_id) + "_location" + str(i)
-        locations.append(Location(player_id, name, address, region))
+        location = Location(player_id, name, address, region)
+        locations.append(location)
+        region.locations.append(location)
     return locations
 
 
