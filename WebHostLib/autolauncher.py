@@ -110,6 +110,26 @@ def autohost(config: dict):
     def keep_running():
         try:
             with Locker("autohost"):
+                while 1:
+                    time.sleep(0.1)
+                    with db_session:
+                        rooms = select(
+                            room for room in Room if
+                            room.last_activity >= datetime.utcnow() - timedelta(days=3))
+                        for room in rooms:
+                            launch_room(room, config)
+
+        except AlreadyRunningException:
+            logging.info("Autohost reports as already running, not starting another.")
+
+    import threading
+    threading.Thread(target=keep_running, name="AP_Autohost").start()
+
+
+def autogen(config: dict):
+    def keep_running():
+        try:
+            with Locker("autogen"):
 
                 with multiprocessing.Pool(config["GENERATORS"], initializer=init_db,
                                           initargs=(config["PONY"],)) as generator_pool:
@@ -129,22 +149,17 @@ def autohost(config: dict):
                         select(generation for generation in Generation if generation.state == STATE_ERROR).delete()
 
                     while 1:
-                        time.sleep(0.50)
+                        time.sleep(0.1)
                         with db_session:
-                            rooms = select(
-                                room for room in Room if
-                                room.last_activity >= datetime.utcnow() - timedelta(days=3))
-                            for room in rooms:
-                                launch_room(room, config)
                             to_start = select(
                                 generation for generation in Generation if generation.state == STATE_QUEUED)
                             for generation in to_start:
                                 launch_generator(generator_pool, generation)
         except AlreadyRunningException:
-            pass
+            logging.info("Autogen reports as already running, not starting another.")
 
     import threading
-    threading.Thread(target=keep_running).start()
+    threading.Thread(target=keep_running, name="AP_Autogen").start()
 
 
 multiworlds = {}

@@ -9,6 +9,7 @@ SEED_NAME = "{{ seed_name }}"
 FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
 TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
 MAX_SCIENCE_PACK = {{ max_science_pack }}
+GOAL = {{ goal }}
 ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
 
 if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
@@ -136,7 +137,7 @@ script.on_event(defines.events.on_player_removed, on_player_removed)
 
 function on_rocket_launched(event)
     if event.rocket and event.rocket.valid and global.forcedata[event.rocket.force.name]['victory'] == 0 then
-		if event.rocket.get_item_count("satellite") > 0 or MAX_SCIENCE_PACK < 6 then
+		if event.rocket.get_item_count("satellite") > 0 or GOAL == 0 then
 			global.forcedata[event.rocket.force.name]['victory'] = 1
             dumpInfo(event.rocket.force)
             game.set_game_state

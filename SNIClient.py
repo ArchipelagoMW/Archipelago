@@ -175,15 +175,22 @@ async def deathlink_kill_player(ctx: Context):
             snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
         elif ctx.game == GAME_SM:
             snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
+            if not ctx.death_link_allow_survive:
+                snes_buffered_write(ctx, WRAM_START + 0x09D6, bytes([0, 0]))  # set current reserve to 0
         await snes_flush_writes(ctx)
         await asyncio.sleep(1)
         gamemode = None
         if ctx.game == GAME_ALTTP:
             gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
+            if not gamemode or gamemode[0] in DEATH_MODES:
+                ctx.death_state = DeathState.dead
         elif ctx.game == GAME_SM:
             gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
-        if not gamemode or gamemode[0] in (DEATH_MODES if ctx.game == GAME_ALTTP else SM_DEATH_MODES):
-            ctx.death_state = DeathState.dead
+            health = await snes_read(ctx, WRAM_START + 0x09C2, 2)
+            if health is not None:
+                health = health[0] | (health[1] << 8)
+            if not gamemode or gamemode[0] in SM_DEATH_MODES or (ctx.death_link_allow_survive and health is not None and health > 0):
+                ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
 
 
@@ -884,6 +891,7 @@ async def game_watcher(ctx: Context):
 
         if not ctx.rom:
             ctx.finished_game = False
+            ctx.death_link_allow_survive = False
             game_name = await snes_read(ctx, SM_ROMNAME_START, 2)
             if game_name is None:
                 continue
@@ -900,6 +908,7 @@ async def game_watcher(ctx: Context):
             death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
                                          SM_DEATH_LINK_ACTIVE_ADDR, 1)
             if death_link:
+                ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
                 await ctx.update_death_link(bool(death_link[0] & 0b1))
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
@@ -1039,6 +1048,7 @@ async def game_watcher(ctx: Context):
                     ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
 
+
 async def run_game(romfile):
     auto_start = Utils.get_options()["lttp_options"].get("rom_start", True)
     if auto_start is True:
@@ -1062,11 +1072,13 @@ async def main():
         import Patch
         logging.info("Patch file was supplied. Creating sfc rom..")
         meta, romfile = Patch.create_rom_file(args.diff_file)
-        args.connect = meta["server"]
+        if "server" in meta:
+            args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
         if args.diff_file.endswith(".apsoe"):
             import webbrowser
-            webbrowser.open("http://www.evermizer.com/apclient/")
+            webbrowser.open("http://www.evermizer.com/apclient/" +
+                            (f"#server={meta['server']}" if "server" in meta else ""))
             logging.info("Starting Evermizer Client in your Browser...")
             import time
             time.sleep(3)

@@ -1,7 +1,7 @@
 from __future__ import annotations
 import typing
 
-from Options import Choice, OptionDict, ItemDict, Option, DefaultOnToggle, Range, DeathLink
+from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink
 from schema import Schema, Optional, And, Or
 
 # schema helpers
@@ -31,6 +31,14 @@ class MaxSciencePack(Choice):
 
     def get_max_pack(self):
         return self.get_ordered_science_packs()[self.value].replace("_", "-")
+
+
+class Goal(Choice):
+    """Goal required to complete the game."""
+    displayname = "Goal"
+    option_rocket = 0
+    option_satellite = 1
+    default = 0
 
 
 class TechCost(Choice):
@@ -86,6 +94,8 @@ class TechTreeLayout(Choice):
     option_small_funnels = 7
     option_medium_funnels = 8
     option_large_funnels = 9
+    option_trees = 10
+    option_choices = 11
     default = 0
 
 
@@ -144,6 +154,15 @@ class FactorioStartItems(ItemDict):
     displayname = "Starting Items"
     verify_item_name = False
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
+
+
+class FactorioFreeSampleBlacklist(OptionSet):
+    displayname = "Free Sample Blacklist"
+
+
+class FactorioFreeSampleWhitelist(OptionSet):
+    """overrides any free sample blacklist present. This may ruin the balance of the mod, be forewarned."""
+    displayname = "Free Sample Whitelist"
 
 
 class TrapCount(Range):
@@ -306,6 +325,7 @@ class ImportedBlueprint(DefaultOnToggle):
 
 factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,
+    "goal": Goal,
     "tech_tree_layout": TechTreeLayout,
     "tech_cost": TechCost,
     "silo": Silo,
@@ -313,6 +333,8 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "free_samples": FreeSamples,
     "tech_tree_information": TechTreeInformation,
     "starting_items": FactorioStartItems,
+    "free_sample_blacklist": FactorioFreeSampleBlacklist,
+    "free_sample_whitelist": FactorioFreeSampleWhitelist,
     "recipe_time": RecipeTime,
     "recipe_ingredients": RecipeIngredients,
     "imported_blueprints": ImportedBlueprint,

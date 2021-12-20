@@ -8,11 +8,16 @@ os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
 
+from kivy.base import Config
+Config.set("input", "mouse", "mouse,disable_multitouch")
+Config.set('kivy', 'exit_on_escape', '0')
+Config.set('graphics', 'multisamples', '0')  # multisamples crash old intel drivers
+
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
 from kivy.core.text.markup import MarkupLabel
-from kivy.base import ExceptionHandler, ExceptionManager, Config, Clock
+from kivy.base import ExceptionHandler, ExceptionManager, Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.uix.button import Button
@@ -207,7 +212,7 @@ class GameManager(App):
 
         # keep track of last used command to autofill on click
         self.last_autofillable_command = "hint"
-        autofillable_commands = ("hint", "getitem")
+        autofillable_commands = ("hint_location", "hint", "getitem")
         original_say = ctx.on_user_say
 
         def intercept_say(text):
@@ -365,6 +370,13 @@ class TextManager(GameManager):
     base_title = "Archipelago Text Client"
 
 
+class FF1Manager(GameManager):
+    logging_pairs = [
+        ("Client", "Archipelago")
+    ]
+    base_title = "Archipelago Final Fantasy 1 Client"
+
+
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
         super(LogtoUI, self).__init__(logging.INFO)
@@ -424,6 +436,4 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 
 ExceptionManager.add_handler(E())
 
-Config.set("input", "mouse", "mouse,disable_multitouch")
-Config.set('kivy', 'exit_on_escape', '0')
 Builder.load_file(Utils.local_path("data", "client.kv"))

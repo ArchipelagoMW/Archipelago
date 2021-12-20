@@ -109,9 +109,12 @@ def generate_mod(world, output_directory: str):
                                                       progressive_technology_table.values()},
                      "custom_recipes": world.custom_recipes,
                      "max_science_pack": multiworld.max_science_pack[player].value,
-                     "liquids": liquids}
+                     "liquids": liquids,
+                     "goal": multiworld.goal[player].value}
 
     for factorio_option in Options.factorio_options:
+        if factorio_option in ["free_sample_blacklist", "free_sample_whitelist"]:
+            continue
         template_data[factorio_option] = getattr(multiworld, factorio_option)[player].value
         
     if getattr(multiworld, "silo")[player].value == Options.Silo.option_randomize_recipe:
@@ -119,6 +122,9 @@ def generate_mod(world, output_directory: str):
     
     if getattr(multiworld, "satellite")[player].value == Options.Satellite.option_randomize_recipe:
         template_data["free_sample_blacklist"]["satellite"] = 1
+
+    template_data["free_sample_blacklist"].update({item: 1 for item in multiworld.free_sample_blacklist[player].value})
+    template_data["free_sample_blacklist"].update({item: 0 for item in multiworld.free_sample_whitelist[player].value})
 
     control_code = control_template.render(**template_data)
     data_template_code = data_template.render(**template_data)

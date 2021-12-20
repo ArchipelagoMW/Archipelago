@@ -22,8 +22,7 @@ ModuleUpdate.update()
 
 import websockets
 import colorama
-import prompt_toolkit
-from prompt_toolkit.patch_stdout import patch_stdout
+
 from fuzzywuzzy import process as fuzzy_process
 
 import NetUtils

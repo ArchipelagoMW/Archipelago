@@ -67,7 +67,7 @@ When the client launched automatically, SNI should have also automatically launc
 4. In the new window, click **Browse...**
 5. Select the connector lua file included with your client
      - Z3Client users should download `sniConnector.lua` from the client download page
-     - SNIClient users should look in their Archipelago folder for `/sni/Connector.lua`
+     - SNIClient users should look in their Archipelago folder for `/sni/lua`
 
 ##### BizHawk
 1. Ensure you have the BSNES core loaded. You may do this by clicking on the Tools menu in BizHawk and following
@@ -76,10 +76,11 @@ When the client launched automatically, SNI should have also automatically launc
    Once you have changed the loaded core, you must restart BizHawk.
 2. Load your ROM file if it hasn't already been loaded.
 3. Click on the Tools menu and click on **Lua Console**
-4. Click the button to open a new Lua script.
-5. Select the `sniConnector.lua` file you downloaded above
+4. Click Script -> Open Script...
+5. Select the `Connector.lua` file you downloaded above
      - Z3Client users should download `sniConnector.lua` from the client download page
-     - SNIClient users should look in their Archipelago folder for `/sni/Connector.lua`
+     - SNIClient users should look in their Archipelago folder for `/sni/lua`
+6. Run the script by double-clicking it in the listing
 
 #### With hardware
 This guide assumes you have downloaded the correct firmware for your device. If you have not done so already, please do this now. SD2SNES and FXPak Pro users may download the appropriate firmware [from the sd2snes releases page](https://github.com/RedGuyyyy/sd2snes/releases). Other hardware may find helpful information [on the usb2snes supported platforms page](http://usb2snes.com/#supported-platforms).

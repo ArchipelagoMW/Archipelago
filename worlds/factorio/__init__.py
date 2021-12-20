@@ -11,7 +11,7 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     liquids
 from .Shapes import get_shapes
 from .Mod import generate_mod
-from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation
+from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal
 
 import logging
 
@@ -142,12 +142,14 @@ class Factorio(World):
                     Rules.add_rule(location, lambda state,
                                                     locations=locations: all(state.can_reach(loc) for loc in locations))
 
-            silo_recipe = None if self.world.silo[self.player].value == Silo.option_spawn \
-                else self.custom_recipes["rocket-silo"] if "rocket-silo" in self.custom_recipes \
+            silo_recipe = None
+            if self.world.silo[self.player] == Silo.option_spawn:
+                silo_recipe = self.custom_recipes["rocket-silo"] if "rocket-silo" in self.custom_recipes \
                 else next(iter(all_product_sources.get("rocket-silo")))
             part_recipe = self.custom_recipes["rocket-part"]
-            satellite_recipe = None if self.world.max_science_pack[self.player].value != MaxSciencePack.option_space_science_pack \
-                else self.custom_recipes["satellite"] if "satellite" in self.custom_recipes \
+            satellite_recipe = None
+            if self.world.goal[self.player] == Goal.option_satellite:
+                satellite_recipe = self.custom_recipes["satellite"] if "satellite" in self.custom_recipes \
                 else next(iter(all_product_sources.get("satellite")))
             victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe)
             world.get_location("Rocket Launch", player).access_rule = lambda state: all(state.has(technology, player)
@@ -171,7 +173,7 @@ class Factorio(World):
         return super(Factorio, self).collect_item(state, item, remove)
 
     def get_required_client_version(self) -> tuple:
-        return max((0, 1, 6), super(Factorio, self).get_required_client_version())
+        return max((0, 2, 1), super(Factorio, self).get_required_client_version())
 
     options = factorio_options
 
@@ -339,7 +341,7 @@ class Factorio(World):
         needed_recipes = self.world.max_science_pack[self.player].get_allowed_packs() | {"rocket-part"}
         if self.world.silo[self.player] != Silo.option_spawn:
             needed_recipes |= {"rocket-silo"}
-        if self.world.max_science_pack[self.player].value == MaxSciencePack.option_space_science_pack:
+        if self.world.goal[self.player].value == Goal.option_satellite:
             needed_recipes |= {"satellite"}
 
         for recipe in needed_recipes:

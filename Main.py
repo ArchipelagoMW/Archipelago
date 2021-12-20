@@ -321,8 +321,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     logger.warning("Location Accessibility requirements not fulfilled.")
 
             # retrieve exceptions via .result() if they occured.
-            if multidata_task:
-                multidata_task.result()
+            multidata_task.result()
             for i, future in enumerate(concurrent.futures.as_completed(output_file_futures), start=1):
                 if i % 10 == 0 or i == len(output_file_futures):
                     logger.info(f'Generating output files ({i}/{len(output_file_futures)}).')

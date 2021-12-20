@@ -281,7 +281,7 @@ def get_static_room_data(room: Room):
 
 @app.route('/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
 @cache.memoize(timeout=60)  # multisave is currently created at most every minute
-def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
+def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool = False):
     # Team and player must be positive and greater than zero
     if tracked_team < 0 or tracked_player < 1:
         abort(404)
@@ -324,12 +324,17 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
                         checks_done[location_to_area[location]] += 1
                         checks_done["Total"] += 1
     specific_tracker = game_specific_trackers.get(games[tracked_player], None)
-    if specific_tracker:
+    if specific_tracker and not want_generic:
         return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
                                 seed_checks_in_area, checks_done)
     else:
         return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
                                       seed_checks_in_area, checks_done)
+
+
+@app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
+def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
+    return getPlayerTracker(tracker, tracked_team, tracked_player, True)
 
 
 def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
@@ -423,19 +428,21 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
         "Fishing Rod": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7f/Fishing_Rod_JE2_BE2.png",
         "Campfire": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/91/Campfire_JE2_BE2.gif",
         "Water Bottle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/75/Water_Bottle_JE2_BE2.png",
+        "Spyglass": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c1/Spyglass_JE2_BE1.png",
         "Dragon Head": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b6/Dragon_Head.png",
     }
 
     minecraft_location_ids = {
-        "Story": [42073, 42080, 42081, 42023, 42082, 42027, 42039, 42085, 42002, 42009, 42010,
-                    42070, 42041, 42049, 42090, 42004, 42031, 42025, 42029, 42051, 42077, 42089],
+        "Story": [42073, 42023, 42027, 42039, 42002, 42009, 42010, 42070, 
+                  42041, 42049, 42004, 42031, 42025, 42029, 42051, 42077],
         "Nether": [42017, 42044, 42069, 42058, 42034, 42060, 42066, 42076, 42064, 42071, 42021,
-                    42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42014],
+                   42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42014],
         "The End": [42052, 42005, 42012, 42032, 42030, 42042, 42018, 42038, 42046],
-        "Adventure": [42047, 42086, 42087, 42050, 42059, 42055, 42072, 42003, 42035, 42016, 42020,
-                        42048, 42054, 42068, 42043, 42074, 42075, 42024, 42026, 42037, 42045, 42056, 42088],
-        "Husbandry": [42065, 42067, 42078, 42022, 42007, 42079, 42013, 42028,
-                        42036, 42057, 42063, 42053, 42083, 42084, 42091]
+        "Adventure": [42047, 42050, 42096, 42097, 42098, 42059, 42055, 42072, 42003, 42035, 42016, 42020,
+                      42048, 42054, 42068, 42043, 42074, 42075, 42024, 42026, 42037, 42045, 42056, 42099, 42100],
+        "Husbandry": [42065, 42067, 42078, 42022, 42007, 42079, 42013, 42028, 42036, 
+                      42057, 42063, 42053, 42102, 42101, 42092, 42093, 42094, 42095],
+        "Archipelago": [42080, 42081, 42082, 42083, 42084, 42085, 42086, 42087, 42088, 42089, 42090, 42091],
     }
 
     display_data = {}
@@ -767,6 +774,106 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
+def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+                                inventory: Counter, team: int, player: int, playerName: str,
+                                seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
+
+    icons = {
+        "Energy Tank":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/ETank.png",
+        "Missile":          "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Missile.png",
+        "Super Missile":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Super.png",
+        "Power Bomb":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/PowerBomb.png",
+        "Bomb":             "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Bomb.png",
+        "Charge Beam":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Charge.png",
+        "Ice Beam":         "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Ice.png",
+        "Hi-Jump Boots":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/HiJump.png",
+        "Speed Booster":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/SpeedBooster.png",
+        "Wave Beam":        "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Wave.png",
+        "Spazer":           "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Spazer.png",
+        "Spring Ball":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/SpringBall.png",
+        "Varia Suit":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Varia.png",
+        "Plasma Beam":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Plasma.png",
+        "Grappling Beam":   "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Grapple.png",
+        "Morph Ball":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Morph.png",
+        "Reserve Tank":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Reserve.png",
+        "Gravity Suit":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Gravity.png",
+        "X-Ray Scope":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/XRayScope.png",
+        "Space Jump":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/SpaceJump.png",
+        "Screw Attack":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/ScrewAttack.png",
+        "Nothing":          "",
+        "No Energy":        "",
+        "Kraid":            "",
+        "Phantoon":         "",
+        "Draygon":          "",
+        "Ridley":           "",
+        "Mother Brain":     "",
+    }
+
+    multi_items = {
+        "Energy Tank": 83000,
+        "Missile": 83001,
+        "Super Missile": 83002,
+        "Power Bomb": 83003,
+        "Reserve Tank": 83020,
+    }
+
+    supermetroid_location_ids = {
+        'Crateria/Blue Brinstar': [82005, 82007, 82008, 82026, 82029,
+                     82000, 82004, 82006, 82009, 82010,
+                     82011, 82012, 82027, 82028, 82034,
+                     82036, 82037],
+        'Green/Pink Brinstar': [82017, 82023, 82030, 82033, 82035,
+                              82013, 82014, 82015, 82016, 82018,
+                              82019, 82021, 82022, 82024, 82025,
+                              82031],
+        'Red Brinstar': [82038, 82042, 82039, 82040, 82041],
+        'Kraid': [82043, 82048, 82044],
+        'Norfair': [82050, 82053, 82061, 82066, 82068,
+                    82049, 82051, 82054, 82055, 82056,
+                    82062, 82063, 82064, 82065, 82067],
+        'Lower Norfair': [82078, 82079, 82080, 82070, 82071,
+                         82073, 82074, 82075, 82076, 82077],
+        'Crocomire': [82052, 82060, 82057, 82058, 82059],
+        'Wrecked Ship': [82129, 82132, 82134, 82135, 82001,
+                        82002, 82003, 82128, 82130, 82131,
+                        82133],
+        'West Maridia': [82138, 82136, 82137, 82139, 82140,
+                        82141, 82142],
+        'East Maridia': [82143, 82145, 82150, 82152, 82154,
+                        82144, 82146, 82147, 82148, 82149,
+                        82151],
+    }
+
+    display_data = {}
+
+
+    for item_name, item_id in multi_items.items():
+        base_name = item_name.split()[0].lower()
+        count = inventory[item_id]
+        display_data[base_name+"_count"] = inventory[item_id]
+
+    # Victory condition
+    game_state = multisave.get("client_game_state", {}).get((team, player), 0)
+    display_data['game_finished'] = game_state == 30
+
+    # Turn location IDs into advancement tab counts
+    checked_locations = multisave.get("location_checks", {}).get((team, player), set())
+    lookup_name = lambda id: lookup_any_location_id_to_name[id]
+    location_info = {tab_name: {lookup_name(id): (id in checked_locations) for id in tab_locations}
+                     for tab_name, tab_locations in supermetroid_location_ids.items()}
+    checks_done = {tab_name: len([id for id in tab_locations if id in checked_locations])
+                   for tab_name, tab_locations in supermetroid_location_ids.items()}
+    checks_done['Total'] = len(checked_locations)
+    checks_in_area = {tab_name: len(tab_locations) for tab_name, tab_locations in supermetroid_location_ids.items()}
+    checks_in_area['Total'] = sum(checks_in_area.values())
+
+    return render_template("supermetroidTracker.html",
+                            inventory=inventory, icons=icons,
+                            acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
+                                            id in lookup_any_item_id_to_name},
+                            player=player, team=team, room=room, player_name=playerName,
+                            checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
+                            **display_data)
 
 def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
                            inventory: Counter, team: int, player: int, playerName: str,
@@ -880,5 +987,6 @@ game_specific_trackers: typing.Dict[str, typing.Callable] = {
     "Minecraft": __renderMinecraftTracker,
     "Ocarina of Time": __renderOoTTracker,
     "Timespinner": __renderTimespinnerTracker,
-    "A Link to the Past": __renderAlttpTracker
+    "A Link to the Past": __renderAlttpTracker,
+    "Super Metroid": __renderSuperMetroidTracker
 }

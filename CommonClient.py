@@ -82,16 +82,19 @@ class ClientCommandProcessor(CommandProcessor):
         return True
 
     def _cmd_items(self):
+        """List all item names for the currently running game."""
         self.output(f"Item Names for {self.ctx.game}")
         for item_name in AutoWorldRegister.world_types[self.ctx.game].item_name_to_id:
             self.output(item_name)
 
     def _cmd_locations(self):
+        """List all location names for the currently running game."""
         self.output(f"Location Names for {self.ctx.game}")
         for location_name in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id:
             self.output(location_name)
 
     def _cmd_ready(self):
+        """Send ready status to server."""
         self.ctx.ready = not self.ctx.ready
         if self.ctx.ready:
             state = ClientStatus.CLIENT_READY

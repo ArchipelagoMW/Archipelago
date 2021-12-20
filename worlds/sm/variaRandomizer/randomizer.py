@@ -348,8 +348,7 @@ class VariaRandomizer:
                 if response.ok:
                     PresetLoader.factory(json.loads(response.text)).load(self.player)
                 else:
-                    print("Got error {} {} {} from trying to fetch varia custom preset named {}".format(response.status_code, response.reason, response.text, preset_name))
-                    sys.exit(-1)
+                    raise Exception("Got error {} {} {} from trying to fetch varia custom preset named {}".format(response.status_code, response.reason, response.text, preset_name))
             else:
                 preset = 'default'
                 PresetLoader.factory(os.path.join(appDir, getPresetDir('casual'), 'casual.json')).load(self.player)
@@ -365,13 +364,11 @@ class VariaRandomizer:
             self.seed = args.seed
         logger.debug("seed: {}".format(self.seed))
 
-        seed4rand = self.seed
         if args.raceMagic is not None:
             if args.raceMagic <= 0 or args.raceMagic >= 0x10000:
                 print("Invalid magic")
                 sys.exit(-1)
-            seed4rand = self.seed ^ args.raceMagic
-        # random.seed(seed4rand)
+
         # if no max diff, set it very high
         if args.maxDifficulty:
             if args.maxDifficulty == 'random':
