@@ -107,6 +107,7 @@ This is only required if you wish to set up a forge install yourself, it's recom
 - Minecraft Forge from: [Minecraft Forge Download Page](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.5.html)
 - Minecraft Archipelago Randomizer Mod from: [AP Randomizer Forge Server Mod Releases Page](https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
   - **DO NOT INSTALL THIS ON YOUR CLIENT**
+
 ### Dedicated Server Setup
 Only one person has to do this setup and host a dedicated server for everyone else playing to connect to.
 1. Download the 1.16.5 **Minecraft Forge** installer from the link above, making sure to download the most recent recommended version.
