@@ -1,6 +1,7 @@
 import unittest
+import pytest
 from worlds.AutoWorld import World
-from Fill import fill_restrictive
+from Fill import FillError, fill_restrictive
 from BaseClasses import MultiWorld, Region, RegionType, Item, Location
 from worlds.generic.Rules import set_rule
 
@@ -106,3 +107,46 @@ class TestBase(unittest.TestCase):
 
         self.assertEqual(loc0.item, item1)
         self.assertEqual(loc1.item, item0)
+
+    def test_impossible_fill_restrictive(self):
+        multi_world = generate_multi_world()
+        player1_id = 1
+        player1_menu = multi_world.get_region("Menu", player1_id)
+
+        locations = generate_locations(2, player1_id, None, player1_menu)
+        items = generate_items(2, player1_id, True)
+
+        item0 = items[0]
+        item1 = items[1]
+        loc0 = locations[0]
+        loc1 = locations[1]
+
+        multi_world.completion_condition[player1_id] = lambda state: state.has(
+            item0.name, player1_id) and state.has(item1.name, player1_id)
+        set_rule(loc1, lambda state: state.has(item1.name, player1_id))
+        set_rule(loc0, lambda state: state.has(item0.name, player1_id))
+        with pytest.raises(FillError):
+            fill_restrictive(multi_world, multi_world.state, locations, items)
+
+    def test_circular_fill_restrictive(self):
+        multi_world = generate_multi_world()
+        player1_id = 1
+        player1_menu = multi_world.get_region("Menu", player1_id)
+
+        locations = generate_locations(3, player1_id, None, player1_menu)
+        items = generate_items(3, player1_id, True)
+
+        item0 = items[0]
+        item1 = items[1]
+        item2 = items[2]
+        loc0 = locations[0]
+        loc1 = locations[1]
+        loc2 = locations[2]
+
+        multi_world.completion_condition[player1_id] = lambda state: state.has(
+            item0.name, player1_id) and state.has(item1.name, player1_id) and state.has(item2.name, player1_id)
+        set_rule(loc1, lambda state: state.has(item0.name, player1_id))
+        set_rule(loc2, lambda state: state.has(item1.name, player1_id))
+        set_rule(loc0, lambda state: state.has(item2.name, player1_id))
+        with pytest.raises(FillError):
+            fill_restrictive(multi_world, multi_world.state, locations, items)
