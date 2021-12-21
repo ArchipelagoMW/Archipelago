@@ -8,5 +8,5 @@ lookup_id_to_name = {}
 for item in location_table:
     lookup_id_to_name[item["id"]] = item["name"]
 
-lookup_id_to_name[None] = "Tangaroa End"
+lookup_id_to_name[None] = "RadioTowerRadioTranscriptionLOC" # TODO Change to actual victory condition later
 lookup_name_to_id = {name: id for id, name in lookup_id_to_name.items()}

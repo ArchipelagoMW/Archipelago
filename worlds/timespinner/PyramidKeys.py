@@ -27,4 +27,7 @@ def get_pyramid_keys_unlock(world: MultiWorld, player: int) -> str:
     else:
         gates = (*past_teleportation_gates, *present_teleportation_gates)
 
+    if not world:
+        return gates[0]
+
     return world.random.choice(gates)

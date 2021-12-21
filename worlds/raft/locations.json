@@ -1,31 +1,31 @@
 [{
         "id": 48001,
-        "name": "Metal Spear",
+        "name": "MetalSpear",
         "location": "MetalSpear",
         "region": "ResearchTable"
     }, {
         "id": 48002,
-        "name": "Paint Brush",
+        "name": "PaintBrush",
         "location": "PaintBrush",
         "region": "ResearchTable"
     }, {
         "id": 48003,
-        "name": "Scrap Hook",
+        "name": "ScrapHook",
         "location": "ScrapHook",
         "region": "ResearchTable"
     }, {
         "id": 48004,
-        "name": "Metal Axe",
+        "name": "MetalAxe",
         "location": "MetalAxe",
         "region": "ResearchTable"
     }, {
         "id": 48005,
-        "name": "Metal Fishing Rod",
+        "name": "MetalFishingRod",
         "location": "MetalFishingRod",
         "region": "ResearchTable"
     }, {
         "id": 48006,
-        "name": "Basic Bow",
+        "name": "BasicBow",
         "location": "BasicBow",
         "region": "ResearchTable"
     }, {
@@ -35,7 +35,7 @@
         "region": "ResearchTable"
     }, {
         "id": 48008,
-        "name": "Stone Arrow",
+        "name": "StoneArrow",
         "location": "StoneArrow",
         "region": "ResearchTable"
     }, {
@@ -50,7 +50,7 @@
         "region": "ResearchTable"
     }, {
         "id": 48011,
-        "name": "Paint Mill",
+        "name": "PaintMill",
         "location": "PaintMill",
         "region": "ResearchTable"
     }, {
@@ -75,7 +75,7 @@
         "region": "ResearchTable"
     }, {
         "id": 48016,
-        "name": "Collection Net",
+        "name": "CollectionNet",
         "location": "CollectionNet",
         "region": "ResearchTable"
     }, {
@@ -85,7 +85,7 @@
         "region": "ResearchTable"
     }, {
         "id": 48018,
-        "name": "Birds Nest",
+        "name": "BirdsNest",
         "location": "BirdsNest",
         "region": "ResearchTable"
     }, {
@@ -95,7 +95,7 @@
         "region": "ResearchTable"
     }, {
         "id": 48020,
-        "name": "Stationary Anchor",
+        "name": "StationaryAnchor",
         "location": "StationaryAnchor",
         "region": "ResearchTable"
     }, {
@@ -105,27 +105,27 @@
         "region": "ResearchTable"
     }, {
         "id": 48022,
-        "name": "Large Crop Plot",
+        "name": "LargeCropPlot",
         "location": "LargeCropPlot",
         "region": "ResearchTable"
     }, {
         "id": 48023,
-        "name": "Medium Crop Plot",
+        "name": "MediumCropPlot",
         "location": "MediumCropPlot",
         "region": "ResearchTable"
     }, {
         "id": 48024,
-        "name": "Advanced Purifier",
+        "name": "AdvancedPurifier",
         "location": "AdvancedPurifier",
         "region": "ResearchTable"
     }, {
         "id": 48025,
-        "name": "Advanced Grill",
+        "name": "AdvancedGrill",
         "location": "AdvancedGrill",
         "region": "ResearchTable"
     }, {
         "id": 48026,
-        "name": "Empty Bottle",
+        "name": "EmptyBottle",
         "location": "EmptyBottle",
         "region": "ResearchTable"
     }, {
@@ -135,7 +135,7 @@
         "region": "ResearchTable"
     }, {
         "id": 48028,
-        "name": "Oxygen Bottle",
+        "name": "OxygenBottle",
         "location": "OxygenBottle",
         "region": "ResearchTable"
     }, {
@@ -145,7 +145,7 @@
         "region": "ResearchTable"
     }, {
         "id": 48030,
-        "name": "Circuit Board",
+        "name": "CircuitBoard",
         "location": "CircuitBoard",
         "region": "ResearchTable"
     }, {
@@ -160,17 +160,17 @@
         "region": "ResearchTable"
     }, {
         "id": 48033,
-        "name": "Cooking Pot",
+        "name": "CookingPot",
         "location": "CookingPot",
         "region": "ResearchTable"
     }, {
         "id": 48034,
-        "name": "Clay Bowl",
+        "name": "ClayBowl",
         "location": "ClayBowl",
         "region": "ResearchTable"
     }, {
         "id": 48035,
-        "name": "Net Launcher",
+        "name": "NetLauncher",
         "location": "NetLauncher",
         "region": "ResearchTable"
     }, {
@@ -190,22 +190,22 @@
         "region": "ResearchTable"
     }, {
         "id": 48039,
-        "name": "Net Canister",
+        "name": "NetCanister",
         "location": "NetCanister",
         "region": "ResearchTable"
     }, {
         "id": 48040,
-        "name": "Healing Salve",
+        "name": "HealingSalve",
         "location": "HealingSalve",
         "region": "ResearchTable"
     }, {
         "id": 48041,
-        "name": "Good Healing Salve",
+        "name": "GoodHealingSalve",
         "location": "GoodHealingSalve",
         "region": "ResearchTable"
     }, {
         "id": 48042,
-        "name": "Grass Plot",
+        "name": "GrassPlot",
         "location": "GrassPlot",
         "region": "ResearchTable"
     }, {
@@ -220,17 +220,17 @@
         "region": "ResearchTable"
     }, {
         "id": 48045,
-        "name": "Leather Helmet",
+        "name": "LeatherHelmet",
         "location": "LeatherHelmet",
         "region": "ResearchTable"
     }, {
         "id": 48046,
-        "name": "Leather Body Armor",
+        "name": "LeatherBodyArmor",
         "location": "LeatherBodyArmor",
         "region": "ResearchTable"
     }, {
         "id": 48047,
-        "name": "Leather Greaves",
+        "name": "LeatherGreaves",
         "location": "LeatherGreaves",
         "region": "ResearchTable"
     }, {
@@ -240,23 +240,23 @@
         "region": "ResearchTable"
     }, {
         "id": 48049,
-        "name": "Radio Tower Diary 1",
+        "name": "RadioTowerDiary1",
         "location": "RadioTowerDiary1",
         "region": "RadioTower"
     }, {
         "id": 48050,
-        "name": "Radio Tower Diary 2",
+        "name": "RadioTowerDiary2",
         "location": "RadioTowerDiary2",
         "region": "RadioTower"
     }, {
         "id": 48051,
-        "name": "Radio Tower Diary 3",
+        "name": "RadioTowerDiary3",
         "location": "RadioTowerDiary3",
         "region": "RadioTower"
     }, {
         "id": 48052,
-        "name": "Radio Tower Radio Transcription",
-        "location": "RadioTowerRadioTranscription",
+        "name": "RadioTowerRadioTranscriptionLOC",
+        "location": "RadioTowerRadioTranscriptionLOC",
         "region": "RadioTower"
     }
 ]

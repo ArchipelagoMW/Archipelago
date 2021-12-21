@@ -94,6 +94,8 @@ class TechTreeLayout(Choice):
     option_small_funnels = 7
     option_medium_funnels = 8
     option_large_funnels = 9
+    option_trees = 10
+    option_choices = 11
     default = 0
 
 

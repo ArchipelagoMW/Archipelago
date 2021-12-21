@@ -1,4 +1,4 @@
-from typing import Dict, List, Set, TextIO
+from typing import Dict, List, Set, Tuple, TextIO
 from BaseClasses import Item, MultiWorld, Location
 from ..AutoWorld import World
 from .LogicMixin import TimespinnerLogic
@@ -24,19 +24,31 @@ class TimespinnerWorld(World):
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
     item_name_groups = get_item_names_per_category()
 
-    locked_locations: Dict[int, List[str]] = {}
-    pyramid_keys_unlock: Dict[int, str] = {}
-    location_cache: Dict[int, List[Location]] = {}
+    locked_locations: List[str]
+    pyramid_keys_unlock: str
+    location_cache: List[Location]
+
+    def __init__(self, world: MultiWorld, player: int):
+        super().__init__(world, player)
+
+        self.locked_locations = []
+        self.location_cache = []
+        self.pyramid_keys_unlock = get_pyramid_keys_unlock(world, player)
+
 
     def generate_early(self):
-        self.locked_locations[self.player] = []
-        self.location_cache[self.player] = []
-        self.pyramid_keys_unlock[self.player] = get_pyramid_keys_unlock(self.world, self.player)
+        # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
+        if self.world.start_inventory[self.player].value.pop('Meyef', 0) > 0:
+            self.world.StartWithMeyef[self.player].value = self.world.StartWithMeyef[self.player].option_true
+        if self.world.start_inventory[self.player].value.pop('Talaria Attachment', 0) > 0:
+            self.world.QuickSeed[self.player].value = self.world.QuickSeed[self.player].option_true
+        if self.world.start_inventory[self.player].value.pop('Jewelry Box', 0) > 0:
+            self.world.StartWithJewelryBox[self.player].value = self.world.StartWithJewelryBox[self.player].option_true
 
 
     def create_regions(self):
         create_regions(self.world, self.player, get_locations(self.world, self.player), 
-                        self.location_cache[self.player], self.pyramid_keys_unlock[self.player])
+                        self.location_cache, self.pyramid_keys_unlock)
 
 
     def create_item(self, name: str) -> Item:
@@ -44,22 +56,22 @@ class TimespinnerWorld(World):
 
 
     def set_rules(self):
-        setup_events(self.world, self.player, self.locked_locations[self.player], self.location_cache[self.player])
+        setup_events(self.world, self.player, self.locked_locations, self.location_cache)
 
         self.world.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
 
 
     def generate_basic(self):
-        excluded_items = get_excluded_items_based_on_options(self.world, self.player)
+        excluded_items = get_excluded_items(self, self.world, self.player)
 
-        assign_starter_items(self.world, self.player, excluded_items, self.locked_locations[self.player])
+        assign_starter_items(self.world, self.player, excluded_items, self.locked_locations)
 
         if not is_option_enabled(self.world, self.player, "QuickSeed") and not is_option_enabled(self.world, self.player, "Inverted"):
-            place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations[self.player])
+            place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations)
 
         pool = get_item_pool(self.world, self.player, excluded_items)
 
-        fill_item_pool_with_dummy_items(self.world, self.player, self.locked_locations[self.player], self.location_cache[self.player], pool)
+        fill_item_pool_with_dummy_items(self.world, self.player, self.locked_locations, self.location_cache, pool)
 
         self.world.itempool += pool
 
@@ -73,17 +85,17 @@ class TimespinnerWorld(World):
         slot_data["StinkyMaw"] = True
         slot_data["ProgressiveVerticalMovement"] = False
         slot_data["ProgressiveKeycards"] = False
-        slot_data["PyramidKeysGate"] = self.pyramid_keys_unlock[self.player]
-        slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache[self.player])
+        slot_data["PyramidKeysGate"] = self.pyramid_keys_unlock
+        slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache)
 
         return slot_data
         
 
     def write_spoiler_header(self, spoiler_handle: TextIO):
-        spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % (self.pyramid_keys_unlock[self.player]))
-        
+        spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % (self.pyramid_keys_unlock))
 
-def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> Set[str]:
+
+def get_excluded_items(self: TimespinnerWorld, world: MultiWorld, player: int) -> Set[str]:
     excluded_items: Set[str] = set()
 
     if is_option_enabled(world, player, "StartWithJewelryBox"):
@@ -92,25 +104,47 @@ def get_excluded_items_based_on_options(world: MultiWorld, player: int) -> Set[s
         excluded_items.add('Meyef')
     if is_option_enabled(world, player, "QuickSeed"):
         excluded_items.add('Talaria Attachment')
+
+    for item in world.precollected_items[player]:
+        if item.name not in self.item_name_groups['UseItem']:
+            excluded_items.add(item.name)
     
     return excluded_items
 
 
 def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
-    melee_weapon = world.random.choice(starter_melee_weapons)
-    spell = world.random.choice(starter_spells)
+    non_local_items = world.non_local_items[player].value
 
-    excluded_items.add(melee_weapon)
-    excluded_items.add(spell)
+    local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if item not in non_local_items)
+    if not local_starter_melee_weapons:
+        if 'Plasma Orb' in non_local_items:
+            raise Exception("Atleast one melee orb must be local")
+        else:
+            local_starter_melee_weapons = ('Plasma Orb',)
 
-    melee_weapon_item = create_item_with_correct_settings(world, player, melee_weapon)
-    spell_item = create_item_with_correct_settings(world, player, spell)
+    local_starter_spells = tuple(item for item in starter_spells if item not in non_local_items)
+    if not local_starter_spells:
+        if 'Lightwall' in non_local_items:
+            raise Exception("Atleast one spell must be local")
+        else:
+            local_starter_spells = ('Lightwall',)
 
-    world.get_location('Yo Momma 1', player).place_locked_item(melee_weapon_item)
-    world.get_location('Yo Momma 2', player).place_locked_item(spell_item)
+    assign_starter_item(world, player, excluded_items, locked_locations, 'Yo Momma 1', local_starter_melee_weapons)
+    assign_starter_item(world, player, excluded_items, locked_locations, 'Yo Momma 2', local_starter_spells)
 
-    locked_locations.append('Yo Momma 1')
-    locked_locations.append('Yo Momma 2')
+
+def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str], 
+        location: str, item_list: Tuple[str, ...]):
+
+    item_name = world.random.choice(item_list)
+
+    excluded_items.add(item_name)
+
+    item = create_item_with_correct_settings(world, player, item_name)
+
+    world.get_location(location, player).place_locked_item(item)
+
+    locked_locations.append(location)
 
 
 def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
@@ -133,8 +167,20 @@ def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locat
 
 
 def place_first_progression_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
-    progression_item = world.random.choice(starter_progression_items)
-    location = world.random.choice(starter_progression_locations)
+    for item in world.precollected_items[player]:
+        if item.name in starter_progression_items:
+            return
+    
+    local_starter_progression_items = tuple(
+        item for item in starter_progression_items if item not in world.non_local_items[player].value)
+    non_excluded_starter_progression_locations = tuple(
+        location for location in starter_progression_locations if location not in world.exclude_locations[player].value)
+
+    if  not local_starter_progression_items or not non_excluded_starter_progression_locations:
+        return
+
+    progression_item = world.random.choice(local_starter_progression_items)
+    location = world.random.choice(non_excluded_starter_progression_locations)
 
     excluded_items.add(progression_item)
     locked_locations.append(location)

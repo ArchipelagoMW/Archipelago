@@ -1,5 +1,4 @@
 {
-	"Menu": ["Raft"],
 	"Raft": ["RadioTower", "ResearchTable"],
 	"ResearchTable": [],
 	"RadioTower": ["Vasagatan"],

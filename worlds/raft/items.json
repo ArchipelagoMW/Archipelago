@@ -1,3 +1,7 @@
 [
-    { "id": 47000, "count": 1, "progression": false, "name": "Advanced Grill" }
+    { "id": 47001, "count": 1, "progression": true, "name": "RadioTowerRadioTranscriptionITEM" },
+    { "id": 47002, "count": 1, "progression": true, "name": "Sail" },
+    { "id": 47003, "count": 1, "progression": true, "name": "Battery" },
+    { "id": 47004, "count": 1, "progression": true, "name": "Receiver" },
+    { "id": 47005, "count": 1, "progression": true, "name": "Antenna" }
 ]

@@ -42,10 +42,12 @@ class StartLocation(Choice):
 
 class DeathLink(Choice):
     """When DeathLink is enabled and someone dies, you will die. With survive reserve tanks can save you."""
-    displayname = "Death Link Survive"
+    displayname = "Death Link"
     option_disable = 0
     option_enable = 1
     option_enable_survive = 3
+    alias_false = 0
+    alias_true = 1
     default = 0
 
 class MaxDifficulty(Choice):

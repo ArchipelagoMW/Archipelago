@@ -2287,7 +2287,7 @@ def write_strings(rom, world, player):
             if hint_count:
                 locations = world.find_items_in_locations(set(items_to_hint), player)
                 local_random.shuffle(locations)
-                for x in range(hint_count):
+                for x in range(min(hint_count, len(locations))):
                     this_location = locations.pop()
                     this_hint = this_location.item.hint_text + ' can be found ' + hint_text(this_location) + '.'
                     tt[hint_locations.pop(0)] = this_hint

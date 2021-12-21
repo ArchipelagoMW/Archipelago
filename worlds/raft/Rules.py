@@ -5,55 +5,65 @@ from ..AutoWorld import LogicMixin
 
 class RaftLogic(LogicMixin):
 
-    def can_navigate(state, player): # The player can both find locations with the receiver and can change course with the sail
-        return state.has("Sail", player) and state.has("Battery", player) and state.has("Receiver", player) and state.has("Antenna", player)
+    def can_navigate(self, player): # The player can both find locations with the receiver and can change course with the sail
+        return self.has("Sail", player) and self.has("Battery", player) and self.has("Receiver", player) and self.has("Antenna", player)
 
-    def can_drive(state, player): # The player can go wherever they want with the engine
-        return state.has("Engine", player) and state.has("Steering Wheel", player)
+    def can_drive(self, player): # The player can go wherever they want with the engine
+        return self.has("Engine", player) and self.has("Steering Wheel", player)
 
-    def can_access_radio_tower(state, player):
-        state.can_navigate(state, player)
+    def can_access_radio_tower(self, player):
+        return self.can_navigate(player)
 
-    def can_complete_radio_tower(state, player):
-        return state.can_access_radio_tower(state, player)
+    def can_complete_radio_tower(self, player):
+        return self.can_access_radio_tower(player)
 
-    def can_access_vasagatan(state, player):
-        return state.can_navigate(state, player) and state.has("Vastagatan Coordinates", player)
+    def can_access_vasagatan(self, player):
+        return self.can_navigate(player) and self.has("Vasagatan Coordinates", player)
 
-    def can_complete_vasagatan(state, player):
-        return state.can_access_vasagatan(state, player) and state.has("Bomb", player)
+    def can_complete_vasagatan(self, player):
+        return self.can_access_vasagatan(player) and self.has("Bomb", player)
 
-    def can_access_balboa_island(state, player):
-        return state.can_navigate(state, player) and state.can_drive(state, player) and state.has("Balboa Coordinates", player)
+    def can_access_balboa_island(self, player):
+        return self.can_navigate(player) and self.can_drive(state, player) and self.has("Balboa Coordinates", player)
 
-    def can_complete_balboa_island(state, player):
-        return state.can_access_balboa_island(state, player) and state.has("Machete", player)
+    def can_complete_balboa_island(self, player):
+        return self.can_access_balboa_island(player) and self.has("Machete", player)
 
-    def can_access_caravan_island(state, player):
-        return state.can_navigate(state, player) and state.can_drive(state, player) and state.has("Caravan Coordinates", player)
+    def can_access_caravan_island(self, player):
+        return self.can_navigate(player) and self.can_drive(player) and self.has("Caravan Coordinates", player)
 
-    def can_complete_caravan_island(state, player):
-        return state.can_access_caravan_island(state, player) and state.has("Zipline", player)
+    def can_complete_caravan_island(self, player):
+        return self.can_access_caravan_island(player) and self.has("Zipline", player)
 
-    def can_access_tangaroa(state, player):
-        return state.can_navigate(state, player) and state.can_drive(state, player) and state.has("Tangaroa Coordinates", player)
+    def can_access_tangaroa(self, player):
+        return self.can_navigate(player) and self.can_drive(player) and self.has("Tangaroa Coordinates", player)
 
-    def can_complete_tangaroa(state, player):
-        return state.can_access_tangaroa(state, player) and state.has("Generator Part", player, 3) and state.has("Tape", 9)
+    def can_complete_tangaroa(self, player):
+        return self.can_access_tangaroa(player) and self.has("Generator Part", player, 3) and self.has("Tape", 9)
 
 
 def set_rules(world, player):
     # Map region to check to see if we can access it
     regionChecks = {
-        "Radio Tower": lambda state: state.can_access_radio_tower(player),
+        "Raft": lambda state: True,
+        "ResearchTable": lambda state: True,
+        "RadioTower": lambda state: state.can_access_radio_tower(player), # All can_access functions have state as implicit parameter for function
         "Vasagatan": lambda state: state.can_access_vasagatan(player),
-        "Balboa Island": lambda state: state.can_access_balboa_island(player),
-        "Caravan Island": lambda state: state.can_access_caravan_island(player),
+        "BalboaIsland": lambda state: state.can_access_balboa_island(player),
+        "CaravanIsland": lambda state: state.can_access_caravan_island(player),
         "Tangaroa": lambda state: state.can_access_tangaroa(player)
     }
+
     # Location rules
-    
+    for region in regionMap:
+        if region != "Menu":
+            # TODO Add item requirements (eg Caravan Island requires zipline for some, but not all, checks)
+            for exitRegion in world.get_region(region, player).exits:
+                set_rule(world.get_entrance(exitRegion.name, player), regionChecks[region])
+     
     # Process locations
+    for location in location_table:
+        set_rule(world.get_location(location["name"], player), regionChecks[location["region"]])
 
     # Victory location
-    world.completion_condition[player] = lambda state: state.has('RadioTowerRadioTranscription', player) #TODO: Add actual victory condition
+    world.completion_condition[player] = lambda state: state.has('Victory', player)
