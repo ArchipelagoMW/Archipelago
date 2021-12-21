@@ -62,6 +62,8 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
                 # try swaping this item with previously placed items
                 for(i, location) in enumerate(placements):
                     placed_item = location.item
+                    # Unplaceable items can sometimes be swapped infinitely. Limit the 
+                    # number of times we will swap an individual item to prevent this
                     if swapped_items[placed_item.player, placed_item.name] > 0:
                         continue
                     location.item = None
