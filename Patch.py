@@ -36,6 +36,10 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: str = GAM
         from worlds.sm.Rom import JAP10HASH as HASH
     elif game == GAME_SOE:
         from worlds.soe.Patch import USHASH as HASH
+    elif game == GAME_SMZ3:
+        from worlds.alttp.Rom import JAP10HASH as ALTTPHASH
+        from worlds.sm.Rom import JAP10HASH as SMHASH
+        HASH = ALTTPHASH + SMHASH
     else:
         raise RuntimeError(f"Selected game {game} for base rom not found.")
 
