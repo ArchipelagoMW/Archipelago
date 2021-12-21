@@ -150,3 +150,22 @@ class TestBase(unittest.TestCase):
         set_rule(loc0, lambda state: state.has(item2.name, player1_id))
         with pytest.raises(FillError):
             fill_restrictive(multi_world, multi_world.state, locations, items)
+
+    def test_competing_fill_restrictive(self):
+        multi_world = generate_multi_world()
+        player1_id = 1
+        player1_menu = multi_world.get_region("Menu", player1_id)
+
+        locations = generate_locations(2, player1_id, None, player1_menu)
+        items = generate_items(2, player1_id, True)
+
+        item0 = items[0]
+        item1 = items[1]
+        loc1 = locations[1]
+
+        multi_world.completion_condition[player1_id] = lambda state: state.has(
+            item0.name, player1_id) and state.has(item0.name, player1_id) and state.has(item1.name, player1_id)
+        set_rule(loc1, lambda state: state.has(item0.name, player1_id)
+                 and state.has(item1.name, player1_id))
+        with pytest.raises(FillError):
+            fill_restrictive(multi_world, multi_world.state, locations, items)
