@@ -27,7 +27,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
     unplaced_items = []
     placements = []
 
-    swapped_items: Counter[Item] = Counter()
+    swapped_items = Counter()
     reachable_items = {}
     for item in itempool:
         reachable_items.setdefault(item.player, []).append(item)
@@ -62,7 +62,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
                 # try swaping this item with previously placed items
                 for(i, location) in enumerate(placements):
                     placed_item = location.item
-                    if swapped_items[placed_item.name] > 0:
+                    if swapped_items[placed_item.player, placed_item.name] > 0:
                         continue
                     location.item = None
                     placed_item.location = None
@@ -72,7 +72,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
                         # Add this item to the exisiting placement, and
                         # add the old item to the back of the queue
                         spot_to_fill = placements.pop(i)
-                        swapped_items[placed_item.name] += 1
+                        swapped_items[placed_item.player, placed_item.name] += 1
                         reachable_items.setdefault(
                             placed_item.player, []).append(placed_item)
                         itempool.append(placed_item)
