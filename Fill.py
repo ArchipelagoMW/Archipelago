@@ -2,6 +2,8 @@ import logging
 import typing
 import collections
 import itertools
+from collections import Counter
+
 
 from BaseClasses import CollectionState, Location, MultiWorld, Item
 from worlds.generic import PlandoItem
@@ -25,6 +27,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
     unplaced_items = []
     placements = []
 
+    swapped_items: Counter[Item] = Counter()
     reachable_items = {}
     for item in itempool:
         reachable_items.setdefault(item.player, []).append(item)
@@ -59,15 +62,19 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
                 # try swaping this item with previously placed items
                 for(i, location) in enumerate(placements):
                     placed_item = location.item
+                    if swapped_items[placed_item.name] > 0:
+                        continue
                     location.item = None
                     placed_item.location = None
                     swap_state = sweep_from_pool(base_state, itempool)
                     if (not single_player_placement or location.player == item_to_place.player) \
                             and location.can_fill(swap_state, item_to_place, perform_access_check):
-                        # Add this item to the exisiting placement, and 
+                        # Add this item to the exisiting placement, and
                         # add the old item to the back of the queue
                         spot_to_fill = placements.pop(i)
-                        reachable_items.setdefault(placed_item.player, []).append(placed_item)
+                        swapped_items[placed_item.name] += 1
+                        reachable_items.setdefault(
+                            placed_item.player, []).append(placed_item)
                         itempool.append(placed_item)
                         break
                     else:
