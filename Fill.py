@@ -2,7 +2,7 @@ import logging
 import typing
 import collections
 import itertools
-from collections import Counter
+from collections import Counter, deque
 
 
 from BaseClasses import CollectionState, Location, MultiWorld, Item
@@ -14,7 +14,7 @@ class FillError(RuntimeError):
     pass
 
 
-def sweep_from_pool(base_state: CollectionState, itempool: list[Item]):
+def sweep_from_pool(base_state: CollectionState, itempool):
     new_state = base_state.copy()
     for item in itempool:
         new_state.collect(item, True)
@@ -28,9 +28,9 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
     placements = []
 
     swapped_items = Counter()
-    reachable_items = {}
+    reachable_items: dict[str, deque] = {}
     for item in itempool:
-        reachable_items.setdefault(item.player, []).append(item)
+        reachable_items.setdefault(item.player, deque()).append(item)
 
     while any(reachable_items.values()) and locations:
         # grab one item per player
@@ -75,8 +75,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
                         # add the old item to the back of the queue
                         spot_to_fill = placements.pop(i)
                         swapped_items[placed_item.player, placed_item.name] += 1
-                        reachable_items.setdefault(
-                            placed_item.player, []).append(placed_item)
+                        reachable_items[placed_item.player].appendleft(placed_item)
                         itempool.append(placed_item)
                         break
                     else:
