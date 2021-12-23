@@ -34,6 +34,7 @@ class DungeonItem(Choice):
     option_own_world = 2
     option_any_world = 3
     option_different_world = 4
+    option_start_with = 6
     alias_true = 3
     alias_false = 0
 
