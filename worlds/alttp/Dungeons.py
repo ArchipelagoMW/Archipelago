@@ -3,13 +3,22 @@ from worlds.alttp.Bosses import BossFactory
 from Fill import fill_restrictive
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import lookup_boss_drops
-from worlds.alttp.Options import  smallkey_shuffle
+from worlds.alttp.Options import smallkey_shuffle, bigkey_shuffle, compass_shuffle, map_shuffle
 
 
 def create_dungeons(world, player):
     def make_dungeon(name, default_boss, dungeon_regions, big_key, small_keys, dungeon_items):
+        if world.bigkey_shuffle[player] == bigkey_shuffle.option_start_with:
+            big_key = None
+        if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal or world.smallkey_shuffle[player] == smallkey_shuffle.option_start_with:
+            small_keys = []
+        for dungeonitem in dungeon_items:
+            if dungeonitem.type == 'Map' and world.map_shuffle[player] == map_shuffle.option_start_with:
+                dungeon_items.remove(dungeonitem)
+            if dungeonitem.type == 'Compass' and world.compass_shuffle[player] == compass_shuffle.option_start_with:
+                dungeon_items.remove(dungeonitem)
         dungeon = Dungeon(name, dungeon_regions, big_key,
-                          [] if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal else small_keys,
+                          small_keys,
                           dungeon_items, player)
         for item in dungeon.all_items:
             item.dungeon = dungeon
