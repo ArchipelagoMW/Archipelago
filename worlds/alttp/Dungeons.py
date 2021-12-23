@@ -15,6 +15,7 @@ def create_dungeons(world, player):
         for dungeonitem in dungeon_items:
             if dungeonitem.type == 'Map' and world.map_shuffle[player] == map_shuffle.option_start_with:
                 dungeon_items.remove(dungeonitem)
+        for dungeonitem in dungeon_items:
             if dungeonitem.type == 'Compass' and world.compass_shuffle[player] == compass_shuffle.option_start_with:
                 dungeon_items.remove(dungeonitem)
         dungeon = Dungeon(name, dungeon_regions, big_key,
