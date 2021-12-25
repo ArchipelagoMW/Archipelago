@@ -305,7 +305,7 @@ def get_adjuster_settings(romfile: str, skip_questions: bool = False) -> typing.
     if hasattr(get_adjuster_settings, "adjuster_settings"):
         adjuster_settings = getattr(get_adjuster_settings, "adjuster_settings")
     else:
-        adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_3", {})
+        adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_LttP", {})
 
     if adjuster_settings:
         import pprint

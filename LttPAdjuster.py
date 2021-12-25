@@ -121,7 +121,7 @@ def main():
         args, path = adjust(args=args)
         if isinstance(args.sprite, Sprite):
             args.sprite = args.sprite.name
-        persistent_store("adjuster", "last_settings_3", args)
+        persistent_store("adjuster", "last_settings_LttP", args)
 
 
 def adjust(args):
@@ -226,7 +226,7 @@ def adjustGUI():
             messagebox.showinfo(title="Success", message=f"Rom patched successfully to {path}")
             if isinstance(guiargs.sprite, Sprite):
                 guiargs.sprite = guiargs.sprite.name
-            persistent_store("adjuster", "last_settings_3", guiargs)
+            persistent_store("adjuster", "last_settings_LttP", guiargs)
 
     adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
     rom_options_frame.pack(side=TOP)
@@ -437,7 +437,7 @@ class BackgroundTaskProgressNullWindow(BackgroundTask):
 
 
 def get_rom_frame(parent=None):
-    adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_3", {})
+    adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_LttP", {})
     if not adjuster_settings:
         adjuster_settings = Namespace()
         adjuster_settings.baserom = "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
@@ -470,7 +470,7 @@ def get_rom_frame(parent=None):
 
 
 def get_rom_options_frame(parent=None):
-    adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_3", {})
+    adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_LttP", {})
     if not adjuster_settings:
         adjuster_settings = Namespace()
         adjuster_settings.music = True
