@@ -692,7 +692,7 @@ def get_pool_core(world, player: int):
         precollected_items.append('Big Key (Ganons Tower)')
 
     dungeon_item_count = len(get_dungeon_item_pool_player(world, player))
-    breakpoint()
+    
     while (total_items_to_place + (63 - dungeon_item_count)) > (len(pool) + len(placed_items)):
         extraitems = (total_items_to_place + (63 - dungeon_item_count)) - (len(pool) + len(placed_items))
         if extraitems >= len(junkweights):
