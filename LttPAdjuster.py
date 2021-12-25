@@ -20,7 +20,7 @@ from urllib.parse import urlparse
 from urllib.request import urlopen
 
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
-from Utils import output_path, local_path, open_file, get_cert_none_ssl_context, persistent_store
+from Utils import output_path, local_path, open_file, get_cert_none_ssl_context, persistent_store, persistent_load
 
 
 class AdjusterWorld(object):
@@ -437,9 +437,14 @@ class BackgroundTaskProgressNullWindow(BackgroundTask):
 
 
 def get_rom_frame(parent=None):
+    adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_3", {})
+    if not adjuster_settings:
+        adjuster_settings = Namespace()
+        adjuster_settings.baserom = "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
+
     romFrame = Frame(parent)
     baseRomLabel = Label(romFrame, text='LttP Base Rom: ')
-    romVar = StringVar(value="Zelda no Densetsu - Kamigami no Triforce (Japan).sfc")
+    romVar = StringVar(value=adjuster_settings.baserom)
     romEntry = Entry(romFrame, textvariable=romVar)
 
     def RomSelect():
@@ -465,6 +470,25 @@ def get_rom_frame(parent=None):
 
 
 def get_rom_options_frame(parent=None):
+    adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_3", {})
+    if not adjuster_settings:
+        adjuster_settings = Namespace()
+        adjuster_settings.music = True
+        adjuster_settings.reduceflashing = True
+        adjuster_settings.deathlink = False
+        adjuster_settings.sprite = None
+        adjuster_settings.quickswap = True
+        adjuster_settings.menuspeed = 'normal'
+        adjuster_settings.heartcolor = 'red'
+        adjuster_settings.heartbeep = 'normal'
+        adjuster_settings.ow_palettes = 'default'
+        adjuster_settings.uw_palettes = 'default'
+        adjuster_settings.hud_palettes = 'default'
+        adjuster_settings.sword_palettes = 'default'
+        adjuster_settings.shield_palettes = 'default'
+    if not hasattr(adjuster_settings, 'sprite_pool'):
+        adjuster_settings.sprite_pool = []
+
     romOptionsFrame = LabelFrame(parent, text="Rom options")
     romOptionsFrame.columnconfigure(0, weight=1)
     romOptionsFrame.columnconfigure(1, weight=1)
@@ -473,16 +497,16 @@ def get_rom_options_frame(parent=None):
     vars = Namespace()
 
     vars.MusicVar = IntVar()
-    vars.MusicVar.set(1)
+    vars.MusicVar.set(adjuster_settings.music)
     MusicCheckbutton = Checkbutton(romOptionsFrame, text="Music", variable=vars.MusicVar)
     MusicCheckbutton.grid(row=0, column=0, sticky=E)
 
-    vars.disableFlashingVar = IntVar(value=1)
+    vars.disableFlashingVar = IntVar(value=adjuster_settings.reduceflashing)
     disableFlashingCheckbutton = Checkbutton(romOptionsFrame, text="Disable flashing (anti-epilepsy)",
                                              variable=vars.disableFlashingVar)
     disableFlashingCheckbutton.grid(row=6, column=0, sticky=W)
 
-    vars.DeathLinkVar = IntVar(value=0)
+    vars.DeathLinkVar = IntVar(value=adjuster_settings.deathlink)
     DeathLinkCheckbutton = Checkbutton(romOptionsFrame, text="DeathLink (Team Deaths)", variable=vars.DeathLinkVar)
     DeathLinkCheckbutton.grid(row=7, column=0, sticky=W)
 
@@ -491,7 +515,7 @@ def get_rom_options_frame(parent=None):
     baseSpriteLabel = Label(spriteDialogFrame, text='Sprite:')
 
     vars.spriteNameVar = StringVar()
-    vars.sprite = None
+    vars.sprite = adjuster_settings.sprite
 
     def set_sprite(sprite_param):
         nonlocal vars
@@ -519,7 +543,7 @@ def get_rom_options_frame(parent=None):
     spriteEntry.pack(side=LEFT)
     spriteSelectButton.pack(side=LEFT)
 
-    vars.quickSwapVar = IntVar(value=1)
+    vars.quickSwapVar = IntVar(value=adjuster_settings.quickswap)
     quickSwapCheckbutton = Checkbutton(romOptionsFrame, text="L/R Quickswapping", variable=vars.quickSwapVar)
     quickSwapCheckbutton.grid(row=1, column=0, sticky=E)
 
@@ -528,7 +552,7 @@ def get_rom_options_frame(parent=None):
     menuspeedLabel = Label(menuspeedFrame, text='Menu speed')
     menuspeedLabel.pack(side=LEFT)
     vars.menuspeedVar = StringVar()
-    vars.menuspeedVar.set('normal')
+    vars.menuspeedVar.set(adjuster_settings.menuspeed)
     menuspeedOptionMenu = OptionMenu(menuspeedFrame, vars.menuspeedVar, 'normal', 'instant', 'double', 'triple',
                                      'quadruple', 'half')
     menuspeedOptionMenu.pack(side=LEFT)
@@ -538,7 +562,7 @@ def get_rom_options_frame(parent=None):
     heartcolorLabel = Label(heartcolorFrame, text='Heart color')
     heartcolorLabel.pack(side=LEFT)
     vars.heartcolorVar = StringVar()
-    vars.heartcolorVar.set('red')
+    vars.heartcolorVar.set(adjuster_settings.heartcolor)
     heartcolorOptionMenu = OptionMenu(heartcolorFrame, vars.heartcolorVar, 'red', 'blue', 'green', 'yellow', 'random')
     heartcolorOptionMenu.pack(side=LEFT)
 
@@ -547,7 +571,7 @@ def get_rom_options_frame(parent=None):
     heartbeepLabel = Label(heartbeepFrame, text='Heartbeep')
     heartbeepLabel.pack(side=LEFT)
     vars.heartbeepVar = StringVar()
-    vars.heartbeepVar.set('normal')
+    vars.heartbeepVar.set(adjuster_settings.heartbeep)
     heartbeepOptionMenu = OptionMenu(heartbeepFrame, vars.heartbeepVar, 'double', 'normal', 'half', 'quarter', 'off')
     heartbeepOptionMenu.pack(side=LEFT)
 
@@ -556,7 +580,7 @@ def get_rom_options_frame(parent=None):
     owPalettesLabel = Label(owPalettesFrame, text='Overworld palettes')
     owPalettesLabel.pack(side=LEFT)
     vars.owPalettesVar = StringVar()
-    vars.owPalettesVar.set('default')
+    vars.owPalettesVar.set(adjuster_settings.ow_palettes)
     owPalettesOptionMenu = OptionMenu(owPalettesFrame, vars.owPalettesVar, 'default', 'good', 'blackout', 'grayscale',
                                       'negative', 'classic', 'dizzy', 'sick', 'puke')
     owPalettesOptionMenu.pack(side=LEFT)
@@ -566,7 +590,7 @@ def get_rom_options_frame(parent=None):
     uwPalettesLabel = Label(uwPalettesFrame, text='Dungeon palettes')
     uwPalettesLabel.pack(side=LEFT)
     vars.uwPalettesVar = StringVar()
-    vars.uwPalettesVar.set('default')
+    vars.uwPalettesVar.set(adjuster_settings.uw_palettes)
     uwPalettesOptionMenu = OptionMenu(uwPalettesFrame, vars.uwPalettesVar, 'default', 'good', 'blackout', 'grayscale',
                                       'negative', 'classic', 'dizzy', 'sick', 'puke')
     uwPalettesOptionMenu.pack(side=LEFT)
@@ -576,7 +600,7 @@ def get_rom_options_frame(parent=None):
     hudPalettesLabel = Label(hudPalettesFrame, text='HUD palettes')
     hudPalettesLabel.pack(side=LEFT)
     vars.hudPalettesVar = StringVar()
-    vars.hudPalettesVar.set('default')
+    vars.hudPalettesVar.set(adjuster_settings.hud_palettes)
     hudPalettesOptionMenu = OptionMenu(hudPalettesFrame, vars.hudPalettesVar, 'default', 'good', 'blackout',
                                        'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     hudPalettesOptionMenu.pack(side=LEFT)
@@ -586,7 +610,7 @@ def get_rom_options_frame(parent=None):
     swordPalettesLabel = Label(swordPalettesFrame, text='Sword palettes')
     swordPalettesLabel.pack(side=LEFT)
     vars.swordPalettesVar = StringVar()
-    vars.swordPalettesVar.set('default')
+    vars.swordPalettesVar.set(adjuster_settings.sword_palettes)
     swordPalettesOptionMenu = OptionMenu(swordPalettesFrame, vars.swordPalettesVar, 'default', 'good', 'blackout',
                                          'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     swordPalettesOptionMenu.pack(side=LEFT)
@@ -596,7 +620,7 @@ def get_rom_options_frame(parent=None):
     shieldPalettesLabel = Label(shieldPalettesFrame, text='Shield palettes')
     shieldPalettesLabel.pack(side=LEFT)
     vars.shieldPalettesVar = StringVar()
-    vars.shieldPalettesVar.set('default')
+    vars.shieldPalettesVar.set(adjuster_settings.shield_palettes)
     shieldPalettesOptionMenu = OptionMenu(shieldPalettesFrame, vars.shieldPalettesVar, 'default', 'good', 'blackout',
                                           'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     shieldPalettesOptionMenu.pack(side=LEFT)
@@ -606,7 +630,7 @@ def get_rom_options_frame(parent=None):
     baseSpritePoolLabel = Label(spritePoolFrame, text='Sprite Pool:')
 
     vars.spritePoolCountVar = StringVar()
-    vars.sprite_pool = []
+    vars.sprite_pool = adjuster_settings.sprite_pool
 
     def set_sprite_pool(sprite_param):
         nonlocal vars
@@ -625,7 +649,7 @@ def get_rom_options_frame(parent=None):
         vars.spritePoolCountVar.set(str(len(vars.sprite_pool)))
 
     set_sprite_pool(None)
-    vars.spritePoolCountVar.set('0')
+    vars.spritePoolCountVar.set(len(adjuster_settings.sprite_pool))
     spritePoolEntry = Label(spritePoolFrame, textvariable=vars.spritePoolCountVar)
 
     def SpritePoolSelect():
