@@ -1,19 +1,20 @@
 from BaseClasses import Region, MultiWorld, Entrance, Item
-from .Items import LegacyItem, item_table, item_frequencies, skills_table, base_item_table
+from .Items import LegacyItem, item_table, item_frequencies
 from .Locations import LegacyLocation, location_table
-from .Options import EarlyVendors, legacy_options
+from .Options import legacy_options
 from .Regions import create_regions
 from ..AutoWorld import World
 import random
 import typing
 
+
 class LegacyWorld(World):
     """
-    Rogue Legacy is a genealogical rogue-"LITE" where anyone can be a hero. 
-    Each time you die, your child will succeed you. Every child is unique. One 
-    child might be colorblind, another might have vertigo-- they could even be 
-    a dwarf. But that's OK, because no one is perfect, and you don't have to be 
-    to succeed. 
+    Rogue Legacy is a genealogical rogue-"LITE" where anyone can be a hero. Each
+    time you die, your child will succeed you. Every child is unique. One child
+    might be colorblind, another might have vertigo-- they could even be a
+    dwarf. But that's OK, because no one is perfect, and you don't have to be to
+    succeed.
     """
 
     game: str = "Rogue Legacy"

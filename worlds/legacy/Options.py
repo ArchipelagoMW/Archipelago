@@ -2,11 +2,11 @@ from Options import Choice, Option
 import typing
 
 
-class InitialGender(Choice):
+class StartingGender(Choice):
     """
     Determines the gender of your initial 'Sir Lee' character.
     """
-    displayname = "Initial Gender"
+    displayname = "Starting Gender"
     option_sir = 0
     option_lady = 1
     alias_male = 0
@@ -16,8 +16,9 @@ class InitialGender(Choice):
 
 class NewGamePlusMode(Choice):
     """
-    Puts the castle in new game plus mode which vastly increases enemy level, but increases gold gain by 50%. Not
-    recommended for those inexperienced to Rogue Legacy!
+    Puts the castle in new game plus mode which vastly increases enemy level,
+    but increases gold gain by 50%. Not recommended for those inexperienced to
+    Rogue Legacy!
     """
     displayname = "New Game Plus Mode"
     option_normal = 0
@@ -27,6 +28,6 @@ class NewGamePlusMode(Choice):
 
 
 legacy_options: typing.Dict[str, Option] = {
-    "initial_gender": InitialGender,
+    "starting_gender": StartingGender,
     "new_game_plus_mode": NewGamePlusMode,
 }
