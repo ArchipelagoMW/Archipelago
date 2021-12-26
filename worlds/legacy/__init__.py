@@ -4,6 +4,7 @@ from .Items import LegacyItem, item_table, item_frequencies, item_repeatable, \
 from .Locations import LegacyLocation, location_table, base_location_table
 from .Options import legacy_options
 from .Regions import create_regions
+from .Constants import DEBUG
 from ..AutoWorld import World
 import random
 import typing
@@ -43,6 +44,11 @@ class LegacyWorld(World):
 
     def generate_basic(self):
         itempool: typing.List[LegacyItem] = []
+
+        # Print these tables, so I can easily copy it into RL. Used during dev.
+        if DEBUG:
+            LegacyItem.print_item_table()
+            LegacyLocation.print_location_table()
 
         # Fill item pool with all runes, blueprints, and skill unlocks.
         for item in item_table:

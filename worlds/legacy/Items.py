@@ -2,6 +2,7 @@ from BaseClasses import Item
 from .Incrementer import Incrementer
 from .Constants import ITEMS_STARTING_INDEX
 import typing
+import re
 
 
 class ItemData(typing.NamedTuple):
@@ -16,6 +17,13 @@ class LegacyItem(Item):
         item_data = item_table[name]
         super(LegacyItem, self).__init__(
             name, item_data.progression, item_data.code, player)
+
+    @staticmethod
+    def print_item_table():
+        print("=== STARTING PRINT ITEM LIST ======================")
+        for name, data in item_table.items():
+            print(f"{{ \"{name}\", {data.code} }},")
+        print("=== ENDING PRINT ITEM LIST ========================")
 
 
 counter = Incrementer(ITEMS_STARTING_INDEX)

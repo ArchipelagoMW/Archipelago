@@ -3,10 +3,18 @@ from .Incrementer import Incrementer
 from .Constants import LOCATIONS_STARTING_INDEX, FAIRY_CHEST_MAXIMUM_PER_ZONE, \
     CHEST_MAXIMUM_PER_ZONE
 import typing
+import re
 
 
 class LegacyLocation(Location):
     game: str = "Rogue Legacy"
+
+    @staticmethod
+    def print_location_table():
+        print("=== STARTING PRINT LOCATION LIST ======================")
+        for name, code in location_table.items():
+            print(f"{{ \"{name}\", {code} }},")
+        print("=== ENDING PRINT LOCATION LIST ========================")
 
 
 counter = Incrementer(LOCATIONS_STARTING_INDEX)
