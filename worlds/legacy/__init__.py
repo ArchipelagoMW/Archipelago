@@ -28,7 +28,7 @@ class LegacyWorld(World):
 
     def _get_slot_data(self):
         return {
-            "initial_gender": self.world.starting_gender[self.player],
+            "starting_gender": self.world.starting_gender[self.player],
             "new_game_plus": self.world.new_game_plus[self.player],
             "total_locations": self.world.total_locations[self.player],
             "death_link": self.world.death_link[self.player],
@@ -38,7 +38,7 @@ class LegacyWorld(World):
         slot_data = self._get_slot_data()
         for option_name in legacy_options:
             option = getattr(self.world, option_name)[self.player]
-            slot_data[option_name] = int(option.value)
+            slot_data[option_name] = option.value
 
         return slot_data
 

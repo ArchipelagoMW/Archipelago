@@ -34,7 +34,7 @@ class TotalLocations(Range):
     default = 200
 
 
-legacy_options: typing.Dict[str, Option] = {
+legacy_options: typing.Dict[str, type(Option)] = {
     "starting_gender": StartingGender,
     "new_game_plus": NewGamePlus,
     "total_locations": TotalLocations,
