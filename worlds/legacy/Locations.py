@@ -1,6 +1,7 @@
 from BaseClasses import Location
 from .Incrementer import Incrementer
-import Constants
+from .Constants import LOCATIONS_STARTING_INDEX, FAIRY_CHEST_MAXIMUM_PER_ZONE, \
+    CHEST_MAXIMUM_PER_ZONE
 import typing
 
 
@@ -8,7 +9,7 @@ class LegacyLocation(Location):
     game: str = "Rogue Legacy"
 
 
-counter = Incrementer(Constants.LOCATIONS_STARTING_INDEX)
+counter = Incrementer(LOCATIONS_STARTING_INDEX)
 
 base_location_table = {
     # Main Bosses
@@ -20,7 +21,7 @@ base_location_table = {
     "Ponce de Leon's Reward Right":         counter.next(),
     "Herodotus's Reward Left":              counter.next(),
     "Herodotus's Reward Right":             counter.next(),
-                                            
+
     # 31 Manor Pieces                       
     "Manor Observatory Telescope":          counter.next(),
     "Manor Observatory Base":               counter.next(),
@@ -67,24 +68,26 @@ base_location_table = {
 additional_location_table = {
     # Fairy Chests
     **{f"Castle Fairy Chest {i + 1}": counter.next() for i in
-       range(0, Constants.FAIRY_CHEST_MAXIMUM_PER_ZONE)},
+       range(0, FAIRY_CHEST_MAXIMUM_PER_ZONE)},
     **{f"Garden Fairy Chest {i + 1}": counter.next() for i in
-       range(0, Constants.FAIRY_CHEST_MAXIMUM_PER_ZONE)},
+       range(0, FAIRY_CHEST_MAXIMUM_PER_ZONE)},
     **{f"Tower Fairy Chest {i + 1}": counter.next() for i in
-       range(0, Constants.FAIRY_CHEST_MAXIMUM_PER_ZONE)},
+       range(0, FAIRY_CHEST_MAXIMUM_PER_ZONE)},
     **{f"Dungeon Fairy Chest {i + 1}": counter.next() for i in
-       range(0, Constants.FAIRY_CHEST_MAXIMUM_PER_ZONE)},
+       range(0, FAIRY_CHEST_MAXIMUM_PER_ZONE)},
 
     # Non-Fairy Chests
     **{f"Castle Chest {i + 1}": counter.next() for i in
-       range(0, Constants.CHEST_MAXIMUM_PER_ZONE)},
+       range(0, CHEST_MAXIMUM_PER_ZONE)},
     **{f"Garden Chest {i + 1}": counter.next() for i in
-       range(0, Constants.CHEST_MAXIMUM_PER_ZONE)},
+       range(0, CHEST_MAXIMUM_PER_ZONE)},
     **{f"Tower Chest {i + 1}": counter.next() for i in
-       range(0, Constants.CHEST_MAXIMUM_PER_ZONE)},
+       range(0, CHEST_MAXIMUM_PER_ZONE)},
     **{f"Dungeon Chest {i + 1}": counter.next() for i in
-       range(0, Constants.CHEST_MAXIMUM_PER_ZONE)},
+       range(0, CHEST_MAXIMUM_PER_ZONE)},
 }
+
+required_locations = 67
 
 location_table = {
     **base_location_table,

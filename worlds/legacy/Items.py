@@ -1,6 +1,6 @@
 from BaseClasses import Item
 from .Incrementer import Incrementer
-import Constants
+from .Constants import ITEMS_STARTING_INDEX
 import typing
 
 
@@ -18,7 +18,7 @@ class LegacyItem(Item):
             name, item_data.progression, item_data.code, player)
 
 
-counter = Incrementer(Constants.ITEMS_STARTING_INDEX)
+counter = Incrementer(ITEMS_STARTING_INDEX)
 
 item_table = {
     # Vendors
@@ -195,6 +195,8 @@ item_table = {
     "Slayer Cape":                          ItemData(counter.next(), True),
     "Dark Cape":                            ItemData(counter.next(), True),
 }
+
+required_items_count = 163
 
 item_repeatable = [
     "Random Stat Increase",
