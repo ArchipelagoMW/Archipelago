@@ -1,3 +1,4 @@
+from .Constants import TOTAL_LOCATIONS
 import typing
 
 
@@ -14,7 +15,7 @@ def create_regions(world, player: int):
     # Fill remaining spots with chests.
     chest_counter = -1
     fairy_counter = 0
-    for i in range(0, world.total_locations[player] - 67):
+    for i in range(0, TOTAL_LOCATIONS - 67):
         zone_cycle = i % 4
         zone = ""
         if zone_cycle == 0:

@@ -4,7 +4,7 @@ from .Items import LegacyItem, item_table, item_frequencies, item_repeatable, \
 from .Locations import LegacyLocation, location_table, base_location_table
 from .Options import legacy_options
 from .Regions import create_regions
-from .Constants import DEBUG
+from .Constants import DEBUG, TOTAL_LOCATIONS
 from ..AutoWorld import World
 import random
 import typing
@@ -30,7 +30,6 @@ class LegacyWorld(World):
         return {
             "starting_gender": self.world.starting_gender[self.player],
             "new_game_plus": self.world.new_game_plus[self.player],
-            "total_locations": self.world.total_locations[self.player],
             "death_link": self.world.death_link[self.player],
         }
 
@@ -60,8 +59,8 @@ class LegacyWorld(World):
             else:
                 itempool += [self.create_item(item)]
 
-        # Fill any extra locations with random stuff.
-        extra = self.world.total_locations[self.player] - required_items_count
+        # Fill remaining locations with random stuff.
+        extra = TOTAL_LOCATIONS - required_items_count
         for i in range(0, extra):
             item = random.choice(item_repeatable)
             itempool += [self.create_item(item)]
