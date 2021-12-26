@@ -294,7 +294,6 @@ def generate_itempool(world):
         world.push_item(location, event, False)
         location.event = location.locked = True
 
-
     # set up item pool
     additional_triforce_pieces = 0
     if world.custom:
@@ -327,7 +326,8 @@ def generate_itempool(world):
             starting_weapon = world.random.choice(possible_weapons)
             placed_items["Link's Uncle"] = starting_weapon
             pool.remove(starting_weapon)
-        if placed_items["Link's Uncle"] in ['Bow', 'Progressive Bow', 'Bombs (10)', 'Cane of Somaria', 'Cane of Byrna'] and world.enemy_health[player] not in ['default', 'easy']:
+        if placed_items["Link's Uncle"] in ['Bow', 'Progressive Bow', 'Bombs (10)', 'Cane of Somaria',
+                                            'Cane of Byrna'] and world.enemy_health[player] not in ['default', 'easy']:
             world.escape_assist[player].append('bombs')
 
     for (location, item) in placed_items.items():
@@ -362,13 +362,14 @@ def generate_itempool(world):
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
     # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
-    if world.goal[player] != 'icerodhunt' and world.difficulty[player] in ['easy', 'normal', 'hard'] and not (world.custom and world.customitemarray[30] == 0):
+    if world.goal[player] != 'icerodhunt' and world.difficulty[player] in ['easy', 'normal', 'hard'] and not (
+            world.custom and world.customitemarray[30] == 0):
         next(item for item in items if item.name == 'Boss Heart Container').advancement = True
-    elif world.goal[player] != 'icerodhunt' and world.difficulty[player] in ['expert'] and not (world.custom and world.customitemarray[29] < 4):
+    elif world.goal[player] != 'icerodhunt' and world.difficulty[player] in ['expert'] and not (
+            world.custom and world.customitemarray[29] < 4):
         adv_heart_pieces = (item for item in items if item.name == 'Piece of Heart')
         for i in range(4):
             next(adv_heart_pieces).advancement = True
-
 
     progressionitems = []
     nonprogressionitems = []
@@ -460,7 +461,7 @@ def set_up_take_anys(world, player):
         old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0)
 
     for num in range(4):
-        take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave, 'a cave of choice', player)
+        take_any = Region("Take-Any #{}".format(num + 1), RegionType.Cave, 'a cave of choice', player)
         world.regions.append(take_any)
         world.dynamic_regions.append(take_any)
 
@@ -534,7 +535,7 @@ def get_pool_core(world, player: int):
                        + (["Arrows (10)"] * 12)
                        + (["Bombs (3)"] * 16)
                        + ["Bombs (10)"])
-    if goal == 'ierodhunt':
+    if goal == 'icerodhunt':
         junkweights = ["Nothing"] * 100
 
     def place_item(loc, item):
@@ -610,13 +611,6 @@ def get_pool_core(world, player: int):
     elif timer == 'timed-ohko':
         pool.extend(diff.timedohko)
         clock_mode = 'countdown-ohko'
-    additional_pieces_to_place = 0
-    if 'triforcehunt' in goal:
-        pieces_in_core = world.triforce_pieces_available[player]
-        additional_pieces_to_place = world.triforce_pieces_available[player] - pieces_in_core
-        pool.extend(["Triforce Piece"] * pieces_in_core)
-        treasure_hunt_count = world.triforce_pieces_required[player]
-        treasure_hunt_icon = 'Triforce Piece'
 
 
     if goal == 'pedestal':
@@ -692,9 +686,18 @@ def get_pool_core(world, player: int):
         precollected_items.append('Big Key (Ganons Tower)')
 
     dungeon_item_count = len(get_dungeon_item_pool_player(world, player))
-    
-    while (total_items_to_place + (63 - dungeon_item_count)) > (len(pool) + len(placed_items)):
-        extraitems = (total_items_to_place + (63 - dungeon_item_count)) - (len(pool) + len(placed_items))
+
+    additional_pieces_to_place = 0
+    if 'triforcehunt' in goal:
+        pieces_in_core = min((total_items_to_place + (63 - dungeon_item_count)) - (len(pool) + len(placed_items)),
+                             world.triforce_pieces_available[player])
+        additional_pieces_to_place = world.triforce_pieces_available[player] - pieces_in_core
+        pool.extend(["Triforce Piece"] * pieces_in_core)
+        treasure_hunt_count = world.triforce_pieces_required[player]
+        treasure_hunt_icon = 'Triforce Piece'
+
+    while (total_items_to_place + (63 - dungeon_item_count) - (goal == "icerodhunt")) > (len(pool) + len(placed_items)):
+        extraitems = (total_items_to_place + (63 - dungeon_item_count) - (goal == "icerodhunt")) - (len(pool) + len(placed_items))
         if extraitems >= len(junkweights):
             pool.extend(junkweights)
         else:
@@ -845,7 +848,7 @@ def make_custom_item_pool(world, player):
     if shuffle == 'insanity_legacy':
         place_item('Link\'s House', 'Magic Mirror')
         place_item('Sanctuary', 'Moon Pearl')
-        pool.extend(['Magic Mirror'] * max((customitemarray[22] -1 ), 0))
+        pool.extend(['Magic Mirror'] * max((customitemarray[22] - 1), 0))
         pool.extend(['Moon Pearl'] * max((customitemarray[28] - 1), 0))
     else:
         pool.extend(['Magic Mirror'] * customitemarray[22])
