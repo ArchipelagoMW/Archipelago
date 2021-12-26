@@ -1,5 +1,6 @@
 from BaseClasses import Region, MultiWorld, Entrance, Item
-from .Items import LegacyItem, item_table, item_frequencies, item_repeatable
+from .Items import LegacyItem, item_table, item_frequencies, item_repeatable, \
+    required_items_count
 from .Locations import LegacyLocation, location_table, base_location_table
 from .Options import legacy_options
 from .Regions import create_regions
@@ -27,7 +28,8 @@ class LegacyWorld(World):
     def _get_slot_data(self):
         return {
             "initial_gender": self.world.starting_gender[self.player],
-            "new_game_plus_mode": self.world.new_game_plus_mode[self.player],
+            "new_game_plus": self.world.new_game_plus[self.player],
+            "total_locations": self.world.total_locations[self.player],
         }
 
     def fill_slot_data(self) -> dict:
@@ -50,6 +52,12 @@ class LegacyWorld(World):
                 itempool += [self.create_item(item)] * item_frequencies[item]
             else:
                 itempool += [self.create_item(item)]
+
+        # Fill any extra locations with random stuff.
+        extra = self.world.total_locations[self.player] - required_items_count
+        for i in range(0, extra):
+            item = random.choice(item_repeatable)
+            itempool += [self.create_item(item)]
 
         self.world.itempool += itempool
 

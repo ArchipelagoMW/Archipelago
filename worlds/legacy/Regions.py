@@ -12,11 +12,9 @@ def create_regions(world, player: int):
     locations += [location for location in base_location_table]
 
     # Fill remaining spots with chests.
-    minimum_locations = required_items_count - required_locations
-
     chest_counter = -1
     fairy_counter = 0
-    for i in range(0, minimum_locations):
+    for i in range(0, world.total_locations[player] - 67):
         zone_cycle = i % 4
         zone = ""
         if zone_cycle == 0:
