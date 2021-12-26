@@ -74,7 +74,7 @@ plando_items:
   - item:
       Empire Orb: 1
       Radiant Orb: 1
-    location: Starter Chest 1
+    location: Starter chest 1
     from_pool: true
     world: true
     percentage: 50
