@@ -1,4 +1,4 @@
-from Options import Choice, Range, Option
+from Options import Choice, Range, DeathLink, Option
 import typing
 
 
@@ -37,5 +37,6 @@ class TotalLocations(Range):
 legacy_options: typing.Dict[str, Option] = {
     "starting_gender": StartingGender,
     "new_game_plus": NewGamePlus,
-    "total_locations": TotalLocations
+    "total_locations": TotalLocations,
+    "death_link": DeathLink,
 }

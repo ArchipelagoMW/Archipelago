@@ -30,6 +30,7 @@ class LegacyWorld(World):
             "initial_gender": self.world.starting_gender[self.player],
             "new_game_plus": self.world.new_game_plus[self.player],
             "total_locations": self.world.total_locations[self.player],
+            "death_link": self.world.death_link[self.player],
         }
 
     def fill_slot_data(self) -> dict:
