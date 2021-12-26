@@ -100,7 +100,7 @@ class RoomRandomizer(Toggle):
     default = 0
 
 
-legacy_options: typing.Dict[str, type(Option)] = {
+legacy_options: typing.Dict[str, Option] = {
     "initial_gender": InitialGender,
     "difficulty": Difficulty,
     "stat_increase_pool": StatIncreasePool,
