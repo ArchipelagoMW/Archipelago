@@ -2,7 +2,6 @@ from BaseClasses import Item
 from .Incrementer import Incrementer
 from .Constants import ITEMS_STARTING_INDEX
 import typing
-import re
 
 
 class ItemData(typing.NamedTuple):
