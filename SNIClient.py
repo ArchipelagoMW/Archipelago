@@ -1094,14 +1094,15 @@ async def main():
             
                         from tkinter import Tk, PhotoImage, LabelFrame, Button, LEFT
                         applyPromptWindow = Tk()
-                        applyPromptWindow.resizable=False
+                        applyPromptWindow.resizable(False, False)
+                        applyPromptWindow.protocol('WM_DELETE_WINDOW',lambda: onButtonClick())
                         logo = PhotoImage(file=Utils.local_path('data', 'icon.png'))
                         applyPromptWindow.tk.call('wm', 'iconphoto', applyPromptWindow._w, logo)
                         applyPromptWindow.wm_title("Last adjuster settings LttP")
 
                         label = LabelFrame(applyPromptWindow,
                                       text='Last used adjuster settings were found. Would you like to apply these?')
-                        label.grid(column=0,row=0)
+                        label.grid(column=0,row=0, padx=5, pady=5, ipadx=5, ipady=5)
                         label.grid_columnconfigure (0, weight=1) 
                         label.grid_columnconfigure (1, weight=1) 
                         label.grid_columnconfigure (2, weight=1) 
@@ -1110,18 +1111,14 @@ async def main():
                             setattr(onButtonClick, 'choice', answer)
                             applyPromptWindow.destroy()
 
-                        yesButton = Button(label, text='Yes', command=lambda: onButtonClick('yes'))
+                        yesButton = Button(label, text='Yes', command=lambda: onButtonClick('yes'), width=10)
                         yesButton.grid(column=0, row=0)
-                        #yesButton.pack(side=LEFT, pady=5, padx=50)
-                        noButton = Button(label, text='No', command=lambda: onButtonClick('no'))
+                        noButton = Button(label, text='No', command=lambda: onButtonClick('no'), width=10)
                         noButton.grid(column=1, row=0)
-                        #noButton.pack(side=LEFT, pady=5, padx=50)
-                        alwaysButton = Button(label, text='Always', command=lambda: onButtonClick('always'))
+                        alwaysButton = Button(label, text='Always', command=lambda: onButtonClick('always'), width=10)
                         alwaysButton.grid(column=2, row=0)
-                        #alwaysButton.pack(side=LEFT, pady=5, padx=50)
-                        neverButton = Button(label, text='Never', command=lambda: onButtonClick('never'))
+                        neverButton = Button(label, text='Never', command=lambda: onButtonClick('never'), width=10)
                         neverButton.grid(column=3, row=0)
-                        #neverButton.pack(side=LEFT, pady=5, padx=50)
 
                         applyPromptWindow.mainloop()
                         choice = getattr(onButtonClick, 'choice')
