@@ -14,7 +14,7 @@ def create_regions(world, player: int):
         exit_array = regionMap[region]
         if len(exit_array) == 0:
             exit_array = None
-        new_region = create_region(world, player, region, [location["location"] for location in location_table if location["region"] == region], exit_array)
+        new_region = create_region(world, player, region, [location["name"] for location in location_table if location["region"] == region], exit_array)
             
         world.regions += [new_region]
 
