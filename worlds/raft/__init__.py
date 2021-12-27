@@ -35,7 +35,6 @@ class RaftWorld(World):
             ("Plastic", 1, 5),
             ("Clay", 1, 5),
             ("Stone", 1, 5),
-            ("Rope", 1, 5),
             ("Scrap", 1, 5),
             ("SeaVine", 1, 5),
             ("Thatch", 1, 5),
