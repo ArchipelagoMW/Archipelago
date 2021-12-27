@@ -529,8 +529,8 @@ def get_rom_options_frame(parent=None):
             vars.sprite = sprite_param
             vars.spriteNameVar.set(vars.sprite.name)
 
-    set_sprite(None)
-    vars.spriteNameVar.set('(unchanged)')
+    set_sprite(adjuster_settings.sprite)
+    #vars.spriteNameVar.set(adjuster_settings.sprite)
     spriteEntry = Label(spriteDialogFrame, textvariable=vars.spriteNameVar)
 
     def SpriteSelect():
