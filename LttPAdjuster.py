@@ -14,7 +14,7 @@ import tkinter as tk
 from argparse import Namespace
 from concurrent.futures import as_completed, ThreadPoolExecutor
 from glob import glob
-from tkinter import Tk, Frame, Label, StringVar, Entry, filedialog, messagebox, Button, LEFT, X, TOP, LabelFrame, \
+from tkinter import Tk, Frame, Label, StringVar, Entry, filedialog, messagebox, Button, Radiobutton, LEFT, X, TOP, LabelFrame, \
     IntVar, Checkbutton, E, W, OptionMenu, Toplevel, BOTTOM, RIGHT, font as font, PhotoImage
 from urllib.parse import urlparse
 from urllib.request import urlopen
@@ -196,6 +196,7 @@ def adjustGUI():
 
     def adjustRom():
         guiargs = Namespace()
+        guiargs.auto_apply = rom_vars.auto_apply.get()
         guiargs.heartbeep = rom_vars.heartbeepVar.get()
         guiargs.heartcolor = rom_vars.heartcolorVar.get()
         guiargs.menuspeed = rom_vars.menuspeedVar.get()
@@ -228,11 +229,37 @@ def adjustGUI():
                 guiargs.sprite = guiargs.sprite.name
             persistent_store("adjuster", "last_settings_LttP", guiargs)
 
+    def saveGUISettings():
+        guiargs = Namespace()
+        guiargs.auto_apply = rom_vars.auto_apply.get()
+        guiargs.heartbeep = rom_vars.heartbeepVar.get()
+        guiargs.heartcolor = rom_vars.heartcolorVar.get()
+        guiargs.menuspeed = rom_vars.menuspeedVar.get()
+        guiargs.ow_palettes = rom_vars.owPalettesVar.get()
+        guiargs.uw_palettes = rom_vars.uwPalettesVar.get()
+        guiargs.hud_palettes = rom_vars.hudPalettesVar.get()
+        guiargs.sword_palettes = rom_vars.swordPalettesVar.get()
+        guiargs.shield_palettes = rom_vars.shieldPalettesVar.get()
+        guiargs.quickswap = bool(rom_vars.quickSwapVar.get())
+        guiargs.music = bool(rom_vars.MusicVar.get())
+        guiargs.reduceflashing = bool(rom_vars.disableFlashingVar.get())
+        guiargs.deathlink = bool(rom_vars.DeathLinkVar.get())
+        guiargs.rom = romVar2.get()
+        guiargs.baserom = romVar.get()
+        guiargs.sprite = rom_vars.sprite
+        if rom_vars.sprite_pool:
+            guiargs.world = AdjusterWorld(rom_vars.sprite_pool)
+        persistent_store("adjuster", "last_settings_LttP", guiargs)
+        messagebox.showinfo(title="Success", message="Settings saved to persistent storage")
+
     adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
     rom_options_frame.pack(side=TOP)
-    adjustButton.pack(side=BOTTOM, padx=(5, 5))
+    adjustButton.pack(side=LEFT, padx=(5,5))
 
-    bottomFrame2.pack(side=BOTTOM, pady=(5, 5))
+    saveButton = Button(bottomFrame2, text='Save Settings', command=saveGUISettings)
+    saveButton.pack(side=LEFT, padx=(5,5))
+
+    bottomFrame2.pack(side=TOP, pady=(5,5))
 
     adjustWindow.mainloop()
 
@@ -473,6 +500,7 @@ def get_rom_options_frame(parent=None):
     adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_LttP", {})
     if not adjuster_settings:
         adjuster_settings = Namespace()
+        adjuster_settings.auto_apply = 'ask'
         adjuster_settings.music = True
         adjuster_settings.reduceflashing = True
         adjuster_settings.deathlink = False
@@ -669,6 +697,18 @@ def get_rom_options_frame(parent=None):
     spritePoolSelectButton.pack(side=LEFT)
     spritePoolClearButton.pack(side=LEFT)
 
+    vars.auto_apply = StringVar(value=adjuster_settings.auto_apply)
+    autoApplyFrame = Frame(romOptionsFrame)
+    autoApplyFrame.grid(row=8, column=0, columnspan=2, sticky=W)
+    filler = Label(autoApplyFrame, text="Automatically apply last used settings on opening .apbp files")
+    filler.pack(side=TOP, expand=True, fill=X)
+    askRadio = Radiobutton(autoApplyFrame, text='Ask', variable=vars.auto_apply, value='ask')
+    askRadio.pack(side=LEFT, padx=5, pady=5)
+    alwaysRadio = Radiobutton(autoApplyFrame, text='Always', variable=vars.auto_apply, value='always')
+    alwaysRadio.pack(side=LEFT, padx=5, pady=5)
+    neverRadio = Radiobutton(autoApplyFrame, text='Never', variable=vars.auto_apply, value='never')
+    neverRadio.pack(side=LEFT, padx=5, pady=5)
+
     return romOptionsFrame, vars, set_sprite
 
 
@@ -718,6 +758,9 @@ class SpriteSelector():
         button = Button(frame, text="Update alttpr sprites", command=self.update_alttpr_sprites)
         button.pack(side=RIGHT, padx=(5, 0))
 
+        button = Button(frame, text="Do not adjust sprite",command=self.use_default_sprite)
+        button.pack(side=LEFT,padx=(0,5))
+
         button = Button(frame, text="Default Link sprite", command=self.use_default_link_sprite)
         button.pack(side=LEFT, padx=(0, 5))
 
@@ -756,10 +799,6 @@ class SpriteSelector():
 
             button = Checkbutton(frame, text="Random", command=self.update_random_button,
                                  variable=self.randomOnRandomVar)
-            button.pack(side=LEFT, padx=(0, 5))
-
-        if adjuster:
-            button = Button(frame, text="Current sprite from rom", command=self.use_default_sprite)
             button.pack(side=LEFT, padx=(0, 5))
 
         set_icon(self.window)
