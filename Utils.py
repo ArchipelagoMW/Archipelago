@@ -11,6 +11,7 @@ import io
 import collections
 import importlib
 import logging
+from tkinter import Tk
 
 
 def tuplize_version(version: str) -> Version:
@@ -420,3 +421,10 @@ def stream_input(stream, queue):
     thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
     thread.start()
     return thread
+
+
+def tkinter_center_window(window: Tk):
+    window.update()
+    xPos = int(window.winfo_screenwidth()/2 - window.winfo_reqwidth()/2)
+    yPos = int(window.winfo_screenheight()/2 - window.winfo_reqheight()/2)
+    window.geometry("+{}+{}".format(xPos, yPos))
