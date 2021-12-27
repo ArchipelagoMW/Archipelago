@@ -217,7 +217,34 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
             LocationData('Left Side forest Caves', 'Cantoran',  1337176),
         )
 
-    # 1337177 - 1337236 Reserved for future use
+    # 1337177 - 1337198 Lore Checks
+    if not world or is_option_enabled(world, player, "LoreChecks"):
+        location_table += (
+            LocationData('Lake Desolation', 'Memory - Coyote Jump (Time Messenger)',  1337177),
+            LocationData('Library', 'Memory - Waterway (A Message)',  1337178),
+            LocationData('Library', 'Memory - Library Gap (Lachiemi Sun)',  1337179),
+            LocationData('Library', 'Memory - Mr. Hat Portrait (Moonlit Night)',  1337180),
+            LocationData('Varndagroth Tower Left', 'Memory - Left Elevator (Nomads)',  1337181),
+            LocationData('Varndagroth Tower Right', 'Memory - Siren Elevator (Childhood)',  1337182),
+            LocationData('Varndagroth Tower Right', 'Memory - Varndagroth Right Bottom (Faron)',  1337183),
+            LocationData('Military Hangar', 'Memory - Bomber Climb (A Solution)',  1337184),
+            LocationData('The Lab', 'Memory - Genza\'s Secret Stash 1 (An Old Friend)',  1337185),
+            LocationData('The Lab', 'Memory - Genza\'s Secret Stash 2 (Twilight Dinner)',  1337186),
+            LocationData('Emperor\'s Tower', 'Memory - Way Up There (Final Circle)',  1337187),
+            LocationData('Forest', 'Journal - Forest Rats (Lachiem Expedition)',  1337188),
+            LocationData('Forest', 'Journal - Forest Bat Jump Ledge (Peace Treaty)',  1337189),
+            LocationData('Castle Ramparts', 'Journal - Floating in Moat (Prime Edicts)',  1337190),
+            LocationData('Castle Ramparts', 'Journal - Archer + Knight (Declaration of Independence)',  1337191),
+            LocationData('Castle Keep', 'Journal - Under the Twins (Letter of Reference)',  1337192),
+            LocationData('Castle Keep', 'Journal - Castle Loop Giantess (Political Advice)',  1337193),
+            LocationData('Castle Keep', 'Journal - Aleana\'s Room (Diplomatic Missive)',  1337194),
+            LocationData('Royal Towers', 'Journal - Top Struggle Juggle Base (War of the Sisters)',  1337195),
+            LocationData('Royal Towers', 'Journal - Aleana Boss (Stained Letter)',  1337196),
+            LocationData('Royal Towers', 'Journal - Near Bottom Struggle Juggle (Mission Findings)',  1337197),
+            LocationData('Caves of Banishment (Maw)', 'Journal - Lower Left Maw Caves (Naïvety)',  1337198),
+        )
+
+    # 1337199 - 1337236 Reserved for future use
 
     # 1337237 - 1337245 GyreArchives
     if not world or is_option_enabled(world, player, "GyreArchives"):
