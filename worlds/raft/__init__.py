@@ -40,9 +40,10 @@ class RaftWorld(World):
             ("SeaVine", 1, 5),
             ("Thatch", 1, 5),
             ("Sand", 1, 5),
-            ("Beet", 1, 5)
+            ("Beet", 1, 5),
+            ("Rock", 1, 5),
+            ("Potato", 1, 5)
         ]
-
     for resourcePack in possible_resource_packs:
         for i in range(resourcePack[1], resourcePack[2] + 1):
             lastItemId += 1
@@ -61,10 +62,9 @@ class RaftWorld(World):
             raft_item = self.create_item(item["name"])
             pool.append(raft_item)
 
-        print(lookup_name_to_item)
         while extras > 0:
-            pack_seed = self.possible_resource_packs[random.randrange(0, len(self.possible_resource_packs))]
-            pack = self.create_item("Resource Pack: " + str(random.randrange(pack_seed[1], pack_seed[2] + 1)) + " " + pack_seed[0])
+            pack_seed = self.possible_resource_packs[random.randrange(0, len(self.possible_resource_packs))] #TODO: Make this work with options that aren't 1
+            pack = self.create_item("Resource Pack: " + str(random.randrange(pack_seed[1] * self.world.resource_pack_multiplier[self.player].value, (pack_seed[2] * self.world.resource_pack_multiplier[self.player].value) + 1, self.world.resource_pack_multiplier[self.player].value)) + " " + pack_seed[0])
             pool.append(pack)
             extras -= 1
 
