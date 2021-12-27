@@ -11,7 +11,7 @@ import shutil
 import logging
 import asyncio
 from json import loads, dumps
-from tkinter.constants import FALSE, LEFT
+from tkinter import font
 
 from Utils import get_item_name_from_id, init_logging
 
@@ -1090,9 +1090,26 @@ async def main():
                 choice = 'no'
                 adjusted = False
                 if not hasattr(lastSettings, 'auto_apply') or 'ask' in lastSettings.auto_apply:
+
+                    whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
+                            "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
+                            "reduceflashing", "deathlink"}
+                    printed_options = {name: value for name, value in vars(lastSettings).items() if name in whitelist}
+                    if hasattr(lastSettings, "sprite_pool"):
+                        sprite_pool = {}
+                        for sprite in getattr(lastSettings, "sprite_pool"):
+                            if sprite in sprite_pool:
+                                sprite_pool[sprite] += 1
+                            else:
+                                sprite_pool[sprite] = 1
+                        if sprite_pool:
+                            printed_options["sprite_pool"] = sprite_pool
+                    import pprint
+
                     if gui_enabled:
             
-                        from tkinter import Tk, PhotoImage, LabelFrame, Button, LEFT
+                        from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
+                        from tkinter.constants import W
                         applyPromptWindow = Tk()
                         applyPromptWindow.resizable(False, False)
                         applyPromptWindow.protocol('WM_DELETE_WINDOW',lambda: onButtonClick())
@@ -1111,20 +1128,36 @@ async def main():
                             setattr(onButtonClick, 'choice', answer)
                             applyPromptWindow.destroy()
 
-                        yesButton = Button(label, text='Yes', command=lambda: onButtonClick('yes'), width=10)
-                        yesButton.grid(column=0, row=0)
-                        noButton = Button(label, text='No', command=lambda: onButtonClick('no'), width=10)
-                        noButton.grid(column=1, row=0)
-                        alwaysButton = Button(label, text='Always', command=lambda: onButtonClick('always'), width=10)
-                        alwaysButton.grid(column=2, row=0)
-                        neverButton = Button(label, text='Never', command=lambda: onButtonClick('never'), width=10)
-                        neverButton.grid(column=3, row=0)
+                        framedOptions = Frame(label)
+                        framedOptions.grid(column=0, columnspan=4,row=0)
+                        framedOptions.grid_columnconfigure(0, weight=1)
+                        framedOptions.grid_columnconfigure(1, weight=1)
+                        framedOptions.grid_columnconfigure(2, weight=1)
+                        curRow = 0
+                        curCol = 0
+                        for name, value in printed_options.items():
+                            Label(framedOptions, text=name+": "+str(value)).grid(column=curCol, row=curRow, padx=5)
+                            if(curCol==2):
+                                curRow+=1
+                                curCol=0
+                            else:
+                                curCol+=1
 
+                        yesButton = Button(label, text='Yes', command=lambda: onButtonClick('yes'), width=10)
+                        yesButton.grid(column=0, row=1)
+                        noButton = Button(label, text='No', command=lambda: onButtonClick('no'), width=10)
+                        noButton.grid(column=1, row=1)
+                        alwaysButton = Button(label, text='Always', command=lambda: onButtonClick('always'), width=10)
+                        alwaysButton.grid(column=2, row=1)
+                        neverButton = Button(label, text='Never', command=lambda: onButtonClick('never'), width=10)
+                        neverButton.grid(column=3, row=1)
+
+                        Utils.tkinter_center_window(applyPromptWindow)
                         applyPromptWindow.mainloop()
                         choice = getattr(onButtonClick, 'choice')
                     else:
                         choice = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
-                                          #f"{pprint.pformat(printed_options)}\n"
+                                          f"{pprint.pformat(printed_options)}\n"
                                           f"Enter yes, no, always or never: ")
                     if choice and choice.startswith("y"):
                         choice = 'yes'
