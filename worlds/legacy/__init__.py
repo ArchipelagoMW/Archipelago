@@ -67,11 +67,20 @@ class LegacyWorld(World):
 
         self.world.itempool += itempool
 
+        # Victory stuff.
+        self.world.get_location("Victory", self.player)\
+            .place_locked_item(self.create_event("Victory"))
+        self.world.completion_condition[self.player] = \
+            lambda state: state.has("Victory", self.player)
+
     def create_regions(self):
         create_regions(self.world, self.player)
 
     def create_item(self, name: str) -> Item:
         return LegacyItem(name, self.player)
+
+    def create_event(self, event: str):
+        return LegacyItem(event, self.player, True)
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None,

@@ -99,6 +99,7 @@ required_locations = 67
 location_table = {
     **base_location_table,
     **additional_location_table,
+    "Victory": None
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {

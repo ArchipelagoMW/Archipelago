@@ -7,15 +7,19 @@ import typing
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     progression: bool
+    event: bool = False
 
 
 class LegacyItem(Item):
     game: str = "Rogue Legacy"
 
-    def __init__(self, name, player: int = None):
-        item_data = item_table[name]
-        super(LegacyItem, self).__init__(
-            name, item_data.progression, item_data.code, player)
+    def __init__(self, name, player: int = None, event: bool = False):
+        if event:
+            super(LegacyItem, self).__init__(name, True, None, player)
+        else:
+            item_data = item_table[name]
+            super(LegacyItem, self).__init__(
+                name, item_data.progression, item_data.code, player)
 
     @staticmethod
     def print_item_table():
@@ -221,3 +225,4 @@ item_frequencies: typing.Dict[str, int] = {
 lookup_id_to_name: typing.Dict[int, str] = {
     data.code: item_name for item_name, data in item_table.items() if data.code
 }
+lookup_id_to_name[None] = "Victory"
