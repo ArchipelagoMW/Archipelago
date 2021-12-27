@@ -241,7 +241,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
             LocationData('Royal Towers', 'Journal - Top Struggle Juggle Base (War of the Sisters)',  1337195),
             LocationData('Royal Towers', 'Journal - Aleana Boss (Stained Letter)',  1337196),
             LocationData('Royal Towers', 'Journal - Near Bottom Struggle Juggle (Mission Findings)',  1337197),
-            LocationData('Caves of Banishment (Maw)', 'Journal - Lower Left Maw Caves (Naievety)',  1337198),
+            LocationData('Caves of Banishment (Maw)', 'Journal - Lower Left Maw Caves (Naivety)',  1337198),
         )
 
     # 1337199 - 1337236 Reserved for future use
