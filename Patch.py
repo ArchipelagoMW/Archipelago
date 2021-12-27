@@ -146,7 +146,8 @@ if __name__ == "__main__":
                 elif rom.endswith(".apbp"):
                     print(f"Applying patch {rom}")
                     data, target = create_rom_file(rom)
-                    romfile, adjusted = Utils.get_adjuster_settings(target)
+                    #romfile, adjusted = Utils.get_adjuster_settings(target)
+                    adjusted = False
                     if adjusted:
                         try:
                             os.replace(romfile, target)
