@@ -68,10 +68,11 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
 
     if multidata:
         decompressed_multidata = MultiServer.Context._decompress(multidata)
-        leftover_names = [(name, decompressed_multidata["names"][0].index(name) + 1) for name in
-                          decompressed_multidata["names"][0] if name not in [slot.player_name for slot in slots]]
+        player_names = {slot.player_name for slot in slots}
+        leftover_names = [(name, index+1) for index, name in
+                          enumerate([name for name in decompressed_multidata["names"][0]])]
         newslots = [(Slot(data=None, player_name=name, player_id=slot, game=decompressed_multidata["games"][slot]))
-                    for name, slot in leftover_names]
+                    for name, slot in leftover_names if name not in player_names]
         for slot in newslots:
             slots.add(slot)
 
