@@ -1,5 +1,6 @@
 import logging
 import typing
+import random
 
 from .Locations import location_table, lookup_name_to_id as locations_lookup_name_to_id
 from .Items import item_table, lookup_name_to_item, advancement_item_names
@@ -29,6 +30,25 @@ class RaftWorld(World):
     location_name_to_id = locations_lookup_name_to_id
     options = options
 
+    possible_resource_packs = [ #TODO: Figure out a more dynamic way of setting these
+            ("Plank", 1, 5),
+            ("Plastic", 1, 5),
+            ("Clay", 1, 5),
+            ("Stone", 1, 5),
+            ("Rope", 1, 5),
+            ("Scrap", 1, 5),
+            ("SeaVine", 1, 5),
+            ("Thatch", 1, 5),
+            ("Sand", 1, 5),
+            ("Beet", 1, 5)
+        ]
+
+    for resourcePack in possible_resource_packs:
+        for i in range(resourcePack[1], resourcePack[2] + 1):
+            lastItemId += 1
+            item_name_to_id["Resource Pack: " + str(i) + " " + resourcePack[0]] = lastItemId
+    
+
     data_version = 11
 
     def generate_basic(self):
@@ -37,16 +57,16 @@ class RaftWorld(World):
         extras = len(location_table) - len(item_table)
         if extras < 0:
             extras = 0
-        # for progressiveName in progressive_item_list.values():
-        #     if progressiveName not in 
         for item in item_table:
             raft_item = self.create_item(item["name"])
             pool.append(raft_item)
 
-        for item_name in self.world.random.choices(sorted(advancement_item_names), k=extras):
-            item = self.create_item(item_name)
-            item.advancement = False  # as it's an extra, just fast-fill it somewhere (is this actually correct...?)
-            pool.append(item)
+        print(lookup_name_to_item)
+        while extras > 0:
+            pack_seed = self.possible_resource_packs[random.randrange(0, len(self.possible_resource_packs))]
+            pack = self.create_item("Resource Pack: " + str(random.randrange(pack_seed[1], pack_seed[2] + 1)) + " " + pack_seed[0])
+            pool.append(pack)
+            extras -= 1
 
         self.world.itempool += pool
 
@@ -61,6 +81,8 @@ class RaftWorld(World):
         return slot_data
 
     def create_item(self, name: str) -> Item:
+        if len(name) >= 14 and name[0:14] == "Resource Pack:": #TODO: Make this less evil and hacky
+            return RaftItem(name, False, self.item_name_to_id[name], player=self.player)
         item = lookup_name_to_item[name]
         if name in lookup_item_to_progressive:
             name = lookup_item_to_progressive[name]
