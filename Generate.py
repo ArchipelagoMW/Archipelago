@@ -469,7 +469,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
 
     ret = argparse.Namespace()
     for option_key in Options.per_game_common_options:
-        if option_key in weights:
+        if option_key in weights and option_key not in Options.common_options:
             raise Exception(f"Option {option_key} has to be in a game's section, not on its own.")
 
     ret.game = get_choice("game", weights)

@@ -11,6 +11,8 @@ target_folder = os.path.join("WebHostLib", "static", "generated")
 
 
 def create():
+    os.makedirs(os.path.join(target_folder, 'configs'), exist_ok=True)
+
     def dictify_range(option):
         data = {option.range_start: 0, option.range_end: 0, "random": 0, "random-low": 0, "random-high": 0,
                 option.default: 50}
@@ -26,13 +28,12 @@ def create():
         return default_value
 
     for game_name, world in AutoWorldRegister.world_types.items():
+        all_options = {**world.options, **Options.per_game_common_options}
         res = Template(open(os.path.join("WebHostLib", "templates", "options.yaml")).read()).render(
-            options={**world.options, **Options.per_game_common_options},
+            options=all_options,
             __version__=__version__, game=game_name, yaml_dump=yaml.dump,
             dictify_range=dictify_range, default_converter=default_converter,
         )
-
-        os.makedirs(os.path.join(target_folder, 'configs'), exist_ok=True)
 
         with open(os.path.join(target_folder, 'configs', game_name + ".yaml"), "w") as f:
             f.write(res)
@@ -47,7 +48,7 @@ def create():
         }
 
         game_options = {}
-        for option_name, option in world.options.items():
+        for option_name, option in all_options.items():
             if option.options:
                 game_options[option_name] = this_option = {
                     "type": "select",
