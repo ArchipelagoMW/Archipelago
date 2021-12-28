@@ -25,15 +25,15 @@ class GanonsTower(Z3Region):
                 lambda items: items.Hammer and items.Hookshot),
             Location(self, 256+194, 0x1EAD3, LocationType.Regular, "Ganon's Tower - Map Chest",
                 lambda items: items.Hammer and (items.Hookshot or items.Boots) and items.KeyGT >=
-                    (3 if any(self.GetLocation("Ganon's Tower - Map Chest").ItemIs(type, self.World) for type in [ItemType.BigKeyGT, ItemType.KeyGT]) else 4))
-                .AlwaysAllow(lambda item, items: item.Is(ItemType.KeyGT, self.World) and items.KeyGT >= 3),
+                    (3 if any(self.GetLocation("Ganon's Tower - Map Chest").ItemIs(type, self.world) for type in [ItemType.BigKeyGT, ItemType.KeyGT]) else 4))
+                .AlwaysAllow(lambda item, items: item.Is(ItemType.KeyGT, self.world) and items.KeyGT >= 3),
             Location(self, 256+195, 0x1EAD0, LocationType.Regular, "Ganon's Tower - Firesnake Room",
-                lambda items: items.Hammer and items.Hookshot and items.KeyGT >= (2 if any(l.ItemIs(ItemType.BigKeyGT, self.World) for l in [
+                lambda items: items.Hammer and items.Hookshot and items.KeyGT >= (2 if any(l.ItemIs(ItemType.BigKeyGT, self.world) for l in [
                         self.GetLocation("Ganon's Tower - Randomizer Room - Top Right"),
                         self.GetLocation("Ganon's Tower - Randomizer Room - Top Left"),
                         self.GetLocation("Ganon's Tower - Randomizer Room - Bottom Left"),
                         self.GetLocation("Ganon's Tower - Randomizer Room - Bottom Right")
-                    ]) or self.GetLocation("Ganon's Tower - Firesnake Room").ItemIs(ItemType.KeyGT, self.World) else 3)),
+                    ]) or self.GetLocation("Ganon's Tower - Firesnake Room").ItemIs(ItemType.KeyGT, self.world) else 3)),
             Location(self, 256+196, 0x1EAC4, LocationType.Regular, "Ganon's Tower - Randomizer Room - Top Left",
                 lambda items: self.LeftSide(items, [
                     self.GetLocation("Ganon's Tower - Randomizer Room - Top Right"),
@@ -94,28 +94,28 @@ class GanonsTower(Z3Region):
                 lambda items: items.BigKeyGT and items.KeyGT >= 3 and (
                     items.Hammer and items.Hookshot or
                     items.Somaria and items.Firerod))
-                .Allow(lambda item, items: item.IsNot(ItemType.BigKeyGT, self.World)),
+                .Allow(lambda item, items: item.IsNot(ItemType.BigKeyGT, self.world)),
             Location(self, 256+209, 0x1EAF1, LocationType.Regular, "Ganon's Tower - Big Key Chest", self.BigKeyRoom),
             Location(self, 256+210, 0x1EAF4, LocationType.Regular, "Ganon's Tower - Big Key Room - Left", self.BigKeyRoom),
             Location(self, 256+211, 0x1EAF7, LocationType.Regular, "Ganon's Tower - Big Key Room - Right", self.BigKeyRoom),
             Location(self, 256+212, 0x1EAFD, LocationType.Regular, "Ganon's Tower - Mini Helmasaur Room - Left", self.TowerAscend)
-                .Allow(lambda item, items: item.IsNot(ItemType.BigKeyGT, self.World)),
+                .Allow(lambda item, items: item.IsNot(ItemType.BigKeyGT, self.world)),
             Location(self, 256+213, 0x1EB00, LocationType.Regular, "Ganon's Tower - Mini Helmasaur Room - Right", self.TowerAscend)
-                .Allow(lambda item, items: item.IsNot(ItemType.BigKeyGT, self.World)),
+                .Allow(lambda item, items: item.IsNot(ItemType.BigKeyGT, self.world)),
             Location(self, 256+214, 0x1EB03, LocationType.Regular, "Ganon's Tower - Pre-Moldorm Chest", self.TowerAscend)
-                .Allow(lambda item, items: item.IsNot(ItemType.BigKeyGT, self.World)),
+                .Allow(lambda item, items: item.IsNot(ItemType.BigKeyGT, self.world)),
             Location(self, 256+215, 0x1EB06, LocationType.Regular, "Ganon's Tower - Moldorm Chest",
                 lambda items: items.BigKeyGT and items.KeyGT >= 4 and
                     items.Bow and items.CanLightTorches() and
                     self.CanBeatMoldorm(items) and items.Hookshot)
-                .Allow(lambda item, items: all(item.IsNot(type, self.World) for type in [ ItemType.KeyGT, ItemType.BigKeyGT ]))
+                .Allow(lambda item, items: all(item.IsNot(type, self.world) for type in [ ItemType.KeyGT, ItemType.BigKeyGT ]))
             ]
 
     def LeftSide(self, items: Progression, locations: List[Location]):
-        return items.Hammer and items.Hookshot and items.KeyGT >= (3 if any(l.ItemIs(ItemType.BigKeyGT, self.World) for l in locations) else 4)
+        return items.Hammer and items.Hookshot and items.KeyGT >= (3 if any(l.ItemIs(ItemType.BigKeyGT, self.world) for l in locations) else 4)
 
     def RightSide(self, items: Progression, locations: List[Location]):
-        return items.Somaria and items.Firerod and items.KeyGT >= (3 if any(l.ItemIs(ItemType.BigKeyGT, self.World) for l in locations) else 4)
+        return items.Somaria and items.Firerod and items.KeyGT >= (3 if any(l.ItemIs(ItemType.BigKeyGT, self.world) for l in locations) else 4)
 
     def BigKeyRoom(self, items: Progression):
         return items.KeyGT >= 3 and self.CanBeatArmos(items) \
@@ -133,14 +133,14 @@ class GanonsTower(Z3Region):
         return items.Sword or items.Hammer
 
     def CanEnter(self, items: Progression):
-        return items.MoonPearl and self.World.CanEnter("Dark World Death Mountain East", items) and \
-            self.World.CanAquireAll(items, [ RewardType.CrystalBlue, RewardType.CrystalRed, RewardType.GoldenFourBoss ])
+        return items.MoonPearl and self.world.CanEnter("Dark World Death Mountain East", items) and \
+            self.world.CanAquireAll(items, RewardType.CrystalBlue, RewardType.CrystalRed, RewardType.GoldenFourBoss)
 
-    def CanFill(self, item: Item, items: Progression):
+    def CanFill(self, item: Item):
         if (Config.GameMode == GameMode.Multiworld):
-            if (item.World != self.World or item.Progression):
+            if (item.World != self.world or item.Progression):
                 return False
-            if (Config.KeyShuffle == KeyShuffle.Keysanity and not ((item.Type == ItemType.BigKeyGT or item.Type == ItemType.KeyGT) and item.World == self.World) and (item.IsKey or item.IsBigKey or item.IsKeycard)):
+            if (Config.KeyShuffle == KeyShuffle.Keysanity and not ((item.Type == ItemType.BigKeyGT or item.Type == ItemType.KeyGT) and item.World == self.world) and (item.IsKey or item.IsBigKey or item.IsKeycard)):
                 return False
-        return super.CanFill(item, items)
+        return super().CanFill(item)
 

@@ -1,6 +1,7 @@
 ﻿from enum import Enum
 from typing import Dict, List
 from worlds.smz3.TotalSMZ3.Config import *
+from worlds.smz3.TotalSMZ3.Item import Item, ItemType
 
 class RewardType(Enum):
     Null = 0
@@ -36,20 +37,20 @@ class Region:
 
     def __init__(self, world, config: Config):
         self.Config = config
-        self.World = world
+        self.world = world
         self.locationLookup = {}
         self.RegionItems = []
 
     def GenerateLocationLookup(self):
-        locationLookup = {loc.Name:loc for loc in self.Locations}
+        self.locationLookup = {loc.Name:loc for loc in self.Locations}
 
     def IsRegionItem(self, item):
         return item.Type in self.RegionItems
 
-    def CanFill(self, item, items):
+    def CanFill(self, item):
         return self.Config.Keysanity or not item.IsDungeonItem() or self.IsRegionItem(item)
 
-    def CanEnter(items):
+    def CanEnter(self, items):
         return True
 
 class SMRegion(Region):

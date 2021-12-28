@@ -1,7 +1,7 @@
 ﻿from worlds.smz3.TotalSMZ3.Region import Z3Region, RewardType, IReward
 from worlds.smz3.TotalSMZ3.Config import Config
 from worlds.smz3.TotalSMZ3.Location import Location, LocationType
-from worlds.smz3.TotalSMZ3.Item import Progression
+from worlds.smz3.TotalSMZ3.Item import ItemType, Progression
 
 class DesertPalace(Z3Region, IReward):
     Name = "Desert Palace"
@@ -10,6 +10,7 @@ class DesertPalace(Z3Region, IReward):
     def __init__(self, world, config: Config):
         super().__init__(world, config)
         self.Reward = RewardType.Null
+        self.RegionItems = [ ItemType.KeyDP, ItemType.BigKeyDP, ItemType.MapDP, ItemType.CompassDP ]
         self.Locations = [
             Location(self, 256+109, 0x1E98F, LocationType.Regular, "Desert Palace - Big Chest",
                 lambda items: items.BigKeyDP),

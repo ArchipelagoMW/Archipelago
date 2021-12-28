@@ -327,7 +327,14 @@ class Item:
     # The order of the dungeon pool is significant
     @staticmethod
     def CreateDungeonPool(world):
-        itemPool = [
+        itemPool = [Item(ItemType.BigKeyGT)]
+        Item.AddRange(itemPool, 4, Item(ItemType.KeyGT))
+        if (not world.Config.Keysanity):
+            itemPool += [
+                Item(ItemType.MapGT),
+                Item(ItemType.CompassGT),
+                ]
+        itemPool += [
             Item(ItemType.BigKeyEP),
             Item(ItemType.BigKeyDP),
             Item(ItemType.BigKeyTH),
@@ -338,7 +345,6 @@ class Item:
             Item(ItemType.BigKeyIP),
             Item(ItemType.BigKeyMM),
             Item(ItemType.BigKeyTR),
-            Item(ItemType.BigKeyGT),
         ]
 
         Item.AddRange(itemPool, 1, Item(ItemType.KeyHC))
@@ -352,7 +358,6 @@ class Item:
         Item.AddRange(itemPool, 2, Item(ItemType.KeyIP))
         Item.AddRange(itemPool, 3, Item(ItemType.KeyMM))
         Item.AddRange(itemPool, 4, Item(ItemType.KeyTR))
-        Item.AddRange(itemPool, 4, Item(ItemType.KeyGT))
 
         itemPool += [
             Item(ItemType.MapEP),
@@ -369,7 +374,6 @@ class Item:
         if (not world.Config.Keysanity):
             itemPool += [
                 Item(ItemType.MapHC),
-                Item(ItemType.MapGT),
                 Item(ItemType.CompassEP),
                 Item(ItemType.CompassDP),
                 Item(ItemType.CompassTH),
@@ -380,7 +384,6 @@ class Item:
                 Item(ItemType.CompassIP),
                 Item(ItemType.CompassMM),
                 Item(ItemType.CompassTR),
-                Item(ItemType.CompassGT),
             ]
 
         for item in itemPool:
@@ -589,6 +592,24 @@ class Progression:
     ]
 
     def __init__(self, items):
+        for item in Progression.itemMapping:
+            setattr(self, item.name, False)
+        self.KeyCT = 0
+        self.KeyPD = 0
+        self.KeySW = 0
+        self.KeyIP = 0
+        self.KeyMM = 0
+        self.KeyTR = 0
+        self.KeyGT = 0
+        self.ETank = 0
+        self.ReserveTank = 0
+        self.shield = 0
+        self.MasterSword = False
+        self.Sword = False
+        self.Mitt = False
+        self.Glove = False
+        self.TwoPowerBombs = False
+        self.PowerBomb = False
         self.Add(items)
 
     def Add(self, items:List[Item]):
@@ -626,7 +647,44 @@ class Progression:
                 self.Glove = True
             elif (item.Type == ItemType.PowerBomb):
                 self.TwoPowerBombs = self.PowerBomb
-                self.PowerBomb = True               
+                self.PowerBomb = True     
+
+    def Remove(self, items:List[Item]):
+        for item in items:
+            found = item.Type in Progression.itemMapping
+            if found:
+                setattr(self, item.Type.name, False)
+                continue
+
+            if (item.Type == ItemType.KeyCT):
+                self.KeyCT -= 1
+            elif (item.Type == ItemType.KeyPD):
+                self.KeyPD -= 1
+            elif (item.Type == ItemType.KeySW):
+                self.KeySW -= 1
+            elif (item.Type == ItemType.KeyIP):
+                self.KeyIP -= 1
+            elif (item.Type == ItemType.KeyMM):
+                self.KeyMM -= 1
+            elif (item.Type == ItemType.KeyTR):
+                self.KeyTR -= 1
+            elif (item.Type == ItemType.KeyGT):
+                self.KeyGT -= 1
+            elif (item.Type == ItemType.ETank):
+                self.ETank -= 1
+            elif (item.Type == ItemType.ReserveTank):
+                self.ReserveTank -= 1
+            elif (item.Type == ItemType.KeyPD):
+                self.shield -= 1
+            elif (item.Type == ItemType.ProgressiveSword):
+                self.Sword = self.MasterSword
+                self.MasterSword = False
+            elif (item.Type == ItemType.ProgressiveGlove):
+                self.Glove = self.Mitt
+                self.Mitt = False
+            elif (item.Type == ItemType.PowerBomb):
+                self.PowerBomb = self.TwoPowerBombs
+                self.TwoPowerBombs = False           
 
     def CanLiftLight(self): return self.Glove
 
@@ -699,7 +757,7 @@ class Progression:
 
     def CanAccessMaridiaPortal(self, world):
         import worlds.smz3.TotalSMZ3.Region
-        if (world.config.SMLogic == SMLogic.Normal):
+        if (world.Config.SMLogic == SMLogic.Normal):
             return self.MoonPearl and self.Flippers and \
                     self.Gravity and self.Morph and \
                     (world.CanAquire(self, worlds.smz3.TotalSMZ3.Region.RewardType.Agahnim) or self.Hammer and self.CanLiftLight() or self.CanLiftHeavy())

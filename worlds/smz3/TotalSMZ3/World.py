@@ -134,7 +134,14 @@ class World:
         return next(iter([region for region in self.Regions if isinstance(region, Region.IReward) and region.Reward == reward])).CanComplete(items)
 
     def CanAquireAll(self, items: Item.Progression, *rewards: Region.RewardType):
-        return all(region.CanComplete(items) for region in self.Regions if isinstance(region, Region.IReward) and region.Reward in rewards)
+        for region in self.Regions:
+            if issubclass(type(region), Region.IReward):
+                if (region.Reward in rewards):
+                    if not region.CanComplete(items):
+                        return False
+        return True
+
+        # return all(region.CanComplete(items) for region in self.Regions if (isinstance(region, Region.IReward) and region.Reward in rewards))
 
     def Setup(self, rnd: random):
         self.SetMedallions(rnd)

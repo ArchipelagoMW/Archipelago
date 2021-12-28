@@ -1,5 +1,6 @@
 ﻿from enum import Enum
 from typing import List, Callable
+from worlds.smz3.TotalSMZ3.Item import Progression
 import worlds.smz3.TotalSMZ3.Region as Region
 import worlds.smz3.TotalSMZ3.World as World
 
@@ -32,7 +33,9 @@ class Location:
     allow: Callable = lambda item, items: True
     weight: int
 
-    def ItemIs(self, type, world: World): return self.Item.Is(type, world) if self.Item != None else False
+    def ItemIs(self, type, world: World): 
+        item = self.APLocation.item.item if self.APLocation.item is not None else None
+        return item.Is(type, world) if item != None else False
     def ItemIsNot(self, type, world: World): return not self.ItemIs(type, world)
 
     def __init__(self, region: Region, id: int, address: int, type: LocationType, name: str, access: Callable = lambda items : True):
@@ -40,6 +43,7 @@ class Location:
         self.Id = id
         self.Name = name
         self.Type = type
+        self.Item = None
         self.Address = address
         self.canAccess = access
         self.alwaysAllow = lambda item, items: False
@@ -57,13 +61,13 @@ class Location:
         self.allow = allow
         return self
 
-    def Available(self, items: Callable):
+    def Available(self, items: Progression):
         return self.Region.CanEnter(items) and self.canAccess(items)
 
-    def CanFill(self, item, items: Callable):
+    def CanFill(self, item, items: Progression):
         oldItem = self.Item
         self.Item = item
-        fillable = self.alwaysAllow(item, items) or (self.Region.CanFill(item, items) and self.allow(item, items) and self.Available(items))
+        fillable = self.alwaysAllow(item, items) or (self.Region.CanFill(item) and self.allow(item, items) and self.Available(items))
         self.Item = oldItem
         return fillable
 
@@ -86,11 +90,11 @@ class Location:
     def AvailableWithinWorld(locations, items):
         result = []
         for world in set([l.Region.World for l in locations]):
-            result += Location.Available([l for l in locations if l.Region.World == world], [i for i in items if i.World == world])
+            result += Location.AvailableGlobal([l for l in locations if l.Region.World == world], [i for i in items if i.World == world])
         return result  
 
     @staticmethod
-    def Available(locations, items):
+    def AvailableGlobal(locations, items):
         progression = Progression(items)
         return [l for l in locations if l.Available(progression)]
 
