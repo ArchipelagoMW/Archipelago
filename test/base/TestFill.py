@@ -84,20 +84,38 @@ class TestBase(unittest.TestCase):
     def test_ordered_fill_restrictive(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(multi_world, 1, 2, 2)
-
-        item0 = player1.prog_items[0]
-        item1 = player1.prog_items[1]
-        loc0 = player1.locations[0]
-        loc1 = player1.locations[1]
+        items = player1.prog_items
+        locations = player1.locations
 
         multi_world.completion_condition[player1.id] = lambda state: state.has(
-            item0.name, player1.id) and state.has(item1.name, player1.id)
-        set_rule(loc1, lambda state: state.has(item0.name, player1.id))
+            items[0].name, player1.id) and state.has(items[1].name, player1.id)
+        set_rule(locations[1], lambda state: state.has(
+            items[0].name, player1.id))
         fill_restrictive(multi_world, multi_world.state,
-                         player1.locations, player1.prog_items)
+                         player1.locations.copy(), player1.prog_items.copy())
 
-        self.assertEqual(loc0.item, item0)
-        self.assertEqual(loc1.item, item1)
+        self.assertEqual(locations[0].item, items[0])
+        self.assertEqual(locations[1].item, items[1])
+
+    def test_minimal_fill_restrictive(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(multi_world, 1, 2, 2)
+
+        items = player1.prog_items
+        locations = player1.locations
+
+        multi_world.accessibility[player1.id] = 'minimal'
+        multi_world.completion_condition[player1.id] = lambda state: state.has(
+            items[1].name, player1.id)
+        set_rule(locations[1], lambda state: state.has(
+            items[0].name, player1.id))
+
+        fill_restrictive(multi_world, multi_world.state,
+                         player1.locations.copy(), player1.prog_items.copy())
+
+        self.assertEqual(locations[0].item, items[1])
+        # Unnecessary unreachable Item
+        self.assertEqual(locations[1].item, items[0])
 
     def test_reversed_fill_restrictive(self):
         multi_world = generate_multi_world()
@@ -126,9 +144,12 @@ class TestBase(unittest.TestCase):
 
         multi_world.completion_condition[player1.id] = lambda state: state.has(
             items[2].name, player1.id) and state.has(items[3].name, player1.id)
-        set_rule(locations[1], lambda state: state.has(items[0].name, player1.id))
-        set_rule(locations[2], lambda state: state.has(items[1].name, player1.id))
-        set_rule(locations[3], lambda state: state.has(items[1].name, player1.id))
+        set_rule(locations[1], lambda state: state.has(
+            items[0].name, player1.id))
+        set_rule(locations[2], lambda state: state.has(
+            items[1].name, player1.id))
+        set_rule(locations[3], lambda state: state.has(
+            items[1].name, player1.id))
 
         fill_restrictive(multi_world, multi_world.state,
                          player1.locations.copy(), player1.prog_items.copy())
@@ -138,22 +159,42 @@ class TestBase(unittest.TestCase):
         self.assertEqual(locations[2].item, items[0])
         self.assertEqual(locations[3].item, items[3])
 
-    def test_impossible_fill_restrictive(self):
+    def test_minimal_fill_restrictive(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(multi_world, 1, 2, 2)
 
-        item0 = player1.prog_items[0]
-        item1 = player1.prog_items[1]
-        loc0 = player1.locations[0]
-        loc1 = player1.locations[1]
+        items = player1.prog_items
+        locations = player1.locations
+
+        multi_world.accessibility[player1.id] = 'minimal'
+        multi_world.completion_condition[player1.id] = lambda state: state.has(
+            items[1].name, player1.id)
+        set_rule(locations[1], lambda state: state.has(
+            items[0].name, player1.id))
+
+        fill_restrictive(multi_world, multi_world.state,
+                         player1.locations.copy(), player1.prog_items.copy())
+
+        self.assertEqual(locations[0].item, items[1])
+        # Unnecessary unreachable Item
+        self.assertEqual(locations[1].item, items[0])
+
+    def test_impossible_fill_restrictive(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(multi_world, 1, 2, 2)
+        items = player1.prog_items
+        locations = player1.locations
 
         multi_world.completion_condition[player1.id] = lambda state: state.has(
-            item0.name, player1.id) and state.has(item1.name, player1.id)
-        set_rule(loc1, lambda state: state.has(item1.name, player1.id))
-        set_rule(loc0, lambda state: state.has(item0.name, player1.id))
+            items[0].name, player1.id) and state.has(items[1].name, player1.id)
+        set_rule(locations[1], lambda state: state.has(
+            items[1].name, player1.id))
+        set_rule(locations[0], lambda state: state.has(
+            items[0].name, player1.id))
+
         with pytest.raises(FillError):
             fill_restrictive(multi_world, multi_world.state,
-                             player1.locations, player1.prog_items)
+                             player1.locations.copy(), player1.prog_items.copy())
 
     def test_circular_fill_restrictive(self):
         multi_world = generate_multi_world()
