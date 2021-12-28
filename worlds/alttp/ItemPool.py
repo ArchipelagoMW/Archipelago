@@ -372,14 +372,30 @@ def generate_itempool(world):
 
     dungeon_items = [item for item in get_dungeon_item_pool_player(world, player)
                      if item.name not in world.worlds[player].dungeon_local_item_names]
-
+    dungeon_item_replacements = difficulties[world.difficulty[player]].extras[0]\
+                                + difficulties[world.difficulty[player]].extras[1]\
+                                + difficulties[world.difficulty[player]].extras[2]\
+                                + difficulties[world.difficulty[player]].extras[3]\
+                                + difficulties[world.difficulty[player]].extras[4]
+    world.random.shuffle(dungeon_item_replacements)
     if world.goal[player] == 'icerodhunt':
         for item in dungeon_items:
             world.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
             world.push_precollected(item)
     else:
+        for x in range(len(dungeon_items)-1, -1, -1):
+            item = dungeon_items[x]
+            logging.info(f'itemn:{x} item:{item} len:{len(dungeon_items)}')
+            if ((world.smallkey_shuffle[player] == smallkey_shuffle.option_start_with and item.type == 'SmallKey')
+                    or (world.bigkey_shuffle[player] == bigkey_shuffle.option_start_with and item.type == 'BigKey')
+                    or (world.compass_shuffle[player] == compass_shuffle.option_start_with and item.type == 'Compass')
+                    or (world.map_shuffle[player] == map_shuffle.option_start_with and item.type == 'Map')):
+                logging.info('Removing...')
+                dungeon_items.remove(item)
+                world.push_precollected(item)
+                world.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
+        logging.info(f'Done: {dungeon_items}')
         world.itempool.extend([item for item in dungeon_items])
-
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
     # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
@@ -652,72 +668,6 @@ def get_pool_core(world, player: int):
             place_item(key_location, item_to_place)
         else:
             pool.extend([item_to_place])
-
-    dungitemreplacements = diff.extras[0] + diff.extras[1] + diff.extras[2] + diff.extras[3] + diff.extras[4]
-    world.random.shuffle(dungitemreplacements)
-
-    if world.smallkey_shuffle[player] == smallkey_shuffle.option_start_with:
-        precollected_items.append('Small Key (Hyrule Castle)')
-        precollected_items.append('Small Key (Desert Palace)')
-        precollected_items.append('Small Key (Tower of Hera)')
-        precollected_items.extend(['Small Key (Palace of Darkness)'] * 6)
-        precollected_items.append('Small Key (Thieves Town)')
-        precollected_items.extend(['Small Key (Skull Woods)'] * 3)
-        precollected_items.append('Small Key (Swamp Palace)')
-        precollected_items.extend(['Small Key (Ice Palace)'] * 2)
-        precollected_items.extend(['Small Key (Misery Mire)'] * 3)
-        precollected_items.extend(['Small Key (Turtle Rock)'] * 4)
-        precollected_items.extend(['Small Key (Agahnims Tower)'] * 2)
-        precollected_items.extend(['Small Key (Ganons Tower)'] * 4)
-        pool.extend(dungitemreplacements[:29])
-        dungitemreplacements = dungitemreplacements[29:]
-
-
-    if world.compass_shuffle[player] == compass_shuffle.option_start_with:
-        precollected_items.append('Compass (Eastern Palace)')
-        precollected_items.append('Compass (Desert Palace)')
-        precollected_items.append('Compass (Tower of Hera)')
-        precollected_items.append('Compass (Palace of Darkness)')
-        precollected_items.append('Compass (Thieves Town)')
-        precollected_items.append('Compass (Skull Woods)')
-        precollected_items.append('Compass (Swamp Palace)')
-        precollected_items.append('Compass (Ice Palace)')
-        precollected_items.append('Compass (Misery Mire)')
-        precollected_items.append('Compass (Turtle Rock)')
-        precollected_items.append('Compass (Ganons Tower)')
-        pool.extend(dungitemreplacements[:11])
-        dungitemreplacements = dungitemreplacements[11:]
-
-    if world.map_shuffle[player] == map_shuffle.option_start_with:
-        precollected_items.append('Map (Hyrule Castle)')
-        precollected_items.append('Map (Eastern Palace)')
-        precollected_items.append('Map (Desert Palace)')
-        precollected_items.append('Map (Tower of Hera)')
-        precollected_items.append('Map (Palace of Darkness)')
-        precollected_items.append('Map (Thieves Town)')
-        precollected_items.append('Map (Skull Woods)')
-        precollected_items.append('Map (Swamp Palace)')
-        precollected_items.append('Map (Ice Palace)')
-        precollected_items.append('Map (Misery Mire)')
-        precollected_items.append('Map (Turtle Rock)')
-        precollected_items.append('Map (Ganons Tower)')
-        pool.extend(dungitemreplacements[:12])
-        dungitemreplacements = dungitemreplacements[12:]
-
-    if world.bigkey_shuffle[player] == bigkey_shuffle.option_start_with:
-        precollected_items.append('Big Key (Eastern Palace)')
-        precollected_items.append('Big Key (Desert Palace)')
-        precollected_items.append('Big Key (Tower of Hera)')
-        precollected_items.append('Big Key (Palace of Darkness)')
-        precollected_items.append('Big Key (Thieves Town)')
-        precollected_items.append('Big Key (Skull Woods)')
-        precollected_items.append('Big Key (Swamp Palace)')
-        precollected_items.append('Big Key (Ice Palace)')
-        precollected_items.append('Big Key (Misery Mire)')
-        precollected_items.append('Big Key (Turtle Rock)')
-        precollected_items.append('Big Key (Ganons Tower)')
-        pool.extend(dungitemreplacements[:11])
-
 
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
             additional_pieces_to_place)
