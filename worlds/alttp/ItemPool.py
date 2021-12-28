@@ -1,15 +1,15 @@
-import logging
 from collections import namedtuple
+import logging
 
 from BaseClasses import Region, RegionType
-from Fill import FillError
+from worlds.alttp.SubClasses import ALttPLocation
+from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops
 from worlds.alttp.Bosses import place_bosses
 from worlds.alttp.Dungeons import get_dungeon_item_pool_player
 from worlds.alttp.EntranceShuffle import connect_entrance
+from Fill import FillError
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
 from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle
-from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops
-from worlds.alttp.SubClasses import ALttPLocation
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -653,6 +653,9 @@ def get_pool_core(world, player: int):
         else:
             pool.extend([item_to_place])
 
+    dungitemreplacements = diff.extras[0] + diff.extras[1] + diff.extras[2] + diff.extras[3] + diff.extras[4]
+    world.random.shuffle(dungitemreplacements)
+
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_start_with:
         precollected_items.append('Small Key (Hyrule Castle)')
         precollected_items.append('Small Key (Desert Palace)')
@@ -666,9 +669,9 @@ def get_pool_core(world, player: int):
         precollected_items.extend(['Small Key (Turtle Rock)'] * 4)
         precollected_items.extend(['Small Key (Agahnims Tower)'] * 2)
         precollected_items.extend(['Small Key (Ganons Tower)'] * 4)
-        pool.extend(['Rupees (20)'] * 23)
-        pool.extend(['Arrows (10)'] * 3)
-        pool.extend(['Bombs (10)'] * 3)
+        pool.extend(dungitemreplacements[:29])
+        dungitemreplacements = dungitemreplacements[29:]
+
 
     if world.compass_shuffle[player] == compass_shuffle.option_start_with:
         precollected_items.append('Compass (Eastern Palace)')
@@ -682,9 +685,8 @@ def get_pool_core(world, player: int):
         precollected_items.append('Compass (Misery Mire)')
         precollected_items.append('Compass (Turtle Rock)')
         precollected_items.append('Compass (Ganons Tower)')
-        pool.extend(['Rupees (20)'] * 9)
-        pool.append('Arrows (10)')
-        pool.append('Bombs (10)')
+        pool.extend(dungitemreplacements[:11])
+        dungitemreplacements = dungitemreplacements[11:]
 
     if world.map_shuffle[player] == map_shuffle.option_start_with:
         precollected_items.append('Map (Hyrule Castle)')
@@ -699,9 +701,8 @@ def get_pool_core(world, player: int):
         precollected_items.append('Map (Misery Mire)')
         precollected_items.append('Map (Turtle Rock)')
         precollected_items.append('Map (Ganons Tower)')
-        pool.extend(['Rupees (20)'] * 10)
-        pool.append('Arrows (10)')
-        pool.append('Bombs (10)')
+        pool.extend(dungitemreplacements[:12])
+        dungitemreplacements = dungitemreplacements[12:]
 
     if world.bigkey_shuffle[player] == bigkey_shuffle.option_start_with:
         precollected_items.append('Big Key (Eastern Palace)')
@@ -715,9 +716,7 @@ def get_pool_core(world, player: int):
         precollected_items.append('Big Key (Misery Mire)')
         precollected_items.append('Big Key (Turtle Rock)')
         precollected_items.append('Big Key (Ganons Tower)')
-        pool.extend(['Rupees (20)'] * 9)
-        pool.append('Arrows (10)')
-        pool.append('Bombs (10)')
+        pool.extend(dungitemreplacements[:11])
 
 
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
