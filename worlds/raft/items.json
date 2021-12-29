@@ -333,5 +333,10 @@
         "id": 47067,
         "progression": true,
         "name": "Tangaroa Frequency"
+    },
+    {
+        "id": 47068,
+        "progression": true,
+        "name": "Caravan Island Frequency"
     }
 ]

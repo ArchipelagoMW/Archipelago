@@ -1,15 +1,13 @@
-import logging
 import typing
 import random
 
 from .Locations import location_table, lookup_name_to_id as locations_lookup_name_to_id
-from .Items import item_table, lookup_name_to_item, advancement_item_names
-from .Items import lookup_name_to_id as items_lookup_name_to_id
-from .Progressives import lookup_item_to_progressive, progressive_item_list
+from .Items import (createResourcePackName, item_table, progressive_table, progressive_item_list,
+    lookup_name_to_item, resourcepack_items as resourcePackItems, lookup_name_to_id as items_lookup_name_to_id)
 
 from .Regions import create_regions, getConnectionName
 from .Rules import set_rules
-from .Options import options
+from .Options import raft_options
 
 from BaseClasses import Region, RegionType, Entrance, Location, MultiWorld, Item
 from ..AutoWorld import World
@@ -24,48 +22,52 @@ class RaftWorld(World):
 
     item_name_to_id = items_lookup_name_to_id.copy()
     lastItemId = max(filter(lambda val: val is not None, item_name_to_id.values()))
-    for progressiveItemName in progressive_item_list.keys():
-        lastItemId += 1
-        item_name_to_id[progressiveItemName] = lastItemId
+
     location_name_to_id = locations_lookup_name_to_id
-    options = options
+    options = raft_options
 
-    possible_resource_packs = [ #TODO: Figure out a more dynamic way of setting these
-            ("Plank", 1, 5),
-            ("Plastic", 1, 5),
-            ("Clay", 1, 5),
-            ("Stone", 1, 5),
-            ("Scrap", 1, 5),
-            ("SeaVine", 1, 5),
-            ("Thatch", 1, 5),
-            ("Sand", 1, 5),
-            ("Beet", 1, 5),
-            ("Rock", 1, 5),
-            ("Potato", 1, 5)
-        ]
-    for resourcePack in possible_resource_packs:
-        for i in range(resourcePack[1], resourcePack[2] + 1):
-            lastItemId += 1
-            item_name_to_id["Resource Pack: " + str(i) + " " + resourcePack[0]] = lastItemId
-    
-
-    data_version = 11
+    data_version = 12
 
     def generate_basic(self):
+        minRPSpecified = self.world.minimum_resource_pack_amount[self.player].value
+        maxRPSpecified = self.world.maximum_resource_pack_amount[self.player].value
+        minimumResourcePackAmount = min(minRPSpecified, maxRPSpecified)
+        maximumResourcePackAmount = max(minRPSpecified, maxRPSpecified)
         # Generate item pool
         pool = []
-        extras = len(location_table) - len(item_table)
-        if extras < 0:
-            extras = 0
         for item in item_table:
-            raft_item = self.create_item(item["name"])
+            raft_item = self.create_item_replaceAsNecessary(item["name"])
             pool.append(raft_item)
 
-        while extras > 0:
-            pack_seed = self.possible_resource_packs[random.randrange(0, len(self.possible_resource_packs))] #TODO: Make this work with options that aren't 1
-            pack = self.create_item("Resource Pack: " + str(random.randrange(pack_seed[1] * self.world.resource_pack_multiplier[self.player].value, (pack_seed[2] * self.world.resource_pack_multiplier[self.player].value) + 1, self.world.resource_pack_multiplier[self.player].value)) + " " + pack_seed[0])
-            pool.append(pack)
-            extras -= 1
+        extraItemNamePool = []
+        extras = max(len(location_table) - len(item_table), 0)
+        if extras > 0:
+            if (self.world.use_resource_packs[self.player].value):
+                for packItem in resourcePackItems:
+                    for i in range(minimumResourcePackAmount, maximumResourcePackAmount + 1):
+                        extraItemNamePool.append(createResourcePackName(i, packItem))
+
+            if self.world.duplicate_items[self.player].value != 0:
+                dupeItemPool = item_table.copy()
+                # Remove frequencies if necessary
+                if self.world.island_frequency_locations[self.player].value != 3: # Not completely random locations
+                    dupeItemPool = (itm for itm in dupeItemPool if "Frequency" not in itm["name"])
+                
+                # Remove progression or non-progression items if necessary
+                if (self.world.duplicate_items[self.player].value == 1): # Progression only
+                    dupeItemPool = (itm for itm in dupeItemPool if itm["progression"] == True)
+                elif (self.world.duplicate_items[self.player].value == 2): # Non-progression only
+                    dupeItemPool = (itm for itm in dupeItemPool if itm["progression"] == False)
+                
+                dupeItemPool = list(dupeItemPool)
+                # Finally, add items as necessary
+                if len(dupeItemPool) > 0:
+                    for item in dupeItemPool:
+                        extraItemNamePool.append(item["name"])
+            
+            for randomItem in random.choices(extraItemNamePool, k=extras):
+                raft_item = self.create_item_replaceAsNecessary(randomItem)
+                pool.append(raft_item)
 
         self.world.itempool += pool
 
@@ -78,14 +80,21 @@ class RaftWorld(World):
     def fill_slot_data(self):
         slot_data = {}
         return slot_data
+    
+    def create_item_replaceAsNecessary(self, name: str) -> Item:
+        isFrequency = "Frequency" in name
+        shouldUseProgressive = ((isFrequency and self.world.island_frequency_locations[self.player].value == 2)
+            or (not isFrequency and self.world.progressive_items[self.player].value))
+        if shouldUseProgressive and name in progressive_table:
+            name = progressive_table[name]
+        return self.create_item(name)
 
     def create_item(self, name: str) -> Item:
-        if len(name) >= 14 and name[0:14] == "Resource Pack:": #TODO: Make this less evil and hacky
-            return RaftItem(name, False, self.item_name_to_id[name], player=self.player)
         item = lookup_name_to_item[name]
-        if name in lookup_item_to_progressive:
-            name = lookup_item_to_progressive[name]
         return RaftItem(name, item["progression"], self.item_name_to_id[name], player=self.player)
+    
+    def create_resourcePack(self, rpName: str) -> Item:
+        return RaftItem(rpName, False, self.item_name_to_id[rpName], player=self.player)
     
     def collect_item(self, state, item, remove=False):
         if item.name in progressive_item_list:
@@ -105,10 +114,30 @@ class RaftWorld(World):
         return max((0, 2, 0), super(RaftWorld, self).get_required_client_version())
     
     def pre_fill(self):
+        if self.world.island_frequency_locations[self.player] == 0:
+            self.setLocationItem("Radio Tower Frequency to Vasagatan", "Vasagatan Frequency")
+            self.setLocationItem("Vasagatan Frequency to Balboa", "Balboa Island Frequency")
+            self.setLocationItem("Relay Station quest", "Caravan Island Frequency")
+            self.setLocationItem("Caravan Island Frequency to Tangaroa", "Tangaroa Frequency")
+        elif self.world.island_frequency_locations[self.player] == 1:
+            self.setLocationItemFromRegion("RadioTower", "Vasagatan Frequency")
+            self.setLocationItemFromRegion("Vasagatan", "Balboa Island Frequency")
+            self.setLocationItemFromRegion("BalboaIsland", "Caravan Island Frequency")
+            self.setLocationItemFromRegion("CaravanIsland", "Tangaroa Frequency")
         # Victory item
         self.world.get_location("Tangaroa Next Frequency", self.player).place_locked_item(
             RaftItem("Victory", True, None, player=self.player))
-
+    
+    def setLocationItem(self, location: str, itemName: str):
+        itemToUse = next(filter(lambda itm: itm.name == itemName, self.world.itempool))
+        self.world.itempool.remove(itemToUse)
+        self.world.get_location(location, self.player).place_locked_item(itemToUse)
+    
+    def setLocationItemFromRegion(self, region: str, itemName: str):
+        itemToUse = next(filter(lambda itm: itm.name == itemName, self.world.itempool))
+        self.world.itempool.remove(itemToUse)
+        location = random.choice(list(loc for loc in location_table if loc["region"] == region))
+        self.world.get_location(location["name"], self.player).place_locked_item(itemToUse)
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, RegionType.Generic, name, player)
@@ -123,7 +152,6 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
             ret.exits.append(Entrance(player, getConnectionName(name, exit), ret))
 
     return ret
-
 
 class RaftLocation(Location):
     game = "Raft"

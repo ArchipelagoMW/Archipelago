@@ -15,7 +15,6 @@ def create_regions(world, player: int):
         if len(exit_array) == 0:
             exit_array = None
         new_region = create_region(world, player, region, [location["name"] for location in location_table if location["region"] == region], exit_array)
-            
         world.regions += [new_region]
 
     menu = create_region(world, player, "Menu", None, ["Raft"])

@@ -3,15 +3,13 @@ from .Locations import location_table
 from .Regions import regionMap
 from ..AutoWorld import LogicMixin
 
-# TODOs
-# - Maybe put large island unlockables behind Receiver
-# -- This will make getting them more consistent
-# - Blueprint fuel pipe on Balboa didn't trigger Archipelago sendable ("Error finding ID for location Blueprint_Pipe_Fuel")
-# -- Same with Blueprint_Fueltank
-# -- All blueprints :(
-# - Blueprint_Firework from doll after explosive barrel on Caravan Island doesn't disappear when picked up
-
 class RaftLogic(LogicMixin):
+    def paddleboard_mode_enabled(self, player):
+        return self.world.paddleboard_mode[player].value
+    
+    def big_islands_available(self, player):
+        return self.world.big_island_early_crafting[player].value or self.can_access_radio_tower(player)
+
     def can_smelt_items(self, player):
         return self.has("Smelter", player)
 
@@ -81,8 +79,6 @@ class RaftLogic(LogicMixin):
         return self.can_craft_engine(player) and self.can_craft_steeringWheel(player)
 
     def can_access_radio_tower(self, player):
-        # Technically the player doesn't need things like the sail to reach the Radio Tower,
-        # but paddling there is not very efficient or engaging gameplay.
         return self.can_navigate(player)
 
     def can_complete_radio_tower(self, player):
@@ -95,25 +91,26 @@ class RaftLogic(LogicMixin):
         return self.can_access_vasagatan(player)
 
     def can_access_balboa_island(self, player):
-        return self.can_complete_vasagatan(player) and self.can_drive(player) and self.has("Balboa Island Frequency", player)
+        return (self.can_complete_vasagatan(player)
+            and (self.can_drive(player) or self.paddleboard_mode_enabled(player))
+            and self.has("Balboa Island Frequency", player))
 
     def can_complete_balboa_island(self, player):
         return self.can_access_balboa_island(player) and self.can_craft_machete(player) and self.can_fire_bow(player)
 
     def can_access_caravan_island(self, player):
-        return self.can_complete_balboa_island(player) and self.can_drive(player) # Coordinates are given from Relay Station quest
+        return self.can_complete_balboa_island(player) and (self.can_drive(player) or self.paddleboard_mode_enabled(player)) and self.has("Caravan Island Frequency", player)
 
     def can_complete_caravan_island(self, player):
         return self.can_access_caravan_island(player) and self.can_craft_ziplineTool(player)
 
     def can_access_tangaroa(self, player):
-        return self.can_complete_caravan_island(player) and self.can_drive(player) and self.has("Tangaroa Frequency", player)
+        return self.can_complete_caravan_island(player) and (self.can_drive(player) or self.paddleboard_mode_enabled(player)) and self.has("Tangaroa Frequency", player)
 
     def can_complete_tangaroa(self, player):
         return self.can_access_tangaroa(player)
 
 def set_rules(world, player):
-    # Map region to check to see if we can access it
     regionChecks = {
         "Raft": lambda state: True,
         "ResearchTable": lambda state: True,
@@ -133,14 +130,14 @@ def set_rules(world, player):
         "Scrap": lambda state: True,
         "SeaVine": lambda state: True,
         "Brick_Dry": lambda state: True,
-        "Leather": lambda state: True, # Conflicting info on whetherwe need state.can_navigate(player) instead, personal testing indicates this is correct
         "Thatch": lambda state: True, # Palm Leaf
         "Placeable_GiantClam": lambda state: True,
-        "Feather": lambda state: state.can_craft_birdNest(player), # Maybe add config for this since you technically don't need bird nest
+        "Leather": lambda state: state.big_islands_available(player),
+        "Feather": lambda state: state.big_islands_available(player) or state.can_craft_birdNest(player),
         "MetalIngot": lambda state: state.can_smelt_items(player),
         "CopperIngot": lambda state: state.can_smelt_items(player),
         "VineGoo": lambda state: state.can_smelt_items(player),
-        "ExplosivePowder": lambda state: state.can_smelt_items(player),
+        "ExplosivePowder": lambda state: state.big_islands_available(player) and state.can_smelt_items(player),
         "Glass": lambda state: state.can_smelt_items(player),
         "Bolt": lambda state: state.can_craft_bolt(player),
         "Hinge": lambda state: state.can_craft_hinge(player),
@@ -158,26 +155,26 @@ def set_rules(world, player):
         "Zipline tool": lambda state: state.can_craft_ziplineTool(player)
     }
 
-    # Location rules
+    # Region access rules
     for region in regionMap:
         if region != "Menu":
             for exitRegion in world.get_region(region, player).exits:
                 set_rule(world.get_entrance(exitRegion.name, player), regionChecks[region])
      
-    # Process locations
+    # Location access rules
     for location in location_table:
         locFromWorld = world.get_location(location["name"], player)
-        if "requiresAccessToItems" in location:
-            def ruleLambda(state, location=location):
+        if "requiresAccessToItems" in location: # Specific item access required
+            def fullLocationCheck(state, location=location):
                 canAccess = regionChecks[location["region"]](state)
                 for item in location["requiresAccessToItems"]:
                     if not itemChecks[item](state):
                         canAccess = False
                         break
                 return canAccess
-            set_rule(locFromWorld, ruleLambda)
-        else:
+            set_rule(locFromWorld, fullLocationCheck)
+        else: # Only region access required
             set_rule(locFromWorld, regionChecks[location["region"]])
 
-    # Victory location
-    world.completion_condition[player] = lambda state: state.has('Victory', player)
+    # Victory requirement
+    world.completion_condition[player] = lambda state: state.has("Victory", player)
