@@ -184,7 +184,7 @@ def create_inverted_regions(world, player):
         create_dw_region(player, 'West Dark World', ['Frog', 'Flute Activation Spot'], ['Village of Outcasts Drop', 'East Dark World River Pier', 'Brewery', 'C-Shaped House', 'Chest Game', 'Thieves Town', 'Bumper Cave Entrance Rock',
                                                        'Skull Woods Forest', 'Village of Outcasts Pegs', 'Village of Outcasts Eastern Rocks', 'Red Shield Shop', 'Inverted Dark Sanctuary', 'Fortune Teller (Dark)', 'Dark World Lumberjack Shop',
                                                        'West Dark World Teleporter', 'WDW Flute']),
-        create_dw_region(player, 'Dark Grassy Lawn', None, ['Grassy Lawn Pegs', 'Dark World Shop', 'Dark Grassy Lawn Flute']),
+        create_dw_region(player, 'Dark Grassy Lawn', None, ['Grassy Lawn Pegs', 'Village of Outcasts Shop', 'Dark Grassy Lawn Flute']),
         create_dw_region(player, 'Hammer Peg Area', ['Dark Blacksmith Ruins'], ['Dark World Hammer Peg Cave', 'Peg Area Rocks', 'Hammer Peg Area Flute']),
         create_dw_region(player, 'Bumper Cave Entrance', None, ['Bumper Cave (Bottom)', 'Bumper Cave Entrance Drop']),
         create_cave_region(player, 'Fortune Teller (Dark)', 'a fortune teller'),
