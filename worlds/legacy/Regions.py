@@ -1,45 +1,42 @@
-from .Constants import TOTAL_LOCATIONS
 import typing
 
 
 def create_regions(world, player: int):
     from . import create_region
-    from .Locations import base_location_table, location_table
+    from .Locations import base_location_table, diary_location_table
+    from .Items import LegacyItem
 
     locations: typing.List[str] = []
 
     # Add required locations.
-    locations += [location for location in location_table]
+    locations += [location for location in base_location_table]
+    locations += [location for location in diary_location_table]
 
-    # # Fill remaining spots with chests.
-    # chest_counter = -1
-    # fairy_counter = 0
-    # for i in range(0, TOTAL_LOCATIONS - 67):
-    #     zone_cycle = i % 4
-    #     zone = ""
-    #     if zone_cycle == 0:
-    #         zone = "Castle"
-    #         chest_counter += 1
-    #     elif zone_cycle == 1:
-    #         zone = "Garden"
-    #     elif zone_cycle == 2:
-    #         zone = "Tower"
-    #     elif zone_cycle == 3:
-    #         zone = "Dungeon"
-    #     fairy = chest_counter % 3 == 0
-    #     if fairy:
-    #         fairy_counter += 1
-    #         locations += [f"{zone} Fairy Chest {chest_counter // 3 + 1}"]
-    #     else:
-    #         locations += [
-    #             f"{zone} Chest {chest_counter + 1 - fairy_counter // 4}"]
-    #
-    # locations += ["Victory"]
+    # Add chests per settings.
+    fairies = int(world.fairy_chests_per_zone[player])
+    for i in range(0, fairies):
+        locations += [f"Castle Hamson Fairy Chest {i + 1}"]
+        locations += [f"Forest Abkhazia Fairy Chest {i + 1}"]
+        locations += [f"The Maya Fairy Chest {i + 1}"]
+        locations += [f"The Land of Darkness Fairy Chest {i + 1}"]
+
+    chests = int(world.chests_per_zone[player])
+    for i in range(0, chests):
+        locations += [f"Castle Hamson Chest {i + 1}"]
+        locations += [f"Forest Abkhazia Chest {i + 1}"]
+        locations += [f"The Maya Chest {i + 1}"]
+        locations += [f"The Land of Darkness Chest {i + 1}"]
 
     # Set up the regions correctly.
     world.regions += [
         create_region(world, player, "Menu", None, ["Outside Castle Hamson"]),
         create_region(world, player, "Castle Hamson", locations),
     ]
-    world.get_entrance("Outside Castle Hamson", player).connect(
-        world.get_region("Castle Hamson", player))
+
+    # Connect entrances and set up events.
+    world.get_entrance("Outside Castle Hamson", player).connect(world.get_region("Castle Hamson", player))
+    world.get_location("Castle Hamson", player).place_locked_item(LegacyItem("Defeated Khindr", player, True))
+    world.get_location("Forest Abkhazia", player).place_locked_item(LegacyItem("Defeated Alexander", player, True))
+    world.get_location("The Maya", player).place_locked_item(LegacyItem("Defeated Ponce de Leon", player, True))
+    world.get_location("The Land of Darkness", player).place_locked_item(LegacyItem("Defeated Herodotus", player, True))
+    world.get_location("Victory", player).place_locked_item(LegacyItem("Victory", player, True))
