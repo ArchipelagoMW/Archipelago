@@ -385,16 +385,13 @@ def generate_itempool(world):
     else:
         for x in range(len(dungeon_items)-1, -1, -1):
             item = dungeon_items[x]
-            logging.info(f'itemn:{x} item:{item} len:{len(dungeon_items)}')
             if ((world.smallkey_shuffle[player] == smallkey_shuffle.option_start_with and item.type == 'SmallKey')
                     or (world.bigkey_shuffle[player] == bigkey_shuffle.option_start_with and item.type == 'BigKey')
                     or (world.compass_shuffle[player] == compass_shuffle.option_start_with and item.type == 'Compass')
                     or (world.map_shuffle[player] == map_shuffle.option_start_with and item.type == 'Map')):
-                logging.info('Removing...')
                 dungeon_items.remove(item)
                 world.push_precollected(item)
                 world.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
-        logging.info(f'Done: {dungeon_items}')
         world.itempool.extend([item for item in dungeon_items])
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
