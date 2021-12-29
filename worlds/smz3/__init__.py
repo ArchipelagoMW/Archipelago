@@ -13,6 +13,7 @@ import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
 from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
 from worlds.smz3.TotalSMZ3.Config import Config, MorphLocation, SwordLocation
 from worlds.smz3.TotalSMZ3.Location import Location as TotalSMZ3Location
+from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch
 from ..AutoWorld import World
 from .Rom import get_base_rom_bytes
 from .ips import IPS_Patch
@@ -124,6 +125,15 @@ class SMZ3World(World):
         base_combined_rom = get_base_rom_bytes()
         basepatch = IPS_Patch.load("worlds/smz3/zsm.ips")
         base_combined_rom = basepatch.apply(base_combined_rom)
+
+        patcher = TotalSMZ3Patch(self.smz3World, [world.smz3World for world in self.world.worlds if isinstance(world, type(self))], "test", 10, self.world.random)
+        patches = patcher.Create(self.smz3World.Config)
+        for addr, bytes in patches.items():
+            offset = 0
+            for byte in bytes:
+                base_combined_rom[addr + offset] = byte
+                offset += 1
+
         with open("Test.sfc", "wb") as binary_file:
             binary_file.write(base_combined_rom)
         Patch.create_patch_file("Test.sfc", player=self.player, player_name=self.world.player_name[self.player], game=Patch.GAME_SMZ3)
@@ -230,7 +240,7 @@ class SMZ3World(World):
 
 def create_locations(self, player: int):
     for name, id in SMZ3World.location_name_to_id.items():
-        newLoc = SMZ3Location(player, name, id)
+        newLoc = SMZ3Location(player, name, self.smz3World.locationLookup[name].Address)
         self.locations[name] = newLoc
         self.smz3World.locationLookup[name].APLocation = newLoc
 
