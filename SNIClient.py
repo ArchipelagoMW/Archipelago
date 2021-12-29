@@ -532,9 +532,9 @@ def launch_sni(ctx: Context):
         snes_logger.info(f"Attempting to start {sni_path}")
         import sys
         if not sys.stdout:  # if it spawns a visible console, may as well populate it
-            subprocess.Popen(sni_path, cwd=os.path.dirname(sni_path))
+            subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path))
         else:
-            subprocess.Popen(sni_path, cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL,
+            subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL,
                              stderr=subprocess.DEVNULL)
     else:
         snes_logger.info(
