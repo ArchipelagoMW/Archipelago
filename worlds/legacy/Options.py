@@ -90,12 +90,12 @@ class GoldGainMultiplier(Choice):
     Adjusts the multiplier for gaining gold from all sources.
     """
     displayname = "Gold Gain Multiplier"
-    option_quarter = 0
-    option_half = 1
-    option_normal = 2
+    option_normal = 0
+    option_quarter = 1
+    option_half = 2
     option_double = 3
     option_quadruple = 4
-    default = 2
+    default = 0
 
 
 legacy_options: typing.Dict[str, type(Option)] = {

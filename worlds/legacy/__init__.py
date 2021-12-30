@@ -2,7 +2,7 @@ import random
 import typing
 
 from BaseClasses import Region, MultiWorld, Entrance, Item
-from .Items import LegacyItem, item_table, item_frequencies, base_item_table, extra_item_table
+from .Items import LegacyItem, item_table, item_frequencies, base_item_table, extra_item_table, equipment_item_table, rune_item_table
 from .Locations import LegacyLocation, location_table, base_location_table
 from .Options import legacy_options
 from .Regions import create_regions
@@ -56,6 +56,12 @@ class LegacyWorld(World):
                 itempool += [self.create_item(item)] * item_frequencies[item]
             else:
                 itempool += [self.create_item(item)]
+
+        for item in equipment_item_table:
+            itempool += [self.create_item(item)]
+
+        for item in rune_item_table:
+            itempool += [self.create_item(item)]
 
         # Check if we need to start with these vendors or put them in the pool.
         if self.world.vendors[self.player].value == 0:
