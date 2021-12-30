@@ -1,6 +1,5 @@
 from typing import NamedTuple
 import unittest
-import pytest
 from worlds.AutoWorld import World
 from Fill import FillError, fill_restrictive
 from BaseClasses import MultiWorld, Region, RegionType, Item, Location
@@ -21,10 +20,6 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
         multi_world.regions.append(region)
 
     multi_world.set_seed()
-    # args = Namespace()
-    # for name, option in world_type.options.items():
-    #     setattr(args, name, {1: option.from_any(option.default)})
-    # multi_world.set_options(args)
     multi_world.set_default_common_options()
 
     return multi_world
@@ -159,26 +154,6 @@ class TestBase(unittest.TestCase):
         self.assertEqual(locations[2].item, items[0])
         self.assertEqual(locations[3].item, items[3])
 
-    def test_minimal_fill_restrictive(self):
-        multi_world = generate_multi_world()
-        player1 = generate_player_data(multi_world, 1, 2, 2)
-
-        items = player1.prog_items
-        locations = player1.locations
-
-        multi_world.accessibility[player1.id] = 'minimal'
-        multi_world.completion_condition[player1.id] = lambda state: state.has(
-            items[1].name, player1.id)
-        set_rule(locations[1], lambda state: state.has(
-            items[0].name, player1.id))
-
-        fill_restrictive(multi_world, multi_world.state,
-                         player1.locations.copy(), player1.prog_items.copy())
-
-        self.assertEqual(locations[0].item, items[1])
-        # Unnecessary unreachable Item
-        self.assertEqual(locations[1].item, items[0])
-
     def test_impossible_fill_restrictive(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(multi_world, 1, 2, 2)
@@ -192,9 +167,8 @@ class TestBase(unittest.TestCase):
         set_rule(locations[0], lambda state: state.has(
             items[0].name, player1.id))
 
-        with pytest.raises(FillError):
-            fill_restrictive(multi_world, multi_world.state,
-                             player1.locations.copy(), player1.prog_items.copy())
+        self.assertRaises(FillError, fill_restrictive, multi_world, multi_world.state,
+                          player1.locations.copy(), player1.prog_items.copy())
 
     def test_circular_fill_restrictive(self):
         multi_world = generate_multi_world()
@@ -212,9 +186,9 @@ class TestBase(unittest.TestCase):
         set_rule(loc1, lambda state: state.has(item0.name, player1.id))
         set_rule(loc2, lambda state: state.has(item1.name, player1.id))
         set_rule(loc0, lambda state: state.has(item2.name, player1.id))
-        with pytest.raises(FillError):
-            fill_restrictive(multi_world, multi_world.state,
-                             player1.locations, player1.prog_items)
+
+        self.assertRaises(FillError, fill_restrictive, multi_world, multi_world.state,
+                          player1.locations.copy(), player1.prog_items.copy())
 
     def test_competing_fill_restrictive(self):
         multi_world = generate_multi_world()
@@ -228,9 +202,9 @@ class TestBase(unittest.TestCase):
             item0.name, player1.id) and state.has(item0.name, player1.id) and state.has(item1.name, player1.id)
         set_rule(loc1, lambda state: state.has(item0.name, player1.id)
                  and state.has(item1.name, player1.id))
-        with pytest.raises(FillError):
-            fill_restrictive(multi_world, multi_world.state,
-                             player1.locations, player1.prog_items)
+                 
+        self.assertRaises(FillError, fill_restrictive, multi_world, multi_world.state,
+                          player1.locations.copy(), player1.prog_items.copy())
 
     def test_multiplayer_fill_restrictive(self):
         multi_world = generate_multi_world(2)
@@ -266,7 +240,6 @@ class TestBase(unittest.TestCase):
 
         set_rule(player2.locations[1], lambda state: state.has(
             player2.prog_items[0].name, player2.id))
-        # set_rule(player2.locations[1], lambda state: state.has(player2.prog_items[1]))
 
         fill_restrictive(multi_world, multi_world.state, player1.locations +
                          player2.locations, player1.prog_items + player2.prog_items)
