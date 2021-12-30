@@ -23,7 +23,7 @@ class DuplicateItems(Choice):
     Resource Packs (if configured). Note that there are not many progression items,
     and selecting Progression may produce many of the same duplicate item."""
     displayname = "Duplicate items"
-    option_off = 0
+    option_disabled = 0
     option_progression = 1
     option_non_progression = 2
     option_any = 3
