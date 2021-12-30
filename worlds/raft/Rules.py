@@ -115,10 +115,10 @@ def set_rules(world, player):
         "Raft": lambda state: True,
         "ResearchTable": lambda state: True,
         "RadioTower": lambda state: state.can_access_radio_tower(player), # All can_access functions have state as implicit parameter for function
-        "Vasagatan": lambda state: state.can_access_vasagatan(player),
-        "BalboaIsland": lambda state: state.can_access_balboa_island(player),
-        "CaravanIsland": lambda state: state.can_access_caravan_island(player),
-        "Tangaroa": lambda state: state.can_access_tangaroa(player)
+        "Vasagatan": lambda state: state.can_complete_radio_tower(player) and state.can_access_vasagatan(player),
+        "BalboaIsland": lambda state: state.can_complete_vasagatan(player) and state.can_access_balboa_island(player),
+        "CaravanIsland": lambda state: state.can_complete_balboa_island(player) and state.can_access_caravan_island(player),
+        "Tangaroa": lambda state: state.can_complete_caravan_island(player) and state.can_access_tangaroa(player)
     }
     itemChecks = {
         "Plank": lambda state: True,

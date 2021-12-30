@@ -26,7 +26,7 @@ class RaftWorld(World):
     location_name_to_id = locations_lookup_name_to_id
     options = raft_options
 
-    data_version = 12
+    data_version = 1
 
     def generate_basic(self):
         minRPSpecified = self.world.minimum_resource_pack_amount[self.player].value
@@ -40,7 +40,7 @@ class RaftWorld(World):
             pool.append(raft_item)
 
         extraItemNamePool = []
-        extras = max(len(location_table) - len(item_table), 0)
+        extras = max(len(location_table) - len(item_table) - 1, 0) # Victory takes up 1 unaccounted-for slot
         if extras > 0:
             if (self.world.use_resource_packs[self.player].value):
                 for packItem in resourcePackItems:
