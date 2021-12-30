@@ -91,11 +91,11 @@ class Patch:
 
         self.WriteMedallions()
         self.WriteRewards()
-        #WriteDungeonMusic(config.Keysanity);
+        self.WriteDungeonMusic(config.Keysanity)
 
-        #WriteDiggingGameRng();
+        self.WriteDiggingGameRng()
 
-        #WritePrizeShuffle();
+        self.WritePrizeShuffle()
 
         #WriteRemoveEquipmentFromUncle(myWorld.GetLocation("Link's Uncle").Item);
 
@@ -190,7 +190,7 @@ class Patch:
                     }
         result = regionType.get(type(region), None)
         if result is None:
-            raise exception(f"Region {result} should not be a dungeon reward region")
+            raise exception(f"Region {region} should not be a dungeon reward region")
         else:
             return result
 
@@ -206,7 +206,7 @@ class Patch:
                 }
         result = crystalMap.get(crystal, None)
         if result is None:
-            raise exception(f"Tried using {result} as a crystal number")
+            raise exception(f"Tried using {crystal} as a crystal number")
         else:
             return result
 
@@ -218,7 +218,7 @@ class Patch:
                     }
         result = pendantMap.get(pendant, None)
         if result is None:
-            raise exception(f"Tried using {result} as a pendant number")
+            raise exception(f"Tried using {pendant} as a pendant number")
         else:
             return result
     
@@ -313,205 +313,200 @@ class Patch:
         itemtype = 0 if location.Item.World == location.Region.World else 1
         owner = location.Item.World.Id
         return (0x386000 + (location.Id * 8), [itemtype, itemId, owner, 0])
-"""
-    void WriteDungeonMusic(bool keysanity) {
-        if (!keysanity) {
-            var regions = myWorld.Regions.OfType<IReward>();
-            IEnumerable<byte> music;
-            var pendantRegions = regions.Where(x => new[] { PendantGreen, PendantNonGreen }.Contains(x.Reward));
-            var crystalRegions = regions.Where(x => new[] { CrystalBlue, CrystalRed }.Contains(x.Reward));
-            regions = pendantRegions.Concat(crystalRegions);
-            music = new byte[] {
-                0x11, 0x11, 0x11, 0x16, 0x16,
-                0x16, 0x16, 0x16, 0x16, 0x16,
-            };
-            patches.AddRange(MusicPatches(regions, music));
-        }
-    }
 
-    IEnumerable<byte> RandomDungeonMusic() {
-        while (true) yield return rnd.Next(2) == 0 ? (byte)0x11 : (byte)0x16;
-    }
+    def WriteDungeonMusic(self, keysanity: bool):
+        if (not keysanity):
+            regions = [region for region in self.myWorld.Regions if isinstance(region, IReward)]
+            music = []
+            pendantRegions = [region for region in regions if region.Reward in [RewardType.PendantGreen, RewardType.PendantNonGreen]]
+            crystalRegions = [region for region in regions if region.Reward in [RewardType.CrystalBlue, RewardType.CrystalRed]]
+            regions = pendantRegions + crystalRegions
+            music = [
+                        0x11, 0x11, 0x11, 0x16, 0x16,
+                        0x16, 0x16, 0x16, 0x16, 0x16,
+                    ]
+            self.patches += self.MusicPatches(regions, music)
 
-    IEnumerable<(int, byte[])> MusicPatches(IEnumerable<IReward> regions, IEnumerable<byte> music) {
-        var addresses = regions.Select(MusicAddresses);
-        var associations = addresses.Zip(music, (a, b) => (a, b));
-        return associations.SelectMany(x => x.a.Select(i => (Snes(i), new byte[] { x.b })));
-    }
+    #IEnumerable<byte> RandomDungeonMusic() {
+    #    while (true) yield return rnd.Next(2) == 0 ? (byte)0x11 : (byte)0x16;
+    #}
 
-    int[] MusicAddresses(IReward region) {
-        return region switch {
-            EasternPalace _ => new[] { 0x2D59A },
-            DesertPalace _ => new[] { 0x2D59B, 0x2D59C, 0x2D59D, 0x2D59E },
-            TowerOfHera _ => new[] { 0x2D5C5, 0x2907A, 0x28B8C },
-            PalaceOfDarkness _ => new[] { 0x2D5B8 },
-            SwampPalace _ => new[] { 0x2D5B7 },
-            SkullWoods _ => new[] { 0x2D5BA, 0x2D5BB, 0x2D5BC, 0x2D5BD, 0x2D608, 0x2D609, 0x2D60A, 0x2D60B },
-            ThievesTown _ => new[] { 0x2D5C6 },
-            IcePalace _ => new[] { 0x2D5BF },
-            MiseryMire _ => new[] { 0x2D5B9 },
-            TurtleRock _ => new[] { 0x2D5C7, 0x2D5A7, 0x2D5AA, 0x2D5AB },
-            var x => throw new InvalidOperationException($"Region {x} should not be a dungeon music region"),
-        };
-    }
+    def MusicPatches(self, regions: List[IReward], music: List[int]):
+        addresses = [self.MusicAddresses(region) for region in regions]
+        associations = zip(addresses, music)
+        return [(Snes(i), [association[1]]) for association in associations for i in association[0]]
 
-    void WritePrizeShuffle() {
-        const int prizePackItems = 56;
-        const int treePullItems = 3;
+    def MusicAddresses(self, region: IReward):
+        regionMap = {
+                        EasternPalace : [ 0x2D59A ],
+                        DesertPalace : [ 0x2D59B, 0x2D59C, 0x2D59D, 0x2D59E ],
+                        TowerOfHera : [ 0x2D5C5, 0x2907A, 0x28B8C ],
+                        PalaceOfDarkness : [ 0x2D5B8 ],
+                        SwampPalace : [ 0x2D5B7 ],
+                        SkullWoods : [ 0x2D5BA, 0x2D5BB, 0x2D5BC, 0x2D5BD, 0x2D608, 0x2D609, 0x2D60A, 0x2D60B ],
+                        ThievesTown : [ 0x2D5C6 ],
+                        IcePalace : [ 0x2D5BF ],
+                        MiseryMire : [ 0x2D5B9 ],
+                        TurtleRock : [ 0x2D5C7, 0x2D5A7, 0x2D5AA, 0x2D5AB ],
+                    }
+        result = regionMap.get(type(region), None)
+        if result is None:
+            raise exception(f"Region {region} should not be a dungeon music region")
+        else:
+            return result
 
-        IEnumerable<byte> bytes;
-        byte drop, final;
+    def WritePrizeShuffle(self):
+        prizePackItems = 56
+        treePullItems = 3
 
-        var pool = new DropPrize[] {
-            Heart, Heart, Heart, Heart, Green, Heart, Heart, Green,         // pack 1
-            Blue, Green, Blue, Red, Blue, Green, Blue, Blue,                // pack 2
-            FullMagic, Magic, Magic, Blue, FullMagic, Magic, Heart, Magic,  // pack 3
-            Bomb1, Bomb1, Bomb1, Bomb4, Bomb1, Bomb1, Bomb8, Bomb1,         // pack 4
-            Arrow5, Heart, Arrow5, Arrow10, Arrow5, Heart, Arrow5, Arrow10, // pack 5
-            Magic, Green, Heart, Arrow5, Magic, Bomb1, Green, Heart,        // pack 6
-            Heart, Fairy, FullMagic, Red, Bomb8, Heart, Red, Arrow10,       // pack 7
-            Green, Blue, Red, // from pull trees
-            Green, Red, // from prize crab
-            Green, // stunned prize
-            Red, // saved fish prize
-        }.AsEnumerable();
+        bytes = []
+        drop = 0
+        final = 0
 
-        var prizes = pool.Shuffle(rnd).Cast<byte>();
+        pool = [
+            DropPrize.Heart, DropPrize.Heart, DropPrize.Heart, DropPrize.Heart, DropPrize.Green, DropPrize.Heart, DropPrize.Heart, DropPrize.Green,         #// pack 1
+            DropPrize.Blue, DropPrize.Green, DropPrize.Blue, DropPrize.Red, DropPrize.Blue, DropPrize.Green, DropPrize.Blue, DropPrize.Blue,                #// pack 2
+            DropPrize.FullMagic, DropPrize.Magic, DropPrize.Magic, DropPrize.Blue, DropPrize.FullMagic, DropPrize.Magic, DropPrize.Heart, DropPrize.Magic,  #// pack 3
+            DropPrize.Bomb1, DropPrize.Bomb1, DropPrize.Bomb1, DropPrize.Bomb4, DropPrize.Bomb1, DropPrize.Bomb1, DropPrize.Bomb8, DropPrize.Bomb1,        #// pack 4
+            DropPrize.Arrow5, DropPrize.Heart, DropPrize.Arrow5, DropPrize.Arrow10, DropPrize.Arrow5, DropPrize.Heart, DropPrize.Arrow5, DropPrize.Arrow10,#// pack 5
+            DropPrize.Magic, DropPrize.Green, DropPrize.Heart, DropPrize.Arrow5, DropPrize.Magic, DropPrize.Bomb1, DropPrize.Green, DropPrize.Heart,       #// pack 6
+            DropPrize.Heart, DropPrize.Fairy, DropPrize.FullMagic, DropPrize.Red, DropPrize.Bomb8, DropPrize.Heart, DropPrize.Red, DropPrize.Arrow10,      #// pack 7
+            DropPrize.Green, DropPrize.Blue, DropPrize.Red,#// from pull trees
+            DropPrize.Green, DropPrize.Red,#// from prize crab
+            DropPrize.Green, #// stunned prize
+            DropPrize.Red,#// saved fish prize
+        ]
 
-        /* prize pack drop order */
-        (bytes, prizes) = prizes.SplitOff(prizePackItems);
-        patches.Add((Snes(0x6FA78), bytes.ToArray()));
+        prizes = pool
+        self.rnd.shuffle(prizes)
 
-        /* tree pull prizes */
-        (bytes, prizes) = prizes.SplitOff(treePullItems);
-        patches.Add((Snes(0x1DFBD4), bytes.ToArray()));
+        #/* prize pack drop order */
+        (bytes, prizes) = SplitOff(prizes, prizePackItems)
+        self.patches.append((Snes(0x6FA78), [byte.value for byte in bytes]))
 
-        /* crab prizes */
-        (drop, final, prizes) = prizes;
-        patches.Add((Snes(0x6A9C8), new[] { drop }));
-        patches.Add((Snes(0x6A9C4), new[] { final }));
+        #/* tree pull prizes */
+        (bytes, prizes) = SplitOff(prizes, treePullItems)
+        self.patches.append((Snes(0x1DFBD4), [byte.value for byte in bytes]))
 
-        /* stun prize */
-        (drop, prizes) = prizes;
-        patches.Add((Snes(0x6F993), new[] { drop }));
+        #/* crab prizes */
+        (drop, final, prizes) = (prizes[0], prizes[1], prizes[2:])
+        self.patches.append((Snes(0x6A9C8), [ drop.value ]))
+        self.patches.append((Snes(0x6A9C4), [ final.value ]))
 
-        /* fish prize */
-        (drop, _) = prizes;
-        patches.Add((Snes(0x1D82CC), new[] { drop }));
+        #/* stun prize */
+        (drop, prizes) = (prizes[0], prizes[1:])
+        self.patches.append((Snes(0x6F993), [ drop.value ]))
 
-        patches.AddRange(EnemyPrizePackDistribution());
+        #/* fish prize */
+        drop = prizes[0]
+        self.patches.append((Snes(0x1D82CC), [ drop.value ]))
 
-        /* Pack drop chance */
-        /* Normal difficulty is 50%. 0 => 100%, 1 => 50%, 3 => 25% */
-        const int nrPacks = 7;
-        const byte probability = 1;
-        patches.Add((Snes(0x6FA62), Repeat(probability, nrPacks).ToArray()));
-    }
+        self.patches += self.EnemyPrizePackDistribution()
 
-    IEnumerable<(int, byte[])> EnemyPrizePackDistribution() {
-        var (prizePacks, duplicatePacks) = EnemyPrizePacks();
+        #/* Pack drop chance */
+        #/* Normal difficulty is 50%. 0 => 100%, 1 => 50%, 3 => 25% */
+        nrPacks = 7
+        probability = 1
+        self.patches.append((Snes(0x6FA62), [probability] * nrPacks))
 
-        var n = prizePacks.Sum(x => x.bytes.Length);
-        var randomization = PrizePackRandomization(n, 1);
+    def EnemyPrizePackDistribution(self):
+        (prizePacks, duplicatePacks) = self.EnemyPrizePacks()
 
-        var patches = prizePacks.Select(x => {
-            IEnumerable<byte> packs;
-            (packs, randomization) = randomization.SplitOff(x.bytes.Length);
-            return (x.offset, bytes: x.bytes.Zip(packs, (b, p) => (byte)(b | p)).ToArray());
-        }).ToList();
+        n = sum(len(x[1]) for x in prizePacks)
+        randomization = self.PrizePackRandomization(n, 1)
+        patches = []
+        for prizepack in prizePacks:
+            (packs, randomization) = SplitOff(randomization, len(prizepack[1]))
+            patches.append((prizepack[0], [(b | p) for b,p in zip(prizepack[1], packs)]))
 
-        var duplicates =
-            from d in duplicatePacks
-            from p in patches
-            where p.offset == d.src
-            select (d.dest, p.bytes);
-        patches.AddRange(duplicates.ToList());
+        duplicates = [(d[1], p[1])
+                        for d in duplicatePacks
+                        for p in patches
+                        if p[0] == d[0]]
+        patches += duplicates
 
-        return patches.Select(x => (Snes(x.offset), x.bytes));
-    }
+        return [(Snes(x[0]), x[1]) for x in patches]
 
-    /* Guarantees at least s of each prize pack, over a total of n packs.
-        * In each iteration, from the product n * m, use the guaranteed number
-        * at k, where k is the "row" (integer division by m), when k falls
-        * within the list boundary. Otherwise use the "column" (modulo by m)
-        * as the random element.
-        */
-    IEnumerable<byte> PrizePackRandomization(int n, int s) {
-        const int m = 7;
-        var g = Repeat(Range(0, m), s).SelectMany(x => x).ToList();
+    #/* Guarantees at least s of each prize pack, over a total of n packs.
+    #* In each iteration, from the product n * m, use the guaranteed number
+    #* at k, where k is the "row" (integer division by m), when k falls
+    #* within the list boundary. Otherwise use the "column" (modulo by m)
+    #* as the random element.
+    #*/
+    def PrizePackRandomization(self, n: int, s: int):
+        m = 7
+        g = list(range(0, m)) * s
 
-        IEnumerable<int> randomization(int n) {
-            n = m * n;
-            while (n > 0) {
-                var r = rnd.Next(n);
-                var k = r / m;
-                yield return k < g.Count ? g[k] : r % m;
-                if (k < g.Count) g.RemoveAt(k);
-                n -= m;
-            }
-        }
+        def randomization(n: int):
+            result = []
+            n = m * n
+            while (n > 0):
+                r = self.rnd.randrange(0, n)
+                k = r // m
+                result.append(g[k] if k < len(g) else r % m)
+                if (k < len(g)): del g[k]
+                n -= m
+            return result
 
-        return randomization(n).Select(x => (byte)(x + 1)).ToList();
-    }
+        return [(x + 1) for x in randomization(n)]
 
-    /* Todo: Deadrock turns into $8F Blob when powdered, but those "onion blobs" always drop prize pack 1. */
-    (IList<(int offset, byte[] bytes)>, IList<(int src, int dest)>) EnemyPrizePacks() {
-        const int offset = 0xDB632;
-        var patches = new[] {
-            /* sprite_prep */
-            (0x6888D, new byte[] { 0x00 }), // Keese DW
-            (0x688A8, new byte[] { 0x00 }), // Rope
-            (0x68967, new byte[] { 0x00, 0x00 }), // Crow/Dacto
-            (0x69125, new byte[] { 0x00, 0x00 }), // Red/Blue Hardhat Bettle
-            /* sprite properties */
-            (offset+0x01, new byte[] { 0x90 }), // Vulture
-            (offset+0x08, new byte[] { 0x00 }), // Octorok (One Way)
-            (offset+0x0A, new byte[] { 0x00 }), // Octorok (Four Way)
-            (offset+0x0D, new byte[] { 0x80, 0x90 }), // Buzzblob, Snapdragon
-            (offset+0x11, new byte[] { 0x90, 0x90, 0x00 }), // Hinox, Moblin, Mini Helmasaur
-            (offset+0x18, new byte[] { 0x90, 0x90 }), // Mini Moldorm, Poe/Hyu
-            (offset+0x20, new byte[] { 0x00 }), // Sluggula
-            (offset+0x22, new byte[] { 0x80, 0x00, 0x00 }), // Ropa, Red Bari, Blue Bari
-            // Blue Soldier/Tarus, Green Soldier, Red Spear Soldier
-            // Blue Assault Soldier, Red Assault Spear Soldier/Tarus
-            // Blue Archer, Green Archer
-            // Red Javelin Soldier, Red Bush Javelin Soldier
-            // Red Bomb Soldiers, Green Soldier Recruits,
-            // Geldman, Toppo
-            (offset+0x41, new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x10, 0x90, 0x90, 0x80 }),
-            (offset+0x4F, new byte[] { 0x80 }), // Popo 2
-            (offset+0x51, new byte[] { 0x80 }), // Armos
-            (offset+0x55, new byte[] { 0x00, 0x00 }), // Ku, Zora
-            (offset+0x58, new byte[] { 0x90 }), // Crab
-            (offset+0x64, new byte[] { 0x80 }), // Devalant (Shooter)
-            (offset+0x6A, new byte[] { 0x90, 0x90 }), // Ball N' Chain Trooper, Cannon Soldier
-            (offset+0x6D, new byte[] { 0x80, 0x80 }), // Rat/Buzz, (Stal)Rope
-            (offset+0x71, new byte[] { 0x80 }), // Leever
-            (offset+0x7C, new byte[] { 0x90 }), // Initially Floating Stal
-            (offset+0x81, new byte[] { 0xC0 }), // Hover
-            // Green Eyegore/Mimic, Red Eyegore/Mimic
-            // Detached Stalfos Body, Kodongo
-            (offset+0x83, new byte[] { 0x10, 0x10, 0x10, 0x00 }),
-            (offset+0x8B, new byte[] { 0x10 }), // Gibdo
-            (offset+0x8E, new byte[] { 0x00, 0x00 }), // Terrorpin, Blob
-            (offset+0x91, new byte[] { 0x10 }), // Stalfos Knight
-            (offset+0x99, new byte[] { 0x10 }), // Pengator
-            (offset+0x9B, new byte[] { 0x10 }), // Wizzrobe
-            // Blue Zazak, Red Zazak, Stalfos
-            // Green Zirro, Blue Zirro, Pikit
-            (offset+0xA5, new byte[] { 0x10, 0x10, 0x10, 0x80, 0x80, 0x80 }),
-            (offset+0xC7, new byte[] { 0x10 }), // Hokku-Bokku
-            (offset+0xC9, new byte[] { 0x10 }), // Tektite
-            (offset+0xD0, new byte[] { 0x10 }), // Lynel
-            (offset+0xD3, new byte[] { 0x00 }), // Stal
-        };
-        var duplicates = new[] {
-            /* Popo2 -> Popo. Popo is not used in vanilla Z3, but we duplicate from Popo2 just to be sure */
+    #/* Todo: Deadrock turns into $8F Blob when powdered, but those "onion blobs" always drop prize pack 1. */
+    def EnemyPrizePacks(self):
+        offset = 0xDB632
+        patches = [
+            #/* sprite_prep */
+            (0x6888D, [ 0x00 ]), #// Keese DW
+            (0x688A8, [ 0x00 ]), #// Rope
+            (0x68967, [ 0x00, 0x00 ]), #// Crow/Dacto
+            (0x69125, [ 0x00, 0x00 ]), #// Red/Blue Hardhat Bettle
+            #/* sprite properties */
+            (offset+0x01, [ 0x90 ]), #// Vulture
+            (offset+0x08, [ 0x00 ]), #// Octorok (One Way)
+            (offset+0x0A, [ 0x00 ]), #// Octorok (Four Way)
+            (offset+0x0D, [ 0x80, 0x90 ]), #// Buzzblob, Snapdragon
+            (offset+0x11, [ 0x90, 0x90, 0x00 ]), #// Hinox, Moblin, Mini Helmasaur
+            (offset+0x18, [ 0x90, 0x90 ]), #// Mini Moldorm, Poe/Hyu
+            (offset+0x20, [ 0x00 ]), #// Sluggula
+            (offset+0x22, [ 0x80, 0x00, 0x00 ]), #// Ropa, Red Bari, Blue Bari
+            #// Blue Soldier/Tarus, Green Soldier, Red Spear Soldier
+            #// Blue Assault Soldier, Red Assault Spear Soldier/Tarus
+            #// Blue Archer, Green Archer
+            #// Red Javelin Soldier, Red Bush Javelin Soldier
+            #// Red Bomb Soldiers, Green Soldier Recruits,
+            #// Geldman, Toppo
+            (offset+0x41, [ 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x10, 0x90, 0x90, 0x80 ]),
+            (offset+0x4F, [ 0x80 ]), #// Popo 2
+            (offset+0x51, [ 0x80 ]), #// Armos
+            (offset+0x55, [ 0x00, 0x00 ]), #// Ku, Zora
+            (offset+0x58, [ 0x90 ]), #// Crab
+            (offset+0x64, [ 0x80 ]), #// Devalant (Shooter)
+            (offset+0x6A, [ 0x90, 0x90 ]), #// Ball N' Chain Trooper, Cannon Soldier
+            (offset+0x6D, [ 0x80, 0x80 ]), #// Rat/Buzz, (Stal)Rope
+            (offset+0x71, [ 0x80 ]), #// Leever
+            (offset+0x7C, [ 0x90 ]), #// Initially Floating Stal
+            (offset+0x81, [ 0xC0 ]), #// Hover
+            #// Green Eyegore/Mimic, Red Eyegore/Mimic
+            #// Detached Stalfos Body, Kodongo
+            (offset+0x83, [ 0x10, 0x10, 0x10, 0x00 ]),
+            (offset+0x8B, [ 0x10 ]), #// Gibdo
+            (offset+0x8E, [ 0x00, 0x00 ]), #// Terrorpin, Blob
+            (offset+0x91, [ 0x10 ]), #// Stalfos Knight
+            (offset+0x99, [ 0x10 ]), #// Pengator
+            (offset+0x9B, [ 0x10 ]), #// Wizzrobe
+            #// Blue Zazak, Red Zazak, Stalfos
+            #// Green Zirro, Blue Zirro, Pikit
+            (offset+0xA5, [ 0x10, 0x10, 0x10, 0x80, 0x80, 0x80 ]),
+            (offset+0xC7, [ 0x10 ]), #// Hokku-Bokku
+            (offset+0xC9, [ 0x10 ]), #// Tektite
+            (offset+0xD0, [ 0x10 ]), #// Lynel
+            (offset+0xD3, [ 0x00 ]), #// Stal
+            ]
+        duplicates = [
+            #/* Popo2 -> Popo. Popo is not used in vanilla Z3, but we duplicate from Popo2 just to be sure */
             (offset + 0x4F, offset + 0x4E),
-        };
-        return (patches, duplicates);
-    }
-
+        ]
+        return (patches, duplicates)
+    """
     void WriteTexts(Config config) {
         var regions = myWorld.Regions.OfType<IReward>();
         var greenPendantDungeon = regions.Where(x => x.Reward == PendantGreen).Cast<Region>().First();
@@ -722,13 +717,13 @@ class Patch:
 
         patches.Add((Snes(0x8f0000 + plmTablePos), new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }));
     }
+    """
+    def WriteDiggingGameRng(self):
+        digs = (self.rnd.randrange(30) + 1)
+        self.patches.append((Snes(0x308020), [ digs ]))
+        self.patches.append((Snes(0x1DFD95), [ digs ]))
 
-    void WriteDiggingGameRng() {
-        byte digs = (byte)(rnd.Next(30) + 1);
-        patches.Add((Snes(0x308020), new byte[] { digs }));
-        patches.Add((Snes(0x1DFD95), new byte[] { digs }));
-    }
-
+    """
     // Removes Sword/Shield from Uncle by moving the tiles for
     // sword/shield to his head and replaces them with his head.
     void WriteRemoveEquipmentFromUncle(Item item) {
@@ -814,3 +809,7 @@ def getWordArray(w):
 
 }
 """
+def SplitOff(source: List[Any], count: int):
+    head = source[:count]
+    tail = source[count:]
+    return (head, tail)
