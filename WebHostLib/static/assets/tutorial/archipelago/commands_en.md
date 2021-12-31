@@ -1,10 +1,16 @@
 ### Helpful Commands
-Commands are split into two types: client commands and server commands. Client commands are commands which are executed by the client and do not affect the Archipelago remote session. Server commands are commands which are executed by the Archipelago server and affect the Archipelago session or otherwise provide feedback from the server.
 
-In clients which have their own commands the commands are typically prepended by a forward slash:`/`. Remote commands are always submitted to the server prepended with an exclamation point: `!`.
+Commands are split into two types: client commands and server commands. Client commands are commands which are executed
+by the client and do not affect the Archipelago remote session. Server commands are commands which are executed by the
+Archipelago server and affect the Archipelago session or otherwise provide feedback from the server.
+
+In clients which have their own commands the commands are typically prepended by a forward slash:`/`. Remote commands
+are always submitted to the server prepended with an exclamation point: `!`.
 
 #### Local Commands
-The following list is a list of client commands which may be available to you through your Archipelago client. You execute these commands in your client window.
+
+The following list is a list of client commands which may be available to you through your Archipelago client. You
+execute these commands in your client window.
 
 - `/connect <address:port>` Connect to the multiworld server.
 - `/disconnect` Disconnects you from your current session.
@@ -15,9 +21,14 @@ The following list is a list of client commands which may be available to you th
 - Just typing anything will broadcast a message to all players
 
 #### Remote Commands
-- `!hint <item name>` Tells you at which location in whose game your Item is. Note you need to have checked some locations to earn a hint. You can check how many you have by just running `!hint`
-- `!forfeit` If you didn't turn on auto-forfeit or if you allowed forfeiting prior to goal completion. Remember that "forfeiting" actually means sending out your remaining items in your world.
-- `!collect` Grants you all the remaining checks in your world. Can only be used after your goal is complete or when you have forfeited.
+
+- `!hint <item name>` Tells you at which location in whose game your Item is. Note you need to have checked some
+  locations to earn a hint. You can check how many you have by just running `!hint`
+- `!forfeit` If you didn't turn on auto-forfeit or if you allowed forfeiting prior to goal completion. Remember that "
+  forfeiting" actually means sending out your remaining items in your world.
+- `!collect` Grants you all the remaining checks in your world. Can only be used after your goal is complete or when you
+  have forfeited.
 
 #### Host only (on Archipelago.gg or in your server console)
+
 - `/forfeit <Player Name>` Forfeits someone regardless of settings and game completion status

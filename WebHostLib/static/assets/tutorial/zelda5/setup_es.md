@@ -6,13 +6,19 @@ Al usar el cliente y bizhawk, esta guia solo es aplicable en Windows.
 
 ## Software Requerido
 
-- [bizhawk+script+Z5Client](https://github.com/ArchipelagoMW/Z5Client/releases) Recomendamos bajar el setup de Z5client ya que automatizara varios pasos mas adelante
+- [bizhawk+script+Z5Client](https://github.com/ArchipelagoMW/Z5Client/releases) Recomendamos bajar el setup de Z5client
+  ya que automatizara varios pasos mas adelante
 
 ## Instala emulador y cliente
 
-Descarga el fichero getBizhawk.ps1 del enlace anterior. Colocalo en la carpeta donde desees instalar el emulador, haz click derecho en él y selecciona "Ejecutar con PowerShell". Esto descargará todas las dependencias necesarias para el emulador. Puede tardar un rato.
+Descarga el fichero getBizhawk.ps1 del enlace anterior. Colocalo en la carpeta donde desees instalar el emulador, haz
+click derecho en él y selecciona "Ejecutar con PowerShell". Esto descargará todas las dependencias necesarias para el
+emulador. Puede tardar un rato.
 
-Es recomendable asociar la extensión de las roms de N64 (\*.n64) al bizhawk que hemos instalado anteriormente. Para hacerlo simplemente debemos buscar alguna rom de n64 que tengamos, hacer click derecho, seleccionar "Abrir con...", desplegar la lista y buscar la opción "Buscar otra aplicación", navegar hasta el directorio de bizhawk y seleccionar EmuHawk.exe
+Es recomendable asociar la extensión de las roms de N64 (\*.n64) al bizhawk que hemos instalado anteriormente. Para
+hacerlo simplemente debemos buscar alguna rom de n64 que tengamos, hacer click derecho, seleccionar "Abrir con...",
+desplegar la lista y buscar la opción "Buscar otra aplicación", navegar hasta el directorio de bizhawk y seleccionar
+EmuHawk.exe
 
 Situa el fichero ootMulti.lua del enlace anterior en la carpeta "lua" del emulador recien instalado.
 
@@ -21,16 +27,21 @@ Instala el cliente Z5Client.
 ## Configura tu fichero YAML
 
 ### Que es un fichero YAML y por qué necesito uno?
-Tu fichero YAML contiene un numero de opciones que proveen al generador con información sobre como debe generar tu juego.
-Cada jugador de un multiworld entregara u propio fichero YAML.
-Esto permite que cada jugador disfrute de una experiencia personalizada a su gusto y diferentes jugadores dentro del mismo multiworld
-pueden tener diferentes opciones
+
+Tu fichero YAML contiene un numero de opciones que proveen al generador con información sobre como debe generar tu
+juego. Cada jugador de un multiworld entregara u propio fichero YAML. Esto permite que cada jugador disfrute de una
+experiencia personalizada a su gusto y diferentes jugadores dentro del mismo multiworld pueden tener diferentes opciones
 
 ### Where do I get a YAML file?
-Un fichero basico yaml para OOT tendra este aspecto. (Hay muchas opciones cosméticas que se han ignorado para este tutorial, si quieres ver una lista completa, descarga (Archipelago)[https://github.com/ArchipelagoMW/Archipelago/releases] y buscar el fichero de ejemplo en el directorio "Players"))
+
+Un fichero basico yaml para OOT tendra este aspecto. (Hay muchas opciones cosméticas que se han ignorado para este
+tutorial, si quieres ver una lista completa, descarga (
+Archipelago)[https://github.com/ArchipelagoMW/Archipelago/releases] y buscar el fichero de ejemplo en el directorio "
+Players"))
+
 ```yaml
 description: Default Ocarina of Time Template # Describe tu fichero yalm
-\# Tu nombre en el juego. Los espacio seran reemplazados por _ y hay un limite de 16 caracteres
+  \# Tu nombre en el juego. Los espacio seran reemplazados por _ y hay un limite de 16 caracteres
 name: YourName{number}
 game:
   Ocarina of Time: 1
@@ -355,18 +366,26 @@ Ocarina of Time:
 
 ### Obten tu parche
 
+Cuando te unes a un juego multiworld, se te pedirá que entregues tu fichero YAML a quien sea que hospede el juego
+multiworld. Una vez la generación acabe, el anfitrión te dará un enlace a tu fichero de datos o un zip con los ficheros
+de todos. Tu fichero de datos tiene una extensión `.z5ap`.
 
-Cuando te unes a un juego multiworld, se te pedirá que entregues tu fichero YAML a quien sea que hospede el juego multiworld.
-Una vez la generación acabe, el anfitrión te dará un enlace a tu fichero de datos o un zip con los ficheros de todos.
-Tu fichero de datos tiene una extensión `.z5ap`.
-
-Haz doble click en tu fichero `.z5ap` para que se arranque el Z5Client y realize el parcheado de la ROM. Una vez acabe el parcheado de la rom (esto puede llevar un tiempo) se abrira automaticamente el emulador (Si se ha asociado la extensión al emulador tal como hemos recomendado)
+Haz doble click en tu fichero `.z5ap` para que se arranque el Z5Client y realize el parcheado de la ROM. Una vez acabe
+el parcheado de la rom (esto puede llevar un tiempo) se abrira automaticamente el emulador (Si se ha asociado la
+extensión al emulador tal como hemos recomendado)
 
 ### Conectar al multiserver
-Una vez arrancado tanto el Z5Client como el emulador hay que conectarlo entre ellos, para ello simplemente accede al menú "Tools" y selecciona "Lua console". En la nueva ventana, dale al icono de la carpeta y busca el fichero ootMulti.lua. Al cargar dicho fichero se conectara automaticamente con el cliente.
 
-Nota: Es muy recomendable que no se abra ningún menú del emulador mientras esten emulador y Z5Client conectados, ya que el script de conexión se para en ese caso y pueden provocar desconexiones. Si se pierde la conexion, simplemente haz doble click en el script de nuevo.
+Una vez arrancado tanto el Z5Client como el emulador hay que conectarlo entre ellos, para ello simplemente accede al
+menú "Tools" y selecciona "Lua console". En la nueva ventana, dale al icono de la carpeta y busca el fichero
+ootMulti.lua. Al cargar dicho fichero se conectara automaticamente con el cliente.
 
-Para conectar el cliente con el servidor simplemente pon la direccion_IP:puerto en la caja de texto de arriba y presiona enter (si el servidor tiene contraseña, en la caja de texto de abajo escribir /connect direccion:puerto contraseña, para conectar) 
+Nota: Es muy recomendable que no se abra ningún menú del emulador mientras esten emulador y Z5Client conectados, ya que
+el script de conexión se para en ese caso y pueden provocar desconexiones. Si se pierde la conexion, simplemente haz
+doble click en el script de nuevo.
+
+Para conectar el cliente con el servidor simplemente pon la direccion_IP:puerto en la caja de texto de arriba y presiona
+enter (si el servidor tiene contraseña, en la caja de texto de abajo escribir /connect direccion:puerto contraseña, para
+conectar)
 
 Y ya estas listo, para emprender tu aventura por Hyrule.
