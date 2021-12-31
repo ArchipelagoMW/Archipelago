@@ -2,6 +2,6 @@ colorama>=0.4.4
 websockets>=10.1
 PyYAML>=6.0
 fuzzywuzzy>=0.18.0
-appdirs>=1.4.4
 jinja2>=3.0.3
 schema>=0.7.4
+kivy>=2.0.0
