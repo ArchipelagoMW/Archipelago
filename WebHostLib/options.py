@@ -105,6 +105,7 @@ def create():
         weighted_settings["games"][game_name] = {}
         weighted_settings["games"][game_name]["gameOptions"] = game_options
         weighted_settings["games"][game_name]["gameItems"] = tuple(world.item_name_to_id.keys())
+        weighted_settings["games"][game_name]["gameLocations"] = tuple(world.location_name_to_id.keys())
 
     with open(os.path.join(target_folder, 'weighted-settings.json'), "w") as f:
         f.write(json.dumps(weighted_settings, indent=2, separators=(',', ': ')))
