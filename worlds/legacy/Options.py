@@ -120,6 +120,7 @@ legacy_options: typing.Dict[str, type(Option)] = {
     "fairy_chests_per_zone": FairyChestsPerZone,
     "chests_per_zone": ChestsPerZone,
     "vendors": Vendors,
+    "disable_charon": DisableCharon,
     "require_purchasing": RequirePurchasing,
     "gold_gain_multiplier": GoldGainMultiplier,
     "number_of_children": NumberOfChildren,

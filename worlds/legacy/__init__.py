@@ -33,6 +33,7 @@ class LegacyWorld(World):
             "fairy_chests_per_zone": self.world.fairy_chests_per_zone[self.player],
             "chests_per_zone": self.world.chests_per_zone[self.player],
             "vendors": self.world.vendors[self.player],
+            "disable_charon": self.world.disable_charon[self.player],
             "require_purchasing": self.world.require_purchasing[self.player],
             "gold_gain_multiplier": self.world.gold_gain_multiplier[self.player],
             "number_of_children": self.world.number_of_children[self.player],
