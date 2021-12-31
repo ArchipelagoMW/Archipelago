@@ -39,7 +39,8 @@ class LegacyWorld(World):
             "death_link": self.world.death_link[self.player],
         }
 
-    def _create_items(self, name: str, data: ItemData):
+    def _create_items(self, name: str):
+        data = item_table[name]
         return [self.create_item(name)] * data.quantity
 
     def fill_slot_data(self) -> dict:
@@ -55,8 +56,22 @@ class LegacyWorld(World):
         total_required_locations = 61 + (self.world.chests_per_zone[self.player] * 4) + (self.world.fairy_chests_per_zone[self.player] * 4)
 
         # Fill item pool with all required items
-        for item, data in {**skill_unlocks_table, **blueprints_table, **runes_table}.items():
-            itempool += self._create_items(item, data)
+        for item in {**skill_unlocks_table, **blueprints_table, **runes_table}:
+            itempool += self._create_items(item)
+
+        # Add specific classes into the pool. Eventually, will be able to shuffle the starting ones, but until then...
+        itempool += [
+            self.create_item(ItemName.paladin),
+            self.create_item(ItemName.archmage),
+            self.create_item(ItemName.barbarian_king),
+            self.create_item(ItemName.assassin),
+            self.create_item(ItemName.dragon),
+            self.create_item(ItemName.traitor),
+            *self._create_items(ItemName.progressive_shinobi),
+            *self._create_items(ItemName.progressive_miner),
+            *self._create_items(ItemName.progressive_lich),
+            *self._create_items(ItemName.progressive_spellthief),
+        ]
 
         # Check if we need to start with these vendors or put them in the pool.
         if self.world.vendors[self.player] == "start_unlocked":
