@@ -1,138 +1,129 @@
 import typing
 
 from BaseClasses import Item
+from .Names import ItemName
 
 
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     progression: bool
+    quantity: int = 1
     event: bool = False
 
 
 class LegacyItem(Item):
     game: str = "Rogue Legacy"
 
-    def __init__(self, name, player: int = None, event: bool = False):
-        if event:
-            super(LegacyItem, self).__init__(name, True, None, player)
-        else:
-            item_data = item_table[name]
-            super(LegacyItem, self).__init__(
-                name, item_data.progression, item_data.code, player)
+    def __init__(self, name, advancement: bool = False, code: int = None, player: int = None):
+        super(LegacyItem, self).__init__(name, advancement, code, player)
 
 
-item_vendors_table = {
-    "Blacksmith": ItemData(90000, True),
-    "Enchantress": ItemData(90001, True),
+# Separate tables for each type of item.
+vendors_table = {
+    ItemName.blacksmith: ItemData(90000, True),
+    ItemName.enchantress: ItemData(90001, True),
+    ItemName.architect: ItemData(90002, False),
 }
 
-base_item_table = {
-    "Architect": ItemData(90002, False),
-
-    # Classes
-    "Paladins": ItemData(90003, True),
-    "Archmages": ItemData(90004, True),
-    "Barbarian Kings": ItemData(90005, True),
-    "Assassins": ItemData(90006, True),
-    "Progressive Shinobis": ItemData(90007, True),
-    "Progressive Miners": ItemData(90008, True),
-    "Progressive Lichs": ItemData(90009, True),
-    "Progressive Spellthieves": ItemData(90010, True),
-    "Dragons": ItemData(90011, True),
-    "Traitors": ItemData(90012, True),
-
-    # Skill Unlocks
-    "Health Up": ItemData(90013, True),
-    "Mana Up": ItemData(90014, True),
-    "Attack Up": ItemData(90015, True),
-    "Magic Damage Up": ItemData(90016, True),
-    "Armor Up": ItemData(90017, True),
-    "Equip Up": ItemData(90018, True),
-    "Crit Chance Up": ItemData(90019, False),
-    "Crit Damage Up": ItemData(90020, False),
-    "Down Strike Up": ItemData(90021, False),
-    "Gold Gain Up": ItemData(90022, False),
-    "Potion Efficiency Up": ItemData(90023, False),
-    "Invulnerability Time Up": ItemData(90024, False),
-    "Mana Cost Down": ItemData(90025, False),
-    "Death Defiance": ItemData(90026, False),
-    "Haggling": ItemData(90027, False),
-    "Randomize Children": ItemData(90028, False),
-
-    # Misc. Items
-    "Triple Stat Increases": ItemData(90030, False),
-    "1000 Gold": ItemData(90031, False),
-    "3000 Gold": ItemData(90032, False),
-    "5000 Gold": ItemData(90033, False),
+static_classes_table = {
+    ItemName.knight: ItemData(90080, True),
+    ItemName.paladin: ItemData(90081, True),
+    ItemName.mage: ItemData(90082, True),
+    ItemName.archmage: ItemData(90083, True),
+    ItemName.barbarian: ItemData(90084, True),
+    ItemName.barbarian_king: ItemData(90085, True),
+    ItemName.knave: ItemData(90086, True),
+    ItemName.assassin: ItemData(90087, True),
+    ItemName.shinobi: ItemData(90088, True),
+    ItemName.hokage: ItemData(90089, True),
+    ItemName.miner: ItemData(90090, True),
+    ItemName.spelunker: ItemData(90091, True),
+    ItemName.lich: ItemData(90092, True),
+    ItemName.lich_king: ItemData(90093, True),
+    ItemName.spellthief: ItemData(90094, True),
+    ItemName.spellsword: ItemData(90095, True),
+    ItemName.dragon: ItemData(90096, True),
+    ItemName.traitor: ItemData(90097, True),
 }
 
-equipment_item_table = {
-    "Squire Armor Blueprints": ItemData(90040, True),
-    "Silver Armor Blueprints": ItemData(90041, True),
-    "Guardian Armor Blueprints": ItemData(90042, True),
-    "Imperial Armor Blueprints": ItemData(90043, True),
-    "Royal Armor Blueprints": ItemData(90044, True),
-    "Knight Armor Blueprints": ItemData(90045, True),
-    "Ranger Armor Blueprints": ItemData(90046, True),
-    "Sky Armor Blueprints": ItemData(90047, True),
-    "Dragon Armor Blueprints": ItemData(90048, True),
-    "Slayer Armor Blueprints": ItemData(90049, True),
-    "Blood Armor Blueprints": ItemData(90050, True),
-    "Sage Armor Blueprints": ItemData(90051, True),
-    "Retribution Armor Blueprints": ItemData(90052, True),
-    "Holy Armor Blueprints": ItemData(90053, True),
-    "Dark Armor Blueprints": ItemData(90054, True),
+progressive_classes_table = {
+    ItemName.progressive_knight: ItemData(90003, True, 2),
+    ItemName.progressive_mage: ItemData(90004, True, 2),
+    ItemName.progressive_barbarian: ItemData(90005, True, 2),
+    ItemName.progressive_knave: ItemData(90006, True, 2),
+    ItemName.progressive_shinobi: ItemData(90007, True, 2),
+    ItemName.progressive_miner: ItemData(90008, True, 2),
+    ItemName.progressive_lich: ItemData(90009, True, 2),
+    ItemName.progressive_spellthief: ItemData(90010, True, 2),
 }
 
-rune_item_table = {
-    "Vault Runes": ItemData(90060, True),
-    "Sprint Runes": ItemData(90061, True),
-    "Vampire Runes": ItemData(90062, True),
-    "Sky Runes": ItemData(90063, True),
-    "Siphon Runes": ItemData(90064, True),
-    "Retaliation Runes": ItemData(90065, True),
-    "Bounty Runes": ItemData(90066, True),
-    "Haste Runes": ItemData(90067, True),
-    "Curse Runes": ItemData(90068, True),
-    "Grace Runes": ItemData(90069, True),
-    "Balance Runes": ItemData(90070, True),
+skill_unlocks_table = {
+    ItemName.health: ItemData(90013, True, 15),
+    ItemName.mana: ItemData(90014, True, 15),
+    ItemName.attack: ItemData(90015, True, 15),
+    ItemName.magic_damage: ItemData(90016, True, 15),
+    ItemName.armor: ItemData(90017, True, 10),
+    ItemName.equip: ItemData(90018, True, 10),
+    ItemName.crit_chance: ItemData(90019, False, 5),
+    ItemName.crit_damage: ItemData(90020, False, 5),
+    ItemName.down_strike: ItemData(90021, False),
+    ItemName.gold_gain: ItemData(90022, False),
+    ItemName.potion_efficiency: ItemData(90023, False),
+    ItemName.invulnerability_time: ItemData(90024, False),
+    ItemName.mana_cost_down: ItemData(90025, False),
+    ItemName.death_defiance: ItemData(90026, False),
+    ItemName.haggling: ItemData(90027, False),
+    ItemName.random_children: ItemData(90028, False),
 }
 
+blueprints_table = {
+    ItemName.squire_blueprints: ItemData(90040, True),
+    ItemName.silver_blueprints: ItemData(90041, True),
+    ItemName.guardian_blueprints: ItemData(90042, True),
+    ItemName.imperial_blueprints: ItemData(90043, True),
+    ItemName.royal_blueprints: ItemData(90044, True),
+    ItemName.knight_blueprints: ItemData(90045, True),
+    ItemName.ranger_blueprints: ItemData(90046, True),
+    ItemName.sky_blueprints: ItemData(90047, True),
+    ItemName.dragon_blueprints: ItemData(90048, True),
+    ItemName.slayer_blueprints: ItemData(90049, True),
+    ItemName.blood_blueprints: ItemData(90050, True),
+    ItemName.sage_blueprints: ItemData(90051, True),
+    ItemName.retribution_blueprints: ItemData(90052, True),
+    ItemName.holy_blueprints: ItemData(90053, True),
+    ItemName.dark_blueprints: ItemData(90054, True),
+}
+
+runes_table = {
+    ItemName.vault_runes: ItemData(90060, True),
+    ItemName.sprint_runes: ItemData(90061, True),
+    ItemName.vampire_runes: ItemData(90062, True),
+    ItemName.sky_runes: ItemData(90063, True),
+    ItemName.siphon_runes: ItemData(90064, True),
+    ItemName.retaliation_runes: ItemData(90065, True),
+    ItemName.bounty_runes: ItemData(90066, True),
+    ItemName.haste_runes: ItemData(90067, True),
+    ItemName.curse_runes: ItemData(90068, True),
+    ItemName.grace_runes: ItemData(90069, True),
+    ItemName.balance_runes: ItemData(90070, True),
+}
+
+misc_items_table = {
+    ItemName.trip_stat_increase: ItemData(90030, False),
+    ItemName.gold_1000: ItemData(90031, False),
+    ItemName.gold_3000: ItemData(90032, False),
+    ItemName.gold_5000: ItemData(90033, False),
+}
+
+# Complete item table.
 item_table = {
-    **item_vendors_table,
-    **base_item_table,
-    **equipment_item_table,
-    **rune_item_table,
-}
-
-extra_item_table = [
-    "Triple Stat Increases",
-    "1000 Gold",
-    "3000 Gold",
-    "5000 Gold",
-]
-
-# Anything not listed here will be added only once.
-item_frequencies: typing.Dict[str, int] = {
-    "Progressive Shinobis": 2,
-    "Progressive Miners": 2,
-    "Progressive Lichs": 2,
-    "Progressive Spellthieves": 2,
-    "Health Up": 15,
-    "Mana Up": 15,
-    "Attack Up": 15,
-    "Magic Damage Up": 15,
-    "Armor Up": 10,
-    "Equip Up": 10,
-    "Crit Chance Up": 5,
-    "Crit Damage Up": 5,
-
-    # Do not include these items in the pool by default. They will be added later to fill empty locations.
-    "Triple Stat Increases": 0,
-    "1000 Gold": 0,
-    "3000 Gold": 0,
-    "5000 Gold": 0,
+    **vendors_table,
+    **static_classes_table,
+    **progressive_classes_table,
+    **skill_unlocks_table,
+    **blueprints_table,
+    **runes_table,
+    **misc_items_table,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
-lookup_id_to_name[None] = "Victory"

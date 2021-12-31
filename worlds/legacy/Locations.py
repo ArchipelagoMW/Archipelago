@@ -1,6 +1,7 @@
 import typing
 
 from BaseClasses import Location
+from .Names import LocationName
 
 
 class LegacyLocation(Location):
@@ -8,70 +9,70 @@ class LegacyLocation(Location):
 
 
 base_location_table = {
-    # Manor Upgrades
-    "Manor Ground Road": 91000,
-    "Manor Main Base": 91001,
-    "Manor Main Bottom Window": 91002,
-    "Manor Main Top Window": 91003,
-    "Manor Main Roof": 91004,
-    "Manor Left Wing Base": 91005,
-    "Manor Left Wing Window": 91006,
-    "Manor Left Wing Roof": 91007,
-    "Manor Left Big Base": 91008,
-    "Manor Left Big Upper 1": 91009,
-    "Manor Left Big Upper 2": 91010,
-    "Manor Left Big Windows": 91011,
-    "Manor Left Big Roof": 91012,
-    "Manor Left Far Base": 91013,
-    "Manor Left Far Roof": 91014,
-    "Manor Left Extension": 91015,
-    "Manor Left Tree 1": 91016,
-    "Manor Left Tree 2": 91017,
-    "Manor Right Wing Base": 91018,
-    "Manor Right Wing Window": 91019,
-    "Manor Right Wing Roof": 91020,
-    "Manor Right Big Base": 91021,
-    "Manor Right Big Upper": 91022,
-    "Manor Right Big Roof": 91023,
-    "Manor Right High Base": 91024,
-    "Manor Right High Upper": 91025,
-    "Manor Right High Tower": 91026,
-    "Manor Right Extension": 91027,
-    "Manor Right Tree": 91028,
-    "Manor Observatory Base": 91029,
-    "Manor Observatory Telescope": 91030,
+    # Manor Renovations
+    LocationName.manor_ground_base: 91000,
+    LocationName.manor_main_base: 91001,
+    LocationName.manor_main_bottom_window: 91002,
+    LocationName.manor_main_top_window: 91003,
+    LocationName.manor_main_roof: 91004,
+    LocationName.manor_left_wing_base: 91005,
+    LocationName.manor_left_wing_window: 91006,
+    LocationName.manor_left_wing_roof: 91007,
+    LocationName.manor_left_big_base: 91008,
+    LocationName.manor_left_big_upper1: 91009,
+    LocationName.manor_left_big_upper2: 91010,
+    LocationName.manor_left_big_windows: 91011,
+    LocationName.manor_left_big_roof: 91012,
+    LocationName.manor_left_far_base: 91013,
+    LocationName.manor_left_far_roof: 91014,
+    LocationName.manor_left_extension: 91015,
+    LocationName.manor_left_tree1: 91016,
+    LocationName.manor_left_tree2: 91017,
+    LocationName.manor_right_wing_base: 91018,
+    LocationName.manor_right_wing_window: 91019,
+    LocationName.manor_right_wing_roof: 91020,
+    LocationName.manor_right_big_base: 91021,
+    LocationName.manor_right_big_upper: 91022,
+    LocationName.manor_right_big_roof: 91023,
+    LocationName.manor_right_high_base: 91024,
+    LocationName.manor_right_high_upper: 91025,
+    LocationName.manor_right_high_tower: 91026,
+    LocationName.manor_right_extension: 91027,
+    LocationName.manor_right_tree: 91028,
+    LocationName.manor_observatory_base: 91029,
+    LocationName.manor_observatory_scope: 91030,
 
-    # Main Bosses
-    "Khindr's Reward Chest": 91100,
-    "Alexander's Reward Chest": 91102,
-    "Ponce de Leon's Reward Chest": 91104,
-    "Herodotus's Reward Chest": 91106,
+    # Boss Rewards
+    LocationName.boss_khindr: 91100,
+    LocationName.boss_alexander: 91102,
+    LocationName.boss_leon: 91104,
+    LocationName.boss_herodotus: 91106,
 
     # Special Rooms
-    "Jukebox": 91200,
+    LocationName.special_jukebox: 91200,
 
     # Special Locations
-    "Castle Hamson": None,
-    "Forest Abkhazia": None,
-    "The Maya": None,
-    "The Land of Darkness": None,
-    "Victory": None,
+    LocationName.castle: None,
+    LocationName.garden: None,
+    LocationName.tower: None,
+    LocationName.dungeon: None,
+    LocationName.fountain: None,
 }
 
-diary_location_table = {f"Diary {i + 1}": i + 91300 for i in range(0, 25)}
+diary_location_table = {f"{LocationName.diary} {i + 1}": i + 91300 for i in range(0, 25)}
 
 fairy_chest_location_table = {
-    **{f"Castle Hamson Fairy Chest {i + 1}": i + 91400 for i in range(0, 50)},
-    **{f"Forest Abkhazia Fairy Chest {i + 1}": i + 91450 for i in range(0, 50)},
-    **{f"The Maya Fairy Chest {i + 1}": i + 91500 for i in range(0, 50)},
-    **{f"The Land of Darkness Fairy Chest {i + 1}": i + 91550 for i in range(0, 50)},
+    **{f"{LocationName.castle} - Fairy Chest {i + 1}": i + 91400 for i in range(0, 50)},
+    **{f"{LocationName.garden} - Fairy Chest {i + 1}": i + 91450 for i in range(0, 50)},
+    **{f"{LocationName.tower} - Fairy Chest {i + 1}": i + 91500 for i in range(0, 50)},
+    **{f"{LocationName.dungeon} - Fairy Chest {i + 1}": i + 91550 for i in range(0, 50)},
 }
 
 chest_location_table = {
-    **{f"Castle Hamson Chest {i + 1}": i + 91600 for i in range(0, 100)},
-    **{f"Forest Abkhazia Chest {i + 1}": i + 91700 for i in range(0, 100)},
-    **{f"The Maya Chest {i + 1}": i + 91800 for i in range(0, 100)},
-    **{f"The Land of Darkness Chest {i + 1}": i + 91900 for i in range(0, 100)},
+    **{f"{LocationName.castle} - Chest {i + 1}": i + 91600 for i in range(0, 100)},
+    **{f"{LocationName.garden} - Chest {i + 1}": i + 91700 for i in range(0, 100)},
+    **{f"{LocationName.tower} - Chest {i + 1}": i + 91800 for i in range(0, 100)},
+    **{f"{LocationName.dungeon} - Chest {i + 1}": i + 91900 for i in range(0, 100)},
 }
 
 location_table = {

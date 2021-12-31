@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, Range, Option, DeathLink, DefaultOnToggle
+from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle
 
 
 class StartingGender(Choice):
@@ -15,6 +15,18 @@ class StartingGender(Choice):
     default = 0
 
 
+class StartingClass(Choice):
+    """
+    Determines the starting class of your initial 'Sir Lee' character.
+    """
+    displayname = "Starting Class"
+    option_knight = 0
+    option_mage = 1
+    option_barbarian = 2
+    option_knave = 3
+    default = 0
+
+
 class NewGamePlus(Choice):
     """
     Puts the castle in new game plus mode which vastly increases enemy level, but increases gold gain by 50%. Not
@@ -23,7 +35,9 @@ class NewGamePlus(Choice):
     displayname = "New Game Plus"
     option_normal = 0
     option_new_game_plus = 1
+    option_new_game_plus_2 = 2
     alias_hard = 1
+    alias_brutal = 2
     default = 0
 
 
@@ -34,7 +48,7 @@ class FairyChestsPerZone(Range):
     """
     displayname = "Fairy Chests Per Zone"
     range_start = 5
-    range_end = 50
+    range_end = 15
     default = 5
 
 
@@ -45,18 +59,8 @@ class ChestsPerZone(Range):
     """
     displayname = "Chests Per Zone"
     range_start = 15
-    range_end = 100
-    default = 25
-
-
-class ItemsEveryNthChests(Range):
-    """
-    Determines how many chests need to be opened before an item can be found. Iron and Gold chests always have items.
-    """
-    displayname = "Items Every Nth Chests"
-    range_start = 1
-    range_end = 5
-    default = 2
+    range_end = 30
+    default = 15
 
 
 class Vendors(Choice):
@@ -71,18 +75,19 @@ class Vendors(Choice):
     default = 1
 
 
-class RequirePurchasingEquipment(DefaultOnToggle):
+class DisableCharon(Toggle):
     """
-    Determines where you will be required to purchase equipment from the Blacksmith before equipping them.
+    Prevents Charon from taking your money when you re-enter the castle. Also removes Haggling from the Item Pool.
+    """
+    displayname = "Disable Charon"
+
+
+class RequirePurchasing(DefaultOnToggle):
+    """
+    Determines where you will be required to purchase equipment and runes from the Blacksmith and Enchantress before
+    equipping them. If you disable require purchasing, Manor Renovations are scaled to take this into account.
     """
     displayname = "Require Purchasing Equipment"
-
-
-class RequirePurchasingRunes(DefaultOnToggle):
-    """
-    Determines where you will be required to purchase runes from the Enchantress before equipping them.
-    """
-    displayname = "Require Purchasing Runes"
 
 
 class GoldGainMultiplier(Choice):
@@ -98,15 +103,25 @@ class GoldGainMultiplier(Choice):
     default = 0
 
 
+class NumberOfChildren(Range):
+    """
+    Determines the number of offspring you can choose from on the lineage screen after a death.
+    """
+    displayname = "Number of Children"
+    range_start = 1
+    range_end = 5
+    default = 3
+
+
 legacy_options: typing.Dict[str, type(Option)] = {
     "starting_gender": StartingGender,
+    "starting_class": StartingClass,
     "new_game_plus": NewGamePlus,
     "fairy_chests_per_zone": FairyChestsPerZone,
     "chests_per_zone": ChestsPerZone,
-    "items_every_nth_chests": ItemsEveryNthChests,
     "vendors": Vendors,
-    "require_purchasing_equipment": RequirePurchasingEquipment,
-    "require_purchasing_runes": RequirePurchasingRunes,
+    "require_purchasing": RequirePurchasing,
     "gold_gain_multiplier": GoldGainMultiplier,
+    "number_of_children": NumberOfChildren,
     "death_link": DeathLink,
 }

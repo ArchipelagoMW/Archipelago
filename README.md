@@ -14,6 +14,7 @@ Currently, the following games are supported:
 * Super Metroid
 * Secret of Evermore
 * Final Fantasy
+* Rogue Legacy
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

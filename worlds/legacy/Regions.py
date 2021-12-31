@@ -1,10 +1,12 @@
 import typing
 
+from BaseClasses import MultiWorld, Region, Entrance
+from .Items import LegacyItem
+from .Locations import LegacyLocation, diary_location_table, location_table, base_location_table
+from .Names import LocationName, ItemName
+
 
 def create_regions(world, player: int):
-    from . import create_region
-    from .Locations import base_location_table, diary_location_table
-    from .Items import LegacyItem
 
     locations: typing.List[str] = []
 
@@ -15,28 +17,44 @@ def create_regions(world, player: int):
     # Add chests per settings.
     fairies = int(world.fairy_chests_per_zone[player])
     for i in range(0, fairies):
-        locations += [f"Castle Hamson Fairy Chest {i + 1}"]
-        locations += [f"Forest Abkhazia Fairy Chest {i + 1}"]
-        locations += [f"The Maya Fairy Chest {i + 1}"]
-        locations += [f"The Land of Darkness Fairy Chest {i + 1}"]
+        locations += [f"{LocationName.castle} Fairy Chest {i + 1}"]
+        locations += [f"{LocationName.garden} Fairy Chest {i + 1}"]
+        locations += [f"{LocationName.tower} Fairy Chest {i + 1}"]
+        locations += [f"{LocationName.dungeon} Fairy Chest {i + 1}"]
 
     chests = int(world.chests_per_zone[player])
     for i in range(0, chests):
-        locations += [f"Castle Hamson Chest {i + 1}"]
-        locations += [f"Forest Abkhazia Chest {i + 1}"]
-        locations += [f"The Maya Chest {i + 1}"]
-        locations += [f"The Land of Darkness Chest {i + 1}"]
+        locations += [f"{LocationName.castle} Chest {i + 1}"]
+        locations += [f"{LocationName.garden} Chest {i + 1}"]
+        locations += [f"{LocationName.tower} Chest {i + 1}"]
+        locations += [f"{LocationName.dungeon} Chest {i + 1}"]
 
     # Set up the regions correctly.
     world.regions += [
-        create_region(world, player, "Menu", None, ["Outside Castle Hamson"]),
-        create_region(world, player, "Castle Hamson", locations),
+        create_region(world, player, "Menu", None, [LocationName.outside]),
+        create_region(world, player, LocationName.castle, locations),
     ]
 
     # Connect entrances and set up events.
-    world.get_entrance("Outside Castle Hamson", player).connect(world.get_region("Castle Hamson", player))
-    world.get_location("Castle Hamson", player).place_locked_item(LegacyItem("Defeated Khindr", player, True))
-    world.get_location("Forest Abkhazia", player).place_locked_item(LegacyItem("Defeated Alexander", player, True))
-    world.get_location("The Maya", player).place_locked_item(LegacyItem("Defeated Ponce de Leon", player, True))
-    world.get_location("The Land of Darkness", player).place_locked_item(LegacyItem("Defeated Herodotus", player, True))
-    world.get_location("Victory", player).place_locked_item(LegacyItem("Victory", player, True))
+    world.get_entrance(LocationName.outside, player).connect(world.get_region(LocationName.castle, player))
+    world.get_location(LocationName.castle, player).place_locked_item(LegacyItem(ItemName.boss_khindr, True, None, player))
+    world.get_location(LocationName.garden, player).place_locked_item(LegacyItem(ItemName.boss_alexander, True, None, player))
+    world.get_location(LocationName.tower, player).place_locked_item(LegacyItem(ItemName.boss_leon, True, None, player))
+    world.get_location(LocationName.dungeon, player).place_locked_item(LegacyItem(ItemName.boss_herodotus, True, None, player))
+    world.get_location(LocationName.fountain, player).place_locked_item(LegacyItem(ItemName.boss_fountain, True, None, player))
+
+
+def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
+    # Shamelessly stolen from the ROR2 definition, lol
+    ret = Region(name, None, name, player)
+    ret.world = world
+    if locations:
+        for location in locations:
+            loc_id = location_table.get(location, 0)
+            location = LegacyLocation(player, location, loc_id, ret)
+            ret.locations.append(location)
+    if exits:
+        for exit in exits:
+            ret.exits.append(Entrance(player, exit, ret))
+
+    return ret

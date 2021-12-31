@@ -1,12 +1,13 @@
-import random
 import typing
 
-from BaseClasses import Region, MultiWorld, Entrance, Item
-from .Items import LegacyItem, item_table, item_frequencies, base_item_table, extra_item_table, equipment_item_table, rune_item_table
+from BaseClasses import Item, MultiWorld
+from .Items import LegacyItem, ItemData, item_table, vendors_table, static_classes_table, progressive_classes_table, \
+    skill_unlocks_table, blueprints_table, runes_table, misc_items_table
 from .Locations import LegacyLocation, location_table, base_location_table
 from .Options import legacy_options
 from .Regions import create_regions
 from .Rules import set_rules
+from .Names import ItemName
 from ..AutoWorld import World
 
 
@@ -27,16 +28,19 @@ class LegacyWorld(World):
     def _get_slot_data(self):
         return {
             "starting_gender": self.world.starting_gender[self.player],
+            "starting_class": self.world.starting_class[self.player],
             "new_game_plus": self.world.new_game_plus[self.player],
             "fairy_chests_per_zone": self.world.fairy_chests_per_zone[self.player],
             "chests_per_zone": self.world.chests_per_zone[self.player],
-            "items_every_nth_chests": self.world.items_every_nth_chests[self.player],
             "vendors": self.world.vendors[self.player],
-            "require_purchasing_equipment": self.world.require_purchasing_equipment[self.player],
-            "require_purchasing_runes": self.world.require_purchasing_runes[self.player],
+            "require_purchasing": self.world.require_purchasing[self.player],
             "gold_gain_multiplier": self.world.gold_gain_multiplier[self.player],
+            "number_of_children": self.world.number_of_children[self.player],
             "death_link": self.world.death_link[self.player],
         }
+
+    def _create_items(self, name: str, data: ItemData):
+        return [self.create_item(name)] * data.quantity
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
@@ -50,29 +54,20 @@ class LegacyWorld(World):
         itempool: typing.List[LegacyItem] = []
         total_required_locations = 61 + (self.world.chests_per_zone[self.player] * 4) + (self.world.fairy_chests_per_zone[self.player] * 4)
 
-        # Fill item pool with all base items
-        for item in base_item_table:
-            if item in item_frequencies:
-                itempool += [self.create_item(item)] * item_frequencies[item]
-            else:
-                itempool += [self.create_item(item)]
-
-        for item in equipment_item_table:
-            itempool += [self.create_item(item)]
-
-        for item in rune_item_table:
-            itempool += [self.create_item(item)]
+        # Fill item pool with all required items
+        for item, data in {**skill_unlocks_table, **blueprints_table, **runes_table}.items():
+            itempool += self._create_items(item, data)
 
         # Check if we need to start with these vendors or put them in the pool.
-        if self.world.vendors[self.player].value == 0:
-            self.world.push_precollected(self.world.create_item("Blacksmith", self.player))
-            self.world.push_precollected(self.world.create_item("Enchantress", self.player))
+        if self.world.vendors[self.player] == "start_unlocked":
+            self.world.push_precollected(self.world.create_item(ItemName.blacksmith, self.player))
+            self.world.push_precollected(self.world.create_item(ItemName.enchantress, self.player))
         else:
-            itempool += [self.create_item("Blacksmith"), self.create_item("Enchantress")]
+            itempool += [self.create_item(ItemName.blacksmith), self.create_item(ItemName.enchantress)]
 
         # Fill item pool with the remaining
         for _ in range(len(itempool), total_required_locations):
-            item = random.choice(extra_item_table)
+            item = self.world.random.choice(list(misc_items_table.keys()))
             itempool += [self.create_item(item)]
 
         self.world.itempool += itempool
@@ -81,23 +76,8 @@ class LegacyWorld(World):
         create_regions(self.world, self.player)
 
     def create_item(self, name: str) -> Item:
-        return LegacyItem(name, self.player)
+        data = item_table[name]
+        return LegacyItem(name, data.progression, data.code, self.player)
 
     def set_rules(self):
         set_rules(self.world, self.player)
-
-
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    # Shamelessly stolen from the ROR2 definition, lol
-    ret = Region(name, None, name, player)
-    ret.world = world
-    if locations:
-        for location in locations:
-            loc_id = location_table.get(location, 0)
-            location = LegacyLocation(player, location, loc_id, ret)
-            ret.locations.append(location)
-    if exits:
-        for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
-
-    return ret
