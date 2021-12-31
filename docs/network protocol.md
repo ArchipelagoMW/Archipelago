@@ -144,8 +144,8 @@ The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
 | ---- | ---- | ----- |
 | hint_points | int | New argument. The client's current hint points. |
 | players | list\[NetworkPlayer\] | Changed argument. Always sends all players, whether connected or not. |
-| checked_locations | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
-| missing_locations | Should never be sent as an update, if needed is the inverse of checked_locations. |
+| checked_locations | list\[int\] | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
+| missing_locations | list\[int\] | Should never be sent as an update, if needed is the inverse of checked_locations. |
 
 All arguments for this packet are optional, only changes are sent.
 
