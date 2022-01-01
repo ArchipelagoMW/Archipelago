@@ -284,7 +284,6 @@ const updateGameSetting = (event) => {
   const type = event.target.getAttribute('data-type');
   switch (type){
     case 'select':
-      console.log(`${game}-${setting}-${option}`);
       document.getElementById(`${game}-${setting}-${option}`).innerText = event.target.value;
       break;
     case 'range':
