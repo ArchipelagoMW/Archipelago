@@ -173,7 +173,7 @@ Sent to clients to provide what is known as a 'data package' which contains info
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| data | DataPackageObject | The data package as a JSON object. More details on its contents may be found at [Data Package Contents](#Data-Package-Contents) |
+| data | [DataPackageObject](#Data-Package-Contents) | The data package as a JSON object. |
 
 ### Bounced
 Sent to clients after a client requested this message be sent to them, more info in the Bounce package.
