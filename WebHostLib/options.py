@@ -97,7 +97,7 @@ def create():
         os.makedirs(os.path.join(target_folder, 'player-settings'), exist_ok=True)
 
         with open(os.path.join(target_folder, 'player-settings', game_name + ".json"), "w") as f:
-            f.write(json.dumps(player_settings, indent=2, separators=(',', ': ')))
+            json.dump(player_settings, f, indent=2, separators=(',', ': '))
 
         if not world.hidden:
             weighted_settings["baseOptions"]["game"][game_name] = 0
@@ -107,4 +107,4 @@ def create():
             weighted_settings["games"][game_name]["gameLocations"] = tuple(world.location_names)
 
     with open(os.path.join(target_folder, 'weighted-settings.json'), "w") as f:
-        f.write(json.dumps(weighted_settings, indent=2, separators=(',', ': ')))
+        json.dump(weighted_settings, f, indent=2, separators=(',', ': '))
