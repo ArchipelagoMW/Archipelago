@@ -10,7 +10,7 @@ progressive_barbarian  = "Progressive Barbarians"
 progressive_knave      = "Progressive Knaves"
 progressive_shinobi    = "Progressive Shinobis"
 progressive_miner      = "Progressive Miners"
-progressive_lich       = "Progressive Lichs"
+progressive_lich       = "Progressive Liches"
 progressive_spellthief = "Progressive Spellthieves"
 
 # Static Class Definitions

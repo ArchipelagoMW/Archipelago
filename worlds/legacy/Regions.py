@@ -17,17 +17,17 @@ def create_regions(world, player: int):
     # Add chests per settings.
     fairies = int(world.fairy_chests_per_zone[player])
     for i in range(0, fairies):
-        locations += [f"{LocationName.castle} Fairy Chest {i + 1}"]
-        locations += [f"{LocationName.garden} Fairy Chest {i + 1}"]
-        locations += [f"{LocationName.tower} Fairy Chest {i + 1}"]
-        locations += [f"{LocationName.dungeon} Fairy Chest {i + 1}"]
+        locations += [f"{LocationName.castle} - Fairy Chest {i + 1}"]
+        locations += [f"{LocationName.garden} - Fairy Chest {i + 1}"]
+        locations += [f"{LocationName.tower} - Fairy Chest {i + 1}"]
+        locations += [f"{LocationName.dungeon} - Fairy Chest {i + 1}"]
 
     chests = int(world.chests_per_zone[player])
     for i in range(0, chests):
-        locations += [f"{LocationName.castle} Chest {i + 1}"]
-        locations += [f"{LocationName.garden} Chest {i + 1}"]
-        locations += [f"{LocationName.tower} Chest {i + 1}"]
-        locations += [f"{LocationName.dungeon} Chest {i + 1}"]
+        locations += [f"{LocationName.castle} - Chest {i + 1}"]
+        locations += [f"{LocationName.garden} - Chest {i + 1}"]
+        locations += [f"{LocationName.tower} - Chest {i + 1}"]
+        locations += [f"{LocationName.dungeon} - Chest {i + 1}"]
 
     # Set up the regions correctly.
     world.regions += [

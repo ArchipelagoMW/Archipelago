@@ -21,20 +21,20 @@ class LegacyLogic(LogicMixin):
 def set_rules(world: MultiWorld, player: int):
     # Chests
     for i in range(0, world.chests_per_zone[player]):
-        set_rule(world.get_location(f"{LocationName.garden} Chest {i + 1}", player),
+        set_rule(world.get_location(f"{LocationName.garden} - Chest {i + 1}", player),
                  lambda state: state.has(ItemName.boss_khindr, player))
-        set_rule(world.get_location(f"{LocationName.tower} Chest {i + 1}", player),
+        set_rule(world.get_location(f"{LocationName.tower} - Chest {i + 1}", player),
                  lambda state: state.has(ItemName.boss_alexander, player))
-        set_rule(world.get_location(f"{LocationName.dungeon} Chest {i + 1}", player),
+        set_rule(world.get_location(f"{LocationName.dungeon} - Chest {i + 1}", player),
                  lambda state: state.has(ItemName.boss_leon, player))
 
     # Fairy Chests
     for i in range(0, world.fairy_chests_per_zone[player]):
-        set_rule(world.get_location(f"{LocationName.garden} Fairy Chest {i + 1}", player),
+        set_rule(world.get_location(f"{LocationName.garden} - Fairy Chest {i + 1}", player),
                  lambda state: state.has(ItemName.boss_khindr, player))
-        set_rule(world.get_location(f"{LocationName.tower} Fairy Chest {i + 1}", player),
+        set_rule(world.get_location(f"{LocationName.tower} - Fairy Chest {i + 1}", player),
                  lambda state: state.has(ItemName.boss_alexander, player))
-        set_rule(world.get_location(f"{LocationName.dungeon} Fairy Chest {i + 1}", player),
+        set_rule(world.get_location(f"{LocationName.dungeon} - Fairy Chest {i + 1}", player),
                  lambda state: state.has(ItemName.boss_leon, player))
 
     # Vendors
