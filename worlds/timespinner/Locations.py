@@ -227,7 +227,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
             LocationData('Varndagroth tower left', 'Memory - Left Elevator (Nomads)',  1337181, lambda state: state.has('Elevator Keycard', player)),
             LocationData('Varndagroth tower right (lower)', 'Memory - Siren Elevator (Childhood)',  1337182, state._timespinner_has_keycard_B(world, player)),
             LocationData('Varndagroth tower right (lower)', 'Memory - Varndagroth Right Bottom (Faron)',  1337183),
-            LocationData('Military Fortress (hangar)', 'Memory - Bomber Climb (A Solution)',  1337184, lambda state: state.has('Timespinner Wheel', player) and state._timespinner_has_doublejump_of_npc(world, player)),
+            LocationData('Military Fortress', 'Memory - Bomber Climb (A Solution)',  1337184, lambda state: state.has('Timespinner Wheel', player) and state._timespinner_has_doublejump_of_npc(world, player)),
             LocationData('The lab', 'Memory - Genza\'s Secret Stash 1 (An Old Friend)',  1337185, lambda state: state._timespinner_can_break_walls(world, player)),
             LocationData('The lab', 'Memory - Genza\'s Secret Stash 2 (Twilight Dinner)',  1337186, lambda state: state._timespinner_can_break_walls(world, player)),
             LocationData('Emperors tower', 'Memory - Way Up There (Final Circle)',  1337187),
