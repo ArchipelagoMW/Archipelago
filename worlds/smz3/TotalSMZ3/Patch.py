@@ -4,7 +4,7 @@ from typing import Any, Callable, List, Sequence
 import random
 import typing
 from BaseClasses import Location
-from worlds.smz3.TotalSMZ3.Item import ItemType
+from worlds.smz3.TotalSMZ3.Item import Item, ItemType
 from worlds.smz3.TotalSMZ3.Location import LocationType
 from worlds.smz3.TotalSMZ3.Region import IMedallionAccess, IReward, RewardType, SMRegion, Z3Region
 from worlds.smz3.TotalSMZ3.Regions.Zelda.EasternPalace import EasternPalace
@@ -20,7 +20,7 @@ from worlds.smz3.TotalSMZ3.Regions.Zelda.TurtleRock import TurtleRock
 from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
 
 from worlds.smz3.TotalSMZ3.World import World
-from worlds.smz3.TotalSMZ3.Config import Config, GameMode
+from worlds.smz3.TotalSMZ3.Config import Config, GameMode, GanonInvincible
 
 class KeycardPlaque:
     Level1 = 0xe0
@@ -77,6 +77,7 @@ class Patch:
     rnd: random.Random
     #stringTable: StringTable
     patches: Sequence[Any]
+    stringTable: StringTable
 
     def __init__(self, myWorld: World, allWorlds: List[World], seedGuid: str, seed: int, rnd: random.Random):
         self.myWorld = myWorld
@@ -86,7 +87,7 @@ class Patch:
         self.rnd = rnd
 
     def Create(self, config: Config):
-        #stringTable = new StringTable();
+        self.stringTable = StringTable()
         self.patches = []
 
         self.WriteMedallions()
@@ -97,15 +98,15 @@ class Patch:
 
         self.WritePrizeShuffle()
 
-        #WriteRemoveEquipmentFromUncle(myWorld.GetLocation("Link's Uncle").Item);
+        self.WriteRemoveEquipmentFromUncle(self.myWorld.GetLocation("Link's Uncle").APLocaion.item.item)
 
-        #WriteGanonInvicible(config.GanonInvincible);
-        #WriteRngBlock();
+        self.WriteGanonInvicible(config.GanonInvincible)
+        self.WriteRngBlock()
 
-        #WriteSaveAndQuitFromBossRoom();
-        #WriteWorldOnAgahnimDeath();
+        self.WriteSaveAndQuitFromBossRoom()
+        self.WriteWorldOnAgahnimDeath()
 
-        #WriteTexts(config);
+        self.WriteTexts(config)
 
         self.WriteSMLocations([loc for region in self.myWorld.Regions for loc in region.Locations if isinstance(region, SMRegion)])
         self.WriteZ3Locations([loc for region in self.myWorld.Regions for loc in region.Locations if isinstance(region, Z3Region)])
@@ -506,54 +507,54 @@ class Patch:
             (offset + 0x4F, offset + 0x4E),
         ]
         return (patches, duplicates)
-    """
-    void WriteTexts(Config config) {
-        var regions = myWorld.Regions.OfType<IReward>();
-        var greenPendantDungeon = regions.Where(x => x.Reward == PendantGreen).Cast<Region>().First();
-        var redCrystalDungeons = regions.Where(x => x.Reward == CrystalRed).Cast<Region>();
 
-        var sahasrahla = Texts.SahasrahlaReveal(greenPendantDungeon);
+    def WriteTexts(self, config: Config):
+        regions = myWorld.Regions.OfType<IReward>();
+        greenPendantDungeon = regions.Where(x => x.Reward == PendantGreen).Cast<Region>().First();
+        redCrystalDungeons = regions.Where(x => x.Reward == CrystalRed).Cast<Region>();
+
+        sahasrahla = Texts.SahasrahlaReveal(greenPendantDungeon);
         patches.Add((Snes(0x308A00), Dialog.Simple(sahasrahla)));
         stringTable.SetSahasrahlaRevealText(sahasrahla);
 
-        var bombShop = Texts.BombShopReveal(redCrystalDungeons);
+        bombShop = Texts.BombShopReveal(redCrystalDungeons);
         patches.Add((Snes(0x308E00), Dialog.Simple(bombShop)));
         stringTable.SetBombShopRevealText(bombShop);
 
-        var blind = Texts.Blind(rnd);
+        blind = Texts.Blind(rnd);
         patches.Add((Snes(0x308800), Dialog.Simple(blind)));
         stringTable.SetBlindText(blind);
 
-        var tavernMan = Texts.TavernMan(rnd);
+        tavernMan = Texts.TavernMan(rnd);
         patches.Add((Snes(0x308C00), Dialog.Simple(tavernMan)));
         stringTable.SetTavernManText(tavernMan);
 
-        var ganon = Texts.GanonFirstPhase(rnd);
+        ganon = Texts.GanonFirstPhase(rnd);
         patches.Add((Snes(0x308600), Dialog.Simple(ganon)));
         stringTable.SetGanonFirstPhaseText(ganon);
 
-        // Todo: Verify these two are correct if ganon invincible patch is ever added
-        // ganon_fall_in_alt in v30
-        var ganonFirstPhaseInvincible = "You think you\nare ready to\nface me?\n\nI will not die\n\nunless you\ncomplete your\ngoals. Dingus!";
+        #// Todo: Verify these two are correct if ganon invincible patch is ever added
+        #// ganon_fall_in_alt in v30
+        ganonFirstPhaseInvincible = "You think you\nare ready to\nface me?\n\nI will not die\n\nunless you\ncomplete your\ngoals. Dingus!";
         patches.Add((Snes(0x309100), Dialog.Simple(ganonFirstPhaseInvincible)));
 
-        // ganon_phase_3_alt in v30
-        var ganonThirdPhaseInvincible = "Got wax in\nyour ears?\nI cannot die!";
+        #// ganon_phase_3_alt in v30
+        ganonThirdPhaseInvincible = "Got wax in\nyour ears?\nI cannot die!";
         patches.Add((Snes(0x309200), Dialog.Simple(ganonThirdPhaseInvincible)));
-        // ---
+        #// ---
 
-        var silversLocation = allWorlds.SelectMany(world => world.Locations).Where(l => l.ItemIs(SilverArrows, myWorld)).First();
-        var silvers = config.GameMode == GameMode.Multiworld ?
+        silversLocation = allWorlds.SelectMany(world => world.Locations).Where(l => l.ItemIs(SilverArrows, myWorld)).First();
+        silvers = config.GameMode == GameMode.Multiworld ?
             Texts.GanonThirdPhaseMulti(silversLocation.Region, myWorld) :
             Texts.GanonThirdPhaseSingle(silversLocation.Region);
         patches.Add((Snes(0x308700), Dialog.Simple(silvers)));
         stringTable.SetGanonThirdPhaseText(silvers);
 
-        var triforceRoom = Texts.TriforceRoom(rnd);
+        triforceRoom = Texts.TriforceRoom(rnd);
         patches.Add((Snes(0x308400), Dialog.Simple(triforceRoom)));
         stringTable.SetTriforceRoomText(triforceRoom);
-    }
 
+    """
     void WriteStringTable() {
         // Todo: v12, base table in asm, use move instructions in seed patch
         patches.Add((Snes(0x1C8000), stringTable.GetPaddedBytes()));
@@ -723,65 +724,62 @@ class Patch:
         self.patches.append((Snes(0x308020), [ digs ]))
         self.patches.append((Snes(0x1DFD95), [ digs ]))
 
-    """
-    // Removes Sword/Shield from Uncle by moving the tiles for
-    // sword/shield to his head and replaces them with his head.
-    void WriteRemoveEquipmentFromUncle(Item item) {
-        if (item.Type != ProgressiveSword) {
-            patches.AddRange(new[] {
-                (Snes(0xDD263), new byte[] { 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x0E }),
-                (Snes(0xDD26B), new byte[] { 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x0E }),
-                (Snes(0xDD293), new byte[] { 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x0E }),
-                (Snes(0xDD29B), new byte[] { 0x00, 0x00, 0xF7, 0xFF, 0x00, 0x0E }),
-                (Snes(0xDD2B3), new byte[] { 0x00, 0x00, 0xF6, 0xFF, 0x02, 0x0E }),
-                (Snes(0xDD2BB), new byte[] { 0x00, 0x00, 0xF6, 0xFF, 0x02, 0x0E }),
-                (Snes(0xDD2E3), new byte[] { 0x00, 0x00, 0xF7, 0xFF, 0x02, 0x0E }),
-                (Snes(0xDD2EB), new byte[] { 0x00, 0x00, 0xF7, 0xFF, 0x02, 0x0E }),
-                (Snes(0xDD31B), new byte[] { 0x00, 0x00, 0xE4, 0xFF, 0x08, 0x0E }),
-                (Snes(0xDD323), new byte[] { 0x00, 0x00, 0xE4, 0xFF, 0x08, 0x0E }),
-            });
-        }
-        if (item.Type != ProgressiveShield) {
-            patches.AddRange(new[] {
-                (Snes(0xDD253), new byte[] { 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x0E }),
-                (Snes(0xDD25B), new byte[] { 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x0E }),
-                (Snes(0xDD283), new byte[] { 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x0E }),
-                (Snes(0xDD28B), new byte[] { 0x00, 0x00, 0xF7, 0xFF, 0x00, 0x0E }),
-                (Snes(0xDD2CB), new byte[] { 0x00, 0x00, 0xF6, 0xFF, 0x02, 0x0E }),
-                (Snes(0xDD2FB), new byte[] { 0x00, 0x00, 0xF7, 0xFF, 0x02, 0x0E }),
-                (Snes(0xDD313), new byte[] { 0x00, 0x00, 0xE4, 0xFF, 0x08, 0x0E }),
-            });
-        }
-    }
+    #// Removes Sword/Shield from Uncle by moving the tiles for
+    #// sword/shield to his head and replaces them with his head.
+    def WriteRemoveEquipmentFromUncle(self, item: Item):
+        if (item.Type != ItemType.ProgressiveSword):
+            self.patches += [
+                    (Snes(0xDD263), [ 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x0E ]),
+                    (Snes(0xDD26B), [ 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x0E ]),
+                    (Snes(0xDD293), [ 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x0E ]),
+                    (Snes(0xDD29B), [ 0x00, 0x00, 0xF7, 0xFF, 0x00, 0x0E ]),
+                    (Snes(0xDD2B3), [ 0x00, 0x00, 0xF6, 0xFF, 0x02, 0x0E ]),
+                    (Snes(0xDD2BB), [ 0x00, 0x00, 0xF6, 0xFF, 0x02, 0x0E ]),
+                    (Snes(0xDD2E3), [ 0x00, 0x00, 0xF7, 0xFF, 0x02, 0x0E ]),
+                    (Snes(0xDD2EB), [ 0x00, 0x00, 0xF7, 0xFF, 0x02, 0x0E ]),
+                    (Snes(0xDD31B), [ 0x00, 0x00, 0xE4, 0xFF, 0x08, 0x0E ]),
+                    (Snes(0xDD323), [ 0x00, 0x00, 0xE4, 0xFF, 0x08, 0x0E ]),
+                ]
+        if (item.Type != ItemType.ProgressiveShield):
+            self.patches += [
+                    (Snes(0xDD253), [ 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x0E ]),
+                    (Snes(0xDD25B), [ 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x0E ]),
+                    (Snes(0xDD283), [ 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x0E ]),
+                    (Snes(0xDD28B), [ 0x00, 0x00, 0xF7, 0xFF, 0x00, 0x0E ]),
+                    (Snes(0xDD2CB), [ 0x00, 0x00, 0xF6, 0xFF, 0x02, 0x0E ]),
+                    (Snes(0xDD2FB), [ 0x00, 0x00, 0xF7, 0xFF, 0x02, 0x0E ]),
+                    (Snes(0xDD313), [ 0x00, 0x00, 0xE4, 0xFF, 0x08, 0x0E ]),
+                ]
 
-    void WriteGanonInvicible(GanonInvincible invincible) {
-        /* Defaults to $00 (never) at [asm]/z3/randomizer/tables.asm */
-        var value = invincible switch {
-            GanonInvincible.Never => 0x00,
-            GanonInvincible.Always => 0x01,
-            GanonInvincible.BeforeAllDungeons => 0x02,
-            GanonInvincible.BeforeCrystals => 0x03,
-            var x => throw new ArgumentException($"Unknown Ganon invincible value {x}", nameof(invincible))
-        };
-        patches.Add((Snes(0x30803E), new byte[] { (byte)value }));
-    }
+    def WriteGanonInvicible(self, invincible: GanonInvincible):
+        #/* Defaults to $00 (never) at [asm]/z3/randomizer/tables.asm */
+        invincibleMap = {
+                        GanonInvincible.Never : 0x00,
+                        GanonInvincible.Always : 0x01,
+                        GanonInvincible.BeforeAllDungeons : 0x02,
+                        GanonInvincible.BeforeCrystals : 0x03,
+                        }
+        value = invincibleMap.get(invincible, None)
+        if (value is None):
+            raise exception(f"Unknown Ganon invincible value {invincible}")
+        else:
+            self.patches.append((Snes(0x30803E), [value]))
 
-    void WriteRngBlock() {
-        /* Repoint RNG Block */
-        patches.Add((0x420000, Range(0, 1024).Select(x => (byte)rnd.Next(0x100)).ToArray()));
-    }
 
-    void WriteSaveAndQuitFromBossRoom() {
-        /* Defaults to $00 at [asm]/z3/randomizer/tables.asm */
-        patches.Add((Snes(0x308042), new byte[] { 0x01 }));
-    }
+    def WriteRngBlock(self):
+        #/* Repoint RNG Block */
+        self.patches.append((0x420000, [self.rnd.randrange(0, 0x100) for x in range(0, 1024)]))
 
-    void WriteWorldOnAgahnimDeath() {
-        /* Defaults to $01 at [asm]/z3/randomizer/tables.asm */
-        // Todo: Z3r major glitches disables this, reconsider extending or dropping with glitched logic later.
-        //patches.Add((Snes(0x3080A3), new byte[] { 0x01 }));
-    }
-"""
+    def WriteSaveAndQuitFromBossRoom(self):
+        #/* Defaults to $00 at [asm]/z3/randomizer/tables.asm */
+        self.patches.append((Snes(0x308042), [ 0x01 ]))
+
+    def WriteWorldOnAgahnimDeath(self):
+        pass
+        #/* Defaults to $01 at [asm]/z3/randomizer/tables.asm */
+        #// Todo: Z3r major glitches disables this, reconsider extending or dropping with glitched logic later.
+        #//patches.Add((Snes(0x3080A3), new byte[] { 0x01 }));
+
 def Snes(addr: int):
     #/* Redirect hi bank $30 access into ExHiRom lo bank $40 */
     if (addr & 0xFF8000) == 0x308000:
