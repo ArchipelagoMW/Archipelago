@@ -523,10 +523,13 @@ def launch_sni(ctx: Context):
     if not os.path.isdir(sni_path):
         sni_path = Utils.local_path(sni_path)
     if os.path.isdir(sni_path):
-        for file in os.listdir(sni_path):
-            lower_file = file.lower()
-            if (lower_file.startswith("sni.") and not lower_file.endswith(".proto")) or lower_file == "sni":
-                sni_path = os.path.join(sni_path, file)
+        dir_entry: os.DirEntry
+        for dir_entry in os.scandir(sni_path):
+            if dir_entry.is_file():
+                lower_file = dir_entry.name.lower()
+                if (lower_file.startswith("sni.") and not lower_file.endswith(".proto")) or (lower_file == "sni"):
+                    sni_path = dir_entry.path
+                    break
 
     if os.path.isfile(sni_path):
         snes_logger.info(f"Attempting to start {sni_path}")

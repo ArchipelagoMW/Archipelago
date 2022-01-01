@@ -1,0 +1,228 @@
+window.addEventListener('load', () => {
+  fetchSettingData().then((results) => {
+    let settingHash = localStorage.getItem('weighted-settings-hash');
+    if (!settingHash) {
+      // If no hash data has been set before, set it now
+      localStorage.setItem('weighted-settings-hash', md5(results));
+      localStorage.removeItem('weighted-settings');
+      settingHash = md5(results);
+    }
+
+    if (settingHash !== md5(results)) {
+      const userMessage = document.getElementById('user-message');
+      userMessage.innerText = "Your settings are out of date! Click here to update them! Be aware this will reset " +
+        "them all to default.";
+      userMessage.style.display = "block";
+      userMessage.addEventListener('click', resetSettings);
+    }
+
+    // Page setup
+    createDefaultSettings(results);
+    // buildUI(results);
+    adjustHeaderWidth();
+
+    // Event listeners
+    document.getElementById('export-settings').addEventListener('click', () => exportSettings());
+    document.getElementById('generate-race').addEventListener('click', () => generateGame(true));
+    document.getElementById('generate-game').addEventListener('click', () => generateGame());
+
+    // Name input field
+    const weightedSettings = JSON.parse(localStorage.getItem('weighted-settings'));
+    const nameInput = document.getElementById('player-name');
+    nameInput.addEventListener('keyup', (event) => updateBaseSetting(event));
+    nameInput.value = weightedSettings.name;
+  });
+});
+
+const resetSettings = () => {
+  localStorage.removeItem('weighted-settings');
+  localStorage.removeItem('weighted-settings-hash')
+  window.location.reload();
+};
+
+const fetchSettingData = () => new Promise((resolve, reject) => {
+  fetch(new Request(`${window.location.origin}/static/generated/weighted-settings.json`)).then((response) => {
+    try{ resolve(response.json()); }
+    catch(error){ reject(error); }
+  });
+});
+
+const createDefaultSettings = (settingData) => {
+  if (!localStorage.getItem('weighted-settings')) {
+    const newSettings = {};
+
+    // Transfer base options directly
+    for (let baseOption of Object.keys(settingData.baseOptions)){
+      newSettings[baseOption] = settingData.baseOptions[baseOption];
+    }
+
+    // Set options per game
+    for (let game of Object.keys(settingData.games)) {
+      // Initialize game object
+      newSettings[game] = {};
+
+      // Transfer game options
+      for (let gameOption of Object.keys(settingData.games[game].gameOptions)){
+        newSettings[game][gameOption] = settingData.games[game].gameOptions[gameOption].defaultValue;
+      }
+
+      newSettings[game].start_inventory = [];
+      newSettings[game].exclude_locations = [];
+      newSettings[game].local_items = [];
+      newSettings[game].non_local_items = [];
+      newSettings[game].start_hints = [];
+    }
+
+    localStorage.setItem('weighted-settings', JSON.stringify(newSettings));
+  }
+};
+
+// TODO: Update this function for use with weighted-settings
+// TODO: Include item configs: start_inventory, local_items, non_local_items, start_hints
+// TODO: Include location configs: exclude_locations
+const buildUI = (settingData) => {
+  // Game Options
+  const leftGameOpts = {};
+  const rightGameOpts = {};
+  Object.keys(settingData.gameOptions).forEach((key, index) => {
+    if (index < Object.keys(settingData.gameOptions).length / 2) { leftGameOpts[key] = settingData.gameOptions[key]; }
+    else { rightGameOpts[key] = settingData.gameOptions[key]; }
+  });
+  document.getElementById('game-options-left').appendChild(buildOptionsTable(leftGameOpts));
+  document.getElementById('game-options-right').appendChild(buildOptionsTable(rightGameOpts));
+};
+
+const buildOptionsTable = (settings, romOpts = false) => {
+  const currentSettings = JSON.parse(localStorage.getItem(gameName));
+  const table = document.createElement('table');
+  const tbody = document.createElement('tbody');
+
+  Object.keys(settings).forEach((setting) => {
+    const tr = document.createElement('tr');
+
+    // td Left
+    const tdl = document.createElement('td');
+    const label = document.createElement('label');
+    label.setAttribute('for', setting);
+    label.setAttribute('data-tooltip', settings[setting].description);
+    label.innerText = `${settings[setting].displayName}:`;
+    tdl.appendChild(label);
+    tr.appendChild(tdl);
+
+    // td Right
+    const tdr = document.createElement('td');
+    let element = null;
+
+    switch(settings[setting].type){
+      case 'select':
+        element = document.createElement('div');
+        element.classList.add('select-container');
+        let select = document.createElement('select');
+        select.setAttribute('id', setting);
+        select.setAttribute('data-key', setting);
+        if (romOpts) { select.setAttribute('data-romOpt', '1'); }
+        settings[setting].options.forEach((opt) => {
+          const option = document.createElement('option');
+          option.setAttribute('value', opt.value);
+          option.innerText = opt.name;
+          if ((isNaN(currentSettings[gameName][setting]) &&
+            (parseInt(opt.value, 10) === parseInt(currentSettings[gameName][setting]))) ||
+            (opt.value === currentSettings[gameName][setting]))
+          {
+            option.selected = true;
+          }
+          select.appendChild(option);
+        });
+        select.addEventListener('change', (event) => updateGameSetting(event));
+        element.appendChild(select);
+        break;
+
+      case 'range':
+        element = document.createElement('div');
+        element.classList.add('range-container');
+
+        let range = document.createElement('input');
+        range.setAttribute('type', 'range');
+        range.setAttribute('data-key', setting);
+        range.setAttribute('min', settings[setting].min);
+        range.setAttribute('max', settings[setting].max);
+        range.value = currentSettings[gameName][setting];
+        range.addEventListener('change', (event) => {
+          document.getElementById(`${setting}-value`).innerText = event.target.value;
+          updateGameSetting(event);
+        });
+        element.appendChild(range);
+
+        let rangeVal = document.createElement('span');
+        rangeVal.classList.add('range-value');
+        rangeVal.setAttribute('id', `${setting}-value`);
+        rangeVal.innerText = currentSettings[gameName][setting] ?? settings[setting].defaultValue;
+        element.appendChild(rangeVal);
+        break;
+
+      default:
+        console.error(`Unknown setting type: ${settings[setting].type}`);
+        console.error(setting);
+        return;
+    }
+
+    tdr.appendChild(element);
+    tr.appendChild(tdr);
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  return table;
+};
+
+const updateBaseSetting = (event) => {
+  const options = JSON.parse(localStorage.getItem(gameName));
+  options[event.target.getAttribute('data-key')] = isNaN(event.target.value) ?
+    event.target.value : parseInt(event.target.value);
+  localStorage.setItem(gameName, JSON.stringify(options));
+};
+
+const updateGameSetting = (event) => {
+  const options = JSON.parse(localStorage.getItem(gameName));
+  options[gameName][event.target.getAttribute('data-key')] = isNaN(event.target.value) ?
+      event.target.value : parseInt(event.target.value, 10);
+  localStorage.setItem(gameName, JSON.stringify(options));
+};
+
+const exportSettings = () => {
+  const settings = JSON.parse(localStorage.getItem(gameName));
+  if (!settings.name || settings.name.trim().length === 0) { settings.name = "noname"; }
+  const yamlText = jsyaml.safeDump(settings, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);
+  download(`${document.getElementById('player-name').value}.yaml`, yamlText);
+};
+
+/** Create an anchor and trigger a download of a text file. */
+const download = (filename, text) => {
+  const downloadLink = document.createElement('a');
+  downloadLink.setAttribute('href','data:text/yaml;charset=utf-8,'+ encodeURIComponent(text))
+  downloadLink.setAttribute('download', filename);
+  downloadLink.style.display = 'none';
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+};
+
+const generateGame = (raceMode = false) => {
+  axios.post('/api/generate', {
+    weights: { player: localStorage.getItem(gameName) },
+    presetData: { player: localStorage.getItem(gameName) },
+    playerCount: 1,
+    race: raceMode ? '1' : '0',
+  }).then((response) => {
+    window.location.href = response.data.url;
+  }).catch((error) => {
+    const userMessage = document.getElementById('user-message');
+    userMessage.innerText = 'Something went wrong and your game could not be generated.';
+    if (error.response.data.text) {
+      userMessage.innerText += ' ' + error.response.data.text;
+    }
+    userMessage.classList.add('visible');
+    window.scrollTo(0, 0);
+    console.error(error);
+  });
+};
