@@ -37,8 +37,6 @@ def create():
     }
 
     for game_name, world in AutoWorldRegister.world_types.items():
-        if (world.hidden):
-            continue
 
         all_options = {**world.options, **Options.per_game_common_options}
         res = Template(open(os.path.join("WebHostLib", "templates", "options.yaml")).read()).render(
@@ -101,11 +99,12 @@ def create():
         with open(os.path.join(target_folder, 'player-settings', game_name + ".json"), "w") as f:
             f.write(json.dumps(player_settings, indent=2, separators=(',', ': ')))
 
-        weighted_settings["baseOptions"]["game"][game_name] = 0
-        weighted_settings["games"][game_name] = {}
-        weighted_settings["games"][game_name]["gameOptions"] = game_options
-        weighted_settings["games"][game_name]["gameItems"] = tuple(world.item_name_to_id.keys())
-        weighted_settings["games"][game_name]["gameLocations"] = tuple(world.location_name_to_id.keys())
+        if not world.hidden:
+            weighted_settings["baseOptions"]["game"][game_name] = 0
+            weighted_settings["games"][game_name] = {}
+            weighted_settings["games"][game_name]["gameOptions"] = game_options
+            weighted_settings["games"][game_name]["gameItems"] = tuple(world.item_names)
+            weighted_settings["games"][game_name]["gameLocations"] = tuple(world.location_names)
 
     with open(os.path.join(target_folder, 'weighted-settings.json'), "w") as f:
         f.write(json.dumps(weighted_settings, indent=2, separators=(',', ': ')))
