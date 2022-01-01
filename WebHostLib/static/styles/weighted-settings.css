@@ -14,6 +14,35 @@ html{
     color: #eeffeb;
 }
 
+#weighted-settings #games-wrapper{
+    width: 100%;
+}
+
+#weighted-settings .setting-wrapper{
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+#weighted-settings .setting-description{
+    font-weight: bold;
+    margin: 0 0 1rem;
+}
+
+#weighted-settings table{
+    width: 100%;
+}
+
+#weighted-settings table .td-left{
+    padding-right: 1rem;
+}
+
+#weighted-settings table .td-middle{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding-right: 1rem;
+}
+
 #weighted-settings #weighted-settings-button-row{
     display: flex;
     flex-direction: row;
@@ -94,52 +123,17 @@ html{
 
 #weighted-settings .game-options, #weighted-settings .rom-options{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
-#weighted-settings .left, #weighted-settings .right{
-    flex-grow: 1;
-}
-
-#weighted-settings table .select-container{
-    display: flex;
-    flex-direction: row;
-}
-
-#weighted-settings table .select-container select{
-    min-width: 200px;
-    flex-grow: 1;
-}
-
-#weighted-settings table .range-container{
-    display: flex;
-    flex-direction: row;
-}
-
-#weighted-settings table .range-container input[type=range]{
-    flex-grow: 1;
-}
-
-#weighted-settings table .range-value{
-    min-width: 20px;
-    margin-left: 0.25rem;
-}
-
-#weighted-settings table label{
-    display: block;
-    min-width: 200px;
-    margin-right: 4px;
-    cursor: default;
+#weighted-settings .invisible{
+    display: none;
 }
 
 @media all and (max-width: 1000px), all and (orientation: portrait){
     #weighted-settings .game-options{
         justify-content: flex-start;
         flex-wrap: wrap;
-    }
-
-    #weighted-settings .left, #weighted-settings .right{
-        flex-grow: unset;
     }
 
     #game-options table label{

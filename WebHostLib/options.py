@@ -103,7 +103,7 @@ def create():
 
         weighted_settings["baseOptions"]["game"][game_name] = 0
         weighted_settings["games"][game_name] = {}
-        weighted_settings["games"][game_name]["gameOptions"] = game_options
+        weighted_settings["games"][game_name]["gameSettings"] = game_options
         weighted_settings["games"][game_name]["gameItems"] = tuple(world.item_name_to_id.keys())
         weighted_settings["games"][game_name]["gameLocations"] = tuple(world.location_name_to_id.keys())
 
