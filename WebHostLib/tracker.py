@@ -252,7 +252,7 @@ def get_static_room_data(room: Room):
     result = _multidata_cache.get(room.seed.id, None)
     if result:
         return result
-    multidata = Context._decompress(room.seed.multidata)
+    multidata = Context.decompress(room.seed.multidata)
     # in > 100 players this can take a bit of time and is the main reason for the cache
     locations: Dict[int, Dict[int, Tuple[int, int]]] = multidata['locations']
     names: Dict[int, Dict[int, str]] = multidata["names"]
