@@ -444,6 +444,26 @@ const exportSettings = () => {
     window.scrollTo(0, 0);
     return;
   }
+
+  // Clean up the settings output
+  Object.keys(settings.game).forEach((game) => {
+    // Remove any disabled games
+    if (settings.game[game] === 0) {
+      delete settings.game[game];
+      delete settings[game];
+      return;
+    }
+
+    // Remove any disabled options
+    Object.keys(settings[game]).forEach((setting) => {
+      Object.keys(settings[game][setting]).forEach((option) => {
+        if (settings[game][setting][option] === 0) {
+          delete settings[game][setting][option];
+        }
+      });
+    });
+  });
+
   const yamlText = jsyaml.safeDump(settings, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);
   download(`${document.getElementById('player-name').value}.yaml`, yamlText);
 };
