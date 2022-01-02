@@ -87,7 +87,7 @@ class RequirePurchasing(DefaultOnToggle):
     Determines where you will be required to purchase equipment and runes from the Blacksmith and Enchantress before
     equipping them. If you disable require purchasing, Manor Renovations are scaled to take this into account.
     """
-    displayname = "Require Purchasing Equipment"
+    displayname = "Require Purchasing"
 
 
 class GoldGainMultiplier(Choice):
