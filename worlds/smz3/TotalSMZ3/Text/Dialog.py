@@ -124,23 +124,24 @@ class Dialog:
             line = line.rstrip()
             if (len(line) <= width):
                 result.append(line)
-            words = line.split(' ')
-            lines = [ "" ]
-            for word in words:
-                line = lines.pop()
-                if (len(line) + len(word) <= width):
-                    line = f"{line}{word} "
-                else:
-                    if (len(line) > 0):
-                        lines.append(line)
-                    line = word
-                    while (len(line) > width):
-                        lines.append(line[:width])
-                        line = line[width:]
-                    line = f"{line} "
-                lines.append(line)
-            lines.reverse()
-            result += [l.strip() for l in lines]
+            else:
+                words = line.split(' ')
+                lines = [ "" ]
+                for word in words:
+                    line = lines.pop()
+                    if (len(line) + len(word) <= width):
+                        line = f"{line}{word} "
+                    else:
+                        if (len(line) > 0):
+                            lines.append(line)
+                        line = word
+                        while (len(line) > width):
+                            lines.append(line[:width])
+                            line = line[width:]
+                        line = f"{line} "
+                    lines.append(line)
+                #lines.reverse()
+                result += [l.strip() for l in lines]
         return result
 
     @staticmethod
