@@ -240,7 +240,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
             LocationData('Royal towers (lower)', 'Journal - Aleana\'s Room (Diplomatic Missive)',  1337194, lambda state: state._timespinner_has_pink(world, player)),
             LocationData('Royal towers (upper)', 'Journal - Top Struggle Juggle Base (War of the Sisters)',  1337195),
             LocationData('Royal towers (upper)', 'Journal - Aleana Boss (Stained Letter)',  1337196),
-            LocationData('Royal towers', 'Journal - Near Bottom Struggle Juggle (Mission Findings)',  1337197),
+            LocationData('Royal towers', 'Journal - Near Bottom Struggle Juggle (Mission Findings)',  1337197, lambda state: state._timespinner_has_doublejump_of_npc(world, player)),
             LocationData('Caves of Banishment (Maw)', 'Journal - Lower Left Maw Caves (Naivety)',  1337198)
         )
 
