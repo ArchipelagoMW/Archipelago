@@ -98,7 +98,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Emperors tower', 'Dad\'s courtyard chest',  1337079, lambda state: state._timespinner_has_upwarddash(world, player)),
         LocationData('Emperors tower', 'Galactic sage room',  1337080),
         LocationData('Emperors tower', 'Bottom of Dad\'s right tower',  1337081),
-        LocationData('Emperors tower', 'Wayyyy up there',  1337082),
+        LocationData('Emperors tower', 'Wayyyy up there',  1337082, lambda state: state._timespinner_has_doublejump_of_npc(world, player)),
         LocationData('Emperors tower', 'Dad\'s left tower balcony',  1337083),
         LocationData('Emperors tower', 'Dad\'s Chambers chest',  1337084),
         LocationData('Emperors tower', 'Dad\'s Chambers pedestal',  1337085),
