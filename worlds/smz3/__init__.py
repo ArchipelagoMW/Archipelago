@@ -126,7 +126,7 @@ class SMZ3World(World):
         basepatch = IPS_Patch.load("worlds/smz3/zsm.ips")
         base_combined_rom = basepatch.apply(base_combined_rom)
 
-        patcher = TotalSMZ3Patch(self.smz3World, [world.smz3World for world in self.world.worlds if isinstance(world, type(self))], "test", 10, self.world.random)
+        patcher = TotalSMZ3Patch(self.smz3World, [world.smz3World for key, world in self.world.worlds.items() if isinstance(world, SMZ3World)], "test", 10, self.world.random)
         patches = patcher.Create(self.smz3World.Config)
         for addr, bytes in patches.items():
             offset = 0

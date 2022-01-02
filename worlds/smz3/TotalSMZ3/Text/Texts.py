@@ -2,7 +2,7 @@
 from worlds.smz3.TotalSMZ3.Region import Region
 from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
 from worlds.smz3.TotalSMZ3.Item import Item, ItemType
-from yaml import load
+from yaml import load, Loader
 import random
 
 class Texts:
@@ -10,18 +10,18 @@ class Texts:
     def ParseYamlScripts(resource: str):
         with open(resource, 'rb') as f:
             yaml = str(f.read(), "utf-8")
-        return load(yaml)
+        return load(yaml, Loader)
 
     @staticmethod        
     def ParseTextScript(resource: str):
         with open(resource, 'r') as file:
             return [text.rstrip('\n') for text in file.read().replace("\r", "").split("---\n") if text]
 
-    scripts: Any = ParseYamlScripts.__func__("Text/Scripts/General.yaml")
-    blind: List[str] = ParseTextScript("Text/Scripts/Blind.txt")
-    ganon: List[str] = ParseTextScript("Text/Scripts/Ganon.txt")
-    tavernMan: List[str] = ParseTextScript("Text/Scripts/TavernMan.txt")
-    triforceRoom: List[str] = ParseTextScript("Text/Scripts/TriforceRoom.txt")
+    scripts: Any = ParseYamlScripts.__func__("worlds/smz3/TotalSMZ3/Text/Scripts/General.yaml")
+    blind: List[str] = ParseTextScript.__func__("worlds/smz3/TotalSMZ3/Text/Scripts/Blind.txt")
+    ganon: List[str] = ParseTextScript.__func__("worlds/smz3/TotalSMZ3/Text/Scripts/Ganon.txt")
+    tavernMan: List[str] = ParseTextScript.__func__("worlds/smz3/TotalSMZ3/Text/Scripts/TavernMan.txt")
+    triforceRoom: List[str] = ParseTextScript.__func__("worlds/smz3/TotalSMZ3/Text/Scripts/TriforceRoom.txt")
 
     @staticmethod
     def SahasrahlaReveal(dungeon: Region):

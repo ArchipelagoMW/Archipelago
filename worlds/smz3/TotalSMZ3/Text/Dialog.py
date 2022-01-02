@@ -18,7 +18,7 @@ class Dialog:
         lineIndex = 0
         for line in lines:
             bytes.append(0x74 if 0 else 0x75 if 1 else 0x76)
-            letters = len(line) > line[:wrap] if wrap else line
+            letters = line[:wrap] if len(line) > wrap else line
             for letter in letters:
                 write = Dialog.LetterToBytes(letter)
                 if (write[0] == 0xFD):
@@ -35,7 +35,7 @@ class Dialog:
                 bytes.append(0x73)
 
         bytes.append(0x7F)
-        if (bytes.Count > maxBytes):
+        if (len(bytes) > maxBytes):
             return bytes[:maxBytes - 1].append(0x7F)
 
         return bytes
@@ -52,14 +52,14 @@ class Dialog:
 
         bytes = [ 0xFB ]
         lines = Dialog.Wordwrap(text, wrap)
-        lineCount = len(l for l in lines if not Dialog.command.match(l))
+        lineCount = len([l for l in lines if not Dialog.command.match(l)])
         lineIndex = 0
         for line in lines:
             match = Dialog.command.match(line)
             if (match is not None):
-                if (match == "{NOTEXT}"):
+                if (match.string == "{NOTEXT}"):
                     return [ 0xFB, 0xFE, 0x6E, 0x00, 0xFE, 0x6B, 0x04 ]
-                if (match == "{INTRO}"):
+                if (match.string == "{INTRO}"):
                     padOut = True
 
                 bytesMap = {
@@ -87,9 +87,9 @@ class Dialog:
                             "{INTRO}" : [ 0xFE, 0x6E, 0x00, 0xFE, 0x77, 0x07, 0xFC, 0x03, 0xFE, 0x6B, 0x02, 0xFE, 0x67 ],
                             "{IBOX}" : [ 0xFE, 0x6B, 0x02, 0xFE, 0x77, 0x07, 0xFC, 0x03, 0xF7 ],
                         }
-                result = bytesMap.get(match, None)
+                result = bytesMap.get(match.string, None)
                 if (result is None):
-                    raise Exception(f"Dialog text contained unknown command {match}", text)
+                    raise Exception(f"Dialog text contained unknown command {match.string}", text)
                 else:
                     bytes += result
 
@@ -107,7 +107,8 @@ class Dialog:
 
             #// The first box needs to fill the full width with spaces as the palette is loaded weird.
             letters = line + (" " * wrap) if padOut and lineIndex < 3 else line
-            bytes += [Dialog.LetterToBytes(letter) for letter in letters]
+            for letter in letters:
+                bytes += Dialog.LetterToBytes(letter)
 
             lineIndex += 1
 
@@ -144,9 +145,9 @@ class Dialog:
 
     @staticmethod
     def LetterToBytes(c: str):
-        if Dialog.digit.match(c): return [(c - '0' + 0xA0) ]
-        elif Dialog.uppercaseLetter.match(c): return [ (c - 'A' + 0xAA) ]
-        elif Dialog.lowercaseLetter.match(c): return [ (c - 'a' + 0x30) ]
+        if Dialog.digit.match(c): return [(ord(c) - ord('0') + 0xA0) ]
+        elif Dialog.uppercaseLetter.match(c): return [ (ord(c) - ord('A') + 0xAA) ]
+        elif Dialog.lowercaseLetter.match(c): return [ (ord(c) - ord('a') + 0x30) ]
         else:
             value = Dialog.letters.get(c, None)
             return value if value else [ 0xFF ]

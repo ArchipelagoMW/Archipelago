@@ -18,9 +18,12 @@ from worlds.smz3.TotalSMZ3.Regions.Zelda.IcePalace import IcePalace
 from worlds.smz3.TotalSMZ3.Regions.Zelda.MiseryMire import MiseryMire
 from worlds.smz3.TotalSMZ3.Regions.Zelda.TurtleRock import TurtleRock
 from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
+from worlds.smz3.TotalSMZ3.Text.StringTable import StringTable
 
 from worlds.smz3.TotalSMZ3.World import World
 from worlds.smz3.TotalSMZ3.Config import Config, GameMode, GanonInvincible
+from worlds.smz3.TotalSMZ3.Text.Texts import Texts
+from worlds.smz3.TotalSMZ3.Text.Dialog import Dialog
 
 class KeycardPlaque:
     Level1 = 0xe0
@@ -98,7 +101,7 @@ class Patch:
 
         self.WritePrizeShuffle()
 
-        self.WriteRemoveEquipmentFromUncle(self.myWorld.GetLocation("Link's Uncle").APLocaion.item.item)
+        self.WriteRemoveEquipmentFromUncle(self.myWorld.GetLocation("Link's Uncle").APLocation.item.item)
 
         self.WriteGanonInvicible(config.GanonInvincible)
         self.WriteRngBlock()
@@ -111,7 +114,7 @@ class Patch:
         self.WriteSMLocations([loc for region in self.myWorld.Regions for loc in region.Locations if isinstance(region, SMRegion)])
         self.WriteZ3Locations([loc for region in self.myWorld.Regions for loc in region.Locations if isinstance(region, Z3Region)])
 
-        #WriteStringTable();
+        self.WriteStringTable()
 
         #WriteSMKeyCardDoors();
         #WriteZ3KeysanityFlags();
@@ -509,57 +512,55 @@ class Patch:
         return (patches, duplicates)
 
     def WriteTexts(self, config: Config):
-        regions = myWorld.Regions.OfType<IReward>();
-        greenPendantDungeon = regions.Where(x => x.Reward == PendantGreen).Cast<Region>().First();
-        redCrystalDungeons = regions.Where(x => x.Reward == CrystalRed).Cast<Region>();
+        regions = [region for region in self.myWorld.Regions if isinstance(region, IReward)]
+        greenPendantDungeon = [region for region in regions if region.Reward == RewardType.PendantGreen][0]
+        redCrystalDungeons = [region for region in regions if region.Reward == RewardType.CrystalRed]
 
-        sahasrahla = Texts.SahasrahlaReveal(greenPendantDungeon);
-        patches.Add((Snes(0x308A00), Dialog.Simple(sahasrahla)));
-        stringTable.SetSahasrahlaRevealText(sahasrahla);
+        sahasrahla = Texts.SahasrahlaReveal(greenPendantDungeon)
+        self.patches.append((Snes(0x308A00), Dialog.Simple(sahasrahla)))
+        self.stringTable.SetSahasrahlaRevealText(sahasrahla)
 
-        bombShop = Texts.BombShopReveal(redCrystalDungeons);
-        patches.Add((Snes(0x308E00), Dialog.Simple(bombShop)));
-        stringTable.SetBombShopRevealText(bombShop);
+        bombShop = Texts.BombShopReveal(redCrystalDungeons)
+        self.patches.append((Snes(0x308E00), Dialog.Simple(bombShop)))
+        self.stringTable.SetBombShopRevealText(bombShop)
 
-        blind = Texts.Blind(rnd);
-        patches.Add((Snes(0x308800), Dialog.Simple(blind)));
-        stringTable.SetBlindText(blind);
+        blind = Texts.Blind(self.rnd)
+        self.patches.append((Snes(0x308800), Dialog.Simple(blind)))
+        self.stringTable.SetBlindText(blind)
 
-        tavernMan = Texts.TavernMan(rnd);
-        patches.Add((Snes(0x308C00), Dialog.Simple(tavernMan)));
-        stringTable.SetTavernManText(tavernMan);
+        tavernMan = Texts.TavernMan(self.rnd)
+        self.patches.append((Snes(0x308C00), Dialog.Simple(tavernMan)))
+        self.stringTable.SetTavernManText(tavernMan)
 
-        ganon = Texts.GanonFirstPhase(rnd);
-        patches.Add((Snes(0x308600), Dialog.Simple(ganon)));
-        stringTable.SetGanonFirstPhaseText(ganon);
+        ganon = Texts.GanonFirstPhase(self.rnd)
+        self.patches.append((Snes(0x308600), Dialog.Simple(ganon)))
+        self.stringTable.SetGanonFirstPhaseText(ganon)
 
         #// Todo: Verify these two are correct if ganon invincible patch is ever added
         #// ganon_fall_in_alt in v30
         ganonFirstPhaseInvincible = "You think you\nare ready to\nface me?\n\nI will not die\n\nunless you\ncomplete your\ngoals. Dingus!";
-        patches.Add((Snes(0x309100), Dialog.Simple(ganonFirstPhaseInvincible)));
+        self.patches.append((Snes(0x309100), Dialog.Simple(ganonFirstPhaseInvincible)))
 
         #// ganon_phase_3_alt in v30
         ganonThirdPhaseInvincible = "Got wax in\nyour ears?\nI cannot die!";
-        patches.Add((Snes(0x309200), Dialog.Simple(ganonThirdPhaseInvincible)));
+        self.patches.append((Snes(0x309200), Dialog.Simple(ganonThirdPhaseInvincible)))
         #// ---
 
-        silversLocation = allWorlds.SelectMany(world => world.Locations).Where(l => l.ItemIs(SilverArrows, myWorld)).First();
-        silvers = config.GameMode == GameMode.Multiworld ?
-            Texts.GanonThirdPhaseMulti(silversLocation.Region, myWorld) :
-            Texts.GanonThirdPhaseSingle(silversLocation.Region);
-        patches.Add((Snes(0x308700), Dialog.Simple(silvers)));
-        stringTable.SetGanonThirdPhaseText(silvers);
+        silversLocation = [loc for world in self.allWorlds for loc in world.Locations if loc.ItemIs(ItemType.SilverArrows, self.myWorld)][0]
+        silvers = Texts.GanonThirdPhaseMulti(silversLocation.Region, self.myWorld) if config.GameMode == GameMode.Multiworld else \
+                    Texts.GanonThirdPhaseSingle(silversLocation.Region)
+        self.patches.append((Snes(0x308700), Dialog.Simple(silvers)))
+        self.stringTable.SetGanonThirdPhaseText(silvers);
 
-        triforceRoom = Texts.TriforceRoom(rnd);
-        patches.Add((Snes(0x308400), Dialog.Simple(triforceRoom)));
-        stringTable.SetTriforceRoomText(triforceRoom);
+        triforceRoom = Texts.TriforceRoom(self.rnd)
+        self.patches.append((Snes(0x308400), Dialog.Simple(triforceRoom)))
+        self.stringTable.SetTriforceRoomText(triforceRoom)
+
+    def WriteStringTable(self):
+        #// Todo: v12, base table in asm, use move instructions in seed patch
+        self.patches.append((Snes(0x1C8000), self.stringTable.GetPaddedBytes()))
 
     """
-    void WriteStringTable() {
-        // Todo: v12, base table in asm, use move instructions in seed patch
-        patches.Add((Snes(0x1C8000), stringTable.GetPaddedBytes()));
-    }
-
     void WritePlayerNames() {
         patches.AddRange(allWorlds.Select(world => (0x385000 + (world.Id * 16), PlayerNameBytes(world.Player))));
     }
