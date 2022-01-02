@@ -24,6 +24,26 @@ html{
     margin-bottom: 2rem;
 }
 
+#weighted-settings .setting-wrapper .add-option-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+}
+
+#weighted-settings .setting-wrapper .add-option-div button{
+    width: auto;
+    height: auto;
+    margin: 0 0 0 0.15rem;
+    padding: 0 0.25rem;
+    border-radius: 4px;
+    cursor: default;
+}
+
+#weighted-settings .setting-wrapper .add-option-div button:active{
+    margin-bottom: 1px;
+}
+
 #weighted-settings p.setting-description{
     font-weight: bold;
     margin: 0 0 1rem;
@@ -46,6 +66,7 @@ html{
 
 #weighted-settings table .td-left{
     padding-right: 1rem;
+    width: 200px;
 }
 
 #weighted-settings table .td-middle{
@@ -53,6 +74,20 @@ html{
     flex-direction: column;
     justify-content: space-evenly;
     padding-right: 1rem;
+}
+
+#weighted-settings table .td-right{
+    width: 4rem;
+    text-align: right;
+}
+
+#weighted-settings table .td-delete{
+    width: 50px;
+    text-align: right;
+}
+
+#weighted-settings table .range-option-delete{
+    cursor: pointer;
 }
 
 #weighted-settings #weighted-settings-button-row{
