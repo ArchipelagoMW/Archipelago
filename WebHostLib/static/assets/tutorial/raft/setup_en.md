@@ -4,25 +4,23 @@
 
 - [Raft](https://store.steampowered.com/app/648800/Raft/)
 - [Raft Mod Loader](https://www.raftmodding.com/loader) ("*RML*")
-- [Raftipelago mod](https://www.raftmodding.com/raftipelago)
+- [Raftipelago mod](https://www.raftmodding.com/mods/raftipelago)
 
 ## Installation Procedures
 
 1. Install Raft. The currently-supported Raft version is Update 13: The Renovation Update. If you plan on playing Raft mainly with Archipelago, it's recommended to disable Raft auto-updating through Steam, as there is no beta channel to get old builds.
 
-2. Install RML. If you've already installed it, the shortcut in the Start Menu is called "RMLLauncher.exe".
+2. Install RML.
 
-3. Install the Raftipelago mod from the Raft Modding website. This requires that you open the link on the webpage through RML. Alternatively, you can download the .rmod file and place it in the Mods folder manually.
+3. Install the Raftipelago mod from the Raft Modding website. You should open the auto-installation link on the webpage through RML. Alternatively, you can download the .rmod file and place it in the Mods folder manually.
 
-4. Start Raft through Steam. Wait for it to load into the main menu.
+4. Open RML and click Play. If you've already installed it, the shortcut in the Start Menu is called "RMLLauncher.exe". Raft should start.
 
-5. Once the Raft main menu loads, open RML and click Play. Wait a few seconds after it says "Successfully injected" for RML to appear in Raft.
+5. Open the RML menu. This should open automatically when Raft first loads. If it does not, and you see RML information in the top center of the Raft main menu, press F9 to open it.
 
-6. Open the RML menu. After RML injects, this should open automatically. If it does not, and you see RML information in the top center of the Raft main menu, press F9 to open it.
+6. Navigate to the "Mod manager" tab in the left-hand menu.
 
-7. Navigate to the "Mod manager" tab in the left-hand menu.
-
-8. Click on the plug icon for Raftipelago to load the mod.
+7. Click on the plug icon for Raftipelago to load the mod.
 
 ## Installation Troubleshooting
 
@@ -30,11 +28,23 @@ You can press F10 to open the console to view any errors when loading the mod.
 
 ### DLL/Reflection/Image errors
 
-Restart Raft and try again. Although RML may be able to start Raft instead of you starting it through Steam, try specifically opening Raft through Steam (not RML), then clicking Play in RML once you're on the Raft main menu.
+Restart Raft and try again. These should be ephemeral errors.
 
-### RML can't find Raft
+### RML says to start Raft through Steam
 
-Restart Raft and try again. Try running RML as administrator by right-clicking the shortcut and clicking "Run as administrator".
+If this happens, then RML is configured to only inject into an existing instance of Raft, rather than try and start a new one.
+
+You can either:
+- Click "Play" after Raft has loaded into the main menu
+- Uncheck the box next to the "Disable Automatic Game Start" setting in the Settings menu then click Play.
+
+### RML doesn't do anything when I click Play
+
+If this happens, then RML is configured to only start a new instance of Raft, then inject into that specific instance. This also means that RML has detected an instance of Raft is already running, and will not start a new one.
+
+You can either:
+- Close the existing instance of Raft then click Play
+- Check the box next to the "Disable Automatic Game Start" setting in the Settings menu then click Play.
     
 ## Joining a MultiWorld Game
 
@@ -43,16 +53,16 @@ Restart Raft and try again. Try running RML as administrator by right-clicking t
 2. Open the Debug Console by pressing F10.
 
 3. Type */connect {serverAddress} {username} {password}* into the console and hit Enter.
-   - Example: */connect archipelago.gg:12345 SunnyBat*
-   - serverAddress must not contain spaces.
-   - If your username or password contains spaces, surround that value with quotation marks ("). Adding quotation marks even when not necessary (eg "SunnyBat") is fine.
-   - If your username or password starts with a quotation mark, surround the value with an additional set of quotation marks (eg the value *"myP@s$w0rD* would be entered as *""myP@s$w0rD"*).
+    - Example: */connect archipelago.gg:12345 SunnyBat*
+    - serverAddress must not contain spaces.
+    - If your username or password contains spaces, surround that value with quotation marks ("). Adding quotation marks even when not necessary (eg "SunnyBat") is fine.
+    - If your username or password starts with a quotation mark, surround the value with an additional set of quotation marks (eg the value *"myP@s$w0rD* would be entered as *""myP@s$w0rD"*).
 
 4. Start a new game or load an existing one.
-   - Raftipelago save games are marked as *incompatible* with
-   - Do not use an existing game that was not created with Raftipelago. It will work, but if anything is unlocked, it will be automatically registered with Archipelago once the world is loaded. This is irreversible.
+    - Raftipelago save games are marked as *incompatible* with vanilla Raft. This means when Raftipelago is not loaded, saves made with Raftipelago will show as corrupt/unselectable.
+    - Avoid using an existing game that was not created with your current run of Raftipelago (either vanilla or a different Raftipelago run). It will work, but if anything is unlocked, it will be automatically registered with Archipelago once the world is loaded. This is irreversible.
 
-5. You can disconnect by typing */disconnect confirmDisconnect* into the console and hitting Enter.
+5. You can disconnect from an Archipelago server by typing */disconnect confirmDisconnect* into the console and hitting Enter.
 
 ## Game Troubleshooting
 
