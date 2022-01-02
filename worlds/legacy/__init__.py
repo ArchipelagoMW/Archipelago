@@ -58,6 +58,9 @@ class LegacyWorld(World):
 
         # Fill item pool with all required items
         for item in {**skill_unlocks_table, **blueprints_table, **runes_table}:
+            # if Haggling, do not add if Disable Charon.
+            if item == ItemName.haggling and self.world.disable_charon[self.player] == 1:
+                continue
             itempool += self._create_items(item)
 
         # Add specific classes into the pool. Eventually, will be able to shuffle the starting ones, but until then...
