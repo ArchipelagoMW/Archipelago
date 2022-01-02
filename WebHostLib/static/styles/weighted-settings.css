@@ -2,6 +2,7 @@ html{
     background-image: url('../static/backgrounds/grass/grass-0007-large.png');
     background-repeat: repeat;
     background-size: 650px 650px;
+    scroll-padding-top: 90px;
 }
 
 #weighted-settings{
@@ -23,9 +24,20 @@ html{
     margin-bottom: 2rem;
 }
 
-#weighted-settings .setting-description{
+#weighted-settings p.setting-description{
     font-weight: bold;
     margin: 0 0 1rem;
+}
+
+#weighted-settings p.hint-text{
+    margin: 0 0 1rem;
+    font-style: italic;
+}
+
+#weighted-settings .jump-link{
+    color: #ffef00;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 #weighted-settings table{

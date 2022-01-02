@@ -130,8 +130,14 @@ const buildGameChoice = (games) => {
 
   const gameSelectDescription = document.createElement('p');
   gameSelectDescription.classList.add('setting-description');
-  gameSelectDescription.innerText = 'Choose which games you might be required to play'
+  gameSelectDescription.innerText = 'Choose which games you might be required to play.';
   gameChoiceDiv.appendChild(gameSelectDescription);
+
+  const hintText = document.createElement('p');
+  hintText.classList.add('hint-text');
+  hintText.innerText = 'If a game\'s value is greater than zero, you can click it\'s name to jump ' +
+    'to that section.'
+  gameChoiceDiv.appendChild(hintText);
 
   // Build the game choice table
   const table = document.createElement('table');
@@ -141,7 +147,10 @@ const buildGameChoice = (games) => {
     const tr = document.createElement('tr');
     const tdLeft = document.createElement('td');
     tdLeft.classList.add('td-left');
-    tdLeft.innerText = game;
+    const span = document.createElement('span');
+    span.innerText = game;
+    span.setAttribute('id', `${game}-game-option`)
+    tdLeft.appendChild(span);
     tr.appendChild(tdLeft);
 
     const tdMiddle = document.createElement('td');
@@ -183,17 +192,17 @@ const buildOptionsDiv = (game, settings) => {
     const settingWrapper = document.createElement('div');
     settingWrapper.classList.add('setting-wrapper');
 
+    const settingNameHeader = document.createElement('h4');
+    settingNameHeader.innerText = setting.displayName;
+    settingWrapper.appendChild(settingNameHeader);
+
+    const settingDescription = document.createElement('p');
+    settingDescription.classList.add('setting-description');
+    settingDescription.innerText = setting.description.replace(/(\n)/g, ' ');
+    settingWrapper.appendChild(settingDescription);
+
     switch(setting.type){
       case 'select':
-        const settingNameHeader = document.createElement('h4');
-        settingNameHeader.innerText = setting.displayName;
-        settingWrapper.appendChild(settingNameHeader);
-
-        const settingDescription = document.createElement('p');
-        settingDescription.classList.add('setting-description');
-        settingDescription.innerText = setting.description.replace(/(\n)/g, ' ');
-        settingWrapper.appendChild(settingDescription);
-
         const optionTable = document.createElement('table');
         const tbody = document.createElement('tbody');
 
@@ -235,7 +244,10 @@ const buildOptionsDiv = (game, settings) => {
         break;
 
       case 'range':
-        // TODO: Include range settings
+        const settingDescription = document.createElement('p');
+        settingDescription.classList.add('setting-description');
+        settingDescription.innerText = setting.description.replace(/(\n)/g, ' ');
+        settingWrapper.appendChild(settingDescription);
         break;
 
       default:
@@ -251,9 +263,23 @@ const updateVisibleGames = () => {
   const settings = JSON.parse(localStorage.getItem('weighted-settings'));
   Object.keys(settings.game).forEach((game) => {
     const gameDiv = document.getElementById(`${game}-div`);
-    (parseInt(settings.game[game], 10) > 0) ?
-      gameDiv.classList.remove('invisible') :
-      gameDiv.classList.add('invisible')
+    const gameOption = document.getElementById(`${game}-game-option`);
+    if (parseInt(settings.game[game], 10) > 0) {
+      gameDiv.classList.remove('invisible');
+      gameOption.classList.add('jump-link');
+      gameOption.addEventListener('click', () => {
+        const gameDiv = document.getElementById(`${game}-div`);
+        if (gameDiv.classList.contains('invisible')) { return; }
+        gameDiv.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      });
+    } else {
+      gameDiv.classList.add('invisible');
+      gameOption.classList.remove('jump-link');
+
+    }
   });
 };
 
@@ -282,13 +308,7 @@ const updateGameSetting = (event) => {
   const setting = event.target.getAttribute('data-setting');
   const option = event.target.getAttribute('data-option');
   const type = event.target.getAttribute('data-type');
-  switch (type){
-    case 'select':
-      document.getElementById(`${game}-${setting}-${option}`).innerText = event.target.value;
-      break;
-    case 'range':
-      break;
-  }
+  document.getElementById(`${game}-${setting}-${option}`).innerText = event.target.value;
   options[game][setting][option] = isNaN(event.target.value) ?
       event.target.value : parseInt(event.target.value, 10);
   localStorage.setItem('weighted-settings', JSON.stringify(options));
