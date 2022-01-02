@@ -116,8 +116,30 @@ const buildUI = (settingData) => {
     gameHeader.innerText = game;
     gameDiv.appendChild(gameHeader);
 
-    gameDiv.appendChild(buildOptionsDiv(game, settingData.games[game].gameSettings));
+    const collapseButton = document.createElement('a');
+    collapseButton.innerText = '(Collapse)';
+    gameDiv.appendChild(collapseButton);
+
+    const expandButton = document.createElement('a');
+    expandButton.innerText = '(Expand)';
+    expandButton.classList.add('invisible');
+    gameDiv.appendChild(expandButton);
+
+    const optionsDiv = buildOptionsDiv(game, settingData.games[game].gameSettings);
+    gameDiv.appendChild(optionsDiv);
     gamesWrapper.appendChild(gameDiv);
+
+    collapseButton.addEventListener('click', () => {
+      collapseButton.classList.add('invisible');
+      optionsDiv.classList.add('invisible');
+      expandButton.classList.remove('invisible');
+    });
+
+    expandButton.addEventListener('click', () => {
+      collapseButton.classList.remove('invisible');
+      optionsDiv.classList.remove('invisible');
+      expandButton.classList.add('invisible');
+    });
   });
 };
 

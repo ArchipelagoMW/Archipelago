@@ -147,6 +147,7 @@ html{
 
 #weighted-settings a{
     color: #ffef00;
+    cursor: pointer;
 }
 
 #weighted-settings input:not([type]){
