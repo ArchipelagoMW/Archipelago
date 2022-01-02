@@ -116,8 +116,30 @@ const buildUI = (settingData) => {
     gameHeader.innerText = game;
     gameDiv.appendChild(gameHeader);
 
-    gameDiv.appendChild(buildOptionsDiv(game, settingData.games[game].gameSettings));
+    const collapseButton = document.createElement('a');
+    collapseButton.innerText = '(Collapse)';
+    gameDiv.appendChild(collapseButton);
+
+    const expandButton = document.createElement('a');
+    expandButton.innerText = '(Expand)';
+    expandButton.classList.add('invisible');
+    gameDiv.appendChild(expandButton);
+
+    const optionsDiv = buildOptionsDiv(game, settingData.games[game].gameSettings);
+    gameDiv.appendChild(optionsDiv);
     gamesWrapper.appendChild(gameDiv);
+
+    collapseButton.addEventListener('click', () => {
+      collapseButton.classList.add('invisible');
+      optionsDiv.classList.add('invisible');
+      expandButton.classList.remove('invisible');
+    });
+
+    expandButton.addEventListener('click', () => {
+      collapseButton.classList.remove('invisible');
+      optionsDiv.classList.remove('invisible');
+      expandButton.classList.add('invisible');
+    });
   });
 };
 
@@ -240,20 +262,141 @@ const buildOptionsDiv = (game, settings) => {
 
         optionTable.appendChild(tbody);
         settingWrapper.appendChild(optionTable);
-        optionsWrapper.appendChild(settingWrapper);
         break;
 
       case 'range':
-        const settingDescription = document.createElement('p');
-        settingDescription.classList.add('setting-description');
-        settingDescription.innerText = setting.description.replace(/(\n)/g, ' ');
-        settingWrapper.appendChild(settingDescription);
+        const hintText = document.createElement('p');
+        hintText.classList.add('hint-text');
+        hintText.innerHTML = 'This is a range option. You may enter valid numerical values in the text box below, ' +
+          `then press the "Add" button to add a weight for it.<br />Minimum value: ${setting.min}<br />` +
+          `Maximum value: ${setting.max}`;
+        settingWrapper.appendChild(hintText);
+
+        const addOptionDiv = document.createElement('div');
+        addOptionDiv.classList.add('add-option-div');
+        const optionInput = document.createElement('input');
+        optionInput.setAttribute('id', `${game}-${settingName}-option`);
+        optionInput.setAttribute('placeholder', `${setting.min} - ${setting.max}`);
+        addOptionDiv.appendChild(optionInput);
+        const addOptionButton = document.createElement('button');
+        addOptionButton.innerText = 'Add';
+        addOptionDiv.appendChild(addOptionButton);
+        settingWrapper.appendChild(addOptionDiv);
+        optionInput.addEventListener('keydown', (evt) => {
+          if (evt.key === 'Enter') { addOptionButton.dispatchEvent(new Event('click')); }
+        });
+
+        const rangeTable = document.createElement('table');
+        const rangeTbody = document.createElement('tbody');
+
+        Object.keys(currentSettings[game][settingName]).forEach((option) => {
+          if (currentSettings[game][settingName][option] > 0) {
+            const tr = document.createElement('tr');
+            const tdLeft = document.createElement('td');
+            tdLeft.classList.add('td-left');
+            tdLeft.innerText = option;
+            tr.appendChild(tdLeft);
+
+            const tdMiddle = document.createElement('td');
+            tdMiddle.classList.add('td-middle');
+            const range = document.createElement('input');
+            range.setAttribute('type', 'range');
+            range.setAttribute('id', `${game}-${settingName}-${option}-range`);
+            range.setAttribute('data-game', game);
+            range.setAttribute('data-setting', settingName);
+            range.setAttribute('data-option', option);
+            range.setAttribute('min', 0);
+            range.setAttribute('max', 50);
+            range.addEventListener('change', updateGameSetting);
+            range.value = currentSettings[game][settingName][parseInt(option, 10)];
+            tdMiddle.appendChild(range);
+            tr.appendChild(tdMiddle);
+
+            const tdRight = document.createElement('td');
+            tdRight.setAttribute('id', `${game}-${settingName}-${option}`)
+            tdRight.classList.add('td-right');
+            tdRight.innerText = range.value;
+            tr.appendChild(tdRight);
+
+            const tdDelete = document.createElement('td');
+            tdDelete.classList.add('td-delete');
+            const deleteButton = document.createElement('span');
+            deleteButton.classList.add('range-option-delete');
+            deleteButton.innerText = '❌';
+            deleteButton.addEventListener('click', () => {
+              range.value = 0;
+              range.dispatchEvent(new Event('change'));
+              rangeTbody.removeChild(tr);
+            });
+            tdDelete.appendChild(deleteButton);
+            tr.appendChild(tdDelete);
+
+            rangeTbody.appendChild(tr);
+          }
+        });
+
+        rangeTable.appendChild(rangeTbody);
+        settingWrapper.appendChild(rangeTable);
+
+        addOptionButton.addEventListener('click', () => {
+          const optionInput = document.getElementById(`${game}-${settingName}-option`);
+          let option = optionInput.value;
+          if (!option || !option.trim()) { return; }
+          option = parseInt(option, 10);
+          if ((option < setting.min) || (option > setting.max)) { return; }
+          optionInput.value = '';
+          if (document.getElementById(`${game}-${settingName}-${option}-range`)) { return; }
+
+          const tr = document.createElement('tr');
+          const tdLeft = document.createElement('td');
+          tdLeft.classList.add('td-left');
+          tdLeft.innerText = option;
+          tr.appendChild(tdLeft);
+
+          const tdMiddle = document.createElement('td');
+          tdMiddle.classList.add('td-middle');
+          const range = document.createElement('input');
+          range.setAttribute('type', 'range');
+          range.setAttribute('id', `${game}-${settingName}-${option}-range`);
+          range.setAttribute('data-game', game);
+          range.setAttribute('data-setting', settingName);
+          range.setAttribute('data-option', option);
+          range.setAttribute('min', 0);
+          range.setAttribute('max', 50);
+          range.addEventListener('change', updateGameSetting);
+          range.value = currentSettings[game][settingName][parseInt(option, 10)];
+          tdMiddle.appendChild(range);
+          tr.appendChild(tdMiddle);
+
+          const tdRight = document.createElement('td');
+          tdRight.setAttribute('id', `${game}-${settingName}-${option}`)
+          tdRight.classList.add('td-right');
+          tdRight.innerText = range.value;
+          tr.appendChild(tdRight);
+
+          const tdDelete = document.createElement('td');
+          tdDelete.classList.add('td-delete');
+          const deleteButton = document.createElement('span');
+          deleteButton.classList.add('range-option-delete');
+          deleteButton.innerText = '❌';
+          deleteButton.addEventListener('click', () => {
+            range.value = 0;
+            range.dispatchEvent(new Event('change'));
+            rangeTbody.removeChild(tr);
+          });
+          tdDelete.appendChild(deleteButton);
+          tr.appendChild(tdDelete);
+
+          rangeTbody.appendChild(tr);
+        });
         break;
 
       default:
         console.error(`Unknown setting type for ${game} setting ${setting}: ${settings[setting].type}`);
         return;
     }
+
+    optionsWrapper.appendChild(settingWrapper);
   });
 
   return optionsWrapper;
@@ -323,6 +466,26 @@ const exportSettings = () => {
     window.scrollTo(0, 0);
     return;
   }
+
+  // Clean up the settings output
+  Object.keys(settings.game).forEach((game) => {
+    // Remove any disabled games
+    if (settings.game[game] === 0) {
+      delete settings.game[game];
+      delete settings[game];
+      return;
+    }
+
+    // Remove any disabled options
+    Object.keys(settings[game]).forEach((setting) => {
+      Object.keys(settings[game][setting]).forEach((option) => {
+        if (settings[game][setting][option] === 0) {
+          delete settings[game][setting][option];
+        }
+      });
+    });
+  });
+
   const yamlText = jsyaml.safeDump(settings, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);
   download(`${document.getElementById('player-name').value}.yaml`, yamlText);
 };
