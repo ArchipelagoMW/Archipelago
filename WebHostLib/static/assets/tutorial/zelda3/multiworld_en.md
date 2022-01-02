@@ -1,10 +1,10 @@
 # A Link to the Past Randomizer Setup Guide
 
 ## Required Software
-- [Z3Client](https://github.com/ArchipelagoMW/Z3Client/releases) or the SNIClient included with
-[Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
-    - If installing Archipelago, make sure to check the box for SNIClient -> A Link to the Past Patch Setup during install, or SNI will not be included
-- [SNI](https://github.com/alttpo/sni/releases) (Included in both Z3Client and SNIClient)
+- [SNIClient](https://github.com/ArchipelagoMW/Archipelago/releases) included with the main Archipelago install
+or [SuperNintendoClient](https://github.com/ArchipelagoMW/SuperNintendoClient/releases)
+    - If installing Archipelago, make sure to check the box for `SNI Client - A Link to the Past Patch Setup`
+- [SNI](https://github.com/alttpo/sni/releases) (Included in both clients from the first step)
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
       ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
@@ -75,8 +75,9 @@ Firewall.
 3. Click on **New Lua Script Window...**
 4. In the new window, click **Browse...**
 5. Select the connector lua file included with your client
-     - Z3Client users should download `sniConnector.lua` from the client download page
-     - SNIClient users should look in their Archipelago folder for `/sni/lua`
+     - SuperNintendoClient users should download `sniConnector.lua` from the client download page
+     - SNIClient users should look in their Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if
+the emulator is 64-bit or 32-bit.
 
 ##### BizHawk
 1. Ensure you have the BSNES core loaded. You may do this by clicking on the Tools menu in BizHawk and following
@@ -87,9 +88,9 @@ Firewall.
 3. Click on the Tools menu and click on **Lua Console**
 4. Click Script -> Open Script...
 5. Select the `Connector.lua` file you downloaded above
-     - Z3Client users should download `sniConnector.lua` from the client download page
-     - SNIClient users should look in their Archipelago folder for `/sni/lua`
-6. Run the script by double-clicking it in the listing
+     - SuperNintendoClient users should download `sniConnector.lua` from the client download page
+     - SNIClient users should look in their Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if 
+the emulator is 64-bit or 32-bit.
 
 #### With hardware
 This guide assumes you have downloaded the correct firmware for your device. If you have not
@@ -111,7 +112,8 @@ Status: Connected".
 
 ### Play the game
 When the client shows both SNES Device and Server as connected, you're ready to begin playing. Congratulations
-on successfully joining a multiworld game!
+on successfully joining a multiworld game! You can execute various commands in your client. For more information
+regarding these commands you can use `/help` for local client commands and `!help` for server commands.
 
 ## Hosting a MultiWorld game
 The recommended way to host a game is to use our [hosting service](/generate). The process is relatively simple:
