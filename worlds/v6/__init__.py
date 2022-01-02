@@ -42,5 +42,6 @@ class V6World(World):
 
     def fill_slot_data(self):
         return {
-            "DeathLink": self.world.DeathLink[self.player].value
+            "DeathLink": self.world.DeathLink[self.player].value,
+            "DeathLink_Amnesty": self.world.DeathLinkAmnesty[self.player].value
         }
