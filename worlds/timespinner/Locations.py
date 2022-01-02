@@ -230,7 +230,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
             LocationData('Military Fortress', 'Memory - Bomber Climb (A Solution)',  1337184, lambda state: state.has('Timespinner Wheel', player) and state._timespinner_has_doublejump_of_npc(world, player)),
             LocationData('The lab', 'Memory - Genza\'s Secret Stash 1 (An Old Friend)',  1337185, lambda state: state._timespinner_can_break_walls(world, player)),
             LocationData('The lab', 'Memory - Genza\'s Secret Stash 2 (Twilight Dinner)',  1337186, lambda state: state._timespinner_can_break_walls(world, player)),
-            LocationData('Emperors tower', 'Memory - Way Up There (Final Circle)',  1337187),
+            LocationData('Emperors tower', 'Memory - Way Up There (Final Circle)',  1337187, lambda state: state._timespinner_has_doublejump_of_npc(world, player)),
             LocationData('Forest', 'Journal - Forest Rats (Lachiem Expedition)',  1337188),
             LocationData('Forest', 'Journal - Forest Bat Jump Ledge (Peace Treaty)',  1337189, lambda state: state._timespinner_has_doublejump_of_npc(world, player) or state._timespinner_has_forwarddash_doublejump(world, player) or state._timespinner_has_fastjump_on_npc(world, player)),
             LocationData('Castle Ramparts', 'Journal - Floating in Moat (Prime Edicts)',  1337190),
@@ -240,7 +240,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
             LocationData('Royal towers (lower)', 'Journal - Aleana\'s Room (Diplomatic Missive)',  1337194, lambda state: state._timespinner_has_pink(world, player)),
             LocationData('Royal towers (upper)', 'Journal - Top Struggle Juggle Base (War of the Sisters)',  1337195),
             LocationData('Royal towers (upper)', 'Journal - Aleana Boss (Stained Letter)',  1337196),
-            LocationData('Royal towers', 'Journal - Near Bottom Struggle Juggle (Mission Findings)',  1337197),
+            LocationData('Royal towers', 'Journal - Near Bottom Struggle Juggle (Mission Findings)',  1337197, lambda state: state._timespinner_has_doublejump_of_npc(world, player)),
             LocationData('Caves of Banishment (Maw)', 'Journal - Lower Left Maw Caves (Naivety)',  1337198)
         )
 
