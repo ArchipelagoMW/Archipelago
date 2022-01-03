@@ -65,9 +65,9 @@ class Texts:
                     ItemType.ArrowUpgrade10 : "ArrowUpgrade",
                     item.Type : item.Type.name,
                 }
-        if item.IsMap: name = "Map"
-        elif item.IsCompass: name = "Compass"
-        elif item.IsKeycard: name = "Keycard"
+        if item.IsMap(): name = "Map"
+        elif item.IsCompass(): name = "Compass"
+        elif item.IsKeycard(): name = "Keycard"
         else: name = nameMap[item.Type]
 
         items = Texts.scripts["Items"]
