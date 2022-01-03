@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [Timespinner (steam)](https://store.steampowered.com/app/368620/Timespinner/) or [Timespinner (drm free)](https://www.humblebundle.com/store/timespinner)
+- [Timespinner (steam)](https://store.steampowered.com/app/368620/Timespinner/), [Timespinner (humble)](https://www.humblebundle.com/store/timespinner) or [Timespinner (GOG)](https://www.gog.com/game/timespinner)
 - [Timespinner Randomizer](https://github.com/JarnoWesthof/TsRandomizer)
 
 ## General Concept
@@ -11,7 +11,7 @@ The timespinner Randomizer loads Timespinner.exe from the same folder, and alter
 
 ## Installation Procedures
 
-Download latest version of [Timespinner Randomizer](https://github.com/JarnoWesthof/TsRandomizer) you can find the .zip files on the releases page, download the zip for your current platform. Then extract the zip to the folder where your Timespinner game is installed. Then just run TsRandomizer.exe instead of Timespinner.exe to start the game in randomized mode, for more info see the [readme](https://github.com/JarnoWesthof/TsRandomizer)
+Download latest release on [Timespinner Randomizer Releases](https://github.com/JarnoWesthof/TsRandomizer/releases) you can find the .zip files on the releases page, download the zip for your current platform. Then extract the zip to the folder where your Timespinner game is installed. Then just run TsRandomizer.exe (on windows) or TsRandomizerItemTracker.bin.x86_64 (on linux) or TsRandomizerItemTracker.bin.osx (on mac) instead of Timespinner.exe to start the game in randomized mode, for more info see the [ReadMe](https://github.com/JarnoWesthof/TsRandomizer)
     
 ## Joining a MultiWorld Game
 
@@ -31,29 +31,20 @@ name: Lunais{number} # Your name in-game. Spaces will be replaced with underscor
 game:
   Timespinner: 1
 requires:
-  version: 0.1.8
+  version: 0.2.3
 Timespinner:
-  StartWithJewelryBox: # Start with Jewelry Box unlocked
-    false: 50
-    true: 0
-  DownloadableItems: # With the tablet you will be able to download items at terminals
-    false: 50
-    true: 50
-  FacebookMode: # Requires Oculus Rift(ng) to spot the weakspots in walls and floors
-    false: 50
-    true: 0
-  StartWithMeyef: # Start with Meyef, ideal for when you want to play multiplayer
-    false: 50
-    true: 50
-  QuickSeed: # Start with Talaria Attachment, Nyoom!
-    false: 50
-    true: 0
-  SpecificKeycards: # Keycards can only open corresponding doors
-    false: 0
-    true: 50
-  Inverted: # Start in the past
-    false: 50
-    true: 50
+  StartWithJewelryBox: 'true'
+  DownloadableItems: 'true'
+  FacebookMode: 'false'
+  StartWithMeyef: 'false'
+  QuickSeed: 'false'
+  SpecificKeycards: 'true'
+  Inverted: random
+  DeathLink: 'false'
+  Cantoran: 'false'
+  DamageRando: 'false'
+  GyreArchives: 'false'
+  LoreChecks: 'false'
 ```
 * All Options are either enabled or not, if values are specified for both true & false the generator will select one based on weight
 * The Timespinner Randomizer option "StinkyMaw" is currently always enabled for Archipelago generated seeds
