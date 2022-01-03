@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [Timespinner (steam)](https://store.steampowered.com/app/368620/Timespinner/), [Timespinner (humble)](https://www.humblebundle.com/store/timespinner) or [Timespinner (GOG)](https://www.gog.com/game/timespinner)
+- [Timespinner (steam)](https://store.steampowered.com/app/368620/Timespinner/), [Timespinner (humble)](https://www.humblebundle.com/store/timespinner) or [Timespinner (GOG)](https://www.gog.com/game/timespinner) (other versions are not supported)
 - [Timespinner Randomizer](https://github.com/JarnoWesthof/TsRandomizer)
 
 ## General Concept
