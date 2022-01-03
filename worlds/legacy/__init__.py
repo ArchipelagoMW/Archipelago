@@ -62,7 +62,7 @@ class LegacyWorld(World):
             if item == ItemName.haggling and self.world.disable_charon[self.player] == 1:
                 continue
             itempool += self._create_items(item)
-
+            
         # Add specific classes into the pool. Eventually, will be able to shuffle the starting ones, but until then...
         itempool += [
             self.create_item(ItemName.paladin),
@@ -84,6 +84,9 @@ class LegacyWorld(World):
         else:
             itempool += [self.create_item(ItemName.blacksmith), self.create_item(ItemName.enchantress)]
 
+        # Add Arcitect.
+        itempool += [self.create_item(ItemName.architect)]
+            
         # Fill item pool with the remaining
         for _ in range(len(itempool), total_required_locations):
             item = self.world.random.choice(list(misc_items_table.keys()))
