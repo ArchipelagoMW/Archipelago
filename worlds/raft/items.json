@@ -41,7 +41,7 @@
     },
     {
         "id": 47009,
-        "progression": false,
+        "progression": true,
         "name": "Empty bottle"
     },
     {
@@ -96,7 +96,7 @@
     },
     {
         "id": 47020,
-        "progression": false,
+        "progression": true,
         "name": "Grass plot"
     },
     {
@@ -271,12 +271,12 @@
     },
     {
         "id": 47055,
-        "progression": false,
+        "progression": true,
         "name": "Shear"
     },
     {
         "id": 47056,
-        "progression": false,
+        "progression": true,
         "name": "Shovel"
     },
     {
@@ -311,12 +311,12 @@
     },
     {
         "id": 47063,
-        "progression": false,
+        "progression": true,
         "name": "Net launcher"
     },
     {
         "id": 47064,
-        "progression": false,
+        "progression": true,
         "name": "Net canister"
     },
     {
