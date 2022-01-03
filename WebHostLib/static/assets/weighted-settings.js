@@ -81,6 +81,9 @@ const createDefaultSettings = (settingData) => {
               newSettings[game][gameSetting][i] =
                 (setting.hasOwnProperty('defaultValue') && setting.defaultValue === i) ? 25 : 0;
             }
+            newSettings[game][gameSetting]['random'] = 0;
+            newSettings[game][gameSetting]['random-low'] = 0;
+            newSettings[game][gameSetting]['random-high'] = 0;
             break;
           default:
             console.error(`Unknown setting type for ${game} setting ${gameSetting}: ${setting.type}`);
@@ -333,6 +336,36 @@ const buildOptionsDiv = (game, settings) => {
 
             rangeTbody.appendChild(tr);
           }
+        });
+
+        ['random', 'random-low', 'random-high'].forEach((option) => {
+          const tr = document.createElement('tr');
+            const tdLeft = document.createElement('td');
+            tdLeft.classList.add('td-left');
+            tdLeft.innerText = option;
+            tr.appendChild(tdLeft);
+
+            const tdMiddle = document.createElement('td');
+            tdMiddle.classList.add('td-middle');
+            const range = document.createElement('input');
+            range.setAttribute('type', 'range');
+            range.setAttribute('id', `${game}-${settingName}-${option}-range`);
+            range.setAttribute('data-game', game);
+            range.setAttribute('data-setting', settingName);
+            range.setAttribute('data-option', option);
+            range.setAttribute('min', 0);
+            range.setAttribute('max', 50);
+            range.addEventListener('change', updateGameSetting);
+            range.value = currentSettings[game][settingName][option];
+            tdMiddle.appendChild(range);
+            tr.appendChild(tdMiddle);
+
+            const tdRight = document.createElement('td');
+            tdRight.setAttribute('id', `${game}-${settingName}-${option}`)
+            tdRight.classList.add('td-right');
+            tdRight.innerText = range.value;
+            tr.appendChild(tdRight);
+            rangeTbody.appendChild(tr);
         });
 
         rangeTable.appendChild(rangeTbody);
