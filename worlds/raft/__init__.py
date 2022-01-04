@@ -65,9 +65,10 @@ class RaftWorld(World):
                     for item in dupeItemPool:
                         extraItemNamePool.append(item["name"])
             
-            for randomItem in random.choices(extraItemNamePool, k=extras):
-                raft_item = self.create_item_replaceAsNecessary(randomItem)
-                pool.append(raft_item)
+            if (len(extraItemNamePool) > 0):
+                for randomItem in random.choices(extraItemNamePool, k=extras):
+                    raft_item = self.create_item_replaceAsNecessary(randomItem)
+                    pool.append(raft_item)
 
         self.world.itempool += pool
 
