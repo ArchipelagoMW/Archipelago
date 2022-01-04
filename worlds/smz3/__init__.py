@@ -36,9 +36,6 @@ class SMZ3World(World):
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
-        self.smz3World = TotalSMZ3World(Config({}), "Test", 1, "hash")
-        self.smz3DungeonItems = []
-        SMZ3World.location_names = frozenset(self.smz3World.locationLookup.keys())
         
     def __new__(cls, world, player):
         # Add necessary objects to CollectionState on initialization
@@ -64,6 +61,10 @@ class SMZ3World(World):
         return super().__new__(cls)
 
     def generate_early(self):
+        self.smz3World = TotalSMZ3World(Config({}), self.world.get_player_name(self.player), 1, "hash")
+        self.smz3DungeonItems = []
+        SMZ3World.location_names = frozenset(self.smz3World.locationLookup.keys())
+
         self.world.state.smz3state[self.player] = TotalSMZ3Item.Progression([])
         self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("none")
     
@@ -108,12 +109,12 @@ class SMZ3World(World):
                 set_rule(l, lambda state, loc=loc: loc.Available(state.smz3state[self.player]))
 
     def create_regions(self):
-        create_locations(self, self.player)
-        startRegion = create_region(self, self.world, self.player, 'Menu')
+        self.create_locations(self.player)
+        startRegion = self.create_region(self.world, self.player, 'Menu')
         self.world.regions.append(startRegion)
 
         for region in self.smz3World.Regions:
-            currentRegion = create_region(self, self.world, self.player, region.Name, region.locationLookup.keys(), [region.Name + "->" + 'Menu'])
+            currentRegion = self.create_region(self.world, self.player, region.Name, region.locationLookup.keys(), [region.Name + "->" + 'Menu'])
             self.world.regions.append(currentRegion)
             entrance = self.world.get_entrance(region.Name + "->" + 'Menu', self.player)
             entrance.connect(startRegion)
@@ -122,25 +123,39 @@ class SMZ3World(World):
             exit.connect(currentRegion)
 
     def generate_output(self, output_directory: str):
-        base_combined_rom = get_base_rom_bytes()
-        basepatch = IPS_Patch.load("worlds/smz3/zsm.ips")
-        base_combined_rom = basepatch.apply(base_combined_rom)
+        try:
+            base_combined_rom = get_base_rom_bytes()
+            basepatch = IPS_Patch.load("worlds/smz3/zsm.ips")
+            base_combined_rom = basepatch.apply(base_combined_rom)
 
-        patcher = TotalSMZ3Patch(self.smz3World, [world.smz3World for key, world in self.world.worlds.items() if isinstance(world, SMZ3World)], "test", 10, self.world.random)
-        patches = patcher.Create(self.smz3World.Config)
-        for addr, bytes in patches.items():
-            offset = 0
-            for byte in bytes:
-                base_combined_rom[addr + offset] = byte
-                offset += 1
-
-        with open("Test.sfc", "wb") as binary_file:
-            binary_file.write(base_combined_rom)
-        Patch.create_patch_file("Test.sfc", player=self.player, player_name=self.world.player_name[self.player], game=Patch.GAME_SMZ3)
-        pass
+            patcher = TotalSMZ3Patch(self.smz3World, [world.smz3World for key, world in self.world.worlds.items() if isinstance(world, SMZ3World)], "test", 10, self.world.random)
+            patches = patcher.Create(self.smz3World.Config)
+            for addr, bytes in patches.items():
+                offset = 0
+                for byte in bytes:
+                    base_combined_rom[addr + offset] = byte
+                    offset += 1
+            filename = f"SMZ3_{self.world.seed}_{self.world.get_player_name(self.player)}.sfc"
+            with open(filename, "wb") as binary_file:
+                binary_file.write(base_combined_rom)
+            Patch.create_patch_file(filename, player=self.player, player_name=self.world.player_name[self.player], game=Patch.GAME_SMZ3)
+            self.rom_name = bytearray(patcher.title, 'utf8')
+        except:
+            raise
+        finally:
+            self.rom_name_available_event.set() # make sure threading continues and errors are collected
 
     def modify_multidata(self, multidata: dict):
-        pass
+        import base64
+        # wait for self.rom_name to be available.
+        self.rom_name_available_event.wait()
+        rom_name = getattr(self, "rom_name", None)
+        # we skip in case of error, so that the original error in the output thread is the one that gets raised
+        if rom_name:
+            new_name = base64.b64encode(bytes(self.rom_name)).decode()
+            payload = multidata["connect_names"][self.world.player_name[self.player]]
+            multidata["connect_names"][new_name] = payload
+            del (multidata["connect_names"][self.world.player_name[self.player]])
 
     def fill_slot_data(self): 
         slot_data = {}
@@ -238,24 +253,24 @@ class SMZ3World(World):
         self.FrontFillItemInOwnWorld(self.progression, TotalSMZ3Item.ItemType.Super)
         self.FrontFillItemInOwnWorld(self.progression, TotalSMZ3Item.ItemType.PowerBomb)
 
-def create_locations(self, player: int):
-    for name, id in SMZ3World.location_name_to_id.items():
-        newLoc = SMZ3Location(player, name, self.smz3World.locationLookup[name].Address)
-        self.locations[name] = newLoc
-        self.smz3World.locationLookup[name].APLocation = newLoc
+    def create_locations(self, player: int):
+        for name, id in SMZ3World.location_name_to_id.items():
+            newLoc = SMZ3Location(player, name, self.smz3World.locationLookup[name].Address)
+            self.locations[name] = newLoc
+            self.smz3World.locationLookup[name].APLocation = newLoc
 
-def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, RegionType.LightWorld, name, player)
-    ret.world = world
-    if locations:
-        for loc in locations:
-            location = self.locations[loc]
-            location.parent_region = ret
-            ret.locations.append(location)
-    if exits:
-        for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
-    return ret
+    def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
+        ret = Region(name, RegionType.LightWorld, name, player)
+        ret.world = world
+        if locations:
+            for loc in locations:
+                location = self.locations[loc]
+                location.parent_region = ret
+                ret.locations.append(location)
+        if exits:
+            for exit in exits:
+                ret.exits.append(Entrance(player, exit, ret))
+        return ret
 
 
 class SMZ3Location(Location):

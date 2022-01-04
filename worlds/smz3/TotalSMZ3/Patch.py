@@ -93,6 +93,7 @@ class Patch:
     def Create(self, config: Config):
         self.stringTable = StringTable()
         self.patches = []
+        self.title = ""
 
         self.WriteMedallions()
         self.WriteRewards()
@@ -597,9 +598,9 @@ class Patch:
                     "H" if self.myWorld.Config.SMLogic == Config.SMLogic.Hard else \
                     "X"
 
-        title = f"ZSM{Patch.Major}{Patch.Minor}{z3Glitch}{smGlitch}{self.seed:08x}".ljust(21)[:21]
-        self.patches.append((Snes(0x00FFC0), bytearray(title, 'utf8')))
-        self.patches.append((Snes(0x80FFC0), bytearray(title, 'utf8')))
+        self.title = f"ZSM{Patch.Major}{Patch.Minor}{z3Glitch}{smGlitch}{self.seed:08x}".ljust(21)[:21]
+        self.patches.append((Snes(0x00FFC0), bytearray(self.title, 'utf8')))
+        self.patches.append((Snes(0x80FFC0), bytearray(self.title, 'utf8')))
     
     def WriteZ3KeysanityFlags(self):
         if (self.myWorld.Config.Keysanity):

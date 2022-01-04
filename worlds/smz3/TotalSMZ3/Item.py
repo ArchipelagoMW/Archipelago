@@ -189,6 +189,7 @@ class Item:
     def __init__(self, itemType: ItemType, world = None):
         self.Type = itemType
         self.World = world
+        self.Progression = False
         #self.Name = itemType.GetDescription()
 
     @staticmethod

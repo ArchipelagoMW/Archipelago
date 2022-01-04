@@ -38,7 +38,7 @@ class GanonInvincible(Enum):
         Always = 3
 
 class Config:
-    GameMode: GameMode = GameMode.Normal
+    GameMode: GameMode = GameMode.Multiworld
     Z3Logic: Z3Logic = Z3Logic.Normal
     SMLogic: SMLogic = SMLogic.Normal
     SwordLocation: SwordLocation= SwordLocation.Randomized
