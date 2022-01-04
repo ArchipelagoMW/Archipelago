@@ -371,5 +371,24 @@
         ]
       }
     ]
+  },
+  {
+    "gameTitle": "Rogue Legacy",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Rogue Legacy Randomizer software on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "rogue-legacy/rogue-legacy_en.md",
+            "link": "rogue-legacy/rogue-legacy/en",
+            "authors": [
+              "Phar"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]
