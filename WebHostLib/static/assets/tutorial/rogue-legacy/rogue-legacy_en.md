@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [Rogue Legacy Randomizer](https://github.com/ThePhar/RogueLegacyRandomizer/releases)
+- Rogue Legacy Randomizer from the [Rogue Legacy Randomizer Releases Page](https://github.com/ThePhar/RogueLegacyRandomizer/releases)
 
 ## Configuring your YAML file
 
@@ -13,7 +13,7 @@ each player to enjoy an experience customized for their taste, and different pla
 can all have different options.
 
 ### Where do I get a YAML file?
-you can customize your settings by visiting the <a href="/games/Rogue Legacy/player-settings">rogue legacy settings page here</a>.
+you can customize your settings by visiting the [Rogue Legacy Settings Page](/games/Rogue%20Legacy/player-settings).
 
 ### Connect to the MultiServer
 Once in game, press the start button and the AP connection screen should appear. You will fill out the hostname, port,

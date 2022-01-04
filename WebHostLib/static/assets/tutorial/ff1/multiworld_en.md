@@ -4,16 +4,16 @@
 
 - The FF1Client
     - Bundled with
-      Archipelago: [https://github.com/ArchipelagoMW/Archipelago/releases](https://github.com/ArchipelagoMW/Archipelago/releases)
+      Archipelago: [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
 - The BizHawk emulator. Versions 2.3.1 and higher are supported. Version 2.7 is recommended
-    - [http://tasvideos.org/BizHawk.html](http://tasvideos.org/BizHawk.html)
+    - [BizHawk Official Website](http://tasvideos.org/BizHawk.html)
 - Your legally obtained Final Fantasy (USA Edition) ROM file, probably named `Final Fantasy (USA).nes`. Neither
   Archipelago.gg nor the Final Fantasy Randomizer Community can supply you with this.
 
 ## Installation Procedures
 
 1. Download and install the latest version of Archipelago.
-    1. On Windows, download Setup.Archipelago.<HighestVersion>.exe and run it
+    1. On Windows, download Setup.Archipelago.<HighestVersion\>.exe and run it
 2. Assign Bizhawk version 2.3.1 or higher as your default program for launching `.nes` files.
     1. Extract your Bizhawk folder to your Desktop, or somewhere you will remember. Below are optional additional steps
        for loading ROMs more conveniently
@@ -25,7 +25,7 @@
 ## Obtaining your Archipelago yaml file and randomized ROM
 
 Unlike most other Archipelago.gg games Final Fantasy 1 is randomized by the main randomizer
-at [https://finalfantasyrandomizer.com/](https://finalfantasyrandomizer.com/).
+at the [Final Fantasy Randomizer Homepage](https://finalfantasyrandomizer.com/).
 
 Generate a game by going to the site and performing the following steps:
 
@@ -63,3 +63,6 @@ required by Archipelago.gg
 
 When the client shows both NES and server are connected you are good to go. You can check the connection status of the
 NES at any time by running `/nes`
+
+### Other Client Commands
+All other commands may be found on the [Archipelago Server and Client Commands Guide](/tutorial/archipelago/commands/en).

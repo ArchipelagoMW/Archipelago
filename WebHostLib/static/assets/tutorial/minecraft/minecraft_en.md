@@ -55,6 +55,6 @@ the following links are the versions of the software we use.
 
 - [Minecraft Forge Download Page](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.17.1.html)
 - [Minecraft Archipelago Randomizer Mod Releases Page](https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
-  **DO NOT INSTALL THIS ON YOUR CLIENT**
+  - **DO NOT INSTALL THIS ON YOUR CLIENT**
 - [Java 16 Download Page](https://docs.aws.amazon.com/corretto/latest/corretto-16-ug/downloads-list.html)
 
