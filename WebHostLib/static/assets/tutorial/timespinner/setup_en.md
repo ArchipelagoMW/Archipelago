@@ -24,7 +24,7 @@ Download latest release on [Timespinner Randomizer Releases](https://github.com/
 6. If all went well you will be taken back the difficulty selection menu and the game will start as soon as you select a difficulty
 
 ## Where do I get a config file?
-The [Player Settings](https://archipelago.gg/tutorial/timespinner/setup/en) page on the website allows you to configure your personal settings and export a config file from them.
+The [Player Settings](https://archipelago.gg/games/Timespinner/player-settings) page on the website allows you to configure your personal settings and export a config file from them.
 
 * The Timespinner Randomizer option "StinkyMaw" is currently always enabled for Archipelago generated seeds
 * The Timespinner Randomizer options "ProgressiveVerticalMovement" & "ProgressiveKeycards" are currently not supported on Archipelago generated seeds
