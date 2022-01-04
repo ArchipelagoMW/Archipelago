@@ -352,8 +352,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "legacy/legacy_en.md",
-            "link": "legacy/legacy/en",
+            "filename": "rogue-legacy/rogue-legacy_en.md",
+            "link": "rogue-legacy/rogue-legacy/en",
             "authors": [
               "Phar"
             ]
