@@ -292,51 +292,84 @@ const buildOptionsDiv = (game, settings) => {
         const rangeTable = document.createElement('table');
         const rangeTbody = document.createElement('tbody');
 
-        Object.keys(currentSettings[game][settingName]).forEach((option) => {
-          if (currentSettings[game][settingName][option] > 0) {
+        if (((setting.max - setting.min) + 1) < 11) {
+          for (let i=setting.min; i <= setting.max; ++i) {
             const tr = document.createElement('tr');
-            const tdLeft = document.createElement('td');
-            tdLeft.classList.add('td-left');
-            tdLeft.innerText = option;
-            tr.appendChild(tdLeft);
+              const tdLeft = document.createElement('td');
+              tdLeft.classList.add('td-left');
+              tdLeft.innerText = i;
+              tr.appendChild(tdLeft);
 
-            const tdMiddle = document.createElement('td');
-            tdMiddle.classList.add('td-middle');
-            const range = document.createElement('input');
-            range.setAttribute('type', 'range');
-            range.setAttribute('id', `${game}-${settingName}-${option}-range`);
-            range.setAttribute('data-game', game);
-            range.setAttribute('data-setting', settingName);
-            range.setAttribute('data-option', option);
-            range.setAttribute('min', 0);
-            range.setAttribute('max', 50);
-            range.addEventListener('change', updateGameSetting);
-            range.value = currentSettings[game][settingName][parseInt(option, 10)];
-            tdMiddle.appendChild(range);
-            tr.appendChild(tdMiddle);
+              const tdMiddle = document.createElement('td');
+              tdMiddle.classList.add('td-middle');
+              const range = document.createElement('input');
+              range.setAttribute('type', 'range');
+              range.setAttribute('id', `${game}-${settingName}-${i}-range`);
+              range.setAttribute('data-game', game);
+              range.setAttribute('data-setting', settingName);
+              range.setAttribute('data-option', i);
+              range.setAttribute('min', 0);
+              range.setAttribute('max', 50);
+              range.addEventListener('change', updateGameSetting);
+              range.value = currentSettings[game][settingName][i];
+              tdMiddle.appendChild(range);
+              tr.appendChild(tdMiddle);
 
-            const tdRight = document.createElement('td');
-            tdRight.setAttribute('id', `${game}-${settingName}-${option}`)
-            tdRight.classList.add('td-right');
-            tdRight.innerText = range.value;
-            tr.appendChild(tdRight);
+              const tdRight = document.createElement('td');
+              tdRight.setAttribute('id', `${game}-${settingName}-${i}`)
+              tdRight.classList.add('td-right');
+              tdRight.innerText = range.value;
+              tr.appendChild(tdRight);
 
-            const tdDelete = document.createElement('td');
-            tdDelete.classList.add('td-delete');
-            const deleteButton = document.createElement('span');
-            deleteButton.classList.add('range-option-delete');
-            deleteButton.innerText = '❌';
-            deleteButton.addEventListener('click', () => {
-              range.value = 0;
-              range.dispatchEvent(new Event('change'));
-              rangeTbody.removeChild(tr);
-            });
-            tdDelete.appendChild(deleteButton);
-            tr.appendChild(tdDelete);
-
-            rangeTbody.appendChild(tr);
+              rangeTbody.appendChild(tr);
           }
-        });
+        } else {
+          Object.keys(currentSettings[game][settingName]).forEach((option) => {
+            if (currentSettings[game][settingName][option] > 0) {
+              const tr = document.createElement('tr');
+              const tdLeft = document.createElement('td');
+              tdLeft.classList.add('td-left');
+              tdLeft.innerText = option;
+              tr.appendChild(tdLeft);
+
+              const tdMiddle = document.createElement('td');
+              tdMiddle.classList.add('td-middle');
+              const range = document.createElement('input');
+              range.setAttribute('type', 'range');
+              range.setAttribute('id', `${game}-${settingName}-${option}-range`);
+              range.setAttribute('data-game', game);
+              range.setAttribute('data-setting', settingName);
+              range.setAttribute('data-option', option);
+              range.setAttribute('min', 0);
+              range.setAttribute('max', 50);
+              range.addEventListener('change', updateGameSetting);
+              range.value = currentSettings[game][settingName][parseInt(option, 10)];
+              tdMiddle.appendChild(range);
+              tr.appendChild(tdMiddle);
+
+              const tdRight = document.createElement('td');
+              tdRight.setAttribute('id', `${game}-${settingName}-${option}`)
+              tdRight.classList.add('td-right');
+              tdRight.innerText = range.value;
+              tr.appendChild(tdRight);
+
+              const tdDelete = document.createElement('td');
+              tdDelete.classList.add('td-delete');
+              const deleteButton = document.createElement('span');
+              deleteButton.classList.add('range-option-delete');
+              deleteButton.innerText = '❌';
+              deleteButton.addEventListener('click', () => {
+                range.value = 0;
+                range.dispatchEvent(new Event('change'));
+                rangeTbody.removeChild(tr);
+              });
+              tdDelete.appendChild(deleteButton);
+              tr.appendChild(tdDelete);
+
+              rangeTbody.appendChild(tr);
+            }
+          });
+        }
 
         ['random', 'random-low', 'random-high'].forEach((option) => {
           const tr = document.createElement('tr');
