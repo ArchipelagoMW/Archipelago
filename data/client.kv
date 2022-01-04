@@ -32,6 +32,8 @@
     pos: (0, 0)
 <ServerToolTip>:
     size: self.texture_size
+    size_hint: None, None
+    font_size: dp(18)
     pos_hint: {'center_y': 0.5, 'center_x': 0.5}
     halign: "left"
     canvas.before:
@@ -40,3 +42,13 @@
         Rectangle:
             size: self.size
             pos: self.pos
+        Color:
+            rgba: 0.098, 0.337, 0.431, 1
+        Line:
+            width: 3
+            rectangle: self.x-2, self.y-2, self.width+4, self.height+4
+        Color:
+            rgba: 0.235, 0.678, 0.843, 1
+        Line:
+            width: 1
+            rectangle: self.x-2, self.y-2, self.width+4, self.height+4

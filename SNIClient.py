@@ -523,18 +523,21 @@ def launch_sni(ctx: Context):
     if not os.path.isdir(sni_path):
         sni_path = Utils.local_path(sni_path)
     if os.path.isdir(sni_path):
-        for file in os.listdir(sni_path):
-            lower_file = file.lower()
-            if (lower_file.startswith("sni.") and not lower_file.endswith(".proto")) or lower_file == "sni":
-                sni_path = os.path.join(sni_path, file)
+        dir_entry: os.DirEntry
+        for dir_entry in os.scandir(sni_path):
+            if dir_entry.is_file():
+                lower_file = dir_entry.name.lower()
+                if (lower_file.startswith("sni.") and not lower_file.endswith(".proto")) or (lower_file == "sni"):
+                    sni_path = dir_entry.path
+                    break
 
     if os.path.isfile(sni_path):
         snes_logger.info(f"Attempting to start {sni_path}")
         import sys
         if not sys.stdout:  # if it spawns a visible console, may as well populate it
-            subprocess.Popen(sni_path, cwd=os.path.dirname(sni_path))
+            subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path))
         else:
-            subprocess.Popen(sni_path, cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL,
+            subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL,
                              stderr=subprocess.DEVNULL)
     else:
         snes_logger.info(
@@ -1048,6 +1051,7 @@ async def game_watcher(ctx: Context):
                     ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
 
+
 async def run_game(romfile):
     auto_start = Utils.get_options()["lttp_options"].get("rom_start", True)
     if auto_start is True:
@@ -1076,7 +1080,8 @@ async def main():
         logging.info(f"Wrote rom file to {romfile}")
         if args.diff_file.endswith(".apsoe"):
             import webbrowser
-            webbrowser.open("http://www.evermizer.com/apclient/")
+            webbrowser.open("http://www.evermizer.com/apclient/" +
+                            (f"#server={meta['server']}" if "server" in meta else ""))
             logging.info("Starting Evermizer Client in your Browser...")
             import time
             time.sleep(3)

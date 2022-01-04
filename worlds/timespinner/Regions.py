@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple, Optional, Callable
+from typing import List, Set, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Options import is_option_enabled
 from .Locations import LocationData
@@ -6,7 +6,7 @@ from .Locations import LocationData
 def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location], pyramid_keys_unlock: str):
     locations_per_region = get_locations_per_region(locations)
 
-    world.regions += [
+    regions = [
         create_region(world, player, locations_per_region, location_cache, 'Menu'),
         create_region(world, player, locations_per_region, location_cache, 'Tutorial'),
         create_region(world, player, locations_per_region, location_cache, 'Lake desolation'),
@@ -14,15 +14,18 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'Lower lake desolation'),
         create_region(world, player, locations_per_region, location_cache, 'Library'),
         create_region(world, player, locations_per_region, location_cache, 'Library top'),
+        create_region(world, player, locations_per_region, location_cache, 'Ifrit\'s Lair'),
         create_region(world, player, locations_per_region, location_cache, 'Varndagroth tower left'),
         create_region(world, player, locations_per_region, location_cache, 'Varndagroth tower right (upper)'),
         create_region(world, player, locations_per_region, location_cache, 'Varndagroth tower right (lower)'),
         create_region(world, player, locations_per_region, location_cache, 'Varndagroth tower right (elevator)'),
         create_region(world, player, locations_per_region, location_cache, 'Sealed Caves (Sirens)'),
         create_region(world, player, locations_per_region, location_cache, 'Military Fortress'),
+        create_region(world, player, locations_per_region, location_cache, 'Military Fortress (hangar)'),
         create_region(world, player, locations_per_region, location_cache, 'The lab'),
         create_region(world, player, locations_per_region, location_cache, 'The lab (power off)'),
         create_region(world, player, locations_per_region, location_cache, 'The lab (upper)'),
+        create_region(world, player, locations_per_region, location_cache, 'Ravenlord\'s Lair'),
         create_region(world, player, locations_per_region, location_cache, 'Emperors tower'),
         create_region(world, player, locations_per_region, location_cache, 'Skeleton Shaft'),
         create_region(world, player, locations_per_region, location_cache, 'Sealed Caves (upper)'),
@@ -40,10 +43,16 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'Royal towers (lower)'),
         create_region(world, player, locations_per_region, location_cache, 'Royal towers'),
         create_region(world, player, locations_per_region, location_cache, 'Royal towers (upper)'),
+        create_region(world, player, locations_per_region, location_cache, 'Temporal Gyre'),
         create_region(world, player, locations_per_region, location_cache, 'Ancient Pyramid (left)'),
         create_region(world, player, locations_per_region, location_cache, 'Ancient Pyramid (right)'),
         create_region(world, player, locations_per_region, location_cache, 'Space time continuum')
     ]
+
+    if __debug__:
+        throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
+
+    world.regions += regions
 
     connectStartingRegion(world, player)
 
@@ -63,6 +72,8 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Library', 'Varndagroth tower left', lambda state: state._timespinner_has_keycard_D(world, player))
     connect(world, player, names, 'Library', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Library top', 'Library')
+    connect(world, player, names, 'Library top', 'Ifrit\'s Lair', lambda state: state.has('Kobo', player) and state.can_reach('Refugee Camp', 'Region', player))
+    connect(world, player, names, 'Ifrit\'s Lair', 'Library top')
     connect(world, player, names, 'Varndagroth tower left', 'Library')
     connect(world, player, names, 'Varndagroth tower left', 'Varndagroth tower right (upper)', lambda state: state._timespinner_has_keycard_C(world, player))
     connect(world, player, names, 'Varndagroth tower left', 'Varndagroth tower right (lower)', lambda state: state._timespinner_has_keycard_B(world, player))
@@ -81,21 +92,27 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Sealed Caves (Sirens)', 'Varndagroth tower right (lower)', lambda state: state.has('Elevator Keycard', player))
     connect(world, player, names, 'Sealed Caves (Sirens)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Military Fortress', 'Varndagroth tower right (lower)', lambda state: state._timespinner_can_kill_all_3_bosses(world, player))
-    connect(world, player, names, 'Military Fortress', 'The lab', lambda state: state._timespinner_has_keycard_B(world, player) and state._timespinner_has_doublejump(world, player))
+    connect(world, player, names, 'Military Fortress', 'Temporal Gyre', lambda state: state.has('Timespinner Wheel', player))
+    connect(world, player, names, 'Military Fortress', 'Military Fortress (hangar)', lambda state: state._timespinner_has_doublejump(world, player))
+    connect(world, player, names, 'Military Fortress (hangar)', 'Military Fortress')
+    connect(world, player, names, 'Military Fortress (hangar)', 'The lab', lambda state: state._timespinner_has_keycard_B(world, player) and state._timespinner_has_doublejump(world, player))
+    connect(world, player, names, 'Temporal Gyre', 'Military Fortress')
     connect(world, player, names, 'The lab', 'Military Fortress')
     connect(world, player, names, 'The lab', 'The lab (power off)', lambda state: state._timespinner_has_doublejump_of_npc(world, player))
     connect(world, player, names, 'The lab (power off)', 'The lab')
     connect(world, player, names, 'The lab (power off)', 'The lab (upper)', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
     connect(world, player, names, 'The lab (upper)', 'The lab (power off)')
+    connect(world, player, names, 'The lab (upper)', 'Ravenlord\'s Lair', lambda state: state.has('Merchant Crow', player))
     connect(world, player, names, 'The lab (upper)', 'Emperors tower', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
     connect(world, player, names, 'The lab (upper)', 'Ancient Pyramid (left)', lambda state: state.has_all({'Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'}, player))
+    connect(world, player, names, 'Ravenlord\'s Lair', 'The lab (upper)')
     connect(world, player, names, 'Emperors tower', 'The lab (upper)')
     connect(world, player, names, 'Skeleton Shaft', 'Lake desolation')
     connect(world, player, names, 'Skeleton Shaft', 'Sealed Caves (upper)', lambda state: state._timespinner_has_keycard_A(world, player))
     connect(world, player, names, 'Skeleton Shaft', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Sealed Caves (upper)', 'Skeleton Shaft')
-    connect(world, player, names, 'Sealed Caves (upper)', 'Sealed Caves (Xarion)', lambda state: state.has('Twin Pyramid Key', player) or state._timespinner_has_forwarddash_doublejump(world, player))
-    connect(world, player, names, 'Sealed Caves (Xarion)', 'Sealed Caves (upper)', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
+    connect(world, player, names, 'Sealed Caves (upper)', 'Sealed Caves (Xarion)', lambda state: state.has('Twin Pyramid Key', player) or state._timespinner_has_doublejump(world, player))
+    connect(world, player, names, 'Sealed Caves (Xarion)', 'Sealed Caves (upper)', lambda state: state._timespinner_has_doublejump(world, player))
     connect(world, player, names, 'Sealed Caves (Xarion)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Refugee Camp', 'Forest')
     connect(world, player, names, 'Refugee Camp', 'Library', lambda state: not is_option_enabled(world, player, "Inverted"))
@@ -114,9 +131,9 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Lower Lake Serene', 'Left Side forest Caves')
     connect(world, player, names, 'Lower Lake Serene', 'Caves of Banishment (upper)')
     connect(world, player, names, 'Caves of Banishment (upper)', 'Upper Lake Serene', lambda state: state.has('Water Mask', player))
-    connect(world, player, names, 'Caves of Banishment (upper)', 'Caves of Banishment (Maw)', lambda state: state.has('Twin Pyramid Key', player) or state._timespinner_has_forwarddash_doublejump(world, player))
+    connect(world, player, names, 'Caves of Banishment (upper)', 'Caves of Banishment (Maw)', lambda state: state.has('Twin Pyramid Key', player) or state._timespinner_has_doublejump(world, player))
     connect(world, player, names, 'Caves of Banishment (upper)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
-    connect(world, player, names, 'Caves of Banishment (Maw)', 'Caves of Banishment (upper)', lambda state: state._timespinner_has_forwarddash_doublejump(world, player))
+    connect(world, player, names, 'Caves of Banishment (Maw)', 'Caves of Banishment (upper)', lambda state: state._timespinner_has_doublejump(world, player))
     connect(world, player, names, 'Caves of Banishment (Maw)', 'Caves of Banishment (Sirens)', lambda state: state.has('Gas Mask', player))
     connect(world, player, names, 'Caves of Banishment (Maw)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Caves of Banishment (Sirens)', 'Forest')
@@ -148,6 +165,16 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Space time continuum', 'Royal towers (lower)', lambda state: pyramid_keys_unlock == "GateRoyalTowers")
     connect(world, player, names, 'Space time continuum', 'Caves of Banishment (Maw)', lambda state: pyramid_keys_unlock == "GateMaw")
     connect(world, player, names, 'Space time continuum', 'Caves of Banishment (upper)', lambda state: pyramid_keys_unlock == "GateCavesOfBanishment")
+
+
+def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames: Set[str]):
+    existingRegions = set()
+
+    for region in regions:
+        existingRegions.add(region.name)
+
+    if (regionNames - existingRegions):
+        raise Exception("Tiemspinner: the following regions are used in locations: {}, but no such region exists".format(regionNames - existingRegions))
 
 
 def create_location(player: int, location_data: LocationData, region: Region, location_cache: List[Location]) -> Location:

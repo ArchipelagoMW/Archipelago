@@ -10,6 +10,7 @@ def update_sprites_lttp():
     from tkinter import Tk
     from LttPAdjuster import get_image_for_sprite
     from LttPAdjuster import BackgroundTaskProgress
+    from LttPAdjuster import BackgroundTaskProgressNullWindow
     from LttPAdjuster import update_sprites
 
     # Target directories
@@ -19,11 +20,15 @@ def update_sprites_lttp():
     os.makedirs(os.path.join(output_dir, "sprites"), exist_ok=True)
     # update sprites through gui.py's functions
     done = threading.Event()
-    top = Tk()
-    top.withdraw()
-    BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
+    try:
+        top = Tk()
+    except:
+        task = BackgroundTaskProgressNullWindow(update_sprites, lambda successful, resultmessage: done.set())
+    else:
+        top.withdraw()
+        task = BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
     while not done.isSet():
-        top.update()
+        task.do_events()
 
     spriteData = []
 

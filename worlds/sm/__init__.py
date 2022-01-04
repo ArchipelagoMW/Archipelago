@@ -161,6 +161,10 @@ class SMWorld(World):
         create_locations(self, self.player)
         create_regions(self, self.world, self.player)
 
+    def get_required_client_version(self):
+        # changes to client DeathLink handling for 0.2.1
+        return max(super(SMWorld, self).get_required_client_version(), (0, 2, 1))
+
     def getWord(self, w):
         return (w & 0x00FF, (w & 0xFF00) >> 8)
     
@@ -278,7 +282,7 @@ class SMWorld(World):
             
         openTourianGreyDoors = {0x07C823 + 5: [0x0C], 0x07C831 + 5: [0x0C]}
 
-        deathLink = {0x277f04: [self.world.death_link_survive[self.player].value]}
+        deathLink = {0x277f04: [self.world.death_link[self.player].value]}
 
         playerNames = {}
         playerNameIDMap = {}

@@ -92,7 +92,6 @@ class SendDefeatedMobs(Toggle):
 class StartingItems(OptionList):
     """Start with these items. Each entry should be of this format: {item: "item_name", amount: #, nbt: "nbt_string"}"""
     displayname = "Starting Items"
-    default = 0
 
 
 minecraft_options: typing.Dict[str, type(Option)] = {

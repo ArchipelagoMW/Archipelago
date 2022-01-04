@@ -1,7 +1,7 @@
 from __future__ import annotations
 import typing
 
-from Options import Choice, OptionDict, ItemDict, Option, DefaultOnToggle, Range, DeathLink
+from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink
 from schema import Schema, Optional, And, Or
 
 # schema helpers
@@ -94,6 +94,8 @@ class TechTreeLayout(Choice):
     option_small_funnels = 7
     option_medium_funnels = 8
     option_large_funnels = 9
+    option_trees = 10
+    option_choices = 11
     default = 0
 
 
@@ -129,6 +131,8 @@ class RecipeTime(Choice):
 
 
 class Progressive(Choice):
+    """Merges together Technologies like "automation-1" to "automation-3" into 3 copies of "Progressive Automation",
+    which awards them in order."""
     displayname = "Progressive Technologies"
     option_off = 0
     option_grouped_random = 1
@@ -149,9 +153,20 @@ class RecipeIngredients(Choice):
 
 
 class FactorioStartItems(ItemDict):
+    """Mapping of Factorio internal item-name to amount granted on start."""
     displayname = "Starting Items"
     verify_item_name = False
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
+
+
+class FactorioFreeSampleBlacklist(OptionSet):
+    """Set of items that should never be granted from Free Samples"""
+    displayname = "Free Sample Blacklist"
+
+
+class FactorioFreeSampleWhitelist(OptionSet):
+    """Overrides any free sample blacklist present. This may ruin the balance of the mod, be warned."""
+    displayname = "Free Sample Whitelist"
 
 
 class TrapCount(Range):
@@ -169,6 +184,7 @@ class EvolutionTrapCount(TrapCount):
 
 
 class EvolutionTrapIncrease(Range):
+    """How much an Evolution Trap increases the enemy evolution"""
     displayname = "Evolution Trap % Effect"
     range_start = 1
     default = 10
@@ -176,6 +192,8 @@ class EvolutionTrapIncrease(Range):
 
 
 class FactorioWorldGen(OptionDict):
+    """World Generation settings. Overview of options at https://wiki.factorio.com/Map_generator,
+    with in-depth documentation at https://lua-api.factorio.com/latest/Concepts.html#MapGenSettings"""
     displayname = "World Generation"
     # FIXME: do we want default be a rando-optimized default or in-game DS?
     value: typing.Dict[str, typing.Dict[str, typing.Any]]
@@ -309,6 +327,7 @@ class FactorioWorldGen(OptionDict):
 
 
 class ImportedBlueprint(DefaultOnToggle):
+    """Allow or Disallow Blueprints from outside the current savegame."""
     displayname = "Blueprints"
 
 
@@ -322,6 +341,8 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "free_samples": FreeSamples,
     "tech_tree_information": TechTreeInformation,
     "starting_items": FactorioStartItems,
+    "free_sample_blacklist": FactorioFreeSampleBlacklist,
+    "free_sample_whitelist": FactorioFreeSampleWhitelist,
     "recipe_time": RecipeTime,
     "recipe_ingredients": RecipeIngredients,
     "imported_blueprints": ImportedBlueprint,

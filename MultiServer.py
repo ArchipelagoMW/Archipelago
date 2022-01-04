@@ -22,8 +22,7 @@ ModuleUpdate.update()
 
 import websockets
 import colorama
-import prompt_toolkit
-from prompt_toolkit.patch_stdout import patch_stdout
+
 from fuzzywuzzy import process as fuzzy_process
 
 import NetUtils
@@ -236,11 +235,11 @@ class Context:
             with open(multidatapath, 'rb') as f:
                 data = f.read()
 
-        self._load(self._decompress(data), use_embedded_server_options)
+        self._load(self.decompress(data), use_embedded_server_options)
         self.data_filename = multidatapath
 
     @staticmethod
-    def _decompress(data: bytes) -> dict:
+    def decompress(data: bytes) -> dict:
         format_version = data[0]
         if format_version != 1:
             raise Exception("Incompatible multidata.")

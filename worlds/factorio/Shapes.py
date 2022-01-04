@@ -1,4 +1,5 @@
 from typing import Dict, List, Set
+from collections import deque
 
 from worlds.factorio.Options import TechTreeLayout
 
@@ -21,7 +22,9 @@ def get_shapes(factorio_world) -> Dict[str, List[str]]:
     tech_names.sort()
     world.random.shuffle(tech_names)
 
-    if layout == TechTreeLayout.option_small_diamonds:
+    if layout == TechTreeLayout.option_single:
+        pass
+    elif layout == TechTreeLayout.option_small_diamonds:
         slice_size = 4
         while len(tech_names) > slice_size:
             slice = tech_names[:slice_size]
@@ -189,6 +192,55 @@ def get_shapes(factorio_world) -> Dict[str, List[str]]:
                         prerequisites.setdefault(tech_name, set()).update(previous_slice[i:i+2])
                 previous_slice = slice
                 layer_size -= 1
+    elif layout == TechTreeLayout.option_trees:
+        #              0              |
+        #            1   2            |
+        #              3              |
+        #        4   5   6   7        |
+        #              8              |
+        #  9   10   11   12   13  14  |
+        #              15             |
+        #              16             |
+        slice_size = 17
+        while len(tech_names) > slice_size:
+            slice = tech_names[:slice_size]
+            tech_names = tech_names[slice_size:]
+            slice.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
+
+            prerequisites[slice[1]] = {slice[0]}
+            prerequisites[slice[2]] = {slice[0]}
+
+            prerequisites[slice[3]] = {slice[1], slice[2]}
+
+            prerequisites[slice[4]] = {slice[3]}
+            prerequisites[slice[5]] = {slice[3]}
+            prerequisites[slice[6]] = {slice[3]}
+            prerequisites[slice[7]] = {slice[3]}
+
+            prerequisites[slice[8]] = {slice[4], slice[5], slice[6], slice[7]}
+
+            prerequisites[slice[9]] = {slice[8]}
+            prerequisites[slice[10]] = {slice[8]}
+            prerequisites[slice[11]] = {slice[8]}
+            prerequisites[slice[12]] = {slice[8]}
+            prerequisites[slice[13]] = {slice[8]}
+            prerequisites[slice[14]] = {slice[8]}
+
+            prerequisites[slice[15]] = {slice[9], slice[10], slice[11], slice[12], slice[13], slice[14]}
+            prerequisites[slice[16]] = {slice[15]}
+    elif layout == TechTreeLayout.option_choices:
+        tech_names.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
+        current_choices = deque([tech_names[0]])
+        tech_names = tech_names[1:]
+        while len(tech_names) > 1:
+            source = current_choices.pop()
+            choices = tech_names[:2]
+            tech_names = tech_names[2:]
+            for choice in choices:
+                prerequisites[choice] = {source}
+            current_choices.extendleft(choices)
+    else:
+        raise NotImplementedError(f"Layout {layout} is not implemented.")
 
     world.tech_tree_layout_prerequisites[player] = prerequisites
     return prerequisites
