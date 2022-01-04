@@ -1,9 +1,9 @@
 # Super Metroid Setup Guide
 
 ## Required Software
-- [Super Metroid Client](https://github.com/ArchipelagoMW/SuperMetroidClient/releases)
+- [Super Nintendo Client](https://github.com/ArchipelagoMW/SuperNintendoClient/releases)
 - **sniConnector.lua** (located on the client download page)
-- [SNI](https://github.com/alttpo/sni/releases) (Included in the Super Metroid Client)
+- [SNI](https://github.com/alttpo/sni/releases) (Included in the Super Nintendo Client)
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
       ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
@@ -14,7 +14,7 @@
 ## Installation Procedures
 
 ### Windows Setup
-1. Download and install the Super Metroid Client from the link above, making sure to install the most recent version.
+1. Download and install the Super Nintendo Client from the link above, making sure to install the most recent version.
 **The file is located in the assets section at the bottom of the version information**.
 2. During setup, you will be asked to locate your base ROM file. This is your Super Metroid ROM file.
 3. If you are using an emulator, you should assign your Lua capable emulator as your default program
