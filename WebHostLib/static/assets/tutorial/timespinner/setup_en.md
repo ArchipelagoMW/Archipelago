@@ -23,29 +23,8 @@ Download latest release on [Timespinner Randomizer Releases](https://github.com/
 5. Select "Connect"
 6. If all went well you will be taken back the difficulty selection menu and the game will start as soon as you select a difficulty
 
-## YAML Settings
-An example YAML would look like this:
-```yaml
-description: Default Timespinner Template
-name: Lunais{number} # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
-game:
-  Timespinner: 1
-requires:
-  version: 0.2.3
-Timespinner:
-  StartWithJewelryBox: 'true'
-  DownloadableItems: 'true'
-  FacebookMode: 'false'
-  StartWithMeyef: 'false'
-  QuickSeed: 'false'
-  SpecificKeycards: 'true'
-  Inverted: random
-  DeathLink: 'false'
-  Cantoran: 'false'
-  DamageRando: 'false'
-  GyreArchives: 'false'
-  LoreChecks: 'false'
-```
-* All Options are either enabled or not, if values are specified for both true & false the generator will select one based on weight
+## Where do I get a config file?
+The [Player Settings](https://archipelago.gg/tutorial/timespinner/setup/en) page on the website allows you to configure your personal settings and export a config file from them.
+
 * The Timespinner Randomizer option "StinkyMaw" is currently always enabled for Archipelago generated seeds
 * The Timespinner Randomizer options "ProgressiveVerticalMovement" & "ProgressiveKeycards" are currently not supported on Archipelago generated seeds
