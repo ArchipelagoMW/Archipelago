@@ -23,7 +23,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 version_tuple = tuplize_version(__version__)
 
 from yaml import load, dump, safe_load

@@ -20,7 +20,7 @@ from urllib.parse import urlparse
 from urllib.request import urlopen
 
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
-from Utils import output_path, local_path, open_file
+from Utils import output_path, local_path, open_file, get_cert_none_ssl_context, persistent_store
 
 
 class AdjusterWorld(object):
@@ -102,13 +102,14 @@ def main():
     parser.add_argument('--update_sprites', action='store_true', help='Update Sprite Database, then exit.')
     args = parser.parse_args()
     args.music = not args.disablemusic
-    if args.update_sprites:
-        run_sprite_update()
-        sys.exit()
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
         args.loglevel]
     logging.basicConfig(format='%(message)s', level=loglevel)
+
+    if args.update_sprites:
+        run_sprite_update()
+        sys.exit()
 
     if not os.path.isfile(args.rom):
         adjustGUI()
@@ -118,7 +119,6 @@ def main():
             sys.exit(1)
 
         args, path = adjust(args=args)
-        from Utils import persistent_store
         if isinstance(args.sprite, Sprite):
             args.sprite = args.sprite.name
         persistent_store("adjuster", "last_settings_3", args)
@@ -224,7 +224,6 @@ def adjustGUI():
             messagebox.showerror(title="Error while adjusting Rom", message=str(e))
         else:
             messagebox.showinfo(title="Success", message=f"Rom patched successfully to {path}")
-            from Utils import persistent_store
             if isinstance(guiargs.sprite, Sprite):
                 guiargs.sprite = guiargs.sprite.name
             persistent_store("adjuster", "last_settings_3", guiargs)
@@ -241,12 +240,16 @@ def adjustGUI():
 def run_sprite_update():
     import threading
     done = threading.Event()
-    top = Tk()
-    top.withdraw()
-    BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
+    try:
+        top = Tk()
+    except:
+        task = BackgroundTaskProgressNullWindow(update_sprites, lambda successful, resultmessage: done.set())
+    else:
+        top.withdraw()
+        task = BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
     while not done.isSet():
-        top.update()
-    print("Done updating sprites")
+        task.do_events()
+    logging.info("Done updating sprites")
 
 
 def update_sprites(task, on_finish=None):
@@ -254,7 +257,7 @@ def update_sprites(task, on_finish=None):
     successful = True
     sprite_dir = local_path("data", "sprites", "alttpr")
     os.makedirs(sprite_dir, exist_ok=True)
-
+    ctx = get_cert_none_ssl_context()
     def finished():
         task.close_window()
         if on_finish:
@@ -262,7 +265,7 @@ def update_sprites(task, on_finish=None):
 
     try:
         task.update_status("Downloading alttpr sprites list")
-        with urlopen('https://alttpr.com/sprites') as response:
+        with urlopen('https://alttpr.com/sprites', context=ctx) as response:
             sprites_arr = json.loads(response.read().decode("utf-8"))
     except Exception as e:
         resultmessage = "Error getting list of alttpr sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
@@ -289,7 +292,7 @@ def update_sprites(task, on_finish=None):
 
     def dl(sprite_url, filename):
         target = os.path.join(sprite_dir, filename)
-        with urlopen(sprite_url) as response, open(target, 'wb') as out:
+        with urlopen(sprite_url, context=ctx) as response, open(target, 'wb') as out:
             shutil.copyfileobj(response, out)
 
     def rem(sprite):
@@ -400,10 +403,37 @@ class BackgroundTaskProgress(BackgroundTask):
     def update_status(self, text):
         self.queue_event(lambda: self.label_var.set(text))
 
+    def do_events(self):
+        self.parent.update()
+
     # only call this in an event callback
     def close_window(self):
         self.stop()
         self.window.destroy()
+
+
+class BackgroundTaskProgressNullWindow(BackgroundTask):
+    def __init__(self, code_to_run, *args):
+        super().__init__(None, code_to_run, *args)
+
+    def process_queue(self):
+        try:
+            while True:
+                if not self.running:
+                    return
+                event = self.queue.get_nowait()
+                event()
+        except queue.Empty:
+            pass
+
+    def do_events(self):
+        self.process_queue()
+
+    def update_status(self, text):
+        self.queue_event(lambda: logging.info(text))
+
+    def close_window(self):
+        self.stop()
 
 
 def get_rom_frame(parent=None):

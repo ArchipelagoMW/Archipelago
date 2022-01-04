@@ -50,6 +50,14 @@ class Cantoran(Toggle):
     "Cantoran's fight and check are available upon revisiting his room"
     display_name = "Cantoran"
 
+class LoreChecks(Toggle):
+    "Memories and journal entries contain items."
+    display_name = "Lore Checks"
+
+class DamageRando(Toggle):
+    "Each orb has a high chance of having lower base damage and a low chance of having much higher base damage."
+    display_name = "Damage Rando"
+
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Toggle] = {
     "StartWithJewelryBox": StartWithJewelryBox,
@@ -64,6 +72,8 @@ timespinner_options: Dict[str, Toggle] = {
     #"StinkyMaw": StinkyMaw,
     "GyreArchives": GyreArchives,
     "Cantoran": Cantoran,
+    "LoreChecks": LoreChecks,
+    "DamageRando": DamageRando,
     "DeathLink": DeathLink,
 }
 

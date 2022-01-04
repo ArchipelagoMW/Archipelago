@@ -213,6 +213,7 @@ starter_melee_weapons: Tuple[str, ...] = (
 )
 
 starter_spells: Tuple[str, ...] = (
+    'Aura Blast',
     'Colossal Blade',
     'Infernal Flames',
     'Plasma Geyser',

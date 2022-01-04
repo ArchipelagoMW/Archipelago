@@ -334,7 +334,7 @@ class Accessibility(Choice):
     Locations: ensure everything can be reached and acquired.
     Items: ensure all logically relevant items can be acquired.
     Minimal: ensure what is needed to reach your goal can be acquired."""
-
+    displayname = "Accessibility"
     option_locations = 0
     option_items = 1
     option_minimal = 2
@@ -344,6 +344,7 @@ class Accessibility(Choice):
 
 class ProgressionBalancing(DefaultOnToggle):
     """A system that moves progression earlier, to try and prevent the player from getting stuck and bored early."""
+    displayname = "Progression Balancing"
 
 
 common_options = {
@@ -395,6 +396,7 @@ class DeathLink(Toggle):
 
 
 per_game_common_options = {
+    **common_options,  # can be overwritten per-game
     "local_items": LocalItems,
     "non_local_items": NonLocalItems,
     "start_inventory": StartInventory,

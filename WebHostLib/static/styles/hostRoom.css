@@ -18,3 +18,34 @@
     border-radius: 3px;
     width: 500px;
 }
+
+#host-room table {
+    border-spacing: 0px;
+}
+
+#host-room table tbody{
+    background-color: #dce2bd;
+}
+
+#host-room table tbody tr:hover{
+    background-color: #e2eabb;
+}
+
+#host-room table tbody td{
+    padding: 4px 6px;
+    color: black;
+}
+
+#host-room table tbody a{
+    color: #234ae4;
+}
+
+#host-room table thead td{
+    background-color: #b0a77d;
+    color: black;
+    top: 0;
+}
+
+#host-room table tbody td{
+    border: 1px solid #bba967;
+}

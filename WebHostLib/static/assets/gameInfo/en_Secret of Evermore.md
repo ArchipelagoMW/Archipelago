@@ -10,7 +10,7 @@ so the game is always able to be completed. However, because of the item shuffle
 areas before they would in the vanilla game. For example, the Windwalker (flying machine) is accessible as soon as any
 weapon is obtained.
 
-Additional help can be found in the [guide](https://github.com/black-sliver/evermizer/blob/feat-mw/guide.md).
+Additional help can be found in the [guide](https://github.com/black-sliver/evermizer/blob/master/guide.md).
 
 ## What items and locations get shuffled?
 All gourds/chests/pots, boss drops and alchemists are shuffled. Alchemy ingredients, sniff spot items, call bead spells
