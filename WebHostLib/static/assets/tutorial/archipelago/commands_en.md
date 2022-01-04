@@ -48,6 +48,19 @@ client does not allow for sending chat then you may connect to your game slot wi
 Archipelago installation. In order to execute the command you need to merely send a text message with the command, 
 including the exclamation point.
 
+- `!help` Returns a listing of available remote commands.
+- `!license` Returns the software licensing information.
+- `!options` Returns the current server options, including password in plaintext.
+- `!admin <command>` Executes a command as if you typed it into the server console. Remote administration must be enabled.
+- `!players` Returns info about the currently connected and non-connected players.
+- `!status` Returns information about your team. (Currently all players as teams are unimplemented.)
+- `!remaining` Lists the items remaining in your game, but not where they are or who they go to.
+- `!missing` Lists the location checks you are missing from the server's perspective.
+- `!checked` Lists all the location checks you've done from the server's perspective.
+- `!alias <alias>` Sets your alias.
+- `!getitem <item>` Cheats an item, if it is enabled in the server.
+- `!hint_location <location>` Hints for a location specifically. Useful in games where item names may match location names
+  such as Factorio.
 - `!hint <item name>` Tells you at which location in whose game your Item is. Note you need to have checked some
   locations to earn a hint. You can check how many you have by just running `!hint`
 - `!forfeit` If you didn't turn on auto-forfeit or if you allowed forfeiting prior to goal completion. Remember that "
