@@ -50,7 +50,7 @@ class Config:
     GanonInvincible: GanonInvincible = GanonInvincible.BeforeCrystals
 
     def __init__(self, options: Dict[str, str]):
-        self.GameMode = self.ParseOption(options, GameMode.Normal)
+        self.GameMode = self.ParseOption(options, GameMode.Multiworld)
         self.Z3Logic = self.ParseOption(options, Z3Logic.Normal)
         self.SMLogic = self.ParseOption(options, SMLogic.Normal)
         self.SwordLocation = self.ParseOption(options, SwordLocation.Randomized)

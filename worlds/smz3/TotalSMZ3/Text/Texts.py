@@ -45,7 +45,7 @@ class Texts:
         if (silvers.world == myWorld):
             return node["local"]
         player = silvers.world.Player
-        player = player.zfill(7 + len(player / 2))
+        player = player.zfill(7 + len(player) // 2)
         text = node["remote"]
         return text.replace("<player>", player)
 

@@ -21,7 +21,7 @@ from .ips import IPS_Patch
 class SMZ3World(World):
     game: str = "SMZ3"
     topology_present = False
-    data_version = 1
+    data_version = 0
     # options = sm_options
     item_names: Set[str] = frozenset(TotalSMZ3Item.lookup_name_to_id)
     location_names: Set[str]
@@ -31,10 +31,9 @@ class SMZ3World(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
 
-    locations = {}
-
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
+        self.locations = {}
         super().__init__(world, player)
         
     def __new__(cls, world, player):
