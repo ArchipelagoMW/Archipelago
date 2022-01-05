@@ -5,7 +5,7 @@ import itertools
 from collections import Counter, deque
 
 
-from BaseClasses import CollectionState, Location, MultiWorld, Item
+from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item
 from worlds.generic import PlandoItem
 from worlds.AutoWorld import call_all
 
