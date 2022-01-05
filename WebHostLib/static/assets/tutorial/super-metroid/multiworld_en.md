@@ -85,7 +85,8 @@ first time launching, you may be prompted to allow it to communicate through the
 2. Click on the File menu and hover on **Lua Scripting**
 3. Click on **New Lua Script Window...**
 4. In the new window, click **Browse...**
-5. Select the `sniConnector.lua` file in the `Archipelago\SNI\LUA` folder.
+5. Select the `Connector.lua` file in the `Archipelago\SNI\lua` folder.
+    - Use x86 for 32-bit or x64 for 64-bit.
 
 ##### BizHawk
 
@@ -96,7 +97,8 @@ first time launching, you may be prompted to allow it to communicate through the
 2. Load your ROM file if it hasn't already been loaded.
 3. Click on the Tools menu and click on **Lua Console**
 4. Click the button to open a new Lua script.
-5. Select the `sniConnector.lua` file in `Archipelago\SNI\LUA` folder.
+5. Select the `Connector.lua` file in `Archipelago\SNI\lua` folder.
+    - Use x86 for 32-bit or x64 for 64-bit. Please note the most recent versions of BizHawk are 64-bit only.
 
 #### With hardware
 
