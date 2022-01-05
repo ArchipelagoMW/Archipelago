@@ -2,11 +2,8 @@
 
 ## Required Software
 
-- Super Metroid Client
-  from: [Super Metroid Client Releases Page](https://github.com/ArchipelagoMW/SuperMetroidClient/releases)
-- **sniConnector.lua** (located on the client download page)
-- SNI from: [SNI Releases Page](https://github.com/alttpo/sni/releases)
-    - Included in the Super Metroid Client
+- SNI Client
+    - Included in Archipelago download
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI such as:
         - snes9x Multitroid
@@ -20,8 +17,8 @@
 
 ### Windows Setup
 
-1. Download and install the Super Metroid Client from the link above, making sure to install the most recent version.
-   **The file is located in the assets section at the bottom of the version information**.
+1. During the installation of Archipelago, you will have been asked to install the SNI Client.
+   If you did not do this, or you are on an older version, you may run the installer again to install the SNI Client.
 2. During setup, you will be asked to locate your base ROM file. This is your Super Metroid ROM file.
 3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
@@ -88,7 +85,8 @@ first time launching, you may be prompted to allow it to communicate through the
 2. Click on the File menu and hover on **Lua Scripting**
 3. Click on **New Lua Script Window...**
 4. In the new window, click **Browse...**
-5. Select the `sniConnector.lua` file you downloaded above
+5. Select the `Connector.lua` file in the `Archipelago\SNI\lua` folder.
+    - Use x86 for 32-bit or x64 for 64-bit.
 
 ##### BizHawk
 
@@ -99,7 +97,8 @@ first time launching, you may be prompted to allow it to communicate through the
 2. Load your ROM file if it hasn't already been loaded.
 3. Click on the Tools menu and click on **Lua Console**
 4. Click the button to open a new Lua script.
-5. Select the `sniConnector.lua` file you downloaded above
+5. Select the `Connector.lua` file in `Archipelago\SNI\lua` folder.
+    - Use x86 for 32-bit or x64 for 64-bit. Please note the most recent versions of BizHawk are 64-bit only.
 
 #### With hardware
 
