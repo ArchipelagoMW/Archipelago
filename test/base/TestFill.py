@@ -96,6 +96,31 @@ class TestFillRestrictive(unittest.TestCase):
         self.assertEqual(locations[0].item, items[0])
         self.assertEqual(locations[1].item, items[1])
 
+    def test_partial_fill(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(multi_world, 1, 3, 2)
+
+        item0 = player1.prog_items[0]
+        item1 = player1.prog_items[1]
+        loc0 = player1.locations[0]
+        loc1 = player1.locations[1]
+        loc2 = player1.locations[2]
+
+        multi_world.completion_condition[player1.id] = lambda state: state.has(
+            item0.name, player1.id) and state.has(item1.name, player1.id)
+        set_rule(loc1, lambda state: state.has(
+            item0.name, player1.id))
+        #forces a swap
+        set_rule(loc2, lambda state: state.has(
+            item0.name, player1.id))
+        fill_restrictive(multi_world, multi_world.state,
+                         player1.locations, player1.prog_items)
+
+        self.assertEqual(loc0.item, item0)
+        self.assertEqual(loc1.item, item1)
+        self.assertEqual(1, len(player1.locations))
+        self.assertEqual(player1.locations[0], loc2)
+
     def test_minimal_fill(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(multi_world, 1, 2, 2)
