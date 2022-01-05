@@ -1,8 +1,8 @@
 from typing import NamedTuple
 import unittest
 from worlds.AutoWorld import World
-from Fill import FillError, fill_restrictive
-from BaseClasses import MultiWorld, Region, RegionType, Item, Location
+from Fill import FillError, fill_restrictive, distribute_items_restrictive
+from BaseClasses import LocationProgressType, MultiWorld, Region, RegionType, Item, Location
 from worlds.generic.Rules import set_rule
 
 
@@ -19,7 +19,7 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
                         "Menu Region Hint", player_id, multi_world)
         multi_world.regions.append(region)
 
-    multi_world.set_seed()
+    multi_world.set_seed(0)
     multi_world.set_default_common_options()
 
     return multi_world
@@ -30,15 +30,18 @@ class PlayerDefinition(NamedTuple):
     menu: Region
     locations: list[Location]
     prog_items: list[Item]
+    basic_items: list[Item]
 
 
-def generate_player_data(multi_world: MultiWorld, player_id: int, location_count: int, prog_item_count: int) -> PlayerDefinition:
+def generate_player_data(multi_world: MultiWorld, player_id: int, location_count: int, prog_item_count: int = 0, basic_item_count: int = 0) -> PlayerDefinition:
     menu = multi_world.get_region("Menu", player_id)
     locations = generate_locations(location_count, player_id, None, menu)
     prog_items = generate_items(prog_item_count, player_id, True)
+    multi_world.itempool += prog_items
+    basic_items = generate_items(basic_item_count, player_id, False)
+    multi_world.itempool += basic_items
 
-    return PlayerDefinition(player_id, menu, locations, prog_items)
-
+    return PlayerDefinition(player_id, menu, locations, prog_items, basic_items)
 
 def generate_locations(count: int, player_id: int, address: int = None, region: Region = None) -> list[Location]:
     locations = []
@@ -52,14 +55,15 @@ def generate_locations(count: int, player_id: int, address: int = None, region: 
 
 def generate_items(count: int, player_id: int, advancement: bool = False, code: int = None) -> list[Location]:
     items = []
+    type = "prog" if advancement else ""
     for i in range(count):
-        name = "player" + str(player_id) + "_item" + str(i)
+        name = "player" + str(player_id) + "_" + type + "item" + str(i)
         items.append(Item(name, advancement, code, player_id))
     return items
 
 
-class TestBase(unittest.TestCase):
-    def test_basic_fill_restrictive(self):
+class TestFillRestrictive(unittest.TestCase):
+    def test_basic_fill(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(multi_world, 1, 2, 2)
 
@@ -76,7 +80,7 @@ class TestBase(unittest.TestCase):
         self.assertEqual([], player1.locations)
         self.assertEqual([], player1.prog_items)
 
-    def test_ordered_fill_restrictive(self):
+    def test_ordered_fill(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(multi_world, 1, 2, 2)
         items = player1.prog_items
@@ -92,7 +96,7 @@ class TestBase(unittest.TestCase):
         self.assertEqual(locations[0].item, items[0])
         self.assertEqual(locations[1].item, items[1])
 
-    def test_minimal_fill_restrictive(self):
+    def test_minimal_fill(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(multi_world, 1, 2, 2)
 
@@ -112,7 +116,7 @@ class TestBase(unittest.TestCase):
         # Unnecessary unreachable Item
         self.assertEqual(locations[1].item, items[0])
 
-    def test_reversed_fill_restrictive(self):
+    def test_reversed_fill(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(multi_world, 1, 2, 2)
 
@@ -130,7 +134,7 @@ class TestBase(unittest.TestCase):
         self.assertEqual(loc0.item, item1)
         self.assertEqual(loc1.item, item0)
 
-    def test_multi_step_fill_restrictive(self):
+    def test_multi_step_fill(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(multi_world, 1, 4, 4)
 
@@ -154,7 +158,7 @@ class TestBase(unittest.TestCase):
         self.assertEqual(locations[2].item, items[0])
         self.assertEqual(locations[3].item, items[3])
 
-    def test_impossible_fill_restrictive(self):
+    def test_impossible_fill(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(multi_world, 1, 2, 2)
         items = player1.prog_items
@@ -170,7 +174,7 @@ class TestBase(unittest.TestCase):
         self.assertRaises(FillError, fill_restrictive, multi_world, multi_world.state,
                           player1.locations.copy(), player1.prog_items.copy())
 
-    def test_circular_fill_restrictive(self):
+    def test_circular_fill(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(multi_world, 1, 3, 3)
 
@@ -190,7 +194,7 @@ class TestBase(unittest.TestCase):
         self.assertRaises(FillError, fill_restrictive, multi_world, multi_world.state,
                           player1.locations.copy(), player1.prog_items.copy())
 
-    def test_competing_fill_restrictive(self):
+    def test_competing_fill(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(multi_world, 1, 2, 2)
 
@@ -202,11 +206,11 @@ class TestBase(unittest.TestCase):
             item0.name, player1.id) and state.has(item0.name, player1.id) and state.has(item1.name, player1.id)
         set_rule(loc1, lambda state: state.has(item0.name, player1.id)
                  and state.has(item1.name, player1.id))
-                 
+
         self.assertRaises(FillError, fill_restrictive, multi_world, multi_world.state,
                           player1.locations.copy(), player1.prog_items.copy())
 
-    def test_multiplayer_fill_restrictive(self):
+    def test_multiplayer_fill(self):
         multi_world = generate_multi_world(2)
         player1 = generate_player_data(multi_world, 1, 2, 2)
         player2 = generate_player_data(multi_world, 2, 2, 2)
@@ -226,7 +230,7 @@ class TestBase(unittest.TestCase):
         self.assertEqual(player2.locations[0].item, player1.prog_items[0])
         self.assertEqual(player2.locations[1].item, player2.prog_items[0])
 
-    def test_multiplayer_rules_fill_restrictive(self):
+    def test_multiplayer_rules_fill(self):
         multi_world = generate_multi_world(2)
         player1 = generate_player_data(multi_world, 1, 2, 2)
         player2 = generate_player_data(multi_world, 2, 2, 2)
@@ -248,3 +252,87 @@ class TestBase(unittest.TestCase):
         self.assertEqual(player1.locations[1].item, player2.prog_items[1])
         self.assertEqual(player2.locations[0].item, player1.prog_items[0])
         self.assertEqual(player2.locations[1].item, player1.prog_items[1])
+
+
+class TestDistributeItemsRestrictive(unittest.TestCase):
+    def test_basic_distribute(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(
+            multi_world, 1, 4, prog_item_count=2, basic_item_count=2)
+        locations = player1.locations
+        prog_items = player1.prog_items
+        basic_items = player1.basic_items
+
+        distribute_items_restrictive(multi_world)
+
+        self.assertEqual(locations[0].item, prog_items[0])
+        self.assertEqual(locations[1].item, basic_items[1])
+        self.assertEqual(locations[2].item, basic_items[0])
+        self.assertEqual(locations[3].item, prog_items[1])
+
+    def test_excluded_distribute(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(
+            multi_world, 1, 4, prog_item_count=2, basic_item_count=2)
+        locations = player1.locations
+        prog_items = player1.prog_items
+        basic_items = player1.basic_items
+
+        locations[0].progress_type = LocationProgressType.EXCLUDED
+        locations[3].progress_type = LocationProgressType.EXCLUDED
+
+        distribute_items_restrictive(multi_world)
+
+        self.assertEqual(locations[0].item, basic_items[0])
+        self.assertEqual(locations[1].item, prog_items[1])
+        self.assertEqual(locations[2].item, prog_items[0])
+        self.assertEqual(locations[3].item, basic_items[1])
+
+    def test_too_many_excluded_distribute(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(
+            multi_world, 1, 4, prog_item_count=2, basic_item_count=2)
+        locations = player1.locations
+
+        locations[0].progress_type = LocationProgressType.EXCLUDED
+        locations[1].progress_type = LocationProgressType.EXCLUDED
+        locations[2].progress_type = LocationProgressType.EXCLUDED
+
+        self.assertRaises(FillError, distribute_items_restrictive, multi_world)
+
+    def test_priority_distribute(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(
+            multi_world, 1, 4, prog_item_count=2, basic_item_count=2)
+        locations = player1.locations
+        prog_items = player1.prog_items
+        basic_items = player1.basic_items
+
+        locations[1].progress_type = LocationProgressType.PRIORITY
+        locations[2].progress_type = LocationProgressType.PRIORITY
+
+        distribute_items_restrictive(multi_world)
+
+        self.assertEqual(locations[0].item, basic_items[0])
+        self.assertEqual(locations[1].item, prog_items[0])
+        self.assertEqual(locations[2].item, prog_items[1])
+        self.assertEqual(locations[3].item, basic_items[1])
+
+    def test_excess_priority_distribute(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(
+            multi_world, 1, 4, prog_item_count=2, basic_item_count=2)
+        locations = player1.locations
+        prog_items = player1.prog_items
+        basic_items = player1.basic_items
+
+        locations[0].progress_type = LocationProgressType.PRIORITY
+        locations[1].progress_type = LocationProgressType.PRIORITY
+        locations[2].progress_type = LocationProgressType.PRIORITY
+
+        distribute_items_restrictive(multi_world)
+
+        self.assertEqual(locations[0].item, basic_items[0])
+        self.assertEqual(locations[1].item, prog_items[0])
+        self.assertEqual(locations[2].item, prog_items[1])
+        self.assertEqual(locations[3].item, basic_items[1])

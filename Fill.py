@@ -106,8 +106,21 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
 def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
     # If not passed in, then get a shuffled list of locations to fill in
     if not fill_locations:
-        fill_locations = world.get_unfilled_locations()
-        world.random.shuffle(fill_locations)
+        fill_locations = world.get_locations()
+
+    world.random.shuffle(fill_locations)
+
+    prioritizedlocations = []
+    defaultlocations = []
+    backfilllocations = []
+
+    for loc in fill_locations:
+        if loc.progress_type == LocationProgressType.PRIORITY:
+            prioritizedlocations.append(loc)
+        elif loc.progress_type == LocationProgressType.EXCLUDED:
+            backfilllocations.append(loc)
+        else:
+            defaultlocations.append(loc)
 
     # get items to distribute
     world.random.shuffle(world.itempool)
@@ -129,18 +142,35 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
         else:
             restitempool.append(item)
 
-    world.random.shuffle(fill_locations)
-    call_all(world, "fill_hook", progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool, restitempool, fill_locations)
+    call_all(world, "fill_hook", progitempool, nonexcludeditempool,
+             localrestitempool, nonlocalrestitempool, restitempool, fill_locations)
 
-    fill_restrictive(world, world.state, fill_locations, progitempool)
+    locationDeficit = len(progitempool) - len(prioritizedlocations)
+    if locationDeficit > 0:
+        if locationDeficit > len(defaultlocations):
+            raise FillError(
+                f'Not enough locations for progress items. There are {len(progitempool)} progression items with {len(prioritizedlocations)} priority locations and {len(defaultlocations)} default locations')
+        for i in range(0, locationDeficit):
+            prioritizedlocations.append(defaultlocations.pop())
+
+    fill_restrictive(world, world.state, prioritizedlocations, progitempool)
+    if prioritizedlocations:
+        defaultlocations = prioritizedlocations + defaultlocations
+
+    if progitempool:
+        fill_restrictive(world, world.state, defaultlocations, progitempool)
+
+    defaultlocations = defaultlocations + backfilllocations
 
     if nonexcludeditempool:
-        world.random.shuffle(fill_locations)
-        fill_restrictive(world, world.state, fill_locations, nonexcludeditempool)  # needs logical fill to not conflict with local items
+        world.random.shuffle(defaultlocations)
+        # needs logical fill to not conflict with local items
+        fill_restrictive(world, world.state, defaultlocations,
+                         nonexcludeditempool)
 
     if any(localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
         local_locations = {player: [] for player in world.player_ids}
-        for location in fill_locations:
+        for location in defaultlocations:
             local_locations[location.player].append(location)
         for locations in local_locations.values():
             world.random.shuffle(locations)
@@ -154,24 +184,27 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
                     break
                 spot_to_fill = player_local_locations.pop()
                 world.push_item(spot_to_fill, item_to_place, False)
-                fill_locations.remove(spot_to_fill)
+                defaultlocations.remove(spot_to_fill)
 
     for item_to_place in nonlocalrestitempool:
-        for i, location in enumerate(fill_locations):
+        for i, location in enumerate(defaultlocations):
             if location.player != item_to_place.player:
-                world.push_item(fill_locations.pop(i), item_to_place, False)
+                world.push_item(defaultlocations.pop(i), item_to_place, False)
                 break
         else:
-            logging.warning(f"Could not place non_local_item {item_to_place} among {fill_locations}, tossing.")
+            logging.warning(
+                f"Could not place non_local_item {item_to_place} among {defaultlocations}, tossing.")
 
-    world.random.shuffle(fill_locations)
+    world.random.shuffle(defaultlocations)
 
-    restitempool, fill_locations = fast_fill(world, restitempool, fill_locations)
+    restitempool, defaultlocations = fast_fill(
+        world, restitempool, defaultlocations)
     unplaced = progitempool + restitempool
-    unfilled = [location.name for location in fill_locations]
+    unfilled = [location.name for location in defaultlocations]
 
     if unplaced or unfilled:
-        logging.warning(f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
+        logging.warning(
+            f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
 
 
 def fast_fill(world: MultiWorld, item_pool: typing.List, fill_locations: typing.List) -> typing.Tuple[typing.List, typing.List]:
