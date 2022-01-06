@@ -110,17 +110,13 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
 
     world.random.shuffle(fill_locations)
 
-    prioritizedlocations = []
-    defaultlocations = []
-    backfilllocations = []
-
+    locations: dict[LocationProgressType, list[Location]] = {}
     for loc in fill_locations:
-        if loc.progress_type == LocationProgressType.PRIORITY:
-            prioritizedlocations.append(loc)
-        elif loc.progress_type == LocationProgressType.EXCLUDED:
-            backfilllocations.append(loc)
-        else:
-            defaultlocations.append(loc)
+        locations.setdefault(loc.progress_type, []).append(loc)
+    
+    prioritylocations = locations.setdefault(LocationProgressType.PRIORITY, [])
+    defaultlocations = locations.setdefault(LocationProgressType.DEFAULT, [])
+    excludedlocations = locations.setdefault(LocationProgressType.EXCLUDED, [])
 
     # get items to distribute
     world.random.shuffle(world.itempool)
@@ -145,22 +141,22 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
     call_all(world, "fill_hook", progitempool, nonexcludeditempool,
              localrestitempool, nonlocalrestitempool, restitempool, fill_locations)
 
-    locationDeficit = len(progitempool) - len(prioritizedlocations)
+    locationDeficit = len(progitempool) - len(prioritylocations)
     if locationDeficit > 0:
         if locationDeficit > len(defaultlocations):
             raise FillError(
-                f'Not enough locations for progress items. There are {len(progitempool)} progression items with {len(prioritizedlocations)} priority locations and {len(defaultlocations)} default locations')
-        for i in range(0, locationDeficit):
-            prioritizedlocations.append(defaultlocations.pop())
+                f'Not enough locations for advancement items. There are {len(progitempool)} advancement items with {len(prioritylocations)} priority locations and {len(defaultlocations)} default locations')
+        prioritylocations += defaultlocations[:locationDeficit]
+        defaultlocations = defaultlocations[locationDeficit:]
 
-    fill_restrictive(world, world.state, prioritizedlocations, progitempool)
-    if prioritizedlocations:
-        defaultlocations = prioritizedlocations + defaultlocations
+    fill_restrictive(world, world.state, prioritylocations, progitempool)
+    if prioritylocations:
+        defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
         fill_restrictive(world, world.state, defaultlocations, progitempool)
 
-    defaultlocations = defaultlocations + backfilllocations
+    defaultlocations = defaultlocations + excludedlocations
 
     if nonexcludeditempool:
         world.random.shuffle(defaultlocations)

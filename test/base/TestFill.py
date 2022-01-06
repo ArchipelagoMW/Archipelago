@@ -290,10 +290,10 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
         distribute_items_restrictive(multi_world)
 
-        self.assertEqual(locations[0].item, prog_items[0])
-        self.assertEqual(locations[1].item, basic_items[1])
-        self.assertEqual(locations[2].item, basic_items[0])
-        self.assertEqual(locations[3].item, prog_items[1])
+        self.assertEqual(locations[0].item, basic_items[0])
+        self.assertEqual(locations[1].item, prog_items[0])
+        self.assertEqual(locations[2].item, prog_items[1])
+        self.assertEqual(locations[3].item, basic_items[1])
 
     def test_excluded_distribute(self):
         multi_world = generate_multi_world()
@@ -303,15 +303,16 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         prog_items = player1.prog_items
         basic_items = player1.basic_items
 
-        locations[0].progress_type = LocationProgressType.EXCLUDED
-        locations[3].progress_type = LocationProgressType.EXCLUDED
+        locations[1].progress_type = LocationProgressType.EXCLUDED
+        locations[2].progress_type = LocationProgressType.EXCLUDED
 
         distribute_items_restrictive(multi_world)
 
-        self.assertEqual(locations[0].item, basic_items[0])
-        self.assertEqual(locations[1].item, prog_items[1])
-        self.assertEqual(locations[2].item, prog_items[0])
-        self.assertEqual(locations[3].item, basic_items[1])
+        self.assertEqual(locations[0].item, prog_items[1])
+        self.assertEqual(locations[1].item, basic_items[1])
+        self.assertEqual(locations[2].item, basic_items[0])
+        self.assertEqual(locations[3].item, prog_items[0])
+
 
     def test_too_many_excluded_distribute(self):
         multi_world = generate_multi_world()
@@ -333,15 +334,15 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         prog_items = player1.prog_items
         basic_items = player1.basic_items
 
-        locations[1].progress_type = LocationProgressType.PRIORITY
-        locations[2].progress_type = LocationProgressType.PRIORITY
+        locations[0].progress_type = LocationProgressType.PRIORITY
+        locations[3].progress_type = LocationProgressType.PRIORITY
 
         distribute_items_restrictive(multi_world)
 
-        self.assertEqual(locations[0].item, basic_items[0])
-        self.assertEqual(locations[1].item, prog_items[0])
-        self.assertEqual(locations[2].item, prog_items[1])
-        self.assertEqual(locations[3].item, basic_items[1])
+        self.assertEqual(locations[0].item, prog_items[1])
+        self.assertEqual(locations[1].item, basic_items[1])
+        self.assertEqual(locations[2].item, basic_items[0])
+        self.assertEqual(locations[3].item, prog_items[0])
 
     def test_excess_priority_distribute(self):
         multi_world = generate_multi_world()
