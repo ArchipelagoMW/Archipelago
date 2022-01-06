@@ -8,6 +8,16 @@ settings page link: [VVVVVV Player Settings Page](../player-settings).
 ## What does randomization do to this game?
 All 20 Trinkets are now Location Checks and may not actually contain Trinkets, but Items for different games.
 
+Optionally, you may enable DoorCost, which will gate away some areas:
+- Laboratory
+- The Tower
+- Space Station 2 and
+- Warp Zone
+until you've collected some Trinkets.
+Examples:
+- If you set DoorCost at 3, then to enter Laboratory you will need Trinkets 1-3, for The Tower 4-6, etc.
+- If you set DoorCost at 4, then to enter Laboratory you will need Trinkets 1-4, for The Tower 5-8, etc.
+
 ## What is the goal of VVVVVV when randomized?
 Save all crew members, and finish the story.
 
@@ -21,3 +31,6 @@ and who will receive it.
 ## When the player receives an item, what happens?
 When you receive a Trinket, the standard Animation will play. Afterwards a textbox will inform you where
 you received the Trinket from, and which one it is.
+
+NOTE: You can't check your trinkets in the Spaceship. Instead, you can check them in the pause menu under 'Stats'.
+This is especially useful if you have DoorCost enabled.

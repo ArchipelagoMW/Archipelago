@@ -2,12 +2,12 @@ import string
 from .Items import item_table, V6Item
 from .Locations import location_table, V6Location
 from .Options import v6_options
-from ..generic.Rules import set_rule
+from .Rules import set_rules
+from .Regions import create_regions
 from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld
 from ..AutoWorld import World
 
 client_version = 1
-
 
 class V6World(World):
     """ 
@@ -26,22 +26,22 @@ class V6World(World):
     options = v6_options
 
     def create_regions(self):
-        reg = Region("Menu", RegionType.Generic, "Dimension VVVVVV", self.player, self.world)
-        for location_name in location_table:
-            location = V6Location(self.player, location_name, location_table[location_name], reg)
-            reg.locations.append(location)
-        self.world.regions.append(reg)
+        create_regions(self.world,self.player)
+
+    def set_rules(self):
+        set_rules(self.world,self.player)
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
         item = V6Item(name, True, item_id, self.player)
         return item
 
-    def generate_basic(self):      
+    def generate_basic(self):
         self.world.itempool += [self.create_item(name) for name in self.item_names]
 
     def fill_slot_data(self):
         return {
+            "DoorCost": self.world.DoorCost[self.player].value,
             "DeathLink": self.world.DeathLink[self.player].value,
             "DeathLink_Amnesty": self.world.DeathLinkAmnesty[self.player].value
         }

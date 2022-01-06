@@ -24,5 +24,4 @@ item_table = {
     "Trinket 18": 2515017,
     "Trinket 19": 2515018,
     "Trinket 20": 2515019
-    
 }

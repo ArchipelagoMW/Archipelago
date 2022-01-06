@@ -7,7 +7,7 @@ location_table = { # Correspond to 2515000 + index in collect array of game code
     "It's a Secret to Nobody": 2515000,
     "Trench Warfare": 2515001,
     "One Way Room": 2515002,
-    "You just Keep Coming Back": 2515003,
+    "You Just Keep Coming Back": 2515003,
     "Clarion Call": 2515004,
     "Doing things the hard way": 2515005,
     "Prize for the Reckless": 2515006,
