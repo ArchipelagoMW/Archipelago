@@ -24,7 +24,7 @@ certain items to your own world.
 
 ## What does another world's item look like in OoT?
 
-Items belonging to other worlds are represented by an Ocarina of Time.
+Items belonging to other worlds are represented by Zelda's Letter.
 
 ## When the player receives an item, what happens?
 
