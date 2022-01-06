@@ -89,6 +89,11 @@ def start_playing():
     return render_template(f"startPlaying.html")
 
 
+@app.route('/weighted-settings')
+def weighted_settings():
+    return render_template(f"weighted-settings.html")
+
+
 # Player settings pages
 @app.route('/games/<string:game>/player-settings')
 def player_settings(game):

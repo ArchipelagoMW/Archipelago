@@ -9,6 +9,7 @@ Utils.local_path.cached_path = file_path
 from BaseClasses import MultiWorld, CollectionState
 from worlds.alttp.Items import ItemFactory
 
+
 class TestBase(unittest.TestCase):
     world: MultiWorld
     _state_cache = {}

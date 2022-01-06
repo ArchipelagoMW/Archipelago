@@ -312,7 +312,7 @@ def get_hint_area(spot):
 
             spot_queue.extend(list(filter(lambda ent: ent not in already_checked, parent_region.entrances)))
 
-        raise HintAreaNotFound('No hint area could be found for %s [World %d]' % (spot, spot.world.id))
+        raise HintAreaNotFound('No hint area could be found for %s [World %d]' % (spot, spot.player))
     else:
         return spot.name
 
