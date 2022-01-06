@@ -491,7 +491,9 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         for option_key, option in world_type.options.items():
             handle_option(ret, game_weights, option_key, option)
         for option_key, option in Options.per_game_common_options.items():
-            handle_option(ret, game_weights, option_key, option)
+            # skip setting this option if already set from common_options, defaulting to root option
+            if not (option_key in Options.common_options and option_key not in game_weights):
+                handle_option(ret, game_weights, option_key, option)
         if "items" in plando_options:
             ret.plando_items = roll_item_plando(world_type, game_weights)
         if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
