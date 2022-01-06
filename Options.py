@@ -186,6 +186,8 @@ class Choice(Option):
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
+    __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
+
 
 class Range(Option, int):
     range_start = 0
