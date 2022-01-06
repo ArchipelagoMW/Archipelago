@@ -148,7 +148,7 @@ if __name__ == "__main__":
                     print(f"Applying patch {rom}")
                     data, target = create_rom_file(rom)
                     #romfile, adjusted = Utils.get_adjuster_settings(target)
-                    adjuster_settings = Utils.get_adjuster_settings("LttP")
+                    adjuster_settings = Utils.get_adjuster_settings(GAME_ALTTP)
                     adjusted = False
                     if adjuster_settings:
                         import pprint
@@ -182,11 +182,11 @@ if __name__ == "__main__":
                         
                         if adjust_wanted and "never" in adjust_wanted:
                             adjuster_settings.auto_apply = 'never'
-                            Utils.persistent_store("adjuster", "last_settings_LttP", adjuster_settings)
+                            Utils.persistent_store("adjuster", GAME_ALTTP, adjuster_settings)
 
                         elif adjust_wanted and "always" in adjust_wanted:
                             adjuster_settings.auto_apply = 'always'
-                            Utils.persistent_store("adjuster", "last_settings_LttP", adjuster_settings)
+                            Utils.persistent_store("adjuster", GAME_ALTTP, adjuster_settings)
 
                         if adjust_wanted and adjust_wanted.startswith("y"):
                             if hasattr(adjuster_settings, "sprite_pool"):

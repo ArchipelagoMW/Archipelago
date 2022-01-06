@@ -21,8 +21,8 @@ from urllib.parse import urlparse
 from urllib.request import urlopen
 
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
-from Utils import output_path, local_path, open_file, get_cert_none_ssl_context, persistent_store, persistent_load, tkinter_center_window
-
+from Utils import output_path, local_path, open_file, get_cert_none_ssl_context, persistent_store, get_adjuster_settings, tkinter_center_window
+from Patch import GAME_ALTTP
 
 class AdjusterWorld(object):
     def __init__(self, sprite_pool):
@@ -122,7 +122,7 @@ def main():
         args, path = adjust(args=args)
         if isinstance(args.sprite, Sprite):
             args.sprite = args.sprite.name
-        persistent_store("adjuster", "last_settings_LttP", args)
+        persistent_store("adjuster", GAME_ALTTP, args)
 
 
 def adjust(args):
@@ -228,7 +228,7 @@ def adjustGUI():
             messagebox.showinfo(title="Success", message=f"Rom patched successfully to {path}")
             if isinstance(guiargs.sprite, Sprite):
                 guiargs.sprite = guiargs.sprite.name
-            persistent_store("adjuster", "last_settings_LttP", guiargs)
+            persistent_store("adjuster", GAME_ALTTP, guiargs)
 
     def saveGUISettings():
         guiargs = Namespace()
@@ -249,7 +249,7 @@ def adjustGUI():
         guiargs.baserom = romVar.get()
         guiargs.sprite = rom_vars.sprite
         guiargs.sprite_pool = rom_vars.sprite_pool
-        persistent_store("adjuster", "last_settings_LttP", guiargs)
+        persistent_store("adjuster", GAME_ALTTP, guiargs)
         messagebox.showinfo(title="Success", message="Settings saved to persistent storage")
 
     adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
@@ -465,7 +465,7 @@ class BackgroundTaskProgressNullWindow(BackgroundTask):
 
 
 def get_rom_frame(parent=None):
-    adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_LttP", {})
+    adjuster_settings = get_adjuster_settings(GAME_ALTTP)
     if not adjuster_settings:
         adjuster_settings = Namespace()
         adjuster_settings.baserom = "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
@@ -498,7 +498,7 @@ def get_rom_frame(parent=None):
 
 
 def get_rom_options_frame(parent=None):
-    adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_LttP", {})
+    adjuster_settings = get_adjuster_settings(GAME_ALTTP)
     if not adjuster_settings:
         adjuster_settings = Namespace()
         adjuster_settings.auto_apply = 'ask'

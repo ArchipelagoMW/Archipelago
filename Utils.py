@@ -303,7 +303,7 @@ def persistent_load() -> typing.Dict[dict]:
 
 
 def get_adjuster_settings(gameName: str):
-    adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_"+gameName, {})
+    adjuster_settings = persistent_load().get("adjuster", {}).get(gameName, {})
     return adjuster_settings
 
 
