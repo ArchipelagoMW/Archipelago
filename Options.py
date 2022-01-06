@@ -125,6 +125,8 @@ class Toggle(Option):
     def get_option_name(cls, value):
         return ["No", "Yes"][int(value)]
 
+    __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
+
 
 class DefaultOnToggle(Toggle):
     default = 1
