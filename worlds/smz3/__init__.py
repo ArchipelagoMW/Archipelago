@@ -12,7 +12,7 @@ from worlds.generic.Rules import add_rule, set_rule
 import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
 from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
 from worlds.smz3.TotalSMZ3.Config import Config, MorphLocation, SwordLocation
-from worlds.smz3.TotalSMZ3.Location import Location as TotalSMZ3Location
+from worlds.smz3.TotalSMZ3.Location import locations_start_id, Location as TotalSMZ3Location
 from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch
 from ..AutoWorld import World
 from .Rom import get_base_rom_bytes
@@ -26,7 +26,7 @@ class SMZ3World(World):
     item_names: Set[str] = frozenset(TotalSMZ3Item.lookup_name_to_id)
     location_names: Set[str]
     item_name_to_id = TotalSMZ3Item.lookup_name_to_id
-    location_name_to_id: Dict[str, int] = {key : 85000 + value.Id for key, value in TotalSMZ3World(Config({}), "", 0, "").locationLookup.items()}
+    location_name_to_id: Dict[str, int] = {key : locations_start_id + value.Id for key, value in TotalSMZ3World(Config({}), "", 0, "").locationLookup.items()}
 
     remote_items: bool = False
     remote_start_inventory: bool = False
@@ -60,7 +60,7 @@ class SMZ3World(World):
         return super().__new__(cls)
 
     def generate_early(self):
-        self.smz3World = TotalSMZ3World(Config({}), self.world.get_player_name(self.player), 1, "hash")
+        self.smz3World = TotalSMZ3World(Config({}), self.world.get_player_name(self.player), self.player, self.world.seed_name)
         self.smz3DungeonItems = []
         SMZ3World.location_names = frozenset(self.smz3World.locationLookup.keys())
 
@@ -127,7 +127,7 @@ class SMZ3World(World):
             basepatch = IPS_Patch.load("worlds/smz3/zsm.ips")
             base_combined_rom = basepatch.apply(base_combined_rom)
 
-            patcher = TotalSMZ3Patch(self.smz3World, [world.smz3World for key, world in self.world.worlds.items() if isinstance(world, SMZ3World)], "test", 10, self.world.random)
+            patcher = TotalSMZ3Patch(self.smz3World, [world.smz3World for key, world in self.world.worlds.items() if isinstance(world, SMZ3World)], self.world.seed_name, self.world.seed, self.world.random)
             patches = patcher.Create(self.smz3World.Config)
             for addr, bytes in patches.items():
                 offset = 0
@@ -135,6 +135,7 @@ class SMZ3World(World):
                     base_combined_rom[addr + offset] = byte
                     offset += 1
             filename = f"SMZ3_{self.world.seed}_{self.world.get_player_name(self.player)}.sfc"
+            filename = os.path.join(output_directory, filename)
             with open(filename, "wb") as binary_file:
                 binary_file.write(base_combined_rom)
             Patch.create_patch_file(filename, player=self.player, player_name=self.world.player_name[self.player], game=Patch.GAME_SMZ3)
@@ -254,7 +255,7 @@ class SMZ3World(World):
 
     def create_locations(self, player: int):
         for name, id in SMZ3World.location_name_to_id.items():
-            newLoc = SMZ3Location(player, name, self.smz3World.locationLookup[name].Address)
+            newLoc = SMZ3Location(player, name, id)
             self.locations[name] = newLoc
             self.smz3World.locationLookup[name].APLocation = newLoc
 

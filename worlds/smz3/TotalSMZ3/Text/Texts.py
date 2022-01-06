@@ -71,7 +71,7 @@ class Texts:
         else: name = nameMap[item.Type]
 
         items = Texts.scripts["Items"]
-        return items[name] or items["default"]
+        return items.get(name, None) or items["default"]
 
     @staticmethod
     def Blind(rnd: random): return Texts.RandomLine(rnd, Texts.blind)

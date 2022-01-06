@@ -103,3 +103,6 @@ class Location:
         itemWorldProgression = Progression([i for i in items if i.World == item.World].append(item))
         worldProgression = {world.Id : Progression([i for i in items if i.World == world]) for world in set([l.Region.World for l in locations])}
         return [l for l in locations if l.CanFill(item, worldProgression[l.Region.World.Id] and next(ll for ll in item.World.Locations if ll.Id == l.Id).Available(itemWorldProgression))]
+
+# Start of AP integration
+locations_start_id = 85000

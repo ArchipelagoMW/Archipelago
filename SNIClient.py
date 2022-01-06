@@ -1089,12 +1089,14 @@ async def game_watcher(ctx: Context):
                 message = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x700 + itemAdress, 8)
                 # worldId = message[0] | (message[1] << 8)  # unused
                 # itemId = message[2] | (message[3] << 8)  # unused
-                itemIndex = (message[4] | (message[5] << 8)) >> 3
+                isZ3Item = ((message[5] & 0x80) != 0)
+                maskedPart = (message[5] & 0x7F) if isZ3Item else message[5]
+                itemIndex = ((message[4] | (maskedPart << 8)) >> 3) + (256 if isZ3Item else 0)
 
                 recv_index += 1
                 snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x680, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
 
-                from worlds.sm.Locations import locations_start_id
+                from worlds.smz3.TotalSMZ3.Location import locations_start_id
                 location_id = locations_start_id + itemIndex
 
                 ctx.locations_checked.add(location_id)
@@ -1109,7 +1111,7 @@ async def game_watcher(ctx: Context):
             # recv_itemOutPtr = data[0] | (data[1] << 8) # unused
             itemOutPtr = data[2] | (data[3] << 8)
 
-            from worlds.sm.Items import items_start_id
+            from worlds.smz3.TotalSMZ3.Item import items_start_id
             if itemOutPtr < len(ctx.items_received):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
