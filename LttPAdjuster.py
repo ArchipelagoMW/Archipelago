@@ -16,11 +16,12 @@ from concurrent.futures import as_completed, ThreadPoolExecutor
 from glob import glob
 from tkinter import Tk, Frame, Label, StringVar, Entry, filedialog, messagebox, Button, Radiobutton, LEFT, X, TOP, LabelFrame, \
     IntVar, Checkbutton, E, W, OptionMenu, Toplevel, BOTTOM, RIGHT, font as font, PhotoImage
+from tkinter.constants import DISABLED, NORMAL
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
-from Utils import output_path, local_path, open_file, get_cert_none_ssl_context, persistent_store, persistent_load
+from Utils import output_path, local_path, open_file, get_cert_none_ssl_context, persistent_store, persistent_load, tkinter_center_window
 
 
 class AdjusterWorld(object):
@@ -247,8 +248,7 @@ def adjustGUI():
         guiargs.rom = romVar2.get()
         guiargs.baserom = romVar.get()
         guiargs.sprite = rom_vars.sprite
-        if rom_vars.sprite_pool:
-            guiargs.world = AdjusterWorld(rom_vars.sprite_pool)
+        guiargs.sprite_pool = rom_vars.sprite_pool
         persistent_store("adjuster", "last_settings_LttP", guiargs)
         messagebox.showinfo(title="Success", message="Settings saved to persistent storage")
 
@@ -261,6 +261,7 @@ def adjustGUI():
 
     bottomFrame2.pack(side=TOP, pady=(5,5))
 
+    tkinter_center_window(adjustWindow)
     adjustWindow.mainloop()
 
 
@@ -757,7 +758,7 @@ class SpriteSelector():
 
         button = Button(frame, text="Update alttpr sprites", command=self.update_alttpr_sprites)
         button.pack(side=RIGHT, padx=(5, 0))
-
+        
         button = Button(frame, text="Do not adjust sprite",command=self.use_default_sprite)
         button.pack(side=LEFT,padx=(0,5))
 
@@ -777,32 +778,36 @@ class SpriteSelector():
         self.randomOnItemVar = IntVar()
         self.randomOnBonkVar = IntVar()
         self.randomOnRandomVar = IntVar()
+        self.randomOnAllVar = IntVar()
 
         if self.randomOnEvent:
-            button = Checkbutton(frame, text="Hit", command=self.update_random_button, variable=self.randomOnHitVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonHit = Checkbutton(frame, text="Hit", command=self.update_random_button, variable=self.randomOnHitVar)
+            self.buttonHit.pack(side=LEFT, padx=(0, 5))
 
-            button = Checkbutton(frame, text="Enter", command=self.update_random_button, variable=self.randomOnEnterVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonEnter = Checkbutton(frame, text="Enter", command=self.update_random_button, variable=self.randomOnEnterVar)
+            self.buttonEnter.pack(side=LEFT, padx=(0, 5))
 
-            button = Checkbutton(frame, text="Exit", command=self.update_random_button, variable=self.randomOnExitVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonExit = Checkbutton(frame, text="Exit", command=self.update_random_button, variable=self.randomOnExitVar)
+            self.buttonExit.pack(side=LEFT, padx=(0, 5))
 
-            button = Checkbutton(frame, text="Slash", command=self.update_random_button, variable=self.randomOnSlashVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonSlash = Checkbutton(frame, text="Slash", command=self.update_random_button, variable=self.randomOnSlashVar)
+            self.buttonSlash.pack(side=LEFT, padx=(0, 5))
 
-            button = Checkbutton(frame, text="Item", command=self.update_random_button, variable=self.randomOnItemVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonItem = Checkbutton(frame, text="Item", command=self.update_random_button, variable=self.randomOnItemVar)
+            self.buttonItem.pack(side=LEFT, padx=(0, 5))
 
-            button = Checkbutton(frame, text="Bonk", command=self.update_random_button, variable=self.randomOnBonkVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonBonk = Checkbutton(frame, text="Bonk", command=self.update_random_button, variable=self.randomOnBonkVar)
+            self.buttonBonk.pack(side=LEFT, padx=(0, 5))
 
-            button = Checkbutton(frame, text="Random", command=self.update_random_button,
-                                 variable=self.randomOnRandomVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonRandom = Checkbutton(frame, text="Random", command=self.update_random_button, variable=self.randomOnRandomVar)
+            self.buttonRandom.pack(side=LEFT, padx=(0, 5))
+
+            self.buttonAll = Checkbutton(frame, text="All", command=self.update_random_button, variable=self.randomOnAllVar)
+            self.buttonAll.pack(side=LEFT, padx=(0, 5))
 
         set_icon(self.window)
         self.window.focus()
+        tkinter_center_window(self.window)
 
     def remove_from_sprite_pool(self, button, spritename):
         self.callback(("remove", spritename))
@@ -942,9 +947,31 @@ class SpriteSelector():
             self.add_to_sprite_pool("link")
 
     def update_random_button(self):
-        if self.randomOnRandomVar.get():
+        if self.randomOnAllVar.get():
+            randomon = "all"
+            self.buttonHit.config(state=DISABLED)
+            self.buttonEnter.config(state=DISABLED)
+            self.buttonExit.config(state=DISABLED)
+            self.buttonSlash.config(state=DISABLED)
+            self.buttonItem.config(state=DISABLED)
+            self.buttonBonk.config(state=DISABLED)
+            self.buttonRandom.config(state=DISABLED)
+        elif self.randomOnRandomVar.get():
             randomon = "random"
+            self.buttonHit.config(state=DISABLED)
+            self.buttonEnter.config(state=DISABLED)
+            self.buttonExit.config(state=DISABLED)
+            self.buttonSlash.config(state=DISABLED)
+            self.buttonItem.config(state=DISABLED)
+            self.buttonBonk.config(state=DISABLED)
         else:
+            self.buttonHit.config(state=NORMAL)
+            self.buttonEnter.config(state=NORMAL)
+            self.buttonExit.config(state=NORMAL)
+            self.buttonSlash.config(state=NORMAL)
+            self.buttonItem.config(state=NORMAL)
+            self.buttonBonk.config(state=NORMAL)
+            self.buttonRandom.config(state=NORMAL)
             randomon = "-hit" if self.randomOnHitVar.get() else ""
             randomon += "-enter" if self.randomOnEnterVar.get() else ""
             randomon += "-exit" if self.randomOnExitVar.get() else ""
