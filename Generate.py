@@ -148,7 +148,7 @@ def main(args=None, callback=ERmain):
                         if category_name is None:
                             weights_cache[path][key] = option
                         elif category_name not in weights_cache[path]:
-                            raise Exception(f"Meta: Category {category_name} is not present in {path}.")
+                            logging.warning(f"Meta: Category {category_name} is not present in {path}.")
                         else:
                             weights_cache[path][category_name][key] = option
 
