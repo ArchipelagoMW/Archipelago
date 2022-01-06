@@ -100,7 +100,7 @@ def uploads():
             if file.filename == '':
                 flash('No selected file')
             elif file and allowed_file(file.filename):
-                if zipfile.is_zipfile(file.filename):
+                if zipfile.is_zipfile(file):
                     with zipfile.ZipFile(file, 'r') as zfile:
                         res = upload_zip_to_db(zfile)
                         if type(res) == str:

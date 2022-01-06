@@ -1,4 +1,4 @@
-from typing import NamedTuple
+from typing import NamedTuple, List
 import unittest
 from worlds.AutoWorld import World
 from Fill import FillError, fill_restrictive, distribute_items_restrictive
@@ -28,9 +28,9 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
 class PlayerDefinition(NamedTuple):
     id: int
     menu: Region
-    locations: list[Location]
-    prog_items: list[Item]
-    basic_items: list[Item]
+    locations: List[Location]
+    prog_items: List[Item]
+    basic_items: List[Item]
 
 
 def generate_player_data(multi_world: MultiWorld, player_id: int, location_count: int, prog_item_count: int = 0, basic_item_count: int = 0) -> PlayerDefinition:
@@ -43,7 +43,7 @@ def generate_player_data(multi_world: MultiWorld, player_id: int, location_count
 
     return PlayerDefinition(player_id, menu, locations, prog_items, basic_items)
 
-def generate_locations(count: int, player_id: int, address: int = None, region: Region = None) -> list[Location]:
+def generate_locations(count: int, player_id: int, address: int = None, region: Region = None) -> List[Location]:
     locations = []
     for i in range(count):
         name = "player" + str(player_id) + "_location" + str(i)
@@ -53,7 +53,7 @@ def generate_locations(count: int, player_id: int, address: int = None, region: 
     return locations
 
 
-def generate_items(count: int, player_id: int, advancement: bool = False, code: int = None) -> list[Location]:
+def generate_items(count: int, player_id: int, advancement: bool = False, code: int = None) -> List[Item]:
     items = []
     type = "prog" if advancement else ""
     for i in range(count):
