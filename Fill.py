@@ -110,13 +110,12 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
 
     world.random.shuffle(fill_locations)
 
-    locations: dict[LocationProgressType, list[Location]] = {}
-    for type in LocationProgressType:
-        locations[type] = []
+    locations: dict[LocationProgressType, list[Location]] = {
+        type: [] for type in LocationProgressType}
 
     for loc in fill_locations:
         locations[loc.progress_type].append(loc)
-    
+
     prioritylocations = locations[LocationProgressType.PRIORITY]
     defaultlocations = locations[LocationProgressType.DEFAULT]
     excludedlocations = locations[LocationProgressType.EXCLUDED]
@@ -159,7 +158,6 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
     if progitempool:
         fill_restrictive(world, world.state, defaultlocations, progitempool)
 
-
     if nonexcludeditempool:
         world.random.shuffle(defaultlocations)
         # needs logical fill to not conflict with local items
@@ -176,8 +174,8 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
         local_locations = {player: [] for player in world.player_ids}
         for location in defaultlocations:
             local_locations[location.player].append(location)
-        for locations in local_locations.values():
-            world.random.shuffle(locations)
+        for player_locations in local_locations.values():
+            world.random.shuffle(player_locations)
 
         for player, items in localrestitempool.items():  # items already shuffled
             player_local_locations = local_locations[player]
