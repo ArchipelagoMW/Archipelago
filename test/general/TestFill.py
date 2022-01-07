@@ -393,17 +393,17 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         self.assertEqual(player1.locations[2].item, player3.prog_items[1])
         self.assertEqual(player1.locations[3].item, player2.prog_items[0])
 
-        self.assertEqual(player2.locations[0].item, player2.basic_items[0])
-        self.assertEqual(player2.locations[1].item, player1.basic_items[1])
-        self.assertEqual(player2.locations[2].item, player1.basic_items[0])
-        self.assertEqual(player2.locations[3].item, player3.basic_items[1])
+        self.assertEqual(player2.locations[0].item, player1.basic_items[0])
+        self.assertEqual(player2.locations[1].item, player2.basic_items[1])
+        self.assertEqual(player2.locations[2].item, player3.basic_items[1])
+        self.assertEqual(player2.locations[3].item, player2.basic_items[0])
 
-        self.assertEqual(player3.locations[0].item, player2.basic_items[2])
+        self.assertEqual(player3.locations[0].item, player1.basic_items[1])
         self.assertEqual(player3.locations[1].item, player3.prog_items[3])
         self.assertEqual(player3.locations[2].item, player1.prog_items[0])
-        self.assertEqual(player3.locations[3].item, player2.basic_items[1])
+        self.assertEqual(player3.locations[3].item, player3.basic_items[0])
         self.assertEqual(player3.locations[4].item, player3.prog_items[0])
-        self.assertEqual(player3.locations[5].item, player3.basic_items[0])
+        self.assertEqual(player3.locations[5].item, player2.basic_items[2])
 
     def test_multiple_world_priority_distribute(self):
         multi_world = generate_multi_world(3)
@@ -426,19 +426,19 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
         distribute_items_restrictive(multi_world)
 
-        self.assertEqual(player1.locations[0].item, player1.basic_items[1])
-        self.assertEqual(player1.locations[1].item, player3.basic_items[0])
+        self.assertEqual(player1.locations[0].item, player2.basic_items[1])
+        self.assertEqual(player1.locations[1].item, player2.basic_items[2])
         self.assertEqual(player1.locations[2].item, player3.prog_items[1])
         self.assertEqual(player1.locations[3].item, player1.prog_items[1])
 
-        self.assertEqual(player2.locations[0].item, player2.basic_items[0])
+        self.assertEqual(player2.locations[0].item, player1.basic_items[0])
         self.assertEqual(player2.locations[1].item, player1.prog_items[0])
-        self.assertEqual(player2.locations[2].item, player3.basic_items[1])
-        self.assertEqual(player2.locations[3].item, player2.basic_items[2])
+        self.assertEqual(player2.locations[2].item, player2.basic_items[0])
+        self.assertEqual(player2.locations[3].item, player1.basic_items[1])
 
         self.assertEqual(player3.locations[0].item, player3.prog_items[3])
         self.assertEqual(player3.locations[1].item, player3.prog_items[0])
         self.assertEqual(player3.locations[2].item, player2.prog_items[0])
         self.assertEqual(player3.locations[3].item, player3.prog_items[2])
-        self.assertEqual(player3.locations[4].item, player2.basic_items[1])
-        self.assertEqual(player3.locations[5].item, player1.basic_items[0])
+        self.assertEqual(player3.locations[4].item, player3.basic_items[0])
+        self.assertEqual(player3.locations[5].item, player3.basic_items[1])
