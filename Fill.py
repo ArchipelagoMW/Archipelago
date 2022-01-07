@@ -111,12 +111,15 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
     world.random.shuffle(fill_locations)
 
     locations: dict[LocationProgressType, list[Location]] = {}
+    for type in LocationProgressType:
+        locations[type] = []
+
     for loc in fill_locations:
-        locations.setdefault(loc.progress_type, []).append(loc)
+        locations[loc.progress_type].append(loc)
     
-    prioritylocations = locations.setdefault(LocationProgressType.PRIORITY, [])
-    defaultlocations = locations.setdefault(LocationProgressType.DEFAULT, [])
-    excludedlocations = locations.setdefault(LocationProgressType.EXCLUDED, [])
+    prioritylocations = locations[LocationProgressType.PRIORITY]
+    defaultlocations = locations[LocationProgressType.DEFAULT]
+    excludedlocations = locations[LocationProgressType.EXCLUDED]
 
     # get items to distribute
     world.random.shuffle(world.itempool)
