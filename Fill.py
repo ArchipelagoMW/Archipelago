@@ -159,13 +159,17 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
     if progitempool:
         fill_restrictive(world, world.state, defaultlocations, progitempool)
 
-    defaultlocations = defaultlocations + excludedlocations
 
     if nonexcludeditempool:
         world.random.shuffle(defaultlocations)
         # needs logical fill to not conflict with local items
         fill_restrictive(world, world.state, defaultlocations,
                          nonexcludeditempool)
+        if(len(nonexcludeditempool) > 0):
+            raise FillError(
+                f'Not enough locations for non-excluded items. There are {len(nonexcludeditempool)} more items than locations')
+
+    defaultlocations = defaultlocations + excludedlocations
 
     if any(localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
         local_locations = {player: [] for player in world.player_ids}
