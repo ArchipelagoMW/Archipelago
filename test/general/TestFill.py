@@ -314,6 +314,20 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         self.assertEqual(locations[2].item, basic_items[0])
         self.assertEqual(locations[3].item, prog_items[0])
 
+    def test_non_excluded_item_distribute(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(
+            multi_world, 1, 4, prog_item_count=2, basic_item_count=2)
+        locations = player1.locations
+        basic_items = player1.basic_items
+
+        locations[1].progress_type = LocationProgressType.EXCLUDED
+        basic_items[1].never_exclude = True
+
+        distribute_items_restrictive(multi_world)
+
+        self.assertEqual(locations[1].item, basic_items[0])
+
     def test_too_many_excluded_distribute(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(
