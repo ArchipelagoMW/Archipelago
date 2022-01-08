@@ -51,6 +51,7 @@ class bigkey_shuffle(DungeonItem):
 
 class smallkey_shuffle(DungeonItem):
     """Small Key Placement"""
+    option_start_with_plus = 7
     option_universal = 5
     item_name_group = "Small Keys"
     displayname = "Small Key Shuffle"
@@ -58,12 +59,14 @@ class smallkey_shuffle(DungeonItem):
 
 class compass_shuffle(DungeonItem):
     """Compass Placement"""
+    option_remove = 5
     item_name_group = "Compasses"
     displayname = "Compass Shuffle"
 
 
 class map_shuffle(DungeonItem):
     """Map Placement"""
+    option_remove = 5
     item_name_group = "Maps"
     displayname = "Map Shuffle"
 
