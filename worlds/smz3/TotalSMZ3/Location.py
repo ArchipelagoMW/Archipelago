@@ -34,7 +34,7 @@ class Location:
     weight: int
 
     def ItemIs(self, type, world: World): 
-        item = self.APLocation.item.item if self.APLocation.item is not None else None
+        item = self.APLocation.item.item if self.APLocation.item is not None and self.APLocation.item.game == "SMZ3" else None
         return item.Is(type, world) if item != None else False
     def ItemIsNot(self, type, world: World): return not self.ItemIs(type, world)
 

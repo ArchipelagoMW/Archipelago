@@ -40,11 +40,16 @@ class Texts:
         return text.replace("<region>", silvers.Area)
 
     @staticmethod
-    def GanonThirdPhaseMulti(silvers: Region, myWorld):
+    def GanonThirdPhaseMulti(silvers: Region, myWorld: int, silversWorld: int = None, silversPlayer: str = None):
         node = Texts.scripts["GanonSilversReveal"]["multi"]
-        if (silvers.world == myWorld):
-            return node["local"]
-        player = silvers.world.Player
+        if silvers is None:
+            if (silversWorld == myWorld.Id):
+                return node["local"]
+            player = silversPlayer
+        else:
+            if (silvers.world == myWorld):
+                return node["local"]
+            player = silvers.world.Player
         player = player.zfill(7 + len(player) // 2)
         text = node["remote"]
         return text.replace("<player>", player)

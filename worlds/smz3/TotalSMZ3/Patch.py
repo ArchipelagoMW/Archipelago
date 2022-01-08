@@ -82,13 +82,17 @@ class Patch:
     rnd: random.Random
     patches: Sequence[Any]
     stringTable: StringTable
+    silversWorldID: int
 
-    def __init__(self, myWorld: World, allWorlds: List[World], seedGuid: str, seed: int, rnd: random.Random):
+    def __init__(self, myWorld: World, allWorlds: List[World], seedGuid: str, seed: int, rnd: random.Random, playerNames: List[str], silversWorldID: int):
         self.myWorld = myWorld
         self.allWorlds = allWorlds
         self.seedGuid = seedGuid
         self.seed = seed
         self.rnd = rnd
+        self.playerNames = playerNames
+        self.playerIDToNames = {id:name for name, id in playerNames.items()}
+        self.silversWorldID = silversWorldID
 
     def Create(self, config: Config):
         self.stringTable = StringTable()
@@ -103,7 +107,9 @@ class Patch:
 
         self.WritePrizeShuffle()
 
-        self.WriteRemoveEquipmentFromUncle(self.myWorld.GetLocation("Link's Uncle").APLocation.item.item)
+        self.WriteRemoveEquipmentFromUncle( self.myWorld.GetLocation("Link's Uncle").APLocation.item.item if 
+                                            self.myWorld.GetLocation("Link's Uncle").APLocation.item.game == "SMZ3" else
+                                            Item(ItemType.Hammer))
 
         self.WriteGanonInvicible(config.GanonInvincible)
         self.WriteRngBlock()
@@ -276,7 +282,7 @@ class Patch:
             if (location.Type == LocationType.HeraStandingKey):
                 self.patches.append((Snes(0x9E3BB), [0xE4] if location.APLocation.item.item.Type == ItemType.KeyTH else [0xEB]))
             elif (location.Type in [LocationType.Pedestal, LocationType.Ether, LocationType.Bombos]):
-                text = Texts.ItemTextbox(location.APLocation.item.item)
+                text = Texts.ItemTextbox(location.APLocation.item.item if location.APLocation.item.game == "SMZ3" else Item(ItemType.Hammer))
                 dialog = Dialog.Simple(text)
                 if (location.Type == LocationType.Pedestal):
                     self.stringTable.SetPedestalText(text)
@@ -295,25 +301,28 @@ class Patch:
                 self.patches.append((Snes(location.Address), [self.GetZ3ItemId(location)]))
 
     def GetZ3ItemId(self, location: Location):
-        item = location.APLocation.item.item
-        itemDungeon = None
-        if item.IsKey():
-            itemDungeon = ItemType.Key if (not item.World.Config.Keysanity or item.Type != ItemType.KeyHC) else ItemType.KeyHC
-        elif item.IsBigKey(): 
-            itemDungeon = ItemType.BigKey
-        elif item.IsMap():
-            itemDungeon = ItemType.Map if (not item.World.Config.Keysanity or item.Type != ItemType.MapHC) else ItemType.MapHC
-        elif item.IsCompass():
-            itemDungeon = ItemType.Compass
+        if (location.APLocation.item.game == "SMZ3"):
+            item = location.APLocation.item.item
+            itemDungeon = None
+            if item.IsKey():
+                itemDungeon = ItemType.Key if (not item.World.Config.Keysanity or item.Type != ItemType.KeyHC) else ItemType.KeyHC
+            elif item.IsBigKey(): 
+                itemDungeon = ItemType.BigKey
+            elif item.IsMap():
+                itemDungeon = ItemType.Map if (not item.World.Config.Keysanity or item.Type != ItemType.MapHC) else ItemType.MapHC
+            elif item.IsCompass():
+                itemDungeon = ItemType.Compass
 
-        value = item.Type if location.Type == LocationType.NotInDungeon or \
-            not (item.IsDungeonItem() and location.Region.IsRegionItem(item) and item.World == self.myWorld) else itemDungeon
+            value = item.Type if location.Type == LocationType.NotInDungeon or \
+                not (item.IsDungeonItem() and location.Region.IsRegionItem(item) and item.World == self.myWorld) else itemDungeon
             
-        return value.value
+            return value.value
+        else:
+            return ItemType.Hammer.value
 
     def ItemTablePatch(self, location: Location, itemId: int):
-        itemtype = 0 if location.APLocation.item.item.World == location.Region.world else 1
-        owner = location.APLocation.item.item.World.Id
+        itemtype = 0 if location.APLocation.item.player == location.Region.world.Id else 1
+        owner = location.APLocation.item.player
         return (0x386000 + (location.Id * 8), getWordArray(itemtype) + getWordArray(itemId) + getWordArray(owner) + getWordArray(0))
 
     def WriteDungeonMusic(self, keysanity: bool):
@@ -536,19 +545,22 @@ class Patch:
 
         #// Todo: Verify these two are correct if ganon invincible patch is ever added
         #// ganon_fall_in_alt in v30
-        ganonFirstPhaseInvincible = "You think you\nare ready to\nface me?\n\nI will not die\n\nunless you\ncomplete your\ngoals. Dingus!";
+        ganonFirstPhaseInvincible = "You think you\nare ready to\nface me?\n\nI will not die\n\nunless you\ncomplete your\ngoals. Dingus!"
         self.patches.append((Snes(0x309100), Dialog.Simple(ganonFirstPhaseInvincible)))
 
         #// ganon_phase_3_alt in v30
-        ganonThirdPhaseInvincible = "Got wax in\nyour ears?\nI cannot die!";
+        ganonThirdPhaseInvincible = "Got wax in\nyour ears?\nI cannot die!"
         self.patches.append((Snes(0x309200), Dialog.Simple(ganonThirdPhaseInvincible)))
         #// ---
 
-        silversLocation = [loc for world in self.allWorlds for loc in world.Locations if loc.ItemIs(ItemType.SilverArrows, self.myWorld)][0]
-        silvers = Texts.GanonThirdPhaseMulti(silversLocation.Region, self.myWorld) if config.GameMode == GameMode.Multiworld else \
-                    Texts.GanonThirdPhaseSingle(silversLocation.Region)
+        silversLocation = [loc for world in self.allWorlds for loc in world.Locations if loc.ItemIs(ItemType.SilverArrows, self.myWorld)]
+        if len(silversLocation) == 0:      
+            silvers = Texts.GanonThirdPhaseMulti(None, self.myWorld, self.silversWorldID, self.playerIDToNames[self.silversWorldID])
+        else:
+            silvers = Texts.GanonThirdPhaseMulti(silversLocation[0].Region, self.myWorld) if config.GameMode == GameMode.Multiworld else \
+                        Texts.GanonThirdPhaseSingle(silversLocation[0].Region)
         self.patches.append((Snes(0x308700), Dialog.Simple(silvers)))
-        self.stringTable.SetGanonThirdPhaseText(silvers);
+        self.stringTable.SetGanonThirdPhaseText(silvers)
 
         triforceRoom = Texts.TriforceRoom(self.rnd)
         self.patches.append((Snes(0x308400), Dialog.Simple(triforceRoom)))
@@ -559,11 +571,13 @@ class Patch:
         self.patches.append((Snes(0x1C8000), self.stringTable.GetPaddedBytes()))
 
     def WritePlayerNames(self):
-        self.patches += [(0x385000 + (world.Id * 16), self.PlayerNameBytes(world.Player)) for world in self.allWorlds]
+        self.patches += [(0x385000 + (0 * 16), self.PlayerNameBytes("Archipelago"))]
+        self.patches += [(0x385000 + (id * 16), self.PlayerNameBytes(name)) for name, id in self.playerNames.items()]
+        #self.patches += [(0x385000 + (world.Id * 16), self.PlayerNameBytes(world.Player)) for world in self.allWorlds]
 
     def PlayerNameBytes(self, name: str):
-        name = (name[:12] if len(name) > 12 else name).center(12)
-        return bytearray(name + "\x00", 'utf8') 
+        name = (name[:16] if len(name) > 16 else name).center(16)
+        return bytearray(name, 'utf8') 
 
     def WriteSeedData(self):
         configField =                                                                            \

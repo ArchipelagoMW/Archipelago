@@ -101,8 +101,10 @@ class SMZ3World(World):
             for loc in region.Locations:
                 l = self.locations[loc.Name]
                 l.always_allow = lambda state, item, loc=loc: \
+                    item.game == "SMZ3" and \
                     loc.alwaysAllow(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World), state.smz3state[self.player])
                 l.item_rule = lambda item, loc=loc, region=region: \
+                    item.game != "SMZ3" or \
                     loc.allow(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World), None) and \
                         region.CanFill(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World))
                 set_rule(l, lambda state, loc=loc: loc.Available(state.smz3state[self.player]))
@@ -127,7 +129,13 @@ class SMZ3World(World):
             basepatch = IPS_Patch.load("worlds/smz3/zsm.ips")
             base_combined_rom = basepatch.apply(base_combined_rom)
 
-            patcher = TotalSMZ3Patch(self.smz3World, [world.smz3World for key, world in self.world.worlds.items() if isinstance(world, SMZ3World)], self.world.seed_name, self.world.seed, self.world.random)
+            patcher = TotalSMZ3Patch(self.smz3World,
+                                    [world.smz3World for key, world in self.world.worlds.items() if isinstance(world, SMZ3World)],
+                                    self.world.seed_name,
+                                    self.world.seed,
+                                    self.world.random,
+                                    self.world.world_name_lookup,
+                                    next(iter(loc.player for loc in self.world.get_locations() if loc.item == self.create_item("SilverArrows"))))
             patches = patcher.Create(self.smz3World.Config)
             for addr, bytes in patches.items():
                 offset = 0
