@@ -10,6 +10,7 @@ from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
 from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle
+from worlds.alttp.Regions import key_drop_data
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -385,14 +386,28 @@ def generate_itempool(world):
     else:
         for x in range(len(dungeon_items)-1, -1, -1):
             item = dungeon_items[x]
-            if ((world.smallkey_shuffle[player] == smallkey_shuffle.option_start_with and item.type == 'SmallKey')
+            if ((world.smallkey_shuffle[player] in [smallkey_shuffle.option_start_with,
+                 smallkey_shuffle.option_start_with_plus] and item.type == 'SmallKey')
                     or (world.bigkey_shuffle[player] == bigkey_shuffle.option_start_with and item.type == 'BigKey')
                     or (world.compass_shuffle[player] == compass_shuffle.option_start_with and item.type == 'Compass')
                     or (world.map_shuffle[player] == map_shuffle.option_start_with and item.type == 'Map')):
                 dungeon_items.remove(item)
                 world.push_precollected(item)
                 world.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
+            if ((world.compass_shuffle[player] == compass_shuffle.option_remove and item.type == 'Compass')
+                    or (world.map_shuffle[player] == map_shuffle.option_remove and item.type == 'Map')):
+                dungeon_items.remove(item)
+                world.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
         world.itempool.extend([item for item in dungeon_items])
+    if world.smallkey_shuffle[player] == smallkey_shuffle.option_start_with_plus:
+        for x in key_drop_data:
+            if "Big" not in x:
+                if "Castle Tower" in x:
+                    world.push_precollected(ItemFactory(f"Small Key (Agahnims Tower)", player))
+                else:
+                    key_dungeon = "".join(x.split(" -")[0].split("\'"))
+                    world.push_precollected(ItemFactory(f"Small Key ({key_dungeon})", player))
+
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
     # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
