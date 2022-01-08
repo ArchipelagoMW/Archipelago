@@ -17,7 +17,7 @@ each player to enjoy an experience customized for their taste, and different pla
 can all have different options.
 
 ### Where do I get a YAML file?
-you can customize your settings by visiting the [Rogue Legacy Settings Page](/games/Rogue%20Legacy/player-settings).
+you can customize your settings by visiting the [Slay the Spire Settings Page](/games/Slay%20the%20Spire/player-settings).
 
 ### Connect to the MultiServer
 For Steam-based installations, if you are subscribed to ModTheSpire, when you launch the game, you should have the 
