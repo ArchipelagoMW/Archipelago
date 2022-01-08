@@ -23,7 +23,7 @@ by one. By clicking on this icon, it'll open a menu that lists all the items you
 You can take any relics and card packs sent to you and add them to your current run. It is advised that you do not open 
 this menu until you are outside an encounter or event to prevent the game from soft-locking.
 
-## What happens if a player dies in a run? Do they have to start completely over?
+## What happens if a player dies in a run?
 When a player dies, they will be taken back to the main menu and will need to reconnect to start climbing the spire 
 from the beginning, but they will have access to all the items ever sent to them in the Archipelago menu in the top 
 right. Any items found in an earlier run will not be sent again if you encounter them in the same location.
