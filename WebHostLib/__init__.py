@@ -89,6 +89,11 @@ def start_playing():
     return render_template(f"startPlaying.html")
 
 
+@app.route('/weighted-settings')
+def weighted_settings():
+    return render_template(f"weighted-settings.html")
+
+
 # Player settings pages
 @app.route('/games/<string:game>/player-settings')
 def player_settings(game):
@@ -186,6 +191,15 @@ def favicon():
 @app.route('/discord')
 def discord():
     return redirect("https://discord.gg/archipelago")
+
+
+@app.route('/datapackage')
+@cache.cached()
+def get_datapackge():
+    """A pretty print version of /api/datapackage"""
+    from worlds import network_data_package
+    import json
+    return Response(json.dumps(network_data_package, indent=4), mimetype="text/plain")
 
 
 from WebHostLib.customserver import run_server_process
