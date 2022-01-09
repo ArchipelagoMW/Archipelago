@@ -132,4 +132,4 @@ For example:
             difficulty: mystery
   ```
 
-In this example if the `pupdunk` option is rolled then the difficulty values will be rolled again using the new options `normal`, `pupdunk_hard`, and `pupdunk_mystery`, and the exp modifier will be rerolled using new weights for 150 and 200. This allows for two more triggers that will only be used for the new `pupdunk_hard` and `pupdunk_mystery` options so that they will only be triggered on "pupdunk AND hard/mystery".
+In this example (thanks to @Black-Sliver) if the `pupdunk` option is rolled then the difficulty values will be rolled again using the new options `normal`, `pupdunk_hard`, and `pupdunk_mystery`, and the exp modifier will be rerolled using new weights for 150 and 200. This allows for two more triggers that will only be used for the new `pupdunk_hard` and `pupdunk_mystery` options so that they will only be triggered on "pupdunk AND hard/mystery".
