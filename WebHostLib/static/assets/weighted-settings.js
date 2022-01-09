@@ -138,12 +138,14 @@ const buildUI = (settingData) => {
     collapseButton.addEventListener('click', () => {
       collapseButton.classList.add('invisible');
       weightedSettingsDiv.classList.add('invisible');
+      itemsDiv.classList.add('invisible');
       expandButton.classList.remove('invisible');
     });
 
     expandButton.addEventListener('click', () => {
       collapseButton.classList.remove('invisible');
       weightedSettingsDiv.classList.remove('invisible');
+      itemsDiv.classList.remove('invisible');
       expandButton.classList.add('invisible');
     });
   });
@@ -477,7 +479,7 @@ const buildItemsDiv = (game, items) => {
   itemsDiv.classList.add('items-div');
 
   const itemsDivHeader = document.createElement('h3');
-  itemsDivHeader.innerText = 'Item Management';
+  itemsDivHeader.innerText = 'Item Pool';
   itemsDiv.appendChild(itemsDivHeader);
 
   const itemsDescription = document.createElement('p');
@@ -500,41 +502,52 @@ const buildItemsDiv = (game, items) => {
   availableItemsWrapper.innerText = 'Available Items';
   const availableItems = document.createElement('div');
   availableItems.classList.add('item-container');
-  availableItems.setAttribute('id', `${game}-available-items`);
+  availableItems.setAttribute('id', `${game}-available_items`);
+  availableItems.addEventListener('dragover', itemDragoverHandler);
+  availableItems.addEventListener('drop', itemDropHandler);
 
   const startInventoryWrapper = document.createElement('div');
   startInventoryWrapper.classList.add('item-set-wrapper');
   startInventoryWrapper.innerText = 'Start Inventory';
   const startInventory = document.createElement('div');
   startInventory.classList.add('item-container');
-  startInventory.setAttribute('id', `${game}-start-inventory`);
+  startInventory.setAttribute('id', `${game}-start_inventory`);
+  startInventory.setAttribute('data-setting', 'start_inventory');
+  startInventory.addEventListener('dragover', itemDragoverHandler);
+  startInventory.addEventListener('drop', itemDropHandler);
 
   const localItemsWrapper = document.createElement('div');
   localItemsWrapper.classList.add('item-set-wrapper');
   localItemsWrapper.innerText = 'Local Items';
   const localItems = document.createElement('div');
   localItems.classList.add('item-container');
-  localItems.setAttribute('id', `${game}-local-items`);
+  localItems.setAttribute('id', `${game}-local_items`);
+  localItems.setAttribute('data-setting', 'local_items')
+  localItems.addEventListener('dragover', itemDragoverHandler);
+  localItems.addEventListener('drop', itemDropHandler);
 
   const nonLocalItemsWrapper = document.createElement('div');
   nonLocalItemsWrapper.classList.add('item-set-wrapper');
   nonLocalItemsWrapper.innerText = 'Non-Local Items';
   const nonLocalItems = document.createElement('div');
   nonLocalItems.classList.add('item-container');
-  nonLocalItems.setAttribute('id', `${game}-remote-items`);
+  nonLocalItems.setAttribute('id', `${game}-non_local_items`);
+  nonLocalItems.setAttribute('data-setting', 'non_local_items');
+  nonLocalItems.addEventListener('dragover', itemDragoverHandler);
+  nonLocalItems.addEventListener('drop', itemDropHandler);
 
   // Populate the divs
   items.sort().forEach((item) => {
-    const itemDiv = document.createElement('div');
-    itemDiv.classList.add('item-div');
-    itemDiv.setAttribute('id', `${game}-${item}`);
-    itemDiv.innerText = item;
+    const itemDiv = buildItemDiv(game, item);
 
     if (currentSettings[game].start_inventory.includes(item)){
+      itemDiv.setAttribute('data-setting', 'start_inventory');
       startInventory.appendChild(itemDiv);
     } else if (currentSettings[game].local_items.includes(item)) {
+      itemDiv.setAttribute('data-setting', 'local_items');
       localItems.appendChild(itemDiv);
     } else if (currentSettings[game].non_local_items.includes(item)) {
+      itemDiv.setAttribute('data-setting', 'non_local_items');
       nonLocalItems.appendChild(itemDiv);
     } else {
       availableItems.appendChild(itemDiv);
@@ -551,6 +564,66 @@ const buildItemsDiv = (game, items) => {
   itemsWrapper.appendChild(nonLocalItemsWrapper);
   itemsDiv.appendChild(itemsWrapper);
   return itemsDiv;
+};
+
+const buildItemDiv = (game, item) => {
+  const itemDiv = document.createElement('div');
+  itemDiv.classList.add('item-div');
+  itemDiv.setAttribute('id', `${game}-${item}`);
+  itemDiv.setAttribute('data-game', game);
+  itemDiv.setAttribute('data-item', item);
+  itemDiv.setAttribute('draggable', 'true');
+  itemDiv.innerText = item;
+  itemDiv.addEventListener('dragstart', (evt) => {
+    evt.dataTransfer.setData('text/plain', itemDiv.getAttribute('id'));
+  });
+  return itemDiv;
+};
+
+const itemDragoverHandler = (evt) => {
+  evt.preventDefault();
+};
+
+const itemDropHandler = (evt) => {
+  evt.preventDefault();
+  const sourceId = evt.dataTransfer.getData('text/plain');
+  const sourceDiv = document.getElementById(sourceId);
+
+  const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
+  const game = sourceDiv.getAttribute('data-game');
+  const item = sourceDiv.getAttribute('data-item');
+  const itemDiv = buildItemDiv(game, item);
+
+  const oldSetting = sourceDiv.hasAttribute('data-setting') ? sourceDiv.getAttribute('data-setting') : null;
+  const newSetting = evt.target.hasAttribute('data-setting') ? evt.target.getAttribute('data-setting') : null;
+
+  if (oldSetting) {
+    console.log(oldSetting);
+    console.log(item);
+    console.log(currentSettings[game][oldSetting].indexOf(item));
+    console.log(currentSettings[game][oldSetting]);
+    if (currentSettings[game][oldSetting].includes(item)) {
+      currentSettings[game][oldSetting].splice(currentSettings[game][oldSetting].indexOf(item), 1);
+      console.log(currentSettings[game][oldSetting]);
+    }
+  }
+
+  if (newSetting) {
+    itemDiv.setAttribute('data-setting', newSetting);
+    document.getElementById(`${game}-${newSetting}`).appendChild(itemDiv);
+    if (!currentSettings[game][newSetting].includes(item)){
+      currentSettings[game][newSetting].push(item);
+    }
+  } else {
+    // No setting was assigned, this item has been removed from the settings
+    document.getElementById(`${game}-available_items`).appendChild(itemDiv);
+  }
+
+  // Remove the source drag object
+  sourceDiv.parentElement.removeChild(sourceDiv);
+
+  // Save the updated settings
+  localStorage.setItem('weighted-settings', JSON.stringify(currentSettings));
 };
 
 const updateVisibleGames = () => {
