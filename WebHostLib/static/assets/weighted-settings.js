@@ -598,13 +598,8 @@ const itemDropHandler = (evt) => {
   const newSetting = evt.target.hasAttribute('data-setting') ? evt.target.getAttribute('data-setting') : null;
 
   if (oldSetting) {
-    console.log(oldSetting);
-    console.log(item);
-    console.log(currentSettings[game][oldSetting].indexOf(item));
-    console.log(currentSettings[game][oldSetting]);
     if (currentSettings[game][oldSetting].includes(item)) {
       currentSettings[game][oldSetting].splice(currentSettings[game][oldSetting].indexOf(item), 1);
-      console.log(currentSettings[game][oldSetting]);
     }
   }
 
