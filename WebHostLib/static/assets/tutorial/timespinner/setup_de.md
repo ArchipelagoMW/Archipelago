@@ -38,4 +38,4 @@ Weitere Informationen zum Randomizer findest du hier: [ReadMe](https://github.co
 Die [Player Settings](https://archipelago.gg/games/Timespinner/player-settings) Seite auf der Website erlaubt dir, persönliche Einstellungen zu definieren und diese in eine Konfigurationsdatei zu exportieren
 
 * Die Timespinner Randomizer Option "StinkyMaw" ist in Archipelago Seeds aktuell immer an
-* Die Timespinner Randomizer Optionen "ProgressiveVerticalMovement" & "ProgressiveKeycards" werden in Archipelago seeds aktuell nicht unterstützt
+* Die Timespinner Randomizer Optionen "ProgressiveVerticalMovement" & "ProgressiveKeycards" werden in Archipelago Seeds aktuell nicht unterstützt
