@@ -17,8 +17,8 @@
 
 ### Windows Setup
 
-1. During the installation of Archipelago, you will have been asked to install the SNI Client.
-   If you did not do this, or you are on an older version, you may run the installer again to install the SNI Client.
+1. During the installation of Archipelago, you will have been asked to install the SNI Client. If you did not do this,
+   or you are on an older version, you may run the installer again to install the SNI Client.
 2. During setup, you will be asked to locate your base ROM file. This is your Super Metroid ROM file.
 3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.

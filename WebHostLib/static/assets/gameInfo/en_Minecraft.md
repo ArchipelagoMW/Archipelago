@@ -2,8 +2,8 @@
 
 ## Where is the settings page?
 
-The player settings page for this game contains all the options you need to configure and export a config file. Player
-settings page link: [Minecraft Player Settings Page](../player-settings).
+The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+config file.
 
 ## What does randomization do to this game?
 

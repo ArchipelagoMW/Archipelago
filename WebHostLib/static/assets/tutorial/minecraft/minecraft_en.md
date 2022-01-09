@@ -37,6 +37,7 @@ Using minecraft 1.17.1 connect to the server `localhost`.
 
 Once you are in game type `/connect <AP-Address> (Port) (Password)` where `<AP-Address>` is the address of the
 Archipelago server. `(Port)` is only required if the Archipelago server is not using the default port of
+
 38281. `(Password)` is only required if the Archipelago server you are using has a password set.
 
 ### Play the game
@@ -55,6 +56,6 @@ the following links are the versions of the software we use.
 
 - [Minecraft Forge Download Page](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.17.1.html)
 - [Minecraft Archipelago Randomizer Mod Releases Page](https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
-  - **DO NOT INSTALL THIS ON YOUR CLIENT**
+    - **DO NOT INSTALL THIS ON YOUR CLIENT**
 - [Java 16 Download Page](https://docs.aws.amazon.com/corretto/latest/corretto-16-ug/downloads-list.html)
 

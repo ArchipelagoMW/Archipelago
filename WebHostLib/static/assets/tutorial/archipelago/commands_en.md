@@ -26,11 +26,13 @@ The following commands are available in these clients: SNIClient, FactorioClient
 - Just typing anything will broadcast a message to all players
 
 ##### FF1Client Only
+
 The following command is only available when using the FF1Client for the Final Fantasy Randomizer.
 
 - `/nes` Shows the current status of the NES connection.
 
 ##### SNIClient Only
+
 The following command is only available when using the SNIClient for SNES based games.
 
 - `/snes` Attempts to connect to your SNES device via SNI.
@@ -38,20 +40,23 @@ The following command is only available when using the SNIClient for SNES based 
 - `/slow_mode` Toggles on or off slow mode, which limits the rate in which you receive items.
 
 ##### FactorioClient Only
+
 The following command is only available when using the FactorioClient to play Factorio with Archipelago.
 
 - `/factorio <command text>` Sends the command argument to the Factorio server as a command.
 
 #### Remote Commands
+
 Remote commands may be executed by any client which allows for sending text chat to the Archipelago server. If your
 client does not allow for sending chat then you may connect to your game slot with the TextClient which comes with the
-Archipelago installation. In order to execute the command you need to merely send a text message with the command, 
+Archipelago installation. In order to execute the command you need to merely send a text message with the command,
 including the exclamation point.
 
 - `!help` Returns a listing of available remote commands.
 - `!license` Returns the software licensing information.
 - `!options` Returns the current server options, including password in plaintext.
-- `!admin <command>` Executes a command as if you typed it into the server console. Remote administration must be enabled.
+- `!admin <command>` Executes a command as if you typed it into the server console. Remote administration must be
+  enabled.
 - `!players` Returns info about the currently connected and non-connected players.
 - `!status` Returns information about your team. (Currently all players as teams are unimplemented.)
 - `!remaining` Lists the items remaining in your game, but not where they are or who they go to.
@@ -59,8 +64,8 @@ including the exclamation point.
 - `!checked` Lists all the location checks you've done from the server's perspective.
 - `!alias <alias>` Sets your alias.
 - `!getitem <item>` Cheats an item, if it is enabled in the server.
-- `!hint_location <location>` Hints for a location specifically. Useful in games where item names may match location names
-  such as Factorio.
+- `!hint_location <location>` Hints for a location specifically. Useful in games where item names may match location
+  names such as Factorio.
 - `!hint <item name>` Tells you at which location in whose game your Item is. Note you need to have checked some
   locations to earn a hint. You can check how many you have by just running `!hint`
 - `!forfeit` If you didn't turn on auto-forfeit or if you allowed forfeiting prior to goal completion. Remember that "
