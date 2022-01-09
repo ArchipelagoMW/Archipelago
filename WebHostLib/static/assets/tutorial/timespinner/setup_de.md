@@ -20,7 +20,7 @@ Der Timespinner Randomizer lädt die Timespinner.exe im gleichen Verzeichnis und
 - auf Linux: Starte die Datei TsRandomizer.bin.x86_64
 - auf Mac: Starte die Datei TsRandomizer.bin.osx
 
-... in dem Ordner wo du die Inhalte aus der .zip Datei entpackt hast
+... im Ordner in dem die Inhalte aus der .zip Datei entpackt wurden
 
 Weitere Informationen zum Randomizer findest du hier: [ReadMe](https://github.com/JarnoWesthof/TsRandomizer)
     
@@ -28,8 +28,8 @@ Weitere Informationen zum Randomizer findest du hier: [ReadMe](https://github.co
 
 1. Starte den Randomizer wie unter [Den Randomizer starten](#Den-Randomizer-starten) beschrieben
 2. Wähle "New Game"
-3. Wechsle "<< Select Seed >>" zu "<< Archiplago >>" indem du 'links' auf deinem Controller oder der Tastatur drückst
-4. Wähle "<< Archiplago >>" um ein neues Menu zu öffnen, wo du deine Logininformationen für Archipelago eingeben kannst 
+3. Wechsle "<< Select Seed >>" zu "<< Archiplago >>" indem du "links" auf deinem Controller oder der Tastatur drückst
+4. Wähle "<< Archipelago >>" um ein neues Menu zu öffnen, wo du deine Logininformationen für Archipelago eingeben kannst 
 	* ANMERKUNG: Die Eingabefelder unterstützen das Einfügen von Informationen mittels 'Ctrl + V' 
 5. Wähle "Connect"
 6. Wenn alles funktioniert hat, wechselt das Spiel zurück zur Auswahl des Schwierigkeitsgrads und das Spiel startet, sobald du einen davon ausgewählt hast
