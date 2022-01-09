@@ -361,5 +361,24 @@
         ]
       }
     ]
+  },
+  {
+    "gameTitle": "Slay the Spire",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up Slay the Spire for Archipelago. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "slay-the-spire/slay-the-spire_en.md",
+            "link": "slay-the-spire/slay-the-spire/en",
+            "authors": [
+              "Phar"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]
