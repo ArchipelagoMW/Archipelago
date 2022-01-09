@@ -350,16 +350,16 @@ class ALTTPWorld(World):
         # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
         # TODO: this might be worthwhile to introduce as generic option for various games and then optimize it
         if standard_keyshuffle_players:
-            viable = []
+            viable = {}
             for location in world.get_locations():
                 if location.player in standard_keyshuffle_players \
                         and location.item is None \
                         and location.can_reach(world.state):
-                    viable.append(location)
-            world.random.shuffle(viable)
+                    viable.setdefault(location.player, []).append(location)
+
             for player in standard_keyshuffle_players:
+                loc = world.random.choice(viable[player])
                 key = world.create_item("Small Key (Hyrule Castle)", player)
-                loc = viable.pop()
                 loc.place_locked_item(key)
                 fill_locations.remove(loc)
             world.random.shuffle(fill_locations)
