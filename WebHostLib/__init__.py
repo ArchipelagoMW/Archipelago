@@ -193,6 +193,15 @@ def discord():
     return redirect("https://discord.gg/archipelago")
 
 
+@app.route('/datapackage')
+@cache.cached()
+def get_datapackge():
+    """A pretty print version of /api/datapackage"""
+    from worlds import network_data_package
+    import json
+    return Response(json.dumps(network_data_package, indent=4), mimetype="text/plain")
+
+
 from WebHostLib.customserver import run_server_process
 from . import tracker, upload, landing, check, generate, downloads, api  # to trigger app routing picking up on it
 

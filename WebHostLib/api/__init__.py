@@ -31,6 +31,7 @@ def get_datapackge():
     from worlds import network_data_package
     return network_data_package
 
+
 @api_endpoints.route('/datapackage_version')
 @cache.cached()
 def get_datapackge_versions():

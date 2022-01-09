@@ -125,6 +125,8 @@ class Toggle(Option):
     def get_option_name(cls, value):
         return ["No", "Yes"][int(value)]
 
+    __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
+
 
 class DefaultOnToggle(Toggle):
     default = 1
@@ -183,6 +185,8 @@ class Choice(Option):
             return False
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
+    __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
 class Range(Option, int):
