@@ -26,7 +26,7 @@ Weitere Informationen zum Randomizer findest du hier: [ReadMe](https://github.co
     
 ## An einer Multiworld teilnehmen
 
-1. Starte den Randomizer wie unter [Den Randomizer starten](#Den Randomizer starten) beschrieben
+1. Starte den Randomizer wie unter [Den Randomizer starten](#Den-Randomizer-starten) beschrieben
 2. Wähle "New Game"
 3. Wechsle "<< Select Seed >>" zu "<< Archiplago >>" indem du 'links' auf deinem Controller oder der Tastatur drückst
 4. Wähle "<< Archiplago >>" um ein neues Menu zu öffnen, wo du deine Logininformationen für Archipelago eingeben kannst 
