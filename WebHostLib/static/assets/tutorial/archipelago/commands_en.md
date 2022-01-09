@@ -54,6 +54,8 @@ including the exclamation point.
 
 - `!help` Returns a listing of available remote commands.
 - `!license` Returns the software licensing information.
+- `!countdown <countdown in seconds>` Starts a countdown using the given seconds value. Useful for synchronizing starts.
+  Defaults to 10 seconds if no argument is provided.
 - `!options` Returns the current server options, including password in plaintext.
 - `!admin <command>` Executes a command as if you typed it into the server console. Remote administration must be
   enabled.

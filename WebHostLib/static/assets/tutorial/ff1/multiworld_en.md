@@ -38,7 +38,12 @@ Generate a game by going to the site and performing the following steps:
 It should download two files. One is the `*.nes` file which your emulator will run and the other is the yaml file
 required by Archipelago.gg
 
+At this point you are ready to join the multiworld. If you are uncertain on how to generate, host or join a multiworld
+please refer to the [game agnostic setup guide](/tutorial/archipelago/setup/en).
+
 ## Running the Client Program and Connecting to the Server
+
+Once the Archipelago server has been hosted:
 
 1. Navigate to your Archipelago install folder and run `ArchipelagoFF1Client.exe`
 2. Notice the `/connect command` on the server hosting page (It should look like `/connect archipelago.gg:*****`

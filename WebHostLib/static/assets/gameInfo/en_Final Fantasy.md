@@ -11,7 +11,7 @@ website: [FF1R Website](https://finalfantasyrandomizer.com/)
 A better questions is what isn't randomized at this point. Enemies stats and spell, character spells, shop inventory and
 boss stats and spells are all commonly randomized. Unlike most other randomizers it is also most standard to shuffle
 progression items and non-progression items into separate pools and then redistribute them to their respective
-locations. So ,for example, Princess Sarah may have the CANOE instead of the LUTE; however, she will never have a Heal
+locations. So, for example, Princess Sarah may have the CANOE instead of the LUTE; however, she will never have a Heal
 Pot or some armor. There are plenty of other things that can be randomized on the main randomizer
 site: [FF1R Website](https://finalfantasyrandomizer.com/)
 
