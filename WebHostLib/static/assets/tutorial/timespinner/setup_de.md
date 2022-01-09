@@ -7,7 +7,7 @@
 
 ## Wie funktioniert's?
 
-Der Timespinner Randommizer lädt die Timespinner.exe im gleichen Verzeichnis und verändert seine Speicherinformationen um die Randomisierung der Gegenstände zu erlauben
+Der Timespinner Randomizer lädt die Timespinner.exe im gleichen Verzeichnis und verändert seine Speicherinformationen um die Randomisierung der Gegenstände zu erlauben
 
 ## Installationsanweisungen
 
