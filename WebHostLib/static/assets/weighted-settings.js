@@ -128,19 +128,24 @@ const buildUI = (settingData) => {
     expandButton.classList.add('invisible');
     gameDiv.appendChild(expandButton);
 
-    const optionsDiv = buildOptionsDiv(game, settingData.games[game].gameSettings);
-    gameDiv.appendChild(optionsDiv);
+    const weightedSettingsDiv = buildWeightedSettingsDiv(game, settingData.games[game].gameSettings);
+    gameDiv.appendChild(weightedSettingsDiv);
+
+    const itemsDiv = buildItemsDiv(game, settingData.games[game].gameItems);
+    gameDiv.appendChild(itemsDiv);
     gamesWrapper.appendChild(gameDiv);
 
     collapseButton.addEventListener('click', () => {
       collapseButton.classList.add('invisible');
-      optionsDiv.classList.add('invisible');
+      weightedSettingsDiv.classList.add('invisible');
+      itemsDiv.classList.add('invisible');
       expandButton.classList.remove('invisible');
     });
 
     expandButton.addEventListener('click', () => {
       collapseButton.classList.remove('invisible');
-      optionsDiv.classList.remove('invisible');
+      weightedSettingsDiv.classList.remove('invisible');
+      itemsDiv.classList.remove('invisible');
       expandButton.classList.add('invisible');
     });
   });
@@ -207,10 +212,10 @@ const buildGameChoice = (games) => {
   gameChoiceDiv.appendChild(table);
 };
 
-const buildOptionsDiv = (game, settings) => {
+const buildWeightedSettingsDiv = (game, settings) => {
   const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
-  const optionsWrapper = document.createElement('div');
-  optionsWrapper.classList.add('settings-wrapper');
+  const settingsWrapper = document.createElement('div');
+  settingsWrapper.classList.add('settings-wrapper');
 
   Object.keys(settings).forEach((settingName) => {
     const setting = settings[settingName];
@@ -268,27 +273,6 @@ const buildOptionsDiv = (game, settings) => {
         break;
 
       case 'range':
-        const hintText = document.createElement('p');
-        hintText.classList.add('hint-text');
-        hintText.innerHTML = 'This is a range option. You may enter valid numerical values in the text box below, ' +
-          `then press the "Add" button to add a weight for it.<br />Minimum value: ${setting.min}<br />` +
-          `Maximum value: ${setting.max}`;
-        settingWrapper.appendChild(hintText);
-
-        const addOptionDiv = document.createElement('div');
-        addOptionDiv.classList.add('add-option-div');
-        const optionInput = document.createElement('input');
-        optionInput.setAttribute('id', `${game}-${settingName}-option`);
-        optionInput.setAttribute('placeholder', `${setting.min} - ${setting.max}`);
-        addOptionDiv.appendChild(optionInput);
-        const addOptionButton = document.createElement('button');
-        addOptionButton.innerText = 'Add';
-        addOptionDiv.appendChild(addOptionButton);
-        settingWrapper.appendChild(addOptionDiv);
-        optionInput.addEventListener('keydown', (evt) => {
-          if (evt.key === 'Enter') { addOptionButton.dispatchEvent(new Event('click')); }
-        });
-
         const rangeTable = document.createElement('table');
         const rangeTbody = document.createElement('tbody');
 
@@ -324,6 +308,79 @@ const buildOptionsDiv = (game, settings) => {
               rangeTbody.appendChild(tr);
           }
         } else {
+          const hintText = document.createElement('p');
+          hintText.classList.add('hint-text');
+          hintText.innerHTML = 'This is a range option. You may enter a valid numerical value in the text box ' +
+            `below, then press the "Add" button to add a weight for it.<br />Minimum value: ${setting.min}<br />` +
+            `Maximum value: ${setting.max}`;
+          settingWrapper.appendChild(hintText);
+
+          const addOptionDiv = document.createElement('div');
+          addOptionDiv.classList.add('add-option-div');
+          const optionInput = document.createElement('input');
+          optionInput.setAttribute('id', `${game}-${settingName}-option`);
+          optionInput.setAttribute('placeholder', `${setting.min} - ${setting.max}`);
+          addOptionDiv.appendChild(optionInput);
+          const addOptionButton = document.createElement('button');
+          addOptionButton.innerText = 'Add';
+          addOptionDiv.appendChild(addOptionButton);
+          settingWrapper.appendChild(addOptionDiv);
+          optionInput.addEventListener('keydown', (evt) => {
+            if (evt.key === 'Enter') { addOptionButton.dispatchEvent(new Event('click')); }
+          });
+
+          addOptionButton.addEventListener('click', () => {
+            const optionInput = document.getElementById(`${game}-${settingName}-option`);
+            let option = optionInput.value;
+            if (!option || !option.trim()) { return; }
+            option = parseInt(option, 10);
+            if ((option < setting.min) || (option > setting.max)) { return; }
+            optionInput.value = '';
+            if (document.getElementById(`${game}-${settingName}-${option}-range`)) { return; }
+
+            const tr = document.createElement('tr');
+            const tdLeft = document.createElement('td');
+            tdLeft.classList.add('td-left');
+            tdLeft.innerText = option;
+            tr.appendChild(tdLeft);
+
+            const tdMiddle = document.createElement('td');
+            tdMiddle.classList.add('td-middle');
+            const range = document.createElement('input');
+            range.setAttribute('type', 'range');
+            range.setAttribute('id', `${game}-${settingName}-${option}-range`);
+            range.setAttribute('data-game', game);
+            range.setAttribute('data-setting', settingName);
+            range.setAttribute('data-option', option);
+            range.setAttribute('min', 0);
+            range.setAttribute('max', 50);
+            range.addEventListener('change', updateGameSetting);
+            range.value = currentSettings[game][settingName][parseInt(option, 10)];
+            tdMiddle.appendChild(range);
+            tr.appendChild(tdMiddle);
+
+            const tdRight = document.createElement('td');
+            tdRight.setAttribute('id', `${game}-${settingName}-${option}`)
+            tdRight.classList.add('td-right');
+            tdRight.innerText = range.value;
+            tr.appendChild(tdRight);
+
+            const tdDelete = document.createElement('td');
+            tdDelete.classList.add('td-delete');
+            const deleteButton = document.createElement('span');
+            deleteButton.classList.add('range-option-delete');
+            deleteButton.innerText = '❌';
+            deleteButton.addEventListener('click', () => {
+              range.value = 0;
+              range.dispatchEvent(new Event('change'));
+              rangeTbody.removeChild(tr);
+            });
+            tdDelete.appendChild(deleteButton);
+            tr.appendChild(tdDelete);
+
+            rangeTbody.appendChild(tr);
+          });
+
           Object.keys(currentSettings[game][settingName]).forEach((option) => {
             if (currentSettings[game][settingName][option] > 0) {
               const tr = document.createElement('tr');
@@ -403,58 +460,6 @@ const buildOptionsDiv = (game, settings) => {
 
         rangeTable.appendChild(rangeTbody);
         settingWrapper.appendChild(rangeTable);
-
-        addOptionButton.addEventListener('click', () => {
-          const optionInput = document.getElementById(`${game}-${settingName}-option`);
-          let option = optionInput.value;
-          if (!option || !option.trim()) { return; }
-          option = parseInt(option, 10);
-          if ((option < setting.min) || (option > setting.max)) { return; }
-          optionInput.value = '';
-          if (document.getElementById(`${game}-${settingName}-${option}-range`)) { return; }
-
-          const tr = document.createElement('tr');
-          const tdLeft = document.createElement('td');
-          tdLeft.classList.add('td-left');
-          tdLeft.innerText = option;
-          tr.appendChild(tdLeft);
-
-          const tdMiddle = document.createElement('td');
-          tdMiddle.classList.add('td-middle');
-          const range = document.createElement('input');
-          range.setAttribute('type', 'range');
-          range.setAttribute('id', `${game}-${settingName}-${option}-range`);
-          range.setAttribute('data-game', game);
-          range.setAttribute('data-setting', settingName);
-          range.setAttribute('data-option', option);
-          range.setAttribute('min', 0);
-          range.setAttribute('max', 50);
-          range.addEventListener('change', updateGameSetting);
-          range.value = currentSettings[game][settingName][parseInt(option, 10)];
-          tdMiddle.appendChild(range);
-          tr.appendChild(tdMiddle);
-
-          const tdRight = document.createElement('td');
-          tdRight.setAttribute('id', `${game}-${settingName}-${option}`)
-          tdRight.classList.add('td-right');
-          tdRight.innerText = range.value;
-          tr.appendChild(tdRight);
-
-          const tdDelete = document.createElement('td');
-          tdDelete.classList.add('td-delete');
-          const deleteButton = document.createElement('span');
-          deleteButton.classList.add('range-option-delete');
-          deleteButton.innerText = '❌';
-          deleteButton.addEventListener('click', () => {
-            range.value = 0;
-            range.dispatchEvent(new Event('change'));
-            rangeTbody.removeChild(tr);
-          });
-          tdDelete.appendChild(deleteButton);
-          tr.appendChild(tdDelete);
-
-          rangeTbody.appendChild(tr);
-        });
         break;
 
       default:
@@ -462,10 +467,158 @@ const buildOptionsDiv = (game, settings) => {
         return;
     }
 
-    optionsWrapper.appendChild(settingWrapper);
+    settingsWrapper.appendChild(settingWrapper);
   });
 
-  return optionsWrapper;
+  return settingsWrapper;
+};
+
+const buildItemsDiv = (game, items) => {
+  const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
+  const itemsDiv = document.createElement('div');
+  itemsDiv.classList.add('items-div');
+
+  const itemsDivHeader = document.createElement('h3');
+  itemsDivHeader.innerText = 'Item Pool';
+  itemsDiv.appendChild(itemsDivHeader);
+
+  const itemsDescription = document.createElement('p');
+  itemsDescription.classList.add('setting-description');
+  itemsDescription.innerText = 'Choose if you would like to start with items, or control if they are placed in ' +
+    'your seed or someone else\'s.';
+  itemsDiv.appendChild(itemsDescription);
+
+  const itemsHint = document.createElement('p');
+  itemsHint.classList.add('hint-text');
+  itemsHint.innerText = 'Drag and drop items from one box to another.';
+  itemsDiv.appendChild(itemsHint);
+
+  const itemsWrapper = document.createElement('div');
+  itemsWrapper.classList.add('items-wrapper');
+
+  // Create container divs for each category
+  const availableItemsWrapper = document.createElement('div');
+  availableItemsWrapper.classList.add('item-set-wrapper');
+  availableItemsWrapper.innerText = 'Available Items';
+  const availableItems = document.createElement('div');
+  availableItems.classList.add('item-container');
+  availableItems.setAttribute('id', `${game}-available_items`);
+  availableItems.addEventListener('dragover', itemDragoverHandler);
+  availableItems.addEventListener('drop', itemDropHandler);
+
+  const startInventoryWrapper = document.createElement('div');
+  startInventoryWrapper.classList.add('item-set-wrapper');
+  startInventoryWrapper.innerText = 'Start Inventory';
+  const startInventory = document.createElement('div');
+  startInventory.classList.add('item-container');
+  startInventory.setAttribute('id', `${game}-start_inventory`);
+  startInventory.setAttribute('data-setting', 'start_inventory');
+  startInventory.addEventListener('dragover', itemDragoverHandler);
+  startInventory.addEventListener('drop', itemDropHandler);
+
+  const localItemsWrapper = document.createElement('div');
+  localItemsWrapper.classList.add('item-set-wrapper');
+  localItemsWrapper.innerText = 'Local Items';
+  const localItems = document.createElement('div');
+  localItems.classList.add('item-container');
+  localItems.setAttribute('id', `${game}-local_items`);
+  localItems.setAttribute('data-setting', 'local_items')
+  localItems.addEventListener('dragover', itemDragoverHandler);
+  localItems.addEventListener('drop', itemDropHandler);
+
+  const nonLocalItemsWrapper = document.createElement('div');
+  nonLocalItemsWrapper.classList.add('item-set-wrapper');
+  nonLocalItemsWrapper.innerText = 'Non-Local Items';
+  const nonLocalItems = document.createElement('div');
+  nonLocalItems.classList.add('item-container');
+  nonLocalItems.setAttribute('id', `${game}-non_local_items`);
+  nonLocalItems.setAttribute('data-setting', 'non_local_items');
+  nonLocalItems.addEventListener('dragover', itemDragoverHandler);
+  nonLocalItems.addEventListener('drop', itemDropHandler);
+
+  // Populate the divs
+  items.sort().forEach((item) => {
+    const itemDiv = buildItemDiv(game, item);
+
+    if (currentSettings[game].start_inventory.includes(item)){
+      itemDiv.setAttribute('data-setting', 'start_inventory');
+      startInventory.appendChild(itemDiv);
+    } else if (currentSettings[game].local_items.includes(item)) {
+      itemDiv.setAttribute('data-setting', 'local_items');
+      localItems.appendChild(itemDiv);
+    } else if (currentSettings[game].non_local_items.includes(item)) {
+      itemDiv.setAttribute('data-setting', 'non_local_items');
+      nonLocalItems.appendChild(itemDiv);
+    } else {
+      availableItems.appendChild(itemDiv);
+    }
+  });
+
+  availableItemsWrapper.appendChild(availableItems);
+  startInventoryWrapper.appendChild(startInventory);
+  localItemsWrapper.appendChild(localItems);
+  nonLocalItemsWrapper.appendChild(nonLocalItems);
+  itemsWrapper.appendChild(availableItemsWrapper);
+  itemsWrapper.appendChild(startInventoryWrapper);
+  itemsWrapper.appendChild(localItemsWrapper);
+  itemsWrapper.appendChild(nonLocalItemsWrapper);
+  itemsDiv.appendChild(itemsWrapper);
+  return itemsDiv;
+};
+
+const buildItemDiv = (game, item) => {
+  const itemDiv = document.createElement('div');
+  itemDiv.classList.add('item-div');
+  itemDiv.setAttribute('id', `${game}-${item}`);
+  itemDiv.setAttribute('data-game', game);
+  itemDiv.setAttribute('data-item', item);
+  itemDiv.setAttribute('draggable', 'true');
+  itemDiv.innerText = item;
+  itemDiv.addEventListener('dragstart', (evt) => {
+    evt.dataTransfer.setData('text/plain', itemDiv.getAttribute('id'));
+  });
+  return itemDiv;
+};
+
+const itemDragoverHandler = (evt) => {
+  evt.preventDefault();
+};
+
+const itemDropHandler = (evt) => {
+  evt.preventDefault();
+  const sourceId = evt.dataTransfer.getData('text/plain');
+  const sourceDiv = document.getElementById(sourceId);
+
+  const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
+  const game = sourceDiv.getAttribute('data-game');
+  const item = sourceDiv.getAttribute('data-item');
+  const itemDiv = buildItemDiv(game, item);
+
+  const oldSetting = sourceDiv.hasAttribute('data-setting') ? sourceDiv.getAttribute('data-setting') : null;
+  const newSetting = evt.target.hasAttribute('data-setting') ? evt.target.getAttribute('data-setting') : null;
+
+  if (oldSetting) {
+    if (currentSettings[game][oldSetting].includes(item)) {
+      currentSettings[game][oldSetting].splice(currentSettings[game][oldSetting].indexOf(item), 1);
+    }
+  }
+
+  if (newSetting) {
+    itemDiv.setAttribute('data-setting', newSetting);
+    document.getElementById(`${game}-${newSetting}`).appendChild(itemDiv);
+    if (!currentSettings[game][newSetting].includes(item)){
+      currentSettings[game][newSetting].push(item);
+    }
+  } else {
+    // No setting was assigned, this item has been removed from the settings
+    document.getElementById(`${game}-available_items`).appendChild(itemDiv);
+  }
+
+  // Remove the source drag object
+  sourceDiv.parentElement.removeChild(sourceDiv);
+
+  // Save the updated settings
+  localStorage.setItem('weighted-settings', JSON.stringify(currentSettings));
 };
 
 const updateVisibleGames = () => {
