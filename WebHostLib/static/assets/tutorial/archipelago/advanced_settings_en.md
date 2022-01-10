@@ -36,19 +36,6 @@ For `nested_option_two`, `option_two_setting_one` will be rolled 14 times and `o
 times against each other. This means `option_two_setting_two` will be more likely to occur, but it isn't guaranteed,
 adding more randomness and "mystery" to your settings. Every configurable setting supports weights.
 
-#### Random options
-
-Settings which take numbers as options can use a variety of `random` options to choose a number randomly.
-
-* `random` will choose a number allowed for the setting at random
-* `random-low` will choose a number allowed for the setting at random, but will be weighted towards lower numbers
-* `random-middle` will choose a number allowed for the setting at random, but will be weighted towards the middle of the range
-* `random-high` will choose a number allowed for the setting at random, but will be weighted towards higher numbers
-* `random-range-#-#` will choose a number at random from between the specified numbers. For example `random-range-40-60`
-will choose a number between 40 and 60
-* `random-range-low-#-#`, `random-range-middle-#-#`, and `random-range-high-#-#` will choose a number at random from the
-specified numbers, but with the specified weights
-
 ### Root Options
 Currently there are only a few options that are root options. Everything else should be nested within one of these root
 options or in some cases nested within other nested options. The only options that should exist in root are `description`,
@@ -102,6 +89,19 @@ in your own.
 it to see how important the location is.
 * `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
 item which isn't necessary for progression to go in these locations.
+
+### Random numbers
+
+Options taking a choice of a number can also use a variety of `random` options to choose a number randomly.
+
+* `random` will choose a number allowed for the setting at random
+* `random-low` will choose a number allowed for the setting at random, but will be weighted towards lower numbers
+* `random-middle` will choose a number allowed for the setting at random, but will be weighted towards the middle of the range
+* `random-high` will choose a number allowed for the setting at random, but will be weighted towards higher numbers
+* `random-range-#-#` will choose a number at random from between the specified numbers. For example `random-range-40-60`
+will choose a number between 40 and 60
+* `random-range-low-#-#`, `random-range-middle-#-#`, and `random-range-high-#-#` will choose a number at random from the
+specified numbers, but with the specified weights
 
 ### Example
 
