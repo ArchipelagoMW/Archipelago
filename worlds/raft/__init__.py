@@ -40,7 +40,7 @@ class RaftWorld(World):
             pool.append(raft_item)
 
         extraItemNamePool = []
-        extras = max(len(location_table) - len(item_table) - 1, 0) # Victory takes up 1 unaccounted-for slot
+        extras = len(location_table) - len(item_table) - 1 # Victory takes up 1 unaccounted-for slot
         if extras > 0:
             if (self.world.use_resource_packs[self.player].value):
                 for packItem in resourcePackItems:
