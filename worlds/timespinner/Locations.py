@@ -186,8 +186,9 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         #AncientPyramidLocations
         LocationData('Ancient Pyramid (left)', 'Why not it\'s right there',  1337246),
         LocationData('Ancient Pyramid (left)', 'Conviction guarded room',  1337247),
-        LocationData('Ancient Pyramid (right)', 'Pit secret room',  1337248, lambda state: state._timespinner_can_break_walls(world, player)),
-        LocationData('Ancient Pyramid (right)', 'Regret chest',  1337249, lambda state: state._timespinner_can_break_walls(world, player)),
+        LocationData('Ancient Pyramid (left)', 'Pit secret room',  1337248, lambda state: state._timespinner_can_break_walls(world, player)),
+        LocationData('Ancient Pyramid (left)', 'Regret chest',  1337249, lambda state: state._timespinner_can_break_walls(world, player)),
+        LocationData('Ancient Pyramid (right)', 'Nightmare Door chest',  1337236),
         LocationData('Ancient Pyramid (right)', 'Killed Nightmare',  EventId)
     ]
 
