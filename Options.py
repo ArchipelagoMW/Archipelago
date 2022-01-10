@@ -125,6 +125,8 @@ class Toggle(Option):
     def get_option_name(cls, value):
         return ["No", "Yes"][int(value)]
 
+    __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
+
 
 class DefaultOnToggle(Toggle):
     default = 1
@@ -183,6 +185,8 @@ class Choice(Option):
             return False
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
+    __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
 class Range(Option, int):
@@ -334,7 +338,7 @@ class Accessibility(Choice):
     Locations: ensure everything can be reached and acquired.
     Items: ensure all logically relevant items can be acquired.
     Minimal: ensure what is needed to reach your goal can be acquired."""
-
+    displayname = "Accessibility"
     option_locations = 0
     option_items = 1
     option_minimal = 2
@@ -344,6 +348,7 @@ class Accessibility(Choice):
 
 class ProgressionBalancing(DefaultOnToggle):
     """A system that moves progression earlier, to try and prevent the player from getting stuck and bored early."""
+    displayname = "Progression Balancing"
 
 
 common_options = {
@@ -395,6 +400,7 @@ class DeathLink(Toggle):
 
 
 per_game_common_options = {
+    **common_options,  # can be overwritten per-game
     "local_items": LocalItems,
     "non_local_items": NonLocalItems,
     "start_inventory": StartInventory,

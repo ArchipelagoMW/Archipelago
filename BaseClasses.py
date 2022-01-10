@@ -782,10 +782,9 @@ class RegionType(int, Enum):
 
 
 class Region(object):
-
-    def __init__(self, name: str, type: str, hint, player: int, world: Optional[MultiWorld] = None):
+    def __init__(self, name: str, type_: RegionType, hint, player: int, world: Optional[MultiWorld] = None):
         self.name = name
-        self.type = type
+        self.type = type_
         self.entrances = []
         self.exits = []
         self.locations = []
@@ -1210,8 +1209,6 @@ class Spoiler():
                 if self.world.players > 1:
                     outfile.write('\nPlayer %d: %s\n' % (player, self.world.get_player_name(player)))
                 outfile.write('Game:                            %s\n' % self.world.game[player])
-                for f_option, option in Options.common_options.items():
-                    write_option(f_option, option)
                 for f_option, option in Options.per_game_common_options.items():
                     write_option(f_option, option)
                 options = self.world.worlds[player].options

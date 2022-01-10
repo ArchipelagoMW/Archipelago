@@ -62,12 +62,20 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         elif file.filename.endswith(".archipelago"):
             try:
                 multidata = zfile.open(file).read()
-                MultiServer.Context._decompress(multidata)
             except:
                 flash("Could not load multidata. File may be corrupted or incompatible.")
                 multidata = None
 
     if multidata:
+        decompressed_multidata = MultiServer.Context.decompress(multidata)
+        player_names = {slot.player_name for slot in slots}
+        leftover_names = [(name, index) for index, name in
+                          enumerate((name for name in decompressed_multidata["names"][0]), start=1)]
+        newslots = [(Slot(data=None, player_name=name, player_id=slot, game=decompressed_multidata["games"][slot]))
+                    for name, slot in leftover_names if name not in player_names]
+        for slot in newslots:
+            slots.add(slot)
+
         flush()  # commit slots
         seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner, meta=json.dumps(meta),
                     id=sid if sid else uuid.uuid4())
@@ -92,7 +100,7 @@ def uploads():
             if file.filename == '':
                 flash('No selected file')
             elif file and allowed_file(file.filename):
-                if file.filename.endswith(".zip"):
+                if zipfile.is_zipfile(file):
                     with zipfile.ZipFile(file, 'r') as zfile:
                         res = upload_zip_to_db(zfile)
                         if type(res) == str:
@@ -100,12 +108,13 @@ def uploads():
                         elif res:
                             return redirect(url_for("view_seed", seed=res.id))
                 else:
+                    file.seek(0)  # offset from is_zipfile check
+                    # noinspection PyBroadException
                     try:
                         multidata = file.read()
-                        MultiServer.Context._decompress(multidata)
-                    except:
-                        flash("Could not load multidata. File may be corrupted or incompatible.")
-                        raise
+                        MultiServer.Context.decompress(multidata)
+                    except Exception as e:
+                        flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
                     else:
                         seed = Seed(multidata=multidata, owner=session["_id"])
                         flush()  # place into DB and generate ids

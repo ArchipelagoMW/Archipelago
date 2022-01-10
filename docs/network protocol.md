@@ -13,6 +13,10 @@ These steps should be followed in order to establish a gameplay connection with 
 
 In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
 
+There are libraries available that implement the this network protocol in [Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py), [Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java) and [.Net](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net)
+
+For Super Nintendo games there are clients available in either [Node](https://github.com/ArchipelagoMW/SuperNintendoClient) or [Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py), There are also game specific clients available for [The Legend of Zelda: Ocarina of Time](https://github.com/ArchipelagoMW/Z5Client) or [Final Fantasy 1](https://github.com/ArchipelagoMW/Archipelago/blob/main/FF1Client.py)
+
 ## Synchronizing Items
 When the client receives a [ReceivedItems](#ReceivedItems) packet, if the `index` argument does not match the next index that the client expects then it is expected that the client will re-sync items with the server. This can be accomplished by sending the server a [Sync](#Sync) packet and then a [LocationChecks](#LocationChecks) packet.
 
@@ -51,13 +55,13 @@ Sent to clients when they connect to an Archipelago server.
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| version | NetworkVersion | Object denoting the version of Archipelago which the server is running. See [NetworkVersion](#NetworkVersion) for more details. |
+| version | [NetworkVersion](#NetworkVersion) | Object denoting the version of Archipelago which the server is running. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. Example: `WebHost` |
 | password | bool | Denoted whether a password is required to join this room.|
-| permissions | dict\[str, Permission\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "forfeit", "collect" and "remaining". |
+| permissions | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "forfeit", "collect" and "remaining". |
 | hint_cost | int | The amount of points it costs to receive a hint from the server. |
 | location_check_points | int | The amount of hint points you receive per item/location check completed. ||
-| players | list\[NetworkPlayer\] | Sent only if the client is properly authenticated (see [Archipelago Connection Handshake](#Archipelago-Connection-Handshake)). Information on the players currently connected to the server. See [NetworkPlayer](#NetworkPlayer) for more details. |
+| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Sent only if the client is properly authenticated (see [Archipelago Connection Handshake](#Archipelago-Connection-Handshake)). Information on the players currently connected to the server. |
 | games | list\[str\] | sorted list of game names for the players, so first player's game will be games\[0\]. Matches game names in datapackage. |
 | datapackage_version | int | Data version of the [data package](#Data-Package-Contents) the server will send. Used to update the client's (optional) local cache. |
 | datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. |
@@ -110,7 +114,7 @@ Sent to clients when the connection handshake is successfully completed.
 | ---- | ---- | ----- |
 | team | int | Your team number. See [NetworkPlayer](#NetworkPlayer) for more info on team number. |
 | slot | int | Your slot number on your team. See [NetworkPlayer](#NetworkPlayer) for more info on the slot number. |
-| players | list\[NetworkPlayer\] | List denoting other players in the multiworld, whether connected or not. See [NetworkPlayer](#NetworkPlayer) for info on the format. |
+| players | list\[[NetworkPlayer](#NetworkPlayer)\] | List denoting other players in the multiworld, whether connected or not. |
 | missing_locations | list\[int\] | Contains ids of remaining locations that need to be checked. Useful for trackers, among other things. |
 | checked_locations | list\[int\] | Contains ids of all locations that have been checked. Useful for trackers, among other things. |
 | slot_data | dict | Contains a json object for slot related data, differs per game. Empty if not required. |
@@ -121,14 +125,14 @@ Sent to clients when they receive an item.
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | index | int | The next empty slot in the list of items for the receiving client. |
-| items | list\[NetworkItem\] | The items which the client is receiving. See [NetworkItem](#NetworkItem) for more details. |
+| items | list\[[NetworkItem](#NetworkItem)\] | The items which the client is receiving. |
 
 ### LocationInfo
 Sent to clients to acknowledge a received [LocationScouts](#LocationScouts) packet and responds with the item in the location(s) being scouted.
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| locations | list\[NetworkItem\] | Contains list of item(s) in the location(s) scouted. See [NetworkItem](#NetworkItem) for more details. |
+| locations | list\[[NetworkItem](#NetworkItem)\] | Contains list of item(s) in the location(s) scouted. |
 
 ### RoomUpdate
 Sent when there is a need to update information about the present game session. Generally useful for async games.
@@ -139,9 +143,9 @@ The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | hint_points | int | New argument. The client's current hint points. |
-| players | list\[NetworkPlayer\] | Changed argument. Always sends all players, whether connected or not. |
-| checked_locations | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
-| missing_locations | Should never be sent as an update, if needed is the inverse of checked_locations. |
+| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Changed argument. Always sends all players, whether connected or not. |
+| checked_locations | list\[int\] | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
+| missing_locations | list\[int\] | Should never be sent as an update, if needed is the inverse of checked_locations. |
 
 All arguments for this packet are optional, only changes are sent.
 
@@ -157,10 +161,10 @@ Sent to clients purely to display a message to the player. This packet differs f
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| data | list\[JSONMessagePart\] | See [JSONMessagePart](#JSONMessagePart) for more details on this type. |
+| data | list\[[JSONMessagePart](#JSONMessagePart)\] | Type of this part of the message. |
 | type | str | May be present to indicate the nature of this message. Known types are Hint and ItemSend. |
 | receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID. |
-| item | NetworkItem | Is present if type is Hint or ItemSend and marks the source player id, location id and item id. |
+| item | [NetworkItem](#NetworkItem) | Is present if type is Hint or ItemSend and marks the source player id, location id and item id. |
 | found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
 
 ### DataPackage
@@ -169,7 +173,7 @@ Sent to clients to provide what is known as a 'data package' which contains info
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| data | DataPackageObject | The data package as a JSON object. More details on its contents may be found at [Data Package Contents](#Data-Package-Contents) |
+| data | [DataPackageObject](#Data-Package-Contents) | The data package as a JSON object. |
 
 ### Bounced
 Sent to clients after a client requested this message be sent to them, more info in the Bounce package.
@@ -209,7 +213,7 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | game | str | The name of the game the client is playing. Example: `A Link to the Past` |
 | name | str | The player name for this client. |
 | uuid | str | Unique identifier for player client. |
-| version | NetworkVersion | An object representing the Archipelago version this client supports. |
+| version | [NetworkVersion](#NetworkVersion) | An object representing the Archipelago version this client supports. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
 
 #### Authentication

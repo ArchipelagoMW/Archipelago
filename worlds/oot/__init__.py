@@ -24,6 +24,7 @@ from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 from .Hints import hint_dist_keys, get_hint_area, buildWorldGossipHints
 from .HintList import getRequiredHints
+from .SaveContext import SaveContext
 
 from Utils import get_options, output_path
 from BaseClasses import MultiWorld, CollectionState, RegionType
@@ -186,6 +187,8 @@ class OOTWorld(World):
         self.mq_dungeons_random = False  # this will be a deprecated option later
         self.ocarina_songs = False  # just need to pull in the OcarinaSongs module
         self.big_poe_count = 1  # disabled due to client-side issues for now
+        self.mix_entrance_pools = False
+        self.decouple_entrances = False
 
         # Set internal names used by the OoT generator
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld']
@@ -469,13 +472,16 @@ class OOTWorld(World):
                 self.remove_from_start_inventory.remove(item.name)
                 removed_items.append(item.name)
             else:
-                self.starting_items[item.name] += 1
-                if item.type == 'Song':
-                    self.starting_songs = True
-                # Call the junk fill and get a replacement
-                if item in self.itempool:
-                    self.itempool.remove(item)
-                    self.itempool.append(self.create_item(*get_junk_item(pool=junk_pool)))
+                if item.name not in SaveContext.giveable_items:
+                    raise Exception(f"Invalid OoT starting item: {item.name}")
+                else:
+                    self.starting_items[item.name] += 1
+                    if item.type == 'Song':
+                        self.starting_songs = True
+                    # Call the junk fill and get a replacement
+                    if item in self.itempool:
+                        self.itempool.remove(item)
+                        self.itempool.append(self.create_item(*get_junk_item(pool=junk_pool)))
         if self.start_with_consumables:
             self.starting_items['Deku Sticks'] = 30
             self.starting_items['Deku Nuts'] = 40
@@ -716,7 +722,6 @@ class OOTWorld(World):
         impa = self.world.get_location("Song from Impa", self.player)
         if self.skip_child_zelda:
             if impa.item is None:
-                from .SaveContext import SaveContext
                 item_to_place = self.world.random.choice(list(item for item in self.world.itempool if
                                                               item.player == self.player and item.name in SaveContext.giveable_items))
                 impa.place_locked_item(item_to_place)
@@ -827,7 +832,12 @@ class OOTWorld(World):
                                 or (loc.player in item_hint_players and loc.name in world.worlds[loc.player].added_hint_types['item'])):
                         autoworld.major_item_locations.append(loc)
 
-                    if loc.game == "Ocarina of Time" and loc.item.code and (not loc.locked or loc.item.type == 'Song'):
+                    if loc.game == "Ocarina of Time" and loc.item.code and (not loc.locked or 
+                        (loc.item.type == 'Song' or 
+                            (loc.item.type == 'SmallKey'         and world.worlds[loc.player].shuffle_smallkeys     == 'any_dungeon') or
+                            (loc.item.type == 'FortressSmallKey' and world.worlds[loc.player].shuffle_fortresskeys  == 'any_dungeon') or
+                            (loc.item.type == 'BossKey'          and world.worlds[loc.player].shuffle_bosskeys      == 'any_dungeon') or
+                            (loc.item.type == 'GanonBossKey'     and world.worlds[loc.player].shuffle_ganon_bosskey == 'any_dungeon'))):
                         if loc.player in barren_hint_players:
                             hint_area = get_hint_area(loc)
                             items_by_region[loc.player][hint_area]['weight'] += 1

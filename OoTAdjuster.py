@@ -12,6 +12,7 @@ from worlds.oot.Cosmetics import patch_cosmetics
 from worlds.oot.Options import cosmetic_options, sfx_options
 from worlds.oot.Rom import Rom, compress_rom_file
 from worlds.oot.N64Patch import apply_patch_file
+from worlds.oot.Utils import data_path
 from Utils import local_path
 
 logger = logging.getLogger('OoTAdjuster')
@@ -211,9 +212,11 @@ def adjust(args):
     ootworld.logic_rules = 'glitched' if args.is_glitched else 'glitchless'
     ootworld.death_link = args.deathlink
 
+    delete_zootdec = False
     if os.path.splitext(args.rom)[-1] in ['.z64', '.n64']:
         # Load up the ROM
         rom = Rom(file=args.rom, force_use=True)
+        delete_zootdec = True
     elif os.path.splitext(args.rom)[-1] == '.apz5':
         # Load vanilla ROM
         rom = Rom(file=args.vanilla_rom, force_use=True)
@@ -222,15 +225,21 @@ def adjust(args):
     else:
         raise Exception("Invalid file extension; requires .n64, .z64, .apz5")
     # Call patch_cosmetics
-    patch_cosmetics(ootworld, rom)
-    rom.write_byte(rom.sym('DEATH_LINK'), args.deathlink)
-    # Output new file
-    path_pieces = os.path.splitext(args.rom)
-    decomp_path = path_pieces[0] + '-adjusted-decomp.n64'
-    comp_path = path_pieces[0] + '-adjusted.n64'
-    rom.write_to_file(decomp_path)
-    compress_rom_file(decomp_path, comp_path)
-    os.remove(decomp_path)
+    try:
+        patch_cosmetics(ootworld, rom)
+        rom.write_byte(rom.sym('DEATH_LINK'), args.deathlink)
+        # Output new file
+        path_pieces = os.path.splitext(args.rom)
+        decomp_path = path_pieces[0] + '-adjusted-decomp.n64'
+        comp_path = path_pieces[0] + '-adjusted.n64'
+        rom.write_to_file(decomp_path)
+        os.chdir(data_path("Compress"))
+        compress_rom_file(decomp_path, comp_path)
+        os.remove(decomp_path)
+    finally:
+        if delete_zootdec:
+            os.chdir(os.path.split(__file__)[0])
+            os.remove("ZOOTDEC.z64")
     return comp_path
 
 if __name__ == '__main__':

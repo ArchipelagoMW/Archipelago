@@ -235,11 +235,11 @@ class Context:
             with open(multidatapath, 'rb') as f:
                 data = f.read()
 
-        self._load(self._decompress(data), use_embedded_server_options)
+        self._load(self.decompress(data), use_embedded_server_options)
         self.data_filename = multidatapath
 
     @staticmethod
-    def _decompress(data: bytes) -> dict:
+    def decompress(data: bytes) -> dict:
         format_version = data[0]
         if format_version != 1:
             raise Exception("Incompatible multidata.")
@@ -639,7 +639,7 @@ def collect_player(ctx: Context, team: int, slot: int):
 
     ctx.notify_all("%s (Team #%d) has collected" % (ctx.player_names[(team, slot)], team + 1))
     for source_player, location_ids in all_locations.items():
-        register_location_checks(ctx, team, source_player, location_ids)
+        register_location_checks(ctx, team, source_player, location_ids, count_activity=False)
         update_checked_locations(ctx, team, source_player)
 
 
@@ -651,11 +651,13 @@ def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
     return sorted(items)
 
 
-def register_location_checks(ctx: Context, team: int, slot: int, locations: typing.Iterable[int]):
+def register_location_checks(ctx: Context, team: int, slot: int, locations: typing.Iterable[int],
+                             count_activity: bool = True):
     new_locations = set(locations) - ctx.location_checks[team, slot]
     new_locations.intersection_update(ctx.locations[slot])  # ignore location IDs unknown to this multidata
     if new_locations:
-        ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
+        if count_activity:
+            ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
         for location in new_locations:
             item_id, target_player = ctx.locations[slot][location]
             new_item = NetworkItem(item_id, location, slot)
