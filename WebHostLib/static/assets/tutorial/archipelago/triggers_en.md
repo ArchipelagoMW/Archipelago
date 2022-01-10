@@ -97,39 +97,4 @@ For example:
             difficulty: mystery
   ```
 
-In this example if the `pupdunk` option is rolled then the difficulty values will be rolled again using the new options `normal`, `pupdunk_hard`, and `pupdunk_mystery`, and the exp modifier will be rerolled using new weights for 150 and 200. This allows for two more triggers that will only be used for the new `pupdunk_hard` and `pupdunk_mystery` options so that they will only be triggered on "pupdunk AND hard/mystery".
-
-It is also possible to use imaginary names in options to trigger specific settings. You can use these made up names in either your main options or to trigger from another trigger. Currently this is the only way to trigger on "setting 1 AND setting 2".
-
-For example:
-  ```yaml
-  triggers:
-    - option_category: Secret of Evermore
-      option_name: doggomizer
-        option_result: pupdunk
-        options:
-          Secret of Evermore:
-            difficulty:
-              normal: 50
-              pupdunk_hard: 25
-              pupdunk_mystery: 25
-            exp_modifier:
-              150: 50
-              200: 50
-      - option_category: Secret of Evermore
-        option_name: difficulty
-        option_result: pupdunk_hard
-        options:
-          Secret of Evermore:
-            fix_wings_glitch: false
-            difficulty: hard
-      - option_category: Secret of Evermore
-        option_name: difficulty
-        option_result: pupdunk_mystery
-        options:
-          Secret of Evermore:
-            fix_wings_glitch: false
-            difficulty: mystery
-  ```
-
 In this example (thanks to @Black-Sliver) if the `pupdunk` option is rolled then the difficulty values will be rolled again using the new options `normal`, `pupdunk_hard`, and `pupdunk_mystery`, and the exp modifier will be rerolled using new weights for 150 and 200. This allows for two more triggers that will only be used for the new `pupdunk_hard` and `pupdunk_mystery` options so that they will only be triggered on "pupdunk AND hard/mystery".
