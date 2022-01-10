@@ -33,8 +33,21 @@ following the colons here are weights. The generator will read the weight of eve
 times, the next option as many times as its numbered and so forth. For the above example `nested_option_one` will have
 `option_one_setting_one` 1 time and `option_one_setting_two` 0 times so `option_one_setting_one` is guaranteed to occur.
 For `nested_option_two`, `option_two_setting_one` will be rolled 14 times and `option_two_setting_two` will be rolled 43
-times against each other. This means `option_two_setting_two` will be more likely to occur but it isn't guaranteed adding
-more randomness and "mystery" to your settings. Every configurable setting supports weights.
+times against each other. This means `option_two_setting_two` will be more likely to occur, but it isn't guaranteed,
+adding more randomness and "mystery" to your settings. Every configurable setting supports weights.
+
+#### Random options
+
+Settings which take numbers as options can use a variety of `random` options to choose a number randomly.
+
+* `random` will choose a number allowed for the setting at random
+* `random-low` will choose a number allowed for the setting at random, but will be weighted towards lower numbers
+* `random-middle` will choose a number allowed for the setting at random, but will be weighted towards the middle of the range
+* `random-high` will choose a number allowed for the setting at random, but will be weighted towards higher numbers
+* `random-range-#-#` will choose a number at random from between the specified numbers. For example `random-range-40-60`
+will choose a number between 40 and 60
+* `random-range-low-#-#`, `random-range-middle-#-#`, and `random-range-high-#-#` will choose a number at random from the
+specified numbers, but with the specified weights
 
 ### Root Options
 Currently there are only a few options that are root options. Everything else should be nested within one of these root
@@ -105,6 +118,10 @@ A Link to the Past:
   smallkey_shuffle:
     original_dungeon: 1
     any_world: 1
+  crystals_needed_for_gt:
+    random-low: 1
+  crystals_needed_for_ganon:
+    random-range-high-1-7: 1
   start_inventory:
     Pegasus Boots: 1
     Bombs (3): 2
@@ -144,6 +161,10 @@ things to do.
 * `smallkey_shuffle` is an option for A Link to the Past which determines how dungeon small keys are shuffled. In this example
 we have a 1/2 chance for them to either be placed in their original dungeon and a 1/2 chance for them to be placed anywhere
 amongst the multiworld.
+* `crystals_needed_for_gt` determines the number of crystals required to enter the Ganon's Tower entrance. In this example
+a random number will be chosen from the allowed range for this setting (0 through 7) but will be weighted towards a lower number.
+* `crystals_needed_for_ganon` determines the number of crystals required to beat Ganon. In this example a number
+between 1 and 7 will be chosen at random, weighted towards a high number.
 * `start_inventory` defines an area for us to determine what items we would like to start the seed with. For this example
 we have:
   * `Pegasus Boots: 1` which gives us 1 copy of the Pegasus Boots
