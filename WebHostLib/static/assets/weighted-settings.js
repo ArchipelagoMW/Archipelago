@@ -835,7 +835,7 @@ const updateGameSetting = (event) => {
   localStorage.setItem('weighted-settings', JSON.stringify(options));
 };
 
-const exportSettings = () => {
+const validateSettings = () => {
   const settings = JSON.parse(localStorage.getItem('weighted-settings'));
   const userMessage = document.getElementById('user-message');
   let errorMessage = null;
@@ -891,6 +891,12 @@ const exportSettings = () => {
 
   // If no error occurred, hide the user message if it is visible
   userMessage.classList.remove('visible');
+  return settings;
+};
+
+const exportSettings = () => {
+  const settings = validateSettings();
+  if (!settings) { return; }
 
   const yamlText = jsyaml.safeDump(settings, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);
   download(`${document.getElementById('player-name').value}.yaml`, yamlText);
@@ -908,9 +914,12 @@ const download = (filename, text) => {
 };
 
 const generateGame = (raceMode = false) => {
+  const settings = validateSettings();
+  if (!settings) { return; }
+
   axios.post('/api/generate', {
-    weights: { player: localStorage.getItem('weighted-settings') },
-    presetData: { player: localStorage.getItem('weighted-settings') },
+    weights: { player: JSON.stringify(settings) },
+    presetData: { player: JSON.stringify(settings) },
     playerCount: 1,
     race: raceMode ? '1' : '0',
   }).then((response) => {
