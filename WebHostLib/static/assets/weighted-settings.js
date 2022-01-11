@@ -95,14 +95,13 @@ const createDefaultSettings = (settingData) => {
       newSettings[game].local_items = [];
       newSettings[game].non_local_items = [];
       newSettings[game].start_hints = [];
+      newSettings[game].start_location_hints = [];
     }
 
     localStorage.setItem('weighted-settings', JSON.stringify(newSettings));
   }
 };
 
-// TODO: Include item configs: start_inventory, local_items, non_local_items, start_hints
-// TODO: Include location configs: exclude_locations
 const buildUI = (settingData) => {
   // Build the game-choice div
   buildGameChoice(settingData.games);
@@ -133,12 +132,17 @@ const buildUI = (settingData) => {
 
     const itemsDiv = buildItemsDiv(game, settingData.games[game].gameItems);
     gameDiv.appendChild(itemsDiv);
+
+    const hintsDiv = buildHintsDiv(game, settingData.games[game].gameItems, settingData.games[game].gameLocations);
+    gameDiv.appendChild(hintsDiv);
+
     gamesWrapper.appendChild(gameDiv);
 
     collapseButton.addEventListener('click', () => {
       collapseButton.classList.add('invisible');
       weightedSettingsDiv.classList.add('invisible');
       itemsDiv.classList.add('invisible');
+      hintsDiv.classList.add('invisible');
       expandButton.classList.remove('invisible');
     });
 
@@ -146,6 +150,7 @@ const buildUI = (settingData) => {
       collapseButton.classList.remove('invisible');
       weightedSettingsDiv.classList.remove('invisible');
       itemsDiv.classList.remove('invisible');
+      hintsDiv.classList.remove('invisible');
       expandButton.classList.add('invisible');
     });
   });
@@ -619,6 +624,24 @@ const itemDropHandler = (evt) => {
 
   // Save the updated settings
   localStorage.setItem('weighted-settings', JSON.stringify(currentSettings));
+};
+
+const buildHintsDiv = (game, items, locations) => {
+  const hintsDiv = document.createElement('div');
+  hintsDiv.classList.add('hints-div');
+  const hintsHeader = document.createElement('h3');
+  hintsHeader.innerText = 'Item & Location Hints';
+  hintsDiv.appendChild(hintsHeader);
+  const hintsDescription = document.createElement('p');
+  hintsDescription.classList.add('setting-description');
+  hintsDescription.innerText = 'Choose any items or locations to begin the game with the knowledge of where those ' +
+    ' items, are or what those locations contain. Excluded locations will not contain progression items.';
+  hintsDiv.appendChild(hintsDescription);
+
+  const itemHintsDiv = document.createElement('div');
+
+  hintsDiv.appendChild(itemHintsDiv);
+  return hintsDiv;
 };
 
 const updateVisibleGames = () => {
