@@ -860,10 +860,6 @@ const validateSettings = () => {
       return;
     }
 
-    if (Object.keys(settings.game).length === 0) {
-      errorMessage = 'You have not chosen a game to play!';
-    }
-
     // Remove any disabled options
     Object.keys(settings[game]).forEach((setting) => {
       Object.keys(settings[game][setting]).forEach((option) => {
@@ -877,6 +873,10 @@ const validateSettings = () => {
       }
     });
   });
+
+  if (Object.keys(settings.game).length === 0) {
+    errorMessage = 'You have not chosen a game to play!';
+  }
 
   // If an error occurred, alert the user and do not export the file
   if (errorMessage) {
