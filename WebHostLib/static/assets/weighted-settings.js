@@ -467,6 +467,18 @@ const buildWeightedSettingsDiv = (game, settings) => {
         settingWrapper.appendChild(rangeTable);
         break;
 
+      case 'items-list':
+        // TODO
+        break;
+
+      case 'locations-list':
+        // TODO
+        break;
+
+      case 'custom-list':
+        // TODO
+        break;
+
       default:
         console.error(`Unknown setting type for ${game} setting ${setting}: ${settings[setting].type}`);
         return;
