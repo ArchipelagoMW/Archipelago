@@ -90,7 +90,7 @@ const createDefaultSettings = (settingData) => {
         }
       }
 
-      newSettings[game].start_inventory = [];
+      newSettings[game].start_inventory = {};
       newSettings[game].exclude_locations = [];
       newSettings[game].local_items = [];
       newSettings[game].non_local_items = [];
@@ -546,18 +546,20 @@ const buildItemsDiv = (game, items) => {
 
   // Populate the divs
   items.forEach((item) => {
-    const itemDiv = buildItemDiv(game, item);
-
-    if (currentSettings[game].start_inventory.includes(item)){
+    if (Object.keys(currentSettings[game].start_inventory).includes(item)){
+      const itemDiv = buildItemQtyDiv(game, item);
       itemDiv.setAttribute('data-setting', 'start_inventory');
       startInventory.appendChild(itemDiv);
     } else if (currentSettings[game].local_items.includes(item)) {
+      const itemDiv = buildItemDiv(game, item);
       itemDiv.setAttribute('data-setting', 'local_items');
       localItems.appendChild(itemDiv);
     } else if (currentSettings[game].non_local_items.includes(item)) {
+      const itemDiv = buildItemDiv(game, item);
       itemDiv.setAttribute('data-setting', 'non_local_items');
       nonLocalItems.appendChild(itemDiv);
     } else {
+      const itemDiv = buildItemDiv(game, item);
       availableItems.appendChild(itemDiv);
     }
   });
@@ -588,6 +590,35 @@ const buildItemDiv = (game, item) => {
   return itemDiv;
 };
 
+const buildItemQtyDiv = (game, item) => {
+  const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
+  const itemQtyDiv = document.createElement('div');
+  itemQtyDiv.classList.add('item-qty-div');
+  itemQtyDiv.setAttribute('id', `${game}-${item}`);
+  itemQtyDiv.setAttribute('data-game', game);
+  itemQtyDiv.setAttribute('data-item', item);
+  itemQtyDiv.setAttribute('draggable', 'true');
+  itemQtyDiv.innerText = item;
+
+  const itemQty = document.createElement('input');
+  itemQty.setAttribute('value', currentSettings[game].start_inventory.hasOwnProperty(item) ?
+    currentSettings[game].start_inventory[item] : '1');
+  itemQty.setAttribute('data-game', game);
+  itemQty.setAttribute('data-setting', 'start_inventory');
+  itemQty.setAttribute('data-option', item);
+  itemQty.setAttribute('maxlength', '3');
+  itemQty.addEventListener('keyup', (evt) => {
+    evt.target.value = isNaN(parseInt(evt.target.value)) ? 0 : parseInt(evt.target.value);
+    updateItemSetting(evt);
+  });
+  itemQtyDiv.appendChild(itemQty);
+
+  itemQtyDiv.addEventListener('dragstart', (evt) => {
+    evt.dataTransfer.setData('text/plain', itemQtyDiv.getAttribute('id'));
+  });
+  return itemQtyDiv;
+};
+
 const itemDragoverHandler = (evt) => {
   evt.preventDefault();
 };
@@ -600,22 +631,33 @@ const itemDropHandler = (evt) => {
   const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
   const game = sourceDiv.getAttribute('data-game');
   const item = sourceDiv.getAttribute('data-item');
-  const itemDiv = buildItemDiv(game, item);
 
   const oldSetting = sourceDiv.hasAttribute('data-setting') ? sourceDiv.getAttribute('data-setting') : null;
   const newSetting = evt.target.hasAttribute('data-setting') ? evt.target.getAttribute('data-setting') : null;
 
+  const itemDiv = newSetting === 'start_inventory' ? buildItemQtyDiv(game, item) : buildItemDiv(game, item);
+
   if (oldSetting) {
-    if (currentSettings[game][oldSetting].includes(item)) {
-      currentSettings[game][oldSetting].splice(currentSettings[game][oldSetting].indexOf(item), 1);
+    if (oldSetting === 'start_inventory') {
+      if (currentSettings[game][oldSetting].hasOwnProperty(item)) {
+        delete currentSettings[game][oldSetting][item];
+      }
+    } else {
+      if (currentSettings[game][oldSetting].includes(item)) {
+        currentSettings[game][oldSetting].splice(currentSettings[game][oldSetting].indexOf(item), 1);
+      }
     }
   }
 
   if (newSetting) {
     itemDiv.setAttribute('data-setting', newSetting);
     document.getElementById(`${game}-${newSetting}`).appendChild(itemDiv);
-    if (!currentSettings[game][newSetting].includes(item)){
-      currentSettings[game][newSetting].push(item);
+    if (newSetting === 'start_inventory') {
+      currentSettings[game][newSetting][item] = 1;
+    } else {
+      if (!currentSettings[game][newSetting].includes(item)){
+        currentSettings[game][newSetting].push(item);
+      }
     }
   } else {
     // No setting was assigned, this item has been removed from the settings
@@ -823,15 +865,28 @@ const updateBaseSetting = (event) => {
   localStorage.setItem('weighted-settings', JSON.stringify(settings));
 };
 
-const updateGameSetting = (event) => {
+const updateGameSetting = (evt) => {
   const options = JSON.parse(localStorage.getItem('weighted-settings'));
-  const game = event.target.getAttribute('data-game');
-  const setting = event.target.getAttribute('data-setting');
-  const option = event.target.getAttribute('data-option');
-  const type = event.target.getAttribute('data-type');
-  document.getElementById(`${game}-${setting}-${option}`).innerText = event.target.value;
-  options[game][setting][option] = isNaN(event.target.value) ?
-      event.target.value : parseInt(event.target.value, 10);
+  const game = evt.target.getAttribute('data-game');
+  const setting = evt.target.getAttribute('data-setting');
+  const option = evt.target.getAttribute('data-option');
+  document.getElementById(`${game}-${setting}-${option}`).innerText = evt.target.value;
+  options[game][setting][option] = isNaN(evt.target.value) ?
+      evt.target.value : parseInt(evt.target.value, 10);
+  localStorage.setItem('weighted-settings', JSON.stringify(options));
+};
+
+const updateItemSetting = (evt) => {
+  const options = JSON.parse(localStorage.getItem('weighted-settings'));
+  const game = evt.target.getAttribute('data-game');
+  const setting = evt.target.getAttribute('data-setting');
+  const option = evt.target.getAttribute('data-option');
+  if (setting === 'start_inventory') {
+    options[game][setting][option] = evt.target.value.trim() ? parseInt(evt.target.value) : 0;
+  } else {
+    options[game][setting][option] = isNaN(evt.target.value) ?
+      evt.target.value : parseInt(evt.target.value, 10);
+  }
   localStorage.setItem('weighted-settings', JSON.stringify(options));
 };
 
@@ -868,7 +923,11 @@ const validateSettings = () => {
         }
       });
 
-      if (Object.keys(settings[game][setting]).length === 0 && !Array.isArray(settings[game][setting])) {
+      if (
+        Object.keys(settings[game][setting]).length === 0 &&
+        !Array.isArray(settings[game][setting]) &&
+        setting !== 'start_inventory'
+      ) {
         errorMessage = `${game} // ${setting} has no values above zero!`;
       }
     });

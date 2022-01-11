@@ -125,6 +125,24 @@ html{
     background-color: rgba(0, 0, 0, 0.1);
 }
 
+#weighted-settings .item-container .item-qty-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.125rem 0.5rem;
+    cursor: pointer;
+}
+
+#weighted-settings .item-container .item-qty-div input{
+    min-width: unset;
+    width: 1.5rem;
+    text-align: center;
+}
+
+#weighted-settings .item-container .item-qty-div:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
 #weighted-settings .hints-div{
     margin-top: 2rem;
 }
