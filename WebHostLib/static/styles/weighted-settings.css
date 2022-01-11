@@ -133,6 +133,12 @@ html{
     cursor: pointer;
 }
 
+#weighted-settings .item-container .item-qty-div .item-qty-input-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
 #weighted-settings .item-container .item-qty-div input{
     min-width: unset;
     width: 1.5rem;
@@ -166,6 +172,8 @@ html{
     display: flex;
     flex-direction: row;
     cursor: pointer;
+    user-select: none;
+    -moz-user-select: none;
 }
 
 #weighted-settings .hints-div .hints-wrapper .hint-div:hover{

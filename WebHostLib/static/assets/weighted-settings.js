@@ -600,6 +600,9 @@ const buildItemQtyDiv = (game, item) => {
   itemQtyDiv.setAttribute('draggable', 'true');
   itemQtyDiv.innerText = item;
 
+  const inputWrapper = document.createElement('div');
+  inputWrapper.classList.add('item-qty-input-wrapper')
+
   const itemQty = document.createElement('input');
   itemQty.setAttribute('value', currentSettings[game].start_inventory.hasOwnProperty(item) ?
     currentSettings[game].start_inventory[item] : '1');
@@ -611,7 +614,8 @@ const buildItemQtyDiv = (game, item) => {
     evt.target.value = isNaN(parseInt(evt.target.value)) ? 0 : parseInt(evt.target.value);
     updateItemSetting(evt);
   });
-  itemQtyDiv.appendChild(itemQty);
+  inputWrapper.appendChild(itemQty);
+  itemQtyDiv.appendChild(inputWrapper);
 
   itemQtyDiv.addEventListener('dragstart', (evt) => {
     evt.dataTransfer.setData('text/plain', itemQtyDiv.getAttribute('id'));
