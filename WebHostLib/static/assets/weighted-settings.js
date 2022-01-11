@@ -479,6 +479,9 @@ const buildWeightedSettingsDiv = (game, settings) => {
 };
 
 const buildItemsDiv = (game, items) => {
+  // Sort alphabetical, in pace
+  items.sort();
+
   const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
   const itemsDiv = document.createElement('div');
   itemsDiv.classList.add('items-div');
@@ -542,7 +545,7 @@ const buildItemsDiv = (game, items) => {
   nonLocalItems.addEventListener('drop', itemDropHandler);
 
   // Populate the divs
-  items.sort().forEach((item) => {
+  items.forEach((item) => {
     const itemDiv = buildItemDiv(game, item);
 
     if (currentSettings[game].start_inventory.includes(item)){
@@ -627,6 +630,12 @@ const itemDropHandler = (evt) => {
 };
 
 const buildHintsDiv = (game, items, locations) => {
+  const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
+
+  // Sort alphabetical, in place
+  items.sort();
+  locations.sort();
+
   const hintsDiv = document.createElement('div');
   hintsDiv.classList.add('hints-div');
   const hintsHeader = document.createElement('h3');
@@ -635,13 +644,140 @@ const buildHintsDiv = (game, items, locations) => {
   const hintsDescription = document.createElement('p');
   hintsDescription.classList.add('setting-description');
   hintsDescription.innerText = 'Choose any items or locations to begin the game with the knowledge of where those ' +
-    ' items, are or what those locations contain. Excluded locations will not contain progression items.';
+    ' items are, or what those locations contain. Excluded locations will not contain progression items.';
   hintsDiv.appendChild(hintsDescription);
 
-  const itemHintsDiv = document.createElement('div');
+  const itemHintsContainer = document.createElement('div');
+  itemHintsContainer.classList.add('hints-container');
 
-  hintsDiv.appendChild(itemHintsDiv);
+  const itemHintsWrapper = document.createElement('div');
+  itemHintsWrapper.classList.add('hints-wrapper');
+  itemHintsWrapper.innerText = 'Starting Item Hints';
+
+  const itemHintsDiv = document.createElement('div');
+  itemHintsDiv.classList.add('item-container');
+  items.forEach((item) => {
+    const itemDiv = document.createElement('div');
+    itemDiv.classList.add('hint-div');
+
+    const itemLabel = document.createElement('label');
+    itemLabel.setAttribute('for', `${game}-start_hints-${item}`);
+
+    const itemCheckbox = document.createElement('input');
+    itemCheckbox.setAttribute('type', 'checkbox');
+    itemCheckbox.setAttribute('id', `${game}-start_hints-${item}`);
+    itemCheckbox.setAttribute('data-game', game);
+    itemCheckbox.setAttribute('data-setting', 'start_hints');
+    itemCheckbox.setAttribute('data-option', item);
+    if (currentSettings[game].start_hints.includes(item)) {
+      itemCheckbox.setAttribute('checked', 'true');
+    }
+    itemCheckbox.addEventListener('change', hintChangeHandler);
+    itemLabel.appendChild(itemCheckbox);
+
+    const itemName = document.createElement('span');
+    itemName.innerText = item;
+    itemLabel.appendChild(itemName);
+
+    itemDiv.appendChild(itemLabel);
+    itemHintsDiv.appendChild(itemDiv);
+  });
+
+  itemHintsWrapper.appendChild(itemHintsDiv);
+  itemHintsContainer.appendChild(itemHintsWrapper);
+
+  const locationHintsWrapper = document.createElement('div');
+  locationHintsWrapper.classList.add('hints-wrapper');
+  locationHintsWrapper.innerText = 'Starting Location Hints';
+
+  const locationHintsDiv = document.createElement('div');
+  locationHintsDiv.classList.add('item-container');
+  locations.forEach((location) => {
+    const locationDiv = document.createElement('div');
+    locationDiv.classList.add('hint-div');
+
+    const locationLabel = document.createElement('label');
+    locationLabel.setAttribute('for', `${game}-start_location_hints-${location}`);
+
+    const locationCheckbox = document.createElement('input');
+    locationCheckbox.setAttribute('type', 'checkbox');
+    locationCheckbox.setAttribute('id', `${game}-start_location_hints-${location}`);
+    locationCheckbox.setAttribute('data-game', game);
+    locationCheckbox.setAttribute('data-setting', 'start_location_hints');
+    locationCheckbox.setAttribute('data-option', location);
+    if (currentSettings[game].start_location_hints.includes(location)) {
+      locationCheckbox.setAttribute('checked', '1');
+    }
+    locationCheckbox.addEventListener('change', hintChangeHandler);
+    locationLabel.appendChild(locationCheckbox);
+
+    const locationName = document.createElement('span');
+    locationName.innerText = location;
+    locationLabel.appendChild(locationName);
+
+    locationDiv.appendChild(locationLabel);
+    locationHintsDiv.appendChild(locationDiv);
+  });
+
+  locationHintsWrapper.appendChild(locationHintsDiv);
+  itemHintsContainer.appendChild(locationHintsWrapper);
+
+  const excludeLocationsWrapper = document.createElement('div');
+  excludeLocationsWrapper.classList.add('hints-wrapper');
+  excludeLocationsWrapper.innerText = 'Exclude Locations';
+
+  const excludeLocationsDiv = document.createElement('div');
+  excludeLocationsDiv.classList.add('item-container');
+  locations.forEach((location) => {
+    const locationDiv = document.createElement('div');
+    locationDiv.classList.add('hint-div');
+
+    const locationLabel = document.createElement('label');
+    locationLabel.setAttribute('for', `${game}-exclude_locations-${location}`);
+
+    const locationCheckbox = document.createElement('input');
+    locationCheckbox.setAttribute('type', 'checkbox');
+    locationCheckbox.setAttribute('id', `${game}-exclude_locations-${location}`);
+    locationCheckbox.setAttribute('data-game', game);
+    locationCheckbox.setAttribute('data-setting', 'exclude_locations');
+    locationCheckbox.setAttribute('data-option', location);
+    if (currentSettings[game].exclude_locations.includes(location)) {
+      locationCheckbox.setAttribute('checked', '1');
+    }
+    locationCheckbox.addEventListener('change', hintChangeHandler);
+    locationLabel.appendChild(locationCheckbox);
+
+    const locationName = document.createElement('span');
+    locationName.innerText = location;
+    locationLabel.appendChild(locationName);
+
+    locationDiv.appendChild(locationLabel);
+    excludeLocationsDiv.appendChild(locationDiv);
+  });
+
+  excludeLocationsWrapper.appendChild(excludeLocationsDiv);
+  itemHintsContainer.appendChild(excludeLocationsWrapper);
+
+  hintsDiv.appendChild(itemHintsContainer);
   return hintsDiv;
+};
+
+const hintChangeHandler = (evt) => {
+  const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
+  const game = evt.target.getAttribute('data-game');
+  const setting = evt.target.getAttribute('data-setting');
+  const option = evt.target.getAttribute('data-option');
+
+  if (evt.target.checked) {
+    if (!currentSettings[game][setting].includes(option)) {
+      currentSettings[game][setting].push(option);
+    }
+  } else {
+    if (currentSettings[game][setting].includes(option)) {
+      currentSettings[game][setting].splice(currentSettings[game][setting].indexOf(option), 1);
+    }
+  }
+  localStorage.setItem('weighted-settings', JSON.stringify(currentSettings));
 };
 
 const updateVisibleGames = () => {
