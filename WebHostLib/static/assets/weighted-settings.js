@@ -85,6 +85,13 @@ const createDefaultSettings = (settingData) => {
             newSettings[game][gameSetting]['random-low'] = 0;
             newSettings[game][gameSetting]['random-high'] = 0;
             break;
+
+          case 'items-list':
+          case 'locations-list':
+          case 'custom-list':
+            newSettings[game][gameSetting] = [];
+            break;
+
           default:
             console.error(`Unknown setting type for ${game} setting ${gameSetting}: ${setting.type}`);
         }
