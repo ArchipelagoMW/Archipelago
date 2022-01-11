@@ -1,3 +1,4 @@
+import logging
 import os
 from Utils import __version__
 from jinja2 import Template
@@ -8,6 +9,9 @@ from worlds.AutoWorld import AutoWorldRegister
 import Options
 
 target_folder = os.path.join("WebHostLib", "static", "generated")
+
+handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hints", "start_location_hints",
+                 "exclude_locations"}
 
 
 def create():
@@ -91,6 +95,10 @@ def create():
                     "min": option.range_start,
                     "max": option.range_end,
                 }
+            elif option_name in handled_in_js:
+                pass
+            else:
+                logging.debug(f"{option} not exported to Web Settings.")
 
         player_settings["gameOptions"] = game_options
 
