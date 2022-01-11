@@ -837,11 +837,17 @@ const updateGameSetting = (event) => {
 
 const exportSettings = () => {
   const settings = JSON.parse(localStorage.getItem('weighted-settings'));
+  const userMessage = document.getElementById('user-message');
+  let errorMessage = null;
+
+  // User must choose a name for their file
   if (!settings.name || settings.name.trim().length === 0 || settings.name.toLowerCase().trim() === 'player') {
-    const userMessage = document.getElementById('user-message');
     userMessage.innerText = 'You forgot to set your player name at the top of the page!';
     userMessage.classList.add('visible');
-    window.scrollTo(0, 0);
+    userMessage.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
     return;
   }
 
@@ -854,6 +860,10 @@ const exportSettings = () => {
       return;
     }
 
+    if (Object.keys(settings.game).length === 0) {
+      errorMessage = 'You have not chosen a game to play!';
+    }
+
     // Remove any disabled options
     Object.keys(settings[game]).forEach((setting) => {
       Object.keys(settings[game][setting]).forEach((option) => {
@@ -861,8 +871,26 @@ const exportSettings = () => {
           delete settings[game][setting][option];
         }
       });
+
+      if (Object.keys(settings[game][setting]).length === 0 && !Array.isArray(settings[game][setting])) {
+        errorMessage = `${game} // ${setting} has no values above zero!`;
+      }
     });
   });
+
+  // If an error occurred, alert the user and do not export the file
+  if (errorMessage) {
+    userMessage.innerText = errorMessage;
+    userMessage.classList.add('visible');
+    userMessage.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+    return;
+  }
+
+  // If no error occurred, hide the user message if it is visible
+  userMessage.classList.remove('visible');
 
   const yamlText = jsyaml.safeDump(settings, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);
   download(`${document.getElementById('player-name').value}.yaml`, yamlText);
@@ -894,7 +922,10 @@ const generateGame = (raceMode = false) => {
       userMessage.innerText += ' ' + error.response.data.text;
     }
     userMessage.classList.add('visible');
-    window.scrollTo(0, 0);
+    userMessage.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
     console.error(error);
   });
 };
