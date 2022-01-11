@@ -25,7 +25,7 @@ preferred_endings = {
     GAME_ALTTP: "apbp",
     GAME_SM: "apm3",
     GAME_SOE: "apsoe",
-    GAME_SMZ3: "apzsm"
+    GAME_SMZ3: "apsmz"
 }
 
 
@@ -69,7 +69,7 @@ def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str
                            meta,
                            game)
     target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + (
-        ".apbp" if game == GAME_ALTTP else ".apm3")
+        ".apbp" if game == GAME_ALTTP else ".apsmz" if game == GAME_SMZ3 else ".apm3")
     write_lzma(bytes, target)
     return target
 
@@ -220,6 +220,13 @@ if __name__ == "__main__":
                         Utils.persistent_store("servers", data['hash'], data['server'])
                         print(f"Host is {data['server']}")
                 elif rom.endswith(".apm3"):
+                    print(f"Applying patch {rom}")
+                    data, target = create_rom_file(rom)
+                    print(f"Created rom {target}.")
+                    if 'server' in data:
+                        Utils.persistent_store("servers", data['hash'], data['server'])
+                        print(f"Host is {data['server']}")
+                elif rom.endswith(".apsmz"):
                     print(f"Applying patch {rom}")
                     data, target = create_rom_file(rom)
                     print(f"Created rom {target}.")

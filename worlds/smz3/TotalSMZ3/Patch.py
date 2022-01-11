@@ -573,7 +573,6 @@ class Patch:
     def WritePlayerNames(self):
         self.patches += [(0x385000 + (0 * 16), self.PlayerNameBytes("Archipelago"))]
         self.patches += [(0x385000 + (id * 16), self.PlayerNameBytes(name)) for name, id in self.playerNames.items()]
-        #self.patches += [(0x385000 + (world.Id * 16), self.PlayerNameBytes(world.Player)) for world in self.allWorlds]
 
     def PlayerNameBytes(self, name: str):
         name = (name[:16] if len(name) > 16 else name).center(16)

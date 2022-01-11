@@ -142,11 +142,15 @@ class SMZ3World(World):
                 for byte in bytes:
                     base_combined_rom[addr + offset] = byte
                     offset += 1
-            filename = f"SMZ3_{self.world.seed}_{self.world.get_player_name(self.player)}.sfc"
-            filename = os.path.join(output_directory, filename)
+            outfilebase = 'AP_' + self.world.seed_name
+            outfilepname = f'_P{self.player}'
+            outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}" \
+
+            filename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
             with open(filename, "wb") as binary_file:
                 binary_file.write(base_combined_rom)
             Patch.create_patch_file(filename, player=self.player, player_name=self.world.player_name[self.player], game=Patch.GAME_SMZ3)
+            os.remove(filename)
             self.rom_name = bytearray(patcher.title, 'utf8')
         except:
             raise
