@@ -538,6 +538,13 @@ def roll_item_plando(world_type, weights):
                     for key, value in items.items():
                         item_list += [key] * value
                     items = item_list
+                if isinstance(locations, dict):
+                    location_list = []
+                    for key, value in locations.items():
+                        location_list += [key] * value
+                    locations = location_list
+                if isinstance(locations, str):
+                    locations = [locations]
                 if not items or not locations:
                     raise Exception("You must specify at least one item and one location to place items.")
                 random.shuffle(items)
