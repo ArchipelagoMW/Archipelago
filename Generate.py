@@ -522,9 +522,6 @@ def roll_item_plando(world_type, weights):
     def add_plando_item(item: str, location: str):
         if item not in world_type.item_name_to_id:
             raise Exception(f"Could not plando item {item} as the item was not recognized")
-        if location not in world_type.location_name_to_id:
-            raise Exception(
-                f"Could not plando item {item} at location {location} as the location was not recognized")
         plando_items.append(PlandoItem(item, location, location_world, from_pool, force))
 
     options = weights.get("plando_items", [])
