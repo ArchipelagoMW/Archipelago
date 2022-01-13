@@ -402,11 +402,8 @@ def generate_itempool(world):
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_start_with_plus:
         for x in key_drop_data:
             if "Big" not in x:
-                if "Castle Tower" in x:
-                    world.push_precollected(ItemFactory(f"Small Key (Agahnims Tower)", player))
-                else:
-                    key_dungeon = "".join(x.split(" -")[0].split("\'"))
-                    world.push_precollected(ItemFactory(f"Small Key ({key_dungeon})", player))
+                key_dungeon = "".join(x.split(" -")[0].split("\'")).replace("Castle Tower", "Agahnims Tower")
+                world.push_precollected(ItemFactory(f"Small Key ({key_dungeon})", player))
 
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
