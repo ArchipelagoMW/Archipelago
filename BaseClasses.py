@@ -336,7 +336,10 @@ class MultiWorld():
 
     def get_unfilled_locations_for_players(self, location_name: str, players: Iterable[int]):
         for player in players:
-            location = self.get_location(location_name, player)
+            if (location_name, player) in self._location_cache:
+                location = self.get_location(location_name, player)
+            else:
+                continue
             if location.item is None:
                 yield location
 
