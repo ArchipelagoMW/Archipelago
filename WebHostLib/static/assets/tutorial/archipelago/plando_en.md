@@ -16,8 +16,9 @@ editor and find the `plando_options` key. The available plando modules can be en
 
 ## Item Plando
 Item plando allows a player to place an item in a specific location or specific locations, place multiple items into
-a list of specific locations both in their own game or in another player's game. **Note that there's a very good chance that
-cross-game plando could very well be broken i.e. placing on of your items in someone else's world playing a different game.**
+a list of specific locations both in their own game or in another player's game. **Note that, while you can place items into
+locations cross-game, all locations you list can be chosen from and if a location is chosen for a game that no one is playing,
+that item will fail to place.**
 * The options for item plando are `from_pool`, `world`, `percentage`, `force`, and either item and location, or items and locations.
   * `from_pool` determines if the item should be taken *from* the item pool or *added* to it. This can be true or false
 and defaults to true if omitted.
@@ -47,24 +48,29 @@ omitted will default to 100.
 * [A Link to the Past](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Items.py#L52)
 * [Factorio Non-Progressive](https://wiki.factorio.com/Technologies) Note that these use the *internal names*. For example, `advanced-electronics`
 * [Factorio Progressive](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/factorio/Technologies.py#L374)
+* [Final Fantasy 1](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ff1/data/items.json)
 * [Minecraft](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Items.py#L14)
 * [Ocarina of Time](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/Items.py#L61)
 * [Risk of Rain 2](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ror2/Items.py#L8)
+* [Rogue Legacy](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/rogue-legacy/Names/ItemName.py)
 * [Slay the Spire](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/spire/Items.py#L13)
 * [Subnautica](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/subnautica/items.json)
+* [Super Metroid](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/variaRandomizer/rando/Items.py#L37) Look for "Name="
 * [Timespinner](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/timespinner/Items.py#L11)
 
 ### Available Locations
 * [A Link to the Past](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Regions.py#L429)
 * [Factorio](https://wiki.factorio.com/Technologies) Same as items
+* [Final Fantasy 1](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ff1/data/locations.json)
 * [Minecraft](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Locations.py#L18)
 * [Ocarina of Time](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LocationList.py#L38)
 * [Risk of Rain 2](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ror2/Locations.py#L17) This is a special
 case. The locations are "ItemPickup[number]" up to the maximum set in the yaml.
+* [Rogue Legacy](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/rogue-legacy/Names/LocationName.py)
 * [Slay the Spire](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/spire/Locations.py)
 * [Subnautica](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/subnautica/locations.json)
+* [Super Metroid](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/variaRandomizer/graph/location.py#L132)
 * [Timespinner](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/timespinner/Locations.py#L13)
-
 
 A list of all available items and locations can also be found in the [server's datapackage](/api/datapackage).
 ### Examples
@@ -119,6 +125,16 @@ plando_items:
       steel-processing
     percentage: 80
     force: true
+
+# example block 5 - Secret of Evermore cross-game
+  - items:
+      Levitate: 1
+      Revealer: 1
+      Energize: 1
+    locations:
+      Master Sword Pedestal: 2
+      Boss Relic 1: 2
+    world: true
 ```
 1. This block has a 50% chance to occur, and if it does will place either the Empire Orb or Radiant Orb on another player's
 Starter Chest 1 and removes the chosen item from the item pool.
@@ -127,6 +143,7 @@ in their own dungeon major item chests.
 3. This block will always trigger and will lock boss relics on the bosses.
 4. This block has an 80% chance of occuring and when it does will place all but 1 of the items randomly among the four
 locations chosen here.
+6. This block will always trigger and will attempt to place Levitate, Revealer and Energize into up to two other player's Master Sword Pedestals, and up to two Boss Relic 1 locations. If there were fewer than two Slay the Spire games or fewer than two A Link to the Past games, some of these items could fail to place.
 
 ## Boss Plando
 As this is currently only supported by A Link to the Past instead of explaining here please refer to the 
