@@ -109,9 +109,9 @@ plando_items:
   - items:
       Boss Relic: 3
     locations:
-      Boss Relic 1
-      Boss Relic 2
-      Boss Relic 3
+      - Boss Relic 1
+      - Boss Relic 2
+      - Boss Relic 3
 
 # example block 4 - Factorio
   - items:
@@ -119,10 +119,10 @@ plando_items:
       electric-energy-accumulators: 1
       progressive-turret: 2
     locations:
-      military
-      gun-turret
-      logistic-science-pack
-      steel-processing
+      - military
+      - gun-turret
+      - logistic-science-pack
+      - steel-processing
     percentage: 80
     force: true
 
