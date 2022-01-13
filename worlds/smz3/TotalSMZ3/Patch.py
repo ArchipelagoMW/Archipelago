@@ -109,7 +109,7 @@ class Patch:
 
         self.WriteRemoveEquipmentFromUncle( self.myWorld.GetLocation("Link's Uncle").APLocation.item.item if 
                                             self.myWorld.GetLocation("Link's Uncle").APLocation.item.game == "SMZ3" else
-                                            Item(ItemType.Hammer))
+                                            Item(ItemType.Something))
 
         self.WriteGanonInvicible(config.GanonInvincible)
         self.WriteRngBlock()
@@ -282,7 +282,7 @@ class Patch:
             if (location.Type == LocationType.HeraStandingKey):
                 self.patches.append((Snes(0x9E3BB), [0xE4] if location.APLocation.item.item.Type == ItemType.KeyTH else [0xEB]))
             elif (location.Type in [LocationType.Pedestal, LocationType.Ether, LocationType.Bombos]):
-                text = Texts.ItemTextbox(location.APLocation.item.item if location.APLocation.item.game == "SMZ3" else Item(ItemType.Hammer))
+                text = Texts.ItemTextbox(location.APLocation.item.item if location.APLocation.item.game == "SMZ3" else Item(ItemType.Something))
                 dialog = Dialog.Simple(text)
                 if (location.Type == LocationType.Pedestal):
                     self.stringTable.SetPedestalText(text)
@@ -318,7 +318,7 @@ class Patch:
             
             return value.value
         else:
-            return ItemType.Hammer.value
+            return ItemType.Something.value
 
     def ItemTablePatch(self, location: Location, itemId: int):
         itemtype = 0 if location.APLocation.item.player == location.Region.world.Id else 1

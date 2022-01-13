@@ -1070,8 +1070,9 @@ async def game_watcher(ctx: Context):
                     ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
         elif ctx.game == GAME_SMZ3:
-            gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
-            if gamemode is not None and gamemode[0] in SMZ3_ENDGAME_MODES:
+            lttpCompleted = await snes_read(ctx, SRAM_START + 0x017506, 1)
+            smCompleted = await snes_read(ctx, SRAM_START + 0x017402, 1)
+            if smCompleted == 1 and lttpCompleted == 1:
                 if not ctx.finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     ctx.finished_game = True
