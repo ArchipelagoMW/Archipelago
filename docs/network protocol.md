@@ -343,8 +343,9 @@ Flags are bit flags:
 | Flag | Meaning |
 | ----- | ----- |
 | 0 | Indicates, indicates the item had no specail use in generation |
-| 1 << 0 | If set, indicates the item is can unlock progression |
+| 1 << 0 | If set, indicates the item is can unlock advancement |
 | 1 << 1 | If set, indicates the item important but not necessarily advancement |
+| 1 << 2 | If set, indicates the item is an trap |
 
 ### JSONMessagePart
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are intended to be read in the order they are listed in the packet.
