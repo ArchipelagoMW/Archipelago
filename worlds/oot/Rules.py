@@ -143,7 +143,7 @@ def set_rules(ootworld):
     if ootworld.skip_child_zelda:
         # If skip child zelda is on, the item at Song from Impa must be giveable by the save context. 
         location = world.get_location('Song from Impa', player)
-        add_item_rule(location, lambda item: item in SaveContext.giveable_items)
+        add_item_rule(location, lambda item: item.name in SaveContext.giveable_items)
 
     for name in ootworld.always_hints:
         add_rule(world.get_location(name, player), guarantee_hint)
