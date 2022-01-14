@@ -264,7 +264,7 @@ def ShopSlotFill(world):
                         price = world.random.randrange(8, 56)
 
                     shop.push_inventory(location.shop_slot, item_name,
-                                        min(int(price * 5 * world.shop_price_modifier[location.player] / 100), 9999), 1,
+                                        min(int(price * world.shop_price_modifier[location.player] / 100) * 5, 9999), 1,
                                         location.item.player if location.item.player != location.player else 0)
                     if 'P' in world.shop_shuffle[location.player]:
                         price_to_funny_price(shop.inventory[location.shop_slot], world, location.player)

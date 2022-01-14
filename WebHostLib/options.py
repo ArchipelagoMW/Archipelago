@@ -1,3 +1,4 @@
+import logging
 import os
 from Utils import __version__
 from jinja2 import Template
@@ -8,6 +9,9 @@ from worlds.AutoWorld import AutoWorldRegister
 import Options
 
 target_folder = os.path.join("WebHostLib", "static", "generated")
+
+handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hints", "start_location_hints",
+                 "exclude_locations"}
 
 
 def create():
@@ -59,7 +63,10 @@ def create():
 
         game_options = {}
         for option_name, option in all_options.items():
-            if option.options:
+            if option_name in handled_in_js:
+                pass
+
+            elif option.options:
                 game_options[option_name] = this_option = {
                     "type": "select",
                     "displayName": option.displayname if hasattr(option, "displayname") else option_name,
@@ -91,6 +98,32 @@ def create():
                     "min": option.range_start,
                     "max": option.range_end,
                 }
+
+            elif getattr(option, "verify_item_name", False):
+                game_options[option_name] = {
+                    "type": "items-list",
+                    "displayName": option.displayname if hasattr(option, "displayname") else option_name,
+                    "description": option.__doc__ if option.__doc__ else "Please document me!",
+                }
+
+            elif getattr(option, "verify_location_name", False):
+                game_options[option_name] = {
+                    "type": "locations-list",
+                    "displayName": option.displayname if hasattr(option, "displayname") else option_name,
+                    "description": option.__doc__ if option.__doc__ else "Please document me!",
+                }
+
+            elif hasattr(option, "valid_keys"):
+                if option.valid_keys:
+                    game_options[option_name] = {
+                        "type": "custom-list",
+                        "displayName": option.displayname if hasattr(option, "displayname") else option_name,
+                        "description": option.__doc__ if option.__doc__ else "Please document me!",
+                        "options": list(option.valid_keys),
+                    }
+
+            else:
+                logging.debug(f"{option} not exported to Web Settings.")
 
         player_settings["gameOptions"] = game_options
 
