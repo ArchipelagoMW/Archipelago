@@ -57,6 +57,7 @@ class NetworkItem(typing.NamedTuple):
     item: int
     location: int
     player: int
+    flags: int = 0
 
 
 def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
@@ -253,13 +254,14 @@ class Hint(typing.NamedTuple):
     item: int
     found: bool
     entrance: str = ""
+    item_flags: int = 0
 
     def re_check(self, ctx, team) -> Hint:
         if self.found:
             return self
         found = self.location in ctx.location_checks[team, self.finding_player]
         if found:
-            return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance)
+            return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance, self.item_flags)
         return self
 
     def __hash__(self):
@@ -288,7 +290,7 @@ class Hint(typing.NamedTuple):
 
         return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
                 "receiving": self.receiving_player,
-                "item": NetworkItem(self.item, self.location, self.finding_player),
+                "item": NetworkItem(self.item, self.location, self.finding_player, self.item_flags),
                 "found": self.found}
 
     @property

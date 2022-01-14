@@ -164,7 +164,7 @@ Sent to clients purely to display a message to the player. This packet differs f
 | data | list\[[JSONMessagePart](#JSONMessagePart)\] | Type of this part of the message. |
 | type | str | May be present to indicate the nature of this message. Known types are Hint and ItemSend. |
 | receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID. |
-| item | [NetworkItem](#NetworkItem) | Is present if type is Hint or ItemSend and marks the source player id, location id and item id. |
+| item | [NetworkItem](#NetworkItem) | Is present if type is Hint or ItemSend and marks the source player id, location id, item id and item flags. |
 | found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
 
 ### DataPackage
@@ -329,15 +329,22 @@ class NetworkItem(NamedTuple):
     item: int
     location: int
     player: int
+    flags: int
 ```
 In JSON this may look like:
 ```js
 [
-    {"item": 1, "location": 1, "player": 0},
-    {"item": 2, "location": 2, "player": 0},
-    {"item": 3, "location": 3, "player": 0}
+    {"item": 1, "location": 1, "player": 0, "flags": 1},
+    {"item": 2, "location": 2, "player": 0, "flags": 2},
+    {"item": 3, "location": 3, "player": 0, "flags": 0}
 ]
 ```
+Flags are bit flags:
+| Flag | Meaning |
+| ----- | ----- |
+| 0 | Indicates, indicates the item had no specail use in generation |
+| 1 << 0 | If set, indicates the item is can unlock progression |
+| 1 << 1 | If set, indicates the item important but not necessarily advancement |
 
 ### JSONMessagePart
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are intended to be read in the order they are listed in the packet.
