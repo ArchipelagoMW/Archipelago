@@ -659,7 +659,12 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
         if count_activity:
             ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
         for location in new_locations:
-            item_id, target_player, flags = ctx.locations[slot][location]
+            if len(ctx.locations[slot][location]) == 3:
+                item_id, target_player, flags = ctx.locations[slot][location]
+            else:
+                item_id, target_player = ctx.locations[slot][location]
+                flags = 0
+
             new_item = NetworkItem(item_id, location, slot, flags)
             if target_player != slot or slot in ctx.remote_items:
                 get_received_items(ctx, team, target_player).append(new_item)
@@ -691,7 +696,12 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
     seeked_item_id = proxy_worlds[ctx.games[slot]].item_name_to_id[item]
     for finding_player, check_data in ctx.locations.items():
         for location_id, result in check_data.items():
-            item_id, receiving_player, item_flags = result
+            if len(result) == 3:
+                item_id, receiving_player, item_flags = result
+            else:
+                item_id, receiving_player = result
+                item_flags = 0
+
             if receiving_player == slot and item_id == seeked_item_id:
                 found = location_id in ctx.location_checks[team, finding_player]
                 entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
@@ -702,8 +712,14 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
 
 def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[NetUtils.Hint]:
     seeked_location: int = proxy_worlds[ctx.games[slot]].location_name_to_id[location]
-    item_id, receiving_player, item_flags = ctx.locations[slot].get(seeked_location, (None, None, None))
-    if item_id:
+    result = ctx.locations[slot].get(seeked_location, (None, None, None))
+    if result:
+        if len(result) == 3:
+            item_id, receiving_player, item_flags = result
+        else:
+            item_id, receiving_player = result
+            item_flags = 0
+
         found = seeked_location in ctx.location_checks[team, slot]
         entrance = ctx.er_hint_data.get(slot, {}).get(seeked_location, "")
         return [NetUtils.Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags)]
@@ -1338,7 +1354,12 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                         [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
                                           "original_cmd": cmd}])
                     return
-                target_item, target_player, flags = ctx.locations[client.slot][location]
+                if len(ctx.locations[client.slot][location]) == 3:
+                    target_item, target_player, flags = ctx.locations[client.slot][location]
+                else:
+                    target_item, target_player = ctx.locations[client.slot][location]
+                    flags = 0
+
                 locs.append(NetworkItem(target_item, location, target_player, flags))
 
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
