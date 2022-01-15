@@ -125,6 +125,8 @@ class Toggle(Option):
     def get_option_name(cls, value):
         return ["No", "Yes"][int(value)]
 
+    __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
+
 
 class DefaultOnToggle(Toggle):
     default = 1
@@ -184,6 +186,8 @@ class Choice(Option):
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
+    __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
+
 
 class Range(Option, int):
     range_start = 0
@@ -240,7 +244,21 @@ class OptionNameSet(Option):
         return cls.from_text(str(data))
 
 
-class OptionDict(Option):
+class VerifyKeys:
+    valid_keys = frozenset()
+    valid_keys_casefold: bool = False
+
+    @classmethod
+    def verify_keys(cls, data):
+        if cls.valid_keys:
+            dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
+            extra = dataset - cls.valid_keys
+            if extra:
+                raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
+                                f"Allowed keys: {cls.valid_keys}.")
+
+
+class OptionDict(Option, VerifyKeys):
     default = {}
     supports_weighting = False
     value: typing.Dict[str, typing.Any]
@@ -251,6 +269,7 @@ class OptionDict(Option):
     @classmethod
     def from_any(cls, data: typing.Dict[str, typing.Any]) -> OptionDict:
         if type(data) == dict:
+            cls.verify_keys(set(data))
             return cls(data)
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
@@ -272,7 +291,7 @@ class ItemDict(OptionDict):
         super(ItemDict, self).__init__(value)
 
 
-class OptionList(Option):
+class OptionList(Option, VerifyKeys):
     default = []
     supports_weighting = False
     value: list
@@ -288,6 +307,7 @@ class OptionList(Option):
     @classmethod
     def from_any(cls, data: typing.Any):
         if type(data) == list:
+            cls.verify_keys(set(data))
             return cls(data)
         return cls.from_text(str(data))
 

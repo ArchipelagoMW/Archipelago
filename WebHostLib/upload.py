@@ -108,12 +108,13 @@ def uploads():
                         elif res:
                             return redirect(url_for("view_seed", seed=res.id))
                 else:
+                    file.seek(0)  # offset from is_zipfile check
                     # noinspection PyBroadException
                     try:
                         multidata = file.read()
                         MultiServer.Context.decompress(multidata)
-                    except:
-                        flash("Could not load multidata. File may be corrupted or incompatible.")
+                    except Exception as e:
+                        flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
                     else:
                         seed = Seed(multidata=multidata, owner=session["_id"])
                         flush()  # place into DB and generate ids

@@ -23,6 +23,7 @@ import Options
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
+import copy
 
 categories = set(AutoWorldRegister.world_types)
 
@@ -148,7 +149,7 @@ def main(args=None, callback=ERmain):
                         if category_name is None:
                             weights_cache[path][key] = option
                         elif category_name not in weights_cache[path]:
-                            raise Exception(f"Meta: Category {category_name} is not present in {path}.")
+                            logging.warning(f"Meta: Category {category_name} is not present in {path}.")
                         else:
                             weights_cache[path][category_name][key] = option
 
@@ -330,7 +331,7 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
 
 
 def roll_linked_options(weights: dict) -> dict:
-    weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+    weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     for option_set in weights["linked_options"]:
         if "name" not in option_set:
             raise ValueError("One of your linked options does not have a name.")
@@ -352,7 +353,7 @@ def roll_linked_options(weights: dict) -> dict:
 
 
 def roll_triggers(weights: dict, triggers: list) -> dict:
-    weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+    weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
         try:
