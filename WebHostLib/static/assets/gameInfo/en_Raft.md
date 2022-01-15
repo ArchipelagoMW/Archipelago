@@ -25,7 +25,6 @@ Researches and pickups remain visually unchanged, regardless of what the unlock 
 A Raft notification will appear with the item information. The unlock will also appear in the chat. Unlocks that would normally give you the item (eg Machete) will NOT give it to you, but must instead be crafted.
 
 ## Are there any limitations compared to vanilla Raft?
-- Raftipelago only supports **one player per Raft world**. Multiple players can technically join, but this will very likely break how Raftipelago handles events.
 - Mods that add new researchable technologies, modify story islands, or give items like blueprints are likely incompatible with Raftipelago.
     - Some mods that add items that are always craftable (eg don't add them to the Research Table) may be compatible.
     - Mods that do not affect items, notes, blueprints, or story islands have a good chance of being compatible with Raftipelago
