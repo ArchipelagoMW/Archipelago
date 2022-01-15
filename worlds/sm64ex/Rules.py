@@ -47,6 +47,9 @@ def set_rules(world,player):
     connect_regions(world, player, "Tick Tock Clock", "Second Floor", lambda state: True)
     connect_regions(world, player, "Rainbow Ride", "Second Floor", lambda state: True)
 
+    #Special Rules for some Locations
+    add_rule(world.get_location("Eye to Eye in the Secret Room", player), lambda state: state.can_reach("Vanish Cap Under the Moat Red Coins", 'Location', player))
+
     #Rules for Secret Stars
     add_rule(world.get_location("Bowser in the Dark World Red Coins", player), lambda state: state.has("Star", player, 8))
     add_rule(world.get_location("Bowser in the Fire Sea Red Coins", player), lambda state: state.can_reach("Cellar",'Region',player) and state.has("Star", player, 30))
