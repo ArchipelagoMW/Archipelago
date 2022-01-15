@@ -251,6 +251,7 @@ class VerifyKeys:
     @classmethod
     def verify_keys(cls, data):
         if cls.valid_keys:
+            data = set(data)
             dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
             extra = dataset - cls.valid_keys
             if extra:
@@ -269,7 +270,7 @@ class OptionDict(Option, VerifyKeys):
     @classmethod
     def from_any(cls, data: typing.Dict[str, typing.Any]) -> OptionDict:
         if type(data) == dict:
-            cls.verify_keys(set(data))
+            cls.verify_keys(data)
             return cls(data)
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
@@ -307,7 +308,7 @@ class OptionList(Option, VerifyKeys):
     @classmethod
     def from_any(cls, data: typing.Any):
         if type(data) == list:
-            cls.verify_keys(set(data))
+            cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
 
