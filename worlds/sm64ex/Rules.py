@@ -49,6 +49,9 @@ def set_rules(world,player):
 
     #Special Rules for some Locations
     add_rule(world.get_location("Eye to Eye in the Secret Room", player), lambda state: state.can_reach("Vanish Cap Under the Moat Red Coins", 'Location', player))
+    if (world.StrictCapRequirements[player].value):
+        add_rule(world.get_location("Mario Wings to the Sky", player), lambda state: state.can_reach("Tower of the Wing Cap Red Coins", 'Location', player))
+        add_rule(world.get_location("Metal-Head Mario Can Move!", player), lambda state: state.can_reach("Cavern of the Metal Cap Red Coins", 'Location', player))
 
     #Rules for Secret Stars
     add_rule(world.get_location("Bowser in the Dark World Red Coins", player), lambda state: state.has("Star", player, 8))
