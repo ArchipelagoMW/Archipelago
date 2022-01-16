@@ -180,8 +180,8 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Royal towers (upper)', 'Before Aelana',  1337152),
         LocationData('Royal towers (upper)', 'Killed Aelana',  EventId),
         LocationData('Royal towers (upper)', 'Aelana\'s attic',  1337153, lambda state: state._timespinner_has_upwarddash(world, player)),
-        LocationData('Royal towers (upper)', 'Aelana\'s pedestal',  1337154),
-        LocationData('Royal towers (upper)', 'Aelana\'s chest',  1337155),
+        LocationData('Royal towers (upper)', 'Aelana\'s chest',  1337154),
+        LocationData('Royal towers (upper)', 'Aelana\'s pedestal',  1337155),
 
         #AncientPyramidLocations
         LocationData('Ancient Pyramid (left)', 'Why not it\'s right there',  1337246),
