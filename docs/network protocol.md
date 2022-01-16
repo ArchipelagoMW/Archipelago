@@ -343,7 +343,7 @@ Flags are bit flags:
 | Flag | Meaning |
 | ----- | ----- |
 | 0 | Indicates, indicates the item had no specail use in generation |
-| 1 << 0 | If set, indicates the item is can unlock advancement |
+| 1 << 0 | If set, indicates the item can unlock advancement |
 | 1 << 1 | If set, indicates the item is important but not necessarily unlocks advancement |
 | 1 << 2 | If set, indicates the item is an trap |
 
