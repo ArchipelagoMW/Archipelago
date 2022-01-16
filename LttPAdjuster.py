@@ -228,6 +228,7 @@ def adjustGUI():
             messagebox.showinfo(title="Success", message=f"Rom patched successfully to {path}")
             if isinstance(guiargs.sprite, Sprite):
                 guiargs.sprite = guiargs.sprite.name
+            delattr(guiargs, "rom")
             persistent_store("adjuster", GAME_ALTTP, guiargs)
 
     def saveGUISettings():
@@ -245,9 +246,8 @@ def adjustGUI():
         guiargs.music = bool(rom_vars.MusicVar.get())
         guiargs.reduceflashing = bool(rom_vars.disableFlashingVar.get())
         guiargs.deathlink = bool(rom_vars.DeathLinkVar.get())
-        guiargs.rom = romVar2.get()
         guiargs.baserom = romVar.get()
-        guiargs.sprite = rom_vars.sprite
+        guiargs.sprite = rom_vars.sprite.name
         guiargs.sprite_pool = rom_vars.sprite_pool
         persistent_store("adjuster", GAME_ALTTP, guiargs)
         messagebox.showinfo(title="Success", message="Settings saved to persistent storage")
