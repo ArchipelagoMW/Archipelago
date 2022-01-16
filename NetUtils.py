@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from re import I
 import typing
 import enum
 from json import JSONEncoder, JSONDecoder
