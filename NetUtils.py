@@ -239,8 +239,8 @@ def add_json_text(parts: list, text: typing.Any, **kwargs) -> None:
     parts.append({"text": str(text), **kwargs})
 
 
-def add_json_item(parts: list, item_id: int, player: int = 0, **kwargs) -> None:
-    parts.append({"text": str(item_id), "player": player, "type": JSONTypes.item_id, **kwargs})
+def add_json_item(parts: list, item_id: int, player: int = 0, item_flags: int = 0, **kwargs) -> None:
+    parts.append({"text": str(item_id), "player": player, "item_flags": item_flags, "type": JSONTypes.item_id, **kwargs})
 
 
 def add_json_location(parts: list, item_id: int, player: int = 0, **kwargs) -> None:
@@ -272,7 +272,7 @@ class Hint(typing.NamedTuple):
         add_json_text(parts, "[Hint]: ")
         add_json_text(parts, self.receiving_player, type="player_id")
         add_json_text(parts, "'s ")
-        add_json_item(parts, self.item, self.receiving_player)
+        add_json_item(parts, self.item, self.receiving_player, self.item_flags)
         add_json_text(parts, " is at ")
         add_json_location(parts, self.location, self.finding_player)
         add_json_text(parts, " in ")

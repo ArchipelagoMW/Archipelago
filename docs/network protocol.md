@@ -354,9 +354,10 @@ Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed
 from typing import TypedDict, Optional
 class JSONMessagePart(TypedDict):
     type: Optional[str]
-    color: Optional[str]
     text: Optional[str]
-    player: Optional[int] # marks owning player id for location/item
+    color: Optional[str] # only available if type is an color
+    item_flags: Optional[int] # only available if type is an item
+    player: Optional[int] # only available if type is either item or location
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
@@ -398,6 +399,8 @@ Color options:
 * white_bg
 
 `text` is the content of the message part to be displayed.
+`player` marks owning player id for location/item, 
+`item_flags` contains the [NetworkItem](#NetworkItem) flags that belong to the item
 
 ### Client States
 An enumeration containing the possible client states that may be used to inform the server in [StatusUpdate](#StatusUpdate).
