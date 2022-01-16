@@ -8,6 +8,7 @@ import subprocess
 import sys
 import time
 import random
+from typing import Optional
 
 import factorio_rcon
 import colorama
@@ -330,17 +331,17 @@ async def main(args):
 
 
 class FactorioJSONtoTextParser(JSONtoTextParser):
-    def _handle_color(self, node: JSONMessagePart):
+    def _handle_color(self, node: JSONMessagePart, item: Optional[NetworkItem] = None):
         colors = node["color"].split(";")
         for color in colors:
             if color in {"red", "green", "blue", "orange", "yellow", "pink", "purple", "white", "black", "gray",
                          "brown", "cyan", "acid"}:
                 node["text"] = f"[color={color}]{node['text']}[/color]"
-                return self._handle_text(node)
+                return self._handle_text(node, item)
             elif color == "magenta":
                 node["text"] = f"[color=pink]{node['text']}[/color]"
-            return self._handle_text(node)
-        return self._handle_text(node)
+            return self._handle_text(node, item)
+        return self._handle_text(node, item)
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from re import I
 import typing
 import enum
 from json import JSONEncoder, JSONDecoder
@@ -166,59 +167,68 @@ class JSONtoTextParser(metaclass=HandlerMeta):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    def __call__(self, input_object: typing.List[JSONMessagePart]) -> str:
-        return "".join(self.handle_node(section) for section in input_object)
+    def __call__(self, input_object: typing.List[JSONMessagePart], item: typing.Optional[NetworkItem] = None) -> str:
+        return "".join(self.handle_node(section, item) for section in input_object)
 
-    def handle_node(self, node: JSONMessagePart):
+    def handle_node(self, node: JSONMessagePart, item: typing.Optional[NetworkItem] = None):
         node_type = node.get("type", None)
         handler = self.handlers.get(node_type, self.handlers["text"])
-        return handler(node)
+        return handler(node, item)
 
-    def _handle_color(self, node: JSONMessagePart):
+    def _handle_color(self, node: JSONMessagePart, item: typing.Optional[NetworkItem] = None):
         codes = node["color"].split(";")
         buffer = "".join(color_code(code) for code in codes)
-        return buffer + self._handle_text(node) + color_code("reset")
+        return buffer + self._handle_text(node, item) + color_code("reset")
 
-    def _handle_text(self, node: JSONMessagePart):
+    def _handle_text(self, node: JSONMessagePart, item: typing.Optional[NetworkItem] = None):
         return node.get("text", "")
 
-    def _handle_player_id(self, node: JSONMessagePart):
+    def _handle_player_id(self, node: JSONMessagePart, item: typing.Optional[NetworkItem] = None):
         player = int(node["text"])
         node["color"] = 'magenta' if player == self.ctx.slot else 'yellow'
         node["text"] = self.ctx.player_names[player]
-        return self._handle_color(node)
+        return self._handle_color(node, item)
 
     # for other teams, spectators etc.? Only useful if player isn't in the clientside mapping
-    def _handle_player_name(self, node: JSONMessagePart):
+    def _handle_player_name(self, node: JSONMessagePart, item: typing.Optional[NetworkItem] = None):
         node["color"] = 'yellow'
+        return self._handle_color(node, item)
+
+    def _handle_item_name(self, node: JSONMessagePart, item: typing.Optional[NetworkItem] = None):
+        if not item or item.flags == 0:
+            node["color"] = 'cyan'
+        elif item.flags & 1 << 0: # advancement
+            node["color"] = 'plum'
+        elif item.flags & 1 << 1: # never_eclude
+            node["color"] = 'slateblue'
+        elif item.flags & 1 << 2: # trap
+            node["color"] = 'salmon' 
+        else:
+            node["color"] = 'cyan'
         return self._handle_color(node)
 
-    def _handle_item_name(self, node: JSONMessagePart):
-        node["color"] = 'cyan'
-        return self._handle_color(node)
-
-    def _handle_item_id(self, node: JSONMessagePart):
+    def _handle_item_id(self, node: JSONMessagePart, item: typing.Optional[NetworkItem] = None):
         item_id = int(node["text"])
         node["text"] = self.ctx.item_name_getter(item_id)
-        return self._handle_item_name(node)
+        return self._handle_item_name(node, item)
 
-    def _handle_location_name(self, node: JSONMessagePart):
+    def _handle_location_name(self, node: JSONMessagePart, item: typing.Optional[NetworkItem] = None):
         node["color"] = 'green'
-        return self._handle_color(node)
+        return self._handle_color(node, item)
 
-    def _handle_location_id(self, node: JSONMessagePart):
+    def _handle_location_id(self, node: JSONMessagePart, item: typing.Optional[NetworkItem] = None):
         item_id = int(node["text"])
         node["text"] = self.ctx.location_name_getter(item_id)
-        return self._handle_location_name(node)
+        return self._handle_location_name(node, item)
 
-    def _handle_entrance_name(self, node: JSONMessagePart):
+    def _handle_entrance_name(self, node: JSONMessagePart, item: typing.Optional[NetworkItem] = None):
         node["color"] = 'blue'
-        return self._handle_color(node)
+        return self._handle_color(node, item)
 
 
 class RawJSONtoTextParser(JSONtoTextParser):
-    def _handle_color(self, node: JSONMessagePart):
-        return self._handle_text(node)
+    def _handle_color(self, node: JSONMessagePart, item: typing.Optional[NetworkItem] = None):
+        return self._handle_text(node, item)
 
 
 color_codes = {'reset': 0, 'bold': 1, 'underline': 4, 'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34,

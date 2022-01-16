@@ -269,7 +269,7 @@ class CommonContext():
 
     def on_print_json(self, args: dict):
         if self.ui:
-            self.ui.print_json(args["data"])
+            self.ui.print_json(args["data"], args.get("item"))
         else:
             text = self.jsontotextparser(args["data"])
             logger.info(text)
