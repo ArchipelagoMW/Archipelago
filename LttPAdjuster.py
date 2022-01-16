@@ -247,7 +247,10 @@ def adjustGUI():
         guiargs.reduceflashing = bool(rom_vars.disableFlashingVar.get())
         guiargs.deathlink = bool(rom_vars.DeathLinkVar.get())
         guiargs.baserom = romVar.get()
-        guiargs.sprite = rom_vars.sprite.name
+        if isinstance(rom_vars.sprite, Sprite):
+            guiargs.sprite = rom_vars.sprite.name
+        else:
+            guiargs.sprite = rom_vars.sprite
         guiargs.sprite_pool = rom_vars.sprite_pool
         persistent_store("adjuster", GAME_ALTTP, guiargs)
         messagebox.showinfo(title="Success", message="Settings saved to persistent storage")
