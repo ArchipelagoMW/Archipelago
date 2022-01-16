@@ -210,6 +210,23 @@ class Range(Option, int):
                 return cls(int(round(random.triangular(cls.range_start, cls.range_end, cls.range_end), 0)))
             elif text == "random-middle":
                 return cls(int(round(random.triangular(cls.range_start, cls.range_end), 0)))
+            elif text.startswith("random-range-"):
+                textsplit = text.split("-")
+                try:
+                    randomrange = [int(textsplit[len(textsplit)-2]), int(textsplit[len(textsplit)-1])]
+                except ValueError:
+                    raise ValueError(f"Invalid random range {text} for option {cls.__name__}")
+                randomrange.sort()
+                if randomrange[0] < cls.range_start or randomrange[1] > cls.range_end:
+                    raise Exception(f"{randomrange[0]}-{randomrange[1]} is outside allowed range {cls.range_start}-{cls.range_end} for option {cls.__name__}")
+                if text.startswith("random-range-low"):
+                    return cls(int(round(random.triangular(randomrange[0], randomrange[1], randomrange[0]))))
+                elif text.startswith("random-range-middle"):
+                    return cls(int(round(random.triangular(randomrange[0], randomrange[1]))))
+                elif text.startswith("random-range-high"):
+                    return cls(int(round(random.triangular(randomrange[0], randomrange[1], randomrange[1]))))
+                else:
+                    return cls(int(round(random.randint(randomrange[0], randomrange[1]))))
             else:
                 return cls(random.randint(cls.range_start, cls.range_end))
         return cls(int(text))
