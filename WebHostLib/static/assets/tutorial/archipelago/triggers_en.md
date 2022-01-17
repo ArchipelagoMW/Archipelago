@@ -20,20 +20,27 @@ General plando guide: [Archipelago Plando Guide](/tutorial/archipelago/plando/en
 Link to the Past plando guide: [LttP Plando Guide](/tutorial/zelda3/plando/en)
 
 ## Trigger use
-Triggers may be defined in either the root or in the relevant game sections. Generally, The best place to do this is the bottom of the yaml for clear organization.
-- Triggers comprise the trigger section and then each trigger must have an `option_category`, `option_name`, and 
-`option_result` from which it will react to and then an `options` section for the definition of what will happen.
+
+Triggers may be defined in either the root or in the relevant game sections. Generally, The best place to do this is the
+bottom of the yaml for clear organization.
+
+- Triggers comprise the trigger section and then each trigger must have an `option_category`, `option_name`, and
+  `option_result` from which it will react to and then an `options` section for the definition of what will happen.
 - `option_category` is the defining section from which the option is defined in.
     - Example: `A Link to the Past`
-    - This is the root category the option is located in. If the option you're triggering off of is in root then you would use `null`, otherwise this is the game for which you want this option trigger to activate.
+    - This is the root category the option is located in. If the option you're triggering off of is in root then you
+      would use `null`, otherwise this is the game for which you want this option trigger to activate.
 - `option_name` is the option setting from which the triggered choice is going to react to.
-    - Example: `shop_item_slots` 
+    - Example: `shop_item_slots`
     - This can be any option from any category defined in the yaml file in either root or a game section.
 - `option_result` is the result of this option setting from which you would like to react.
     - Example: `15`
-    - Each trigger must be used for exactly one option result. If you would like the same thing to occur with multiple results you would need multiple triggers for this.
-- `options` is where you define what will happen when this is detected. This can be something as simple as ensuring another option also gets selected or placing an item in a certain location. It is possible to have multiple things happen in this section.
-    - Example: 
+    - Each trigger must be used for exactly one option result. If you would like the same thing to occur with multiple
+      results you would need multiple triggers for this.
+- `options` is where you define what will happen when this is detected. This can be something as simple as ensuring
+  another option also gets selected or placing an item in a certain location. It is possible to have multiple things
+  happen in this section.
+    - Example:
   ```yaml
   A Link to the Past:
     start_inventory: 
@@ -77,11 +84,15 @@ For example:
         Timespinner:
           Inverted: true
   ```
+
 In this example if your world happens to roll SpecificKeycards then your game will also start in inverted.
 
-It is also possible to use imaginary names in options to trigger specific settings. You can use these made up names in either your main options or to trigger from another trigger. Currently, this is the only way to trigger on "setting 1 AND setting 2".
+It is also possible to use imaginary names in options to trigger specific settings. You can use these made up names in
+either your main options or to trigger from another trigger. Currently, this is the only way to trigger on "setting 1
+AND setting 2".
 
 For example:
+
   ```yaml
   triggers:
     - option_category: Secret of Evermore
@@ -112,4 +123,7 @@ For example:
             difficulty: mystery
   ```
 
-In this example (thanks to @Black-Sliver) if the `pupdunk` option is rolled then the difficulty values will be rolled again using the new options `normal`, `pupdunk_hard`, and `pupdunk_mystery`, and the exp modifier will be rerolled using new weights for 150 and 200. This allows for two more triggers that will only be used for the new `pupdunk_hard` and `pupdunk_mystery` options so that they will only be triggered on "pupdunk AND hard/mystery".
+In this example (thanks to @Black-Sliver) if the `pupdunk` option is rolled then the difficulty values will be rolled
+again using the new options `normal`, `pupdunk_hard`, and `pupdunk_mystery`, and the exp modifier will be rerolled using
+new weights for 150 and 200. This allows for two more triggers that will only be used for the new `pupdunk_hard`
+and `pupdunk_mystery` options so that they will only be triggered on "pupdunk AND hard/mystery".
