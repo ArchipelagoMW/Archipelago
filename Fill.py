@@ -436,9 +436,9 @@ def distribute_planned(world: MultiWorld):
             if 'count' not in block:
                 block['count'] = min(len(block['items']),len(block['locations']))
             if block['count'] > len(block['items']):
-                failed(f"Plando count {count} greater than items specified")
+                failed(f"Plando count {maxcount} greater than items specified")
             if block['count'] > len(block['locations']):
-                failed(f"Plando count {count} greater than locations ; specified")
+                failed(f"Plando count {maxcount} greater than locations ; specified")
             plando_blocks.append(block)
 
     # shuffle, but then sort blocks by number of items, so blocks with fewer items get priority
@@ -473,11 +473,6 @@ def distribute_planned(world: MultiWorld):
                     continue
                 worlds = {world_name_lookup[target_world]}
 
-            #if len(locations) == 0:
-            #    candidates = list(location for location in world.get_unfilled_locations(target_world))
-            ##    logging.info(f"candidates: {candidates}") #DELETE
-             #   breakpoint()
-            #else:
             candidates = list(location for location in world.get_unfilled_locations_for_players(locations,
                                                                                                 worlds))
 
@@ -488,6 +483,9 @@ def distribute_planned(world: MultiWorld):
             successful_pairs = []
             for item in items:
                 for location in reversed(candidates):
+                    if location in key_drop_data:
+                        warn(
+                            f"Can't place '{placement.item}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
                     if not location.item:
                         if location.item_rule(item):
                             if location.can_fill(world.state, item, False):
@@ -511,7 +509,7 @@ def distribute_planned(world: MultiWorld):
                 world.push_item(location, item, collect=False)
                 location.event = True  # flag location to be checked during fill
                 location.locked = True
-                logging.info(f"Plando placed {item} at {location}") #CHANGE BACK TO DEBUG
+                logging.debug(f"Plando placed {item} at {location}")
                 if from_pool:
                     try:
                         world.itempool.remove(item)
