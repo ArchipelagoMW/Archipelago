@@ -136,8 +136,7 @@ def view_seed(seed: UUID):
     seed = Seed.get(id=seed)
     if not seed:
         abort(404)
-    return render_template("viewSeed.html", seed=seed,
-                           rooms=[room for room in seed.rooms if room.owner == session["_id"]])
+    return render_template("viewSeed.html", seed=seed)
 
 
 @app.route('/new_room/<suuid:seed>')

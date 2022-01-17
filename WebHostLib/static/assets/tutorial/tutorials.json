@@ -54,7 +54,8 @@
             "filename": "archipelago/advanced_settings_en.md",
             "link": "archipelago/advanced_settings/en",
             "authors": [
-              "alwaysintreble"
+              "alwaysintreble",
+              "Alchav"
             ]
           }
         ]
@@ -290,6 +291,16 @@
             "link": "timespinner/setup/en",
             "authors": [
               "Jarno"
+            ]
+          },
+          {
+            "language": "German",
+            "filename": "timespinner/setup_de.md",
+            "link": "timespinner/setup/de",
+            "authors": [
+              "Grrmo",
+              "Fynxes",
+              "Blaze0168"
             ]
           }
         ]

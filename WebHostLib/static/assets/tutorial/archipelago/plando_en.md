@@ -16,9 +16,15 @@ On the website plando will already be enabled. If you will be generating the gam
 enabled (opt-in).
 
 * To opt-in go to the archipelago installation (default: `C:\ProgramData\Archipelago`), open the host.yaml with a text
-  editor and find the `plando_options` key. The available plando modules can be enabled by adding them after this such
-  as
-  `plando_options: bosses, items, texts, connections`.
+editor and find the `plando_options` key. The available plando modules can be enabled by adding them after this such as
+`plando_options: bosses, items, texts, connections`.
+* If you are not the one doing the generation or even if you are you can add to the `requires` section of your yaml so that it will throw an error if the options that you need to generate properly are not enabled to ensure you will get the results you desire. Only enter in the plando modules that you are using here but it should look like: 
+```yaml
+  requires: 
+    version: current.version.number
+    plando: bosses, items, texts, connections
+``` 
+
 
 ## Item Plando
 

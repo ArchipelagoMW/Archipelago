@@ -51,10 +51,8 @@ For the above example `nested_option_one` will have `option_one_setting_one` 1 t
 so `option_one_setting_one` is guaranteed to occur.
 
 For `nested_option_two`, `option_two_setting_one` will be rolled 14 times and `option_two_setting_two` will be rolled 43
-times against each other. This means `option_two_setting_two` will be more likely to occur, but it isn't guaranteed
-adding more randomness and "mystery" to your settings.
-
-Every configurable setting supports weights.
+times against each other. This means `option_two_setting_two` will be more likely to occur, but it isn't guaranteed,
+adding more randomness and "mystery" to your settings. Every configurable setting supports weights.
 
 ### Root Options
 
@@ -114,31 +112,40 @@ See the plando guide for more info on plando options. Plando
 guide: [Archipelago Plando Guide](/tutorial/archipelago/plando/en)
 
 * `start_inventory` will give any items defined here to you at the beginning of your game. The format for this must be
-  the name as it appears in the game files and the amount you would like to start with. For example `Rupees(5): 6` which
-  will give you the item `Rupees(5)` six times, totalling 30 rupees.
-
+the name as it appears in the game files and the amount you would like to start with. For example `Rupees(5): 6` which
+will give you 30 rupees.
 * `start_hints` gives you free server hints for the defined item/s at the beginning of the game allowing you to hint for
-  the location without using any hint points.
-
+the location without using any hint points.
 * `local_items` will force any items you want to be in your world instead of being in another world.
-
-* `non_local_items` is the inverse of `local_items` forcing any items you want to be in another world and won't be
-  located in your own.
-
+* `non_local_items` is the inverse of `local_items` forcing any items you want to be in another world and won't be located
+in your own.
 * `start_location_hints` allows you to define a location which you can then hint for to find out what item is located in
   it to see how important the location is.
 
 * `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
   item which isn't necessary for progression to go in these locations.
 
-### Example YAML
+### Random numbers
+
+Options taking a choice of a number can also use a variety of `random` options to choose a number randomly.
+
+* `random` will choose a number allowed for the setting at random
+* `random-low` will choose a number allowed for the setting at random, but will be weighted towards lower numbers
+* `random-middle` will choose a number allowed for the setting at random, but will be weighted towards the middle of the range
+* `random-high` will choose a number allowed for the setting at random, but will be weighted towards higher numbers
+* `random-range-#-#` will choose a number at random from between the specified numbers. For example `random-range-40-60`
+will choose a number between 40 and 60
+* `random-range-low-#-#`, `random-range-middle-#-#`, and `random-range-high-#-#` will choose a number at random from the
+specified numbers, but with the specified weights
+
+### Example
 
 ```yaml
 
 description: An example using various advanced options
 name: Example Player
 game: A Link to the Past
-requires:
+requires: 
   version: 0.2.0
 accessibility: none
 progression_balancing: on
@@ -146,6 +153,10 @@ A Link to the Past:
   smallkey_shuffle:
     original_dungeon: 1
     any_world: 1
+  crystals_needed_for_gt:
+    random-low: 1
+  crystals_needed_for_ganon:
+    random-range-high-1-7: 1
   start_inventory:
     Pegasus Boots: 1
     Bombs (3): 2
@@ -173,46 +184,34 @@ triggers:
 ```
 
 #### This is a fully functional yaml file that will do all the following things:
-
 * `description` gives us a general overview so if we pull up this file later we can understand the intent.
-
 * `name` is `Example Player` and this will be used in the server console when sending and receiving items.
-
 * `game` is set to `A Link to the Past` meaning that is what game we will play with this file.
-
 * `requires` is set to require release version 0.2.0 or higher.
-
 * `accesibility` is set to `none` which will set this seed to beatable only meaning some locations and items may be
-  completely inaccessible but the seed will still be completable.
-
-* `progression_balancing` is set on meaning we will likely receive important items earlier increasing the chance of
-  having things to do.
-
-* `A Link to the Past` defines a location for us to nest all the game options we would like to use for our
-  game `A Link to the Past`.
-
-* `smallkey_shuffle` is an option for A Link to the Past which determines how dungeon small keys are shuffled. In this
-  example we have a 1/2 chance for them to either be placed in their original dungeon and a 1/2 chance for them to be
-  placed anywhere amongst the multiworld.
-
-* `start_inventory` defines an area for us to determine what items we would like to start the seed with. For this
-  example we have:
-    * `Pegasus Boots: 1` which gives us 1 copy of the Pegasus Boots
-    * `Bombs (3)` gives us 2 packs of 3 bombs or 6 total bombs
-
-* `start_hints` gives us a starting hint for the hammer available at the beginning of the multiworld which we can use
-  with no cost.
-
+completely inaccessible but the seed will still be completable.
+* `progression_balancing` is set on meaning we will likely receive important items earlier increasing the chance of having
+things to do.
+* `A Link to the Past` defines a location for us to nest all the game options we would like to use for our game `A Link to the Past`.
+* `smallkey_shuffle` is an option for A Link to the Past which determines how dungeon small keys are shuffled. In this example
+we have a 1/2 chance for them to either be placed in their original dungeon and a 1/2 chance for them to be placed anywhere
+amongst the multiworld.
+* `crystals_needed_for_gt` determines the number of crystals required to enter the Ganon's Tower entrance. In this example
+a random number will be chosen from the allowed range for this setting (0 through 7) but will be weighted towards a lower number.
+* `crystals_needed_for_ganon` determines the number of crystals required to beat Ganon. In this example a number
+between 1 and 7 will be chosen at random, weighted towards a high number.
+* `start_inventory` defines an area for us to determine what items we would like to start the seed with. For this example
+we have:
+  * `Pegasus Boots: 1` which gives us 1 copy of the Pegasus Boots
+  * `Bombs (3)` gives us 2 packs of 3 bombs or 6 total bombs
+* `start_hints` gives us a starting hint for the hammer available at the beginning of the multiworld which we can use with no cost.
 * `local_items` forces the `Bombos`, `Ether`, and `Quake` medallions to all be placed within our own world, meaning we
-  have to find it ourselves.
-
+have to find it ourselves.
 * `non_local_items` forces the `Moon Pearl` to be placed in someone else's world, meaning we won't be able to find it.
-
-* `start_location_hints` gives us a starting hint for the `Spike Cave` location available at the beginning of the
-  multiworld that can be used for no cost.
-
+* `start_location_hints` gives us a starting hint for the `Spike Cave` location available at the beginning of the multiworld
+that can be used for no cost.
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
 
 * `triggers` allows us to define a trigger such that if our `smallkey_shuffle` option happens to roll the `any_world`
-  result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to
-  the `any_world` result.
+result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to the `any_world`
+result.

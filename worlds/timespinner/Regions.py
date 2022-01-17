@@ -58,7 +58,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
 
     names: Dict[str, int] = {}
 
-    connect(world, player, names, 'Lake desolation', 'Lower lake desolation', lambda state: state._timespinner_has_timestop(world, player or state.has('Talaria Attachment', player)))
+    connect(world, player, names, 'Lake desolation', 'Lower lake desolation', lambda state: state._timespinner_has_timestop(world, player) or state.has('Talaria Attachment', player))
     connect(world, player, names, 'Lake desolation', 'Upper lake desolation', lambda state: state._timespinner_has_fire(world, player) and state.can_reach('Upper Lake Serene', 'Region', player))
     connect(world, player, names, 'Lake desolation', 'Skeleton Shaft', lambda state: state._timespinner_has_doublejump(world, player))
     connect(world, player, names, 'Lake desolation', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))

@@ -1,5 +1,6 @@
 import typing
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionList, DeathLink
+from Options import Option, DefaultOnToggle, Toggle, Range, OptionList, DeathLink
+from .LogicTricks import normalized_name_tricks
 from .ColorSFXOptions import *
 
 
@@ -824,6 +825,8 @@ class LogicTricks(OptionList):
 Format as a comma-separated list of "nice" names: ["Fewer Tunic Requirements", "Hidden Grottos without Stone of Agony"].
 A full list of supported tricks can be found at https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py"""
     displayname = "Logic Tricks"
+    valid_keys = frozenset(normalized_name_tricks)
+    valid_keys_casefold = True
 
 
 # All options assembled into a single dict
