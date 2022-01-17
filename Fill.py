@@ -435,10 +435,11 @@ def distribute_planned(world: MultiWorld):
 
             if 'count' not in block:
                 block['count'] = min(len(block['items']),len(block['locations']))
+            count = block['count']
             if block['count'] > len(block['items']):
-                failed(f"Plando count {maxcount} greater than items specified")
+                failed(f"Plando count {count} greater than items specified")
             if block['count'] > len(block['locations']):
-                failed(f"Plando count {maxcount} greater than locations ; specified")
+                failed(f"Plando count {count} greater than locations ; specified")
             plando_blocks.append(block)
 
     # shuffle, but then sort blocks by number of items, so blocks with fewer items get priority
