@@ -194,13 +194,14 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_color(node)
 
     def _handle_item_name(self, node: JSONMessagePart):
-        if not node["item_flags"]:
+        flags = node.get("item_flags", 0)
+        if flags == 0:
             node["color"] = 'cyan'
-        elif node["item_flags"] & 1 << 0: # advancement
+        elif flags & 1 << 0: # advancement
             node["color"] = 'plum'
-        elif node["item_flags"] & 1 << 1: # never_eclude
+        elif flags & 1 << 1: # never_eclude
             node["color"] = 'slateblue'
-        elif node["item_flags"] & 1 << 2: # trap
+        elif flags & 1 << 2: # trap
             node["color"] = 'salmon' 
         else:
             node["color"] = 'cyan'
