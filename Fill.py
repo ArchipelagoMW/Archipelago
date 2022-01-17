@@ -381,7 +381,7 @@ def distribute_planned(world: MultiWorld):
         if force in ['true', 'fail', 'failure']:
             raise Exception(warning)
         else:
-            warn(warning)
+            warn(warning, force)
 
     # TODO: remove. Preferably by implementing key drop
     from worlds.alttp.Regions import key_drop_data
@@ -433,19 +433,24 @@ def distribute_planned(world: MultiWorld):
                 locations = [locations]
             block['locations'] = locations
 
-            if 'count' not in block:
-                block['count'] = min(len(block['items']),len(block['locations']))
-            count = block['count']
+            if not block['count']:
+                block['count'] = min(len(block['items']), len(block['locations']))
+                if len(block['locations']) == 0:
+                    block['count'] = len(block['items'])
             if block['count'] > len(block['items']):
-                failed(f"Plando count {count} greater than items specified")
-            if block['count'] > len(block['locations']):
-                failed(f"Plando count {count} greater than locations ; specified")
+                count = block['count']
+                failed(f"Plando count {count} greater than items specified", block['force'])
+                block['count'] = len(block['items'])
+            if block['count'] > len(block['locations']) > 0:
+                count = block['count']
+                failed(f"Plando count {count} greater than locations specified for player ", block['force'])
+                block['count'] = len(block['locations'])
             plando_blocks.append(block)
 
     # shuffle, but then sort blocks by number of items, so blocks with fewer items get priority
     world.random.shuffle(plando_blocks)
-    plando_blocks.sort(key=lambda block: len(block['items']))
-
+    plando_blocks.sort(key=lambda block: block['count'])
+    
     for placement in plando_blocks:
         player = placement['player']
         try:
@@ -499,11 +504,11 @@ def distribute_planned(world: MultiWorld):
                         else:
                             err = f"{item} not allowed at {location}."
                     else:
-                        err = f"Cannot place item into already filled location {location}."
+                        err = f"Cannot place {item} into already filled location {location}."
                 if count == maxcount:
                     break
             if count < maxcount:
-                failed(f"Plando block failed to place item(s), most recent cause: {err}")
+                failed(f"Plando block failed to place item(s) for {world.player_name[player]}, most recent cause: {err}")
                 continue
             for (item, location) in successful_pairs:
                 item = world.worlds[player].create_item(item)
@@ -515,7 +520,7 @@ def distribute_planned(world: MultiWorld):
                     try:
                         world.itempool.remove(item)
                     except ValueError:
-                        placement.warn(f"Could not remove {item} from pool as it's already missing from it.")
+                        placement.warn(f"Could not remove {item} from pool for {world.player_name[player]} as it's already missing from it.")
 
         except Exception as e:
             raise Exception(
