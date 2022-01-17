@@ -16,9 +16,7 @@ editor and find the `plando_options` key. The available plando modules can be en
 
 ## Item Plando
 Item plando allows a player to place an item in a specific location or specific locations, place multiple items into
-a list of specific locations both in their own game or in another player's game. **Note that, while you can place items into
-locations cross-game, all locations you list can be chosen from and if a location is chosen for a game that no one is playing,
-that item will fail to place.**
+a list of specific locations both in their own game or in another player's game.
 * The options for item plando are `from_pool`, `world`, `percentage`, `force`, and either item and location, or items and locations.
   * `from_pool` determines if the item should be taken *from* the item pool or *added* to it. This can be true or false
 and defaults to true if omitted.
@@ -43,6 +41,9 @@ omitted will default to 100.
     * `items` defines the items to use and a number letting you place multiple of it.
     * `locations` is a list of possible locations those items can be placed in.
     * Using the multi placement method, placements are picked randomly.
+  * `count` can be used to set the maximum number of items placed from the block. The default is 1 if using `item` and False if using `items`
+    * If a number is used it will try to place this number of items.
+    * If set to false it will try to place as many items from the block as it can.
 
 ### Available Items
 * [A Link to the Past](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Items.py#L52)
@@ -132,18 +133,19 @@ plando_items:
       Revealer: 1
       Energize: 1
     locations:
-      Master Sword Pedestal: 2
-      Boss Relic 1: 2
+      - Master Sword Pedestal
+      - Boss Relic 1
     world: true
+    count: 2
 ```
 1. This block has a 50% chance to occur, and if it does will place either the Empire Orb or Radiant Orb on another player's
 Starter Chest 1 and removes the chosen item from the item pool.
 2. This block will always trigger and will place the player's swords, bow, magic meter, strength upgrades, and hookshots
 in their own dungeon major item chests.
 3. This block will always trigger and will lock boss relics on the bosses.
-4. This block has an 80% chance of occuring and when it does will place all but 1 of the items randomly among the four
+4. This block has an 80% chance of occurring and when it does will place all but 1 of the items randomly among the four
 locations chosen here.
-6. This block will always trigger and will attempt to place Levitate, Revealer and Energize into up to two other player's Master Sword Pedestals, and up to two Boss Relic 1 locations. If there were fewer than two Slay the Spire games or fewer than two A Link to the Past games, some of these items could fail to place.
+6. This block will always trigger and will attempt to place a random 2 of Levitate, Revealer and Energize into other players' Master Sword Pedestals or Boss Relic 1 locations.
 
 ## Boss Plando
 As this is currently only supported by A Link to the Past instead of explaining here please refer to the 
