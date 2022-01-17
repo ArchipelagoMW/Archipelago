@@ -47,3 +47,8 @@ class SM64World(World):
         key1 = self.create_item("Cellar Key")
         key2 = self.create_item("Second Floor Key")
         self.world.itempool += [key1,key2]
+
+        wingcap = self.create_item("Wing Cap")
+        metalcap = self.create_item("Metal Cap")
+        vanishcap = self.create_item("Vanish Cap")
+        self.world.itempool += [wingcap,metalcap,vanishcap]

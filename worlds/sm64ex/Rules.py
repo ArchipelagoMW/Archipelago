@@ -48,17 +48,21 @@ def set_rules(world,player):
     connect_regions(world, player, "Rainbow Ride", "Second Floor", lambda state: True)
 
     #Special Rules for some Locations
-    add_rule(world.get_location("Eye to Eye in the Secret Room", player), lambda state: state.can_reach("Vanish Cap Under the Moat Red Coins", 'Location', player))
-    add_rule(world.get_location("Collect the Caps...", player), lambda state: state.can_reach("Cavern of the Metal Cap Red Coins", 'Location', player) and
-                                                                              state.can_reach("Vanish Cap Under the Moat Red Coins", 'Location', player))
-    add_rule(world.get_location("Into the Igloo", player), lambda state: state.can_reach("Vanish Cap Under the Moat Red Coins", 'Location', player))
-    add_rule(world.get_location("Quick Race Through Downtown!", player), lambda state: state.can_reach("Vanish Cap Under the Moat Red Coins", 'Location', player))
+    add_rule(world.get_location("Wing Cap Switch", player), lambda state: state.has("Star", player, 10))
+    add_rule(world.get_location("Metal Cap Switch", player), lambda state: state.can_reach("Cellar", 'Region', player))
+    add_rule(world.get_location("Vanish Cap Switch", player), lambda state: state.can_reach("Cellar", 'Region', player))
+
+    add_rule(world.get_location("Eye to Eye in the Secret Room", player), lambda state: state.has("Vanish Cap", player))
+    add_rule(world.get_location("Collect the Caps...", player), lambda state: state.has("Metal Cap", player) and
+                                                                              state.has("Vanish Cap", player))
+    add_rule(world.get_location("Into the Igloo", player), lambda state: state.has("Vanish Cap", player))
+    add_rule(world.get_location("Quick Race Through Downtown!", player), lambda state: state.has("Vanish Cap", player))
     if (world.StrictCapRequirements[player].value):
-        add_rule(world.get_location("Mario Wings to the Sky", player), lambda state: state.can_reach("Tower of the Wing Cap Red Coins", 'Location', player))
-        add_rule(world.get_location("Metal-Head Mario Can Move!", player), lambda state: state.can_reach("Cavern of the Metal Cap Red Coins", 'Location', player))
-        add_rule(world.get_location("JRB: Through the Jet Stream", player), lambda state: state.can_reach("Cavern of the Metal Cap Red Coins", 'Location', player))
-        add_rule(world.get_location("Free Flying for 8 Red Coins", player), lambda state: state.can_reach("Tower of the Wing Cap Red Coins", 'Location', player))
-        add_rule(world.get_location("DDD: Through the Jet Stream", player), lambda state: state.can_reach("Cavern of the Metal Cap Red Coins", 'Location', player))
+        add_rule(world.get_location("Mario Wings to the Sky", player), lambda state: state.has("Wing Cap", player))
+        add_rule(world.get_location("Metal-Head Mario Can Move!", player), lambda state: state.has("Metal Cap", player))
+        add_rule(world.get_location("JRB: Through the Jet Stream", player), lambda state: state.has("Metal Cap", player))
+        add_rule(world.get_location("Free Flying for 8 Red Coins", player), lambda state: state.has("Wing Cap", player))
+        add_rule(world.get_location("DDD: Through the Jet Stream", player), lambda state: state.has("Metal Cap", player))
 
     #Rules for Secret Stars
     add_rule(world.get_location("Bowser in the Dark World Red Coins", player), lambda state: state.has("Star", player, 8))
@@ -66,10 +70,12 @@ def set_rules(world,player):
     add_rule(world.get_location("Bowser in the Sky Red Coins", player), lambda state: state.can_reach("Second Floor",'Region',player) and state.has("Star", player, 70))
     add_rule(world.get_location("The Princess's Secret Slide Box", player), lambda state: state.has("Star", player, 1))
     add_rule(world.get_location("The Princess's Secret Slide Fast", player), lambda state: state.has("Star", player, 1))
-    add_rule(world.get_location("Cavern of the Metal Cap Red Coins", player), lambda state: state.can_reach("Cellar", 'Region', player))
-    add_rule(world.get_location("Tower of the Wing Cap Red Coins", player), lambda state: state.has("Star", player, 10))
-    add_rule(world.get_location("Vanish Cap Under the Moat Red Coins", player), lambda state: state.can_reach("Cellar", 'Region', player))
-    add_rule(world.get_location("Wing Mario Over the Rainbow Red Coins", player), lambda state: state.can_reach("Third Floor", 'Region', player) and state.can_reach("Tower of the Wing Cap Red Coins", 'Location', player))
+    add_rule(world.get_location("Cavern of the Metal Cap Red Coins", player), lambda state: state.can_reach("Metal Cap Switch", 'Location', player) and state.has("Metal Cap", player))
+    add_rule(world.get_location("Tower of the Wing Cap Red Coins", player), lambda state: state.can_reach("Wing Cap Switch", 'Location', player))
+    add_rule(world.get_location("Vanish Cap Under the Moat Red Coins", player), lambda state: state.can_reach("Vanish Cap Switch", 'Location', player))
+    if (world.StrictCapRequirements[player].value):
+        add_rule(world.get_location("Vanish Cap Under the Moat Red Coins", player), lambda state: state.has("Vanish Cap", player))
+    add_rule(world.get_location("Wing Mario Over the Rainbow Red Coins", player), lambda state: state.can_reach("Third Floor", 'Region', player) and state.has("Wing Cap", player))
     add_rule(world.get_location("The Secret Aquarium", player), lambda state: state.can_reach("Jolly Roger Bay", 'Region', player))
     add_rule(world.get_location("Toad (Cellar)", player), lambda state: state.can_reach("Cellar",'Region',player))
     add_rule(world.get_location("Toad (Second Floor)", player), lambda state: state.can_reach("Second Floor",'Region',player))

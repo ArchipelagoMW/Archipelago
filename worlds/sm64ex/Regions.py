@@ -3,13 +3,14 @@ from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Locations import SM64Location, location_table,locBoB_table,locWhomp_table,locJRB_table,locCCM_table,locBBH_table, \
                                                     locHMC_table,locLLL_table,locSSL_table,locDDD_table,locSL_table, \
                                                     locWDW_table,locTTM_table,locTHI_table,locTTC_table,locRR_table, \
-                                                    locSS_table, locKey_table
+                                                    locSS_table, locKey_table, locCap_table
 
 def create_regions(world: MultiWorld, player: int):
 
-    regSS = Region("Menu", RegionType.Generic, "Secret Stars", player, world)
+    regSS = Region("Menu", RegionType.Generic, "Castle Area", player, world)
     locSS_names = [name for name, id in locSS_table.items()]
     locSS_names += [name for name, id in locKey_table.items()]
+    locSS_names += [name for name, id in locCap_table.items()]
     regSS.locations += [SM64Location(player, loc_name, location_table[loc_name], regSS) for loc_name in locSS_names]
     world.regions.append(regSS)
 

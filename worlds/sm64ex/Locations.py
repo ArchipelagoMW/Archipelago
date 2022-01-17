@@ -154,6 +154,24 @@ locRR_table = {
     "Somewhere Over the Rainbow": 3626103
 }
 
+loc100Coin_table = {
+        "BoB 100 Coins": 3626006,
+        "Whomp 100 Coins": 3626013,
+        "JRB 100 Coins": 3626020,
+        "CCM 100 Coins": 3626027,
+        "BBH 100 Coins": 3626034,
+        "HMC 100 Coins": 3626041,
+        "LLL 100 Coins": 3626048,
+        "SSL 100 Coins": 3626055,
+        "DDD 100 Coins": 3626062,
+        "SL 100 Coins": 3626069,
+        "WDW 100 Coins": 3626076,
+        "TTM 100 Coins": 3626083,
+        "THI 100 Coins": 3626090,
+        "TTC 100 Coins": 3626097,
+        "RR 100 Coins": 3626104
+}
+
 #Secret Stars and Stages
 locSS_table = {
     "Bowser in the Dark World Red Coins": 3626105,
@@ -179,27 +197,15 @@ locKey_table = {
     "Second Floor Key": 3626179
 }
 
-loc100Coin_table = {
-        "BoB 100 Coins": 3626006,
-        "Whomp 100 Coins": 3626013,
-        "JRB 100 Coins": 3626020,
-        "CCM 100 Coins": 3626027,
-        "BBH 100 Coins": 3626034,
-        "HMC 100 Coins": 3626041,
-        "LLL 100 Coins": 3626048,
-        "SSL 100 Coins": 3626055,
-        "DDD 100 Coins": 3626062,
-        "SL 100 Coins": 3626069,
-        "WDW 100 Coins": 3626076,
-        "TTM 100 Coins": 3626083,
-        "THI 100 Coins": 3626090,
-        "TTC 100 Coins": 3626097,
-        "RR 100 Coins": 3626104
-
+#Caps
+locCap_table = {
+    "Wing Cap Switch": 3626180,
+    "Metal Cap Switch": 3626181,
+    "Vanish Cap Switch": 3626182
 }
 
 # Correspond to 3626000 + course index * 7 + star index, then secret stars, then keys, then 100 Coin Stars
 location_table = locBoB_table | locWhomp_table | locJRB_table | locCCM_table | locBBH_table \
                | locHMC_table | locLLL_table | locSSL_table | locDDD_table | locSL_table \
                | locWDW_table | locTTM_table | locTHI_table | locTTC_table | locRR_table \
-               | locSS_table | locKey_table | loc100Coin_table
+               | loc100Coin_table | locSS_table | locKey_table | locCap_table
