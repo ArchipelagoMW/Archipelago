@@ -334,14 +334,17 @@ class MultiWorld():
         return [location for location in self.get_locations() if
                 (player is None or location.player == player) and location.item is None and location.can_reach(state)]
 
-    def get_unfilled_locations_for_players(self, location_name: str, players: Iterable[int]):
+    def get_unfilled_locations_for_players(self, locations, players: Iterable[int]):
         for player in players:
-            if (location_name, player) in self._location_cache:
-                location = self.get_location(location_name, player)
-            else:
-                continue
-            if location.item is None:
-                yield location
+            if len(locations) == 0:
+                locations = [item.name for item in self.get_unfilled_locations(player)]
+            for location_name in locations:
+                if (location_name, player) in self._location_cache:
+                    location = self.get_location(location_name, player)
+                    if location.item is None:
+                        yield location
+                else:
+                    continue
 
     def unlocks_new_location(self, item) -> bool:
         temp_state = self.state.copy()
