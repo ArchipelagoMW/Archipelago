@@ -40,7 +40,7 @@ class RaftWorld(World):
             pool.append(raft_item)
 
         extraItemNamePool = []
-        extras = max(len(location_table) - len(item_table) - 1, 0) # Victory takes up 1 unaccounted-for slot
+        extras = len(location_table) - len(item_table) - 1 # Victory takes up 1 unaccounted-for slot
         if extras > 0:
             if (self.world.use_resource_packs[self.player].value):
                 for packItem in resourcePackItems:
@@ -65,9 +65,10 @@ class RaftWorld(World):
                     for item in dupeItemPool:
                         extraItemNamePool.append(item["name"])
             
-            for randomItem in random.choices(extraItemNamePool, k=extras):
-                raft_item = self.create_item_replaceAsNecessary(randomItem)
-                pool.append(raft_item)
+            if (len(extraItemNamePool) > 0):
+                for randomItem in random.choices(extraItemNamePool, k=extras):
+                    raft_item = self.create_item_replaceAsNecessary(randomItem)
+                    pool.append(raft_item)
 
         self.world.itempool += pool
 
