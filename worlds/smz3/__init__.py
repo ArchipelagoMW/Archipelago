@@ -212,7 +212,9 @@ class SMZ3World(World):
             #        if i.Type.name == i2.name:
             #            items.append(i2)
             #            break
-            fill_restrictive(self.world, self.world.get_all_state(False), [loc for loc in self.locations.values() if loc.item is None], self.smz3DungeonItems, True, True)
+            locations = [loc for loc in self.locations.values() if loc.item is None]
+            self.world.random.shuffle(locations)
+            fill_restrictive(self.world, self.world.get_all_state(False), locations, self.smz3DungeonItems, True, True)
 
     def FillItemAtLocation(self, itemPool, itemType, location):
         itemToPlace = TotalSMZ3Item.Item.Get(itemPool, itemType, self.smz3World)
