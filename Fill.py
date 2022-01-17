@@ -314,7 +314,10 @@ def balance_multiworld_progression(world: MultiWorld):
                                 balancing_state.collect(location.item, True, location)
                                 player = location.item.player
                                 # only replace items that end up in another player's world
-                                if not location.locked and player in balancing_players and location.player != player:
+                                if(not location.locked and
+                                        player in balancing_players and
+                                        location.player != player and
+                                        location.progress_type != LocationProgressType.PRIORITY):
                                     candidate_items[player].add(location)
                         balancing_sphere = get_sphere_locations(balancing_state, balancing_unchecked_locations)
                         for location in balancing_sphere:
