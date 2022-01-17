@@ -66,7 +66,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Upper lake desolation', 'Lower lake desolation') 
     connect(world, player, names, 'Lower lake desolation', 'Lake desolation') 
     connect(world, player, names, 'Lower lake desolation', 'Library') 
-    connect(world, player, names, 'Lower lake desolation', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Library', 'Lower lake desolation') 
     connect(world, player, names, 'Library', 'Library top', lambda state: state._timespinner_has_doublejump(world, player) or state.has('Talaria Attachment', player)) 
     connect(world, player, names, 'Library', 'Varndagroth tower left', lambda state: state._timespinner_has_keycard_D(world, player))
