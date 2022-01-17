@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Dict, Set, Tuple, List, Optional, TextIO
+from typing import Dict, Set, Tuple, List, Optional, TextIO, Any
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
@@ -8,7 +8,7 @@ from Options import Option
 class AutoWorldRegister(type):
     world_types: Dict[str, World] = {}
 
-    def __new__(cls, name, bases, dct):
+    def __new__(cls, name: str, bases, dct: Dict[str, Any]):
         # filter out any events
         dct["item_name_to_id"] = {name: id for name, id in dct["item_name_to_id"].items() if id}
         dct["location_name_to_id"] = {name: id for name, id in dct["location_name_to_id"].items() if id}
@@ -19,7 +19,7 @@ class AutoWorldRegister(type):
         # build rest
         dct["item_names"] = frozenset(dct["item_name_to_id"])
         dct["location_names"] = frozenset(dct["location_name_to_id"])
-        dct["all_names"] = dct["item_names"] | dct["location_names"] | set(dct.get("item_name_groups", {}))
+        dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
 
         # construct class
         new_class = super().__new__(cls, name, bases, dct)
@@ -71,7 +71,7 @@ class World(metaclass=AutoWorldRegister):
     options: Dict[str, type(Option)] = {}  # link your Options mapping
     game: str  # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
-    all_names: Set[str] = frozenset()  # gets automatically populated with all item, item group and location names
+    all_item_and_group_names: Set[str] = frozenset()  # gets automatically populated with all item and item group names
 
     # map names to their IDs
     item_name_to_id: Dict[str, int] = {}
@@ -115,7 +115,8 @@ class World(metaclass=AutoWorldRegister):
     item_names: Set[str]  # set of all potential item names
     location_names: Set[str]  # set of all potential location names
 
-    # If there is visibility in what is being sent, this is where it will be known.
+    # If the game displays all contained items to the user, this flag pre-fills the hint system with this information
+    # For example the "full" tech tree information option in Factorio
     sending_visible: bool = False
 
     def __init__(self, world: MultiWorld, player: int):

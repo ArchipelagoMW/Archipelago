@@ -68,15 +68,11 @@ class HKWorld(World):
 
         self.world.itempool += pool
 
-
     def set_rules(self):
         set_rules(self.world, self.player)
 
     def create_regions(self):
         create_regions(self.world, self.player)
-
-    def generate_output(self):
-        pass  # Hollow Knight needs no output files
 
     def fill_slot_data(self): 
         slot_data = {}

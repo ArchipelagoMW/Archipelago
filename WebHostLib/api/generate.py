@@ -65,7 +65,6 @@ def generate_api():
         return {"text": "Uncaught Exception:" + str(e)}, 500
 
 
-
 @api_endpoints.route('/status/<suuid:seed>')
 def wait_seed_api(seed: UUID):
     seed_id = seed
