@@ -1089,10 +1089,7 @@ async def main():
             sys.exit()
         elif args.diff_file.endswith((".apbp", "apz3")):
             adjustedromfile, adjusted = get_alttp_settings(romfile)
-            if(adjusted):
-                asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
-            else:
-                asyncio.create_task(run_game(romfile))
+            asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
         else:
             asyncio.create_task(run_game(romfile))
 
@@ -1143,7 +1140,7 @@ def get_alttp_settings(romfile: str):
             printed_options = {name: value for name, value in vars(lastSettings).items() if name in whitelist}
             if hasattr(lastSettings, "sprite_pool"):
                 sprite_pool = {}
-                for sprite in getattr(lastSettings, "sprite_pool"):
+                for sprite in lastSettings.sprite_pool:
                     if sprite in sprite_pool:
                         sprite_pool[sprite] += 1
                     else:
