@@ -23,6 +23,7 @@ window.addEventListener('load', () => {
         showdown.setOption('tables', true);
         showdown.setOption('strikethrough', true);
         showdown.setOption('literalMidWordUnderscores', true);
+        showdown.setOption('disableForced4SpacesIndentedSublists', true);
         tutorialWrapper.innerHTML += (new showdown.Converter()).makeHtml(results);
         adjustHeaderWidth();
 

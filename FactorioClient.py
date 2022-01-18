@@ -333,12 +333,8 @@ class FactorioJSONtoTextParser(JSONtoTextParser):
     def _handle_color(self, node: JSONMessagePart):
         colors = node["color"].split(";")
         for color in colors:
-            if color in {"red", "green", "blue", "orange", "yellow", "pink", "purple", "white", "black", "gray",
-                         "brown", "cyan", "acid"}:
-                node["text"] = f"[color={color}]{node['text']}[/color]"
-                return self._handle_text(node)
-            elif color == "magenta":
-                node["text"] = f"[color=pink]{node['text']}[/color]"
+            if color in self.color_codes:
+                node["text"] = f"[color=#{self.color_codes[color]}]{node['text']}[/color]"
             return self._handle_text(node)
         return self._handle_text(node)
 

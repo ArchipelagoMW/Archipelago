@@ -78,7 +78,7 @@ class Context:
                       "compatibility": int}
     # team -> slot id -> list of clients authenticated to slot.
     clients: typing.Dict[int, typing.Dict[int, typing.List[Client]]]
-    locations: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int]]]
+    locations: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int]]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
@@ -241,8 +241,8 @@ class Context:
     @staticmethod
     def decompress(data: bytes) -> dict:
         format_version = data[0]
-        if format_version != 1:
-            raise Exception("Incompatible multidata.")
+        if format_version > 2:
+            raise Utils.VersionException("Incompatible multidata.")
         return restricted_loads(zlib.decompress(data[1:]))
 
     def _load(self, decoded_obj: dict, use_embedded_server_options: bool):
@@ -662,8 +662,14 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
         if count_activity:
             ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
         for location in new_locations:
-            item_id, target_player = ctx.locations[slot][location]
-            new_item = NetworkItem(item_id, location, slot)
+            if len(ctx.locations[slot][location]) == 3:
+                item_id, target_player, flags = ctx.locations[slot][location]
+            else:
+                # TODO: remove around version 0.2.5
+                item_id, target_player = ctx.locations[slot][location]
+                flags = 0
+
+            new_item = NetworkItem(item_id, location, slot, flags)
             if target_player != slot or slot in ctx.remote_items:
                 get_received_items(ctx, team, target_player).append(new_item)
 
@@ -694,22 +700,36 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
     seeked_item_id = proxy_worlds[ctx.games[slot]].item_name_to_id[item]
     for finding_player, check_data in ctx.locations.items():
         for location_id, result in check_data.items():
-            item_id, receiving_player = result
+            if len(result) == 3:
+                item_id, receiving_player, item_flags = result
+            else:
+                # TODO: remove around version 0.2.5
+                item_id, receiving_player = result
+                item_flags = 0
+
             if receiving_player == slot and item_id == seeked_item_id:
                 found = location_id in ctx.location_checks[team, finding_player]
                 entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
-                hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance))
+                hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
+                                           item_flags))
 
     return hints
 
 
 def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[NetUtils.Hint]:
     seeked_location: int = proxy_worlds[ctx.games[slot]].location_name_to_id[location]
-    item_id, receiving_player = ctx.locations[slot].get(seeked_location, (None, None))
-    if item_id:
+    result = ctx.locations[slot].get(seeked_location, (None, None, None))
+    if result:
+        if len(result) == 3:
+            item_id, receiving_player, item_flags = result
+        else:
+            # TODO: remove around version 0.2.5
+            item_id, receiving_player = result
+            item_flags = 0
+
         found = seeked_location in ctx.location_checks[team, slot]
         entrance = ctx.er_hint_data.get(slot, {}).get(seeked_location, "")
-        return [NetUtils.Hint(receiving_player, slot, seeked_location, item_id, found, entrance)]
+        return [NetUtils.Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags)]
     return []
 
 
@@ -729,10 +749,10 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
     NetUtils.add_json_text(parts, net_item.player, type=NetUtils.JSONTypes.player_id)
     if net_item.player == receiving_player:
         NetUtils.add_json_text(parts, " found their ")
-        NetUtils.add_json_item(parts, net_item.item, net_item.player)
+        NetUtils.add_json_item(parts, net_item.item, net_item.player, net_item.flags)
     else:
         NetUtils.add_json_text(parts, " sent ")
-        NetUtils.add_json_item(parts, net_item.item, receiving_player)
+        NetUtils.add_json_item(parts, net_item.item, receiving_player, net_item.flags)
         NetUtils.add_json_text(parts, " to ")
         NetUtils.add_json_text(parts, receiving_player, type=NetUtils.JSONTypes.player_id)
 
@@ -1188,9 +1208,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_hint_location(self, location: str = "") -> bool:
         """Use !hint_location {location_name},
-        for example !hint_location atomic-bomb to get a spoiler peek for that location.
-        (In the case of factorio, or any other game where item names and location names are identical,
-        this command must be used explicitly.)"""
+        for example !hint_location atomic-bomb to get a spoiler peek for that location."""
         return self.get_hints(location, True)
 
 
@@ -1342,8 +1360,14 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                         [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
                                           "original_cmd": cmd}])
                     return
-                target_item, target_player = ctx.locations[client.slot][location]
-                locs.append(NetworkItem(target_item, location, target_player))
+                if len(ctx.locations[client.slot][location]) == 3:
+                    target_item, target_player, flags = ctx.locations[client.slot][location]
+                else:
+                    # TODO: remove around version 0.2.5
+                    target_item, target_player = ctx.locations[client.slot][location]
+                    flags = 0
+
+                locs.append(NetworkItem(target_item, location, target_player, flags))
 
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 

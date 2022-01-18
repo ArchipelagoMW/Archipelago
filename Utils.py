@@ -428,3 +428,8 @@ def tkinter_center_window(window: Tk):
     xPos = int(window.winfo_screenwidth()/2 - window.winfo_reqwidth()/2)
     yPos = int(window.winfo_screenheight()/2 - window.winfo_reqheight()/2)
     window.geometry("+{}+{}".format(xPos, yPos))
+
+    
+class VersionException(Exception):
+    pass
+

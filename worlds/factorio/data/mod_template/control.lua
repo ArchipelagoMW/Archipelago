@@ -505,7 +505,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     elseif item_name == "Evolution Trap" then
         if global.index_sync[index] == nil then -- not yet received trap
             global.index_sync[index] = item_name
-            game.forces["enemy"].evolution_factor = game.forces["enemy"].evolution_factor + TRAP_EVO_FACTOR
+            game.forces["enemy"].evolution_factor = game.forces["enemy"].evolution_factor + (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].evolution_factor))
             game.print({"", "Received Evolution Trap from ", source, ". New factor:", game.forces["enemy"].evolution_factor})
         end
     else

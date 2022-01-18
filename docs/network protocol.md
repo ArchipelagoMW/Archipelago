@@ -164,7 +164,7 @@ Sent to clients purely to display a message to the player. This packet differs f
 | data | list\[[JSONMessagePart](#JSONMessagePart)\] | Type of this part of the message. |
 | type | str | May be present to indicate the nature of this message. Known types are Hint and ItemSend. |
 | receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID. |
-| item | [NetworkItem](#NetworkItem) | Is present if type is Hint or ItemSend and marks the source player id, location id and item id. |
+| item | [NetworkItem](#NetworkItem) | Is present if type is Hint or ItemSend and marks the source player id, location id, item id and item flags. |
 | found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
 
 ### DataPackage
@@ -329,15 +329,23 @@ class NetworkItem(NamedTuple):
     item: int
     location: int
     player: int
+    flags: int
 ```
 In JSON this may look like:
 ```js
 [
-    {"item": 1, "location": 1, "player": 0},
-    {"item": 2, "location": 2, "player": 0},
-    {"item": 3, "location": 3, "player": 0}
+    {"item": 1, "location": 1, "player": 0, "flags": 1},
+    {"item": 2, "location": 2, "player": 0, "flags": 2},
+    {"item": 3, "location": 3, "player": 0, "flags": 0}
 ]
 ```
+Flags are bit flags:
+| Flag | Meaning |
+| ----- | ----- |
+| 0 | Nothing special about this item |
+| 0b001 | If set, indicates the item can unlock logical advancement |
+| 0b010 | If set, indicates the item is important but not in a way that unlocks advancement |
+| 0b100 | If set, indicates the item is a trap |
 
 ### JSONMessagePart
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are intended to be read in the order they are listed in the packet.
@@ -346,9 +354,10 @@ Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed
 from typing import TypedDict, Optional
 class JSONMessagePart(TypedDict):
     type: Optional[str]
-    color: Optional[str]
     text: Optional[str]
-    player: Optional[int] # marks owning player id for location/item
+    color: Optional[str] # only available if type is a color
+    flags: Optional[int] # only available if type is an item_id or item_name
+    player: Optional[int] # only available if type is either item or location
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
@@ -362,7 +371,7 @@ Possible values for `type` include:
 | item_id | Item ID, should be resolved to Item Name |
 | item_name | Item Name, not currently used over network, but supported by reference Clients. |
 | location_id | Location ID, should be resolved to Location Name |
-| location_name |Location Name, not currently used over network, but supported by reference Clients. |
+| location_name | Location Name, not currently used over network, but supported by reference Clients. |
 | entrance_name | Entrance Name. No ID mapping exists. |
 | color | Regular text that should be colored. Only `type` that will contain `color` data. |
 
@@ -390,6 +399,8 @@ Color options:
 * white_bg
 
 `text` is the content of the message part to be displayed.
+`player` marks owning player id for location/item, 
+`flags` contains the [NetworkItem](#NetworkItem) flags that belong to the item
 
 ### Client States
 An enumeration containing the possible client states that may be used to inform the server in [StatusUpdate](#StatusUpdate).
