@@ -15,8 +15,8 @@ Optionally, you may enable DoorCost, which will gate away some areas:
 - Warp Zone
 until you've collected some Trinkets.
 Examples:
+- If you set DoorCost at 2, then to enter Laboratory you will need Trinkets 1-2, for The Tower 3-4, etc.
 - If you set DoorCost at 3, then to enter Laboratory you will need Trinkets 1-3, for The Tower 4-6, etc.
-- If you set DoorCost at 4, then to enter Laboratory you will need Trinkets 1-4, for The Tower 5-8, etc.
 
 ## What is the goal of VVVVVV when randomized?
 Save all crew members, and finish the story.
