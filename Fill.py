@@ -433,7 +433,7 @@ def distribute_planned(world: MultiWorld):
                 locations = [locations]
             block['locations'] = locations
             c = block['count']
-            logging.info(f"Block count before: {c}")
+            
             if not block['count']:
                 block['count'] = (min(len(block['items']), len(block['locations'])) if len(block['locations'])
                                   > 0 else len(block['items']))
@@ -454,7 +454,7 @@ def distribute_planned(world: MultiWorld):
                 block['count'] = len(block['locations'])
             block['count']['target'] = world.random.randint(block['count']['min'], block['count']['max'])
             c = block['count']
-            logging.info(f"Block count after: {c}")
+            
             if block['count']['target'] > 0:
                 plando_blocks.append(block)
 
