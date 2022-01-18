@@ -342,10 +342,10 @@ In JSON this may look like:
 Flags are bit flags:
 | Flag | Meaning |
 | ----- | ----- |
-| 0 | Indicates, indicates the item had no specail use in generation |
-| 1 << 0 | If set, indicates the item can unlock advancement |
-| 1 << 1 | If set, indicates the item is important but not necessarily unlocks advancement |
-| 1 << 2 | If set, indicates the item is an trap |
+| 0 | Nothing special about this item |
+| 0b100 | If set, indicates the item can unlock logical advancement |
+| 0b100 | If set, indicates the item is important but not in a way that unlocks advancement |
+| 0b100 | If set, indicates the item is a trap |
 
 ### JSONMessagePart
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are intended to be read in the order they are listed in the packet.
@@ -355,8 +355,8 @@ from typing import TypedDict, Optional
 class JSONMessagePart(TypedDict):
     type: Optional[str]
     text: Optional[str]
-    color: Optional[str] # only available if type is an color
-    item_flags: Optional[int] # only available if type is an item
+    color: Optional[str] # only available if type is a color
+    flags: Optional[int] # only available if type is an item_id or item_name
     player: Optional[int] # only available if type is either item or location
 ```
 
@@ -371,7 +371,7 @@ Possible values for `type` include:
 | item_id | Item ID, should be resolved to Item Name |
 | item_name | Item Name, not currently used over network, but supported by reference Clients. |
 | location_id | Location ID, should be resolved to Location Name |
-| location_name |Location Name, not currently used over network, but supported by reference Clients. |
+| location_name | Location Name, not currently used over network, but supported by reference Clients. |
 | entrance_name | Entrance Name. No ID mapping exists. |
 | color | Regular text that should be colored. Only `type` that will contain `color` data. |
 
@@ -400,7 +400,7 @@ Color options:
 
 `text` is the content of the message part to be displayed.
 `player` marks owning player id for location/item, 
-`item_flags` contains the [NetworkItem](#NetworkItem) flags that belong to the item
+`flags` contains the [NetworkItem](#NetworkItem) flags that belong to the item
 
 ### Client States
 An enumeration containing the possible client states that may be used to inform the server in [StatusUpdate](#StatusUpdate).

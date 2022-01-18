@@ -17,6 +17,8 @@ class JSONMessagePart(typing.TypedDict, total=False):
     color: str
     # owning player for location/item
     player: int
+    # if type == item indicates item flags
+    flags: int
 
 
 class ClientStatus(enum.IntEnum):
@@ -211,7 +213,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_color(node)
 
     def _handle_item_name(self, node: JSONMessagePart):
-        flags = node.get("item_flags", 0)
+        flags = node.get("flags", 0)
         if flags == 0:
             node["color"] = 'cyan'
         elif flags & 1 << 0: # advancement
@@ -266,7 +268,7 @@ def add_json_text(parts: list, text: typing.Any, **kwargs) -> None:
 
 
 def add_json_item(parts: list, item_id: int, player: int = 0, item_flags: int = 0, **kwargs) -> None:
-    parts.append({"text": str(item_id), "player": player, "item_flags": item_flags, "type": JSONTypes.item_id, **kwargs})
+    parts.append({"text": str(item_id), "player": player, "flags": item_flags, "type": JSONTypes.item_id, **kwargs})
 
 
 def add_json_location(parts: list, item_id: int, player: int = 0, **kwargs) -> None:
@@ -287,7 +289,8 @@ class Hint(typing.NamedTuple):
             return self
         found = self.location in ctx.location_checks[team, self.finding_player]
         if found:
-            return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance, self.item_flags)
+            return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance,
+                        self.item_flags)
         return self
 
     def __hash__(self):

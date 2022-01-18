@@ -710,7 +710,8 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
             if receiving_player == slot and item_id == seeked_item_id:
                 found = location_id in ctx.location_checks[team, finding_player]
                 entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
-                hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance, item_flags))
+                hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
+                                           item_flags))
 
     return hints
 
