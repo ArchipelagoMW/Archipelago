@@ -184,7 +184,9 @@ class EvolutionTrapCount(TrapCount):
 
 
 class EvolutionTrapIncrease(Range):
-    """How much an Evolution Trap increases the enemy evolution"""
+    """How much an Evolution Trap increases the enemy evolution.
+    Increases scale down proportionally to the session's current evolution factor
+    (40 increase at 0.50 will add 0.20... 40 increase at 0.75 will add 0.10...)"""
     displayname = "Evolution Trap % Effect"
     range_start = 1
     default = 10
