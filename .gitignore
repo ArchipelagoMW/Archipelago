@@ -156,3 +156,6 @@ Archipelago.zip
 #minecraft server stuff
 jdk*/
 minecraft*/
+
+#pyenv
+.python-version

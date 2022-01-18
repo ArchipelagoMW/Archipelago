@@ -34,6 +34,7 @@ class DungeonItem(Choice):
     option_own_world = 2
     option_any_world = 3
     option_different_world = 4
+    option_start_with = 6
     alias_true = 3
     alias_false = 0
 
@@ -90,6 +91,11 @@ class ShopItemSlots(Range):
     range_start = 0
     range_end = 30
 
+class ShopPriceModifier(Range):
+    """Percentage modifier for shuffled item prices in shops"""
+    range_start = 0
+    default = 100
+    range_end = 400
 
 class WorldState(Choice):
     option_standard = 1
@@ -305,6 +311,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "killable_thieves": KillableThieves,
     "bush_shuffle": BushShuffle,
     "shop_item_slots": ShopItemSlots,
+    "shop_price_modifier": ShopPriceModifier,
     "tile_shuffle": TileShuffle,
     "ow_palettes": OWPalette,
     "uw_palettes": UWPalette,

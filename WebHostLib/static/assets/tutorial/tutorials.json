@@ -17,7 +17,36 @@
         ]
       },
       {
-        "name": "Using Advanced Settings",
+        "name": "Archipelago Website User Guide",
+        "description": "A guide to using the Archipelago website to generate multiworlds or host pre-generated multiworlds.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/using_website.md",
+            "link": "archipelago/using_website/en",
+            "authors": [
+              "alwaysintreble"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Archipelago Server and Client Commands",
+        "description": "A guide detailing the commands available to the user when participating in an Archipelago session.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/commands_en.md",
+            "link": "archipelago/commands/en",
+            "authors": [
+              "jat2980",
+              "Ijwu"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Advanced YAML Guide",
         "description": "A guide to reading yaml files and editing them to fully customize your game.",
         "files": [
           {
@@ -25,7 +54,8 @@
             "filename": "archipelago/advanced_settings_en.md",
             "link": "archipelago/advanced_settings/en",
             "authors": [
-              "alwaysintreble"
+              "alwaysintreble",
+              "Alchav"
             ]
           }
         ]
@@ -282,6 +312,16 @@
             "authors": [
               "Jarno"
             ]
+          },
+          {
+            "language": "German",
+            "filename": "timespinner/setup_de.md",
+            "link": "timespinner/setup/de",
+            "authors": [
+              "Grrmo",
+              "Fynxes",
+              "Blaze0168"
+            ]
           }
         ]
       }
@@ -357,6 +397,44 @@
             "link": "ff1/multiworld/en",
             "authors": [
               "jat2980"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Rogue Legacy",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Rogue Legacy Randomizer software on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "rogue-legacy/rogue-legacy_en.md",
+            "link": "rogue-legacy/rogue-legacy/en",
+            "authors": [
+              "Phar"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Slay the Spire",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up Slay the Spire for Archipelago. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "slay-the-spire/slay-the-spire_en.md",
+            "link": "slay-the-spire/slay-the-spire/en",
+            "authors": [
+              "Phar"
             ]
           }
         ]

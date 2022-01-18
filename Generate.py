@@ -23,6 +23,7 @@ import Options
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
+import copy
 
 categories = set(AutoWorldRegister.world_types)
 
@@ -148,7 +149,7 @@ def main(args=None, callback=ERmain):
                         if category_name is None:
                             weights_cache[path][key] = option
                         elif category_name not in weights_cache[path]:
-                            raise Exception(f"Meta: Category {category_name} is not present in {path}.")
+                            logging.warning(f"Meta: Category {category_name} is not present in {path}.")
                         else:
                             weights_cache[path][category_name][key] = option
 
@@ -190,8 +191,6 @@ def main(args=None, callback=ERmain):
                     if len(player_settings.values()) > 1:
                         important[option] = {player: value for player, value in player_settings.items() if
                                              player <= args.yaml_output}
-                    elif len(player_settings.values()) > 0:
-                        important[option] = player_settings[1]
                     else:
                         logging.debug(f"No player settings defined for option '{option}'")
 
@@ -330,7 +329,7 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
 
 
 def roll_linked_options(weights: dict) -> dict:
-    weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+    weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     for option_set in weights["linked_options"]:
         if "name" not in option_set:
             raise ValueError("One of your linked options does not have a name.")
@@ -352,7 +351,7 @@ def roll_linked_options(weights: dict) -> dict:
 
 
 def roll_triggers(weights: dict, triggers: list) -> dict:
-    weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+    weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
         try:
@@ -491,7 +490,9 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         for option_key, option in world_type.options.items():
             handle_option(ret, game_weights, option_key, option)
         for option_key, option in Options.per_game_common_options.items():
-            handle_option(ret, game_weights, option_key, option)
+            # skip setting this option if already set from common_options, defaulting to root option
+            if not (option_key in Options.common_options and option_key not in game_weights):
+                handle_option(ret, game_weights, option_key, option)
         if "items" in plando_options:
             ret.plando_items = roll_item_plando(world_type, game_weights)
         if ret.game == "Minecraft" or ret.game == "Ocarina of Time":

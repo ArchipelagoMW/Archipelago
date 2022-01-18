@@ -247,7 +247,12 @@ def ShopSlotFill(world):
 
                     item_name = location.item.name
                     if location.item.game != "A Link to the Past":
-                        price = world.random.randrange(1, 28)
+                        if location.item.advancement:
+                            price = world.random.randrange(8, 56)
+                        elif location.item.never_exclude:
+                            price = world.random.randrange(4, 28)
+                        else:
+                            price = world.random.randrange(2, 14)
                     elif any(x in item_name for x in
                              ['Compass', 'Map', 'Single Bomb', 'Single Arrow', 'Piece of Heart']):
                         price = world.random.randrange(1, 7)
@@ -258,7 +263,8 @@ def ShopSlotFill(world):
                     else:
                         price = world.random.randrange(8, 56)
 
-                    shop.push_inventory(location.shop_slot, item_name, price * 5, 1,
+                    shop.push_inventory(location.shop_slot, item_name,
+                                        min(int(price * world.shop_price_modifier[location.player] / 100) * 5, 9999), 1,
                                         location.item.player if location.item.player != location.player else 0)
                     if 'P' in world.shop_shuffle[location.player]:
                         price_to_funny_price(shop.inventory[location.shop_slot], world, location.player)

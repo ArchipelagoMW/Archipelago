@@ -2,8 +2,10 @@ import logging
 import typing
 import collections
 import itertools
+from collections import Counter, deque
 
-from BaseClasses import CollectionState, Location, MultiWorld
+
+from BaseClasses import CollectionState, Location, MultiWorld, Item
 from worlds.generic import PlandoItem
 from worlds.AutoWorld import call_all
 
@@ -12,30 +14,35 @@ class FillError(RuntimeError):
     pass
 
 
-def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, itempool, single_player_placement=False,
-                     lock=False):
-    def sweep_from_pool():
-        new_state = base_state.copy()
-        for item in itempool:
-            new_state.collect(item, True)
-        new_state.sweep_for_events()
-        return new_state
+def sweep_from_pool(base_state: CollectionState, itempool):
+    new_state = base_state.copy()
+    for item in itempool:
+        new_state.collect(item, True)
+    new_state.sweep_for_events()
+    return new_state
 
+
+def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, itempool: typing.List[Item],
+                     single_player_placement=False, lock=False):
     unplaced_items = []
     placements = []
 
-    reachable_items = {}
+    swapped_items = Counter()
+    reachable_items: dict[str, deque] = {}
     for item in itempool:
-        reachable_items.setdefault(item.player, []).append(item)
+        reachable_items.setdefault(item.player, deque()).append(item)
 
     while any(reachable_items.values()) and locations:
-        items_to_place = [items.pop() for items in reachable_items.values() if items]  # grab one item per player
+        # grab one item per player
+        items_to_place = [items.pop()
+                          for items in reachable_items.values() if items]
         for item in items_to_place:
             itempool.remove(item)
-        maximum_exploration_state = sweep_from_pool()
+        maximum_exploration_state = sweep_from_pool(base_state, itempool)
         has_beaten_game = world.has_beaten_game(maximum_exploration_state)
 
         for item_to_place in items_to_place:
+            spot_to_fill: Location = None
             if world.accessibility[item_to_place.player] == 'minimal':
                 perform_access_check = not world.has_beaten_game(maximum_exploration_state,
                                                                  item_to_place.player) if single_player_placement else not has_beaten_game
@@ -45,19 +52,48 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
             for i, location in enumerate(locations):
                 if (not single_player_placement or location.player == item_to_place.player) \
                         and location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
-                    spot_to_fill = locations.pop(i) # poping by index is faster than removing by content,
+                    # poping by index is faster than removing by content,
+                    spot_to_fill = locations.pop(i)
                     # skipping a scan for the element
                     break
 
             else:
-                # we filled all reachable spots. Maybe the game can be beaten anyway?
-                unplaced_items.append(item_to_place)
-                if world.accessibility[item_to_place.player] != 'minimal' and world.can_beat_game():
-                    logging.warning(
-                        f'Not all items placed. Game beatable anyway. (Could not place {item_to_place})')
-                    continue
-                raise FillError(f'No more spots to place {item_to_place}, locations {locations} are invalid. '
-                                f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
+                # we filled all reachable spots.
+                # try swaping this item with previously placed items
+                for(i, location) in enumerate(placements):
+                    placed_item = location.item
+                    # Unplaceable items can sometimes be swapped infinitely. Limit the
+                    # number of times we will swap an individual item to prevent this
+                    if swapped_items[placed_item.player, placed_item.name] > 0:
+                        continue
+                    location.item = None
+                    placed_item.location = None
+                    swap_state = sweep_from_pool(base_state, itempool)
+                    if (not single_player_placement or location.player == item_to_place.player) \
+                            and location.can_fill(swap_state, item_to_place, perform_access_check):
+                        # Add this item to the exisiting placement, and
+                        # add the old item to the back of the queue
+                        spot_to_fill = placements.pop(i)
+                        swapped_items[placed_item.player,
+                                      placed_item.name] += 1
+                        reachable_items[placed_item.player].appendleft(
+                            placed_item)
+                        itempool.append(placed_item)
+                        break
+                    else:
+                        # Item can't be placed here, restore original item
+                        location.item = placed_item
+                        placed_item.location = location
+
+                if spot_to_fill == None:
+                    # Maybe the game can be beaten anyway?
+                    unplaced_items.append(item_to_place)
+                    if world.accessibility[item_to_place.player] != 'minimal' and world.can_beat_game():
+                        logging.warning(
+                            f'Not all items placed. Game beatable anyway. (Could not place {item_to_place})')
+                        continue
+                    raise FillError(f'No more spots to place {item_to_place}, locations {locations} are invalid. '
+                                    f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
 
             world.push_item(spot_to_fill, item_to_place, False)
             spot_to_fill.locked = lock

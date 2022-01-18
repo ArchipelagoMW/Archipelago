@@ -258,7 +258,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 precollected_items = {player: [item.code for item in world_precollected]
                                       for player, world_precollected in world.precollected_items.items()}
                 precollected_hints = {player: set() for player in range(1, world.players + 1)}
-                # for now special case Factorio tech_tree_information
+
                 sending_visible_players = set()
 
                 for slot in world.player_ids:

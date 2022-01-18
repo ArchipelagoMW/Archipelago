@@ -282,7 +282,7 @@ class Rom(BigStream):
 
 
 def compress_rom_file(input_file, output_file):
-    compressor_path = data_path("Compress")
+    compressor_path = "."
 
     if platform.system() == 'Windows':
         executable_path = "Compress.exe"

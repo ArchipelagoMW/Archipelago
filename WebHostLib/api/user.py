@@ -16,7 +16,6 @@ def get_rooms():
             "last_port": room.last_port,
             "timeout": room.timeout,
             "tracker": room.tracker,
-            "players": room.seed.multidata["names"] if room.seed.multidata else [["Singleplayer"]],
         })
     return jsonify(response)
 
@@ -28,6 +27,6 @@ def get_seeds():
         response.append({
             "seed_id": seed.id,
             "creation_time": seed.creation_time,
-            "players": seed.multidata["names"] if seed.multidata else [["Singleplayer"]],
+            "players": [(slot.player_name, slot.game) for slot in seed.slots],
         })
     return jsonify(response)

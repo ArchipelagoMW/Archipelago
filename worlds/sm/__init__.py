@@ -44,6 +44,7 @@ class SMWorld(World):
     itemManager: ItemManager
 
     locations = {}
+    hint_blacklist = {'Nothing', 'NoEnergy'}
 
     Logic.factory('vanilla')
 
@@ -85,6 +86,7 @@ class SMWorld(World):
         # keeps Nothing items local so no player will ever pickup Nothing
         # doing so reduces contribution of this world to the Multiworld the more Nothing there is though
         self.world.local_items[self.player].value.add('Nothing')
+        self.world.local_items[self.player].value.add('NoEnergy')
 
         if (self.variaRando.args.morphPlacement == "early"):
             self.world.local_items[self.player].value.add('Morph')
@@ -126,7 +128,7 @@ class SMWorld(World):
                     weaponCount[2] += 1
                 else:
                     isAdvancement = False
-            elif item.Type == 'Nothing':
+            elif item.Category == 'Nothing':
                 isAdvancement = False
 
             itemClass = ItemManager.Items[item.Type].Class
