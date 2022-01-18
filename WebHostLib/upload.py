@@ -67,7 +67,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                 multidata = None
 
     if multidata:
-        decompressed_multidata = MultiServer.Context._decompress(multidata)
+        decompressed_multidata = MultiServer.Context.decompress(multidata)
         player_names = {slot.player_name for slot in slots}
         leftover_names = [(name, index) for index, name in
                           enumerate((name for name in decompressed_multidata["names"][0]), start=1)]
@@ -100,7 +100,7 @@ def uploads():
             if file.filename == '':
                 flash('No selected file')
             elif file and allowed_file(file.filename):
-                if file.filename.endswith(".zip"):
+                if zipfile.is_zipfile(file):
                     with zipfile.ZipFile(file, 'r') as zfile:
                         res = upload_zip_to_db(zfile)
                         if type(res) == str:
@@ -108,12 +108,13 @@ def uploads():
                         elif res:
                             return redirect(url_for("view_seed", seed=res.id))
                 else:
+                    file.seek(0)  # offset from is_zipfile check
+                    # noinspection PyBroadException
                     try:
                         multidata = file.read()
-                        MultiServer.Context._decompress(multidata)
-                    except:
-                        flash("Could not load multidata. File may be corrupted or incompatible.")
-                        raise
+                        MultiServer.Context.decompress(multidata)
+                    except Exception as e:
+                        flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
                     else:
                         seed = Seed(multidata=multidata, owner=session["_id"])
                         flush()  # place into DB and generate ids

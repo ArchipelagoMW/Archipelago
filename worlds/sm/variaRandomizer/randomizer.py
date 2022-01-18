@@ -16,6 +16,7 @@ from utils.doorsmanager import DoorsManager
 from logic.logic import Logic
 
 import utils.log
+from worlds.sm.Options import StartLocation
 
 # we need to know the logic before doing anything else
 def getLogic():
@@ -498,10 +499,12 @@ class VariaRandomizer:
                         sys.exit(-1)
                 args.startLocation = random.choice(possibleStartAPs)
             elif args.startLocation not in possibleStartAPs:
-                optErrMsgs.append('Invalid start location: {}.  {}'.format(args.startLocation, reasons[args.startLocation]))
-                optErrMsgs.append('Possible start locations with these settings: {}'.format(possibleStartAPs))
-                dumpErrorMsgs(args.output, optErrMsgs)
-                sys.exit(-1)
+                args.startLocation = 'Landing Site'
+                world.start_location[player] = StartLocation(StartLocation.default)
+                #optErrMsgs.append('Invalid start location: {}.  {}'.format(args.startLocation, reasons[args.startLocation]))
+                #optErrMsgs.append('Possible start locations with these settings: {}'.format(possibleStartAPs))
+                #dumpErrorMsgs(args.output, optErrMsgs)
+                #sys.exit(-1)
         ap = getAccessPoint(args.startLocation)
         if 'forcedEarlyMorph' in ap.Start and ap.Start['forcedEarlyMorph'] == True:
             forceArg('morphPlacement', 'early', "'Morph Placement' forced to early for custom start location")

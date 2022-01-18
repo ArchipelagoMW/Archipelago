@@ -28,8 +28,8 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Lower lake desolation', 'Tank chest',  1337009, lambda state: state._timespinner_has_timestop(world, player)),
         LocationData('Upper lake desolation', 'Upper desolation Oxygen recovery room',  1337010),
         LocationData('Upper lake desolation', 'Upper desolation secret',  1337011, lambda state: state._timespinner_can_break_walls(world, player)),
-        LocationData('Upper lake desolation', 'Upper desolation double jump cave floor',  1337012, lambda state: state._timespinner_has_doublejump(world, player)),
-        LocationData('Upper lake desolation', 'Upper desolation double jump cave platform',  1337013),
+        LocationData('Upper lake desolation', 'Upper desolation double jump cave platform',  1337012, lambda state: state._timespinner_has_doublejump(world, player)),
+        LocationData('Upper lake desolation', 'Upper desolation double jump cave floor',  1337013),
         LocationData('Upper lake desolation', 'Fire-Locked sparrow chest',  1337014),
         LocationData('Upper lake desolation', 'Crash site pedestal',  1337015),
         LocationData('Upper lake desolation', 'Crash site chest 1',  1337016, lambda state: state.has_all({'Killed Maw', 'Gas Mask'}, player)),
@@ -72,16 +72,16 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Sealed Caves (Sirens)', 'Upper sealed cave water hook',  1337053, lambda state: state.has('Water Mask', player)),
         LocationData('Sealed Caves (Sirens)', 'Upper sealed cave siren room right',  1337054, lambda state: state.has('Water Mask', player)),
         LocationData('Sealed Caves (Sirens)', 'Upper sealed cave siren room left',  1337055, lambda state: state.has('Water Mask', player)),
-        LocationData('Sealed Caves (Sirens)', 'Upper sealed cave after sirens chest 2',  1337056),
-        LocationData('Sealed Caves (Sirens)', 'Upper sealed cave after sirens chest 1',  1337057),
+        LocationData('Sealed Caves (Sirens)', 'Upper sealed cave after sirens chest 1',  1337056),
+        LocationData('Sealed Caves (Sirens)', 'Upper sealed cave after sirens chest 2',  1337057),
         LocationData('Military Fortress', 'Military bomber chest',  1337058, lambda state: state.has('Timespinner Wheel', player) and state._timespinner_has_doublejump_of_npc(world, player)),
         LocationData('Military Fortress', 'Close combat room',  1337059),
-        LocationData('Military Fortress', 'Military soldiers bridge',  1337060),
-        LocationData('Military Fortress', 'Military giantess room',  1337061),
-        LocationData('Military Fortress', 'Military giantess bridge',  1337062),
-        LocationData('Military Fortress', 'Military B door chest 2',  1337063, lambda state: state._timespinner_has_doublejump(world, player) and state._timespinner_has_keycard_B(world, player)),
-        LocationData('Military Fortress', 'Military B door chest 1',  1337064, lambda state: state._timespinner_has_doublejump(world, player) and state._timespinner_has_keycard_B(world, player)),
-        LocationData('Military Fortress', 'Military pedestal',  1337065, lambda state: state._timespinner_has_doublejump(world, player) and (state._timespinner_has_doublejump_of_npc(world, player) or state._timespinner_has_forwarddash_doublejump(world, player))),
+        LocationData('Military Fortress (hangar)', 'Military soldiers bridge',  1337060),
+        LocationData('Military Fortress (hangar)', 'Military giantess room',  1337061),
+        LocationData('Military Fortress (hangar)', 'Military giantess bridge',  1337062),
+        LocationData('Military Fortress (hangar)', 'Military B door chest 2',  1337063, lambda state: state._timespinner_has_doublejump(world, player) and state._timespinner_has_keycard_B(world, player)),
+        LocationData('Military Fortress (hangar)', 'Military B door chest 1',  1337064, lambda state: state._timespinner_has_doublejump(world, player) and state._timespinner_has_keycard_B(world, player)),
+        LocationData('Military Fortress (hangar)', 'Military pedestal',  1337065, lambda state: state._timespinner_has_doublejump_of_npc(world, player) or state._timespinner_has_forwarddash_doublejump(world, player)),
         LocationData('The lab', 'Coffee break',  1337066),
         LocationData('The lab', 'Lower trash right',  1337067, lambda state: state._timespinner_has_doublejump(world, player)),
         LocationData('The lab', 'Lower trash left',  1337068, lambda state: state._timespinner_has_upwarddash(world, player)),
@@ -98,7 +98,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Emperors tower', 'Dad\'s courtyard chest',  1337079, lambda state: state._timespinner_has_upwarddash(world, player)),
         LocationData('Emperors tower', 'Galactic sage room',  1337080),
         LocationData('Emperors tower', 'Bottom of Dad\'s right tower',  1337081),
-        LocationData('Emperors tower', 'Wayyyy up there',  1337082),
+        LocationData('Emperors tower', 'Wayyyy up there',  1337082, lambda state: state._timespinner_has_doublejump_of_npc(world, player)),
         LocationData('Emperors tower', 'Dad\'s left tower balcony',  1337083),
         LocationData('Emperors tower', 'Dad\'s Chambers chest',  1337084),
         LocationData('Emperors tower', 'Dad\'s Chambers pedestal',  1337085),
@@ -180,8 +180,8 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Royal towers (upper)', 'Before Aelana',  1337152),
         LocationData('Royal towers (upper)', 'Killed Aelana',  EventId),
         LocationData('Royal towers (upper)', 'Aelana\'s attic',  1337153, lambda state: state._timespinner_has_upwarddash(world, player)),
-        LocationData('Royal towers (upper)', 'Aelana\'s pedestal',  1337154),
-        LocationData('Royal towers (upper)', 'Aelana\'s chest',  1337155),
+        LocationData('Royal towers (upper)', 'Aelana\'s chest',  1337154),
+        LocationData('Royal towers (upper)', 'Aelana\'s pedestal',  1337155),
 
         #AncientPyramidLocations
         LocationData('Ancient Pyramid (left)', 'Why not it\'s right there',  1337246),
@@ -217,20 +217,47 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
             LocationData('Left Side forest Caves', 'Cantoran',  1337176),
         )
 
-    # 1337177 - 1337236 Reserved for future use
+    # 1337177 - 1337198 Lore Checks
+    if not world or is_option_enabled(world, player, "LoreChecks"):
+        location_table += (
+            LocationData('Lower lake desolation', 'Memory - Coyote Jump (Time Messenger)',  1337177),
+            LocationData('Library', 'Memory - Waterway (A Message)',  1337178),
+            LocationData('Library top', 'Memory - Library Gap (Lachiemi Sun)',  1337179),
+            LocationData('Library top', 'Memory - Mr. Hat Portrait (Moonlit Night)',  1337180),
+            LocationData('Varndagroth tower left', 'Memory - Left Elevator (Nomads)',  1337181, lambda state: state.has('Elevator Keycard', player)),
+            LocationData('Varndagroth tower right (lower)', 'Memory - Siren Elevator (Childhood)',  1337182, lambda state: state._timespinner_has_keycard_B(world, player)),
+            LocationData('Varndagroth tower right (lower)', 'Memory - Varndagroth Right Bottom (Faron)',  1337183),
+            LocationData('Military Fortress', 'Memory - Bomber Climb (A Solution)',  1337184, lambda state: state.has('Timespinner Wheel', player) and state._timespinner_has_doublejump_of_npc(world, player)),
+            LocationData('The lab', 'Memory - Genza\'s Secret Stash 1 (An Old Friend)',  1337185, lambda state: state._timespinner_can_break_walls(world, player)),
+            LocationData('The lab', 'Memory - Genza\'s Secret Stash 2 (Twilight Dinner)',  1337186, lambda state: state._timespinner_can_break_walls(world, player)),
+            LocationData('Emperors tower', 'Memory - Way Up There (Final Circle)',  1337187, lambda state: state._timespinner_has_doublejump_of_npc(world, player)),
+            LocationData('Forest', 'Journal - Forest Rats (Lachiem Expedition)',  1337188),
+            LocationData('Forest', 'Journal - Forest Bat Jump Ledge (Peace Treaty)',  1337189, lambda state: state._timespinner_has_doublejump_of_npc(world, player) or state._timespinner_has_forwarddash_doublejump(world, player) or state._timespinner_has_fastjump_on_npc(world, player)),
+            LocationData('Castle Ramparts', 'Journal - Floating in Moat (Prime Edicts)',  1337190),
+            LocationData('Castle Ramparts', 'Journal - Archer + Knight (Declaration of Independence)',  1337191),
+            LocationData('Castle Keep', 'Journal - Under the Twins (Letter of Reference)',  1337192),
+            LocationData('Castle Keep', 'Journal - Castle Loop Giantess (Political Advice)',  1337193),
+            LocationData('Royal towers (lower)', 'Journal - Aleana\'s Room (Diplomatic Missive)',  1337194, lambda state: state._timespinner_has_pink(world, player)),
+            LocationData('Royal towers (upper)', 'Journal - Top Struggle Juggle Base (War of the Sisters)',  1337195),
+            LocationData('Royal towers (upper)', 'Journal - Aleana Boss (Stained Letter)',  1337196),
+            LocationData('Royal towers', 'Journal - Near Bottom Struggle Juggle (Mission Findings)',  1337197, lambda state: state._timespinner_has_doublejump_of_npc(world, player)),
+            LocationData('Caves of Banishment (Maw)', 'Journal - Lower Left Maw Caves (Naivety)',  1337198)
+        )
+
+    # 1337199 - 1337236 Reserved for future use
 
     # 1337237 - 1337245 GyreArchives
     if not world or is_option_enabled(world, player, "GyreArchives"):
         location_table += (
-            LocationData('The lab (upper)', 'Ravenlord post fight (pedestal)',  1337237, lambda state: state.has('Merchant Crow', player)),
-            LocationData('Library top', 'Ifrit post fight (pedestal)',  1337238, lambda state: state.has('Kobo', player)),
-            LocationData('Ancient Pyramid (right)', 'Transition chest 1',  1337239),
-            LocationData('Ancient Pyramid (right)', 'Transition chest 2',  1337240),
-            LocationData('Ancient Pyramid (right)', 'Transition chest 3',  1337241),
-            LocationData('The lab (upper)', 'Ravenlord pre fight',  1337242, lambda state: state.has('Merchant Crow', player)),
-            LocationData('The lab (upper)', 'Ravenlord post fight (chest)',  1337243, lambda state: state.has('Merchant Crow', player)),
-            LocationData('Library top', 'Ifrit pre fight',  1337244, lambda state: state.has('Kobo', player)),
-            LocationData('Library top', 'Ifrit post fight (chest)',  1337245, lambda state: state.has('Kobo', player)),
+            LocationData('Ravenlord\'s Lair', 'Ravenlord post fight (pedestal)',  1337237),
+            LocationData('Ifrit\'s Lair', 'Ifrit post fight (pedestal)',  1337238),
+            LocationData('Temporal Gyre', 'Gyre chest 1',  1337239),
+            LocationData('Temporal Gyre', 'Gyre chest 2',  1337240),
+            LocationData('Temporal Gyre', 'Gyre chest 3',  1337241),
+            LocationData('Ravenlord\'s Lair', 'Ravenlord pre fight',  1337242),
+            LocationData('Ravenlord\'s Lair', 'Ravenlord post fight (chest)',  1337243),
+            LocationData('Ifrit\'s Lair', 'Ifrit pre fight',  1337244),
+            LocationData('Ifrit\'s Lair', 'Ifrit post fight (chest)', 1337245),
         )
  
     return tuple(location_table)

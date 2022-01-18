@@ -76,7 +76,7 @@ class WebHostContext(Context):
         else:
             self.port = get_random_port()
 
-        return self._load(self._decompress(room.seed.multidata), True)
+        return self._load(self.decompress(room.seed.multidata), True)
 
     @db_session
     def init_save(self, enabled: bool = True):

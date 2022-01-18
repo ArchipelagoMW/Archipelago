@@ -782,10 +782,9 @@ class RegionType(int, Enum):
 
 
 class Region(object):
-
-    def __init__(self, name: str, type: str, hint, player: int, world: Optional[MultiWorld] = None):
+    def __init__(self, name: str, type_: RegionType, hint, player: int, world: Optional[MultiWorld] = None):
         self.name = name
-        self.type = type
+        self.type = type_
         self.entrances = []
         self.exits = []
         self.locations = []

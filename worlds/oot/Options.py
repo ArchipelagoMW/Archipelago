@@ -1,5 +1,6 @@
 import typing
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionList, DeathLink
+from Options import Option, DefaultOnToggle, Toggle, Range, OptionList, DeathLink
+from .LogicTricks import normalized_name_tricks
 from .ColorSFXOptions import *
 
 
@@ -191,8 +192,8 @@ world_options: typing.Dict[str, type(Option)] = {
     "owl_drops": OwlDrops,
     "warp_songs": WarpSongs,
     "spawn_positions": SpawnPositions,
-    "mix_entrance_pools": MixEntrancePools,
-    "decouple_entrances": DecoupleEntrances,
+    # "mix_entrance_pools": MixEntrancePools,
+    # "decouple_entrances": DecoupleEntrances,
     "triforce_hunt": TriforceHunt, 
     "triforce_goal": TriforceGoal,
     "extra_triforce_percentage": ExtraTriforces,
@@ -824,6 +825,8 @@ class LogicTricks(OptionList):
 Format as a comma-separated list of "nice" names: ["Fewer Tunic Requirements", "Hidden Grottos without Stone of Agony"].
 A full list of supported tricks can be found at https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py"""
     displayname = "Logic Tricks"
+    valid_keys = frozenset(normalized_name_tricks)
+    valid_keys_casefold = True
 
 
 # All options assembled into a single dict
