@@ -44,6 +44,7 @@ omitted will default to 100.
   * `count` can be used to set the maximum number of items placed from the block. The default is 1 if using `item` and False if using `items`
     * If a number is used it will try to place this number of items.
     * If set to false it will try to place as many items from the block as it can.
+    * If `min` and `max` are defined, it will try to place a number of items between these two numbers at random
 
 ### Available Items
 * [A Link to the Past](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Items.py#L52)
@@ -127,7 +128,7 @@ plando_items:
     percentage: 80
     force: true
 
-# example block 5 - Secret of Evermore cross-game
+# example block 5 - Secret of Evermore
   - items:
       Levitate: 1
       Revealer: 1
@@ -137,6 +138,14 @@ plando_items:
       - Boss Relic 1
     world: true
     count: 2
+
+# example block 6 - A Link to the Past
+  - items:
+      Progressive Sword: 4
+    world: BobsSlaytheSpire
+    count:
+      min: 1
+      max: 4
 ```
 1. This block has a 50% chance to occur, and if it does will place either the Empire Orb or Radiant Orb on another player's
 Starter Chest 1 and removes the chosen item from the item pool.
@@ -145,7 +154,8 @@ in their own dungeon major item chests.
 3. This block will always trigger and will lock boss relics on the bosses.
 4. This block has an 80% chance of occurring and when it does will place all but 1 of the items randomly among the four
 locations chosen here.
-6. This block will always trigger and will attempt to place a random 2 of Levitate, Revealer and Energize into other players' Master Sword Pedestals or Boss Relic 1 locations.
+5. This block will always trigger and will attempt to place a random 2 of Levitate, Revealer and Energize into other players' Master Sword Pedestals or Boss Relic 1 locations.
+6. This block will always trigger and will attempt to place a random number, between 1 and 4, of progressive swords into any locations within a game slot named BobsSlaytheSpire.
 
 ## Boss Plando
 As this is currently only supported by A Link to the Past instead of explaining here please refer to the 
