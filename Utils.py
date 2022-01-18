@@ -474,3 +474,7 @@ def stream_input(stream, queue):
     thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
     thread.start()
     return thread
+
+
+class VersionException(Exception):
+    pass

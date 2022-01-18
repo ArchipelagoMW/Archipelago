@@ -1018,6 +1018,10 @@ class Item():
     def pedestal_hint_text(self):
         return getattr(self, "_pedestal_hint_text", self.name.replace("_", " ").replace("-", " "))
 
+    @property
+    def flags(self) -> int:
+        return self.advancement + (self.never_exclude << 1) + (self.trap << 2)
+
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player
 

@@ -61,8 +61,8 @@ def mystery_argparse():
     return args, options
 
 
-def get_seed_name(random):
-    return f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
+def get_seed_name(random_source) -> str:
+    return f"{random_source.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 
 def main(args=None, callback=ERmain):
@@ -191,8 +191,6 @@ def main(args=None, callback=ERmain):
                     if len(player_settings.values()) > 1:
                         important[option] = {player: value for player, value in player_settings.items() if
                                              player <= args.yaml_output}
-                    elif len(player_settings.values()) > 0:
-                        important[option] = player_settings[1]
                     else:
                         logging.debug(f"No player settings defined for option '{option}'")
 
@@ -222,11 +220,11 @@ def read_weights_yaml(path):
     return parse_yaml(yaml)
 
 
-def interpret_on_off(value):
+def interpret_on_off(value) -> bool:
     return {"on": True, "off": False}.get(value, value)
 
 
-def convert_to_on_off(value):
+def convert_to_on_off(value) -> str:
     return {True: "on", False: "off"}.get(value, value)
 
 
@@ -514,7 +512,6 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     else:
         raise Exception(f"Unsupported game {ret.game}")
     return ret
-
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     if "dungeon_items" in weights and get_choice_legacy('dungeon_items', weights, "none") != "none":
