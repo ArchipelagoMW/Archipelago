@@ -61,8 +61,8 @@ def mystery_argparse():
     return args, options
 
 
-def get_seed_name(random):
-    return f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
+def get_seed_name(random_source) -> str:
+    return f"{random_source.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 
 def main(args=None, callback=ERmain):
@@ -220,11 +220,11 @@ def read_weights_yaml(path):
     return parse_yaml(yaml)
 
 
-def interpret_on_off(value):
+def interpret_on_off(value) -> bool:
     return {"on": True, "off": False}.get(value, value)
 
 
-def convert_to_on_off(value):
+def convert_to_on_off(value) -> str:
     return {True: "on", False: "off"}.get(value, value)
 
 
@@ -527,10 +527,10 @@ def roll_item_plando(world_type, weights):
 
     options = weights.get("plando_items", [])
     for placement in options:
-        if roll_percentage(get_choice_legacy("percentage", placement, 100)):
-            from_pool = get_choice_legacy("from_pool", placement, PlandoItem._field_defaults["from_pool"])
-            location_world = get_choice_legacy("world", placement, PlandoItem._field_defaults["world"])
-            force = str(get_choice_legacy("force", placement, PlandoItem._field_defaults["force"])).lower()
+        if roll_percentage(get_choice("percentage", placement, 100)):
+            from_pool = get_choice("from_pool", placement, PlandoItem._field_defaults["from_pool"])
+            location_world = get_choice("world", placement, PlandoItem._field_defaults["world"])
+            force = str(get_choice("force", placement, PlandoItem._field_defaults["force"])).lower()
             if "items" in placement and "locations" in placement:
                 items = placement["items"]
                 locations = placement["locations"]
@@ -546,8 +546,8 @@ def roll_item_plando(world_type, weights):
                 for item, location in zip(items, locations):
                     add_plando_item(item, location)
             else:
-                item = get_choice_legacy("item", placement, get_choice_legacy("items", placement))
-                location = get_choice_legacy("location", placement)
+                item = get_choice("item", placement, get_choice("items", placement))
+                location = get_choice("location", placement)
                 add_plando_item(item, location)
     return plando_items
 

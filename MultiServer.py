@@ -665,6 +665,7 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             if len(ctx.locations[slot][location]) == 3:
                 item_id, target_player, flags = ctx.locations[slot][location]
             else:
+                # TODO: remove around version 0.2.5
                 item_id, target_player = ctx.locations[slot][location]
                 flags = 0
 
@@ -702,6 +703,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
             if len(result) == 3:
                 item_id, receiving_player, item_flags = result
             else:
+                # TODO: remove around version 0.2.5
                 item_id, receiving_player = result
                 item_flags = 0
 
@@ -720,6 +722,7 @@ def collect_hints_location(ctx: Context, team: int, slot: int, location: str) ->
         if len(result) == 3:
             item_id, receiving_player, item_flags = result
         else:
+            # TODO: remove around version 0.2.5
             item_id, receiving_player = result
             item_flags = 0
 
@@ -1204,9 +1207,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_hint_location(self, location: str = "") -> bool:
         """Use !hint_location {location_name},
-        for example !hint_location atomic-bomb to get a spoiler peek for that location.
-        (In the case of factorio, or any other game where item names and location names are identical,
-        this command must be used explicitly.)"""
+        for example !hint_location atomic-bomb to get a spoiler peek for that location."""
         return self.get_hints(location, True)
 
 
@@ -1361,6 +1362,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 if len(ctx.locations[client.slot][location]) == 3:
                     target_item, target_player, flags = ctx.locations[client.slot][location]
                 else:
+                    # TODO: remove around version 0.2.5
                     target_item, target_player = ctx.locations[client.slot][location]
                     flags = 0
 

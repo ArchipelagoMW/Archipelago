@@ -266,12 +266,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     if world.worlds[slot].sending_visible:
                         sending_visible_players.add(slot)
 
-                def get_item_flags(item: Item) -> int:
-                    return item.advancement + (item.never_exclude << 1) + (item.trap << 2)
-
                 def precollect_hint(location):
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                         location.item.code, False, "", get_item_flags(location.item))
+                                         location.item.code, False, "", location.item.flags)
                     precollected_hints[location.player].add(hint)
                     precollected_hints[location.item.player].add(hint)
 
@@ -281,7 +278,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         # item code None should be event, location.address should then also be None
                         assert location.item.code is not None
                         locations_data[location.player][location.address] = \
-                            location.item.code, location.item.player, get_item_flags(location.item)
+                            location.item.code, location.item.player, location.item.flags
                         if location.player in sending_visible_players:
                             precollect_hint(location)
                         elif location.name in world.start_location_hints[location.player]:

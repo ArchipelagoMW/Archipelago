@@ -164,6 +164,22 @@ class JSONTypes(str, enum.Enum):
 
 
 class JSONtoTextParser(metaclass=HandlerMeta):
+
+    color_codes = {
+        # not exact color names, close enough but decent looking
+        "black": "000000",
+        "red": "EE0000",
+        "green": "00FF7F",
+        "yellow": "FAFAD2",
+        "blue": "6495ED",
+        "magenta": "EE00EE",
+        "cyan": "00EEEE",
+        "slateblue": "6D8BE8",
+        "plum": "AF99EF",
+        "salmon": "FA8072",
+        "white": "FFFFFF"
+    }
+
     def __init__(self, ctx):
         self.ctx = ctx
 
