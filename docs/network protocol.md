@@ -340,8 +340,11 @@ In JSON this may look like:
 ]
 ```
 `item` is the item id of the item
+
 `location` is the location id of the item inside the world
+
 `player` is the player slot of the world the item is located in
+
 `flags` are bit flags:
 | Flag | Meaning |
 | ----- | ----- |
