@@ -9,7 +9,7 @@ import tempfile
 import zipfile
 from typing import Dict, Tuple, Optional
 
-from BaseClasses import MultiWorld, CollectionState, Region, RegionType
+from BaseClasses import Item, MultiWorld, CollectionState, Region, RegionType
 from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
@@ -266,18 +266,22 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     if world.worlds[slot].sending_visible:
                         sending_visible_players.add(slot)
 
+                def get_item_flags(item: Item) -> int:
+                    return item.advancement + (item.never_exclude << 1) + (item.trap << 2)
+
                 def precollect_hint(location):
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                         location.item.code, False)
+                                         location.item.code, False, "", get_item_flags(location.item))
                     precollected_hints[location.player].add(hint)
                     precollected_hints[location.item.player].add(hint)
 
-                locations_data: Dict[int, Dict[int, Tuple[int, int]]] = {player: {} for player in world.player_ids}
+                locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in world.player_ids}
                 for location in world.get_filled_locations():
                     if type(location.address) == int:
                         # item code None should be event, location.address should then also be None
                         assert location.item.code is not None
-                        locations_data[location.player][location.address] = location.item.code, location.item.player
+                        locations_data[location.player][location.address] = \
+                            location.item.code, location.item.player, get_item_flags(location.item)
                         if location.player in sending_visible_players:
                             precollect_hint(location)
                         elif location.name in world.start_location_hints[location.player]:
