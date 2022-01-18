@@ -136,7 +136,7 @@ def view_seed(seed: UUID):
     seed = Seed.get(id=seed)
     if not seed:
         abort(404)
-    return render_template("viewSeed.html", seed=seed)
+    return render_template("viewSeed.html", seed=seed, slot_count=count(seed.slots))
 
 
 @app.route('/new_room/<suuid:seed>')

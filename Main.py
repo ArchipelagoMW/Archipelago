@@ -311,7 +311,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 multidata = zlib.compress(pickle.dumps(multidata), 9)
 
                 with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
-                    f.write(bytes([1]))  # version of format
+                    f.write(bytes([2]))  # version of format
                     f.write(multidata)
 
             multidata_task = pool.submit(write_multidata)
