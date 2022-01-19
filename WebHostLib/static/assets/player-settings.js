@@ -191,7 +191,9 @@ const updateGameSetting = (event) => {
 
 const exportSettings = () => {
   const settings = JSON.parse(localStorage.getItem(gameName));
-  if (!settings.name || settings.name.trim().length === 0) { settings.name = "noname"; }
+  if (!settings.name || settings.name.toLowerCase() === 'player' || settings.name.trim().length === 0) {
+    settings.name = "Player{player}";
+  }
   const yamlText = jsyaml.safeDump(settings, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);
   download(`${document.getElementById('player-name').value}.yaml`, yamlText);
 };
