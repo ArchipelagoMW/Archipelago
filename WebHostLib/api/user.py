@@ -1,7 +1,7 @@
 from flask import session, jsonify
 
 from WebHostLib.models import *
-from . import api_endpoints
+from . import api_endpoints, get_players
 
 
 @api_endpoints.route('/get_rooms')
@@ -27,6 +27,6 @@ def get_seeds():
         response.append({
             "seed_id": seed.id,
             "creation_time": seed.creation_time,
-            "players": [(slot.player_name, slot.game) for slot in seed.slots],
+            "players": get_players(seed.slots),
         })
     return jsonify(response)
