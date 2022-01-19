@@ -369,7 +369,6 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked=
     location_2.item.location = location_2
     location_1.event, location_2.event = location_2.event, location_1.event
 
-
 def distribute_planned(world: MultiWorld):
     def warn(warning: str, force):
         if force in ['true', 'fail', 'failure', 'none', 'false', 'warn', 'warning']:
@@ -433,7 +432,7 @@ def distribute_planned(world: MultiWorld):
                 locations = [locations]
             block['locations'] = locations
             c = block['count']
-            
+
             if not block['count']:
                 block['count'] = (min(len(block['items']), len(block['locations'])) if len(block['locations'])
                                   > 0 else len(block['items']))
@@ -454,7 +453,7 @@ def distribute_planned(world: MultiWorld):
                 block['count'] = len(block['locations'])
             block['count']['target'] = world.random.randint(block['count']['min'], block['count']['max'])
             c = block['count']
-            
+
             if block['count']['target'] > 0:
                 plando_blocks.append(block)
 
@@ -476,17 +475,26 @@ def distribute_planned(world: MultiWorld):
                 worlds = set(world.player_ids) - {player}
             elif target_world is None:
                 worlds = set(world.player_ids)
+            elif type(target_world) == list:
+                worlds = []
+                for listed_world in target_world:
+                    if listed_world not in world_name_lookup:
+                        failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
+                               placement['force'])
+                        continue
+                    worlds.append(world_name_lookup[listed_world])
+                worlds = set(worlds)
             elif type(target_world) == int:
                 if target_world not in range(1, world.players + 1):
-                    placement.failed(
+                    failed(
                         f"Cannot place item in world {target_world} as it is not in range of (1, {world.players})",
-                        ValueError)
+                        placement['forced'])
                     continue
                 worlds = {target_world}
             else:  # find world by name
                 if target_world not in world_name_lookup:
-                    placement.failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
-                                     ValueError)
+                    failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
+                           placement['force'])
                     continue
                 worlds = {world_name_lookup[target_world]}
 
