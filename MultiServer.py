@@ -23,7 +23,7 @@ ModuleUpdate.update()
 import websockets
 import colorama
 
-from fuzzywuzzy import process as fuzzy_process
+from thefuzz import process as fuzzy_process
 
 import NetUtils
 from worlds.AutoWorld import AutoWorldRegister

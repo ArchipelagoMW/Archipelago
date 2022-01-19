@@ -27,7 +27,7 @@ class Version(typing.NamedTuple):
 __version__ = "0.2.3"
 version_tuple = tuplize_version(__version__)
 
-from yaml import load, dump, safe_load
+from yaml import load, dump, SafeLoader
 
 try:
     from yaml import CLoader as Loader
@@ -118,7 +118,19 @@ def open_file(filename):
         subprocess.call([open_command, filename])
 
 
-parse_yaml = safe_load
+# from https://gist.github.com/pypt/94d747fe5180851196eb#gistcomment-4015118 with some changes
+class UniqueKeyLoader(SafeLoader):
+    def construct_mapping(self, node, deep=False):
+        mapping = set()
+        for key_node, value_node in node.value:
+            key = self.construct_object(key_node, deep=deep)
+            if key in mapping:
+                raise KeyError(f"Duplicate key {key!r} found in YAML. Already found keys: {mapping}.")
+            mapping.add(key)
+        return super().construct_mapping(node, deep)
+
+
+parse_yaml = functools.partial(load, Loader=UniqueKeyLoader)
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
 
