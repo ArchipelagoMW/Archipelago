@@ -20,7 +20,19 @@
 }
 
 #host-room table {
-    border-spacing: 0px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-spacing: 0;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+}
+
+#host-room table thead td{
+    padding: 5px 10px;
+    background-color: #b0a77d;
+    color: black;
+    border: 1px solid;
 }
 
 #host-room table tbody{
@@ -32,20 +44,19 @@
 }
 
 #host-room table tbody td{
-    padding: 4px 6px;
+    padding: 5px 10px;
     color: black;
 }
 
-#host-room table tbody a{
+#host-room table tbody td a{
     color: #234ae4;
 }
 
-#host-room table thead td{
-    background-color: #b0a77d;
-    color: black;
-    top: 0;
-}
-
 #host-room table tbody td{
-    border: 1px solid #bba967;
+    border: 1px solid;
+}
+#host-room table tbody td:first-child,
+#host-room table thead td:first-child
+{
+    text-align: center;
 }
