@@ -368,7 +368,6 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked=
     location_1.item.location = location_1
     location_2.item.location = location_2
     location_1.event, location_2.event = location_2.event, location_1.event
-
 def distribute_planned(world: MultiWorld):
     def warn(warning: str, force):
         if force in ['true', 'fail', 'failure', 'none', 'false', 'warn', 'warning']:
@@ -506,11 +505,12 @@ def distribute_planned(world: MultiWorld):
             count = 0
             err = "Unknown error"
             successful_pairs = []
-            for item in items:
+            for item_name in items:
+                item = world.worlds[player].create_item(item_name)
                 for location in reversed(candidates):
                     if location in key_drop_data:
                         warn(
-                            f"Can't place '{placement.item}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
+                            f"Can't place '{item_name}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
                     if not location.item:
                         if location.item_rule(item):
                             if location.can_fill(world.state, item, False):
@@ -521,9 +521,9 @@ def distribute_planned(world: MultiWorld):
                             else:
                                 err = f"Can't place item at {location} due to fill condition not met."
                         else:
-                            err = f"{item} not allowed at {location}."
+                            err = f"{item_name} not allowed at {location}."
                     else:
-                        err = f"Cannot place {item} into already filled location {location}."
+                        err = f"Cannot place {item_name} into already filled location {location}."
                 if count == maxcount:
                     break
             if count < placement['count']['min']:
@@ -532,7 +532,6 @@ def distribute_planned(world: MultiWorld):
                     placement['force'])
                 continue
             for (item, location) in successful_pairs:
-                item = world.worlds[player].create_item(item)
                 world.push_item(location, item, collect=False)
                 location.event = True  # flag location to be checked during fill
                 location.locked = True
