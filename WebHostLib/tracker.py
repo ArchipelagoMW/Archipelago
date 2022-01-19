@@ -254,7 +254,7 @@ def get_static_room_data(room: Room):
         return result
     multidata = Context.decompress(room.seed.multidata)
     # in > 100 players this can take a bit of time and is the main reason for the cache
-    locations: Dict[int, Dict[int, Tuple[int, int]]] = multidata['locations']
+    locations: Dict[int, Dict[int, Tuple[int, int, int]]] = multidata['locations']
     names: Dict[int, Dict[int, str]] = multidata["names"]
     seed_checks_in_area = checks_in_area.copy()
 
@@ -317,7 +317,10 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
             # If the player does not have the item, do nothing
             for location in locations_checked:
                 if location in player_locations:
-                    item, recipient = player_locations[location]
+                    if len(player_locations[location]) == 3:
+                        item, recipient, flags = player_locations[location]
+                    else: # TODO: remove around version 0.2.5
+                        item, recipient = player_locations[location]
                     if recipient == tracked_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
                     if ms_player == tracked_player:  # a check done by the tracked player
@@ -337,7 +340,7 @@ def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
     return getPlayerTracker(tracker, tracked_team, tracked_player, True)
 
 
-def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                          inventory: Counter, team: int, player: int, player_name: str,
                          seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
@@ -381,7 +384,11 @@ def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[
     player_big_key_locations = set()
     player_small_key_locations = set()
     for loc_data in locations.values():
-        for item_id, item_player in loc_data.values():
+        for values in loc_data.values():
+            if len(values) == 3:
+                item_id, item_player, flags = values
+            else: # TODO: remove around version 0.2.5
+                item_id, item_player = values
             if item_player == player:
                 if item_id in ids_big_key:
                     player_big_key_locations.add(ids_big_key[item_id])
@@ -398,7 +405,7 @@ def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[
                             **display_data)
 
 
-def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                              inventory: Counter, team: int, player: int, playerName: str,
                              seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
@@ -500,7 +507,7 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
                             **display_data)
 
 
-def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                        inventory: Counter, team: int, player: int, playerName: str,
                        seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
@@ -686,7 +693,7 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
                            **display_data)
 
 
-def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                                inventory: Counter, team: int, player: int, playerName: str,
                                seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
@@ -773,7 +780,7 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
-def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                                 inventory: Counter, team: int, player: int, playerName: str,
                                 seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
@@ -874,7 +881,7 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
-def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                            inventory: Counter, team: int, player: int, playerName: str,
                            seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
@@ -930,7 +937,11 @@ def getTracker(tracker: UUID):
             if location not in player_locations or location not in player_location_to_area[player]:
                 continue
 
-            item, recipient = player_locations[location]
+            if len(player_locations[location]) == 3:
+                item, recipient, flags = player_locations[location]
+            else: # TODO: remove around version 0.2.5
+                item, recipient = player_locations[location]
+
             attribute_item(inventory, team, recipient, item)
             checks_done[team][player][player_location_to_area[player][location]] += 1
             checks_done[team][player]["Total"] += 1
@@ -942,12 +953,16 @@ def getTracker(tracker: UUID):
     player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
     player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
     for loc_data in locations.values():
-        for item_id, item_player in loc_data.values():
+         for values in loc_data.values():
+            if len(values) == 3:
+                item_id, item_player, flags = values
+            else: # TODO: remove around version 0.2.5
+                item_id, item_player = values
+
             if item_id in ids_big_key:
                 player_big_key_locations[item_player].add(ids_big_key[item_id])
             elif item_id in ids_small_key:
                 player_small_key_locations[item_player].add(ids_small_key[item_id])
-
     group_big_key_locations = set()
     group_key_locations = set()
     for player in range(1, len(names[0]) + 1):
