@@ -16,11 +16,9 @@ window.addEventListener('load', () => {
     }
 
     if (settingHash !== md5(results[0])) {
-      const userMessage = document.getElementById('user-message');
-      userMessage.innerText = "Your settings are out of date! Click here to update them! Be aware this will reset " +
-        "them all to default.";
-      userMessage.style.display = "block";
-      userMessage.addEventListener('click', resetSettings);
+      showUserMessage("Your settings are out of date! Click here to update them! Be aware this will reset " +
+        "them all to default.");
+      document.getElementById('user-message').addEventListener('click', resetSettings);
     }
 
     // Page setup
@@ -192,7 +190,7 @@ const updateGameSetting = (event) => {
 const exportSettings = () => {
   const settings = JSON.parse(localStorage.getItem(gameName));
   if (!settings.name || settings.name.toLowerCase() === 'player' || settings.name.trim().length === 0) {
-    settings.name = "Player{player}";
+    return showUserMessage('You must enter a player name!');
   }
   const yamlText = jsyaml.safeDump(settings, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);
   download(`${document.getElementById('player-name').value}.yaml`, yamlText);
@@ -210,21 +208,41 @@ const download = (filename, text) => {
 };
 
 const generateGame = (raceMode = false) => {
+  const settings = JSON.parse(localStorage.getItem(gameName));
+  if (!settings.name || settings.name.toLowerCase() === 'player' || settings.name.trim().length === 0) {
+    return showUserMessage('You must enter a player name!');
+  }
+
   axios.post('/api/generate', {
-    weights: { player: localStorage.getItem(gameName) },
-    presetData: { player: localStorage.getItem(gameName) },
+    weights: { player: settings },
+    presetData: { player: settings },
     playerCount: 1,
     race: raceMode ? '1' : '0',
   }).then((response) => {
     window.location.href = response.data.url;
   }).catch((error) => {
-    const userMessage = document.getElementById('user-message');
-    userMessage.innerText = 'Something went wrong and your game could not be generated.';
+    let userMessage = 'Something went wrong and your game could not be generated.';
     if (error.response.data.text) {
-      userMessage.innerText += ' ' + error.response.data.text;
+      userMessage += ' ' + error.response.data.text;
     }
-    userMessage.classList.add('visible');
-    window.scrollTo(0, 0);
+    showUserMessage(userMessage);
     console.error(error);
   });
+};
+
+const showUserMessage = (message) => {
+  const userMessage = document.getElementById('user-message');
+    userMessage.innerText = message;
+    userMessage.classList.add('visible');
+    window.scrollTo(0, 0);
+    userMessage.addEventListener('click', () => {
+      userMessage.classList.remove('visible');
+      userMessage.addEventListener('click', hideUserMessage);
+    });
+};
+
+const hideUserMessage = () => {
+  const userMessage = document.getElementById('user-message');
+  userMessage.classList.remove('visible');
+  userMessage.removeEventListener('click', hideUserMessage);
 };
