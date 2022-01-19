@@ -33,18 +33,19 @@ enabled (opt-in).
 Item plando allows a player to place an item in a specific location or specific locations, place multiple items into a
 list of specific locations both in their own game or in another player's game.
 
-* The options for item plando are `from_pool`, `world`, `percentage`, `force`, and either item and location, or items
+* The options for item plando are `from_pool`, `world`, `percentage`, `force`, `count`, and either item and location, or items
   and locations.
     * `from_pool` determines if the item should be taken *from* the item pool or *added* to it. This can be true or
       false and defaults to true if omitted.
     * `world` is the target world to place the item in.
         * It gets ignored if only one world is generated.
-        * Can be a number, name, true, false, or null. False is the default.
+        * Can be a number, name, true, false, null, or a list. False is the default.
             * If a number is used it targets that slot or player number in the multiworld.
             * If a name is used it will target the world with that player name.
             * If set to true it will be any player's world besides your own.
             * If set to false it will target your own world.
             * If set to null it will target a random world in the multiworld.
+            * If a list of names is used, it will target the games with the player names specified.
     * `force` determines whether the generator will fail if the item can't be placed in the location can be true, false,
       or silent. Silent is the default.
         * If set to true the item must be placed and the generator will throw an error if it is unable to do so.
@@ -165,23 +166,24 @@ plando_items:
 # example block 6 - A Link to the Past
   - items:
       Progressive Sword: 4
-    world: BobsSlaytheSpire
+    world:
+      - BobsSlaytheSpire
+      - BobsRogueLegacy
     count:
       min: 1
       max: 4
 ```
-
-1. This block has a 50% chance to occur, and if it does will place either the Empire Orb or Radiant Orb on another
-   player's Starter Chest 1 and removes the chosen item from the item pool.
+1. This block has a 50% chance to occur, and if it does will place either the Empire Orb or Radiant Orb on another player's
+Starter Chest 1 and removes the chosen item from the item pool.
 2. This block will always trigger and will place the player's swords, bow, magic meter, strength upgrades, and hookshots
-   in their own dungeon major item chests.
+in their own dungeon major item chests.
 3. This block will always trigger and will lock boss relics on the bosses.
 4. This block has an 80% chance of occurring and when it does will place all but 1 of the items randomly among the four
 locations chosen here.
-5. This block will always trigger and will attempt to place a random 2 of Levitate, Revealer and Energize into other
-players' Master Sword Pedestals or Boss Relic 1 locations.
+5. This block will always trigger and will attempt to place a random 2 of Levitate, Revealer and Energize into
+other players' Master Sword Pedestals or Boss Relic 1 locations.
 6. This block will always trigger and will attempt to place a random number, between 1 and 4, of progressive swords
-into any locations within a game slot named BobsSlaytheSpire.
+into any locations within the game slots named BobsSlaytheSpire and BobsRogueLegacy
 
 
 ## Boss Plando
