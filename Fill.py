@@ -6,7 +6,7 @@ from collections import Counter, deque
 
 
 from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item
-from worlds.generic import PlandoItem
+
 from worlds.AutoWorld import call_all
 
 
@@ -407,80 +407,182 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked=
     location_1.item.location = location_1
     location_2.item.location = location_2
     location_1.event, location_2.event = location_2.event, location_1.event
-
-
 def distribute_planned(world: MultiWorld):
+    def warn(warning: str, force):
+        if force in ['true', 'fail', 'failure', 'none', 'false', 'warn', 'warning']:
+            logging.warning(f'{warning}')
+        else:
+            logging.debug(f'{warning}')
+
+    def failed(warning: str, force):
+        if force in ['true', 'fail', 'failure']:
+            raise Exception(warning)
+        else:
+            warn(warning, force)
+
     # TODO: remove. Preferably by implementing key drop
     from worlds.alttp.Regions import key_drop_data
     world_name_lookup = world.world_name_lookup
 
-    for player in world.player_ids:
+    plando_blocks = []
+    player_ids = set(world.player_ids)
+    for player in player_ids:
+        for block in world.plando_items[player]:
+            block['player'] = player
+            if 'force' not in block:
+                block['force'] = 'silent'
+            if 'from_pool' not in block:
+                block['from_pool'] = True
+            if 'world' not in block:
+                block['world'] = False
+            items = []
+            if "items" in block:
+                items = block["items"]
+                if 'count' not in block:
+                    block['count'] = False
+            elif "item" in block:
+                items = block["item"]
+                if 'count' not in block:
+                    block['count'] = 1
+            else:
+                failed("You must specify at least one item to place items with plando.", block['forced'])
+            if isinstance(items, dict):
+                item_list = []
+                for key, value in items.items():
+                    item_list += [key] * value
+                items = item_list
+            if isinstance(items, str):
+                items = [items]
+            block['items'] = items
+
+            locations = []
+            if 'locations' in block:
+                locations.extend(block['locations'])
+            elif 'location' in block:
+                locations.extend(block['location'])
+
+            if isinstance(locations, dict):
+                location_list = []
+                for key, value in locations.items():
+                    location_list += [key] * value
+                locations = location_list
+            if isinstance(locations, str):
+                locations = [locations]
+            block['locations'] = locations
+            c = block['count']
+
+            if not block['count']:
+                block['count'] = (min(len(block['items']), len(block['locations'])) if len(block['locations'])
+                                  > 0 else len(block['items']))
+            if isinstance(block['count'], int):
+                block['count'] = {'min': block['count'], 'max': block['count']}
+            if 'min' not in block['count']:
+                block['count']['min'] = 0
+            if 'max' not in block['count']:
+                block['count']['max'] = (min(len(block['items']), len(block['locations'])) if len(block['locations'])
+                                         > 0 else len(block['items']))
+            if block['count']['max'] > len(block['items']):
+                count = block['count']
+                failed(f"Plando count {count} greater than items specified", block['force'])
+                block['count'] = len(block['items'])
+            if block['count']['max'] > len(block['locations']) > 0:
+                count = block['count']
+                failed(f"Plando count {count} greater than locations specified for player ", block['force'])
+                block['count'] = len(block['locations'])
+            block['count']['target'] = world.random.randint(block['count']['min'], block['count']['max'])
+            c = block['count']
+
+            if block['count']['target'] > 0:
+                plando_blocks.append(block)
+
+    # shuffle, but then sort blocks by number of items, so blocks with fewer items get priority
+    world.random.shuffle(plando_blocks)
+    plando_blocks.sort(key=lambda block: block['count']['target'])
+
+    for placement in plando_blocks:
+        player = placement['player']
         try:
-            placement: PlandoItem
-            for placement in world.plando_items[player]:
-                if placement.location in key_drop_data:
-                    placement.warn(
-                        f"Can't place '{placement.item}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
+            target_world = placement['world']
+            locations = placement['locations']
+            items = placement['items']
+            maxcount = placement['count']['target']
+            from_pool = placement['from_pool']
+            if target_world is False or world.players == 1:
+                worlds = {player}
+            elif target_world is True:
+                worlds = set(world.player_ids) - {player}
+            elif target_world is None:
+                worlds = set(world.player_ids)
+            elif type(target_world) == list:
+                worlds = []
+                for listed_world in target_world:
+                    if listed_world not in world_name_lookup:
+                        failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
+                               placement['force'])
+                        continue
+                    worlds.append(world_name_lookup[listed_world])
+                worlds = set(worlds)
+            elif type(target_world) == int:
+                if target_world not in range(1, world.players + 1):
+                    failed(
+                        f"Cannot place item in world {target_world} as it is not in range of (1, {world.players})",
+                        placement['forced'])
                     continue
-                item = world.worlds[player].create_item(placement.item)
-                target_world: int = placement.world
-                if target_world is False or world.players == 1:
-                    target_world = player  # in own world
-                elif target_world is True:  # in any other world
-                    unfilled = list(location for location in world.get_unfilled_locations_for_players(
-                        placement.location,
-                        set(world.player_ids) - {player}) if location.item_rule(item)
-                                    )
-                    if not unfilled:
-                        placement.failed(f"Could not find a world with an unfilled location {placement.location}",
-                                         FillError)
-                        continue
-
-                    target_world = world.random.choice(unfilled).player
-
-                elif target_world is None:  # any random world
-                    unfilled = list(location for location in world.get_unfilled_locations_for_players(
-                        placement.location,
-                        set(world.player_ids)) if location.item_rule(item)
-                                    )
-                    if not unfilled:
-                        placement.failed(f"Could not find a world with an unfilled location {placement.location}",
-                                         FillError)
-                        continue
-
-                    target_world = world.random.choice(unfilled).player
-
-                elif type(target_world) == int:  # target world by player id
-                    if target_world not in range(1, world.players + 1):
-                        placement.failed(
-                            f"Cannot place item in world {target_world} as it is not in range of (1, {world.players})",
-                            ValueError)
-                        continue
-                else:  # find world by name
-                    if target_world not in world_name_lookup:
-                        placement.failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
-                                         ValueError)
-                        continue
-                    target_world = world_name_lookup[target_world]
-
-                location = world.get_location(placement.location, target_world)
-                if location.item:
-                    placement.failed(f"Cannot place item into already filled location {location}.")
+                worlds = {target_world}
+            else:  # find world by name
+                if target_world not in world_name_lookup:
+                    failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
+                           placement['force'])
                     continue
+                worlds = {world_name_lookup[target_world]}
 
-                if location.can_fill(world.state, item, False):
-                    world.push_item(location, item, collect=False)
-                    location.event = True  # flag location to be checked during fill
-                    location.locked = True
-                    logging.debug(f"Plando placed {item} at {location}")
-                else:
-                    placement.failed(f"Can't place {item} at {location} due to fill condition not met.")
-                    continue
+            candidates = list(location for location in world.get_unfilled_locations_for_players(locations,
+                                                                                                worlds))
 
-                if placement.from_pool:  # Should happen AFTER the item is placed, in case it was allowed to skip failed placement.
+            world.random.shuffle(candidates)
+            world.random.shuffle(items)
+            count = 0
+            err = "Unknown error"
+            successful_pairs = []
+            for item_name in items:
+                item = world.worlds[player].create_item(item_name)
+                for location in reversed(candidates):
+                    if location in key_drop_data:
+                        warn(
+                            f"Can't place '{item_name}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
+                    if not location.item:
+                        if location.item_rule(item):
+                            if location.can_fill(world.state, item, False):
+                                successful_pairs.append([item, location])
+                                candidates.remove(location)
+                                count = count + 1
+                                break
+                            else:
+                                err = f"Can't place item at {location} due to fill condition not met."
+                        else:
+                            err = f"{item_name} not allowed at {location}."
+                    else:
+                        err = f"Cannot place {item_name} into already filled location {location}."
+                if count == maxcount:
+                    break
+            if count < placement['count']['min']:
+                failed(
+                    f"Plando block failed to place item(s) for {world.player_name[player]}, most recent cause: {err}",
+                    placement['force'])
+                continue
+            for (item, location) in successful_pairs:
+                world.push_item(location, item, collect=False)
+                location.event = True  # flag location to be checked during fill
+                location.locked = True
+                logging.debug(f"Plando placed {item} at {location}")
+                if from_pool:
                     try:
                         world.itempool.remove(item)
                     except ValueError:
-                        placement.warn(f"Could not remove {item} from pool as it's already missing from it.")
+                        warn(
+                            f"Could not remove {item} from pool for {world.player_name[player]} as it's already missing from it.",
+                        placement['force'])
+
         except Exception as e:
-            raise Exception(f"Error running plando for player {player} ({world.player_name[player]})") from e
+            raise Exception(
+                f"Error running plando for player {player} ({world.player_name[player]})") from e

@@ -494,7 +494,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             if not (option_key in Options.common_options and option_key not in game_weights):
                 handle_option(ret, game_weights, option_key, option)
         if "items" in plando_options:
-            ret.plando_items = roll_item_plando(world_type, game_weights)
+            ret.plando_items = game_weights.get("plando_items", [])
         if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
             # bad hardcoded behavior to make this work for now
             ret.plando_connections = []
@@ -512,45 +512,6 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     else:
         raise Exception(f"Unsupported game {ret.game}")
     return ret
-
-
-def roll_item_plando(world_type, weights):
-    plando_items = []
-
-    def add_plando_item(item: str, location: str):
-        if item not in world_type.item_name_to_id:
-            raise Exception(f"Could not plando item {item} as the item was not recognized")
-        if location not in world_type.location_name_to_id:
-            raise Exception(
-                f"Could not plando item {item} at location {location} as the location was not recognized")
-        plando_items.append(PlandoItem(item, location, location_world, from_pool, force))
-
-    options = weights.get("plando_items", [])
-    for placement in options:
-        if roll_percentage(get_choice("percentage", placement, 100)):
-            from_pool = get_choice("from_pool", placement, PlandoItem._field_defaults["from_pool"])
-            location_world = get_choice("world", placement, PlandoItem._field_defaults["world"])
-            force = str(get_choice("force", placement, PlandoItem._field_defaults["force"])).lower()
-            if "items" in placement and "locations" in placement:
-                items = placement["items"]
-                locations = placement["locations"]
-                if isinstance(items, dict):
-                    item_list = []
-                    for key, value in items.items():
-                        item_list += [key] * value
-                    items = item_list
-                if not items or not locations:
-                    raise Exception("You must specify at least one item and one location to place items.")
-                random.shuffle(items)
-                random.shuffle(locations)
-                for item, location in zip(items, locations):
-                    add_plando_item(item, location)
-            else:
-                item = get_choice("item", placement, get_choice("items", placement))
-                location = get_choice("location", placement)
-                add_plando_item(item, location)
-    return plando_items
-
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     if "dungeon_items" in weights and get_choice_legacy('dungeon_items', weights, "none") != "none":

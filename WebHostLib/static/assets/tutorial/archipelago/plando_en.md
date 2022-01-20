@@ -30,24 +30,22 @@ enabled (opt-in).
 ``` 
 
 ## Item Plando
-
 Item plando allows a player to place an item in a specific location or specific locations, place multiple items into a
-list of specific locations both in their own game or in another player's game. **Note that there's a very good chance
-that cross-game plando could very well be broken i.e. placing on of your items in someone else's world playing a
-different game.**
+list of specific locations both in their own game or in another player's game.
 
-* The options for item plando are `from_pool`, `world`, `percentage`, `force`, and either item and location, or items
+* The options for item plando are `from_pool`, `world`, `percentage`, `force`, `count`, and either item and location, or items
   and locations.
     * `from_pool` determines if the item should be taken *from* the item pool or *added* to it. This can be true or
       false and defaults to true if omitted.
     * `world` is the target world to place the item in.
         * It gets ignored if only one world is generated.
-        * Can be a number, name, true, false, or null. False is the default.
+        * Can be a number, name, true, false, null, or a list. False is the default.
             * If a number is used it targets that slot or player number in the multiworld.
             * If a name is used it will target the world with that player name.
             * If set to true it will be any player's world besides your own.
             * If set to false it will target your own world.
             * If set to null it will target a random world in the multiworld.
+            * If a list of names is used, it will target the games with the player names specified.
     * `force` determines whether the generator will fail if the item can't be placed in the location can be true, false,
       or silent. Silent is the default.
         * If set to true the item must be placed and the generator will throw an error if it is unable to do so.
@@ -61,6 +59,11 @@ different game.**
         * `items` defines the items to use and a number letting you place multiple of it.
         * `locations` is a list of possible locations those items can be placed in.
         * Using the multi placement method, placements are picked randomly.
+    * `count` can be used to set the maximum number of items placed from the block. The default is 1 if using `item` and False if using `items`
+        * If a number is used it will try to place this number of items.
+        * If set to false it will try to place as many items from the block as it can.
+        * If `min` and `max` are defined, it will try to place a number of items between these two numbers at random
+
 
 ### Available Items
 
@@ -68,23 +71,29 @@ different game.**
 * [Factorio Non-Progressive](https://wiki.factorio.com/Technologies) Note that these use the *internal names*. For
   example, `advanced-electronics`
 * [Factorio Progressive](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/factorio/Technologies.py#L374)
+* [Final Fantasy 1](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ff1/data/items.json)
 * [Minecraft](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Items.py#L14)
 * [Ocarina of Time](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/Items.py#L61)
 * [Risk of Rain 2](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ror2/Items.py#L8)
+* [Rogue Legacy](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/rogue-legacy/Names/ItemName.py)
 * [Slay the Spire](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/spire/Items.py#L13)
 * [Subnautica](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/subnautica/items.json)
+* [Super Metroid](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/variaRandomizer/rando/Items.py#L37) Look for "Name="
 * [Timespinner](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/timespinner/Items.py#L11)
 
 ### Available Locations
 
 * [A Link to the Past](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Regions.py#L429)
 * [Factorio](https://wiki.factorio.com/Technologies) Same as items
+* [Final Fantasy 1](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ff1/data/locations.json)
 * [Minecraft](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Locations.py#L18)
 * [Ocarina of Time](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LocationList.py#L38)
 * [Risk of Rain 2](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ror2/Locations.py#L17) This is a
   special case. The locations are "ItemPickup[number]" up to the maximum set in the yaml.
+* [Rogue Legacy](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/rogue-legacy/Names/LocationName.py)
 * [Slay the Spire](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/spire/Locations.py)
 * [Subnautica](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/subnautica/locations.json)
+* [Super Metroid](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/variaRandomizer/graph/location.py#L132)
 * [Timespinner](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/timespinner/Locations.py#L13)
 
 A list of all available items and locations can also be found in the [server's datapackage](/api/datapackage).
@@ -126,9 +135,9 @@ plando_items:
   - items:
       Boss Relic: 3
     locations:
-      Boss Relic 1
-      Boss Relic 2
-      Boss Relic 3
+      - Boss Relic 1
+      - Boss Relic 2
+      - Boss Relic 3
 
   # example block 4 - Factorio
   - items:
@@ -136,21 +145,46 @@ plando_items:
       electric-energy-accumulators: 1
       progressive-turret: 2
     locations:
-      military
-      gun-turret
-      logistic-science-pack
-      steel-processing
+      - military
+      - gun-turret
+      - logistic-science-pack
+      - steel-processing
     percentage: 80
     force: true
-```
 
-1. This block has a 50% chance to occur, and if it does will place either the Empire Orb or Radiant Orb on another
-   player's Starter Chest 1 and removes the chosen item from the item pool.
+# example block 5 - Secret of Evermore
+  - items:
+      Levitate: 1
+      Revealer: 1
+      Energize: 1
+    locations:
+      - Master Sword Pedestal
+      - Boss Relic 1
+    world: true
+    count: 2
+
+# example block 6 - A Link to the Past
+  - items:
+      Progressive Sword: 4
+    world:
+      - BobsSlaytheSpire
+      - BobsRogueLegacy
+    count:
+      min: 1
+      max: 4
+```
+1. This block has a 50% chance to occur, and if it does will place either the Empire Orb or Radiant Orb on another player's
+Starter Chest 1 and removes the chosen item from the item pool.
 2. This block will always trigger and will place the player's swords, bow, magic meter, strength upgrades, and hookshots
-   in their own dungeon major item chests.
+in their own dungeon major item chests.
 3. This block will always trigger and will lock boss relics on the bosses.
-4. This block has an 80% chance of occuring and when it does will place all but 1 of the items randomly among the four
-   locations chosen here.
+4. This block has an 80% chance of occurring and when it does will place all but 1 of the items randomly among the four
+locations chosen here.
+5. This block will always trigger and will attempt to place a random 2 of Levitate, Revealer and Energize into
+other players' Master Sword Pedestals or Boss Relic 1 locations.
+6. This block will always trigger and will attempt to place a random number, between 1 and 4, of progressive swords
+into any locations within the game slots named BobsSlaytheSpire and BobsRogueLegacy
+
 
 ## Boss Plando
 
