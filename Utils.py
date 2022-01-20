@@ -11,6 +11,7 @@ import io
 import collections
 import importlib
 import logging
+from tkinter import Tk
 
 
 def tuplize_version(version: str) -> Version:
@@ -313,63 +314,9 @@ def persistent_load() -> typing.Dict[dict]:
     return storage
 
 
-def get_adjuster_settings(romfile: str, skip_questions: bool = False) -> typing.Tuple[str, bool]:
-    if hasattr(get_adjuster_settings, "adjuster_settings"):
-        adjuster_settings = getattr(get_adjuster_settings, "adjuster_settings")
-    else:
-        adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_3", {})
-
-    if adjuster_settings:
-        import pprint
-        from worlds.alttp.Rom import get_base_rom_path
-        adjuster_settings.rom = romfile
-        adjuster_settings.baserom = get_base_rom_path()
-        adjuster_settings.world = None
-        whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
-                     "uw_palettes", "sprite"}
-        printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
-        if hasattr(adjuster_settings, "sprite_pool"):
-            sprite_pool = {}
-            for sprite in getattr(adjuster_settings, "sprite_pool"):
-                if sprite in sprite_pool:
-                    sprite_pool[sprite] += 1
-                else:
-                    sprite_pool[sprite] = 1
-            if sprite_pool:
-                printed_options["sprite_pool"] = sprite_pool
-
-        if hasattr(get_adjuster_settings, "adjust_wanted"):
-            adjust_wanted = getattr(get_adjuster_settings, "adjust_wanted")
-        elif persistent_load().get("adjuster", {}).get("never_adjust", False):  # never adjust, per user request
-            return romfile, False
-        elif skip_questions:
-            return romfile, False
-        else:
-            adjust_wanted = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
-                                  f"{pprint.pformat(printed_options)}\n"
-                                  f"Enter yes, no or never: ")
-        if adjust_wanted and adjust_wanted.startswith("y"):
-            if hasattr(adjuster_settings, "sprite_pool"):
-                from LttPAdjuster import AdjusterWorld
-                adjuster_settings.world = AdjusterWorld(getattr(adjuster_settings, "sprite_pool"))
-
-            adjusted = True
-            import LttPAdjuster
-            _, romfile = LttPAdjuster.adjust(adjuster_settings)
-
-            if hasattr(adjuster_settings, "world"):
-                delattr(adjuster_settings, "world")
-        elif adjust_wanted and "never" in adjust_wanted:
-            persistent_store("adjuster", "never_adjust", True)
-            return romfile, False
-        else:
-            adjusted = False
-            if not hasattr(get_adjuster_settings, "adjust_wanted"):
-                logging.info(f"Skipping post-patch adjustment")
-        get_adjuster_settings.adjuster_settings = adjuster_settings
-        get_adjuster_settings.adjust_wanted = adjust_wanted
-        return romfile, adjusted
-    return romfile, False
+def get_adjuster_settings(gameName: str):
+    adjuster_settings = persistent_load().get("adjuster", {}).get(gameName, {})
+    return adjuster_settings
 
 
 @cache_argsless
@@ -488,5 +435,13 @@ def stream_input(stream, queue):
     return thread
 
 
+def tkinter_center_window(window: Tk):
+    window.update()
+    xPos = int(window.winfo_screenwidth()/2 - window.winfo_reqwidth()/2)
+    yPos = int(window.winfo_screenheight()/2 - window.winfo_reqheight()/2)
+    window.geometry("+{}+{}".format(xPos, yPos))
+
+    
 class VersionException(Exception):
     pass
+

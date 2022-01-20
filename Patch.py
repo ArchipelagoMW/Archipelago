@@ -1,5 +1,6 @@
 # TODO: convert this into a system like AutoWorld
 
+import shutil
 import bsdiff4
 import yaml
 import os
@@ -146,10 +147,63 @@ if __name__ == "__main__":
                 elif rom.endswith(".apbp"):
                     print(f"Applying patch {rom}")
                     data, target = create_rom_file(rom)
-                    romfile, adjusted = Utils.get_adjuster_settings(target)
+                    #romfile, adjusted = Utils.get_adjuster_settings(target)
+                    adjuster_settings = Utils.get_adjuster_settings(GAME_ALTTP)
+                    adjusted = False
+                    if adjuster_settings:
+                        import pprint
+                        from worlds.alttp.Rom import get_base_rom_path
+                        adjuster_settings.rom = target
+                        adjuster_settings.baserom = get_base_rom_path()
+                        adjuster_settings.world = None
+                        whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
+                                        "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
+                                        "reduceflashing", "deathlink"}
+                        printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
+                        if hasattr(adjuster_settings, "sprite_pool"):
+                            sprite_pool = {}
+                            for sprite in getattr(adjuster_settings, "sprite_pool"):
+                                if sprite in sprite_pool:
+                                    sprite_pool[sprite] += 1
+                                else:
+                                    sprite_pool[sprite] = 1
+                            if sprite_pool:
+                                printed_options["sprite_pool"] = sprite_pool
+
+                        adjust_wanted = str('no')
+                        if not hasattr(adjuster_settings, 'auto_apply') or 'ask' in adjuster_settings.auto_apply:
+                            adjust_wanted = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
+                                                  f"{pprint.pformat(printed_options)}\n"
+                                                  f"Enter yes, no, always or never: ")
+                        if adjuster_settings.auto_apply == 'never':  # never adjust, per user request
+                            adjust_wanted = 'no'
+                        elif adjuster_settings.auto_apply == 'always':
+                            adjust_wanted = 'yes'
+                        
+                        if adjust_wanted and "never" in adjust_wanted:
+                            adjuster_settings.auto_apply = 'never'
+                            Utils.persistent_store("adjuster", GAME_ALTTP, adjuster_settings)
+
+                        elif adjust_wanted and "always" in adjust_wanted:
+                            adjuster_settings.auto_apply = 'always'
+                            Utils.persistent_store("adjuster", GAME_ALTTP, adjuster_settings)
+
+                        if adjust_wanted and adjust_wanted.startswith("y"):
+                            if hasattr(adjuster_settings, "sprite_pool"):
+                                from LttPAdjuster import AdjusterWorld
+                                adjuster_settings.world = AdjusterWorld(getattr(adjuster_settings, "sprite_pool"))
+
+                            adjusted = True
+                            import LttPAdjuster
+                            _, romfile = LttPAdjuster.adjust(adjuster_settings)
+
+                            if hasattr(adjuster_settings, "world"):
+                                delattr(adjuster_settings, "world")
+                        else:
+                            adjusted = False
                     if adjusted:
                         try:
-                            os.replace(romfile, target)
+                            shutil.move(romfile, target)
                             romfile = target
                         except Exception as e:
                             print(e)
