@@ -1,5 +1,7 @@
 import typing
 
+from BaseClasses import LocationProgressType
+
 if typing.TYPE_CHECKING:
     import BaseClasses
 
@@ -31,6 +33,7 @@ def exclusion_rules(world, player: int, exclude_locations: typing.Set[str]):
         else: 
             add_item_rule(location, lambda i: not (i.advancement or i.never_exclude))
             location.excluded = True
+            location.progress_type = LocationProgressType.EXCLUDED
 
 def set_rule(spot, rule: CollectionRule):
     spot.access_rule = rule
