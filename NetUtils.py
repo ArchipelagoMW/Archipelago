@@ -166,7 +166,6 @@ class JSONTypes(str, enum.Enum):
 
 
 class JSONtoTextParser(metaclass=HandlerMeta):
-
     color_codes = {
         # not exact color names, close enough but decent looking
         "black": "000000",
@@ -216,12 +215,12 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         flags = node.get("flags", 0)
         if flags == 0:
             node["color"] = 'cyan'
-        elif flags & 1 << 0: # advancement
+        elif flags & 0b001:  # advancement
             node["color"] = 'plum'
-        elif flags & 1 << 1: # never_exclude
+        elif flags & 0b010:  # never_exclude
             node["color"] = 'slateblue'
-        elif flags & 1 << 2: # trap
-            node["color"] = 'salmon' 
+        elif flags & 0b100:  # trap
+            node["color"] = 'salmon'
         else:
             node["color"] = 'cyan'
         return self._handle_color(node)

@@ -9,8 +9,6 @@ from .. import cache
 
 api_endpoints = Blueprint('api', __name__, url_prefix="/api")
 
-from . import generate, user  # trigger registration
-
 # unsorted/misc endpoints
 
 
@@ -46,3 +44,6 @@ def get_datapackge_versions():
     version_package = {game: world.data_version for game, world in AutoWorldRegister.world_types.items()}
     version_package["version"] = network_data_package["version"]
     return version_package
+
+
+from . import generate, user  # trigger registration
