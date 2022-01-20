@@ -1,9 +1,9 @@
-from typing import NamedTuple, List
+from typing import List
 import unittest
 from worlds.AutoWorld import World
-from Fill import FillError, fill_restrictive, distribute_items_restrictive
-from BaseClasses import LocationProgressType, MultiWorld, Region, RegionType, Item, Location
-from worlds.generic.Rules import set_rule
+from Fill import FillError, balance_multiworld_progression, fill_restrictive, distribute_items_restrictive
+from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, RegionType, Item, Location
+from worlds.generic.Rules import CollectionRule, set_rule
 
 
 def generate_multi_world(players: int = 1) -> MultiWorld:
@@ -25,15 +25,66 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
     return multi_world
 
 
-class PlayerDefinition(NamedTuple):
+class PlayerDefinition(object):
+    world: MultiWorld
     id: int
     menu: Region
     locations: List[Location]
     prog_items: List[Item]
     basic_items: List[Item]
+    regions: List[Region]
+
+    def __init__(self, world: MultiWorld, id: int, menu: Region, locations: List[Location] = [], prog_items: List[Item] = [], basic_items: List[Item] = []):
+        self.world = world
+        self.id = id
+        self.menu = menu
+        self.locations = locations
+        self.prog_items = prog_items
+        self.basic_items = basic_items
+        self.regions = [menu]
+
+    def generate_region(self, parent: Region, size: int, access_rule: CollectionRule = lambda state: True) -> Region:
+        region_tag = "_region" + str(len(self.regions))
+        region_name = "player" + str(self.id) + region_tag
+        region = Region("player" + str(self.id) + region_tag, RegionType.Generic,
+                        "Region Hint", self.id, self.world)
+        self.locations += generate_locations(size,
+                                             self.id, None, region, region_tag)
+
+        entrance = Entrance(self.id, region_name + "_entrance", parent)
+        parent.exits.append(entrance)
+        entrance.connect(region)
+        entrance.access_rule = access_rule
+
+        self.regions.append(region)
+        self.world.regions.append(region)
+
+        return region
 
 
-def generate_player_data(multi_world: MultiWorld, player_id: int, location_count: int, prog_item_count: int = 0, basic_item_count: int = 0) -> PlayerDefinition:
+def fillRegion(world: MultiWorld, region: Region, items: List[Item]) -> List[Item]:
+    items = items.copy()
+    while len(items) > 0:
+        location = region.locations.pop(0)
+        region.locations.append(location)
+        if location.item:
+            return items
+        item = items.pop(0)
+        world.push_item(location, item, False)
+        location.event = item.advancement
+
+    return items
+
+
+def regionContains(region: Region, item: Item) -> bool:
+    for location in region.locations:
+        if location.item == item:
+            return True
+
+    return False
+
+
+def generate_player_data(multi_world: MultiWorld, player_id: int, location_count: int = 0, prog_item_count: int = 0, basic_item_count: int = 0) -> PlayerDefinition:
     menu = multi_world.get_region("Menu", player_id)
     locations = generate_locations(location_count, player_id, None, menu)
     prog_items = generate_items(prog_item_count, player_id, True)
@@ -41,13 +92,14 @@ def generate_player_data(multi_world: MultiWorld, player_id: int, location_count
     basic_items = generate_items(basic_item_count, player_id, False)
     multi_world.itempool += basic_items
 
-    return PlayerDefinition(player_id, menu, locations, prog_items, basic_items)
+    return PlayerDefinition(multi_world, player_id, menu, locations, prog_items, basic_items)
 
 
-def generate_locations(count: int, player_id: int, address: int = None, region: Region = None) -> List[Location]:
+def generate_locations(count: int, player_id: int, address: int = None, region: Region = None, tag: str = "") -> List[Location]:
     locations = []
+    prefix = "player" + str(player_id) + tag + "_location"
     for i in range(count):
-        name = "player" + str(player_id) + "_location" + str(i)
+        name = prefix + str(i)
         location = Location(player_id, name, address, region)
         locations.append(location)
         region.locations.append(location)
@@ -434,3 +486,69 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         self.assertTrue(player3.locations[1].item.advancement)
         self.assertTrue(player3.locations[2].item.advancement)
         self.assertTrue(player3.locations[3].item.advancement)
+
+
+class TestBalanceMultiworldProgression(unittest.TestCase):
+    def assertRegionContains(self, region: Region, item: Item):
+        for location in region.locations:
+            if location.item and location.item == item:
+                return True
+
+        self.fail("Expected " + region.name + " to contain " + item.name +
+                  "\n Contains" + str(list(map(lambda location: location.item, region.locations))))
+
+    def setUp(self):
+        multi_world = generate_multi_world(2)
+        self.multi_world = multi_world
+        player1 = generate_player_data(
+            multi_world, 1, prog_item_count=2, basic_item_count=40)
+        self.player1 = player1
+        player2 = generate_player_data(
+            multi_world, 2, prog_item_count=2, basic_item_count=40)
+        self.player2 = player2
+
+        multi_world.completion_condition[player1.id] = lambda state: state.has(
+            player1.prog_items[0].name, player1.id) and state.has(
+            player1.prog_items[1].name, player1.id)
+        multi_world.completion_condition[player2.id] = lambda state: state.has(
+            player2.prog_items[0].name, player2.id) and state.has(
+            player2.prog_items[1].name, player2.id)
+
+        items = player1.basic_items + player2.basic_items
+
+        # Sphere 1
+        region = player1.generate_region(player1.menu, 20)
+        items = fillRegion(multi_world, region, [
+                           player1.prog_items[0]] + items)
+
+        # Sphere 2
+        region = player1.generate_region(
+            player1.regions[1], 20, lambda state: state.has(player1.prog_items[0].name, player1.id))
+        items = fillRegion(
+            multi_world, region, [player1.prog_items[1], player2.prog_items[0]] + items)
+
+        # Sphere 3
+        region = player2.generate_region(
+            player2.menu, 20, lambda state: state.has(player2.prog_items[0].name, player2.id))
+        items = fillRegion(multi_world, region, [
+                           player2.prog_items[1]] + items)
+
+        multi_world.progression_balancing[player1.id] = True
+        multi_world.progression_balancing[player2.id] = True
+
+    def test_balances_progression(self):
+        self.assertRegionContains(
+            self.player1.regions[2], self.player2.prog_items[0])
+
+        balance_multiworld_progression(self.multi_world)
+
+        self.assertRegionContains(
+            self.player1.regions[1], self.player2.prog_items[0])
+
+    def test_ignores_priority_locations(self):
+        self.player2.prog_items[0].location.progress_type = LocationProgressType.PRIORITY
+
+        balance_multiworld_progression(self.multi_world)
+
+        self.assertRegionContains(
+            self.player1.regions[2], self.player2.prog_items[0])

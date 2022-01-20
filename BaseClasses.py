@@ -787,7 +787,7 @@ class Region(object):
         self.type = type_
         self.entrances = []
         self.exits = []
-        self.locations = []
+        self.locations: List[Location] = []
         self.dungeon = None
         self.shop = None
         self.world = world
