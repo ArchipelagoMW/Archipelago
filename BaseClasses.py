@@ -790,7 +790,7 @@ class Region(object):
         self.type = type_
         self.entrances = []
         self.exits = []
-        self.locations = []
+        self.locations: List[Location] = []
         self.dungeon = None
         self.shop = None
         self.world = world
@@ -911,6 +911,11 @@ class Boss():
         return f"Boss({self.name})"
 
 
+class LocationProgressType(Enum):
+    DEFAULT = 1
+    PRIORITY = 2
+    EXCLUDED = 3
+
 class Location():
     # If given as integer, then this is the shop's inventory index
     shop_slot: Optional[int] = None
@@ -922,6 +927,7 @@ class Location():
     show_in_spoiler: bool = True
     excluded: bool = False
     crystal: bool = False
+    progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow = staticmethod(lambda item, state: False)
     access_rule = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
