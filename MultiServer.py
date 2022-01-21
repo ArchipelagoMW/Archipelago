@@ -671,8 +671,8 @@ def collect_player(ctx: Context, team: int, slot: int):
     """register any locations that are in the multidata, pointing towards this player"""
     all_locations = collections.defaultdict(set)
     for source_slot, location_data in ctx.locations.items():
-        for location_id, (item_id, target_player_id) in location_data.items():
-            if target_player_id == slot:
+        for location_id, values in location_data.items():
+            if values[1] == slot:
                 all_locations[source_slot].add(location_id)
 
     ctx.notify_all("%s (Team #%d) has collected" % (ctx.player_names[(team, slot)], team + 1))
