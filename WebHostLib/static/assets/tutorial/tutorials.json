@@ -441,5 +441,24 @@
         ]
       }
     ]
+  },
+  {
+    "gameTitle": "VVVVVV",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up VVVVVV for MultiWorld.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "v6/setup_en.md",
+            "link": "v6/setup/en",
+            "authors": [
+              "N00byKing"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]
