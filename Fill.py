@@ -106,7 +106,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
 def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
     # If not passed in, then get a shuffled list of locations to fill in
     if not fill_locations:
-        fill_locations = world.get_locations()
+        fill_locations = world.get_unfilled_locations()
 
     world.random.shuffle(fill_locations)
 
