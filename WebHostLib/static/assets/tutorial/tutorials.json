@@ -280,6 +280,26 @@
     ]
   },
   {
+    "gameTitle": "Raft",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up Raft integration for Archipelago multiworld games.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "raft/setup_en.md",
+            "link": "raft/setup/en",
+            "authors": [
+              "SunnyBat",
+              "Awareqwx"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "gameTitle": "Timespinner",
     "tutorials": [
       {
