@@ -476,7 +476,8 @@ Tags are represented as a list of strings, the common Client tags follow:
 | AP | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily. |
 | IgnoreGame | Tells the server to ignore the "game" attribute in the [Connect](#Connect) packet. |
 | DeathLink | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets |
-| Tracker | Tells the server that this client is actually a Tracker and will refuse new locations from this client. |
+| Tracker | Tells the server that this client is actually a Tracker, will refuse new locations from this client and send all items as if they were remote items. |
+| TextOnly | Tells the server that this client will not send locations and does not want to receive items. |
 
 ### DeathLink
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:

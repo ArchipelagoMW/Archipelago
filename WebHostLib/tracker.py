@@ -906,11 +906,13 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dic
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set())
     player_received_items = {}
+    if multisave.get('version', 0) > 0:
+        # add numbering to all items but starter_inventory
+        ordered_items = multisave.get('received_items', {}).get((team, player, True), [])
+    else:
+        ordered_items = multisave.get('received_items', {}).get((team, player), [])
 
-    for order_index, networkItem in enumerate(
-            multisave.get('received_items', {}).get((team, player), []),
-            start=1
-    ):
+    for order_index, networkItem in enumerate(ordered_items, start=1):
         player_received_items[networkItem.item] = order_index
 
     return render_template("genericTracker.html",
