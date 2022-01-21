@@ -1,0 +1,9 @@
+{
+	"Raft": ["RadioTower", "ResearchTable"],
+	"ResearchTable": [],
+	"RadioTower": ["Vasagatan"],
+	"Vasagatan": ["BalboaIsland"],
+	"BalboaIsland": ["CaravanIsland"],
+	"CaravanIsland": ["Tangaroa"],
+	"Tangaroa": []
+}

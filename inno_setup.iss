@@ -1,9 +1,11 @@
-#define sourcepath "build\exe.win-amd64-3.10"
+#define source_path ReadIni(SourcePath + "\setup.ini", "Data", "source_path")
+#define min_windows ReadIni(SourcePath + "\setup.ini", "Data", "min_windows")
+
 #define MyAppName "Archipelago"
 #define MyAppExeName "ArchipelagoServer.exe"
 #define MyAppIcon "data/icon.ico"
 #dim VersionTuple[4]
-#define MyAppVersion ParseVersion('build\exe.win-amd64-3.10\ArchipelagoServer.exe', VersionTuple[0], VersionTuple[1], VersionTuple[2], VersionTuple[3])
+#define MyAppVersion ParseVersion(source_path + '\ArchipelagoServer.exe', VersionTuple[0], VersionTuple[1], VersionTuple[2], VersionTuple[3])
 #define MyAppVersionText Str(VersionTuple[0])+"."+Str(VersionTuple[1])+"."+Str(VersionTuple[2])
 
 
@@ -34,6 +36,7 @@ SignTool= signtool
 LicenseFile= LICENSE
 WizardStyle= modern
 SetupLogging=yes
+MinVersion={#min_windows}
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -73,19 +76,19 @@ Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Ka
 Source: "{code:GetSMROMPath}"; DestDir: "{app}"; DestName: "Super Metroid (JU).sfc"; Flags: external; Components: client/sni/sm or generator/sm
 Source: "{code:GetSoEROMPath}"; DestDir: "{app}"; DestName: "Secret of Evermore (USA).sfc"; Flags: external; Components: generator/soe
 Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: generator/oot
-Source: "{#sourcepath}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#sourcepath}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
-Source: "{#sourcepath}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
+Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
+Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
 
-Source: "{#sourcepath}\ArchipelagoGenerate.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: generator
-Source: "{#sourcepath}\ArchipelagoServer.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: server
-Source: "{#sourcepath}\ArchipelagoFactorioClient.exe";  DestDir: "{app}"; Flags: ignoreversion; Components: client/factorio
-Source: "{#sourcepath}\ArchipelagoTextClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/text
-Source: "{#sourcepath}\ArchipelagoSNIClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni
-Source: "{#sourcepath}\ArchipelagoLttPAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni/lttp or generator/lttp
-Source: "{#sourcepath}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/minecraft
-Source: "{#sourcepath}\ArchipelagoOoTAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
-Source: "{#sourcepath}\ArchipelagoFF1Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ff1
+Source: "{#source_path}\ArchipelagoGenerate.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: generator
+Source: "{#source_path}\ArchipelagoServer.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: server
+Source: "{#source_path}\ArchipelagoFactorioClient.exe";  DestDir: "{app}"; Flags: ignoreversion; Components: client/factorio
+Source: "{#source_path}\ArchipelagoTextClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/text
+Source: "{#source_path}\ArchipelagoSNIClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni
+Source: "{#source_path}\ArchipelagoLttPAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sni/lttp or generator/lttp
+Source: "{#source_path}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/minecraft
+Source: "{#source_path}\ArchipelagoOoTAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
+Source: "{#source_path}\ArchipelagoFF1Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ff1
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 [Icons]

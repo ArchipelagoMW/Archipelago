@@ -334,11 +334,14 @@ class MultiWorld():
         return [location for location in self.get_locations() if
                 (player is None or location.player == player) and location.item is None and location.can_reach(state)]
 
-    def get_unfilled_locations_for_players(self, location_name: str, players: Iterable[int]):
+    def get_unfilled_locations_for_players(self, locations, players: Iterable[int]):
         for player in players:
-            location = self.get_location(location_name, player)
-            if location.item is None:
-                yield location
+            if len(locations) == 0:
+                locations = [location.name for location in self.get_unfilled_locations(player)]
+            for location_name in locations:
+                location = self._location_cache.get((location_name, player), None)
+                if location is not None and location.item is None:
+                    yield location
 
     def unlocks_new_location(self, item) -> bool:
         temp_state = self.state.copy()
@@ -787,7 +790,7 @@ class Region(object):
         self.type = type_
         self.entrances = []
         self.exits = []
-        self.locations = []
+        self.locations: List[Location] = []
         self.dungeon = None
         self.shop = None
         self.world = world
@@ -908,6 +911,11 @@ class Boss():
         return f"Boss({self.name})"
 
 
+class LocationProgressType(Enum):
+    DEFAULT = 1
+    PRIORITY = 2
+    EXCLUDED = 3
+
 class Location():
     # If given as integer, then this is the shop's inventory index
     shop_slot: Optional[int] = None
@@ -919,6 +927,7 @@ class Location():
     show_in_spoiler: bool = True
     excluded: bool = False
     crystal: bool = False
+    progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow = staticmethod(lambda item, state: False)
     access_rule = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
@@ -1011,6 +1020,10 @@ class Item():
     @property
     def pedestal_hint_text(self):
         return getattr(self, "_pedestal_hint_text", self.name.replace("_", " ").replace("-", " "))
+
+    @property
+    def flags(self) -> int:
+        return self.advancement + (self.never_exclude << 1) + (self.trap << 2)
 
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player

@@ -17,7 +17,36 @@
         ]
       },
       {
-        "name": "Using Advanced Settings",
+        "name": "Archipelago Website User Guide",
+        "description": "A guide to using the Archipelago website to generate multiworlds or host pre-generated multiworlds.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/using_website.md",
+            "link": "archipelago/using_website/en",
+            "authors": [
+              "alwaysintreble"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Archipelago Server and Client Commands",
+        "description": "A guide detailing the commands available to the user when participating in an Archipelago session.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/commands_en.md",
+            "link": "archipelago/commands/en",
+            "authors": [
+              "jat2980",
+              "Ijwu"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Advanced YAML Guide",
         "description": "A guide to reading yaml files and editing them to fully customize your game.",
         "files": [
           {
@@ -54,7 +83,8 @@
             "filename": "archipelago/plando_en.md",
             "link": "archipelago/plando/en",
             "authors": [
-              "alwaysintreble"
+              "alwaysintreble",
+              "Alchav"
             ]
           }
         ]
@@ -250,6 +280,26 @@
     ]
   },
   {
+    "gameTitle": "Raft",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up Raft integration for Archipelago multiworld games.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "raft/setup_en.md",
+            "link": "raft/setup/en",
+            "authors": [
+              "SunnyBat",
+              "Awareqwx"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "gameTitle": "Timespinner",
     "tutorials": [
       {
@@ -386,6 +436,25 @@
             "link": "slay-the-spire/slay-the-spire/en",
             "authors": [
               "Phar"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "VVVVVV",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up VVVVVV for MultiWorld.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "v6/setup_en.md",
+            "link": "v6/setup/en",
+            "authors": [
+              "N00byKing"
             ]
           }
         ]

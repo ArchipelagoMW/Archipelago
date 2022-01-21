@@ -180,3 +180,8 @@ if signtool:
 remove_sprites_from_folder(buildfolder / "data" / "sprites" / "alttpr")
 
 manifest_creation(buildfolder)
+
+if sys.platform == "win32":
+    with open("setup.ini", "w") as f:
+        min_supported_windows = "6.2.9200" if sys.version_info > (3, 9) else "6.0.6000"
+        f.write(f"[Data]\nsource_path={buildfolder}\nmin_windows={min_supported_windows}\n")

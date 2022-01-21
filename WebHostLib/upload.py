@@ -9,7 +9,7 @@ from flask import request, flash, redirect, url_for, session, render_template
 from pony.orm import flush, select
 
 from WebHostLib import app, Seed, Room, Slot
-from Utils import parse_yaml
+from Utils import parse_yaml, VersionException
 from Patch import preferred_endings
 
 banned_zip_contents = (".sfc",)
@@ -102,11 +102,15 @@ def uploads():
             elif file and allowed_file(file.filename):
                 if zipfile.is_zipfile(file):
                     with zipfile.ZipFile(file, 'r') as zfile:
-                        res = upload_zip_to_db(zfile)
-                        if type(res) == str:
-                            return res
-                        elif res:
-                            return redirect(url_for("view_seed", seed=res.id))
+                        try:
+                            res = upload_zip_to_db(zfile)
+                        except VersionException:
+                            flash(f"Could not load multidata. Wrong Version detected.")
+                        else:
+                            if type(res) == str:
+                                return res
+                            elif res:
+                                return redirect(url_for("view_seed", seed=res.id))
                 else:
                     file.seek(0)  # offset from is_zipfile check
                     # noinspection PyBroadException

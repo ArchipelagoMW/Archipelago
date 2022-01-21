@@ -1,43 +1,35 @@
 # Final Fantasy 1 (NES) Multiworld Setup Guide
 
 ## Required Software
-- The FF1Client which is bundled with [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
-- The [BizHawk](http://tasvideos.org/BizHawk.html) emulator. Versions 2.3.1 and higher are supported. 
-  Version 2.7 is recommended
-- Your Final Fantasy (USA Edition) ROM file, probably named `Final Fantasy (USA).nes`. Neither Archipelago.gg nor the 
-  Final Fantasy Randomizer Community can supply you with this.
+
+- The FF1Client
+    - Bundled with Archipelago: [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
+- The BizHawk emulator. Versions 2.3.1 and higher are supported. Version 2.7 is recommended
+    - [BizHawk Official Website](http://tasvideos.org/BizHawk.html)
+- Your legally obtained Final Fantasy (USA Edition) ROM file, probably named `Final Fantasy (USA).nes`. Neither
+  Archipelago.gg nor the Final Fantasy Randomizer Community can supply you with this.
 
 ## Installation Procedures
-1. Download and install the latest version of [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
-   1. On Windows, download Setup.Archipelago.<HighestVersion>.exe and run it
+
+1. Download and install the latest version of Archipelago.
+    1. On Windows, download Setup.Archipelago.<HighestVersion\>.exe and run it
 2. Assign Bizhawk version 2.3.1 or higher as your default program for launching `.nes` files.
-    1. Extract your Bizhawk folder to your Desktop, or somewhere you will remember. Below are optional additional
-       steps for loading ROMs more conveniently
-       1. Right-click on a ROM file and select **Open with...**
-       2. Check the box next to **Always use this app to open .nes files**
-       3. Scroll to the bottom of the list and click the grey text **Look for another App on this PC**
-       4. Browse for `EmuHawk.exe` located inside your Bizhawk folder (from step 1) and click **Open**.
+    1. Extract your Bizhawk folder to your Desktop, or somewhere you will remember. Below are optional additional steps
+       for loading ROMs more conveniently
+        1. Right-click on a ROM file and select **Open with...**
+        2. Check the box next to **Always use this app to open .nes files**
+        3. Scroll to the bottom of the list and click the grey text **Look for another App on this PC**
+        4. Browse for `EmuHawk.exe` located inside your Bizhawk folder (from step 1) and click **Open**.
 
-## Playing a Multiworld
-Playing a multiworld on Archipelago.gg has 3 key components:
-1. The Server which is hosting a game for all players.
-2. The Client Program. For Final Fantasy 1, it is a standalone program but other randomizers may build it in.
-3. The Game itself, in this case running on Bizhawk, which then connects to the Client running on your computer.
+## Obtaining your Archipelago yaml file and randomized ROM
 
-To set this up the following steps are required:
-1. (Each Player) Generate your own yaml file and randomized ROM
-2. (Host Only) Generate a randomized game with you and 0 or more players using Archipelago
-3. (Host Only) Run the Archipelago Server
-4. (Each Player) Run your client program and connect it to the Server
-5. (Each Player) Run your game and connect it to your client program
-6. (Each Player) Play the game and have fun!
+Unlike most other Archipelago.gg games Final Fantasy 1 is randomized by the main randomizer at
+the [Final Fantasy Randomizer Homepage](https://finalfantasyrandomizer.com/).
 
-### Obtaining your Archipelago yaml file and randomized ROM
-Unlike most other Archipelago.gg games Final Fantasy 1 is randomized by the 
-[main randomizer](https://finalfantasyrandomizer.com/). Generate a game by going to the site and performing the
-following steps:
-1. Select the randomization options (also known as `Flags` in the community) of your choice. If you do not know what 
-you prefer, or it is your first time playing select the "Archipelago" preset on the main page.
+Generate a game by going to the site and performing the following steps:
+
+1. Select the randomization options (also known as `Flags` in the community) of your choice. If you do not know what you
+   prefer, or it is your first time playing select the "Archipelago" preset on the main page.
 2. Go to the `Beta` tab and ensure `Archipelago` is enabled. Set your player name to any name that represents you.
 3. Upload you `Final Fantasy(USA).nes` (and click `Remember ROM` for the future!)
 4. Press the `NEW` button beside `Seed` a few times
@@ -46,69 +38,37 @@ you prefer, or it is your first time playing select the "Archipelago" preset on 
 It should download two files. One is the `*.nes` file which your emulator will run and the other is the yaml file
 required by Archipelago.gg
 
-### Generating the Multiworld and Starting the Server
-The game can be generated locally or by Archipelago.gg.
+At this point you are ready to join the multiworld. If you are uncertain on how to generate, host or join a multiworld
+please refer to the [game agnostic setup guide](/tutorial/archipelago/setup/en).
 
-#### Generating on Archipelago.gg (Recommended)
-1. Gather all yaml files
-2. Create a zip file containing all of the yaml files. Make sure it is a `*.zip` not a `*.7z` or a `*.rar`
-3. Navigate to the [Generate Page](https://archipelago.gg/generate) and click `Upload File`
-   1. For your first game keep `Forfeit Permission` as `Automatic on goal completion`. Forfeiting actually means
-      giving out all of the items remaining in your game in this case so you do not block anyone else.
-   2. For your first game keep `Hint Cost` at 10%
-4. Select your zip file
+## Running the Client Program and Connecting to the Server
 
-#### Generating Locally
-1. Navigate to your Archipelago install directory
-2. Empty the `Players` directory then fill it with one yaml per player including your own which you got from the 
-   finalfantasyrandomizer website above
-3. Run `ArchipelagoGenerate.exe` (double-click it in File Explorer)
-4. You will find your generated game in the `output` directory
+Once the Archipelago server has been hosted:
 
-#### Starting the server
-If you generated on Archipelago.gg click `Create New Room` on the results page to start your server
-If you generated locally simply navigate to the [Host Game Page](https://archipelago.gg/uploads) and upload the file
-in the `output` directory
-
-### Running the Client Program and Connecting to the Server
 1. Navigate to your Archipelago install folder and run `ArchipelagoFF1Client.exe`
-2. Notice the `/connect command` on the server hosting page (It should look like `/connect archipelago.gg:*****` where 
-   ***** are numbers)
+2. Notice the `/connect command` on the server hosting page (It should look like `/connect archipelago.gg:*****`
+   where ***** are numbers)
 3. Type the connect command into the client OR add the port to the pre-populated address on the top bar (it should
    already say `archipelago.gg`) and click `connect`
 
-#### Running Your Game and Connecting to the Client Program
-1. Open Bizhawk 2.3.1 or higher and load your ROM OR 
-   click your ROM file if it is already associated with the extension `*.nes`
+### Running Your Game and Connecting to the Client Program
+
+1. Open Bizhawk 2.3.1 or higher and load your ROM OR click your ROM file if it is already associated with the
+   extension `*.nes`
 2. Click on the Tools menu and click on **Lua Console**
 3. Click the folder button to open a new Lua script. (CTL-O or **Script** -> **Open Script**)
 4. Navigate to the location you installed Archipelago to. Open data/lua/FF1/ff1_connector.lua
-   1. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
-   close your emulator entirely, restart it and re-run these steps
-   2. If it says `Must use a version of bizhawk 2.3.1 or higher`, double-check your Bizhawk version by clicking 
-   **Help** -> **About**
+    1. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
+       close your emulator entirely, restart it and re-run these steps
+    2. If it says `Must use a version of bizhawk 2.3.1 or higher`, double-check your Bizhawk version by clicking **
+       Help** -> **About**
 
-### Play the game
+## Play the game
+
 When the client shows both NES and server are connected you are good to go. You can check the connection status of the
 NES at any time by running `/nes`
 
-### Helpful Commands
-Commands are broken into two types: `/` and `!` commands. The difference is that `/commands` are local to your machine
-and game whereas `!` commands ask the server. Most of the time you can use local commands.
+### Other Client Commands
 
-#### Local Commands
-- `/connect <address with port number>` connect to the multiworld server
-- `/disconnect` if you accidentally connected to the wrong port run this to disconnect and then reconnect using
-- `/nes` Shows the current status of the NES connection
-- `/received` Displays all the items you have found or been sent
-- `/missing` Displays all the locations along with their current status (checked/missing)
-- Just typing anything will broadcast a message to all players
-
-#### Remote Commands
-- `!hint <item name>` Tells you at which location in whose game your Item is. Note you need to have checked some locations
-to earn a hint. You can check how many you have by just running `!hint`
-- `!forfeit` If you didn't turn on auto-forfeit or you allowed forfeiting prior to goal completion. Remember that
-"forfeiting" actually means sending out your remaining items in your world
-
-#### Host only (on Archipelago.gg)
-`/forfeit <Player Name>` Forfeits someone regardless of settings and game completion status
+All other commands may be found on the [Archipelago Server and Client Commands Guide](/tutorial/archipelago/commands/en)
+.

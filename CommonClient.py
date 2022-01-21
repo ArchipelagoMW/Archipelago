@@ -587,7 +587,7 @@ if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
 
     class TextContext(CommonContext):
-        tags = {"AP", "IgnoreGame"}
+        tags = {"AP", "IgnoreGame", "TextOnly"}
         game = "Archipelago"
 
         async def server_auth(self, password_requested: bool = False):
