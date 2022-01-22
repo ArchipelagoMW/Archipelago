@@ -104,6 +104,8 @@ class SoEWorld(World):
     evermizer_seed: int
     connect_name: str
 
+    _halls_ne_chest_names: typing.List[str] = [loc.name for loc in _locations if 'Halls NE' in loc.name]
+
     def __init__(self, *args, **kwargs):
         self.connect_name_available_event = threading.Event()
         super(SoEWorld, self).__init__(*args, **kwargs)
@@ -163,6 +165,11 @@ class SoEWorld(World):
     def generate_basic(self):
         # place Victory event
         self.world.get_location('Done', self.player).place_locked_item(self.create_event('Victory'))
+        # place wings in halls NE to avoid softlock
+        wings_location = self.world.random.choice(self._halls_ne_chest_names)
+        wings_item = self.create_item('Wings')
+        self.world.get_location(wings_location, self.player).place_locked_item(wings_item)
+        self.world.itempool.remove(wings_item)
         # generate stuff for later
         self.evermizer_seed = self.world.random.randint(0, 2**16-1)  # TODO: make this an option for "full" plando?
 
