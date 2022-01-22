@@ -134,9 +134,6 @@ class SoEWorld(World):
         self.world.get_entrance('New Game', self.player).connect(self.world.get_region('Ingame', self.player))
 
     def create_items(self):
-        # clear precollected items since we don't support them yet
-        if type(self.world.precollected_items) is dict:
-            self.world.precollected_items[self.player] = []
         # add items to the pool
         self.world.itempool += list(map(lambda item: self.create_item(item), _items))
 
