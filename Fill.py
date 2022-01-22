@@ -110,16 +110,6 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
 
     world.random.shuffle(fill_locations)
 
-    locations: dict[LocationProgressType, list[Location]] = {
-        type: [] for type in LocationProgressType}
-
-    for loc in fill_locations:
-        locations[loc.progress_type].append(loc)
-
-    prioritylocations = locations[LocationProgressType.PRIORITY]
-    defaultlocations = locations[LocationProgressType.DEFAULT]
-    excludedlocations = locations[LocationProgressType.EXCLUDED]
-
     # get items to distribute
     world.random.shuffle(world.itempool)
     progitempool = []
@@ -143,6 +133,18 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
     call_all(world, "fill_hook", progitempool, nonexcludeditempool,
              localrestitempool, nonlocalrestitempool, restitempool, fill_locations)
 
+    locations: dict[LocationProgressType, list[Location]] = {
+        type: [] for type in LocationProgressType}
+
+    for loc in fill_locations:
+        locations[loc.progress_type].append(loc)
+    logging.warning("Locations: " + str(len(fill_locations)))
+    logging.warning("Items: " + str(len(world.itempool)))
+
+    prioritylocations = locations[LocationProgressType.PRIORITY]
+    defaultlocations = locations[LocationProgressType.DEFAULT]
+    excludedlocations = locations[LocationProgressType.EXCLUDED]
+
     locationDeficit = len(progitempool) - len(prioritylocations)
     if locationDeficit > 0:
         if locationDeficit > len(defaultlocations):
@@ -157,6 +159,9 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
 
     if progitempool:
         fill_restrictive(world, world.state, defaultlocations, progitempool)
+        if(len(progitempool) > 0):
+            raise FillError(
+                f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
 
     if nonexcludeditempool:
         world.random.shuffle(defaultlocations)
