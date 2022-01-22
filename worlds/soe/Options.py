@@ -83,13 +83,13 @@ class FixWingsGlitch(EvermizerFlag, Toggle):
     flag = '7'
 
 
-class ShorterDialogs(EvermizerFlag, Toggle):
+class ShorterDialogs(EvermizerFlag, DefaultOnToggle):
     """Cuts some dialogs"""
     displayname = "Shorter Dialogs"
     flag = '9'
 
 
-class ShortBossRush(EvermizerFlag, Toggle):
+class ShortBossRush(EvermizerFlag, DefaultOnToggle):
     """Start boss rush at Metal Magmar, cut enemy HP in half"""
     displayname = "Short Boss Rush"
     flag = 'f'
