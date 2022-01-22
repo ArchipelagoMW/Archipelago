@@ -56,9 +56,10 @@ list of specific locations both in their own game or in another player's game.
     * Single Placement is when you use a plando block to place a single item at a single location.
         * `item` is the item you would like to place and `location` is the location to place it.
     * Multi Placement uses a plando block to place multiple items in multiple locations until either list is exhausted.
-        * `items` defines the items to use and a number letting you place multiple of it.
+        * `items` defines the items to use and a number letting you place multiple of it. You can use true instead of a number to have it use however many of that item are in your item pool.
         * `locations` is a list of possible locations those items can be placed in.
         * Using the multi placement method, placements are picked randomly.
+        * Instead of a number, you can use true 
     * `count` can be used to set the maximum number of items placed from the block. The default is 1 if using `item` and False if using `items`
         * If a number is used it will try to place this number of items.
         * If set to false it will try to place as many items from the block as it can.
