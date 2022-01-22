@@ -487,6 +487,26 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         self.assertTrue(player3.locations[2].item.advancement)
         self.assertTrue(player3.locations[3].item.advancement)
 
+    def test_can_remove_locations_in_fill_hook(self):
+
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(
+            multi_world, 1, 4, prog_item_count=2, basic_item_count=2)
+
+        removed_item: list[Item] = []
+        removed_location: list[Location] = []
+
+        def fill_hook(progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool, restitempool, fill_locations):
+            removed_item.append(restitempool.pop(0))
+            removed_location.append(fill_locations.pop(0))
+
+        multi_world.worlds[player1.id].fill_hook = fill_hook
+
+        distribute_items_restrictive(multi_world)
+
+        self.assertIsNone(removed_item[0].location)
+        self.assertIsNone(removed_location[0].item)
+
 
 class TestBalanceMultiworldProgression(unittest.TestCase):
     def assertRegionContains(self, region: Region, item: Item):
