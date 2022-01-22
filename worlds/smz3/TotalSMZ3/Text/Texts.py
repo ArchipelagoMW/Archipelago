@@ -4,6 +4,7 @@ from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
 from worlds.smz3.TotalSMZ3.Item import Item, ItemType
 from yaml import load, Loader
 import random
+import Utils
 
 class Texts:
     @staticmethod
@@ -17,11 +18,11 @@ class Texts:
         with open(resource, 'r') as file:
             return [text.rstrip('\n') for text in file.read().replace("\r", "").split("---\n") if text]
 
-    scripts: Any = ParseYamlScripts.__func__("worlds/smz3/TotalSMZ3/Text/Scripts/General.yaml")
-    blind: List[str] = ParseTextScript.__func__("worlds/smz3/TotalSMZ3/Text/Scripts/Blind.txt")
-    ganon: List[str] = ParseTextScript.__func__("worlds/smz3/TotalSMZ3/Text/Scripts/Ganon.txt")
-    tavernMan: List[str] = ParseTextScript.__func__("worlds/smz3/TotalSMZ3/Text/Scripts/TavernMan.txt")
-    triforceRoom: List[str] = ParseTextScript.__func__("worlds/smz3/TotalSMZ3/Text/Scripts/TriforceRoom.txt")
+    scripts: Any = ParseYamlScripts.__func__(("lib/" if Utils.is_frozen() else "") + "worlds/smz3/TotalSMZ3/Text/Scripts/General.yaml")
+    blind: List[str] = ParseTextScript.__func__(("lib/" if Utils.is_frozen() else "") + "worlds/smz3/TotalSMZ3/Text/Scripts/Blind.txt")
+    ganon: List[str] = ParseTextScript.__func__(("lib/" if Utils.is_frozen() else "") + "worlds/smz3/TotalSMZ3/Text/Scripts/Ganon.txt")
+    tavernMan: List[str] = ParseTextScript.__func__(("lib/" if Utils.is_frozen() else "") + "worlds/smz3/TotalSMZ3/Text/Scripts/TavernMan.txt")
+    triforceRoom: List[str] = ParseTextScript.__func__(("lib/" if Utils.is_frozen() else "") + "worlds/smz3/TotalSMZ3/Text/Scripts/TriforceRoom.txt")
 
     @staticmethod
     def SahasrahlaReveal(dungeon: Region):
@@ -50,7 +51,7 @@ class Texts:
             if (silvers.world == myWorld):
                 return node["local"]
             player = silvers.world.Player
-        player = player.zfill(7 + len(player) // 2)
+        player = player.rjust(7 + len(player) // 2)
         text = node["remote"]
         return text.replace("<player>", player)
 

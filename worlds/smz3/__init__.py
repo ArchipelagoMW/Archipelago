@@ -5,6 +5,7 @@ import threading
 import sys
 import pathlib
 import Patch
+import Utils
 from typing import Dict, List, Set
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
@@ -130,7 +131,7 @@ class SMZ3World(World):
     def generate_output(self, output_directory: str):
         try:
             base_combined_rom = get_base_rom_bytes()
-            basepatch = IPS_Patch.load("worlds/smz3/zsm.ips")
+            basepatch = IPS_Patch.load(("lib/" if Utils.is_frozen() else "") + "worlds/smz3/zsm.ips")
             base_combined_rom = basepatch.apply(base_combined_rom)
 
             patcher = TotalSMZ3Patch(self.smz3World,
