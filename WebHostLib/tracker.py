@@ -930,7 +930,7 @@ def getTracker(tracker: UUID):
     if not room:
         abort(404)
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
-        precollected_items, games = get_static_room_data(room)
+        precollected_items, games, slot_data = get_static_room_data(room)
 
     inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
                  for teamnumber, team in enumerate(names)}

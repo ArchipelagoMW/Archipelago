@@ -28,7 +28,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
     placements = []
 
     swapped_items = Counter()
-    reachable_items: dict[str, deque] = {}
+    reachable_items: typing.Dict[int, deque] = {}
     for item in itempool:
         reachable_items.setdefault(item.player, deque()).append(item)
 
@@ -42,7 +42,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
         has_beaten_game = world.has_beaten_game(maximum_exploration_state)
 
         for item_to_place in items_to_place:
-            spot_to_fill: Location = None
+            spot_to_fill: typing.Optional[Location] = None
             if world.accessibility[item_to_place.player] == 'minimal':
                 perform_access_check = not world.has_beaten_game(maximum_exploration_state,
                                                                  item_to_place.player) if single_player_placement else not has_beaten_game
@@ -59,7 +59,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
 
             else:
                 # we filled all reachable spots.
-                # try swaping this item with previously placed items
+                # try swapping this item with previously placed items
                 for(i, location) in enumerate(placements):
                     placed_item = location.item
                     # Unplaceable items can sometimes be swapped infinitely. Limit the
@@ -71,7 +71,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
                     swap_state = sweep_from_pool(base_state, itempool)
                     if (not single_player_placement or location.player == item_to_place.player) \
                             and location.can_fill(swap_state, item_to_place, perform_access_check):
-                        # Add this item to the exisiting placement, and
+                        # Add this item to the existing placement, and
                         # add the old item to the back of the queue
                         spot_to_fill = placements.pop(i)
                         swapped_items[placed_item.player,
@@ -85,7 +85,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
                         location.item = placed_item
                         placed_item.location = location
 
-                if spot_to_fill == None:
+                if spot_to_fill is None:
                     # Maybe the game can be beaten anyway?
                     unplaced_items.append(item_to_place)
                     if world.accessibility[item_to_place.player] != 'minimal' and world.can_beat_game():
@@ -103,11 +103,8 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
     itempool.extend(unplaced_items)
 
 
-def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
-    # If not passed in, then get a shuffled list of locations to fill in
-    if not fill_locations:
-        fill_locations = world.get_unfilled_locations()
-
+def distribute_items_restrictive(world: MultiWorld):
+    fill_locations = world.get_unfilled_locations()
     world.random.shuffle(fill_locations)
 
     # get items to distribute
@@ -133,7 +130,7 @@ def distribute_items_restrictive(world: MultiWorld, fill_locations=None):
     call_all(world, "fill_hook", progitempool, nonexcludeditempool,
              localrestitempool, nonlocalrestitempool, restitempool, fill_locations)
 
-    locations: dict[LocationProgressType, list[Location]] = {
+    locations: typing.Dict[LocationProgressType, typing.List[Location]] = {
         type: [] for type in LocationProgressType}
 
     for loc in fill_locations:
