@@ -56,11 +56,19 @@ class Client(Endpoint):
         self.messageprocessor = client_message_processor(ctx, self)
         self.ctx = weakref.ref(ctx)
 
-    def parse_tags(self, ctx: Context):
-        self.remote_items = 'Tracker' in self.tags or self.slot in ctx.remote_items
-        self.remote_start_inventory = 'Tracker' in self.tags or self.slot in ctx.remote_start_inventory
-        self.no_items = 'TextOnly' in self.tags
-        self.no_locations = 'TextOnly' in self.tags or 'Tracker' in self.tags
+    @property
+    def items_handling(self):
+        if self.no_items:
+            return 0
+        return 1 + (self.remote_items << 1) + (self.remote_start_inventory << 2)
+
+    @items_handling.setter
+    def items_handling(self, value: int):
+        if not (value & 0b001) and (value & 0b110):
+            raise ValueError("Invalid flag combination")
+        self.no_items = not (value & 0b001)
+        self.remote_items = bool(value & 0b010)
+        self.remote_start_inventory = bool(value & 0b100)
 
     @property
     def name(self) -> str:
@@ -1307,6 +1315,16 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             minver = ctx.minimum_client_versions[slot]
             if minver > args['version']:
                 errors.add('IncompatibleVersion')
+            if args.get('items_handling', None) is None:
+                # fall back to load from multidata
+                client.no_items = False
+                client.remote_items = slot in ctx.remote_items
+                client.remote_start_inventory = slot in ctx.remote_start_inventory
+            else:
+                try:
+                    client.items_handling = args['items_handling']
+                except (ValueError, TypeError):
+                    errors.add('InvalidItemsHandling')
 
         # only exact version match allowed
         if ctx.compatibility == 0 and args['version'] != version_tuple:
@@ -1327,7 +1345,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             ctx.clients[team][slot].append(client)
             client.version = args['version']
             client.tags = args['tags']
-            client.parse_tags(ctx)
+            client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
             reply = [{
                 "cmd": "Connected",
                 "team": client.team, "slot": client.slot,
@@ -1338,7 +1356,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             }]
             start_inventory = get_start_inventory(ctx, team, slot, client.remote_start_inventory)
             items = get_received_items(ctx, client.team, client.slot, client.remote_items)
-            if start_inventory or items:
+            if (start_inventory or items) and not client.no_items:
                 reply.append({"cmd": 'ReceivedItems', "index": 0, "items": start_inventory + items})
                 client.send_index = len(start_inventory) + len(items)
             if not client.auth:  # if this was a Re-Connect, don't print to console
@@ -1368,21 +1386,28 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                               "original_cmd": cmd}])
                 return
 
-            if "tags" in args:
-                old_tags = client.tags
-                client.tags = args["tags"]
-                client.parse_tags(ctx)
-                if "Tracker" in old_tags != "Tracker" in client.tags \
-                        or "TextOnly" in old_tags != "TextOnly" in client.tags:
+            if args.get('items_handling', None) is not None and client.items_handling != args['items_handling']:
+                try:
+                    client.items_handling = args['items_handling']
                     start_inventory = get_start_inventory(ctx, client.team, client.slot, client.remote_start_inventory)
                     items = get_received_items(ctx, client.team, client.slot, client.remote_items)
-                    if start_inventory or items:
+                    if (items or start_inventory) and not client.no_items:
                         client.send_index = len(start_inventory) + len(items)
                         await ctx.send_msgs(client, [{"cmd": "ReceivedItems", "index": 0,
                                                       "items": start_inventory + items}])
                     else:
                         client.send_index = 0
+                except (ValueError, TypeError) as err:
+                    await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', 'type': 'arguments',
+                                                  'text': f'Invalid items_handling: {err}',
+                                                  'original_cmd': cmd}])
+                    return
+
+            if "tags" in args:
+                old_tags = client.tags
+                client.tags = args["tags"]
                 if set(old_tags) != set(client.tags):
+                    client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
                     ctx.notify_all(
                         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
                         f"from {old_tags} to {client.tags}.")
@@ -1390,7 +1415,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'Sync':
             start_inventory = get_start_inventory(ctx, client.team, client.slot, client.remote_start_inventory)
             items = get_received_items(ctx, client.team, client.slot, client.remote_items)
-            if start_inventory or items:
+            if (start_inventory or items) and not client.no_items:
                 client.send_index = len(start_inventory) + len(items)
                 await ctx.send_msgs(client, [{"cmd": "ReceivedItems", "index": 0,
                                               "items": start_inventory + items}])

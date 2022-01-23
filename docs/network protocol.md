@@ -99,13 +99,14 @@ Sent to clients when the server refuses connection. This is sent during the init
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| errors | list\[str\] | Optional. When provided, should contain any one of: `InvalidSlot`, `InvalidGame`, `SlotAlreadyTaken`, `IncompatibleVersion`, or `InvalidPassword`. |
+| errors | list\[str\] | Optional. When provided, should contain any one of: `InvalidSlot`, `InvalidGame`, `SlotAlreadyTaken`, `IncompatibleVersion`, `InvalidPassword`, or `InvalidItemsHandling`. |
 
 InvalidSlot indicates that the sent 'name' field did not match any auth entry on the server.
 InvalidGame indicates that a correctly named slot was found, but the game for it mismatched.
 SlotAlreadyTaken indicates a connection with a different uuid is already established.
 IncompatibleVersion indicates a version mismatch.
 InvalidPassword indicates the wrong, or no password when it was required, was sent.
+InvalidItemsHandling indicates a wrong value type or flag combination was sent.
 
 ### Connected
 Sent to clients when the connection handshake is successfully completed.
@@ -214,17 +215,28 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | name | str | The player name for this client. |
 | uuid | str | Unique identifier for player client. |
 | version | [NetworkVersion](#NetworkVersion) | An object representing the Archipelago version this client supports. |
+| items_handling | int | Flags configuring which items should be sent by the server. Read below for individual flags.
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
+
+#### items_handling flags
+| Value | Meaning |
+| ----- | ------- |
+| 0b000 | No ReceivedItems is sent to you, ever. |
+| 0b001 | Indicates you get items sent from other worlds. |
+| 0b010 | Indicates you get items sent from your own world. Requires 0b001 to be set. |
+| 0b100 | Indicates you get your starting inventory sent. Requires 0b001 to be set. |
+| null  | Null or undefined loads settings from world definition for backwards compatibility. This is deprecated. |
 
 #### Authentication
 Many, if not all, other packets require a successfully authenticated client. This is described in more detail in [Archipelago Connection Handshake](#Archipelago-Connection-Handshake).
 
 ### ConnectUpdate
-Update arguments from the Connect package, currently only updating tags is supported.
+Update arguments from the Connect package, currently only updating tags and items_handling is supported.
 
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
+| items_handling | int | Flags configuring which items should be sent by the server.
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
 
 ### Sync

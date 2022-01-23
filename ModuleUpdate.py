@@ -23,7 +23,7 @@ def update_command():
         subprocess.call([sys.executable, '-m', 'pip', 'install', '-r', file, '--upgrade'])
 
 
-def update(yes = False, force = False):
+def update(yes=False, force=False):
     global update_ran
     if not update_ran:
         update_ran = True
@@ -38,9 +38,8 @@ def update(yes = False, force = False):
                 for line in requirementsfile:
                     if line.startswith('https://'):
                         # extract name and version from url
-                        url = line.split(';')[0]
                         wheel = line.split('/')[-1]
-                        name, version, _ = wheel.split('-',2)
+                        name, version, _ = wheel.split('-', 2)
                         line = f'{name}=={version}'
                     requirements = pkg_resources.parse_requirements(line)
                     for requirement in requirements:
@@ -58,6 +57,7 @@ def update(yes = False, force = False):
 
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser(description='Install archipelago requirements')
     parser.add_argument('-y', '--yes', dest='yes', action='store_true', help='answer "yes" to all questions')
     parser.add_argument('-f', '--force', dest='force', action='store_true', help='force update')
