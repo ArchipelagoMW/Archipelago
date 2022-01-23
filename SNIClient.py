@@ -103,6 +103,7 @@ class LttPCommandProcessor(ClientCommandProcessor):
 class Context(CommonContext):
     command_processor = LttPCommandProcessor
     game = "A Link to the Past"
+    items_handling = None  # set in game_watcher
 
     def __init__(self, snes_address, server_address, password):
         super(Context, self).__init__(server_address, password)
@@ -914,12 +915,14 @@ async def game_watcher(ctx: Context):
                 continue
             elif game_name[:2] == b"SM":
                 ctx.game = GAME_SM
+                ctx.items_handling = 0b001  # full local
             else:
                 game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
                 if game_name == b"ZSM":
                     ctx.game = GAME_SMZ3
                 else:
                     ctx.game = GAME_ALTTP
+                    ctx.items_handling = 0b001  # full local
 
             rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else SMZ3_ROMNAME_START if ctx.game == GAME_SMZ3 else ROMNAME_START, ROMNAME_SIZE)
             if rom is None or rom == bytes([0] * ROMNAME_SIZE):

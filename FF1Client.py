@@ -30,6 +30,9 @@ class FF1CommandProcessor(ClientCommandProcessor):
 
 
 class FF1Context(CommonContext):
+    command_processor = FF1CommandProcessor
+    items_handling = 0b111  # full remote
+
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
         self.nes_streams: (StreamReader, StreamWriter) = None
@@ -39,8 +42,6 @@ class FF1Context(CommonContext):
         self.nes_status = CONNECTION_INITIAL_STATUS
         self.game = 'Final Fantasy'
         self.awaiting_rom = False
-
-    command_processor = FF1CommandProcessor
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
