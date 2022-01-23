@@ -443,6 +443,25 @@
     ]
   },
   {
+    "gameTitle": "Super Mario 64 EX",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up SM64EX for MultiWorld.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "sm64ex/setup_en.md",
+            "link": "sm64ex/setup/en",
+            "authors": [
+              "N00byKing"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "gameTitle": "VVVVVV",
     "tutorials": [
       {
