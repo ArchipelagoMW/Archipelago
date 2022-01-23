@@ -5,7 +5,7 @@ from .Locations import V6Location, location_table
 def create_regions(world: MultiWorld, player: int):
     regOvr = Region("Menu", RegionType.Generic, "Dimension VVVVVV", player, world)
     locOvr_names = ["Overworld (Pipe-shaped Segment)", "Overworld (Left of Ship)", "Overworld (Square Room)", "Overworld (Sad Elephant)",
-                    "It's a Secret to Nobody", "Trench Warfare", "NPC Trinket"]
+                    "It's a Secret to Nobody", "Trench Warfare", "NPC Trinket", "V"]
     regOvr.locations += [V6Location(player, loc_name, location_table[loc_name], regOvr) for loc_name in locOvr_names]
     world.regions.append(regOvr)
 
@@ -28,11 +28,6 @@ def create_regions(world: MultiWorld, player: int):
     locWrp_names = ["Edge Games"]
     regWrp.locations += [V6Location(player, loc_name, location_table[loc_name], regWrp) for loc_name in locWrp_names]
     world.regions.append(regWrp)
-
-    regEnd = Region("The Final Level", RegionType.Generic, "The Final Level", player, world)
-    locEnd_names = ["V"]
-    regEnd.locations += [V6Location(player, loc_name, location_table[loc_name], regEnd) for loc_name in locEnd_names]
-    world.regions.append(regEnd)
 
 def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule):
     sourceRegion = world.get_region(source, player)
