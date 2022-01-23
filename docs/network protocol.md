@@ -221,10 +221,11 @@ Sent by the client to initiate a connection to an Archipelago game session.
 #### items_handling flags
 | Value | Meaning |
 | ----- | ------- |
+| 0b000 | No ReceivedItems is sent to you, ever. |
 | 0b001 | Indicates you get items sent from other worlds. |
 | 0b010 | Indicates you get items sent from your own world. Requires 0b001 to be set. |
 | 0b100 | Indicates you get your starting inventory sent. Requires 0b001 to be set. |
-| null  | Null or undefined loads settings from world definition for backwards compatibility. This is deprecated.
+| null  | Null or undefined loads settings from world definition for backwards compatibility. This is deprecated. |
 
 #### Authentication
 Many, if not all, other packets require a successfully authenticated client. This is described in more detail in [Archipelago Connection Handshake](#Archipelago-Connection-Handshake).
