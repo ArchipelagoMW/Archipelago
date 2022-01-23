@@ -49,6 +49,7 @@ class FactorioCommandProcessor(ClientCommandProcessor):
 class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
     game = "Factorio"
+    items_handling = 0b111  # full remote
 
     # updated by spinup server
     mod_version: Utils.Version = Utils.Version(0, 0, 0)
