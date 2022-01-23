@@ -68,7 +68,7 @@ def set_rules(world,player):
     #Rules for Secret Stars
     add_rule(world.get_location("Bowser in the Dark World Red Coins", player), lambda state: state.has("Star", player, 8))
     add_rule(world.get_location("Bowser in the Fire Sea Red Coins", player), lambda state: state.can_reach("Cellar",'Region',player) and state.has("Star", player, 30))
-    add_rule(world.get_location("Bowser in the Sky Red Coins", player), lambda state: state.can_reach("Second Floor",'Region',player) and state.has("Star", player, 70))
+    add_rule(world.get_location("Bowser in the Sky Red Coins", player), lambda state: state.can_reach("Third Floor",'Region',player) and state.has("Star", player, world.StarsToFinish[player].value))
     add_rule(world.get_location("The Princess's Secret Slide Box", player), lambda state: state.has("Star", player, 1))
     add_rule(world.get_location("The Princess's Secret Slide Fast", player), lambda state: state.has("Star", player, 1))
     add_rule(world.get_location("Cavern of the Metal Cap Red Coins", player), lambda state: state.can_reach("Metal Cap Switch", 'Location', player) and state.has("Metal Cap", player))
@@ -86,4 +86,4 @@ def set_rules(world,player):
     add_rule(world.get_location("Cellar Key", player), lambda state: state.has("Star", player, 8))
     add_rule(world.get_location("Second Floor Key", player), lambda state: state.can_reach("Cellar", 'Region', player) and state.has("Star", player, 30))
 
-    world.completion_condition[player] = lambda state: state.can_reach("Second Floor",'Region',player) and state.has("Star", player, 70)
+    world.completion_condition[player] = lambda state: state.can_reach("Third Floor",'Region',player) and state.has("Star", player, world.StarsToFinish[player].value)

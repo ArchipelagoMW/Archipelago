@@ -52,3 +52,8 @@ class SM64World(World):
         metalcap = self.create_item("Metal Cap")
         vanishcap = self.create_item("Vanish Cap")
         self.world.itempool += [wingcap,metalcap,vanishcap]
+
+    def fill_slot_data(self):
+        return {
+            "StarsToFinish": self.world.StarsToFinish[self.player].value
+        }
