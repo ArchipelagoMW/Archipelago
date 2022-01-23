@@ -3,6 +3,7 @@ from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Options import is_option_enabled
 from .Locations import LocationData
 
+
 def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location], pyramid_keys_unlock: str):
     locations_per_region = get_locations_per_region(locations)
 
@@ -12,6 +13,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'Lake desolation'),
         create_region(world, player, locations_per_region, location_cache, 'Upper lake desolation'),
         create_region(world, player, locations_per_region, location_cache, 'Lower lake desolation'),
+        create_region(world, player, locations_per_region, location_cache, 'Eastern lake desolation'),
         create_region(world, player, locations_per_region, location_cache, 'Library'),
         create_region(world, player, locations_per_region, location_cache, 'Library top'),
         create_region(world, player, locations_per_region, location_cache, 'Ifrit\'s Lair'),
@@ -51,7 +53,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
 
     if __debug__:
         throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
-
+        
     world.regions += regions
 
     connectStartingRegion(world, player)
@@ -63,11 +65,14 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Lake desolation', 'Skeleton Shaft', lambda state: state._timespinner_has_doublejump(world, player))
     connect(world, player, names, 'Lake desolation', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Upper lake desolation', 'Lake desolation')
-    connect(world, player, names, 'Upper lake desolation', 'Lower lake desolation') 
+    connect(world, player, names, 'Upper lake desolation', 'Eastern lake desolation')
     connect(world, player, names, 'Lower lake desolation', 'Lake desolation') 
-    connect(world, player, names, 'Lower lake desolation', 'Library') 
-    connect(world, player, names, 'Lower lake desolation', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
-    connect(world, player, names, 'Library', 'Lower lake desolation') 
+    connect(world, player, names, 'Lower lake desolation', 'Eastern lake desolation')
+    connect(world, player, names, 'Eastern lake desolation', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
+    connect(world, player, names, 'Eastern lake desolation', 'Library')
+    connect(world, player, names, 'Eastern lake desolation', 'Lower lake desolation')
+    connect(world, player, names, 'Eastern lake desolation', 'Upper lake desolation', lambda state: state._timespinner_has_fire(world, player) and state.can_reach('Upper Lake Serene', 'Region', player))
+    connect(world, player, names, 'Library', 'Eastern lake desolation')
     connect(world, player, names, 'Library', 'Library top', lambda state: state._timespinner_has_doublejump(world, player) or state.has('Talaria Attachment', player)) 
     connect(world, player, names, 'Library', 'Varndagroth tower left', lambda state: state._timespinner_has_keycard_D(world, player))
     connect(world, player, names, 'Library', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
@@ -174,7 +179,7 @@ def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames:
         existingRegions.add(region.name)
 
     if (regionNames - existingRegions):
-        raise Exception("Tiemspinner: the following regions are used in locations: {}, but no such region exists".format(regionNames - existingRegions))
+        raise Exception("Timespinner: the following regions are used in locations: {}, but no such region exists".format(regionNames - existingRegions))
 
 
 def create_location(player: int, location_data: LocationData, region: Region, location_cache: List[Location]) -> Location:
@@ -234,7 +239,7 @@ def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: 
         name = target
     else:
         used_names[target] += 1
-        name = target + (' ' *  used_names[target])
+        name = target + (' ' * used_names[target])
 
     connection = Entrance(player, name, sourceRegion)
 
