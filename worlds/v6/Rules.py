@@ -19,16 +19,16 @@ def set_rules(world,player):
     connect_regions(world, player, "Menu", "Space Station 2", lambda state: _has_trinket_range(state,player,world.DoorCost[player].value*2,world.DoorCost[player].value*3))
     connect_regions(world, player, "Menu", "Warp Zone",       lambda state: _has_trinket_range(state,player,world.DoorCost[player].value*3,world.DoorCost[player].value*4))
 
-    connect_regions(world, player,  "Menu", "The Final Level", lambda state : state.can_reach("Laboratory",'Region',player) and
-                                                                              state.can_reach("The Tower",'Region',player) and
-                                                                              state.can_reach("Space Station 2",'Region',player) and
-                                                                              state.can_reach("Warp Zone",'Region',player))
+    #Special Rule for V
+    add_rule(world.get_location("V",player), lambda state : state.can_reach("Laboratory",'Region',player) and
+                                                            state.can_reach("The Tower",'Region',player) and
+                                                            state.can_reach("Space Station 2",'Region',player) and
+                                                            state.can_reach("Warp Zone",'Region',player))
 
     connect_regions(world, player,  "Laboratory", "Menu", lambda state: True)
     connect_regions(world, player,  "The Tower", "Menu", lambda state: True)
     connect_regions(world, player,  "Space Station 2", "Menu", lambda state: True)
     connect_regions(world, player,  "Warp Zone", "Menu", lambda state: True)
-    connect_regions(world, player,  "The Final Level", "Menu", lambda state: True)
 
     create_npctrinket_rules(world,world.get_location("NPC Trinket",player),player)
-    world.completion_condition[player] = lambda state: state.can_reach("The Final Level",'Region',player)
+    world.completion_condition[player] = lambda state: state.can_reach("V",'Location',player)
