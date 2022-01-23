@@ -11,7 +11,8 @@ client_version = 1
 
 class SM64World(World):
     """ 
-     dude do be jumping
+    The first Super Mario game to feature 3D gameplay, it features freedom of movement within a large open world based on polygons,
+    combined with traditional Mario gameplay, visual style, and characters.
     """
 
     game: str = "Super Mario 64"
