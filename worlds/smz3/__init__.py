@@ -207,19 +207,13 @@ class SMZ3World(World):
         self.InitialFillInOwnWorld()
 
         if (not self.smz3World.Config.Keysanity):
-            #state = CollectionState(self.world)
-            #for i in (self.progression + self.keyCardsItems):
-            #    state.collect(self.create_item(i.Type.name), True)
-                # self.collectOwnProgSMZ3Item(state, i)    
-            #items = []
-            #for i in self.dungeon:
-            #    for i2 in self.smz3Items:
-            #        if i.Type.name == i2.name:
-            #            items.append(i2)
-            #            break
             locations = [loc for loc in self.locations.values() if loc.item is None]
             self.world.random.shuffle(locations)
+
+            oldAccessibility = self.world.accessibility[self.player]
+            self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("items")
             fill_restrictive(self.world, self.world.get_all_state(False), locations, self.smz3DungeonItems, True, True)
+            self.world.accessibility[self.player] = oldAccessibility
 
     def FillItemAtLocation(self, itemPool, itemType, location):
         itemToPlace = TotalSMZ3Item.Item.Get(itemPool, itemType, self.smz3World)
