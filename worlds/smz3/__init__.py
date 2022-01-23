@@ -19,6 +19,8 @@ from ..AutoWorld import World
 from .Rom import get_base_rom_bytes
 from .ips import IPS_Patch
 
+world_folder = os.path.dirname(__file__)
+
 class SMZ3World(World):
     """
      A python port of Super Metroid & A Link To The Past Crossover Item Randomizer based on v11.2 of Total's SMZ3. 
@@ -97,8 +99,8 @@ class SMZ3World(World):
         self.world.itempool += itemPool
 
     def set_rules(self):
-        self.world.completion_condition[self.player] = lambda state: self.smz3World.GetRegion("Ganon's Tower").CanEnter(state.smz3state[self.player]) and \
-                                                                    state.smz3state[self.player].BigKeyGT
+        # SM G4 is logically required to access Ganon's Tower in SMZ3
+        self.world.completion_condition[self.player] = lambda state: self.smz3World.GetRegion("Ganon's Tower").TowerAscend(state.smz3state[self.player])
 
         for region in self.smz3World.Regions:
             entrance = self.world.get_entrance('Menu' + "->" + region.Name, self.player)
@@ -131,7 +133,7 @@ class SMZ3World(World):
     def generate_output(self, output_directory: str):
         try:
             base_combined_rom = get_base_rom_bytes()
-            basepatch = IPS_Patch.load(("lib/" if Utils.is_frozen() else "") + "worlds/smz3/zsm.ips")
+            basepatch = IPS_Patch.load(world_folder + "/zsm.ips")
             base_combined_rom = basepatch.apply(base_combined_rom)
 
             patcher = TotalSMZ3Patch(self.smz3World,

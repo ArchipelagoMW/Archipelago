@@ -2,8 +2,8 @@
 from typing import Any, List
 import copy
 from worlds.smz3.TotalSMZ3.Text.Dialog import Dialog
+from worlds.smz3.TotalSMZ3.Text.Texts import text_folder
 from yaml import load, Loader
-import Utils
 
 class StringTable:
 
@@ -25,7 +25,7 @@ class StringTable:
             else: raise Exception(f"Did not expect an object of type {type(value)}")
         return result
 
-    template = ParseEntries.__func__(("lib/" if Utils.is_frozen() else "") + "worlds/smz3/TotalSMZ3/Text/Scripts/StringTable.yaml")
+    template = ParseEntries.__func__(text_folder + "/Scripts/StringTable.yaml")
     entries = copy.deepcopy(template)
 
     def SetSahasrahlaRevealText(self, text: str):
