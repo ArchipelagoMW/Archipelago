@@ -4,26 +4,28 @@ from .Options import is_option_enabled
 
 EventId: Optional[int] = None
 
+
 class LocationData(NamedTuple):
     region: str
     name: str
     code: Optional[int]
     rule: Callable = lambda state: True
 
+
 def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[LocationData, ...]:
     # 1337000 - 1337155 Generic locations
     # 1337171 - 1337175 New Pickup checks
     # 1337246 - 1337249 Ancient Pyramid
     location_table: List[LocationData] = [
-        # PresentItemLocations
+        # Present item locations
         LocationData('Tutorial', 'Yo Momma 1',  1337000),
         LocationData('Tutorial', 'Yo Momma 2',  1337001),
         LocationData('Lake desolation', 'Starter chest 2',  1337002),
         LocationData('Lake desolation', 'Starter chest 3',  1337003),
         LocationData('Lake desolation', 'Starter chest 1',  1337004),
         LocationData('Lake desolation', 'Timespinner Wheel room',  1337005),
-        LocationData('Upper lake desolation', 'Forget me not chest',  1337006),
-        LocationData('Lower lake desolation', 'Chicken chest',  1337007, lambda state: state._timespinner_has_timestop(world, player)),
+        LocationData('Lake desolation', 'Chicken chest', 1337007, lambda state: state._timespinner_has_timestop(world, player)),
+        LocationData('Lake desolation', 'Forget me not chest',  1337006, lambda state: state._timespinner_has_fire(world, player) and state.can_reach('Upper Lake Serene', 'Region', player)),
         LocationData('Lower lake desolation', 'Not so secret room',  1337008, lambda state: state._timespinner_can_break_walls(world, player)),
         LocationData('Lower lake desolation', 'Tank chest',  1337009, lambda state: state._timespinner_has_timestop(world, player)),
         LocationData('Upper lake desolation', 'Upper desolation Oxygen recovery room',  1337010),
@@ -32,9 +34,9 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Upper lake desolation', 'Upper desolation double jump cave floor',  1337013),
         LocationData('Upper lake desolation', 'Fire-Locked sparrow chest',  1337014),
         LocationData('Upper lake desolation', 'Crash site pedestal',  1337015),
-        LocationData('Upper lake desolation', 'Crash site chest 1',  1337016, lambda state: state.has_all({'Killed Maw', 'Gas Mask'}, player)),
-        LocationData('Upper lake desolation', 'Crash site chest 2',  1337017, lambda state: state.has_all({'Killed Maw', 'Gas Mask'}, player)),
-        LocationData('Upper lake desolation', 'Kitty Boss',  1337018),
+        LocationData('Upper lake desolation', 'Crash site chest 1',  1337016, lambda state: state.has_all({'Killed Maw'}, player)),
+        LocationData('Upper lake desolation', 'Crash site chest 2',  1337017, lambda state: state.has_all({'Killed Maw'}, player)),
+        LocationData('Eastern lake desolation', 'Kitty Boss',  1337018),
         LocationData('Library', 'Library Basement',  1337019),
         LocationData('Library', 'Library warp gate',  1337020),
         LocationData('Library', 'Librarian',  1337021),
@@ -103,7 +105,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Emperors tower', 'Dad\'s Chambers chest',  1337084),
         LocationData('Emperors tower', 'Dad\'s Chambers pedestal',  1337085),
 
-        # PastItemLocations
+        # Past item locations
         LocationData('Refugee Camp', 'Neliste\'s Bra',  1337086),
         LocationData('Refugee Camp', 'Refugee camp storage chest 3',  1337087),
         LocationData('Refugee Camp', 'Refugee camp storage chest 2',  1337088),
@@ -183,7 +185,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Royal towers (upper)', 'Aelana\'s chest',  1337154),
         LocationData('Royal towers (upper)', 'Aelana\'s pedestal',  1337155),
 
-        #AncientPyramidLocations
+        # Ancient pyramid locations
         LocationData('Ancient Pyramid (left)', 'Why not it\'s right there',  1337246),
         LocationData('Ancient Pyramid (left)', 'Conviction guarded room',  1337247),
         LocationData('Ancient Pyramid (left)', 'Pit secret room',  1337248, lambda state: state._timespinner_can_break_walls(world, player)),
@@ -197,7 +199,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         location_table += ( 
             LocationData('Library', 'Library terminal 2',  1337156, lambda state: state.has('Tablet', player)),
             LocationData('Library', 'Library terminal 1',  1337157, lambda state: state.has('Tablet', player)),
-            # 1337158 Is Lost in time
+            # 1337158 Is lost in time
             LocationData('Library', 'Library terminal 3',  1337159, lambda state: state.has('Tablet', player)),
             LocationData('Library', 'V terminal 1',  1337160, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
             LocationData('Library', 'V terminal 2',  1337161, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
