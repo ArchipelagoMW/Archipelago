@@ -230,7 +230,7 @@ Sent by the client to initiate a connection to an Archipelago game session.
 Many, if not all, other packets require a successfully authenticated client. This is described in more detail in [Archipelago Connection Handshake](#Archipelago-Connection-Handshake).
 
 ### ConnectUpdate
-Update arguments from the Connect package, currently only updating tags and item_handling is supported.
+Update arguments from the Connect package, currently only updating tags and items_handling is supported.
 
 #### Arguments
 | Name | Type | Notes |
