@@ -920,6 +920,7 @@ async def game_watcher(ctx: Context):
                 game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
                 if game_name == b"ZSM":
                     ctx.game = GAME_SMZ3
+                    ctx.items_handling = 0b001  # full local
                 else:
                     ctx.game = GAME_ALTTP
                     ctx.items_handling = 0b001  # full local
