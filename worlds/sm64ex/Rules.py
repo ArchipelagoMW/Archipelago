@@ -87,4 +87,4 @@ def set_rules(world,player):
     add_rule(world.get_location("Cellar Key", player), lambda state: state.has("Star", player, 8))
     add_rule(world.get_location("Second Floor Key", player), lambda state: state.can_reach("Cellar", 'Region', player) and state.has("Star", player, 30))
 
-    world.completion_condition[player] = lambda state: state.can_reach(world.get_region("Second Floor", player),'Region',player) and state.has("Star", player, 70)
+    world.completion_condition[player] = lambda state: state.can_reach("Second Floor",'Region',player) and state.has("Star", player, 70)
