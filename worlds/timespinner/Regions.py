@@ -51,6 +51,9 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'Space time continuum')
     ]
 
+    if __debug__:
+        throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
+        
     world.regions += regions
 
     connectStartingRegion(world, player)
@@ -65,7 +68,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Upper lake desolation', 'Eastern lake desolation')
     connect(world, player, names, 'Lower lake desolation', 'Lake desolation') 
     connect(world, player, names, 'Lower lake desolation', 'Eastern lake desolation')
-    connect(world, player, names, 'Lower lake desolation', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
+    connect(world, player, names, 'Eastern lake desolation', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Eastern lake desolation', 'Library')
     connect(world, player, names, 'Eastern lake desolation', 'Lower lake desolation')
     connect(world, player, names, 'Eastern lake desolation', 'Upper lake desolation', lambda state: state._timespinner_has_fire(world, player) and state.can_reach('Upper Lake Serene', 'Region', player))
