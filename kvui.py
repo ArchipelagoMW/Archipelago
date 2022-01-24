@@ -290,6 +290,7 @@ class GameManager(App):
         return self.container
 
     def update_texts(self, dt):
+        self.tabs.content.children[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
         if self.ctx.server:
             self.title = self.base_title + " " + Utils.__version__ + \
                          f" | Connected to: {self.ctx.server_address} " \
@@ -340,7 +341,7 @@ class GameManager(App):
         except Exception as e:
             logging.getLogger("Client").exception(e)
 
-    def print_json(self, data):
+    def print_json(self, data: typing.List[JSONMessagePart]):
         text = self.json_to_kivy_parser(data)
         self.log_panels["Archipelago"].on_message_markup(text)
         self.log_panels["All"].on_message_markup(text)
@@ -401,6 +402,12 @@ class UILog(RecycleView):
     def on_message_markup(self, text):
         self.data.append({"text": text})
 
+    def fix_heights(self):
+        """Workaround fix for divergent texture and layout heights"""
+        for element in self.children[0].children:
+            if element.height != element.texture_size[1]:
+                element.height = element.texture_size[1]
+
 
 class E(ExceptionHandler):
     logger = logging.getLogger("Client")
@@ -411,17 +418,6 @@ class E(ExceptionHandler):
 
 
 class KivyJSONtoTextParser(JSONtoTextParser):
-    color_codes = {
-        # not exact color names, close enough but decent looking
-        "black": "000000",
-        "red": "EE0000",
-        "green": "00FF7F",
-        "yellow": "FAFAD2",
-        "blue": "6495ED",
-        "magenta": "EE00EE",
-        "cyan": "00EEEE",
-        "white": "FFFFFF"
-    }
 
     def _handle_color(self, node: JSONMessagePart):
         colors = node["color"].split(";")

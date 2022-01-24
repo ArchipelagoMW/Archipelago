@@ -3,7 +3,7 @@ from worlds.alttp.Bosses import BossFactory
 from Fill import fill_restrictive
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import lookup_boss_drops
-from worlds.alttp.Options import  smallkey_shuffle
+from worlds.alttp.Options import smallkey_shuffle
 
 
 def create_dungeons(world, player):

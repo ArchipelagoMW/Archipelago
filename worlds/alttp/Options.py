@@ -95,7 +95,7 @@ class ShopPriceModifier(Range):
     """Percentage modifier for shuffled item prices in shops"""
     range_start = 0
     default = 100
-    range_end = 10000
+    range_end = 400
 
 class WorldState(Choice):
     option_standard = 1

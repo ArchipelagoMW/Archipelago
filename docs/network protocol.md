@@ -99,13 +99,14 @@ Sent to clients when the server refuses connection. This is sent during the init
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| errors | list\[str\] | Optional. When provided, should contain any one of: `InvalidSlot`, `InvalidGame`, `SlotAlreadyTaken`, `IncompatibleVersion`, or `InvalidPassword`. |
+| errors | list\[str\] | Optional. When provided, should contain any one of: `InvalidSlot`, `InvalidGame`, `SlotAlreadyTaken`, `IncompatibleVersion`, `InvalidPassword`, or `InvalidItemsHandling`. |
 
 InvalidSlot indicates that the sent 'name' field did not match any auth entry on the server.
 InvalidGame indicates that a correctly named slot was found, but the game for it mismatched.
 SlotAlreadyTaken indicates a connection with a different uuid is already established.
 IncompatibleVersion indicates a version mismatch.
 InvalidPassword indicates the wrong, or no password when it was required, was sent.
+InvalidItemsHandling indicates a wrong value type or flag combination was sent.
 
 ### Connected
 Sent to clients when the connection handshake is successfully completed.
@@ -164,7 +165,7 @@ Sent to clients purely to display a message to the player. This packet differs f
 | data | list\[[JSONMessagePart](#JSONMessagePart)\] | Type of this part of the message. |
 | type | str | May be present to indicate the nature of this message. Known types are Hint and ItemSend. |
 | receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID. |
-| item | [NetworkItem](#NetworkItem) | Is present if type is Hint or ItemSend and marks the source player id, location id and item id. |
+| item | [NetworkItem](#NetworkItem) | Is present if type is Hint or ItemSend and marks the source player id, location id, item id and item flags. |
 | found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
 
 ### DataPackage
@@ -214,17 +215,28 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | name | str | The player name for this client. |
 | uuid | str | Unique identifier for player client. |
 | version | [NetworkVersion](#NetworkVersion) | An object representing the Archipelago version this client supports. |
+| items_handling | int | Flags configuring which items should be sent by the server. Read below for individual flags.
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
+
+#### items_handling flags
+| Value | Meaning |
+| ----- | ------- |
+| 0b000 | No ReceivedItems is sent to you, ever. |
+| 0b001 | Indicates you get items sent from other worlds. |
+| 0b010 | Indicates you get items sent from your own world. Requires 0b001 to be set. |
+| 0b100 | Indicates you get your starting inventory sent. Requires 0b001 to be set. |
+| null  | Null or undefined loads settings from world definition for backwards compatibility. This is deprecated. |
 
 #### Authentication
 Many, if not all, other packets require a successfully authenticated client. This is described in more detail in [Archipelago Connection Handshake](#Archipelago-Connection-Handshake).
 
 ### ConnectUpdate
-Update arguments from the Connect package, currently only updating tags is supported.
+Update arguments from the Connect package, currently only updating tags and items_handling is supported.
 
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
+| items_handling | int | Flags configuring which items should be sent by the server.
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
 
 ### Sync
@@ -329,15 +341,29 @@ class NetworkItem(NamedTuple):
     item: int
     location: int
     player: int
+    flags: int
 ```
 In JSON this may look like:
 ```js
 [
-    {"item": 1, "location": 1, "player": 0},
-    {"item": 2, "location": 2, "player": 0},
-    {"item": 3, "location": 3, "player": 0}
+    {"item": 1, "location": 1, "player": 0, "flags": 1},
+    {"item": 2, "location": 2, "player": 0, "flags": 2},
+    {"item": 3, "location": 3, "player": 0, "flags": 0}
 ]
 ```
+`item` is the item id of the item
+
+`location` is the location id of the item inside the world
+
+`player` is the player slot of the world the item is located in
+
+`flags` are bit flags:
+| Flag | Meaning |
+| ----- | ----- |
+| 0 | Nothing special about this item |
+| 0b001 | If set, indicates the item can unlock logical advancement |
+| 0b010 | If set, indicates the item is important but not in a way that unlocks advancement |
+| 0b100 | If set, indicates the item is a trap |
 
 ### JSONMessagePart
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are intended to be read in the order they are listed in the packet.
@@ -346,9 +372,10 @@ Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed
 from typing import TypedDict, Optional
 class JSONMessagePart(TypedDict):
     type: Optional[str]
-    color: Optional[str]
     text: Optional[str]
-    player: Optional[int] # marks owning player id for location/item
+    color: Optional[str] # only available if type is a color
+    flags: Optional[int] # only available if type is an item_id or item_name
+    player: Optional[int] # only available if type is either item or location
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
@@ -362,7 +389,7 @@ Possible values for `type` include:
 | item_id | Item ID, should be resolved to Item Name |
 | item_name | Item Name, not currently used over network, but supported by reference Clients. |
 | location_id | Location ID, should be resolved to Location Name |
-| location_name |Location Name, not currently used over network, but supported by reference Clients. |
+| location_name | Location Name, not currently used over network, but supported by reference Clients. |
 | entrance_name | Entrance Name. No ID mapping exists. |
 | color | Regular text that should be colored. Only `type` that will contain `color` data. |
 
@@ -390,6 +417,8 @@ Color options:
 * white_bg
 
 `text` is the content of the message part to be displayed.
+`player` marks owning player id for location/item, 
+`flags` contains the [NetworkItem](#NetworkItem) flags that belong to the item
 
 ### Client States
 An enumeration containing the possible client states that may be used to inform the server in [StatusUpdate](#StatusUpdate).
@@ -459,7 +488,8 @@ Tags are represented as a list of strings, the common Client tags follow:
 | AP | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily. |
 | IgnoreGame | Tells the server to ignore the "game" attribute in the [Connect](#Connect) packet. |
 | DeathLink | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets |
-| Tracker | Tells the server that this client is actually a Tracker and will refuse new locations from this client. |
+| Tracker | Tells the server that this client is actually a Tracker, will refuse new locations from this client and send all items as if they were remote items. |
+| TextOnly | Tells the server that this client will not send locations and does not want to receive items. |
 
 ### DeathLink
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:

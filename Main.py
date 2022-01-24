@@ -9,7 +9,7 @@ import tempfile
 import zipfile
 from typing import Dict, Tuple, Optional
 
-from BaseClasses import MultiWorld, CollectionState, Region, RegionType
+from BaseClasses import Item, MultiWorld, CollectionState, Region, RegionType
 from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
@@ -258,7 +258,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 precollected_items = {player: [item.code for item in world_precollected]
                                       for player, world_precollected in world.precollected_items.items()}
                 precollected_hints = {player: set() for player in range(1, world.players + 1)}
-                # for now special case Factorio tech_tree_information
+
                 sending_visible_players = set()
 
                 for slot in world.player_ids:
@@ -268,16 +268,17 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
                 def precollect_hint(location):
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                         location.item.code, False)
+                                         location.item.code, False, "", location.item.flags)
                     precollected_hints[location.player].add(hint)
                     precollected_hints[location.item.player].add(hint)
 
-                locations_data: Dict[int, Dict[int, Tuple[int, int]]] = {player: {} for player in world.player_ids}
+                locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in world.player_ids}
                 for location in world.get_filled_locations():
                     if type(location.address) == int:
                         # item code None should be event, location.address should then also be None
                         assert location.item.code is not None
-                        locations_data[location.player][location.address] = location.item.code, location.item.player
+                        locations_data[location.player][location.address] = \
+                            location.item.code, location.item.player, location.item.flags
                         if location.player in sending_visible_players:
                             precollect_hint(location)
                         elif location.name in world.start_location_hints[location.player]:
@@ -310,7 +311,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 multidata = zlib.compress(pickle.dumps(multidata), 9)
 
                 with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
-                    f.write(bytes([1]))  # version of format
+                    f.write(bytes([2]))  # version of format
                     f.write(multidata)
 
             multidata_task = pool.submit(write_multidata)

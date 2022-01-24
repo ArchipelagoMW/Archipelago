@@ -23,7 +23,7 @@ ModuleUpdate.update()
 import websockets
 import colorama
 
-from fuzzywuzzy import process as fuzzy_process
+from thefuzz import process as fuzzy_process
 
 import NetUtils
 from worlds.AutoWorld import AutoWorldRegister
@@ -41,6 +41,10 @@ colorama.init()
 class Client(Endpoint):
     version = Version(0, 0, 0)
     tags: typing.List[str] = []
+    remote_items: bool
+    remote_start_inventory: bool
+    no_items: bool
+    no_locations: bool
 
     def __init__(self, socket: websockets.WebSocketServerProtocol, ctx: Context):
         super().__init__(socket)
@@ -51,6 +55,20 @@ class Client(Endpoint):
         self.tags = []
         self.messageprocessor = client_message_processor(ctx, self)
         self.ctx = weakref.ref(ctx)
+
+    @property
+    def items_handling(self):
+        if self.no_items:
+            return 0
+        return 1 + (self.remote_items << 1) + (self.remote_start_inventory << 2)
+
+    @items_handling.setter
+    def items_handling(self, value: int):
+        if not (value & 0b001) and (value & 0b110):
+            raise ValueError("Invalid flag combination")
+        self.no_items = not (value & 0b001)
+        self.remote_items = bool(value & 0b010)
+        self.remote_start_inventory = bool(value & 0b100)
 
     @property
     def name(self) -> str:
@@ -78,7 +96,8 @@ class Context:
                       "compatibility": int}
     # team -> slot id -> list of clients authenticated to slot.
     clients: typing.Dict[int, typing.Dict[int, typing.List[Client]]]
-    locations: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int]]]
+    locations: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int]]]
+    save_version = 2
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
@@ -108,6 +127,7 @@ class Context:
         self.server = None
         self.countdown_timer = 0
         self.received_items = {}
+        self.start_inventory = {}
         self.name_aliases: typing.Dict[team_slot, str] = {}
         self.location_checks = collections.defaultdict(set)
         self.hint_cost = hint_cost
@@ -241,8 +261,8 @@ class Context:
     @staticmethod
     def decompress(data: bytes) -> dict:
         format_version = data[0]
-        if format_version != 1:
-            raise Exception("Incompatible multidata.")
+        if format_version > 2:
+            raise Utils.VersionException("Incompatible multidata.")
         return restricted_loads(zlib.decompress(data[1:]))
 
     def _load(self, decoded_obj: dict, use_embedded_server_options: bool):
@@ -273,11 +293,10 @@ class Context:
         self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
                              for player, loc_data in decoded_obj["er_hint_data"].items()}
         self.games = decoded_obj["games"]
-        # award remote-items start inventory:
+        # load start inventory:
+        for slot, item_codes in decoded_obj["precollected_items"].items():
+            self.start_inventory[slot] = [NetworkItem(item_code, -2, 0) for item_code in item_codes]
         for team in range(len(decoded_obj['names'])):
-            for slot, item_codes in decoded_obj["precollected_items"].items():
-                if slot in self.remote_start_inventory:
-                    self.received_items[team, slot] = [NetworkItem(item_code, -2, 0) for item_code in item_codes]
             for slot, hints in decoded_obj["precollected_hints"].items():
                 self.hints[team, slot].update(hints)
         # declare slots without checks as done, as they're assumed to be spectators
@@ -351,6 +370,7 @@ class Context:
     def get_save(self) -> dict:
         self.recheck_hints()
         d = {
+            "version": self.save_version,
             "connect_names": self.connect_names,
             "received_items": self.received_items,
             "hints_used": dict(self.hints_used),
@@ -370,7 +390,22 @@ class Context:
     def set_save(self, savedata: dict):
         if self.connect_names != savedata["connect_names"]:
             raise Exception("This savegame does not appear to match the loaded multiworld.")
-        self.received_items = savedata["received_items"]
+        if "version" not in savedata:
+            # upgrade from version 1
+            # this is not perfect but good enough for old games to continue
+            for old, items in savedata["received_items"].items():
+                self.received_items[(*old, True)] = items
+                self.received_items[(*old, False)] = items.copy()
+            for (team, slot, remote) in self.received_items:
+                # remove start inventory from items, since this is separate now
+                start_inventory = get_start_inventory(self, team, slot, slot in self.remote_start_inventory)
+                if start_inventory:
+                    del self.received_items[team, slot, remote][:len(start_inventory)]
+            logging.info("Upgraded save data")
+        elif savedata["version"] > self.save_version:
+            raise Exception("This savegame is newer than the server.")
+        else:
+            self.received_items = savedata["received_items"]
         self.hints_used.update(savedata["hints_used"])
         self.hints.update(savedata["hints"])
 
@@ -543,7 +578,10 @@ async def on_client_joined(ctx: Context, client: Client):
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
         f"{verb} {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}).")
-
+    ctx.notify_client(client, "Now that you are connected, "
+                              "you can use !help to list commands to run via the server."
+                              "If your client supports it, "
+                              "you may have additional local commands you can list with /help.")
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
@@ -599,21 +637,29 @@ def get_status_string(ctx: Context, team: int):
     return text
 
 
-def get_received_items(ctx: Context, team: int, player: int) -> typing.List[NetworkItem]:
-    return ctx.received_items.setdefault((team, player), [])
+def get_received_items(ctx: Context, team: int, player: int, remote_items: bool) -> typing.List[NetworkItem]:
+    return ctx.received_items.setdefault((team, player, remote_items), [])
+
+
+def get_start_inventory(ctx: Context, team: int, player: int, remote_start_inventory: bool) -> typing.List[NetworkItem]:
+    return ctx.start_inventory.setdefault(player, []) if remote_start_inventory else []
 
 
 def send_new_items(ctx: Context):
     for team, clients in ctx.clients.items():
         for slot, clients in clients.items():
-            items = get_received_items(ctx, team, slot)
             for client in clients:
-                if len(items) > client.send_index:
+                if client.no_items:
+                    continue
+                start_inventory = get_start_inventory(ctx, team, slot, client.remote_start_inventory)
+                items = get_received_items(ctx, team, slot, client.remote_items)
+                if len(start_inventory) + len(items) > client.send_index:
+                    first_new_item = max(0, client.send_index - len(start_inventory))
                     asyncio.create_task(ctx.send_msgs(client, [{
                         "cmd": "ReceivedItems",
                         "index": client.send_index,
-                        "items": items[client.send_index:]}]))
-                    client.send_index = len(items)
+                        "items": start_inventory[client.send_index:] + items[first_new_item:]}]))
+                    client.send_index = len(start_inventory) + len(items)
 
 
 def update_checked_locations(ctx: Context, team: int, slot: int):
@@ -633,13 +679,13 @@ def collect_player(ctx: Context, team: int, slot: int):
     """register any locations that are in the multidata, pointing towards this player"""
     all_locations = collections.defaultdict(set)
     for source_slot, location_data in ctx.locations.items():
-        for location_id, (item_id, target_player_id) in location_data.items():
-            if target_player_id == slot:
+        for location_id, values in location_data.items():
+            if values[1] == slot:
                 all_locations[source_slot].add(location_id)
 
     ctx.notify_all("%s (Team #%d) has collected" % (ctx.player_names[(team, slot)], team + 1))
     for source_player, location_ids in all_locations.items():
-        register_location_checks(ctx, team, source_player, location_ids)
+        register_location_checks(ctx, team, source_player, location_ids, count_activity=False)
         update_checked_locations(ctx, team, source_player)
 
 
@@ -651,16 +697,25 @@ def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
     return sorted(items)
 
 
-def register_location_checks(ctx: Context, team: int, slot: int, locations: typing.Iterable[int]):
+def register_location_checks(ctx: Context, team: int, slot: int, locations: typing.Iterable[int],
+                             count_activity: bool = True):
     new_locations = set(locations) - ctx.location_checks[team, slot]
     new_locations.intersection_update(ctx.locations[slot])  # ignore location IDs unknown to this multidata
     if new_locations:
-        ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
+        if count_activity:
+            ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
         for location in new_locations:
-            item_id, target_player = ctx.locations[slot][location]
-            new_item = NetworkItem(item_id, location, slot)
-            if target_player != slot or slot in ctx.remote_items:
-                get_received_items(ctx, team, target_player).append(new_item)
+            if len(ctx.locations[slot][location]) == 3:
+                item_id, target_player, flags = ctx.locations[slot][location]
+            else:
+                # TODO: remove around version 0.2.5
+                item_id, target_player = ctx.locations[slot][location]
+                flags = 0
+
+            new_item = NetworkItem(item_id, location, slot, flags)
+            if target_player != slot:
+                get_received_items(ctx, team, target_player, False).append(new_item)
+            get_received_items(ctx, team, target_player, True).append(new_item)
 
             logging.info('(Team #%d) %s sent %s to %s (%s)' % (
                 team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(item_id),
@@ -689,22 +744,36 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
     seeked_item_id = proxy_worlds[ctx.games[slot]].item_name_to_id[item]
     for finding_player, check_data in ctx.locations.items():
         for location_id, result in check_data.items():
-            item_id, receiving_player = result
+            if len(result) == 3:
+                item_id, receiving_player, item_flags = result
+            else:
+                # TODO: remove around version 0.2.5
+                item_id, receiving_player = result
+                item_flags = 0
+
             if receiving_player == slot and item_id == seeked_item_id:
                 found = location_id in ctx.location_checks[team, finding_player]
                 entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
-                hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance))
+                hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
+                                           item_flags))
 
     return hints
 
 
 def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[NetUtils.Hint]:
     seeked_location: int = proxy_worlds[ctx.games[slot]].location_name_to_id[location]
-    item_id, receiving_player = ctx.locations[slot].get(seeked_location, (None, None))
-    if item_id:
+    result = ctx.locations[slot].get(seeked_location, (None, None, None))
+    if result:
+        if len(result) == 3:
+            item_id, receiving_player, item_flags = result
+        else:
+            # TODO: remove around version 0.2.5
+            item_id, receiving_player = result
+            item_flags = 0
+
         found = seeked_location in ctx.location_checks[team, slot]
         entrance = ctx.er_hint_data.get(slot, {}).get(seeked_location, "")
-        return [NetUtils.Hint(receiving_player, slot, seeked_location, item_id, found, entrance)]
+        return [NetUtils.Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags)]
     return []
 
 
@@ -724,10 +793,10 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
     NetUtils.add_json_text(parts, net_item.player, type=NetUtils.JSONTypes.player_id)
     if net_item.player == receiving_player:
         NetUtils.add_json_text(parts, " found their ")
-        NetUtils.add_json_item(parts, net_item.item, net_item.player)
+        NetUtils.add_json_item(parts, net_item.item, net_item.player, net_item.flags)
     else:
         NetUtils.add_json_text(parts, " sent ")
-        NetUtils.add_json_item(parts, net_item.item, receiving_player)
+        NetUtils.add_json_item(parts, net_item.item, receiving_player, net_item.flags)
         NetUtils.add_json_text(parts, " to ")
         NetUtils.add_json_text(parts, receiving_player, type=NetUtils.JSONTypes.player_id)
 
@@ -1073,7 +1142,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
                                                             world.item_names)
             if usable:
                 new_item = NetworkItem(world.create_item(item_name).code, -1, self.client.slot)
-                get_received_items(self.ctx, self.client.team, self.client.slot).append(new_item)
+                get_received_items(self.ctx, self.client.team, self.client.slot, False).append(new_item)
+                get_received_items(self.ctx, self.client.team, self.client.slot, True).append(new_item)
                 self.ctx.notify_all(
                     'Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team,
                                                                                                  self.client.slot))
@@ -1086,7 +1156,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output("Cheating is disabled.")
             return False
 
-    def get_hints(self, input_text: str, explicit_location: bool = False) -> bool:
+    def get_hints(self, input_text: str, for_location: bool = False) -> bool:
         points_available = get_client_points(self.ctx, self.client)
         if not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
@@ -1098,20 +1168,21 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return True
         else:
             world = proxy_worlds[self.ctx.games[self.client.slot]]
-            item_name, usable, response = get_intended_text(input_text,
-                                                            world.all_names if not explicit_location else world.location_names)
+            names = world.location_names if for_location else world.all_item_and_group_names
+            hint_name, usable, response = get_intended_text(input_text,
+                                                            names)
             if usable:
-                if item_name in world.hint_blacklist:
-                    self.output(f"Sorry, \"{item_name}\" is marked as non-hintable.")
+                if hint_name in world.hint_blacklist:
+                    self.output(f"Sorry, \"{hint_name}\" is marked as non-hintable.")
                     hints = []
-                elif item_name in world.item_name_groups and not explicit_location:
+                elif not for_location and hint_name in world.item_name_groups: # item group name
                     hints = []
-                    for item in world.item_name_groups[item_name]:
+                    for item in world.item_name_groups[hint_name]:
                         hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
-                elif item_name in world.item_names and not explicit_location:  # item name
-                    hints = collect_hints(self.ctx, self.client.team, self.client.slot, item_name)
+                elif not for_location and hint_name in world.item_names:  # item name
+                    hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_name)
                 else:  # location name
-                    hints = collect_hints_location(self.ctx, self.client.team, self.client.slot, item_name)
+                    hints = collect_hints_location(self.ctx, self.client.team, self.client.slot, hint_name)
                 cost = self.ctx.get_hint_cost(self.client.slot)
                 if hints:
                     new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
@@ -1173,8 +1244,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     @mark_raw
     def _cmd_hint(self, item_or_location: str = "") -> bool:
-        """Use !hint {item_name/location_name},
-        for example !hint Lamp or !hint Link's House to get a spoiler peek for that location or item.
+        """Use !hint {item_name},
+        for example !hint Lamp to get a spoiler peek for that item.
         If hint costs are on, this will only give you one new result,
         you can rerun the command to get more in that case."""
         return self.get_hints(item_or_location)
@@ -1182,9 +1253,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_hint_location(self, location: str = "") -> bool:
         """Use !hint_location {location_name},
-        for example !hint_location atomic-bomb to get a spoiler peek for that location.
-        (In the case of factorio, or any other game where item names and location names are identical,
-        this command must be used explicitly.)"""
+        for example !hint_location atomic-bomb to get a spoiler peek for that location."""
         return self.get_hints(location, True)
 
 
@@ -1246,6 +1315,16 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             minver = ctx.minimum_client_versions[slot]
             if minver > args['version']:
                 errors.add('IncompatibleVersion')
+            if args.get('items_handling', None) is None:
+                # fall back to load from multidata
+                client.no_items = False
+                client.remote_items = slot in ctx.remote_items
+                client.remote_start_inventory = slot in ctx.remote_start_inventory
+            else:
+                try:
+                    client.items_handling = args['items_handling']
+                except (ValueError, TypeError):
+                    errors.add('InvalidItemsHandling')
 
         # only exact version match allowed
         if ctx.compatibility == 0 and args['version'] != version_tuple:
@@ -1266,6 +1345,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             ctx.clients[team][slot].append(client)
             client.version = args['version']
             client.tags = args['tags']
+            client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
             reply = [{
                 "cmd": "Connected",
                 "team": client.team, "slot": client.slot,
@@ -1274,10 +1354,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 "checked_locations": get_checked_checks(ctx, team, slot),
                 "slot_data": ctx.slot_data[client.slot]
             }]
-            items = get_received_items(ctx, client.team, client.slot)
-            if items:
-                reply.append({"cmd": 'ReceivedItems', "index": 0, "items": items})
-                client.send_index = len(items)
+            start_inventory = get_start_inventory(ctx, team, slot, client.remote_start_inventory)
+            items = get_received_items(ctx, client.team, client.slot, client.remote_items)
+            if (start_inventory or items) and not client.no_items:
+                reply.append({"cmd": 'ReceivedItems', "index": 0, "items": start_inventory + items})
+                client.send_index = len(start_inventory) + len(items)
             if not client.auth:  # if this was a Re-Connect, don't print to console
                 client.auth = True
                 await on_client_joined(ctx, client)
@@ -1305,23 +1386,42 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                               "original_cmd": cmd}])
                 return
 
+            if args.get('items_handling', None) is not None and client.items_handling != args['items_handling']:
+                try:
+                    client.items_handling = args['items_handling']
+                    start_inventory = get_start_inventory(ctx, client.team, client.slot, client.remote_start_inventory)
+                    items = get_received_items(ctx, client.team, client.slot, client.remote_items)
+                    if (items or start_inventory) and not client.no_items:
+                        client.send_index = len(start_inventory) + len(items)
+                        await ctx.send_msgs(client, [{"cmd": "ReceivedItems", "index": 0,
+                                                      "items": start_inventory + items}])
+                    else:
+                        client.send_index = 0
+                except (ValueError, TypeError) as err:
+                    await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', 'type': 'arguments',
+                                                  'text': f'Invalid items_handling: {err}',
+                                                  'original_cmd': cmd}])
+                    return
+
             if "tags" in args:
                 old_tags = client.tags
                 client.tags = args["tags"]
                 if set(old_tags) != set(client.tags):
+                    client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
                     ctx.notify_all(
                         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
                         f"from {old_tags} to {client.tags}.")
 
         elif cmd == 'Sync':
-            items = get_received_items(ctx, client.team, client.slot)
-            if items:
-                client.send_index = len(items)
+            start_inventory = get_start_inventory(ctx, client.team, client.slot, client.remote_start_inventory)
+            items = get_received_items(ctx, client.team, client.slot, client.remote_items)
+            if (start_inventory or items) and not client.no_items:
+                client.send_index = len(start_inventory) + len(items)
                 await ctx.send_msgs(client, [{"cmd": "ReceivedItems", "index": 0,
-                                              "items": items}])
+                                              "items": start_inventory + items}])
 
         elif cmd == 'LocationChecks':
-            if "Tracker" in client.tags:
+            if client.no_locations:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
                                               "text": "Trackers can't register new Location Checks",
                                               "original_cmd": cmd}])
@@ -1336,8 +1436,14 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                         [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
                                           "original_cmd": cmd}])
                     return
-                target_item, target_player = ctx.locations[client.slot][location]
-                locs.append(NetworkItem(target_item, location, target_player))
+                if len(ctx.locations[client.slot][location]) == 3:
+                    target_item, target_player, flags = ctx.locations[client.slot][location]
+                else:
+                    # TODO: remove around version 0.2.5
+                    target_item, target_player = ctx.locations[client.slot][location]
+                    flags = 0
+
+                locs.append(NetworkItem(target_item, location, target_player, flags))
 
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 
@@ -1497,7 +1603,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
             item, usable, response = get_intended_text(item, world.item_names)
             if usable:
                 new_item = NetworkItem(world.item_name_to_id[item], -1, 0)
-                get_received_items(self.ctx, team, slot).append(new_item)
+                get_received_items(self.ctx, team, slot, True).append(new_item)
+                get_received_items(self.ctx, team, slot, False).append(new_item)
                 self.ctx.notify_all('Cheat console: sending "' + item + '" to ' +
                                     self.ctx.get_aliased_name(team, slot))
                 send_new_items(self.ctx)
@@ -1509,23 +1616,44 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(response)
             return False
 
-    def _cmd_hint(self, player_name: str, *item_or_location: str) -> bool:
-        """Send out a hint for a player's item or location to their team"""
+    def _cmd_hint(self, player_name: str, *item: str) -> bool:
+        """Send out a hint for a player's item to their team"""
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             team, slot = self.ctx.player_name_lookup[seeked_player]
-            item = " ".join(item_or_location)
+            item = " ".join(item)
             world = proxy_worlds[self.ctx.games[slot]]
-            item, usable, response = get_intended_text(item, world.all_names)
+            item, usable, response = get_intended_text(item, world.all_item_and_group_names)
             if usable:
                 if item in world.item_name_groups:
                     hints = []
                     for item in world.item_name_groups[item]:
                         hints.extend(collect_hints(self.ctx, team, slot, item))
-                elif item in world.item_names:  # item name
+                else:  # item name
                     hints = collect_hints(self.ctx, team, slot, item)
-                else:  # location name
-                    hints = collect_hints_location(self.ctx, team, slot, item)
+                if hints:
+                    notify_hints(self.ctx, team, hints)
+                else:
+                    self.output("No hints found.")
+                return True
+            else:
+                self.output(response)
+                return False
+
+        else:
+            self.output(response)
+            return False
+
+    def _cmd_hint_location(self, player_name: str, *location: str) -> bool:
+        """Send out a hint for a player's location to their team"""
+        seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
+        if usable:
+            team, slot = self.ctx.player_name_lookup[seeked_player]
+            item = " ".join(location)
+            world = proxy_worlds[self.ctx.games[slot]]
+            item, usable, response = get_intended_text(item, world.location_names)
+            if usable:
+                hints = collect_hints_location(self.ctx, team, slot, item)
                 if hints:
                     notify_hints(self.ctx, team, hints)
                 else:

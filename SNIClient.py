@@ -11,6 +11,7 @@ import shutil
 import logging
 import asyncio
 from json import loads, dumps
+from tkinter import font
 
 from Utils import get_item_name_from_id, init_logging
 
@@ -101,6 +102,7 @@ class LttPCommandProcessor(ClientCommandProcessor):
 class Context(CommonContext):
     command_processor = LttPCommandProcessor
     game = "A Link to the Past"
+    items_handling = None  # set in game_watcher
 
     def __init__(self, snes_address, server_address, password):
         super(Context, self).__init__(server_address, password)
@@ -900,8 +902,10 @@ async def game_watcher(ctx: Context):
                 continue
             elif game_name == b"SM":
                 ctx.game = GAME_SM
+                ctx.items_handling = 0b001  # full local
             else:
                 ctx.game = GAME_ALTTP
+                ctx.items_handling = 0b001  # full local
 
             rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else ROMNAME_START, ROMNAME_SIZE)
             if rom is None or rom == bytes([0] * ROMNAME_SIZE):
@@ -1087,13 +1091,7 @@ async def main():
             time.sleep(3)
             sys.exit()
         elif args.diff_file.endswith((".apbp", "apz3")):
-            adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile, gui_enabled)
-            if adjusted:
-                try:
-                    shutil.move(adjustedromfile, romfile)
-                    adjustedromfile = romfile
-                except Exception as e:
-                    logging.exception(e)
+            adjustedromfile, adjusted = get_alttp_settings(romfile)
             asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
         else:
             asyncio.create_task(run_game(romfile))
@@ -1131,6 +1129,126 @@ async def main():
     if input_task:
         input_task.cancel()
 
+def get_alttp_settings(romfile: str):
+    lastSettings = Utils.get_adjuster_settings(GAME_ALTTP)
+    adjusted = False
+    adjustedromfile = ''
+    if lastSettings:
+        choice = 'no'
+        if not hasattr(lastSettings, 'auto_apply') or 'ask' in lastSettings.auto_apply:
+
+            whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
+                        "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
+                        "reduceflashing", "deathlink"}
+            printed_options = {name: value for name, value in vars(lastSettings).items() if name in whitelist}
+            if hasattr(lastSettings, "sprite_pool"):
+                sprite_pool = {}
+                for sprite in lastSettings.sprite_pool:
+                    if sprite in sprite_pool:
+                        sprite_pool[sprite] += 1
+                    else:
+                        sprite_pool[sprite] = 1
+                    if sprite_pool:
+                        printed_options["sprite_pool"] = sprite_pool
+            import pprint
+
+            if gui_enabled:
+            
+                from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
+                applyPromptWindow = Tk()
+                applyPromptWindow.resizable(False, False)
+                applyPromptWindow.protocol('WM_DELETE_WINDOW',lambda: onButtonClick())
+                logo = PhotoImage(file=Utils.local_path('data', 'icon.png'))
+                applyPromptWindow.tk.call('wm', 'iconphoto', applyPromptWindow._w, logo)
+                applyPromptWindow.wm_title("Last adjuster settings LttP")
+
+                label = LabelFrame(applyPromptWindow,
+                                text='Last used adjuster settings were found. Would you like to apply these?')
+                label.grid(column=0,row=0, padx=5, pady=5, ipadx=5, ipady=5)
+                label.grid_columnconfigure (0, weight=1) 
+                label.grid_columnconfigure (1, weight=1) 
+                label.grid_columnconfigure (2, weight=1) 
+                label.grid_columnconfigure (3, weight=1) 
+                def onButtonClick(answer: str='no'):
+                    setattr(onButtonClick, 'choice', answer)
+                    applyPromptWindow.destroy()
+
+                framedOptions = Frame(label)
+                framedOptions.grid(column=0, columnspan=4,row=0)
+                framedOptions.grid_columnconfigure(0, weight=1)
+                framedOptions.grid_columnconfigure(1, weight=1)
+                framedOptions.grid_columnconfigure(2, weight=1)
+                curRow = 0
+                curCol = 0
+                for name, value in printed_options.items():
+                    Label(framedOptions, text=name+": "+str(value)).grid(column=curCol, row=curRow, padx=5)
+                    if(curCol==2):
+                        curRow+=1
+                        curCol=0
+                    else:
+                        curCol+=1
+
+                yesButton = Button(label, text='Yes', command=lambda: onButtonClick('yes'), width=10)
+                yesButton.grid(column=0, row=1)
+                noButton = Button(label, text='No', command=lambda: onButtonClick('no'), width=10)
+                noButton.grid(column=1, row=1)
+                alwaysButton = Button(label, text='Always', command=lambda: onButtonClick('always'), width=10)
+                alwaysButton.grid(column=2, row=1)
+                neverButton = Button(label, text='Never', command=lambda: onButtonClick('never'), width=10)
+                neverButton.grid(column=3, row=1)
+
+                Utils.tkinter_center_window(applyPromptWindow)
+                applyPromptWindow.mainloop()
+                choice = getattr(onButtonClick, 'choice')
+            else:
+                choice = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
+                                    f"{pprint.pformat(printed_options)}\n"
+                                    f"Enter yes, no, always or never: ")
+            if choice and choice.startswith("y"):
+                choice = 'yes'
+            elif choice and "never" in choice:
+                choice = 'no'
+                lastSettings.auto_apply = 'never'
+                Utils.persistent_store("adjuster", GAME_ALTTP, lastSettings)
+            elif choice and "always" in choice:
+                choice = 'yes'
+                lastSettings.auto_apply = 'always'
+                Utils.persistent_store("adjuster", GAME_ALTTP, lastSettings)
+            else:
+                choice = 'no'
+        elif 'never' in lastSettings.auto_apply:
+            choice = 'no'
+        elif 'always' in lastSettings.auto_apply:
+            choice = 'yes'
+                    
+        if 'yes' in choice:
+            from worlds.alttp.Rom import get_base_rom_path
+            lastSettings.rom = romfile
+            lastSettings.baserom = get_base_rom_path()
+            lastSettings.world = None
+
+            if hasattr(lastSettings, "sprite_pool"):
+                from LttPAdjuster import AdjusterWorld
+                lastSettings.world = AdjusterWorld(getattr(lastSettings, "sprite_pool"))
+
+            adjusted = True
+            import LttPAdjuster
+            _, adjustedromfile = LttPAdjuster.adjust(lastSettings)
+
+            if hasattr(lastSettings, "world"):
+                delattr(lastSettings, "world")
+        else:
+            adjusted = False;
+        if adjusted:
+            try:
+                shutil.move(adjustedromfile, romfile)
+                adjustedromfile = romfile
+            except Exception as e:
+                logging.exception(e)
+    else:
+        
+        adjusted = False
+    return adjustedromfile, adjusted
 
 if __name__ == '__main__':
     colorama.init()

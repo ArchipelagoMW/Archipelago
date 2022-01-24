@@ -17,6 +17,8 @@ class JSONMessagePart(typing.TypedDict, total=False):
     color: str
     # owning player for location/item
     player: int
+    # if type == item indicates item flags
+    flags: int
 
 
 class ClientStatus(enum.IntEnum):
@@ -57,6 +59,7 @@ class NetworkItem(typing.NamedTuple):
     item: int
     location: int
     player: int
+    flags: int = 0
 
 
 def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
@@ -163,6 +166,21 @@ class JSONTypes(str, enum.Enum):
 
 
 class JSONtoTextParser(metaclass=HandlerMeta):
+    color_codes = {
+        # not exact color names, close enough but decent looking
+        "black": "000000",
+        "red": "EE0000",
+        "green": "00FF7F",
+        "yellow": "FAFAD2",
+        "blue": "6495ED",
+        "magenta": "EE00EE",
+        "cyan": "00EEEE",
+        "slateblue": "6D8BE8",
+        "plum": "AF99EF",
+        "salmon": "FA8072",
+        "white": "FFFFFF"
+    }
+
     def __init__(self, ctx):
         self.ctx = ctx
 
@@ -194,7 +212,17 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_color(node)
 
     def _handle_item_name(self, node: JSONMessagePart):
-        node["color"] = 'cyan'
+        flags = node.get("flags", 0)
+        if flags == 0:
+            node["color"] = 'cyan'
+        elif flags & 0b001:  # advancement
+            node["color"] = 'plum'
+        elif flags & 0b010:  # never_exclude
+            node["color"] = 'slateblue'
+        elif flags & 0b100:  # trap
+            node["color"] = 'salmon'
+        else:
+            node["color"] = 'cyan'
         return self._handle_color(node)
 
     def _handle_item_id(self, node: JSONMessagePart):
@@ -238,8 +266,8 @@ def add_json_text(parts: list, text: typing.Any, **kwargs) -> None:
     parts.append({"text": str(text), **kwargs})
 
 
-def add_json_item(parts: list, item_id: int, player: int = 0, **kwargs) -> None:
-    parts.append({"text": str(item_id), "player": player, "type": JSONTypes.item_id, **kwargs})
+def add_json_item(parts: list, item_id: int, player: int = 0, item_flags: int = 0, **kwargs) -> None:
+    parts.append({"text": str(item_id), "player": player, "flags": item_flags, "type": JSONTypes.item_id, **kwargs})
 
 
 def add_json_location(parts: list, item_id: int, player: int = 0, **kwargs) -> None:
@@ -253,13 +281,15 @@ class Hint(typing.NamedTuple):
     item: int
     found: bool
     entrance: str = ""
+    item_flags: int = 0
 
     def re_check(self, ctx, team) -> Hint:
         if self.found:
             return self
         found = self.location in ctx.location_checks[team, self.finding_player]
         if found:
-            return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance)
+            return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance,
+                        self.item_flags)
         return self
 
     def __hash__(self):
@@ -270,7 +300,7 @@ class Hint(typing.NamedTuple):
         add_json_text(parts, "[Hint]: ")
         add_json_text(parts, self.receiving_player, type="player_id")
         add_json_text(parts, "'s ")
-        add_json_item(parts, self.item, self.receiving_player)
+        add_json_item(parts, self.item, self.receiving_player, self.item_flags)
         add_json_text(parts, " is at ")
         add_json_location(parts, self.location, self.finding_player)
         add_json_text(parts, " in ")
@@ -288,7 +318,7 @@ class Hint(typing.NamedTuple):
 
         return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
                 "receiving": self.receiving_player,
-                "item": NetworkItem(self.item, self.location, self.finding_player),
+                "item": NetworkItem(self.item, self.location, self.finding_player, self.item_flags),
                 "found": self.found}
 
     @property

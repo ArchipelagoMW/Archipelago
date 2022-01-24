@@ -49,6 +49,7 @@ class FactorioCommandProcessor(ClientCommandProcessor):
 class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
     game = "Factorio"
+    items_handling = 0b111  # full remote
 
     # updated by spinup server
     mod_version: Utils.Version = Utils.Version(0, 0, 0)
@@ -308,8 +309,8 @@ async def main(args):
     if sys.stdin:
         input_task = asyncio.create_task(console_loop(ctx), name="Input")
     factorio_server_task = asyncio.create_task(factorio_spinup_server(ctx), name="FactorioSpinupServer")
-    succesful_launch = await factorio_server_task
-    if succesful_launch:
+    successful_launch = await factorio_server_task
+    if successful_launch:
         factorio_server_task = asyncio.create_task(factorio_server_watcher(ctx), name="FactorioServer")
         progression_watcher = asyncio.create_task(
             game_watcher(ctx), name="FactorioProgressionWatcher")
@@ -333,12 +334,8 @@ class FactorioJSONtoTextParser(JSONtoTextParser):
     def _handle_color(self, node: JSONMessagePart):
         colors = node["color"].split(";")
         for color in colors:
-            if color in {"red", "green", "blue", "orange", "yellow", "pink", "purple", "white", "black", "gray",
-                         "brown", "cyan", "acid"}:
-                node["text"] = f"[color={color}]{node['text']}[/color]"
-                return self._handle_text(node)
-            elif color == "magenta":
-                node["text"] = f"[color=pink]{node['text']}[/color]"
+            if color in self.color_codes:
+                node["text"] = f"[color=#{self.color_codes[color]}]{node['text']}[/color]"
             return self._handle_text(node)
         return self._handle_text(node)
 
