@@ -140,14 +140,6 @@ def distribute_items_restrictive(world: MultiWorld):
     defaultlocations = locations[LocationProgressType.DEFAULT]
     excludedlocations = locations[LocationProgressType.EXCLUDED]
 
-    locationDeficit = len(progitempool) - len(prioritylocations)
-    if locationDeficit > 0:
-        if locationDeficit > len(defaultlocations):
-            raise FillError(
-                f'Not enough locations for advancement items. There are {len(progitempool)} advancement items with {len(prioritylocations)} priority locations and {len(defaultlocations)} default locations')
-        prioritylocations += defaultlocations[:locationDeficit]
-        defaultlocations = defaultlocations[locationDeficit:]
-
     fill_restrictive(world, world.state, prioritylocations, progitempool)
     if prioritylocations:
         defaultlocations = prioritylocations + defaultlocations
