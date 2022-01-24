@@ -135,8 +135,6 @@ def distribute_items_restrictive(world: MultiWorld):
 
     for loc in fill_locations:
         locations[loc.progress_type].append(loc)
-    logging.warning("Locations: " + str(len(fill_locations)))
-    logging.warning("Items: " + str(len(world.itempool)))
 
     prioritylocations = locations[LocationProgressType.PRIORITY]
     defaultlocations = locations[LocationProgressType.DEFAULT]
