@@ -11,10 +11,10 @@ class TotalLocations(Range):
 
 
 class TotalRevivals(Range):
-    """Number of `Dio's Best Friend` item put in the item pool."""
-    displayname = "Total Revivals Available"
+    """Total Percentage of `Dio's Best Friend` item put in the item pool."""
+    displayname = "Total Percentage Revivals Available"
     range_start = 0
-    range_end = 50
+    range_end = 10
     default = 4
 
 
