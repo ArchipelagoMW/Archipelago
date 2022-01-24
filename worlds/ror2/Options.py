@@ -42,7 +42,7 @@ class GreenScrap(Range):
     """Weight of Green Scraps in the item pool."""
     displayname = "Green Scraps"
     range_start = 0
-    range_end = 500
+    range_end = 100
     default = 16
 
 
@@ -50,7 +50,7 @@ class RedScrap(Range):
     """Weight of Red Scraps in the item pool."""
     displayname = "Red Scraps"
     range_start = 0
-    range_end = 500
+    range_end = 100
     default = 4
 
 
@@ -58,7 +58,7 @@ class YellowScrap(Range):
     """Weight of yellow scraps in the item pool."""
     displayname = "Yellow Scraps"
     range_start = 0
-    range_end = 500
+    range_end = 100
     default = 1
 
 
@@ -66,7 +66,7 @@ class WhiteScrap(Range):
     """Weight of white scraps in the item pool."""
     displayname = "White Scraps"
     range_start = 0
-    range_end = 500
+    range_end = 100
     default = 32
 
 
@@ -74,7 +74,7 @@ class CommonItem(Range):
     """Weight of common items in the item pool."""
     displayname = "Common Items"
     range_start = 0
-    range_end = 500
+    range_end = 100
     default = 64
 
 
@@ -82,7 +82,7 @@ class UncommonItem(Range):
     """Weight of uncommon items in the item pool."""
     displayname = "Uncommon Items"
     range_start = 0
-    range_end = 500
+    range_end = 100
     default = 32
 
 
@@ -90,7 +90,7 @@ class LegendaryItem(Range):
     """Weight of legendary items in the item pool."""
     displayname = "Legendary Items"
     range_start = 0
-    range_end = 500
+    range_end = 100
     default = 8
 
 
@@ -98,7 +98,7 @@ class BossItem(Range):
     """Weight of boss items in the item pool."""
     displayname = "Boss Items"
     range_start = 0
-    range_end = 500
+    range_end = 100
     default = 4
 
 
@@ -106,7 +106,7 @@ class LunarItem(Range):
     """Weight of lunar items in the item pool."""
     displayname = "Lunar Items"
     range_start = 0
-    range_end = 500
+    range_end = 100
     default = 16
 
 
@@ -114,7 +114,7 @@ class Equipment(Range):
     """Weight of equipment items in the item pool."""
     displayname = "Equipment"
     range_start = 0
-    range_end = 500
+    range_end = 100
     default = 32
 
 
