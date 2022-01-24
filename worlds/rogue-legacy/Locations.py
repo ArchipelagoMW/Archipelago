@@ -43,13 +43,16 @@ base_location_table = {
     LocationName.manor_observatory_scope: 91030,
 
     # Boss Rewards
-    LocationName.boss_khindr: 91100,
-    LocationName.boss_alexander: 91102,
-    LocationName.boss_leon: 91104,
-    LocationName.boss_herodotus: 91106,
+    LocationName.boss_castle: 91100,
+    LocationName.boss_forest: 91102,
+    LocationName.boss_tower: 91104,
+    LocationName.boss_dungeon: 91106,
 
     # Special Rooms
     LocationName.special_jukebox: 91200,
+    LocationName.special_painting: 91201,
+    LocationName.special_cheapskate: 91202,
+    LocationName.special_carnival: 91203,
 
     # Special Locations
     LocationName.castle: None,
@@ -66,6 +69,7 @@ fairy_chest_location_table = {
     **{f"{LocationName.garden} - Fairy Chest {i + 1}": i + 91450 for i in range(0, 50)},
     **{f"{LocationName.tower} - Fairy Chest {i + 1}": i + 91500 for i in range(0, 50)},
     **{f"{LocationName.dungeon} - Fairy Chest {i + 1}": i + 91550 for i in range(0, 50)},
+    **{f"Fairy Chest {i + 1}": i + 92200 for i in range(0, 60)},
 }
 
 chest_location_table = {
@@ -73,6 +77,7 @@ chest_location_table = {
     **{f"{LocationName.garden} - Chest {i + 1}": i + 91700 for i in range(0, 100)},
     **{f"{LocationName.tower} - Chest {i + 1}": i + 91800 for i in range(0, 100)},
     **{f"{LocationName.dungeon} - Chest {i + 1}": i + 91900 for i in range(0, 100)},
+    **{f"Chest {i + 1}": i + 92000 for i in range(0, 120)},
 }
 
 location_table = {
