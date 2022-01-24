@@ -81,7 +81,7 @@ generator:
   race: 0
   # List of options that can be plando'd. Can be combined, for example "bosses, items"
   # Available options: bosses, items, texts, connections
-  plando_options: "bosses"
+  plando_options: "bosses, items, texts, connections"
 lttp_options:
   # File name of the v1.0 J rom
   rom_file: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"

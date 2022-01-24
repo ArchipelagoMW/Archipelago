@@ -44,7 +44,6 @@ class LegacyWorld(World):
             "alexander": self.world.alexander[self.player],
             "leon": self.world.leon[self.player],
             "herodotus": self.world.herodotus[self.player],
-            "johannes": self.world.johannes[self.player],
             "death_link": self.world.death_link[self.player],
         }
 
