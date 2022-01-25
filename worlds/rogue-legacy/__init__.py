@@ -20,7 +20,7 @@ class LegacyWorld(World):
     game: str = "Rogue Legacy"
     options = legacy_options
     topology_present = False
-    data_version = 2
+    data_version = 3
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
