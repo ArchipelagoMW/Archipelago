@@ -125,7 +125,8 @@ class UniqueKeyLoader(SafeLoader):
         for key_node, value_node in node.value:
             key = self.construct_object(key_node, deep=deep)
             if key in mapping:
-                raise KeyError(f"Duplicate key {key!r} found in YAML. Already found keys: {mapping}.")
+                logging.error(f"YAML duplicates sanity check failed{key_node.start_mark}")
+                raise KeyError(f"Duplicate key {key} found in YAML. Already found keys: {mapping}.")
             mapping.add(key)
         return super().construct_mapping(node, deep)
 
