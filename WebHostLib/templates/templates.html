@@ -14,7 +14,7 @@
     <h1>Option Templates (YAML)</h1>
     <ul>
         {% for file in files %}
-        <li><a href="{{ url_for('static', filename="generated/"+file+".yaml") }}">{{ file }}</a></li>
+        <li><a href="{{ url_for('static', filename="generated/configs/"+file+".yaml") }}">{{ file }}</a></li>
         {% endfor %}
     </ul>
     </div>
