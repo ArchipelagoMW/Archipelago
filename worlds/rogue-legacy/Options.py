@@ -111,7 +111,7 @@ class Architect(Choice):
     """
     displayname = "Architect"
     option_start_unlocked = 0
-    option_early = 1
+    # option_early = 1 -- needs to be fixed
     option_normal = 2
     option_disabled = 3
     default = 2
@@ -353,6 +353,13 @@ class CritDamageUpPool(Range):
     default = 5
 
 
+class FreeDiaryOnGeneration(DefaultOnToggle):
+    """
+    Allows the player to get a free diary check every time they regenerate the castle in the starting room.
+    """
+    displayname = "Free Diary On Generation"
+
+
 class FairyTraps(Choice):
     """
     Replaces junk item fills with Fury/Rage/Wrath fairy enemy traps, scaled to player level. Mild replaces 20% of junk
@@ -391,6 +398,7 @@ legacy_options: typing.Dict[str, type(Option)] = {
     "progressive_blueprints": ProgressiveBlueprints,
     "gold_gain_multiplier": GoldGainMultiplier,
     "number_of_children": NumberOfChildren,
+    "free_diary_on_generation": FreeDiaryOnGeneration,
     # "additional_names": AdditionalNames,
     # "allow_default_names": AllowDefaultNames,
     # "castle_scaling": CastleScaling,
