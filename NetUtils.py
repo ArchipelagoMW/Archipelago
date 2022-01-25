@@ -194,7 +194,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_color(self, node: JSONMessagePart):
         codes = node["color"].split(";")
-        buffer = "".join(color_code(code) for code in codes)
+        buffer = "".join(color_code(code) for code in codes if code in color_codes)
         return buffer + self._handle_text(node) + color_code("reset")
 
     def _handle_text(self, node: JSONMessagePart):

@@ -196,14 +196,6 @@ async def deathlink_kill_player(ctx: Context):
         ctx.last_death_link = time.time()
 
 
-def color_item(item_id: int, green: bool = False) -> str:
-    item_name = get_item_name_from_id(item_id)
-    item_colors = ['green' if green else 'cyan']
-    if item_name in Items.progression_items:
-        item_colors.append("white_bg")
-    return color(item_name, *item_colors)
-
-
 SNES_RECONNECT_DELAY = 5
 
 # LttP
