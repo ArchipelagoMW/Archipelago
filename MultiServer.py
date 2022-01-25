@@ -1243,12 +1243,12 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 return False
 
     @mark_raw
-    def _cmd_hint(self, item_or_location: str = "") -> bool:
+    def _cmd_hint(self, item: str = "") -> bool:
         """Use !hint {item_name},
         for example !hint Lamp to get a spoiler peek for that item.
         If hint costs are on, this will only give you one new result,
         you can rerun the command to get more in that case."""
-        return self.get_hints(item_or_location)
+        return self.get_hints(item)
 
     @mark_raw
     def _cmd_hint_location(self, location: str = "") -> bool:
