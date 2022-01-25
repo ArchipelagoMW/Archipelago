@@ -32,9 +32,7 @@ class V6World(World):
         set_rules(self.world,self.player)
 
     def create_item(self, name: str) -> Item:
-        item_id = item_table[name]
-        item = V6Item(name, True, item_id, self.player)
-        return item
+        return V6Item(name, True, item_table[name], self.player)
 
     def generate_basic(self):
         self.world.itempool += [self.create_item(name) for name in self.item_names]
