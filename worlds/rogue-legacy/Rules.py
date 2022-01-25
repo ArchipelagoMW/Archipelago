@@ -67,17 +67,15 @@ def set_rules(world: MultiWorld, player: int):
 
     # Vendors
     if world.vendors[player] == "early":
-        set_rule(world.get_location(LocationName.castle, player),
+        set_rule(world.get_location(LocationName.boss_castle, player),
                  lambda state: state._legacy_has_all_vendors(player))
     elif world.vendors[player] == "normal":
         set_rule(world.get_location(LocationName.garden, player),
                  lambda state: state._legacy_has_any_vendors(player))
-    elif world.vendors[player] == "anywhere":
-        pass  # it can be anywhere, so no rule for this!
 
-    # Architect
+    # Architect - I have no idea why it won't generate if this is set to castle, but it'll have to do for now.
     if world.architect[player] == "early":
-        set_rule(world.get_location(LocationName.castle, player),
+        set_rule(world.get_location(LocationName.garden, player),
                  lambda state: state.has(ItemName.architect, player))
 
     # Diaries
@@ -143,14 +141,11 @@ def set_rules(world: MultiWorld, player: int):
 
     # Standard Zone Progression
     set_rule(world.get_location(LocationName.garden, player),
-             lambda state: state._legacy_has_stat_upgrades(player, 0.125 * state._legacy_total_stat_upgrades_count(player)) and
-                           state.has(ItemName.boss_castle, player))
+             lambda state: state._legacy_has_stat_upgrades(player, 0.125 * state._legacy_total_stat_upgrades_count(player)) and state.has(ItemName.boss_castle, player))
     set_rule(world.get_location(LocationName.tower, player),
-             lambda state: state._legacy_has_stat_upgrades(player, 0.3125 * state._legacy_total_stat_upgrades_count(player)) and
-                           state.has(ItemName.boss_forest, player))
+             lambda state: state._legacy_has_stat_upgrades(player, 0.3125 * state._legacy_total_stat_upgrades_count(player)) and state.has(ItemName.boss_forest, player))
     set_rule(world.get_location(LocationName.dungeon, player),
-             lambda state: state._legacy_has_stat_upgrades(player, 0.5 * state._legacy_total_stat_upgrades_count(player)) and
-                           state.has(ItemName.boss_tower, player))
+             lambda state: state._legacy_has_stat_upgrades(player, 0.5 * state._legacy_total_stat_upgrades_count(player)) and state.has(ItemName.boss_tower, player))
 
     # Bosses
     set_rule(world.get_location(LocationName.boss_castle, player),
@@ -162,7 +157,10 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location(LocationName.boss_dungeon, player),
              lambda state: state.has(ItemName.boss_dungeon, player))
     set_rule(world.get_location(LocationName.fountain, player),
-             lambda state: state._legacy_has_stat_upgrades(player, 0.625 * state._legacy_total_stat_upgrades_count(player)) and
-                           state.has(ItemName.boss_dungeon, player))
+             lambda state: state._legacy_has_stat_upgrades(player, 0.625 * state._legacy_total_stat_upgrades_count(player))
+                and state.has(ItemName.boss_castle, player)
+                and state.has(ItemName.boss_forest, player)
+                and state.has(ItemName.boss_tower, player)
+                and state.has(ItemName.boss_dungeon, player))
 
     world.completion_condition[player] = lambda state: state.has(ItemName.boss_fountain, player)

@@ -47,14 +47,14 @@ static_classes_table = {
 }
 
 progressive_classes_table = {
-    ItemName.progressive_knight: ItemData(90003, True, 2),
-    ItemName.progressive_mage: ItemData(90004, True, 2),
-    ItemName.progressive_barbarian: ItemData(90005, True, 2),
-    ItemName.progressive_knave: ItemData(90006, True, 2),
-    ItemName.progressive_shinobi: ItemData(90007, True, 2),
-    ItemName.progressive_miner: ItemData(90008, True, 2),
-    ItemName.progressive_lich: ItemData(90009, True, 2),
-    ItemName.progressive_spellthief: ItemData(90010, True, 2),
+    ItemName.progressive_knight: ItemData(90003, False, 2),
+    ItemName.progressive_mage: ItemData(90004, False, 2),
+    ItemName.progressive_barbarian: ItemData(90005, False, 2),
+    ItemName.progressive_knave: ItemData(90006, False, 2),
+    ItemName.progressive_shinobi: ItemData(90007, False, 2),
+    ItemName.progressive_miner: ItemData(90008, False, 2),
+    ItemName.progressive_lich: ItemData(90009, False, 2),
+    ItemName.progressive_spellthief: ItemData(90010, False, 2),
 }
 
 configurable_skill_unlocks_table = {
