@@ -54,6 +54,9 @@ class LegacyWorld(World):
         data = item_table[name]
         return [self.create_item(name)] * data.quantity
 
+    def get_required_client_version(self) -> typing.Tuple[int, int, int]:
+        return max((0, 2, 3), super(LegacyWorld, self).get_required_client_version())
+
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
         for option_name in legacy_options:
