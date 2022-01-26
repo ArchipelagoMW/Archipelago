@@ -2,10 +2,11 @@
 
 ## Required Software
 
-- [SNIClient](https://github.com/ArchipelagoMW/Archipelago/releases) included with the main Archipelago install
-  or [SuperNintendoClient](https://github.com/ArchipelagoMW/SuperNintendoClient/releases)
-    - If installing Archipelago, make sure to check the box for `SNI Client - A Link to the Past Patch Setup`
-- [SNI](https://github.com/alttpo/sni/releases) (Included in both clients from the first step)
+- One of the client programs:
+  - [SNIClient](https://github.com/ArchipelagoMW/Archipelago/releases), included with the main 
+  Archipelago install. Make sure to check the box for `SNI Client - A Link to the Past Patch Setup`
+  - [SuperNintendoClient](https://github.com/ArchipelagoMW/SuperNintendoClient/releases), an alternate standalone
+  client for Super Nintendo games
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
       ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
