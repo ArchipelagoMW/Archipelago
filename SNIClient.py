@@ -173,8 +173,17 @@ async def deathlink_kill_player(ctx: Context):
     while ctx.death_state == DeathState.killing_player and \
             ctx.snes_state == SNESState.SNES_ATTACHED:
         if ctx.game == GAME_ALTTP:
-            snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
-            snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
+            invincible = await snes_read(ctx, WRAM_START + 0x037B, 1)
+            last_health = await snes_read(ctx, WRAM_START + 0xF36D, 1)
+            await asyncio.sleep(0.25)
+            health = await snes_read(ctx, WRAM_START + 0xF36D, 1)
+            if not invincible or not last_health or not health:
+                ctx.death_state = DeathState.dead
+                ctx.last_death_link = time.time()
+                continue
+            if not invincible[0] and last_health[0] == health[0]:
+                snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
+                snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
         elif ctx.game == GAME_SM:
             snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
             if not ctx.death_link_allow_survive:
