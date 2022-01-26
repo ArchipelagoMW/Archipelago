@@ -176,15 +176,15 @@ class NumberOfChildren(Range):
 class AdditionalNames(OptionList):
     """
     Set of additional names your potential offspring can have. If Allow Default Names is disabled, this is the only list
-    of names your children can have.
+    of names your children can have (along with your Player name).
     """
     displayname = "Additional Names"
 
 
 class AllowDefaultNames(DefaultOnToggle):
     """
-    Determines if the names defined in Additional Names are allowed or not. Warning: This will not generate if the
-    number of Additional Names defined is less than the Number of Children value.
+    Determines if the default names defined in the vanilla game are allowed to be used. Warning: Your world will not
+    generate if the number of Additional Names defined is less than the Number of Children value.
     """
     displayname = "Allow Default Names"
 
