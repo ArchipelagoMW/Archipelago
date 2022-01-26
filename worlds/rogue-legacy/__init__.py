@@ -71,7 +71,7 @@ class LegacyWorld(World):
             itempool += self._create_items(item)
 
         # Blueprints
-        if self.world.progressive_blueprints:
+        if self.world.progressive_blueprints[self.player]:
             itempool += [self.create_item(ItemName.progressive_blueprints)] * 15
         else:
             for item in blueprints_table:

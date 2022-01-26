@@ -111,7 +111,6 @@ class Architect(Choice):
     """
     displayname = "Architect"
     option_start_unlocked = 0
-    # option_early = 1 -- needs to be fixed
     option_normal = 2
     option_disabled = 3
     default = 2
@@ -190,13 +189,6 @@ class AllowDefaultNames(DefaultOnToggle):
     displayname = "Allow Default Names"
 
 
-class BossShuffle(Toggle):
-    """
-    Allow bosses to be in any zone.
-    """
-    displayname = "Boss Shuffle"
-
-
 class CastleScaling(Range):
     """
     Adjusts the scaling factor for how big a castle can be. Larger castles scale enemies quicker and also take longer
@@ -206,21 +198,6 @@ class CastleScaling(Range):
     range_start = 50
     range_end = 300
     default = 100
-
-
-class RoomShuffle(Toggle):
-    """
-    Shuffles each room's zone, so you have no idea where any room is located. You could be in Castle Hamson, then go up
-    and find yourself in the Land of Darkness, followed by the Forest immediately after.
-    """
-    displayname = "Room Zone Shuffle"
-
-
-class BossLevelRequirements(Toggle):
-    """
-    Adds an artificial gate to each boss room door that requires the player be a minimum level to fight the boss.
-    """
-    displayname = "Boss Room Level Requirements"
 
 
 class ChallengeBossKhidr(Choice):
@@ -258,16 +235,6 @@ class ChallengeBossHerodotus(Choice):
     Determines if Astrodotus replaces Herodotus in their boss room.
     """
     displayname = "Herodotus"
-    option_vanilla = 0
-    option_challenge = 1
-    default = 0
-
-
-class ChallengeBossJohannes(Choice):
-    """
-    Determines if The Brohannes replaces Johannes in their boss room.
-    """
-    displayname = "Johannes"
     option_vanilla = 0
     option_challenge = 1
     default = 0
@@ -360,32 +327,10 @@ class FreeDiaryOnGeneration(DefaultOnToggle):
     displayname = "Free Diary On Generation"
 
 
-class FairyTraps(Choice):
-    """
-    Replaces junk item fills with Fury/Rage/Wrath fairy enemy traps, scaled to player level. Mild replaces 20% of junk
-    items with fairy traps. Moderate replaces 40%. Severe replaces 65%. Onslaught replaces 100%.
-    """
-    displayname = "Fury Traps"
-    option_disabled = 0
-    option_mild = 1
-    option_moderate = 2
-    option_severe = 3
-    option_onslaught = 4
-    default = 0
-
-
-class TraitsBlacklist(OptionList):
-    """
-    Prevents certain traits from appearing on your offspring. Say goodbye to Vertigo!
-    """
-    displayname = "Traits Blacklist"
-
-
 legacy_options: typing.Dict[str, type(Option)] = {
     "starting_gender": StartingGender,
     "starting_class": StartingClass,
     "new_game_plus": NewGamePlus,
-    # "level_scaling": LevelScaling,
     "fairy_chests_per_zone": FairyChestsPerZone,
     "chests_per_zone": ChestsPerZone,
     "universal_fairy_chests": UniversalFairyChests,
@@ -399,17 +344,10 @@ legacy_options: typing.Dict[str, type(Option)] = {
     "gold_gain_multiplier": GoldGainMultiplier,
     "number_of_children": NumberOfChildren,
     "free_diary_on_generation": FreeDiaryOnGeneration,
-    # "additional_names": AdditionalNames,
-    # "allow_default_names": AllowDefaultNames,
-    # "castle_scaling": CastleScaling,
-    # "boss_shuffle": BossShuffle,
-    # "room_shuffle": RoomShuffle,
-    # "boss_level_requirements": BossLevelRequirements,
     "khidr": ChallengeBossKhidr,
     "alexander": ChallengeBossAlexander,
     "leon": ChallengeBossLeon,
     "herodotus": ChallengeBossHerodotus,
-    # "johannes": ChallengeBossJohannes,
     "health_pool": HealthUpPool,
     "mana_pool": ManaUpPool,
     "attack_pool": AttackUpPool,
@@ -418,7 +356,7 @@ legacy_options: typing.Dict[str, type(Option)] = {
     "equip_pool": EquipUpPool,
     "crit_chance_pool": CritChanceUpPool,
     "crit_damage_pool": CritDamageUpPool,
-    # "fury_traps": FairyTraps,
-    # "traits_blacklist": TraitsBlacklist,
+    "allow_default_names": AllowDefaultNames,
+    "additional_names": AdditionalNames,
     "death_link": DeathLink,
 }

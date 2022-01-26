@@ -73,11 +73,6 @@ def set_rules(world: MultiWorld, player: int):
         set_rule(world.get_location(LocationName.garden, player),
                  lambda state: state._legacy_has_any_vendors(player))
 
-    # Architect - I have no idea why it won't generate if this is set to castle, but it'll have to do for now.
-    if world.architect[player] == "early":
-        set_rule(world.get_location(LocationName.garden, player),
-                 lambda state: state.has(ItemName.architect, player))
-
     # Diaries
     for i in range(0, 5):
         set_rule(world.get_location(f"Diary {i + 6}", player),
