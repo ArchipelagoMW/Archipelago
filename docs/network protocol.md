@@ -177,12 +177,15 @@ Sent to clients to provide what is known as a 'data package' which contains info
 | data | [DataPackageObject](#Data-Package-Contents) | The data package as a JSON object. |
 
 ### Bounced
-Sent to clients after a client requested this message be sent to them, more info in the Bounce package.
+Sent to clients after a client requested this message be sent to them, more info in the [Bounce](#Bounce) package.
 
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| data | dict | The data in the Bounce package copied |
+| games | list\[str\] | Optional. Game names this message is targeting |
+| slots | list\[int\] | Optional. Player slot IDs that this message is targeting |
+| tags | list\[str\] | Optional. Client [Tags](#Tags) this message is targeting |
+| data | dict | The data in the [Bounce](#Bounce) package copied |
 
 ### InvalidPacket
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
