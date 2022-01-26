@@ -145,7 +145,7 @@ class RequirePurchasing(DefaultOnToggle):
 class ProgressiveBlueprints(Toggle):
     """
     Instead of shuffling blueprints randomly into the pool, blueprint unlocks are progressively unlocked. You would get
-    Squire first, then Silver, etc., until finally Dark.
+    Squire first, then Knight, etc., until finally Dark.
     """
     displayname = "Progressive Blueprints"
 
