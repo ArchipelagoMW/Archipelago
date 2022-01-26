@@ -176,7 +176,8 @@ class NumberOfChildren(Range):
 class AdditionalNames(OptionList):
     """
     Set of additional names your potential offspring can have. If Allow Default Names is disabled, this is the only list
-    of names your children can have (along with your Player name).
+    of names your children can have. The first value will also be your initial character's name depending on Starting
+    Gender.
     """
     displayname = "Additional Names"
 
