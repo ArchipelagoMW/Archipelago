@@ -4,7 +4,7 @@
 
 - One of the client programs:
   - [SNIClient](https://github.com/ArchipelagoMW/Archipelago/releases), included with the main 
-  Archipelago install. Make sure to check the box for `SNI Client - A Link to the Past Patch Setup`
+  Archipelago install. Make sure to check the box for `SNI Client - Super Metroid Patch Setup`
   - [SuperNintendoClient](https://github.com/ArchipelagoMW/SuperNintendoClient/releases), an alternate standalone
   client for Super Nintendo games
 - Hardware or software capable of loading and playing SNES ROM files
