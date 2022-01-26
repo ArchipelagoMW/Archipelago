@@ -29,6 +29,22 @@ class LegacyLogic(LogicMixin):
 
 
 def set_rules(world: MultiWorld, player: int):
+    # Check for duplicate names.
+    if len(set(world.additional_lady_names[player].value)) != len(world.additional_lady_names[player].value):
+        raise Exception(f"Duplicate values are not allowed in additional_lady_names.")
+    if len(set(world.additional_sir_names[player].value)) != len(world.additional_sir_names[player].value):
+        raise Exception(f"Duplicate values are not allowed in additional_sir_names.")
+
+    if not world.allow_default_names[player]:
+        # Check for quantity.
+        name_count = len(world.additional_lady_names[player].value)
+        if name_count < int(world.number_of_children[player]):
+            raise Exception(f"allow_default_names is off, but not enough names are defined in additional_lady_names. Expected {int(world.number_of_children[player])}, Got {name_count}")
+
+        name_count = len(world.additional_sir_names[player].value)
+        if name_count < int(world.number_of_children[player]):
+            raise Exception(f"allow_default_names is off, but not enough names are defined in additional_sir_names. Expected {int(world.number_of_children[player])}, Got {name_count}")
+
     # Chests
     if world.universal_chests[player]:
         for i in range(0, world.chests_per_zone[player]):

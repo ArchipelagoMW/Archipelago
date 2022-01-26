@@ -44,6 +44,9 @@ class LegacyWorld(World):
             "alexander": self.world.alexander[self.player],
             "leon": self.world.leon[self.player],
             "herodotus": self.world.herodotus[self.player],
+            "allow_default_names": self.world.allow_default_names[self.player],
+            "additional_sir_names": self.world.additional_sir_names[self.player],
+            "additional_lady_names": self.world.additional_lady_names[self.player],
             "death_link": self.world.death_link[self.player],
         }
 

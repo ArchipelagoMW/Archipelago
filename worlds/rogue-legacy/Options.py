@@ -357,6 +357,7 @@ legacy_options: typing.Dict[str, type(Option)] = {
     "crit_chance_pool": CritChanceUpPool,
     "crit_damage_pool": CritDamageUpPool,
     "allow_default_names": AllowDefaultNames,
-    "additional_names": AdditionalNames,
+    "additional_lady_names": AdditionalNames,
+    "additional_sir_names": AdditionalNames,
     "death_link": DeathLink,
 }
