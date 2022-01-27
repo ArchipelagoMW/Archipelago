@@ -21,7 +21,7 @@ class SM64World(World):
     item_name_to_id = item_table
     location_name_to_id = location_table
 
-    data_version = 2
+    data_version = 3
     forced_auto_forfeit = False
 
     options = sm64_options
