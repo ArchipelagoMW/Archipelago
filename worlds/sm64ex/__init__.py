@@ -39,13 +39,13 @@ class SM64World(World):
         return item
 
     def generate_basic(self):
-        staritem = self.create_item("Star")
+        staritem = self.create_item("Power Star")
         if (self.world.EnableCoinStars[self.player].value):
             self.world.itempool += [staritem for i in range(0,120)]
         else:
             self.world.itempool += [staritem for i in range(0,105)]
 
-        key1 = self.create_item("Cellar Key")
+        key1 = self.create_item("Basement Key")
         key2 = self.create_item("Second Floor Key")
         self.world.itempool += [key1,key2]
 
