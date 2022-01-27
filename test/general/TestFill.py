@@ -430,34 +430,6 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
         self.assertFalse(locations[3].item.advancement)
 
-    def test_multiple_world_distribute(self):
-        multi_world = generate_multi_world(3)
-        player1 = generate_player_data(
-            multi_world, 1, 4, prog_item_count=2, basic_item_count=2)
-        player2 = generate_player_data(
-            multi_world, 2, 4, prog_item_count=1, basic_item_count=3)
-        player3 = generate_player_data(
-            multi_world, 3, 6, prog_item_count=4, basic_item_count=2)
-
-        distribute_items_restrictive(multi_world)
-
-        self.assertEqual(player1.locations[0].item, player1.prog_items[1])
-        self.assertEqual(player1.locations[1].item, player3.prog_items[2])
-        self.assertEqual(player1.locations[2].item, player3.prog_items[1])
-        self.assertEqual(player1.locations[3].item, player2.prog_items[0])
-
-        self.assertEqual(player2.locations[0].item, player1.basic_items[0])
-        self.assertEqual(player2.locations[1].item, player2.basic_items[1])
-        self.assertEqual(player2.locations[2].item, player3.basic_items[1])
-        self.assertEqual(player2.locations[3].item, player2.basic_items[0])
-
-        self.assertEqual(player3.locations[0].item, player1.basic_items[1])
-        self.assertEqual(player3.locations[1].item, player3.prog_items[3])
-        self.assertEqual(player3.locations[2].item, player1.prog_items[0])
-        self.assertEqual(player3.locations[3].item, player3.basic_items[0])
-        self.assertEqual(player3.locations[4].item, player3.prog_items[0])
-        self.assertEqual(player3.locations[5].item, player2.basic_items[2])
-
     def test_multiple_world_priority_distribute(self):
         multi_world = generate_multi_world(3)
         player1 = generate_player_data(
@@ -506,6 +478,41 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
         self.assertIsNone(removed_item[0].location)
         self.assertIsNone(removed_location[0].item)
+
+    def test_seed_robust_to_item_order(self):
+        mw1 = generate_multi_world()
+        gen1 = generate_player_data(
+            mw1, 1, 4, prog_item_count=2, basic_item_count=2)
+        distribute_items_restrictive(mw1)
+
+        mw2 = generate_multi_world()
+        gen2 = generate_player_data(
+            mw2, 1, 4, prog_item_count=2, basic_item_count=2)
+        mw2.itempool.append(mw2.itempool.pop(0))
+        distribute_items_restrictive(mw2)
+
+        self.assertEqual(gen1.locations[0].item, gen2.locations[0].item)
+        self.assertEqual(gen1.locations[1].item, gen2.locations[1].item)
+        self.assertEqual(gen1.locations[2].item, gen2.locations[2].item)
+        self.assertEqual(gen1.locations[3].item, gen2.locations[3].item)
+
+    def test_seed_robust_to_location_order(self):
+        mw1 = generate_multi_world()
+        gen1 = generate_player_data(
+            mw1, 1, 4, prog_item_count=2, basic_item_count=2)
+        distribute_items_restrictive(mw1)
+
+        mw2 = generate_multi_world()
+        gen2 = generate_player_data(
+            mw2, 1, 4, prog_item_count=2, basic_item_count=2)
+        reg = mw2.get_region("Menu", gen2.id)
+        reg.locations.append(reg.locations.pop(0))
+        distribute_items_restrictive(mw2)
+
+        self.assertEqual(gen1.locations[0].item, gen2.locations[0].item)
+        self.assertEqual(gen1.locations[1].item, gen2.locations[1].item)
+        self.assertEqual(gen1.locations[2].item, gen2.locations[2].item)
+        self.assertEqual(gen1.locations[3].item, gen2.locations[3].item)
 
 
 class TestBalanceMultiworldProgression(unittest.TestCase):
