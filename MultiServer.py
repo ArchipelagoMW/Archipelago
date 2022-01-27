@@ -34,7 +34,6 @@ import Utils
 from Utils import get_item_name_from_id, get_location_name_from_id, \
     version_tuple, restricted_loads, Version
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission
-
 colorama.init()
 
 
@@ -704,6 +703,7 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
     if new_locations:
         if count_activity:
             ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
+        bingo_checks = set()
         for location in new_locations:
             if len(ctx.locations[slot][location]) == 3:
                 item_id, target_player, flags = ctx.locations[slot][location]
@@ -722,6 +722,9 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
                 ctx.player_names[(team, target_player)], get_location_name_from_id(location)))
             info_text = json_format_send_event(new_item, target_player)
             ctx.broadcast_team(team, [info_text])
+            if ctx.games[target_player] == 'Bingo':
+                logging.info("adding bingo")
+                bingo_checks.add(target_player)
 
         ctx.location_checks[team, slot] |= new_locations
         send_new_items(ctx)
@@ -730,8 +733,66 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             "hint_points": get_slot_points(ctx, team, slot),
             "checked_locations": new_locations,  # send back new checks only
         }])
-
         ctx.save()
+        for player in bingo_checks:
+            bingo_call(ctx, team, player)
+
+
+def bingo_call(ctx, team, player):
+    from worlds.bingo.Locations import location_table
+    cards = ctx.slot_data[player]['cards']
+    received_items = get_received_items(ctx, team, player, True)
+    bingocalls = []
+    for b in received_items:
+        bingocalls.append(get_item_name_from_id(b.item))
+    for card in range(0, len(cards)):
+        # horizontal lines
+        for r in range(0, 5):
+            row = cards[card][r]
+            failed_line = 0
+            for i in row:
+                if i != 0:
+                    if i not in bingocalls:
+                        failed_line = 1
+            if not failed_line:
+                loc = f"Card {card+1} Horizontal {r+1}"
+                register_location_checks(ctx, team, player, {location_table[loc]})
+        # vertical lines
+        for c in range(0, 5):
+            failed_line = 0
+            for r in range(0, 5):
+                if cards[card][r][c] != 0:
+                    if cards[card][r][c] not in bingocalls:
+                        failed_line = 1
+            if not failed_line:
+                loc = f"Card {card+1} Vertical {c+1}"
+                register_location_checks(ctx, team, player, {location_table[loc]})
+        # diagonal lines
+        for line in range(0, 2):
+            diag = []
+            if line == 0:
+                for x in range(0, 5):
+                    diag.append(cards[card][x][x])
+            elif line == 1:
+                for x in range(0, 5):
+                    diag.append(cards[card][4-x][x])
+            failed_line = 0
+            for i in diag:
+                if i != 0:
+                    if i not in bingocalls:
+                        failed_line = 1
+            if not failed_line:
+                loc = f"Card {card+1} Diagonal {line+1}"
+                register_location_checks(ctx, team, player, {location_table[loc]})
+    if len(bingocalls) == len(cards) * 12:
+        ctx.client_game_state[team, player] = ClientStatus.CLIENT_GOAL
+        finished_msg = f'{ctx.get_aliased_name(team, player)} (Team #{team + 1})' \
+                       f' has been completed.'
+        ctx.notify_all(finished_msg)
+
+
+
+
 
 
 def notify_team(ctx: Context, team: int, text: str):

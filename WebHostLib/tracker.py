@@ -900,6 +900,42 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
+
+def __renderBingoTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+                                inventory: Counter, team: int, player: int, playerName: str,
+                                seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
+
+    from worlds.bingo.Items import item_table
+    ordered_items = multisave.get('received_items', {}).get((team, player, True), [])
+    # web design is my passion
+    text = "<HTML><HEAD><title>Bingo tracker</title><meta http-equiv=\"refresh\" content=\"15\" />"
+    text += "<STYLE>body {font-family: Courier;}</STYLE></HEAD><BODY><table><tr>"
+    for cardnum in range(0, len(slot_data["cards"])):
+        text += "<td>|--------------|<BR>"
+        text += "|B&nbsp;&nbsp;I&nbsp;&nbsp;N&nbsp;&nbsp;G&nbsp;&nbsp;O&nbsp;|<br>"
+        text += "|--------------|<BR>"
+        for row in slot_data["cards"][cardnum]:
+            text += "|"
+            for c in row:
+                s = False
+                if c == 0:
+                    c = "Bingo Call **"
+                else:
+                    itemid = item_table[c].code
+                    for i in ordered_items:
+                        if i.item == itemid:
+                            s = True
+                if s:
+                    text += f"<s>{c.split()[2]}</s>|"
+                else:
+                    text += f"{c.split()[2]}|"
+            text += "<br>"
+        text += "|--------------|<br>"
+        text += f"|&nbsp;&nbsp;Card&nbsp;&nbsp;&nbsp;#&nbsp;{cardnum+1}&nbsp;&nbsp;|<br>"
+        text += "|--------------|</td>"
+    text += "</tr></table></BODY></HTML"
+    return text
+
 def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                            inventory: Counter, team: int, player: int, playerName: str,
                            seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
