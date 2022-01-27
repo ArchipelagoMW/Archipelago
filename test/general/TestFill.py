@@ -106,13 +106,17 @@ def generate_locations(count: int, player_id: int, address: int = None, region: 
     return locations
 
 
-def generate_items(count: int, player_id: int, advancement: bool = False, code: int = None) -> List[Item]:
+def generate_items(count: int, player_id: int, advancement: bool = False, code: int = None) -> list[Item]:
     items = []
     type = "prog" if advancement else ""
     for i in range(count):
         name = "player" + str(player_id) + "_" + type + "item" + str(i)
         items.append(Item(name, advancement, code, player_id))
     return items
+
+
+def names(objs: list) -> list[str]:
+    return map(lambda o: o.name, objs)
 
 
 class TestFillRestrictive(unittest.TestCase):
@@ -331,6 +335,29 @@ class TestFillRestrictive(unittest.TestCase):
         self.assertEqual(player2.locations[0].item, player1.prog_items[0])
         self.assertEqual(player2.locations[1].item, player1.prog_items[1])
 
+    def test_restrictive_progress(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(multi_world, 1, prog_item_count=25)
+        items = player1.prog_items.copy()
+        multi_world.completion_condition[player1.id] = lambda state: state.has_all(
+            names(player1.prog_items), player1.id)
+
+        region1 = player1.generate_region(player1.menu, 5)
+        region2 = player1.generate_region(player1.menu, 5, lambda state: state.has_all(
+            names(items[2:7]), player1.id))
+        region3 = player1.generate_region(player1.menu, 5, lambda state: state.has_all(
+            names(items[7:12]), player1.id))
+        region4 = player1.generate_region(player1.menu, 5, lambda state: state.has_all(
+            names(items[12:17]), player1.id))
+        region5 = player1.generate_region(player1.menu, 5, lambda state: state.has_all(
+            names(items[17:22]), player1.id))
+
+        locations = multi_world.get_unfilled_locations()
+
+        fill_restrictive(multi_world, multi_world.state,
+                         locations, player1.prog_items)
+        
+
 
 class TestDistributeItemsRestrictive(unittest.TestCase):
     def test_basic_distribute(self):
@@ -539,7 +566,7 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
         # Sphere 1
         region = player1.generate_region(player1.menu, 20)
         items = fillRegion(multi_world, region, [
-                           player1.prog_items[0]] + items)
+            player1.prog_items[0]] + items)
 
         # Sphere 2
         region = player1.generate_region(
@@ -551,7 +578,7 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
         region = player2.generate_region(
             player2.menu, 20, lambda state: state.has(player2.prog_items[0].name, player2.id))
         items = fillRegion(multi_world, region, [
-                           player2.prog_items[1]] + items)
+            player2.prog_items[1]] + items)
 
         multi_world.progression_balancing[player1.id] = True
         multi_world.progression_balancing[player2.id] = True
