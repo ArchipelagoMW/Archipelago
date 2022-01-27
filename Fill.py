@@ -104,18 +104,19 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
 
 
 def distribute_items_restrictive(world: MultiWorld):
-    fill_locations = world.get_unfilled_locations()
+    fill_locations = sorted(world.get_unfilled_locations())
     world.random.shuffle(fill_locations)
 
     # get items to distribute
-    world.random.shuffle(world.itempool)
+    itempool = sorted(world.itempool)
+    world.random.shuffle(itempool)
     progitempool = []
     nonexcludeditempool = []
     localrestitempool = {player: [] for player in range(1, world.players + 1)}
     nonlocalrestitempool = []
     restitempool = []
 
-    for item in world.itempool:
+    for item in itempool:
         if item.advancement:
             progitempool.append(item)
         elif item.never_exclude:  # this only gets nonprogression items which should not appear in excluded locations
