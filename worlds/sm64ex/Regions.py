@@ -49,8 +49,8 @@ def create_regions(world: MultiWorld, player: int):
         regBBH.locations.append(SM64Location(player, "BBH 100 Coins", location_table["BBH 100 Coins"], regBBH))
     world.regions.append(regBBH)
 
-    regCellar = Region("Cellar", RegionType.Generic, "Cellar", player, world)
-    world.regions.append(regCellar)
+    regBasement = Region("Basement", RegionType.Generic, "Basement", player, world)
+    world.regions.append(regBasement)
 
     regHMC = Region("Hazy Maze Cave", RegionType.Generic, "Hazy Maze Cave", player, world)
     locHMC_names = [name for name, id in locHMC_table.items()]

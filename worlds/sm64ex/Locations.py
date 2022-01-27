@@ -10,7 +10,7 @@ locBoB_table = {
     "Shoot to the Island in the Sky": 3626002,
     "Find the 8 Red Coins": 3626003,
     "Mario Wings to the Sky": 3626004,
-    "Behind Chain Chomps Gate": 3626005
+    "Behind Chain Chomp's Gate": 3626005
 }
 
 #Whomp's Fortress
@@ -177,14 +177,14 @@ locSS_table = {
     "Bowser in the Dark World Red Coins": 3626105,
     "Bowser in the Fire Sea Red Coins": 3626112,
     "Bowser in the Sky Red Coins": 3626119,
-    "The Princess's Secret Slide Box": 3626126,
+    "The Princess's Secret Slide Block": 3626126,
     "The Princess's Secret Slide Fast": 3626127,
     "Cavern of the Metal Cap Red Coins": 3626133,
     "Tower of the Wing Cap Red Coins": 3626140,
     "Vanish Cap Under the Moat Red Coins": 3626147,
-    "Wing Mario Over the Rainbow Red Coins": 3626154,
+    "Wing Mario Over the Rainbow": 3626154,
     "The Secret Aquarium": 3626161,
-    "Toad (Cellar)": 3626168,
+    "Toad (Basement)": 3626168,
     "Toad (Second Floor)": 3626169,
     "Toad (Third Floor)": 3626170,
     "MIPS 1": 3626171,
@@ -193,8 +193,8 @@ locSS_table = {
 
 #Keys
 locKey_table = {
-    "Cellar Key": 3626178,
-    "Second Floor Key": 3626179
+    "Bowser in the Dark World Key": 3626178,
+    "Bowser in the Fire Sea Key": 3626179
 }
 
 #Caps
