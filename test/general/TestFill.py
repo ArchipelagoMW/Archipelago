@@ -106,7 +106,7 @@ def generate_locations(count: int, player_id: int, address: int = None, region: 
     return locations
 
 
-def generate_items(count: int, player_id: int, advancement: bool = False, code: int = None) -> list[Item]:
+def generate_items(count: int, player_id: int, advancement: bool = False, code: int = None) -> List[Item]:
     items = []
     type = "prog" if advancement else ""
     for i in range(count):
@@ -115,7 +115,7 @@ def generate_items(count: int, player_id: int, advancement: bool = False, code: 
     return items
 
 
-def names(objs: list) -> list[str]:
+def names(objs: list) -> List[str]:
     return map(lambda o: o.name, objs)
 
 
@@ -356,7 +356,6 @@ class TestFillRestrictive(unittest.TestCase):
 
         fill_restrictive(multi_world, multi_world.state,
                          locations, player1.prog_items)
-        
 
 
 class TestDistributeItemsRestrictive(unittest.TestCase):
