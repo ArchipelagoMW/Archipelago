@@ -2,7 +2,7 @@ import string
 from .Items import item_table, V6Item
 from .Locations import location_table, V6Location
 from .Options import v6_options
-from .Rules import set_rules
+from .Rules import set_rules, area_connections
 from .Regions import create_regions
 from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld
 from ..AutoWorld import World
@@ -39,6 +39,7 @@ class V6World(World):
 
     def fill_slot_data(self):
         return {
+            "AreaRando": area_connections,
             "DoorCost": self.world.DoorCost[self.player].value,
             "DeathLink": self.world.DeathLink[self.player].value,
             "DeathLink_Amnesty": self.world.DeathLinkAmnesty[self.player].value
