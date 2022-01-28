@@ -25,7 +25,7 @@ def sweep_from_pool(base_state: CollectionState, itempool=[]):
 def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, itempool: typing.List[Item],
                      single_player_placement=False, lock=False):
     unplaced_items = []
-    placements: list[Location] = []
+    placements: typing.List[Location] = []
 
     swapped_items = Counter()
     reachable_items: typing.Dict[int, deque] = {}
