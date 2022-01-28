@@ -734,11 +734,6 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
         ctx.save()
 
 
-def notify_team(ctx: Context, team: int, text: str):
-    logging.info("Notice (Team #%d): %s" % (team + 1, text))
-    ctx.broadcast_team(team, [['Print', {"text": text}]])
-
-
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[NetUtils.Hint]:
     hints = []
     seeked_item_id = proxy_worlds[ctx.games[slot]].item_name_to_id[item]

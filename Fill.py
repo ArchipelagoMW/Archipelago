@@ -167,7 +167,7 @@ def distribute_items_restrictive(world: MultiWorld):
 
     if progitempool:
         fill_restrictive(world, world.state, defaultlocations, progitempool)
-        if(len(progitempool) > 0):
+        if progitempool:
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
 
@@ -176,7 +176,7 @@ def distribute_items_restrictive(world: MultiWorld):
         # needs logical fill to not conflict with local items
         nonexcludeditempool, defaultlocations = fast_fill(
             world, nonexcludeditempool, defaultlocations)
-        if(len(nonexcludeditempool) > 0):
+        if nonexcludeditempool:
             raise FillError(
                 f'Not enough locations for non-excluded items. There are {len(nonexcludeditempool)} more items than locations')
 

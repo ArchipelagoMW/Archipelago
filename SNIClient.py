@@ -190,7 +190,7 @@ async def deathlink_kill_player(ctx: Context):
                 snes_buffered_write(ctx, WRAM_START + 0x09D6, bytes([0, 0]))  # set current reserve to 0
         await snes_flush_writes(ctx)
         await asyncio.sleep(1)
-        gamemode = None
+
         if ctx.game == GAME_ALTTP:
             gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
             if not gamemode or gamemode[0] in DEATH_MODES:
