@@ -8,7 +8,7 @@ from ..AutoWorld import World
 from .Options import bingo_options
 from .Regions import create_regions
 import os
-
+from ..generic.Rules import add_item_rule
 
 class BingoWorld(World):
     options = bingo_options
@@ -62,8 +62,8 @@ class BingoWorld(World):
             for _ in range(0, 24):
                 item = BingoItem(items[b], self.player)
                 pool.append(item)
-                if self.world.force_non_local[self.player]:
-                    self.world.non_local_items[self.player].value.add(item.name)
+                # if self.world.force_non_local[self.player]:
+                #     self.world.non_local_items[self.player].value.add(item.name)
                 b += 1
 
         self.world.itempool += pool
@@ -94,10 +94,10 @@ class BingoWorld(World):
         out_file = os.path.join(output_directory, filename)
         with open(out_file, 'w') as f:
             # Web design is my passion
-            f.write("<HTML><HEAD><STYLE>body {font-family: Courier;}</STYLE></HEAD><BODY>")
+            f.write("<HTML><HEAD><STYLE>body {font-family: Courier;}</STYLE></HEAD><BODY><TABLE>")
             for cardnum in range(0, len(self.cards[self.player])):
                 card = self.cards[self.player][cardnum]
-                f.write(f"|--------------|<BR>| B I N G O &nbsp;{cardnum+1} |<BR>|--------------|<BR>")
+                f.write(f"<TR><TD>|--------------|<BR>| B I N G O &nbsp;{cardnum+1} |<BR>|--------------|<BR>")
                 for row in card:
                     f.write("|")
                     for c in row:
@@ -106,22 +106,28 @@ class BingoWorld(World):
                         else:
                             f.write(str(c.split()[2]) + "|")
                     f.write("<BR>|--------------|<BR>")
-                f.write("<BR>")
-            f.write("</BODY></HTML>")
+                f.write("</TD></TR>")
+            f.write("</TABLE></BODY></HTML>")
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, None, name, player)
     ret.world = world
     if locations:
+        forced_advancement_order = [True] * int((len(locations) * world.forced_advancement[player]) / 100)
+        forced_advancement_order += [False] * (len(locations) - len(forced_advancement_order))
+        world.random.shuffle(forced_advancement_order)
         for location in locations:
             loc_id = location_table.get(location, 0)
             if loc_id is not None:
                 if loc_id - 900 >= (world.card_pairs[player] * 24):
                     continue
             location = BingoLocation(player, location, loc_id, ret)
-            if world.advancement_items_only[player]:
+            if forced_advancement_order.pop():
                 location.progress_type = LocationProgressType.PRIORITY
+            if world.disallow_bingo_calls[player]:
+                add_item_rule(location,
+                              lambda item: item.game != "Bingo")
             ret.locations.append(location)
     if exits:
         for exit in exits:
