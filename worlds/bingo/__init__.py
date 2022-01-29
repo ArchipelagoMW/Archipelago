@@ -8,7 +8,7 @@ from ..AutoWorld import World
 from .Options import bingo_options
 from .Regions import create_regions
 import os
-from ..generic.Rules import add_item_rule
+from ..generic.Rules import forbid_items, add_item_rule
 
 class BingoWorld(World):
     options = bingo_options
@@ -63,7 +63,7 @@ class BingoWorld(World):
                 item = BingoItem(items[b], self.player)
                 pool.append(item)
                 # if self.world.force_non_local[self.player]:
-                #     self.world.non_local_items[self.player].value.add(item.name)
+                #    self.world.non_local_items[self.player].value.add(item.name)
                 b += 1
 
         self.world.itempool += pool
@@ -114,20 +114,23 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     ret = Region(name, None, name, player)
     ret.world = world
     if locations:
-        forced_advancement_order = [True] * int((len(locations) * world.forced_advancement[player]) / 100)
-        forced_advancement_order += [False] * (len(locations) - len(forced_advancement_order))
+        loc_count = (world.card_pairs[player] * 24)
+        forced_advancement_order = [True] * int((loc_count * world.forced_advancement[player]) / 100)
+        forced_advancement_order += [False] * (loc_count - len(forced_advancement_order))
         world.random.shuffle(forced_advancement_order)
         for location in locations:
             loc_id = location_table.get(location, 0)
             if loc_id is not None:
-                if loc_id - 900 >= (world.card_pairs[player] * 24):
+                if loc_id - 900 >= loc_count:
                     continue
             location = BingoLocation(player, location, loc_id, ret)
-            if forced_advancement_order.pop():
-                location.progress_type = LocationProgressType.PRIORITY
-            if world.disallow_bingo_calls[player]:
-                add_item_rule(location,
-                              lambda item: item.game != "Bingo")
+            if loc_id != None:
+                if forced_advancement_order.pop():
+                    location.progress_type = LocationProgressType.PRIORITY
+                    import logging
+                    logging.info(f"Priority loc: {location}")
+                if world.disallow_bingo_calls[player]:
+                    add_item_rule(location, lambda item: item.game != "Bingo")
             ret.locations.append(location)
     if exits:
         for exit in exits:
