@@ -23,7 +23,7 @@ def sweep_from_pool(base_state: CollectionState, itempool):
 
 
 def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, itempool: typing.List[Item],
-                     single_player_placement=False, lock=False):
+                     single_player_placement=False, lock=False, allow_skipping=False):
     unplaced_items = []
     placements = []
 
@@ -88,6 +88,8 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
                 if spot_to_fill is None:
                     # Maybe the game can be beaten anyway?
                     unplaced_items.append(item_to_place)
+                    if allow_skipping:
+                        continue
                     if world.accessibility[item_to_place.player] != 'minimal' and world.can_beat_game():
                         logging.warning(
                             f'Not all items placed. Game beatable anyway. (Could not place {item_to_place})')
@@ -140,7 +142,7 @@ def distribute_items_restrictive(world: MultiWorld):
     defaultlocations = locations[LocationProgressType.DEFAULT]
     excludedlocations = locations[LocationProgressType.EXCLUDED]
 
-    fill_restrictive(world, world.state, prioritylocations, progitempool)
+    fill_restrictive(world, world.state, prioritylocations, progitempool, allow_skipping=True)
     if prioritylocations:
         defaultlocations = prioritylocations + defaultlocations
 
