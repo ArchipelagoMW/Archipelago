@@ -9,7 +9,7 @@
   client for Super Nintendo games
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
-      ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
+      ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
       [BizHawk](http://tasvideos.org/BizHawk.html))
     - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware
 - Your Japanese v1.0 ROM file, probably named `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
