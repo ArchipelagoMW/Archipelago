@@ -115,6 +115,10 @@ def generate_items(count: int, player_id: int, advancement: bool = False, code: 
     return items
 
 
+def names(objs: list) -> List[str]:
+    return map(lambda o: o.name, objs)
+
+
 class TestFillRestrictive(unittest.TestCase):
     def test_basic_fill(self):
         multi_world = generate_multi_world()
@@ -331,6 +335,28 @@ class TestFillRestrictive(unittest.TestCase):
         self.assertEqual(player2.locations[0].item, player1.prog_items[0])
         self.assertEqual(player2.locations[1].item, player1.prog_items[1])
 
+    def test_restrictive_progress(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(multi_world, 1, prog_item_count=25)
+        items = player1.prog_items.copy()
+        multi_world.completion_condition[player1.id] = lambda state: state.has_all(
+            names(player1.prog_items), player1.id)
+
+        region1 = player1.generate_region(player1.menu, 5)
+        region2 = player1.generate_region(player1.menu, 5, lambda state: state.has_all(
+            names(items[2:7]), player1.id))
+        region3 = player1.generate_region(player1.menu, 5, lambda state: state.has_all(
+            names(items[7:12]), player1.id))
+        region4 = player1.generate_region(player1.menu, 5, lambda state: state.has_all(
+            names(items[12:17]), player1.id))
+        region5 = player1.generate_region(player1.menu, 5, lambda state: state.has_all(
+            names(items[17:22]), player1.id))
+
+        locations = multi_world.get_unfilled_locations()
+
+        fill_restrictive(multi_world, multi_world.state,
+                         locations, player1.prog_items)
+
 
 class TestDistributeItemsRestrictive(unittest.TestCase):
     def test_basic_distribute(self):
@@ -430,34 +456,6 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
         self.assertFalse(locations[3].item.advancement)
 
-    def test_multiple_world_distribute(self):
-        multi_world = generate_multi_world(3)
-        player1 = generate_player_data(
-            multi_world, 1, 4, prog_item_count=2, basic_item_count=2)
-        player2 = generate_player_data(
-            multi_world, 2, 4, prog_item_count=1, basic_item_count=3)
-        player3 = generate_player_data(
-            multi_world, 3, 6, prog_item_count=4, basic_item_count=2)
-
-        distribute_items_restrictive(multi_world)
-
-        self.assertEqual(player1.locations[0].item, player1.prog_items[1])
-        self.assertEqual(player1.locations[1].item, player3.prog_items[2])
-        self.assertEqual(player1.locations[2].item, player3.prog_items[1])
-        self.assertEqual(player1.locations[3].item, player2.prog_items[0])
-
-        self.assertEqual(player2.locations[0].item, player1.basic_items[0])
-        self.assertEqual(player2.locations[1].item, player2.basic_items[1])
-        self.assertEqual(player2.locations[2].item, player3.basic_items[1])
-        self.assertEqual(player2.locations[3].item, player2.basic_items[0])
-
-        self.assertEqual(player3.locations[0].item, player1.basic_items[1])
-        self.assertEqual(player3.locations[1].item, player3.prog_items[3])
-        self.assertEqual(player3.locations[2].item, player1.prog_items[0])
-        self.assertEqual(player3.locations[3].item, player3.basic_items[0])
-        self.assertEqual(player3.locations[4].item, player3.prog_items[0])
-        self.assertEqual(player3.locations[5].item, player2.basic_items[2])
-
     def test_multiple_world_priority_distribute(self):
         multi_world = generate_multi_world(3)
         player1 = generate_player_data(
@@ -507,6 +505,41 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         self.assertIsNone(removed_item[0].location)
         self.assertIsNone(removed_location[0].item)
 
+    def test_seed_robust_to_item_order(self):
+        mw1 = generate_multi_world()
+        gen1 = generate_player_data(
+            mw1, 1, 4, prog_item_count=2, basic_item_count=2)
+        distribute_items_restrictive(mw1)
+
+        mw2 = generate_multi_world()
+        gen2 = generate_player_data(
+            mw2, 1, 4, prog_item_count=2, basic_item_count=2)
+        mw2.itempool.append(mw2.itempool.pop(0))
+        distribute_items_restrictive(mw2)
+
+        self.assertEqual(gen1.locations[0].item, gen2.locations[0].item)
+        self.assertEqual(gen1.locations[1].item, gen2.locations[1].item)
+        self.assertEqual(gen1.locations[2].item, gen2.locations[2].item)
+        self.assertEqual(gen1.locations[3].item, gen2.locations[3].item)
+
+    def test_seed_robust_to_location_order(self):
+        mw1 = generate_multi_world()
+        gen1 = generate_player_data(
+            mw1, 1, 4, prog_item_count=2, basic_item_count=2)
+        distribute_items_restrictive(mw1)
+
+        mw2 = generate_multi_world()
+        gen2 = generate_player_data(
+            mw2, 1, 4, prog_item_count=2, basic_item_count=2)
+        reg = mw2.get_region("Menu", gen2.id)
+        reg.locations.append(reg.locations.pop(0))
+        distribute_items_restrictive(mw2)
+
+        self.assertEqual(gen1.locations[0].item, gen2.locations[0].item)
+        self.assertEqual(gen1.locations[1].item, gen2.locations[1].item)
+        self.assertEqual(gen1.locations[2].item, gen2.locations[2].item)
+        self.assertEqual(gen1.locations[3].item, gen2.locations[3].item)
+
 
 class TestBalanceMultiworldProgression(unittest.TestCase):
     def assertRegionContains(self, region: Region, item: Item):
@@ -539,7 +572,7 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
         # Sphere 1
         region = player1.generate_region(player1.menu, 20)
         items = fillRegion(multi_world, region, [
-                           player1.prog_items[0]] + items)
+            player1.prog_items[0]] + items)
 
         # Sphere 2
         region = player1.generate_region(
@@ -551,7 +584,7 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
         region = player2.generate_region(
             player2.menu, 20, lambda state: state.has(player2.prog_items[0].name, player2.id))
         items = fillRegion(multi_world, region, [
-                           player2.prog_items[1]] + items)
+            player2.prog_items[1]] + items)
 
         multi_world.progression_balancing[player1.id] = True
         multi_world.progression_balancing[player2.id] = True

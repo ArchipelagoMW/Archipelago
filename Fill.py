@@ -14,7 +14,7 @@ class FillError(RuntimeError):
     pass
 
 
-def sweep_from_pool(base_state: CollectionState, itempool):
+def sweep_from_pool(base_state: CollectionState, itempool=[]):
     new_state = base_state.copy()
     for item in itempool:
         new_state.collect(item, True)
@@ -25,7 +25,7 @@ def sweep_from_pool(base_state: CollectionState, itempool):
 def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, itempool: typing.List[Item],
                      single_player_placement=False, lock=False, allow_skipping=False):
     unplaced_items = []
-    placements = []
+    placements: typing.List[Location] = []
 
     swapped_items = Counter()
     reachable_items: typing.Dict[int, deque] = {}
@@ -64,26 +64,45 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
                     placed_item = location.item
                     # Unplaceable items can sometimes be swapped infinitely. Limit the
                     # number of times we will swap an individual item to prevent this
-                    if swapped_items[placed_item.player, placed_item.name] > 0:
+                    swap_count = swapped_items[placed_item.player,
+                                               placed_item.name]
+                    if swap_count > 1:
                         continue
+
                     location.item = None
                     placed_item.location = None
-                    swap_state = sweep_from_pool(base_state, itempool)
+                    swap_state = sweep_from_pool(base_state)
                     if (not single_player_placement or location.player == item_to_place.player) \
                             and location.can_fill(swap_state, item_to_place, perform_access_check):
-                        # Add this item to the existing placement, and
-                        # add the old item to the back of the queue
-                        spot_to_fill = placements.pop(i)
-                        swapped_items[placed_item.player,
-                                      placed_item.name] += 1
-                        reachable_items[placed_item.player].appendleft(
-                            placed_item)
-                        itempool.append(placed_item)
-                        break
-                    else:
-                        # Item can't be placed here, restore original item
-                        location.item = placed_item
-                        placed_item.location = location
+
+                        # Verify that placing this item won't reduce available locations
+                        prev_state = swap_state.copy()
+                        prev_state.collect(placed_item)
+                        prev_loc_count = len(
+                            world.get_reachable_locations(prev_state))
+
+                        swap_state.collect(item_to_place, True)
+                        new_loc_count = len(
+                            world.get_reachable_locations(swap_state))
+
+                        if new_loc_count >= prev_loc_count:
+                            # Add this item to the existing placement, and
+                            # add the old item to the back of the queue
+                            spot_to_fill = placements.pop(i)
+
+                            swap_count += 1
+                            swapped_items[placed_item.player,
+                                          placed_item.name] = swap_count
+
+                            reachable_items[placed_item.player].appendleft(
+                                placed_item)
+                            itempool.append(placed_item)
+
+                            break
+
+                    # Item can't be placed here, restore original item
+                    location.item = placed_item
+                    placed_item.location = location
 
                 if spot_to_fill is None:
                     # Maybe the game can be beaten anyway?
@@ -106,18 +125,19 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
 
 
 def distribute_items_restrictive(world: MultiWorld):
-    fill_locations = world.get_unfilled_locations()
+    fill_locations = sorted(world.get_unfilled_locations())
     world.random.shuffle(fill_locations)
 
     # get items to distribute
-    world.random.shuffle(world.itempool)
+    itempool = sorted(world.itempool)
+    world.random.shuffle(itempool)
     progitempool = []
     nonexcludeditempool = []
     localrestitempool = {player: [] for player in range(1, world.players + 1)}
     nonlocalrestitempool = []
     restitempool = []
 
-    for item in world.itempool:
+    for item in itempool:
         if item.advancement:
             progitempool.append(item)
         elif item.never_exclude:  # this only gets nonprogression items which should not appear in excluded locations
@@ -150,7 +170,7 @@ def distribute_items_restrictive(world: MultiWorld):
 
     if progitempool:
         fill_restrictive(world, world.state, defaultlocations, progitempool)
-        if(len(progitempool) > 0):
+        if progitempool:
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
 
@@ -159,7 +179,7 @@ def distribute_items_restrictive(world: MultiWorld):
         # needs logical fill to not conflict with local items
         nonexcludeditempool, defaultlocations = fast_fill(
             world, nonexcludeditempool, defaultlocations)
-        if(len(nonexcludeditempool) > 0):
+        if nonexcludeditempool:
             raise FillError(
                 f'Not enough locations for non-excluded items. There are {len(nonexcludeditempool)} more items than locations')
 

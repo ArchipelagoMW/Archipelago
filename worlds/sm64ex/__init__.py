@@ -21,7 +21,7 @@ class SM64World(World):
     item_name_to_id = item_table
     location_name_to_id = location_table
 
-    data_version = 1
+    data_version = 3
     forced_auto_forfeit = False
 
     options = sm64_options
@@ -39,13 +39,13 @@ class SM64World(World):
         return item
 
     def generate_basic(self):
-        staritem = self.create_item("Star")
+        staritem = self.create_item("Power Star")
         if (self.world.EnableCoinStars[self.player].value):
             self.world.itempool += [staritem for i in range(0,120)]
         else:
             self.world.itempool += [staritem for i in range(0,105)]
 
-        key1 = self.create_item("Cellar Key")
+        key1 = self.create_item("Basement Key")
         key2 = self.create_item("Second Floor Key")
         self.world.itempool += [key1,key2]
 
