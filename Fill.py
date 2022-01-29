@@ -106,19 +106,23 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
                     placed_item.location = location
 
                 if spot_to_fill is None:
-                    # Maybe the game can be beaten anyway?
+                    # Can't place this item, move on to the next
                     unplaced_items.append(item_to_place)
-                    if world.accessibility[item_to_place.player] != 'minimal' and world.can_beat_game():
-                        logging.warning(
-                            f'Not all items placed. Game beatable anyway. (Could not place {item_to_place})')
-                        continue
-                    raise FillError(f'No more spots to place {item_to_place}, locations {locations} are invalid. '
-                                    f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
+                    continue
 
             world.push_item(spot_to_fill, item_to_place, False)
             spot_to_fill.locked = lock
             placements.append(spot_to_fill)
             spot_to_fill.event = True
+
+    if len(unplaced_items) > 0 and len(locations) > 0:
+        # There are leftover unplaceable items and locations that won't accept them
+        if world.can_beat_game():
+            logging.warning(
+                f'Not all items placed. Game beatable anyway. (Could not place {unplaced_items})')
+        else:
+            raise FillError(f'No more spots to place {unplaced_items}, locations {locations} are invalid. '
+                            f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
 
     itempool.extend(unplaced_items)
 
