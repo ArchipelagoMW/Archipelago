@@ -62,7 +62,7 @@ class ItemType(Enum):
     BigKey = 0x32
     Map = 0x33
 
-    Something = 0xC5
+    Something = 0x6B
 
     ProgressiveTunic = 0x60
     ProgressiveShield = 0x5F

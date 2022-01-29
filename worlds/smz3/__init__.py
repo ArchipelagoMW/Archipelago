@@ -14,7 +14,7 @@ import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
 from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
 from worlds.smz3.TotalSMZ3.Config import Config, MorphLocation, SwordLocation
 from worlds.smz3.TotalSMZ3.Location import locations_start_id, Location as TotalSMZ3Location
-from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch
+from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWordArray
 from ..AutoWorld import World
 from .Rom import get_base_rom_bytes
 from .ips import IPS_Patch
@@ -130,10 +130,23 @@ class SMZ3World(World):
             startRegion.exits.append(exit)
             exit.connect(currentRegion)
 
+    def apply_sm_custom_sprite(self):
+        itemSprites = ["off_world_prog_item.bin", "off_world_item.bin"]
+        itemSpritesAddress = [0xF800, 0xF900]
+        idx = 0
+        offworldSprites = {}
+        for fileName in itemSprites:
+            with open(world_folder + "/data/custom_sprite/" + fileName, 'rb') as stream:
+                buffer = bytearray(stream.read())
+                offworldSprites[0x04Eff2 + 10*((0x6B + 0x40) + idx)] = bytearray(getWordArray(itemSpritesAddress[idx])) + buffer[0:8]
+                offworldSprites[0x090000 + itemSpritesAddress[idx]] = buffer[8:264]
+                idx += 1
+        return offworldSprites
+
     def generate_output(self, output_directory: str):
         try:
             base_combined_rom = get_base_rom_bytes()
-            basepatch = IPS_Patch.load(world_folder + "/zsm.ips")
+            basepatch = IPS_Patch.load(world_folder + "/data/zsm.ips")
             base_combined_rom = basepatch.apply(base_combined_rom)
 
             patcher = TotalSMZ3Patch(self.smz3World,
@@ -144,11 +157,13 @@ class SMZ3World(World):
                                     self.world.world_name_lookup,
                                     next(iter(loc.player for loc in self.world.get_locations() if loc.item == self.create_item("SilverArrows"))))
             patches = patcher.Create(self.smz3World.Config)
+            patches.update(self.apply_sm_custom_sprite())
             for addr, bytes in patches.items():
                 offset = 0
                 for byte in bytes:
                     base_combined_rom[addr + offset] = byte
                     offset += 1
+
             outfilebase = 'AP_' + self.world.seed_name
             outfilepname = f'_P{self.player}'
             outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}" \
@@ -300,12 +315,6 @@ class SMZ3Location(Location):
         result = self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
         self.item = oldItem
         return result
-
-    #def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-    #    return self.parent_region.world.worlds[self.player].smz3World.GetLocation(self.name).CanFill(
-    #        TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.parent_region.world.worlds[self.player]), state.smz3state[self.player])
-        # return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
-
 
 class SMZ3Item(Item):
     game = "SMZ3"

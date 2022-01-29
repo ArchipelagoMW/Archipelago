@@ -323,7 +323,8 @@ class Patch:
     def ItemTablePatch(self, location: Location, itemId: int):
         itemtype = 0 if location.APLocation.item.player == location.Region.world.Id else 1
         owner = location.APLocation.item.player
-        return (0x386000 + (location.Id * 8), getWordArray(itemtype) + getWordArray(itemId) + getWordArray(owner) + getWordArray(0))
+        progressionItem = 0 if location.APLocation.item.advancement else 1
+        return (0x386000 + (location.Id * 8), getWordArray(itemtype) + getWordArray(itemId) + getWordArray(owner) + getWordArray(progressionItem))
 
     def WriteDungeonMusic(self, keysanity: bool):
         if (not keysanity):
