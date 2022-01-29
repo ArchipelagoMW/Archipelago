@@ -23,9 +23,8 @@ class DisallowBingoCalls(Toggle):
 
 
 class ForcedAdvancement(Range):
-    """Percentage of Bingo rewards to be forced to have only advancement items.
-    Otherwise, advancement items may still be placed by chance."""
-    display_name = "Advancement Items Only"
+    """Percentage of Bingo rewards to be prioritized for advancement items."""
+    display_name = "Advancement Items Prioritization"
     range_start = 0
     range_end = 100
     default = 0
@@ -35,5 +34,5 @@ bingo_options: typing.Dict[str, type(Option)] = {
     "card_pairs": CardPairs,
     "reveal_rewards": RevealRewards,
     "disallow_bingo_calls": DisallowBingoCalls,
-    "forced_advancement": ForcedAdvancement
+    "priority_rewards": ForcedAdvancement
 }

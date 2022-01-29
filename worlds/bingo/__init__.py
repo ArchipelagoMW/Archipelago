@@ -109,15 +109,69 @@ class BingoWorld(World):
                 f.write("</TD></TR>")
             f.write("</TABLE></BODY></HTML>")
 
+    def received_checks(self, ctx, team, player):
+        from MultiServer import get_received_items, register_location_checks, ClientStatus
+        from Utils import get_item_name_from_id
+        from worlds.bingo.Locations import location_table
+        cards = ctx.slot_data[player]['cards']
+        received_items = get_received_items(ctx, team, player, True)
+        bingocalls = []
+        for b in received_items:
+            bingocalls.append(get_item_name_from_id(b.item))
+        for card in range(0, len(cards)):
+            # horizontal lines
+            for r in range(0, 5):
+                row = cards[card][r]
+                failed_line = 0
+                for i in row:
+                    if i != 0:
+                        if i not in bingocalls:
+                            failed_line = 1
+                if not failed_line:
+                    loc = f"Card {card + 1} Horizontal {r + 1}"
+                    register_location_checks(ctx, team, player, {location_table[loc]})
+            # vertical lines
+            for c in range(0, 5):
+                failed_line = 0
+                for r in range(0, 5):
+                    if cards[card][r][c] != 0:
+                        if cards[card][r][c] not in bingocalls:
+                            failed_line = 1
+                if not failed_line:
+                    loc = f"Card {card + 1} Vertical {c + 1}"
+                    register_location_checks(ctx, team, player, {location_table[loc]})
+            # diagonal lines
+            for line in range(0, 2):
+                diag = []
+                if line == 0:
+                    for x in range(0, 5):
+                        diag.append(cards[card][x][x])
+                elif line == 1:
+                    for x in range(0, 5):
+                        diag.append(cards[card][4 - x][x])
+                failed_line = 0
+                for i in diag:
+                    if i != 0:
+                        if i not in bingocalls:
+                            failed_line = 1
+                if not failed_line:
+                    loc = f"Card {card + 1} Diagonal {line + 1}"
+                    register_location_checks(ctx, team, player, {location_table[loc]})
+        if len(bingocalls) == len(cards) * 12:
+            ctx.client_game_state[team, player] = ClientStatus.CLIENT_GOAL
+            finished_msg = f'{ctx.get_aliased_name(team, player)} (Team #{team + 1})' \
+                           f' has been completed.'
+            ctx.notify_all(finished_msg)
+
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, None, name, player)
     ret.world = world
     if locations:
         loc_count = (world.card_pairs[player] * 24)
-        forced_advancement_order = [True] * int((loc_count * world.forced_advancement[player]) / 100)
-        forced_advancement_order += [False] * (loc_count - len(forced_advancement_order))
-        world.random.shuffle(forced_advancement_order)
+        priority_order = [True] * int((loc_count * world.priority_rewards[player]) / 100)
+        priority_order += [False] * (loc_count - len(priority_order))
+        world.random.shuffle(priority_order)
         for location in locations:
             loc_id = location_table.get(location, 0)
             if loc_id is not None:
@@ -125,10 +179,8 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
                     continue
             location = BingoLocation(player, location, loc_id, ret)
             if loc_id != None:
-                if forced_advancement_order.pop():
+                if priority_order.pop():
                     location.progress_type = LocationProgressType.PRIORITY
-                    import logging
-                    logging.info(f"Priority loc: {location}")
                 if world.disallow_bingo_calls[player]:
                     add_item_rule(location, lambda item: item.game != "Bingo")
             ret.locations.append(location)

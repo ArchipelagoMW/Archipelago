@@ -201,6 +201,9 @@ class World(metaclass=AutoWorldRegister):
         Warning: this may be called with self.world = None, for example by MultiServer"""
         raise NotImplementedError
 
+    def received_checks(self, ctx, team, player):
+        pass
+
     # following methods should not need to be overridden.
     def collect(self, state: CollectionState, item: Item) -> bool:
         name = self.collect_item(state, item)
