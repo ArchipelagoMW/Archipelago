@@ -465,13 +465,13 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             raise Exception('Player slot already in use for that team')
         elif 'IncompatibleVersion' in errors:
             raise Exception('Server reported your client version as incompatible')
+        elif 'InvalidItemsHandling' in errors:
+            raise Exception('The item handling flags requested by the client are not supported')
         # last to check, recoverable problem
         elif 'InvalidPassword' in errors:
             logger.error('Invalid password')
             ctx.password = None
             await ctx.server_auth(True)
-        elif 'InvalidItemsHandling' in errors:
-            raise Exception('The item handling flags requested by the client are not supported')
         elif errors:
             raise Exception("Unknown connection errors: " + str(errors))
         else:
