@@ -144,6 +144,8 @@ def distribute_items_restrictive(world: MultiWorld):
 
     fill_restrictive(world, world.state, prioritylocations, progitempool, allow_skipping=True)
     if prioritylocations:
+        logging.warning(f"Could not fill {len(prioritylocations)} priority location(s) with advancement items, "
+                        + f"unfilled locations: {prioritylocations}")
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
