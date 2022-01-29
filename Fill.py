@@ -38,7 +38,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
                           for items in reachable_items.values() if items]
         for item in items_to_place:
             itempool.remove(item)
-        maximum_exploration_state = sweep_from_pool(base_state, itempool)
+        maximum_exploration_state = sweep_from_pool(base_state, itempool + unplaced_items)
         has_beaten_game = world.has_beaten_game(maximum_exploration_state)
 
         for item_to_place in items_to_place:
