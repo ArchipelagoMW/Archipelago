@@ -12,6 +12,7 @@
 *.sfc
 *.z64
 *.n64
+*.nes
 *.wixobj
 *.lck
 *.db3
