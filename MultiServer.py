@@ -1588,8 +1588,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
         self.output(f"Could not find player {player_name} to forbid the !forfeit command for.")
         return False
 
-    def _cmd_send(self, player_name: str, *item_name: str) -> bool:
-        """Sends an item to the specified player"""
+    def _cmd_send_multiple(self, amount: str, player_name: str, *item_name: str) -> bool:
+        """Sends multiples of an item to the specified player"""
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             team, slot = self.ctx.player_name_lookup[seeked_player]
@@ -1597,12 +1597,13 @@ class ServerCommandProcessor(CommonCommandProcessor):
             world = proxy_worlds[self.ctx.games[slot]]
             item, usable, response = get_intended_text(item, world.item_names)
             if usable:
-                new_item = NetworkItem(world.item_name_to_id[item], -1, 0)
-                get_received_items(self.ctx, team, slot, True).append(new_item)
-                get_received_items(self.ctx, team, slot, False).append(new_item)
-                self.ctx.notify_all('Cheat console: sending "' + item + '" to ' +
+                for i in range(0,int(amount)):
+                    new_item = NetworkItem(world.item_name_to_id[item], -1, 0)
+                    get_received_items(self.ctx, team, slot, True).append(new_item)
+                    get_received_items(self.ctx, team, slot, False).append(new_item)
+                    send_new_items(self.ctx)
+                self.ctx.notify_all('Cheat console: sending ' + ('' if amount == 1 else amount + ' of ') + '"' + item + '" to ' +
                                     self.ctx.get_aliased_name(team, slot))
-                send_new_items(self.ctx)
                 return True
             else:
                 self.output(response)
@@ -1610,6 +1611,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
         else:
             self.output(response)
             return False
+
+    def _cmd_send(self, player_name: str, *item_name: str) -> bool:
+        """Sends an item to the specified player"""
+        self._cmd_send_multiple(1,player_name,*item_name)
 
     def _cmd_hint(self, player_name: str, *item: str) -> bool:
         """Send out a hint for a player's item to their team"""
