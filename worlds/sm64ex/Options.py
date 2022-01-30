@@ -15,8 +15,15 @@ class StarsToFinish(Range):
     range_end = 100
     default = 70
 
+class ExtraStars(Range):
+    """How many stars exist beyond those set for StarsToFinish"""
+    range_start = 0
+    range_end = 50
+    default = 50
+
 sm64_options: typing.Dict[str,type(Option)] = {
     "EnableCoinStars": EnableCoinStars,
     "StrictCapRequirements": StrictCapRequirements,
-    "StarsToFinish": StarsToFinish
+    "StarsToFinish": StarsToFinish,
+    "ExtraStars": ExtraStars
 } 
