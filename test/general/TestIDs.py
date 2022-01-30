@@ -32,7 +32,7 @@ class TestIDs(unittest.TestCase):
                     self.assertLess(location_id, 2**53)
 
     def testReservedItems(self):
-        """negative IDs are reserved to the special "Archipelago" world."""
+        """negative item IDs are reserved to the special "Archipelago" world."""
         for gamename, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=gamename):
                 if gamename == "Archipelago":
@@ -43,7 +43,7 @@ class TestIDs(unittest.TestCase):
                         self.assertGreater(item_id, 0)
 
     def testReservedLocations(self):
-        """negative IDs are reserved to the special "Archipelago" world."""
+        """negative location IDs are reserved to the special "Archipelago" world."""
         for gamename, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=gamename):
                 if gamename == "Archipelago":
