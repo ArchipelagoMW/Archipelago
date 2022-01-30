@@ -12,7 +12,7 @@ window.addEventListener('load', () => {
       const userMessage = document.getElementById('user-message');
       userMessage.innerText = "Your settings are out of date! Click here to update them! Be aware this will reset " +
         "them all to default.";
-      userMessage.style.display = "block";
+      userMessage.classList.add('visible');
       userMessage.addEventListener('click', resetSettings);
     }
 
