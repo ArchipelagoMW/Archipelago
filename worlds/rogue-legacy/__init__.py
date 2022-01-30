@@ -101,37 +101,37 @@ class LegacyWorld(World):
         if "Traitor" in classes:
             itempool.append(self.create_item(ItemName.traitor))
         if self.world.starting_class[self.player] == "knight":
-            itempool += self.create_item(ItemName.progressive_knight),
+            itempool.append(self.create_item(ItemName.progressive_knight))
         elif "Knight" in classes:
-            itempool += *self._create_items(ItemName.progressive_knight),
+            itempool.extend(self._create_items(ItemName.progressive_knight))
         if self.world.starting_class[self.player] == "mage":
-            itempool += self.create_item(ItemName.progressive_mage),
+            itempool.append(self.create_item(ItemName.progressive_mage))
         elif "Mage" in classes:
-            itempool += *self._create_items(ItemName.progressive_mage),
+            itempool.extend(self._create_items(ItemName.progressive_mage))
         if self.world.starting_class[self.player] == "barbarian":
-            itempool += self.create_item(ItemName.progressive_barbarian),
+            itempool.append(self.create_item(ItemName.progressive_barbarian))
         elif "Barbarian" in classes:
-            itempool += *self._create_items(ItemName.progressive_barbarian),
+            itempool.extend(self._create_items(ItemName.progressive_barbarian))
         if self.world.starting_class[self.player] == "knave":
-            itempool += self.create_item(ItemName.progressive_knave),
+            itempool.append(self.create_item(ItemName.progressive_knave))
         elif "Knave" in classes:
-            itempool += *self._create_items(ItemName.progressive_knave),
+            itempool.extend(self._create_items(ItemName.progressive_knave))
         if self.world.starting_class[self.player] == "shinobi":
-            itempool += self.create_item(ItemName.progressive_shinobi),
+            itempool.append(self.create_item(ItemName.progressive_shinobi))
         elif "Shinobi" in classes:
-            itempool += *self._create_items(ItemName.progressive_shinobi),
+            itempool.extend(self._create_items(ItemName.progressive_shinobi))
         if self.world.starting_class[self.player] == "miner":
-            itempool += self.create_item(ItemName.progressive_miner),
+            itempool.append(self.create_item(ItemName.progressive_miner))
         elif "Miner" in classes:
-            itempool += *self._create_items(ItemName.progressive_miner),
+            itempool.extend(self._create_items(ItemName.progressive_miner))
         if self.world.starting_class[self.player] == "lich":
-            itempool += self.create_item(ItemName.progressive_lich),
+            itempool.append(self.create_item(ItemName.progressive_lich))
         elif "Lich" in classes:
-            itempool += *self._create_items(ItemName.progressive_lich),
+            itempool.extend(self._create_items(ItemName.progressive_lich))
         if self.world.starting_class[self.player] == "spellthief":
-            itempool += self.create_item(ItemName.progressive_spellthief),
+            itempool.append(self.create_item(ItemName.progressive_spellthief))
         elif "Spellthief" in classes:
-            itempool += *self._create_items(ItemName.progressive_spellthief),
+            itempool.extend(self._create_items(ItemName.progressive_spellthief))
 
         # Check if we need to start with these vendors or put them in the pool.
         if self.world.vendors[self.player] == "start_unlocked":
