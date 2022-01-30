@@ -2,7 +2,7 @@ import string
 from .Items import item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options
-from .Rules import set_rules
+from .Rules import set_rules, area_connections
 from .Regions import create_regions
 from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld
 from ..AutoWorld import World
@@ -58,5 +58,6 @@ class SM64World(World):
 
     def fill_slot_data(self):
         return {
+            "AreaRando": area_connections,
             "StarsToFinish": self.world.StarsToFinish[self.player].value
         }
