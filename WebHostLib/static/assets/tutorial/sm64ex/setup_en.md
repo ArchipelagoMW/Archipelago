@@ -3,7 +3,7 @@
 ## Required Software
 
 - Super Mario 64 US Rom (Japanese may work also. Europe and Shindou not supported)
-- Either of [sm64pclauncher](https://github.com/N00byKing/sm64pclauncher/actions/workflows/ci.yml?query=branch%3Aarchipelago+event%3Apush) or
+- Either of [sm64pclauncher](https://github.com/N00byKing/sm64pclauncher/releases) or
 - Cloning and building [sm64ex](https://github.com/N00byKing/sm64ex) manually.
 
 NOTE: The above linked sm64pclauncher is a special version designed to work with the Archipelago build of sm64ex.
