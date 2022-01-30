@@ -13,7 +13,7 @@
 
 # Joining a MultiWorld Game
 
-To join, set the following launch options: `-v6ap_name "YourName" -v6ap_ip "ServerIP"`.
+To join, set the following launch options: `-v6ap_name YourName -v6ap_ip ServerIP:Port`.
 Optionally, add `-v6ap_passwd "YourPassword"` if the room you are using requires a password. All parameters without quotation marks.
 The Name in this case is the one specified in your generated .yaml file.
 In case you are using the Archipelago Website, the IP should be `archipelago.gg`.
@@ -26,7 +26,7 @@ Start the game from the command line to view helpful messages regarding V6AP. Th
 
 ### Game no longer starts after copying the .exe
 
-Most likely you forgot to set the launch options. `-v6ap_name "YourName"` and `-v6ap_ip "ServerIP"` are required for startup.
+Most likely you forgot to set the launch options. `-v6ap_name YourName` and `-v6ap_ip ServerIP:Port` are required for startup.
 
 ## Game Troubleshooting
 
