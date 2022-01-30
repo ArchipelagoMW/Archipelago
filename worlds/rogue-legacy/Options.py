@@ -328,9 +328,17 @@ class FreeDiaryOnGeneration(DefaultOnToggle):
     displayname = "Free Diary On Generation"
 
 
+class AvailableClasses(OptionList):
+    """
+    List of classes that will be in the item pool to find. The upgraded form of the class will be added with it.
+    The upgraded form of your starting class will be available regardless.
+    """
+    default = ["Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"]
+
 legacy_options: typing.Dict[str, type(Option)] = {
     "starting_gender": StartingGender,
     "starting_class": StartingClass,
+    "available_classes": AvailableClasses,
     "new_game_plus": NewGamePlus,
     "fairy_chests_per_zone": FairyChestsPerZone,
     "chests_per_zone": ChestsPerZone,
