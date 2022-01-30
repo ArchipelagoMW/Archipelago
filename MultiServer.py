@@ -497,20 +497,26 @@ class Context:
 
 
 def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint]):
+    """Send and remember hints"""
     concerns = collections.defaultdict(list)
     for hint in hints:
         net_msg = hint.as_network_message()
         concerns[hint.receiving_player].append(net_msg)
         if not hint.local:
             concerns[hint.finding_player].append(net_msg)
+        # remember hints in all cases
+        if not hint.found:
+            ctx.hints[team, hint.finding_player].add(hint)
+            ctx.hints[team, hint.receiving_player].add(hint)
     for text in (format_hint(ctx, team, hint) for hint in hints):
         logging.info("Notice (Team #%d): %s" % (team + 1, text))
 
-    for slot, clients in ctx.clients[team].items():
-        client_hints = concerns[slot]
-        if client_hints:
-            for client in clients:
-                asyncio.create_task(ctx.send_msgs(client, client_hints))
+    if hints:
+        for slot, clients in ctx.clients[team].items():
+            client_hints = concerns[slot]
+            if client_hints:
+                for client in clients:
+                    asyncio.create_task(ctx.send_msgs(client, client_hints))
 
 
 def update_aliases(ctx: Context, team: int):
@@ -766,8 +772,12 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
     return hints
 
 
-def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[NetUtils.Hint]:
+def collect_hint_location_name(ctx: Context, team: int, slot: int, location: str) -> typing.List[NetUtils.Hint]:
     seeked_location: int = proxy_worlds[ctx.games[slot]].location_name_to_id[location]
+    return collect_hint_location_id(ctx, team, slot, seeked_location)
+
+
+def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location: int) -> typing.List[NetUtils.Hint]:
     result = ctx.locations[slot].get(seeked_location, (None, None, None))
     if result:
         item_id, receiving_player, item_flags = result
@@ -1183,7 +1193,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 elif not for_location and hint_name in world.item_names:  # item name
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_name)
                 else:  # location name
-                    hints = collect_hints_location(self.ctx, self.client.team, self.client.slot, hint_name)
+                    hints = collect_hint_location_name(self.ctx, self.client.team, self.client.slot, hint_name)
                 cost = self.ctx.get_hint_cost(self.client.slot)
                 if hints:
                     new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
@@ -1214,10 +1224,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
                             can_pay -= 1
                             self.ctx.hints_used[self.client.team, self.client.slot] += 1
                             points_available = get_client_points(self.ctx, self.client)
-
-                            if not hint.found:
-                                self.ctx.hints[self.client.team, hint.finding_player].add(hint)
-                                self.ctx.hints[self.client.team, hint.receiving_player].add(hint)
 
                         if not_found_hints:
                             if hints and cost and int((points_available // cost) == 0):
@@ -1432,6 +1438,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
         elif cmd == 'LocationScouts':
             locs = []
+            create_as_hint = args.get("create_as_hint", False)
+            hints = []
             for location in args["locations"]:
                 if type(location) is not int or location not in lookup_any_location_id_to_name:
                     await ctx.send_msgs(client,
@@ -1440,8 +1448,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     return
 
                 target_item, target_player, flags = ctx.locations[client.slot][location]
+                if create_as_hint: hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
-
+            notify_hints(ctx, client.team, hints)
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 
         elif cmd == 'StatusUpdate':
@@ -1628,8 +1637,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
                         hints.extend(collect_hints(self.ctx, team, slot, item))
                 else:  # item name
                     hints = collect_hints(self.ctx, team, slot, item)
+
                 if hints:
                     notify_hints(self.ctx, team, hints)
+
                 else:
                     self.output("No hints found.")
                 return True
@@ -1650,7 +1661,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             world = proxy_worlds[self.ctx.games[slot]]
             item, usable, response = get_intended_text(item, world.location_names)
             if usable:
-                hints = collect_hints_location(self.ctx, team, slot, item)
+                hints = collect_hint_location_name(self.ctx, team, slot, item)
                 if hints:
                     notify_hints(self.ctx, team, hints)
                 else:
