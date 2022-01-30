@@ -12,6 +12,7 @@ import random
 
 import Options
 import Utils
+import NetUtils
 
 
 class MultiWorld():
@@ -39,6 +40,7 @@ class MultiWorld():
     def __init__(self, players: int):
         self.random = random.Random()  # world-local random state is saved for multiple generations running concurrently
         self.players = players
+        self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
         self.glitch_triforce = False
         self.algorithm = 'balanced'
         self.dungeons: Dict[Tuple[str, int], Dungeon] = {}

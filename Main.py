@@ -9,7 +9,7 @@ import tempfile
 import zipfile
 from typing import Dict, Tuple, Optional
 
-from BaseClasses import Item, MultiWorld, CollectionState, Region, RegionType
+from BaseClasses import MultiWorld, CollectionState, Region, RegionType
 from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
@@ -250,11 +250,14 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 import NetUtils
                 slot_data = {}
                 client_versions = {}
-                minimum_versions = {"server": (0, 1, 8), "clients": client_versions}
                 games = {}
+                minimum_versions = {"server": (0, 2, 4), "clients": client_versions}
+                slot_info = {}
+                names = [[name for player, name in sorted(world.player_name.items())]]
                 for slot in world.player_ids:
                     client_versions[slot] = world.worlds[slot].get_required_client_version()
                     games[slot] = world.game[slot]
+                    slot_info[slot] = NetUtils.NetworkSlot(names[0][slot+1], world.game[slot], world.player_types[slot])
                 precollected_items = {player: [item.code for item in world_precollected]
                                       for player, world_precollected in world.precollected_items.items()}
                 precollected_hints = {player: set() for player in range(1, world.players + 1)}
@@ -288,8 +291,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
                 multidata = {
                     "slot_data": slot_data,
-                    "games": games,
-                    "names": [[name for player, name in sorted(world.player_name.items())]],
+                    "slot_info": slot_info,
+                    "names": names,  # TODO: remove around 0.2.5 in favor of slot_info
+                    "games": games,  # TODO: remove around 0.2.5 in favor of slot_info
                     "connect_names": {name: (0, player) for player, name in world.player_name.items()},
                     "remote_items": {player for player in world.player_ids if
                                      world.worlds[player].remote_items},

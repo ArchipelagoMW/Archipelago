@@ -18,6 +18,9 @@ class GenericWorld(World):
     }
     hidden = True
 
+    def generate_early(self):
+        self.world.player_types[self.player] = 0  # mark as spectator
+
     def create_item(self, name: str) -> Item:
         if name == "Nothing":
             return Item(name, False, -1, self.player)
