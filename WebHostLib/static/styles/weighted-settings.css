@@ -213,6 +213,7 @@ html{
 
 #weighted-settings #user-message.visible{
     display: block;
+    cursor: pointer;
 }
 
 #weighted-settings h1{

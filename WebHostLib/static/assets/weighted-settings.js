@@ -3,12 +3,12 @@ window.addEventListener('load', () => {
     let settingHash = localStorage.getItem('weighted-settings-hash');
     if (!settingHash) {
       // If no hash data has been set before, set it now
-      localStorage.setItem('weighted-settings-hash', md5(results));
+      localStorage.setItem('weighted-settings-hash', md5(JSON.stringify(results)));
       localStorage.removeItem('weighted-settings');
-      settingHash = md5(results);
+      settingHash = md5(JSON.stringify(results));
     }
 
-    if (settingHash !== md5(results)) {
+    if (settingHash !== md5(JSON.stringify(results))) {
       const userMessage = document.getElementById('user-message');
       userMessage.innerText = "Your settings are out of date! Click here to update them! Be aware this will reset " +
         "them all to default.";
@@ -45,7 +45,7 @@ const resetSettings = () => {
 
 const fetchSettingData = () => new Promise((resolve, reject) => {
   fetch(new Request(`${window.location.origin}/static/generated/weighted-settings.json`)).then((response) => {
-    try{ resolve(response.json()); }
+    try{ response.json().then((jsonObj) => resolve(jsonObj)); }
     catch(error){ reject(error); }
   });
 });
