@@ -358,7 +358,7 @@ In JSON this may look like:
 
 `location` is the location id of the item inside the world
 
-`player` is the player slot of the world the item is located in, except when inside an LocationInfoPacket then it will be the slot of the player to receive the item
+`player` is the player slot of the world the item is located in, except when inside an [LocationInfo](#LocationInfo) Packet then it will be the slot of the player to receive the item
 
 `flags` are bit flags:
 | Flag | Meaning |
