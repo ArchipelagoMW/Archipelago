@@ -1448,7 +1448,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     return
 
                 target_item, target_player, flags = ctx.locations[client.slot][location]
-                if create_as_hint: hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
+                if create_as_hint:
+                    hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
             notify_hints(ctx, client.team, hints)
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
