@@ -1186,7 +1186,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 if hint_name in world.hint_blacklist:
                     self.output(f"Sorry, \"{hint_name}\" is marked as non-hintable.")
                     hints = []
-                elif not for_location and hint_name in world.item_name_groups: # item group name
+                elif not for_location and hint_name in world.item_name_groups:  # item group name
                     hints = []
                     for item in world.item_name_groups[hint_name]:
                         hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
@@ -1600,7 +1600,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         self.output(f"Could not find player {player_name} to forbid the !forfeit command for.")
         return False
 
-    def _cmd_send_multiple(self, amount: str, player_name: str, *item_name: str) -> bool:
+    def _cmd_send_multiple(self, amount: typing.Union[int, str], player_name: str, *item_name: str) -> bool:
         """Sends multiples of an item to the specified player"""
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
@@ -1609,13 +1609,15 @@ class ServerCommandProcessor(CommonCommandProcessor):
             world = proxy_worlds[self.ctx.games[slot]]
             item, usable, response = get_intended_text(item, world.item_names)
             if usable:
-                for i in range(0,int(amount)):
-                    new_item = NetworkItem(world.item_name_to_id[item], -1, 0)
-                    get_received_items(self.ctx, team, slot, True).append(new_item)
-                    get_received_items(self.ctx, team, slot, False).append(new_item)
-                    send_new_items(self.ctx)
-                self.ctx.notify_all('Cheat console: sending ' + ('' if amount == 1 else amount + ' of ') + '"' + item + '" to ' +
-                                    self.ctx.get_aliased_name(team, slot))
+                amount: int = int(amount)
+                new_items = [NetworkItem(world.item_name_to_id[item], -1, 0) for i in range(int(amount))]
+
+                get_received_items(self.ctx, team, slot, True).extend(new_items)
+                get_received_items(self.ctx, team, slot, False).extend(new_items)
+                send_new_items(self.ctx)
+                self.ctx.notify_all(
+                    'Cheat console: sending ' + ('' if amount == 1 else f'{amount} of ') +
+                    f'"{item}" to {self.ctx.get_aliased_name(team, slot)}')
                 return True
             else:
                 self.output(response)
@@ -1626,7 +1628,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_send(self, player_name: str, *item_name: str) -> bool:
         """Sends an item to the specified player"""
-        self._cmd_send_multiple(1,player_name,*item_name)
+        return self._cmd_send_multiple(1, player_name, *item_name)
 
     def _cmd_hint(self, player_name: str, *item: str) -> bool:
         """Send out a hint for a player's item to their team"""
