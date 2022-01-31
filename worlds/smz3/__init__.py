@@ -2,11 +2,8 @@ import logging
 import copy
 import os
 import threading
-import sys
-import pathlib
 import Patch
-import Utils
-from typing import Dict, List, Set
+from typing import Dict, Set, TextIO
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
 from worlds.generic.Rules import add_rule, set_rule
@@ -38,9 +35,12 @@ class SMZ3World(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
 
+    
+
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         self.locations = {}
+        self.unreachable = []
         super().__init__(world, player)
         
     def __new__(cls, world, player):
@@ -72,7 +72,6 @@ class SMZ3World(World):
         SMZ3World.location_names = frozenset(self.smz3World.locationLookup.keys())
 
         self.world.state.smz3state[self.player] = TotalSMZ3Item.Progression([])
-        self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("none")
     
     def generate_basic(self):
         self.smz3World.Setup(self.world.random)
@@ -80,7 +79,7 @@ class SMZ3World(World):
         self.dungeon.reverse()
         self.progression = TotalSMZ3Item.Item.CreateProgressionPool(self.smz3World)
         self.keyCardsItems = TotalSMZ3Item.Item.CreateKeycards(self.smz3World)
-        #self.totalSMZ3ItemsMap = {i.Type.name:i for i in (self.dungeon + self.progression + self.keyCardsItems)}
+
         niceItems = TotalSMZ3Item.Item.CreateNicePool(self.smz3World)
         junkItems = TotalSMZ3Item.Item.CreateJunkPool(self.smz3World)
         allJunkItems = niceItems + junkItems
@@ -107,9 +106,10 @@ class SMZ3World(World):
             set_rule(entrance, lambda state, region=region: region.CanEnter(state.smz3state[self.player]))
             for loc in region.Locations:
                 l = self.locations[loc.Name]
-                l.always_allow = lambda state, item, loc=loc: \
-                    item.game == "SMZ3" and \
-                    loc.alwaysAllow(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World), state.smz3state[self.player])
+                if self.world.accessibility[self.player] != 'locations':
+                    l.always_allow = lambda state, item, loc=loc: \
+                        item.game == "SMZ3" and \
+                        loc.alwaysAllow(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World), state.smz3state[self.player])
                 l.item_rule = lambda item, loc=loc, region=region: \
                     item.game != "SMZ3" or \
                     loc.allow(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World), None) and \
@@ -212,10 +212,6 @@ class SMZ3World(World):
             return True
         return False
 
-    #def collectOwnProgSMZ3Item(self, state: CollectionState, item: TotalSMZ3Item.Item) -> bool:
-    #    state.smz3state[self.player].Add([item])
-    #    state.prog_items[item.Type.name, self.player] += 1
-
     def create_item(self, name: str) -> Item:
         return SMZ3Item(name, True, TotalSMZ3Item.ItemType[name], self.item_name_to_id[name], player = self.player)
 
@@ -227,10 +223,28 @@ class SMZ3World(World):
             locations = [loc for loc in self.locations.values() if loc.item is None]
             self.world.random.shuffle(locations)
 
-            oldAccessibility = self.world.accessibility[self.player]
-            self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("items")
-            fill_restrictive(self.world, self.world.get_all_state(False), locations, self.smz3DungeonItems, True, True)
-            self.world.accessibility[self.player] = oldAccessibility
+            all_state = self.world.get_all_state(False)
+            all_dungeonItems = self.smz3DungeonItems[:]
+            fill_restrictive(self.world, all_state, locations, self.smz3DungeonItems, True, True)
+
+            # some small or big keys (those always_allow) can be unreachable in-game
+            # while logic still collects some of them (probably to simulate the player collecting pot keys in the logic), some others don't
+            # so we need to remove those exceptions as progression items
+            if self.world.accessibility[self.player] != 'locations':
+                exception_item = [TotalSMZ3Item.ItemType.BigKeySW, TotalSMZ3Item.ItemType.BigKeySP, TotalSMZ3Item.ItemType.KeyTH]
+                for item in all_dungeonItems:
+                    if item.item.Type in exception_item and item.location.always_allow(all_state, item) and not all_state.can_reach(item.location):
+                        item.advancement = False
+                        item.item.Progression = False
+                        item.location.event = False
+                        self.unreachable.append(item.location)
+
+    def write_spoiler(self, spoiler_handle: TextIO):
+        self.world.spoiler.unreachables += self.unreachable
+        if self.world.spoiler.unreachables:
+               logging.warning('\n\nUnreachable Items:\n\n')
+               logging.warning(
+                    '\n'.join(['%s: %s' % (unreachable.item, unreachable) for unreachable in self.world.spoiler.unreachables]))
 
     def FillItemAtLocation(self, itemPool, itemType, location):
         itemToPlace = TotalSMZ3Item.Item.Get(itemPool, itemType, self.smz3World)
