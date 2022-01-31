@@ -38,7 +38,8 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
                           for items in reachable_items.values() if items]
         for item in items_to_place:
             itempool.remove(item)
-        maximum_exploration_state = sweep_from_pool(base_state, itempool + unplaced_items)
+        maximum_exploration_state = sweep_from_pool(
+            base_state, itempool + unplaced_items)
 
         has_beaten_game = world.has_beaten_game(maximum_exploration_state)
 
@@ -113,7 +114,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
             world.push_item(spot_to_fill, item_to_place, False)
             spot_to_fill.locked = lock
             placements.append(spot_to_fill)
-            spot_to_fill.event = True
+            spot_to_fill.event = item_to_place.advancement
 
     if len(unplaced_items) > 0 and len(locations) > 0:
         # There are leftover unplaceable items and locations that won't accept them
@@ -178,8 +179,8 @@ def distribute_items_restrictive(world: MultiWorld):
     if nonexcludeditempool:
         world.random.shuffle(defaultlocations)
         # needs logical fill to not conflict with local items
-        nonexcludeditempool, defaultlocations = fast_fill(
-            world, nonexcludeditempool, defaultlocations)
+        fill_restrictive(
+            world, world.state, defaultlocations, nonexcludeditempool)
         if nonexcludeditempool:
             raise FillError(
                 f'Not enough locations for non-excluded items. There are {len(nonexcludeditempool)} more items than locations')
