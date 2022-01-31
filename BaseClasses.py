@@ -254,7 +254,7 @@ class MultiWorld():
             self._all_state = ret
         return ret
 
-    def get_items(self) -> list:
+    def get_items(self) -> List[Item]:
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
     def find_item_locations(self, item, player: int) -> List[Location]:
