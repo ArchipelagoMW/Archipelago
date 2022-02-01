@@ -428,6 +428,12 @@ class ExcludeLocations(OptionSet):
     verify_location_name = True
 
 
+class PriorityLocations(OptionSet):
+    """Prevent these locations from having an unimportant item"""
+    displayname = "Priority Locations"
+    verify_location_name = True
+
+
 class DeathLink(Toggle):
     """When you die, everyone dies. Of course the reverse is true too."""
     displayname = "Death Link"
@@ -440,7 +446,8 @@ per_game_common_options = {
     "start_inventory": StartInventory,
     "start_hints": StartHints,
     "start_location_hints": StartLocationHints,
-    "exclude_locations": ExcludeLocations
+    "exclude_locations": ExcludeLocations,
+    "priority_locations": PriorityLocations,
 }
 
 if __name__ == "__main__":

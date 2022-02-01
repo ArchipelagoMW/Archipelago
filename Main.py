@@ -9,7 +9,7 @@ import tempfile
 import zipfile
 from typing import Dict, Tuple, Optional
 
-from BaseClasses import MultiWorld, CollectionState, Region, RegionType
+from BaseClasses import MultiWorld, CollectionState, Region, RegionType, LocationProgressType
 from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
@@ -137,6 +137,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     for player in world.player_ids:
         exclusion_rules(world, player, world.exclude_locations[player].value)
+        world.priority_locations[player].value -= world.exclude_locations[player].value
+        for location_name in world.priority_locations[player].value:
+            world.get_location(location_name, player).progress_type = LocationProgressType.PRIORITY
 
     AutoWorld.call_all(world, "generate_basic")
 

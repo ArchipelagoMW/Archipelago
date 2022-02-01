@@ -918,6 +918,7 @@ class LocationProgressType(Enum):
     PRIORITY = 2
     EXCLUDED = 3
 
+
 class Location():
     # If given as integer, then this is the shop's inventory index
     shop_slot: Optional[int] = None
@@ -927,7 +928,6 @@ class Location():
     spot_type = 'Location'
     game: str = "Generic"
     show_in_spoiler: bool = True
-    excluded: bool = False
     crystal: bool = False
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow = staticmethod(lambda item, state: False)
