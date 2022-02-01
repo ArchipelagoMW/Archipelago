@@ -61,13 +61,13 @@ class DamageRando(Toggle):
 
 class ShopFill(Choice):
     """Sets the items for sale in Merchant Crow's shops.
-    Default: No sunglasses or tendy jacket, but sand vials for sale.
-    Randomimized: Up to 4 random items in each shop.
+    Default: No sunglasses or trendy jacket, but sand vials for sale.
+    Randomized: Up to 4 random items in each shop.
     Vanilla: Keep shops the same as the base game.
     Empty: Sell no items at the shop."""
     displayname = "Shop Inventory"
     option_default = 0
-    option_randomimized = 1
+    option_randomized = 1
     option_vanilla = 2
     option_empty = 3
 
