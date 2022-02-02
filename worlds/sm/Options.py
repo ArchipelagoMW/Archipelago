@@ -2,11 +2,11 @@ import typing
 from Options import Choice, Range, OptionDict, OptionList, Option, Toggle, DefaultOnToggle
 
 class StartItemsRemovesFromPool(Toggle):
-    displayname = "StartItems Removes From Item Pool"
+    display_name = "StartItems Removes From Item Pool"
 
 class Preset(Choice):
     """choose one of the preset or specify "varia_custom" to use varia_custom_preset option or specify "custom" to use custom_preset option"""
-    displayname = "Preset"
+    display_name = "Preset"
     option_newbie = 0
     option_casual = 1
     option_regular = 2
@@ -22,7 +22,7 @@ class Preset(Choice):
     default = 2
 
 class StartLocation(Choice):
-    displayname = "Start Location"
+    display_name = "Start Location"
     option_Ceres = 0
     option_Landing_Site = 1
     option_Gauntlet_Top = 2
@@ -42,7 +42,7 @@ class StartLocation(Choice):
 
 class DeathLink(Choice):
     """When DeathLink is enabled and someone dies, you will die. With survive reserve tanks can save you."""
-    displayname = "Death Link"
+    display_name = "Death Link"
     option_disable = 0
     option_enable = 1
     option_enable_survive = 3
@@ -51,7 +51,7 @@ class DeathLink(Choice):
     default = 0
 
 class MaxDifficulty(Choice):
-    displayname = "Maximum Difficulty"
+    display_name = "Maximum Difficulty"
     option_easy = 0
     option_medium = 1
     option_hard = 2
@@ -62,40 +62,40 @@ class MaxDifficulty(Choice):
     default = 4
 
 class MorphPlacement(Choice):
-    displayname = "Morph Placement"
+    display_name = "Morph Placement"
     option_early = 0
     option_normal = 1
     default = 0
 
 class StrictMinors(Toggle):
-    displayname = "Strict Minors"
+    display_name = "Strict Minors"
 
 class MissileQty(Range):
-    displayname = "Missile Quantity"
+    display_name = "Missile Quantity"
     range_start = 10
     range_end = 90
     default = 30
 
 class SuperQty(Range):
-    displayname = "Super Quantity"
+    display_name = "Super Quantity"
     range_start = 10
     range_end = 90
     default = 20
 
 class PowerBombQty(Range):
-    displayname = "Power Bomb Quantity"
+    display_name = "Power Bomb Quantity"
     range_start = 10
     range_end = 90
     default = 10
 
 class MinorQty(Range):
-    displayname = "Minor Quantity"
+    display_name = "Minor Quantity"
     range_start = 7
     range_end = 100
     default = 100
 
 class EnergyQty(Choice):
-    displayname = "Energy Quantity"
+    display_name = "Energy Quantity"
     option_ultra_sparse = 0
     option_sparse = 1
     option_medium = 2
@@ -103,7 +103,7 @@ class EnergyQty(Choice):
     default = 3
 
 class AreaRandomization(Choice):
-    displayname = "Area Randomization"
+    display_name = "Area Randomization"
     option_off = 0
     option_light = 1
     option_on = 2
@@ -112,47 +112,47 @@ class AreaRandomization(Choice):
     default = 0
 
 class AreaLayout(Toggle):
-    displayname = "Area Layout"
+    display_name = "Area Layout"
 
 class DoorsColorsRando(Toggle):
-    displayname = "Doors Colors Rando"
+    display_name = "Doors Colors Rando"
 
 class AllowGreyDoors(Toggle):
-    displayname = "Allow Grey Doors"
+    display_name = "Allow Grey Doors"
 
 class BossRandomization(Toggle):
-    displayname = "Boss Randomization"
+    display_name = "Boss Randomization"
 
 class FunCombat(Toggle):
     """if used, might force 'items' accessibility"""
-    displayname = "Fun Combat"
+    display_name = "Fun Combat"
 
 class FunMovement(Toggle):
     """if used, might force 'items' accessibility"""
-    displayname = "Fun Movement"
+    display_name = "Fun Movement"
 
 class FunSuits(Toggle):
     """if used, might force 'items' accessibility"""
-    displayname = "Fun Suits"
+    display_name = "Fun Suits"
 
 class LayoutPatches(DefaultOnToggle):
-    displayname = "Layout Patches"
+    display_name = "Layout Patches"
 
 class VariaTweaks(Toggle):
-    displayname = "Varia Tweaks"
+    display_name = "Varia Tweaks"
 
 class NerfedCharge(Toggle):
-    displayname = "Nerfed Charge"
+    display_name = "Nerfed Charge"
 
 class GravityBehaviour(Choice):
-    displayname = "Gravity Behaviour"
+    display_name = "Gravity Behaviour"
     option_Vanilla = 0
     option_Balanced = 1
     option_Progressive = 2
     default = 1
 
 class ElevatorsDoorsSpeed(DefaultOnToggle):
-    displayname = "Elevators doors speed"
+    display_name = "Elevators doors speed"
 
 class SpinJumpRestart(Toggle):
     displayname = "Spin Jump Restart"

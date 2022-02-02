@@ -4,15 +4,15 @@ from Options import OptionDict
 
 
 class Locations(OptionDict):
-    displayname = "locations"
+    display_name = "locations"
 
 
 class Items(OptionDict):
-    displayname = "items"
+    display_name = "items"
 
 
 class Rules(OptionDict):
-    displayname = "rules"
+    display_name = "rules"
 
 
 ff1_options: Dict[str, OptionDict] = {

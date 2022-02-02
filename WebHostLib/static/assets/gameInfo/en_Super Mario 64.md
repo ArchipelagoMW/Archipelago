@@ -6,7 +6,7 @@ The player settings page for this game contains all the options you need to conf
 settings page link: [SM64EX Player Settings Page](../player-settings).
 
 ## What does randomization do to this game?
-All 120 Stars, the 3 Cap Switches, the Cellar and Secound Floor Key are now Location Checks and may contain Items for different games as well
+All 120 Stars, the 3 Cap Switches, the Basement and Secound Floor Key are now Location Checks and may contain Items for different games as well
 as different Items from within SM64.
 
 

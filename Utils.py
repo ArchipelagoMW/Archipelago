@@ -24,7 +24,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 version_tuple = tuplize_version(__version__)
 
 from yaml import load, dump, SafeLoader
@@ -349,7 +349,7 @@ class RestrictedUnpickler(pickle.Unpickler):
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
         # used by MultiServer -> savegame/multidata
-        if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint"}:
+        if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint", "SlotType", "NetworkSlot"}:
             return getattr(self.net_utils_module, name)
         # Options and Plando are unpickled by WebHost -> Generate
         if module == "worlds.generic" and name in {"PlandoItem", "PlandoConnection"}:
