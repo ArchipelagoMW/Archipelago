@@ -5,6 +5,10 @@ from .Locations import SM64Location, location_table,locBoB_table,locWhomp_table,
                                                     locWDW_table,locTTM_table,locTHI_table,locTTC_table,locRR_table, \
                                                     locBitDW_table, locBitFS_table, locSS_table, locCap_table
 
+sm64courses = ["Bob-omb Battlefield", "Whomp's Fortress", "Jolly Roger Bay", "Cool, Cool Mountain", "Big Boo's Haunt",
+               "Hazy Maze Cave", "Lethal Lava Land", "Shifting Sand Land", "Dire, Dire Docks", "Snowman's Land", "Wet-Dry World",
+               "Tall, Tall Mountain", "Tiny-Huge Island", "Tick Tock Clock", "Rainbow Ride"]
+
 def create_regions(world: MultiWorld, player: int):
 
     regSS = Region("Menu", RegionType.Generic, "Castle Area", player, world)

@@ -2,7 +2,7 @@ import string
 from .Items import item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options
-from .Rules import set_rules, area_connections
+from .Rules import set_rules
 from .Regions import create_regions
 from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld
 from ..AutoWorld import World
@@ -24,14 +24,19 @@ class SM64World(World):
     data_version = 4
     forced_auto_forfeit = False
 
+    area_connections = {}
+
     options = sm64_options
+
+    def generate_early(self):
+        self.topology_present = self.world.AreaRandomizer[self.player].value
 
     def create_regions(self):
         create_regions(self.world,self.player)
 
-
     def set_rules(self):
-        set_rules(self.world,self.player)
+        self.area_connections = {}
+        set_rules(self.world,self.player,self.area_connections)
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
@@ -40,12 +45,12 @@ class SM64World(World):
 
     def generate_basic(self):
         staritem = self.create_item("Power Star")
-        starcount = self.world.StarsToFinish[self.player].value + self.world.ExtraStars[self.player].value
-        if (self.world.EnableCoinStars[self.player].value and (starcount-15) >= self.world.StarsToFinish[self.player].value):
-            starcount -= 15
+        starcount = min(self.world.StarsToFinish[self.player].value + self.world.ExtraStars[self.player].value,120)
+        if (not self.world.EnableCoinStars[self.player].value):
+            starcount = max(starcount - 15,self.world.StarsToFinish[self.player].value)
         self.world.itempool += [staritem for i in range(0,starcount)]
         mushroomitem = self.create_item("1Up Mushroom") 
-        self.world.itempool += [mushroomitem for i in range(starcount,120)]
+        self.world.itempool += [mushroomitem for i in range(starcount,120 - (15 if not self.world.EnableCoinStars[self.player].value else 0))]
 
         key1 = self.create_item("Basement Key")
         key2 = self.create_item("Second Floor Key")
@@ -58,6 +63,6 @@ class SM64World(World):
 
     def fill_slot_data(self):
         return {
-            "AreaRando": area_connections,
+            "AreaRando": self.area_connections,
             "StarsToFinish": self.world.StarsToFinish[self.player].value
         }
