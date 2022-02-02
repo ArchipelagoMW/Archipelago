@@ -2,6 +2,8 @@ import typing
 from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Locations import V6Location, location_table
 
+v6areas = ["Laboratory", "The Tower", "Space Station 2", "Warp Zone"]
+
 def create_regions(world: MultiWorld, player: int):
     regOvr = Region("Menu", RegionType.Generic, "Dimension VVVVVV", player, world)
     locOvr_names = ["Overworld (Pipe-shaped Segment)", "Overworld (Left of Ship)", "Overworld (Square Room)", "Overworld (Sad Elephant)",
