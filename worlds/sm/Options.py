@@ -2,10 +2,11 @@ import typing
 from Options import Choice, Range, OptionDict, OptionList, Option, Toggle, DefaultOnToggle
 
 class StartItemsRemovesFromPool(Toggle):
+    """Remove items in starting inventory from pool."""
     display_name = "StartItems Removes From Item Pool"
 
 class Preset(Choice):
-    """choose one of the preset or specify "varia_custom" to use varia_custom_preset option or specify "custom" to use custom_preset option"""
+    """Choose one of the presets or specify "varia_custom" to use varia_custom_preset option or specify "custom" to use custom_preset option."""
     display_name = "Preset"
     option_newbie = 0
     option_casual = 1
@@ -22,6 +23,7 @@ class Preset(Choice):
     default = 2
 
 class StartLocation(Choice):
+    """Choose where you want to start the game."""
     display_name = "Start Location"
     option_Ceres = 0
     option_Landing_Site = 1
@@ -51,6 +53,7 @@ class DeathLink(Choice):
     default = 0
 
 class MaxDifficulty(Choice):
+    """Depending on the perceived difficulties of the techniques, bosses, hell runs etc. from the preset. It will prevent the Randomizer from placing an item in a location too difficult to reach with the current items."""
     display_name = "Maximum Difficulty"
     option_easy = 0
     option_medium = 1
@@ -62,39 +65,46 @@ class MaxDifficulty(Choice):
     default = 4
 
 class MorphPlacement(Choice):
+    """Influences where the Morphing Ball with be placed."""
     display_name = "Morph Placement"
     option_early = 0
     option_normal = 1
     default = 0
 
 class StrictMinors(Toggle):
+    """Instead of using the Minors proportions as probabilities, enforce a strict distribution to match the proportions as closely as possible."""
     display_name = "Strict Minors"
 
 class MissileQty(Range):
+    """The higher the number the higher the probability of choosing missles when placing a minor."""
     display_name = "Missile Quantity"
     range_start = 10
     range_end = 90
     default = 30
 
 class SuperQty(Range):
+    """The higher the number the higher the probability of choosing super missles when placing a minor."""
     display_name = "Super Quantity"
     range_start = 10
     range_end = 90
     default = 20
 
 class PowerBombQty(Range):
+    """The higher the number the higher the probability of choosing power bombs when placing a minor."""
     display_name = "Power Bomb Quantity"
     range_start = 10
     range_end = 90
     default = 10
 
 class MinorQty(Range):
+    """From 7%: minimum number of minors required to finish the game to 100%: all minors locations contain a minor (vanilla like)."""
     display_name = "Minor Quantity"
     range_start = 7
     range_end = 100
     default = 100
 
 class EnergyQty(Choice):
+    """Choose how many Energy/Reserve Tanks will be available, from 0-1 in ultra sparse, 4-6 in sparse, 8-12 in medium and 18 in vanilla."""
     display_name = "Energy Quantity"
     option_ultra_sparse = 0
     option_sparse = 1
@@ -103,6 +113,7 @@ class EnergyQty(Choice):
     default = 3
 
 class AreaRandomization(Choice):
+    """Randomize areas together using bidirectional access portals."""
     display_name = "Area Randomization"
     option_off = 0
     option_light = 1
@@ -112,39 +123,47 @@ class AreaRandomization(Choice):
     default = 0
 
 class AreaLayout(Toggle):
+    """Some layout tweaks to make your life easier in areas randomizer."""
     display_name = "Area Layout"
 
 class DoorsColorsRando(Toggle):
+    """Randomize the color of Red/Green/Yellow doors. Add four new type of doors which require Ice/Wave/Spazer/Plasma beams to open them."""
     display_name = "Doors Colors Rando"
 
 class AllowGreyDoors(Toggle):
+    """When randomizing the color of Red/Green/Yellow doors, some doors can be randomized to Grey. Grey doors will never open, you will have to go around them."""
     display_name = "Allow Grey Doors"
 
 class BossRandomization(Toggle):
+    """Randomize Golden 4 bosses access doors using bidirectional access portals."""
     display_name = "Boss Randomization"
 
 class FunCombat(Toggle):
-    """if used, might force 'items' accessibility"""
+    """Forces removal of Plasma Beam and Screw Attack if the preset and settings allow it. In addition, can randomly remove Spazer and Wave Beam from the Combat set. If used, might force 'items' accessibility."""
     display_name = "Fun Combat"
 
 class FunMovement(Toggle):
-    """if used, might force 'items' accessibility"""
+    """Forces removal of Space Jump if the preset allows it. In addition, can randomly remove High Jump, Grappling Beam, Spring Ball, Speed Booster, and Bombs from the Movement set. If used, might force 'items' accessibility."""
     display_name = "Fun Movement"
 
 class FunSuits(Toggle):
-    """if used, might force 'items' accessibility"""
+    """If the preset and seed layout allow it, will force removal of at least one of Varia Suit and/or Gravity Suit. If used, might force 'items' accessibility."""
     display_name = "Fun Suits"
 
 class LayoutPatches(DefaultOnToggle):
+    """Include the anti-softlock layout patches. Disable at your own softlocking risk!"""
     display_name = "Layout Patches"
 
 class VariaTweaks(Toggle):
+    """Include minor tweaks for the game to behave 'as it should' in a randomizer context"""
     display_name = "Varia Tweaks"
 
 class NerfedCharge(Toggle):
+    """Samus begins with a starter Charge Beam that does one third of charged shot damage that can damage bosses. Pseudo Screws also do one third damage. Special Beam Attacks do normal damage but cost 3 Power Bombs instead of 1. Once the Charge Beam item has been collected, it does full damage and special attacks are back to normal."""
     display_name = "Nerfed Charge"
 
 class GravityBehaviour(Choice):
+    """Modify the heat damage and enemy damage reduction qualities of the Gravity and Varia Suits."""
     display_name = "Gravity Behaviour"
     option_Vanilla = 0
     option_Balanced = 1
@@ -152,27 +171,35 @@ class GravityBehaviour(Choice):
     default = 1
 
 class ElevatorsDoorsSpeed(DefaultOnToggle):
+    """Accelerate doors and elevators transitions."""
     display_name = "Elevators doors speed"
 
 class SpinJumpRestart(Toggle):
+    """Allows Samus to start spinning in mid air after jumping or falling."""
     displayname = "Spin Jump Restart"
 
 class InfiniteSpaceJump(Toggle):
+    """Space jumps can be done quicker and at any time in air, water or lava, even after falling long distances."""
     displayname = "Infinite Space Jump"
 
 class RefillBeforeSave(Toggle):
+    """Refill energy and ammo when saving."""
     displayname = "Refill Before Save"
 
 class Hud(Toggle):
+    """Displays the current area name and the number of remaining items of selected item split in the HUD for the current area."""
     displayname = "Hud"
 
 class Animals(Toggle):
+    """Replace saving the animals in the escape sequence by a random surprise."""
     displayname = "Animals"
 
 class NoMusic(Toggle):
+    """Disable the background music."""
     displayname = "No Music"
 
 class RandomMusic(Toggle):
+    """Randomize the background music."""
     displayname = "Random Music"
 
 class CustomPreset(OptionDict):
