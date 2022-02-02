@@ -1,4 +1,3 @@
-from tkinter import N
 from typing import Dict
 from BaseClasses import MultiWorld
 from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option
