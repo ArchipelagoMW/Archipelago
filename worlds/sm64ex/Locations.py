@@ -172,10 +172,18 @@ loc100Coin_table = {
         "RR: 100 Coins": 3626104
 }
 
+locBitDW_table = {
+    "Bowser in the Dark World Red Coins": 3626105,
+    "Bowser in the Dark World Key": 3626178
+}
+
+locBitFS_table = {
+    "Bowser in the Fire Sea Red Coins": 3626112,
+    "Bowser in the Fire Sea Key": 3626179
+}
+
 #Secret Stars and Stages
 locSS_table = {
-    "Bowser in the Dark World Red Coins": 3626105,
-    "Bowser in the Fire Sea Red Coins": 3626112,
     "Bowser in the Sky Red Coins": 3626119,
     "The Princess's Secret Slide Block": 3626126,
     "The Princess's Secret Slide Fast": 3626127,
@@ -191,12 +199,6 @@ locSS_table = {
     "MIPS 2": 3626172
 }
 
-#Keys
-locKey_table = {
-    "Bowser in the Dark World Key": 3626178,
-    "Bowser in the Fire Sea Key": 3626179
-}
-
 #Caps
 locCap_table = {
     "Tower of the Wing Cap Switch": 3626180,
@@ -208,4 +210,4 @@ locCap_table = {
 location_table = {**locBoB_table,**locWhomp_table,**locJRB_table,**locCCM_table,**locBBH_table, \
                   **locHMC_table,**locLLL_table,**locSSL_table,**locDDD_table,**locSL_table, \
                   **locWDW_table,**locTTM_table,**locTHI_table,**locTTC_table,**locRR_table, \
-                  **loc100Coin_table,**locSS_table,**locKey_table,**locCap_table}
+                  **loc100Coin_table,**locBitDW_table,**locBitFS_table,**locSS_table,**locCap_table}
