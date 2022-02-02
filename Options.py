@@ -41,9 +41,9 @@ class Option(metaclass=AssembleOptions):
     name_lookup: typing.Dict[int, str]
     default = 0
 
-    # convert option_name_long into Name Long as displayname, otherwise name_long is the result.
+    # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
     # Handled in get_option_name()
-    autodisplayname = False
+    auto_display_name = False
 
     # can be weighted between selections
     supports_weighting = True
@@ -64,7 +64,7 @@ class Option(metaclass=AssembleOptions):
 
     @classmethod
     def get_option_name(cls, value: typing.Any) -> str:
-        if cls.autodisplayname:
+        if cls.auto_display_name:
             return cls.name_lookup[value].replace("_", " ").title()
         else:
             return cls.name_lookup[value]
@@ -133,7 +133,7 @@ class DefaultOnToggle(Toggle):
 
 
 class Choice(Option):
-    autodisplayname = True
+    auto_display_name = True
 
     def __init__(self, value: int):
         self.value: int = value
@@ -372,7 +372,7 @@ class Accessibility(Choice):
     Locations: ensure everything can be reached and acquired.
     Items: ensure all logically relevant items can be acquired.
     Minimal: ensure what is needed to reach your goal can be acquired."""
-    displayname = "Accessibility"
+    display_name = "Accessibility"
     option_locations = 0
     option_items = 1
     option_minimal = 2
@@ -382,7 +382,7 @@ class Accessibility(Choice):
 
 class ProgressionBalancing(DefaultOnToggle):
     """A system that moves progression earlier, to try and prevent the player from getting stuck and bored early."""
-    displayname = "Progression Balancing"
+    display_name = "Progression Balancing"
 
 
 common_options = {
@@ -398,45 +398,50 @@ class ItemSet(OptionSet):
 
 class LocalItems(ItemSet):
     """Forces these items to be in their native world."""
-    displayname = "Local Items"
+    display_name = "Local Items"
 
 
 class NonLocalItems(ItemSet):
     """Forces these items to be outside their native world."""
-    displayname = "Not Local Items"
+    display_name = "Not Local Items"
 
 
 class StartInventory(ItemDict):
     """Start with these items."""
     verify_item_name = True
-    displayname = "Start Inventory"
+    display_name = "Start Inventory"
+
+
+class ItemLinks(OptionList):
+    """Share these items with players of the same game."""
+    display_name = "Shared Items"
 
 
 class StartHints(ItemSet):
     """Start with these item's locations prefilled into the !hint command."""
-    displayname = "Start Hints"
+    display_name = "Start Hints"
 
 
 class StartLocationHints(OptionSet):
     """Start with these locations and their item prefilled into the !hint command"""
-    displayname = "Start Location Hints"
+    display_name = "Start Location Hints"
 
 
 class ExcludeLocations(OptionSet):
     """Prevent these locations from having an important item"""
-    displayname = "Excluded Locations"
+    display_name = "Excluded Locations"
     verify_location_name = True
 
 
 class PriorityLocations(OptionSet):
     """Prevent these locations from having an unimportant item"""
-    displayname = "Priority Locations"
+    display_name = "Priority Locations"
     verify_location_name = True
 
 
 class DeathLink(Toggle):
     """When you die, everyone dies. Of course the reverse is true too."""
-    displayname = "Death Link"
+    display_name = "Death Link"
 
 
 per_game_common_options = {

@@ -74,7 +74,6 @@ class Factorio(World):
 
         self.sending_visible = self.world.tech_tree_information[player] == TechTreeInformation.option_full
 
-
     generate_output = generate_mod
 
     def create_regions(self):
@@ -145,12 +144,12 @@ class Factorio(World):
             silo_recipe = None
             if self.world.silo[self.player] == Silo.option_spawn:
                 silo_recipe = self.custom_recipes["rocket-silo"] if "rocket-silo" in self.custom_recipes \
-                else next(iter(all_product_sources.get("rocket-silo")))
+                    else next(iter(all_product_sources.get("rocket-silo")))
             part_recipe = self.custom_recipes["rocket-part"]
             satellite_recipe = None
             if self.world.goal[self.player] == Goal.option_satellite:
                 satellite_recipe = self.custom_recipes["satellite"] if "satellite" in self.custom_recipes \
-                else next(iter(all_product_sources.get("satellite")))
+                    else next(iter(all_product_sources.get("satellite")))
             victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe)
             world.get_location("Rocket Launch", player).access_rule = lambda state: all(state.has(technology, player)
                                                                                         for technology in
@@ -205,7 +204,8 @@ class Factorio(World):
                     new_ingredient = pool.pop()
                 liquids_used += 1
             new_ingredients[new_ingredient] = 1
-        return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients, original.products, original.energy)
+        return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
+                      original.products, original.energy)
 
     def make_balanced_recipe(self, original: Recipe, pool: list, factor: float = 1, allow_liquids: int = 2) -> \
             Recipe:
@@ -225,7 +225,7 @@ class Factorio(World):
         while remaining_num_ingredients > 0 and pool:
             ingredient = pool.pop()
             if liquids_used == allow_liquids and ingredient in liquids:
-                continue   # can't use this ingredient as we already have maximum liquid in our recipe.
+                continue  # can't use this ingredient as we already have maximum liquid in our recipe.
             if ingredient in all_product_sources:
                 ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
                 ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
@@ -292,7 +292,8 @@ class Factorio(World):
         if remaining_num_ingredients > 1:
             logging.warning("could not randomize recipe")
 
-        return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients, original.products, original.energy)
+        return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
+                      original.products, original.energy)
 
     def set_custom_technologies(self):
         custom_technologies = {}

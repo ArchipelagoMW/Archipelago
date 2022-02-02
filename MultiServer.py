@@ -263,7 +263,7 @@ class Context:
     @staticmethod
     def decompress(data: bytes) -> dict:
         format_version = data[0]
-        if format_version > 2:
+        if format_version > 3:
             raise Utils.VersionException("Incompatible multidata.")
         return restricted_loads(zlib.decompress(data[1:]))
 

@@ -4,7 +4,7 @@ from Options import Option, DefaultOnToggle, Range, Choice
 
 class TotalLocations(Range):
     """Number of location checks which are added to the Risk of Rain playthrough."""
-    displayname = "Total Locations"
+    display_name = "Total Locations"
     range_start = 10
     range_end = 500
     default = 20
@@ -12,7 +12,7 @@ class TotalLocations(Range):
 
 class TotalRevivals(Range):
     """Total Percentage of `Dio's Best Friend` item put in the item pool."""
-    displayname = "Total Percentage Revivals Available"
+    display_name = "Total Percentage Revivals Available"
     range_start = 0
     range_end = 10
     default = 4
@@ -22,7 +22,7 @@ class ItemPickupStep(Range):
     """Number of items to pick up before an AP Check is completed.
     Setting to 1 means every other pickup.
     Setting to 2 means every third pickup. So on..."""
-    displayname = "Item Pickup Step"
+    display_name = "Item Pickup Step"
     range_start = 0
     range_end = 5
     default = 2
@@ -30,17 +30,17 @@ class ItemPickupStep(Range):
 
 class AllowLunarItems(DefaultOnToggle):
     """Allows Lunar items in the item pool."""
-    displayname = "Enable Lunar Item Shuffling"
+    display_name = "Enable Lunar Item Shuffling"
 
 
 class StartWithRevive(DefaultOnToggle):
     """Start the game with a `Dio's Best Friend` item."""
-    displayname = "Start with a Revive"
+    display_name = "Start with a Revive"
 
 
 class GreenScrap(Range):
     """Weight of Green Scraps in the item pool."""
-    displayname = "Green Scraps"
+    display_name = "Green Scraps"
     range_start = 0
     range_end = 100
     default = 16
@@ -48,7 +48,7 @@ class GreenScrap(Range):
 
 class RedScrap(Range):
     """Weight of Red Scraps in the item pool."""
-    displayname = "Red Scraps"
+    display_name = "Red Scraps"
     range_start = 0
     range_end = 100
     default = 4
@@ -56,7 +56,7 @@ class RedScrap(Range):
 
 class YellowScrap(Range):
     """Weight of yellow scraps in the item pool."""
-    displayname = "Yellow Scraps"
+    display_name = "Yellow Scraps"
     range_start = 0
     range_end = 100
     default = 1
@@ -64,7 +64,7 @@ class YellowScrap(Range):
 
 class WhiteScrap(Range):
     """Weight of white scraps in the item pool."""
-    displayname = "White Scraps"
+    display_name = "White Scraps"
     range_start = 0
     range_end = 100
     default = 32
@@ -72,7 +72,7 @@ class WhiteScrap(Range):
 
 class CommonItem(Range):
     """Weight of common items in the item pool."""
-    displayname = "Common Items"
+    display_name = "Common Items"
     range_start = 0
     range_end = 100
     default = 64
@@ -80,7 +80,7 @@ class CommonItem(Range):
 
 class UncommonItem(Range):
     """Weight of uncommon items in the item pool."""
-    displayname = "Uncommon Items"
+    display_name = "Uncommon Items"
     range_start = 0
     range_end = 100
     default = 32
@@ -88,7 +88,7 @@ class UncommonItem(Range):
 
 class LegendaryItem(Range):
     """Weight of legendary items in the item pool."""
-    displayname = "Legendary Items"
+    display_name = "Legendary Items"
     range_start = 0
     range_end = 100
     default = 8
@@ -96,7 +96,7 @@ class LegendaryItem(Range):
 
 class BossItem(Range):
     """Weight of boss items in the item pool."""
-    displayname = "Boss Items"
+    display_name = "Boss Items"
     range_start = 0
     range_end = 100
     default = 4
@@ -104,7 +104,7 @@ class BossItem(Range):
 
 class LunarItem(Range):
     """Weight of lunar items in the item pool."""
-    displayname = "Lunar Items"
+    display_name = "Lunar Items"
     range_start = 0
     range_end = 100
     default = 16
@@ -112,7 +112,7 @@ class LunarItem(Range):
 
 class Equipment(Range):
     """Weight of equipment items in the item pool."""
-    displayname = "Equipment"
+    display_name = "Equipment"
     range_start = 0
     range_end = 100
     default = 32
@@ -120,7 +120,7 @@ class Equipment(Range):
 
 class ItemPoolPresetToggle(DefaultOnToggle):
     """Will use the item weight presets when set to true, otherwise will use the custom set item pool weights."""
-    displayname = "Item Weight Presets"
+    display_name = "Item Weight Presets"
 
 class ItemWeights(Choice):
     """Preset choices for determining the weights of the item pool.<br>
@@ -132,7 +132,7 @@ class ItemWeights(Choice):
     No Scraps removes all scrap items from the item pool.<br>
     Even generates the item pool with every item having an even weight.<br>
     Scraps Only will be only scrap items in the item pool."""
-    displayname = "Item Weights"
+    display_name = "Item Weights"
     option_default = 0
     option_new = 1
     option_uncommon = 2

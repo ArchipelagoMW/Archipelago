@@ -157,7 +157,7 @@ def distribute_items_restrictive(world: MultiWorld):
              localrestitempool, nonlocalrestitempool, restitempool, fill_locations)
 
     locations: typing.Dict[LocationProgressType, typing.List[Location]] = {
-        type: [] for type in LocationProgressType}
+        loc_type: [] for loc_type in LocationProgressType}
 
     for loc in fill_locations:
         locations[loc.progress_type].append(loc)

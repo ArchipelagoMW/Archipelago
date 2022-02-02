@@ -7,7 +7,7 @@ class StartingGender(Choice):
     """
     Determines the gender of your initial 'Sir Lee' character.
     """
-    displayname = "Starting Gender"
+    display_name = "Starting Gender"
     option_sir = 0
     option_lady = 1
     alias_male = 0
@@ -19,7 +19,7 @@ class StartingClass(Choice):
     """
     Determines the starting class of your initial 'Sir Lee' character.
     """
-    displayname = "Starting Class"
+    display_name = "Starting Class"
     option_knight = 0
     option_mage = 1
     option_barbarian = 2
@@ -36,7 +36,7 @@ class NewGamePlus(Choice):
     Puts the castle in new game plus mode which vastly increases enemy level, but increases gold gain by 50%. Not
     recommended for those inexperienced to Rogue Legacy!
     """
-    displayname = "New Game Plus"
+    display_name = "New Game Plus"
     option_normal = 0
     option_new_game_plus = 1
     option_new_game_plus_2 = 2
@@ -51,7 +51,7 @@ class LevelScaling(Range):
     100% level scaling (normal). Setting this too high will result in enemies with absurdly high levels, you have been
     warned.
     """
-    displayname = "Enemy Level Scaling Percentage"
+    display_name = "Enemy Level Scaling Percentage"
     range_start = 1
     range_end = 300
     default = 100
@@ -62,7 +62,7 @@ class FairyChestsPerZone(Range):
     Determines the number of Fairy Chests in a given zone that contain items. After these have been checked, only stat
     bonuses can be found in Fairy Chests.
     """
-    displayname = "Fairy Chests Per Zone"
+    display_name = "Fairy Chests Per Zone"
     range_start = 5
     range_end = 15
     default = 5
@@ -73,7 +73,7 @@ class ChestsPerZone(Range):
     Determines the number of Non-Fairy Chests in a given zone that contain items. After these have been checked, only
     gold or stat bonuses can be found in Chests.
     """
-    displayname = "Chests Per Zone"
+    display_name = "Chests Per Zone"
     range_start = 15
     range_end = 30
     default = 15
@@ -83,21 +83,21 @@ class UniversalFairyChests(Toggle):
     """
     Determines if fairy chests should be combined into one pool instead of per zone, similar to Risk of Rain 2.
     """
-    displayname = "Universal Fairy Chests"
+    display_name = "Universal Fairy Chests"
 
 
 class UniversalChests(Toggle):
     """
     Determines if non-fairy chests should be combined into one pool instead of per zone, similar to Risk of Rain 2.
     """
-    displayname = "Universal Non-Fairy Chests"
+    display_name = "Universal Non-Fairy Chests"
 
 
 class Vendors(Choice):
     """
     Determines where to place the Blacksmith and Enchantress unlocks in logic (or start with them unlocked).
     """
-    displayname = "Vendors"
+    display_name = "Vendors"
     option_start_unlocked = 0
     option_early = 1
     option_normal = 2
@@ -109,7 +109,7 @@ class Architect(Choice):
     """
     Determines where the Architect sits in the item pool.
     """
-    displayname = "Architect"
+    display_name = "Architect"
     option_start_unlocked = 0
     option_normal = 2
     option_disabled = 3
@@ -121,7 +121,7 @@ class ArchitectFee(Range):
     Determines how large of a percentage the architect takes from the player when utilizing his services. 100 means he
     takes all your gold. 0 means his services are free.
     """
-    displayname = "Architect Fee Percentage"
+    display_name = "Architect Fee Percentage"
     range_start = 0
     range_end = 100
     default = 40
@@ -131,7 +131,7 @@ class DisableCharon(Toggle):
     """
     Prevents Charon from taking your money when you re-enter the castle. Also removes Haggling from the Item Pool.
     """
-    displayname = "Disable Charon"
+    display_name = "Disable Charon"
 
 
 class RequirePurchasing(DefaultOnToggle):
@@ -139,7 +139,7 @@ class RequirePurchasing(DefaultOnToggle):
     Determines where you will be required to purchase equipment and runes from the Blacksmith and Enchantress before
     equipping them. If you disable require purchasing, Manor Renovations are scaled to take this into account.
     """
-    displayname = "Require Purchasing"
+    display_name = "Require Purchasing"
 
 
 class ProgressiveBlueprints(Toggle):
@@ -147,14 +147,14 @@ class ProgressiveBlueprints(Toggle):
     Instead of shuffling blueprints randomly into the pool, blueprint unlocks are progressively unlocked. You would get
     Squire first, then Knight, etc., until finally Dark.
     """
-    displayname = "Progressive Blueprints"
+    display_name = "Progressive Blueprints"
 
 
 class GoldGainMultiplier(Choice):
     """
     Adjusts the multiplier for gaining gold from all sources.
     """
-    displayname = "Gold Gain Multiplier"
+    display_name = "Gold Gain Multiplier"
     option_normal = 0
     option_quarter = 1
     option_half = 2
@@ -167,7 +167,7 @@ class NumberOfChildren(Range):
     """
     Determines the number of offspring you can choose from on the lineage screen after a death.
     """
-    displayname = "Number of Children"
+    display_name = "Number of Children"
     range_start = 1
     range_end = 5
     default = 3
@@ -179,7 +179,7 @@ class AdditionalNames(OptionList):
     of names your children can have. The first value will also be your initial character's name depending on Starting
     Gender.
     """
-    displayname = "Additional Names"
+    display_name = "Additional Names"
 
 
 class AllowDefaultNames(DefaultOnToggle):
@@ -187,7 +187,7 @@ class AllowDefaultNames(DefaultOnToggle):
     Determines if the default names defined in the vanilla game are allowed to be used. Warning: Your world will not
     generate if the number of Additional Names defined is less than the Number of Children value.
     """
-    displayname = "Allow Default Names"
+    display_name = "Allow Default Names"
 
 
 class CastleScaling(Range):

@@ -47,13 +47,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.item_functionality = args.item_functionality.copy()
     world.timer = args.timer.copy()
     world.goal = args.goal.copy()
-
-    if hasattr(args, "algorithm"):  # current GUI options
-        world.algorithm = args.algorithm
-        world.shuffleganon = args.shuffleganon
-        world.custom = args.custom
-        world.customitemarray = args.customitemarray
-
     world.open_pyramid = args.open_pyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
     world.enemy_health = args.enemy_health.copy()
@@ -318,7 +311,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 multidata = zlib.compress(pickle.dumps(multidata), 9)
 
                 with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
-                    f.write(bytes([2]))  # version of format
+                    f.write(bytes([3]))  # version of format
                     f.write(multidata)
 
             multidata_task = pool.submit(write_multidata)

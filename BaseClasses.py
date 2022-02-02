@@ -1206,9 +1206,9 @@ class Spoiler():
 
         def write_option(option_key: str, option_obj: type(Options.Option)):
             res = getattr(self.world, option_key)[player]
-            displayname = getattr(option_obj, "displayname", option_key)
+            display_name = getattr(option_obj, "display_name", option_key)
             try:
-                outfile.write(f'{displayname + ":":33}{res.get_current_option_name()}\n')
+                outfile.write(f'{display_name + ":":33}{res.get_current_option_name()}\n')
             except:
                 raise Exception
 
