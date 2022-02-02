@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Option, Toggle, Range, OptionList, DeathLink
+from Options import Choice, Option, Toggle, Range, OptionList, DeathLink, OptionSet
 
 
 class CardPairs(Range):
@@ -22,17 +22,42 @@ class DisallowBingoCalls(Toggle):
     default = 1
 
 
-class ForcedAdvancement(Range):
-    """Percentage of Bingo rewards to be prioritized for advancement items."""
-    display_name = "Advancement Items Prioritization"
-    range_start = 0
-    range_end = 100
+class ForcedAdvancementHorizontal(Toggle):
+    """Force all horizontal line rewards to be advancement items"""
+    display_name = "Horizontal Line Priority Rewards"
     default = 0
 
+
+class ForcedAdvancementVertical(Toggle):
+    """Force all vertical line rewards to be advancement items"""
+    display_name = "vertical Line Priority Rewards"
+    default = 0
+
+
+class ForcedAdvancementDiagonal(Toggle):
+    """Force all diagonal line rewards to be advancement items"""
+    display_name = "Diagonal Line Priority Rewards"
+    default = 0
+
+
+class PriorityRewardItemBlacklist(OptionSet):
+    """Add items to this list to blacklist them from being Bingo rewards for lines set to be forced advancement items"""
+    display_name = "Priority reward item Blacklist"
+    default = {"Gold Skulltula Token"}
+
+
+class RewardItemBlacklist(OptionSet):
+    """Add items to this list to blacklist them from being any Bingo rewards"""
+    display_name = "General reward item Blacklist"
+    default = {}
 
 bingo_options: typing.Dict[str, type(Option)] = {
     "card_pairs": CardPairs,
     "reveal_rewards": RevealRewards,
     "disallow_bingo_calls": DisallowBingoCalls,
-    "priority_rewards": ForcedAdvancement
+    "priority_rewards_horizontal": ForcedAdvancementHorizontal,
+    "priority_rewards_vertical": ForcedAdvancementVertical,
+    "priority_rewards_diagonal": ForcedAdvancementDiagonal,
+    "priority_reward_item_blacklist": PriorityRewardItemBlacklist,
+    "reward_item_blacklist": RewardItemBlacklist
 }

@@ -6,9 +6,9 @@ class BingoLogic(LogicMixin):
     def _bingo_has_horizontal(self, card: int, linen: int, player) -> bool:
         cards = self.world.worlds[player].cards[player]
         line = cards[card-1][linen-1]
-        for c in line:
-            if c != 0:
-                if not self.has(c, player):
+        for call in line:
+            if call != 0:  # not a free space
+                if not self.has(call, player):
                     return False
         return True
 
@@ -16,9 +16,9 @@ class BingoLogic(LogicMixin):
         cards = self.world.worlds[player].cards[player]
         card = cards[cardn-1]
         for row in card:
-            c = row[line-1]
-            if c != 0:
-                if not self.has(c, player):
+            call = row[line-1]
+            if call != 0:  # not a free space
+                if not self.has(call, player):
                     return False
         return True
 
@@ -32,19 +32,19 @@ class BingoLogic(LogicMixin):
         if line == 2:
             for x in range(0, 5):
                 diag.append(card[4-x][x])
-        for c in diag:
-            if c != 0:
-                if not self.has(c, player):
+        for call in diag:
+            if call != 0:  # not a free space
+                if not self.has(call, player):
                     return False
         return True
 
-    def _bingo_completed(self, player):
+    def _bingo_completed(self, player) -> bool:
         cards = self.world.worlds[player].cards[player]
         for card in cards:
             for row in card:
-                for c in row:
-                    if c != 0:
-                        if not self.has(c, player):
+                for call in row:
+                    if call != 0:  # not a free space
+                        if not self.has(call, player):
                             return False
         return True
 

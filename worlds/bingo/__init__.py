@@ -8,7 +8,7 @@ from ..AutoWorld import World
 from .Options import bingo_options
 from .Regions import create_regions
 import os
-from ..generic.Rules import forbid_items, add_item_rule
+from ..generic.Rules import add_item_rule
 
 class BingoWorld(World):
     options = bingo_options
@@ -62,8 +62,6 @@ class BingoWorld(World):
             for _ in range(0, 24):
                 item = BingoItem(items[b], self.player)
                 pool.append(item)
-                # if self.world.force_non_local[self.player]:
-                #    self.world.non_local_items[self.player].value.add(item.name)
                 b += 1
 
         self.world.itempool += pool
@@ -83,7 +81,7 @@ class BingoWorld(World):
         slot_data = self._get_slot_data()
         for option_name in bingo_options:
             option = getattr(self.world, option_name)[self.player]
-            slot_data[option_name] = int(option.value)
+            slot_data[option_name] = option.value
         return slot_data
 
     def create_regions(self):
@@ -169,18 +167,18 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     ret.world = world
     if locations:
         loc_count = (world.card_pairs[player] * 24)
-        priority_order = [True] * int((loc_count * world.priority_rewards[player]) / 100)
-        priority_order += [False] * (loc_count - len(priority_order))
-        world.random.shuffle(priority_order)
         for location in locations:
             loc_id = location_table.get(location, 0)
+            location = BingoLocation(player, location, loc_id, ret)
             if loc_id is not None:
                 if loc_id - 900 >= loc_count:
                     continue
-            location = BingoLocation(player, location, loc_id, ret)
-            if loc_id != None:
-                if priority_order.pop():
+                if (("Horizontal" in location.name and world.priority_rewards_horizontal[player])
+                        or ("Vertical" in location.name and world.priority_rewards_vertical[player])
+                        or ("Diagonal" in location.name and world.priority_rewards_diagonal[player])):
                     location.progress_type = LocationProgressType.PRIORITY
+                    add_item_rule(location, lambda item: item.name not in world.priority_reward_item_blacklist[player])
+                add_item_rule(location, lambda item: item.name not in world.reward_item_blacklist[player])
                 if world.disallow_bingo_calls[player]:
                     add_item_rule(location, lambda item: item.game != "Bingo")
             ret.locations.append(location)
