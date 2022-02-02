@@ -1700,6 +1700,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
             if option_name in {"forfeit_mode", "remaining_mode", "collect_mode"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
+            if option_name in {"hint_cost", "location_check_points"}:
+                room_update = {"cmd": "RoomUpdate"}
+                room_update[option_name] = getattr(self.ctx, option_name)
+                self.ctx.broadcast_all([room_update])
             return True
         else:
             known = (f"{option}:{otype}" for option, otype in self.ctx.simple_options.items())
