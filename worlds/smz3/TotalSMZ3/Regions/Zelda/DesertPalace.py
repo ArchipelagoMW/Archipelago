@@ -24,7 +24,7 @@ class DesertPalace(Z3Region, IReward):
             Location(self, 256+114, 0x308151, LocationType.Regular, "Desert Palace - Lanmolas",
                 lambda items: (
                     items.CanLiftLight() or
-                    items.CanAccessMiseryMirePortal(Config) and items.Mirror
+                    items.CanAccessMiseryMirePortal(self.Config) and items.Mirror
                 ) and items.BigKeyDP and items.KeyDP and items.CanLightTorches() and self.CanBeatBoss(items))
             ]
 
@@ -36,7 +36,7 @@ class DesertPalace(Z3Region, IReward):
     def CanEnter(self, items: Progression):
         return items.Book or \
             items.Mirror and items.CanLiftHeavy() and items.Flute or \
-            items.CanAccessMiseryMirePortal(Config) and items.Mirror
+            items.CanAccessMiseryMirePortal(self.Config) and items.Mirror
 
     def CanComplete(self, items: Progression):
         return self.GetLocation("Desert Palace - Lanmolas").Available(items)

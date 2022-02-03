@@ -23,7 +23,7 @@ class TurtleRock(Z3Region, IReward, IMedallionAccess):
                 lambda items: items.KeyTR >= 1),
             Location(self, 256+181, 0x1EA25, LocationType.Regular, "Turtle Rock - Big Key Chest",
                 lambda items: items.KeyTR >=
-                    (2 if not Config.Keysanity or self.GetLocation("Turtle Rock - Big Key Chest").ItemIs(ItemType.BigKeyTR, self.world) else
+                    (2 if not self.Config.Keysanity or self.GetLocation("Turtle Rock - Big Key Chest").ItemIs(ItemType.BigKeyTR, self.world) else
                         3 if self.GetLocation("Turtle Rock - Big Key Chest").ItemIs(ItemType.KeyTR, self.world) else 4))
                 .AlwaysAllow(lambda item, items: item.Is(ItemType.KeyTR, self.world) and items.KeyTR >= 3),
             Location(self, 256+182, 0x1EA19, LocationType.Regular, "Turtle Rock - Big Chest",

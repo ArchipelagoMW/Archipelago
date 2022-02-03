@@ -25,4 +25,4 @@ class NorthEast(Z3Region):
         return self.world.CanAquire(items, RewardType.Agahnim) or items.MoonPearl and (
             items.Hammer and items.CanLiftLight() or
             items.CanLiftHeavy() and items.Flippers or
-            items.CanAccessDarkWorldPortal(Config) and items.Flippers)
+            items.CanAccessDarkWorldPortal(self.Config) and items.Flippers)

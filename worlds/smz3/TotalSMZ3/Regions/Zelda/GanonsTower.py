@@ -137,10 +137,10 @@ class GanonsTower(Z3Region):
             self.world.CanAquireAll(items, RewardType.CrystalBlue, RewardType.CrystalRed, RewardType.GoldenFourBoss)
 
     def CanFill(self, item: Item):
-        if (Config.GameMode == GameMode.Multiworld):
+        if (self.Config.GameMode == GameMode.Multiworld):
             if (item.World != self.world or item.Progression):
                 return False
-            if (Config.KeyShuffle == KeyShuffle.Keysanity and not ((item.Type == ItemType.BigKeyGT or item.Type == ItemType.KeyGT) and item.World == self.world) and (item.IsKey() or item.IsBigKey() or item.IsKeycard())):
+            if (self.Config.KeyShuffle == KeyShuffle.Keysanity and not ((item.Type == ItemType.BigKeyGT or item.Type == ItemType.KeyGT) and item.World == self.world) and (item.IsKey() or item.IsBigKey() or item.IsKeycard())):
                 return False
         return super().CanFill(item)
 

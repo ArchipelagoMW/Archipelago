@@ -17,9 +17,9 @@ class East(SMRegion):
                     self.world.CanEnter("Wrecked Ship", items)) if self.Logic == SMLogic.Normal else \
                 lambda items: items.Morph),
             Location(self, 2, 0x8F81EE, LocationType.Hidden, "Missile (outside Wrecked Ship top)",
-                lambda items: self.world.CanEnter("Wrecked Ship", items) and (not Config.Keysanity or items.CardWreckedShipBoss) and items.CanPassBombPassages()),
+                lambda items: self.world.CanEnter("Wrecked Ship", items) and (not self.Config.Keysanity or items.CardWreckedShipBoss) and items.CanPassBombPassages()),
             Location(self, 3, 0x8F81F4, LocationType.Visible, "Missile (outside Wrecked Ship middle)",
-                lambda items: self.world.CanEnter("Wrecked Ship", items) and (not Config.Keysanity or items.CardWreckedShipBoss) and items.CanPassBombPassages()),
+                lambda items: self.world.CanEnter("Wrecked Ship", items) and (not self.Config.Keysanity or items.CardWreckedShipBoss) and items.CanPassBombPassages()),
             Location(self, 4, 0x8F8248, LocationType.Visible, "Missile (Crateria moat)",
                 lambda items: True)
             ]
@@ -27,9 +27,9 @@ class East(SMRegion):
     def CanEnter(self, items:Progression):
         if self.Logic == SMLogic.Normal:
                 # /* Ship -> Moat */
-            return (items.CardCrateriaL2 if Config.Keysanity else items.CanUsePowerBombs()) and items.Super or (
+            return (items.CardCrateriaL2 if self.Config.Keysanity else items.CanUsePowerBombs()) and items.Super or (
                 # /* UN Portal -> Red Tower -> Moat
-                items.CardCrateriaL2 if Config.Keysanity else items.CanUsePowerBombs()) and items.CanAccessNorfairUpperPortal() and (
+                items.CardCrateriaL2 if self.Config.Keysanity else items.CanUsePowerBombs()) and items.CanAccessNorfairUpperPortal() and (
                     items.Ice or items.HiJump or items.SpaceJump) or (
                 # /*Through Maridia From Portal*/
                 items.CanAccessMaridiaPortal(self.world)) and items.Gravity and items.Super and (
@@ -41,9 +41,9 @@ class East(SMRegion):
                 items.CanUsePowerBombs()) and items.Super and items.Gravity
         else:
                 # /* Ship -> Moat */
-            return (items.CardCrateriaL2 if Config.Keysanity else  items.CanUsePowerBombs()) and items.Super or (
+            return (items.CardCrateriaL2 if self.Config.Keysanity else  items.CanUsePowerBombs()) and items.Super or (
                 # /* UN Portal -> Red Tower -> Moat */
-                items.CardCrateriaL2  if Config.Keysanity else  items.CanUsePowerBombs()) and items.CanAccessNorfairUpperPortal() and (
+                items.CardCrateriaL2  if self.Config.Keysanity else  items.CanUsePowerBombs()) and items.CanAccessNorfairUpperPortal() and (
                     items.Ice or items.HiJump or items.CanFly() or items.CanSpringBallJump()) or (
                 # /*Through Maridia From Portal*/
                 items.CanAccessMaridiaPortal(self.world)) and (

@@ -32,18 +32,18 @@ class Crocomire(SMRegion):
         ]
 
     def CanAccessCrocomire(self, items:Progression):
-        return items.CardNorfairBoss if Config.Keysanity else items.Super
+        return items.CardNorfairBoss if self.Config.Keysanity else items.Super
 
     def CanEnter(self, items:Progression):
         if self.Logic == SMLogic.Normal:
             return ((items.CanDestroyBombWalls() or items.SpeedBooster) and items.Super and items.Morph or items.CanAccessNorfairUpperPortal()) and (
                 items.Varia) and (
                     # /* Ice Beam -> Croc Speedway */
-                    (items.CardNorfairL1 if Config.Keysanity else items.Super) and items.CanUsePowerBombs() and items.SpeedBooster or
+                    (items.CardNorfairL1 if self.Config.Keysanity else items.Super) and items.CanUsePowerBombs() and items.SpeedBooster or
                     # /* Frog Speedway */
                     items.SpeedBooster and items.Wave or
                     # /* Cathedral -> through the floor or Vulcano */
-                    items.CanOpenRedDoors() and (items.CardNorfairL2 if Config.Keysanity else items.Super) and
+                    items.CanOpenRedDoors() and (items.CardNorfairL2 if self.Config.Keysanity else items.Super) and
                         (items.CanFly() or items.HiJump or items.SpeedBooster) and
                         (items.CanPassBombPassages() or items.Gravity and items.Morph) and items.Wave
                     or
@@ -53,13 +53,13 @@ class Crocomire(SMRegion):
         else:
             return ((items.CanDestroyBombWalls() or items.SpeedBooster) and items.Super and items.Morph or items.CanAccessNorfairUpperPortal()) and (
                     # /* Ice Beam -> Croc Speedway */
-                    (items.CardNorfairL1 if Config.Keysanity else items.Super) and items.CanUsePowerBombs() and
+                    (items.CardNorfairL1 if self.Config.Keysanity else items.Super) and items.CanUsePowerBombs() and
                         items.SpeedBooster and (items.HasEnergyReserves(3) or items.Varia) or
                     # /* Frog Speedway */
                     items.SpeedBooster and (items.HasEnergyReserves(2) or items.Varia) and
                         (items.Missile or items.Super or items.Wave) or ( # /* Blue Gate */
                     # /* Cathedral -> through the floor or Vulcano */
-                    items.CanHellRun()) and items.CanOpenRedDoors() and (items.CardNorfairL2 if Config.Keysanity else items.Super) and
+                    items.CanHellRun()) and items.CanOpenRedDoors() and (items.CardNorfairL2 if self.Config.Keysanity else items.Super) and
                         (items.CanFly() or items.HiJump or items.SpeedBooster or items.CanSpringBallJump() or items.Varia and items.Ice) and
                         (items.CanPassBombPassages() or items.Varia and items.Morph) and
                         (items.Missile or items.Super or items.Wave) # /* Blue Gate */

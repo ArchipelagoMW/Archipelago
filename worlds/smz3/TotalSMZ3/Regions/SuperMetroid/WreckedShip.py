@@ -46,7 +46,7 @@ class WreckedShip(SMRegion, IReward):
         if self.Logic == SMLogic.Normal:
             return items.Super and (
                     # /* Over the Moat */
-                    (items.CardCrateriaL2 if Config.Keysanity else items.CanUsePowerBombs()) and (
+                    (items.CardCrateriaL2 if self.Config.Keysanity else items.CanUsePowerBombs()) and (
                         items.SpeedBooster or items.Grapple or items.SpaceJump or
                         items.Gravity and (items.CanIbj() or items.HiJump)
                     ) or
@@ -59,7 +59,7 @@ class WreckedShip(SMRegion, IReward):
         else:
             return items.Super and (
                     # /* Over the Moat */
-                    (items.CardCrateriaL2 if Config.Keysanity else items.CanUsePowerBombs()) or
+                    (items.CardCrateriaL2 if self.Config.Keysanity else items.CanUsePowerBombs()) or
                     # /* Through Maridia -> Forgotten Highway */
                     items.CanUsePowerBombs() and (
                         items.Gravity or

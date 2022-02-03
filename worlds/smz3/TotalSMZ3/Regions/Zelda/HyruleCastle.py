@@ -28,7 +28,7 @@ class HyruleCastle(Z3Region):
             Location(self, 256+98, 0x1EB09, LocationType.Regular, "Hyrule Castle - Zelda's Cell",
                 lambda items: items.KeyHC).Weighted(sphereOne),
             Location(self, 256+99, 0x5DF45, LocationType.NotInDungeon, "Link's Uncle")
-                .Allow(lambda item, items: Config.Keysanity or not item.IsDungeonItem()).Weighted(sphereOne),
+                .Allow(lambda item, items: self.Config.Keysanity or not item.IsDungeonItem()).Weighted(sphereOne),
             Location(self, 256+100, 0x1E971, LocationType.NotInDungeon, "Secret Passage")
-                .Allow(lambda item, items: Config.Keysanity or not item.IsDungeonItem()).Weighted(sphereOne),
+                .Allow(lambda item, items: self.Config.Keysanity or not item.IsDungeonItem()).Weighted(sphereOne),
             ]

@@ -396,7 +396,7 @@ class Item:
 
     @staticmethod
     def CreateKeycards(world):
-        return [
+        itemPool =  [
             Item(ItemType.CardCrateriaL1, world),
             Item(ItemType.CardCrateriaL2, world),
             Item(ItemType.CardCrateriaBoss, world),
@@ -414,6 +414,12 @@ class Item:
             Item(ItemType.CardLowerNorfairL1, world),
             Item(ItemType.CardLowerNorfairBoss, world),
         ]
+
+        for item in itemPool:
+            item.Progression = True
+            item.World = world
+
+        return itemPool
 
     @staticmethod
     def Get(items, itemType:ItemType):

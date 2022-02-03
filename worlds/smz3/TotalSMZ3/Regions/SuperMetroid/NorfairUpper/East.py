@@ -76,7 +76,7 @@ class East(SMRegion):
                     items.CanAccessNorfairUpperPortal()
                 ) and items.Varia and items.Super and (
                     # /* Cathedral */
-                    items.CanOpenRedDoors() and (items.CardNorfairL2 if Config.Keysanity else items.Super) and
+                    items.CanOpenRedDoors() and (items.CardNorfairL2 if self.Config.Keysanity else items.Super) and
                         (items.CanFly() or items.HiJump or items.SpeedBooster) or
                     # /* Frog Speedway */
                     items.SpeedBooster and (items.CardNorfairL2 or items.Wave) and items.CanUsePowerBombs()
@@ -86,7 +86,7 @@ class East(SMRegion):
                     items.CanAccessNorfairUpperPortal()) and (
                 items.CanHellRun()) and (
                     # /* Cathedral */
-                    items.CanOpenRedDoors() and (items.CardNorfairL2 if Config.Keysanity else items.Super) and (
+                    items.CanOpenRedDoors() and (items.CardNorfairL2 if self.Config.Keysanity else items.Super) and (
                         items.CanFly() or items.HiJump or items.SpeedBooster or
                         items.CanSpringBallJump() or items.Varia and items.Ice
                     ) or
