@@ -21,7 +21,7 @@ class SM64World(World):
     item_name_to_id = item_table
     location_name_to_id = location_table
 
-    data_version = 4
+    data_version = 5
     forced_auto_forfeit = False
 
     area_connections = {}
@@ -52,9 +52,13 @@ class SM64World(World):
         mushroomitem = self.create_item("1Up Mushroom") 
         self.world.itempool += [mushroomitem for i in range(starcount,120 - (15 if not self.world.EnableCoinStars[self.player].value else 0))]
 
-        key1 = self.create_item("Basement Key")
-        key2 = self.create_item("Second Floor Key")
-        self.world.itempool += [key1,key2]
+        if (not self.world.ProgressiveKeys[self.player].value):
+            key1 = self.create_item("Basement Key")
+            key2 = self.create_item("Second Floor Key")
+            self.world.itempool += [key1,key2]
+        else:
+            key = self.create_item("Progressive Key")
+            self.world.itempool += [key,key]
 
         wingcap = self.create_item("Wing Cap")
         metalcap = self.create_item("Metal Cap")

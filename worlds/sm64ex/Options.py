@@ -23,10 +23,15 @@ class ExtraStars(Range):
 
 class AreaRandomizer(Toggle):
     """Randomize Entrances to Courses"""
-    displayname = "Course Randomizer"
+    display_name = "Course Randomizer"
+
+class ProgressiveKeys(DefaultOnToggle):
+    """Keys will first grant you access to the Basement, then to the Secound Floor"""
+    display_name = "Progressive Keys"
 
 sm64_options: typing.Dict[str,type(Option)] = {
     "AreaRandomizer": AreaRandomizer,
+    "ProgressiveKeys": ProgressiveKeys,
     "EnableCoinStars": EnableCoinStars,
     "StrictCapRequirements": StrictCapRequirements,
     "StarsToFinish": StarsToFinish,

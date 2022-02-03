@@ -201,9 +201,9 @@ locSS_table = {
 
 #Caps
 locCap_table = {
-    "Tower of the Wing Cap Switch": 3626180,
-    "Cavern of the Metal Cap Switch": 3626181,
-    "Vanish Cap Under the Moat Switch": 3626182
+    "Tower of the Wing Cap Switch": 3626181,
+    "Cavern of the Metal Cap Switch": 3626182,
+    "Vanish Cap Under the Moat Switch": 3626183
 }
 
 # Correspond to 3626000 + course index * 7 + star index, then secret stars, then keys, then 100 Coin Stars

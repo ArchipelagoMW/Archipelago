@@ -15,7 +15,7 @@ def set_rules(world,player,area_connections):
     connect_regions(world, player, "Menu", "Bowser in the Dark World", lambda state: state.has("Power Star", player, 8))
     connect_regions(world, player, "Menu", sm64courses[area_connections[4]], lambda state: state.has("Power Star", player, 12))
 
-    connect_regions(world, player, "Menu", "Basement", lambda state: state.has("Basement Key", player))
+    connect_regions(world, player, "Menu", "Basement", lambda state: state.has("Basement Key", player) or state.has("Progressive Key", player, 1))
 
     connect_regions(world, player, "Basement", sm64courses[area_connections[5]], lambda state: True)
     connect_regions(world, player, "Basement", sm64courses[area_connections[6]], lambda state: True)
@@ -24,7 +24,7 @@ def set_rules(world,player,area_connections):
     connect_regions(world, player, "Basement", "Bowser in the Fire Sea", lambda state: state.has("Power Star", player, 30) and
                                                                                        state.can_reach("Dire, Dire Docks", 'Region', player))
 
-    connect_regions(world, player, "Menu", "Second Floor", lambda state: state.has("Second Floor Key", player))
+    connect_regions(world, player, "Menu", "Second Floor", lambda state: state.has("Second Floor Key", player) or state.has("Progressive Key", player, 2))
 
     connect_regions(world, player, "Second Floor", sm64courses[area_connections[9]], lambda state: True)
     connect_regions(world, player, "Second Floor", sm64courses[area_connections[10]], lambda state: True)
