@@ -17,7 +17,12 @@ class AreaRandomizer(Toggle):
     """Randomize Entrances to Areas"""
     displayname = "Area Randomizer"
 
+class MusicRandomizer(Toggle):
+    """Randomize Music"""
+    displayname = "Music Randomizer"
+
 v6_options: typing.Dict[str,type(Option)] = {
+    "MusicRandomizer": MusicRandomizer,
     "AreaRandomizer": AreaRandomizer,
     "DoorCost": DoorCost,
     "DeathLink": DeathLink,
