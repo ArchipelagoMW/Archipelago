@@ -1,4 +1,4 @@
-import string
+import typing
 from .Items import item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options
@@ -24,7 +24,7 @@ class SM64World(World):
     data_version = 5
     forced_auto_forfeit = False
 
-    area_connections = {}
+    area_connections: typing.Dict[int, int]
 
     options = sm64_options
 
@@ -36,7 +36,7 @@ class SM64World(World):
 
     def set_rules(self):
         self.area_connections = {}
-        set_rules(self.world,self.player,self.area_connections)
+        set_rules(self.world, self.player, self.area_connections)
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
