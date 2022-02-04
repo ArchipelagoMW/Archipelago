@@ -2,7 +2,6 @@ import typing
 from ..generic.Rules import add_rule
 from .Regions import connect_regions, v6areas
 
-area_connections = {}
 
 def _has_trinket_range(state,player,start,end) -> bool:
     for i in range(start,end):
@@ -10,9 +9,10 @@ def _has_trinket_range(state,player,start,end) -> bool:
             return False
     return True
 
-def set_rules(world,player,area_connections):
+
+def set_rules(world, player, area_connections: typing.Dict[int, int]):
     areashuffle = list(range(len(v6areas)))
-    if (world.AreaRandomizer[player].value):
+    if world.AreaRandomizer[player].value:
         world.random.shuffle(areashuffle)
     area_connections.update({(index+1): (value+1) for index, value in enumerate(areashuffle)})
     area_connections.update({0:0})

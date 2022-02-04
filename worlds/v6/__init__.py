@@ -1,8 +1,9 @@
-import string
+import typing
+
 from .Items import item_table, V6Item
 from .Locations import location_table, V6Location
 from .Options import v6_options
-from .Rules import set_rules, area_connections
+from .Rules import set_rules
 from .Regions import create_regions
 from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld
 from ..AutoWorld import World
@@ -23,7 +24,7 @@ class V6World(World):
     data_version = 1
     forced_auto_forfeit = False
 
-    area_connections = {}
+    area_connections: typing.Dict[int, int]
 
     options = v6_options
 
@@ -32,7 +33,7 @@ class V6World(World):
 
     def set_rules(self):
         self.area_connections = {}
-        set_rules(self.world,self.player,self.area_connections)
+        set_rules(self.world, self.player, self.area_connections)
 
     def create_item(self, name: str) -> Item:
         return V6Item(name, True, item_table[name], self.player)
