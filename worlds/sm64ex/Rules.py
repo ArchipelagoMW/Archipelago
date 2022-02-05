@@ -64,9 +64,9 @@ def set_rules(world,player,area_connections):
     add_rule(world.get_location("Vanish Cap Under the Moat Red Coins", player), lambda state: state.can_reach("Vanish Cap Under the Moat Switch", 'Location', player))
     add_rule(world.get_location("Wing Mario Over the Rainbow", player), lambda state: state.can_reach("Third Floor", 'Region', player) and state.has("Wing Cap", player))
     add_rule(world.get_location("The Secret Aquarium", player), lambda state: state.has("Power Star", player, 3))
-    add_rule(world.get_location("Toad (Basement)", player), lambda state: state.can_reach("Basement",'Region',player))
-    add_rule(world.get_location("Toad (Second Floor)", player), lambda state: state.can_reach("Second Floor",'Region',player))
-    add_rule(world.get_location("Toad (Third Floor)", player), lambda state: state.can_reach("Third Floor",'Region',player))
+    add_rule(world.get_location("Toad (Basement)", player), lambda state: state.can_reach("Basement",'Region',player) and state.has("Power Star", player, 12))
+    add_rule(world.get_location("Toad (Second Floor)", player), lambda state: state.can_reach("Second Floor",'Region',player) and state.has("Power Star", player, 25))
+    add_rule(world.get_location("Toad (Third Floor)", player), lambda state: state.can_reach("Third Floor",'Region',player) and state.has("Power Star", player, 35))
     add_rule(world.get_location("MIPS 1", player), lambda state: state.can_reach("Basement",'Region',player) and state.has("Power Star", player, 15))
     add_rule(world.get_location("MIPS 2", player), lambda state: state.can_reach("Basement",'Region',player) and state.has("Power Star", player, 50))
 
