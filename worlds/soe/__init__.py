@@ -35,7 +35,7 @@ Provides could be events, but instead we iterate through the entire logic in Log
     e.g. NPC available after fighting a Boss
 
 Rules are special locations that don't have a physical location
-instead of implementing virtual locations and virtual items, we simply use them  in Logic.py
+instead of implementing virtual locations and virtual items, we simply use them in Logic.py
     e.g. 2DEs+Wheel+Gauge = Rocket
 
 Rules and Locations live on the same logic tree returned by pyevermizer.get_logic()
@@ -66,9 +66,9 @@ def _get_location_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[i
     name_to_id = {}
     id_to_raw = {}
     for loc in _locations:
-        apid = _id_offset[loc.type] + loc.index
-        id_to_raw[apid] = loc
-        name_to_id[loc.name] = apid
+        ap_id = _id_offset[loc.type] + loc.index
+        id_to_raw[ap_id] = loc
+        name_to_id[loc.name] = ap_id
     name_to_id['Done'] = None
     return name_to_id, id_to_raw
 
@@ -79,9 +79,9 @@ def _get_item_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[int, 
     for item in _items:
         if item.name in name_to_id:
             continue
-        apid = _id_offset[item.type] + item.index
-        id_to_raw[apid] = item
-        name_to_id[item.name] = apid
+        ap_id = _id_offset[item.type] + item.index
+        id_to_raw[ap_id] = item
+        name_to_id[item.name] = ap_id
     name_to_id['Victory'] = None
     return name_to_id, id_to_raw
 
