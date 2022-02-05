@@ -12,6 +12,7 @@
 *.sfc
 *.z64
 *.n64
+*.nes
 *.wixobj
 *.lck
 *.db3
@@ -26,14 +27,9 @@ dist
 README.html
 .vs/
 EnemizerCLI/
-RaceRom.py
-weights/
-/MultiMystery/
 /Players/
-/QUsb2Snes/
 /options.yaml
 /config.yaml
-/uploads/
 /logs/
 _persistent_storage.yaml
 mystery_result_*.yaml
@@ -44,6 +40,10 @@ Output Logs/
 /factorio/
 /Minecraft Forge Server/
 /WebHostLib/static/generated
+/freeze_requirements.txt
+/Archipelago.zip
+/setup.ini
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -150,8 +150,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-
-Archipelago.zip
 
 #minecraft server stuff
 jdk*/

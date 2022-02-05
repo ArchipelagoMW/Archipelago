@@ -12,6 +12,7 @@ import random
 
 import Options
 import Utils
+import NetUtils
 
 
 class MultiWorld():
@@ -39,6 +40,7 @@ class MultiWorld():
     def __init__(self, players: int):
         self.random = random.Random()  # world-local random state is saved for multiple generations running concurrently
         self.players = players
+        self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
         self.glitch_triforce = False
         self.algorithm = 'balanced'
         self.dungeons: Dict[Tuple[str, int], Dungeon] = {}
@@ -252,7 +254,7 @@ class MultiWorld():
             self._all_state = ret
         return ret
 
-    def get_items(self) -> list:
+    def get_items(self) -> List[Item]:
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
     def find_item_locations(self, item, player: int) -> List[Location]:
@@ -916,6 +918,7 @@ class LocationProgressType(Enum):
     PRIORITY = 2
     EXCLUDED = 3
 
+
 class Location():
     # If given as integer, then this is the shop's inventory index
     shop_slot: Optional[int] = None
@@ -925,7 +928,6 @@ class Location():
     spot_type = 'Location'
     game: str = "Generic"
     show_in_spoiler: bool = True
-    excluded: bool = False
     crystal: bool = False
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow = staticmethod(lambda item, state: False)
@@ -1204,9 +1206,9 @@ class Spoiler():
 
         def write_option(option_key: str, option_obj: type(Options.Option)):
             res = getattr(self.world, option_key)[player]
-            displayname = getattr(option_obj, "displayname", option_key)
+            display_name = getattr(option_obj, "display_name", option_key)
             try:
-                outfile.write(f'{displayname + ":":33}{res.get_current_option_name()}\n')
+                outfile.write(f'{display_name + ":":33}{res.get_current_option_name()}\n')
             except:
                 raise Exception
 

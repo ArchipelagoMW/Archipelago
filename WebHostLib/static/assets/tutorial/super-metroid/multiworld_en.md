@@ -2,8 +2,11 @@
 
 ## Required Software
 
-- SNI Client
-    - Included in Archipelago download
+- One of the client programs:
+  - [SNIClient](https://github.com/ArchipelagoMW/Archipelago/releases), included with the main 
+  Archipelago install. Make sure to check the box for `SNI Client - Super Metroid Patch Setup`
+  - [SuperNintendoClient](https://github.com/ArchipelagoMW/SuperNintendoClient/releases), an alternate standalone
+  client for Super Nintendo games
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI such as:
         - snes9x Multitroid
@@ -85,8 +88,10 @@ first time launching, you may be prompted to allow it to communicate through the
 2. Click on the File menu and hover on **Lua Scripting**
 3. Click on **New Lua Script Window...**
 4. In the new window, click **Browse...**
-5. Select the `Connector.lua` file in the `Archipelago\SNI\lua` folder.
-    - Use x86 for 32-bit or x64 for 64-bit.
+5. Select the connector lua file included with your client
+    - SuperNintendoClient users should download `sniConnector.lua` from the client download page
+    - SNIClient users should look in their Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
+      emulator is 64-bit or 32-bit.
 
 ##### BizHawk
 
@@ -97,8 +102,10 @@ first time launching, you may be prompted to allow it to communicate through the
 2. Load your ROM file if it hasn't already been loaded.
 3. Click on the Tools menu and click on **Lua Console**
 4. Click the button to open a new Lua script.
-5. Select the `Connector.lua` file in `Archipelago\SNI\lua` folder.
-    - Use x86 for 32-bit or x64 for 64-bit. Please note the most recent versions of BizHawk are 64-bit only.
+5. Select the `Connector.lua` file included with your client
+    - SuperNintendoClient users should download `sniConnector.lua` from the client download page
+    - SNIClient users should look in their Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
+      emulator is 64-bit or 32-bit. Please note the most recent versions of BizHawk are 64-bit only.
 
 #### With hardware
 

@@ -13,7 +13,7 @@ These steps should be followed in order to establish a gameplay connection with 
 
 In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
 
-There are libraries available that implement the this network protocol in [Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py), [Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java) and [.Net](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net)
+There are libraries available that implement this network protocol in [Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py), [Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java) and [.Net](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net)
 
 For Super Nintendo games there are clients available in either [Node](https://github.com/ArchipelagoMW/SuperNintendoClient) or [Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py), There are also game specific clients available for [The Legend of Zelda: Ocarina of Time](https://github.com/ArchipelagoMW/Z5Client) or [Final Fantasy 1](https://github.com/ArchipelagoMW/Archipelago/blob/main/FF1Client.py)
 
@@ -177,12 +177,15 @@ Sent to clients to provide what is known as a 'data package' which contains info
 | data | [DataPackageObject](#Data-Package-Contents) | The data package as a JSON object. |
 
 ### Bounced
-Sent to clients after a client requested this message be sent to them, more info in the Bounce package.
+Sent to clients after a client requested this message be sent to them, more info in the [Bounce](#Bounce) package.
 
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| data | dict | The data in the Bounce package copied |
+| games | list\[str\] | Optional. Game names this message is targeting |
+| slots | list\[int\] | Optional. Player slot IDs that this message is targeting |
+| tags | list\[str\] | Optional. Client [Tags](#Tags) this message is targeting |
+| data | dict | The data in the [Bounce](#Bounce) package copied |
 
 ### InvalidPacket
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
@@ -346,16 +349,16 @@ class NetworkItem(NamedTuple):
 In JSON this may look like:
 ```js
 [
-    {"item": 1, "location": 1, "player": 0, "flags": 1},
-    {"item": 2, "location": 2, "player": 0, "flags": 2},
-    {"item": 3, "location": 3, "player": 0, "flags": 0}
+    {"item": 1, "location": 1, "player": 1, "flags": 1},
+    {"item": 2, "location": 2, "player": 2, "flags": 2},
+    {"item": 3, "location": 3, "player": 3, "flags": 0}
 ]
 ```
 `item` is the item id of the item
 
 `location` is the location id of the item inside the world
 
-`player` is the player slot of the world the item is located in
+`player` is the player slot of the world the item is located in, except when inside an [LocationInfo](#LocationInfo) Packet then it will be the slot of the player to receive the item
 
 `flags` are bit flags:
 | Flag | Meaning |

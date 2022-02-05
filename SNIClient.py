@@ -174,15 +174,24 @@ async def deathlink_kill_player(ctx: Context):
     while ctx.death_state == DeathState.killing_player and \
             ctx.snes_state == SNESState.SNES_ATTACHED:
         if ctx.game == GAME_ALTTP:
-            snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
-            snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
+            invincible = await snes_read(ctx, WRAM_START + 0x037B, 1)
+            last_health = await snes_read(ctx, WRAM_START + 0xF36D, 1)
+            await asyncio.sleep(0.25)
+            health = await snes_read(ctx, WRAM_START + 0xF36D, 1)
+            if not invincible or not last_health or not health:
+                ctx.death_state = DeathState.dead
+                ctx.last_death_link = time.time()
+                continue
+            if not invincible[0] and last_health[0] == health[0]:
+                snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
+                snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
         elif ctx.game == GAME_SM:
             snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
             if not ctx.death_link_allow_survive:
                 snes_buffered_write(ctx, WRAM_START + 0x09D6, bytes([0, 0]))  # set current reserve to 0
         await snes_flush_writes(ctx)
         await asyncio.sleep(1)
-        gamemode = None
+
         if ctx.game == GAME_ALTTP:
             gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
             if not gamemode or gamemode[0] in DEATH_MODES:
@@ -195,14 +204,6 @@ async def deathlink_kill_player(ctx: Context):
             if not gamemode or gamemode[0] in SM_DEATH_MODES or (ctx.death_link_allow_survive and health is not None and health > 0):
                 ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
-
-
-def color_item(item_id: int, green: bool = False) -> str:
-    item_name = get_item_name_from_id(item_id)
-    item_colors = ['green' if green else 'cyan']
-    if item_name in Items.progression_items:
-        item_colors.append("white_bg")
-    return color(item_name, *item_colors)
 
 
 SNES_RECONNECT_DELAY = 5

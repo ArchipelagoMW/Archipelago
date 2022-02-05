@@ -324,7 +324,7 @@ class ALTTPWorld(World):
             del (multidata["connect_names"][self.world.player_name[self.player]])
 
     def get_required_client_version(self) -> tuple:
-        return max((0, 2, 0), super(ALTTPWorld, self).get_required_client_version())
+        return max((0, 2, 4), super(ALTTPWorld, self).get_required_client_version())
 
     def create_item(self, name: str) -> Item:
         return ALttPItem(name, self.player, **as_dict_item_table[name])

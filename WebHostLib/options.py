@@ -69,7 +69,7 @@ def create():
             elif option.options:
                 game_options[option_name] = this_option = {
                     "type": "select",
-                    "displayName": option.displayname if hasattr(option, "displayname") else option_name,
+                    "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": option.__doc__ if option.__doc__ else "Please document me!",
                     "defaultValue": None,
                     "options": []
@@ -92,7 +92,7 @@ def create():
             elif hasattr(option, "range_start") and hasattr(option, "range_end"):
                 game_options[option_name] = {
                     "type": "range",
-                    "displayName": option.displayname if hasattr(option, "displayname") else option_name,
+                    "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": option.__doc__ if option.__doc__ else "Please document me!",
                     "defaultValue": option.default if hasattr(option, "default") else option.range_start,
                     "min": option.range_start,
@@ -102,14 +102,14 @@ def create():
             elif getattr(option, "verify_item_name", False):
                 game_options[option_name] = {
                     "type": "items-list",
-                    "displayName": option.displayname if hasattr(option, "displayname") else option_name,
+                    "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": option.__doc__ if option.__doc__ else "Please document me!",
                 }
 
             elif getattr(option, "verify_location_name", False):
                 game_options[option_name] = {
                     "type": "locations-list",
-                    "displayName": option.displayname if hasattr(option, "displayname") else option_name,
+                    "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": option.__doc__ if option.__doc__ else "Please document me!",
                 }
 
@@ -117,7 +117,7 @@ def create():
                 if option.valid_keys:
                     game_options[option_name] = {
                         "type": "custom-list",
-                        "displayName": option.displayname if hasattr(option, "displayname") else option_name,
+                        "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                         "description": option.__doc__ if option.__doc__ else "Please document me!",
                         "options": list(option.valid_keys),
                     }

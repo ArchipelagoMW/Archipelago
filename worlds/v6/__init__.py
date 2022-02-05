@@ -1,4 +1,5 @@
-import string
+import typing
+
 from .Items import item_table, V6Item
 from .Locations import location_table, V6Location
 from .Options import v6_options
@@ -23,24 +24,35 @@ class V6World(World):
     data_version = 1
     forced_auto_forfeit = False
 
+    area_connections: typing.Dict[int, int]
+
+    music_map: typing.Dict[int,int]
+
     options = v6_options
 
     def create_regions(self):
         create_regions(self.world,self.player)
 
     def set_rules(self):
-        set_rules(self.world,self.player)
+        self.area_connections = {}
+        set_rules(self.world, self.player, self.area_connections)
 
     def create_item(self, name: str) -> Item:
-        item_id = item_table[name]
-        item = V6Item(name, True, item_id, self.player)
-        return item
+        return V6Item(name, True, item_table[name], self.player)
 
     def generate_basic(self):
         self.world.itempool += [self.create_item(name) for name in self.item_names]
 
+        musiclist_o = [1,2,3,4,9,12]
+        musiclist_s = musiclist_o.copy()
+        if self.world.MusicRandomizer[self.player].value:
+            self.world.random.shuffle(musiclist_s)
+        self.music_map = dict(zip(musiclist_o, musiclist_s))
+
     def fill_slot_data(self):
         return {
+            "MusicRando": self.music_map,
+            "AreaRando": self.area_connections,
             "DoorCost": self.world.DoorCost[self.player].value,
             "DeathLink": self.world.DeathLink[self.player].value,
             "DeathLink_Amnesty": self.world.DeathLinkAmnesty[self.player].value
