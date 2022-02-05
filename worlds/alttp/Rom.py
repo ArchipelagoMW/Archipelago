@@ -755,7 +755,6 @@ def patch_rom(world, rom, player, enemized):
     local_random = world.slot_seeds[player]
 
     # patch items
-    targets_pointing_to_here = world.get_player_groups(player) | {player}
 
     for location in world.get_locations():
         if location.player != player or location.address is None or location.shop_slot is not None:
@@ -786,7 +785,7 @@ def patch_rom(world, rom, player, enemized):
                     itemid = list(location_table.keys()).index(location.name) + 1
                     assert itemid < 0x100
                     rom.write_byte(location.player_address, 0xFF)
-                elif location.item.player not in targets_pointing_to_here:
+                elif location.item.player != player:
                     if location.player_address is not None:
                         rom.write_byte(location.player_address, min(location.item.player, ROM_PLAYER_LIMIT))
                     else:

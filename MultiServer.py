@@ -728,11 +728,11 @@ def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
     return sorted(items)
 
 
-def send_items_to(ctx: Context, team: int, slot: int, *items: NetworkItem):
-    targets = ctx.groups.get(slot, [slot])
+def send_items_to(ctx: Context, team: int, target_slot: int, *items: NetworkItem):
+    targets = ctx.groups.get(target_slot, [target_slot])
     for target in targets:
         for item in items:
-            if target != item.player:
+            if item.player != target_slot:
                 get_received_items(ctx, team, target, False).append(item)
             get_received_items(ctx, team, target, True).append(item)
 
