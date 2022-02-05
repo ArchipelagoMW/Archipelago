@@ -201,7 +201,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         world.itempool = new_itempool
 
         while itemcount > len(world.itempool):
-            for player in world.get_game_players(game):
+            for player in group["players"]:
                 if item_link["players"][player]:
                     world.itempool.append(AutoWorld.call_single(world, "create_item", player,
                                                                 item_link["players"][player]))
