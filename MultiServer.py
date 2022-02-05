@@ -443,7 +443,7 @@ class Context:
         if "random_state" in savedata:
             self.random.setstate(savedata["random_state"])
         logging.info(f'Loaded save file with {sum([len(p) for p in self.received_items.values()])} received items '
-                     f'for {len(self.received_items)} players')
+                     f'for {len(self.received_items)/2} players')
 
     # rest
 
