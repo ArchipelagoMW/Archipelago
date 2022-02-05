@@ -20,6 +20,8 @@ class AutoWorldRegister(type):
 
         # build rest
         dct["item_names"] = frozenset(dct["item_name_to_id"])
+        dct["item_name_groups"] = dct.get("item_name_groups", {})
+        dct["item_name_groups"]["Everything"] = dct["item_names"]
         dct["location_names"] = frozenset(dct["location_name_to_id"])
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
 

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import copy
-import typing
 from enum import Enum, unique
 import logging
 import json
@@ -198,7 +197,7 @@ class MultiWorld():
 
         return new_id, new_group
 
-    def get_player_groups(self, player) -> typing.Set[int]:
+    def get_player_groups(self, player) -> Set[int]:
         return {group_id for group_id, group in self.groups.items() if player in group["players"]}
 
     def set_seed(self, seed: Optional[int] = None, secure: bool = False, name: Optional[str] = None):
