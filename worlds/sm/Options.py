@@ -53,7 +53,7 @@ class DeathLink(Choice):
     default = 0
 
 class MaxDifficulty(Choice):
-    """Depending on the perceived difficulties of the techniques, bosses, hell runs etc. from the preset. It will prevent the Randomizer from placing an item in a location too difficult to reach with the current items."""
+    """Depending on the perceived difficulties of the techniques, bosses, hell runs etc. from the preset, it will prevent the Randomizer from placing an item in a location too difficult to reach with the current items."""
     display_name = "Maximum Difficulty"
     option_easy = 0
     option_medium = 1
@@ -97,7 +97,7 @@ class PowerBombQty(Range):
     default = 10
 
 class MinorQty(Range):
-    """From 7%: minimum number of minors required to finish the game to 100%: all minors locations contain a minor (vanilla like)."""
+    """From 7%, minimum number of minors required to finish the game, to 100%."""
     display_name = "Minor Quantity"
     range_start = 7
     range_end = 100
