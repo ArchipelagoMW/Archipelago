@@ -442,8 +442,9 @@ class Context:
         self.location_checks.update(savedata["location_checks"])
         if "random_state" in savedata:
             self.random.setstate(savedata["random_state"])
-        logging.info(f'Loaded save file with {sum([len(p) for p in self.received_items.values()])} received items '
-                     f'for {len(self.received_items)} players')
+        # count items and slots from lists for item_handling = remote
+        logging.info(f'Loaded save file with {sum([len(v) for k,v in self.received_items.items() if k[2]])} received items '
+                         f'for {sum(k[2] for k in self.received_items)} players')
 
     # rest
 
