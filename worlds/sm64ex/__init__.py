@@ -21,7 +21,7 @@ class SM64World(World):
     item_name_to_id = item_table
     location_name_to_id = location_table
 
-    data_version = 1
+    data_version = 4
     forced_auto_forfeit = False
 
     options = sm64_options
@@ -35,17 +35,19 @@ class SM64World(World):
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
-        item = SM64Item(name, True, item_id, self.player)
+        item = SM64Item(name, name != "1Up Mushroom", item_id, self.player)
         return item
 
     def generate_basic(self):
-        staritem = self.create_item("Star")
-        if (self.world.EnableCoinStars[self.player].value):
-            self.world.itempool += [staritem for i in range(0,120)]
-        else:
-            self.world.itempool += [staritem for i in range(0,105)]
+        staritem = self.create_item("Power Star")
+        starcount = self.world.StarsToFinish[self.player].value + self.world.ExtraStars[self.player].value
+        if (self.world.EnableCoinStars[self.player].value and (starcount-15) >= self.world.StarsToFinish[self.player].value):
+            starcount -= 15
+        self.world.itempool += [staritem for i in range(0,starcount)]
+        mushroomitem = self.create_item("1Up Mushroom") 
+        self.world.itempool += [mushroomitem for i in range(starcount,120)]
 
-        key1 = self.create_item("Cellar Key")
+        key1 = self.create_item("Basement Key")
         key2 = self.create_item("Second Floor Key")
         self.world.itempool += [key1,key2]
 

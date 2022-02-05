@@ -11,6 +11,7 @@ from pony.orm import flush, select
 from WebHostLib import app, Seed, Room, Slot
 from Utils import parse_yaml, VersionException
 from Patch import preferred_endings
+from Utils import __version__
 
 banned_zip_contents = (".sfc",)
 
@@ -125,7 +126,7 @@ def uploads():
                         return redirect(url_for("view_seed", seed=seed.id))
             else:
                 flash("Not recognized file format. Awaiting a .archipelago file or .zip containing one.")
-    return render_template("hostGame.html")
+    return render_template("hostGame.html", version=__version__)
 
 
 @app.route('/user-content', methods=['GET'])

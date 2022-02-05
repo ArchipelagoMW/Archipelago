@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 import typing
 import enum
 from json import JSONEncoder, JSONDecoder
@@ -29,7 +28,18 @@ class ClientStatus(enum.IntEnum):
     CLIENT_GOAL = 30
 
 
-class Permission(enum.IntEnum):
+class SlotType(enum.IntFlag):
+    spectator = 0b00
+    player = 0b01
+    group = 0b10
+
+    @property
+    def always_goal(self) -> bool:
+        """Mark this slot has having reached its goal instantly."""
+        return self.value != 0b01
+
+
+class Permission(enum.IntFlag):
     disabled = 0b000  # 0, completely disables access
     enabled = 0b001  # 1, allows manual use
     goal = 0b010  # 2, allows manual use after goal completion
@@ -49,10 +59,18 @@ class Permission(enum.IntEnum):
 
 
 class NetworkPlayer(typing.NamedTuple):
+    """Represents a particular player on a particular team."""
     team: int
     slot: int
     alias: str
     name: str
+
+
+class NetworkSlot(typing.NamedTuple):
+    """Represents a particular slot across teams."""
+    name: str
+    game: str
+    type: SlotType
 
 
 class NetworkItem(typing.NamedTuple):
@@ -121,9 +139,6 @@ class Endpoint:
 
     def __init__(self, socket):
         self.socket = socket
-
-    async def disconnect(self):
-        raise NotImplementedError
 
 
 class HandlerMeta(type):
@@ -194,7 +209,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_color(self, node: JSONMessagePart):
         codes = node["color"].split(";")
-        buffer = "".join(color_code(code) for code in codes)
+        buffer = "".join(color_code(code) for code in codes if code in color_codes)
         return buffer + self._handle_text(node) + color_code("reset")
 
     def _handle_text(self, node: JSONMessagePart):

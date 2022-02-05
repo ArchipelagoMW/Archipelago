@@ -91,5 +91,6 @@ including the exclamation point.
 - `/allow_forfeit <player name>` Allows the given player to use the `!forfeit` command.
 - `/forbid_forfeit <player name>` Bars the given player from using the `!forfeit` command.
 - `/send <player name> <item name>` Grants the given player the specified item.
+- `/send_multiple <amount> <player name> <item name>` Grants the given player the stated amount of the specified item.
 - `/hint <player name> <item or location name>` Send out a hint for the given item or location for the specified player.
 - `/option <option name> <option value>` Set a server option. For a list of options, use the `/options` command.

@@ -1,23 +1,26 @@
 import typing
 from ..generic.Rules import add_rule
-from .Regions import connect_regions
+from .Regions import connect_regions, v6areas
 
-def _has_trinket_range(state,player,start,end):
-    for i in range(start+1,end+1):
-        if (not state.has("Trinket " + str(i).zfill(2), player)):
+
+def _has_trinket_range(state,player,start,end) -> bool:
+    for i in range(start,end):
+        if (not state.has("Trinket " + str(i+1).zfill(2), player)):
             return False
     return True
 
-def create_npctrinket_rules(world,location,player):
-    add_rule(location, lambda state: state.can_reach("Laboratory",'Region',player) or 
-                                     state.can_reach("Space Station 2",'Region',player))
 
-def set_rules(world,player):
-    if (world.DoorCost[player].value == 0): pass
-    connect_regions(world, player, "Menu", "Laboratory",      lambda state: _has_trinket_range(state,player,0,world.DoorCost[player].value))
-    connect_regions(world, player, "Menu", "The Tower",       lambda state: _has_trinket_range(state,player,world.DoorCost[player].value,world.DoorCost[player].value*2))
-    connect_regions(world, player, "Menu", "Space Station 2", lambda state: _has_trinket_range(state,player,world.DoorCost[player].value*2,world.DoorCost[player].value*3))
-    connect_regions(world, player, "Menu", "Warp Zone",       lambda state: _has_trinket_range(state,player,world.DoorCost[player].value*3,world.DoorCost[player].value*4))
+def set_rules(world, player, area_connections: typing.Dict[int, int]):
+    areashuffle = list(range(len(v6areas)))
+    if world.AreaRandomizer[player].value:
+        world.random.shuffle(areashuffle)
+    area_connections.update({(index+1): (value+1) for index, value in enumerate(areashuffle)})
+    area_connections.update({0:0})
+
+    connect_regions(world, player, "Menu", v6areas[area_connections[1]-1], lambda state: _has_trinket_range(state,player,0,world.DoorCost[player].value))
+    connect_regions(world, player, "Menu", v6areas[area_connections[2]-1], lambda state: _has_trinket_range(state,player,world.DoorCost[player].value,world.DoorCost[player].value*2))
+    connect_regions(world, player, "Menu", v6areas[area_connections[3]-1], lambda state: _has_trinket_range(state,player,world.DoorCost[player].value*2,world.DoorCost[player].value*3))
+    connect_regions(world, player, "Menu", v6areas[area_connections[4]-1], lambda state: _has_trinket_range(state,player,world.DoorCost[player].value*3,world.DoorCost[player].value*4))
 
     #Special Rule for V
     add_rule(world.get_location("V",player), lambda state : state.can_reach("Laboratory",'Region',player) and
@@ -25,10 +28,8 @@ def set_rules(world,player):
                                                             state.can_reach("Space Station 2",'Region',player) and
                                                             state.can_reach("Warp Zone",'Region',player))
 
-    connect_regions(world, player,  "Laboratory", "Menu", lambda state: True)
-    connect_regions(world, player,  "The Tower", "Menu", lambda state: True)
-    connect_regions(world, player,  "Space Station 2", "Menu", lambda state: True)
-    connect_regions(world, player,  "Warp Zone", "Menu", lambda state: True)
+    #Special Rule for NPC Trinket
+    add_rule(world.get_location("NPC Trinket",player), lambda state: state.can_reach("Laboratory",'Region',player) or 
+                                                                     state.can_reach("Space Station 2",'Region',player))
 
-    create_npctrinket_rules(world,world.get_location("NPC Trinket",player),player)
     world.completion_condition[player] = lambda state: state.can_reach("V",'Location',player)

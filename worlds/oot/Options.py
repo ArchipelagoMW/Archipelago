@@ -6,7 +6,7 @@ from .ColorSFXOptions import *
 
 class Logic(Choice): 
     """Set the logic used for the generator."""
-    displayname = "Logic Rules"
+    display_name = "Logic Rules"
     option_glitchless = 0
     option_glitched = 1
     option_no_logic = 2
@@ -14,12 +14,12 @@ class Logic(Choice):
 
 class NightTokens(Toggle):
     """Nighttime skulltulas will logically require Sun's Song."""
-    displayname = "Nighttime Skulltulas Expect Sun's Song"
+    display_name = "Nighttime Skulltulas Expect Sun's Song"
 
 
 class Forest(Choice): 
     """Set the state of Kokiri Forest and the path to Deku Tree."""
-    displayname = "Forest"
+    display_name = "Forest"
     option_open = 0
     option_closed_deku = 1
     option_closed = 2
@@ -29,7 +29,7 @@ class Forest(Choice):
 
 class Gate(Choice): 
     """Set the state of the Kakariko Village gate."""
-    displayname = "Kakariko Gate"
+    display_name = "Kakariko Gate"
     option_open = 0
     option_zelda = 1
     option_closed = 2
@@ -37,12 +37,12 @@ class Gate(Choice):
 
 class DoorOfTime(DefaultOnToggle):
     """Open the Door of Time by default, without the Song of Time."""
-    displayname = "Open Door of Time"
+    display_name = "Open Door of Time"
 
 
 class Fountain(Choice): 
     """Set the state of King Zora, blocking the way to Zora's Fountain."""
-    displayname = "Zora's Fountain"
+    display_name = "Zora's Fountain"
     option_open = 0
     option_adult = 1
     option_closed = 2
@@ -51,7 +51,7 @@ class Fountain(Choice):
 
 class Fortress(Choice): 
     """Set the requirements for access to Gerudo Fortress."""
-    displayname = "Gerudo Fortress"
+    display_name = "Gerudo Fortress"
     option_normal = 0
     option_fast = 1
     option_open = 2
@@ -60,7 +60,7 @@ class Fortress(Choice):
 
 class Bridge(Choice): 
     """Set the requirements for the Rainbow Bridge."""
-    displayname = "Rainbow Bridge Requirement"
+    display_name = "Rainbow Bridge Requirement"
     option_open = 0
     option_vanilla = 1
     option_stones = 2
@@ -72,7 +72,7 @@ class Bridge(Choice):
 
 class Trials(Range):
     """Set the number of required trials in Ganon's Castle."""
-    displayname = "Ganon's Trials Count"
+    display_name = "Ganon's Trials Count"
     range_start = 0
     range_end = 6
 
@@ -90,14 +90,14 @@ open_options: typing.Dict[str, type(Option)] = {
 
 class StartingAge(Choice): 
     """Choose which age Link will start as."""
-    displayname = "Starting Age"
+    display_name = "Starting Age"
     option_child = 0
     option_adult = 1
 
 
 class InteriorEntrances(Choice): 
     """Shuffles interior entrances. "Simple" shuffles houses and Great Fairies; "All" includes Windmill, Link's House, Temple of Time, and Kak potion shop."""
-    displayname = "Shuffle Interior Entrances"
+    display_name = "Shuffle Interior Entrances"
     option_off = 0
     option_simple = 1
     option_all = 2
@@ -107,37 +107,37 @@ class InteriorEntrances(Choice):
 
 class GrottoEntrances(Toggle):
     """Shuffles grotto and grave entrances."""
-    displayname = "Shuffle Grotto/Grave Entrances"
+    display_name = "Shuffle Grotto/Grave Entrances"
 
 
 class DungeonEntrances(Toggle):
     """Shuffles dungeon entrances, excluding Ganon's Castle. Opens Deku, Fire and BotW to both ages."""
-    displayname = "Shuffle Dungeon Entrances"
+    display_name = "Shuffle Dungeon Entrances"
 
 
 class OverworldEntrances(Toggle):
     """Shuffles overworld loading zones."""
-    displayname = "Shuffle Overworld Entrances"
+    display_name = "Shuffle Overworld Entrances"
 
 
 class OwlDrops(Toggle):
     """Randomizes owl drops from Lake Hylia or Death Mountain Trail as child."""
-    displayname = "Randomize Owl Drops"
+    display_name = "Randomize Owl Drops"
 
 
 class WarpSongs(Toggle):
     """Randomizes warp song destinations."""
-    displayname = "Randomize Warp Songs"
+    display_name = "Randomize Warp Songs"
 
 
 class SpawnPositions(Toggle):
     """Randomizes the starting position on loading a save. Consistent between savewarps."""
-    displayname = "Randomize Spawn Positions"
+    display_name = "Randomize Spawn Positions"
 
 
 class MixEntrancePools(Choice):
     """Shuffles entrances into a mixed pool instead of separate ones. "indoor" keeps overworld entrances separate; "all" mixes them in."""
-    displayname = "Mix Entrance Pools"
+    display_name = "Mix Entrance Pools"
     option_off = 0
     option_indoor = 1
     option_all = 2
@@ -146,17 +146,17 @@ class MixEntrancePools(Choice):
 
 class DecoupleEntrances(Toggle):
     """Decouple entrances when shuffling them. Also adds the one-way entrance from Gerudo Valley to Lake Hylia if overworld is shuffled."""
-    displayname = "Decouple Entrances"
+    display_name = "Decouple Entrances"
 
 
 class TriforceHunt(Toggle):
     """Gather pieces of the Triforce scattered around the world to complete the game."""
-    displayname = "Triforce Hunt"
+    display_name = "Triforce Hunt"
 
 
 class TriforceGoal(Range):
     """Number of Triforce pieces required to complete the game."""
-    displayname = "Required Triforce Pieces"
+    display_name = "Required Triforce Pieces"
     range_start = 1
     range_end = 100
     default = 20
@@ -164,7 +164,7 @@ class TriforceGoal(Range):
 
 class ExtraTriforces(Range):
     """Percentage of additional Triforce pieces in the pool, separate from the item pool setting."""
-    displayname = "Percentage of Extra Triforce Pieces"
+    display_name = "Percentage of Extra Triforce Pieces"
     range_start = 0
     range_end = 100
     default = 50
