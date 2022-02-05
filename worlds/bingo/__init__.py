@@ -9,6 +9,7 @@ from .Options import bingo_options
 from .Regions import create_regions
 import os
 from ..generic.Rules import add_item_rule
+from Utils import get_location_name_from_id
 
 class BingoWorld(World):
     options = bingo_options
@@ -107,10 +108,34 @@ class BingoWorld(World):
                 f.write("</TD></TR>")
             f.write("</TABLE></BODY></HTML>")
 
+    def received_hint(self, ctx, team, player, hint):
+        from MultiServer import notify_hints, collect_hints
+        location = get_location_name_from_id(hint.location).split()
+        card = ctx.slot_data[player]['cards'][int(location[1])-1]
+        if location[2] == "Horizontal":
+            line = card[int(location[3])-1]
+        if location[2] == "Vertical":
+            line = []
+            for i in range(0, 5):
+                line.append(card[i][int(location[3])-1])
+        if location[2] == "Diagonal":
+            line = []
+            if location[3] == "1":
+                for i in range(0, 5):
+                    line.append(card[i][i])
+            elif location[3] == "2":
+                for i in range(0, 5):
+                    line.append(card[i][4-i])
+        hints = []
+        for i in line:
+            if i != 0:
+                hints += collect_hints(ctx, team, player, i)
+        notify_hints(ctx, team, hints)
+        ctx.save()
+
     def received_checks(self, ctx, team, player):
         from MultiServer import get_received_items, register_location_checks, ClientStatus
         from Utils import get_item_name_from_id
-        from worlds.bingo.Locations import location_table
         cards = ctx.slot_data[player]['cards']
         received_items = get_received_items(ctx, team, player, True)
         bingocalls = []
@@ -160,6 +185,7 @@ class BingoWorld(World):
             finished_msg = f'{ctx.get_aliased_name(team, player)} (Team #{team + 1})' \
                            f' has been completed.'
             ctx.notify_all(finished_msg)
+        ctx.save()
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):

@@ -926,7 +926,7 @@ def __renderBingoTracker(multisave: Dict[str, Any], room: Room, locations: Dict[
                         if i.item == itemid:
                             s = True
                 if s:
-                    text += f"<s>{c.split()[2]}</s>|"
+                    text += f"<s style=\"color:red\">{c.split()[2]}</s>|"
                 else:
                     text += f"{c.split()[2]}|"
             text += "<br>"
@@ -1059,5 +1059,6 @@ game_specific_trackers: typing.Dict[str, typing.Callable] = {
     "Ocarina of Time": __renderOoTTracker,
     "Timespinner": __renderTimespinnerTracker,
     "A Link to the Past": __renderAlttpTracker,
-    "Super Metroid": __renderSuperMetroidTracker
+    "Super Metroid": __renderSuperMetroidTracker,
+    "Bingo": __renderBingoTracker
 }

@@ -201,6 +201,9 @@ class World(metaclass=AutoWorldRegister):
         Warning: this may be called with self.world = None, for example by MultiServer"""
         raise NotImplementedError
 
+    def received_hint(self, ctx, team, player, hint):
+        pass
+
     def received_checks(self, ctx, team, player):
         pass
 
