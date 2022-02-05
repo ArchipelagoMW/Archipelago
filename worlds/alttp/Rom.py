@@ -755,6 +755,7 @@ def patch_rom(world, rom, player, enemized):
     local_random = world.slot_seeds[player]
 
     # patch items
+    targets_pointing_to_here = world.get_player_groups(player) | {player}
 
     for location in world.get_locations():
         if location.player != player or location.address is None or location.shop_slot is not None:
@@ -785,7 +786,7 @@ def patch_rom(world, rom, player, enemized):
                     itemid = list(location_table.keys()).index(location.name) + 1
                     assert itemid < 0x100
                     rom.write_byte(location.player_address, 0xFF)
-                elif location.item.player != player:
+                elif location.item.player not in targets_pointing_to_here:
                     if location.player_address is not None:
                         rom.write_byte(location.player_address, min(location.item.player, ROM_PLAYER_LIMIT))
                     else:
@@ -1653,9 +1654,10 @@ def patch_rom(world, rom, player, enemized):
     rom.write_bytes(0x7FC0, rom.name)
 
     # set player names
-    for p in range(1, min(world.players, ROM_PLAYER_LIMIT) + 1):
+    encoded_players = world.players + len(world.groups)
+    for p in range(1, min(encoded_players, ROM_PLAYER_LIMIT) + 1):
         rom.write_bytes(0x195FFC + ((p - 1) * 32), hud_format_text(world.player_name[p]))
-    if world.players > ROM_PLAYER_LIMIT:
+    if encoded_players > ROM_PLAYER_LIMIT:
         rom.write_bytes(0x195FFC + ((ROM_PLAYER_LIMIT - 1) * 32), hud_format_text("Archipelago"))
 
     # Write title screen Code

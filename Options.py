@@ -2,6 +2,8 @@ from __future__ import annotations
 import typing
 import random
 
+from schema import Schema, And, Or
+
 
 class AssembleOptions(type):
     def __new__(mcs, name, bases, attrs):
@@ -25,14 +27,28 @@ class AssembleOptions(type):
 
         # auto-validate schema on __init__
         if "schema" in attrs.keys():
-            def validate_decorator(func):
-                def validate(self, *args, **kwargs):
-                    func(self, *args, **kwargs)
+
+            if "__init__" in attrs:
+                def validate_decorator(func):
+                    def validate(self, *args, **kwargs):
+                        ret = func(self, *args, **kwargs)
+                        self.value = self.schema.validate(self.value)
+                        return ret
+
+                    return validate
+                attrs["__init__"] = validate_decorator(attrs["__init__"])
+            else:
+                # construct an __init__ that calls parent __init__
+
+                cls = super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
+
+                def meta__init__(self, *args, **kwargs):
+                    super(cls, self).__init__(*args, **kwargs)
                     self.value = self.schema.validate(self.value)
 
-                return validate
+                cls.__init__ = meta__init__
+                return cls
 
-            attrs["__init__"] = validate_decorator(attrs["__init__"])
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
 
@@ -143,8 +159,8 @@ class Choice(Option):
         text = text.lower()
         if text == "random":
             return cls(random.choice(list(cls.name_lookup)))
-        for optionname, value in cls.options.items():
-            if optionname == text:
+        for option_name, value in cls.options.items():
+            if option_name == text:
                 return cls(value)
         raise KeyError(
             f'Could not find option "{text}" for "{cls.__name__}", '
@@ -213,20 +229,22 @@ class Range(Option, int):
             elif text.startswith("random-range-"):
                 textsplit = text.split("-")
                 try:
-                    randomrange = [int(textsplit[len(textsplit)-2]), int(textsplit[len(textsplit)-1])]
+                    random_range = [int(textsplit[len(textsplit) - 2]), int(textsplit[len(textsplit) - 1])]
                 except ValueError:
                     raise ValueError(f"Invalid random range {text} for option {cls.__name__}")
-                randomrange.sort()
-                if randomrange[0] < cls.range_start or randomrange[1] > cls.range_end:
-                    raise Exception(f"{randomrange[0]}-{randomrange[1]} is outside allowed range {cls.range_start}-{cls.range_end} for option {cls.__name__}")
+                random_range.sort()
+                if random_range[0] < cls.range_start or random_range[1] > cls.range_end:
+                    raise Exception(
+                        f"{random_range[0]}-{random_range[1]} is outside allowed range "
+                        f"{cls.range_start}-{cls.range_end} for option {cls.__name__}")
                 if text.startswith("random-range-low"):
-                    return cls(int(round(random.triangular(randomrange[0], randomrange[1], randomrange[0]))))
+                    return cls(int(round(random.triangular(random_range[0], random_range[1], random_range[0]))))
                 elif text.startswith("random-range-middle"):
-                    return cls(int(round(random.triangular(randomrange[0], randomrange[1]))))
+                    return cls(int(round(random.triangular(random_range[0], random_range[1]))))
                 elif text.startswith("random-range-high"):
-                    return cls(int(round(random.triangular(randomrange[0], randomrange[1], randomrange[1]))))
+                    return cls(int(round(random.triangular(random_range[0], random_range[1], random_range[1]))))
                 else:
-                    return cls(int(round(random.randint(randomrange[0], randomrange[1]))))
+                    return cls(int(round(random.randint(random_range[0], random_range[1]))))
             else:
                 return cls(random.randint(cls.range_start, cls.range_end))
         return cls(int(text))
@@ -412,11 +430,6 @@ class StartInventory(ItemDict):
     display_name = "Start Inventory"
 
 
-class ItemLinks(OptionList):
-    """Share these items with players of the same game."""
-    display_name = "Shared Items"
-
-
 class StartHints(ItemSet):
     """Start with these item's locations prefilled into the !hint command."""
     display_name = "Start Hints"
@@ -444,6 +457,18 @@ class DeathLink(Toggle):
     display_name = "Death Link"
 
 
+class ItemLinks(OptionList):
+    """Share part of your item pool with other players."""
+    default = []
+    schema = Schema([
+        {
+            "name": And(str, len),
+            "item_pool": [And(str, len)],
+            "replacement_item": Or(And(str, len), None)
+        }
+    ])
+
+
 per_game_common_options = {
     **common_options,  # can be overwritten per-game
     "local_items": LocalItems,
@@ -453,7 +478,9 @@ per_game_common_options = {
     "start_location_hints": StartLocationHints,
     "exclude_locations": ExcludeLocations,
     "priority_locations": PriorityLocations,
+    "item_links": ItemLinks
 }
+
 
 if __name__ == "__main__":
 
@@ -462,8 +489,8 @@ if __name__ == "__main__":
 
     map_shuffle = Toggle
     compass_shuffle = Toggle
-    keyshuffle = Toggle
-    bigkey_shuffle = Toggle
+    key_shuffle = Toggle
+    big_key_shuffle = Toggle
     hints = Toggle
     test = argparse.Namespace()
     test.logic = Logic.from_text("no_logic")
