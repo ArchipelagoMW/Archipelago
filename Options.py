@@ -262,26 +262,12 @@ class Range(Option, int):
         return str(self.value)
 
 
-class OptionNameSet(Option):
-    default = frozenset()
-
-    def __init__(self, value: typing.Set[str]):
-        self.value: typing.Set[str] = value
-
-    @classmethod
-    def from_text(cls, text: str) -> OptionNameSet:
-        return cls({option.strip() for option in text.split(",")})
-
-    @classmethod
-    def from_any(cls, data: typing.Any) -> OptionNameSet:
-        if type(data) == set:
-            return cls(data)
-        return cls.from_text(str(data))
-
-
 class VerifyKeys:
     valid_keys = frozenset()
     valid_keys_casefold: bool = False
+    verify_item_name = False
+    verify_location_name = False
+    value: typing.Any
 
     @classmethod
     def verify_keys(cls, data):
@@ -292,6 +278,18 @@ class VerifyKeys:
             if extra:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
                                 f"Allowed keys: {cls.valid_keys}.")
+
+    def verify(self, world):
+        if self.verify_item_name:
+            for item_name in self.value:
+                if item_name not in world.item_names:
+                    raise Exception(f"Item {item_name} from option {self} "
+                                    f"is not a valid item name from {world.game}")
+        elif self.verify_location_name:
+            for location_name in self.value:
+                if location_name not in world.world_types[world.game].location_names:
+                    raise Exception(f"Location {location_name} from option {self} "
+                                    f"is not a valid location name from {world.game}")
 
 
 class OptionDict(Option, VerifyKeys):
@@ -354,7 +352,7 @@ class OptionList(Option, VerifyKeys):
         return item in self.value
 
 
-class OptionSet(Option):
+class OptionSet(Option, VerifyKeys):
     default = frozenset()
     supports_weighting = False
     value: set
@@ -370,8 +368,10 @@ class OptionSet(Option):
     @classmethod
     def from_any(cls, data: typing.Any):
         if type(data) == list:
+            cls.verify_keys(data)
             return cls(data)
         elif type(data) == set:
+            cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
 
@@ -467,6 +467,17 @@ class ItemLinks(OptionList):
             "replacement_item": Or(And(str, len), None)
         }
     ])
+
+    def verify(self, world):
+        super(ItemLinks, self).verify(world)
+        for link in self.value:
+            for item_name in link["item_pool"]:
+                if item_name not in world.item_names and item_name not in world.item_name_groups:
+                    raise Exception(f"Item {item_name} from option {self} "
+                                    f"is not a valid item name from {world.game}")
+            if link["replacement_item"] not in world.item_names:
+                raise Exception(f"Item {link['replacement_item']} from option {self} "
+                                f"is not a valid item name from {world.game}")
 
 
 per_game_common_options = {

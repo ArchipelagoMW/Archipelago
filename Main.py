@@ -158,9 +158,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         pool = set()
         for item in item_link["item_pool"]:
             pool |= current_item_name_groups.get(item, {item})
-        unknown_items = pool - AutoWorld.AutoWorldRegister.world_types[item_link["game"]].item_names
-        if unknown_items:
-            raise Exception(f"Unknown item in ItemLink({name}): {''.join(unknown_items)}")
         item_link["item_pool"] = pool
 
     for group_name, item_link in item_links.items():
