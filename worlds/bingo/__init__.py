@@ -111,27 +111,25 @@ class BingoWorld(World):
     def received_hint(self, ctx, team, player, hint):
         from MultiServer import notify_hints, collect_hints
         location = get_location_name_from_id(hint.location).split()
-        card = ctx.slot_data[player]['cards'][int(location[1])-1]
+        card = ctx.slot_data[player]['cards'][int(location[1]) - 1]
         if location[2] == "Horizontal":
-            line = card[int(location[3])-1]
+            line = card[int(location[3]) - 1]
         if location[2] == "Vertical":
             line = []
             for i in range(0, 5):
-                line.append(card[i][int(location[3])-1])
+                line.append(card[i][int(location[3]) - 1])
         if location[2] == "Diagonal":
             line = []
             if location[3] == "1":
                 for i in range(0, 5):
-                    line.append(card[i][i])
+                    line.append(card[i - 1][i])
             elif location[3] == "2":
                 for i in range(0, 5):
-                    line.append(card[i][4-i])
+                    line.append(card[i - 1][4-i])
         hints = []
-        for i in line:
-            if i != 0:
-                hints += collect_hints(ctx, team, player, i)
+        for i in range(0,5):
+            hints += collect_hints(ctx, team, player, line[i])
         notify_hints(ctx, team, hints)
-        ctx.save()
 
     def received_checks(self, ctx, team, player):
         from MultiServer import get_received_items, register_location_checks, ClientStatus
@@ -140,7 +138,11 @@ class BingoWorld(World):
         received_items = get_received_items(ctx, team, player, True)
         bingocalls = []
         for b in received_items:
-            bingocalls.append(get_item_name_from_id(b.item))
+            try:
+                bingocalls.append(get_item_name_from_id(b.item))
+            except:
+                import logging
+                logging.info(f"couldn't add {b}")
         for card in range(0, len(cards)):
             # horizontal lines
             for r in range(0, 5):
@@ -185,7 +187,6 @@ class BingoWorld(World):
             finished_msg = f'{ctx.get_aliased_name(team, player)} (Team #{team + 1})' \
                            f' has been completed.'
             ctx.notify_all(finished_msg)
-        ctx.save()
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):

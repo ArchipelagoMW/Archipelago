@@ -460,11 +460,12 @@ class SMWorld(World):
         return slot_data
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        state.smbm[item.player].addItem(item.type)
-        if item.advancement:
-            state.prog_items[item.name, item.player] += 1
-            return True  # indicate that a logical state change has occured
-        return False
+        state.smbm[self.player].addItem(item.type)
+        return super(SMWorld, self).collect(state, item)
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        state.smbm[self.player].removeItem(item.type)
+        return super(SMWorld, self).remove(state, item)
 
     def create_item(self, name: str) -> Item:
         item = next(x for x in ItemManager.Items.values() if x.Name == name)

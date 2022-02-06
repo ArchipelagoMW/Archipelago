@@ -5,7 +5,7 @@ from .LogicMixin import TimespinnerLogic
 from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
 from .Locations import get_locations, starter_progression_locations, EventId
 from .Regions import create_regions
-from .Options import is_option_enabled, timespinner_options
+from .Options import is_option_enabled, get_option_value, timespinner_options
 from .PyramidKeys import get_pyramid_keys_unlock
 
 class TimespinnerWorld(World):
@@ -80,7 +80,7 @@ class TimespinnerWorld(World):
         slot_data: Dict[str, object] = {}
 
         for option_name in timespinner_options:
-            slot_data[option_name] = is_option_enabled(self.world, self.player, option_name)
+            slot_data[option_name] = get_option_value(self.world, self.player, option_name)
 
         slot_data["StinkyMaw"] = True
         slot_data["ProgressiveVerticalMovement"] = False

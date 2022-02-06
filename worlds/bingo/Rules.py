@@ -50,6 +50,16 @@ class BingoLogic(LogicMixin):
 
 
 def set_rules(world: MultiWorld, player: int):
+    for c in range(1, (world.card_pairs[player] * 2) + 1):
+        for l in range(1, 6):
+            set_rule(world.get_location(f"Card {c} Horizontal {l}", player),
+                     lambda state, card=c, line=l: state._bingo_has_horizontal(card, line, player))
+            set_rule(world.get_location(f"Card {c} Vertical {l}", player),
+                     lambda state, card=c, line=l: state._bingo_has_vertical(card, line, player))
+            if l < 3:
+                set_rule(world.get_location(f"Card {c} Diagonal {l}", player),
+                     lambda state, card=c, line=l: state._bingo_has_diagonal(card, line, player))
+    return
     set_rule(world.get_location("Card 1 Horizontal 1", player),
              lambda state: state._bingo_has_horizontal(1, 1, player))
     set_rule(world.get_location("Card 1 Vertical 1", player),

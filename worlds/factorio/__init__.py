@@ -38,7 +38,9 @@ class Factorio(World):
 
     item_name_to_id = all_items
     location_name_to_id = base_tech_table
-
+    item_name_groups = {
+        "Progressive": set(progressive_tech_table.values()),
+    }
     data_version = 5
 
     def __init__(self, world, player: int):

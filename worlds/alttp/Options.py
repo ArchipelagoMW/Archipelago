@@ -42,6 +42,11 @@ class DungeonItem(Choice):
     def in_dungeon(self):
         return self.value in {0, 1}
 
+    @property
+    def hints_useful(self):
+        """Indicates if hints for this Item are useful in any way."""
+        return self.value in {1, 2, 3, 4}
+
 
 class bigkey_shuffle(DungeonItem):
     """Big Key Placement"""
