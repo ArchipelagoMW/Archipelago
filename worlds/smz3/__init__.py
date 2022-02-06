@@ -255,11 +255,7 @@ class SMZ3World(World):
                         self.unreachable.append(item.location)
 
     def write_spoiler(self, spoiler_handle: TextIO):
-        self.world.spoiler.unreachables += self.unreachable
-        if self.world.spoiler.unreachables:
-               logging.warning('\n\nUnreachable Items:\n\n')
-               logging.warning(
-                    '\n'.join(['%s: %s' % (unreachable.item, unreachable) for unreachable in self.world.spoiler.unreachables]))
+        self.world.spoiler.unreachables.update(self.unreachable)
 
     def FillItemAtLocation(self, itemPool, itemType, location):
         itemToPlace = TotalSMZ3Item.Item.Get(itemPool, itemType, self.smz3World)
