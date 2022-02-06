@@ -1018,11 +1018,11 @@ def patch_rom(world, rom, player, enemized):
     # Set overflow items for progressive equipment
     rom.write_bytes(0x180090,
                     [difficulty.progressive_sword_limit if not world.swordless[player] else 0,
-                     item_table[difficulty.basic_sword[-1]].item_code,
-                     difficulty.progressive_shield_limit, item_table[difficulty.basic_shield[-1]].item_code,
-                     difficulty.progressive_armor_limit, item_table[difficulty.basic_armor[-1]].item_code,
+                     item_table[difficulty.basicsword[-1]].item_code,
+                     difficulty.progressive_shield_limit, item_table[difficulty.basicshield[-1]].item_code,
+                     difficulty.progressive_armor_limit, item_table[difficulty.basicarmor[-1]].item_code,
                      difficulty.progressive_bottle_limit, overflow_replacement,
-                     difficulty.progressive_bow_limit, item_table[difficulty.basic_bow[-1]].item_code])
+                     difficulty.progressive_bow_limit, item_table[difficulty.basicbow[-1]].item_code])
 
     if difficulty.progressive_bow_limit < 2 and (
             world.swordless[player] or world.logic[player] == 'noglitches'):
