@@ -426,17 +426,8 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
         except Exception as e:
             raise Exception(f"Error generating option {option_key} in {ret.game}") from e
         else:
-            # verify item names existing
-            if getattr(player_option, "verify_item_name", False):
-                for item_name in player_option.value:
-                    if item_name not in AutoWorldRegister.world_types[ret.game].item_names:
-                        raise Exception(f"Item {item_name} from option {player_option} "
-                                        f"is not a valid item name from {ret.game}")
-            elif getattr(player_option, "verify_location_name", False):
-                for location_name in player_option.value:
-                    if location_name not in AutoWorldRegister.world_types[ret.game].location_names:
-                        raise Exception(f"Location {location_name} from option {player_option} "
-                                        f"is not a valid location name from {ret.game}")
+            if hasattr(player_option, "verify"):
+                player_option.verify(AutoWorldRegister.world_types[ret.game])
     else:
         setattr(ret, option_key, option(option.default))
 
@@ -512,6 +503,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     else:
         raise Exception(f"Unsupported game {ret.game}")
     return ret
+
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     if "dungeon_items" in weights and get_choice_legacy('dungeon_items', weights, "none") != "none":
