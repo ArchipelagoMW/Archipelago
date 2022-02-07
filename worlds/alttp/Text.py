@@ -1716,7 +1716,7 @@ class TextTable(object):
         text['telepathic_tile_tower_of_hera_entrance'] = CompressedTextMapper.convert(
             "{NOBORDER}\nThis is a bad place, with a guy who will make you fall…\n\n\na lot.")
         text['houlihan_room'] = CompressedTextMapper.convert(
-            "Have a Multiworld Tournament\nand we can list the winners here.")
+            "Multiworld Touranament winners\nSGLive 2021 BadmoonZ")
         text['caught_a_bee'] = CompressedTextMapper.convert("Caught a Bee\n  ≥ keep\n    release\n{CHOICE}")
         text['caught_a_fairy'] = CompressedTextMapper.convert("Caught Fairy!\n  ≥ keep\n    release\n{CHOICE}")
         text['no_empty_bottles'] = CompressedTextMapper.convert("Whoa, bucko!\nNo empty bottles.")
