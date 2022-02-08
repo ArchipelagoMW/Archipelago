@@ -6,13 +6,26 @@ import logging
 import json
 import functools
 from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple
+from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, TYPE_CHECKING
 import secrets
 import random
 
 import Options
 import Utils
 import NetUtils
+
+if TYPE_CHECKING:
+    from worlds import AutoWorld
+    auto_world = AutoWorld.World
+else:
+    auto_world = object
+
+
+class Group(TypedDict):
+    name: str
+    game: str
+    world: auto_world
+    players: Set[int]
 
 
 class MultiWorld():
@@ -27,6 +40,7 @@ class MultiWorld():
     plando_items: List
     plando_connections: List
     worlds: Dict[int, Any]
+    groups: Dict[int, Group]
     is_race: bool = False
     precollected_items: Dict[int, List[Item]]
 
@@ -44,6 +58,7 @@ class MultiWorld():
         self.glitch_triforce = False
         self.algorithm = 'balanced'
         self.dungeons: Dict[Tuple[str, int], Dungeon] = {}
+        self.groups = {}
         self.regions = []
         self.shops = []
         self.itempool = []
@@ -132,6 +147,59 @@ class MultiWorld():
         self.worlds = {}
         self.slot_seeds = {}
 
+    def add_group(self, name: str, game: str, players: Set[int] = frozenset()) -> Tuple[int, Group]:
+        """Create a group with name and return the assigned player ID and group.
+        If a group of this name already exists, the set of players is extended instead of creating a new one."""
+        for group_id, group in self.groups.items():
+            if group["name"] == name:
+                group["players"] |= players
+                return group_id, group
+        new_id: int = self.players + len(self.groups) + 1
+        from worlds import AutoWorld
+        self.game[new_id] = game
+        self.custom_data[new_id] = {}
+        self.player_types[new_id] = NetUtils.SlotType.group
+        world_type = AutoWorld.AutoWorldRegister.world_types[game]
+        for option_key, option in world_type.options.items():
+            getattr(self, option_key)[new_id] = option(option.default)
+        for option_key, option in Options.common_options.items():
+            getattr(self, option_key)[new_id] = option(option.default)
+        for option_key, option in Options.per_game_common_options.items():
+            getattr(self, option_key)[new_id] = option(option.default)
+
+        self.worlds[new_id] = world_type(self, new_id)
+
+        self.player_name[new_id] = name
+        # TODO: remove when LttP are transitioned over
+        self.difficulty_requirements[new_id] = self.difficulty_requirements[next(iter(players))]
+
+        new_group = self.groups[new_id] = Group(name=name, game=game, players=players,
+                                                world=self.worlds[new_id])
+
+        # instead of collect/remove overwrites, should encode sending as Events so they show up in spoiler log
+        def group_collect(state, item) -> bool:
+            changed = False
+            for player in new_group["players"]:
+                max(self.worlds[player].collect(state, item), changed)
+            return changed
+
+        def group_remove(state, item) -> bool:
+            changed = False
+            for player in new_group["players"]:
+                max(self.worlds[player].remove(state, item), changed)
+            return changed
+
+        new_world = new_group["world"]
+        new_world.collect = group_collect
+        new_world.remove = group_remove
+
+        self.worlds[new_id] = new_world
+
+        return new_id, new_group
+
+    def get_player_groups(self, player) -> Set[int]:
+        return {group_id for group_id, group in self.groups.items() if player in group["players"]}
+
     def set_seed(self, seed: Optional[int] = None, secure: bool = False, name: Optional[str] = None):
         self.seed = get_seed(seed)
         if secure:
@@ -176,7 +244,8 @@ class MultiWorld():
 
     @functools.lru_cache()
     def get_game_worlds(self, game_name: str):
-        return tuple(world for player, world in self.worlds.items() if self.game[player] == game_name)
+        return tuple(world for player, world in self.worlds.items() if
+                     player not in self.groups and self.game[player] == game_name)
 
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_name(obj.player)})'
@@ -254,7 +323,7 @@ class MultiWorld():
             self._all_state = ret
         return ret
 
-    def get_items(self) -> list:
+    def get_items(self) -> List[Item]:
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
     def find_item_locations(self, item, player: int) -> List[Location]:
@@ -918,6 +987,7 @@ class LocationProgressType(Enum):
     PRIORITY = 2
     EXCLUDED = 3
 
+
 class Location():
     # If given as integer, then this is the shop's inventory index
     shop_slot: Optional[int] = None
@@ -927,7 +997,6 @@ class Location():
     spot_type = 'Location'
     game: str = "Generic"
     show_in_spoiler: bool = True
-    excluded: bool = False
     crystal: bool = False
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow = staticmethod(lambda item, state: False)
@@ -1047,6 +1116,7 @@ class Item():
 
 class Spoiler():
     world: MultiWorld
+    unreachables: Set[Location]
 
     def __init__(self, world):
         self.world = world
@@ -1054,7 +1124,7 @@ class Spoiler():
         self.entrances = OrderedDict()
         self.medallions = {}
         self.playthrough = {}
-        self.unreachables = []
+        self.unreachables = set()
         self.locations = {}
         self.paths = {}
         self.shops = []
@@ -1206,9 +1276,9 @@ class Spoiler():
 
         def write_option(option_key: str, option_obj: type(Options.Option)):
             res = getattr(self.world, option_key)[player]
-            displayname = getattr(option_obj, "displayname", option_key)
+            display_name = getattr(option_obj, "display_name", option_key)
             try:
-                outfile.write(f'{displayname + ":":33}{res.get_current_option_name()}\n')
+                outfile.write(f'{display_name + ":":33}{res.get_current_option_name()}\n')
             except:
                 raise Exception
 

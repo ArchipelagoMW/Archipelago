@@ -3,7 +3,7 @@
 ## Required Software
 
 - Super Mario 64 US Rom (Japanese may work also. Europe and Shindou not supported)
-- Either of [sm64pclauncher](https://github.com/N00byKing/sm64pclauncher/actions/workflows/ci.yml?query=branch%3Aarchipelago+event%3Apush) or
+- Either of [sm64pclauncher](https://github.com/N00byKing/sm64pclauncher/releases) or
 - Cloning and building [sm64ex](https://github.com/N00byKing/sm64ex) manually.
 
 NOTE: The above linked sm64pclauncher is a special version designed to work with the Archipelago build of sm64ex.
@@ -61,6 +61,7 @@ Start the game from the command line to view helpful messages regarding SM64EX.
 ### Game doesn't start after compiling
 
 Most likely you forgot to set the launch options. `--sm64ap_name YourName` and `--sm64ap_ip ServerIP:Port` are required for startup.
+If your Name or Password have spaces in them, surround them in quotes.
 
 ## Game Troubleshooting
 

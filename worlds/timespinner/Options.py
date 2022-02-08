@@ -1,6 +1,6 @@
 from typing import Dict
 from BaseClasses import MultiWorld
-from Options import Toggle, DeathLink
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option
 
 class StartWithJewelryBox(Toggle):
     "Start with Jewelry Box unlocked"
@@ -14,7 +14,7 @@ class StartWithJewelryBox(Toggle):
 #    "Always find Security Keycard's in the following order D -> C -> B -> A"
 #    display_name = "Progressive keycards"
 
-class DownloadableItems(Toggle):
+class DownloadableItems(DefaultOnToggle):
     "With the tablet you will be able to download items at terminals"
     display_name = "Downloadable items"
 
@@ -58,8 +58,31 @@ class DamageRando(Toggle):
     "Each orb has a high chance of having lower base damage and a low chance of having much higher base damage."
     display_name = "Damage Rando"
 
+class ShopFill(Choice):
+    """Sets the items for sale in Merchant Crow's shops.
+    Default: No sunglasses or trendy jacket, but sand vials for sale.
+    Randomized: Up to 4 random items in each shop.
+    Vanilla: Keep shops the same as the base game.
+    Empty: Sell no items at the shop."""
+    display_name = "Shop Inventory"
+    option_default = 0
+    option_randomized = 1
+    option_vanilla = 2
+    option_empty = 3
+
+class ShopWarpShards(DefaultOnToggle):
+    "Shops always sell warp shards (when keys possessed), ignoring inventory setting."
+    display_name = "Always Sell Warp Shards"
+
+class ShopMultiplier(Range):
+    "Multiplier for the cost of items in the shop. Set to 0 for free shops."
+    display_name = "Shop Price Multiplier"
+    range_start = 0
+    range_end = 10
+    default = 1
+
 # Some options that are available in the timespinner randomizer arent currently implemented
-timespinner_options: Dict[str, Toggle] = {
+timespinner_options: Dict[str, Option] = {
     "StartWithJewelryBox": StartWithJewelryBox,
     #"ProgressiveVerticalMovement": ProgressiveVerticalMovement,
     #"ProgressiveKeycards": ProgressiveKeycards,
@@ -74,13 +97,19 @@ timespinner_options: Dict[str, Toggle] = {
     "Cantoran": Cantoran,
     "LoreChecks": LoreChecks,
     "DamageRando": DamageRando,
+    "ShopFill": ShopFill,
+    "ShopWarpShards": ShopWarpShards,
+    "ShopMultiplier": ShopMultiplier,
     "DeathLink": DeathLink,
 }
 
 def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
+    return get_option_value(world, player, name) > 0
+
+def get_option_value(world: MultiWorld, player: int, name: str) -> int:
     option = getattr(world, name, None)
 
     if option == None:
-        return False
+        return 0
 
-    return int(option[player].value) > 0
+    return int(option[player].value)

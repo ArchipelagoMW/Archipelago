@@ -5,6 +5,7 @@ import json
 import zipfile
 from collections import Counter
 from typing import Dict, Optional as TypeOptional
+from Utils import __version__
 
 from flask import request, flash, redirect, url_for, session, render_template
 
@@ -78,7 +79,7 @@ def generate(race=False):
 
                     return redirect(url_for("view_seed", seed=seed_id))
 
-    return render_template("generate.html", race=race)
+    return render_template("generate.html", race=race, version=__version__)
 
 
 def gen_game(gen_options, meta: TypeOptional[Dict[str, object]] = None, owner=None, sid=None):

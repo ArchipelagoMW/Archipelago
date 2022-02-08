@@ -32,8 +32,8 @@ def exclusion_rules(world, player: int, exclude_locations: typing.Set[str]):
                 raise Exception(f"Unable to exclude location {loc_name} in player {player}'s world.") from e
         else: 
             add_item_rule(location, lambda i: not (i.advancement or i.never_exclude))
-            location.excluded = True
             location.progress_type = LocationProgressType.EXCLUDED
+
 
 def set_rule(spot, rule: CollectionRule):
     spot.access_rule = rule

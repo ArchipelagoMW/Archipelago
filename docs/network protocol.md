@@ -349,16 +349,16 @@ class NetworkItem(NamedTuple):
 In JSON this may look like:
 ```js
 [
-    {"item": 1, "location": 1, "player": 0, "flags": 1},
-    {"item": 2, "location": 2, "player": 0, "flags": 2},
-    {"item": 3, "location": 3, "player": 0, "flags": 0}
+    {"item": 1, "location": 1, "player": 1, "flags": 1},
+    {"item": 2, "location": 2, "player": 2, "flags": 2},
+    {"item": 3, "location": 3, "player": 3, "flags": 0}
 ]
 ```
 `item` is the item id of the item
 
 `location` is the location id of the item inside the world
 
-`player` is the player slot of the world the item is located in
+`player` is the player slot of the world the item is located in, except when inside an [LocationInfo](#LocationInfo) Packet then it will be the slot of the player to receive the item
 
 `flags` are bit flags:
 | Flag | Meaning |

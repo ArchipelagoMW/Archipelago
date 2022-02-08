@@ -3,7 +3,7 @@ import unittest
 from worlds.AutoWorld import World
 from Fill import FillError, balance_multiworld_progression, fill_restrictive, distribute_items_restrictive
 from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, RegionType, Item, Location
-from worlds.generic.Rules import CollectionRule, set_rule
+from worlds.generic.Rules import CollectionRule, locality_rules, set_rule
 
 
 def generate_multi_world(players: int = 1) -> MultiWorld:
@@ -342,14 +342,14 @@ class TestFillRestrictive(unittest.TestCase):
         multi_world.completion_condition[player1.id] = lambda state: state.has_all(
             names(player1.prog_items), player1.id)
 
-        region1 = player1.generate_region(player1.menu, 5)
-        region2 = player1.generate_region(player1.menu, 5, lambda state: state.has_all(
+        player1.generate_region(player1.menu, 5)
+        player1.generate_region(player1.menu, 5, lambda state: state.has_all(
             names(items[2:7]), player1.id))
-        region3 = player1.generate_region(player1.menu, 5, lambda state: state.has_all(
+        player1.generate_region(player1.menu, 5, lambda state: state.has_all(
             names(items[7:12]), player1.id))
-        region4 = player1.generate_region(player1.menu, 5, lambda state: state.has_all(
+        player1.generate_region(player1.menu, 5, lambda state: state.has_all(
             names(items[12:17]), player1.id))
-        region5 = player1.generate_region(player1.menu, 5, lambda state: state.has_all(
+        player1.generate_region(player1.menu, 5, lambda state: state.has_all(
             names(items[17:22]), player1.id))
 
         locations = multi_world.get_unfilled_locations()
@@ -370,9 +370,13 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         distribute_items_restrictive(multi_world)
 
         self.assertEqual(locations[0].item, basic_items[0])
+        self.assertFalse(locations[0].event)
         self.assertEqual(locations[1].item, prog_items[0])
+        self.assertTrue(locations[1].event)
         self.assertEqual(locations[2].item, prog_items[1])
+        self.assertTrue(locations[2].event)
         self.assertEqual(locations[3].item, basic_items[1])
+        self.assertFalse(locations[3].event)
 
     def test_excluded_distribute(self):
         multi_world = generate_multi_world()
@@ -539,6 +543,44 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         self.assertEqual(gen1.locations[1].item, gen2.locations[1].item)
         self.assertEqual(gen1.locations[2].item, gen2.locations[2].item)
         self.assertEqual(gen1.locations[3].item, gen2.locations[3].item)
+
+    def test_can_reserve_advancement_items_for_general_fill(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(
+            multi_world, 1, location_count=5, prog_item_count=5)
+        items = player1.prog_items
+        multi_world.completion_condition[player1.id] = lambda state: state.has_all(
+            names(items), player1.id)
+
+        location = player1.locations[0]
+        location.progress_type = LocationProgressType.PRIORITY
+        location.item_rule = lambda item: item != items[
+            0] and item != items[1] and item != items[2] and item != items[3]
+
+        distribute_items_restrictive(multi_world)
+
+        self.assertEqual(location.item, items[4])
+
+    def test_non_excluded_local_items(self):
+        multi_world = generate_multi_world(2)
+        player1 = generate_player_data(
+            multi_world, 1, location_count=5, basic_item_count=5)
+        player2 = generate_player_data(
+            multi_world, 2, location_count=5, basic_item_count=5)
+
+        for item in multi_world.get_items():
+            item.never_exclude = True
+
+        multi_world.local_items[player1.id].value = set(names(player1.basic_items))
+        multi_world.local_items[player2.id].value = set(names(player2.basic_items))
+        locality_rules(multi_world, player1.id)
+        locality_rules(multi_world, player2.id)
+
+        distribute_items_restrictive(multi_world)
+
+        for item in multi_world.get_items():
+            self.assertEqual(item.player, item.location.player)
+            self.assertFalse(item.location.event, False)
 
 
 class TestBalanceMultiworldProgression(unittest.TestCase):

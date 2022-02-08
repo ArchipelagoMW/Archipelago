@@ -9,5 +9,6 @@ item_table = {
     "Second Floor Key": 3626179,
     "Wing Cap": 3626180,
     "Metal Cap": 3626181,
-    "Vanish Cap": 3626182
+    "Vanish Cap": 3626182,
+    "1Up Mushroom": 3626183
 } 
