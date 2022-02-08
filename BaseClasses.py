@@ -1116,6 +1116,7 @@ class Item():
 
 class Spoiler():
     world: MultiWorld
+    unreachables: Set[Location]
 
     def __init__(self, world):
         self.world = world
@@ -1123,7 +1124,7 @@ class Spoiler():
         self.entrances = OrderedDict()
         self.medallions = {}
         self.playthrough = {}
-        self.unreachables = []
+        self.unreachables = set()
         self.locations = {}
         self.paths = {}
         self.shops = []
