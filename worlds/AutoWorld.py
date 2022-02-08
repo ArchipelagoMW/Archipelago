@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import logging
 from typing import Dict, Set, Tuple, List, Optional, TextIO, Any
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
@@ -18,6 +20,8 @@ class AutoWorldRegister(type):
 
         # build rest
         dct["item_names"] = frozenset(dct["item_name_to_id"])
+        dct["item_name_groups"] = dct.get("item_name_groups", {})
+        dct["item_name_groups"]["Everything"] = dct["item_names"]
         dct["location_names"] = frozenset(dct["location_name_to_id"])
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
 
@@ -87,6 +91,8 @@ class World(metaclass=AutoWorldRegister):
 
     hint_blacklist: Set[str] = frozenset()  # any names that should not be hintable
 
+    # NOTE: remote_items and remote_start_inventory are now available in the network protocol for the client to set.
+    # These values will be removed.
     # if a world is set to remote_items, then it just needs to send location checks to the server and the server
     # sends back the items
     # if a world is set to remote_items = False, then the server never sends an item where receiver == finder,
@@ -189,34 +195,45 @@ class World(metaclass=AutoWorldRegister):
         pass
     # end of ordered Main.py calls
 
-    def collect_item(self, state: CollectionState, item: Item, remove: bool = False) -> Optional[str]:
-        """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
-        Collect None to skip item.
-        :param remove: indicate if this is meant to remove from state instead of adding."""
-        if item.advancement:
-            return item.name
-
     def create_item(self, name: str) -> Item:
         """Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer"""
         raise NotImplementedError
 
+    def get_filler_item_name(self) -> str:
+        """Called when the item pool needs to be filled with additional items to match location count."""
+        logging.warning(f"World {self} is generating a filler item without custom filler pool.")
+        return self.world.random.choice(self.item_name_to_id)
+
+    # decent place to implement progressive items, in most cases can stay as-is
+    def collect_item(self, state: CollectionState, item: Item, remove: bool = False) -> Optional[str]:
+        """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
+        Collect None to skip item.
+        :param state: CollectionState to collect into
+        :param item: Item to decide on if it should be collected into state
+        :param remove: indicate if this is meant to remove from state instead of adding."""
+        if item.advancement:
+            return item.name
+
     # following methods should not need to be overridden.
     def collect(self, state: CollectionState, item: Item) -> bool:
         name = self.collect_item(state, item)
         if name:
-            state.prog_items[name, item.player] += 1
+            state.prog_items[name, self.player] += 1
             return True
         return False
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         name = self.collect_item(state, item, True)
         if name:
-            state.prog_items[name, item.player] -= 1
-            if state.prog_items[name, item.player] < 1:
-                del (state.prog_items[name, item.player])
+            state.prog_items[name, self.player] -= 1
+            if state.prog_items[name, self.player] < 1:
+                del (state.prog_items[name, self.player])
             return True
         return False
+
+    def create_filler(self):
+        self.world.itempool.append(self.create_item(self.get_filler_item_name()))
 
 
 # any methods attached to this can be used as part of CollectionState,

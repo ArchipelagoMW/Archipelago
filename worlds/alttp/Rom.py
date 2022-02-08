@@ -35,7 +35,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from Utils import local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen
-from worlds.alttp.Items import ItemFactory, item_table
+from worlds.alttp.Items import ItemFactory, item_table, item_name_groups, progression_items
 from worlds.alttp.EntranceShuffle import door_addresses
 from worlds.alttp.Options import smallkey_shuffle
 import Patch
@@ -1018,17 +1018,15 @@ def patch_rom(world, rom, player, enemized):
     # Set overflow items for progressive equipment
     rom.write_bytes(0x180090,
                     [difficulty.progressive_sword_limit if not world.swordless[player] else 0,
-                     overflow_replacement,
-                     difficulty.progressive_shield_limit, overflow_replacement,
-                     difficulty.progressive_armor_limit, overflow_replacement,
-                     difficulty.progressive_bottle_limit, overflow_replacement])
-
-    # Work around for json patch ordering issues - write bow limit separately so that it is replaced in the patch
-    rom.write_bytes(0x180098, [difficulty.progressive_bow_limit, overflow_replacement])
+                     item_table[difficulty.basicsword[-1]].item_code,
+                     difficulty.progressive_shield_limit, item_table[difficulty.basicshield[-1]].item_code,
+                     difficulty.progressive_armor_limit, item_table[difficulty.basicarmor[-1]].item_code,
+                     difficulty.progressive_bottle_limit, overflow_replacement,
+                     difficulty.progressive_bow_limit, item_table[difficulty.basicbow[-1]].item_code])
 
     if difficulty.progressive_bow_limit < 2 and (
             world.swordless[player] or world.logic[player] == 'noglitches'):
-        rom.write_bytes(0x180098, [2, overflow_replacement])
+        rom.write_bytes(0x180098, [2, item_table["Silver Bow"].item_code])
         rom.write_byte(0x180181, 0x01)  # Make silver arrows work only on ganon
         rom.write_byte(0x180182, 0x00)  # Don't auto equip silvers on pickup
 
@@ -1653,9 +1651,10 @@ def patch_rom(world, rom, player, enemized):
     rom.write_bytes(0x7FC0, rom.name)
 
     # set player names
-    for p in range(1, min(world.players, ROM_PLAYER_LIMIT) + 1):
+    encoded_players = world.players + len(world.groups)
+    for p in range(1, min(encoded_players, ROM_PLAYER_LIMIT) + 1):
         rom.write_bytes(0x195FFC + ((p - 1) * 32), hud_format_text(world.player_name[p]))
-    if world.players > ROM_PLAYER_LIMIT:
+    if encoded_players > ROM_PLAYER_LIMIT:
         rom.write_bytes(0x195FFC + ((ROM_PLAYER_LIMIT - 1) * 32), hud_format_text("Archipelago"))
 
     # Write title screen Code
@@ -2271,13 +2270,13 @@ def write_strings(rom, world, player):
                     this_hint = location + ' contains ' + hint_text(world.get_location(location, player).item) + '.'
                     tt[hint_locations.pop(0)] = this_hint
 
-            # Lastly we write hints to show where certain interesting items are. It is done the way it is to re-use the silver code and also to give one hint per each type of item regardless of how many exist. This supports many settings well.
+            # Lastly we write hints to show where certain interesting items are.
             items_to_hint = RelevantItems.copy()
-            if world.smallkey_shuffle[player]:
-                items_to_hint.extend(SmallKeys)
-            if world.bigkey_shuffle[player]:
-                items_to_hint.extend(BigKeys)
-            local_random.shuffle(items_to_hint)
+            if world.smallkey_shuffle[player].hints_useful:
+                items_to_hint |= item_name_groups["Small Keys"]
+            if world.bigkey_shuffle[player].hints_useful:
+                items_to_hint |= item_name_groups["Big Keys"]
+
             if world.hints[player] == "full":
                 hint_count = len(hint_locations) # fill all remaining hint locations with Item hints.
             else:
@@ -2285,7 +2284,7 @@ def write_strings(rom, world, player):
                                                                 'dungeonscrossed'] else 8
             hint_count = min(hint_count, len(items_to_hint), len(hint_locations))
             if hint_count:
-                locations = world.find_items_in_locations(set(items_to_hint), player)
+                locations = world.find_items_in_locations(items_to_hint, player)
                 local_random.shuffle(locations)
                 for x in range(min(hint_count, len(locations))):
                     this_location = locations.pop()
@@ -2873,88 +2872,10 @@ InconvenientLocations = ['Spike Cave',
 InconvenientVanillaLocations = ['Graveyard Cave',
                                 'Mimic Cave']
 
-RelevantItems = ['Bow',
-                 'Progressive Bow',
-                 'Book of Mudora',
-                 'Hammer',
-                 'Hookshot',
-                 'Magic Mirror',
-                 'Flute',
-                 'Pegasus Boots',
-                 'Power Glove',
-                 'Cape',
-                 'Mushroom',
-                 'Shovel',
-                 'Lamp',
-                 'Magic Powder',
-                 'Moon Pearl',
-                 'Cane of Somaria',
-                 'Fire Rod',
-                 'Flippers',
-                 'Ice Rod',
-                 'Titans Mitts',
-                 'Ether',
-                 'Bombos',
-                 'Quake',
-                 'Bottle',
-                 'Bottle (Red Potion)',
-                 'Bottle (Green Potion)',
-                 'Bottle (Blue Potion)',
-                 'Bottle (Fairy)',
-                 'Bottle (Bee)',
-                 'Bottle (Good Bee)',
-                 'Master Sword',
-                 'Tempered Sword',
-                 'Fighter Sword',
-                 'Golden Sword',
-                 'Progressive Sword',
-                 'Progressive Glove',
-                 'Master Sword',
-                 'Power Star',
-                 'Triforce Piece',
-                 'Single Arrow',
-                 'Blue Mail',
-                 'Red Mail',
-                 'Progressive Mail',
-                 'Blue Boomerang',
-                 'Red Boomerang',
-                 'Blue Shield',
-                 'Red Shield',
-                 'Mirror Shield',
-                 'Progressive Shield',
-                 'Bug Catching Net',
-                 'Cane of Byrna',
-                 'Magic Upgrade (1/2)',
-                 'Magic Upgrade (1/4)'
-                 ]
 
-SmallKeys = ['Small Key (Eastern Palace)',
-             'Small Key (Hyrule Castle)',
-             'Small Key (Desert Palace)',
-             'Small Key (Tower of Hera)',
-             'Small Key (Agahnims Tower)',
-             'Small Key (Palace of Darkness)',
-             'Small Key (Thieves Town)',
-             'Small Key (Swamp Palace)',
-             'Small Key (Skull Woods)',
-             'Small Key (Ice Palace)',
-             'Small Key (Misery Mire)',
-             'Small Key (Turtle Rock)',
-             'Small Key (Ganons Tower)',
-             ]
+RelevantItems = progression_items - {"Triforce", "Activated Flute"} - item_name_groups["Small Keys"] - item_name_groups["Big Keys"] \
+             | item_name_groups["Mails"] | item_name_groups["Shields"]
 
-BigKeys = ['Big Key (Eastern Palace)',
-           'Big Key (Desert Palace)',
-           'Big Key (Tower of Hera)',
-           'Big Key (Palace of Darkness)',
-           'Big Key (Thieves Town)',
-           'Big Key (Swamp Palace)',
-           'Big Key (Skull Woods)',
-           'Big Key (Ice Palace)',
-           'Big Key (Misery Mire)',
-           'Big Key (Turtle Rock)',
-           'Big Key (Ganons Tower)'
-           ]
 
 hash_alphabet = [
     "Bow", "Boomerang", "Hookshot", "Bomb", "Mushroom", "Powder", "Rod", "Pendant", "Bombos", "Ether", "Quake",

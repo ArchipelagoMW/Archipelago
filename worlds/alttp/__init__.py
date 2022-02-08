@@ -404,6 +404,9 @@ class ALTTPWorld(World):
                     fill_locations.remove(spot_to_fill)  # very slow, unfortunately
                     trash_count -= 1
 
+    def get_filler_item_name(self) -> str:
+        return "Rupees (5)"  # temporary
+
 
 def get_same_seed(world, seed_def: tuple) -> str:
     seeds: typing.Dict[tuple, str] = getattr(world, "__named_seeds", {})

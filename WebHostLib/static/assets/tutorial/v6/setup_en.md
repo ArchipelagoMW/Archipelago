@@ -27,6 +27,7 @@ Start the game from the command line to view helpful messages regarding V6AP. Th
 ### Game no longer starts after copying the .exe
 
 Most likely you forgot to set the launch options. `-v6ap_name YourName` and `-v6ap_ip ServerIP:Port` are required for startup.
+If your Name or Password have spaces in them, surround them in quotes.
 
 ## Game Troubleshooting
 
