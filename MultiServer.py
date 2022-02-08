@@ -1322,11 +1322,17 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         if ctx.password and args['password'] != ctx.password:
             errors.add('InvalidPassword')
 
-        if args['name'] not in ctx.connect_names:
+        if args['name'] in ctx.connect_names:
+            team, slot = ctx.connect_names[args['name']]
+        elif ("Tracker" in args["tags"] or "TextOnly" in args["tags"]) and args['name'] in ctx.player_name_lookup:
+            team, slot = ctx.player_name_lookup[args['name']]
+        else:
+            team, slot = None, None
+
+        if slot is None:
             logging.info((args["name"], ctx.connect_names))
             errors.add('InvalidSlot')
         else:
-            team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
             if "IgnoreGame" not in args["tags"] and args['game'] != game:
                 errors.add('InvalidGame')
@@ -1351,7 +1357,6 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             logging.info(f"A client connection was refused due to: {errors}, the sent connect information was {args}.")
             await ctx.send_msgs(client, [{"cmd": "ConnectionRefused", "errors": list(errors)}])
         else:
-            team, slot = ctx.connect_names[args['name']]
             if client.auth and client.team is not None and client.slot in ctx.clients[client.team]:
                 ctx.clients[team][slot].remove(client)  # re-auth, remove old entry
                 if client.team != team or client.slot != slot:
