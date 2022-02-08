@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
+from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList, OptionSet
 
 
 class StartingGender(Choice):
@@ -328,13 +328,14 @@ class FreeDiaryOnGeneration(DefaultOnToggle):
     displayname = "Free Diary On Generation"
 
 
-class AvailableClasses(OptionList):
+class AvailableClasses(OptionSet):
     """
     List of classes that will be in the item pool to find. The upgraded form of the class will be added with it.
     The upgraded form of your starting class will be available regardless.
     """
     displayname = "Available Classes"
-    default = ["Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"]
+    default = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
+    valid_keys = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
 
 legacy_options: typing.Dict[str, type(Option)] = {
     "starting_gender": StartingGender,

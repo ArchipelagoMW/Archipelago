@@ -336,7 +336,7 @@ class OptionList(Option, VerifyKeys):
         return item in self.value
 
 
-class OptionSet(Option):
+class OptionSet(Option, VerifyKeys):
     default = frozenset()
     supports_weighting = False
     value: set
@@ -351,9 +351,8 @@ class OptionSet(Option):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if type(data) == list:
-            return cls(data)
-        elif type(data) == set:
+        if type(data) in [list, set]:
+            cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
 

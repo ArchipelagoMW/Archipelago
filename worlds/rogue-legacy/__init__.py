@@ -93,8 +93,6 @@ class LegacyWorld(World):
         itempool += [self.create_item(ItemName.crit_chance)] * int(self.world.crit_chance_pool[self.player])
         itempool += [self.create_item(ItemName.crit_damage)] * int(self.world.crit_damage_pool[self.player])
 
-        # Add specific classes into the pool. Eventually, will be able to shuffle the starting ones, but until then...
-
         classes = self.world.available_classes[self.player]
         if "Dragon" in classes:
             itempool.append(self.create_item(ItemName.dragon))
