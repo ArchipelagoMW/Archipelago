@@ -122,13 +122,14 @@ class BingoWorld(World):
             line = []
             if location[3] == "1":
                 for i in range(0, 5):
-                    line.append(card[i - 1][i])
+                    line.append(card[i][i])
             elif location[3] == "2":
                 for i in range(0, 5):
-                    line.append(card[i - 1][4-i])
+                    line.append(card[i][4-i])
         hints = []
         for i in range(0,5):
-            hints += collect_hints(ctx, team, player, line[i])
+            if i != 0:
+                hints += collect_hints(ctx, team, player, line[i])
         notify_hints(ctx, team, hints)
 
     def received_checks(self, ctx, team, player):
@@ -198,14 +199,13 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
             loc_id = location_table.get(location, 0)
             location = BingoLocation(player, location, loc_id, ret)
             if loc_id is not None:
-                if loc_id - 900 >= loc_count:
+                if loc_id - 1000 >= loc_count:
                     continue
                 if (("Horizontal" in location.name and world.priority_rewards_horizontal[player])
                         or ("Vertical" in location.name and world.priority_rewards_vertical[player])
                         or ("Diagonal" in location.name and world.priority_rewards_diagonal[player])):
                     location.progress_type = LocationProgressType.PRIORITY
                     add_item_rule(location, lambda item: item.name not in world.priority_reward_item_blacklist[player])
-                add_item_rule(location, lambda item: item.name not in world.reward_item_blacklist[player])
                 if world.disallow_bingo_calls[player]:
                     add_item_rule(location, lambda item: item.game != "Bingo")
             ret.locations.append(location)

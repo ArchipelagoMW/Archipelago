@@ -6,8 +6,8 @@ class CardPairs(Range):
     """How many pairs of Bingo cards."""
     display_name = "Card Pairs"
     range_start = 1
-    range_end = 4
-    default = 4
+    range_end = 40
+    default = 2
 
 
 class RevealRewards(Toggle):
@@ -23,33 +23,28 @@ class DisallowBingoCalls(Toggle):
 
 
 class ForcedAdvancementHorizontal(Toggle):
-    """Force all horizontal line rewards to be advancement items"""
+    """Prioritize all horizontal line rewards for advancement items"""
     display_name = "Horizontal Line Priority Rewards"
     default = 0
 
 
 class ForcedAdvancementVertical(Toggle):
-    """Force all vertical line rewards to be advancement items"""
+    """Prioritize all vertical line rewards for advancement items"""
     display_name = "vertical Line Priority Rewards"
     default = 0
 
 
 class ForcedAdvancementDiagonal(Toggle):
-    """Force all diagonal line rewards to be advancement items"""
+    """Prioritize all diagonal line rewards for advancement items"""
     display_name = "Diagonal Line Priority Rewards"
     default = 0
 
 
 class PriorityRewardItemBlacklist(OptionSet):
-    """Add items to this list to blacklist them from being Bingo rewards for lines set to be forced advancement items"""
+    """Add items to this list to blacklist them from being rewards for lines prioritized for forced advancement items"""
     display_name = "Priority reward item Blacklist"
     default = {"Gold Skulltula Token"}
 
-
-class RewardItemBlacklist(OptionSet):
-    """Add items to this list to blacklist them from being any Bingo rewards"""
-    display_name = "General reward item Blacklist"
-    default = {}
 
 bingo_options: typing.Dict[str, type(Option)] = {
     "card_pairs": CardPairs,
@@ -59,5 +54,4 @@ bingo_options: typing.Dict[str, type(Option)] = {
     "priority_rewards_vertical": ForcedAdvancementVertical,
     "priority_rewards_diagonal": ForcedAdvancementDiagonal,
     "priority_reward_item_blacklist": PriorityRewardItemBlacklist,
-    "reward_item_blacklist": RewardItemBlacklist
 }
