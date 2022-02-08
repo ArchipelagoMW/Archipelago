@@ -112,10 +112,6 @@ soe_options:
   # File name of the SoE US ROM
   rom_file: "Secret of Evermore (USA).sfc"
 smz3_options:
-  # File name of the v1.0 J rom
-  sm_rom_file: "Super Metroid (JU).sfc"
-  # File name of the v1.0 J rom
-  lttp_rom_file: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
   # Set this to your SNI folder location if you want the MultiClient to attempt an auto start, does nothing if not found
   sni: "SNI"
   # Set this to false to never autostart a rom (such as after patching)

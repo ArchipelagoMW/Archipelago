@@ -35,7 +35,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 def get_sm_base_rom_path(file_name: str = "") -> str:
     options = Utils.get_options()
     if not file_name:
-        file_name = options["smz3_options"]["sm_rom_file"]
+        file_name = options["sm_options"]["rom_file"]
     if not os.path.exists(file_name):
         file_name = Utils.local_path(file_name)
     return file_name
@@ -43,7 +43,7 @@ def get_sm_base_rom_path(file_name: str = "") -> str:
 def get_lttp_base_rom_path(file_name: str = "") -> str:
     options = Utils.get_options()
     if not file_name:
-        file_name = options["smz3_options"]["lttp_rom_file"]
+        file_name = options["lttp_options"]["rom_file"]
     if not os.path.exists(file_name):
         file_name = Utils.local_path(file_name)
     return file_name
