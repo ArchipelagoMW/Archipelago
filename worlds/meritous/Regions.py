@@ -7,8 +7,7 @@ import typing
 from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Locations import MeritousLocation, alpha_store, beta_store, gamma_store, chest_store, special_store, location_table
 
-meritous_regions = ["Atlas Dome", "Chest rewards",
-                    "PSI Keys", "Meridian", "Ataraxia", "Merodach", "Endgame"]
+meritous_regions = ["Chest rewards", "PSI Keys", "Meridian", "Ataraxia", "Merodach", "Endgame"]
 
 
 def create_regions(world: MultiWorld, player: int):
