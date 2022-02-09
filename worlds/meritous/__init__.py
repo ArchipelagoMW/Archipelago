@@ -41,14 +41,22 @@ class MeritousWorld(World):
     def create_item(self, name: str) -> Item:
         return MeritousItem(name, True, item_table[name], self.player)
 
-    def _make_crystals(self) -> MeritousItem:
-        rand_crystals = self.world.random.randrange(0, 32)
-        if rand_crystals < 24:
-            return self.create_item("Crystals x500")
-        elif rand_crystals < 31:
-            return self.create_item("Crystals x1000")
-        else:
-            return self.create_item("Crystals x2000")
+    def _create_item_in_quantities(self, name: str, qty: int) -> [Item]:
+        return [self.create_item(name) for _ in range(0, qty)]        
+
+    def _make_crystals(self, qty: int) -> MeritousItem:
+        crystal_pool = []
+
+        for _ in range(0, qty):
+            rand_crystals = self.world.random.randrange(0, 32)
+            if rand_crystals < 24:
+                crystal_pool += [self.create_item("Crystals x500")]
+            elif rand_crystals < 31:
+                crystal_pool += [self.create_item("Crystals x1000")]
+            else:
+                crystal_pool += [self.create_item("Crystals x2000")]
+        
+        return crystal_pool
 
     def generate_basic(self):
         frequencies = [0, 25, 23, 22, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3]
@@ -56,9 +64,9 @@ class MeritousWorld(World):
         location_count = len(location_table)
         item_pool = []
 
-        self.world.get_location("Cursed Seal", self.player).place_locked_item(
+        self.world.get_location("Place of Power", self.player).place_locked_item(
             self.create_item("Cursed Seal"))
-        self.world.get_location("Agate Knife", self.player).place_locked_item(
+        self.world.get_location("The Last Place You'll Look", self.player).place_locked_item(
             self.create_item("Agate Knife"))
 
         if not self.world.include_psi_keys[self.player]:
@@ -83,12 +91,11 @@ class MeritousWorld(World):
 
         for i, name in enumerate(item_table):
             if (i < len(frequencies)):
-                item_pool += self.create_item(name) * frequencies[i]
+                item_pool += self._create_item_in_quantities(name, frequencies[i])
                 item_count += frequencies[i]
 
-        while item_count < location_count:
-            item_pool += self._make_crystals()
-            item_count += 1
+        if item_count < location_count:
+            item_pool += self._make_crystals(location_count - item_count)
 
     def fill_slot_data(self) -> dict:
         return {
