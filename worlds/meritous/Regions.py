@@ -14,17 +14,17 @@ def create_regions(world: MultiWorld, player: int):
     region_paid_stores = Region(
         "Menu", RegionType.Generic, "Atlas Dome", player, world)
     region_paid_stores.locations += [MeritousLocation(
-        player, loc_name, location_table[loc_name], region_paid_stores) for loc_name in [*alpha_store]]
+        player, loc_name, location_table[loc_name], region_paid_stores) for loc_name in alpha_store]
     region_paid_stores.locations += [MeritousLocation(
-        player, loc_name, location_table[loc_name], region_paid_stores) for loc_name in [*beta_store]]
+        player, loc_name, location_table[loc_name], region_paid_stores) for loc_name in beta_store]
     region_paid_stores.locations += [MeritousLocation(
-        player, loc_name, location_table[loc_name], region_paid_stores) for loc_name in [*gamma_store]]
+        player, loc_name, location_table[loc_name], region_paid_stores) for loc_name in gamma_store]
     world.regions.append(region_paid_stores)
 
     region_chest_store = Region(
         "Chest rewards", RegionType.Generic, "Chest rewards", player, world)
     region_chest_store.locations += [MeritousLocation(
-        player, loc_name, location_table[loc_name], region_chest_store) for loc_name in [*chest_store]]
+        player, loc_name, location_table[loc_name], region_chest_store) for loc_name in chest_store]
     world.regions.append(region_chest_store)
 
     region_psi_keys = Region(
