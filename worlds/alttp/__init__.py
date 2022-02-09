@@ -319,9 +319,7 @@ class ALTTPWorld(World):
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            payload = multidata["connect_names"][self.world.player_name[self.player]]
-            multidata["connect_names"][new_name] = payload
-            del (multidata["connect_names"][self.world.player_name[self.player]])
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
     def get_required_client_version(self) -> tuple:
         return max((0, 2, 4), super(ALTTPWorld, self).get_required_client_version())
