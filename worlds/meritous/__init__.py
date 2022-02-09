@@ -4,7 +4,6 @@
 # https://opensource.org/licenses/MIT
 
 import typing
-import random
 
 from .Items import item_table, MeritousItem
 from .Locations import location_table, MeritousLocation
@@ -41,7 +40,7 @@ class MeritousWorld(World):
         return MeritousItem(name, True, item_table[name], self.player)
 
     def _make_crystals(self) -> MeritousItem:
-        rand_crystals = random.randrange(0, 32)
+        rand_crystals = self.world.random.randrange(0, 32)
         if rand_crystals < 24:
             return self.create_item("Crystals x500")
         elif rand_crystals < 31:
