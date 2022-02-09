@@ -16,15 +16,15 @@ def check_endgame(state, player):
 
 
 def set_rules(world, player):
-    connect_regions(world, player, "Item stores",
+    connect_regions(world, player, "Menu",
                     "Chest rewards", lambda state: True)
-    connect_regions(world, player, "Item stores", "Meridian",
+    connect_regions(world, player, "Menu", "Meridian",
                     lambda state: state.has("PSI Key 1", player))
-    connect_regions(world, player, "Item stores", "Ataraxia",
+    connect_regions(world, player, "Menu", "Ataraxia",
                     lambda state: state.has("PSI Key 2", player))
-    connect_regions(world, player, "Item stores", "Merodach",
+    connect_regions(world, player, "Menu", "Merodach",
                     lambda state: state.has("PSI Key 3", player))
-    connect_regions(world, player, "Item stores", "Endgame",
+    connect_regions(world, player, "Menu", "Endgame",
                     lambda state: check_endgame(state, player))
 
     world.completion_condition[player] = lambda state: state.can_reach(

@@ -13,7 +13,7 @@ meritous_regions = ["Atlas Dome", "Chest rewards",
 
 def create_regions(world: MultiWorld, player: int):
     region_paid_stores = Region(
-        "Atlas Dome", RegionType.Generic, "Atlas Dome", player, world)
+        "Menu", RegionType.Generic, "Atlas Dome", player, world)
     region_paid_stores.locations += [MeritousLocation(
         player, loc_name, location_table[loc_name], region_paid_stores) for loc_name in [*alpha_store]]
     region_paid_stores.locations += [MeritousLocation(
