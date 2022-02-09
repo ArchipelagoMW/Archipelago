@@ -30,18 +30,18 @@ def create_regions(world: MultiWorld, player: int):
     region_psi_keys = Region(
         "PSI Keys", RegionType.Generic, "PSI Keys", player, world)
     region_psi_keys.locations += [MeritousLocation(
-        player, "PSI Key Storage {i}", location_table["PSI Key Storage {i}"], region_psi_keys) for i in range(1, 4)]
+        player, f"PSI Key Storage {i}", location_table[f"PSI Key Storage {i}"], region_psi_keys) for i in range(1, 4)]
     world.regions.append(region_psi_keys)
 
     for boss in ["Meridian", "Ataraxia", "Merodach"]:
         boss_region = Region(boss, RegionType.Generic, boss, player, world)
-        boss_region.locations += MeritousLocation(
-            player, boss, location_table[boss], boss_region)
+        boss_region.locations += [MeritousLocation(
+            player, boss, location_table[boss], boss_region)]
         world.regions.append(boss_region)
 
     region_end_game = Region(
         "Endgame", RegionType.Generic, "Endgame", player, world)
-    locations_end_game = ["Cursed Seal", "Agate Knife"]
+    locations_end_game = ["Place of Power", "The Last Place You'll Look"]
     region_end_game.locations += [MeritousLocation(
         player, loc_name, location_table[loc_name], region_end_game) for loc_name in locations_end_game]
     world.regions.append(region_end_game)
