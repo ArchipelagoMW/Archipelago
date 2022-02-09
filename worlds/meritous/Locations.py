@@ -10,22 +10,22 @@ class MeritousLocation(Location):
     game: str = "Meritous"
 
 
-offset = 0
+offset = 593_000
 
 alpha_store = {
-    f"Alpha Store {i}": offset + i for i in range(0, 24)
+    f"Alpha Store {i + 1}": offset + i for i in range(0, 24)
 }
 
 beta_store = {
-    f"Beta Store {i}": offset + i + 24 for i in range(0, 24)
+    f"Beta Store {i + 1}": offset + i + 24 for i in range(0, 24)
 }
 
 gamma_store = {
-    f"Gamma Store {i}": offset + i + 48 for i in range(0, 24)
+    f"Gamma Store {i + 1}": offset + i + 48 for i in range(0, 24)
 }
 
 chest_store = {
-    f"Reward Chest {i}": offset + i + 72 for i in range(0, 24)
+    f"Reward Chest {i + 1}": offset + i + 72 for i in range(0, 24)
 }
 
 special_store = {
