@@ -10,7 +10,7 @@ class MeritousItem(Item):
     game: str = "Meritous"
 
 
-offset = 0
+offset = 593_000
 
 item_table = {
     "Nothing": offset + 0,

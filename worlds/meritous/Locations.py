@@ -10,7 +10,7 @@ class MeritousLocation(Location):
     game: str = "Meritous"
 
 
-offset = 0
+offset = 593_000
 
 alpha_store = {
     f"Alpha Store {i}": offset + i for i in range(0, 24)
