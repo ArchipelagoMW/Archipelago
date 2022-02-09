@@ -13,14 +13,17 @@ class Goal(Choice):
     option_true_ending = 1
     alias_normal_ending = 0
     alias_agate_knife = 1
+    default = 0
 
 
 class IncludePSIKeys(DefaultOnToggle):
     """Whether PSI Keys should be included in the multiworld pool. If not, they will be in their vanilla locations."""
+    display_name = "Include PSI Keys"
 
 
 class IncludeEvolutionTraps(Toggle):
     """Whether evolution traps should be included in the multiworld pool. If not, they will be activated by bosses, as in vanilla."""
+    display_name = "Include Evolution Traps"
 
 
 meritous_options: typing.Dict[str, type(Option)] = {
