@@ -7,31 +7,23 @@ import typing
 from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Locations import MeritousLocation, alpha_store, beta_store, gamma_store, chest_store, special_store, location_table
 
-meritous_regions = ["Chest rewards", "PSI Keys", "Meridian", "Ataraxia", "Merodach", "Endgame"]
+meritous_regions = ["Meridian", "Ataraxia", "Merodach", "Endgame"]
 
 
 def create_regions(world: MultiWorld, player: int):
-    region_paid_stores = Region(
+    region_primary = Region(
         "Menu", RegionType.Generic, "Atlas Dome", player, world)
-    region_paid_stores.locations += [MeritousLocation(
+    region_primary.locations += [MeritousLocation(
         player, loc_name, location_table[loc_name], region_paid_stores) for loc_name in alpha_store]
-    region_paid_stores.locations += [MeritousLocation(
+    region_primary.locations += [MeritousLocation(
         player, loc_name, location_table[loc_name], region_paid_stores) for loc_name in beta_store]
-    region_paid_stores.locations += [MeritousLocation(
+    region_primary.locations += [MeritousLocation(
         player, loc_name, location_table[loc_name], region_paid_stores) for loc_name in gamma_store]
-    world.regions.append(region_paid_stores)
-
-    region_chest_store = Region(
-        "Chest rewards", RegionType.Generic, "Chest rewards", player, world)
-    region_chest_store.locations += [MeritousLocation(
+    region_primary.locations += [MeritousLocation(
         player, loc_name, location_table[loc_name], region_chest_store) for loc_name in chest_store]
-    world.regions.append(region_chest_store)
-
-    region_psi_keys = Region(
-        "PSI Keys", RegionType.Generic, "PSI Keys", player, world)
-    region_psi_keys.locations += [MeritousLocation(
+    region_primary.locations += [MeritousLocation(
         player, f"PSI Key Storage {i}", location_table[f"PSI Key Storage {i}"], region_psi_keys) for i in range(1, 4)]
-    world.regions.append(region_psi_keys)
+    world.regions.append(region_primary)
 
     for boss in ["Meridian", "Ataraxia", "Merodach"]:
         boss_region = Region(boss, RegionType.Generic, boss, player, world)

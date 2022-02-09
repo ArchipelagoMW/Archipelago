@@ -16,8 +16,6 @@ def check_endgame(state, player):
 
 
 def set_rules(world, player):
-    connect_regions(world, player, "Menu",
-                    "Chest rewards", lambda state: True)
     connect_regions(world, player, "Menu", "Meridian",
                     lambda state: state.has("PSI Key 1", player))
     connect_regions(world, player, "Menu", "Ataraxia",
