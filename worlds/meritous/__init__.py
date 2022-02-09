@@ -92,10 +92,11 @@ class MeritousWorld(World):
         for i, name in enumerate(item_table):
             if (i < len(frequencies)):
                 item_pool += self._create_item_in_quantities(name, frequencies[i])
-                item_count += frequencies[i]
 
-        if item_count < location_count:
-            item_pool += self._make_crystals(location_count - item_count)
+        if len(item_pool) < location_count:
+            item_pool += self._make_crystals(location_count - len(item_pool))
+
+        self.world.itempool += item_pool
 
     def fill_slot_data(self) -> dict:
         return {
