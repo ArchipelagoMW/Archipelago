@@ -17,12 +17,10 @@ class Goal(Choice):
 
 class IncludePSIKeys(DefaultOnToggle):
     """Whether PSI Keys should be included in the multiworld pool. If not, they will be in their vanilla locations."""
-    default = True
 
 
 class IncludeEvolutionTraps(Toggle):
     """Whether evolution traps should be included in the multiworld pool. If not, they will be activated by bosses, as in vanilla."""
-    default = False
 
 
 meritous_options: typing.Dict[str, type(Option)] = {
