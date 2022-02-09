@@ -82,7 +82,7 @@ class MeritousWorld(World):
             fill_restrictive(self.world, self.world.get_all_state(
                 False), psi_key_storage, psi_keys)
 
-        if not self.world.include_evo_traps[self.player]:
+        if not self.world.include_evolution_traps[self.player]:
             frequencies[17] = 0
             location_count -= 3
             for boss in ["Meridian", "Ataraxia", "Merodach"]:

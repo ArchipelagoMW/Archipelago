@@ -29,6 +29,6 @@ class IncludeEvolutionTraps(Toggle):
 meritous_options: typing.Dict[str, type(Option)] = {
     "goal": Goal,
     "include_psi_keys": IncludePSIKeys,
-    "include_evo_traps": IncludeEvolutionTraps,
+    "include_evolution_traps": IncludeEvolutionTraps,
     "death_link": DeathLink
 }
