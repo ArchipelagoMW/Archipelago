@@ -75,9 +75,9 @@ class MeritousWorld(World):
             psi_key_storage = []
             for i in range(0, 3):
                 frequencies[i + 12] = 0
-                psi_keys += self.create_item(f"PSI Key {i + 1}")
-                psi_key_storage += self.world.get_location(
-                    f"PSI Key Storage {i + 1}", self.player)
+                psi_keys += [self.create_item(f"PSI Key {i + 1}")]
+                psi_key_storage += [self.world.get_location(
+                    f"PSI Key Storage {i + 1}", self.player)]
 
             fill_restrictive(self.world, self.world.get_all_state(
                 False), psi_key_storage, psi_keys)
