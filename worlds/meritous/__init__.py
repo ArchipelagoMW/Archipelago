@@ -61,7 +61,7 @@ class MeritousWorld(World):
     def generate_basic(self):
         frequencies = [0, 25, 23, 22, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3]
         item_count = 0
-        location_count = len(location_table)
+        location_count = len(location_table) - 2
         item_pool = []
 
         self.world.get_location("Place of Power", self.player).place_locked_item(
