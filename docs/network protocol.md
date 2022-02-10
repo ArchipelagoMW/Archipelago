@@ -117,7 +117,7 @@ Sent to clients when the connection handshake is successfully completed.
 | slot | int | Your slot number on your team. See [NetworkPlayer](#NetworkPlayer) for more info on the slot number. |
 | players | list\[[NetworkPlayer](#NetworkPlayer)\] | List denoting other players in the multiworld, whether connected or not. |
 | missing_locations | list\[int\] | Contains ids of remaining locations that need to be checked. Useful for trackers, among other things. |
-| checked_locations | list\[int\] | Contains ids of all locations that have been checked. Useful for trackers, among other things. |
+| checked_locations | list\[int\] | Contains ids of all locations that have been checked. Useful for trackers, among other things. Location ids are in the range of ± 2<sup>53</sup>-1. |
 | slot_data | dict | Contains a json object for slot related data, differs per game. Empty if not required. |
 
 ### ReceivedItems
@@ -354,9 +354,9 @@ In JSON this may look like:
     {"item": 3, "location": 3, "player": 3, "flags": 0}
 ]
 ```
-`item` is the item id of the item
+`item` is the item id of the item. Item ids are in the range of ± 2<sup>53</sup>-1.
 
-`location` is the location id of the item inside the world
+`location` is the location id of the item inside the world. Location ids are in the range of ± 2<sup>53</sup>-1.
 
 `player` is the player slot of the world the item is located in, except when inside an [LocationInfo](#LocationInfo) Packet then it will be the slot of the player to receive the item
 

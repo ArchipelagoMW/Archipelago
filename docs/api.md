@@ -82,6 +82,7 @@ Each location has a `name` and an `id` (a.k.a. "code" or "address"), is placed
 in a Region and has access rules.
 The name needs to be unique in each game, the ID needs to be unique across all
 games and is best in the same range as the item IDs.
+World-specific IDs are 1 to 2<sup>53</sup>-1, IDs ≤ 0 are global and reserved.
 
 Special locations with ID `None` can hold events.
 
