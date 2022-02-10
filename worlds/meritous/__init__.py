@@ -38,11 +38,13 @@ class MeritousWorld(World):
     def set_rules(self):
         set_rules(self.world, self.player)
 
-    def create_item(self, name: str) -> Item:
-        return MeritousItem(name, True, item_table[name], self.player)
+    def create_item(self, name: str, progression = False) -> Item:
+        item = MeritousItem(name, progression, item_table[name], self.player)
+        if "Trap" in name: item.trap = True
+        return item
 
-    def _create_item_in_quantities(self, name: str, qty: int) -> [Item]:
-        return [self.create_item(name) for _ in range(0, qty)]        
+    def _create_item_in_quantities(self, name: str, qty: int, progression = False) -> [Item]:
+        return [self.create_item(name, progression) for _ in range(0, qty)]        
 
     def _make_crystals(self, qty: int) -> MeritousItem:
         crystal_pool = []
@@ -60,14 +62,15 @@ class MeritousWorld(World):
 
     def generate_basic(self):
         frequencies = [0, 25, 23, 22, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3]
+        progression_items = range(12, 17)
         item_count = 0
         location_count = len(location_table) - 2
         item_pool = []
 
         self.world.get_location("Place of Power", self.player).place_locked_item(
-            self.create_item("Cursed Seal"))
+            self.create_item("Cursed Seal", True))
         self.world.get_location("The Last Place You'll Look", self.player).place_locked_item(
-            self.create_item("Agate Knife"))
+            self.create_item("Agate Knife", True))
 
         if not self.world.include_psi_keys[self.player]:
             location_count -= 3
@@ -75,7 +78,7 @@ class MeritousWorld(World):
             psi_key_storage = []
             for i in range(0, 3):
                 frequencies[i + 12] = 0
-                psi_keys += [self.create_item(f"PSI Key {i + 1}")]
+                psi_keys += [self.create_item(f"PSI Key {i + 1}", True)]
                 psi_key_storage += [self.world.get_location(
                     f"PSI Key Storage {i + 1}", self.player)]
 
@@ -91,7 +94,7 @@ class MeritousWorld(World):
 
         for i, name in enumerate(item_table):
             if (i < len(frequencies)):
-                item_pool += self._create_item_in_quantities(name, frequencies[i])
+                item_pool += self._create_item_in_quantities(name, frequencies[i], i in progression_items)
 
         if len(item_pool) < location_count:
             item_pool += self._make_crystals(location_count - len(item_pool))
