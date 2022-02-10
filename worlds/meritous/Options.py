@@ -9,6 +9,7 @@ from Options import Option, DeathLink, Toggle, DefaultOnToggle, Choice
 
 class Goal(Choice):
     """Which goal must be achieved to trigger completion."""
+    display_name = "Goal"
     option_any_ending = 0
     option_true_ending = 1
     alias_normal_ending = 0
