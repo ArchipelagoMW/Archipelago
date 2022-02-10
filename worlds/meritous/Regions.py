@@ -14,15 +14,15 @@ def create_regions(world: MultiWorld, player: int):
     region_primary = Region(
         "Menu", RegionType.Generic, "Atlas Dome", player, world)
     region_primary.locations += [MeritousLocation(
-        player, loc_name, location_table[loc_name], region_paid_stores) for loc_name in alpha_store]
+        player, loc_name, location_table[loc_name], region_primary) for loc_name in alpha_store]
     region_primary.locations += [MeritousLocation(
-        player, loc_name, location_table[loc_name], region_paid_stores) for loc_name in beta_store]
+        player, loc_name, location_table[loc_name], region_primary) for loc_name in beta_store]
     region_primary.locations += [MeritousLocation(
-        player, loc_name, location_table[loc_name], region_paid_stores) for loc_name in gamma_store]
+        player, loc_name, location_table[loc_name], region_primary) for loc_name in gamma_store]
     region_primary.locations += [MeritousLocation(
-        player, loc_name, location_table[loc_name], region_chest_store) for loc_name in chest_store]
+        player, loc_name, location_table[loc_name], region_primary) for loc_name in chest_store]
     region_primary.locations += [MeritousLocation(
-        player, f"PSI Key Storage {i}", location_table[f"PSI Key Storage {i}"], region_psi_keys) for i in range(1, 4)]
+        player, f"PSI Key Storage {i}", location_table[f"PSI Key Storage {i}"], region_primary) for i in range(1, 4)]
     world.regions.append(region_primary)
 
     for boss in ["Meridian", "Ataraxia", "Merodach"]:
