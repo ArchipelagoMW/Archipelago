@@ -10,6 +10,17 @@ from .Locations import MeritousLocation, alpha_store, beta_store, gamma_store, c
 meritous_regions = ["Meridian", "Ataraxia", "Merodach", "Endgame"]
 
 
+def _generate_entrances(player: int, list: [str], parent: Region):
+    return [Entrance(player, entrance, parent) for entrance in list]
+
+
+def _check_endgame(state, player):
+    for check in ["Meridian", "Ataraxia", "Merodach"]:
+        if not state.can_reach(check, "Location", player):
+            return False
+    return True
+
+
 def create_regions(world: MultiWorld, player: int):
     region_primary = Region(
         "Menu", RegionType.Generic, "Atlas Dome", player, world)
@@ -23,6 +34,8 @@ def create_regions(world: MultiWorld, player: int):
         player, loc_name, location_table[loc_name], region_primary) for loc_name in chest_store]
     region_primary.locations += [MeritousLocation(
         player, f"PSI Key Storage {i}", location_table[f"PSI Key Storage {i}"], region_primary) for i in range(1, 4)]
+    region_primary.exits = _generate_entrances(player, ["To Meridian",
+                                                        "To Ataraxia", "To Merodach", "Toward the endgame"], region_primary)
     world.regions.append(region_primary)
 
     for boss in ["Meridian", "Ataraxia", "Merodach"]:
@@ -36,6 +49,8 @@ def create_regions(world: MultiWorld, player: int):
     locations_end_game = ["Place of Power", "The Last Place You'll Look"]
     region_end_game.locations += [MeritousLocation(
         player, loc_name, location_table[loc_name], region_end_game) for loc_name in locations_end_game]
+    region_end_game.exits += _generate_entrances(player, ["Back to the entrance",
+                                                          "Back to the entrance with the Knife"], region_end_game)
     world.regions.append(region_end_game)
 
     region_final_boss = Region(
@@ -50,13 +65,37 @@ def create_regions(world: MultiWorld, player: int):
         player, "Wervyn Anixil?", None, region_tfb)]
     world.regions.append(region_tfb)
 
+    entrance_map = {
+        "To Meridian": {
+            "to": "Meridian",
+            "rule": lambda state: state.has("PSI Key 1", player)
+        },
+        "To Ataraxia": {
+            "to": "Ataraxia",
+            "rule": lambda state: state.has("PSI Key 2", player)
+        },
+        "To Merodach": {
+            "to": "Merodach",
+            "rule": lambda state: state.has("PSI Key 3", player)
+        },
+        "Toward the endgame": {
+            "to": "Endgame",
+            "rule": lambda state: _check_endgame(state, player)
+        },
+        "Back to the entrance": {
+            "to": "Final Boss",
+            "rule": lambda state: state.has(
+                "Cursed Seal", player) and not state.has("Agate Knife", player)
+        },
+        "Back to the entrance with the Knife": {
+            "to": "True Final Boss",
+            "rule": lambda state: state.has(
+                "Cursed Seal", player) and state.has("Agate Knife", player)
+        }
+    }
 
-def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule):
-    sourceRegion = world.get_region(source, player)
-    targetRegion = world.get_region(target, player)
-
-    connection = Entrance(player, '', sourceRegion)
-    connection.access_rule = rule
-
-    sourceRegion.exits.append(connection)
-    connection.connect(targetRegion)
+    for entrance in entrance_map:
+        connection_data = entrance_map[entrance]
+        connection = world.get_entrance(entrance, player)
+        connection.access_rule = connection_data["rule"]
+        connection.connect(world.get_region(connection_data["to"], player))
