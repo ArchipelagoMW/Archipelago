@@ -14,13 +14,6 @@ def _generate_entrances(player: int, list: [str], parent: Region):
     return [Entrance(player, entrance, parent) for entrance in list]
 
 
-def _check_endgame(state, player):
-    for check in ["Meridian", "Ataraxia", "Merodach"]:
-        if not state.can_reach(check, "Location", player):
-            return False
-    return True
-
-
 def create_regions(world: MultiWorld, player: int):
     region_primary = Region(
         "Menu", RegionType.Generic, "Atlas Dome", player, world)
@@ -80,17 +73,16 @@ def create_regions(world: MultiWorld, player: int):
         },
         "Toward the endgame": {
             "to": "Endgame",
-            "rule": lambda state: _check_endgame(state, player)
+            "rule": lambda state: state.has_all(["PSI Key 1", "PSI Key 2", "PSI Key 3"], player)
         },
         "Back to the entrance": {
             "to": "Final Boss",
             "rule": lambda state: state.has(
-                "Cursed Seal", player) and not state.has("Agate Knife", player)
+                "Cursed Seal", player)
         },
         "Back to the entrance with the Knife": {
             "to": "True Final Boss",
-            "rule": lambda state: state.has(
-                "Cursed Seal", player) and state.has("Agate Knife", player)
+            "rule": lambda state: state.has_all(["Cursed Seal", "Agate Knife"], player)
         }
     }
 

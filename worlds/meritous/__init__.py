@@ -33,7 +33,7 @@ class MeritousWorld(World):
     options = meritous_options
 
     def _is_progression(self, name):
-        return "PSI Key" in name  # or name in ["Cursed Seal", "Agate Knife"]
+        return "PSI Key" in name or name in ["Cursed Seal", "Agate Knife"]
 
     def create_item(self, name: str) -> Item:
         item = MeritousItem(name, self._is_progression(
