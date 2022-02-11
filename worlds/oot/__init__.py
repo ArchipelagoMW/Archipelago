@@ -159,6 +159,9 @@ class OOTWorld(World):
         # Closed forest and adult start are not compatible; closed forest takes priority
         if self.open_forest == 'closed':
             self.starting_age = 'child'
+            # These ER options force closed forest to become closed deku
+            if (self.shuffle_interior_entrances == 'all' or self.shuffle_overworld_entrances or self.warp_songs or self.spawn_positions):
+                self.open_forest = 'closed_deku'
 
         # Skip child zelda and shuffle egg are not compatible; skip-zelda takes priority
         if self.skip_child_zelda:
