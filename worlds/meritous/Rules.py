@@ -30,7 +30,7 @@ def set_rules(world, player):
     connect_regions(world, player, "Endgame", "Final Boss",
                     lambda state: state.has("Cursed Seal", player))
     connect_regions(world, player, "Endgame", "True Final Boss",
-                    lambda state: state.has("Agate Knife") and state.has("Cursed Seal"))
+                    lambda state: state.has("Agate Knife", player) and state.has("Cursed Seal", player))
 
     forbid_item(world.get_location("Meridian", player), "PSI Key 1", player)
     forbid_item(world.get_location("Ataraxia", player), "PSI Key 2", player)
