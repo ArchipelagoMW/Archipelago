@@ -879,6 +879,9 @@ def patch_rom(world, rom, player, enemized):
         credits_total += 30 if 'w' in world.shop_shuffle[player] else 27
 
     rom.write_byte(0x187010, credits_total)  # dynamic credits
+
+    rom.write_byte(0x140000, 1)  # key drop shuffle
+
     # collection rate address: 238C37
     first_top, first_bot = credits_digit((credits_total / 100) % 10)
     mid_top, mid_bot = credits_digit((credits_total / 10) % 10)
