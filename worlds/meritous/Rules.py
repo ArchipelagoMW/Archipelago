@@ -4,7 +4,9 @@
 # https://opensource.org/licenses/MIT
 
 import typing
-from ..generic.Rules import add_rule
+
+from ..generic.Rules import add_rule, forbid_item
+
 from .Regions import meritous_regions, connect_regions
 
 
@@ -25,5 +27,11 @@ def set_rules(world, player):
     connect_regions(world, player, "Menu", "Endgame",
                     lambda state: check_endgame(state, player))
 
-    world.completion_condition[player] = lambda state: state.can_reach(
-        "Endgame", "Region", player)
+    connect_regions(world, player, "Endgame", "Final Boss",
+                    lambda state: state.has("Cursed Seal", player))
+    connect_regions(world, player, "Endgame", "True Final Boss",
+                    lambda state: state.has("Agate Knife") and state.has("Cursed Seal"))
+
+    forbid_item(world.get_location("Meridian", player), "PSI Key 1", player)
+    forbid_item(world.get_location("Ataraxia", player), "PSI Key 2", player)
+    forbid_item(world.get_location("Merodach", player), "PSI Key 3", player)

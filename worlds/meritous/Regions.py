@@ -38,6 +38,18 @@ def create_regions(world: MultiWorld, player: int):
         player, loc_name, location_table[loc_name], region_end_game) for loc_name in locations_end_game]
     world.regions.append(region_end_game)
 
+    region_final_boss = Region(
+        "Final Boss", RegionType.Generic, "Final Boss", player, world)
+    region_final_boss.locations = [MeritousLocation(
+        player, "Wervyn Anixil", None, region_final_boss)]
+    world.regions.append(region_final_boss)
+
+    region_tfb = Region("True Final Boss", RegionType.Generic,
+                        "True Final Boss", player, world)
+    region_tfb.locations = [MeritousLocation(
+        player, "Wervyn Anixil?", None, region_tfb)]
+    world.regions.append(region_tfb)
+
 
 def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule):
     sourceRegion = world.get_region(source, player)
