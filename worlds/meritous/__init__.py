@@ -32,12 +32,6 @@ class MeritousWorld(World):
 
     options = meritous_options
 
-    def create_regions(self):
-        create_regions(self.world, self.player)
-
-    def set_rules(self):
-        set_rules(self.world, self.player)
-
     def _is_progression(self, name):
         return "PSI Key" in name  # or name in ["Cursed Seal", "Agate Knife"]
 
@@ -68,18 +62,27 @@ class MeritousWorld(World):
 
         return crystal_pool
 
+    def generate_early(self):
+        self.goal = self.world.goal[self.player].value
+        self.include_evolution_traps = self.world.include_evolution_traps[self.player].value
+        self.include_psi_keys = self.world.include_psi_keys[self.player].value
+        self.death_link = self.world.death_link[self.player].value
+
+    def create_regions(self):
+        create_regions(self.world, self.player)
+
     def create_items(self):
         frequencies = [0, 25, 23, 22, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3]
         item_count = 0
         location_count = len(location_table) - 2
         item_pool = []
 
-        if not self.world.include_psi_keys[self.player]:
+        if not self.include_psi_keys:
             location_count -= 3
             for i in range(3):
                 frequencies[i + 12] = 0
 
-        if not self.world.include_evolution_traps[self.player]:
+        if not self.include_evolution_traps:
             frequencies[17] = 0
             location_count -= 3
 
@@ -93,6 +96,9 @@ class MeritousWorld(World):
 
         self.world.itempool += item_pool
 
+    def set_rules(self):
+        set_rules(self.world, self.player)
+
     def generate_basic(self):
         self.world.get_location("Place of Power", self.player).place_locked_item(
             self.create_item("Cursed Seal"))
@@ -103,7 +109,7 @@ class MeritousWorld(World):
         self.world.get_location("Wervyn Anixil?", self.player).place_locked_item(
             self.create_event("Full Victory"))
 
-        if not self.world.include_psi_keys[self.player]:
+        if not self.include_psi_keys:
             psi_keys = []
             psi_key_storage = []
             for i in range(0, 3):
@@ -114,20 +120,24 @@ class MeritousWorld(World):
             fill_restrictive(self.world, self.world.get_all_state(
                 False), psi_key_storage, psi_keys)
 
-        if not self.world.include_evolution_traps[self.player]:
+        if not self.include_evolution_traps:
             for boss in ["Meridian", "Ataraxia", "Merodach"]:
                 self.world.get_location(boss, self.player).place_locked_item(
                     self.create_item("Evolution Trap"))
 
-        if self.world.goal[self.player] == 0:
+        if self.goal == 0:
             self.world.completion_condition[self.player] = lambda state: state.has(
                 "Victory", self.player) or state.has("Full Victory", self.player)
         else:
             self.world.completion_condition[self.player] = lambda state: state.has(
                 "Full Victory", self.player)
 
+    def get_required_client_version(self) -> tuple:
+        # NOTE: Remember to change this before this game goes live
+        return max((0, 2, 4), super(MeritousWorld, self).get_required_client_version())
+
     def fill_slot_data(self) -> dict:
         return {
-            "goal": self.world.goal[self.player],
-            "death_link": self.world.death_link[self.player]
+            "goal": self.goal,
+            "death_link": self.death_link
         }
