@@ -68,40 +68,20 @@ class MeritousWorld(World):
 
         return crystal_pool
 
-    def generate_basic(self):
+    def create_items(self):
         frequencies = [0, 25, 23, 22, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3]
         item_count = 0
         location_count = len(location_table) - 2
         item_pool = []
 
-        self.world.get_location("Place of Power", self.player).place_locked_item(
-            self.create_item("Cursed Seal"))
-        self.world.get_location("The Last Place You'll Look", self.player).place_locked_item(
-            self.create_item("Agate Knife"))
-        self.world.get_location("Wervyn Anixil", self.player).place_locked_item(
-            self.create_event("Victory"))
-        self.world.get_location("Wervyn Anixil?", self.player).place_locked_item(
-            self.create_event("Full Victory"))
-
         if not self.world.include_psi_keys[self.player]:
             location_count -= 3
-            psi_keys = []
-            psi_key_storage = []
-            for i in range(0, 3):
+            for i in range(3):
                 frequencies[i + 12] = 0
-                psi_keys += [self.create_item(f"PSI Key {i + 1}")]
-                psi_key_storage += [self.world.get_location(
-                    f"PSI Key Storage {i + 1}", self.player)]
-
-            fill_restrictive(self.world, self.world.get_all_state(
-                False), psi_key_storage, psi_keys)
 
         if not self.world.include_evolution_traps[self.player]:
             frequencies[17] = 0
             location_count -= 3
-            for boss in ["Meridian", "Ataraxia", "Merodach"]:
-                self.world.get_location(boss, self.player).place_locked_item(
-                    self.create_item("Evolution Trap"))
 
         for i, name in enumerate(item_table):
             if (i < len(frequencies)):
@@ -112,6 +92,32 @@ class MeritousWorld(World):
             item_pool += self._make_crystals(location_count - len(item_pool))
 
         self.world.itempool += item_pool
+
+    def generate_basic(self):
+        self.world.get_location("Place of Power", self.player).place_locked_item(
+            self.create_item("Cursed Seal"))
+        self.world.get_location("The Last Place You'll Look", self.player).place_locked_item(
+            self.create_item("Agate Knife"))
+        self.world.get_location("Wervyn Anixil", self.player).place_locked_item(
+            self.create_event("Victory"))
+        self.world.get_location("Wervyn Anixil?", self.player).place_locked_item(
+            self.create_event("Full Victory"))
+
+        if not self.world.include_psi_keys[self.player]:
+            psi_keys = []
+            psi_key_storage = []
+            for i in range(0, 3):
+                psi_keys += [self.create_item(f"PSI Key {i + 1}")]
+                psi_key_storage += [self.world.get_location(
+                    f"PSI Key Storage {i + 1}", self.player)]
+
+            fill_restrictive(self.world, self.world.get_all_state(
+                False), psi_key_storage, psi_keys)
+
+        if not self.world.include_evolution_traps[self.player]:
+            for boss in ["Meridian", "Ataraxia", "Merodach"]:
+                self.world.get_location(boss, self.player).place_locked_item(
+                    self.create_item("Evolution Trap"))
 
         if self.world.goal[self.player] == 0:
             self.world.completion_condition[self.player] = lambda state: state.has(
