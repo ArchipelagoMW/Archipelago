@@ -10,8 +10,8 @@ from worlds.generic.Rules import add_rule, set_rule
 import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
 from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
 from worlds.smz3.TotalSMZ3.Config import Config, GameMode, GanonInvincible, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic
-from worlds.smz3.TotalSMZ3.Location import locations_start_id, Location as TotalSMZ3Location
-from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWordArray
+from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
+from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
 from ..AutoWorld import World
 from .Rom import get_base_rom_bytes
 from .ips import IPS_Patch
@@ -158,6 +158,87 @@ class SMZ3World(World):
                 idx += 1
         return offworldSprites
 
+    def convert_to_sm_item_name(self, itemName):
+        charMap = { "A" : 0x3CE0, 
+                    "B" : 0x3CE1,
+                    "C" : 0x3CE2,
+                    "D" : 0x3CE3,
+                    "E" : 0x3CE4,
+                    "F" : 0x3CE5,
+                    "G" : 0x3CE6,
+                    "H" : 0x3CE7,
+                    "I" : 0x3CE8,
+                    "J" : 0x3CE9,
+                    "K" : 0x3CEA,
+                    "L" : 0x3CEB,
+                    "M" : 0x3CEC,
+                    "N" : 0x3CED,
+                    "O" : 0x3CEE,
+                    "P" : 0x3CEF,
+                    "Q" : 0x3CF0,
+                    "R" : 0x3CF1,
+                    "S" : 0x3CF2,
+                    "T" : 0x3CF3,
+                    "U" : 0x3CF4,
+                    "V" : 0x3CF5,
+                    "W" : 0x3CF6,
+                    "X" : 0x3CF7,
+                    "Y" : 0x3CF8,
+                    "Z" : 0x3CF9,
+                    " " : 0x3C4E,
+                    "!" : 0x3CFF,
+                    "?" : 0x3CFE,
+                    "'" : 0x3CFD,
+                    "," : 0x3CFB,
+                    "." : 0x3CFA,
+                    "-" : 0x3CCF,
+                    "_" : 0x000E,
+                    "1" : 0x3C00,
+                    "2" : 0x3C01,
+                    "3" : 0x3C02,
+                    "4" : 0x3C03,
+                    "5" : 0x3C04,
+                    "6" : 0x3C05,
+                    "7" : 0x3C06,
+                    "8" : 0x3C07,
+                    "9" : 0x3C08,
+                    "0" : 0x3C09,
+                    "%" : 0x3C0A}
+        data = []
+
+        itemName = itemName.upper()[:26]
+        itemName = itemName.strip()
+        itemName = itemName.center(26, " ")    
+        itemName = "___" + itemName + "___"
+
+        for char in itemName:
+            (w0, w1) = getWord(charMap.get(char, 0x3C4E))
+            data.append(w0)
+            data.append(w1)
+        return data
+
+    def convert_to_lttp_item_name(self, itemName):
+        return bytearray(itemName[:19].center(19, " ")  , 'utf8') + bytearray(0)
+
+    def apply_item_names(self):
+        patch = {}
+        sm_remote_idx = 0
+        lttp_remote_idx = 0
+        for location in self.smz3World.Locations:
+            if self.world.worlds[location.APLocation.item.player].game != self.game:
+                if location.Type == LocationType.Visible or location.Type == LocationType.Chozo or location.Type == LocationType.Hidden:
+                    patch[0x390000 + sm_remote_idx*64] = self.convert_to_sm_item_name(location.APLocation.item.name)
+                    sm_remote_idx += 1
+                    progressionItem = (0 if location.APLocation.item.advancement else 0x8000) + sm_remote_idx
+                    patch[0x386000 + (location.Id * 8) + 6] = bytearray(getWordArray(progressionItem))
+                else:
+                    patch[0x390000 + 100 * 64 + lttp_remote_idx * 20] = self.convert_to_lttp_item_name(location.APLocation.item.name)
+                    lttp_remote_idx += 1
+                    progressionItem = (0 if location.APLocation.item.advancement else 0x8000) + lttp_remote_idx
+                    patch[0x386000 + (location.Id * 8) + 6] = bytearray(getWordArray(progressionItem))
+                
+        return patch
+
     def generate_output(self, output_directory: str):
         try:
             base_combined_rom = get_base_rom_bytes()
@@ -173,6 +254,7 @@ class SMZ3World(World):
                                     next(iter(loc.player for loc in self.world.get_locations() if loc.item == self.create_item("SilverArrows"))))
             patches = patcher.Create(self.smz3World.Config)
             patches.update(self.apply_sm_custom_sprite())
+            patches.update(self.apply_item_names())
             for addr, bytes in patches.items():
                 offset = 0
                 for byte in bytes:
