@@ -1323,7 +1323,6 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             errors.add('InvalidPassword')
 
         if args['name'] not in ctx.connect_names:
-            logging.info((args["name"], ctx.connect_names))
             errors.add('InvalidSlot')
         else:
             team, slot = ctx.connect_names[args['name']]

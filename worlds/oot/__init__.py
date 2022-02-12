@@ -159,6 +159,9 @@ class OOTWorld(World):
         # Closed forest and adult start are not compatible; closed forest takes priority
         if self.open_forest == 'closed':
             self.starting_age = 'child'
+            # These ER options force closed forest to become closed deku
+            if (self.shuffle_interior_entrances == 'all' or self.shuffle_overworld_entrances or self.warp_songs or self.spawn_positions):
+                self.open_forest = 'closed_deku'
 
         # Skip child zelda and shuffle egg are not compatible; skip-zelda takes priority
         if self.skip_child_zelda:
@@ -271,6 +274,9 @@ class OOTWorld(World):
             # Both two-handed swords can be required in glitch logic, so only consider them nonprogression in glitchless
             self.nonadvancement_items.add('Biggoron Sword')
             self.nonadvancement_items.add('Giants Knife')
+            if not getattr(self, 'logic_water_central_gs_fw', False):
+                # Farore's Wind skippable if not used for this logic trick in Water Temple
+                self.nonadvancement_items.add('Farores Wind')
   
     def load_regions_from_json(self, file_path):
         region_json = read_json(file_path)
@@ -841,7 +847,7 @@ class OOTWorld(World):
                         if loc.player in barren_hint_players:
                             hint_area = get_hint_area(loc)
                             items_by_region[loc.player][hint_area]['weight'] += 1
-                            if loc.item.advancement:
+                            if loc.item.advancement or loc.item.never_exclude:
                                 items_by_region[loc.player][hint_area]['is_barren'] = False
                         if loc.player in woth_hint_players and loc.item.advancement:
                             # Skip item at location and see if game is still beatable

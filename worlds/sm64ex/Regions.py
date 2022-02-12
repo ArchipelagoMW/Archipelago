@@ -3,13 +3,16 @@ from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Locations import SM64Location, location_table,locBoB_table,locWhomp_table,locJRB_table,locCCM_table,locBBH_table, \
                                                     locHMC_table,locLLL_table,locSSL_table,locDDD_table,locSL_table, \
                                                     locWDW_table,locTTM_table,locTHI_table,locTTC_table,locRR_table, \
-                                                    locSS_table, locKey_table, locCap_table
+                                                    locBitDW_table, locBitFS_table, locSS_table, locCap_table
+
+sm64courses = ["Bob-omb Battlefield", "Whomp's Fortress", "Jolly Roger Bay", "Cool, Cool Mountain", "Big Boo's Haunt",
+               "Hazy Maze Cave", "Lethal Lava Land", "Shifting Sand Land", "Dire, Dire Docks", "Snowman's Land", "Wet-Dry World",
+               "Tall, Tall Mountain", "Tiny-Huge Island", "Tick Tock Clock", "Rainbow Ride"]
 
 def create_regions(world: MultiWorld, player: int):
 
     regSS = Region("Menu", RegionType.Generic, "Castle Area", player, world)
     locSS_names = [name for name, id in locSS_table.items()]
-    locSS_names += [name for name, id in locKey_table.items()]
     locSS_names += [name for name, id in locCap_table.items()]
     regSS.locations += [SM64Location(player, loc_name, location_table[loc_name], regSS) for loc_name in locSS_names]
     world.regions.append(regSS)
@@ -49,6 +52,11 @@ def create_regions(world: MultiWorld, player: int):
         regBBH.locations.append(SM64Location(player, "BBH: 100 Coins", location_table["BBH: 100 Coins"], regBBH))
     world.regions.append(regBBH)
 
+    regBitDW = Region("Bowser in the Dark World", RegionType.Generic, "Bowser in the Dark World", player, world)
+    locBitDW_names = [name for name, id in locBitDW_table.items()]
+    regBitDW.locations += [SM64Location(player, loc_name, location_table[loc_name], regBitDW) for loc_name in locBitDW_names]
+    world.regions.append(regBitDW)
+
     regBasement = Region("Basement", RegionType.Generic, "Basement", player, world)
     world.regions.append(regBasement)
 
@@ -79,6 +87,11 @@ def create_regions(world: MultiWorld, player: int):
     if (world.EnableCoinStars[player].value):
         regDDD.locations.append(SM64Location(player, "DDD: 100 Coins", location_table["DDD: 100 Coins"], regDDD))
     world.regions.append(regDDD)
+
+    regBitFS = Region("Bowser in the Fire Sea", RegionType.Generic, "Bowser in the Fire Sea", player, world)
+    locBitFS_names = [name for name, id in locBitFS_table.items()]
+    regBitFS.locations += [SM64Location(player, loc_name, location_table[loc_name], regBitFS) for loc_name in locBitFS_names]
+    world.regions.append(regBitFS)
 
     regFloor2 = Region("Second Floor", RegionType.Generic, "Second Floor", player, world)
     world.regions.append(regFloor2)

@@ -186,6 +186,8 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
                                                           "? (")
                             cmdinput.text = f"!{App.get_running_app().last_autofillable_command} {name}"
                             break
+                elif not cmdinput.text and text.startswith("Missing: "):
+                    cmdinput.text = text.replace("Missing: ", "!hint_location ")
 
                 Clipboard.copy(text)
                 return self.parent.select_with_touch(self.index, touch)
