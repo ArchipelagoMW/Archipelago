@@ -8,13 +8,6 @@ import typing
 from ..generic.Rules import forbid_item, exclusion_rules
 
 
-def check_endgame(state, player):
-    for check in ["Meridian", "Ataraxia", "Merodach"]:
-        if not state.can_reach(check, "Location", player):
-            return False
-    return True
-
-
 def set_rules(world, player):
     # Prevent PSI keys from showing up in respective boss' room
     # Should be prevented by region generation but let's be sure
