@@ -1,5 +1,5 @@
 import typing
-from Options import Option, DefaultOnToggle, Range
+from Options import Option, DefaultOnToggle, Range, Toggle
 
 class EnableCoinStars(DefaultOnToggle):
     """Disable to Ignore 100 Coin Stars. You can still collect them, but they don't do anything"""
@@ -21,7 +21,17 @@ class ExtraStars(Range):
     range_end = 50
     default = 50
 
+class AreaRandomizer(Toggle):
+    """Randomize Entrances to Courses"""
+    display_name = "Course Randomizer"
+
+class ProgressiveKeys(DefaultOnToggle):
+    """Keys will first grant you access to the Basement, then to the Secound Floor"""
+    display_name = "Progressive Keys"
+
 sm64_options: typing.Dict[str,type(Option)] = {
+    "AreaRandomizer": AreaRandomizer,
+    "ProgressiveKeys": ProgressiveKeys,
     "EnableCoinStars": EnableCoinStars,
     "StrictCapRequirements": StrictCapRequirements,
     "StarsToFinish": StarsToFinish,
