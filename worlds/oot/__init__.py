@@ -274,7 +274,7 @@ class OOTWorld(World):
             # Both two-handed swords can be required in glitch logic, so only consider them nonprogression in glitchless
             self.nonadvancement_items.add('Biggoron Sword')
             self.nonadvancement_items.add('Giants Knife')
-            if getattr(self, 'logic_water_central_gs_fw', False):
+            if not getattr(self, 'logic_water_central_gs_fw', False):
                 # Farore's Wind skippable if not used for this logic trick in Water Temple
                 self.nonadvancement_items.add('Farores Wind')
   
