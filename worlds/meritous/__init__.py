@@ -51,11 +51,14 @@ class MeritousWorld(World):
             item.type = "Nothing"
         elif name == "Cursed Seal" or name == "Agate Knife":
             item.type = name
-        else: item.type = "Artifact"
+        else:
+            item.type = "Artifact"
         return item
 
     def create_event(self, event: str):
-        return MeritousItem(event, True, None, self.player)
+        event = MeritousItem(event, True, None, self.player)
+        event.type = "Victory"
+        return event
 
     def _create_item_in_quantities(self, name: str, qty: int) -> [Item]:
         return [self.create_item(name) for _ in range(0, qty)]
@@ -138,8 +141,8 @@ class MeritousWorld(World):
                     self.create_item("Evolution Trap"))
 
         if self.goal == 0:
-            self.world.completion_condition[self.player] = lambda state: state.has(
-                "Victory", self.player) or state.has("Full Victory", self.player)
+            self.world.completion_condition[self.player] = lambda state: state.has_any(
+                ["Victory", "Full Victory"], self.player)
         else:
             self.world.completion_condition[self.player] = lambda state: state.has(
                 "Full Victory", self.player)
