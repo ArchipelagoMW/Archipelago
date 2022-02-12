@@ -9,7 +9,7 @@ from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld
 from Fill import fill_restrictive
 from ..AutoWorld import World
 
-from .Items import item_table, MeritousItem
+from .Items import item_table, item_groups, MeritousItem
 from .Locations import location_table, MeritousLocation
 from .Options import meritous_options
 from .Rules import set_rules
@@ -19,6 +19,7 @@ client_version = 1
 
 
 class MeritousWorld(World):
+    # NOTE: Remember to put in an actual description before going live
     """Insert some sort of description here"""
 
     game: str = "Meritous"
@@ -26,6 +27,7 @@ class MeritousWorld(World):
 
     item_name_to_id = item_table
     location_name_to_id = location_table
+    item_name_groups = item_groups
 
     data_version = 1
     forced_auto_forfeit = False

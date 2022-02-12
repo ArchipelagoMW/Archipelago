@@ -35,3 +35,11 @@ item_table = {
     "Crystals x1000": offset + 19,
     "Crystals x2000": offset + 20
 }
+
+item_groups = {
+    "PSI Keys": [f"PSI Key {x}" for x in range(1, 4)],
+    "Upgrades": ["Reflect Shield upgrade", "Circuit Charge upgrade", "Circuit Refill upgrade"],
+    "Artifacts": ["Map", "Shield Boost", "Crystal Efficiency", "Circuit Booster",
+                  "Metabolism", "Dodge Enhancer", "Ethereal Monocle", "Crystal Gatherer"],
+    "Crystals": ["Crystals x500", "Crystals x1000", "Crystals x2000"]
+}
