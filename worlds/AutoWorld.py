@@ -215,6 +215,10 @@ class World(metaclass=AutoWorldRegister):
         if item.advancement:
             return item.name
 
+    # called to create all_state, return Items that are created during pre_fill
+    def get_pre_fill_items(self) -> List[Item]:
+        return []
+
     # following methods should not need to be overridden.
     def collect(self, state: CollectionState, item: Item) -> bool:
         name = self.collect_item(state, item)
@@ -234,6 +238,7 @@ class World(metaclass=AutoWorldRegister):
 
     def create_filler(self):
         self.world.itempool.append(self.create_item(self.get_filler_item_name()))
+
 
 
 # any methods attached to this can be used as part of CollectionState,

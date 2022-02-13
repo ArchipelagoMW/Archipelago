@@ -249,7 +249,7 @@ class ALTTPWorld(World):
     @classmethod
     def stage_pre_fill(cls, world):
         from .Dungeons import fill_dungeons_restrictive
-        fill_dungeons_restrictive(cls, world)
+        fill_dungeons_restrictive(world)
 
     @classmethod
     def stage_post_fill(cls, world):
@@ -363,17 +363,9 @@ class ALTTPWorld(World):
                 fill_locations.remove(loc)
             world.random.shuffle(fill_locations)
             # TODO: investigate not creating the key in the first place
-            if __debug__:
-                # keeping this here while I'm not sure we caught all instances of multiple HC small keys in the pool
-                count = len(progitempool)
-                progitempool[:] = [item for item in progitempool if
-                                   item.player not in standard_keyshuffle_players or
-                                   item.name != "Small Key (Hyrule Castle)"]
-                assert len(progitempool) + len(standard_keyshuffle_players) == count
-            else:
-                progitempool[:] = [item for item in progitempool if
-                                   item.player not in standard_keyshuffle_players or
-                                   item.name != "Small Key (Hyrule Castle)"]
+            progitempool[:] = [item for item in progitempool if
+                               item.player not in standard_keyshuffle_players or
+                               item.name != "Small Key (Hyrule Castle)"]
 
         if trash_counts:
             locations_mapping = {player: [] for player in trash_counts}
@@ -404,6 +396,16 @@ class ALTTPWorld(World):
 
     def get_filler_item_name(self) -> str:
         return "Rupees (5)"  # temporary
+
+    def get_pre_fill_items(self):
+        res = []
+        if self.dungeon_local_item_names:
+            for (name, player), dungeon in self.world.dungeons.items():
+                if player == self.player:
+                    for item in dungeon.all_items:
+                        if item.name in self.dungeon_local_item_names:
+                            res.append(item)
+        return res
 
 
 def get_same_seed(world, seed_def: tuple) -> str:
