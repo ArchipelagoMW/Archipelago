@@ -18,6 +18,7 @@ from .ips import IPS_Patch
 from .Options import smz3_options
 
 world_folder = os.path.dirname(__file__)
+logger = logging.getLogger("SMZ3")
 
 class SMZ3World(World):
     """
@@ -278,6 +279,14 @@ class SMZ3World(World):
 
     def modify_multidata(self, multidata: dict):
         import base64
+        if (not self.smz3World.Config.Keysanity):
+            for item_name in self.keyCardsItems:
+                item_id = self.item_name_to_id.get(item_name.Type.name, None)
+                try:
+                    multidata["precollected_items"][self.player].remove(item_id)
+                except ValueError as e:
+                    logger.warning(f"Attempted to remove nonexistent item id {item_id} from smz3 precollected items ({item_name})")
+
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
         rom_name = getattr(self, "rom_name", None)
