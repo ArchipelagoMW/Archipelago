@@ -68,5 +68,6 @@ class SM64World(World):
     def fill_slot_data(self):
         return {
             "AreaRando": self.area_connections,
-            "StarsToFinish": self.world.StarsToFinish[self.player].value
+            "StarsToFinish": self.world.StarsToFinish[self.player].value,
+            "DeathLink": self.world.DeathLink[self.player].value,
         }

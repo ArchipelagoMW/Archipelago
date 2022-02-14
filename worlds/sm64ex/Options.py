@@ -1,5 +1,5 @@
 import typing
-from Options import Option, DefaultOnToggle, Range, Toggle
+from Options import Option, DefaultOnToggle, Range, Toggle, DeathLink
 
 class EnableCoinStars(DefaultOnToggle):
     """Disable to Ignore 100 Coin Stars. You can still collect them, but they don't do anything"""
@@ -35,5 +35,6 @@ sm64_options: typing.Dict[str,type(Option)] = {
     "EnableCoinStars": EnableCoinStars,
     "StrictCapRequirements": StrictCapRequirements,
     "StarsToFinish": StarsToFinish,
-    "ExtraStars": ExtraStars
+    "ExtraStars": ExtraStars,
+    "DeathLink": DeathLink,
 } 
