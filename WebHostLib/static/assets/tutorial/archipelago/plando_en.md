@@ -19,9 +19,7 @@ enabled (opt-in).
   editor and find the `plando_options` key. The available plando modules can be enabled by adding them after this such
   as
   `plando_options: bosses, items, texts, connections`.
-* If you are not the one doing the generation or even if you are you can add to the `requires` section of your yaml so
-  that it will throw an error if the options that you need to generate properly are not enabled to ensure you will get
-  the results you desire. Only enter in the plando modules that you are using here but it should look like:
+* You can add the necessary plando modules for your settings to the `requires` section of your yaml. Doing so will throw an error if the options that you need to generate properly are not enabled to ensure you will get the results you desire. Only enter in the plando modules that you are using here but it should look like:
 
 ```yaml
   requires: 
@@ -66,38 +64,9 @@ list of specific locations both in their own game or in another player's game.
         * If `min` and `max` are defined, it will try to place a number of items between these two numbers at random
 
 
-### Available Items
+### Available Items and Locations
 
-* [A Link to the Past](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Items.py#L52)
-* [Factorio Non-Progressive](https://wiki.factorio.com/Technologies) Note that these use the *internal names*. For
-  example, `advanced-electronics`
-* [Factorio Progressive](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/factorio/Technologies.py#L374)
-* [Final Fantasy 1](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ff1/data/items.json)
-* [Minecraft](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Items.py#L14)
-* [Ocarina of Time](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/Items.py#L61)
-* [Risk of Rain 2](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ror2/Items.py#L8)
-* [Rogue Legacy](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/rogue-legacy/Names/ItemName.py)
-* [Slay the Spire](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/spire/Items.py#L13)
-* [Subnautica](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/subnautica/items.json)
-* [Super Metroid](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/variaRandomizer/rando/Items.py#L37) Look for "Name="
-* [Timespinner](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/timespinner/Items.py#L11)
-
-### Available Locations
-
-* [A Link to the Past](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Regions.py#L429)
-* [Factorio](https://wiki.factorio.com/Technologies) Same as items
-* [Final Fantasy 1](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ff1/data/locations.json)
-* [Minecraft](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Locations.py#L18)
-* [Ocarina of Time](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LocationList.py#L38)
-* [Risk of Rain 2](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/ror2/Locations.py#L17) This is a
-  special case. The locations are "ItemPickup[number]" up to the maximum set in the yaml.
-* [Rogue Legacy](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/rogue-legacy/Names/LocationName.py)
-* [Slay the Spire](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/spire/Locations.py)
-* [Subnautica](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/subnautica/locations.json)
-* [Super Metroid](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/variaRandomizer/graph/location.py#L132)
-* [Timespinner](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/timespinner/Locations.py#L13)
-
-A list of all available items and locations can also be found in the [server's datapackage](/api/datapackage).
+A list of all available items and locations can be found in the [website's datapackage](/api/datapackage). The items and locations will be in the `"item_name_to_id"` and `"location_name_to_id"` sections of the relevant game. You do not need the quotes but the name must be entered in the same as it appears on that page and is caps-sensitive.
 
 ### Examples
 
