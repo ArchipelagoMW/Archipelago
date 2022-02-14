@@ -312,10 +312,9 @@ class MultiWorld():
 
         for item in self.itempool:
             self.worlds[item.player].collect(ret, item)
-        from worlds.alttp.Dungeons import get_dungeon_item_pool
-        for item in get_dungeon_item_pool(self):
-            subworld = self.worlds[item.player]
-            if item.name in subworld.dungeon_local_item_names:
+        for player in self.player_ids:
+            subworld = self.worlds[player]
+            for item in subworld.get_pre_fill_items():
                 subworld.collect(ret, item)
         ret.sweep_for_events()
 
