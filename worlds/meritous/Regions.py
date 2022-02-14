@@ -3,15 +3,14 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
-import typing
-from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
-from .Locations import MeritousLocation, alpha_store, beta_store, gamma_store, chest_store, special_store, location_table
+from BaseClasses import MultiWorld, Region, Entrance, RegionType
+from .Locations import MeritousLocation, alpha_store, beta_store, gamma_store, chest_store, location_table
 
 meritous_regions = ["Meridian", "Ataraxia", "Merodach", "Endgame"]
 
 
-def _generate_entrances(player: int, list: [str], parent: Region):
-    return [Entrance(player, entrance, parent) for entrance in list]
+def _generate_entrances(player: int, entrance_list: [str], parent: Region):
+    return [Entrance(player, entrance, parent) for entrance in entrance_list]
 
 
 def create_regions(world: MultiWorld, player: int):
@@ -27,8 +26,8 @@ def create_regions(world: MultiWorld, player: int):
         player, loc_name, location_table[loc_name], region_primary) for loc_name in chest_store]
     region_primary.locations += [MeritousLocation(
         player, f"PSI Key Storage {i}", location_table[f"PSI Key Storage {i}"], region_primary) for i in range(1, 4)]
-    region_primary.exits = _generate_entrances(player, ["To Meridian",
-                                                        "To Ataraxia", "To Merodach", "Toward the endgame"], region_primary)
+    region_primary.exits = _generate_entrances(player, ["To Meridian", "To Ataraxia",
+                                                        "To Merodach", "Toward the endgame"], region_primary)
     world.regions.append(region_primary)
 
     for boss in ["Meridian", "Ataraxia", "Merodach"]:
@@ -77,8 +76,7 @@ def create_regions(world: MultiWorld, player: int):
         },
         "Back to the entrance": {
             "to": "Final Boss",
-            "rule": lambda state: state.has(
-                "Cursed Seal", player)
+            "rule": lambda state: state.has("Cursed Seal", player)
         },
         "Back to the entrance with the Knife": {
             "to": "True Final Boss",

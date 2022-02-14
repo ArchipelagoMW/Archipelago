@@ -3,8 +3,6 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
-import typing
-
 from ..generic.Rules import forbid_item, exclusion_rules
 
 

@@ -23,7 +23,10 @@ class IncludePSIKeys(DefaultOnToggle):
 
 
 class IncludeEvolutionTraps(Toggle):
-    """Whether evolution traps should be included in the multiworld pool. If not, they will be activated by bosses, as in vanilla."""
+    """
+        Whether evolution traps should be included in the multiworld pool.
+        If not, they will be activated by bosses, as in vanilla.
+    """
     display_name = "Include Evolution Traps"
 
 

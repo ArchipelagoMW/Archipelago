@@ -3,17 +3,14 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
-import typing
-
-from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld
+from BaseClasses import Item, MultiWorld
 from Fill import fill_restrictive
-from ..AutoWorld import World
-
 from .Items import item_table, item_groups, MeritousItem
 from .Locations import location_table, MeritousLocation
 from .Options import meritous_options
-from .Rules import set_rules
 from .Regions import create_regions
+from .Rules import set_rules
+from ..AutoWorld import World
 
 client_version = 1
 
@@ -34,7 +31,15 @@ class MeritousWorld(World):
 
     options = meritous_options
 
-    def _is_progression(self, name):
+    def __init__(self, world: MultiWorld, player: int):
+        super().__init__(world, player)
+        self.goal = 0
+        self.include_evolution_traps = False
+        self.include_psi_keys = False
+        self.death_link = False
+
+    @staticmethod
+    def _is_progression(name):
         return "PSI Key" in name or name in ["Cursed Seal", "Agate Knife"]
 
     def create_item(self, name: str) -> Item:
@@ -65,7 +70,7 @@ class MeritousWorld(World):
     def _create_item_in_quantities(self, name: str, qty: int) -> [Item]:
         return [self.create_item(name) for _ in range(0, qty)]
 
-    def _make_crystals(self, qty: int) -> MeritousItem:
+    def _make_crystals(self, qty: int) -> [MeritousItem]:
         crystal_pool = []
 
         for _ in range(0, qty):
@@ -90,7 +95,6 @@ class MeritousWorld(World):
 
     def create_items(self):
         frequencies = [0, 25, 23, 22, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3]
-        item_count = 0
         location_count = len(location_table) - 2
         item_pool = []
 
@@ -104,7 +108,7 @@ class MeritousWorld(World):
             location_count -= 3
 
         for i, name in enumerate(item_table):
-            if (i < len(frequencies)):
+            if i < len(frequencies):
                 item_pool += self._create_item_in_quantities(
                     name, frequencies[i])
 
