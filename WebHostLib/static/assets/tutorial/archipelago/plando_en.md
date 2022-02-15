@@ -66,7 +66,7 @@ list of specific locations both in their own game or in another player's game.
 
 ### Available Items and Locations
 
-A list of all available items and locations can be found in the [website's datapackage](/api/datapackage). The items and locations will be in the `"item_name_to_id"` and `"location_name_to_id"` sections of the relevant game. You do not need the quotes but the name must be entered in the same as it appears on that page and is caps-sensitive.
+A list of all available items and locations can be found in the [website's datapackage](/datapackage). The items and locations will be in the `"item_name_to_id"` and `"location_name_to_id"` sections of the relevant game. You do not need the quotes but the name must be entered in the same as it appears on that page and is caps-sensitive.
 
 ### Examples
 
