@@ -431,7 +431,8 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked=
     location_1.item.location = location_1
     location_2.item.location = location_2
     location_1.event, location_2.event = location_2.event, location_1.event
-    
+
+
 def distribute_planned(world: MultiWorld):
     def warn(warning: str, force):
         if force in [True, 'fail', 'failure', 'none', False, 'warn', 'warning']:

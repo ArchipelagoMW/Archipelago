@@ -80,8 +80,6 @@ class MultiWorld():
         self.custom = False
         self.customitemarray = []
         self.shuffle_ganon = True
-        self.dynamic_regions = []
-        self.dynamic_locations = []
         self.spoiler = Spoiler(self)
         self.fix_trock_doors = self.AttributeProxy(
             lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
