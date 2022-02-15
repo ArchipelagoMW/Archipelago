@@ -9,6 +9,27 @@ from BaseClasses import Item
 class MeritousItem(Item):
     game: str = "Meritous"
 
+    def __init__(self, name, advancement, code, player):
+        super(MeritousItem, self).__init__(name, advancement, code, player)
+        if "Trap" in name:
+            self.type = "Trap"
+            self.trap = True
+        elif "PSI Key" in name:
+            self.type = "PSI Key"
+        elif "upgrade" in name:
+            self.type = "Ability upgrade"
+        elif "Crystals" in name:
+            self.type = "Crystals"
+        elif name == "Nothing":
+            self.type = "Nothing"
+        elif name == "Cursed Seal" or name == "Agate Knife":
+            self.type = name
+        else:
+            self.type = "Artifact"
+        
+        # TODO: LttP credits text
+
+
 
 offset = 593_000
 

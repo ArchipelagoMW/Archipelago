@@ -32,7 +32,7 @@ class MeritousWorld(World):
     options = meritous_options
 
     def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+        super(MeritousWorld, self).__init__(world, player)
         self.goal = 0
         self.include_evolution_traps = False
         self.include_psi_keys = False
@@ -43,24 +43,8 @@ class MeritousWorld(World):
         return "PSI Key" in name or name in ["Cursed Seal", "Agate Knife"]
 
     def create_item(self, name: str) -> Item:
-        item = MeritousItem(name, self._is_progression(
+        return MeritousItem(name, self._is_progression(
             name), item_table[name], self.player)
-        if "Trap" in name:
-            item.type = "Trap"
-            item.trap = True
-        elif "PSI Key" in name:
-            item.type = "PSI Key"
-        elif "upgrade" in name:
-            item.type = "Ability upgrade"
-        elif "Crystals" in name:
-            item.type = "Crystals"
-        elif name == "Nothing":
-            item.type = "Nothing"
-        elif name == "Cursed Seal" or name == "Agate Knife":
-            item.type = name
-        else:
-            item.type = "Artifact"
-        return item
 
     def create_event(self, event: str):
         event = MeritousItem(event, True, None, self.player)
