@@ -115,7 +115,7 @@ def create_regions(world, player):
                                                                          'Hyrule Castle - Map Guard Key Drop', 'Hyrule Castle - Boomerang Guard Key Drop', 'Hyrule Castle - Big Key Drop'],
                               ['Hyrule Castle Exit (East)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (South)', 'Throne Room']),
         create_dungeon_region(player, 'Sewer Drop', 'a drop\'s exit', None, ['Sewer Drop']),  # This exists only to be referenced for access checks
-        create_dungeon_region(player, 'Sewers (Dark)', 'a drop\'s exit', ['Sewers - Dark Cross', 'Hyrule Castle - Key Rat Key Drop'], ['Sewers Door']),
+        create_dungeon_region(player, 'Sewers (Dark)', 'a drop\'s exit', ['Sewers - Dark Cross', 'Sewers - Key Rat Key Drop'], ['Sewers Door']),
         create_dungeon_region(player, 'Sewers', 'a drop\'s exit', ['Sewers - Secret Room - Left', 'Sewers - Secret Room - Middle',
                                          'Sewers - Secret Room - Right'], ['Sanctuary Push Door', 'Sewers Back Door']),
         create_dungeon_region(player, 'Sanctuary', 'a drop\'s exit', ['Sanctuary'], ['Sanctuary Exit']),
@@ -409,7 +409,7 @@ old_location_address_to_new_location_address = {
 key_drop_data = {
     'Hyrule Castle - Map Guard Key Drop': [0x140036, 0x140037, 'in Hyrule Castle', 'Small Key (Hyrule Castle)'],
     'Hyrule Castle - Boomerang Guard Key Drop': [0x140033, 0x140034, 'in Hyrule Castle', 'Small Key (Hyrule Castle)'],
-    'Hyrule Castle - Key Rat Key Drop': [0x14000c, 0x14000d, 'in Hyrule Castle', 'Small Key (Hyrule Castle)'],
+    'Sewers - Key Rat Key Drop': [0x14000c, 0x14000d, 'in the sewers', 'Small Key (Hyrule Castle)'],
     'Hyrule Castle - Big Key Drop': [0x14003c, 0x14003d, 'in Hyrule Castle', 'Big Key (Hyrule Castle)'],
     'Eastern Palace - Dark Square Pot Key': [0x14005a, 0x14005b, 'in Eastern Palace', 'Small Key (Eastern Palace)'],
     'Eastern Palace - Dark Eyegore Key Drop': [0x140048, 0x140049, 'in Eastern Palace', 'Small Key (Eastern Palace)'],

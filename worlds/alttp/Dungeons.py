@@ -2,7 +2,7 @@ from BaseClasses import Dungeon
 from worlds.alttp.Bosses import BossFactory
 from Fill import fill_restrictive
 from worlds.alttp.Items import ItemFactory
-from worlds.alttp.Regions import lookup_boss_drops
+from worlds.alttp.Regions import lookup_boss_drops, key_drop_data
 from worlds.alttp.Options import smallkey_shuffle
 
 
@@ -20,7 +20,8 @@ def create_dungeons(world, player):
         return dungeon
 
     ES = make_dungeon('Hyrule Castle', None, ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers (Dark)', 'Sanctuary'],
-                      ItemFactory('Big Key (Hyrule Castle)', player), ItemFactory(['Small Key (Hyrule Castle)'] * 4, player),
+                      ItemFactory('Big Key (Hyrule Castle)', player),
+                      ItemFactory(['Small Key (Hyrule Castle)'] * 4, player),
                       [ItemFactory('Map (Hyrule Castle)', player)])
     EP = make_dungeon('Eastern Palace', 'Armos Knights', ['Eastern Palace'],
                       ItemFactory('Big Key (Eastern Palace)', player),
@@ -138,6 +139,7 @@ def fill_dungeons_restrictive(autoworld, world):
     if localized:
         in_dungeon_items = [item for item in get_dungeon_item_pool(world) if (item.player, item.name) in localized]
         if in_dungeon_items:
+
             restricted_players = {player for player, restricted in world.restrict_dungeon_item_on_boss.items() if
                                   restricted}
             locations = [location for location in world.get_unfilled_dungeon_locations()

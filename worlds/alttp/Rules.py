@@ -840,7 +840,7 @@ def open_rules(world, player):
     set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2))
 
-    set_rule(world.get_location('Hyrule Castle - Key Rat Key Drop', player),
+    set_rule(world.get_location('Sewers - Key Rat Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2))
 
     set_rule(world.get_location('Hyrule Castle - Big Key Drop', player),
@@ -893,7 +893,7 @@ def standard_rules(world, player):
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2) and
                            state.has('Big Key (Hyrule Castle', player))
 
-    set_rule(world.get_location('Hyrule Castle - Key Rat Key Drop', player),
+    set_rule(world.get_location('Sewers - Key Rat Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3))
 
 def toss_junk_item(world, player):

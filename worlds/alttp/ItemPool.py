@@ -10,6 +10,7 @@ from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
 from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle
+from worlds.alttp.Regions import key_drop_data
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -372,6 +373,25 @@ def generate_itempool(world):
 
     dungeon_items = [item for item in get_dungeon_item_pool_player(world, player)
                      if item.name not in world.worlds[player].dungeon_local_item_names]
+
+    if not world.key_drop_shuffle[player]:
+        for key_loc in key_drop_data:
+            key_data = key_drop_data[key_loc]
+            drop_item = ItemFactory(key_data[3], player)
+            if drop_item in dungeon_items:
+                dungeon_items.remove(drop_item)
+            else:
+                dungeon = (drop_item.name.split("(")[1].split(")")[0], player)
+                if drop_item in world.dungeons[dungeon].small_keys:
+                    world.dungeons[dungeon].small_keys.remove(drop_item)
+                elif world.dungeons[dungeon].big_key == drop_item:
+                    world.dungeons[dungeon].big_key = None
+                else:
+                    print(f"didn't remove {drop_item}")
+            loc = world.get_location(key_loc, player)
+            loc.place_locked_item(drop_item)
+
+
     dungeon_item_replacements = difficulties[world.difficulty[player]].extras[0]\
                                 + difficulties[world.difficulty[player]].extras[1]\
                                 + difficulties[world.difficulty[player]].extras[2]\

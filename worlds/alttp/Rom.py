@@ -24,7 +24,7 @@ from typing import Optional
 from BaseClasses import CollectionState, Region, Location
 from worlds.alttp.Shops import ShopType, ShopPriceType
 from worlds.alttp.Dungeons import dungeon_music_addresses
-from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
+from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address, key_drop_data
 from worlds.alttp.Text import MultiByteTextMapper, text_addresses, Credits, TextTable
 from worlds.alttp.Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, \
     Blind_texts, \
@@ -880,7 +880,23 @@ def patch_rom(world, rom, player, enemized):
 
     rom.write_byte(0x187010, credits_total)  # dynamic credits
 
-    rom.write_byte(0x140000, 1)  # key drop shuffle
+    if world.key_drop_shuffle[player]:
+        rom.write_byte(0x140000, 1)  # enable key drop shuffle
+        credits_total += len(key_drop_data)
+        # update dungeon counters
+        rom.write_byte(0x187001, 12)  # Hyrule Castle
+        rom.write_byte(0x187002, 8)  # Eastern Palace
+        rom.write_byte(0x187003, 9)  # Desert Palace
+        rom.write_byte(0x187004, 4)  # Agahnims Tower
+        rom.write_byte(0x187005, 15)  # Swamp Palace
+        rom.write_byte(0x187007, 11)  # Misery Mire
+        rom.write_byte(0x187008, 10)  # Skull Woods
+        rom.write_byte(0x187009, 12)  # Ice Palace
+        rom.write_byte(0x18700B, 10)  # Thieves Town
+        rom.write_byte(0x18700C, 14)  # Turtle Rock
+        rom.write_byte(0x18700D, 31)  # Ganons Tower
+
+
 
     # collection rate address: 238C37
     first_top, first_bot = credits_digit((credits_total / 100) % 10)

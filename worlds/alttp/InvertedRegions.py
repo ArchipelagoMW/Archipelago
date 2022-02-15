@@ -130,7 +130,7 @@ def create_inverted_regions(world, player):
                               ['Hyrule Castle Exit (East)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (South)',
                                'Throne Room']),
         create_dungeon_region(player, 'Sewer Drop', 'a drop\'s exit', None, ['Sewer Drop']),  # This exists only to be referenced for access checks
-        create_dungeon_region(player, 'Sewers (Dark)', 'a drop\'s exit', ['Sewers - Dark Cross', 'Hyrule Castle - Key Rat Key Drop'], ['Sewers Door']),
+        create_dungeon_region(player, 'Sewers (Dark)', 'a drop\'s exit', ['Sewers - Dark Cross', 'Sewers - Key Rat Key Drop'], ['Sewers Door']),
         create_dungeon_region(player, 'Sewers', 'a drop\'s exit', ['Sewers - Secret Room - Left', 'Sewers - Secret Room - Middle',
                                          'Sewers - Secret Room - Right'], ['Sanctuary Push Door', 'Sewers Back Door']),
         create_dungeon_region(player, 'Sanctuary', 'a drop\'s exit', ['Sanctuary'], ['Sanctuary Exit']),
