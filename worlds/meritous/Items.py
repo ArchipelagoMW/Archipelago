@@ -24,6 +24,8 @@ class MeritousItem(Item):
             self.type = "Nothing"
         elif name == "Cursed Seal" or name == "Agate Knife":
             self.type = name
+        elif name == "Extra Life":
+            self.type = "Other"
         else:
             self.type = "Artifact"
         
@@ -54,7 +56,8 @@ item_table = {
     "Evolution Trap": offset + 17,
     "Crystals x500": offset + 18,
     "Crystals x1000": offset + 19,
-    "Crystals x2000": offset + 20
+    "Crystals x2000": offset + 20,
+    "Extra Life": offset + 21
 }
 
 item_groups = {
