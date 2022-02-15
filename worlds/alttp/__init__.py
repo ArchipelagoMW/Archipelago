@@ -8,7 +8,7 @@ from BaseClasses import Item, CollectionState
 from .SubClasses import ALttPItem
 from ..AutoWorld import World, LogicMixin
 from .Options import alttp_options, smallkey_shuffle
-from .Items import as_dict_item_table, item_name_groups, item_table
+from .Items import as_dict_item_table, item_name_groups, item_table, GetBeemizerItem
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
 from .Rules import set_rules
 from .ItemPool import generate_itempool, difficulties
@@ -403,7 +403,11 @@ class ALTTPWorld(World):
                     trash_count -= 1
 
     def get_filler_item_name(self) -> str:
-        return "Rupees (5)"  # temporary
+        if self.world.goal[self.player] == "icerodhunt":
+            item = GetBeemizerItem(self.player, "Nothing")
+        else:
+            item = "Rupees (5)"  # temporary
+        return item
 
 
 def get_same_seed(world, seed_def: tuple) -> str:

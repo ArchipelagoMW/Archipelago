@@ -59,7 +59,8 @@ def create_dungeons(world, player):
                       ItemFactory(['Map (Skull Woods)', 'Compass (Skull Woods)'], player))
     SP = make_dungeon('Swamp Palace', 'Arrghus',
                       ['Swamp Palace (Entrance)', 'Swamp Palace (First Room)', 'Swamp Palace (Starting Area)',
-                       'Swamp Palace (Center)', 'Swamp Palace (North)'], ItemFactory('Big Key (Swamp Palace)', player),
+                       'Swamp Palace (West)', 'Swamp Palace (Center)', 'Swamp Palace (North)'],
+                      ItemFactory('Big Key (Swamp Palace)', player),
                       ItemFactory(['Small Key (Swamp Palace)'] * 6, player),
                       ItemFactory(['Map (Swamp Palace)', 'Compass (Swamp Palace)'], player))
     IP = make_dungeon('Ice Palace', 'Kholdstare',
@@ -74,6 +75,7 @@ def create_dungeons(world, player):
                       ItemFactory(['Map (Misery Mire)', 'Compass (Misery Mire)'], player))
     TR = make_dungeon('Turtle Rock', 'Trinexx',
                       ['Turtle Rock (Entrance)', 'Turtle Rock (First Section)', 'Turtle Rock (Chain Chomp Room)',
+                       'Turtle Rock (Pokey Room)',
                        'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Turtle Rock (Crystaroller Room)',
                        'Turtle Rock (Dark Room)', 'Turtle Rock (Eye Bridge)', 'Turtle Rock (Trinexx)'],
                       ItemFactory('Big Key (Turtle Rock)', player),

@@ -374,10 +374,13 @@ def generate_itempool(world):
     dungeon_items = [item for item in get_dungeon_item_pool_player(world, player)
                      if item.name not in world.worlds[player].dungeon_local_item_names]
 
-    if not world.key_drop_shuffle[player]:
-        for key_loc in key_drop_data:
-            key_data = key_drop_data[key_loc]
-            drop_item = ItemFactory(key_data[3], player)
+    for key_loc in key_drop_data:
+        key_data = key_drop_data[key_loc]
+        drop_item = ItemFactory(key_data[3], player)
+        if (("big" in key_data[3] and world.bigkey_shuffle[player] == bigkey_shuffle.option_start_with) or
+            ("small" in key_data[3] and world.smallkey_shuffle[player] == smallkey_shuffle.option_start_with) or
+            world.goal[player] == 'icerodhunt' or not world.key_drop_shuffle[player]):
+            # in any of these cases, the key drop item should be removed from the pool
             if drop_item in dungeon_items:
                 dungeon_items.remove(drop_item)
             else:
@@ -386,18 +389,18 @@ def generate_itempool(world):
                     world.dungeons[dungeon].small_keys.remove(drop_item)
                 elif world.dungeons[dungeon].big_key == drop_item:
                     world.dungeons[dungeon].big_key = None
-                else:
-                    print(f"didn't remove {drop_item}")
+        if not world.key_drop_shuffle[player]:
+            # key drop item was removed from the pool because key drop shuffle is off
+            # and it will now place the removed key into its original location
             loc = world.get_location(key_loc, player)
             loc.place_locked_item(drop_item)
+        else:
+            # key drop item removed because of start_with option or icerodhunt, and key drop shuffle is on.
+            # Either way it will be placed into the starting inventory, and replaced in the pool with
+            # get_filler_item_name(), which will return Nothing if goal is icerodhunt
+            world.itempool.append(ItemFactory(GetBeemizerItem(world, player, world.worlds[player].get_filler_item_name()), player))
+            world.push_precollected(drop_item)
 
-
-    dungeon_item_replacements = difficulties[world.difficulty[player]].extras[0]\
-                                + difficulties[world.difficulty[player]].extras[1]\
-                                + difficulties[world.difficulty[player]].extras[2]\
-                                + difficulties[world.difficulty[player]].extras[3]\
-                                + difficulties[world.difficulty[player]].extras[4]
-    world.random.shuffle(dungeon_item_replacements)
     if world.goal[player] == 'icerodhunt':
         for item in dungeon_items:
             world.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
@@ -411,8 +414,10 @@ def generate_itempool(world):
                     or (world.map_shuffle[player] == map_shuffle.option_start_with and item.type == 'Map')):
                 dungeon_items.remove(item)
                 world.push_precollected(item)
-                world.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
+                world.itempool.append(ItemFactory(GetBeemizerItem(world, player, world.worlds[player].get_filler_item_name()), player))
         world.itempool.extend([item for item in dungeon_items])
+
+
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
     # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
@@ -685,6 +690,8 @@ def get_pool_core(world, player: int):
             place_item(key_location, item_to_place)
         else:
             pool.extend([item_to_place])
+        if world.key_drop_shuffle[player]:
+            pool.extend([item_to_place] * (len(key_drop_data) - 1))
 
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
             additional_pieces_to_place)
