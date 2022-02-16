@@ -2,11 +2,11 @@
 
 class Dialog:
 
-    command = re.compile("^\{[^}]*\}")
-    invalid = re.compile("(?<!^)\{[^}]*\}(?!$)", re.MULTILINE)
-    digit = re.compile("\d")
-    uppercaseLetter = re.compile("[A-Z]")
-    lowercaseLetter = re.compile("[a-z]")
+    command = re.compile(r"^\{[^}]*\}")
+    invalid = re.compile(r"(?<!^)\{[^}]*\}(?!$)", re.MULTILINE)
+    digit = re.compile(r"\d")
+    uppercaseLetter = re.compile(r"[A-Z]")
+    lowercaseLetter = re.compile(r"[a-z]")
 
     @staticmethod
     def Simple(text: str):

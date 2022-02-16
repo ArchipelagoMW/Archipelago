@@ -330,20 +330,28 @@ class SMZ3World(World):
             self.world.random.shuffle(locations)
 
             all_state = self.world.get_all_state(False)
-            all_dungeonItems = self.smz3DungeonItems[:]
-            fill_restrictive(self.world, all_state, locations, self.smz3DungeonItems, True, True)
+            for item in self.smz3DungeonItems:
+                all_state.remove(item)
 
+            all_dungeonItems = self.smz3DungeonItems[:]
+            fill_restrictive(self.world, all_state, locations, all_dungeonItems, True, True)
             # some small or big keys (those always_allow) can be unreachable in-game
             # while logic still collects some of them (probably to simulate the player collecting pot keys in the logic), some others don't
             # so we need to remove those exceptions as progression items
             if self.world.accessibility[self.player] != 'locations':
                 exception_item = [TotalSMZ3Item.ItemType.BigKeySW, TotalSMZ3Item.ItemType.BigKeySP, TotalSMZ3Item.ItemType.KeyTH]
-                for item in all_dungeonItems:
+                for item in self.smz3DungeonItems:
                     if item.item.Type in exception_item and item.location.always_allow(all_state, item) and not all_state.can_reach(item.location):
                         item.advancement = False
                         item.item.Progression = False
                         item.location.event = False
                         self.unreachable.append(item.location)
+
+    def get_pre_fill_items(self):
+        if (not self.smz3World.Config.Keysanity):
+            return self.smz3DungeonItems
+        else:
+            return []
 
     def write_spoiler(self, spoiler_handle: TextIO):
             self.world.spoiler.unreachables.update(self.unreachable)
