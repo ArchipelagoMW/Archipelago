@@ -398,7 +398,7 @@ def generate_itempool(world):
             # key drop item removed because of start_with option or icerodhunt, and key drop shuffle is on.
             # Either way it will be placed into the starting inventory, and replaced in the pool with
             # get_filler_item_name(), which will return Nothing if goal is icerodhunt
-            world.itempool.append(ItemFactory(GetBeemizerItem(world, player, world.worlds[player].get_filler_item_name()), player))
+            world.itempool.append(ItemFactory(world.worlds[player].get_filler_item_name(), player))
             world.push_precollected(drop_item)
 
     if world.goal[player] == 'icerodhunt':

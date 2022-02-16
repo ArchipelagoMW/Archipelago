@@ -147,6 +147,7 @@ def fill_dungeons_restrictive(autoworld, world):
             locations = [location for location in world.get_unfilled_dungeon_locations()
                          # filter boss
                          if not (location.player in restricted_players and location.name in lookup_boss_drops)]
+
             if dungeon_specific:
                 for location in locations:
                     dungeon = location.parent_region.dungeon
@@ -165,6 +166,11 @@ def fill_dungeons_restrictive(autoworld, world):
                                  (5 if (item.player, item.name) in dungeon_specific else 0))
             for item in in_dungeon_items:
                 all_state_base.remove(item)
+            for (player, key_drop_shuffle) in enumerate(world.key_drop_shuffle.values(), start=1):
+                if not key_drop_shuffle:
+                    for key_loc in key_drop_data:
+                        key_data = key_drop_data[key_loc]
+                        all_state_base.remove(ItemFactory(key_data[3], player))
             fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True)
 
 
