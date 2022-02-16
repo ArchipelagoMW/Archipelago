@@ -3,7 +3,7 @@ import logging
 import random
 
 from ..AutoWorld import World
-from .Items import item_table, event_item_pairs, junk_weights
+from .Items import WitnessItem, item_table, event_item_pairs, junk_weights
 from .Locations import location_table
 from .Rules import set_rules
 from .Regions import create_regions
@@ -55,7 +55,7 @@ class WitnessWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = item_table[name]
-        return WitnessItem(name, True, item, player=self.player)
+        return WitnessItem(name, True, item.code, player=self.player)
     
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
@@ -64,10 +64,6 @@ class WitnessWorld(World):
 
 class WitnessLocation(Location):
     game: str = "The Witness"
-
-
-class WitnessItem(Item):
-    game = "The Witness"
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, None, name, player)

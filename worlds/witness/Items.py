@@ -9,6 +9,9 @@ class ItemData(typing.NamedTuple):
     progression: bool
     event: bool = False
 
+class WitnessItem(Item):
+    game: str = "The Witness"
+
 
 item_table: Dict[str, ItemData] = {
     'Glass Factory Entry': ItemData(158000, True),
@@ -33,7 +36,7 @@ item_table: Dict[str, ItemData] = {
     'Nothing' : ItemData(158500, True),
 
     # Event Items
-    'Victory': ItemData(None, True, True)
+    'Victory': ItemData(158600, True, True)
 }
 
 junk_weights = {
