@@ -32,10 +32,6 @@
     5. Browse for your emulator's `.exe` file and click **Open**. This file should be located inside the folder you
        extracted in step one.
 
-### Macintosh Setup
-
-- We need volunteers to help fill this section! Please contact **Farrak Kilhn** on Discord if you want to help.
-
 ## Create a Config (.yaml) File
 
 ### What is a config file and why do I need one?
