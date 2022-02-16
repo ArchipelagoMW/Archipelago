@@ -407,7 +407,7 @@ class ALTTPWorld(World):
             item = "Nothing"
         else:
             item = "Rupees (5)"  # temporary
-        return GetBeemizerItem(self.player, item)
+        return GetBeemizerItem(self.world, self.player, item)
 
 
 def get_same_seed(world, seed_def: tuple) -> str:

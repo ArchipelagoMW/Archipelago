@@ -16,6 +16,18 @@ class TestAgahnimsTower(TestDungeon):
             ["Castle Tower - Dark Maze", False, [], ['Progressive Sword', 'Hammer', 'Progressive Bow', 'Fire Rod', 'Ice Rod', 'Cane of Somaria', 'Cane of Byrna']],
             ["Castle Tower - Dark Maze", True, ['Progressive Sword', 'Small Key (Agahnims Tower)', 'Lamp']],
 
+            ["Castle Tower - Dark Archer Key Drop", False, []],
+            ["Castle Tower - Dark Archer Key Drop", False, ['Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)']],
+            ["Castle Tower - Dark Archer Key Drop", False, [], ['Lamp']],
+            ["Castle Tower - Dark Archer Key Drop", False, [], ['Progressive Sword', 'Hammer', 'Progressive Bow', 'Fire Rod', 'Ice Rod', 'Cane of Somaria', 'Cane of Byrna']],
+            ["Castle Tower - Dark Archer Key Drop", True, ['Progressive Sword', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)', 'Lamp']],
+
+            ["Castle Tower - Circle of Pots Key Drop", False, []],
+            ["Castle Tower - Circle of Pots Key Drop", False, ['Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)']],
+            ["Castle Tower - Circle of Pots Key Drop", False, [], ['Lamp']],
+            ["Castle Tower - Circle of Pots Key Drop", False, [], ['Progressive Sword', 'Hammer', 'Progressive Bow', 'Fire Rod', 'Ice Rod', 'Cane of Somaria', 'Cane of Byrna']],
+            ["Castle Tower - Circle of Pots Key Drop", True, ['Progressive Sword', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)', 'Lamp']],
+
             ["Agahnim 1", False, []],
             ["Agahnim 1", False, ['Small Key (Agahnims Tower)'], ['Small Key (Agahnims Tower)']],
             ["Agahnim 1", False, [], ['Progressive Sword']],

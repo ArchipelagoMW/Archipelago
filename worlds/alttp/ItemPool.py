@@ -414,7 +414,7 @@ def generate_itempool(world):
                     or (world.map_shuffle[player] == map_shuffle.option_start_with and item.type == 'Map')):
                 dungeon_items.remove(item)
                 world.push_precollected(item)
-                world.itempool.append(ItemFactory(GetBeemizerItem(world, player, world.worlds[player].get_filler_item_name()), player))
+                world.itempool.append(ItemFactory(world.worlds[player].get_filler_item_name(), player))
         world.itempool.extend([item for item in dungeon_items])
 
 

@@ -325,8 +325,8 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Misery Mire Big Key Door', player), lambda state: state.has('Big Key (Misery Mire)', player))
     # you can squander the free small key from the pot by opening the south door to the north west switch room, locking you out of accessing a color switch ...
     # big key gives backdoor access to that from the teleporter in the north west
-    set_rule(world.get_location('Misery Mire - Map Chest', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 3) or state.has('Big Key (Misery Mire)', player))
-    set_rule(world.get_location('Misery Mire - Main Lobby', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 4) or state.has('Big Key (Misery Mire)', player))
+    set_rule(world.get_location('Misery Mire - Map Chest', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 3))
+    set_rule(world.get_location('Misery Mire - Main Lobby', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 4))
     # we can place a small key in the West wing iff it also contains/blocks the Big Key, as we cannot reach and softlock with the basement key door yet
     set_rule(world.get_location('Misery Mire - Conveyor Crystal Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 4) if item_name(state, 'Misery Mire - Compass Chest', player) == ('Big Key (Misery Mire)', player) or item_name(state, 'Misery Mire - Big Key Chest', player) == ('Big Key (Misery Mire)', player) or item_name(state, 'Misery Mire - Conveyor Crystal Key Drop', player) == ('Big Key (Misery Mire)', player) else state._lttp_has_key('Small Key (Misery Mire)', player, 5))
@@ -812,9 +812,13 @@ def add_conditional_lamps(world, player):
     if world.mode[player] != 'inverted':
         add_conditional_lamp('Agahnim 1', 'Agahnims Tower', 'Entrance')
         add_conditional_lamp('Castle Tower - Dark Maze', 'Agahnims Tower')
+        add_conditional_lamp('Castle Tower - Dark Archer Key Drop', 'Agahnims Tower')
+        add_conditional_lamp('Castle Tower - Circle of Pots Key Drop', 'Agahnims Tower')
     else:
         add_conditional_lamp('Agahnim 1', 'Inverted Agahnims Tower', 'Entrance')
         add_conditional_lamp('Castle Tower - Dark Maze', 'Inverted Agahnims Tower')
+        add_conditional_lamp('Castle Tower - Dark Archer Key Drop', 'Inverted Agahnims Tower')
+        add_conditional_lamp('Castle Tower - Circle of Pots Key Drop', 'Inverted Agahnims Tower')
     add_conditional_lamp('Old Man', 'Old Man Cave')
     add_conditional_lamp('Old Man Cave Exit (East)', 'Old Man Cave', 'Entrance')
     add_conditional_lamp('Death Mountain Return Cave Exit (East)', 'Death Mountain Return Cave', 'Entrance')
