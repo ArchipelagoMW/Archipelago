@@ -337,7 +337,6 @@ def create_shops(world, player: int):
                     loc.shop_slot_disabled = True
                 loc.item.world = world
                 shop.region.locations.append(loc)
-                world.dynamic_locations.append(loc)
                 world.clear_location_cache()
 
 
