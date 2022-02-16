@@ -1,18 +1,21 @@
 import typing
 
 
-def GetBeemizerItem(world, player, item):
+def GetBeemizerItem(world, player: int, item):
     item_name = item if isinstance(item, str) else item.name
-    if world.beemizer[player] and item_name in trap_replaceable:
-        if world.random.random() < world.beemizer[player] * 0.25:
-            if world.random.random() < (0.5 + world.beemizer[player] * 0.1):
-                return "Bee Trap" if isinstance(item, str) else world.create_item("Bee Trap", player)
-            else:
-                return "Bee" if isinstance(item, str) else world.create_item("Bee", player)
-        else:
-            return item
-    else:
+
+    if item_name not in trap_replaceable:
         return item
+
+    # first roll - replaceable item should be replaced, within beemizer_total_chance
+    if not world.beemizer_total_chance[player] or world.random.random() > (world.beemizer_total_chance[player] / 100):
+        return item
+
+    # second roll - bee replacement should be trap, within beemizer_trap_chance
+    if not world.beemizer_trap_chance[player] or world.random.random() > (world.beemizer_trap_chance[player] / 100):
+        return "Bee" if isinstance(item, str) else world.create_item("Bee", player)
+    else:
+        return "Bee Trap" if isinstance(item, str) else world.create_item("Bee Trap", player)        
 
 
 # should be replaced with direct world.create_item(item) call in the future
@@ -34,6 +37,7 @@ def ItemFactory(items, player: int):
         return ret[0]
     return ret
 
+
 class ItemData(typing.NamedTuple):
     advancement: bool
     type: typing.Optional[str]
@@ -45,6 +49,8 @@ class ItemData(typing.NamedTuple):
     witch_credit: typing.Optional[str]
     flute_boy_credit: typing.Optional[str]
     hint_text: typing.Optional[str]
+    trap: bool = False
+
 
 # Format: Name: (Advancement, Type, ItemCode, Pedestal Hint Text, Pedestal Credit Text, Sick Kid Credit Text, Zora Credit Text, Witch Credit Text, Flute Boy Credit Text, Hint Text)
 item_table = {'Bow': ItemData(True, None, 0x0B, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'the Bow'),
@@ -128,8 +134,8 @@ item_table = {'Bow': ItemData(True, None, 0x0B, 'You have\nchosen the\narcher cl
               'Rupees (50)': ItemData(False, None, 0x41, 'A rupee pile!\nOkay?', 'and the rupee pile', 'the well-off kid', 'life lesson for sale', 'buying okay drugs', 'destitute boy has dinner again', 'fifty rupees'),
               'Rupees (100)': ItemData(False, None, 0x40, 'A rupee stash!\nHell yeah!', 'and the rupee stash', 'the kind-of-rich kid', 'life lesson for sale', 'buying good drugs', 'affluent boy goes drinking again', 'one hundred rupees'),
               'Rupees (300)': ItemData(False, None, 0x46, 'A rupee hoard!\nHell yeah!', 'and the rupee hoard', 'the really-rich kid', 'life lesson for sale', 'buying the best drugs', 'fat-cat boy is rich again', 'three hundred rupees'),
-              'Rupoor': ItemData(False, None, 0x59, 'a debt collector', 'and the toll-booth', 'the toll-booth kid', 'double loss for sale', 'witch stole your rupees', 'affluent boy steals rupees', 'a rupoor'),
-              'Red Clock': ItemData(False, None, 0x5B, 'a waste of time', 'the ruby clock', 'the ruby-time kid', 'red time for sale', 'for ruby time', 'moment boy travels time again', 'a red clock'),
+              'Rupoor': ItemData(False, None, 0x59, 'a debt collector', 'and the toll-booth', 'the toll-booth kid', 'double loss for sale', 'witch stole your rupees', 'affluent boy steals rupees', 'a rupoor', True),
+              'Red Clock': ItemData(False, None, 0x5B, 'a waste of time', 'the ruby clock', 'the ruby-time kid', 'red time for sale', 'for ruby time', 'moment boy travels time again', 'a red clock', True),
               'Blue Clock': ItemData(False, None, 0x5C, 'a bit of time', 'the sapphire clock', 'sapphire-time kid', 'blue time for sale', 'for sapphire time', 'moment boy time travels again', 'a blue clock'),
               'Green Clock': ItemData(False, None, 0x5D, 'a lot of time', 'the emerald clock', 'the emerald-time kid', 'green time for sale', 'for emerald time', 'moment boy adjusts time again', 'a red clock'),
               'Single RNG': ItemData(False, None, 0x62, 'something you don\'t yet have', None, None, None, None, 'unknown boy somethings again', 'a new mystery'),
@@ -192,7 +198,7 @@ item_table = {'Bow': ItemData(True, None, 0x0B, 'You have\nchosen the\narcher cl
               'Map (Ganons Tower)': ItemData(False, 'Map', 0x72, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Ganon\'s Tower'),
               'Small Key (Universal)': ItemData(False, None, 0xAF, 'A small key for any door', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key'),
               'Nothing': ItemData(False, None, 0x5A, 'Some Hot Air', 'and the Nothing', 'the zen kid', 'outright theft', 'shroom theft', 'empty boy is bored again', 'nothing'),
-              'Bee Trap': ItemData(False, None, 0xB0, 'We will sting your face a whole lot!', 'and the sting buddies', 'the beekeeper kid', 'insects for sale', 'shroom pollenation', 'bottle boy has mad bees again', 'Friendship'),
+              'Bee Trap': ItemData(False, None, 0xB0, 'We will sting your face a whole lot!', 'and the sting buddies', 'the beekeeper kid', 'insects for sale', 'shroom pollenation', 'bottle boy has mad bees again', 'Friendship', True),
               'Faerie': ItemData(False, None, 0xB1, 'Save me and I will revive you', 'and the captive', 'the tingle kid','hostage for sale', 'fairy dust and shrooms', 'bottle boy has friend again', 'a faerie'),
               'Good Bee': ItemData(False, None, 0xB2, 'Save me and I will sting you (sometimes)', 'and the captive', 'the tingle kid','hostage for sale', 'good dust and shrooms', 'bottle boy has friend again', 'a bee'),
               'Magic Jar': ItemData(False, None, 0xB3, '', '', '','', '', '', ''),
@@ -202,7 +208,7 @@ item_table = {'Bow': ItemData(True, None, 0x0B, 'You have\nchosen the\narcher cl
               'Red Potion': ItemData(False, None, 0x2E, 'Hearty red goop!', 'and the red goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has red goo again', 'a red potion'),
               'Green Potion': ItemData(False, None, 0x2F, 'Refreshing green goop!', 'and the green goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has green goo again', 'a green potion'),
               'Blue Potion': ItemData(False, None, 0x30, 'Delicious blue goop!', 'and the blue goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has blue goo again', 'a blue potion'),
-              'Bee': ItemData(False, None, 0x0E, 'I will sting your foes a few times', 'and the sting buddy', 'the beekeeper kid', 'insect for sale', 'shroom pollenation', 'bottle boy has mad bee again', 'a bee'),
+              'Bee': ItemData(False, None, 0x0E, 'I will sting your foes a few times', 'and the sting buddy', 'the beekeeper kid', 'insect for sale', 'shroom pollenation', 'bottle boy has mad bee again', 'a bee', True),
               'Small Heart': ItemData(False, None, 0x42, 'Just a little\npiece of love!', 'and the heart', 'the life-giving kid', 'little love for sale', 'fungus for life', 'life boy feels some love again', 'a heart'),
               'Activated Flute': ItemData(True, None, 0x4A, 'Save the duck\nand fly to\nfreedom!', 'and the duck call', 'the duck-call kid', 'duck call for sale', 'duck-calls for trade', 'flute boy plays again', 'the Flute'),
               'Beat Agahnim 1': ItemData(True, 'Event', None, None, None, None, None, None, None, None),
@@ -271,8 +277,8 @@ for basename, substring in _simple_groups:
 del (_simple_groups)
 
 progression_items = {name for name, data in item_table.items() if type(data.item_code) == int and data.advancement}
-item_name_groups['Everything'] = {name for name, data in item_table.items() if type(data.item_code) == int}
+everything = {name for name, data in item_table.items() if type(data.item_code) == int}
 item_name_groups['Progression Items'] = progression_items
-item_name_groups['Non Progression Items'] = item_name_groups['Everything'] - progression_items
+item_name_groups['Non Progression Items'] = everything - progression_items
 
 trap_replaceable = item_name_groups['Rupees'] | {'Arrows (10)', 'Single Bomb', 'Bombs (3)', 'Bombs (10)', 'Nothing'}

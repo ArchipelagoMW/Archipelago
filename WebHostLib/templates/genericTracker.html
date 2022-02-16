@@ -20,6 +20,7 @@
                         <tr>
                             <th>Item</th>
                             <th>Amount</th>
+                            <th>Order Received</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,6 +29,7 @@
                     <tr>
                         <td>{{ name | item_name }}</td>
                         <td>{{ count }}</td>
+                        <td>{{received_items[name]}}</td>
                     </tr>
                     {%- endfor -%}
 

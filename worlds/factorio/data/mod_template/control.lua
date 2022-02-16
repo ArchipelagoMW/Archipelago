@@ -8,6 +8,17 @@ SLOT_NAME = "{{ slot_name }}"
 SEED_NAME = "{{ seed_name }}"
 FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
 TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
+MAX_SCIENCE_PACK = {{ max_science_pack }}
+GOAL = {{ goal }}
+ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
+
+if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
+    DEATH_LINK = 1
+else
+    DEATH_LINK = 0
+end
+
+CURRENTLY_DEATH_LOCK = 0
 
 {% if not imported_blueprints -%}
 function set_permissions()
@@ -57,6 +68,7 @@ function on_force_created(event)
     local data = {}
     data['earned_samples'] = {{ dict_to_lua(starting_items) }}
     data["victory"] = 0
+    data["death_link_tick"] = 0
     global.forcedata[event.force] = data
 {%- if silo == 2 %}
     check_spawn_silo(force)
@@ -71,6 +83,27 @@ function on_force_destroyed(event)
 {%- endif %}
     global.forcedata[event.force.name] = nil
 end
+
+function on_runtime_mod_setting_changed(event)
+    local force
+    if event.player_index == nil then
+        force = game.forces.player
+    else
+        force = game.players[event.player_index].force
+    end
+
+    if event.setting == ARCHIPELAGO_DEATH_LINK_SETTING then
+        if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
+            DEATH_LINK = 1
+        else
+            DEATH_LINK = 0
+        end
+        if force ~= nil then
+            dumpInfo(force)
+        end
+    end
+end
+script.on_event(defines.events.on_runtime_mod_setting_changed, on_runtime_mod_setting_changed)
 
 -- Initialize player data, either from them joining the game or them already being part of the game when the mod was
 -- added.`
@@ -103,8 +136,19 @@ end
 script.on_event(defines.events.on_player_removed, on_player_removed)
 
 function on_rocket_launched(event)
-    global.forcedata[event.rocket.force.name]['victory'] = 1
-    dumpInfo(event.rocket.force)
+    if event.rocket and event.rocket.valid and global.forcedata[event.rocket.force.name]['victory'] == 0 then
+		if event.rocket.get_item_count("satellite") > 0 or GOAL == 0 then
+			global.forcedata[event.rocket.force.name]['victory'] = 1
+            dumpInfo(event.rocket.force)
+            game.set_game_state
+            {
+                game_finished = true,
+                player_won = true,
+                can_continue = true,
+                victorious_force = event.rocket.force
+            }
+		end
+	end
 end
 script.on_event(defines.events.on_rocket_launched, on_rocket_launched)
 
@@ -194,12 +238,17 @@ script.on_init(function()
         e.player_index = index
         on_player_created(e)
     end
+
+    if remote.interfaces["silo_script"] then
+        remote.call("silo_script", "set_no_victory", true)
+    end
 end)
 
 -- hook into researches done
 script.on_event(defines.events.on_research_finished, function(event)
     local technology = event.research
     if technology.researched and string.find(technology.name, "ap%-") == 1 then
+        -- check if it came from the server anyway, then we don't need to double send.
         dumpInfo(technology.force) --is sendable
     else
         if FREE_SAMPLES == 0 then
@@ -249,6 +298,17 @@ function chain_lookup(table, ...)
     return table
 end
 
+function kill_players(force)
+    CURRENTLY_DEATH_LOCK = 1
+    local current_character = nil
+    for _, player in ipairs(force.players) do
+        current_character = player.character
+        if current_character ~= nil then
+            current_character.die()
+        end
+    end
+    CURRENTLY_DEATH_LOCK = 0
+end
 
 function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
     local prototype = game.entity_prototypes[name]
@@ -350,6 +410,21 @@ function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
 end
 
 
+script.on_event(defines.events.on_entity_died, function(event)
+    if DEATH_LINK == 0 then
+        return
+    end
+    if CURRENTLY_DEATH_LOCK == 1 then -- don't re-trigger on same event
+        return
+    end
+
+    local force = event.entity.force
+    global.forcedata[force.name].death_link_tick = game.tick
+    dumpInfo(force)
+    kill_players(force)
+end, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "character"}})
+
+
 -- add / commands
 commands.add_command("ap-sync", "Used by the Archipelago client to get progress information", function(call)
     local force
@@ -362,7 +437,9 @@ commands.add_command("ap-sync", "Used by the Archipelago client to get progress 
     local data_collection = {
         ["research_done"] = research_done,
         ["victory"] = chain_lookup(global, "forcedata", force.name, "victory"),
-        }
+        ["death_link_tick"] = chain_lookup(global, "forcedata", force.name, "death_link_tick"),
+        ["death_link"] = DEATH_LINK
+    }
 
     for tech_name, tech in pairs(force.technologies) do
         if tech.researched and string.find(tech_name, "ap%-") == 1 then
@@ -392,8 +469,8 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
             game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
             game.play_sound({path="utility/research_completed"})
             tech.researched = true
-            return
         end
+        return
     elseif progressive_technologies[item_name] ~= nil then
         if global.index_sync[index] == nil then -- not yet received prog item
             global.index_sync[index] = item_name
@@ -411,9 +488,6 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     elseif force.technologies[item_name] ~= nil then
         tech = force.technologies[item_name]
         if tech ~= nil then
-            if global.index_sync[index] ~= nil and global.index_sync[index] ~= tech then
-                game.print("Warning: Desync Detected. Duplicate/Missing items may occur.")
-            end
             global.index_sync[index] = tech
             if tech.researched ~= true then
                 game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
@@ -431,7 +505,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     elseif item_name == "Evolution Trap" then
         if global.index_sync[index] == nil then -- not yet received trap
             global.index_sync[index] = item_name
-            game.forces["enemy"].evolution_factor = game.forces["enemy"].evolution_factor + TRAP_EVO_FACTOR
+            game.forces["enemy"].evolution_factor = game.forces["enemy"].evolution_factor + (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].evolution_factor))
             game.print({"", "Received Evolution Trap from ", source, ". New factor:", game.forces["enemy"].evolution_factor})
         end
     else
@@ -441,7 +515,7 @@ end)
 
 
 commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
-    rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME}))
+    rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME, ["death_link"] = DEATH_LINK}))
 end)
 
 
@@ -450,6 +524,14 @@ commands.add_command("ap-spawn-silo", "Attempts to spawn a silo around 0,0", fun
     spawn_entity(game.player.surface, game.player.force, "rocket-silo", 0, 0, 80, true, true)
 end)
 {% endif -%}
+
+
+commands.add_command("ap-deathlink", "Kill all players", function(call)
+    local force = game.forces["player"]
+    local source = call.parameter or "Archipelago"
+    kill_players(force)
+    game.print("Death was granted by " .. source)
+end)
 
 
 -- data

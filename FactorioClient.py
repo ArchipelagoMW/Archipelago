@@ -5,31 +5,25 @@ import json
 import string
 import copy
 import subprocess
-import factorio_rcon
+import sys
+import time
+import random
 
+import factorio_rcon
 import colorama
 import asyncio
 from queue import Queue
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled
-from MultiServer import mark_raw
-
 import Utils
-import random
+
+if __name__ == "__main__":
+    Utils.init_logging("FactorioClient", exception_logger="Client")
+
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled, \
+     get_base_parser
+from MultiServer import mark_raw
 from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
 
 from worlds.factorio import Factorio
-
-log_folder = Utils.local_path("logs")
-
-os.makedirs(log_folder, exist_ok=True)
-
-
-if gui_enabled:
-    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
-                        filename=os.path.join(log_folder, "FactorioClient.txt"), filemode="w", force=True)
-else:
-    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
-    logging.getLogger().addHandler(logging.FileHandler(os.path.join(log_folder, "FactorioClient.txt"), "w"))
 
 
 class FactorioCommandProcessor(ClientCommandProcessor):
@@ -55,36 +49,34 @@ class FactorioCommandProcessor(ClientCommandProcessor):
 class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
     game = "Factorio"
+    items_handling = 0b111  # full remote
 
     # updated by spinup server
     mod_version: Utils.Version = Utils.Version(0, 0, 0)
 
     def __init__(self, server_address, password):
         super(FactorioContext, self).__init__(server_address, password)
-        self.send_index = 0
+        self.send_index: int = 0
         self.rcon_client = None
         self.awaiting_bridge = False
+        self.write_data_path = None
+        self.death_link_tick: int = 0  # last send death link on Factorio layer
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
 
-    async def server_auth(self, password_requested):
+    async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(FactorioContext, self).server_auth(password_requested)
 
-        if not self.auth:
-            if self.rcon_client:
-                get_info(self, self.rcon_client)  # retrieve current auth code
-            else:
-                raise Exception("Cannot connect to a server with unknown own identity, "
-                                "bridge to Factorio first.")
+        if self.rcon_client:
+            await get_info(self, self.rcon_client)  # retrieve current auth code
+        else:
+            raise Exception("Cannot connect to a server with unknown own identity, "
+                            "bridge to Factorio first.")
 
-        await self.send_msgs([{"cmd": 'Connect',
-                               'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
-                               'tags': ['AP'],
-                               'uuid': Utils.get_unique_identifier(), 'game': "Factorio"
-                               }])
+        await self.send_connect()
 
     def on_print(self, args: dict):
-        logger.info(args["text"])
+        super(FactorioContext, self).on_print(args)
         if self.rcon_client:
             self.print_to_game(args['text'])
 
@@ -96,22 +88,21 @@ class FactorioContext(CommonContext):
 
     @property
     def savegame_name(self) -> str:
-        return f"AP_{self.seed_name}_{self.auth}.zip"
+        return f"AP_{self.seed_name}_{self.auth}_Save.zip"
 
     def print_to_game(self, text):
-        # TODO: remove around version 0.2
-        if self.mod_version < Utils.Version(0, 1, 6):
-            text = text.replace('"', '')
-            self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] "
-                                          f"{text}\")")
-        else:
-            self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
-                                          f"{text}")
+        self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
+                                      f"{text}")
+
+    def on_deathlink(self, data: dict):
+        if self.rcon_client:
+            self.rcon_client.send_command(f"/ap-deathlink {data['source']}")
+        super(FactorioContext, self).on_deathlink(data)
 
     def on_package(self, cmd: str, args: dict):
-        if cmd == "Connected":
+        if cmd in {"Connected", "RoomUpdate"}:
             # catch up sync anything that is already cleared.
-            if args["checked_locations"]:
+            if "checked_locations" in args and args["checked_locations"]:
                 self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
 
@@ -119,9 +110,11 @@ class FactorioContext(CommonContext):
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
     from worlds.factorio.Technologies import lookup_id_to_name
+    next_bridge = time.perf_counter() + 1
     try:
         while not ctx.exit_event.is_set():
-            if ctx.awaiting_bridge and ctx.rcon_client:
+            if ctx.awaiting_bridge and ctx.rcon_client and time.perf_counter() > next_bridge:
+                next_bridge = time.perf_counter() + 1
                 ctx.awaiting_bridge = False
                 data = json.loads(ctx.rcon_client.send_command("/ap-sync"))
                 if data["slot_name"] != ctx.auth:
@@ -134,18 +127,26 @@ async def game_watcher(ctx: FactorioContext):
                     research_data = data["research_done"]
                     research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                     victory = data["victory"]
+                    if "death_link" in data:    # TODO: Remove this if statement around version 0.2.4 or so
+                        await ctx.update_death_link(data["death_link"])
 
                     if not ctx.finished_game and victory:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                         ctx.finished_game = True
 
                     if ctx.locations_checked != research_data:
-                        bridge_logger.info(
+                        bridge_logger.debug(
                             f"New researches done: "
                             f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
-            await asyncio.sleep(1)
+                    death_link_tick = data.get("death_link_tick", 0)
+                    if death_link_tick != ctx.death_link_tick:
+                        ctx.death_link_tick = death_link_tick
+                        if "DeathLink" in ctx.tags:
+                            await ctx.send_death()
+
+            await asyncio.sleep(0.1)
 
     except Exception as e:
         logging.exception(e)
@@ -191,20 +192,19 @@ async def factorio_server_watcher(ctx: FactorioContext):
 
             while not factorio_queue.empty():
                 msg = factorio_queue.get()
-                factorio_server_logger.info(msg)
+                factorio_queue.task_done()
+
                 if not ctx.rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     ctx.rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
-                    # TODO: remove around version 0.2
-                    if ctx.mod_version < Utils.Version(0, 1, 6):
-                        ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
-                        ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
                     if not ctx.server:
                         logger.info("Established bridge to Factorio Server. "
                                     "Ready to connect to Archipelago via /connect")
 
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
-
+                    factorio_server_logger.debug(msg)
+                else:
+                    factorio_server_logger.info(msg)
             if ctx.rcon_client:
                 commands = {}
                 while ctx.send_index < len(ctx.items_received):
@@ -233,10 +233,13 @@ async def factorio_server_watcher(ctx: FactorioContext):
         factorio_process.wait(5)
 
 
-def get_info(ctx, rcon_client):
+async def get_info(ctx, rcon_client):
     info = json.loads(rcon_client.send_command("/ap-rcon-info"))
     ctx.auth = info["slot_name"]
     ctx.seed_name = info["seed_name"]
+    # 0.2.0 addition, not present earlier
+    death_link = bool(info.get("death_link", False))
+    await ctx.update_death_link(death_link)
 
 
 async def factorio_spinup_server(ctx: FactorioContext) -> bool:
@@ -265,11 +268,17 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
                 if "Loading mod AP-" in msg and msg.endswith("(data.lua)"):
                     parts = msg.split()
                     ctx.mod_version = Utils.Version(*(int(number) for number in parts[-2].split(".")))
+                elif "Write data path: " in msg:
+                    ctx.write_data_path = Utils.get_text_between(msg, "Write data path: ", " [")
+                    if "AppData" in ctx.write_data_path:
+                        logger.warning("It appears your mods are loaded from Appdata, "
+                                       "this can lead to problems with multiple Factorio instances. "
+                                       "If this is the case, you will get a file locked error running Factorio.")
                 if not rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     if ctx.mod_version == ctx.__class__.mod_version:
                         raise Exception("No Archipelago mod was loaded. Aborting.")
-                    get_info(ctx, rcon_client)
+                    await get_info(ctx, rcon_client)
             await asyncio.sleep(0.01)
 
     except Exception as e:
@@ -278,27 +287,30 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
         ctx.exit_event.set()
 
     else:
-        logger.info(f"Got World Information from AP Mod {tuple(ctx.mod_version)} for seed {ctx.seed_name} in slot {ctx.auth}")
+        logger.info(
+            f"Got World Information from AP Mod {tuple(ctx.mod_version)} for seed {ctx.seed_name} in slot {ctx.auth}")
         return True
     finally:
         factorio_process.terminate()
         factorio_process.wait(5)
     return False
 
+
 async def main(args):
     ctx = FactorioContext(args.connect, args.password)
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+    input_task = None
     if gui_enabled:
-        input_task = None
         from kvui import FactorioManager
         ctx.ui = FactorioManager(ctx)
         ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
     else:
-        input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None
+    if sys.stdin:
+        input_task = asyncio.create_task(console_loop(ctx), name="Input")
     factorio_server_task = asyncio.create_task(factorio_spinup_server(ctx), name="FactorioSpinupServer")
-    succesful_launch = await factorio_server_task
-    if succesful_launch:
+    successful_launch = await factorio_server_task
+    if successful_launch:
         factorio_server_task = asyncio.create_task(factorio_server_watcher(ctx), name="FactorioServer")
         progression_watcher = asyncio.create_task(
             game_watcher(ctx), name="FactorioProgressionWatcher")
@@ -309,14 +321,7 @@ async def main(args):
         await progression_watcher
         await factorio_server_task
 
-    if ctx.server and not ctx.server.socket.closed:
-        await ctx.server.socket.close()
-    if ctx.server_task:
-        await ctx.server_task
-
-    while ctx.input_requests > 0:
-        ctx.input_queue.put_nowait(None)
-        ctx.input_requests -= 1
+    await ctx.shutdown()
 
     if ui_task:
         await ui_task
@@ -329,33 +334,24 @@ class FactorioJSONtoTextParser(JSONtoTextParser):
     def _handle_color(self, node: JSONMessagePart):
         colors = node["color"].split(";")
         for color in colors:
-            if color in {"red", "green", "blue", "orange", "yellow", "pink", "purple", "white", "black", "gray",
-                         "brown", "cyan", "acid"}:
-                node["text"] = f"[color={color}]{node['text']}[/color]"
-                return self._handle_text(node)
-            elif color == "magenta":
-                node["text"] = f"[color=pink]{node['text']}[/color]"
+            if color in self.color_codes:
+                node["text"] = f"[color=#{self.color_codes[color]}]{node['text']}[/color]"
             return self._handle_text(node)
         return self._handle_text(node)
 
 
 if __name__ == '__main__':
-    import argparse
-
-    parser = argparse.ArgumentParser(description="Optional arguments to FactorioClient follow. "
-                                                 "Remaining arguments get passed into bound Factorio instance."
-                                                 "Refer to Factorio --help for those.")
+    parser = get_base_parser(description="Optional arguments to FactorioClient follow. "
+                                         "Remaining arguments get passed into bound Factorio instance."
+                                         "Refer to Factorio --help for those.")
     parser.add_argument('--rcon-port', default='24242', type=int, help='Port to use to communicate with Factorio')
     parser.add_argument('--rcon-password', help='Password to authenticate with RCON.')
-    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
-    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
-    if not Utils.is_frozen():  # Frozen state has no cmd window in the first place
-        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
 
     args, rest = parser.parse_known_args()
     colorama.init()
     rcon_port = args.rcon_port
-    rcon_password = args.rcon_password if args.rcon_password else ''.join(random.choice(string.ascii_letters) for x in range(32))
+    rcon_password = args.rcon_password if args.rcon_password else ''.join(
+        random.choice(string.ascii_letters) for x in range(32))
 
     factorio_server_logger = logging.getLogger("FactorioServer")
     options = Utils.get_options()

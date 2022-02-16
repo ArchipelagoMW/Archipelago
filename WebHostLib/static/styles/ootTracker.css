@@ -1,0 +1,136 @@
+#player-tracker-wrapper{
+    margin: 0;
+}
+
+#inventory-table{
+    border-top: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    padding: 3px 3px 10px;
+    width: 448px;
+    background-color: rgb(60, 114, 157);
+}
+
+#inventory-table td{
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#inventory-table img{
+    height: 100%;
+    max-width: 40px;
+    max-height: 40px;
+    filter: grayscale(100%) contrast(75%) brightness(30%);
+}
+
+#inventory-table img.acquired{
+    filter: none;
+}
+
+#inventory-table div.counted-item {
+    position: relative;
+}
+
+#inventory-table div.item-count {
+    position: absolute;
+    color: white;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 1.1em;
+    bottom: 0px;
+    right: 8px;
+}
+
+#location-table{
+    width: 448px;
+    border-left: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-bottom: 2px solid #000000;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    background-color: rgb(60, 114, 157);
+    padding: 0 3px 3px;
+    font-family: monospace;
+    font-size: 15px;
+    cursor: default;
+}
+
+#location-table th{
+    vertical-align: middle;
+    text-align: left;
+    padding-right: 10px;
+}
+
+#location-table td{
+    padding-top: 2px;
+    padding-bottom: 2px;
+    line-height: 20px;
+}
+
+#location-table td.counter {
+    text-align: right;
+    font-size: 15px;
+}
+
+#location-table td.toggle-arrow {
+    text-align: right;
+}
+
+#location-table tr#Total-header {
+    font-weight: bold;
+}
+
+#location-table img{
+    height: 100%;
+    max-width: 30px;
+    max-height: 30px;
+}
+
+#location-table tbody.locations {
+    font-size: 13px;
+}
+
+#location-table td.location-name {
+    padding-left: 16px;
+}
+
+.hide {
+    display: none;
+}
+
+.right-align {
+    text-align: right;
+    font-weight: bold;
+}
+
+#location-table td:first-child {
+    width: 272px;
+}
+
+.location-category td:first-child {
+    padding-right: 16px;
+}
+
+#inventory-table img.acquired#lullaby{
+    filter: sepia(100%) hue-rotate(-60deg); /* css trick to hue-shift a static image */
+}
+
+#inventory-table img.acquired#epona{
+    filter: sepia(100%) hue-rotate(-20deg) saturate(250%);
+}
+
+#inventory-table img.acquired#saria{
+    filter: sepia(100%) hue-rotate(60deg) saturate(150%);
+}
+
+#inventory-table img.acquired#sun{
+    filter: sepia(100%) hue-rotate(15deg) saturate(200%) brightness(120%);
+}
+
+#inventory-table img.acquired#time{
+    filter: sepia(100%) hue-rotate(160deg) saturate(150%);
+}

@@ -284,7 +284,7 @@ junk_texts = [
     "{C:GREEN}\nThere’s always\nmoney in the\nBanana Stand>",
     "{C:GREEN}\n \nJust walk away\n            >",
     "{C:GREEN}\neverybody is\nlooking for\nsomething   >",
-    "{C:GREEN}\nSpring Ball\nare behind\nRidley      >",
+    # "{C:GREEN}\nSpring Ball\nare behind\nRidley      >",  removed as people may assume it's a real hint
     "{C:GREEN}\nThe gnome asks\nyou to guess\nhis name.   >",
     "{C:GREEN}\nI heard beans\non toast is a\ngreat meal. >",
     "{C:GREEN}\n> Sweetcorn\non pizza is a\ngreat choice.",
@@ -1716,7 +1716,7 @@ class TextTable(object):
         text['telepathic_tile_tower_of_hera_entrance'] = CompressedTextMapper.convert(
             "{NOBORDER}\nThis is a bad place, with a guy who will make you fall…\n\n\na lot.")
         text['houlihan_room'] = CompressedTextMapper.convert(
-            "Have a Multiworld Tournament\nand we can list the winners here.")
+            "Multiworld Tournament winners\nSGLive 2021 BadmoonZ")
         text['caught_a_bee'] = CompressedTextMapper.convert("Caught a Bee\n  ≥ keep\n    release\n{CHOICE}")
         text['caught_a_fairy'] = CompressedTextMapper.convert("Caught Fairy!\n  ≥ keep\n    release\n{CHOICE}")
         text['no_empty_bottles'] = CompressedTextMapper.convert("Whoa, bucko!\nNo empty bottles.")

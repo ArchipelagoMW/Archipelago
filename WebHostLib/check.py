@@ -49,9 +49,7 @@ def get_yaml_data(file) -> Union[Dict[str, str], str]:
                 for file in infolist:
                     if file.filename.endswith(banned_zip_contents):
                         return "Uploaded data contained a rom file, which is likely to contain copyrighted material. Your file was deleted."
-                    elif file.filename.endswith(".yaml"):
-                        options[file.filename] = zfile.open(file, "r").read()
-                    elif file.filename.endswith(".txt"):
+                    elif file.filename.endswith((".yaml", ".json", ".yml", ".txt")):
                         options[file.filename] = zfile.open(file, "r").read()
         else:
             options = {file.filename: file.read()}
@@ -73,7 +71,8 @@ def roll_options(options: Dict[str, Union[dict, str]]) -> Tuple[Dict[str, Union[
             results[filename] = f"Failed to parse YAML data in {filename}: {e}"
         else:
             try:
-                rolled_results[filename] = roll_settings(yaml_data, plando_options={"bosses"})
+                rolled_results[filename] = roll_settings(yaml_data,
+                                                         plando_options={"bosses", "items", "connections", "texts"})
             except Exception as e:
                 results[filename] = f"Failed to generate mystery in {filename}: {e}"
             else:

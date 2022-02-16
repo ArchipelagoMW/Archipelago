@@ -5,5 +5,9 @@
     "author": "Berserker and Dewiniaid",
     "homepage": "https://archipelago.gg",
     "description": "Integration client for the Archipelago Randomizer",
-    "factorio_version": "1.1"
+    "factorio_version": "1.1",
+    "dependencies": [
+	  "base >= 1.1.0",
+	  "? science-not-invited"
+	]
 }

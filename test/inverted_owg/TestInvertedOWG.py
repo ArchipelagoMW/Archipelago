@@ -35,7 +35,7 @@ class TestInvertedOWG(TestBase):
         self.world.itempool.extend(ItemFactory(['Green Pendant', 'Red Pendant', 'Blue Pendant', 'Beat Agahnim 1', 'Beat Agahnim 2', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7'], 1))
         self.world.get_location('Agahnim 1', 1).item = None
         self.world.get_location('Agahnim 2', 1).item = None
-        self.world.precollected_items.clear()
+        self.world.precollected_items[1].clear()
         self.world.itempool.append(ItemFactory('Pegasus Boots', 1))
         mark_light_world_regions(self.world, 1)
         self.world.worlds[1].set_rules()

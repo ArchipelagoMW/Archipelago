@@ -4,11 +4,14 @@ import copy
 import textwrap
 import shlex
 
+"""Legacy module, undergoing dismantling."""
+
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 
     def _get_help_string(self, action):
         return textwrap.dedent(action.help)
+
 
 def parse_arguments(argv, no_defaults=False):
     def defval(value):
@@ -16,7 +19,7 @@ def parse_arguments(argv, no_defaults=False):
 
     # we need to know how many players we have first
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
+    parser.add_argument('--multi', default=defval(1), type=lambda value: max(int(value), 1))
     multiargs, _ = parser.parse_known_args(argv)
 
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
@@ -218,7 +221,8 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--enemy_health', default=defval('default'),
                         choices=['default', 'easy', 'normal', 'hard', 'expert'])
     parser.add_argument('--enemy_damage', default=defval('default'), choices=['default', 'shuffled', 'chaos'])
-    parser.add_argument('--beemizer', default=defval(0), type=lambda value: min(max(int(value), 0), 4))
+    parser.add_argument('--beemizer_total_chance', default=defval(0), type=lambda value: min(max(int(value), 0), 100))
+    parser.add_argument('--beemizer_trap_chance', default=defval(0), type=lambda value: min(max(int(value), 0), 100))
     parser.add_argument('--shop_shuffle', default='', help='''\
     combine letters for options:
     g: generate default inventories for light and dark world shops, and unique shops
@@ -235,13 +239,12 @@ def parse_arguments(argv, no_defaults=False):
     For unlit dark rooms, require the Lamp to be considered in logic by default. 
     Torches means additionally easily accessible Torches that can be lit with Fire Rod are considered doable.
     None means full traversal through dark rooms without tools is considered doable.''')
-    parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
+    parser.add_argument('--multi', default=defval(1), type=lambda value: max(int(value), 1))
     parser.add_argument('--names', default=defval(''))
     parser.add_argument('--outputpath')
     parser.add_argument('--game', default="A Link to the Past")
     parser.add_argument('--race', default=defval(False), action='store_true')
     parser.add_argument('--outputname')
-    parser.add_argument('--start_hints')
     if multiargs.multi:
         for player in range(1, multiargs.multi + 1):
             parser.add_argument(f'--p{player}', default=defval(''), help=argparse.SUPPRESS)
@@ -255,7 +258,6 @@ def parse_arguments(argv, no_defaults=False):
     ret.plando_items = []
     ret.plando_texts = {}
     ret.plando_connections = []
-    ret.er_seeds = {}
 
     if ret.timer == "none":
         ret.timer = False
@@ -272,13 +274,13 @@ def parse_arguments(argv, no_defaults=False):
             for name in ['logic', 'mode', 'goal', 'difficulty', 'item_functionality',
                          'shuffle', 'open_pyramid', 'timer',
                          'countdown_start_time', 'red_clock_time', 'blue_clock_time', 'green_clock_time',
-                         'beemizer',
+                         'beemizer_total_chance', 'beemizer_trap_chance',
                          'shufflebosses', 'enemy_health', 'enemy_damage',
                          'sprite',
                          "triforce_pieces_available",
                          "triforce_pieces_required", "shop_shuffle",
-                         "required_medallions", "start_hints",
-                         "plando_items", "plando_texts", "plando_connections", "er_seeds",
+                         "required_medallions",
+                         "plando_items", "plando_texts", "plando_connections",
                          'dungeon_counters',
                          'shuffle_prizes', 'sprite_pool', 'dark_room_logic',
                          'game']:

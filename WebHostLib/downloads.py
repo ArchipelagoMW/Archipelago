@@ -1,9 +1,10 @@
 from flask import send_file, Response, render_template
 from pony.orm import select
 
-from Patch import update_patch_data
+from Patch import update_patch_data, preferred_endings
 from WebHostLib import app, Slot, Room, Seed, cache
 import zipfile
+
 
 @app.route("/dl_patch/<suuid:room_id>/<int:patch_id>")
 def download_patch(room_id, patch_id):
@@ -19,7 +20,8 @@ def download_patch(room_id, patch_id):
         patch_data = update_patch_data(patch.data, server=f"{app.config['PATCH_TARGET']}:{last_port}")
         patch_data = io.BytesIO(patch_data)
 
-        fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](room_id)}.apbp"
+        fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](room_id)}." \
+                f"{preferred_endings[patch.game]}"
         return send_file(patch_data, as_attachment=True, attachment_filename=fname)
 
 
@@ -27,23 +29,6 @@ def download_patch(room_id, patch_id):
 def download_spoiler(seed_id):
     return Response(Seed.get(id=seed_id).spoiler, mimetype="text/plain")
 
-
-@app.route("/dl_raw_patch/<suuid:seed_id>/<int:player_id>")
-def download_raw_patch(seed_id, player_id: int):
-    seed = Seed.get(id=seed_id)
-    patch = select(patch for patch in seed.slots if
-                   patch.player_id == player_id).first()
-
-    if not patch:
-        return "Patch not found"
-    else:
-        import io
-
-        patch_data = update_patch_data(patch.data, server="")
-        patch_data = io.BytesIO(patch_data)
-
-        fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](seed_id)}.apbp"
-        return send_file(patch_data, as_attachment=True, attachment_filename=fname)
 
 @app.route("/slot_file/<suuid:room_id>/<int:player_id>")
 def download_slot_file(room_id, player_id: int):

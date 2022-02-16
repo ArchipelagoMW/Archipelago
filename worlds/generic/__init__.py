@@ -1,6 +1,8 @@
 from typing import NamedTuple, Union
 import logging
 
+from BaseClasses import Item
+
 from ..AutoWorld import World
 
 
@@ -11,10 +13,19 @@ class GenericWorld(World):
         "Nothing": -1
     }
     location_name_to_id = {
-        "Cheat Console" : -1,
+        "Cheat Console": -1,
         "Server": -2
     }
     hidden = True
+
+    def generate_early(self):
+        self.world.player_types[self.player] = 0  # mark as spectator
+
+    def create_item(self, name: str) -> Item:
+        if name == "Nothing":
+            return Item(name, False, -1, self.player)
+        raise KeyError(name)
+
 
 class PlandoItem(NamedTuple):
     item: str

@@ -2,6 +2,7 @@ from collections import deque
 import logging
 
 from .SaveContext import SaveContext
+from .Regions import TimeOfDay
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item
@@ -42,6 +43,36 @@ class OOTLogic(LogicMixin):
             return can_reach
         return self.age[player] == age
 
+    def _oot_reach_at_time(self, regionname, tod, already_checked, player):
+        name_map = {
+            TimeOfDay.DAY: self.day_reachable_regions[player],
+            TimeOfDay.DAMPE: self.dampe_reachable_regions[player],
+            TimeOfDay.ALL: self.day_reachable_regions[player].intersection(self.dampe_reachable_regions[player])
+        }
+        if regionname in name_map[tod]:
+            return True
+        region = self.world.get_region(regionname, player)
+        if region.provides_time == TimeOfDay.ALL or regionname == 'Root':
+            self.day_reachable_regions[player].add(regionname)
+            self.dampe_reachable_regions[player].add(regionname)
+            return True
+        if region.provides_time == TimeOfDay.DAMPE:
+            self.dampe_reachable_regions[player].add(regionname)
+            return tod == TimeOfDay.DAMPE
+        for entrance in region.entrances:
+            if entrance.parent_region.name in already_checked:
+                continue
+            if self._oot_reach_at_time(entrance.parent_region.name, tod, already_checked + [regionname], player):
+                if tod == TimeOfDay.DAY:
+                    self.day_reachable_regions[player].add(regionname)
+                elif tod == TimeOfDay.DAMPE:
+                    self.dampe_reachable_regions[player].add(regionname)
+                elif tod == TimeOfDay.ALL:
+                    self.day_reachable_regions[player].add(regionname)
+                    self.dampe_reachable_regions[player].add(regionname)
+                return True
+        return False
+
     # Store the age before calling this!
     def _oot_update_age_reachable_regions(self, player): 
         self.stale[player] = False
@@ -62,6 +93,8 @@ class OOTLogic(LogicMixin):
             while queue:
                 connection = queue.popleft()
                 new_region = connection.connected_region
+                if new_region is None: 
+                    continue
                 if new_region in rrp:
                     bc.remove(connection)
                 elif connection.can_reach(self):
@@ -106,6 +139,11 @@ def set_rules(ootworld):
         # This is required if map/compass included, or any_dungeon shuffle.
         location = world.get_location('Sheik in Ice Cavern', player)
         add_item_rule(location, lambda item: item.player == player and item.type == 'Song')
+
+    if ootworld.skip_child_zelda:
+        # If skip child zelda is on, the item at Song from Impa must be giveable by the save context. 
+        location = world.get_location('Song from Impa', player)
+        add_item_rule(location, lambda item: item.name in SaveContext.giveable_items)
 
     for name in ootworld.always_hints:
         add_rule(world.get_location(name, player), guarantee_hint)

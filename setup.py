@@ -3,11 +3,19 @@ import shutil
 import sys
 import sysconfig
 from pathlib import Path
+
+import ModuleUpdate
+# I don't really want to have another root directory file for a single requirement, but this special case is also jank.
+# Might move this into a cleaner solution when I think of one.
+with open("freeze_requirements.txt", "w") as f:
+    f.write("cx-Freeze>=6.9\n")
+ModuleUpdate.requirements_files.add("freeze_requirements.txt")
+ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
+ModuleUpdate.update()
+
 import cx_Freeze
 from kivy_deps import sdl2, glew
 from Utils import version_tuple
-
-is_64bits = sys.maxsize > 2 ** 32
 
 arch_folder = "exe.{platform}-{version}".format(platform=sysconfig.get_platform(),
                                                 version=sysconfig.get_python_version())
@@ -74,13 +82,18 @@ scripts = {
     # Core
     "MultiServer.py": ("ArchipelagoServer", False, icon),
     "Generate.py": ("ArchipelagoGenerate", False, icon),
-    # LttP
-    "LttPClient.py": ("ArchipelagoLttPClient", True, icon),
+    "CommonClient.py": ("ArchipelagoTextClient", True, icon),
+    # SNI
+    "SNIClient.py": ("ArchipelagoSNIClient", True, icon),
     "LttPAdjuster.py": ("ArchipelagoLttPAdjuster", True, icon),
     # Factorio
     "FactorioClient.py": ("ArchipelagoFactorioClient", True, icon),
     # Minecraft
     "MinecraftClient.py": ("ArchipelagoMinecraftClient", False, mcicon),
+    # Ocarina of Time
+    "OoTAdjuster.py": ("ArchipelagoOoTAdjuster", True, icon),
+    # FF1
+    "FF1Client.py": ("ArchipelagoFF1Client", True, icon),
 }
 
 exes = []
@@ -138,13 +151,21 @@ for folder in sdl2.dep_bins + glew.dep_bins:
     shutil.copytree(folder, libfolder, dirs_exist_ok=True)
     print('copying', folder, '->', libfolder)
 
-extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI", "meta.yaml"]
+extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI"]
 
 for data in extra_data:
     installfile(Path(data))
 
-os.makedirs(buildfolder / "Players", exist_ok=True)
-shutil.copyfile("playerSettings.yaml", buildfolder / "Players" / "weightedSettings.yaml")
+os.makedirs(buildfolder / "Players" / "Templates", exist_ok=True)
+from WebHostLib.options import create
+create()
+from worlds.AutoWorld import AutoWorldRegister
+for worldname, worldtype in AutoWorldRegister.world_types.items():
+    if not worldtype.hidden:
+        file_name = worldname+".yaml"
+        shutil.copyfile(os.path.join("WebHostLib", "static", "generated", "configs", file_name),
+                        buildfolder / "Players" / "Templates" / file_name)
+shutil.copyfile("meta.yaml", buildfolder / "Players" / "Templates" / "meta.yaml")
 
 try:
     from maseya import z3pr
@@ -169,3 +190,8 @@ if signtool:
 remove_sprites_from_folder(buildfolder / "data" / "sprites" / "alttpr")
 
 manifest_creation(buildfolder)
+
+if sys.platform == "win32":
+    with open("setup.ini", "w") as f:
+        min_supported_windows = "6.2.9200" if sys.version_info > (3, 9) else "6.0.6000"
+        f.write(f"[Data]\nsource_path={buildfolder}\nmin_windows={min_supported_windows}\n")

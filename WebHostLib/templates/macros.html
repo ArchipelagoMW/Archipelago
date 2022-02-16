@@ -1,29 +1,50 @@
 {% macro list_rooms(rooms) -%}
     <ul>
         {% for room in rooms %}
-            <li><a href="{{ url_for("hostRoom", room=room.id) }}">Room #{{ room.id|suuid }}</a></li>
+            <li><a href="{{ url_for("host_room", room=room.id) }}">Room #{{ room.id|suuid }}</a></li>
         {% endfor %}
         {{ caller() }}
     </ul>
 {%- endmacro %}
 {% macro list_patches_room(room) %}
     {% if room.seed.slots %}
-        <ul>
+        <table>
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Name</td>
+                    <td>Game</td>
+                    <td>Download Link</td>
+                    <td>Tracker Page</td>
+                </tr>
+            </thead>
+            <tbody>
             {% for patch in room.seed.slots|list|sort(attribute="player_id") %}
-                {% if patch.game == "Minecraft" %}
-                <li><a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}">
-                    APMC for player {{ patch.player_id }} - {{ patch.player_name }}</a></li>
-                {% elif patch.game == "Factorio" %}
-                <li><a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}">
-                    Mod for player {{ patch.player_id }} - {{ patch.player_name }}</a></li>
-                {% elif patch.game == "Ocarina of Time" %}
-                <li><a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}">
-                    APZ5 for player {{ patch.player_id }} - {{ patch.player_name }}</a></li>
-                {% else %}
-                <li><a href="{{ url_for("download_patch", patch_id=patch.id, room_id=room.id) }}">
-                    Patch for player {{ patch.player_id }} - {{ patch.player_name }}</a></li>
-                {% endif %}
+                <tr>
+                    <td>{{ patch.player_id }}</td>
+                    <td>{{ patch.player_name }}</td>
+                    <td>{{ patch.game }}</td>
+                    <td>
+                        {% if patch.game == "Minecraft" %}
+                        <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
+                            Download APMC File...</a>
+                        {% elif patch.game == "Factorio" %}
+                        <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
+                            Download Factorio Mod...</a>
+                        {% elif patch.game == "Ocarina of Time" %}
+                        <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
+                            Download APZ5 File...</a>
+                        {% elif patch.game in ["A Link to the Past", "Secret of Evermore", "Super Metroid"] %}
+                        <a href="{{ url_for("download_patch", patch_id=patch.id, room_id=room.id) }}" download>
+                            Download Patch File...</a>
+                        {% else %}
+                            No file to download for this game.
+                        {% endif %}
+                    </td>
+                    <td><a href="{{ url_for("getPlayerTracker", tracker=room.tracker, tracked_team=0, tracked_player=patch.player_id) }}">Tracker</a></td>
+                </tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
     {% endif %}
 {%- endmacro -%}

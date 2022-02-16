@@ -106,7 +106,7 @@ def has_propulsion_cannon(state, player):
     return state.has("Propulsion Cannon Fragment", player, 2) or \
            (has_prawn(state, player) and has_praw_propulsion_arm(state, player))
 
-    
+
 def has_cyclops_shield(state, player):
     return has_cyclops(state, player) and \
            state.has("Cyclops Shield Generator", player)
@@ -121,12 +121,12 @@ def has_cyclops_shield(state, player):
 # Fins are not used when using seaglide
 #
 def get_max_swim_depth(state, player):
-    #TODO, Make this a difficulty setting.
+    # TODO, Make this a difficulty setting.
     # Only go up to 200m without any submarines for now.
     return 200
 
     # Rules bellow, are what are technically possible
-    
+
     # has_ultra_high_capacity_tank = state.has("Ultra High Capacity Tank", player)
     # has_ultra_glide_fins = state.has("Ultra Glide Fins", player)
 
@@ -151,7 +151,7 @@ def get_seamoth_max_depth(state, player):
     if has_seamoth(state, player):
         if has_seamoth_depth_module_mk3(state, player):
             return 900
-        elif has_seamoth_depth_module_mk2(state, player): # Will never be the case, 3 is craftable
+        elif has_seamoth_depth_module_mk2(state, player):  # Will never be the case, 3 is craftable
             return 500
         elif has_seamoth_depth_module_mk1(state, player):
             return 300
@@ -165,7 +165,7 @@ def get_cyclops_max_depth(state, player):
     if has_cyclops(state, player):
         if has_cyclops_depth_module_mk3(state, player):
             return 1700
-        elif has_cyclops_depth_module_mk2(state, player): # Will never be the case, 3 is craftable
+        elif has_cyclops_depth_module_mk2(state, player):  # Will never be the case, 3 is craftable
             return 1300
         elif has_cyclops_depth_module_mk1(state, player):
             return 900
@@ -188,12 +188,12 @@ def get_prawn_max_depth(state, player):
 
 
 def get_max_depth(state, player):
-    #TODO, Difficulty option, we can add vehicle depth + swim depth
+    # TODO, Difficulty option, we can add vehicle depth + swim depth
     # But at this point, we have to consider traver distance in caves, not
     # just depth
-    return max(get_max_swim_depth(state, player), \
-               get_seamoth_max_depth(state, player), \
-               get_cyclops_max_depth(state, player), \
+    return max(get_max_swim_depth(state, player),
+               get_seamoth_max_depth(state, player),
+               get_cyclops_max_depth(state, player),
                get_prawn_max_depth(state, player))
 
 
@@ -201,9 +201,9 @@ def can_access_location(state, player, loc):
     pos_x = loc.get("position").get("x")
     pos_y = loc.get("position").get("y")
     pos_z = loc.get("position").get("z")
-    depth = -pos_y # y-up
-    map_center_dist = math.sqrt(pos_x**2 + pos_z**2)
-    aurora_dist = math.sqrt((pos_x - 1038.0)**2 + (pos_y - -3.4)**2 + (pos_z - -163.1)**2)
+    depth = -pos_y  # y-up
+    map_center_dist = math.sqrt(pos_x ** 2 + pos_z ** 2)
+    aurora_dist = math.sqrt((pos_x - 1038.0) ** 2 + (pos_y - -3.4) ** 2 + (pos_z - -163.1) ** 2)
 
     need_radiation_suit = aurora_dist < 950
     need_laser_cutter = loc.get("need_laser_cutter", False)

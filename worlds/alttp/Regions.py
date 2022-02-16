@@ -176,7 +176,7 @@ def create_regions(world, player):
                                                                    'Hype Cave - Bottom', 'Hype Cave - Generous Guy']),
         create_dw_region(player, 'West Dark World', ['Frog'], ['Village of Outcasts Drop', 'East Dark World River Pier', 'Brewery', 'C-Shaped House', 'Chest Game', 'Thieves Town', 'Graveyard Ledge Mirror Spot', 'Kings Grave Mirror Spot', 'Bumper Cave Entrance Rock',
                                                        'Skull Woods Forest', 'Village of Outcasts Pegs', 'Village of Outcasts Eastern Rocks', 'Red Shield Shop', 'Dark Sanctuary Hint', 'Fortune Teller (Dark)', 'Dark World Lumberjack Shop']),
-        create_dw_region(player, 'Dark Grassy Lawn', None, ['Grassy Lawn Pegs', 'Dark World Shop']),
+        create_dw_region(player, 'Dark Grassy Lawn', None, ['Grassy Lawn Pegs', 'Village of Outcasts Shop']),
         create_dw_region(player, 'Hammer Peg Area', ['Dark Blacksmith Ruins'], ['Bat Cave Drop Ledge Mirror Spot', 'Dark World Hammer Peg Cave', 'Peg Area Rocks']),
         create_dw_region(player, 'Bumper Cave Entrance', None, ['Bumper Cave (Bottom)', 'Bumper Cave Entrance Mirror Spot', 'Bumper Cave Entrance Drop']),
         create_cave_region(player, 'Fortune Teller (Dark)', 'a fortune teller'),

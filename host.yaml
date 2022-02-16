@@ -23,11 +23,21 @@ server_options:
   # so for example hint_cost: 20 would mean that for every 20% of available checks, you get the ability to hint, for a total of 5
   hint_cost: 10 # Set to 0 if you want free hints
   # Forfeit modes
+  # A Forfeit sends out the remaining items *from* a world that forfeits
   # "disabled" -> clients can't forfeit,
   # "enabled" -> clients can always forfeit
-  # "auto" -> automatic forfeit on goal completion, "goal" -> clients can forfeit after achieving their goal
+  # "auto" -> automatic forfeit on goal completion
   # "auto-enabled" -> automatic forfeit on goal completion and manual forfeit is also enabled
+  # "goal" -> forfeit is allowed after goal completion
   forfeit_mode: "goal"
+  # Collect modes
+  # A Collect sends the remaining items *to* a world that collects
+  # "disabled" -> clients can't collect,
+  # "enabled" -> clients can always collect
+  # "auto" -> automatic collect on goal completion
+  # "auto-enabled" -> automatic collect on goal completion and manual collect is also enabled
+  # "goal" -> collect is allowed after goal completion
+  collect_mode: "goal"
   # Remaining modes
   # !remaining handling, that tells a client which items remain in their pool
   # "enabled" -> Client can always ask for remaining items
@@ -54,7 +64,7 @@ generator:
   # general weights file, within the stated player_files_path location
   # gets used if players is higher than the amount of per-player files found to fill remaining slots
   weights_file_path: "weights.yaml"
-  # Meta file name, within the stated player_files_path location, TODO: re-implement this
+  # Meta file name, within the stated player_files_path location
   meta_file_path: "meta.yaml"
   # Create a spoiler file
   # 0 -> None
@@ -81,6 +91,15 @@ lttp_options:
   # True for operating system default program
   # Alternatively, a path to a program to open the .sfc file with
   rom_start: true
+sm_options:
+  # File name of the v1.0 J rom
+  rom_file: "Super Metroid (JU).sfc"
+  # Set this to your SNI folder location if you want the MultiClient to attempt an auto start, does nothing if not found
+  sni: "SNI"
+  # Set this to false to never autostart a rom (such as after patching)
+  # True for operating system default program
+  # Alternatively, a path to a program to open the .sfc file with
+  rom_start: true
 factorio_options:
   executable: "factorio\\bin\\x64\\factorio"
 minecraft_options: 
@@ -89,3 +108,6 @@ minecraft_options:
 oot_options: 
   # File name of the OoT v1.0 ROM
   rom_file: "The Legend of Zelda - Ocarina of Time.z64"
+soe_options:
+  # File name of the SoE US ROM
+  rom_file: "Secret of Evermore (USA).sfc"

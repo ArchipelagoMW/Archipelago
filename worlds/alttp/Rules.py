@@ -15,8 +15,10 @@ def set_rules(world):
     player = world.player
     world = world.world
     if world.logic[player] == 'nologic':
-        logging.info(
-            'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
+        if player == next(player_id for player_id in world.get_game_players("A Link to the Past")
+                          if world.logic[player_id] == 'nologic'):  # only warn one time
+            logging.info(
+                'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
 
         if world.players == 1:
             world.get_region('Menu', player).can_reach_private = lambda state: True
@@ -261,7 +263,7 @@ def global_rules(world, player):
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Swamp Palace - Big Chest', player), lambda state, item: item.name == 'Big Key (Swamp Palace)' and item.player == player)
     set_rule(world.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player))
-    if not world.smallkey_shuffle[player] and world.logic[player] != 'nologic':
+    if not world.smallkey_shuffle[player] and world.logic[player] not in ['hybridglitches', 'nologic']:
         forbid_item(world.get_location('Swamp Palace - Entrance', player), 'Big Key (Swamp Palace)', player)
 
     set_rule(world.get_entrance('Thieves Town Big Key Door', player), lambda state: state.has('Big Key (Thieves Town)', player))
@@ -934,8 +936,9 @@ def set_trock_key_rules(world, player):
                     # A key is required in the Big Key Chest to prevent a possible softlock.  Place an extra key to ensure 100% locations still works
                     item = ItemFactory('Small Key (Turtle Rock)', player)
                     item.world = world
-                    world.push_item(world.get_location('Turtle Rock - Big Key Chest', player), item, False)
-                    world.get_location('Turtle Rock - Big Key Chest', player).event = True
+                    location = world.get_location('Turtle Rock - Big Key Chest', player)
+                    location.place_locked_item(item)
+                    location.event = True
                     toss_junk_item(world, player)
 
     if world.accessibility[player] != 'locations':
@@ -1004,7 +1007,7 @@ def set_big_bomb_rules(world, player):
                              'Red Shield Shop',
                              'Dark Sanctuary Hint',
                              'Fortune Teller (Dark)',
-                             'Dark World Shop',
+                             'Village of Outcasts Shop',
                              'Dark World Lumberjack Shop',
                              'Thieves Town',
                              'Skull Woods First Section Door',
@@ -1328,7 +1331,7 @@ def set_inverted_big_bomb_rules(world, player):
     elif bombshop_entrance.name in LW_bush_entrances:
         # These entrances are behind bushes in LW so you need either Pearl or the tools to solve NDW bomb shop locations.
         add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.has('Magic Mirror', player) and (state.has('Activated Flute', player) or state.has('Moon Pearl', player) or (state.can_lift_heavy_rocks(player) and state.has('Hammer', player))))
-    elif bombshop_entrance.name == 'Dark World Shop':
+    elif bombshop_entrance.name == 'Village of Outcasts Shop':
         # This is mostly the same as NDW but the Mirror path requires the Pearl, or using the Hammer
         add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.has('Activated Flute', player) or (state.can_lift_heavy_rocks(player) and state.has('Hammer', player)) or (state.has('Magic Mirror', player) and state.can_reach('Light World', 'Region', player) and (state.has('Moon Pearl', player) or state.has('Hammer', player))))
     elif bombshop_entrance.name == 'Bumper Cave (Bottom)':

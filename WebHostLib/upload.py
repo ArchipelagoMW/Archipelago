@@ -9,11 +9,9 @@ from flask import request, flash, redirect, url_for, session, render_template
 from pony.orm import flush, select
 
 from WebHostLib import app, Seed, Room, Slot
-from Utils import parse_yaml
-
-accepted_zip_contents = {"patches": ".apbp",
-                         "spoiler": ".txt",
-                         "multidata": ".archipelago"}
+from Utils import parse_yaml, VersionException
+from Patch import preferred_endings
+from Utils import __version__
 
 banned_zip_contents = (".sfc",)
 
@@ -29,15 +27,17 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         if file.filename.endswith(banned_zip_contents):
             return "Uploaded data contained a rom file, which is likely to contain copyrighted material. " \
                    "Your file was deleted."
-        elif file.filename.endswith(".apbp"):
+        elif file.filename.endswith(tuple(preferred_endings.values())):
             data = zfile.open(file, "r").read()
             yaml_data = parse_yaml(lzma.decompress(data).decode("utf-8-sig"))
             if yaml_data["version"] < 2:
-                return "Old format cannot be uploaded (outdated .apbp)", 500
+                return "Old format cannot be uploaded (outdated .apbp)"
             metadata = yaml_data["meta"]
-            slots.add(Slot(data=data, player_name=metadata["player_name"],
+
+            slots.add(Slot(data=data,
+                           player_name=metadata["player_name"],
                            player_id=metadata["player_id"],
-                           game="A Link to the Past"))
+                           game=yaml_data["game"]))
 
         elif file.filename.endswith(".apmc"):
             data = zfile.open(file, "r").read()
@@ -48,7 +48,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
 
         elif file.filename.endswith(".zip"):
             # Factorio mods need a specific name or they do not function
-            _, seed_name, slot_id, slot_name = file.filename.rsplit("_", 1)[0].split("-")
+            _, seed_name, slot_id, slot_name = file.filename.rsplit("_", 1)[0].split("-", 3)
             slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
                            player_id=int(slot_id[1:]), game="Factorio"))
 
@@ -63,12 +63,20 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         elif file.filename.endswith(".archipelago"):
             try:
                 multidata = zfile.open(file).read()
-                MultiServer.Context._decompress(multidata)
             except:
                 flash("Could not load multidata. File may be corrupted or incompatible.")
-            else:
-                multidata = zfile.open(file).read()
+                multidata = None
+
     if multidata:
+        decompressed_multidata = MultiServer.Context.decompress(multidata)
+        player_names = {slot.player_name for slot in slots}
+        leftover_names = [(name, index) for index, name in
+                          enumerate((name for name in decompressed_multidata["names"][0]), start=1)]
+        newslots = [(Slot(data=None, player_name=name, player_id=slot, game=decompressed_multidata["games"][slot]))
+                    for name, slot in leftover_names if name not in player_names]
+        for slot in newslots:
+            slots.add(slot)
+
         flush()  # commit slots
         seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner, meta=json.dumps(meta),
                     id=sid if sid else uuid.uuid4())
@@ -93,27 +101,32 @@ def uploads():
             if file.filename == '':
                 flash('No selected file')
             elif file and allowed_file(file.filename):
-                if file.filename.endswith(".zip"):
+                if zipfile.is_zipfile(file):
                     with zipfile.ZipFile(file, 'r') as zfile:
-                        res = upload_zip_to_db(zfile)
-                        if type(res) == str:
-                            return res
-                        elif res:
-                            return redirect(url_for("viewSeed", seed=res.id))
+                        try:
+                            res = upload_zip_to_db(zfile)
+                        except VersionException:
+                            flash(f"Could not load multidata. Wrong Version detected.")
+                        else:
+                            if type(res) == str:
+                                return res
+                            elif res:
+                                return redirect(url_for("view_seed", seed=res.id))
                 else:
+                    file.seek(0)  # offset from is_zipfile check
+                    # noinspection PyBroadException
                     try:
                         multidata = file.read()
-                        MultiServer.Context._decompress(multidata)
-                    except:
-                        flash("Could not load multidata. File may be corrupted or incompatible.")
-                        raise
+                        MultiServer.Context.decompress(multidata)
+                    except Exception as e:
+                        flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
                     else:
                         seed = Seed(multidata=multidata, owner=session["_id"])
                         flush()  # place into DB and generate ids
-                        return redirect(url_for("viewSeed", seed=seed.id))
+                        return redirect(url_for("view_seed", seed=seed.id))
             else:
-                flash("Not recognized file format. Awaiting a .multidata file.")
-    return render_template("hostGame.html")
+                flash("Not recognized file format. Awaiting a .archipelago file or .zip containing one.")
+    return render_template("hostGame.html", version=__version__)
 
 
 @app.route('/user-content', methods=['GET'])

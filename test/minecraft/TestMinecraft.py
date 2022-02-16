@@ -4,7 +4,7 @@ from BaseClasses import MultiWorld
 from worlds import AutoWorld
 from worlds.minecraft import MinecraftWorld
 from worlds.minecraft.Items import MinecraftItem, item_table
-from worlds.minecraft.Options import AdvancementGoal, CombatDifficulty, BeeTraps
+from worlds.minecraft.Options import *
 from Options import Toggle, Range
 
 # Converts the name of an item into an item object
@@ -30,16 +30,17 @@ class TestMinecraft(TestBase):
         self.world = MultiWorld(1)
         self.world.game[1] = "Minecraft"
         self.world.worlds[1] = MinecraftWorld(self.world, 1)
-        exclusion_pools = ['hard', 'insane', 'postgame']
+        exclusion_pools = ['hard', 'unreasonable', 'postgame']
         for pool in exclusion_pools:
-            setattr(self.world, f"include_{pool}_advancements", [False, False])
+            setattr(self.world, f"include_{pool}_advancements", {1: False})
         setattr(self.world, "advancement_goal", {1: AdvancementGoal(30)})
-        setattr(self.world, "shuffle_structures", {1: Toggle(False)})
-        setattr(self.world, "combat_difficulty", {1: CombatDifficulty(1)}) # normal
+        setattr(self.world, "egg_shards_required", {1: EggShardsRequired(0)})
+        setattr(self.world, "egg_shards_available", {1: EggShardsAvailable(0)})
+        setattr(self.world, "required_bosses", {1: BossGoal(1)}) # ender dragon
+        setattr(self.world, "shuffle_structures", {1: ShuffleStructures(False)})
         setattr(self.world, "bee_traps", {1: BeeTraps(0)})
+        setattr(self.world, "combat_difficulty", {1: CombatDifficulty(1)}) # normal
         setattr(self.world, "structure_compasses", {1: Toggle(False)})
-        setattr(self.world, "egg_shards_required", {1: Range(0)})
-        setattr(self.world, "egg_shards_available", {1: Range(0)})
         AutoWorld.call_single(self.world, "create_regions", 1)
         AutoWorld.call_single(self.world, "generate_basic", 1)
         AutoWorld.call_single(self.world, "set_rules", 1)

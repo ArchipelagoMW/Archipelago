@@ -1,5 +1,97 @@
 [
   {
+    "gameTitle": "Archipelago",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Tutorial",
+        "description": "A guide to setting up the Archipelago software to generate and host multiworld games on your computer and using the website.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/setup_en.md",
+            "link": "archipelago/setup/en",
+            "authors": [
+              "alwaysintreble"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Archipelago Website User Guide",
+        "description": "A guide to using the Archipelago website to generate multiworlds or host pre-generated multiworlds.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/using_website.md",
+            "link": "archipelago/using_website/en",
+            "authors": [
+              "alwaysintreble"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Archipelago Server and Client Commands",
+        "description": "A guide detailing the commands available to the user when participating in an Archipelago session.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/commands_en.md",
+            "link": "archipelago/commands/en",
+            "authors": [
+              "jat2980",
+              "Ijwu"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Advanced YAML Guide",
+        "description": "A guide to reading yaml files and editing them to fully customize your game.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/advanced_settings_en.md",
+            "link": "archipelago/advanced_settings/en",
+            "authors": [
+              "alwaysintreble",
+              "Alchav"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Archipelago Triggers Guide",
+        "description": "A guide to setting up and using triggers in your game settings.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/triggers_en.md",
+            "link": "archipelago/triggers/en",
+            "authors": [
+              "alwaysintreble"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Archipelago Plando Guide",
+        "description": "A guide to understanding and using plando for your game.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/plando_en.md",
+            "link": "archipelago/plando/en",
+            "authors": [
+              "alwaysintreble",
+              "Alchav"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "gameTitle": "The Legend of Zelda: A Link to the Past",
     "tutorials": [
       {
@@ -87,6 +179,33 @@
     ]
   },
   {
+    "gameTitle": "The Legend of Zelda: Ocarina of Time",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Tutorial",
+        "description": "A guide to setting up the Archipelago Ocarina of Time software on your computer.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "zelda5/setup_en.md",
+            "link": "zelda5/setup/en",
+            "authors": [
+              "Edos"
+            ]
+          },
+          {
+            "language": "Spanish",
+            "filename": "zelda5/setup_es.md",
+            "link": "zelda5/setup/es",
+            "authors": [
+              "Edos"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "gameTitle": "Factorio",
     "tutorials": [
       {
@@ -98,7 +217,8 @@
             "filename": "factorio/setup_en.md",
             "link": "factorio/setup/en",
             "authors": [
-              "Berserker"
+              "Berserker",
+              "Farrak Kilhn"
             ]
           }
         ]
@@ -153,6 +273,207 @@
             "link": "ror2/setup/en",
             "authors": [
               "Ijwu"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Raft",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up Raft integration for Archipelago multiworld games.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "raft/setup_en.md",
+            "link": "raft/setup/en",
+            "authors": [
+              "SunnyBat",
+              "Awareqwx"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Timespinner",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Timespinner randomizer connected to an Archipelago Multiworld",
+        "files": [
+          {
+            "language": "English",
+            "filename": "timespinner/setup_en.md",
+            "link": "timespinner/setup/en",
+            "authors": [
+              "Jarno"
+            ]
+          },
+          {
+            "language": "German",
+            "filename": "timespinner/setup_de.md",
+            "link": "timespinner/setup/de",
+            "authors": [
+              "Grrmo",
+              "Fynxes",
+              "Blaze0168"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Subnautica",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Subnautica randomizer connected to an Archipelago Multiworld",
+        "files": [
+          {
+            "language": "English",
+            "filename": "Subnautica/setup_en.md",
+            "link": "Subnautica/setup/en",
+            "authors": [
+              "Berserker"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Super Metroid",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Super Metroid Client on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "super-metroid/multiworld_en.md",
+            "link": "super-metroid/multiworld/en",
+            "authors": [
+              "Farrak Kilhn"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Secret of Evermore",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to playing Secret of Evermore randomizer. This guide covers single-player, multiworld and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "secret-of-evermore/multiworld_en.md",
+            "link": "secret-of-evermore/multiworld/en",
+            "authors": [
+              "Black Sliver"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Final Fantasy",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to playing Final Fantasy multiworld. This guide only covers playing multiworld.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "ff1/multiworld_en.md",
+            "link": "ff1/multiworld/en",
+            "authors": [
+              "jat2980"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Rogue Legacy",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Rogue Legacy Randomizer software on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "rogue-legacy/rogue-legacy_en.md",
+            "link": "rogue-legacy/rogue-legacy/en",
+            "authors": [
+              "Phar"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Slay the Spire",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up Slay the Spire for Archipelago. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "slay-the-spire/slay-the-spire_en.md",
+            "link": "slay-the-spire/slay-the-spire/en",
+            "authors": [
+              "Phar"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Super Mario 64 EX",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up SM64EX for MultiWorld.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "sm64ex/setup_en.md",
+            "link": "sm64ex/setup/en",
+            "authors": [
+              "N00byKing"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "VVVVVV",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up VVVVVV for MultiWorld.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "v6/setup_en.md",
+            "link": "v6/setup/en",
+            "authors": [
+              "N00byKing"
             ]
           }
         ]

@@ -14,14 +14,15 @@ import tkinter as tk
 from argparse import Namespace
 from concurrent.futures import as_completed, ThreadPoolExecutor
 from glob import glob
-from tkinter import Tk, Frame, Label, StringVar, Entry, filedialog, messagebox, Button, LEFT, X, TOP, LabelFrame, \
-    IntVar, Checkbutton, E, OptionMenu, Toplevel, BOTTOM, RIGHT, font as font, PhotoImage
+from tkinter import Tk, Frame, Label, StringVar, Entry, filedialog, messagebox, Button, Radiobutton, LEFT, X, TOP, LabelFrame, \
+    IntVar, Checkbutton, E, W, OptionMenu, Toplevel, BOTTOM, RIGHT, font as font, PhotoImage
+from tkinter.constants import DISABLED, NORMAL
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
-from Utils import output_path, local_path, open_file
-
+from Utils import output_path, local_path, open_file, get_cert_none_ssl_context, persistent_store, get_adjuster_settings, tkinter_center_window
+from Patch import GAME_ALTTP
 
 class AdjusterWorld(object):
     def __init__(self, sprite_pool):
@@ -51,6 +52,7 @@ def main():
                              (default: %(default)s)
                              ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
+    parser.add_argument('--deathlink', help='Enable DeathLink system.', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
     parser.add_argument('--triforcehud', default='hide_goal', const='hide_goal', nargs='?',
                         choices=['normal', 'hide_goal', 'hide_required', 'hide_both'],
@@ -101,13 +103,14 @@ def main():
     parser.add_argument('--update_sprites', action='store_true', help='Update Sprite Database, then exit.')
     args = parser.parse_args()
     args.music = not args.disablemusic
-    if args.update_sprites:
-        run_sprite_update()
-        sys.exit()
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
         args.loglevel]
     logging.basicConfig(format='%(message)s', level=loglevel)
+
+    if args.update_sprites:
+        run_sprite_update()
+        sys.exit()
 
     if not os.path.isfile(args.rom):
         adjustGUI()
@@ -117,10 +120,9 @@ def main():
             sys.exit(1)
 
         args, path = adjust(args=args)
-        from Utils import persistent_store
         if isinstance(args.sprite, Sprite):
             args.sprite = args.sprite.name
-        persistent_store("adjuster", "last_settings_3", args)
+        persistent_store("adjuster", GAME_ALTTP, args)
 
 
 def adjust(args):
@@ -152,7 +154,8 @@ def adjust(args):
         world = getattr(args, "world")
 
     apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.menuspeed, args.music,
-                       args.sprite, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world)
+                       args.sprite, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world,
+                       deathlink=args.deathlink)
     path = output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc')
     rom.write_to_file(path)
 
@@ -194,6 +197,7 @@ def adjustGUI():
 
     def adjustRom():
         guiargs = Namespace()
+        guiargs.auto_apply = rom_vars.auto_apply.get()
         guiargs.heartbeep = rom_vars.heartbeepVar.get()
         guiargs.heartcolor = rom_vars.heartcolorVar.get()
         guiargs.menuspeed = rom_vars.menuspeedVar.get()
@@ -205,6 +209,7 @@ def adjustGUI():
         guiargs.quickswap = bool(rom_vars.quickSwapVar.get())
         guiargs.music = bool(rom_vars.MusicVar.get())
         guiargs.reduceflashing = bool(rom_vars.disableFlashingVar.get())
+        guiargs.deathlink = bool(rom_vars.DeathLinkVar.get())
         guiargs.rom = romVar2.get()
         guiargs.baserom = romVar.get()
         guiargs.sprite = rom_vars.sprite
@@ -221,29 +226,61 @@ def adjustGUI():
             messagebox.showerror(title="Error while adjusting Rom", message=str(e))
         else:
             messagebox.showinfo(title="Success", message=f"Rom patched successfully to {path}")
-            from Utils import persistent_store
             if isinstance(guiargs.sprite, Sprite):
                 guiargs.sprite = guiargs.sprite.name
-            persistent_store("adjuster", "last_settings_3", guiargs)
+            delattr(guiargs, "rom")
+            persistent_store("adjuster", GAME_ALTTP, guiargs)
+
+    def saveGUISettings():
+        guiargs = Namespace()
+        guiargs.auto_apply = rom_vars.auto_apply.get()
+        guiargs.heartbeep = rom_vars.heartbeepVar.get()
+        guiargs.heartcolor = rom_vars.heartcolorVar.get()
+        guiargs.menuspeed = rom_vars.menuspeedVar.get()
+        guiargs.ow_palettes = rom_vars.owPalettesVar.get()
+        guiargs.uw_palettes = rom_vars.uwPalettesVar.get()
+        guiargs.hud_palettes = rom_vars.hudPalettesVar.get()
+        guiargs.sword_palettes = rom_vars.swordPalettesVar.get()
+        guiargs.shield_palettes = rom_vars.shieldPalettesVar.get()
+        guiargs.quickswap = bool(rom_vars.quickSwapVar.get())
+        guiargs.music = bool(rom_vars.MusicVar.get())
+        guiargs.reduceflashing = bool(rom_vars.disableFlashingVar.get())
+        guiargs.deathlink = bool(rom_vars.DeathLinkVar.get())
+        guiargs.baserom = romVar.get()
+        if isinstance(rom_vars.sprite, Sprite):
+            guiargs.sprite = rom_vars.sprite.name
+        else:
+            guiargs.sprite = rom_vars.sprite
+        guiargs.sprite_pool = rom_vars.sprite_pool
+        persistent_store("adjuster", GAME_ALTTP, guiargs)
+        messagebox.showinfo(title="Success", message="Settings saved to persistent storage")
 
     adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
     rom_options_frame.pack(side=TOP)
-    adjustButton.pack(side=BOTTOM, padx=(5, 5))
+    adjustButton.pack(side=LEFT, padx=(5,5))
 
-    bottomFrame2.pack(side=BOTTOM, pady=(5, 5))
+    saveButton = Button(bottomFrame2, text='Save Settings', command=saveGUISettings)
+    saveButton.pack(side=LEFT, padx=(5,5))
 
+    bottomFrame2.pack(side=TOP, pady=(5,5))
+
+    tkinter_center_window(adjustWindow)
     adjustWindow.mainloop()
 
 
 def run_sprite_update():
     import threading
     done = threading.Event()
-    top = Tk()
-    top.withdraw()
-    BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
+    try:
+        top = Tk()
+    except:
+        task = BackgroundTaskProgressNullWindow(update_sprites, lambda successful, resultmessage: done.set())
+    else:
+        top.withdraw()
+        task = BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
     while not done.isSet():
-        top.update()
-    print("Done updating sprites")
+        task.do_events()
+    logging.info("Done updating sprites")
 
 
 def update_sprites(task, on_finish=None):
@@ -251,7 +288,7 @@ def update_sprites(task, on_finish=None):
     successful = True
     sprite_dir = local_path("data", "sprites", "alttpr")
     os.makedirs(sprite_dir, exist_ok=True)
-
+    ctx = get_cert_none_ssl_context()
     def finished():
         task.close_window()
         if on_finish:
@@ -259,7 +296,7 @@ def update_sprites(task, on_finish=None):
 
     try:
         task.update_status("Downloading alttpr sprites list")
-        with urlopen('https://alttpr.com/sprites') as response:
+        with urlopen('https://alttpr.com/sprites', context=ctx) as response:
             sprites_arr = json.loads(response.read().decode("utf-8"))
     except Exception as e:
         resultmessage = "Error getting list of alttpr sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
@@ -272,25 +309,25 @@ def update_sprites(task, on_finish=None):
         current_sprites = [os.path.basename(file) for file in glob(sprite_dir + '/*')]
         alttpr_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path))
                           for sprite in sprites_arr if sprite["author"] != "Nintendo"]
-        needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in alttpr_sprites if filename not in current_sprites]
+        needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in alttpr_sprites if
+                          filename not in current_sprites]
 
         alttpr_filenames = [filename for (_, filename) in alttpr_sprites]
         obsolete_sprites = [sprite for sprite in current_sprites if sprite not in alttpr_filenames]
     except Exception as e:
-        resultmessage = "Error Determining which sprites to update. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
+        resultmessage = "Error Determining which sprites to update. Sprites not updated.\n\n%s: %s" % (
+        type(e).__name__, e)
         successful = False
         task.queue_event(finished)
         return
 
-
     def dl(sprite_url, filename):
         target = os.path.join(sprite_dir, filename)
-        with urlopen(sprite_url) as response, open(target, 'wb') as out:
+        with urlopen(sprite_url, context=ctx) as response, open(target, 'wb') as out:
             shutil.copyfileobj(response, out)
 
     def rem(sprite):
         os.remove(os.path.join(sprite_dir, sprite))
-
 
     with ThreadPoolExecutor() as pool:
         dl_tasks = []
@@ -313,7 +350,7 @@ def update_sprites(task, on_finish=None):
             except Exception as e:
                 logging.exception(e)
                 resultmessage = "Error downloading sprite. Not all sprites updated.\n\n%s: %s" % (
-                type(e).__name__, e)
+                    type(e).__name__, e)
                 successful = False
 
         for rem_task in as_completed(rem_tasks):
@@ -324,7 +361,7 @@ def update_sprites(task, on_finish=None):
             except Exception as e:
                 logging.exception(e)
                 resultmessage = "Error removing obsolete sprite. Not all sprites updated.\n\n%s: %s" % (
-                type(e).__name__, e)
+                    type(e).__name__, e)
                 successful = False
 
     if successful:
@@ -362,7 +399,7 @@ class BackgroundTask(object):
                 event = self.queue.get_nowait()
                 event()
                 if self.running:
-                    #if self is no longer running self.window may no longer be valid
+                    # if self is no longer running self.window may no longer be valid
                     self.window.update_idletasks()
         except queue.Empty:
             pass
@@ -397,16 +434,48 @@ class BackgroundTaskProgress(BackgroundTask):
     def update_status(self, text):
         self.queue_event(lambda: self.label_var.set(text))
 
+    def do_events(self):
+        self.parent.update()
+
     # only call this in an event callback
     def close_window(self):
         self.stop()
         self.window.destroy()
 
 
+class BackgroundTaskProgressNullWindow(BackgroundTask):
+    def __init__(self, code_to_run, *args):
+        super().__init__(None, code_to_run, *args)
+
+    def process_queue(self):
+        try:
+            while True:
+                if not self.running:
+                    return
+                event = self.queue.get_nowait()
+                event()
+        except queue.Empty:
+            pass
+
+    def do_events(self):
+        self.process_queue()
+
+    def update_status(self, text):
+        self.queue_event(lambda: logging.info(text))
+
+    def close_window(self):
+        self.stop()
+
+
 def get_rom_frame(parent=None):
+    adjuster_settings = get_adjuster_settings(GAME_ALTTP)
+    if not adjuster_settings:
+        adjuster_settings = Namespace()
+        adjuster_settings.baserom = "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
+
     romFrame = Frame(parent)
     baseRomLabel = Label(romFrame, text='LttP Base Rom: ')
-    romVar = StringVar(value="Zelda no Densetsu - Kamigami no Triforce (Japan).sfc")
+    romVar = StringVar(value=adjuster_settings.baserom)
     romEntry = Entry(romFrame, textvariable=romVar)
 
     def RomSelect():
@@ -420,6 +489,7 @@ def get_rom_frame(parent=None):
             romVar.set(rom)
             romSelectButton['state'] = "disabled"
             romSelectButton["text"] = "ROM verified"
+
     romSelectButton = Button(romFrame, text='Select Rom', command=RomSelect)
 
     baseRomLabel.pack(side=LEFT)
@@ -431,6 +501,26 @@ def get_rom_frame(parent=None):
 
 
 def get_rom_options_frame(parent=None):
+    adjuster_settings = get_adjuster_settings(GAME_ALTTP)
+    if not adjuster_settings:
+        adjuster_settings = Namespace()
+        adjuster_settings.auto_apply = 'ask'
+        adjuster_settings.music = True
+        adjuster_settings.reduceflashing = True
+        adjuster_settings.deathlink = False
+        adjuster_settings.sprite = None
+        adjuster_settings.quickswap = True
+        adjuster_settings.menuspeed = 'normal'
+        adjuster_settings.heartcolor = 'red'
+        adjuster_settings.heartbeep = 'normal'
+        adjuster_settings.ow_palettes = 'default'
+        adjuster_settings.uw_palettes = 'default'
+        adjuster_settings.hud_palettes = 'default'
+        adjuster_settings.sword_palettes = 'default'
+        adjuster_settings.shield_palettes = 'default'
+    if not hasattr(adjuster_settings, 'sprite_pool'):
+        adjuster_settings.sprite_pool = []
+
     romOptionsFrame = LabelFrame(parent, text="Rom options")
     romOptionsFrame.columnconfigure(0, weight=1)
     romOptionsFrame.columnconfigure(1, weight=1)
@@ -439,22 +529,26 @@ def get_rom_options_frame(parent=None):
     vars = Namespace()
 
     vars.MusicVar = IntVar()
-    vars.MusicVar.set(1)
+    vars.MusicVar.set(adjuster_settings.music)
     MusicCheckbutton = Checkbutton(romOptionsFrame, text="Music", variable=vars.MusicVar)
     MusicCheckbutton.grid(row=0, column=0, sticky=E)
 
-    vars.disableFlashingVar = IntVar(value=1)
-    disableFlashingCheckbutton = Checkbutton(romOptionsFrame, text="Disable flashing (anti-epilepsy)", variable=vars.disableFlashingVar)
-    disableFlashingCheckbutton.grid(row=6, column=0, sticky=E)
+    vars.disableFlashingVar = IntVar(value=adjuster_settings.reduceflashing)
+    disableFlashingCheckbutton = Checkbutton(romOptionsFrame, text="Disable flashing (anti-epilepsy)",
+                                             variable=vars.disableFlashingVar)
+    disableFlashingCheckbutton.grid(row=6, column=0, sticky=W)
+
+    vars.DeathLinkVar = IntVar(value=adjuster_settings.deathlink)
+    DeathLinkCheckbutton = Checkbutton(romOptionsFrame, text="DeathLink (Team Deaths)", variable=vars.DeathLinkVar)
+    DeathLinkCheckbutton.grid(row=7, column=0, sticky=W)
 
     spriteDialogFrame = Frame(romOptionsFrame)
     spriteDialogFrame.grid(row=0, column=1)
     baseSpriteLabel = Label(spriteDialogFrame, text='Sprite:')
 
-
-
     vars.spriteNameVar = StringVar()
-    vars.sprite = None
+    vars.sprite = adjuster_settings.sprite
+
     def set_sprite(sprite_param):
         nonlocal vars
         if isinstance(sprite_param, str):
@@ -467,8 +561,8 @@ def get_rom_options_frame(parent=None):
             vars.sprite = sprite_param
             vars.spriteNameVar.set(vars.sprite.name)
 
-    set_sprite(None)
-    vars.spriteNameVar.set('(unchanged)')
+    set_sprite(adjuster_settings.sprite)
+    #vars.spriteNameVar.set(adjuster_settings.sprite)
     spriteEntry = Label(spriteDialogFrame, textvariable=vars.spriteNameVar)
 
     def SpriteSelect():
@@ -481,7 +575,7 @@ def get_rom_options_frame(parent=None):
     spriteEntry.pack(side=LEFT)
     spriteSelectButton.pack(side=LEFT)
 
-    vars.quickSwapVar = IntVar(value=1)
+    vars.quickSwapVar = IntVar(value=adjuster_settings.quickswap)
     quickSwapCheckbutton = Checkbutton(romOptionsFrame, text="L/R Quickswapping", variable=vars.quickSwapVar)
     quickSwapCheckbutton.grid(row=1, column=0, sticky=E)
 
@@ -490,8 +584,9 @@ def get_rom_options_frame(parent=None):
     menuspeedLabel = Label(menuspeedFrame, text='Menu speed')
     menuspeedLabel.pack(side=LEFT)
     vars.menuspeedVar = StringVar()
-    vars.menuspeedVar.set('normal')
-    menuspeedOptionMenu = OptionMenu(menuspeedFrame, vars.menuspeedVar, 'normal', 'instant', 'double', 'triple', 'quadruple', 'half')
+    vars.menuspeedVar.set(adjuster_settings.menuspeed)
+    menuspeedOptionMenu = OptionMenu(menuspeedFrame, vars.menuspeedVar, 'normal', 'instant', 'double', 'triple',
+                                     'quadruple', 'half')
     menuspeedOptionMenu.pack(side=LEFT)
 
     heartcolorFrame = Frame(romOptionsFrame)
@@ -499,7 +594,7 @@ def get_rom_options_frame(parent=None):
     heartcolorLabel = Label(heartcolorFrame, text='Heart color')
     heartcolorLabel.pack(side=LEFT)
     vars.heartcolorVar = StringVar()
-    vars.heartcolorVar.set('red')
+    vars.heartcolorVar.set(adjuster_settings.heartcolor)
     heartcolorOptionMenu = OptionMenu(heartcolorFrame, vars.heartcolorVar, 'red', 'blue', 'green', 'yellow', 'random')
     heartcolorOptionMenu.pack(side=LEFT)
 
@@ -508,7 +603,7 @@ def get_rom_options_frame(parent=None):
     heartbeepLabel = Label(heartbeepFrame, text='Heartbeep')
     heartbeepLabel.pack(side=LEFT)
     vars.heartbeepVar = StringVar()
-    vars.heartbeepVar.set('normal')
+    vars.heartbeepVar.set(adjuster_settings.heartbeep)
     heartbeepOptionMenu = OptionMenu(heartbeepFrame, vars.heartbeepVar, 'double', 'normal', 'half', 'quarter', 'off')
     heartbeepOptionMenu.pack(side=LEFT)
 
@@ -517,8 +612,9 @@ def get_rom_options_frame(parent=None):
     owPalettesLabel = Label(owPalettesFrame, text='Overworld palettes')
     owPalettesLabel.pack(side=LEFT)
     vars.owPalettesVar = StringVar()
-    vars.owPalettesVar.set('default')
-    owPalettesOptionMenu = OptionMenu(owPalettesFrame, vars.owPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    vars.owPalettesVar.set(adjuster_settings.ow_palettes)
+    owPalettesOptionMenu = OptionMenu(owPalettesFrame, vars.owPalettesVar, 'default', 'good', 'blackout', 'grayscale',
+                                      'negative', 'classic', 'dizzy', 'sick', 'puke')
     owPalettesOptionMenu.pack(side=LEFT)
 
     uwPalettesFrame = Frame(romOptionsFrame)
@@ -526,8 +622,9 @@ def get_rom_options_frame(parent=None):
     uwPalettesLabel = Label(uwPalettesFrame, text='Dungeon palettes')
     uwPalettesLabel.pack(side=LEFT)
     vars.uwPalettesVar = StringVar()
-    vars.uwPalettesVar.set('default')
-    uwPalettesOptionMenu = OptionMenu(uwPalettesFrame, vars.uwPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    vars.uwPalettesVar.set(adjuster_settings.uw_palettes)
+    uwPalettesOptionMenu = OptionMenu(uwPalettesFrame, vars.uwPalettesVar, 'default', 'good', 'blackout', 'grayscale',
+                                      'negative', 'classic', 'dizzy', 'sick', 'puke')
     uwPalettesOptionMenu.pack(side=LEFT)
 
     hudPalettesFrame = Frame(romOptionsFrame)
@@ -535,8 +632,9 @@ def get_rom_options_frame(parent=None):
     hudPalettesLabel = Label(hudPalettesFrame, text='HUD palettes')
     hudPalettesLabel.pack(side=LEFT)
     vars.hudPalettesVar = StringVar()
-    vars.hudPalettesVar.set('default')
-    hudPalettesOptionMenu = OptionMenu(hudPalettesFrame, vars.hudPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    vars.hudPalettesVar.set(adjuster_settings.hud_palettes)
+    hudPalettesOptionMenu = OptionMenu(hudPalettesFrame, vars.hudPalettesVar, 'default', 'good', 'blackout',
+                                       'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     hudPalettesOptionMenu.pack(side=LEFT)
 
     swordPalettesFrame = Frame(romOptionsFrame)
@@ -544,8 +642,9 @@ def get_rom_options_frame(parent=None):
     swordPalettesLabel = Label(swordPalettesFrame, text='Sword palettes')
     swordPalettesLabel.pack(side=LEFT)
     vars.swordPalettesVar = StringVar()
-    vars.swordPalettesVar.set('default')
-    swordPalettesOptionMenu = OptionMenu(swordPalettesFrame, vars.swordPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    vars.swordPalettesVar.set(adjuster_settings.sword_palettes)
+    swordPalettesOptionMenu = OptionMenu(swordPalettesFrame, vars.swordPalettesVar, 'default', 'good', 'blackout',
+                                         'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     swordPalettesOptionMenu.pack(side=LEFT)
 
     shieldPalettesFrame = Frame(romOptionsFrame)
@@ -553,8 +652,9 @@ def get_rom_options_frame(parent=None):
     shieldPalettesLabel = Label(shieldPalettesFrame, text='Shield palettes')
     shieldPalettesLabel.pack(side=LEFT)
     vars.shieldPalettesVar = StringVar()
-    vars.shieldPalettesVar.set('default')
-    shieldPalettesOptionMenu = OptionMenu(shieldPalettesFrame, vars.shieldPalettesVar, 'default', 'good', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    vars.shieldPalettesVar.set(adjuster_settings.shield_palettes)
+    shieldPalettesOptionMenu = OptionMenu(shieldPalettesFrame, vars.shieldPalettesVar, 'default', 'good', 'blackout',
+                                          'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     shieldPalettesOptionMenu.pack(side=LEFT)
 
     spritePoolFrame = Frame(romOptionsFrame)
@@ -562,7 +662,8 @@ def get_rom_options_frame(parent=None):
     baseSpritePoolLabel = Label(spritePoolFrame, text='Sprite Pool:')
 
     vars.spritePoolCountVar = StringVar()
-    vars.sprite_pool = []
+    vars.sprite_pool = adjuster_settings.sprite_pool
+
     def set_sprite_pool(sprite_param):
         nonlocal vars
         operation = "add"
@@ -580,7 +681,7 @@ def get_rom_options_frame(parent=None):
         vars.spritePoolCountVar.set(str(len(vars.sprite_pool)))
 
     set_sprite_pool(None)
-    vars.spritePoolCountVar.set('0')
+    vars.spritePoolCountVar.set(len(adjuster_settings.sprite_pool))
     spritePoolEntry = Label(spritePoolFrame, textvariable=vars.spritePoolCountVar)
 
     def SpritePoolSelect():
@@ -599,6 +700,18 @@ def get_rom_options_frame(parent=None):
     spritePoolEntry.pack(side=LEFT)
     spritePoolSelectButton.pack(side=LEFT)
     spritePoolClearButton.pack(side=LEFT)
+
+    vars.auto_apply = StringVar(value=adjuster_settings.auto_apply)
+    autoApplyFrame = Frame(romOptionsFrame)
+    autoApplyFrame.grid(row=8, column=0, columnspan=2, sticky=W)
+    filler = Label(autoApplyFrame, text="Automatically apply last used settings on opening .apbp files")
+    filler.pack(side=TOP, expand=True, fill=X)
+    askRadio = Radiobutton(autoApplyFrame, text='Ask', variable=vars.auto_apply, value='ask')
+    askRadio.pack(side=LEFT, padx=5, pady=5)
+    alwaysRadio = Radiobutton(autoApplyFrame, text='Always', variable=vars.auto_apply, value='always')
+    alwaysRadio.pack(side=LEFT, padx=5, pady=5)
+    neverRadio = Radiobutton(autoApplyFrame, text='Never', variable=vars.auto_apply, value='never')
+    neverRadio.pack(side=LEFT, padx=5, pady=5)
 
     return romOptionsFrame, vars, set_sprite
 
@@ -632,8 +745,10 @@ class SpriteSelector():
         title_link.pack(side=LEFT)
         title_link.bind("<Button-1>", open_custom_sprite_dir)
 
-        self.icon_section(alttpr_frametitle, self.alttpr_sprite_dir, 'ALTTPR sprites not found. Click "Update alttpr sprites" to download them.')
-        self.icon_section(custom_frametitle, self.custom_sprite_dir, 'Put sprites in the custom sprites folder (see open link above) to have them appear here.')
+        self.icon_section(alttpr_frametitle, self.alttpr_sprite_dir,
+                          'ALTTPR sprites not found. Click "Update alttpr sprites" to download them.')
+        self.icon_section(custom_frametitle, self.custom_sprite_dir,
+                          'Put sprites in the custom sprites folder (see open link above) to have them appear here.')
         if not randomOnEvent:
             self.sprite_pool_section(spritePool)
 
@@ -646,6 +761,9 @@ class SpriteSelector():
 
         button = Button(frame, text="Update alttpr sprites", command=self.update_alttpr_sprites)
         button.pack(side=RIGHT, padx=(5, 0))
+        
+        button = Button(frame, text="Do not adjust sprite",command=self.use_default_sprite)
+        button.pack(side=LEFT,padx=(0,5))
 
         button = Button(frame, text="Default Link sprite", command=self.use_default_link_sprite)
         button.pack(side=LEFT, padx=(0, 5))
@@ -663,35 +781,36 @@ class SpriteSelector():
         self.randomOnItemVar = IntVar()
         self.randomOnBonkVar = IntVar()
         self.randomOnRandomVar = IntVar()
+        self.randomOnAllVar = IntVar()
 
         if self.randomOnEvent:
-            button = Checkbutton(frame, text="Hit", command=self.update_random_button, variable=self.randomOnHitVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonHit = Checkbutton(frame, text="Hit", command=self.update_random_button, variable=self.randomOnHitVar)
+            self.buttonHit.pack(side=LEFT, padx=(0, 5))
 
-            button = Checkbutton(frame, text="Enter", command=self.update_random_button, variable=self.randomOnEnterVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonEnter = Checkbutton(frame, text="Enter", command=self.update_random_button, variable=self.randomOnEnterVar)
+            self.buttonEnter.pack(side=LEFT, padx=(0, 5))
 
-            button = Checkbutton(frame, text="Exit", command=self.update_random_button, variable=self.randomOnExitVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonExit = Checkbutton(frame, text="Exit", command=self.update_random_button, variable=self.randomOnExitVar)
+            self.buttonExit.pack(side=LEFT, padx=(0, 5))
 
-            button = Checkbutton(frame, text="Slash", command=self.update_random_button, variable=self.randomOnSlashVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonSlash = Checkbutton(frame, text="Slash", command=self.update_random_button, variable=self.randomOnSlashVar)
+            self.buttonSlash.pack(side=LEFT, padx=(0, 5))
 
-            button = Checkbutton(frame, text="Item", command=self.update_random_button, variable=self.randomOnItemVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonItem = Checkbutton(frame, text="Item", command=self.update_random_button, variable=self.randomOnItemVar)
+            self.buttonItem.pack(side=LEFT, padx=(0, 5))
 
-            button = Checkbutton(frame, text="Bonk", command=self.update_random_button, variable=self.randomOnBonkVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonBonk = Checkbutton(frame, text="Bonk", command=self.update_random_button, variable=self.randomOnBonkVar)
+            self.buttonBonk.pack(side=LEFT, padx=(0, 5))
 
-            button = Checkbutton(frame, text="Random", command=self.update_random_button, variable=self.randomOnRandomVar)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonRandom = Checkbutton(frame, text="Random", command=self.update_random_button, variable=self.randomOnRandomVar)
+            self.buttonRandom.pack(side=LEFT, padx=(0, 5))
 
-        if adjuster:
-            button = Button(frame, text="Current sprite from rom", command=self.use_default_sprite)
-            button.pack(side=LEFT, padx=(0, 5))
+            self.buttonAll = Checkbutton(frame, text="All", command=self.update_random_button, variable=self.randomOnAllVar)
+            self.buttonAll.pack(side=LEFT, padx=(0, 5))
 
         set_icon(self.window)
         self.window.focus()
+        tkinter_center_window(self.window)
 
     def remove_from_sprite_pool(self, button, spritename):
         self.callback(("remove", spritename))
@@ -805,7 +924,6 @@ class SpriteSelector():
 
         BackgroundTaskProgress(self.parent, update_sprites, "Updating Sprites", on_finish)
 
-
     def browse_for_sprite(self):
         sprite = filedialog.askopenfilename(
             filetypes=[("All Sprite Sources", (".zspr", ".spr", ".sfc", ".smc")),
@@ -818,7 +936,6 @@ class SpriteSelector():
         except Exception:
             self.callback(None)
         self.window.destroy()
-
 
     def use_default_sprite(self):
         self.callback(None)
@@ -833,9 +950,31 @@ class SpriteSelector():
             self.add_to_sprite_pool("link")
 
     def update_random_button(self):
-        if self.randomOnRandomVar.get():
+        if self.randomOnAllVar.get():
+            randomon = "all"
+            self.buttonHit.config(state=DISABLED)
+            self.buttonEnter.config(state=DISABLED)
+            self.buttonExit.config(state=DISABLED)
+            self.buttonSlash.config(state=DISABLED)
+            self.buttonItem.config(state=DISABLED)
+            self.buttonBonk.config(state=DISABLED)
+            self.buttonRandom.config(state=DISABLED)
+        elif self.randomOnRandomVar.get():
             randomon = "random"
+            self.buttonHit.config(state=DISABLED)
+            self.buttonEnter.config(state=DISABLED)
+            self.buttonExit.config(state=DISABLED)
+            self.buttonSlash.config(state=DISABLED)
+            self.buttonItem.config(state=DISABLED)
+            self.buttonBonk.config(state=DISABLED)
         else:
+            self.buttonHit.config(state=NORMAL)
+            self.buttonEnter.config(state=NORMAL)
+            self.buttonExit.config(state=NORMAL)
+            self.buttonSlash.config(state=NORMAL)
+            self.buttonItem.config(state=NORMAL)
+            self.buttonBonk.config(state=NORMAL)
+            self.buttonRandom.config(state=NORMAL)
             randomon = "-hit" if self.randomOnHitVar.get() else ""
             randomon += "-enter" if self.randomOnEnterVar.get() else ""
             randomon += "-exit" if self.randomOnExitVar.get() else ""
@@ -923,7 +1062,8 @@ def get_image_for_sprite(sprite, gif_only: bool = False):
         gif_lsd = bytearray(7)
         gif_lsd[0] = width
         gif_lsd[2] = height
-        gif_lsd[4] = 0xF4  # 32 color palette follows.  transparant + 15 for sprite + 1 for shadow=17 which rounds up to 32 as nearest power of 2
+        gif_lsd[
+            4] = 0xF4  # 32 color palette follows.  transparant + 15 for sprite + 1 for shadow=17 which rounds up to 32 as nearest power of 2
         gif_lsd[5] = 0  # background color is zero
         gif_lsd[6] = 0  # aspect raio not specified
         gif_gct = bytearray(3 * 32)
@@ -943,7 +1083,8 @@ def get_image_for_sprite(sprite, gif_only: bool = False):
         gif_id[7] = height
         gif_id[9] = 0  # no local color table
 
-        gif_img_minimum_code_size = bytes([7])  # we choose 7 bits, so that each pixel is represented by a byte, for conviennce.
+        gif_img_minimum_code_size = bytes(
+            [7])  # we choose 7 bits, so that each pixel is represented by a byte, for conviennce.
 
         clear = 0x80
         stop = 0x81
@@ -1099,6 +1240,7 @@ class ToolTips(object):
         if cls.after_id:
             widget.after_cancel(cls.after_id)
             cls.after_id = None
+
 
 if __name__ == '__main__':
     main()

@@ -4,7 +4,8 @@ import Utils
 from Patch import read_rom
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '13a75c5dd28055fbcf8f69bd8161871d'
+RANDOMIZERBASEHASH = '9952c2a3ec1b421e408df0d20c8f0c7f'
+ROM_PLAYER_LIMIT = 255
 
 import io
 import json
@@ -20,9 +21,8 @@ import concurrent.futures
 import bsdiff4
 from typing import Optional
 
-from BaseClasses import CollectionState, Region
-from worlds.alttp.SubClasses import ALttPLocation
-from worlds.alttp.Shops import ShopType
+from BaseClasses import CollectionState, Region, Location
+from worlds.alttp.Shops import ShopType, ShopPriceType
 from worlds.alttp.Dungeons import dungeon_music_addresses
 from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
 from worlds.alttp.Text import MultiByteTextMapper, text_addresses, Credits, TextTable
@@ -35,7 +35,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from Utils import local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen
-from worlds.alttp.Items import ItemFactory, item_table
+from worlds.alttp.Items import ItemFactory, item_table, item_name_groups, progression_items
 from worlds.alttp.EntranceShuffle import door_addresses
 from worlds.alttp.Options import smallkey_shuffle
 import Patch
@@ -754,13 +754,6 @@ def get_nonnative_item_sprite(item: str) -> int:
 def patch_rom(world, rom, player, enemized):
     local_random = world.slot_seeds[player]
 
-    # progressive bow silver arrow hint hack
-    prog_bow_locs = world.find_items('Progressive Bow', player)
-    if len(prog_bow_locs) > 1:
-        # only pick a distingushed bow if we have at least two
-        distinguished_prog_bow_loc = local_random.choice(prog_bow_locs)
-        distinguished_prog_bow_loc.item.code = 0x65
-
     # patch items
 
     for location in world.get_locations():
@@ -773,7 +766,10 @@ def patch_rom(world, rom, player, enemized):
 
             if location.item is not None:
                 if not location.native_item:
-                    itemid = get_nonnative_item_sprite(location.item.game)
+                    if location.item.trap:
+                        itemid = 0x5A  # Nothing, which disguises
+                    else:
+                        itemid = get_nonnative_item_sprite(location.item.name)
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):
@@ -791,7 +787,7 @@ def patch_rom(world, rom, player, enemized):
                     rom.write_byte(location.player_address, 0xFF)
                 elif location.item.player != player:
                     if location.player_address is not None:
-                        rom.write_byte(location.player_address, location.item.player)
+                        rom.write_byte(location.player_address, min(location.item.player, ROM_PLAYER_LIMIT))
                     else:
                         itemid = 0x5A
             location_address = old_location_address_to_new_location_address.get(location.address, location.address)
@@ -836,7 +832,9 @@ def patch_rom(world, rom, player, enemized):
                                           'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit',
                                           'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit',
                                           'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
-                                          'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)'}:
+                                          'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)'} and \
+                            (world.logic[player] not in ['hybridglitches', 'nologic'] or 
+                                exit.name not in {'Palace of Darkness Exit', 'Tower of Hera Exit', 'Swamp Palace Exit'}):
                         # For exits that connot be reached from another, no need to apply offset fixes.
                         rom.write_int16(0x15DB5 + 2 * offset, link_y)  # same as final else
                     elif room_id == 0x0059 and world.fix_skullwoods_exit[player]:
@@ -1020,17 +1018,15 @@ def patch_rom(world, rom, player, enemized):
     # Set overflow items for progressive equipment
     rom.write_bytes(0x180090,
                     [difficulty.progressive_sword_limit if not world.swordless[player] else 0,
-                     overflow_replacement,
-                     difficulty.progressive_shield_limit, overflow_replacement,
-                     difficulty.progressive_armor_limit, overflow_replacement,
-                     difficulty.progressive_bottle_limit, overflow_replacement])
-
-    # Work around for json patch ordering issues - write bow limit separately so that it is replaced in the patch
-    rom.write_bytes(0x180098, [difficulty.progressive_bow_limit, overflow_replacement])
+                     item_table[difficulty.basicsword[-1]].item_code,
+                     difficulty.progressive_shield_limit, item_table[difficulty.basicshield[-1]].item_code,
+                     difficulty.progressive_armor_limit, item_table[difficulty.basicarmor[-1]].item_code,
+                     difficulty.progressive_bottle_limit, overflow_replacement,
+                     difficulty.progressive_bow_limit, item_table[difficulty.basicbow[-1]].item_code])
 
     if difficulty.progressive_bow_limit < 2 and (
             world.swordless[player] or world.logic[player] == 'noglitches'):
-        rom.write_bytes(0x180098, [2, overflow_replacement])
+        rom.write_bytes(0x180098, [2, item_table["Silver Bow"].item_code])
         rom.write_byte(0x180181, 0x01)  # Make silver arrows work only on ganon
         rom.write_byte(0x180182, 0x00)  # Don't auto equip silvers on pickup
 
@@ -1317,9 +1313,7 @@ def patch_rom(world, rom, player, enemized):
         equip[0x37B] = 1
         equip[0x36E] = 0x80
 
-    for item in world.precollected_items:
-        if item.player != player:
-            continue
+    for item in world.precollected_items[player]:
 
         if item.name in {'Bow', 'Silver Bow', 'Silver Arrows', 'Progressive Bow', 'Progressive Bow (Alt)',
                          'Titans Mitts', 'Power Glove', 'Progressive Glove',
@@ -1538,7 +1532,7 @@ def patch_rom(world, rom, player, enemized):
     }
 
     def get_reveal_bytes(itemName):
-        locations = world.find_items(itemName, player)
+        locations = world.find_item_locations(itemName, player)
         if len(locations) < 1:
             return 0x0000
         location = locations[0]
@@ -1657,8 +1651,11 @@ def patch_rom(world, rom, player, enemized):
     rom.write_bytes(0x7FC0, rom.name)
 
     # set player names
-    for p in range(1, min(world.players, 255) + 1):
+    encoded_players = world.players + len(world.groups)
+    for p in range(1, min(encoded_players, ROM_PLAYER_LIMIT) + 1):
         rom.write_bytes(0x195FFC + ((p - 1) * 32), hud_format_text(world.player_name[p]))
+    if encoded_players > ROM_PLAYER_LIMIT:
+        rom.write_bytes(0x195FFC + ((ROM_PLAYER_LIMIT - 1) * 32), hud_format_text("Archipelago"))
 
     # Write title screen Code
     hashint = int(rom.get_hash(), 16)
@@ -1678,6 +1675,16 @@ def patch_rom(world, rom, player, enemized):
 def patch_race_rom(rom, world, player):
     rom.write_bytes(0x180213, [0x01, 0x00])  # Tournament Seed
     rom.encrypt(world, player)
+
+
+def get_price_data(price: int, price_type: int) -> bytes:
+    if price_type != ShopPriceType.Rupees:
+        # Set special price flag 0x8000
+        # Then set the type of price we're setting 0x7F00 (this starts from Hearts, not Rupees, subtract 1)
+        # Then append the price/index into the second byte 0x00FF
+        return int16_as_bytes(0x8000 | 0x100 * (price_type - 1) | price)
+    else:
+        return int16_as_bytes(price)
 
 
 def write_custom_shops(rom, world, player):
@@ -1711,9 +1718,11 @@ def write_custom_shops(rom, world, player):
 
         # [id][item][price-low][price-high][max][repl_id][repl_price-low][repl_price-high][player]
         for index, item in enumerate(shop.inventory):
-            slot = 0 if shop.type == ShopType.TakeAny else index
             if item is None:
                 break
+            price_data = get_price_data(item['price'], item["price_type"])
+            replacement_price_data = get_price_data(item['replacement_price'], item['replacement_price_type'])
+            slot = 0 if shop.type == ShopType.TakeAny else index
             if not item['item'] in item_table:  # item not native to ALTTP
                 item_code = get_nonnative_item_sprite(item['item'])
             else:
@@ -1721,9 +1730,9 @@ def write_custom_shops(rom, world, player):
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro[player]:
                     rom.write_byte(0x186500 + shop.sram_offset + slot, arrow_mask)
 
-            item_data = [shop_id, item_code] + int16_as_bytes(item['price']) + \
+            item_data = [shop_id, item_code] + price_data + \
                         [item['max'], ItemFactory(item['replacement'], player).code if item['replacement'] else 0xFF] + \
-                        int16_as_bytes(item['replacement_price']) + [0 if item['player'] == player else item['player']]
+                        replacement_price_data + [0 if item['player'] == player else min(ROM_PLAYER_LIMIT, item['player'])]
             items_data.extend(item_data)
 
     rom.write_bytes(0x184800, shop_data)
@@ -1756,7 +1765,7 @@ def hud_format_text(text):
 
 def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, palettes_options,
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
-                       triforcehud: str = None):
+                       triforcehud: str = None, deathlink: bool = False):
     local_random = random if not world else world.slot_seeds[player]
     disable_music: bool = not music
     # enable instant item menu
@@ -1791,12 +1800,16 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
         rom.write_bytes(0x123FE, [0x72])  # set lightning flash in misery mire (and standard) to brightness 0x72
         rom.write_bytes(0x3FA7B, [0x80, 0xac - 0x7b])  # branch from palette writing lightning on death mountain
         rom.write_byte(0x10817F, 0x01)  # internal rom option
+        rom.write_byte(0x3FAB6, 0x80)  # GT flashing
+        rom.write_byte(0x3FAC2, 0x80)  # GT flashing
     else:
         rom.write_bytes(0x17E07, [0x00])
         rom.write_bytes(0x17EAB, [0x85, 0x00, 0x29, 0x1F, 0x00, 0x18])
         rom.write_bytes(0x123FE, [0x32])  # original weather flash value
         rom.write_bytes(0x3FA7B, [0xc2, 0x20])  # rep #$20
         rom.write_byte(0x10817F, 0x00)  # internal rom option
+        rom.write_byte(0x3FAB6, 0xF0)  # GT flashing
+        rom.write_byte(0x3FAC2, 0xD0)  # GT flashing
 
     rom.write_byte(0x18004B, 0x01 if quickswap else 0x00)
 
@@ -1885,6 +1898,8 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
             blackout_uw_palettes(rom)
         elif palettes_options['dungeon'] == 'random':
             randomize_uw_palettes(rom, local_random)
+
+    rom.write_byte(0x18008D, int(deathlink))
 
     apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event,
                                  world.sprite_pool[player] if world else [])
@@ -2097,7 +2112,7 @@ def write_strings(rom, world, player):
         if dest.player != player:
             if ped_hint:
                 hint += f" for {world.player_name[dest.player]}!"
-            elif type(dest) in [Region, ALttPLocation]:
+            elif isinstance(dest, (Region, Location)):
                 hint += f" in {world.player_name[dest.player]}'s world"
             else:
                 hint += f" for {world.player_name[dest.player]}"
@@ -2113,191 +2128,201 @@ def write_strings(rom, world, player):
         vendor_location = world.get_location("Bottle Merchant", player)
         tt['bottle_vendor_choice'] = f"I gots {hint_text(vendor_location.item)}\nYous gots 100 rupees?" \
                                      f"\n  ≥ I want\n    no way!\n{{CHOICE}}"
-
-        tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles can have hints!'
-        hint_locations = HintLocations.copy()
-        local_random.shuffle(hint_locations)
-        all_entrances = [entrance for entrance in world.get_entrances() if entrance.player == player]
-        local_random.shuffle(all_entrances)
-
-        # First we take care of the one inconvenient dungeon in the appropriately simple shuffles.
-        entrances_to_hint = {}
-        entrances_to_hint.update(InconvenientDungeonEntrances)
-        if world.shuffle_ganon:
-            if world.mode[player] == 'inverted':
-                entrances_to_hint.update({'Inverted Ganons Tower': 'The sealed castle door'})
+        if world.hints[player].value >= 2:
+            if world.hints[player] == "full":
+                tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles have hints!'
             else:
-                entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
-        if world.shuffle[player] in ['simple', 'restricted', 'restricted_legacy']:
-            for entrance in all_entrances:
-                if entrance.name in entrances_to_hint:
-                    this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(
-                        entrance.connected_region) + '.'
-                    tt[hint_locations.pop(0)] = this_hint
-                    entrances_to_hint = {}
-                    break
-        # Now we write inconvenient locations for most shuffles and finish taking care of the less chaotic ones.
-        entrances_to_hint.update(InconvenientOtherEntrances)
-        if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']:
-            hint_count = 0
-        elif world.shuffle[player] in ['simple', 'restricted', 'restricted_legacy']:
-            hint_count = 2
-        else:
-            hint_count = 4
-        for entrance in all_entrances:
-            if entrance.name in entrances_to_hint:
-                if hint_count:
-                    this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(
-                        entrance.connected_region) + '.'
-                    tt[hint_locations.pop(0)] = this_hint
-                    entrances_to_hint.pop(entrance.name)
-                    hint_count -= 1
-                else:
-                    break
+                tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles can have hints!'
+            hint_locations = HintLocations.copy()
+            local_random.shuffle(hint_locations)
+            all_entrances = [entrance for entrance in world.get_entrances() if entrance.player == player]
+            local_random.shuffle(all_entrances)
 
-        # Next we handle hints for randomly selected other entrances, curating the selection intelligently based on shuffle.
-        if world.shuffle[player] not in ['simple', 'restricted', 'restricted_legacy']:
-            entrances_to_hint.update(ConnectorEntrances)
-            entrances_to_hint.update(DungeonEntrances)
-            if world.mode[player] == 'inverted':
-                entrances_to_hint.update({'Inverted Agahnims Tower': 'The dark mountain tower'})
-            else:
-                entrances_to_hint.update({'Agahnims Tower': 'The sealed castle door'})
-        elif world.shuffle[player] == 'restricted':
-            entrances_to_hint.update(ConnectorEntrances)
-        entrances_to_hint.update(OtherEntrances)
-        if world.mode[player] == 'inverted':
-            entrances_to_hint.update({'Inverted Dark Sanctuary': 'The dark sanctuary cave'})
-            entrances_to_hint.update({'Inverted Big Bomb Shop': 'The old hero\'s dark home'})
-            entrances_to_hint.update({'Inverted Links House': 'The old hero\'s light home'})
-        else:
-            entrances_to_hint.update({'Dark Sanctuary Hint': 'The dark sanctuary cave'})
-            entrances_to_hint.update({'Big Bomb Shop': 'The old bomb shop'})
-        if world.shuffle[player] in ['insanity', 'madness_legacy', 'insanity_legacy']:
-            entrances_to_hint.update(InsanityEntrances)
+            # First we take care of the one inconvenient dungeon in the appropriately simple shuffles.
+            entrances_to_hint = {}
+            entrances_to_hint.update(InconvenientDungeonEntrances)
             if world.shuffle_ganon:
                 if world.mode[player] == 'inverted':
-                    entrances_to_hint.update({'Inverted Pyramid Entrance': 'The extra castle passage'})
+                    entrances_to_hint.update({'Inverted Ganons Tower': 'The sealed castle door'})
                 else:
-                    entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
-        hint_count = 4 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull',
-                                                        'dungeonscrossed'] else 0
-        for entrance in all_entrances:
-            if entrance.name in entrances_to_hint:
-                if hint_count:
-                    this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(
-                        entrance.connected_region) + '.'
-                    tt[hint_locations.pop(0)] = this_hint
-                    entrances_to_hint.pop(entrance.name)
-                    hint_count -= 1
-                else:
-                    break
-
-        # Next we write a few hints for specific inconvenient locations. We don't make many because in entrance this is highly unpredictable.
-        locations_to_hint = InconvenientLocations.copy()
-        if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']:
-            locations_to_hint.extend(InconvenientVanillaLocations)
-        local_random.shuffle(locations_to_hint)
-        hint_count = 3 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull',
-                                                        'dungeonscrossed'] else 5
-        for location in locations_to_hint[:hint_count]:
-            if location == 'Swamp Left':
-                if local_random.randint(0, 1):
-                    first_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
-                    second_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
-                else:
-                    second_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
-                    first_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
-                this_hint = ('The westmost chests in Swamp Palace contain ' + first_item + ' and ' + second_item + '.')
-                tt[hint_locations.pop(0)] = this_hint
-            elif location == 'Mire Left':
-                if local_random.randint(0, 1):
-                    first_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
-                    second_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
-                else:
-                    second_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
-                    first_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
-                this_hint = ('The westmost chests in Misery Mire contain ' + first_item + ' and ' + second_item + '.')
-                tt[hint_locations.pop(0)] = this_hint
-            elif location == 'Tower of Hera - Big Key Chest':
-                this_hint = 'Waiting in the Tower of Hera basement leads to ' + hint_text(
-                    world.get_location(location, player).item) + '.'
-                tt[hint_locations.pop(0)] = this_hint
-            elif location == 'Ganons Tower - Big Chest':
-                this_hint = 'The big chest in Ganon\'s Tower contains ' + hint_text(
-                    world.get_location(location, player).item) + '.'
-                tt[hint_locations.pop(0)] = this_hint
-            elif location == 'Thieves\' Town - Big Chest':
-                this_hint = 'The big chest in Thieves\' Town contains ' + hint_text(
-                    world.get_location(location, player).item) + '.'
-                tt[hint_locations.pop(0)] = this_hint
-            elif location == 'Ice Palace - Big Chest':
-                this_hint = 'The big chest in Ice Palace contains ' + hint_text(
-                    world.get_location(location, player).item) + '.'
-                tt[hint_locations.pop(0)] = this_hint
-            elif location == 'Eastern Palace - Big Key Chest':
-                this_hint = 'The antifairy guarded chest in Eastern Palace contains ' + hint_text(
-                    world.get_location(location, player).item) + '.'
-                tt[hint_locations.pop(0)] = this_hint
-            elif location == 'Sahasrahla':
-                this_hint = 'Sahasrahla seeks a green pendant for ' + hint_text(
-                    world.get_location(location, player).item) + '.'
-                tt[hint_locations.pop(0)] = this_hint
-            elif location == 'Graveyard Cave':
-                this_hint = 'The cave north of the graveyard contains ' + hint_text(
-                    world.get_location(location, player).item) + '.'
-                tt[hint_locations.pop(0)] = this_hint
+                    entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
+            if world.shuffle[player] in ['simple', 'restricted', 'restricted_legacy']:
+                for entrance in all_entrances:
+                    if entrance.name in entrances_to_hint:
+                        this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(
+                            entrance.connected_region) + '.'
+                        tt[hint_locations.pop(0)] = this_hint
+                        entrances_to_hint = {}
+                        break
+            # Now we write inconvenient locations for most shuffles and finish taking care of the less chaotic ones.
+            entrances_to_hint.update(InconvenientOtherEntrances)
+            if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']:
+                hint_count = 0
+            elif world.shuffle[player] in ['simple', 'restricted', 'restricted_legacy']:
+                hint_count = 2
             else:
-                this_hint = location + ' contains ' + hint_text(world.get_location(location, player).item) + '.'
-                tt[hint_locations.pop(0)] = this_hint
+                hint_count = 4
+            for entrance in all_entrances:
+                if entrance.name in entrances_to_hint:
+                    if hint_count:
+                        this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(
+                            entrance.connected_region) + '.'
+                        tt[hint_locations.pop(0)] = this_hint
+                        entrances_to_hint.pop(entrance.name)
+                        hint_count -= 1
+                    else:
+                        break
 
-        # Lastly we write hints to show where certain interesting items are. It is done the way it is to re-use the silver code and also to give one hint per each type of item regardless of how many exist. This supports many settings well.
-        items_to_hint = RelevantItems.copy()
-        if world.smallkey_shuffle[player]:
-            items_to_hint.extend(SmallKeys)
-        if world.bigkey_shuffle[player]:
-            items_to_hint.extend(BigKeys)
-        local_random.shuffle(items_to_hint)
-        hint_count = 5 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull',
-                                                        'dungeonscrossed'] else 8
-        while hint_count > 0 and items_to_hint:
-            this_item = items_to_hint.pop(0)
-            this_location = world.find_items(this_item, player)
-            if this_location:
-                local_random.shuffle(this_location)
-                this_hint = this_location[0].item.hint_text + ' can be found ' + hint_text(this_location[0]) + '.'
-                tt[hint_locations.pop(0)] = this_hint
-                hint_count -= 1
+            # Next we handle hints for randomly selected other entrances,
+            # curating the selection intelligently based on shuffle.
+            if world.shuffle[player] not in ['simple', 'restricted', 'restricted_legacy']:
+                entrances_to_hint.update(ConnectorEntrances)
+                entrances_to_hint.update(DungeonEntrances)
+                if world.mode[player] == 'inverted':
+                    entrances_to_hint.update({'Inverted Agahnims Tower': 'The dark mountain tower'})
+                else:
+                    entrances_to_hint.update({'Agahnims Tower': 'The sealed castle door'})
+            elif world.shuffle[player] == 'restricted':
+                entrances_to_hint.update(ConnectorEntrances)
+            entrances_to_hint.update(OtherEntrances)
+            if world.mode[player] == 'inverted':
+                entrances_to_hint.update({'Inverted Dark Sanctuary': 'The dark sanctuary cave'})
+                entrances_to_hint.update({'Inverted Big Bomb Shop': 'The old hero\'s dark home'})
+                entrances_to_hint.update({'Inverted Links House': 'The old hero\'s light home'})
+            else:
+                entrances_to_hint.update({'Dark Sanctuary Hint': 'The dark sanctuary cave'})
+                entrances_to_hint.update({'Big Bomb Shop': 'The old bomb shop'})
+            if world.shuffle[player] in ['insanity', 'madness_legacy', 'insanity_legacy']:
+                entrances_to_hint.update(InsanityEntrances)
+                if world.shuffle_ganon:
+                    if world.mode[player] == 'inverted':
+                        entrances_to_hint.update({'Inverted Pyramid Entrance': 'The extra castle passage'})
+                    else:
+                        entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
+            hint_count = 4 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull',
+                                                            'dungeonscrossed'] else 0
+            for entrance in all_entrances:
+                if entrance.name in entrances_to_hint:
+                    if hint_count:
+                        this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(
+                            entrance.connected_region) + '.'
+                        tt[hint_locations.pop(0)] = this_hint
+                        entrances_to_hint.pop(entrance.name)
+                        hint_count -= 1
+                    else:
+                        break
 
-        # All remaining hint slots are filled with junk hints. It is done this way to ensure the same junk hint isn't selected twice.
-        junk_hints = junk_texts.copy()
-        local_random.shuffle(junk_hints)
-        for location, text in zip(hint_locations, junk_hints):
-            tt[location] = text
+            # Next we write a few hints for specific inconvenient locations. We don't make many because in entrance this is highly unpredictable.
+            locations_to_hint = InconvenientLocations.copy()
+            if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']:
+                locations_to_hint.extend(InconvenientVanillaLocations)
+            local_random.shuffle(locations_to_hint)
+            hint_count = 3 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull',
+                                                            'dungeonscrossed'] else 5
+            for location in locations_to_hint[:hint_count]:
+                if location == 'Swamp Left':
+                    if local_random.randint(0, 1):
+                        first_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
+                        second_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
+                    else:
+                        second_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
+                        first_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
+                    this_hint = ('The westmost chests in Swamp Palace contain ' + first_item + ' and ' + second_item + '.')
+                    tt[hint_locations.pop(0)] = this_hint
+                elif location == 'Mire Left':
+                    if local_random.randint(0, 1):
+                        first_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
+                        second_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
+                    else:
+                        second_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
+                        first_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
+                    this_hint = ('The westmost chests in Misery Mire contain ' + first_item + ' and ' + second_item + '.')
+                    tt[hint_locations.pop(0)] = this_hint
+                elif location == 'Tower of Hera - Big Key Chest':
+                    this_hint = 'Waiting in the Tower of Hera basement leads to ' + hint_text(
+                        world.get_location(location, player).item) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+                elif location == 'Ganons Tower - Big Chest':
+                    this_hint = 'The big chest in Ganon\'s Tower contains ' + hint_text(
+                        world.get_location(location, player).item) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+                elif location == 'Thieves\' Town - Big Chest':
+                    this_hint = 'The big chest in Thieves\' Town contains ' + hint_text(
+                        world.get_location(location, player).item) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+                elif location == 'Ice Palace - Big Chest':
+                    this_hint = 'The big chest in Ice Palace contains ' + hint_text(
+                        world.get_location(location, player).item) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+                elif location == 'Eastern Palace - Big Key Chest':
+                    this_hint = 'The antifairy guarded chest in Eastern Palace contains ' + hint_text(
+                        world.get_location(location, player).item) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+                elif location == 'Sahasrahla':
+                    this_hint = 'Sahasrahla seeks a green pendant for ' + hint_text(
+                        world.get_location(location, player).item) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+                elif location == 'Graveyard Cave':
+                    this_hint = 'The cave north of the graveyard contains ' + hint_text(
+                        world.get_location(location, player).item) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+                else:
+                    this_hint = location + ' contains ' + hint_text(world.get_location(location, player).item) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+
+            # Lastly we write hints to show where certain interesting items are.
+            items_to_hint = RelevantItems.copy()
+            if world.smallkey_shuffle[player].hints_useful:
+                items_to_hint |= item_name_groups["Small Keys"]
+            if world.bigkey_shuffle[player].hints_useful:
+                items_to_hint |= item_name_groups["Big Keys"]
+
+            if world.hints[player] == "full":
+                hint_count = len(hint_locations) # fill all remaining hint locations with Item hints.
+            else:
+                hint_count = 5 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull',
+                                                                'dungeonscrossed'] else 8
+            hint_count = min(hint_count, len(items_to_hint), len(hint_locations))
+            if hint_count:
+                locations = world.find_items_in_locations(items_to_hint, player)
+                local_random.shuffle(locations)
+                for x in range(min(hint_count, len(locations))):
+                    this_location = locations.pop()
+                    this_hint = this_location.item.hint_text + ' can be found ' + hint_text(this_location) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+
+            if hint_locations:
+                # All remaining hint slots are filled with junk hints.
+                # It is done this way to ensure the same junk hint isn't selected twice.
+                junk_hints = junk_texts.copy()
+                local_random.shuffle(junk_hints)
+                for location, text in zip(hint_locations, junk_hints):
+                    tt[location] = text
 
     # We still need the older hints of course. Those are done here.
 
-    silverarrows = world.find_items('Silver Bow', player)
+    silverarrows = world.find_item_locations('Silver Bow', player)
     local_random.shuffle(silverarrows)
     silverarrow_hint = (
             ' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
     tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
     tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
-
-    prog_bow_locs = world.find_items('Progressive Bow', player)
-    distinguished_prog_bow_loc = next((location for location in prog_bow_locs if location.item.code == 0x65), None)
-    progressive_silvers = world.difficulty_requirements[player].progressive_bow_limit >= 2 or (
-            world.swordless[player] or world.logic[player] == 'noglitches')
-    if distinguished_prog_bow_loc:
-        prog_bow_locs.remove(distinguished_prog_bow_loc)
-        silverarrow_hint = (' %s?' % hint_text(distinguished_prog_bow_loc).replace('Ganon\'s',
-                                                                                   'my')) if progressive_silvers else '?\nI think not!'
-        tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
-
-    if any(prog_bow_locs):
-        silverarrow_hint = (' %s?' % hint_text(local_random.choice(prog_bow_locs)).replace('Ganon\'s',
-                                                                                           'my')) if progressive_silvers else '?\nI think not!'
-        tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
+    if world.worlds[player].has_progressive_bows and (world.difficulty_requirements[player].progressive_bow_limit >= 2 or (
+            world.swordless[player] or world.logic[player] == 'noglitches')):
+        prog_bow_locs = world.find_item_locations('Progressive Bow', player)
+        world.slot_seeds[player].shuffle(prog_bow_locs)
+        found_bow = False
+        found_bow_alt = False
+        while prog_bow_locs and not (found_bow and found_bow_alt):
+            bow_loc = prog_bow_locs.pop()
+            if bow_loc.item.code == 0x65:
+                found_bow_alt = True
+                target = 'ganon_phase_3_no_silvers'
+            else:
+                found_bow = True
+                target = 'ganon_phase_3_no_silvers_alt'
+            silverarrow_hint = (' %s?' % hint_text(bow_loc).replace('Ganon\'s', 'my'))
+            tt[target] = 'Did you find the silver arrows%s' % silverarrow_hint
 
     crystal5 = world.find_item('Crystal 5', player)
     crystal6 = world.find_item('Crystal 6', player)
@@ -2774,7 +2799,7 @@ OtherEntrances = {'Blinds Hideout': 'Blind\'s old house',
                   'C-Shaped House': 'The NE house in Village of Outcasts',
                   'Dark Death Mountain Fairy': 'The SW cave on dark DM',
                   'Dark Lake Hylia Shop': 'The building NW dark Lake Hylia',
-                  'Dark World Shop': 'The hammer sealed building',
+                  'Village of Outcasts Shop': 'The hammer sealed building',
                   'Red Shield Shop': 'The fenced in building',
                   'Mire Shed': 'The western hut in the mire',
                   'East Dark World Hint': 'The dark cave near the eastmost portal',
@@ -2847,88 +2872,10 @@ InconvenientLocations = ['Spike Cave',
 InconvenientVanillaLocations = ['Graveyard Cave',
                                 'Mimic Cave']
 
-RelevantItems = ['Bow',
-                 'Progressive Bow',
-                 'Book of Mudora',
-                 'Hammer',
-                 'Hookshot',
-                 'Magic Mirror',
-                 'Flute',
-                 'Pegasus Boots',
-                 'Power Glove',
-                 'Cape',
-                 'Mushroom',
-                 'Shovel',
-                 'Lamp',
-                 'Magic Powder',
-                 'Moon Pearl',
-                 'Cane of Somaria',
-                 'Fire Rod',
-                 'Flippers',
-                 'Ice Rod',
-                 'Titans Mitts',
-                 'Ether',
-                 'Bombos',
-                 'Quake',
-                 'Bottle',
-                 'Bottle (Red Potion)',
-                 'Bottle (Green Potion)',
-                 'Bottle (Blue Potion)',
-                 'Bottle (Fairy)',
-                 'Bottle (Bee)',
-                 'Bottle (Good Bee)',
-                 'Master Sword',
-                 'Tempered Sword',
-                 'Fighter Sword',
-                 'Golden Sword',
-                 'Progressive Sword',
-                 'Progressive Glove',
-                 'Master Sword',
-                 'Power Star',
-                 'Triforce Piece',
-                 'Single Arrow',
-                 'Blue Mail',
-                 'Red Mail',
-                 'Progressive Mail',
-                 'Blue Boomerang',
-                 'Red Boomerang',
-                 'Blue Shield',
-                 'Red Shield',
-                 'Mirror Shield',
-                 'Progressive Shield',
-                 'Bug Catching Net',
-                 'Cane of Byrna',
-                 'Magic Upgrade (1/2)',
-                 'Magic Upgrade (1/4)'
-                 ]
 
-SmallKeys = ['Small Key (Eastern Palace)',
-             'Small Key (Hyrule Castle)',
-             'Small Key (Desert Palace)',
-             'Small Key (Tower of Hera)',
-             'Small Key (Agahnims Tower)',
-             'Small Key (Palace of Darkness)',
-             'Small Key (Thieves Town)',
-             'Small Key (Swamp Palace)',
-             'Small Key (Skull Woods)',
-             'Small Key (Ice Palace)',
-             'Small Key (Misery Mire)',
-             'Small Key (Turtle Rock)',
-             'Small Key (Ganons Tower)',
-             ]
+RelevantItems = progression_items - {"Triforce", "Activated Flute"} - item_name_groups["Small Keys"] - item_name_groups["Big Keys"] \
+             | item_name_groups["Mails"] | item_name_groups["Shields"]
 
-BigKeys = ['Big Key (Eastern Palace)',
-           'Big Key (Desert Palace)',
-           'Big Key (Tower of Hera)',
-           'Big Key (Palace of Darkness)',
-           'Big Key (Thieves Town)',
-           'Big Key (Swamp Palace)',
-           'Big Key (Skull Woods)',
-           'Big Key (Ice Palace)',
-           'Big Key (Misery Mire)',
-           'Big Key (Turtle Rock)',
-           'Big Key (Ganons Tower)'
-           ]
 
 hash_alphabet = [
     "Bow", "Boomerang", "Hookshot", "Bomb", "Mushroom", "Powder", "Rod", "Pendant", "Bombos", "Ether", "Quake",

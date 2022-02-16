@@ -1796,6 +1796,7 @@ def link_inverted_entrances(world, player):
     if world.get_entrance('Inverted Ganons Tower', player).connected_region.name != 'Ganons Tower (Entrance)':
         world.ganonstower_vanilla[player] = False
 
+
 def connect_simple(world, exitname, regionname, player):
     world.get_entrance(exitname, player).connect(world.get_region(regionname, player))
 
@@ -1819,6 +1820,7 @@ def connect_entrance(world, entrancename: str, exitname: str, player: int):
 
     entrance.connect(region, addresses, target)
     world.spoiler.set_entrance(entrance.name, exit.name if exit is not None else region.name, 'entrance', player)
+
 
 def connect_exit(world, exitname, entrancename, player):
     entrance = world.get_entrance(entrancename, player)
@@ -2547,7 +2549,7 @@ DW_Single_Cave_Doors = ['Bonk Fairy (Dark)',
                         'Big Bomb Shop',
                         'Dark Death Mountain Fairy',
                         'Dark Lake Hylia Shop',
-                        'Dark World Shop',
+                        'Village of Outcasts Shop',
                         'Red Shield Shop',
                         'Mire Shed',
                         'East Dark World Hint',
@@ -2624,7 +2626,7 @@ Bomb_Shop_Single_Cave_Doors = ['Waterfall of Wishing',
                                'Red Shield Shop',
                                'Dark Sanctuary Hint',
                                'Fortune Teller (Dark)',
-                               'Dark World Shop',
+                               'Village of Outcasts Shop',
                                'Dark World Lumberjack Shop',
                                'Dark World Potion Shop',
                                'Archery Game',
@@ -2835,7 +2837,7 @@ Inverted_DW_Single_Cave_Doors = ['Bonk Fairy (Dark)',
                                  'C-Shaped House',
                                  'Bumper Cave (Top)',
                                  'Dark Lake Hylia Shop',
-                                 'Dark World Shop',
+                                 'Village of Outcasts Shop',
                                  'Red Shield Shop',
                                  'Mire Shed',
                                  'East Dark World Hint',
@@ -2881,7 +2883,7 @@ Inverted_Bomb_Shop_Single_Cave_Doors = ['Waterfall of Wishing',
                                         'Red Shield Shop',
                                         'Inverted Dark Sanctuary',
                                         'Fortune Teller (Dark)',
-                                        'Dark World Shop',
+                                        'Village of Outcasts Shop',
                                         'Dark World Lumberjack Shop',
                                         'Dark World Potion Shop',
                                         'Archery Game',
@@ -3541,7 +3543,7 @@ default_connections = [('Waterfall of Wishing', 'Waterfall of Wishing'),
                        ('Red Shield Shop', 'Red Shield Shop'),
                        ('Dark Sanctuary Hint', 'Dark Sanctuary Hint'),
                        ('Fortune Teller (Dark)', 'Fortune Teller (Dark)'),
-                       ('Dark World Shop', 'Village of Outcasts Shop'),
+                       ('Village of Outcasts Shop', 'Village of Outcasts Shop'),
                        ('Dark World Lumberjack Shop', 'Dark World Lumberjack Shop'),
                        ('Dark World Potion Shop', 'Dark World Potion Shop'),
                        ('Archery Game', 'Archery Game'),
@@ -3677,7 +3679,7 @@ inverted_default_connections =  [('Waterfall of Wishing', 'Waterfall of Wishing'
                                  ('Dark World Hammer Peg Cave', 'Dark World Hammer Peg Cave'),
                                  ('Red Shield Shop', 'Red Shield Shop'),
                                  ('Fortune Teller (Dark)', 'Fortune Teller (Dark)'),
-                                 ('Dark World Shop', 'Village of Outcasts Shop'),
+                                 ('Village of Outcasts Shop', 'Village of Outcasts Shop'),
                                  ('Dark World Lumberjack Shop', 'Dark World Lumberjack Shop'),
                                  ('Dark World Potion Shop', 'Dark World Potion Shop'),
                                  ('Archery Game', 'Archery Game'),
@@ -3979,7 +3981,7 @@ door_addresses = {'Links House': (0x00, (0x0104, 0x2c, 0x0506, 0x0a9a, 0x0832, 0
                   'Dark Sanctuary Hint': (0x59, (0x0112, 0x53, 0x001e, 0x0400, 0x06e2, 0x0446, 0x0758, 0x046d, 0x075f, 0x00, 0x00, 0x0000, 0x0000)),
                   'Inverted Dark Sanctuary': (0x59, (0x0112, 0x53, 0x001e, 0x0400, 0x06e2, 0x0446, 0x0758, 0x046d, 0x075f, 0x00, 0x00, 0x0000, 0x0000)),
                   'Fortune Teller (Dark)': (0x65, (0x0122, 0x51, 0x0610, 0x04b4, 0x027e, 0x0507, 0x02f8, 0x0523, 0x0303, 0x0a, 0xf6, 0x091E, 0x0000)),
-                  'Dark World Shop': (0x5F, (0x010f, 0x58, 0x1058, 0x0814, 0x02be, 0x0868, 0x0338, 0x0883, 0x0343, 0x0a, 0xf6, 0x0000, 0x0000)),
+                  'Village of Outcasts Shop': (0x5F, (0x010f, 0x58, 0x1058, 0x0814, 0x02be, 0x0868, 0x0338, 0x0883, 0x0343, 0x0a, 0xf6, 0x0000, 0x0000)),
                   'Dark World Lumberjack Shop': (0x56, (0x010f, 0x42, 0x041c, 0x0074, 0x04e2, 0x00c7, 0x0558, 0x00e3, 0x055f, 0x0a, 0xf6, 0x0000, 0x0000)),
                   'Dark World Potion Shop': (0x6E, (0x010f, 0x56, 0x080e, 0x04f4, 0x0c66, 0x0548, 0x0cd8, 0x0563, 0x0ce3, 0x0a, 0xf6, 0x0000, 0x0000)),
                   'Archery Game': (0x58, (0x0111, 0x69, 0x069e, 0x0ac4, 0x02ea, 0x0b18, 0x0368, 0x0b33, 0x036f, 0x0a, 0xf6, 0x09AC, 0x0000)),

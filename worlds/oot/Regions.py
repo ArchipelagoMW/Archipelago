@@ -38,6 +38,8 @@ class OOTRegion(Region):
         self.provides_time = TimeOfDay.NONE
         self.scene = None
         self.dungeon = None
+        self.pretty_name = None
+        self.font_color = None
 
     def get_scene(self): 
         if self.scene: 

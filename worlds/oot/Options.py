@@ -1,12 +1,12 @@
 import typing
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionList
-from .Colors import *
-import worlds.oot.Sounds as sfx
+from Options import Option, DefaultOnToggle, Toggle, Range, OptionList, DeathLink
+from .LogicTricks import normalized_name_tricks
+from .ColorSFXOptions import *
 
 
 class Logic(Choice): 
     """Set the logic used for the generator."""
-    displayname = "Logic Rules"
+    display_name = "Logic Rules"
     option_glitchless = 0
     option_glitched = 1
     option_no_logic = 2
@@ -14,12 +14,12 @@ class Logic(Choice):
 
 class NightTokens(Toggle):
     """Nighttime skulltulas will logically require Sun's Song."""
-    displayname = "Nighttime Skulltulas Expect Sun's Song"
+    display_name = "Nighttime Skulltulas Expect Sun's Song"
 
 
 class Forest(Choice): 
     """Set the state of Kokiri Forest and the path to Deku Tree."""
-    displayname = "Forest"
+    display_name = "Forest"
     option_open = 0
     option_closed_deku = 1
     option_closed = 2
@@ -29,7 +29,7 @@ class Forest(Choice):
 
 class Gate(Choice): 
     """Set the state of the Kakariko Village gate."""
-    displayname = "Kakariko Gate"
+    display_name = "Kakariko Gate"
     option_open = 0
     option_zelda = 1
     option_closed = 2
@@ -37,12 +37,12 @@ class Gate(Choice):
 
 class DoorOfTime(DefaultOnToggle):
     """Open the Door of Time by default, without the Song of Time."""
-    displayname = "Open Door of Time"
+    display_name = "Open Door of Time"
 
 
 class Fountain(Choice): 
     """Set the state of King Zora, blocking the way to Zora's Fountain."""
-    displayname = "Zora's Fountain"
+    display_name = "Zora's Fountain"
     option_open = 0
     option_adult = 1
     option_closed = 2
@@ -51,7 +51,7 @@ class Fountain(Choice):
 
 class Fortress(Choice): 
     """Set the requirements for access to Gerudo Fortress."""
-    displayname = "Gerudo Fortress"
+    display_name = "Gerudo Fortress"
     option_normal = 0
     option_fast = 1
     option_open = 2
@@ -60,7 +60,7 @@ class Fortress(Choice):
 
 class Bridge(Choice): 
     """Set the requirements for the Rainbow Bridge."""
-    displayname = "Rainbow Bridge Requirement"
+    display_name = "Rainbow Bridge Requirement"
     option_open = 0
     option_vanilla = 1
     option_stones = 2
@@ -72,7 +72,7 @@ class Bridge(Choice):
 
 class Trials(Range):
     """Set the number of required trials in Ganon's Castle."""
-    displayname = "Ganon's Trials Count"
+    display_name = "Ganon's Trials Count"
     range_start = 0
     range_end = 6
 
@@ -90,27 +90,73 @@ open_options: typing.Dict[str, type(Option)] = {
 
 class StartingAge(Choice): 
     """Choose which age Link will start as."""
-    displayname = "Starting Age"
+    display_name = "Starting Age"
     option_child = 0
     option_adult = 1
 
 
-# TODO: document and name ER options
 class InteriorEntrances(Choice): 
+    """Shuffles interior entrances. "Simple" shuffles houses and Great Fairies; "All" includes Windmill, Link's House, Temple of Time, and Kak potion shop."""
+    display_name = "Shuffle Interior Entrances"
     option_off = 0
     option_simple = 1
     option_all = 2
     alias_false = 0
+    alias_true = 2
+
+
+class GrottoEntrances(Toggle):
+    """Shuffles grotto and grave entrances."""
+    display_name = "Shuffle Grotto/Grave Entrances"
+
+
+class DungeonEntrances(Toggle):
+    """Shuffles dungeon entrances, excluding Ganon's Castle. Opens Deku, Fire and BotW to both ages."""
+    display_name = "Shuffle Dungeon Entrances"
+
+
+class OverworldEntrances(Toggle):
+    """Shuffles overworld loading zones."""
+    display_name = "Shuffle Overworld Entrances"
+
+
+class OwlDrops(Toggle):
+    """Randomizes owl drops from Lake Hylia or Death Mountain Trail as child."""
+    display_name = "Randomize Owl Drops"
+
+
+class WarpSongs(Toggle):
+    """Randomizes warp song destinations."""
+    display_name = "Randomize Warp Songs"
+
+
+class SpawnPositions(Toggle):
+    """Randomizes the starting position on loading a save. Consistent between savewarps."""
+    display_name = "Randomize Spawn Positions"
+
+
+class MixEntrancePools(Choice):
+    """Shuffles entrances into a mixed pool instead of separate ones. "indoor" keeps overworld entrances separate; "all" mixes them in."""
+    display_name = "Mix Entrance Pools"
+    option_off = 0
+    option_indoor = 1
+    option_all = 2
+    alias_false = 0
+
+
+class DecoupleEntrances(Toggle):
+    """Decouple entrances when shuffling them. Also adds the one-way entrance from Gerudo Valley to Lake Hylia if overworld is shuffled."""
+    display_name = "Decouple Entrances"
 
 
 class TriforceHunt(Toggle):
     """Gather pieces of the Triforce scattered around the world to complete the game."""
-    displayname = "Triforce Hunt"
+    display_name = "Triforce Hunt"
 
 
 class TriforceGoal(Range):
     """Number of Triforce pieces required to complete the game."""
-    displayname = "Required Triforce Pieces"
+    display_name = "Required Triforce Pieces"
     range_start = 1
     range_end = 100
     default = 20
@@ -118,7 +164,7 @@ class TriforceGoal(Range):
 
 class ExtraTriforces(Range):
     """Percentage of additional Triforce pieces in the pool, separate from the item pool setting."""
-    displayname = "Percentage of Extra Triforce Pieces"
+    display_name = "Percentage of Extra Triforce Pieces"
     range_start = 0
     range_end = 100
     default = 50
@@ -129,20 +175,30 @@ class LogicalChus(Toggle):
     displayname = "Bombchus Considered in Logic"
 
 
+class MQDungeons(Range):
+    """Number of MQ dungeons. The dungeons to replace are randomly selected."""
+    displayname = "Number of MQ Dungeons"
+    range_start = 0
+    range_end = 12
+    default = 0
+
+
 world_options: typing.Dict[str, type(Option)] = {
     "starting_age": StartingAge,
-    # "shuffle_interior_entrances": InteriorEntrances,
-    # "shuffle_grotto_entrances": Toggle,
-    # "shuffle_dungeon_entrances": Toggle,
-    # "shuffle_overworld_entrances": Toggle,
-    # "owl_drops": Toggle,
-    # "warp_songs": Toggle,
-    # "spawn_positions": Toggle,
+    "shuffle_interior_entrances": InteriorEntrances,
+    "shuffle_grotto_entrances": GrottoEntrances,
+    "shuffle_dungeon_entrances": DungeonEntrances,
+    "shuffle_overworld_entrances": OverworldEntrances,
+    "owl_drops": OwlDrops,
+    "warp_songs": WarpSongs,
+    "spawn_positions": SpawnPositions,
+    # "mix_entrance_pools": MixEntrancePools,
+    # "decouple_entrances": DecoupleEntrances,
     "triforce_hunt": TriforceHunt, 
     "triforce_goal": TriforceGoal,
     "extra_triforce_percentage": ExtraTriforces,
     "bombchus_in_logic": LogicalChus,
-    # "mq_dungeons": make_range(0, 12),
+    "mq_dungeons": MQDungeons,
 }
 
 
@@ -508,6 +564,11 @@ class Hints(Choice):
     alias_false = 0
 
 
+class MiscHints(DefaultOnToggle):
+    """Controls whether the Temple of Time altar gives dungeon prize info and whether Ganondorf hints the Light Arrows."""
+    displayname = "Misc Hints"
+
+
 class HintDistribution(Choice):
     """Choose the hint distribution to use. Affects the frequency of strong hints, which items are always hinted, etc."""
     displayname = "Hint Distribution"
@@ -575,6 +636,7 @@ class RupeeStart(Toggle):
 misc_options: typing.Dict[str, type(Option)] = {
     "correct_chest_sizes": CSMC,
     "hints": Hints,
+    "misc_hints": MiscHints,
     "hint_dist": HintDistribution,
     "text_shuffle": TextShuffle,
     "damage_multiplier": DamageMultiplier,
@@ -651,21 +713,6 @@ itempool_options: typing.Dict[str, type(Option)] = {
 
 # Start of cosmetic options
 
-def assemble_color_option(func, display_name: str, default_option: str, outer=False): 
-    color_options = func()
-    if outer:
-        color_options.append("Match Inner")
-    format_color = lambda color: color.replace(' ', '_').lower()
-    color_to_id = {format_color(color): index for index, color in enumerate(color_options)}
-    class ColorOption(Choice):
-        """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-        displayname = display_name
-        default = color_options.index(default_option)
-    ColorOption.options.update(color_to_id)
-    ColorOption.name_lookup.update({id: color for (color, id) in color_to_id.items()})
-    return ColorOption
-
-
 class Targeting(Choice): 
     """Default targeting option."""
     displayname = "Default Targeting Option"
@@ -720,44 +767,34 @@ cosmetic_options: typing.Dict[str, type(Option)] = {
     "background_music": BackgroundMusic,
     "fanfares": Fanfares,
     "ocarina_fanfares": OcarinaFanfares,
-    "kokiri_color": assemble_color_option(get_tunic_color_options, "Kokiri Tunic", "Kokiri Green"),
-    "goron_color":  assemble_color_option(get_tunic_color_options, "Goron Tunic", "Goron Red"),
-    "zora_color":   assemble_color_option(get_tunic_color_options, "Zora Tunic", "Zora Blue"),
-    "silver_gauntlets_color":   assemble_color_option(get_gauntlet_color_options, "Silver Gauntlets Color", "Silver"),
-    "golden_gauntlets_color":   assemble_color_option(get_gauntlet_color_options, "Golden Gauntlets Color", "Gold"),
-    "mirror_shield_frame_color": assemble_color_option(get_shield_frame_color_options, "Mirror Shield Frame Color", "Red"),
-    "navi_color_default_inner": assemble_color_option(get_navi_color_options, "Navi Idle Inner", "White"),
-    "navi_color_default_outer": assemble_color_option(get_navi_color_options, "Navi Idle Outer", "Match Inner", outer=True),
-    "navi_color_enemy_inner":   assemble_color_option(get_navi_color_options, "Navi Targeting Enemy Inner", "Yellow"),
-    "navi_color_enemy_outer":   assemble_color_option(get_navi_color_options, "Navi Targeting Enemy Outer", "Match Inner", outer=True),
-    "navi_color_npc_inner":     assemble_color_option(get_navi_color_options, "Navi Targeting NPC Inner", "Light Blue"),
-    "navi_color_npc_outer":     assemble_color_option(get_navi_color_options, "Navi Targeting NPC Outer", "Match Inner", outer=True),
-    "navi_color_prop_inner":    assemble_color_option(get_navi_color_options, "Navi Targeting Prop Inner", "Green"),
-    "navi_color_prop_outer":    assemble_color_option(get_navi_color_options, "Navi Targeting Prop Outer", "Match Inner", outer=True),
+    "kokiri_color": kokiri_color,
+    "goron_color":  goron_color,
+    "zora_color":   zora_color,
+    "silver_gauntlets_color":   silver_gauntlets_color,
+    "golden_gauntlets_color":   golden_gauntlets_color,
+    "mirror_shield_frame_color": mirror_shield_frame_color,
+    "navi_color_default_inner": navi_color_default_inner,
+    "navi_color_default_outer": navi_color_default_outer,
+    "navi_color_enemy_inner":   navi_color_enemy_inner,
+    "navi_color_enemy_outer":   navi_color_enemy_outer,
+    "navi_color_npc_inner":     navi_color_npc_inner,
+    "navi_color_npc_outer":     navi_color_npc_outer,
+    "navi_color_prop_inner":    navi_color_prop_inner,
+    "navi_color_prop_outer":    navi_color_prop_outer,
     "sword_trail_duration": SwordTrailDuration,
-    "sword_trail_color_inner": assemble_color_option(get_sword_trail_color_options, "Sword Trail Inner", "White"),
-    "sword_trail_color_outer": assemble_color_option(get_sword_trail_color_options, "Sword Trail Outer", "Match Inner", outer=True),
-    "bombchu_trail_color_inner": assemble_color_option(get_bombchu_trail_color_options, "Bombchu Trail Inner", "Red"),
-    "bombchu_trail_color_outer": assemble_color_option(get_bombchu_trail_color_options, "Bombchu Trail Outer", "Match Inner", outer=True),
-    "boomerang_trail_color_inner": assemble_color_option(get_boomerang_trail_color_options, "Boomerang Trail Inner", "Yellow"),
-    "boomerang_trail_color_outer": assemble_color_option(get_boomerang_trail_color_options, "Boomerang Trail Outer", "Match Inner", outer=True),
-    "heart_color":          assemble_color_option(get_heart_color_options, "Heart Color", "Red"),
-    "magic_color":          assemble_color_option(get_magic_color_options, "Magic Color", "Green"),
-    "a_button_color":       assemble_color_option(get_a_button_color_options, "A Button Color", "N64 Blue"),
-    "b_button_color":       assemble_color_option(get_b_button_color_options, "B Button Color", "N64 Green"),
-    "c_button_color":       assemble_color_option(get_c_button_color_options, "C Button Color", "Yellow"),
-    "start_button_color":   assemble_color_option(get_start_button_color_options, "Start Button Color", "N64 Red"),
+    "sword_trail_color_inner": sword_trail_color_inner,
+    "sword_trail_color_outer": sword_trail_color_outer,
+    "bombchu_trail_color_inner": bombchu_trail_color_inner,
+    "bombchu_trail_color_outer": bombchu_trail_color_outer,
+    "boomerang_trail_color_inner": boomerang_trail_color_inner,
+    "boomerang_trail_color_outer": boomerang_trail_color_outer,
+    "heart_color":          heart_color,
+    "magic_color":          magic_color,
+    "a_button_color":       a_button_color,
+    "b_button_color":       b_button_color,
+    "c_button_color":       c_button_color,
+    "start_button_color":   start_button_color,
 }
-
-def assemble_sfx_option(sound_hook: sfx.SoundHooks, display_name: str):
-    options = sfx.get_setting_choices(sound_hook).keys()
-    sfx_to_id = {sfx.replace('-', '_'): index for index, sfx in enumerate(options)}
-    class SfxOption(Choice):
-        """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound."""
-        displayname = display_name
-    SfxOption.options.update(sfx_to_id)
-    SfxOption.name_lookup.update({id: sfx for (sfx, id) in sfx_to_id.items()})
-    return SfxOption
 
 class SfxOcarina(Choice):
     """Change the sound of the ocarina."""
@@ -771,16 +808,25 @@ class SfxOcarina(Choice):
     default = 1
 
 sfx_options: typing.Dict[str, type(Option)] = {
-    "sfx_navi_overworld":   assemble_sfx_option(sfx.SoundHooks.NAVI_OVERWORLD, "Navi Overworld"),
-    "sfx_navi_enemy":       assemble_sfx_option(sfx.SoundHooks.NAVI_ENEMY, "Navi Enemy"),
-    "sfx_low_hp":           assemble_sfx_option(sfx.SoundHooks.HP_LOW, "Low HP"),
-    "sfx_menu_cursor":      assemble_sfx_option(sfx.SoundHooks.MENU_CURSOR, "Menu Cursor"),
-    "sfx_menu_select":      assemble_sfx_option(sfx.SoundHooks.MENU_SELECT, "Menu Select"),
-    "sfx_nightfall":        assemble_sfx_option(sfx.SoundHooks.NIGHTFALL, "Nightfall"),
-    "sfx_horse_neigh":      assemble_sfx_option(sfx.SoundHooks.HORSE_NEIGH, "Horse"),
-    "sfx_hover_boots":      assemble_sfx_option(sfx.SoundHooks.BOOTS_HOVER, "Hover Boots"),
+    "sfx_navi_overworld":   sfx_navi_overworld,
+    "sfx_navi_enemy":       sfx_navi_enemy,
+    "sfx_low_hp":           sfx_low_hp,
+    "sfx_menu_cursor":      sfx_menu_cursor,
+    "sfx_menu_select":      sfx_menu_select,
+    "sfx_nightfall":        sfx_nightfall,
+    "sfx_horse_neigh":      sfx_horse_neigh,
+    "sfx_hover_boots":      sfx_hover_boots,
     "sfx_ocarina":          SfxOcarina,
 }
+
+
+class LogicTricks(OptionList):
+    """Set various tricks for logic in Ocarina of Time. 
+Format as a comma-separated list of "nice" names: ["Fewer Tunic Requirements", "Hidden Grottos without Stone of Agony"].
+A full list of supported tricks can be found at https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py"""
+    displayname = "Logic Tricks"
+    valid_keys = frozenset(normalized_name_tricks)
+    valid_keys_casefold = True
 
 
 # All options assembled into a single dict
@@ -798,5 +844,6 @@ oot_options: typing.Dict[str, type(Option)] = {
     **itempool_options,
     **cosmetic_options,
     **sfx_options,
-    "logic_tricks": OptionList,
+    "logic_tricks": LogicTricks,
+    "death_link": DeathLink,
 }

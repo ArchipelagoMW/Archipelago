@@ -24,14 +24,9 @@ name: YourName{number} # Your name in-game. Spaces will be replaced with undersc
 #{number} will be replaced with the counter value of the name.
 #{NUMBER} will be replaced with the counter value of the name if the counter value is greater than 1.
 game: # Pick a game to play
-  A Link to the Past: 0
-  Factorio: 0
-  Minecraft: 0
-  Subnautica: 0
-  Slay the Spire: 0
-  Ocarina of Time: 0
+  A Link to the Past: 1
 requires:
-  version: 0.1.7 # Version of Archipelago required for this yaml to work as expected.
+  version: 0.2.3 # Version of Archipelago required for this yaml to work as expected.
 # Shared Options supported by all games:
 accessibility:
   items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
@@ -40,246 +35,6 @@ accessibility:
 progression_balancing:
   on: 50 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
   off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch/sequence break around missing items.
-# The following 4 options can be uncommented and moved into a game's section they should affect
-# start_inventory: # Begin the file with the listed items/upgrades
-  # Please only use items for the correct game, use triggers if need to be have seperated lists.
-  # Pegasus Boots: on
-  # Bomb Upgrade (+10): 4
-  # Arrow Upgrade (+10): 4
-# start_hints: # Begin the game with these items' locations revealed to you at the start of the game. Get the info via !hint in your client.
-#   - Moon Pearl
-# local_items: # Force certain items to appear in your world only, not across the multiworld. Recognizes some group names, like "Swords"
-#  - "Moon Pearl"
-#  - "Small Keys"
-#  - "Big Keys"
-# non_local_items: # Force certain items to appear outside your world only, unless in single-player. Recognizes some group names, like "Swords"
-#  - "Progressive Weapons"
-# exclude_locations: # Force certain locations to never contain progression items, and always be filled with junk. 
-#  - "Master Sword Pedestal"
-
-Subnautica: {}
-Slay the Spire:
-  character: # Pick What Character you wish to play with.
-    ironclad: 50
-    silent: 50
-    defect: 50
-    watcher: 50
-  ascension: # What Ascension do you wish to play with.
-    # you can add additional values between minimum and maximum
-    0: 50 # minimum value
-    20: 0 # maximum value
-    random: 0
-    random-low: 0
-    random-high: 0
-  heart_run: # Whether or not you will need to collect they 3 keys to unlock the final act
-    #     and beat the heart to finish the game.
-    false: 50
-    true: 0
-Factorio:
-  tech_tree_layout:
-    single: 1
-    small_diamonds: 1
-    medium_diamonds: 1
-    large_diamonds: 1
-    small_pyramids: 1
-    medium_pyramids: 1
-    large_pyramids: 1
-    small_funnels: 1
-    medium_funnels: 1
-    large_funnels: 1
-  recipe_time: # randomize the time it takes for any recipe to craft, this includes smelting, chemical lab, hand crafting etc.
-    vanilla: 1
-    fast: 0 # 25% to 100% of original time
-    normal: 0 # 50 % to 200% of original time
-    slow: 0 # 100% to 400% of original time
-    chaos: 0 # 25% to 400% of original time
-  recipe_ingredients:
-    rocket: 1 # only randomize rocket part recipe
-    science_pack: 1 # also randomize science pack ingredients
-  max_science_pack:
-    automation_science_pack: 0
-    logistic_science_pack: 0
-    military_science_pack: 0
-    chemical_science_pack: 0
-    production_science_pack: 0
-    utility_science_pack: 0
-    space_science_pack: 1
-  tech_cost:
-    very_easy : 0
-    easy : 0
-    kind : 0
-    normal : 1
-    hard : 0
-    very_hard : 0
-    insane : 0
-  silo:
-    vanilla: 1
-    randomize_recipe: 0
-    spawn: 0 # spawn silo near player spawn point
-  free_samples:
-    none: 1
-    single_craft: 0
-    half_stack: 0
-    stack: 0
-  progressive:
-    on: 1
-    off: 0
-    grouped_random: 0
-  tech_tree_information:
-    none: 0
-    advancement: 0 # show which items are a logical advancement
-    full: 1 # show full info on each tech node
-  imported_blueprints: # can be turned off to prevent access to blueprints created outside the current world
-    on: 1
-    off: 0
-  starting_items:
-    burner-mining-drill: 19
-    stone-furnace: 19
-  # Note: Total amount of traps cannot exceed 4, if the sum of them is higher it will get automatically capped.
-  evolution_traps:
-    # Trap items that when received increase the enemy evolution.
-    0: 1
-    1: 0
-    2: 0
-    3: 0
-    4: 0
-    random: 0
-    random-low: 0
-    random-middle: 0
-    random-high: 0
-  evolution_trap_increase:
-    # If present, % increase of Evolution with each trap received.
-    5: 0
-    10: 1
-    15: 0
-    20: 0
-    100: 0
-    random: 0
-    random-low: 0
-    random-middle: 0
-    random-high: 0
-  attack_traps:
-    # Trap items that when received trigger an attack on your base.
-    0: 1
-    1: 0
-    2: 0
-    3: 0
-    4: 0
-    random: 0
-    random-low: 0
-    random-middle: 0
-    random-high: 0
-  world_gen:
-    # frequency, size, richness, terrain segmentation, starting area and water are all of https://wiki.factorio.com/Types/MapGenSize
-    # inverse of water scale
-    terrain_segmentation: 0.5
-    water: 1.5
-    autoplace_controls:
-      # set size to 0 to disable
-      coal:
-        frequency: 1
-        size: 3
-        richness: 6
-      copper-ore:
-        frequency: 1
-        size: 3
-        richness: 6
-      crude-oil:
-        frequency: 1
-        size: 3
-        richness: 6
-      enemy-base:
-        frequency: 1
-        size: 1
-        richness: 1
-      iron-ore:
-        frequency: 1
-        size: 3
-        richness: 6
-      stone:
-        frequency: 1
-        size: 3
-        richness: 6
-      trees:
-        frequency: 1
-        size: 1
-        richness: 1
-      uranium-ore:
-        frequency: 1
-        size: 3
-        richness: 6
-    seed: null # turn into positive number to create specific seed
-    starting_area: 1
-    peaceful_mode: 0
-    cliff_settings:
-      name: cliff
-      cliff_elevation_0: 10 # base elevation, can't be changed in GUI
-      cliff_elevation_interval: 40 # 40/frequency
-      richness: 1 # 0: off, >0: continuity
-    property_expression_names:
-      "control-setting:moisture:bias": 0 # grass bias -0.5 to +0.5
-      "control-setting:moisture:frequency:multiplier": 1 # 1/scale in GUI
-      "control-setting:aux:bias": 0 # -sand/+red desert bias -0.5 to +0.5
-      "control-setting:aux:frequency:multiplier": 1 # 1/scale in GUI
-    pollution:
-      enabled: true
-      diffusion_ratio: 0.02
-      ageing: 1 # GUI dissipation factor
-      enemy_attack_pollution_consumption_modifier: 1
-      min_pollution_to_damage_trees: 60
-      pollution_restored_per_tree_damage: 10
-    enemy_evolution:
-      enabled: true
-      time_factor: 40.0e-7 # GUI value * 0.0000001
-      destroy_factor: 200.0e-5 # GUI value * 0.00001
-      pollution_factor: 9.0e-7 # GUI value * 0.0000001
-    enemy_expansion:
-      enabled: true
-      max_expansion_distance: 7
-      settler_group_min_size: 5
-      settler_group_max_size: 20
-      min_expansion_cooldown: 14400 # 1 to 60 min in ticks
-      max_expansion_cooldown: 216000 # 5 to 180 min in ticks
-Minecraft:
-  advancement_goal: 50 # Number of advancements required (87 max) to spawn the Ender Dragon and complete the game.
-  egg_shards_required: # Number of dragon egg shards to collect (30 max) before the Ender Dragon will spawn. 
-    0: 1
-    5: 0
-    10: 0
-    20: 0
-  egg_shards_available: # Number of egg shards available in the pool (30 max). 
-    0: 1
-    5: 0
-    10: 0
-    20: 0
-  combat_difficulty: # Modifies the level of items logically required for exploring dangerous areas and fighting bosses.
-    easy: 0
-    normal: 1
-    hard: 0
-  include_hard_advancements: # Junk-fills certain RNG-reliant or tedious advancements.
-    on: 0
-    off: 1
-  include_insane_advancements: # Junk-fills extremely difficult advancements; this is only How Did We Get Here? and Adventuring Time.
-    on: 0
-    off: 1
-  include_postgame_advancements: # Some advancements require defeating the Ender Dragon; this will junk-fill them so you won't have to finish to send some items.
-    on: 0
-    off: 1
-  shuffle_structures: # Enables shuffling of villages, outposts, fortresses, bastions, and end cities.
-    on: 0
-    off: 1
-  structure_compasses: # Adds structure compasses to the item pool, which point to the nearest indicated structure.
-    on: 0
-    off: 1
-  bee_traps: # Replaces a percentage of junk items with bee traps, which spawn multiple angered bees around every player when received. 
-    0: 1
-    25: 0
-    50: 0
-    75: 0
-    100: 0
-  send_defeated_mobs: # Send killed mobs to other Minecraft worlds which have this option enabled.
-    on: 0
-    off: 1
 A Link to the Past:
   ### Logic Section ###
   glitches_required: # Determine the logic required to complete the seed
@@ -303,6 +58,7 @@ A Link to the Past:
     own_world: 0
     any_world: 0
     different_world: 0
+    start_with: 0
   smallkey_shuffle: # Small Key Placement
     original_dungeon: 50
     own_dungeons: 0
@@ -310,18 +66,21 @@ A Link to the Past:
     any_world: 0
     different_world: 0
     universal: 0
+    start_with: 0
   compass_shuffle: # Compass Placement
     original_dungeon: 50
     own_dungeons: 0
     own_world: 0
     any_world: 0
     different_world: 0
+    start_with: 0
   map_shuffle: # Map Placement
     original_dungeon: 50
     own_dungeons: 0
     own_world: 0
     any_world: 0
     different_world: 0
+    start_with: 0
   dungeon_counters:
     on: 0 # Always display amount of items checked in a dungeon
     pickup: 50 # Show when compass is picked up
@@ -392,40 +151,31 @@ A Link to the Past:
     50: 0
   crystals_needed_for_gt: # Crystals required to open GT
     0: 0
-    1: 0
-    2: 0
-    3: 0
-    4: 0
-    5: 0
-    6: 0
-    7: 0
+    7: 50
     random: 0
-    random-low: 50 # any valid number, weighted towards the lower end
+    random-low: 0 # any valid number, weighted towards the lower end
     random-middle: 0 # any valid number, weighted towards the central range
     random-high: 0 # any valid number, weighted towards the higher end
   crystals_needed_for_ganon: # Crystals required to hurt Ganon
     0: 0
-    1: 0
-    2: 0
-    3: 0
-    4: 0
-    5: 0
-    6: 0
-    7: 0
+    7: 50
     random: 0
     random-low: 0
     random-middle: 0
-    random-high: 50
+    random-high: 0
   mode:
-    standard: 50 # Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
+    standard: 0 # Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
     open: 50 # Begin the game from your choice of Link's House or the Sanctuary
     inverted: 0 # Begin in the Dark World. The Moon Pearl is required to avoid bunny-state in Light World, and the Light World game map is altered
   retro:
     on: 0 # you must buy a quiver to use the bow, take-any caves and an old-man cave are added to the world. You may need to find your sword from the old man's cave
     off: 50
-  hints:
-    'on': 50 # Hint tiles sometimes give item location hints
-    'off': 0 # Hint tiles provide gameplay tips
+  hints: # Vendors: King Zora and Bottle Merchant say what they're selling.
+  #    On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints.
+    'on': 50
+    vendors: 0
+    'off': 0
+    full: 0
   swordless:
     on: 0 # Your swords are replaced by rupees. Gameplay changes have been made to accommodate this change
     off: 1
@@ -481,13 +231,20 @@ A Link to the Past:
     'on': 0 # Keys, items, and buttons hidden under pots in dungeons are shuffled with other pots in their supertile
     'off': 50 # Default pot item locations
   ### End of Enemizer Section ###
-  beemizer: # Remove items from the global item pool and replace them with single bees (fill bottles) and bee traps
-    0: 50 # No bee traps are placed
-    1: 0 # 25% of rupees, bombs and arrows are replaced with bees, of which 60% are traps and 40% single bees
-    2: 0 # 50% of rupees, bombs and arrows are replaced with bees, of which 70% are traps and 30% single bees
-    3: 0 # 75% of rupees, bombs and arrows are replaced with bees, of which 80% are traps and 20% single bees
-    4: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 90% are traps and 10% single bees
-    5: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 100% are traps and 0% single bees
+  ### Beemizer ###
+  # can add weights for any whole number between 0 and 100
+  beemizer_total_chance: # Remove items from the global item pool and replace them with single bees (fill bottles) and bee traps
+    0: 50   # No junk fill items are replaced (Beemizer is off)
+    25: 0   # 25% chance for each junk fill item (rupees, bombs and arrows) to be replaced with bees
+    50: 0   # 50% chance for each junk fill item (rupees, bombs and arrows) to be replaced with bees
+    75: 0   # 75% chance for each junk fill item (rupees, bombs and arrows) to be replaced with bees
+    100: 0  # All junk fill items (rupees, bombs and arrows) are replaced with bees
+  beemizer_trap_chance:
+    60: 50  # 60% chance for each beemizer replacement to be a trap, 40% chance to be a single bee
+    70: 0   # 70% chance for each beemizer replacement to be a trap, 30% chance to be a single bee
+    80: 0   # 80% chance for each beemizer replacement to be a trap, 20% chance to be a single bee
+    90: 0   # 90% chance for each beemizer replacement to be a trap, 10% chance to be a single bee
+    100: 0  # All beemizer replacements are traps
   ### Shop Settings ###
   shop_item_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
     0: 50
@@ -495,6 +252,14 @@ A Link to the Past:
     15: 0
     30: 0
     random: 0 # 0 to 30 evenly distributed
+  shop_price_modifier: # Percentage modifier for shuffled item prices in shops
+    # you can add additional values between minimum and maximum
+    0: 0 # minimum value
+    400: 0 # maximum value
+    random: 0
+    random-low: 0
+    random-high: 0
+    100: 50
   shop_shuffle:
     none: 50
     g: 0 # Generate new default inventories for overworld/underworld shops, and unique shops
@@ -676,656 +441,9 @@ A Link to the Past:
     vanilla: 0 # Swords are placed in vanilla locations in your own game (Uncle, Pyramid Fairy, Smiths, Pedestal)
     swordless: 0 # swordless mode
 
-Ocarina of Time:
-  logic_rules: # Set the logic used for the generator.
-    glitchless: 50
-    glitched: 0
-    no_logic: 0
-  logic_no_night_tokens_without_suns_song: # Nighttime skulltulas will logically require Sun's Song.
+  death_link:
     false: 50
     true: 0
-  open_forest: # Set the state of Kokiri Forest and the path to Deku Tree.
-    open: 50
-    closed_deku: 0
-    closed: 0
-  open_kakariko: # Set the state of the Kakariko Village gate.
-    open: 50
-    zelda: 0
-    closed: 0
-  open_door_of_time: # Open the Door of Time by default, without the Song of Time.
-    false: 0
-    true: 50
-  zora_fountain: # Set the state of King Zora, blocking the way to Zora's Fountain.
-    open: 0
-    adult: 0
-    closed: 50
-  gerudo_fortress: # Set the requirements for access to Gerudo Fortress.
-    normal: 0
-    fast: 50
-    open: 0
-  bridge: # Set the requirements for the Rainbow Bridge.
-    open: 0
-    vanilla: 0
-    stones: 0
-    medallions: 50
-    dungeons: 0
-    tokens: 0
-  trials: # Set the number of required trials in Ganon's Castle.
-    # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    6: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
-  starting_age: # Choose which age Link will start as.
-    child: 50
-    adult: 0
-  triforce_hunt: # Gather pieces of the Triforce scattered around the world to complete the game.
-    false: 50
-    true: 0
-  triforce_goal: # Number of Triforce pieces required to complete the game.
-    # you can add additional values between minimum and maximum
-    1: 0 # minimum value
-    50: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
-  extra_triforce_percentage: # Percentage of additional Triforce pieces in the pool, separate from the item pool setting.
-    # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    100: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
-  bombchus_in_logic: # Bombchus are properly considered in logic. The first found pack will have 20 chus; Kokiri Shop and Bazaar sell refills; bombchus open Bombchu Bowling.
-    false: 50
-    true: 0
-  bridge_stones: # Set the number of Spiritual Stones required for the rainbow bridge.
-    # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    3: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
-  bridge_medallions: # Set the number of medallions required for the rainbow bridge.
-    # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    6: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
-  bridge_rewards: # Set the number of dungeon rewards required for the rainbow bridge.
-    # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    9: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
-  bridge_tokens: # Set the number of Gold Skulltula Tokens required for the rainbow bridge.
-    # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    100: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
-  shuffle_mapcompass: # Control where to shuffle dungeon maps and compasses.
-    remove: 0
-    startwith: 50
-    vanilla: 0
-    dungeon: 0
-    overworld: 0
-    any_dungeon: 0
-    keysanity: 0
-  shuffle_smallkeys: # Control where to shuffle dungeon small keys.
-    remove: 0
-    vanilla: 0
-    dungeon: 50
-    overworld: 0
-    any_dungeon: 0
-    keysanity: 0
-  shuffle_fortresskeys: # Control where to shuffle the Gerudo Fortress small keys.
-    vanilla: 50
-    overworld: 0
-    any_dungeon: 0
-    keysanity: 0
-  shuffle_bosskeys: # Control where to shuffle boss keys, except the Ganon's Castle Boss Key.
-    remove: 0
-    vanilla: 0
-    dungeon: 50
-    overworld: 0
-    any_dungeon: 0
-    keysanity: 0
-  shuffle_ganon_bosskey: # Control where to shuffle the Ganon's Castle Boss Key.
-    remove: 50
-    vanilla: 0
-    dungeon: 0
-    overworld: 0
-    any_dungeon: 0
-    keysanity: 0
-    on_lacs: 0
-  enhance_map_compass: # Map tells if a dungeon is vanilla or MQ. Compass tells what the dungeon reward is.
-    false: 50
-    true: 0
-  lacs_condition: # Set the requirements for the Light Arrow Cutscene in the Temple of Time.
-    vanilla: 50
-    stones: 0
-    medallions: 0
-    dungeons: 0
-    tokens: 0
-  lacs_stones: # Set the number of Spiritual Stones required for LACS.
-    # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    3: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
-  lacs_medallions: # Set the number of medallions required for LACS.
-    # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    6: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
-  lacs_rewards: # Set the number of dungeon rewards required for LACS.
-    # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    9: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
-  lacs_tokens: # Set the number of Gold Skulltula Tokens required for LACS.
-    # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    100: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
-  shuffle_song_items: # Set where songs can appear.
-    song: 50
-    dungeon: 0
-    any: 0
-  shopsanity: # Randomizes shop contents. "fixed_number" randomizes a specific number of items per shop; "random_number" randomizes the value for each shop.
-    off: 50
-    fixed_number: 0
-    random_number: 0
-  shop_slots: # Number of items per shop to be randomized into the main itempool. Only active if Shopsanity is set to "fixed_number."
-    # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    4: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
-  tokensanity: # Token rewards from Gold Skulltulas are shuffled into the pool.
-    off: 50
-    dungeons: 0
-    overworld: 0
-    all: 0
-  shuffle_scrubs: # Shuffle the items sold by Business Scrubs, and set the prices.
-    off: 50
-    low: 0
-    affordable: 0
-    expensive: 0
-  shuffle_cows: # Cows give items when Epona's Song is played.
-    false: 50
-    true: 0
-  shuffle_kokiri_sword: # Shuffle Kokiri Sword into the item pool.
-    false: 50
-    true: 0
-  shuffle_ocarinas: # Shuffle the Fairy Ocarina and Ocarina of Time into the item pool.
-    false: 50
-    true: 0
-  shuffle_weird_egg: # Shuffle the Weird Egg from Malon at Hyrule Castle.
-    false: 50
-    true: 0
-  shuffle_gerudo_card: # Shuffle the Gerudo Membership Card into the item pool.
-    false: 50
-    true: 0
-  shuffle_beans: # Adds a pack of 10 beans to the item pool and changes the bean salesman to sell one item for 60 rupees.
-    false: 50
-    true: 0
-  shuffle_medigoron_carpet_salesman: # Shuffle the items sold by Medigoron and the Haunted Wasteland Carpet Salesman.
-    false: 50
-    true: 0
-  skip_child_zelda: # Game starts with Zelda's Letter, the item at Zelda's Lullaby, and the relevant events already completed.
-    false: 50
-    true: 0
-  no_escape_sequence: # Skips the tower collapse sequence between the Ganondorf and Ganon fights.
-    false: 0
-    true: 50
-  no_guard_stealth: # The crawlspace into Hyrule Castle skips straight to Zelda.
-    false: 0
-    true: 50
-  no_epona_race: # Epona can always be summoned with Epona's Song.
-    false: 0
-    true: 50
-  skip_some_minigame_phases: # Dampe Race and Horseback Archery give both rewards if the second condition is met on the first attempt.
-    false: 0
-    true: 50
-  complete_mask_quest: # All masks are immediately available to borrow from the Happy Mask Shop.
-    false: 50
-    true: 0
-  useful_cutscenes: # Reenables the Poe cutscene in Forest Temple, Darunia in Fire Temple, and Twinrova introduction. Mostly useful for glitched.
-    false: 50
-    true: 0
-  fast_chests: # All chest animations are fast. If disabled, major items have a slow animation.
-    false: 0
-    true: 50
-  free_scarecrow: # Pulling out the ocarina near a scarecrow spot spawns Pierre without needing the song.
-    false: 50
-    true: 0
-  fast_bunny_hood: # Bunny Hood lets you move 1.5x faster like in Majora's Mask.
-    false: 50
-    true: 0
-  chicken_count: # Controls the number of Cuccos for Anju to give an item as child.
-    # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    7: 0 # maximum value
-    random: 50
-    random-low: 0
-    random-high: 0
-  correct_chest_sizes: # Changes chests containing progression into large chests, and nonprogression into small chests.
-    false: 50
-    true: 0
-  hints: # Gossip Stones can give hints about item locations.
-    none: 0
-    mask: 0
-    agony: 0
-    always: 50
-    false: 0
-  hint_dist: # Choose the hint distribution to use. Affects the frequency of strong hints, which items are always hinted, etc.
-    balanced: 50
-    ddr: 0
-    league: 0
-    mw2: 0
-    scrubs: 0
-    strong: 0
-    tournament: 0
-    useless: 0
-    very_strong: 0
-  text_shuffle: # Randomizes text in the game for comedic effect.
-    none: 50
-    except_hints: 0
-    complete: 0
-  damage_multiplier: # Controls the amount of damage Link takes.
-    half: 0
-    normal: 50
-    double: 0
-    quadruple: 0
-    ohko: 0
-  no_collectible_hearts: # Hearts will not drop from enemies or objects.
-    false: 50
-    true: 0
-  starting_tod: # Change the starting time of day.
-    default: 50
-    sunrise: 0
-    morning: 0
-    noon: 0
-    afternoon: 0
-    sunset: 0
-    evening: 0
-    midnight: 0
-    witching_hour: 0
-  start_with_consumables: # Start the game with full Deku Sticks and Deku Nuts.
-    false: 50
-    true: 0
-  start_with_rupees: # Start with a full wallet. Wallet upgrades will also fill your wallet.
-    false: 50
-    true: 0
-  item_pool_value: # Changes the number of items available in the game.
-    plentiful: 0
-    balanced: 50
-    scarce: 0
-    minimal: 0
-  junk_ice_traps: # Adds ice traps to the item pool.
-    off: 0
-    normal: 50
-    extra: 0
-    mayhem: 0
-    onslaught: 0
-  ice_trap_appearance: # Changes the appearance of ice traps as freestanding items.
-    major_only: 50
-    junk_only: 0
-    anything: 0
-  logic_earliest_adult_trade: # Earliest item that can appear in the adult trade sequence.
-    pocket_egg: 0
-    pocket_cucco: 0
-    cojiro: 0
-    odd_mushroom: 0
-    poachers_saw: 0
-    broken_sword: 0
-    prescription: 50
-    eyeball_frog: 0
-    eyedrops: 0
-    claim_check: 0
-  logic_latest_adult_trade: # Latest item that can appear in the adult trade sequence.
-    pocket_egg: 0
-    pocket_cucco: 0
-    cojiro: 0
-    odd_mushroom: 0
-    poachers_saw: 0
-    broken_sword: 0
-    prescription: 0
-    eyeball_frog: 0
-    eyedrops: 0
-    claim_check: 50
-  default_targeting: # Default targeting option.
-    hold: 50
-    switch: 0
-  display_dpad: # Show dpad icon on HUD for quick actions (ocarina, hover boots, iron boots).
-    false: 0
-    true: 50
-  correct_model_colors: # Makes in-game models match their HUD element colors.
-    false: 0
-    true: 50
-  background_music: # Randomize or disable background music.
-    normal: 50
-    off: 0
-    randomized: 0
-  fanfares: # Randomize or disable item fanfares.
-    normal: 50
-    off: 0
-    randomized: 0
-  ocarina_fanfares: # Enable ocarina songs as fanfares. These are longer than usual fanfares. Does nothing without fanfares randomized.
-    false: 50
-    true: 0
-  kokiri_color: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
-    random_choice: 0
-    completely_random: 0
-    kokiri_green: 50
-    goron_red: 0
-    zora_blue: 0
-    black: 0
-    white: 0
-    azure_blue: 0
-    vivid_cyan: 0
-    light_red: 0
-    fuchsia: 0
-    purple: 0
-    majora_purple: 0
-    twitch_purple: 0
-    purple_heart: 0
-    persian_rose: 0
-    dirty_yellow: 0
-    blush_pink: 0
-    hot_pink: 0
-    rose_pink: 0
-    orange: 0
-    gray: 0
-    gold: 0
-    silver: 0
-    beige: 0
-    teal: 0
-    blood_red: 0
-    blood_orange: 0
-    royal_blue: 0
-    sonic_blue: 0
-    nes_green: 0
-    dark_green: 0
-    lumen: 0
-  goron_color: # Choose a color. Uses the same options as "kokiri_color".
-    random_choice: 0
-    completely_random: 0
-    goron_red: 50
-  zora_color: # Choose a color. Uses the same options as "kokiri_color".
-    random_choice: 0
-    completely_random: 0
-    zora_blue: 50
-  silver_gauntlets_color: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
-    random_choice: 0
-    completely_random: 0
-    silver: 50
-    gold: 0
-    black: 0
-    green: 0
-    blue: 0
-    bronze: 0
-    red: 0
-    sky_blue: 0
-    pink: 0
-    magenta: 0
-    orange: 0
-    lime: 0
-    purple: 0
-  golden_gauntlets_color: # Choose a color. Uses the same options as "silver_gauntlets_color".
-    random_choice: 0
-    completely_random: 0
-    gold: 50
-  mirror_shield_frame_color: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
-    random_choice: 0
-    completely_random: 0
-    red: 50
-    green: 0
-    blue: 0
-    yellow: 0
-    cyan: 0
-    magenta: 0
-    orange: 0
-    gold: 0
-    purple: 0
-    pink: 0
-  navi_color_default_inner: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
-    random_choice: 0
-    completely_random: 0
-    rainbow: 0
-    gold: 0
-    white: 50
-    green: 0
-    light_blue: 0
-    yellow: 0
-    red: 0
-    magenta: 0
-    black: 0
-    tatl: 0
-    tael: 0
-    fi: 0
-    ciela: 0
-    epona: 0
-    ezlo: 0
-    king_of_red_lions: 0
-    linebeck: 0
-    loftwing: 0
-    midna: 0
-    phantom_zelda: 0
-  navi_color_default_outer: # Choose a color. Uses the same options as "navi_color_default_inner" plus "match_inner".
-    random_choice: 0
-    completely_random: 0
-    match_inner: 50
-  navi_color_enemy_inner: # Choose a color. Uses the same options as "navi_color_default_inner".
-    random_choice: 0
-    completely_random: 0
-    yellow: 50
-  navi_color_enemy_outer: # Choose a color. Uses the same options as "navi_color_default_inner" plus "match_inner".
-    random_choice: 0
-    completely_random: 0
-    match_inner: 50
-  navi_color_npc_inner: # Choose a color. Uses the same options as "navi_color_default_inner".
-    random_choice: 0
-    completely_random: 0
-    light_blue: 50
-  navi_color_npc_outer: # Choose a color. Uses the same options as "navi_color_default_inner" plus "match_inner".
-    random_choice: 0
-    completely_random: 0
-    match_inner: 50
-  navi_color_prop_inner: # Choose a color. Uses the same options as "navi_color_default_inner".
-    random_choice: 0
-    completely_random: 0
-    green: 50
-  navi_color_prop_outer: # Choose a color. Uses the same options as "navi_color_default_inner" plus "match_inner".
-    random_choice: 0
-    completely_random: 0
-    match_inner: 50
-  sword_trail_duration: # Set the duration for sword trails.
-    # you can add additional values between minimum and maximum
-    4: 50 # minimum value
-    20: 0 # maximum value
-    random: 0
-    random-low: 0
-    random-high: 0
-  sword_trail_color_inner: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
-    random_choice: 0
-    completely_random: 0
-    rainbow: 0
-    white: 50
-    red: 0
-    green: 0
-    blue: 0
-    cyan: 0
-    magenta: 0
-    orange: 0
-    gold: 0
-    purple: 0
-    pink: 0
-  sword_trail_color_outer: # Uses the same options as "sword_trail_color_inner" plus "match_inner".
-    random_choice: 0
-    completely_random: 0
-    match_inner: 50
-  bombchu_trail_color_inner: # Uses the same options as "sword_trail_color_inner".
-    random_choice: 0
-    completely_random: 0
-    red: 50
-  bombchu_trail_color_outer: # Uses the same options as "sword_trail_color_inner" plus "match_inner".
-    random_choice: 0
-    completely_random: 0
-    match_inner: 50
-  boomerang_trail_color_inner: # Uses the same options as "sword_trail_color_inner".
-    random_choice: 0
-    completely_random: 0
-    yellow: 50
-  boomerang_trail_color_outer: # Uses the same options as "sword_trail_color_inner" plus "match_inner".
-    random_choice: 0
-    completely_random: 0
-    match_inner: 50
-  heart_color: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
-    random_choice: 0
-    completely_random: 0
-    red: 50
-    green: 0
-    blue: 0
-    yellow: 0
-  magic_color: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
-    random_choice: 0
-    completely_random: 0
-    green: 50
-    red: 0
-    blue: 0
-    purple: 0
-    pink: 0
-    yellow: 0
-    white: 0
-  a_button_color: # Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.
-    random_choice: 0
-    completely_random: 0
-    n64_blue: 50
-    n64_green: 0
-    n64_red: 0
-    gamecube_green: 0
-    gamecube_red: 0
-    gamecube_grey: 0
-    yellow: 0
-    black: 0
-    white: 0
-    magenta: 0
-    ruby: 0
-    sapphire: 0
-    lime: 0
-    cyan: 0
-    purple: 0
-    orange: 0
-  b_button_color: # Choose a color. Uses the same options as "a_button_color".
-    random_choice: 0
-    completely_random: 0
-    n64_green: 50
-  c_button_color: # Choose a color. Uses the same options as "a_button_color".
-    random_choice: 0
-    completely_random: 0
-    yellow: 50
-  start_button_color: # Choose a color. Uses the same options as "a_button_color".
-    random_choice: 0
-    completely_random: 0
-    n64_red: 50
-  sfx_navi_overworld: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
-    default: 50
-    completely_random: 0
-    random_ear_safe: 0
-    random_choice: 0
-    none: 0
-  sfx_navi_enemy: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
-    default: 50
-    completely_random: 0
-    random_ear_safe: 0
-    random_choice: 0
-    none: 0
-  sfx_low_hp: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
-    default: 50
-    completely_random: 0
-    random_ear_safe: 0
-    random_choice: 0
-    none: 0
-  sfx_menu_cursor: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
-    default: 50
-    completely_random: 0
-    random_ear_safe: 0
-    random_choice: 0
-    none: 0
-  sfx_menu_select: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
-    default: 50
-    completely_random: 0
-    random_ear_safe: 0
-    random_choice: 0
-    none: 0
-  sfx_nightfall: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
-    default: 50
-    completely_random: 0
-    random_ear_safe: 0
-    random_choice: 0
-    none: 0
-  sfx_horse_neigh: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
-    default: 50
-    completely_random: 0
-    random_ear_safe: 0
-    random_choice: 0
-    none: 0
-  sfx_hover_boots: # Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.
-    default: 50
-    completely_random: 0
-    random_ear_safe: 0
-    random_choice: 0
-  sfx_ocarina: # Change the sound of the ocarina.
-    ocarina: 50
-    malon: 0
-    whistle: 0
-    harp: 0
-    grind_organ: 0
-    flute: 0
-
-  # Uncomment this section to enable logical tricks for Ocarina of Time.
-  # Add logic tricks keyed by "nice" name rather than internal name: "Hidden Grottos without Stone of Agony", not "logic_grottos_without_agony"
-  # The following is the typical set of racing tricks, though you can add or remove them as desired.
-  # logic_tricks: 
-  #   - Fewer Tunic Requirements
-  #   - Hidden Grottos without Stone of Agony
-  #   - Child Deadhand without Kokiri Sword
-  #   - Man on Roof without Hookshot
-  #   - Dodongo's Cavern Spike Trap Room Jump without Hover Boots
-  #   - Hammer Rusted Switches Through Walls
-  #   - Windmill PoH as Adult with Nothing
-  #   - Crater's Bean PoH with Hover Boots
-  #   - Forest Temple East Courtyard Vines with Hookshot
-  #   - Bottom of the Well without Lens of Truth
-  #   - Ganon's Castle without Lens of Truth
-  #   - Gerudo Training Grounds without Lens of Truth
-  #   - Shadow Temple before Invisible Moving Platform without Lens of Truth
-  #   - Shadow Temple beyond Invisible Moving Platform without Lens of Truth
-  #   - Spirit Temple without Lens of Truth
-
-# meta_ignore, linked_options and triggers work for any game
-meta_ignore: # Nullify options specified in the meta.yaml file. Adding an option here guarantees it will not occur in your seed, even if the .yaml file specifies it
-  mode:
-    - inverted # Never play inverted seeds
-  retro:
-    - on # Never play retro seeds
-  swordless:
-    - on # Never play a swordless seed
 
 linked_options:
   - name: crosskeys

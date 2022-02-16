@@ -56,10 +56,12 @@ item_table = {
     "Structure Compass (End City)": ItemData(45041, True),
     "Shulker Box": ItemData(45042, False),
     "Dragon Egg Shard": ItemData(45043, True),
+    "Spyglass": ItemData(45044, True),
     "Bee Trap (Minecraft)": ItemData(45100, False),
 
     "Blaze Rods": ItemData(None, True),
-    "Victory": ItemData(None, True)
+    "Defeat Ender Dragon": ItemData(None, True),
+    "Defeat Wither": ItemData(None, True),
 }
 
 # 33 required items
@@ -87,6 +89,7 @@ required_items = {
     "Infinity Book": 1,
     "3 Ender Pearls": 4,
     "Saddle": 1,
+    "Spyglass": 1,
 }
 
 junk_weights = {

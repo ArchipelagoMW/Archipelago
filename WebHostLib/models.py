@@ -40,7 +40,7 @@ class Seed(db.Entity):
     creation_time = Required(datetime, default=lambda: datetime.utcnow())
     slots = Set(Slot)
     spoiler = Optional(LongStr, lazy=True)
-    meta = Required(str, default=lambda: "{\"race\": false}")  # additional meta information/tags
+    meta = Required(LongStr, default=lambda: "{\"race\": false}")  # additional meta information/tags
 
 
 class Command(db.Entity):
@@ -53,5 +53,5 @@ class Generation(db.Entity):
     id = PrimaryKey(UUID, default=uuid4)
     owner = Required(UUID)
     options = Required(buffer, lazy=True)
-    meta = Required(str, default=lambda: "{\"race\": false}")
+    meta = Required(LongStr, default=lambda: "{\"race\": false}")
     state = Required(int, default=0, index=True)

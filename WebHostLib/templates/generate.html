@@ -11,33 +11,115 @@
     {% include 'header/oceanHeader.html' %}
     <div id="generate-game-wrapper">
         <div id="generate-game" class="grass-island">
-            <h1>Upload Config{% if race %} (Race Mode){% endif %}</h1>
+            <h1>Generate Game{% if race %} (Race Mode){% endif %}</h1>
             <p>
-                This page allows you to generate a game by uploading a yaml file or a zip file containing yaml files.
-                If you do not have a config (yaml) file yet, you may create one on the
-                <a href="/player-settings">Player Settings</a> page.
+                This page allows you to generate a game by uploading a config file or a zip file containing config
+                files. If you do not have a config (.yaml) file yet, you may create one on the game's settings page,
+                which you can find via the <a href="{{ url_for("games") }}">supported games list</a>.
+            </p>
+            <p>
+                Note: This website will always generate games using the current release version of Archipelago,
+                currently {{ version }}.
             </p>
             <p>
                 {% if race -%}
-                    This game will be generated in race mode, meaning the spoiler log will be unavailable,
-                    roms will be encrypted, and single-player games will have no multidata files.
+                    This game will be generated in race mode,
+                    meaning the spoiler log will be unavailable and game specific protections will be in place,
+                    like ROM encryption or cheat mode removal.
                 {%- else -%}
                     If you would like to generate a race game,
-                    <a href="{{ url_for("generate", race=True) }}">click here.</a> Race games are generated without
-                    a spoiler log, the ROMs are encrypted, and single-player games will not include a multidata file.
+                    <a href="{{ url_for("generate", race=True) }}">click here.</a><br />
+                    Race games are generated without a spoiler log and game specific protections will be in place,
+                    like ROM encryption or cheat mode removal.
                 {%- endif -%}
-            </p>
-            <p>
-                After generation is complete, you will have the option to download a patch file.
-                This patch file can be opened with the
-                <a href="https://github.com/ArchipelagoMW/Archipelago/releases">client</a>, which can be
-                used to to create a rom file. In-browser patching is planned for the future.
             </p>
             <div id="generate-game-form-wrapper">
                 <form id="generate-game-form" method="post" enctype="multipart/form-data">
-                    <input id="file-input" type="file" name="file">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label for="forfeit_mode">Forfeit Permission:</label>
+                                    <span
+                                            class="interactive"
+                                            data-tooltip="A forfeit releases all remaining items from the locations
+                                            in your world.">(?)
+                                    </span>
+                                </td>
+                                <td>
+                                    <select name="forfeit_mode" id="forfeit_mode">
+                                        <option value="auto">Automatic on goal completion</option>
+                                        <option value="goal">Allow !forfeit after goal completion</option>
+                                        <option value="auto-enabled">Automatic on goal completion and manual !forfeit</option>
+                                        <option value="enabled">Manual !forfeit</option>
+                                        <option value="disabled">Disabled</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label for="collect_mode">Collect Permission:</label>
+                                    <span
+                                            class="interactive"
+                                            data-tooltip="A collect releases all of your remaining items to you
+                                            from across the multiworld.">(?)
+                                    </span>
+                                </td>
+                                <td>
+                                    <select name="collect_mode" id="collect_mode">
+                                        <option value="goal">Allow !collect after goal completion</option>
+                                        <option value="auto">Automatic on goal completion</option>
+                                        <option value="auto-enabled">Automatic on goal completion and manual !collect</option>
+                                        <option value="enabled">Manual !collect</option>
+                                        <option value="disabled">Disabled</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label for="remaining_mode">Remaining Permission:</label>
+                                    <span
+                                            class="interactive"
+                                            data-tooltip="Remaining lists all items still in your world by name only.">(?)
+                                    </span>
+                                </td>
+                                <td>
+                                    <select name="remaining_mode" id="remaining_mode">
+                                        <option value="disabled">Disabled</option>
+                                        <option value="goal">Allow !remaining after goal completion</option>
+                                        <option value="enabled">Manual !remaining</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label for="hint_cost"> Hint Cost:</label>
+                                    <span
+                                            class="interactive"
+                                            data-tooltip="After gathering this many checks, players can !hint <itemname>
+                                            to get the location of that hint item.">(?)
+                                    </span>
+                                </td>
+                                <td>
+                                    <select name="hint_cost" id="hint_cost">
+                                        {% for n in range(0, 110, 5) %}
+                                            <option {% if n == 10 %}selected="selected" {% endif %} value="{{ n }}">
+                                                {% if n > 100 %}Off{% else %}{{ n }}%{% endif %}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="generate-form-button-row">
+                        <input id="file-input" type="file" name="file">
+                    </div>
                 </form>
-                <button id="generate-game-button">Upload</button>
+                <button id="generate-game-button">Upload File</button>
             </div>
         </div>
     </div>

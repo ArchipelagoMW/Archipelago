@@ -59,8 +59,8 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
     def build_rule(self, player: int):
         logging.debug(f"Building rules for {self.name}")
 
-        return lambda state, technologies=technologies: all(state.has(f"Automated {ingredient}", player)
-                                                            for ingredient in self.ingredients)
+        return lambda state: all(state.has(f"Automated {ingredient}", player)
+                                 for ingredient in self.ingredients)
 
     def get_prior_technologies(self) -> Set[Technology]:
         """Get Technologies that have to precede this one to resolve tree connections."""
@@ -84,11 +84,18 @@ class CustomTechnology(Technology):
 
     def __init__(self, origin: Technology, world, allowed_packs: Set[str], player: int):
         ingredients = origin.ingredients & allowed_packs
+        military_allowed = "military-science-pack" in allowed_packs \
+                           and ((ingredients & {"chemical-science-pack", "production-science-pack", "utility-science-pack"})
+                                or origin.name == "rocket-silo")
         self.player = player
         if origin.name not in world.worlds[player].static_nodes:
+            if military_allowed:
+                ingredients.add("military-science-pack")
             ingredients = list(ingredients)
             ingredients.sort()  # deterministic sample
             ingredients = world.random.sample(ingredients, world.random.randint(1, len(ingredients)))
+        elif origin.name == "rocket-silo" and military_allowed:
+            ingredients.add("military-science-pack")
         super(CustomTechnology, self).__init__(origin.name, ingredients, origin.factorio_id)
 
 
@@ -124,6 +131,7 @@ class Recipe(FactorioElement):
         base = {technology_table[tech_name] for tech_name in recipe_sources.get(self.name, ())}
         for ingredient in self.ingredients:
             base |= required_technologies[ingredient]
+        base |= required_technologies[self.crafting_machine]
         return base
 
     @property
@@ -150,10 +158,13 @@ class Recipe(FactorioElement):
         total_energy = self.energy
         for ingredient, cost in self.ingredients.items():
             if ingredient in all_product_sources:
-                for ingredient_recipe in all_product_sources[ingredient]:  # FIXME: this may select the wrong recipe
+                selected_recipe_energy = float('inf')
+                for ingredient_recipe in all_product_sources[ingredient]:
                     craft_count = max((n for name, n in ingredient_recipe.products.items() if name == ingredient))
-                    total_energy += ingredient_recipe.total_energy / craft_count * cost
-                    break
+                    recipe_energy = ingredient_recipe.total_energy / craft_count * cost
+                    if recipe_energy < selected_recipe_energy:
+                        selected_recipe_energy = recipe_energy
+                total_energy += selected_recipe_energy
         return total_energy
 
 
@@ -290,19 +301,17 @@ for category_name, machine_name in machine_per_category.items():
 required_technologies: Dict[str, FrozenSet[Technology]] = Utils.KeyedDefaultDict(lambda ingredient_name: frozenset(
     recursively_get_unlocking_technologies(ingredient_name, unlock_func=unlock)))
 
-advancement_technologies: Set[str] = set()
-for ingredient_name in all_ingredient_names:
-    technologies = required_technologies[ingredient_name]
-    advancement_technologies |= {technology.name for technology in technologies}
-
-
-def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe) -> Set[str]:
+def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe, satellite_recipe: Recipe) -> Set[str]:
     techs = set()
     if silo_recipe:
         for ingredient in silo_recipe.ingredients:
             techs |= recursively_get_unlocking_technologies(ingredient)
     for ingredient in part_recipe.ingredients:
         techs |= recursively_get_unlocking_technologies(ingredient)
+    if satellite_recipe:
+        techs |= satellite_recipe.unlocking_technologies
+        for ingredient in satellite_recipe.ingredients:
+            techs |= recursively_get_unlocking_technologies(ingredient)
     return {tech.name for tech in techs}
 
 
@@ -324,8 +333,6 @@ rocket_recipes = {
     Options.MaxSciencePack.option_automation_science_pack:
         {"copper-cable": 10, "iron-plate": 10, "wood": 10}
 }
-
-advancement_technologies |= {tech.name for tech in required_technologies["rocket-silo"]}
 
 # progressive technologies
 # auto-progressive
@@ -420,8 +427,6 @@ for root in sorted_rows:
                                         unlocks=any(technology_table[tech].unlocks for tech in progressive))
     progressive_tech_table[root] = progressive_technology.factorio_id
     progressive_technology_table[root] = progressive_technology
-    if any(tech in advancement_technologies for tech in progressive):
-        advancement_technologies.add(root)
 
 tech_to_progressive_lookup: Dict[str, str] = {}
 for technology in progressive_technology_table.values():
@@ -454,9 +459,8 @@ rel_cost = {
     "used-up-uranium-fuel-cell": 1000
 }
 
-# forbid liquids for now, TODO: allow a single liquid per assembler
-blacklist: Set[str] = all_ingredient_names | {"rocket-part", "crude-oil", "water", "sulfuric-acid", "petroleum-gas",
-                                              "light-oil", "heavy-oil", "lubricant", "steam"}
+blacklist: Set[str] = all_ingredient_names | {"rocket-part"}
+liquids: Set[str] = {"crude-oil", "water", "sulfuric-acid", "petroleum-gas", "light-oil", "heavy-oil", "lubricant", "steam"}
 
 
 @Utils.cache_argsless
@@ -469,7 +473,7 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
             cost += rel_cost.get(ingredient_name, 1) * amount
         return cost
 
-    science_pack_pools = {}
+    science_pack_pools: Dict[str, Set[str]] = {}
     already_taken = blacklist.copy()
     current_difficulty = 5
     for science_pack in Options.MaxSciencePack.get_ordered_science_packs():
@@ -480,6 +484,10 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
                 current |= set(recipe.products)
         if science_pack == "automation-science-pack":
             current |= {"iron-ore", "copper-ore", "coal", "stone"}
+            # Can't hand craft automation science if liquids end up in its recipe, making the seed impossible.
+            current -= liquids
+        elif science_pack == "logistic-science-pack":
+            current |= {"steam"}
         current -= already_taken
         already_taken |= current
         current_difficulty *= 2

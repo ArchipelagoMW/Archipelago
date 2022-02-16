@@ -727,6 +727,14 @@ known_logic_tricks = {
                     To kill it, the logic normally guarantees one of
                     Hookshot, Bow, or Magic.
                     '''},
+    'Skip King Zora as Adult with Nothing': {
+        'name'    : 'logic_king_zora_skip',
+        'tags'    : ("Zora's Domain",),
+        'tooltip' : '''\
+                    With a precise jump as adult, it is possible to
+                    get on the fence next to King Zora from the front
+                    to access Zora's Fountain.
+                    '''},
     'Shadow Temple River Statue with Bombchu': {
         'name'    : 'logic_shadow_statue',
         'tags'    : ("Shadow Temple",),

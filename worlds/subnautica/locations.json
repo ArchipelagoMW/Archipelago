@@ -41,7 +41,7 @@
 
     { "id": 33010, "position": { "x": -1396.3, "y": -330.8, "z": 730.0},
       "need_laser_cutter": false, "can_slip_through": false,
-      "name": "Dunes Wreck - PDA" },
+      "name": "Dunes North Wreck - PDA" },
 
     { "id": 33011, "position": { "x": -1409.8, "y": -332.4, "z": 706.9},
       "need_laser_cutter": true, "can_slip_through": false,
@@ -380,7 +380,7 @@
       "name": "Aurora Drive Room - Upgrade Console" },
 
     { "id": 33095, "position": { "x": 991.6, "y": 3.2, "z": -31.0},
-      "need_laser_cutter": false, "can_slip_through": false, "need_propulsion_cannon": true,
+      "need_laser_cutter": true, "can_slip_through": false, "need_propulsion_cannon": true,
       "name": "Aurora Prawn Suit Bay - Upgrade Console" },
 
     { "id": 33096, "position": { "x": 952.1, "y": 41.2, "z": 113.9},
@@ -497,7 +497,7 @@
 
     { "id": 33124, "position": { "x": -30.4, "y": -1220.3, "z": 111.8},
       "need_laser_cutter": false, "can_slip_through": false,
-      "name": "Alien Thermal Plant - Yelow Alien Data Terminal" },
+      "name": "Alien Thermal Plant - Yellow Alien Data Terminal" },
 
     { "id": 33125, "position": { "x": 245.8, "y": -1430.6, "z": -311.5},
       "need_laser_cutter": false, "can_slip_through": false,

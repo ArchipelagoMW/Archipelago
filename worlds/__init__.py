@@ -3,7 +3,8 @@ import os
 
 __all__ = {"lookup_any_item_id_to_name",
            "lookup_any_location_id_to_name",
-           "network_data_package"}
+           "network_data_package",
+           "AutoWorldRegister"}
 
 # import all submodules to trigger AutoWorldRegister
 for file in os.scandir(os.path.dirname(__file__)):
@@ -27,10 +28,6 @@ for world_name, world in AutoWorldRegister.world_types.items():
     lookup_any_location_id_to_name.update(world.location_id_to_name)
 
 network_data_package = {
-    # Remove with 0.2.0
-    "lookup_any_location_id_to_name": lookup_any_location_id_to_name,  # legacy, to be removed
-    "lookup_any_item_id_to_name": lookup_any_item_id_to_name,  # legacy, to be removed
-
     "version": sum(world.data_version for world in AutoWorldRegister.world_types.values()),
     "games": games,
 }
@@ -38,3 +35,5 @@ network_data_package = {
 # Set entire datapackage to version 0 if any of them are set to 0
 if any(not world.data_version for world in AutoWorldRegister.world_types.values()):
     network_data_package["version"] = 0
+    import logging
+    logging.warning("Datapackage is in custom mode.")

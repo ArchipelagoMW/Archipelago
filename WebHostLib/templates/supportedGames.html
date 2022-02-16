@@ -9,9 +9,13 @@
     {% include 'header/grassHeader.html' %}
     <div id="games">
         <h1>Currently Supported Games</h1>
-        {% for game, description in worlds.items() %}
-        <h3><a href="{{ url_for("player_settings", game=game) }}">{{ game }}</a></h3>
-        <p>{{ description }}</p>
+        {% for game, description in worlds.items() | sort %}
+        <h3><a href="{{ url_for("game_info", game=game, lang="en") }}">{{ game }}</a></h3>
+        <p>
+            <a href="{{ url_for("player_settings", game=game) }}">Settings Page</a>
+            <br />
+            {{ description }}
+        </p>
         {% endfor %}
     </div>
 {% endblock %}

@@ -7,7 +7,7 @@ logger = logging.getLogger("Ocarina of Time")
 
 from .Location import OOTLocation, LocationFactory, location_name_to_id
 from .Entrance import OOTEntrance
-from .EntranceShuffle import shuffle_random_entrances
+from .EntranceShuffle import shuffle_random_entrances, entrance_shuffle_table, EntranceShuffleError
 from .Items import OOTItem, item_table, oot_data_to_ap_id
 from .ItemPool import generate_itempool, add_dungeon_items, get_junk_item, get_junk_pool
 from .Regions import OOTRegion, TimeOfDay
@@ -24,6 +24,7 @@ from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 from .Hints import hint_dist_keys, get_hint_area, buildWorldGossipHints
 from .HintList import getRequiredHints
+from .SaveContext import SaveContext
 
 from Utils import get_options, output_path
 from BaseClasses import MultiWorld, CollectionState, RegionType
@@ -36,10 +37,14 @@ location_id_offset = 67000
 
 # OoT's generate_output doesn't benefit from more than 2 threads, instead it uses a lot of memory.
 i_o_limiter = threading.Semaphore(2)
-hint_data_available = threading.Event()
 
 
 class OOTWorld(World):
+    """
+    The Legend of Zelda: Ocarina of Time is a 3D action/adventure game. Travel through Hyrule in two time periods, 
+    learn magical ocarina songs, and explore twelve dungeons on your quest. Use Link's many items and abilities 
+    to rescue the Seven Sages, and then confront Ganondorf to save Hyrule!
+    """
     game: str = "Ocarina of Time"
     options: dict = oot_options
     topology_present: bool = True
@@ -47,6 +52,7 @@ class OOTWorld(World):
                        data[2] is not None}
     location_name_to_id = location_name_to_id
     remote_items: bool = False
+    remote_start_inventory: bool = False
 
     data_version = 1
 
@@ -61,6 +67,8 @@ class OOTWorld(World):
             self.adult_reachable_regions = {player: set() for player in range(1, parent.players + 1)}
             self.child_blocked_connections = {player: set() for player in range(1, parent.players + 1)}
             self.adult_blocked_connections = {player: set() for player in range(1, parent.players + 1)}
+            self.day_reachable_regions   = {player: set() for player in range(1, parent.players + 1)}
+            self.dampe_reachable_regions = {player: set() for player in range(1, parent.players + 1)}
             self.age = {player: None for player in range(1, parent.players + 1)}
 
         def oot_copy(self):
@@ -73,6 +81,10 @@ class OOTWorld(World):
                                              range(1, self.world.players + 1)}
             ret.adult_blocked_connections = {player: copy.copy(self.adult_blocked_connections[player]) for player in
                                              range(1, self.world.players + 1)}
+            ret.day_reachable_regions   = {player: copy.copy(self.adult_reachable_regions[player]) for player in
+                                           range(1, self.world.players + 1)}
+            ret.dampe_reachable_regions = {player: copy.copy(self.adult_reachable_regions[player]) for player in
+                                           range(1, self.world.players + 1)}
             return ret
 
         CollectionState.__init__ = oot_init
@@ -83,10 +95,16 @@ class OOTWorld(World):
             world.state.adult_reachable_regions = {player: set() for player in range(1, world.players + 1)}
             world.state.child_blocked_connections = {player: set() for player in range(1, world.players + 1)}
             world.state.adult_blocked_connections = {player: set() for player in range(1, world.players + 1)}
+            world.state.day_reachable_regions   = {player: set() for player in range(1, world.players + 1)}
+            world.state.dampe_reachable_regions = {player: set() for player in range(1, world.players + 1)}
             world.state.age = {player: None for player in range(1, world.players + 1)}
 
         return super().__new__(cls)
 
+    def __init__(self, world, player):
+        self.hint_data_available = threading.Event()
+        super(OOTWorld, self).__init__(world, player)
+    
     def generate_early(self):
         # Player name MUST be at most 16 bytes ascii-encoded, otherwise won't write to ROM correctly
         if len(bytes(self.world.get_player_name(self.player), 'ascii')) > 16:
@@ -130,7 +148,7 @@ class OOTWorld(World):
         # Incompatible option handling
         # ER and glitched logic are not compatible; glitched takes priority
         if self.logic_rules == 'glitched':
-            self.shuffle_interior_entrances = False
+            self.shuffle_interior_entrances = 'off'
             self.shuffle_grotto_entrances = False
             self.shuffle_dungeon_entrances = False
             self.shuffle_overworld_entrances = False
@@ -141,6 +159,9 @@ class OOTWorld(World):
         # Closed forest and adult start are not compatible; closed forest takes priority
         if self.open_forest == 'closed':
             self.starting_age = 'child'
+            # These ER options force closed forest to become closed deku
+            if (self.shuffle_interior_entrances == 'all' or self.shuffle_overworld_entrances or self.warp_songs or self.spawn_positions):
+                self.open_forest = 'closed_deku'
 
         # Skip child zelda and shuffle egg are not compatible; skip-zelda takes priority
         if self.skip_child_zelda:
@@ -154,7 +175,6 @@ class OOTWorld(World):
 
         # Determine which dungeons are MQ
         # Possible future plan: allow user to pick which dungeons are MQ
-        self.mq_dungeons = 0  # temporary disable for client-side issues
         mq_dungeons = self.world.random.sample(dungeon_table, self.mq_dungeons)
         self.dungeon_mq = {item['name']: (item in mq_dungeons) for item in dungeon_table}
 
@@ -170,20 +190,13 @@ class OOTWorld(World):
         self.mq_dungeons_random = False  # this will be a deprecated option later
         self.ocarina_songs = False  # just need to pull in the OcarinaSongs module
         self.big_poe_count = 1  # disabled due to client-side issues for now
-        # ER options
-        self.shuffle_interior_entrances = 'off'
-        self.shuffle_grotto_entrances = False
-        self.shuffle_dungeon_entrances = False
-        self.shuffle_overworld_entrances = False
-        self.owl_drops = False
-        self.warp_songs = False
-        self.spawn_positions = False
+        self.mix_entrance_pools = False
+        self.decouple_entrances = False
 
         # Set internal names used by the OoT generator
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld']
 
         # Hint stuff
-        self.misc_hints = True  # this is just always on
         self.clearer_hints = True  # this is being enforced since non-oot items do not have non-clear hint text
         self.gossip_hints = {}
         self.required_locations = []
@@ -261,13 +274,20 @@ class OOTWorld(World):
             # Both two-handed swords can be required in glitch logic, so only consider them nonprogression in glitchless
             self.nonadvancement_items.add('Biggoron Sword')
             self.nonadvancement_items.add('Giants Knife')
-
+            if not getattr(self, 'logic_water_central_gs_fw', False):
+                # Farore's Wind skippable if not used for this logic trick in Water Temple
+                self.nonadvancement_items.add('Farores Wind')
+  
     def load_regions_from_json(self, file_path):
         region_json = read_json(file_path)
 
         for region in region_json:
             new_region = OOTRegion(region['region_name'], RegionType.Generic, None, self.player)
             new_region.world = self.world
+            if 'pretty_name' in region:
+                new_region.pretty_name = region['pretty_name']
+            if 'font_color' in region:
+                new_region.font_color = region['font_color']
             if 'scene' in region:
                 new_region.scene = region['scene']
             if 'hint' in region:
@@ -310,7 +330,7 @@ class OOTWorld(World):
                         new_location.show_in_spoiler = False
             if 'exits' in region:
                 for exit, rule in region['exits'].items():
-                    new_exit = OOTEntrance(self.player, '%s => %s' % (new_region.name, exit), new_region)
+                    new_exit = OOTEntrance(self.player, self.world, '%s -> %s' % (new_region.name, exit), new_region)
                     new_exit.vanilla_connected_region = exit
                     new_exit.rule_string = rule
                     if self.world.logic_rules != 'none':
@@ -408,7 +428,8 @@ class OOTWorld(World):
 
     def create_item(self, name: str):
         if name in item_table:
-            return OOTItem(name, self.player, item_table[name], False, (name in self.nonadvancement_items))
+            return OOTItem(name, self.player, item_table[name], False, 
+                (name in self.nonadvancement_items if getattr(self, 'nonadvancement_items', None) else False))
         return OOTItem(name, self.player, ('Event', True, None, None), True, False)
 
     def make_event_item(self, name, location, item=None):
@@ -428,7 +449,7 @@ class OOTWorld(World):
             world_type = 'Glitched World'
         overworld_data_path = data_path(world_type, 'Overworld.json')
         menu = OOTRegion('Menu', None, None, self.player)
-        start = OOTEntrance(self.player, 'New Game', menu)
+        start = OOTEntrance(self.player, self.world, 'New Game', menu)
         menu.exits.append(start)
         self.world.regions.append(menu)
         self.load_regions_from_json(overworld_data_path)
@@ -440,14 +461,10 @@ class OOTWorld(World):
             self.random_shop_prices()
         self.set_scrub_prices()
 
-        # logger.info('Setting Entrances.')
-        # set_entrances(self)
-        # Enforce vanilla for now
+        # Bind entrances to vanilla
         for region in self.regions:
             for exit in region.exits:
                 exit.connect(self.world.get_region(exit.vanilla_connected_region, self.player))
-        if self.entrance_shuffle:
-            shuffle_random_entrances(self)
 
     def create_items(self):
         # Generate itempool
@@ -456,20 +473,21 @@ class OOTWorld(World):
         junk_pool = get_junk_pool(self)
         removed_items = []
         # Determine starting items
-        for item in self.world.precollected_items:
-            if item.player != self.player:
-                continue
+        for item in self.world.precollected_items[self.player]:
             if item.name in self.remove_from_start_inventory:
                 self.remove_from_start_inventory.remove(item.name)
                 removed_items.append(item.name)
             else:
-                self.starting_items[item.name] += 1
-                if item.type == 'Song':
-                    self.starting_songs = True
-                # Call the junk fill and get a replacement
-                if item in self.itempool:
-                    self.itempool.remove(item)
-                    self.itempool.append(self.create_item(*get_junk_item(pool=junk_pool)))
+                if item.name not in SaveContext.giveable_items:
+                    raise Exception(f"Invalid OoT starting item: {item.name}")
+                else:
+                    self.starting_items[item.name] += 1
+                    if item.type == 'Song':
+                        self.starting_songs = True
+                    # Call the junk fill and get a replacement
+                    if item in self.itempool:
+                        self.itempool.remove(item)
+                        self.itempool.append(self.create_item(*get_junk_item(pool=junk_pool)))
         if self.start_with_consumables:
             self.starting_items['Deku Sticks'] = 30
             self.starting_items['Deku Nuts'] = 40
@@ -480,6 +498,36 @@ class OOTWorld(World):
         self.remove_from_start_inventory.extend(removed_items)
 
     def set_rules(self):
+        # This has to run AFTER creating items but BEFORE set_entrances_based_rules
+        if self.entrance_shuffle:
+            # 10 attempts at shuffling entrances
+            tries = 10
+            while tries:
+                try:
+                    shuffle_random_entrances(self)
+                except EntranceShuffleError as e:
+                    tries -= 1
+                    logging.getLogger('').debug(f"Failed shuffling entrances for world {self.player}, retrying {tries} more times")
+                    if tries == 0:
+                        raise e
+                    # Restore original state and delete assumed entrances
+                    for entrance in self.get_shuffled_entrances():
+                        entrance.connect(self.world.get_region(entrance.vanilla_connected_region, self.player))
+                        if entrance.assumed:
+                            assumed_entrance = entrance.assumed
+                            if assumed_entrance.connected_region is not None:
+                                assumed_entrance.disconnect()
+                            del assumed_entrance
+                        entrance.reverse = None
+                        entrance.replaces = None
+                        entrance.assumed = None
+                        entrance.shuffled = False
+                    # Clean up root entrances
+                    root = self.get_region("Root Exits")
+                    root.exits = root.exits[:8]
+                else:
+                    break
+
         set_rules(self)
         set_entrances_based_rules(self)
 
@@ -505,7 +553,7 @@ class OOTWorld(World):
         all_locations = self.get_locations()
         reachable = self.world.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
-                       loc.internal and loc.event and loc.locked and loc not in reachable]
+                       (loc.internal or loc.type == 'Drop') and loc.event and loc.locked and loc not in reachable]
         for loc in unreachable:
             loc.parent_region.locations.remove(loc)
         # Exception: Sell Big Poe is an event which is only reachable if Bottle with Big Poe is in the item pool. 
@@ -586,14 +634,20 @@ class OOTWorld(World):
             fill_restrictive(self.world, self.world.get_all_state(False), any_dungeon_locations,
                              itempools['any_dungeon'], True, True)
 
-        # If anything is overworld-only, enforce them as local and not in the remaining dungeon locations
-        if itempools['overworld'] or self.shuffle_fortresskeys == 'overworld':
-            from worlds.generic.Rules import forbid_items_for_player
-            fortresskeys = {'Small Key (Gerudo Fortress)'} if self.shuffle_fortresskeys == 'overworld' else set()
-            local_overworld_items = set(map(lambda item: item.name, itempools['overworld'])).union(fortresskeys)
-            for location in self.world.get_locations():
-                if location.player != self.player or location in any_dungeon_locations:
-                    forbid_items_for_player(location, local_overworld_items, self.player)
+        # If anything is overworld-only, fill into local non-dungeon locations
+        if self.shuffle_fortresskeys == 'overworld':
+            fortresskeys = filter(lambda item: item.player == self.player and item.type == 'FortressSmallKey', self.world.itempool)
+            itempools['overworld'].extend(fortresskeys)
+        if itempools['overworld']:
+            for item in itempools['overworld']:
+                self.world.itempool.remove(item)
+            itempools['overworld'].sort(key=lambda item: 
+                {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'FortressSmallKey': 1}.get(item.type, 0))
+            non_dungeon_locations = [loc for loc in self.get_locations() if not loc.item and loc not in any_dungeon_locations 
+                and loc.type != 'Shop' and (loc.type != 'Song' or self.shuffle_song_items != 'song')]
+            self.world.random.shuffle(non_dungeon_locations)
+            fill_restrictive(self.world, self.world.get_all_state(False), non_dungeon_locations,
+                             itempools['overworld'], True, True)
 
         # Place songs
         # 5 built-in retries because this section can fail sometimes
@@ -611,18 +665,35 @@ class OOTWorld(World):
             songs = list(filter(lambda item: item.player == self.player and item.type == 'Song', self.world.itempool))
             for song in songs:
                 self.world.itempool.remove(song)
+
+            important_warps = (self.shuffle_special_interior_entrances or self.shuffle_overworld_entrances or 
+                self.warp_songs or self.spawn_positions)
+            song_order = {
+                'Zeldas Lullaby': 1,
+                'Eponas Song': 1,
+                'Sarias Song': 3 if important_warps else 0,
+                'Suns Song': 0,
+                'Song of Time': 0,
+                'Song of Storms': 3,
+                'Minuet of Forest': 2 if important_warps else 0,
+                'Bolero of Fire': 2 if important_warps else 0,
+                'Serenade of Water': 2 if important_warps else 0,
+                'Requiem of Spirit': 2,
+                'Nocturne of Shadow': 2,
+                'Prelude of Light': 2 if important_warps else 0,
+            }
+            songs.sort(key=lambda song: song_order.get(song.name, 0))
+
             while tries:
                 try:
-                    self.world.random.shuffle(songs)  # shuffling songs makes it less likely to fail by placing ZL last
                     self.world.random.shuffle(song_locations)
                     fill_restrictive(self.world, self.world.get_all_state(False), song_locations[:], songs[:],
                                      True, True)
                     logger.debug(f"Successfully placed songs for player {self.player} after {6 - tries} attempt(s)")
-                    tries = 0
                 except FillError as e:
                     tries -= 1
                     if tries == 0:
-                        raise e
+                        raise Exception(f"Failed placing songs for player {self.player}. Error cause: {e}")
                     logger.debug(f"Failed placing songs for player {self.player}. Retries left: {tries}")
                     # undo what was done
                     for song in songs:
@@ -632,6 +703,8 @@ class OOTWorld(World):
                         location.item = None
                         location.locked = False
                         location.event = False
+                else:
+                    break
 
         # Place shop items
         # fast fill will fail because there is some logic on the shop items. we'll gather them up and place the shop items
@@ -640,7 +713,11 @@ class OOTWorld(World):
             shop_locations = list(
                 filter(lambda location: location.type == 'Shop' and location.name not in self.shop_prices,
                        self.world.get_unfilled_locations(player=self.player)))
-            shop_items.sort(key=lambda item: 1 if item.name in {"Buy Goron Tunic", "Buy Zora Tunic"} else 0)
+            shop_items.sort(key=lambda item: {
+                'Buy Deku Shield': 3*int(self.open_forest == 'closed'), 
+                'Buy Goron Tunic': 2, 
+                'Buy Zora Tunic': 2
+            }.get(item.name, int(item.advancement)))  # place Deku Shields if needed, then tunics, then other advancement, then junk
             self.world.random.shuffle(shop_locations)
             for item in shop_items:
                 self.world.itempool.remove(item)
@@ -649,12 +726,15 @@ class OOTWorld(World):
 
         # If skip child zelda is active and Song from Impa is unfilled, put a local giveable item into it.
         impa = self.world.get_location("Song from Impa", self.player)
-        if self.skip_child_zelda and impa.item is None:
-            from .SaveContext import SaveContext
-            item_to_place = self.world.random.choice(list(item for item in self.world.itempool if
-                                                          item.player == self.player and item.name in SaveContext.giveable_items))
-            impa.place_locked_item(item_to_place)
-            self.world.itempool.remove(item_to_place)
+        if self.skip_child_zelda:
+            if impa.item is None:
+                item_to_place = self.world.random.choice(list(item for item in self.world.itempool if
+                                                              item.player == self.player and item.name in SaveContext.giveable_items))
+                impa.place_locked_item(item_to_place)
+                self.world.itempool.remove(item_to_place)
+            # Give items to startinventory
+            self.world.push_precollected(impa.item)
+            self.world.push_precollected(self.create_item("Zeldas Letter"))
 
         # Exclude locations in Ganon's Castle proportional to the number of items required to make the bridge
         # Check for dungeon ER later
@@ -689,13 +769,16 @@ class OOTWorld(World):
 
     def generate_output(self, output_directory: str):
         if self.hints != 'none':
-            hint_data_available.wait()
+            self.hint_data_available.wait()
 
         with i_o_limiter:
             # Make ice traps appear as other random items
             ice_traps = [loc.item for loc in self.get_locations() if loc.item.name == 'Ice Trap']
             for trap in ice_traps:
                 trap.looks_like_item = self.create_item(self.world.slot_seeds[self.player].choice(self.fake_items).name)
+
+            # Seed hint RNG, used for ganon text lines also
+            self.hint_rng = self.world.slot_seeds[self.player]
 
             outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}"
             rom = Rom(file=get_options()['oot_options']['rom_file'])
@@ -706,6 +789,24 @@ class OOTWorld(World):
             rom.update_header()
             create_patch_file(rom, output_path(output_directory, outfile_name + '.apz5'))
             rom.restore()
+
+            # Write entrances to spoiler log
+            all_entrances = self.get_shuffled_entrances()
+            all_entrances.sort(key=lambda x: x.name)
+            all_entrances.sort(key=lambda x: x.type)
+            if not self.decouple_entrances:
+                for loadzone in all_entrances:
+                    if loadzone.primary:
+                        entrance = loadzone
+                    else:
+                        entrance = loadzone.reverse
+                    if entrance.reverse is not None:
+                        self.world.spoiler.set_entrance(entrance, entrance.replaces, 'both', self.player)
+                    else:
+                        self.world.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
+            else:
+                for entrance in all_entrances:
+                    self.world.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
 
     # Gathers hint data for OoT. Loops over all world locations for woth, barren, and major item locations.
     @classmethod
@@ -737,11 +838,16 @@ class OOTWorld(World):
                                 or (loc.player in item_hint_players and loc.name in world.worlds[loc.player].added_hint_types['item'])):
                         autoworld.major_item_locations.append(loc)
 
-                    if loc.game == "Ocarina of Time" and loc.item.code and (not loc.locked or loc.item.type == 'Song'):
+                    if loc.game == "Ocarina of Time" and loc.item.code and (not loc.locked or 
+                        (loc.item.type == 'Song' or 
+                            (loc.item.type == 'SmallKey'         and world.worlds[loc.player].shuffle_smallkeys     == 'any_dungeon') or
+                            (loc.item.type == 'FortressSmallKey' and world.worlds[loc.player].shuffle_fortresskeys  == 'any_dungeon') or
+                            (loc.item.type == 'BossKey'          and world.worlds[loc.player].shuffle_bosskeys      == 'any_dungeon') or
+                            (loc.item.type == 'GanonBossKey'     and world.worlds[loc.player].shuffle_ganon_bosskey == 'any_dungeon'))):
                         if loc.player in barren_hint_players:
                             hint_area = get_hint_area(loc)
                             items_by_region[loc.player][hint_area]['weight'] += 1
-                            if loc.item.advancement:
+                            if loc.item.advancement or loc.item.never_exclude:
                                 items_by_region[loc.player][hint_area]['is_barren'] = False
                         if loc.player in woth_hint_players and loc.item.advancement:
                             # Skip item at location and see if game is still beatable
@@ -768,9 +874,27 @@ class OOTWorld(World):
         except Exception as e:
             raise e
         finally:
-            hint_data_available.set()
+            for autoworld in world.get_game_worlds("Ocarina of Time"):
+                autoworld.hint_data_available.set()
 
     def modify_multidata(self, multidata: dict):
+
+        hint_entrances = set()
+        for entrance in entrance_shuffle_table:
+            hint_entrances.add(entrance[1][0])
+            if len(entrance) > 2:
+                hint_entrances.add(entrance[2][0])
+
+        def get_entrance_to_region(region):
+            if region.name == 'Root': 
+                return None
+            for entrance in region.entrances:
+                if entrance.name in hint_entrances:
+                    return entrance
+            for entrance in region.entrances:
+                return get_entrance_to_region(entrance.parent_region)
+
+        # Remove undesired items from start_inventory
         for item_name in self.remove_from_start_inventory:
             item_id = self.item_name_to_id.get(item_name, None)
             try:
@@ -778,10 +902,26 @@ class OOTWorld(World):
             except ValueError as e:
                 logger.warning(f"Attempted to remove nonexistent item id {item_id} from OoT precollected items ({item_name})")
 
+        # Add ER hint data
+        if self.shuffle_interior_entrances != 'off' or self.shuffle_dungeon_entrances or self.shuffle_grotto_entrances:
+            er_hint_data = {}
+            for region in self.regions:
+                main_entrance = get_entrance_to_region(region)
+                if main_entrance is not None and main_entrance.shuffled:
+                    for location in region.locations:
+                        if type(location.address) == int:
+                            er_hint_data[location.address] = main_entrance.name
+            multidata['er_hint_data'][self.player] = er_hint_data
+
 
     # Helper functions
-    def get_shuffled_entrances(self):
-        return []  # later this will return all entrances modified by ER. patching process needs it now though
+    def get_shufflable_entrances(self, type=None, only_primary=False):
+        return [entrance for entrance in self.world.get_entrances() if (entrance.player == self.player and 
+            (type == None or entrance.type == type) and 
+            (not only_primary or entrance.primary))]
+
+    def get_shuffled_entrances(self, type=None, only_primary=False):
+        return [entrance for entrance in self.get_shufflable_entrances(type=type, only_primary=only_primary) if entrance.shuffled]
 
     def get_locations(self):
         for region in self.regions:
@@ -793,6 +933,9 @@ class OOTWorld(World):
 
     def get_region(self, region):
         return self.world.get_region(region, self.player)
+
+    def get_entrance(self, entrance):
+        return self.world.get_entrance(entrance, self.player)
 
     def is_major_item(self, item: OOTItem):
         if item.type == 'Token':
@@ -819,3 +962,29 @@ class OOTWorld(World):
             return False
 
         return True
+
+    # Specifically ensures that only real items are gotten, not any events.
+    # In particular, ensures that Time Travel needs to be found.
+    def get_state_with_complete_itempool(self):
+        all_state = self.world.get_all_state(use_cache=False)
+        # Remove event progression items
+        for item, player in all_state.prog_items:
+            if (item not in item_table or item_table[item][2] is None) and player == self.player:
+                all_state.prog_items[(item, player)] = 0
+        # Remove all events and checked locations
+        all_state.locations_checked = {loc for loc in all_state.locations_checked if loc.player != self.player}
+        all_state.events = {loc for loc in all_state.events if loc.player != self.player}
+        # If free_scarecrow give Scarecrow Song
+        if self.free_scarecrow:
+            all_state.collect(self.create_item("Scarecrow Song"), event=True)
+
+        # Invalidate caches
+        all_state.child_reachable_regions[self.player] = set()
+        all_state.adult_reachable_regions[self.player] = set()
+        all_state.child_blocked_connections[self.player] = set()
+        all_state.adult_blocked_connections[self.player] = set()
+        all_state.day_reachable_regions[self.player] = set()
+        all_state.dampe_reachable_regions[self.player] = set()
+        all_state.stale[self.player] = True
+
+        return all_state

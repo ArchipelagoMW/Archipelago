@@ -3,12 +3,13 @@ import itertools
 import re
 import zlib
 from collections import defaultdict
+from functools import partial
 
 from .LocationList import business_scrubs
 from .Hints import writeGossipStoneHints, buildAltarHints, \
         buildGanonText, getSimpleHintNoPrefix
 from .Utils import data_path
-from .Messages import read_messages, update_message_by_id, read_shop_items, \
+from .Messages import read_messages, update_message_by_id, read_shop_items, update_warp_song_text, \
         write_shop_items, remove_unused_messages, make_player_message, \
         add_item_messages, repack_messages, shuffle_messages, \
         get_message_by_id
@@ -1006,6 +1007,12 @@ def patch_rom(world, rom):
         # Archipelago forces this item to be local so it can always be given to the player. Usually it's a song so it's no problem.
         item = world.get_location('Song from Impa').item
         save_context.give_raw_item(item.name)
+        if item.name == 'Slingshot':
+            save_context.give_raw_item("Deku Seeds (30)")
+        elif item.name == 'Bow': 
+            save_context.give_raw_item("Arrows (30)")
+        elif item.name == 'Bomb Bag': 
+            save_context.give_raw_item("Bombs (20)")
         save_context.write_bits(0x0ED7, 0x04) # "Obtained Malon's Item"
         save_context.write_bits(0x0ED7, 0x08) # "Woke Talon in castle"
         save_context.write_bits(0x0ED7, 0x10) # "Talon has fled castle"
@@ -1321,8 +1328,11 @@ def patch_rom(world, rom):
     # Write item overrides
     override_table = get_override_table(world)
     rom.write_bytes(rom.sym('cfg_item_overrides'), get_override_table_bytes(override_table))
-    rom.write_byte(rom.sym('PLAYER_ID'), world.player) # Write player ID
+    rom.write_byte(rom.sym('PLAYER_ID'), min(world.player, 255)) # Write player ID
     rom.write_bytes(rom.sym('AP_PLAYER_NAME'), bytearray(world.world.get_player_name(world.player), 'ascii'))
+
+    if world.death_link:
+        rom.write_byte(rom.sym('DEATH_LINK'), 0x01)
 
     # Revert Song Get Override Injection
     if not songs_as_items:
@@ -1331,10 +1341,10 @@ def patch_rom(world, rom):
         rom.write_int32(0xAE5E04, 0xAD0F00A4)
         # requiem of spirit
         rom.write_int32s(0xAC9ABC, [0x3C010001, 0x00300821])
-        # sun song
-        rom.write_int32(0xE09F68, 0x8C6F00A4)
-        rom.write_int32(0xE09F74, 0x01CFC024)
-        rom.write_int32(0xE09FB0, 0x240F0001)
+        # sun song -- commented for AP to always set the relevant bit in event_chk_inf
+        # rom.write_int32(0xE09F68, 0x8C6F00A4)
+        # rom.write_int32(0xE09F74, 0x01CFC024)
+        # rom.write_int32(0xE09FB0, 0x240F0001)
         # song of time
         rom.write_int32(0xDB532C, 0x24050003)
 
@@ -1630,7 +1640,7 @@ def patch_rom(world, rom):
                     rom.write_int16(chest_address + 2, 0x0190) # X pos
                     rom.write_int16(chest_address + 6, 0xFABC) # Z pos
             else:
-                if location.item.advancement:
+                if not location.item.advancement:
                     rom.write_int16(chest_address + 2, 0x0190) # X pos
                     rom.write_int16(chest_address + 6, 0xFABC) # Z pos
 
@@ -1646,7 +1656,7 @@ def patch_rom(world, rom):
                     rom.write_int16(chest_address_0 + 6, 0x0172)  # Z pos
                     rom.write_int16(chest_address_2 + 6, 0x0172)  # Z pos
             else:
-                if location.item.advancement:
+                if not location.item.advancement:
                     rom.write_int16(chest_address_0 + 6, 0x0172)  # Z pos
                     rom.write_int16(chest_address_2 + 6, 0x0172)  # Z pos
 
@@ -1737,6 +1747,10 @@ def patch_rom(world, rom):
     elif world.text_shuffle == 'complete':
         permutation = shuffle_messages(messages, except_hints=False)
 
+    # If Warp Song ER is on, update text boxes
+    if world.warp_songs:
+        update_warp_song_text(messages, world)
+
     repack_messages(rom, messages, permutation)
 
     # output a text dump, for testing...
@@ -1804,7 +1818,7 @@ def write_rom_item(rom, item_id, item):
 
 
 def get_override_table(world):
-    return list(filter(lambda val: val != None, map(get_override_entry, world.world.get_filled_locations(world.player))))
+    return list(filter(lambda val: val != None, map(partial(get_override_entry, world.player), world.world.get_filled_locations(world.player))))
 
 
 override_struct = struct.Struct('>xBBBHBB') # match override_t in get_items.c
@@ -1812,10 +1826,10 @@ def get_override_table_bytes(override_table):
     return b''.join(sorted(itertools.starmap(override_struct.pack, override_table)))
 
 
-def get_override_entry(location):
+def get_override_entry(player_id, location):
     scene = location.scene
     default = location.default
-    player_id = location.item.player
+    player_id = 0 if player_id == location.item.player else min(location.item.player, 255)
     if location.item.game != 'Ocarina of Time': 
         # This is an AP sendable. It's guaranteed to not be None. 
         looks_like_item_id = 0

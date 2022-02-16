@@ -1,5 +1,5 @@
-from ..generic.Rules import set_rule
-from .Locations import exclusion_table, events_table
+from ..generic.Rules import set_rule, add_rule
+from .Locations import exclusion_table, get_postgame_advancements
 from BaseClasses import MultiWorld
 from ..AutoWorld import LogicMixin
 
@@ -7,6 +7,9 @@ from ..AutoWorld import LogicMixin
 class MinecraftLogic(LogicMixin):
 
     def _mc_has_iron_ingots(self, player: int):
+        return self.has('Progressive Tools', player) and self.has('Progressive Resource Crafting', player)
+
+    def _mc_has_copper_ingots(self, player: int):
         return self.has('Progressive Tools', player) and self.has('Progressive Resource Crafting', player)
 
     def _mc_has_gold_ingots(self, player: int): 
@@ -20,6 +23,9 @@ class MinecraftLogic(LogicMixin):
 
     def _mc_has_bottle(self, player: int): 
         return self.has('Bottles', player) and self.has('Progressive Resource Crafting', player)
+
+    def _mc_has_spyglass(self, player: int):
+        return self._mc_has_copper_ingots(player) and self.has('Spyglass', player) and self._mc_can_adventure(player)
 
     def _mc_can_enchant(self, player: int): 
         return self.has('Enchanting', player) and self._mc_has_diamond_pickaxe(player) # mine obsidian and lapis
@@ -81,48 +87,31 @@ class MinecraftLogic(LogicMixin):
             return self._mc_fortress_loot(player) and (normal_kill or self.can_reach('The Nether', 'Region', player) or self.can_reach('The End', 'Region', player))
         return self._mc_fortress_loot(player) and normal_kill
 
+    def _mc_can_respawn_ender_dragon(self, player: int):
+        return self.can_reach('The Nether', 'Region', player) and self.can_reach('The End', 'Region', player) and \
+            self.has('Progressive Resource Crafting', player) # smelt sand into glass
+
     def _mc_can_kill_ender_dragon(self, player: int):
-        # Since it is possible to kill the dragon without getting any of the advancements related to it, we need to require that it can be respawned. 
-        respawn_dragon = self.can_reach('The Nether', 'Region', player) and self.has('Progressive Resource Crafting', player)
         if self._mc_combat_difficulty(player) == 'easy': 
-            return respawn_dragon and self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and \
+            return self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and \
                    self.has('Archery', player) and self._mc_can_brew_potions(player) and self._mc_can_enchant(player)
         if self._mc_combat_difficulty(player) == 'hard': 
-            return respawn_dragon and ((self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player)) or \
-                   (self.has('Progressive Weapons', player, 1) and self.has('Bed', player)))
-        return respawn_dragon and self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
+            return (self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player)) or \
+                   (self.has('Progressive Weapons', player, 1) and self.has('Bed', player))
+        return self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
 
     def _mc_has_structure_compass(self, entrance_name: str, player: int):
         if not self.world.structure_compasses[player]:
             return True
         return self.has(f"Structure Compass ({self.world.get_entrance(entrance_name, player).connected_region.name})", player)
 
-
-def set_rules(world: MultiWorld, player: int):
-    def reachable_locations(state):
-        postgame_advancements = exclusion_table['postgame'].copy()
-        postgame_advancements.add('Free the End')
-        for event in events_table.keys():
-            postgame_advancements.add(event)
-        return [location for location in world.get_locations() if
-                location.player == player and
-                location.name not in postgame_advancements and
-                location.can_reach(state)]
+# Sets rules on entrances and advancements that are always applied
+def set_advancement_rules(world: MultiWorld, player: int):
 
     # Retrieves the appropriate structure compass for the given entrance
     def get_struct_compass(entrance_name): 
         struct = world.get_entrance(entrance_name, player).connected_region.name
         return f"Structure Compass ({struct})"
-
-    # 92 total advancements. Goal is to complete X advancements and then Free the End. 
-    # There are 5 advancements which cannot be included for dragon spawning (4 postgame, Free the End)
-    # Hence the true maximum is (92 - 5) = 87
-    goal = world.advancement_goal[player]
-    egg_shards = min(world.egg_shards_required[player], world.egg_shards_available[player])
-    can_complete = lambda state: len(reachable_locations(state)) >= goal and state.has("Dragon Egg Shard", player, egg_shards) and state.can_reach('The End', 'Region', player) and state._mc_can_kill_ender_dragon(player)
-
-    if world.logic[player] != 'nologic':
-        world.completion_condition[player] = lambda state: state.has('Victory', player)
 
     set_rule(world.get_entrance("Nether Portal", player), lambda state: state.has('Flint and Steel', player) and 
         (state.has('Bucket', player) or state.has('Progressive Tools', player, 3)) and 
@@ -134,7 +123,8 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_entrance("Nether Structure 2", player), lambda state: state._mc_can_adventure(player) and state._mc_has_structure_compass("Nether Structure 2", player))
     set_rule(world.get_entrance("The End Structure", player), lambda state: state._mc_can_adventure(player) and state._mc_has_structure_compass("The End Structure", player))
 
-    set_rule(world.get_location("Ender Dragon", player), lambda state: can_complete(state))
+    set_rule(world.get_location("Ender Dragon", player), lambda state: state._mc_can_kill_ender_dragon(player))
+    set_rule(world.get_location("Wither", player), lambda state: state._mc_can_kill_wither(player))
     set_rule(world.get_location("Blaze Spawner", player), lambda state: state._mc_fortress_loot(player))
 
     set_rule(world.get_location("Who is Cutting Onions?", player), lambda state: state._mc_can_piglin_trade(player))
@@ -143,7 +133,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Very Very Frightening", player), lambda state: state.has("Channeling Book", player) and state._mc_can_use_anvil(player) and state._mc_can_enchant(player) and \
         ((world.get_region('Village', player).entrances[0].parent_region.name != 'The End' and state.can_reach('Village', 'Region', player)) or state.can_reach('Zombie Doctor', 'Location', player))) # need villager into the overworld for lightning strike
     set_rule(world.get_location("Hot Stuff", player), lambda state: state.has("Bucket", player) and state._mc_has_iron_ingots(player))
-    set_rule(world.get_location("Free the End", player), lambda state: can_complete(state))
+    set_rule(world.get_location("Free the End", player), lambda state: state._mc_can_respawn_ender_dragon(player) and state._mc_can_kill_ender_dragon(player))
     set_rule(world.get_location("A Furious Cocktail", player), lambda state: state._mc_can_brew_potions(player) and 
                                                                              state.has("Fishing Rod", player) and # Water Breathing
                                                                              state.can_reach('The Nether', 'Region', player) and # Regeneration, Fire Resistance, gold nuggets
@@ -155,7 +145,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Not Today, Thank You", player), lambda state: state.has("Shield", player) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Isn't It Iron Pick", player), lambda state: state.has("Progressive Tools", player, 2) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Local Brewery", player), lambda state: state._mc_can_brew_potions(player))
-    set_rule(world.get_location("The Next Generation", player), lambda state: can_complete(state))
+    set_rule(world.get_location("The Next Generation", player), lambda state: state._mc_can_kill_ender_dragon(player))
     set_rule(world.get_location("Fishy Business", player), lambda state: state.has("Fishing Rod", player))
     set_rule(world.get_location("Hot Tourist Destinations", player), lambda state: True)
     set_rule(world.get_location("This Boat Has Legs", player), lambda state: (state._mc_fortress_loot(player) or state._mc_complete_raid(player)) and 
@@ -189,7 +179,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Total Beelocation", player), lambda state: state.has("Silk Touch Book", player) and state._mc_can_use_anvil(player) and state._mc_can_enchant(player))
     set_rule(world.get_location("Arbalistic", player), lambda state: state._mc_craft_crossbow(player) and state.has("Piercing IV Book", player) and 
                                                                      state._mc_can_use_anvil(player) and state._mc_can_enchant(player))
-    set_rule(world.get_location("The End... Again...", player), lambda state: can_complete(state))
+    set_rule(world.get_location("The End... Again...", player), lambda state: state._mc_can_respawn_ender_dragon(player) and state._mc_can_kill_ender_dragon(player))
     set_rule(world.get_location("Acquire Hardware", player), lambda state: state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Not Quite \"Nine\" Lives", player), lambda state: state._mc_can_piglin_trade(player) and state.has("Progressive Resource Crafting", player, 2))
     set_rule(world.get_location("Cover Me With Diamonds", player), lambda state: state.has("Progressive Armor", player, 2) and state.can_reach("Diamonds!", "Location", player))
@@ -197,9 +187,10 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Hired Help", player), lambda state: state.has("Progressive Resource Crafting", player, 2) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Return to Sender", player), lambda state: True)
     set_rule(world.get_location("Sweet Dreams", player), lambda state: state.has("Bed", player) or state.can_reach('Village', 'Region', player))
-    set_rule(world.get_location("You Need a Mint", player), lambda state: can_complete(state) and state._mc_has_bottle(player))
+    set_rule(world.get_location("You Need a Mint", player), lambda state: state._mc_can_respawn_ender_dragon(player) and state._mc_has_bottle(player))
     set_rule(world.get_location("Adventure", player), lambda state: True)
-    set_rule(world.get_location("Monsters Hunted", player), lambda state: can_complete(state) and state._mc_can_kill_wither(player) and state.has("Fishing Rod", player))  # pufferfish for Water Breathing
+    set_rule(world.get_location("Monsters Hunted", player), lambda state: state._mc_can_respawn_ender_dragon(player) and state._mc_can_kill_ender_dragon(player) and 
+        state._mc_can_kill_wither(player) and state.has("Fishing Rod", player))  # pufferfish for Water Breathing
     set_rule(world.get_location("Enchanter", player), lambda state: state._mc_can_enchant(player))
     set_rule(world.get_location("Voluntary Exile", player), lambda state: state._mc_basic_combat(player))
     set_rule(world.get_location("Eye Spy", player), lambda state: state._mc_enter_stronghold(player))
@@ -225,7 +216,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Uneasy Alliance", player), lambda state: state._mc_has_diamond_pickaxe(player) and state.has('Fishing Rod', player))
     set_rule(world.get_location("Diamonds!", player), lambda state: state.has("Progressive Tools", player, 2) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("A Terrible Fortress", player), lambda state: True)  # since you don't have to fight anything
-    set_rule(world.get_location("A Throwaway Joke", player), lambda state: True)  # kill drowned
+    set_rule(world.get_location("A Throwaway Joke", player), lambda state: state._mc_can_adventure(player))  # kill drowned
     set_rule(world.get_location("Minecraft", player), lambda state: True)
     set_rule(world.get_location("Sticky Situation", player), lambda state: state.has("Campfire", player) and state._mc_has_bottle(player))
     set_rule(world.get_location("Ol' Betsy", player), lambda state: state._mc_craft_crossbow(player))
@@ -248,4 +239,44 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Overkill", player), lambda state: state._mc_can_brew_potions(player) and 
         (state.has("Progressive Weapons", player) or state.can_reach('The Nether', 'Region', player)))  # strength 1 + stone axe crit OR strength 2 + wood axe crit
     set_rule(world.get_location("Librarian", player), lambda state: state.has("Enchanting", player))
-    set_rule(world.get_location("Overpowered", player), lambda state: state.has("Progressive Resource Crafting", player, 2) and state._mc_has_gold_ingots(player))
+    set_rule(world.get_location("Overpowered", player), lambda state: state._mc_has_iron_ingots(player) and 
+        state.has('Progressive Tools', player, 2) and state._mc_basic_combat(player))  # mine gold blocks w/ iron pick
+    set_rule(world.get_location("Wax On", player), lambda state: state._mc_has_copper_ingots(player) and state.has('Campfire', player) and
+        state.has('Progressive Resource Crafting', player, 2))
+    set_rule(world.get_location("Wax Off", player), lambda state: state._mc_has_copper_ingots(player) and state.has('Campfire', player) and
+        state.has('Progressive Resource Crafting', player, 2))
+    set_rule(world.get_location("The Cutest Predator", player), lambda state: state._mc_has_iron_ingots(player) and state.has('Bucket', player))
+    set_rule(world.get_location("The Healing Power of Friendship", player), lambda state: state._mc_has_iron_ingots(player) and state.has('Bucket', player))
+    set_rule(world.get_location("Is It a Bird?", player), lambda state: state._mc_has_spyglass(player) and state._mc_can_adventure(player))
+    set_rule(world.get_location("Is It a Balloon?", player), lambda state: state._mc_has_spyglass(player))
+    set_rule(world.get_location("Is It a Plane?", player), lambda state: state._mc_has_spyglass(player) and state._mc_can_respawn_ender_dragon(player))
+    set_rule(world.get_location("Surge Protector", player), lambda state: state.has("Channeling Book", player) and state._mc_can_use_anvil(player) and state._mc_can_enchant(player) and \
+        ((world.get_region('Village', player).entrances[0].parent_region.name != 'The End' and state.can_reach('Village', 'Region', player)) or state.can_reach('Zombie Doctor', 'Location', player)))
+    set_rule(world.get_location("Light as a Rabbit", player), lambda state: state._mc_can_adventure(player) and state._mc_has_iron_ingots(player) and state.has('Bucket', player))
+    set_rule(world.get_location("Glow and Behold!", player), lambda state: state._mc_can_adventure(player))
+    set_rule(world.get_location("Whatever Floats Your Goat!", player), lambda state: state._mc_can_adventure(player))
+
+# Sets rules on completion condition and postgame advancements
+def set_completion_rules(world: MultiWorld, player: int):
+    def reachable_locations(state):
+        postgame_advancements = get_postgame_advancements(world.required_bosses[player].current_key)
+        return [location for location in world.get_locations() if
+                location.player == player and
+                location.name not in postgame_advancements and
+                location.address != None and
+                location.can_reach(state)]
+
+    def defeated_required_bosses(state):
+        return (world.required_bosses[player].current_key not in {"ender_dragon", "both"} or state.has("Defeat Ender Dragon", player)) and \
+            (world.required_bosses[player].current_key not in {"wither", "both"} or state.has("Defeat Wither", player))
+
+    # 103 total advancements. Goal is to complete X advancements and then defeat the dragon. 
+    # There are 11 possible postgame advancements; 5 for dragon, 5 for wither, 1 shared between them
+    # Hence the max for completion is 92
+    egg_shards = min(world.egg_shards_required[player], world.egg_shards_available[player])
+    completion_requirements = lambda state: len(reachable_locations(state)) >= world.advancement_goal[player] and \
+        state.has("Dragon Egg Shard", player, egg_shards)
+    world.completion_condition[player] = lambda state: completion_requirements(state) and defeated_required_bosses(state)
+    # Set rules on postgame advancements
+    for adv_name in get_postgame_advancements(world.required_bosses[player].current_key):
+        add_rule(world.get_location(adv_name, player), completion_requirements)
