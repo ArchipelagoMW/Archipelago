@@ -404,10 +404,10 @@ class ALTTPWorld(World):
 
     def get_filler_item_name(self) -> str:
         if self.world.goal[self.player] == "icerodhunt":
-            item = GetBeemizerItem(self.player, "Nothing")
+            item = "Nothing"
         else:
             item = "Rupees (5)"  # temporary
-        return item
+        return GetBeemizerItem(self.player, item)
 
 
 def get_same_seed(world, seed_def: tuple) -> str:
