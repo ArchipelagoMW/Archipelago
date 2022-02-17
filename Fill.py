@@ -310,7 +310,7 @@ def balance_multiworld_progression(world: MultiWorld):
         checked_locations = set()
         unchecked_locations = set(world.get_locations())
 
-        reachable_locations_count = {player: 0 for player in world.player_ids}
+        reachable_locations_count = {player: 0 for player in world.get_all_ids()}
 
         def get_sphere_locations(sphere_state, locations):
             sphere_state.sweep_for_events(key_only=True, locations=locations)
