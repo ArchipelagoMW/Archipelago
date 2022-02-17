@@ -30,7 +30,7 @@ from randomizer import VariaRandomizer
 
 class SMCollectionState(metaclass=AutoLogicRegister):
     def init_mixin(self, parent: MultiWorld):
-        # for unit tests where MultiWorld is instanciated before worlds
+        # for unit tests where MultiWorld is instantiated before worlds
         if hasattr(parent, "state"):
             self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff,
                                                parent.state.smbm[player].onlyBossLeft) for player in
