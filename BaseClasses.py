@@ -6,7 +6,7 @@ import logging
 import json
 import functools
 from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, TYPE_CHECKING
+from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, TYPE_CHECKING, Callable
 import secrets
 import random
 
@@ -16,6 +16,7 @@ import NetUtils
 
 if TYPE_CHECKING:
     from worlds import AutoWorld
+
     auto_world = AutoWorld.World
 else:
     auto_world = object
@@ -193,17 +194,20 @@ class MultiWorld():
 
     def set_options(self, args):
         from worlds import AutoWorld
+        for option_key in Options.common_options:
+            setattr(self, option_key, getattr(args, option_key, {}))
+        for option_key in Options.per_game_common_options:
+            setattr(self, option_key, getattr(args, option_key, {}))
+
         for player in self.player_ids:
             self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             for option_key in world_type.options:
                 setattr(self, option_key, getattr(args, option_key, {}))
-            for option_key in Options.common_options:
-                setattr(self, option_key, getattr(args, option_key, {}))
-            for option_key in Options.per_game_common_options:
-                setattr(self, option_key, getattr(args, option_key, {}))
+
             self.worlds[player] = world_type(self, player)
 
+    def set_item_links(self):
         item_links = {}
 
         for player in self.player_ids:
@@ -239,6 +243,7 @@ class MultiWorld():
             setattr(self, option_key, {player_id: option(option.default) for player_id in self.player_ids})
         for option_key, option in Options.per_game_common_options.items():
             setattr(self, option_key, {player_id: option(option.default) for player_id in self.player_ids})
+        self.state = CollectionState(self)
 
     def secure(self):
         self.random = secrets.SystemRandom()
@@ -551,7 +556,9 @@ class MultiWorld():
         return False
 
 
-class CollectionState(object):
+class CollectionState():
+    additional_init_functions: List[Callable] = []
+    additional_copy_functions: List[Callable] = []
 
     def __init__(self, parent: MultiWorld):
         self.prog_items = Counter()
@@ -565,6 +572,8 @@ class CollectionState(object):
         for items in parent.precollected_items.values():
             for item in items:
                 self.collect(item, True)
+        for function in self.additional_init_functions:
+            function(self, parent)
 
     def update_reachable_regions(self, player: int):
         from worlds.alttp.EntranceShuffle import indirect_connections
@@ -609,6 +618,8 @@ class CollectionState(object):
         ret.events = copy.copy(self.events)
         ret.path = copy.copy(self.path)
         ret.locations_checked = copy.copy(self.locations_checked)
+        for function in self.additional_copy_functions:
+            ret = function(self, ret)
         return ret
 
     def can_reach(self, spot, resolution_hint=None, player=None) -> bool:
@@ -921,7 +932,7 @@ class Entrance(object):
 
         return False
 
-    def connect(self, region: Region, addresses=None, target = None):
+    def connect(self, region: Region, addresses=None, target=None):
         self.connected_region = region
         self.target = target
         self.addresses = addresses

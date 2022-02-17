@@ -77,6 +77,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
     world.set_options(args)
+    world.set_item_links()
     world.state = CollectionState(world)
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, world.seed)
 
