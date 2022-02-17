@@ -394,6 +394,7 @@ def generate_itempool(world):
             # and it will now place the removed key into its original location
             loc = world.get_location(key_loc, player)
             loc.place_locked_item(drop_item)
+            loc.address = None
         else:
             # key drop item removed because of start_with option or icerodhunt, and key drop shuffle is on.
             # Either way it will be placed into the starting inventory, and replaced in the pool with

@@ -257,8 +257,8 @@ def global_rules(world, player):
     set_rule(world.get_location('Desert Palace - Big Chest', player), lambda state: state.has('Big Key (Desert Palace)', player))
     set_rule(world.get_location('Desert Palace - Torch', player), lambda state: state.has('Pegasus Boots', player))
     set_rule(world.get_entrance('Desert Palace East Wing', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 2))
-    set_rule(world.get_location('Desert Palace - Beamos Hall Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 2))
-    set_rule(world.get_location('Desert Palace - Desert Tiles 2 Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 3))
+    set_rule(world.get_location('Desert Palace - Beamos Hall Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 2) and state.can_kill_most_things(player))
+    set_rule(world.get_location('Desert Palace - Desert Tiles 2 Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 3) and state.can_kill_most_things(player))
     set_rule(world.get_location('Desert Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and state.has_fire_source(player) and state.world.get_location('Desert Palace - Prize', player).parent_region.dungeon.boss.can_defeat(state))
     set_rule(world.get_location('Desert Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and state.has_fire_source(player) and state.world.get_location('Desert Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
 

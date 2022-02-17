@@ -25,6 +25,18 @@ class TestDesertPalace(TestDungeon):
             ["Desert Palace - Big Key Chest", False, [], ['Small Key (Desert Palace)']],
             ["Desert Palace - Big Key Chest", True, ['Small Key (Desert Palace)']],
 
+            ["Desert Palace - Desert Tiles 1 Pot Key", True, []],
+
+            ["Desert Palace - Beamos Hall Pot Key", False, []],
+            ["Desert Palace - Beamos Hall Pot Key", False, [], ['Small Key (Desert Palace)']],
+            ["Desert Palace - Beamos Hall Pot Key", False, ['Progressive Sword', 'Hammer', 'Fire Rod', 'Ice Rod', 'Progressive Bow', 'Cane of Somaria', 'Cane of Byrna']],
+            ["Desert Palace - Beamos Hall Pot Key", True, ['Small Key (Desert Palace)', 'Progressive Sword', 'Hammer', 'Fire Rod', 'Ice Rod', 'Progressive Bow', 'Cane of Somaria', 'Cane of Byrna']],
+
+            ["Desert Palace - Desert Tiles 2 Pot Key", False, []],
+            ["Desert Palace - Desert Tiles 2 Pot Key", False, ['Small Key (Desert Palace)']],
+            ["Desert Palace - Desert Tiles 2 Pot Key", False, ['Progressive Sword', 'Hammer', 'Fire Rod', 'Ice Rod', 'Progressive Bow', 'Cane of Somaria', 'Cane of Byrna']],
+            ["Desert Palace - Desert Tiles 2 Pot Key", True, ['Small Key (Desert Palace)', 'Progressive Sword', 'Hammer', 'Fire Rod', 'Ice Rod', 'Progressive Bow', 'Cane of Somaria', 'Cane of Byrna']],
+
             ["Desert Palace - Boss", False, []],
             ["Desert Palace - Boss", False, [], ['Small Key (Desert Palace)']],
             ["Desert Palace - Boss", False, [], ['Big Key (Desert Palace)']],
@@ -33,7 +45,6 @@ class TestDesertPalace(TestDungeon):
             ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Fire Rod']],
             ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Lamp', 'Progressive Sword']],
             ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Lamp', 'Hammer']],
-            ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Lamp', 'Ice Rod']],
             ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Lamp', 'Cane of Somaria']],
             ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Lamp', 'Cane of Byrna']],
         ])

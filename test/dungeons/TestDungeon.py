@@ -63,4 +63,4 @@ class TestDungeon(unittest.TestCase):
                     item.advancement = True
                     state.collect(item)
 
-                self.assertEqual(self.world.get_location(location, 1).can_reach(state), access)
+                self.assertEqual(self.world.get_location(location, 1).can_reach(state), access, f"failed {self.world.get_location(location, 1)} with: {item_pool}")
