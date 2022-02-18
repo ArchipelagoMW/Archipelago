@@ -377,17 +377,14 @@ def generate_itempool(world):
     for key_loc in key_drop_data:
         key_data = key_drop_data[key_loc]
         drop_item = ItemFactory(key_data[3], player)
-        if (("big" in key_data[3] and world.bigkey_shuffle[player] == bigkey_shuffle.option_start_with) or
-            ("small" in key_data[3] and world.smallkey_shuffle[player] == smallkey_shuffle.option_start_with) or
-            world.goal[player] == 'icerodhunt' or not world.key_drop_shuffle[player]):
-            # in any of these cases, the key drop item should be removed from the pool
+        if world.goal[player] == 'icerodhunt' or not world.key_drop_shuffle[player]:
             if drop_item in dungeon_items:
                 dungeon_items.remove(drop_item)
             else:
                 dungeon = (drop_item.name.split("(")[1].split(")")[0], player)
                 if drop_item in world.dungeons[dungeon].small_keys:
                     world.dungeons[dungeon].small_keys.remove(drop_item)
-                elif world.dungeons[dungeon].big_key == drop_item:
+                elif world.dungeons[dungeon].big_key is not None and world.dungeons[dungeon].big_key == drop_item:
                     world.dungeons[dungeon].big_key = None
         if not world.key_drop_shuffle[player]:
             # key drop item was removed from the pool because key drop shuffle is off
@@ -395,12 +392,13 @@ def generate_itempool(world):
             loc = world.get_location(key_loc, player)
             loc.place_locked_item(drop_item)
             loc.address = None
-        else:
-            # key drop item removed because of start_with option or icerodhunt, and key drop shuffle is on.
-            # Either way it will be placed into the starting inventory, and replaced in the pool with
-            # get_filler_item_name(), which will return Nothing if goal is icerodhunt
-            world.itempool.append(ItemFactory(world.worlds[player].get_filler_item_name(), player))
+        elif world.goal[player] == 'icerodhunt':
+            # key drop item removed because of icerodhunt
+            world.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
             world.push_precollected(drop_item)
+        elif "Small" in key_data[3] and world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+            # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
+            world.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Small Key (Universal)'), player))
 
     if world.goal[player] == 'icerodhunt':
         for item in dungeon_items:
@@ -692,7 +690,7 @@ def get_pool_core(world, player: int):
         else:
             pool.extend([item_to_place])
         if world.key_drop_shuffle[player]:
-            pool.extend([item_to_place] * (len(key_drop_data) - 1))
+            pass # pool.extend([item_to_place] * (len(key_drop_data) - 1))
 
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
             additional_pieces_to_place)
@@ -846,6 +844,8 @@ def make_custom_item_pool(world, player):
 
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
         itemtotal = itemtotal - 28  # Corrects for small keys not being in item pool in Retro Mode
+        if world.key_drop_shuffle[player]:
+            itemtotal = itemtotal - (len(key_drop_data) - 1)
     if itemtotal < total_items_to_place:
         pool.extend(['Nothing'] * (total_items_to_place - itemtotal))
         logging.warning(f"Pool was filled up with {total_items_to_place - itemtotal} Nothing's for player {player}")
