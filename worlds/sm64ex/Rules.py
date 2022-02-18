@@ -46,6 +46,7 @@ def set_rules(world,player,area_connections):
                                                                               state.has("Vanish Cap", player))
     add_rule(world.get_location("DDD: Pole-Jumping for Red Coins", player), lambda state: state.can_reach("Bowser in the Fire Sea",'Region',player))
     add_rule(world.get_location("SL: Into the Igloo", player), lambda state: state.has("Vanish Cap", player))
+    add_rule(world.get_location("SL: Bob-omb Buddy", player), lambda state: state.has("Vanish Cap", player))
     add_rule(world.get_location("WDW: Quick Race Through Downtown!", player), lambda state: state.has("Vanish Cap", player))
     if (world.StrictCapRequirements[player].value):
         add_rule(world.get_location("BoB: Mario Wings to the Sky", player), lambda state: state.has("Wing Cap", player))
@@ -58,7 +59,6 @@ def set_rules(world,player,area_connections):
         add_rule(world.get_location("BoB: Mario Wings to the Sky", player), lambda state: state.has("Cannon Unlock BoB", player))
         add_rule(world.get_location("WF: Blast Away the Wall", player), lambda state: state.has("Cannon Unlock WF", player))
         add_rule(world.get_location("JRB: Blast to the Stone Pillar", player), lambda state: state.has("Cannon Unlock JRB", player))
-    add_rule(world.get_location("SL: Bob-omb Buddy", player), lambda state: state.has("Vanish Cap", player))
     add_rule(world.get_location("RR: Somewhere Over the Rainbow", player), lambda state: state.has("Cannon Unlock RR", player))
 
     #Rules for Secret Stars
