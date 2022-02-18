@@ -58,6 +58,10 @@ def set_rules(world,player,area_connections):
         add_rule(world.get_location("BoB: Mario Wings to the Sky", player), lambda state: state.has("Cannon Unlock BoB", player))
         add_rule(world.get_location("WF: Blast Away the Wall", player), lambda state: state.has("Cannon Unlock WF", player))
         add_rule(world.get_location("JRB: Blast to the Stone Pillar", player), lambda state: state.has("Cannon Unlock JRB", player))
+    if (world.AreaRandomizer[player].value):
+        add_rule(world.get_location("TTC: Stop Time for Red Coins", player), lambda state: state.can_reach("Third Floor", 'Region', player))
+    if (world.BuddyChecks[player].value):
+        add_rule(world.get_location("SL: Bob-omb Buddy", player), lambda state: state.has("Vanish Cap", player))
     add_rule(world.get_location("RR: Somewhere Over the Rainbow", player), lambda state: state.has("Cannon Unlock RR", player))
 
     #Rules for Secret Stars
