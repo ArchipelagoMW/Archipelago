@@ -6,20 +6,13 @@ import logging
 import json
 import functools
 from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, TYPE_CHECKING, Callable
+from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable
 import secrets
 import random
 
 import Options
 import Utils
 import NetUtils
-
-if TYPE_CHECKING:
-    from worlds import AutoWorld
-
-    auto_world = AutoWorld.World
-else:
-    auto_world = object
 
 
 class Group(TypedDict, total=False):
@@ -159,7 +152,7 @@ class MultiWorld():
                 group["players"] |= players
                 return group_id, group
         new_id: int = self.players + len(self.groups) + 1
-        from worlds import AutoWorld
+
         self.game[new_id] = game
         self.custom_data[new_id] = {}
         self.player_types[new_id] = NetUtils.SlotType.group
@@ -193,7 +186,6 @@ class MultiWorld():
                            range(1, self.players + 1)}
 
     def set_options(self, args):
-        from worlds import AutoWorld
         for option_key in Options.common_options:
             setattr(self, option_key, getattr(args, option_key, {}))
         for option_key in Options.per_game_common_options:
@@ -1286,7 +1278,6 @@ class Spoiler():
         return json.dumps(out)
 
     def to_file(self, filename):
-        from worlds.AutoWorld import call_all, call_single, call_stage
         self.parse_data()
 
         def bool_to_text(variable: Union[bool, str]) -> str:
@@ -1308,7 +1299,7 @@ class Spoiler():
                     Utils.__version__, self.world.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.world.algorithm)
             outfile.write('Players:                         %d\n' % self.world.players)
-            call_stage(self.world, "write_spoiler_header", outfile)
+            AutoWorld.call_stage(self.world, "write_spoiler_header", outfile)
 
             for player in range(1, self.world.players + 1):
                 if self.world.players > 1:
@@ -1320,7 +1311,7 @@ class Spoiler():
                 if options:
                     for f_option, option in options.items():
                         write_option(f_option, option)
-                call_single(self.world, "write_spoiler_header", player, outfile)
+                AutoWorld.call_single(self.world, "write_spoiler_header", player, outfile)
 
                 if player in self.world.get_game_players("A Link to the Past"):
                     outfile.write('%s%s\n' % ('Hash: ', self.hashes[player]))
@@ -1370,7 +1361,7 @@ class Spoiler():
                 for dungeon, medallion in self.medallions.items():
                     outfile.write(f'\n{dungeon}: {medallion}')
 
-            call_all(self.world, "write_spoiler", outfile)
+            AutoWorld.call_all(self.world, "write_spoiler", outfile)
 
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(
@@ -1411,7 +1402,7 @@ class Spoiler():
                     path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
 
                 outfile.write('\n'.join(path_listings))
-            call_all(self.world, "write_spoiler_end", outfile)
+            AutoWorld.call_all(self.world, "write_spoiler_end", outfile)
 
 
 seeddigits = 20
@@ -1422,3 +1413,8 @@ def get_seed(seed=None):
         random.seed(None)
         return random.randint(0, pow(10, seeddigits) - 1)
     return seed
+
+
+from worlds import AutoWorld
+
+auto_world = AutoWorld.World
