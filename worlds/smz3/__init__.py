@@ -1,6 +1,7 @@
 import logging
 import copy
 import os
+import random
 import threading
 import Patch
 from typing import Dict, Set, TextIO
@@ -69,7 +70,6 @@ class SMZ3World(World):
         return super().__new__(cls)
 
     def generate_early(self):
-
         config = Config({})
         config.GameMode = GameMode.Multiworld
         config.Z3Logic = Z3Logic.Normal
@@ -81,6 +81,7 @@ class SMZ3World(World):
         config.Keysanity = config.KeyShuffle != KeyShuffle.Null
         config.GanonInvincible = GanonInvincible.BeforeCrystals
 
+        self.local_random = random.Random(self.world.random.randint(0, 1000))
         self.smz3World = TotalSMZ3World(config, self.world.get_player_name(self.player), self.player, self.world.seed_name)
         self.smz3DungeonItems = []
         SMZ3World.location_names = frozenset(self.smz3World.locationLookup.keys())
@@ -250,7 +251,7 @@ class SMZ3World(World):
                                     [world.smz3World for key, world in self.world.worlds.items() if isinstance(world, SMZ3World)],
                                     self.world.seed_name,
                                     self.world.seed,
-                                    self.world.random,
+                                    self.local_random,
                                     self.world.world_name_lookup,
                                     next(iter(loc.player for loc in self.world.get_locations() if loc.item == self.create_item("SilverArrows"))))
             patches = patcher.Create(self.smz3World.Config)
