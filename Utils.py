@@ -24,7 +24,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.2.4"
+__version__ = "0.2.5"
 version_tuple = tuplize_version(__version__)
 
 from yaml import load, dump, SafeLoader
@@ -182,7 +182,7 @@ def get_default_options() -> dict:
             "output_path": "output",
         },
         "factorio_options": {
-            "executable": "factorio\\bin\\x64\\factorio",
+            "executable": os.path.join("factorio", "bin", "x64", "factorio"),
         },
         "sm_options": {
             "rom_file": "Super Metroid (JU).sfc",
@@ -219,7 +219,7 @@ def get_default_options() -> dict:
         },
         "generator": {
             "teams": 1,
-            "enemizer_path": "EnemizerCLI/EnemizerCLI.Core.exe",
+            "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core.exe"),
             "player_files_path": "Players",
             "players": 0,
             "weights_file_path": "weights.yaml",

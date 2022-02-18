@@ -121,7 +121,8 @@ def gen_game(gen_options, meta: TypeOptional[Dict[str, object]] = None, owner=No
             if not erargs.name[player]:
                 erargs.name[player] = os.path.splitext(os.path.split(playerfile)[-1])[0]
             erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
-
+        if len(set(erargs.name.values())) != len(erargs.name):
+            raise Exception(f"Names have to be unique. Names: {Counter(erargs.name.values())}")
         ERmain(erargs, seed, baked_server_options=meta)
 
         return upload_to_db(target.name, sid, owner, race)

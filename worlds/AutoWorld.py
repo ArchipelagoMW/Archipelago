@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, Set, Tuple, List, Optional, TextIO, Any
+from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
@@ -35,8 +35,13 @@ class AutoWorldRegister(type):
 class AutoLogicRegister(type):
     def __new__(cls, name, bases, dct):
         new_class = super().__new__(cls, name, bases, dct)
+        function: Callable
         for item_name, function in dct.items():
-            if not item_name.startswith("__"):
+            if item_name == "copy_mixin":
+                CollectionState.additional_copy_functions.append(function)
+            elif item_name == "init_mixin":
+                CollectionState.additional_init_functions.append(function)
+            elif not item_name.startswith("__"):
                 if hasattr(CollectionState, item_name):
                     raise Exception(f"Name conflict on Logic Mixin {name} trying to overwrite {item_name}")
                 setattr(CollectionState, item_name, function)
@@ -193,6 +198,7 @@ class World(metaclass=AutoWorldRegister):
     def write_spoiler_end(self, spoiler_handle: TextIO):
         """Write to the end of the spoiler"""
         pass
+
     # end of ordered Main.py calls
 
     def create_item(self, name: str) -> Item:
@@ -214,6 +220,10 @@ class World(metaclass=AutoWorldRegister):
         :param remove: indicate if this is meant to remove from state instead of adding."""
         if item.advancement:
             return item.name
+
+    # called to create all_state, return Items that are created during pre_fill
+    def get_pre_fill_items(self) -> List[Item]:
+        return []
 
     # following methods should not need to be overridden.
     def collect(self, state: CollectionState, item: Item) -> bool:

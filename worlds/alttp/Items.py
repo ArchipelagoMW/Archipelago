@@ -1,6 +1,7 @@
 import typing
 
-def GetBeemizerItem(world, player, item):
+
+def GetBeemizerItem(world, player: int, item):
     item_name = item if isinstance(item, str) else item.name
 
     if item_name not in trap_replaceable:
@@ -15,6 +16,7 @@ def GetBeemizerItem(world, player, item):
         return "Bee" if isinstance(item, str) else world.create_item("Bee", player)
     else:
         return "Bee Trap" if isinstance(item, str) else world.create_item("Bee Trap", player)        
+
 
 # should be replaced with direct world.create_item(item) call in the future
 def ItemFactory(items, player: int):
@@ -34,6 +36,7 @@ def ItemFactory(items, player: int):
     if singleton:
         return ret[0]
     return ret
+
 
 class ItemData(typing.NamedTuple):
     advancement: bool

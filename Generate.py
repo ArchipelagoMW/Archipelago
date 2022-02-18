@@ -14,7 +14,7 @@ ModuleUpdate.update()
 
 import Utils
 from worlds.alttp import Options as LttPOptions
-from worlds.generic import PlandoItem, PlandoConnection
+from worlds.generic import PlandoConnection
 from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
@@ -180,7 +180,7 @@ def main(args=None, callback=ERmain):
         erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
 
     if len(set(erargs.name.values())) != len(erargs.name):
-        raise Exception(f"Names have to be unique. Names: {erargs.name}")
+        raise Exception(f"Names have to be unique. Names: {Counter(erargs.name.values())}")
 
     if args.yaml_output:
         import yaml
@@ -502,6 +502,9 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             roll_alttp_settings(ret, game_weights, plando_options)
     else:
         raise Exception(f"Unsupported game {ret.game}")
+    # not meant to stay here, intended to be removed when itemlinks are stable
+    if not "item_links" in plando_options:
+        ret.item_links.value = []
     return ret
 
 

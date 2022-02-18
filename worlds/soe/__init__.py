@@ -234,7 +234,7 @@ class SoEWorld(World):
         if self.connect_name and self.connect_name != self.world.player_name[self.player]:
             payload = multidata["connect_names"][self.world.player_name[self.player]]
             multidata["connect_names"][self.connect_name] = payload
-            del (multidata["connect_names"][self.world.player_name[self.player]])
+
 
 
 class SoEItem(Item):

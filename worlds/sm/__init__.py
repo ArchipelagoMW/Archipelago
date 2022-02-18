@@ -15,7 +15,7 @@ from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT
 import Utils
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
-from ..AutoWorld import World
+from ..AutoWorld import World, AutoLogicRegister
 import Patch
 
 from logic.smboolmanager import SMBoolManager
@@ -26,6 +26,21 @@ from rando.Items import ItemManager
 from utils.parameters import *
 from logic.logic import Logic
 from randomizer import VariaRandomizer
+
+
+class SMCollectionState(metaclass=AutoLogicRegister):
+    def init_mixin(self, parent: MultiWorld):
+        # for unit tests where MultiWorld is instantiated before worlds
+        if hasattr(parent, "state"):
+            self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff,
+                                               parent.state.smbm[player].onlyBossLeft) for player in
+                         parent.get_game_players("Super Metroid")}
+        else:
+            self.smbm = {}
+
+    def copy_mixin(self, ret) -> CollectionState:
+        ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in self.world.get_game_players("Super Metroid")}
+        return ret
 
 
 class SMWorld(World):
@@ -44,38 +59,13 @@ class SMWorld(World):
     itemManager: ItemManager
 
     locations = {}
-    hint_blacklist = {'Nothing', 'NoEnergy'}
+    hint_blacklist = {'Nothing', 'No Energy'}
 
     Logic.factory('vanilla')
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
-        
-    def __new__(cls, world, player):
-        
-        # Add necessary objects to CollectionState on initialization
-        orig_init = CollectionState.__init__
-        orig_copy = CollectionState.copy
-
-        def sm_init(self, parent: MultiWorld):
-            if (hasattr(parent, "state")): # for unit tests where MultiWorld is instanciated before worlds
-                self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff, parent.state.smbm[player].onlyBossLeft) for player in parent.get_game_players("Super Metroid")}
-            orig_init(self, parent)
-
-
-        def sm_copy(self):
-            ret = orig_copy(self)
-            ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in self.world.get_game_players("Super Metroid")}
-            return ret
-
-        CollectionState.__init__ = sm_init
-        CollectionState.copy = sm_copy
-
-        if world:
-            world.state.smbm = {}
-
-        return super().__new__(cls)
 
     def generate_early(self):
         Logic.factory('vanilla')
@@ -86,7 +76,7 @@ class SMWorld(World):
         # keeps Nothing items local so no player will ever pickup Nothing
         # doing so reduces contribution of this world to the Multiworld the more Nothing there is though
         self.world.local_items[self.player].value.add('Nothing')
-        self.world.local_items[self.player].value.add('NoEnergy')
+        self.world.local_items[self.player].value.add('No Energy')
 
         if (self.variaRando.args.morphPlacement == "early"):
             self.world.local_items[self.player].value.add('Morph')
@@ -450,9 +440,7 @@ class SMWorld(World):
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            payload = multidata["connect_names"][self.world.player_name[self.player]]
-            multidata["connect_names"][new_name] = payload
-            del (multidata["connect_names"][self.world.player_name[self.player]])
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
 
     def fill_slot_data(self): 
