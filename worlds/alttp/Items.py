@@ -1,6 +1,7 @@
 import typing
 
-def GetBeemizerItem(world, player, item):
+
+def GetBeemizerItem(world, player: int, item):
     item_name = item if isinstance(item, str) else item.name
 
     if item_name not in trap_replaceable:
@@ -15,6 +16,7 @@ def GetBeemizerItem(world, player, item):
         return "Bee" if isinstance(item, str) else world.create_item("Bee", player)
     else:
         return "Bee Trap" if isinstance(item, str) else world.create_item("Bee Trap", player)        
+
 
 # should be replaced with direct world.create_item(item) call in the future
 def ItemFactory(items, player: int):
@@ -34,6 +36,7 @@ def ItemFactory(items, player: int):
     if singleton:
         return ret[0]
     return ret
+
 
 class ItemData(typing.NamedTuple):
     advancement: bool
@@ -274,8 +277,8 @@ for basename, substring in _simple_groups:
 del (_simple_groups)
 
 progression_items = {name for name, data in item_table.items() if type(data.item_code) == int and data.advancement}
-item_name_groups['Everything'] = {name for name, data in item_table.items() if type(data.item_code) == int}
+everything = {name for name, data in item_table.items() if type(data.item_code) == int}
 item_name_groups['Progression Items'] = progression_items
-item_name_groups['Non Progression Items'] = item_name_groups['Everything'] - progression_items
+item_name_groups['Non Progression Items'] = everything - progression_items
 
 trap_replaceable = item_name_groups['Rupees'] | {'Arrows (10)', 'Single Bomb', 'Bombs (3)', 'Bombs (10)', 'Nothing'}

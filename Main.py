@@ -1,3 +1,5 @@
+import copy
+import collections
 from itertools import zip_longest, chain
 import logging
 import os
@@ -7,9 +9,9 @@ import concurrent.futures
 import pickle
 import tempfile
 import zipfile
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, Set
 
-from BaseClasses import MultiWorld, CollectionState, Region, RegionType, LocationProgressType
+from BaseClasses import MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
 from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
@@ -17,7 +19,6 @@ from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShop
 from Utils import output_path, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
-
 
 ordered_areas = (
     'Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
@@ -70,12 +71,14 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.plando_connections = args.plando_connections.copy()
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
-    world.set_options(args)
     world.player_name = args.name.copy()
     world.enemizer = args.enemizercli
     world.sprite = args.sprite.copy()
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
+    world.set_options(args)
+    world.set_item_links()
+    world.state = CollectionState(world)
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, world.seed)
 
     logger.info("Found World Types:")
@@ -135,6 +138,73 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             world.get_location(location_name, player).progress_type = LocationProgressType.PRIORITY
 
     AutoWorld.call_all(world, "generate_basic")
+
+    # temporary home for item links, should be moved out of Main
+    for group_id, group in world.groups.items():
+        # TODO: remove when LttP options are transitioned over
+        world.difficulty_requirements[group_id] = world.difficulty_requirements[next(iter(group["players"]))]
+
+        def find_common_pool(players: Set[int], shared_pool: Set[str]):
+            advancement = set()
+            counters = {player: {name: 0 for name in shared_pool} for player in players}
+            for item in world.itempool:
+                if item.player in counters and item.name in shared_pool:
+                    counters[item.player][item.name] += 1
+                    if item.advancement:
+                        advancement.add(item.name)
+
+            for item in shared_pool:
+                count = min(counters[player][item] for player in players)
+                if count:
+                    for player in players:
+                        counters[player][item] = count
+                else:
+                    for player in players:
+                        del(counters[player][item])
+            return counters, advancement
+
+        common_item_count, common_advancement_items = find_common_pool(group["players"], group["item_pool"])
+        # TODO: fix logic
+        if common_advancement_items:
+            logger.warning(f"Logical requirements for {', '.join(common_advancement_items)} in group {group['name']} "
+                           f"will be incorrect.")
+        new_itempool = []
+        for item_name, item_count in next(iter(common_item_count.values())).items():
+            advancement = item_name in common_advancement_items
+            for _ in range(item_count):
+                new_item = group["world"].create_item(item_name)
+                new_item.advancement = advancement
+                new_itempool.append(new_item)
+
+        region = Region("Menu", RegionType.Generic, "ItemLink", group_id, world)
+        world.regions.append(region)
+        locations = region.locations = []
+        for item in world.itempool:
+            count = common_item_count.get(item.player, {}).get(item.name, 0)
+            if count:
+                loc = Location(group_id, f"Item Link: {item.name} -> {world.player_name[item.player]} {count}",
+                               None, region)
+                loc.access_rule = lambda state: state.has(item.name, group_id, count)
+                locations.append(loc)
+                loc.place_locked_item(item)
+                common_item_count[item.player][item.name] -= 1
+            else:
+                new_itempool.append(item)
+
+        itemcount = len(world.itempool)
+        world.itempool = new_itempool
+
+        # can produce more items than were removed
+        while itemcount > len(world.itempool):
+            for player in group["players"]:
+                if group["replacement_items"][player]:
+                    world.itempool.append(AutoWorld.call_single(world, "create_item", player,
+                                                                group["replacement_items"][player]))
+                else:
+                    AutoWorld.call_single(world, "create_filler", player)
+    if any(world.item_links.values()):
+        world._recache()
+        world._all_state = None
 
     logger.info("Running Item Plando")
 
@@ -253,10 +323,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 for slot in world.player_ids:
                     client_versions[slot] = world.worlds[slot].get_required_client_version()
                     games[slot] = world.game[slot]
-                    slot_info[slot] = NetUtils.NetworkSlot(names[0][slot-1], world.game[slot], world.player_types[slot])
+                    slot_info[slot] = NetUtils.NetworkSlot(names[0][slot - 1], world.game[slot],
+                                                           world.player_types[slot])
+                for slot, group in world.groups.items():
+                    games[slot] = world.game[slot]
+                    slot_info[slot] = NetUtils.NetworkSlot(group["name"], world.game[slot], world.player_types[slot],
+                                                           group_members=sorted(group["players"]))
                 precollected_items = {player: [item.code for item in world_precollected]
                                       for player, world_precollected in world.precollected_items.items()}
-                precollected_hints = {player: set() for player in range(1, world.players + 1)}
+                precollected_hints = {player: set() for player in range(1, world.players + 1 + len(world.groups))}
 
                 sending_visible_players = set()
 
@@ -321,7 +396,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 else:
                     logger.warning("Location Accessibility requirements not fulfilled.")
 
-            # retrieve exceptions via .result() if they occured.
+            # retrieve exceptions via .result() if they occurred.
             multidata_task.result()
             for i, future in enumerate(concurrent.futures.as_completed(output_file_futures), start=1):
                 if i % 10 == 0 or i == len(output_file_futures):
