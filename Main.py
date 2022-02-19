@@ -341,8 +341,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         sending_visible_players.add(slot)
 
                 def precollect_hint(location):
+                    entrance = er_hint_data.get(location.player, {}).get(location.address, "")
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                         location.item.code, False, "", location.item.flags)
+                                         location.item.code, False, entrance, location.item.flags)
                     precollected_hints[location.player].add(hint)
                     precollected_hints[location.item.player].add(hint)
 
