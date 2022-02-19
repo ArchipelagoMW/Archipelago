@@ -908,32 +908,34 @@ def __renderBingoTracker(multisave: Dict[str, Any], room: Room, locations: Dict[
     from worlds.bingo.Items import item_table
     ordered_items = multisave.get('received_items', {}).get((team, player, True), [])
     # web design is my passion
-    text = "<HTML><HEAD><title>Bingo tracker</title><meta http-equiv=\"refresh\" content=\"15\" />"
-    text += "<STYLE>body {font-family: Courier;}</STYLE></HEAD><BODY><table><tr>"
+    text = f"<HTML><HEAD><title>{playerName}'s Tracker</title><meta http-equiv=\"refresh\" content=\"20\" />"
+    text += "<STYLE>table, th, td {border: 1px solid black; border-collapse: collapse;}"
+    text += "th, td {padding: 5px; text-align: center;}</STYLE></HEAD><BODY><TABLE><TR>"
     for cardnum in range(0, len(slot_data["cards"])):
-        text += "<td>|--------------|<BR>"
-        text += "|B&nbsp;&nbsp;I&nbsp;&nbsp;N&nbsp;&nbsp;G&nbsp;&nbsp;O&nbsp;|<br>"
-        text += "|--------------|<BR>"
+        if cardnum % 8 == 0:
+            text += "</TR><TR>"
+        text += f"<TD>BINGO CARD {cardnum + 1}<TABLE>"
+        text += "<TR><TD>B</TD><TD>I</TD><TD>N</TD><TD>G</TD><TD>O</TD></TR>"
         for row in slot_data["cards"][cardnum]:
-            text += "|"
+            text += "<TR>"
             for c in row:
                 s = False
                 if c == 0:
-                    c = "Bingo Call **"
+                    c = "Bingo Call FREE"
                 else:
                     itemid = item_table[c].code
                     for i in ordered_items:
                         if i.item == itemid:
                             s = True
                 if s:
-                    text += f"<s style=\"color:red\">{c.split()[2]}</s>|"
+                    text += f"<TD><s style=\"color:red\">{c.split()[2]}</s></TD>"
                 else:
-                    text += f"{c.split()[2]}|"
-            text += "<br>"
-        text += "|--------------|<br>"
-        text += f"|&nbsp;&nbsp;Card&nbsp;&nbsp;&nbsp;#&nbsp;{cardnum+1}&nbsp;&nbsp;|<br>"
-        text += "|--------------|</td>"
-    text += "</tr></table></BODY></HTML"
+                    text += f"<TD>{c.split()[2]}</TD>"
+            text += "</TR>"
+        text += "</TABLE></TD>"
+        if (cardnum + 1) % 8 == 0 or cardnum == len(slot_data["cards"]) - 1:
+            text += "</TR>"
+    text += "</TABLE></BODY></HTML>"
     return text
 
 def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],

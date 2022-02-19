@@ -82,7 +82,6 @@ scripts = {
     # Core
     "MultiServer.py": ("ArchipelagoServer", False, icon),
     "Generate.py": ("ArchipelagoGenerate", False, icon),
-    "WebHost.py": ("ArchipelagoWebHost", False, icon),
     "CommonClient.py": ("ArchipelagoTextClient", True, icon),
     # SNI
     "SNIClient.py": ("ArchipelagoSNIClient", True, icon),
@@ -118,7 +117,7 @@ cx_Freeze.setup(
     executables=exes,
     options={
         "build_exe": {
-            "packages": ["websockets", "worlds", "kivy", "pony"],
+            "packages": ["websockets", "worlds", "kivy"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],

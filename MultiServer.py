@@ -507,13 +507,13 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint]):
         concerns[hint.receiving_player].append(net_msg)
         if not hint.local:
             concerns[hint.finding_player].append(net_msg)
-        # remember hints in all cases3w
+        # remember hints in all cases
         if not hint.found:
             ctx.hints[team, hint.finding_player].add(hint)
             ctx.hints[team, hint.receiving_player].add(hint)
 
         world = AutoWorldRegister.world_types[ctx.games[hint.finding_player]]
-        world.received_hint(world, ctx, team, hint.finding_player)
+        world.received_hint(world, ctx, team, hint.finding_player, hint)
 
     for text in (format_hint(ctx, team, hint) for hint in hints):
         logging.info("Notice (Team #%d): %s" % (team + 1, text))

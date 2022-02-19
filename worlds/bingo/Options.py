@@ -10,6 +10,14 @@ class CardPairs(Range):
     default = 2
 
 
+class MinimumOccurrences(Range):
+    """Minimum occurrences of each Bingo Call. If 2, there will be exactly 2 of each Bingo Call.
+    If 0, there may be Bingo Calls which do not appear on any cards, rendering them useless"""
+    display_name = "Minimum Occurrences"
+    range_start = 0
+    range_end = 2
+    default = 2
+
 class RevealRewards(Toggle):
     """Start with all Bingo rewards hinted."""
     display_name = "Reveal Rewards"
@@ -48,6 +56,7 @@ class PriorityRewardItemBlacklist(OptionSet):
 
 bingo_options: typing.Dict[str, type(Option)] = {
     "card_pairs": CardPairs,
+    "bingo_call_minimum_occurrences": MinimumOccurrences,
     "reveal_rewards": RevealRewards,
     "disallow_bingo_calls": DisallowBingoCalls,
     "priority_rewards_horizontal": ForcedAdvancementHorizontal,

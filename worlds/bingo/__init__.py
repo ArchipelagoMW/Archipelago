@@ -37,31 +37,80 @@ class BingoWorld(World):
     def generate_cards(self, world, player):
         cards = []
         pairs = world.card_pairs[player]
-        for _ in range(0, 2):
+        min_occ = world.bingo_call_minimum_occurrences[player]
+        if min_occ == 2:
+            for _ in range(0, 2):
+                items = list(item_table)[:pairs * 24]
+                world.random.shuffle(items)
+                for c in range(0, pairs):
+                    card = []
+                    for row in range(1, 6):
+                        if row == 3:
+                            card_row = items[:2] + [0] + items[2:4]
+                            items = items[4:]
+                        else:
+                            card_row = items[:5]
+                            items = items[5:]
+                        card.append(card_row)
+                    cards.append(card)
+        else:
+            for _ in range(0, pairs*2):
+                cards.append([[None, None, None, None, None], [None, None, None, None, None],
+                              [None, None, 0, None, None], [None, None, None, None, None],
+                              [None, None, None, None, None]])
+            remaining_placements = pairs * 48
+            if min_occ == 1:
+                items = list(item_table)[:pairs * 24]
+                world.random.shuffle(items)
+                while len(items) > 0:
+                    spot = [world.random.randint(0, (pairs*2)-1), world.random.randint(0, 4), world.random.randint(0, 4)]
+                    while True:
+                        if cards[spot[0]][spot[2]][spot[1]] is None:
+                            cards[spot[0]][spot[2]][spot[1]] = items.pop()
+                            remaining_placements -= 1
+                            break
+                        spot[1] += 1
+                        if spot[1] == 5:
+                            spot[1] = 0
+                            spot[2] += 1
+                            if spot[2] == 5:
+                                spot[2] = 0
+                                spot[0] += 1
+                                if spot[0] == len(cards):
+                                    spot[0] = 0
             items = list(item_table)[:pairs * 24]
-            world.random.shuffle(items)
-            for c in range(0, pairs):
-                card = []
-                for row in range(1, 6):
-                    if row == 3:
-                        card_row = items[:2] + [0] + items[2:4]
-                        items = items[4:]
-                    else:
-                        card_row = items[:5]
-                        items = items[5:]
-                    card.append(card_row)
-                cards.append(card)
-
+            spot = [0, 0, 0]
+            while remaining_placements > 0:
+                if cards[spot[0]][spot[2]][spot[1]] is None:
+                    cards[spot[0]][spot[2]][spot[1]] = items[world.random.randint(0, len(items)-1)]
+                    remaining_placements -= 1
+                spot[1] += 1
+                if spot[1] == 5:
+                    spot[1] = 0
+                    spot[2] += 1
+                    if spot[2] == 5:
+                        spot[2] = 0
+                        spot[0] += 1
+                        if spot[0] == len(cards):
+                            break  # should be unnecessary
         world.worlds[player].cards[player] = cards
 
     def generate_basic(self):
         pool = []
+        used_calls = set()
         card_pairs = self.world.card_pairs[self.player]
+        for card in self.cards[self.player]:
+            for row in card:
+                for call in row:
+                    used_calls.add(call)
         items = list(item_table)
         b = 0
         for _ in range(0, card_pairs):
             for _ in range(0, 24):
                 item = BingoItem(items[b], self.player)
+                if item.name not in used_calls:
+                    item.advancement = False
+                    item.never_exclude = True
                 pool.append(item)
                 b += 1
 
@@ -154,7 +203,7 @@ class BingoWorld(World):
                         if i not in bingocalls:
                             failed_line = 1
                 if not failed_line:
-                    loc = f"Card {card + 1} Horizontal {r + 1}"
+                    loc = f"Bingo Card {card + 1} Horizontal {r + 1}"
                     register_location_checks(ctx, team, player, {location_table[loc]})
             # vertical lines
             for c in range(0, 5):
@@ -164,7 +213,7 @@ class BingoWorld(World):
                         if cards[card][r][c] not in bingocalls:
                             failed_line = 1
                 if not failed_line:
-                    loc = f"Card {card + 1} Vertical {c + 1}"
+                    loc = f"Bingo Card {card + 1} Vertical {c + 1}"
                     register_location_checks(ctx, team, player, {location_table[loc]})
             # diagonal lines
             for line in range(0, 2):
@@ -181,7 +230,7 @@ class BingoWorld(World):
                         if i not in bingocalls:
                             failed_line = 1
                 if not failed_line:
-                    loc = f"Card {card + 1} Diagonal {line + 1}"
+                    loc = f"Bingo Card {card + 1} Diagonal {line + 1}"
                     register_location_checks(ctx, team, player, {location_table[loc]})
         if len(bingocalls) == len(cards) * 12:
             ctx.client_game_state[team, player] = ClientStatus.CLIENT_GOAL
