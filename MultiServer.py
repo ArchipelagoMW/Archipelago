@@ -319,7 +319,11 @@ class Context:
                     SlotType(int(bool(locations))))
                 for slot, locations in self.locations.items()
             }
-
+            # locations may need converting
+            for slot, locations in self.locations.items():
+                for location, item_data in locations.items():
+                    if len(item_data) < 3:
+                        locations[location] = (*item_data, 0)
         # declare slots that aren't players as done
         for slot, slot_info in self.slot_info.items():
             if slot_info.type.always_goal:
