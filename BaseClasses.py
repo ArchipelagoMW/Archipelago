@@ -561,11 +561,11 @@ class CollectionState():
         self.path = {}
         self.locations_checked = set()
         self.stale = {player: True for player in parent.get_all_ids()}
+        for function in self.additional_init_functions:
+            function(self, parent)
         for items in parent.precollected_items.values():
             for item in items:
                 self.collect(item, True)
-        for function in self.additional_init_functions:
-            function(self, parent)
 
     def update_reachable_regions(self, player: int):
         from worlds.alttp.EntranceShuffle import indirect_connections
