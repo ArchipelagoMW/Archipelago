@@ -897,7 +897,10 @@ def open_rules(world, player):
 def swordless_rules(world, player):
     set_rule(world.get_entrance('Agahnim 1', player), lambda state: (state.has('Hammer', player) or state.has('Fire Rod', player) or state.can_shoot_arrows(player) or state.has('Cane of Somaria', player)) and state._lttp_has_key('Small Key (Agahnims Tower)', player, 2))
     set_rule(world.get_entrance('Skull Woods Torch Room', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 3) and state.has('Fire Rod', player))  # no curtain
-    set_rule(world.get_entrance('Ice Palace Entrance Room', player), lambda state: state.has('Fire Rod', player) or state.has('Bombos', player)) #in swordless mode bombos pads are present in the relevant parts of ice palace
+
+    set_rule(world.get_location('Ice Palace - Jelly Key Drop', player), lambda state: state.has('Fire Rod', player) or state.has('Bombos', player))
+    set_rule(world.get_entrance('Ice Palace (Second Section)', player), lambda state: state.has(('Fire Rod', player) or state.has('Bombos', player)) and state._lttp_has_key('Small Key (Ice Palace)', player))
+
     set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.has('Hammer', player))  # need to damage ganon to get tiles to drop
 
     if world.mode[player] != 'inverted':

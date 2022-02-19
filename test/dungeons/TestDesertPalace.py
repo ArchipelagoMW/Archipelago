@@ -18,7 +18,9 @@ class TestDesertPalace(TestDungeon):
 
             ["Desert Palace - Compass Chest", False, []],
             ["Desert Palace - Compass Chest", False, [], ['Small Key (Desert Palace)']],
-            ["Desert Palace - Compass Chest", True, ['Small Key (Desert Palace)']],
+            ["Desert Palace - Compass Chest", False, ['Progressive Sword', 'Hammer', 'Fire Rod', 'Ice Rod', 'Progressive Bow', 'Cane of Somaria', 'Cane of Byrna']],
+            ["Desert Palace - Compass Chest", False, ['Small Key (Desert Palace)']],
+            ["Desert Palace - Compass Chest", True, ['Progressive Sword', 'Small Key (Desert Palace)']],
 
             ["Desert Palace - Big Key Chest", False, []],
             ["Desert Palace - Big Key Chest", False, [], ['Small Key (Desert Palace)']],
