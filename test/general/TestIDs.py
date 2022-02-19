@@ -18,14 +18,14 @@ class TestIDs(unittest.TestCase):
             self.assertEqual(len(known_location_ids) - len(world_type.location_id_to_name), current)
 
     def testRangeItems(self):
-        """There are Javascript clients, which are limited to 2**53 integer size."""
+        """There are Javascript clients, which are limited to Number.MAX_SAFE_INTEGER due to 64bit float precision."""
         for gamename, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=gamename):
                 for item_id in world_type.item_id_to_name:
                     self.assertLess(item_id, 2**53)
 
     def testRangeLocations(self):
-        """There are Javascript clients, which are limited to 2**53 integer size."""
+        """There are Javascript clients, which are limited to Number.MAX_SAFE_INTEGER due to 64bit float precision."""
         for gamename, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=gamename):
                 for location_id in world_type.location_id_to_name:
