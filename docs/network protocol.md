@@ -13,7 +13,7 @@ These steps should be followed in order to establish a gameplay connection with 
 
 In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
 
-There are libraries available that implement this network protocol in [Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py), [Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java) and [.Net](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net)
+There are libraries available that implement this network protocol in [Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py), [Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java), [.Net](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net) and [C++](https://github.com/black-sliver/apclientpp)
 
 For Super Nintendo games there are clients available in either [Node](https://github.com/ArchipelagoMW/SuperNintendoClient) or [Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py), There are also game specific clients available for [The Legend of Zelda: Ocarina of Time](https://github.com/ArchipelagoMW/Z5Client) or [Final Fantasy 1](https://github.com/ArchipelagoMW/Archipelago/blob/main/FF1Client.py)
 
@@ -119,6 +119,7 @@ Sent to clients when the connection handshake is successfully completed.
 | missing_locations | list\[int\] | Contains ids of remaining locations that need to be checked. Useful for trackers, among other things. |
 | checked_locations | list\[int\] | Contains ids of all locations that have been checked. Useful for trackers, among other things. Location ids are in the range of ± 2<sup>53</sup>-1. |
 | slot_data | dict | Contains a json object for slot related data, differs per game. Empty if not required. |
+| slot_info | dict\[int, NetworkSlot\] | maps each slot to a NetworkSlot information |
 
 ### ReceivedItems
 Sent to clients when they receive an item.
@@ -262,6 +263,7 @@ Sent to the server to inform it of locations the client has seen, but not checke
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | locations | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server. |
+| create_as_hint | bool | If True, the scouted locations get created and broadcasted as a player-visible hint. |
 
 ### StatusUpdate
 Sent to the server to update on the sender's status. Examples include readiness or goal completion. (Example: defeated Ganon in A Link to the Past)
@@ -443,6 +445,30 @@ class Version(NamedTuple):
     major: int
     minor: int
     build: int
+```
+
+### SlotType
+An enum representing the nature of a slot.
+
+```python
+import enum
+class SlotType(enum.IntFlag):
+    spectator = 0b00
+    player = 0b01
+    group = 0b10
+```
+
+### NetworkSlot
+An object representing static information about a slot.
+
+```python
+import typing
+from NetUtils import SlotType
+class NetworkSlot(typing.NamedTuple):
+   name: str
+   game: str
+   type: SlotType
+   group_members: typing.List[int] = []  # only populated if type == group
 ```
 
 ### Permission

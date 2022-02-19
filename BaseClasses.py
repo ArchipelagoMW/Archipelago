@@ -6,7 +6,7 @@ import logging
 import json
 import functools
 from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, TYPE_CHECKING
+from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable
 import secrets
 import random
 
@@ -14,18 +14,14 @@ import Options
 import Utils
 import NetUtils
 
-if TYPE_CHECKING:
-    from worlds import AutoWorld
-    auto_world = AutoWorld.World
-else:
-    auto_world = object
 
-
-class Group(TypedDict):
+class Group(TypedDict, total=False):
     name: str
     game: str
     world: auto_world
     players: Set[int]
+    item_pool: Set[str]
+    replacement_items: Dict[int, Optional[str]]
 
 
 class MultiWorld():
@@ -43,6 +39,7 @@ class MultiWorld():
     groups: Dict[int, Group]
     is_race: bool = False
     precollected_items: Dict[int, List[Item]]
+    state: CollectionState
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -65,7 +62,6 @@ class MultiWorld():
         self.seed = None
         self.seed_name: str = "Unavailable"
         self.precollected_items = {player: [] for player in self.player_ids}
-        self.state = CollectionState(self)
         self._cached_entrances = None
         self._cached_locations = None
         self._entrance_cache = {}
@@ -145,6 +141,9 @@ class MultiWorld():
         self.worlds = {}
         self.slot_seeds = {}
 
+    def get_all_ids(self):
+        return self.player_ids + tuple(self.groups)
+
     def add_group(self, name: str, game: str, players: Set[int] = frozenset()) -> Tuple[int, Group]:
         """Create a group with name and return the assigned player ID and group.
         If a group of this name already exists, the set of players is extended instead of creating a new one."""
@@ -153,7 +152,7 @@ class MultiWorld():
                 group["players"] |= players
                 return group_id, group
         new_id: int = self.players + len(self.groups) + 1
-        from worlds import AutoWorld
+
         self.game[new_id] = game
         self.custom_data[new_id] = {}
         self.player_types[new_id] = NetUtils.SlotType.group
@@ -166,32 +165,10 @@ class MultiWorld():
             getattr(self, option_key)[new_id] = option(option.default)
 
         self.worlds[new_id] = world_type(self, new_id)
-
         self.player_name[new_id] = name
-        # TODO: remove when LttP are transitioned over
-        self.difficulty_requirements[new_id] = self.difficulty_requirements[next(iter(players))]
 
         new_group = self.groups[new_id] = Group(name=name, game=game, players=players,
                                                 world=self.worlds[new_id])
-
-        # instead of collect/remove overwrites, should encode sending as Events so they show up in spoiler log
-        def group_collect(state, item) -> bool:
-            changed = False
-            for player in new_group["players"]:
-                max(self.worlds[player].collect(state, item), changed)
-            return changed
-
-        def group_remove(state, item) -> bool:
-            changed = False
-            for player in new_group["players"]:
-                max(self.worlds[player].remove(state, item), changed)
-            return changed
-
-        new_world = new_group["world"]
-        new_world.collect = group_collect
-        new_world.remove = group_remove
-
-        self.worlds[new_id] = new_world
 
         return new_id, new_group
 
@@ -209,17 +186,48 @@ class MultiWorld():
                            range(1, self.players + 1)}
 
     def set_options(self, args):
-        from worlds import AutoWorld
+        for option_key in Options.common_options:
+            setattr(self, option_key, getattr(args, option_key, {}))
+        for option_key in Options.per_game_common_options:
+            setattr(self, option_key, getattr(args, option_key, {}))
+
         for player in self.player_ids:
             self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             for option_key in world_type.options:
                 setattr(self, option_key, getattr(args, option_key, {}))
-            for option_key in Options.common_options:
-                setattr(self, option_key, getattr(args, option_key, {}))
-            for option_key in Options.per_game_common_options:
-                setattr(self, option_key, getattr(args, option_key, {}))
+
             self.worlds[player] = world_type(self, player)
+
+    def set_item_links(self):
+        item_links = {}
+
+        for player in self.player_ids:
+            for item_link in self.item_links[player].value:
+                if item_link["name"] in item_links:
+                    item_links[item_link["name"]]["players"][player] = item_link["replacement_item"]
+                    item_links[item_link["name"]]["item_pool"] &= set(item_link["item_pool"])
+                else:
+                    if item_link["name"] in self.player_name.values():
+                        raise Exception(f"Cannot name a ItemLink group the same as a player ({item_link['name']}).")
+                    item_links[item_link["name"]] = {
+                        "players": {player: item_link["replacement_item"]},
+                        "item_pool": set(item_link["item_pool"]),
+                        "game": self.game[player]
+                    }
+
+        for name, item_link in item_links.items():
+            current_item_name_groups = AutoWorld.AutoWorldRegister.world_types[item_link["game"]].item_name_groups
+            pool = set()
+            for item in item_link["item_pool"]:
+                pool |= current_item_name_groups.get(item, {item})
+            item_link["item_pool"] = pool
+
+        for group_name, item_link in item_links.items():
+            game = item_link["game"]
+            group_id, group = self.add_group(group_name, game, set(item_link["players"]))
+            group["item_pool"] = item_link["item_pool"]
+            group["replacement_items"] = item_link["players"]
 
     # intended for unittests
     def set_default_common_options(self):
@@ -227,6 +235,7 @@ class MultiWorld():
             setattr(self, option_key, {player_id: option(option.default) for player_id in self.player_ids})
         for option_key, option in Options.per_game_common_options.items():
             setattr(self, option_key, {player_id: option(option.default) for player_id in self.player_ids})
+        self.state = CollectionState(self)
 
     def secure(self):
         self.random = secrets.SystemRandom()
@@ -539,20 +548,24 @@ class MultiWorld():
         return False
 
 
-class CollectionState(object):
+class CollectionState():
+    additional_init_functions: List[Callable] = []
+    additional_copy_functions: List[Callable] = []
 
     def __init__(self, parent: MultiWorld):
         self.prog_items = Counter()
         self.world = parent
-        self.reachable_regions = {player: set() for player in range(1, parent.players + 1)}
-        self.blocked_connections = {player: set() for player in range(1, parent.players + 1)}
+        self.reachable_regions = {player: set() for player in parent.get_all_ids()}
+        self.blocked_connections = {player: set() for player in parent.get_all_ids()}
         self.events = set()
         self.path = {}
         self.locations_checked = set()
-        self.stale = {player: True for player in range(1, parent.players + 1)}
+        self.stale = {player: True for player in parent.get_all_ids()}
         for items in parent.precollected_items.values():
             for item in items:
                 self.collect(item, True)
+        for function in self.additional_init_functions:
+            function(self, parent)
 
     def update_reachable_regions(self, player: int):
         from worlds.alttp.EntranceShuffle import indirect_connections
@@ -591,12 +604,14 @@ class CollectionState(object):
         ret = CollectionState(self.world)
         ret.prog_items = self.prog_items.copy()
         ret.reachable_regions = {player: copy.copy(self.reachable_regions[player]) for player in
-                                 range(1, self.world.players + 1)}
+                                 self.reachable_regions}
         ret.blocked_connections = {player: copy.copy(self.blocked_connections[player]) for player in
-                                   range(1, self.world.players + 1)}
+                                   self.blocked_connections}
         ret.events = copy.copy(self.events)
         ret.path = copy.copy(self.path)
         ret.locations_checked = copy.copy(self.locations_checked)
+        for function in self.additional_copy_functions:
+            ret = function(self, ret)
         return ret
 
     def can_reach(self, spot, resolution_hint=None, player=None) -> bool:
@@ -909,7 +924,7 @@ class Entrance(object):
 
         return False
 
-    def connect(self, region: Region, addresses=None, target = None):
+    def connect(self, region: Region, addresses=None, target=None):
         self.connected_region = region
         self.target = target
         self.addresses = addresses
@@ -1263,7 +1278,6 @@ class Spoiler():
         return json.dumps(out)
 
     def to_file(self, filename):
-        from worlds.AutoWorld import call_all, call_single, call_stage
         self.parse_data()
 
         def bool_to_text(variable: Union[bool, str]) -> str:
@@ -1285,7 +1299,7 @@ class Spoiler():
                     Utils.__version__, self.world.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.world.algorithm)
             outfile.write('Players:                         %d\n' % self.world.players)
-            call_stage(self.world, "write_spoiler_header", outfile)
+            AutoWorld.call_stage(self.world, "write_spoiler_header", outfile)
 
             for player in range(1, self.world.players + 1):
                 if self.world.players > 1:
@@ -1297,7 +1311,7 @@ class Spoiler():
                 if options:
                     for f_option, option in options.items():
                         write_option(f_option, option)
-                call_single(self.world, "write_spoiler_header", player, outfile)
+                AutoWorld.call_single(self.world, "write_spoiler_header", player, outfile)
 
                 if player in self.world.get_game_players("A Link to the Past"):
                     outfile.write('%s%s\n' % ('Hash: ', self.hashes[player]))
@@ -1347,7 +1361,7 @@ class Spoiler():
                 for dungeon, medallion in self.medallions.items():
                     outfile.write(f'\n{dungeon}: {medallion}')
 
-            call_all(self.world, "write_spoiler", outfile)
+            AutoWorld.call_all(self.world, "write_spoiler", outfile)
 
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(
@@ -1388,7 +1402,7 @@ class Spoiler():
                     path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
 
                 outfile.write('\n'.join(path_listings))
-            call_all(self.world, "write_spoiler_end", outfile)
+            AutoWorld.call_all(self.world, "write_spoiler_end", outfile)
 
 
 seeddigits = 20
@@ -1399,3 +1413,8 @@ def get_seed(seed=None):
         random.seed(None)
         return random.randint(0, pow(10, seeddigits) - 1)
     return seed
+
+
+from worlds import AutoWorld
+
+auto_world = AutoWorld.World
