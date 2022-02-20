@@ -28,6 +28,7 @@ class MeritousItem(Item):
             self.type = "Other"
         else:
             self.type = "Artifact"
+            self.never_exclude = True
         
         # TODO: LttP credits text
 
