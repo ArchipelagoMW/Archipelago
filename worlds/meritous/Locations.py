@@ -17,15 +17,15 @@ class MeritousLocation(Location):
 offset = 593_000
 
 alpha_store = {
-    f"Alpha Store {i + 1}": offset + i for i in range(0, 24)
+    f"Alpha Cache {i + 1}": offset + i for i in range(0, 24)
 }
 
 beta_store = {
-    f"Beta Store {i + 1}": offset + i + 24 for i in range(0, 24)
+    f"Beta Cache {i + 1}": offset + i + 24 for i in range(0, 24)
 }
 
 gamma_store = {
-    f"Gamma Store {i + 1}": offset + i + 48 for i in range(0, 24)
+    f"Gamma Cache {i + 1}": offset + i + 48 for i in range(0, 24)
 }
 
 chest_store = {
