@@ -48,9 +48,9 @@ The Compiled binary will be in `build/REGION_pc/`.
 # Joining a MultiWorld Game
 
 To join, set the following launch options: `--sm64ap_name YourName --sm64ap_ip ServerIP:Port`.
-Optionally, add `--sm64ap_passwd "YourPassword"` if the room you are using requires a password. All parameters without quotation marks.
+Optionally, add `--sm64ap_passwd "YourPassword"` if the room you are using requires a password.
 The Name in this case is the one specified in your generated .yaml file.
-In case you are using the Archipelago Website, the IP should be `archipelago.gg` and Port `38281`.
+In case you are using the Archipelago Website, the IP should be `archipelago.gg`.
 
 If everything worked out, you will see a textbox informing you the connection has been established after the story intro.
 
