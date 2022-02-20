@@ -903,18 +903,22 @@ class Region(object):
         return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
 
-class Entrance(object):
+class Entrance:
     spot_type = 'Entrance'
+    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    hide_path: bool = False
+    player: int
+    name: str
+    parent_region: Optional[Region]
+    connected_region: Optional[Region] = None
+    # LttP specific, TODO: should make a LttPEntrance
+    addresses = None
+    target = None
 
     def __init__(self, player: int, name: str = '', parent=None):
         self.name = name
         self.parent_region = parent
-        self.connected_region = None
-        self.target = None
-        self.addresses = None
-        self.access_rule = lambda state: True
         self.player = player
-        self.hide_path = False
 
     def can_reach(self, state: CollectionState) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
