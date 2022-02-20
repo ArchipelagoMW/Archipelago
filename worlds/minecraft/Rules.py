@@ -52,11 +52,13 @@ class MinecraftLogic(LogicMixin):
         return self.world.combat_difficulty[player].current_key
 
     def _mc_can_adventure(self, player: int):
+        death_link_check = not self.world.death_link[player] or self.has('Bed', player)
         if self._mc_combat_difficulty(player) == 'easy':
-            return self.has('Progressive Weapons', player, 2) and self._mc_has_iron_ingots(player)
+            return self.has('Progressive Weapons', player, 2) and self._mc_has_iron_ingots(player) and death_link_check
         elif self._mc_combat_difficulty(player) == 'hard':
             return True
-        return self.has('Progressive Weapons', player) and (self.has('Progressive Resource Crafting', player) or self.has('Campfire', player))
+        return (self.has('Progressive Weapons', player) and death_link_check and 
+            (self.has('Progressive Resource Crafting', player) or self.has('Campfire', player)))
 
     def _mc_basic_combat(self, player: int):
         if self._mc_combat_difficulty(player) == 'easy': 
