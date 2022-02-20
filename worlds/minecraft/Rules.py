@@ -141,7 +141,7 @@ def set_advancement_rules(world: MultiWorld, player: int):
                                                                              state.can_reach('The Nether', 'Region', player) and # Regeneration, Fire Resistance, gold nuggets
                                                                              state.can_reach('Village', 'Region', player) and # Night Vision, Invisibility
                                                                              state.can_reach('Bring Home the Beacon', 'Location', player)) # Resistance
-    set_rule(world.get_location("Best Friends Forever", player), lambda state: True)
+    # set_rule(world.get_location("Best Friends Forever", player), lambda state: True)
     set_rule(world.get_location("Bring Home the Beacon", player), lambda state: state._mc_can_kill_wither(player) and 
         state._mc_has_diamond_pickaxe(player) and state.has("Progressive Resource Crafting", player, 2))
     set_rule(world.get_location("Not Today, Thank You", player), lambda state: state.has("Shield", player) and state._mc_has_iron_ingots(player))
@@ -149,11 +149,11 @@ def set_advancement_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Local Brewery", player), lambda state: state._mc_can_brew_potions(player))
     set_rule(world.get_location("The Next Generation", player), lambda state: state._mc_can_kill_ender_dragon(player))
     set_rule(world.get_location("Fishy Business", player), lambda state: state.has("Fishing Rod", player))
-    set_rule(world.get_location("Hot Tourist Destinations", player), lambda state: True)
+    # set_rule(world.get_location("Hot Tourist Destinations", player), lambda state: True)
     set_rule(world.get_location("This Boat Has Legs", player), lambda state: (state._mc_fortress_loot(player) or state._mc_complete_raid(player)) and 
         state.has("Saddle", player) and state.has("Fishing Rod", player))
     set_rule(world.get_location("Sniper Duel", player), lambda state: state.has("Archery", player))
-    set_rule(world.get_location("Nether", player), lambda state: True)
+    # set_rule(world.get_location("Nether", player), lambda state: True)
     set_rule(world.get_location("Great View From Up Here", player), lambda state: state._mc_basic_combat(player))
     set_rule(world.get_location("How Did We Get Here?", player), lambda state: state._mc_can_brew_potions(player) and 
                            state._mc_has_gold_ingots(player) and  # Absorption
@@ -165,16 +165,16 @@ def set_advancement_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Bullseye", player), lambda state: state.has("Archery", player) and state.has("Progressive Tools", player, 2) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Spooky Scary Skeleton", player), lambda state: state._mc_basic_combat(player))
     set_rule(world.get_location("Two by Two", player), lambda state: state._mc_has_iron_ingots(player) and state._mc_can_adventure(player))  # shears > seagrass > turtles; nether > striders; gold carrots > horses skips ingots
-    set_rule(world.get_location("Stone Age", player), lambda state: True)
+    # set_rule(world.get_location("Stone Age", player), lambda state: True)
     set_rule(world.get_location("Two Birds, One Arrow", player), lambda state: state._mc_craft_crossbow(player) and state._mc_can_enchant(player))
-    set_rule(world.get_location("We Need to Go Deeper", player), lambda state: True)
+    # set_rule(world.get_location("We Need to Go Deeper", player), lambda state: True)
     set_rule(world.get_location("Who's the Pillager Now?", player), lambda state: state._mc_craft_crossbow(player))
     set_rule(world.get_location("Getting an Upgrade", player), lambda state: state.has("Progressive Tools", player))
     set_rule(world.get_location("Tactical Fishing", player), lambda state: state.has("Bucket", player) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Zombie Doctor", player), lambda state: state._mc_can_brew_potions(player) and state._mc_has_gold_ingots(player))
-    set_rule(world.get_location("The City at the End of the Game", player), lambda state: True)
+    # set_rule(world.get_location("The City at the End of the Game", player), lambda state: True)
     set_rule(world.get_location("Ice Bucket Challenge", player), lambda state: state._mc_has_diamond_pickaxe(player))
-    set_rule(world.get_location("Remote Getaway", player), lambda state: True)
+    # set_rule(world.get_location("Remote Getaway", player), lambda state: True)
     set_rule(world.get_location("Into Fire", player), lambda state: state._mc_basic_combat(player))
     set_rule(world.get_location("War Pigs", player), lambda state: state._mc_basic_combat(player))
     set_rule(world.get_location("Take Aim", player), lambda state: state.has("Archery", player))
@@ -187,22 +187,22 @@ def set_advancement_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Cover Me With Diamonds", player), lambda state: state.has("Progressive Armor", player, 2) and state.can_reach("Diamonds!", "Location", player))
     set_rule(world.get_location("Sky's the Limit", player), lambda state: state._mc_basic_combat(player))
     set_rule(world.get_location("Hired Help", player), lambda state: state.has("Progressive Resource Crafting", player, 2) and state._mc_has_iron_ingots(player))
-    set_rule(world.get_location("Return to Sender", player), lambda state: True)
+    # set_rule(world.get_location("Return to Sender", player), lambda state: True)
     set_rule(world.get_location("Sweet Dreams", player), lambda state: state.has("Bed", player) or state.can_reach('Village', 'Region', player))
     set_rule(world.get_location("You Need a Mint", player), lambda state: state._mc_can_respawn_ender_dragon(player) and state._mc_has_bottle(player))
-    set_rule(world.get_location("Adventure", player), lambda state: True)
+    # set_rule(world.get_location("Adventure", player), lambda state: True)
     set_rule(world.get_location("Monsters Hunted", player), lambda state: state._mc_can_respawn_ender_dragon(player) and state._mc_can_kill_ender_dragon(player) and 
         state._mc_can_kill_wither(player) and state.has("Fishing Rod", player))  # pufferfish for Water Breathing
     set_rule(world.get_location("Enchanter", player), lambda state: state._mc_can_enchant(player))
     set_rule(world.get_location("Voluntary Exile", player), lambda state: state._mc_basic_combat(player))
     set_rule(world.get_location("Eye Spy", player), lambda state: state._mc_enter_stronghold(player))
-    set_rule(world.get_location("The End", player), lambda state: True)
+    # set_rule(world.get_location("The End", player), lambda state: True)
     set_rule(world.get_location("Serious Dedication", player), lambda state: state.can_reach("Hidden in the Depths", "Location", player) and state._mc_has_gold_ingots(player))
     set_rule(world.get_location("Postmortal", player), lambda state: state._mc_complete_raid(player))
-    set_rule(world.get_location("Monster Hunter", player), lambda state: True)
+    # set_rule(world.get_location("Monster Hunter", player), lambda state: True)
     set_rule(world.get_location("Adventuring Time", player), lambda state: state._mc_can_adventure(player))
-    set_rule(world.get_location("A Seedy Place", player), lambda state: True)
-    set_rule(world.get_location("Those Were the Days", player), lambda state: True)
+    # set_rule(world.get_location("A Seedy Place", player), lambda state: True)
+    # set_rule(world.get_location("Those Were the Days", player), lambda state: True)
     set_rule(world.get_location("Hero of the Village", player), lambda state: state._mc_complete_raid(player))
     set_rule(world.get_location("Hidden in the Depths", player), lambda state: state._mc_can_brew_potions(player) and state.has("Bed", player) and state._mc_has_diamond_pickaxe(player))  # bed mining :)
     set_rule(world.get_location("Beaconator", player), lambda state: state._mc_can_kill_wither(player) and state._mc_has_diamond_pickaxe(player) and
@@ -211,31 +211,31 @@ def set_advancement_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("A Balanced Diet", player), lambda state: state._mc_has_bottle(player) and state._mc_has_gold_ingots(player) and  # honey bottle; gapple
                            state.has("Progressive Resource Crafting", player, 2) and state.can_reach('The End', 'Region', player))  # notch apple, chorus fruit
     set_rule(world.get_location("Subspace Bubble", player), lambda state: state._mc_has_diamond_pickaxe(player))
-    set_rule(world.get_location("Husbandry", player), lambda state: True)
+    # set_rule(world.get_location("Husbandry", player), lambda state: True)
     set_rule(world.get_location("Country Lode, Take Me Home", player), lambda state: state.can_reach("Hidden in the Depths", "Location", player) and state._mc_has_gold_ingots(player))
     set_rule(world.get_location("Bee Our Guest", player), lambda state: state.has("Campfire", player) and state._mc_has_bottle(player))
-    set_rule(world.get_location("What a Deal!", player), lambda state: True)
+    # set_rule(world.get_location("What a Deal!", player), lambda state: True)
     set_rule(world.get_location("Uneasy Alliance", player), lambda state: state._mc_has_diamond_pickaxe(player) and state.has('Fishing Rod', player))
     set_rule(world.get_location("Diamonds!", player), lambda state: state.has("Progressive Tools", player, 2) and state._mc_has_iron_ingots(player))
-    set_rule(world.get_location("A Terrible Fortress", player), lambda state: True)  # since you don't have to fight anything
+    # set_rule(world.get_location("A Terrible Fortress", player), lambda state: True)  # since you don't have to fight anything
     set_rule(world.get_location("A Throwaway Joke", player), lambda state: state._mc_can_adventure(player))  # kill drowned
-    set_rule(world.get_location("Minecraft", player), lambda state: True)
+    # set_rule(world.get_location("Minecraft", player), lambda state: True)
     set_rule(world.get_location("Sticky Situation", player), lambda state: state.has("Campfire", player) and state._mc_has_bottle(player))
     set_rule(world.get_location("Ol' Betsy", player), lambda state: state._mc_craft_crossbow(player))
     set_rule(world.get_location("Cover Me in Debris", player), lambda state: state.has("Progressive Armor", player, 2) and
                            state.has("8 Netherite Scrap", player, 2) and state.has("Progressive Resource Crafting", player) and
                            state.can_reach("Diamonds!", "Location", player) and state.can_reach("Hidden in the Depths", "Location", player))
-    set_rule(world.get_location("The End?", player), lambda state: True)
-    set_rule(world.get_location("The Parrots and the Bats", player), lambda state: True)
-    set_rule(world.get_location("A Complete Catalogue", player), lambda state: True)  # kill fish for raw
-    set_rule(world.get_location("Getting Wood", player), lambda state: True)
-    set_rule(world.get_location("Time to Mine!", player), lambda state: True)
+    # set_rule(world.get_location("The End?", player), lambda state: True)
+    # set_rule(world.get_location("The Parrots and the Bats", player), lambda state: True)
+    # set_rule(world.get_location("A Complete Catalogue", player), lambda state: True)  # kill fish for raw
+    # set_rule(world.get_location("Getting Wood", player), lambda state: True)
+    # set_rule(world.get_location("Time to Mine!", player), lambda state: True)
     set_rule(world.get_location("Hot Topic", player), lambda state: state.has("Progressive Resource Crafting", player))
-    set_rule(world.get_location("Bake Bread", player), lambda state: True)
+    # set_rule(world.get_location("Bake Bread", player), lambda state: True)
     set_rule(world.get_location("The Lie", player), lambda state: state._mc_has_iron_ingots(player) and state.has("Bucket", player))
     set_rule(world.get_location("On a Rail", player), lambda state: state._mc_has_iron_ingots(player) and state.has('Progressive Tools', player, 2))  # powered rails
-    set_rule(world.get_location("Time to Strike!", player), lambda state: True)
-    set_rule(world.get_location("Cow Tipper", player), lambda state: True)
+    # set_rule(world.get_location("Time to Strike!", player), lambda state: True)
+    # set_rule(world.get_location("Cow Tipper", player), lambda state: True)
     set_rule(world.get_location("When Pigs Fly", player), lambda state: (state._mc_fortress_loot(player) or state._mc_complete_raid(player)) and 
         state.has("Saddle", player) and state.has("Fishing Rod", player) and state._mc_can_adventure(player))
     set_rule(world.get_location("Overkill", player), lambda state: state._mc_can_brew_potions(player) and 
