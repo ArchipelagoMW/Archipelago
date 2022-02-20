@@ -70,6 +70,11 @@ class FF1World(World):
             if possible_early_items:
                 progression_item = self.world.random.choice(possible_early_items)
                 self._place_locked_item_in_sphere0(progression_item)
+        else:
+            # Fail generation if there are no items in the pool
+            raise Exception("FFR settings submitted with no key items. Please ensure you generated the settings using "
+                            "finalfantasyrandomizer.com AND enabled the AP flag")
+
         items = [self.create_item(name) for name, data in items.items() for x in range(data['count']) if name not in
                  self.locked_items]
 
