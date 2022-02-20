@@ -615,7 +615,7 @@ class CollectionState():
         return ret
 
     def can_reach(self, spot, resolution_hint=None, player=None) -> bool:
-        if not hasattr(spot, "spot_type"):
+        if not hasattr(spot, "can_reach"):
             # try to resolve a name
             if resolution_hint == 'Location':
                 spot = self.world.get_location(spot, player)
@@ -867,19 +867,30 @@ class RegionType(int, Enum):
         return self in (RegionType.Cave, RegionType.Dungeon)
 
 
-class Region(object):
+class Region:
+    name: str
+    type: RegionType
+    hint_text: str
+    player: int
+    world: Optional[MultiWorld]
+    entrances: List[Entrance]
+    exits: List[Entrance]
+    locations: List[Location]
+    dungeon: Optional[Dungeon] = None
+    shop: Optional = None
+
+    # LttP specific. TODO: move to a LttPRegion
+    # will be set after making connections.
+    is_light_world: bool = False
+    is_dark_world: bool = False
+
     def __init__(self, name: str, type_: RegionType, hint, player: int, world: Optional[MultiWorld] = None):
         self.name = name
         self.type = type_
         self.entrances = []
         self.exits = []
-        self.locations: List[Location] = []
-        self.dungeon = None
-        self.shop = None
+        self.locations = []
         self.world = world
-        self.is_light_world = False  # will be set after making connections.
-        self.is_dark_world = False
-        self.spot_type = 'Region'
         self.hint_text = hint
         self.player = player
 
@@ -904,7 +915,6 @@ class Region(object):
 
 
 class Entrance:
-    spot_type = 'Entrance'
     access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     hide_path: bool = False
     player: int
@@ -1004,13 +1014,12 @@ class LocationProgressType(Enum):
     EXCLUDED = 3
 
 
-class Location():
+class Location:
     # If given as integer, then this is the shop's inventory index
     shop_slot: Optional[int] = None
     shop_slot_disabled: bool = False
     event: bool = False
     locked: bool = False
-    spot_type = 'Location'
     game: str = "Generic"
     show_in_spoiler: bool = True
     crystal: bool = False
@@ -1018,13 +1027,13 @@ class Location():
     always_allow = staticmethod(lambda item, state: False)
     access_rule = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
+    item: Optional[Item] = None
 
     def __init__(self, player: int, name: str = '', address: int = None, parent=None):
         self.name: str = name
         self.address: Optional[int] = address
         self.parent_region: Region = parent
         self.player: int = player
-        self.item: Optional[Item] = None
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
         return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
