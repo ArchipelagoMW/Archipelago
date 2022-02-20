@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable
+from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable, Union
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
@@ -73,6 +73,12 @@ def call_stage(world: MultiWorld, method_name: str, *args):
             stage_callable(world, *args)
 
 
+class WebWorld:
+    """Webhost integration"""
+    # display a settings page. Can be a link to an out-of-ap settings tool too.
+    settings_page: Union[bool, str] = True
+
+
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
@@ -129,6 +135,8 @@ class World(metaclass=AutoWorldRegister):
     # If the game displays all contained items to the user, this flag pre-fills the hint system with this information
     # For example the "full" tech tree information option in Factorio
     sending_visible: bool = False
+
+    web: WebWorld = WebWorld()
 
     def __init__(self, world: MultiWorld, player: int):
         self.world = world
@@ -250,3 +258,4 @@ class World(metaclass=AutoWorldRegister):
 # please use a prefix as all of them get clobbered together
 class LogicMixin(metaclass=AutoLogicRegister):
     pass
+

@@ -1028,11 +1028,12 @@ class Location:
     access_rule = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
     item: Optional[Item] = None
+    parent_region: Optional[Region]
 
     def __init__(self, player: int, name: str = '', address: int = None, parent=None):
         self.name: str = name
         self.address: Optional[int] = address
-        self.parent_region: Region = parent
+        self.parent_region = parent
         self.player: int = player
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
