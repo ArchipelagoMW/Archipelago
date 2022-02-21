@@ -1,5 +1,5 @@
 import typing
-from .Items import item_table, SM64Item
+from .Items import item_table, cannon_item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options
 from .Rules import set_rules
@@ -21,7 +21,7 @@ class SM64World(World):
     item_name_to_id = item_table
     location_name_to_id = location_table
 
-    data_version = 5
+    data_version = 6
     forced_auto_forfeit = False
 
     area_connections: typing.Dict[int, int]
@@ -64,6 +64,20 @@ class SM64World(World):
         metalcap = self.create_item("Metal Cap")
         vanishcap = self.create_item("Vanish Cap")
         self.world.itempool += [wingcap,metalcap,vanishcap]
+
+        if (self.world.BuddyChecks[self.player].value):
+            self.world.itempool += [self.create_item(name) for name, id in cannon_item_table.items()]
+        else:
+            self.world.get_location("BoB: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock BoB"))
+            self.world.get_location("WF: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock WF"))
+            self.world.get_location("JRB: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock JRB"))
+            self.world.get_location("CCM: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock CCM"))
+            self.world.get_location("SSL: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock SSL"))
+            self.world.get_location("SL: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock SL"))
+            self.world.get_location("WDW: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock WDW"))
+            self.world.get_location("TTM: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock TTM"))
+            self.world.get_location("THI: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock THI"))
+            self.world.get_location("RR: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock RR"))
 
     def fill_slot_data(self):
         return {

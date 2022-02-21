@@ -57,7 +57,8 @@ class LttPCommandProcessor(ClientCommandProcessor):
     @mark_raw
     def _cmd_snes(self, snes_options: str = "") -> bool:
         """Connect to a snes. Optionally include network address of a snes to connect to,
-        otherwise show available devices; and a SNES device number if more than one SNES is detected"""
+        otherwise show available devices; and a SNES device number if more than one SNES is detected.
+        Examples: "/snes", "/snes 1", "/snes localhost:8080 1" """
 
         snes_address = self.ctx.snes_address
         snes_device_number = -1
@@ -66,13 +67,12 @@ class LttPCommandProcessor(ClientCommandProcessor):
         num_options = len(options)
 
         if num_options > 0:
-            snes_address = options[0]
+            snes_device_number = int(options[0])
 
         if num_options > 1:
-            try:
-                snes_device_number = int(options[1])
-            except:
-                pass
+            snes_address = options[0]
+            snes_device_number = int(options[1])
+
 
         self.ctx.snes_reconnect_address = None
         asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number), name="SNES Connect")

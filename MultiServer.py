@@ -319,7 +319,11 @@ class Context:
                     SlotType(int(bool(locations))))
                 for slot, locations in self.locations.items()
             }
-
+            # locations may need converting
+            for slot, locations in self.locations.items():
+                for location, item_data in locations.items():
+                    if len(item_data) < 3:
+                        locations[location] = (*item_data, 0)
         # declare slots that aren't players as done
         for slot, slot_info in self.slot_info.items():
             if slot_info.type.always_goal:
@@ -505,13 +509,21 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint]):
     concerns = collections.defaultdict(list)
     for hint in hints:
         net_msg = hint.as_network_message()
-        concerns[hint.receiving_player].append(net_msg)
-        if not hint.local:
+        if hint.receiving_player in ctx.groups:
+            for player in ctx.groups[hint.receiving_player]:
+                concerns[player].append(net_msg)
+        else:
+            concerns[hint.receiving_player].append(net_msg)
+        if not hint.local and net_msg not in concerns[hint.finding_player]:
             concerns[hint.finding_player].append(net_msg)
         # remember hints in all cases
         if not hint.found:
             ctx.hints[team, hint.finding_player].add(hint)
-            ctx.hints[team, hint.receiving_player].add(hint)
+            if hint.receiving_player in ctx.groups:
+                for player in ctx.groups[hint.receiving_player]:
+                    ctx.hints[team, player].add(hint)
+            else:
+                ctx.hints[team, hint.receiving_player].add(hint)
     for text in (format_hint(ctx, team, hint) for hint in hints):
         logging.info("Notice (Team #%d): %s" % (team + 1, text))
 
@@ -769,12 +781,16 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
 
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[NetUtils.Hint]:
     hints = []
+    slots = []
+    for group_id, group in ctx.groups.items():
+        if slot in group:
+            slots.append(group_id)
     seeked_item_id = proxy_worlds[ctx.games[slot]].item_name_to_id[item]
     for finding_player, check_data in ctx.locations.items():
         for location_id, result in check_data.items():
             item_id, receiving_player, item_flags = result
 
-            if receiving_player == slot and item_id == seeked_item_id:
+            if (receiving_player == slot or receiving_player in slots) and item_id == seeked_item_id:
                 found = location_id in ctx.location_checks[team, finding_player]
                 entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
                 hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
@@ -1337,6 +1353,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 client.no_items = False
                 client.remote_items = slot in ctx.remote_items
                 client.remote_start_inventory = slot in ctx.remote_start_inventory
+                ctx.send_msgs([{"cmd": "Print", "text": "Warning: Client is not sending items_handling flags, "
+                                                        "which will not be supported in the future."}])
             else:
                 try:
                     client.items_handling = args['items_handling']

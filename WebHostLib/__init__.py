@@ -112,7 +112,7 @@ def games():
     worlds = {}
     for game, world in AutoWorldRegister.world_types.items():
         if not world.hidden:
-            worlds[game] = world.__doc__ if world.__doc__ else "No description provided."
+            worlds[game] = world
     return render_template("supportedGames.html", worlds=worlds)
 
 
