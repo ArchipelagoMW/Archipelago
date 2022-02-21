@@ -13,13 +13,26 @@ from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
 from worlds.smz3.TotalSMZ3.Config import Config, GameMode, GanonInvincible, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic
 from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
 from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
-from ..AutoWorld import World
+from ..AutoWorld import World, AutoLogicRegister
 from .Rom import get_base_rom_bytes
 from .ips import IPS_Patch
 from .Options import smz3_options
 
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")
+
+class SMCollectionState(metaclass=AutoLogicRegister):
+    def init_mixin(self, parent: MultiWorld):
+        # for unit tests where MultiWorld is instantiated before worlds
+        if hasattr(parent, "state"):
+            self.smz3state = {player: TotalSMZ3Item.Progression([]) for player in parent.get_game_players("SMZ3")}
+        else:
+            self.smz3state = {}
+
+    def copy_mixin(self, ret) -> CollectionState:
+        ret.smz3state = {player: copy.deepcopy(self.smz3state[player]) for player in self.world.get_game_players("SMZ3")}
+        return ret
+
 
 class SMZ3World(World):
     """
@@ -38,36 +51,11 @@ class SMZ3World(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
 
-    
-
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         self.locations = {}
         self.unreachable = []
         super().__init__(world, player)
-        
-    def __new__(cls, world, player):
-        # Add necessary objects to CollectionState on initialization
-        orig_init = CollectionState.__init__
-        orig_copy = CollectionState.copy
-
-        def smz3_init(self, parent: MultiWorld):
-            if (hasattr(parent, "state")): # for unit tests where MultiWorld is instanciated before worlds
-                self.smz3state = {player: TotalSMZ3Item.Progression([]) for player in parent.get_game_players("SMZ3")}
-            orig_init(self, parent)
-
-        def smz3_copy(self):
-            ret = orig_copy(self)
-            ret.smz3state = {player: copy.deepcopy(self.smz3state[player]) for player in self.world.get_game_players("SMZ3")}
-            return ret
-
-        CollectionState.__init__ = smz3_init
-        CollectionState.copy = smz3_copy
-
-        if world:
-            world.state.smz3state = {}
-
-        return super().__new__(cls)
 
     def generate_early(self):
         config = Config({})
