@@ -26,7 +26,9 @@ class StringTable:
         return result
 
     template = ParseEntries.__func__(text_folder + "/Scripts/StringTable.yaml")
-    entries = copy.deepcopy(template)
+
+    def __init__(self):
+        self.entries = copy.deepcopy(StringTable.template)
 
     def SetSahasrahlaRevealText(self, text: str):
         self.SetText("sahasrahla_quest_information", text)
@@ -60,13 +62,13 @@ class StringTable:
 
     def SetText(self, name: str, text: str):
         count = 0
-        for key, value in StringTable.entries:
+        for key, value in self.entries:
             if (key == name):
                 index = count
                 break
             else:
                 count += 1
-        StringTable.entries[index] = (name, Dialog.Compiled(text))
+        self.entries[index] = (name, Dialog.Compiled(text))
 
     def GetPaddedBytes(self):
         return self.GetBytes(True)
@@ -74,7 +76,7 @@ class StringTable:
     def GetBytes(self, pad = False):
         maxBytes = 0x7355
         data = []
-        for entry in StringTable.entries:
+        for entry in self.entries:
             data += entry[1]
 
         if (len(data) > maxBytes):
