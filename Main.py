@@ -340,12 +340,16 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     if world.worlds[slot].sending_visible:
                         sending_visible_players.add(slot)
 
-                def precollect_hint(location):
+                def precollect_hint(location, group_players=None):
                     entrance = er_hint_data.get(location.player, {}).get(location.address, "")
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
                                          location.item.code, False, entrance, location.item.flags)
                     precollected_hints[location.player].add(hint)
-                    precollected_hints[location.item.player].add(hint)
+                    if not group_players:
+                        precollected_hints[location.item.player].add(hint)
+                    else:
+                        for player in group_players:
+                            precollected_hints[player].add(hint)
 
                 locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in world.player_ids}
                 for location in world.get_filled_locations():
@@ -360,6 +364,12 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                             precollect_hint(location)
                         elif location.item.name in world.start_hints[location.item.player]:
                             precollect_hint(location)
+                        elif location.item.player in world.groups:
+                            group_players = world.groups[location.item.player]["players"]
+                            for player in group_players:
+                                if location.item.name in world.start_hints[player]:
+                                    precollect_hint(location, group_players)
+                                    break  # Everyone in the group benefits from the start hint.
 
                 multidata = {
                     "slot_data": slot_data,
