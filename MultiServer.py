@@ -319,7 +319,11 @@ class Context:
                     SlotType(int(bool(locations))))
                 for slot, locations in self.locations.items()
             }
-
+            # locations may need converting
+            for slot, locations in self.locations.items():
+                for location, item_data in locations.items():
+                    if len(item_data) < 3:
+                        locations[location] = (*item_data, 0)
         # declare slots that aren't players as done
         for slot, slot_info in self.slot_info.items():
             if slot_info.type.always_goal:
@@ -1349,6 +1353,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 client.no_items = False
                 client.remote_items = slot in ctx.remote_items
                 client.remote_start_inventory = slot in ctx.remote_start_inventory
+                ctx.send_msgs([{"cmd": "Print", "text": "Warning: Client is not sending items_handling flags, "
+                                                        "which will not be supported in the future."}])
             else:
                 try:
                     client.items_handling = args['items_handling']

@@ -1,16 +1,18 @@
 import typing
 from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
-from .Locations import SM64Location, location_table,locBoB_table,locWhomp_table,locJRB_table,locCCM_table,locBBH_table, \
-                                                    locHMC_table,locLLL_table,locSSL_table,locDDD_table,locSL_table, \
-                                                    locWDW_table,locTTM_table,locTHI_table,locTTC_table,locRR_table, \
-                                                    locBitDW_table, locBitFS_table, locSS_table, locCap_table
+from .Locations import SM64Location, location_table, locBoB_table, locWhomp_table, locJRB_table, locCCM_table, \
+    locBBH_table, \
+    locHMC_table, locLLL_table, locSSL_table, locDDD_table, locSL_table, \
+    locWDW_table, locTTM_table, locTHI_table, locTTC_table, locRR_table, \
+    locBitDW_table, locBitFS_table, locSS_table, locCap_table
 
 sm64courses = ["Bob-omb Battlefield", "Whomp's Fortress", "Jolly Roger Bay", "Cool, Cool Mountain", "Big Boo's Haunt",
-               "Hazy Maze Cave", "Lethal Lava Land", "Shifting Sand Land", "Dire, Dire Docks", "Snowman's Land", "Wet-Dry World",
+               "Hazy Maze Cave", "Lethal Lava Land", "Shifting Sand Land", "Dire, Dire Docks", "Snowman's Land",
+               "Wet-Dry World",
                "Tall, Tall Mountain", "Tiny-Huge Island", "Tick Tock Clock", "Rainbow Ride"]
 
-def create_regions(world: MultiWorld, player: int):
 
+def create_regions(world: MultiWorld, player: int):
     regSS = Region("Menu", RegionType.Generic, "Castle Area", player, world)
     locSS_names = [name for name, id in locSS_table.items()]
     locSS_names += [name for name, id in locCap_table.items()]
@@ -26,7 +28,8 @@ def create_regions(world: MultiWorld, player: int):
 
     regWhomp = Region("Whomp's Fortress", RegionType.Generic, "Whomp's Fortress", player, world)
     locWhomp_names = [name for name, id in locWhomp_table.items()]
-    regWhomp.locations += [SM64Location(player, loc_name, location_table[loc_name], regWhomp) for loc_name in locWhomp_names]
+    regWhomp.locations += [SM64Location(player, loc_name, location_table[loc_name], regWhomp) for loc_name in
+                           locWhomp_names]
     if (world.EnableCoinStars[player].value):
         regWhomp.locations.append(SM64Location(player, "WF: 100 Coins", location_table["WF: 100 Coins"], regWhomp))
     world.regions.append(regWhomp)
@@ -54,7 +57,8 @@ def create_regions(world: MultiWorld, player: int):
 
     regBitDW = Region("Bowser in the Dark World", RegionType.Generic, "Bowser in the Dark World", player, world)
     locBitDW_names = [name for name, id in locBitDW_table.items()]
-    regBitDW.locations += [SM64Location(player, loc_name, location_table[loc_name], regBitDW) for loc_name in locBitDW_names]
+    regBitDW.locations += [SM64Location(player, loc_name, location_table[loc_name], regBitDW) for loc_name in
+                           locBitDW_names]
     world.regions.append(regBitDW)
 
     regBasement = Region("Basement", RegionType.Generic, "Basement", player, world)
@@ -90,7 +94,8 @@ def create_regions(world: MultiWorld, player: int):
 
     regBitFS = Region("Bowser in the Fire Sea", RegionType.Generic, "Bowser in the Fire Sea", player, world)
     locBitFS_names = [name for name, id in locBitFS_table.items()]
-    regBitFS.locations += [SM64Location(player, loc_name, location_table[loc_name], regBitFS) for loc_name in locBitFS_names]
+    regBitFS.locations += [SM64Location(player, loc_name, location_table[loc_name], regBitFS) for loc_name in
+                           locBitFS_names]
     world.regions.append(regBitFS)
 
     regFloor2 = Region("Second Floor", RegionType.Generic, "Second Floor", player, world)
@@ -142,12 +147,13 @@ def create_regions(world: MultiWorld, player: int):
     world.regions.append(regRR)
 
 
-def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule):
+def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule=None):
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
 
-    connection = Entrance(player,'', sourceRegion)
-    connection.access_rule = rule
+    connection = Entrance(player, '', sourceRegion)
+    if rule:
+        connection.access_rule = rule
 
     sourceRegion.exits.append(connection)
-    connection.connect(targetRegion) 
+    connection.connect(targetRegion)
