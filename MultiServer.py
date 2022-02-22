@@ -1525,15 +1525,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                                          bounceclient.slot in slots):
                     await ctx.send_encoded_msgs(bounceclient, msg)
 
-        elif cmd == "Store":
-            if "data" not in args or type(args["data"]) != dict:
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                                              "text": 'Store', "original_cmd": cmd}])
-                return
-            for key, value in args["data"].items():
-                ctx.stored_data[key] = value
-
-        elif cmd == "Retrieve":
+        elif cmd == "Get":
             if "data" not in args or type(args["data"]) != list:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": 'Retrieve', "original_cmd": cmd}])
@@ -1543,26 +1535,28 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             args["data"] = {key: ctx.stored_data.get(key, None) for key in keys}
             await ctx.send_msgs(client, [args])
 
-        elif cmd == "Modify":
+        elif cmd == "Set":
             if "key" not in args or "value" not in args:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                                              "text": 'Modify', "original_cmd": cmd}])
+                                              "text": 'Set', "original_cmd": cmd}])
                 return
-            args["cmd"] = "Modified"
+            args["cmd"] = "SetReply"
             value = ctx.stored_data.get(args["key"], args.get("default", 0))
             args["original_value"] = value
-            operation = args.get("operation", "add")
+            operation = args.get("operation", "replace")
             func = modify_functions[operation]
             value = func(value, args.get("value"))
             ctx.stored_data[args["key"]] = args["value"] = value
             targets = set(ctx.stored_data_notification_clients[args["key"]])
-            targets.add(client)
-            ctx.broadcast(targets, [args])
+            if args.get("want_reply", True):
+                targets.add(client)
+            if targets:
+                ctx.broadcast(targets, [args])
 
-        elif cmd == "ModifyNotify":
+        elif cmd == "SetNotify":
             if "data" not in args or type(args["data"]) != list:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                                              "text": 'ModifyNotify', "original_cmd": cmd}])
+                                              "text": 'SetNotify', "original_cmd": cmd}])
                 return
             for key in args["data"]:
                 ctx.stored_data_notification_clients[key].add(client)
