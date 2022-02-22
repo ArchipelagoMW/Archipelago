@@ -238,6 +238,10 @@ class BingoWorld(World):
                            f' has been completed.'
             ctx.notify_all(finished_msg)
 
+    def get_filler_item_name(self) -> str:
+        call = self.world.random.randint(1, self.card_pairs[self.player] * 24)
+        return f"Bingo Call {call}"
+
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, None, name, player)
