@@ -102,12 +102,14 @@ sm_options:
   rom_start: true
 factorio_options:
   executable: "factorio\\bin\\x64\\factorio"
-minecraft_options: 
+minecraft_options:
   forge_directory: "Minecraft Forge server"
   max_heap_size: "2G"
-oot_options: 
+oot_options:
   # File name of the OoT v1.0 ROM
   rom_file: "The Legend of Zelda - Ocarina of Time.z64"
 soe_options:
   # File name of the SoE US ROM
   rom_file: "Secret of Evermore (USA).sfc"
+ffr_options:
+  display_msgs: true
