@@ -15,6 +15,7 @@ import random
 import pickle
 import itertools
 import time
+import operator
 
 import ModuleUpdate
 
@@ -37,6 +38,16 @@ from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, Networ
     SlotType
 
 colorama.init()
+
+# functions callable on storable data on the server by clients
+modify_functions = {
+    "add": operator.add,
+    "mul": operator.mul,
+    "max": max,
+    "min": min,
+    "replace": lambda old, new: new,
+    "deplete": lambda value, change: max(0, value + change)
+}
 
 
 class Client(Endpoint):
@@ -100,6 +111,8 @@ class Context:
     locations: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int]]]
     groups: typing.Dict[int, typing.Set[int]]
     save_version = 2
+    stored_data: typing.Dict[str, object]
+    stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
@@ -161,6 +174,8 @@ class Context:
         self.seed_name = ""
         self.groups = {}
         self.random = random.Random()
+        self.stored_data = {}
+        self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
 
     # General networking
 
@@ -408,7 +423,8 @@ class Context:
                 (key, value.timestamp()) for key, value in self.client_activity_timers.items()),
             "client_connection_timers": tuple(
                 (key, value.timestamp()) for key, value in self.client_connection_timers.items()),
-            "random_state": self.random.getstate()
+            "random_state": self.random.getstate(),
+            "stored_data": self.stored_data
         }
 
         return d
@@ -444,11 +460,14 @@ class Context:
             {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
              in savedata["client_activity_timers"]})
         self.location_checks.update(savedata["location_checks"])
-        if "random_state" in savedata:
-            self.random.setstate(savedata["random_state"])
+        self.random.setstate(savedata["random_state"])
+
+        if "stored_data" in savedata:
+            self.stored_data = savedata["stored_data"]
         # count items and slots from lists for item_handling = remote
-        logging.info(f'Loaded save file with {sum([len(v) for k,v in self.received_items.items() if k[2]])} received items '
-                         f'for {sum(k[2] for k in self.received_items)} players')
+        logging.info(
+            f'Loaded save file with {sum([len(v) for k, v in self.received_items.items() if k[2]])} received items '
+            f'for {sum(k[2] for k in self.received_items)} players')
 
     # rest
 
@@ -1505,6 +1524,48 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                                          set(bounceclient.tags) & tags or
                                                          bounceclient.slot in slots):
                     await ctx.send_encoded_msgs(bounceclient, msg)
+
+        elif cmd == "Store":
+            if "data" not in args or type(args["data"]) != dict:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
+                                              "text": 'Store', "original_cmd": cmd}])
+                return
+            for key, value in args["data"].items():
+                ctx.stored_data[key] = value
+
+        elif cmd == "Retrieve":
+            if "data" not in args or type(args["data"]) != list:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
+                                              "text": 'Retrieve', "original_cmd": cmd}])
+                return
+            args["cmd"] = "Retrieved"
+            keys = args["data"]
+            args["data"] = {key: ctx.stored_data.get(key, None) for key in keys}
+            await ctx.send_msgs(client, [args])
+
+        elif cmd == "Modify":
+            if "key" not in args or "value" not in args:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
+                                              "text": 'Modify', "original_cmd": cmd}])
+                return
+            args["cmd"] = "Modified"
+            value = ctx.stored_data.get(args["key"], args.get("default", 0))
+            args["original_value"] = value
+            operation = args.get("operation", "add")
+            func = modify_functions[operation]
+            value = func(value, args.get("value"))
+            ctx.stored_data[args["key"]] = args["value"] = value
+            targets = set(ctx.stored_data_notification_clients[args["key"]])
+            targets.add(client)
+            ctx.broadcast(targets, [args])
+
+        elif cmd == "ModifyNotify":
+            if "data" not in args or type(args["data"]) != list:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
+                                              "text": 'ModifyNotify', "original_cmd": cmd}])
+                return
+            for key in args["data"]:
+                ctx.stored_data_notification_clients[key].add(client)
 
 
 def update_client_status(ctx: Context, client: Client, new_status: ClientStatus):
