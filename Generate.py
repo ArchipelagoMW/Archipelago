@@ -502,9 +502,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             roll_alttp_settings(ret, game_weights, plando_options)
     else:
         raise Exception(f"Unsupported game {ret.game}")
-    # not meant to stay here, intended to be removed when itemlinks are stable
-    if not "item_links" in plando_options:
-        ret.item_links.value = []
+
     return ret
 
 

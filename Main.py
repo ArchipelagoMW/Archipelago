@@ -141,9 +141,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     # temporary home for item links, should be moved out of Main
     for group_id, group in world.groups.items():
-        # TODO: remove when LttP options are transitioned over
-        world.difficulty_requirements[group_id] = world.difficulty_requirements[next(iter(group["players"]))]
-
         def find_common_pool(players: Set[int], shared_pool: Set[str]):
             advancement = set()
             counters = {player: {name: 0 for name in shared_pool} for player in players}
@@ -164,10 +161,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             return counters, advancement
 
         common_item_count, common_advancement_items = find_common_pool(group["players"], group["item_pool"])
-        # TODO: fix logic
-        if common_advancement_items:
-            logger.warning(f"Logical requirements for {', '.join(common_advancement_items)} in group {group['name']} "
-                           f"will be incorrect.")
+
         new_itempool = []
         for item_name, item_count in next(iter(common_item_count.values())).items():
             advancement = item_name in common_advancement_items
@@ -184,7 +178,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             if count:
                 loc = Location(group_id, f"Item Link: {item.name} -> {world.player_name[item.player]} {count}",
                                None, region)
-                loc.access_rule = lambda state: state.has(item.name, group_id, count)
+                loc.access_rule = lambda state, item_name = item.name, group_id_ = group_id, count_ = count: \
+                    state.has(item_name, group_id_, count_)
+
                 locations.append(loc)
                 loc.place_locked_item(item)
                 common_item_count[item.player][item.name] -= 1
