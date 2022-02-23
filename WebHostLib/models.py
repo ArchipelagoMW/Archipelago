@@ -12,7 +12,7 @@ STATE_ERROR = -1
 class Slot(db.Entity):
     id = PrimaryKey(int, auto=True)
     player_id = Required(int)
-    player_name = Required(str, 16)
+    player_name = Required(str)
     data = Optional(bytes, lazy=True)
     seed = Optional('Seed')
     game = Required(str)
