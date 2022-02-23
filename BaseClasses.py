@@ -205,13 +205,18 @@ class MultiWorld():
         item_links = {}
 
         for player in self.player_ids:
+            player_item_links = set()
             for item_link in self.item_links[player].value:
+                if item_link["name"] in player_item_links:
+                    raise Exception(f"Cannot name more than one item_link with the same name in the same yaml ({item_link['name']}) ({self.get_player_name(player)})")
+                else:
+                    player_item_links.add(item_link["name"])
                 if item_link["name"] in item_links:
                     item_links[item_link["name"]]["players"][player] = item_link["replacement_item"]
                     item_links[item_link["name"]]["item_pool"] &= set(item_link["item_pool"])
                 else:
                     if item_link["name"] in self.player_name.values():
-                        raise Exception(f"Cannot name a ItemLink group the same as a player ({item_link['name']}).")
+                        raise Exception(f"Cannot name a ItemLink group the same as a player ({item_link['name']}) ({self.get_player_name(player)}).")
                     item_links[item_link["name"]] = {
                         "players": {player: item_link["replacement_item"]},
                         "item_pool": set(item_link["item_pool"]),
