@@ -22,7 +22,7 @@
         {% if room.last_port %}
             You can connect to this room by using '/connect {{ config['PATCH_TARGET'] }}:{{ room.last_port }}'
             in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>{% endif %}
-        {{ macros.list_patches_room(room) }}
+        {{ macros.list_patches_room(room, groups) }}
         {% if room.owner == session["_id"] %}
             <form method=post>
                 <div class="form-group">

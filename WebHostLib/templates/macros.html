@@ -6,7 +6,7 @@
         {{ caller() }}
     </ul>
 {%- endmacro %}
-{% macro list_patches_room(room) %}
+{% macro list_patches_room(room, groups) %}
     {% if room.seed.slots %}
         <table>
             <thead>
@@ -19,7 +19,7 @@
                 </tr>
             </thead>
             <tbody>
-            {% for patch in room.seed.slots|list|sort(attribute="player_id") %}
+            {% for patch in room.seed.slots|list|sort(attribute="player_id") if patch.player_id not in groups %}
                 <tr>
                     <td>{{ patch.player_id }}</td>
                     <td>{{ patch.player_name }}</td>
