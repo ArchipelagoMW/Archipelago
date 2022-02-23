@@ -9,8 +9,6 @@ from flask import Flask, request, redirect, url_for, render_template, Response, 
 from flask_caching import Cache
 from flask_compress import Compress
 from worlds.AutoWorld import AutoWorldRegister
-from MultiServer import Context
-from NetUtils import SlotType
 
 from .models import *
 
@@ -180,11 +178,7 @@ def host_room(room: UUID):
     with db_session:
         room.last_activity = datetime.utcnow()  # will trigger a spinup, if it's not already running
 
-    multidata = Context.decompress(room.seed.multidata)
-    groups = {slot: slot_info.group_members for slot, slot_info in multidata.get("slot_info", {}).items()
-                  if slot_info.type == SlotType.group}
-
-    return render_template("hostRoom.html", room=room, groups=groups)
+    return render_template("hostRoom.html", room=room)
 
 
 @app.route('/favicon.ico')
