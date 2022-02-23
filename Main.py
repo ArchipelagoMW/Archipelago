@@ -150,6 +150,14 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     if item.advancement:
                         advancement.add(item.name)
 
+            for player in players.copy():
+                if all([counters[player][item] == 0 for item in shared_pool]):
+                    players.remove(player)
+                    del(counters[player])
+
+            if not players:
+                return None, None
+
             for item in shared_pool:
                 count = min(counters[player][item] for player in players)
                 if count:
@@ -161,6 +169,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             return counters, advancement
 
         common_item_count, common_advancement_items = find_common_pool(group["players"], group["item_pool"])
+        if not common_item_count:
+            continue
 
         new_itempool = []
         for item_name, item_count in next(iter(common_item_count.values())).items():
