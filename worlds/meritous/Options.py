@@ -10,11 +10,12 @@ from Options import Option, DeathLink, Toggle, DefaultOnToggle, Choice
 class Goal(Choice):
     """Which goal must be achieved to trigger completion."""
     display_name = "Goal"
-    option_any_ending = 0
-    option_true_ending = 1
-    alias_normal_ending = 0
-    alias_agate_knife = 1
-    default = 0
+    option_return_the_cursed_seal = 0
+    option_any_ending = 1
+    option_true_ending = 2
+    alias_normal_ending = 1
+    alias_agate_knife = 2
+    default = 1
 
 
 class IncludePSIKeys(DefaultOnToggle):
