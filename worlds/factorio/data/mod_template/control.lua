@@ -11,6 +11,7 @@ TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
 MAX_SCIENCE_PACK = {{ max_science_pack }}
 GOAL = {{ goal }}
 ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
+ENERGY_INCREMENT = 1000000
 
 if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
     DEATH_LINK = 1
@@ -19,6 +20,40 @@ else
 end
 
 CURRENTLY_DEATH_LOCK = 0
+
+function on_check_energy_link(event)
+    --- assuming 1 MJ increment and 5MJ battery:
+    --- first 2 MJ request fill, last 2 MJ push energy, middle 1 MJ does nothing
+    if event.tick % 60 == 30 then
+        local surface = game.get_surface(1)
+        local force = "player"
+        local bridges = surface.find_entities_filtered({name="ap-energy-bridge", force=force})
+        local bridgecount = table_size(bridges)
+        global.forcedata[force].energy_bridges = bridgecount
+        if global.forcedata[force].energy == nil then
+            global.forcedata[force].energy = 0
+        end
+        if global.forcedata[force].energy < ENERGY_INCREMENT * bridgecount * 5 then
+            for i, bridge in ipairs(bridges) do
+                if bridge.energy > ENERGY_INCREMENT*3 then
+                    global.forcedata[force].energy = global.forcedata[force].energy + ENERGY_INCREMENT
+                    bridge.energy = bridge.energy - ENERGY_INCREMENT
+                end
+            end
+        end
+        for i, bridge in ipairs(bridges) do
+            if global.forcedata[force].energy < ENERGY_INCREMENT then
+                break
+            end
+            if bridge.energy < ENERGY_INCREMENT*2 and global.forcedata[force].energy > ENERGY_INCREMENT then
+                global.forcedata[force].energy = global.forcedata[force].energy - ENERGY_INCREMENT
+                bridge.energy = bridge.energy + ENERGY_INCREMENT
+            end
+        end
+        game.print("Bridges: " .. bridgecount .. " With: " .. global.forcedata["player"].energy)
+    end
+end
+script.on_event(defines.events.on_tick, on_check_energy_link)
 
 {% if not imported_blueprints -%}
 function set_permissions()
@@ -69,6 +104,8 @@ function on_force_created(event)
     data['earned_samples'] = {{ dict_to_lua(starting_items) }}
     data["victory"] = 0
     data["death_link_tick"] = 0
+    data["energy"] = 0
+    data["energy_bridges"] = 0
     global.forcedata[event.force] = data
 {%- if silo == 2 %}
     check_spawn_silo(force)
@@ -434,11 +471,14 @@ commands.add_command("ap-sync", "Used by the Archipelago client to get progress 
         force = game.players[call.player_index].force
     end
     local research_done = {}
+    local forcedata = chain_lookup(global, "forcedata", force.name)
     local data_collection = {
         ["research_done"] = research_done,
-        ["victory"] = chain_lookup(global, "forcedata", force.name, "victory"),
-        ["death_link_tick"] = chain_lookup(global, "forcedata", force.name, "death_link_tick"),
-        ["death_link"] = DEATH_LINK
+        ["victory"] = chain_lookup(forcedata, "victory"),
+        ["death_link_tick"] = chain_lookup(forcedata, "death_link_tick"),
+        ["death_link"] = DEATH_LINK,
+        ["energy"] = chain_lookup(forcedata, "energy"),
+        ["energy_bridges"] = chain_lookup(forcedata, "energy_bridges"),
     }
 
     for tech_name, tech in pairs(force.technologies) do
@@ -515,7 +555,12 @@ end)
 
 
 commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
-    rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME, ["death_link"] = DEATH_LINK}))
+    rcon.print(game.table_to_json({
+        ["slot_name"] = SLOT_NAME,
+        ["seed_name"] = SEED_NAME,
+        ["death_link"] = DEATH_LINK,
+        ["energy_link"] = ENERGY_INCREMENT
+    }))
 end)
 
 
@@ -533,6 +578,11 @@ commands.add_command("ap-deathlink", "Kill all players", function(call)
     game.print("Death was granted by " .. source)
 end)
 
+commands.add_command("ap-energylink", "Used by the Archipelago client to manage Energy Link", function(call)
+    local change = tonumber(call.parameter or "0")
+    local force = "player"
+    global.forcedata[force].energy = global.forcedata[force].energy + change
+end)
 
 -- data
 progressive_technologies = {{ dict_to_lua(progressive_technology_table) }}

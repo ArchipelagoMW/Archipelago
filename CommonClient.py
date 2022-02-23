@@ -441,7 +441,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             else:
                 args['players'].sort()
                 current_team = -1
-                logger.info('Players:')
+                logger.info('Connected Players:')
                 for network_player in args['players']:
                     if network_player.team != current_team:
                         logger.info(f'  Team #{network_player.team + 1}')
