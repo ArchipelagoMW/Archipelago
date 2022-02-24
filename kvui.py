@@ -91,9 +91,9 @@ class ServerToolTip(Label):
     pass
 
 
-class ServerLabel(HoverBehavior, Label):
+class HovererableLabel(HoverBehavior, Label):
     def __init__(self, *args, **kwargs):
-        super(ServerLabel, self).__init__(*args, **kwargs)
+        super(HovererableLabel, self).__init__(*args, **kwargs)
         self.layout = FloatLayout()
         self.popuplabel = ServerToolTip(text="Test")
         self.layout.add_widget(self.popuplabel)
@@ -105,6 +105,12 @@ class ServerLabel(HoverBehavior, Label):
     def on_leave(self):
         App.get_running_app().root.remove_widget(self.layout)
 
+    @property
+    def ctx(self) -> context_type:
+        return App.get_running_app().ctx
+
+
+class ServerLabel(HovererableLabel):
     def get_text(self):
         if self.ctx.server:
             ctx = self.ctx
@@ -137,10 +143,6 @@ class ServerLabel(HoverBehavior, Label):
 
         else:
             return "No current server connection. \nPlease connect to an Archipelago server."
-
-    @property
-    def ctx(self) -> context_type:
-        return App.get_running_app().ctx
 
 
 class MainLayout(GridLayout):

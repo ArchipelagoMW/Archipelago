@@ -183,7 +183,7 @@ async def game_watcher(ctx: FactorioContext):
                                 }]))
                                 ctx.rcon_client.send_command(
                                     f"/ap-energylink -{value}")
-                                logger.info(f"EnergyLink: Sent {value} Joules")
+                                logger.info(f"EnergyLink: Sent {Utils.format_SI_prefix(value)}J")
 
             await asyncio.sleep(0.1)
 

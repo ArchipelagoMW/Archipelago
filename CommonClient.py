@@ -318,16 +318,17 @@ class CommonContext():
             logger.info(f"DeathLink: Received from {data['source']}")
 
     async def send_death(self, death_text: str = ""):
-        logger.info("DeathLink: Sending death to your friends...")
-        self.last_death_link = time.time()
-        await self.send_msgs([{
-            "cmd": "Bounce", "tags": ["DeathLink"],
-            "data": {
-                "time": self.last_death_link,
-                "source": self.player_names[self.slot],
-                "cause": death_text
-            }
-        }])
+        if self.server and self.server.socket:
+            logger.info("DeathLink: Sending death to your friends...")
+            self.last_death_link = time.time()
+            await self.send_msgs([{
+                "cmd": "Bounce", "tags": ["DeathLink"],
+                "data": {
+                    "time": self.last_death_link,
+                    "source": self.player_names[self.slot],
+                    "cause": death_text
+                }
+            }])
 
     async def update_death_link(self, death_link):
         old_tags = self.tags.copy()
