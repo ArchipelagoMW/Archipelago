@@ -59,9 +59,9 @@ class MeritousWorld(World):
 
         for _ in range(0, qty):
             rand_crystals = self.world.random.randrange(0, 32)
-            if rand_crystals < 24:
+            if rand_crystals < 16:
                 crystal_pool += [self.create_item("Crystals x500")]
-            elif rand_crystals < 31:
+            elif rand_crystals < 28:
                 crystal_pool += [self.create_item("Crystals x1000")]
             else:
                 crystal_pool += [self.create_item("Crystals x2000")]
