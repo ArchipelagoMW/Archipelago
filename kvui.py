@@ -9,6 +9,7 @@ os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
 
 from kivy.base import Config
+
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set('kivy', 'exit_on_escape', '0')
 Config.set('graphics', 'multisamples', '0')  # multisamples crash old intel drivers
@@ -221,10 +222,11 @@ class GameManager(App):
             text = original_say(text)
             if text:
                 for command in autofillable_commands:
-                    if text.startswith("!"+command):
+                    if text.startswith("!" + command):
                         self.last_autofillable_command = command
                         break
             return text
+
         ctx.on_user_say = intercept_say
 
         super(GameManager, self).__init__()
@@ -234,18 +236,18 @@ class GameManager(App):
 
         self.grid = MainLayout()
         self.grid.cols = 1
-        connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
+        self.connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
         # top part
         server_label = ServerLabel()
-        connect_layout.add_widget(server_label)
+        self.connect_layout.add_widget(server_label)
         self.server_connect_bar = TextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False,
                                             write_tab=False)
         self.server_connect_bar.bind(on_text_validate=self.connect_button_action)
-        connect_layout.add_widget(self.server_connect_bar)
+        self.connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
         self.server_connect_button.bind(on_press=self.connect_button_action)
-        connect_layout.add_widget(self.server_connect_button)
-        self.grid.add_widget(connect_layout)
+        self.connect_layout.add_widget(self.server_connect_button)
+        self.grid.add_widget(self.connect_layout)
         self.progressbar = ProgressBar(size_hint_y=None, height=3)
         self.grid.add_widget(self.progressbar)
 
@@ -347,6 +349,16 @@ class GameManager(App):
         text = self.json_to_kivy_parser(data)
         self.log_panels["Archipelago"].on_message_markup(text)
         self.log_panels["All"].on_message_markup(text)
+
+    def enable_energy_link(self):
+        if not hasattr(self, "energy_link_label"):
+            self.energy_link_label = Label(text="Energy Link: Standby",
+                                           size_hint_x=None, width=150)
+            self.connect_layout.add_widget(self.energy_link_label)
+
+    def set_new_energy_link_value(self):
+        if hasattr(self, "energy_link_label"):
+            self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
 
 class FactorioManager(GameManager):

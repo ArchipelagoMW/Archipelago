@@ -438,11 +438,22 @@ def stream_input(stream, queue):
 
 def tkinter_center_window(window: Tk):
     window.update()
-    xPos = int(window.winfo_screenwidth()/2 - window.winfo_reqwidth()/2)
-    yPos = int(window.winfo_screenheight()/2 - window.winfo_reqheight()/2)
+    xPos = int(window.winfo_screenwidth() / 2 - window.winfo_reqwidth() / 2)
+    yPos = int(window.winfo_screenheight() / 2 - window.winfo_reqheight() / 2)
     window.geometry("+{}+{}".format(xPos, yPos))
 
-    
+
 class VersionException(Exception):
     pass
 
+
+def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")):
+    n = 0
+
+    while value > power:
+        value /= power
+        n += 1
+    if type(value) == int:
+        return f"{value} {power_labels[n]}"
+    else:
+        return f"{value:0.3f} {power_labels[n]}"

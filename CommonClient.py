@@ -119,6 +119,7 @@ class CommonContext():
     ui = None
     keep_alive_task = None
     items_handling: typing.Optional[int] = None
+    current_energy_link_value = 0  # to display in UI, gets set by server
 
     def __init__(self, server_address, password):
         # server state
@@ -548,7 +549,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
         if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
             ctx.on_deathlink(args["data"])
-
+    elif cmd == "SetReply":
+        if args["key"] == "EnergyLink":
+            ctx.current_energy_link_value = args["value"]
+            if ctx.ui:
+                ctx.ui.set_new_energy_link_value()
     else:
         logger.debug(f"unknown command {cmd}")
 

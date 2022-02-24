@@ -50,7 +50,6 @@ function on_check_energy_link(event)
                 bridge.energy = bridge.energy + ENERGY_INCREMENT
             end
         end
-        game.print("Bridges: " .. bridgecount .. " With: " .. global.forcedata["player"].energy)
     end
 end
 script.on_event(defines.events.on_tick, on_check_energy_link)
