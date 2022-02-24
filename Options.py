@@ -477,10 +477,10 @@ class ItemLinks(OptionList):
             existing_links.add(link["name"])
             for item_name in link["item_pool"]:
                 if item_name not in world.item_names and item_name not in world.item_name_groups:
-                    raise Exception(f"Item {item_name} from option {self} "
+                    raise Exception(f"Item {item_name} from item link {link} "
                                     f"is not a valid item name from {world.game}")
             if link["replacement_item"] and link["replacement_item"] not in world.item_names:
-                raise Exception(f"Item {link['replacement_item']} from option {self} "
+                raise Exception(f"Item {link['replacement_item']} from item link {link} "
                                 f"is not a valid item name from {world.game}")
 
 
