@@ -37,7 +37,7 @@ function on_check_energy_link(event)
         if global.forcedata[force].energy < ENERGY_INCREMENT * bridgecount * 5 then
             for i, bridge in ipairs(bridges) do
                 if bridge.energy > ENERGY_INCREMENT*3 then
-                    global.forcedata[force].energy = (global.forcedata[force].energy + ENERGY_INCREMENT) * ENERGY_LINK_EFFICIENCY
+                    global.forcedata[force].energy = global.forcedata[force].energy + (ENERGY_INCREMENT * ENERGY_LINK_EFFICIENCY)
                     bridge.energy = bridge.energy - ENERGY_INCREMENT
                 end
             end
