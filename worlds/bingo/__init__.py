@@ -37,6 +37,9 @@ class BingoWorld(World):
     def generate_cards(self, world, player):
         cards = []
         pairs = world.card_pairs[player]
+        items = list(item_table)[:pairs * 24]
+        call_divisions = [items[:pairs*5], items[pairs*5:pairs*10], items[pairs*10:pairs*14],
+                          items[pairs*14:pairs*19], items[pairs*19:pairs*24]]
         min_occ = world.bingo_call_minimum_occurrences[player]
         if min_occ == 2:
             for _ in range(0, 2):
@@ -54,45 +57,42 @@ class BingoWorld(World):
                         card.append(card_row)
                     cards.append(card)
         else:
+            items = list(item_table)[:pairs * 24]
+            card_columns = []
             for _ in range(0, pairs*2):
+                card_columns.append([[], [], [], [], []])
                 cards.append([[None, None, None, None, None], [None, None, None, None, None],
                               [None, None, 0, None, None], [None, None, None, None, None],
                               [None, None, None, None, None]])
-            remaining_placements = pairs * 48
             if min_occ == 1:
-                items = list(item_table)[:pairs * 24]
-                world.random.shuffle(items)
-                while len(items) > 0:
-                    spot = [world.random.randint(0, (pairs*2)-1), world.random.randint(0, 4), world.random.randint(0, 4)]
-                    while True:
-                        if cards[spot[0]][spot[2]][spot[1]] is None:
-                            cards[spot[0]][spot[2]][spot[1]] = items.pop()
-                            remaining_placements -= 1
-                            break
-                        spot[1] += 1
-                        if spot[1] == 5:
-                            spot[1] = 0
-                            spot[2] += 1
-                            if spot[2] == 5:
-                                spot[2] = 0
-                                spot[0] += 1
-                                if spot[0] == len(cards):
-                                    spot[0] = 0
-            items = list(item_table)[:pairs * 24]
-            spot = [0, 0, 0]
-            while remaining_placements > 0:
-                if cards[spot[0]][spot[2]][spot[1]] is None:
-                    cards[spot[0]][spot[2]][spot[1]] = items[world.random.randint(0, len(items)-1)]
-                    remaining_placements -= 1
-                spot[1] += 1
-                if spot[1] == 5:
-                    spot[1] = 0
-                    spot[2] += 1
-                    if spot[2] == 5:
-                        spot[2] = 0
-                        spot[0] += 1
-                        if spot[0] == len(cards):
-                            break  # should be unnecessary
+                for column in range(0, 5):
+                    for item in call_divisions[column]:
+                        while True:
+                            random_card = world.random.randint(0, len(card_columns) - 1)
+                            if len(card_columns[random_card][column]) < 5:
+                                card_columns[random_card][column].append(item)
+                                break
+            for column in range(0, 5):
+                for card in range(0, len(card_columns)):
+                    div_copy = call_divisions[column].copy()
+                    column_count = 4 if column == 2 else 5
+                    while len(card_columns[card][column]) < column_count:
+                        if len(div_copy) == 0:
+                            breakpoint()
+                        random_call = world.random.choice(div_copy)
+                        div_copy.remove(random_call)
+                        if random_call not in card_columns[card][column]:
+                            card_columns[card][column].append(random_call)
+            for column in range(0, 5):
+                for card in range(0, len(card_columns)):
+                    card_columns[card][column].sort(key=lambda item: f"{len(item)} {item}")
+                    if column == 2:
+                        card_columns[card][2].insert(2, 0)
+                    for row in range(0, 5):
+                        # if [column, row] == [2, 2]:
+                        #     cards[card][row][column] = 0
+                        # else:
+                        cards[card][row][column] = card_columns[card][column][row]
         world.worlds[player].cards[player] = cards
 
     def generate_basic(self):
