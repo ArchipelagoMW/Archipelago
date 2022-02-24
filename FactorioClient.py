@@ -160,7 +160,7 @@ async def game_watcher(ctx: FactorioContext):
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick
                         if "DeathLink" in ctx.tags:
-                            await ctx.send_death()
+                            asyncio.create_task(ctx.send_death())
                     if ctx.energy_link_increment:
                         in_world_bridges = data["energy_bridges"]
                         if in_world_bridges:
