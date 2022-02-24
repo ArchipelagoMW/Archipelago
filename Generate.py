@@ -14,7 +14,7 @@ ModuleUpdate.update()
 
 import Utils
 from worlds.alttp import Options as LttPOptions
-from worlds.generic import PlandoItem, PlandoConnection
+from worlds.generic import PlandoConnection
 from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
@@ -180,7 +180,7 @@ def main(args=None, callback=ERmain):
         erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
 
     if len(set(erargs.name.values())) != len(erargs.name):
-        raise Exception(f"Names have to be unique. Names: {erargs.name}")
+        raise Exception(f"Names have to be unique. Names: {Counter(erargs.name.values())}")
 
     if args.yaml_output:
         import yaml
@@ -426,17 +426,8 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
         except Exception as e:
             raise Exception(f"Error generating option {option_key} in {ret.game}") from e
         else:
-            # verify item names existing
-            if getattr(player_option, "verify_item_name", False):
-                for item_name in player_option.value:
-                    if item_name not in AutoWorldRegister.world_types[ret.game].item_names:
-                        raise Exception(f"Item {item_name} from option {player_option} "
-                                        f"is not a valid item name from {ret.game}")
-            elif getattr(player_option, "verify_location_name", False):
-                for location_name in player_option.value:
-                    if location_name not in AutoWorldRegister.world_types[ret.game].location_names:
-                        raise Exception(f"Location {location_name} from option {player_option} "
-                                        f"is not a valid location name from {ret.game}")
+            if hasattr(player_option, "verify"):
+                player_option.verify(AutoWorldRegister.world_types[ret.game])
     else:
         setattr(ret, option_key, option(option.default))
 
@@ -511,7 +502,9 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             roll_alttp_settings(ret, game_weights, plando_options)
     else:
         raise Exception(f"Unsupported game {ret.game}")
+
     return ret
+
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     if "dungeon_items" in weights and get_choice_legacy('dungeon_items', weights, "none") != "none":

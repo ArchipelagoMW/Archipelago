@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, Set, Tuple, List, Optional, TextIO, Any
+from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable, Union
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
@@ -35,8 +35,13 @@ class AutoWorldRegister(type):
 class AutoLogicRegister(type):
     def __new__(cls, name, bases, dct):
         new_class = super().__new__(cls, name, bases, dct)
+        function: Callable
         for item_name, function in dct.items():
-            if not item_name.startswith("__"):
+            if item_name == "copy_mixin":
+                CollectionState.additional_copy_functions.append(function)
+            elif item_name == "init_mixin":
+                CollectionState.additional_init_functions.append(function)
+            elif not item_name.startswith("__"):
                 if hasattr(CollectionState, item_name):
                     raise Exception(f"Name conflict on Logic Mixin {name} trying to overwrite {item_name}")
                 setattr(CollectionState, item_name, function)
@@ -66,6 +71,12 @@ def call_stage(world: MultiWorld, method_name: str, *args):
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
             stage_callable(world, *args)
+
+
+class WebWorld:
+    """Webhost integration"""
+    # display a settings page. Can be a link to an out-of-ap settings tool too.
+    settings_page: Union[bool, str] = True
 
 
 class World(metaclass=AutoWorldRegister):
@@ -124,6 +135,8 @@ class World(metaclass=AutoWorldRegister):
     # If the game displays all contained items to the user, this flag pre-fills the hint system with this information
     # For example the "full" tech tree information option in Factorio
     sending_visible: bool = False
+
+    web: WebWorld = WebWorld()
 
     def __init__(self, world: MultiWorld, player: int):
         self.world = world
@@ -193,6 +206,7 @@ class World(metaclass=AutoWorldRegister):
     def write_spoiler_end(self, spoiler_handle: TextIO):
         """Write to the end of the spoiler"""
         pass
+
     # end of ordered Main.py calls
 
     def create_item(self, name: str) -> Item:
@@ -214,6 +228,10 @@ class World(metaclass=AutoWorldRegister):
         :param remove: indicate if this is meant to remove from state instead of adding."""
         if item.advancement:
             return item.name
+
+    # called to create all_state, return Items that are created during pre_fill
+    def get_pre_fill_items(self) -> List[Item]:
+        return []
 
     def received_hint(self, ctx, team, player, hint):
         pass
@@ -246,3 +264,4 @@ class World(metaclass=AutoWorldRegister):
 # please use a prefix as all of them get clobbered together
 class LogicMixin(metaclass=AutoLogicRegister):
     pass
+
