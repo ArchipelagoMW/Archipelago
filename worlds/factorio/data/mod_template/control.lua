@@ -11,7 +11,7 @@ TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
 MAX_SCIENCE_PACK = {{ max_science_pack }}
 GOAL = {{ goal }}
 ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
-ENERGY_INCREMENT = 1000000
+ENERGY_INCREMENT = 0
 
 if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
     DEATH_LINK = 1
@@ -24,6 +24,9 @@ CURRENTLY_DEATH_LOCK = 0
 function on_check_energy_link(event)
     --- assuming 1 MJ increment and 5MJ battery:
     --- first 2 MJ request fill, last 2 MJ push energy, middle 1 MJ does nothing
+    if event.tick == 0 then
+        ENERGY_INCREMENT = game.entity_prototypes["ap-energy-bridge"].electric_energy_source_prototype.buffer_capacity / 5
+    end
     if event.tick % 60 == 30 then
         local surface = game.get_surface(1)
         local force = "player"
@@ -554,6 +557,7 @@ end)
 
 
 commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
+    ENERGY_INCREMENT = game.entity_prototypes["ap-energy-bridge"].electric_energy_source_prototype.buffer_capacity / 5
     rcon.print(game.table_to_json({
         ["slot_name"] = SLOT_NAME,
         ["seed_name"] = SEED_NAME,

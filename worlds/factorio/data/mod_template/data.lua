@@ -3,6 +3,9 @@ local energy_bridge = table.deepcopy(data.raw["accumulator"]["accumulator"])
 energy_bridge.name = "ap-energy-bridge"
 energy_bridge.minable.result = "ap-energy-bridge"
 energy_bridge.localised_name = "Archipelago EnergyLink Bridge"
+energy_bridge.energy_source.buffer_capacity = "10MJ"
+energy_bridge.energy_source.input_flow_limit = "1MW"
+energy_bridge.energy_source.output_flow_limit = "1MW"
 data.raw["accumulator"]["ap-energy-bridge"] = energy_bridge
 
 local energy_bridge_item = table.deepcopy(data.raw["item"]["accumulator"])
