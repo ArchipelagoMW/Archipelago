@@ -11,7 +11,8 @@ TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
 MAX_SCIENCE_PACK = {{ max_science_pack }}
 GOAL = {{ goal }}
 ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
-ENERGY_INCREMENT = 0
+ENERGY_INCREMENT = {{ energy_link * 1000000 }}
+ENERGY_LINK_EFFICIENCY = 0.75
 
 if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
     DEATH_LINK = 1
@@ -24,9 +25,6 @@ CURRENTLY_DEATH_LOCK = 0
 function on_check_energy_link(event)
     --- assuming 1 MJ increment and 5MJ battery:
     --- first 2 MJ request fill, last 2 MJ push energy, middle 1 MJ does nothing
-    if event.tick == 0 then
-        ENERGY_INCREMENT = game.entity_prototypes["ap-energy-bridge"].electric_energy_source_prototype.buffer_capacity / 5
-    end
     if event.tick % 60 == 30 then
         local surface = game.get_surface(1)
         local force = "player"
@@ -39,7 +37,7 @@ function on_check_energy_link(event)
         if global.forcedata[force].energy < ENERGY_INCREMENT * bridgecount * 5 then
             for i, bridge in ipairs(bridges) do
                 if bridge.energy > ENERGY_INCREMENT*3 then
-                    global.forcedata[force].energy = global.forcedata[force].energy + ENERGY_INCREMENT
+                    global.forcedata[force].energy = (global.forcedata[force].energy + ENERGY_INCREMENT) * ENERGY_LINK_EFFICIENCY
                     bridge.energy = bridge.energy - ENERGY_INCREMENT
                 end
             end
@@ -55,7 +53,9 @@ function on_check_energy_link(event)
         end
     end
 end
-script.on_event(defines.events.on_tick, on_check_energy_link)
+if (ENERGY_INCREMENT) then
+    script.on_event(defines.events.on_tick, on_check_energy_link)
+end
 
 {% if not imported_blueprints -%}
 function set_permissions()
@@ -557,7 +557,6 @@ end)
 
 
 commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
-    ENERGY_INCREMENT = game.entity_prototypes["ap-energy-bridge"].electric_energy_source_prototype.buffer_capacity / 5
     rcon.print(game.table_to_json({
         ["slot_name"] = SLOT_NAME,
         ["seed_name"] = SEED_NAME,
