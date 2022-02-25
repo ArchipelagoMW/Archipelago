@@ -416,6 +416,7 @@ class Context:
             "received_items": self.received_items,
             "hints_used": dict(self.hints_used),
             "hints": dict(self.hints),
+            "hint_cost": self.hint_cost,
             "location_checks": dict(self.location_checks),
             "name_aliases": self.name_aliases,
             "client_game_state": dict(self.client_game_state),
@@ -461,6 +462,9 @@ class Context:
              in savedata["client_activity_timers"]})
         self.location_checks.update(savedata["location_checks"])
         self.random.setstate(savedata["random_state"])
+
+        if "hint_cost" in savedata:
+            self.hint_cost = savedata["hint_cost"]
 
         if "stored_data" in savedata:
             self.stored_data = savedata["stored_data"]
