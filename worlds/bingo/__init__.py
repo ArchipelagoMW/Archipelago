@@ -160,23 +160,23 @@ class BingoWorld(World):
     def received_hint(self, ctx, team, player, hint):
         from MultiServer import notify_hints, collect_hints
         location = get_location_name_from_id(hint.location).split()
-        card = ctx.slot_data[player]['cards'][int(location[1]) - 1]
-        if location[2] == "Horizontal":
-            line = card[int(location[3]) - 1]
-        if location[2] == "Vertical":
+        card = ctx.slot_data[player]['cards'][int(location[2]) - 1]
+        if location[3] == "Horizontal":
+            line = card[int(location[4]) - 1]
+        if location[3] == "Vertical":
             line = []
             for i in range(0, 5):
-                line.append(card[i][int(location[3]) - 1])
-        if location[2] == "Diagonal":
+                line.append(card[i][int(location[4]) - 1])
+        if location[3] == "Diagonal":
             line = []
-            if location[3] == "1":
+            if location[4] == "1":
                 for i in range(0, 5):
                     line.append(card[i][i])
-            elif location[3] == "2":
+            elif location[4] == "2":
                 for i in range(0, 5):
                     line.append(card[i][4-i])
         hints = []
-        for i in range(0,5):
+        for i in range(0, 5):
             if i != 0:
                 hints += collect_hints(ctx, team, player, line[i])
         notify_hints(ctx, team, hints)
