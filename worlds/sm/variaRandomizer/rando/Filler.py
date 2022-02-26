@@ -77,10 +77,10 @@ class Filler(object):
             if aboveMaxDiffStr != '[  ]':
                 self.errorMsg += "\nMaximum difficulty could not be applied everywhere. Affected locations: {}".format(aboveMaxDiffStr)
             isStuck = False
-        print('\n%d step(s) in %dms' % (self.nSteps, int((date-self.startDate)*1000)))
+
         if self.vcr != None:
             self.vcr.dump()
-        return (isStuck, self.container.itemLocations, self.getProgressionItemLocations())
+        return isStuck, self.container.itemLocations, self.getProgressionItemLocations()
 
     # helper method to collect in item/location with logic. updates self.ap and VCR
     def collect(self, itemLoc, container=None, pickup=True):

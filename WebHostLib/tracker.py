@@ -12,6 +12,7 @@ from WebHostLib import app, cache, Room
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
 from MultiServer import get_item_name_from_id, Context
+from NetUtils import SlotType
 
 alttp_icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
@@ -256,6 +257,10 @@ def get_static_room_data(room: Room):
     # in > 100 players this can take a bit of time and is the main reason for the cache
     locations: Dict[int, Dict[int, Tuple[int, int, int]]] = multidata['locations']
     names: Dict[int, Dict[int, str]] = multidata["names"]
+    groups = {}
+    if "slot_info" in multidata:
+        groups = {slot: slot_info.group_members for slot, slot_info in multidata["slot_info"].items()
+                  if slot_info.type == SlotType.group}
     seed_checks_in_area = checks_in_area.copy()
 
     use_door_tracker = False
@@ -269,12 +274,14 @@ def get_static_room_data(room: Room):
     player_checks_in_area = {playernumber: {areaname: len(multidata["checks_in_area"][playernumber][areaname])
     if areaname != "Total" else multidata["checks_in_area"][playernumber]["Total"]
                                             for areaname in ordered_areas}
-                             for playernumber in range(1, len(names[0]) + 1)}
+                             for playernumber in range(1, len(names[0]) + 1)
+                             if playernumber not in groups}
     player_location_to_area = {playernumber: get_location_table(multidata["checks_in_area"][playernumber])
-                               for playernumber in range(1, len(names[0]) + 1)}
+                               for playernumber in range(1, len(names[0]) + 1)
+                               if playernumber not in groups}
 
     result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area, \
-             multidata["precollected_items"], multidata["games"], multidata["slot_data"]
+             multidata["precollected_items"], multidata["games"], multidata["slot_data"], groups
     _multidata_cache[room.seed.id] = result
     return result
 
@@ -292,7 +299,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
 
     # Collect seed information and pare it down to a single player
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
-        precollected_items, games, slot_data = get_static_room_data(room)
+        precollected_items, games, slot_data, groups = get_static_room_data(room)
     player_name = names[tracked_team][tracked_player - 1]
     location_to_area = player_location_to_area[tracked_player]
     inventory = collections.Counter()
@@ -930,13 +937,13 @@ def getTracker(tracker: UUID):
     if not room:
         abort(404)
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
-        precollected_items, games, slot_data = get_static_room_data(room)
+        precollected_items, games, slot_data, groups = get_static_room_data(room)
 
-    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
+    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1) if playernumber not in groups}
                  for teamnumber, team in enumerate(names)}
 
     checks_done = {teamnumber: {playernumber: {loc_name: 0 for loc_name in default_locations}
-                                for playernumber in range(1, len(team) + 1)}
+                                for playernumber in range(1, len(team) + 1) if playernumber not in groups}
                    for teamnumber, team in enumerate(names)}
 
     hints = {team: set() for team in range(len(names))}
@@ -949,6 +956,8 @@ def getTracker(tracker: UUID):
             hints[team] |= set(slot_hints)
 
     for (team, player), locations_checked in multisave.get("location_checks", {}).items():
+        if player in groups:
+            continue
         player_locations = locations[player]
         if precollected_items:
             precollected = precollected_items[player]
@@ -968,11 +977,13 @@ def getTracker(tracker: UUID):
             checks_done[team][player]["Total"] += 1
 
     for (team, player), game_state in multisave.get("client_game_state", {}).items():
+        if player in groups:
+            continue
         if game_state == 30:
             inventory[team][player][106] = 1  # Triforce
 
-    player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
-    player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
+    player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1) if playernumber not in groups}
+    player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1) if playernumber not in groups}
     for loc_data in locations.values():
          for values in loc_data.values():
             if len(values) == 3:
@@ -986,7 +997,7 @@ def getTracker(tracker: UUID):
                 player_small_key_locations[item_player].add(ids_small_key[item_id])
     group_big_key_locations = set()
     group_key_locations = set()
-    for player in range(1, len(names[0]) + 1):
+    for player in [player for player in range(1, len(names[0]) + 1) if player not in groups]:
         group_key_locations |= player_small_key_locations[player]
         group_big_key_locations |= player_big_key_locations[player]
 

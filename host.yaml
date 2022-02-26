@@ -111,6 +111,8 @@ oot_options:
 soe_options:
   # File name of the SoE US ROM
   rom_file: "Secret of Evermore (USA).sfc"
+ffr_options:
+  display_msgs: true
 smz3_options:
   # Set this to your SNI folder location if you want the MultiClient to attempt an auto start, does nothing if not found
   sni: "SNI"

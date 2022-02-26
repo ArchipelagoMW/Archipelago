@@ -168,7 +168,7 @@ class SoEWorld(World):
         self.world.get_location(wings_location, self.player).place_locked_item(wings_item)
         self.world.itempool.remove(wings_item)
         # generate stuff for later
-        self.evermizer_seed = self.world.random.randint(0, 2**16-1)  # TODO: make this an option for "full" plando?
+        self.evermizer_seed = self.world.random.randint(0, 2 ** 16 - 1)  # TODO: make this an option for "full" plando?
 
     def generate_output(self, output_directory: str):
         player_name = self.world.get_player_name(self.player)
@@ -223,7 +223,7 @@ class SoEWorld(World):
             try:
                 os.unlink(placement_file)
                 os.unlink(out_file)
-                os.unlink(out_file[:-4]+'_SPOILER.log')
+                os.unlink(out_file[:-4] + '_SPOILER.log')
             except:
                 pass
 
@@ -234,7 +234,6 @@ class SoEWorld(World):
         if self.connect_name and self.connect_name != self.world.player_name[self.player]:
             payload = multidata["connect_names"][self.world.player_name[self.player]]
             multidata["connect_names"][self.connect_name] = payload
-
 
 
 class SoEItem(Item):
