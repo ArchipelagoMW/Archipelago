@@ -4,7 +4,6 @@ import collections
 import itertools
 from collections import Counter, deque
 
-
 from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item
 
 from worlds.AutoWorld import call_all
@@ -14,7 +13,7 @@ class FillError(RuntimeError):
     pass
 
 
-def sweep_from_pool(base_state: CollectionState, itempool=[]):
+def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item] = tuple()):
     new_state = base_state.copy()
     for item in itempool:
         new_state.collect(item, True)
@@ -22,8 +21,8 @@ def sweep_from_pool(base_state: CollectionState, itempool=[]):
     return new_state
 
 
-def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, itempool: typing.List[Item],
-                     single_player_placement=False, lock=False):
+def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
+                     itempool: typing.List[Item], single_player_placement=False, lock=False):
     unplaced_items = []
     placements: typing.List[Location] = []
 
@@ -62,7 +61,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
             else:
                 # we filled all reachable spots.
                 # try swapping this item with previously placed items
-                for(i, location) in enumerate(placements):
+                for (i, location) in enumerate(placements):
                     placed_item = location.item
                     # Unplaceable items can sometimes be swapped infinitely. Limit the
                     # number of times we will swap an individual item to prevent this
@@ -233,7 +232,8 @@ def distribute_items_restrictive(world: MultiWorld):
         logging.info(f'Per-Player counts: {print_data})')
 
 
-def fast_fill(world: MultiWorld, item_pool: typing.List, fill_locations: typing.List) -> typing.Tuple[typing.List, typing.List]:
+def fast_fill(world: MultiWorld, item_pool: typing.List, fill_locations: typing.List) -> typing.Tuple[
+    typing.List, typing.List]:
     placing = min(len(item_pool), len(fill_locations))
     for item, location in zip(item_pool, fill_locations):
         world.push_item(location, item, False)
@@ -338,7 +338,7 @@ def balance_multiworld_progression(world: MultiWorld):
                                 balancing_state.collect(location.item, True, location)
                                 player = location.item.player
                                 # only replace items that end up in another player's world
-                                if(not location.locked and
+                                if (not location.locked and
                                         player in balancing_players and
                                         location.player != player and
                                         location.progress_type != LocationProgressType.PRIORITY):
@@ -441,7 +441,7 @@ def distribute_planned(world: MultiWorld):
             logging.debug(f'{warning}')
 
     def failed(warning: str, force):
-        if force in [True,  'fail', 'failure']:
+        if force in [True, 'fail', 'failure']:
             raise Exception(warning)
         else:
             warn(warning, force)
@@ -502,15 +502,15 @@ def distribute_planned(world: MultiWorld):
             block['locations'] = locations
 
             if not block['count']:
-                block['count'] = (min(len(block['items']), len(block['locations'])) if len(block['locations'])
-                                  > 0 else len(block['items']))
+                block['count'] = (min(len(block['items']), len(block['locations'])) if
+                                  len(block['locations']) > 0 else len(block['items']))
             if isinstance(block['count'], int):
                 block['count'] = {'min': block['count'], 'max': block['count']}
             if 'min' not in block['count']:
                 block['count']['min'] = 0
             if 'max' not in block['count']:
-                block['count']['max'] = (min(len(block['items']), len(block['locations'])) if len(block['locations'])
-                                         > 0 else len(block['items']))
+                block['count']['max'] = (min(len(block['items']), len(block['locations'])) if
+                                         len(block['locations']) > 0 else len(block['items']))
             if block['count']['max'] > len(block['items']):
                 count = block['count']
                 failed(f"Plando count {count} greater than items specified", block['force'])

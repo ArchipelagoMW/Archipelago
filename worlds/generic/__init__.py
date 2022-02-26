@@ -4,6 +4,7 @@ import logging
 from BaseClasses import Item
 
 from ..AutoWorld import World
+from NetUtils import SlotType
 
 
 class GenericWorld(World):
@@ -19,7 +20,7 @@ class GenericWorld(World):
     hidden = True
 
     def generate_early(self):
-        self.world.player_types[self.player] = 0  # mark as spectator
+        self.world.player_types[self.player] = SlotType.spectator  # mark as spectator
 
     def create_item(self, name: str) -> Item:
         if name == "Nothing":

@@ -156,6 +156,7 @@ class MultiWorld():
         self.game[new_id] = game
         self.custom_data[new_id] = {}
         self.player_types[new_id] = NetUtils.SlotType.group
+        self._region_cache[new_id] = {}
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
         for option_key, option in world_type.options.items():
             getattr(self, option_key)[new_id] = option(option.default)
@@ -165,6 +166,7 @@ class MultiWorld():
             getattr(self, option_key)[new_id] = option(option.default)
 
         self.worlds[new_id] = world_type(self, new_id)
+        self.worlds[new_id].collect_item = classmethod(AutoWorld.World.collect_item).__get__(self.worlds[new_id])
         self.player_name[new_id] = name
 
         new_group = self.groups[new_id] = Group(name=name, game=game, players=players,
@@ -209,7 +211,7 @@ class MultiWorld():
                     item_links[item_link["name"]]["item_pool"] &= set(item_link["item_pool"])
                 else:
                     if item_link["name"] in self.player_name.values():
-                        raise Exception(f"Cannot name a ItemLink group the same as a player ({item_link['name']}).")
+                        raise Exception(f"Cannot name a ItemLink group the same as a player ({item_link['name']}) ({self.get_player_name(player)}).")
                     item_links[item_link["name"]] = {
                         "players": {player: item_link["replacement_item"]},
                         "item_pool": set(item_link["item_pool"]),
@@ -271,6 +273,7 @@ class MultiWorld():
 
     def _recache(self):
         """Rebuild world cache"""
+        self._cached_locations = None
         for region in self.regions:
             player = region.player
             self._region_cache[player][region.name] = region
