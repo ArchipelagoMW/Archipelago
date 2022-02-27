@@ -331,7 +331,7 @@ def balance_multiworld_progression(world: MultiWorld):
                     balancing_unchecked_locations = unchecked_locations.copy()
                     balancing_reachables = reachable_locations_count.copy()
                     balancing_sphere = sphere_locations.copy()
-                    candidate_items = collections.defaultdict(list)
+                    candidate_items = collections.defaultdict(set)
                     while True:
                         for location in balancing_sphere:
                             if location.event:
@@ -342,7 +342,7 @@ def balance_multiworld_progression(world: MultiWorld):
                                         player in balancing_players and
                                         location.player != player and
                                         location.progress_type != LocationProgressType.PRIORITY):
-                                    candidate_items[player].append(location)
+                                    candidate_items[player].add(location)
                         balancing_sphere = get_sphere_locations(balancing_state, balancing_unchecked_locations)
                         for location in balancing_sphere:
                             balancing_unchecked_locations.remove(location)
@@ -359,7 +359,9 @@ def balance_multiworld_progression(world: MultiWorld):
                     items_to_replace = []
                     for player in balancing_players:
                         locations_to_test = unlocked_locations[player]
-                        items_to_test = candidate_items[player]
+                        items_to_test = list(candidate_items[player])
+                        items_to_test.sort()
+                        world.random.shuffle(items_to_test)
                         while items_to_test:
                             testing = items_to_test.pop()
                             reducing_state = state.copy()
