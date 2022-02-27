@@ -77,7 +77,7 @@ LttPCreditsText = {
                                          "He can see you coming",
                                          "Okay now I'm seeing things",
                                          "Precognition for sale",
-                                         "It's like deja vu all over again"),
+                                         "Like deja vu all over again"),
     "Crystal Gatherer": MeritousLttPText("Attractive Aura",
                                          "Magnetic kid",
                                          "I swear it attracts money",
