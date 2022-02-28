@@ -1,4 +1,4 @@
-# Factorio Randomizer Setup Guide
+# Meritous Randomizer Setup Guide
 
 ## Required Software
 
