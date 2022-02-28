@@ -7,7 +7,7 @@ The player settings page for this game is located <a href="../player-settings">h
 The PSI Enhancement Tiles have become general-purpose Item Caches, and all upgrades and artifacts are added to the multiworld item pool. Optionally, the progression-critical PSI Keys can also be added to the pool, as well as monster evolution traps which (in vanilla) trigger when bosses are defeated.
 
 ## What is the goal of Meritous when randomized?
-Depending on YAML settings, you may only need to get the PSI Keys, defeat the three bosses, retrieve the Cursed Seal, return it to the entrance, and defeat the final boss; or, you may also need to explore every last room of the Atlas Dome and retrieve the Agate Knife before getting the Cursed Seal and defeating the final boss' true form.
+At minimum, you will need to get the PSI Keys, defeat the three bosses, retrieve the Cursed Seal, and return it to the entrance. Depending on your selected goal, you may also have to defeat the final boss, or you may also need to explore every last room of the Atlas Dome and retrieve the Agate Knife before getting the Cursed Seal and defeating the final boss' true form.
 
 ## Which items can be in another player's world?
 Every item added to the multiworld pool (as outlined above) can be distributed to other players' worlds.

@@ -40,9 +40,13 @@ Eventually, this process will be moved to in-game menus for better ease of use.
 
 ## Finishing the Game
 
-Your initial goal is to find all three PSI Keys. Depending on your YAML settings, these may be located on pedestals in special rooms in the Atlas Dome, or they may be scattered across other players' worlds. These PSI Keys are then brought to their respective locations in the Dome, where you will be subjected to a boss battle. This unlocks the Cursed Seal, hidden in the farthest-away location from the Entrance. The Compass tiles can help you find your way to these locations.
+Your initial goal is to find all three PSI Keys. Depending on your YAML settings, these may be located on pedestals in special rooms in the Atlas Dome, or they may be scattered across other players' worlds. These PSI Keys are then brought to their respective locations in the Dome, where you will be subjected to a boss battle. Once all three bosses are defeated, this unlocks the Cursed Seal, hidden in the farthest-away location from the Entrance. The Compass tiles can help you find your way to these locations.
 
-Depending on your selected goal, the game may be considered cleared once the Cursed Seal is brought back to the Entrance and the final boss has been defeated, or alternatively, you may need to explore all 3000 rooms of the Atlas Dome and find the Agate Knife before returning the Cursed Seal to the Entrance and fighting the final boss' true form.
+At minimum, every seed will require you to find the Cursed Seal and bring it back to the Entrance. The goal can then vary based on your `goal` YAML setting:
+
+- `return_the_cursed_seal`: You will fight the final boss, but win or lose, a victory will be posted.
+- `any_ending`: You must defeat the final boss.
+- `true_ending`: You must first explore all 3000 rooms of the Atlas Dome and find the Agate Knife, then fight the final boss' true form.
 
 Once the goal has been completed, you may press F to send a forfeit, sending out all of your world's remaining items to their respective players, and C to send a collect, which gathers up all of your world's items from their shuffled locations in other player's worlds. You may also press S to view your statistics, if you're a fan of numbers.
 
