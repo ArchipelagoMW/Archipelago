@@ -4,6 +4,8 @@ import os
 import threading
 from typing import Set, List
 
+# from worlds.sm.variaRandomizer.utils.doorsmanager import DoorsManager
+
 logger = logging.getLogger("Super Metroid")
 
 from .Locations import lookup_name_to_id as locations_lookup_name_to_id
@@ -26,6 +28,7 @@ from rando.Items import ItemManager
 from utils.parameters import *
 from logic.logic import Logic
 from randomizer import VariaRandomizer
+from utils.doorsmanager import DoorsManager
 
 
 class SMCollectionState(metaclass=AutoLogicRegister):
@@ -445,6 +448,19 @@ class SMWorld(World):
 
     def fill_slot_data(self): 
         slot_data = {}
+        if not self.world.is_race:
+            for option_name in self.options:
+                option = getattr(self.world, option_name)[self.player]
+                slot_data[option_name] = option.value
+
+            slot_data["InterAreaTransitions"] = {}
+            for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions:
+                slot_data["InterAreaTransitions"][src.Name] = dest.Name
+                
+            slot_data["Doors"] = {}
+            for door in DoorsManager.doorsDict[self.player].values():
+                slot_data["Doors"][door.name] = door.getColor()
+                
         return slot_data
 
     def collect(self, state: CollectionState, item: Item) -> bool:
