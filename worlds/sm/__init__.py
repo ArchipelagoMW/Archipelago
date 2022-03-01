@@ -4,8 +4,6 @@ import os
 import threading
 from typing import Set, List
 
-# from worlds.sm.variaRandomizer.utils.doorsmanager import DoorsManager
-
 logger = logging.getLogger("Super Metroid")
 
 from .Locations import lookup_name_to_id as locations_lookup_name_to_id
@@ -29,6 +27,7 @@ from utils.parameters import *
 from logic.logic import Logic
 from randomizer import VariaRandomizer
 from utils.doorsmanager import DoorsManager
+from rom.rom_patches import RomPatches
 
 
 class SMCollectionState(metaclass=AutoLogicRegister):
@@ -453,6 +452,17 @@ class SMWorld(World):
                 option = getattr(self.world, option_name)[self.player]
                 slot_data[option_name] = option.value
 
+            slot_data["Preset"] = { "Knows": {},
+                                    "Settings": {"hardRooms": Settings.SettingsDict[self.player].hardRooms,
+                                                 "hardRooms": Settings.SettingsDict[self.player].bossesDifficulty,
+                                                 "hardRooms": Settings.SettingsDict[self.player].hellRuns},
+                                    "Controller": Controller.ControllerDict[self.player].__dict__}
+
+            for knows in Knows.__dict__:
+                if isKnows(knows):
+                    slot_data["Preset"]["Knows"][knows] = [ getattr(Knows.knowsDict[self.player], knows).bool, 
+                                                            getattr(Knows.knowsDict[self.player], knows).difficulty]
+
             slot_data["InterAreaTransitions"] = {}
             for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions:
                 slot_data["InterAreaTransitions"][src.Name] = dest.Name
@@ -460,6 +470,8 @@ class SMWorld(World):
             slot_data["Doors"] = {}
             for door in DoorsManager.doorsDict[self.player].values():
                 slot_data["Doors"][door.name] = door.getColor()
+
+            slot_data["RomPatches"] = RomPatches.ActivePatches[self.player]
                 
         return slot_data
 
