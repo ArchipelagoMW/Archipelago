@@ -424,7 +424,12 @@ class Context:
             "client_connection_timers": tuple(
                 (key, value.timestamp()) for key, value in self.client_connection_timers.items()),
             "random_state": self.random.getstate(),
-            "stored_data": self.stored_data
+            "stored_data": self.stored_data,
+            "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
+                             "server_password": self.server_password, "password": self.password, "forfeit_mode":
+                             self.forfeit_mode, "remaining_mode": self.remaining_mode, "collect_mode":
+                             self.collect_mode, "item_cheat": self.item_cheat, "compatibility": self.compatibility}
+
         }
 
         return d
@@ -461,6 +466,17 @@ class Context:
              in savedata["client_activity_timers"]})
         self.location_checks.update(savedata["location_checks"])
         self.random.setstate(savedata["random_state"])
+
+        if "game_options" in savedata:
+            self.hint_cost = savedata["game_options"]["hint_cost"]
+            self.location_check_points = savedata["game_options"]["location_check_points"]
+            self.server_password = savedata["game_options"]["server_password"]
+            self.password = savedata["game_options"]["password"]
+            self.forfeit_mode = savedata["game_options"]["forfeit_mode"]
+            self.remaining_mode = savedata["game_options"]["remaining_mode"]
+            self.collect_mode = savedata["game_options"]["collect_mode"]
+            self.item_cheat = savedata["game_options"]["item_cheat"]
+            self.compatibility = savedata["game_options"]["compatibility"]
 
         if "stored_data" in savedata:
             self.stored_data = savedata["stored_data"]
