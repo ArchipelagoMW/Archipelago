@@ -30,17 +30,26 @@ from randomizer import VariaRandomizer
 
 class SMCollectionState(metaclass=AutoLogicRegister):
     def init_mixin(self, parent: MultiWorld):
+        
         # for unit tests where MultiWorld is instantiated before worlds
         if hasattr(parent, "state"):
             self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff,
-                                               parent.state.smbm[player].onlyBossLeft) for player in
-                         parent.get_game_players("Super Metroid")}
+                                    parent.state.smbm[player].onlyBossLeft) for player in
+                                        parent.get_game_players("Super Metroid")}
+            for player, group in parent.groups.items():
+                if (group["game"] == "Super Metroid"):
+                    self.smbm[player] = SMBoolManager(player)
+                    if player not in parent.state.smbm:
+                        parent.state.smbm[player] = SMBoolManager(player)
         else:
             self.smbm = {}
 
     def copy_mixin(self, ret) -> CollectionState:
-        ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in self.world.get_game_players("Super Metroid")}
+        ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in self.smbm}
         return ret
+
+    def get_game_players(self, multiword: MultiWorld, game_name: str):
+        return tuple(player for player in multiword.get_all_ids() if multiword.game[player] == game_name)
 
 
 class SMWorld(World):
