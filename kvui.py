@@ -200,6 +200,12 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
         self.selected = is_selected
 
 
+class ConnectBarTextInput(TextInput):
+    def insert_text(self, substring, from_undo=False):
+        s = substring.replace('\n', '').replace('\r', '')
+        return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
+
+
 class GameManager(App):
     logging_pairs = [
         ("Client", "Archipelago"),
@@ -242,8 +248,8 @@ class GameManager(App):
         # top part
         server_label = ServerLabel()
         self.connect_layout.add_widget(server_label)
-        self.server_connect_bar = TextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False,
-                                            write_tab=False)
+        self.server_connect_bar = ConnectBarTextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False,
+                                                      write_tab=False)
         self.server_connect_bar.bind(on_text_validate=self.connect_button_action)
         self.connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
