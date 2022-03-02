@@ -454,8 +454,8 @@ class SMWorld(World):
 
             slot_data["Preset"] = { "Knows": {},
                                     "Settings": {"hardRooms": Settings.SettingsDict[self.player].hardRooms,
-                                                 "hardRooms": Settings.SettingsDict[self.player].bossesDifficulty,
-                                                 "hardRooms": Settings.SettingsDict[self.player].hellRuns},
+                                                 "bossesDifficulty": Settings.SettingsDict[self.player].bossesDifficulty,
+                                                 "hellRuns": Settings.SettingsDict[self.player].hellRuns},
                                     "Controller": Controller.ControllerDict[self.player].__dict__}
 
             for knows in Knows.__dict__:
