@@ -4,12 +4,6 @@
 # For example, if a meta.yaml fast_ganon result is rolled, every player will have that fast_ganon goal
 # There is the special case of null, which ignores that part of the meta.yaml,
 # allowing for a chance for that meta to not take effect
-# Players can also have a meta_ignore option to ignore specific options
-# Example of ignore that would be in a player's file:
-# meta_ignore:
-#   mode:
-#     inverted
-# This means, if mode is meta-rolled and the result happens to be inverted, then defer to the player's yaml instead.
 meta_description: Meta-Mystery file with the intention of having similar-length completion times for a hopefully better experience
 null:
   progression_balancing: # Progression balancing tries to make sure that the player has *something* towards any players goal in each "sphere"
@@ -33,26 +27,6 @@ A Link to the Past:
     open: 60
     inverted: 10
     null: 10 # Maintain individual world states
-  tower_open:
-    '0': 8
-    '1': 7
-    '2': 6
-    '3': 5
-    '4': 4
-    '5': 3
-    '6': 2
-    '7': 1
-    random: 10 # A different GT open time should not usually result in a vastly different completion time, unless ganon goal and tower_open > ganon_open
-  ganon_open:
-    '0': 3
-    '1': 4
-    '2': 5
-    '3': 6
-    '4': 7
-    '5': 8
-    '6': 9
-    '7': 10
-    random: 5 # This will mean differing completion times. But leaving it for that surprise effect
   triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
     extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
     percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required

@@ -1,7 +1,7 @@
 from itertools import chain
 import logging
 
-from worlds.generic.Rules import set_rule
+from worlds.generic.Rules import set_rule, add_rule
 
 from .Hints import get_hint_area, HintAreaNotFound
 from .Regions import TimeOfDay
@@ -29,12 +29,13 @@ def assume_entrance_pool(entrance_pool, ootworld):
     assumed_pool = []
     for entrance in entrance_pool:
         assumed_forward = entrance.assume_reachable()
-        if entrance.reverse != None:
+        if entrance.reverse != None and not ootworld.decouple_entrances:
             assumed_return = entrance.reverse.assume_reachable()
-            if (entrance.type in ('Dungeon', 'Grotto', 'Grave') and entrance.reverse.name != 'Spirit Temple Lobby -> Desert Colossus From Spirit Lobby') or \
-               (entrance.type == 'Interior' and ootworld.shuffle_special_interior_entrances):
-                # In most cases, Dungeon, Grotto/Grave and Simple Interior exits shouldn't be assumed able to give access to their parent region
-                set_rule(assumed_return, lambda state, **kwargs: False)
+            if not (ootworld.mix_entrance_pools != 'off' and (ootworld.shuffle_overworld_entrances or ootworld.shuffle_special_interior_entrances)):
+                if (entrance.type in ('Dungeon', 'Grotto', 'Grave') and entrance.reverse.name != 'Spirit Temple Lobby -> Desert Colossus From Spirit Lobby') or \
+                   (entrance.type == 'Interior' and ootworld.shuffle_special_interior_entrances):
+                    # In most cases, Dungeon, Grotto/Grave and Simple Interior exits shouldn't be assumed able to give access to their parent region
+                    set_rule(assumed_return, lambda state, **kwargs: False)
             assumed_forward.bind_two_way(assumed_return)
         assumed_pool.append(assumed_forward)
     return assumed_pool
@@ -308,6 +309,8 @@ entrance_shuffle_table = [
     ('Overworld',       ('ZD Behind King Zora -> Zoras Fountain',                           { 'index': 0x0225 }),
                         ('Zoras Fountain -> ZD Behind King Zora',                           { 'index': 0x01A1 })),
 
+    ('Overworld',       ('GV Lower Stream -> Lake Hylia',                                   { 'index': 0x0219 })),
+
     ('OwlDrop',         ('LH Owl Flight -> Hyrule Field',                                   { 'index': 0x027E, 'addresses': [0xAC9F26] })),
     ('OwlDrop',         ('DMT Owl Flight -> Kak Impas Rooftop',                             { 'index': 0x0554, 'addresses': [0xAC9EF2] })),
 
@@ -362,35 +365,54 @@ def shuffle_random_entrances(ootworld):
 
     if ootworld.owl_drops:
         one_way_entrance_pools['OwlDrop'] = ootworld.get_shufflable_entrances(type='OwlDrop')
-    if ootworld.spawn_positions:
-        one_way_entrance_pools['Spawn'] = ootworld.get_shufflable_entrances(type='Spawn')
     if ootworld.warp_songs:
         one_way_entrance_pools['WarpSong'] = ootworld.get_shufflable_entrances(type='WarpSong')
-        if world.accessibility[player].current_key != 'minimal' and ootworld.logic_rules == 'glitchless':
+        if ootworld.logic_rules == 'glitchless':
             one_way_priorities['Bolero'] = priority_entrance_table['Bolero']
             one_way_priorities['Nocturne'] = priority_entrance_table['Nocturne']
             if not ootworld.shuffle_dungeon_entrances and not ootworld.shuffle_overworld_entrances:
                 one_way_priorities['Requiem'] = priority_entrance_table['Requiem']
+    if ootworld.spawn_positions:
+        one_way_entrance_pools['Spawn'] = ootworld.get_shufflable_entrances(type='Spawn')
 
     if ootworld.shuffle_dungeon_entrances:
         entrance_pools['Dungeon'] = ootworld.get_shufflable_entrances(type='Dungeon', only_primary=True)
         if ootworld.open_forest == 'closed':
             entrance_pools['Dungeon'].remove(world.get_entrance('KF Outside Deku Tree -> Deku Tree Lobby', player))
+        if ootworld.decouple_entrances:
+            entrance_pools['DungeonReverse'] = [entrance.reverse for entrance in entrance_pools['Dungeon']]
     if ootworld.shuffle_interior_entrances != 'off':
         entrance_pools['Interior'] = ootworld.get_shufflable_entrances(type='Interior', only_primary=True)
         if ootworld.shuffle_special_interior_entrances:
             entrance_pools['Interior'] += ootworld.get_shufflable_entrances(type='SpecialInterior', only_primary=True)
+        if ootworld.decouple_entrances:
+            entrance_pools['InteriorReverse'] = [entrance.reverse for entrance in entrance_pools['Interior']]
     if ootworld.shuffle_grotto_entrances:
         entrance_pools['GrottoGrave'] = ootworld.get_shufflable_entrances(type='Grotto', only_primary=True)
         entrance_pools['GrottoGrave'] += ootworld.get_shufflable_entrances(type='Grave', only_primary=True)
+        if ootworld.decouple_entrances:
+            entrance_pools['GrottoGraveReverse'] = [entrance.reverse for entrance in entrance_pools['GrottoGrave']]
     if ootworld.shuffle_overworld_entrances:
-        entrance_pools['Overworld'] = ootworld.get_shufflable_entrances(type='Overworld')
+        exclude_overworld_reverse = ootworld.mix_entrance_pools == 'all' and not ootworld.decouple_entrances
+        entrance_pools['Overworld'] = ootworld.get_shufflable_entrances(type='Overworld', only_primary=exclude_overworld_reverse)
+        if not ootworld.decouple_entrances:
+            entrance_pools['Overworld'].remove(world.get_entrance('GV Lower Stream -> Lake Hylia', player))
 
     # Mark shuffled entrances
     for entrance in chain(chain.from_iterable(one_way_entrance_pools.values()), chain.from_iterable(entrance_pools.values())):
         entrance.shuffled = True
         if entrance.reverse:
             entrance.reverse.shuffled = True
+
+    # Combine all entrance pools if mixing
+    if ootworld.mix_entrance_pools == 'all':
+        entrance_pools = {'Mixed': list(chain.from_iterable(entrance_pools.values()))}
+    elif ootworld.mix_entrance_pools == 'indoor':
+        if ootworld.shuffle_overworld_entrances:
+            ow_pool = entrance_pools['Overworld']
+        entrance_pools = {'Mixed': list(filter(lambda entrance: entrance.type != 'Overworld', chain.from_iterable(entrance_pools.values())))}
+        if ootworld.shuffle_overworld_entrances:
+            entrance_pools['Overworld'] = ow_pool
 
     # Build target entrance pools
     one_way_target_entrance_pools = {}
@@ -403,7 +425,9 @@ def shuffle_random_entrances(ootworld):
         elif pool_type in {'Spawn', 'WarpSong'}: 
             valid_target_types = ('Spawn', 'WarpSong', 'OwlDrop', 'Overworld', 'Interior', 'SpecialInterior', 'Extra')
             one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, valid_target_types)
-        # Ensure that the last entrance doesn't assume the rest of the targets are reachable?
+        # Ensure that the last entrance doesn't assume the rest of the targets are reachable
+        for target in one_way_target_entrance_pools[pool_type]:
+            add_rule(target, (lambda entrances=entrance_pool: (lambda state: any(entrance.connected_region == None for entrance in entrances)))())
     # Disconnect one-way entrances for priority placement
     for entrance in chain.from_iterable(one_way_entrance_pools.values()):
         entrance.disconnect()
@@ -419,7 +443,52 @@ def shuffle_random_entrances(ootworld):
         if item_tuple[1] == player:
             none_state.prog_items[item_tuple] = 0
 
-    # Plando entrances?
+    # Plando entrances
+    if world.plando_connections[player]:
+        rollbacks = []
+        all_targets = {**one_way_target_entrance_pools, **target_entrance_pools}
+        for conn in world.plando_connections[player]:
+            try:
+                entrance = ootworld.get_entrance(conn.entrance)
+                exit = ootworld.get_entrance(conn.exit)
+                if entrance is None:
+                    raise EntranceShuffleError(f"Could not find entrance to plando: {conn.entrance}")
+                if exit is None:
+                    raise EntranceShuffleError(f"Could not find entrance to plando: {conn.exit}")
+                target_region = exit.name.split(' -> ')[1]
+                target_parent = exit.parent_region.name
+                pool_type = entrance.type
+                matched_targets_to_region = list(filter(lambda target: target.connected_region and target.connected_region.name == target_region,
+                                                        all_targets[pool_type]))
+                target = next(filter(lambda target: target.replaces.parent_region.name == target_parent, matched_targets_to_region))
+
+                replace_entrance(ootworld, entrance, target, rollbacks, locations_to_ensure_reachable, all_state, none_state)
+                if conn.direction == 'both' and entrance.reverse and ootworld.decouple_entrances:
+                    replace_entrance(ootworld, entrance.reverse, target.reverse, rollbacks, locations_to_ensure_reachable, all_state, none_state)
+            except EntranceShuffleError as e:
+                raise RuntimeError(f"Failed to plando OoT entrances. Reason: {e}")
+            except StopIteration:
+                raise RuntimeError(f"Could not find entrance to plando: {conn.entrance} => {conn.exit}")
+            finally:
+                for (entrance, target) in rollbacks:
+                    confirm_replacement(entrance, target)
+
+    # Check placed one way entrances and trim.
+    # The placed entrances are already pointing at their new regions.
+    placed_entrances = [entrance for entrance in chain.from_iterable(one_way_entrance_pools.values())
+                        if entrance.replaces is not None]
+    replaced_entrances = [entrance.replaces for entrance in placed_entrances]
+    # Remove replaced entrances so we don't place two in one target.
+    for remaining_target in chain.from_iterable(one_way_target_entrance_pools.values()):
+        if remaining_target.replaces and remaining_target.replaces in replaced_entrances:
+            delete_target_entrance(remaining_target)
+    # Remove priority targets if any placed entrances point at their region(s).
+    for key, (regions, _) in priority_entrance_table.items():
+        if key in one_way_priorities:
+            for entrance in placed_entrances:
+                if entrance.connected_region and entrance.connected_region.name in regions:
+                    del one_way_priorities[key]
+                    break
 
     # Place priority entrances
     shuffle_one_way_priority_entrances(ootworld, one_way_priorities, one_way_entrance_pools, one_way_target_entrance_pools, locations_to_ensure_reachable, all_state, none_state, retry_count=2)
@@ -508,11 +577,16 @@ def place_one_way_priority_entrance(ootworld, priority_name, allowed_regions, al
     for entrance in avail_pool:
         if entrance.replaces:
             continue
+        # With mask hints, child needs to be able to access the gossip stone.
         if entrance.parent_region.name == 'Adult Spawn' and (priority_name != 'Nocturne' or ootworld.hints == 'mask'):
             continue
+        # With dungeons unshuffled, adult needs to be able to access Shadow Temple.
         if not ootworld.shuffle_dungeon_entrances and priority_name == 'Nocturne':
             if entrance.type != 'WarpSong' and entrance.parent_region.name != 'Adult Spawn':
                 continue
+        # With overworld unshuffled, child can't spawn at Desert Colossus
+        if not ootworld.shuffle_overworld_entrances and priority_name == 'Requiem' and entrance.parent_region.name == 'Child Spawn':
+            continue
         for target in one_way_target_entrance_pools[entrance.type]:
             if target.connected_region and target.connected_region.name in allowed_regions:
                 if replace_entrance(ootworld, entrance, target, rollbacks, locations_to_ensure_reachable, all_state, none_state):
@@ -619,24 +693,25 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
         time_travel_state.collect(ootworld.create_item('Time Travel'), event=True)
         time_travel_state._oot_update_age_reachable_regions(player)
 
-    # For various reasons, we don't want the player to end up through certain entrances as the wrong age
+    # Unless entrances are decoupled, we don't want the player to end up through certain entrances as the wrong age
     # This means we need to hard check that none of the relevant entrances are ever reachable as that age
     # This is mostly relevant when shuffling special interiors (such as windmill or kak potion shop)
     # Warp Songs and Overworld Spawns can also end up inside certain indoors so those need to be handled as well
     CHILD_FORBIDDEN = ['OGC Great Fairy Fountain -> Castle Grounds', 'GV Carpenter Tent -> GV Fortress Side']
     ADULT_FORBIDDEN = ['HC Great Fairy Fountain -> Castle Grounds', 'HC Storms Grotto -> Castle Grounds']
 
-    for entrance in ootworld.get_shufflable_entrances():
-        if entrance.shuffled and entrance.replaces:
-            if entrance.replaces.name in CHILD_FORBIDDEN and not entrance_unreachable_as(entrance, 'child', already_checked=[entrance.replaces.reverse]):
-                raise EntranceShuffleError(f'{entrance.replaces.name} replaced by an entrance with potential child access')
-            if entrance.replaces.name in ADULT_FORBIDDEN and not entrance_unreachable_as(entrance, 'adult', already_checked=[entrance.replaces.reverse]):
-                raise EntranceShuffleError(f'{entrance.replaces.name} replaced by an entrance with potential adult access')
-        else:
-            if entrance.name in CHILD_FORBIDDEN and not entrance_unreachable_as(entrance, 'child', already_checked=[entrance.reverse]):
-                raise EntranceShuffleError(f'{entrance.name} potentially accessible as child')
-            if entrance.name in ADULT_FORBIDDEN and not entrance_unreachable_as(entrance, 'adult', already_checked=[entrance.reverse]):
-                raise EntranceShuffleError(f'{entrance.name} potentially accessible as adult')
+    if not ootworld.decouple_entrances:
+        for entrance in ootworld.get_shufflable_entrances():
+            if entrance.shuffled and entrance.replaces:
+                if entrance.replaces.name in CHILD_FORBIDDEN and not entrance_unreachable_as(entrance, 'child', already_checked=[entrance.replaces.reverse]):
+                    raise EntranceShuffleError(f'{entrance.replaces.name} replaced by an entrance with potential child access')
+                if entrance.replaces.name in ADULT_FORBIDDEN and not entrance_unreachable_as(entrance, 'adult', already_checked=[entrance.replaces.reverse]):
+                    raise EntranceShuffleError(f'{entrance.replaces.name} replaced by an entrance with potential adult access')
+            else:
+                if entrance.name in CHILD_FORBIDDEN and not entrance_unreachable_as(entrance, 'child', already_checked=[entrance.reverse]):
+                    raise EntranceShuffleError(f'{entrance.name} potentially accessible as child')
+                if entrance.name in ADULT_FORBIDDEN and not entrance_unreachable_as(entrance, 'adult', already_checked=[entrance.reverse]):
+                    raise EntranceShuffleError(f'{entrance.name} potentially accessible as adult')
 
     # Check if all locations are reachable if not beatable-only or game is not yet complete
     if locations_to_ensure_reachable:
@@ -645,7 +720,8 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
                 if not all_state.can_reach(loc, 'Location', player):
                     raise EntranceShuffleError(f'{loc} is unreachable')
 
-    if ootworld.shuffle_interior_entrances and (entrance_placed == None or entrance_placed.type in ['Interior', 'SpecialInterior']):
+    if ootworld.shuffle_interior_entrances and (ootworld.misc_hints or ootworld.hints != 'none') and \
+        (entrance_placed == None or entrance_placed.type in ['Interior', 'SpecialInterior']):
         # Ensure Kak Potion Shop entrances are in the same hint area so there is no ambiguity as to which entrance is used for hints
         potion_front_entrance = get_entrance_replacing(world.get_region('Kak Potion Shop Front', player), 'Kakariko Village -> Kak Potion Shop Front', player)
         potion_back_entrance = get_entrance_replacing(world.get_region('Kak Potion Shop Back', player), 'Kak Backyard -> Kak Potion Shop Back', player)
@@ -733,14 +809,14 @@ def get_entrance_replacing(region, entrance_name, player):
 def change_connections(entrance, target):
     entrance.connect(target.disconnect())
     entrance.replaces = target.replaces
-    if entrance.reverse:
+    if entrance.reverse and not entrance.world.worlds[entrance.player].decouple_entrances:
         target.replaces.reverse.connect(entrance.reverse.assumed.disconnect())
         target.replaces.reverse.replaces = entrance.reverse
 
 def restore_connections(entrance, target):
     target.connect(entrance.disconnect())
     entrance.replaces = None
-    if entrance.reverse:
+    if entrance.reverse and not entrance.world.worlds[entrance.player].decouple_entrances:
         entrance.reverse.assumed.connect(target.replaces.reverse.disconnect())
         target.replaces.reverse.replaces = None
 
@@ -757,7 +833,7 @@ def check_entrances_compatibility(entrance, target, rollbacks):
 def confirm_replacement(entrance, target):
     delete_target_entrance(target)
     logging.getLogger('').debug(f'Connected {entrance} to {entrance.connected_region}')
-    if entrance.reverse:
+    if entrance.reverse and not entrance.world.worlds[entrance.player].decouple_entrances:
         replaced_reverse = target.replaces.reverse
         delete_target_entrance(entrance.reverse.assumed)
         logging.getLogger('').debug(f'Connected {replaced_reverse} to {replaced_reverse.connected_region}')

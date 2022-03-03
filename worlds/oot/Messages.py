@@ -1,5 +1,6 @@
 # text details: https://wiki.cloudmodding.com/oot/Text_Format
 
+import logging
 import random
 from .TextBox import line_wrap
 
@@ -314,6 +315,17 @@ KEYSANITY_MESSAGES = {
     0x00A5: "\x13\x76\x08You found the \x05\x41Dungeon Map\x05\x40\x01for the \x05\x45Bottom of the Well\x05\x40!\x09",
     0x00A6: "\x13\x77\x08You found a \x05\x41Small Key\x05\x40\x01for the \x05\x46Spirit Temple\x05\x40!\x09",
     0x00A9: "\x13\x77\x08You found a \x05\x41Small Key\x05\x40\x01for the \x05\x45Shadow Temple\x05\x40!\x09",
+}
+
+COLOR_MAP = {
+    'White':      '\x40',
+    'Red':        '\x41',
+    'Green':      '\x42',
+    'Blue':       '\x43',
+    'Light Blue': '\x44',
+    'Pink':       '\x45',
+    'Yellow':     '\x46',
+    'Black':      '\x47',
 }
 
 MISC_MESSAGES = {
@@ -995,3 +1007,30 @@ def shuffle_messages(messages, except_hints=True, always_allow_skip=True):
     ]))
 
     return permutation
+
+# Update warp song text boxes for ER
+def update_warp_song_text(messages, ootworld):
+    msg_list = {
+        0x088D: 'Minuet of Forest Warp -> Sacred Forest Meadow',
+        0x088E: 'Bolero of Fire Warp -> DMC Central Local',
+        0x088F: 'Serenade of Water Warp -> Lake Hylia',
+        0x0890: 'Requiem of Spirit Warp -> Desert Colossus',
+        0x0891: 'Nocturne of Shadow Warp -> Graveyard Warp Pad Region',
+        0x0892: 'Prelude of Light Warp -> Temple of Time',
+    }
+
+    for id, entr in msg_list.items():
+        destination = ootworld.world.get_entrance(entr, ootworld.player).connected_region
+
+        if destination.pretty_name:
+            destination_name = destination.pretty_name
+        elif destination.hint_text:
+            destination_name = destination.hint_text
+        elif destination.dungeon:
+            destination_name = destination.dungeon.hint
+        else:
+            destination_name = destination.name
+        color = COLOR_MAP[destination.font_color or 'White']
+
+        new_msg = f"\x08\x05{color}Warp to {destination_name}?\x05\40\x09\x01\x01\x1b\x05{color}OK\x01No\x05\40"
+        update_message_by_id(messages, id, new_msg)

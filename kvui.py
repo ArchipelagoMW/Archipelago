@@ -2,16 +2,23 @@ import os
 import logging
 import typing
 import asyncio
-import sys
 
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
 
+from kivy.base import Config
+
+Config.set("input", "mouse", "mouse,disable_multitouch")
+Config.set('kivy', 'exit_on_escape', '0')
+Config.set('graphics', 'multisamples', '0')  # multisamples crash old intel drivers
+
 from kivy.app import App
 from kivy.core.window import Window
-from kivy.base import ExceptionHandler, ExceptionManager, Config, Clock
+from kivy.core.clipboard import Clipboard
+from kivy.core.text.markup import MarkupLabel
+from kivy.base import ExceptionHandler, ExceptionManager, Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.uix.button import Button
@@ -25,6 +32,10 @@ from kivy.uix.label import Label
 from kivy.uix.progressbar import ProgressBar
 from kivy.utils import escape_markup
 from kivy.lang import Builder
+from kivy.uix.recycleview.views import RecycleDataViewBehavior
+from kivy.uix.behaviors import FocusBehavior
+from kivy.uix.recycleboxlayout import RecycleBoxLayout
+from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 
 import Utils
 from NetUtils import JSONtoTextParser, JSONMessagePart
@@ -80,9 +91,9 @@ class ServerToolTip(Label):
     pass
 
 
-class ServerLabel(HoverBehavior, Label):
+class HovererableLabel(HoverBehavior, Label):
     def __init__(self, *args, **kwargs):
-        super(ServerLabel, self).__init__(*args, **kwargs)
+        super(HovererableLabel, self).__init__(*args, **kwargs)
         self.layout = FloatLayout()
         self.popuplabel = ServerToolTip(text="Test")
         self.layout.add_widget(self.popuplabel)
@@ -94,6 +105,12 @@ class ServerLabel(HoverBehavior, Label):
     def on_leave(self):
         App.get_running_app().root.remove_widget(self.layout)
 
+    @property
+    def ctx(self) -> context_type:
+        return App.get_running_app().ctx
+
+
+class ServerLabel(HovererableLabel):
     def get_text(self):
         if self.ctx.server:
             ctx = self.ctx
@@ -127,10 +144,6 @@ class ServerLabel(HoverBehavior, Label):
         else:
             return "No current server connection. \nPlease connect to an Archipelago server."
 
-    @property
-    def ctx(self) -> context_type:
-        return App.get_running_app().ctx
-
 
 class MainLayout(GridLayout):
     pass
@@ -140,11 +153,65 @@ class ContainerLayout(FloatLayout):
     pass
 
 
+class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
+                                 RecycleBoxLayout):
+    """ Adds selection and focus behaviour to the view. """
+
+
+class SelectableLabel(RecycleDataViewBehavior, Label):
+    """ Add selection support to the Label """
+    index = None
+    selected = BooleanProperty(False)
+
+    def refresh_view_attrs(self, rv, index, data):
+        """ Catch and handle the view changes """
+        self.index = index
+        return super(SelectableLabel, self).refresh_view_attrs(
+            rv, index, data)
+
+    def on_touch_down(self, touch):
+        """ Add selection on touch down """
+        if super(SelectableLabel, self).on_touch_down(touch):
+            return True
+        if self.collide_point(*touch.pos):
+            if self.selected:
+                self.parent.clear_selection()
+            else:
+                # Not a fan of the following few lines, but they work.
+                temp = MarkupLabel(text=self.text).markup
+                text = "".join(part for part in temp if not part.startswith(("[color", "[/color]")))
+                cmdinput = App.get_running_app().textinput
+                if not cmdinput.text and " did you mean " in text:
+                    for question in ("Didn't find something that closely matches, did you mean ",
+                                     "Too many close matches, did you mean "):
+                        if text.startswith(question):
+                            name = Utils.get_text_between(text, question,
+                                                          "? (")
+                            cmdinput.text = f"!{App.get_running_app().last_autofillable_command} {name}"
+                            break
+                elif not cmdinput.text and text.startswith("Missing: "):
+                    cmdinput.text = text.replace("Missing: ", "!hint_location ")
+
+                Clipboard.copy(text)
+                return self.parent.select_with_touch(self.index, touch)
+
+    def apply_selection(self, rv, index, is_selected):
+        """ Respond to the selection of items in the view. """
+        self.selected = is_selected
+
+
+class ConnectBarTextInput(TextInput):
+    def insert_text(self, substring, from_undo=False):
+        s = substring.replace('\n', '').replace('\r', '')
+        return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
+
+
 class GameManager(App):
     logging_pairs = [
         ("Client", "Archipelago"),
     ]
-    base_title = "Archipelago Client"
+    base_title: str = "Archipelago Client"
+    last_autofillable_command: str
 
     def __init__(self, ctx: context_type):
         self.title = self.base_title
@@ -153,6 +220,23 @@ class GameManager(App):
         self.icon = r"data/icon.png"
         self.json_to_kivy_parser = KivyJSONtoTextParser(ctx)
         self.log_panels = {}
+
+        # keep track of last used command to autofill on click
+        self.last_autofillable_command = "hint"
+        autofillable_commands = ("hint_location", "hint", "getitem")
+        original_say = ctx.on_user_say
+
+        def intercept_say(text):
+            text = original_say(text)
+            if text:
+                for command in autofillable_commands:
+                    if text.startswith("!" + command):
+                        self.last_autofillable_command = command
+                        break
+            return text
+
+        ctx.on_user_say = intercept_say
+
         super(GameManager, self).__init__()
 
     def build(self):
@@ -160,17 +244,18 @@ class GameManager(App):
 
         self.grid = MainLayout()
         self.grid.cols = 1
-        connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
+        self.connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
         # top part
         server_label = ServerLabel()
-        connect_layout.add_widget(server_label)
-        self.server_connect_bar = TextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False)
+        self.connect_layout.add_widget(server_label)
+        self.server_connect_bar = ConnectBarTextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False,
+                                                      write_tab=False)
         self.server_connect_bar.bind(on_text_validate=self.connect_button_action)
-        connect_layout.add_widget(self.server_connect_bar)
+        self.connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
         self.server_connect_button.bind(on_press=self.connect_button_action)
-        connect_layout.add_widget(self.server_connect_button)
-        self.grid.add_widget(connect_layout)
+        self.connect_layout.add_widget(self.server_connect_button)
+        self.grid.add_widget(self.connect_layout)
         self.progressbar = ProgressBar(size_hint_y=None, height=3)
         self.grid.add_widget(self.progressbar)
 
@@ -201,9 +286,15 @@ class GameManager(App):
         info_button = Button(height=30, text="Command:", size_hint_x=None)
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
-        textinput = TextInput(size_hint_y=None, height=30, multiline=False)
-        textinput.bind(on_text_validate=self.on_message)
-        bottom_layout.add_widget(textinput)
+        self.textinput = TextInput(size_hint_y=None, height=30, multiline=False, write_tab=False)
+        self.textinput.bind(on_text_validate=self.on_message)
+
+        def text_focus(event):
+            """Needs to be set via delay, as unfocusing happens after on_message"""
+            self.textinput.focus = True
+
+        self.textinput.text_focus = text_focus
+        bottom_layout.add_widget(self.textinput)
         self.grid.add_widget(bottom_layout)
         self.commandprocessor("/help")
         Clock.schedule_interval(self.update_texts, 1 / 30)
@@ -211,6 +302,7 @@ class GameManager(App):
         return self.container
 
     def update_texts(self, dt):
+        self.tabs.content.children[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
         if self.ctx.server:
             self.title = self.base_title + " " + Utils.__version__ + \
                          f" | Connected to: {self.ctx.server_address} " \
@@ -224,7 +316,11 @@ class GameManager(App):
             self.progressbar.value = 0
 
     def command_button_action(self, button):
-        logging.getLogger("Client").info("/help for client commands and !help for server commands.")
+        if self.ctx.server:
+            logging.getLogger("Client").info("/help for client commands and !help for server commands.")
+        else:
+            logging.getLogger("Client").info("/help for client commands and once you are connected, "
+                                             "!help for server commands.")
 
     def connect_button_action(self, button):
         if self.ctx.server:
@@ -251,13 +347,26 @@ class GameManager(App):
                 self.ctx.input_queue.put_nowait(input_text)
             elif input_text:
                 self.commandprocessor(input_text)
+
+            Clock.schedule_once(textinput.text_focus)
+
         except Exception as e:
             logging.getLogger("Client").exception(e)
 
-    def print_json(self, data):
+    def print_json(self, data: typing.List[JSONMessagePart]):
         text = self.json_to_kivy_parser(data)
         self.log_panels["Archipelago"].on_message_markup(text)
         self.log_panels["All"].on_message_markup(text)
+
+    def enable_energy_link(self):
+        if not hasattr(self, "energy_link_label"):
+            self.energy_link_label = Label(text="Energy Link: Standby",
+                                           size_hint_x=None, width=150)
+            self.connect_layout.add_widget(self.energy_link_label)
+
+    def set_new_energy_link_value(self):
+        if hasattr(self, "energy_link_label"):
+            self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
 
 class FactorioManager(GameManager):
@@ -284,6 +393,13 @@ class TextManager(GameManager):
     base_title = "Archipelago Text Client"
 
 
+class FF1Manager(GameManager):
+    logging_pairs = [
+        ("Client", "Archipelago")
+    ]
+    base_title = "Archipelago Final Fantasy 1 Client"
+
+
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
         super(LogtoUI, self).__init__(logging.INFO)
@@ -308,6 +424,12 @@ class UILog(RecycleView):
     def on_message_markup(self, text):
         self.data.append({"text": text})
 
+    def fix_heights(self):
+        """Workaround fix for divergent texture and layout heights"""
+        for element in self.children[0].children:
+            if element.height != element.texture_size[1]:
+                element.height = element.texture_size[1]
+
 
 class E(ExceptionHandler):
     logger = logging.getLogger("Client")
@@ -318,17 +440,6 @@ class E(ExceptionHandler):
 
 
 class KivyJSONtoTextParser(JSONtoTextParser):
-    color_codes = {
-        # not exact color names, close enough but decent looking
-        "black": "000000",
-        "red": "EE0000",
-        "green": "00FF7F",
-        "yellow": "FAFAD2",
-        "blue": "6495ED",
-        "magenta": "EE00EE",
-        "cyan": "00EEEE",
-        "white": "FFFFFF"
-    }
 
     def _handle_color(self, node: JSONMessagePart):
         colors = node["color"].split(";")
@@ -343,6 +454,4 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 
 ExceptionManager.add_handler(E())
 
-Config.set("input", "mouse", "mouse,disable_multitouch")
-Config.set('kivy', 'exit_on_escape', '0')
 Builder.load_file(Utils.local_path("data", "client.kv"))

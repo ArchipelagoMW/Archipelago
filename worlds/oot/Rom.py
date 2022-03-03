@@ -17,7 +17,7 @@ double_cache_prevention = threading.Lock()
 class Rom(BigStream):
     original = None
 
-    def __init__(self, file=None):
+    def __init__(self, file=None, force_use=False):
         super().__init__([])
 
         self.changed_address = {}
@@ -34,22 +34,25 @@ class Rom(BigStream):
             self.symbols = {name: int(addr, 16) for name, addr in symbols.items()}
 
         # If decompressed file already exists, read from it
-        if os.path.exists(decomp_file):
-            file = decomp_file
+        if not force_use:
+            if os.path.exists(decomp_file):
+                file = decomp_file
 
-        if file == '':
-            # if not specified, try to read from the previously decompressed rom
-            file = decomp_file
-            try:
+            if file == '':
+                # if not specified, try to read from the previously decompressed rom
+                file = decomp_file
+                try:
+                    self.read_rom(file)
+                except FileNotFoundError:
+                    # could not find the decompressed rom either
+                    raise FileNotFoundError('Must specify path to base ROM')
+            else:
                 self.read_rom(file)
-            except FileNotFoundError:
-                # could not find the decompressed rom either
-                raise FileNotFoundError('Must specify path to base ROM')
         else:
             self.read_rom(file)
 
         # decompress rom, or check if it's already decompressed
-        self.decompress_rom_file(file, decomp_file)
+        self.decompress_rom_file(file, decomp_file, force_use)
 
         # Add file to maximum size
         self.buffer.extend(bytearray([0x00] * (0x4000000 - len(self.buffer))))
@@ -69,7 +72,7 @@ class Rom(BigStream):
         new_rom.force_patch = copy.copy(self.force_patch)
         return new_rom
 
-    def decompress_rom_file(self, file, decomp_file):
+    def decompress_rom_file(self, file, decomp_file, skip_crc_check):
         validCRC = [
             [0xEC, 0x70, 0x11, 0xB7, 0x76, 0x16, 0xD7, 0x2B],  # Compressed
             [0x70, 0xEC, 0xB7, 0x11, 0x16, 0x76, 0x2B, 0xD7],  # Byteswap compressed
@@ -79,7 +82,7 @@ class Rom(BigStream):
         # Validate ROM file
         file_name = os.path.splitext(file)
         romCRC = list(self.buffer[0x10:0x18])
-        if romCRC not in validCRC:
+        if romCRC not in validCRC and not skip_crc_check:
             # Bad CRC validation
             raise RuntimeError('ROM file %s is not a valid OoT 1.0 US ROM.' % file)
         elif len(self.buffer) < 0x2000000 or len(self.buffer) > (0x4000000) or file_name[1].lower() not in ['.z64',
@@ -279,22 +282,22 @@ class Rom(BigStream):
 
 
 def compress_rom_file(input_file, output_file):
-    subcall = []
-
-    compressor_path = data_path("Compress")
+    compressor_path = "."
 
     if platform.system() == 'Windows':
-        compressor_path += "\\Compress.exe"
+        executable_path = "Compress.exe"
     elif platform.system() == 'Linux':
         if platform.uname()[4] == 'aarch64' or platform.uname()[4] == 'arm64':
-            compressor_path += "/Compress_ARM64"
+            executable_path = "Compress_ARM64"
         else:
-            compressor_path += "/Compress"
+            executable_path = "Compress"
     elif platform.system() == 'Darwin':
-        compressor_path += "/Compress.out"
+        executable_path = "Compress.out"
     else:
         raise RuntimeError('Unsupported operating system for compression.')
-
+    compressor_path = os.path.join(compressor_path, executable_path)
     if not os.path.exists(compressor_path):
         raise RuntimeError(f'Compressor does not exist! Please place it at {compressor_path}.')
-    process = subprocess.call([compressor_path, input_file, output_file], **subprocess_args(include_stdout=False))
+    import logging
+    logging.info(subprocess.check_output([compressor_path, input_file, output_file],
+                                             **subprocess_args(include_stdout=False)))

@@ -1329,9 +1329,10 @@ def get_pool_core(world):
         # We can resolve this by starting with some extra keys
         if world.dungeon_mq['Spirit Temple']:
             # Yes somehow you need 3 keys. This dungeon is bonkers
-            world.world.push_precollected(world.create_item('Small Key (Spirit Temple)'))
-            world.world.push_precollected(world.create_item('Small Key (Spirit Temple)'))
-            world.world.push_precollected(world.create_item('Small Key (Spirit Temple)'))
+            items = [world.create_item('Small Key (Spirit Temple)') for i in range(3)]
+            for item in items:
+                world.world.push_precollected(item)
+                world.remove_from_start_inventory.append(item.name)
         #if not world.dungeon_mq['Fire Temple']:
         #    world.state.collect(ItemFactory('Small Key (Fire Temple)'))
     if world.shuffle_bosskeys == 'vanilla':

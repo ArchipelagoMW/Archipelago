@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
 from MultiServer import CommandProcessor
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
-from Utils import Version
+from Utils import Version, stream_input
 from worlds import network_data_package, AutoWorldRegister
 
 logger = logging.getLogger("Client")
@@ -39,13 +39,13 @@ class ClientCommandProcessor(CommandProcessor):
     def _cmd_connect(self, address: str = "") -> bool:
         """Connect to a MultiWorld Server"""
         self.ctx.server_address = None
-        asyncio.create_task(self.ctx.connect(address if address else None))
+        asyncio.create_task(self.ctx.connect(address if address else None), name="connecting")
         return True
 
     def _cmd_disconnect(self) -> bool:
         """Disconnect from a MultiWorld Server"""
         self.ctx.server_address = None
-        asyncio.create_task(self.ctx.disconnect())
+        asyncio.create_task(self.ctx.disconnect(), name="disconnecting")
         return True
 
     def _cmd_received(self) -> bool:
@@ -81,7 +81,20 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No missing location checks found.")
         return True
 
+    def _cmd_items(self):
+        """List all item names for the currently running game."""
+        self.output(f"Item Names for {self.ctx.game}")
+        for item_name in AutoWorldRegister.world_types[self.ctx.game].item_name_to_id:
+            self.output(item_name)
+
+    def _cmd_locations(self):
+        """List all location names for the currently running game."""
+        self.output(f"Location Names for {self.ctx.game}")
+        for location_name in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id:
+            self.output(location_name)
+
     def _cmd_ready(self):
+        """Send ready status to server."""
         self.ctx.ready = not self.ctx.ready
         if self.ctx.ready:
             state = ClientStatus.CLIENT_READY
@@ -89,10 +102,12 @@ class ClientCommandProcessor(CommandProcessor):
         else:
             state = ClientStatus.CLIENT_CONNECTED
             self.output("Unreadied.")
-        asyncio.create_task(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]))
+        asyncio.create_task(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
 
     def default(self, raw: str):
-        asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]))
+        raw = self.ctx.on_user_say(raw)
+        if raw:
+            asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]), name="send Say")
 
 
 class CommonContext():
@@ -103,6 +118,8 @@ class CommonContext():
     game = None
     ui = None
     keep_alive_task = None
+    items_handling: typing.Optional[int] = None
+    current_energy_link_value = 0  # to display in UI, gets set by server
 
     def __init__(self, server_address, password):
         # server state
@@ -149,7 +166,7 @@ class CommonContext():
         self.set_getters(network_data_package)
 
         # execution
-        self.keep_alive_task = asyncio.create_task(keep_alive(self))
+        self.keep_alive_task = asyncio.create_task(keep_alive(self), name="Bouncy")
 
     @property
     def total_locations(self) -> typing.Optional[int]:
@@ -230,13 +247,24 @@ class CommonContext():
             self.password = await self.console_input()
             return self.password
 
+    async def send_connect(self, **kwargs):
+        payload = {
+            'cmd': 'Connect',
+            'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
+            'tags': self.tags, 'items_handling': self.items_handling,
+            'uuid': Utils.get_unique_identifier(), 'game': self.game
+        }
+        if kwargs:
+            payload.update(kwargs)
+        await self.send_msgs([payload])
+
     async def console_input(self):
         self.input_requests += 1
         return await self.input_queue.get()
 
     async def connect(self, address=None):
         await self.disconnect()
-        self.server_task = asyncio.create_task(server_loop(self, address))
+        self.server_task = asyncio.create_task(server_loop(self, address), name="server loop")
 
     def on_print(self, args: dict):
         logger.info(args["text"])
@@ -252,6 +280,11 @@ class CommonContext():
         """For custom package handling in subclasses."""
         pass
 
+    def on_user_say(self, text: str) -> typing.Optional[str]:
+        """Gets called before sending a Say to the server from the user.
+        Returned text is sent, or sending is aborted if None is returned."""
+        return text
+
     def update_permissions(self, permissions: typing.Dict[str, int]):
         for permission_name, permission_flag in permissions.items():
             try:
@@ -260,6 +293,20 @@ class CommonContext():
                 self.permissions[permission_name] = flag.name
             except Exception as e:  # safeguard against permissions that may be implemented in the future
                 logger.exception(e)
+
+    async def shutdown(self):
+        self.server_address = None
+        if self.server and not self.server.socket.closed:
+            await self.server.socket.close()
+        if self.server_task:
+            await self.server_task
+
+        while self.input_requests > 0:
+            self.input_queue.put_nowait(None)
+            self.input_requests -= 1
+        self.keep_alive_task.cancel()
+
+    # DeathLink hooks
 
     def on_deathlink(self, data: dict):
         """Gets dispatched when a new DeathLink is triggered by another linked player."""
@@ -271,16 +318,26 @@ class CommonContext():
             logger.info(f"DeathLink: Received from {data['source']}")
 
     async def send_death(self, death_text: str = ""):
-        logger.info("DeathLink: Sending death to your friends...")
-        self.last_death_link = time.time()
-        await self.send_msgs([{
-            "cmd": "Bounce", "tags": ["DeathLink"],
-            "data": {
-                "time": self.last_death_link,
-                "source": self.player_names[self.slot],
-                "cause": death_text
-            }
-        }])
+        if self.server and self.server.socket:
+            logger.info("DeathLink: Sending death to your friends...")
+            self.last_death_link = time.time()
+            await self.send_msgs([{
+                "cmd": "Bounce", "tags": ["DeathLink"],
+                "data": {
+                    "time": self.last_death_link,
+                    "source": self.player_names[self.slot],
+                    "cause": death_text
+                }
+            }])
+
+    async def update_death_link(self, death_link):
+        old_tags = self.tags.copy()
+        if death_link:
+            self.tags.add("DeathLink")
+        else:
+            self.tags -= {"DeathLink"}
+        if old_tags != self.tags and self.server and not self.server.socket.closed:
+            await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
 
 async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
@@ -340,14 +397,14 @@ async def server_loop(ctx: CommonContext, address=None):
         await ctx.connection_closed()
         if ctx.server_address:
             logger.info(f"... reconnecting in {ctx.current_reconnect_delay}s")
-            asyncio.create_task(server_autoreconnect(ctx))
+            asyncio.create_task(server_autoreconnect(ctx), name="server auto reconnect")
         ctx.current_reconnect_delay *= 2
 
 
 async def server_autoreconnect(ctx: CommonContext):
     await asyncio.sleep(ctx.current_reconnect_delay)
     if ctx.server_address and ctx.server_task is None:
-        ctx.server_task = asyncio.create_task(server_loop(ctx))
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
 
 async def process_server_cmd(ctx: CommonContext, args: dict):
@@ -386,7 +443,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             else:
                 args['players'].sort()
                 current_team = -1
-                logger.info('Players:')
+                logger.info('Connected Players:')
                 for network_player in args['players']:
                     if network_player.team != current_team:
                         logger.info(f'  Team #{network_player.team + 1}')
@@ -410,6 +467,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             raise Exception('Player slot already in use for that team')
         elif 'IncompatibleVersion' in errors:
             raise Exception('Server reported your client version as incompatible')
+        elif 'InvalidItemsHandling' in errors:
+            raise Exception('The item handling flags requested by the client are not supported')
         # last to check, recoverable problem
         elif 'InvalidPassword' in errors:
             logger.error('Invalid password')
@@ -491,7 +550,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
         if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
             ctx.on_deathlink(args["data"])
-
+    elif cmd == "SetReply":
+        if args["key"] == "EnergyLink":
+            ctx.current_energy_link_value = args["value"]
+            if ctx.ui:
+                ctx.ui.set_new_energy_link_value()
     else:
         logger.debug(f"unknown command {cmd}")
 
@@ -501,12 +564,12 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 async def console_loop(ctx: CommonContext):
     import sys
     commandprocessor = ctx.command_processor(ctx)
+    queue = asyncio.Queue()
+    stream_input(sys.stdin, queue)
     while not ctx.exit_event.is_set():
         try:
-            input_text = await asyncio.get_event_loop().run_in_executor(
-                None, sys.stdin.readline
-            )
-            input_text = input_text.strip()
+            input_text = await queue.get()
+            queue.task_done()
 
             if ctx.input_requests > 0:
                 ctx.input_requests -= 1
@@ -533,7 +596,9 @@ if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
 
     class TextContext(CommonContext):
-        tags = {"AP", "IgnoreGame"}
+        tags = {"AP", "IgnoreGame", "TextOnly"}
+        game = "Archipelago"
+        items_handling = 0  # don't receive any NetworkItems
 
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:
@@ -542,11 +607,7 @@ if __name__ == '__main__':
                 logger.info('Enter slot name:')
                 self.auth = await self.console_input()
 
-            await self.send_msgs([{"cmd": 'Connect',
-                                   'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
-                                   'tags': self.tags,
-                                   'uuid': Utils.get_unique_identifier(), 'game': self.game
-                                   }])
+            await self.send_connect()
 
         def on_package(self, cmd: str, args: dict):
             if cmd == "Connected":
@@ -555,27 +616,19 @@ if __name__ == '__main__':
 
     async def main(args):
         ctx = TextContext(args.connect, args.password)
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+        input_task = None
         if gui_enabled:
-            input_task = None
             from kvui import TextManager
             ctx.ui = TextManager(ctx)
             ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
         else:
-            input_task = asyncio.create_task(console_loop(ctx), name="Input")
             ui_task = None
+        if sys.stdin:
+            input_task = asyncio.create_task(console_loop(ctx), name="Input")
         await ctx.exit_event.wait()
 
-        ctx.server_address = None
-        if ctx.server and not ctx.server.socket.closed:
-            await ctx.server.socket.close()
-        if ctx.server_task:
-            await ctx.server_task
-
-        while ctx.input_requests > 0:
-            ctx.input_queue.put_nowait(None)
-            ctx.input_requests -= 1
-
+        await ctx.shutdown()
         if ui_task:
             await ui_task
 
@@ -584,7 +637,7 @@ if __name__ == '__main__':
 
     import colorama
 
-    parser = get_base_parser(description="Gameless Archipelago Client, for text interfaction.")
+    parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
 
     args, rest = parser.parse_known_args()
     colorama.init()

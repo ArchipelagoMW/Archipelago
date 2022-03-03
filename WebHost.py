@@ -14,7 +14,7 @@ from WebHostLib import app as raw_app
 from waitress import serve
 
 from WebHostLib.models import db
-from WebHostLib.autolauncher import autohost
+from WebHostLib.autolauncher import autohost, autogen
 from WebHostLib.lttpsprites import update_sprites_lttp
 from WebHostLib.options import create as create_options_files
 
@@ -45,6 +45,8 @@ if __name__ == "__main__":
     create_options_files()
     if app.config["SELFLAUNCH"]:
         autohost(app.config)
+    if app.config["SELFGEN"]:
+        autogen(app.config)
     if app.config["SELFHOST"]:  # using WSGI, you just want to run get_app()
         if app.config["DEBUG"]:
             autohost(app.config)

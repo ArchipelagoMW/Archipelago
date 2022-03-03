@@ -2,17 +2,22 @@
 
 ## Important
 
-As we are using Z5Client and Bizhawk, this guide is only applicable to Windows.
+As we are using Z5Client and BizHawk, this guide is only applicable to Windows.
 
 ## Required Software
 
-- [bizhawk+script+Z5Client](https://github.com/ArchipelagoMW/Z5Client/releases) We recommend download Z5Client-setup as it makes some steps automatic.
+- BizHawk and Z5Client from: [Z5Client Releases Page](https://github.com/ArchipelagoMW/Z5Client/releases)
+    - We recommend download Z5Client-setup as it makes some steps automatic.
 
 ## Install Emulator and client
 
-Download getBizhawk.ps1 from previous link. Place it on the folder where you want your emulator to be installed, right click on it and select "Run with PowerShell". This will download all the needed dependencies used by the emulator. This can take a while.
+Download getBizhawk.ps1 from previous link. Place it on the folder where you want your emulator to be installed, right
+click on it and select "Run with PowerShell". This will download all the needed dependencies used by the emulator. This
+can take a while.
 
-It is strongly recommended to associate N64 rom extension (\*.n64) to the Bizhawk we've just installed. To do so, we simple have to search any N64 rom we happened to own, right click and select "Open with...", we unfold the list that appears and select the bottom option "Look for another application", we browse to Bizhawk folder and select EmuHawk.exe
+It is strongly recommended to associate N64 rom extension (\*.n64) to the BizHawk we've just installed. To do so, we
+simply have to search any N64 rom we happened to own, right click and select "Open with...", we unfold the list that
+appears and select the bottom option "Look for another application", we browse to BizHawk folder and select EmuHawk.exe
 
 Place the ootMulti.lua file from the previous link inside the "lua" folder from the just installed emulator.
 
@@ -21,14 +26,18 @@ Install the Z5Client using its setup.
 ## Configuring your YAML file
 
 ### What is a YAML file and why do I need one?
-Your YAML file contains a set of configuration options which provide the generator with information about how
-it should generate your game. Each player of a multiworld will provide their own YAML file. This setup allows
-each player to enjoy an experience customized for their taste, and different players in the same multiworld
-can all have different options.
+
+Your YAML file contains a set of configuration options which provide the generator with information about how it should
+generate your game. Each player of a multiworld will provide their own YAML file. This setup allows each player to enjoy
+an experience customized for their taste, and different players in the same multiworld can all have different options.
 
 ### Where do I get a YAML file?
 
-A basic OOT yaml will look like this. There are lots of cosmetic options that have been removed for the sake of this tutorial, if you want to see a complete list, download [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) and look for the sample file in the "Players" folder.
+A basic OOT yaml will look like this. There are lots of cosmetic options that have been removed for the sake of this
+tutorial, if you want to see a complete list, download Archipelago from
+the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases) and look for the sample file in
+the "Players" folder.
+
 ```yaml
 description: Default Ocarina of Time Template # Used to describe your yaml. Useful if you have multiple files
 # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
@@ -371,17 +380,24 @@ Ocarina of Time:
 
 ### Obtain your OOT patch file
 
-When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting. Once that
-is done, the host will provide you with either a link to download your data file, or with a zip file containing
-everyone's data files. Your data file should have a `.z5ap` extension.
+When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting. Once that is done,
+the host will provide you with either a link to download your data file, or with a zip file containing everyone's data
+files. Your data file should have a `.z5ap` extension.
 
-Double click on your `.z5ap` file to start Z5Client and start the ROM patch process. Once the process is finished (this can take a while), the emulator will be started automatically (If we associated the extension to the emulator as recommended)
+Double-click on your `.z5ap` file to start Z5Client and start the ROM patch process. Once the process is finished (this
+can take a while), the emulator will be started automatically (If we associated the extension to the emulator as
+recommended)
 
-### Connect to multiserver
-Once both the Z5Client and the emulator are started we must connect them. Within the emulator we click on the "Tools" menu and select "Lua console". In the new window click on the folder icon and look for the ootMulti.lua file. Once the file is loaded it will connect automatically to Z5Client.
+### Connect to the Multiserver
 
-Note: We strongly advise you don't open any emulator menu while it and Z5client are connected, as the script will halt and disconnects can happen. If you get disconnected just double click on the script again.
+Once both the Z5Client and the emulator are started we must connect them. Within the emulator we click on the "Tools"
+menu and select "Lua console". In the new window click on the folder icon and look for the ootMulti.lua file. Once the
+file is loaded it will connect automatically to Z5Client.
 
-To connect the client to the multiserver simply put address:port on the textfield on top and press enter (if the server uses password, type on the bottom textfield /connect <address>:<port> [password], to connect) 
+Note: We strongly advise you don't open any emulator menu while it and Z5client are connected, as the script will halt
+and disconnects can happen. If you get disconnected just double-click on the script again.
+
+To connect the client to the multiserver simply put `<address>:<port>` on the textfield on top and press enter (if the
+server uses password, type in the bottom textfield `/connect <address>:<port> [password]`)
 
 Now you are ready to start your adventure in Hyrule.

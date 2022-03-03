@@ -11,7 +11,7 @@ import json
 from enum import Enum
 
 from .HintList import getHint, getHintGroup, Hint, hintExclusions
-from .Messages import update_message_by_id
+from .Messages import COLOR_MAP, update_message_by_id
 from .TextBox import line_wrap
 from .Utils import data_path, read_json
 
@@ -266,17 +266,6 @@ def getSimpleHintNoPrefix(item):
 
 
 def colorText(gossip_text):
-    colorMap = {
-        'White':      '\x40',
-        'Red':        '\x41',
-        'Green':      '\x42',
-        'Blue':       '\x43',
-        'Light Blue': '\x44',
-        'Pink':       '\x45',
-        'Yellow':     '\x46',
-        'Black':      '\x47',
-    }
-
     text = gossip_text.text
     colors = list(gossip_text.colors) if gossip_text.colors is not None else []
     color = 'White'
@@ -292,7 +281,7 @@ def colorText(gossip_text):
                 splitText[1] = splitText[1][len(prefix):]
                 break
 
-        splitText[1] = '\x05' + colorMap[color] + splitText[1] + '\x05\x40'
+        splitText[1] = '\x05' + COLOR_MAP[color] + splitText[1] + '\x05\x40'
         text = ''.join(splitText)
 
     return text
@@ -323,7 +312,7 @@ def get_hint_area(spot):
 
             spot_queue.extend(list(filter(lambda ent: ent not in already_checked, parent_region.entrances)))
 
-        raise HintAreaNotFound('No hint area could be found for %s [World %d]' % (spot, spot.world.id))
+        raise HintAreaNotFound('No hint area could be found for %s [World %d]' % (spot, spot.player))
     else:
         return spot.name
 
@@ -649,9 +638,9 @@ def buildWorldGossipHints(world, checkedLocations=None):
     if checkedLocations is None:
         checkedLocations = {player: set() for player in world.world.player_ids}
 
-    # If Ganondorf can be reached without Light Arrows, add to checkedLocations to prevent extra hinting
+    # If Ganondorf hints Light Arrows and is reachable without them, add to checkedLocations to prevent extra hinting
     # Can only be forced with vanilla bridge or trials
-    if world.bridge != 'vanilla' and world.trials == 0:
+    if world.bridge != 'vanilla' and world.trials == 0 and world.misc_hints:
         try:
             light_arrow_location = world.world.find_item("Light Arrows", world.player)
             checkedLocations[light_arrow_location.player].add(light_arrow_location.name)

@@ -1007,7 +1007,7 @@ def set_big_bomb_rules(world, player):
                              'Red Shield Shop',
                              'Dark Sanctuary Hint',
                              'Fortune Teller (Dark)',
-                             'Dark World Shop',
+                             'Village of Outcasts Shop',
                              'Dark World Lumberjack Shop',
                              'Thieves Town',
                              'Skull Woods First Section Door',
@@ -1331,7 +1331,7 @@ def set_inverted_big_bomb_rules(world, player):
     elif bombshop_entrance.name in LW_bush_entrances:
         # These entrances are behind bushes in LW so you need either Pearl or the tools to solve NDW bomb shop locations.
         add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.has('Magic Mirror', player) and (state.has('Activated Flute', player) or state.has('Moon Pearl', player) or (state.can_lift_heavy_rocks(player) and state.has('Hammer', player))))
-    elif bombshop_entrance.name == 'Dark World Shop':
+    elif bombshop_entrance.name == 'Village of Outcasts Shop':
         # This is mostly the same as NDW but the Mirror path requires the Pearl, or using the Hammer
         add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.has('Activated Flute', player) or (state.can_lift_heavy_rocks(player) and state.has('Hammer', player)) or (state.has('Magic Mirror', player) and state.can_reach('Light World', 'Region', player) and (state.has('Moon Pearl', player) or state.has('Hammer', player))))
     elif bombshop_entrance.name == 'Bumper Cave (Bottom)':

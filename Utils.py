@@ -1,6 +1,17 @@
 from __future__ import annotations
 
 import typing
+import builtins
+import os
+import subprocess
+import sys
+import pickle
+import functools
+import io
+import collections
+import importlib
+import logging
+from tkinter import Tk
 
 
 def tuplize_version(version: str) -> Version:
@@ -13,21 +24,10 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.2.0"
+__version__ = "0.2.6"
 version_tuple = tuplize_version(__version__)
 
-import builtins
-import os
-import subprocess
-import sys
-import pickle
-import functools
-import io
-import collections
-import importlib
-import logging
-
-from yaml import load, dump, safe_load
+from yaml import load, dump, SafeLoader
 
 try:
     from yaml import CLoader as Loader
@@ -118,7 +118,20 @@ def open_file(filename):
         subprocess.call([open_command, filename])
 
 
-parse_yaml = safe_load
+# from https://gist.github.com/pypt/94d747fe5180851196eb#gistcomment-4015118 with some changes
+class UniqueKeyLoader(SafeLoader):
+    def construct_mapping(self, node, deep=False):
+        mapping = set()
+        for key_node, value_node in node.value:
+            key = self.construct_object(key_node, deep=deep)
+            if key in mapping:
+                logging.error(f"YAML duplicates sanity check failed{key_node.start_mark}")
+                raise KeyError(f"Duplicate key {key} found in YAML. Already found keys: {mapping}.")
+            mapping.add(key)
+        return super().construct_mapping(node, deep)
+
+
+parse_yaml = functools.partial(load, Loader=UniqueKeyLoader)
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
 
@@ -169,7 +182,7 @@ def get_default_options() -> dict:
             "output_path": "output",
         },
         "factorio_options": {
-            "executable": "factorio\\bin\\x64\\factorio",
+            "executable": os.path.join("factorio", "bin", "x64", "factorio"),
         },
         "sm_options": {
             "rom_file": "Super Metroid (JU).sfc",
@@ -206,7 +219,7 @@ def get_default_options() -> dict:
         },
         "generator": {
             "teams": 1,
-            "enemizer_path": "EnemizerCLI/EnemizerCLI.Core.exe",
+            "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core.exe"),
             "player_files_path": "Players",
             "players": 0,
             "weights_file_path": "weights.yaml",
@@ -302,63 +315,9 @@ def persistent_load() -> typing.Dict[dict]:
     return storage
 
 
-def get_adjuster_settings(romfile: str, skip_questions: bool = False) -> typing.Tuple[str, bool]:
-    if hasattr(get_adjuster_settings, "adjuster_settings"):
-        adjuster_settings = getattr(get_adjuster_settings, "adjuster_settings")
-    else:
-        adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_3", {})
-
-    if adjuster_settings:
-        import pprint
-        from worlds.alttp.Rom import get_base_rom_path
-        adjuster_settings.rom = romfile
-        adjuster_settings.baserom = get_base_rom_path()
-        adjuster_settings.world = None
-        whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
-                     "uw_palettes", "sprite"}
-        printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
-        if hasattr(adjuster_settings, "sprite_pool"):
-            sprite_pool = {}
-            for sprite in getattr(adjuster_settings, "sprite_pool"):
-                if sprite in sprite_pool:
-                    sprite_pool[sprite] += 1
-                else:
-                    sprite_pool[sprite] = 1
-            if sprite_pool:
-                printed_options["sprite_pool"] = sprite_pool
-
-        if hasattr(get_adjuster_settings, "adjust_wanted"):
-            adjust_wanted = getattr(get_adjuster_settings, "adjust_wanted")
-        elif persistent_load().get("adjuster", {}).get("never_adjust", False):  # never adjust, per user request
-            return romfile, False
-        elif skip_questions:
-            return romfile, False
-        else:
-            adjust_wanted = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
-                                  f"{pprint.pformat(printed_options)}\n"
-                                  f"Enter yes, no or never: ")
-        if adjust_wanted and adjust_wanted.startswith("y"):
-            if hasattr(adjuster_settings, "sprite_pool"):
-                from LttPAdjuster import AdjusterWorld
-                adjuster_settings.world = AdjusterWorld(getattr(adjuster_settings, "sprite_pool"))
-
-            adjusted = True
-            import LttPAdjuster
-            _, romfile = LttPAdjuster.adjust(adjuster_settings)
-
-            if hasattr(adjuster_settings, "world"):
-                delattr(adjuster_settings, "world")
-        elif adjust_wanted and "never" in adjust_wanted:
-            persistent_store("adjuster", "never_adjust", True)
-            return romfile, False
-        else:
-            adjusted = False
-            if not hasattr(get_adjuster_settings, "adjust_wanted"):
-                logging.info(f"Skipping post-patch adjustment")
-        get_adjuster_settings.adjuster_settings = adjuster_settings
-        get_adjuster_settings.adjust_wanted = adjust_wanted
-        return romfile, adjusted
-    return romfile, False
+def get_adjuster_settings(gameName: str):
+    adjuster_settings = persistent_load().get("adjuster", {}).get(gameName, {})
+    return adjuster_settings
 
 
 @cache_argsless
@@ -390,7 +349,7 @@ class RestrictedUnpickler(pickle.Unpickler):
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
         # used by MultiServer -> savegame/multidata
-        if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint"}:
+        if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint", "SlotType", "NetworkSlot"}:
             return getattr(self.net_utils_module, name)
         # Options and Plando are unpickled by WebHost -> Generate
         if module == "worlds.generic" and name in {"PlandoItem", "PlandoConnection"}:
@@ -462,3 +421,39 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         handle_exception._wrapped = True
 
         sys.excepthook = handle_exception
+
+
+def stream_input(stream, queue):
+    def queuer():
+        while 1:
+            text = stream.readline().strip()
+            if text:
+                queue.put_nowait(text)
+
+    from threading import Thread
+    thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
+    thread.start()
+    return thread
+
+
+def tkinter_center_window(window: Tk):
+    window.update()
+    xPos = int(window.winfo_screenwidth() / 2 - window.winfo_reqwidth() / 2)
+    yPos = int(window.winfo_screenheight() / 2 - window.winfo_reqheight() / 2)
+    window.geometry("+{}+{}".format(xPos, yPos))
+
+
+class VersionException(Exception):
+    pass
+
+
+def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")):
+    n = 0
+
+    while value > power:
+        value /= power
+        n += 1
+    if type(value) == int:
+        return f"{value} {power_labels[n]}"
+    else:
+        return f"{value:0.3f} {power_labels[n]}"

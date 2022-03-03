@@ -14,7 +14,7 @@ ModuleUpdate.update()
 
 import Utils
 from worlds.alttp import Options as LttPOptions
-from worlds.generic import PlandoItem, PlandoConnection
+from worlds.generic import PlandoConnection
 from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
@@ -23,6 +23,7 @@ import Options
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
+import copy
 
 categories = set(AutoWorldRegister.world_types)
 
@@ -60,8 +61,8 @@ def mystery_argparse():
     return args, options
 
 
-def get_seed_name(random):
-    return f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
+def get_seed_name(random_source) -> str:
+    return f"{random_source.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 
 def main(args=None, callback=ERmain):
@@ -90,7 +91,8 @@ def main(args=None, callback=ERmain):
         except Exception as e:
             raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
         meta_weights = weights_cache[args.meta_file_path]
-        print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights, 'No description specified')}")
+        print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
+        del(meta_weights["meta_description"])
         if args.samesettings:
             raise Exception("Cannot mix --samesettings with --meta")
     else:
@@ -126,7 +128,7 @@ def main(args=None, callback=ERmain):
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
 
-    Utils.init_logging(f"Generate_{seed}.txt", loglevel=args.log_level)
+    Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
 
     erargs.lttp_rom = args.lttp_rom
     erargs.sm_rom = args.sm_rom
@@ -139,17 +141,17 @@ def main(args=None, callback=ERmain):
         player_path_cache[player] = player_files.get(player, args.weights_file_path)
 
     if meta_weights:
-        for player, path in player_path_cache.items():
-            weights_cache[path].setdefault("meta_ignore", [])
-        for key in meta_weights:
-            option = get_choice(key, meta_weights)
-            if option is not None:
-                for player, path in player_path_cache.items():
-                    players_meta = weights_cache[path].get("meta_ignore", [])
-                    if key not in players_meta:
-                        weights_cache[path][key] = option
-                    elif type(players_meta) == dict and players_meta[key] and option not in players_meta[key]:
-                        weights_cache[path][key] = option
+        for category_name, category_dict in meta_weights.items():
+            for key in category_dict:
+                option = get_choice(key, category_dict)
+                if option is not None:
+                    for player, path in player_path_cache.items():
+                        if category_name is None:
+                            weights_cache[path][key] = option
+                        elif category_name not in weights_cache[path]:
+                            logging.warning(f"Meta: Category {category_name} is not present in {path}.")
+                        else:
+                            weights_cache[path][category_name][key] = option
 
     name_counter = Counter()
     erargs.player_settings = {}
@@ -178,7 +180,7 @@ def main(args=None, callback=ERmain):
         erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
 
     if len(set(erargs.name.values())) != len(erargs.name):
-        raise Exception(f"Names have to be unique. Names: {erargs.name}")
+        raise Exception(f"Names have to be unique. Names: {Counter(erargs.name.values())}")
 
     if args.yaml_output:
         import yaml
@@ -189,8 +191,6 @@ def main(args=None, callback=ERmain):
                     if len(player_settings.values()) > 1:
                         important[option] = {player: value for player, value in player_settings.items() if
                                              player <= args.yaml_output}
-                    elif len(player_settings.values()) > 0:
-                        important[option] = player_settings[1]
                     else:
                         logging.debug(f"No player settings defined for option '{option}'")
 
@@ -220,11 +220,11 @@ def read_weights_yaml(path):
     return parse_yaml(yaml)
 
 
-def interpret_on_off(value):
+def interpret_on_off(value) -> bool:
     return {"on": True, "off": False}.get(value, value)
 
 
-def convert_to_on_off(value):
+def convert_to_on_off(value) -> str:
     return {True: "on", False: "off"}.get(value, value)
 
 
@@ -329,7 +329,7 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
 
 
 def roll_linked_options(weights: dict) -> dict:
-    weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+    weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     for option_set in weights["linked_options"]:
         if "name" not in option_set:
             raise ValueError("One of your linked options does not have a name.")
@@ -351,8 +351,8 @@ def roll_linked_options(weights: dict) -> dict:
 
 
 def roll_triggers(weights: dict, triggers: list) -> dict:
-    weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
-    weights["_Generator_Version"] = "Archipelago"  # Some means for triggers to know if the seed is on main or doors.
+    weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
+    weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
         try:
             currently_targeted_weights = weights
@@ -426,17 +426,8 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
         except Exception as e:
             raise Exception(f"Error generating option {option_key} in {ret.game}") from e
         else:
-            # verify item names existing
-            if getattr(player_option, "verify_item_name", False):
-                for item_name in player_option.value:
-                    if item_name not in AutoWorldRegister.world_types[ret.game].item_names:
-                        raise Exception(f"Item {item_name} from option {player_option} "
-                                        f"is not a valid item name from {ret.game}")
-            elif getattr(player_option, "verify_location_name", False):
-                for location_name in player_option.value:
-                    if location_name not in AutoWorldRegister.world_types[ret.game].location_names:
-                        raise Exception(f"Location {location_name} from option {player_option} "
-                                        f"is not a valid location name from {ret.game}")
+            if hasattr(player_option, "verify"):
+                player_option.verify(AutoWorldRegister.world_types[ret.game])
     else:
         setattr(ret, option_key, option(option.default))
 
@@ -468,7 +459,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
 
     ret = argparse.Namespace()
     for option_key in Options.per_game_common_options:
-        if option_key in weights:
+        if option_key in weights and option_key not in Options.common_options:
             raise Exception(f"Option {option_key} has to be in a game's section, not on its own.")
 
     ret.game = get_choice("game", weights)
@@ -490,10 +481,12 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         for option_key, option in world_type.options.items():
             handle_option(ret, game_weights, option_key, option)
         for option_key, option in Options.per_game_common_options.items():
-            handle_option(ret, game_weights, option_key, option)
+            # skip setting this option if already set from common_options, defaulting to root option
+            if not (option_key in Options.common_options and option_key not in game_weights):
+                handle_option(ret, game_weights, option_key, option)
         if "items" in plando_options:
-            ret.plando_items = roll_item_plando(world_type, game_weights)
-        if ret.game == "Minecraft":
+            ret.plando_items = game_weights.get("plando_items", [])
+        if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
             # bad hardcoded behavior to make this work for now
             ret.plando_connections = []
             if "connections" in plando_options:
@@ -503,51 +496,14 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                         ret.plando_connections.append(PlandoConnection(
                             get_choice("entrance", placement),
                             get_choice("exit", placement),
-                            get_choice("direction", placement, "both")
+                            get_choice("direction", placement)
                         ))
         elif ret.game == "A Link to the Past":
             roll_alttp_settings(ret, game_weights, plando_options)
     else:
         raise Exception(f"Unsupported game {ret.game}")
+
     return ret
-
-
-def roll_item_plando(world_type, weights):
-    plando_items = []
-
-    def add_plando_item(item: str, location: str):
-        if item not in world_type.item_name_to_id:
-            raise Exception(f"Could not plando item {item} as the item was not recognized")
-        if location not in world_type.location_name_to_id:
-            raise Exception(
-                f"Could not plando item {item} at location {location} as the location was not recognized")
-        plando_items.append(PlandoItem(item, location, location_world, from_pool, force))
-
-    options = weights.get("plando_items", [])
-    for placement in options:
-        if roll_percentage(get_choice_legacy("percentage", placement, 100)):
-            from_pool = get_choice_legacy("from_pool", placement, PlandoItem._field_defaults["from_pool"])
-            location_world = get_choice_legacy("world", placement, PlandoItem._field_defaults["world"])
-            force = str(get_choice_legacy("force", placement, PlandoItem._field_defaults["force"])).lower()
-            if "items" in placement and "locations" in placement:
-                items = placement["items"]
-                locations = placement["locations"]
-                if isinstance(items, dict):
-                    item_list = []
-                    for key, value in items.items():
-                        item_list += [key] * value
-                    items = item_list
-                if not items or not locations:
-                    raise Exception("You must specify at least one item and one location to place items.")
-                random.shuffle(items)
-                random.shuffle(locations)
-                for item, location in zip(items, locations):
-                    add_plando_item(item, location)
-            else:
-                item = get_choice_legacy("item", placement, get_choice_legacy("items", placement))
-                location = get_choice_legacy("location", placement)
-                add_plando_item(item, location)
-    return plando_items
 
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):

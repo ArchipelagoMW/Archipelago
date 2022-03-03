@@ -82,6 +82,7 @@ Each location has a `name` and an `id` (a.k.a. "code" or "address"), is placed
 in a Region and has access rules.
 The name needs to be unique in each game, the ID needs to be unique across all
 games and is best in the same range as the item IDs.
+World-specific IDs are 1 to 2<sup>53</sup>-1, IDs ≤ 0 are global and reserved.
 
 Special locations with ID `None` can hold events.
 
@@ -217,7 +218,7 @@ By convention options are defined in `Options.py` and will be used when parsing
 the players' yaml files.
 
 Each option has its own class, inherits from a base option type, has a docstring 
-to describe it and a `displayname` property for display on the website and in
+to describe it and a `display_name` property for display on the website and in
 spoiler logs.
 
 The actual name as used in the yaml is defined in a `dict[str, Option]`, that is
@@ -263,7 +264,7 @@ import typing
 
 class Difficulty(Choice):
     """Sets overall game difficulty."""
-    displayname = "Difficulty"
+    display_name = "Difficulty"
     option_easy = 0
     option_normal = 1
     option_hard = 2
@@ -273,14 +274,14 @@ class Difficulty(Choice):
 
 class FinalBossHP(Range):
     """Sets the HP of the final boss"""
-    displayname = "Final Boss HP"
+    display_name = "Final Boss HP"
     range_start = 100
     range_end = 10000
     default = 2000
 
 class FixXYZGlitch(Toggle):
     """Fixes ABC when you do XYZ"""
-    displayname = "Fix XYZ Glitch"
+    display_name = "Fix XYZ Glitch"
 
 # By convention we call the options dict variable `<world>_options`.
 mygame_options: typing.Dict[str, type(Option)] = {

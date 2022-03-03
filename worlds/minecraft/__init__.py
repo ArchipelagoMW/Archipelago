@@ -4,16 +4,17 @@ from base64 import b64encode, b64decode
 from math import ceil
 
 from .Items import MinecraftItem, item_table, required_items, junk_weights
-from .Locations import MinecraftAdvancement, advancement_table, exclusion_table, events_table
+from .Locations import MinecraftAdvancement, advancement_table, exclusion_table, get_postgame_advancements
 from .Regions import mc_regions, link_minecraft_structures, default_connections
-from .Rules import set_rules
+from .Rules import set_advancement_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 
 from BaseClasses import Region, Entrance, Item
 from .Options import minecraft_options
 from ..AutoWorld import World
 
-client_version = 6
+client_version = 7
+minecraft_version = "1.17.1"
 
 class MinecraftWorld(World):
     """
@@ -29,7 +30,7 @@ class MinecraftWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 3
+    data_version = 4
 
     def _get_mc_data(self):
         exits = [connection[0] for connection in default_connections]
@@ -39,12 +40,16 @@ class MinecraftWorld(World):
             'player_name': self.world.get_player_name(self.player),
             'player_id': self.player,
             'client_version': client_version,
+            'minecraft_version': minecraft_version,
             'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits},
             'advancement_goal': self.world.advancement_goal[self.player],
             'egg_shards_required': min(self.world.egg_shards_required[self.player], self.world.egg_shards_available[self.player]),
             'egg_shards_available': self.world.egg_shards_available[self.player],
+            'required_bosses': self.world.required_bosses[self.player].current_key,
             'MC35': bool(self.world.send_defeated_mobs[self.player]),
-            'race': self.world.is_race
+            'death_link': bool(self.world.death_link[self.player]),
+            'starting_items': str(self.world.starting_items[self.player].value),
+            'race': self.world.is_race,
         }
 
     def generate_basic(self):
@@ -61,7 +66,8 @@ class MinecraftWorld(World):
             for struct_name in structures:
                 itempool.append(f"Structure Compass ({struct_name})")
         # Add dragon egg shards
-        itempool += ["Dragon Egg Shard"] * self.world.egg_shards_available[self.player]
+        if self.world.egg_shards_required[self.player] > 0:
+            itempool += ["Dragon Egg Shard"] * self.world.egg_shards_available[self.player]
         # Add bee traps if desired
         bee_trap_quantity = ceil(self.world.bee_traps[self.player] * (len(self.location_names)-len(itempool)) * 0.01)
         itempool += ["Bee Trap (Minecraft)"] * bee_trap_quantity
@@ -72,20 +78,24 @@ class MinecraftWorld(World):
 
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
-        exclusion_types = ['hard', 'insane', 'postgame']
+        exclusion_types = ['hard', 'unreasonable']
         for key in exclusion_types:
             if not getattr(self.world, f"include_{key}_advancements")[self.player]:
                 exclusion_pool.update(exclusion_table[key])
+        # For postgame advancements, check with the boss goal
+        exclusion_pool.update(get_postgame_advancements(self.world.required_bosses[self.player].current_key))
         exclusion_rules(self.world, self.player, exclusion_pool)
 
         # Prefill event locations with their events
         self.world.get_location("Blaze Spawner", self.player).place_locked_item(self.create_item("Blaze Rods"))
-        self.world.get_location("Ender Dragon", self.player).place_locked_item(self.create_item("Victory"))
+        self.world.get_location("Ender Dragon", self.player).place_locked_item(self.create_item("Defeat Ender Dragon"))
+        self.world.get_location("Wither", self.player).place_locked_item(self.create_item("Defeat Wither"))
 
         self.world.itempool += itempool
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        set_advancement_rules(self.world, self.player)
+        set_completion_rules(self.world, self.player)
 
     def create_regions(self):
         def MCRegion(region_name: str, exits=[]):
@@ -110,7 +120,8 @@ class MinecraftWorld(World):
         slot_data = self._get_mc_data()
         for option_name in minecraft_options:
             option = getattr(self.world, option_name)[self.player]
-            slot_data[option_name] = int(option.value)
+            if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
+                slot_data[option_name] = int(option.value)
         return slot_data
 
     def create_item(self, name: str) -> Item:

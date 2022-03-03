@@ -9,7 +9,7 @@ from .LocationList import business_scrubs
 from .Hints import writeGossipStoneHints, buildAltarHints, \
         buildGanonText, getSimpleHintNoPrefix
 from .Utils import data_path
-from .Messages import read_messages, update_message_by_id, read_shop_items, \
+from .Messages import read_messages, update_message_by_id, read_shop_items, update_warp_song_text, \
         write_shop_items, remove_unused_messages, make_player_message, \
         add_item_messages, repack_messages, shuffle_messages, \
         get_message_by_id
@@ -1007,6 +1007,12 @@ def patch_rom(world, rom):
         # Archipelago forces this item to be local so it can always be given to the player. Usually it's a song so it's no problem.
         item = world.get_location('Song from Impa').item
         save_context.give_raw_item(item.name)
+        if item.name == 'Slingshot':
+            save_context.give_raw_item("Deku Seeds (30)")
+        elif item.name == 'Bow': 
+            save_context.give_raw_item("Arrows (30)")
+        elif item.name == 'Bomb Bag': 
+            save_context.give_raw_item("Bombs (20)")
         save_context.write_bits(0x0ED7, 0x04) # "Obtained Malon's Item"
         save_context.write_bits(0x0ED7, 0x08) # "Woke Talon in castle"
         save_context.write_bits(0x0ED7, 0x10) # "Talon has fled castle"
@@ -1634,7 +1640,7 @@ def patch_rom(world, rom):
                     rom.write_int16(chest_address + 2, 0x0190) # X pos
                     rom.write_int16(chest_address + 6, 0xFABC) # Z pos
             else:
-                if location.item.advancement:
+                if not location.item.advancement:
                     rom.write_int16(chest_address + 2, 0x0190) # X pos
                     rom.write_int16(chest_address + 6, 0xFABC) # Z pos
 
@@ -1650,7 +1656,7 @@ def patch_rom(world, rom):
                     rom.write_int16(chest_address_0 + 6, 0x0172)  # Z pos
                     rom.write_int16(chest_address_2 + 6, 0x0172)  # Z pos
             else:
-                if location.item.advancement:
+                if not location.item.advancement:
                     rom.write_int16(chest_address_0 + 6, 0x0172)  # Z pos
                     rom.write_int16(chest_address_2 + 6, 0x0172)  # Z pos
 
@@ -1740,6 +1746,10 @@ def patch_rom(world, rom):
         permutation = shuffle_messages(messages, except_hints=True)
     elif world.text_shuffle == 'complete':
         permutation = shuffle_messages(messages, except_hints=False)
+
+    # If Warp Song ER is on, update text boxes
+    if world.warp_songs:
+        update_warp_song_text(messages, world)
 
     repack_messages(rom, messages, permutation)
 

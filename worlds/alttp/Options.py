@@ -34,6 +34,7 @@ class DungeonItem(Choice):
     option_own_world = 2
     option_any_world = 3
     option_different_world = 4
+    option_start_with = 6
     alias_true = 3
     alias_false = 0
 
@@ -41,30 +42,35 @@ class DungeonItem(Choice):
     def in_dungeon(self):
         return self.value in {0, 1}
 
+    @property
+    def hints_useful(self):
+        """Indicates if hints for this Item are useful in any way."""
+        return self.value in {1, 2, 3, 4}
+
 
 class bigkey_shuffle(DungeonItem):
     """Big Key Placement"""
     item_name_group = "Big Keys"
-    displayname = "Big Key Shuffle"
+    display_name = "Big Key Shuffle"
 
 
 class smallkey_shuffle(DungeonItem):
     """Small Key Placement"""
     option_universal = 5
     item_name_group = "Small Keys"
-    displayname = "Small Key Shuffle"
+    display_name = "Small Key Shuffle"
 
 
 class compass_shuffle(DungeonItem):
     """Compass Placement"""
     item_name_group = "Compasses"
-    displayname = "Compass Shuffle"
+    display_name = "Compass Shuffle"
 
 
 class map_shuffle(DungeonItem):
     """Map Placement"""
     item_name_group = "Maps"
-    displayname = "Map Shuffle"
+    display_name = "Map Shuffle"
 
 
 class Crystals(Range):
@@ -90,6 +96,11 @@ class ShopItemSlots(Range):
     range_start = 0
     range_end = 30
 
+class ShopPriceModifier(Range):
+    """Percentage modifier for shuffled item prices in shops"""
+    range_start = 0
+    default = 100
+    range_end = 400
 
 class WorldState(Choice):
     option_standard = 1
@@ -112,7 +123,7 @@ class Enemies(Choice):
 
 
 class Progressive(Choice):
-    displayname = "Progressive Items"
+    display_name = "Progressive Items"
     option_off = 0
     option_grouped_random = 1
     option_on = 2
@@ -131,50 +142,57 @@ class Swordless(Toggle):
     can be opened without a sword. Hammer damages Ganon.
     Ether and Bombos Tablet can be activated with Hammer
     (and Book)."""
-    displayname = "Swordless"
+    display_name = "Swordless"
 
 
 class Retro(Toggle):
     """Zelda-1 like mode. You have to purchase a quiver to shoot arrows using rupees
     and there are randomly placed take-any caves that contain one Sword and choices of Heart Container/Blue Potion."""
-    displayname = "Retro"
+    display_name = "Retro"
 
 
 class RestrictBossItem(Toggle):
     """Don't place dungeon-native items on the dungeon's boss."""
-    displayname = "Prevent Dungeon Item on Boss"
+    display_name = "Prevent Dungeon Item on Boss"
 
 
-class Hints(DefaultOnToggle):
-    """Put item and entrance placement hints on telepathic tiles and some NPCs.
-    Additionally King Zora and Bottle Merchant say what they're selling."""
-    displayname = "Hints"
+class Hints(Choice):
+    """Vendors: King Zora and Bottle Merchant say what they're selling.
+    On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints."""
+    display_name = "Hints"
+    option_off = 0
+    option_vendors = 1
+    option_on = 2
+    option_full = 3
+    default = 2
+    alias_false = 0
+    alias_true = 2
 
 
 class EnemyShuffle(Toggle):
     """Randomize every enemy spawn.
     If mode is Standard, Hyrule Castle is left out (may result in visually wrong enemy sprites in that area.)"""
-    displayname = "Enemy Shuffle"
+    display_name = "Enemy Shuffle"
 
 
 class KillableThieves(Toggle):
     """Makes Thieves killable."""
-    displayname = "Killable Thieves"
+    display_name = "Killable Thieves"
 
 
 class BushShuffle(Toggle):
     """Randomize chance that a bush contains an enemy as well as which enemy may spawn."""
-    displayname = "Bush Shuffle"
+    display_name = "Bush Shuffle"
 
 
 class TileShuffle(Toggle):
     """Randomize flying tiles floor patterns."""
-    displayname = "Tile Shuffle"
+    display_name = "Tile Shuffle"
 
 
 class PotShuffle(Toggle):
     """Shuffle contents of pots within "supertiles" (item will still be nearby original placement)."""
-    displayname = "Pot Shuffle"
+    display_name = "Pot Shuffle"
 
 
 class Palette(Choice):
@@ -190,31 +208,31 @@ class Palette(Choice):
 
 
 class OWPalette(Palette):
-    displayname = "Overworld Palette"
+    display_name = "Overworld Palette"
 
 
 class UWPalette(Palette):
-    displayname = "Underworld Palette"
+    display_name = "Underworld Palette"
 
 
 class HUDPalette(Palette):
-    displayname = "Menu Palette"
+    display_name = "Menu Palette"
 
 
 class SwordPalette(Palette):
-    displayname = "Sword Palette"
+    display_name = "Sword Palette"
 
 
 class ShieldPalette(Palette):
-    displayname = "Shield Palette"
+    display_name = "Shield Palette"
 
 
 class LinkPalette(Palette):
-    displayname = "Link Palette"
+    display_name = "Link Palette"
 
 
 class HeartBeep(Choice):
-    displayname = "Heart Beep Rate"
+    display_name = "Heart Beep Rate"
     option_normal = 0
     option_double = 1
     option_half = 2
@@ -224,7 +242,7 @@ class HeartBeep(Choice):
 
 
 class HeartColor(Choice):
-    displayname = "Heart Color"
+    display_name = "Heart Color"
     option_red = 0
     option_blue = 1
     option_green = 2
@@ -232,11 +250,11 @@ class HeartColor(Choice):
 
 
 class QuickSwap(DefaultOnToggle):
-    displayname = "L/R Quickswapping"
+    display_name = "L/R Quickswapping"
 
 
 class MenuSpeed(Choice):
-    displayname = "Menu Speed"
+    display_name = "Menu Speed"
     option_normal = 0
     option_instant = 1,
     option_double = 2
@@ -246,7 +264,7 @@ class MenuSpeed(Choice):
 
 
 class Music(DefaultOnToggle):
-    displayname = "Play music"
+    display_name = "Play music"
 
 
 class ReduceFlashing(DefaultOnToggle):
@@ -298,6 +316,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "killable_thieves": KillableThieves,
     "bush_shuffle": BushShuffle,
     "shop_item_slots": ShopItemSlots,
+    "shop_price_modifier": ShopPriceModifier,
     "tile_shuffle": TileShuffle,
     "ow_palettes": OWPalette,
     "uw_palettes": UWPalette,

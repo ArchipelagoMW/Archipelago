@@ -311,7 +311,7 @@ def loadRandoPreset(world, player, args):
     args.animals = world.animals[player].value
     args.noVariaTweaks = not world.varia_tweaks[player].value
     args.maxDifficulty = diffs[world.max_difficulty[player].value]
-    args.suitsRestriction = world.suits_restriction[player].value
+    #args.suitsRestriction = world.suits_restriction[player].value
     #args.hideItems = world.hide_items[player].value
     args.strictMinors = world.strict_minors[player].value
     args.noLayout = not world.layout_patches[player].value

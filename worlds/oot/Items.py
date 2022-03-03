@@ -33,6 +33,7 @@ class OOTItem(Item):
         self.looks_like_item = None
         self.price = special.get('price', None) if special else None
         self.internal = False
+        self.trap = name == 'Ice Trap'
         if force_not_advancement:
             self.never_exclude = True
         if name == 'Gold Skulltula Token':

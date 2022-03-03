@@ -13,12 +13,13 @@ class SMBoolManager(object):
     items = ['ETank', 'Missile', 'Super', 'PowerBomb', 'Bomb', 'Charge', 'Ice', 'HiJump', 'SpeedBooster', 'Wave', 'Spazer', 'SpringBall', 'Varia', 'Plasma', 'Grapple', 'Morph', 'Reserve', 'Gravity', 'XRayScope', 'SpaceJump', 'ScrewAttack', 'Nothing', 'NoEnergy', 'MotherBrain', 'Hyper'] + Bosses.Golden4()
     countItems = ['Missile', 'Super', 'PowerBomb', 'ETank', 'Reserve']
 
-    def __init__(self, player=0, maxDiff=sys.maxsize):
+    def __init__(self, player=0, maxDiff=sys.maxsize, onlyBossLeft = False):
         self._items = { }
         self._counts = { }
 
         self.player = player
         self.maxDiff = maxDiff
+        self.onlyBossLeft = onlyBossLeft
 
         # cache related
         self.cacheKey = 0
@@ -150,7 +151,7 @@ class SMBoolManager(object):
         # take no parameter
         for knows in Knows.__dict__:
             if isKnows(knows):
-                if knows in Knows.knowsDict[player].__dict__:
+                if player in Knows.knowsDict and knows in Knows.knowsDict[player].__dict__:
                     setattr(self, 'knows'+knows, lambda knows=knows: SMBool(Knows.knowsDict[player].__dict__[knows].bool,
                                                                             Knows.knowsDict[player].__dict__[knows].difficulty,
                                                                             knows=[knows]))

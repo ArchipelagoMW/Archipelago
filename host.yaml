@@ -37,7 +37,7 @@ server_options:
   # "auto" -> automatic collect on goal completion
   # "auto-enabled" -> automatic collect on goal completion and manual collect is also enabled
   # "goal" -> collect is allowed after goal completion
-  collect_mode: "disabled"
+  collect_mode: "goal"
   # Remaining modes
   # !remaining handling, that tells a client which items remain in their pool
   # "enabled" -> Client can always ask for remaining items
@@ -64,7 +64,7 @@ generator:
   # general weights file, within the stated player_files_path location
   # gets used if players is higher than the amount of per-player files found to fill remaining slots
   weights_file_path: "weights.yaml"
-  # Meta file name, within the stated player_files_path location, TODO: re-implement this
+  # Meta file name, within the stated player_files_path location
   meta_file_path: "meta.yaml"
   # Create a spoiler file
   # 0 -> None
@@ -102,12 +102,14 @@ sm_options:
   rom_start: true
 factorio_options:
   executable: "factorio\\bin\\x64\\factorio"
-minecraft_options: 
+minecraft_options:
   forge_directory: "Minecraft Forge server"
   max_heap_size: "2G"
-oot_options: 
+oot_options:
   # File name of the OoT v1.0 ROM
   rom_file: "The Legend of Zelda - Ocarina of Time.z64"
 soe_options:
   # File name of the SoE US ROM
   rom_file: "Secret of Evermore (USA).sfc"
+ffr_options:
+  display_msgs: true

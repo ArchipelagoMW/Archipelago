@@ -11,6 +11,7 @@ import shutil
 import logging
 import asyncio
 from json import loads, dumps
+from tkinter import font
 
 from Utils import get_item_name_from_id, init_logging
 
@@ -55,7 +56,8 @@ class LttPCommandProcessor(ClientCommandProcessor):
     @mark_raw
     def _cmd_snes(self, snes_options: str = "") -> bool:
         """Connect to a snes. Optionally include network address of a snes to connect to,
-        otherwise show available devices; and a SNES device number if more than one SNES is detected"""
+        otherwise show available devices; and a SNES device number if more than one SNES is detected.
+        Examples: "/snes", "/snes 1", "/snes localhost:8080 1" """
 
         snes_address = self.ctx.snes_address
         snes_device_number = -1
@@ -64,16 +66,15 @@ class LttPCommandProcessor(ClientCommandProcessor):
         num_options = len(options)
 
         if num_options > 0:
-            snes_address = options[0]
+            snes_device_number = int(options[0])
 
         if num_options > 1:
-            try:
-                snes_device_number = int(options[1])
-            except:
-                pass
+            snes_address = options[0]
+            snes_device_number = int(options[1])
+
 
         self.ctx.snes_reconnect_address = None
-        asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number))
+        asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number), name="SNES Connect")
         return True
 
     def _cmd_snes_close(self) -> bool:
@@ -101,6 +102,7 @@ class LttPCommandProcessor(ClientCommandProcessor):
 class Context(CommonContext):
     command_processor = LttPCommandProcessor
     game = "A Link to the Past"
+    items_handling = None  # set in game_watcher
 
     def __init__(self, snes_address, server_address, password):
         super(Context, self).__init__(server_address, password)
@@ -143,12 +145,7 @@ class Context(CommonContext):
         self.awaiting_rom = False
         self.auth = self.rom
         auth = base64.b64encode(self.rom).decode()
-        await self.send_msgs([{"cmd": 'Connect',
-                               'password': self.password, 'name': auth, 'version': Utils.version_tuple,
-                               'tags': self.tags,
-                               'uuid': Utils.get_unique_identifier(),
-                               'game': self.game
-                               }])
+        await self.send_connect(name=auth)
 
     def on_deathlink(self, data: dict):
         if not self.killing_player_task or self.killing_player_task.done():
@@ -176,28 +173,36 @@ async def deathlink_kill_player(ctx: Context):
     while ctx.death_state == DeathState.killing_player and \
             ctx.snes_state == SNESState.SNES_ATTACHED:
         if ctx.game == GAME_ALTTP:
-            snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
-            snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
+            invincible = await snes_read(ctx, WRAM_START + 0x037B, 1)
+            last_health = await snes_read(ctx, WRAM_START + 0xF36D, 1)
+            await asyncio.sleep(0.25)
+            health = await snes_read(ctx, WRAM_START + 0xF36D, 1)
+            if not invincible or not last_health or not health:
+                ctx.death_state = DeathState.dead
+                ctx.last_death_link = time.time()
+                continue
+            if not invincible[0] and last_health[0] == health[0]:
+                snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
+                snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
         elif ctx.game == GAME_SM:
             snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
+            if not ctx.death_link_allow_survive:
+                snes_buffered_write(ctx, WRAM_START + 0x09D6, bytes([0, 0]))  # set current reserve to 0
         await snes_flush_writes(ctx)
         await asyncio.sleep(1)
-        gamemode = None
+
         if ctx.game == GAME_ALTTP:
             gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
+            if not gamemode or gamemode[0] in DEATH_MODES:
+                ctx.death_state = DeathState.dead
         elif ctx.game == GAME_SM:
             gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
-        if not gamemode or gamemode[0] in (DEATH_MODES if ctx.game == GAME_ALTTP else SM_DEATH_MODES):
-            ctx.death_state = DeathState.dead
+            health = await snes_read(ctx, WRAM_START + 0x09C2, 2)
+            if health is not None:
+                health = health[0] | (health[1] << 8)
+            if not gamemode or gamemode[0] in SM_DEATH_MODES or (ctx.death_link_allow_survive and health is not None and health > 0):
+                ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
-
-
-def color_item(item_id: int, green: bool = False) -> str:
-    item_name = get_item_name_from_id(item_id)
-    item_colors = ['green' if green else 'cyan']
-    if item_name in Items.progression_items:
-        item_colors.append("white_bg")
-    return color(item_name, *item_colors)
 
 
 SNES_RECONNECT_DELAY = 5
@@ -521,18 +526,21 @@ def launch_sni(ctx: Context):
     if not os.path.isdir(sni_path):
         sni_path = Utils.local_path(sni_path)
     if os.path.isdir(sni_path):
-        for file in os.listdir(sni_path):
-            lower_file = file.lower()
-            if (lower_file.startswith("sni.") and not lower_file.endswith(".proto")) or lower_file == "sni":
-                sni_path = os.path.join(sni_path, file)
+        dir_entry: os.DirEntry
+        for dir_entry in os.scandir(sni_path):
+            if dir_entry.is_file():
+                lower_file = dir_entry.name.lower()
+                if (lower_file.startswith("sni.") and not lower_file.endswith(".proto")) or (lower_file == "sni"):
+                    sni_path = dir_entry.path
+                    break
 
     if os.path.isfile(sni_path):
         snes_logger.info(f"Attempting to start {sni_path}")
         import sys
         if not sys.stdout:  # if it spawns a visible console, may as well populate it
-            subprocess.Popen(sni_path, cwd=os.path.dirname(sni_path))
+            subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path))
         else:
-            subprocess.Popen(sni_path, cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL,
+            subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL,
                              stderr=subprocess.DEVNULL)
     else:
         snes_logger.info(
@@ -685,11 +693,6 @@ async def snes_disconnect(ctx: Context):
 
 
 async def snes_autoreconnect(ctx: Context):
-    # unfortunately currently broken. See: https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1033
-    # with prompt_toolkit.shortcuts.ProgressBar() as pb:
-    #    for _ in pb(range(100)):
-    #        await asyncio.sleep(RECONNECT_DELAY/100)
-
     await asyncio.sleep(SNES_RECONNECT_DELAY)
     if ctx.snes_reconnect_address and ctx.snes_socket is None:
         await snes_connect(ctx, ctx.snes_reconnect_address)
@@ -894,13 +897,16 @@ async def game_watcher(ctx: Context):
 
         if not ctx.rom:
             ctx.finished_game = False
-            gameName = await snes_read(ctx, SM_ROMNAME_START, 2)
-            if gameName is None:
+            ctx.death_link_allow_survive = False
+            game_name = await snes_read(ctx, SM_ROMNAME_START, 2)
+            if game_name is None:
                 continue
-            elif gameName == b"SM":
+            elif game_name == b"SM":
                 ctx.game = GAME_SM
+                ctx.items_handling = 0b001  # full local
             else:
                 ctx.game = GAME_ALTTP
+                ctx.items_handling = 0b001  # full local
 
             rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else ROMNAME_START, ROMNAME_SIZE)
             if rom is None or rom == bytes([0] * ROMNAME_SIZE):
@@ -910,14 +916,8 @@ async def game_watcher(ctx: Context):
             death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
                                          SM_DEATH_LINK_ACTIVE_ADDR, 1)
             if death_link:
-                death_link = bool(death_link[0] & 0b1)
-                old_tags = ctx.tags.copy()
-                if death_link:
-                    ctx.tags.add("DeathLink")
-                else:
-                    ctx.tags -= {"DeathLink"}
-                if old_tags != ctx.tags and ctx.server and not ctx.server.socket.closed:
-                    await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
+                ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
+                await ctx.update_death_link(bool(death_link[0] & 0b1))
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
                 ctx.locations_scouted = set()
@@ -1056,6 +1056,7 @@ async def game_watcher(ctx: Context):
                     ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
 
+
 async def run_game(romfile):
     auto_start = Utils.get_options()["lttp_options"].get("rom_start", True)
     if auto_start is True:
@@ -1079,23 +1080,19 @@ async def main():
         import Patch
         logging.info("Patch file was supplied. Creating sfc rom..")
         meta, romfile = Patch.create_rom_file(args.diff_file)
-        args.connect = meta["server"]
+        if "server" in meta:
+            args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
         if args.diff_file.endswith(".apsoe"):
             import webbrowser
-            webbrowser.open("http://www.evermizer.com/apclient/")
+            webbrowser.open("http://www.evermizer.com/apclient/" +
+                            (f"#server={meta['server']}" if "server" in meta else ""))
             logging.info("Starting Evermizer Client in your Browser...")
             import time
             time.sleep(3)
             sys.exit()
         elif args.diff_file.endswith((".apbp", "apz3")):
-            adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile, gui_enabled)
-            if adjusted:
-                try:
-                    shutil.move(adjustedromfile, romfile)
-                    adjustedromfile = romfile
-                except Exception as e:
-                    logging.exception(e)
+            adjustedromfile, adjusted = get_alttp_settings(romfile)
             asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
         else:
             asyncio.create_task(run_game(romfile))
@@ -1103,38 +1100,29 @@ async def main():
     ctx = Context(args.snes, args.connect, args.password)
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-
+    input_task = None
     if gui_enabled:
-        input_task = None
         from kvui import SNIManager
         ctx.ui = SNIManager(ctx)
         ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
     else:
-        input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None
+    if sys.stdin:
+        input_task = asyncio.create_task(console_loop(ctx), name="Input")
 
-    snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address))
+    snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address), name="SNES Connect")
     watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
 
     await ctx.exit_event.wait()
-    if snes_connect_task:
-        snes_connect_task.cancel()
+
     ctx.server_address = None
     ctx.snes_reconnect_address = None
-
-    await watcher_task
-
-    if ctx.server and not ctx.server.socket.closed:
-        await ctx.server.socket.close()
-    if ctx.server_task:
-        await ctx.server_task
-
     if ctx.snes_socket is not None and not ctx.snes_socket.closed:
         await ctx.snes_socket.close()
-
-    while ctx.input_requests > 0:
-        ctx.input_queue.put_nowait(None)
-        ctx.input_requests -= 1
+    if snes_connect_task:
+        snes_connect_task.cancel()
+    await watcher_task
+    await ctx.shutdown()
 
     if ui_task:
         await ui_task
@@ -1142,6 +1130,126 @@ async def main():
     if input_task:
         input_task.cancel()
 
+def get_alttp_settings(romfile: str):
+    lastSettings = Utils.get_adjuster_settings(GAME_ALTTP)
+    adjusted = False
+    adjustedromfile = ''
+    if lastSettings:
+        choice = 'no'
+        if not hasattr(lastSettings, 'auto_apply') or 'ask' in lastSettings.auto_apply:
+
+            whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
+                        "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
+                        "reduceflashing", "deathlink"}
+            printed_options = {name: value for name, value in vars(lastSettings).items() if name in whitelist}
+            if hasattr(lastSettings, "sprite_pool"):
+                sprite_pool = {}
+                for sprite in lastSettings.sprite_pool:
+                    if sprite in sprite_pool:
+                        sprite_pool[sprite] += 1
+                    else:
+                        sprite_pool[sprite] = 1
+                    if sprite_pool:
+                        printed_options["sprite_pool"] = sprite_pool
+            import pprint
+
+            if gui_enabled:
+            
+                from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
+                applyPromptWindow = Tk()
+                applyPromptWindow.resizable(False, False)
+                applyPromptWindow.protocol('WM_DELETE_WINDOW',lambda: onButtonClick())
+                logo = PhotoImage(file=Utils.local_path('data', 'icon.png'))
+                applyPromptWindow.tk.call('wm', 'iconphoto', applyPromptWindow._w, logo)
+                applyPromptWindow.wm_title("Last adjuster settings LttP")
+
+                label = LabelFrame(applyPromptWindow,
+                                text='Last used adjuster settings were found. Would you like to apply these?')
+                label.grid(column=0,row=0, padx=5, pady=5, ipadx=5, ipady=5)
+                label.grid_columnconfigure (0, weight=1) 
+                label.grid_columnconfigure (1, weight=1) 
+                label.grid_columnconfigure (2, weight=1) 
+                label.grid_columnconfigure (3, weight=1) 
+                def onButtonClick(answer: str='no'):
+                    setattr(onButtonClick, 'choice', answer)
+                    applyPromptWindow.destroy()
+
+                framedOptions = Frame(label)
+                framedOptions.grid(column=0, columnspan=4,row=0)
+                framedOptions.grid_columnconfigure(0, weight=1)
+                framedOptions.grid_columnconfigure(1, weight=1)
+                framedOptions.grid_columnconfigure(2, weight=1)
+                curRow = 0
+                curCol = 0
+                for name, value in printed_options.items():
+                    Label(framedOptions, text=name+": "+str(value)).grid(column=curCol, row=curRow, padx=5)
+                    if(curCol==2):
+                        curRow+=1
+                        curCol=0
+                    else:
+                        curCol+=1
+
+                yesButton = Button(label, text='Yes', command=lambda: onButtonClick('yes'), width=10)
+                yesButton.grid(column=0, row=1)
+                noButton = Button(label, text='No', command=lambda: onButtonClick('no'), width=10)
+                noButton.grid(column=1, row=1)
+                alwaysButton = Button(label, text='Always', command=lambda: onButtonClick('always'), width=10)
+                alwaysButton.grid(column=2, row=1)
+                neverButton = Button(label, text='Never', command=lambda: onButtonClick('never'), width=10)
+                neverButton.grid(column=3, row=1)
+
+                Utils.tkinter_center_window(applyPromptWindow)
+                applyPromptWindow.mainloop()
+                choice = getattr(onButtonClick, 'choice')
+            else:
+                choice = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
+                                    f"{pprint.pformat(printed_options)}\n"
+                                    f"Enter yes, no, always or never: ")
+            if choice and choice.startswith("y"):
+                choice = 'yes'
+            elif choice and "never" in choice:
+                choice = 'no'
+                lastSettings.auto_apply = 'never'
+                Utils.persistent_store("adjuster", GAME_ALTTP, lastSettings)
+            elif choice and "always" in choice:
+                choice = 'yes'
+                lastSettings.auto_apply = 'always'
+                Utils.persistent_store("adjuster", GAME_ALTTP, lastSettings)
+            else:
+                choice = 'no'
+        elif 'never' in lastSettings.auto_apply:
+            choice = 'no'
+        elif 'always' in lastSettings.auto_apply:
+            choice = 'yes'
+                    
+        if 'yes' in choice:
+            from worlds.alttp.Rom import get_base_rom_path
+            lastSettings.rom = romfile
+            lastSettings.baserom = get_base_rom_path()
+            lastSettings.world = None
+
+            if hasattr(lastSettings, "sprite_pool"):
+                from LttPAdjuster import AdjusterWorld
+                lastSettings.world = AdjusterWorld(getattr(lastSettings, "sprite_pool"))
+
+            adjusted = True
+            import LttPAdjuster
+            _, adjustedromfile = LttPAdjuster.adjust(lastSettings)
+
+            if hasattr(lastSettings, "world"):
+                delattr(lastSettings, "world")
+        else:
+            adjusted = False;
+        if adjusted:
+            try:
+                shutil.move(adjustedromfile, romfile)
+                adjustedromfile = romfile
+            except Exception as e:
+                logging.exception(e)
+    else:
+        
+        adjusted = False
+    return adjustedromfile, adjusted
 
 if __name__ == '__main__':
     colorama.init()

@@ -41,6 +41,7 @@ html{
 
 #player-settings #user-message.visible{
     display: block;
+    cursor: pointer;
 }
 
 #player-settings h1{

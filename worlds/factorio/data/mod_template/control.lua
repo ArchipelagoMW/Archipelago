@@ -8,9 +8,54 @@ SLOT_NAME = "{{ slot_name }}"
 SEED_NAME = "{{ seed_name }}"
 FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
 TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
-DEATH_LINK = {{ death_link | int }}
+MAX_SCIENCE_PACK = {{ max_science_pack }}
+GOAL = {{ goal }}
+ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
+ENERGY_INCREMENT = {{ energy_link * 1000000 }}
+ENERGY_LINK_EFFICIENCY = 0.75
+
+if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
+    DEATH_LINK = 1
+else
+    DEATH_LINK = 0
+end
 
 CURRENTLY_DEATH_LOCK = 0
+
+function on_check_energy_link(event)
+    --- assuming 1 MJ increment and 5MJ battery:
+    --- first 2 MJ request fill, last 2 MJ push energy, middle 1 MJ does nothing
+    if event.tick % 60 == 30 then
+        local surface = game.get_surface(1)
+        local force = "player"
+        local bridges = surface.find_entities_filtered({name="ap-energy-bridge", force=force})
+        local bridgecount = table_size(bridges)
+        global.forcedata[force].energy_bridges = bridgecount
+        if global.forcedata[force].energy == nil then
+            global.forcedata[force].energy = 0
+        end
+        if global.forcedata[force].energy < ENERGY_INCREMENT * bridgecount * 5 then
+            for i, bridge in ipairs(bridges) do
+                if bridge.energy > ENERGY_INCREMENT*3 then
+                    global.forcedata[force].energy = global.forcedata[force].energy + (ENERGY_INCREMENT * ENERGY_LINK_EFFICIENCY)
+                    bridge.energy = bridge.energy - ENERGY_INCREMENT
+                end
+            end
+        end
+        for i, bridge in ipairs(bridges) do
+            if global.forcedata[force].energy < ENERGY_INCREMENT then
+                break
+            end
+            if bridge.energy < ENERGY_INCREMENT*2 and global.forcedata[force].energy > ENERGY_INCREMENT then
+                global.forcedata[force].energy = global.forcedata[force].energy - ENERGY_INCREMENT
+                bridge.energy = bridge.energy + ENERGY_INCREMENT
+            end
+        end
+    end
+end
+if (ENERGY_INCREMENT) then
+    script.on_event(defines.events.on_tick, on_check_energy_link)
+end
 
 {% if not imported_blueprints -%}
 function set_permissions()
@@ -61,6 +106,8 @@ function on_force_created(event)
     data['earned_samples'] = {{ dict_to_lua(starting_items) }}
     data["victory"] = 0
     data["death_link_tick"] = 0
+    data["energy"] = 0
+    data["energy_bridges"] = 0
     global.forcedata[event.force] = data
 {%- if silo == 2 %}
     check_spawn_silo(force)
@@ -75,6 +122,27 @@ function on_force_destroyed(event)
 {%- endif %}
     global.forcedata[event.force.name] = nil
 end
+
+function on_runtime_mod_setting_changed(event)
+    local force
+    if event.player_index == nil then
+        force = game.forces.player
+    else
+        force = game.players[event.player_index].force
+    end
+
+    if event.setting == ARCHIPELAGO_DEATH_LINK_SETTING then
+        if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
+            DEATH_LINK = 1
+        else
+            DEATH_LINK = 0
+        end
+        if force ~= nil then
+            dumpInfo(force)
+        end
+    end
+end
+script.on_event(defines.events.on_runtime_mod_setting_changed, on_runtime_mod_setting_changed)
 
 -- Initialize player data, either from them joining the game or them already being part of the game when the mod was
 -- added.`
@@ -107,8 +175,19 @@ end
 script.on_event(defines.events.on_player_removed, on_player_removed)
 
 function on_rocket_launched(event)
-    global.forcedata[event.rocket.force.name]['victory'] = 1
-    dumpInfo(event.rocket.force)
+    if event.rocket and event.rocket.valid and global.forcedata[event.rocket.force.name]['victory'] == 0 then
+		if event.rocket.get_item_count("satellite") > 0 or GOAL == 0 then
+			global.forcedata[event.rocket.force.name]['victory'] = 1
+            dumpInfo(event.rocket.force)
+            game.set_game_state
+            {
+                game_finished = true,
+                player_won = true,
+                can_continue = true,
+                victorious_force = event.rocket.force
+            }
+		end
+	end
 end
 script.on_event(defines.events.on_rocket_launched, on_rocket_launched)
 
@@ -197,6 +276,10 @@ script.on_init(function()
     for index, _ in pairs(game.players) do
         e.player_index = index
         on_player_created(e)
+    end
+
+    if remote.interfaces["silo_script"] then
+        remote.call("silo_script", "set_no_victory", true)
     end
 end)
 
@@ -366,18 +449,19 @@ function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
 end
 
 
-if DEATH_LINK == 1 then
-    script.on_event(defines.events.on_entity_died, function(event)
-        if CURRENTLY_DEATH_LOCK == 1 then -- don't re-trigger on same event
-            return
-        end
+script.on_event(defines.events.on_entity_died, function(event)
+    if DEATH_LINK == 0 then
+        return
+    end
+    if CURRENTLY_DEATH_LOCK == 1 then -- don't re-trigger on same event
+        return
+    end
 
-        local force = event.entity.force
-        global.forcedata[force.name].death_link_tick = game.tick
-        dumpInfo(force)
-        kill_players(force)
-    end, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "character"}})
-end
+    local force = event.entity.force
+    global.forcedata[force.name].death_link_tick = game.tick
+    dumpInfo(force)
+    kill_players(force)
+end, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "character"}})
 
 
 -- add / commands
@@ -389,10 +473,14 @@ commands.add_command("ap-sync", "Used by the Archipelago client to get progress 
         force = game.players[call.player_index].force
     end
     local research_done = {}
+    local forcedata = chain_lookup(global, "forcedata", force.name)
     local data_collection = {
         ["research_done"] = research_done,
-        ["victory"] = chain_lookup(global, "forcedata", force.name, "victory"),
-        ["death_link_tick"] = chain_lookup(global, "forcedata", force.name, "death_link_tick")
+        ["victory"] = chain_lookup(forcedata, "victory"),
+        ["death_link_tick"] = chain_lookup(forcedata, "death_link_tick"),
+        ["death_link"] = DEATH_LINK,
+        ["energy"] = chain_lookup(forcedata, "energy"),
+        ["energy_bridges"] = chain_lookup(forcedata, "energy_bridges"),
     }
 
     for tech_name, tech in pairs(force.technologies) do
@@ -442,9 +530,6 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     elseif force.technologies[item_name] ~= nil then
         tech = force.technologies[item_name]
         if tech ~= nil then
-            if global.index_sync[index] ~= nil and global.index_sync[index] ~= tech then
-                game.print("Warning: Desync Detected. Duplicate/Missing items may occur.")
-            end
             global.index_sync[index] = tech
             if tech.researched ~= true then
                 game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
@@ -462,7 +547,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     elseif item_name == "Evolution Trap" then
         if global.index_sync[index] == nil then -- not yet received trap
             global.index_sync[index] = item_name
-            game.forces["enemy"].evolution_factor = game.forces["enemy"].evolution_factor + TRAP_EVO_FACTOR
+            game.forces["enemy"].evolution_factor = game.forces["enemy"].evolution_factor + (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].evolution_factor))
             game.print({"", "Received Evolution Trap from ", source, ". New factor:", game.forces["enemy"].evolution_factor})
         end
     else
@@ -472,7 +557,12 @@ end)
 
 
 commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
-    rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME, ["death_link"] = DEATH_LINK}))
+    rcon.print(game.table_to_json({
+        ["slot_name"] = SLOT_NAME,
+        ["seed_name"] = SEED_NAME,
+        ["death_link"] = DEATH_LINK,
+        ["energy_link"] = ENERGY_INCREMENT
+    }))
 end)
 
 
@@ -490,6 +580,11 @@ commands.add_command("ap-deathlink", "Kill all players", function(call)
     game.print("Death was granted by " .. source)
 end)
 
+commands.add_command("ap-energylink", "Used by the Archipelago client to manage Energy Link", function(call)
+    local change = tonumber(call.parameter or "0")
+    local force = "player"
+    global.forcedata[force].energy = global.forcedata[force].energy + change
+end)
 
 -- data
 progressive_technologies = {{ dict_to_lua(progressive_technology_table) }}

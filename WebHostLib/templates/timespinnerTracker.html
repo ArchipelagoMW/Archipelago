@@ -17,7 +17,7 @@
                 <td><img src="{{ icons['Timespinner Gear 3'] }}" class="{{ 'acquired' if 'Timespinner Gear 3' in acquired_items }}" title="Timespinner Gear 3" /></td>
             </tr>
             <tr>
-                <td><img src="{{ icons['Talaria Attachment'] }}" class="{{ 'acquired' if 'Talaria Attachment' in acquired_items }}" title="Talaria Attachment" /></td>
+                <td><img src="{{ icons['Talaria Attachment'] }}" class="{{ 'acquired' if 'Talaria Attachment' in acquired_items or 'QuickSeed' in options }}" title="Talaria Attachment" /></td>
                 <td><img src="{{ icons['Succubus Hairpin'] }}" class="{{ 'acquired' if 'Succubus Hairpin' in acquired_items }}" title="Succubus Hairpin" /></td>
                 <td><img src="{{ icons['Lightwall'] }}" class="{{ 'acquired' if 'Lightwall' in acquired_items }}" title="Lightwall" /></td>
                 <td><img src="{{ icons['Celestial Sash'] }}" class="{{ 'acquired' if 'Celestial Sash' in acquired_items }}" title="Celestial Sash" /></td>
@@ -28,36 +28,56 @@
                 <td><img src="{{ icons['Security Keycard B'] }}" class="{{ 'acquired' if 'Security Keycard B' in acquired_items }}" title="Security Keycard B" /></td>
                 <td><img src="{{ icons['Security Keycard C'] }}" class="{{ 'acquired' if 'Security Keycard C' in acquired_items }}" title="Security Keycard C" /></td>
                 <td><img src="{{ icons['Security Keycard D'] }}" class="{{ 'acquired' if 'Security Keycard D' in acquired_items }}" title="Security Keycard D" /></td>
-                <td><img src="{{ icons['Library Keycard V'] }}" class="{{ 'acquired' if 'Library Keycard V' in acquired_items }}" title="Library Keycard V" /></td>
+                {% if 'DownloadableItems' in options %}
+                    <td><img src="{{ icons['Library Keycard V'] }}" class="{{ 'acquired' if 'Library Keycard V' in acquired_items }}" title="Library Keycard V" /></td>
+                {% else %}
+                    <td></td>
+                {% endif %}   
             </tr>
             <tr>
-                <td><img src="{{ icons['Tablet'] }}" class="{{ 'acquired' if 'Tablet' in acquired_items }}" title="Tablet" /></td>
+                {% if 'DownloadableItems' in options %}
+                    <td><img src="{{ icons['Tablet'] }}" class="{{ 'acquired' if 'Tablet' in acquired_items }}" title="Tablet" /></td>
+                {% else %}
+                    <td></td>
+                {% endif %}    
                 <td><img src="{{ icons['Elevator Keycard'] }}" class="{{ 'acquired' if 'Elevator Keycard' in acquired_items }}" title="Elevator Keycard" /></td>
-                <td><img src="{{ icons['Oculus Ring'] }}" class="{{ 'acquired' if 'Oculus Ring' in acquired_items }}" title="Oculus Ring" /></td>
+                {% if 'FacebookMode' in options %}
+                    <td><img src="{{ icons['Oculus Ring'] }}" class="{{ 'acquired' if 'Oculus Ring' in acquired_items }}" title="Oculus Ring" /></td>
+                {% else %}
+                    <td></td>
+                {% endif %}   
                 <td><img src="{{ icons['Water Mask'] }}" class="{{ 'acquired' if 'Water Mask' in acquired_items }}" title="Water Mask" /></td>
                 <td><img src="{{ icons['Gas Mask'] }}" class="{{ 'acquired' if 'Gas Mask' in acquired_items }}" title="Gas Mask" /></td>
             </tr>
             <tr>
-                {% if 'Fire Orb' in acquired_items %}
+                {% if 'GyreArchives' in options %}
+                    <td><img src="{{ icons['Kobo'] }}" class="{{ 'acquired' if 'Kobo' in acquired_items }}" title="Kobo" /></td>
+                    <td><img src="{{ icons['Merchant Crow'] }}" class="{{ 'acquired' if 'Merchant Crow' in acquired_items }}" title="Merchant Crow" /></td>
+                {% else %}
+                    <td></td>
+                    <td></td>
+                {% endif %}
+
+                {% if 'Djinn Inferno' in acquired_items %}
+                    <td><img src="{{ icons['Djinn Inferno'] }}" class="acquired" title="Djinn Inferno" /></td>
+                {% elif 'Pyro Ring' in acquired_items %}
+                    <td><img src="{{ icons['Pyro Ring'] }}" class="acquired" title="Pyro Ring" /></td>
+                {% elif 'Fire Orb' in acquired_items %}
                     <td><img src="{{ icons['Fire Orb'] }}" class="acquired" title="Fire Orb" /></td>
                 {% elif 'Infernal Flames' in acquired_items %}
                     <td><img src="{{ icons['Infernal Flames'] }}" class="acquired" title="Infernal Flames" /></td>
-                {% elif 'Pyro Ring' in acquired_items %}
-                    <td><img src="{{ icons['Pyro Ring'] }}" class="acquired" title="Pyro Ring" /></td>
-                {% elif 'Pyro Ring' in acquired_items %}
-                    <td><img src="{{ icons['Djinn Inferno'] }}" class="acquired" title="Djinn Inferno" /></td>
                 {% else %}
-                    <td><img src="{{ icons['Fire Orb'] }}" title="Fire Orb" /></td>
+                    <td><img src="{{ icons['Djinn Inferno'] }}" title="Djinn Inferno" /></td>
                 {% endif %}
 
-                {% if 'Plasma Orb' in acquired_items %}
-                    <td><img src="{{ icons['Plasma Orb'] }}" class="acquired" title="Plasma Orb" /></td>
+                {% if 'Royal Ring' in acquired_items %}
+                    <td><img src="{{ icons['Royal Ring'] }}" class="acquired" title="Royal Ring" /></td>
                 {% elif 'Plasma Geyser' in acquired_items %}
                     <td><img src="{{ icons['Plasma Geyser'] }}" class="acquired" title="Plasma Geyser" /></td>
-                {% elif 'Royal Ring' in acquired_items %}
-                    <td><img src="{{ icons['Royal Ring'] }}" class="acquired" title="Royal Ring" /></td>
+                {% elif 'Plasma Orb' in acquired_items %}
+                    <td><img src="{{ icons['Plasma Orb'] }}" class="acquired" title="Plasma Orb" /></td>
                 {% else %}
-                    <td><img src="{{ icons['Plasma Orb'] }}" title="Plasma Orb" /></td>
+                    <td><img src="{{ icons['Royal Ring'] }}" title="Royal Ring" /></td>
                 {% endif %}
             </tr>
         </table>

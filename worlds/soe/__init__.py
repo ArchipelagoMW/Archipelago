@@ -104,6 +104,8 @@ class SoEWorld(World):
     evermizer_seed: int
     connect_name: str
 
+    _halls_ne_chest_names: typing.List[str] = [loc.name for loc in _locations if 'Halls NE' in loc.name]
+
     def __init__(self, *args, **kwargs):
         self.connect_name_available_event = threading.Event()
         super(SoEWorld, self).__init__(*args, **kwargs)
@@ -132,9 +134,6 @@ class SoEWorld(World):
         self.world.get_entrance('New Game', self.player).connect(self.world.get_region('Ingame', self.player))
 
     def create_items(self):
-        # clear precollected items since we don't support them yet
-        if type(self.world.precollected_items) is dict:
-            self.world.precollected_items[self.player] = []
         # add items to the pool
         self.world.itempool += list(map(lambda item: self.create_item(item), _items))
 
@@ -163,8 +162,13 @@ class SoEWorld(World):
     def generate_basic(self):
         # place Victory event
         self.world.get_location('Done', self.player).place_locked_item(self.create_event('Victory'))
+        # place wings in halls NE to avoid softlock
+        wings_location = self.world.random.choice(self._halls_ne_chest_names)
+        wings_item = self.create_item('Wings')
+        self.world.get_location(wings_location, self.player).place_locked_item(wings_item)
+        self.world.itempool.remove(wings_item)
         # generate stuff for later
-        self.evermizer_seed = self.world.random.randint(0, 2**16-1)  # TODO: make this an option for "full" plando?
+        self.evermizer_seed = self.world.random.randint(0, 2 ** 16 - 1)  # TODO: make this an option for "full" plando?
 
     def generate_output(self, output_directory: str):
         player_name = self.world.get_player_name(self.player)
@@ -219,7 +223,7 @@ class SoEWorld(World):
             try:
                 os.unlink(placement_file)
                 os.unlink(out_file)
-                os.unlink(out_file[:-4]+'_SPOILER.log')
+                os.unlink(out_file[:-4] + '_SPOILER.log')
             except:
                 pass
 
@@ -230,7 +234,6 @@ class SoEWorld(World):
         if self.connect_name and self.connect_name != self.world.player_name[self.player]:
             payload = multidata["connect_names"][self.world.player_name[self.player]]
             multidata["connect_names"][self.connect_name] = payload
-            del (multidata["connect_names"][self.world.player_name[self.player]])
 
 
 class SoEItem(Item):

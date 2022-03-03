@@ -1,7 +1,7 @@
 from __future__ import annotations
 import typing
 
-from Options import Choice, OptionDict, ItemDict, Option, DefaultOnToggle, Range, DeathLink
+from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink, Toggle
 from schema import Schema, Optional, And, Or
 
 # schema helpers
@@ -11,7 +11,7 @@ LuaBool = Or(bool, And(int, lambda n: n in (0, 1)))
 
 class MaxSciencePack(Choice):
     """Maximum level of science pack required to complete the game."""
-    displayname = "Maximum Required Science Pack"
+    display_name = "Maximum Required Science Pack"
     option_automation_science_pack = 0
     option_logistic_science_pack = 1
     option_military_science_pack = 2
@@ -33,9 +33,17 @@ class MaxSciencePack(Choice):
         return self.get_ordered_science_packs()[self.value].replace("_", "-")
 
 
+class Goal(Choice):
+    """Goal required to complete the game."""
+    display_name = "Goal"
+    option_rocket = 0
+    option_satellite = 1
+    default = 0
+
+
 class TechCost(Choice):
     """How expensive are the technologies."""
-    displayname = "Technology Cost Scale"
+    display_name = "Technology Cost Scale"
     option_very_easy = 0
     option_easy = 1
     option_kind = 2
@@ -48,16 +56,24 @@ class TechCost(Choice):
 
 class Silo(Choice):
     """Ingredients to craft rocket silo or auto-place if set to spawn."""
-    displayname = "Rocket Silo"
+    display_name = "Rocket Silo"
     option_vanilla = 0
     option_randomize_recipe = 1
     option_spawn = 2
     default = 0
 
 
+class Satellite(Choice):
+    """Ingredients to craft satellite."""
+    display_name = "Satellite"
+    option_vanilla = 0
+    option_randomize_recipe = 1
+    default = 0
+
+
 class FreeSamples(Choice):
     """Get free items with your technologies."""
-    displayname = "Free Samples"
+    display_name = "Free Samples"
     option_none = 0
     option_single_craft = 1
     option_half_stack = 2
@@ -67,7 +83,7 @@ class FreeSamples(Choice):
 
 class TechTreeLayout(Choice):
     """Selects how the tech tree nodes are interwoven."""
-    displayname = "Technology Tree Layout"
+    display_name = "Technology Tree Layout"
     option_single = 0
     option_small_diamonds = 1
     option_medium_diamonds = 2
@@ -78,12 +94,14 @@ class TechTreeLayout(Choice):
     option_small_funnels = 7
     option_medium_funnels = 8
     option_large_funnels = 9
+    option_trees = 10
+    option_choices = 11
     default = 0
 
 
 class TechTreeInformation(Choice):
     """How much information should be displayed in the tech tree."""
-    displayname = "Technology Tree Information"
+    display_name = "Technology Tree Information"
     option_none = 0
     option_advancement = 1
     option_full = 2
@@ -91,17 +109,31 @@ class TechTreeInformation(Choice):
 
 
 class RecipeTime(Choice):
-    """randomize the time it takes for any recipe to craft, this includes smelting, chemical lab, hand crafting etc."""
-    displayname = "Recipe Time"
+    """Randomize the time it takes for any recipe to craft, this includes smelting, chemical lab, hand crafting etc.
+    Fast: 0.25X - 1X
+    Normal: 0.5X - 2X
+    Slow: 1X - 4X
+    Chaos: 0.25X - 4X
+    New category: ignores vanilla recipe time and rolls new one
+    New Fast: 0.25 - 2 seconds
+    New Normal: 0.25 - 10 seconds
+    New Slow:  5 - 10 seconds
+    """
+    display_name = "Recipe Time"
     option_vanilla = 0
     option_fast = 1
     option_normal = 2
     option_slow = 4
     option_chaos = 5
+    option_new_fast = 6
+    option_new_normal = 7
+    option_new_slow = 8
 
 
 class Progressive(Choice):
-    displayname = "Progressive Technologies"
+    """Merges together Technologies like "automation-1" to "automation-3" into 3 copies of "Progressive Automation",
+    which awards them in order."""
+    display_name = "Progressive Technologies"
     option_off = 0
     option_grouped_random = 1
     option_on = 2
@@ -115,15 +147,26 @@ class Progressive(Choice):
 
 class RecipeIngredients(Choice):
     """Select if rocket, or rocket + science pack ingredients should be random."""
-    displayname = "Random Recipe Ingredients Level"
+    display_name = "Random Recipe Ingredients Level"
     option_rocket = 0
     option_science_pack = 1
 
 
 class FactorioStartItems(ItemDict):
-    displayname = "Starting Items"
+    """Mapping of Factorio internal item-name to amount granted on start."""
+    display_name = "Starting Items"
     verify_item_name = False
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
+
+
+class FactorioFreeSampleBlacklist(OptionSet):
+    """Set of items that should never be granted from Free Samples"""
+    display_name = "Free Sample Blacklist"
+
+
+class FactorioFreeSampleWhitelist(OptionSet):
+    """Overrides any free sample blacklist present. This may ruin the balance of the mod, be warned."""
+    display_name = "Free Sample Whitelist"
 
 
 class TrapCount(Range):
@@ -132,23 +175,28 @@ class TrapCount(Range):
 
 class AttackTrapCount(TrapCount):
     """Trap items that when received trigger an attack on your base."""
-    displayname = "Attack Traps"
+    display_name = "Attack Traps"
 
 
 class EvolutionTrapCount(TrapCount):
     """Trap items that when received increase the enemy evolution."""
-    displayname = "Evolution Traps"
+    display_name = "Evolution Traps"
 
 
 class EvolutionTrapIncrease(Range):
-    displayname = "Evolution Trap % Effect"
+    """How much an Evolution Trap increases the enemy evolution.
+    Increases scale down proportionally to the session's current evolution factor
+    (40 increase at 0.50 will add 0.20... 40 increase at 0.75 will add 0.10...)"""
+    display_name = "Evolution Trap % Effect"
     range_start = 1
     default = 10
     range_end = 100
 
 
 class FactorioWorldGen(OptionDict):
-    displayname = "World Generation"
+    """World Generation settings. Overview of options at https://wiki.factorio.com/Map_generator,
+    with in-depth documentation at https://lua-api.factorio.com/latest/Concepts.html#MapGenSettings"""
+    display_name = "World Generation"
     # FIXME: do we want default be a rando-optimized default or in-game DS?
     value: typing.Dict[str, typing.Dict[str, typing.Any]]
     default = {
@@ -281,17 +329,27 @@ class FactorioWorldGen(OptionDict):
 
 
 class ImportedBlueprint(DefaultOnToggle):
-    displayname = "Blueprints"
+    """Allow or Disallow Blueprints from outside the current savegame."""
+    display_name = "Blueprints"
+
+
+class EnergyLink(Toggle):
+    """Allow sending energy to other worlds. 25% of the energy is lost in the transfer."""
+    display_name = "EnergyLink"
 
 
 factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,
+    "goal": Goal,
     "tech_tree_layout": TechTreeLayout,
     "tech_cost": TechCost,
     "silo": Silo,
+    "satellite": Satellite,
     "free_samples": FreeSamples,
     "tech_tree_information": TechTreeInformation,
     "starting_items": FactorioStartItems,
+    "free_sample_blacklist": FactorioFreeSampleBlacklist,
+    "free_sample_whitelist": FactorioFreeSampleWhitelist,
     "recipe_time": RecipeTime,
     "recipe_ingredients": RecipeIngredients,
     "imported_blueprints": ImportedBlueprint,
@@ -300,5 +358,6 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "evolution_traps": EvolutionTrapCount,
     "attack_traps": AttackTrapCount,
     "evolution_trap_increase": EvolutionTrapIncrease,
-    "death_link": DeathLink
+    "death_link": DeathLink,
+    "energy_link": EnergyLink
 }

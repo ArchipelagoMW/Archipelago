@@ -4,7 +4,7 @@ from Options import Choice
 
 class kokiri_color(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Kokiri Tunic"
+    display_name = "Kokiri Tunic"
     option_random_choice = 0
     option_completely_random = 1
     option_kokiri_green = 2
@@ -43,7 +43,7 @@ class kokiri_color(Choice):
 
 class goron_color(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Goron Tunic"
+    display_name = "Goron Tunic"
     option_random_choice = 0
     option_completely_random = 1
     option_kokiri_green = 2
@@ -82,7 +82,7 @@ class goron_color(Choice):
 
 class zora_color(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Zora Tunic"
+    display_name = "Zora Tunic"
     option_random_choice = 0
     option_completely_random = 1
     option_kokiri_green = 2
@@ -121,7 +121,7 @@ class zora_color(Choice):
 
 class silver_gauntlets_color(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Silver Gauntlets Color"
+    display_name = "Silver Gauntlets Color"
     option_random_choice = 0
     option_completely_random = 1
     option_silver = 2
@@ -142,7 +142,7 @@ class silver_gauntlets_color(Choice):
 
 class golden_gauntlets_color(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Golden Gauntlets Color"
+    display_name = "Golden Gauntlets Color"
     option_random_choice = 0
     option_completely_random = 1
     option_silver = 2
@@ -163,7 +163,7 @@ class golden_gauntlets_color(Choice):
 
 class mirror_shield_frame_color(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Mirror Shield Frame Color"
+    display_name = "Mirror Shield Frame Color"
     option_random_choice = 0
     option_completely_random = 1
     option_red = 2
@@ -181,7 +181,7 @@ class mirror_shield_frame_color(Choice):
 
 class navi_color_default_inner(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Navi Idle Inner"
+    display_name = "Navi Idle Inner"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -209,7 +209,7 @@ class navi_color_default_inner(Choice):
 
 class navi_color_default_outer(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code. "match_inner" copies the inner color for this option."""
-    displayname = "Navi Idle Outer"
+    display_name = "Navi Idle Outer"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -238,7 +238,7 @@ class navi_color_default_outer(Choice):
 
 class navi_color_enemy_inner(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Navi Targeting Enemy Inner"
+    display_name = "Navi Targeting Enemy Inner"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -266,7 +266,7 @@ class navi_color_enemy_inner(Choice):
 
 class navi_color_enemy_outer(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code. "match_inner" copies the inner color for this option."""
-    displayname = "Navi Targeting Enemy Outer"
+    display_name = "Navi Targeting Enemy Outer"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -295,7 +295,7 @@ class navi_color_enemy_outer(Choice):
 
 class navi_color_npc_inner(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Navi Targeting NPC Inner"
+    display_name = "Navi Targeting NPC Inner"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -323,7 +323,7 @@ class navi_color_npc_inner(Choice):
 
 class navi_color_npc_outer(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code. "match_inner" copies the inner color for this option."""
-    displayname = "Navi Targeting NPC Outer"
+    display_name = "Navi Targeting NPC Outer"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -352,7 +352,7 @@ class navi_color_npc_outer(Choice):
 
 class navi_color_prop_inner(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Navi Targeting Prop Inner"
+    display_name = "Navi Targeting Prop Inner"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -380,7 +380,7 @@ class navi_color_prop_inner(Choice):
 
 class navi_color_prop_outer(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code. "match_inner" copies the inner color for this option."""
-    displayname = "Navi Targeting Prop Outer"
+    display_name = "Navi Targeting Prop Outer"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -409,7 +409,7 @@ class navi_color_prop_outer(Choice):
 
 class sword_trail_color_inner(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Sword Trail Inner"
+    display_name = "Sword Trail Inner"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -428,7 +428,7 @@ class sword_trail_color_inner(Choice):
 
 class sword_trail_color_outer(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code. "match_inner" copies the inner color for this option."""
-    displayname = "Sword Trail Outer"
+    display_name = "Sword Trail Outer"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -448,7 +448,7 @@ class sword_trail_color_outer(Choice):
 
 class bombchu_trail_color_inner(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Bombchu Trail Inner"
+    display_name = "Bombchu Trail Inner"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -466,7 +466,7 @@ class bombchu_trail_color_inner(Choice):
 
 class bombchu_trail_color_outer(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code. "match_inner" copies the inner color for this option."""
-    displayname = "Bombchu Trail Outer"
+    display_name = "Bombchu Trail Outer"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -485,7 +485,7 @@ class bombchu_trail_color_outer(Choice):
 
 class boomerang_trail_color_inner(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Boomerang Trail Inner"
+    display_name = "Boomerang Trail Inner"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -504,7 +504,7 @@ class boomerang_trail_color_inner(Choice):
 
 class boomerang_trail_color_outer(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code. "match_inner" copies the inner color for this option."""
-    displayname = "Boomerang Trail Outer"
+    display_name = "Boomerang Trail Outer"
     option_random_choice = 0
     option_completely_random = 1
     option_rainbow = 2
@@ -524,7 +524,7 @@ class boomerang_trail_color_outer(Choice):
 
 class heart_color(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Heart Color"
+    display_name = "Heart Color"
     option_random_choice = 0
     option_completely_random = 1
     option_red = 2
@@ -536,7 +536,7 @@ class heart_color(Choice):
 
 class magic_color(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Magic Color"
+    display_name = "Magic Color"
     option_random_choice = 0
     option_completely_random = 1
     option_green = 2
@@ -551,7 +551,7 @@ class magic_color(Choice):
 
 class a_button_color(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "A Button Color"
+    display_name = "A Button Color"
     option_random_choice = 0
     option_completely_random = 1
     option_n64_blue = 2
@@ -575,7 +575,7 @@ class a_button_color(Choice):
 
 class b_button_color(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "B Button Color"
+    display_name = "B Button Color"
     option_random_choice = 0
     option_completely_random = 1
     option_n64_blue = 2
@@ -599,7 +599,7 @@ class b_button_color(Choice):
 
 class c_button_color(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "C Button Color"
+    display_name = "C Button Color"
     option_random_choice = 0
     option_completely_random = 1
     option_n64_blue = 2
@@ -623,7 +623,7 @@ class c_button_color(Choice):
 
 class start_button_color(Choice):
     """Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code."""
-    displayname = "Start Button Color"
+    display_name = "Start Button Color"
     option_random_choice = 0
     option_completely_random = 1
     option_n64_blue = 2
@@ -647,7 +647,7 @@ class start_button_color(Choice):
 
 class sfx_navi_overworld(Choice):
     """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound."""
-    displayname = "Navi Overworld"
+    display_name = "Navi Overworld"
     option_default = 0
     option_completely_random = 1
     option_random_ear_safe = 2
@@ -686,7 +686,7 @@ class sfx_navi_overworld(Choice):
 
 class sfx_navi_enemy(Choice):
     """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound."""
-    displayname = "Navi Enemy"
+    display_name = "Navi Enemy"
     option_default = 0
     option_completely_random = 1
     option_random_ear_safe = 2
@@ -725,7 +725,7 @@ class sfx_navi_enemy(Choice):
 
 class sfx_low_hp(Choice):
     """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound."""
-    displayname = "Low HP"
+    display_name = "Low HP"
     option_default = 0
     option_completely_random = 1
     option_random_ear_safe = 2
@@ -762,7 +762,7 @@ class sfx_low_hp(Choice):
 
 class sfx_menu_cursor(Choice):
     """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound."""
-    displayname = "Menu Cursor"
+    display_name = "Menu Cursor"
     option_default = 0
     option_completely_random = 1
     option_random_ear_safe = 2
@@ -834,7 +834,7 @@ class sfx_menu_cursor(Choice):
 
 class sfx_menu_select(Choice):
     """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound."""
-    displayname = "Menu Select"
+    display_name = "Menu Select"
     option_default = 0
     option_completely_random = 1
     option_random_ear_safe = 2
@@ -908,7 +908,7 @@ class sfx_menu_select(Choice):
 
 class sfx_nightfall(Choice):
     """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound."""
-    displayname = "Nightfall"
+    display_name = "Nightfall"
     option_default = 0
     option_completely_random = 1
     option_random_ear_safe = 2
@@ -927,7 +927,7 @@ class sfx_nightfall(Choice):
 
 class sfx_horse_neigh(Choice):
     """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound."""
-    displayname = "Horse"
+    display_name = "Horse"
     option_default = 0
     option_completely_random = 1
     option_random_ear_safe = 2
@@ -946,7 +946,7 @@ class sfx_horse_neigh(Choice):
 
 class sfx_hover_boots(Choice):
     """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound."""
-    displayname = "Hover Boots"
+    display_name = "Hover Boots"
     option_default = 0
     option_completely_random = 1
     option_random_ear_safe = 2

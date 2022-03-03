@@ -2,7 +2,7 @@ import logging
 import copy
 import os
 import threading
-from typing import Set
+from typing import Set, List
 
 logger = logging.getLogger("Super Metroid")
 
@@ -15,7 +15,7 @@ from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT
 import Utils
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
-from ..AutoWorld import World
+from ..AutoWorld import World, AutoLogicRegister
 import Patch
 
 from logic.smboolmanager import SMBoolManager
@@ -26,6 +26,32 @@ from rando.Items import ItemManager
 from utils.parameters import *
 from logic.logic import Logic
 from randomizer import VariaRandomizer
+from utils.doorsmanager import DoorsManager
+from rom.rom_patches import RomPatches
+
+
+class SMCollectionState(metaclass=AutoLogicRegister):
+    def init_mixin(self, parent: MultiWorld):
+        
+        # for unit tests where MultiWorld is instantiated before worlds
+        if hasattr(parent, "state"):
+            self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff,
+                                    parent.state.smbm[player].onlyBossLeft) for player in
+                                        parent.get_game_players("Super Metroid")}
+            for player, group in parent.groups.items():
+                if (group["game"] == "Super Metroid"):
+                    self.smbm[player] = SMBoolManager(player)
+                    if player not in parent.state.smbm:
+                        parent.state.smbm[player] = SMBoolManager(player)
+        else:
+            self.smbm = {}
+
+    def copy_mixin(self, ret) -> CollectionState:
+        ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in self.smbm}
+        return ret
+
+    def get_game_players(self, multiword: MultiWorld, game_name: str):
+        return tuple(player for player in multiword.get_all_ids() if multiword.game[player] == game_name)
 
 
 class SMWorld(World):
@@ -44,37 +70,13 @@ class SMWorld(World):
     itemManager: ItemManager
 
     locations = {}
+    hint_blacklist = {'Nothing', 'No Energy'}
 
     Logic.factory('vanilla')
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
-        
-    def __new__(cls, world, player):
-        
-        # Add necessary objects to CollectionState on initialization
-        orig_init = CollectionState.__init__
-        orig_copy = CollectionState.copy
-
-        def sm_init(self, parent: MultiWorld):
-            if (hasattr(parent, "state")): # for unit tests where MultiWorld is instanciated before worlds
-                self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff) for player in parent.get_game_players("Super Metroid")}
-            orig_init(self, parent)
-
-
-        def sm_copy(self):
-            ret = orig_copy(self)
-            ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in self.world.get_game_players("Super Metroid")}
-            return ret
-
-        CollectionState.__init__ = sm_init
-        CollectionState.copy = sm_copy
-
-        if world:
-            world.state.smbm = {}
-
-        return super().__new__(cls)
 
     def generate_early(self):
         Logic.factory('vanilla')
@@ -85,9 +87,14 @@ class SMWorld(World):
         # keeps Nothing items local so no player will ever pickup Nothing
         # doing so reduces contribution of this world to the Multiworld the more Nothing there is though
         self.world.local_items[self.player].value.add('Nothing')
+        self.world.local_items[self.player].value.add('No Energy')
 
         if (self.variaRando.args.morphPlacement == "early"):
             self.world.local_items[self.player].value.add('Morph')
+
+        if (len(self.variaRando.randoExec.setup.restrictedLocs) > 0):
+            self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("items")
+            logger.warning(f"accessibility forced to 'items' for player {self.world.get_player_name(self.player)} because of 'fun' settings")
     
     def generate_basic(self):
         itemPool = self.variaRando.container.itemPool
@@ -122,7 +129,7 @@ class SMWorld(World):
                     weaponCount[2] += 1
                 else:
                     isAdvancement = False
-            elif item.Type == 'Nothing':
+            elif item.Category == 'Nothing':
                 isAdvancement = False
 
             itemClass = ItemManager.Items[item.Type].Class
@@ -156,6 +163,10 @@ class SMWorld(World):
     def create_regions(self):
         create_locations(self, self.player)
         create_regions(self, self.world, self.player)
+
+    def get_required_client_version(self):
+        # changes to client DeathLink handling for 0.2.1
+        return max(super(SMWorld, self).get_required_client_version(), (0, 2, 1))
 
     def getWord(self, w):
         return (w & 0x00FF, (w & 0xFF00) >> 8)
@@ -274,7 +285,7 @@ class SMWorld(World):
             
         openTourianGreyDoors = {0x07C823 + 5: [0x0C], 0x07C831 + 5: [0x0C]}
 
-        deathLink = {0x277f04: [int(self.world.death_link[self.player])]}
+        deathLink = {0x277f04: [self.world.death_link[self.player].value]}
 
         playerNames = {}
         playerNameIDMap = {}
@@ -440,21 +451,46 @@ class SMWorld(World):
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            payload = multidata["connect_names"][self.world.player_name[self.player]]
-            multidata["connect_names"][new_name] = payload
-            del (multidata["connect_names"][self.world.player_name[self.player]])
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
 
     def fill_slot_data(self): 
         slot_data = {}
+        if not self.world.is_race:
+            for option_name in self.options:
+                option = getattr(self.world, option_name)[self.player]
+                slot_data[option_name] = option.value
+
+            slot_data["Preset"] = { "Knows": {},
+                                    "Settings": {"hardRooms": Settings.SettingsDict[self.player].hardRooms,
+                                                 "bossesDifficulty": Settings.SettingsDict[self.player].bossesDifficulty,
+                                                 "hellRuns": Settings.SettingsDict[self.player].hellRuns},
+                                    "Controller": Controller.ControllerDict[self.player].__dict__}
+
+            for knows in Knows.__dict__:
+                if isKnows(knows):
+                    slot_data["Preset"]["Knows"][knows] = [ getattr(Knows.knowsDict[self.player], knows).bool, 
+                                                            getattr(Knows.knowsDict[self.player], knows).difficulty]
+
+            slot_data["InterAreaTransitions"] = {}
+            for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions:
+                slot_data["InterAreaTransitions"][src.Name] = dest.Name
+                
+            slot_data["Doors"] = {}
+            for door in DoorsManager.doorsDict[self.player].values():
+                slot_data["Doors"][door.name] = door.getColor()
+
+            slot_data["RomPatches"] = RomPatches.ActivePatches[self.player]
+                
         return slot_data
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        state.smbm[item.player].addItem(item.type)
-        if item.advancement:
-            state.prog_items[item.name, item.player] += 1
-            return True  # indicate that a logical state change has occured
-        return False
+        state.smbm[self.player].addItem(item.type)
+        return super(SMWorld, self).collect(state, item)
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        state.smbm[self.player].removeItem(item.type)
+        return super(SMWorld, self).remove(state, item)
 
     def create_item(self, name: str) -> Item:
         item = next(x for x in ItemManager.Items.values() if x.Name == name)
@@ -476,23 +512,28 @@ class SMWorld(World):
                                         item.player != self.player or
                                         item.name != "Morph Ball"] 
 
-    def post_fill(self):
-        # increase maxDifficulty if only bosses is too difficult to beat game
-        new_state = CollectionState(self.world)
-        for item in self.world.itempool:
-            if item.player == self.player:
-                new_state.collect(item, True)
-        new_state.sweep_for_events()
-        if (any(not self.world.get_location(bossLoc, self.player).can_reach(new_state) for bossLoc in self.locked_items)):
-            if (self.variaRando.randoExec.setup.services.onlyBossesLeft(self.variaRando.randoExec.setup.startAP, self.variaRando.randoExec.setup.container)):
-                self.world.state.smbm[self.player].maxDiff = infinity
-
     @classmethod
     def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
                         restitempool, fill_locations):      
         if world.get_game_players("Super Metroid"):
             progitempool.sort(
                 key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
+
+    def post_fill(self):
+        new_state = CollectionState(self.world)
+        progitempool = []
+        for item in self.world.itempool:
+            if item.player == self.player and item.advancement:
+                progitempool.append(item)
+
+        for item in progitempool:
+            new_state.collect(item, True)
+
+        bossesLoc = ['Draygon', 'Kraid', 'Ridley', 'Phantoon', 'Mother Brain']
+        for bossLoc in bossesLoc:
+            if (not self.world.get_location(bossLoc, self.player).can_reach(new_state)):
+                self.world.state.smbm[self.player].onlyBossLeft = True
+                break
 
 def create_locations(self, player: int):
     for name, id in locations_lookup_name_to_id.items():

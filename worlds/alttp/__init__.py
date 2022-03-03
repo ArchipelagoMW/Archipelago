@@ -194,7 +194,7 @@ class ALTTPWorld(World):
                         return
                     elif state.has('Red Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 3:
                         return 'Mirror Shield'
-                    elif state.has('Blue Shield', item.player)  and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
+                    elif state.has('Blue Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
                         return 'Red Shield'
                     elif self.world.difficulty_requirements[item.player].progressive_shield_limit >= 1:
                         return 'Blue Shield'
@@ -249,7 +249,7 @@ class ALTTPWorld(World):
     @classmethod
     def stage_pre_fill(cls, world):
         from .Dungeons import fill_dungeons_restrictive
-        fill_dungeons_restrictive(cls, world)
+        fill_dungeons_restrictive(world)
 
     @classmethod
     def stage_post_fill(cls, world):
@@ -319,12 +319,10 @@ class ALTTPWorld(World):
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            payload = multidata["connect_names"][self.world.player_name[self.player]]
-            multidata["connect_names"][new_name] = payload
-            del (multidata["connect_names"][self.world.player_name[self.player]])
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
     def get_required_client_version(self) -> tuple:
-        return max((0, 2, 0), super(ALTTPWorld, self).get_required_client_version())
+        return max((0, 2, 4), super(ALTTPWorld, self).get_required_client_version())
 
     def create_item(self, name: str) -> Item:
         return ALttPItem(name, self.player, **as_dict_item_table[name])
@@ -336,7 +334,8 @@ class ALTTPWorld(World):
         standard_keyshuffle_players = set()
         for player in world.get_game_players("A Link to the Past"):
             if world.mode[player] == 'standard' and world.smallkey_shuffle[player] \
-                    and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal:
+                    and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal and \
+                    world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons:
                 standard_keyshuffle_players.add(player)
             if not world.ganonstower_vanilla[player] or \
                     world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:
@@ -350,16 +349,16 @@ class ALTTPWorld(World):
         # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
         # TODO: this might be worthwhile to introduce as generic option for various games and then optimize it
         if standard_keyshuffle_players:
-            viable = []
+            viable = {}
             for location in world.get_locations():
                 if location.player in standard_keyshuffle_players \
                         and location.item is None \
                         and location.can_reach(world.state):
-                    viable.append(location)
-            world.random.shuffle(viable)
+                    viable.setdefault(location.player, []).append(location)
+
             for player in standard_keyshuffle_players:
+                loc = world.random.choice(viable[player])
                 key = world.create_item("Small Key (Hyrule Castle)", player)
-                loc = viable.pop()
                 loc.place_locked_item(key)
                 fill_locations.remove(loc)
             world.random.shuffle(fill_locations)
@@ -394,6 +393,19 @@ class ALTTPWorld(World):
                     world.push_item(spot_to_fill, item_to_place, False)
                     fill_locations.remove(spot_to_fill)  # very slow, unfortunately
                     trash_count -= 1
+
+    def get_filler_item_name(self) -> str:
+        return "Rupees (5)"  # temporary
+
+    def get_pre_fill_items(self):
+        res = []
+        if self.dungeon_local_item_names:
+            for (name, player), dungeon in self.world.dungeons.items():
+                if player == self.player:
+                    for item in dungeon.all_items:
+                        if item.name in self.dungeon_local_item_names:
+                            res.append(item)
+        return res
 
 
 def get_same_seed(world, seed_def: tuple) -> str:

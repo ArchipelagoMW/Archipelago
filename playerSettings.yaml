@@ -25,9 +25,8 @@ name: YourName{number} # Your name in-game. Spaces will be replaced with undersc
 #{NUMBER} will be replaced with the counter value of the name if the counter value is greater than 1.
 game: # Pick a game to play
   A Link to the Past: 1
-
 requires:
-  version: 0.1.7 # Version of Archipelago required for this yaml to work as expected.
+  version: 0.2.3 # Version of Archipelago required for this yaml to work as expected.
 # Shared Options supported by all games:
 accessibility:
   items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
@@ -36,23 +35,6 @@ accessibility:
 progression_balancing:
   on: 50 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
   off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch/sequence break around missing items.
-# The following 4 options can be uncommented and moved into a game's section they should affect
-# start_inventory: # Begin the file with the listed items/upgrades
-  # Please only use items for the correct game, use triggers if need to be have seperated lists.
-  # Pegasus Boots: on
-  # Bomb Upgrade (+10): 4
-  # Arrow Upgrade (+10): 4
-# start_hints: # Begin the game with these items' locations revealed to you at the start of the game. Get the info via !hint in your client.
-#   - Moon Pearl
-# local_items: # Force certain items to appear in your world only, not across the multiworld. Recognizes some group names, like "Swords"
-#  - "Moon Pearl"
-#  - "Small Keys"
-#  - "Big Keys"
-# non_local_items: # Force certain items to appear outside your world only, unless in single-player. Recognizes some group names, like "Swords"
-#  - "Progressive Weapons"
-# exclude_locations: # Force certain locations to never contain progression items, and always be filled with junk. 
-#  - "Master Sword Pedestal"
-
 A Link to the Past:
   ### Logic Section ###
   glitches_required: # Determine the logic required to complete the seed
@@ -76,6 +58,7 @@ A Link to the Past:
     own_world: 0
     any_world: 0
     different_world: 0
+    start_with: 0
   smallkey_shuffle: # Small Key Placement
     original_dungeon: 50
     own_dungeons: 0
@@ -83,18 +66,21 @@ A Link to the Past:
     any_world: 0
     different_world: 0
     universal: 0
+    start_with: 0
   compass_shuffle: # Compass Placement
     original_dungeon: 50
     own_dungeons: 0
     own_world: 0
     any_world: 0
     different_world: 0
+    start_with: 0
   map_shuffle: # Map Placement
     original_dungeon: 50
     own_dungeons: 0
     own_world: 0
     any_world: 0
     different_world: 0
+    start_with: 0
   dungeon_counters:
     on: 0 # Always display amount of items checked in a dungeon
     pickup: 50 # Show when compass is picked up
@@ -165,40 +151,31 @@ A Link to the Past:
     50: 0
   crystals_needed_for_gt: # Crystals required to open GT
     0: 0
-    1: 0
-    2: 0
-    3: 0
-    4: 0
-    5: 0
-    6: 0
-    7: 0
+    7: 50
     random: 0
-    random-low: 50 # any valid number, weighted towards the lower end
+    random-low: 0 # any valid number, weighted towards the lower end
     random-middle: 0 # any valid number, weighted towards the central range
     random-high: 0 # any valid number, weighted towards the higher end
   crystals_needed_for_ganon: # Crystals required to hurt Ganon
     0: 0
-    1: 0
-    2: 0
-    3: 0
-    4: 0
-    5: 0
-    6: 0
-    7: 0
+    7: 50
     random: 0
     random-low: 0
     random-middle: 0
-    random-high: 50
+    random-high: 0
   mode:
-    standard: 50 # Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
+    standard: 0 # Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
     open: 50 # Begin the game from your choice of Link's House or the Sanctuary
     inverted: 0 # Begin in the Dark World. The Moon Pearl is required to avoid bunny-state in Light World, and the Light World game map is altered
   retro:
     on: 0 # you must buy a quiver to use the bow, take-any caves and an old-man cave are added to the world. You may need to find your sword from the old man's cave
     off: 50
-  hints:
-    'on': 50 # Hint tiles sometimes give item location hints
-    'off': 0 # Hint tiles provide gameplay tips
+  hints: # Vendors: King Zora and Bottle Merchant say what they're selling.
+  #    On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints.
+    'on': 50
+    vendors: 0
+    'off': 0
+    full: 0
   swordless:
     on: 0 # Your swords are replaced by rupees. Gameplay changes have been made to accommodate this change
     off: 1
@@ -261,7 +238,7 @@ A Link to the Past:
     25: 0   # 25% chance for each junk fill item (rupees, bombs and arrows) to be replaced with bees
     50: 0   # 50% chance for each junk fill item (rupees, bombs and arrows) to be replaced with bees
     75: 0   # 75% chance for each junk fill item (rupees, bombs and arrows) to be replaced with bees
-    100: 0  # All junk fill items (rupees, bombs and arrows) are replaced with bees 
+    100: 0  # All junk fill items (rupees, bombs and arrows) are replaced with bees
   beemizer_trap_chance:
     60: 50  # 60% chance for each beemizer replacement to be a trap, 40% chance to be a single bee
     70: 0   # 70% chance for each beemizer replacement to be a trap, 30% chance to be a single bee
@@ -275,6 +252,14 @@ A Link to the Past:
     15: 0
     30: 0
     random: 0 # 0 to 30 evenly distributed
+  shop_price_modifier: # Percentage modifier for shuffled item prices in shops
+    # you can add additional values between minimum and maximum
+    0: 0 # minimum value
+    400: 0 # maximum value
+    random: 0
+    random-low: 0
+    random-high: 0
+    100: 50
   shop_shuffle:
     none: 50
     g: 0 # Generate new default inventories for overworld/underworld shops, and unique shops
@@ -455,6 +440,10 @@ A Link to the Past:
     assured: 0 # Begin with a sword, the rest are placed randomly throughout the world
     vanilla: 0 # Swords are placed in vanilla locations in your own game (Uncle, Pyramid Fairy, Smiths, Pedestal)
     swordless: 0 # swordless mode
+
+  death_link:
+    false: 50
+    true: 0
 
 linked_options:
   - name: crosskeys

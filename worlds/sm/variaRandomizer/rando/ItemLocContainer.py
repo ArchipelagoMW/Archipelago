@@ -76,7 +76,7 @@ class ItemLocContainer(object):
         locs = copy.copy(self.unusedLocations)
         # we don't copy restriction state on purpose: it depends on
         # outside context we don't want to bring to the copy
-        ret = ItemLocContainer(SMBoolManager(self.sm.player, self.sm.maxDiff),
+        ret = ItemLocContainer(SMBoolManager(self.sm.player, self.sm.maxDiff, self.sm.onlyBossLeft),
                                self.itemPoolBackup[:] if self.itemPoolBackup != None else self.itemPool[:],
                                locs)
         ret.currentItems = self.currentItems[:]
@@ -103,7 +103,7 @@ class ItemLocContainer(object):
     # transfer collected items/locations to another container
     def transferCollected(self, dest):
         dest.currentItems = self.currentItems[:]
-        dest.sm = SMBoolManager(self.sm.player, self.sm.maxDiff)
+        dest.sm = SMBoolManager(self.sm.player, self.sm.maxDiff, self.sm.onlyBossLeft)
         dest.sm.addItems([item.Type for item in dest.currentItems])
         dest.itemLocations = copy.copy(self.itemLocations)
         dest.unrestrictedItems = copy.copy(self.unrestrictedItems)

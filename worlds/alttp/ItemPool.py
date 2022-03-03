@@ -9,7 +9,7 @@ from worlds.alttp.Dungeons import get_dungeon_item_pool_player
 from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
-from worlds.alttp.Options import smallkey_shuffle
+from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -226,6 +226,7 @@ for diff in {'easy', 'normal', 'hard', 'expert'}:
 def generate_itempool(world):
     player = world.player
     world = world.world
+
     if world.difficulty[player] not in difficulties:
         raise NotImplementedError(f"Diffulty {world.difficulty[player]}")
     if world.goal[player] not in {'ganon', 'pedestal', 'bosses', 'triforcehunt', 'localtriforcehunt', 'icerodhunt',
@@ -289,7 +290,6 @@ def generate_itempool(world):
         loc.access_rule = lambda state: state.has_triforce_pieces(state.world.treasure_hunt_count[player], player)
 
         region.locations.append(loc)
-        world.dynamic_locations.append(loc)
         world.clear_location_cache()
 
         world.push_item(loc, ItemFactory('Triforce', player), False)
@@ -371,14 +371,27 @@ def generate_itempool(world):
 
     dungeon_items = [item for item in get_dungeon_item_pool_player(world, player)
                      if item.name not in world.worlds[player].dungeon_local_item_names]
-
+    dungeon_item_replacements = difficulties[world.difficulty[player]].extras[0]\
+                                + difficulties[world.difficulty[player]].extras[1]\
+                                + difficulties[world.difficulty[player]].extras[2]\
+                                + difficulties[world.difficulty[player]].extras[3]\
+                                + difficulties[world.difficulty[player]].extras[4]
+    world.random.shuffle(dungeon_item_replacements)
     if world.goal[player] == 'icerodhunt':
         for item in dungeon_items:
             world.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
             world.push_precollected(item)
     else:
+        for x in range(len(dungeon_items)-1, -1, -1):
+            item = dungeon_items[x]
+            if ((world.smallkey_shuffle[player] == smallkey_shuffle.option_start_with and item.type == 'SmallKey')
+                    or (world.bigkey_shuffle[player] == bigkey_shuffle.option_start_with and item.type == 'BigKey')
+                    or (world.compass_shuffle[player] == compass_shuffle.option_start_with and item.type == 'Compass')
+                    or (world.map_shuffle[player] == map_shuffle.option_start_with and item.type == 'Map')):
+                dungeon_items.remove(item)
+                world.push_precollected(item)
+                world.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
         world.itempool.extend([item for item in dungeon_items])
-
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
     # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
@@ -460,7 +473,6 @@ def set_up_take_anys(world, player):
 
     old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave, 'the sword cave', player)
     world.regions.append(old_man_take_any)
-    world.dynamic_regions.append(old_man_take_any)
 
     reg = regions.pop()
     entrance = world.get_region(reg, player).entrances[0]
@@ -481,7 +493,6 @@ def set_up_take_anys(world, player):
     for num in range(4):
         take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave, 'a cave of choice', player)
         world.regions.append(take_any)
-        world.dynamic_regions.append(take_any)
 
         target, room_id = world.random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
         reg = regions.pop()
@@ -505,7 +516,6 @@ def create_dynamic_shop_locations(world, player):
                 if item['create_location']:
                     loc = ALttPLocation(player, f"{shop.region.name} {shop.slot_names[i]}", parent=shop.region)
                     shop.region.locations.append(loc)
-                    world.dynamic_locations.append(loc)
 
                     world.clear_location_cache()
 
@@ -651,6 +661,7 @@ def get_pool_core(world, player: int):
             place_item(key_location, item_to_place)
         else:
             pool.extend([item_to_place])
+
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
             additional_pieces_to_place)
 

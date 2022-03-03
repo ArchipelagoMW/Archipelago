@@ -16,6 +16,7 @@ from utils.doorsmanager import DoorsManager
 from logic.logic import Logic
 
 import utils.log
+from worlds.sm.Options import StartLocation
 
 # we need to know the logic before doing anything else
 def getLogic():
@@ -348,8 +349,7 @@ class VariaRandomizer:
                 if response.ok:
                     PresetLoader.factory(json.loads(response.text)).load(self.player)
                 else:
-                    print("Got error {} {} {} from trying to fetch varia custom preset named {}".format(response.status_code, response.reason, response.text, preset_name))
-                    sys.exit(-1)
+                    raise Exception("Got error {} {} {} from trying to fetch varia custom preset named {}".format(response.status_code, response.reason, response.text, preset_name))
             else:
                 preset = 'default'
                 PresetLoader.factory(os.path.join(appDir, getPresetDir('casual'), 'casual.json')).load(self.player)
@@ -365,13 +365,11 @@ class VariaRandomizer:
             self.seed = args.seed
         logger.debug("seed: {}".format(self.seed))
 
-        seed4rand = self.seed
         if args.raceMagic is not None:
             if args.raceMagic <= 0 or args.raceMagic >= 0x10000:
                 print("Invalid magic")
                 sys.exit(-1)
-            seed4rand = self.seed ^ args.raceMagic
-        # random.seed(seed4rand)
+
         # if no max diff, set it very high
         if args.maxDifficulty:
             if args.maxDifficulty == 'random':
@@ -501,10 +499,12 @@ class VariaRandomizer:
                         sys.exit(-1)
                 args.startLocation = random.choice(possibleStartAPs)
             elif args.startLocation not in possibleStartAPs:
-                optErrMsgs.append('Invalid start location: {}.  {}'.format(args.startLocation, reasons[args.startLocation]))
-                optErrMsgs.append('Possible start locations with these settings: {}'.format(possibleStartAPs))
-                dumpErrorMsgs(args.output, optErrMsgs)
-                sys.exit(-1)
+                args.startLocation = 'Landing Site'
+                world.start_location[player] = StartLocation(StartLocation.default)
+                #optErrMsgs.append('Invalid start location: {}.  {}'.format(args.startLocation, reasons[args.startLocation]))
+                #optErrMsgs.append('Possible start locations with these settings: {}'.format(possibleStartAPs))
+                #dumpErrorMsgs(args.output, optErrMsgs)
+                #sys.exit(-1)
         ap = getAccessPoint(args.startLocation)
         if 'forcedEarlyMorph' in ap.Start and ap.Start['forcedEarlyMorph'] == True:
             forceArg('morphPlacement', 'early', "'Morph Placement' forced to early for custom start location")
