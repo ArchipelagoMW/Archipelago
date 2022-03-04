@@ -41,12 +41,20 @@ colorama.init()
 
 # functions callable on storable data on the server by clients
 modify_functions = {
-    "add": operator.add,
+    "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
     "mul": operator.mul,
+    "mod": operator.mod,
     "max": max,
     "min": min,
     "replace": lambda old, new: new,
-    "deplete": lambda value, change: max(0, value + change)
+    "default": lambda old, new: old,
+    "pow": operator.pow,
+    # bitwise:
+    "xor": operator.xor,
+    "or": operator.or_,
+    "and": operator.and_,
+    "left_shift": operator.lshift,
+    "right_shift": operator.rshift,
 }
 
 
@@ -1544,26 +1552,27 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     await ctx.send_encoded_msgs(bounceclient, msg)
 
         elif cmd == "Get":
-            if "data" not in args or type(args["data"]) != list:
+            if "keys" not in args or type(args["keys"]) != list:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": 'Retrieve', "original_cmd": cmd}])
                 return
             args["cmd"] = "Retrieved"
-            keys = args["data"]
-            args["data"] = {key: ctx.stored_data.get(key, None) for key in keys}
+            keys = args["keys"]
+            args["keys"] = {key: ctx.stored_data.get(key, None) for key in keys}
             await ctx.send_msgs(client, [args])
 
         elif cmd == "Set":
-            if "key" not in args or "value" not in args:
+            if "key" not in args or "value" not in args or \
+                    "operations" not in args or not type(args["operations"]) == list:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": 'Set', "original_cmd": cmd}])
                 return
             args["cmd"] = "SetReply"
             value = ctx.stored_data.get(args["key"], args.get("default", 0))
             args["original_value"] = value
-            operation = args.get("operation", "replace")
-            func = modify_functions[operation]
-            value = func(value, args.get("value"))
+            for operation in args["operations"]:
+                func = modify_functions[operation["operation"]]
+                value = func(value, operation["value"])
             ctx.stored_data[args["key"]] = args["value"] = value
             targets = set(ctx.stored_data_notification_clients[args["key"]])
             if args.get("want_reply", True):
@@ -1572,11 +1581,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 ctx.broadcast(targets, [args])
 
         elif cmd == "SetNotify":
-            if "data" not in args or type(args["data"]) != list:
+            if "keys" not in args or type(args["keys"]) != list:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": 'SetNotify', "original_cmd": cmd}])
                 return
-            for key in args["data"]:
+            for key in args["keys"]:
                 ctx.stored_data_notification_clients[key].add(client)
 
 
