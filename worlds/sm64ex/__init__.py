@@ -41,6 +41,8 @@ class SM64World(World):
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
         item = SM64Item(name, name != "1Up Mushroom", item_id, self.player)
+        if name == "Power Star": 
+            item.skip_in_prog_balancing = True
         return item
 
     def generate_basic(self):
