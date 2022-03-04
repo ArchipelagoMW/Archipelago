@@ -109,7 +109,7 @@ class FactorioContext(CommonContext):
                                                 item_name in args["checked_locations"]})
             if cmd == "Connected" and self.energy_link_increment:
                 asyncio.create_task(self.send_msgs([{
-                    "cmd": "SetNotify", "data": ["EnergyLink"]
+                    "cmd": "SetNotify", "keys": ["EnergyLink"]
                 }]))
         elif cmd == "SetReply":
             if args["key"] == "EnergyLink":
