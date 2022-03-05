@@ -113,6 +113,9 @@ class MeritousWorld(World):
             self.create_event("Victory"))
         self.world.get_location("Wervyn Anixil?", self.player).place_locked_item(
             self.create_event("Full Victory"))
+        for boss in ["Meridian", "Ataraxia", "Merodach"]:
+            self.world.get_location(f"{boss} Defeat", self.player).place_locked_item(
+                self.create_event(f"{boss} Defeated"))
 
         if not self.include_psi_keys:
             psi_keys = []
