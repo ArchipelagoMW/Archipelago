@@ -11,9 +11,9 @@ def set_rules(world: MultiWorld, player: int):
 # Sets rules on completion condition
 def set_completion_rules(world: MultiWorld, player: int):
 
-    width_req = world.max_width[player]-5
-    height_req = world.max_height[player]-5
-    bomb_req = world.max_bombs[player]-5
+    width_req = 10-5
+    height_req = 10-5
+    bomb_req = 20-5
     completion_requirements = lambda state: \
         state.has("Map Width", player, width_req) and \
         state.has("Map Height", player, height_req) and \

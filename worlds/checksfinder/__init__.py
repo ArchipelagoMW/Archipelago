@@ -36,9 +36,6 @@ class ChecksFinderWorld(World):
             'player_name': self.world.get_player_name(self.player),
             'player_id': self.player,
             'client_version': client_version,
-            'max_width': self.world.max_width[self.player],
-            'max_height': self.world.max_height[self.player],
-            'max_bombs': self.world.max_bombs[self.player],
             'race': self.world.is_race,
         }
 
@@ -50,10 +47,10 @@ class ChecksFinderWorld(World):
         for (name, num) in required_items.items():
             itempool += [name] * num
         # Add the map width and height stuff
-        itempool += ["Map Width"] * (self.world.max_width[self.player]-5)
-        itempool += ["Map Height"] * (self.world.max_height[self.player]-5)
+        itempool += ["Map Width"] * (10-5)
+        itempool += ["Map Height"] * (10-5)
         # Add the map bombs
-        itempool += ["Map Bombs"] * (self.world.max_bombs[self.player]-5)
+        itempool += ["Map Bombs"] * (20-5)
         # Convert itempool into real items
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
 
@@ -80,10 +77,12 @@ class ChecksFinderWorld(World):
         link_checksfinder_structures(self.world, self.player)
 
     def generate_output(self, output_directory: str):
+        """
         data = self._get_checksfinder_data()
         filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}.apcf"
         with open(os.path.join(output_directory, filename), 'wb') as f:
-            f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
+            f.write(b64encode(bytes(json.dumps(data), 'utf-8')))"""
+        pass
 
     def fill_slot_data(self):
         slot_data = self._get_checksfinder_data()

@@ -3,31 +3,34 @@ from Options import Choice, Option, Toggle, Range, OptionList, DeathLink
 
 
 class MaxWidth(Range):
-    """The max width of the board."""
-    display_name = "Max Width"
+    """The goal width of the board."""
+    display_name = "Goal Width"
     range_start = 10
     range_end = 25
     default = 10
 
 
 class MaxHeight(Range):
-    """The max height of the board."""
-    display_name = "Max Height"
+    """The goal height of the board."""
+    display_name = "Goal Height"
     range_start = 10
     range_end = 25
     default = 10
 
 
 class MaxBombs(Range):
-    """The max amount of bombs on the board."""
-    display_name = "Max Bombs"
+    """The goal amount of bombs on the board."""
+    display_name = "Goal Bombs"
     range_start = 10
     range_end = 40
     default = 20
 
 
+class noneOption(Toggle):
+    """There are no options."""
+    display_name = "None"
+
+
 checksfinder_options: typing.Dict[str, type(Option)] = {
-    "max_width":                     MaxWidth,
-    "max_height":                     MaxHeight,
-    "max_bombs":                     MaxBombs,
+    "none":                     noneOption,
 }

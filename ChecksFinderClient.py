@@ -521,6 +521,9 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             filename = f"send{ss}"
             with open(os.path.expandvars(r"%localappdata%/ChecksFinder/"+filename), 'w') as f:
                 f.close()
+        with open(os.path.expandvars(r"%localappdata%/ChecksFinder/" + filename), 'w') as f:
+            f.write(str())
+            f.close()
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
