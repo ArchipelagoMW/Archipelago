@@ -3,6 +3,8 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
+import typing
+
 from BaseClasses import MultiWorld, Region, Entrance, RegionType
 from .Locations import MeritousLocation, alpha_store, beta_store, gamma_store, chest_store, location_table
 
@@ -14,26 +16,35 @@ def _generate_entrances(player: int, entrance_list: [str], parent: Region):
 
 
 def create_regions(world: MultiWorld, player: int):
-    region_primary = Region(
-        "Menu", RegionType.Generic, "Atlas Dome", player, world)
-    region_primary.locations += [MeritousLocation(
-        player, loc_name, location_table[loc_name], region_primary) for loc_name in alpha_store]
-    region_primary.locations += [MeritousLocation(
-        player, loc_name, location_table[loc_name], region_primary) for loc_name in beta_store]
-    region_primary.locations += [MeritousLocation(
-        player, loc_name, location_table[loc_name], region_primary) for loc_name in gamma_store]
-    region_primary.locations += [MeritousLocation(
-        player, loc_name, location_table[loc_name], region_primary) for loc_name in chest_store]
-    region_primary.locations += [MeritousLocation(
-        player, f"PSI Key Storage {i}", location_table[f"PSI Key Storage {i}"], region_primary) for i in range(1, 4)]
-    region_primary.exits = _generate_entrances(player, ["To Meridian", "To Ataraxia",
-                                                        "To Merodach", "Toward the endgame"], region_primary)
-    world.regions.append(region_primary)
+    regions = ["First", "Second", "Third", "Last"]
+    bosses = ["Meridian", "Ataraxia", "Merodach"]
 
-    for boss in ["Meridian", "Ataraxia", "Merodach"]:
+    for x, name in enumerate(regions):
+        fullname = f"{name} Quarter"
+        insidename = fullname
+        if x == 0: insidename = "Menu"
+
+        region = Region(insidename, RegionType.Generic, fullname, player, world)
+        for store in ["Alpha Cache", "Beta Cache", "Gamma Cache", "Reward Chest"]:
+            for y in range(1, 7):
+                loc_name = f"{store} {(x * 6) + y}"
+                region.locations += [MeritousLocation(player, loc_name, location_table[loc_name], region)]
+
+        if x < 3:
+            storage_loc = f"PSI Key Storage {x + 1}"
+            region.locations += [MeritousLocation(player, storage_loc, location_table[storage_loc], region)]
+            region.exits += _generate_entrances(player, [f"To {bosses[x]}"], region)
+        else: region.exits += _generate_entrances(player, ["Toward the endgame"], region)
+
+        world.regions += [region]
+
+    for x, boss in enumerate(bosses):
         boss_region = Region(boss, RegionType.Generic, boss, player, world)
-        boss_region.locations += [MeritousLocation(
-            player, boss, location_table[boss], boss_region)]
+        boss_region.locations += [
+            MeritousLocation(player, boss, location_table[boss], boss_region),
+            MeritousLocation(player, f"{boss} Defeat", None, boss_region)
+            ]
+        boss_region.exits = _generate_entrances(player, [f"To {regions[x + 1]} Quarter"], boss_region)
         world.regions.append(boss_region)
 
     region_end_game = Region(
@@ -60,19 +71,31 @@ def create_regions(world: MultiWorld, player: int):
     entrance_map = {
         "To Meridian": {
             "to": "Meridian",
-            "rule": lambda state: state.has("PSI Key 1", player)
+            "rule": lambda state: state.has_group("PSI Keys", player, 1)
+        },
+        "To Second Quarter": {
+            "to": "Second Quarter",
+            "rule": lambda state: state.has("Meridian Defeated", player)
         },
         "To Ataraxia": {
             "to": "Ataraxia",
-            "rule": lambda state: state.has("PSI Key 2", player)
+            "rule": lambda state: state.has_group("PSI Keys", player, 2)
+        },
+        "To Third Quarter": {
+            "to": "Third Quarter",
+            "rule": lambda state: state.has("Ataraxia Defeated", player)
         },
         "To Merodach": {
             "to": "Merodach",
-            "rule": lambda state: state.has("PSI Key 3", player)
+            "rule": lambda state: state.has_group("PSI Keys", player, 3)
+        },
+        "To Last Quarter": {
+            "to": "Last Quarter",
+            "rule": lambda state: state.has("Merodach Defeated", player)
         },
         "Toward the endgame": {
             "to": "Endgame",
-            "rule": lambda state: state.has_all(["PSI Key 1", "PSI Key 2", "PSI Key 3"], player)
+            "rule": lambda state: state.has_group("PSI Keys", player, 3)
         },
         "Back to the entrance": {
             "to": "Final Boss",
