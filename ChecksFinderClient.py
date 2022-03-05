@@ -191,6 +191,11 @@ class CommonContext():
             await self.server.socket.close()
         self.server = None
         self.server_task = None
+        path = os.path.expandvars(r"%localappdata%/ChecksFinder")
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if file.find("obtain") <= -1:
+                    os.remove(root+"/"+file)
 
     # noinspection PyAttributeOutsideInit
     def set_getters(self, data_package: dict, network=False):
