@@ -96,6 +96,10 @@ class ClientCommandProcessor(CommandProcessor):
         for location_name in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id:
             self.output(location_name)
 
+    def _cmd_resync(self):
+        """Manually trigger a resync."""
+        self.ctx.awaiting_bridge = True
+
     def _cmd_ready(self):
         """Send ready status to server."""
         self.ctx.ready = not self.ctx.ready
@@ -126,6 +130,7 @@ class CommonContext():
 
     def __init__(self, server_address, password):
         # server state
+        self.send_index: int = 0
         self.server_address = server_address
         self.password = password
         self.server_task = None
@@ -307,6 +312,11 @@ class CommonContext():
             self.input_queue.put_nowait(None)
             self.input_requests -= 1
         self.keep_alive_task.cancel()
+        path = os.path.expandvars(r"%localappdata%/ChecksFinder")
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if file.find("obtain") <= -1:
+                    os.remove(root+"/"+file)
 
     # DeathLink hooks
 
@@ -502,6 +512,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # when /missing is used for the client side view of what is missing.
         ctx.missing_locations = set(args["missing_locations"])
         ctx.checked_locations = set(args["checked_locations"])
+        for ss in ctx.checked_locations:
+            filename = f"send{ss}"
+            with open(os.path.expandvars(r"%localappdata%/ChecksFinder/"+filename), 'w') as f:
+                f.close()
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
@@ -538,6 +552,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             checked = set(args["checked_locations"])
             ctx.checked_locations |= checked
             ctx.missing_locations -= checked
+            for ss in ctx.checked_locations:
+                filename = f"send{ss}"
+                with open(os.path.expandvars(r"%localappdata%/ChecksFinder/"+filename), 'w') as f:
+                    f.close()
         if "permissions" in args:
             ctx.update_permissions(args["permissions"])
 
@@ -573,14 +591,15 @@ async def game_watcher(ctx: CommonContext):
         sending = []
         for root, dirs, files in os.walk(path):
             for file in files:
-                st = file.split("send", -1)[1]
-                sending = sending+[(int(st))]
-        if ctx.locations_checked != sending:
-            ctx.locations_checked = sending
-            logger.debug(
-                f"New researches done: "
-                f"{[lookup_id_to_name[rid] for rid in sending]}")
-            await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(sending)}])
+                if file.find("send") > -1:
+                    st = file.split("send", -1)[1]
+                    sending = sending+[(int(st))]
+        ctx.locations_checked = sending
+        logger.debug(
+            f"New item found: "
+            f"{[lookup_id_to_name[rid] for rid in sending]}")
+        message = [{"cmd": 'LocationChecks', "locations": sending}]
+        await ctx.send_msgs(message)
         await asyncio.sleep(0.1)
 
 
@@ -620,6 +639,7 @@ if __name__ == '__main__':
 
     class TextContext(CommonContext):
         game = "ChecksFinder"
+        items_handling = 0b111  # full remote
 
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:
