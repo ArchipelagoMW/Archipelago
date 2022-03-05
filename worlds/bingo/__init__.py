@@ -176,9 +176,9 @@ class BingoWorld(World):
                 for i in range(0, 5):
                     line.append(card[i][4-i])
         hints = []
-        for i in range(0, 5):
+        for i in line:
             if i != 0:
-                hints += collect_hints(ctx, team, player, line[i])
+                hints += collect_hints(ctx, team, player, i)
         notify_hints(ctx, team, hints)
 
     def received_checks(self, ctx, team, player):
