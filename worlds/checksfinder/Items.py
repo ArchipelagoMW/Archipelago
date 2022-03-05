@@ -22,9 +22,7 @@ required_items = {
 }
 
 item_frequencies = {
-    "Map Width": 9,
-    "Map Height": 9,
-    "Map Bombs": 15,
+    
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}

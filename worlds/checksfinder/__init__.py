@@ -86,7 +86,7 @@ class ChecksFinderWorld(World):
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 
     def fill_slot_data(self):
-        slot_data = self._get_mc_data()
+        slot_data = self._get_checksfinder_data()
         for option_name in checksfinder_options:
             option = getattr(self.world, option_name)[self.player]
             if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
