@@ -1,7 +1,7 @@
 from __future__ import annotations
 import typing
 
-from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink
+from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink, Toggle
 from schema import Schema, Optional, And, Or
 
 # schema helpers
@@ -333,6 +333,11 @@ class ImportedBlueprint(DefaultOnToggle):
     display_name = "Blueprints"
 
 
+class EnergyLink(Toggle):
+    """Allow sending energy to other worlds. 25% of the energy is lost in the transfer."""
+    display_name = "EnergyLink"
+
+
 factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,
     "goal": Goal,
@@ -353,5 +358,6 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "evolution_traps": EvolutionTrapCount,
     "attack_traps": AttackTrapCount,
     "evolution_trap_increase": EvolutionTrapIncrease,
-    "death_link": DeathLink
+    "death_link": DeathLink,
+    "energy_link": EnergyLink
 }

@@ -11,9 +11,8 @@ import shutil
 import logging
 import asyncio
 from json import loads, dumps
-from tkinter import font
 
-from Utils import get_item_name_from_id, init_logging
+from Utils import init_logging
 
 if __name__ == "__main__":
     init_logging("SNIClient", exception_logger="Client")
@@ -22,13 +21,11 @@ import colorama
 
 from NetUtils import *
 from worlds.alttp import Regions, Shops
-from worlds.alttp import Items
 from worlds.alttp.Rom import ROM_PLAYER_LIMIT
 from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
 import Utils
 from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Patch import GAME_ALTTP, GAME_SM
-
 
 snes_logger = logging.getLogger("SNES")
 
@@ -41,7 +38,7 @@ class DeathState(enum.IntEnum):
     dead = 3
 
 
-class LttPCommandProcessor(ClientCommandProcessor):
+class SNIClientCommandProcessor(ClientCommandProcessor):
     ctx: Context
 
     def _cmd_slow_mode(self, toggle: str = ""):
@@ -72,7 +69,6 @@ class LttPCommandProcessor(ClientCommandProcessor):
             snes_address = options[0]
             snes_device_number = int(options[1])
 
-
         self.ctx.snes_reconnect_address = None
         asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number), name="SNES Connect")
         return True
@@ -92,15 +88,23 @@ class LttPCommandProcessor(ClientCommandProcessor):
     #     if self.ctx.snes_state != SNESState.SNES_ATTACHED:
     #         self.output("No attached SNES Device.")
     #         return False
-    #
     #     snes_buffered_write(self.ctx, int(address, 16), bytes([int(data)]))
     #     asyncio.create_task(snes_flush_writes(self.ctx))
     #     self.output("Data Sent")
     #     return True
 
+    # def _cmd_snes_read(self, address, size=1):
+    #     """Read the SNES' memory address (base16)."""
+    #     if self.ctx.snes_state != SNESState.SNES_ATTACHED:
+    #         self.output("No attached SNES Device.")
+    #         return False
+    #     data = await snes_read(self.ctx, int(address, 16), size)
+    #     self.output(f"Data Read: {data}")
+    #     return True
+
 
 class Context(CommonContext):
-    command_processor = LttPCommandProcessor
+    command_processor = SNIClientCommandProcessor
     game = "A Link to the Past"
     items_handling = None  # set in game_watcher
 
@@ -183,7 +187,8 @@ async def deathlink_kill_player(ctx: Context):
                 continue
             if not invincible[0] and last_health[0] == health[0]:
                 snes_buffered_write(ctx, WRAM_START + 0xF36D, bytes([0]))  # set current health to 0
-                snes_buffered_write(ctx, WRAM_START + 0x0373, bytes([8]))  # deal 1 full heart of damage at next opportunity
+                snes_buffered_write(ctx, WRAM_START + 0x0373,
+                                    bytes([8]))  # deal 1 full heart of damage at next opportunity
         elif ctx.game == GAME_SM:
             snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
             if not ctx.death_link_allow_survive:
@@ -200,7 +205,8 @@ async def deathlink_kill_player(ctx: Context):
             health = await snes_read(ctx, WRAM_START + 0x09C2, 2)
             if health is not None:
                 health = health[0] | (health[1] << 8)
-            if not gamemode or gamemode[0] in SM_DEATH_MODES or (ctx.death_link_allow_survive and health is not None and health > 0):
+            if not gamemode or gamemode[0] in SM_DEATH_MODES or (
+                    ctx.death_link_allow_survive and health is not None and health > 0):
                 ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
 
@@ -914,7 +920,7 @@ async def game_watcher(ctx: Context):
 
             ctx.rom = rom
             death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
-                                         SM_DEATH_LINK_ACTIVE_ADDR, 1)
+            SM_DEATH_LINK_ACTIVE_ADDR, 1)
             if death_link:
                 ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
                 await ctx.update_death_link(bool(death_link[0] & 0b1))
@@ -976,7 +982,8 @@ async def game_watcher(ctx: Context):
                 item = ctx.items_received[recv_index]
                 recv_index += 1
                 logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                    color(ctx.item_name_getter(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
+                    color(ctx.item_name_getter(item.item), 'red', 'bold'),
+                    color(ctx.player_names[item.player], 'yellow'),
                     ctx.location_name_getter(item.location), recv_index, len(ctx.items_received)))
 
                 snes_buffered_write(ctx, RECV_PROGRESS_ADDR,
@@ -998,7 +1005,7 @@ async def game_watcher(ctx: Context):
             if scout_location > 0 and scout_location not in ctx.locations_scouted:
                 ctx.locations_scouted.add(scout_location)
                 await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [scout_location]}])
-            await track_locations(ctx, roomid, roomdata)        
+            await track_locations(ctx, roomid, roomdata)
         elif ctx.game == GAME_SM:
             gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
             if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
@@ -1025,14 +1032,16 @@ async def game_watcher(ctx: Context):
                 itemIndex = (message[4] | (message[5] << 8)) >> 3
 
                 recv_index += 1
-                snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x680, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
+                snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x680,
+                                    bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
 
                 from worlds.sm.Locations import locations_start_id
                 location_id = locations_start_id + itemIndex
 
                 ctx.locations_checked.add(location_id)
                 location = ctx.location_name_getter(location_id)
-                snes_logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                snes_logger.info(
+                    f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                 await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
             data = await snes_read(ctx, SM_RECV_PROGRESS_ADDR + 0x600, 4)
@@ -1048,11 +1057,14 @@ async def game_watcher(ctx: Context):
                 itemId = item.item - items_start_id
 
                 playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
-                snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes([playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
+                snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes(
+                    [playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
                 itemOutPtr += 1
-                snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x602, bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
+                snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x602,
+                                    bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
                 logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                    color(ctx.item_name_getter(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
+                    color(ctx.item_name_getter(item.item), 'red', 'bold'),
+                    color(ctx.player_names[item.player], 'yellow'),
                     ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
 
@@ -1130,6 +1142,7 @@ async def main():
     if input_task:
         input_task.cancel()
 
+
 def get_alttp_settings(romfile: str):
     lastSettings = Utils.get_adjuster_settings(GAME_ALTTP)
     adjusted = False
@@ -1139,8 +1152,8 @@ def get_alttp_settings(romfile: str):
         if not hasattr(lastSettings, 'auto_apply') or 'ask' in lastSettings.auto_apply:
 
             whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
-                        "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
-                        "reduceflashing", "deathlink"}
+                         "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
+                         "reduceflashing", "deathlink"}
             printed_options = {name: value for name, value in vars(lastSettings).items() if name in whitelist}
             if hasattr(lastSettings, "sprite_pool"):
                 sprite_pool = {}
@@ -1154,40 +1167,41 @@ def get_alttp_settings(romfile: str):
             import pprint
 
             if gui_enabled:
-            
+
                 from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
                 applyPromptWindow = Tk()
                 applyPromptWindow.resizable(False, False)
-                applyPromptWindow.protocol('WM_DELETE_WINDOW',lambda: onButtonClick())
+                applyPromptWindow.protocol('WM_DELETE_WINDOW', lambda: onButtonClick())
                 logo = PhotoImage(file=Utils.local_path('data', 'icon.png'))
                 applyPromptWindow.tk.call('wm', 'iconphoto', applyPromptWindow._w, logo)
                 applyPromptWindow.wm_title("Last adjuster settings LttP")
 
                 label = LabelFrame(applyPromptWindow,
-                                text='Last used adjuster settings were found. Would you like to apply these?')
-                label.grid(column=0,row=0, padx=5, pady=5, ipadx=5, ipady=5)
-                label.grid_columnconfigure (0, weight=1) 
-                label.grid_columnconfigure (1, weight=1) 
-                label.grid_columnconfigure (2, weight=1) 
-                label.grid_columnconfigure (3, weight=1) 
-                def onButtonClick(answer: str='no'):
+                                   text='Last used adjuster settings were found. Would you like to apply these?')
+                label.grid(column=0, row=0, padx=5, pady=5, ipadx=5, ipady=5)
+                label.grid_columnconfigure(0, weight=1)
+                label.grid_columnconfigure(1, weight=1)
+                label.grid_columnconfigure(2, weight=1)
+                label.grid_columnconfigure(3, weight=1)
+
+                def onButtonClick(answer: str = 'no'):
                     setattr(onButtonClick, 'choice', answer)
                     applyPromptWindow.destroy()
 
                 framedOptions = Frame(label)
-                framedOptions.grid(column=0, columnspan=4,row=0)
+                framedOptions.grid(column=0, columnspan=4, row=0)
                 framedOptions.grid_columnconfigure(0, weight=1)
                 framedOptions.grid_columnconfigure(1, weight=1)
                 framedOptions.grid_columnconfigure(2, weight=1)
                 curRow = 0
                 curCol = 0
                 for name, value in printed_options.items():
-                    Label(framedOptions, text=name+": "+str(value)).grid(column=curCol, row=curRow, padx=5)
-                    if(curCol==2):
-                        curRow+=1
-                        curCol=0
+                    Label(framedOptions, text=name + ": " + str(value)).grid(column=curCol, row=curRow, padx=5)
+                    if (curCol == 2):
+                        curRow += 1
+                        curCol = 0
                     else:
-                        curCol+=1
+                        curCol += 1
 
                 yesButton = Button(label, text='Yes', command=lambda: onButtonClick('yes'), width=10)
                 yesButton.grid(column=0, row=1)
@@ -1203,8 +1217,8 @@ def get_alttp_settings(romfile: str):
                 choice = getattr(onButtonClick, 'choice')
             else:
                 choice = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
-                                    f"{pprint.pformat(printed_options)}\n"
-                                    f"Enter yes, no, always or never: ")
+                               f"{pprint.pformat(printed_options)}\n"
+                               f"Enter yes, no, always or never: ")
             if choice and choice.startswith("y"):
                 choice = 'yes'
             elif choice and "never" in choice:
@@ -1221,7 +1235,7 @@ def get_alttp_settings(romfile: str):
             choice = 'no'
         elif 'always' in lastSettings.auto_apply:
             choice = 'yes'
-                    
+
         if 'yes' in choice:
             from worlds.alttp.Rom import get_base_rom_path
             lastSettings.rom = romfile
@@ -1247,9 +1261,9 @@ def get_alttp_settings(romfile: str):
             except Exception as e:
                 logging.exception(e)
     else:
-        
         adjusted = False
     return adjustedromfile, adjusted
+
 
 if __name__ == '__main__':
     colorama.init()
