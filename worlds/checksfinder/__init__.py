@@ -5,7 +5,7 @@ from math import ceil
 
 from .Items import ChecksFinderItem, item_table, required_items
 from .Locations import ChecksFinderAdvancement, advancement_table, exclusion_table
-from .Regions import checksfinder_regions, default_connections
+from .Regions import checksfinder_regions, link_checksfinder_structures, default_connections
 from .Rules import set_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 
@@ -59,10 +59,6 @@ class ChecksFinderWorld(World):
 
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
-        exclusion_types = ['hard', 'unreasonable']
-        for key in exclusion_types:
-            if not getattr(self.world, f"include_{key}_advancements")[self.player]:
-                exclusion_pool.update(exclusion_table[key])
 
         self.world.itempool += itempool
 
@@ -81,6 +77,7 @@ class ChecksFinderWorld(World):
             return ret
 
         self.world.regions += [ChecksFinderRegion(*r) for r in checksfinder_regions]
+        link_checksfinder_structures(self.world, self.player)
 
     def generate_output(self, output_directory: str):
         data = self._get_checksfinder_data()

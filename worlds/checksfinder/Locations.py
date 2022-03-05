@@ -47,5 +47,4 @@ exclusion_table = {
 }
 
 events_table = {
-    "Beat Final Board": "Victory"
 }
