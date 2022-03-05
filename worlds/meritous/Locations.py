@@ -11,7 +11,8 @@ class MeritousLocation(Location):
 
     def __init__(self, player: int, name: str = '', address: int = None, parent=None):
         super(MeritousLocation, self).__init__(player, name, address, parent)
-        if "Wervyn Anixil" in name: self.event = True
+        if "Wervyn Anixil" in name or "Defeat" in name:
+            self.event = True
 
 
 offset = 593_000

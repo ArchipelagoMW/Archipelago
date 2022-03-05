@@ -22,7 +22,8 @@ def create_regions(world: MultiWorld, player: int):
     for x, name in enumerate(regions):
         fullname = f"{name} Quarter"
         insidename = fullname
-        if x == 0: insidename = "Menu"
+        if x == 0:
+            insidename = "Menu"
 
         region = Region(insidename, RegionType.Generic, fullname, player, world)
         for store in ["Alpha Cache", "Beta Cache", "Gamma Cache", "Reward Chest"]:
