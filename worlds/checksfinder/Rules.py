@@ -6,7 +6,8 @@ from ..AutoWorld import LogicMixin
 class ChecksFinderLogic(LogicMixin):
 
     def _has_total(self, player: int, total: int):
-        return (self.item_count('Map Width', player)+self.item_count('Map Height', player)+self.item_count('Map Bombs', player)) >= total
+        return (self.item_count('Map Width', player)+self.item_count('Map Height', player)+
+                self.item_count('Map Bombs', player)) >= total
 
 
 # Sets rules on entrances and advancements that are always applied

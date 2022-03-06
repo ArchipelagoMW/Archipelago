@@ -594,17 +594,20 @@ async def game_watcher(ctx: CommonContext):
     while not ctx.exit_event.is_set():
         path = os.path.expandvars(r"%localappdata%/ChecksFinder")
         sending = []
+        victory = False
         for root, dirs, files in os.walk(path):
             for file in files:
                 if file.find("send") > -1:
                     st = file.split("send", -1)[1]
                     sending = sending+[(int(st))]
+                if file.find("victory") > -1:
+                    victory = True
         ctx.locations_checked = sending
-        logger.debug(
-            f"New item found: "
-            f"{[lookup_id_to_name[rid] for rid in sending]}")
         message = [{"cmd": 'LocationChecks', "locations": sending}]
         await ctx.send_msgs(message)
+        if not ctx.finished_game and victory:
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            ctx.finished_game = True
         await asyncio.sleep(0.1)
 
 
