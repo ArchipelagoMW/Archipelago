@@ -17,7 +17,6 @@ item_table = {
     "Map Bombs": ItemData(80002, True),
 }
 
-# 33 required items
 required_items = {
 }
 
