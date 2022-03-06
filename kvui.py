@@ -378,6 +378,13 @@ class FactorioManager(GameManager):
     base_title = "Archipelago Factorio Client"
 
 
+class ChecksFinderManager(GameManager):
+    logging_pairs = [
+        ("Client", "Archipelago")
+    ]
+    base_title = "Archipelago ChecksFinder Client"
+
+
 class SNIManager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago"),

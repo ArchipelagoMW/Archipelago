@@ -668,8 +668,8 @@ if __name__ == '__main__':
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         input_task = None
         if gui_enabled:
-            from kvui import TextManager
-            ctx.ui = TextManager(ctx)
+            from kvui import ChecksFinderManager
+            ctx.ui = ChecksFinderManager(ctx)
             ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
         else:
             ui_task = None
