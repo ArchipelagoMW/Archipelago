@@ -171,6 +171,16 @@ class Context(CommonContext):
             if not currently_dead:
                 self.death_state = DeathState.alive
 
+    def on_package(self, cmd: str, args: dict):
+        if cmd in {"Connected", "RoomUpdate"}:
+            if "checked_locations" in args and args["checked_locations"]:
+                new_locations = set(args["checked_locations"])
+                self.checked_locations |= new_locations
+                self.locations_scouted |= new_locations
+                # Items belonging to the player should not be marked as checked in game, since the player will likely need that item.
+                # Once the games handled by SNIClient gets made to be remote items, this will no longer be needed.
+                asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": list(new_locations)}]))
+
 
 async def deathlink_kill_player(ctx: Context):
     ctx.death_state = DeathState.killing_player
@@ -239,6 +249,7 @@ SCOUTREPLY_LOCATION_ADDR = SAVEDATA_START + 0x4D8   # 1 byte
 SCOUTREPLY_ITEM_ADDR = SAVEDATA_START + 0x4D9       # 1 byte
 SCOUTREPLY_PLAYER_ADDR = SAVEDATA_START + 0x4DA     # 1 byte
 SHOP_ADDR = SAVEDATA_START + 0x302                  # 2 bytes
+SHOP_LEN = (len(Shops.shop_table) * 3) + 5
 
 DEATH_LINK_ACTIVE_ADDR = ROMNAME_START + 0x15       # 1 byte
 
@@ -820,19 +831,28 @@ async def track_locations(ctx: Context, roomid, roomdata):
             f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
 
     try:
-        if roomid in location_shop_ids:
-            misc_data = await snes_read(ctx, SHOP_ADDR, (len(Shops.shop_table) * 3) + 5)
-            for cnt, b in enumerate(misc_data):
-                if int(b) and (Shops.SHOP_ID_START + cnt) not in ctx.locations_checked:
-                    new_check(Shops.SHOP_ID_START + cnt)
+        shop_data = await snes_read(ctx, SHOP_ADDR, SHOP_LEN)
+        shop_data_changed = False
+        shop_data = list(shop_data)
+        for cnt, b in enumerate(shop_data):
+            location = Shops.SHOP_ID_START + cnt
+            if int(b) and location not in ctx.locations_checked:
+                new_check(location)
+            if location in ctx.checked_locations and location not in ctx.locations_checked \
+                    and location in ctx.locations_info and ctx.locations_info[location][1] != ctx.slot:
+                if not int(b):
+                    shop_data[cnt] += 1
+                    shop_data_changed = True
+                new_check(location)
+        if shop_data_changed:
+            snes_buffered_write(ctx, SHOP_ADDR, bytes(shop_data))
     except Exception as e:
         snes_logger.info(f"Exception: {e}")
 
     for location_id, (loc_roomid, loc_mask) in location_table_uw_id.items():
         try:
-
-            if location_id not in ctx.locations_checked and loc_roomid == roomid and (
-                    roomdata << 4) & loc_mask != 0:
+            if location_id not in ctx.locations_checked and loc_roomid == roomid and \
+                    (roomdata << 4) & loc_mask != 0:
                 new_check(location_id)
         except Exception as e:
             snes_logger.exception(f"Exception: {e}")
@@ -840,12 +860,18 @@ async def track_locations(ctx: Context, roomid, roomdata):
     uw_begin = 0x129
     ow_end = uw_end = 0
     uw_unchecked = {}
+    uw_checked = {}
     for location, (roomid, mask) in location_table_uw.items():
         location_id = Regions.lookup_name_to_id[location]
         if location_id not in ctx.locations_checked:
             uw_unchecked[location_id] = (roomid, mask)
             uw_begin = min(uw_begin, roomid)
             uw_end = max(uw_end, roomid + 1)
+        if location_id in ctx.checked_locations and location_id not in ctx.locations_checked and \
+                location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
+            uw_begin = min(uw_begin, roomid)
+            uw_end = max(uw_end, roomid + 1)
+            uw_checked[location_id] = (roomid, mask)
 
     if uw_begin < uw_end:
         uw_data = await snes_read(ctx, SAVEDATA_START + (uw_begin * 2), (uw_end - uw_begin) * 2)
@@ -855,14 +881,28 @@ async def track_locations(ctx: Context, roomid, roomdata):
                 roomdata = uw_data[offset] | (uw_data[offset + 1] << 8)
                 if roomdata & mask != 0:
                     new_check(location_id)
+            if uw_checked:
+                uw_data = list(uw_data)
+                for location_id, (roomid, mask) in uw_checked.items():
+                    offset = (roomid - uw_begin) * 2
+                    roomdata = uw_data[offset] | (uw_data[offset + 1] << 8)
+                    roomdata |= mask
+                    uw_data[offset] = roomdata & 0xFF
+                    uw_data[offset + 1] = roomdata >> 8
+                    new_check(location_id)
+                snes_buffered_write(ctx, SAVEDATA_START + (uw_begin * 2), bytes(uw_data))
 
     ow_begin = 0x82
     ow_unchecked = {}
+    ow_checked = {}
     for location_id, screenid in location_table_ow_id.items():
         if location_id not in ctx.locations_checked:
             ow_unchecked[location_id] = screenid
             ow_begin = min(ow_begin, screenid)
             ow_end = max(ow_end, screenid + 1)
+            if location_id is ctx.checked_locations and location_id in ctx.locations_info \
+                    and ctx.locations_info[location_id][1] != ctx.slot:
+                ow_checked[location_id] = screenid
 
     if ow_begin < ow_end:
         ow_data = await snes_read(ctx, SAVEDATA_START + 0x280 + ow_begin, ow_end - ow_begin)
@@ -870,25 +910,50 @@ async def track_locations(ctx: Context, roomid, roomdata):
             for location_id, screenid in ow_unchecked.items():
                 if ow_data[screenid - ow_begin] & 0x40 != 0:
                     new_check(location_id)
+            if ow_checked:
+                ow_data = list(ow_data)
+                for location_id, screenid in ow_checked.items():
+                    ow_data[screenid - ow_begin] |= 0x40
+                snes_buffered_write(ctx, SAVEDATA_START + 0x280 + ow_begin, bytes(ow_data))
 
     if not ctx.locations_checked.issuperset(location_table_npc_id):
         npc_data = await snes_read(ctx, SAVEDATA_START + 0x410, 2)
         if npc_data is not None:
+            npc_value_changed = False
             npc_value = npc_data[0] | (npc_data[1] << 8)
             for location_id, mask in location_table_npc_id.items():
                 if npc_value & mask != 0 and location_id not in ctx.locations_checked:
                     new_check(location_id)
+                if location_id in ctx.checked_locations and location_id not in ctx.locations_checked \
+                        and location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
+                    new_check(location_id)
+                    npc_value |= mask
+                    npc_value_changed = True
+            if npc_value_changed:
+                npc_data = bytes([npc_value & 0xFF, npc_value >> 8])
+                snes_buffered_write(ctx, SAVEDATA_START + 0x410, npc_data)
 
     if not ctx.locations_checked.issuperset(location_table_misc_id):
         misc_data = await snes_read(ctx, SAVEDATA_START + 0x3c6, 4)
         if misc_data is not None:
+            misc_data = list(misc_data)
+            misc_data_changed = False
             for location_id, (offset, mask) in location_table_misc_id.items():
                 assert (0x3c6 <= offset <= 0x3c9)
                 if misc_data[offset - 0x3c6] & mask != 0 and location_id not in ctx.locations_checked:
                     new_check(location_id)
+                if location_id in ctx.checked_locations and location_id not in ctx.locations_checked \
+                        and location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
+                    misc_data_changed = True
+                    misc_data[offset - 0x3c6] |= mask
+                    new_check(location_id)
+            if misc_data_changed:
+                snes_buffered_write(ctx, SAVEDATA_START + 0x3c6, bytes(misc_data))
+
 
     if new_locations:
         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": new_locations}])
+    await snes_flush_writes(ctx)
 
 
 async def game_watcher(ctx: Context):
@@ -927,6 +992,7 @@ async def game_watcher(ctx: Context):
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
                 ctx.locations_scouted = set()
+                ctx.locations_info = {}
             ctx.prev_rom = ctx.rom
 
             if ctx.awaiting_rom:
