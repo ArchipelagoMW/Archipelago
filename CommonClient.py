@@ -519,9 +519,9 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.watcher_event.set()
 
     elif cmd == 'LocationInfo':
-        for item, location, player in args['locations']:
-            if location not in ctx.locations_info:
-                ctx.locations_info[location] = (item, player)
+        for item in [NetworkItem(*item) for item in args['locations']]:
+            if item.location not in ctx.locations_info:
+                ctx.locations_info[item.location] = (item.item, item.player)
         ctx.watcher_event.set()
 
     elif cmd == "RoomUpdate":
