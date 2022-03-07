@@ -479,5 +479,24 @@
         ]
       }
     ]
+  },
+  {
+    "gameTitle": "ChecksFinder",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Tutorial",
+        "description": "A guide to setting up the Archipelago ChecksFinder software on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "checksfinder/checksfinder_en.md",
+            "link": "checksfinder/checksfinder/en",
+            "authors": [
+              "Mewlif"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]
