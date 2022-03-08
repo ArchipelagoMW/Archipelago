@@ -65,23 +65,20 @@ class V6World(World):
     def generate_output(self, output_directory: str):
         if self.world.players != 1:
             return
-        try:
-            data = {
-                "slot_data": self.fill_slot_data(),
-                "location_to_item": {self.location_name_to_id[i] : item_table[self.world.get_location(i, self.player).item.name] for i in self.location_name_to_id},
-                "data_package": {
-                    "data": {
-                        "games": {
-                            self.game: {
-                                "item_name_to_id": self.item_name_to_id,
-                                "location_name_to_id": self.location_name_to_id
-                            }
+        data = {
+            "slot_data": self.fill_slot_data(),
+            "location_to_item": {self.location_name_to_id[i] : item_table[self.world.get_location(i, self.player).item.name] for i in self.location_name_to_id},
+            "data_package": {
+                "data": {
+                    "games": {
+                        self.game: {
+                            "item_name_to_id": self.item_name_to_id,
+                            "location_name_to_id": self.location_name_to_id
                         }
                     }
                 }
             }
-            filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}.apv6"
-            with open(os.path.join(output_directory, filename), 'w') as f:
-                json.dump(data, f)
-        except:
-            raise
+        }
+        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}.apv6"
+        with open(os.path.join(output_directory, filename), 'w') as f:
+            json.dump(data, f)
