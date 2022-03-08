@@ -3,10 +3,8 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
-import typing
-
 from BaseClasses import MultiWorld, Region, Entrance, RegionType
-from .Locations import MeritousLocation, alpha_store, beta_store, gamma_store, chest_store, location_table
+from .Locations import MeritousLocation, location_table
 
 meritous_regions = ["Meridian", "Ataraxia", "Merodach", "Endgame"]
 
@@ -92,10 +90,6 @@ def create_regions(world: MultiWorld, player: int):
             "to": "Last Quarter",
             "rule": lambda state: state.has("Merodach Defeated", player)
         },
-        # "Toward the endgame": {
-        #     "to": "Endgame",
-        #     "rule": lambda state: state.has_group("PSI Keys", player, 3)
-        # },
         "Back to the entrance": {
             "to": "Final Boss",
             "rule": lambda state: state.has("Cursed Seal", player)

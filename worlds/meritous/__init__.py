@@ -7,7 +7,7 @@ from BaseClasses import Item, MultiWorld
 from Fill import fill_restrictive
 from .Items import item_table, item_groups, MeritousItem
 from .Locations import location_table, MeritousLocation
-from .Options import meritous_options
+from .Options import meritous_options, cost_scales
 from .Regions import create_regions
 from .Rules import set_rules
 from ..AutoWorld import World
@@ -36,6 +36,7 @@ class MeritousWorld(World):
         self.goal = 0
         self.include_evolution_traps = False
         self.include_psi_keys = False
+        self.item_cache_cost = 0
         self.death_link = False
 
     @staticmethod
@@ -72,6 +73,7 @@ class MeritousWorld(World):
         self.goal = self.world.goal[self.player].value
         self.include_evolution_traps = self.world.include_evolution_traps[self.player].value
         self.include_psi_keys = self.world.include_psi_keys[self.player].value
+        self.item_cache_cost = self.world.item_cache_cost[self.player].value
         self.death_link = self.world.death_link[self.player].value
 
     def create_regions(self):
@@ -147,5 +149,6 @@ class MeritousWorld(World):
     def fill_slot_data(self) -> dict:
         return {
             "goal": self.goal,
+            "cost_scale": cost_scales[self.item_cache_cost],
             "death_link": self.death_link
         }
