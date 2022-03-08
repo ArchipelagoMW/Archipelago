@@ -843,7 +843,6 @@ async def track_locations(ctx: Context, roomid, roomdata):
                 if not int(b):
                     shop_data[cnt] += 1
                     shop_data_changed = True
-                new_check(location)
         if shop_data_changed:
             snes_buffered_write(ctx, SHOP_ADDR, bytes(shop_data))
     except Exception as e:
@@ -889,7 +888,6 @@ async def track_locations(ctx: Context, roomid, roomdata):
                     roomdata |= mask
                     uw_data[offset] = roomdata & 0xFF
                     uw_data[offset + 1] = roomdata >> 8
-                    new_check(location_id)
                 snes_buffered_write(ctx, SAVEDATA_START + (uw_begin * 2), bytes(uw_data))
 
     ow_begin = 0x82
@@ -900,7 +898,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
             ow_unchecked[location_id] = screenid
             ow_begin = min(ow_begin, screenid)
             ow_end = max(ow_end, screenid + 1)
-            if location_id is ctx.checked_locations and location_id in ctx.locations_info \
+            if location_id in ctx.checked_locations and location_id in ctx.locations_info \
                     and ctx.locations_info[location_id][1] != ctx.slot:
                 ow_checked[location_id] = screenid
 
@@ -926,7 +924,6 @@ async def track_locations(ctx: Context, roomid, roomdata):
                     new_check(location_id)
                 if location_id in ctx.checked_locations and location_id not in ctx.locations_checked \
                         and location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
-                    new_check(location_id)
                     npc_value |= mask
                     npc_value_changed = True
             if npc_value_changed:
@@ -946,7 +943,6 @@ async def track_locations(ctx: Context, roomid, roomdata):
                         and location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
                     misc_data_changed = True
                     misc_data[offset - 0x3c6] |= mask
-                    new_check(location_id)
             if misc_data_changed:
                 snes_buffered_write(ctx, SAVEDATA_START + 0x3c6, bytes(misc_data))
 
