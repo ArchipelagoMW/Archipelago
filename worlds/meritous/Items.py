@@ -83,6 +83,11 @@ LttPCreditsText = {
                                          "I swear it attracts money",
                                          "Big magnet for sale",
                                          "Works for tips"),
+    "Portable Compass": MeritousLttPText("Way Forward",
+                                         "Forward-thinking kid",
+                                         "Shrooms for Life Advice",
+                                         "Moving Needle for sale",
+                                         "Sing a tale of adventure"),
     "PSI Key 1": MeritousLttPText("Familiar Artifact",
                                   "Messenger kid",
                                   "The Black Market",
@@ -149,8 +154,8 @@ class MeritousItem(Item):
         elif "PSI Key" in name:
             self.type = "PSI Key"
         elif "upgrade" in name:
-            self.type = "Ability upgrade"
-        elif "Crystals" in name:
+            self.type = "Enhancement"
+        elif "Crystals x" in name:
             self.type = "Crystals"
         elif name == "Nothing":
             self.type = "Nothing"
@@ -186,22 +191,24 @@ item_table = {
     "Dodge Enhancer": offset + 9,
     "Ethereal Monocle": offset + 10,
     "Crystal Gatherer": offset + 11,
-    "PSI Key 1": offset + 12,
-    "PSI Key 2": offset + 13,
-    "PSI Key 3": offset + 14,
-    "Cursed Seal": offset + 15,
-    "Agate Knife": offset + 16,
-    "Evolution Trap": offset + 17,
-    "Crystals x500": offset + 18,
-    "Crystals x1000": offset + 19,
-    "Crystals x2000": offset + 20,
-    "Extra Life": offset + 21
+    "Portable Compass": offset + 12,
+    "PSI Key 1": offset + 13,
+    "PSI Key 2": offset + 14,
+    "PSI Key 3": offset + 15,
+    "Cursed Seal": offset + 16,
+    "Agate Knife": offset + 17,
+    "Evolution Trap": offset + 18,
+    "Crystals x500": offset + 19,
+    "Crystals x1000": offset + 20,
+    "Crystals x2000": offset + 21,
+    "Extra Life": offset + 22
 }
 
 item_groups = {
     "PSI Keys": [f"PSI Key {x}" for x in range(1, 4)],
     "Upgrades": ["Reflect Shield upgrade", "Circuit Charge upgrade", "Circuit Refill upgrade"],
     "Artifacts": ["Map", "Shield Boost", "Crystal Efficiency", "Circuit Booster",
-                  "Metabolism", "Dodge Enhancer", "Ethereal Monocle", "Crystal Gatherer"],
+                  "Metabolism", "Dodge Enhancer", "Ethereal Monocle", "Crystal Gatherer",
+                  "Portable Compass"],
     "Crystals": ["Crystals x500", "Crystals x1000", "Crystals x2000"]
 }

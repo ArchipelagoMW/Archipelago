@@ -26,7 +26,7 @@ class MeritousWorld(World):
     location_name_to_id = location_table
     item_name_groups = item_groups
 
-    data_version = 1
+    data_version = 2
     forced_auto_forfeit = False
 
     options = meritous_options
@@ -80,7 +80,7 @@ class MeritousWorld(World):
         create_regions(self.world, self.player)
 
     def create_items(self):
-        frequencies = [0, 25, 23, 22, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3]
+        frequencies = [0, 25, 23, 22, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3]
         location_count = len(location_table) - 2
         item_pool = []
 
