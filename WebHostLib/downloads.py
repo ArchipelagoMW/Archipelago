@@ -53,6 +53,10 @@ def download_slot_file(room_id, player_id: int):
                         fname = name.rsplit("/", 1)[0]+".zip"
         elif slot_data.game == "Ocarina of Time":
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_P{slot_data.player_id}_{slot_data.player_name}.apz5"
+        elif slot_data.game == "VVVVVV":
+            fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_SP.apv6"
+        elif slot_data.game == "Super Mario 64":
+            fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_SP.apsm64ex"
         else:
             return "Game download not supported."
         return send_file(io.BytesIO(slot_data.data), as_attachment=True, attachment_filename=fname)
