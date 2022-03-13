@@ -108,9 +108,10 @@ def get_any_version(data: dict) -> Version:
     return Version(int(data["major"]), int(data["minor"]), int(data["build"]))
 
 
-whitelist = {"NetworkPlayer": NetworkPlayer,
-             "NetworkItem": NetworkItem,
-             }
+whitelist = {
+    "NetworkPlayer": NetworkPlayer,
+    "NetworkItem": NetworkItem,
+}
 
 custom_hooks = {
     "Version": get_any_version
