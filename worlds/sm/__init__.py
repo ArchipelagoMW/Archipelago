@@ -64,8 +64,8 @@ class SMWorld(World):
     item_name_to_id = items_lookup_name_to_id
     location_name_to_id = locations_lookup_name_to_id
 
-    remote_items: bool = False
-    remote_start_inventory: bool = False
+    remote_items: bool = True
+    remote_start_inventory: bool = True
 
     itemManager: ItemManager
 
