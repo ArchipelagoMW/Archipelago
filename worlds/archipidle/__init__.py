@@ -17,7 +17,7 @@ class ArchipIDLEWorld(World):
 
     location_name_to_id = {}
     start_id = 9000
-    for i in range(1, 51):
+    for i in range(1, 101):
         location_name_to_id[f"Location {i}"] = start_id
         start_id += 1
 
@@ -26,7 +26,7 @@ class ArchipIDLEWorld(World):
         self.world.random.shuffle(item_table_copy)
 
         item_pool = []
-        for i in range(50):
+        for i in range(100):
             item = Item(item_table[i], True, self.item_name_to_id[item_table[i]], self.player)
             item.game = 'ArchipIDLE'
             item_pool.append(item)
@@ -37,8 +37,7 @@ class ArchipIDLEWorld(World):
         set_rules(self.world, self.player)
 
     def create_item(self, name: str) -> Item:
-        item_data = item_table[name]
-        return Item(name, item_data.progression, item_data.code, self.player)
+        return Item(name, True, self.item_name_to_id[name], self.player)
 
     def create_regions(self):
         self.world.regions += [

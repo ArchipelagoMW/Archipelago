@@ -31,3 +31,9 @@ def set_rules(world: MultiWorld, player: int):
             world.get_location(f"Location {i}", player),
             lambda state: state._archipidle_location_is_accessible(player, 20)
         )
+
+    for i in range(51, 101):
+        set_rule(
+            world.get_location(f"Location {i}", player),
+            lambda state: state._archipidle_location_is_accessible(player, 35)
+        )
