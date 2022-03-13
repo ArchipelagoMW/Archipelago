@@ -1093,6 +1093,8 @@ class Item():
     trap: bool = False
     # change manually to ensure that a specific non-progression item never goes on an excluded location
     never_exclude = False
+    # item is not considered by progression balancing despite being progression
+    skip_in_prog_balancing: bool = False
 
     # need to find a decent place for these to live and to allow other games to register texts if they want.
     pedestal_credit_text: str = "and the Unknown Item"
