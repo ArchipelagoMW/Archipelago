@@ -28,9 +28,9 @@ class ArchipIDLEWorld(World):
         item_pool = []
         for i in range(100):
             item = Item(
-                item_table[i],
-                self.item_name_to_id[item_table[i]] < 9020,
-                self.item_name_to_id[item_table[i]],
+                item_table_copy[i],
+                i < 20,
+                self.item_name_to_id[item_table_copy[i]],
                 self.player
             )
             item.game = 'ArchipIDLE'
@@ -42,7 +42,7 @@ class ArchipIDLEWorld(World):
         set_rules(self.world, self.player)
 
     def create_item(self, name: str) -> Item:
-        return Item(name, self.item_name_to_id[name] < 9020, self.item_name_to_id[name], self.player)
+        return Item(name, True, self.item_name_to_id[name], self.player)
 
     def create_regions(self):
         self.world.regions += [
