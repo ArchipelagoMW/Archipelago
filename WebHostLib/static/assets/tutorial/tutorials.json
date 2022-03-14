@@ -92,6 +92,45 @@
     ]
   },
   {
+    "gameTitle": "Factorio",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Tutorial",
+        "description": "A guide to setting up the Archipelago Factorio software on your computer.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "factorio/setup_en.md",
+            "link": "factorio/setup/en",
+            "authors": [
+              "Berserker",
+              "Farrak Kilhn"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Final Fantasy",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to playing Final Fantasy multiworld. This guide only covers playing multiworld.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "ff1/multiworld_en.md",
+            "link": "ff1/multiworld/en",
+            "authors": [
+              "jat2980"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "gameTitle": "The Legend of Zelda: A Link to the Past",
     "tutorials": [
       {
@@ -206,26 +245,6 @@
     ]
   },
   {
-    "gameTitle": "Factorio",
-    "tutorials": [
-      {
-        "name": "Multiworld Setup Tutorial",
-        "description": "A guide to setting up the Archipelago Factorio software on your computer.",
-        "files": [
-          {
-            "language": "English",
-            "filename": "factorio/setup_en.md",
-            "link": "factorio/setup/en",
-            "authors": [
-              "Berserker",
-              "Farrak Kilhn"
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
     "gameTitle": "Minecraft",
     "tutorials": [
       {
@@ -261,25 +280,6 @@
     ]
   },
   {
-    "gameTitle": "Risk of Rain 2",
-    "tutorials": [
-      {
-        "name": "Multiworld Setup Guide",
-        "description": "A guide to setting up the Risk of Rain 2 integration for Archipelago multiworld games.",
-        "files": [
-          {
-            "language": "English",
-            "filename": "ror2/setup_en.md",
-            "link": "ror2/setup/en",
-            "authors": [
-              "Ijwu"
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
     "gameTitle": "Raft",
     "tutorials": [
       {
@@ -300,28 +300,94 @@
     ]
   },
   {
-    "gameTitle": "Timespinner",
+    "gameTitle": "Risk of Rain 2",
     "tutorials": [
       {
         "name": "Multiworld Setup Guide",
-        "description": "A guide to setting up the Timespinner randomizer connected to an Archipelago Multiworld",
+        "description": "A guide to setting up the Risk of Rain 2 integration for Archipelago multiworld games.",
         "files": [
           {
             "language": "English",
-            "filename": "timespinner/setup_en.md",
-            "link": "timespinner/setup/en",
+            "filename": "ror2/setup_en.md",
+            "link": "ror2/setup/en",
             "authors": [
-              "Jarno"
+              "Ijwu"
             ]
-          },
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Rogue Legacy",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Rogue Legacy Randomizer software on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
           {
-            "language": "German",
-            "filename": "timespinner/setup_de.md",
-            "link": "timespinner/setup/de",
+            "language": "English",
+            "filename": "rogue-legacy/rogue-legacy_en.md",
+            "link": "rogue-legacy/rogue-legacy/en",
             "authors": [
-              "Grrmo",
-              "Fynxes",
-              "Blaze0168"
+              "Phar"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Secret of Evermore",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to playing Secret of Evermore randomizer. This guide covers single-player, multiworld and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "secret-of-evermore/multiworld_en.md",
+            "link": "secret-of-evermore/multiworld/en",
+            "authors": [
+              "Black Sliver"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Slay the Spire",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up Slay the Spire for Archipelago. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "slay-the-spire/slay-the-spire_en.md",
+            "link": "slay-the-spire/slay-the-spire/en",
+            "authors": [
+              "Phar"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "SMZ3",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up SMZ3 for Archipelago. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "smz3/multiworld_en.md",
+            "link": "smz3/setup/en",
+            "authors": [
+              "Phar"
             ]
           }
         ]
@@ -367,82 +433,6 @@
     ]
   },
   {
-    "gameTitle": "Secret of Evermore",
-    "tutorials": [
-      {
-        "name": "Multiworld Setup Guide",
-        "description": "A guide to playing Secret of Evermore randomizer. This guide covers single-player, multiworld and related software.",
-        "files": [
-          {
-            "language": "English",
-            "filename": "secret-of-evermore/multiworld_en.md",
-            "link": "secret-of-evermore/multiworld/en",
-            "authors": [
-              "Black Sliver"
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "gameTitle": "Final Fantasy",
-    "tutorials": [
-      {
-        "name": "Multiworld Setup Guide",
-        "description": "A guide to playing Final Fantasy multiworld. This guide only covers playing multiworld.",
-        "files": [
-          {
-            "language": "English",
-            "filename": "ff1/multiworld_en.md",
-            "link": "ff1/multiworld/en",
-            "authors": [
-              "jat2980"
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "gameTitle": "Rogue Legacy",
-    "tutorials": [
-      {
-        "name": "Multiworld Setup Guide",
-        "description": "A guide to setting up the Rogue Legacy Randomizer software on your computer. This guide covers single-player, multiworld, and related software.",
-        "files": [
-          {
-            "language": "English",
-            "filename": "rogue-legacy/rogue-legacy_en.md",
-            "link": "rogue-legacy/rogue-legacy/en",
-            "authors": [
-              "Phar"
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "gameTitle": "Slay the Spire",
-    "tutorials": [
-      {
-        "name": "Multiworld Setup Guide",
-        "description": "A guide to setting up Slay the Spire for Archipelago. This guide covers single-player, multiworld, and related software.",
-        "files": [
-          {
-            "language": "English",
-            "filename": "slay-the-spire/slay-the-spire_en.md",
-            "link": "slay-the-spire/slay-the-spire/en",
-            "authors": [
-              "Phar"
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
     "gameTitle": "Super Mario 64 EX",
     "tutorials": [
       {
@@ -455,6 +445,35 @@
             "link": "sm64ex/setup/en",
             "authors": [
               "N00byKing"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Timespinner",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Timespinner randomizer connected to an Archipelago Multiworld",
+        "files": [
+          {
+            "language": "English",
+            "filename": "timespinner/setup_en.md",
+            "link": "timespinner/setup/en",
+            "authors": [
+              "Jarno"
+            ]
+          },
+          {
+            "language": "German",
+            "filename": "timespinner/setup_de.md",
+            "link": "timespinner/setup/de",
+            "authors": [
+              "Grrmo",
+              "Fynxes",
+              "Blaze0168"
             ]
           }
         ]
