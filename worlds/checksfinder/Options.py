@@ -32,5 +32,4 @@ class noneOption(Toggle):
 
 
 checksfinder_options: typing.Dict[str, type(Option)] = {
-    "none":                     noneOption,
 }

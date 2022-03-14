@@ -20,7 +20,7 @@ You can customize your settings by visiting the [ChecksFinder Player Settings Pa
 
 ## Joining a MultiWorld Game
 
-### Obtain Your ChecksFinder Data File
+### Generating a ChecksFinder game
 
 **ChecksFinder is meant to be played _alongside_ another game! You may not be playing it for long periods of time if 
 you play it with another person!**
