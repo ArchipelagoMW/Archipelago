@@ -18,7 +18,7 @@ class ArchipIDLEWorld(World):
     location_name_to_id = {}
     start_id = 9000
     for i in range(1, 101):
-        location_name_to_id[f"Location {i}"] = start_id
+        location_name_to_id[f"IDLE for {int(i / 2)} minutes {30 if (i % 2) > 0 else 0} seconds"] = start_id
         start_id += 1
 
     def generate_basic(self):
@@ -27,11 +27,16 @@ class ArchipIDLEWorld(World):
 
         item_pool = []
         for i in range(100):
-            item = Item(item_table[i], True, self.item_name_to_id[item_table[i]], self.player)
+            item = Item(
+                item_table_copy[i],
+                i < 20,
+                self.item_name_to_id[item_table_copy[i]],
+                self.player
+            )
             item.game = 'ArchipIDLE'
             item_pool.append(item)
 
-            self.world.itempool = item_pool
+        self.world.itempool += item_pool
 
     def set_rules(self):
         set_rules(self.world, self.player)
