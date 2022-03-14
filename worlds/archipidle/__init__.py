@@ -5,6 +5,9 @@ from ..AutoWorld import World
 
 
 class ArchipIDLEWorld(World):
+    """
+    An idle game which sends a check every thirty seconds, up to one hundred checks.
+    """
     game = "ArchipIDLE"
     topology_present = False
     data_version = 1
