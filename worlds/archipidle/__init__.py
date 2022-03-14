@@ -36,7 +36,7 @@ class ArchipIDLEWorld(World):
             item.game = 'ArchipIDLE'
             item_pool.append(item)
 
-        self.world.itempool = item_pool
+        self.world.itempool += item_pool
 
     def set_rules(self):
         set_rules(self.world, self.player)
