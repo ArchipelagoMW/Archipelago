@@ -159,12 +159,12 @@ end
 
 local bizhawk_version = client.getversion()
 local is23Or24Or25 = (bizhawk_version=="2.3.1") or (bizhawk_version:sub(1,3)=="2.4") or (bizhawk_version:sub(1,3)=="2.5")
-local is26To27 =  (bizhawk_version:sub(1,3)=="2.6") or (bizhawk_version:sub(1,3)=="2.7")
+local is26To28 =  (bizhawk_version:sub(1,3)=="2.6") or (bizhawk_version:sub(1,3)=="2.7") or (bizhawk_version:sub(1,3)=="2.8")
 
 local function getMaxMessageLength()
     if is23Or24Or25 then
         return client.screenwidth()/11
-    elseif is26To27 then
+    elseif is26To28 then
         return client.screenwidth()/12
     end
 end
@@ -172,7 +172,7 @@ end
 local function drawText(x, y, message, color)
     if is23Or24Or25 then
         gui.addmessage(message)
-    elseif is26To27 then
+    elseif is26To28 then
         gui.drawText(x, y, message, color, 0xB0000000, 18, "Courier New", nil, nil, nil, "client")
     end
 end
@@ -180,7 +180,7 @@ end
 local function clearScreen()
     if is23Or24Or25 then
         return
-    elseif is26To27 then
+    elseif is26To28 then
         drawText(0, 0, "", "black")
     end
 end
@@ -206,7 +206,7 @@ local function drawMessages()
                 end
             end
             newTTL = 0
-            if is26To27 then
+            if is26To28 then
                 newTTL = itemMessages[k]["TTL"] - 1
             end
             itemMessages[k]["TTL"] = newTTL
@@ -493,7 +493,7 @@ function receive()
 end
 
 function main()
-    if (is23Or24Or25 or is26To27) == false then
+    if (is23Or24Or25 or is26To28) == false then
         print("Must use a version of bizhawk 2.3.1 or higher")
         return
     end
