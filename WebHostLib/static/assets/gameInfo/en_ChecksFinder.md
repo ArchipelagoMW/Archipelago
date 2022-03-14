@@ -25,5 +25,5 @@ bombs.
 
 ## What is the victory condition?
 
-Victory is achieved when the player wins a board they were given when they have received all of their Map Width, Map
+Victory is achieved when the player wins a board they were given after they have received all of their Map Width, Map
 Height, and Map Bomb items. The game will say at the bottom of the screen how many of each you have received.
