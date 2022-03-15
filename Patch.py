@@ -100,12 +100,14 @@ class APContainer:
 
 
 class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
+    """An APContainer that additionally has delta.bsdiff4
+    containing a delta patch to get the desired file, often a rom."""
+
     hash = Optional[str]  # base checksum of source file
     patch_file_ending: str = ""
     delta: Optional[bytes] = None
     result_file_ending: str = ".sfc"
-    """An APContainer that additionally has delta.bsdiff4 
-    containing a delta patch to get the desired file, often a rom."""
+    source_data: bytes
 
     def __init__(self, *args, patched_path: str = "", **kwargs):
         self.patched_path = patched_path
@@ -116,15 +118,22 @@ class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
         manifest["base_checksum"] = self.hash
         return manifest
 
-    def get_source_data(self) -> bytes:
+    @classmethod
+    def get_source_data(cls) -> bytes:
         """Get Base data"""
         raise NotImplementedError()
+
+    @classmethod
+    def get_source_data_with_cache(cls) -> bytes:
+        if not hasattr(cls, "source_data"):
+            cls.source_data = cls.get_source_data()
+        return cls.source_data
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile):
         super(APDeltaPatch, self).write_contents(opened_zipfile)
         # write Delta
         opened_zipfile.writestr("delta.bsdiff4",
-                                bsdiff4.diff(self.get_source_data(), open(self.patched_path, "rb").read()))
+                                bsdiff4.diff(self.get_source_data_with_cache(), open(self.patched_path, "rb").read()))
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile):
         super(APDeltaPatch, self).read_contents(opened_zipfile)
@@ -134,7 +143,7 @@ class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
         """Base + Delta -> Patched"""
         if not self.delta:
             self.read()
-        result = bsdiff4.patch(self.get_source_data(), self.delta)
+        result = bsdiff4.patch(self.get_source_data_with_cache(), self.delta)
         with open(target, "wb") as f:
             f.write(result)
 

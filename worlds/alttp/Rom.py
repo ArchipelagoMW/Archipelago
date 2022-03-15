@@ -2889,7 +2889,8 @@ class LttPDeltaPatch(Patch.APDeltaPatch):
     game = "A Link to the Past"
     patch_file_ending = ".aplttp"
 
-    def get_source_data(self) -> bytes:
+    @classmethod
+    def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
 
 
