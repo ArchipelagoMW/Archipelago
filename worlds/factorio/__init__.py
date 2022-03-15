@@ -201,10 +201,10 @@ class Factorio(World):
             new_ingredient = pool.pop()
             if new_ingredient in liquids:
                 while liquids_used == allow_liquids and new_ingredient in liquids:
-                    # liquids already at max for current recipe. Return the liquid to the pool, shuffle, and get a new ingredient.
+                    # liquids already at max for current recipe.
+                    # Return the liquid to the pool and get a new ingredient.
                     pool.append(new_ingredient)
-                    self.world.random.shuffle(pool)
-                    new_ingredient = pool.pop()
+                    new_ingredient = pool.pop(0)
                 liquids_used += 1
             new_ingredients[new_ingredient] = 1
         return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
@@ -347,7 +347,7 @@ class Factorio(World):
                    {bridge: 1}, 10),
             sorted(science_pack_pools[self.world.max_science_pack[self.player].get_ordered_science_packs()[0]]))
         for ingredient_name in new_recipe.ingredients:
-            new_recipe.ingredients[ingredient_name] = self.world.random.randint(3, 10)
+            new_recipe.ingredients[ingredient_name] = self.world.random.randint(10, 100)
         self.custom_recipes[bridge] = new_recipe
 
         needed_recipes = self.world.max_science_pack[self.player].get_allowed_packs() | {"rocket-part"}
