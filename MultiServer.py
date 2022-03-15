@@ -1358,6 +1358,9 @@ def get_missing_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
 
 
 def get_client_points(ctx: Context, client: Client) -> int:
+    if ctx.games[client.slot] == "Bingo":
+        if ctx.slot_data[client.slot]["bingo_mode"] == 1 and ctx.slot_data[client.slot]["auto_hint"] == 1:
+            return 0
     return (ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) -
             ctx.get_hint_cost(client.slot) * ctx.hints_used[client.team, client.slot])
 

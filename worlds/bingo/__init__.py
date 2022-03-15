@@ -30,94 +30,82 @@ class BingoWorld(World):
 
     def _get_slot_data(self):
         return {
-            'card_pairs': self.world.card_pairs[self.player],
+            'bingo_mode': self.world.bingo_mode[self.player],
             'cards': self.cards[self.player]
         }
 
     def generate_cards(self, world, player):
+
         cards = []
-        pairs = world.card_pairs[player]
-        items = list(item_table)[:pairs * 24]
-        call_divisions = [items[:pairs*5], items[pairs*5:pairs*10], items[pairs*10:pairs*14],
-                          items[pairs*14:pairs*19], items[pairs*19:pairs*24]]
-        min_occ = world.bingo_call_minimum_occurrences[player]
-        if min_occ == 2:
-            for _ in range(0, 2):
-                items = list(item_table)[:pairs * 24]
-                world.random.shuffle(items)
-                for c in range(0, pairs):
-                    card = []
-                    for row in range(1, 6):
-                        if row == 3:
-                            card_row = items[:2] + [0] + items[2:4]
-                            items = items[4:]
-                        else:
-                            card_row = items[:5]
-                            items = items[5:]
-                        card.append(card_row)
-                    cards.append(card)
-        else:
-            items = list(item_table)[:pairs * 24]
-            card_columns = []
-            for _ in range(0, pairs*2):
-                card_columns.append([[], [], [], [], []])
-                cards.append([[None, None, None, None, None], [None, None, None, None, None],
-                              [None, None, 0, None, None], [None, None, None, None, None],
-                              [None, None, None, None, None]])
-            if min_occ == 1:
-                for column in range(0, 5):
-                    for item in call_divisions[column]:
-                        while True:
-                            random_card = world.random.randint(0, len(card_columns) - 1)
-                            if len(card_columns[random_card][column]) < 5:
-                                card_columns[random_card][column].append(item)
-                                break
+        card_count = world.number_of_rewards[player]
+        if world.bingo_mode[player] == 1:
+            card_count //= 12
+        rewards = world.number_of_rewards[player]
+        if world.bingo_mode == 1:
+            rewards //= 12
+            rewards *= 12
+        items = list(item_table)[:rewards]
+        div = [rewards // 24 * 5, rewards // 24 * 5, rewards // 24 * 4, rewards // 24 * 5, rewards // 24 * 5]
+        while sum(div) < rewards:
+            for d in [2, 0, 1, 3, 4]:
+                div[d] += 1
+                if sum(div) == rewards:
+                    break
+        div = [div[0], sum(div[:2]), sum(div[:3]), sum(div[:4])]
+        call_divisions = [items[:div[0]], items[div[0]:div[1]], items[div[1]:div[2]],
+                          items[div[2]:div[3]], items[div[3]:]]
+        card_columns = []
+        for _ in range(0, card_count):
+            card_columns.append([[], [], [], [], []])
+            cards.append([[None, None, None, None, None], [None, None, None, None, None],
+                          [None, None, 0, None, None], [None, None, None, None, None],
+                          [None, None, None, None, None]])
+        if not world.allow_unused_calls[player]:
             for column in range(0, 5):
-                for card in range(0, len(card_columns)):
-                    div_copy = call_divisions[column].copy()
-                    column_count = 4 if column == 2 else 5
-                    while len(card_columns[card][column]) < column_count:
-                        if len(div_copy) == 0:
-                            breakpoint()
-                        random_call = world.random.choice(div_copy)
-                        div_copy.remove(random_call)
-                        if random_call not in card_columns[card][column]:
-                            card_columns[card][column].append(random_call)
-            for column in range(0, 5):
-                for card in range(0, len(card_columns)):
-                    card_columns[card][column].sort(key=lambda item: f"{len(item)} {item}")
-                    if column == 2:
-                        card_columns[card][2].insert(2, 0)
-                    for row in range(0, 5):
-                        # if [column, row] == [2, 2]:
-                        #     cards[card][row][column] = 0
-                        # else:
-                        cards[card][row][column] = card_columns[card][column][row]
+                for item in call_divisions[column]:
+                    while True:
+                        random_card = world.random.randint(0, len(card_columns) - 1)
+                        if len(card_columns[random_card][column]) < 5:
+                            card_columns[random_card][column].append(item)
+                            break
+        for column in range(0, 5):
+            for card in range(0, len(card_columns)):
+                div_copy = call_divisions[column].copy()
+                column_count = 4 if column == 2 else 5
+                while len(card_columns[card][column]) < column_count:
+                    if len(div_copy) == 0:
+                        breakpoint()
+                    random_call = world.random.choice(div_copy)
+                    div_copy.remove(random_call)
+                    if random_call not in card_columns[card][column]:
+                        card_columns[card][column].append(random_call)
+        for column in range(0, 5):
+            for card in range(0, len(card_columns)):
+                world.random.shuffle(card_columns[card][column])
+                if column == 2:
+                    card_columns[card][2].insert(2, 0)
+                for row in range(0, 5):
+                    cards[card][row][column] = card_columns[card][column][row]
         world.worlds[player].cards[player] = cards
 
     def generate_basic(self):
         pool = []
         used_calls = set()
-        card_pairs = self.world.card_pairs[self.player]
+        rewards = self.world.number_of_rewards[self.player]
         for card in self.cards[self.player]:
             for row in card:
                 for call in row:
                     used_calls.add(call)
         items = list(item_table)
-        b = 0
-        for _ in range(0, card_pairs):
-            for _ in range(0, 24):
-                item = BingoItem(items[b], self.player)
-                if item.name not in used_calls:
-                    item.advancement = False
-                    item.never_exclude = True
-                pool.append(item)
-                b += 1
-
+        for b in range(0, rewards):
+            item = BingoItem(items[b], self.player)
+            if item.name not in used_calls:
+                item.advancement = False
+                item.never_exclude = True
+            pool.append(item)
         self.world.itempool += pool
         self.world.get_location("Completed Cards", self.player).place_locked_item(BingoItem("Completion", self.player))
         self.world.completion_condition[self.player] = lambda state: state.has("Completion", self.player)
-        self.sending_visible = self.world.reveal_rewards[self.player]
 
     def set_rules(self):
         self.generate_cards(self.world, self.player)
@@ -159,6 +147,8 @@ class BingoWorld(World):
 
     def received_hint(self, ctx, team, player, hint):
         from MultiServer import notify_hints, collect_hints
+        if self.world.bingo_mode[player] == 0 or self.world.auto_hint[player] == 0:
+            return
         location = get_location_name_from_id(hint.location).split()
         card = ctx.slot_data[player]['cards'][int(location[2]) - 1]
         if location[3] == "Horizontal":
@@ -193,6 +183,7 @@ class BingoWorld(World):
             except:
                 import logging
                 logging.info(f"couldn't add {b}")
+                breakpoint()
         for card in range(0, len(cards)):
             # horizontal lines
             for r in range(0, 5):
@@ -204,6 +195,8 @@ class BingoWorld(World):
                             failed_line = 1
                 if not failed_line:
                     loc = f"Bingo Card {card + 1} Horizontal {r + 1}"
+                    if ctx.slot_data[player]["bingo_mode"] == 0:
+                        loc = f"Bingo Card {card + 1}"
                     register_location_checks(ctx, team, player, {location_table[loc]})
             # vertical lines
             for c in range(0, 5):
@@ -214,6 +207,8 @@ class BingoWorld(World):
                             failed_line = 1
                 if not failed_line:
                     loc = f"Bingo Card {card + 1} Vertical {c + 1}"
+                    if ctx.slot_data[player]["bingo_mode"] == 0:
+                        loc = f"Bingo Card {card + 1}"
                     register_location_checks(ctx, team, player, {location_table[loc]})
             # diagonal lines
             for line in range(0, 2):
@@ -231,36 +226,46 @@ class BingoWorld(World):
                             failed_line = 1
                 if not failed_line:
                     loc = f"Bingo Card {card + 1} Diagonal {line + 1}"
+                    if ctx.slot_data[player]["bingo_mode"] == 0:
+                        loc = f"Bingo Card {card + 1}"
                     register_location_checks(ctx, team, player, {location_table[loc]})
-        if len(bingocalls) == len(cards) * 12:
+        if ((len(bingocalls) == len(cards) * 12 and ctx.slot_data[player]["bingo_mode"] == 1) or
+                (len(bingocalls) == len(cards) and ctx.slot_data[player]["bingo_mode"] == 0)):
             ctx.client_game_state[team, player] = ClientStatus.CLIENT_GOAL
             finished_msg = f'{ctx.get_aliased_name(team, player)} (Team #{team + 1})' \
                            f' has been completed.'
             ctx.notify_all(finished_msg)
 
     def get_filler_item_name(self) -> str:
-        call = self.world.random.randint(1, self.card_pairs[self.player] * 24)
+        call = self.world.random.randint(1, len(self.cards[self.player]) * 12)
         return f"Bingo Call {call}"
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
+    def set_item_rules(location):
+        if world.priority_rewards[player]:
+            location.progress_type = LocationProgressType.PRIORITY
+        add_item_rule(location, lambda item: item.name not in world.item_blacklist[player])
+        # add_item_rule(location, lambda item: item.player > item.world.players) # force item link rewards?
+        if world.disallow_bingo_calls[player]:
+            add_item_rule(location, lambda item: item.game != "Bingo")
     ret = Region(name, None, name, player)
     ret.world = world
     if locations:
-        loc_count = (world.card_pairs[player] * 24)
+        loc_count = world.number_of_rewards[player]
+        if world.bingo_mode[player] == 1:
+            loc_count //= 12
+            loc_count *= 12
         for location in locations:
             loc_id = location_table.get(location, 0)
             location = BingoLocation(player, location, loc_id, ret)
             if loc_id is not None:
-                if loc_id - 1000 >= loc_count:
+                if loc_id - 1000 >= loc_count and world.bingo_mode[player] == 1:
                     continue
-                if (("Horizontal" in location.name and world.priority_rewards_horizontal[player])
-                        or ("Vertical" in location.name and world.priority_rewards_vertical[player])
-                        or ("Diagonal" in location.name and world.priority_rewards_diagonal[player])):
-                    location.progress_type = LocationProgressType.PRIORITY
-                    add_item_rule(location, lambda item: item.name not in world.priority_reward_item_blacklist[player])
-                if world.disallow_bingo_calls[player]:
-                    add_item_rule(location, lambda item: item.game != "Bingo")
+                if (loc_id - 1960 >= loc_count or loc_id < 1960) and world.bingo_mode[player] == 0:
+                    continue
+                set_item_rules(location)
+
             ret.locations.append(location)
     if exits:
         for exit in exits:

@@ -3,6 +3,7 @@ def get_location_table():
     locations = {}
     for c in range(0, 80):
         locations.update({
+            f"Bingo Card {c+1}": 1960 + c,
             f"Bingo Card {c+1} Horizontal 1": 1000+(c*12),
             f"Bingo Card {c+1} Horizontal 2": 1001+(c*12),
             f"Bingo Card {c+1} Horizontal 3": 1002+(c*12),
