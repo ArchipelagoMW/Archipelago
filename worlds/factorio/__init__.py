@@ -347,7 +347,7 @@ class Factorio(World):
                    {bridge: 1}, 10),
             sorted(science_pack_pools[self.world.max_science_pack[self.player].get_ordered_science_packs()[0]]))
         for ingredient_name in new_recipe.ingredients:
-            new_recipe.ingredients[ingredient_name] = self.world.random.randint(3, 10)
+            new_recipe.ingredients[ingredient_name] = self.world.random.randint(10, 100)
         self.custom_recipes[bridge] = new_recipe
 
         needed_recipes = self.world.max_science_pack[self.player].get_allowed_packs() | {"rocket-part"}
