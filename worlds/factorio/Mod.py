@@ -61,13 +61,15 @@ class FactorioModFile(Patch.APContainer):
     compression_method = zipfile.ZIP_DEFLATED  # Factorio can't load LZMA archives
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile):
-        super(FactorioModFile, self).write_contents(opened_zipfile)
+        # directory containing Factorio mod has to come first, or Factorio won't recognize this file as a mod.
         mod_dir = self.path[:-4]  # cut off .zip
         for root, dirs, files in os.walk(mod_dir):
             for file in files:
                 opened_zipfile.write(os.path.join(root, file),
                                      os.path.relpath(os.path.join(root, file),
                                                      os.path.join(mod_dir, '..')))
+        # now we can add extras.
+        super(FactorioModFile, self).write_contents(opened_zipfile)
 
 
 def generate_mod(world, output_directory: str):
