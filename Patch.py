@@ -1,6 +1,7 @@
-# TODO: convert this into a system like AutoWorld
+from __future__ import annotations
 
 import shutil
+import json
 import bsdiff4
 import yaml
 import os
@@ -9,12 +10,136 @@ import threading
 import concurrent.futures
 import zipfile
 import sys
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Dict, Any
 
 import Utils
 
-current_patch_version = 3
+current_patch_version = 4
 
+
+class AutoPatchRegister(type):
+    patch_types: Dict[str, APDeltaPatch] = {}
+    file_endings: Dict[str, APDeltaPatch] = {}
+
+    def __new__(cls, name: str, bases, dct: Dict[str, Any]):
+        # construct class
+        new_class = super().__new__(cls, name, bases, dct)
+        if "game" in dct:
+            AutoPatchRegister.patch_types[dct["game"]] = new_class
+            if not dct["patch_file_ending"]:
+                raise Exception(f"Need an expected file ending for {name}")
+            AutoPatchRegister.file_endings[dct["patch_file_ending"]] = new_class
+        return new_class
+
+    @staticmethod
+    def get_handler(file: str) -> Optional[type(APDeltaPatch)]:
+        for file_ending, handler in AutoPatchRegister.file_endings.items():
+            if file.endswith(file_ending):
+                return handler
+
+
+class APContainer:
+    """A zipfile containing at least archipelago.json"""
+    version: int = current_patch_version
+    compression_level: int = 9
+    compression_method: int = zipfile.ZIP_LZMA
+    game: Optional[str] = None
+
+    # instance attributes:
+    path: Optional[str]
+    player: Optional[int]
+    player_name: str
+    server: str
+
+    def __init__(self, path: Optional[str] = None, player: Optional[int] = None,
+                 player_name: str = "", server: str = ""):
+        self.path = path
+        self.player = player
+        self.player_name = player_name
+        self.server = server
+
+    def write(self, path: Optional[str] = None):
+        if path:
+            self.path = path
+        if not self.path:
+            raise FileNotFoundError(f"Cannot write {self.__class__.__name__} due to no path provided.")
+        with zipfile.ZipFile(self.path, "w", self.compression_method, True, self.compression_level) as zf:
+            self.write_contents(zf)
+
+    def write_contents(self, opened_zipfile: zipfile.ZipFile):
+        opened_zipfile.writestr("archipelago.json", json.dumps(self.get_manifest()))
+
+    def read(self, path: Optional[str] = None):
+        if path:
+            self.path = path
+        if not self.path:
+            raise FileNotFoundError(f"Cannot read {self.__class__.__name__} due to no path provided.")
+        with zipfile.ZipFile(self.path, "r") as zf:
+            self.read_contents(zf)
+
+    def read_contents(self, opened_zipfile: zipfile.ZipFile):
+        with opened_zipfile.open("archipelago.json", "r") as f:
+            manifest = json.load(f)
+        if manifest["compatible_version"] > self.version:
+            raise Exception(f"File (version: {manifest['compatible_version']}) too new "
+                            f"for this handler (version: {self.version})")
+        self.player = manifest["player"]
+        self.server = manifest["server"]
+        self.player_name = manifest["player_name"]
+
+    def get_manifest(self) -> dict:
+        return {
+            "server": self.server,  # allow immediate connection to server in multiworld. Empty string otherwise
+            "player": self.player,
+            "player_name": self.player_name,
+            "game": self.game,
+            # minimum version of patch system expected for patching to be successful
+            "compatible_version": 4,
+            "version": current_patch_version,
+        }
+
+
+class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
+    hash = Optional[str]  # base checksum of source file
+    patch_file_ending: str = ""
+    delta: Optional[bytes] = None
+    result_file_ending: str = ".sfc"
+    """An APContainer that additionally has delta.bsdiff4 
+    containing a delta patch to get the desired file, often a rom."""
+
+    def __init__(self, *args, patched_path: str = "", **kwargs):
+        self.patched_path = patched_path
+        super(APDeltaPatch, self).__init__(*args, **kwargs)
+
+    def get_manifest(self) -> dict:
+        manifest = super(APDeltaPatch, self).get_manifest()
+        manifest["base_checksum"] = self.hash
+        return manifest
+
+    def get_source_data(self) -> bytes:
+        """Get Base data"""
+        raise NotImplementedError()
+
+    def write_contents(self, opened_zipfile: zipfile.ZipFile):
+        super(APDeltaPatch, self).write_contents(opened_zipfile)
+        # write Delta
+        opened_zipfile.writestr("delta.bsdiff4",
+                                bsdiff4.diff(self.get_source_data(), open(self.patched_path, "rb").read()))
+
+    def read_contents(self, opened_zipfile: zipfile.ZipFile):
+        super(APDeltaPatch, self).read_contents(opened_zipfile)
+        self.delta = opened_zipfile.read("delta.bsdiff4")
+
+    def patch(self, target: str):
+        """Base + Delta -> Patched"""
+        if not self.delta:
+            self.read()
+        result = bsdiff4.patch(self.get_source_data(), self.delta)
+        with open(target, "wb") as f:
+            f.write(result)
+
+
+# legacy patch handling follows:
 GAME_ALTTP = "A Link to the Past"
 GAME_SM = "Super Metroid"
 GAME_SOE = "Secret of Evermore"
@@ -96,10 +221,19 @@ def get_base_rom_data(game: str):
 
 
 def create_rom_file(patch_file: str) -> Tuple[dict, str]:
-    data, target, patched_data = create_rom_bytes(patch_file)
-    with open(target, "wb") as f:
-        f.write(patched_data)
-    return data, target
+    auto_handler = AutoPatchRegister.get_handler(patch_file)
+    if auto_handler:
+        handler: APDeltaPatch = auto_handler(patch_file)
+        target = os.path.splitext(patch_file)[0]+handler.result_file_ending
+        handler.patch(target)
+        return {"server": handler.server,
+                "player": handler.player,
+                "player_name": handler.player_name}, target
+    else:
+        data, target, patched_data = create_rom_bytes(patch_file)
+        with open(target, "wb") as f:
+            f.write(patched_data)
+        return data, target
 
 
 def update_patch_data(patch_data: bytes, server: str = "") -> bytes:

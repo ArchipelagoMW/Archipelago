@@ -7,12 +7,14 @@ import threading
 import json
 
 import jinja2
-import Utils
 import shutil
+
+import Utils
+import Patch
 from . import Options
-from BaseClasses import MultiWorld
-from .Technologies import tech_table, rocket_recipes, recipes, free_sample_blacklist, progressive_technology_table, \
-    base_tech_table, tech_to_progressive_lookup, progressive_tech_table, liquids
+
+from .Technologies import tech_table, recipes, free_sample_blacklist, progressive_technology_table, \
+    base_tech_table, tech_to_progressive_lookup, liquids
 
 template_env: Optional[jinja2.Environment] = None
 
@@ -52,6 +54,20 @@ recipe_time_ranges = {
     Options.RecipeTime.option_new_normal: (0.25, 10),
     Options.RecipeTime.option_slow: (5, 10)
 }
+
+
+class FactorioModFile(Patch.APContainer):
+    game = "Factorio"
+    compression_method = zipfile.ZIP_DEFLATED  # Factorio can't load LZMA archives
+
+    def write_contents(self, opened_zipfile: zipfile.ZipFile):
+        super(FactorioModFile, self).write_contents(opened_zipfile)
+        mod_dir = self.path[:-4]  # cut off .zip
+        for root, dirs, files in os.walk(mod_dir):
+            for file in files:
+                opened_zipfile.write(os.path.join(root, file),
+                                     os.path.relpath(os.path.join(root, file),
+                                                     os.path.join(mod_dir, '..')))
 
 
 def generate_mod(world, output_directory: str):
@@ -159,10 +175,7 @@ def generate_mod(world, output_directory: str):
 
     # zip the result
     zf_path = os.path.join(mod_dir + ".zip")
-    with zipfile.ZipFile(zf_path, compression=zipfile.ZIP_DEFLATED, mode='w') as zf:
-        for root, dirs, files in os.walk(mod_dir):
-            for file in files:
-                zf.write(os.path.join(root, file),
-                         os.path.relpath(os.path.join(root, file),
-                                         os.path.join(mod_dir, '..')))
+    mod = FactorioModFile(zf_path, player=player, player_name=multiworld.player_name[player])
+    mod.write()
+
     shutil.rmtree(mod_dir)
