@@ -147,19 +147,21 @@ if __name__ == "__main__":
                 elif rom.endswith(".apbp"):
                     print(f"Applying patch {rom}")
                     data, target = create_rom_file(rom)
-                    #romfile, adjusted = Utils.get_adjuster_settings(target)
+                    # romfile, adjusted = Utils.get_adjuster_settings(target)
                     adjuster_settings = Utils.get_adjuster_settings(GAME_ALTTP)
                     adjusted = False
                     if adjuster_settings:
                         import pprint
                         from worlds.alttp.Rom import get_base_rom_path
+
                         adjuster_settings.rom = target
                         adjuster_settings.baserom = get_base_rom_path()
                         adjuster_settings.world = None
                         whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
-                                        "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
-                                        "reduceflashing", "deathlink"}
-                        printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
+                                     "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
+                                     "reduceflashing", "deathlink"}
+                        printed_options = {name: value for name, value in vars(adjuster_settings).items() if
+                                           name in whitelist}
                         if hasattr(adjuster_settings, "sprite_pool"):
                             sprite_pool = {}
                             for sprite in getattr(adjuster_settings, "sprite_pool"):
@@ -172,14 +174,15 @@ if __name__ == "__main__":
 
                         adjust_wanted = str('no')
                         if not hasattr(adjuster_settings, 'auto_apply') or 'ask' in adjuster_settings.auto_apply:
-                            adjust_wanted = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
-                                                  f"{pprint.pformat(printed_options)}\n"
-                                                  f"Enter yes, no, always or never: ")
+                            adjust_wanted = input(
+                                f"Last used adjuster settings were found. Would you like to apply these? \n"
+                                f"{pprint.pformat(printed_options)}\n"
+                                f"Enter yes, no, always or never: ")
                         if adjuster_settings.auto_apply == 'never':  # never adjust, per user request
                             adjust_wanted = 'no'
                         elif adjuster_settings.auto_apply == 'always':
                             adjust_wanted = 'yes'
-                        
+
                         if adjust_wanted and "never" in adjust_wanted:
                             adjuster_settings.auto_apply = 'never'
                             Utils.persistent_store("adjuster", GAME_ALTTP, adjuster_settings)
@@ -191,10 +194,12 @@ if __name__ == "__main__":
                         if adjust_wanted and adjust_wanted.startswith("y"):
                             if hasattr(adjuster_settings, "sprite_pool"):
                                 from LttPAdjuster import AdjusterWorld
+
                                 adjuster_settings.world = AdjusterWorld(getattr(adjuster_settings, "sprite_pool"))
 
                             adjusted = True
                             import LttPAdjuster
+
                             _, romfile = LttPAdjuster.adjust(adjuster_settings)
 
                             if hasattr(adjuster_settings, "world"):
@@ -218,24 +223,6 @@ if __name__ == "__main__":
                     if 'server' in data:
                         Utils.persistent_store("servers", data['hash'], data['server'])
                         print(f"Host is {data['server']}")
-                elif rom.endswith(".archipelago"):
-                    import json
-                    import zlib
-
-                    with open(rom, 'rb') as fr:
-
-                        multidata = zlib.decompress(fr.read()).decode("utf-8")
-                        with open(rom + '.txt', 'w') as fw:
-                            fw.write(multidata)
-                        multidata = json.loads(multidata)
-                        for romname in multidata['roms']:
-                            Utils.persistent_store("servers", "".join(chr(byte) for byte in romname[2]), address)
-                        from Utils import get_options
-
-                        multidata["server_options"] = get_options()["server_options"]
-                        multidata = zlib.compress(json.dumps(multidata).encode("utf-8"), 9)
-                        with open(rom + "_updated.archipelago", 'wb') as f:
-                            f.write(multidata)
 
                 elif rom.endswith(".zip"):
                     print(f"Updating host in patch files contained in {rom}")
