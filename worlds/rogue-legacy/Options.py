@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
+from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList, OptionSet
 
 
 class StartingGender(Choice):
@@ -195,7 +195,7 @@ class CastleScaling(Range):
     Adjusts the scaling factor for how big a castle can be. Larger castles scale enemies quicker and also take longer
     to generate. 100 means normal castle size.
     """
-    displayname = "Castle Size Scaling Percentage"
+    display_name = "Castle Size Scaling Percentage"
     range_start = 50
     range_end = 300
     default = 100
@@ -205,7 +205,7 @@ class ChallengeBossKhidr(Choice):
     """
     Determines if Neo Khidr replaces Khidr in their boss room.
     """
-    displayname = "Khidr"
+    display_name = "Khidr"
     option_vanilla = 0
     option_challenge = 1
     default = 0
@@ -215,7 +215,7 @@ class ChallengeBossAlexander(Choice):
     """
     Determines if Alexander the IV replaces Alexander in their boss room.
     """
-    displayname = "Alexander"
+    display_name = "Alexander"
     option_vanilla = 0
     option_challenge = 1
     default = 0
@@ -225,7 +225,7 @@ class ChallengeBossLeon(Choice):
     """
     Determines if Ponce de Freon replaces Ponce de Leon in their boss room.
     """
-    displayname = "Ponce de Leon"
+    display_name = "Ponce de Leon"
     option_vanilla = 0
     option_challenge = 1
     default = 0
@@ -235,7 +235,7 @@ class ChallengeBossHerodotus(Choice):
     """
     Determines if Astrodotus replaces Herodotus in their boss room.
     """
-    displayname = "Herodotus"
+    display_name = "Herodotus"
     option_vanilla = 0
     option_challenge = 1
     default = 0
@@ -245,7 +245,7 @@ class HealthUpPool(Range):
     """
     Determines the number of Health Ups in the item pool.
     """
-    displayname = "Health Up Pool"
+    display_name = "Health Up Pool"
     range_start = 0
     range_end = 15
     default = 15
@@ -255,7 +255,7 @@ class ManaUpPool(Range):
     """
     Determines the number of Mana Ups in the item pool.
     """
-    displayname = "Mana Up Pool"
+    display_name = "Mana Up Pool"
     range_start = 0
     range_end = 15
     default = 15
@@ -265,7 +265,7 @@ class AttackUpPool(Range):
     """
     Determines the number of Attack Ups in the item pool.
     """
-    displayname = "Attack Up Pool"
+    display_name = "Attack Up Pool"
     range_start = 0
     range_end = 15
     default = 15
@@ -275,7 +275,7 @@ class MagicDamageUpPool(Range):
     """
     Determines the number of Magic Damage Ups in the item pool.
     """
-    displayname = "Magic Damage Up Pool"
+    display_name = "Magic Damage Up Pool"
     range_start = 0
     range_end = 15
     default = 15
@@ -285,7 +285,7 @@ class ArmorUpPool(Range):
     """
     Determines the number of Armor Ups in the item pool.
     """
-    displayname = "Armor Up Pool"
+    display_name = "Armor Up Pool"
     range_start = 0
     range_end = 10
     default = 10
@@ -295,7 +295,7 @@ class EquipUpPool(Range):
     """
     Determines the number of Equip Ups in the item pool.
     """
-    displayname = "Equip Up Pool"
+    display_name = "Equip Up Pool"
     range_start = 0
     range_end = 10
     default = 10
@@ -305,7 +305,7 @@ class CritChanceUpPool(Range):
     """
     Determines the number of Crit Chance Ups in the item pool.
     """
-    displayname = "Crit Chance Up Pool"
+    display_name = "Crit Chance Up Pool"
     range_start = 0
     range_end = 5
     default = 5
@@ -315,7 +315,7 @@ class CritDamageUpPool(Range):
     """
     Determines the number of Crit Damage Ups in the item pool.
     """
-    displayname = "Crit Damage Up Pool"
+    display_name = "Crit Damage Up Pool"
     range_start = 0
     range_end = 5
     default = 5
@@ -325,12 +325,22 @@ class FreeDiaryOnGeneration(DefaultOnToggle):
     """
     Allows the player to get a free diary check every time they regenerate the castle in the starting room.
     """
-    displayname = "Free Diary On Generation"
+    display_name = "Free Diary On Generation"
 
+
+class AvailableClasses(OptionSet):
+    """
+    List of classes that will be in the item pool to find. The upgraded form of the class will be added with it.
+    The upgraded form of your starting class will be available regardless.
+    """
+    display_name = "Available Classes"
+    default = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
+    valid_keys = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
 
 legacy_options: typing.Dict[str, type(Option)] = {
     "starting_gender": StartingGender,
     "starting_class": StartingClass,
+    "available_classes": AvailableClasses,
     "new_game_plus": NewGamePlus,
     "fairy_chests_per_zone": FairyChestsPerZone,
     "chests_per_zone": ChestsPerZone,
