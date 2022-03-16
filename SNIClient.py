@@ -201,7 +201,8 @@ async def deathlink_kill_player(ctx: Context):
                 snes_buffered_write(ctx, WRAM_START + 0x0373,
                                     bytes([8]))  # deal 1 full heart of damage at next opportunity
         elif ctx.game == GAME_SM:
-            snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
+            snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([1, 0]))  # set current health to 1 (to prevent saving with 0 energy)
+            snes_buffered_write(ctx, WRAM_START + 0x0A50, bytes([255])) # deal 255 of damage at next opportunity
             if not ctx.death_link_allow_survive:
                 snes_buffered_write(ctx, WRAM_START + 0x09D6, bytes([0, 0]))  # set current reserve to 0
         await snes_flush_writes(ctx)
