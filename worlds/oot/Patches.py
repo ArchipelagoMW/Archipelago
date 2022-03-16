@@ -2,6 +2,8 @@ import struct
 import itertools
 import re
 import zlib
+import zipfile
+import os
 from collections import defaultdict
 from functools import partial
 
@@ -16,6 +18,18 @@ from .Messages import read_messages, update_message_by_id, read_shop_items, upda
 from .MQ import patch_files, File, update_dmadata, insert_space, add_relocations
 from .SaveContext import SaveContext
 from .TextBox import character_table, NORMAL_LINE_WIDTH
+
+from Patch import APContainer
+
+
+class OOTContainer(APContainer):
+    game = "Ocarina of Time"
+
+    def write_contents(self, opened_zipfile: zipfile.ZipFile):
+        zpf = self.path[:-5] + '.zpf'  # cut off .apz5, replace with .zpf
+        print(zpf)
+        opened_zipfile.write(zpf, os.path.basename(zpf))
+        super(OOTContainer, self).write_contents(opened_zipfile)  # write manifest
 
 
 # "Spoiler" argument deleted; can probably be replaced with calls to world.world

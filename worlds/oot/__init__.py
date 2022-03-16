@@ -1,6 +1,7 @@
 import logging
 import threading
 import copy
+import os
 from collections import Counter
 
 logger = logging.getLogger("Ocarina of Time")
@@ -19,7 +20,7 @@ from .LocationList import business_scrubs, set_drop_location_names
 from .DungeonList import dungeon_table, create_dungeons
 from .LogicTricks import normalized_name_tricks
 from .Rom import Rom
-from .Patches import patch_rom
+from .Patches import patch_rom, OOTContainer
 from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 from .Hints import hint_dist_keys, get_hint_area, buildWorldGossipHints
@@ -773,15 +774,23 @@ class OOTWorld(World):
             # Seed hint RNG, used for ganon text lines also
             self.hint_rng = self.world.slot_seeds[self.player]
 
-            outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}"
+            player_name = self.world.get_player_name(self.player)
+            outfile_path = output_path(output_directory, f"AP_{self.world.seed_name}_P{self.player}_{player_name}")
             rom = Rom(file=get_options()['oot_options']['rom_file'])
             if self.hints != 'none':
                 buildWorldGossipHints(self)
             patch_rom(self, rom)
             patch_cosmetics(self, rom)
             rom.update_header()
-            create_patch_file(rom, output_path(output_directory, outfile_name + '.apz5'))
+            create_patch_file(rom, outfile_path + '.zpf')
             rom.restore()
+
+            # Put zpf in apz5 container, then clear patch file
+            apz5 = OOTContainer(path=outfile_path + '.apz5',
+                player=self.player,
+                player_name=player_name)
+            apz5.write()
+            os.remove(outfile_path + '.zpf')
 
             # Write entrances to spoiler log
             all_entrances = self.get_shuffled_entrances()
