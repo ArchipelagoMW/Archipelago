@@ -1,7 +1,9 @@
 import os
 import json
+import zipfile
 from base64 import b64encode, b64decode
 from math import ceil
+from typing import Optional
 
 from .Items import MinecraftItem, item_table, required_items, junk_weights
 from .Locations import MinecraftAdvancement, advancement_table, exclusion_table, get_postgame_advancements
@@ -10,11 +12,28 @@ from .Rules import set_advancement_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 
 from BaseClasses import Region, Entrance, Item
+from Patch import APContainer
 from .Options import minecraft_options
 from ..AutoWorld import World
 
 client_version = 7
 minecraft_version = "1.17.1"
+
+
+class MinecraftContainer(APContainer):
+    game = "Minecraft"
+    mc_data: dict
+
+    def __init__(self, path: Optional[str] = None, player: Optional[int] = None,
+                 player_name: str = "", server: str = "", data: dict = {}):
+        self.mc_data = data
+        super(MinecraftContainer, self).__init__(path, player, player_name, server)
+
+    def get_manifest(self) -> dict:
+        info = super(MinecraftContainer, self).get_manifest()
+        info.update(self.mc_data)
+        return info
+
 
 class MinecraftWorld(World):
     """
@@ -112,9 +131,13 @@ class MinecraftWorld(World):
 
     def generate_output(self, output_directory: str):
         data = self._get_mc_data()
-        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}.apmc"
-        with open(os.path.join(output_directory, filename), 'wb') as f:
-            f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
+        player_name = self.world.get_player_name(self.player)
+        filename = os.path.join(output_directory, f"AP_{self.world.seed_name}_P{self.player}_{player_name}.apmc")
+        apmc = MinecraftContainer(path=filename, 
+            player=self.player, 
+            player_name=player_name, 
+            data=self._get_mc_data())
+        apmc.write()
 
     def fill_slot_data(self):
         slot_data = self._get_mc_data()
@@ -131,9 +154,3 @@ class MinecraftWorld(World):
         if name in nonexcluded_items:  # prevent books from going on excluded locations
             item.never_exclude = True
         return item
-
-def mc_update_output(raw_data, server, port):
-    data = json.loads(b64decode(raw_data))
-    data['server'] = server
-    data['port'] = port
-    return b64encode(bytes(json.dumps(data), 'utf-8'))
