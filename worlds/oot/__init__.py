@@ -786,11 +786,11 @@ class OOTWorld(World):
             rom.restore()
 
             # Put zpf in apz5 container, then clear patch file
-            apz5 = OOTContainer(path=outfile_path + '.apz5',
-                player=self.player,
-                player_name=player_name)
+            apz5 = OOTContainer(player=self.player,
+                player_name=player_name,
+                path_noext=outfile_path)
             apz5.write()
-            os.remove(outfile_path + '.zpf')
+            os.remove(apz5.zpf_path)
 
             # Write entrances to spoiler log
             all_entrances = self.get_shuffled_entrances()

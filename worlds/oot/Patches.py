@@ -25,10 +25,13 @@ from Patch import APContainer
 class OOTContainer(APContainer):
     game = "Ocarina of Time"
 
+    def __init__(self, player=None, player_name="", server="", path_noext=""):
+        container_path = path_noext + ".apz5"
+        self.zpf_path  = path_noext + ".zpf"
+        super(OOTContainer, self).__init__(container_path, player, player_name, server)
+
     def write_contents(self, opened_zipfile: zipfile.ZipFile):
-        zpf = self.path[:-5] + '.zpf'  # cut off .apz5, replace with .zpf
-        print(zpf)
-        opened_zipfile.write(zpf, os.path.basename(zpf))
+        opened_zipfile.write(self.zpf_path, os.path.basename(self.zpf_path))
         super(OOTContainer, self).write_contents(opened_zipfile)  # write manifest
 
 
