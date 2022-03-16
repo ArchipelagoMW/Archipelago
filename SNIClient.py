@@ -266,6 +266,7 @@ SM_RECV_ITEM_ADDR = SAVEDATA_START + 0x4D2          # 1 byte
 SM_RECV_ITEM_PLAYER_ADDR = SAVEDATA_START + 0x4D3   # 1 byte
 
 SM_DEATH_LINK_ACTIVE_ADDR = ROM_START + 0x277f04    # 1 byte
+SM_REMOTE_ITEM_FLAG_ADDR = ROM_START + 0x277f06    # 1 byte
 
 # SMZ3
 SMZ3_ROMNAME_START = 0x00FFC0
@@ -983,7 +984,8 @@ async def game_watcher(ctx: Context):
                 continue
             elif game_name[:2] == b"SM":
                 ctx.game = GAME_SM
-                ctx.items_handling = 0b111  # full local
+                item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
+                ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
             else:
                 game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
                 if game_name == b"ZSM":
@@ -1137,7 +1139,7 @@ async def game_watcher(ctx: Context):
             if itemOutPtr < len(ctx.items_received):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
-                locationId = (item.location - locations_start_id) if item.location >= 0 else 0xFF
+                locationId = (item.location - locations_start_id) if item.location >= 0 else 0x00
 
                 playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes(
@@ -1211,7 +1213,7 @@ async def game_watcher(ctx: Context):
                 snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x602, bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
                 logging.info('Received %s from %s (%s) (%d/%d in list)' % (
                     color(ctx.item_name_getter(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
-                    ctx.location_name_getter(locationId + locations_start_id), itemOutPtr, len(ctx.items_received)))
+                    ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
 
 

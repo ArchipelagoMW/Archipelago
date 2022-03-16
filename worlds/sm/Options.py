@@ -52,6 +52,14 @@ class DeathLink(Choice):
     alias_true = 1
     default = 0
 
+class RemoteItems(Toggle):
+    """Indicates you get items sent from your own world. This allows coop play of a seed."""
+    display_name = "Remote Items"  
+
+class RemoteStartInventory(Toggle):
+    """Indicates you get your starting inventory sent instead of them being baked into the ROM."""
+    display_name = "Remote Start Inventory"  
+
 class MaxDifficulty(Choice):
     """Depending on the perceived difficulties of the techniques, bosses, hell runs etc. from the preset, it will prevent the Randomizer from placing an item in a location too difficult to reach with the current items."""
     display_name = "Maximum Difficulty"
@@ -225,6 +233,8 @@ sm_options: typing.Dict[str, type(Option)] = {
     "start_inventory_removes_from_pool": StartItemsRemovesFromPool,
     "preset": Preset,
     "start_location": StartLocation,
+    "remote_items": RemoteItems,
+    "remote_start_inventory": RemoteStartInventory,
     "death_link": DeathLink,
     #"majors_split": "Full",
     #"scav_num_locs": "10",

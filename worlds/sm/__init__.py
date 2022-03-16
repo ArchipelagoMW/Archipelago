@@ -64,8 +64,8 @@ class SMWorld(World):
     item_name_to_id = items_lookup_name_to_id
     location_name_to_id = locations_lookup_name_to_id
 
-    remote_items: bool = True
-    remote_start_inventory: bool = True
+    remote_items: bool = False
+    remote_start_inventory: bool = False
 
     itemManager: ItemManager
 
@@ -91,6 +91,9 @@ class SMWorld(World):
 
         if (self.variaRando.args.morphPlacement == "early"):
             self.world.local_items[self.player].value.add('Morph')
+
+        self.remote_items = self.world.remote_items[self.player]
+        self.remote_start_inventory = self.world.remote_start_inventory[self.player]
 
         if (len(self.variaRando.randoExec.setup.restrictedLocs) > 0):
             self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("items")
@@ -286,6 +289,9 @@ class SMWorld(World):
         openTourianGreyDoors = {0x07C823 + 5: [0x0C], 0x07C831 + 5: [0x0C]}
 
         deathLink = {0x277f04: [self.world.death_link[self.player].value]}
+        remoteItem = {0x277f06: self.getWordArray(  0b001 + 
+                                                    (0b010 if self.remote_items else 0b000) + 
+                                                    (0b100 if self.remote_start_inventory else 0b000))}
 
         playerNames = {}
         playerNameIDMap = {}
@@ -300,6 +306,7 @@ class SMWorld(World):
                         'offworldSprites': offworldSprites,
                         'openTourianGreyDoors': openTourianGreyDoors,
                         'deathLink': deathLink,
+                        'remoteItem': remoteItem,
                         'PlayerName':  playerNames,
                         'PlayerNameIDMap':  playerNameIDMap}
         romPatcher.applyIPSPatchDict(patchDict)
@@ -311,74 +318,75 @@ class SMWorld(World):
         self.romName.extend([0] * (21 - len(self.romName)))
         romPatcher.applyIPSPatch('ROMName', { 'ROMName':  {0x1C4F00 : self.romName, 0x007FC0 : self.romName} })
 
-        startItemROMAddressBase = 0x2FD8B9
+        if (not self.remote_start_inventory):
+            startItemROMAddressBase = 0x2FD8B9
 
-        # current, base value or bitmask, max, base value or bitmask
-        startItemROMDict = {'ETank': [0x8, 0x64, 0xA, 0x64],
-                            'Missile': [0xC, 0x5, 0xE, 0x5],
-                            'Super': [0x10, 0x5, 0x12, 0x5],
-                            'PowerBomb': [0x14, 0x5, 0x16, 0x5],
-                            'Reserve': [0x1A, 0x64, 0x18, 0x64],
-                            'Morph': [0x2, 0x4, 0x0, 0x4],
-                            'Bomb': [0x3, 0x10, 0x1, 0x10],
-                            'SpringBall': [0x2, 0x2, 0x0, 0x2],
-                            'HiJump': [0x3, 0x1, 0x1, 0x1],
-                            'Varia': [0x2, 0x1, 0x0, 0x1],
-                            'Gravity': [0x2, 0x20, 0x0, 0x20],
-                            'SpeedBooster': [0x3, 0x20, 0x1, 0x20],
-                            'SpaceJump': [0x3, 0x2, 0x1, 0x2],
-                            'ScrewAttack': [0x2, 0x8, 0x0, 0x8],
-                            'Charge': [0x7, 0x10, 0x5, 0x10],
-                            'Ice': [0x6, 0x2, 0x4, 0x2], 
-                            'Wave': [0x6, 0x1, 0x4, 0x1],
-                            'Spazer': [0x6, 0x4, 0x4, 0x4], 
-                            'Plasma': [0x6, 0x8, 0x4, 0x8],
-                            'Grapple': [0x3, 0x40, 0x1, 0x40],
-                            'XRayScope': [0x3, 0x80, 0x1, 0x80]
-                            }
-        mergedData = {}
-        hasETank = False
-        hasSpazer = False
-        hasPlasma = False
-        for startItem in self.startItems:
-            item = startItem.Type
-            if item == 'ETank': hasETank = True
-            if item == 'Spazer': hasSpazer = True
-            if item == 'Plasma': hasPlasma = True
-            if (item in ['ETank', 'Missile', 'Super', 'PowerBomb', 'Reserve']):
-                (currentValue, currentBase, maxValue, maxBase) = startItemROMDict[item]
-                if (startItemROMAddressBase + currentValue) in mergedData:
-                    mergedData[startItemROMAddressBase + currentValue] += currentBase
-                    mergedData[startItemROMAddressBase + maxValue] += maxBase
+            # current, base value or bitmask, max, base value or bitmask
+            startItemROMDict = {'ETank': [0x8, 0x64, 0xA, 0x64],
+                                'Missile': [0xC, 0x5, 0xE, 0x5],
+                                'Super': [0x10, 0x5, 0x12, 0x5],
+                                'PowerBomb': [0x14, 0x5, 0x16, 0x5],
+                                'Reserve': [0x1A, 0x64, 0x18, 0x64],
+                                'Morph': [0x2, 0x4, 0x0, 0x4],
+                                'Bomb': [0x3, 0x10, 0x1, 0x10],
+                                'SpringBall': [0x2, 0x2, 0x0, 0x2],
+                                'HiJump': [0x3, 0x1, 0x1, 0x1],
+                                'Varia': [0x2, 0x1, 0x0, 0x1],
+                                'Gravity': [0x2, 0x20, 0x0, 0x20],
+                                'SpeedBooster': [0x3, 0x20, 0x1, 0x20],
+                                'SpaceJump': [0x3, 0x2, 0x1, 0x2],
+                                'ScrewAttack': [0x2, 0x8, 0x0, 0x8],
+                                'Charge': [0x7, 0x10, 0x5, 0x10],
+                                'Ice': [0x6, 0x2, 0x4, 0x2], 
+                                'Wave': [0x6, 0x1, 0x4, 0x1],
+                                'Spazer': [0x6, 0x4, 0x4, 0x4], 
+                                'Plasma': [0x6, 0x8, 0x4, 0x8],
+                                'Grapple': [0x3, 0x40, 0x1, 0x40],
+                                'XRayScope': [0x3, 0x80, 0x1, 0x80]
+                                }
+            mergedData = {}
+            hasETank = False
+            hasSpazer = False
+            hasPlasma = False
+            for startItem in self.startItems:
+                item = startItem.Type
+                if item == 'ETank': hasETank = True
+                if item == 'Spazer': hasSpazer = True
+                if item == 'Plasma': hasPlasma = True
+                if (item in ['ETank', 'Missile', 'Super', 'PowerBomb', 'Reserve']):
+                    (currentValue, currentBase, maxValue, maxBase) = startItemROMDict[item]
+                    if (startItemROMAddressBase + currentValue) in mergedData:
+                        mergedData[startItemROMAddressBase + currentValue] += currentBase
+                        mergedData[startItemROMAddressBase + maxValue] += maxBase
+                    else:
+                        mergedData[startItemROMAddressBase + currentValue] = currentBase
+                        mergedData[startItemROMAddressBase + maxValue] = maxBase
                 else:
-                    mergedData[startItemROMAddressBase + currentValue] = currentBase
-                    mergedData[startItemROMAddressBase + maxValue] = maxBase
-            else:
-                (collected, currentBitmask, equipped, maxBitmask) = startItemROMDict[item]
-                if (startItemROMAddressBase + collected) in mergedData:
-                    mergedData[startItemROMAddressBase + collected] |= currentBitmask
-                    mergedData[startItemROMAddressBase + equipped] |= maxBitmask
+                    (collected, currentBitmask, equipped, maxBitmask) = startItemROMDict[item]
+                    if (startItemROMAddressBase + collected) in mergedData:
+                        mergedData[startItemROMAddressBase + collected] |= currentBitmask
+                        mergedData[startItemROMAddressBase + equipped] |= maxBitmask
+                    else:
+                        mergedData[startItemROMAddressBase + collected] = currentBitmask
+                        mergedData[startItemROMAddressBase + equipped] = maxBitmask
+
+            if hasETank:
+                mergedData[startItemROMAddressBase + 0x8] += 99
+                mergedData[startItemROMAddressBase + 0xA] += 99
+
+            if hasSpazer and hasPlasma:
+                mergedData[startItemROMAddressBase + 0x4] &= ~0x4
+
+            for key, value in mergedData.items():
+                if (key - startItemROMAddressBase > 7):
+                    (w0, w1) = self.getWord(value)
+                    mergedData[key] = [w0, w1]
                 else:
-                    mergedData[startItemROMAddressBase + collected] = currentBitmask
-                    mergedData[startItemROMAddressBase + equipped] = maxBitmask
+                    mergedData[key] = [value]
+                
 
-        if hasETank:
-            mergedData[startItemROMAddressBase + 0x8] += 99
-            mergedData[startItemROMAddressBase + 0xA] += 99
-
-        if hasSpazer and hasPlasma:
-            mergedData[startItemROMAddressBase + 0x4] &= ~0x4
-
-        for key, value in mergedData.items():
-            if (key - startItemROMAddressBase > 7):
-                (w0, w1) = self.getWord(value)
-                mergedData[key] = [w0, w1]
-            else:
-                mergedData[key] = [value]
-            
-
-        startItemPatch = { 'startItemPatch':  mergedData }
-        romPatcher.applyIPSPatch('startItemPatch', startItemPatch)
+            startItemPatch = { 'startItemPatch':  mergedData }
+            romPatcher.applyIPSPatch('startItemPatch', startItemPatch)
 
         romPatcher.commitIPS()
 
