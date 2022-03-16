@@ -8,7 +8,13 @@ from CommonClient import CommonContext, server_loop, gui_enabled, console_loop,
     ClientCommandProcessor, logger, get_base_parser
 
 class OoTCommandProcessor(ClientCommandProcessor):
-    pass
+    def __init__(self, ctx): 
+        super().__init__(ctx)
+
+    def _cmd_n64(self):
+        """Check N64 Connection State"""
+        if isinstance(self.ctx, OoTContext):
+            logger.info(f"N64 Status: {self.ctx.n64_status}")
 
 class OoTContext(CommonContext): 
     pass
