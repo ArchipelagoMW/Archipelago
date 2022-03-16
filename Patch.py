@@ -42,7 +42,7 @@ class APContainer:
     """A zipfile containing at least archipelago.json"""
     version: int = current_patch_version
     compression_level: int = 9
-    compression_method: int = zipfile.ZIP_LZMA
+    compression_method: int = zipfile.ZIP_DEFLATED
     game: Optional[str] = None
 
     # instance attributes:
@@ -116,6 +116,7 @@ class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
     def get_manifest(self) -> dict:
         manifest = super(APDeltaPatch, self).get_manifest()
         manifest["base_checksum"] = self.hash
+        manifest["result_file_ending"] = self.result_file_ending
         return manifest
 
     @classmethod
@@ -133,7 +134,8 @@ class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
         super(APDeltaPatch, self).write_contents(opened_zipfile)
         # write Delta
         opened_zipfile.writestr("delta.bsdiff4",
-                                bsdiff4.diff(self.get_source_data_with_cache(), open(self.patched_path, "rb").read()))
+                                bsdiff4.diff(self.get_source_data_with_cache(), open(self.patched_path, "rb").read()),
+                                compress_type=zipfile.ZIP_STORED)  # bsdiff4 is a format with integrated compression
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile):
         super(APDeltaPatch, self).read_contents(opened_zipfile)
