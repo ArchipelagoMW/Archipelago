@@ -69,7 +69,6 @@ def generate_mod(world, output_directory: str):
             control_template = template_env.get_template("control.lua")
             settings_template = template_env.get_template("settings.lua")
     # get data for templates
-    player_names = {x: multiworld.player_name[x] for x in multiworld.player_ids}
     locations = []
     for location in multiworld.get_filled_locations(player):
         if location.address:
@@ -95,7 +94,7 @@ def generate_mod(world, output_directory: str):
         return random.uniform(low, high)
 
     template_data = {
-        "locations": locations, "player_names": player_names, "tech_table": tech_table,
+        "locations": locations, "player_names": multiworld.player_name, "tech_table": tech_table,
         "base_tech_table": base_tech_table, "tech_to_progressive_lookup": tech_to_progressive_lookup,
         "mod_name": mod_name,
         "allowed_science_packs": multiworld.max_science_pack[player].get_allowed_packs(),
