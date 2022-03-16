@@ -80,17 +80,22 @@ class MeritousWorld(World):
         create_regions(self.world, self.player)
 
     def create_items(self):
-        frequencies = [0, 25, 23, 22, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3]
+        frequencies = [0, # Nothing [0]
+                       25, 23, 22, # PSI Enhancements [1-3]
+                       1, 1, 1, 1, 1, 1, 1, 1, 1, # Artifacts [4-12]
+                       1, 1, 1, # PSI Keys [13-15]
+                       0, 0, # Seal & Knife [16-17]
+                       3] # Traps [18]
         location_count = len(location_table) - 2
         item_pool = []
 
         if not self.include_psi_keys:
             location_count -= 3
             for i in range(3):
-                frequencies[i + 12] = 0
+                frequencies[i - 6] = 0
 
         if not self.include_evolution_traps:
-            frequencies[17] = 0
+            frequencies[-1] = 0
             location_count -= 3
 
         for i, name in enumerate(item_table):
