@@ -54,13 +54,19 @@ In case you are using the Archipelago Website, the IP should be `archipelago.gg`
 
 If everything worked out, you will see a textbox informing you the connection has been established after the story intro.
 
+# Playing offline
+
+To play offline, first generate a seed on the game's settings page.
+Create a room and download the `.apsm64ex` file, and start the game with the `--sm64ap_file FileName` launch argument.
+
 ## Installation Troubleshooting
 
 Start the game from the command line to view helpful messages regarding SM64EX.
 
 ### Game doesn't start after compiling
 
-Most likely you forgot to set the launch options. `--sm64ap_name YourName` and `--sm64ap_ip ServerIP:Port` are required for startup.
+Most likely you forgot to set the launch options. `--sm64ap_name YourName` and `--sm64ap_ip ServerIP:Port` are required for startup for Multiworlds, and
+`--sm64ap_file FileName` is required for (offline) singleplayer.
 If your Name or Password have spaces in them, surround them in quotes.
 
 ## Game Troubleshooting

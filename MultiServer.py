@@ -698,8 +698,10 @@ def get_players_string(ctx: Context):
     player_names = sorted(ctx.player_names.keys())
     current_team = -1
     text = ''
+    total = 0
     for team, slot in player_names:
         if ctx.slot_info[slot].type == SlotType.player:
+            total += 1
             player_name = ctx.player_names[team, slot]
             if team != current_team:
                 text += f':: Team #{team + 1}: '
@@ -708,7 +710,7 @@ def get_players_string(ctx: Context):
                 text += f'{player_name} '
             else:
                 text += f'({player_name}) '
-    return f'{len(auth_clients)} players of {len(ctx.player_names)} connected ' + text[:-1]
+    return f'{len(auth_clients)} players of {total} connected ' + text[:-1]
 
 
 def get_status_string(ctx: Context, team: int):

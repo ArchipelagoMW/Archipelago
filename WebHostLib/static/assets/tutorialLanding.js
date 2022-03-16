@@ -66,6 +66,6 @@ window.addEventListener('load', () => {
       console.error(error);
     }
   };
-  ajax.open('GET', `${window.location.origin}/static/assets/tutorial/tutorials.json`, true);
+  ajax.open('GET', `${window.location.origin}/static/generated/tutorials.json`, true);
   ajax.send();
 });
