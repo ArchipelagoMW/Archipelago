@@ -3,7 +3,7 @@
 ## Required Software
 
 - ChecksFinder from
-  my [Github releases Page for the game](https://github.com/jonloveslegos/ChecksFinder/releases) (latest version)
+  the [Github releases Page for the game](https://github.com/jonloveslegos/ChecksFinder/releases) (latest version)
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
     - (select `ChecksFinder Client` during installation.)
 
@@ -17,8 +17,6 @@ guide: [Basic Multiworld Setup Guide](/tutorial/archipelago/setup/en)
 ### Where do I get a YAML file?
 
 You can customize your settings by visiting the [ChecksFinder Player Settings Page](/games/ChecksFinder/player-settings)
-
-## Joining a MultiWorld Game
 
 ### Generating a ChecksFinder game
 

@@ -45,12 +45,12 @@ def link_checksfinder_structures(world, player):
 # (Region name, list of exits)
 checksfinder_regions = [
     ('Menu', ['New Board']),
-    ('Overworld',[]),
+    ('Board',[]),
 ]
 
 # (Entrance, region pointed to)
 mandatory_connections = [
-    ('New Board', 'Overworld'),
+    ('New Board', 'Board'),
 ]
 
 default_connections = [

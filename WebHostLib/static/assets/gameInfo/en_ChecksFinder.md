@@ -5,12 +5,6 @@
 The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
 config file.
 
-## What does randomization do to this game?
-
-Recipes are removed from the crafting book and shuffled into the item pool. It can also optionally change which
-structures appear in each dimension. Crafting recipes are re-learned when they are received from other players as item
-checks, and occasionally when completing your own achievements.
-
 ## What is considered a location check in ChecksFinder?
 
 Location checks in are completed when the player finds a spot on a board that has the archipelago logo. The bottom of
