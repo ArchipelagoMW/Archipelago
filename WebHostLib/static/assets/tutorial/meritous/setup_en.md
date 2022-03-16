@@ -2,7 +2,7 @@
 
 ## Required Software
 
-[Meritous Gaiden](https://github.com/FelicitusNeko/meritous-ap/releases)
+Download the game from the [Meritous Gaiden GitHub releases page](https://github.com/FelicitusNeko/meritous-ap/releases)
 
 ## Installation Procedures
 

@@ -16,8 +16,11 @@ client_version = 1
 
 
 class MeritousWorld(World):
-    # NOTE: Remember to put in an actual description before going live
-    """Insert some sort of description here"""
+    """
+        Meritous Gaiden is a procedurally generated bullet-hell dungeon crawl game.
+        Five generations after the Orcus Dome incident, strange experiments conducted in a new
+        structure on the moon are tearing at the very fabric of reality...
+    """
 
     game: str = "Meritous"
     topology_present: False
