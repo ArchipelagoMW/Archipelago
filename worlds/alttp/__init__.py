@@ -303,7 +303,7 @@ class ALTTPWorld(World):
 
             rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
             rom.write_to_file(rompath)
-            patch = LttPDeltaPatch(os.path.splitext(rompath)[0]+".aplttp", player=player,
+            patch = LttPDeltaPatch(os.path.splitext(rompath)[0]+LttPDeltaPatch.patch_file_ending, player=player,
                                    player_name=world.player_name[player], patched_path=rompath)
             patch.write()
             os.unlink(rompath)

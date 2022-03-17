@@ -67,7 +67,13 @@ class APContainer:
             self.write_contents(zf)
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile):
-        opened_zipfile.writestr("archipelago.json", json.dumps(self.get_manifest()))
+        manifest = self.get_manifest()
+        try:
+            manifest = json.dumps(manifest)
+        except Exception as e:
+            raise Exception(f"Manifest {manifest} did not convert to json.") from e
+        else:
+            opened_zipfile.writestr("archipelago.json", manifest)
 
     def read(self, path: Optional[str] = None):
         if path:
@@ -378,24 +384,6 @@ if __name__ == "__main__":
                     if 'server' in data:
                         Utils.persistent_store("servers", data['hash'], data['server'])
                         print(f"Host is {data['server']}")
-                elif rom.endswith(".archipelago"):
-                    import json
-                    import zlib
-
-                    with open(rom, 'rb') as fr:
-
-                        multidata = zlib.decompress(fr.read()).decode("utf-8")
-                        with open(rom + '.txt', 'w') as fw:
-                            fw.write(multidata)
-                        multidata = json.loads(multidata)
-                        for romname in multidata['roms']:
-                            Utils.persistent_store("servers", "".join(chr(byte) for byte in romname[2]), address)
-                        from Utils import get_options
-
-                        multidata["server_options"] = get_options()["server_options"]
-                        multidata = zlib.compress(json.dumps(multidata).encode("utf-8"), 9)
-                        with open(rom + "_updated.archipelago", 'wb') as f:
-                            f.write(multidata)
 
                 elif rom.endswith(".zip"):
                     print(f"Updating host in patch files contained in {rom}")
