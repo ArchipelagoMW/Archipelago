@@ -38,10 +38,9 @@ class BingoWorld(World):
 
         cards = []
         card_count = world.number_of_rewards[player]
+        rewards = world.number_of_rewards[player]
         if world.bingo_mode[player] == 1:
             card_count //= 12
-        rewards = world.number_of_rewards[player]
-        if world.bingo_mode == 1:
             rewards //= 12
             rewards *= 12
         items = list(item_table)[:rewards]
@@ -86,12 +85,16 @@ class BingoWorld(World):
                     card_columns[card][2].insert(2, 0)
                 for row in range(0, 5):
                     cards[card][row][column] = card_columns[card][column][row]
-        world.worlds[player].cards[player] = cards
+        # world.worlds[player].cards[player] = cards
+        self.cards[self.player] = cards
 
     def generate_basic(self):
         pool = []
         used_calls = set()
         rewards = self.world.number_of_rewards[self.player]
+        if self.world.bingo_mode[self.player] == 1:
+            rewards //= 12
+            rewards *= 12
         for card in self.cards[self.player]:
             for row in card:
                 for call in row:

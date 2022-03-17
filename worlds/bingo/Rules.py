@@ -57,7 +57,7 @@ class BingoLogic(LogicMixin):
                             if not self.has(call, player):
                                 return False
         elif self.world.bingo_mode[player] == 0:
-            for card in range(0, len(cards)):
+            for card in range(1, len(cards)+1):
                 card_completed = 0
                 for l in range(1, 6):
                     if (self._bingo_has_horizontal(card, l, player) or self._bingo_has_vertical(card, l, player) or
@@ -71,7 +71,7 @@ class BingoLogic(LogicMixin):
 
 
 def set_rules(world: MultiWorld, player: int):
-    for c in range(1, len(world.worlds[player].cards)):
+    for c in range(1, len(world.worlds[player].cards[player]) + 1):
         if world.bingo_mode[player] == 1:
             for l in range(1, 6):
                 set_rule(world.get_location(f"Bingo Card {c} Horizontal {l}", player),
