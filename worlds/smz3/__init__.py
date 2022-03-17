@@ -3,7 +3,6 @@ import copy
 import os
 import random
 import threading
-import Patch
 from typing import Dict, Set, TextIO
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState

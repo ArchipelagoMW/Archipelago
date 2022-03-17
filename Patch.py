@@ -10,7 +10,7 @@ import threading
 import concurrent.futures
 import zipfile
 import sys
-from typing import Tuple, Optional, Dict, Any
+from typing import Tuple, Optional, Dict, Any, Union, BinaryIO
 
 import Utils
 
@@ -58,12 +58,13 @@ class APContainer:
         self.player_name = player_name
         self.server = server
 
-    def write(self, path: Optional[str] = None):
-        if path:
-            self.path = path
-        if not self.path:
+    def write(self, file: Optional[Union[str, BinaryIO]] = None):
+        if not self.path and not file:
             raise FileNotFoundError(f"Cannot write {self.__class__.__name__} due to no path provided.")
-        with zipfile.ZipFile(self.path, "w", self.compression_method, True, self.compression_level) as zf:
+        with zipfile.ZipFile(file if file else self.path, "w", self.compression_method, True, self.compression_level) \
+                as zf:
+            if file:
+                self.path = zf.filename
             self.write_contents(zf)
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile):
@@ -75,12 +76,13 @@ class APContainer:
         else:
             opened_zipfile.writestr("archipelago.json", manifest)
 
-    def read(self, path: Optional[str] = None):
-        if path:
-            self.path = path
-        if not self.path:
+    def read(self, file: Optional[Union[str, BinaryIO]] = None):
+        """Read data into patch object. file can be file-like, such as an outer zip file's stream."""
+        if not self.path and not file:
             raise FileNotFoundError(f"Cannot read {self.__class__.__name__} due to no path provided.")
-        with zipfile.ZipFile(self.path, "r") as zf:
+        with zipfile.ZipFile(file if file else self.path, "r") as zf:
+            if file:
+                self.path = zf.filename
             self.read_contents(zf)
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile):
