@@ -23,9 +23,10 @@ from NetUtils import *
 from worlds.alttp import Regions, Shops
 from worlds.alttp.Rom import ROM_PLAYER_LIMIT
 from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
+from worlds.smz3.Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
 import Utils
 from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, get_base_parser
-from Patch import GAME_ALTTP, GAME_SM
+from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3
 
 snes_logger = logging.getLogger("SNES")
 
@@ -265,6 +266,18 @@ SM_RECV_ITEM_ADDR = SAVEDATA_START + 0x4D2          # 1 byte
 SM_RECV_ITEM_PLAYER_ADDR = SAVEDATA_START + 0x4D3   # 1 byte
 
 SM_DEATH_LINK_ACTIVE_ADDR = ROM_START + 0x277f04    # 1 byte
+
+# SMZ3
+SMZ3_ROMNAME_START = 0x00FFC0
+
+SMZ3_INGAME_MODES = {0x07, 0x09, 0x0b}
+SMZ3_ENDGAME_MODES = {0x26, 0x27}
+SMZ3_DEATH_MODES = {0x15, 0x17, 0x18, 0x19, 0x1A}
+
+SMZ3_RECV_PROGRESS_ADDR = SRAM_START + 0x4000         # 2 bytes
+SMZ3_RECV_ITEM_ADDR = SAVEDATA_START + 0x4D2          # 1 byte
+SMZ3_RECV_ITEM_PLAYER_ADDR = SAVEDATA_START + 0x4D3   # 1 byte
+
 
 location_shop_ids = set([info[0] for name, info in Shops.shop_table.items()])
 
@@ -968,23 +981,29 @@ async def game_watcher(ctx: Context):
             game_name = await snes_read(ctx, SM_ROMNAME_START, 2)
             if game_name is None:
                 continue
-            elif game_name == b"SM":
+            elif game_name[:2] == b"SM":
                 ctx.game = GAME_SM
                 ctx.items_handling = 0b001  # full local
             else:
-                ctx.game = GAME_ALTTP
-                ctx.items_handling = 0b001  # full local
+                game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
+                if game_name == b"ZSM":
+                    ctx.game = GAME_SMZ3
+                    ctx.items_handling = 0b101  # local items and remote start inventory
+                else:
+                    ctx.game = GAME_ALTTP
+                    ctx.items_handling = 0b001  # full local
 
-            rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else ROMNAME_START, ROMNAME_SIZE)
+            rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else SMZ3_ROMNAME_START if ctx.game == GAME_SMZ3 else ROMNAME_START, ROMNAME_SIZE)
             if rom is None or rom == bytes([0] * ROMNAME_SIZE):
                 continue
 
             ctx.rom = rom
-            death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
-            SM_DEATH_LINK_ACTIVE_ADDR, 1)
-            if death_link:
-                ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
-                await ctx.update_death_link(bool(death_link[0] & 0b1))
+            if ctx.game != GAME_SMZ3:
+                death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
+                                             SM_DEATH_LINK_ACTIVE_ADDR, 1)
+                if death_link:
+                    ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
+                    await ctx.update_death_link(bool(death_link[0] & 0b1))
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
                 ctx.locations_scouted = set()
@@ -1127,6 +1146,69 @@ async def game_watcher(ctx: Context):
                 logging.info('Received %s from %s (%s) (%d/%d in list)' % (
                     color(ctx.item_name_getter(item.item), 'red', 'bold'),
                     color(ctx.player_names[item.player], 'yellow'),
+                    ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
+            await snes_flush_writes(ctx)
+        elif ctx.game == GAME_SMZ3:
+            currentGame = await snes_read(ctx, SRAM_START + 0x33FE, 2)
+            if (currentGame is not None):
+                if (currentGame[0] != 0):
+                    gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
+                    endGameModes = SM_ENDGAME_MODES
+                else:
+                    gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
+                    endGameModes = ENDGAME_MODES
+
+            if gamemode is not None and (gamemode[0] in endGameModes):
+                if not ctx.finished_game:
+                    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                    ctx.finished_game = True
+                continue
+
+            data = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x680, 4)
+            if data is None:
+                continue
+
+            recv_index = data[0] | (data[1] << 8)
+            recv_item = data[2] | (data[3] << 8)
+
+            while (recv_index < recv_item):
+                itemAdress = recv_index * 8
+                message = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x700 + itemAdress, 8)
+                # worldId = message[0] | (message[1] << 8)  # unused
+                # itemId = message[2] | (message[3] << 8)  # unused
+                isZ3Item = ((message[5] & 0x80) != 0)
+                maskedPart = (message[5] & 0x7F) if isZ3Item else message[5]
+                itemIndex = ((message[4] | (maskedPart << 8)) >> 3) + (256 if isZ3Item else 0)
+
+                recv_index += 1
+                snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x680, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
+
+                from worlds.smz3.TotalSMZ3.Location import locations_start_id
+                location_id = locations_start_id + itemIndex
+
+                ctx.locations_checked.add(location_id)
+                location = ctx.location_name_getter(location_id)
+                snes_logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
+
+            data = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x600, 4)
+            if data is None:
+                continue
+
+            # recv_itemOutPtr = data[0] | (data[1] << 8) # unused
+            itemOutPtr = data[2] | (data[3] << 8)
+
+            from worlds.smz3.TotalSMZ3.Item import items_start_id
+            if itemOutPtr < len(ctx.items_received):
+                item = ctx.items_received[itemOutPtr]
+                itemId = item.item - items_start_id
+
+                playerID = item.player if item.player <= SMZ3_ROM_PLAYER_LIMIT else 0
+                snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes([playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
+                itemOutPtr += 1
+                snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x602, bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
+                logging.info('Received %s from %s (%s) (%d/%d in list)' % (
+                    color(ctx.item_name_getter(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
                     ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
 

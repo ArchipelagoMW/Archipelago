@@ -307,7 +307,7 @@ def balance_multiworld_progression(world: MultiWorld):
     # Define a threshold value based on the player with the most available locations.
     # If other players are below the threshold value, swap progression in this sphere into earlier spheres,
     #   which gives more locations available by this sphere.
-    balanceable_players = {player for player in range(1, world.players + 1) if world.progression_balancing[player]}
+    balanceable_players = {player for player in world.player_ids if world.progression_balancing[player]}
     if not balanceable_players:
         logging.info('Skipping multiworld progression balancing.')
     else:
@@ -316,8 +316,9 @@ def balance_multiworld_progression(world: MultiWorld):
         checked_locations = set()
         unchecked_locations = set(world.get_locations())
 
-        reachable_locations_count = {player: 0 for player in world.get_all_ids()}
-        total_locations_count = {player: sum(1 for loc in world.get_locations() if not loc.locked and loc.player == player) for player in world.player_ids}
+        reachable_locations_count = {player: 0 for player in world.player_ids}
+        total_locations_count = Counter(location.player for location in world.get_locations() if not location.locked)
+        balanceable_players = {player for player in balanceable_players if total_locations_count[player]}
         sphere_num = 1
         moved_item_count = 0
 
