@@ -150,7 +150,7 @@ class BingoWorld(World):
 
     def received_hint(self, ctx, team, player, hint):
         from MultiServer import notify_hints, collect_hints
-        if self.world.bingo_mode[player] == 0 or self.world.auto_hint[player] == 0:
+        if ctx.slot_data[player]["bingo_mode"] == 0 or ctx.slot_data[player]["auto_hint"] == False:
             return
         location = get_location_name_from_id(hint.location).split()
         card = ctx.slot_data[player]['cards'][int(location[2]) - 1]
@@ -177,6 +177,8 @@ class BingoWorld(World):
     def received_checks(self, ctx, team, player):
         from MultiServer import get_received_items, register_location_checks, ClientStatus
         from Utils import get_item_name_from_id
+        if player in ctx.groups.keys():
+            return
         cards = ctx.slot_data[player]['cards']
         received_items = get_received_items(ctx, team, player, True)
         bingocalls = []
@@ -251,7 +253,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
         add_item_rule(location, lambda item: item.name not in world.item_blacklist[player])
         # add_item_rule(location, lambda item: item.player > item.world.players) # force item link rewards?
         if world.disallow_bingo_calls[player]:
-            add_item_rule(location, lambda item: item.game != "Bingo")
+            add_item_rule(location, lambda item: "Bingo Call" not in item.name)
     ret = Region(name, None, name, player)
     ret.world = world
     if locations:
