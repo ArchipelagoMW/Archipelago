@@ -251,7 +251,7 @@ class World(metaclass=AutoWorldRegister):
         return False
 
     def create_filler(self):
-        self.world.itempool.append(self.create_item(self.get_filler_item_name()))
+        return self.create_item(self.get_filler_item_name())
 
 
 # any methods attached to this can be used as part of CollectionState,
