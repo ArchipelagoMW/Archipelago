@@ -11,7 +11,7 @@ import tempfile
 import zipfile
 from typing import Dict, Tuple, Optional, Set
 
-from BaseClasses import MultiWorld, CollectionState, Region, RegionType, LocationProgressType
+from BaseClasses import MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
 from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
@@ -71,12 +71,14 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.plando_connections = args.plando_connections.copy()
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
-    world.set_options(args)
     world.player_name = args.name.copy()
     world.enemizer = args.enemizercli
     world.sprite = args.sprite.copy()
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
+    world.set_options(args)
+    world.set_item_links()
+    world.state = CollectionState(world)
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, world.seed)
 
     logger.info("Found World Types:")
@@ -138,38 +140,23 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     AutoWorld.call_all(world, "generate_basic")
 
     # temporary home for item links, should be moved out of Main
-    item_links = {}
-    for player in world.player_ids:
-        for item_link in world.item_links[player].value:
-            if item_link["name"] in item_links:
-                item_links[item_link["name"]]["players"][player] = item_link["replacement_item"]
-                item_links[item_link["name"]]["item_pool"] &= set(item_link["item_pool"])
-            else:
-                if item_link["name"] in world.player_name.values():
-                    raise Exception(f"Cannot name a ItemLink group the same as a player ({item_link['name']}).")
-                item_links[item_link["name"]] = {
-                    "players": {player: item_link["replacement_item"]},
-                    "item_pool": set(item_link["item_pool"]),
-                    "game": world.game[player]
-                }
-
-    for name, item_link in item_links.items():
-        current_item_name_groups = AutoWorld.AutoWorldRegister.world_types[item_link["game"]].item_name_groups
-        pool = set()
-        for item in item_link["item_pool"]:
-            pool |= current_item_name_groups.get(item, {item})
-        item_link["item_pool"] = pool
-
-    for group_name, item_link in item_links.items():
-        game = item_link["game"]
-        group_id, group = world.add_group(group_name, game, set(item_link["players"]))
-
-        def find_common_pool(players: Set[int], shared_pool: Set[int]) -> \
-                Dict[int, Dict[str, int]]:
+    for group_id, group in world.groups.items():
+        def find_common_pool(players: Set[int], shared_pool: Set[str]):
+            advancement = set()
             counters = {player: {name: 0 for name in shared_pool} for player in players}
             for item in world.itempool:
                 if item.player in counters and item.name in shared_pool:
                     counters[item.player][item.name] += 1
+                    if item.advancement:
+                        advancement.add(item.name)
+
+            for player in players.copy():
+                if all([counters[player][item] == 0 for item in shared_pool]):
+                    players.remove(player)
+                    del(counters[player])
+
+            if not players:
+                return None, None
 
             for item in shared_pool:
                 count = min(counters[player][item] for player in players)
@@ -179,17 +166,33 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 else:
                     for player in players:
                         del(counters[player][item])
-            return counters
+            return counters, advancement
 
-        common_item_count = find_common_pool(group["players"], item_link["item_pool"])
+        common_item_count, common_advancement_items = find_common_pool(group["players"], group["item_pool"])
+        if not common_item_count:
+            continue
 
         new_itempool = []
         for item_name, item_count in next(iter(common_item_count.values())).items():
+            advancement = item_name in common_advancement_items
             for _ in range(item_count):
-                new_itempool.append(group["world"].create_item(item_name))
+                new_item = group["world"].create_item(item_name)
+                new_item.advancement = advancement
+                new_itempool.append(new_item)
 
+        region = Region("Menu", RegionType.Generic, "ItemLink", group_id, world)
+        world.regions.append(region)
+        locations = region.locations = []
         for item in world.itempool:
-            if common_item_count.get(item.player, {}).get(item.name, 0):
+            count = common_item_count.get(item.player, {}).get(item.name, 0)
+            if count:
+                loc = Location(group_id, f"Item Link: {item.name} -> {world.player_name[item.player]} {count}",
+                               None, region)
+                loc.access_rule = lambda state, item_name = item.name, group_id_ = group_id, count_ = count: \
+                    state.has(item_name, group_id_, count_)
+
+                locations.append(loc)
+                loc.place_locked_item(item)
                 common_item_count[item.player][item.name] -= 1
             else:
                 new_itempool.append(item)
@@ -197,13 +200,17 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         itemcount = len(world.itempool)
         world.itempool = new_itempool
 
+        # can produce more items than were removed
         while itemcount > len(world.itempool):
             for player in group["players"]:
-                if item_link["players"][player]:
+                if group["replacement_items"][player]:
                     world.itempool.append(AutoWorld.call_single(world, "create_item", player,
-                                                                item_link["players"][player]))
+                                                                group["replacement_items"][player]))
                 else:
                     AutoWorld.call_single(world, "create_filler", player)
+    if any(world.item_links.values()):
+        world._recache()
+        world._all_state = None
 
     logger.info("Running Item Plando")
 
@@ -340,10 +347,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         sending_visible_players.add(slot)
 
                 def precollect_hint(location):
+                    entrance = er_hint_data.get(location.player, {}).get(location.address, "")
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                         location.item.code, False, "", location.item.flags)
+                                         location.item.code, False, entrance, location.item.flags)
                     precollected_hints[location.player].add(hint)
-                    precollected_hints[location.item.player].add(hint)
+                    if location.item.player not in world.groups:
+                        precollected_hints[location.item.player].add(hint)
+                    else:
+                        for player in world.groups[location.item.player]["players"]:
+                            precollected_hints[player].add(hint)
 
                 locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in world.player_ids}
                 for location in world.get_filled_locations():
@@ -357,6 +369,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         elif location.name in world.start_location_hints[location.player]:
                             precollect_hint(location)
                         elif location.item.name in world.start_hints[location.item.player]:
+                            precollect_hint(location)
+                        elif any([location.item.name in world.start_hints[player]
+                                  for player in world.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)
 
                 multidata = {

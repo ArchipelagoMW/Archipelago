@@ -3,7 +3,11 @@ from BaseClasses import Item, Location, MultiWorld
 from .Items import ItemData, FF1Items, FF1_STARTER_ITEMS, FF1_PROGRESSION_LIST, FF1_BRIDGE
 from .Locations import EventId, FF1Locations, generate_rule, CHAOS_TERMINATED_EVENT
 from .Options import ff1_options
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
+
+
+class FF1Web(WebWorld):
+    settings_page = "https://finalfantasyrandomizer.com/"
 
 
 class FF1World(World):
@@ -27,6 +31,8 @@ class FF1World(World):
     item_name_groups = ff1_items.get_item_names_per_category()
     item_name_to_id = ff1_items.get_item_name_to_code_dict()
     location_name_to_id = ff1_locations.get_location_name_to_address_dict()
+
+    web = FF1Web()
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -70,6 +76,11 @@ class FF1World(World):
             if possible_early_items:
                 progression_item = self.world.random.choice(possible_early_items)
                 self._place_locked_item_in_sphere0(progression_item)
+        else:
+            # Fail generation if there are no items in the pool
+            raise Exception("FFR settings submitted with no key items. Please ensure you generated the settings using "
+                            "finalfantasyrandomizer.com AND enabled the AP flag")
+
         items = [self.create_item(name) for name, data in items.items() for x in range(data['count']) if name not in
                  self.locked_items]
 

@@ -1,3 +1,4 @@
+import typing
 import zipfile
 import lzma
 import json
@@ -9,9 +10,9 @@ from flask import request, flash, redirect, url_for, session, render_template
 from pony.orm import flush, select
 
 from WebHostLib import app, Seed, Room, Slot
-from Utils import parse_yaml, VersionException
+from Utils import parse_yaml, VersionException, __version__
 from Patch import preferred_endings
-from Utils import __version__
+from NetUtils import NetworkSlot, SlotType
 
 banned_zip_contents = (".sfc",)
 
@@ -46,6 +47,15 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                            player_id=metadata["player_id"],
                            game="Minecraft"))
 
+        elif file.filename.endswith(".apv6"):
+            _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
+            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
+                           player_id=int(slot_id[1:]), game="VVVVVV"))
+        elif file.filename.endswith(".apsm64ex"):
+            _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
+            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
+                           player_id=int(slot_id[1:]), game="Super Mario 64"))
+
         elif file.filename.endswith(".zip"):
             # Factorio mods need a specific name or they do not function
             _, seed_name, slot_id, slot_name = file.filename.rsplit("_", 1)[0].split("-", 3)
@@ -69,15 +79,18 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
 
     if multidata:
         decompressed_multidata = MultiServer.Context.decompress(multidata)
-        player_names = {slot.player_name for slot in slots}
-        leftover_names = [(name, index) for index, name in
-                          enumerate((name for name in decompressed_multidata["names"][0]), start=1)]
-        newslots = [(Slot(data=None, player_name=name, player_id=slot, game=decompressed_multidata["games"][slot]))
-                    for name, slot in leftover_names if name not in player_names]
-        for slot in newslots:
-            slots.add(slot)
+        if "slot_info" in decompressed_multidata:
+            player_names = {slot.player_name for slot in slots}
+            leftover_names: typing.Dict[int, NetworkSlot] = {
+                slot_id: slot_info for slot_id, slot_info in decompressed_multidata["slot_info"].items()
+                if slot_info.name not in player_names and slot_info.type != SlotType.group}
+            newslots = [(Slot(data=None, player_name=slot_info.name, player_id=slot, game=slot_info.game))
+                        for slot, slot_info in leftover_names.items()]
+            for slot in newslots:
+                slots.add(slot)
 
-        flush()  # commit slots
+            flush()  # commit slots
+
         seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner, meta=json.dumps(meta),
                     id=sid if sid else uuid.uuid4())
         flush()  # create seed

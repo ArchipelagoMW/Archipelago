@@ -132,7 +132,7 @@ def create():
         with open(os.path.join(target_folder, 'player-settings', game_name + ".json"), "w") as f:
             json.dump(player_settings, f, indent=2, separators=(',', ': '))
 
-        if not world.hidden:
+        if not world.hidden and world.web.settings_page is True:
             weighted_settings["baseOptions"]["game"][game_name] = 0
             weighted_settings["games"][game_name] = {}
             weighted_settings["games"][game_name]["gameSettings"] = game_options

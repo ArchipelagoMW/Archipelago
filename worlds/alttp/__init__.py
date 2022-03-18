@@ -194,7 +194,7 @@ class ALTTPWorld(World):
                         return
                     elif state.has('Red Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 3:
                         return 'Mirror Shield'
-                    elif state.has('Blue Shield', item.player)  and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
+                    elif state.has('Blue Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
                         return 'Red Shield'
                     elif self.world.difficulty_requirements[item.player].progressive_shield_limit >= 1:
                         return 'Blue Shield'
@@ -322,7 +322,7 @@ class ALTTPWorld(World):
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
     def get_required_client_version(self) -> tuple:
-        return max((0, 2, 4), super(ALTTPWorld, self).get_required_client_version())
+        return max((0, 2, 6), super(ALTTPWorld, self).get_required_client_version())
 
     def create_item(self, name: str) -> Item:
         return ALttPItem(name, self.player, **as_dict_item_table[name])

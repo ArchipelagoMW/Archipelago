@@ -10,7 +10,8 @@ class TestBase(unittest.TestCase):
 
     def testAllStateCanReachEverything(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            if game_name != "Ori and the Blind Forest":  # TODO: fix Ori Logic
+            # Final Fantasy logic is controlled by finalfantasyrandomizer.com
+            if game_name != "Ori and the Blind Forest" and game_name != "Final Fantasy":  # TODO: fix Ori Logic
                 with self.subTest("Game", game=game_name):
                     world = setup_default_world(world_type)
                     state = world.get_all_state(False)
@@ -20,7 +21,8 @@ class TestBase(unittest.TestCase):
 
     def testEmptyStateCanReachSomething(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            if game_name != "Archipelago":
+            # Final Fantasy logic is controlled by finalfantasyrandomizer.com
+            if game_name != "Archipelago" and game_name != "Final Fantasy":
                 with self.subTest("Game", game=game_name):
                     world = setup_default_world(world_type)
                     state = CollectionState(world)

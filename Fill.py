@@ -4,7 +4,6 @@ import collections
 import itertools
 from collections import Counter, deque
 
-
 from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item
 
 from worlds.AutoWorld import call_all
@@ -14,7 +13,7 @@ class FillError(RuntimeError):
     pass
 
 
-def sweep_from_pool(base_state: CollectionState, itempool=[]):
+def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item] = tuple()):
     new_state = base_state.copy()
     for item in itempool:
         new_state.collect(item, True)
@@ -22,8 +21,8 @@ def sweep_from_pool(base_state: CollectionState, itempool=[]):
     return new_state
 
 
-def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, itempool: typing.List[Item],
-                     single_player_placement=False, lock=False):
+def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
+                     itempool: typing.List[Item], single_player_placement=False, lock=False):
     unplaced_items = []
     placements: typing.List[Location] = []
 
@@ -62,7 +61,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, 
             else:
                 # we filled all reachable spots.
                 # try swapping this item with previously placed items
-                for(i, location) in enumerate(placements):
+                for (i, location) in enumerate(placements):
                     placed_item = location.item
                     # Unplaceable items can sometimes be swapped infinitely. Limit the
                     # number of times we will swap an individual item to prevent this
@@ -233,7 +232,8 @@ def distribute_items_restrictive(world: MultiWorld):
         logging.info(f'Per-Player counts: {print_data})')
 
 
-def fast_fill(world: MultiWorld, item_pool: typing.List, fill_locations: typing.List) -> typing.Tuple[typing.List, typing.List]:
+def fast_fill(world: MultiWorld, item_pool: typing.List, fill_locations: typing.List) -> typing.Tuple[
+    typing.List, typing.List]:
     placing = min(len(item_pool), len(fill_locations))
     for item, location in zip(item_pool, fill_locations):
         world.push_item(location, item, False)
@@ -301,7 +301,13 @@ def flood_items(world: MultiWorld):
 
 
 def balance_multiworld_progression(world: MultiWorld):
-    balanceable_players = {player for player in range(1, world.players + 1) if world.progression_balancing[player]}
+    # A system to reduce situations where players have no checks remaining, popularly known as "BK mode."
+    # Overall progression balancing algorithm: 
+    # Gather up all locations in a sphere.
+    # Define a threshold value based on the player with the most available locations.
+    # If other players are below the threshold value, swap progression in this sphere into earlier spheres,
+    #   which gives more locations available by this sphere.
+    balanceable_players = {player for player in world.player_ids if world.progression_balancing[player]}
     if not balanceable_players:
         logging.info('Skipping multiworld progression balancing.')
     else:
@@ -311,21 +317,38 @@ def balance_multiworld_progression(world: MultiWorld):
         unchecked_locations = set(world.get_locations())
 
         reachable_locations_count = {player: 0 for player in world.player_ids}
+        total_locations_count = Counter(location.player for location in world.get_locations() if not location.locked)
+        balanceable_players = {player for player in balanceable_players if total_locations_count[player]}
+        sphere_num = 1
+        moved_item_count = 0
 
         def get_sphere_locations(sphere_state, locations):
             sphere_state.sweep_for_events(key_only=True, locations=locations)
             return {loc for loc in locations if sphere_state.can_reach(loc)}
 
+        def item_percentage(player, num):
+            return num / total_locations_count[player]
+
         while True:
+            # Gather non-locked locations. This ensures that only shuffled locations get counted for progression balancing, 
+            #   i.e. the items the players will be checking.
             sphere_locations = get_sphere_locations(state, unchecked_locations)
             for location in sphere_locations:
                 unchecked_locations.remove(location)
-                reachable_locations_count[location.player] += 1
+                if not location.locked:
+                    reachable_locations_count[location.player] += 1
+
+            logging.debug(f"Sphere {sphere_num}")
+            logging.debug(f"Reachable locations: {reachable_locations_count}")
+            logging.debug(f"Reachable percentages: { {player: round(item_percentage(player, num), 2) for player, num in reachable_locations_count.items()} }\n")
+            sphere_num += 1
 
             if checked_locations:
-                threshold = max(reachable_locations_count.values()) - 20
+                # The 10% threshold can be modified for "progression balancing strength" -- right now it approximates the old 20/216 bound.
+                threshold_percentage = max(map(lambda p: item_percentage(p, reachable_locations_count[p]), reachable_locations_count)) - 0.10
+                logging.debug(f"Threshold: {threshold_percentage}")
                 balancing_players = {player for player, reachables in reachable_locations_count.items() if
-                                     reachables < threshold and player in balanceable_players}
+                                     item_percentage(player, reachables) < threshold_percentage and player in balanceable_players}
                 if balancing_players:
                     balancing_state = state.copy()
                     balancing_unchecked_locations = unchecked_locations.copy()
@@ -333,25 +356,30 @@ def balance_multiworld_progression(world: MultiWorld):
                     balancing_sphere = sphere_locations.copy()
                     candidate_items = collections.defaultdict(set)
                     while True:
+                        # Check locations in the current sphere and gather progression items to swap earlier
                         for location in balancing_sphere:
                             if location.event:
                                 balancing_state.collect(location.item, True, location)
                                 player = location.item.player
                                 # only replace items that end up in another player's world
-                                if(not location.locked and
+                                if (not location.locked and not location.item.skip_in_prog_balancing and
                                         player in balancing_players and
                                         location.player != player and
                                         location.progress_type != LocationProgressType.PRIORITY):
                                     candidate_items[player].add(location)
+                                    logging.debug(f"Candidate item: {location.name}, {location.item.name}")
                         balancing_sphere = get_sphere_locations(balancing_state, balancing_unchecked_locations)
                         for location in balancing_sphere:
                             balancing_unchecked_locations.remove(location)
-                            balancing_reachables[location.player] += 1
+                            if not location.locked:
+                                balancing_reachables[location.player] += 1
                         if world.has_beaten_game(balancing_state) or all(
-                                reachables >= threshold for reachables in balancing_reachables.values()):
+                                item_percentage(player, reachables) >= threshold_percentage 
+                                for player, reachables in balancing_reachables.items()):
                             break
                         elif not balancing_sphere:
                             raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
+                    # Gather a set of locations which we can swap items into
                     unlocked_locations = collections.defaultdict(set)
                     for l in unchecked_locations:
                         if l not in balancing_unchecked_locations:
@@ -374,7 +402,7 @@ def balance_multiworld_progression(world: MultiWorld):
                                     items_to_replace.append(testing)
                             else:
                                 reduced_sphere = get_sphere_locations(reducing_state, locations_to_test)
-                                if reachable_locations_count[player] + len(reduced_sphere) < threshold:
+                                if item_percentage(player, reachable_locations_count[player] + len(reduced_sphere)) < threshold_percentage:
                                     items_to_replace.append(testing)
 
                     replaced_items = False
@@ -386,6 +414,7 @@ def balance_multiworld_progression(world: MultiWorld):
                     items_to_replace.sort()
                     world.random.shuffle(items_to_replace)
 
+                    # Start swapping items. Since we swap into earlier spheres, no need for accessibility checks. 
                     while replacement_locations and items_to_replace:
                         old_location = items_to_replace.pop()
                         for new_location in replacement_locations:
@@ -395,6 +424,7 @@ def balance_multiworld_progression(world: MultiWorld):
                                 swap_location_item(old_location, new_location)
                                 logging.debug(f"Progression balancing moved {new_location.item} to {new_location}, "
                                               f"displacing {old_location.item} into {old_location}")
+                                moved_item_count += 1
                                 state.collect(new_location.item, True, new_location)
                                 replaced_items = True
                                 break
@@ -402,10 +432,12 @@ def balance_multiworld_progression(world: MultiWorld):
                             logging.warning(f"Could not Progression Balance {old_location.item}")
 
                     if replaced_items:
+                        logging.debug(f"Moved {moved_item_count} items so far\n")
                         unlocked = {fresh for player in balancing_players for fresh in unlocked_locations[player]}
                         for location in get_sphere_locations(state, unlocked):
                             unchecked_locations.remove(location)
-                            reachable_locations_count[location.player] += 1
+                            if not location.locked:
+                                reachable_locations_count[location.player] += 1
                             sphere_locations.add(location)
 
             for location in sphere_locations:
@@ -441,7 +473,7 @@ def distribute_planned(world: MultiWorld):
             logging.debug(f'{warning}')
 
     def failed(warning: str, force):
-        if force in [True,  'fail', 'failure']:
+        if force in [True, 'fail', 'failure']:
             raise Exception(warning)
         else:
             warn(warning, force)
@@ -502,15 +534,15 @@ def distribute_planned(world: MultiWorld):
             block['locations'] = locations
 
             if not block['count']:
-                block['count'] = (min(len(block['items']), len(block['locations'])) if len(block['locations'])
-                                  > 0 else len(block['items']))
+                block['count'] = (min(len(block['items']), len(block['locations'])) if
+                                  len(block['locations']) > 0 else len(block['items']))
             if isinstance(block['count'], int):
                 block['count'] = {'min': block['count'], 'max': block['count']}
             if 'min' not in block['count']:
                 block['count']['min'] = 0
             if 'max' not in block['count']:
-                block['count']['max'] = (min(len(block['items']), len(block['locations'])) if len(block['locations'])
-                                         > 0 else len(block['items']))
+                block['count']['max'] = (min(len(block['items']), len(block['locations'])) if
+                                         len(block['locations']) > 0 else len(block['items']))
             if block['count']['max'] > len(block['items']):
                 count = block['count']
                 failed(f"Plando count {count} greater than items specified", block['force'])

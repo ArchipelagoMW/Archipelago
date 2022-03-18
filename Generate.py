@@ -502,6 +502,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             roll_alttp_settings(ret, game_weights, plando_options)
     else:
         raise Exception(f"Unsupported game {ret.game}")
+
     return ret
 
 
