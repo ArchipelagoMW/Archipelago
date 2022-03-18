@@ -250,7 +250,7 @@ class World(metaclass=AutoWorldRegister):
             return True
         return False
 
-    def create_filler(self):
+    def create_filler(self) -> Item:
         return self.create_item(self.get_filler_item_name())
 
 

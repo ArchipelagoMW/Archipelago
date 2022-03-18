@@ -209,8 +209,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 else:
                     items_to_add.append(AutoWorld.call_single(world, "create_filler", player))
             world.random.shuffle(items_to_add)
-            while itemcount > len(world.itempool) and len(items_to_add) > 0:
-                world.itempool.append(items_to_add.pop())
+            world.itempool.extend(items_to_add[:itemcount - len(world.itempool)])
 
     if any(world.item_links.values()):
         world._recache()
