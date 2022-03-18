@@ -49,6 +49,13 @@ A `World` class is the class with all the specifics of a certain game to be
 included. It will be instantiated for each player that rolls a seed for that
 game.
 
+### WebWorld Class
+
+A `WebWorld` class contains specific attributes and methods that can be modified
+for your world specifically on the webhost. At the moment this comprises of `settings_page`
+which can be changed to a link instead of an AP generated settings page; such is the case
+for Final Fantasy.
+
 ### MultiWorld Object
 
 The `MultiWorld` object references the whole multiworld (all items and locations
