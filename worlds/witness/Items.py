@@ -25,8 +25,8 @@ item_table: Dict[str, ItemData] = {
 event_item_table = dict()
 
 for event_item in eventPanels:
-    event_item_table[checksByHex[event_item[0]]["checkName"] + " Event"] = ItemData(None, True, True)
-    item_table[checksByHex[event_item[0]]["checkName"] + " Event"] = ItemData(None, True, True)
+    event_item_table[checksByHex[event_item]["checkName"] + " Event"] = ItemData(None, True, True)
+    item_table[checksByHex[event_item]["checkName"] + " Event"] = ItemData(None, True, True)
 
 print(item_table)
 

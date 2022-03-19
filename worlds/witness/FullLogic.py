@@ -66,7 +66,7 @@ def defineNewRegion(line):
         
         for panelOption in parseLambda(correspondingLambda):
             for panel in panelOption:
-                eventPanels.add((panel, len(eventPanels)))
+                eventPanels.add(panel)
     
         options.add((connectedRegion, parseLambda(correspondingLambda)))   
     
@@ -146,5 +146,24 @@ for checkHex, check in checksDependentByHex.items():
     checksByHex[checkHex] = newCheck
     checksByName[newCheck["checkName"]] = newCheck
     
-panelsThatHaveBeenVisited = set()  
-panelsThatHaveBeenTrue = set()
+    
+originalEventPanels = eventPanels
+eventPanels = set()
+
+for panel in originalEventPanels:
+    for regionName, region in allRegionsByName.items():
+        for connection in region["connections"]:
+            connectedRegionName = connection[0]
+            if connectedRegionName not in allRegionsByName:
+                continue
+            
+            if regionName == "Boat" or connectedRegionName == "Boat":
+                continue
+            
+            connectedRegion = allRegionsByName[connectedRegionName]
+            
+            if not any([panel in option for option in connection[1]]):
+                continue
+            
+            if panel not in region["panels"] and panel not in connectedRegion["panels"]:
+                eventPanels.add(panel)

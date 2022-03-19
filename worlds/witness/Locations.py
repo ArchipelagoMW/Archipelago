@@ -180,7 +180,7 @@ hardOptionalLocations = {
 
 locations = alwaysLocations | uncommonOptionalLocations | hardOptionalLocations #TODO: Determined by settings
 
-event_location_table = {checksByHex[panelHex[0]]["checkName"] + " Event":None for panelHex in eventPanels}
+event_location_table = {checksByHex[panelHex]["checkName"] + " Event":None for panelHex in eventPanels if checksByHex[panelHex]["checkName"] not in locations}
 
 location_table = event_location_table | {location: checksByName[location]["idOffset"] + start + typeToOffset[checksByName[location]["panelType"]] for location in locations if checksByName[location]["panelType"] in panelTypesToShuffle}
 location_table_backwards = {checksByName[location]["idOffset"] + start + typeToOffset[checksByName[location]["panelType"]]: location for location in locations if checksByName[location]["panelType"] in panelTypesToShuffle}

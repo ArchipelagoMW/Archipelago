@@ -1,4 +1,4 @@
-First Hallway (Tutorial) - Entry - True:
+First Hallway (First Hallway) - Entry - True:
 0x00064 (Straight) - True - True
 0x00182 (Bend) - 0x00064 - True
 

@@ -36,14 +36,30 @@ class WitnessLogic(LogicMixin):
                 return True
 
         return False
+      
+    #nested can_reach can cause problems, but only if the region being checked is neither of the two original regions from the first can_reach.
+    #a nested can_reach is okay here because the only panels this function is called on are panels that exist on either side of all connections they are required for.
+    #the spoiler log looks so much nicer this way, it gets rid of a bunch of event items, only leaving a couple. :)
+    def _safe_manual_panel_check(self, panel, player):
+        from .FullLogic import checksByHex
+        return self._can_solve_panel(panel, player) and self.can_reach(checksByHex[panel]["region"]["name"],"Region", player)
 
     def _has_event_items(self, panelHexToSolveSet, player):
-        from .FullLogic import checksByHex, checksByName
-        for option in panelHexToSolveSet:    
-            solvability = [self.has(checksByHex[panel]["checkName"] + " Event", player) for panel in option]
-       
+        from .FullLogic import checksByHex, checksByName, originalEventPanels
+        from .Locations import event_location_table
         
-            if all(solvability):
+        for option in panelHexToSolveSet:    
+            if len(option) == 0:
+                return True
+        
+            for panel in option:
+                if checksByHex[panel]["checkName"] + " Event" in event_location_table and not self.has(checksByHex[panel]["checkName"] + " Event", player):
+                    print(panel)
+                    break
+                if panel not in originalEventPanels and not self.can_reach(checksByHex[panel]["checkName"], "Location", player):
+                    break
+                if panel in originalEventPanels and checksByHex[panel]["checkName"] + " Event" not in event_location_table and not self._safe_manual_panel_check(panel, player): 
+                    break
                 return True
         return False
 
