@@ -335,7 +335,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     games[slot] = world.game[slot]
                     slot_info[slot] = NetUtils.NetworkSlot(group["name"], world.game[slot], world.player_types[slot],
                                                            group_members=sorted(group["players"]))
-                precollected_items = {player: [item.code for item in world_precollected]
+                precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
                                       for player, world_precollected in world.precollected_items.items()}
                 precollected_hints = {player: set() for player in range(1, world.players + 1 + len(world.groups))}
 

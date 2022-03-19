@@ -19,11 +19,11 @@ class DeathLinkAmnesty(Range):
 
 class AreaRandomizer(Toggle):
     """Randomize Entrances to Areas"""
-    displayname = "Area Randomizer"
+    display_name = "Area Randomizer"
 
 class MusicRandomizer(Toggle):
     """Randomize Music"""
-    displayname = "Music Randomizer"
+    display_name = "Music Randomizer"
 
 v6_options: typing.Dict[str,type(Option)] = {
     "MusicRandomizer": MusicRandomizer,

@@ -226,6 +226,25 @@
     ]
   },
   {
+    "gameTitle": "Meritous",
+    "tutorials": [
+      {
+        "name": "Meritous Setup Tutorial",
+        "description": "A guide to setting up the Archipelago Meritous software on your computer.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "meritous/setup_en.md",
+            "link": "meritous/setup/en",
+            "authors": [
+              "KewlioMZX"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "gameTitle": "Minecraft",
     "tutorials": [
       {

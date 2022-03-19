@@ -72,7 +72,7 @@ def is_frozen() -> bool:
     return getattr(sys, 'frozen', False)
 
 
-def local_path(*path):
+def local_path(*path: str):
     if local_path.cached_path:
         return os.path.join(local_path.cached_path, *path)
 
