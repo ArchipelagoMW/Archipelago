@@ -27,7 +27,7 @@ app.config["GENERATORS"] = 8  # maximum concurrent world gens
 app.config["SELFLAUNCH"] = True  # application process is in charge of launching Rooms.
 app.config["SELFGEN"] = True  # application process is in charge of scheduling Generations.
 app.config["DEBUG"] = False
-app.config["PORT"] = 80
+app.config["PORT"] = 12000
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 64 * 1024 * 1024  # 64 megabyte limit
 # if you want to deploy, make sure you have a non-guessable secret key

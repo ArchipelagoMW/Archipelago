@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import typing
-import builtins
 import os
 import subprocess
 import sys

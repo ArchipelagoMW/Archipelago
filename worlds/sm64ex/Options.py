@@ -47,4 +47,4 @@ sm64_options: typing.Dict[str,type(Option)] = {
     "ExtraStars": ExtraStars,
     "DeathLink": DeathLink,
     "BuddyChecks": BuddyChecks,
-} 
+}
