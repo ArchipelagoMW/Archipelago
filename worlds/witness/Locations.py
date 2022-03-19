@@ -129,7 +129,6 @@ alwaysLocations = {
     "Inside Mountain Same Solution 6",
     "Inside Mountain Elevator Discard",
     "Inside Mountain Giant Puzzle",
-    "Inside Mountain Bottom Layer Discard",
     
     
     
@@ -175,10 +174,11 @@ hardOptionalLocations = {
     "Inside Mountain Secret Area Upstairs Dot Grid Rotated Shapers",
     
     "Challenge Vault Box",
-    "Theater Walkway Secret Vault Box"
+    "Theater Walkway Secret Vault Box",
+    "Inside Mountain Bottom Layer Discard"
 }
 
-locations = alwaysLocations | uncommonOptionalLocations #| hardOptionalLocations #TODO: Determined by settings
+locations = alwaysLocations | uncommonOptionalLocations | hardOptionalLocations #TODO: Determined by settings
 
 event_location_table = {checksByHex[panelHex[0]]["checkName"] + " Event":None for panelHex in eventPanels}
 

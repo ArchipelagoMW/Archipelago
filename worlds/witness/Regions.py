@@ -1,19 +1,16 @@
 from BaseClasses import MultiWorld, Entrance
 
-def makeLambda(targetRegion, panelHexToSolveSet, player):
-    from .FullLogic import checksByHex, has_event_items
-    return lambda state: has_event_items(targetRegion, panelHexToSolveSet, state, player)
+def makeLambda(panelHexToSolveSet, player):
+    return lambda state: state._has_event_items(panelHexToSolveSet, player)
 
 def connect(world: MultiWorld, player: int, source: str, target: str, panelHexToSolveSet = None):
-    from .FullLogic import checksByHex
-
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
    
     
     connection = Entrance(player, source + " to " + target + " via " + str(panelHexToSolveSet), sourceRegion)
 
-    connection.access_rule = makeLambda(targetRegion, panelHexToSolveSet, player)
+    connection.access_rule = makeLambda(panelHexToSolveSet, player)
 
     sourceRegion.exits.append(connection)
     connection.connect(targetRegion)

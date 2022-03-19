@@ -148,35 +148,3 @@ for checkHex, check in checksDependentByHex.items():
     
 panelsThatHaveBeenVisited = set()  
 panelsThatHaveBeenTrue = set()
-
-def can_solve_panel(panel, state, player):
-    panelObj = checksByHex[panel]   
-    
-    for option in panelObj["requirement"]:
-        if len(option) == 0:
-            return True
-      
-        solvability = [state.has(item, player) or (item == "7 Lasers" and state._witness_has_lasers(player, 7)) or (item == "11 Lasers" and state._witness_has_lasers(player, 11)) for item in option]
-        
-        
-        
-        if all(solvability):
-            return True
-
-    return False
-    
-def can_solve_panel_with_region_check(panel, state, player): 
-    panelObj = checksByHex[panel]
-    return can_solve_panel(panel, state, player) and state.can_reach(panelObj["region"]["name"], 'Region', player)
-
-
-def has_event_items(r, panelHexToSolveSet, state, player):
-    for option in panelHexToSolveSet:    
-        solvability = [state.has(checksByHex[panel]["checkName"] + " Event", player) for panel in option]
-       
-        
-        if all(solvability):
-            return True
-       
-                
-    return False

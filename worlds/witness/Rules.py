@@ -21,13 +21,37 @@ class WitnessLogic(LogicMixin):
         
         
         return lasers >= amount
+        
+    def _can_solve_panel(self, panel, player):
+        from .FullLogic import checksByHex, checksByName
+        panelObj = checksByHex[panel]   
+    
+        for option in panelObj["requirement"]:
+            if len(option) == 0:
+                return True
+      
+            solvability = [self.has(item, player) or (item == "7 Lasers" and self._witness_has_lasers(player, 7)) or (item == "11 Lasers" and self._witness_has_lasers(player, 11)) for item in option]
+        
+            if all(solvability):
+                return True
+
+        return False
+
+    def _has_event_items(self, panelHexToSolveSet, player):
+        from .FullLogic import checksByHex, checksByName
+        for option in panelHexToSolveSet:    
+            solvability = [self.has(checksByHex[panel]["checkName"] + " Event", player) for panel in option]
+       
+        
+            if all(solvability):
+                return True
+        return False
 
 def makeLambda(checkHex, player):
-    from .FullLogic import can_solve_panel
-    return lambda state: can_solve_panel(checkHex, state, player)
+    return lambda state: state._can_solve_panel(checkHex, player)
 
 def set_rules(world: MultiWorld, player: int):
-    from .FullLogic import checksByName, checksByHex, can_solve_panel
+    from .FullLogic import checksByName, checksByHex
     from .Locations import location_table, event_location_table
     
     for location in location_table:
