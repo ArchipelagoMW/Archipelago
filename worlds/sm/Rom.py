@@ -1,11 +1,21 @@
+import hashlib
+import os
+
 import Utils
-from Patch import read_rom
+from Patch import read_rom, APDeltaPatch
 
 JAP10HASH = '21f3e98df4780ee1c667b84e57d88675'
 ROM_PLAYER_LIMIT = 65535
 
-import hashlib
-import os
+
+class SMDeltaPatch(APDeltaPatch):
+    hash = JAP10HASH
+    game = "Super Metroid"
+    patch_file_ending = ".apsm"
+
+    @classmethod
+    def get_source_data(cls) -> bytes:
+        return get_base_rom_bytes()
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:
@@ -21,6 +31,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
                             'Get the correct game and version, then dump it')
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
+
 
 def get_base_rom_path(file_name: str = "") -> str:
     options = Utils.get_options()

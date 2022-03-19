@@ -20,13 +20,19 @@ In case you are using the Archipelago Website, the IP should be `archipelago.gg`
 
 If everything worked out, you will see a textbox informing you the connection has been established after the story intro.
 
+# Playing offline
+
+To play offline, first generate a seed on the game's settings page.
+Create a room and download the `.apv6` file, and start the game with the `-v6ap_file FileName` launch argument.
+
 ## Installation Troubleshooting
 
 Start the game from the command line to view helpful messages regarding V6AP. These will look something like "V6AP: Message"
 
 ### Game no longer starts after copying the .exe
 
-Most likely you forgot to set the launch options. `-v6ap_name YourName` and `-v6ap_ip ServerIP:Port` are required for startup.
+Most likely you forgot to set the launch options. `-v6ap_name YourName` and `-v6ap_ip ServerIP:Port` are required for startup for Multiworlds, and
+`-v6ap_file FileName` is required for (offline) singleplayer.
 If your Name or Password have spaces in them, surround them in quotes.
 
 ## Game Troubleshooting

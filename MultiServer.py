@@ -41,12 +41,20 @@ colorama.init()
 
 # functions callable on storable data on the server by clients
 modify_functions = {
-    "add": operator.add,
+    "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
     "mul": operator.mul,
+    "mod": operator.mod,
     "max": max,
     "min": min,
     "replace": lambda old, new: new,
-    "deplete": lambda value, change: max(0, value + change)
+    "default": lambda old, new: old,
+    "pow": operator.pow,
+    # bitwise:
+    "xor": operator.xor,
+    "or": operator.or_,
+    "and": operator.and_,
+    "left_shift": operator.lshift,
+    "right_shift": operator.rshift,
 }
 
 
@@ -424,7 +432,12 @@ class Context:
             "client_connection_timers": tuple(
                 (key, value.timestamp()) for key, value in self.client_connection_timers.items()),
             "random_state": self.random.getstate(),
-            "stored_data": self.stored_data
+            "stored_data": self.stored_data,
+            "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
+                             "server_password": self.server_password, "password": self.password, "forfeit_mode":
+                             self.forfeit_mode, "remaining_mode": self.remaining_mode, "collect_mode":
+                             self.collect_mode, "item_cheat": self.item_cheat, "compatibility": self.compatibility}
+
         }
 
         return d
@@ -461,6 +474,17 @@ class Context:
              in savedata["client_activity_timers"]})
         self.location_checks.update(savedata["location_checks"])
         self.random.setstate(savedata["random_state"])
+
+        if "game_options" in savedata:
+            self.hint_cost = savedata["game_options"]["hint_cost"]
+            self.location_check_points = savedata["game_options"]["location_check_points"]
+            self.server_password = savedata["game_options"]["server_password"]
+            self.password = savedata["game_options"]["password"]
+            self.forfeit_mode = savedata["game_options"]["forfeit_mode"]
+            self.remaining_mode = savedata["game_options"]["remaining_mode"]
+            self.collect_mode = savedata["game_options"]["collect_mode"]
+            self.item_cheat = savedata["game_options"]["item_cheat"]
+            self.compatibility = savedata["game_options"]["compatibility"]
 
         if "stored_data" in savedata:
             self.stored_data = savedata["stored_data"]
@@ -674,8 +698,10 @@ def get_players_string(ctx: Context):
     player_names = sorted(ctx.player_names.keys())
     current_team = -1
     text = ''
+    total = 0
     for team, slot in player_names:
         if ctx.slot_info[slot].type == SlotType.player:
+            total += 1
             player_name = ctx.player_names[team, slot]
             if team != current_team:
                 text += f':: Team #{team + 1}: '
@@ -684,7 +710,7 @@ def get_players_string(ctx: Context):
                 text += f'{player_name} '
             else:
                 text += f'({player_name}) '
-    return f'{len(auth_clients)} players of {len(ctx.player_names)} connected ' + text[:-1]
+    return f'{len(auth_clients)} players of {total} connected ' + text[:-1]
 
 
 def get_status_string(ctx: Context, team: int):
@@ -1528,26 +1554,27 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     await ctx.send_encoded_msgs(bounceclient, msg)
 
         elif cmd == "Get":
-            if "data" not in args or type(args["data"]) != list:
+            if "keys" not in args or type(args["keys"]) != list:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": 'Retrieve', "original_cmd": cmd}])
                 return
             args["cmd"] = "Retrieved"
-            keys = args["data"]
-            args["data"] = {key: ctx.stored_data.get(key, None) for key in keys}
+            keys = args["keys"]
+            args["keys"] = {key: ctx.stored_data.get(key, None) for key in keys}
             await ctx.send_msgs(client, [args])
 
         elif cmd == "Set":
-            if "key" not in args or "value" not in args:
+            if "key" not in args or \
+                    "operations" not in args or not type(args["operations"]) == list:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": 'Set', "original_cmd": cmd}])
                 return
             args["cmd"] = "SetReply"
             value = ctx.stored_data.get(args["key"], args.get("default", 0))
             args["original_value"] = value
-            operation = args.get("operation", "replace")
-            func = modify_functions[operation]
-            value = func(value, args.get("value"))
+            for operation in args["operations"]:
+                func = modify_functions[operation["operation"]]
+                value = func(value, operation["value"])
             ctx.stored_data[args["key"]] = args["value"] = value
             targets = set(ctx.stored_data_notification_clients[args["key"]])
             if args.get("want_reply", True):
@@ -1556,11 +1583,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 ctx.broadcast(targets, [args])
 
         elif cmd == "SetNotify":
-            if "data" not in args or type(args["data"]) != list:
+            if "keys" not in args or type(args["keys"]) != list:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": 'SetNotify', "original_cmd": cmd}])
                 return
-            for key in args["data"]:
+            for key in args["keys"]:
                 ctx.stored_data_notification_clients[key].add(client)
 
 

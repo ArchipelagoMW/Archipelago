@@ -18,7 +18,6 @@ local energy_bridge_recipe = table.deepcopy(data.raw["recipe"]["accumulator"])
 energy_bridge_recipe.name = "ap-energy-bridge"
 energy_bridge_recipe.result = energy_bridge_item.name
 energy_bridge_recipe.energy_required = 1
-energy_bridge_recipe.ingredients = { {# {type="item", name="iron-plate", amount=1} TODO: randomized recipe  #} }
 energy_bridge_recipe.enabled = {{ energy_link }}
 energy_bridge_recipe.localised_name = "Archipelago EnergyLink Bridge"
 data.raw["recipe"]["ap-energy-bridge"] = energy_bridge_recipe

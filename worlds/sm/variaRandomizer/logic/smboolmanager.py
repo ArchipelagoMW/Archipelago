@@ -151,7 +151,7 @@ class SMBoolManager(object):
         # take no parameter
         for knows in Knows.__dict__:
             if isKnows(knows):
-                if knows in Knows.knowsDict[player].__dict__:
+                if player in Knows.knowsDict and knows in Knows.knowsDict[player].__dict__:
                     setattr(self, 'knows'+knows, lambda knows=knows: SMBool(Knows.knowsDict[player].__dict__[knows].bool,
                                                                             Knows.knowsDict[player].__dict__[knows].difficulty,
                                                                             knows=[knows]))

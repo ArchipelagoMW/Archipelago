@@ -3,11 +3,13 @@ import multiprocessing
 import logging
 
 import ModuleUpdate
+
 ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
 ModuleUpdate.update()
 
 # in case app gets imported by something like gunicorn
 import Utils
+
 Utils.local_path.cached_path = os.path.dirname(__file__)
 
 from WebHostLib import app as raw_app
@@ -32,6 +34,15 @@ def get_app():
     return app
 
 
+def create_ordered_tutorials_file():
+    import json
+    with open(os.path.join("WebHostLib", "static", "assets", "tutorial", "tutorials.json")) as source:
+        data = json.load(source)
+    data = sorted(data, key=lambda entry: entry["gameTitle"])
+    with open(os.path.join("WebHostLib", "static", "generated", "tutorials.json"), "w") as target:
+        json.dump(data, target)
+
+
 if __name__ == "__main__":
     multiprocessing.freeze_support()
     multiprocessing.set_start_method('spawn')
@@ -43,6 +54,7 @@ if __name__ == "__main__":
         logging.warning("Could not update LttP sprites.")
     app = get_app()
     create_options_files()
+    create_ordered_tutorials_file()
     if app.config["SELFLAUNCH"]:
         autohost(app.config)
     if app.config["SELFGEN"]:

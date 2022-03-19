@@ -109,7 +109,7 @@ class FactorioContext(CommonContext):
                                                 item_name in args["checked_locations"]})
             if cmd == "Connected" and self.energy_link_increment:
                 asyncio.create_task(self.send_msgs([{
-                    "cmd": "SetNotify", "data": ["EnergyLink"]
+                    "cmd": "SetNotify", "keys": ["EnergyLink"]
                 }]))
         elif cmd == "SetReply":
             if args["key"] == "EnergyLink":
@@ -169,8 +169,9 @@ async def game_watcher(ctx: FactorioContext):
                                 # attempt to refill
                                 ctx.last_deplete = time.time()
                                 asyncio.create_task(ctx.send_msgs([{
-                                    "cmd": "Set", "key": "EnergyLink", "operation": "deplete",
-                                    "value": -ctx.energy_link_increment * in_world_bridges,
+                                    "cmd": "Set", "key": "EnergyLink", "operations":
+                                        [{"operation": "add", "value": -ctx.energy_link_increment * in_world_bridges},
+                                         {"operation": "max", "value": 0}],
                                     "last_deplete": ctx.last_deplete
                                 }]))
                             # Above Capacity - (len(Bridges) * ENERGY_INCREMENT)
@@ -178,8 +179,8 @@ async def game_watcher(ctx: FactorioContext):
                                 ctx.energy_link_increment*in_world_bridges:
                                 value = ctx.energy_link_increment * in_world_bridges
                                 asyncio.create_task(ctx.send_msgs([{
-                                    "cmd": "Set", "key": "EnergyLink", "operation": "add",
-                                    "value": value
+                                    "cmd": "Set", "key": "EnergyLink", "operations":
+                                        [{"operation": "add", "value": value}]
                                 }]))
                                 ctx.rcon_client.send_command(
                                     f"/ap-energylink -{value}")

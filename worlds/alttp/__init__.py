@@ -15,7 +15,7 @@ from .ItemPool import generate_itempool, difficulties
 from .Shops import create_shops, ShopSlotFill
 from .Dungeons import create_dungeons
 from .Rom import LocalRom, patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, get_hash_string, \
-    get_base_rom_path
+    get_base_rom_path, LttPDeltaPatch
 import Patch
 
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -303,7 +303,9 @@ class ALTTPWorld(World):
 
             rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
             rom.write_to_file(rompath)
-            Patch.create_patch_file(rompath, player=player, player_name=world.player_name[player])
+            patch = LttPDeltaPatch(os.path.splitext(rompath)[0]+LttPDeltaPatch.patch_file_ending, player=player,
+                                   player_name=world.player_name[player], patched_path=rompath)
+            patch.write()
             os.unlink(rompath)
             self.rom_name = rom.name
         except:
@@ -322,7 +324,7 @@ class ALTTPWorld(World):
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
     def get_required_client_version(self) -> tuple:
-        return max((0, 2, 4), super(ALTTPWorld, self).get_required_client_version())
+        return max((0, 2, 6), super(ALTTPWorld, self).get_required_client_version())
 
     def create_item(self, name: str) -> Item:
         return ALttPItem(name, self.player, **as_dict_item_table[name])

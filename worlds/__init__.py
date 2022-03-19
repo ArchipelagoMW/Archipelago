@@ -36,4 +36,5 @@ network_data_package = {
 if any(not world.data_version for world in AutoWorldRegister.world_types.values()):
     network_data_package["version"] = 0
     import logging
-    logging.warning("Datapackage is in custom mode.")
+    logging.warning(f"Datapackage is in custom mode. Custom Worlds: "
+                    f"{[world for world in AutoWorldRegister.world_types.values() if not world.data_version]}")

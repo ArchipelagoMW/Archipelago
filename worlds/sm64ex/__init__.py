@@ -1,4 +1,6 @@
 import typing
+import os
+import json
 from .Items import item_table, cannon_item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options
@@ -41,6 +43,8 @@ class SM64World(World):
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
         item = SM64Item(name, name != "1Up Mushroom", item_id, self.player)
+        if name == "Power Star": 
+            item.skip_in_prog_balancing = True
         return item
 
     def generate_basic(self):
@@ -85,3 +89,24 @@ class SM64World(World):
             "StarsToFinish": self.world.StarsToFinish[self.player].value,
             "DeathLink": self.world.DeathLink[self.player].value,
         }
+
+    def generate_output(self, output_directory: str):
+        if self.world.players != 1:
+            return
+        data = {
+            "slot_data": self.fill_slot_data(),
+            "location_to_item": {self.location_name_to_id[i] : item_table[self.world.get_location(i, self.player).item.name] for i in self.location_name_to_id},
+            "data_package": {
+                "data": {
+                    "games": {
+                        self.game: {
+                            "item_name_to_id": self.item_name_to_id,
+                            "location_name_to_id": self.location_name_to_id
+                        }
+                    }
+                }
+            }
+        }
+        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}.apsm64ex"
+        with open(os.path.join(output_directory, filename), 'w') as f:
+            json.dump(data, f)
