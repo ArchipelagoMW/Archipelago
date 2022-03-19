@@ -2,7 +2,7 @@ import logging
 import copy
 import os
 import threading
-from typing import Set, List
+from typing import Set
 
 logger = logging.getLogger("Super Metroid")
 
@@ -11,12 +11,11 @@ from .Items import lookup_name_to_id as items_lookup_name_to_id
 from .Regions import create_regions
 from .Rules import set_rules, add_entrance_rule
 from .Options import sm_options
-from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT
+from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch
 import Utils
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
 from ..AutoWorld import World, AutoLogicRegister
-import Patch
 
 from logic.smboolmanager import SMBoolManager
 from graph.vanilla.graph_locations import locationsDict
@@ -26,21 +25,32 @@ from rando.Items import ItemManager
 from utils.parameters import *
 from logic.logic import Logic
 from randomizer import VariaRandomizer
+from utils.doorsmanager import DoorsManager
+from rom.rom_patches import RomPatches
 
 
 class SMCollectionState(metaclass=AutoLogicRegister):
     def init_mixin(self, parent: MultiWorld):
+        
         # for unit tests where MultiWorld is instantiated before worlds
         if hasattr(parent, "state"):
             self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff,
-                                               parent.state.smbm[player].onlyBossLeft) for player in
-                         parent.get_game_players("Super Metroid")}
+                                    parent.state.smbm[player].onlyBossLeft) for player in
+                                        parent.get_game_players("Super Metroid")}
+            for player, group in parent.groups.items():
+                if (group["game"] == "Super Metroid"):
+                    self.smbm[player] = SMBoolManager(player)
+                    if player not in parent.state.smbm:
+                        parent.state.smbm[player] = SMBoolManager(player)
         else:
             self.smbm = {}
 
     def copy_mixin(self, ret) -> CollectionState:
-        ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in self.world.get_game_players("Super Metroid")}
+        ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in self.smbm}
         return ret
+
+    def get_game_players(self, multiword: MultiWorld, game_name: str):
+        return tuple(player for player in multiword.get_all_ids() if multiword.game[player] == game_name)
 
 
 class SMWorld(World):
@@ -383,23 +393,25 @@ class SMWorld(World):
         romPatcher.writeRandoSettings(self.variaRando.randoExec.randoSettings, itemLocs)
 
     def generate_output(self, output_directory: str):
+        outfilebase = 'AP_' + self.world.seed_name
+        outfilepname = f'_P{self.player}'
+        outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}"
+        outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
+
         try:
-            outfilebase = 'AP_' + self.world.seed_name
-            outfilepname = f'_P{self.player}'
-            outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}" \
-
-            outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
             self.variaRando.PatchRom(outputFilename, self.APPatchRom)
-
             self.write_crc(outputFilename)
-
-            Patch.create_patch_file(outputFilename, player=self.player, player_name=self.world.player_name[self.player], game=Patch.GAME_SM)
-            os.unlink(outputFilename)
             self.rom_name = self.romName
         except:
             raise
+        else:
+            patch = SMDeltaPatch(os.path.splitext(outputFilename)[0]+SMDeltaPatch.patch_file_ending, player=self.player,
+                                 player_name=self.world.player_name[self.player], patched_path=outputFilename)
+            patch.write()
         finally:
-            self.rom_name_available_event.set() # make sure threading continues and errors are collected
+            if os.path.exists(outputFilename):
+                os.unlink(outputFilename)
+            self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
     def checksum_mirror_sum(self, start, length, mask = 0x800000):
         while (not(length & mask) and mask):
@@ -415,8 +427,6 @@ class SMWorld(World):
             while (next_length < mask):
                 next_length += next_length
                 part2 += part2
-
-            length = mask + mask
 
         return (part1 + part2) & 0xFFFF
 
@@ -442,9 +452,34 @@ class SMWorld(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
-
     def fill_slot_data(self): 
         slot_data = {}
+        if not self.world.is_race:
+            for option_name in self.options:
+                option = getattr(self.world, option_name)[self.player]
+                slot_data[option_name] = option.value
+
+            slot_data["Preset"] = { "Knows": {},
+                                    "Settings": {"hardRooms": Settings.SettingsDict[self.player].hardRooms,
+                                                 "bossesDifficulty": Settings.SettingsDict[self.player].bossesDifficulty,
+                                                 "hellRuns": Settings.SettingsDict[self.player].hellRuns},
+                                    "Controller": Controller.ControllerDict[self.player].__dict__}
+
+            for knows in Knows.__dict__:
+                if isKnows(knows):
+                    slot_data["Preset"]["Knows"][knows] = [ getattr(Knows.knowsDict[self.player], knows).bool, 
+                                                            getattr(Knows.knowsDict[self.player], knows).difficulty]
+
+            slot_data["InterAreaTransitions"] = {}
+            for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions:
+                slot_data["InterAreaTransitions"][src.Name] = dest.Name
+                
+            slot_data["Doors"] = {}
+            for door in DoorsManager.doorsDict[self.player].values():
+                slot_data["Doors"][door.name] = door.getColor()
+
+            slot_data["RomPatches"] = RomPatches.ActivePatches[self.player]
+                
         return slot_data
 
     def collect(self, state: CollectionState, item: Item) -> bool:
@@ -498,9 +533,11 @@ class SMWorld(World):
                 self.world.state.smbm[self.player].onlyBossLeft = True
                 break
 
+
 def create_locations(self, player: int):
     for name, id in locations_lookup_name_to_id.items():
         self.locations[name] = SMLocation(player, name, id)
+
 
 def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, RegionType.LightWorld, name, player)

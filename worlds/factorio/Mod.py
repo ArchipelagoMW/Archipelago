@@ -7,12 +7,14 @@ import threading
 import json
 
 import jinja2
-import Utils
 import shutil
+
+import Utils
+import Patch
 from . import Options
-from BaseClasses import MultiWorld
-from .Technologies import tech_table, rocket_recipes, recipes, free_sample_blacklist, progressive_technology_table, \
-    base_tech_table, tech_to_progressive_lookup, progressive_tech_table, liquids
+
+from .Technologies import tech_table, recipes, free_sample_blacklist, progressive_technology_table, \
+    base_tech_table, tech_to_progressive_lookup, liquids
 
 template_env: Optional[jinja2.Environment] = None
 
@@ -54,6 +56,22 @@ recipe_time_ranges = {
 }
 
 
+class FactorioModFile(Patch.APContainer):
+    game = "Factorio"
+    compression_method = zipfile.ZIP_DEFLATED  # Factorio can't load LZMA archives
+
+    def write_contents(self, opened_zipfile: zipfile.ZipFile):
+        # directory containing Factorio mod has to come first, or Factorio won't recognize this file as a mod.
+        mod_dir = self.path[:-4]  # cut off .zip
+        for root, dirs, files in os.walk(mod_dir):
+            for file in files:
+                opened_zipfile.write(os.path.join(root, file),
+                                     os.path.relpath(os.path.join(root, file),
+                                                     os.path.join(mod_dir, '..')))
+        # now we can add extras.
+        super(FactorioModFile, self).write_contents(opened_zipfile)
+
+
 def generate_mod(world, output_directory: str):
     player = world.player
     multiworld = world.world
@@ -69,7 +87,6 @@ def generate_mod(world, output_directory: str):
             control_template = template_env.get_template("control.lua")
             settings_template = template_env.get_template("settings.lua")
     # get data for templates
-    player_names = {x: multiworld.player_name[x] for x in multiworld.player_ids}
     locations = []
     for location in multiworld.get_filled_locations(player):
         if location.address:
@@ -95,7 +112,7 @@ def generate_mod(world, output_directory: str):
         return random.uniform(low, high)
 
     template_data = {
-        "locations": locations, "player_names": player_names, "tech_table": tech_table,
+        "locations": locations, "player_names": multiworld.player_name, "tech_table": tech_table,
         "base_tech_table": base_tech_table, "tech_to_progressive_lookup": tech_to_progressive_lookup,
         "mod_name": mod_name,
         "allowed_science_packs": multiworld.max_science_pack[player].get_allowed_packs(),
@@ -160,10 +177,7 @@ def generate_mod(world, output_directory: str):
 
     # zip the result
     zf_path = os.path.join(mod_dir + ".zip")
-    with zipfile.ZipFile(zf_path, compression=zipfile.ZIP_DEFLATED, mode='w') as zf:
-        for root, dirs, files in os.walk(mod_dir):
-            for file in files:
-                zf.write(os.path.join(root, file),
-                         os.path.relpath(os.path.join(root, file),
-                                         os.path.join(mod_dir, '..')))
+    mod = FactorioModFile(zf_path, player=player, player_name=multiworld.player_name[player])
+    mod.write()
+
     shutil.rmtree(mod_dir)
