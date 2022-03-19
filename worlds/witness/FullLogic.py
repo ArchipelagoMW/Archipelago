@@ -1,10 +1,16 @@
 import pathlib
+import os
 pathlib.Path(__file__).parent.resolve()
 
 overallAllItems = set()
+eventPanels = set()
 
-def getIndependentRequirementOf(check, checksDependentByHex):  
+def getIndependentRequirementOf(check, checksDependentByHex): 
+    global eventPanels
     global overallAllItems
+    
+    for itemSet in check["requirement"]["items"]:
+        overallAllItems = overallAllItems.union(itemSet)
   
     if check["requirement"]["panels"] == frozenset({frozenset()}):
         return check["requirement"]["items"]
@@ -15,23 +21,17 @@ def getIndependentRequirementOf(check, checksDependentByHex):
 
     for option in check["requirement"]["panels"]:    
         for panel in option:
-            if panel == "7 Lasers":
-                thisPanelOptions = frozenset(frozenset("7 Lasers"))
-                continue
-                
-            if panel == "11 Lasers":
-                thisPanelOptions = frozenset(frozenset("11 Lasers"))
-                continue
-        
-            dependentItems = getIndependentRequirementOf(checksDependentByHex[panel], checksDependentByHex)
+            if panel == "7 Lasers" or panel == "11 Lasers":
+                dependentItems = frozenset({frozenset([panel])})
+            else:
+                dependentItems = getIndependentRequirementOf(checksDependentByHex[panel], checksDependentByHex)
+               
 
             for itemsOption in theseItems:
                 for dependentItem in dependentItems:
-                    #print("Dependent")
-                    #print(dependentItem)
                     allOptions.add(itemsOption.union(dependentItem))
                     
-                    overallAllItems = overallAllItems.union(itemsOption).union(dependentItem)
+                    
                     
     return frozenset(allOptions)
            
@@ -45,29 +45,46 @@ def parseLambda(lambdaString):
     
     return lambdaList
 
+
+
 def defineNewRegion(line):
     line = line[:-1]
     lineSplit = line.split(" - ")
    
-    regionName = lineSplit.pop(0)
+    regionNameFull = lineSplit.pop(0)
+    
+    regionNameSplit = regionNameFull.split(" (")
+    
+    regionName = regionNameSplit[0]
+    regionNameShort = regionNameSplit[1][:-1]
+    
     options = set()
     
     for i in range(len(lineSplit) // 2):
         connectedRegion = lineSplit.pop(0)
         correspondingLambda = lineSplit.pop(0)
-    
-        options.add((connectedRegion, parseLambda(correspondingLambda)))
         
-    regionObject = {"name": regionName, "connections": options};
+        for panelOption in parseLambda(correspondingLambda):
+            for panel in panelOption:
+                eventPanels.add((panel, len(eventPanels)))
+    
+        options.add((connectedRegion, parseLambda(correspondingLambda)))   
+    
+    regionObject = {"name": regionName, "shortName": regionNameShort, "connections": options, "panels": []};
     return regionObject
 
 
-f = open("WitnessLogic.txt");
+f = open(os.path.join(os.path.dirname(__file__), "WitnessLogic.txt"));
 
 currentRegion = ""
 
-regions = []
+allRegionsByName = dict()
 checksDependentByHex = dict()
+
+discardIDs = 0
+normalPanelIDs = 0
+vaultIDs = 0
+laserIDs = 0
 
 for line in f.readlines():
     line = line.strip()
@@ -77,7 +94,7 @@ for line in f.readlines():
         
     if line[0] != "0":
         currentRegion = defineNewRegion(line)
-        regions.append(currentRegion)
+        allRegionsByName[currentRegion["name"]] = currentRegion
         continue;
     
     
@@ -90,22 +107,76 @@ for line in f.readlines():
     
     requiredPanel = lineSplit.pop(0)
     correspondingLambda = lineSplit.pop(0)
+    
+    locationID = 0
+    locationType = ""
+    
+    if "Discard" in checkName:
+        locationType = "Discard"
+        locationID = discardIDs
+        discardIDs += 1
+    elif "Vault" in checkName or "Video" in checkName or checkName == "Tutorial Gate Close":
+        locationType = "Vault"
+        locationID = vaultIDs
+        vaultIDs += 1
+    elif checkName == "Laser" or checkName == "Laser Hedges" or checkName == "Laser Pressure Plates":
+        locationType = "Laser"
+        locationID = laserIDs
+        laserIDs += 1
+    else:
+        locationType = "General"
+        locationID = normalPanelIDs
+        normalPanelIDs += 1
    
     requirement = {"panels": parseLambda(requiredPanel), "items": parseLambda(correspondingLambda)}
     
-    checksDependentByHex[checkHex] = {"checkName": checkName, "checkHex": checkHex, "region": currentRegion, "requirement": requirement}
+    checksDependentByHex[checkHex] = {"checkName": currentRegion["shortName"] + " " + checkName, "checkHex": checkHex, "region": currentRegion, "requirement": requirement, "idOffset": locationID, "panelType": locationType}
+   
+    currentRegion["panels"].append(checkHex)
     
 
-checksIndependent = []
+checksByHex = dict()
+checksByName = dict()
 
-for check in checksDependentByHex.values():
-
+for checkHex, check in checksDependentByHex.items():
     independentRequirement = getIndependentRequirementOf(check, checksDependentByHex)
     
-    checksIndependent.append({"checkName": check["checkName"], "checkHex": check["checkHex"], "region": check["region"], "requirement": independentRequirement})
+    newCheck = {"checkName": check["checkName"], "checkHex": check["checkHex"], "region": check["region"], "requirement": independentRequirement, "idOffset": check["idOffset"], "panelType": check["panelType"]}
     
-print("\n".join([str(check) for check in checksIndependent]))
+    checksByHex[checkHex] = newCheck
+    checksByName[newCheck["checkName"]] = newCheck
+    
+panelsThatHaveBeenVisited = set()  
+panelsThatHaveBeenTrue = set()
 
-overallAllItems = list(overallAllItems)
-overallAllItems.sort()
-print("\n".join(overallAllItems))
+def can_solve_panel(panel, state, player):
+    panelObj = checksByHex[panel]   
+    
+    for option in panelObj["requirement"]:
+        if len(option) == 0:
+            return True
+      
+        solvability = [state.has(item, player) or (item == "7 Lasers" and state._witness_has_lasers(player, 7)) or (item == "11 Lasers" and state._witness_has_lasers(player, 11)) for item in option]
+        
+        
+        
+        if all(solvability):
+            return True
+
+    return False
+    
+def can_solve_panel_with_region_check(panel, state, player): 
+    panelObj = checksByHex[panel]
+    return can_solve_panel(panel, state, player) and state.can_reach(panelObj["region"]["name"], 'Region', player)
+
+
+def has_event_items(r, panelHexToSolveSet, state, player):
+    for option in panelHexToSolveSet:    
+        solvability = [state.has(checksByHex[panel]["checkName"] + " Event", player) for panel in option]
+       
+        
+        if all(solvability):
+            return True
+       
+                
+    return False

@@ -1,10 +1,52 @@
+from BaseClasses import MultiWorld, Entrance
+
+def makeLambda(targetRegion, panelHexToSolveSet, player):
+    from .FullLogic import checksByHex, has_event_items
+    return lambda state: has_event_items(targetRegion, panelHexToSolveSet, state, player)
+
+def connect(world: MultiWorld, player: int, source: str, target: str, panelHexToSolveSet = None):
+    from .FullLogic import checksByHex
+
+    sourceRegion = world.get_region(source, player)
+    targetRegion = world.get_region(target, player)
+   
+    
+    connection = Entrance(player, source + " to " + target + " via " + str(panelHexToSolveSet), sourceRegion)
+
+    connection.access_rule = makeLambda(targetRegion, panelHexToSolveSet, player)
+
+    sourceRegion.exits.append(connection)
+    connection.connect(targetRegion)
+
 def create_regions(world, player: int):
     from . import create_region
-    from .Locations import location_table
+    from .Locations import location_table, event_location_table
+    from .FullLogic import allRegionsByName, checksByHex
 
     world.regions += [
         create_region(world, player, 'Menu', None, ["The Splashscreen?"]),
-        create_region(world, player, 'Witness Island', [location for location in location_table])
     ]
+    
+    allLocationsAccordingToRegions = set()
+    allLocationsAccordingToLocationTable = set(location_table.keys())
 
-    world.get_entrance("The Splashscreen?", player).connect(world.get_region('Witness Island', player))
+
+    for regionName, region in allRegionsByName.items():        
+        locationsForThisRegion = [checksByHex[panel]["checkName"] for panel in region["panels"] if checksByHex[panel]["checkName"] in location_table]
+        locationsForThisRegion += [checksByHex[panel]["checkName"] + " Event" for panel in region["panels"] if checksByHex[panel]["checkName"] + " Event" in event_location_table]
+        
+        print(locationsForThisRegion)
+        
+        allLocationsAccordingToRegions = allLocationsAccordingToRegions | set(locationsForThisRegion)
+       
+        
+        world.regions += [create_region(world, player, regionName, locationsForThisRegion)]
+        
+    for regionName, region in allRegionsByName.items():
+        for connection in region["connections"]:
+            if connection[0] == "Entry":
+                continue
+            connect(world, player, regionName, connection[0], connection[1])
+            connect(world, player, connection[0], regionName, connection[1])
+
+    world.get_entrance("The Splashscreen?", player).connect(world.get_region('First Hallway', player))

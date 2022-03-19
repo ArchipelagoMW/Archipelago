@@ -1,80 +1,187 @@
-location_table = {
-    'Tutorial Gate Open': 158000,
-    'Outside Tutorial Dots Tutorial 5': 158001,
-    'Outside Tutorial Stones Tutorial 9': 158002,
-    'Tutorial Patio floor': 158003,
-    'Orchard Apple Tree 5': 158004,
-    'Glass Factory Vertical Symmetry 4': 158005,
-    'Glass Factory Rotational Symmetry 3': 158006,
-    'Glass Factory Melting 3': 158007,
-    'Symmetry Island Black Dots 5': 158008,
-    'Symmetry Island Colored Dots 6': 158009,
-    'Symmetry Island Fading Lines 7': 158010,
-    'Symmetry Island Transparent 5': 158011,
-    'Symmetry Island Laser Yellow 3': 158012,
-    'Symmetry Island Laser Blue 3': 158013,
-    'Symmetry Laser': 158014,
-    'Desert Surface 8': 158015,
-    'Desert Light 3': 158016,
-    'Desert Pond 5': 158017,
-    'Desert Flood 5': 158018,
-    'Desert Laser': 158019,
-    'Mill Lower Row 6': 158020,
-    'Mill Upper Row 8': 158021,
-    'Mill Control Room 2': 158022,
-    'Boathouse Erasers and Shapers 5': 158023,
-    'Boathouse Erasers and Stars 7': 158024,
-    'Boathouse Erasers Shapers and Stars 5': 158025,
-    'Quarry Laser': 158026,
-    'Treehouse Yellow 9': 158027,
-    'Treehouse First Purple 5': 158028,
-    'Treehouse Second Purple 7': 158029,
-    'Treehouse Left Orange 15': 158030,
-    'Treehouse Right Orange 12': 158031,
-    'Treehouse Green 7': 158032,
-    'Treehouse Laser': 158033,
-    'Shadows Tutorial 8': 158034,
-    'Shadows Avoid 8': 158035,
-    'Shadows Follow 5': 158036,
-    'Shadows Laser': 158037,
-    'Monastery Exterior 3': 158038,
-    'Monastery Interior 4': 158039,
-    'Monastery Laser': 158040,
-    'Keep Hedges 4': 158041,
-    'Keep Blue Pressure Plates': 158042,
-    'Keep Front Laser': 158043,
-    'Keep Back Laser': 158044,
-    'Town Eraser': 158045,
-    'Town Blue 5': 158046,
-    'Town Red Hexagonal': 158047,
-    'Town Lattice': 158048,
-    'Town Laser': 158049,
-    'Swamp Tutorial 6': 158050,
-    'Swamp Tutorial 14': 158051,
-    'Swamp Red 4': 158052,
-    'Swamp Discontinuous 4': 158053,
-    'Swamp Rotation Tutorial 4': 158054,
-    'Swamp Rotation Advanced 4': 158055,
-    'Swamp Blue Underwater 5': 158056,
-    'Swamp Teal Underwater 5': 158057,
-    'Swamp Red Underwater 4': 158058,
-    'Swamp Purple Tetris': 158059,
-    'Swamp Laser': 158060,
-    'Bunker Tutorial 5': 158061,
-    'Bunker Advanced 4': 158062,
-    'Bunker Glass 3': 158063,
-    'Bunker Ultraviolet 2': 158064,
-    'Bunker Laser': 158065,
-    'Jungle Waves 3': 158066,
-    'Jungle Waves 7': 158067,
-    'Jungle Dots 6': 158068,
-    'Jungle Laser': 158069,
-    'Mountaintop River': 158070,
-    'Mountain 1 Orange 7': 158071,
-    'Mountain 1 Purple 2': 158072,
-    'Mountain 1 Green 5': 158073,
-    'Mountain 2 Rainbow 4': 158074,
-    'Mountain 2 Discard': 158075,
-    
-    'Final Elevator Control': 158500
+from .FullLogic import checksByName, checksByHex, eventPanels
+
+start = 158000
+
+typeToOffset = {
+    "General": 0,
+    "Discard": 600,
+    "Vault": 700,
+    "Laser": 800
 }
+
+panelTypesToShuffle = {
+    "General", "Discard", "Vault", "Laser" #Base This off of settings in the future!!
+}
+
+alwaysLocations = {
+    "Tutorial Gate Open",
+    
+    "Outside Tutorial Vault Box",
+    "Outside Tutorial Discard",
+    "Outside Tutorial Dots Introduction 5",
+    "Outside Tutorial Squares Introduction 9",
+    
+    "Glass Factory Discard",
+    "Glass Factory Vertical Symmetry 5",
+    "Glass Factory Rotational Symmetry 3",
+    "Glass Factory Melting 3",
+    
+    "Symmetry Island Black Dots 5",
+    "Symmetry Island Colored Dots 6",
+    "Symmetry Island Fading Lines 7",
+    "Symmetry Island Scenery Outlines 5",
+    "Symmetry Island Laser",
+    
+    "Orchard Apple Tree 5",
+    
+    "Desert Vault Box",
+    "Desert Discard",
+    "Desert Sun Reflection 8",
+    "Desert Artificial Light Reflection 3",
+    "Desert Pond Reflection 5",
+    "Desert Flood Reflection 5",
+    "Desert Laser",
+    
+    "Quarry Mill Eraser and Dots 6",
+    "Quarry Mill Eraser and Squares 8",
+    "Quarry Mill Small Squares & Dots & and Eraser",
+    "Quarry Boathouse Intro Shapers",
+    "Quarry Boathouse Eraser and Shapers 5",
+    "Quarry Boathouse Stars & Eraser & and Shapers 2",
+    "Quarry Boathouse Stars & Eraser & and Shapers 5",
+    "Quarry Laser",
+    
+    "Shadows Lower Avoid 8",
+    "Shadows Environmental Avoid 8",
+    "Shadows Follow 5",
+    "Shadows Laser",
+    
+    "Keep Hedge Maze 4",
+    "Keep Pressure Plates 4",
+    "Keep Discard",
+    "Keep Laser Hedges",
+    "Keep Laser Pressure Plates",
+    
+    "Shipwreck Vault Box",
+    "Shipwreck Discard",
+    
+    "Monastery Rhombic Avoid 3",
+    "Monastery Branch Follow 2",
+    "Monastery Laser",
+    
+    "Town Cargo Box Discard",
+    "Town Hexagonal Reflection",
+    "Town Square Avoid",
+    "Town Town Discard",
+    "Town Symmetry Squares 5 + Dots",
+    "Town Full Dot Grid Shapers 5",
+    "Town Shapers & Dots & and Eraser",
+    "Town RGB Squares",
+    "Town RGB Stars",
+    "Town Laser",
+    
+    "Theater Discard",
+    
+    "Jungle Discard",
+    "Jungle Waves 3",
+    "Jungle Waves 7",
+    "Jungle Popup Wall 6",
+    "Jungle Laser",
+    
+    "River Vault",
+    
+    "Bunker Drawn Squares 5",
+    "Bunker Drawn Squares 9",
+    "Bunker Drawn Squares through Tinted Glass 3",
+    "Bunker Drop-Down Door Squares 2",
+    "Bunker Laser",
+    
+    "Swamp Seperatable Shapers 6",
+    "Swamp Combinable Shapers 8",
+    "Swamp Broken Shapers 4",
+    "Swamp Cyan Underwater Negative Shapers 5",
+    "Swamp Platform Shapers 4",
+    "Swamp Rotated Shapers 4",
+    "Swamp Red Underwater Negative Shapers 4",
+    "Swamp More Rotated Shapers 4",
+    "Swamp Blue Underwater Negative Shapers 5",
+    "Swamp Laser",
+    
+    "Treehouse Yellow Bridge 9",
+    "Treehouse First Purple Bridge 5",
+    "Treehouse Second Purple Bridge 7",
+    "Treehouse Green Bridge 7",
+    "Treehouse Green Bridge Discard",
+    "Treehouse Left Orange Bridge 14",
+    "Treehouse Burned House Discard",
+    "Treehouse Right Orange Bridge 12",
+    "Treehouse Laser",
+    
+    "Mountaintop Trap Door Triple Exit",
+    "Mountaintop Discard",
+    "Mountaintop Vault Box",
+
+    "Inside Mountain Obscured Vision 5",
+    "Inside Mountain Moving Background 7",
+    "Inside Mountain Physically Obstructed 3",
+    "Inside Mountain Angled Inside Trash 2",
+    "Inside Mountain Color Cycle 5",
+    "Inside Mountain Same Solution 6",
+    "Inside Mountain Elevator Discard",
+    "Inside Mountain Giant Puzzle",
+    "Inside Mountain Bottom Layer Discard",
+    
+    
+    
+    "Inside Mountain Final Room Elevator Start"
+}
+
+uncommonOptionalLocations = {
+    "Mountaintop River Shape",
+    "Tutorial Patio Floor",
+    "Theater Tutorial Video",
+    "Theater Desert Video",
+    "Theater Jungle Video",
+    "Theater Challenge Video",
+    "Theater Shipwreck Video",
+    "Theater Mountain Video"
+}
+
+hardOptionalLocations = {
+    "Tutorial Gate Close",
+    "Quarry Mill Big Squares & Dots & and Eraser",
+    "Swamp Underwater Back Optional",
+    
+    "Inside Mountain Secret Area Dot Grid Triangles 4",
+    "Inside Mountain Secret Area Symmetry Triangles",
+    "Inside Mountain Secret Area Stars & Squares and Triangles 2",
+    "Inside Mountain Secret Area Shapers and Triangles 2",
+    "Inside Mountain Secret Area Symmetry Shapers",
+    "Inside Mountain Secret Area Broken and Negative Shapers",
+    "Inside Mountain Secret Area Broken Shapers",
+    
+    "Inside Mountain Secret Area Rainbow Squares",
+    "Inside Mountain Secret Area Squares & Stars and Colored Eraser",
+    "Inside Mountain Secret Area Rotated Broken Shapers",
+    "Inside Mountain Secret Area Stars and Squares",
+    "Inside Mountain Secret Area Lone Pillar",
+    "Inside Mountain Secret Area Wooden Beam Shapers",
+    "Inside Mountain Secret Area Wooden Beam Squares and Shapers",
+    "Inside Mountain Secret Area Wooden Beam Shapers and Squares",
+    "Inside Mountain Secret Area Wooden Beam Shapers and Stars",
+    "Inside Mountain Secret Area Upstairs Invisible Dots 8",
+    "Inside Mountain Secret Area Upstairs Invisible Dot Symmetry 3",
+    "Inside Mountain Secret Area Upstairs Dot Grid Shapers",
+    "Inside Mountain Secret Area Upstairs Dot Grid Rotated Shapers",
+    
+    "Challenge Vault Box",
+    "Theater Walkway Secret Vault Box"
+}
+
+locations = alwaysLocations | uncommonOptionalLocations #| hardOptionalLocations #TODO: Determined by settings
+
+event_location_table = {checksByHex[panelHex[0]]["checkName"] + " Event":None for panelHex in eventPanels}
+
+location_table = event_location_table | {location: checksByName[location]["idOffset"] + start + typeToOffset[checksByName[location]["panelType"]] for location in locations if checksByName[location]["panelType"] in panelTypesToShuffle}
+location_table_backwards = {checksByName[location]["idOffset"] + start + typeToOffset[checksByName[location]["panelType"]]: location for location in locations if checksByName[location]["panelType"] in panelTypesToShuffle}
+
