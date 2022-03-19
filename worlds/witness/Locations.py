@@ -4,9 +4,9 @@ start = 158000
 
 typeToOffset = {
     "General": 0,
-    "Discard": 600,
-    "Vault": 700,
-    "Laser": 800
+    "Discard": 500,
+    "Vault": 550,
+    "Laser": 600
 }
 
 panelTypesToShuffle = {

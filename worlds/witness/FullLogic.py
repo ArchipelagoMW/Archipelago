@@ -10,7 +10,9 @@ def getIndependentRequirementOf(check, checksDependentByHex):
     global overallAllItems
     
     for itemSet in check["requirement"]["items"]:
-        overallAllItems = overallAllItems.union(itemSet)
+        for item in itemSet:
+            if item not in {item[0] for item in overallAllItems}:
+                overallAllItems.add((item, len(overallAllItems)))
   
     if check["requirement"]["panels"] == frozenset({frozenset()}):
         return check["requirement"]["items"]

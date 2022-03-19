@@ -28,17 +28,12 @@ for event_item in eventPanels:
     event_item_table[checksByHex[event_item]["checkName"] + " Event"] = ItemData(None, True, True)
     item_table[checksByHex[event_item]["checkName"] + " Event"] = ItemData(None, True, True)
 
-print(item_table)
-
-counter = 0
 
 for item in overallAllItems:
-    if item == "11 Lasers" or item == "7 Lasers":
+    if item[0] == "11 Lasers" or item == "7 Lasers":
         continue
 
-    item_table[item] = ItemData(158000 + counter, True, False)
-    
-    counter += 1
+    item_table[item[0]] = ItemData(158000 + item[1], True, False)
 
 junk_weights = {
     "Temporary Speed Boost": 1

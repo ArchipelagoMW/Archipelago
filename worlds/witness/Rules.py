@@ -54,7 +54,6 @@ class WitnessLogic(LogicMixin):
         
             for panel in option:
                 if checksByHex[panel]["checkName"] + " Event" in event_location_table and not self.has(checksByHex[panel]["checkName"] + " Event", player):
-                    print(panel)
                     break
                 if panel not in originalEventPanels and not self.can_reach(checksByHex[panel]["checkName"], "Location", player):
                     break

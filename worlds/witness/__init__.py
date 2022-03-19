@@ -43,7 +43,6 @@ class WitnessWorld(World):
         self.world.get_location("Inside Mountain Final Room Elevator Start", self.player).place_locked_item(self.create_item("Victory"))
         
         for event_location in event_location_table:
-            print(event_location)
             self.world.get_location(event_location, self.player).place_locked_item(self.create_item(event_location))
     
         self.world.itempool += pool
@@ -54,18 +53,19 @@ class WitnessWorld(World):
     def set_rules(self):
         set_rules(self.world, self.player)
 
-    def fill_slot_data(self):
-        slot_data = {}
+    def fill_slot_data(self) -> dict:
+        slot_data = self._get_slot_data()
+        for option_name in set(): #Put Witness Options in!
+            option = getattr(self.world, option_name)[self.player]
+            slot_data[option_name] = int(option.value)
+            
         return slot_data
+        
+    
 
     def create_item(self, name: str) -> Item:
         item = item_table[name]
         return WitnessItem(name, item.progression, item.code, player=self.player)
-    
-    def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data()
-        #Redo this part (with StS reference) later
-        return slot_data
 
 class WitnessLocation(Location):
     game: str = "The Witness"

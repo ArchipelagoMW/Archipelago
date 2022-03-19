@@ -32,8 +32,6 @@ def create_regions(world, player: int):
         locationsForThisRegion = [checksByHex[panel]["checkName"] for panel in region["panels"] if checksByHex[panel]["checkName"] in location_table]
         locationsForThisRegion += [checksByHex[panel]["checkName"] + " Event" for panel in region["panels"] if checksByHex[panel]["checkName"] + " Event" in event_location_table]
         
-        print(locationsForThisRegion)
-        
         allLocationsAccordingToRegions = allLocationsAccordingToRegions | set(locationsForThisRegion)
        
         
