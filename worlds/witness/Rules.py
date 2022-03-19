@@ -51,14 +51,18 @@ class WitnessLogic(LogicMixin):
         for option in panelHexToSolveSet:    
             if len(option) == 0:
                 return True
-        
+                                
+            validOption = True
+            
             for panel in option:
                 if checksByHex[panel]["checkName"] + " Event" in event_location_table and not self.has(checksByHex[panel]["checkName"] + " Event", player):
-                    break
+                    validOption = False
                 if panel not in originalEventPanels and not self.can_reach(checksByHex[panel]["checkName"], "Location", player):
-                    break
+                    validOption = False
                 if panel in originalEventPanels and checksByHex[panel]["checkName"] + " Event" not in event_location_table and not self._safe_manual_panel_check(panel, player): 
-                    break
+                    validOption = False
+                
+            if validOption:
                 return True
         return False
 

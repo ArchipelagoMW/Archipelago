@@ -1,4 +1,5 @@
 from typing import NamedTuple, Union
+import typing
 import logging
 import random
 
@@ -69,14 +70,25 @@ class WitnessWorld(World):
 
 class WitnessLocation(Location):
     game: str = "The Witness"
+    checkHex: int = -1
+    
+    def __init__(self, player: int, name: str, address: typing.Optional[int], parent, chHex: int = -1):
+        super().__init__(player, name, address, parent)
+        self.checkHex = chHex
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
+    from .FullLogic import checksByName
     ret = Region(name, RegionType.Generic, name, player)
     ret.world = world
     if locations:
         for location in locations:
             loc_id = location_table[location]
-            location = WitnessLocation(player, location, loc_id, ret)
+            
+            checkHex = -1
+            if location in checksByName:
+                checkHex = int(checksByName[location]["checkHex"], 0)
+            location = WitnessLocation(player, location, loc_id, ret, checkHex)
+
             ret.locations.append(location)
     if exits:
         for exit in exits:
