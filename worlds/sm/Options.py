@@ -53,7 +53,7 @@ class DeathLink(Choice):
     default = 0
 
 class RemoteItems(Toggle):
-    """Indicates you get items sent from your own world. This allows coop play of a seed."""
+    """Indicates you get items sent from your own world. This allows coop play of a world."""
     display_name = "Remote Items"  
 
 class RemoteStartInventory(Toggle):
