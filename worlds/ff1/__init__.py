@@ -8,7 +8,7 @@ from ..AutoWorld import World, WebWorld
 
 class FF1Web(WebWorld):
     settings_page = "https://finalfantasyrandomizer.com/"
-    theme = "jungle"
+    theme = "dirt"
 
 
 class FF1World(World):
