@@ -7,3 +7,28 @@ html{
 #base-header {
     background: url('../../static/backgrounds/header/jungle-header.png') repeat-x;
 }
+
+h1{
+
+}
+
+h2{
+
+}
+
+h3, h4, h5,h6{
+    color: #ffffff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+table th{
+
+}
+
+table td{
+
+}
+
+a{
+
+}
