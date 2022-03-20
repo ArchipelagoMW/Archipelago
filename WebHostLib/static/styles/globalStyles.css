@@ -1,35 +1,9 @@
-@font-face{
-    font-family: LexendDeca-ExtraLight;
-    src: url("../../static/static/fonts/LexendDeca-ExtraLight.ttf");
-}
-
-@font-face{
-    font-family: LexendDeca-Light;
-    src: url("../../static/static/fonts/LexendDeca-Light.ttf");
-}
-
-@font-face{
-    font-family: LexendDeca-Regular;
-    src: url("../../static/static/fonts/LexendDeca-Regular.ttf");
-}
-
-@font-face{
-    font-family: LexendDeca-Medium;
-    src: url("../../static/static/fonts/LexendDeca-Medium.ttf");
-}
-
-@font-face{
-    font-family: LondrinaSolid-Regular;
-    src: url("../../static/static/fonts/LondrinaSolid-Regular.ttf");
-}
-
-@font-face{
-    font-family: LondrinaSolid-Light;
-    src: url("../../static/static/fonts/LondrinaSolid-Light.ttf");
+@font-face {
+    font-family: "sans-serif";
 }
 
 html{
-    font-family: LexendDeca-ExtraLight, sans-serif;
+    font-family: 'Jost', sans-serif;
     font-size: 1.1rem;
     color: #000000;
 }
@@ -40,11 +14,10 @@ body{
 
 a{
     color: #ffef00;
-    text-decoration: none;
-    font-family: LexendDeca-Regular, sans-serif;
 }
 
 button{
+    font-family: Jost, sans-serif;
     font-weight: 500;
     font-size: 0.9rem;
     padding: 10px 17px 11px 16px; /* top right bottom left */
@@ -75,6 +48,7 @@ button.button-dirt{
 }
 
 h1, h2, h3, h4, h5, h6{
+    font-family: sans-serif;
     font-weight: normal;
     margin: 0;
     color: #032605;

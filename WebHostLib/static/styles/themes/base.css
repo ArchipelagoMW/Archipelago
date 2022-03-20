@@ -2,6 +2,11 @@ html{
     padding-top: 110px;
 }
 
+body{
+    font-family: sans-serif;
+    color: #000000;
+}
+
 #base-header{
     display: flex;
     flex-direction: row;
@@ -12,6 +17,7 @@ html{
     position: fixed;
     top: 0;
     left: 0;
+    font-family: sans-serif;
     padding: 10px;
     line-height: 2rem;
     z-index: 9999;
@@ -27,17 +33,13 @@ html{
     padding-right: 7px;
 }
 
-#base-header-right{
-    margin-top: 4px;
-}
-
 #base-header #site-title{
     margin-right: 7px;
 }
 
 #base-header #site-title img{
-    height: 38px;
-    margin-top: 4px;
+    width: 40px;
+    height: 40px;
 }
 
 #base-header a{
@@ -45,7 +47,5 @@ html{
     text-decoration: none;
     cursor: pointer;
     margin-right: 1.2rem;
-    font-size: 22px;
-    font-family: LondrinaSolid-Light, sans-serif;
-    text-transform: uppercase;
+    font-size: 1.2rem;
 }
