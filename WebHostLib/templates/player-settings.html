@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block body %}
-    {% include 'header/grassHeader.html' %}
+    {% include 'header/'+theme+'Header.html' %}
     <div id="player-settings" data-game="{{ game }}">
         <div id="user-message"></div>
         <h1><span id="game-name">Player</span> Settings</h1>
