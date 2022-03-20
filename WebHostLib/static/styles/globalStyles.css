@@ -1,6 +1,5 @@
 @font-face {
-    font-family: "HyliaSerif";
-    src: url('../static/fonts/HyliaSerifBeta-Regular.otf') format("opentype");
+    font-family: "sans-serif";
 }
 
 html{
@@ -49,7 +48,7 @@ button.button-dirt{
 }
 
 h1, h2, h3, h4, h5, h6{
-    font-family: HyliaSerif, sans-serif;
+    font-family: sans-serif;
     font-weight: normal;
     margin: 0;
     color: #032605;
@@ -65,38 +64,6 @@ h4{
 h5, h6{
     font-size: 1.25rem;
     margin-bottom: 0.5rem;
-}
-
-.grass-island{
-    background:
-        url('../static/backgrounds/cliffs/grass/cliff-top-left-corner.png') top left no-repeat,
-        url('../static/backgrounds/cliffs/grass/cliff-top-right-corner.png') top right no-repeat,
-        url('../static/backgrounds/cliffs/grass/cliff-bottom-left-corner.png') bottom left no-repeat,
-        url('../static/backgrounds/cliffs/grass/cliff-bottom-right-corner.png') bottom right no-repeat,
-        url('../static/backgrounds/cliffs/grass/cliff-top.png') top repeat-x,
-        url('../static/backgrounds/cliffs/grass/cliff-bottom.png') bottom repeat-x,
-        url('../static/backgrounds/cliffs/grass/cliff-left.png') left repeat-y,
-        url('../static/backgrounds/cliffs/grass/cliff-right.png') right repeat-y,
-        url('../static/backgrounds/grass/grass-0007-large.png') repeat;
-
-    background-size:
-        140px 120px, /* top-left */
-        140px 120px, /* top-right */
-        140px 140px, /* bottom-left */
-        140px 140px, /* bottom-right */
-        20px 71px, /* top */
-        20px 100px, /* bottom */
-        71px 20px, /* left */
-        71px 20px, /* right */
-        525px 525px; /* center */
-
-    min-width: 280px;
-    min-height: 280px;
-
-    padding-left: 120px;
-    padding-right: 120px;
-    padding-top: 100px;
-    padding-bottom: 120px;
 }
 
 .user-message{

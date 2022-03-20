@@ -78,6 +78,10 @@ class WebWorld:
     # display a settings page. Can be a link to an out-of-ap settings tool too.
     settings_page: Union[bool, str] = True
 
+    # Choose a theme for your /game/* pages
+    # Available: dirt, grass, grass-flowers, ice, jungle
+    theme = "grass"
+
 
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
