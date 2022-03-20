@@ -16,19 +16,20 @@ html{
     text-align: center;
 }
 
-#landing-header h1{
-    color: #ffffff;
-    font-size: 3.5rem;
-    text-shadow: 1px 1px 7px #000000;
-    -webkit-text-stroke: 1px #00582e;
+#landing-header #landing-logo{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    height: 140px;
     z-index: 10;
 }
 
 #landing-header h4{
     color: #ffffff;
-    font-size: 1.75rem;
+    font-size: 36px;
+    margin-top: -10px;
     margin-bottom: 0;
-    text-shadow: 1px 1px 7px #000000;
+    /** text-shadow: 1px 1px 7px #000000; */
     font-kerning: none;
     z-index: 10;
 }
@@ -44,16 +45,17 @@ html{
     display: block;
     text-align: center;
     background-repeat: no-repeat;
-    font-family: sans-serif;
     font-kerning: none;
     text-decoration: none;
     text-shadow: 1px 1px 7px #000000;
     color: #ffffff;
-    font-size: 1.4rem;
+    font-size: 25px;
+    text-transform: uppercase;
+    font-family: LondrinaSolid-Light, sans-serif;
 }
 
 #far-left-button{
-    top: 115px;
+    top: 160px;
     left: calc(50% - 416px - 200px - 75px);
     background-image: url("/static/static/button-images/island-button-a.png");
     background-size: 200px auto;
@@ -64,44 +66,44 @@ html{
 }
 
 #mid-left-button{
-    top: 320px;
+    top: 365px;
     left: calc(50% - 416px - 200px + 140px);
     background-image: url("/static/static/button-images/island-button-b.png");
     background-size: 260px auto;
     width: 260px;
     height: calc(130px - 35px);
-    padding-top: 35px;
+    padding-top: 43px;
 }
 
 #mid-button{
-    top: 400px;
+    top: 445px;
     left: calc(50% - 100px);
     background-image: url("/static/static/button-images/island-button-a.png");
     background-size: 200px auto;
     width: 200px;
     height: calc(156px - 38px);
-    padding-top: 38px;
+    padding-top: 40px;
 }
 
 #mid-right-button{
-    top: 300px;
+    top: 345px;
     left: calc(50% + 416px - 166px);
     background-image: url("/static/static/button-images/island-button-c.png");
     background-size: 250px auto;
     width: calc(250px - 20px);
     height: calc(180px - 90px);
-    padding-top: 90px;
+    padding-top: 94px;
     padding-left: 20px;
 }
 
 #far-right-button{
-    top: 125px;
+    top: 170px;
     left: calc(50% + 416px + 75px);
     background-image: url("/static/static/button-images/island-button-b.png");
     background-size: 260px auto;
     width: 260px;
     height: calc(130px - 35px);
-    padding-top: 35px;
+    padding-top: 42px;
 }
 
 #landing-clouds{
@@ -142,6 +144,13 @@ html{
     animation-name: c3-float;
     animation-duration: 20s;
     animation-iteration-count: infinite;
+}
+
+#landing #first-line{
+    font-family: LondrinaSolid-Light, sans-serif;
+    font-size: 25px;
+    margin: 20px 0;
+    text-transform: uppercase;
 }
 
 @keyframes c1-float{
@@ -220,8 +229,11 @@ html{
     margin-right: auto;
 }
 
-#landing #first-line{
-    font-weight: 500;
+#landing-body{
+    font-family: LexendDeca-Light, sans-serif;
+    font-size: 18px;
+    color: #ffffff;
+    line-height: 30px;
 }
 
 #landing .variable{
@@ -241,32 +253,32 @@ html{
 }
 
 #landing-deco-1{
-    top: 480px;
+    top: 525px;
     left: calc(50% - 276px);
 }
 
 #landing-deco-2{
-    top: 250px;
-    left: calc(50% + 150px);
+    top: 355px;
+    left: calc(50% + 110px);
 }
 
 #landing-deco-3{
-    top: 350px;
+    top: 395px;
     left: calc(50% - 150px);
 }
 
 #landing-deco-4{
-    top: 290px;
+    top: 335px;
     left: calc(50% - 580px);
 }
 
 #landing-deco-5{
-    top: 90px;
+    top: 135px;
     left: calc(50% + 450px);
 }
 
 #landing-deco-6{
-    top: 462px;
+    top: 507px;
     left: calc(50% + 196px);
 }
 
@@ -290,7 +302,7 @@ html{
         position: relative;
         margin-left: auto;
         margin-right: auto;
-        margin-bottom: 1rem;
+
         top: auto;
         left: auto;
     }
