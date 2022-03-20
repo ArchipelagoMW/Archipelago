@@ -4,7 +4,8 @@ from BaseClasses import Item
 from typing import Dict
 
 
-from .FullLogic import overallAllItems, eventPanels, checksByHex
+from .FullLogic import overallAllItems, eventPanels, checksByHex, eventItemPairs
+from .Locations import event_location_table
 
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
@@ -24,9 +25,9 @@ item_table: Dict[str, ItemData] = {
 
 event_item_table = dict()
 
-for event_item in eventPanels:
-    event_item_table[checksByHex[event_item]["checkName"] + " Event"] = ItemData(None, True, True)
-    item_table[checksByHex[event_item]["checkName"] + " Event"] = ItemData(None, True, True)
+for event_location in event_location_table:
+    event_item_table[eventItemPairs[event_location]] = ItemData(None, True, True)
+    item_table[eventItemPairs[event_location]] = ItemData(None, True, True)
 
 
 for item in overallAllItems:

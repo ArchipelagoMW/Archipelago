@@ -7,32 +7,62 @@ class WitnessLogic(LogicMixin):
     def _witness_has_lasers(self, player: int, amount: int) -> bool:    
         lasers = 0
         
-        lasers += int(self.can_reach("Symmetry Island Laser", "Location", player))
-        lasers += int(self.can_reach("Desert Laser", "Location", player))
-        lasers += int(self.can_reach("Town Laser", "Location", player))
-        lasers += int(self.can_reach("Quarry Laser", "Location", player))
-        lasers += int(self.can_reach("Shadows Laser", "Location", player))
-        lasers += int(self.can_reach("Keep Laser Hedges", "Location", player) and self.can_reach("Keep Laser Pressure Plates", "Location", player))
-        lasers += int(self.can_reach("Jungle Laser", "Location", player))
-        lasers += int(self.can_reach("Swamp Laser", "Location", player))
-        lasers += int(self.can_reach("Treehouse Laser", "Location", player))
-        lasers += int(self.can_reach("Bunker Laser", "Location", player))
-        lasers += int(self.can_reach("Monastery Laser", "Location", player))
-        
+        lasers += int(self.has("Symmetry Laser Activation", player))
+        lasers += int(self.has("Desert Laser Activation", player) and self.has("Desert Laser Redirection", player))
+        lasers += int(self.has("Town Laser Activation", player))
+        lasers += int(self.has("Monastery Laser Activation", player))
+        lasers += int(self.has("Keep Laser Hedges Activation", player) and self.has("Keep Laser Pressure Plates Activation", player))
+        lasers += int(self.has("Quarry Laser Activation", player))
+        lasers += int(self.has("Treehouse Laser Activation", player))
+        lasers += int(self.has("Jungle Laser Activation", player))
+        lasers += int(self.has("Bunker Laser Activation", player))
+        lasers += int(self.has("Swamp Laser Activation", player))
+        lasers += int(self.has("Shadows Laser Activation", player))
         
         return lasers >= amount
-        
-    def _can_solve_panel(self, panel, player):
-        from .FullLogic import checksByHex, checksByName
-        panelObj = checksByHex[panel]   
     
-        for option in panelObj["requirement"]:
+    def _can_solve_panel(self, panel, player):
+        from .FullLogic import checksByHex, checksByName, eventPanels, eventItemNames, originalEventPanels, eventItemPairs
+        from .Locations import event_location_table, locations
+                     
+        
+        panelObj = checksByHex[panel] 
+          
+        if checksByHex[panel]["checkName"] + " Solved" in event_location_table and not self.has(eventItemPairs[checksByHex[panel]["checkName"] + " Solved"], player):
+            return False
+        if panel not in originalEventPanels and not self.can_reach(checksByHex[panel]["checkName"], "Location", player):
+            return False
+        if panel in originalEventPanels and checksByHex[panel]["checkName"] + " Solved" not in event_location_table and not self._safe_manual_panel_check(panel, player): 
+            return False
+        return True
+    
+    def _meets_item_requirements(self, panel, player):
+        from .FullLogic import checksByHex, checksByName, eventPanels, eventItemNames
+        from .Locations import event_location_table, locations
+        
+        panelObj = checksByHex[panel] 
+        
+        
+        for option in panelObj["requirement"]:     
             if len(option) == 0:
                 return True
-      
-            solvability = [self.has(item, player) or (item == "7 Lasers" and self._witness_has_lasers(player, 7)) or (item == "11 Lasers" and self._witness_has_lasers(player, 11)) for item in option]
         
-            if all(solvability):
+            solvability = []
+            
+            for item in option:
+                if item == "7 Lasers":
+                    solvability.append(self._witness_has_lasers(player, 7))
+                elif item == "11 Lasers":
+                    solvability.append(self._witness_has_lasers(player, 11))
+                elif item in eventPanels:
+                    if checksByHex[item]["checkName"] + " Solved" in event_location_table:
+                        solvability.append(self.has(eventItemNames[item], player))
+                    else :
+                        solvability.append(self.can_reach(checksByHex[item]["checkName"], "Location", player))
+                else:
+                    solvability.append(self.has(item, player))
+                               
+            if all(solvability):          
                 return True
 
         return False
@@ -42,9 +72,9 @@ class WitnessLogic(LogicMixin):
     #the spoiler log looks so much nicer this way, it gets rid of a bunch of event items, only leaving a couple. :)
     def _safe_manual_panel_check(self, panel, player):
         from .FullLogic import checksByHex
-        return self._can_solve_panel(panel, player) and self.can_reach(checksByHex[panel]["region"]["name"],"Region", player)
+        return self._meets_item_requirements(panel, player) and self.can_reach(checksByHex[panel]["region"]["name"],"Region", player)
 
-    def _has_event_items(self, panelHexToSolveSet, player):
+    def _can_solve_panels(self, panelHexToSolveSet, player):
         from .FullLogic import checksByHex, checksByName, originalEventPanels
         from .Locations import event_location_table
         
@@ -54,20 +84,17 @@ class WitnessLogic(LogicMixin):
                                 
             validOption = True
             
-            for panel in option:
-                if checksByHex[panel]["checkName"] + " Event" in event_location_table and not self.has(checksByHex[panel]["checkName"] + " Event", player):
+            for panel in option:     
+                if not self._can_solve_panel(panel, player):
                     validOption = False
-                if panel not in originalEventPanels and not self.can_reach(checksByHex[panel]["checkName"], "Location", player):
-                    validOption = False
-                if panel in originalEventPanels and checksByHex[panel]["checkName"] + " Event" not in event_location_table and not self._safe_manual_panel_check(panel, player): 
-                    validOption = False
+                    break
                 
             if validOption:
                 return True
         return False
 
 def makeLambda(checkHex, player):
-    return lambda state: state._can_solve_panel(checkHex, player)
+    return lambda state: state._meets_item_requirements(checkHex, player)
 
 def set_rules(world: MultiWorld, player: int):
     from .FullLogic import checksByName, checksByHex
@@ -77,7 +104,7 @@ def set_rules(world: MultiWorld, player: int):
         real_location = location
     
         if location in event_location_table:
-            real_location = location[:-6]
+            real_location = location[:-7]
 
         panel = checksByName[real_location]
         checkHex = panel["checkHex"]

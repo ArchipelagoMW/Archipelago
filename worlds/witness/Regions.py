@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld, Entrance
 
 def makeLambda(panelHexToSolveSet, player):
-    return lambda state: state._has_event_items(panelHexToSolveSet, player)
+    return lambda state: state._can_solve_panels(panelHexToSolveSet, player)
 
 def connect(world: MultiWorld, player: int, source: str, target: str, panelHexToSolveSet = None):
     sourceRegion = world.get_region(source, player)
@@ -30,7 +30,8 @@ def create_regions(world, player: int):
 
     for regionName, region in allRegionsByName.items():        
         locationsForThisRegion = [checksByHex[panel]["checkName"] for panel in region["panels"] if checksByHex[panel]["checkName"] in location_table]
-        locationsForThisRegion += [checksByHex[panel]["checkName"] + " Event" for panel in region["panels"] if checksByHex[panel]["checkName"] + " Event" in event_location_table]
+        locationsForThisRegion += [checksByHex[panel]["checkName"] + " Solved" for panel in region["panels"] if checksByHex[panel]["checkName"] + " Solved" in event_location_table]
+        
         
         allLocationsAccordingToRegions = allLocationsAccordingToRegions | set(locationsForThisRegion)
        

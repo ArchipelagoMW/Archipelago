@@ -8,6 +8,7 @@ from .Items import WitnessItem, item_table, junk_weights, event_item_table
 from .Locations import location_table, event_location_table
 from .Rules import set_rules
 from .Regions import create_regions
+from .FullLogic import eventItemPairs
 from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance
 
 class WitnessWorld(World):
@@ -44,7 +45,7 @@ class WitnessWorld(World):
         self.world.get_location("Inside Mountain Final Room Elevator Start", self.player).place_locked_item(self.create_item("Victory"))
         
         for event_location in event_location_table:
-            self.world.get_location(event_location, self.player).place_locked_item(self.create_item(event_location))
+            self.world.get_location(event_location, self.player).place_locked_item(self.create_item(eventItemPairs[event_location]))
     
         self.world.itempool += pool
 

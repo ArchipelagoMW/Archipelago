@@ -1,4 +1,4 @@
-from .FullLogic import checksByName, checksByHex, eventPanels
+from .FullLogic import checksByName, checksByHex, eventPanels, alwaysEventHexCodes
 
 start = 158000
 
@@ -6,7 +6,8 @@ typeToOffset = {
     "General": 0,
     "Discard": 500,
     "Vault": 550,
-    "Laser": 600
+    "Laser": 600,
+    "Laser Event": 700
 }
 
 panelTypesToShuffle = {
@@ -174,14 +175,15 @@ hardOptionalLocations = {
     "Inside Mountain Secret Area Upstairs Dot Grid Rotated Shapers",
     
     "Challenge Vault Box",
-    "Theater Walkway Secret Vault Box",
+    "Theater Walkway Vault Box",
     "Inside Mountain Bottom Layer Discard"
 }
 
 locations = alwaysLocations | uncommonOptionalLocations | hardOptionalLocations #TODO: Determined by settings
 
-event_location_table = {checksByHex[panelHex]["checkName"] + " Event":None for panelHex in eventPanels if checksByHex[panelHex]["checkName"] not in locations}
+event_location_table = {checksByHex[panelHex]["checkName"] + " Solved":None for panelHex in eventPanels if checksByHex[panelHex]["checkName"] not in locations or panelHex in alwaysEventHexCodes}
+
+
 
 location_table = event_location_table | {location: checksByName[location]["idOffset"] + start + typeToOffset[checksByName[location]["panelType"]] for location in locations if checksByName[location]["panelType"] in panelTypesToShuffle}
 location_table_backwards = {checksByName[location]["idOffset"] + start + typeToOffset[checksByName[location]["panelType"]]: location for location in locations if checksByName[location]["panelType"] in panelTypesToShuffle}
-
