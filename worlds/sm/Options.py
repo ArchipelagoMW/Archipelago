@@ -221,6 +221,14 @@ class VariaCustomPreset(OptionList):
     default = {}
 
 
+class RemoveEmptyLocations(Toggle):
+    """When a Super Metroid location is empty (contains a "Nothing" item), it cannot be collected.
+    This means these hint points cannot be obtained and the locations will always be present in the !missing list
+    This option removes these empty locations from the list of active locations, reducing the number of hint points
+    required for a hint and removing the locations from the !missing list, etc. However, this means a !missing check,
+    web tracker, etc., may spoil where these empty locations are."""
+    default = 0
+
 sm_options: typing.Dict[str, type(Option)] = {
     "start_inventory_removes_from_pool": StartItemsRemovesFromPool,
     "preset": Preset,
@@ -270,5 +278,6 @@ sm_options: typing.Dict[str, type(Option)] = {
     "no_music": NoMusic,
     "random_music": RandomMusic,
     "custom_preset": CustomPreset,
-    "varia_custom_preset": VariaCustomPreset
+    "varia_custom_preset": VariaCustomPreset,
+    "remove_empty_locations": RemoveEmptyLocations
     }
