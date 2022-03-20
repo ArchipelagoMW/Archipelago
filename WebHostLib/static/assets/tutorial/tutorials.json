@@ -348,6 +348,25 @@
     ]
   },
   {
+    "gameTitle": "SMZ3",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Archipelago Super Metroid and A Link to the Past Crossover randomizer on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "smz3/multiworld_en.md",
+            "link": "smz3/multiworld/en",
+            "authors": [
+              "lordlou"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "gameTitle": "Subnautica",
     "tutorials": [
       {
