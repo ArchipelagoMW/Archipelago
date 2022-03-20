@@ -2,6 +2,11 @@ html{
     padding-top: 110px;
 }
 
+body{
+    font-family: sans-serif;
+    color: #000000;
+}
+
 #base-header{
     display: flex;
     flex-direction: row;
@@ -12,7 +17,7 @@ html{
     position: fixed;
     top: 0;
     left: 0;
-    font-family: HyliaSerif, sans-serif;
+    font-family: sans-serif;
     padding: 10px;
     line-height: 2rem;
     z-index: 9999;

@@ -1,7 +1,7 @@
 {% extends 'pageWrapper.html' %}
 
 {% block head %}
-    {% include 'header/grassHeader.html' %}
+    {% include 'header/'+theme+'Header.html' %}
     <title>Archipelago</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"

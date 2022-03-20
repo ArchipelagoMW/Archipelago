@@ -44,7 +44,7 @@ html{
     display: block;
     text-align: center;
     background-repeat: no-repeat;
-    font-family: HyliaSerif, sans-serif;
+    font-family: sans-serif;
     font-kerning: none;
     text-decoration: none;
     text-shadow: 1px 1px 7px #000000;
@@ -55,7 +55,7 @@ html{
 #far-left-button{
     top: 115px;
     left: calc(50% - 416px - 200px - 75px);
-    background-image: url("/static/static/button-images/button-a.png");
+    background-image: url("/static/static/button-images/island-button-a.png");
     background-size: 200px auto;
     width: 200px;
     height: calc(156px - 40px);
@@ -66,7 +66,7 @@ html{
 #mid-left-button{
     top: 320px;
     left: calc(50% - 416px - 200px + 140px);
-    background-image: url("/static/static/button-images/button-b.png");
+    background-image: url("/static/static/button-images/island-button-b.png");
     background-size: 260px auto;
     width: 260px;
     height: calc(130px - 35px);
@@ -76,7 +76,7 @@ html{
 #mid-button{
     top: 400px;
     left: calc(50% - 100px);
-    background-image: url("/static/static/button-images/button-a.png");
+    background-image: url("/static/static/button-images/island-button-a.png");
     background-size: 200px auto;
     width: 200px;
     height: calc(156px - 38px);
@@ -86,7 +86,7 @@ html{
 #mid-right-button{
     top: 300px;
     left: calc(50% + 416px - 166px);
-    background-image: url("/static/static/button-images/button-c.png");
+    background-image: url("/static/static/button-images/island-button-c.png");
     background-size: 250px auto;
     width: calc(250px - 20px);
     height: calc(180px - 90px);
@@ -97,7 +97,7 @@ html{
 #far-right-button{
     top: 125px;
     left: calc(50% + 416px + 75px);
-    background-image: url("/static/static/button-images/button-b.png");
+    background-image: url("/static/static/button-images/island-button-b.png");
     background-size: 260px auto;
     width: 260px;
     height: calc(130px - 35px);
