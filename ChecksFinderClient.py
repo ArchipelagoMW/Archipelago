@@ -18,13 +18,9 @@ from MultiServer import CommandProcessor
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
 from Utils import Version, stream_input
 from worlds import network_data_package, AutoWorldRegister
-
+from CommonClient import gui_enabled, console_loop, logger, server_autoreconnect, get_base_parser, \
+    keep_alive
 from worlds.checksfinder import ChecksFinderWorld
-
-logger = logging.getLogger("Client")
-
-# without terminal we have to use gui mode
-gui_enabled = not sys.stdout or "--nogui" not in sys.argv
 
 
 class ClientCommandProcessor(CommandProcessor):
@@ -98,7 +94,8 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_resync(self):
         """Manually trigger a resync."""
-        self.ctx.awaiting_bridge = True
+        self.output(f"Syncing items.")
+        self.ctx.syncing = True
 
     def _cmd_ready(self):
         """Send ready status to server."""
@@ -133,6 +130,8 @@ class CommonContext():
         self.send_index: int = 0
         self.server_address = server_address
         self.password = password
+        self.syncing = False
+        self.awaiting_bridge = False
         self.server_task = None
         self.server: typing.Optional[Endpoint] = None
         self.server_version = Version(0, 0, 0)
@@ -357,19 +356,6 @@ class CommonContext():
             await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
 
-async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
-    """some ISPs/network configurations drop TCP connections if no payload is sent (ignore TCP-keep-alive)
-     so we send a payload to prevent drop and if we were dropped anyway this will cause an auto-reconnect."""
-    seconds_elapsed = 0
-    while not ctx.exit_event.is_set():
-        await asyncio.sleep(1)  # short sleep to not block program shutdown
-        if ctx.server and ctx.slot:
-            seconds_elapsed += 1
-            if seconds_elapsed > seconds_between_checks:
-                await ctx.send_msgs([{"cmd": "Bounce", "slots": [ctx.slot]}])
-                seconds_elapsed = 0
-
-
 async def server_loop(ctx: CommonContext, address=None):
     cached_address = None
     if ctx.server and ctx.server.socket:
@@ -415,12 +401,6 @@ async def server_loop(ctx: CommonContext, address=None):
             logger.info(f"... reconnecting in {ctx.current_reconnect_delay}s")
             asyncio.create_task(server_autoreconnect(ctx), name="server auto reconnect")
         ctx.current_reconnect_delay *= 2
-
-
-async def server_autoreconnect(ctx: CommonContext):
-    await asyncio.sleep(ctx.current_reconnect_delay)
-    if ctx.server_address and ctx.server_task is None:
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
 
 async def process_server_cmd(ctx: CommonContext, args: dict):
@@ -592,6 +572,12 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 async def game_watcher(ctx: CommonContext):
     from worlds.checksfinder.Locations import lookup_id_to_name
     while not ctx.exit_event.is_set():
+        if ctx.syncing == True:
+            sync_msg = [{'cmd': 'Sync'}]
+            if ctx.locations_checked:
+                sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
+            await ctx.send_msgs(sync_msg)
+            ctx.syncing = False
         path = os.path.expandvars(r"%localappdata%/ChecksFinder")
         sending = []
         victory = False
@@ -609,37 +595,6 @@ async def game_watcher(ctx: CommonContext):
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
         await asyncio.sleep(0.1)
-
-
-async def console_loop(ctx: CommonContext):
-    import sys
-    commandprocessor = ctx.command_processor(ctx)
-    queue = asyncio.Queue()
-    stream_input(sys.stdin, queue)
-    while not ctx.exit_event.is_set():
-        try:
-            input_text = await queue.get()
-            queue.task_done()
-
-            if ctx.input_requests > 0:
-                ctx.input_requests -= 1
-                ctx.input_queue.put_nowait(input_text)
-                continue
-
-            if input_text:
-                commandprocessor(input_text)
-        except Exception as e:
-            logger.exception(e)
-
-
-def get_base_parser(description=None):
-    import argparse
-    parser = argparse.ArgumentParser(description=description)
-    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
-    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
-    if sys.stdout:  # If terminal output exists, offer gui-less mode
-        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
-    return parser
 
 
 if __name__ == '__main__':

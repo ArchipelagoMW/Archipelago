@@ -5,7 +5,7 @@ from math import ceil
 
 from .Items import ChecksFinderItem, item_table, required_items
 from .Locations import ChecksFinderAdvancement, advancement_table, exclusion_table
-from .Regions import checksfinder_regions, link_checksfinder_structures, default_connections
+from .Regions import checksfinder_regions, link_checksfinder_structures
 from .Rules import set_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 
@@ -76,14 +76,6 @@ class ChecksFinderWorld(World):
         self.world.regions += [ChecksFinderRegion(*r) for r in checksfinder_regions]
         link_checksfinder_structures(self.world, self.player)
 
-    def generate_output(self, output_directory: str):
-        """
-        data = self._get_checksfinder_data()
-        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}.apcf"
-        with open(os.path.join(output_directory, filename), 'wb') as f:
-            f.write(b64encode(bytes(json.dumps(data), 'utf-8')))"""
-        pass
-
     def fill_slot_data(self):
         slot_data = self._get_checksfinder_data()
         for option_name in checksfinder_options:
@@ -96,10 +88,3 @@ class ChecksFinderWorld(World):
         item_data = item_table[name]
         item = ChecksFinderItem(name, item_data.progression, item_data.code, self.player)
         return item
-
-
-def ChecksFinder_update_output(raw_data, server, port):
-    data = json.loads(b64decode(raw_data))
-    data['server'] = server
-    data['port'] = port
-    return b64encode(bytes(json.dumps(data), 'utf-8'))
