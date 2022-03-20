@@ -3,7 +3,6 @@ html{
 }
 
 body{
-    font-family: sans-serif;
     color: #000000;
 }
 
@@ -17,7 +16,6 @@ body{
     position: fixed;
     top: 0;
     left: 0;
-    font-family: sans-serif;
     padding: 10px;
     line-height: 2rem;
     z-index: 9999;
@@ -33,13 +31,17 @@ body{
     padding-right: 7px;
 }
 
+#base-header-right{
+    margin-top: 4px;
+}
+
 #base-header #site-title{
     margin-right: 7px;
 }
 
 #base-header #site-title img{
-    width: 40px;
-    height: 40px;
+    height: 38px;
+    margin-top: 4px;
 }
 
 #base-header a{
@@ -47,5 +49,7 @@ body{
     text-decoration: none;
     cursor: pointer;
     margin-right: 1.2rem;
-    font-size: 1.2rem;
+    font-size: 22px;
+    font-family: LondrinaSolid-Light, sans-serif;
+    text-transform: uppercase;
 }
