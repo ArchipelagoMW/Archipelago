@@ -1,5 +1,4 @@
 import logging
-from typing import Set
 
 logger = logging.getLogger("Hollow Knight")
 
@@ -9,8 +8,9 @@ from .Regions import create_regions
 from .Rules import set_rules
 from .Options import hollow_knight_options
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType
 from ..AutoWorld import World, LogicMixin
+
 
 class HKWorld(World):
     game: str = "Hollow Knight"
@@ -87,7 +87,7 @@ class HKWorld(World):
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, None, name, player)
+    ret = Region(name, RegionType.Generic, name, player)
     ret.world = world
     if locations:
         for location in locations:
@@ -105,14 +105,14 @@ class HKLocation(Location):
     game: str = "Hollow Knight"
 
     def __init__(self, player: int, name: str, address=None, parent=None):
-        super(HKLocation, self).__init__(player, name, address, parent)
+        super(HKLocation, self).__init__(player, name, address if address else None, parent)
 
 
 class HKItem(Item):
     game = "Hollow Knight"
 
     def __init__(self, name, advancement, code, type, player: int = None):
-        super(HKItem, self).__init__(name, advancement, code, player)
+        super(HKItem, self).__init__(name, advancement, code if code else None, player)
         self.type = type
 
 

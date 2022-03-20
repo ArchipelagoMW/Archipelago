@@ -226,6 +226,25 @@
     ]
   },
   {
+    "gameTitle": "Meritous",
+    "tutorials": [
+      {
+        "name": "Meritous Setup Tutorial",
+        "description": "A guide to setting up the Archipelago Meritous software on your computer.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "meritous/setup_en.md",
+            "link": "meritous/setup/en",
+            "authors": [
+              "KewlioMZX"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "gameTitle": "Minecraft",
     "tutorials": [
       {
@@ -322,6 +341,25 @@
               "Grrmo",
               "Fynxes",
               "Blaze0168"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "SMZ3",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Archipelago Super Metroid and A Link to the Past Crossover randomizer on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "smz3/multiworld_en.md",
+            "link": "smz3/multiworld/en",
+            "authors": [
+              "lordlou"
             ]
           }
         ]
