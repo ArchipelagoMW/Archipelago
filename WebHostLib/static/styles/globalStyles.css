@@ -9,6 +9,16 @@
 }
 
 @font-face{
+    font-family: LexendDeca-Regular;
+    src: url("../../static/static/fonts/LexendDeca-Regular.ttf");
+}
+
+@font-face{
+    font-family: LexendDeca-Medium;
+    src: url("../../static/static/fonts/LexendDeca-Medium.ttf");
+}
+
+@font-face{
     font-family: LondrinaSolid-Regular;
     src: url("../../static/static/fonts/LondrinaSolid-Regular.ttf");
 }
