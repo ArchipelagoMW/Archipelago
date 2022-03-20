@@ -231,6 +231,10 @@ chao_garden_location_table = {
     LocationName.chao_super_karate:    0xFF00C8,
 }
 
+other_location_table = {
+    LocationName.green_hill: 0xFF001F,
+}
+
 all_locations = {
     **first_mission_location_table,
     **second_mission_location_table,
@@ -240,6 +244,7 @@ all_locations = {
     **cannon_core_location_table,
     **upgrade_location_table,
     **chao_garden_location_table,
+    **other_location_table,
 }
 
 location_table = {}
@@ -263,6 +268,7 @@ def setup_locations(world, player: int):
     # location_table += {**cannon_core_location_table}
     # location_table += {**upgrade_location_table}
     # location_table += {**chao_garden_location_table}
+    # location_table += {**other_location_table}
 
     return location_table
 

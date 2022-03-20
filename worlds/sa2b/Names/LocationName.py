@@ -207,6 +207,9 @@ chao_standard_karate = "Chao Garden - Standard Karate"
 chao_expert_karate   = "Chao Garden - Expert Karate"
 chao_super_karate    = "Chao Garden - Super Karate"
 
+# Other Definitions
+green_hill = "Green Hill"
+
 
 # Region Definitions
 menu_region  = "Menu"
