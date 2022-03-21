@@ -91,6 +91,8 @@ class SMWorld(World):
         if (self.variaRando.args.morphPlacement == "early"):
             self.world.local_items[self.player].value.add('Morph')
 
+        self.remote_items = self.world.remote_items[self.player]
+
         if (len(self.variaRando.randoExec.setup.restrictedLocs) > 0):
             self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("items")
             logger.warning(f"accessibility forced to 'items' for player {self.world.get_player_name(self.player)} because of 'fun' settings")
@@ -285,6 +287,7 @@ class SMWorld(World):
         openTourianGreyDoors = {0x07C823 + 5: [0x0C], 0x07C831 + 5: [0x0C]}
 
         deathLink = {0x277f04: [self.world.death_link[self.player].value]}
+        remoteItem = {0x277f06: self.getWordArray(0b001 + (0b010 if self.remote_items else 0b000))}
 
         playerNames = {}
         playerNameIDMap = {}
@@ -299,6 +302,7 @@ class SMWorld(World):
                         'offworldSprites': offworldSprites,
                         'openTourianGreyDoors': openTourianGreyDoors,
                         'deathLink': deathLink,
+                        'remoteItem': remoteItem,
                         'PlayerName':  playerNames,
                         'PlayerNameIDMap':  playerNameIDMap}
         romPatcher.applyIPSPatchDict(patchDict)
@@ -309,6 +313,7 @@ class SMWorld(World):
         self.romName = bytearray(f'SM{__version__.replace(".", "")[0:3]}_{self.player}_{self.world.seed:11}\0', 'utf8')[:21]
         self.romName.extend([0] * (21 - len(self.romName)))
         romPatcher.applyIPSPatch('ROMName', { 'ROMName':  {0x1C4F00 : self.romName, 0x007FC0 : self.romName} })
+
 
         startItemROMAddressBase = 0x2FD8B9
 

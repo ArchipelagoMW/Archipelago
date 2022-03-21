@@ -201,7 +201,8 @@ async def deathlink_kill_player(ctx: Context):
                 snes_buffered_write(ctx, WRAM_START + 0x0373,
                                     bytes([8]))  # deal 1 full heart of damage at next opportunity
         elif ctx.game == GAME_SM:
-            snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
+            snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([1, 0]))  # set current health to 1 (to prevent saving with 0 energy)
+            snes_buffered_write(ctx, WRAM_START + 0x0A50, bytes([255])) # deal 255 of damage at next opportunity
             if not ctx.death_link_allow_survive:
                 snes_buffered_write(ctx, WRAM_START + 0x09D6, bytes([0, 0]))  # set current reserve to 0
         await snes_flush_writes(ctx)
@@ -266,6 +267,7 @@ SM_RECV_ITEM_ADDR = SAVEDATA_START + 0x4D2          # 1 byte
 SM_RECV_ITEM_PLAYER_ADDR = SAVEDATA_START + 0x4D3   # 1 byte
 
 SM_DEATH_LINK_ACTIVE_ADDR = ROM_START + 0x277f04    # 1 byte
+SM_REMOTE_ITEM_FLAG_ADDR = ROM_START + 0x277f06    # 1 byte
 
 # SMZ3
 SMZ3_ROMNAME_START = 0x00FFC0
@@ -983,7 +985,8 @@ async def game_watcher(ctx: Context):
                 continue
             elif game_name[:2] == b"SM":
                 ctx.game = GAME_SM
-                ctx.items_handling = 0b001  # full local
+                item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
+                ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
             else:
                 game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
                 if game_name == b"ZSM":
@@ -1133,13 +1136,15 @@ async def game_watcher(ctx: Context):
             itemOutPtr = data[2] | (data[3] << 8)
 
             from worlds.sm.Items import items_start_id
+            from worlds.sm.Locations import locations_start_id
             if itemOutPtr < len(ctx.items_received):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
+                locationId = (item.location - locations_start_id) if item.location >= 0 else 0x00
 
                 playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes(
-                    [playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
+                	[playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, locationId & 0xFF]))
                 itemOutPtr += 1
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x602,
                                     bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
