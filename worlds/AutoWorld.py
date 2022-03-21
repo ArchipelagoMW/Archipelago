@@ -80,7 +80,7 @@ class WebWorld:
 
     # Choose a theme for your /game/* pages
     # Available: dirt, grass, grassFlowers, ice, jungle, ocean
-    theme = "ice"
+    theme = "grass"
 
 
 class World(metaclass=AutoWorldRegister):
