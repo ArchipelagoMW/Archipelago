@@ -4,7 +4,7 @@ import logging
 import random
 
 from ..AutoWorld import World
-from .Items import WitnessItem, item_table, junk_weights, event_item_table
+from .items import WitnessItem, item_table, junk_weights, event_item_table
 from .Locations import location_table, event_location_table
 from .Rules import set_rules
 from .Regions import create_regions
