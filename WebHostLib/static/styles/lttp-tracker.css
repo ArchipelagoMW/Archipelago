@@ -1,5 +1,8 @@
 #player-tracker-wrapper{
     margin: 0;
+    font-family: LexendDeca-Light, sans-serif;
+    color: white;
+    font-size: 14px;
 }
 
 #inventory-table{
