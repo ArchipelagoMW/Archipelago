@@ -7,8 +7,8 @@ There are two key steps to incorporating a game into Archipelago:
 - Archipelago Server Integration
 
 Refer to the following documents as well:
-    * [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
-    * [api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/api.md)
+    * [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md) for network communication between client and server.
+    * [api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/api.md) for documentation on server side code and creating a world package.
 
 
 # Game Modification  
@@ -255,7 +255,7 @@ Here’s an example of what your world module can look like:
   
 ![Example world module directory open in Window's Explorer](./img/archipelago-world-directory-example.png)
 
-The minimum requirements for a new archipelago world are the module itself (the world folder containing a file named `__init__.py`),
+The minimum requirements for a new archipelago world are the package itself (the world folder containing a file named `__init__.py`),
 which must define a `World` class object for the game with a game name, create an equal number of items and locations with rules,
 a win condition, and at least one `Region` object.
   
