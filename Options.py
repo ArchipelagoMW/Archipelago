@@ -381,7 +381,7 @@ class OptionSet(Option, VerifyKeys):
         return cls.from_text(str(data))
 
     def get_option_name(self, value):
-        return ", ".join(value)
+        return ", ".join(sorted(value))
 
     def __contains__(self, item):
         return item in self.value
