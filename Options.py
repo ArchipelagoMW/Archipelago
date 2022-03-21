@@ -322,7 +322,6 @@ class OptionDict(Option, VerifyKeys):
 
 
 class ItemDict(OptionDict):
-    # implemented by Generate
     verify_item_name = True
 
     def __init__(self, value: typing.Dict[str, int]):
@@ -416,7 +415,6 @@ common_options = {
 
 
 class ItemSet(OptionSet):
-    # implemented by Generate
     verify_item_name = True
     convert_name_groups = True
 
