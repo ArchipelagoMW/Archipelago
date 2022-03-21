@@ -265,8 +265,9 @@ class Range(Option, int):
 class VerifyKeys:
     valid_keys = frozenset()
     valid_keys_casefold: bool = False
-    verify_item_name = False
-    verify_location_name = False
+    convert_name_groups: bool = False
+    verify_item_name: bool = False
+    verify_location_name: bool = False
     value: typing.Any
 
     @classmethod
@@ -280,6 +281,11 @@ class VerifyKeys:
                                 f"Allowed keys: {cls.valid_keys}.")
 
     def verify(self, world):
+        if self.convert_name_groups and self.verify_item_name:
+            new_value = type(self.value)()  # empty container of whatever value is
+            for item_name in self.value:
+                new_value |= world.item_name_groups.get(item_name, {item_name})
+            self.value = new_value
         if self.verify_item_name:
             for item_name in self.value:
                 if item_name not in world.item_names:
@@ -287,7 +293,7 @@ class VerifyKeys:
                                     f"is not a valid item name from {world.game}")
         elif self.verify_location_name:
             for location_name in self.value:
-                if location_name not in world.world_types[world.game].location_names:
+                if location_name not in world.location_names:
                     raise Exception(f"Location {location_name} from option {self} "
                                     f"is not a valid location name from {world.game}")
 
@@ -412,6 +418,7 @@ common_options = {
 class ItemSet(OptionSet):
     # implemented by Generate
     verify_item_name = True
+    convert_name_groups = True
 
 
 class LocalItems(ItemSet):
