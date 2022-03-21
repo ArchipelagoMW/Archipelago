@@ -22,8 +22,9 @@
     border: 1px solid #000000;
     padding: 3px;
     border-radius: 3px;
-    width: 100%;
-    margin-top: 4px;
+    width: 50%;
+    margin-top: 25px;
+    margin-bottom: 6px;
 }
 
 #host-room table{
@@ -54,6 +55,4 @@
     border: 1px solid #2a6c2f;
     border-radius: 6px;
     color: #000000;
-    height: 400px;
-    overflow-y: auto;
 }

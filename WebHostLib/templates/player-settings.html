@@ -2,6 +2,7 @@
 
 {% block head %}
     <title>{{ game }} Settings</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/player-settings.css") }}" />
     <script type="application/ecmascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/md5.min.js") }}"></script>
@@ -11,7 +12,7 @@
 
 {% block body %}
     {% include 'header/'+theme+'Header.html' %}
-    <div id="player-settings" data-game="{{ game }}">
+    <div id="player-settings" class="markdown" data-game="{{ game }}">
         <div id="user-message"></div>
         <h1><span id="game-name">Player</span> Settings</h1>
         <p>Choose the options you would like to play with! You may generate a single-player game from this page,
