@@ -40,6 +40,8 @@ body{
 
 a{
     color: #ffef00;
+    text-decoration: none;
+    font-family: LexendDeca-Regular, sans-serif;
 }
 
 button{
