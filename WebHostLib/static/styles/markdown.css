@@ -48,7 +48,7 @@
 .markdown h3{
     font-size: 26px;
     font-family: LexendDeca-Regular, sans-serif;
-    text-transform: lowercase;
+    text-transform: none;
     text-align: left;
     cursor: pointer;
     width: 100%;
@@ -57,7 +57,7 @@
 
 .markdown h4{
     font-family: LexendDeca-Regular, sans-serif;
-    text-transform: lowercase;
+    text-transform: none;
     font-size: 24px;
     cursor: pointer;
     margin-bottom: 24px;
@@ -65,14 +65,14 @@
 
 .markdown h5{
     font-family: LexendDeca-Regular, sans-serif;
-    text-transform: lowercase;
+    text-transform: none;
     font-size: 22px;
     cursor: pointer;
 }
 
 .markdown h6{
     font-family: LexendDeca-Regular, sans-serif;
-    text-transform: uppercase;
+    text-transform: none;
     font-size: 20px;
     cursor: pointer;;
 }
