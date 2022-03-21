@@ -2,10 +2,6 @@ html{
     padding-top: 110px;
 }
 
-body{
-    color: #000000;
-}
-
 #base-header{
     display: flex;
     flex-direction: row;
