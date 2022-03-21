@@ -1,11 +1,17 @@
 #host-room{
-    width: calc(100% - 5rem);
+    width: 60%;
     margin-left: auto;
     margin-right: auto;
     background-color: rgba(0, 0, 0, 0.15);
     border-radius: 8px;
     padding: 1rem;
     color: #eeffeb;
+    font-family: LexendDeca-Light, sans-serif;
+    line-height: 24px;
+}
+
+#host-room div{
+    line-height: 26px;
 }
 
 #host-room a{
@@ -16,36 +22,37 @@
     border: 1px solid #000000;
     padding: 3px;
     border-radius: 3px;
-    width: 500px;
+    width: 50%;
+    margin-top: 25px;
+    margin-bottom: 6px;
 }
 
-#host-room table {
-    border-spacing: 0px;
+#host-room table{
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 0.5rem;
+    width: 100%;
 }
 
-#host-room table tbody{
-    background-color: #dce2bd;
+#host-room table th{
+    text-align: left;
+    padding: 10px;
+    border: 1px solid white;
+    font-size: 20px;
+    font-family: LexendDeca-Regular, sans-serif;
 }
 
-#host-room table tbody tr:hover{
-    background-color: #e2eabb;
+#host-room table td{
+    border: 1px solid white;
+    text-align: left;
+    padding: 10px;
 }
 
-#host-room table tbody td{
-    padding: 4px 6px;
-    color: black;
-}
-
-#host-room table tbody a{
-    color: #234ae4;
-}
-
-#host-room table thead td{
-    background-color: #b0a77d;
-    color: black;
-    top: 0;
-}
-
-#host-room table tbody td{
-    border: 1px solid #bba967;
+#host-room #logger{
+    margin-top: 0;
+    padding: 0.5rem 0.25rem;
+    background-color: #b5e9a4;
+    border: 1px solid #2a6c2f;
+    border-radius: 6px;
+    color: #000000;
 }
