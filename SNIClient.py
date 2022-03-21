@@ -854,7 +854,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
             if int(b) and location not in ctx.locations_checked:
                 new_check(location)
             if location in ctx.checked_locations and location not in ctx.locations_checked \
-                    and location in ctx.locations_info and ctx.locations_info[location][1] != ctx.slot:
+                    and location in ctx.locations_info and ctx.locations_info[location].player != ctx.slot:
                 if not int(b):
                     shop_data[cnt] += 1
                     shop_data_changed = True
@@ -882,7 +882,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
             uw_begin = min(uw_begin, roomid)
             uw_end = max(uw_end, roomid + 1)
         if location_id in ctx.checked_locations and location_id not in ctx.locations_checked and \
-                location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
+                location_id in ctx.locations_info and ctx.locations_info[location_id].player != ctx.slot:
             uw_begin = min(uw_begin, roomid)
             uw_end = max(uw_end, roomid + 1)
             uw_checked[location_id] = (roomid, mask)
@@ -914,7 +914,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
             ow_begin = min(ow_begin, screenid)
             ow_end = max(ow_end, screenid + 1)
             if location_id in ctx.checked_locations and location_id in ctx.locations_info \
-                    and ctx.locations_info[location_id][1] != ctx.slot:
+                    and ctx.locations_info[location_id].player != ctx.slot:
                 ow_checked[location_id] = screenid
 
     if ow_begin < ow_end:
@@ -938,7 +938,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
                 if npc_value & mask != 0 and location_id not in ctx.locations_checked:
                     new_check(location_id)
                 if location_id in ctx.checked_locations and location_id not in ctx.locations_checked \
-                        and location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
+                        and location_id in ctx.locations_info and ctx.locations_info[location_id].player != ctx.slot:
                     npc_value |= mask
                     npc_value_changed = True
             if npc_value_changed:
@@ -955,7 +955,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
                 if misc_data[offset - 0x3c6] & mask != 0 and location_id not in ctx.locations_checked:
                     new_check(location_id)
                 if location_id in ctx.checked_locations and location_id not in ctx.locations_checked \
-                        and location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
+                        and location_id in ctx.locations_info and ctx.locations_info[location_id].player != ctx.slot:
                     misc_data_changed = True
                     misc_data[offset - 0x3c6] |= mask
             if misc_data_changed:
@@ -1080,9 +1080,9 @@ async def game_watcher(ctx: Context):
                 snes_buffered_write(ctx, SCOUTREPLY_LOCATION_ADDR,
                                     bytes([scout_location]))
                 snes_buffered_write(ctx, SCOUTREPLY_ITEM_ADDR,
-                                    bytes([ctx.locations_info[scout_location][0]]))
+                                    bytes([ctx.locations_info[scout_location].item]))
                 snes_buffered_write(ctx, SCOUTREPLY_PLAYER_ADDR,
-                                    bytes([min(ROM_PLAYER_LIMIT, ctx.locations_info[scout_location][1])]))
+                                    bytes([min(ROM_PLAYER_LIMIT, ctx.locations_info[scout_location].player)]))
 
             await snes_flush_writes(ctx)
 
