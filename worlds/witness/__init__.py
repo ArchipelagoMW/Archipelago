@@ -8,15 +8,16 @@ from .Items import WitnessItem, item_table, junk_weights, event_item_table
 from .Locations import location_table, event_location_table
 from .Rules import set_rules
 from .Regions import create_regions
-from .FullLogic import eventItemPairs
+from .full_logic import EVENT_ITEM_PAIRS
 from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance
+
 
 class WitnessWorld(World):
     game = "The Witness"
     topology_present = False
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
-    hidden = True
+    hidden = False
     
     def _get_slot_data(self):
         return {
@@ -45,7 +46,7 @@ class WitnessWorld(World):
         self.world.get_location("Inside Mountain Final Room Elevator Start", self.player).place_locked_item(self.create_item("Victory"))
         
         for event_location in event_location_table:
-            self.world.get_location(event_location, self.player).place_locked_item(self.create_item(eventItemPairs[event_location]))
+            self.world.get_location(event_location, self.player).place_locked_item(self.create_item(EVENT_ITEM_PAIRS[event_location]))
     
         self.world.itempool += pool
 
@@ -78,7 +79,7 @@ class WitnessLocation(Location):
         self.checkHex = chHex
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    from .FullLogic import checksByName
+    from .full_logic import CHECKS_BY_NAME
     ret = Region(name, RegionType.Generic, name, player)
     ret.world = world
     if locations:
@@ -86,8 +87,8 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
             loc_id = location_table[location]
             
             checkHex = -1
-            if location in checksByName:
-                checkHex = int(checksByName[location]["checkHex"], 0)
+            if location in CHECKS_BY_NAME:
+                checkHex = int(CHECKS_BY_NAME[location]["checkHex"], 0)
             location = WitnessLocation(player, location, loc_id, ret, checkHex)
 
             ret.locations.append(location)

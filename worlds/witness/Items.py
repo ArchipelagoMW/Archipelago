@@ -4,7 +4,7 @@ from BaseClasses import Item
 from typing import Dict
 
 
-from .FullLogic import overallAllItems, eventPanels, checksByHex, eventItemPairs
+from .full_logic import ALL_ITEMS, EVENT_ITEM_PAIRS
 from .Locations import event_location_table
 
 class ItemData(typing.NamedTuple):
@@ -26,11 +26,11 @@ item_table: Dict[str, ItemData] = {
 event_item_table = dict()
 
 for event_location in event_location_table:
-    event_item_table[eventItemPairs[event_location]] = ItemData(None, True, True)
-    item_table[eventItemPairs[event_location]] = ItemData(None, True, True)
+    event_item_table[EVENT_ITEM_PAIRS[event_location]] = ItemData(None, True, True)
+    item_table[EVENT_ITEM_PAIRS[event_location]] = ItemData(None, True, True)
 
 
-for item in overallAllItems:
+for item in ALL_ITEMS:
     if item[0] == "11 Lasers" or item == "7 Lasers":
         continue
 

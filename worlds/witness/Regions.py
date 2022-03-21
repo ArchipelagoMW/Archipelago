@@ -18,7 +18,7 @@ def connect(world: MultiWorld, player: int, source: str, target: str, panelHexTo
 def create_regions(world, player: int):
     from . import create_region
     from .Locations import location_table, event_location_table
-    from .FullLogic import allRegionsByName, checksByHex
+    from .full_logic import ALL_REGIONS_BY_NAME, CHECKS_BY_HEX
 
     world.regions += [
         create_region(world, player, 'Menu', None, ["The Splashscreen?"]),
@@ -28,9 +28,9 @@ def create_regions(world, player: int):
     allLocationsAccordingToLocationTable = set(location_table.keys())
 
 
-    for regionName, region in allRegionsByName.items():        
-        locationsForThisRegion = [checksByHex[panel]["checkName"] for panel in region["panels"] if checksByHex[panel]["checkName"] in location_table]
-        locationsForThisRegion += [checksByHex[panel]["checkName"] + " Solved" for panel in region["panels"] if checksByHex[panel]["checkName"] + " Solved" in event_location_table]
+    for regionName, region in ALL_REGIONS_BY_NAME.items():        
+        locationsForThisRegion = [CHECKS_BY_HEX[panel]["checkName"] for panel in region["panels"] if CHECKS_BY_HEX[panel]["checkName"] in location_table]
+        locationsForThisRegion += [CHECKS_BY_HEX[panel]["checkName"] + " Solved" for panel in region["panels"] if CHECKS_BY_HEX[panel]["checkName"] + " Solved" in event_location_table]
         
         
         allLocationsAccordingToRegions = allLocationsAccordingToRegions | set(locationsForThisRegion)
@@ -38,7 +38,7 @@ def create_regions(world, player: int):
         
         world.regions += [create_region(world, player, regionName, locationsForThisRegion)]
         
-    for regionName, region in allRegionsByName.items():
+    for regionName, region in ALL_REGIONS_BY_NAME.items():
         for connection in region["connections"]:
             if connection[0] == "Entry":
                 continue

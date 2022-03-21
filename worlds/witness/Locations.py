@@ -1,4 +1,4 @@
-from .FullLogic import checksByName, checksByHex, eventPanels, alwaysEventHexCodes
+from .full_logic import CHECKS_BY_NAME, CHECKS_BY_HEX, NECESSARY_EVENT_PANELS, ALWAYS_EVENT_HEX_CODES
 
 start = 158000
 
@@ -181,9 +181,9 @@ hardOptionalLocations = {
 
 locations = alwaysLocations | uncommonOptionalLocations | hardOptionalLocations #TODO: Determined by settings
 
-event_location_table = {checksByHex[panelHex]["checkName"] + " Solved":None for panelHex in eventPanels if checksByHex[panelHex]["checkName"] not in locations or panelHex in alwaysEventHexCodes}
+event_location_table = {CHECKS_BY_HEX[panelHex]["checkName"] + " Solved":None for panelHex in NECESSARY_EVENT_PANELS if CHECKS_BY_HEX[panelHex]["checkName"] not in locations or panelHex in ALWAYS_EVENT_HEX_CODES}
 
 
 
-location_table = event_location_table | {location: checksByName[location]["idOffset"] + start + typeToOffset[checksByName[location]["panelType"]] for location in locations if checksByName[location]["panelType"] in panelTypesToShuffle}
-location_table_backwards = {checksByName[location]["idOffset"] + start + typeToOffset[checksByName[location]["panelType"]]: location for location in locations if checksByName[location]["panelType"] in panelTypesToShuffle}
+location_table = event_location_table | {location: CHECKS_BY_NAME[location]["idOffset"] + start + typeToOffset[CHECKS_BY_NAME[location]["panelType"]] for location in locations if CHECKS_BY_NAME[location]["panelType"] in panelTypesToShuffle}
+location_table_backwards = {CHECKS_BY_NAME[location]["idOffset"] + start + typeToOffset[CHECKS_BY_NAME[location]["panelType"]]: location for location in locations if CHECKS_BY_NAME[location]["panelType"] in panelTypesToShuffle}
