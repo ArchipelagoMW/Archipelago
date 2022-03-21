@@ -79,7 +79,7 @@ class WebWorld:
     settings_page: Union[bool, str] = True
 
     # Choose a theme for your /game/* pages
-    # Available: dirt, grass, grassFlowers, ice, jungle
+    # Available: dirt, grass, grassFlowers, ice, jungle, ocean
     theme = "grass"
 
 
