@@ -79,8 +79,8 @@ class WebWorld:
     settings_page: Union[bool, str] = True
 
     # Choose a theme for your /game/* pages
-    # Available: dirt, grass, grassFlowers, ice, jungle
-    theme = "grass"
+    # Available: dirt, grass, grassFlowers, ice, jungle, ocean
+    theme = "ice"
 
 
 class World(metaclass=AutoWorldRegister):
@@ -254,8 +254,8 @@ class World(metaclass=AutoWorldRegister):
             return True
         return False
 
-    def create_filler(self):
-        self.world.itempool.append(self.create_item(self.get_filler_item_name()))
+    def create_filler(self) -> Item:
+        return self.create_item(self.get_filler_item_name())
 
 
 # any methods attached to this can be used as part of CollectionState,
