@@ -74,7 +74,7 @@ def get_world_theme(game_name: str):
     for game, world in AutoWorldRegister.world_types.items():
         if game_name == game:
             return world.web.theme
-    return None
+    return 'grass'
 
 
 @app.before_request
