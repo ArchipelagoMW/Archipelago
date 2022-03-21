@@ -42,6 +42,17 @@ Rules and Locations live on the same logic tree returned by pyevermizer.get_logi
 
 TODO: for balancing we may want to generate Regions (with Entrances) for some
 common rules, place the locations in those Regions and shorten the rules.
+
+
+Item grouping currently supports
+* Any <ingredient name> - "Any Water" matches all Water drops
+* Any <healing item name> - "Any Petal" matches all Petal drops
+* Any Moniez - Matches the talon/jewel/gold coin/credit drops from chests (not market, fountain or Mungola)
+* Ingredients - Matches all ingredient drops
+* Alchemy - Matches all alchemy formulas
+* Weapons - Matches all weapons but Bazooka, Bone Crusher, Neutron Blade
+* Bazooka - Matches all bazookas (currently only one)
+* Traps - Matches all traps
 """
 
 _id_base = 64000
@@ -60,6 +71,20 @@ _locations = pyevermizer.get_locations()
 for _loc in _locations:
     if _loc.type == pyevermizer.CHECK_GOURD:
         _loc.name = f'{_loc.name} #{_loc.index}'
+# item helpers
+_ingredients = (
+    'Wax', 'Water', 'Vinegar', 'Root', 'Oil', 'Mushroom', 'Mud Pepper', 'Meteorite', 'Limestone', 'Iron',
+    'Gunpowder', 'Grease', 'Feather', 'Ethanol', 'Dry Ice', 'Crystal', 'Clay', 'Brimstone', 'Bone', 'Atlas Amulet',
+    'Ash', 'Acorn'
+)
+_other_items = (
+    'Call bead', 'Petal', 'Biscuit', 'Pixie Dust', 'Nectar', 'Honey', 'Moniez'
+)
+
+
+def _match_item_name(item, substr: str) -> bool:
+    sub = item.name.split(' ', 1)[1] if item.name[0].isdigit() else item.name
+    return sub == substr or sub == substr+'s'
 
 
 def _get_location_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[int, pyevermizer.Location]]:
@@ -86,6 +111,24 @@ def _get_item_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[int, 
     return name_to_id, id_to_raw
 
 
+def _get_item_grouping() -> typing.Dict[str, typing.Set[str]]:
+    groups = {}
+    ingredients_group = set()
+    for ingredient in _ingredients:
+        group = set(item.name for item in _items if _match_item_name(item, ingredient))
+        groups[f'Any {ingredient}'] = group
+        ingredients_group |= group
+    groups['Ingredients'] = ingredients_group
+    for other in _other_items:
+        groups[f'Any {other}'] = set(item.name for item in _items if _match_item_name(item, other))
+    groups['Alchemy'] = set(item.name for item in _items if item.type == pyevermizer.CHECK_ALCHEMY)
+    groups['Weapons'] = {'Spider Claw', 'Horn Spear', 'Gladiator Sword', 'Bronze Axe', 'Bronze Spear', 'Crusader Sword',
+                         'Lance (Weapon)', 'Knight Basher', 'Atom Smasher', 'Laser Lance'}
+    groups['Bazooka'] = {'Bazooka+Shells / Shining Armor / 5k Gold'}
+    groups['Traps'] = {trap.name for trap in _traps}
+    return groups
+
+
 class SoEWorld(World):
     """
     Secret of Evermore is a SNES action RPG. You learn alchemy spells, fight bosses and gather rocket parts to visit a
@@ -99,6 +142,7 @@ class SoEWorld(World):
 
     item_name_to_id, item_id_to_raw = _get_item_mapping()
     location_name_to_id, location_id_to_raw = _get_location_mapping()
+    item_name_groups = _get_item_grouping()
 
     evermizer_seed: int
     connect_name: str
