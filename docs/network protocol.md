@@ -320,14 +320,14 @@ the server will forward the message to all those targets to which any one requir
 | data | dict | Any data you want to send |
 
 ### Get
-Used to request a or multiple values from the server's its datastorage, see the [Set](#Set) package for how to write values to the datastorage. A Get package will be answered with a [Retrieved](#Retrieved) package.
+Used to request a or multiple values from the server its datastorage, see the [Set](#Set) package for how to write values to the datastorage. A Get package will be answered with a [Retrieved](#Retrieved) package.
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | keys | list\[str\] | keys to retrieve the values for |
 
 ### Set
-Used to write data to the server its datastorage, that data can then be shared across worlds or just saved for later. Data in the datastorage can be retrieved with an [Get](#Get) package, or monitored with an [SetNotify](#SetNotify) package.
+Used to write data to the server its datastorage, that data can then be shared across worlds or just saved for later. values for keys in the datastorage can be retrieved with an [Get](#Get) package, or monitored with an [SetNotify](#SetNotify) package.
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
@@ -341,13 +341,14 @@ Additional arguments send in this package will also be added to the [SetReply](#
 
 #### DataStorageOpperation
 An datastorage opperation manipulates or alters the value of a key in the datastorage. If the opperation transformns the value from one state to an other then the current value of the key is used as starting point or the [Set](#Set)'s package `default` if the key does not exist on the server.
-Datastorage opperation consist of both the opperation to be applied provided in the form of a string, aswel as the value to be used for that opperation.
+Datastorage opperation consist of an object containing both the opperation to be applied provided in the form of a string, aswel as the value to be used for that opperation.
 ```js
 {"operation": "add", "value": 12}
 ```
 
 The following opperations van be applied to a datastorage key
 | Opperation | Effect |
+| ------ | ----- |
 | replace | Sets the current value of the key to `value` |
 | default | If the key has no value yet, sets the current value of the key to the `default` of the [Set](#Set)'s package (`value` is ignored) |
 | add | Adds `value` to the current value of the key, if both current and `value` are arrays then the value will be appended |
