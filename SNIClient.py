@@ -657,24 +657,24 @@ async def snes_connect(ctx: Context, address, deviceIndex=-1):
 
     try:
         devices = await get_snes_devices(ctx)
-        numDevices = len(devices)
+        device_count = len(devices)
 
-        if numDevices == 1:
+        if device_count == 1:
             device = devices[0]
         elif ctx.snes_reconnect_address:
             if ctx.snes_attached_device[1] in devices:
                 device = ctx.snes_attached_device[1]
             else:
                 device = devices[ctx.snes_attached_device[0]]
-        elif numDevices > 1:
+        elif device_count > 1:
             if deviceIndex == -1:
-                snes_logger.info(
-                    "Found " + str(numDevices) + " SNES devices; connect to one with /snes <address> <device number>:")
+                snes_logger.info(f"Found {device_count} SNES devices. "
+                                 f"Connect to one with /snes <address> <device number>. For example /snes {address} 1")
 
                 for idx, availableDevice in enumerate(devices):
                     snes_logger.info(str(idx + 1) + ": " + availableDevice)
 
-            elif (deviceIndex < 0) or (deviceIndex - 1) > numDevices:
+            elif (deviceIndex < 0) or (deviceIndex - 1) > device_count:
                 snes_logger.warning("SNES device number out of range")
 
             else:
@@ -696,8 +696,6 @@ async def snes_connect(ctx: Context, address, deviceIndex=-1):
         ctx.snes_attached_device = (devices.index(device), device)
         ctx.snes_reconnect_address = address
         recv_task = asyncio.create_task(snes_recv_loop(ctx))
-        SNES_RECONNECT_DELAY = ctx.starting_reconnect_delay
-        snes_logger.info(f"Attached to {device}")
 
     except Exception as e:
         if recv_task is not None:
@@ -715,6 +713,10 @@ async def snes_connect(ctx: Context, address, deviceIndex=-1):
             snes_logger.error(f"Error connecting to snes, attempt again in {SNES_RECONNECT_DELAY}s")
             asyncio.create_task(snes_autoreconnect(ctx))
         SNES_RECONNECT_DELAY *= 2
+
+    else:
+        SNES_RECONNECT_DELAY = ctx.starting_reconnect_delay
+        snes_logger.info(f"Attached to {device}")
 
 
 async def snes_disconnect(ctx: Context):
