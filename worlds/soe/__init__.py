@@ -318,6 +318,9 @@ class SoEWorld(World):
             payload = multidata["connect_names"][self.world.player_name[self.player]]
             multidata["connect_names"][self.connect_name] = payload
 
+    def get_required_client_version(self):
+        return max((0, 2, 6), super(SoEWorld, self).get_required_client_version())
+
 
 class SoEItem(Item):
     game: str = "Secret of Evermore"
