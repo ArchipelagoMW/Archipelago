@@ -35,7 +35,6 @@ Outside Tutorial (Outside Tutorial) - Tutorial - 0x03629:
 0x00021 (Squares Introduction 9) - 0x00020 - Squares
 
 Main Island () - Outside Tutorial - True:
-0x17CDF (Jungle Shore Boat Spawn) - True - Boat
 
 Outside Glass Factory (Glass Factory) - Main Island - True:
 0x01A54 (Entry Door) - True - Symmetry
@@ -349,6 +348,7 @@ Theater (Theater) - Windmill Interior - 0x17F89:
 0x17CF7 (Discard) - True - Triangles
 
 Jungle (Jungle) - Main Island - True:
+0x17CDF (Shore Boat Spawn) - True - Boat
 0x17F9B (Discard) - True - Triangles
 0x002C4 (Waves 1) - True - Sound & Sound Waves
 0x00767 (Waves 2) - 0x002C4 - Sound & Sound Waves
