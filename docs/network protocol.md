@@ -335,19 +335,19 @@ Used to write data to the server its datastorage, that data can then be shared a
 | value | any | The new value for the key  |
 | default | any | The default value to use incase the key has no value on the server |
 | want_reply | bool | if set, will send an [SetReply](#SetReply) response back to the client |
-| operations | list\[[DataStorageOpperation](#DataStorageOpperation)\] | opperations to apply to the value, multiple opperations can be present they will be executed in order of apearence |
+| operations | list\[[DataStorageOperation](#DataStorageOperation)\] | operations to apply to the value, multiple operations can be present they will be executed in order of appearance |
 
 Additional arguments send in this package will also be added to the [SetReply](#SetReply) packege it triggers
 
-#### DataStorageOpperation
-An datastorage opperation manipulates or alters the value of a key in the datastorage. If the opperation transformns the value from one state to an other then the current value of the key is used as starting point or the [Set](#Set)'s package `default` if the key does not exist on the server.
-Datastorage opperation consist of an object containing both the opperation to be applied provided in the form of a string, aswel as the value to be used for that opperation.
+#### DataStorageOperation
+An datastorage operation manipulates or alters the value of a key in the datastorage. If the operation transform's the value from one state to an other then the current value of the key is used as starting point or the [Set](#Set)'s package `default` if the key does not exist on the server.
+Datastorage operation consist of an object containing both the operation to be applied provided in the form of a string, as well as the value to be used for that operation.
 ```js
 {"operation": "add", "value": 12}
 ```
 
-The following opperations van be applied to a datastorage key
-| Opperation | Effect |
+The following operations van be applied to a datastorage key
+| Operation | Effect |
 | ------ | ----- |
 | replace | Sets the current value of the key to `value` |
 | default | If the key has no value yet, sets the current value of the key to the `default` of the [Set](#Set)'s package (`value` is ignored) |
@@ -364,11 +364,11 @@ The following opperations van be applied to a datastorage key
 | right_shift | Applies an bitwise right-shift to the current value of the key by `value` |
 
 ### SetNotify
-Used to register your current session for recieving all [SetReply](#SetReply) packages of certain keys to allow your client to keep track of changes
+Used to register your current session for receiving all [SetReply](#SetReply) packages of certain keys to allow your client to keep track of changes
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| keys | list\[str\] | keys to recieve all [SetReply](#SetReply) packages for |
+| keys | list\[str\] | keys to receive all [SetReply](#SetReply) packages for |
 
 ## Appendix
 
