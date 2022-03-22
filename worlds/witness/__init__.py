@@ -1,53 +1,71 @@
+"""
+Archipelago init file for The Witness
+"""
+
 from typing import NamedTuple, Union
 import typing
 import logging
 import random
 
+from BaseClasses import (
+    Region, RegionType, Location, MultiWorld, Item, Entrance
+)
+
 from ..AutoWorld import World
-from .items import WitnessItem, item_table, junk_weights, event_item_table
-from .Locations import location_table, event_location_table
-from .Rules import set_rules
-from .Regions import create_regions
+from .items import WitnessItem, ITEM_TABLE, junk_weights, EVENT_ITEM_TABLE
+from .locations import (
+    CHECK_LOCATION_TABLE, EVENT_LOCATION_TABLE,
+    ALL_LOCATIONS_TO_ID, CHECKS_BY_NAME,
+    CHECK_PANELHEX_TO_ID
+)
+from .rules import set_rules
+from .regions import create_regions
 from .full_logic import EVENT_ITEM_PAIRS
-from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance
 
 
 class WitnessWorld(World):
+    """
+    Archipelago World class for The Witness
+    """
     game = "The Witness"
     topology_present = False
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = location_table
+    item_name_to_id = {name: data.code for name, data in ITEM_TABLE.items()}
+    location_name_to_id = ALL_LOCATIONS_TO_ID
     hidden = False
-    
+
     def _get_slot_data(self):
         return {
-            'seed': random.randint(0, 1000000)
+            'seed': random.randint(0, 1000000),
+            'panelhex_to_id': CHECK_PANELHEX_TO_ID
         }
-    
+
     def generate_basic(self):
         # Link regions
-     
+
         # Generate item pool
         pool = []
-        for item in item_table:
+        for item in ITEM_TABLE:
             witness_item = self.create_item(item)
-            if not item == "Victory" and not item in event_item_table:
+            if not item == "Victory" and item not in EVENT_ITEM_TABLE:
                 pool.append(witness_item)
-       
-
-        # Victory item
-
 
         junk_pool = junk_weights.copy()
-        junk_pool = self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(pool)-1)
-        
+        junk_pool = self.world.random.choices(
+            list(junk_pool.keys()), weights=list(junk_pool.values()),
+            k=len(CHECK_LOCATION_TABLE)-len(pool)-len(EVENT_LOCATION_TABLE) - 1
+        )
+
         pool += [self.create_item(junk) for junk in junk_pool]
-               
-        self.world.get_location("Inside Mountain Final Room Elevator Start", self.player).place_locked_item(self.create_item("Victory"))
-        
-        for event_location in event_location_table:
-            self.world.get_location(event_location, self.player).place_locked_item(self.create_item(EVENT_ITEM_PAIRS[event_location]))
-    
+
+        victory_location = "Inside Mountain Final Room Elevator Start"
+        victory_ap_loc = self.world.get_location(victory_location, self.player)
+        victory_ap_loc.place_locked_item(self.create_item("Victory"))
+
+        for event_location in EVENT_LOCATION_TABLE:
+            item_obj = self.create_item(EVENT_ITEM_PAIRS[event_location])
+            location_obj = self.world.get_location(event_location, self.player)
+            location_obj.place_locked_item(item_obj)
+
         self.world.itempool += pool
 
     def create_regions(self):
@@ -58,46 +76,55 @@ class WitnessWorld(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
-        for option_name in set(): #Put Witness Options in!
+        for option_name in set():  # Put Witness Options in!
             option = getattr(self.world, option_name)[self.player]
             slot_data[option_name] = int(option.value)
-            
+
         return slot_data
-        
-    
 
     def create_item(self, name: str) -> Item:
-        item = item_table[name]
-        return WitnessItem(name, item.progression, item.code, player=self.player)
+        item = ITEM_TABLE[name]
+        return WitnessItem(
+            name, item.progression, item.code, player=self.player
+        )
+
 
 class WitnessLocation(Location):
+    """
+    Archipelago Location for The Witness
+    """
     game: str = "The Witness"
-    checkHex: int = -1
-    
-    def __init__(self, player: int, name: str, address: typing.Optional[int], parent, chHex: int = -1):
-        super().__init__(player, name, address, parent)
-        self.checkHex = chHex
+    check_hex: int = -1
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    from .full_logic import CHECKS_BY_NAME
+    def __init__(self, player: int, name: str, address: typing.Optional[int],
+                 parent, ch_hex: int = -1):
+
+        super().__init__(player, name, address, parent)
+        self.check_hex = ch_hex
+
+
+def create_region(world: MultiWorld, player: int, name: str,
+                  locations=None, exits=None):
+    """
+    Create an Archipelago Region for The Witness
+    """
+
     ret = Region(name, RegionType.Generic, name, player)
     ret.world = world
     if locations:
         for location in locations:
-            loc_id = location_table[location]
-            
-            checkHex = -1
+            loc_id = CHECK_LOCATION_TABLE[location]
+
+            check_hex = -1
             if location in CHECKS_BY_NAME:
-                checkHex = int(CHECKS_BY_NAME[location]["checkHex"], 0)
-            location = WitnessLocation(player, location, loc_id, ret, checkHex)
+                check_hex = int(CHECKS_BY_NAME[location]["checkHex"], 0)
+            location = WitnessLocation(
+                player, location, loc_id, ret, check_hex
+            )
 
             ret.locations.append(location)
     if exits:
-        for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
+        for single_exit in exits:
+            ret.exits.append(Entrance(player, single_exit, ret))
 
     return ret
-#class PlandoConnection(NamedTuple):
- #   entrance: str
-  #  exit: str
-   # direction: str  # entrance, exit or both

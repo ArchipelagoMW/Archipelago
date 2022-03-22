@@ -1,40 +1,47 @@
-from .full_logic import CHECKS_BY_NAME, CHECKS_BY_HEX, NECESSARY_EVENT_PANELS, ALWAYS_EVENT_HEX_CODES
+"""
+Defines constants for different types of location in the game
+"""
 
-start = 158000
+from .full_logic import (
+    CHECKS_BY_NAME, CHECKS_BY_HEX, NECESSARY_EVENT_PANELS,
+    ALWAYS_EVENT_HEX_CODES
+)
 
-typeToOffset = {
+ID_START = 158000
+
+TYPE_OFFSETS = {
     "General": 0,
-    "Discard": 500,
-    "Vault": 550,
-    "Laser": 600,
-    "Laser Event": 700
+    "Discard": 600,
+    "Vault": 650,
+    "Laser": 700,
 }
 
-panelTypesToShuffle = {
-    "General", "Discard", "Vault", "Laser" #Base This off of settings in the future!!
+PANEL_TYPES_TO_SHUFFLE = {
+    "General", "Discard", "Vault", "Laser"
+    # Base This off of settings in the future!!
 }
 
-alwaysLocations = {
+GENERAL_LOCATIONS = {
     "Tutorial Gate Open",
-    
+
     "Outside Tutorial Vault Box",
     "Outside Tutorial Discard",
     "Outside Tutorial Dots Introduction 5",
     "Outside Tutorial Squares Introduction 9",
-    
+
     "Glass Factory Discard",
     "Glass Factory Vertical Symmetry 5",
     "Glass Factory Rotational Symmetry 3",
     "Glass Factory Melting 3",
-    
+
     "Symmetry Island Black Dots 5",
     "Symmetry Island Colored Dots 6",
     "Symmetry Island Fading Lines 7",
     "Symmetry Island Scenery Outlines 5",
     "Symmetry Island Laser",
-    
+
     "Orchard Apple Tree 5",
-    
+
     "Desert Vault Box",
     "Desert Discard",
     "Desert Sun Reflection 8",
@@ -42,7 +49,7 @@ alwaysLocations = {
     "Desert Pond Reflection 5",
     "Desert Flood Reflection 5",
     "Desert Laser",
-    
+
     "Quarry Mill Eraser and Dots 6",
     "Quarry Mill Eraser and Squares 8",
     "Quarry Mill Small Squares & Dots & and Eraser",
@@ -51,25 +58,25 @@ alwaysLocations = {
     "Quarry Boathouse Stars & Eraser & and Shapers 2",
     "Quarry Boathouse Stars & Eraser & and Shapers 5",
     "Quarry Laser",
-    
+
     "Shadows Lower Avoid 8",
     "Shadows Environmental Avoid 8",
     "Shadows Follow 5",
     "Shadows Laser",
-    
+
     "Keep Hedge Maze 4",
     "Keep Pressure Plates 4",
     "Keep Discard",
     "Keep Laser Hedges",
     "Keep Laser Pressure Plates",
-    
+
     "Shipwreck Vault Box",
     "Shipwreck Discard",
-    
+
     "Monastery Rhombic Avoid 3",
     "Monastery Branch Follow 2",
     "Monastery Laser",
-    
+
     "Town Cargo Box Discard",
     "Town Hexagonal Reflection",
     "Town Square Avoid",
@@ -80,23 +87,23 @@ alwaysLocations = {
     "Town RGB Squares",
     "Town RGB Stars",
     "Town Laser",
-    
+
     "Theater Discard",
-    
+
     "Jungle Discard",
     "Jungle Waves 3",
     "Jungle Waves 7",
     "Jungle Popup Wall 6",
     "Jungle Laser",
-    
+
     "River Vault",
-    
+
     "Bunker Drawn Squares 5",
     "Bunker Drawn Squares 9",
     "Bunker Drawn Squares through Tinted Glass 3",
     "Bunker Drop-Down Door Squares 2",
     "Bunker Laser",
-    
+
     "Swamp Seperatable Shapers 6",
     "Swamp Combinable Shapers 8",
     "Swamp Broken Shapers 4",
@@ -107,7 +114,7 @@ alwaysLocations = {
     "Swamp More Rotated Shapers 4",
     "Swamp Blue Underwater Negative Shapers 5",
     "Swamp Laser",
-    
+
     "Treehouse Yellow Bridge 9",
     "Treehouse First Purple Bridge 5",
     "Treehouse Second Purple Bridge 7",
@@ -117,7 +124,7 @@ alwaysLocations = {
     "Treehouse Burned House Discard",
     "Treehouse Right Orange Bridge 12",
     "Treehouse Laser",
-    
+
     "Mountaintop Trap Door Triple Exit",
     "Mountaintop Discard",
     "Mountaintop Vault Box",
@@ -130,13 +137,13 @@ alwaysLocations = {
     "Inside Mountain Same Solution 6",
     "Inside Mountain Elevator Discard",
     "Inside Mountain Giant Puzzle",
-    
-    
-    
+
+
+
     "Inside Mountain Final Room Elevator Start"
 }
 
-uncommonOptionalLocations = {
+UNCOMMON_LOCATIONS = {
     "Mountaintop River Shape",
     "Tutorial Patio Floor",
     "Theater Tutorial Video",
@@ -147,11 +154,11 @@ uncommonOptionalLocations = {
     "Theater Mountain Video"
 }
 
-hardOptionalLocations = {
+HARD_LOCATIONS = {
     "Tutorial Gate Close",
     "Quarry Mill Big Squares & Dots & and Eraser",
     "Swamp Underwater Back Optional",
-    
+
     "Inside Mountain Secret Area Dot Grid Triangles 4",
     "Inside Mountain Secret Area Symmetry Triangles",
     "Inside Mountain Secret Area Stars & Squares and Triangles 2",
@@ -159,7 +166,7 @@ hardOptionalLocations = {
     "Inside Mountain Secret Area Symmetry Shapers",
     "Inside Mountain Secret Area Broken and Negative Shapers",
     "Inside Mountain Secret Area Broken Shapers",
-    
+
     "Inside Mountain Secret Area Rainbow Squares",
     "Inside Mountain Secret Area Squares & Stars and Colored Eraser",
     "Inside Mountain Secret Area Rotated Broken Shapers",
@@ -173,17 +180,62 @@ hardOptionalLocations = {
     "Inside Mountain Secret Area Upstairs Invisible Dot Symmetry 3",
     "Inside Mountain Secret Area Upstairs Dot Grid Shapers",
     "Inside Mountain Secret Area Upstairs Dot Grid Rotated Shapers",
-    
+
     "Challenge Vault Box",
     "Theater Walkway Vault Box",
     "Inside Mountain Bottom Layer Discard"
 }
 
-locations = alwaysLocations | uncommonOptionalLocations | hardOptionalLocations #TODO: Determined by settings
 
-event_location_table = {CHECKS_BY_HEX[panelHex]["checkName"] + " Solved":None for panelHex in NECESSARY_EVENT_PANELS if CHECKS_BY_HEX[panelHex]["checkName"] not in locations or panelHex in ALWAYS_EVENT_HEX_CODES}
+def get_id(location):
+    """
+    Calculates the location ID for any given location
+    """
+
+    panel_offset = CHECKS_BY_NAME[location]["idOffset"]
+    type_offset = TYPE_OFFSETS[CHECKS_BY_NAME[location]["panelType"]]
+
+    return ID_START + panel_offset + type_offset
 
 
+def get_event_name(panelHex):
+    """
+    Returns the event name of any given panel.
+    Currently this is always "Panelname Solved"
+    """
 
-location_table = event_location_table | {location: CHECKS_BY_NAME[location]["idOffset"] + start + typeToOffset[CHECKS_BY_NAME[location]["panelType"]] for location in locations if CHECKS_BY_NAME[location]["panelType"] in panelTypesToShuffle}
-location_table_backwards = {CHECKS_BY_NAME[location]["idOffset"] + start + typeToOffset[CHECKS_BY_NAME[location]["panelType"]]: location for location in locations if CHECKS_BY_NAME[location]["panelType"] in panelTypesToShuffle}
+    return CHECKS_BY_HEX[panelHex]["checkName"] + " Solved"
+
+
+ALL_LOCATIONS = [check["checkName"] for check in CHECKS_BY_HEX.values()]
+ALL_LOCATIONS_TO_ID = {
+    location: get_id(location) for location in ALL_LOCATIONS
+}
+ALL_LOCATIONS_TO_ID = dict(sorted(ALL_LOCATIONS_TO_ID.items(),
+                           key=lambda item: item[1]))
+
+
+CHECK_LOCATIONS = GENERAL_LOCATIONS | UNCOMMON_LOCATIONS | HARD_LOCATIONS
+
+CHECK_PANELHEX_TO_ID = {
+    CHECKS_BY_NAME[check]["checkHex"]: ALL_LOCATIONS_TO_ID[check]
+    for check in CHECK_LOCATIONS
+}
+CHECK_PANELHEX_TO_ID = dict(sorted(CHECK_PANELHEX_TO_ID.items(),
+                            key=lambda item: item[1]))
+
+event_locations = {
+    p for p in NECESSARY_EVENT_PANELS
+    if CHECKS_BY_HEX[p]["checkName"] not in CHECK_LOCATIONS
+    or p in ALWAYS_EVENT_HEX_CODES
+}
+
+EVENT_LOCATION_TABLE = {
+    get_event_name(panel_hex): None for panel_hex in event_locations
+}
+
+
+CHECK_LOCATION_TABLE = EVENT_LOCATION_TABLE | {
+    location: get_id(location) for location in CHECK_LOCATIONS
+    if CHECKS_BY_NAME[location]["panelType"] in PANEL_TYPES_TO_SHUFFLE
+}

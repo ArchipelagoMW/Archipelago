@@ -7,7 +7,7 @@ from typing import Dict, NamedTuple, Optional
 from BaseClasses import Item
 
 from .full_logic import ALL_ITEMS, EVENT_ITEM_PAIRS
-from .Locations import event_location_table
+from .locations import EVENT_LOCATION_TABLE
 
 
 class ItemData(NamedTuple):
@@ -36,7 +36,7 @@ ITEM_TABLE: Dict[str, ItemData] = {
 
 EVENT_ITEM_TABLE = dict()
 
-for event_location in event_location_table:
+for event_location in EVENT_LOCATION_TABLE:
     location = EVENT_ITEM_PAIRS[event_location]
     EVENT_ITEM_TABLE[location] = ItemData(None, True, True)
     ITEM_TABLE[location] = ItemData(None, True, True)
@@ -47,6 +47,10 @@ for item in ALL_ITEMS:
         continue
 
     ITEM_TABLE[item[0]] = ItemData(158000 + item[1], True, False)
+
+ITEM_TABLE = dict(sorted(ITEM_TABLE.items(),
+                  key=lambda item: item[1].code
+                  if isinstance(item[1].code, int) else 0))
 
 junk_weights = {
     "Temporary Speed Boost": 1
