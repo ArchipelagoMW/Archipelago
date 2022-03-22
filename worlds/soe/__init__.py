@@ -1,11 +1,13 @@
 from ..AutoWorld import World
-from ..generic.Rules import set_rule, add_item_rule
-from BaseClasses import Region, Location, Entrance, Item
-from Utils import get_options, output_path
+from ..generic.Rules import set_rule
+from BaseClasses import Region, Location, Entrance, Item, RegionType
+from Utils import output_path
 import typing
 import os
 import os.path
 import threading
+import itertools
+import time
 
 try:
     import pyevermizer  # from package
@@ -62,10 +64,12 @@ _id_offset: typing.Dict[int, int] = {
     pyevermizer.CHECK_GOURD: _id_base + 100,  # gourds 64100..64399
     pyevermizer.CHECK_NPC: _id_base + 400,  # npc 64400..64499
     # TODO: sniff 64500..64799
+    pyevermizer.CHECK_TRAP: _id_base + 900,  # npc 64900..64999
 }
 
 # cache native evermizer items and locations
 _items = pyevermizer.get_items()
+_traps = pyevermizer.get_traps()
 _locations = pyevermizer.get_locations()
 # fix up texts for AP
 for _loc in _locations:
@@ -101,7 +105,7 @@ def _get_location_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[i
 def _get_item_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[int, pyevermizer.Item]]:
     name_to_id = {}
     id_to_raw = {}
-    for item in _items:
+    for item in itertools.chain(_items, _traps):
         if item.name in name_to_id:
             continue
         ap_id = _id_offset[item.type] + item.index
@@ -138,7 +142,7 @@ class SoEWorld(World):
     options = soe_options
     topology_present: bool = False
     remote_items: bool = False
-    data_version = 1
+    data_version = 2
 
     item_name_to_id, item_id_to_raw = _get_item_mapping()
     location_name_to_id, location_id_to_raw = _get_location_mapping()
@@ -164,11 +168,11 @@ class SoEWorld(World):
 
     def create_regions(self):
         # TODO: generate *some* regions from locations' requirements?
-        r = Region('Menu', None, 'Menu', self.player, self.world)
+        r = Region('Menu', RegionType.Generic, 'Menu', self.player, self.world)
         r.exits = [Entrance(self.player, 'New Game', r)]
         self.world.regions += [r]
 
-        r = Region('Ingame', None, 'Ingame', self.player, self.world)
+        r = Region('Ingame', RegionType.Generic, 'Ingame', self.player, self.world)
         r.locations = [SoELocation(self.player, loc.name, self.location_name_to_id[loc.name], r)
                        for loc in _locations]
         r.locations.append(SoELocation(self.player, 'Done', None, r))
@@ -178,7 +182,44 @@ class SoEWorld(World):
 
     def create_items(self):
         # add items to the pool
-        self.world.itempool += list(map(lambda item: self.create_item(item), _items))
+        items = list(map(lambda item: self.create_item(item), _items))
+
+        trap_count = self.world.trap_count[self.player].value
+        trap_chances = {}
+        trap_names = {}
+        fool = 1648731600 <= time.time() <= 1648900800
+        if trap_count > 0:
+            for trap_type in ("quake", "poison", "confound", "hud", "ohko"):
+                trap_option = getattr(self.world, f'trap_chance_{trap_type}')[self.player]
+                trap_chances[trap_type] = trap_option.value
+                trap_names[trap_type] = trap_option.item_name
+            trap_chances_total = sum(trap_chances.values())
+            if trap_chances_total == 0:
+                for trap_type in trap_chances:
+                    trap_chances[trap_type] = 1
+                trap_chances_total = len(trap_chances)
+        elif fool:
+            trap_count = 1
+            trap_chances = {'quake': 1}
+            trap_names = {'quake': getattr(self.world, 'trap_chance_quake')[self.player].item_name}
+            trap_chances_total = 1
+
+        def create_trap():
+            v = self.world.random.randrange(trap_chances_total)
+            for t, c in trap_chances.items():
+                if v < c:
+                    return self.create_item(trap_names[t])
+                v -= c
+
+        while trap_count > 0:
+            r = self.world.random.randrange(len(items))
+            for ingredient in _ingredients:
+                if _match_item_name(items[r], ingredient):
+                    items[r] = create_trap()
+                    trap_count -= 1
+                    break
+
+        self.world.itempool += items
 
     def set_rules(self):
         self.world.completion_condition[self.player] = lambda state: state.has('Victory', self.player)
@@ -224,6 +265,9 @@ class SoEWorld(World):
         try:
             money = self.world.money_modifier[self.player].value
             exp = self.world.exp_modifier[self.player].value
+            switches = []
+            if self.world.death_link[self.player].value:
+                switches.append("--death-link")
             rom_file = get_base_rom_path()
             out_base = output_path(output_directory, f'AP_{self.world.seed_name}_P{self.player}_{player_name}')
             out_file = out_base + '.sfc'
@@ -251,7 +295,7 @@ class SoEWorld(World):
             if not os.path.exists(rom_file):
                 raise FileNotFoundError(rom_file)
             if (pyevermizer.main(rom_file, out_file, placement_file, self.world.seed_name, self.connect_name,
-                                 self.evermizer_seed, flags, money, exp)):
+                                 self.evermizer_seed, flags, money, exp, switches)):
                 raise RuntimeError()
             patch = SoEDeltaPatch(patch_file, player=self.player,
                                   player_name=player_name, patched_path=out_file)
