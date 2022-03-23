@@ -16,8 +16,10 @@ class AssembleOptions(type):
                 name_lookup.update(base.name_lookup)
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
                        name.startswith("option_")}
-        if "random" in new_options:
-            raise Exception("Choice option 'random' cannot be manually assigned.")
+
+        assert "random" not in new_options  # Choice option 'random' cannot be manually assigned.
+        assert len(new_options) == len(set(new_options.values()))  # same ID cannot be used twice. Try alias?
+
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
 
