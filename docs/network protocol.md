@@ -354,7 +354,7 @@ The following operations can be applied to a datastorage key
 | Operation | Effect |
 | ------ | ----- |
 | replace | Sets the current value of the key to `value`. |
-| default | If the key has no value yet, sets the key to `default` of the [Set](#Set)'s package (`value` is ignored). |
+| default | If the key has no value yet, sets the current value of the key to `default` of the [Set](#Set)'s package (`value` is ignored). |
 | add | Adds `value` to the current value of the key, if both the current value and `value` are arrays then `value` will be appended to the current value. |
 | mul | Multiplies the current value of the key by `value`. |
 | pow | Multiplies the current value of the key to the power of `value`. |
