@@ -7,8 +7,8 @@ required to send and receive items between the game and server.
 Client implementation is out of scope of this document. Please refer to an
 existing game that provides a similar API to yours.
 Refer to the following documents as well:
-    * [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
-    * [adding games.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/adding%20games.md)
+- [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
+- [adding games.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/adding%20games.md)
 
 Archipelago will be abbreviated as "AP" from now on.
 
@@ -42,6 +42,10 @@ class MyGameWorld(World):
 
 
 ## Definitions
+
+This section will cover various classes and objects you can use for your world.
+While some of the attributes and methods are mentioned here not all of them are,
+but you can find them in `BaseClasses.py`.
 
 ### World Class
 
