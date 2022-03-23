@@ -90,6 +90,7 @@ class RiskOfRainWorld(World):
 
     def create_regions(self):
         create_regions(self.world, self.player)
+        create_events(self.world, self.player, int(self.world.total_locations[self.player]))
 
     def fill_slot_data(self):
         return {
@@ -102,8 +103,24 @@ class RiskOfRainWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
-        item = RiskOfRainItem(name, True, item_id, self.player)
+        if name == "Dio's Best Friend":
+            prog = True
+        else:
+            prog = False
+        item = RiskOfRainItem(name, prog, item_id, self.player)
         return item
+
+
+def create_events(world: MultiWorld, player: int, total_locations: int):
+    num_of_events = total_locations // 25
+    if total_locations / 25 == num_of_events:
+        num_of_events -= 1
+    for i in range(num_of_events):
+        event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world.get_region('Petrichor V', player))
+        event_loc.place_locked_item(RiskOfRainItem(f"Pickup{(i + 1) * 25}", True, None, player))
+        event_loc.access_rule(lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", player))
+        world.get_region('Petrichor V', player).locations.append(event_loc)
+
 
 # generate locations based on player setting
 def create_regions(world, player: int):
@@ -115,11 +132,6 @@ def create_regions(world, player: int):
     ]
 
     world.get_entrance("Lobby", player).connect(world.get_region("Petrichor V", player))
-    world.get_location("Level One", player).place_locked_item(RiskOfRainItem("Beat Level One", True, None, player))
-    world.get_location("Level Two", player).place_locked_item(RiskOfRainItem("Beat Level Two", True, None, player))
-    world.get_location("Level Three", player).place_locked_item(RiskOfRainItem("Beat Level Three", True, None, player))
-    world.get_location("Level Four", player).place_locked_item(RiskOfRainItem("Beat Level Four", True, None, player))
-    world.get_location("Level Five", player).place_locked_item(RiskOfRainItem("Beat Level Five", True, None, player))
     world.get_location("Victory", player).place_locked_item(RiskOfRainItem("Victory", True, None, player))
 
 
