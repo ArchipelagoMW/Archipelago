@@ -1938,7 +1938,7 @@ async def main(args: argparse.Namespace):
             except Exception as e:
                 logging.error("Could not load tkinter, which is likely not installed. "
                               "This attempt was made because no .archipelago file was provided as argument. "
-                              "Either provide a file or tkinter.")
+                              "Either provide a file or ensure the tkinter package is installed.")
                 raise e
             else:
                 root = tkinter.Tk()
