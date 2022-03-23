@@ -200,6 +200,8 @@ Sent to clients as a response the a [Get](#Get) package
 | ---- | ---- | ----- |
 | keys | dict\[str\, any] | A key-value collection containing all the values for the keys requested in the [Get](#Get) package. |
 
+Additional arguments added to the [Get](#Get) package that triggered this [Retrieved](#Retrieved) will also be passed along.
+
 ### SetReply
 Sent to clients in response to a [Set](#Set) package if want_reply was set to true, or if the client has registered to receive updates for a certain key using the [SetNotify](#SetNotify) package. SetReply packages are sent even if a [Set](#Set) package did not alter the value for the key.
 #### Arguments
@@ -326,6 +328,8 @@ Used to request a single or multiple values from the server's data storage, see 
 | ------ | ----- | ------ |
 | keys | list\[str\] | Keys to retrieve the values for. |
 
+Additional arguments sent in this package will also be added to the [Retrieved](#Retrieved) package it triggers.
+
 ### Set
 Used to write data to the server's data storage, that data can then be shared across worlds or just saved for later. Values for keys in the data storage can be retrieved with a [Get](#Get) package, or monitored with a [SetNotify](#SetNotify) package.
 #### Arguments
@@ -337,7 +341,7 @@ Used to write data to the server's data storage, that data can then be shared ac
 | want_reply | bool | If set, the server will send a [SetReply](#SetReply) response back to the client. |
 | operations | list\[[DataStorageOperation](#DataStorageOperation)\] | Operations to apply to the value, multiple operations can be present and they will be executed in order of appearance. |
 
-Additional arguments send in this package will also be added to the [SetReply](#SetReply) packege it triggers
+Additional arguments sent in this package will also be added to the [SetReply](#SetReply) package it triggers.
 
 #### DataStorageOperation
 A DataStorageOperation manipulates or alters the value of a key in the data storage. If the operation transforms the value from one state to another then the current value of the key is used as the starting point otherwise the [Set](#Set)'s package `default` is used if the key does not exist on the server already.
