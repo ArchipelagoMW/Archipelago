@@ -419,6 +419,8 @@ In addition the following methods can be implemented
 * `def get_required_client_version(self)`
   can return a tuple of 3 ints to make sure the client is compatible to this
   world (e.g. item IDs) when connecting.
+  Always use `return max((x,y,z), super().get_required_client_version())`
+  to catch updates in the lower layers that break compatibility.
 
 #### generate_early
 

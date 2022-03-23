@@ -200,14 +200,17 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         itemcount = len(world.itempool)
         world.itempool = new_itempool
 
-        # can produce more items than were removed
         while itemcount > len(world.itempool):
+            items_to_add = []
             for player in group["players"]:
                 if group["replacement_items"][player]:
-                    world.itempool.append(AutoWorld.call_single(world, "create_item", player,
+                    items_to_add.append(AutoWorld.call_single(world, "create_item", player,
                                                                 group["replacement_items"][player]))
                 else:
-                    AutoWorld.call_single(world, "create_filler", player)
+                    items_to_add.append(AutoWorld.call_single(world, "create_filler", player))
+            world.random.shuffle(items_to_add)
+            world.itempool.extend(items_to_add[:itemcount - len(world.itempool)])
+
     if any(world.item_links.values()):
         world._recache()
         world._all_state = None

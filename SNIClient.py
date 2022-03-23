@@ -201,7 +201,8 @@ async def deathlink_kill_player(ctx: Context):
                 snes_buffered_write(ctx, WRAM_START + 0x0373,
                                     bytes([8]))  # deal 1 full heart of damage at next opportunity
         elif ctx.game == GAME_SM:
-            snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
+            snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([1, 0]))  # set current health to 1 (to prevent saving with 0 energy)
+            snes_buffered_write(ctx, WRAM_START + 0x0A50, bytes([255])) # deal 255 of damage at next opportunity
             if not ctx.death_link_allow_survive:
                 snes_buffered_write(ctx, WRAM_START + 0x09D6, bytes([0, 0]))  # set current reserve to 0
         await snes_flush_writes(ctx)
@@ -266,6 +267,7 @@ SM_RECV_ITEM_ADDR = SAVEDATA_START + 0x4D2          # 1 byte
 SM_RECV_ITEM_PLAYER_ADDR = SAVEDATA_START + 0x4D3   # 1 byte
 
 SM_DEATH_LINK_ACTIVE_ADDR = ROM_START + 0x277f04    # 1 byte
+SM_REMOTE_ITEM_FLAG_ADDR = ROM_START + 0x277f06    # 1 byte
 
 # SMZ3
 SMZ3_ROMNAME_START = 0x00FFC0
@@ -655,24 +657,24 @@ async def snes_connect(ctx: Context, address, deviceIndex=-1):
 
     try:
         devices = await get_snes_devices(ctx)
-        numDevices = len(devices)
+        device_count = len(devices)
 
-        if numDevices == 1:
+        if device_count == 1:
             device = devices[0]
         elif ctx.snes_reconnect_address:
             if ctx.snes_attached_device[1] in devices:
                 device = ctx.snes_attached_device[1]
             else:
                 device = devices[ctx.snes_attached_device[0]]
-        elif numDevices > 1:
+        elif device_count > 1:
             if deviceIndex == -1:
-                snes_logger.info(
-                    "Found " + str(numDevices) + " SNES devices; connect to one with /snes <address> <device number>:")
+                snes_logger.info(f"Found {device_count} SNES devices. "
+                                 f"Connect to one with /snes <address> <device number>. For example /snes {address} 1")
 
                 for idx, availableDevice in enumerate(devices):
                     snes_logger.info(str(idx + 1) + ": " + availableDevice)
 
-            elif (deviceIndex < 0) or (deviceIndex - 1) > numDevices:
+            elif (deviceIndex < 0) or (deviceIndex - 1) > device_count:
                 snes_logger.warning("SNES device number out of range")
 
             else:
@@ -694,8 +696,6 @@ async def snes_connect(ctx: Context, address, deviceIndex=-1):
         ctx.snes_attached_device = (devices.index(device), device)
         ctx.snes_reconnect_address = address
         recv_task = asyncio.create_task(snes_recv_loop(ctx))
-        SNES_RECONNECT_DELAY = ctx.starting_reconnect_delay
-        snes_logger.info(f"Attached to {device}")
 
     except Exception as e:
         if recv_task is not None:
@@ -713,6 +713,10 @@ async def snes_connect(ctx: Context, address, deviceIndex=-1):
             snes_logger.error(f"Error connecting to snes, attempt again in {SNES_RECONNECT_DELAY}s")
             asyncio.create_task(snes_autoreconnect(ctx))
         SNES_RECONNECT_DELAY *= 2
+
+    else:
+        SNES_RECONNECT_DELAY = ctx.starting_reconnect_delay
+        snes_logger.info(f"Attached to {device}")
 
 
 async def snes_disconnect(ctx: Context):
@@ -852,7 +856,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
             if int(b) and location not in ctx.locations_checked:
                 new_check(location)
             if location in ctx.checked_locations and location not in ctx.locations_checked \
-                    and location in ctx.locations_info and ctx.locations_info[location][1] != ctx.slot:
+                    and location in ctx.locations_info and ctx.locations_info[location].player != ctx.slot:
                 if not int(b):
                     shop_data[cnt] += 1
                     shop_data_changed = True
@@ -880,7 +884,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
             uw_begin = min(uw_begin, roomid)
             uw_end = max(uw_end, roomid + 1)
         if location_id in ctx.checked_locations and location_id not in ctx.locations_checked and \
-                location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
+                location_id in ctx.locations_info and ctx.locations_info[location_id].player != ctx.slot:
             uw_begin = min(uw_begin, roomid)
             uw_end = max(uw_end, roomid + 1)
             uw_checked[location_id] = (roomid, mask)
@@ -912,7 +916,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
             ow_begin = min(ow_begin, screenid)
             ow_end = max(ow_end, screenid + 1)
             if location_id in ctx.checked_locations and location_id in ctx.locations_info \
-                    and ctx.locations_info[location_id][1] != ctx.slot:
+                    and ctx.locations_info[location_id].player != ctx.slot:
                 ow_checked[location_id] = screenid
 
     if ow_begin < ow_end:
@@ -936,7 +940,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
                 if npc_value & mask != 0 and location_id not in ctx.locations_checked:
                     new_check(location_id)
                 if location_id in ctx.checked_locations and location_id not in ctx.locations_checked \
-                        and location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
+                        and location_id in ctx.locations_info and ctx.locations_info[location_id].player != ctx.slot:
                     npc_value |= mask
                     npc_value_changed = True
             if npc_value_changed:
@@ -953,7 +957,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
                 if misc_data[offset - 0x3c6] & mask != 0 and location_id not in ctx.locations_checked:
                     new_check(location_id)
                 if location_id in ctx.checked_locations and location_id not in ctx.locations_checked \
-                        and location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
+                        and location_id in ctx.locations_info and ctx.locations_info[location_id].player != ctx.slot:
                     misc_data_changed = True
                     misc_data[offset - 0x3c6] |= mask
             if misc_data_changed:
@@ -983,7 +987,8 @@ async def game_watcher(ctx: Context):
                 continue
             elif game_name[:2] == b"SM":
                 ctx.game = GAME_SM
-                ctx.items_handling = 0b001  # full local
+                item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
+                ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
             else:
                 game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
                 if game_name == b"ZSM":
@@ -1077,9 +1082,9 @@ async def game_watcher(ctx: Context):
                 snes_buffered_write(ctx, SCOUTREPLY_LOCATION_ADDR,
                                     bytes([scout_location]))
                 snes_buffered_write(ctx, SCOUTREPLY_ITEM_ADDR,
-                                    bytes([ctx.locations_info[scout_location][0]]))
+                                    bytes([ctx.locations_info[scout_location].item]))
                 snes_buffered_write(ctx, SCOUTREPLY_PLAYER_ADDR,
-                                    bytes([min(ROM_PLAYER_LIMIT, ctx.locations_info[scout_location][1])]))
+                                    bytes([min(ROM_PLAYER_LIMIT, ctx.locations_info[scout_location].player)]))
 
             await snes_flush_writes(ctx)
 
@@ -1133,13 +1138,15 @@ async def game_watcher(ctx: Context):
             itemOutPtr = data[2] | (data[3] << 8)
 
             from worlds.sm.Items import items_start_id
+            from worlds.sm.Locations import locations_start_id
             if itemOutPtr < len(ctx.items_received):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
+                locationId = (item.location - locations_start_id) if item.location >= 0 else 0x00
 
                 playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes(
-                    [playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
+                	[playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, locationId & 0xFF]))
                 itemOutPtr += 1
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x602,
                                     bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
