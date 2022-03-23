@@ -1,45 +1,29 @@
 from BaseClasses import MultiWorld
-from ..AutoWorld import LogicMixin
-from ..generic.Rules import set_rule
-
-
-class RiskOfRainLogic(LogicMixin):
-    def _ror_has_items(self, player: int, amount: int) -> bool:
-        count: int = self.item_count("Common Item", player) + self.item_count("Uncommon Item", player) + \
-                     self.item_count("Legendary Item", player) + self.item_count("Boss Item", player) + \
-                     self.item_count("Lunar Item", player) + self.item_count("Equipment", player) + \
-                     self.item_count("Dio's Best Friend", player) + self.item_count("Item Scrap, White", player) + \
-                     self.item_count("Item Scrap, Green", player) + self.item_count("Item Scrap, Red", player) + \
-                     self.item_count("Item Scrap, Yellow", player)
-        return count >= amount
+from ..generic.Rules import set_rule, add_rule
 
 
 def set_rules(world: MultiWorld, player: int):
-    # divide by 5 since 5 levels (then commencement)
-    items_per_level = max(int(world.total_locations[player] / 5 / (world.item_pickup_step[player]+1)), 1)
+    total_locations = world.total_locations[player]  # total locations for current player
+    event_location_step = 25  # set an event location at these locations for "spheres"
+    divisions = total_locations // event_location_step
 
-    # lock item pickup access based on level completion
-    for i in range(1, items_per_level):
-        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: True)
-    for i in range(items_per_level, 2*items_per_level):
-        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: state.has("Beat Level One", player))
-    for i in range(2*items_per_level, 3*items_per_level):
-        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: state.has("Beat Level Two", player))
-    for i in range(3*items_per_level, 4*items_per_level):
-        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: state.has("Beat Level Three", player))
-    for i in range(4*items_per_level, world.total_locations[player] + 1):
-        set_rule(world.get_location(f"ItemPickup{i}", player), lambda state: state.has("Beat Level Four", player))
+    if divisions:
+        for i in range(1, divisions):  # since divisions is the floor of total_locations / 25
+            event_loc = world.get_location(f"Pickup{i * event_location_step}", player)
+            for n in range(i * event_location_step, (i + 1) * event_location_step):  # we want to create a rule for each of the 25 locations per division
+                if n == i * event_location_step:
+                    set_rule(world.get_location(f"ItemPickup{n}", player), lambda state, event_item=event_loc.item.name: state.has(event_item, player))
+                else:
+                    set_rule(world.get_location(f"ItemPickup{n}", player),
+                             lambda state, n = n: state.can_reach(f"ItemPickup{n - 1}", 'Location', player))
+        for i in range(divisions * event_location_step, total_locations+1):
+            set_rule(world.get_location(f"ItemPickup{i}", player), lambda state, i=i: state.can_reach(f"ItemPickup{i - 1}", "Location", player))
 
-    # require items to beat each stage
-    set_rule(world.get_location("Level Two", player),
-             lambda state: state.has("Beat Level One", player) and state._ror_has_items(player, items_per_level))
-    set_rule(world.get_location("Level Three", player),
-             lambda state: state._ror_has_items(player, 2 * items_per_level) and state.has("Beat Level Two", player))
-    set_rule(world.get_location("Level Four", player),
-             lambda state: state._ror_has_items(player, 3 * items_per_level) and state.has("Beat Level Three", player))
-    set_rule(world.get_location("Level Five", player),
-             lambda state: state._ror_has_items(player, 4 * items_per_level) and state.has("Beat Level Four", player))
     set_rule(world.get_location("Victory", player),
-             lambda state: state._ror_has_items(player, 5 * items_per_level) and state.has("Beat Level Five", player))
+             lambda state: state.can_reach(f"ItemPickup{total_locations}", "Location", player))
+    if world.total_revivals[player] or world.start_with_revive[player]:
+        total_revivals = world.total_revivals[player] // 100 * world.total_locations[player]
+        add_rule(world.get_location("Victory", player),
+                 lambda state: state.has("Dio's Best Friend", player, total_revivals + int(world.start_with_revive[player])))
 
     world.completion_condition[player] = lambda state: state.has("Victory", player)
