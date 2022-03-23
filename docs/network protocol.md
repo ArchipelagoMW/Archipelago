@@ -198,18 +198,18 @@ Sent to clients as a response the a [Get](#Get) package
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| keys | Dict\[str\, any] | a Key-value collection containing all the values for the keys requested in the [Get](#Get) package |
+| keys | dict\[str\, any] | A key-value collection containing all the values for the keys requested in the [Get](#Get) package. |
 
 ### SetReply
-Sent to clients in response to a [Set](#Set) package if want_reply was set to true, or if the client has registered to receive updates for a certain key using the [SetNotify](#SetNotify) package. SetReply packages are send even if an [Set](#Set) package did not alter the key.
+Sent to clients in response to a [Set](#Set) package if want_reply was set to true, or if the client has registered to receive updates for a certain key using the [SetNotify](#SetNotify) package. SetReply packages are sent even if a [Set](#Set) package did not alter the value for the key.
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| key | str | The key that was updated  |
-| value | any | The new value for the key  |
-| original_value | any | The value the key had before it was updated |
+| key | str | The key that was updated. |
+| value | any | The new value for the key. |
+| original_value | any | The value the key had before it was updated. |
 
-Addition arguments added to the [Set](#Set) package that triggered this [SetReply](#SetReply) will be passed along
+Additional arguments added to the [Set](#Set) package that triggered this [SetReply](#SetReply) will also be passed along.
 
 ## (Client -> Server)
 These packets are sent purely from client to server. They are not accepted by clients.
@@ -320,28 +320,28 @@ the server will forward the message to all those targets to which any one requir
 | data | dict | Any data you want to send |
 
 ### Get
-Used to request a or multiple values from the server its datastorage, see the [Set](#Set) package for how to write values to the datastorage. A Get package will be answered with a [Retrieved](#Retrieved) package.
+Used to request a single or multiple values from the server's data storage, see the [Set](#Set) package for how to write values to the data storage. A Get package will be answered with a [Retrieved](#Retrieved) package.
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| keys | list\[str\] | keys to retrieve the values for |
+| keys | list\[str\] | Keys to retrieve the values for. |
 
 ### Set
-Used to write data to the server its datastorage, that data can then be shared across worlds or just saved for later. values for keys in the datastorage can be retrieved with an [Get](#Get) package, or monitored with an [SetNotify](#SetNotify) package.
+Used to write data to the server's data storage, that data can then be shared across worlds or just saved for later. Values for keys in the data storage can be retrieved with a [Get](#Get) package, or monitored with a [SetNotify](#SetNotify) package.
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| key | str | The key to manipulate  |
-| value | any | The new value for the key  |
-| default | any | The default value to use incase the key has no value on the server |
-| want_reply | bool | if set, will send an [SetReply](#SetReply) response back to the client |
-| operations | list\[[DataStorageOperation](#DataStorageOperation)\] | operations to apply to the value, multiple operations can be present they will be executed in order of appearance |
+| key | str | The key to manipulate. |
+| value | any | The new value for the key. |
+| default | any | The default value to use in case the key has no value on the server. |
+| want_reply | bool | If set, the server will send a [SetReply](#SetReply) response back to the client. |
+| operations | list\[[DataStorageOperation](#DataStorageOperation)\] | Operations to apply to the value, multiple operations can be present and they will be executed in order of appearance. |
 
 Additional arguments send in this package will also be added to the [SetReply](#SetReply) packege it triggers
 
 #### DataStorageOperation
-An datastorage operation manipulates or alters the value of a key in the datastorage. If the operation transform's the value from one state to an other then the current value of the key is used as starting point or the [Set](#Set)'s package `default` if the key does not exist on the server.
-Datastorage operation consist of an object containing both the operation to be applied provided in the form of a string, as well as the value to be used for that operation.
+A DataStorageOperation manipulates or alters the value of a key in the data storage. If the operation transforms the value from one state to another then the current value of the key is used as the starting point otherwise the [Set](#Set)'s package `default` is used if the key does not exist on the server already.
+DataStorageOperations consist of an object containing both the operation to be applied, provided in the form of a string, as well as the value to be used for that operation.
 ```js
 {"operation": "add", "value": 12}
 ```
@@ -349,26 +349,26 @@ Datastorage operation consist of an object containing both the operation to be a
 The following operations van be applied to a datastorage key
 | Operation | Effect |
 | ------ | ----- |
-| replace | Sets the current value of the key to `value` |
-| default | If the key has no value yet, sets the current value of the key to the `default` of the [Set](#Set)'s package (`value` is ignored) |
-| add | Adds `value` to the current value of the key, if both current and `value` are arrays then the value will be appended |
-| mul | Multiplies the current value of the key by `value` |
-| pow | Multiplies the current value of the key to the power of `value` |
-| mod | Sets the current value of the key to the remainder after division by `value` |
-| max | Sets the current value of the key to `value` if `value` is bigger |
-| min | Sets the current value of the key to `value` if `value` is lower |
-| and | Applies an bitwise And to the current value of the key with `value` |
-| or | Applies an bitwise Or to the current value of the key with `value` |
-| xor | Applies an bitwise Exclusive Or to the current value of the key with `value` |
-| left_shift | Applies an bitwise left-shift to the current value of the key by `value` |
-| right_shift | Applies an bitwise right-shift to the current value of the key by `value` |
+| replace | Sets the current value of the key to `value`. |
+| default | If the key has no value yet, sets the current value of the key to the `default` of the [Set](#Set)'s package (`value` is ignored). |
+| add | Adds `value` to the current value of the key, if both the current value and `value` are arrays then `value` will be appended to the current value. |
+| mul | Multiplies the current value of the key by `value`. |
+| pow | Multiplies the current value of the key to the power of `value`. |
+| mod | Sets the current value of the key to the remainder after division by `value`. |
+| max | Sets the current value of the key to `value` if `value` is bigger. |
+| min | Sets the current value of the key to `value` if `value` is lower. |
+| and | Applies a bitwise AND to the current value of the key with `value`. |
+| or | Applies a bitwise OR to the current value of the key with `value`. |
+| xor | Applies a bitwise Exclusive OR to the current value of the key with `value`. |
+| left_shift | Applies a bitwise left-shift to the current value of the key by `value`. |
+| right_shift | Applies a bitwise right-shift to the current value of the key by `value`. |
 
 ### SetNotify
-Used to register your current session for receiving all [SetReply](#SetReply) packages of certain keys to allow your client to keep track of changes
+Used to register your current session for receiving all [SetReply](#SetReply) packages of certain keys to allow your client to keep track of changes.
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| keys | list\[str\] | keys to receive all [SetReply](#SetReply) packages for |
+| keys | list\[str\] | Keys to receive all [SetReply](#SetReply) packages for. |
 
 ## Appendix
 
