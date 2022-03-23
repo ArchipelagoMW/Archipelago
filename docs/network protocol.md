@@ -345,16 +345,16 @@ Additional arguments sent in this package will also be added to the [SetReply](#
 
 #### DataStorageOperation
 A DataStorageOperation manipulates or alters the value of a key in the data storage. If the operation transforms the value from one state to another then the current value of the key is used as the starting point otherwise the [Set](#Set)'s package `default` is used if the key does not exist on the server already.
-DataStorageOperations consist of an object containing both the operation to be applied, provided in the form of a string, as well as the value to be used for that operation.
+DataStorageOperations consist of an object containing both the operation to be applied, provided in the form of a string, as well as the value to be used for that operation, Example:
 ```js
 {"operation": "add", "value": 12}
 ```
 
-The following operations van be applied to a datastorage key
+The following operations can be applied to a datastorage key
 | Operation | Effect |
 | ------ | ----- |
 | replace | Sets the current value of the key to `value`. |
-| default | If the key has no value yet, sets the current value of the key to the `default` of the [Set](#Set)'s package (`value` is ignored). |
+| default | If the key has no value yet, sets the key to `default` of the [Set](#Set)'s package (`value` is ignored). |
 | add | Adds `value` to the current value of the key, if both the current value and `value` are arrays then `value` will be appended to the current value. |
 | mul | Multiplies the current value of the key by `value`. |
 | pow | Multiplies the current value of the key to the power of `value`. |
