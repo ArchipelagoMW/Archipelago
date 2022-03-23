@@ -1770,6 +1770,10 @@ function kill_link()
 end
 
 function process_block(block)
+    -- Sometimes the block is nothing, if this is the case then quietly stop processing
+    if block == nil then
+        return
+    end
     -- Write player names on first connect or after reset (N64 logo, title screen, file select)
     cur_mode = get_current_game_mode()
     if (first_connect or cur_mode == 0 or cur_mode == 1 or cur_mode == 2) and (#block['playerNames'] > 0) then
