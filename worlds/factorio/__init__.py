@@ -72,11 +72,12 @@ class Factorio(World):
                     self.world.get_location(tech_name, player).place_locked_item(tech_item)
                 else:
                     self.world.itempool.append(tech_item)
+
         map_basic_settings = self.world.world_gen[player].value["basic"]
         if map_basic_settings.get("seed", None) is None:  # allow seed 0
             map_basic_settings["seed"] = self.world.slot_seeds[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
 
-        # used to be called "sending_visible
+        # used to be called "sending_visible"
         if self.world.tech_tree_information[player] == TechTreeInformation.option_full:
             # mark all locations as pre-hinted
             self.world.start_location_hints[self.player].value.update(base_tech_table)
