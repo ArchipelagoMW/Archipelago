@@ -94,6 +94,8 @@ scripts = {
     "OoTAdjuster.py": ("ArchipelagoOoTAdjuster", True, icon),
     # FF1
     "FF1Client.py": ("ArchipelagoFF1Client", True, icon),
+    # ChecksFinder
+    "ChecksFinderClient.py": ("ArchipelagoChecksFinderClient", True, icon),
 }
 
 exes = []

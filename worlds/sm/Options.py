@@ -52,6 +52,10 @@ class DeathLink(Choice):
     alias_true = 1
     default = 0
 
+class RemoteItems(Toggle):
+    """Indicates you get items sent from your own world. This allows coop play of a world."""
+    display_name = "Remote Items"  
+
 class MaxDifficulty(Choice):
     """Depending on the perceived difficulties of the techniques, bosses, hell runs etc. from the preset, it will prevent the Randomizer from placing an item in a location too difficult to reach with the current items."""
     display_name = "Maximum Difficulty"
@@ -225,6 +229,7 @@ sm_options: typing.Dict[str, type(Option)] = {
     "start_inventory_removes_from_pool": StartItemsRemovesFromPool,
     "preset": Preset,
     "start_location": StartLocation,
+    "remote_items": RemoteItems,
     "death_link": DeathLink,
     #"majors_split": "Full",
     #"scav_num_locs": "10",

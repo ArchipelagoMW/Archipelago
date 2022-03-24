@@ -1,4 +1,5 @@
 from __future__ import annotations
+import os
 import logging
 import asyncio
 import urllib.parse
@@ -11,17 +12,15 @@ import websockets
 import Utils
 
 if __name__ == "__main__":
-    Utils.init_logging("TextClient", exception_logger="Client")
+    Utils.init_logging("ChecksFinderClient", exception_logger="Client")
 
 from MultiServer import CommandProcessor
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
 from Utils import Version, stream_input
 from worlds import network_data_package, AutoWorldRegister
-
-logger = logging.getLogger("Client")
-
-# without terminal we have to use gui mode
-gui_enabled = not sys.stdout or "--nogui" not in sys.argv
+from CommonClient import gui_enabled, console_loop, logger, server_autoreconnect, get_base_parser, \
+    keep_alive
+from worlds.checksfinder import ChecksFinderWorld
 
 
 class ClientCommandProcessor(CommandProcessor):
@@ -93,6 +92,11 @@ class ClientCommandProcessor(CommandProcessor):
         for location_name in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id:
             self.output(location_name)
 
+    def _cmd_resync(self):
+        """Manually trigger a resync."""
+        self.output(f"Syncing items.")
+        self.ctx.syncing = True
+
     def _cmd_ready(self):
         """Send ready status to server."""
         self.ctx.ready = not self.ctx.ready
@@ -123,8 +127,11 @@ class CommonContext():
 
     def __init__(self, server_address, password):
         # server state
+        self.send_index: int = 0
         self.server_address = server_address
         self.password = password
+        self.syncing = False
+        self.awaiting_bridge = False
         self.server_task = None
         self.server: typing.Optional[Endpoint] = None
         self.server_version = Version(0, 0, 0)
@@ -149,7 +156,7 @@ class CommonContext():
         self.items_received = []
         self.missing_locations: typing.Set[int] = set()
         self.checked_locations: typing.Set[int] = set()  # server state
-        self.locations_info: typing.Dict[int, NetworkItem] = {}
+        self.locations_info = {}
 
         self.input_queue = asyncio.Queue()
         self.input_requests = 0
@@ -183,6 +190,11 @@ class CommonContext():
             await self.server.socket.close()
         self.server = None
         self.server_task = None
+        path = os.path.expandvars(r"%localappdata%/ChecksFinder")
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if file.find("obtain") <= -1:
+                    os.remove(root+"/"+file)
 
     # noinspection PyAttributeOutsideInit
     def set_getters(self, data_package: dict, network=False):
@@ -277,7 +289,6 @@ class CommonContext():
             logger.info(text)
 
     def on_package(self, cmd: str, args: dict):
-        """For custom package handling in subclasses."""
         pass
 
     def on_user_say(self, text: str) -> typing.Optional[str]:
@@ -305,6 +316,11 @@ class CommonContext():
             self.input_queue.put_nowait(None)
             self.input_requests -= 1
         self.keep_alive_task.cancel()
+        path = os.path.expandvars(r"%localappdata%/ChecksFinder")
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if file.find("obtain") <= -1:
+                    os.remove(root+"/"+file)
 
     # DeathLink hooks
 
@@ -340,19 +356,6 @@ class CommonContext():
             await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
 
-async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
-    """some ISPs/network configurations drop TCP connections if no payload is sent (ignore TCP-keep-alive)
-     so we send a payload to prevent drop and if we were dropped anyway this will cause an auto-reconnect."""
-    seconds_elapsed = 0
-    while not ctx.exit_event.is_set():
-        await asyncio.sleep(1)  # short sleep to not block program shutdown
-        if ctx.server and ctx.slot:
-            seconds_elapsed += 1
-            if seconds_elapsed > seconds_between_checks:
-                await ctx.send_msgs([{"cmd": "Bounce", "slots": [ctx.slot]}])
-                seconds_elapsed = 0
-
-
 async def server_loop(ctx: CommonContext, address=None):
     cached_address = None
     if ctx.server and ctx.server.socket:
@@ -369,7 +372,6 @@ async def server_loop(ctx: CommonContext, address=None):
 
     address = f"ws://{address}" if "://" not in address else address
     port = urllib.parse.urlparse(address).port or 38281
-
     logger.info(f'Connecting to Archipelago server at {address}')
     try:
         socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None)
@@ -399,12 +401,6 @@ async def server_loop(ctx: CommonContext, address=None):
             logger.info(f"... reconnecting in {ctx.current_reconnect_delay}s")
             asyncio.create_task(server_autoreconnect(ctx), name="server auto reconnect")
         ctx.current_reconnect_delay *= 2
-
-
-async def server_autoreconnect(ctx: CommonContext):
-    await asyncio.sleep(ctx.current_reconnect_delay)
-    if ctx.server_address and ctx.server_task is None:
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
 
 async def process_server_cmd(ctx: CommonContext, args: dict):
@@ -501,6 +497,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # when /missing is used for the client side view of what is missing.
         ctx.missing_locations = set(args["missing_locations"])
         ctx.checked_locations = set(args["checked_locations"])
+        for ss in ctx.checked_locations:
+            filename = f"send{ss}"
+            with open(os.path.expandvars(r"%localappdata%/ChecksFinder/"+filename), 'w') as f:
+                f.close()
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
@@ -515,12 +515,17 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             await ctx.send_msgs(sync_msg)
         if start_index == len(ctx.items_received):
             for item in args['items']:
+                filename = f"AP_{str(NetworkItem(*item).location)}PLR{str(NetworkItem(*item).player)}.item"
+                with open(os.path.expandvars(r"%localappdata%/ChecksFinder/"+filename), 'w') as f:
+                    f.write(str(NetworkItem(*item).item))
+                    f.close()
                 ctx.items_received.append(NetworkItem(*item))
         ctx.watcher_event.set()
 
     elif cmd == 'LocationInfo':
-        for item in [NetworkItem(*item) for item in args['locations']]:
-            ctx.locations_info[item.location] = item
+        for item, location, player in args['locations']:
+            if location not in ctx.locations_info:
+                ctx.locations_info[location] = (item, player)
         ctx.watcher_event.set()
 
     elif cmd == "RoomUpdate":
@@ -532,6 +537,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             checked = set(args["checked_locations"])
             ctx.checked_locations |= checked
             ctx.missing_locations -= checked
+            for ss in ctx.checked_locations:
+                filename = f"send{ss}"
+                with open(os.path.expandvars(r"%localappdata%/ChecksFinder/"+filename), 'w') as f:
+                    f.close()
         if "permissions" in args:
             ctx.update_permissions(args["permissions"])
 
@@ -560,44 +569,40 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     ctx.on_package(cmd, args)
 
 
-async def console_loop(ctx: CommonContext):
-    import sys
-    commandprocessor = ctx.command_processor(ctx)
-    queue = asyncio.Queue()
-    stream_input(sys.stdin, queue)
+async def game_watcher(ctx: CommonContext):
+    from worlds.checksfinder.Locations import lookup_id_to_name
     while not ctx.exit_event.is_set():
-        try:
-            input_text = await queue.get()
-            queue.task_done()
-
-            if ctx.input_requests > 0:
-                ctx.input_requests -= 1
-                ctx.input_queue.put_nowait(input_text)
-                continue
-
-            if input_text:
-                commandprocessor(input_text)
-        except Exception as e:
-            logger.exception(e)
-
-
-def get_base_parser(description=None):
-    import argparse
-    parser = argparse.ArgumentParser(description=description)
-    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
-    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
-    if sys.stdout:  # If terminal output exists, offer gui-less mode
-        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
-    return parser
+        if ctx.syncing == True:
+            sync_msg = [{'cmd': 'Sync'}]
+            if ctx.locations_checked:
+                sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
+            await ctx.send_msgs(sync_msg)
+            ctx.syncing = False
+        path = os.path.expandvars(r"%localappdata%/ChecksFinder")
+        sending = []
+        victory = False
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if file.find("send") > -1:
+                    st = file.split("send", -1)[1]
+                    sending = sending+[(int(st))]
+                if file.find("victory") > -1:
+                    victory = True
+        ctx.locations_checked = sending
+        message = [{"cmd": 'LocationChecks', "locations": sending}]
+        await ctx.send_msgs(message)
+        if not ctx.finished_game and victory:
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            ctx.finished_game = True
+        await asyncio.sleep(0.1)
 
 
 if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
 
     class TextContext(CommonContext):
-        tags = {"AP", "IgnoreGame", "TextOnly"}
-        game = "Archipelago"
-        items_handling = 0  # don't receive any NetworkItems
+        game = "ChecksFinder"
+        items_handling = 0b111  # full remote
 
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:
@@ -618,14 +623,20 @@ if __name__ == '__main__':
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         input_task = None
         if gui_enabled:
-            from kvui import TextManager
-            ctx.ui = TextManager(ctx)
+            from kvui import ChecksFinderManager
+            ctx.ui = ChecksFinderManager(ctx)
             ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
         else:
             ui_task = None
         if sys.stdin:
             input_task = asyncio.create_task(console_loop(ctx), name="Input")
+        progression_watcher = asyncio.create_task(
+            game_watcher(ctx), name="ChecksFinderProgressionWatcher")
+
         await ctx.exit_event.wait()
+        ctx.server_address = None
+
+        await progression_watcher
 
         await ctx.shutdown()
         if ui_task:
@@ -636,7 +647,7 @@ if __name__ == '__main__':
 
     import colorama
 
-    parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
+    parser = get_base_parser(description="ChecksFinder Client, for text interfacing.")
 
     args, rest = parser.parse_known_args()
     colorama.init()

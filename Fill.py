@@ -224,7 +224,7 @@ def distribute_items_restrictive(world: MultiWorld):
     if unplaced or unfilled:
         logging.warning(
             f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
-        items_counter = Counter([location.item.player for location in world.get_locations()])
+        items_counter = Counter([location.item.player for location in world.get_locations() if location.item])
         locations_counter = Counter([location.player for location in world.get_locations()])
         items_counter.update([item.player for item in unplaced])
         locations_counter.update([location.player for location in unfilled])
@@ -316,7 +316,7 @@ def balance_multiworld_progression(world: MultiWorld):
         checked_locations = set()
         unchecked_locations = set(world.get_locations())
 
-        reachable_locations_count = {player: 0 for player in world.player_ids}
+        reachable_locations_count = {player: 0 for player in world.player_ids if len(world.get_filled_locations(player)) != 0}
         total_locations_count = Counter(location.player for location in world.get_locations() if not location.locked)
         balanceable_players = {player for player in balanceable_players if total_locations_count[player]}
         sphere_num = 1

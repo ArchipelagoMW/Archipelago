@@ -7,8 +7,8 @@ required to send and receive items between the game and server.
 Client implementation is out of scope of this document. Please refer to an
 existing game that provides a similar API to yours.
 Refer to the following documents as well:
-    * [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
-    * [adding games.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/adding%20games.md)
+- [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
+- [adding games.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/adding%20games.md)
 
 Archipelago will be abbreviated as "AP" from now on.
 
@@ -43,11 +43,22 @@ class MyGameWorld(World):
 
 ## Definitions
 
+This section will cover various classes and objects you can use for your world.
+While some of the attributes and methods are mentioned here not all of them are,
+but you can find them in `BaseClasses.py`.
+
 ### World Class
 
 A `World` class is the class with all the specifics of a certain game to be
 included. It will be instantiated for each player that rolls a seed for that
 game.
+
+### WebWorld Class
+
+A `WebWorld` class contains specific attributes and methods that can be modified
+for your world specifically on the webhost. At the moment this comprises of `settings_page`
+which can be changed to a link instead of an AP generated settings page; such is the case
+for Final Fantasy.
 
 ### MultiWorld Object
 
@@ -408,6 +419,8 @@ In addition the following methods can be implemented
 * `def get_required_client_version(self)`
   can return a tuple of 3 ints to make sure the client is compatible to this
   world (e.g. item IDs) when connecting.
+  Always use `return max((x,y,z), super().get_required_client_version())`
+  to catch updates in the lower layers that break compatibility.
 
 #### generate_early
 

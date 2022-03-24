@@ -433,7 +433,7 @@ class MultiWorld():
 
         return False
 
-    def has_beaten_game(self, state, player: Optional[int] = None):
+    def has_beaten_game(self, state: CollectionState, player: Optional[int] = None):
         if player:
             return self.completion_condition[player](state)
         else:
@@ -617,7 +617,7 @@ class CollectionState():
             ret = function(self, ret)
         return ret
 
-    def can_reach(self, spot, resolution_hint=None, player=None) -> bool:
+    def can_reach(self, spot: Union[Location, Entrance, Region, str], resolution_hint=None, player=None) -> bool:
         if not hasattr(spot, "can_reach"):
             # try to resolve a name
             if resolution_hint == 'Location':
@@ -629,7 +629,7 @@ class CollectionState():
                 spot = self.world.get_region(spot, player)
         return spot.can_reach(self)
 
-    def sweep_for_events(self, key_only: bool = False, locations=None):
+    def sweep_for_events(self, key_only: bool = False, locations: Set[Location] = None):
         if locations is None:
             locations = self.world.get_filled_locations()
         new_locations = True
@@ -644,7 +644,7 @@ class CollectionState():
                 self.events.add(event)
                 self.collect(event.item, True, event)
 
-    def has(self, item, player: int, count: int = 1):
+    def has(self, item: str, player: int, count: int = 1):
         return self.prog_items[item, player] >= count
 
     def has_all(self, items: Set[str], player: int):
@@ -727,7 +727,7 @@ class CollectionState():
                 basemagic = basemagic + basemagic * self.bottle_count(player)
         return basemagic >= smallmagic
 
-    def can_kill_most_things(self, player: int, enemies=5) -> bool:
+    def can_kill_most_things(self, player: int, enemies: int = 5) -> bool:
         return (self.has_melee_weapon(player)
                 or self.has('Cane of Somaria', player)
                 or (self.has('Cane of Byrna', player) and (enemies < 6 or self.can_extend_magic(player)))
@@ -802,26 +802,26 @@ class CollectionState():
     def has_turtle_rock_medallion(self, player: int) -> bool:
         return self.has(self.world.required_medallions[player][1], player)
 
-    def can_boots_clip_lw(self, player: int):
+    def can_boots_clip_lw(self, player: int) -> bool:
         if self.world.mode[player] == 'inverted':
             return self.has('Pegasus Boots', player) and self.has('Moon Pearl', player)
         return self.has('Pegasus Boots', player)
 
-    def can_boots_clip_dw(self, player: int):
+    def can_boots_clip_dw(self, player: int) -> bool:
         if self.world.mode[player] != 'inverted':
             return self.has('Pegasus Boots', player) and self.has('Moon Pearl', player)
         return self.has('Pegasus Boots', player)
 
-    def can_get_glitched_speed_lw(self, player: int):
+    def can_get_glitched_speed_lw(self, player: int) -> bool:
         rules = [self.has('Pegasus Boots', player), any([self.has('Hookshot', player), self.has_sword(player)])]
         if self.world.mode[player] == 'inverted':
             rules.append(self.has('Moon Pearl', player))
         return all(rules)
 
-    def can_superbunny_mirror_with_sword(self, player: int):
+    def can_superbunny_mirror_with_sword(self, player: int) -> bool:
         return self.has('Magic Mirror', player) and self.has_sword(player)
 
-    def can_get_glitched_speed_dw(self, player: int):
+    def can_get_glitched_speed_dw(self, player: int) -> bool:
         rules = [self.has('Pegasus Boots', player), any([self.has('Hookshot', player), self.has_sword(player)])]
         if self.world.mode[player] != 'inverted':
             rules.append(self.has('Moon Pearl', player))
@@ -887,7 +887,7 @@ class Region:
     is_light_world: bool = False
     is_dark_world: bool = False
 
-    def __init__(self, name: str, type_: RegionType, hint, player: int, world: Optional[MultiWorld] = None):
+    def __init__(self, name: str, type_: RegionType, hint: str, player: int, world: Optional[MultiWorld] = None):
         self.name = name
         self.type = type_
         self.entrances = []
@@ -928,7 +928,7 @@ class Entrance:
     addresses = None
     target = None
 
-    def __init__(self, player: int, name: str = '', parent=None):
+    def __init__(self, player: int, name: str = '', parent: Region = None):
         self.name = name
         self.parent_region = parent
         self.player = player
@@ -956,7 +956,8 @@ class Entrance:
 
 
 class Dungeon(object):
-    def __init__(self, name: str, regions, big_key, small_keys, dungeon_items, player: int):
+    def __init__(self, name: str, regions: List[Region], big_key: Item, small_keys: List[Item],
+                 dungeon_items: List[Item], player: int):
         self.name = name
         self.regions = regions
         self.big_key = big_key
@@ -975,11 +976,11 @@ class Dungeon(object):
         self.bosses[None] = value
 
     @property
-    def keys(self):
+    def keys(self) -> List[Item]:
         return self.small_keys + ([self.big_key] if self.big_key else [])
 
     @property
-    def all_items(self):
+    def all_items(self) -> List[Item]:
         return self.dungeon_items + self.keys
 
     def is_dungeon_item(self, item: Item) -> bool:
@@ -998,7 +999,7 @@ class Dungeon(object):
 
 
 class Boss():
-    def __init__(self, name: str, enemizer_name: str, defeat_rule, player: int):
+    def __init__(self, name: str, enemizer_name: str, defeat_rule: Callable, player: int):
         self.name = name
         self.enemizer_name = enemizer_name
         self.defeat_rule = defeat_rule
@@ -1066,7 +1067,7 @@ class Location:
     def __hash__(self):
         return hash((self.name, self.player))
 
-    def __lt__(self, other):
+    def __lt__(self, other: Location):
         return (self.player, self.name) < (other.player, other.name)
 
     @property
@@ -1075,7 +1076,7 @@ class Location:
         return self.item and self.item.game == self.game
 
     @property
-    def hint_text(self):
+    def hint_text(self) -> str:
         hint_text = getattr(self, "_hint_text", None)
         if hint_text:
             return hint_text
@@ -1130,7 +1131,7 @@ class Item():
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player
 
-    def __lt__(self, other):
+    def __lt__(self, other: Item):
         if other.player != self.player:
             return other.player < self.player
         return self.name < other.name
@@ -1161,13 +1162,13 @@ class Spoiler():
         self.shops = []
         self.bosses = OrderedDict()
 
-    def set_entrance(self, entrance, exit, direction, player):
+    def set_entrance(self, entrance: str, exit_: str, direction: str, player: int):
         if self.world.players == 1:
             self.entrances[(entrance, direction, player)] = OrderedDict(
-                [('entrance', entrance), ('exit', exit), ('direction', direction)])
+                [('entrance', entrance), ('exit', exit_), ('direction', direction)])
         else:
             self.entrances[(entrance, direction, player)] = OrderedDict(
-                [('player', player), ('entrance', entrance), ('exit', exit), ('direction', direction)])
+                [('player', player), ('entrance', entrance), ('exit', exit_), ('direction', direction)])
 
     def parse_data(self):
         self.medallions = OrderedDict()
@@ -1296,7 +1297,7 @@ class Spoiler():
 
         return json.dumps(out)
 
-    def to_file(self, filename):
+    def to_file(self, filename: str):
         self.parse_data()
 
         def bool_to_text(variable: Union[bool, str]) -> str:
@@ -1427,7 +1428,7 @@ class Spoiler():
 seeddigits = 20
 
 
-def get_seed(seed=None):
+def get_seed(seed=None) -> int:
     if seed is None:
         random.seed(None)
         return random.randint(0, pow(10, seeddigits) - 1)
