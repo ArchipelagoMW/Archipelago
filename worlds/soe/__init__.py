@@ -161,10 +161,12 @@ class SoEWorld(World):
         progression = True
         return SoEItem(event, progression, None, self.player)
 
-    def create_item(self, item: typing.Union[pyevermizer.Item, str], force_progression: bool = False) -> Item:
+    def create_item(self, item: typing.Union[pyevermizer.Item, str]) -> Item:
         if type(item) is str:
             item = self.item_id_to_raw[self.item_name_to_id[item]]
-        return SoEItem(item.name, force_progression or item.progression, self.item_name_to_id[item.name], self.player)
+        res = SoEItem(item.name, item.progression, self.item_name_to_id[item.name], self.player)
+        res.trap = item.type == pyevermizer.CHECK_TRAP
+        return res
 
     def create_regions(self):
         # TODO: generate *some* regions from locations' requirements?
@@ -204,7 +206,7 @@ class SoEWorld(World):
             trap_names = {'quake': getattr(self.world, 'trap_chance_quake')[self.player].item_name}
             trap_chances_total = 1
 
-        def create_trap():
+        def create_trap() -> Item:
             v = self.world.random.randrange(trap_chances_total)
             for t, c in trap_chances.items():
                 if v < c:
