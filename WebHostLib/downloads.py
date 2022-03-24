@@ -33,7 +33,7 @@ def download_patch(room_id, patch_id):
                         else:
                             new_zip.writestr(file.filename, zf.read(file), file.compress_type, 9)
 
-            fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](room_id)}." \
+            fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](room_id)}" \
                     f"{AutoPatchRegister.patch_types[patch.game].patch_file_ending}"
             new_file.seek(0)
             return send_file(new_file, as_attachment=True, attachment_filename=fname)
