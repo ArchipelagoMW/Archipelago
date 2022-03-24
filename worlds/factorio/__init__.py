@@ -57,6 +57,7 @@ class Factorio(World):
         attack_traps_wanted = self.world.attack_traps[player].value
         traps_wanted = ["Evolution Trap"] * evolution_traps_wanted + ["Attack Trap"] * attack_traps_wanted
         self.world.random.shuffle(traps_wanted)
+
         for tech_name in base_tech_table:
             if traps_wanted and tech_name in useless_technologies:
                 self.world.itempool.append(self.create_item(traps_wanted.pop()))
@@ -75,7 +76,10 @@ class Factorio(World):
         if map_basic_settings.get("seed", None) is None:  # allow seed 0
             map_basic_settings["seed"] = self.world.slot_seeds[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
 
-        self.sending_visible = self.world.tech_tree_information[player] == TechTreeInformation.option_full
+        # used to be called "sending_visible
+        if self.world.tech_tree_information[player] == TechTreeInformation.option_full:
+            # mark all locations as pre-hinted
+            self.world.start_location_hints[self.player].value.update(base_tech_table)
 
     generate_output = generate_mod
 
