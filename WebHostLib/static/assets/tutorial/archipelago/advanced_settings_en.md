@@ -9,8 +9,7 @@ The settings page can be found on the supported games page, just click the "Sett
 * Weighted settings page: [Archipelago Weighted Settings](/weighted-settings)
 
 Clicking on the "Export Settings" button at the bottom-left will provide you with a pre-filled YAML with your options.
-The player settings page also has an option to download a fully filled out yaml containing every option with every
-available setting for the available options.
+The player settings page also has a link to download a full template file for that game which will have every option possible for the game including some that don't display correctly on the site.
 
 ## YAML Overview
 
