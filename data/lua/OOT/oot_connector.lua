@@ -108,7 +108,7 @@ local scrub_sanity_check = function(scene_offset, bit_to_check)
     return scene_check(scene_offset, bit_to_check, 0x10)
 end
 
-local cow_bean_sale_check = function(scene_offset, bit_to_check)
+local cow_check = function(scene_offset, bit_to_check)
     local checked_in_save_context = scene_check(scene_offset, bit_to_check, 0xC)
     if checked_in_save_context then return true end
     -- Check temporary context
@@ -132,8 +132,7 @@ local great_fairy_magic_check = function(scene_offset, bit_to_check)
     return true
 end
 
--- Fire arrows have special behavior, so they get their own function.
--- They report type 0x00, unlike other chest-type items.
+-- Fire arrow location reports 0x00570058 to 0x40002C
 local fire_arrows_check = function(scene_offset, bit_to_check)
     local checked_in_save_context = scene_check(scene_offset, bit_to_check, 0x0)
     if checked_in_save_context then return true end
@@ -142,7 +141,20 @@ local fire_arrows_check = function(scene_offset, bit_to_check)
     if check_data[0] ~= 0x00 then return false end
     if check_data[1] ~= scene_offset then return false end
     if check_data[2] ~= 0x00 then return false end
-    if check_data[3] ~= bit_to_check then return false end
+    if check_data[3] ~= 0x58 then return false end
+    return true
+end
+
+-- Bean salesman reports 0x00540016 to 0x40002C
+local bean_sale_check = function(scene_offset, bit_to_check)
+    local checked_in_save_context = scene_check(scene_offset, bit_to_check, 0xC)
+    if checked_in_save_context then return true end
+    -- Check temporary context
+    local check_data = mainmemory.readbyterange(0x40002C, 4)
+    if check_data[0] ~= 0x00 then return false end
+    if check_data[1] ~= scene_offset then return false end
+    if check_data[2] ~= 0x00 then return false end
+    if check_data[3] ~= 0x16 then return false end
     return true
 end
 
@@ -249,7 +261,7 @@ local read_kokiri_forest_checks = function()
     checks["KF Midos Bottom Right Chest"] = chest_check(0x28, 0x03)
     checks["KF Kokiri Sword Chest"] = chest_check(0x55, 0x00)
     checks["KF Storms Grotto Chest"] = chest_check(0x3E, 0x0C)
-    checks["KF Links House Cow"] = cow_bean_sale_check(0x34, 0x18)
+    checks["KF Links House Cow"] = cow_check(0x34, 0x18)
 
     checks["KF GS Know It All House"] = skulltula_check(0x0C, 0x1)
     checks["KF GS Bean Patch"] = skulltula_check(0x0C, 0x0)
@@ -392,7 +404,7 @@ local read_hyrule_field_checks = function()
     checks["HF Tektite Grotto Freestanding PoH"] = on_the_ground_check(0x3E, 0x01)
     checks["HF Southeast Grotto Chest"] = chest_check(0x3E, 0x02)
     checks["HF Open Grotto Chest"] = chest_check(0x3E, 0x03)
-    checks["HF Cow Grotto Cow"] = cow_bean_sale_check(0x3E, 0x19)
+    checks["HF Cow Grotto Cow"] = cow_check(0x3E, 0x19)
 
     -- This is the third of three deku scrubs which are always included in the item pool, not just in scrub-sanity
     checks["HF Deku Scrub Grotto"] = item_get_info_check(0x0, 0x3)
@@ -409,8 +421,8 @@ local read_lon_lon_ranch_checks = function()
     local checks = {}
     checks["LLR Talons Chickens"] = item_get_info_check(0x1, 0x2)
     checks["LLR Freestanding PoH"] = on_the_ground_check(0x4C, 0x01)
-    checks["LLR Tower Left Cow"] = cow_bean_sale_check(0x4C, 0x19)
-    checks["LLR Tower Right Cow"] = cow_bean_sale_check(0x4C, 0x18)
+    checks["LLR Tower Left Cow"] = cow_check(0x4C, 0x19)
+    checks["LLR Tower Right Cow"] = cow_check(0x4C, 0x18)
 
     -- checks["Lon Lon Ranch - Epona"] = event_check(0x1, 0x8)
 
@@ -418,8 +430,8 @@ local read_lon_lon_ranch_checks = function()
     checks["LLR Deku Scrub Grotto Center"] = scrub_sanity_check(0x26, 0x4)
     checks["LLR Deku Scrub Grotto Right"] = scrub_sanity_check(0x26, 0x6)
 
-    checks["LLR Stables Left Cow"] = cow_bean_sale_check(0x36, 0x18)
-    checks["LLR Stables Right Cow"] = cow_bean_sale_check(0x36, 0x19)
+    checks["LLR Stables Left Cow"] = cow_check(0x36, 0x18)
+    checks["LLR Stables Right Cow"] = cow_check(0x36, 0x19)
 
     checks["LLR GS House Window"] = skulltula_check(0x0B, 0x2)
     checks["LLR GS Tree"] = skulltula_check(0x0B, 0x3)
@@ -484,7 +496,7 @@ local read_kakariko_village_checks = function()
     checks["Kak 30 Gold Skulltula Reward"] = event_check(0xD, 0xC)
     checks["Kak 40 Gold Skulltula Reward"] = event_check(0xD, 0xD)
     checks["Kak 50 Gold Skulltula Reward"] = event_check(0xD, 0xE)
-    checks["Kak Impas House Cow"] = cow_bean_sale_check(0x37, 0x18)
+    checks["Kak Impas House Cow"] = cow_check(0x37, 0x18)
 
     checks["Kak GS Tree"] = skulltula_check(0x10, 0x5)
     checks["Kak GS Guards House"] = skulltula_check(0x10, 0x1)
@@ -623,7 +635,7 @@ local read_death_mountain_trail_checks = function()
     checks["DMT Storms Grotto Chest"] = chest_check(0x3E, 0x17)
     checks["DMT Great Fairy Reward"] = great_fairy_magic_check(0x3B, 0x18)
     checks["DMT Biggoron"] = big_goron_sword_check()
-    checks["DMT Cow Grotto Cow"] = cow_bean_sale_check(0x3E, 0x18)
+    checks["DMT Cow Grotto Cow"] = cow_check(0x3E, 0x18)
 
     checks["DMT GS Near Kak"] = skulltula_check(0x0F, 0x2)
     checks["DMT GS Bean Patch"] = skulltula_check(0x0F, 0x1)
@@ -767,7 +779,7 @@ end
 
 local read_zoras_river_checks = function()
     local checks = {}
-    checks["ZR Magic Bean Salesman"] = cow_bean_sale_check(0x54, 0x1)
+    checks["ZR Magic Bean Salesman"] = bean_sale_check(0x54, 0x1)
     checks["ZR Open Grotto Chest"] = chest_check(0x3E, 0x09)
     checks["ZR Frogs in the Rain"] = event_check(0xD, 0x6)
     checks["ZR Frogs Ocarina Game"] = event_check(0xD, 0x0)
@@ -833,7 +845,7 @@ local read_jabu_checks = function(mq_table_address)
         checks["Jabu Jabus Belly MQ Second Room Upper Chest"] = chest_check(0x2, 0x7)
         checks["Jabu Jabus Belly MQ Near Boss Chest"] = chest_check(0x2, 0xA)
 
-        checks["Jabu Jabus Belly MQ Cow"] = cow_bean_sale_check(0x2, 0x18)
+        checks["Jabu Jabus Belly MQ Cow"] = cow_check(0x2, 0x18)
 
         checks["Jabu Jabus Belly MQ GS Boomerang Chest Room"] = skulltula_check(0x2, 0x0)
         checks["Jabu Jabus Belly MQ GS Tailpasaran Room"] = skulltula_check(0x2, 0x2)
@@ -934,7 +946,7 @@ local read_gerudo_valley_checks = function()
     checks["GV Chest"] = chest_check(0x5A, 0x00)
     checks["GV Deku Scrub Grotto Front"] = scrub_sanity_check(0x1A, 0x9)
     checks["GV Deku Scrub Grotto Rear"] = scrub_sanity_check(0x1A, 0x8)
-    checks["GV Cow"] = cow_bean_sale_check(0x5A, 0x18)
+    checks["GV Cow"] = cow_check(0x5A, 0x18)
 
     checks["GV GS Small Bridge"] = skulltula_check(0x13, 0x1)
     checks["GV GS Bean Patch"] = skulltula_check(0x13, 0x0)
