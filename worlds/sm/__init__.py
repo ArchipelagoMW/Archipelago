@@ -312,6 +312,8 @@ class SMWorld(World):
         from Main import __version__
         self.romName = bytearray(f'SM{__version__.replace(".", "")[0:3]}_{self.player}_{self.world.seed:11}\0', 'utf8')[:21]
         self.romName.extend([0] * (21 - len(self.romName)))
+        # clients should read from 0x7FC0, the location of the rom title in the SNES header.
+        # duplicative ROM name at 0x1C4F00 is still written here for now, since people with archipelago pre-0.3.0 client installed will still be depending on this location for connecting to SM
         romPatcher.applyIPSPatch('ROMName', { 'ROMName':  {0x1C4F00 : self.romName, 0x007FC0 : self.romName} })
 
 
