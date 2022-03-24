@@ -23,6 +23,8 @@ local fishing_context_offset = save_context_offset + 0xEC0 --0x11B490
 local item_get_inf_offset = save_context_offset + 0xEF0 --0x11B4C0
 local inf_table_offset = save_context_offset + 0xEF8 -- 0x11B4C8
 
+local temp_context = nil
+
 -- Offsets for scenes can be found here
 -- https://wiki.cloudmodding.com/oot/Scene_Table/NTSC_1.0
 -- Each scene is 0x1c bits long, chests at 0x0, switches at 0x4, collectibles at 0xc
@@ -32,130 +34,70 @@ local scene_check = function(scene_offset, bit_to_check, scene_data_offset)
     return bit.check(nearby_memory,bit_to_check)
 end
 
-local chest_check = function(scene_offset, bit_to_check)
-    -- If the chest is saved as having been opened in the save context, that means this check has been completed
-    local chest_checked_in_save_context = scene_check(scene_offset, bit_to_check, 0x0)
-    if chest_checked_in_save_context then return true end
-
-    -- If the chest is not present in the save context, it may have been opened in the temporary context. In this
-    -- context, we must read from a particular location to determine if a chest has been checked:
-    -- 0x40002C is written to whenever a remote item is found. There are four relevant bytes:
-    -- [0] should always be 0x00 when a non-local multiworld item is checked
-    -- [1] is the scene id
-    -- [2] is the location type, which for a chest is 0x01
-    -- [3] is the location id within the scene, and represents the bit which was checked
-    local check_data = mainmemory.readbyterange(0x40002C,4)
-
-    -- If the data in the byte range does not match the chest we are looking for, return false
-    if check_data[0] ~= 0x00 then return false end
-    if check_data[1] ~= scene_offset then return false end
-    if check_data[2] ~= 0x01 then return false end
-    if check_data[3] ~= bit_to_check then return false end
-
-    -- The check matches, and the chest is open in the temporary context
+-- Whenever a check is opened, values are written to 0x40002C.
+-- We can use this to send checks before they are written to the main save context.
+-- [0] should always be 0x00 when a non-local multiworld item is checked
+-- [1] is the scene id
+-- [2] is the location type, which varies as input to the function
+-- [3] is the location id within the scene, and represents the bit which was checked
+-- Note that temp_context is 0-indexed and expected_values is 1-indexed, because consistency.
+local check_temp_context = function(expected_values)
+    if temp_context[0] ~= 0x00 return false
+    for i=1,3 do
+        if temp_context[i] ~= expected_values[i+1] then return false end
+    end
     return true
+end
+
+-- When checking locations, we check two spots:
+-- First, we check the main save context. This is "permanent" memory.
+-- If the main save context doesn't have the check recorded, we check the temporary context instead,
+-- which holds the value of the last location checked. 
+-- The main save context is written on loading zone or save,
+-- but we can get checks sent faster using the temporary context.
+
+local chest_check = function(scene_offset, bit_to_check)
+    return scene_check(scene_offset, bit_to_check, 0x0)
+        or check_temp_context({scene_offset, 0x01, bit_to_check})
 end
 
 local on_the_ground_check = function(scene_offset, bit_to_check)
-    local item_checked_in_save_context = scene_check(scene_offset, bit_to_check, 0xC)
-    if item_checked_in_save_context then return true end
-
-    -- If the item is not present in the save context, it may have been obtained in the temporary context. In this
-    -- context, we must read from a particular location to determine if a chest has been checked:
-    -- 0x40002C is written to whenever a remote item is found. There are four relevant bytes:
-    -- [0] should always be 0x00 when a non-local multiworld item is checked
-    -- [1] is the scene id
-    -- [2] is the location type, which for a freestanding item is 0x02
-    -- [3] is the location id within the scene, and represents the bit which was checked
-    local check_data = mainmemory.readbyterange(0x40002C,4)
-
-    -- If the data in the byte range does not match the chest we are looking for, return false
-    if check_data[0] ~= 0x00 then return false end
-    if check_data[1] ~= scene_offset then return false end
-    if check_data[2] ~= 0x02 then return false end
-    if check_data[3] ~= bit_to_check then return false end
-
-    -- The check matches, and the chest is open in the temporary context
-    return true
+    return scene_check(scene_offset, bit_to_check, 0xC)
+        or check_temp_context({scene_offset, 0x02, bit_to_check})
 end
 
 local boss_item_check = function(scene_offset)
-    -- If the chest is saved as having been opened in the save context, that means this check has been completed
-    local chest_checked_in_save_context = chest_check(scene_offset, 0x1F)
-    if chest_checked_in_save_context then return true end
-
-    -- If the chest is not present in the save context, it may have been opened in the temporary context. In this
-    -- context, we must read from a particular location to determine if a chest has been checked:
-    -- 0x40002C is written to whenever a remote item is found. There are four relevant bytes:
-    -- [0] should always be 0x00 when a non-local multiworld item is checked
-    -- [1] is the scene id
-    -- [2] is the location type, which for a boss item is 0x00
-    -- [3] is the location id within the scene, and represents the bit which was checked
-    local check_data = mainmemory.readbyterange(0x40002C,4)
-
-    -- If the data in the byte range does not match the chest we are looking for, return false
-    if check_data[0] ~= 0x00 then return false end
-    if check_data[1] ~= scene_offset then return false end
-    if check_data[2] ~= 0x00 then return false end
-    if check_data[3] ~= 0x4F then return false end
-
-    -- The check matches, and the chest is open in the temporary context
-    return true
+    return chest_check(scene_offset, 0x1F)
+        or check_temp_context({scene_offset, 0x00, 0x4F})
 end
 
 -- NOTE: Scrubs are stored in the "unused" block of scene memory
+-- These always write instantly to save context, so no need to check temp context
 local scrub_sanity_check = function(scene_offset, bit_to_check)
     return scene_check(scene_offset, bit_to_check, 0x10)
 end
 
 local cow_check = function(scene_offset, bit_to_check)
-    local checked_in_save_context = scene_check(scene_offset, bit_to_check, 0xC)
-    if checked_in_save_context then return true end
-    -- Check temporary context
-    local check_data = mainmemory.readbyterange(0x40002C, 4)
-    if check_data[0] ~= 0x00 then return false end
-    if check_data[1] ~= scene_offset then return false end
-    if check_data[2] ~= 0x00 then return false end
-    if check_data[3] ~= bit_to_check then return false end
-    return true
+    return scene_check(scene_offset, bit_to_check, 0xC)
+        or check_temp_context({scene_offset, 0x00, bit_to_check})
 end
 
+-- Haven't been able to get DMT and DMC fairy to send instantly
 local great_fairy_magic_check = function(scene_offset, bit_to_check)
-    local checked_in_save_context = scene_check(scene_offset, bit_to_check, 0x4)
-    if checked_in_save_context then return true end
-    -- Check temporary context
-    local check_data = mainmemory.readbyterange(0x40002C, 4)
-    if check_data[0] ~= 0x00 then return false end
-    if check_data[1] ~= scene_offset then return false end
-    if check_data[2] ~= 0x05 then return false end
-    if check_data[3] ~= bit_to_check then return false end
-    return true
+    return scene_check(scene_offset, bit_to_check, 0x4)
+        or check_temp_context({scene_offset, 0x05, bit_to_check})
 end
 
 -- Fire arrow location reports 0x00570058 to 0x40002C
 local fire_arrows_check = function(scene_offset, bit_to_check)
-    local checked_in_save_context = scene_check(scene_offset, bit_to_check, 0x0)
-    if checked_in_save_context then return true end
-    -- Check temporary context
-    local check_data = mainmemory.readbyterange(0x40002C, 4)
-    if check_data[0] ~= 0x00 then return false end
-    if check_data[1] ~= scene_offset then return false end
-    if check_data[2] ~= 0x00 then return false end
-    if check_data[3] ~= 0x58 then return false end
-    return true
+    return scene_check(scene_offset, bit_to_check, 0x0)
+        or check_temp_context({scene_offset, 0x00, 0x58})
 end
 
 -- Bean salesman reports 0x00540016 to 0x40002C
 local bean_sale_check = function(scene_offset, bit_to_check)
-    local checked_in_save_context = scene_check(scene_offset, bit_to_check, 0xC)
-    if checked_in_save_context then return true end
-    -- Check temporary context
-    local check_data = mainmemory.readbyterange(0x40002C, 4)
-    if check_data[0] ~= 0x00 then return false end
-    if check_data[1] ~= scene_offset then return false end
-    if check_data[2] ~= 0x00 then return false end
-    if check_data[3] ~= 0x16 then return false end
-    return true
+    return scene_check(scene_offset, bit_to_check, 0xC)
+        or check_temp_context({scene_offset, 0x00, 0x16})
 end
 
 --Helper method to resolve skulltula lookup location
@@ -1180,6 +1122,7 @@ end
 local check_all_locations = function(mq_table_address)
 -- TODO: make MQ better
     local location_checks = {}
+    temp_context = mainmemory.readbyterange(0x40002C, 4)
     for k,v in pairs(read_kokiri_forest_checks()) do location_checks[k] = v end
     for k,v in pairs(read_lost_woods_checks()) do location_checks[k] = v end
     for k,v in pairs(read_sacred_forest_meadow_checks()) do location_checks[k] = v end
