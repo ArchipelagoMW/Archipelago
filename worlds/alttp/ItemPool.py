@@ -545,7 +545,7 @@ def get_pool_core(world, player: int):
     pool.extend(diff.alwaysitems)
 
     def place_item(loc, item):
-        assert loc not in placed_items
+        assert loc not in placed_items, "cannot place item twice"
         placed_items[loc] = item
 
     # provide boots to major glitch dependent seeds
@@ -681,7 +681,7 @@ def make_custom_item_pool(world, player):
     treasure_hunt_icon = None
 
     def place_item(loc, item):
-        assert loc not in placed_items
+        assert loc not in placed_items, "cannot place item twice"
         placed_items[loc] = item
 
     # Correct for insanely oversized item counts and take initial steps to handle undersized pools.
