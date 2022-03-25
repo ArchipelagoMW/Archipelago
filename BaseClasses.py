@@ -1053,6 +1053,7 @@ class Location:
         if self.item:
             raise Exception(f"Location {self} already filled.")
         self.item = item
+        item.location = self
         self.event = item.advancement
         self.item.world = self.parent_region.world
         self.locked = True
