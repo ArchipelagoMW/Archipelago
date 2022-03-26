@@ -1,6 +1,5 @@
 import asyncio
 import json
-import time
 import os
 import multiprocessing
 import subprocess
@@ -8,7 +7,6 @@ from asyncio import StreamReader, StreamWriter
 
 from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, \
     ClientCommandProcessor, logger, get_base_parser
-import Options
 import Utils
 from worlds import network_data_package
 from worlds.oot.Rom import Rom, compress_rom_file
