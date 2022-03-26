@@ -5,13 +5,14 @@ import json
 import base64
 import MultiServer
 import uuid
+from io import BytesIO
 
 from flask import request, flash, redirect, url_for, session, render_template
 from pony.orm import flush, select
 
 from WebHostLib import app, Seed, Room, Slot
 from Utils import parse_yaml, VersionException, __version__
-from Patch import preferred_endings
+from Patch import preferred_endings, AutoPatchRegister
 from NetUtils import NetworkSlot, SlotType
 
 banned_zip_contents = (".sfc",)
@@ -25,9 +26,18 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
     spoiler = ""
     multidata = None
     for file in infolist:
+        handler = AutoPatchRegister.get_handler(file.filename)
         if file.filename.endswith(banned_zip_contents):
             return "Uploaded data contained a rom file, which is likely to contain copyrighted material. " \
                    "Your file was deleted."
+        elif handler:
+            raw = zfile.open(file, "r").read()
+            patch = handler(BytesIO(raw))
+            patch.read()
+            slots.add(Slot(data=raw,
+                           player_name=patch.player_name,
+                           player_id=patch.player,
+                           game=patch.game))
         elif file.filename.endswith(tuple(preferred_endings.values())):
             data = zfile.open(file, "r").read()
             yaml_data = parse_yaml(lzma.decompress(data).decode("utf-8-sig"))
@@ -43,7 +53,8 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         elif file.filename.endswith(".apmc"):
             data = zfile.open(file, "r").read()
             metadata = json.loads(base64.b64decode(data).decode("utf-8"))
-            slots.add(Slot(data=data, player_name=metadata["player_name"],
+            slots.add(Slot(data=data,
+                           player_name=metadata["player_name"],
                            player_id=metadata["player_id"],
                            game="Minecraft"))
 
@@ -51,6 +62,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
             _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
             slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
                            player_id=int(slot_id[1:]), game="VVVVVV"))
+
         elif file.filename.endswith(".apsm64ex"):
             _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
             slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
@@ -70,6 +82,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
 
         elif file.filename.endswith(".txt"):
             spoiler = zfile.open(file, "r").read().decode("utf-8-sig")
+
         elif file.filename.endswith(".archipelago"):
             try:
                 multidata = zfile.open(file).read()

@@ -3,25 +3,25 @@ import copy
 import os
 import random
 import threading
-import Patch
 from typing import Dict, Set, TextIO
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
-from worlds.generic.Rules import add_rule, set_rule
+from worlds.generic.Rules import set_rule
 import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
 from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
 from worlds.smz3.TotalSMZ3.Config import Config, GameMode, GanonInvincible, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic
 from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
 from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
 from ..AutoWorld import World, AutoLogicRegister
-from .Rom import get_base_rom_bytes
+from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
 from .Options import smz3_options
 
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")
 
-class SMCollectionState(metaclass=AutoLogicRegister):
+
+class SMZ3CollectionState(metaclass=AutoLogicRegister):
     def init_mixin(self, parent: MultiWorld):
         # for unit tests where MultiWorld is instantiated before worlds
         if hasattr(parent, "state"):
@@ -41,7 +41,7 @@ class SMZ3World(World):
     """
     game: str = "SMZ3"
     topology_present = False
-    data_version = 0
+    data_version = 1
     options = smz3_options
     item_names: Set[str] = frozenset(TotalSMZ3Item.lookup_name_to_id)
     location_names: Set[str]
@@ -208,7 +208,7 @@ class SMZ3World(World):
         return data
 
     def convert_to_lttp_item_name(self, itemName):
-        return bytearray(itemName[:19].center(19, " ")  , 'utf8') + bytearray(0)
+        return bytearray(itemName[:19].center(19, " "), 'utf8') + bytearray(0)
 
     def apply_item_names(self):
         patch = {}
@@ -258,7 +258,9 @@ class SMZ3World(World):
             filename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
             with open(filename, "wb") as binary_file:
                 binary_file.write(base_combined_rom)
-            Patch.create_patch_file(filename, player=self.player, player_name=self.world.player_name[self.player], game=Patch.GAME_SMZ3)
+            patch = SMZ3DeltaPatch(os.path.splitext(filename)[0]+SMZ3DeltaPatch.patch_file_ending, player=self.player,
+                                   player_name=self.world.player_name[self.player], patched_path=filename)
+            patch.write()
             os.remove(filename)
             self.rom_name = bytearray(patcher.title, 'utf8')
         except:
@@ -422,12 +424,6 @@ class SMZ3Location(Location):
     def __init__(self, player: int, name: str, address=None, parent=None):
         super(SMZ3Location, self).__init__(player, name, address, parent)
 
-    def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        oldItem = self.item
-        self.item = item
-        result = self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
-        self.item = oldItem
-        return result
 
 class SMZ3Item(Item):
     game = "SMZ3"

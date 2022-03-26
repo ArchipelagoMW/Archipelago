@@ -2,7 +2,7 @@ import logging
 import copy
 import os
 import threading
-from typing import Set, List
+from typing import Set
 
 logger = logging.getLogger("Super Metroid")
 
@@ -11,12 +11,11 @@ from .Items import lookup_name_to_id as items_lookup_name_to_id
 from .Regions import create_regions
 from .Rules import set_rules, add_entrance_rule
 from .Options import sm_options
-from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT
+from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch
 import Utils
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
 from ..AutoWorld import World, AutoLogicRegister
-import Patch
 
 from logic.smboolmanager import SMBoolManager
 from graph.vanilla.graph_locations import locationsDict
@@ -393,23 +392,25 @@ class SMWorld(World):
         romPatcher.writeRandoSettings(self.variaRando.randoExec.randoSettings, itemLocs)
 
     def generate_output(self, output_directory: str):
+        outfilebase = 'AP_' + self.world.seed_name
+        outfilepname = f'_P{self.player}'
+        outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}"
+        outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
+
         try:
-            outfilebase = 'AP_' + self.world.seed_name
-            outfilepname = f'_P{self.player}'
-            outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}" \
-
-            outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
             self.variaRando.PatchRom(outputFilename, self.APPatchRom)
-
             self.write_crc(outputFilename)
-
-            Patch.create_patch_file(outputFilename, player=self.player, player_name=self.world.player_name[self.player], game=Patch.GAME_SM)
-            os.unlink(outputFilename)
             self.rom_name = self.romName
         except:
             raise
+        else:
+            patch = SMDeltaPatch(os.path.splitext(outputFilename)[0]+SMDeltaPatch.patch_file_ending, player=self.player,
+                                 player_name=self.world.player_name[self.player], patched_path=outputFilename)
+            patch.write()
         finally:
-            self.rom_name_available_event.set() # make sure threading continues and errors are collected
+            if os.path.exists(outputFilename):
+                os.unlink(outputFilename)
+            self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
     def checksum_mirror_sum(self, start, length, mask = 0x800000):
         while (not(length & mask) and mask):
@@ -425,8 +426,6 @@ class SMWorld(World):
             while (next_length < mask):
                 next_length += next_length
                 part2 += part2
-
-            length = mask + mask
 
         return (part1 + part2) & 0xFFFF
 
@@ -451,7 +450,6 @@ class SMWorld(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
-
 
     def fill_slot_data(self): 
         slot_data = {}
@@ -536,9 +534,11 @@ class SMWorld(World):
                 self.world.state.smbm[self.player].onlyBossLeft = True
                 break
 
+
 def create_locations(self, player: int):
     for name, id in locations_lookup_name_to_id.items():
         self.locations[name] = SMLocation(player, name, id)
+
 
 def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, RegionType.LightWorld, name, player)

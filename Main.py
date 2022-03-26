@@ -200,14 +200,17 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         itemcount = len(world.itempool)
         world.itempool = new_itempool
 
-        # can produce more items than were removed
         while itemcount > len(world.itempool):
+            items_to_add = []
             for player in group["players"]:
                 if group["replacement_items"][player]:
-                    world.itempool.append(AutoWorld.call_single(world, "create_item", player,
+                    items_to_add.append(AutoWorld.call_single(world, "create_item", player,
                                                                 group["replacement_items"][player]))
                 else:
-                    AutoWorld.call_single(world, "create_filler", player)
+                    items_to_add.append(AutoWorld.call_single(world, "create_filler", player))
+            world.random.shuffle(items_to_add)
+            world.itempool.extend(items_to_add[:itemcount - len(world.itempool)])
+
     if any(world.item_links.values()):
         world._recache()
         world._all_state = None
@@ -335,7 +338,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     games[slot] = world.game[slot]
                     slot_info[slot] = NetUtils.NetworkSlot(group["name"], world.game[slot], world.player_types[slot],
                                                            group_members=sorted(group["players"]))
-                precollected_items = {player: [item.code for item in world_precollected]
+                precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
                                       for player, world_precollected in world.precollected_items.items()}
                 precollected_hints = {player: set() for player in range(1, world.players + 1 + len(world.groups))}
 
