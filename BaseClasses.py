@@ -644,14 +644,17 @@ class CollectionState():
                 self.events.add(event)
                 self.collect(event.item, True, event)
 
-    def has(self, item: str, player: int, count: int = 1):
+    def has(self, item: str, player: int, count: int = 1) -> bool:
         return self.prog_items[item, player] >= count
 
-    def has_all(self, items: Set[str], player: int):
+    def has_all(self, items: Set[str], player: int) -> bool:
         return all(self.prog_items[item, player] for item in items)
 
-    def has_any(self, items: Set[str], player: int):
+    def has_any(self, items: Set[str], player: int) -> bool:
         return any(self.prog_items[item, player] for item in items)
+
+    def count(self, item: str, player: int) -> int:
+        return self.prog_items[item, player]
 
     def has_group(self, item_name_group: str, player: int, count: int = 1):
         found: int = 0
@@ -1053,6 +1056,7 @@ class Location:
         if self.item:
             raise Exception(f"Location {self} already filled.")
         self.item = item
+        item.location = self
         self.event = item.advancement
         self.item.world = self.parent_region.world
         self.locked = True
