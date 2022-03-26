@@ -1,7 +1,7 @@
 html{
-    background-image: url('../../static/backgrounds/ice.png');
+    background-image: url("../../static/backgrounds/party-time.png");
     background-repeat: repeat;
-    background-size: 400px 400px;
+    background-size: 300px 300px;
 }
 
 body{
@@ -9,11 +9,11 @@ body{
 }
 
 #base-header {
-    background: url('../../static/backgrounds/header/ocean-header.png') repeat-x;
+    background: url('../../static/backgrounds/header/party-time-header.png') repeat-x;
 }
 
 .markdown {
-    background-color: rgba(0, 0, 0, 0.25) !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
 h1{
@@ -21,7 +21,7 @@ h1{
 }
 
 h2{
-    color: #ffcccc;
+    color: #ff5884;
 }
 
 h3, h4, h5,h6{
@@ -38,14 +38,14 @@ table td{
 }
 
 a{
-    color: #ffee75;
+    color: #b1fd5e;
 }
 
 pre{
     margin-top: 0;
     padding: 0.5rem 0.25rem;
-    background-color: #cae2e9;
-    border: 1px solid #5d7d87;
+    background-color: #b08ed5;
+    border: 1px solid #6d5687;
     border-radius: 6px;
     color: #000000;
 }
@@ -55,9 +55,9 @@ pre code{
 }
 
 code{
-    background-color: #cae2e9;
+    background-color: #b08ed5;
     border-radius: 4px;
-    border: 1px solid #5d7d87;
+    border: 1px solid #6d5687;
     padding-left: 0.25rem;
     padding-right: 0.25rem;
     color: #000000;
