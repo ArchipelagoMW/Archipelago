@@ -198,5 +198,5 @@ item_table = (
     'Fresh Strawberries',
     'Delicious Tacos',
     'The Krabby Patty Recipe',
-    'Waldo\'s Location',
+    'Map to Waldo\'s Location',
 )
