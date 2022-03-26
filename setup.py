@@ -91,6 +91,7 @@ scripts = {
     # Minecraft
     "MinecraftClient.py": ("ArchipelagoMinecraftClient", False, mcicon),
     # Ocarina of Time
+    "OoTClient.py": ("ArchipelagoOoTClient", True, icon),
     "OoTAdjuster.py": ("ArchipelagoOoTAdjuster", True, icon),
     # FF1
     "FF1Client.py": ("ArchipelagoFF1Client", True, icon),
