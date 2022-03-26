@@ -360,8 +360,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in world.player_ids}
                 for location in world.get_filled_locations():
                     if type(location.address) == int:
-                        # item code None should be event, location.address should then also be None
-                        assert location.item.code is not None
+                        assert location.item.code is not None, "item code None should be event, " \
+                                                               "location.address should then also be None"
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
                         if location.name in world.start_location_hints[location.player]:

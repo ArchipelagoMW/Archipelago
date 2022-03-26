@@ -17,8 +17,8 @@ class AssembleOptions(type):
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
                        name.startswith("option_")}
 
-        assert "random" not in new_options  # Choice option 'random' cannot be manually assigned.
-        assert len(new_options) == len(set(new_options.values()))  # same ID cannot be used twice. Try alias?
+        assert "random" not in new_options, "Choice option 'random' cannot be manually assigned."
+        assert len(new_options) == len(set(new_options.values())), "same ID cannot be used twice. Try alias?"
 
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
@@ -104,7 +104,7 @@ class Toggle(Option):
     default = 0
 
     def __init__(self, value: int):
-        assert value == 0 or value == 1
+        assert value == 0 or value == 1, "value of Toggle can only be 0 or 1"
         self.value = value
 
     @classmethod
@@ -178,10 +178,10 @@ class Choice(Option):
         if isinstance(other, self.__class__):
             return other.value == self.value
         elif isinstance(other, str):
-            assert other in self.options
+            assert other in self.options, "compared against a str that could never be equal."
             return other == self.current_key
         elif isinstance(other, int):
-            assert other in self.name_lookup
+            assert other in self.name_lookup, "compared against an int that could never be equal."
             return other == self.value
         elif isinstance(other, bool):
             return other == bool(self.value)
@@ -192,10 +192,10 @@ class Choice(Option):
         if isinstance(other, self.__class__):
             return other.value != self.value
         elif isinstance(other, str):
-            assert other in self.options
+            assert other in self.options , "compared against a str that could never be equal."
             return other != self.current_key
         elif isinstance(other, int):
-            assert other in self.name_lookup
+            assert other in self.name_lookup, "compared against am int that could never be equal."
             return other != self.value
         elif isinstance(other, bool):
             return other != bool(self.value)
