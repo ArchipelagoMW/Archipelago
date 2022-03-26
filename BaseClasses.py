@@ -42,10 +42,10 @@ class MultiWorld():
     precollected_items: Dict[int, List[Item]]
     state: CollectionState
 
-    accessibility: Dict[int, str]
-    local_items: Dict[int, Any]  # TODO: what type is this Any? something with a .value
-    non_local_items: Dict[int, Any]  # TODO: what type is this Any? something with a .value
-    progression_balancing: Dict[int, bool]
+    accessibility: Dict[int, Options.Accessibility]
+    local_items: Dict[int, Options.LocalItems]
+    non_local_items: Dict[int, Options.NonLocalItems]
+    progression_balancing: Dict[int, Options.ProgressionBalancing]
 
     class AttributeProxy():
         def __init__(self, rule):
