@@ -3,6 +3,7 @@ import json
 import time
 import os
 import multiprocessing
+import subprocess
 from asyncio import StreamReader, StreamWriter
 
 from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, \
