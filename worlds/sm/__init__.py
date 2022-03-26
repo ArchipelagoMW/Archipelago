@@ -69,7 +69,6 @@ class SMWorld(World):
     itemManager: ItemManager
 
     locations = {}
-    hint_blacklist = {'Nothing', 'No Energy'}
 
     Logic.factory('vanilla')
 
@@ -531,6 +530,8 @@ class SMWorld(World):
         for item in self.world.itempool:
             if item.player == self.player and item.advancement:
                 progitempool.append(item)
+            if item.location.player == self.player and item.game == "Super Metroid" and item.type == "Nothing":
+                item.location.address = None
 
         for item in progitempool:
             new_state.collect(item, True)
