@@ -42,9 +42,9 @@ end
 -- [3] is the location id within the scene, and represents the bit which was checked
 -- Note that temp_context is 0-indexed and expected_values is 1-indexed, because consistency.
 local check_temp_context = function(expected_values)
-    if temp_context[0] ~= 0x00 return false
+    if temp_context[0] ~= 0x00 then return false end
     for i=1,3 do
-        if temp_context[i] ~= expected_values[i+1] then return false end
+        if temp_context[i] ~= expected_values[i] then return false end
     end
     return true
 end
