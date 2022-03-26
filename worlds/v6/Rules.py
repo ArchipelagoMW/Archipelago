@@ -34,9 +34,10 @@ def set_rules(world, player, area_connections: typing.Dict[int, int], area_cost_
                                                             state.can_reach("Warp Zone", 'Region', player))
 
     # Special Rule for NPC Trinket
-    add_rule(world.get_location("V", player), lambda state: state.can_reach("Laboratory", 'Region', player) or
-                                                            (state.can_reach("The Tower", 'Region', player) and
-                                                             state.can_reach("Space Station 2", 'Region', player) and
-                                                             state.can_reach("Warp Zone", 'Region', player)))
+    add_rule(world.get_location("NPC Trinket", player),
+             lambda state: state.can_reach("Laboratory", 'Region', player) or
+                           (state.can_reach("The Tower", 'Region', player) and
+                            state.can_reach("Space Station 2", 'Region', player) and
+                            state.can_reach("Warp Zone", 'Region', player)))
 
     world.completion_condition[player] = lambda state: state.can_reach("V", 'Location', player)
