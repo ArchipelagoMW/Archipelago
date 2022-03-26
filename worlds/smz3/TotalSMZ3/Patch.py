@@ -322,7 +322,7 @@ class Patch:
 
     def ItemTablePatch(self, location: Location, itemId: int):
         itemtype = 0 if location.APLocation.item.player == location.Region.world.Id else 1
-        owner = location.APLocation.item.player
+        owner = location.APLocation.item.player if location.APLocation.item.player < 256 else 0
         return (0x386000 + (location.Id * 8), getWordArray(itemtype) + getWordArray(itemId) + getWordArray(owner))
 
     def WriteDungeonMusic(self, keysanity: bool):
@@ -572,7 +572,7 @@ class Patch:
 
     def WritePlayerNames(self):
         self.patches += [(0x385000 + (0 * 16), self.PlayerNameBytes("Archipelago"))]
-        self.patches += [(0x385000 + (id * 16), self.PlayerNameBytes(name)) for name, id in self.playerNames.items()]
+        self.patches += [(0x385000 + (id * 16), self.PlayerNameBytes(name)) for name, id in self.playerNames.items() if id < 256]
 
     def PlayerNameBytes(self, name: str):
         name = (name[:16] if len(name) > 16 else name).center(16)
