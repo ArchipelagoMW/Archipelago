@@ -798,7 +798,8 @@ def send_items_to(ctx: Context, team: int, target_slot: int, *items: NetworkItem
             if item.player != target_slot:
                 get_received_items(ctx, team, target, False).append(item)
             get_received_items(ctx, team, target, True).append(item)
-
+        world = AutoWorldRegister.world_types[ctx.games[target]]
+        world.received_checks(ctx, team, target)
 
 def register_location_checks(ctx: Context, team: int, slot: int, locations: typing.Iterable[int],
                              count_activity: bool = True):
@@ -807,7 +808,6 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
     if new_locations:
         if count_activity:
             ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
-        received_checks = set()
         for location in new_locations:
             item_id, target_player, flags = ctx.locations[slot][location]
             new_item = NetworkItem(item_id, location, slot, flags)
@@ -818,7 +818,6 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
                 ctx.player_names[(team, target_player)], get_location_name_from_id(location)))
             info_text = json_format_send_event(new_item, target_player)
             ctx.broadcast_team(team, [info_text])
-            received_checks.add(target_player)
 
         ctx.location_checks[team, slot] |= new_locations
         send_new_items(ctx)
@@ -828,9 +827,6 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             "checked_locations": new_locations,  # send back new checks only
         }])
         ctx.save()
-        for player in received_checks:
-            world = AutoWorldRegister.world_types[ctx.games[player]]
-            world.received_checks(world, ctx, team, player)
 
 
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[NetUtils.Hint]:
