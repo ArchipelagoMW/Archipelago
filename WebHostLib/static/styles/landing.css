@@ -294,17 +294,7 @@ html{
     #landing{ order: 2; }
 
     #landing-links{
-        height: auto;
-        flex-direction: column;
-    }
-
-    #landing-links a{
-        position: relative;
-        margin-left: auto;
-        margin-right: auto;
-
-        top: auto;
-        left: auto;
+        display: none;
     }
 
     .landing-deco{

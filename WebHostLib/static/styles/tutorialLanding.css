@@ -1,7 +1,4 @@
-#tutorial-landing{
-    width: 60%;
-    margin: auto;
-}
+#tutorial-landing{}
 
 #tutorial-landing h2, #tutorial-landing h3, #tutorial-landing h4, #tutorial-landing h5, #tutorial-landing h6 {
     text-transform: none;
