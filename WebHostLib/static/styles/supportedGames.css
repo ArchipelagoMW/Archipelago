@@ -1,6 +1,6 @@
 #games{
     width: 60%;
-    margin: auto;
+    margin: auto auto 30px;
 }
 
 #games h2, #games h3, #games h4, #games h5, #games h6 {

@@ -12,12 +12,16 @@ body{
     background: url('../../static/backgrounds/header/grass-header.png') repeat-x;
 }
 
+.markdown {
+    background-color: rgba(0, 0, 0, 0.30) !important;
+}
+
 h1{
     color: #ffffff;
 }
 
 h2{
-    color: #fff677;
+    color: #5aff6a;
 }
 
 h3, h4, h5,h6{
@@ -34,7 +38,7 @@ table td{
 }
 
 a{
-    color: #fbff00;
+    color: #fff80f;
 }
 
 pre{

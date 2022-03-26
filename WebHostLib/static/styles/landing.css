@@ -29,7 +29,7 @@ html{
     font-size: 36px;
     margin-top: -10px;
     margin-bottom: 0;
-    /** text-shadow: 1px 1px 7px #000000; */
+    text-shadow: 1px 1px 7px #000000;
     font-kerning: none;
     z-index: 10;
 }
@@ -282,7 +282,7 @@ html{
     left: calc(50% + 196px);
 }
 
-@media all and (max-width: 1520px){
+@media all and (max-width: 1580px){
     #landing-clouds #cloud1, #landing-clouds #cloud2, #landing-clouds #cloud3{
         display: none;
     }

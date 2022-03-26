@@ -1,7 +1,7 @@
 html{
     background-image: url("../../static/backgrounds/party-time.png");
     background-repeat: repeat;
-    background-size: 300px 300px;
+    background-size: 350px 350px;
 }
 
 body{
@@ -13,7 +13,7 @@ body{
 }
 
 .markdown {
-    background-color: rgba(0, 0, 0, 0.5) !important;
+    background-color: rgba(26, 5, 48, 0.8) !important;
 }
 
 h1{

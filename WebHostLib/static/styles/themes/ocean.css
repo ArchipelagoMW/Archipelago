@@ -12,6 +12,10 @@ body{
     background: url('../../static/backgrounds/header/ocean-header.png') repeat-x;
 }
 
+.markdown {
+    background-color: rgba(17, 35, 62, 0.55) !important;
+}
+
 h1{
     color: #ffffff;
 }

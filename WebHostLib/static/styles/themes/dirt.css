@@ -12,6 +12,10 @@ body{
     background: url('../../static/backgrounds/header/dirt-header.png') repeat-x;
 }
 
+.markdown {
+    background-color: rgba(0, 0, 0, 0.25) !important;
+}
+
 h1{
     color: #ffffff;
 }
