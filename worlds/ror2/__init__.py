@@ -103,11 +103,7 @@ class RiskOfRainWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
-        if name == "Dio's Best Friend":
-            prog = True
-        else:
-            prog = False
-        item = RiskOfRainItem(name, prog, item_id, self.player)
+        item = RiskOfRainItem(name, name == "Dio's Best Friend", item_id, self.player)
         return item
 
 
