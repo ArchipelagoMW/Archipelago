@@ -524,23 +524,23 @@ class SMWorld(World):
             progitempool.sort(
                 key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
 
-    def post_fill(self):
-        new_state = CollectionState(self.world)
+    @classmethod
+    def stage_post_fill(cls, world):
+        new_state = CollectionState(world)
         progitempool = []
-        for item in self.world.itempool:
-            if item.player == self.player and item.advancement:
+        for item in world.itempool:
+            if item.game == "Super Metroid" and item.advancement:
                 progitempool.append(item)
-            if item.location.player == self.player and item.game == "Super Metroid" and item.type == "Nothing":
-                item.location.address = None
 
         for item in progitempool:
             new_state.collect(item, True)
-
+        
         bossesLoc = ['Draygon', 'Kraid', 'Ridley', 'Phantoon', 'Mother Brain']
-        for bossLoc in bossesLoc:
-            if (not self.world.get_location(bossLoc, self.player).can_reach(new_state)):
-                self.world.state.smbm[self.player].onlyBossLeft = True
-                break
+        for player in world.get_game_players("Super Metroid"):
+            for bossLoc in bossesLoc:
+                if not world.get_location(bossLoc, player).can_reach(new_state):
+                    world.state.smbm[player].onlyBossLeft = True
+                    break
 
 
 def create_locations(self, player: int):
@@ -576,5 +576,7 @@ class SMItem(Item):
     game = "Super Metroid"
 
     def __init__(self, name, advancement, type, code, player: int = None):
+        if type == "Nothing":
+            code = None
         super(SMItem, self).__init__(name, advancement, code, player)
         self.type = type
