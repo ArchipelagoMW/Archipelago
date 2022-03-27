@@ -221,6 +221,20 @@ async def run_game(romfile):
                          stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
+async def patch_and_run_game(apz5_file):
+    base_name = os.path.splitext(apz5_file)[0]
+    decomp_path = base_name + '-decomp.z64'
+    comp_path = base_name + '.z64'
+    # Load vanilla ROM, patch file, compress ROM
+    rom = Rom(Utils.get_options()["oot_options"]["rom_file"])
+    apply_patch_file(rom, apz5_file)
+    rom.write_to_file(decomp_path)
+    os.chdir(data_path("Compress"))
+    compress_rom_file(decomp_path, comp_path)
+    os.remove(decomp_path)
+    asyncio.create_task(run_game(comp_path))
+
+
 if __name__ == '__main__':
 
     Utils.init_logging("OoTClient")
@@ -234,18 +248,7 @@ if __name__ == '__main__':
 
         if args.apz5_file:
             logger.info("APZ5 file supplied, beginning patching process...")
-            base_name = os.path.splitext(args.apz5_file)[0]
-            decomp_path = base_name + '-decomp.z64'
-            comp_path = base_name + '.z64'
-            # Load vanilla ROM, patch file, compress ROM
-            rom = Rom(Utils.get_options()["oot_options"]["rom_file"])
-            apply_patch_file(rom, args.apz5_file)
-            rom.write_to_file(decomp_path)
-            os.chdir(data_path("Compress"))
-            compress_rom_file(decomp_path, comp_path)
-            os.remove(decomp_path)
-            # Run game file
-            asyncio.create_task(run_game(comp_path))
+            asyncio.create_task(patch_and_run_game(args.apz5_file))
 
         ctx = OoTContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="Server Loop")
