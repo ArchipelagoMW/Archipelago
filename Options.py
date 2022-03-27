@@ -53,9 +53,11 @@ class AssembleOptions(type):
 
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
+T = typing.TypeVar('T')
 
-class Option(metaclass=AssembleOptions):
-    value: int
+
+class Option(typing.Generic[T], metaclass=AssembleOptions):
+    value: T
     name_lookup: typing.Dict[int, str]
     default = 0
 
@@ -98,7 +100,7 @@ class Option(metaclass=AssembleOptions):
         raise NotImplementedError
 
 
-class Toggle(Option):
+class Toggle(Option[int]):
     option_false = 0
     option_true = 1
     default = 0
@@ -150,7 +152,7 @@ class DefaultOnToggle(Toggle):
     default = 1
 
 
-class Choice(Option):
+class Choice(Option[int]):
     auto_display_name = True
 
     def __init__(self, value: int):
@@ -207,7 +209,7 @@ class Choice(Option):
     __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
-class Range(Option, int):
+class Range(Option[int], int):
     range_start = 0
     range_end = 1
 
@@ -300,10 +302,9 @@ class VerifyKeys:
                                     f"is not a valid location name from {world.game}")
 
 
-class OptionDict(Option, VerifyKeys):
+class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
     default = {}
     supports_weighting = False
-    value: typing.Dict[str, typing.Any]
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
         self.value = value
@@ -332,10 +333,9 @@ class ItemDict(OptionDict):
         super(ItemDict, self).__init__(value)
 
 
-class OptionList(Option, VerifyKeys):
+class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     default = []
     supports_weighting = False
-    value: list
 
     def __init__(self, value: typing.List[typing.Any]):
         self.value = value or []
@@ -359,10 +359,9 @@ class OptionList(Option, VerifyKeys):
         return item in self.value
 
 
-class OptionSet(Option, VerifyKeys):
+class OptionSet(Option[typing.Set[str]], VerifyKeys):
     default = frozenset()
     supports_weighting = False
-    value: set
 
     def __init__(self, value: typing.Union[typing.Set[str, typing.Any], typing.List[str, typing.Any]]):
         self.value = set(value)

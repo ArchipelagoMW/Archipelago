@@ -33,13 +33,19 @@ class MultiWorld():
     dark_room_logic: Dict[int, str]
     restrict_dungeon_item_on_boss: Dict[int, bool]
     plando_texts: List[Dict[str, str]]
-    plando_items: List
+    plando_items: List[List[Dict[str, Any]]]
     plando_connections: List
     worlds: Dict[int, Any]
     groups: Dict[int, Group]
+    itempool: List[Item]
     is_race: bool = False
     precollected_items: Dict[int, List[Item]]
     state: CollectionState
+
+    accessibility: Dict[int, Options.Accessibility]
+    local_items: Dict[int, Options.LocalItems]
+    non_local_items: Dict[int, Options.NonLocalItems]
+    progression_balancing: Dict[int, Options.ProgressionBalancing]
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -65,7 +71,7 @@ class MultiWorld():
         self._cached_entrances = None
         self._cached_locations = None
         self._entrance_cache = {}
-        self._location_cache = {}
+        self._location_cache: Dict[Tuple[str, int], Location] = {}
         self.required_locations = []
         self.light_world_light_cone = False
         self.dark_world_light_cone = False
@@ -387,7 +393,7 @@ class MultiWorld():
     def clear_location_cache(self):
         self._cached_locations = None
 
-    def get_unfilled_locations(self, player=None) -> List[Location]:
+    def get_unfilled_locations(self, player: Optional[int] = None) -> List[Location]:
         if player is not None:
             return [location for location in self.get_locations() if
                     location.player == player and not location.item]
@@ -396,13 +402,13 @@ class MultiWorld():
     def get_unfilled_dungeon_locations(self):
         return [location for location in self.get_locations() if not location.item and location.parent_region.dungeon]
 
-    def get_filled_locations(self, player=None) -> List[Location]:
+    def get_filled_locations(self, player: Optional[int] = None) -> List[Location]:
         if player is not None:
             return [location for location in self.get_locations() if
                     location.player == player and location.item is not None]
         return [location for location in self.get_locations() if location.item is not None]
 
-    def get_reachable_locations(self, state=None, player=None) -> List[Location]:
+    def get_reachable_locations(self, state: Optional[CollectionState] = None, player: Optional[int] = None) -> List[Location]:
         if state is None:
             state = self.state
         return [location for location in self.get_locations() if
@@ -414,7 +420,7 @@ class MultiWorld():
         return [location for location in self.get_locations() if
                 (player is None or location.player == player) and location.item is None and location.can_reach(state)]
 
-    def get_unfilled_locations_for_players(self, locations, players: Iterable[int]):
+    def get_unfilled_locations_for_players(self, locations: List[str], players: Iterable[int]):
         for player in players:
             if len(locations) == 0:
                 locations = [location.name for location in self.get_unfilled_locations(player)]
@@ -423,7 +429,7 @@ class MultiWorld():
                 if location is not None and location.item is None:
                     yield location
 
-    def unlocks_new_location(self, item) -> bool:
+    def unlocks_new_location(self, item: Item) -> bool:
         temp_state = self.state.copy()
         temp_state.collect(item, True)
 
@@ -433,7 +439,7 @@ class MultiWorld():
 
         return False
 
-    def has_beaten_game(self, state: CollectionState, player: Optional[int] = None):
+    def has_beaten_game(self, state: CollectionState, player: Optional[int] = None) -> bool:
         if player:
             return self.completion_condition[player](state)
         else:
@@ -617,7 +623,10 @@ class CollectionState():
             ret = function(self, ret)
         return ret
 
-    def can_reach(self, spot: Union[Location, Entrance, Region, str], resolution_hint=None, player=None) -> bool:
+    def can_reach(self,
+                  spot: Union[Location, Entrance, Region, str],
+                  resolution_hint: Optional[str] = None,
+                  player: Optional[int] = None) -> bool:
         if not hasattr(spot, "can_reach"):
             # try to resolve a name
             if resolution_hint == 'Location':
@@ -833,7 +842,7 @@ class CollectionState():
     def can_bomb_clip(self, region: Region, player: int) -> bool:
         return self.is_not_bunny(region, player) and self.has('Pegasus Boots', player)
 
-    def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:
+    def collect(self, item: Item, event: bool = False, location: Optional[Location] = None) -> bool:
         if location:
             self.locations_checked.add(location)
 

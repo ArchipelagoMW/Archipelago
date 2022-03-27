@@ -534,9 +534,9 @@ class SMWorld(World):
 
         for item in progitempool:
             new_state.collect(item, True)
-
+        
+        bossesLoc = ['Draygon', 'Kraid', 'Ridley', 'Phantoon', 'Mother Brain']
         for player in world.get_game_players("Super Metroid"):
-            bossesLoc = ['Draygon', 'Kraid', 'Ridley', 'Phantoon', 'Mother Brain']
             for bossLoc in bossesLoc:
                 if not world.get_location(bossLoc, player).can_reach(new_state):
                     world.state.smbm[player].onlyBossLeft = True
