@@ -136,10 +136,6 @@ class World(metaclass=AutoWorldRegister):
     item_names: Set[str]  # set of all potential item names
     location_names: Set[str]  # set of all potential location names
 
-    # If the game displays all contained items to the user, this flag pre-fills the hint system with this information
-    # For example the "full" tech tree information option in Factorio
-    sending_visible: bool = False
-
     web: WebWorld = WebWorld()
 
     def __init__(self, world: MultiWorld, player: int):
