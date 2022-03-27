@@ -354,7 +354,8 @@ $APPDIR/$exe "$@"
         shutil.copy(root_icon, self.app_dir / '.DirIcon')
         self.write_desktop()
         self.write_launcher(self.app_exec)
-        subprocess.call(["appimagetool", str(self.app_dir), str(self.dist_file)])
+        print(f'{self.app_dir} -> {self.dist_file}')
+        subprocess.call(f'./appimagetool -n "{self.app_dir}" "{self.dist_file}"', shell=True)
 
 
 cx_Freeze.setup(
@@ -376,6 +377,7 @@ cx_Freeze.setup(
             "optimize": 1,
             "build_exe": buildfolder,
             "extra_data": extra_data,
+            "bin_includes": [] if is_windows else ["libffi.so"]
         },
         "bdist_appimage": {
            "build_folder": buildfolder,
