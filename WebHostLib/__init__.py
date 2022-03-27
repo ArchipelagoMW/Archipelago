@@ -71,9 +71,8 @@ app.jinja_env.filters['suuid'] = lambda value: base64.urlsafe_b64encode(value.by
 
 
 def get_world_theme(game_name: str):
-    for game, world in AutoWorldRegister.world_types.items():
-        if game_name == game:
-            return world.web.theme
+    if game_name in AutoWorldRegister.world_types:
+        return AutoWorldRegister.world_types[game_name].web.theme
     return 'grass'
 
 
