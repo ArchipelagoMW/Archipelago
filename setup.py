@@ -114,7 +114,7 @@ class BuildExeCommand(cx_Freeze.dist.build_exe):
         ('extra-data=', None, 'Additional files to add.'),
     ]
     yes: bool
-    extra_data: Iterable[any]
+    extra_data: Iterable  # [any] not available in 3.8
 
     buildfolder: Path
     libfolder: Path
