@@ -406,6 +406,12 @@ class FF1Manager(GameManager):
     ]
     base_title = "Archipelago Final Fantasy 1 Client"
 
+class OoTManager(GameManager):
+    logging_pairs = [
+        ("Client", "Archipelago")
+    ]
+    base_title = "Archipelago Ocarina of Time Client"
+
 
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
