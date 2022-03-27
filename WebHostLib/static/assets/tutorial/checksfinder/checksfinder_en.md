@@ -21,7 +21,7 @@ You can customize your settings by visiting the [ChecksFinder Player Settings Pa
 ### Generating a ChecksFinder game
 
 **ChecksFinder is meant to be played _alongside_ another game! You may not be playing it for long periods of time if 
-you play it with another person!**
+you play it by itself with another person!**
 
 When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting. Once that is done,
 the host will provide you with either a link to download your data file, or with a zip file containing everyone's data
