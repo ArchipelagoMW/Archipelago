@@ -45,6 +45,8 @@ mcicon = os.path.join("data", "mcicon.ico")
 
 
 scripts = {
+    # Launcher
+    "Launcher.py": ("ArchipelagoLauncher", True, icon),
     # Core
     "MultiServer.py": ("ArchipelagoServer", False, icon),
     "Generate.py": ("ArchipelagoGenerate", False, icon),
