@@ -548,8 +548,6 @@ def distribute_planned(world: MultiWorld) -> None:
                 for key, value in locations.items():
                     location_list += [key] * value
                 locations = location_list
-            if isinstance(locations, str):  # TODO: isn't this already handled 8 lines up?
-                locations = [locations]
             block['locations'] = locations
 
             if not block['count']:
@@ -591,20 +589,19 @@ def distribute_planned(world: MultiWorld) -> None:
             maxcount = placement['count']['target']
             from_pool = placement['from_pool']
             if target_world is False or world.players == 1:  # target own world
-                worlds = {player}
+                worlds: typing.Set[int] = {player}
             elif target_world is True:  # target any worlds besides own
                 worlds = set(world.player_ids) - {player}
             elif target_world is None:  # target all worlds
                 worlds = set(world.player_ids)
             elif type(target_world) == list:  # list of target worlds
-                worlds = []  # TODO: why do we make list and convert to set, instead of just set to begin with?
+                worlds = set()
                 for listed_world in target_world:
                     if listed_world not in world_name_lookup:
                         failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
                                placement['force'])
                         continue
-                    worlds.append(world_name_lookup[listed_world])
-                worlds = set(worlds)
+                    worlds.add(world_name_lookup[listed_world])
             elif type(target_world) == int:  # target world by slot number
                 if target_world not in range(1, world.players + 1):
                     failed(
