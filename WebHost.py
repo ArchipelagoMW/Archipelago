@@ -21,6 +21,8 @@ from WebHostLib.lttpsprites import update_sprites_lttp
 from WebHostLib.options import create as create_options_files
 
 configpath = os.path.abspath("config.yaml")
+if not os.path.exists(configpath):  # fall back to config.yaml in home
+    configpath = os.path.abspath(Utils.user_path('config.yaml'))
 
 
 def get_app():
