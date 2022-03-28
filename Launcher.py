@@ -55,8 +55,9 @@ def open_patch():
         root.withdraw()
         suffixes = []
         for c in components:
-            suffixes += c.file_identifier.suffixes if c.type == Type.CLIENT and \
-                                                      isinstance(c.file_identifier, SuffixIdentifier) else []
+            if os.path.isfile(get_exe(c)[-1]):
+                suffixes += c.file_identifier.suffixes if c.type == Type.CLIENT and \
+                                                          isinstance(c.file_identifier, SuffixIdentifier) else []
         filename = tkinter.filedialog.askopenfilename(filetypes=(('Patches', ' '.join(suffixes)),))
         file, component = identify(filename)
         if file and component:
@@ -90,9 +91,10 @@ class SuffixIdentifier:
         self.suffixes = args
 
     def __call__(self, path: str):
-        for suffix in self.suffixes:
-            if path.endswith(suffix):
-                return True
+        if isinstance(path, str):
+            for suffix in self.suffixes:
+                if path.endswith(suffix):
+                    return True
         return False
 
 
@@ -226,9 +228,9 @@ def run_gui():
     class Launcher(App):
         base_title: str = "Archipelago Launcher"
 
-        _tools = {c.display_name: c for c in components if c.type == Type.TOOL}
-        _clients = {c.display_name: c for c in components if c.type == Type.CLIENT}
-        _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER}
+        _tools = {c.display_name: c for c in components if c.type == Type.TOOL and os.path.isfile(get_exe(c)[-1])}
+        _clients = {c.display_name: c for c in components if c.type == Type.CLIENT and os.path.isfile(get_exe(c)[-1])}
+        _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER and os.path.isfile(get_exe(c)[-1])}
         _funcs = {c.display_name: c for c in components if c.type == Type.FUNC}
 
         def __init__(self, ctx=None):
