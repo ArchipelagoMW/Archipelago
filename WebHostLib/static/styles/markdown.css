@@ -124,6 +124,10 @@
     padding: 10px;
 }
 
+.markdown pre{
+    overflow-x: auto;
+}
+
 strong{
     font-family: LexendDeca-Medium, sans-serif;
     font-weight: normal;
