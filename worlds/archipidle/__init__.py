@@ -1,7 +1,11 @@
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance
 from .Items import item_table
 from .Rules import set_rules
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
+
+
+class ArchipIDLEWebWorld(WebWorld):
+    theme = 'partyTime'
 
 
 class ArchipIDLEWorld(World):
@@ -11,6 +15,7 @@ class ArchipIDLEWorld(World):
     game = "ArchipIDLE"
     topology_present = False
     data_version = 1
+    web = ArchipIDLEWebWorld()
 
     item_name_to_id = {}
     start_id = 9000

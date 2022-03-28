@@ -4,10 +4,12 @@
     max-width: 70rem;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 30px;
     background-color: rgba(0, 0, 0, 0.15);
     border-radius: 8px;
-    padding: 1rem 1rem 3rem;
-    color: #eeffeb;
+    padding: 25px 30px 30px;
+    font-family: LexendDeca-Light, sans-serif;
+    font-size: 19px;
 }
 
 .markdown img{
@@ -19,36 +21,34 @@
     margin-top: 0;
 }
 
-.markdown a{
-    color: #ffef00;
-}
+.markdown a{}
 
 .markdown h1{
-    font-size: 2.5rem;
+    font-size: 52px;
     font-weight: normal;
-    border-bottom: 1px solid #ffffff;
+    font-family: LondrinaSolid-Regular, sans-serif;
+    text-transform: uppercase;
     cursor: pointer;
     width: 100%;
-    margin-bottom: 0.5rem;
-    color: #ffffff;
     text-shadow: 1px 1px 4px #000000;
 }
 
 .markdown h2{
-    font-size: 2rem;
+    font-size: 38px;
     font-weight: normal;
-    border-bottom: 1px solid #ffffff;
+    font-family: LondrinaSolid-Light, sans-serif;
     cursor: pointer;
     width: 100%;
+    margin-top: 20px;
     margin-bottom: 0.5rem;
-    color: #ffe993;
     text-transform: lowercase;
     text-shadow: 1px 1px 2px #000000;
 }
 
 .markdown h3{
-    font-size: 1.70rem;
-    font-weight: normal;
+    font-size: 26px;
+    font-family: LexendDeca-Regular, sans-serif;
+    text-transform: none;
     text-align: left;
     cursor: pointer;
     width: 100%;
@@ -56,28 +56,25 @@
 }
 
 .markdown h4{
-    font-size: 1.5rem;
-    font-weight: normal;
+    font-family: LexendDeca-Regular, sans-serif;
+    text-transform: none;
+    font-size: 24px;
     cursor: pointer;
-    margin-bottom: 0.5rem;
+    margin-bottom: 24px;
 }
 
 .markdown h5{
-    font-size: 1.25rem;
-    font-weight: normal;
+    font-family: LexendDeca-Regular, sans-serif;
+    text-transform: none;
+    font-size: 22px;
     cursor: pointer;
 }
 
 .markdown h6{
-    font-size: 1.25rem;
-    font-weight: normal;
-    cursor: pointer;
-    color: #434343;
-}
-
-.markdown h3, .markdown h4, .markdown h5,.markdown h6{
-    color: #ffffff;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    font-family: LexendDeca-Regular, sans-serif;
+    text-transform: none;
+    font-size: 20px;
+    cursor: pointer;;
 }
 
 .markdown h4, .markdown h5,.markdown h6{
@@ -98,23 +95,6 @@
 
 }
 
-.markdown pre{
-    margin-top: 0;
-    padding: 0.5rem 0.25rem;
-    background-color: #ffeeab;
-    border: 1px solid #9f916a;
-    border-radius: 6px;
-    color: #000000;
-}
-
-.markdown code{
-    background-color: #ffeeab;
-    border-radius: 4px;
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-    color: #000000;
-}
-
 .markdown #tutorial-video-container{
     width: 100%;
     text-align: center;
@@ -132,13 +112,19 @@
 
 .markdown table th{
     text-align: left;
-    font-weight: bold;
-    border: 1px solid #eeffeb;
-    padding: 0.25rem;
+    padding: 10px;
+    border: 1px solid white;
+    font-size: 20px;
+    font-family: LexendDeca-Regular, sans-serif;
 }
 
 .markdown table td{
+    border: 1px solid white;
     text-align: left;
-    border: 1px solid #eeffeb;
-    padding: 0.25rem;
+    padding: 10px;
+}
+
+strong{
+    font-family: LexendDeca-Medium, sans-serif;
+    font-weight: normal;
 }
