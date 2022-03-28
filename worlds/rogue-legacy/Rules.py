@@ -47,7 +47,7 @@ def set_rules(world: MultiWorld, player: int):
 
     # Chests
     if world.universal_chests[player]:
-        for i in range(0, world.chests_per_zone[player]):
+        for i in range(0, int(world.chests_per_zone[player])):
             set_rule(world.get_location(f"Chest {i + 1 + (world.chests_per_zone[player] * 1)}", player),
                      lambda state: state.has(ItemName.boss_castle, player))
             set_rule(world.get_location(f"Chest {i + 1 + (world.chests_per_zone[player] * 2)}", player),
@@ -55,7 +55,7 @@ def set_rules(world: MultiWorld, player: int):
             set_rule(world.get_location(f"Chest {i + 1 + (world.chests_per_zone[player] * 3)}", player),
                      lambda state: state.has(ItemName.boss_tower, player))
     else:
-        for i in range(0, world.chests_per_zone[player]):
+        for i in range(0, int(world.chests_per_zone[player])):
             set_rule(world.get_location(f"{LocationName.garden} - Chest {i + 1}", player),
                      lambda state: state.has(ItemName.boss_castle, player))
             set_rule(world.get_location(f"{LocationName.tower} - Chest {i + 1}", player),
@@ -65,7 +65,7 @@ def set_rules(world: MultiWorld, player: int):
 
     # Fairy Chests
     if world.universal_fairy_chests[player]:
-        for i in range(0, world.fairy_chests_per_zone[player]):
+        for i in range(0, int(world.fairy_chests_per_zone[player])):
             set_rule(world.get_location(f"Fairy Chest {i + 1 + (world.fairy_chests_per_zone[player] * 1)}", player),
                      lambda state: state.has(ItemName.boss_castle, player))
             set_rule(world.get_location(f"Fairy Chest {i + 1 + (world.fairy_chests_per_zone[player] * 2)}", player),
@@ -73,7 +73,7 @@ def set_rules(world: MultiWorld, player: int):
             set_rule(world.get_location(f"Fairy Chest {i + 1 + (world.fairy_chests_per_zone[player] * 3)}", player),
                      lambda state: state.has(ItemName.boss_tower, player))
     else:
-        for i in range(0, world.fairy_chests_per_zone[player]):
+        for i in range(0, int(world.fairy_chests_per_zone[player])):
             set_rule(world.get_location(f"{LocationName.garden} - Fairy Chest {i + 1}", player),
                      lambda state: state.has(ItemName.boss_castle, player))
             set_rule(world.get_location(f"{LocationName.tower} - Fairy Chest {i + 1}", player),

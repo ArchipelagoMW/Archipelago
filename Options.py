@@ -53,12 +53,13 @@ class AssembleOptions(type):
 
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
+
 T = typing.TypeVar('T')
 
 
 class Option(typing.Generic[T], metaclass=AssembleOptions):
     value: T
-    name_lookup: typing.Dict[int, str]
+    name_lookup: typing.Dict[T, str]
     default = 0
 
     # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
@@ -71,7 +72,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.get_current_option_name()})"
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.value)
 
     @property
@@ -83,7 +84,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         return self.get_option_name(self.value)
 
     @classmethod
-    def get_option_name(cls, value: typing.Any) -> str:
+    def get_option_name(cls, value: T) -> str:
         if cls.auto_display_name:
             return cls.name_lookup[value].replace("_", " ").title()
         else:
@@ -96,11 +97,91 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         return bool(self.value)
 
     @classmethod
-    def from_any(cls, data: typing.Any):
+    def from_any(cls, data: typing.Any) -> Option[T]:
         raise NotImplementedError
 
 
-class Toggle(Option[int]):
+class NumericOption(Option[int]):
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value == other.value
+        else:
+            return typing.cast(bool, self.value == other)
+
+    def __lt__(self, other: typing.Union[int, NumericOption]) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value < other.value
+        else:
+            return self.value < other
+
+    def __le__(self, other: typing.Union[int, NumericOption]) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value <= other.value
+        else:
+            return self.value <= other
+
+    def __gt__(self, other: typing.Union[int, NumericOption]) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value > other.value
+        else:
+            return self.value > other
+
+    def __bool__(self) -> bool:
+        return bool(self.value)
+
+    def __int__(self) -> int:
+        return self.value
+
+    def __mul__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return self.value * other.value
+        else:
+            return self.value * other
+
+    def __rmul__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return other.value * self.value
+        else:
+            return other * self.value
+
+    def __sub__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return self.value - other.value
+        else:
+            return self.value - other
+
+    def __rsub__(self, left: typing.Any) -> typing.Any:
+        if isinstance(left, NumericOption):
+            return left.value - self.value
+        else:
+            return left - self.value
+
+    def __add__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return self.value + other.value
+        else:
+            return self.value + other
+
+    def __radd__(self, left: typing.Any) -> typing.Any:
+        if isinstance(left, NumericOption):
+            return left.value + self.value
+        else:
+            return left + self.value
+
+    def __truediv__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return self.value / other.value
+        else:
+            return self.value / other
+
+    def __rtruediv__(self, left: typing.Any) -> typing.Any:
+        if isinstance(left, NumericOption):
+            return left.value / self.value
+        else:
+            return left / self.value
+
+
+class Toggle(NumericOption):
     option_false = 0
     option_true = 1
     default = 0
@@ -123,24 +204,6 @@ class Toggle(Option[int]):
         else:
             return cls(data)
 
-    def __eq__(self, other):
-        if isinstance(other, Toggle):
-            return self.value == other.value
-        else:
-            return self.value == other
-
-    def __gt__(self, other):
-        if isinstance(other, Toggle):
-            return self.value > other.value
-        else:
-            return self.value > other
-
-    def __bool__(self):
-        return bool(self.value)
-
-    def __int__(self):
-        return int(self.value)
-
     @classmethod
     def get_option_name(cls, value):
         return ["No", "Yes"][int(value)]
@@ -152,7 +215,7 @@ class DefaultOnToggle(Toggle):
     default = 1
 
 
-class Choice(Option[int]):
+class Choice(NumericOption):
     auto_display_name = True
 
     def __init__(self, value: int):
@@ -209,7 +272,7 @@ class Choice(Option[int]):
     __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
-class Range(Option[int], int):
+class Range(NumericOption):
     range_start = 0
     range_end = 1
 
@@ -251,6 +314,13 @@ class Range(Option[int], int):
                     return cls(int(round(random.randint(random_range[0], random_range[1]))))
             else:
                 return cls(random.randint(cls.range_start, cls.range_end))
+        elif text in {"on", "true", "default", "yes", "high"}:
+            if hasattr(cls, "default") and text != "high":
+                return cls(cls.default)
+            else:  # "high" or there is no default
+                return cls(cls.range_end)
+        elif text in {"off", "false", "none", "null", "no", "low"}:
+            return cls(cls.range_start)
         return cls(int(text))
 
     @classmethod
@@ -259,10 +329,11 @@ class Range(Option[int], int):
             return cls(data)
         return cls.from_text(str(data))
 
-    def get_option_name(self, value):
+    @classmethod
+    def get_option_name(cls, value: int) -> str:
         return str(value)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.value)
 
 
@@ -404,8 +475,12 @@ class Accessibility(Choice):
     default = 1
 
 
-class ProgressionBalancing(DefaultOnToggle):
-    """A system that moves progression earlier, to try and prevent the player from getting stuck and bored early."""
+class ProgressionBalancing(Range):
+    """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+    [0-20, default 10] A lower setting means more getting stuck. A higher setting means less getting stuck."""
+    default = 10  # approximates the old 20/216 bound
+    range_start = 0
+    range_end = 20
     display_name = "Progression Balancing"
 
 
