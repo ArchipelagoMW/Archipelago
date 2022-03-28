@@ -5,7 +5,6 @@ import itertools
 from collections import Counter, deque
 
 from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item
-from Options import ProgressionBalancing
 
 from worlds.AutoWorld import call_all
 
@@ -312,7 +311,7 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
     # If other players are below the threshold value, swap progression in this sphere into earlier spheres,
     #   which gives more locations available by this sphere.
     balanceable_players = {
-        player: (ProgressionBalancing.range_end + 1 - world.progression_balancing[player]) / 100
+        player: world.progression_balancing[player] / 100
         for player in world.player_ids
         if world.progression_balancing[player] > 0
     }
@@ -370,7 +369,7 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
                 max_percentage = max(map(lambda p: item_percentage(p, reachable_locations_count[p]),
                                          reachable_locations_count))
                 threshold_percentages = {
-                    player: max_percentage - balanceable_players[player]
+                    player: max_percentage * balanceable_players[player]
                     for player in balanceable_players
                 }
                 logging.debug(f"Thresholds: {threshold_percentages}")
