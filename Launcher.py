@@ -4,49 +4,27 @@ Archipelago launcher for bundled app.
 * if run with APBP as argument, launch corresponding client.
 * if run with executable as argument, run it passing argv[2:] as arguments
 * if run without arguments, open launcher GUI
+
+Scroll down to components= to add components to the launcher as well as setup.py
 """
+
+
 import argparse
 import os.path
 import sys
-import typing
+from typing import Iterable, Callable, Union, Optional
 import subprocess
 import itertools
-from Utils import is_frozen, user_path, local_path
+from Utils import is_frozen, user_path, local_path, init_logging
 from shutil import which
 import shlex
+from enum import Enum, auto
+import logging
 
 
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform == 'darwin'
 is_windows = sys.platform in ("win32", "cygwin", "msys")
-
-
-sni_suffixes = ('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3')
-patch_suffixes = {
-    'SNIClient': sni_suffixes
-}
-_frozen_name_rewrites = {
-    'MultiServer': 'ArchipelagoServer',
-    'CommonClient': 'ArchipelagoTextClient',
-}
-_canonical_names = {
-    'Server': 'MultiServer',
-    'TextClient': 'CommonClient',
-}
-_cli_components = ('Generate', 'MultiServer')
-_tools = {
-    'Generate': 'Generate',
-    'Host': 'MultiServer',
-    'LttP Adjuster': 'LttPAdjuster',
-    'OoT Adjuster': 'OoTAdjuster',
-}
-_clients = {
-    'SNI Client': 'SNIClient',
-    'Factorio Client': 'FactorioClient',
-    'FF1 Client': 'FF1Client',
-    'Minecraft Client': 'MinecraftClient',
-    'Text Client': 'CommonClient',
-}
 
 
 def open_host_yaml():
@@ -63,6 +41,28 @@ def open_host_yaml():
         webbrowser.open(file)
 
 
+def open_patch():
+    try:
+        import tkinter
+        import tkinter.filedialog
+    except Exception as e:
+        logging.error("Could not load tkinter, which is likely not installed. "
+                      "This attempt was made because no .archipelago file was provided as argument. "
+                      "Either provide a file or ensure the tkinter package is installed.")
+        raise e
+    else:
+        root = tkinter.Tk()
+        root.withdraw()
+        suffixes = []
+        for c in components:
+            suffixes += c.file_identifier.suffixes if c.type == Type.CLIENT and \
+                                                      isinstance(c.file_identifier, SuffixIdentifier) else []
+        filename = tkinter.filedialog.askopenfilename(filetypes=(('Patches', ' '.join(suffixes)),))
+        file, component = identify(filename)
+        if file and component:
+            subprocess.run([*get_exe(component), file])
+
+
 def browse_files():
     file = user_path()
     if is_linux:
@@ -76,46 +76,124 @@ def browse_files():
         webbrowser.open(file)
 
 
-_funcs = {
-    'Open host.yaml': open_host_yaml,
-    'Browse Files': browse_files,
+class Type(Enum):
+    TOOL = auto()
+    FUNC = auto()  # not a real component
+    CLIENT = auto()
+    ADJUSTER = auto()
+
+
+class SuffixIdentifier:
+    suffixes: Iterable[str]
+
+    def __init__(self, *args: str):
+        self.suffixes = args
+
+    def __call__(self, path: str):
+        for suffix in self.suffixes:
+            if path.endswith(suffix):
+                return True
+        return False
+
+
+class Component:
+    display_name: str
+    type: Optional[Type]
+    script_name: Optional[str]
+    frozen_name: Optional[str]
+    icon: str  # just the name, no suffix
+    cli: bool
+    func: Optional[Callable]
+    file_identifier: Optional[Callable[[str], bool]]
+
+    def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
+                 cli: bool = False, icon: str = 'icon', component_type: Type = None, func: Optional[Callable] = None,
+                 file_identifier: Optional[Callable[[str], bool]] = None):
+        self.display_name = display_name
+        self.script_name = script_name
+        self.frozen_name = frozen_name or f'Archipelago{script_name}' if script_name else None
+        self.icon = icon
+        self.cli = cli
+        self.type = component_type or \
+            None if not display_name else \
+            Type.FUNC if func else \
+            Type.CLIENT if 'Client' in display_name else \
+            Type.ADJUSTER if 'Adjuster' in display_name else Type.TOOL
+        self.func = func
+        self.file_identifier = file_identifier
+
+    def handles_file(self, path: str):
+        return self.file_identifier(path) if self.file_identifier else False
+
+
+components: Iterable[Component] = (
+    # Launcher
+    Component(None, 'Launcher'),
+    # Core
+    Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
+              file_identifier=SuffixIdentifier('.archipelago', '.zip')),
+    Component('Generate', 'Generate', cli=True),
+    Component('Text Client', 'CommonClient', 'ArchipelagoTextClient'),
+    # SNI
+    Component('SNI Client', 'SNIClient',
+              file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3')),
+    Component('LttP Adjuster', 'LttPAdjuster'),
+    # Factorio
+    Component('Factorio Client', 'FactorioClient'),
+    # Minecraft
+    Component('Minecraft Client', 'MinecraftClient', icon='mcicon',
+              file_identifier=SuffixIdentifier('.apmc')),
+    # Ocarina of Time
+    Component('OoT Client', 'OoTClient',
+              file_identifier=SuffixIdentifier('.apz5')),
+    Component('OoT Adjuster', 'OoTAdjuster'),
+    # FF1
+    Component('FF1 Client', 'FF1Client'),
+    # ChecksFinder
+    Component('ChecksFinder Client', 'ChecksFinderClient'),
+    # Functions
+    Component('Open host.yaml', func=open_host_yaml),
+    Component('Open Patch', func=open_patch),
+    Component('Browse Files', func=browse_files),
+)
+icon_paths = {
+    'icon': local_path('data', 'icon.ico' if is_windows else 'icon.png'),
+    'mcicon': local_path('data', 'mcicon.ico')
 }
 
 
-def identify(path: typing.Union[None, str]):
+def identify(path: Union[None, str]):
     if path is None:
         return None, None
-    if path.endswith('.archipelago') or path.endswith('.zip'):
-        return path, 'MultiServer'
-    for component, suffixes in patch_suffixes.items():
-        for suffix in suffixes:
-            if path.endswith(suffix):
-                return path, component
-    return None, None if '/' in path or '\\' in path else path
+    for component in components:
+        if component.handles_file(path):
+            return path, component.script_name
+    return (None, None) if '/' in path or '\\' in path else (None, path)
 
 
-def get_frozen_name(name: str) -> str:
-    if name in _frozen_name_rewrites:
-        return _frozen_name_rewrites[name]
-    return f'Archipelago{name}'
-
-
-def get_exe(component: str) -> str:
-    if component.startswith('Archipelago'):
-        component = component[11:]
-    if component.endswith('.exe'):
-        component = component[:-4]
-    if component.endswith('.py'):
-        component = component[:-3]
-    if not component:
-        return None
-    if component in _canonical_names:
-        component = _canonical_names[component]
+def get_exe(component: Union[str, Component]) -> str:
+    if isinstance(component, str):
+        name = component
+        component = None
+        if name.startswith('Archipelago'):
+            name = name[11:]
+        if name.endswith('.exe'):
+            name = name[:-4]
+        if name.endswith('.py'):
+            name = name[:-3]
+        if not name:
+            return None
+        for c in components:
+            if c.script_name == name or c.frozen_name == f'Archipelago{name}':
+                component = c
+                break
+        if not component:
+            return None
     if is_frozen():
         suffix = '.exe' if is_windows else ''
-        return [local_path(f'{get_frozen_name(component)}{suffix}')]
+        return [local_path(f'{component.frozen_name}{suffix}')]
     else:
-        return [sys.executable, local_path(f'{component}.py')]
+        return [sys.executable, local_path(f'{component.script_name}.py')]
 
 
 def launch(exe, in_terminal=False):
@@ -148,6 +226,11 @@ def run_gui():
     class Launcher(App):
         base_title: str = "Archipelago Launcher"
 
+        _tools = {c.display_name: c for c in components if c.type == Type.TOOL}
+        _clients = {c.display_name: c for c in components if c.type == Type.CLIENT}
+        _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER}
+        _funcs = {c.display_name: c for c in components if c.type == Type.FUNC}
+
         def __init__(self, ctx=None):
             self.title = self.base_title
             self.ctx = ctx
@@ -156,11 +239,12 @@ def run_gui():
 
         def build(self):
             self.container = ContainerLayout()
-            self.grid = GridLayout(cols=3)
+            self.grid = GridLayout(cols=2)
             self.container.add_widget(self.grid)
 
             self.button_layout = self.grid  # make buttons fill the window
-            for (tool, client, func) in itertools.zip_longest(_tools.items(), _clients.items(), _funcs.items()):
+            for (tool, client) in itertools.zip_longest(itertools.chain(
+                    self._tools.items(), self._funcs.items(), self._adjusters.items()), self._clients.items()):
                 # column 1
                 if tool:
                     button = Button(text=tool[0])
@@ -177,28 +261,20 @@ def run_gui():
                     self.button_layout.add_widget(button)
                 else:
                     self.button_layout.add_widget(Label())
-                # column 3
-                if func:
-                    button = Button(text=func[0])
-                    button.func = func[1]
-                    button.bind(on_press=self.func_action)
-                    self.button_layout.add_widget(button)
-                else:
-                    self.button_layout.add_widget(Label())
 
             return self.container
 
         def component_action(self, button):
-            launch(get_exe(button.component), button.component in _cli_components)
-
-        def func_action(self, button):
-            button.func()
+            if button.component.type == Type.FUNC:
+                button.component.func()
+            else:
+                launch(get_exe(button.component), button.component.cli)
 
     Launcher().run()
 
 
-def main(args: typing.Union[argparse.Namespace, dict] = {}):
-    if type(args) is argparse.Namespace:
+def main(args: Union[argparse.Namespace, dict] = {}):
+    if isinstance(args, argparse.Namespace):
         args = {k: v for k, v in args._get_kwargs()}
 
     if "Patch|Game|Component" in args:
@@ -217,6 +293,7 @@ def main(args: typing.Union[argparse.Namespace, dict] = {}):
 
 
 if __name__ == '__main__':
+    init_logging('Launcher')
     parser = argparse.ArgumentParser(description='Archipelago Launcher')
     parser.add_argument('Patch|Game|Component', type=str, nargs='?',
                         help="Pass either a patch file, a generated game or the name of a component to run.")

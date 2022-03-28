@@ -10,6 +10,7 @@ from Utils import version_tuple
 from collections.abc import Iterable
 import typing
 import setuptools
+from Launcher import components, icon_paths
 
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
@@ -40,40 +41,16 @@ arch_folder = "exe.{platform}-{version}".format(platform=sysconfig.get_platform(
 buildfolder = Path("build", arch_folder)
 is_windows = sys.platform in ("win32", "cygwin", "msys")
 
-icon = os.path.join("data", "icon.ico" if is_windows else "icon.png")
-mcicon = os.path.join("data", "mcicon.ico")
 
-
-scripts = {
-    # Launcher
-    "Launcher.py": ("ArchipelagoLauncher", True, icon),
-    # Core
-    "MultiServer.py": ("ArchipelagoServer", False, icon),
-    "Generate.py": ("ArchipelagoGenerate", False, icon),
-    "CommonClient.py": ("ArchipelagoTextClient", True, icon),
-    # SNI
-    "SNIClient.py": ("ArchipelagoSNIClient", True, icon),
-    "LttPAdjuster.py": ("ArchipelagoLttPAdjuster", True, icon),
-    # Factorio
-    "FactorioClient.py": ("ArchipelagoFactorioClient", True, icon),
-    # Minecraft
-    "MinecraftClient.py": ("ArchipelagoMinecraftClient", False, mcicon),
-    # Ocarina of Time
-    "OoTClient.py": ("ArchipelagoOoTClient", True, icon),
-    "OoTAdjuster.py": ("ArchipelagoOoTAdjuster", True, icon),
-    # FF1
-    "FF1Client.py": ("ArchipelagoFF1Client", True, icon),
-    # ChecksFinder
-    "ChecksFinderClient.py": ("ArchipelagoChecksFinderClient", True, icon),
-}
-
+# see Launcher.py on how to add scripts to setup.py
 exes = [
     cx_Freeze.Executable(
-        script=script,
-        target_name=script_name + (".exe" if is_windows else ""),
-        icon=icon,
-        base="Win32GUI" if is_windows and gui else None
-    ) for script, (script_name, gui, icon) in scripts.items()]
+        script=f'{c.script_name}.py',
+        target_name=c.frozen_name + (".exe" if is_windows else ""),
+        icon=icon_paths[c.icon],
+        base="Win32GUI" if is_windows and not c.cli else None
+    ) for c in components if c.script_name
+]
 
 extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI"]
 
