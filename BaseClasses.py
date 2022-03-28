@@ -91,7 +91,6 @@ class MultiWorld():
             lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
         self.fix_trock_exit = self.AttributeProxy(
             lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
-        self.NOTCURSED = self.AttributeProxy(lambda player: not self.CURSED[player])
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
@@ -518,8 +517,9 @@ class MultiWorld():
 
         def location_relevant(location: Location):
             """Determine if this location is relevant to sweep."""
-            if location.player in players["locations"] or location.event or \
-                    (location.item and location.item.advancement):
+            if location.progress_type != LocationProgressType.EXCLUDED \
+                and (location.player in players["locations"] or location.event
+                     or (location.item and location.item.advancement)):
                 return True
             return False
 
