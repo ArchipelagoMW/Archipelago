@@ -60,7 +60,7 @@ def open_patch():
         filename = tkinter.filedialog.askopenfilename(filetypes=(('Patches', ' '.join(suffixes)),))
         file, component = identify(filename)
         if file and component:
-            subprocess.run([*get_exe(component), file])
+            subprocess.Popen([*get_exe(component), file])
 
 
 def browse_files():
