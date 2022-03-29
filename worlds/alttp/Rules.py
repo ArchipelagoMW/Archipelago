@@ -988,11 +988,11 @@ def set_trock_key_rules(world, player):
         set_rule(world.get_entrance('Turtle Rock (Pokey Room) (North)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 3))
         set_rule(world.get_entrance('Turtle Rock Entrance to Pokey Room', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 5))
     else:
-        # Middle to front requires 3/4 keys if the back is locked, otherwise 6
+        # Middle to front requires 3 keys if the back is locked by this door, otherwise 6
         set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 3)
-                if item_in_locations(state, 'Big Key (Turtle Rock)', player, front_locked_locations)
+                if item_in_locations(state, 'Big Key (Turtle Rock)', player, front_locked_locations.union({('Turtle Rock - Pokey 1 Key Drop', player)}))
                 else state._lttp_has_key('Small Key (Turtle Rock)', player, 6))
-        # Middle to front requires 3/4 keys if the back is locked, otherwise 6
+        # Middle to front requires 4 keys if the back is locked by this door, otherwise 6
         set_rule(world.get_entrance('Turtle Rock (Pokey Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 4)
                 if item_in_locations(state, 'Big Key (Turtle Rock)', player, front_locked_locations)
                 else state._lttp_has_key('Small Key (Turtle Rock)', player, 6))
