@@ -6,6 +6,7 @@ from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable, Unio
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
+from WebHostLib import Room
 
 
 class AutoWorldRegister(type):
@@ -248,6 +249,9 @@ class World(metaclass=AutoWorldRegister):
     def modify_multidata(self, multidata: dict):
         """For deeper modification of server multidata."""
         pass
+
+    def get_required_client_version(self) -> Tuple[int, int, int]:
+        return 0, 1, 6
 
     # Spoiler writing is optional, these may not get called.
     def write_spoiler_header(self, spoiler_handle: TextIO):
