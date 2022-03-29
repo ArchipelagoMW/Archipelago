@@ -1,100 +1,43 @@
-#tutorial-landing{
-    display: flex;
-    flex-direction: column;
-    max-width: 70rem;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
-    padding: 1rem 1rem 3rem;
-    color: #eeffeb;
-}
+#tutorial-landing{}
 
-#tutorial-landing p{
-    margin: 0;
-}
-
-#tutorial-landing a{
-    color: #ffef00;
-    text-decoration: none;
+#tutorial-landing h2, #tutorial-landing h3, #tutorial-landing h4, #tutorial-landing h5, #tutorial-landing h6 {
+    text-transform: none;
+    cursor: unset;
 }
 
 #tutorial-landing h1{
-    font-size: 2.5rem;
-    font-weight: normal;
-    border-bottom: 1px solid #ffffff;
-    width: 100%;
-    margin-bottom: 0.5rem;
-    color: #ffffff;
-    text-shadow: 1px 1px 4px #000000;
+    font-size: 60px;
+    cursor: unset;
 }
 
 #tutorial-landing h2{
-    font-size: 2rem;
-    font-weight: normal;
-    border-bottom: 1px solid #ffffff;
-    width: 100%;
-    margin-bottom: 0.5rem;
-    color: #ffe993;
-    text-transform: lowercase;
-    text-shadow: 1px 1px 2px #000000;
+    color: #fff677;
+    margin-bottom: 2px;
+    margin-top: 33px;
+    font-size: 44px;
 }
 
-#tutorial-landing h3{
-    font-size: 1.70rem;
-    font-weight: normal;
-    text-align: left;
-    width: 100%;
-    margin-bottom: 0.5rem;
+#tutorial-landing a{
+    font-size: 16px;
 }
 
-#tutorial-landing h4{
-    font-size: 1.5rem;
-    font-weight: normal;
-    margin-bottom: 0.5rem;
+#tutorial-landing .link-spacer{
+    margin: 0 6px;
+    color: #fffc95;
 }
 
-#tutorial-landing h5{
-    font-size: 1.25rem;
-    font-weight: normal;
-}
-
-#tutorial-landing h6{
-    font-size: 1.25rem;
-    font-weight: normal;
-    color: #434343;
-}
-
-#tutorial-landing h3, #tutorial-landing h4, #tutorial-landing h5,#tutorial-landing h6{
-    color: #ffffff;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+#tutorial-landing p{
+    line-height: 25px;
+    margin-bottom: 7px;
+    font-size: 17px;
 }
 
 #tutorial-landing ul{
-
-}
-
-#tutorial-landing ol{
-
+    font-size: 17px;
+    margin-top: 0;
+    margin-bottom: 26px;
 }
 
 #tutorial-landing li{
-
-}
-
-#tutorial-landing pre{
-    margin-top: 0;
-    padding: 0.5rem 0.25rem;
-    background-color: #ffeeab;
-    border: 1px solid #9f916a;
-    border-radius: 6px;
-    color: #000000;
-}
-
-#tutorial-landing code{
-    background-color: #ffeeab;
-    border-radius: 4px;
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-    color: #000000;
+    line-height: 22px;
 }

@@ -1,0 +1,65 @@
+html{
+    background-image: url('../../static/backgrounds/ocean.png');
+    background-repeat: repeat;
+    background-size: 400px 400px;
+}
+
+body{
+    color: #ffffff;
+}
+
+#base-header{
+    background: url('../../static/backgrounds/header/ocean-header.png') repeat-x;
+}
+
+.markdown {
+    background-color: rgba(17, 35, 62, 0.55) !important;
+}
+
+h1{
+    color: #ffffff;
+}
+
+h2{
+    color: #93dcff;
+}
+
+h3, h4, h5,h6{
+    color: #ffffff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+table th{
+
+}
+
+table td{
+
+}
+
+a{
+    color: #fffc95;
+}
+
+pre{
+    margin-top: 0;
+    padding: 0.5rem 0.25rem;
+    background-color: #83a8e1;
+    border: 1px solid #4c658b;
+    border-radius: 6px;
+    color: #000000;
+    overflow-x: auto;
+}
+
+pre code{
+    border: none;
+}
+
+code{
+    background-color: #83a8e1;
+    border-radius: 4px;
+    border: 1px solid #4c658b;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    color: #000000;
+}
