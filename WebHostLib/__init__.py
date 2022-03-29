@@ -70,6 +70,12 @@ app.url_map.converters["suuid"] = B64UUIDConverter
 app.jinja_env.filters['suuid'] = lambda value: base64.urlsafe_b64encode(value.bytes).rstrip(b'=').decode('ascii')
 
 
+def get_world_theme(game_name: str):
+    if game_name in AutoWorldRegister.world_types:
+        return AutoWorldRegister.world_types[game_name].web.theme
+    return 'grass'
+
+
 @app.before_request
 def register_session():
     session.permanent = True  # technically 31 days after the last visit
@@ -97,13 +103,13 @@ def weighted_settings():
 # Player settings pages
 @app.route('/games/<string:game>/player-settings')
 def player_settings(game):
-    return render_template(f"player-settings.html", game=game)
+    return render_template(f"player-settings.html", game=game, theme=get_world_theme(game))
 
 
 # Game Info Pages
 @app.route('/games/<string:game>/info/<string:lang>')
 def game_info(game, lang):
-    return render_template('gameInfo.html', game=game, lang=lang)
+    return render_template('gameInfo.html', game=game, lang=lang, theme=get_world_theme(game))
 
 
 # List of supported games
@@ -118,7 +124,7 @@ def games():
 
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
 def tutorial(game, file, lang):
-    return render_template("tutorial.html", game=game, file=file, lang=lang)
+    return render_template("tutorial.html", game=game, file=file, lang=lang, theme=get_world_theme(game))
 
 
 @app.route('/tutorial/')
