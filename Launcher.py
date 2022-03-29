@@ -47,8 +47,7 @@ def open_patch():
         import tkinter.filedialog
     except Exception as e:
         logging.error("Could not load tkinter, which is likely not installed. "
-                      "This attempt was made because no .archipelago file was provided as argument. "
-                      "Either provide a file or ensure the tkinter package is installed.")
+                      "This attempt was made because Launcher.open_patch was used.")
         raise e
     else:
         root = tkinter.Tk()
