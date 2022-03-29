@@ -10,9 +10,9 @@ Scroll down to components= to add components to the launcher as well as setup.py
 
 
 import argparse
-import os.path
+from os.path import isfile
 import sys
-from typing import Iterable, Callable, Union, Optional
+from typing import Iterable, Sequence, Callable, Union, Optional
 import subprocess
 import itertools
 from Utils import is_frozen, user_path, local_path, init_logging
@@ -55,7 +55,7 @@ def open_patch():
         root.withdraw()
         suffixes = []
         for c in components:
-            if os.path.isfile(get_exe(c)[-1]):
+            if isfile(get_exe(c)[-1]):
                 suffixes += c.file_identifier.suffixes if c.type == Type.CLIENT and \
                                                           isinstance(c.file_identifier, SuffixIdentifier) else []
         filename = tkinter.filedialog.askopenfilename(filetypes=(('Patches', ' '.join(suffixes)),))
@@ -130,7 +130,7 @@ class Component:
 
 components: Iterable[Component] = (
     # Launcher
-    Component(None, 'Launcher'),
+    Component('', 'Launcher'),
     # Core
     Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
               file_identifier=SuffixIdentifier('.archipelago', '.zip')),
@@ -173,7 +173,7 @@ def identify(path: Union[None, str]):
     return (None, None) if '/' in path or '\\' in path else (None, path)
 
 
-def get_exe(component: Union[str, Component]) -> str:
+def get_exe(component: Union[str, Component]) -> Optional[Sequence[str]]:
     if isinstance(component, str):
         name = component
         component = None
@@ -221,16 +221,18 @@ def run_gui():
     else:
         from kivy.app import App
         from kivy.uix.button import Button
-        from kivy.uix.gridlayout import GridLayout as GridLayout
         from kivy.uix.floatlayout import FloatLayout as ContainerLayout
+        from kivy.uix.gridlayout import GridLayout
         from kivy.uix.label import Label
 
     class Launcher(App):
         base_title: str = "Archipelago Launcher"
+        container: ContainerLayout
+        grid: GridLayout
 
-        _tools = {c.display_name: c for c in components if c.type == Type.TOOL and os.path.isfile(get_exe(c)[-1])}
-        _clients = {c.display_name: c for c in components if c.type == Type.CLIENT and os.path.isfile(get_exe(c)[-1])}
-        _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER and os.path.isfile(get_exe(c)[-1])}
+        _tools = {c.display_name: c for c in components if c.type == Type.TOOL and isfile(get_exe(c)[-1])}
+        _clients = {c.display_name: c for c in components if c.type == Type.CLIENT and isfile(get_exe(c)[-1])}
+        _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER and isfile(get_exe(c)[-1])}
         _funcs = {c.display_name: c for c in components if c.type == Type.FUNC}
 
         def __init__(self, ctx=None):
@@ -244,7 +246,7 @@ def run_gui():
             self.grid = GridLayout(cols=2)
             self.container.add_widget(self.grid)
 
-            self.button_layout = self.grid  # make buttons fill the window
+            button_layout = self.grid  # make buttons fill the window
             for (tool, client) in itertools.zip_longest(itertools.chain(
                     self._tools.items(), self._funcs.items(), self._adjusters.items()), self._clients.items()):
                 # column 1
@@ -252,21 +254,22 @@ def run_gui():
                     button = Button(text=tool[0])
                     button.component = tool[1]
                     button.bind(on_release=self.component_action)
-                    self.button_layout.add_widget(button)
+                    button_layout.add_widget(button)
                 else:
-                    self.button_layout.add_widget(Label())
+                    button_layout.add_widget(Label())
                 # column 2
                 if client:
                     button = Button(text=client[0])
                     button.component = client[1]
                     button.bind(on_press=self.component_action)
-                    self.button_layout.add_widget(button)
+                    button_layout.add_widget(button)
                 else:
-                    self.button_layout.add_widget(Label())
+                    button_layout.add_widget(Label())
 
             return self.container
 
-        def component_action(self, button):
+        @staticmethod
+        def component_action(button):
             if button.component.type == Type.FUNC:
                 button.component.func()
             else:
@@ -275,9 +278,11 @@ def run_gui():
     Launcher().run()
 
 
-def main(args: Union[argparse.Namespace, dict] = {}):
+def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     if isinstance(args, argparse.Namespace):
         args = {k: v for k, v in args._get_kwargs()}
+    elif not args:
+        args = {}
 
     if "Patch|Game|Component" in args:
         file, component = identify(args["Patch|Game|Component"])
