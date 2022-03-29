@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from flask import render_template
 import logging
-from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable, Union
+from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, Counter
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
+from WebHostLib import Room
 
 
 class AutoWorldRegister(type):
@@ -92,6 +94,26 @@ class WebWorld:
     # Choose a theme for your /game/* pages
     # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime
     theme = "grass"
+
+    def get_player_tracker(self, multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+                           inventory: Counter, team: int, player: int, player_name: str) -> str:
+        checked_locations = multisave.get("location_checks", {}).get((team, player), set())
+        player_received_items = {}
+        if multisave.get('version', 0) > 0:
+            # add numbering to all items but starter_inventory
+            ordered_items = multisave.get('received_items', {}).get((team, player, True), [])
+        else:
+            ordered_items = multisave.get('received_items', {}).get((team, player), [])
+
+        for order_index, networkItem in enumerate(ordered_items, start=1):
+            player_received_items[networkItem.item] = order_index
+
+        return render_template("genericTracker.html",
+                               inventory=inventory,
+                               player=player, team=team, room=room, player_name=player_name,
+                               checked_locations=checked_locations,
+                               not_checked_locations=set(locations[player]) - checked_locations,
+                               received_items=player_received_items, theme=self.theme)
 
     # display a link to a bug report page, most likely a link to a GitHub issue page.
     bug_report_page: Optional[str]
