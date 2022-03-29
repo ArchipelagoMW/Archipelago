@@ -347,24 +347,8 @@ def global_rules(world, player):
     # If have big key: then you will need 2 small keys to be able to hit switch and return to main area, as you can burn key in dark room
     # If not big key: cannot burn key in dark room, hence need only 1 key. all doors immediately available lead to a crystal switch.
     # The listed chests are those which can be reached if you can reach a crystal switch.
-    set_rule(world.get_location('Misery Mire - Map Chest', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 1) 
-        if item_in_locations(state, 'Big Key (Misery Mire)', player, 
-            [('Misery Mire - Map Chest', player),
-             ('Misery Mire - Main Lobby', player),
-             ('Misery Mire - Fishbone Pot Key', player),
-             ('Misery Mire - Conveyor Crystal Key Drop', player),
-             ('Misery Mire - Compass Chest', player),
-             ('Misery Mire - Big Key Chest', player)])
-        else state._lttp_has_key('Small Key (Misery Mire)', player, 2))
-    set_rule(world.get_location('Misery Mire - Main Lobby', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 1) 
-        if item_in_locations(state, 'Big Key (Misery Mire)', player, 
-            [('Misery Mire - Map Chest', player),
-             ('Misery Mire - Main Lobby', player),
-             ('Misery Mire - Fishbone Pot Key', player),
-             ('Misery Mire - Conveyor Crystal Key Drop', player),
-             ('Misery Mire - Compass Chest', player),
-             ('Misery Mire - Big Key Chest', player)])
-        else state._lttp_has_key('Small Key (Misery Mire)', player, 2))
+    set_rule(world.get_location('Misery Mire - Map Chest', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 2))
+    set_rule(world.get_location('Misery Mire - Main Lobby', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 2))
     # we can place a small key in the West wing iff it also contains/blocks the Big Key, as we cannot reach and softlock with the basement key door yet
     set_rule(world.get_location('Misery Mire - Conveyor Crystal Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 4) 
