@@ -290,6 +290,10 @@ def get_static_room_data(room: Web.Room):
 @Web.app.route('/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
 @Web.cache.memoize(timeout=60)  # multisave is currently created at most every minute
 def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool = False):
+    return build_trackers(tracker, tracked_team, tracked_player, 'specific')
+
+
+def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: str = 'generic'):
     # Team and player must be positive and greater than zero
     if tracked_team < 0 or tracked_player < 1:
         abort(404)
@@ -304,7 +308,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
     player_name = names[tracked_team][tracked_player - 1]
     location_to_area = player_location_to_area[tracked_player]
     inventory = collections.Counter()
-    checks_done = {loc_name: 0 for loc_name in default_locations}
+    lttp_checks_done = {loc_name: 0 for loc_name in default_locations}
 
     # Add starting items to inventory
     starting_items = precollected_items[tracked_player]
@@ -317,6 +321,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
     else:
         multisave: Dict[str, Any] = {}
 
+    checked_locations = multisave.get("location_checks", {}).get((tracked_team, tracked_player), set())
     # Add items to player inventory
     for (ms_team, ms_player), locations_checked in multisave.get("location_checks", {}).items():
         # Skip teams and players not matching the request
@@ -332,24 +337,25 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
                     if recipient == tracked_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
                     if ms_player == tracked_player:  # a check done by the tracked player
-                        checks_done[location_to_area[location]] += 1
-                        checks_done["Total"] += 1
+                        lttp_checks_done[location_to_area[location]] += 1
+                        lttp_checks_done["Total"] += 1
+
     game_name = games[tracked_player]
-    if game_name in game_specific_trackers and not want_generic:
+    if game_name in game_specific_trackers and type is not 'generic':
         specific_tracker = game_specific_trackers.get(game_name, None)
         return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                seed_checks_in_area, checks_done, slot_data)
-    elif game_name in AutoWorldRegister.world_types:
+                                seed_checks_in_area, checked_locations, slot_data[tracked_player])
+    elif game_name in AutoWorldRegister.world_types and type is not 'generic':
         webworld = AutoWorldRegister.world_types[game_name].web
-        return webworld.get_player_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
+        return webworld.get_player_tracker(multisave, room, locations, inventory, tracked_team, tracked_player,
+                                           player_name, checked_locations)
     else:
-        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                      seed_checks_in_area, checks_done)
+        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
 
 
 @Web.app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
 def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
-    return getPlayerTracker(tracker, tracked_team, tracked_player, True)
+    return build_trackers(tracker, tracked_team, tracked_player)
 
 
 def __renderAlttpTracker(multisave: Dict[str, Any], room: Web.Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
@@ -811,6 +817,7 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Web.Room, locati
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             options=options, **display_data)
 
+
 def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Web.Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                                 inventory: Counter, team: int, player: int, playerName: str,
                                 seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
@@ -912,9 +919,9 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Web.Room, locat
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
+
 def __renderGenericTracker(multisave: Dict[str, Any], room: Web.Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
-                           inventory: Counter, team: int, player: int, playerName: str,
-                           seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
+                           inventory: Counter, team: int, player: int, player_name: str) -> str:
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set())
     player_received_items = {}
@@ -928,11 +935,11 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Web.Room, locations:
         player_received_items[networkItem.item] = order_index
 
     return render_template("genericTracker.html",
-                            inventory=inventory,
-                            player=player, team=team, room=room, player_name=playerName,
-                            checked_locations=checked_locations,
-                            not_checked_locations=set(locations[player]) - checked_locations,
-                            received_items=player_received_items)
+                           inventory=inventory,
+                           player=player, team=team, room=room, player_name=player_name,
+                           checked_locations=checked_locations,
+                           not_checked_locations=set(locations[player]) - checked_locations,
+                           received_items=player_received_items)
 
 
 @Web.app.route('/tracker/<suuid:tracker>')
@@ -1035,9 +1042,9 @@ def getTracker(tracker: UUID):
 
 
 game_specific_trackers: typing.Dict[str, typing.Callable] = {
+    "Minecraft": __renderMinecraftTracker,
     "Ocarina of Time": __renderOoTTracker,
     "Timespinner": __renderTimespinnerTracker,
     "A Link to the Past": __renderAlttpTracker,
     "Super Metroid": __renderSuperMetroidTracker,
-    "Minecraft": __renderMinecraftTracker
 }
