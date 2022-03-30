@@ -8,7 +8,7 @@ import datetime
 from uuid import UUID
 
 from worlds.alttp import Items
-import WebHostLib as Web
+from WebHostLib import app, cache, Room
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
 from worlds.AutoWorld import AutoWorldRegister
@@ -83,8 +83,8 @@ def get_alttp_id(item_name):
     return Items.item_table[item_name][2]
 
 
-Web.app.jinja_env.filters["location_name"] = lambda location: lookup_any_location_id_to_name.get(location, location)
-Web.app.jinja_env.filters['item_name'] = lambda id: lookup_any_item_id_to_name.get(id, id)
+app.jinja_env.filters["location_name"] = lambda location: lookup_any_location_id_to_name.get(location, location)
+app.jinja_env.filters['item_name'] = lambda id: lookup_any_item_id_to_name.get(id, id)
 
 links = {"Bow": "Progressive Bow",
          "Silver Arrows": "Progressive Bow",
@@ -229,7 +229,7 @@ def attribute_item_solo(inventory, item):
         inventory[target_item] += 1
 
 
-@Web.app.template_filter()
+@app.template_filter()
 def render_timedelta(delta: datetime.timedelta):
     hours, minutes = divmod(delta.total_seconds() / 60, 60)
     hours = str(int(hours))
@@ -250,7 +250,7 @@ def get_location_table(checks_table: dict) -> dict:
     return loc_to_area
 
 
-def get_static_room_data(room: Web.Room):
+def get_static_room_data(room: Room):
     result = _multidata_cache.get(room.seed.id, None)
     if result:
         return result
@@ -287,9 +287,9 @@ def get_static_room_data(room: Web.Room):
     return result
 
 
-@Web.app.route('/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
-@Web.cache.memoize(timeout=60)  # multisave is currently created at most every minute
-def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool = False):
+@app.route('/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
     return build_trackers(tracker, tracked_team, tracked_player, 'specific')
 
 
@@ -298,7 +298,7 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
     if tracked_team < 0 or tracked_player < 1:
         abort(404)
 
-    room: Optional[Web.Room] = Web.Room.get(tracker=tracker)
+    room: Optional[Room] = Room.get(tracker=tracker)
     if not room:
         abort(404)
 
@@ -340,25 +340,42 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
                         lttp_checks_done[location_to_area[location]] += 1
                         lttp_checks_done["Total"] += 1
 
+    prog_items: Dict = {}
+    if tracked_player in prog_items:
+        pass
+    else:
+        prog_items[tracked_player] = collections.Counter()
+        for player in locations:
+            for location in locations[player]:
+                item, recipient, flags = locations[player][location]
+                if recipient == tracked_player:
+                    if flags & 1:
+                        prog_items[tracked_player][item] += 1
+
+
     game_name = games[tracked_player]
-    if game_name in game_specific_trackers and type is not 'generic':
+    if game_name in game_specific_trackers and type != 'generic':
         specific_tracker = game_specific_trackers.get(game_name, None)
         return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                seed_checks_in_area, checked_locations, slot_data[tracked_player])
-    elif game_name in AutoWorldRegister.world_types and type is not 'generic':
+                                seed_checks_in_area, lttp_checks_done, slot_data[tracked_player])
+    elif game_name in AutoWorldRegister.world_types and type != 'generic':
         webworld = AutoWorldRegister.world_types[game_name].web
-        return webworld.get_player_tracker(multisave, room, locations, inventory, tracked_team, tracked_player,
-                                           player_name, checked_locations)
+        locations_done = {lookup_any_location_id_to_name[id] for id in checked_locations}
+        items_received = {lookup_any_item_id_to_name[id] for id in inventory}
+        player_prog_items = {lookup_any_item_id_to_name[id] for id in prog_items[tracked_player]}
+        return webworld.get_player_tracker(multisave, room, locations, inventory, prog_items[tracked_player],
+                                           player_prog_items, tracked_team, tracked_player, player_name, locations_done,
+                                           items_received, slot_data[tracked_player])
     else:
         return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
 
 
-@Web.app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
+@app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
 def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
     return build_trackers(tracker, tracked_team, tracked_player)
 
 
-def __renderAlttpTracker(multisave: Dict[str, Any], room: Web.Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                          inventory: Counter, team: int, player: int, player_name: str,
                          seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
@@ -423,7 +440,7 @@ def __renderAlttpTracker(multisave: Dict[str, Any], room: Web.Room, locations: D
                             **display_data)
 
 
-def __renderMinecraftTracker(multisave: Dict[str, Any], room: Web.Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                              inventory: Counter, team: int, player: int, playerName: str,
                              seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
@@ -525,7 +542,7 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Web.Room, location
                             **display_data)
 
 
-def __renderOoTTracker(multisave: Dict[str, Any], room: Web.Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                        inventory: Counter, team: int, player: int, playerName: str,
                        seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
@@ -711,7 +728,7 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Web.Room, locations: Dic
                            **display_data)
 
 
-def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Web.Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                                inventory: Counter, team: int, player: int, playerName: str,
                                seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict[str, Any]) -> str:
 
@@ -818,7 +835,7 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Web.Room, locati
                             options=options, **display_data)
 
 
-def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Web.Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                                 inventory: Counter, team: int, player: int, playerName: str,
                                 seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
@@ -920,7 +937,7 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Web.Room, locat
                             **display_data)
 
 
-def __renderGenericTracker(multisave: Dict[str, Any], room: Web.Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                            inventory: Counter, team: int, player: int, player_name: str) -> str:
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set())
@@ -942,10 +959,10 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Web.Room, locations:
                            received_items=player_received_items)
 
 
-@Web.app.route('/tracker/<suuid:tracker>')
-@Web.cache.memoize(timeout=60)  # multisave is currently created at most every minute
+@app.route('/tracker/<suuid:tracker>')
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
 def getTracker(tracker: UUID):
-    room: Web.Room = Web.Room.get(tracker=tracker)
+    room: Room = Room.get(tracker=tracker)
     if not room:
         abort(404)
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
