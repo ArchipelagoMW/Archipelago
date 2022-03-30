@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 import logging
 import copy
 import os
 import threading
-from typing import Set
+import base64
+from typing import Set, List
 
 logger = logging.getLogger("Super Metroid")
 
@@ -246,7 +249,6 @@ class SMWorld(World):
         multiWorldLocations = {}
         multiWorldItems = {}
         idx = 0
-        itemId = 0
         self.playerIDMap = {}
         playerIDCount = 0 # 0 is for "Archipelago" server
         for itemLoc in self.world.get_locations():
@@ -421,7 +423,7 @@ class SMWorld(World):
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
     def checksum_mirror_sum(self, start, length, mask = 0x800000):
-        while (not(length & mask) and mask):
+        while not(length & mask) and mask:
             mask >>= 1
 
         part1 = sum(start[:mask]) & 0xFFFF
@@ -450,7 +452,6 @@ class SMWorld(World):
             outfile.write(buffer)
 
     def modify_multidata(self, multidata: dict):
-        import base64
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
         rom_name = getattr(self, "rom_name", None)
@@ -542,6 +543,11 @@ class SMWorld(World):
                     world.state.smbm[player].onlyBossLeft = True
                     break
 
+        # Turn Nothing items into event pairs.
+        for location in world.get_locations():
+            if location.game == location.item.game == "Super Metroid" and location.item.type == "Nothing":
+                location.address = location.item.code = None
+
 
 def create_locations(self, player: int):
     for name, id in locations_lookup_name_to_id.items():
@@ -576,7 +582,5 @@ class SMItem(Item):
     game = "Super Metroid"
 
     def __init__(self, name, advancement, type, code, player: int = None):
-        if type == "Nothing":
-            code = None
         super(SMItem, self).__init__(name, advancement, code, player)
         self.type = type
