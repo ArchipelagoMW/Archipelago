@@ -1,11 +1,13 @@
 from __future__ import annotations
+import abc
+import numbers
 import typing
 import random
 
 from schema import Schema, And, Or
 
 
-class AssembleOptions(type):
+class AssembleOptions(abc.ABCMeta):
     def __new__(mcs, name, bases, attrs):
         options = attrs["options"] = {}
         name_lookup = attrs["name_lookup"] = {}
@@ -101,7 +103,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         raise NotImplementedError
 
 
-class NumericOption(Option[int]):
+class NumericOption(Option[int], numbers.Integral):
     def __eq__(self, other: typing.Any) -> bool:
         if isinstance(other, NumericOption):
             return self.value == other.value
@@ -179,6 +181,80 @@ class NumericOption(Option[int]):
             return left.value / self.value
         else:
             return left / self.value
+
+    def __abs__(self) -> numbers.Real:
+        raise NotImplementedError
+
+    def __and__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __ceil__(self) -> int:
+        raise NotImplementedError
+
+    def __floor__(self) -> int:
+        raise NotImplementedError
+
+    def __floordiv__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __invert__(self) -> int:
+        raise NotImplementedError
+
+    def __lshift__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __mod__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __neg__(self) -> int:
+        raise NotImplementedError
+
+    def __or__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __pos__(self) -> int:
+        raise NotImplementedError
+
+    def __pow__(self, exponent: numbers.Complex, modulus: typing.Optional[numbers.Integral] = None) -> int:
+        if not (modulus is None):
+            assert isinstance(exponent, numbers.Integral)
+        raise NotImplementedError
+
+    def __rand__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __rfloordiv__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __rlshift__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __rmod__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __ror__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __round__(self, ndigits: typing.Optional[int] = None) -> int:
+        raise NotImplementedError
+
+    def __rpow__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __rrshift__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __rshift__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __rxor__(self, other: typing.Any) -> int:
+        raise NotImplementedError
+
+    def __trunc__(self) -> int:
+        raise NotImplementedError
+
+    def __xor__(self, other: typing.Any) -> int:
+        raise NotImplementedError
 
 
 class Toggle(NumericOption):

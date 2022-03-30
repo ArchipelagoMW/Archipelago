@@ -81,7 +81,7 @@ class FF1World(World):
             raise Exception("FFR settings submitted with no key items. Please ensure you generated the settings using "
                             "finalfantasyrandomizer.com AND enabled the AP flag")
 
-        items = [self.create_item(name) for name, data in items.items() for x in range(int(data['count'])) if name not in
+        items = [self.create_item(name) for name, data in items.items() for x in range(data['count']) if name not in
                  self.locked_items]
 
         self.world.itempool += items

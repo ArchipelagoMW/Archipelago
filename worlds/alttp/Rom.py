@@ -1472,8 +1472,8 @@ def patch_rom(world, rom, player, enemized):
     else:
         rom.write_byte(0x18003E, 0x03)  # make ganon invincible until all crystals and aga 2 are collected
 
-    rom.write_byte(0x18005E, int(world.crystals_needed_for_gt[player]))
-    rom.write_byte(0x18005F, int(world.crystals_needed_for_ganon[player]))
+    rom.write_byte(0x18005E, world.crystals_needed_for_gt[player])
+    rom.write_byte(0x18005F, world.crystals_needed_for_ganon[player])
 
     # Bitfield - enable text box to show with free roaming items
     #
