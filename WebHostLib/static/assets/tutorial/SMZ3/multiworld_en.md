@@ -1,4 +1,4 @@
-# Super Metroid Setup Guide
+# SMZ3 Setup Guide
 
 ## Required Software
 
