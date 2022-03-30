@@ -1,55 +1,54 @@
 {% extends "genericTracker.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
+
+{% endblock %}
+
 {% block body %}
     {% include "header/%sHeader.html" % (theme) %}
     <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}/{{ team }}/{{ player }}">
         <div id="tracker-header-bar">
-            <input placeholder="Search" id="search"/>
             <span class="info">This tracker will automatically update itself periodically.</span>
         </div>
             <div class="table-wrapper">
                 <table class="table non-unique-item-table">
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Amount</th>
-                            <th>Order Received</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    {% for name, count in inventory.items() %}
-                    <tr>
-                        <td>{{ name | item_name }}</td>
-                        <td>{{ count }}</td>
-                        <td>{{ received_items[name]}}</td>
+                    {% for names, count in all_progression_items.items()|slice(item_rows) %}
+                    <tr class="row-{{ loop.index }}">
+                        {% for name in names %}
+                        <td>{{ icons[name] }}</td>
+                        {% endfor %}
                     </tr>
-                    {%- endfor -%}
-
-                    </tbody>
+                    {% endfor %}
                 </table>
             </div>
             <div class="table-wrapper">
                 <table class="table non-unique-item-table">
-                    <thead>
-                    <tr>
-                        <th>Location</th>
-                        <th>Checked</th>
+                    {% if regions %}
+                    {% for region, location in regions.items() %}
+                    <tr class="region" id="{{region}}-header">
+                        <td>{{ region }} {{ '▼' if area != 'Total' }}</td>
+                        <td class="counter">{{ locations in regions[region] if locations in
+                            locations_done }} / {{ locations in regions[region] }}</td>
                     </tr>
-                    </thead>
-                    <tbody>
-                        {% for name in checked_locations %}
+                    <tbody class="locations hide" id="{{region}}">
                         <tr>
-                            <td>{{ name | location_name}}</td>
-                            <td>✔</td>
+                            <td class="location-name">{{ location }}</td>
+                            <td class="counter">{{ '✔' if location in locations_done else '' }}</td>
                         </tr>
-                        {%- endfor -%}
-                        {% for name in not_checked_locations %}
-                        <tr>
-                            <td>{{ name | location_name }}</td>
-                            <td></td>
-                        </tr>
-                        {%- endfor -%}
                     </tbody>
+                    {% endfor %}
+                    {% else %}
+                    <tr class="generic-locations" id="locations-header">
+                        {% for column in checked_locations|slice(location_columns) %}
+                        <ul class="column-{{ loop.index}}">
+                        {%- for location in column %}
+                            <li>{{ location }}</li>
+                        {%- endfor %}
+                        </ul>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
                 </table>
             </div>
     </div>
