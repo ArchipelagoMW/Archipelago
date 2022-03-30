@@ -9,6 +9,7 @@
         - snes9x-rr from: [snes9x-rr Releases Page](https://github.com/gocha/snes9x-rr/releases)
         - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
         - bsnes-plus-nwa from: [bsnes-plus GitHub](https://github.com/black-sliver/bsnes-plus)
+        - RetroArch from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
     - Or SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
       compatible hardware.
 - Your legally obtained Secret of Evermore US ROM file, probably named `Secret of Evermore (USA).sfc`
@@ -91,6 +92,20 @@ you may be prompted to allow it to communicate through the Windows Firewall.
 
 This should automatically connect to SNI. If this is its first time launching, you may be prompted to allow it to
 communicate through the Windows Firewall.
+
+##### RetroArch
+
+You only have to do these steps once.
+
+1. Enter the RetroArch main menu screen.
+2. Go to Settings --> User Interface. Set "Show Advanced Settings" to ON.
+3. Go to Settings --> Network. Set "Network Commands" to ON. Leave the default Network Command Port at 55355.
+!["Network Commands" setting is after Request Device 1 ... Request Device 16](/static/assets/tutorial/retroarch-network-commands-en.png)
+4. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and select "Nintendo - SNES / SFC (bsnes-mercury
+   Performance)".
+
+When loading a ROM, be sure to select a **bsnes-mercury** core. These are the only cores that allow external tools to
+read ROM data.
 
 #### With hardware
 
