@@ -1,0 +1,56 @@
+{% extends "genericTracker.html" %}
+{% block body %}
+    {% include "header/%sHeader.html" % (theme) %}
+    <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}/{{ team }}/{{ player }}">
+        <div id="tracker-header-bar">
+            <input placeholder="Search" id="search"/>
+            <span class="info">This tracker will automatically update itself periodically.</span>
+        </div>
+            <div class="table-wrapper">
+                <table class="table non-unique-item-table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Amount</th>
+                            <th>Order Received</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for name, count in inventory.items() %}
+                    <tr>
+                        <td>{{ name | item_name }}</td>
+                        <td>{{ count }}</td>
+                        <td>{{ received_items[name]}}</td>
+                    </tr>
+                    {%- endfor -%}
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-wrapper">
+                <table class="table non-unique-item-table">
+                    <thead>
+                    <tr>
+                        <th>Location</th>
+                        <th>Checked</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for name in checked_locations %}
+                        <tr>
+                            <td>{{ name | location_name}}</td>
+                            <td>✔</td>
+                        </tr>
+                        {%- endfor -%}
+                        {% for name in not_checked_locations %}
+                        <tr>
+                            <td>{{ name | location_name }}</td>
+                            <td></td>
+                        </tr>
+                        {%- endfor -%}
+                    </tbody>
+                </table>
+            </div>
+    </div>
+{% endblock %}
