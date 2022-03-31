@@ -216,7 +216,7 @@ def main(args=None, callback=ERmain):
 
 def read_weights_yaml(path):
     try:
-        if urllib.parse.urlparse(path).scheme:
+        if urllib.parse.urlparse(path).scheme == 'https':
             yaml = str(urllib.request.urlopen(path).read(), "utf-8")
         else:
             with open(path, 'rb') as f:
