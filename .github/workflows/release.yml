@@ -1,16 +1,36 @@
-# This workflow will build a release-like distribution when manually dispatched
+# This workflow will create a release and store builds to it when an x.y.z tag is pushed
 
-name: Build
+name: Release
 
-on: workflow_dispatch
+on:
+  push:
+    tags:
+      - '*.*.*'
 
 jobs:
-  # build-release-windows: # LF volunteer; RCs will still be built and signed by hand
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV  # tag x.y.z will become "Archipelago x.y.z"
+      - name: Create Release
+        uses: softprops/action-gh-release@b7e450da2a4b4cb4bfbae528f788167786cfcedf
+        with:
+          draft: true  # don't publish right away, especially since windows build is added by hand
+          prerelease: false
+          name: Archipelago ${{ env.RELEASE_VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # build-release-windows: # this is done by hand because of signing
   # build-release-macos: # LF volunteer
 
-  build-ubuntu1804:
-    runs-on: ubuntu-18.04
+  build-release-ubuntu1804:
+    runs-on: ubuntu-latest
     steps:
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      # - code below copied from build.yml -
       - uses: actions/checkout@v2
       - name: Install base dependencies
         run: |
@@ -51,13 +71,14 @@ jobs:
           (cd build && DIR_NAME="`ls | grep exe`" && mv "$DIR_NAME" Archipelago && tar -czvf ../dist/$TAR_NAME Archipelago && mv Archipelago "$DIR_NAME")
           echo "APPIMAGE_NAME=$APPIMAGE_NAME" >> $GITHUB_ENV
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
-      - name: Store AppImage
-        uses: actions/upload-artifact@v2
+      # - code above copied from build.yml -
+      - name: Add to Release
+        uses: softprops/action-gh-release@b7e450da2a4b4cb4bfbae528f788167786cfcedf
         with:
-          name: ${{ env.APPIMAGE_NAME }}
-          path: dist/${{ env.APPIMAGE_NAME }}
-      - name: Store .tar.gz
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.TAR_NAME }}
-          path: dist/${{ env.TAR_NAME }}
+          draft: true  # see above
+          prerelease: false
+          name: Archipelago ${{ env.RELEASE_VERSION }}
+          files: |
+            dist/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
