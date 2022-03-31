@@ -16,7 +16,7 @@ from Launcher import components, icon_paths
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 import subprocess
 import pkg_resources
-requirement = 'cx-Freeze>=6.9'
+requirement = 'cx-Freeze>=6.10'
 try:
     pkg_resources.require(requirement)
     import cx_Freeze
