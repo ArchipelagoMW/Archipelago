@@ -14,7 +14,7 @@ class ArchipIDLEWorld(World):
     """
     game = "ArchipIDLE"
     topology_present = False
-    data_version = 1
+    data_version = 0
     web = ArchipIDLEWebWorld()
 
     item_name_to_id = {}
@@ -25,8 +25,8 @@ class ArchipIDLEWorld(World):
 
     location_name_to_id = {}
     start_id = 9000
-    for i in range(1, 101):
-        location_name_to_id[f"IDLE for {int(i / 2)} minutes {30 if (i % 2) > 0 else 0} seconds"] = start_id
+    for i in range(1, 151):
+        location_name_to_id[f"IDLE for at least {int(i / 2)} minutes {30 if (i % 2) > 0 else 0} seconds"] = start_id
         start_id += 1
 
     def generate_basic(self):
@@ -34,7 +34,7 @@ class ArchipIDLEWorld(World):
         self.world.random.shuffle(item_table_copy)
 
         item_pool = []
-        for i in range(100):
+        for i in range(150):
             item = Item(
                 item_table_copy[i],
                 i < 20,
