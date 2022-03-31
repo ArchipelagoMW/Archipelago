@@ -32,7 +32,7 @@ def set_rules(world: MultiWorld, player: int):
             lambda state: state._archipidle_location_is_accessible(player, 10)
         )
 
-    for i in range(51, 151):
+    for i in range(51, 101):
         set_rule(
             world.get_location(f"IDLE for at least {int(i / 2)} minutes {30 if (i % 2) > 0 else 0} seconds", player),
             lambda state: state._archipidle_location_is_accessible(player, 20)

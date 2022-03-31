@@ -25,7 +25,7 @@ class ArchipIDLEWorld(World):
 
     location_name_to_id = {}
     start_id = 9000
-    for i in range(1, 151):
+    for i in range(1, 101):
         location_name_to_id[f"IDLE for at least {int(i / 2)} minutes {30 if (i % 2) > 0 else 0} seconds"] = start_id
         start_id += 1
 
@@ -34,7 +34,7 @@ class ArchipIDLEWorld(World):
         self.world.random.shuffle(item_table_copy)
 
         item_pool = []
-        for i in range(150):
+        for i in range(100):
             item = Item(
                 item_table_copy[i],
                 i < 20,
