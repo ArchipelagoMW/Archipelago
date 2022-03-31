@@ -111,7 +111,9 @@ class Toggle(Option[int]):
 
     @classmethod
     def from_text(cls, text: str) -> Toggle:
-        if text.lower() in {"off", "0", "false", "none", "null", "no"}:
+        if text == "random":
+            return cls(random.choice(list(cls.name_lookup)))
+        elif text.lower() in {"off", "0", "false", "none", "null", "no"}:
             return cls(0)
         else:
             return cls(1)
