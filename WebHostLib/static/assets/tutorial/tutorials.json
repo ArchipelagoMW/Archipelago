@@ -168,8 +168,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "zelda3/plando_en.md",
-            "link": "zelda3/plando/en",
+            "filename": "A Link to the Past/plando_en.md",
+            "link": "A Link to the Past/plando/en",
             "authors": [
               "Berserker"
             ]
@@ -527,10 +527,29 @@
         "files": [
           {
             "language": "English",
-            "filename": "checksfinder/checksfinder_en.md",
-            "link": "checksfinder/checksfinder/en",
+            "filename": "ChecksFinder/checksfinder_en.md",
+            "link": "ChecksFinder/checksfinder/en",
             "authors": [
               "Mewlif"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "ArchipIDLE",
+    "tutorials": [
+      {
+        "name": "Setup Guide",
+        "description": "A guide to playing ArchipIDLE",
+        "files": [
+          {
+            "language": "English",
+            "filename": "ArchipIDLE/guide_en.md",
+            "link": "ArchipIDLE/guide/en",
+            "authors": [
+              "Farrak Kilhn"
             ]
           }
         ]
