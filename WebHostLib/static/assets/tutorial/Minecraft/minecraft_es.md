@@ -30,7 +30,7 @@ game: Minecraft
 
 # Opciones compartidas por todos los juegos:
 accessibility: locations
-progression_balancing: on
+progression_balancing: 50
 # Opciones Especficicas para Minecraft
 
 Minecraft:

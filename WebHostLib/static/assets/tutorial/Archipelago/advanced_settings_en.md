@@ -85,12 +85,15 @@ games you want settings for.
 
 * `progression_balancing` is a system the Archipelago generator uses to try and reduce "BK mode" as much as possible.
   This primarily involves moving necessary progression items into earlier logic spheres to make the games more
-  accessible so that players almost always have something to do. This can be turned `on` or `off` and is `on` by
-  default.
+  accessible so that players almost always have something to do. This can be in a range from 0 to 99, and is 50 by
+  default. This number represents a percentage of the furthest progressible player.
+    * For example: With the default of 50%, if the furthest player can access 40% of their items, the randomizer tries
+      to let you access at least 20% of your items. 50% of 40% is 20%.
+    * Note that it is not always guaranteed that it will be able to bring you up to this threshold.
 
-    * `triggers` is one of the more advanced options that allows you to create conditional adjustments. You can read
-      more triggers in the triggers guide. Triggers
-      guide: [Archipelago Triggers Guide](/tutorial/archipelago/triggers/en)
+* `triggers` is one of the more advanced options that allows you to create conditional adjustments. You can read
+  more triggers in the triggers guide. Triggers
+  guide: [Archipelago Triggers Guide](/tutorial/archipelago/triggers/en)
 
 ### Game Options
 
@@ -190,8 +193,8 @@ triggers:
 * `requires` is set to require release version 0.2.0 or higher.
 * `accesibility` is set to `none` which will set this seed to beatable only meaning some locations and items may be
   completely inaccessible but the seed will still be completable.
-* `progression_balancing` is set on meaning we will likely receive important items earlier increasing the chance of
-  having things to do.
+* `progression_balancing` is set on, giving it the default value, meaning we will likely receive important items
+  earlier increasing the chance of having things to do.
 * `A Link to the Past` defines a location for us to nest all the game options we would like to use for our
   game `A Link to the Past`.
 * `smallkey_shuffle` is an option for A Link to the Past which determines how dungeon small keys are shuffled. In this
