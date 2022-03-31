@@ -1,5 +1,6 @@
 from __future__ import annotations
 import abc
+import math
 import numbers
 import typing
 import random
@@ -104,6 +105,13 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
 
 
 class NumericOption(Option[int], numbers.Integral):
+    # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
+    # `int` is not a `numbers.Integral` according to the official typestubs
+    # (even though isinstance(5, numbers.Integral) == True)
+    # https://github.com/python/typing/issues/272
+    # https://github.com/python/mypy/issues/3186
+    # https://github.com/microsoft/pyright/issues/1575
+
     def __eq__(self, other: typing.Any) -> bool:
         if isinstance(other, NumericOption):
             return self.value == other.value
@@ -182,79 +190,80 @@ class NumericOption(Option[int], numbers.Integral):
         else:
             return left / self.value
 
-    def __abs__(self) -> numbers.Real:
-        raise NotImplementedError
+    def __abs__(self) -> typing.Any:
+        return abs(self.value)
 
     def __and__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return self.value & int(other)
 
     def __ceil__(self) -> int:
-        raise NotImplementedError
+        return math.ceil(self.value)
 
     def __floor__(self) -> int:
-        raise NotImplementedError
+        return math.floor(self.value)
 
     def __floordiv__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return self.value // int(other)
 
     def __invert__(self) -> int:
-        raise NotImplementedError
+        return ~(self.value)
 
     def __lshift__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return self.value << int(other)
 
     def __mod__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return self.value % int(other)
 
     def __neg__(self) -> int:
-        raise NotImplementedError
+        return -(self.value)
 
     def __or__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return self.value | int(other)
 
     def __pos__(self) -> int:
-        raise NotImplementedError
+        return +(self.value)
 
     def __pow__(self, exponent: numbers.Complex, modulus: typing.Optional[numbers.Integral] = None) -> int:
         if not (modulus is None):
             assert isinstance(exponent, numbers.Integral)
-        raise NotImplementedError
+            return pow(self.value, exponent, modulus)  # type: ignore
+        return self.value ** exponent  # type: ignore
 
     def __rand__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return int(other) & self.value
 
     def __rfloordiv__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return int(other) // self.value
 
     def __rlshift__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return int(other) << self.value
 
     def __rmod__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return int(other) % self.value
 
     def __ror__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return int(other) | self.value
 
     def __round__(self, ndigits: typing.Optional[int] = None) -> int:
-        raise NotImplementedError
+        return round(self.value, ndigits)
 
-    def __rpow__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+    def __rpow__(self, base: typing.Any) -> typing.Any:
+        return base ** self.value
 
     def __rrshift__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return int(other) >> self.value
 
     def __rshift__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return self.value >> int(other)
 
     def __rxor__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return int(other) ^ self.value
 
     def __trunc__(self) -> int:
-        raise NotImplementedError
+        return math.trunc(self.value)
 
     def __xor__(self, other: typing.Any) -> int:
-        raise NotImplementedError
+        return self.value ^ int(other)
 
 
 class Toggle(NumericOption):
