@@ -58,7 +58,6 @@ T = typing.TypeVar('T')
 
 class Option(typing.Generic[T], metaclass=AssembleOptions):
     value: T
-    name_lookup: typing.Dict[int, str]
     default = 0
 
     # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
@@ -67,6 +66,10 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
 
     # can be weighted between selections
     supports_weighting = True
+
+    # filled by AssembleOptions:
+    name_lookup: typing.Dict[int, str]
+    options: typing.Dict[str, int]
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.get_current_option_name()})"
@@ -83,13 +86,13 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         return self.get_option_name(self.value)
 
     @classmethod
-    def get_option_name(cls, value: typing.Any) -> str:
+    def get_option_name(cls, value: T) -> str:
         if cls.auto_display_name:
             return cls.name_lookup[value].replace("_", " ").title()
         else:
             return cls.name_lookup[value]
 
-    def __int__(self) -> int:
+    def __int__(self) -> T:
         return self.value
 
     def __bool__(self) -> bool:
