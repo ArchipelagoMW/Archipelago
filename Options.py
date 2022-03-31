@@ -328,10 +328,10 @@ class Choice(NumericOption):
         if isinstance(other, self.__class__):
             return other.value == self.value
         elif isinstance(other, str):
-            assert other in self.options, "compared against a str that could never be equal."
+            assert other in self.options, f"compared against a str that could never be equal. {self} == {other}"
             return other == self.current_key
         elif isinstance(other, int):
-            assert other in self.name_lookup, "compared against an int that could never be equal."
+            assert other in self.name_lookup, f"compared against an int that could never be equal. {self} == {other}"
             return other == self.value
         elif isinstance(other, bool):
             return other == bool(self.value)
@@ -342,10 +342,10 @@ class Choice(NumericOption):
         if isinstance(other, self.__class__):
             return other.value != self.value
         elif isinstance(other, str):
-            assert other in self.options , "compared against a str that could never be equal."
+            assert other in self.options , f"compared against a str that could never be equal. {self} != {other}"
             return other != self.current_key
         elif isinstance(other, int):
-            assert other in self.name_lookup, "compared against am int that could never be equal."
+            assert other in self.name_lookup, f"compared against am int that could never be equal. {self} != {other}"
             return other != self.value
         elif isinstance(other, bool):
             return other != bool(self.value)

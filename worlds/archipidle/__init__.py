@@ -14,7 +14,7 @@ class ArchipIDLEWorld(World):
     """
     game = "ArchipIDLE"
     topology_present = False
-    data_version = 1
+    data_version = 2
     web = ArchipIDLEWebWorld()
 
     item_name_to_id = {}
@@ -26,7 +26,7 @@ class ArchipIDLEWorld(World):
     location_name_to_id = {}
     start_id = 9000
     for i in range(1, 101):
-        location_name_to_id[f"IDLE for {int(i / 2)} minutes {30 if (i % 2) > 0 else 0} seconds"] = start_id
+        location_name_to_id[f"IDLE for at least {int(i / 2)} minutes {30 if (i % 2) > 0 else 0} seconds"] = start_id
         start_id += 1
 
     def generate_basic(self):

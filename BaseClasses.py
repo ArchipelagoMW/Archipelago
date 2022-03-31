@@ -644,11 +644,10 @@ class CollectionState():
             locations = self.world.get_filled_locations()
         new_locations = True
         # since the loop has a good chance to run more than once, only filter the events once
-        locations = {location for location in locations if location.event}
+        locations = {location for location in locations if location.event and
+                     not key_only or getattr(location.item, "locked_dungeon_item", False)}
         while new_locations:
-            reachable_events = {location for location in locations if
-                                (not key_only or getattr(location.item, "locked_dungeon_item", False))
-                                and location.can_reach(self)}
+            reachable_events = {location for location in locations if location.can_reach(self)}
             new_locations = reachable_events - self.events
             for event in new_locations:
                 self.events.add(event)
