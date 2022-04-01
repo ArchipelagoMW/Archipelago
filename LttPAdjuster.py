@@ -21,7 +21,7 @@ from urllib.parse import urlparse
 from urllib.request import urlopen
 
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
-from Utils import output_path, local_path, open_file, get_cert_none_ssl_context, persistent_store, get_adjuster_settings, tkinter_center_window
+from Utils import output_path, local_path, user_path, open_file, get_cert_none_ssl_context, persistent_store, get_adjuster_settings, tkinter_center_window
 from Patch import GAME_ALTTP
 
 class AdjusterWorld(object):
@@ -286,7 +286,7 @@ def run_sprite_update():
 def update_sprites(task, on_finish=None):
     resultmessage = ""
     successful = True
-    sprite_dir = local_path("data", "sprites", "alttpr")
+    sprite_dir = user_path("data", "sprites", "alttpr")
     os.makedirs(sprite_dir, exist_ok=True)
     ctx = get_cert_none_ssl_context()
     def finished():
@@ -1013,11 +1013,11 @@ class SpriteSelector():
 
     @property
     def alttpr_sprite_dir(self):
-        return local_path("data", "sprites", "alttpr")
+        return user_path("data", "sprites", "alttpr")
 
     @property
     def custom_sprite_dir(self):
-        return local_path("data", "sprites", "custom")
+        return user_path("data", "sprites", "custom")
 
 
 def get_image_for_sprite(sprite, gif_only: bool = False):
