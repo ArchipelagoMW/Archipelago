@@ -2,9 +2,10 @@ import typing
 from .ExtractedData import logic_options, starts, pool_options
 from Options import Option, DefaultOnToggle, Toggle, Choice, Range
 
+locations = {"option_" + start: i for i, start in enumerate(starts)}
 # This way the dynamic start names are picked up by the MetaClass Choice belongs to
-StartLocation = type("StartLocation", (Choice,), {
-    "option_" + start: i for i, start in enumerate(starts)} | {"auto_display_name": False})
+StartLocation = type("StartLocation", (Choice,), {"auto_display_name": False, **locations})
+del (locations)
 
 default_on = {
     "RandomizeDreamers",
