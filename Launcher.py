@@ -142,7 +142,7 @@ components: Iterable[Component] = (
     # Factorio
     Component('Factorio Client', 'FactorioClient'),
     # Minecraft
-    Component('Minecraft Client', 'MinecraftClient', icon='mcicon',
+    Component('Minecraft Client', 'MinecraftClient', icon='mcicon', cli=True,
               file_identifier=SuffixIdentifier('.apmc')),
     # Ocarina of Time
     Component('OoT Client', 'OoTClient',
