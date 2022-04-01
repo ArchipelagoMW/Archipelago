@@ -377,5 +377,5 @@ begin
   if (assigned(SoEROMFilePage)) and (PageID = SoEROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/soe'));
   if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('generator/oot'));
+    Result := not (WizardIsComponentSelected('generator/oot') or WizardIsComponentSelected('client/oot'));
 end;
