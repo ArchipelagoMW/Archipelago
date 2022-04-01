@@ -504,7 +504,7 @@ location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      'Ganons Tower - Pre-Moldorm Chest': (0x3d, 0x40),
                      'Ganons Tower - Validation Chest': (0x4d, 0x10)}
 
-location_collect_blacklist = {Regions.lookup_name_to_id[name] for name in {'Eastern Palace - Boss',
+boss_locations = {Regions.lookup_name_to_id[name] for name in {'Eastern Palace - Boss',
                                                                            'Desert Palace - Boss',
                                                                            'Tower of Hera - Boss',
                                                                            'Palace of Darkness - Boss',
@@ -902,7 +902,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
             uw_end = max(uw_end, roomid + 1)
         if location_id in ctx.checked_locations and location_id not in ctx.locations_checked and \
                 location_id in ctx.locations_info and ctx.locations_info[location_id].player != ctx.slot and \
-                location_id not in location_collect_blacklist:
+                location_id not in boss_locations:
             uw_begin = min(uw_begin, roomid)
             uw_end = max(uw_end, roomid + 1)
             uw_checked[location_id] = (roomid, mask)
