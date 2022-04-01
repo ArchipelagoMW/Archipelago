@@ -6,7 +6,6 @@ from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable, Unio
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
-from WebHostLib import Room
 
 
 class AutoWorldRegister(type):
@@ -95,25 +94,42 @@ class WebWorld:
     # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime
     theme = "grass"
 
-    def get_player_tracker(self, multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
-                           inventory: Counter, team: int, player: int, player_name: str) -> str:
-        checked_locations = multisave.get("location_checks", {}).get((team, player), set())
-        player_received_items = {}
-        if multisave.get('version', 0) > 0:
-            # add numbering to all items but starter_inventory
-            ordered_items = multisave.get('received_items', {}).get((team, player, True), [])
-        else:
-            ordered_items = multisave.get('received_items', {}).get((team, player), [])
+    bgcolor = "green"
 
-        for order_index, networkItem in enumerate(ordered_items, start=1):
-            player_received_items[networkItem.item] = order_index
+    # overridable method allowing you to create your own tracker. It needs to be designated as a class method to be picked
+    # up correctly. All the arguments available should give you the information you need to build one and the template html
+    # can also be overridden.
+    @classmethod
+    def get_player_tracker(cls, multisave: Dict[str, Any], room, locations: set,
+                           all_progression_items: Counter, team: int, player: int, player_name: str,
+                           checked_locations: set, player_received_items: Counter, slot_data: Dict) -> str:
 
-        return render_template("genericTracker.html",
-                               inventory=inventory,
+        #icons: Dict = {
+        #    item: item for item in all_progression_items
+        #}
+        #icons = {}
+        #for item in all_progression_items:
+        #    icons[item] = 'https://user-images.githubusercontent.com/12670730/113008567-6ebdcb80-9177-11eb-91bd-6863196d9cd3.png'
+
+        # testing ror2
+        #regions = {
+        #    'first_region': [],
+        #    'second_region': [],
+        #    'third_region': [],
+        #    'fourth_region': [],
+        #}
+        #for i in range(5):
+        #    regions['first_region'].append(f'ItemPickup{i}')
+        #    regions['second_region'].append(f'ItemPickup{i+5}')
+        #    regions['third_region'].append(f'ItemPickup{i+10}')
+        #    regions['fourth_region'].append(f'ItemPickup{i+15}')
+
+
+        return render_template("playerTracker.html", all_progression_items=all_progression_items, icons=icons,
                                player=player, team=team, room=room, player_name=player_name,
-                               checked_locations=checked_locations,
-                               not_checked_locations=set(locations[player]) - checked_locations,
-                               received_items=player_received_items, theme=self.theme)
+                               checked_locations=sorted(checked_locations), #regions=regions,
+                               not_checked_locations=sorted(locations - checked_locations),
+                               received_items=player_received_items, theme=cls.theme, item_columns=4, location_columns=4)
 
     # display a link to a bug report page, most likely a link to a GitHub issue page.
     bug_report_page: Optional[str]

@@ -1,8 +1,7 @@
-{% extends "genericTracker.html" %}
+{% extends 'genericTracker.html' %}
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
-
+        <script type="application/ecmascript" src="{{ url_for('static', filename='assets/timespinnerTracker.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -11,45 +10,161 @@
         <div id="tracker-header-bar">
             <span class="info">This tracker will automatically update itself periodically.</span>
         </div>
-            <div class="table-wrapper">
-                <table class="table non-unique-item-table">
-                    {% for names, count in all_progression_items.items()|slice(item_rows) %}
+        <div class="table-wrapper">
+            {% if icons or received_items %}
+            <table class="table non-unique-item-table">
+                <thead>
+                <tr class="center-column">
+                    {% for column in range(item_columns) %}
+                    <th>Item</th>
+                    <th>Received</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                {% if icons %}
+                {% block icons_render %}
+                <tbody>
+                {%- for column in icons|sort|batch(item_columns) %}
+                    {% if column|count % item_columns %}
+                        {% for space in range(column|count % item_columns) %}
+                            {{ column.append('') }}
+                        {% endfor %}
+                    {% endif %}
+                <tr class="center-column row-{{ loop.index }}">
+                    {%- for name in column %}
+                    <td><img src="{{ icons[name] }}" class="icon {{ 'acquired' if name in received_items }}"><br />{{ name }}</td>
+                    {% if all_progression_items[name] > 1 %}
+                    <td> {{ received_items[name] if name in received_items else '' }} </td>
+                    {% else %}
+                    <td> {{ '✔' if name in received_items else '' }}</td>
+                    {% endif %}
+                    {%- endfor %}
+                </tr>
+                {%- endfor %}
+                </tbody>
+                {% endblock %}
+                {% else %}
+                {% block item_names_render %}
+                <tbody>
+                    {% if received_items|count > item_columns %}
+                    {% for column in all_progression_items|sort|batch(item_columns) %}
+                        {% if column|count % item_columns %}
+                            {% for space in range(column|count % item_columns) %}
+                                {{ column.append('') }}
+                            {% endfor %}
+                        {% endif %}
                     <tr class="row-{{ loop.index }}">
-                        {% for name in names %}
-                        <td>{{ icons[name] }}</td>
+                        {% for name in column %}
+                        {% if name in received_items %}
+                        <td>{{ name }}</td>
+                            {% if all_progression_items[name] > 1 %}
+                            <td> {{ received_items[name] }}</td>
+                            {% else %}
+                            <td>✔</td>
+                            {% endif %}
+                        {% else %}
+                        <td></td>
+                        <td></td>
+                        {% endif %}
                         {% endfor %}
                     </tr>
                     {% endfor %}
-                </table>
-            </div>
-            <div class="table-wrapper">
-                <table class="table non-unique-item-table">
-                    {% if regions %}
-                    {% for region, location in regions.items() %}
-                    <tr class="region" id="{{region}}-header">
-                        <td>{{ region }} {{ '▼' if area != 'Total' }}</td>
-                        <td class="counter">{{ locations in regions[region] if locations in
-                            locations_done }} / {{ locations in regions[region] }}</td>
-                    </tr>
-                    <tbody class="locations hide" id="{{region}}">
-                        <tr>
-                            <td class="location-name">{{ location }}</td>
-                            <td class="counter">{{ '✔' if location in locations_done else '' }}</td>
-                        </tr>
-                    </tbody>
-                    {% endfor %}
                     {% else %}
-                    <tr class="generic-locations" id="locations-header">
-                        {% for column in checked_locations|slice(location_columns) %}
-                        <ul class="column-{{ loop.index}}">
-                        {%- for location in column %}
-                            <li>{{ location }}</li>
-                        {%- endfor %}
-                        </ul>
+                    <tr class="row-1">
+                        {% for name in received_items|sort %}
+                        <td>{{ name }}</td>
+                        {% if all_progression_items[name] > 1 %}
+                        <td> {{ received_items[name] }}</td>
+                        {% else %}
+                        <td>✔</td>
+                        {% endif %}
+                        {% endfor %}
+                        {% if received_items|count == 1 %}
+                        {% for space in range(item_columns-1) %}
+                        <td></td>
+                        <td></td>
+                        {% endfor %}
+                        {% else %}
+                        {% for space in range(item_columns % received_items|count) %}
+                        <td></td>
+                        <td></td>
+                        {% endfor %}
+                        {% endif %}
                     </tr>
-                    {% endfor %}
                     {% endif %}
-                </table>
-            </div>
+                </tbody>
+                {% endblock %}
+                {% endif %}
+            </table>
+            {% endif %}
+        </div>
+        {% if regions %}
+        {% block regions_render %}
+        <div class="table-wrapper">
+            <table class="table non-unique-item-table" id="location-table">
+                <thead>
+                <tr>
+                    {% for columns in range(location_columns) %}
+                    <th>Region</th>
+                    <th>Locations Checked</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                {% for column in regions|batch(location_columns) %}
+                <tr>
+                    {% for region in column %}
+                    <td>{{ region }} {{ '▼' if region != 'Total' }}</td>
+                    <td class="counter">{{ locations in regions[region] if locations in
+                        locations_done }} / {{ regions[region]|count }}</td>
+                    {% endfor %}
+                </tr>
+                <tbody class="locations" id="{{region}}">
+                    {% for region in column %}
+                {% for location in regions[region] %}
+                <tr>
+                    <td class="location-name">{{ location }}</td>
+                    <td class="counter">{{ '✔' if location in locations_done else '' }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        </div>
+        {% endblock %}
+        {% else %}
+        {% block locations_render %}
+        <div class="table-wrapper">
+            <table class="table non-unique-item-table">
+                <thead>
+                <tr>
+                    {% for column in range(location_columns) %}
+                    <th>Location</th>
+                    <th>Checked</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {%- for column in checked_locations|batch(location_columns) %}
+                <tr class="column-{{ loop.index}}">
+                    {%- for location in column %}
+                    <td>{{ location }}</td>
+                    <td>✔</td>
+                    {%- endfor %}
+                </tr>
+                {%- endfor %}
+                {%- for column in not_checked_locations|batch(location_columns) %}
+                <tr class="column-{{ loop.index}}">
+                    {%- for location in column %}
+                    <td>{{ location }}</td>
+                    <td></td>
+                    {%- endfor %}
+                </tr>
+                {%- endfor %}
+                </tbody>
+        {% endblock %}
+        {% endif %}
+            </table>
+        </div>
     </div>
 {% endblock %}
