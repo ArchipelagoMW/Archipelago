@@ -38,6 +38,7 @@ class AssembleOptions(type):
                         return ret
 
                     return validate
+
                 attrs["__init__"] = validate_decorator(attrs["__init__"])
             else:
                 # construct an __init__ that calls parent __init__
@@ -52,6 +53,7 @@ class AssembleOptions(type):
                 return cls
 
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
+
 
 T = typing.TypeVar('T')
 
@@ -199,7 +201,7 @@ class Choice(Option[int]):
         if isinstance(other, self.__class__):
             return other.value != self.value
         elif isinstance(other, str):
-            assert other in self.options , f"compared against a str that could never be equal. {self} != {other}"
+            assert other in self.options, f"compared against a str that could never be equal. {self} != {other}"
             return other != self.current_key
         elif isinstance(other, int):
             assert other in self.name_lookup, f"compared against am int that could never be equal. {self} != {other}"
@@ -506,7 +508,6 @@ per_game_common_options = {
     "priority_locations": PriorityLocations,
     "item_links": ItemLinks
 }
-
 
 if __name__ == "__main__":
 

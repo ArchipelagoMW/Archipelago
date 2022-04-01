@@ -2,6 +2,20 @@ import typing
 from .ExtractedData import logic_options, starts, pool_options
 from Options import Option, DefaultOnToggle, Toggle, Choice, Range
 
+
+class Disabled(Toggle):
+    def __init__(self, value: int):
+        super(Disabled, self).__init__(0)
+
+    @classmethod
+    def from_text(cls, text: str) -> Toggle:
+        return cls(0)
+
+    @classmethod
+    def from_any(cls, data: typing.Any):
+        return cls(0)
+
+
 locations = {"option_" + start: i for i, start in enumerate(starts)}
 # This way the dynamic start names are picked up by the MetaClass Choice belongs to
 StartLocation = type("StartLocation", (Choice,), {"auto_display_name": False, **locations})
@@ -24,23 +38,25 @@ disabled = {
     "RandomizeSwim",
     "RandomizeMimics",
     "RandomizeNail",
-
 }
 
 hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {}
 
 for option_name, option_data in pool_options.items():
     extra_data = {"items": option_data[0], "locations": option_data[1]}
+    if option_name in disabled:
+        extra_data["__doc__"] = "Disabled Option. Not implemented."
+        option = type(option_name, (Disabled,), extra_data)
     if option_name in default_on:
         option = type(option_name, (DefaultOnToggle,), extra_data)
     else:
         option = type(option_name, (Toggle,), extra_data)
     hollow_knight_randomize_options[option_name] = option
 
+
 hollow_knight_logic_options: typing.Dict[str, type(Option)] = {
-    option_name: Toggle for option_name in logic_options.values() if
-    option_name not in hollow_knight_randomize_options
-    and option_name != "RandomizeCharmNotches"}
+    option_name: Disabled if option_name in disabled else Toggle for option_name in logic_options.values() if
+    option_name not in hollow_knight_randomize_options}
 
 
 class MinimumGrubPrice(Range):
