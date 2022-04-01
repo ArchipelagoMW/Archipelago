@@ -3,6 +3,7 @@ import yaml
 from typing import Optional
 import Utils
 from Patch import APDeltaPatch
+import os
 
 
 USHASH = '6e9c94511d04fac6e0a1e582c170be3a'
@@ -19,8 +20,13 @@ class SoEDeltaPatch(APDeltaPatch):
             return read_rom(stream)
 
 
-def get_base_rom_path() -> str:
-    return Utils.get_options()['soe_options']['rom_file']
+def get_base_rom_path(file_name: Optional[str] = None) -> str:
+    options = Utils.get_options()
+    if not file_name:
+        file_name = options["soe_options"]["rom_file"]
+    if not os.path.exists(file_name):
+        file_name = Utils.user_path(file_name)
+    return file_name
 
 
 def read_rom(stream, strip_header=True) -> bytes:

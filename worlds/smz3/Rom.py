@@ -48,7 +48,7 @@ def get_sm_base_rom_path(file_name: str = "") -> str:
     if not file_name:
         file_name = options["sm_options"]["rom_file"]
     if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
+        file_name = Utils.user_path(file_name)
     return file_name
 
 
@@ -57,7 +57,7 @@ def get_lttp_base_rom_path(file_name: str = "") -> str:
     if not file_name:
         file_name = options["lttp_options"]["rom_file"]
     if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
+        file_name = Utils.user_path(file_name)
     return file_name
 
 

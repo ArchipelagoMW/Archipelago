@@ -10,7 +10,8 @@
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
       ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
-      [BizHawk](http://tasvideos.org/BizHawk.html))
+       [BizHawk](http://tasvideos.org/BizHawk.html), or
+       [RetroArch](https://retroarch.com?page=platforms) 1.10.1 or newer). Or,
     - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware
 - Your Japanese v1.0 ROM file, probably named `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
 
@@ -101,6 +102,21 @@ first time launching, you may be prompted to allow it to communicate through the
     - SuperNintendoClient users should download `sniConnector.lua` from the client download page
     - SNIClient users should look in their Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
       emulator is 64-bit or 32-bit.
+
+##### RetroArch 1.10.1 or newer
+
+You only have to do these steps once.
+
+1. Enter the RetroArch main menu screen.
+2. Go to Settings --> User Interface. Set "Show Advanced Settings" to ON.
+3. Go to Settings --> Network. Set "Network Commands" to ON. (It is found below Request Device 16.) Leave the default
+   Network Command Port at 55355.
+![Screenshot of Network Commands setting](/static/assets/tutorial/retroarch-network-commands-en.png)
+4. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and select "Nintendo - SNES / SFC (bsnes-mercury
+   Performance)".
+
+When loading a ROM, be sure to select a **bsnes-mercury** core. These are the only cores that allow external tools to
+read ROM data.
 
 #### With hardware
 

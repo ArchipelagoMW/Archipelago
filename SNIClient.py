@@ -572,8 +572,14 @@ def launch_sni(ctx: Context):
         if not sys.stdout:  # if it spawns a visible console, may as well populate it
             subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path))
         else:
-            subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL,
-                             stderr=subprocess.DEVNULL)
+            proc = subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path),
+                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            try:
+                proc.wait(.1)  # wait a bit to see if startup fails (missing dependencies)
+                snes_logger.info('Failed to start SNI. Try running it externally for error output.')
+            except subprocess.TimeoutExpired:
+                pass  # seems to be running
+
     else:
         snes_logger.info(
             f"Attempt to start SNI was aborted as path {sni_path} was not found, "
