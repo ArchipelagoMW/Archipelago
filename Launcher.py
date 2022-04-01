@@ -58,9 +58,9 @@ def open_patch():
                 suffixes += c.file_identifier.suffixes if c.type == Type.CLIENT and \
                                                           isinstance(c.file_identifier, SuffixIdentifier) else []
         filename = tkinter.filedialog.askopenfilename(filetypes=(('Patches', ' '.join(suffixes)),))
-        file, component = identify(filename)
+        file, _, component = identify(filename)
         if file and component:
-            subprocess.Popen([*get_exe(component), file])
+            launch([*get_exe(component), file], component.cli)
 
 
 def browse_files():
@@ -165,11 +165,11 @@ icon_paths = {
 
 def identify(path: Union[None, str]):
     if path is None:
-        return None, None
+        return None, None, None
     for component in components:
         if component.handles_file(path):
-            return path, component.script_name
-    return (None, None) if '/' in path or '\\' in path else (None, path)
+            return path, component.script_name, component
+    return (None, None, None) if '/' in path or '\\' in path else (None, path, None)
 
 
 def get_exe(component: Union[str, Component]) -> Optional[Sequence[str]]:
@@ -284,7 +284,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
         args = {}
 
     if "Patch|Game|Component" in args:
-        file, component = identify(args["Patch|Game|Component"])
+        file, component, _ = identify(args["Patch|Game|Component"])
         if file:
             args['file'] = file
         if component:
