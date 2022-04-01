@@ -211,7 +211,7 @@ def install_forge(directory: str):
                 f.write(resp.content)
             print(f"Installing Forge...")
             argstring = ' '.join([jdk, "-jar", "\"" + forge_install_jar+ "\"", "--installServer", "\"" + directory + "\""])
-            install_process = Popen(argstring)
+            install_process = Popen(argstring, shell=True)
             install_process.wait()
             os.remove(forge_install_jar)
 
@@ -228,7 +228,8 @@ def run_forge_server(forge_dir: str, heap_arg):
         heap_arg = heap_arg[:-1]
     heap_arg = "-Xmx" + heap_arg
 
-    args_file = os.path.join(forge_dir, "libraries", "net", "minecraftforge", "forge", forge_version, "win_args.txt")
+    os_args = "win_args.txt" if is_windows else "unix_args.txt"
+    args_file = os.path.join(forge_dir, "libraries", "net", "minecraftforge", "forge", forge_version, os_args)
     win_args = []
     with open(args_file) as argfile:
         for line in argfile:
@@ -237,7 +238,7 @@ def run_forge_server(forge_dir: str, heap_arg):
     argstring = ' '.join([java_exe, heap_arg] + win_args + ["-nogui"])
     logging.info(f"Running Forge server: {argstring}")
     os.chdir(forge_dir)
-    return Popen(argstring)
+    return Popen(argstring, shell=True)
 
 
 if __name__ == '__main__':
@@ -271,7 +272,10 @@ if __name__ == '__main__':
     if apmc_file is not None and not os.path.isfile(apmc_file):
         raise FileNotFoundError(f"Path {apmc_file} does not exist or could not be accessed.")
     if not os.path.isdir(forge_dir):
-        raise NotADirectoryError(f"Path {forge_dir} does not exist or could not be accessed.")
+        if prompt_yes_no("Did not find forge directory. Download and install forge now?"):
+            install_forge(forge_dir)
+        if not os.path.isdir(forge_dir):
+            raise NotADirectoryError(f"Path {forge_dir} does not exist or could not be accessed.")
     if not max_heap_re.match(max_heap):
         raise Exception(f"Max heap size {max_heap} in incorrect format. Use a number followed by M or G, e.g. 512M or 2G.")
 
