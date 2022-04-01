@@ -1,6 +1,6 @@
 from typing import Dict, List, Set, Tuple, TextIO
 from BaseClasses import Item, MultiWorld, Location
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 from .LogicMixin import TimespinnerLogic
 from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
 from .Locations import get_locations, starter_progression_locations, EventId
@@ -8,6 +8,8 @@ from .Regions import create_regions
 from .Options import is_option_enabled, get_option_value, timespinner_options
 from .PyramidKeys import get_pyramid_keys_unlock
 
+class TimespinnerWebWorld(WebWorld):
+    theme = "ice"
 
 class TimespinnerWorld(World):
     """
@@ -20,6 +22,7 @@ class TimespinnerWorld(World):
     topology_present = True
     remote_items = False
     data_version = 8
+    web = TimespinnerWebWorld()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
