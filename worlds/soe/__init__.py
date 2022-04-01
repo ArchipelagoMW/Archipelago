@@ -1,4 +1,4 @@
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 from ..generic.Rules import set_rule
 from BaseClasses import Region, Location, Entrance, Item, RegionType
 from Utils import output_path
@@ -133,6 +133,10 @@ def _get_item_grouping() -> typing.Dict[str, typing.Set[str]]:
     return groups
 
 
+class SoEWebWorld(WebWorld):
+    theme = 'jungle'
+
+
 class SoEWorld(World):
     """
     Secret of Evermore is a SNES action RPG. You learn alchemy spells, fight bosses and gather rocket parts to visit a
@@ -143,6 +147,7 @@ class SoEWorld(World):
     topology_present: bool = False
     remote_items: bool = False
     data_version = 2
+    web = SoEWebWorld
 
     item_name_to_id, item_id_to_raw = _get_item_mapping()
     location_name_to_id, location_id_to_raw = _get_location_mapping()
