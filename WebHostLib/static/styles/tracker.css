@@ -51,6 +51,17 @@ table.dataTable{
     color: #000000;
 }
 
+table.dataTable img.icon{
+    height: 100%;
+    max-width: 60px;
+    max-height: 60px;
+    filter: grayscale(100%) contrast(75%) brightness(50%);
+}
+
+table.dataTable img.acquired{
+    filter: none;
+}
+
 table.dataTable thead{
     font-family: LexendDeca-Regular, sans-serif;
 }

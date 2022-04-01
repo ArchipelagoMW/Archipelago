@@ -350,7 +350,8 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
                 item, recipient, flags = locations[player][location]
                 if recipient == tracked_player:
                     if flags & 1:
-                        prog_items[tracked_player][item] += 1
+                        item_name = lookup_any_item_id_to_name[item]
+                        prog_items[tracked_player][item_name] += 1
 
 
     game_name = games[tracked_player]
@@ -361,11 +362,14 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
     elif game_name in AutoWorldRegister.world_types and type != 'generic':
         webworld = AutoWorldRegister.world_types[game_name].web
         locations_done = {lookup_any_location_id_to_name[id] for id in checked_locations}
-        items_received = {lookup_any_item_id_to_name[id] for id in inventory}
-        player_prog_items = {lookup_any_item_id_to_name[id] for id in prog_items[tracked_player]}
-        return webworld.get_player_tracker(multisave, room, locations, inventory, prog_items[tracked_player],
-                                           player_prog_items, tracked_team, tracked_player, player_name, locations_done,
-                                           items_received, slot_data[tracked_player])
+        items_received = collections.Counter()
+        all_location_names = {lookup_any_location_id_to_name[id] for id in locations[tracked_player]}
+        for id in inventory:
+            if lookup_any_item_id_to_name[id] in prog_items[tracked_player]:
+                items_received[lookup_any_item_id_to_name[id]] += 1
+        return webworld.get_player_tracker(multisave, room, all_location_names, prog_items[tracked_player], tracked_team,
+                                           tracked_player, player_name, locations_done, items_received,
+                                           slot_data[tracked_player])
     else:
         return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
 
