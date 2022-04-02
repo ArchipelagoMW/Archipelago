@@ -996,10 +996,9 @@ def getTracker(tracker: UUID):
             if location not in player_locations or location not in player_location_to_area[player]:
                 continue
 
-            if len(player_locations[location]) == 3:
-                item, recipient, flags = player_locations[location]
-            else: # TODO: remove around version 0.2.5
-                item, recipient = player_locations[location]
+            item, recipient, flags = player_locations[location]
+            if recipient not in names:
+                continue
 
             attribute_item(inventory, team, recipient, item)
             checks_done[team][player][player_location_to_area[player][location]] += 1

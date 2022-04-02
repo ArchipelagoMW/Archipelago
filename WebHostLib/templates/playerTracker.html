@@ -32,11 +32,16 @@
                     {% endif %}
                 <tr class="center-column row-{{ loop.index }}">
                     {%- for name in column %}
-                    <td><img src="{{ icons[name] }}" class="icon {{ 'acquired' if name in received_items }}"><br />{{ name }}</td>
-                    {% if all_progression_items[name] > 1 %}
+                    {% if name in icons %}
+                    <td><img src="{{ icons[name] }}" class="icon {{ 'acquired' if name in received_items }}"><br />{{ name if name in received_items else '' }}</td>
+                        {% if all_progression_items[name] > 1 %}
                     <td> {{ received_items[name] if name in received_items else '' }} </td>
-                    {% else %}
+                        {% else %}
                     <td> {{ '✔' if name in received_items else '' }}</td>
+                        {% endif %}
+                    {% else %}
+                    <td></td>
+                    <td></td>
                     {% endif %}
                     {%- endfor %}
                 </tr>
@@ -111,6 +116,7 @@
                 </tr>
                 </thead>
                 {% for column in regions|batch(location_columns) %}
+                <table class="region" id="region-{{column}}">
                 <tr>
                     {% for region in column %}
                     <td>{{ region }} {{ '▼' if region != 'Total' }}</td>
@@ -128,6 +134,7 @@
                 {% endfor %}
                 </tbody>
                     {% endfor %}
+                </table>
                 {% endfor %}
             </table>
         </div>
@@ -163,8 +170,8 @@
                 {%- endfor %}
                 </tbody>
         {% endblock %}
-        {% endif %}
             </table>
         </div>
+        {% endif %}
     </div>
 {% endblock %}
