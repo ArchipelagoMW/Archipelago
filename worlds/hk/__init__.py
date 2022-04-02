@@ -77,6 +77,11 @@ white_palace_locations = {
 
 
 class HKWorld(World):
+    """Beneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface, 
+    searching for riches, or glory, or answers to old secrets.
+
+As the enigmatic Knight, you’ll traverse the depths, unravel its mysteries and conquer its evils.
+    """  # from https://www.hollowknight.com
     game: str = "Hollow Knight"
     options = hollow_knight_options
 
@@ -84,7 +89,6 @@ class HKWorld(World):
     location_name_to_id = {location_name: location_id for location_id, location_name in
                            enumerate(locations, start=0x1000000)}
 
-    hidden = True
     ranges: typing.Dict[str, typing.Tuple[int, int]]
     shops = {"Egg_Shop": "egg", "Grubfather": "grub", "Seer": "essence", "Salubra_(Requires_Charms)": "charm"}
     charm_costs: typing.List[int]
