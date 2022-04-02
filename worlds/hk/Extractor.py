@@ -251,7 +251,12 @@ for item_data in extra_item_data:
     for effect in effects:
         effect_names.add(effect["Term"])
     effects = {effect["Term"]: effect["Value"] for effect in effects if
-               effect["Term"] != item_data["Name"] and effect["Term"] != "GEO"}
+               effect["Term"] != item_data["Name"] and effect["Term"] not in {"GEO",
+                                                                              "HALLOWNESTSEALS",
+                                                                              "WANDERERSJOURNALS",
+                                                                              'HALLOWNESTSEALS',
+                                                                              "KINGSIDOLS",
+                                                                              'ARCANEEGGS'}}
     if effects:
         item_effects[item_data["Name"]] = effects
 
@@ -363,7 +368,12 @@ warning = "# This module is written by Extractor.py, do not edit manually!.\n\n"
 with open(os.path.join(os.path.dirname(__file__), "ExtractedData.py"), "wt") as py:
     py.write(warning)
     for name in names:
-        py.write(f"{name} = {globals()[name]}\n")
+        var = globals()[name]
+        if type(var) == set:
+            # sort so a regen doesn't cause a file change every time
+            var = sorted(var)
+            var = "{"+str(var)[1:-1]+"}"
+        py.write(f"{name} = {var}\n")
 
 
 template_env: jinja2.Environment = \
