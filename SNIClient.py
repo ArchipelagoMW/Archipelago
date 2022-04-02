@@ -988,13 +988,18 @@ async def game_watcher(ctx: Context):
         if not ctx.rom:
             ctx.finished_game = False
             ctx.death_link_allow_survive = False
-            game_name = await snes_read(ctx, SM_ROMNAME_START, 2)
+            game_name = await snes_read(ctx, SM_ROMNAME_START, 5)
             if game_name is None:
                 continue
             elif game_name[:2] == b"SM":
                 ctx.game = GAME_SM
-                item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
-                ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
+                # versions lower than 0.3.0 dont have item handling flag nor remote item support
+                romVersion = int(game_name[2:5].decode('UTF-8'))
+                if romVersion < 30:
+                    ctx.items_handling = 0b001 # full local 
+                else:
+                    item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
+                    ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
             else:
                 game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
                 if game_name == b"ZSM":
@@ -1148,7 +1153,7 @@ async def game_watcher(ctx: Context):
             if itemOutPtr < len(ctx.items_received):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
-                locationId = (item.location - locations_start_id) if item.location >= 0 else 0x00
+                locationId = (item.location - locations_start_id) if item.location >= 0 and bool(ctx.items_handling & 0b010) else 0x00
 
                 playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes(
