@@ -149,11 +149,14 @@ class HKWorld(World):
                 for item_name, location_name in zip(option.items, option.locations):
                     if item_name in geo_replace:
                         item_name = "Geo_Rock-Default"
+                    item = self.create_item(item_name)
                     if location_name in white_palace_locations:
-                        self.create_location(location_name).place_locked_item(self.create_item(item_name))
+                        self.create_location(location_name).place_locked_item(item)
+                    elif location_name == "Start":
+                        self.world.push_precollected(item)
                     else:
                         self.create_location(location_name)
-                        pool.append(self.create_item(item_name))
+                        pool.append(item)
             else:
                 for item_name, location_name in zip(option.items, option.locations):
                     item = self.create_item(item_name)
