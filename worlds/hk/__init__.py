@@ -244,6 +244,17 @@ class HKWorld(World):
 
         return change
 
+    @classmethod
+    def stage_write_spoiler(cls, world, spoiler_handle):
+        hk_players = world.get_game_players(cls.game)
+        spoiler_handle.write('\n\nCharm Notches:')
+        for player in hk_players:
+            name = world.get_player_name(player)
+            spoiler_handle.write(f'\n{name}\n')
+            hk_world: HKWorld = world.worlds[player]
+            for charm_number, cost in enumerate(hk_world.charm_costs, start=1):
+                spoiler_handle.write(f"\n{charm_number}: {cost}")
+
 
 def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:
     ret = Region(name, RegionType.Generic, name, player)
