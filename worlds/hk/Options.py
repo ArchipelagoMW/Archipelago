@@ -18,7 +18,7 @@ class Disabled(Toggle):
 
 locations = {"option_" + start: i for i, start in enumerate(starts)}
 # This way the dynamic start names are picked up by the MetaClass Choice belongs to
-StartLocation = type("StartLocation", (Choice,), {"auto_display_name": False, **locations})
+StartLocation = type("StartLocation", (Choice,), {"__module__": __name__, "auto_display_name": False, **locations})
 del (locations)
 
 default_on = {
@@ -43,7 +43,7 @@ disabled = {
 hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {}
 
 for option_name, option_data in pool_options.items():
-    extra_data = {"items": option_data[0], "locations": option_data[1]}
+    extra_data = {"__module__": __name__, "items": option_data[0], "locations": option_data[1]}
     if option_name in disabled:
         extra_data["__doc__"] = "Disabled Option. Not implemented."
         option = type(option_name, (Disabled,), extra_data)
@@ -51,7 +51,8 @@ for option_name, option_data in pool_options.items():
         option = type(option_name, (DefaultOnToggle,), extra_data)
     else:
         option = type(option_name, (Toggle,), extra_data)
-    hollow_knight_randomize_options[option_name] = option
+    globals()[option.__name__] = option
+    hollow_knight_randomize_options[option.__name__] = option
 
 
 hollow_knight_logic_options: typing.Dict[str, type(Option)] = {
