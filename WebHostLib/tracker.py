@@ -330,7 +330,10 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
             # If the player does not have the item, do nothing
             for location in locations_checked:
                 if location in player_locations:
-                    item, recipient, flags = player_locations[location]
+                    if len(player_locations[location]) == 3:
+                        item, recipient, flags = player_locations[location]
+                    else: # TODO: remove around version 0.2.5
+                        item, recipient = player_locations[location]
                     if recipient == tracked_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
                     if ms_player == tracked_player:  # a check done by the tracked player
@@ -350,8 +353,8 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
                         item_name = lookup_any_item_id_to_name[item]
                         prog_items[tracked_player][item_name] += 1
 
-
     game_name = games[tracked_player]
+    # TODO move all games in game_specific_trackers to new system
     if game_name in game_specific_trackers and type != 'generic':
         specific_tracker = game_specific_trackers.get(game_name, None)
         return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
@@ -364,7 +367,7 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
         for id in inventory:
             if lookup_any_item_id_to_name[id] in prog_items[tracked_player]:
                 items_received[lookup_any_item_id_to_name[id]] += 1
-        return webworld.get_player_tracker(multisave, room, all_location_names, prog_items[tracked_player], tracked_team,
+        return webworld.get_player_tracker(room, all_location_names, prog_items[tracked_player], tracked_team,
                                            tracked_player, player_name, locations_done, items_received,
                                            slot_data[tracked_player])
     else:
@@ -995,9 +998,10 @@ def getTracker(tracker: UUID):
                 continue
 
             item, recipient, flags = player_locations[location]
+            if recipient not in names:
+                continue
 
-            if recipient in names:
-                attribute_item(inventory, team, recipient, item)
+            attribute_item(inventory, team, recipient, item)
             checks_done[team][player][player_location_to_area[player][location]] += 1
             checks_done[team][player]["Total"] += 1
 
@@ -1011,7 +1015,10 @@ def getTracker(tracker: UUID):
     player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1) if playernumber not in groups}
     for loc_data in locations.values():
          for values in loc_data.values():
-            item_id, item_player, flags = values
+            if len(values) == 3:
+                item_id, item_player, flags = values
+            else: # TODO: remove around version 0.2.5
+                item_id, item_player = values
 
             if item_id in ids_big_key:
                 player_big_key_locations[item_player].add(ids_big_key[item_id])
