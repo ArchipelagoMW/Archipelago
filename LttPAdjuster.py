@@ -130,7 +130,7 @@ def adjust(args):
     logger = logging.getLogger('Adjuster')
     logger.info('Patching ROM.')
     vanillaRom = args.baserom
-    if os.path.splitext(args.rom)[-1].lower() == '.apbp':
+    if os.path.splitext(args.rom)[-1].lower() in {'.apbp', '.aplttp'}:
         import Patch
         meta, args.rom = Patch.create_rom_file(args.rom)
 
