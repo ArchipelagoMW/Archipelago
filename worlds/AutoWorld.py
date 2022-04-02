@@ -94,40 +94,40 @@ class WebWorld:
     # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime
     theme = "grass"
 
-    bgcolor = "green"
-
     # overridable method allowing you to create your own tracker. It needs to be designated as a class method to be picked
     # up correctly. All the arguments available should give you the information you need to build one and the template html
     # can also be overridden.
     @classmethod
-    def get_player_tracker(cls, multisave: Dict[str, Any], room, locations: set,
-                           all_progression_items: Counter, team: int, player: int, player_name: str,
-                           checked_locations: set, player_received_items: Counter, slot_data: Dict) -> str:
-
-        #icons: Dict = {
-        #    item: item for item in all_progression_items
-        #}
-        #icons = {}
-        #for item in all_progression_items:
-        #    icons[item] = 'https://user-images.githubusercontent.com/12670730/113008567-6ebdcb80-9177-11eb-91bd-6863196d9cd3.png'
+    def get_player_tracker(cls, room, locations: set, all_progression_items: Counter, team: int, player: int,
+                           player_name: str, checked_locations: set, player_received_items: Counter, slot_data: Dict) -> str:
+        """This method will create a basic 'prettier' tracker for each world using their themes automatically. This
+        can be overridden to customize how it will appear. Can provide icons and custom regions as well as custom
+        number of item and location columns. The html used is also a template that can be overridden if you want your
+        tracker to look different in certain aspects. All arguments being returned by this method are required by your
+        implementation. To add icons and regions simply return the icons and regions arguments to the html."""
+        icons: Dict = {
+            item: item for item in all_progression_items
+        }
+        icons = {}
+        for item in all_progression_items:
+            icons[item] = 'https://user-images.githubusercontent.com/12670730/113008567-6ebdcb80-9177-11eb-91bd-6863196d9cd3.png'
 
         # testing ror2
-        #regions = {
-        #    'first_region': [],
-        #    'second_region': [],
-        #    'third_region': [],
-        #    'fourth_region': [],
-        #}
-        #for i in range(5):
-        #    regions['first_region'].append(f'ItemPickup{i}')
-        #    regions['second_region'].append(f'ItemPickup{i+5}')
-        #    regions['third_region'].append(f'ItemPickup{i+10}')
-        #    regions['fourth_region'].append(f'ItemPickup{i+15}')
+        regions = {
+            'first_region': [],
+            'second_region': [],
+            'third_region': [],
+            'fourth_region': [],
+        }
+        for i in range(5):
+            regions['first_region'].append(f'Item{i}')
+            regions['second_region'].append(f'Item{i+5}')
+            regions['third_region'].append(f'Item{i+10}')
+            regions['fourth_region'].append(f'Item{i+15}')
 
-
-        return render_template("playerTracker.html", all_progression_items=all_progression_items, icons=icons,
-                               player=player, team=team, room=room, player_name=player_name,
-                               checked_locations=sorted(checked_locations), #regions=regions,
+        return render_template("playerTracker.html", all_progression_items=all_progression_items, player=player,
+                               team=team, room=room, player_name=player_name, icons=icons,
+                               checked_locations=sorted(checked_locations),
                                not_checked_locations=sorted(locations - checked_locations),
                                received_items=player_received_items, theme=cls.theme, item_columns=4, location_columns=4)
 
