@@ -211,7 +211,7 @@ def install_forge(directory: str):
                 f.write(resp.content)
             print(f"Installing Forge...")
             argstring = ' '.join([jdk, "-jar", "\"" + forge_install_jar+ "\"", "--installServer", "\"" + directory + "\""])
-            install_process = Popen(argstring, shell=True)
+            install_process = Popen(argstring, shell=not is_windows)
             install_process.wait()
             os.remove(forge_install_jar)
 
@@ -238,7 +238,7 @@ def run_forge_server(forge_dir: str, heap_arg):
     argstring = ' '.join([java_exe, heap_arg] + win_args + ["-nogui"])
     logging.info(f"Running Forge server: {argstring}")
     os.chdir(forge_dir)
-    return Popen(argstring, shell=True)
+    return Popen(argstring, shell=not is_windows)
 
 
 if __name__ == '__main__':
