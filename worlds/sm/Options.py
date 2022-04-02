@@ -224,7 +224,6 @@ class VariaCustomPreset(OptionList):
     display_name = "Varia Custom Preset"  
     default = {}
 
-
 sm_options: typing.Dict[str, type(Option)] = {
     "start_inventory_removes_from_pool": StartItemsRemovesFromPool,
     "preset": Preset,
@@ -275,5 +274,5 @@ sm_options: typing.Dict[str, type(Option)] = {
     "no_music": NoMusic,
     "random_music": RandomMusic,
     "custom_preset": CustomPreset,
-    "varia_custom_preset": VariaCustomPreset
+    "varia_custom_preset": VariaCustomPreset,
     }

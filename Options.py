@@ -38,6 +38,7 @@ class AssembleOptions(type):
                         return ret
 
                     return validate
+
                 attrs["__init__"] = validate_decorator(attrs["__init__"])
             else:
                 # construct an __init__ that calls parent __init__
@@ -54,9 +55,11 @@ class AssembleOptions(type):
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
 
-class Option(metaclass=AssembleOptions):
-    value: int
-    name_lookup: typing.Dict[int, str]
+T = typing.TypeVar('T')
+
+
+class Option(typing.Generic[T], metaclass=AssembleOptions):
+    value: T
     default = 0
 
     # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
@@ -65,6 +68,10 @@ class Option(metaclass=AssembleOptions):
 
     # can be weighted between selections
     supports_weighting = True
+
+    # filled by AssembleOptions:
+    name_lookup: typing.Dict[int, str]
+    options: typing.Dict[str, int]
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.get_current_option_name()})"
@@ -81,13 +88,13 @@ class Option(metaclass=AssembleOptions):
         return self.get_option_name(self.value)
 
     @classmethod
-    def get_option_name(cls, value: typing.Any) -> str:
+    def get_option_name(cls, value: T) -> str:
         if cls.auto_display_name:
             return cls.name_lookup[value].replace("_", " ").title()
         else:
             return cls.name_lookup[value]
 
-    def __int__(self) -> int:
+    def __int__(self) -> T:
         return self.value
 
     def __bool__(self) -> bool:
@@ -98,7 +105,7 @@ class Option(metaclass=AssembleOptions):
         raise NotImplementedError
 
 
-class Toggle(Option):
+class Toggle(Option[int]):
     option_false = 0
     option_true = 1
     default = 0
@@ -109,7 +116,9 @@ class Toggle(Option):
 
     @classmethod
     def from_text(cls, text: str) -> Toggle:
-        if text.lower() in {"off", "0", "false", "none", "null", "no"}:
+        if text == "random":
+            return cls(random.choice(list(cls.name_lookup)))
+        elif text.lower() in {"off", "0", "false", "none", "null", "no"}:
             return cls(0)
         else:
             return cls(1)
@@ -150,7 +159,7 @@ class DefaultOnToggle(Toggle):
     default = 1
 
 
-class Choice(Option):
+class Choice(Option[int]):
     auto_display_name = True
 
     def __init__(self, value: int):
@@ -178,10 +187,10 @@ class Choice(Option):
         if isinstance(other, self.__class__):
             return other.value == self.value
         elif isinstance(other, str):
-            assert other in self.options, "compared against a str that could never be equal."
+            assert other in self.options, f"compared against a str that could never be equal. {self} == {other}"
             return other == self.current_key
         elif isinstance(other, int):
-            assert other in self.name_lookup, "compared against an int that could never be equal."
+            assert other in self.name_lookup, f"compared against an int that could never be equal. {self} == {other}"
             return other == self.value
         elif isinstance(other, bool):
             return other == bool(self.value)
@@ -192,10 +201,10 @@ class Choice(Option):
         if isinstance(other, self.__class__):
             return other.value != self.value
         elif isinstance(other, str):
-            assert other in self.options , "compared against a str that could never be equal."
+            assert other in self.options, f"compared against a str that could never be equal. {self} != {other}"
             return other != self.current_key
         elif isinstance(other, int):
-            assert other in self.name_lookup, "compared against am int that could never be equal."
+            assert other in self.name_lookup, f"compared against am int that could never be equal. {self} != {other}"
             return other != self.value
         elif isinstance(other, bool):
             return other != bool(self.value)
@@ -207,7 +216,7 @@ class Choice(Option):
     __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
-class Range(Option, int):
+class Range(Option[int], int):
     range_start = 0
     range_end = 1
 
@@ -300,10 +309,9 @@ class VerifyKeys:
                                     f"is not a valid location name from {world.game}")
 
 
-class OptionDict(Option, VerifyKeys):
+class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
     default = {}
     supports_weighting = False
-    value: typing.Dict[str, typing.Any]
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
         self.value = value
@@ -332,10 +340,9 @@ class ItemDict(OptionDict):
         super(ItemDict, self).__init__(value)
 
 
-class OptionList(Option, VerifyKeys):
+class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     default = []
     supports_weighting = False
-    value: list
 
     def __init__(self, value: typing.List[typing.Any]):
         self.value = value or []
@@ -359,10 +366,9 @@ class OptionList(Option, VerifyKeys):
         return item in self.value
 
 
-class OptionSet(Option, VerifyKeys):
+class OptionSet(Option[typing.Set[str]], VerifyKeys):
     default = frozenset()
     supports_weighting = False
-    value: set
 
     def __init__(self, value: typing.Union[typing.Set[str, typing.Any], typing.List[str, typing.Any]]):
         self.value = set(value)
@@ -502,7 +508,6 @@ per_game_common_options = {
     "priority_locations": PriorityLocations,
     "item_links": ItemLinks
 }
-
 
 if __name__ == "__main__":
 
