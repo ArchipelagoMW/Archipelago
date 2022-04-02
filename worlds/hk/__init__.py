@@ -80,7 +80,7 @@ class HKWorld(World):
     """Beneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface, 
     searching for riches, or glory, or answers to old secrets.
 
-As the enigmatic Knight, you’ll traverse the depths, unravel its mysteries and conquer its evils.
+    As the enigmatic Knight, you’ll traverse the depths, unravel its mysteries and conquer its evils.
     """  # from https://www.hollowknight.com
     game: str = "Hollow Knight"
     options = hollow_knight_options
