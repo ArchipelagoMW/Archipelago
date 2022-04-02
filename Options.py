@@ -256,8 +256,10 @@ class Range(Option[int], int):
                     return cls(int(round(random.triangular(random_range[0], random_range[1], random_range[1]))))
                 else:
                     return cls(int(round(random.randint(random_range[0], random_range[1]))))
-            else:
+            elif text == "random":
                 return cls(random.randint(cls.range_start, cls.range_end))
+            else:
+                raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern.")
         return cls(int(text))
 
     @classmethod
