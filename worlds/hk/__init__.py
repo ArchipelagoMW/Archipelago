@@ -91,7 +91,7 @@ class HKWorld(World):
     item_name_groups = item_name_groups
 
     ranges: typing.Dict[str, typing.Tuple[int, int]]
-    shops = {"Egg_Shop": "egg", "Grubfather": "grub", "Seer": "essence", "Salubra_(Requires_Charms)": "charm"}
+    shops = {"Egg_Shop": "Egg", "Grubfather": "Grub", "Seer": "Essence", "Salubra_(Requires_Charms)": "Charm"}
     charm_costs: typing.List[int]
     data_version = 2
 
@@ -104,16 +104,16 @@ class HKWorld(World):
 
     def generate_early(self):
         world = self.world
-        self.charm_costs = world.random_charm_costs[self.player].get_costs(world.random)
+        self.charm_costs = world.RandomCharmCosts[self.player].get_costs(world.random)
         world.exclude_locations[self.player].value.update(white_palace_locations)
         world.local_items[self.player].value.add("Mimic_Grub")
         for vendor, unit in self.shops.items():
-            mini = getattr(world, f"minimum_{unit}_price")[self.player]
-            maxi = getattr(world, f"maximum_{unit}_price")[self.player]
+            mini = getattr(world, f"Minimum{unit}Price")[self.player]
+            maxi = getattr(world, f"Maximum{unit}Price")[self.player]
             # if minimum > maximum, set minimum to maximum
             mini.value = min(mini.value, maxi.value)
             self.ranges[unit] = mini.value, maxi.value
-        world.push_precollected(HKItem(starts[world.start_location[self.player].current_key],
+        world.push_precollected(HKItem(starts[world.StartLocation[self.player].current_key],
                                        True, None, "Event", self.player))
         for option_name in disabled:
             getattr(world, option_name)[self.player].value = 0
@@ -167,7 +167,7 @@ class HKWorld(World):
                         self.world.push_precollected(item)
                     else:
                         self.create_location(location_name).place_locked_item(item)
-        for i in range(self.world.egg_shop_slots[self.player].value):
+        for i in range(self.world.EggShopSlots[self.player].value):
             self.create_location("Egg_Shop")
             pool.append(self.create_item("Geo_Rock-Default"))
         if not self.allow_white_palace:
@@ -315,8 +315,8 @@ class HKLogicMixin(LogicMixin):
 
     def _kh_option(self, player: int, option_name: str) -> int:
         if option_name == "RandomizeCharmNotches":
-            return self.world.random_charm_costs[player] != -1
+            return self.world.RandomCharmCosts[player] != -1
         return getattr(self.world, option_name)[player].value
 
     def _kh_start(self, player, start_location: str) -> bool:
-        return self.world.start_location[player] == start_location
+        return self.world.StartLocation[player] == start_location
