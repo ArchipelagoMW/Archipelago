@@ -146,7 +146,7 @@ class SoEWorld(World):
     topology_present = False
     remote_items = False
     data_version = 2
-    web = SoEWebWorld
+    web = SoEWebWorld()
 
     item_name_to_id, item_id_to_raw = _get_item_mapping()
     location_name_to_id, location_id_to_raw = _get_location_mapping()
