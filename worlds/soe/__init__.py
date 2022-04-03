@@ -1,4 +1,4 @@
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 from ..generic.Rules import set_rule
 from BaseClasses import Region, Location, Entrance, Item, RegionType
 from Utils import output_path
@@ -7,7 +7,6 @@ import os
 import os.path
 import threading
 import itertools
-import time
 
 try:
     import pyevermizer  # from package
@@ -133,6 +132,10 @@ def _get_item_grouping() -> typing.Dict[str, typing.Set[str]]:
     return groups
 
 
+class SoEWebWorld(WebWorld):
+    theme = 'jungle'
+
+
 class SoEWorld(World):
     """
     Secret of Evermore is a SNES action RPG. You learn alchemy spells, fight bosses and gather rocket parts to visit a
@@ -140,13 +143,16 @@ class SoEWorld(World):
     """
     game: str = "Secret of Evermore"
     options = soe_options
-    topology_present: bool = False
-    remote_items: bool = False
+    topology_present = False
+    remote_items = False
     data_version = 2
+    web = SoEWebWorld()
 
     item_name_to_id, item_id_to_raw = _get_item_mapping()
     location_name_to_id, location_id_to_raw = _get_location_mapping()
     item_name_groups = _get_item_grouping()
+
+    trap_types = [name[12:] for name in options if name.startswith('trap_chance_')]
 
     evermizer_seed: int
     connect_name: str
@@ -189,9 +195,8 @@ class SoEWorld(World):
         trap_count = self.world.trap_count[self.player].value
         trap_chances = {}
         trap_names = {}
-        fool = 1648731600 <= time.time() <= 1648900800
         if trap_count > 0:
-            for trap_type in ("quake", "poison", "confound", "hud", "ohko"):
+            for trap_type in self.trap_types:
                 trap_option = getattr(self.world, f'trap_chance_{trap_type}')[self.player]
                 trap_chances[trap_type] = trap_option.value
                 trap_names[trap_type] = trap_option.item_name
@@ -200,11 +205,6 @@ class SoEWorld(World):
                 for trap_type in trap_chances:
                     trap_chances[trap_type] = 1
                 trap_chances_total = len(trap_chances)
-        elif fool:
-            trap_count = 1
-            trap_chances = {'quake': 1}
-            trap_names = {'quake': getattr(self.world, 'trap_chance_quake')[self.player].item_name}
-            trap_chances_total = 1
 
         def create_trap() -> Item:
             v = self.world.random.randrange(trap_chances_total)
