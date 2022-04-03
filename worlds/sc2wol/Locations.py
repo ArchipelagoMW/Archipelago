@@ -42,7 +42,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Outbreak", "Outbreak: Victory", SC2WOL_ITEM_ID_OFFSET + 500),
         LocationData("Outbreak", "Outbreak: Left Infestor", SC2WOL_ITEM_ID_OFFSET + 501),
         LocationData("Outbreak", "Outbreak: Right Infestor", SC2WOL_ITEM_ID_OFFSET + 502),
-        LocationData("Outbreak", "None Outbreak", None),
+        LocationData("Outbreak", "Beat Outbreak", None),
         LocationData("Safe Haven", "Safe Haven: Victory", SC2WOL_ITEM_ID_OFFSET + 600),
         LocationData("Safe Haven", "Beat Safe Haven", None),
         LocationData("Haven's Fall", "Haven's Fall: Victory", SC2WOL_ITEM_ID_OFFSET + 700),
