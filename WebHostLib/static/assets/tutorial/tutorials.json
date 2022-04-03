@@ -555,5 +555,24 @@
         ]
       }
     ]
+  },
+  {
+    "gameTitle": "Hollow Knight",
+    "tutorials": [
+      {
+        "name": "Mod Setup and Use Guide",
+        "description": "A guide to playing Hollow Knight with Archipelago.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "Hollow Knight/setup_en.md",
+            "link": "Hollow Knight/setup/en",
+            "authors": [
+              "ijwu"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]
