@@ -1,1 +1,2 @@
 burnysc2 >= 5.0.15
+nest-asyncio >= 1.5.5
