@@ -3,10 +3,10 @@
 from ..generic.Rules import set_rule, add_rule
 
 units = {
-    "egg": "RANCIDEGGS",
-    "grub": "GRUBS",
-    "essence": "ESSENCE",
-    "charm": "CHARMS",
+    "Egg": "RANCIDEGGS",
+    "Grub": "GRUBS",
+    "Essence": "ESSENCE",
+    "Charm": "CHARMS",
 }
 
 
