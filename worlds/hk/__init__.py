@@ -91,7 +91,12 @@ class HKWorld(World):
     item_name_groups = item_name_groups
 
     ranges: typing.Dict[str, typing.Tuple[int, int]]
-    shops = {"Egg_Shop": "Egg", "Grubfather": "Grub", "Seer": "Essence", "Salubra_(Requires_Charms)": "Charm"}
+    shops: typing.Dict[str, str] = {
+        "Egg_Shop": "Egg",
+        "Grubfather": "Grub",
+        "Seer": "Essence",
+        "Salubra_(Requires_Charms)": "Charm"
+    }
     charm_costs: typing.List[int]
     data_version = 2
 
@@ -257,7 +262,7 @@ class HKWorld(World):
         return change
 
     @classmethod
-    def stage_write_spoiler(cls, world, spoiler_handle):
+    def stage_write_spoiler(cls, world: MultiWorld, spoiler_handle):
         hk_players = world.get_game_players(cls.game)
         spoiler_handle.write('\n\nCharm Notches:')
         for player in hk_players:
@@ -266,6 +271,16 @@ class HKWorld(World):
             hk_world: HKWorld = world.worlds[player]
             for charm_number, cost in enumerate(hk_world.charm_costs, start=1):
                 spoiler_handle.write(f"\n{charm_number}: {cost}")
+
+        spoiler_handle.write('\n\nShop Prices:')
+        for player in hk_players:
+            name = world.get_player_name(player)
+            spoiler_handle.write(f'\n{name}\n')
+            hk_world: HKWorld = world.worlds[player]
+            for shop_name, unit_name in cls.shops.items():
+                for x in range(1, hk_world.created_multi_locations[shop_name]+1):
+                    loc = world.get_location(hk_world.get_multi_location_name(shop_name, x), player)
+                    spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost} {unit_name}")
 
     def get_multi_location_name(self, base: str, i: typing.Optional[int]) -> str:
         if i is None:
