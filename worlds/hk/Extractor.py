@@ -256,7 +256,10 @@ for item_data in extra_item_data:
                                                                               "WANDERERSJOURNALS",
                                                                               'HALLOWNESTSEALS',
                                                                               "KINGSIDOLS",
-                                                                              'ARCANEEGGS'}}
+                                                                              'ARCANEEGGS',
+                                                                              'MAPS'
+                                                                              }}
+
     if effects:
         item_effects[item_data["Name"]] = effects
 
