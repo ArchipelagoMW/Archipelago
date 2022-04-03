@@ -138,7 +138,7 @@ Root: HKCR; Subkey: "{#MyAppName}smpatch";                     ValueData: "Archi
 Root: HKCR; Subkey: "{#MyAppName}smpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}smpatch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
 
-Root: HKCR; Subkey: ".smz3";                                 ValueData: "{#MyAppName}smz3patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: ".apsmz3";                                 ValueData: "{#MyAppName}smz3patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}smz3patch";                     ValueData: "Archipelago SMZ3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}smz3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}smz3patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";
