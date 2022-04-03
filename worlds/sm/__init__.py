@@ -404,7 +404,7 @@ class SMWorld(World):
     def generate_output(self, output_directory: str):
         outfilebase = 'AP_' + self.world.seed_name
         outfilepname = f'_P{self.player}'
-        outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}"
+        outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}"
         outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
 
         try:

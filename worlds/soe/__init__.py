@@ -271,7 +271,8 @@ class SoEWorld(World):
             if self.world.death_link[self.player].value:
                 switches.append("--death-link")
             rom_file = get_base_rom_path()
-            out_base = output_path(output_directory, f'AP_{self.world.seed_name}_P{self.player}_{player_name}')
+            out_base = output_path(output_directory, f'AP_{self.world.seed_name}_P{self.player}_'
+                                                     f'{self.world.get_file_safe_player_name(self.player)}')
             out_file = out_base + '.sfc'
             placement_file = out_base + '.txt'
             patch_file = out_base + '.apsoe'

@@ -112,7 +112,7 @@ class MinecraftWorld(World):
 
     def generate_output(self, output_directory: str):
         data = self._get_mc_data()
-        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}.apmc"
+        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_file_safe_player_name(self.player)}.apmc"
         with open(os.path.join(output_directory, filename), 'wb') as f:
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 
