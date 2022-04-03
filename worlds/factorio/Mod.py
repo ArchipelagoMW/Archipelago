@@ -91,7 +91,7 @@ def generate_mod(world, output_directory: str):
     for location in multiworld.get_filled_locations(player):
         if location.address:
             locations.append((location.name, location.item.name, location.item.player, location.item.advancement))
-    mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.player_name[player]}"
+    mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
     tech_cost_scale = {0: 0.1,
                        1: 0.25,
                        2: 0.5,

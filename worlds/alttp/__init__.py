@@ -298,7 +298,7 @@ class ALTTPWorld(World):
                                deathlink=world.death_link[player])
 
             outfilepname = f'_P{player}'
-            outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
+            outfilepname += f"_{world.get_file_safe_player_name(player).replace(' ', '_')}" \
                 if world.player_name[player] != 'Player%d' % player else ''
 
             rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
