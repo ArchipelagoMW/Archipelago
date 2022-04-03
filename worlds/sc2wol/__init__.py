@@ -29,9 +29,7 @@ class SC2WoLWorld(World):
     location_cache: typing.List[Location]
 
     def _get_sc2wol_data(self):
-        return {
-            #"difficulty": self.world.game_difficulty[self.player].current_key
-        }
+        return {}
 
     def __init__(self, world: MultiWorld, player: int):
         super(SC2WoLWorld, self).__init__(world, player)
@@ -79,7 +77,6 @@ class SC2WoLWorld(World):
             itempool += self._create_items("Fortified Bunker")
 
         self.world.itempool += itempool
-
 
 
     def set_rules(self):
