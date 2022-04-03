@@ -393,6 +393,13 @@ class SNIManager(GameManager):
     base_title = "Archipelago SNI Client"
 
 
+class SC2Manager(GameManager):
+    logging_pairs = [
+        ("Client", "Archipelago")
+    ]
+    base_title = "Archipelago SC2 Client"
+
+
 class TextManager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago")
