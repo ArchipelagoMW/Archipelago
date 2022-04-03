@@ -6,7 +6,7 @@ from collections import Counter
 
 logger = logging.getLogger("Hollow Knight")
 
-from .Items import item_table, lookup_type_to_names
+from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
 from .Rules import set_rules
 from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled
@@ -88,6 +88,7 @@ class HKWorld(World):
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {location_name: location_id for location_id, location_name in
                            enumerate(locations, start=0x1000000)}
+    item_name_groups = item_name_groups
 
     ranges: typing.Dict[str, typing.Tuple[int, int]]
     shops = {"Egg_Shop": "egg", "Grubfather": "grub", "Seer": "essence", "Salubra_(Requires_Charms)": "charm"}
