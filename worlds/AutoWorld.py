@@ -11,6 +11,8 @@ class AutoWorldRegister(type):
     world_types: Dict[str, World] = {}
 
     def __new__(cls, name: str, bases, dct: Dict[str, Any]):
+        if "web" in dct:
+            assert isinstance(dct["web"], WebWorld), "WebWorld has to be instantiated."
         # filter out any events
         dct["item_name_to_id"] = {name: id for name, id in dct["item_name_to_id"].items() if id}
         dct["location_name_to_id"] = {name: id for name, id in dct["location_name_to_id"].items() if id}
