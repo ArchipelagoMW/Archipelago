@@ -3,7 +3,7 @@ import typing
 
 from typing import List, Set, Tuple
 from BaseClasses import Item, MultiWorld, Location
-from .Items import StarcraftWoLItem, item_table, filler_items, item_name_groups, upgrade_bonus, get_full_item_list, \
+from .Items import StarcraftWoLItem, item_table, filler_items, item_name_groups, get_full_item_list, \
     basic_unit
 from .Locations import get_locations
 from .Regions import create_regions
@@ -59,26 +59,6 @@ class SC2WoLWorld(World):
 
         self.world.itempool += pool
 
-
-    def blah(self):
-        itempool: typing.List[StarcraftWoLItem] = []
-
-        for item in item_table:
-            itempool += self._create_items(item)
-
-        if get_option_value(self.world, self.player, "upgrade_bonus") == 0:
-            itempool += self._create_items("Ultra-Capacitors")
-        else:
-            itempool += self._create_items("Vanadium Plating")
-
-        if get_option_value(self.world, self.player, "bunker_upgrade") == 0:
-            itempool += self._create_items("Shrike Turret")
-        else:
-            itempool += self._create_items("Fortified Bunker")
-
-        self.world.itempool += itempool
-
-
     def set_rules(self):
         setup_events(self.world, self.player, self.locked_locations, self.location_cache)
 
@@ -109,9 +89,18 @@ def setup_events(world: MultiWorld, player: int, locked_locations: typing.List[s
 def get_excluded_items(self: SC2WoLWorld, world: MultiWorld, player: int) -> Set[str]:
     excluded_items: Set[str] = set()
 
+    if get_option_value(world, player, "upgrade_bonus") == 1:
+        excluded_items.add("Ultra-Capacitors")
+    else:
+        excluded_items.add("Vanadium Plating")
+
+    if get_option_value(world, player, "bunker_upgrade") == 1:
+        excluded_items.add("Shrike Turret")
+    else:
+        excluded_items.add("Fortified Bunker")
+
     for item in world.precollected_items[player]:
-        if item.name not in self.item_name_groups['UseItem']:
-            excluded_items.add(item.name)
+        excluded_items.add(item.name)
 
     return excluded_items
 

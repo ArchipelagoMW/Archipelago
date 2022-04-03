@@ -18,7 +18,7 @@ class StarcraftWoLItem(Item):
 
 
 def get_full_item_list():
-    return item_table | upgrade_bonus | bunker_upgrade
+    return item_table
 
 
 SC2WOL_ITEM_ID_OFFSET = 1000
@@ -109,6 +109,8 @@ item_table = {
     "Dusk Wings": ItemData(506 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 6),
     "Jackson's Revenge": ItemData(507 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 7),
 
+    "Ultra-Capacitors": ItemData(600 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 0),
+    "Vanadium Plating": ItemData(601 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 1),
     "Orbital Depots": ItemData(602 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 2),
     "Micro-Filtering": ItemData(603 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 3),
     "Automated Refinery": ItemData(604 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 4),
@@ -117,6 +119,8 @@ item_table = {
     "Science Vessel": ItemData(607 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 7),
     "Tech Reactor": ItemData(608 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 8),
     "Orbital Strike": ItemData(609 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 9),
+    "Shrike Turret": ItemData(610 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 10),
+    "Fortified Bunker": ItemData(611 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 11),
     "Planetary Fortress": ItemData(612 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 12),
     "Perdition Turret": ItemData(613 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 13),
     "Predator": ItemData(614 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 14),
@@ -138,16 +142,6 @@ item_table = {
 
     "+5 Starting Minerals": ItemData(500+SC2WOL_ITEM_ID_OFFSET, "Minerals", 5, quantity=0),
     "+5 Starting Vespene": ItemData(501+SC2WOL_ITEM_ID_OFFSET, "Vespene", 5, quantity=0)
-}
-
-upgrade_bonus = {
-    "Ultra-Capacitors": ItemData(600 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 0),
-    "Vanadium Plating": ItemData(601 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 1)
-}
-
-bunker_upgrade = {
-    "Shrike Turret": ItemData(610 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 10),
-    "Fortified Bunker": ItemData(611 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 11)
 }
 
 basic_unit: typing.Tuple[str, ...] = (
