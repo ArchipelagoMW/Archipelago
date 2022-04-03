@@ -175,6 +175,17 @@ class HKWorld(World):
                 loc.item.advancement = False
         self.world.itempool += pool
 
+        for shopname in self.shops:
+            prices: typing.List[int] = []
+            locations: typing.List[HKLocation] = []
+            for x in range(1, self.created_multi_locations[shopname]+1):
+                loc = self.world.get_location(self.get_multi_location_name(shopname, x), self.player)
+                locations.append(loc)
+                prices.append(loc.cost)
+            prices.sort()
+            for loc, price in zip(locations, prices):
+                loc.cost = price
+
     def set_rules(self):
         world = self.world
         player = self.player
@@ -216,7 +227,7 @@ class HKWorld(World):
             cost = 0
         if name in multi_locations:
             self.created_multi_locations[name] += 1
-            name += f"_{self.created_multi_locations[name]}"
+            name = self.get_multi_location_name(name, self.created_multi_locations[name])
 
         region = self.world.get_region("Menu", self.player)
         loc = HKLocation(self.player, name, self.location_name_to_id[name], region)
@@ -254,6 +265,12 @@ class HKWorld(World):
             hk_world: HKWorld = world.worlds[player]
             for charm_number, cost in enumerate(hk_world.charm_costs, start=1):
                 spoiler_handle.write(f"\n{charm_number}: {cost}")
+
+    def get_multi_location_name(self, base: str, i: typing.Optional[int]) -> str:
+        if i is None:
+            i = self.created_multi_locations[base]
+        assert 0 < i < 18, "limited number of multi location IDs reserved."
+        return f"{base}_{i}"
 
 
 def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:
