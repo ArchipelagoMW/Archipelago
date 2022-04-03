@@ -378,6 +378,13 @@ class FactorioManager(GameManager):
     base_title = "Archipelago Factorio Client"
 
 
+class ChecksFinderManager(GameManager):
+    logging_pairs = [
+        ("Client", "Archipelago")
+    ]
+    base_title = "Archipelago ChecksFinder Client"
+
+
 class SNIManager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago"),
@@ -398,6 +405,12 @@ class FF1Manager(GameManager):
         ("Client", "Archipelago")
     ]
     base_title = "Archipelago Final Fantasy 1 Client"
+
+class OoTManager(GameManager):
+    logging_pairs = [
+        ("Client", "Archipelago")
+    ]
+    base_title = "Archipelago Ocarina of Time Client"
 
 
 class LogtoUI(logging.Handler):

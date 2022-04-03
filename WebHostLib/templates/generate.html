@@ -8,14 +8,14 @@
 {% endblock %}
 
 {% block body %}
-    {% include 'header/oceanHeader.html' %}
+    {% include 'header/oceanIslandHeader.html' %}
     <div id="generate-game-wrapper">
         <div id="generate-game" class="grass-island">
             <h1>Generate Game{% if race %} (Race Mode){% endif %}</h1>
             <p>
                 This page allows you to generate a game by uploading a config file or a zip file containing config
                 files. If you do not have a config (.yaml) file yet, you may create one on the game's settings page,
-                which you can find via the <a href="{{ url_for("games") }}">supported games list</a>.
+                which you can find on the <a href="{{ url_for("games") }}">supported games list</a>.
             </p>
             <p>
                 Note: This website will always generate games using the current release version of Archipelago,

@@ -1,5 +1,5 @@
 import typing
-from Options import Option, Range, Choice, Toggle, DefaultOnToggle
+from Options import Option, Range, Choice, Toggle, DefaultOnToggle, AssembleOptions, DeathLink
 
 
 class EvermizerFlags:
@@ -136,6 +136,54 @@ class TurdoMode(EvermizerFlag, Toggle):
     flag = 't'
 
 
+class TrapCount(Range):
+    """Replace some filler items with traps"""
+    display_name = "Trap Count"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
+class ItemChanceMeta(AssembleOptions):
+    def __new__(mcs, name, bases, attrs):
+        if 'item_name' in attrs:
+            attrs["display_name"] = f"{attrs['item_name']} Chance"
+        attrs["range_start"] = 0
+        attrs["range_end"] = 100
+
+        return super(ItemChanceMeta, mcs).__new__(mcs, name, bases, attrs)
+
+
+class TrapChance(Range, metaclass=ItemChanceMeta):
+    item_name: str
+    default = 20
+
+
+class TrapChanceQuake(TrapChance):
+    """Sets the chance/ratio of quake traps"""
+    item_name = "Quake Trap"
+
+
+class TrapChancePoison(TrapChance):
+    """Sets the chance/ratio of poison effect traps"""
+    item_name = "Poison Trap"
+
+
+class TrapChanceConfound(TrapChance):
+    """Sets the chance/ratio of confound effect traps"""
+    item_name = "Confound Trap"
+
+
+class TrapChanceHUD(TrapChance):
+    """Sets the chance/ratio of HUD visibility traps"""
+    item_name = "HUD Trap"
+
+
+class TrapChanceOHKO(TrapChance):
+    """Sets the chance/ratio of OHKO (1HP left) traps"""
+    item_name = "OHKO Trap"
+
+
 soe_options: typing.Dict[str, type(Option)] = {
     "difficulty":           Difficulty,
     "money_modifier":       MoneyModifier,
@@ -153,4 +201,11 @@ soe_options: typing.Dict[str, type(Option)] = {
     "musicmizer":           Musicmizer,
     "doggomizer":           Doggomizer,
     "turdo_mode":           TurdoMode,
+    "death_link":           DeathLink,
+    "trap_count":           TrapCount,
+    "trap_chance_quake":    TrapChanceQuake,
+    "trap_chance_poison":   TrapChancePoison,
+    "trap_chance_confound": TrapChanceConfound,
+    "trap_chance_hud":      TrapChanceHUD,
+    "trap_chance_ohko":     TrapChanceOHKO,
 }

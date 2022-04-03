@@ -11,6 +11,8 @@ class AutoWorldRegister(type):
     world_types: Dict[str, World] = {}
 
     def __new__(cls, name: str, bases, dct: Dict[str, Any]):
+        if "web" in dct:
+            assert isinstance(dct["web"], WebWorld), "WebWorld has to be instantiated."
         # filter out any events
         dct["item_name_to_id"] = {name: id for name, id in dct["item_name_to_id"].items() if id}
         dct["location_name_to_id"] = {name: id for name, id in dct["location_name_to_id"].items() if id}
@@ -78,6 +80,10 @@ class WebWorld:
     # display a settings page. Can be a link to an out-of-ap settings tool too.
     settings_page: Union[bool, str] = True
 
+    # Choose a theme for your /game/* pages
+    # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime
+    theme = "grass"
+
 
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
@@ -131,10 +137,6 @@ class World(metaclass=AutoWorldRegister):
 
     item_names: Set[str]  # set of all potential item names
     location_names: Set[str]  # set of all potential location names
-
-    # If the game displays all contained items to the user, this flag pre-fills the hint system with this information
-    # For example the "full" tech tree information option in Factorio
-    sending_visible: bool = False
 
     web: WebWorld = WebWorld()
 
@@ -250,8 +252,8 @@ class World(metaclass=AutoWorldRegister):
             return True
         return False
 
-    def create_filler(self):
-        self.world.itempool.append(self.create_item(self.get_filler_item_name()))
+    def create_filler(self) -> Item:
+        return self.create_item(self.get_filler_item_name())
 
 
 # any methods attached to this can be used as part of CollectionState,

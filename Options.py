@@ -16,8 +16,10 @@ class AssembleOptions(type):
                 name_lookup.update(base.name_lookup)
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
                        name.startswith("option_")}
-        if "random" in new_options:
-            raise Exception("Choice option 'random' cannot be manually assigned.")
+
+        assert "random" not in new_options, "Choice option 'random' cannot be manually assigned."
+        assert len(new_options) == len(set(new_options.values())), "same ID cannot be used twice. Try alias?"
+
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
 
@@ -36,6 +38,7 @@ class AssembleOptions(type):
                         return ret
 
                     return validate
+
                 attrs["__init__"] = validate_decorator(attrs["__init__"])
             else:
                 # construct an __init__ that calls parent __init__
@@ -52,9 +55,11 @@ class AssembleOptions(type):
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
 
-class Option(metaclass=AssembleOptions):
-    value: int
-    name_lookup: typing.Dict[int, str]
+T = typing.TypeVar('T')
+
+
+class Option(typing.Generic[T], metaclass=AssembleOptions):
+    value: T
     default = 0
 
     # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
@@ -63,6 +68,10 @@ class Option(metaclass=AssembleOptions):
 
     # can be weighted between selections
     supports_weighting = True
+
+    # filled by AssembleOptions:
+    name_lookup: typing.Dict[int, str]
+    options: typing.Dict[str, int]
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.get_current_option_name()})"
@@ -79,13 +88,13 @@ class Option(metaclass=AssembleOptions):
         return self.get_option_name(self.value)
 
     @classmethod
-    def get_option_name(cls, value: typing.Any) -> str:
+    def get_option_name(cls, value: T) -> str:
         if cls.auto_display_name:
             return cls.name_lookup[value].replace("_", " ").title()
         else:
             return cls.name_lookup[value]
 
-    def __int__(self) -> int:
+    def __int__(self) -> T:
         return self.value
 
     def __bool__(self) -> bool:
@@ -96,18 +105,20 @@ class Option(metaclass=AssembleOptions):
         raise NotImplementedError
 
 
-class Toggle(Option):
+class Toggle(Option[int]):
     option_false = 0
     option_true = 1
     default = 0
 
     def __init__(self, value: int):
-        assert value == 0 or value == 1
+        assert value == 0 or value == 1, "value of Toggle can only be 0 or 1"
         self.value = value
 
     @classmethod
     def from_text(cls, text: str) -> Toggle:
-        if text.lower() in {"off", "0", "false", "none", "null", "no"}:
+        if text == "random":
+            return cls(random.choice(list(cls.name_lookup)))
+        elif text.lower() in {"off", "0", "false", "none", "null", "no"}:
             return cls(0)
         else:
             return cls(1)
@@ -148,7 +159,7 @@ class DefaultOnToggle(Toggle):
     default = 1
 
 
-class Choice(Option):
+class Choice(Option[int]):
     auto_display_name = True
 
     def __init__(self, value: int):
@@ -176,10 +187,10 @@ class Choice(Option):
         if isinstance(other, self.__class__):
             return other.value == self.value
         elif isinstance(other, str):
-            assert other in self.options
+            assert other in self.options, f"compared against a str that could never be equal. {self} == {other}"
             return other == self.current_key
         elif isinstance(other, int):
-            assert other in self.name_lookup
+            assert other in self.name_lookup, f"compared against an int that could never be equal. {self} == {other}"
             return other == self.value
         elif isinstance(other, bool):
             return other == bool(self.value)
@@ -190,10 +201,10 @@ class Choice(Option):
         if isinstance(other, self.__class__):
             return other.value != self.value
         elif isinstance(other, str):
-            assert other in self.options
+            assert other in self.options, f"compared against a str that could never be equal. {self} != {other}"
             return other != self.current_key
         elif isinstance(other, int):
-            assert other in self.name_lookup
+            assert other in self.name_lookup, f"compared against am int that could never be equal. {self} != {other}"
             return other != self.value
         elif isinstance(other, bool):
             return other != bool(self.value)
@@ -205,7 +216,7 @@ class Choice(Option):
     __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
-class Range(Option, int):
+class Range(Option[int], int):
     range_start = 0
     range_end = 1
 
@@ -265,8 +276,9 @@ class Range(Option, int):
 class VerifyKeys:
     valid_keys = frozenset()
     valid_keys_casefold: bool = False
-    verify_item_name = False
-    verify_location_name = False
+    convert_name_groups: bool = False
+    verify_item_name: bool = False
+    verify_location_name: bool = False
     value: typing.Any
 
     @classmethod
@@ -280,6 +292,11 @@ class VerifyKeys:
                                 f"Allowed keys: {cls.valid_keys}.")
 
     def verify(self, world):
+        if self.convert_name_groups and self.verify_item_name:
+            new_value = type(self.value)()  # empty container of whatever value is
+            for item_name in self.value:
+                new_value |= world.item_name_groups.get(item_name, {item_name})
+            self.value = new_value
         if self.verify_item_name:
             for item_name in self.value:
                 if item_name not in world.item_names:
@@ -287,15 +304,14 @@ class VerifyKeys:
                                     f"is not a valid item name from {world.game}")
         elif self.verify_location_name:
             for location_name in self.value:
-                if location_name not in world.world_types[world.game].location_names:
+                if location_name not in world.location_names:
                     raise Exception(f"Location {location_name} from option {self} "
                                     f"is not a valid location name from {world.game}")
 
 
-class OptionDict(Option, VerifyKeys):
+class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
     default = {}
     supports_weighting = False
-    value: typing.Dict[str, typing.Any]
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
         self.value = value
@@ -316,7 +332,6 @@ class OptionDict(Option, VerifyKeys):
 
 
 class ItemDict(OptionDict):
-    # implemented by Generate
     verify_item_name = True
 
     def __init__(self, value: typing.Dict[str, int]):
@@ -325,10 +340,9 @@ class ItemDict(OptionDict):
         super(ItemDict, self).__init__(value)
 
 
-class OptionList(Option, VerifyKeys):
+class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     default = []
     supports_weighting = False
-    value: list
 
     def __init__(self, value: typing.List[typing.Any]):
         self.value = value or []
@@ -352,10 +366,9 @@ class OptionList(Option, VerifyKeys):
         return item in self.value
 
 
-class OptionSet(Option, VerifyKeys):
+class OptionSet(Option[typing.Set[str]], VerifyKeys):
     default = frozenset()
     supports_weighting = False
-    value: set
 
     def __init__(self, value: typing.Union[typing.Set[str, typing.Any], typing.List[str, typing.Any]]):
         self.value = set(value)
@@ -376,7 +389,7 @@ class OptionSet(Option, VerifyKeys):
         return cls.from_text(str(data))
 
     def get_option_name(self, value):
-        return ", ".join(value)
+        return ", ".join(sorted(value))
 
     def __contains__(self, item):
         return item in self.value
@@ -410,8 +423,8 @@ common_options = {
 
 
 class ItemSet(OptionSet):
-    # implemented by Generate
     verify_item_name = True
+    convert_name_groups = True
 
 
 class LocalItems(ItemSet):
@@ -495,7 +508,6 @@ per_game_common_options = {
     "priority_locations": PriorityLocations,
     "item_links": ItemLinks
 }
-
 
 if __name__ == "__main__":
 

@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import logging
 import copy
 import os
 import threading
+import base64
 from typing import Set, List
 
 logger = logging.getLogger("Super Metroid")
@@ -11,12 +14,11 @@ from .Items import lookup_name_to_id as items_lookup_name_to_id
 from .Regions import create_regions
 from .Rules import set_rules, add_entrance_rule
 from .Options import sm_options
-from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT
+from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch
 import Utils
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
 from ..AutoWorld import World, AutoLogicRegister
-import Patch
 
 from logic.smboolmanager import SMBoolManager
 from graph.vanilla.graph_locations import locationsDict
@@ -70,7 +72,6 @@ class SMWorld(World):
     itemManager: ItemManager
 
     locations = {}
-    hint_blacklist = {'Nothing', 'No Energy'}
 
     Logic.factory('vanilla')
 
@@ -91,6 +92,8 @@ class SMWorld(World):
 
         if (self.variaRando.args.morphPlacement == "early"):
             self.world.local_items[self.player].value.add('Morph')
+
+        self.remote_items = self.world.remote_items[self.player]
 
         if (len(self.variaRando.randoExec.setup.restrictedLocs) > 0):
             self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("items")
@@ -166,7 +169,8 @@ class SMWorld(World):
 
     def get_required_client_version(self):
         # changes to client DeathLink handling for 0.2.1
-        return max(super(SMWorld, self).get_required_client_version(), (0, 2, 1))
+        # changes to client Remote Item handling for 0.2.6
+        return max(super(SMWorld, self).get_required_client_version(), (0, 2, 6))
 
     def getWord(self, w):
         return (w & 0x00FF, (w & 0xFF00) >> 8)
@@ -245,7 +249,6 @@ class SMWorld(World):
         multiWorldLocations = {}
         multiWorldItems = {}
         idx = 0
-        itemId = 0
         self.playerIDMap = {}
         playerIDCount = 0 # 0 is for "Archipelago" server
         for itemLoc in self.world.get_locations():
@@ -286,6 +289,7 @@ class SMWorld(World):
         openTourianGreyDoors = {0x07C823 + 5: [0x0C], 0x07C831 + 5: [0x0C]}
 
         deathLink = {0x277f04: [self.world.death_link[self.player].value]}
+        remoteItem = {0x277f06: self.getWordArray(0b001 + (0b010 if self.remote_items else 0b000))}
 
         playerNames = {}
         playerNameIDMap = {}
@@ -300,6 +304,7 @@ class SMWorld(World):
                         'offworldSprites': offworldSprites,
                         'openTourianGreyDoors': openTourianGreyDoors,
                         'deathLink': deathLink,
+                        'remoteItem': remoteItem,
                         'PlayerName':  playerNames,
                         'PlayerNameIDMap':  playerNameIDMap}
         romPatcher.applyIPSPatchDict(patchDict)
@@ -309,7 +314,10 @@ class SMWorld(World):
         from Main import __version__
         self.romName = bytearray(f'SM{__version__.replace(".", "")[0:3]}_{self.player}_{self.world.seed:11}\0', 'utf8')[:21]
         self.romName.extend([0] * (21 - len(self.romName)))
+        # clients should read from 0x7FC0, the location of the rom title in the SNES header.
+        # duplicative ROM name at 0x1C4F00 is still written here for now, since people with archipelago pre-0.3.0 client installed will still be depending on this location for connecting to SM
         romPatcher.applyIPSPatch('ROMName', { 'ROMName':  {0x1C4F00 : self.romName, 0x007FC0 : self.romName} })
+
 
         startItemROMAddressBase = 0x2FD8B9
 
@@ -394,26 +402,28 @@ class SMWorld(World):
         romPatcher.writeRandoSettings(self.variaRando.randoExec.randoSettings, itemLocs)
 
     def generate_output(self, output_directory: str):
+        outfilebase = 'AP_' + self.world.seed_name
+        outfilepname = f'_P{self.player}'
+        outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}"
+        outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
+
         try:
-            outfilebase = 'AP_' + self.world.seed_name
-            outfilepname = f'_P{self.player}'
-            outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}" \
-
-            outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
             self.variaRando.PatchRom(outputFilename, self.APPatchRom)
-
             self.write_crc(outputFilename)
-
-            Patch.create_patch_file(outputFilename, player=self.player, player_name=self.world.player_name[self.player], game=Patch.GAME_SM)
-            os.unlink(outputFilename)
             self.rom_name = self.romName
         except:
             raise
+        else:
+            patch = SMDeltaPatch(os.path.splitext(outputFilename)[0]+SMDeltaPatch.patch_file_ending, player=self.player,
+                                 player_name=self.world.player_name[self.player], patched_path=outputFilename)
+            patch.write()
         finally:
-            self.rom_name_available_event.set() # make sure threading continues and errors are collected
+            if os.path.exists(outputFilename):
+                os.unlink(outputFilename)
+            self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
     def checksum_mirror_sum(self, start, length, mask = 0x800000):
-        while (not(length & mask) and mask):
+        while not(length & mask) and mask:
             mask >>= 1
 
         part1 = sum(start[:mask]) & 0xFFFF
@@ -426,8 +436,6 @@ class SMWorld(World):
             while (next_length < mask):
                 next_length += next_length
                 part2 += part2
-
-            length = mask + mask
 
         return (part1 + part2) & 0xFFFF
 
@@ -444,7 +452,6 @@ class SMWorld(World):
             outfile.write(buffer)
 
     def modify_multidata(self, multidata: dict):
-        import base64
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
         rom_name = getattr(self, "rom_name", None)
@@ -452,7 +459,6 @@ class SMWorld(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
-
 
     def fill_slot_data(self): 
         slot_data = {}
@@ -519,25 +525,34 @@ class SMWorld(World):
             progitempool.sort(
                 key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
 
-    def post_fill(self):
-        new_state = CollectionState(self.world)
+    @classmethod
+    def stage_post_fill(cls, world):
+        new_state = CollectionState(world)
         progitempool = []
-        for item in self.world.itempool:
-            if item.player == self.player and item.advancement:
+        for item in world.itempool:
+            if item.game == "Super Metroid" and item.advancement:
                 progitempool.append(item)
 
         for item in progitempool:
             new_state.collect(item, True)
-
+        
         bossesLoc = ['Draygon', 'Kraid', 'Ridley', 'Phantoon', 'Mother Brain']
-        for bossLoc in bossesLoc:
-            if (not self.world.get_location(bossLoc, self.player).can_reach(new_state)):
-                self.world.state.smbm[self.player].onlyBossLeft = True
-                break
+        for player in world.get_game_players("Super Metroid"):
+            for bossLoc in bossesLoc:
+                if not world.get_location(bossLoc, player).can_reach(new_state):
+                    world.state.smbm[player].onlyBossLeft = True
+                    break
+
+        # Turn Nothing items into event pairs.
+        for location in world.get_locations():
+            if location.game == location.item.game == "Super Metroid" and location.item.type == "Nothing":
+                location.address = location.item.code = None
+
 
 def create_locations(self, player: int):
     for name, id in locations_lookup_name_to_id.items():
         self.locations[name] = SMLocation(player, name, id)
+
 
 def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, RegionType.LightWorld, name, player)

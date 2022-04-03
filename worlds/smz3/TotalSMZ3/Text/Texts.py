@@ -17,7 +17,7 @@ class Texts:
 
     @staticmethod        
     def ParseTextScript(resource: str):
-        with open(resource, 'r') as file:
+        with open(resource, 'r', encoding="utf-8-sig") as file:
             return [text.rstrip('\n') for text in file.read().replace("\r", "").split("---\n") if text]
 
     scripts: Any = ParseYamlScripts.__func__(text_folder + "/Scripts/General.yaml")

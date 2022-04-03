@@ -200,14 +200,17 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         itemcount = len(world.itempool)
         world.itempool = new_itempool
 
-        # can produce more items than were removed
         while itemcount > len(world.itempool):
+            items_to_add = []
             for player in group["players"]:
                 if group["replacement_items"][player]:
-                    world.itempool.append(AutoWorld.call_single(world, "create_item", player,
+                    items_to_add.append(AutoWorld.call_single(world, "create_item", player,
                                                                 group["replacement_items"][player]))
                 else:
-                    AutoWorld.call_single(world, "create_filler", player)
+                    items_to_add.append(AutoWorld.call_single(world, "create_filler", player))
+            world.random.shuffle(items_to_add)
+            world.itempool.extend(items_to_add[:itemcount - len(world.itempool)])
+
     if any(world.item_links.values()):
         world._recache()
         world._all_state = None
@@ -335,16 +338,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     games[slot] = world.game[slot]
                     slot_info[slot] = NetUtils.NetworkSlot(group["name"], world.game[slot], world.player_types[slot],
                                                            group_members=sorted(group["players"]))
-                precollected_items = {player: [item.code for item in world_precollected]
+                precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
                                       for player, world_precollected in world.precollected_items.items()}
                 precollected_hints = {player: set() for player in range(1, world.players + 1 + len(world.groups))}
 
-                sending_visible_players = set()
 
                 for slot in world.player_ids:
                     slot_data[slot] = world.worlds[slot].fill_slot_data()
-                    if world.worlds[slot].sending_visible:
-                        sending_visible_players.add(slot)
 
                 def precollect_hint(location):
                     entrance = er_hint_data.get(location.player, {}).get(location.address, "")
@@ -360,13 +360,11 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in world.player_ids}
                 for location in world.get_filled_locations():
                     if type(location.address) == int:
-                        # item code None should be event, location.address should then also be None
-                        assert location.item.code is not None
+                        assert location.item.code is not None, "item code None should be event, " \
+                                                               "location.address should then also be None"
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
-                        if location.player in sending_visible_players:
-                            precollect_hint(location)
-                        elif location.name in world.start_location_hints[location.player]:
+                        if location.name in world.start_location_hints[location.player]:
                             precollect_hint(location)
                         elif location.item.name in world.start_hints[location.item.player]:
                             precollect_hint(location)

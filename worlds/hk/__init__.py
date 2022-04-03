@@ -1,164 +1,284 @@
+from __future__ import annotations
+
 import logging
-from typing import Set
+import typing
+from collections import Counter
 
 logger = logging.getLogger("Hollow Knight")
 
-from .Locations import lookup_name_to_id
 from .Items import item_table, lookup_type_to_names
 from .Regions import create_regions
 from .Rules import set_rules
-from .Options import hollow_knight_options
+from .Options import hollow_knight_options, hollow_knight_randomize_options
+from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
+    event_names, item_effects, connectors, one_ways
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType
 from ..AutoWorld import World, LogicMixin
+
+white_palace_locations = {
+    "Soul_Totem-Path_of_Pain_Below_Thornskip",
+    "Soul_Totem-White_Palace_Final",
+    "Lore_Tablet-Path_of_Pain_Entrance",
+    "Soul_Totem-Path_of_Pain_Left_of_Lever",
+    "Soul_Totem-Path_of_Pain_Hidden",
+    "Soul_Totem-Path_of_Pain_Entrance",
+    "Soul_Totem-Path_of_Pain_Final",
+    "Soul_Totem-White_Palace_Entrance",
+    "Soul_Totem-Path_of_Pain_Below_Lever",
+    "Lore_Tablet-Palace_Throne",
+    "Soul_Totem-Path_of_Pain_Second",
+    "Soul_Totem-White_Palace_Left",
+    "Lore_Tablet-Palace_Workshop",
+    "Soul_Totem-White_Palace_Hub",
+    "Journal_Entry-Seal_of_Binding",
+    "Soul_Totem-White_Palace_Right",
+    "King_Fragment",
+    # Events:
+    "Palace_Entrance_Lantern_Lit",
+    "Palace_Left_Lantern_Lit",
+    "Palace_Right_Lantern_Lit",
+    "Warp-Path_of_Pain_Complete",
+    "Defeated_Path_of_Pain_Arena",
+    "Palace_Atrium_Gates_Opened",
+    "Completed_Path_of_Pain",
+    "Warp-White_Palace_Atrium_to_Palace_Grounds",
+    "Warp-White_Palace_Entrance_to_Palace_Grounds",
+    # Event-Regions:
+    "White_Palace_03_hub",
+    "White_Palace_13",
+    "White_Palace_01",
+    # Event-Transitions:
+    "White_Palace_12[bot1]", "White_Palace_12[bot1]", "White_Palace_03_hub[bot1]", "White_Palace_16[left2]",
+    "White_Palace_16[left2]", "White_Palace_11[door2]", "White_Palace_11[door2]", "White_Palace_18[top1]",
+    "White_Palace_18[top1]", "White_Palace_15[left1]", "White_Palace_15[left1]", "White_Palace_05[left2]",
+    "White_Palace_05[left2]", "White_Palace_14[bot1]", "White_Palace_14[bot1]", "White_Palace_13[left2]",
+    "White_Palace_13[left2]", "White_Palace_03_hub[left1]", "White_Palace_03_hub[left1]", "White_Palace_15[right2]",
+    "White_Palace_15[right2]", "White_Palace_06[top1]", "White_Palace_06[top1]", "White_Palace_03_hub[bot1]",
+    "White_Palace_08[right1]", "White_Palace_08[right1]", "White_Palace_03_hub[right1]", "White_Palace_03_hub[right1]",
+    "White_Palace_01[right1]", "White_Palace_01[right1]", "White_Palace_08[left1]", "White_Palace_08[left1]",
+    "White_Palace_19[left1]", "White_Palace_19[left1]", "White_Palace_04[right2]", "White_Palace_04[right2]",
+    "White_Palace_01[left1]", "White_Palace_01[left1]", "White_Palace_17[right1]", "White_Palace_17[right1]",
+    "White_Palace_07[bot1]", "White_Palace_07[bot1]", "White_Palace_20[bot1]", "White_Palace_20[bot1]",
+    "White_Palace_03_hub[left2]", "White_Palace_03_hub[left2]", "White_Palace_18[right1]", "White_Palace_18[right1]",
+    "White_Palace_05[right1]", "White_Palace_05[right1]", "White_Palace_17[bot1]", "White_Palace_17[bot1]",
+    "White_Palace_09[right1]", "White_Palace_09[right1]", "White_Palace_16[left1]", "White_Palace_16[left1]",
+    "White_Palace_13[left1]", "White_Palace_13[left1]", "White_Palace_06[bot1]", "White_Palace_06[bot1]",
+    "White_Palace_15[right1]", "White_Palace_15[right1]", "White_Palace_06[left1]", "White_Palace_06[left1]",
+    "White_Palace_05[right2]", "White_Palace_05[right2]", "White_Palace_04[top1]", "White_Palace_04[top1]",
+    "White_Palace_19[top1]", "White_Palace_19[top1]", "White_Palace_14[right1]", "White_Palace_14[right1]",
+    "White_Palace_03_hub[top1]", "White_Palace_03_hub[top1]", "Grubfather_2", "White_Palace_13[left3]",
+    "White_Palace_13[left3]", "White_Palace_02[left1]", "White_Palace_02[left1]", "White_Palace_12[right1]",
+    "White_Palace_12[right1]", "White_Palace_07[top1]", "White_Palace_07[top1]", "White_Palace_05[left1]",
+    "White_Palace_05[left1]", "White_Palace_13[right1]", "White_Palace_13[right1]", "White_Palace_01[top1]",
+    "White_Palace_01[top1]",
+
+}
+
 
 class HKWorld(World):
     game: str = "Hollow Knight"
     options = hollow_knight_options
 
-    item_name_to_id = {name: data.id for name, data in item_table.items() if data.type != "Event"}
-    location_name_to_id = lookup_name_to_id
+    item_name_to_id = {name: data.id for name, data in item_table.items()}
+    location_name_to_id = {location_name: location_id for location_id, location_name in
+                           enumerate(locations, start=0x1000000)}
 
     hidden = True
+    ranges: typing.Dict[str, typing.Tuple[int, int]]
+    shops = {"Egg_Shop": "egg", "Grubfather": "grub", "Seer": "essence", "Salubra_(Requires_Charms)": "charm"}
+    charm_costs: typing.List[int]
+    data_version = 2
 
-    def generate_basic(self):
+    allow_white_palace = False
+
+    def __init__(self, world, player):
+        super(HKWorld, self).__init__(world, player)
+        self.created_multi_locations: typing.Dict[str, int] = Counter()
+        self.ranges = {}
+
+    def generate_early(self):
+        world = self.world
+        self.charm_costs = world.random_charm_costs[self.player].get_costs(world.random)
+        world.exclude_locations[self.player].value.update(white_palace_locations)
+        world.local_items[self.player].value.add("Mimic_Grub")
+        for vendor, unit in self.shops.items():
+            mini = getattr(world, f"minimum_{unit}_price")[self.player]
+            maxi = getattr(world, f"maximum_{unit}_price")[self.player]
+            # if minimum > maximum, set minimum to maximum
+            mini.value = min(mini.value, maxi.value)
+            self.ranges[unit] = mini.value, maxi.value
+        world.push_precollected(HKItem(starts[world.start_location[self.player].current_key],
+                                       True, None, "Event", self.player))
+
+    def create_regions(self):
+        menu_region: Region = create_region(self.world, self.player, 'Menu')
+        self.world.regions.append(menu_region)
+
         # Link regions
-        self.world.get_entrance('Hollow Nest S&Q', self.player).connect(self.world.get_region('Hollow Nest', self.player))
+        for event_name in event_names:
+            loc = HKLocation(self.player, event_name, None, menu_region)
+            loc.place_locked_item(HKItem(event_name,
+                                         self.allow_white_palace or event_name not in white_palace_locations,
+                                         None, "Event", self.player))
+            menu_region.locations.append(loc)
+        for entry_transition, exit_transition in connectors.items():
+            if exit_transition:
+                # if door logic fulfilled -> award vanilla target as event
+                loc = HKLocation(self.player, entry_transition, None, menu_region)
+                loc.place_locked_item(HKItem(exit_transition,
+                                             self.allow_white_palace or exit_transition not in white_palace_locations,
+                                             None, "Event", self.player))
+                menu_region.locations.append(loc)
 
-        # Generate item pool
-        pool = []
-        for item_name, item_data in item_table.items():
-            item = self.create_item(item_name)
+    def create_items(self):
+        # Generate item pool and associated locations (paired in HK)
+        pool: typing.List[HKItem] = []
+        geo_replace: typing.Set[str] = set()
+        if self.world.RemoveSpellUpgrades[self.player]:
+            geo_replace.add("Abyss_Shriek")
+            geo_replace.add("Shade_Soul")
+            geo_replace.add("Descending_Dark")
 
-            if item_data.type == "Event":
-                event_location = self.world.get_location(item_name, self.player)
-                self.world.push_item(event_location, item, collect=False)
-                event_location.event = True
-                event_location.locked = True
-                if item.name == "King's_Pass":
-                    self.world.push_precollected(item)
-            elif item_data.type == "Cursed":
-                if self.world.CURSED[self.player]:
-                    pool.append(item)
-                else:
-                    # fill Focus Location with Focus and add it to start inventory as well.
-                    event_location = self.world.get_location(item_name, self.player)
-                    self.world.push_item(event_location, item)
-                    event_location.event = True
-                    event_location.locked = True
-
-            elif item_data.type == "Fake":
-                pass
-            elif item_data.type in not_shufflable_types:
-                location = self.world.get_location(item_name, self.player)
-                self.world.push_item(location, item, collect=False)
-                location.event = item.advancement
-                location.locked = True
+        for option_key, option in hollow_knight_randomize_options.items():
+            if getattr(self.world, option_key)[self.player]:
+                for item_name, location_name in zip(option.items, option.locations):
+                    if item_name in geo_replace:
+                        item_name = "Geo_Rock-Default"
+                    if location_name in white_palace_locations:
+                        self.create_location(location_name).place_locked_item(self.create_item(item_name))
+                    else:
+                        self.create_location(location_name)
+                        pool.append(self.create_item(item_name))
             else:
-                target = option_to_type_lookup[item.type]
-                shuffle_it = getattr(self.world, target)
-                if shuffle_it[self.player]:
-                    pool.append(item)
-                else:
-                    location = self.world.get_location(item_name, self.player)
-                    self.world.push_item(location, item, collect=False)
-                    location.event = item.advancement
-                    location.locked = True
-                    logger.debug(f"Placed {item_name} to vanilla for player {self.player}")
-
+                for item_name, location_name in zip(option.items, option.locations):
+                    item = self.create_item(item_name)
+                    if location_name == "Start":
+                        self.world.push_precollected(item)
+                    else:
+                        self.create_location(location_name).place_locked_item(item)
+        for i in range(self.world.egg_shop_slots[self.player].value):
+            self.create_location("Egg_Shop")
+            pool.append(self.create_item("Geo_Rock-Default"))
+        if not self.allow_white_palace:
+            loc = self.world.get_location("King_Fragment", self.player)
+            if loc.item and loc.item.name == loc.name:
+                loc.item.advancement = False
         self.world.itempool += pool
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        world = self.world
+        player = self.player
+        if world.logic[player] != 'nologic':
+            world.completion_condition[player] = lambda state: state.has('DREAMER', player, 3)
+        set_rules(self)
 
-    def create_regions(self):
-        create_regions(self.world, self.player)
-
-    def fill_slot_data(self): 
+    def fill_slot_data(self):
         slot_data = {}
+
+        options = slot_data["options"] = {}
         for option_name in self.options:
             option = getattr(self.world, option_name)[self.player]
-            slot_data[option_name] = int(option.value)
+            options[option_name] = int(option.value)
+
+        # 32 bit int
+        slot_data["seed"] = self.world.slot_seeds[self.player].randint(-2147483647, 2147483646)
+
+        for shop, unit in self.shops.items():
+            slot_data[f"{unit}_costs"] = {
+                f"{shop}_{i}":
+                    self.world.get_location(f"{shop}_{i}", self.player).cost
+                for i in range(1, 1 + self.created_multi_locations[shop])
+            }
+
+        slot_data["notch_costs"] = self.charm_costs
+
         return slot_data
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str) -> HKItem:
         item_data = item_table[name]
         return HKItem(name, item_data.advancement, item_data.id, item_data.type, self.player)
 
+    def create_location(self, name: str) -> HKLocation:
+        unit = self.shops.get(name, None)
+        if unit:
+            cost = self.world.random.randint(*self.ranges[unit])
+        else:
+            cost = 0
+        if name in multi_locations:
+            self.created_multi_locations[name] += 1
+            name += f"_{self.created_multi_locations[name]}"
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, None, name, player)
+        region = self.world.get_region("Menu", self.player)
+        loc = HKLocation(self.player, name, self.location_name_to_id[name], region)
+        if unit:
+            loc.unit = unit
+            loc.cost = cost
+        region.locations.append(loc)
+        return loc
+
+    def collect(self, state, item: HKItem) -> bool:
+        change = super(HKWorld, self).collect(state, item)
+
+        for effect_name, effect_value in item_effects.get(item.name, {}).items():
+            state.prog_items[effect_name, item.player] += effect_value
+
+        return change
+
+    def remove(self, state, item: HKItem) -> bool:
+        change = super(HKWorld, self).remove(state, item)
+
+        for effect_name, effect_value in item_effects.get(item.name, {}).items():
+            if state.prog_items[effect_name, item.player] == effect_value:
+                del state.prog_items[effect_name, item.player]
+            state.prog_items[effect_name, item.player] -= effect_value
+
+        return change
+
+
+def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:
+    ret = Region(name, RegionType.Generic, name, player)
     ret.world = world
-    if locations:
-        for location in locations:
-            loc_id = lookup_name_to_id.get(location, 0)
+    if location_names:
+        for location in location_names:
+            loc_id = HKWorld.location_name_to_id.get(location, None)
             location = HKLocation(player, location, loc_id, ret)
             ret.locations.append(location)
     if exits:
         for exit in exits:
             ret.exits.append(Entrance(player, exit, ret))
-
     return ret
 
 
 class HKLocation(Location):
     game: str = "Hollow Knight"
+    cost: int = 0
+    unit: typing.Optional[str] = None
 
-    def __init__(self, player: int, name: str, address=None, parent=None):
-        super(HKLocation, self).__init__(player, name, address, parent)
+    def __init__(self, player: int, name: str, code=None, parent=None):
+        super(HKLocation, self).__init__(player, name, code if code else None, parent)
 
 
 class HKItem(Item):
     game = "Hollow Knight"
 
     def __init__(self, name, advancement, code, type, player: int = None):
-        super(HKItem, self).__init__(name, advancement, code, player)
+        super(HKItem, self).__init__(name, advancement, code if code else None, player)
         self.type = type
+        if name == "Mimic_Grub":
+            self.trap = True
 
 
-not_shufflable_types = {"Essence_Boss"}
+class HKLogicMixin(LogicMixin):
+    world: MultiWorld
 
-option_to_type_lookup = {
-    "Root": "RandomizeWhisperingRoots",
-    "Dreamer": "RandomizeDreamers",
-    "Geo": "RandomizeGeoChests",
-    "Skill": "RandomizeSkills",
-    "Map": "RandomizeMaps",
-    "Relic": "RandomizeRelics",
-    "Charm": "RandomizeCharms",
-    "Notch": "RandomizeCharmNotches",
-    "Key": "RandomizeKeys",
-    "Stag": "RandomizeStags",
-    "Flame": "RandomizeFlames",
-    "Grub": "RandomizeGrubs",
-    "Cocoon": "RandomizeLifebloodCocoons",
-    "Mask": "RandomizeMaskShards",
-    "Ore": "RandomizePaleOre",
-    "Egg": "RandomizeRancidEggs",
-    "Vessel": "RandomizeVesselFragments",
-}
+    def _hk_notches(self, player: int, *notches: int) -> int:
+        return sum(self.world.worlds[player].charm_costs[notch] for notch in notches)
 
+    def _kh_option(self, player: int, option_name: str) -> int:
+        if option_name == "RandomizeCharmNotches":
+            return self.world.random_charm_costs[player] != -1
+        return getattr(self.world, option_name)[player].value
 
-class HKLogic(LogicMixin):
-    # these are all wip
-    def _hk_has_essence(self, player: int, count: int):
-        return self.prog_items["Dream_Nail", player]
-        # return self.prog_items["Essence", player] >= count
-
-    def _hk_has_grubs(self, player: int, count: int):
-        found = 0
-        for item_name in lookup_type_to_names["Grub"]:
-            found += self.prog_items[item_name, player]
-            if found >= count:
-                return True
-
-        return False
-
-    def _hk_has_flames(self, player: int, count: int):
-        found = 0
-        for item_name in lookup_type_to_names["Flame"]:
-            found += self.prog_items[item_name, player]
-            if found >= count:
-                return True
-
-        return False
+    def _kh_start(self, player, start_location: str) -> bool:
+        return self.world.start_location[player] == start_location

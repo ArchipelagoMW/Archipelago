@@ -851,7 +851,7 @@ def collect_hint_location_name(ctx: Context, team: int, slot: int, location: str
 
 def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location: int) -> typing.List[NetUtils.Hint]:
     result = ctx.locations[slot].get(seeked_location, (None, None, None))
-    if result:
+    if any(result):
         item_id, receiving_player, item_flags = result
 
         found = seeked_location in ctx.location_checks[team, slot]
@@ -1932,11 +1932,18 @@ async def main(args: argparse.Namespace):
 
     try:
         if not data_filename:
-            import tkinter
-            import tkinter.filedialog
-            root = tkinter.Tk()
-            root.withdraw()
-            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago *.zip"),))
+            try:
+                import tkinter
+                import tkinter.filedialog
+            except Exception as e:
+                logging.error("Could not load tkinter, which is likely not installed. "
+                              "This attempt was made because no .archipelago file was provided as argument. "
+                              "Either provide a file or ensure the tkinter package is installed.")
+                raise e
+            else:
+                root = tkinter.Tk()
+                root.withdraw()
+                data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago *.zip"),))
 
         ctx.load(data_filename, args.use_embedded_options)
 

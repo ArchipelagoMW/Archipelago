@@ -149,7 +149,7 @@ class CommonContext():
         self.items_received = []
         self.missing_locations: typing.Set[int] = set()
         self.checked_locations: typing.Set[int] = set()  # server state
-        self.locations_info = {}
+        self.locations_info: typing.Dict[int, NetworkItem] = {}
 
         self.input_queue = asyncio.Queue()
         self.input_requests = 0
@@ -520,8 +520,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
     elif cmd == 'LocationInfo':
         for item in [NetworkItem(*item) for item in args['locations']]:
-            if item.location not in ctx.locations_info:
-                ctx.locations_info[item.location] = (item.item, item.player)
+            ctx.locations_info[item.location] = item
         ctx.watcher_event.set()
 
     elif cmd == "RoomUpdate":
