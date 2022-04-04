@@ -12,7 +12,7 @@ ROM_PLAYER_LIMIT = 256
 class SMZ3DeltaPatch(APDeltaPatch):
     hash = "3a177ba9879e3dd04fb623a219d175b2"
     game = "SMZ3"
-    patch_file_ending = ".smz3"
+    patch_file_ending = ".apsmz3"
 
     @classmethod
     def get_source_data(cls) -> bytes:
@@ -48,7 +48,7 @@ def get_sm_base_rom_path(file_name: str = "") -> str:
     if not file_name:
         file_name = options["sm_options"]["rom_file"]
     if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
+        file_name = Utils.user_path(file_name)
     return file_name
 
 
@@ -57,7 +57,7 @@ def get_lttp_base_rom_path(file_name: str = "") -> str:
     if not file_name:
         file_name = options["lttp_options"]["rom_file"]
     if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
+        file_name = Utils.user_path(file_name)
     return file_name
 
 

@@ -12,6 +12,7 @@
         - snes9x Multitroid
           from: [snes9x Multitroid Download](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
         - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
+        - RetroArch 1.10.1 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
     - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
       compatible hardware
 - Your legally obtained Super Metroid ROM file, probably named `Super Metroid (Japan, USA).sfc`
@@ -106,6 +107,21 @@ first time launching, you may be prompted to allow it to communicate through the
     - SuperNintendoClient users should download `sniConnector.lua` from the client download page
     - SNIClient users should look in their Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
       emulator is 64-bit or 32-bit. Please note the most recent versions of BizHawk are 64-bit only.
+
+##### RetroArch 1.10.1 or newer
+
+You only have to do these steps once. Note, RetroArch 1.9.x will not work as it is older than 1.10.1.
+
+1. Enter the RetroArch main menu screen.
+2. Go to Settings --> User Interface. Set "Show Advanced Settings" to ON.
+3. Go to Settings --> Network. Set "Network Commands" to ON. (It is found below Request Device 16.) Leave the default
+   Network Command Port at 55355.
+![Screenshot of Network Commands setting](/static/assets/tutorial/retroarch-network-commands-en.png)
+4. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and select "Nintendo - SNES / SFC (bsnes-mercury
+   Performance)".
+
+When loading a ROM, be sure to select a **bsnes-mercury** core. These are the only cores that allow external tools to
+read ROM data.
 
 #### With hardware
 

@@ -57,8 +57,10 @@ game.
 
 A `WebWorld` class contains specific attributes and methods that can be modified
 for your world specifically on the webhost. At the moment this comprises of `settings_page`
-which can be changed to a link instead of an AP generated settings page; such is the case
-for Final Fantasy.
+which can be changed to a link instead of an AP generated settings page, and a `theme` to be used for your game specific AP pages. Available themes:
+| dirt  | grass (default) | grassFlowers | ice  | jungle  | ocean | partyTime |
+|---|---|---|---|---|---|---|
+| <img src="img/theme_dirt.JPG" width="100"> | <img src="img/theme_grass.JPG" width="100"> | <img src="img/theme_grassFlowers.JPG" width="100"> | <img src="img/theme_ice.JPG" width="100"> | <img src="img/theme_jungle.JPG" width="100"> | <img src="img/theme_ocean.JPG" width="100"> | <img src="img/theme_partyTime.JPG" width="100"> |
 
 ### MultiWorld Object
 

@@ -41,6 +41,7 @@ class AssembleOptions(abc.ABCMeta):
                         return ret
 
                     return validate
+
                 attrs["__init__"] = validate_decorator(attrs["__init__"])
             else:
                 # construct an __init__ that calls parent __init__
@@ -62,7 +63,6 @@ T = typing.TypeVar('T')
 
 class Option(typing.Generic[T], metaclass=AssembleOptions):
     value: T
-    name_lookup: typing.Dict[T, str]
     default = 0
 
     # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
@@ -71,6 +71,10 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
 
     # can be weighted between selections
     supports_weighting = True
+
+    # filled by AssembleOptions:
+    name_lookup: typing.Dict[int, str]
+    options: typing.Dict[str, int]
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.get_current_option_name()})"
@@ -93,7 +97,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         else:
             return cls.name_lookup[value]
 
-    def __int__(self) -> int:
+    def __int__(self) -> T:
         return self.value
 
     def __bool__(self) -> bool:
@@ -277,7 +281,9 @@ class Toggle(NumericOption):
 
     @classmethod
     def from_text(cls, text: str) -> Toggle:
-        if text.lower() in {"off", "0", "false", "none", "null", "no"}:
+        if text == "random":
+            return cls(random.choice(list(cls.name_lookup)))
+        elif text.lower() in {"off", "0", "false", "none", "null", "no"}:
             return cls(0)
         else:
             return cls(1)
@@ -342,7 +348,7 @@ class Choice(NumericOption):
         if isinstance(other, self.__class__):
             return other.value != self.value
         elif isinstance(other, str):
-            assert other in self.options , f"compared against a str that could never be equal. {self} != {other}"
+            assert other in self.options, f"compared against a str that could never be equal. {self} != {other}"
             return other != self.current_key
         elif isinstance(other, int):
             assert other in self.name_lookup, f"compared against am int that could never be equal. {self} != {other}"
@@ -397,8 +403,10 @@ class Range(NumericOption):
                     return cls(int(round(random.triangular(random_range[0], random_range[1], random_range[1]))))
                 else:
                     return cls(int(round(random.randint(random_range[0], random_range[1]))))
-            else:
+            elif text == "random":
                 return cls(random.randint(cls.range_start, cls.range_end))
+            else:
+                raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. Acceptable values are: random, random-high, random-middle, random-low, random-range-low-<min>-<max>, random-range-middle-<min>-<max>, random-range-high-<min>-<max>, or random-range-<min>-<max>.")
         elif text in {"on", "true", "default", "yes", "high"}:
             if hasattr(cls, "default") and text != "high":
                 return cls(cls.default)
@@ -661,7 +669,6 @@ per_game_common_options = {
     "priority_locations": PriorityLocations,
     "item_links": ItemLinks
 }
-
 
 if __name__ == "__main__":
 

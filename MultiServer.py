@@ -851,7 +851,7 @@ def collect_hint_location_name(ctx: Context, team: int, slot: int, location: str
 
 def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location: int) -> typing.List[NetUtils.Hint]:
     result = ctx.locations[slot].get(seeked_location, (None, None, None))
-    if result:
+    if any(result):
         item_id, receiving_player, item_flags = result
 
         found = seeked_location in ctx.location_checks[team, slot]

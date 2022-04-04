@@ -2,6 +2,7 @@ import argparse
 import os, sys
 import re
 import atexit
+import shutil
 from subprocess import Popen
 from shutil import copyfile
 from time import strftime
@@ -16,6 +17,7 @@ atexit.register(input, "Press enter to exit.")
 # 1 or more digits followed by m or g, then optional b
 max_heap_re = re.compile(r"^\d+[mMgG][bB]?$")
 forge_version = "1.17.1-37.1.1"
+is_windows = sys.platform in ("win32", "cygwin", "msys")
 
 
 def prompt_yes_no(prompt):
@@ -158,9 +160,15 @@ def find_jdk_dir() -> str:
 
 # get the java exe location
 def find_jdk() -> str:
-    jdk = find_jdk_dir()
-    jdk_exe = os.path.join(jdk, "bin", "java.exe")
-    if os.path.isfile(jdk_exe):
+    if is_windows:
+        jdk = find_jdk_dir()
+        jdk_exe = os.path.join(jdk, "bin", "java.exe")
+        if os.path.isfile(jdk_exe):
+            return jdk_exe
+    else:
+        jdk_exe = shutil.which(options["minecraft_options"].get("java", "java"))
+        if not jdk_exe:
+            raise Exception("Could not find Java. Is Java installed on the system?")
         return jdk_exe
 
 
@@ -203,7 +211,7 @@ def install_forge(directory: str):
                 f.write(resp.content)
             print(f"Installing Forge...")
             argstring = ' '.join([jdk, "-jar", "\"" + forge_install_jar+ "\"", "--installServer", "\"" + directory + "\""])
-            install_process = Popen(argstring)
+            install_process = Popen(argstring, shell=not is_windows)
             install_process.wait()
             os.remove(forge_install_jar)
 
@@ -220,7 +228,8 @@ def run_forge_server(forge_dir: str, heap_arg):
         heap_arg = heap_arg[:-1]
     heap_arg = "-Xmx" + heap_arg
 
-    args_file = os.path.join(forge_dir, "libraries", "net", "minecraftforge", "forge", forge_version, "win_args.txt")
+    os_args = "win_args.txt" if is_windows else "unix_args.txt"
+    args_file = os.path.join(forge_dir, "libraries", "net", "minecraftforge", "forge", forge_version, os_args)
     win_args = []
     with open(args_file) as argfile:
         for line in argfile:
@@ -229,7 +238,7 @@ def run_forge_server(forge_dir: str, heap_arg):
     argstring = ' '.join([java_exe, heap_arg] + win_args + ["-nogui"])
     logging.info(f"Running Forge server: {argstring}")
     os.chdir(forge_dir)
-    return Popen(argstring)
+    return Popen(argstring, shell=not is_windows)
 
 
 if __name__ == '__main__':
@@ -252,15 +261,21 @@ if __name__ == '__main__':
     max_heap = options["minecraft_options"]["max_heap_size"]
 
     if args.install:
-        print("Installing Java and Minecraft Forge")
-        download_java()
+        if is_windows:
+            print("Installing Java and Minecraft Forge")
+            download_java()
+        else:
+            print("Installing Minecraft Forge")
         install_forge(forge_dir)
         sys.exit(0)
 
     if apmc_file is not None and not os.path.isfile(apmc_file):
         raise FileNotFoundError(f"Path {apmc_file} does not exist or could not be accessed.")
     if not os.path.isdir(forge_dir):
-        raise NotADirectoryError(f"Path {forge_dir} does not exist or could not be accessed.")
+        if prompt_yes_no("Did not find forge directory. Download and install forge now?"):
+            install_forge(forge_dir)
+        if not os.path.isdir(forge_dir):
+            raise NotADirectoryError(f"Path {forge_dir} does not exist or could not be accessed.")
     if not max_heap_re.match(max_heap):
         raise Exception(f"Max heap size {max_heap} in incorrect format. Use a number followed by M or G, e.g. 512M or 2G.")
 

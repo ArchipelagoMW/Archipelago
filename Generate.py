@@ -15,7 +15,7 @@ ModuleUpdate.update()
 import Utils
 from worlds.alttp import Options as LttPOptions
 from worlds.generic import PlandoConnection
-from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options
+from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options, local_path, user_path
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from BaseClasses import seeddigits, get_seed
@@ -27,24 +27,31 @@ import copy
 
 categories = set(AutoWorldRegister.world_types)
 
+
 def mystery_argparse():
     options = get_options()
     defaults = options["generator"]
 
+    def resolve_path(path: str, resolver: typing.Callable[[str], str]) -> str:
+        return path if os.path.isabs(path) else resolver(path)
+
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
-    parser.add_argument('--weights_file_path', default = defaults["weights_file_path"],
+    parser.add_argument('--weights_file_path', default=defaults["weights_file_path"],
                         help='Path to the weights file to use for rolling game settings, urls are also valid')
     parser.add_argument('--samesettings', help='Rolls settings per weights file rather than per player',
                         action='store_true')
-    parser.add_argument('--player_files_path', default=defaults["player_files_path"],
+    parser.add_argument('--player_files_path', default=resolve_path(defaults["player_files_path"], user_path),
                         help="Input directory for player files.")
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults["players"], type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
-    parser.add_argument('--lttp_rom', default=options["lttp_options"]["rom_file"], help="Path to the 1.0 JP LttP Baserom.")
-    parser.add_argument('--sm_rom', default=options["sm_options"]["rom_file"], help="Path to the 1.0 JP SM Baserom.")
-    parser.add_argument('--enemizercli', default=defaults["enemizer_path"])
-    parser.add_argument('--outputpath', default=options["general_options"]["output_path"])
+    parser.add_argument('--lttp_rom', default=options["lttp_options"]["rom_file"],
+                        help="Path to the 1.0 JP LttP Baserom.")  # absolute, relative to cwd or relative to app path
+    parser.add_argument('--sm_rom', default=options["sm_options"]["rom_file"],
+                        help="Path to the 1.0 JP SM Baserom.")
+    parser.add_argument('--enemizercli', default=resolve_path(defaults["enemizer_path"], local_path))
+    parser.add_argument('--outputpath', default=resolve_path(options["general_options"]["output_path"], user_path),
+                        help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
     parser.add_argument('--race', action='store_true', default=defaults["race"])
     parser.add_argument('--meta_file_path', default=defaults["meta_file_path"])
     parser.add_argument('--log_level', default='info', help='Sets log level')
@@ -209,11 +216,11 @@ def main(args=None, callback=ERmain):
 
 def read_weights_yaml(path):
     try:
-        if urllib.parse.urlparse(path).scheme:
-            yaml = str(urllib.request.urlopen(path).read(), "utf-8")
+        if urllib.parse.urlparse(path).scheme in ('https', 'file'):
+            yaml = str(urllib.request.urlopen(path).read(), "utf-8-sig")
         else:
             with open(path, 'rb') as f:
-                yaml = str(f.read(), "utf-8")
+                yaml = str(f.read(), "utf-8-sig")
     except Exception as e:
         raise Exception(f"Failed to read weights ({path})") from e
 
