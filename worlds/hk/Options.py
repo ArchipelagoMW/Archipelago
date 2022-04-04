@@ -197,6 +197,7 @@ class MinimumCharmPrice(Range):
 class MaximumCharmPrice(MinimumCharmPrice):
     """The maximum charm price in the range of prices that an item should cost for Salubra's shop item which also
     carry a charm cost."""
+    display_name = "Maximum Charm Requirement"
     default = 20
 
 
