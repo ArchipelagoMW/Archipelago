@@ -10,9 +10,9 @@ window.addEventListener('load', () => {
     let settingHash = localStorage.getItem(`${gameName}-hash`);
     if (!settingHash) {
       // If no hash data has been set before, set it now
-      localStorage.setItem(`${gameName}-hash`, md5(results[0]));
-      localStorage.removeItem(gameName);
       settingHash = md5(results[0]);
+      localStorage.setItem(`${gameName}-hash`, settingHash);
+      localStorage.removeItem(gameName);
     }
 
     if (settingHash !== md5(results[0])) {
