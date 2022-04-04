@@ -359,7 +359,7 @@ async def server_loop(ctx: CommonContext, address=None):
         logger.error('Already connected')
         return
 
-    if address is None:  # set through CLI or APBP
+    if address is None:  # set through CLI or AP patch file
         address = ctx.server_address
 
     # Wait for the user to provide a multiworld server address

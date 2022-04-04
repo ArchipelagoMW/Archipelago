@@ -185,6 +185,7 @@ def adjustGUI():
     romVar2 = StringVar()
     romEntry2 = Entry(romDialogFrame, textvariable=romVar2)
 
+    # TODO: @berserker does this need an update to handle .aplttp?
     def RomSelect2():
         rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc", ".apbp")), ("All Files", "*")])
         romVar2.set(rom)
@@ -704,7 +705,7 @@ def get_rom_options_frame(parent=None):
     vars.auto_apply = StringVar(value=adjuster_settings.auto_apply)
     autoApplyFrame = Frame(romOptionsFrame)
     autoApplyFrame.grid(row=8, column=0, columnspan=2, sticky=W)
-    filler = Label(autoApplyFrame, text="Automatically apply last used settings on opening .apbp files")
+    filler = Label(autoApplyFrame, text="Automatically apply last used settings on opening .apbp/.aplttp files")
     filler.pack(side=TOP, expand=True, fill=X)
     askRadio = Radiobutton(autoApplyFrame, text='Ask', variable=vars.auto_apply, value='ask')
     askRadio.pack(side=LEFT, padx=5, pady=5)

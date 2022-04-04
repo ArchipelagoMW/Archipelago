@@ -1,7 +1,7 @@
 """
 Archipelago launcher for bundled app.
 
-* if run with APBP as argument, launch corresponding client.
+* if run with AP patch file as argument, launch corresponding client.
 * if run with executable as argument, run it passing argv[2:] as arguments
 * if run without arguments, open launcher GUI
 
