@@ -53,6 +53,7 @@ def main():
                              ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--deathlink', help='Enable DeathLink system.', action='store_true')
+    parser.add_argument('--allowcollect', help='Allow collection of other player items', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
     parser.add_argument('--triforcehud', default='hide_goal', const='hide_goal', nargs='?',
                         choices=['normal', 'hide_goal', 'hide_required', 'hide_both'],
@@ -155,7 +156,7 @@ def adjust(args):
 
     apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.menuspeed, args.music,
                        args.sprite, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world,
-                       deathlink=args.deathlink)
+                       deathlink=args.deathlink, allowcollect=args.allowcollect)
     path = output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc')
     rom.write_to_file(path)
 
@@ -210,6 +211,7 @@ def adjustGUI():
         guiargs.music = bool(rom_vars.MusicVar.get())
         guiargs.reduceflashing = bool(rom_vars.disableFlashingVar.get())
         guiargs.deathlink = bool(rom_vars.DeathLinkVar.get())
+        guiargs.allowcollect = bool(rom_vars.AllowCollectVar.get())
         guiargs.rom = romVar2.get()
         guiargs.baserom = romVar.get()
         guiargs.sprite = rom_vars.sprite
@@ -246,6 +248,7 @@ def adjustGUI():
         guiargs.music = bool(rom_vars.MusicVar.get())
         guiargs.reduceflashing = bool(rom_vars.disableFlashingVar.get())
         guiargs.deathlink = bool(rom_vars.DeathLinkVar.get())
+        guiargs.allowcollect = bool(rom_vars.AllowCollectVar.get())
         guiargs.baserom = romVar.get()
         if isinstance(rom_vars.sprite, Sprite):
             guiargs.sprite = rom_vars.sprite.name
@@ -508,6 +511,7 @@ def get_rom_options_frame(parent=None):
         adjuster_settings.music = True
         adjuster_settings.reduceflashing = True
         adjuster_settings.deathlink = False
+        adjuster_settings.allowcollect = False
         adjuster_settings.sprite = None
         adjuster_settings.quickswap = True
         adjuster_settings.menuspeed = 'normal'
@@ -541,6 +545,10 @@ def get_rom_options_frame(parent=None):
     vars.DeathLinkVar = IntVar(value=adjuster_settings.deathlink)
     DeathLinkCheckbutton = Checkbutton(romOptionsFrame, text="DeathLink (Team Deaths)", variable=vars.DeathLinkVar)
     DeathLinkCheckbutton.grid(row=7, column=0, sticky=W)
+
+    vars.AllowCollectVar = IntVar(value=adjuster_settings.allowcollect)
+    AllowCollectCheckbutton = Checkbutton(romOptionsFrame, text="Allow Collect", variable=vars.AllowCollectVar)
+    AllowCollectCheckbutton.grid(row=8, column=0, sticky=W)
 
     spriteDialogFrame = Frame(romOptionsFrame)
     spriteDialogFrame.grid(row=0, column=1)
@@ -703,7 +711,7 @@ def get_rom_options_frame(parent=None):
 
     vars.auto_apply = StringVar(value=adjuster_settings.auto_apply)
     autoApplyFrame = Frame(romOptionsFrame)
-    autoApplyFrame.grid(row=8, column=0, columnspan=2, sticky=W)
+    autoApplyFrame.grid(row=9, column=0, columnspan=2, sticky=W)
     filler = Label(autoApplyFrame, text="Automatically apply last used settings on opening .apbp files")
     filler.pack(side=TOP, expand=True, fill=X)
     askRadio = Radiobutton(autoApplyFrame, text='Ask', variable=vars.auto_apply, value='ask')
