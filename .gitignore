@@ -7,6 +7,10 @@
 *.apm3
 *.apmc
 *.apz5
+*.aplttp
+*.apsm
+*.apsmz3
+*.apsoe
 *.pyc
 *.pyd
 *.sfc
