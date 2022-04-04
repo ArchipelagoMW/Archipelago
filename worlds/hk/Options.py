@@ -130,15 +130,15 @@ hollow_knight_logic_options: typing.Dict[str, type(Option)] = {}
 for option_name in logic_options.values():
     if option_name in hollow_knight_randomize_options:
         continue
-    extra_data = {}
+    extra_data = {"__module__": __name__}
     if option_name in option_docstrings:
         extra_data["__doc__"] = option_docstrings[option_name]
         option = type(option_name, (Toggle,), extra_data)
     if option_name in disabled:
         extra_data["__doc__"] = "Disabled Option. Not implemented."
         option = type(option_name, (Disabled,), extra_data)
-
-    hollow_knight_logic_options[option_name] = option
+    globals()[option.__name__] = option
+    hollow_knight_logic_options[option.__name__] = option
 
 
 class MinimumGrubPrice(Range):
