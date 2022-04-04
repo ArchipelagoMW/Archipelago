@@ -15,7 +15,7 @@ tails_mystic_melody = "Tails - Mystic Melody"
 tails_bazooka       = "Tails - Bazooka"
 
 knuckles_mystic_melody = "Knuckles - Mystic Melody"
-knuckles_shovel_claw   = "Knuckles - Shovel Claw"
+knuckles_shovel_claws  = "Knuckles - Shovel Claws"
 knuckles_air_necklace  = "Knuckles - Air Necklace"
 knuckles_hammer_gloves = "Knuckles - Hammer Gloves"
 knuckles_sunglasses    = "Knuckles - Sunglasses"

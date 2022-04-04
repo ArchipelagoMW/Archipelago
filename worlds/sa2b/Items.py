@@ -37,7 +37,7 @@ upgrades_table = {
     ItemName.tails_bazooka:       ItemData(0xFF000A, True),
 
     ItemName.knuckles_mystic_melody: ItemData(0xFF000B, True),
-    ItemName.knuckles_shovel_claw:   ItemData(0xFF000C, True),
+    ItemName.knuckles_shovel_claws:  ItemData(0xFF000C, True),
     ItemName.knuckles_air_necklace:  ItemData(0xFF000D, True),
     ItemName.knuckles_hammer_gloves: ItemData(0xFF000E, True),
     ItemName.knuckles_sunglasses:    ItemData(0xFF000F, False),

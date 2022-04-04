@@ -265,7 +265,9 @@ def setup_locations(world, player: int):
     if world.IncludeMission5[player]:
         location_table.update({**fifth_mission_location_table})
         
-    # location_table += {**cannon_core_location_table}
+    if world.IncludeCannonsCore[player]:
+        location_table.update({**cannon_core_location_table})
+
     # location_table += {**upgrade_location_table}
     # location_table += {**chao_garden_location_table}
     # location_table += {**other_location_table}

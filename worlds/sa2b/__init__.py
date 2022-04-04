@@ -74,11 +74,15 @@ class SA2BWorld(World):
         if self.world.IncludeMission5[self.player]:
             total_required_locations += 30
 
-        itempool += [self.create_item(ItemName.emblem)] * total_required_locations
+        # Cannon's Core Missions
+        if self.world.IncludeCannonsCore[self.player]:
+            total_required_locations += 5
 
-        ## Fill item pool with all required items
-        #for item in {**upgrades_table}:
-        #    itempool += self._create_items(item)
+        # Fill item pool with all required items
+        for item in {**upgrades_table}:
+            itempool += self._create_items(item)
+
+        itempool += [self.create_item(ItemName.emblem)] * (total_required_locations - len(itempool))
 
         self.world.itempool += itempool
 

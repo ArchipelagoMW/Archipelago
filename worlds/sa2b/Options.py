@@ -27,6 +27,12 @@ class IncludeMission5(Toggle):
     """
     displayname = "Include Fifth Missions"
 
+class IncludeCannonsCore(Toggle):
+    """
+    Allows logic to place items in Cannon's Core
+    """
+    displayname = "Include Cannon's Core"
+
 class IncludeChaoEmblems(Toggle):
     """
     Allows logic to place items in Chao Races and Karate
@@ -42,5 +48,6 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "IncludeMission3":    IncludeMission3,
     "IncludeMission4":    IncludeMission4,
     "IncludeMission5":    IncludeMission5,
+    "IncludeCannonsCore": IncludeCannonsCore,
     "IncludeChaoEmblems": IncludeChaoEmblems,
 }
