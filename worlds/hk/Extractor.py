@@ -143,7 +143,7 @@ class Absorber(ast.NodeTransformer):
             if node.slice.value in removed_starts:
                 return ast.Constant(False, ctx=node.ctx)
             return ast.Call(
-                func=ast.Attribute(value=ast.Name(id='state', ctx=ast.Load()), attr='_kh_start', ctx=ast.Load()),
+                func=ast.Attribute(value=ast.Name(id='state', ctx=ast.Load()), attr='_hk_start', ctx=ast.Load()),
                 args=[ast.Name(id="player", ctx=ast.Load()), node.slice], keywords=[])
         elif node.value.id == "COMBAT":
             return macros[unparse(node)].body
