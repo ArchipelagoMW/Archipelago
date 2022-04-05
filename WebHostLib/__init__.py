@@ -213,7 +213,7 @@ def get_sitemap():
     for game, world in AutoWorldRegister.world_types.items():
         if not world.hidden:
             available_games.append(game)
-    return render_template("siteMap.html", games=available_games)
+    return render_template("siteMap.html", games=available_games, theme_func=get_world_theme)
 
 
 from WebHostLib.customserver import run_server_process
