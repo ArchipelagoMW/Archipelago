@@ -21,8 +21,10 @@ from urllib.parse import urlparse
 from urllib.request import urlopen
 
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
-from Utils import output_path, local_path, user_path, open_file, get_cert_none_ssl_context, persistent_store, get_adjuster_settings, tkinter_center_window
+from Utils import output_path, local_path, user_path, open_file, get_cert_none_ssl_context, persistent_store, \
+    get_adjuster_settings, tkinter_center_window, init_logging
 from Patch import GAME_ALTTP
+
 
 class AdjusterWorld(object):
     def __init__(self, sprite_pool):
@@ -127,9 +129,12 @@ def main():
 
 def adjust(args):
     start = time.perf_counter()
+    init_logging("LttP Adjuster")
     logger = logging.getLogger('Adjuster')
     logger.info('Patching ROM.')
     vanillaRom = args.baserom
+    if not os.path.exists(vanillaRom) and not os.path.isabs(vanillaRom):
+        vanillaRom = local_path(vanillaRom)
     if os.path.splitext(args.rom)[-1].lower() in {'.apbp', '.aplttp'}:
         import Patch
         meta, args.rom = Patch.create_rom_file(args.rom)
