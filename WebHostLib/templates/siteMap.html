@@ -9,7 +9,7 @@
     {% include 'header/grassFlowersHeader.html' %}
     <div id="site-map" class="markdown">
         <h1>Site Map</h1>
-        <h3>Base Pages</h3>
+        <h2>Base Pages</h2>
         <ul>
             <li><a href="/discord">Discord Link</a></li>
             <li><a href="/faq/en">F.A.Q. Page</a></li>
@@ -22,19 +22,19 @@
             <li><a href="/sitemap">Site Map</a></li>
             <li><a href="/start-playing">Start Playing</a></li>
             <li><a href="/games">Supported Games Page</a></li>
-            <li><a href="/tutorials">Tutorials Page</a></li>
+            <li><a href="/tutorial">Tutorials Page</a></li>
             <li><a href="/user-content">User Content</a></li>
             <li><a href="/weighted-settings">Weighted Settings Page</a></li>
         </ul>
 
-        <h3>Game Info Pages</h3>
+        <h2>Game Info Pages</h2>
         <ul>
             {% for game in games %}
                 <li><a href="/games/{{ game }}/info/en">{{ game }}</a></li>
             {% endfor %}
         </ul>
 
-        <h3>Game Settings Pages</h3>
+        <h2>Game Settings Pages</h2>
         <ul>
             {% for game in games %}
                 <li><a href="/games/{{ game }}/player-settings">{{ game }}</a></li>
