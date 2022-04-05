@@ -321,6 +321,9 @@ class HKItem(Item):
         if name == "Mimic_Grub":
             self.trap = True
 
+        if type in ("Grub", "Charm", "DreamWarrior", "Root", "Egg"):
+            self.skip_in_prog_balancing = True
+
 
 class HKLogicMixin(LogicMixin):
     world: MultiWorld
