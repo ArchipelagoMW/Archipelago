@@ -119,6 +119,7 @@ class CommonContext():
     ui = None
     keep_alive_task = None
     items_handling: typing.Optional[int] = None
+    current_energy_link_value = 0  # to display in UI, gets set by server
 
     def __init__(self, server_address, password):
         # server state
@@ -148,7 +149,7 @@ class CommonContext():
         self.items_received = []
         self.missing_locations: typing.Set[int] = set()
         self.checked_locations: typing.Set[int] = set()  # server state
-        self.locations_info = {}
+        self.locations_info: typing.Dict[int, NetworkItem] = {}
 
         self.input_queue = asyncio.Queue()
         self.input_requests = 0
@@ -317,16 +318,17 @@ class CommonContext():
             logger.info(f"DeathLink: Received from {data['source']}")
 
     async def send_death(self, death_text: str = ""):
-        logger.info("DeathLink: Sending death to your friends...")
-        self.last_death_link = time.time()
-        await self.send_msgs([{
-            "cmd": "Bounce", "tags": ["DeathLink"],
-            "data": {
-                "time": self.last_death_link,
-                "source": self.player_names[self.slot],
-                "cause": death_text
-            }
-        }])
+        if self.server and self.server.socket:
+            logger.info("DeathLink: Sending death to your friends...")
+            self.last_death_link = time.time()
+            await self.send_msgs([{
+                "cmd": "Bounce", "tags": ["DeathLink"],
+                "data": {
+                    "time": self.last_death_link,
+                    "source": self.player_names[self.slot],
+                    "cause": death_text
+                }
+            }])
 
     async def update_death_link(self, death_link):
         old_tags = self.tags.copy()
@@ -517,9 +519,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.watcher_event.set()
 
     elif cmd == 'LocationInfo':
-        for item, location, player in args['locations']:
-            if location not in ctx.locations_info:
-                ctx.locations_info[location] = (item, player)
+        for item in [NetworkItem(*item) for item in args['locations']]:
+            ctx.locations_info[item.location] = item
         ctx.watcher_event.set()
 
     elif cmd == "RoomUpdate":
@@ -548,7 +549,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
         if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
             ctx.on_deathlink(args["data"])
-
+    elif cmd == "SetReply":
+        if args["key"] == "EnergyLink":
+            ctx.current_energy_link_value = args["value"]
+            if ctx.ui:
+                ctx.ui.set_new_energy_link_value()
     else:
         logger.debug(f"unknown command {cmd}")
 

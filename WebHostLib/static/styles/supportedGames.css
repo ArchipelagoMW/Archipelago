@@ -1,0 +1,33 @@
+#games{
+    width: 60%;
+    margin: auto auto 30px;
+}
+
+#games h2, #games h3, #games h4, #games h5, #games h6 {
+    text-transform: none;
+    cursor: unset;
+}
+
+#games h1{
+    font-size: 60px;
+    cursor: unset;
+}
+
+#games h2{
+    color: #93dcff;
+    margin-bottom: 2px;
+}
+
+#games a{
+    font-size: 16px;
+}
+
+#games .link-spacer{
+    margin: 0 6px;
+    color: #fffc95;
+}
+
+#games p{
+    line-height: 25px;
+    margin-bottom: 7px;
+}

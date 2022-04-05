@@ -47,8 +47,17 @@ div.dataTables_wrapper.no-footer .dataTables_scrollBody{
     border: none;
 }
 
+table.dataTable{
+    color: #000000;
+}
+
+table.dataTable thead{
+    font-family: LexendDeca-Regular, sans-serif;
+}
+
 table.dataTable tbody{
     background-color: #dce2bd;
+    font-family: LexendDeca-Light, sans-serif;
 }
 
 table.dataTable tbody tr:hover{

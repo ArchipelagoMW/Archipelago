@@ -11,7 +11,8 @@ TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
 MAX_SCIENCE_PACK = {{ max_science_pack }}
 GOAL = {{ goal }}
 ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
-ENERGY_INCREMENT = 1000000
+ENERGY_INCREMENT = {{ energy_link * 1000000 }}
+ENERGY_LINK_EFFICIENCY = 0.75
 
 if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
     DEATH_LINK = 1
@@ -36,7 +37,7 @@ function on_check_energy_link(event)
         if global.forcedata[force].energy < ENERGY_INCREMENT * bridgecount * 5 then
             for i, bridge in ipairs(bridges) do
                 if bridge.energy > ENERGY_INCREMENT*3 then
-                    global.forcedata[force].energy = global.forcedata[force].energy + ENERGY_INCREMENT
+                    global.forcedata[force].energy = global.forcedata[force].energy + (ENERGY_INCREMENT * ENERGY_LINK_EFFICIENCY)
                     bridge.energy = bridge.energy - ENERGY_INCREMENT
                 end
             end
@@ -50,10 +51,11 @@ function on_check_energy_link(event)
                 bridge.energy = bridge.energy + ENERGY_INCREMENT
             end
         end
-        game.print("Bridges: " .. bridgecount .. " With: " .. global.forcedata["player"].energy)
     end
 end
-script.on_event(defines.events.on_tick, on_check_energy_link)
+if (ENERGY_INCREMENT) then
+    script.on_event(defines.events.on_tick, on_check_energy_link)
+end
 
 {% if not imported_blueprints -%}
 function set_permissions()

@@ -16,8 +16,8 @@ from Generate import roll_settings
 from Utils import parse_yaml
 
 
-@app.route('/mysterycheck', methods=['GET', 'POST'])
-def mysterycheck():
+@app.route('/check', methods=['GET', 'POST'])
+def check():
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -30,8 +30,12 @@ def mysterycheck():
             else:
                 results, _ = roll_options(options)
                 return render_template("checkResult.html", results=results)
-
     return render_template("check.html")
+
+
+@app.route('/mysterycheck')
+def mysterycheck():
+    return redirect(url_for("check"), 301)
 
 
 def get_yaml_data(file) -> Union[Dict[str, str], str]:

@@ -3,6 +3,9 @@ local energy_bridge = table.deepcopy(data.raw["accumulator"]["accumulator"])
 energy_bridge.name = "ap-energy-bridge"
 energy_bridge.minable.result = "ap-energy-bridge"
 energy_bridge.localised_name = "Archipelago EnergyLink Bridge"
+energy_bridge.energy_source.buffer_capacity = "5MJ"
+energy_bridge.energy_source.input_flow_limit = "1MW"
+energy_bridge.energy_source.output_flow_limit = "1MW"
 data.raw["accumulator"]["ap-energy-bridge"] = energy_bridge
 
 local energy_bridge_item = table.deepcopy(data.raw["item"]["accumulator"])
@@ -15,8 +18,7 @@ local energy_bridge_recipe = table.deepcopy(data.raw["recipe"]["accumulator"])
 energy_bridge_recipe.name = "ap-energy-bridge"
 energy_bridge_recipe.result = energy_bridge_item.name
 energy_bridge_recipe.energy_required = 1
-energy_bridge_recipe.ingredients = { {# {type="item", name="iron-plate", amount=1} TODO: randomized recipe  #} }
-energy_bridge_recipe.enabled = true
+energy_bridge_recipe.enabled = {{ energy_link }}
 energy_bridge_recipe.localised_name = "Archipelago EnergyLink Bridge"
 data.raw["recipe"]["ap-energy-bridge"] = energy_bridge_recipe
 

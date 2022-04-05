@@ -268,11 +268,11 @@ class Music(DefaultOnToggle):
 
 
 class ReduceFlashing(DefaultOnToggle):
-    displayname = "Reduce Screen Flashes"
+    display_name = "Reduce Screen Flashes"
 
 
 class TriforceHud(Choice):
-    displayname = "Display Method for Triforce Hunt"
+    display_name = "Display Method for Triforce Hunt"
     option_normal = 0
     option_hide_goal = 1
     option_hide_required = 2
@@ -289,14 +289,20 @@ class BeemizerTotalChance(BeemizerRange):
     """Percentage chance for each junk-fill item (rupees, bombs, arrows) to be
     replaced with either a bee swarm trap or a single bottle-filling bee."""
     default = 0
-    displayname = "Beemizer Total Chance"
+    display_name = "Beemizer Total Chance"
 
 
 class BeemizerTrapChance(BeemizerRange):
     """Percentage chance for each replaced junk-fill item to be a bee swarm
     trap; all other replaced items are single bottle-filling bees."""
     default = 60
-    displayname = "Beemizer Trap Chance"
+    display_name = "Beemizer Trap Chance"
+
+
+class AllowCollect(Toggle):
+    """Allows for !collect / co-op to auto-open chests containing items for other players.
+    Off by default, because it currently crashes on real hardware."""
+    display_name = "Allow Collection of checks for other players"
 
 
 alttp_options: typing.Dict[str, type(Option)] = {
@@ -334,6 +340,6 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "glitch_boots": DefaultOnToggle,
     "beemizer_total_chance": BeemizerTotalChance,
     "beemizer_trap_chance": BeemizerTrapChance,
-    "death_link": DeathLink
-
+    "death_link": DeathLink,
+    "allow_collect": AllowCollect
 }

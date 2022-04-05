@@ -3,7 +3,8 @@ import sys
 import subprocess
 import pkg_resources
 
-requirements_files = {'requirements.txt'}
+local_dir = os.path.dirname(__file__)
+requirements_files = {os.path.join(local_dir, 'requirements.txt')}
 
 if sys.version_info < (3, 8, 6):
     raise RuntimeError("Incompatible Python Version. 3.8.7+ is supported.")
@@ -11,7 +12,7 @@ if sys.version_info < (3, 8, 6):
 update_ran = getattr(sys, "frozen", False)  # don't run update if environment is frozen/compiled
 
 if not update_ran:
-    for entry in os.scandir("worlds"):
+    for entry in os.scandir(os.path.join(local_dir, "worlds")):
         if entry.is_dir():
             req_file = os.path.join(entry.path, "requirements.txt")
             if os.path.exists(req_file):

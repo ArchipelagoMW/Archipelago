@@ -1,12 +1,12 @@
-from ..AutoWorld import World
-from ..generic.Rules import set_rule, add_item_rule
-from BaseClasses import Region, Location, Entrance, Item
-from Utils import get_options, output_path
+from ..AutoWorld import World, WebWorld
+from ..generic.Rules import set_rule
+from BaseClasses import Region, Location, Entrance, Item, RegionType
+from Utils import output_path
 import typing
-import lzma
 import os
 import os.path
 import threading
+import itertools
 
 try:
     import pyevermizer  # from package
@@ -17,7 +17,7 @@ except ImportError:
 
 from . import Logic  # load logic mixin
 from .Options import soe_options
-from .Patch import generate_patch
+from .Patch import SoEDeltaPatch, get_base_rom_path
 
 """
 In evermizer:
@@ -36,13 +36,24 @@ Provides could be events, but instead we iterate through the entire logic in Log
     e.g. NPC available after fighting a Boss
 
 Rules are special locations that don't have a physical location
-instead of implementing virtual locations and virtual items, we simply use them  in Logic.py
+instead of implementing virtual locations and virtual items, we simply use them in Logic.py
     e.g. 2DEs+Wheel+Gauge = Rocket
 
 Rules and Locations live on the same logic tree returned by pyevermizer.get_logic()
 
 TODO: for balancing we may want to generate Regions (with Entrances) for some
 common rules, place the locations in those Regions and shorten the rules.
+
+
+Item grouping currently supports
+* Any <ingredient name> - "Any Water" matches all Water drops
+* Any <healing item name> - "Any Petal" matches all Petal drops
+* Any Moniez - Matches the talon/jewel/gold coin/credit drops from chests (not market, fountain or Mungola)
+* Ingredients - Matches all ingredient drops
+* Alchemy - Matches all alchemy formulas
+* Weapons - Matches all weapons but Bazooka, Bone Crusher, Neutron Blade
+* Bazooka - Matches all bazookas (currently only one)
+* Traps - Matches all traps
 """
 
 _id_base = 64000
@@ -52,24 +63,40 @@ _id_offset: typing.Dict[int, int] = {
     pyevermizer.CHECK_GOURD: _id_base + 100,  # gourds 64100..64399
     pyevermizer.CHECK_NPC: _id_base + 400,  # npc 64400..64499
     # TODO: sniff 64500..64799
+    pyevermizer.CHECK_TRAP: _id_base + 900,  # npc 64900..64999
 }
 
 # cache native evermizer items and locations
 _items = pyevermizer.get_items()
+_traps = pyevermizer.get_traps()
 _locations = pyevermizer.get_locations()
 # fix up texts for AP
 for _loc in _locations:
     if _loc.type == pyevermizer.CHECK_GOURD:
         _loc.name = f'{_loc.name} #{_loc.index}'
+# item helpers
+_ingredients = (
+    'Wax', 'Water', 'Vinegar', 'Root', 'Oil', 'Mushroom', 'Mud Pepper', 'Meteorite', 'Limestone', 'Iron',
+    'Gunpowder', 'Grease', 'Feather', 'Ethanol', 'Dry Ice', 'Crystal', 'Clay', 'Brimstone', 'Bone', 'Atlas Amulet',
+    'Ash', 'Acorn'
+)
+_other_items = (
+    'Call bead', 'Petal', 'Biscuit', 'Pixie Dust', 'Nectar', 'Honey', 'Moniez'
+)
+
+
+def _match_item_name(item, substr: str) -> bool:
+    sub = item.name.split(' ', 1)[1] if item.name[0].isdigit() else item.name
+    return sub == substr or sub == substr+'s'
 
 
 def _get_location_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[int, pyevermizer.Location]]:
     name_to_id = {}
     id_to_raw = {}
     for loc in _locations:
-        apid = _id_offset[loc.type] + loc.index
-        id_to_raw[apid] = loc
-        name_to_id[loc.name] = apid
+        ap_id = _id_offset[loc.type] + loc.index
+        id_to_raw[ap_id] = loc
+        name_to_id[loc.name] = ap_id
     name_to_id['Done'] = None
     return name_to_id, id_to_raw
 
@@ -77,14 +104,36 @@ def _get_location_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[i
 def _get_item_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[int, pyevermizer.Item]]:
     name_to_id = {}
     id_to_raw = {}
-    for item in _items:
+    for item in itertools.chain(_items, _traps):
         if item.name in name_to_id:
             continue
-        apid = _id_offset[item.type] + item.index
-        id_to_raw[apid] = item
-        name_to_id[item.name] = apid
+        ap_id = _id_offset[item.type] + item.index
+        id_to_raw[ap_id] = item
+        name_to_id[item.name] = ap_id
     name_to_id['Victory'] = None
     return name_to_id, id_to_raw
+
+
+def _get_item_grouping() -> typing.Dict[str, typing.Set[str]]:
+    groups = {}
+    ingredients_group = set()
+    for ingredient in _ingredients:
+        group = set(item.name for item in _items if _match_item_name(item, ingredient))
+        groups[f'Any {ingredient}'] = group
+        ingredients_group |= group
+    groups['Ingredients'] = ingredients_group
+    for other in _other_items:
+        groups[f'Any {other}'] = set(item.name for item in _items if _match_item_name(item, other))
+    groups['Alchemy'] = set(item.name for item in _items if item.type == pyevermizer.CHECK_ALCHEMY)
+    groups['Weapons'] = {'Spider Claw', 'Horn Spear', 'Gladiator Sword', 'Bronze Axe', 'Bronze Spear', 'Crusader Sword',
+                         'Lance (Weapon)', 'Knight Basher', 'Atom Smasher', 'Laser Lance'}
+    groups['Bazooka'] = {'Bazooka+Shells / Shining Armor / 5k Gold'}
+    groups['Traps'] = {trap.name for trap in _traps}
+    return groups
+
+
+class SoEWebWorld(WebWorld):
+    theme = 'jungle'
 
 
 class SoEWorld(World):
@@ -94,12 +143,16 @@ class SoEWorld(World):
     """
     game: str = "Secret of Evermore"
     options = soe_options
-    topology_present: bool = False
-    remote_items: bool = False
-    data_version = 1
+    topology_present = False
+    remote_items = False
+    data_version = 2
+    web = SoEWebWorld()
 
     item_name_to_id, item_id_to_raw = _get_item_mapping()
     location_name_to_id, location_id_to_raw = _get_location_mapping()
+    item_name_groups = _get_item_grouping()
+
+    trap_types = [name[12:] for name in options if name.startswith('trap_chance_')]
 
     evermizer_seed: int
     connect_name: str
@@ -114,18 +167,20 @@ class SoEWorld(World):
         progression = True
         return SoEItem(event, progression, None, self.player)
 
-    def create_item(self, item: typing.Union[pyevermizer.Item, str], force_progression: bool = False) -> Item:
+    def create_item(self, item: typing.Union[pyevermizer.Item, str]) -> Item:
         if type(item) is str:
             item = self.item_id_to_raw[self.item_name_to_id[item]]
-        return SoEItem(item.name, force_progression or item.progression, self.item_name_to_id[item.name], self.player)
+        res = SoEItem(item.name, item.progression, self.item_name_to_id[item.name], self.player)
+        res.trap = item.type == pyevermizer.CHECK_TRAP
+        return res
 
     def create_regions(self):
         # TODO: generate *some* regions from locations' requirements?
-        r = Region('Menu', None, 'Menu', self.player, self.world)
+        r = Region('Menu', RegionType.Generic, 'Menu', self.player, self.world)
         r.exits = [Entrance(self.player, 'New Game', r)]
         self.world.regions += [r]
 
-        r = Region('Ingame', None, 'Ingame', self.player, self.world)
+        r = Region('Ingame', RegionType.Generic, 'Ingame', self.player, self.world)
         r.locations = [SoELocation(self.player, loc.name, self.location_name_to_id[loc.name], r)
                        for loc in _locations]
         r.locations.append(SoELocation(self.player, 'Done', None, r))
@@ -135,7 +190,38 @@ class SoEWorld(World):
 
     def create_items(self):
         # add items to the pool
-        self.world.itempool += list(map(lambda item: self.create_item(item), _items))
+        items = list(map(lambda item: self.create_item(item), _items))
+
+        trap_count = self.world.trap_count[self.player].value
+        trap_chances = {}
+        trap_names = {}
+        if trap_count > 0:
+            for trap_type in self.trap_types:
+                trap_option = getattr(self.world, f'trap_chance_{trap_type}')[self.player]
+                trap_chances[trap_type] = trap_option.value
+                trap_names[trap_type] = trap_option.item_name
+            trap_chances_total = sum(trap_chances.values())
+            if trap_chances_total == 0:
+                for trap_type in trap_chances:
+                    trap_chances[trap_type] = 1
+                trap_chances_total = len(trap_chances)
+
+        def create_trap() -> Item:
+            v = self.world.random.randrange(trap_chances_total)
+            for t, c in trap_chances.items():
+                if v < c:
+                    return self.create_item(trap_names[t])
+                v -= c
+
+        while trap_count > 0:
+            r = self.world.random.randrange(len(items))
+            for ingredient in _ingredients:
+                if _match_item_name(items[r], ingredient):
+                    items[r] = create_trap()
+                    trap_count -= 1
+                    break
+
+        self.world.itempool += items
 
     def set_rules(self):
         self.world.completion_condition[self.player] = lambda state: state.has('Victory', self.player)
@@ -181,8 +267,12 @@ class SoEWorld(World):
         try:
             money = self.world.money_modifier[self.player].value
             exp = self.world.exp_modifier[self.player].value
-            rom_file = get_options()['soe_options']['rom_file']
-            out_base = output_path(output_directory, f'AP_{self.world.seed_name}_P{self.player}_{player_name}')
+            switches = []
+            if self.world.death_link[self.player].value:
+                switches.append("--death-link")
+            rom_file = get_base_rom_path()
+            out_base = output_path(output_directory, f'AP_{self.world.seed_name}_P{self.player}_'
+                                                     f'{self.world.get_file_safe_player_name(self.player)}')
             out_file = out_base + '.sfc'
             placement_file = out_base + '.txt'
             patch_file = out_base + '.apsoe'
@@ -208,15 +298,11 @@ class SoEWorld(World):
             if not os.path.exists(rom_file):
                 raise FileNotFoundError(rom_file)
             if (pyevermizer.main(rom_file, out_file, placement_file, self.world.seed_name, self.connect_name,
-                                 self.evermizer_seed, flags, money, exp)):
+                                 self.evermizer_seed, flags, money, exp, switches)):
                 raise RuntimeError()
-            with lzma.LZMAFile(patch_file, 'wb') as f:
-                f.write(generate_patch(rom_file, out_file,
-                                       {
-                                           # used by WebHost
-                                           "player_name": self.world.player_name[self.player],
-                                           "player_id": self.player
-                                       }))
+            patch = SoEDeltaPatch(patch_file, player=self.player,
+                                  player_name=player_name, patched_path=out_file)
+            patch.write()
         except:
             raise
         finally:
@@ -234,6 +320,9 @@ class SoEWorld(World):
         if self.connect_name and self.connect_name != self.world.player_name[self.player]:
             payload = multidata["connect_names"][self.world.player_name[self.player]]
             multidata["connect_names"][self.connect_name] = payload
+
+    def get_required_client_version(self):
+        return max((0, 2, 6), super(SoEWorld, self).get_required_client_version())
 
 
 class SoEItem(Item):

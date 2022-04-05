@@ -6,7 +6,7 @@ import subprocess
 import copy
 import threading
 from .Utils import subprocess_args, data_path, get_version_bytes, __version__
-from Utils import local_path
+from Utils import user_path
 from .ntype import BigStream
 from .crc import calculate_crc
 
@@ -27,7 +27,7 @@ class Rom(BigStream):
         if file is None:
             return
 
-        decomp_file = local_path('ZOOTDEC.z64')
+        decomp_file = user_path('ZOOTDEC.z64')
 
         with open(data_path('generated/symbols.json'), 'r') as stream:
             symbols = json.load(stream)

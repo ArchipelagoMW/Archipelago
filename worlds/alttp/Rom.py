@@ -34,7 +34,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
     DeathMountain_texts, \
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen
+from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen
 from worlds.alttp.Items import ItemFactory, item_table, item_name_groups, progression_items
 from worlds.alttp.EntranceShuffle import door_addresses
 from worlds.alttp.Options import smallkey_shuffle
@@ -140,7 +140,7 @@ class LocalRom(object):
             _, target, buffer = Patch.create_rom_bytes(local_path('data', 'basepatch.apbp'), ignore_version=True)
             if self.verify(buffer):
                 self.buffer = bytearray(buffer)
-                with open(local_path('basepatch.sfc'), 'wb') as stream:
+                with open(user_path('basepatch.sfc'), 'wb') as stream:
                     stream.write(buffer)
                 return
             raise RuntimeError('Base patch unverified.  Unable to continue.')
@@ -497,7 +497,7 @@ def _populate_sprite_table():
                     logging.debug(f"Spritefile {file} could not be loaded as a valid sprite.")
 
             with concurrent.futures.ThreadPoolExecutor() as pool:
-                for dir in [local_path('data', 'sprites', 'alttpr'), local_path('data', 'sprites', 'custom')]:
+                for dir in [user_path('data', 'sprites', 'alttpr'), user_path('data', 'sprites', 'custom')]:
                     for file in os.listdir(dir):
                         pool.submit(load_sprite_from_file, os.path.join(dir, file))
 
@@ -1527,7 +1527,7 @@ def patch_rom(world, rom, player, enemized):
         "Skull Woods": 0x0080,
         "Swamp Palace": 0x0400,
         "Ice Palace": 0x0040,
-        "Misery Mire'": 0x0100,
+        "Misery Mire": 0x0100,
         "Turtle Rock": 0x0008,
     }
 
@@ -1765,7 +1765,7 @@ def hud_format_text(text):
 
 def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, palettes_options,
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
-                       triforcehud: str = None, deathlink: bool = False):
+                       triforcehud: str = None, deathlink: bool = False, allowcollect: bool = False):
     local_random = random if not world else world.slot_seeds[player]
     disable_music: bool = not music
     # enable instant item menu
@@ -1899,7 +1899,9 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
         elif palettes_options['dungeon'] == 'random':
             randomize_uw_palettes(rom, local_random)
 
-    rom.write_byte(0x18008D, int(deathlink))
+    rom.write_byte(0x18008D, (0b00000001 if deathlink else 0) |
+                   #          0b00000010 is already used for death_link_allow_survive in super metroid.
+                             (0b00000100 if allowcollect else 0))
 
     apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event,
                                  world.sprite_pool[player] if world else [])
@@ -2884,6 +2886,16 @@ hash_alphabet = [
 ]
 
 
+class LttPDeltaPatch(Patch.APDeltaPatch):
+    hash = JAP10HASH
+    game = "A Link to the Past"
+    patch_file_ending = ".aplttp"
+
+    @classmethod
+    def get_source_data(cls) -> bytes:
+        return get_base_rom_bytes()
+
+
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
@@ -2904,5 +2916,5 @@ def get_base_rom_path(file_name: str = "") -> str:
     if not file_name:
         file_name = options["lttp_options"]["rom_file"]
     if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
+        file_name = Utils.user_path(file_name)
     return file_name

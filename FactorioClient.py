@@ -107,15 +107,20 @@ class FactorioContext(CommonContext):
             if "checked_locations" in args and args["checked_locations"]:
                 self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
+            if cmd == "Connected" and self.energy_link_increment:
+                asyncio.create_task(self.send_msgs([{
+                    "cmd": "SetNotify", "keys": ["EnergyLink"]
+                }]))
         elif cmd == "SetReply":
             if args["key"] == "EnergyLink":
-                logger.info(f"Got EnergyLink package: {args}")
                 if self.energy_link_increment and args.get("last_deplete", -1) == self.last_deplete:
                     # it's our deplete request
-                    gained = args["original_value"] - args["value"]
+                    gained = int(args["original_value"] - args["value"])
+                    gained_text = Utils.format_SI_prefix(gained) + "J"
                     if gained:
-                        logger.info(f"EnergyLink: Received {gained} Joules")
-                        self.rcon_client.send_command(f"/ap-energylink {int(gained)}")
+                        logger.info(f"EnergyLink: Received {gained_text}. "
+                                    f"{Utils.format_SI_prefix(args['value'])}J remaining.")
+                        self.rcon_client.send_command(f"/ap-energylink {gained}")
 
 
 async def game_watcher(ctx: FactorioContext):
@@ -155,7 +160,7 @@ async def game_watcher(ctx: FactorioContext):
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick
                         if "DeathLink" in ctx.tags:
-                            await ctx.send_death()
+                            asyncio.create_task(ctx.send_death())
                     if ctx.energy_link_increment:
                         in_world_bridges = data["energy_bridges"]
                         if in_world_bridges:
@@ -164,8 +169,9 @@ async def game_watcher(ctx: FactorioContext):
                                 # attempt to refill
                                 ctx.last_deplete = time.time()
                                 asyncio.create_task(ctx.send_msgs([{
-                                    "cmd": "Set", "key": "EnergyLink", "operation": "deplete",
-                                    "value": -ctx.energy_link_increment * in_world_bridges,
+                                    "cmd": "Set", "key": "EnergyLink", "operations":
+                                        [{"operation": "add", "value": -ctx.energy_link_increment * in_world_bridges},
+                                         {"operation": "max", "value": 0}],
                                     "last_deplete": ctx.last_deplete
                                 }]))
                             # Above Capacity - (len(Bridges) * ENERGY_INCREMENT)
@@ -173,12 +179,12 @@ async def game_watcher(ctx: FactorioContext):
                                 ctx.energy_link_increment*in_world_bridges:
                                 value = ctx.energy_link_increment * in_world_bridges
                                 asyncio.create_task(ctx.send_msgs([{
-                                    "cmd": "Set", "key": "EnergyLink", "operation": "add",
-                                    "value": value
+                                    "cmd": "Set", "key": "EnergyLink", "operations":
+                                        [{"operation": "add", "value": value}]
                                 }]))
                                 ctx.rcon_client.send_command(
                                     f"/ap-energylink -{value}")
-                                logger.info(f"EnergyLink: Sent {value} Joules")
+                                logger.info(f"EnergyLink: Sent {Utils.format_SI_prefix(value)}J")
 
             await asyncio.sleep(0.1)
 
@@ -267,7 +273,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
         factorio_process.wait(5)
 
 
-async def get_info(ctx, rcon_client):
+async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
     info = json.loads(rcon_client.send_command("/ap-rcon-info"))
     ctx.auth = info["slot_name"]
     ctx.seed_name = info["seed_name"]
@@ -275,6 +281,8 @@ async def get_info(ctx, rcon_client):
     death_link = bool(info.get("death_link", False))
     ctx.energy_link_increment = info.get("energy_link", 0)
     logger.debug(f"Energy Link Increment: {ctx.energy_link_increment}")
+    if ctx.energy_link_increment and ctx.ui:
+        ctx.ui.enable_energy_link()
     await ctx.update_death_link(death_link)
 
 
