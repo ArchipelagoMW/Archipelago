@@ -207,6 +207,15 @@ def get_datapackge():
     return Response(json.dumps(network_data_package, indent=4), mimetype="text/plain")
 
 
+@app.route('/sitemap')
+def get_sitemap():
+    available_games = []
+    for game, world in AutoWorldRegister.world_types.items():
+        if not world.hidden:
+            available_games.append(game)
+    return render_template("siteMap.html", games=available_games)
+
+
 from WebHostLib.customserver import run_server_process
 from . import tracker, upload, landing, check, generate, downloads, api  # to trigger app routing picking up on it
 

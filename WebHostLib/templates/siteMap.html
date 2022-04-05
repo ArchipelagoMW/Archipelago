@@ -1,0 +1,44 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    <title>Site Map</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
+{% endblock %}
+
+{% block body %}
+    {% include 'header/grassFlowersHeader.html' %}
+    <div id="site-map" class="markdown">
+        <h1>Site Map</h1>
+        <h2>Base Pages</h2>
+        <ul>
+            <li><a href="/discord">Discord Link</a></li>
+            <li><a href="/faq/en">F.A.Q. Page</a></li>
+            <li><a href="/favicon.ico">Favicon</a></li>
+            <li><a href="/generate">Generate Game Page</a></li>
+            <li><a href="/">Homepage</a></li>
+            <li><a href="/uploads">Host Game Page</a></li>
+            <li><a href="/datapackage">Raw Data Package</a></li>
+            <li><a href="/mysterycheck">Settings Validator</a></li>
+            <li><a href="/sitemap">Site Map</a></li>
+            <li><a href="/start-playing">Start Playing</a></li>
+            <li><a href="/games">Supported Games Page</a></li>
+            <li><a href="/tutorial">Tutorials Page</a></li>
+            <li><a href="/user-content">User Content</a></li>
+            <li><a href="/weighted-settings">Weighted Settings Page</a></li>
+        </ul>
+
+        <h2>Game Info Pages</h2>
+        <ul>
+            {% for game in games %}
+                <li><a href="{{ url_for('game_info', game=game, lang='en') }}">{{ game }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <h2>Game Settings Pages</h2>
+        <ul>
+            {% for game in games %}
+                <li><a href="{{ url_for('player_settings', game=game) }}">{{ game }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
