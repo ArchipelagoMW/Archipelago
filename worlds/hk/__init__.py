@@ -75,6 +75,17 @@ white_palace_locations = {
 
 }
 
+progression_charms = {
+    # Baulder Killers
+    "Grubberfly's_Elegy", "Weaversong", "Glowing_Womb",
+    # Spore Shroom spots in fungle wastes
+    "Spore_Shroom",
+    # Tuk gives egg,
+    "Defender's_Crest",
+    # Unlocks Grimm Troupe
+    "Grimmchild1", "Grimmchild2"
+}
+
 
 class HKWorld(World):
     """Beneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface, 
@@ -320,6 +331,12 @@ class HKItem(Item):
         self.type = type
         if name == "Mimic_Grub":
             self.trap = True
+
+        if type in ("Grub", "DreamWarrior", "Root", "Egg"):
+            self.skip_in_prog_balancing = True
+
+        if type == "Charm" and name not in progression_charms:
+            self.skip_in_prog_balancing = True
 
 
 class HKLogicMixin(LogicMixin):
