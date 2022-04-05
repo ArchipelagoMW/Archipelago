@@ -328,10 +328,8 @@ class HKLogicMixin(LogicMixin):
     def _hk_notches(self, player: int, *notches: int) -> int:
         return sum(self.world.worlds[player].charm_costs[notch] for notch in notches)
 
-    def _kh_option(self, player: int, option_name: str) -> int:
-        if option_name == "RandomizeCharmNotches":
-            return self.world.RandomCharmCosts[player] != -1
+    def _hk_option(self, player: int, option_name: str) -> int:
         return getattr(self.world, option_name)[player].value
 
-    def _kh_start(self, player, start_location: str) -> bool:
+    def _hk_start(self, player, start_location: str) -> bool:
         return self.world.StartLocation[player] == start_location

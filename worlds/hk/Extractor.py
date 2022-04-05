@@ -107,7 +107,7 @@ class Absorber(ast.NodeTransformer):
             return ast.Constant(False, ctx=node.ctx)
         if node.id in logic_options:
             return ast.Call(
-                func=ast.Attribute(value=ast.Name(id='state', ctx=ast.Load()), attr='_kh_option', ctx=ast.Load()),
+                func=ast.Attribute(value=ast.Name(id='state', ctx=ast.Load()), attr='_hk_option', ctx=ast.Load()),
                 args=[ast.Name(id="player", ctx=ast.Load()), ast.Constant(value=logic_options[node.id])], keywords=[])
         if node.id in macros:
             return macros[node.id].body
@@ -143,7 +143,7 @@ class Absorber(ast.NodeTransformer):
             if node.slice.value in removed_starts:
                 return ast.Constant(False, ctx=node.ctx)
             return ast.Call(
-                func=ast.Attribute(value=ast.Name(id='state', ctx=ast.Load()), attr='_kh_start', ctx=ast.Load()),
+                func=ast.Attribute(value=ast.Name(id='state', ctx=ast.Load()), attr='_hk_start', ctx=ast.Load()),
                 args=[ast.Name(id="player", ctx=ast.Load()), node.slice], keywords=[])
         elif node.value.id == "COMBAT":
             return macros[unparse(node)].body
