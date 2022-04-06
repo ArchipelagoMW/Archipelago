@@ -181,6 +181,7 @@ class Context:
         self.minimum_client_versions: typing.Dict[int, Utils.Version] = {}
         self.seed_name = ""
         self.groups = {}
+        self.group_collected: typing.Dict[int, typing.Set[int]] = {}
         self.random = random.Random()
         self.stored_data = {}
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
@@ -432,6 +433,7 @@ class Context:
             "client_connection_timers": tuple(
                 (key, value.timestamp()) for key, value in self.client_connection_timers.items()),
             "random_state": self.random.getstate(),
+            "group_collected": dict(self.group_collected),
             "stored_data": self.stored_data,
             "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
                              "server_password": self.server_password, "password": self.password, "forfeit_mode":
@@ -485,6 +487,9 @@ class Context:
             self.collect_mode = savedata["game_options"]["collect_mode"]
             self.item_cheat = savedata["game_options"]["item_cheat"]
             self.compatibility = savedata["game_options"]["compatibility"]
+
+        if "group_collected" in savedata:
+            self.group_collected = savedata["group_collected"]
 
         if "stored_data" in savedata:
             self.stored_data = savedata["stored_data"]
@@ -764,7 +769,7 @@ def forfeit_player(ctx: Context, team: int, slot: int):
     update_checked_locations(ctx, team, slot)
 
 
-def collect_player(ctx: Context, team: int, slot: int):
+def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
     """register any locations that are in the multidata, pointing towards this player"""
     all_locations = collections.defaultdict(set)
     for source_slot, location_data in ctx.locations.items():
@@ -776,6 +781,15 @@ def collect_player(ctx: Context, team: int, slot: int):
     for source_player, location_ids in all_locations.items():
         register_location_checks(ctx, team, source_player, location_ids, count_activity=False)
         update_checked_locations(ctx, team, source_player)
+
+    if not is_group:
+        for group, group_players in ctx.groups.items():
+            if slot in group_players:
+                group_collected_players = ctx.group_collected.get(group, set())
+                group_collected_players.add(slot)
+                ctx.group_collected[group] = group_collected_players
+                if set(group_players) == group_collected_players:
+                    collect_player(ctx, team, group, True)
 
 
 def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
