@@ -51,6 +51,9 @@ class SMZ3World(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
 
+    # first added for 0.2.6
+    required_client_version = (0, 2, 6)
+
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         self.locations = {}
@@ -134,10 +137,6 @@ class SMZ3World(World):
             exit = Entrance(self.player, 'Menu' + "->" + region.Name, startRegion)
             startRegion.exits.append(exit)
             exit.connect(currentRegion)
-
-    def get_required_client_version(self):
-        # first added for 0.2.6
-        return max(super(SMZ3World, self).get_required_client_version(), (0, 2, 6))
 
     def apply_sm_custom_sprite(self):
         itemSprites = ["off_world_prog_item.bin", "off_world_item.bin"]

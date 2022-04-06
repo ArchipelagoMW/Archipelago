@@ -69,6 +69,10 @@ class SMWorld(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
 
+    # changes to client DeathLink handling for 0.2.1
+    # changes to client Remote Item handling for 0.2.6
+    required_client_version = (0, 2, 6)
+
     itemManager: ItemManager
 
     locations = {}
@@ -166,11 +170,6 @@ class SMWorld(World):
     def create_regions(self):
         create_locations(self, self.player)
         create_regions(self, self.world, self.player)
-
-    def get_required_client_version(self):
-        # changes to client DeathLink handling for 0.2.1
-        # changes to client Remote Item handling for 0.2.6
-        return max(super(SMWorld, self).get_required_client_version(), (0, 2, 6))
 
     def getWord(self, w):
         return (w & 0x00FF, (w & 0xFF00) >> 8)

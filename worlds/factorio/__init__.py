@@ -42,6 +42,7 @@ class Factorio(World):
         "Progressive": set(progressive_tech_table.values()),
     }
     data_version = 5
+    required_client_version = (0, 2, 6)
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
@@ -178,9 +179,6 @@ class Factorio(World):
                         return item_name
 
         return super(Factorio, self).collect_item(state, item, remove)
-
-    def get_required_client_version(self) -> tuple:
-        return max((0, 2, 6), super(Factorio, self).get_required_client_version())
 
     options = factorio_options
 

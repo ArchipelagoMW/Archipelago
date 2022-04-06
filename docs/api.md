@@ -398,7 +398,7 @@ The world has to provide the following things for generation
   `self.world.get_filled_locations(self.player)` will filter for this world.
   `item.player` can be used to see if it's a local item.
 
-In addition the following methods can be implemented
+In addition, the following methods and properties can be implemented
 
 * `def generate_early(self)`
   called per player before any items or locations are created. You can set
@@ -418,11 +418,9 @@ In addition the following methods can be implemented
   before, during and after the regular fill process, before `generate_output`.
 * `fill_slot_data` and `modify_multidata` can be used to modify the data that
   will be used by the server to host the MultiWorld.
-* `def get_required_client_version(self)`
-  can return a tuple of 3 ints to make sure the client is compatible to this
-  world (e.g. item IDs) when connecting.
-  Always use `return max((x,y,z), super().get_required_client_version())`
-  to catch updates in the lower layers that break compatibility.
+* `required_client_version: Tuple(int, int, int)`
+  Client version as tuple of 3 ints to make sure the client is compatible to
+  this world (e.g. implements all required features) when connecting.
 
 #### generate_early
 

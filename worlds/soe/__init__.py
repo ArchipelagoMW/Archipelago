@@ -147,6 +147,7 @@ class SoEWorld(World):
     remote_items = False
     data_version = 2
     web = SoEWebWorld()
+    required_client_version = (0, 2, 6)
 
     item_name_to_id, item_id_to_raw = _get_item_mapping()
     location_name_to_id, location_id_to_raw = _get_location_mapping()
@@ -320,10 +321,6 @@ class SoEWorld(World):
         if self.connect_name and self.connect_name != self.world.player_name[self.player]:
             payload = multidata["connect_names"][self.world.player_name[self.player]]
             multidata["connect_names"][self.connect_name] = payload
-
-    def get_required_client_version(self):
-        return max((0, 2, 6), super(SoEWorld, self).get_required_client_version())
-
 
 class SoEItem(Item):
     game: str = "Secret of Evermore"
