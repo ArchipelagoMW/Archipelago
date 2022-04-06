@@ -15,7 +15,7 @@ from sc2.data import Race
 from sc2.bot_ai import BotAI
 from sc2.player import Bot, Difficulty, AbstractPlayer
 from worlds.sc2wol.Items import lookup_id_to_name, item_table
-from worlds.sc2wol.Locations import SC2WOL_ITEM_ID_OFFSET
+from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 
 from NetUtils import NetworkItem
 from Utils import init_logging
@@ -47,7 +47,13 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if num_options > 0:
             mission_number = int(options[0])
 
-        asyncio.create_task(starcraft_launch(self.ctx, mission_number), name="SNES Connect")
+        asyncio.create_task(starcraft_launch(self.ctx, mission_number), name="Starcraft Launch")
+        return True
+
+    def _cmd_available(self) -> bool:
+        """Get what missions are currently available to play"""
+
+        request_available_missions(self.ctx.checked_locations)
         return True
 
 
@@ -315,47 +321,131 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     if game_state & (1 << 1) and not self.mission_completed:
                         print("Mission Completed")
                         await self.ctx.send_msgs([
-                            {"cmd": 'LocationChecks', "locations": [SC2WOL_ITEM_ID_OFFSET + 100 * self.mission_id]}])
+                            {"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id]}])
                         self.mission_completed = True
 
                     if game_state & (1 << 2) and not self.first_bonus:
                         print("1st Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_ITEM_ID_OFFSET + 100 * self.mission_id + 1]}])
+                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 1]}])
                         self.first_bonus = True
 
                     if not self.second_bonus and game_state & (1 << 3):
                         print("2nd Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_ITEM_ID_OFFSET + 100 * self.mission_id + 2]}])
+                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 2]}])
                         self.second_bonus = True
 
                     if not self.third_bonus and game_state & (1 << 4):
                         print("3rd Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_ITEM_ID_OFFSET + 100 * self.mission_id + 3]}])
+                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 3]}])
                         self.third_bonus = True
 
                     if not self.fourth_bonus and game_state & (1 << 5):
                         print("4th Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_ITEM_ID_OFFSET + 100 * self.mission_id + 4]}])
+                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 4]}])
                         self.fourth_bonus = True
 
                     if not self.fifth_bonus and game_state & (1 << 6):
                         print("5th Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_ITEM_ID_OFFSET + 100 * self.mission_id + 5]}])
+                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 5]}])
                         self.fifth_bonus = True
 
                     if not self.sixth_bonus and game_state & (1 << 7):
                         print("6th Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_ITEM_ID_OFFSET + 100 * self.mission_id + 6]}])
+                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 6]}])
                         self.sixth_bonus = True
 
                 else:
                     await self.chat_send("LostConnection - Lost connection to game.")
+
+
+class MissionInfo(typing.NamedTuple):
+    id: int
+    extra_locations: int
+    required_world: list[int]
+    number: int = 0  # number of worlds need beaten
+
+
+mission_req_table = {
+    "Liberation Day": MissionInfo(1, 6, []),
+    "The Outlaws": MissionInfo(2, 1, [1]),
+    "Zero Hour": MissionInfo(3, 3, [2]),
+    "Evacuation": MissionInfo(4, 3, [3]),
+    "Outbreak": MissionInfo(5, 2, [4]),
+    "Safe Haven": MissionInfo(6, 0, [5], number=7),
+    "Haven's Fall": MissionInfo(7, 0, [5], number=7),
+    "Smash and Grab": MissionInfo(8, 4, [3]),
+    "The Dig": MissionInfo(9, 3, [8], number=8),
+    "The Moebius Factor": MissionInfo(10, 8, [9], number=11),
+    "Supernova": MissionInfo(11, 4, [10], number=14),
+    "Maw of the Void": MissionInfo(12, 5, [11]),
+    "Devil's Playground": MissionInfo(13, 2, [3], number=4),
+    "Welcome to the Jungle": MissionInfo(14, 3, [13]),
+    "Breakout": MissionInfo(15, 2, [14], number=8),
+    "Ghost of a Chance": MissionInfo(16, 5, [14], number=8),
+    "The Great Train Robbery": MissionInfo(17, 3, [3], number=6),
+    "Cutthroat": MissionInfo(18, 4, [17]),
+    "Engine of Destruction": MissionInfo(19, 5, [18]),
+    "Media Blitz": MissionInfo(20, 4, [19]),
+    "Piercing the Shroud": MissionInfo(21, 5, [20]),
+    "Whispers of Doom": MissionInfo(22, 3, [9]),
+    "A Sinister Turn": MissionInfo(23, 3, [22]),
+    "Echoes of the Future": MissionInfo(24, 2, [23]),
+    "In Utter Darkness": MissionInfo(25, 2, [24]),
+    "Gates of Hell": MissionInfo(26, 1, [12]),
+    "Belly of the Beast": MissionInfo(27, 3, [26]),
+    "Shatter the Sky": MissionInfo(28, 4, [26]),
+    "All-In": MissionInfo(29, -1, [27, 28])
+}
+
+
+def request_available_missions(locations_done):
+    message = "Available locations:"
+
+    first_item = True
+
+    missions = calc_available_missions(locations_done, mission_req_table)
+
+    for mission in missions:
+        if first_item:
+            message += " {}[{}]".format(mission, mission_req_table[mission].id)
+            first_item = False
+        else:
+            message += ", {}[{}]".format(mission, mission_req_table[mission].id)
+
+    logger.info(message)
+
+
+def calc_available_missions(locations_done, locations):
+    available_missions = []
+    mission_complete = 0
+
+    # Get number of missions completed
+    for loc in locations_done:
+        if loc % 100 == 0:
+            mission_complete += 1
+
+    for name in locations:
+        if len(locations[name].required_world) >= 1:
+            reqs_complete = True
+
+            for req_mission in locations[name].required_world:
+                if not(req_mission * 100 + SC2WOL_LOC_ID_OFFSET) in locations_done:
+                    reqs_complete = False
+                    break
+
+            if reqs_complete and mission_complete >= locations[name].number:
+                available_missions.append(name)
+        else:
+            available_missions.append(name)
+
+    return available_missions
+
 
 
 if __name__ == '__main__':
