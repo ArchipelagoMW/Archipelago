@@ -290,7 +290,6 @@ class SMZ3World(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             payload = multidata["connect_names"][self.world.player_name[self.player]]
             multidata["connect_names"][new_name] = payload
-            del (multidata["connect_names"][self.world.player_name[self.player]])
 
     def fill_slot_data(self): 
         slot_data = {}
