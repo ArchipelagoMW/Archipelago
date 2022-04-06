@@ -331,7 +331,7 @@ def create_regions(world, player: int, active_locations):
     chao_garden_region = create_region(world, player, active_locations, LocationName.chao_garden_region, chao_garden_region_locations, None)
     
     # Set up the regions correctly.
-    world.regions = [
+    world.regions += [
         menu_region,
         city_escape_region,
         metal_harbor_region,
