@@ -407,16 +407,12 @@ class Range(NumericOption):
                 return cls(random.randint(cls.range_start, cls.range_end))
             else:
                 raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. Acceptable values are: random, random-high, random-middle, random-low, random-range-low-<min>-<max>, random-range-middle-<min>-<max>, random-range-high-<min>-<max>, or random-range-<min>-<max>.")
-        elif text in {"on", "true", "default", "yes", "high"}:
-            if hasattr(cls, "default") and text != "high":
-                return cls(cls.default)
-            else:  # "high" or there is no default
-                return cls(cls.range_end)
-        elif text in {"off", "false", "none", "null", "no", "low"}:
-            if text == "low" or cls.range_start == 0:
-                return cls(cls.range_start)
-            else:
-                raise ValueError(f'text "{text}" is not valid for range {cls.range_start} to {cls.range_end})')
+        elif text == "default" and hasattr(cls, "default"):
+            return cls(cls.default)
+        elif text == "high":
+            return cls(cls.range_end)
+        elif text == "low":
+            return cls(cls.range_start)
         return cls(int(text))
 
     @classmethod
