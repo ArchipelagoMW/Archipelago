@@ -27,9 +27,9 @@ class AutoWorldRegister(type):
         dct["location_names"] = frozenset(dct["location_name_to_id"])
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
 
-        # move away from required_client_version function
+        # move away from get_required_client_version function
         if "game" in dct:
-            assert "get_required_client_version" not in dct, f"{name}: required_client_version is a property now"
+            assert "get_required_client_version" not in dct, f"{name}: required_client_version is an attribute now"
         # set minimum required_client_version from bases
         if "required_client_version" in dct and bases:
             for base in bases:

@@ -398,7 +398,7 @@ The world has to provide the following things for generation
   `self.world.get_filled_locations(self.player)` will filter for this world.
   `item.player` can be used to see if it's a local item.
 
-In addition, the following methods and properties can be implemented
+In addition, the following methods can be implemented and attributes can be set
 
 * `def generate_early(self)`
   called per player before any items or locations are created. You can set
