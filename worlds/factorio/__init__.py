@@ -42,7 +42,7 @@ class Factorio(World):
         "Progressive": set(progressive_tech_table.values()),
     }
     data_version = 5
-    required_client_version = (0, 2, 6)
+    required_client_version = (0, 3, 0)
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
