@@ -12,6 +12,9 @@ import logging
 import asyncio
 from json import loads, dumps
 
+import ModuleUpdate
+ModuleUpdate.update()
+
 from Utils import init_logging
 
 if __name__ == "__main__":
