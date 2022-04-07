@@ -1,11 +1,14 @@
 from __future__ import annotations
+import abc
+import math
+import numbers
 import typing
 import random
 
 from schema import Schema, And, Or
 
 
-class AssembleOptions(type):
+class AssembleOptions(abc.ABCMeta):
     def __new__(mcs, name, bases, attrs):
         options = attrs["options"] = {}
         name_lookup = attrs["name_lookup"] = {}
@@ -76,7 +79,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.get_current_option_name()})"
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.value)
 
     @property
@@ -101,11 +104,173 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         return bool(self.value)
 
     @classmethod
-    def from_any(cls, data: typing.Any):
+    def from_any(cls, data: typing.Any) -> Option[T]:
         raise NotImplementedError
 
 
-class Toggle(Option[int]):
+class NumericOption(Option[int], numbers.Integral):
+    # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
+    # `int` is not a `numbers.Integral` according to the official typestubs
+    # (even though isinstance(5, numbers.Integral) == True)
+    # https://github.com/python/typing/issues/272
+    # https://github.com/python/mypy/issues/3186
+    # https://github.com/microsoft/pyright/issues/1575
+
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value == other.value
+        else:
+            return typing.cast(bool, self.value == other)
+
+    def __lt__(self, other: typing.Union[int, NumericOption]) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value < other.value
+        else:
+            return self.value < other
+
+    def __le__(self, other: typing.Union[int, NumericOption]) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value <= other.value
+        else:
+            return self.value <= other
+
+    def __gt__(self, other: typing.Union[int, NumericOption]) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value > other.value
+        else:
+            return self.value > other
+
+    def __bool__(self) -> bool:
+        return bool(self.value)
+
+    def __int__(self) -> int:
+        return self.value
+
+    def __mul__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return self.value * other.value
+        else:
+            return self.value * other
+
+    def __rmul__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return other.value * self.value
+        else:
+            return other * self.value
+
+    def __sub__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return self.value - other.value
+        else:
+            return self.value - other
+
+    def __rsub__(self, left: typing.Any) -> typing.Any:
+        if isinstance(left, NumericOption):
+            return left.value - self.value
+        else:
+            return left - self.value
+
+    def __add__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return self.value + other.value
+        else:
+            return self.value + other
+
+    def __radd__(self, left: typing.Any) -> typing.Any:
+        if isinstance(left, NumericOption):
+            return left.value + self.value
+        else:
+            return left + self.value
+
+    def __truediv__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return self.value / other.value
+        else:
+            return self.value / other
+
+    def __rtruediv__(self, left: typing.Any) -> typing.Any:
+        if isinstance(left, NumericOption):
+            return left.value / self.value
+        else:
+            return left / self.value
+
+    def __abs__(self) -> typing.Any:
+        return abs(self.value)
+
+    def __and__(self, other: typing.Any) -> int:
+        return self.value & int(other)
+
+    def __ceil__(self) -> int:
+        return math.ceil(self.value)
+
+    def __floor__(self) -> int:
+        return math.floor(self.value)
+
+    def __floordiv__(self, other: typing.Any) -> int:
+        return self.value // int(other)
+
+    def __invert__(self) -> int:
+        return ~(self.value)
+
+    def __lshift__(self, other: typing.Any) -> int:
+        return self.value << int(other)
+
+    def __mod__(self, other: typing.Any) -> int:
+        return self.value % int(other)
+
+    def __neg__(self) -> int:
+        return -(self.value)
+
+    def __or__(self, other: typing.Any) -> int:
+        return self.value | int(other)
+
+    def __pos__(self) -> int:
+        return +(self.value)
+
+    def __pow__(self, exponent: numbers.Complex, modulus: typing.Optional[numbers.Integral] = None) -> int:
+        if not (modulus is None):
+            assert isinstance(exponent, numbers.Integral)
+            return pow(self.value, exponent, modulus)  # type: ignore
+        return self.value ** exponent  # type: ignore
+
+    def __rand__(self, other: typing.Any) -> int:
+        return int(other) & self.value
+
+    def __rfloordiv__(self, other: typing.Any) -> int:
+        return int(other) // self.value
+
+    def __rlshift__(self, other: typing.Any) -> int:
+        return int(other) << self.value
+
+    def __rmod__(self, other: typing.Any) -> int:
+        return int(other) % self.value
+
+    def __ror__(self, other: typing.Any) -> int:
+        return int(other) | self.value
+
+    def __round__(self, ndigits: typing.Optional[int] = None) -> int:
+        return round(self.value, ndigits)
+
+    def __rpow__(self, base: typing.Any) -> typing.Any:
+        return base ** self.value
+
+    def __rrshift__(self, other: typing.Any) -> int:
+        return int(other) >> self.value
+
+    def __rshift__(self, other: typing.Any) -> int:
+        return self.value >> int(other)
+
+    def __rxor__(self, other: typing.Any) -> int:
+        return int(other) ^ self.value
+
+    def __trunc__(self) -> int:
+        return math.trunc(self.value)
+
+    def __xor__(self, other: typing.Any) -> int:
+        return self.value ^ int(other)
+
+
+class Toggle(NumericOption):
     option_false = 0
     option_true = 1
     default = 0
@@ -130,24 +295,6 @@ class Toggle(Option[int]):
         else:
             return cls(data)
 
-    def __eq__(self, other):
-        if isinstance(other, Toggle):
-            return self.value == other.value
-        else:
-            return self.value == other
-
-    def __gt__(self, other):
-        if isinstance(other, Toggle):
-            return self.value > other.value
-        else:
-            return self.value > other
-
-    def __bool__(self):
-        return bool(self.value)
-
-    def __int__(self):
-        return int(self.value)
-
     @classmethod
     def get_option_name(cls, value):
         return ["No", "Yes"][int(value)]
@@ -159,7 +306,7 @@ class DefaultOnToggle(Toggle):
     default = 1
 
 
-class Choice(Option[int]):
+class Choice(NumericOption):
     auto_display_name = True
 
     def __init__(self, value: int):
@@ -216,7 +363,7 @@ class Choice(Option[int]):
     __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
-class Range(Option[int], int):
+class Range(NumericOption):
     range_start = 0
     range_end = 1
 
@@ -260,6 +407,12 @@ class Range(Option[int], int):
                 return cls(random.randint(cls.range_start, cls.range_end))
             else:
                 raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. Acceptable values are: random, random-high, random-middle, random-low, random-range-low-<min>-<max>, random-range-middle-<min>-<max>, random-range-high-<min>-<max>, or random-range-<min>-<max>.")
+        elif text == "default" and hasattr(cls, "default"):
+            return cls(cls.default)
+        elif text == "high":
+            return cls(cls.range_end)
+        elif text == "low":
+            return cls(cls.range_start)
         return cls(int(text))
 
     @classmethod
@@ -268,10 +421,11 @@ class Range(Option[int], int):
             return cls(data)
         return cls.from_text(str(data))
 
-    def get_option_name(self, value):
+    @classmethod
+    def get_option_name(cls, value: int) -> str:
         return str(value)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.value)
 
 
