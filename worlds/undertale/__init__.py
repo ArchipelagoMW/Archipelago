@@ -49,10 +49,6 @@ class UndertaleWorld(World):
         # Add all required progression items
         for (name, num) in required_items.items():
             itempool += [name] * num
-        # Fill remaining items with randomly generated junk
-        itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool))
-        # Convert itempool into real items
-        itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
 
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
@@ -62,6 +58,11 @@ class UndertaleWorld(World):
             exclusion_pool.update(exclusion_table['pacifist'])
         if self.world.route_required[self.player].current_key == "genocide":
             exclusion_pool.update(exclusion_table['genocide'])
+
+        # Fill remaining items with randomly generated junk
+        itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool)-len(exclusion_pool))
+        # Convert itempool into real items
+        itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
         exclusion_rules(self.world, self.player, exclusion_pool)
 
         self.world.itempool += itempool
@@ -75,7 +76,7 @@ class UndertaleWorld(World):
             ret = Region(region_name, None, region_name, self.player, self.world)
             ret.locations = [UndertaleAdvancement(self.player, loc_name, loc_data.id, ret)
                 for loc_name, loc_data in advancement_table.items()
-                if loc_data.region == region_name]
+                if loc_data.region == region_name and not loc_name in exclusion_table[self.world.route_required[self.player].current_key]]
             for exit in exits:
                 ret.exits.append(Entrance(self.player, exit, ret))
             return ret
