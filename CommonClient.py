@@ -6,6 +6,9 @@ import sys
 import typing
 import time
 
+import ModuleUpdate
+ModuleUpdate.update()
+
 import websockets
 
 import Utils
