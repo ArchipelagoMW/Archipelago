@@ -15,6 +15,7 @@ from ..AutoWorld import World
 
 client_version = 7
 
+
 class UndertaleWorld(World):
     """
     Undertale is an RPG where every choice you make matters. You could choose to hurt all the enemies, eventually
@@ -52,18 +53,12 @@ class UndertaleWorld(World):
 
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
-        if self.world.route_required[self.player].current_key == "neutral":
-            exclusion_pool.update(exclusion_table['neutral'])
-        if self.world.route_required[self.player].current_key == "pacifist":
-            exclusion_pool.update(exclusion_table['pacifist'])
-        if self.world.route_required[self.player].current_key == "genocide":
-            exclusion_pool.update(exclusion_table['genocide'])
+        exclusion_pool.update(exclusion_table[self.world.route_required[self.player].current_key])
 
         # Fill remaining items with randomly generated junk
         itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool)-len(exclusion_pool))
         # Convert itempool into real items
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
-        exclusion_rules(self.world, self.player, exclusion_pool)
 
         self.world.itempool += itempool
 
