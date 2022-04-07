@@ -38,22 +38,30 @@ nest_asyncio.apply()
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: Context
 
-    def _cmd_wol(self, wol_options: str = "") -> bool:
+    def _cmd_wol(self, mission_id: str = "") -> bool:
         """Start a Starcraft 2 mission"""
 
-        options = wol_options.split()
+        options = mission_id.split()
         num_options = len(options)
 
         if num_options > 0:
             mission_number = int(options[0])
+            asyncio.create_task(starcraft_launch(self.ctx, mission_number), name="Starcraft Launch")
+        else:
+            logger.info("Mission ID needs to be specified.  Use /unfinished or /available to view ids for available missions.")
 
-        asyncio.create_task(starcraft_launch(self.ctx, mission_number), name="Starcraft Launch")
         return True
 
     def _cmd_available(self) -> bool:
         """Get what missions are currently available to play"""
 
-        request_available_missions(self.ctx.checked_locations)
+        request_available_missions(self.ctx.checked_locations, mission_req_table)
+        return True
+
+    def _cmd_unfinished(self) -> bool:
+        """Get what missions are currently available to play and have not had all locations checked"""
+
+        request_unfinished_missions(self.ctx.checked_locations, mission_req_table)
         return True
 
 
@@ -168,7 +176,8 @@ async def main():
     if input_task:
         input_task.cancel()
 
-maps_table = ["traynor01", "traynor02", "traynor03", "thanson01", "thanson02", "thanson03a", "thanson03b", "ttychus01"]
+maps_table = ["traynor01", "traynor02", "traynor03", "thanson01", "thanson02", "thanson03a", "thanson03b", "ttychus01",
+              "ttychus02", "ttychus03", "ttychus04", "ttychus05", "ttosh01", "ttosh02", "ttosh03a", "ttosh03b"]
 
 
 def calculate_items(items):
@@ -372,51 +381,104 @@ class MissionInfo(typing.NamedTuple):
 
 
 mission_req_table = {
-    "Liberation Day": MissionInfo(1, 6, []),
-    "The Outlaws": MissionInfo(2, 1, [1]),
-    "Zero Hour": MissionInfo(3, 3, [2]),
-    "Evacuation": MissionInfo(4, 3, [3]),
-    "Outbreak": MissionInfo(5, 2, [4]),
-    "Safe Haven": MissionInfo(6, 0, [5], number=7),
-    "Haven's Fall": MissionInfo(7, 0, [5], number=7),
-    "Smash and Grab": MissionInfo(8, 4, [3]),
-    "The Dig": MissionInfo(9, 3, [8], number=8),
-    "The Moebius Factor": MissionInfo(10, 8, [9], number=11),
-    "Supernova": MissionInfo(11, 4, [10], number=14),
-    "Maw of the Void": MissionInfo(12, 5, [11]),
-    "Devil's Playground": MissionInfo(13, 2, [3], number=4),
-    "Welcome to the Jungle": MissionInfo(14, 3, [13]),
-    "Breakout": MissionInfo(15, 2, [14], number=8),
-    "Ghost of a Chance": MissionInfo(16, 5, [14], number=8),
-    "The Great Train Robbery": MissionInfo(17, 3, [3], number=6),
-    "Cutthroat": MissionInfo(18, 4, [17]),
-    "Engine of Destruction": MissionInfo(19, 5, [18]),
-    "Media Blitz": MissionInfo(20, 4, [19]),
-    "Piercing the Shroud": MissionInfo(21, 5, [20]),
-    "Whispers of Doom": MissionInfo(22, 3, [9]),
-    "A Sinister Turn": MissionInfo(23, 3, [22]),
-    "Echoes of the Future": MissionInfo(24, 2, [23]),
-    "In Utter Darkness": MissionInfo(25, 2, [24]),
-    "Gates of Hell": MissionInfo(26, 1, [12]),
-    "Belly of the Beast": MissionInfo(27, 3, [26]),
-    "Shatter the Sky": MissionInfo(28, 4, [26]),
+    "Liberation Day": MissionInfo(1, 7, []),
+    "The Outlaws": MissionInfo(2, 2, [1]),
+    "Zero Hour": MissionInfo(3, 4, [2]),
+    "Evacuation": MissionInfo(4, 4, [3]),
+    "Outbreak": MissionInfo(5, 3, [4]),
+    "Safe Haven": MissionInfo(6, 1, [5], number=7),
+    "Haven's Fall": MissionInfo(7, 1, [5], number=7),
+    "Smash and Grab": MissionInfo(8, 5, [3]),
+    "The Dig": MissionInfo(9, 4, [8], number=8),
+    "The Moebius Factor": MissionInfo(10, 9, [9], number=11),
+    "Supernova": MissionInfo(11, 5, [10], number=14),
+    "Maw of the Void": MissionInfo(12, 6, [11]),
+    "Devil's Playground": MissionInfo(13, 3, [3], number=4),
+    "Welcome to the Jungle": MissionInfo(14, 4, [13]),
+    "Breakout": MissionInfo(15, 3, [14], number=8),
+    "Ghost of a Chance": MissionInfo(16, 6, [14], number=8),
+    "The Great Train Robbery": MissionInfo(17, 4, [3], number=6),
+    "Cutthroat": MissionInfo(18, 5, [17]),
+    "Engine of Destruction": MissionInfo(19, 6, [18]),
+    "Media Blitz": MissionInfo(20, 5, [19]),
+    "Piercing the Shroud": MissionInfo(21, 6, [20]),
+    "Whispers of Doom": MissionInfo(22, 4, [9]),
+    "A Sinister Turn": MissionInfo(23, 4, [22]),
+    "Echoes of the Future": MissionInfo(24, 3, [23]),
+    "In Utter Darkness": MissionInfo(25, 3, [24]),
+    "Gates of Hell": MissionInfo(26, 2, [12]),
+    "Belly of the Beast": MissionInfo(27, 4, [26]),
+    "Shatter the Sky": MissionInfo(28, 5, [26]),
     "All-In": MissionInfo(29, -1, [27, 28])
 }
 
 
-def request_available_missions(locations_done):
-    message = "Available locations:"
+def calc_objectives_completed(mission, missions_info, locations_done):
+    objectives_complete = 0
+
+    if missions_info[mission].extra_locations > 0:
+        for i in range(missions_info[mission].extra_locations):
+            if (missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i) in locations_done:
+                objectives_complete += 1
+
+        return objectives_complete
+
+    else:
+        return -1
+
+
+def request_unfinished_missions(locations_done, location_table):
+    message = "Unfinished Missions:"
 
     first_item = True
 
-    missions = calc_available_missions(locations_done, mission_req_table)
+    unfinished_missions = calc_unfinished_missions(locations_done, location_table)
+
+    for mission in unfinished_missions:
+        if first_item:
+            message += " {}[{}] ({}/{})".format(mission, location_table[mission].id, unfinished_missions[mission],
+                                                location_table[mission].extra_locations)
+            first_item = False
+        else:
+            message += ", {}[{}] ({}/{})".format(mission, location_table[mission].id, unfinished_missions[mission],
+                                                 location_table[mission].extra_locations)
+
+    logger.info(message)
+
+
+def calc_unfinished_missions(locations_done, locations):
+    unfinished_missions = []
+    locations_completed = []
+    available_missions = calc_available_missions(locations_done, locations)
+
+    for name in available_missions:
+        if not locations[name].extra_locations == -1:
+            objectives_completed = calc_objectives_completed(name, locations, locations_done)
+
+            if objectives_completed < locations[name].extra_locations:
+                unfinished_missions.append(name)
+                locations_completed.append(objectives_completed)
+
+        else:
+            unfinished_missions.append(name)
+            locations_completed.append(-1)
+
+    return {unfinished_missions[i]: locations_completed[i] for i in range(len(unfinished_missions))}
+
+
+def request_available_missions(locations_done, location_table):
+    message = "Available Missions:"
+
+    first_item = True
+
+    missions = calc_available_missions(locations_done, location_table)
 
     for mission in missions:
         if first_item:
-            message += " {}[{}]".format(mission, mission_req_table[mission].id)
+            message += " {}[{}]".format(mission, location_table[mission].id)
             first_item = False
         else:
-            message += ", {}[{}]".format(mission, mission_req_table[mission].id)
+            message += ", {}[{}]".format(mission, location_table[mission].id)
 
     logger.info(message)
 
