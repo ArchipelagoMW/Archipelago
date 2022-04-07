@@ -6,10 +6,10 @@ from collections import Counter
 
 logger = logging.getLogger("Hollow Knight")
 
-from .Items import item_table, lookup_type_to_names
+from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
 from .Rules import set_rules
-from .Options import hollow_knight_options, hollow_knight_randomize_options
+from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
     event_names, item_effects, connectors, one_ways
 
@@ -75,18 +75,39 @@ white_palace_locations = {
 
 }
 
+progression_charms = {
+    # Baulder Killers
+    "Grubberfly's_Elegy", "Weaversong", "Glowing_Womb",
+    # Spore Shroom spots in fungle wastes
+    "Spore_Shroom",
+    # Tuk gives egg,
+    "Defender's_Crest",
+    # Unlocks Grimm Troupe
+    "Grimmchild1", "Grimmchild2"
+}
+
 
 class HKWorld(World):
+    """Beneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface, 
+    searching for riches, or glory, or answers to old secrets.
+
+    As the enigmatic Knight, you’ll traverse the depths, unravel its mysteries and conquer its evils.
+    """  # from https://www.hollowknight.com
     game: str = "Hollow Knight"
     options = hollow_knight_options
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {location_name: location_id for location_id, location_name in
                            enumerate(locations, start=0x1000000)}
+    item_name_groups = item_name_groups
 
-    hidden = True
     ranges: typing.Dict[str, typing.Tuple[int, int]]
-    shops = {"Egg_Shop": "egg", "Grubfather": "grub", "Seer": "essence", "Salubra_(Requires_Charms)": "charm"}
+    shops: typing.Dict[str, str] = {
+        "Egg_Shop": "Egg",
+        "Grubfather": "Grub",
+        "Seer": "Essence",
+        "Salubra_(Requires_Charms)": "Charm"
+    }
     charm_costs: typing.List[int]
     data_version = 2
 
@@ -99,17 +120,19 @@ class HKWorld(World):
 
     def generate_early(self):
         world = self.world
-        self.charm_costs = world.random_charm_costs[self.player].get_costs(world.random)
+        self.charm_costs = world.RandomCharmCosts[self.player].get_costs(world.random)
         world.exclude_locations[self.player].value.update(white_palace_locations)
         world.local_items[self.player].value.add("Mimic_Grub")
         for vendor, unit in self.shops.items():
-            mini = getattr(world, f"minimum_{unit}_price")[self.player]
-            maxi = getattr(world, f"maximum_{unit}_price")[self.player]
+            mini = getattr(world, f"Minimum{unit}Price")[self.player]
+            maxi = getattr(world, f"Maximum{unit}Price")[self.player]
             # if minimum > maximum, set minimum to maximum
             mini.value = min(mini.value, maxi.value)
             self.ranges[unit] = mini.value, maxi.value
-        world.push_precollected(HKItem(starts[world.start_location[self.player].current_key],
+        world.push_precollected(HKItem(starts[world.StartLocation[self.player].current_key],
                                        True, None, "Event", self.player))
+        for option_name in disabled:
+            getattr(world, option_name)[self.player].value = 0
 
     def create_regions(self):
         menu_region: Region = create_region(self.world, self.player, 'Menu')
@@ -145,11 +168,14 @@ class HKWorld(World):
                 for item_name, location_name in zip(option.items, option.locations):
                     if item_name in geo_replace:
                         item_name = "Geo_Rock-Default"
+                    item = self.create_item(item_name)
                     if location_name in white_palace_locations:
-                        self.create_location(location_name).place_locked_item(self.create_item(item_name))
+                        self.create_location(location_name).place_locked_item(item)
+                    elif location_name == "Start":
+                        self.world.push_precollected(item)
                     else:
                         self.create_location(location_name)
-                        pool.append(self.create_item(item_name))
+                        pool.append(item)
             else:
                 for item_name, location_name in zip(option.items, option.locations):
                     item = self.create_item(item_name)
@@ -157,7 +183,7 @@ class HKWorld(World):
                         self.world.push_precollected(item)
                     else:
                         self.create_location(location_name).place_locked_item(item)
-        for i in range(self.world.egg_shop_slots[self.player].value):
+        for i in range(self.world.EggShopSlots[self.player].value):
             self.create_location("Egg_Shop")
             pool.append(self.create_item("Geo_Rock-Default"))
         if not self.allow_white_palace:
@@ -165,6 +191,17 @@ class HKWorld(World):
             if loc.item and loc.item.name == loc.name:
                 loc.item.advancement = False
         self.world.itempool += pool
+
+        for shopname in self.shops:
+            prices: typing.List[int] = []
+            locations: typing.List[HKLocation] = []
+            for x in range(1, self.created_multi_locations[shopname]+1):
+                loc = self.world.get_location(self.get_multi_location_name(shopname, x), self.player)
+                locations.append(loc)
+                prices.append(loc.cost)
+            prices.sort()
+            for loc, price in zip(locations, prices):
+                loc.cost = price
 
     def set_rules(self):
         world = self.world
@@ -207,7 +244,7 @@ class HKWorld(World):
             cost = 0
         if name in multi_locations:
             self.created_multi_locations[name] += 1
-            name += f"_{self.created_multi_locations[name]}"
+            name = self.get_multi_location_name(name, self.created_multi_locations[name])
 
         region = self.world.get_region("Menu", self.player)
         loc = HKLocation(self.player, name, self.location_name_to_id[name], region)
@@ -234,6 +271,33 @@ class HKWorld(World):
             state.prog_items[effect_name, item.player] -= effect_value
 
         return change
+
+    @classmethod
+    def stage_write_spoiler(cls, world: MultiWorld, spoiler_handle):
+        hk_players = world.get_game_players(cls.game)
+        spoiler_handle.write('\n\nCharm Notches:')
+        for player in hk_players:
+            name = world.get_player_name(player)
+            spoiler_handle.write(f'\n{name}\n')
+            hk_world: HKWorld = world.worlds[player]
+            for charm_number, cost in enumerate(hk_world.charm_costs, start=1):
+                spoiler_handle.write(f"\n{charm_number}: {cost}")
+
+        spoiler_handle.write('\n\nShop Prices:')
+        for player in hk_players:
+            name = world.get_player_name(player)
+            spoiler_handle.write(f'\n{name}\n')
+            hk_world: HKWorld = world.worlds[player]
+            for shop_name, unit_name in cls.shops.items():
+                for x in range(1, hk_world.created_multi_locations[shop_name]+1):
+                    loc = world.get_location(hk_world.get_multi_location_name(shop_name, x), player)
+                    spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost} {unit_name}")
+
+    def get_multi_location_name(self, base: str, i: typing.Optional[int]) -> str:
+        if i is None:
+            i = self.created_multi_locations[base]
+        assert 0 < i < 18, "limited number of multi location IDs reserved."
+        return f"{base}_{i}"
 
 
 def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:
@@ -268,6 +332,12 @@ class HKItem(Item):
         if name == "Mimic_Grub":
             self.trap = True
 
+        if type in ("Grub", "DreamWarrior", "Root", "Egg"):
+            self.skip_in_prog_balancing = True
+
+        if type == "Charm" and name not in progression_charms:
+            self.skip_in_prog_balancing = True
+
 
 class HKLogicMixin(LogicMixin):
     world: MultiWorld
@@ -275,10 +345,8 @@ class HKLogicMixin(LogicMixin):
     def _hk_notches(self, player: int, *notches: int) -> int:
         return sum(self.world.worlds[player].charm_costs[notch] for notch in notches)
 
-    def _kh_option(self, player: int, option_name: str) -> int:
-        if option_name == "RandomizeCharmNotches":
-            return self.world.random_charm_costs[player] != -1
+    def _hk_option(self, player: int, option_name: str) -> int:
         return getattr(self.world, option_name)[player].value
 
-    def _kh_start(self, player, start_location: str) -> bool:
-        return self.world.start_location[player] == start_location
+    def _hk_start(self, player, start_location: str) -> bool:
+        return self.world.StartLocation[player] == start_location

@@ -213,6 +213,8 @@ class MultiWorld():
         for player in self.player_ids:
             for item_link in self.item_links[player].value:
                 if item_link["name"] in item_links:
+                    if item_links[item_link["name"]]["game"] != self.game[player]:
+                        raise Exception(f"Cannot ItemLink across games. Link: {item_link['name']}")
                     item_links[item_link["name"]]["players"][player] = item_link["replacement_item"]
                     item_links[item_link["name"]]["item_pool"] &= set(item_link["item_pool"])
                 else:
@@ -267,6 +269,9 @@ class MultiWorld():
 
     def get_player_name(self, player: int) -> str:
         return self.player_name[player]
+
+    def get_file_safe_player_name(self, player: int) -> str:
+        return ''.join(c for c in self.get_player_name(player) if c not in '<>:"/\\|?*')
 
     def initialize_regions(self, regions=None):
         for region in regions if regions else self.regions:

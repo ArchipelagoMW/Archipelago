@@ -217,10 +217,10 @@ def main(args=None, callback=ERmain):
 def read_weights_yaml(path):
     try:
         if urllib.parse.urlparse(path).scheme in ('https', 'file'):
-            yaml = str(urllib.request.urlopen(path).read(), "utf-8")
+            yaml = str(urllib.request.urlopen(path).read(), "utf-8-sig")
         else:
             with open(path, 'rb') as f:
-                yaml = str(f.read(), "utf-8")
+                yaml = str(f.read(), "utf-8-sig")
     except Exception as e:
         raise Exception(f"Failed to read weights ({path})") from e
 

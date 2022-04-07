@@ -9,6 +9,9 @@ import sys
 import time
 import random
 
+import ModuleUpdate
+ModuleUpdate.update()
+
 import factorio_rcon
 import colorama
 import asyncio

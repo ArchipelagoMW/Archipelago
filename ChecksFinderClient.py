@@ -476,6 +476,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             raise Exception('Connection refused by the multiworld host, no reason provided')
 
     elif cmd == 'Connected':
+        if not os.path.exists(os.path.expandvars(r"%localappdata%/ChecksFinder")):
+            os.mkdir(os.path.expandvars(r"%localappdata%/ChecksFinder"))
         ctx.team = args["team"]
         ctx.slot = args["slot"]
         ctx.consume_players_package(args["players"])
