@@ -3,7 +3,7 @@ import logging
 import random
 import urllib.request
 import urllib.parse
-import typing
+from typing import Set, Dict, Tuple, Callable, Any, Union
 import os
 from collections import Counter
 import string
@@ -19,7 +19,6 @@ from Utils import parse_yamls, version_tuple, __version__, tuplize_version, get_
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from BaseClasses import seeddigits, get_seed
-from typing import Set, Dict, List, Tuple
 import Options
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
@@ -33,7 +32,7 @@ def mystery_argparse():
     options = get_options()
     defaults = options["generator"]
 
-    def resolve_path(path: str, resolver: typing.Callable[[str], str]) -> str:
+    def resolve_path(path: 1, resolver: Callable[[str], str]) -> str:
         return path if os.path.isabs(path) else resolver(path)
 
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
@@ -84,7 +83,7 @@ def main(args=None, callback=ERmain):
     if args.race:
         random.seed()  # reset to time-based random source
 
-    weights_cache: Dict[str, Tuple[any]] = {}
+    weights_cache: Dict[str, Tuple[Any]] = {}
     if args.weights_file_path and os.path.exists(args.weights_file_path):
         try:
             weights_cache[args.weights_file_path] = read_weights_yamls(args.weights_file_path)
@@ -224,7 +223,7 @@ def main(args=None, callback=ERmain):
     callback(erargs, seed)
 
 
-def read_weights_yamls(path) -> Tuple[any, ...]:
+def read_weights_yamls(path) -> Tuple[Any, ...]:
     try:
         if urllib.parse.urlparse(path).scheme in ('https', 'file'):
             yaml = str(urllib.request.urlopen(path).read(), "utf-8-sig")
@@ -245,7 +244,7 @@ def convert_to_on_off(value) -> str:
     return {True: "on", False: "off"}.get(value, value)
 
 
-def get_choice_legacy(option, root, value=None) -> typing.Any:
+def get_choice_legacy(option, root, value=None) -> Any:
     if option not in root:
         return value
     if type(root[option]) is list:
@@ -260,7 +259,7 @@ def get_choice_legacy(option, root, value=None) -> typing.Any:
     raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
 
 
-def get_choice(option, root, value=None) -> typing.Any:
+def get_choice(option, root, value=None) -> Any:
     if option not in root:
         return value
     if type(root[option]) is list:
@@ -293,16 +292,16 @@ def handle_name(name: str, player: int, name_counter: Counter):
     return new_name
 
 
-def prefer_int(input_data: str) -> typing.Union[str, int]:
+def prefer_int(input_data: str) -> Union[str, int]:
     try:
         return int(input_data)
     except:
         return input_data
 
 
-available_boss_names: typing.Set[str] = {boss.lower() for boss in Bosses.boss_table if boss not in
+available_boss_names: Set[str] = {boss.lower() for boss in Bosses.boss_table if boss not in
                                          {'Agahnim', 'Agahnim2', 'Ganon'}}
-available_boss_locations: typing.Set[str] = {f"{loc.lower()}{f' {level}' if level else ''}" for loc, level in
+available_boss_locations: Set[str] = {f"{loc.lower()}{f' {level}' if level else ''}" for loc, level in
                                              Bosses.boss_location_table}
 
 boss_shuffle_options = {None: 'none',
@@ -327,7 +326,7 @@ goals = {
 }
 
 
-def roll_percentage(percentage: typing.Union[int, float]) -> bool:
+def roll_percentage(percentage: Union[int, float]) -> bool:
     """Roll a percentage chance.
     percentage is expected to be in range [0, 100]"""
     return random.random() < (float(percentage) / 100)
@@ -397,7 +396,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
     return weights
 
 
-def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str:
+def get_plando_bosses(boss_shuffle: str, plando_options: Set[str]) -> str:
     if boss_shuffle in boss_shuffle_options:
         return boss_shuffle_options[boss_shuffle]
     elif "bosses" in plando_options:
@@ -449,7 +448,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
         setattr(ret, option_key, option(option.default))
 
 
-def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses",))):
+def roll_settings(weights: dict, plando_options: Set[str] = frozenset(("bosses",))):
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
