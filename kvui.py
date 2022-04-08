@@ -385,6 +385,13 @@ class ChecksFinderManager(GameManager):
     base_title = "Archipelago ChecksFinder Client"
 
 
+class UndertaleManager(GameManager):
+    logging_pairs = [
+        ("Client", "Archipelago")
+    ]
+    base_title = "Archipelago Undertale Client"
+
+
 class SNIManager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago"),
