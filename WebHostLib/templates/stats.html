@@ -1,0 +1,21 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    <title>Site Map</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
+    {{ css_resources|indent(4)|safe }}
+    {{ js_resources|indent(4)|safe }}
+    {{ chart_data|indent(4)|safe }}
+{% endblock %}
+
+{% block body %}
+    {% include 'header/grassFlowersHeader.html' %}
+    <div id="stats" class="markdown">
+        <h1>Stats</h1>
+        {% for chart in charts %}
+            {{ chart|indent(12)|safe }}
+        {% endfor %}
+
+
+    </div>
+{% endblock %}
