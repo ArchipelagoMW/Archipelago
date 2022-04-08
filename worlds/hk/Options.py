@@ -1,5 +1,6 @@
 import typing
 from .ExtractedData import logic_options, starts, pool_options
+
 from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict
 from .Charms import vanilla_costs, names as charm_names
 
