@@ -15,11 +15,11 @@ ModuleUpdate.update()
 import Utils
 from worlds.alttp import Options as LttPOptions
 from worlds.generic import PlandoConnection
-from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options, local_path, user_path
+from Utils import parse_yamls, version_tuple, __version__, tuplize_version, get_options, local_path, user_path
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from BaseClasses import seeddigits, get_seed
-from typing import Set, Dict, List
+from typing import Set, Dict, List, Tuple
 import Options
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
@@ -84,10 +84,10 @@ def main(args=None, callback=ERmain):
     if args.race:
         random.seed()  # reset to time-based random source
 
-    weights_cache: Dict[str, List[any]] = {}
+    weights_cache: Dict[str, Tuple[any]] = {}
     if args.weights_file_path and os.path.exists(args.weights_file_path):
         try:
-            weights_cache[args.weights_file_path] = [ read_weights_yaml(args.weights_file_path) ]
+            weights_cache[args.weights_file_path] = read_weights_yamls(args.weights_file_path)
         except Exception as e:
             raise ValueError(f"File {args.weights_file_path} is destroyed. Please fix your yaml.") from e
         print(f"Weights: {args.weights_file_path} >> "
@@ -95,7 +95,7 @@ def main(args=None, callback=ERmain):
 
     if args.meta_file_path and os.path.exists(args.meta_file_path):
         try:
-            weights_cache[args.meta_file_path] = [ read_weights_yaml(args.meta_file_path) ]
+            weights_cache[args.meta_file_path] = read_weights_yamls(args.meta_file_path)
         except Exception as e:
             raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
         meta_weights = weights_cache[args.meta_file_path][-1]
@@ -112,13 +112,7 @@ def main(args=None, callback=ERmain):
         if file.is_file() and os.path.join(args.player_files_path, fname) not in {args.meta_file_path, args.weights_file_path}:
             path = os.path.join(args.player_files_path, fname)
             try:
-                weights_cache[fname] = []
-                yaml = read_weights_yaml(path)
-                if 'worlds' in yaml:
-                    for single_world_yaml in yaml['worlds']:
-                        weights_cache[fname].append(single_world_yaml)
-                else:
-                    weights_cache[fname].append(yaml)
+                weights_cache[fname] = read_weights_yamls(path)
             except Exception as e:
                 raise ValueError(f"File {fname} is destroyed. Please fix your yaml.") from e
             else:
@@ -149,8 +143,8 @@ def main(args=None, callback=ERmain):
     erargs.sm_rom = args.sm_rom
     erargs.enemizercli = args.enemizercli
 
-    settings_cache: Dict[str, List[any]] = \
-        {fname: ([roll_settings(yaml, args.plando) for yaml in yamls ] if args.samesettings else None)
+    settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
+        {fname: ( tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
                 for fname, yamls in weights_cache.items()}
     player_path_cache = {}
     for player in range(1, args.multi + 1):
@@ -178,8 +172,8 @@ def main(args=None, callback=ERmain):
         path = player_path_cache[player]
         if path:
             try:
-                settings = settings_cache[path] if settings_cache[path] else \
-                    [ roll_settings(yaml, args.plando) for yaml in weights_cache[path] ]
+                settings: Tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
+                    tuple(roll_settings(yaml, args.plando) for yaml in weights_cache[path])
                 for settingsObject in settings:
                     for k, v in vars(settingsObject).items():
                         if v is not None:
@@ -230,7 +224,7 @@ def main(args=None, callback=ERmain):
     callback(erargs, seed)
 
 
-def read_weights_yaml(path):
+def read_weights_yamls(path) -> Tuple[any, ...]:
     try:
         if urllib.parse.urlparse(path).scheme in ('https', 'file'):
             yaml = str(urllib.request.urlopen(path).read(), "utf-8-sig")
@@ -240,7 +234,7 @@ def read_weights_yaml(path):
     except Exception as e:
         raise Exception(f"Failed to read weights ({path})") from e
 
-    return parse_yaml(yaml)
+    return tuple(parse_yamls(yaml))
 
 
 def interpret_on_off(value) -> bool:
