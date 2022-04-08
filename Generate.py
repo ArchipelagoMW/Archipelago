@@ -32,7 +32,7 @@ def mystery_argparse():
     options = get_options()
     defaults = options["generator"]
 
-    def resolve_path(path: 1, resolver: Callable[[str], str]) -> str:
+    def resolve_path(path: str, resolver: Callable[[str], str]) -> str:
         return path if os.path.isabs(path) else resolver(path)
 
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
