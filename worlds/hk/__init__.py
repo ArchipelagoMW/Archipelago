@@ -121,7 +121,8 @@ class HKWorld(World):
 
     def generate_early(self):
         world = self.world
-        self.charm_costs = world.RandomCharmCosts[self.player].get_costs(world.random)
+        charm_costs = world.RandomCharmCosts[self.player].get_costs(world.random)
+        self.charm_costs = world.PlandoCharmCosts[self.player].get_costs(charm_costs)
         world.exclude_locations[self.player].value.update(white_palace_locations)
         world.local_items[self.player].value.add("Mimic_Grub")
         for vendor, unit in self.shops.items():
@@ -217,7 +218,10 @@ class HKWorld(World):
         options = slot_data["options"] = {}
         for option_name in self.options:
             option = getattr(self.world, option_name)[self.player]
-            options[option_name] = int(option.value)
+            if isinstance(option.value, (list, dict)):
+                pass
+            else:
+                options[option_name] = int(option.value)
 
         # 32 bit int
         slot_data["seed"] = self.world.slot_seeds[self.player].randint(-2147483647, 2147483646)
