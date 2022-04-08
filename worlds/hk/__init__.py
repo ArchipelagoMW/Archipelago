@@ -12,6 +12,7 @@ from .Rules import set_rules
 from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
     event_names, item_effects, connectors, one_ways
+from .Charms import names as charm_names
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType
 from ..AutoWorld import World, LogicMixin
@@ -256,19 +257,20 @@ class HKWorld(World):
 
     def collect(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).collect(state, item)
-
-        for effect_name, effect_value in item_effects.get(item.name, {}).items():
-            state.prog_items[effect_name, item.player] += effect_value
+        if change:
+            for effect_name, effect_value in item_effects.get(item.name, {}).items():
+                state.prog_items[effect_name, item.player] += effect_value
 
         return change
 
     def remove(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).remove(state, item)
 
-        for effect_name, effect_value in item_effects.get(item.name, {}).items():
-            if state.prog_items[effect_name, item.player] == effect_value:
-                del state.prog_items[effect_name, item.player]
-            state.prog_items[effect_name, item.player] -= effect_value
+        if change:
+            for effect_name, effect_value in item_effects.get(item.name, {}).items():
+                if state.prog_items[effect_name, item.player] == effect_value:
+                    del state.prog_items[effect_name, item.player]
+                state.prog_items[effect_name, item.player] -= effect_value
 
         return change
 
@@ -280,8 +282,8 @@ class HKWorld(World):
             name = world.get_player_name(player)
             spoiler_handle.write(f'\n{name}\n')
             hk_world: HKWorld = world.worlds[player]
-            for charm_number, cost in enumerate(hk_world.charm_costs, start=1):
-                spoiler_handle.write(f"\n{charm_number}: {cost}")
+            for charm_number, cost in enumerate(hk_world.charm_costs):
+                spoiler_handle.write(f"\n{charm_names[charm_number]}: {cost}")
 
         spoiler_handle.write('\n\nShop Prices:')
         for player in hk_players:

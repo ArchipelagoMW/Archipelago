@@ -1,6 +1,7 @@
 import typing
 from .ExtractedData import logic_options, starts, pool_options
 from Options import Option, DefaultOnToggle, Toggle, Choice, Range
+from .Charms import vanilla_costs
 
 
 class Disabled(Toggle):
@@ -208,8 +209,7 @@ class RandomCharmCosts(Range):
     range_start = -1
     range_end = 240
     default = -1
-    vanilla_costs: typing.List[int] = [1, 1, 1, 2, 2, 2, 3, 2, 3, 1, 3, 1, 3, 1, 2, 2, 1, 2, 3, 2,
-                                       4, 2, 2, 2, 3, 1, 4, 2, 4, 1, 2, 3, 2, 4, 3, 5, 1, 3, 2, 2]
+    vanilla_costs: typing.List[int] = vanilla_costs
     charm_count: int = len(vanilla_costs)
 
     def get_costs(self, random_source) -> typing.List[int]:
