@@ -256,19 +256,20 @@ class HKWorld(World):
 
     def collect(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).collect(state, item)
-
-        for effect_name, effect_value in item_effects.get(item.name, {}).items():
-            state.prog_items[effect_name, item.player] += effect_value
+        if change:
+            for effect_name, effect_value in item_effects.get(item.name, {}).items():
+                state.prog_items[effect_name, item.player] += effect_value
 
         return change
 
     def remove(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).remove(state, item)
 
-        for effect_name, effect_value in item_effects.get(item.name, {}).items():
-            if state.prog_items[effect_name, item.player] == effect_value:
-                del state.prog_items[effect_name, item.player]
-            state.prog_items[effect_name, item.player] -= effect_value
+        if change:
+            for effect_name, effect_value in item_effects.get(item.name, {}).items():
+                if state.prog_items[effect_name, item.player] == effect_value:
+                    del state.prog_items[effect_name, item.player]
+                state.prog_items[effect_name, item.player] -= effect_value
 
         return change
 
