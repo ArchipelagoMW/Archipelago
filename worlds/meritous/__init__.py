@@ -32,6 +32,9 @@ class MeritousWorld(World):
     data_version = 2
     forced_auto_forfeit = False
 
+    # NOTE: Remember to change this before this game goes live
+    required_client_version = (0, 2, 4)
+
     options = meritous_options
 
     def __init__(self, world: MultiWorld, player: int):
@@ -149,10 +152,6 @@ class MeritousWorld(World):
         else:
             self.world.completion_condition[self.player] = lambda state: state.has(
                 "Full Victory", self.player)
-
-    def get_required_client_version(self) -> tuple:
-        # NOTE: Remember to change this before this game goes live
-        return max((0, 2, 4), super(MeritousWorld, self).get_required_client_version())
 
     def fill_slot_data(self) -> dict:
         return {
