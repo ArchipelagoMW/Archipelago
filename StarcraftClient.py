@@ -314,7 +314,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     game_state = int(38281 - unit.health)
                     can_read_game = True
 
-            if iteration >= 10 and game_state & 1:
+            if iteration == 10 and not game_state & 1:
                 await self.chat_send("SendMessage Warning: Archipelago unable to connect or has lost connection to " +
                                      "Starcraft 2 (This is likely a map issue)")
 
@@ -327,7 +327,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     current_items[6], current_items[7]))
                 self.last_received_update = len(self.ctx.items_received)
 
-            if game_state & (1):
+            if game_state & 1:
                 if not self.game_running:
                     print("Archipelago Connected")
                     self.game_running = True
