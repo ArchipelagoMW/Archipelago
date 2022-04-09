@@ -83,7 +83,7 @@ def main(args=None, callback=ERmain):
     if args.race:
         random.seed()  # reset to time-based random source
 
-    weights_cache: Dict[str, Tuple[Any]] = {}
+    weights_cache: Dict[str, Tuple[Any, ...]] = {}
     if args.weights_file_path and os.path.exists(args.weights_file_path):
         try:
             weights_cache[args.weights_file_path] = read_weights_yamls(args.weights_file_path)
