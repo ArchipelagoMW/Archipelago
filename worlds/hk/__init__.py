@@ -221,7 +221,6 @@ class HKWorld(World):
                     else:
                         self.create_location(location_name)
                         pool.append(item)
-            # elif option_key not in logicless_options:
             else:
                 for item_name, location_name in zip(option.items, option.locations):
                     if location_name in wp_exclusions and location_name != 'King_Fragment':
@@ -246,6 +245,21 @@ class HKWorld(World):
             prices.sort()
             for loc, price in zip(locations, prices):
                 loc.cost = price
+
+    def _can_beat_thk(self, state, player):
+        return (
+            state.has('Opened_Black_Egg_Temple', player)
+            and (state.count('FIREBALL', player) + state.count('SCREAM', player) + state.count('QUAKE', player)) > 1
+            and (  # NAILCOMBAT
+                    state.has('LEFTSLASH', player)
+                    or state.has('RIGHTSLASH', player)
+                    or state.has('UPSLASH', player)
+            )
+            and (
+                    (state.has('LEFTDASH', player) or state.has('RIGHTDASH', player))
+                    or self.world.ProficientCombat[self.player]
+            )
+        )
 
     def set_rules(self):
         world = self.world
