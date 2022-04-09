@@ -58,6 +58,9 @@ class SA2BWorld(World):
         # First Missions
         total_required_locations = 30
 
+        # Upgrades
+        total_required_locations += 28
+
         # Second Missions
         if self.world.IncludeMission2[self.player]:
             total_required_locations += 30

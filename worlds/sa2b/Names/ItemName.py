@@ -31,8 +31,8 @@ eggman_jet_engine       = "Eggman - Jet Engine"
 eggman_large_cannon     = "Eggman - Large Cannon"
 eggman_protective_armor = "Eggman - Protective Armor"
 
-rouge_mystic_melody  = "Rogue - Mystic Melody"
-rouge_pick_nails     = "Rogue - Pick Nails"
-rouge_treasure_scope = "Rogue - Treasure Scope"
-rouge_iron_boots     = "Rogue - Iron Boots"
+rouge_mystic_melody  = "Rouge - Mystic Melody"
+rouge_pick_nails     = "Rouge - Pick Nails"
+rouge_treasure_scope = "Rouge - Treasure Scope"
+rouge_iron_boots     = "Rouge - Iron Boots"
 

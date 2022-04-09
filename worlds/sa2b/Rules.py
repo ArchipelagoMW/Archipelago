@@ -261,24 +261,24 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
                                                                                            state.has(ItemName.knuckles_air_necklace, player) and \
                                                                                            state.has(ItemName.sonic_bounce_bracelet, player))
 
-    # set_rule(world.get_location(LocationName.city_escape_upgrade, player),     lambda state: state.has(ItemName.sonic_bounce_bracelet, player) and \
-    #                                                                                          state.has(ItemName.sonic_flame_ring, player))
-    # set_rule(world.get_location(LocationName.wild_canyon_upgrade, player),     lambda state: state.has(ItemName.knuckles_shovel_claws, player))
-    # set_rule(world.get_location(LocationName.prison_lane_upgrade, player),     lambda state: state.has(ItemName.tails_bazooka, player))
-    # set_rule(world.get_location(LocationName.hidden_base_upgrade, player),     lambda state: state.has(ItemName.tails_booster, player) and \
-    #                                                                                          state.has(ItemName.tails_bazooka, player))
-    # set_rule(world.get_location(LocationName.eternal_engine_upgrade, player),  lambda state: state.has(ItemName.tails_booster, player))
-    # set_rule(world.get_location(LocationName.meteor_herd_upgrade, player),     lambda state: state.has(ItemName.knuckles_hammer_gloves, player))
-    # set_rule(world.get_location(LocationName.crazy_gadget_upgrade, player),    lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
-    # set_rule(world.get_location(LocationName.final_rush_upgrade, player),      lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
-    # 
-    # set_rule(world.get_location(LocationName.iron_gate_upgrade, player),       lambda state: state.has(ItemName.eggman_large_cannon, player))
-    # set_rule(world.get_location(LocationName.dry_lagoon_upgrade, player),      lambda state: state.has(ItemName.rouge_pick_nails, player))
-    # set_rule(world.get_location(LocationName.sand_ocean_upgrade, player),      lambda state: state.has(ItemName.eggman_jet_engine, player))
-    # set_rule(world.get_location(LocationName.radical_highway_upgrade, player), lambda state: state.has(ItemName.shadow_air_shoes, player))
-    # set_rule(world.get_location(LocationName.security_hall_upgrade, player),   lambda state: state.has(ItemName.rouge_mystic_melody, player) and \
-    #                                                                                          state.has(ItemName.rouge_iron_boots, player))
-    # set_rule(world.get_location(LocationName.cosmic_wall_upgrade, player),     lambda state: state.has(ItemName.eggman_jet_engine, player))
+    set_rule(world.get_location(LocationName.city_escape_upgrade, player),     lambda state: state.has(ItemName.sonic_bounce_bracelet, player) and \
+                                                                                             state.has(ItemName.sonic_flame_ring, player))
+    set_rule(world.get_location(LocationName.wild_canyon_upgrade, player),     lambda state: state.has(ItemName.knuckles_shovel_claws, player))
+    set_rule(world.get_location(LocationName.prison_lane_upgrade, player),     lambda state: state.has(ItemName.tails_bazooka, player))
+    set_rule(world.get_location(LocationName.hidden_base_upgrade, player),     lambda state: state.has(ItemName.tails_booster, player) and \
+                                                                                             state.has(ItemName.tails_bazooka, player))
+    set_rule(world.get_location(LocationName.eternal_engine_upgrade, player),  lambda state: state.has(ItemName.tails_booster, player))
+    set_rule(world.get_location(LocationName.meteor_herd_upgrade, player),     lambda state: state.has(ItemName.knuckles_hammer_gloves, player))
+    set_rule(world.get_location(LocationName.crazy_gadget_upgrade, player),    lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
+    set_rule(world.get_location(LocationName.final_rush_upgrade, player),      lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
+    
+    set_rule(world.get_location(LocationName.iron_gate_upgrade, player),       lambda state: state.has(ItemName.eggman_large_cannon, player))
+    set_rule(world.get_location(LocationName.dry_lagoon_upgrade, player),      lambda state: state.has(ItemName.rouge_pick_nails, player))
+    set_rule(world.get_location(LocationName.sand_ocean_upgrade, player),      lambda state: state.has(ItemName.eggman_jet_engine, player))
+    set_rule(world.get_location(LocationName.radical_highway_upgrade, player), lambda state: state.has(ItemName.shadow_air_shoes, player))
+    set_rule(world.get_location(LocationName.security_hall_upgrade, player),   lambda state: state.has(ItemName.rouge_mystic_melody, player) and \
+                                                                                             state.has(ItemName.rouge_iron_boots, player))
+    set_rule(world.get_location(LocationName.cosmic_wall_upgrade, player),     lambda state: state.has(ItemName.eggman_jet_engine, player))
 
 
 def set_rules(world: MultiWorld, player: int):

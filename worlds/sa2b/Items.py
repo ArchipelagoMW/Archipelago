@@ -40,7 +40,7 @@ upgrades_table = {
     ItemName.knuckles_shovel_claws:  ItemData(0xFF000C, True),
     ItemName.knuckles_air_necklace:  ItemData(0xFF000D, True),
     ItemName.knuckles_hammer_gloves: ItemData(0xFF000E, True),
-    ItemName.knuckles_sunglasses:    ItemData(0xFF000F, False),
+    ItemName.knuckles_sunglasses:    ItemData(0xFF000F, True),
     
     ItemName.shadow_flame_ring:    ItemData(0xFF0010, True),
     ItemName.shadow_air_shoes:     ItemData(0xFF0011, True),
@@ -55,7 +55,7 @@ upgrades_table = {
 
     ItemName.rouge_mystic_melody:  ItemData(0xFF0019, True),
     ItemName.rouge_pick_nails:     ItemData(0xFF001A, True),
-    ItemName.rouge_treasure_scope: ItemData(0xFF001B, False),
+    ItemName.rouge_treasure_scope: ItemData(0xFF001B, True),
     ItemName.rouge_iron_boots:     ItemData(0xFF001C, True),
 }
 
