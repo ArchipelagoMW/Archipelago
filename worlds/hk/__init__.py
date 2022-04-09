@@ -176,7 +176,6 @@ class HKWorld(World):
     def create_regions(self):
         menu_region: Region = create_region(self.world, self.player, 'Menu')
         self.world.regions.append(menu_region)
-        # wp_exclusions = self.white_palace_exclusions()
 
         # Link regions
         for event_name in event_names:
@@ -251,6 +250,21 @@ class HKWorld(World):
             prices.sort()
             for loc, price in zip(locations, prices):
                 loc.cost = price
+
+    def _can_beat_thk(self, state, player):
+        return (
+            state.has('Opened_Black_Egg_Temple', player)
+            and (state.count('FIREBALL', player) + state.count('SCREAM', player) + state.count('QUAKE', player)) > 1
+            and (  # NAILCOMBAT
+                    state.has('LEFTSLASH', player)
+                    or state.has('RIGHTSLASH', player)
+                    or state.has('UPSLASH', player)
+            )
+            and (
+                    (state.has('LEFTDASH', player) or state.has('RIGHTDASH', player))
+                    or self.world.ProficientCombat[self.player]
+            )
+        )
 
     def set_rules(self):
         world = self.world
