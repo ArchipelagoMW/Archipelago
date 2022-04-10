@@ -785,9 +785,8 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
     if not is_group:
         for group, group_players in ctx.groups.items():
             if slot in group_players:
-                group_collected_players = ctx.group_collected.get(group, set())
+                group_collected_players = ctx.group_collected.setdefault(group, set())
                 group_collected_players.add(slot)
-                ctx.group_collected[group] = group_collected_players
                 if set(group_players) == group_collected_players:
                     collect_player(ctx, team, group, True)
 
