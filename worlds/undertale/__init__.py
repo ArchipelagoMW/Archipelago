@@ -16,6 +16,10 @@ from ..AutoWorld import World
 client_version = 7
 
 
+def data_path(*args):
+    return os.path.join(os.path.dirname(__file__), 'data', *args)
+
+
 class UndertaleWorld(World):
     """
     Undertale is an RPG where every choice you make matters. You could choose to hurt all the enemies, eventually

@@ -123,6 +123,7 @@ Name: "{commondesktop}\{#MyAppName} Undertale Client"; Filename: "{app}\Archipel
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
 Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: client/sni/lttp or generator/lttp
 Filename: "{app}\ArchipelagoMinecraftClient.exe"; Parameters: "--install"; StatusMsg: "Installing Forge Server..."; Components: client/minecraft
+Filename: "{app}\ArchipelagoUndertaleClient.exe"; Parameters: "--install {code:GetUndertalePath}"; StatusMsg: "Patching Undertale..."; Components: client/ut
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"
@@ -206,6 +207,8 @@ var SoERomFilePage: TInputFileWizardPage;
 
 var ootrom: string;
 var OoTROMFilePage: TInputFileWizardPage;
+
+var utpath: string;
 
 function GetSNESMD5OfFile(const rom: string): string;
 var data: AnsiString;
@@ -360,6 +363,33 @@ begin
     end
   else
     Result := '';
+end;
+
+function GetUndertalePath(Param: string): string;
+begin
+  { Detected path is cached, as this gets called multiple times }
+  if utpath = '' then
+  begin
+    if RegQueryStringValue(
+         HKLM64, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 391540',
+         'InstallLocation', utpath) then
+    begin
+      Log('Detected Steam installation: ' + utpath);
+    end
+      else
+    if RegQueryStringValue(
+         HKLM32, 'SOFTWARE\GOG.com\Games\1456487183',
+         'path', utpath) then
+    begin
+      Log('Detected GOG installation: ' + utpath);
+    end
+      else
+    begin
+      utpath := 'C:\your\default\path';
+      Log('No installation detected, using the default path: ' + utpath);
+    end;
+  end;
+  Result := utpath;
 end;
 
 procedure InitializeWizard();

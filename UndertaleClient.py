@@ -6,6 +6,7 @@ import urllib.parse
 import sys
 import typing
 import time
+import bsdiff4
 
 import websockets
 
@@ -17,7 +18,7 @@ if __name__ == "__main__":
 from MultiServer import CommandProcessor
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
 from Utils import Version
-from worlds import network_data_package, AutoWorldRegister
+from worlds import network_data_package, AutoWorldRegister, undertale
 from CommonClient import gui_enabled, console_loop, logger, server_autoreconnect, get_base_parser, \
     keep_alive
 
@@ -481,6 +482,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             raise Exception('Connection refused by the multiworld host, no reason provided')
 
     elif cmd == 'Connected':
+        if not os.path.exists(os.path.expandvars(r"%localappdata%/UNDERTALE")):
+            os.mkdir(os.path.expandvars(r"%localappdata%/UNDERTALE"))
         ctx.team = args["team"]
         ctx.slot = args["slot"]
         ctx.consume_players_package(args["players"])
@@ -602,6 +605,23 @@ async def game_watcher(ctx: CommonContext):
         await asyncio.sleep(0.1)
 
 
+def copier(_src, _dst):
+    if not os.path.exists(_src):
+        return False
+
+    _src_fp = open(_src, "rb")
+    _dst_fp = open(_dst, "wb")
+
+    line = _src_fp.readline()
+    while line:
+        _dst_fp.write(line)
+        line = _src_fp.readline()
+    _src_fp.close()
+    _dst_fp.close()
+
+    return True
+
+
 if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
 
@@ -653,8 +673,26 @@ if __name__ == '__main__':
     import colorama
 
     parser = get_base_parser(description="Undertale Client, for text interfacing.")
+    parser.add_argument('--install', '-i', dest='install', nargs='?', default="",
+        help="Patch the vanilla game for randomization. Does not launch the client afterwards.")
 
     args, rest = parser.parse_known_args()
+    print(args.install)
+    if args.install != "":
+        print("Patching Undertale")
+        if os.path.exists(os.getcwd() + r"/Undertale"):
+            path = os.getcwd() + r"/Undertale"
+            for root, dirs, files in os.walk(path):
+                for file in files:
+                    os.remove(root+"/"+file)
+            os.removedirs(os.getcwd() + r"/Undertale")
+        if not os.path.exists(os.getcwd() + r"/Undertale"):
+            os.mkdir(os.getcwd() + r"/Undertale")
+        copier(args.install+"/data.win", os.getcwd() + r"/Undertale/data.win")
+        print(args.install)
+        bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
+        sys.exit(0)
+
     colorama.init()
 
     loop = asyncio.get_event_loop()
