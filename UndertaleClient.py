@@ -503,7 +503,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.missing_locations = set(args["missing_locations"])
         ctx.checked_locations = set(args["checked_locations"])
         for ss in ctx.checked_locations:
-            filename = f"check {ss}.spot"
+            filename = f"check {ss-12000}.spot"
             with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
                 f.close()
 
@@ -522,7 +522,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             for item in args['items']:
                 filename = f"{str(NetworkItem(*item).location)}PLR{str(NetworkItem(*item).player)}.item"
                 with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
-                    f.write(str(NetworkItem(*item).item))
+                    f.write(str(NetworkItem(*item).item-11000))
                     f.close()
                 ctx.items_received.append(NetworkItem(*item))
         ctx.watcher_event.set()
@@ -543,7 +543,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             ctx.checked_locations |= checked
             ctx.missing_locations -= checked
             for ss in ctx.checked_locations:
-                filename = f"check {ss}.spot"
+                filename = f"check {ss-12000}.spot"
                 with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
                     f.close()
         if "permissions" in args:
@@ -590,7 +590,7 @@ async def game_watcher(ctx: CommonContext):
                 if file.find("check ") > -1:
                     st = file.split("check ", -1)[1]
                     st = st.split(".spot", -1)[0]
-                    sending = sending+[(int(st))]
+                    sending = sending+[(int(st))+12000]
                 if file.find("victory") > -1:
                     victory = True
         ctx.locations_checked = sending
