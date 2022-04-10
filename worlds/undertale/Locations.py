@@ -27,7 +27,7 @@ advancement_table = {
     "Noodles Fridge": AdvData(67008, 'Hotland'),
     "Pan Hidden": AdvData(67009, 'Hotland'),
     "Apron Hidden": AdvData(67010, 'Hotland'),
-    "Trash Burger": AdvData(67011, 'Waterfall'),
+    "Trash Burger": AdvData(67011, 'Core'),
     "Present Knife": AdvData(67012, 'New Home'),
     "Present Locket": AdvData(67013, 'New Home'),
     "Candy 1": AdvData(67014, 'Ruins'),

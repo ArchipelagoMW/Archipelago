@@ -81,7 +81,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location(("Gerson 4"), player), lambda state: state._reach_waterfall(player, 0))
     set_rule(world.get_location(("Present Knife"), player), lambda state: state._reach_new_home(player, 0))
     set_rule(world.get_location(("Present Locket"), player), lambda state: state._reach_new_home(player, 0))
-    set_rule(world.get_location(("Trash Burger"), player), lambda state: state._reach_waterfall(player, 0))
+    set_rule(world.get_location(("Trash Burger"), player), lambda state: state._reach_core(player, 0))
     set_rule(world.get_location(("Quiche Bench"), player), lambda state: state._reach_waterfall(player, 0))
     set_rule(world.get_location(("Tutu Hidden"), player), lambda state: state._reach_waterfall(player, 0))
     set_rule(world.get_location(("Grass Shoes"), player), lambda state: state._reach_waterfall(player, 0))
