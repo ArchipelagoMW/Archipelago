@@ -60,6 +60,8 @@ class UndertaleWorld(World):
         # Convert itempool into real items
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
 
+        self.world.random.shuffle(itempool)
+
         self.world.itempool += itempool
 
     def set_rules(self):
