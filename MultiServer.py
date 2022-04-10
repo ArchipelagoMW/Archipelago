@@ -37,6 +37,7 @@ from Utils import get_item_name_from_id, get_location_name_from_id, \
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType
 
+min_client_version = Version(0, 1, 6)
 colorama.init()
 
 # functions callable on storable data on the server by clients
@@ -301,7 +302,7 @@ class Context:
         clients_ver = decoded_obj["minimum_versions"].get("clients", {})
         self.minimum_client_versions = {}
         for player, version in clients_ver.items():
-            self.minimum_client_versions[player] = Utils.Version(*version)
+            self.minimum_client_versions[player] = max(Utils.Version(*version), min_client_version)
 
         self.clients = {}
         for team, names in enumerate(decoded_obj['names']):
@@ -1388,9 +1389,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
-            if "IgnoreGame" not in args["tags"] and args['game'] != game:
+            ignore_game = "IgnoreGame" in args["tags"] or (  # IgnoreGame is deprecated. TODO: remove after 0.3.3?
+                          ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game"))
+            if not ignore_game and args['game'] != game:
                 errors.add('InvalidGame')
-            minver = ctx.minimum_client_versions[slot]
+            minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
             if minver > args['version']:
                 errors.add('IncompatibleVersion')
             if args.get('items_handling', None) is None:

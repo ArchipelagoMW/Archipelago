@@ -14,7 +14,7 @@ class ArchipIDLEWorld(World):
     """
     game = "ArchipIDLE"
     topology_present = False
-    data_version = 2
+    data_version = 3
     web = ArchipIDLEWebWorld()
 
     item_name_to_id = {}

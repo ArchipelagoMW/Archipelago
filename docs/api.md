@@ -57,8 +57,10 @@ game.
 
 A `WebWorld` class contains specific attributes and methods that can be modified
 for your world specifically on the webhost. At the moment this comprises of `settings_page`
-which can be changed to a link instead of an AP generated settings page; such is the case
-for Final Fantasy.
+which can be changed to a link instead of an AP generated settings page, and a `theme` to be used for your game specific AP pages. Available themes:
+| dirt  | grass (default) | grassFlowers | ice  | jungle  | ocean | partyTime |
+|---|---|---|---|---|---|---|
+| <img src="img/theme_dirt.JPG" width="100"> | <img src="img/theme_grass.JPG" width="100"> | <img src="img/theme_grassFlowers.JPG" width="100"> | <img src="img/theme_ice.JPG" width="100"> | <img src="img/theme_jungle.JPG" width="100"> | <img src="img/theme_ocean.JPG" width="100"> | <img src="img/theme_partyTime.JPG" width="100"> |
 
 ### MultiWorld Object
 
@@ -396,7 +398,7 @@ The world has to provide the following things for generation
   `self.world.get_filled_locations(self.player)` will filter for this world.
   `item.player` can be used to see if it's a local item.
 
-In addition the following methods can be implemented
+In addition, the following methods can be implemented and attributes can be set
 
 * `def generate_early(self)`
   called per player before any items or locations are created. You can set
@@ -416,11 +418,9 @@ In addition the following methods can be implemented
   before, during and after the regular fill process, before `generate_output`.
 * `fill_slot_data` and `modify_multidata` can be used to modify the data that
   will be used by the server to host the MultiWorld.
-* `def get_required_client_version(self)`
-  can return a tuple of 3 ints to make sure the client is compatible to this
-  world (e.g. item IDs) when connecting.
-  Always use `return max((x,y,z), super().get_required_client_version())`
-  to catch updates in the lower layers that break compatibility.
+* `required_client_version: Tuple(int, int, int)`
+  Client version as tuple of 3 ints to make sure the client is compatible to
+  this world (e.g. implements all required features) when connecting.
 
 #### generate_early
 

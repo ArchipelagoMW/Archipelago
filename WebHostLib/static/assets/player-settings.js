@@ -6,24 +6,24 @@ window.addEventListener('load', () => {
   // Update game name on page
   document.getElementById('game-name').innerText = gameName;
 
-  Promise.all([fetchSettingData()]).then((results) => {
+  fetchSettingData().then((results) => {
     let settingHash = localStorage.getItem(`${gameName}-hash`);
     if (!settingHash) {
       // If no hash data has been set before, set it now
-      localStorage.setItem(`${gameName}-hash`, md5(results[0]));
+      settingHash = md5(JSON.stringify(results));
+      localStorage.setItem(`${gameName}-hash`, settingHash);
       localStorage.removeItem(gameName);
-      settingHash = md5(results[0]);
     }
 
-    if (settingHash !== md5(results[0])) {
+    if (settingHash !== md5(JSON.stringify(results))) {
       showUserMessage("Your settings are out of date! Click here to update them! Be aware this will reset " +
         "them all to default.");
       document.getElementById('user-message').addEventListener('click', resetSettings);
     }
 
     // Page setup
-    createDefaultSettings(results[0]);
-    buildUI(results[0]);
+    createDefaultSettings(results);
+    buildUI(results);
     adjustHeaderWidth();
 
     // Event listeners
@@ -36,7 +36,7 @@ window.addEventListener('load', () => {
     const nameInput = document.getElementById('player-name');
     nameInput.addEventListener('keyup', (event) => updateBaseSetting(event));
     nameInput.value = playerSettings.name;
-  }).catch((error) => {
+  }).catch(() => {
     const url = new URL(window.location.href);
     window.location.replace(`${url.protocol}//${url.hostname}/page-not-found`);
   })
@@ -159,8 +159,7 @@ const buildOptionsTable = (settings, romOpts = false) => {
         break;
 
       default:
-        console.error(`Unknown setting type: ${settings[setting].type}`);
-        console.error(setting);
+        console.error(`Ignoring unknown setting type: ${settings[setting].type} with name ${setting}`);
         return;
     }
 
