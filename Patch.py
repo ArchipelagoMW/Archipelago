@@ -12,6 +12,9 @@ import zipfile
 import sys
 from typing import Tuple, Optional, Dict, Any, Union, BinaryIO
 
+import ModuleUpdate
+ModuleUpdate.update()
+
 import Utils
 
 current_patch_version = 4

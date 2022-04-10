@@ -773,7 +773,7 @@ class OOTWorld(World):
             # Seed hint RNG, used for ganon text lines also
             self.hint_rng = self.world.slot_seeds[self.player]
 
-            outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}"
+            outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_file_safe_player_name(self.player)}"
             rom = Rom(file=get_options()['oot_options']['rom_file'])
             if self.hints != 'none':
                 buildWorldGossipHints(self)

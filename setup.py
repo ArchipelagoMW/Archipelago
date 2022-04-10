@@ -176,7 +176,8 @@ class BuildExeCommand(cx_Freeze.dist.build_exe):
                 shutil.copyfile(os.path.join("WebHostLib", "static", "generated", "configs", file_name),
                                 self.buildfolder / "Players" / "Templates" / file_name)
         shutil.copyfile("meta.yaml", self.buildfolder / "Players" / "Templates" / "meta.yaml")
-
+        # TODO: fix LttP options one day
+        shutil.copyfile("playerSettings.yaml", self.buildfolder / "Players" / "Templates" / "A Link to the Past.yaml")
         try:
             from maseya import z3pr
         except ImportError:

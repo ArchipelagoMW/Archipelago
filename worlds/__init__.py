@@ -13,7 +13,8 @@ for file in os.scandir(os.path.dirname(__file__)):
         world_folders.append(file.name)
 world_folders.sort()
 for world in world_folders:
-    importlib.import_module(f".{world}", "worlds")
+    if not world.startswith("_"):  # prevent explicitly loading __pycache__ and allow _* names for non-world folders
+        importlib.import_module(f".{world}", "worlds")
 
 from .AutoWorld import AutoWorldRegister
 lookup_any_item_id_to_name = {}

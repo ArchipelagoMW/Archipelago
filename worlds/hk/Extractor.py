@@ -107,7 +107,7 @@ class Absorber(ast.NodeTransformer):
             return ast.Constant(False, ctx=node.ctx)
         if node.id in logic_options:
             return ast.Call(
-                func=ast.Attribute(value=ast.Name(id='state', ctx=ast.Load()), attr='_kh_option', ctx=ast.Load()),
+                func=ast.Attribute(value=ast.Name(id='state', ctx=ast.Load()), attr='_hk_option', ctx=ast.Load()),
                 args=[ast.Name(id="player", ctx=ast.Load()), ast.Constant(value=logic_options[node.id])], keywords=[])
         if node.id in macros:
             return macros[node.id].body
@@ -143,7 +143,7 @@ class Absorber(ast.NodeTransformer):
             if node.slice.value in removed_starts:
                 return ast.Constant(False, ctx=node.ctx)
             return ast.Call(
-                func=ast.Attribute(value=ast.Name(id='state', ctx=ast.Load()), attr='_kh_start', ctx=ast.Load()),
+                func=ast.Attribute(value=ast.Name(id='state', ctx=ast.Load()), attr='_hk_start', ctx=ast.Load()),
                 args=[ast.Name(id="player", ctx=ast.Load()), node.slice], keywords=[])
         elif node.value.id == "COMBAT":
             return macros[unparse(node)].body
@@ -251,7 +251,15 @@ for item_data in extra_item_data:
     for effect in effects:
         effect_names.add(effect["Term"])
     effects = {effect["Term"]: effect["Value"] for effect in effects if
-               effect["Term"] != item_data["Name"] and effect["Term"] != "GEO"}
+               effect["Term"] != item_data["Name"] and effect["Term"] not in {"GEO",
+                                                                              "HALLOWNESTSEALS",
+                                                                              "WANDERERSJOURNALS",
+                                                                              'HALLOWNESTSEALS',
+                                                                              "KINGSIDOLS",
+                                                                              'ARCANEEGGS',
+                                                                              'MAPS'
+                                                                              }}
+
     if effects:
         item_effects[item_data["Name"]] = effects
 
@@ -363,7 +371,12 @@ warning = "# This module is written by Extractor.py, do not edit manually!.\n\n"
 with open(os.path.join(os.path.dirname(__file__), "ExtractedData.py"), "wt") as py:
     py.write(warning)
     for name in names:
-        py.write(f"{name} = {globals()[name]}\n")
+        var = globals()[name]
+        if type(var) == set:
+            # sort so a regen doesn't cause a file change every time
+            var = sorted(var)
+            var = "{"+str(var)[1:-1]+"}"
+        py.write(f"{name} = {var}\n")
 
 
 template_env: jinja2.Environment = \
