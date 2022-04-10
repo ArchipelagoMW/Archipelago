@@ -12,7 +12,7 @@ undertale_regions = [
     ('Snowdin Town', ['Snowdin Town Exit']),
     ('Waterfall', ['Waterfall Exit']),
     ('Hotland', ['Hotland Exit', 'Lab Elevator']),
-    ('True Lab', ['New Home Elevator']),
+    ('True Lab', []),
     ('Core', ['Core Exit']),
     ('New Home', ['New Home Exit']),
     ('Barrier', []),
@@ -28,7 +28,6 @@ mandatory_connections = [
     ('Waterfall Exit', 'Hotland'),
     ('Hotland Exit', 'Core'),
     ('Lab Elevator', 'True Lab'),
-    ('New Home Elevator', 'New Home'),
     ('Core Exit', 'New Home'),
     ('New Home Exit', 'Barrier'),
 ]
