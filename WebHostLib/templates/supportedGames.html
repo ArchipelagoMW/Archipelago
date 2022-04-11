@@ -21,6 +21,10 @@
             {% elif world.web.settings_page %}
             <a href="{{ url_for("player_settings", game=game_name) }}">Settings Page</a>
             {% endif %}
+            {% if world.web.bug_report_page %}
+            <span class="link-spacer">|</span>
+            <a href="{{ world.web.bug_report_page }}">Bug Report</a>
+            {% endif %}
         </p>
         {% endfor %}
     </div>

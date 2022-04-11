@@ -93,6 +93,9 @@ class WebWorld:
     # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime
     theme = "grass"
 
+    # display a link to a bug report page, most likely a link to a GitHub issue page.
+    bug_report_page: Union[bool, str] = False
+
 
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
