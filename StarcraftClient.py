@@ -253,6 +253,8 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     fourth_bonus = False
     fifth_bonus = False
     sixth_bonus = False
+    seventh_bonus = False
+    eight_bonus = False
     ctx: Context = None
     mission_id = 0
 
@@ -374,6 +376,18 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                         await self.ctx.send_msgs(
                             [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 6]}])
                         self.sixth_bonus = True
+
+                    if not self.seventh_bonus and game_state & (1 << 8):
+                        print("6th Bonus Collected")
+                        await self.ctx.send_msgs(
+                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 7]}])
+                        self.seventh_bonus = True
+
+                    if not self.eight_bonus and game_state & (1 << 9):
+                        print("6th Bonus Collected")
+                        await self.ctx.send_msgs(
+                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 8]}])
+                        self.eight_bonus = True
 
                 else:
                     await self.chat_send("LostConnection - Lost connection to game.")
