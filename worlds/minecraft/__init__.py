@@ -19,7 +19,7 @@ minecraft_version = "1.17.1"
 
 class MinecraftWebWorld(WebWorld):
     theme = "jungle"
-    bug_report_page = "https://github.com/KonoTyran/Minecraft_AP_Randomizer/issues"
+    bug_report_page = "https://github.com/KonoTyran/Minecraft_AP_Randomizer/issues/new?assignees=&labels=bug&template=bug_report.yaml&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
 
 
 class MinecraftWorld(World):
