@@ -627,8 +627,18 @@ class SMLocation(Location):
         super(SMLocation, self).__init__(player, name, address, parent)
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
+        return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or (self.can_reach(state) and self.can_comeback(state, item))))
 
+    def can_comeback(self, state: CollectionState, item: Item):
+        randoExec = state.world.worlds[self.player].variaRando.randoExec
+        for key in locationsDict[self.name].AccessFrom.keys():
+            if (randoExec.areaGraph.canAccess(  state.smbm[self.player], 
+                                                key,
+                                                randoExec.graphSettings.startAP,
+                                                state.smbm[self.player].maxDiff,
+                                                None)):
+                return True
+        return False
 
 class SMItem(Item):
     game = "Super Metroid"
