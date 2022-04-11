@@ -26,8 +26,12 @@ class SA2BWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
 
+    music_map: typing.Dict[int,int]
+
     def _get_slot_data(self):
         return {
+            "MusicMap":           self.music_map,
+            "MusicShuffle":       self.world.MusicShuffle[self.player],
             "DeathLink":          self.world.DeathLink[self.player],
             "IncludeMission2":    self.world.IncludeMission2[self.player],
             "IncludeMission3":    self.world.IncludeMission3[self.player],
@@ -45,6 +49,7 @@ class SA2BWorld(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
+        slot_data["MusicMap"]: self.music_map
         for option_name in sa2b_options:
             option = getattr(self.world, option_name)[self.player]
             slot_data[option_name] = option.value
@@ -89,6 +94,18 @@ class SA2BWorld(World):
 
         self.world.itempool += itempool
 
+        if self.world.MusicShuffle[self.player] == "levels":
+            musiclist_o = list(range(0, 46))
+            musiclist_s = musiclist_o.copy()
+            self.world.random.shuffle(musiclist_s)
+            self.music_map = dict(zip(musiclist_o, musiclist_s))
+        elif self.world.MusicShuffle[self.player] == "full":
+            musiclist_o = list(range(0, 77))
+            musiclist_s = musiclist_o.copy()
+            self.world.random.shuffle(musiclist_s)
+            self.music_map = dict(zip(musiclist_o, musiclist_s))
+        else:
+            self.music_map = dict()
 
     def create_regions(self):
         location_table = setup_locations(self.world, self.player)
