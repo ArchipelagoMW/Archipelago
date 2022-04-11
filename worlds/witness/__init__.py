@@ -81,6 +81,8 @@ class WitnessWorld(World):
         for option_name in the_witness_options:
             slot_data[option_name] = is_option_enabled(self.world, self.player, option_name)
 
+        slot_data["hard_mode"] = False
+
         return slot_data
 
     def create_item(self, name: str) -> Item:

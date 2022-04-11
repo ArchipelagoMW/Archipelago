@@ -1,6 +1,10 @@
 from typing import Dict
 from BaseClasses import MultiWorld
-from Options import DefaultOnToggle, Option
+from Options import Toggle, DefaultOnToggle, Option
+
+#class HardMode(Toggle):
+#    "Play the randomizer in hardmode"
+#    display_name = "Hard Mode"
 
 class UnlockSymbols(DefaultOnToggle):
     "All Puzzle symbols of a specific panel need to be unlocked before the panel can be used"
@@ -13,6 +17,7 @@ class DisableNonRandomizedPuzzles(DefaultOnToggle):
     display_name = "Disable non randomized puzzles"
 
 the_witness_options: Dict[str, Option] = {
+    #"hard_mode": HardMode,
     "unlock_symbols": UnlockSymbols,
     "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
 }
