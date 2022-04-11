@@ -94,7 +94,7 @@ class WebWorld:
     theme = "grass"
 
     # display a link to a bug report page, most likely a link to a GitHub issue page.
-    bug_report_page: Union[bool, str] = False
+    bug_report_page: Optional[str]
 
 
 class World(metaclass=AutoWorldRegister):
