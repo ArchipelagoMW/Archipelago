@@ -218,10 +218,12 @@ class HKWorld(World):
         options = slot_data["options"] = {}
         for option_name in self.options:
             option = getattr(self.world, option_name)[self.player]
-            if isinstance(option.value, (list, dict)):
-                pass
+            try:
+                optionvalue = int(option.value)
+            except TypeError:
+                pass  # C# side is currently typed as dict[str, int], drop what doesn't fit
             else:
-                options[option_name] = int(option.value)
+                options[option_name] = optionvalue
 
         # 32 bit int
         slot_data["seed"] = self.world.slot_seeds[self.player].randint(-2147483647, 2147483646)
