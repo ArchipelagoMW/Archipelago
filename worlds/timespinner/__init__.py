@@ -5,8 +5,9 @@ from .LogicMixin import TimespinnerLogic
 from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
 from .Locations import get_locations, starter_progression_locations, EventId
 from .Regions import create_regions
-from .Options import is_option_enabled, timespinner_options
+from .Options import is_option_enabled, get_option_value, timespinner_options
 from .PyramidKeys import get_pyramid_keys_unlock
+
 
 class TimespinnerWorld(World):
     """
@@ -18,7 +19,7 @@ class TimespinnerWorld(World):
     game = "Timespinner"
     topology_present = True
     remote_items = False
-    data_version = 6
+    data_version = 7
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
@@ -54,6 +55,8 @@ class TimespinnerWorld(World):
     def create_item(self, name: str) -> Item:
         return create_item_with_correct_settings(self.world, self.player, name)
 
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice(filler_items)
 
     def set_rules(self):
         setup_events(self.world, self.player, self.locked_locations, self.location_cache)
@@ -71,7 +74,7 @@ class TimespinnerWorld(World):
 
         pool = get_item_pool(self.world, self.player, excluded_items)
 
-        fill_item_pool_with_dummy_items(self.world, self.player, self.locked_locations, self.location_cache, pool)
+        fill_item_pool_with_dummy_items(self, self.world, self.player, self.locked_locations, self.location_cache, pool)
 
         self.world.itempool += pool
 
@@ -80,7 +83,7 @@ class TimespinnerWorld(World):
         slot_data: Dict[str, object] = {}
 
         for option_name in timespinner_options:
-            slot_data[option_name] = is_option_enabled(self.world, self.player, option_name)
+            slot_data[option_name] = get_option_value(self.world, self.player, option_name)
 
         slot_data["StinkyMaw"] = True
         slot_data["ProgressiveVerticalMovement"] = False
@@ -159,10 +162,10 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> L
     return pool
 
 
-def fill_item_pool_with_dummy_items(world: MultiWorld, player: int, locked_locations: List[str],
+def fill_item_pool_with_dummy_items(self: TimespinnerWorld, world: MultiWorld, player: int, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):
     for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
-        item = create_item_with_correct_settings(world, player, world.random.choice(filler_items))
+        item = create_item_with_correct_settings(world, player, self.get_filler_item_name())
         pool.append(item)
 
 

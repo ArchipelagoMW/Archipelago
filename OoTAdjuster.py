@@ -87,7 +87,7 @@ def adjustGUI():
             option = sfx_options[option_name]
         optionFrame = Frame(romSettingsFrame)
         optionFrame.grid(row=row, column=column, sticky=E)
-        optionLabel = Label(optionFrame, text=option.displayname)
+        optionLabel = Label(optionFrame, text=option.display_name)
         optionLabel.pack(side=LEFT)
         setattr(opts, option_name, StringVar())
         getattr(opts, option_name).set(option.name_lookup[option.default])
@@ -143,7 +143,7 @@ def adjustGUI():
     option = cosmetic_options['sword_trail_duration']
     optionFrame = Frame(romSettingsFrame)
     optionFrame.grid(row=8, column=2, sticky=E)
-    optionLabel = Label(optionFrame, text=option.displayname)
+    optionLabel = Label(optionFrame, text=option.display_name)
     optionLabel.pack(side=LEFT)
     setattr(opts, 'sword_trail_duration', StringVar())
     getattr(opts, 'sword_trail_duration').set(option.default)

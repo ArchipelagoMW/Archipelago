@@ -15,6 +15,12 @@ Currently, the following games are supported:
 * Secret of Evermore
 * Final Fantasy
 * Rogue Legacy
+* VVVVVV
+* Raft
+* Super Mario 64
+* Meritous
+* Super Metroid/Link to the Past combo randomizer (SMZ3)
+* ChecksFinder
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
@@ -54,6 +60,8 @@ Contributions are welcome. We have a few asks of any new contributors.
 * Do not introduce any unit test failures/regressions.
 
 Otherwise, we tend to judge code on a case to case basis. It is a generally good idea to stick to PEP-8 guidelines to ensure consistency with existing code. (And to make the linter happy.)
+
+For adding a new game to Archipelago please see the docs folder for the relevant information and feel free to ask any questions in the #archipelago-dev channel in our discord.
 
 ## Code of Conduct
 We conduct ourselves openly and inclusively here. Please do not contribute to an environment which makes other people uncomfortable. This means that we expect all contributors or participants here to:

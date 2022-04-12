@@ -18,6 +18,10 @@
                 which you can find via the <a href="{{ url_for("games") }}">supported games list</a>.
             </p>
             <p>
+                Note: This website will always generate games using the current release version of Archipelago,
+                currently {{ version }}.
+            </p>
+            <p>
                 {% if race -%}
                     This game will be generated in race mode,
                     meaning the spoiler log will be unavailable and game specific protections will be in place,

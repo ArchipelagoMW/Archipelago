@@ -15,19 +15,29 @@ def create_regions(world, player: int):
     locations += [location for location in diary_location_table]
 
     # Add chests per settings.
-    fairies = int(world.fairy_chests_per_zone[player])
-    for i in range(0, fairies):
-        locations += [f"{LocationName.castle} - Fairy Chest {i + 1}"]
-        locations += [f"{LocationName.garden} - Fairy Chest {i + 1}"]
-        locations += [f"{LocationName.tower} - Fairy Chest {i + 1}"]
-        locations += [f"{LocationName.dungeon} - Fairy Chest {i + 1}"]
+    if world.universal_fairy_chests[player]:
+        fairies = int(world.fairy_chests_per_zone[player]) * 4
+        for i in range(0, fairies):
+            locations += [f"Fairy Chest {i + 1}"]
+    else:
+        fairies = int(world.fairy_chests_per_zone[player])
+        for i in range(0, fairies):
+            locations += [f"{LocationName.castle} - Fairy Chest {i + 1}"]
+            locations += [f"{LocationName.garden} - Fairy Chest {i + 1}"]
+            locations += [f"{LocationName.tower} - Fairy Chest {i + 1}"]
+            locations += [f"{LocationName.dungeon} - Fairy Chest {i + 1}"]
 
-    chests = int(world.chests_per_zone[player])
-    for i in range(0, chests):
-        locations += [f"{LocationName.castle} - Chest {i + 1}"]
-        locations += [f"{LocationName.garden} - Chest {i + 1}"]
-        locations += [f"{LocationName.tower} - Chest {i + 1}"]
-        locations += [f"{LocationName.dungeon} - Chest {i + 1}"]
+    if world.universal_chests[player]:
+        chests = int(world.chests_per_zone[player]) * 4
+        for i in range(0, chests):
+            locations += [f"Chest {i + 1}"]
+    else:
+        chests = int(world.chests_per_zone[player])
+        for i in range(0, chests):
+            locations += [f"{LocationName.castle} - Chest {i + 1}"]
+            locations += [f"{LocationName.garden} - Chest {i + 1}"]
+            locations += [f"{LocationName.tower} - Chest {i + 1}"]
+            locations += [f"{LocationName.dungeon} - Chest {i + 1}"]
 
     # Set up the regions correctly.
     world.regions += [
@@ -37,10 +47,10 @@ def create_regions(world, player: int):
 
     # Connect entrances and set up events.
     world.get_entrance(LocationName.outside, player).connect(world.get_region(LocationName.castle, player))
-    world.get_location(LocationName.castle, player).place_locked_item(LegacyItem(ItemName.boss_khindr, True, None, player))
-    world.get_location(LocationName.garden, player).place_locked_item(LegacyItem(ItemName.boss_alexander, True, None, player))
-    world.get_location(LocationName.tower, player).place_locked_item(LegacyItem(ItemName.boss_leon, True, None, player))
-    world.get_location(LocationName.dungeon, player).place_locked_item(LegacyItem(ItemName.boss_herodotus, True, None, player))
+    world.get_location(LocationName.castle, player).place_locked_item(LegacyItem(ItemName.boss_castle, True, None, player))
+    world.get_location(LocationName.garden, player).place_locked_item(LegacyItem(ItemName.boss_forest, True, None, player))
+    world.get_location(LocationName.tower, player).place_locked_item(LegacyItem(ItemName.boss_tower, True, None, player))
+    world.get_location(LocationName.dungeon, player).place_locked_item(LegacyItem(ItemName.boss_dungeon, True, None, player))
     world.get_location(LocationName.fountain, player).place_locked_item(LegacyItem(ItemName.boss_fountain, True, None, player))
 
 

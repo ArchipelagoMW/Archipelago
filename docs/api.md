@@ -7,8 +7,8 @@ required to send and receive items between the game and server.
 Client implementation is out of scope of this document. Please refer to an
 existing game that provides a similar API to yours.
 Refer to the following documents as well:
-    * [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
-    * [adding games.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/adding%20games.md)
+- [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
+- [adding games.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/adding%20games.md)
 
 Archipelago will be abbreviated as "AP" from now on.
 
@@ -43,11 +43,22 @@ class MyGameWorld(World):
 
 ## Definitions
 
+This section will cover various classes and objects you can use for your world.
+While some of the attributes and methods are mentioned here not all of them are,
+but you can find them in `BaseClasses.py`.
+
 ### World Class
 
 A `World` class is the class with all the specifics of a certain game to be
 included. It will be instantiated for each player that rolls a seed for that
 game.
+
+### WebWorld Class
+
+A `WebWorld` class contains specific attributes and methods that can be modified
+for your world specifically on the webhost. At the moment this comprises of `settings_page`
+which can be changed to a link instead of an AP generated settings page; such is the case
+for Final Fantasy.
 
 ### MultiWorld Object
 
@@ -82,6 +93,7 @@ Each location has a `name` and an `id` (a.k.a. "code" or "address"), is placed
 in a Region and has access rules.
 The name needs to be unique in each game, the ID needs to be unique across all
 games and is best in the same range as the item IDs.
+World-specific IDs are 1 to 2<sup>53</sup>-1, IDs ≤ 0 are global and reserved.
 
 Special locations with ID `None` can hold events.
 
@@ -217,7 +229,7 @@ By convention options are defined in `Options.py` and will be used when parsing
 the players' yaml files.
 
 Each option has its own class, inherits from a base option type, has a docstring 
-to describe it and a `displayname` property for display on the website and in
+to describe it and a `display_name` property for display on the website and in
 spoiler logs.
 
 The actual name as used in the yaml is defined in a `dict[str, Option]`, that is
@@ -263,7 +275,7 @@ import typing
 
 class Difficulty(Choice):
     """Sets overall game difficulty."""
-    displayname = "Difficulty"
+    display_name = "Difficulty"
     option_easy = 0
     option_normal = 1
     option_hard = 2
@@ -273,14 +285,14 @@ class Difficulty(Choice):
 
 class FinalBossHP(Range):
     """Sets the HP of the final boss"""
-    displayname = "Final Boss HP"
+    display_name = "Final Boss HP"
     range_start = 100
     range_end = 10000
     default = 2000
 
 class FixXYZGlitch(Toggle):
     """Fixes ABC when you do XYZ"""
-    displayname = "Fix XYZ Glitch"
+    display_name = "Fix XYZ Glitch"
 
 # By convention we call the options dict variable `<world>_options`.
 mygame_options: typing.Dict[str, type(Option)] = {
@@ -407,6 +419,8 @@ In addition the following methods can be implemented
 * `def get_required_client_version(self)`
   can return a tuple of 3 ints to make sure the client is compatible to this
   world (e.g. item IDs) when connecting.
+  Always use `return max((x,y,z), super().get_required_client_version())`
+  to catch updates in the lower layers that break compatibility.
 
 #### generate_early
 

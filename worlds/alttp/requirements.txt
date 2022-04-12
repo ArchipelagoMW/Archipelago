@@ -1,3 +1,2 @@
-bsdiff4>=1.2.1
 maseya-z3pr>=1.0.0rc1
 xxtea>=2.0.0.post0

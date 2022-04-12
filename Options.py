@@ -2,6 +2,8 @@ from __future__ import annotations
 import typing
 import random
 
+from schema import Schema, And, Or
+
 
 class AssembleOptions(type):
     def __new__(mcs, name, bases, attrs):
@@ -14,8 +16,10 @@ class AssembleOptions(type):
                 name_lookup.update(base.name_lookup)
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
                        name.startswith("option_")}
-        if "random" in new_options:
-            raise Exception("Choice option 'random' cannot be manually assigned.")
+
+        assert "random" not in new_options, "Choice option 'random' cannot be manually assigned."
+        assert len(new_options) == len(set(new_options.values())), "same ID cannot be used twice. Try alias?"
+
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
 
@@ -25,14 +29,28 @@ class AssembleOptions(type):
 
         # auto-validate schema on __init__
         if "schema" in attrs.keys():
-            def validate_decorator(func):
-                def validate(self, *args, **kwargs):
-                    func(self, *args, **kwargs)
+
+            if "__init__" in attrs:
+                def validate_decorator(func):
+                    def validate(self, *args, **kwargs):
+                        ret = func(self, *args, **kwargs)
+                        self.value = self.schema.validate(self.value)
+                        return ret
+
+                    return validate
+                attrs["__init__"] = validate_decorator(attrs["__init__"])
+            else:
+                # construct an __init__ that calls parent __init__
+
+                cls = super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
+
+                def meta__init__(self, *args, **kwargs):
+                    super(cls, self).__init__(*args, **kwargs)
                     self.value = self.schema.validate(self.value)
 
-                return validate
+                cls.__init__ = meta__init__
+                return cls
 
-            attrs["__init__"] = validate_decorator(attrs["__init__"])
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
 
@@ -41,9 +59,9 @@ class Option(metaclass=AssembleOptions):
     name_lookup: typing.Dict[int, str]
     default = 0
 
-    # convert option_name_long into Name Long as displayname, otherwise name_long is the result.
+    # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
     # Handled in get_option_name()
-    autodisplayname = False
+    auto_display_name = False
 
     # can be weighted between selections
     supports_weighting = True
@@ -64,7 +82,7 @@ class Option(metaclass=AssembleOptions):
 
     @classmethod
     def get_option_name(cls, value: typing.Any) -> str:
-        if cls.autodisplayname:
+        if cls.auto_display_name:
             return cls.name_lookup[value].replace("_", " ").title()
         else:
             return cls.name_lookup[value]
@@ -86,7 +104,7 @@ class Toggle(Option):
     default = 0
 
     def __init__(self, value: int):
-        assert value == 0 or value == 1
+        assert value == 0 or value == 1, "value of Toggle can only be 0 or 1"
         self.value = value
 
     @classmethod
@@ -125,13 +143,15 @@ class Toggle(Option):
     def get_option_name(cls, value):
         return ["No", "Yes"][int(value)]
 
+    __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
+
 
 class DefaultOnToggle(Toggle):
     default = 1
 
 
 class Choice(Option):
-    autodisplayname = True
+    auto_display_name = True
 
     def __init__(self, value: int):
         self.value: int = value
@@ -141,8 +161,8 @@ class Choice(Option):
         text = text.lower()
         if text == "random":
             return cls(random.choice(list(cls.name_lookup)))
-        for optionname, value in cls.options.items():
-            if optionname == text:
+        for option_name, value in cls.options.items():
+            if option_name == text:
                 return cls(value)
         raise KeyError(
             f'Could not find option "{text}" for "{cls.__name__}", '
@@ -158,10 +178,10 @@ class Choice(Option):
         if isinstance(other, self.__class__):
             return other.value == self.value
         elif isinstance(other, str):
-            assert other in self.options
+            assert other in self.options, "compared against a str that could never be equal."
             return other == self.current_key
         elif isinstance(other, int):
-            assert other in self.name_lookup
+            assert other in self.name_lookup, "compared against an int that could never be equal."
             return other == self.value
         elif isinstance(other, bool):
             return other == bool(self.value)
@@ -172,10 +192,10 @@ class Choice(Option):
         if isinstance(other, self.__class__):
             return other.value != self.value
         elif isinstance(other, str):
-            assert other in self.options
+            assert other in self.options , "compared against a str that could never be equal."
             return other != self.current_key
         elif isinstance(other, int):
-            assert other in self.name_lookup
+            assert other in self.name_lookup, "compared against am int that could never be equal."
             return other != self.value
         elif isinstance(other, bool):
             return other != bool(self.value)
@@ -183,6 +203,8 @@ class Choice(Option):
             return False
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
+    __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
 class Range(Option, int):
@@ -206,6 +228,25 @@ class Range(Option, int):
                 return cls(int(round(random.triangular(cls.range_start, cls.range_end, cls.range_end), 0)))
             elif text == "random-middle":
                 return cls(int(round(random.triangular(cls.range_start, cls.range_end), 0)))
+            elif text.startswith("random-range-"):
+                textsplit = text.split("-")
+                try:
+                    random_range = [int(textsplit[len(textsplit) - 2]), int(textsplit[len(textsplit) - 1])]
+                except ValueError:
+                    raise ValueError(f"Invalid random range {text} for option {cls.__name__}")
+                random_range.sort()
+                if random_range[0] < cls.range_start or random_range[1] > cls.range_end:
+                    raise Exception(
+                        f"{random_range[0]}-{random_range[1]} is outside allowed range "
+                        f"{cls.range_start}-{cls.range_end} for option {cls.__name__}")
+                if text.startswith("random-range-low"):
+                    return cls(int(round(random.triangular(random_range[0], random_range[1], random_range[0]))))
+                elif text.startswith("random-range-middle"):
+                    return cls(int(round(random.triangular(random_range[0], random_range[1]))))
+                elif text.startswith("random-range-high"):
+                    return cls(int(round(random.triangular(random_range[0], random_range[1], random_range[1]))))
+                else:
+                    return cls(int(round(random.randint(random_range[0], random_range[1]))))
             else:
                 return cls(random.randint(cls.range_start, cls.range_end))
         return cls(int(text))
@@ -223,24 +264,43 @@ class Range(Option, int):
         return str(self.value)
 
 
-class OptionNameSet(Option):
-    default = frozenset()
-
-    def __init__(self, value: typing.Set[str]):
-        self.value: typing.Set[str] = value
-
-    @classmethod
-    def from_text(cls, text: str) -> OptionNameSet:
-        return cls({option.strip() for option in text.split(",")})
+class VerifyKeys:
+    valid_keys = frozenset()
+    valid_keys_casefold: bool = False
+    convert_name_groups: bool = False
+    verify_item_name: bool = False
+    verify_location_name: bool = False
+    value: typing.Any
 
     @classmethod
-    def from_any(cls, data: typing.Any) -> OptionNameSet:
-        if type(data) == set:
-            return cls(data)
-        return cls.from_text(str(data))
+    def verify_keys(cls, data):
+        if cls.valid_keys:
+            data = set(data)
+            dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
+            extra = dataset - cls.valid_keys
+            if extra:
+                raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
+                                f"Allowed keys: {cls.valid_keys}.")
+
+    def verify(self, world):
+        if self.convert_name_groups and self.verify_item_name:
+            new_value = type(self.value)()  # empty container of whatever value is
+            for item_name in self.value:
+                new_value |= world.item_name_groups.get(item_name, {item_name})
+            self.value = new_value
+        if self.verify_item_name:
+            for item_name in self.value:
+                if item_name not in world.item_names:
+                    raise Exception(f"Item {item_name} from option {self} "
+                                    f"is not a valid item name from {world.game}")
+        elif self.verify_location_name:
+            for location_name in self.value:
+                if location_name not in world.location_names:
+                    raise Exception(f"Location {location_name} from option {self} "
+                                    f"is not a valid location name from {world.game}")
 
 
-class OptionDict(Option):
+class OptionDict(Option, VerifyKeys):
     default = {}
     supports_weighting = False
     value: typing.Dict[str, typing.Any]
@@ -251,6 +311,7 @@ class OptionDict(Option):
     @classmethod
     def from_any(cls, data: typing.Dict[str, typing.Any]) -> OptionDict:
         if type(data) == dict:
+            cls.verify_keys(data)
             return cls(data)
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
@@ -263,7 +324,6 @@ class OptionDict(Option):
 
 
 class ItemDict(OptionDict):
-    # implemented by Generate
     verify_item_name = True
 
     def __init__(self, value: typing.Dict[str, int]):
@@ -272,7 +332,7 @@ class ItemDict(OptionDict):
         super(ItemDict, self).__init__(value)
 
 
-class OptionList(Option):
+class OptionList(Option, VerifyKeys):
     default = []
     supports_weighting = False
     value: list
@@ -288,6 +348,7 @@ class OptionList(Option):
     @classmethod
     def from_any(cls, data: typing.Any):
         if type(data) == list:
+            cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
 
@@ -298,7 +359,7 @@ class OptionList(Option):
         return item in self.value
 
 
-class OptionSet(Option):
+class OptionSet(Option, VerifyKeys):
     default = frozenset()
     supports_weighting = False
     value: set
@@ -314,13 +375,15 @@ class OptionSet(Option):
     @classmethod
     def from_any(cls, data: typing.Any):
         if type(data) == list:
+            cls.verify_keys(data)
             return cls(data)
         elif type(data) == set:
+            cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
 
     def get_option_name(self, value):
-        return ", ".join(value)
+        return ", ".join(sorted(value))
 
     def __contains__(self, item):
         return item in self.value
@@ -334,7 +397,7 @@ class Accessibility(Choice):
     Locations: ensure everything can be reached and acquired.
     Items: ensure all logically relevant items can be acquired.
     Minimal: ensure what is needed to reach your goal can be acquired."""
-    displayname = "Accessibility"
+    display_name = "Accessibility"
     option_locations = 0
     option_items = 1
     option_minimal = 2
@@ -344,7 +407,7 @@ class Accessibility(Choice):
 
 class ProgressionBalancing(DefaultOnToggle):
     """A system that moves progression earlier, to try and prevent the player from getting stuck and bored early."""
-    displayname = "Progression Balancing"
+    display_name = "Progression Balancing"
 
 
 common_options = {
@@ -354,45 +417,78 @@ common_options = {
 
 
 class ItemSet(OptionSet):
-    # implemented by Generate
     verify_item_name = True
+    convert_name_groups = True
 
 
 class LocalItems(ItemSet):
     """Forces these items to be in their native world."""
-    displayname = "Local Items"
+    display_name = "Local Items"
 
 
 class NonLocalItems(ItemSet):
     """Forces these items to be outside their native world."""
-    displayname = "Not Local Items"
+    display_name = "Not Local Items"
 
 
 class StartInventory(ItemDict):
     """Start with these items."""
     verify_item_name = True
-    displayname = "Start Inventory"
+    display_name = "Start Inventory"
 
 
 class StartHints(ItemSet):
     """Start with these item's locations prefilled into the !hint command."""
-    displayname = "Start Hints"
+    display_name = "Start Hints"
 
 
 class StartLocationHints(OptionSet):
     """Start with these locations and their item prefilled into the !hint command"""
-    displayname = "Start Location Hints"
+    display_name = "Start Location Hints"
 
 
 class ExcludeLocations(OptionSet):
     """Prevent these locations from having an important item"""
-    displayname = "Excluded Locations"
+    display_name = "Excluded Locations"
+    verify_location_name = True
+
+
+class PriorityLocations(OptionSet):
+    """Prevent these locations from having an unimportant item"""
+    display_name = "Priority Locations"
     verify_location_name = True
 
 
 class DeathLink(Toggle):
     """When you die, everyone dies. Of course the reverse is true too."""
-    displayname = "Death Link"
+    display_name = "Death Link"
+
+
+class ItemLinks(OptionList):
+    """Share part of your item pool with other players."""
+    default = []
+    schema = Schema([
+        {
+            "name": And(str, len),
+            "item_pool": [And(str, len)],
+            "replacement_item": Or(And(str, len), None)
+        }
+    ])
+
+    def verify(self, world):
+        super(ItemLinks, self).verify(world)
+        existing_links = set()
+        for link in self.value:
+            if link["name"] in existing_links:
+                raise Exception(f"You cannot have more than one link named {link['name']}.")
+            existing_links.add(link["name"])
+            for item_name in link["item_pool"]:
+                if item_name not in world.item_names and item_name not in world.item_name_groups:
+                    raise Exception(f"Item {item_name} from item link {link} "
+                                    f"is not a valid item name from {world.game}")
+            if link["replacement_item"] and link["replacement_item"] not in world.item_names:
+                raise Exception(f"Item {link['replacement_item']} from item link {link} "
+                                f"is not a valid item name from {world.game}")
 
 
 per_game_common_options = {
@@ -402,8 +498,11 @@ per_game_common_options = {
     "start_inventory": StartInventory,
     "start_hints": StartHints,
     "start_location_hints": StartLocationHints,
-    "exclude_locations": ExcludeLocations
+    "exclude_locations": ExcludeLocations,
+    "priority_locations": PriorityLocations,
+    "item_links": ItemLinks
 }
+
 
 if __name__ == "__main__":
 
@@ -412,8 +511,8 @@ if __name__ == "__main__":
 
     map_shuffle = Toggle
     compass_shuffle = Toggle
-    keyshuffle = Toggle
-    bigkey_shuffle = Toggle
+    key_shuffle = Toggle
+    big_key_shuffle = Toggle
     hints = Toggle
     test = argparse.Namespace()
     test.logic = Logic.from_text("no_logic")

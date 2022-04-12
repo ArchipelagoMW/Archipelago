@@ -1,5 +1,7 @@
 from __future__ import annotations
-from typing import Dict, Set, Tuple, List, Optional, TextIO
+
+import logging
+from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable, Union
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
@@ -8,7 +10,7 @@ from Options import Option
 class AutoWorldRegister(type):
     world_types: Dict[str, World] = {}
 
-    def __new__(cls, name, bases, dct):
+    def __new__(cls, name: str, bases, dct: Dict[str, Any]):
         # filter out any events
         dct["item_name_to_id"] = {name: id for name, id in dct["item_name_to_id"].items() if id}
         dct["location_name_to_id"] = {name: id for name, id in dct["location_name_to_id"].items() if id}
@@ -18,8 +20,10 @@ class AutoWorldRegister(type):
 
         # build rest
         dct["item_names"] = frozenset(dct["item_name_to_id"])
+        dct["item_name_groups"] = dct.get("item_name_groups", {})
+        dct["item_name_groups"]["Everything"] = dct["item_names"]
         dct["location_names"] = frozenset(dct["location_name_to_id"])
-        dct["all_names"] = dct["item_names"] | dct["location_names"] | set(dct.get("item_name_groups", {}))
+        dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
 
         # construct class
         new_class = super().__new__(cls, name, bases, dct)
@@ -31,8 +35,13 @@ class AutoWorldRegister(type):
 class AutoLogicRegister(type):
     def __new__(cls, name, bases, dct):
         new_class = super().__new__(cls, name, bases, dct)
+        function: Callable
         for item_name, function in dct.items():
-            if not item_name.startswith("__"):
+            if item_name == "copy_mixin":
+                CollectionState.additional_copy_functions.append(function)
+            elif item_name == "init_mixin":
+                CollectionState.additional_init_functions.append(function)
+            elif not item_name.startswith("__"):
                 if hasattr(CollectionState, item_name):
                     raise Exception(f"Name conflict on Logic Mixin {name} trying to overwrite {item_name}")
                 setattr(CollectionState, item_name, function)
@@ -64,6 +73,12 @@ def call_stage(world: MultiWorld, method_name: str, *args):
             stage_callable(world, *args)
 
 
+class WebWorld:
+    """Webhost integration"""
+    # display a settings page. Can be a link to an out-of-ap settings tool too.
+    settings_page: Union[bool, str] = True
+
+
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
@@ -71,7 +86,7 @@ class World(metaclass=AutoWorldRegister):
     options: Dict[str, type(Option)] = {}  # link your Options mapping
     game: str  # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
-    all_names: Set[str] = frozenset()  # gets automatically populated with all item, item group and location names
+    all_item_and_group_names: Set[str] = frozenset()  # gets automatically populated with all item and item group names
 
     # map names to their IDs
     item_name_to_id: Dict[str, int] = {}
@@ -87,6 +102,8 @@ class World(metaclass=AutoWorldRegister):
 
     hint_blacklist: Set[str] = frozenset()  # any names that should not be hintable
 
+    # NOTE: remote_items and remote_start_inventory are now available in the network protocol for the client to set.
+    # These values will be removed.
     # if a world is set to remote_items, then it just needs to send location checks to the server and the server
     # sends back the items
     # if a world is set to remote_items = False, then the server never sends an item where receiver == finder,
@@ -115,8 +132,7 @@ class World(metaclass=AutoWorldRegister):
     item_names: Set[str]  # set of all potential item names
     location_names: Set[str]  # set of all potential location names
 
-    # If there is visibility in what is being sent, this is where it will be known.
-    sending_visible: bool = False
+    web: WebWorld = WebWorld()
 
     def __init__(self, world: MultiWorld, player: int):
         self.world = world
@@ -186,39 +202,56 @@ class World(metaclass=AutoWorldRegister):
     def write_spoiler_end(self, spoiler_handle: TextIO):
         """Write to the end of the spoiler"""
         pass
-    # end of ordered Main.py calls
 
-    def collect_item(self, state: CollectionState, item: Item, remove: bool = False) -> Optional[str]:
-        """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
-        Collect None to skip item.
-        :param remove: indicate if this is meant to remove from state instead of adding."""
-        if item.advancement:
-            return item.name
+    # end of ordered Main.py calls
 
     def create_item(self, name: str) -> Item:
         """Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer"""
         raise NotImplementedError
 
+    def get_filler_item_name(self) -> str:
+        """Called when the item pool needs to be filled with additional items to match location count."""
+        logging.warning(f"World {self} is generating a filler item without custom filler pool.")
+        return self.world.random.choice(self.item_name_to_id)
+
+    # decent place to implement progressive items, in most cases can stay as-is
+    def collect_item(self, state: CollectionState, item: Item, remove: bool = False) -> Optional[str]:
+        """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
+        Collect None to skip item.
+        :param state: CollectionState to collect into
+        :param item: Item to decide on if it should be collected into state
+        :param remove: indicate if this is meant to remove from state instead of adding."""
+        if item.advancement:
+            return item.name
+
+    # called to create all_state, return Items that are created during pre_fill
+    def get_pre_fill_items(self) -> List[Item]:
+        return []
+
     # following methods should not need to be overridden.
     def collect(self, state: CollectionState, item: Item) -> bool:
         name = self.collect_item(state, item)
         if name:
-            state.prog_items[name, item.player] += 1
+            state.prog_items[name, self.player] += 1
             return True
         return False
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         name = self.collect_item(state, item, True)
         if name:
-            state.prog_items[name, item.player] -= 1
-            if state.prog_items[name, item.player] < 1:
-                del (state.prog_items[name, item.player])
+            state.prog_items[name, self.player] -= 1
+            if state.prog_items[name, self.player] < 1:
+                del (state.prog_items[name, self.player])
             return True
         return False
+
+    def create_filler(self) -> Item:
+        return self.create_item(self.get_filler_item_name())
 
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together
 class LogicMixin(metaclass=AutoLogicRegister):
     pass
+

@@ -3,16 +3,16 @@ window.addEventListener('load', () => {
     let settingHash = localStorage.getItem('weighted-settings-hash');
     if (!settingHash) {
       // If no hash data has been set before, set it now
-      localStorage.setItem('weighted-settings-hash', md5(results));
+      localStorage.setItem('weighted-settings-hash', md5(JSON.stringify(results)));
       localStorage.removeItem('weighted-settings');
-      settingHash = md5(results);
+      settingHash = md5(JSON.stringify(results));
     }
 
-    if (settingHash !== md5(results)) {
+    if (settingHash !== md5(JSON.stringify(results))) {
       const userMessage = document.getElementById('user-message');
       userMessage.innerText = "Your settings are out of date! Click here to update them! Be aware this will reset " +
         "them all to default.";
-      userMessage.style.display = "block";
+      userMessage.classList.add('visible');
       userMessage.addEventListener('click', resetSettings);
     }
 
@@ -45,7 +45,7 @@ const resetSettings = () => {
 
 const fetchSettingData = () => new Promise((resolve, reject) => {
   fetch(new Request(`${window.location.origin}/static/generated/weighted-settings.json`)).then((response) => {
-    try{ resolve(response.json()); }
+    try{ response.json().then((jsonObj) => resolve(jsonObj)); }
     catch(error){ reject(error); }
   });
 });
@@ -85,24 +85,30 @@ const createDefaultSettings = (settingData) => {
             newSettings[game][gameSetting]['random-low'] = 0;
             newSettings[game][gameSetting]['random-high'] = 0;
             break;
+
+          case 'items-list':
+          case 'locations-list':
+          case 'custom-list':
+            newSettings[game][gameSetting] = [];
+            break;
+
           default:
             console.error(`Unknown setting type for ${game} setting ${gameSetting}: ${setting.type}`);
         }
       }
 
-      newSettings[game].start_inventory = [];
+      newSettings[game].start_inventory = {};
       newSettings[game].exclude_locations = [];
       newSettings[game].local_items = [];
       newSettings[game].non_local_items = [];
       newSettings[game].start_hints = [];
+      newSettings[game].start_location_hints = [];
     }
 
     localStorage.setItem('weighted-settings', JSON.stringify(newSettings));
   }
 };
 
-// TODO: Include item configs: start_inventory, local_items, non_local_items, start_hints
-// TODO: Include location configs: exclude_locations
 const buildUI = (settingData) => {
   // Build the game-choice div
   buildGameChoice(settingData.games);
@@ -128,19 +134,30 @@ const buildUI = (settingData) => {
     expandButton.classList.add('invisible');
     gameDiv.appendChild(expandButton);
 
-    const optionsDiv = buildOptionsDiv(game, settingData.games[game].gameSettings);
-    gameDiv.appendChild(optionsDiv);
+    const weightedSettingsDiv = buildWeightedSettingsDiv(game, settingData.games[game].gameSettings);
+    gameDiv.appendChild(weightedSettingsDiv);
+
+    const itemsDiv = buildItemsDiv(game, settingData.games[game].gameItems);
+    gameDiv.appendChild(itemsDiv);
+
+    const hintsDiv = buildHintsDiv(game, settingData.games[game].gameItems, settingData.games[game].gameLocations);
+    gameDiv.appendChild(hintsDiv);
+
     gamesWrapper.appendChild(gameDiv);
 
     collapseButton.addEventListener('click', () => {
       collapseButton.classList.add('invisible');
-      optionsDiv.classList.add('invisible');
+      weightedSettingsDiv.classList.add('invisible');
+      itemsDiv.classList.add('invisible');
+      hintsDiv.classList.add('invisible');
       expandButton.classList.remove('invisible');
     });
 
     expandButton.addEventListener('click', () => {
       collapseButton.classList.remove('invisible');
-      optionsDiv.classList.remove('invisible');
+      weightedSettingsDiv.classList.remove('invisible');
+      itemsDiv.classList.remove('invisible');
+      hintsDiv.classList.remove('invisible');
       expandButton.classList.add('invisible');
     });
   });
@@ -207,10 +224,10 @@ const buildGameChoice = (games) => {
   gameChoiceDiv.appendChild(table);
 };
 
-const buildOptionsDiv = (game, settings) => {
+const buildWeightedSettingsDiv = (game, settings) => {
   const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
-  const optionsWrapper = document.createElement('div');
-  optionsWrapper.classList.add('settings-wrapper');
+  const settingsWrapper = document.createElement('div');
+  settingsWrapper.classList.add('settings-wrapper');
 
   Object.keys(settings).forEach((settingName) => {
     const setting = settings[settingName];
@@ -268,27 +285,6 @@ const buildOptionsDiv = (game, settings) => {
         break;
 
       case 'range':
-        const hintText = document.createElement('p');
-        hintText.classList.add('hint-text');
-        hintText.innerHTML = 'This is a range option. You may enter valid numerical values in the text box below, ' +
-          `then press the "Add" button to add a weight for it.<br />Minimum value: ${setting.min}<br />` +
-          `Maximum value: ${setting.max}`;
-        settingWrapper.appendChild(hintText);
-
-        const addOptionDiv = document.createElement('div');
-        addOptionDiv.classList.add('add-option-div');
-        const optionInput = document.createElement('input');
-        optionInput.setAttribute('id', `${game}-${settingName}-option`);
-        optionInput.setAttribute('placeholder', `${setting.min} - ${setting.max}`);
-        addOptionDiv.appendChild(optionInput);
-        const addOptionButton = document.createElement('button');
-        addOptionButton.innerText = 'Add';
-        addOptionDiv.appendChild(addOptionButton);
-        settingWrapper.appendChild(addOptionDiv);
-        optionInput.addEventListener('keydown', (evt) => {
-          if (evt.key === 'Enter') { addOptionButton.dispatchEvent(new Event('click')); }
-        });
-
         const rangeTable = document.createElement('table');
         const rangeTbody = document.createElement('tbody');
 
@@ -324,6 +320,79 @@ const buildOptionsDiv = (game, settings) => {
               rangeTbody.appendChild(tr);
           }
         } else {
+          const hintText = document.createElement('p');
+          hintText.classList.add('hint-text');
+          hintText.innerHTML = 'This is a range option. You may enter a valid numerical value in the text box ' +
+            `below, then press the "Add" button to add a weight for it.<br />Minimum value: ${setting.min}<br />` +
+            `Maximum value: ${setting.max}`;
+          settingWrapper.appendChild(hintText);
+
+          const addOptionDiv = document.createElement('div');
+          addOptionDiv.classList.add('add-option-div');
+          const optionInput = document.createElement('input');
+          optionInput.setAttribute('id', `${game}-${settingName}-option`);
+          optionInput.setAttribute('placeholder', `${setting.min} - ${setting.max}`);
+          addOptionDiv.appendChild(optionInput);
+          const addOptionButton = document.createElement('button');
+          addOptionButton.innerText = 'Add';
+          addOptionDiv.appendChild(addOptionButton);
+          settingWrapper.appendChild(addOptionDiv);
+          optionInput.addEventListener('keydown', (evt) => {
+            if (evt.key === 'Enter') { addOptionButton.dispatchEvent(new Event('click')); }
+          });
+
+          addOptionButton.addEventListener('click', () => {
+            const optionInput = document.getElementById(`${game}-${settingName}-option`);
+            let option = optionInput.value;
+            if (!option || !option.trim()) { return; }
+            option = parseInt(option, 10);
+            if ((option < setting.min) || (option > setting.max)) { return; }
+            optionInput.value = '';
+            if (document.getElementById(`${game}-${settingName}-${option}-range`)) { return; }
+
+            const tr = document.createElement('tr');
+            const tdLeft = document.createElement('td');
+            tdLeft.classList.add('td-left');
+            tdLeft.innerText = option;
+            tr.appendChild(tdLeft);
+
+            const tdMiddle = document.createElement('td');
+            tdMiddle.classList.add('td-middle');
+            const range = document.createElement('input');
+            range.setAttribute('type', 'range');
+            range.setAttribute('id', `${game}-${settingName}-${option}-range`);
+            range.setAttribute('data-game', game);
+            range.setAttribute('data-setting', settingName);
+            range.setAttribute('data-option', option);
+            range.setAttribute('min', 0);
+            range.setAttribute('max', 50);
+            range.addEventListener('change', updateGameSetting);
+            range.value = currentSettings[game][settingName][parseInt(option, 10)];
+            tdMiddle.appendChild(range);
+            tr.appendChild(tdMiddle);
+
+            const tdRight = document.createElement('td');
+            tdRight.setAttribute('id', `${game}-${settingName}-${option}`)
+            tdRight.classList.add('td-right');
+            tdRight.innerText = range.value;
+            tr.appendChild(tdRight);
+
+            const tdDelete = document.createElement('td');
+            tdDelete.classList.add('td-delete');
+            const deleteButton = document.createElement('span');
+            deleteButton.classList.add('range-option-delete');
+            deleteButton.innerText = '❌';
+            deleteButton.addEventListener('click', () => {
+              range.value = 0;
+              range.dispatchEvent(new Event('change'));
+              rangeTbody.removeChild(tr);
+            });
+            tdDelete.appendChild(deleteButton);
+            tr.appendChild(tdDelete);
+
+            rangeTbody.appendChild(tr);
+          });
+
           Object.keys(currentSettings[game][settingName]).forEach((option) => {
             if (currentSettings[game][settingName][option] > 0) {
               const tr = document.createElement('tr');
@@ -403,58 +472,18 @@ const buildOptionsDiv = (game, settings) => {
 
         rangeTable.appendChild(rangeTbody);
         settingWrapper.appendChild(rangeTable);
+        break;
 
-        addOptionButton.addEventListener('click', () => {
-          const optionInput = document.getElementById(`${game}-${settingName}-option`);
-          let option = optionInput.value;
-          if (!option || !option.trim()) { return; }
-          option = parseInt(option, 10);
-          if ((option < setting.min) || (option > setting.max)) { return; }
-          optionInput.value = '';
-          if (document.getElementById(`${game}-${settingName}-${option}-range`)) { return; }
+      case 'items-list':
+        // TODO
+        break;
 
-          const tr = document.createElement('tr');
-          const tdLeft = document.createElement('td');
-          tdLeft.classList.add('td-left');
-          tdLeft.innerText = option;
-          tr.appendChild(tdLeft);
+      case 'locations-list':
+        // TODO
+        break;
 
-          const tdMiddle = document.createElement('td');
-          tdMiddle.classList.add('td-middle');
-          const range = document.createElement('input');
-          range.setAttribute('type', 'range');
-          range.setAttribute('id', `${game}-${settingName}-${option}-range`);
-          range.setAttribute('data-game', game);
-          range.setAttribute('data-setting', settingName);
-          range.setAttribute('data-option', option);
-          range.setAttribute('min', 0);
-          range.setAttribute('max', 50);
-          range.addEventListener('change', updateGameSetting);
-          range.value = currentSettings[game][settingName][parseInt(option, 10)];
-          tdMiddle.appendChild(range);
-          tr.appendChild(tdMiddle);
-
-          const tdRight = document.createElement('td');
-          tdRight.setAttribute('id', `${game}-${settingName}-${option}`)
-          tdRight.classList.add('td-right');
-          tdRight.innerText = range.value;
-          tr.appendChild(tdRight);
-
-          const tdDelete = document.createElement('td');
-          tdDelete.classList.add('td-delete');
-          const deleteButton = document.createElement('span');
-          deleteButton.classList.add('range-option-delete');
-          deleteButton.innerText = '❌';
-          deleteButton.addEventListener('click', () => {
-            range.value = 0;
-            range.dispatchEvent(new Event('change'));
-            rangeTbody.removeChild(tr);
-          });
-          tdDelete.appendChild(deleteButton);
-          tr.appendChild(tdDelete);
-
-          rangeTbody.appendChild(tr);
-        });
+      case 'custom-list':
+        // TODO
         break;
 
       default:
@@ -462,10 +491,358 @@ const buildOptionsDiv = (game, settings) => {
         return;
     }
 
-    optionsWrapper.appendChild(settingWrapper);
+    settingsWrapper.appendChild(settingWrapper);
   });
 
-  return optionsWrapper;
+  return settingsWrapper;
+};
+
+const buildItemsDiv = (game, items) => {
+  // Sort alphabetical, in pace
+  items.sort();
+
+  const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
+  const itemsDiv = document.createElement('div');
+  itemsDiv.classList.add('items-div');
+
+  const itemsDivHeader = document.createElement('h3');
+  itemsDivHeader.innerText = 'Item Pool';
+  itemsDiv.appendChild(itemsDivHeader);
+
+  const itemsDescription = document.createElement('p');
+  itemsDescription.classList.add('setting-description');
+  itemsDescription.innerText = 'Choose if you would like to start with items, or control if they are placed in ' +
+    'your seed or someone else\'s.';
+  itemsDiv.appendChild(itemsDescription);
+
+  const itemsHint = document.createElement('p');
+  itemsHint.classList.add('hint-text');
+  itemsHint.innerText = 'Drag and drop items from one box to another.';
+  itemsDiv.appendChild(itemsHint);
+
+  const itemsWrapper = document.createElement('div');
+  itemsWrapper.classList.add('items-wrapper');
+
+  // Create container divs for each category
+  const availableItemsWrapper = document.createElement('div');
+  availableItemsWrapper.classList.add('item-set-wrapper');
+  availableItemsWrapper.innerText = 'Available Items';
+  const availableItems = document.createElement('div');
+  availableItems.classList.add('item-container');
+  availableItems.setAttribute('id', `${game}-available_items`);
+  availableItems.addEventListener('dragover', itemDragoverHandler);
+  availableItems.addEventListener('drop', itemDropHandler);
+
+  const startInventoryWrapper = document.createElement('div');
+  startInventoryWrapper.classList.add('item-set-wrapper');
+  startInventoryWrapper.innerText = 'Start Inventory';
+  const startInventory = document.createElement('div');
+  startInventory.classList.add('item-container');
+  startInventory.setAttribute('id', `${game}-start_inventory`);
+  startInventory.setAttribute('data-setting', 'start_inventory');
+  startInventory.addEventListener('dragover', itemDragoverHandler);
+  startInventory.addEventListener('drop', itemDropHandler);
+
+  const localItemsWrapper = document.createElement('div');
+  localItemsWrapper.classList.add('item-set-wrapper');
+  localItemsWrapper.innerText = 'Local Items';
+  const localItems = document.createElement('div');
+  localItems.classList.add('item-container');
+  localItems.setAttribute('id', `${game}-local_items`);
+  localItems.setAttribute('data-setting', 'local_items')
+  localItems.addEventListener('dragover', itemDragoverHandler);
+  localItems.addEventListener('drop', itemDropHandler);
+
+  const nonLocalItemsWrapper = document.createElement('div');
+  nonLocalItemsWrapper.classList.add('item-set-wrapper');
+  nonLocalItemsWrapper.innerText = 'Non-Local Items';
+  const nonLocalItems = document.createElement('div');
+  nonLocalItems.classList.add('item-container');
+  nonLocalItems.setAttribute('id', `${game}-non_local_items`);
+  nonLocalItems.setAttribute('data-setting', 'non_local_items');
+  nonLocalItems.addEventListener('dragover', itemDragoverHandler);
+  nonLocalItems.addEventListener('drop', itemDropHandler);
+
+  // Populate the divs
+  items.forEach((item) => {
+    if (Object.keys(currentSettings[game].start_inventory).includes(item)){
+      const itemDiv = buildItemQtyDiv(game, item);
+      itemDiv.setAttribute('data-setting', 'start_inventory');
+      startInventory.appendChild(itemDiv);
+    } else if (currentSettings[game].local_items.includes(item)) {
+      const itemDiv = buildItemDiv(game, item);
+      itemDiv.setAttribute('data-setting', 'local_items');
+      localItems.appendChild(itemDiv);
+    } else if (currentSettings[game].non_local_items.includes(item)) {
+      const itemDiv = buildItemDiv(game, item);
+      itemDiv.setAttribute('data-setting', 'non_local_items');
+      nonLocalItems.appendChild(itemDiv);
+    } else {
+      const itemDiv = buildItemDiv(game, item);
+      availableItems.appendChild(itemDiv);
+    }
+  });
+
+  availableItemsWrapper.appendChild(availableItems);
+  startInventoryWrapper.appendChild(startInventory);
+  localItemsWrapper.appendChild(localItems);
+  nonLocalItemsWrapper.appendChild(nonLocalItems);
+  itemsWrapper.appendChild(availableItemsWrapper);
+  itemsWrapper.appendChild(startInventoryWrapper);
+  itemsWrapper.appendChild(localItemsWrapper);
+  itemsWrapper.appendChild(nonLocalItemsWrapper);
+  itemsDiv.appendChild(itemsWrapper);
+  return itemsDiv;
+};
+
+const buildItemDiv = (game, item) => {
+  const itemDiv = document.createElement('div');
+  itemDiv.classList.add('item-div');
+  itemDiv.setAttribute('id', `${game}-${item}`);
+  itemDiv.setAttribute('data-game', game);
+  itemDiv.setAttribute('data-item', item);
+  itemDiv.setAttribute('draggable', 'true');
+  itemDiv.innerText = item;
+  itemDiv.addEventListener('dragstart', (evt) => {
+    evt.dataTransfer.setData('text/plain', itemDiv.getAttribute('id'));
+  });
+  return itemDiv;
+};
+
+const buildItemQtyDiv = (game, item) => {
+  const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
+  const itemQtyDiv = document.createElement('div');
+  itemQtyDiv.classList.add('item-qty-div');
+  itemQtyDiv.setAttribute('id', `${game}-${item}`);
+  itemQtyDiv.setAttribute('data-game', game);
+  itemQtyDiv.setAttribute('data-item', item);
+  itemQtyDiv.setAttribute('draggable', 'true');
+  itemQtyDiv.innerText = item;
+
+  const inputWrapper = document.createElement('div');
+  inputWrapper.classList.add('item-qty-input-wrapper')
+
+  const itemQty = document.createElement('input');
+  itemQty.setAttribute('value', currentSettings[game].start_inventory.hasOwnProperty(item) ?
+    currentSettings[game].start_inventory[item] : '1');
+  itemQty.setAttribute('data-game', game);
+  itemQty.setAttribute('data-setting', 'start_inventory');
+  itemQty.setAttribute('data-option', item);
+  itemQty.setAttribute('maxlength', '3');
+  itemQty.addEventListener('keyup', (evt) => {
+    evt.target.value = isNaN(parseInt(evt.target.value)) ? 0 : parseInt(evt.target.value);
+    updateItemSetting(evt);
+  });
+  inputWrapper.appendChild(itemQty);
+  itemQtyDiv.appendChild(inputWrapper);
+
+  itemQtyDiv.addEventListener('dragstart', (evt) => {
+    evt.dataTransfer.setData('text/plain', itemQtyDiv.getAttribute('id'));
+  });
+  return itemQtyDiv;
+};
+
+const itemDragoverHandler = (evt) => {
+  evt.preventDefault();
+};
+
+const itemDropHandler = (evt) => {
+  evt.preventDefault();
+  const sourceId = evt.dataTransfer.getData('text/plain');
+  const sourceDiv = document.getElementById(sourceId);
+
+  const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
+  const game = sourceDiv.getAttribute('data-game');
+  const item = sourceDiv.getAttribute('data-item');
+
+  const oldSetting = sourceDiv.hasAttribute('data-setting') ? sourceDiv.getAttribute('data-setting') : null;
+  const newSetting = evt.target.hasAttribute('data-setting') ? evt.target.getAttribute('data-setting') : null;
+
+  const itemDiv = newSetting === 'start_inventory' ? buildItemQtyDiv(game, item) : buildItemDiv(game, item);
+
+  if (oldSetting) {
+    if (oldSetting === 'start_inventory') {
+      if (currentSettings[game][oldSetting].hasOwnProperty(item)) {
+        delete currentSettings[game][oldSetting][item];
+      }
+    } else {
+      if (currentSettings[game][oldSetting].includes(item)) {
+        currentSettings[game][oldSetting].splice(currentSettings[game][oldSetting].indexOf(item), 1);
+      }
+    }
+  }
+
+  if (newSetting) {
+    itemDiv.setAttribute('data-setting', newSetting);
+    document.getElementById(`${game}-${newSetting}`).appendChild(itemDiv);
+    if (newSetting === 'start_inventory') {
+      currentSettings[game][newSetting][item] = 1;
+    } else {
+      if (!currentSettings[game][newSetting].includes(item)){
+        currentSettings[game][newSetting].push(item);
+      }
+    }
+  } else {
+    // No setting was assigned, this item has been removed from the settings
+    document.getElementById(`${game}-available_items`).appendChild(itemDiv);
+  }
+
+  // Remove the source drag object
+  sourceDiv.parentElement.removeChild(sourceDiv);
+
+  // Save the updated settings
+  localStorage.setItem('weighted-settings', JSON.stringify(currentSettings));
+};
+
+const buildHintsDiv = (game, items, locations) => {
+  const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
+
+  // Sort alphabetical, in place
+  items.sort();
+  locations.sort();
+
+  const hintsDiv = document.createElement('div');
+  hintsDiv.classList.add('hints-div');
+  const hintsHeader = document.createElement('h3');
+  hintsHeader.innerText = 'Item & Location Hints';
+  hintsDiv.appendChild(hintsHeader);
+  const hintsDescription = document.createElement('p');
+  hintsDescription.classList.add('setting-description');
+  hintsDescription.innerText = 'Choose any items or locations to begin the game with the knowledge of where those ' +
+    ' items are, or what those locations contain. Excluded locations will not contain progression items.';
+  hintsDiv.appendChild(hintsDescription);
+
+  const itemHintsContainer = document.createElement('div');
+  itemHintsContainer.classList.add('hints-container');
+
+  const itemHintsWrapper = document.createElement('div');
+  itemHintsWrapper.classList.add('hints-wrapper');
+  itemHintsWrapper.innerText = 'Starting Item Hints';
+
+  const itemHintsDiv = document.createElement('div');
+  itemHintsDiv.classList.add('item-container');
+  items.forEach((item) => {
+    const itemDiv = document.createElement('div');
+    itemDiv.classList.add('hint-div');
+
+    const itemLabel = document.createElement('label');
+    itemLabel.setAttribute('for', `${game}-start_hints-${item}`);
+
+    const itemCheckbox = document.createElement('input');
+    itemCheckbox.setAttribute('type', 'checkbox');
+    itemCheckbox.setAttribute('id', `${game}-start_hints-${item}`);
+    itemCheckbox.setAttribute('data-game', game);
+    itemCheckbox.setAttribute('data-setting', 'start_hints');
+    itemCheckbox.setAttribute('data-option', item);
+    if (currentSettings[game].start_hints.includes(item)) {
+      itemCheckbox.setAttribute('checked', 'true');
+    }
+    itemCheckbox.addEventListener('change', hintChangeHandler);
+    itemLabel.appendChild(itemCheckbox);
+
+    const itemName = document.createElement('span');
+    itemName.innerText = item;
+    itemLabel.appendChild(itemName);
+
+    itemDiv.appendChild(itemLabel);
+    itemHintsDiv.appendChild(itemDiv);
+  });
+
+  itemHintsWrapper.appendChild(itemHintsDiv);
+  itemHintsContainer.appendChild(itemHintsWrapper);
+
+  const locationHintsWrapper = document.createElement('div');
+  locationHintsWrapper.classList.add('hints-wrapper');
+  locationHintsWrapper.innerText = 'Starting Location Hints';
+
+  const locationHintsDiv = document.createElement('div');
+  locationHintsDiv.classList.add('item-container');
+  locations.forEach((location) => {
+    const locationDiv = document.createElement('div');
+    locationDiv.classList.add('hint-div');
+
+    const locationLabel = document.createElement('label');
+    locationLabel.setAttribute('for', `${game}-start_location_hints-${location}`);
+
+    const locationCheckbox = document.createElement('input');
+    locationCheckbox.setAttribute('type', 'checkbox');
+    locationCheckbox.setAttribute('id', `${game}-start_location_hints-${location}`);
+    locationCheckbox.setAttribute('data-game', game);
+    locationCheckbox.setAttribute('data-setting', 'start_location_hints');
+    locationCheckbox.setAttribute('data-option', location);
+    if (currentSettings[game].start_location_hints.includes(location)) {
+      locationCheckbox.setAttribute('checked', '1');
+    }
+    locationCheckbox.addEventListener('change', hintChangeHandler);
+    locationLabel.appendChild(locationCheckbox);
+
+    const locationName = document.createElement('span');
+    locationName.innerText = location;
+    locationLabel.appendChild(locationName);
+
+    locationDiv.appendChild(locationLabel);
+    locationHintsDiv.appendChild(locationDiv);
+  });
+
+  locationHintsWrapper.appendChild(locationHintsDiv);
+  itemHintsContainer.appendChild(locationHintsWrapper);
+
+  const excludeLocationsWrapper = document.createElement('div');
+  excludeLocationsWrapper.classList.add('hints-wrapper');
+  excludeLocationsWrapper.innerText = 'Exclude Locations';
+
+  const excludeLocationsDiv = document.createElement('div');
+  excludeLocationsDiv.classList.add('item-container');
+  locations.forEach((location) => {
+    const locationDiv = document.createElement('div');
+    locationDiv.classList.add('hint-div');
+
+    const locationLabel = document.createElement('label');
+    locationLabel.setAttribute('for', `${game}-exclude_locations-${location}`);
+
+    const locationCheckbox = document.createElement('input');
+    locationCheckbox.setAttribute('type', 'checkbox');
+    locationCheckbox.setAttribute('id', `${game}-exclude_locations-${location}`);
+    locationCheckbox.setAttribute('data-game', game);
+    locationCheckbox.setAttribute('data-setting', 'exclude_locations');
+    locationCheckbox.setAttribute('data-option', location);
+    if (currentSettings[game].exclude_locations.includes(location)) {
+      locationCheckbox.setAttribute('checked', '1');
+    }
+    locationCheckbox.addEventListener('change', hintChangeHandler);
+    locationLabel.appendChild(locationCheckbox);
+
+    const locationName = document.createElement('span');
+    locationName.innerText = location;
+    locationLabel.appendChild(locationName);
+
+    locationDiv.appendChild(locationLabel);
+    excludeLocationsDiv.appendChild(locationDiv);
+  });
+
+  excludeLocationsWrapper.appendChild(excludeLocationsDiv);
+  itemHintsContainer.appendChild(excludeLocationsWrapper);
+
+  hintsDiv.appendChild(itemHintsContainer);
+  return hintsDiv;
+};
+
+const hintChangeHandler = (evt) => {
+  const currentSettings = JSON.parse(localStorage.getItem('weighted-settings'));
+  const game = evt.target.getAttribute('data-game');
+  const setting = evt.target.getAttribute('data-setting');
+  const option = evt.target.getAttribute('data-option');
+
+  if (evt.target.checked) {
+    if (!currentSettings[game][setting].includes(option)) {
+      currentSettings[game][setting].push(option);
+    }
+  } else {
+    if (currentSettings[game][setting].includes(option)) {
+      currentSettings[game][setting].splice(currentSettings[game][setting].indexOf(option), 1);
+    }
+  }
+  localStorage.setItem('weighted-settings', JSON.stringify(currentSettings));
 };
 
 const updateVisibleGames = () => {
@@ -511,25 +888,44 @@ const updateBaseSetting = (event) => {
   localStorage.setItem('weighted-settings', JSON.stringify(settings));
 };
 
-const updateGameSetting = (event) => {
+const updateGameSetting = (evt) => {
   const options = JSON.parse(localStorage.getItem('weighted-settings'));
-  const game = event.target.getAttribute('data-game');
-  const setting = event.target.getAttribute('data-setting');
-  const option = event.target.getAttribute('data-option');
-  const type = event.target.getAttribute('data-type');
-  document.getElementById(`${game}-${setting}-${option}`).innerText = event.target.value;
-  options[game][setting][option] = isNaN(event.target.value) ?
-      event.target.value : parseInt(event.target.value, 10);
+  const game = evt.target.getAttribute('data-game');
+  const setting = evt.target.getAttribute('data-setting');
+  const option = evt.target.getAttribute('data-option');
+  document.getElementById(`${game}-${setting}-${option}`).innerText = evt.target.value;
+  options[game][setting][option] = isNaN(evt.target.value) ?
+      evt.target.value : parseInt(evt.target.value, 10);
   localStorage.setItem('weighted-settings', JSON.stringify(options));
 };
 
-const exportSettings = () => {
+const updateItemSetting = (evt) => {
+  const options = JSON.parse(localStorage.getItem('weighted-settings'));
+  const game = evt.target.getAttribute('data-game');
+  const setting = evt.target.getAttribute('data-setting');
+  const option = evt.target.getAttribute('data-option');
+  if (setting === 'start_inventory') {
+    options[game][setting][option] = evt.target.value.trim() ? parseInt(evt.target.value) : 0;
+  } else {
+    options[game][setting][option] = isNaN(evt.target.value) ?
+      evt.target.value : parseInt(evt.target.value, 10);
+  }
+  localStorage.setItem('weighted-settings', JSON.stringify(options));
+};
+
+const validateSettings = () => {
   const settings = JSON.parse(localStorage.getItem('weighted-settings'));
+  const userMessage = document.getElementById('user-message');
+  let errorMessage = null;
+
+  // User must choose a name for their file
   if (!settings.name || settings.name.trim().length === 0 || settings.name.toLowerCase().trim() === 'player') {
-    const userMessage = document.getElementById('user-message');
     userMessage.innerText = 'You forgot to set your player name at the top of the page!';
     userMessage.classList.add('visible');
-    window.scrollTo(0, 0);
+    userMessage.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
     return;
   }
 
@@ -549,8 +945,40 @@ const exportSettings = () => {
           delete settings[game][setting][option];
         }
       });
+
+      if (
+        Object.keys(settings[game][setting]).length === 0 &&
+        !Array.isArray(settings[game][setting]) &&
+        setting !== 'start_inventory'
+      ) {
+        errorMessage = `${game} // ${setting} has no values above zero!`;
+      }
     });
   });
+
+  if (Object.keys(settings.game).length === 0) {
+    errorMessage = 'You have not chosen a game to play!';
+  }
+
+  // If an error occurred, alert the user and do not export the file
+  if (errorMessage) {
+    userMessage.innerText = errorMessage;
+    userMessage.classList.add('visible');
+    userMessage.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+    return;
+  }
+
+  // If no error occurred, hide the user message if it is visible
+  userMessage.classList.remove('visible');
+  return settings;
+};
+
+const exportSettings = () => {
+  const settings = validateSettings();
+  if (!settings) { return; }
 
   const yamlText = jsyaml.safeDump(settings, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);
   download(`${document.getElementById('player-name').value}.yaml`, yamlText);
@@ -568,9 +996,12 @@ const download = (filename, text) => {
 };
 
 const generateGame = (raceMode = false) => {
+  const settings = validateSettings();
+  if (!settings) { return; }
+
   axios.post('/api/generate', {
-    weights: { player: localStorage.getItem('weighted-settings') },
-    presetData: { player: localStorage.getItem('weighted-settings') },
+    weights: { player: JSON.stringify(settings) },
+    presetData: { player: JSON.stringify(settings) },
     playerCount: 1,
     race: raceMode ? '1' : '0',
   }).then((response) => {
@@ -582,7 +1013,10 @@ const generateGame = (raceMode = false) => {
       userMessage.innerText += ' ' + error.response.data.text;
     }
     userMessage.classList.add('visible');
-    window.scrollTo(0, 0);
+    userMessage.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
     console.error(error);
   });
 };

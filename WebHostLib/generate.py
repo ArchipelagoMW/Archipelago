@@ -5,6 +5,7 @@ import json
 import zipfile
 from collections import Counter
 from typing import Dict, Optional as TypeOptional
+from Utils import __version__
 
 from flask import request, flash, redirect, url_for, session, render_template
 
@@ -78,7 +79,7 @@ def generate(race=False):
 
                     return redirect(url_for("view_seed", seed=seed_id))
 
-    return render_template("generate.html", race=race)
+    return render_template("generate.html", race=race, version=__version__)
 
 
 def gen_game(gen_options, meta: TypeOptional[Dict[str, object]] = None, owner=None, sid=None):
@@ -120,7 +121,8 @@ def gen_game(gen_options, meta: TypeOptional[Dict[str, object]] = None, owner=No
             if not erargs.name[player]:
                 erargs.name[player] = os.path.splitext(os.path.split(playerfile)[-1])[0]
             erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
-
+        if len(set(erargs.name.values())) != len(erargs.name):
+            raise Exception(f"Names have to be unique. Names: {Counter(erargs.name.values())}")
         ERmain(erargs, seed, baked_server_options=meta)
 
         return upload_to_db(target.name, sid, owner, race)

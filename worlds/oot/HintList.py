@@ -1,5 +1,7 @@
 import random
 
+from BaseClasses import LocationProgressType
+
 #   Abbreviations
 #       DMC     Death Mountain Crater
 #       DMT     Death Mountain Trail
@@ -1257,7 +1259,7 @@ def hintExclusions(world, clear_cache=False):
     world.hint_exclusions = []
 
     for location in world.get_locations():
-        if (location.locked and (location.item.type != 'Song' or world.shuffle_song_items != 'song')) or location.excluded:
+        if (location.locked and (location.item.type != 'Song' or world.shuffle_song_items != 'song')) or location.progress_type == LocationProgressType.EXCLUDED:
             world.hint_exclusions.append(location.name)
 
     world_location_names = [

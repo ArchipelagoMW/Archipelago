@@ -1,9 +1,11 @@
+import typing
+
 from BaseClasses import Dungeon
 from worlds.alttp.Bosses import BossFactory
 from Fill import fill_restrictive
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import lookup_boss_drops
-from worlds.alttp.Options import  smallkey_shuffle
+from worlds.alttp.Options import smallkey_shuffle
 
 
 def create_dungeons(world, player):
@@ -13,6 +15,7 @@ def create_dungeons(world, player):
                           dungeon_items, player)
         for item in dungeon.all_items:
             item.dungeon = dungeon
+            item.world = world
         dungeon.boss = BossFactory(default_boss, player) if default_boss else None
         for region in dungeon.regions:
             world.get_region(region, player).dungeon = dungeon
@@ -108,21 +111,15 @@ def create_dungeons(world, player):
         world.dungeons[dungeon.name, dungeon.player] = dungeon
 
 
-def get_dungeon_item_pool(world):
-    items = [item for dungeon in world.dungeons.values() for item in dungeon.all_items]
-    for item in items:
-        item.world = world
-    return items
+def get_dungeon_item_pool(world) -> typing.List:
+    return [item for dungeon in world.dungeons.values() for item in dungeon.all_items]
 
 
-def get_dungeon_item_pool_player(world, player):
-    items = [item for dungeon in world.dungeons.values() if dungeon.player == player for item in dungeon.all_items]
-    for item in items:
-        item.world = world
-    return items
+def get_dungeon_item_pool_player(world, player) -> typing.List:
+    return [item for dungeon in world.dungeons.values() if dungeon.player == player for item in dungeon.all_items]
 
 
-def fill_dungeons_restrictive(autoworld, world):
+def fill_dungeons_restrictive(world):
     """Places dungeon-native items into their dungeons, places nothing if everything is shuffled outside."""
     localized: set = set()
     dungeon_specific: set = set()

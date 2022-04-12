@@ -1,7 +1,7 @@
 from flask import session, jsonify
 
 from WebHostLib.models import *
-from . import api_endpoints
+from . import api_endpoints, get_players
 
 
 @api_endpoints.route('/get_rooms')
@@ -16,7 +16,6 @@ def get_rooms():
             "last_port": room.last_port,
             "timeout": room.timeout,
             "tracker": room.tracker,
-            "players": room.seed.multidata["names"] if room.seed.multidata else [["Singleplayer"]],
         })
     return jsonify(response)
 
@@ -28,6 +27,6 @@ def get_seeds():
         response.append({
             "seed_id": seed.id,
             "creation_time": seed.creation_time,
-            "players": seed.multidata["names"] if seed.multidata else [["Singleplayer"]],
+            "players": get_players(seed.slots),
         })
     return jsonify(response)

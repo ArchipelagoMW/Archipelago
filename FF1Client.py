@@ -18,6 +18,8 @@ CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
+DISPLAY_MSGS = True
+
 
 class FF1CommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx: CommonContext):
@@ -28,8 +30,17 @@ class FF1CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, FF1Context):
             logger.info(f"NES Status: {self.ctx.nes_status}")
 
+    def _cmd_toggle_msgs(self):
+        """Toggle displaying messages in bizhawk"""
+        global DISPLAY_MSGS
+        DISPLAY_MSGS = not DISPLAY_MSGS
+        logger.info(f"Messages are now {'enabled' if DISPLAY_MSGS  else 'disabled'}")
+
 
 class FF1Context(CommonContext):
+    command_processor = FF1CommandProcessor
+    items_handling = 0b111  # full remote
+
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
         self.nes_streams: (StreamReader, StreamWriter) = None
@@ -39,8 +50,7 @@ class FF1Context(CommonContext):
         self.nes_status = CONNECTION_INITIAL_STATUS
         self.game = 'Final Fantasy'
         self.awaiting_rom = False
-
-    command_processor = FF1CommandProcessor
+        self.display_msgs = True
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -53,7 +63,8 @@ class FF1Context(CommonContext):
         await self.send_connect()
 
     def _set_message(self, msg: str, msg_id: int):
-        self.messages[(time.time(), msg_id)] = msg
+        if DISPLAY_MSGS:
+            self.messages[(time.time(), msg_id)] = msg
 
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
@@ -213,6 +224,9 @@ async def nes_sync_task(ctx: FF1Context):
 if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
     Utils.init_logging("FF1Client")
+
+    options = Utils.get_options()
+    DISPLAY_MSGS = options["ffr_options"]["display_msgs"]
 
     async def main(args):
         ctx = FF1Context(args.connect, args.password)

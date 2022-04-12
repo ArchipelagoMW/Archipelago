@@ -32,13 +32,16 @@ manor_observatory_base   = "Manor Renovation - Observatory Base"
 manor_observatory_scope  = "Manor Renovation - Observatory Telescope"
 
 # Boss Chest Definitions
-boss_khindr              = "Khindr's Boss Chest"
-boss_alexander           = "Alexander's Boss Chest"
-boss_leon                = "Ponce de Leon's Boss Chest"
-boss_herodotus           = "Herodotus's Boss Chest"
+boss_castle              = "Castle Hamson Boss"
+boss_forest              = "Forest Abkhazia Boss"
+boss_tower               = "The Maya Boss"
+boss_dungeon             = "The Land of Darkness Boss"
 
 # Special Room Definitions
 special_jukebox          = "Jukebox"
+special_painting         = "Painting"
+special_cheapskate       = "Cheapskate Elf's Game"
+special_carnival         = "Carnival"
 
 # Shorthand Definitions
 diary                    = "Diary"

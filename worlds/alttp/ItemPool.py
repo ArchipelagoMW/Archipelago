@@ -128,7 +128,7 @@ difficulties = {
         progressiveshield=['Progressive Shield'] * 3,
         basicshield=['Blue Shield', 'Red Shield', 'Red Shield'],
         progressivearmor=['Progressive Mail'] * 2,
-        basicarmor=['Progressive Mail'] * 2,  # neither will count
+        basicarmor=['Blue Mail', 'Blue Mail'] * 2,
         swordless=['Rupees (20)'] * 4,
         progressivemagic=['Magic Upgrade (1/2)', 'Rupees (300)'],
         basicmagic=['Magic Upgrade (1/2)', 'Rupees (300)'],
@@ -158,10 +158,9 @@ difficulties = {
         bottle_count=4,
         same_bottle=False,
         progressiveshield=['Progressive Shield'] * 3,
-        basicshield=['Progressive Shield'] * 3,
-        # only the first one will upgrade, making this equivalent to two blue shields
+        basicshield=['Blue Shield', 'Blue Shield', 'Blue Shield'],
         progressivearmor=['Progressive Mail'] * 2,  # neither will count
-        basicarmor=['Progressive Mail'] * 2,  # neither will count
+        basicarmor=['Rupees (20)'] * 2,
         swordless=['Rupees (20)'] * 4,
         progressivemagic=['Magic Upgrade (1/2)', 'Rupees (300)'],
         basicmagic=['Magic Upgrade (1/2)', 'Rupees (300)'],
@@ -290,7 +289,6 @@ def generate_itempool(world):
         loc.access_rule = lambda state: state.has_triforce_pieces(state.world.treasure_hunt_count[player], player)
 
         region.locations.append(loc)
-        world.dynamic_locations.append(loc)
         world.clear_location_cache()
 
         world.push_item(loc, ItemFactory('Triforce', player), False)
@@ -474,7 +472,6 @@ def set_up_take_anys(world, player):
 
     old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave, 'the sword cave', player)
     world.regions.append(old_man_take_any)
-    world.dynamic_regions.append(old_man_take_any)
 
     reg = regions.pop()
     entrance = world.get_region(reg, player).entrances[0]
@@ -495,7 +492,6 @@ def set_up_take_anys(world, player):
     for num in range(4):
         take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave, 'a cave of choice', player)
         world.regions.append(take_any)
-        world.dynamic_regions.append(take_any)
 
         target, room_id = world.random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
         reg = regions.pop()
@@ -519,7 +515,6 @@ def create_dynamic_shop_locations(world, player):
                 if item['create_location']:
                     loc = ALttPLocation(player, f"{shop.region.name} {shop.slot_names[i]}", parent=shop.region)
                     shop.region.locations.append(loc)
-                    world.dynamic_locations.append(loc)
 
                     world.clear_location_cache()
 
@@ -550,7 +545,7 @@ def get_pool_core(world, player: int):
     pool.extend(diff.alwaysitems)
 
     def place_item(loc, item):
-        assert loc not in placed_items
+        assert loc not in placed_items, "cannot place item twice"
         placed_items[loc] = item
 
     # provide boots to major glitch dependent seeds
@@ -686,7 +681,7 @@ def make_custom_item_pool(world, player):
     treasure_hunt_icon = None
 
     def place_item(loc, item):
-        assert loc not in placed_items
+        assert loc not in placed_items, "cannot place item twice"
         placed_items[loc] = item
 
     # Correct for insanely oversized item counts and take initial steps to handle undersized pools.

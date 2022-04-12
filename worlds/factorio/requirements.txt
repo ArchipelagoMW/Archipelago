@@ -1,2 +1,1 @@
 factorio-rcon-py>=1.2.1
-schema>=0.7.4

@@ -17,7 +17,7 @@ def assemble_color_option(f, internal_name: str, func, display_name: str, defaul
 
     f.write(f"class {internal_name}(Choice):\n")
     f.write(f"    \"\"\"{docstring}\"\"\"\n")
-    f.write(f"    displayname = \"{display_name}\"\n")
+    f.write(f"    display_name = \"{display_name}\"\n")
     for color, id in color_to_id.items():
         f.write(f"    option_{color} = {id}\n")
     f.write(f"    default = {color_options.index(default_option)}")
@@ -31,7 +31,7 @@ def assemble_sfx_option(f, internal_name: str, sound_hook: sfx.SoundHooks, displ
 
     f.write(f"class {internal_name}(Choice):\n")
     f.write(f"    \"\"\"{docstring}\"\"\"\n")
-    f.write(f"    displayname = \"{display_name}\"\n")
+    f.write(f"    display_name = \"{display_name}\"\n")
     for sound, id in sfx_to_id.items():
         f.write(f"    option_{sound} = {id}\n")
     f.write(f"\n\n\n")

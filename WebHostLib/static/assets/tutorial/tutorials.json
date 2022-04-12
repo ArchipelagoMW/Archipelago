@@ -17,7 +17,36 @@
         ]
       },
       {
-        "name": "Using Advanced Settings",
+        "name": "Archipelago Website User Guide",
+        "description": "A guide to using the Archipelago website to generate multiworlds or host pre-generated multiworlds.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/using_website.md",
+            "link": "archipelago/using_website/en",
+            "authors": [
+              "alwaysintreble"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Archipelago Server and Client Commands",
+        "description": "A guide detailing the commands available to the user when participating in an Archipelago session.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "archipelago/commands_en.md",
+            "link": "archipelago/commands/en",
+            "authors": [
+              "jat2980",
+              "Ijwu"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Advanced YAML Guide",
         "description": "A guide to reading yaml files and editing them to fully customize your game.",
         "files": [
           {
@@ -25,7 +54,8 @@
             "filename": "archipelago/advanced_settings_en.md",
             "link": "archipelago/advanced_settings/en",
             "authors": [
-              "alwaysintreble"
+              "alwaysintreble",
+              "Alchav"
             ]
           }
         ]
@@ -53,7 +83,8 @@
             "filename": "archipelago/plando_en.md",
             "link": "archipelago/plando/en",
             "authors": [
-              "alwaysintreble"
+              "alwaysintreble",
+              "Alchav"
             ]
           }
         ]
@@ -195,6 +226,25 @@
     ]
   },
   {
+    "gameTitle": "Meritous",
+    "tutorials": [
+      {
+        "name": "Meritous Setup Tutorial",
+        "description": "A guide to setting up the Archipelago Meritous software on your computer.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "meritous/setup_en.md",
+            "link": "meritous/setup/en",
+            "authors": [
+              "KewlioMZX"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "gameTitle": "Minecraft",
     "tutorials": [
       {
@@ -281,6 +331,35 @@
             "link": "timespinner/setup/en",
             "authors": [
               "Jarno"
+            ]
+          },
+          {
+            "language": "German",
+            "filename": "timespinner/setup_de.md",
+            "link": "timespinner/setup/de",
+            "authors": [
+              "Grrmo",
+              "Fynxes",
+              "Blaze0168"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "SMZ3",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Archipelago Super Metroid and A Link to the Past Crossover randomizer on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "smz3/multiworld_en.md",
+            "link": "smz3/multiworld/en",
+            "authors": [
+              "lordlou"
             ]
           }
         ]
@@ -376,6 +455,82 @@
             "link": "rogue-legacy/rogue-legacy/en",
             "authors": [
               "Phar"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Slay the Spire",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up Slay the Spire for Archipelago. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "slay-the-spire/slay-the-spire_en.md",
+            "link": "slay-the-spire/slay-the-spire/en",
+            "authors": [
+              "Phar"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Super Mario 64 EX",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up SM64EX for MultiWorld.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "sm64ex/setup_en.md",
+            "link": "sm64ex/setup/en",
+            "authors": [
+              "N00byKing"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "VVVVVV",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up VVVVVV for MultiWorld.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "v6/setup_en.md",
+            "link": "v6/setup/en",
+            "authors": [
+              "N00byKing"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "ChecksFinder",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Tutorial",
+        "description": "A guide to setting up the Archipelago ChecksFinder software on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "checksfinder/checksfinder_en.md",
+            "link": "checksfinder/checksfinder/en",
+            "authors": [
+              "Mewlif"
             ]
           }
         ]

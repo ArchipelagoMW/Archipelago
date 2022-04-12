@@ -64,7 +64,7 @@ generator:
   # general weights file, within the stated player_files_path location
   # gets used if players is higher than the amount of per-player files found to fill remaining slots
   weights_file_path: "weights.yaml"
-  # Meta file name, within the stated player_files_path location, TODO: re-implement this
+  # Meta file name, within the stated player_files_path location
   meta_file_path: "meta.yaml"
   # Create a spoiler file
   # 0 -> None
@@ -111,3 +111,12 @@ oot_options:
 soe_options:
   # File name of the SoE US ROM
   rom_file: "Secret of Evermore (USA).sfc"
+ffr_options:
+  display_msgs: true
+smz3_options:
+  # Set this to your SNI folder location if you want the MultiClient to attempt an auto start, does nothing if not found
+  sni: "SNI"
+  # Set this to false to never autostart a rom (such as after patching)
+  # True for operating system default program
+  # Alternatively, a path to a program to open the .sfc file with
+  rom_start: true

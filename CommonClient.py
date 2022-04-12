@@ -118,6 +118,8 @@ class CommonContext():
     game = None
     ui = None
     keep_alive_task = None
+    items_handling: typing.Optional[int] = None
+    current_energy_link_value = 0  # to display in UI, gets set by server
 
     def __init__(self, server_address, password):
         # server state
@@ -147,7 +149,7 @@ class CommonContext():
         self.items_received = []
         self.missing_locations: typing.Set[int] = set()
         self.checked_locations: typing.Set[int] = set()  # server state
-        self.locations_info = {}
+        self.locations_info: typing.Dict[int, NetworkItem] = {}
 
         self.input_queue = asyncio.Queue()
         self.input_requests = 0
@@ -247,9 +249,9 @@ class CommonContext():
 
     async def send_connect(self, **kwargs):
         payload = {
-            "cmd": 'Connect',
+            'cmd': 'Connect',
             'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
-            'tags': self.tags,
+            'tags': self.tags, 'items_handling': self.items_handling,
             'uuid': Utils.get_unique_identifier(), 'game': self.game
         }
         if kwargs:
@@ -316,16 +318,17 @@ class CommonContext():
             logger.info(f"DeathLink: Received from {data['source']}")
 
     async def send_death(self, death_text: str = ""):
-        logger.info("DeathLink: Sending death to your friends...")
-        self.last_death_link = time.time()
-        await self.send_msgs([{
-            "cmd": "Bounce", "tags": ["DeathLink"],
-            "data": {
-                "time": self.last_death_link,
-                "source": self.player_names[self.slot],
-                "cause": death_text
-            }
-        }])
+        if self.server and self.server.socket:
+            logger.info("DeathLink: Sending death to your friends...")
+            self.last_death_link = time.time()
+            await self.send_msgs([{
+                "cmd": "Bounce", "tags": ["DeathLink"],
+                "data": {
+                    "time": self.last_death_link,
+                    "source": self.player_names[self.slot],
+                    "cause": death_text
+                }
+            }])
 
     async def update_death_link(self, death_link):
         old_tags = self.tags.copy()
@@ -440,7 +443,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             else:
                 args['players'].sort()
                 current_team = -1
-                logger.info('Players:')
+                logger.info('Connected Players:')
                 for network_player in args['players']:
                     if network_player.team != current_team:
                         logger.info(f'  Team #{network_player.team + 1}')
@@ -464,6 +467,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             raise Exception('Player slot already in use for that team')
         elif 'IncompatibleVersion' in errors:
             raise Exception('Server reported your client version as incompatible')
+        elif 'InvalidItemsHandling' in errors:
+            raise Exception('The item handling flags requested by the client are not supported')
         # last to check, recoverable problem
         elif 'InvalidPassword' in errors:
             logger.error('Invalid password')
@@ -514,9 +519,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.watcher_event.set()
 
     elif cmd == 'LocationInfo':
-        for item, location, player in args['locations']:
-            if location not in ctx.locations_info:
-                ctx.locations_info[location] = (item, player)
+        for item in [NetworkItem(*item) for item in args['locations']]:
+            ctx.locations_info[item.location] = item
         ctx.watcher_event.set()
 
     elif cmd == "RoomUpdate":
@@ -545,7 +549,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
         if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
             ctx.on_deathlink(args["data"])
-
+    elif cmd == "SetReply":
+        if args["key"] == "EnergyLink":
+            ctx.current_energy_link_value = args["value"]
+            if ctx.ui:
+                ctx.ui.set_new_energy_link_value()
     else:
         logger.debug(f"unknown command {cmd}")
 
@@ -587,8 +595,9 @@ if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
 
     class TextContext(CommonContext):
-        tags = {"AP", "IgnoreGame"}
+        tags = {"AP", "IgnoreGame", "TextOnly"}
         game = "Archipelago"
+        items_handling = 0  # don't receive any NetworkItems
 
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:

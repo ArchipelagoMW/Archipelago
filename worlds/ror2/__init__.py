@@ -23,7 +23,7 @@ class RiskOfRainWorld(World):
     item_name_to_id = item_table
     location_name_to_id = location_table
 
-    data_version = 2
+    data_version = 3
     forced_auto_forfeit = True
 
     def generate_basic(self):
@@ -73,12 +73,12 @@ class RiskOfRainWorld(World):
         itempool = []
 
         # Add revive items for the player
-        itempool += ["Dio's Best Friend"] * self.world.total_revivals[self.player]
+        itempool += ["Dio's Best Friend"] * int(self.world.total_revivals[self.player] / 100 * self.world.total_locations[self.player])
 
         # Fill remaining items with randomly generated junk
         itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
                                               k=self.world.total_locations[self.player] -
-                                                self.world.total_revivals[self.player])
+                                                int(self.world.total_revivals[self.player] / 100 * self.world.total_locations[self.player]))
 
         # Convert itempool into real items
         itempool = list(map(lambda name: self.create_item(name), itempool))

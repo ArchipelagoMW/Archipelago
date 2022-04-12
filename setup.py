@@ -3,6 +3,16 @@ import shutil
 import sys
 import sysconfig
 from pathlib import Path
+
+import ModuleUpdate
+# I don't really want to have another root directory file for a single requirement, but this special case is also jank.
+# Might move this into a cleaner solution when I think of one.
+with open("freeze_requirements.txt", "w") as f:
+    f.write("cx-Freeze>=6.9\n")
+ModuleUpdate.requirements_files.add("freeze_requirements.txt")
+ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
+ModuleUpdate.update()
+
 import cx_Freeze
 from kivy_deps import sdl2, glew
 from Utils import version_tuple
@@ -84,6 +94,8 @@ scripts = {
     "OoTAdjuster.py": ("ArchipelagoOoTAdjuster", True, icon),
     # FF1
     "FF1Client.py": ("ArchipelagoFF1Client", True, icon),
+    # ChecksFinder
+    "ChecksFinderClient.py": ("ArchipelagoChecksFinderClient", True, icon),
 }
 
 exes = []
@@ -180,3 +192,8 @@ if signtool:
 remove_sprites_from_folder(buildfolder / "data" / "sprites" / "alttpr")
 
 manifest_creation(buildfolder)
+
+if sys.platform == "win32":
+    with open("setup.ini", "w") as f:
+        min_supported_windows = "6.2.9200" if sys.version_info > (3, 9) else "6.0.6000"
+        f.write(f"[Data]\nsource_path={buildfolder}\nmin_windows={min_supported_windows}\n")

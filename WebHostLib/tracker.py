@@ -12,6 +12,7 @@ from WebHostLib import app, cache, Room
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
 from MultiServer import get_item_name_from_id, Context
+from NetUtils import SlotType
 
 alttp_icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
@@ -254,8 +255,12 @@ def get_static_room_data(room: Room):
         return result
     multidata = Context.decompress(room.seed.multidata)
     # in > 100 players this can take a bit of time and is the main reason for the cache
-    locations: Dict[int, Dict[int, Tuple[int, int]]] = multidata['locations']
+    locations: Dict[int, Dict[int, Tuple[int, int, int]]] = multidata['locations']
     names: Dict[int, Dict[int, str]] = multidata["names"]
+    groups = {}
+    if "slot_info" in multidata:
+        groups = {slot: slot_info.group_members for slot, slot_info in multidata["slot_info"].items()
+                  if slot_info.type == SlotType.group}
     seed_checks_in_area = checks_in_area.copy()
 
     use_door_tracker = False
@@ -269,12 +274,14 @@ def get_static_room_data(room: Room):
     player_checks_in_area = {playernumber: {areaname: len(multidata["checks_in_area"][playernumber][areaname])
     if areaname != "Total" else multidata["checks_in_area"][playernumber]["Total"]
                                             for areaname in ordered_areas}
-                             for playernumber in range(1, len(names[0]) + 1)}
+                             for playernumber in range(1, len(names[0]) + 1)
+                             if playernumber not in groups}
     player_location_to_area = {playernumber: get_location_table(multidata["checks_in_area"][playernumber])
-                               for playernumber in range(1, len(names[0]) + 1)}
+                               for playernumber in range(1, len(names[0]) + 1)
+                               if playernumber not in groups}
 
     result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area, \
-             multidata["precollected_items"], multidata["games"]
+             multidata["precollected_items"], multidata["games"], multidata["slot_data"], groups
     _multidata_cache[room.seed.id] = result
     return result
 
@@ -292,7 +299,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
 
     # Collect seed information and pare it down to a single player
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
-        precollected_items, games = get_static_room_data(room)
+        precollected_items, games, slot_data, groups = get_static_room_data(room)
     player_name = names[tracked_team][tracked_player - 1]
     location_to_area = player_location_to_area[tracked_player]
     inventory = collections.Counter()
@@ -317,7 +324,10 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
             # If the player does not have the item, do nothing
             for location in locations_checked:
                 if location in player_locations:
-                    item, recipient = player_locations[location]
+                    if len(player_locations[location]) == 3:
+                        item, recipient, flags = player_locations[location]
+                    else: # TODO: remove around version 0.2.5
+                        item, recipient = player_locations[location]
                     if recipient == tracked_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
                     if ms_player == tracked_player:  # a check done by the tracked player
@@ -326,7 +336,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
     specific_tracker = game_specific_trackers.get(games[tracked_player], None)
     if specific_tracker and not want_generic:
         return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                seed_checks_in_area, checks_done)
+                                seed_checks_in_area, checks_done, slot_data[tracked_player])
     else:
         return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
                                       seed_checks_in_area, checks_done)
@@ -337,9 +347,9 @@ def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
     return getPlayerTracker(tracker, tracked_team, tracked_player, True)
 
 
-def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                          inventory: Counter, team: int, player: int, player_name: str,
-                         seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
+                         seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
     # Note the presence of the triforce item
     game_state = multisave.get("client_game_state", {}).get((team, player), 0)
@@ -381,7 +391,11 @@ def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[
     player_big_key_locations = set()
     player_small_key_locations = set()
     for loc_data in locations.values():
-        for item_id, item_player in loc_data.values():
+        for values in loc_data.values():
+            if len(values) == 3:
+                item_id, item_player, flags = values
+            else: # TODO: remove around version 0.2.5
+                item_id, item_player = values
             if item_player == player:
                 if item_id in ids_big_key:
                     player_big_key_locations.add(ids_big_key[item_id])
@@ -398,9 +412,9 @@ def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[
                             **display_data)
 
 
-def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                              inventory: Counter, team: int, player: int, playerName: str,
-                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
+                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
     icons = {
         "Wooden Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d2/Wooden_Pickaxe_JE3_BE3.png",
@@ -421,7 +435,7 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
         "Bucket": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Bucket_JE2_BE2.png",
         "Bow": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/ab/Bow_%28Pull_2%29_JE1_BE1.png",
         "Shield": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c6/Shield_JE2_BE1.png",
-        "Red Bed": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/dc/Red_Bed_JE4_BE3.png",
+        "Red Bed": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/6/6a/Red_Bed_%28N%29.png",
         "Netherite Scrap": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/33/Netherite_Scrap_JE2_BE1.png",
         "Flint and Steel": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/94/Flint_and_Steel_JE4_BE2.png",
         "Enchanting Table": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/31/Enchanting_Table.gif",
@@ -429,7 +443,6 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
         "Campfire": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/91/Campfire_JE2_BE2.gif",
         "Water Bottle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/75/Water_Bottle_JE2_BE2.png",
         "Spyglass": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c1/Spyglass_JE2_BE1.png",
-        "Dragon Head": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b6/Dragon_Head.png",
     }
 
     minecraft_location_ids = {
@@ -501,9 +514,9 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
                             **display_data)
 
 
-def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                        inventory: Counter, team: int, player: int, playerName: str,
-                       seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
+                       seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
     icons = {
         "Fairy Ocarina":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/OoT_Fairy_Ocarina_Icon.png",
@@ -687,9 +700,9 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
                            **display_data)
 
 
-def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                                inventory: Counter, team: int, player: int, playerName: str,
-                               seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
+                               seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict[str, Any]) -> str:
 
     icons = {
         "Timespinner Wheel":    "https://timespinnerwiki.com/mediawiki/images/7/76/Timespinner_Wheel.png",
@@ -733,11 +746,9 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
             1337050, 1337051, 1337052, 1337053, 1337054, 1337055, 1337056, 1337057, 1337058, 1337059,
             1337060, 1337061, 1337062, 1337063, 1337064, 1337065, 1337066, 1337067, 1337068, 1337069,
             1337070, 1337071, 1337072, 1337073, 1337074, 1337075, 1337076, 1337077, 1337078, 1337079,
-            1337080, 1337081, 1337082, 1337083, 1337084, 1337085, 1337156, 1337157,          1337159, 
-            1337160, 1337161, 1337162, 1337163, 1337164, 1337165, 1337166, 1337167, 1337168, 1337169, 
-            1337170, 1337237, 1337238],
+            1337080, 1337081, 1337082, 1337083, 1337084, 1337085],
         "Past": [
-            1337086, 1337087, 1337088, 1337089,
+                                                                  1337086, 1337087, 1337088, 1337089,
             1337090, 1337091, 1337092, 1337093, 1337094, 1337095, 1337096, 1337097, 1337098, 1337099,
             1337100, 1337101, 1337102, 1337103, 1337104, 1337105, 1337106, 1337107, 1337108, 1337109,
             1337110, 1337111, 1337112, 1337113, 1337114, 1337115, 1337116, 1337117, 1337118, 1337119,
@@ -745,9 +756,30 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
             1337130, 1337131, 1337132, 1337133, 1337134, 1337135, 1337136, 1337137, 1337138, 1337139,
             1337140, 1337141, 1337142, 1337143, 1337144, 1337145, 1337146, 1337147, 1337148, 1337149,
             1337150, 1337151, 1337152, 1337153, 1337154, 1337155,
-            1337171, 1337172, 1337173, 1337174, 1337175, 1337176],
-        "Ancient Pyramid": [1337246, 1337247, 1337248, 1337249]
+                     1337171, 1337172, 1337173, 1337174, 1337175],
+        "Ancient Pyramid": [
+                                                                  1337236, 
+                                                                  1337246, 1337247, 1337248, 1337249]
     }
+
+    if(slot_data["DownloadableItems"]):
+        timespinner_location_ids["Present"] += [
+                                                                  1337156, 1337157,          1337159,
+            1337160, 1337161, 1337162, 1337163, 1337164, 1337165, 1337166, 1337167, 1337168, 1337169, 
+            1337170]
+    if(slot_data["Cantoran"]):
+        timespinner_location_ids["Past"].append(1337176)
+    if(slot_data["LoreChecks"]):
+        timespinner_location_ids["Present"] += [
+                                                                           1337177, 1337178, 1337179, 
+            1337180, 1337181, 1337182, 1337183, 1337184, 1337185, 1337186, 1337187]
+        timespinner_location_ids["Past"] += [
+                                                                                    1337188, 1337189,
+            1337190, 1337191, 1337192, 1337193, 1337194, 1337195, 1337196, 1337197, 1337198]
+    if(slot_data["GyreArchives"]):
+        timespinner_location_ids["Ancient Pyramid"] += [
+                                                                           1337237, 1337238, 1337239,
+            1337240, 1337241, 1337242, 1337243, 1337244, 1337245]
 
     display_data = {}
 
@@ -765,18 +797,18 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
     checks_done['Total'] = len(checked_locations)
     checks_in_area = {tab_name: len(tab_locations) for tab_name, tab_locations in timespinner_location_ids.items()}
     checks_in_area['Total'] = sum(checks_in_area.values())
+    acquired_items = {lookup_any_item_id_to_name[id] for id in inventory if id in lookup_any_item_id_to_name}
+    options = {k for k, v in slot_data.items() if v}
 
     return render_template("timespinnerTracker.html",
-                            inventory=inventory, icons=icons,
-                            acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
-                                            id in lookup_any_item_id_to_name},
+                            inventory=inventory, icons=icons, acquired_items=acquired_items,
                             player=player, team=team, room=room, player_name=playerName,
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
-                            **display_data)
+                            options=options, **display_data)
 
-def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                                 inventory: Counter, team: int, player: int, playerName: str,
-                                seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
+                                seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
     icons = {
         "Energy Tank":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/ETank.png",
@@ -875,17 +907,19 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
-def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int]]],
+def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                            inventory: Counter, team: int, player: int, playerName: str,
                            seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set())
     player_received_items = {}
+    if multisave.get('version', 0) > 0:
+        # add numbering to all items but starter_inventory
+        ordered_items = multisave.get('received_items', {}).get((team, player, True), [])
+    else:
+        ordered_items = multisave.get('received_items', {}).get((team, player), [])
 
-    for order_index, networkItem in enumerate(
-            multisave.get('received_items', {}).get((team, player), []),
-            start=1
-    ):
+    for order_index, networkItem in enumerate(ordered_items, start=1):
         player_received_items[networkItem.item] = order_index
 
     return render_template("genericTracker.html",
@@ -903,13 +937,13 @@ def getTracker(tracker: UUID):
     if not room:
         abort(404)
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
-        precollected_items, games = get_static_room_data(room)
+        precollected_items, games, slot_data, groups = get_static_room_data(room)
 
-    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
+    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1) if playernumber not in groups}
                  for teamnumber, team in enumerate(names)}
 
     checks_done = {teamnumber: {playernumber: {loc_name: 0 for loc_name in default_locations}
-                                for playernumber in range(1, len(team) + 1)}
+                                for playernumber in range(1, len(team) + 1) if playernumber not in groups}
                    for teamnumber, team in enumerate(names)}
 
     hints = {team: set() for team in range(len(names))}
@@ -922,6 +956,8 @@ def getTracker(tracker: UUID):
             hints[team] |= set(slot_hints)
 
     for (team, player), locations_checked in multisave.get("location_checks", {}).items():
+        if player in groups:
+            continue
         player_locations = locations[player]
         if precollected_items:
             precollected = precollected_items[player]
@@ -931,27 +967,37 @@ def getTracker(tracker: UUID):
             if location not in player_locations or location not in player_location_to_area[player]:
                 continue
 
-            item, recipient = player_locations[location]
+            if len(player_locations[location]) == 3:
+                item, recipient, flags = player_locations[location]
+            else: # TODO: remove around version 0.2.5
+                item, recipient = player_locations[location]
+
             attribute_item(inventory, team, recipient, item)
             checks_done[team][player][player_location_to_area[player][location]] += 1
             checks_done[team][player]["Total"] += 1
 
     for (team, player), game_state in multisave.get("client_game_state", {}).items():
+        if player in groups:
+            continue
         if game_state == 30:
             inventory[team][player][106] = 1  # Triforce
 
-    player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
-    player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
+    player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1) if playernumber not in groups}
+    player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1) if playernumber not in groups}
     for loc_data in locations.values():
-        for item_id, item_player in loc_data.values():
+         for values in loc_data.values():
+            if len(values) == 3:
+                item_id, item_player, flags = values
+            else: # TODO: remove around version 0.2.5
+                item_id, item_player = values
+
             if item_id in ids_big_key:
                 player_big_key_locations[item_player].add(ids_big_key[item_id])
             elif item_id in ids_small_key:
                 player_small_key_locations[item_player].add(ids_small_key[item_id])
-
     group_big_key_locations = set()
     group_key_locations = set()
-    for player in range(1, len(names[0]) + 1):
+    for player in [player for player in range(1, len(names[0]) + 1) if player not in groups]:
         group_key_locations |= player_small_key_locations[player]
         group_big_key_locations |= player_big_key_locations[player]
 
