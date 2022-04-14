@@ -123,7 +123,7 @@ Name: "{commondesktop}\{#MyAppName} Undertale Client"; Filename: "{app}\Archipel
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
 Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: client/sni/lttp or generator/lttp
 Filename: "{app}\ArchipelagoMinecraftClient.exe"; Parameters: "--install"; StatusMsg: "Installing Forge Server..."; Components: client/minecraft
-Filename: "{app}\ArchipelagoUndertaleClient.exe"; Parameters: "--install {code:GetUndertalePath}"; StatusMsg: "Patching Undertale..."; Components: client/ut
+Filename: "{app}\ArchipelagoUndertaleClient.exe"; Parameters: "--install ""{code:GetUndertalePath}"""; StatusMsg: "Patching Undertale..."; Components: client/ut
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"
@@ -385,7 +385,7 @@ begin
     end
       else
     begin
-      utpath := 'C:\your\default\path';
+      utpath := 'C:\Program Files (x86)\Steam\steamapps\common\Undertale';
       Log('No installation detected, using the default path: ' + utpath);
     end;
   end;

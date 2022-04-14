@@ -121,6 +121,7 @@ class CommonContext():
     command_processor: int = ClientCommandProcessor
     game = None
     ui = None
+    route = None
     keep_alive_task = None
     items_handling: typing.Optional[int] = None
     current_energy_link_value = 0  # to display in UI, gets set by server
@@ -196,6 +197,10 @@ class CommonContext():
                 if file.find("check") > -1:
                     os.remove(root+"/"+file)
                 elif file.find(".item") > -1:
+                    os.remove(root+"/"+file)
+                elif file.find(".victory") > -1:
+                    os.remove(root+"/"+file)
+                elif file.find(".route") > -1:
                     os.remove(root+"/"+file)
 
     # noinspection PyAttributeOutsideInit
@@ -321,11 +326,13 @@ class CommonContext():
         path = os.path.expandvars(r"%localappdata%/UNDERTALE")
         for root, dirs, files in os.walk(path):
             for file in files:
-                if file.find(".spot") > -1:
+                if file.find("check") > -1:
                     os.remove(root+"/"+file)
                 elif file.find(".item") > -1:
                     os.remove(root+"/"+file)
                 elif file.find(".victory") > -1:
+                    os.remove(root+"/"+file)
+                elif file.find(".route") > -1:
                     os.remove(root+"/"+file)
 
     # DeathLink hooks
@@ -498,13 +505,16 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             await ctx.send_msgs(msgs)
         if ctx.finished_game:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-
         # Get the server side view of missing as of time of connecting.
         # This list is used to only send to the server what is reported as ACTUALLY Missing.
         # This also serves to allow an easy visual of what locations were already checked previously
         # when /missing is used for the client side view of what is missing.
         ctx.missing_locations = set(args["missing_locations"])
         ctx.checked_locations = set(args["checked_locations"])
+        ctx.route = args["slot_data"]['route']
+        filename = f"{ctx.route}.route"
+        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
+            f.close()
         for ss in ctx.checked_locations:
             filename = f"check {ss-12000}.spot"
             with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
@@ -594,7 +604,7 @@ async def game_watcher(ctx: CommonContext):
                     st = file.split("check ", -1)[1]
                     st = st.split(".spot", -1)[0]
                     sending = sending+[(int(st))+12000]
-                if file.find("victory") > -1:
+                if file.find("victory") > -1 and file.find(str(ctx.route)) > -1:
                     victory = True
         ctx.locations_checked = sending
         message = [{"cmd": 'LocationChecks', "locations": sending}]
@@ -677,9 +687,8 @@ if __name__ == '__main__':
         help="Patch the vanilla game for randomization. Does not launch the client afterwards.")
 
     args, rest = parser.parse_known_args()
-    print(args.install)
     if args.install != "":
-        print("Patching Undertale")
+        logging.info("Patching Undertale")
         if os.path.exists(os.getcwd() + r"/Undertale"):
             path = os.getcwd() + r"/Undertale"
             for root, dirs, files in os.walk(path):
@@ -688,8 +697,8 @@ if __name__ == '__main__':
             os.removedirs(os.getcwd() + r"/Undertale")
         if not os.path.exists(os.getcwd() + r"/Undertale"):
             os.mkdir(os.getcwd() + r"/Undertale")
+        logging.info(args.install)
         copier(args.install+"/data.win", os.getcwd() + r"/Undertale/data.win")
-        print(args.install)
         bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
         sys.exit(0)
 
