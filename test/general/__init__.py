@@ -1,6 +1,6 @@
 from argparse import Namespace
 
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, CollectionState
 from worlds.AutoWorld import call_all
 
 gen_steps = ["generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill"]

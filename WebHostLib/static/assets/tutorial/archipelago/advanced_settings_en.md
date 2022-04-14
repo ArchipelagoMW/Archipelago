@@ -1,13 +1,12 @@
 # Advanced YAML Guide
 
-This guide covers more the more advanced options available in YAML files. This guide is intended for the user who is
-intent on editing their YAML file manually. This guide should take about 10 minutes to read.
+This guide covers more the more advanced options available in YAML files. This guide is intended for the user who is intent on editing their YAML file manually. This guide should take about 10 minutes to read.
 
-If you would like to generate a basic, fully playable, YAML without editing a file then visit the settings page for the
-game you intend to play.
+If you would like to generate a basic, fully playable, YAML without editing a file then visit the settings page for the game you intend to play. The weighted settings page can also handle most of the advanced settings discussed here.
 
-The settings page can be found on the supported games page, just click the "Settings Page" link under the name of the
-game you would like. Supported games page: [Archipelago Games List](https://archipelago.gg/games)
+The settings page can be found on the supported games page, just click the "Settings Page" link under the name of the game you would like. 
+* Supported games page: [Archipelago Games List](/games)
+* Weighted settings page: [Archipelago Weighted Settings](/weighted-settings)
 
 Clicking on the "Export Settings" button at the bottom-left will provide you with a pre-filled YAML with your options.
 The player settings page also has an option to download a fully filled out yaml containing every option with every

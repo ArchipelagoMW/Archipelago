@@ -172,7 +172,7 @@
       "name": "Sea Treader's Path Wreck - Outside Databox" },
 
     { "id": 33043, "position": { "x": -1129.5, "y": -155.2, "z": -729.3},
-      "need_laser_cutter": false, "can_slip_through": false,
+      "need_laser_cutter": true, "can_slip_through": false,
       "name": "Sea Treader's Path Wreck - Hangar Databox" },
 
     { "id": 33044, "position": { "x": -1115.9, "y": -175.3, "z": -724.5},

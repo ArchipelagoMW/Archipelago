@@ -3,7 +3,7 @@ import typing
 
 from ..AutoWorld import World
 
-from BaseClasses import Region, Entrance, Location, Item
+from BaseClasses import Region, Entrance, Location, Item, RegionType
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, rocket_recipes, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
@@ -33,7 +33,7 @@ class Factorio(World):
     """
     game: str = "Factorio"
     static_nodes = {"automation", "logistics", "rocket-silo"}
-    custom_recipes = {}
+    custom_recipes: typing.Dict[str, Recipe]
     advancement_technologies: typing.Set[str]
 
     item_name_to_id = all_items
@@ -46,6 +46,7 @@ class Factorio(World):
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
         self.advancement_technologies = set()
+        self.custom_recipes = {}
 
     def generate_basic(self):
         player = self.player
@@ -80,10 +81,10 @@ class Factorio(World):
 
     def create_regions(self):
         player = self.player
-        menu = Region("Menu", None, "Menu", player, self.world)
+        menu = Region("Menu", RegionType.Generic, "Menu", player, self.world)
         crash = Entrance(player, "Crash Land", menu)
         menu.exits.append(crash)
-        nauvis = Region("Nauvis", None, "Nauvis", player, self.world)
+        nauvis = Region("Nauvis", RegionType.Generic, "Nauvis", player, self.world)
 
         skip_silo = self.world.silo[self.player].value == Silo.option_spawn
         for tech_name, tech_id in base_tech_table.items():
@@ -174,7 +175,7 @@ class Factorio(World):
         return super(Factorio, self).collect_item(state, item, remove)
 
     def get_required_client_version(self) -> tuple:
-        return max((0, 2, 1), super(Factorio, self).get_required_client_version())
+        return max((0, 2, 6), super(Factorio, self).get_required_client_version())
 
     options = factorio_options
 
@@ -200,10 +201,10 @@ class Factorio(World):
             new_ingredient = pool.pop()
             if new_ingredient in liquids:
                 while liquids_used == allow_liquids and new_ingredient in liquids:
-                    # liquids already at max for current recipe. Return the liquid to the pool, shuffle, and get a new ingredient.
+                    # liquids already at max for current recipe.
+                    # Return the liquid to the pool and get a new ingredient.
                     pool.append(new_ingredient)
-                    self.world.random.shuffle(pool)
-                    new_ingredient = pool.pop()
+                    new_ingredient = pool.pop(0)
                 liquids_used += 1
             new_ingredients[new_ingredient] = 1
         return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
@@ -213,7 +214,7 @@ class Factorio(World):
             Recipe:
         """Generate a recipe from pool with time and cost similar to original * factor"""
         new_ingredients = {}
-        self.world.random.shuffle(pool)
+        pool = sorted(pool, key=lambda x: self.world.random.random())
         target_raw = int(sum((count for ingredient, count in original.base_cost.items())) * factor)
         target_energy = original.total_energy * factor
         target_num_ingredients = len(original.ingredients)
@@ -332,7 +333,7 @@ class Factorio(World):
                 valid_pool += sorted(science_pack_pools[pack])
 
             if self.world.silo[self.player].value == Silo.option_randomize_recipe:
-                new_recipe = self.make_balanced_recipe(recipes["rocket-silo"], valid_pool.copy(),
+                new_recipe = self.make_balanced_recipe(recipes["rocket-silo"], valid_pool,
                                                        factor=(self.world.max_science_pack[self.player].value + 1) / 7)
                 self.custom_recipes["rocket-silo"] = new_recipe
 
@@ -340,6 +341,14 @@ class Factorio(World):
                 new_recipe = self.make_balanced_recipe(recipes["satellite"], valid_pool,
                                                        factor=(self.world.max_science_pack[self.player].value + 1) / 7)
                 self.custom_recipes["satellite"] = new_recipe
+        bridge = "ap-energy-bridge"
+        new_recipe = self.make_quick_recipe(
+            Recipe(bridge, "crafting", {"replace_1": 1, "replace_2": 1, "replace_3": 1},
+                   {bridge: 1}, 10),
+            sorted(science_pack_pools[self.world.max_science_pack[self.player].get_ordered_science_packs()[0]]))
+        for ingredient_name in new_recipe.ingredients:
+            new_recipe.ingredients[ingredient_name] = self.world.random.randint(10, 100)
+        self.custom_recipes[bridge] = new_recipe
 
         needed_recipes = self.world.max_science_pack[self.player].get_allowed_packs() | {"rocket-part"}
         if self.world.silo[self.player] != Silo.option_spawn:

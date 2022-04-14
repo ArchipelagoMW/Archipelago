@@ -1546,7 +1546,7 @@ def patch_rom(world, rom, player, enemized):
         "Skull Woods": 0x0080,
         "Swamp Palace": 0x0400,
         "Ice Palace": 0x0040,
-        "Misery Mire'": 0x0100,
+        "Misery Mire": 0x0100,
         "Turtle Rock": 0x0008,
     }
 
@@ -2901,6 +2901,16 @@ hash_alphabet = [
     "Lamp", "Hammer", "Shovel", "Flute", "Bug Net", "Book", "Bottle", "Potion", "Cane", "Cape", "Mirror", "Boots",
     "Gloves", "Flippers", "Pearl", "Shield", "Tunic", "Heart", "Map", "Compass", "Key"
 ]
+
+
+class LttPDeltaPatch(Patch.APDeltaPatch):
+    hash = JAP10HASH
+    game = "A Link to the Past"
+    patch_file_ending = ".aplttp"
+
+    @classmethod
+    def get_source_data(cls) -> bytes:
+        return get_base_rom_bytes()
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:

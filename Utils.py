@@ -24,7 +24,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.2.4"
+__version__ = "0.2.6"
 version_tuple = tuplize_version(__version__)
 
 from yaml import load, dump, SafeLoader
@@ -72,7 +72,7 @@ def is_frozen() -> bool:
     return getattr(sys, 'frozen', False)
 
 
-def local_path(*path):
+def local_path(*path: str):
     if local_path.cached_path:
         return os.path.join(local_path.cached_path, *path)
 
@@ -182,7 +182,7 @@ def get_default_options() -> dict:
             "output_path": "output",
         },
         "factorio_options": {
-            "executable": "factorio\\bin\\x64\\factorio",
+            "executable": os.path.join("factorio", "bin", "x64", "factorio"),
         },
         "sm_options": {
             "rom_file": "Super Metroid (JU).sfc",
@@ -219,7 +219,7 @@ def get_default_options() -> dict:
         },
         "generator": {
             "teams": 1,
-            "enemizer_path": "EnemizerCLI/EnemizerCLI.Core.exe",
+            "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core.exe"),
             "player_files_path": "Players",
             "players": 0,
             "weights_file_path": "weights.yaml",
@@ -438,11 +438,22 @@ def stream_input(stream, queue):
 
 def tkinter_center_window(window: Tk):
     window.update()
-    xPos = int(window.winfo_screenwidth()/2 - window.winfo_reqwidth()/2)
-    yPos = int(window.winfo_screenheight()/2 - window.winfo_reqheight()/2)
+    xPos = int(window.winfo_screenwidth() / 2 - window.winfo_reqwidth() / 2)
+    yPos = int(window.winfo_screenheight() / 2 - window.winfo_reqheight() / 2)
     window.geometry("+{}+{}".format(xPos, yPos))
 
-    
+
 class VersionException(Exception):
     pass
 
+
+def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")):
+    n = 0
+
+    while value > power:
+        value /= power
+        n += 1
+    if type(value) == int:
+        return f"{value} {power_labels[n]}"
+    else:
+        return f"{value:0.3f} {power_labels[n]}"

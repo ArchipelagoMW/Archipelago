@@ -66,7 +66,8 @@ class MinecraftWorld(World):
             for struct_name in structures:
                 itempool.append(f"Structure Compass ({struct_name})")
         # Add dragon egg shards
-        itempool += ["Dragon Egg Shard"] * self.world.egg_shards_available[self.player]
+        if self.world.egg_shards_required[self.player] > 0:
+            itempool += ["Dragon Egg Shard"] * self.world.egg_shards_available[self.player]
         # Add bee traps if desired
         bee_trap_quantity = ceil(self.world.bee_traps[self.player] * (len(self.location_names)-len(itempool)) * 0.01)
         itempool += ["Bee Trap (Minecraft)"] * bee_trap_quantity

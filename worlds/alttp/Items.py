@@ -1,6 +1,7 @@
 import typing
 
-def GetBeemizerItem(world, player, item):
+
+def GetBeemizerItem(world, player: int, item):
     item_name = item if isinstance(item, str) else item.name
 
     if item_name not in trap_replaceable:
@@ -15,6 +16,7 @@ def GetBeemizerItem(world, player, item):
         return "Bee" if isinstance(item, str) else world.create_item("Bee", player)
     else:
         return "Bee Trap" if isinstance(item, str) else world.create_item("Bee Trap", player)        
+
 
 # should be replaced with direct world.create_item(item) call in the future
 def ItemFactory(items, player: int):
@@ -34,6 +36,7 @@ def ItemFactory(items, player: int):
     if singleton:
         return ret[0]
     return ret
+
 
 class ItemData(typing.NamedTuple):
     advancement: bool
@@ -139,59 +142,59 @@ item_table = {'Bow': ItemData(True, None, 0x0B, 'You have\nchosen the\narcher cl
               'Multi RNG': ItemData(False, None, 0x63, 'something you may already have', None, None, None, None, 'unknown boy somethings again', 'a total mystery'),
               'Magic Upgrade (1/2)': ItemData(True, None, 0x4E, 'Your magic\npower has been\ndoubled!', 'and the spell power', 'the magic-saving kid', 'wizardry for sale', 'mekalekahi mekahiney ho', 'magic boy saves magic again', 'Half Magic'),  # can be required to beat mothula in an open seed in very very rare circumstance
               'Magic Upgrade (1/4)': ItemData(True, None, 0x4F, 'Your magic\npower has been\nquadrupled!', 'and the spell power', 'the magic-saving kid', 'wizardry for sale', 'mekalekahi mekahiney ho', 'magic boy saves magic again', 'Quarter Magic'),  # can be required to beat mothula in an open seed in very very rare circumstance
-              'Small Key (Eastern Palace)': ItemData(True, 'SmallKey', 0xA2, 'A small key to Armos Knights', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Eastern Palace'),
-              'Big Key (Eastern Palace)': ItemData(True, 'BigKey', 0x9D, 'A big key to Armos Knights', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Eastern Palace'),
-              'Compass (Eastern Palace)': ItemData(False, 'Compass', 0x8D, 'Now you can find the Armos Knights!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Eastern Palace'),
+              'Small Key (Eastern Palace)': ItemData(True, 'SmallKey', 0xA2, 'A small key to the eastern palace', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Eastern Palace'),
+              'Big Key (Eastern Palace)': ItemData(True, 'BigKey', 0x9D, 'A big key to the eastern palace', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Eastern Palace'),
+              'Compass (Eastern Palace)': ItemData(False, 'Compass', 0x8D, 'Now you can find the the boss of the eastern palace!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Eastern Palace'),
               'Map (Eastern Palace)': ItemData(False, 'Map', 0x7D, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Eastern Palace'),
               'Small Key (Desert Palace)': ItemData(True, 'SmallKey', 0xA3, 'A small key to the desert', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Desert Palace'),
               'Big Key (Desert Palace)': ItemData(True, 'BigKey', 0x9C, 'A big key to the desert', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Desert Palace'),
-              'Compass (Desert Palace)': ItemData(False, 'Compass', 0x8C, 'Now you can find Lanmolas!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Desert Palace'),
+              'Compass (Desert Palace)': ItemData(False, 'Compass', 0x8C, 'Now you can find the boss of the desert!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Desert Palace'),
               'Map (Desert Palace)': ItemData(False, 'Map', 0x7C, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Desert Palace'),
               'Small Key (Tower of Hera)': ItemData(True, 'SmallKey', 0xAA, 'A small key to Hera', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Tower of Hera'),
               'Big Key (Tower of Hera)': ItemData(True, 'BigKey', 0x95, 'A big key to Hera', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Tower of Hera'),
-              'Compass (Tower of Hera)': ItemData(False, 'Compass', 0x85, 'Now you can find Moldorm!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Tower of Hera'),
+              'Compass (Tower of Hera)': ItemData(False, 'Compass', 0x85, 'Now you can find the boss of Hera!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Tower of Hera'),
               'Map (Tower of Hera)': ItemData(False, 'Map', 0x75, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Tower of Hera'),
               'Small Key (Hyrule Castle)': ItemData(True, 'SmallKey', 0xA0, 'A small key to the castle', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Hyrule Castle'),
               'Big Key (Hyrule Castle)': ItemData(True, 'BigKey', 0x9F, 'A big key to the castle', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Hyrule Castle'),
               'Compass (Hyrule Castle)': ItemData(False, 'Compass', 0x8F, 'Now you can find no boss!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Hyrule Castle'),
               'Map (Hyrule Castle)': ItemData(False, 'Map', 0x7F, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Hyrule Castle'),
-              'Small Key (Agahnims Tower)': ItemData(True, 'SmallKey', 0xA4, 'A small key to Agahnim', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Castle Tower'),
+              'Small Key (Agahnims Tower)': ItemData(True, 'SmallKey', 0xA4, 'A small key to the castle tower', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Castle Tower'),
               # doors-specific items, baserom will not be able to understand these
-              'Big Key (Agahnims Tower)': ItemData(True, 'BigKey', 0x9B, 'A big key to Agahnim', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Castle Tower'),
-              'Compass (Agahnims Tower)': ItemData(False, 'Compass', 0x8B, 'Now you can find Aga1!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds null again', 'a compass to Castle Tower'),
+              'Big Key (Agahnims Tower)': ItemData(True, 'BigKey', 0x9B, 'A big key to the castle tower', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Castle Tower'),
+              'Compass (Agahnims Tower)': ItemData(False, 'Compass', 0x8B, 'Now you can find the boss of the castle tower!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds null again', 'a compass to Castle Tower'),
               'Map (Agahnims Tower)': ItemData(False, 'Map', 0x7B, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Castle Tower'),
               # end of doors-specific items
               'Small Key (Palace of Darkness)': ItemData(True, 'SmallKey', 0xA6, 'A small key to darkness', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Palace of Darkness'),
               'Big Key (Palace of Darkness)': ItemData(True, 'BigKey', 0x99, 'A big key to darkness', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Palace of Darkness'),
-              'Compass (Palace of Darkness)': ItemData(False, 'Compass', 0x89, 'Now you can find Helmasaur King!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Palace of Darkness'),
+              'Compass (Palace of Darkness)': ItemData(False, 'Compass', 0x89, 'Now you can find the boss of darkness!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Palace of Darkness'),
               'Map (Palace of Darkness)': ItemData(False, 'Map', 0x79, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Palace of Darkness'),
               'Small Key (Thieves Town)': ItemData(True, 'SmallKey', 0xAB, 'A small key to thievery', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Thieves\' Town'),
               'Big Key (Thieves Town)': ItemData(True, 'BigKey', 0x94, 'A big key to thievery', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Thieves\' Town'),
-              'Compass (Thieves Town)': ItemData(False, 'Compass', 0x84, 'Now you can find Blind!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Thieves\' Town'),
+              'Compass (Thieves Town)': ItemData(False, 'Compass', 0x84, 'Now you can find the boss of thievery!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Thieves\' Town'),
               'Map (Thieves Town)': ItemData(False, 'Map', 0x74, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Thieves\' Town'),
               'Small Key (Skull Woods)': ItemData(True, 'SmallKey', 0xA8, 'A small key to the woods', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Skull Woods'),
               'Big Key (Skull Woods)': ItemData(True, 'BigKey', 0x97, 'A big key to the woods', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Skull Woods'),
-              'Compass (Skull Woods)': ItemData(False, 'Compass', 0x87, 'Now you can find Mothula!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Skull Woods'),
+              'Compass (Skull Woods)': ItemData(False, 'Compass', 0x87, 'Now you can find the boss of the woods!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Skull Woods'),
               'Map (Skull Woods)': ItemData(False, 'Map', 0x77, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Skull Woods'),
               'Small Key (Swamp Palace)': ItemData(True, 'SmallKey', 0xA5, 'A small key to the swamp', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Swamp Palace'),
               'Big Key (Swamp Palace)': ItemData(True, 'BigKey', 0x9A, 'A big key to the swamp', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Swamp Palace'),
-              'Compass (Swamp Palace)': ItemData(False, 'Compass', 0x8A, 'Now you can find Arrghus!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Swamp Palace'),
+              'Compass (Swamp Palace)': ItemData(False, 'Compass', 0x8A, 'Now you can find the boss of the swamp!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Swamp Palace'),
               'Map (Swamp Palace)': ItemData(False, 'Map', 0x7A, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Swamp Palace'),
               'Small Key (Ice Palace)': ItemData(True, 'SmallKey', 0xA9, 'A small key to the iceberg', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Ice Palace'),
               'Big Key (Ice Palace)': ItemData(True, 'BigKey', 0x96, 'A big key to the iceberg', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Ice Palace'),
-              'Compass (Ice Palace)': ItemData(False, 'Compass', 0x86, 'Now you can find Kholdstare!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Ice Palace'),
+              'Compass (Ice Palace)': ItemData(False, 'Compass', 0x86, 'Now you can find the boss of the iceberg!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Ice Palace'),
               'Map (Ice Palace)': ItemData(False, 'Map', 0x76, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Ice Palace'),
               'Small Key (Misery Mire)': ItemData(True, 'SmallKey', 0xA7, 'A small key to the mire', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Misery Mire'),
               'Big Key (Misery Mire)': ItemData(True, 'BigKey', 0x98, 'A big key to the mire', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Misery Mire'),
-              'Compass (Misery Mire)': ItemData(False, 'Compass', 0x88, 'Now you can find Vitreous!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Misery Mire'),
+              'Compass (Misery Mire)': ItemData(False, 'Compass', 0x88, 'Now you can find the boss of the mire!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Misery Mire'),
               'Map (Misery Mire)': ItemData(False, 'Map', 0x78, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Misery Mire'),
               'Small Key (Turtle Rock)': ItemData(True, 'SmallKey', 0xAC, 'A small key to the pipe maze', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Turtle Rock'),
               'Big Key (Turtle Rock)': ItemData(True, 'BigKey', 0x93, 'A big key to the pipe maze', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Turtle Rock'),
-              'Compass (Turtle Rock)': ItemData(False, 'Compass', 0x83, 'Now you can find Trinexx!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Turtle Rock'),
+              'Compass (Turtle Rock)': ItemData(False, 'Compass', 0x83, 'Now you can find the boss of the pipe maze!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Turtle Rock'),
               'Map (Turtle Rock)': ItemData(False, 'Map', 0x73, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Turtle Rock'),
               'Small Key (Ganons Tower)': ItemData(True, 'SmallKey', 0xAD, 'A small key to the evil tower', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Ganon\'s Tower'),
               'Big Key (Ganons Tower)': ItemData(True, 'BigKey', 0x92, 'A big key to the evil tower', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Ganon\'s Tower'),
-              'Compass (Ganons Tower)': ItemData(False, 'Compass', 0x82, 'Now you can find Agahnim!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Ganon\'s Tower'),
+              'Compass (Ganons Tower)': ItemData(False, 'Compass', 0x82, 'Now you can find the boss of the evil tower!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Ganon\'s Tower'),
               'Map (Ganons Tower)': ItemData(False, 'Map', 0x72, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Ganon\'s Tower'),
               'Small Key (Universal)': ItemData(False, None, 0xAF, 'A small key for any door', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key'),
               'Nothing': ItemData(False, None, 0x5A, 'Some Hot Air', 'and the Nothing', 'the zen kid', 'outright theft', 'shroom theft', 'empty boy is bored again', 'nothing'),

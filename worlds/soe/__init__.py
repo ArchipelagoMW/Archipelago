@@ -3,7 +3,6 @@ from ..generic.Rules import set_rule, add_item_rule
 from BaseClasses import Region, Location, Entrance, Item
 from Utils import get_options, output_path
 import typing
-import lzma
 import os
 import os.path
 import threading
@@ -17,7 +16,7 @@ except ImportError:
 
 from . import Logic  # load logic mixin
 from .Options import soe_options
-from .Patch import generate_patch
+from .Patch import SoEDeltaPatch, get_base_rom_path
 
 """
 In evermizer:
@@ -168,7 +167,7 @@ class SoEWorld(World):
         self.world.get_location(wings_location, self.player).place_locked_item(wings_item)
         self.world.itempool.remove(wings_item)
         # generate stuff for later
-        self.evermizer_seed = self.world.random.randint(0, 2**16-1)  # TODO: make this an option for "full" plando?
+        self.evermizer_seed = self.world.random.randint(0, 2 ** 16 - 1)  # TODO: make this an option for "full" plando?
 
     def generate_output(self, output_directory: str):
         player_name = self.world.get_player_name(self.player)
@@ -181,7 +180,7 @@ class SoEWorld(World):
         try:
             money = self.world.money_modifier[self.player].value
             exp = self.world.exp_modifier[self.player].value
-            rom_file = get_options()['soe_options']['rom_file']
+            rom_file = get_base_rom_path()
             out_base = output_path(output_directory, f'AP_{self.world.seed_name}_P{self.player}_{player_name}')
             out_file = out_base + '.sfc'
             placement_file = out_base + '.txt'
@@ -210,20 +209,16 @@ class SoEWorld(World):
             if (pyevermizer.main(rom_file, out_file, placement_file, self.world.seed_name, self.connect_name,
                                  self.evermizer_seed, flags, money, exp)):
                 raise RuntimeError()
-            with lzma.LZMAFile(patch_file, 'wb') as f:
-                f.write(generate_patch(rom_file, out_file,
-                                       {
-                                           # used by WebHost
-                                           "player_name": self.world.player_name[self.player],
-                                           "player_id": self.player
-                                       }))
+            patch = SoEDeltaPatch(patch_file, player=self.player,
+                                  player_name=player_name, patched_path=out_file)
+            patch.write()
         except:
             raise
         finally:
             try:
                 os.unlink(placement_file)
                 os.unlink(out_file)
-                os.unlink(out_file[:-4]+'_SPOILER.log')
+                os.unlink(out_file[:-4] + '_SPOILER.log')
             except:
                 pass
 
@@ -234,7 +229,6 @@ class SoEWorld(World):
         if self.connect_name and self.connect_name != self.world.player_name[self.player]:
             payload = multidata["connect_names"][self.world.player_name[self.player]]
             multidata["connect_names"][self.connect_name] = payload
-
 
 
 class SoEItem(Item):

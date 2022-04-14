@@ -10,7 +10,8 @@ locBoB_table = {
     "BoB: Shoot to the Island in the Sky": 3626002,
     "BoB: Find the 8 Red Coins": 3626003,
     "BoB: Mario Wings to the Sky": 3626004,
-    "BoB: Behind Chain Chomp's Gate": 3626005
+    "BoB: Behind Chain Chomp's Gate": 3626005,
+    "BoB: Bob-omb Buddy": 3626200,
 }
 
 #Whomp's Fortress
@@ -20,7 +21,8 @@ locWhomp_table = {
     "WF: Shoot into the Wild Blue": 3626009,
     "WF: Red Coins on the Floating Isle": 3626010,
     "WF: Fall onto the Caged Island": 3626011,
-    "WF: Blast Away the Wall": 3626012
+    "WF: Blast Away the Wall": 3626012,
+    "WF: Bob-omb Buddy": 3626201,
 }
 
 #Jolly Roger Bay
@@ -30,7 +32,8 @@ locJRB_table = {
     "JRB: Treasure of the Ocean Cave": 3626016,
     "JRB: Red Coins on the Ship Afloat": 3626017,
     "JRB: Blast to the Stone Pillar": 3626018,
-    "JRB: Through the Jet Stream": 3626019
+    "JRB: Through the Jet Stream": 3626019,
+    "JRB: Bob-omb Buddy": 3626202,
 }
 
 
@@ -41,7 +44,8 @@ locCCM_table = {
     "CCM: Big Penguin Race": 3626023,
     "CCM: Frosty Slide for 8 Red Coins": 3626024,
     "CCM: Snowman's Lost His Head": 3626025,
-    "CCM: Wall Kicks Will Work": 3626026
+    "CCM: Wall Kicks Will Work": 3626026,
+    "CCM: Bob-omb Buddy": 3626203,
 }
 
 #Big Boo's Haunt
@@ -81,7 +85,8 @@ locSSL_table = {
     "SSL: Inside the Ancient Pyramid": 3626051,
     "SSL: Stand Tall on the Four Pillars": 3626052,
     "SSL: Free Flying for 8 Red Coins": 3626053,
-    "SSL: Pyramid Puzzle": 3626054
+    "SSL: Pyramid Puzzle": 3626054,
+    "SSL: Bob-omb Buddy": 3626207,
 }
 
 #Dire, Dire Docks
@@ -101,7 +106,8 @@ locSL_table = {
     "SL: In the Deep Freeze": 3626065,
     "SL: Whirl from the Freezing Pond": 3626066,
     "SL: Shell Shreddin' for Red Coins": 3626067,
-    "SL: Into the Igloo": 3626068
+    "SL: Into the Igloo": 3626068,
+    "SL: Bob-omb Buddy": 3626209,
 }
 
 #Wet-Dry World
@@ -111,7 +117,8 @@ locWDW_table = {
     "WDW: Secrets in the Shallows & Sky": 3626072,
     "WDW: Express Elevator--Hurry Up!": 3626073,
     "WDW: Go to Town for Red Coins": 3626074,
-    "WDW: Quick Race Through Downtown!": 3626075
+    "WDW: Quick Race Through Downtown!": 3626075,
+    "WDW: Bob-omb Buddy": 3626210,
 }
 
 #Tall, Tall Mountain
@@ -121,7 +128,8 @@ locTTM_table = {
     "TTM: Scary 'Shrooms, Red Coins": 3626079,
     "TTM: Mysterious Mountainside": 3626080,
     "TTM: Breathtaking View from Bridge": 3626081,
-    "TTM: Blast to the Lonely Mushroom": 3626082
+    "TTM: Blast to the Lonely Mushroom": 3626082,
+    "TTM: Bob-omb Buddy": 3626211,
 }
 
 #Tiny-Huge Island
@@ -131,7 +139,8 @@ locTHI_table = {
     "THI: Rematch with Koopa the Quick": 3626086,
     "THI: Five Itty Bitty Secrets": 3626087,
     "THI: Wiggler's Red Coins": 3626088,
-    "THI: Make Wiggler Squirm": 3626089
+    "THI: Make Wiggler Squirm": 3626089,
+    "THI: Bob-omb Buddy": 3626212,
 }
 
 #Tick Tock Clock
@@ -151,7 +160,8 @@ locRR_table = {
     "RR: Coins Amassed in a Maze": 3626100,
     "RR: Swingin' in the Breeze": 3626101,
     "RR: Tricky Triangles!": 3626102,
-    "RR: Somewhere Over the Rainbow": 3626103
+    "RR: Somewhere Over the Rainbow": 3626103,
+    "RR: Bob-omb Buddy": 3626214,
 }
 
 loc100Coin_table = {

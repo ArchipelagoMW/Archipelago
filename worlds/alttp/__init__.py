@@ -15,7 +15,7 @@ from .ItemPool import generate_itempool, difficulties
 from .Shops import create_shops, ShopSlotFill
 from .Dungeons import create_dungeons
 from .Rom import LocalRom, patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, get_hash_string, \
-    get_base_rom_path
+    get_base_rom_path, LttPDeltaPatch
 import Patch
 
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -194,7 +194,7 @@ class ALTTPWorld(World):
                         return
                     elif state.has('Red Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 3:
                         return 'Mirror Shield'
-                    elif state.has('Blue Shield', item.player)  and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
+                    elif state.has('Blue Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
                         return 'Red Shield'
                     elif self.world.difficulty_requirements[item.player].progressive_shield_limit >= 1:
                         return 'Blue Shield'
@@ -249,7 +249,7 @@ class ALTTPWorld(World):
     @classmethod
     def stage_pre_fill(cls, world):
         from .Dungeons import fill_dungeons_restrictive
-        fill_dungeons_restrictive(cls, world)
+        fill_dungeons_restrictive(world)
 
     @classmethod
     def stage_post_fill(cls, world):
@@ -303,7 +303,9 @@ class ALTTPWorld(World):
 
             rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
             rom.write_to_file(rompath)
-            Patch.create_patch_file(rompath, player=player, player_name=world.player_name[player])
+            patch = LttPDeltaPatch(os.path.splitext(rompath)[0]+LttPDeltaPatch.patch_file_ending, player=player,
+                                   player_name=world.player_name[player], patched_path=rompath)
+            patch.write()
             os.unlink(rompath)
             self.rom_name = rom.name
         except:
@@ -322,7 +324,7 @@ class ALTTPWorld(World):
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
     def get_required_client_version(self) -> tuple:
-        return max((0, 2, 4), super(ALTTPWorld, self).get_required_client_version())
+        return max((0, 2, 6), super(ALTTPWorld, self).get_required_client_version())
 
     def create_item(self, name: str) -> Item:
         return ALttPItem(name, self.player, **as_dict_item_table[name])
@@ -363,17 +365,9 @@ class ALTTPWorld(World):
                 fill_locations.remove(loc)
             world.random.shuffle(fill_locations)
             # TODO: investigate not creating the key in the first place
-            if __debug__:
-                # keeping this here while I'm not sure we caught all instances of multiple HC small keys in the pool
-                count = len(progitempool)
-                progitempool[:] = [item for item in progitempool if
-                                   item.player not in standard_keyshuffle_players or
-                                   item.name != "Small Key (Hyrule Castle)"]
-                assert len(progitempool) + len(standard_keyshuffle_players) == count
-            else:
-                progitempool[:] = [item for item in progitempool if
-                                   item.player not in standard_keyshuffle_players or
-                                   item.name != "Small Key (Hyrule Castle)"]
+            progitempool[:] = [item for item in progitempool if
+                               item.player not in standard_keyshuffle_players or
+                               item.name != "Small Key (Hyrule Castle)"]
 
         if trash_counts:
             locations_mapping = {player: [] for player in trash_counts}
@@ -408,6 +402,16 @@ class ALTTPWorld(World):
         else:
             item = "Rupees (5)"  # temporary
         return GetBeemizerItem(self.world, self.player, item)
+
+    def get_pre_fill_items(self):
+        res = []
+        if self.dungeon_local_item_names:
+            for (name, player), dungeon in self.world.dungeons.items():
+                if player == self.player:
+                    for item in dungeon.all_items:
+                        if item.name in self.dungeon_local_item_names:
+                            res.append(item)
+        return res
 
 
 def get_same_seed(world, seed_def: tuple) -> str:

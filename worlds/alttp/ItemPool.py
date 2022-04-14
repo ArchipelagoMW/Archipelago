@@ -291,7 +291,6 @@ def generate_itempool(world):
         loc.access_rule = lambda state: state.has_triforce_pieces(state.world.treasure_hunt_count[player], player)
 
         region.locations.append(loc)
-        world.dynamic_locations.append(loc)
         world.clear_location_cache()
 
         world.push_item(loc, ItemFactory('Triforce', player), False)
@@ -498,7 +497,6 @@ def set_up_take_anys(world, player):
 
     old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave, 'the sword cave', player)
     world.regions.append(old_man_take_any)
-    world.dynamic_regions.append(old_man_take_any)
 
     reg = regions.pop()
     entrance = world.get_region(reg, player).entrances[0]
@@ -519,7 +517,6 @@ def set_up_take_anys(world, player):
     for num in range(4):
         take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave, 'a cave of choice', player)
         world.regions.append(take_any)
-        world.dynamic_regions.append(take_any)
 
         target, room_id = world.random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
         reg = regions.pop()
@@ -543,7 +540,6 @@ def create_dynamic_shop_locations(world, player):
                 if item['create_location']:
                     loc = ALttPLocation(player, f"{shop.region.name} {shop.slot_names[i]}", parent=shop.region)
                     shop.region.locations.append(loc)
-                    world.dynamic_locations.append(loc)
 
                     world.clear_location_cache()
 
