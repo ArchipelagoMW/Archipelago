@@ -29,8 +29,8 @@ def get_db_data():
 @app.route('/stats')
 @cache.memoize(timeout=60*60)  # regen once per hour should be plenty
 def stats():
-    plot = figure(title="Games played per day", x_axis_type='datetime', x_axis_label="Date", y_axis_label="Played",
-                  sizing_mode="scale_both")
+    plot = figure(title="Games Played Per Day", x_axis_type='datetime', x_axis_label="Date",
+                  y_axis_label="Games Played", sizing_mode="scale_both", width=500, height=500)
 
     total_games, games_played = get_db_data()
     days = sorted(games_played)
@@ -45,9 +45,9 @@ def stats():
                   occurences, legend_label=game, line_width=2, color=next(cyc_palette))
 
     total = sum(total_games.values())
-    pie = figure(plot_height=350, title=f"Games played in the last 30 days. (Total: {total})", toolbar_location=None,
+    pie = figure(plot_height=350, title=f"Games Played in the Last 30 Days (Total: {total})", toolbar_location=None,
                  tools="hover", tooltips=[("Game:", "@games"), ("Played:", "@count")],
-                 sizing_mode="scale_both")
+                 sizing_mode="scale_both", width=500, height=500)
     pie.axis.visible = False
 
     data = {
@@ -73,4 +73,4 @@ def stats():
 
     script, charts = components((plot, pie))
     return render_template("stats.html", js_resources=INLINE.render_js(), css_resources=INLINE.render_css(),
-                           chart_data=script, charts=charts)
+                           chart_data=script, charts=charts, chart_count=len(charts))
