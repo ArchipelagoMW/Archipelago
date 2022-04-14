@@ -18,9 +18,9 @@
         </h5>
 
         <div id="charts-wrapper">
-        {% for index in range(chart_count) %}
+        {% for chart in charts %}
             <div class="chart-container">
-                {{ charts[index]|indent(12)|safe }}
+                {{ chart|indent(12)|safe }}
             </div>
         {% endfor %}
         </div>

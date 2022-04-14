@@ -73,4 +73,4 @@ def stats():
 
     script, charts = components((plot, pie))
     return render_template("stats.html", js_resources=INLINE.render_js(), css_resources=INLINE.render_css(),
-                           chart_data=script, charts=charts, chart_count=len(charts))
+                           chart_data=script, charts=charts)
