@@ -90,7 +90,7 @@ games you want settings for.
 
     * `triggers` is one of the more advanced options that allows you to create conditional adjustments. You can read
       more triggers in the triggers guide. Triggers
-      guide: [Archipelago Triggers Guide](/tutorial/archipelago/triggers/en)
+      guide: [Archipelago Triggers Guide](/tutorial/Archipelago/triggers/en)
 
 ### Game Options
 
@@ -107,7 +107,7 @@ Currently, these options are `start_inventory`, `start_hints`, `local_items`, `n
 , `exclude_locations`, and various plando options.
 
 See the plando guide for more info on plando options. Plando
-guide: [Archipelago Plando Guide](/tutorial/archipelago/plando/en)
+guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 
 * `start_inventory` will give any items defined here to you at the beginning of your game. The format for this must be
   the name as it appears in the game files and the amount you would like to start with. For example `Rupees(5): 6` which

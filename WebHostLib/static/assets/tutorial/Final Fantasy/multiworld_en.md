@@ -39,7 +39,7 @@ It should download two files. One is the `*.nes` file which your emulator will r
 required by Archipelago.gg
 
 At this point you are ready to join the multiworld. If you are uncertain on how to generate, host or join a multiworld
-please refer to the [game agnostic setup guide](/tutorial/archipelago/setup/en).
+please refer to the [game agnostic setup guide](/tutorial/Archipelago/setup/en).
 
 ## Running the Client Program and Connecting to the Server
 
@@ -70,5 +70,5 @@ NES at any time by running `/nes`
 
 ### Other Client Commands
 
-All other commands may be found on the [Archipelago Server and Client Commands Guide](/tutorial/archipelago/commands/en)
+All other commands may be found on the [Archipelago Server and Client Commands Guide](/tutorial/Archipelago/commands/en)
 .
