@@ -997,10 +997,9 @@ def getTracker(tracker: UUID):
                 continue
 
             item, recipient, flags = player_locations[location]
-            if recipient not in names:
-                continue
+            if recipient in names:
+                attribute_item(inventory, team, recipient, item)
 
-            attribute_item(inventory, team, recipient, item)
             checks_done[team][player][player_location_to_area[player][location]] += 1
             checks_done[team][player]["Total"] += 1
 

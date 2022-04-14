@@ -1,0 +1,102 @@
+#tracker-wrapper{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 5px;
+}
+
+.dirt-wrapper{
+    background-color: #897249;
+}
+
+.grass-wrapper{
+    background-color: #3fb24a;
+}
+
+.grassFlowers-wrapper{
+    background-color: #3fb24a;
+}
+
+.ice-wrapper{
+    background-color: #afe0ef;
+}
+
+.jungle-wrapper{
+    background-color: #2a7808;
+}
+
+.ocean-wrapper{
+    background-color: #3667b1;
+}
+
+.partyTime-wrapper{
+    background-color: #3a0f69;
+}
+
+h1 {
+    font-size: 20px;
+    color: black;
+    padding: 5px;
+    text-align: center;
+}
+
+h2 {
+    padding: 8px;
+}
+
+.items-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 5px;
+}
+
+.item-column{
+    padding: 5px;
+}
+
+.locations-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 5px;
+    text-align: left;
+}
+
+.location-column{
+    padding: 15px;
+}
+
+.acquired{
+    text-decoration: line-through;
+}
+
+.image-container{
+    justify-content: relative;
+    height: 60px;
+    width: 60px;
+    text-align: center;
+    color: white;
+    text-shadow: 1px 1px black;
+}
+
+.bottom-right{
+    position: relative;
+    bottom: 20px;
+    left: 5px;
+    padding: none;
+}
+
+.icon{
+    height: 100%;
+    max-width: 50px;
+    max-height: 50px;
+    filter: grayscale(100%) contrast(75%) brightness(40%);
+}
+
+.icon.acquired{
+    filter: none;
+}

@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from flask import render_template
 import logging
 from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, Counter
+from flask import render_template
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
-from WebHostLib import Room
 
 
 class AutoWorldRegister(type):
@@ -106,6 +105,7 @@ class WebWorld:
         number of item and location columns. The html used is also a template that can be overridden if you want your
         tracker to look different in certain aspects. All arguments being returned by this method are required by your
         implementation. To add icons and regions simply return the icons and regions arguments to the html."""
+
         icons: Dict = {
             item: item for item in all_progression_items
         }
@@ -127,9 +127,9 @@ class WebWorld:
             regions['fourth_region'].append(f'Item{i+15}')
 
         return render_template("playerTracker.html", all_progression_items=all_progression_items, player=player,
-                               team=team, room=room, player_name=player_name, icons=icons,
+                               team=team, room=room, player_name=player_name, #icons=icons,
                                checked_locations=sorted(checked_locations),
-                               not_checked_locations=sorted(locations - checked_locations),
+                               locations=sorted(locations),
                                received_items=player_received_items, theme=cls.theme, item_columns=4, location_columns=4)
 
     # display a link to a bug report page, most likely a link to a GitHub issue page.
