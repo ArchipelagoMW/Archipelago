@@ -27,6 +27,15 @@ class AutoWorldRegister(type):
         dct["location_names"] = frozenset(dct["location_name_to_id"])
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
 
+        # move away from get_required_client_version function
+        if "game" in dct:
+            assert "get_required_client_version" not in dct, f"{name}: required_client_version is an attribute now"
+        # set minimum required_client_version from bases
+        if "required_client_version" in dct and bases:
+            for base in bases:
+                if "required_client_version" in base.__dict__:
+                    dct["required_client_version"] = max(dct["required_client_version"], base.required_client_version)
+
         # construct class
         new_class = super().__new__(cls, name, bases, dct)
         if "game" in dct:
@@ -84,6 +93,9 @@ class WebWorld:
     # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime
     theme = "grass"
 
+    # display a link to a bug report page, most likely a link to a GitHub issue page.
+    bug_report_page: Optional[str]
+
 
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
@@ -105,6 +117,14 @@ class World(metaclass=AutoWorldRegister):
     # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
     # retrieved by clients on every connection.
     data_version: int = 1
+
+    # override this if changes to a world break forward-compatibility of the client
+    # The base version of (0, 1, 6) is provided for backwards compatibility and does *not* need to be updated in the
+    # future. Protocol level compatibility check moved to MultiServer.min_client_version.
+    required_client_version: Tuple[int, int, int] = (0, 1, 6)
+
+    # update this if the resulting multidata breaks forward-compatibility of the server
+    required_server_version: Tuple[int, int, int] = (0, 2, 4)
 
     hint_blacklist: Set[str] = frozenset()  # any names that should not be hintable
 
@@ -190,9 +210,6 @@ class World(metaclass=AutoWorldRegister):
     def modify_multidata(self, multidata: dict):
         """For deeper modification of server multidata."""
         pass
-
-    def get_required_client_version(self) -> Tuple[int, int, int]:
-        return 0, 1, 6
 
     # Spoiler writing is optional, these may not get called.
     def write_spoiler_header(self, spoiler_handle: TextIO):

@@ -310,24 +310,26 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
     # Define a threshold value based on the player with the most available locations.
     # If other players are below the threshold value, swap progression in this sphere into earlier spheres,
     #   which gives more locations available by this sphere.
-    balanceable_players = {player for player in world.player_ids if world.progression_balancing[player]}
+    balanceable_players: typing.Set[int] = {player for player in world.player_ids if world.progression_balancing[player]}
     if not balanceable_players:
         logging.info('Skipping multiworld progression balancing.')
     else:
         logging.info(f'Balancing multiworld progression for {len(balanceable_players)} Players.')
-        state = CollectionState(world)
+        state: CollectionState = CollectionState(world)
         checked_locations: typing.Set[Location] = set()
-        unchecked_locations = set(world.get_locations())
+        unchecked_locations: typing.Set[Location] = set(world.get_locations())
 
-        reachable_locations_count = {
+        reachable_locations_count: typing.Dict[int, int] = {
             player: 0
             for player in world.player_ids
             if len(world.get_filled_locations(player)) != 0
         }
-        total_locations_count = Counter(location.player for location in world.get_locations() if not location.locked)
-        balanceable_players = {player for player in balanceable_players if total_locations_count[player]}
-        sphere_num = 1
-        moved_item_count = 0
+        total_locations_count: Counter = Counter(location.player for location in world.get_locations() if
+                                                 not location.locked)
+        balanceable_players = {player for player in balanceable_players if
+                                                total_locations_count[player]}
+        sphere_num: int = 1
+        moved_item_count: int = 0
 
         def get_sphere_locations(sphere_state: CollectionState,
                                  locations: typing.Set[Location]) -> typing.Set[Location]:

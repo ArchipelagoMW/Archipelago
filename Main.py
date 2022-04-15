@@ -326,11 +326,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 slot_data = {}
                 client_versions = {}
                 games = {}
-                minimum_versions = {"server": (0, 2, 4), "clients": client_versions}
+                minimum_versions = {"server": AutoWorld.World.required_server_version, "clients": client_versions}
                 slot_info = {}
                 names = [[name for player, name in sorted(world.player_name.items())]]
                 for slot in world.player_ids:
-                    client_versions[slot] = world.worlds[slot].get_required_client_version()
+                    player_world: AutoWorld.World = world.worlds[slot]
+                    minimum_versions["server"] = max(minimum_versions["server"], player_world.required_server_version)
+                    client_versions[slot] = player_world.required_client_version
                     games[slot] = world.game[slot]
                     slot_info[slot] = NetUtils.NetworkSlot(names[0][slot - 1], world.game[slot],
                                                            world.player_types[slot])
