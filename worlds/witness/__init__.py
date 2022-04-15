@@ -111,7 +111,7 @@ class WitnessLocation(Location):
         self.check_hex = ch_hex
 
 
-def create_region(world: MultiWorld, player: int, name: str, 
+def create_region(world: MultiWorld, player: int, name: str,
                   logic: ParsedWitnessLogic, locations=None, exits=None):
     """
     Create an Archipelago Region for The Witness
@@ -121,8 +121,6 @@ def create_region(world: MultiWorld, player: int, name: str,
     ret.world = world
     if locations:
         for location in locations:
-            print(location)
-            
             loc_id = CHECK_LOCATION_TABLE[location]
 
             check_hex = -1
