@@ -80,7 +80,7 @@ GENERAL_LOCATIONS = {
     "Town Cargo Box Discard",
     "Town Hexagonal Reflection",
     "Town Square Avoid",
-    "Town Town Discard",
+    "Town Rooftop Discard",
     "Town Symmetry Squares 5 + Dots",
     "Town Full Dot Grid Shapers 5",
     "Town Shapers & Dots & and Eraser",
@@ -96,7 +96,7 @@ GENERAL_LOCATIONS = {
     "Jungle Popup Wall 6",
     "Jungle Laser",
 
-    "River Vault",
+    "River Rhombic Avoid Vault",
 
     "Bunker Drawn Squares 5",
     "Bunker Drawn Squares 9",

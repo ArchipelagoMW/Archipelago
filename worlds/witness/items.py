@@ -6,7 +6,7 @@ from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Item
 
-from .full_logic import ALL_ITEMS, EVENT_ITEM_PAIRS
+from .full_logic import ALL_ITEMS, EVENT_ITEM_PAIRS, ALL_BOOSTS, ALL_TRAPS
 from .locations import EVENT_LOCATION_TABLE
 
 
@@ -28,10 +28,8 @@ class WitnessItem(Item):
 
 
 ITEM_TABLE: Dict[str, ItemData] = {
-    'Temporary Speed Boost': ItemData(158500, False, False),
-
     # Event Items
-    'Victory': ItemData(158600, True, True)
+    'Victory': ItemData(158700, True, True)
 }
 
 EVENT_ITEM_TABLE = dict()
@@ -48,10 +46,21 @@ for item in ALL_ITEMS:
 
     ITEM_TABLE[item[0]] = ItemData(158000 + item[1], True, False)
 
+for item in ALL_TRAPS:
+    ITEM_TABLE[item[0]] = ItemData(158000 + item[1], False, False)
+
+for item in ALL_BOOSTS:
+    ITEM_TABLE[item[0]] = ItemData(158000 + item[1], False, False)
+
 ITEM_TABLE = dict(sorted(ITEM_TABLE.items(),
                   key=lambda item: item[1].code
                   if isinstance(item[1].code, int) else 0))
 
 junk_weights = {
-    "Temporary Speed Boost": 1
+    "Speed Boost": 1,
+    "Slowness Trap": 0.8,
+    "Power Surge Trap": 0.2,
 }
+
+junk_weights = {key: value for (key, value) in junk_weights.items()
+                if key in ITEM_TABLE.keys()}

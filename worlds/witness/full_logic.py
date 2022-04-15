@@ -6,7 +6,10 @@ import pathlib
 import os
 pathlib.Path(__file__).parent.resolve()
 
+
 ALL_ITEMS = set()
+ALL_TRAPS = set()
+ALL_BOOSTS = set()
 EVENT_PANELS_FROM_REGIONS = set()
 EVENT_PANELS_FROM_PANELS = set()
 ALL_REGIONS_BY_NAME = dict()
@@ -61,6 +64,37 @@ ALWAYS_EVENTS_BY_NAME = {
 }
 
 
+def parse_items():
+    """
+    Parses currently defined items from WitnessItems.txt
+    """
+
+    path = os.path.join(os.path.dirname(__file__), "WitnessItems.txt")
+    file = open(path, "r", encoding="utf-8")
+
+    current_set = ALL_ITEMS
+
+    for line in file.readlines():
+        line = line.strip()
+
+        if line == "Progression:":
+            current_set = ALL_ITEMS
+            continue
+        if line == "Boosts:":
+            current_set = ALL_BOOSTS
+            continue
+        if line == "Traps:":
+            current_set = ALL_TRAPS
+            continue
+        if line == "":
+            continue
+
+        line_split = line.split(" - ")
+
+        current_set.add((line_split[1], int(line_split[0])))
+
+
+
 def reduce_requirement_within_region(check_obj):
     """
     Panels in this game often only turn on when other panels are solved.
@@ -69,10 +103,6 @@ def reduce_requirement_within_region(check_obj):
     This is why we reduce the item dependencies within the region.
     Panels outside of the same region will still be checked manually.
     """
-    for item_set in check_obj["requirement"]["items"]:
-        for item in item_set:
-            if item not in {item[0] for item in ALL_ITEMS}:
-                ALL_ITEMS.add((item, len(ALL_ITEMS)))
 
     if check_obj["requirement"]["panels"] == frozenset({frozenset()}):
         return check_obj["requirement"]["items"]
@@ -223,9 +253,15 @@ def read_logic_file():
             location_id = normal_panel_ids
             normal_panel_ids += 1
 
+        required_items = parse_lambda(required_item_lambda)
+        items_actually_in_the_game = {item[0] for item in ALL_ITEMS}
+        required_items = frozenset(
+            subset.intersection(items_actually_in_the_game) for subset in required_items
+        )
+
         requirement = {
             "panels": parse_lambda(required_panel_lambda),
-            "items": parse_lambda(required_item_lambda)
+            "items": required_items
         }
 
         CHECKS_DEPENDENT_BY_HEX[check_hex] = {
@@ -302,7 +338,7 @@ def make_event_panel_lists():
         pair = make_event_item_pair(panel)
         EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
-
+parse_items()
 read_logic_file()
 make_dependency_reduced_checklist()
 make_event_panel_lists()
