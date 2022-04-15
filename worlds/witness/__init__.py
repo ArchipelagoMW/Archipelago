@@ -15,13 +15,13 @@ from ..AutoWorld import World
 from .items import WitnessItem, ITEM_TABLE, junk_weights, EVENT_ITEM_TABLE
 from .locations import (
     CHECK_LOCATION_TABLE, EVENT_LOCATION_TABLE,
-    ALL_LOCATIONS_TO_ID, CHECKS_BY_NAME,
-    CHECK_PANELHEX_TO_ID
+    ALL_LOCATIONS_TO_ID, CHECK_PANELHEX_TO_ID
 )
 from .rules import set_rules
 from .regions import create_regions
-from .full_logic import EVENT_ITEM_PAIRS
+from .full_logic import ParsedWitnessLogic
 from .Options import is_option_enabled, the_witness_options
+
 
 class WitnessWorld(World):
     """
@@ -33,6 +33,7 @@ class WitnessWorld(World):
     location_name_to_id = ALL_LOCATIONS_TO_ID
     hidden = False
     options = the_witness_options
+    logic = ParsedWitnessLogic()
 
     def _get_slot_data(self):
         return {
@@ -63,7 +64,9 @@ class WitnessWorld(World):
         victory_ap_loc.place_locked_item(self.create_item("Victory"))
 
         for event_location in EVENT_LOCATION_TABLE:
-            item_obj = self.create_item(EVENT_ITEM_PAIRS[event_location])
+            item_obj = self.create_item(
+                self.logic.EVENT_ITEM_PAIRS[event_location]
+            )
             location_obj = self.world.get_location(event_location, self.player)
             location_obj.place_locked_item(item_obj)
 
@@ -79,7 +82,9 @@ class WitnessWorld(World):
         slot_data = self._get_slot_data()
 
         for option_name in the_witness_options:
-            slot_data[option_name] = is_option_enabled(self.world, self.player, option_name)
+            slot_data[option_name] = is_option_enabled(
+                self.world, self.player, option_name
+            )
 
         slot_data["hard_mode"] = False
 
@@ -106,8 +111,8 @@ class WitnessLocation(Location):
         self.check_hex = ch_hex
 
 
-def create_region(world: MultiWorld, player: int, name: str,
-                  locations=None, exits=None):
+def create_region(world: MultiWorld, player: int, name: str, 
+                  logic: ParsedWitnessLogic, locations=None, exits=None):
     """
     Create an Archipelago Region for The Witness
     """
@@ -116,11 +121,15 @@ def create_region(world: MultiWorld, player: int, name: str,
     ret.world = world
     if locations:
         for location in locations:
+            print(location)
+            
             loc_id = CHECK_LOCATION_TABLE[location]
 
             check_hex = -1
-            if location in CHECKS_BY_NAME:
-                check_hex = int(CHECKS_BY_NAME[location]["checkHex"], 0)
+            if location in logic.CHECKS_BY_NAME:
+                check_hex = int(
+                    logic.CHECKS_BY_NAME[location]["checkHex"], 0
+                )
             location = WitnessLocation(
                 player, location, loc_id, ret, check_hex
             )

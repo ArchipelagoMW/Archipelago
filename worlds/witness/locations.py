@@ -2,10 +2,9 @@
 Defines constants for different types of location in the game
 """
 
-from .full_logic import (
-    CHECKS_BY_NAME, CHECKS_BY_HEX, NECESSARY_EVENT_PANELS,
-    ALWAYS_EVENT_HEX_CODES
-)
+from .full_logic import ParsedWitnessLogic
+
+LOGIC = ParsedWitnessLogic()
 
 ID_START = 158000
 
@@ -192,22 +191,22 @@ def get_id(location):
     Calculates the location ID for any given location
     """
 
-    panel_offset = CHECKS_BY_NAME[location]["idOffset"]
-    type_offset = TYPE_OFFSETS[CHECKS_BY_NAME[location]["panelType"]]
+    panel_offset = LOGIC.CHECKS_BY_NAME[location]["idOffset"]
+    type_offset = TYPE_OFFSETS[LOGIC.CHECKS_BY_NAME[location]["panelType"]]
 
     return ID_START + panel_offset + type_offset
 
 
-def get_event_name(panelHex):
+def get_event_name(panel_hex):
     """
     Returns the event name of any given panel.
     Currently this is always "Panelname Solved"
     """
 
-    return CHECKS_BY_HEX[panelHex]["checkName"] + " Solved"
+    return LOGIC.CHECKS_BY_HEX[panel_hex]["checkName"] + " Solved"
 
 
-ALL_LOCATIONS = [check["checkName"] for check in CHECKS_BY_HEX.values()]
+ALL_LOCATIONS = [check["checkName"] for check in LOGIC.CHECKS_BY_HEX.values()]
 ALL_LOCATIONS_TO_ID = {
     location: get_id(location) for location in ALL_LOCATIONS
 }
@@ -218,16 +217,16 @@ ALL_LOCATIONS_TO_ID = dict(sorted(ALL_LOCATIONS_TO_ID.items(),
 CHECK_LOCATIONS = GENERAL_LOCATIONS | UNCOMMON_LOCATIONS | HARD_LOCATIONS
 
 CHECK_PANELHEX_TO_ID = {
-    CHECKS_BY_NAME[check]["checkHex"]: ALL_LOCATIONS_TO_ID[check]
+    LOGIC.CHECKS_BY_NAME[check]["checkHex"]: ALL_LOCATIONS_TO_ID[check]
     for check in CHECK_LOCATIONS
 }
 CHECK_PANELHEX_TO_ID = dict(sorted(CHECK_PANELHEX_TO_ID.items(),
                             key=lambda item: item[1]))
 
 event_locations = {
-    p for p in NECESSARY_EVENT_PANELS
-    if CHECKS_BY_HEX[p]["checkName"] not in CHECK_LOCATIONS
-    or p in ALWAYS_EVENT_HEX_CODES
+    p for p in LOGIC.NECESSARY_EVENT_PANELS
+    if LOGIC.CHECKS_BY_HEX[p]["checkName"] not in CHECK_LOCATIONS
+    or p in LOGIC.ALWAYS_EVENT_HEX_CODES
 }
 
 EVENT_LOCATION_TABLE = {
@@ -237,5 +236,5 @@ EVENT_LOCATION_TABLE = {
 
 CHECK_LOCATION_TABLE = EVENT_LOCATION_TABLE | {
     location: get_id(location) for location in CHECK_LOCATIONS
-    if CHECKS_BY_NAME[location]["panelType"] in PANEL_TYPES_TO_SHUFFLE
+    if LOGIC.CHECKS_BY_NAME[location]["panelType"] in PANEL_TYPES_TO_SHUFFLE
 }

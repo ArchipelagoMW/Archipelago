@@ -5,7 +5,9 @@ and connects them with the proper requirements
 
 from BaseClasses import MultiWorld, Entrance
 from .locations import CHECK_LOCATION_TABLE, EVENT_LOCATION_TABLE
-from .full_logic import ALL_REGIONS_BY_NAME, CHECKS_BY_HEX
+from .full_logic import ParsedWitnessLogic
+
+LOGIC = ParsedWitnessLogic()
 
 
 def make_lambda(panel_hex_to_solve_set, player):
@@ -44,31 +46,33 @@ def create_regions(world, player: int):
     from . import create_region
 
     world.regions += [
-        create_region(world, player, 'Menu', None, ["The Splashscreen?"]),
+        create_region(
+            world, player, 'Menu', LOGIC, None, ["The Splashscreen?"]
+        ),
     ]
 
     all_locations = set()
 
-    for region_name, region in ALL_REGIONS_BY_NAME.items():
+    for region_name, region in LOGIC.ALL_REGIONS_BY_NAME.items():
         locations_for_this_region = [
-            CHECKS_BY_HEX[panel]["checkName"]
+            LOGIC.CHECKS_BY_HEX[panel]["checkName"]
             for panel in region["panels"]
-            if CHECKS_BY_HEX[panel]["checkName"] in CHECK_LOCATION_TABLE
+            if LOGIC.CHECKS_BY_HEX[panel]["checkName"] in CHECK_LOCATION_TABLE
         ]
         locations_for_this_region += [
-            CHECKS_BY_HEX[panel]["checkName"] + " Solved"
+            LOGIC.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
             for panel in region["panels"]
-            if CHECKS_BY_HEX[panel]["checkName"] + " Solved"
+            if LOGIC.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
             in EVENT_LOCATION_TABLE
         ]
 
         all_locations = all_locations | set(locations_for_this_region)
 
         world.regions += [create_region(
-            world, player, region_name, locations_for_this_region
+            world, player, region_name, LOGIC, locations_for_this_region
         )]
 
-    for region_name, region in ALL_REGIONS_BY_NAME.items():
+    for region_name, region in LOGIC.ALL_REGIONS_BY_NAME.items():
         for connection in region["connections"]:
             if connection[0] == "Entry":
                 continue

@@ -6,8 +6,10 @@ from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Item
 
-from .full_logic import ALL_ITEMS, EVENT_ITEM_PAIRS, ALL_BOOSTS, ALL_TRAPS
+from .full_logic import ParsedWitnessLogic
 from .locations import EVENT_LOCATION_TABLE
+
+LOGIC = ParsedWitnessLogic
 
 
 class ItemData(NamedTuple):
@@ -35,21 +37,21 @@ ITEM_TABLE: Dict[str, ItemData] = {
 EVENT_ITEM_TABLE = dict()
 
 for event_location in EVENT_LOCATION_TABLE:
-    location = EVENT_ITEM_PAIRS[event_location]
+    location = LOGIC.EVENT_ITEM_PAIRS[event_location]
     EVENT_ITEM_TABLE[location] = ItemData(None, True, True)
     ITEM_TABLE[location] = ItemData(None, True, True)
 
 
-for item in ALL_ITEMS:
+for item in LOGIC.ALL_ITEMS:
     if item[0] == "11 Lasers" or item == "7 Lasers":
         continue
 
     ITEM_TABLE[item[0]] = ItemData(158000 + item[1], True, False)
 
-for item in ALL_TRAPS:
+for item in LOGIC.ALL_TRAPS:
     ITEM_TABLE[item[0]] = ItemData(158000 + item[1], False, False)
 
-for item in ALL_BOOSTS:
+for item in LOGIC.ALL_BOOSTS:
     ITEM_TABLE[item[0]] = ItemData(158000 + item[1], False, False)
 
 ITEM_TABLE = dict(sorted(ITEM_TABLE.items(),

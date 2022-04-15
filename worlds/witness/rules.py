@@ -8,14 +8,13 @@ depending on the items received
 from BaseClasses import MultiWorld
 from ..AutoWorld import LogicMixin
 from ..generic.Rules import set_rule
-from .full_logic import (
-    CHECKS_BY_HEX, ORIGINAL_EVENT_PANELS,
-    EVENT_ITEM_PAIRS, EVENT_ITEM_NAMES, CHECKS_BY_NAME
-)
+from .full_logic import ParsedWitnessLogic
 from .locations import (
-    EVENT_LOCATION_TABLE, NECESSARY_EVENT_PANELS,
+    EVENT_LOCATION_TABLE,
     CHECK_LOCATION_TABLE
 )
+
+LOGIC = ParsedWitnessLogic()
 
 
 class WitnessLogic(LogicMixin):
@@ -48,18 +47,18 @@ class WitnessLogic(LogicMixin):
         Determines whether a panel can be solved
         """
 
-        panel_obj = CHECKS_BY_HEX[panel]
+        panel_obj = LOGIC.CHECKS_BY_HEX[panel]
         check_name = panel_obj["checkName"]
 
         if (check_name + " Solved" in EVENT_LOCATION_TABLE
                 and not self.has(
-                    EVENT_ITEM_PAIRS[check_name + " Solved"],
+                    LOGIC.EVENT_ITEM_PAIRS[check_name + " Solved"],
                     player)):
             return False
-        if (panel not in ORIGINAL_EVENT_PANELS
+        if (panel not in LOGIC.ORIGINAL_EVENT_PANELS
                 and not self.can_reach(check_name, "Location", player)):
             return False
-        if (panel in ORIGINAL_EVENT_PANELS
+        if (panel in LOGIC.ORIGINAL_EVENT_PANELS
                 and check_name + " Solved" not in EVENT_LOCATION_TABLE
                 and not self._safe_manual_panel_check(panel, player)):
 
@@ -72,7 +71,7 @@ class WitnessLogic(LogicMixin):
         a panel
         """
 
-        panel_obj = CHECKS_BY_HEX[panel]
+        panel_obj = LOGIC.CHECKS_BY_HEX[panel]
 
         for option in panel_obj["requirement"]:
             if len(option) == 0:
@@ -89,13 +88,15 @@ class WitnessLogic(LogicMixin):
                     if not self._witness_has_lasers(player, 11):
                         valid_option = False
                         break
-                elif item in NECESSARY_EVENT_PANELS:
-                    if (CHECKS_BY_HEX[item]["checkName"] + " Solved"
+                elif item in LOGIC.NECESSARY_EVENT_PANELS:
+                    if (LOGIC.CHECKS_BY_HEX[item]["checkName"] + " Solved"
                             in EVENT_LOCATION_TABLE):
-                        valid_option = self.has(EVENT_ITEM_NAMES[item], player)
+                        valid_option = self.has(
+                            LOGIC.EVENT_ITEM_NAMES[item], player
+                        )
                     else:
                         valid_option = self.can_reach(
-                            CHECKS_BY_HEX[item]["checkName"],
+                            LOGIC.CHECKS_BY_HEX[item]["checkName"],
                             "Location", player)
                     if not valid_option:
                         break
@@ -119,7 +120,7 @@ class WitnessLogic(LogicMixin):
         The spoiler log looks so much nicer this way,
         it gets rid of a bunch of event items, only leaving a couple. :)
         """
-        region = CHECKS_BY_HEX[panel]["region"]["name"]
+        region = LOGIC.CHECKS_BY_HEX[panel]["region"]["name"]
 
         return (
             self.meets_item_requirements(panel, player)
@@ -165,7 +166,7 @@ def set_rules(world: MultiWorld, player: int):
         if location in EVENT_LOCATION_TABLE:
             real_location = location[:-7]
 
-        panel = CHECKS_BY_NAME[real_location]
+        panel = LOGIC.CHECKS_BY_NAME[real_location]
         check_hex = panel["checkHex"]
 
         rule = make_lambda(check_hex, player)
