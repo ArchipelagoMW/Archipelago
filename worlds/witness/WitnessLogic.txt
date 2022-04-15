@@ -265,7 +265,7 @@ Keep Glass Plates (Keep) - Keep - True - Keep Tower - 0x0361B:
 0x09E49 (Shortcut to Shadows) - 0x01CD3 - True
 
 Shipwreck (Shipwreck) - Keep Glass Plates - 0x033EA:
-0x00AFB (Vault) - True - Symmetry & Sound & Sound Hexagons
+0x00AFB (Vault) - True - Symmetry & Sound & Sound Dots
 0x03535 (Vault Box) - 0x00AFB - True
 0x17D28 (Discard) - True - Triangles
 
@@ -323,7 +323,7 @@ Town (Town) - Main Island - True - Theater - 0x0A168 | 0x33AB2:
 
 RGB House (Town) - Town - 0x28998:
 0x034E4 (Sound Room Left) - True - Sound & Sound Waves
-0x034E3 (Sound Room Right) - True - Sound & Sound Hexagons
+0x034E3 (Sound Room Right) - True - Sound & Sound Dots
 0x334D8 (RGB Control) - 0x034E4 & 0x034E3 - Rotated Shapers & RGB & Squares
 0x03C0C (RGB Squares) - 0x334D8 - RGB & Squares
 0x03C08 (RGB Stars) - 0x334D8 - RGB & Stars
@@ -358,12 +358,12 @@ Jungle (Jungle) - Main Island - True:
 0x0087D (Waves 6) - 0x0070F - Sound & Sound Waves
 0x002C7 (Waves 7) - 0x0087D - Sound & Sound Waves
 0x17CAB (Popup Wall Control) - 0x002C7 - True
-0x0026D (Popup Wall 1) - 0x17CAB - Sound & Sound Hexagons
-0x0026E (Popup Wall 2) - 0x0026D - Sound & Sound Hexagons
-0x0026F (Popup Wall 3) - 0x0026E - Sound & Sound Hexagons
-0x00C3F (Popup Wall 4) - 0x0026F - Sound & Sound Hexagons
-0x00C41 (Popup Wall 5) - 0x00C3F - Sound & Sound Hexagons
-0x014B2 (Popup Wall 6) - 0x00C41 - Sound & Sound Hexagons
+0x0026D (Popup Wall 1) - 0x17CAB - Sound & Sound Dots
+0x0026E (Popup Wall 2) - 0x0026D - Sound & Sound Dots
+0x0026F (Popup Wall 3) - 0x0026E - Sound & Sound Dots
+0x00C3F (Popup Wall 4) - 0x0026F - Sound & Sound Dots
+0x00C41 (Popup Wall 5) - 0x00C3F - Sound & Sound Dots
+0x014B2 (Popup Wall 6) - 0x00C41 - Sound & Sound Dots
 0x03616 (Laser) - 0x014B2 - True
 0x337FA (Shortcut to River) - True - True
 
