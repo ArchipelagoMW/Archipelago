@@ -1,31 +1,29 @@
 window.addEventListener('load', () => {
   // Reload tracker
   const update = () => {
-    const tracker = document.getElementById('tracker-wrapper').getAttribute('data-tracker');
-
     // update items section
     const item_columns = document.getElementsByClassName('item-column');
     for (let i = 0; i < item_columns.length; i++) {
-      $( item_columns[i].id ).load(tracker + ' ' + item_columns[i].id);
+      $( item_columns[i].id ).load(' ' + item_columns[i].id);
     }
 
     // update locations section
     const location_columns = document.getElementsByClassName('location-column');
     for (let i = 0; i < location_columns.length; i++) {
-      $( location_columns[i].id ).load(tracker + ' ' + location_columns[i].id);
+      $( location_columns[i].id ).load(' ' + location_columns[i].id);
     }
 
     // update icons section
     const icon_columns = document.getElementsByClassName('icon-column');
     for (let i = 0; i < icon_columns.length; i++) {
-      $( icon_columns[i].id ).load(tracker + ' ' + icon_columns[i].id);
+      $( icon_columns[i].id ).load(' ' + icon_columns[i].id);
     }
 
     // update regions section
     const regions = document.getElementsByClassName('regions-column');
     for (let i = 0; i < regions.length; i++) {
       let region_name = regions[i].id;
-      $( region_name ).load(tracker + ' ' + region_name);
+      $( region_name ).load(' ' + region_name);
     }
   }
 
