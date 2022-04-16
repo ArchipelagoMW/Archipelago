@@ -95,7 +95,7 @@ class SM64World(World):
             return
         data = {
             "slot_data": self.fill_slot_data(),
-            "location_to_item": {self.location_name_to_id[i] : item_table[self.world.get_location(i, self.player).item.name] for i in self.location_name_to_id},
+            "location_to_item": {self.location_name_to_id[i.name] : item_table[i.item.name] for i in self.world.get_locations()},
             "data_package": {
                 "data": {
                     "games": {
