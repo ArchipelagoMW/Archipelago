@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, Counter
-from flask import render_template
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
@@ -86,6 +85,7 @@ def call_stage(world: MultiWorld, method_name: str, *args):
 
 
 class WebWorld:
+    from flask import render_template
     """Webhost integration"""
     # display a settings page. Can be a link to an out-of-ap settings tool too.
     settings_page: Union[bool, str] = True
