@@ -1,6 +1,6 @@
 import collections
 import typing
-from typing import Counter, Optional, Dict, Any, Tuple
+from typing import Counter, Optional, Dict, Any, Tuple, Set
 
 from flask import render_template
 from werkzeug.exceptions import abort
@@ -14,6 +14,21 @@ from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
 from worlds.AutoWorld import AutoWorldRegister
 from MultiServer import get_item_name_from_id, Context
 from NetUtils import SlotType
+
+
+class PlayerTracker:
+    def __init__(self, room: Room, locations: Set[str], all_progression_items: Counter, team: int, player: int,
+                 player_name: str, checked_locations: set, player_received_items: Counter, slot_data: Dict[any, any]):
+        self.room = room
+        self.locations = locations
+        self.prog_items = all_progression_items
+        self.team = team
+        self.player = player
+        self.name = player_name
+        self.checked_locations = checked_locations
+        self.received_items = player_received_items
+        self.slot_data = slot_data
+
 
 alttp_icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
@@ -367,9 +382,11 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
         for id in inventory:
             if lookup_any_item_id_to_name[id] in prog_items[tracked_player]:
                 items_received[lookup_any_item_id_to_name[id]] += 1
-        return webworld.get_player_tracker(room, all_location_names, prog_items[tracked_player], tracked_team,
-                                           tracked_player, player_name, locations_done, items_received,
-                                           slot_data[tracked_player])
+
+        player_tracker = PlayerTracker(room, all_location_names, prog_items[tracked_player], tracked_team,
+                                       tracked_player, player_name, locations_done, items_received,
+                                       slot_data[tracked_player])
+        return webworld.get_player_tracker(player_tracker)
     else:
         return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
 

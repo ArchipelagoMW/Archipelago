@@ -98,39 +98,41 @@ class WebWorld:
     # up correctly. All the arguments available should give you the information you need to build one and the template html
     # can also be overridden.
     @classmethod
-    def get_player_tracker(cls, room, locations: set, all_progression_items: Counter, team: int, player: int,
-                           player_name: str, checked_locations: set, player_received_items: Counter, slot_data: Dict) -> str:
+    def get_player_tracker(cls, tracker_info) -> str:
         """This method will create a basic 'prettier' tracker for each world using their themes automatically. This
-        can be overridden to customize how it will appear. Can provide icons and custom regions as well as custom
-        number of item and location columns. The html used is also a template that can be overridden if you want your
-        tracker to look different in certain aspects. All arguments being returned by this method are required by your
-        implementation. To add icons and regions simply return the icons and regions arguments to the html."""
+        can be overridden to customize how it will appear. Can provide icons and custom regions. The html used is also
+        a jinja template that can be overridden if you want your tracker to look different in certain aspects. All
+        arguments being returned by this method are required by your implementation."""
 
-        icons: Dict = {
-            item: item for item in all_progression_items
-        }
-        icons = {}
-        for item in all_progression_items:
-            icons[item] = 'https://user-images.githubusercontent.com/12670730/113008567-6ebdcb80-9177-11eb-91bd-6863196d9cd3.png'
+        # tracker_info class is defined here: https://github.com/ArchipelagoMW/Archipelago/blob/main/WebHostLib/tracker.py#L19
 
-        # testing ror2
-        regions = {
-            'first_region': [],
-            'second_region': [],
-            'third_region': [],
-            'fourth_region': [],
-        }
-        for i in range(5):
-            regions['first_region'].append(f'Item{i}')
-            regions['second_region'].append(f'Item{i+5}')
-            regions['third_region'].append(f'Item{i+10}')
-            regions['fourth_region'].append(f'Item{i+15}')
+        # if you use icons it's highly recommended you overwrite the icons_render block for a better appearance with your items
+        # example icons dict must be str: str
+        # icons:Dict[str, str] = {}
+        # for item in all_progression_items:
+        #     icons[item] = 'https://user-images.githubusercontent.com/12670730/113008567-6ebdcb80-9177-11eb-91bd-6863196d9cd3.png'
+#
+        # # example regions dict
+        # regions:Dict[str, List[str]] = {
+        #     'first_region': [],
+        #     'second_region': [],
+        #     'third_region': [],
+        #     'fourth_region': [],
+        # }
+#
+        # # if using regions return checks_done as well
+        # checks_done:Dict[str, Set[str]] = {}
+        # for region in regions:
+        #     for location in region:
+        #         if location in checked_locations:
+        #             checks_done.setdefault(region, set()).add(location)
 
-        return render_template("playerTracker.html", all_progression_items=all_progression_items, player=player,
-                               team=team, room=room, player_name=player_name, #icons=icons,
-                               checked_locations=sorted(checked_locations),
-                               locations=sorted(locations),
-                               received_items=player_received_items, theme=cls.theme, item_columns=4, location_columns=4)
+        return render_template("playerTracker.html", all_progression_items=tracker_info.prog_items,
+                               player=tracker_info.player, team=tracker_info.team, room=tracker_info.room,
+                               player_name=tracker_info.name,
+                               checked_locations=sorted(tracker_info.checked_locations),
+                               locations=sorted(tracker_info.locations), received_items=tracker_info.received_items,
+                               theme=cls.theme, item_columns=4, location_columns=4) # icons=icons, regions=regions, checks_done=checks_done
 
     # display a link to a bug report page, most likely a link to a GitHub issue page.
     bug_report_page: Optional[str]
