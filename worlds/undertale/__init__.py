@@ -44,6 +44,7 @@ class UndertaleWorld(World):
             'client_version': client_version,
             'race': self.world.is_race,
             'route': self.world.route_required[self.player].current_key,
+            'temy_armor_include': bool(self.world.temy_include[self.player].value),
         }
 
     def generate_basic(self):
@@ -54,6 +55,12 @@ class UndertaleWorld(World):
         # Add all required progression items
         for (name, num) in required_items.items():
             itempool += [name] * num
+        if self.world.route_required[self.player].current_key == "genocide":
+            itempool += ["Instant Noodles"]
+        if self.world.route_required[self.player].current_key == "pacifist":
+            itempool += ["Undyne Letter EX"]
+        if self.world.temy_include[self.player].value == 1:
+            itempool += ["temy armor"]
 
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
