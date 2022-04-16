@@ -1,10 +1,25 @@
 #tracker-wrapper{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    padding: 5px;
-    color: #000000
+    padding: 20px;
+    color: #000000;
+}
+
+.change-tracker{
+    display: inline-block;
+    text-decoration: none;
+    border: 2px solid black;
+    background: none;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.change-tracker:hover {
+    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.24), 0 4px 20px 0 rgba(0,0,0,0.19);
+    background-color: white;
 }
 
 .dirt-wrapper{
@@ -54,6 +69,7 @@ h1 {
     color: #ffffff;
     padding: 5px;
     text-align: center;
+    text-shadow: 1px 1px black;
 }
 
 h2 {
@@ -72,6 +88,39 @@ h2 {
     padding: 5px;
 }
 
+.image-container{
+    display: absolute;
+    height: 75px;
+    width: 75px;
+    padding: 5px;
+}
+
+.bottom-right{
+    position: relative;
+    align-items: bottom;
+    text-align: center;
+    text-shadow: 1px 1px black;
+}
+
+.icon{
+    height: 100%;
+    position: relative;
+    left: 15px;
+    max-width: 45px;
+    max-height: 45px;
+    filter: grayscale(100%) contrast(75%) brightness(40%);
+}
+
+.icon.acquired{
+    filter: none;
+}
+
+.total-checks{
+    text-align: center;
+    padding: 5px;
+    font-size: 18px;
+}
+
 .locations-container{
     display: flex;
     flex-direction: row;
@@ -82,7 +131,7 @@ h2 {
 }
 
 .location-column{
-    padding: 15px;
+    padding: 5px;
 }
 
 .acquired{
@@ -92,42 +141,20 @@ h2 {
 
 .regions-container{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    padding: 15px;
-    text-align: left;
+    padding: 5px;
+    text-align: center;
 }
 
-.region-header{
+.regions-header{
     font-size: 18px;
     padding: 15px;
-    text-align: left;
-}
-
-.image-container{
-    justify-content: relative;
-    height: 60px;
-    width: 60px;
+    cursor: pointer;
     text-align: center;
-    text-shadow: 1px 1px black;
-    padding: 5px;
 }
 
-.bottom-right{
-    position: relative;
-    bottom: 20px;
-    left: 5px;
-    padding: none;
-}
-
-.icon{
-    height: 100%;
-    max-width: 60px;
-    max-height: 60px;
-    filter: grayscale(100%) contrast(75%) brightness(40%);
-}
-
-.icon.acquired{
-    filter: none;
+.hidden{
+    display: none;
 }

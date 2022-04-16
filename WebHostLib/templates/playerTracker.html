@@ -1,11 +1,17 @@
 {% block head %}
-    <title>{{ player_name }}&apos;s Tracker</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/playerTracker.css") }}"/>
+    <!--suppress XmlDuplicatedId -->
+<title>{{ player_name }}&apos;s Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/playerTracker.css') }}"/>
+    <script type="application/ecmascript" src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename='assets/playerTracker.js') }}"></script>
 {% endblock %}
 
 {% block body %}
     {# TODO implement button for switching to generic tracker #}
     <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}/{{ team }}/{{ player }}">
+        <button class="change-tracker"
+                onclick="location.href='/generic_tracker/{{ room.tracker|suuid }}/{{ team }}/{{ player }}'"
+                >Go to Generic Tracker</button>
         <div class="{{ theme }}-wrapper">
             <div class="items-container">
             <div class="items-container">
@@ -31,11 +37,11 @@
                 <div class="items-container">
                     {%- for column in icons|slice(4) %}
                         {%- if loop.index > 2 %}
-                    <div class="item-column column-{{ loop.index }}">
+                    <div class="icon-column" id="icon-column-{{ loop.index }}">
                         <h1>Item</h1>
                         {%- for name in column %}
                         <div class="image-container"><img src="{{ icons[name] }}" class="icon {{ 'acquired' if name in received_items }}">
-                            <div class="bottom-right">
+                            <div class="bottom-text">
                             {{ name if name in received_items else '' }}
                             </div>
                         </div>
@@ -52,7 +58,7 @@
                         {% for column in all_progression_items|sort|slice(4) -%}
                         {% if loop.index < 3 -%}
                         <div class="items-container">
-                        <div class="item-column column-{{ loop.index }}">
+                        <div class="item-column" id="item-column-{{ loop.index }}">
                             <h1>Item</h1>
                             {%- for name in column %}
                             {%- if name in received_items %}
@@ -62,7 +68,7 @@
                             {%- endif %}
                             {%- endfor %}
                         </div>
-                        <div class="item-column">
+                        <div class="item-column" id="got-item-column-{{ loop.index }}">
                             <h2></h2>
                             {%- for name in column %}
                             {%- if name in received_items %}
@@ -84,7 +90,7 @@
                         {% for column in all_progression_items|sort|slice(4) -%}
                         {% if loop.index > 2 -%}
                         <div class="items-container">
-                        <div class="item-column column-{{ loop.index }}">
+                        <div class="item-column" id="item-column-{{ loop.index }}">
                             <h1>Item</h1>
                             {%- for name in column %}
                             {%- if name in received_items %}
@@ -94,7 +100,7 @@
                             {%- endif %}
                             {%- endfor %}
                         </div>
-                        <div class="item-column">
+                        <div class="item-column" id="got-item-column-{{ loop.index }}">
                             <h2></h2>
                             {%- for name in column %}
                             {%- if name in received_items %}
@@ -117,17 +123,20 @@
                 </div>
             </div>
                 {% endif %}
+            <div class="total-checks">
+                <div>Total Checks Done: {{ checked_locations|length }}/{{ locations|length }}</div>
+            </div>
             {% if regions %}
             {% block regions_render %}
             <div class="regions-container">
                 {% for region in regions %}
-                <div class="regions-column column-{region}">
-                    <h1 class="region-header {{ region }}">{{ region }} ▼ {{ checks_done[region]|length }} / {{ regions[region]|length }}</h1>
+                <div class="regions-column" id="{{ region }}">
+                    <h1 class="counter regions-header" id="{{ region }}-header">{{ region }} ▼ {{ checks_done[region]|length }} / {{ regions[region]|length }}</h1>
+                <div class="location-column hidden" id="{{ region }}-locations">
                 {%- for location in regions[region] %}
-                <div class="location-column locations-hide">
-                    <div class="{{ 'acquired' if location in checked_locations }}">{{ location }}</div>
-                </div>
+                    <div class="counter {{ 'acquired' if location in checked_locations }}">{{ location }}</div>
                 {%- endfor %}
+                </div>
                 </div>
                 {% endfor %}
             </div>
@@ -138,10 +147,10 @@
                 <div class="locations-container">
                     {%- for column in locations|slice(4) %}
                     {% if loop.index < 3 %}
-                    <div class="location-column checked-locations-column-{{ loop.index }}">
+                    <div class="location-column" id="locations-column-{{ loop.index }}">
                         <h1>Locations</h1>
                         {%- for location in column %}
-                        <div class="{{ 'acquired' if location in checked_locations }}">{{ location }}</div>
+                        <div class="counter {{ 'acquired' if location in checked_locations }}">{{ location }}</div>
                         {%- endfor %}
                     </div>
                     {% endif %}
@@ -150,10 +159,10 @@
                 <div class="locations-container">
                     {% for column in locations|slice(4) %}
                     {% if loop.index > 2 %}
-                    <div class="location-column checked-locations-column-{{ loop.index }}">
+                    <div class="location-column" id="locations-column-{{ loop.index }}">
                         <h1>Locations</h1>
                         {%- for location in column %}
-                        <div class="{{ 'acquired' if location in checked_locations }}">{{ location }}</div>
+                        <div class="counter {{ 'acquired' if location in checked_locations }}">{{ location }}</div>
                         {%- endfor %}
                     </div>
                     {% endif %}

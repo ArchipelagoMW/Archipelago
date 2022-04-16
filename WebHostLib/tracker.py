@@ -17,10 +17,10 @@ from NetUtils import SlotType
 
 
 class PlayerTracker:
-    def __init__(self, room: Room, locations: Set[str], all_progression_items: Counter, team: int, player: int,
+    def __init__(self, room: Room, all_locations: Set[str], all_progression_items: Counter, team: int, player: int,
                  player_name: str, checked_locations: set, player_received_items: Counter, slot_data: Dict[any, any]):
         self.room = room
-        self.locations = locations
+        self.locations = all_locations
         self.prog_items = all_progression_items
         self.team = team
         self.player = player
@@ -376,19 +376,21 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
                                 seed_checks_in_area, lttp_checks_done, slot_data[tracked_player])
     elif game_name in AutoWorldRegister.world_types and type != 'generic':
         webworld = AutoWorldRegister.world_types[game_name].web
-        locations_done = {lookup_any_location_id_to_name[id] for id in checked_locations}
-        items_received = collections.Counter()
+
         all_location_names = {lookup_any_location_id_to_name[id] for id in locations[tracked_player]}
+        locations_done = {lookup_any_location_id_to_name[id] for id in checked_locations}
+
+        prog_items_received = collections.Counter()
         for id in inventory:
             if lookup_any_item_id_to_name[id] in prog_items[tracked_player]:
-                items_received[lookup_any_item_id_to_name[id]] += 1
+                prog_items_received[lookup_any_item_id_to_name[id]] = inventory[id]
 
         player_tracker = PlayerTracker(room, all_location_names, prog_items[tracked_player], tracked_team,
-                                       tracked_player, player_name, locations_done, items_received,
+                                       tracked_player, player_name, locations_done, prog_items_received,
                                        slot_data[tracked_player])
         return webworld.get_player_tracker(player_tracker)
     else:
-        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name)
+        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name, seed_checks_in_area, lttp_checks_done)
 
 
 @app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')

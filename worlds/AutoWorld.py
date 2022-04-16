@@ -96,7 +96,7 @@ class WebWorld:
 
     # overridable method allowing you to create your own tracker. It needs to be designated as a class method to be picked
     # up correctly. All the arguments available should give you the information you need to build one and the template html
-    # can also be overridden.
+    # can also be overridden. This is a class method and the tracker is not typed to avoid circular importing.
     @classmethod
     def get_player_tracker(cls, tracker_info) -> str:
         """This method will create a basic 'prettier' tracker for each world using their themes automatically. This
@@ -132,7 +132,7 @@ class WebWorld:
                                player_name=tracker_info.name,
                                checked_locations=sorted(tracker_info.checked_locations),
                                locations=sorted(tracker_info.locations), received_items=tracker_info.received_items,
-                               theme=cls.theme, item_columns=4, location_columns=4) # icons=icons, regions=regions, checks_done=checks_done
+                               theme=cls.theme) # icons=icons, regions=regions, checks_done=checks_done
 
     # display a link to a bug report page, most likely a link to a GitHub issue page.
     bug_report_page: Optional[str]
