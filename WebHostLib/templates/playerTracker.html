@@ -7,11 +7,13 @@
     <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}/{{ team }}/{{ player }}">
         <div class="{{ theme }}-wrapper">
             <div class="items-container">
+            <div class="items-container">
                 {% if icons or received_items %}
                     {% if icons %}
                     {% block icons_render %}
-
-                    {%- for column in icons|slice(item_columns) %}
+                    <div class="items-container">
+                    {%- for column in icons|slice(4) %}
+                        {%- if loop.index < 3 %}
                     <div class="item-column column-{{ loop.index }}">
                         <h1>Item</h1>
                         {%- for name in column %}
@@ -22,13 +24,31 @@
                         </div>
                         {%- endfor %}
                     </div>
+                        {%- endif %}
+                        {%- endfor %}
+                    </div>
+                <div class="items-container">
+                    {%- for column in icons|slice(4) %}
+                        {%- if loop.index > 2 %}
+                    <div class="item-column column-{{ loop.index }}">
+                        <h1>Item</h1>
+                        {%- for name in column %}
+                        <div class="image-container"><img src="{{ icons[name] }}" class="icon {{ 'acquired' if name in received_items }}">
+                            <div class="bottom-right">
+                            {{ name if name in received_items else '' }}
+                            </div>
+                        </div>
+                        {%- endfor %}
+                    </div>
+                        {%- endif %}
                     {%- endfor %}
+                    </div>
                     {% endblock %}
 
                     {% else %}
                     {% block item_names_render %}
                     <div class="items-container">
-                        {% for column in all_progression_items|sort|slice(4) %}
+                        {% for column in all_progression_items|sort|slice(4) -%}
                         {% if loop.index < 3 -%}
                         <div class="items-container">
                         <div class="item-column column-{{ loop.index }}">
@@ -53,82 +73,62 @@
                             {%- else %}
                             <div></div>
                             {%- endif %}
+                            {%- endfor %}
                         </div>
-                            {% endfor %}
-                            {% endif %}
                         </div>
-                        {% endfor %}
+                            {% endif -%}
+                            {% endfor -%}
                     </div>
+                    <div class="items-container">
+                        {% for column in all_progression_items|sort|slice(4) -%}
+                        {% if loop.index > 2 -%}
                         <div class="items-container">
-                        {% for column in all_progression_items|sort|slice(4) %}
-                        {% if loop.index > 2 %}
-                            <div class="items-container">
                         <div class="item-column column-{{ loop.index }}">
                             <h1>Item</h1>
-                            {% for name in column %}
-                            {% if name in received_items %}
+                            {%- for name in column %}
+                            {%- if name in received_items %}
                             <div>{{ name }}</div>
-                            {% else %}
+                            {%- else %}
                             <div></div>
-                            {% endif %}
-                            {% endfor %}
+                            {%- endif %}
+                            {%- endfor %}
                         </div>
                         <div class="item-column">
                             <h2></h2>
-                            {% for name in column %}
-                            {% if name in received_items %}
+                            {%- for name in column %}
+                            {%- if name in received_items %}
                                 {% if all_progression_items[name] > 1 %}
                                 <div> {{ received_items[name] }}</div>
                                 {% else %}
                                 <div>✔</div>
                                 {% endif %}
-                            {% else %}
+                            {%- else %}
                             <div></div>
-                            {% endif %}
+                            {%- endif %}
+                            {%- endfor %}
                         </div>
-                            {% endfor %}
-                            </div>
                         </div>
-                        {% endif %}
-                        {% endfor %}
+                            {% endif -%}
+                            {% endfor -%}
+                    </div>
                     {% endblock %}
                     {% endif %}
                 </div>
+            </div>
                 {% endif %}
             {% if regions %}
             {% block regions_render %}
-            <div class="table-wrapper">
-                <div class="table non-unique-item-table" id="location-table">
-                    <div>
-                    <div>
-                        {% for columns in range(regions|count) %}
-                        <div>Region</div>
-                        <div>Locations Checked</div>
-                        {% endfor %}
-                    </div>
-                    </div>
-                    {% for column in regions|batch(location_columns) %}
-                    <div class="region" id="region-{{column}}">
-                    <div>
-                        {% for region in column %}
-                        <div>{{ region }} {{ '▼' if region != 'Total' }}</div>
-                        <div class="counter">{{ locations in regions[region] if locations in
-                            locations_done }} / {{ regions[region]|count }}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="locations" id="{{region}}">
-                        {% for region in column %}
-                    {% for location in regions[region] %}
-                    <div>
-                        <div class="location-name">{{ location }}</div>
-                        <div class="counter">{{ '✔' if location in locations_done else '' }}</div>
-                    </div>
-                    {% endfor %}
-                    </div>
-                        {% endfor %}
-                    </div>
-                    {% endfor %}
+            <div class="regions-container">
+                {% for region in regions %}
+                <div class="regions-column column-{region}">
+                    <h1 class="region-header {{ region }}">{{ region }} ▼ {{ checks_done[region]|length }} / {{ regions[region]|length }}</h1>
+                {%- for location in regions[region] %}
+                <div class="location-column locations-hide">
+                    <div class="{{ 'acquired' if location in checked_locations }}">{{ location }}</div>
                 </div>
+                {%- endfor %}
+                </div>
+                {% endfor %}
             </div>
             {% endblock %}
             {% else %}
