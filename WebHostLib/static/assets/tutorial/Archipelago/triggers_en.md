@@ -15,7 +15,7 @@ YAML: [Mercenary Mode YAML on GitHub](https://github.com/alwaysintreble/Archipel
 
 For more information on plando you can reference the general plando guide or the Link to the Past plando guide.
 
-General plando guide: [Archipelago Plando Guide](/tutorial/archipelago/plando/en)
+General plando guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 
 Link to the Past plando guide: [LttP Plando Guide](/tutorial/zelda3/plando/en)
 

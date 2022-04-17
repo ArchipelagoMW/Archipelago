@@ -28,7 +28,7 @@ class Version(typing.NamedTuple):
 __version__ = "0.3.2"
 version_tuple = tuplize_version(__version__)
 
-from yaml import load, dump, SafeLoader
+from yaml import load, load_all, dump, SafeLoader
 
 try:
     from yaml import CLoader as Loader
@@ -159,6 +159,7 @@ class UniqueKeyLoader(SafeLoader):
 
 
 parse_yaml = functools.partial(load, Loader=UniqueKeyLoader)
+parse_yamls = functools.partial(load_all, Loader=UniqueKeyLoader)
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
 
