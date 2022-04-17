@@ -14,14 +14,14 @@ class WitnessRegions():
     locat = None
     logic = None
 
-    def make_lambda(self, panel_hex_to_solve_set, player):
+    def make_lambda(self, panel_hex_to_solve_set, world, player):
         """
         Lambdas are made in a for loop, so the values have to be captured
         This function is for that purpose
         """
 
         return lambda state: state.can_solve_panels(
-            panel_hex_to_solve_set, player, self.logic, self.locat
+            panel_hex_to_solve_set, world, player, self.logic, self.locat
         )
 
     def connect(self, world: MultiWorld, player: int, source: str,
@@ -39,7 +39,7 @@ class WitnessRegions():
             source_region
         )
 
-        connection.access_rule = self.make_lambda(panel_hex_to_solve_set,
+        connection.access_rule = self.make_lambda(panel_hex_to_solve_set, world,
                                                   player)
 
         source_region.exits.append(connection)

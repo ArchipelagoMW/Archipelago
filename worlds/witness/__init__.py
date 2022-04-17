@@ -70,7 +70,7 @@ class WitnessWorld(World):
         pool += [self.create_item(junk) for junk in junk_pool]
 
         victory_location = "Inside Mountain Final Room Elevator Start"
-        #victory_location = "Challenge Vault Box"
+        victory_location = "Challenge Vault Box"
         victory_ap_loc = self.world.get_location(victory_location, self.player)
         victory_ap_loc.place_locked_item(self.create_item("Victory"))
 
