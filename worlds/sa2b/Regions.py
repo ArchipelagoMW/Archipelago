@@ -30,15 +30,15 @@ def create_regions(world, player: int, active_locations):
     ]
     metal_harbor_region = create_region(world, player, active_locations, LocationName.metal_harbor_region, metal_harbor_region_locations, None)
     
-    green_jungle_region_locations = [
-        LocationName.green_jungle_1,
-        LocationName.green_jungle_2,
-        LocationName.green_jungle_3,
-        LocationName.green_jungle_4,
-        LocationName.green_jungle_5,
-        LocationName.green_jungle_upgrade,
+    green_forest_region_locations = [
+        LocationName.green_forest_1,
+        LocationName.green_forest_2,
+        LocationName.green_forest_3,
+        LocationName.green_forest_4,
+        LocationName.green_forest_5,
+        LocationName.green_forest_upgrade,
     ]
-    green_jungle_region = create_region(world, player, active_locations, LocationName.green_jungle_region, green_jungle_region_locations, None)
+    green_forest_region = create_region(world, player, active_locations, LocationName.green_forest_region, green_forest_region_locations, None)
     
     pyramid_cave_region_locations = [
         LocationName.pyramid_cave_1,
@@ -335,7 +335,7 @@ def create_regions(world, player: int, active_locations):
         menu_region,
         city_escape_region,
         metal_harbor_region,
-        green_jungle_region,
+        green_forest_region,
         pyramid_cave_region,
         crazy_gadget_region,
         final_rush_region,
@@ -372,7 +372,7 @@ def create_regions(world, player: int, active_locations):
 
     connect(world, player, names, 'Menu', LocationName.city_escape_region)
     connect(world, player, names, 'Menu', LocationName.metal_harbor_region)
-    connect(world, player, names, 'Menu', LocationName.green_jungle_region)
+    connect(world, player, names, 'Menu', LocationName.green_forest_region)
     connect(world, player, names, 'Menu', LocationName.pyramid_cave_region)
     connect(world, player, names, 'Menu', LocationName.crazy_gadget_region)
     connect(world, player, names, 'Menu', LocationName.final_rush_region)

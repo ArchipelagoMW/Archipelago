@@ -30,14 +30,13 @@ class SA2BWorld(World):
 
     def _get_slot_data(self):
         return {
-            "MusicMap":           self.music_map,
-            "MusicShuffle":       self.world.MusicShuffle[self.player],
-            "DeathLink":          self.world.DeathLink[self.player],
-            "IncludeMission2":    self.world.IncludeMission2[self.player],
-            "IncludeMission3":    self.world.IncludeMission3[self.player],
-            "IncludeMission4":    self.world.IncludeMission4[self.player],
-            "IncludeMission5":    self.world.IncludeMission5[self.player],
-            "IncludeChaoEmblems": self.world.IncludeChaoEmblems[self.player],
+            "MusicMap":                             self.music_map,
+            "MusicShuffle":                         self.world.MusicShuffle[self.player],
+            "DeathLink":                            self.world.DeathLink[self.player],
+            "IncludeMissions":                      self.world.IncludeMissions[self.player],
+            "EmblemPercentageForCannonsCore":       self.world.EmblemPercentageForCannonsCore[self.player],
+            "NumberOfLevelGates":                   self.world.NumberOfLevelGates[self.player],
+            "LevelGateDistribution":                self.world.LevelGateDistribution[self.player],
         }
 
     def _create_items(self, name: str):
@@ -49,7 +48,7 @@ class SA2BWorld(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
-        slot_data["MusicMap"]: self.music_map
+        slot_data["MusicMap"] = self.music_map
         for option_name in sa2b_options:
             option = getattr(self.world, option_name)[self.player]
             slot_data[option_name] = option.value
@@ -61,30 +60,13 @@ class SA2BWorld(World):
         itempool: typing.List[SA2BItem] = []
 
         # First Missions
-        total_required_locations = 30
+        total_required_locations = 31
+
+        # Mission Locations
+        total_required_locations *= self.world.IncludeMissions[self.player]
 
         # Upgrades
         total_required_locations += 28
-
-        # Second Missions
-        if self.world.IncludeMission2[self.player]:
-            total_required_locations += 30
-
-        # Third Missions
-        if self.world.IncludeMission3[self.player]:
-            total_required_locations += 30
-
-        # Fourth Missions
-        if self.world.IncludeMission4[self.player]:
-            total_required_locations += 30
-
-        # Fifth Missions
-        if self.world.IncludeMission5[self.player]:
-            total_required_locations += 30
-
-        # Cannon's Core Missions
-        if self.world.IncludeCannonsCore[self.player]:
-            total_required_locations += 5
 
         # Fill item pool with all required items
         for item in {**upgrades_table}:

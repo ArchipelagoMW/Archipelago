@@ -13,7 +13,7 @@ first_mission_location_table = {
     LocationName.wild_canyon_1:    0xFF0001,
     LocationName.prison_lane_1:    0xFF0002,
     LocationName.metal_harbor_1:   0xFF0003,
-    LocationName.green_jungle_1:   0xFF0004,
+    LocationName.green_forest_1:   0xFF0004,
     LocationName.pumpkin_hill_1:   0xFF0005,
     LocationName.mission_street_1: 0xFF0006,
     LocationName.aquatic_mine_1:   0xFF0007,
@@ -40,6 +40,8 @@ first_mission_location_table = {
     LocationName.mad_space_1:       0xFF001B,
     LocationName.cosmic_wall_1:     0xFF001C,
     LocationName.final_chase_1:     0xFF001D,
+
+    LocationName.cannon_core_1:     0xFF001E,
 }
 
 second_mission_location_table = {
@@ -47,7 +49,7 @@ second_mission_location_table = {
     LocationName.wild_canyon_2:    0xFF0021,
     LocationName.prison_lane_2:    0xFF0022,
     LocationName.metal_harbor_2:   0xFF0023,
-    LocationName.green_jungle_2:   0xFF0024,
+    LocationName.green_forest_2:   0xFF0024,
     LocationName.pumpkin_hill_2:   0xFF0025,
     LocationName.mission_street_2: 0xFF0026,
     LocationName.aquatic_mine_2:   0xFF0027,
@@ -74,6 +76,8 @@ second_mission_location_table = {
     LocationName.mad_space_2:       0xFF003B,
     LocationName.cosmic_wall_2:     0xFF003C,
     LocationName.final_chase_2:     0xFF003D,
+
+    LocationName.cannon_core_2:     0xFF003E,
 }
 
 third_mission_location_table = {
@@ -81,7 +85,7 @@ third_mission_location_table = {
     LocationName.wild_canyon_3:    0xFF0041,
     LocationName.prison_lane_3:    0xFF0042,
     LocationName.metal_harbor_3:   0xFF0043,
-    LocationName.green_jungle_3:   0xFF0044,
+    LocationName.green_forest_3:   0xFF0044,
     LocationName.pumpkin_hill_3:   0xFF0045,
     LocationName.mission_street_3: 0xFF0046,
     LocationName.aquatic_mine_3:   0xFF0047,
@@ -108,6 +112,8 @@ third_mission_location_table = {
     LocationName.mad_space_3:       0xFF005B,
     LocationName.cosmic_wall_3:     0xFF005C,
     LocationName.final_chase_3:     0xFF005D,
+
+    LocationName.cannon_core_3:     0xFF005E,
 }
 
 fourth_mission_location_table = {
@@ -115,7 +121,7 @@ fourth_mission_location_table = {
     LocationName.wild_canyon_4:    0xFF0061,
     LocationName.prison_lane_4:    0xFF0062,
     LocationName.metal_harbor_4:   0xFF0063,
-    LocationName.green_jungle_4:   0xFF0064,
+    LocationName.green_forest_4:   0xFF0064,
     LocationName.pumpkin_hill_4:   0xFF0065,
     LocationName.mission_street_4: 0xFF0066,
     LocationName.aquatic_mine_4:   0xFF0067,
@@ -142,6 +148,8 @@ fourth_mission_location_table = {
     LocationName.mad_space_4:       0xFF007B,
     LocationName.cosmic_wall_4:     0xFF007C,
     LocationName.final_chase_4:     0xFF007D,
+
+    LocationName.cannon_core_4:     0xFF007E,
 }
 
 fifth_mission_location_table = {
@@ -149,7 +157,7 @@ fifth_mission_location_table = {
     LocationName.wild_canyon_5:    0xFF0081,
     LocationName.prison_lane_5:    0xFF0082,
     LocationName.metal_harbor_5:   0xFF0083,
-    LocationName.green_jungle_5:   0xFF0084,
+    LocationName.green_forest_5:   0xFF0084,
     LocationName.pumpkin_hill_5:   0xFF0085,
     LocationName.mission_street_5: 0xFF0086,
     LocationName.aquatic_mine_5:   0xFF0087,
@@ -176,14 +184,8 @@ fifth_mission_location_table = {
     LocationName.mad_space_5:       0xFF009B,
     LocationName.cosmic_wall_5:     0xFF009C,
     LocationName.final_chase_5:     0xFF009D,
-}
 
-cannon_core_location_table = {
-    LocationName.cannon_core_1: 0xFF001E,
-    LocationName.cannon_core_2: 0xFF003E,
-    LocationName.cannon_core_3: 0xFF005E,
-    LocationName.cannon_core_4: 0xFF007E,
-    LocationName.cannon_core_5: 0xFF009E,
+    LocationName.cannon_core_5:     0xFF009E,
 }
 
 upgrade_location_table = {
@@ -191,7 +193,7 @@ upgrade_location_table = {
     LocationName.wild_canyon_upgrade:    0xFF00A1,
     LocationName.prison_lane_upgrade:    0xFF00A2,
     LocationName.metal_harbor_upgrade:   0xFF00A3,
-    LocationName.green_jungle_upgrade:   0xFF00A4,
+    LocationName.green_forest_upgrade:   0xFF00A4,
     LocationName.pumpkin_hill_upgrade:   0xFF00A5,
     LocationName.mission_street_upgrade: 0xFF00A6,
     LocationName.aquatic_mine_upgrade:   0xFF00A7,
@@ -241,7 +243,6 @@ all_locations = {
     **third_mission_location_table,
     **fourth_mission_location_table,
     **fifth_mission_location_table,
-    **cannon_core_location_table,
     **upgrade_location_table,
     **chao_garden_location_table,
     **other_location_table,
@@ -253,20 +254,17 @@ def setup_locations(world, player: int):
 
     location_table = {**first_mission_location_table}
 
-    if world.IncludeMission2[player]:
+    if world.IncludeMissions[player] >= 2:
         location_table.update({**second_mission_location_table})
             
-    if world.IncludeMission3[player]:
+    if world.IncludeMissions[player] >= 3:
         location_table.update({**third_mission_location_table})
 
-    if world.IncludeMission4[player]:
+    if world.IncludeMissions[player] >= 4:
         location_table.update({**fourth_mission_location_table})
 
-    if world.IncludeMission5[player]:
+    if world.IncludeMissions[player] >= 5:
         location_table.update({**fifth_mission_location_table})
-        
-    if world.IncludeCannonsCore[player]:
-        location_table.update({**cannon_core_location_table})
 
     location_table.update({**upgrade_location_table})
     # location_table.update(**chao_garden_location_table})
