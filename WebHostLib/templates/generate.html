@@ -87,9 +87,13 @@
                                 </td>
                                 <td>
                                     <select name="remaining_mode" id="remaining_mode">
-                                        <option value="disabled">Disabled</option>
-                                        <option value="goal">Allow !remaining after goal completion</option>
-                                        <option value="enabled">Manual !remaining</option>
+                                        {% if race -%}
+                                            <option value="disabled">Disabled in Race mode</option>
+                                        {%- else -%}
+                                            <option value="disabled">Disabled</option>
+                                            <option value="goal">Allow !remaining after goal completion</option>
+                                            <option value="enabled">Manual !remaining</option>
+                                        {%- endif -%}
                                     </select>
                                 </td>
                             </tr>
@@ -103,8 +107,12 @@
                                 </td>
                                 <td>
                                     <select name="item_cheat" id="item_cheat">
-                                        <option value="1">Enabled</option>
-                                        <option value="0">Disabled</option>
+                                        {% if race -%}
+                                            <option value="0">Disabled in Race mode</option>
+                                        {%- else -%}
+                                            <option value="1">Enabled</option>
+                                            <option value="0">Disabled</option>
+                                        {%- endif -%}
                                     </select>
                                 </td>
                             </tr>
