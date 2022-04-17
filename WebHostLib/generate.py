@@ -25,7 +25,7 @@ def get_meta(options_source: dict) -> dict:
     meta = {
         "hint_cost": int(options_source.get("hint_cost", 10)),
         "forfeit_mode": options_source.get("forfeit_mode", "goal"),
-        "remaining_mode": options_source.get("forfeit_mode", "disabled"),
+        "remaining_mode": options_source.get("remaining_mode", "disabled"),
         "collect_mode": options_source.get("collect_mode", "disabled"),
     }
     return meta
@@ -51,7 +51,7 @@ def generate(race=False):
 
                 if race:
                     meta["item_cheat"] = False
-                    meta["remaining"] = False
+                    meta["remaining_mode"] = False
 
                 if any(type(result) == str for result in results.values()):
                     return render_template("checkResult.html", results=results)
