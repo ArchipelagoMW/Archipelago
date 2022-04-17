@@ -289,5 +289,3 @@ class WitnessLocations():
             in self.PANEL_TYPES_TO_SHUFFLE
             or location in self.BYE_PANELS
         }
-
-        print(self.CHECK_LOCATION_TABLE)
