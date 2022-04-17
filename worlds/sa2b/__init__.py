@@ -76,11 +76,13 @@ class SA2BWorld(World):
         for item in {**upgrades_table}:
             itempool += self._create_items(item)
 
-        itempool += [self.create_item(ItemName.emblem)] * (total_required_locations - len(itempool))
+        total_emblem_count = total_required_locations - len(itempool)
+
+        itempool += [self.create_item(ItemName.emblem)] * total_emblem_count
 
         self.world.itempool += itempool
 
-        self.emblems_for_cannons_core = math.floor((total_required_locations - len(itempool)) * (self.world.EmblemPercentageForCannonsCore[self.player] / 100.0))
+        self.emblems_for_cannons_core = math.floor(total_emblem_count * (self.world.EmblemPercentageForCannonsCore[self.player] / 100.0))
 
         shuffled_region_list = list(range(30))
         emblem_requirement_list = list()
