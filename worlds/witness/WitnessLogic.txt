@@ -484,11 +484,11 @@ Treehouse Entry Area (Treehouse):
 
 Treehouse Beyond Yellow Bridge (Treehouse) - Treehouse Entry Area - 0x0A182:
 0x2700B (Laser House Door Timer Outside Control) - True - True
-0x17DC8 (First Purple Bridge 1) - True - Stars
-0x17DC7 (First Purple Bridge 2) - 0x17DC8 - Stars
-0x17CE4 (First Purple Bridge 3) - 0x17DC7 - Stars
-0x17D2D (First Purple Bridge 4) - 0x17CE4 - Stars
-0x17D6C (First Purple Bridge 5) - 0x17D2D - Stars
+0x17DC8 (First Purple Bridge 1) - True - Stars & Dots
+0x17DC7 (First Purple Bridge 2) - 0x17DC8 - Stars & Dots
+0x17CE4 (First Purple Bridge 3) - 0x17DC7 - Stars & Dots
+0x17D2D (First Purple Bridge 4) - 0x17CE4 - Stars & Dots
+0x17D6C (First Purple Bridge 5) - 0x17D2D - Stars & Dots
 0x17D9B (Second Purple Bridge 1) - 0x17D6C - Stars & Squares
 0x17D99 (Second Purple Bridge 2) - 0x17D9B - Stars & Squares
 0x17DAA (Second Purple Bridge 3) - 0x17D99 - Stars & Squares
