@@ -4,66 +4,14 @@ Parses the WitnessLogic.txt logic file into useful data structures
 
 import pathlib
 import os
+from BaseClasses import MultiWorld
+
+from worlds.witness.Options import is_option_enabled
 pathlib.Path(__file__).parent.resolve()
 
 
 class ParsedWitnessLogic():
     """WITNESS LOGIC CLASS"""
-
-    ALL_ITEMS = set()
-    ALL_TRAPS = set()
-    ALL_BOOSTS = set()
-    EVENT_PANELS_FROM_REGIONS = set()
-    EVENT_PANELS_FROM_PANELS = set()
-    ALL_REGIONS_BY_NAME = dict()
-    CHECKS_DEPENDENT_BY_HEX = dict()
-    CHECKS_BY_HEX = dict()
-    CHECKS_BY_NAME = dict()
-    ORIGINAL_EVENT_PANELS = set()
-    NECESSARY_EVENT_PANELS = set()
-    EVENT_ITEM_PAIRS = dict()
-    ALWAYS_EVENT_HEX_CODES = set()
-    EVENT_ITEM_NAMES = {
-        "0x01A0F": "Keep Laser Panel (Hedge Mazes) Activates",
-        "0x09D9B": "Monastery Overhead Doors Open",
-        "0x193A6": "Monastery Laser Panel Activates",
-        "0x00037": "Monastery Branch Panels Activate",
-        "0x0A079": "Access to Bunker Laser",
-        "0x0A3B5": "Door to Tutorial Discard Opens",
-        "0x01D3F": "Keep Laser Panel (Pressure Plates) Activates",
-        "0x09F7F": "Mountain Access",
-        "0x0367C": "Quarry Laser Mill Requirement Met",
-        "0x009A1": "Swamp Rotating Bridge Near Side",
-        "0x00006": "Swamp Cyan Water Drains",
-        "0x00990": "Swamp Broken Shapers 1 Activates",
-        "0x0A8DC": "Lower Avoid 6 Activates",
-        "0x0000A": "Swamp More Rotated Shapers 1 Access",
-        "0x09ED8": "Inside Mountain Second Layer Both Light Bridges Solved",
-        "0x0A3D0": "Quarry Laser Boathouse Requirement Met",
-        "0x00596": "Swamp Red Water Drains",
-    }
-
-    ALWAYS_EVENTS_BY_NAME = {
-        "Symmetry Laser Activation": "0x0360D",
-        "Desert Laser Activation": "0x03608",
-        "Desert Laser Redirection": "0x09F98",
-        "Quarry Laser Activation": "0x03612",
-        "Shadows Laser Activation": "0x19650",
-        "Keep Laser Hedges Activation": "0x0360E",
-        "Keep Laser Pressure Plates Activation": "0x03317",
-        "Monastery Laser Activation": "0x17CA4",
-        "Town Laser Activation": "0x032F5",
-        "Jungle Laser Activation": "0x03616",
-        "Bunker Laser Activation": "0x09DE0",
-        "Swamp Laser Activation": "0x03615",
-        "Treehouse Laser Activation": "0x03613",
-        "Shipwreck Video Pattern Knowledge": "0x03535",
-        "Mountain Video Pattern Knowledge": "0x03542",
-        "Desert Video Pattern Knowledge": "0x0339E",
-        "Tutorial Video Pattern Knowledge": "0x03481",
-        "Jungle Video Pattern Knowledge": "0x03702",
-        "Theater Walkway Video Pattern Knowledge": "0x2FAF6"
-    }
 
     def parse_items(self):
         """
@@ -150,6 +98,56 @@ class ParsedWitnessLogic():
         lambda_set = frozenset({frozenset(a.split(" & ")) for a in split_ands})
 
         return lambda_set
+
+    def make_single_adjustment(self, type, line):
+        """Makes a single logic adjustment based on additional logic file"""
+
+        if type == "Event Items":
+            line_split = line.split(" - ")
+            hex_set = line_split[1].split(",")
+
+            for hex_code in hex_set:
+                self.ALWAYS_EVENT_NAMES_BY_HEX[hex_code] = line_split[0]
+
+            """
+            Should probably do this differently...
+            Events right now depend on a panel.
+            That seems bad.
+            """
+
+            to_remove = set()
+
+            for hex_code, event_name in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
+                if hex_code not in hex_set and event_name == line_split[0]:
+                    to_remove.add(hex_code)
+                    
+            for remove in to_remove:
+                del self.ALWAYS_EVENT_NAMES_BY_HEX[remove]
+
+            return
+        
+        if type == "Requirement Changes":
+            line_split = line.split(" - ")
+            panel_obj = self.CHECKS_DEPENDENT_BY_HEX[line_split[0]]
+
+            required_items = self.parse_lambda(line_split[2])
+            items_actually_in_the_game = {item[0] for item in self.ALL_ITEMS}
+            required_items = frozenset(
+                subset.intersection(items_actually_in_the_game)
+                for subset in required_items
+            )
+
+            requirement = {
+                "panels": self.parse_lambda(line_split[1]),
+                "items": required_items
+            }
+
+            panel_obj["requirement"] = requirement
+
+            return
+
+        if type == "Disabled Locations":
+            self.COMPLETELY_DISABLED_CHECKS.add(line[:7])
 
     def define_new_region(self, region_string):
         """
@@ -275,6 +273,34 @@ class ParsedWitnessLogic():
 
             current_region["panels"].add(check_hex)
 
+    def make_options_adjustments(self, world, player):
+        """Makes logic adjustments based on options"""
+        adjustment_files_in_order = []
+
+        print(player)
+        print(is_option_enabled(world, player, "disable_non_randomized_puzzles"))
+
+        if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
+            adjustment_files_in_order.append("Disable_Unrandomized.txt")
+
+        for adjustment_file in adjustment_files_in_order:
+            path = os.path.join(os.path.dirname(__file__), adjustment_file)
+            file = open(path, "r", encoding="utf-8")
+
+            current_adjustment_type = None
+
+            for line in file.readlines():
+                line = line.strip()
+                
+                if len(line) == 0:
+                    continue
+                
+                if line[-1] == ":":
+                    current_adjustment_type = line[:-1]
+                    continue
+                
+                self.make_single_adjustment(current_adjustment_type, line)
+
     def make_dependency_reduced_checklist(self):
         """
         Turns dependent check set into semi-independent check set
@@ -326,7 +352,7 @@ class ParsedWitnessLogic():
                     if panel not in region["panels"] | connected_r["panels"]:
                         self.NECESSARY_EVENT_PANELS.add(panel)
 
-        for always_item, always_hex in self.ALWAYS_EVENTS_BY_NAME.items():
+        for always_hex, always_item in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
             self.ALWAYS_EVENT_HEX_CODES.add(always_hex)
             self.NECESSARY_EVENT_PANELS.add(always_hex)
             self.EVENT_ITEM_NAMES[always_hex] = always_item
@@ -336,7 +362,67 @@ class ParsedWitnessLogic():
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
     def __init__(self):
+        self.ALL_ITEMS = set()
+        self.ALL_TRAPS = set()
+        self.ALL_BOOSTS = set()
+        self.EVENT_PANELS_FROM_REGIONS = set()
+        self.EVENT_PANELS_FROM_PANELS = set()
+        self.ALL_REGIONS_BY_NAME = dict()
+        self.CHECKS_DEPENDENT_BY_HEX = dict()
+        self.CHECKS_BY_HEX = dict()
+        self.CHECKS_BY_NAME = dict()
+        self.ORIGINAL_EVENT_PANELS = set()
+        self.NECESSARY_EVENT_PANELS = set()
+        self.EVENT_ITEM_PAIRS = dict()
+        self.ALWAYS_EVENT_HEX_CODES = set()
+        self.COMPLETELY_DISABLED_CHECKS = set()
+        self.EVENT_ITEM_NAMES = {
+            "0x01A0F": "Keep Laser Panel (Hedge Mazes) Activates",
+            "0x09D9B": "Monastery Overhead Doors Open",
+            "0x193A6": "Monastery Laser Panel Activates",
+            "0x00037": "Monastery Branch Panels Activate",
+            "0x0A079": "Access to Bunker Laser",
+            "0x0A3B5": "Door to Tutorial Discard Opens",
+            "0x01D3F": "Keep Laser Panel (Pressure Plates) Activates",
+            "0x09F7F": "Mountain Access",
+            "0x0367C": "Quarry Laser Mill Requirement Met",
+            "0x009A1": "Swamp Rotating Bridge Near Side",
+            "0x00006": "Swamp Cyan Water Drains",
+            "0x00990": "Swamp Broken Shapers 1 Activates",
+            "0x0A8DC": "Lower Avoid 6 Activates",
+            "0x0000A": "Swamp More Rotated Shapers 1 Access",
+            "0x09ED8": "Inside Mountain Second Layer Both Light Bridges Solved",
+            "0x0A3D0": "Quarry Laser Boathouse Requirement Met",
+            "0x00596": "Swamp Red Water Drains",
+            "0x28B39": "Town Tower 4th Door Opens"
+        }
+
+        self.ALWAYS_EVENT_NAMES_BY_HEX = {
+            "0x0360D": "Symmetry Laser Activation",
+            "0x03608": "Desert Laser Activation",
+            "0x09F98": "Desert Laser Redirection",
+            "0x03612": "Quarry Laser Activation",
+            "0x19650": "Shadows Laser Activation",
+            "0x0360E": "Keep Laser Hedges Activation",
+            "0x03317": "Keep Laser Pressure Plates Activation",
+            "0x17CA4": "Monastery Laser Activation",
+            "0x032F5": "Town Laser Activation",
+            "0x03616": "Jungle Laser Activation",
+            "0x09DE0": "Bunker Laser Activation",
+            "0x03615": "Swamp Laser Activation",
+            "0x03613": "Treehouse Laser Activation",
+            "0x03535": "Shipwreck Video Pattern Knowledge",
+            "0x03542": "Mountain Video Pattern Knowledge",
+            "0x0339E": "Desert Video Pattern Knowledge",
+            "0x03481": "Tutorial Video Pattern Knowledge",
+            "0x03702": "Jungle Video Pattern Knowledge",
+            "0x2FAF6": "Theater Walkway Video Pattern Knowledge",
+        }
+
         self.parse_items()
         self.read_logic_file()
+
+    def adjustments(self, world: MultiWorld, player: int):
+        self.make_options_adjustments(world, player)
         self.make_dependency_reduced_checklist()
         self.make_event_panel_lists()

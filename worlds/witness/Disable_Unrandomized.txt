@@ -2,11 +2,11 @@ Event Items:
 Shadows Laser Activation - 0x00021,0x17D28,0x17C71
 Bunker Laser Activation - 0x00061,0x17D01,0x17C42
 Monastery Laser Activation - 0x00A5B,0x17CE7,0x17FA9
-Hexagonal Reflection Event - 0x17CFB,0x3C12B,0x00B8D,0x17CF7
+Town Tower 4th Door Opens - 0x17CFB,0x3C12B,0x00B8D,0x17CF7,0x28B39
 
 Requirement Changes:
 0x17CA4 - True - True
-0x28B39 - True - Reflection
+0x28B39 - 0x2896A - Reflection
 0x17CAB - True - True
 
 Disabled Locations:
@@ -49,6 +49,7 @@ Disabled Locations:
 0x019DC (Keep Hedge Maze 2)
 0x019E7 (Keep Hedge Maze 3)
 0x01A0F (Keep Hedge Maze 4)
+0x0360E (Laser Hedges)
 0x00290 (Monastery Rhombic Avoid 1)
 0x00038 (Monastery Rhombic Avoid 2)
 0x00037 (Monastery Rhombic Avoid 3)
@@ -60,7 +61,7 @@ Disabled Locations:
 0x28AE3 (Town Vines Shadows Follow)
 0x28938 (Town Four-way Apple Tree)
 0x079DF (Town Triple Environmental Puzzle)
-0x28A69 (Town Square Avoid) - 0x28A0D - Environment
+0x28A69 (Town Square Avoid)
 0x03553 (Theater Tutorial Video)
 0x03552 (Theater Desert Video)
 0x0354E (Theater Jungle Video)
@@ -95,4 +96,4 @@ Disabled Locations:
 0x17E67 (Bunker Drop-Down Door Squares 2)
 0x09DE0 (Bunker Laser)
 0x0A079 (Bunker Elevator Control)
-0x0042D (Mountain River Shape)
+0x0042D (Mountaintop River Shape)

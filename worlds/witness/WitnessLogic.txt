@@ -328,7 +328,7 @@ RGB House (Town) - Town - 0x28998:
 0x03C0C (RGB Squares) - 0x334D8 - RGB & Squares
 0x03C08 (RGB Stars) - 0x334D8 - RGB & Stars
 
-Town Tower Top (Town) - Town - 0x28A69 & 0x2896A & 0x28ACC & 0x28AD9:
+Town Tower Top (Town) - Town - 0x28A69 & 0x28B39 & 0x28ACC & 0x28AD9:
 0x032F5 (Laser) - True - True
 
 Windmill Interior (Windmill) - Town - 0x17F5F:
