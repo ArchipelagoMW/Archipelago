@@ -3,6 +3,7 @@ Defines constants for different types of locations in the game
 """
 
 
+from worlds.witness.Options import is_option_enabled
 from worlds.witness.full_logic import ParsedWitnessLogic
 
 
@@ -15,11 +16,6 @@ class WitnessLocations():
         "Discard": 600,
         "Vault": 650,
         "Laser": 700,
-    }
-
-    PANEL_TYPES_TO_SHUFFLE = {
-        "General", "Discard", "Vault", "Laser"
-        # Base This off of settings in the future!!
     }
 
     GENERAL_LOCATIONS = {
@@ -216,27 +212,51 @@ class WitnessLocations():
         self.ALL_LOCATIONS_TO_ID = None
         self.CHECK_PANELHEX_TO_ID = None
 
+        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
+
         self.ALL_LOCATIONS_TO_ID = {
             panel_obj["checkName"]: self.get_id(chex)
 
             for chex, panel_obj in self.logic.CHECKS_DEPENDENT_BY_HEX.items()
         }
 
-    def define_locations(self):
+        self.CHECK_LOCATIONS = (
+            self.GENERAL_LOCATIONS
+        )
+
+    def define_locations(self, world, player):
         """Defines locations AFTER logic changes due to options"""
+
+        if is_option_enabled(world, player, "shuffle_discarded_panels"):
+            self.PANEL_TYPES_TO_SHUFFLE.add("Discard")
+
+        if is_option_enabled(world, player, "shuffle_vault_boxes"):
+            self.PANEL_TYPES_TO_SHUFFLE.add("Vault")
+
+        if is_option_enabled(world, player, "shuffle_uncommon"):
+            self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | self.UNCOMMON_LOCATIONS
+            
+        if is_option_enabled(world, player, "shuffle_hard"):
+            self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | self.HARD_LOCATIONS
+
 
         self.ALL_LOCATIONS_TO_ID = dict(
             sorted(self.ALL_LOCATIONS_TO_ID.items(), key=lambda item: item[1])
         )
 
-        self.CHECK_LOCATIONS = (
-            self.GENERAL_LOCATIONS |
-            self.UNCOMMON_LOCATIONS |
-            self.HARD_LOCATIONS
-        ) - {
+        self.CHECK_LOCATIONS = self.CHECK_LOCATIONS - {
             self.logic.CHECKS_BY_HEX[check_hex]["checkName"]
             for check_hex in self.logic.COMPLETELY_DISABLED_CHECKS
         }
+
+        self.BYE_PANELS = {"Inside Mountain Final Room Elevator Start"}
+
+        if is_option_enabled(world, player, "challenge_victory"):
+            self.CHECK_LOCATIONS.add("Challenge Vault Box")
+            self.CHECK_LOCATIONS.remove("Inside Mountain Final Room Elevator Start")
+            self.BYE_PANELS.add("Challenge Vault Box")
+            self.BYE_PANELS.remove("Inside Mountain Final Room Elevator Start")
+
 
         self.CHECK_PANELHEX_TO_ID = {
             self.logic.CHECKS_BY_NAME[ch]["checkHex"]:
@@ -267,4 +287,7 @@ class WitnessLocations():
 
             if self.logic.CHECKS_BY_NAME[location]["panelType"]
             in self.PANEL_TYPES_TO_SHUFFLE
+            or location in self.BYE_PANELS
         }
+
+        print(self.CHECK_LOCATION_TABLE)

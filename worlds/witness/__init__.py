@@ -47,7 +47,7 @@ class WitnessWorld(World):
         self.logic = ParsedWitnessLogic()
         self.logic.adjustments(self.world, self.player)
         self.locat = WitnessLocations(self.logic)
-        self.locat.define_locations()
+        self.locat.define_locations(self.world, self.player)
         self.items = WitnessItems(self.logic)
         self.items.adjust_after_options(self.locat)
         self.regio = WitnessRegions(self.logic, self.locat)
@@ -70,7 +70,10 @@ class WitnessWorld(World):
         pool += [self.create_item(junk) for junk in junk_pool]
 
         victory_location = "Inside Mountain Final Room Elevator Start"
-        victory_location = "Challenge Vault Box"
+
+        if is_option_enabled(self.world, self.player, "challenge_victory"):
+            victory_location = "Challenge Vault Box"
+
         victory_ap_loc = self.world.get_location(victory_location, self.player)
         victory_ap_loc.place_locked_item(self.create_item("Victory"))
 
