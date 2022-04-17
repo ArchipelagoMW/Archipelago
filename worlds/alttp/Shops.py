@@ -574,9 +574,10 @@ def price_to_funny_price(world, item: dict, player: int):
             ShopPriceType.Hearts,
             ShopPriceType.Bombs,
         ]
+        # don't pay in universal keys to get access to universal keys
         if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal \
-                and not (item['replacement'] and 'Small Key' in item['replacement']):
-            price_types.append(ShopPriceType.Bombs)
+                and not "Small Key (Universal)" == item['replacement']:
+            price_types.append(ShopPriceType.Keys)
         if not world.retro[player]:
             price_types.append(ShopPriceType.Arrows)
         world.random.shuffle(price_types)
