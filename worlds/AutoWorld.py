@@ -5,7 +5,6 @@ from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable, Unio
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
-from flask import render_template
 
 
 class AutoWorldRegister(type):
@@ -92,7 +91,7 @@ class WebWorld:
 
     # Choose a theme for your /game/* pages
     # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime
-    theme = "grass"
+    theme: str = "grass"
 
     # overridable method allowing you to create your own tracker. It needs to be designated as a class method to be picked
     # up correctly. All the arguments available should give you the information you need to build one and the template html
