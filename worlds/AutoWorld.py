@@ -5,6 +5,7 @@ from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable, Unio
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
+from flask import render_template
 
 
 class AutoWorldRegister(type):
@@ -85,7 +86,6 @@ def call_stage(world: MultiWorld, method_name: str, *args):
 
 
 class WebWorld:
-    from flask import render_template
     """Webhost integration"""
     # display a settings page. Can be a link to an out-of-ap settings tool too.
     settings_page: Union[bool, str] = True
@@ -97,8 +97,7 @@ class WebWorld:
     # overridable method allowing you to create your own tracker. It needs to be designated as a class method to be picked
     # up correctly. All the arguments available should give you the information you need to build one and the template html
     # can also be overridden. This is a class method and the tracker is not typed to avoid circular importing.
-    @classmethod
-    def get_player_tracker(cls, tracker_info) -> str:
+    def get_player_tracker(self, tracker_info):
         """This method will create a basic 'prettier' tracker for each world using their themes automatically. This
         can be overridden to customize how it will appear. Can provide icons and custom regions. The html used is also
         a jinja template that can be overridden if you want your tracker to look different in certain aspects. All
@@ -111,28 +110,26 @@ class WebWorld:
         # icons:Dict[str, str] = {}
         # for item in all_progression_items:
         #     icons[item] = 'https://user-images.githubusercontent.com/12670730/113008567-6ebdcb80-9177-11eb-91bd-6863196d9cd3.png'
-#
-        # # example regions dict
+        # tracker_info.icons = icons
+
+        # example regions dict
         # regions:Dict[str, List[str]] = {
         #     'first_region': [],
         #     'second_region': [],
         #     'third_region': [],
         #     'fourth_region': [],
         # }
-#
-        # # if using regions return checks_done as well
+        # tracker_info.regions = regions
+        #
+        # if using regions return checks_done as well
         # checks_done:Dict[str, Set[str]] = {}
         # for region in regions:
         #     for location in region:
         #         if location in checked_locations:
         #             checks_done.setdefault(region, set()).add(location)
+        # tracker_info.checks_done = checks_done
 
-        return render_template("playerTracker.html", all_progression_items=tracker_info.prog_items,
-                               player=tracker_info.player, team=tracker_info.team, room=tracker_info.room,
-                               player_name=tracker_info.name,
-                               checked_locations=sorted(tracker_info.checked_locations),
-                               locations=sorted(tracker_info.locations), received_items=tracker_info.received_items,
-                               theme=cls.theme) # icons=icons, regions=regions, checks_done=checks_done
+        return tracker_info
 
     # display a link to a bug report page, most likely a link to a GitHub issue page.
     bug_report_page: Optional[str]

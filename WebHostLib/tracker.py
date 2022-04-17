@@ -1,6 +1,6 @@
 import collections
 import typing
-from typing import Counter, Optional, Dict, Any, Tuple, Set
+from typing import Counter, Optional, Dict, Any, Tuple, Set, List
 
 from flask import render_template
 from werkzeug.exceptions import abort
@@ -17,18 +17,41 @@ from NetUtils import SlotType
 
 
 class PlayerTracker:
-    def __init__(self, room: Room, all_locations: Set[str], all_progression_items: Counter, team: int, player: int,
-                 player_name: str, checked_locations: set, player_received_items: Counter, slot_data: Dict[any, any]):
+
+    template: str = 'playerTracker.html'
+    icons: Dict[str, str] = {}
+    regions: Dict[str, List[str]] = {}
+    checks_done: Dict[str, Set[str]] = {}
+    room: Room
+    all_locations: Set[str]
+    all_prog_items: Counter[str]
+    team: int
+    player: int
+    name: str
+    checked_locations: Set[str]
+    received_items: Counter[str]
+    slot_data = [Dict[any, any]]
+    theme: str
+    prog_items: Counter[str]
+
+    def __init__(self, room: Room, team: int, player: int, name: str, all_locations: Set[str], checked_locations: set,
+                 all_progression_items: Counter[str], items_received: Counter[str], received_prog_items: Counter[str],
+                 slot_data: Dict[any, any], theme: str):
         self.room = room
-        self.locations = all_locations
-        self.prog_items = all_progression_items
+        self.all_locations = all_locations
+        self.all_prog_items = all_progression_items
         self.team = team
         self.player = player
-        self.name = player_name
+        self.name = name
         self.checked_locations = checked_locations
-        self.received_items = player_received_items
+        self.received_items = items_received
         self.slot_data = slot_data
+        self.theme = theme
+        self.prog_items = received_prog_items
 
+
+all_trackers: Dict[int, PlayerTracker] = {}
+prog_items: Dict = {}
 
 alttp_icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
@@ -352,7 +375,6 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
                         lttp_checks_done[location_to_area[location]] += 1
                         lttp_checks_done["Total"] += 1
 
-    prog_items: Dict = {}
     if tracked_player in prog_items:
         pass
     else:
@@ -377,15 +399,31 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
         all_location_names = {lookup_any_location_id_to_name[id] for id in locations[tracked_player]}
         locations_done = {lookup_any_location_id_to_name[id] for id in checked_locations}
 
-        prog_items_received = collections.Counter()
+        items_received = collections.Counter()
         for id in inventory:
-            if lookup_any_item_id_to_name[id] in prog_items[tracked_player]:
-                prog_items_received[lookup_any_item_id_to_name[id]] = inventory[id]
+            items_received[lookup_any_item_id_to_name[id]] = inventory[id]
 
-        player_tracker = PlayerTracker(room, all_location_names, prog_items[tracked_player], tracked_team,
-                                       tracked_player, player_name, locations_done, prog_items_received,
-                                       slot_data[tracked_player])
-        return webworld.get_player_tracker(player_tracker)
+        prog_items_received = collections.Counter()
+        for name in items_received:
+            if name in prog_items[tracked_player]:
+                prog_items_received[name] = items_received[name]
+
+        player_tracker = PlayerTracker(room, tracked_team, tracked_player, player_name, all_location_names,
+                                       locations_done, prog_items[tracked_player], items_received, prog_items_received,
+                                       slot_data[tracked_player], webworld.theme)
+
+        if tracked_player not in all_trackers:
+            all_trackers[tracked_player] = webworld.get_player_tracker(player_tracker)
+        else:
+            all_trackers[tracked_player].checked_locations = player_tracker.checked_locations
+            all_trackers[tracked_player].prog_items = player_tracker.prog_items
+
+        display = all_trackers[tracked_player]
+        return render_template(display.template, all_progression_items=display.all_prog_items, player=display.player,
+                               team=display.team, room=display.room, player_name=display.name,
+                               checked_locations=sorted(display.checked_locations), locations=sorted(display.all_locations),
+                               received_items=display.prog_items, theme=display.theme, icons=display.icons,
+                               regions=display.regions, checks_done=display.checks_done)
     else:
         return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name, seed_checks_in_area, lttp_checks_done)
 

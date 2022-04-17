@@ -21,11 +21,11 @@
                     <div class="items-container">
                     {%- for column in icons|slice(4) %}
                         {%- if loop.index < 3 %}
-                    <div class="item-column column-{{ loop.index }}">
+                    <div class="item-column" id="icon-column-{{ loop.index }}">
                         <h1>Item</h1>
                         {%- for name in column %}
                         <div class="image-container"><img src="{{ icons[name] }}" class="icon {{ 'acquired' if name in received_items }}">
-                            <div class="bottom-right">
+                            <div class="bottom-text">
                             {{ name if name in received_items else '' }}
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                 <div class="items-container">
                     {%- for column in icons|slice(4) %}
                         {%- if loop.index > 2 %}
-                    <div class="icon-column" id="icon-column-{{ loop.index }}">
+                    <div class="item-column" id="icon-column-{{ loop.index }}">
                         <h1>Item</h1>
                         {%- for name in column %}
                         <div class="image-container"><img src="{{ icons[name] }}" class="icon {{ 'acquired' if name in received_items }}">
