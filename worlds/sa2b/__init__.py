@@ -100,12 +100,12 @@ class SA2BWorld(World):
         connect_regions(self.world, self.player)
 
         if self.world.MusicShuffle[self.player] == "levels":
-            musiclist_o = list(range(0, 46))
+            musiclist_o = list(range(0, 47))
             musiclist_s = musiclist_o.copy()
             self.world.random.shuffle(musiclist_s)
             self.music_map = dict(zip(musiclist_o, musiclist_s))
         elif self.world.MusicShuffle[self.player] == "full":
-            musiclist_o = list(range(0, 77))
+            musiclist_o = list(range(0, 78))
             musiclist_s = musiclist_o.copy()
             self.world.random.shuffle(musiclist_s)
             self.music_map = dict(zip(musiclist_o, musiclist_s))
