@@ -212,7 +212,13 @@ green_hill = "Green Hill"
 
 
 # Region Definitions
-menu_region  = "Menu"
+menu_region   = "Menu"
+gate_0_region = "Gate 0"
+gate_1_region = "Gate 1"
+gate_2_region = "Gate 2"
+gate_3_region = "Gate 3"
+gate_4_region = "Gate 4"
+gate_5_region = "Gate 5"
 
 city_escape_region  = "City Escape"
 metal_harbor_region = "Metal Harbor"

@@ -5,10 +5,49 @@ from .Items import SA2BItem
 from .Locations import SA2BLocation
 from .Names import LocationName, ItemName
 
+shuffleable_regions = [
+    LocationName.city_escape_region,
+    LocationName.wild_canyon_region,
+    LocationName.prison_lane_region,
+    LocationName.metal_harbor_region,
+    LocationName.green_forest_region,
+    LocationName.pumpkin_hill_region,
+    LocationName.mission_street_region,
+    LocationName.aquatic_mine_region,
+    LocationName.route_101_region,
+    LocationName.hidden_base_region,
+    LocationName.pyramid_cave_region,
+    LocationName.death_chamber_region,
+    LocationName.eternal_engine_region,
+    LocationName.meteor_herd_region,
+    LocationName.crazy_gadget_region,
+    LocationName.final_rush_region,
+    LocationName.iron_gate_region,
+    LocationName.dry_lagoon_region,
+    LocationName.sand_ocean_region,
+    LocationName.radical_highway_region,
+    LocationName.egg_quarters_region,
+    LocationName.lost_colony_region,
+    LocationName.weapons_bed_region,
+    LocationName.security_hall_region,
+    LocationName.white_jungle_region,
+    LocationName.route_280_region,
+    LocationName.sky_rail_region,
+    LocationName.mad_space_region,
+    LocationName.cosmic_wall_region,
+    LocationName.final_chase_region,
+]
+
 
 def create_regions(world, player: int, active_locations):
 
     menu_region = create_region(world, player, active_locations, 'Menu', None, None)
+    gate_0_region = create_region(world, player, active_locations, 'Gate 0', None, None)
+    gate_1_region = create_region(world, player, active_locations, 'Gate 1', None, None)
+    gate_2_region = create_region(world, player, active_locations, 'Gate 2', None, None)
+    gate_3_region = create_region(world, player, active_locations, 'Gate 3', None, None)
+    gate_4_region = create_region(world, player, active_locations, 'Gate 4', None, None)
+    gate_5_region = create_region(world, player, active_locations, 'Gate 5', None, None)
     
     city_escape_region_locations = [
         LocationName.city_escape_1,
@@ -333,6 +372,12 @@ def create_regions(world, player: int, active_locations):
     # Set up the regions correctly.
     world.regions += [
         menu_region,
+        gate_0_region,
+        gate_1_region,
+        gate_2_region,
+        gate_3_region,
+        gate_4_region,
+        gate_5_region,
         city_escape_region,
         metal_harbor_region,
         green_forest_region,
@@ -367,7 +412,8 @@ def create_regions(world, player: int, active_locations):
         chao_garden_region,
     ]
 
-    
+
+def connect_regions(world, player):
     names: typing.Dict[str, int] = {}
 
     connect(world, player, names, 'Menu', LocationName.city_escape_region)
