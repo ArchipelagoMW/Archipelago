@@ -11,10 +11,16 @@ from worlds.generic.Rules import exclusion_rules
 
 from BaseClasses import Region, Entrance, Item
 from .Options import minecraft_options
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 
 client_version = 7
 minecraft_version = "1.17.1"
+
+
+class MinecraftWebWorld(WebWorld):
+    theme = "jungle"
+    bug_report_page = "https://github.com/KonoTyran/Minecraft_AP_Randomizer/issues/new?assignees=&labels=bug&template=bug_report.yaml&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
+
 
 class MinecraftWorld(World):
     """
@@ -26,6 +32,7 @@ class MinecraftWorld(World):
     game: str = "Minecraft"
     options = minecraft_options
     topology_present = True
+    web = MinecraftWebWorld()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}

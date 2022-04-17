@@ -13,7 +13,7 @@ def allowed_file(filename):
 
 
 from Generate import roll_settings
-from Utils import parse_yaml
+from Utils import parse_yamls
 
 
 @app.route('/check', methods=['GET', 'POST'])
@@ -68,14 +68,19 @@ def roll_options(options: Dict[str, Union[dict, str]]) -> Tuple[Dict[str, Union[
     for filename, text in options.items():
         try:
             if type(text) is dict:
-                yaml_data = text
+                yaml_datas = (text, )
             else:
-                yaml_data = parse_yaml(text)
+                yaml_datas = tuple(parse_yamls(text))
         except Exception as e:
             results[filename] = f"Failed to parse YAML data in {filename}: {e}"
         else:
             try:
-                rolled_results[filename] = roll_settings(yaml_data,
+                if len(yaml_datas) == 1:
+                    rolled_results[filename] = roll_settings(yaml_datas[0],
+                                        plando_options={"bosses", "items", "connections", "texts"})
+                else:
+                    for i, yaml_data in enumerate(yaml_datas):
+                        rolled_results[f"{filename}/{i + 1}"] = roll_settings(yaml_data,
                                                          plando_options={"bosses", "items", "connections", "texts"})
             except Exception as e:
                 results[filename] = f"Failed to generate mystery in {filename}: {e}"
