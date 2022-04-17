@@ -51,7 +51,7 @@ def generate(race=False):
 
                 if race:
                     meta["item_cheat"] = False
-                    meta["remaining_mode"] = False
+                    meta["remaining_mode"] = "disabled"
 
                 if any(type(result) == str for result in results.values()):
                     return render_template("checkResult.html", results=results)
