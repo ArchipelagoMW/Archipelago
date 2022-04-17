@@ -27,7 +27,8 @@ def get_meta(options_source: dict) -> dict:
         "forfeit_mode": options_source.get("forfeit_mode", "goal"),
         "remaining_mode": options_source.get("forfeit_mode", "disabled"),
         "collect_mode": options_source.get("collect_mode", "disabled"),
-        "item_cheat": bool(int(options_source.get("item_cheat", 1)))
+        "item_cheat": bool(int(options_source.get("item_cheat", 1))),
+        "server_password": options_source.get("server_password", None)
     }
     return meta
 
