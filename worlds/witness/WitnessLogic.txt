@@ -201,13 +201,13 @@ Quarry Boathouse (Quarry Boathouse) - Quarry - True:
 0x021AE (Eraser and Shapers 5) - 0x021AF - Shapers & Eraser & Broken Shapers
 0x03858 (Ramp Horizontal Control) - 0x021AE - Shapers & Eraser
 0x38663 (Shortcut Door) - 0x03858 - True
-0x021B5 (Stars and Colored Eraser 1) - 0x03858 - Stars & Colored Eraser
-0x021B6 (Stars and Colored Eraser 2) - 0x021B5 - Stars & Colored Eraser
-0x021B7 (Stars and Colored Eraser 3) - 0x021B6 - Stars & Colored Eraser
-0x021BB (Stars and Colored Eraser 4) - 0x021B7 - Stars & Colored Eraser
-0x09DB5 (Stars and Colored Eraser 5) - 0x021BB - Stars & Colored Eraser
-0x09DB1 (Stars and Colored Eraser 6) - 0x09DB5 - Stars & Colored Eraser
-0x3C124 (Stars and Colored Eraser 7) - 0x09DB1 - Stars & Colored Eraser
+0x021B5 (Stars and Colored Eraser 1) - 0x03858 - Stars & Stars + Same Colored Symbol & Eraser
+0x021B6 (Stars and Colored Eraser 2) - 0x021B5 - Stars & Stars + Same Colored Symbol & Eraser
+0x021B7 (Stars and Colored Eraser 3) - 0x021B6 - Stars & Stars + Same Colored Symbol & Eraser
+0x021BB (Stars and Colored Eraser 4) - 0x021B7 - Stars & Stars + Same Colored Symbol & Eraser
+0x09DB5 (Stars and Colored Eraser 5) - 0x021BB - Stars & Stars + Same Colored Symbol & Eraser
+0x09DB1 (Stars and Colored Eraser 6) - 0x09DB5 - Stars & Stars + Same Colored Symbol & Eraser
+0x3C124 (Stars and Colored Eraser 7) - 0x09DB1 - Stars & Stars + Same Colored Symbol & Eraser
 0x09DB3 (Stars & Eraser & and Shapers 1) - 0x3C124 - Stars & Eraser & Shapers
 0x09DB4 (Stars & Eraser & and Shapers 2) - 0x09DB3 - Stars & Eraser & Shapers
 0x275FA (Hook Control) - 0x03858 - Shapers & Eraser
@@ -256,7 +256,7 @@ Keep Glass Plates (Keep) - Keep - True - Keep Tower - 0x0361B:
 0x0A3A8 (Reset Pressure Plates 1) - True - True
 0x033EA (Pressure Plates 1) - 0x0A3A8 - Pressure Plates & Dots
 0x0A3B9 (Reset Pressure Plates 2) - 0x033EA - True
-0x01BE9 (Pressure Plates 2) - 0x033EA & 0x0A3B9 - Pressure Plates & Stars & Squares & Black/White Squares & Stars with other Symbol
+0x01BE9 (Pressure Plates 2) - 0x033EA & 0x0A3B9 - Pressure Plates & Stars & Stars + Same Colored Symbol & Squares & Black/White Squares
 0x0A3BB (Reset Pressure Plates 3) - 0x0A3A8 - True
 0x01CD3 (Pressure Plates 3) - 0x0A3A8 & 0x0A3BB - Pressure Plates & Shapers & Squares & Black/White Squares & Colored Squares
 0x0A3AD (Reset Pressure Plates 4) - 0x01CD3 - True
@@ -272,7 +272,7 @@ Shipwreck (Shipwreck) - Keep Glass Plates - 0x033EA:
 Keep Tower (Keep) - Keep Hedges - 0x01A0F - Keep Glass Plates - 0x01D3F:
 0x0361B (Shortcut to Keep Glass Plates) - True - True
 0x0360E (Laser Hedges) - 0x01A0F - Environment & Sound
-0x03317 (Laser Pressure Plates) - 0x01D3F - Shapers & Squares & Black/White Squares & Colored Squares & Stars & Dots & Stars with other Symbol
+0x03317 (Laser Pressure Plates) - 0x01D3F - Shapers & Squares & Black/White Squares & Colored Squares & Stars & Stars + Same Colored Symbol & Dots
 
 Outside Monastery (Monastery) - Main Island - True:
 0x03713 (Shortcut) - True - True
@@ -492,32 +492,33 @@ Treehouse Beyond Yellow Bridge (Treehouse) - Treehouse Entry Area - 0x0A182:
 0x17D9B (Second Purple Bridge 1) - 0x17D6C - Stars & Squares & Black/White Squares
 0x17D99 (Second Purple Bridge 2) - 0x17D9B - Stars & Squares & Black/White Squares
 0x17DAA (Second Purple Bridge 3) - 0x17D99 - Stars & Squares & Black/White Squares
-0x17D97 (Second Purple Bridge 4) - 0x17DAA - Stars & Squares & Black/White Squares
-0x17BDF (Second Purple Bridge 5) - 0x17D97 - Stars & Squares & Black/White Squares
-0x17D91 (Second Purple Bridge 6) - 0x17BDF - Stars & Squares & Black/White Squares
-0x17DC6 (Second Purple Bridge 7) - 0x17D91 - Stars & Squares & Black/White Squares
+0x17D97 (Second Purple Bridge 4) - 0x17DAA - Stars & Squares & Black/White Squares & Colored Squares
+0x17BDF (Second Purple Bridge 5) - 0x17D97 - Stars & Squares & Colored Squares
+0x17D91 (Second Purple Bridge 6) - 0x17BDF - Stars & Squares & Colored Squares
+0x17DC6 (Second Purple Bridge 7) - 0x17D91 - Stars & Squares & Colored Squares
 0x17E3C (Green Bridge 1) - True - Stars & Shapers
 0x17E4D (Green Bridge 2) - 0x17E3C - Stars & Shapers
 0x17E4F (Green Bridge 3) - 0x17E4D - Stars & Shapers & Rotated Shapers
 0x17E52 (Green Bridge 4 & Directional) - 0x17E4F - Stars & Rotated Shapers & Environment
-0x17E5B (Green Bridge 5) - 0x17E52 - Stars & Shapers & Colored Shapers
-0x17E5F (Green Bridge 6) - 0x17E5B - Stars & Shapers & Colored Shapers & Negative Shapers & Colored Negative Shapers
+0x17E5B (Green Bridge 5) - 0x17E52 - Stars & Shapers & Colored Shapers & Stars + Same Colored Symbol
+0x17E5F (Green Bridge 6) - 0x17E5B - Stars & Shapers & Colored Shapers & Negative Shapers & Colored Negative Shapers & Stars + Same Colored Symbol
 0x17E61 (Green Bridge 7) - 0x17E5F - Stars & Shapers & Rotated Shapers
 0x17FA9 (Green Bridge Discard) - 0x17E61 - Triangles
-0x17DB3 (Left Orange Bridge 1) - 0x17DC6 - Stars & Squares & Colored Squares & Stars and Squares of same color
-0x17DB5 (Left Orange Bridge 2) - 0x17DB3 - Stars & Squares & Colored Squares & Stars and Squares of same color
-0x17DB6 (Left Orange Bridge 3) - 0x17DB5 - Stars & Squares & Colored Squares & Stars and Squares of same color
-0x17DC0 (Left Orange Bridge 4) - 0x17DB6 - Stars & Squares & Colored Squares & Stars and Squares of same color
-0x17DD7 (Left Orange Bridge 5) - 0x17DC0 - Stars & Squares & Colored Squares & Stars and Squares of same color
-0x17DD9 (Left Orange Bridge 6) - 0x17DD7 - Stars & Squares & Colored Squares & Stars and Squares of same color
-0x17DB8 (Left Orange Bridge 7) - 0x17DD9 - Stars & Squares & Colored Squares & Stars and Squares of same color
-0x17DDC (Left Orange Bridge 8 & Directional) - 0x17DB8 - Stars & Squares & Colored Squares & Stars and Squares of same color & Environment
-0x17DD1 (Left Orange Bridge 9) - 0x17DDC - Stars & Squares & Colored Squares & Stars and Squares of same color
-0x17DE3 (Left Orange Bridge 10) - 0x17DD1 - Stars & Squares & Colored Squares & Stars and Squares of same color
-0x17DEC (Left Orange Bridge 11) - 0x17DE3 - Stars & Squares & Colored Squares & Stars and Squares of same color
-0x17DAE (Left Orange Bridge 12) - 0x17DEC - Stars & Squares & Colored Squares & Stars and Squares of same color
-0x17DB0 (Left Orange Bridge 13) - 0x17DAE - Stars & Squares & Colored Squares & Stars and Squares of same color
-0x17DDB (Left Orange Bridge 14) - 0x17DB0 - Stars & Squares & Colored Squares & Stars and Squares of same color
+0x17DB3 (Left Orange Bridge 1) - 0x17DC6 - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
+0x17DB5 (Left Orange Bridge 2) - 0x17DB3 - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
+0x17DB6 (Left Orange Bridge 3) - 0x17DB5 - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
+0x17DC0 (Left Orange Bridge 4) - 0x17DB6 - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
+0x17DD7 (Left Orange Bridge 5) - 0x17DC0 - Stars & Squares & Black/White Squares & Colored Squares & Stars + Same Colored Symbol
+0x17DD9 (Left Orange Bridge 6) - 0x17DD7 - Stars & Squares & Black/White Squares & Colored Squares & Stars + Same Colored Symbol
+0x17DB8 (Left Orange Bridge 7) - 0x17DD9 - Stars & Squares & Black/White Squares & Colored Squares & Stars + Same Colored Symbol
+0x17DDC (Left Orange Bridge 8) - 0x17DB8 - Stars & Squares & Colored Squares & Stars + Same Colored Symbol
+0x17DD1 (Left Orange Bridge 9 & Directional) - 0x17DDC - Stars & Squares & Colored Squares & Stars + Same Colored Symbol & Environment
+0x17DDE (Left Orange Bridge 10) - 0x17DD1 - Stars & Squares & Colored Squares & Stars + Same Colored Symbol
+0x17DE3 (Left Orange Bridge 11) - 0x17DDE - Stars & Squares & Colored Squares & Stars + Same Colored Symbol
+0x17DEC (Left Orange Bridge 12) - 0x17DE3 - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
+0x17DAE (Left Orange Bridge 13) - 0x17DEC - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
+0x17DB0 (Left Orange Bridge 14) - 0x17DAE - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
+0x17DDB (Left Orange Bridge 15) - 0x17DB0 - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 0x17FA0 (Burned House Discard) - 0x17DDB - Triangles
 0x17D88 (Right Orange Bridge 1) - True - Stars
 0x17DB4 (Right Orange Bridge 2) - 0x17D88 - Stars
@@ -542,7 +543,7 @@ Treehouse Bridge Platform (Treehouse) - Treehouse Beyond Yellow Bridge - 0x17DA2
 Mountaintop (Mountaintop) - Main Island - True:
 0x0042D (River Shape) - True - True
 0x09F7F (Box Open) - 7 Lasers - True
-0x17C34 (Trap Door Triple Exit) - 0x09F7F - Stars & Squares & Black/White Squares & Stars and Squares of same color
+0x17C34 (Trap Door Triple Exit) - 0x09F7F - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 0x17C42 (Discard) - True - Triangles
 0x002A6 (Vault) - True - Symmetry & Colored Dots & Squares & Black/White Squares & Dots
 0x03542 (Vault Box) - 0x002A6 - True
@@ -556,11 +557,11 @@ Inside Mountain Top Layer Bridge (Inside Mountain) - Inside Mountain Top Layer -
 0x09E72 (Obscured Vision 3) - 0x09E71 - Obscured & Squares & Black/White Squares & Rotated Shapers & Dots
 0x09E69 (Obscured Vision 4) - 0x09E72 - Obscured & Squares & Black/White Squares & Dots
 0x09E7B (Obscured Vision 5) - 0x09E69 - Obscured & Squares & Black/White Squares & Dots
-0x09E73 (Moving Background 1) - True - Moving & Stars & Squares & Black/White Squares & Stars and Squares of same color
-0x09E75 (Moving Background 2) - 0x09E73 - Moving & Stars & Squares & Black/White Squares & Stars and Squares of same color
+0x09E73 (Moving Background 1) - True - Moving & Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
+0x09E75 (Moving Background 2) - 0x09E73 - Moving & Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 0x09E78 (Moving Background 3) - 0x09E75 - Moving & Shapers
 0x09E79 (Moving Background 4) - 0x09E78 - Moving & Shapers & Rotated Shapers
-0x09E6C (Moving Background 5) - 0x09E79 - Moving & Stars & Squares & Black/White Squares & Stars and Squares of same color
+0x09E6C (Moving Background 5) - 0x09E79 - Moving & Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 0x09E6F (Moving Background 6) - 0x09E6C - Moving & Stars & Rotated Shapers & Shapers
 0x09E6B (Moving Background 7) - 0x09E6F - Moving & Stars & Dots
 0x33AF5 (Physically Obstructed 1) - True - Squares & Black/White Squares & Environment & Symmetry
@@ -570,21 +571,21 @@ Inside Mountain Top Layer Bridge (Inside Mountain) - Inside Mountain Top Layer -
 0x09EAF (Angled Inside Trash 2) - 0x09EAD - Squares & Black/White Squares & Shapers & Angled
 
 Inside Mountain Second Layer (Inside Mountain) - Inside Mountain Top Layer Bridge - 0x09EAF & 0x09F6E & 0x09E6B & 0x09E7B:
-0x09FD3 (Color Cycle 1) - True - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars and Squares of same color
-0x09FD4 (Color Cycle 2) - 0x09FD3 - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars and Squares of same color
-0x09FD6 (Color Cycle 3) - 0x09FD4 - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars and Squares of same color
-0x09FD7 (Color Cycle 4) - 0x09FD6 - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars and Squares of same color & Shapers & Colored Shapers
+0x09FD3 (Color Cycle 1) - True - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars + Same Colored Symbol
+0x09FD4 (Color Cycle 2) - 0x09FD3 - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars + Same Colored Symbol
+0x09FD6 (Color Cycle 3) - 0x09FD4 - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars + Same Colored Symbol
+0x09FD7 (Color Cycle 4) - 0x09FD6 - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars + Same Colored Symbol & Shapers & Colored Shapers
 0x09FD8 (Color Cycle 5) - 0x09FD7 - Color Cycle & RGB & Squares & Colored Squares & Symmetry & Colored Dots
-0x09E86 (Light Bridge Controller 2) - 0x09FD7 - Stars & Colored Rotated Shapers & Eraser & Two Lines
+0x09E86 (Light Bridge Controller 2) - 0x09FD7 - Stars & Stars + Same Colored Symbol & Colored Rotated Shapers & Eraser & Two Lines
 
 Inside Mountain Second Layer Beyond Bridge (Inside Mountain) - Inside Mountain Second Layer - 0x09E86:
 0x09FCC (Same Solution 1) - True - Dots & Same Solution
 0x09FCE (Same Solution 2) - 0x09FCC - Squares & Black/White Squares & Same Solution
 0x09FCF (Same Solution 3) - 0x09FCE - Stars & Same Solution
 0x09FD0 (Same Solution 4) - 0x09FCF - Rotated Shapers & Same Solution
-0x09FD1 (Same Solution 5) - 0x09FD0 - Stars & Squares & Colored Squares & Stars and Squares of Same Color & Same Solution
+0x09FD1 (Same Solution 5) - 0x09FD0 - Stars & Squares & Colored Squares & Stars + Same Colored Symbol & Same Solution
 0x09FD2 (Same Solution 6) - 0x09FD1 - Shapers & Same Solution
-0x09ED8 (Light Bridge Controller 3) - 0x09FD2 - Stars & Colored Rotated Shapers & Eraser & Two Lines
+0x09ED8 (Light Bridge Controller 3) - 0x09FD2 - Stars & Stars + Same Colored Symbol & Colored Rotated Shapers & Eraser & Two Lines
 
 Inside Mountain Second Layer Elevator (Inside Mountain) - Inside Mountain Second Layer - 0x09ED8 & 0x09E86:
 0x09EEB (Elevator Control Panel) - True - Dots
@@ -608,7 +609,7 @@ Inside Mountain Path to Secret Area (Inside Mountain) - Inside Mountain Bottom L
 0x334E1 (Rock Control) - True - True
 
 Inside Mountain Secret Area (Inside Mountain Secret Area) - Inside Mountain Path to Secret Area - 0x00FF8 - Main Island - 0x021D7 - Main Island - 0x17CF2:
-0x021D7 (Shortcut to Mountain) - True - Triangles & Stars & Colored Triangles
+0x021D7 (Shortcut to Mountain) - True - Triangles & Stars & Stars + Same Colored Symbol & Colored Triangles
 0x17CF2 (Shortcut to Swamp) - True - Triangles
 0x335AB (Elevator Inside Control) - True - Dots & Squares & Black/White Squares
 0x335AC (Elevator Upper Outside Control) - 0x335AB - Squares & Black/White Squares
@@ -620,9 +621,9 @@ Inside Mountain Secret Area (Inside Mountain Secret Area) - Inside Mountain Path
 0x01A0D (Symmetry Triangles) - True - Symmetry & Triangles
 0x008B8 (Squares and Triangles) - True - Squares & Black/White Squares & Triangles
 0x00973 (Stars and Triangles) - 0x008B8 - Stars & Triangles
-0x0097B (Stars and Triangles of same color) - 0x00973 - Stars & Triangles & Stars and Triangles of same color
-0x0097D (Stars & Squares and Triangles) - 0x0097B - Stars & Squares & Black/White Squares & Stars and Squares of same color & Triangles
-0x0097E (Stars & Squares and Triangles 2) - 0x0097D - Stars & Squares & Black/White Squares & Stars and Squares of same color & Stars and Triangles of same color
+0x0097B (Stars and Triangles of same color) - 0x00973 - Stars & Triangles & Stars and Triangles of same color & Stars + Same Colored Symbol
+0x0097D (Stars & Squares and Triangles) - 0x0097B - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol & Triangles
+0x0097E (Stars & Squares and Triangles 2) - 0x0097D - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol & Stars and Triangles of same color
 0x00994 (Rotated Shapers and Triangles 1) - True - Rotated Shapers & Triangles
 0x334D5 (Rotated Shapers and Triangles 2) - 0x00994 - Rotated Shapers & Triangles
 0x00995 (Rotated Shapers and Triangles 3) - 0x334D5 - Rotated Shapers & Triangles
@@ -632,11 +633,11 @@ Inside Mountain Secret Area (Inside Mountain Secret Area) - Inside Mountain Path
 0x018A0 (Symmetry Shapers) - True - Shapers & Symmetry
 0x00A72 (Broken and Negative Shapers) - True - Shapers & Broken Shapers & Negative Shapers
 0x32962 (Rotated Broken Shapers) - True - Rotated Shapers & Broken Rotated Shapers
-0x32966 (Stars and Squares) - True - Stars & Squares & Black/White Squares & Stars and Squares of same color
+0x32966 (Stars and Squares) - True - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 0x01A31 (Rainbow Squares) - True - Color Cycle & RGB & Squares & Colored Squares
-0x00B71 (Squares & Stars and Colored Eraser) - True - Colored Eraser & Squares & Colored Squares & Stars & Stars and Squares of same color
+0x00B71 (Squares & Stars and Colored Eraser) - True - Colored Eraser & Squares & Colored Squares & Stars & Stars + Same Colored Symbol
 0x09DD5 (Lone Pillar) - True - Pillar & Triangles
-0x0A16E (Door to Challenge) - 0x09DD5 - Stars & Shapers & Colored Shapers
+0x0A16E (Door to Challenge) - 0x09DD5 - Stars & Shapers & Colored Shapers & Stars + Same Colored Symbol
 0x288EA (Wooden Beam Shapers) - True - Environment & Shapers
 0x288FC (Wooden Beam Squares and Shapers) - True - Environment & Squares & Black/White Squares & Shapers & Rotated Shapers
 0x289E7 (Wooden Beam Shapers and Squares) - True - Environment & Stars & Squares & Black/White Squares
