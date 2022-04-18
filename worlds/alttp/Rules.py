@@ -412,7 +412,7 @@ def global_rules(world, player):
 
     # It is possible to need more than 6 keys to get through this entrance if you spend keys elsewhere. We reflect this in the chest requirements.
     # However we need to leave these at the lower values to derive that with 7 keys it is always possible to reach Bob and Ice Armos.
-    set_rule(world.get_entrance('Ganons Tower (Double Switch Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 5))
+    set_rule(world.get_entrance('Ganons Tower (Double Switch Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 6))
     # It is possible to need more than 7 keys ....
     set_rule(world.get_entrance('Ganons Tower (Firesnake Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
                     item_in_locations(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests + back_chests, [player] * len(randomizer_room_chests + back_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
