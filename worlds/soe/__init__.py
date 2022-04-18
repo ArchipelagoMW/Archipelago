@@ -322,6 +322,9 @@ class SoEWorld(World):
             payload = multidata["connect_names"][self.world.player_name[self.player]]
             multidata["connect_names"][self.connect_name] = payload
 
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice(list(self.item_name_groups["Ingredients"]))
+
 class SoEItem(Item):
     game: str = "Secret of Evermore"
 

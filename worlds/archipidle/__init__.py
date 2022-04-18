@@ -62,6 +62,8 @@ class ArchipIDLEWorld(World):
         self.world.get_entrance('Entrance to IDLE Zone', self.player)\
             .connect(self.world.get_region('IDLE Zone', self.player))
 
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice(item_table)
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     region = Region(name, None, name, player)

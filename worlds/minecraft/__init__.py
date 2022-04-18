@@ -101,6 +101,9 @@ class MinecraftWorld(World):
 
         self.world.itempool += itempool
 
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()))[0]
+
     def set_rules(self):
         set_advancement_rules(self.world, self.player)
         set_completion_rules(self.world, self.player)

@@ -149,6 +149,9 @@ class LegacyWorld(World):
 
         self.world.itempool += itempool
 
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice(list(misc_items_table.keys()))
+
     def create_regions(self):
         create_regions(self.world, self.player)
 

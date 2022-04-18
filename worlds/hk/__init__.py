@@ -307,6 +307,8 @@ class HKWorld(World):
         assert 0 < i < 18, "limited number of multi location IDs reserved."
         return f"{base}_{i}"
 
+    def get_filler_item_name(self) -> str:
+        return "Geo_Rock-Default"
 
 def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:
     ret = Region(name, RegionType.Generic, name, player)

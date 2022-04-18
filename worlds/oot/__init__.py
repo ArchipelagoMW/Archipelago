@@ -983,3 +983,6 @@ class OOTWorld(World):
         all_state.stale[self.player] = True
 
         return all_state
+
+    def get_filler_item_name(self) -> str:
+        return get_junk_item(count=1)[0]
