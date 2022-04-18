@@ -12,8 +12,8 @@ Progression:
 60 - Stars
 61 - Stars + Same Colored Symbol
 70 - Squares
-71 - Colored Squares
-72 - Black/White Squares
+71 - Black/White Squares
+72 - Colored Squares
 
 Boosts:
 500 - Speed Boost
