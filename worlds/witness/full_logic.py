@@ -40,6 +40,10 @@ class ParsedWitnessLogic():
 
             line_split = line.split(" - ")
 
+            #TODO: Setting
+            if line_split[1] == "Squares":
+                continue
+
             current_set.add((line_split[1], int(line_split[0])))
 
     def reduce_req_within_region(self, check_obj):

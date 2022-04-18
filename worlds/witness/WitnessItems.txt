@@ -11,6 +11,8 @@ Progression:
 51 - Negative Rotated Shapers
 60 - Stars
 70 - Squares
+71 - Colored Squares
+72 - Black/White Squares
 
 Boosts:
 500 - Speed Boost
