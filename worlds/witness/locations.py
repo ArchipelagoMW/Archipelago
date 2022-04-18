@@ -117,7 +117,7 @@ class WitnessLocations():
         "Treehouse Second Purple Bridge 7",
         "Treehouse Green Bridge 7",
         "Treehouse Green Bridge Discard",
-        "Treehouse Left Orange Bridge 14",
+        "Treehouse Left Orange Bridge 15",
         "Treehouse Burned House Discard",
         "Treehouse Right Orange Bridge 12",
         "Treehouse Laser",
