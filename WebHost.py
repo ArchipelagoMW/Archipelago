@@ -20,6 +20,8 @@ from WebHostLib.autolauncher import autohost, autogen
 from WebHostLib.lttpsprites import update_sprites_lttp
 from WebHostLib.options import create as create_options_files
 
+from worlds.AutoWorld import AutoWorldRegister
+
 configpath = os.path.abspath("config.yaml")
 if not os.path.exists(configpath):  # fall back to config.yaml in home
     configpath = os.path.abspath(Utils.user_path('config.yaml'))
@@ -45,6 +47,24 @@ def create_ordered_tutorials_file():
         json.dump(data, target)
 
 
+def copy_game_info_files():
+    import sys
+    files = {}
+    worlds = {}
+    for game, world in AutoWorldRegister.world_types.items():
+        if not world.hidden:
+            worlds[game] = world
+    for game in worlds:
+        source_path = os.path.dirname(sys.modules[worlds[game].__module__].__file__)
+        target_path = os.path.join("WebHostLib", "static", "generated", "gameInfo")
+        filename = f'en_{game}.md'
+        if not os.path.exists(os.path.join(target_path, filename)):
+            if os.path.exists(os.path.join(source_path, filename)):
+                with open(os.path.join(source_path, filename), 'r') as source:
+                    data = source.read()
+                with open(os.path.join(target_path, filename), 'w') as target:
+                    target.write(data)
+
 if __name__ == "__main__":
     multiprocessing.freeze_support()
     multiprocessing.set_start_method('spawn')
@@ -57,6 +77,7 @@ if __name__ == "__main__":
     app = get_app()
     create_options_files()
     create_ordered_tutorials_file()
+    copy_game_info_files()
     if app.config["SELFLAUNCH"]:
         autohost(app.config)
     if app.config["SELFGEN"]:
