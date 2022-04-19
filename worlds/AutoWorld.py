@@ -119,14 +119,6 @@ class WebWorld:
         #     'fourth_region': [],
         # }
         # tracker_info.regions = regions
-        #
-        # if using regions return checks_done as well
-        # checks_done:Dict[str, Set[str]] = {}
-        # for region in regions:
-        #     for location in region:
-        #         if location in checked_locations:
-        #             checks_done.setdefault(region, set()).add(location)
-        # tracker_info.checks_done = checks_done
 
         return tracker_info
 

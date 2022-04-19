@@ -419,6 +419,12 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
             all_trackers[tracked_player].prog_items = player_tracker.prog_items
 
         display = all_trackers[tracked_player]
+        if display.regions:
+            for region in display.regions:
+                for location in region:
+                    if location in display.checked_locations:
+                        display.checks_done.setdefault(region, set()).add(location)
+
         return render_template(display.template, all_progression_items=display.all_prog_items, player=display.player,
                                team=display.team, room=display.room, player_name=display.name,
                                checked_locations=sorted(display.checked_locations), locations=sorted(display.all_locations),
