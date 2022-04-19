@@ -11,8 +11,8 @@ class LevelGate:
     gate_emblem_count: int
 
     def __init__(self, emblems):
-        gate_emblem_count = emblems
-        gate_levels = list()
+        self.gate_emblem_count = emblems
+        self.gate_levels = list()
 
 
 shuffleable_regions = [
@@ -428,32 +428,32 @@ def connect_regions(world, player, gates: typing.List[LevelGate]):
 
     connect(world, player, names, 'Menu', LocationName.gate_0_region)
 
-    for i in gates[0].gate_levels:
+    for i in range(len(gates[0].gate_levels)):
         connect(world, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])
 
     if len(gates) >= 2:
         connect(world, player, names, LocationName.gate_0_region, LocationName.gate_1_region, lambda state: (state.has(ItemName.emblem, player, gates[1].gate_emblem_count)))
-        for i in gates[1].gate_levels:
+        for i in range(len(gates[1].gate_levels)):
             connect(world, player, names, LocationName.gate_1_region, shuffleable_regions[gates[1].gate_levels[i]])
 
-    if len(gates) >= 2:
+    if len(gates) >= 3:
         connect(world, player, names, LocationName.gate_1_region, LocationName.gate_2_region, lambda state: (state.has(ItemName.emblem, player, gates[2].gate_emblem_count)))
-        for i in gates[1].gate_levels:
+        for i in range(len(gates[2].gate_levels)):
             connect(world, player, names, LocationName.gate_2_region, shuffleable_regions[gates[2].gate_levels[i]])
 
-    if len(gates) >= 2:
+    if len(gates) >= 4:
         connect(world, player, names, LocationName.gate_2_region, LocationName.gate_3_region, lambda state: (state.has(ItemName.emblem, player, gates[3].gate_emblem_count)))
-        for i in gates[1].gate_levels:
+        for i in range(len(gates[3].gate_levels)):
             connect(world, player, names, LocationName.gate_3_region, shuffleable_regions[gates[3].gate_levels[i]])
 
-    if len(gates) >= 2:
+    if len(gates) >= 5:
         connect(world, player, names, LocationName.gate_3_region, LocationName.gate_4_region, lambda state: (state.has(ItemName.emblem, player, gates[4].gate_emblem_count)))
-        for i in gates[1].gate_levels:
+        for i in range(len(gates[4].gate_levels)):
             connect(world, player, names, LocationName.gate_4_region, shuffleable_regions[gates[4].gate_levels[i]])
 
-    if len(gates) >= 2:
+    if len(gates) >= 6:
         connect(world, player, names, LocationName.gate_4_region, LocationName.gate_5_region, lambda state: (state.has(ItemName.emblem, player, gates[5].gate_emblem_count)))
-        for i in gates[1].gate_levels:
+        for i in range(len(gates[5].gate_levels)):
             connect(world, player, names, LocationName.gate_5_region, shuffleable_regions[gates[5].gate_levels[i]])
 
 
