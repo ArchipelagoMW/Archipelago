@@ -5,7 +5,7 @@ import copy
 import os
 import threading
 import base64
-from typing import Set, List
+from typing import Set, List, TextIO
 
 logger = logging.getLogger("Super Metroid")
 
@@ -565,6 +565,20 @@ class SMWorld(World):
             if location.game == location.item.game == "Super Metroid" and location.item.type == "Nothing":
                 location.address = location.item.code = None
 
+    def write_spoiler(self, spoiler_handle: TextIO):
+        if self.world.area_randomization[self.player].value != 0:
+            spoiler_handle.write('\n\nArea Transitions:\n\n')
+            spoiler_handle.write('\n'.join(['%s%s %s %s' % (f'{self.world.get_player_name(self.player)}: '
+                                                            if self.world.players > 1 else '', src.Name,
+                                                            '<=>',
+                                                            dest.Name) for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions if not src.Boss]))
+
+        if self.world.boss_randomization[self.player].value != 0:
+            spoiler_handle.write('\n\nBoss Transitions:\n\n')
+            spoiler_handle.write('\n'.join(['%s%s %s %s' % (f'{self.world.get_player_name(self.player)}: '
+                                                            if self.world.players > 1 else '', src.Name,
+                                                            '<=>',
+                                                            dest.Name) for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions if src.Boss]))
 
 def create_locations(self, player: int):
     for name, id in locations_lookup_name_to_id.items():
