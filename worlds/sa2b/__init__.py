@@ -6,7 +6,7 @@ from BaseClasses import Item, MultiWorld
 from .Items import SA2BItem, ItemData, item_table, upgrades_table
 from .Locations import SA2BLocation, all_locations, setup_locations
 from .Options import sa2b_options
-from .Regions import create_regions, shuffleable_regions, connect_regions
+from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate
 from .Rules import set_rules
 from .Names import ItemName
 from ..AutoWorld import World
@@ -90,16 +90,23 @@ class SA2BWorld(World):
         levels_per_gate = 30 / (self.world.NumberOfLevelGates[self.player] + 1)
         levels_added = 0
         current_gate = 0
+        gates = list()
+        gates.append(LevelGate(0))
         for i in range(30):
+            gates[current_gate].gate_levels.append(shuffled_region_list[i])
             emblem_requirement_list.append(current_gate)
             levels_added += 1
             if levels_added >= levels_per_gate:
                 current_gate += 1
+                if current_gate > 5:
+                    current_gate = 5
+                else:
+                    gates.append(LevelGate(current_gate))
                 levels_added = 0
 
         self.region_emblem_map = dict(zip(shuffled_region_list, emblem_requirement_list))
 
-        connect_regions(self.world, self.player)
+        connect_regions(self.world, self.player, gates)
 
         if self.world.MusicShuffle[self.player] == "levels":
             musiclist_o = list(range(0, 47))

@@ -5,6 +5,16 @@ from .Items import SA2BItem
 from .Locations import SA2BLocation
 from .Names import LocationName, ItemName
 
+
+class LevelGate:
+    gate_levels: typing.List[int]
+    gate_emblem_count: int
+
+    def __init__(self, emblems):
+        self.gate_emblem_count = emblems
+        self.gate_levels = list()
+
+
 shuffleable_regions = [
     LocationName.city_escape_region,
     LocationName.wild_canyon_region,
@@ -413,41 +423,38 @@ def create_regions(world, player: int, active_locations):
     ]
 
 
-def connect_regions(world, player):
+def connect_regions(world, player, gates: typing.List[LevelGate]):
     names: typing.Dict[str, int] = {}
 
-    connect(world, player, names, 'Menu', LocationName.city_escape_region)
-    connect(world, player, names, 'Menu', LocationName.metal_harbor_region)
-    connect(world, player, names, 'Menu', LocationName.green_forest_region)
-    connect(world, player, names, 'Menu', LocationName.pyramid_cave_region)
-    connect(world, player, names, 'Menu', LocationName.crazy_gadget_region)
-    connect(world, player, names, 'Menu', LocationName.final_rush_region)
-    connect(world, player, names, 'Menu', LocationName.prison_lane_region)
-    connect(world, player, names, 'Menu', LocationName.mission_street_region)
-    connect(world, player, names, 'Menu', LocationName.route_101_region)
-    connect(world, player, names, 'Menu', LocationName.hidden_base_region)
-    connect(world, player, names, 'Menu', LocationName.eternal_engine_region)
-    connect(world, player, names, 'Menu', LocationName.wild_canyon_region)
-    connect(world, player, names, 'Menu', LocationName.pumpkin_hill_region)
-    connect(world, player, names, 'Menu', LocationName.aquatic_mine_region)
-    connect(world, player, names, 'Menu', LocationName.death_chamber_region)
-    connect(world, player, names, 'Menu', LocationName.meteor_herd_region)
-    connect(world, player, names, 'Menu', LocationName.radical_highway_region)
-    connect(world, player, names, 'Menu', LocationName.white_jungle_region)
-    connect(world, player, names, 'Menu', LocationName.sky_rail_region)
-    connect(world, player, names, 'Menu', LocationName.final_chase_region)
-    connect(world, player, names, 'Menu', LocationName.iron_gate_region)
-    connect(world, player, names, 'Menu', LocationName.sand_ocean_region)
-    connect(world, player, names, 'Menu', LocationName.lost_colony_region)
-    connect(world, player, names, 'Menu', LocationName.weapons_bed_region)
-    connect(world, player, names, 'Menu', LocationName.cosmic_wall_region)
-    connect(world, player, names, 'Menu', LocationName.dry_lagoon_region)
-    connect(world, player, names, 'Menu', LocationName.egg_quarters_region)
-    connect(world, player, names, 'Menu', LocationName.security_hall_region)
-    connect(world, player, names, 'Menu', LocationName.route_280_region)
-    connect(world, player, names, 'Menu', LocationName.mad_space_region)
-    connect(world, player, names, 'Menu', LocationName.cannon_core_region)
-    connect(world, player, names, 'Menu', LocationName.chao_garden_region)
+    connect(world, player, names, 'Menu', LocationName.gate_0_region)
+
+    for i in range(len(gates[0].gate_levels)):
+        connect(world, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])
+
+    if len(gates) >= 2:
+        connect(world, player, names, LocationName.gate_0_region, LocationName.gate_1_region, lambda state: (state.has(ItemName.emblem, player, gates[1].gate_emblem_count)))
+        for i in range(len(gates[1].gate_levels)):
+            connect(world, player, names, LocationName.gate_1_region, shuffleable_regions[gates[1].gate_levels[i]])
+
+    if len(gates) >= 3:
+        connect(world, player, names, LocationName.gate_1_region, LocationName.gate_2_region, lambda state: (state.has(ItemName.emblem, player, gates[2].gate_emblem_count)))
+        for i in range(len(gates[2].gate_levels)):
+            connect(world, player, names, LocationName.gate_2_region, shuffleable_regions[gates[2].gate_levels[i]])
+
+    if len(gates) >= 4:
+        connect(world, player, names, LocationName.gate_2_region, LocationName.gate_3_region, lambda state: (state.has(ItemName.emblem, player, gates[3].gate_emblem_count)))
+        for i in range(len(gates[3].gate_levels)):
+            connect(world, player, names, LocationName.gate_3_region, shuffleable_regions[gates[3].gate_levels[i]])
+
+    if len(gates) >= 5:
+        connect(world, player, names, LocationName.gate_3_region, LocationName.gate_4_region, lambda state: (state.has(ItemName.emblem, player, gates[4].gate_emblem_count)))
+        for i in range(len(gates[4].gate_levels)):
+            connect(world, player, names, LocationName.gate_4_region, shuffleable_regions[gates[4].gate_levels[i]])
+
+    if len(gates) >= 6:
+        connect(world, player, names, LocationName.gate_4_region, LocationName.gate_5_region, lambda state: (state.has(ItemName.emblem, player, gates[5].gate_emblem_count)))
+        for i in range(len(gates[5].gate_levels)):
+            connect(world, player, names, LocationName.gate_5_region, shuffleable_regions[gates[5].gate_levels[i]])
 
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
