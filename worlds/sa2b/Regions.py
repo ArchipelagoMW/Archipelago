@@ -423,10 +423,12 @@ def create_regions(world, player: int, active_locations):
     ]
 
 
-def connect_regions(world, player, gates: typing.List[LevelGate]):
+def connect_regions(world, player, gates: typing.List[LevelGate], cannonCoreEmblems):
     names: typing.Dict[str, int] = {}
 
     connect(world, player, names, 'Menu', LocationName.gate_0_region)
+    connect(world, player, names, LocationName.gate_0_region, LocationName.cannon_core_region,
+            lambda state: (state.has(ItemName.emblem, player, cannonCoreEmblems)))
 
     for i in range(len(gates[0].gate_levels)):
         connect(world, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])

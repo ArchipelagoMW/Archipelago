@@ -106,7 +106,7 @@ class SA2BWorld(World):
 
         self.region_emblem_map = dict(zip(shuffled_region_list, emblem_requirement_list))
 
-        connect_regions(self.world, self.player, gates)
+        connect_regions(self.world, self.player, gates, self.emblems_for_cannons_core)
 
         if self.world.MusicShuffle[self.player] == "levels":
             musiclist_o = list(range(0, 47))

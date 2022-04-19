@@ -266,8 +266,6 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
 
 def set_rules(world: MultiWorld, player: int):
 
-    world.completion_condition[player] = lambda state: (state.has(ItemName.eggman_protective_armor, player))
-
     # Mission Progression Rules (Mission 1 begets Mission 2, etc.)
     set_mission_progress_rules(world, player)
 
@@ -280,5 +278,4 @@ def set_rules(world: MultiWorld, player: int):
     #for loc in chao_garden_location_table:
     #    world.get_location(loc, player).add_item_rule(loc, lambda item: False)
 
-    world.completion_condition[player] = lambda state: (state.has(ItemName.emblem, player, 30))
-
+    world.completion_condition[player] = lambda state: state.can_reach(LocationName.cannon_core_1, "Location", player)
