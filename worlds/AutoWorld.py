@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, Counter
+from typing import Dict, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, TYPE_CHECKING
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location
 from Options import Option
@@ -93,33 +93,16 @@ class WebWorld:
     # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime
     theme: str = "grass"
 
-    # overridable method allowing you to create your own tracker. It needs to be designated as a class method to be picked
-    # up correctly. All the arguments available should give you the information you need to build one and the template html
-    # can also be overridden. This is a class method and the tracker is not typed to avoid circular importing.
-    def get_player_tracker(self, tracker_info):
+    if TYPE_CHECKING:
+        from WebHostLib.tracker import PlayerTracker
+
+    def get_player_tracker(self, tracker_info: PlayerTracker) -> PlayerTracker:
         """This method will create a basic 'prettier' tracker for each world using their themes automatically. This
         can be overridden to customize how it will appear. Can provide icons and custom regions. The html used is also
-        a jinja template that can be overridden if you want your tracker to look different in certain aspects. All
-        arguments being returned by this method are required by your implementation."""
-
-        # tracker_info class is defined here: https://github.com/ArchipelagoMW/Archipelago/blob/main/WebHostLib/tracker.py#L19
-
-        # if you use icons it's highly recommended you overwrite the icons_render block for a better appearance with your items
-        # example icons dict must be str: str
-        # icons:Dict[str, str] = {}
-        # for item in all_progression_items:
-        #     icons[item] = 'https://user-images.githubusercontent.com/12670730/113008567-6ebdcb80-9177-11eb-91bd-6863196d9cd3.png'
-        # tracker_info.icons = icons
-
-        # example regions dict
-        # regions:Dict[str, List[str]] = {
-        #     'first_region': [],
-        #     'second_region': [],
-        #     'third_region': [],
-        #     'fourth_region': [],
-        # }
-        # tracker_info.regions = regions
-
+        a jinja template that can be overridden if you want your tracker to look different in certain aspects. To render
+        icons and regions add dictionaries to the relevant attributes of the tracker_info. To customize the layout of
+        your icons you can create a new html in your world and extend playerTracker.html and overwrite the icons_render
+        block then change the tracker_info template attribute to your template."""
         return tracker_info
 
     # display a link to a bug report page, most likely a link to a GitHub issue page.
@@ -309,4 +292,3 @@ class World(metaclass=AutoWorldRegister):
 # please use a prefix as all of them get clobbered together
 class LogicMixin(metaclass=AutoLogicRegister):
     pass
-
