@@ -29,8 +29,7 @@ def get_meta(options_source: dict) -> dict:
         options_source.get("plando_texts", "")
     }
     plando_options -= {""}
-    print(plando_options)
-    print(options_source)
+
     meta = {
         "hint_cost": int(options_source.get("hint_cost", 10)),
         "forfeit_mode": options_source.get("forfeit_mode", "goal"),
