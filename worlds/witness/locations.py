@@ -133,10 +133,6 @@ class WitnessLocations():
         "Inside Mountain Same Solution 6",
         "Inside Mountain Elevator Discard",
         "Inside Mountain Giant Puzzle",
-
-
-
-        "Inside Mountain Final Room Elevator Start"
     }
 
     UNCOMMON_LOCATIONS = {
@@ -239,7 +235,6 @@ class WitnessLocations():
         if is_option_enabled(world, player, "shuffle_hard"):
             self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | self.HARD_LOCATIONS
 
-
         self.ALL_LOCATIONS_TO_ID = dict(
             sorted(self.ALL_LOCATIONS_TO_ID.items(), key=lambda item: item[1])
         )
@@ -248,15 +243,6 @@ class WitnessLocations():
             self.logic.CHECKS_BY_HEX[check_hex]["checkName"]
             for check_hex in self.logic.COMPLETELY_DISABLED_CHECKS
         }
-
-        self.BYE_PANELS = {"Inside Mountain Final Room Elevator Start"}
-
-        if is_option_enabled(world, player, "challenge_victory"):
-            self.CHECK_LOCATIONS.add("Challenge Vault Box")
-            self.CHECK_LOCATIONS.remove("Inside Mountain Final Room Elevator Start")
-            self.BYE_PANELS.add("Challenge Vault Box")
-            self.BYE_PANELS.remove("Inside Mountain Final Room Elevator Start")
-
 
         self.CHECK_PANELHEX_TO_ID = {
             self.logic.CHECKS_BY_NAME[ch]["checkHex"]:

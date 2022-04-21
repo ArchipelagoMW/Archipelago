@@ -286,6 +286,10 @@ class ParsedWitnessLogic():
         else:
             self.VICTORY_LOCATION = "0x3D9A9"
 
+        self.COMPLETELY_DISABLED_CHECKS.add(
+            self.VICTORY_LOCATION
+        )
+
         if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
             adjustment_files_in_order.append("Disable_Unrandomized.txt")
 
