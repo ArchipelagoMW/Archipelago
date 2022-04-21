@@ -105,7 +105,12 @@ factorio_options:
 minecraft_options: 
   forge_directory: "Minecraft Forge server"
   max_heap_size: "2G"
-oot_options: 
+  # 1.16 and before use java 8
+  # 1.17 uses java 16
+  # 1.18+ uses Java 17
+  java_version: "17"
+  forge_version: "1.18.2-40.1.0"
+oot_options:
   # File name of the OoT v1.0 ROM
   rom_file: "The Legend of Zelda - Ocarina of Time.z64"
   # Set this to false to never autostart a rom (such as after patching)
