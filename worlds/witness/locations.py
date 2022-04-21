@@ -273,5 +273,4 @@ class WitnessLocations():
 
             if self.logic.CHECKS_BY_NAME[location]["panelType"]
             in self.PANEL_TYPES_TO_SHUFFLE
-            or location in self.BYE_PANELS
         }
