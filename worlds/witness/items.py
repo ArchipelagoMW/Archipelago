@@ -30,8 +30,6 @@ class WitnessItems():
     """Class that handles Witness items"""
     def __init__(self, early_logic: WitnessLogic):
         self.ITEM_TABLE: Dict[str, ItemData] = {
-            # Event Items
-            'Victory': ItemData(158700, True, True)
         }
         self.locat = None
 

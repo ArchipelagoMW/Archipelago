@@ -40,6 +40,7 @@ class WitnessWorld(World):
     def _get_slot_data(self):
         return {
             'seed': self.world.random.randint(0, 1000000),
+            'victory_location': int(self.logic.VICTORY_LOCATION, 16),
             'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID
         }
 
@@ -57,25 +58,17 @@ class WitnessWorld(World):
         pool = []
         for item in self.items.ITEM_TABLE:
             witness_item = self.create_item(item)
-            if item != "Victory" and item not in self.items.EVENT_ITEM_TABLE:
+            if item not in self.items.EVENT_ITEM_TABLE:
                 pool.append(witness_item)
 
         junk_pool = self.items.JUNK_WEIGHTS.copy()
         junk_pool = self.world.random.choices(
             list(junk_pool.keys()), weights=list(junk_pool.values()),
             k=len(self.locat.CHECK_LOCATION_TABLE) - len(pool)
-            - len(self.locat.EVENT_LOCATION_TABLE) - 1
+            - len(self.locat.EVENT_LOCATION_TABLE)
         )
 
         pool += [self.create_item(junk) for junk in junk_pool]
-
-        victory_location = "Inside Mountain Final Room Elevator Start"
-
-        if is_option_enabled(self.world, self.player, "challenge_victory"):
-            victory_location = "Challenge Vault Box"
-
-        victory_ap_loc = self.world.get_location(victory_location, self.player)
-        victory_ap_loc.place_locked_item(self.create_item("Victory"))
 
         for event_location in self.locat.EVENT_LOCATION_TABLE:
             item_obj = self.create_item(

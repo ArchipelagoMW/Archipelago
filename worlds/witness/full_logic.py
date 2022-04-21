@@ -281,8 +281,10 @@ class ParsedWitnessLogic():
         """Makes logic adjustments based on options"""
         adjustment_files_in_order = []
 
-        print(player)
-        print(is_option_enabled(world, player, "disable_non_randomized_puzzles"))
+        if is_option_enabled(world, player, "challenge_victory"):
+            self.VICTORY_LOCATION = "0x0356B"
+        else:
+            self.VICTORY_LOCATION = "0x3D9A9"
 
         if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
             adjustment_files_in_order.append("Disable_Unrandomized.txt")
@@ -337,6 +339,8 @@ class ParsedWitnessLogic():
         """
         Special event panel data structures
         """
+
+        self.ALWAYS_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
 
         self.ORIGINAL_EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
         self.ORIGINAL_EVENT_PANELS.update(self.EVENT_PANELS_FROM_REGIONS)
