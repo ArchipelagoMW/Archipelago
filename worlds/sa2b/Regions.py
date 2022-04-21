@@ -48,6 +48,42 @@ shuffleable_regions = [
     LocationName.final_chase_region,
 ]
 
+gate_0_blacklist_regions = [
+    LocationName.hidden_base_region,
+    LocationName.eternal_engine_region,
+    LocationName.crazy_gadget_region,
+    LocationName.security_hall_region,
+    LocationName.cosmic_wall_region,
+]
+
+gate_0_whitelist_regions = [
+    LocationName.city_escape_region,
+    LocationName.wild_canyon_region,
+    LocationName.prison_lane_region,
+    LocationName.metal_harbor_region,
+    LocationName.green_forest_region,
+    LocationName.pumpkin_hill_region,
+    LocationName.mission_street_region,
+    LocationName.aquatic_mine_region,
+    LocationName.route_101_region,
+    LocationName.pyramid_cave_region,
+    LocationName.death_chamber_region,
+    LocationName.meteor_herd_region,
+    LocationName.final_rush_region,
+    LocationName.iron_gate_region,
+    LocationName.dry_lagoon_region,
+    LocationName.sand_ocean_region,
+    LocationName.radical_highway_region,
+    LocationName.egg_quarters_region,
+    LocationName.lost_colony_region,
+    LocationName.weapons_bed_region,
+    LocationName.white_jungle_region,
+    LocationName.route_280_region,
+    LocationName.sky_rail_region,
+    LocationName.mad_space_region,
+    LocationName.final_chase_region,
+]
+
 
 def create_regions(world, player: int, active_locations):
 
