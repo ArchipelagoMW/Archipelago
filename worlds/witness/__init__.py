@@ -56,16 +56,29 @@ class WitnessWorld(World):
     def generate_basic(self):
         # Generate item pool
         pool = []
+        items_by_name = dict()
         for item in self.items.ITEM_TABLE:
             witness_item = self.create_item(item)
             if item not in self.items.EVENT_ITEM_TABLE:
                 pool.append(witness_item)
+                items_by_name[item] = witness_item
+
+        good_items = [
+            "Dots", "Black/White Squares", "Stars",
+            "Colored Squares", "Shapers"
+        ]
+        random_good_item = self.world.random.choice(good_items)
+        first_check = self.world.get_location(
+            "Tutorial Gate Open", self.player
+        )
+        first_check.place_locked_item(items_by_name[random_good_item])
+        pool.remove(items_by_name[random_good_item])
 
         junk_pool = self.items.JUNK_WEIGHTS.copy()
         junk_pool = self.world.random.choices(
             list(junk_pool.keys()), weights=list(junk_pool.values()),
             k=len(self.locat.CHECK_LOCATION_TABLE) - len(pool)
-            - len(self.locat.EVENT_LOCATION_TABLE)
+            - len(self.locat.EVENT_LOCATION_TABLE) - 1
         )
 
         pool += [self.create_item(junk) for junk in junk_pool]
@@ -78,6 +91,8 @@ class WitnessWorld(World):
             location_obj.place_locked_item(item_obj)
 
         self.world.itempool += pool
+
+        
 
     def create_regions(self):
         self.regio.create_regions(self.world, self.player)
