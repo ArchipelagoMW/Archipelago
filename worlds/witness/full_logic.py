@@ -153,6 +153,13 @@ class ParsedWitnessLogic():
         if type == "Disabled Locations":
             self.COMPLETELY_DISABLED_CHECKS.add(line[:7])
 
+            return
+
+        if type == "Region Changes":
+            new_region = self.define_new_region(line + ":") 
+            old_region = self.ALL_REGIONS_BY_NAME[new_region["name"]]
+            old_region["connections"] = new_region["connections"]
+
     def define_new_region(self, region_string):
         """
         Returns a region object by parsing a line in the logic file

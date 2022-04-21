@@ -9,6 +9,9 @@ Requirement Changes:
 0x28B39 - 0x2896A - Reflection
 0x17CAB - True - True
 
+Region Changes:
+Quarry (Quarry) - Outside Quarry - 0x17C09 - Quarry Mill - 0x275ED - Quarry Mill - 0x17CAC
+
 Disabled Locations:
 0x03505 (Tutorial Gate Close)
 0x0C335 (Tutorial Pillar)
