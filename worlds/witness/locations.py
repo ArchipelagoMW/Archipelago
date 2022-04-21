@@ -81,8 +81,6 @@ class WitnessLocations():
         "Town Symmetry Squares 5 + Dots",
         "Town Full Dot Grid Shapers 5",
         "Town Shapers & Dots & and Eraser",
-        "Town RGB Squares",
-        "Town RGB Stars",
         "Town Laser",
 
         "Theater Discard",
@@ -148,7 +146,9 @@ class WitnessLocations():
         "Theater Jungle Video",
         "Theater Challenge Video",
         "Theater Shipwreck Video",
-        "Theater Mountain Video"
+        "Theater Mountain Video",
+        "Town RGB Squares",
+        "Town RGB Stars",
     }
 
     HARD_LOCATIONS = {
