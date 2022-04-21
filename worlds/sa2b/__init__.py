@@ -13,6 +13,21 @@ from ..AutoWorld import World
 import Patch
 
 
+def check_for_impossible_shuffle(shuffled_levels: typing.List[int], gate_0_range: int, world: MultiWorld):
+    blacklist_level_count = 0
+
+    for i in range(gate_0_range):
+        if shuffled_levels[i] in gate_0_blacklist_regions:
+            blacklist_level_count += 1
+
+    if blacklist_level_count == gate_0_range:
+        index_to_swap = world.random.randint(0, gate_0_range)
+        for i in range(len(shuffled_levels)):
+            if shuffled_levels[i] in gate_0_whitelist_regions:
+                shuffled_levels[i], shuffled_levels[index_to_swap] = shuffled_levels[index_to_swap], shuffled_levels[i]
+                break
+
+
 class SA2BWorld(World):
     """
     J.R.R. Tolkien's The Lord of the Rings, Vol. 1 is an SNES Action-RPG brought to you by the minds that would
@@ -60,22 +75,40 @@ class SA2BWorld(World):
 
         return slot_data
 
-    def check_for_impossible_shuffle(self, shuffled_levels: typing.List[int], gate_0_range: int, world: MultiWorld):
-        blacklist_level_count = 0
+    def get_levels_per_gate(self) -> list:
+        levels_per_gate = list()
+        max_gate_index = self.world.NumberOfLevelGates[self.player]
+        average_level_count = 30 / (max_gate_index + 1)
+        levels_added = 0
 
-        for i in range(gate_0_range):
-            if shuffled_levels[i] in gate_0_blacklist_regions:
-                blacklist_level_count += 1
+        for i in range(max_gate_index + 1):
+            levels_per_gate.append(average_level_count)
+            levels_added += average_level_count
+        additional_count_iterator = 0
+        while levels_added < 30:
+            levels_per_gate[additional_count_iterator] += 1
+            levels_added += 1
+            additional_count_iterator += 1 if additional_count_iterator < max_gate_index else -max_gate_index
 
-        if blacklist_level_count == gate_0_range:
-            index_to_swap = world.random.randint(0, gate_0_range)
-            for i in range(len(shuffled_levels)):
-                if shuffled_levels[i] in gate_0_whitelist_regions:
-                    shuffled_levels[i], shuffled_levels[index_to_swap] = shuffled_levels[index_to_swap], shuffled_levels[i]
+        if self.world.LevelGateDistribution[self.player] == 0 or self.world.LevelGateDistribution[self.player] == 2:
+            early_distribution = self.world.LevelGateDistribution[self.player] == 0
+            levels_to_distribute = 7
+            gate_index_offset = 0
+            while levels_to_distribute > 0:
+                if levels_per_gate[0 + gate_index_offset] == 1 or levels_per_gate[max_gate_index - gate_index_offset] == 1:
                     break
+                if early_distribution:
+                    levels_per_gate[0 + gate_index_offset] += 1
+                    levels_per_gate[max_gate_index - gate_index_offset] -= 1
+                else:
+                    levels_per_gate[0 + gate_index_offset] -= 1
+                    levels_per_gate[max_gate_index - gate_index_offset] += 1
+                gate_index_offset += 1
+                if gate_index_offset > math.floor(max_gate_index / 2):
+                    gate_index_offset = 0
+                levels_to_distribute -= 1
 
-    def get_levels_per_gate(self, world: MultiWorld, player) -> list:
-        return list()
+        return levels_per_gate
 
     def generate_basic(self):
         itempool: typing.List[SA2BItem] = []
@@ -104,26 +137,28 @@ class SA2BWorld(World):
         shuffled_region_list = list(range(30))
         emblem_requirement_list = list()
         self.world.random.shuffle(shuffled_region_list)
-        levels_per_gate = 30 / (self.world.NumberOfLevelGates[self.player] + 1)
+        levels_per_gate = self.get_levels_per_gate() #30 / (self.world.NumberOfLevelGates[self.player] + 1)
 
-        self.check_for_impossible_shuffle(shuffled_region_list, math.ceil(levels_per_gate), self.world)
+        check_for_impossible_shuffle(shuffled_region_list, math.ceil(levels_per_gate[0]), self.world)
         levels_added_to_gate = 0
         total_levels_added = 0
         current_gate = 0
+        current_gate_emblems = 0
         gates = list()
         gates.append(LevelGate(0))
         for i in range(30):
             gates[current_gate].gate_levels.append(shuffled_region_list[i])
-            emblem_requirement_list.append(current_gate)
+            emblem_requirement_list.append(current_gate_emblems)
             levels_added_to_gate += 1
             total_levels_added += 1
-            if levels_added_to_gate >= levels_per_gate:
+            if levels_added_to_gate >= levels_per_gate[current_gate]:
                 current_gate += 1
                 if current_gate > self.world.NumberOfLevelGates[self.player]:
                     current_gate = self.world.NumberOfLevelGates[self.player];
                 else:
                     print(total_emblem_count * math.pow(total_levels_added / 30.0, 2.0))
-                    gates.append(LevelGate(max(math.floor(total_emblem_count * math.pow(total_levels_added / 30.0, 2.0)), current_gate)))
+                    current_gate_emblems = max(math.floor(total_emblem_count * math.pow(total_levels_added / 30.0, 2.0)), current_gate)
+                    gates.append(LevelGate(current_gate_emblems))
                 levels_added_to_gate = 0
 
         self.region_emblem_map = dict(zip(shuffled_region_list, emblem_requirement_list))
