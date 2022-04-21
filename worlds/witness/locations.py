@@ -141,7 +141,6 @@ class WitnessLocations():
         "Theater Tutorial Video",
         "Theater Desert Video",
         "Theater Jungle Video",
-        "Theater Challenge Video",
         "Theater Shipwreck Video",
         "Theater Mountain Video",
         "Town RGB Squares",
@@ -176,7 +175,8 @@ class WitnessLocations():
 
         "Challenge Vault Box",
         "Theater Walkway Vault Box",
-        "Inside Mountain Bottom Layer Discard"
+        "Inside Mountain Bottom Layer Discard",
+        "Theater Challenge Video",
     }
 
     def get_id(self, chex):
