@@ -77,6 +77,7 @@ Disabled Locations:
 0x002C7 (Waves 7)
 0x15ADD (River Rhombic Avoid Vault)
 0x03702 (River Vault Box)
+0x17C2E (Door to Bunker) - True - Squares & Black/White Squares
 0x09F7D (Bunker Drawn Squares 1)
 0x09FDC (Bunker Drawn Squares 2)
 0x09FF7 (Bunker Drawn Squares 3)
