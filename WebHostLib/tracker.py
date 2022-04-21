@@ -364,7 +364,7 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
                     if ms_player == tracked_player:  # a check done by the tracked player
                         lttp_checks_done[location_to_area[location]] += 1
                         lttp_checks_done["Total"] += 1
-                        checked_locations.add(lookup_any_location_id_to_name(location))
+                        checked_locations.add(lookup_any_location_id_to_name[location])
 
     if not tracked_player in prog_items:
         all_location_names[tracked_player] = {lookup_any_location_id_to_name[id] for id in locations[tracked_player]}
