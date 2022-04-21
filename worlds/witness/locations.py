@@ -50,6 +50,7 @@ class WitnessLocations():
         "Quarry Mill Eraser and Dots 6",
         "Quarry Mill Eraser and Squares 8",
         "Quarry Mill Small Squares & Dots & and Eraser",
+        "Quarry Mill Big Squares & Dots & and Eraser",
         "Quarry Boathouse Intro Shapers",
         "Quarry Boathouse Eraser and Shapers 5",
         "Quarry Boathouse Stars & Eraser & and Shapers 2",
@@ -149,12 +150,11 @@ class WitnessLocations():
         "Theater Mountain Video",
         "Town RGB Squares",
         "Town RGB Stars",
+        "Swamp Underwater Back Optional",
     }
 
     HARD_LOCATIONS = {
         "Tutorial Gate Close",
-        "Quarry Mill Big Squares & Dots & and Eraser",
-        "Swamp Underwater Back Optional",
 
         "Inside Mountain Secret Area Dot Grid Triangles 4",
         "Inside Mountain Secret Area Symmetry Triangles",
