@@ -96,11 +96,13 @@ class ShopItemSlots(Range):
     range_start = 0
     range_end = 30
 
+
 class ShopPriceModifier(Range):
     """Percentage modifier for shuffled item prices in shops"""
     range_start = 0
     default = 100
     range_end = 400
+
 
 class WorldState(Choice):
     option_standard = 1
@@ -299,6 +301,12 @@ class BeemizerTrapChance(BeemizerRange):
     display_name = "Beemizer Trap Chance"
 
 
+class AllowCollect(Toggle):
+    """Allows for !collect / co-op to auto-open chests containing items for other players.
+    Off by default, because it currently crashes on real hardware."""
+    display_name = "Allow Collection of checks for other players"
+
+
 alttp_options: typing.Dict[str, type(Option)] = {
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
@@ -334,6 +342,6 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "glitch_boots": DefaultOnToggle,
     "beemizer_total_chance": BeemizerTotalChance,
     "beemizer_trap_chance": BeemizerTrapChance,
-    "death_link": DeathLink
-
+    "death_link": DeathLink,
+    "allow_collect": AllowCollect
 }
