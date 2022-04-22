@@ -503,7 +503,7 @@ class Context:
 
     def get_hint_cost(self, slot):
         if self.hint_cost:
-            return max(0, int(self.hint_cost * 0.01 * len(self.locations[slot])))
+            return max(0, int(self.hint_cost * 0.01 * len([loc for loc in self.locations[slot].values() if loc[2] & 8 == 0])))
         return 0
 
     def recheck_hints(self):
@@ -792,10 +792,12 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
                     collect_player(ctx, team, group, True)
 
 
-def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
+def get_remaining(ctx: Context, team: int, slot: int, remove_hidden=True) -> typing.List[int]:
     items = []
     for location_id in ctx.locations[slot]:
         if location_id not in ctx.location_checks[team, slot]:
+            if remove_hidden and ctx.locations[slot][location_id][2] & 8 == 0:
+                continue
             items.append(ctx.locations[slot][location_id][0])  # item ID
     return sorted(items)
 
@@ -1158,10 +1160,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     " You can ask the server admin for a /collect")
                 return False
 
-    def _cmd_remaining(self) -> bool:
+    def _cmd_remaining(self, all: str = "") -> bool:
         """List remaining items in your game, but not their location or recipient"""
         if self.ctx.remaining_mode == "enabled":
-            remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
+            remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot, all != "all")
             if remaining_item_ids:
                 self.output("Remaining items: " + ", ".join(lookup_any_item_id_to_name.get(item_id, "unknown item")
                                                             for item_id in remaining_item_ids))
@@ -1174,7 +1176,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return False
         else:  # is goal
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
-                remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
+                remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot, all != "all")
                 if remaining_item_ids:
                     self.output("Remaining items: " + ", ".join(lookup_any_item_id_to_name.get(item_id, "unknown item")
                                                                 for item_id in remaining_item_ids))
@@ -1186,10 +1188,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     "Sorry, !remaining requires you to have beaten the game on this server")
                 return False
 
-    def _cmd_missing(self) -> bool:
+    def _cmd_missing(self, all: str = "") -> bool:
         """List all missing location checks from the server's perspective"""
 
-        locations = get_missing_checks(self.ctx, self.client.team, self.client.slot)
+        locations = get_missing_checks(self.ctx, self.client.team, self.client.slot, remove_hidden=all != "all")
 
         if locations:
             texts = [f'Missing: {get_location_name_from_id(location)}' for location in locations]
@@ -1199,10 +1201,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output("No missing location checks found.")
         return True
 
-    def _cmd_checked(self) -> bool:
+    def _cmd_checked(self, all: str = "") -> bool:
         """List all done location checks from the server's perspective"""
 
-        locations = get_checked_checks(self.ctx, self.client.team, self.client.slot)
+        locations = get_checked_checks(self.ctx, self.client.team, self.client.slot, remove_hidden=all != "all")
 
         if locations:
             texts = [f'Checked: {get_location_name_from_id(location)}' for location in locations]
@@ -1350,25 +1352,35 @@ class ClientMessageProcessor(CommonCommandProcessor):
         return self.get_hints(location, True)
 
 
-def get_checked_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
-    return [location_id for
+def get_checked_checks(ctx: Context, team: int, slot: int, remove_hidden=False) -> typing.List[int]:
+    if remove_hidden:
+        return [location_id for
+             location_id in ctx.locations[slot] if
+             location_id in ctx.location_checks[team, slot] and ctx.locations[slot][location_id][2] & 8 == 0]
+    else:
+        return [location_id for
             location_id in ctx.locations[slot] if
             location_id in ctx.location_checks[team, slot]]
 
 
-def get_missing_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
-    return [location_id for
+def get_missing_checks(ctx: Context, team: int, slot: int, remove_hidden=False) -> typing.List[int]:
+    if remove_hidden:
+        return [location_id for
+             location_id in ctx.locations[slot] if
+             location_id not in ctx.location_checks[team, slot] and ctx.locations[slot][location_id][2] & 8 == 0]
+    else:
+        return [location_id for
             location_id in ctx.locations[slot] if
             location_id not in ctx.location_checks[team, slot]]
 
 
 def get_client_points(ctx: Context, client: Client) -> int:
-    return (ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) -
+    return (ctx.location_check_points * len([loc for loc in ctx.location_checks[client.team, client.slot] if loc.flags & 8 == 0]) -
             ctx.get_hint_cost(client.slot) * ctx.hints_used[client.team, client.slot])
 
 
 def get_slot_points(ctx: Context, team: int, slot: int) -> int:
-    return (ctx.location_check_points * len(ctx.location_checks[team, slot]) -
+    return (ctx.location_check_points * len([loc for loc in ctx.location_checks[team, slot] if loc.flags & 8 == 0]) -
             ctx.get_hint_cost(slot) * ctx.hints_used[team, slot])
 
 
