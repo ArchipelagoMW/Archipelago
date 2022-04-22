@@ -55,6 +55,7 @@ class WitnessLocations():
         "Quarry Boathouse Eraser and Shapers 5",
         "Quarry Boathouse Stars & Eraser & and Shapers 2",
         "Quarry Boathouse Stars & Eraser & and Shapers 5",
+        "Quarry Discard",
         "Quarry Laser",
 
         "Shadows Lower Avoid 8",
