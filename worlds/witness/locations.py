@@ -44,7 +44,7 @@ class WitnessLocations():
         "Desert Sun Reflection 8",
         "Desert Artificial Light Reflection 3",
         "Desert Pond Reflection 5",
-        "Desert Flood Reflection 5",
+        "Desert Flood Reflection 6",
         "Desert Laser",
 
         "Quarry Mill Eraser and Dots 6",

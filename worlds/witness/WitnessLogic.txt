@@ -143,8 +143,9 @@ Desert Water Levels Room (Desert) - Desert Pond Room - 0x0A249:
 0x181AB (Flood Reflection 3) - 0x01205 - Reflection
 0x0117A (Flood Reflection 4) - 0x181AB - Reflection
 0x17ECA (Flood Reflection 5) - 0x0117A - Reflection
+0x18076 (Flood Reflection 6) - 0x17ECA - Reflection
 
-Desert Elevator Room (Desert) - Desert Water Levels Room - 0x17ECA:
+Desert Elevator Room (Desert) - Desert Water Levels Room - 0x18076:
 0x17C31 (Final Transparent Reflection) - True - Reflection
 0x012D7 (Final Reflection) - 0x17C31 & 0x0A015 - Reflection
 0x012D7 (Final Reflection) - 0x17C31 & 0x0A015 - Reflection
