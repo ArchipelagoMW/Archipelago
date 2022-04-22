@@ -1027,6 +1027,7 @@ class Location:
     shop_slot_disabled: bool = False
     event: bool = False
     locked: bool = False
+    hidden = False
     game: str = "Generic"
     show_in_spoiler: bool = True
     crystal: bool = False
@@ -1130,7 +1131,7 @@ class Item():
 
     @property
     def flags(self) -> int:
-        return self.advancement + (self.never_exclude << 1) + (self.trap << 2)
+        return self.advancement + (self.never_exclude << 1) + (self.trap << 2) + (self.location.hidden << 3)
 
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player
