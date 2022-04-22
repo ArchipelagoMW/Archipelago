@@ -92,8 +92,6 @@ class WitnessWorld(World):
 
         self.world.itempool += pool
 
-        
-
     def create_regions(self):
         self.regio.create_regions(self.world, self.player)
 
@@ -114,9 +112,11 @@ class WitnessWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = self.items.ITEM_TABLE[name]
-        return WitnessItem(
+        new_item = WitnessItem(
             name, item.progression, item.code, player=self.player
         )
+        new_item.trap = item.trap
+        return new_item
 
 
 class WitnessLocation(Location):

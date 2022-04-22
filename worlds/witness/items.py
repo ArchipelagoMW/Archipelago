@@ -16,13 +16,13 @@ class ItemData(NamedTuple):
     code: Optional[int]
     progression: bool
     event: bool = False
+    trap: bool = False
 
 
 class WitnessItem(Item):
     """
     Item from the game The Witness
     """
-
     game: str = "The Witness"
 
 
@@ -37,8 +37,8 @@ class WitnessItems():
 
         self.JUNK_WEIGHTS = {
             "Speed Boost": 1,
-            "Slowness Trap": 0.8,
-            "Power Surge Trap": 0.2,
+            "Slowness": 0.8,
+            "Power Surge": 0.2,
         }
 
         self.logic = early_logic
@@ -50,7 +50,9 @@ class WitnessItems():
             self.ITEM_TABLE[item[0]] = ItemData(158000 + item[1], True, False)
 
         for item in self.logic.ALL_TRAPS:
-            self.ITEM_TABLE[item[0]] = ItemData(158000 + item[1], False, False)
+            self.ITEM_TABLE[item[0]] = ItemData(
+                158000 + item[1], False, False, True
+            )
 
         for item in self.logic.ALL_BOOSTS:
             self.ITEM_TABLE[item[0]] = ItemData(158000 + item[1], False, False)
