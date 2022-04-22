@@ -266,7 +266,7 @@ Keep Glass Plates (Keep) - Keep - True - Keep Tower - 0x0361B:
 0x09E49 (Shortcut to Shadows) - 0x01CD3 - True
 
 Shipwreck (Shipwreck) - Keep Glass Plates - 0x033EA:
-0x00AFB (Vault) - True - Symmetry & Sound & Sound Dots
+0x00AFB (Vault) - True - Symmetry & Sound & Sound Dots & Colored Dots
 0x03535 (Vault Box) - 0x00AFB - True
 0x17D28 (Discard) - True - Triangles
 
