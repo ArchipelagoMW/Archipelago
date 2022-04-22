@@ -10,11 +10,11 @@
     <div id="host-room">
         {% if room.owner == session["_id"] %}
             Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
-            <br>
+            <br />
         {% endif %}
         {% if room.tracker %}
             This room has a <a href="{{ url_for("getTracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.
-            <br>
+            <br />
         {% endif %}
         This room will be closed after {{ room.timeout//60//60 }} hours of inactivity. Should you wish to continue
         later,
@@ -31,10 +31,8 @@
                            placeholder="Server Command. /help to list them, list gets appended to log.">
                 </div>
             </form>
-
-            Log:
         <div id="logger"></div>
-        <script>
+        <script type="application/ecmascript">
             let xmlhttp = new XMLHttpRequest();
             let url = '{{ url_for('display_log', room = room.id) }}';
 

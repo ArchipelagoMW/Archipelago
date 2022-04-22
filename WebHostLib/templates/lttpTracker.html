@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <title>{{ player_name }}&apos;s Tracker</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/playerTracker.css") }}"/>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/playerTracker.js") }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/globalStyles.css") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/lttp-tracker.css") }}"/>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/lttp-tracker.js") }}"></script>
 </head>
 
 <body>
@@ -69,12 +70,12 @@
                     <td class="counter">{{ checks_done[area] }} / {{ checks_in_area[area] }}</td>
                     {% if key_locations and "Universal" not in key_locations %}
                         <td class="counter">
-                            {{ inventory[small_key_ids[area]] if area in key_locations else 'N/A' }}
+                            {{ inventory[small_key_ids[area]] if area in key_locations else '—' }}
                         </td>
                     {% endif %}
                     {% if big_key_locations %}
                         <td>
-                            {{ '✔' if area in big_key_locations and inventory[big_key_ids[area]] else ('N/A' if area not in big_key_locations else '') }}
+                            {{ '✔' if area in big_key_locations and inventory[big_key_ids[area]] else ('—' if area not in big_key_locations else '') }}
                         </td>
                     {% endif %}
                 </tr>

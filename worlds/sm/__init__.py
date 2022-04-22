@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 import logging
 import copy
 import os
 import threading
-from typing import Set
+import base64
+from typing import Set, List
 
 logger = logging.getLogger("Super Metroid")
 
@@ -65,6 +68,10 @@ class SMWorld(World):
 
     remote_items: bool = False
     remote_start_inventory: bool = False
+
+    # changes to client DeathLink handling for 0.2.1
+    # changes to client Remote Item handling for 0.2.6
+    required_client_version = (0, 2, 6)
 
     itemManager: ItemManager
 
@@ -164,11 +171,6 @@ class SMWorld(World):
         create_locations(self, self.player)
         create_regions(self, self.world, self.player)
 
-    def get_required_client_version(self):
-        # changes to client DeathLink handling for 0.2.1
-        # changes to client Remote Item handling for 0.2.6
-        return max(super(SMWorld, self).get_required_client_version(), (0, 2, 6))
-
     def getWord(self, w):
         return (w & 0x00FF, (w & 0xFF00) >> 8)
     
@@ -246,7 +248,6 @@ class SMWorld(World):
         multiWorldLocations = {}
         multiWorldItems = {}
         idx = 0
-        itemId = 0
         self.playerIDMap = {}
         playerIDCount = 0 # 0 is for "Archipelago" server
         for itemLoc in self.world.get_locations():
@@ -402,7 +403,7 @@ class SMWorld(World):
     def generate_output(self, output_directory: str):
         outfilebase = 'AP_' + self.world.seed_name
         outfilepname = f'_P{self.player}'
-        outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}"
+        outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}"
         outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
 
         try:
@@ -421,7 +422,7 @@ class SMWorld(World):
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
     def checksum_mirror_sum(self, start, length, mask = 0x800000):
-        while (not(length & mask) and mask):
+        while not(length & mask) and mask:
             mask >>= 1
 
         part1 = sum(start[:mask]) & 0xFFFF
@@ -450,7 +451,6 @@ class SMWorld(World):
             outfile.write(buffer)
 
     def modify_multidata(self, multidata: dict):
-        import base64
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
         rom_name = getattr(self, "rom_name", None)
@@ -524,23 +524,28 @@ class SMWorld(World):
             progitempool.sort(
                 key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
 
-    def post_fill(self):
-        new_state = CollectionState(self.world)
+    @classmethod
+    def stage_post_fill(cls, world):
+        new_state = CollectionState(world)
         progitempool = []
-        for item in self.world.itempool:
-            if item.player == self.player and item.advancement:
+        for item in world.itempool:
+            if item.game == "Super Metroid" and item.advancement:
                 progitempool.append(item)
-            if item.location.player == self.player and item.game == "Super Metroid" and item.type == "Nothing":
-                item.location.address = None
 
         for item in progitempool:
             new_state.collect(item, True)
-
+        
         bossesLoc = ['Draygon', 'Kraid', 'Ridley', 'Phantoon', 'Mother Brain']
-        for bossLoc in bossesLoc:
-            if (not self.world.get_location(bossLoc, self.player).can_reach(new_state)):
-                self.world.state.smbm[self.player].onlyBossLeft = True
-                break
+        for player in world.get_game_players("Super Metroid"):
+            for bossLoc in bossesLoc:
+                if not world.get_location(bossLoc, player).can_reach(new_state):
+                    world.state.smbm[player].onlyBossLeft = True
+                    break
+
+        # Turn Nothing items into event pairs.
+        for location in world.get_locations():
+            if location.game == location.item.game == "Super Metroid" and location.item.type == "Nothing":
+                location.address = location.item.code = None
 
 
 def create_locations(self, player: int):

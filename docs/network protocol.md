@@ -336,7 +336,6 @@ Used to write data to the server's data storage, that data can then be shared ac
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | key | str | The key to manipulate. |
-| value | any | The new value for the key. |
 | default | any | The default value to use in case the key has no value on the server. |
 | want_reply | bool | If set, the server will send a [SetReply](#SetReply) response back to the client. |
 | operations | list\[[DataStorageOperation](#DataStorageOperation)\] | Operations to apply to the value, multiple operations can be present and they will be executed in order of appearance. |
@@ -584,13 +583,13 @@ GameData is a **dict** but contains these keys and values. It's broken out into 
 ### Tags
 Tags are represented as a list of strings, the common Client tags follow:
 
-| Name | Notes |
-| ----- | ---- |
-| AP | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily. |
-| IgnoreGame | Tells the server to ignore the "game" attribute in the [Connect](#Connect) packet. |
-| DeathLink | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets |
-| Tracker | Tells the server that this client is actually a Tracker, will refuse new locations from this client and send all items as if they were remote items. |
-| TextOnly | Tells the server that this client will not send locations and does not want to receive items. |
+| Name       | Notes                                                                                                                                                                                                              |
+|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| AP         | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily.                                                                                  |
+| IgnoreGame | Deprecated. See Tracker and TextOnly. Tells the server to ignore the "game" attribute in the [Connect](#Connect) packet.                                                                                           |
+| DeathLink  | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets                                                                                                            |
+| Tracker    | Tells the server that this client will not send locations and is actually a Tracker. When specified and used with empty or null `game` in [Connect](#connect), game and game's version validation will be skipped. |
+| TextOnly   | Tells the server that this client will not send locations and is intended for chat. When specified and used with empty or null `game` in [Connect](#connect), game and game's version validation will be skipped.  |
 
 ### DeathLink
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:

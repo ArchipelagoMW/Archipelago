@@ -1,14 +1,13 @@
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/header/baseHeader.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/themes/base.css") }}" />
 {% endblock %}
 
 {% block header %}
     <header id="base-header">
         <div id="base-header-left">
             <a href="/" id="site-title">
-                <img src="/favicon.ico" alt="Favicon" />
+                <img id="header-logo" src="/static/static/branding/header-logo.svg" alt="Archipelago" />
             </a>
-            <a href="/">archipelago</a>
         </div>
         <div id="base-header-right">
             <a href="/games">supported games</a>
