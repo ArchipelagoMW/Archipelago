@@ -236,6 +236,8 @@ class WitnessLocations():
         if is_option_enabled(world, player, "shuffle_hard"):
             self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | self.HARD_LOCATIONS
 
+        self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | self.logic.ADDED_CHECKS
+
         self.ALL_LOCATIONS_TO_ID = dict(
             sorted(self.ALL_LOCATIONS_TO_ID.items(), key=lambda item: item[1])
         )

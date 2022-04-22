@@ -160,6 +160,11 @@ class ParsedWitnessLogic():
             old_region = self.ALL_REGIONS_BY_NAME[new_region["name"]]
             old_region["connections"] = new_region["connections"]
 
+            return
+
+        if type == "Added Locations":
+            self.ADDED_CHECKS.add(line)
+
     def define_new_region(self, region_string):
         """
         Returns a region object by parsing a line in the logic file
@@ -395,6 +400,7 @@ class ParsedWitnessLogic():
         self.EVENT_ITEM_PAIRS = dict()
         self.ALWAYS_EVENT_HEX_CODES = set()
         self.COMPLETELY_DISABLED_CHECKS = set()
+        self.ADDED_CHECKS = set()
         self.EVENT_ITEM_NAMES = {
             "0x01A0F": "Keep Laser Panel (Hedge Mazes) Activates",
             "0x09D9B": "Monastery Overhead Doors Open",
