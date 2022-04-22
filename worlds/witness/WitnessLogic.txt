@@ -458,14 +458,14 @@ Swamp Near Boat (Swamp) - Swamp Rotating Bridge Near Side - 0x009A1 - Swamp Plat
 0x009AD (Blue Underwater Negative Shapers 2) - 0x009AB - Shapers & Negative Shapers
 0x009AE (Blue Underwater Negetive Shapers 3) - 0x009AD - Shapers & Negative Shapers
 0x009AF (Blue Underwater Negative Shapers 4) - 0x009AE - Shapers & Negative Shapers
-0x00006 (Blue Underwater Negative Shapers 5) - 0x009AF - Shapers & Broken Negative Shapers
+0x00006 (Blue Underwater Negative Shapers 5) - 0x009AF - Shapers & Negative Shapers & Broken Negative Shapers
 0x17E2B (Long Bridge Control) - True - Rotated Shapers
 
 Swamp Maze (Swamp) - Swamp Rotating Bridge Near Side - 0x00001 & 0x014D2 & 0x014D4 & 0x014D1 - Outside Swamp - 0x17C05 & 0x17C02:
-0x17C04 (Maze Control) - True - Shapers & Negative Rotated Shapers & Environment
+0x17C04 (Maze Control) - True - Shapers & Negative Shapers & Rotated Shapers & Environment
 0x03615 (Laser) - 0x17C04 - True
 0x17C05 (Near Laser Shortcut Door Left) - True - Rotated Shapers
-0x17C02 (Near Laser Shortcut Door Right) - 0x17C05 - Shapers & Negative Rotated Shapers
+0x17C02 (Near Laser Shortcut Door Right) - 0x17C05 - Shapers & Negative Shapers & Rotated Shapers
 
 Treehouse Entry Area (Treehouse):
 0x17C95 (Boat Spawn) - True - Boat
