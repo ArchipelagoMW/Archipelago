@@ -1,5 +1,5 @@
 html{
-    background-image: url('../static/backgrounds/grass/grass-0007-large.png');
+    background-image: url('../static/backgrounds/grass.png');
     background-repeat: repeat;
     background-size: 650px 650px;
     scroll-padding-top: 90px;
@@ -45,7 +45,6 @@ html{
 }
 
 #weighted-settings p.setting-description{
-    font-weight: bold;
     margin: 0 0 1rem;
 }
 
@@ -64,7 +63,16 @@ html{
     width: 100%;
 }
 
+#weighted-settings table th, #weighted-settings table td{
+    border: none;
+}
+
+#weighted-settings table td{
+    padding: 5px;
+}
+
 #weighted-settings table .td-left{
+    font-family: LexendDeca-Regular, sans-serif;
     padding-right: 1rem;
     width: 200px;
 }
@@ -233,13 +241,14 @@ html{
     width: 100%;
     margin-bottom: 0.5rem;
     color: #ffe993;
-    text-transform: lowercase;
+    text-transform: none;
     text-shadow: 1px 1px 2px #000000;
 }
 
 #weighted-settings h3, #weighted-settings h4, #weighted-settings h5, #weighted-settings h6{
     color: #ffffff;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    text-transform: none;
 }
 
 #weighted-settings a{

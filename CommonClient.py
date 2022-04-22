@@ -6,6 +6,9 @@ import sys
 import typing
 import time
 
+import ModuleUpdate
+ModuleUpdate.update()
+
 import websockets
 
 import Utils
@@ -17,6 +20,7 @@ from MultiServer import CommandProcessor
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
 from Utils import Version, stream_input
 from worlds import network_data_package, AutoWorldRegister
+import os
 
 logger = logging.getLogger("Client")
 
@@ -596,7 +600,7 @@ if __name__ == '__main__':
 
     class TextContext(CommonContext):
         tags = {"AP", "IgnoreGame", "TextOnly"}
-        game = "Archipelago"
+        game = ""  # empty matches any game since 0.3.2
         items_handling = 0  # don't receive any NetworkItems
 
         async def server_auth(self, password_requested: bool = False):
@@ -617,13 +621,16 @@ if __name__ == '__main__':
         ctx = TextContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         input_task = None
+        steam_overlay = False
+
         if gui_enabled:
             from kvui import TextManager
             ctx.ui = TextManager(ctx)
             ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
+            steam_overlay = 'gameoverlayrenderer' in os.environ.get('LD_PRELOAD', '')
         else:
             ui_task = None
-        if sys.stdin:
+        if sys.stdin and not steam_overlay:  # steam overlay breaks when starting console_loop
             input_task = asyncio.create_task(console_loop(ctx), name="Input")
         await ctx.exit_event.wait()
 

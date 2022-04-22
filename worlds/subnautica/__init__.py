@@ -28,6 +28,7 @@ class SubnauticaWorld(World):
     options = options
 
     data_version = 2
+    required_client_version = (0, 1, 9)
 
     def generate_basic(self):
         # Link regions
@@ -76,10 +77,6 @@ class SubnauticaWorld(World):
     def create_item(self, name: str) -> Item:
         item = lookup_name_to_item[name]
         return SubnauticaItem(name, item["progression"], item["id"], player=self.player)
-
-    def get_required_client_version(self) -> typing.Tuple[int, int, int]:
-        return max((0, 1, 9), super(SubnauticaWorld, self).get_required_client_version())
-
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, None, name, player)
