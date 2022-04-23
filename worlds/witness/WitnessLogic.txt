@@ -326,7 +326,7 @@ RGB House (Town) - Town - 0x28998:
 0x034E4 (Sound Room Left) - True - Sound & Sound Waves
 0x034E3 (Sound Room Right) - True - Sound & Sound Dots
 0x334D8 (RGB Control) - 0x034E4 & 0x034E3 - Rotated Shapers & RGB & Squares & Colored Squares
-0x03C0C (RGB Squares) - 0x334D8 - RGB & Squares & Colored Squares
+0x03C0C (RGB Squares) - 0x334D8 - RGB & Squares & Colored Squares & Black/White Squares
 0x03C08 (RGB Stars) - 0x334D8 - RGB & Stars
 
 Town Tower Top (Town) - Town - 0x28A69 & 0x28B39 & 0x28ACC & 0x28AD9:
