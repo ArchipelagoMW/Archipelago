@@ -385,6 +385,13 @@ class ChecksFinderManager(GameManager):
     base_title = "Archipelago ChecksFinder Client"
 
 
+class FFPSManager(GameManager):
+    logging_pairs = [
+        ("Client", "Archipelago")
+    ]
+    base_title = "Archipelago FFPS Client"
+
+
 class SNIManager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago"),
