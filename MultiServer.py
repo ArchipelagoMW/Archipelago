@@ -792,11 +792,11 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
                     collect_player(ctx, team, group, True)
 
 
-def get_remaining(ctx: Context, team: int, slot: int, remove_hidden=True) -> typing.List[int]:
+def get_remaining(ctx: Context, team: int, slot: int, remove_hidden=False) -> typing.List[int]:
     items = []
     for location_id in ctx.locations[slot]:
         if location_id not in ctx.location_checks[team, slot]:
-            if remove_hidden and ctx.locations[slot][location_id][2] & 8 == 0:
+            if remove_hidden and ctx.locations[slot][location_id][2] & 8 == 8:
                 continue
             items.append(ctx.locations[slot][location_id][0])  # item ID
     return sorted(items)
