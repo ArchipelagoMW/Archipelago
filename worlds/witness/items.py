@@ -5,9 +5,8 @@ Defines progression, junk and event items for The Witness
 from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Item
+from worlds.witness import ParsedWitnessLogic
 from worlds.witness.Options import is_option_enabled
-from worlds.witness.locations import WitnessLocations
-from worlds.witness.rules import WitnessLogic
 
 
 class ItemData(NamedTuple):
@@ -27,9 +26,10 @@ class WitnessItem(Item):
     game: str = "The Witness"
 
 
-class WitnessItems():
+class WitnessItems:
     """Class that handles Witness items"""
-    def __init__(self, early_logic: WitnessLogic):
+
+    def __init__(self, early_logic: ParsedWitnessLogic):
         self.ITEM_TABLE: Dict[str, ItemData] = {
         }
         self.locat = None
@@ -57,25 +57,25 @@ class WitnessItems():
 
         for item in self.logic.ALL_BOOSTS:
             self.ITEM_TABLE[item[0]] = ItemData(158000 + item[1], False, False)
-            
+
         self.ITEM_TABLE = dict(sorted(self.ITEM_TABLE.items(),
                                       key=lambda item: item[1].code
                                       if isinstance(item[1].code, int) else 0))
-        
-    def adjust_after_options(self, locat, world, player):
-        """Adds event items after logic changes due to options"""
 
         self.GOOD_ITEMS = [
             "Dots", "Black/White Squares", "Stars",
             "Shapers", "Symmetry"
         ]
 
+    def adjust_after_options(self, locat, world, player):
+        """Adds event items after logic changes due to options"""
+
         if is_option_enabled(
-            world, player, "shuffle_discarded_panels"
+                world, player, "shuffle_discarded_panels"
         ):
             self.GOOD_ITEMS.append("Triangles")
         if not is_option_enabled(
-            world, player, "disable_non_randomized_puzzles"
+                world, player, "disable_non_randomized_puzzles"
         ):
             self.GOOD_ITEMS.append("Colored Squares")
 

@@ -2,7 +2,6 @@
 Defines constants for different types of locations in the game
 """
 
-
 from worlds.witness.Options import is_option_enabled
 from worlds.witness.full_logic import ParsedWitnessLogic
 
@@ -189,7 +188,7 @@ class WitnessLocations():
 
         panel_offset = self.logic.CHECKS_DEPENDENT_BY_HEX[chex]["idOffset"]
         type_offset = self.TYPE_OFFSETS[
-             self.logic.CHECKS_DEPENDENT_BY_HEX[chex]["panelType"]
+            self.logic.CHECKS_DEPENDENT_BY_HEX[chex]["panelType"]
         ]
 
         return self.ID_START + panel_offset + type_offset
@@ -234,7 +233,7 @@ class WitnessLocations():
 
         if is_option_enabled(world, player, "shuffle_uncommon"):
             self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | self.UNCOMMON_LOCATIONS
-            
+
         if is_option_enabled(world, player, "shuffle_hard"):
             self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | self.HARD_LOCATIONS
 
@@ -251,7 +250,7 @@ class WitnessLocations():
 
         self.CHECK_PANELHEX_TO_ID = {
             self.logic.CHECKS_BY_NAME[ch]["checkHex"]:
-            self.ALL_LOCATIONS_TO_ID[ch]
+                self.ALL_LOCATIONS_TO_ID[ch]
             for ch in self.CHECK_LOCATIONS
         }
 
@@ -262,8 +261,8 @@ class WitnessLocations():
         event_locations = {
             p for p in self.logic.NECESSARY_EVENT_PANELS
             if self.logic.CHECKS_BY_HEX[p]["checkName"]
-            not in self.CHECK_LOCATIONS
-            or p in self.logic.ALWAYS_EVENT_HEX_CODES
+               not in self.CHECK_LOCATIONS
+               or p in self.logic.ALWAYS_EVENT_HEX_CODES
         }
 
         self.EVENT_LOCATION_TABLE = {
@@ -273,11 +272,11 @@ class WitnessLocations():
 
         check_dict = {
             location:
-            self.get_id(self.logic.CHECKS_BY_NAME[location]["checkHex"])
+                self.get_id(self.logic.CHECKS_BY_NAME[location]["checkHex"])
             for location in self.CHECK_LOCATIONS
 
             if self.logic.CHECKS_BY_NAME[location]["panelType"]
-            in self.PANEL_TYPES_TO_SHUFFLE
+               in self.PANEL_TYPES_TO_SHUFFLE
         }
 
         self.CHECK_LOCATION_TABLE = {**self.EVENT_LOCATION_TABLE, **check_dict}

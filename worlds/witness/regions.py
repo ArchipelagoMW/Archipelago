@@ -4,11 +4,11 @@ and connects them with the proper requirements
 """
 
 from BaseClasses import MultiWorld, Entrance
+from worlds.witness import ParsedWitnessLogic
 from worlds.witness.locations import WitnessLocations
-from worlds.witness.rules import WitnessLogic
 
 
-class WitnessRegions():
+class WitnessRegions:
     """Class that defines Witness Regions"""
 
     locat = None
@@ -63,7 +63,7 @@ class WitnessRegions():
                 self.logic.CHECKS_BY_HEX[panel]["checkName"]
                 for panel in region["panels"]
                 if self.logic.CHECKS_BY_HEX[panel]["checkName"]
-                in self.locat.CHECK_LOCATION_TABLE
+                   in self.locat.CHECK_LOCATION_TABLE
             ]
             locations_for_this_region += [
                 self.logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
@@ -91,7 +91,7 @@ class WitnessRegions():
         world.get_entrance("The Splashscreen?", player).connect(
             world.get_region('First Hallway', player)
         )
-    
-    def __init__(self, logic: WitnessLogic, locat: WitnessLocations):
+
+    def __init__(self, logic: ParsedWitnessLogic, locat: WitnessLocations):
         self.logic = logic
         self.locat = locat

@@ -13,8 +13,10 @@ from .regions import WitnessRegions
 from .full_logic import ParsedWitnessLogic
 from .Options import is_option_enabled, the_witness_options
 
+
 class WitnessWebWorld(WebWorld):
     theme = "jungle"
+
 
 class WitnessWorld(World):
     """
@@ -35,6 +37,7 @@ class WitnessWorld(World):
         name: data.code for name, data in items.ITEM_TABLE.items()
     }
     location_name_to_id = locat.ALL_LOCATIONS_TO_ID
+
     def _get_slot_data(self):
         return {
             'seed': self.world.random.randint(0, 1000000),
@@ -74,7 +77,7 @@ class WitnessWorld(World):
         junk_pool = self.world.random.choices(
             list(junk_pool.keys()), weights=list(junk_pool.values()),
             k=len(self.locat.CHECK_LOCATION_TABLE) - len(pool)
-            - len(self.locat.EVENT_LOCATION_TABLE) - 1
+              - len(self.locat.EVENT_LOCATION_TABLE) - 1
         )
 
         pool += [self.create_item(junk) for junk in junk_pool]
@@ -120,6 +123,7 @@ class WitnessWorld(World):
 
         return self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()))[0]
 
+
 class WitnessLocation(Location):
     """
     Archipelago Location for The Witness
@@ -128,7 +132,6 @@ class WitnessLocation(Location):
     check_hex: int = -1
 
     def __init__(self, player: int, name: str, address: typing.Optional[int], parent, ch_hex: int = -1):
-
         super().__init__(player, name, address, parent)
         self.check_hex = ch_hex
 

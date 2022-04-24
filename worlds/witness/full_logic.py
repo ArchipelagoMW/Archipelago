@@ -20,6 +20,7 @@ import os
 from BaseClasses import MultiWorld
 
 from worlds.witness.Options import is_option_enabled
+
 pathlib.Path(__file__).parent.resolve()
 
 
@@ -138,12 +139,12 @@ class ParsedWitnessLogic():
             for hex_code, event_name in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
                 if hex_code not in hex_set and event_name == line_split[0]:
                     to_remove.add(hex_code)
-                    
+
             for remove in to_remove:
                 del self.ALWAYS_EVENT_NAMES_BY_HEX[remove]
 
             return
-        
+
         if type == "Requirement Changes":
             line_split = line.split(" - ")
             panel_obj = self.CHECKS_DEPENDENT_BY_HEX[line_split[0]]
@@ -170,7 +171,7 @@ class ParsedWitnessLogic():
             return
 
         if type == "Region Changes":
-            new_region = self.define_new_region(line + ":") 
+            new_region = self.define_new_region(line + ":")
             old_region = self.ALL_REGIONS_BY_NAME[new_region["name"]]
             old_region["connections"] = new_region["connections"]
 
@@ -251,9 +252,6 @@ class ParsedWitnessLogic():
 
             required_panel_lambda = line_split.pop(0)
             required_item_lambda = line_split.pop(0)
-
-            location_id = 0
-            location_type = ""
 
             laser_names = {
                 "Laser",
@@ -337,7 +335,7 @@ class ParsedWitnessLogic():
                     continue
 
                 self.make_single_adjustment(current_adjustment_type, line)
-            
+
             file.close()
 
     def make_dependency_reduced_checklist(self):
@@ -411,7 +409,7 @@ class ParsedWitnessLogic():
 
         # All regions with a list of panels in them and the connections to other regions
         self.ALL_REGIONS_BY_NAME = dict()
-        
+
         self.CHECKS_DEPENDENT_BY_HEX = dict()
 
         # The next two are the most important.

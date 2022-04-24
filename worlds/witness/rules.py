@@ -16,20 +16,21 @@ class WitnessLogic(LogicMixin):
     """
     Logic macros that get reused
     """
+
     def _witness_has_lasers(self, world, player: int, amount: int) -> bool:
         lasers = 0
-        
+
         lasers += int(self.has("Symmetry Laser Activation", player))
         lasers += int(self.has("Desert Laser Activation", player)
                       and self.has("Desert Laser Redirection", player))
         lasers += int(self.has("Town Laser Activation", player))
         lasers += int(self.has("Monastery Laser Activation", player))
-        lasers += int(self.has("Keep Laser Pressure Plates Activation",player)
+        lasers += int(self.has("Keep Laser Pressure Plates Activation", player)
                       and (
-                          is_option_enabled(world, player, "disable_non_randomized_puzzles")
-                          or self.has("Keep Laser Hedges Activation", player)
+                              is_option_enabled(world, player, "disable_non_randomized_puzzles")
+                              or self.has("Keep Laser Hedges Activation", player)
                       )
-                     )
+                      )
         lasers += int(self.has("Quarry Laser Activation", player))
         lasers += int(self.has("Treehouse Laser Activation", player))
         lasers += int(self.has("Jungle Laser Activation", player))
@@ -60,7 +61,7 @@ class WitnessLogic(LogicMixin):
                 and not self._safe_manual_panel_check(panel, world, player,
                                                       logic, locat)):
             return False
-        
+
         return True
 
     def meets_item_requirements(self, panel, world, player, logic, locat):
@@ -121,8 +122,8 @@ class WitnessLogic(LogicMixin):
         region = logic.CHECKS_BY_HEX[panel]["region"]["name"]
 
         return (
-            self.meets_item_requirements(panel, world, player, logic, locat)
-            and self.can_reach(region, "Region", player)
+                self.meets_item_requirements(panel, world, player, logic, locat)
+                and self.can_reach(region, "Region", player)
         )
 
     def can_solve_panels(self, panel_hex_to_solve_set, world, player, logic, locat):
