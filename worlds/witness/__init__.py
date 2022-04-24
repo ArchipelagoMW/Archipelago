@@ -35,9 +35,6 @@ class WitnessWorld(World):
         name: data.code for name, data in items.ITEM_TABLE.items()
     }
     location_name_to_id = locat.ALL_LOCATIONS_TO_ID
-
-    hidden = False
-
     def _get_slot_data(self):
         return {
             'seed': self.world.random.randint(0, 1000000),
