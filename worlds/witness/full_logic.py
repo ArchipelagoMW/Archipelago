@@ -118,10 +118,10 @@ class ParsedWitnessLogic():
 
         return lambda_set
 
-    def make_single_adjustment(self, type, line):
+    def make_single_adjustment(self, adj_type, line):
         """Makes a single logic adjustment based on additional logic file"""
 
-        if type == "Event Items":
+        if adj_type == "Event Items":
             line_split = line.split(" - ")
             hex_set = line_split[1].split(",")
 
@@ -145,7 +145,7 @@ class ParsedWitnessLogic():
 
             return
 
-        if type == "Requirement Changes":
+        if adj_type == "Requirement Changes":
             line_split = line.split(" - ")
             panel_obj = self.CHECKS_DEPENDENT_BY_HEX[line_split[0]]
 
@@ -165,19 +165,19 @@ class ParsedWitnessLogic():
 
             return
 
-        if type == "Disabled Locations":
+        if adj_type == "Disabled Locations":
             self.COMPLETELY_DISABLED_CHECKS.add(line[:7])
 
             return
 
-        if type == "Region Changes":
+        if adj_type == "Region Changes":
             new_region = self.define_new_region(line + ":")
             old_region = self.ALL_REGIONS_BY_NAME[new_region["name"]]
             old_region["connections"] = new_region["connections"]
 
             return
 
-        if type == "Added Locations":
+        if adj_type == "Added Locations":
             self.ADDED_CHECKS.add(line)
 
     def define_new_region(self, region_string):

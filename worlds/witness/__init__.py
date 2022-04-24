@@ -138,15 +138,15 @@ class WitnessLocation(Location):
 
 def create_region(world: MultiWorld, player: int, name: str,
                   logic: ParsedWitnessLogic, locat: WitnessLocations,
-                  locations=None, exits=None):
+                  region_locations=None, exits=None):
     """
     Create an Archipelago Region for The Witness
     """
 
     ret = Region(name, RegionType.Generic, name, player)
     ret.world = world
-    if locations:
-        for location in locations:
+    if region_locations:
+        for location in region_locations:
             loc_id = locat.CHECK_LOCATION_TABLE[location]
 
             check_hex = -1

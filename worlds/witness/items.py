@@ -59,8 +59,8 @@ class WitnessItems:
             self.ITEM_TABLE[item[0]] = ItemData(158000 + item[1], False, False)
 
         self.ITEM_TABLE = dict(sorted(self.ITEM_TABLE.items(),
-                                      key=lambda item: item[1].code
-                                      if isinstance(item[1].code, int) else 0))
+                                      key=lambda single_item: single_item[1].code
+                                      if isinstance(single_item[1].code, int) else 0))
 
         self.GOOD_ITEMS = [
             "Dots", "Black/White Squares", "Stars",

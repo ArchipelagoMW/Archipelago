@@ -6,7 +6,7 @@ from worlds.witness.Options import is_option_enabled
 from worlds.witness.full_logic import ParsedWitnessLogic
 
 
-class WitnessLocations():
+class WitnessLocations:
     """
     Class that handles Witness Locations
     """
@@ -271,12 +271,9 @@ class WitnessLocations():
         }
 
         check_dict = {
-            location:
-                self.get_id(self.logic.CHECKS_BY_NAME[location]["checkHex"])
+            location: self.get_id(self.logic.CHECKS_BY_NAME[location]["checkHex"])
             for location in self.CHECK_LOCATIONS
-
-            if self.logic.CHECKS_BY_NAME[location]["panelType"]
-               in self.PANEL_TYPES_TO_SHUFFLE
+            if self.logic.CHECKS_BY_NAME[location]["panelType"] in self.PANEL_TYPES_TO_SHUFFLE
         }
 
         self.CHECK_LOCATION_TABLE = {**self.EVENT_LOCATION_TABLE, **check_dict}

@@ -60,16 +60,12 @@ class WitnessRegions:
 
         for region_name, region in self.logic.ALL_REGIONS_BY_NAME.items():
             locations_for_this_region = [
-                self.logic.CHECKS_BY_HEX[panel]["checkName"]
-                for panel in region["panels"]
-                if self.logic.CHECKS_BY_HEX[panel]["checkName"]
-                   in self.locat.CHECK_LOCATION_TABLE
+                self.logic.CHECKS_BY_HEX[panel]["checkName"] for panel in region["panels"]
+                if self.logic.CHECKS_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
             ]
             locations_for_this_region += [
-                self.logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
-                for panel in region["panels"]
-                if self.logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
-                in self.locat.EVENT_LOCATION_TABLE
+                self.logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" for panel in region["panels"]
+                if self.logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" in self.locat.EVENT_LOCATION_TABLE
             ]
 
             all_locations = all_locations | set(locations_for_this_region)
