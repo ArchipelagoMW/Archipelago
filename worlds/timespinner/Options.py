@@ -114,6 +114,8 @@ timespinner_options: Dict[str, Option] = {
     "ShopFill": ShopFill,
     "ShopWarpShards": ShopWarpShards,
     "ShopMultiplier": ShopMultiplier,
+    "LootPool": LootPool,
+    "ShowBestiary": ShowBestiary,
     "DeathLink": DeathLink,
 }
 
