@@ -156,6 +156,7 @@ class Context:
         self.name_aliases: typing.Dict[team_slot, str] = {}
         self.location_checks = collections.defaultdict(set)
         self.hint_cost = hint_cost
+        self.player_hint_costs = {}
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
         self.hints: typing.Dict[team_slot, typing.Set[NetUtils.Hint]] = collections.defaultdict(set)
@@ -399,6 +400,7 @@ class Context:
                 logging.error('No save data found, starting a new game')
             except Exception as e:
                 logging.exception(e)
+            self.calculate_hint_costs()
             self._start_async_saving()
 
     def _start_async_saving(self):
@@ -501,10 +503,16 @@ class Context:
 
     # rest
 
+    def calculate_hint_costs(self):
+        self.player_hint_costs = {}
+        for player in self.games.keys():
+            if self.hint_cost:
+                self.player_hint_costs[player] = max(0, int(self.hint_cost * 0.01 * len([loc for loc in self.locations[player].values() if not loc[2] & 8])))
+            else:
+                self.player_hint_costs[player] = 0
+
     def get_hint_cost(self, slot):
-        if self.hint_cost:
-            return max(0, int(self.hint_cost * 0.01 * len([loc for loc in self.locations[slot].values() if loc[2] & 8 == 0])))
-        return 0
+        return self.player_hint_costs[slot]
 
     def recheck_hints(self):
         for team, slot in self.hints:
@@ -796,7 +804,7 @@ def get_remaining(ctx: Context, team: int, slot: int, remove_hidden=False) -> ty
     items = []
     for location_id in ctx.locations[slot]:
         if location_id not in ctx.location_checks[team, slot]:
-            if remove_hidden and ctx.locations[slot][location_id][2] & 8 == 8:
+            if remove_hidden and ctx.locations[slot][location_id][2] & 8:
                 continue
             items.append(ctx.locations[slot][location_id][0])  # item ID
     return sorted(items)
@@ -1356,7 +1364,7 @@ def get_checked_checks(ctx: Context, team: int, slot: int, remove_hidden=False) 
     if remove_hidden:
         return [location_id for
              location_id in ctx.locations[slot] if
-             location_id in ctx.location_checks[team, slot] and ctx.locations[slot][location_id][2] & 8 == 0]
+             location_id in ctx.location_checks[team, slot] and not ctx.locations[slot][location_id][2] & 8]
     else:
         return [location_id for
             location_id in ctx.locations[slot] if
@@ -1367,7 +1375,7 @@ def get_missing_checks(ctx: Context, team: int, slot: int, remove_hidden=False) 
     if remove_hidden:
         return [location_id for
              location_id in ctx.locations[slot] if
-             location_id not in ctx.location_checks[team, slot] and ctx.locations[slot][location_id][2] & 8 == 0]
+             location_id not in ctx.location_checks[team, slot] and not ctx.locations[slot][location_id][2] & 8]
     else:
         return [location_id for
             location_id in ctx.locations[slot] if
@@ -1375,12 +1383,13 @@ def get_missing_checks(ctx: Context, team: int, slot: int, remove_hidden=False) 
 
 
 def get_client_points(ctx: Context, client: Client) -> int:
-    return (ctx.location_check_points * len([loc for loc in ctx.location_checks[client.team, client.slot] if loc.flags & 8 == 0]) -
-            ctx.get_hint_cost(client.slot) * ctx.hints_used[client.team, client.slot])
+    return (ctx.location_check_points * len([loc for loc in ctx.location_checks[client.team, client.slot]
+                                             if not loc.flags & 8]) - ctx.get_hint_cost(client.slot)
+                                             * ctx.hints_used[client.team, client.slot])
 
 
 def get_slot_points(ctx: Context, team: int, slot: int) -> int:
-    return (ctx.location_check_points * len([loc for loc in ctx.location_checks[team, slot] if loc.flags & 8 == 0]) -
+    return (ctx.location_check_points * len([loc for loc in ctx.location_checks[team, slot] if not loc.flags & 8]) -
             ctx.get_hint_cost(slot) * ctx.hints_used[team, slot])
 
 
@@ -1823,7 +1832,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             return False
 
     def _cmd_option(self, option_name: str, option: str):
-        """Set options for the server. Warning: expires on restart"""
+        """Set options for the server."""
 
         attrtype = self.ctx.simple_options.get(option_name, None)
         if attrtype:
@@ -1841,6 +1850,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
             elif option_name in {"hint_cost", "location_check_points"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
+                self.ctx.calculate_hint_costs()
             return True
         else:
             known = (f"{option}:{otype}" for option, otype in self.ctx.simple_options.items())
