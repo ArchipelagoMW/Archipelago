@@ -8,7 +8,9 @@ from worlds.witness.full_logic import ParsedWitnessLogic
 
 
 class WitnessLocations():
-    """Class that handles Witness Locations"""
+    """
+    Class that handles Witness Locations
+    """
     ID_START = 158000
 
     TYPE_OFFSETS = {
