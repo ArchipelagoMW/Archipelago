@@ -155,8 +155,7 @@ def make_lambda(check_hex, world, player, logic, locat):
     )
 
 
-def set_rules(world: MultiWorld, player: int,
-              logic: WitnessLogic, locat: WitnessLocations):
+def set_rules(world: MultiWorld, player: int, logic: WitnessLogic, locat: WitnessLocations):
     """
     Sets all rules for all locations
     """
