@@ -24,9 +24,7 @@ class WitnessRegions():
             panel_hex_to_solve_set, world, player, self.logic, self.locat
         )
 
-    def connect(self, world: MultiWorld, player: int, source: str,
-                target: str, panel_hex_to_solve_set=None):
-
+    def connect(self, world: MultiWorld, player: int, source: str, target: str, panel_hex_to_solve_set=None):
         """
         connect two regions and set the corresponding requirement
         """
