@@ -70,13 +70,9 @@ class WitnessItems:
     def adjust_after_options(self, locat, world, player):
         """Adds event items after logic changes due to options"""
 
-        if is_option_enabled(
-                world, player, "shuffle_discarded_panels"
-        ):
+        if is_option_enabled(world, player, "shuffle_discarded_panels"):
             self.GOOD_ITEMS.append("Triangles")
-        if not is_option_enabled(
-                world, player, "disable_non_randomized_puzzles"
-        ):
+        if not is_option_enabled(world, player, "disable_non_randomized_puzzles"):
             self.GOOD_ITEMS.append("Colored Squares")
 
         self.locat = locat
