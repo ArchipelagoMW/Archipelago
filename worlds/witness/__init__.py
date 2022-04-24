@@ -127,8 +127,7 @@ class WitnessLocation(Location):
     game: str = "The Witness"
     check_hex: int = -1
 
-    def __init__(self, player: int, name: str, address: typing.Optional[int],
-                 parent, ch_hex: int = -1):
+    def __init__(self, player: int, name: str, address: typing.Optional[int], parent, ch_hex: int = -1):
 
         super().__init__(player, name, address, parent)
         self.check_hex = ch_hex
