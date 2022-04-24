@@ -55,6 +55,8 @@ class ParsedWitnessLogic():
 
             current_set.add((line_split[1], int(line_split[0])))
 
+        file.close()
+
     def reduce_req_within_region(self, check_obj):
         """
         Panels in this game often only turn on when other panels are solved.
@@ -300,6 +302,7 @@ class ParsedWitnessLogic():
             }
 
             current_region["panels"].add(check_hex)
+        file.close()
 
     def make_options_adjustments(self, world, player):
         """Makes logic adjustments based on options"""
@@ -334,6 +337,8 @@ class ParsedWitnessLogic():
                     continue
 
                 self.make_single_adjustment(current_adjustment_type, line)
+            
+            file.close()
 
     def make_dependency_reduced_checklist(self):
         """

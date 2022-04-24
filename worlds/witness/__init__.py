@@ -26,14 +26,15 @@ class WitnessWorld(World):
     """
     game = "The Witness"
     topology_present = False
-    logic_shell = ParsedWitnessLogic()
-    locat_shell = WitnessLocations(logic_shell)
-    items_shell = WitnessItems(logic_shell)
+    logic = ParsedWitnessLogic()
+    locat = WitnessLocations(logic)
+    items = WitnessItems(logic)
+    regio = WitnessRegions(logic, locat)
     options = the_witness_options
     item_name_to_id = {
-        name: data.code for name, data in items_shell.ITEM_TABLE.items()
+        name: data.code for name, data in items.ITEM_TABLE.items()
     }
-    location_name_to_id = locat_shell.ALL_LOCATIONS_TO_ID
+    location_name_to_id = locat.ALL_LOCATIONS_TO_ID
 
     hidden = False
 
