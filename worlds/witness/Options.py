@@ -37,7 +37,6 @@ class ShuffleHardLocations(Toggle):
 class ChallengeVictoryCondition(Toggle):
     """The victory condition now becomes beating the Challenge area,
     instead of the final elevator."""
-
     display_name = "Victory on beating the Challenge"
 
 the_witness_options: Dict[str, Option] = {
