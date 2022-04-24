@@ -164,6 +164,8 @@ class CommonContext():
         self.locations_scouted: typing.Set[int] = set()
         self.items_received = []
         self.recieved_stages = 0
+        self.recieved_cups = 0
+        self.recieved_speakers = 0
         self.missing_locations: typing.Set[int] = set()
         self.checked_locations: typing.Set[int] = set()  # server state
         self.locations_info = {}
@@ -195,6 +197,8 @@ class CommonContext():
         self.auth = None
         self.items_received = []
         self.recieved_stages = 0
+        self.recieved_cups = 0
+        self.recieved_speakers = 0
         self.locations_info = {}
         self.server_version = Version(0, 0, 0)
         if self.server and self.server.socket is not None:
@@ -509,6 +513,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # when /missing is used for the client side view of what is missing.
         ctx.missing_locations = set(args["missing_locations"])
         ctx.checked_locations = set(args["checked_locations"])
+        path = os.path.expandvars(r"%appdata%/MMFApplications/FNAF6")
+        if not os.path.exists(path):
+            with open(path, "w") as f:
+                f.close()
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
@@ -524,35 +532,61 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         if start_index == len(ctx.items_received):
             if os.path.exists(os.path.expandvars("%appdata%/MMFApplications/FNAF6")):
                 for item in args['items']:
-                    with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), 'r+') as f:
-                        lines = f.read()
-                        if not item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "stage":
-                            f.write(str(item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId)+"=1\n")
-                        if not lines.__contains__("stage="):
-                            f.write("stage=0\n")
-                        if not lines.__contains__("money="):
-                            f.write("money=100\n")
-                        if not lines.__contains__("first="):
-                            f.write("first=1\n")
-                        if not lines.__contains__("night="):
-                            f.write("night=1\n")
-                        if not lines.__contains__("phase="):
-                            f.write("phase=1\n")
-                        f.close()
-                    file = open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), "r")
-                    replacement = ""
-                    for line in file:
-                        line = line.strip()
-                        if item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "stage":
-                            if line.__contains__("stage="):
-                                ctx.recieved_stages += 1
-                                changes = line.replace("stage="+line[line.find("stage=")+6], "stage="+str(ctx.recieved_stages))
-                            else:
-                                changes = line
-                        else:
-                            changes = line
-                        replacement = replacement + changes + "\n"
-                    file.close()
+                    while True:
+                        try:
+                            with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), 'r+') as f:
+                                lines = f.read()
+                                if not item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "speakers" and not item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "cups" and not item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "stage":
+                                    f.write(str(item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId)+"=1\n")
+                                if not lines.__contains__("stage="):
+                                    f.write("stage=0\n")
+                                if not lines.__contains__("cups="):
+                                    f.write("cups=0\n")
+                                if not lines.__contains__("speakers="):
+                                    f.write("speakers=0\n")
+                                if not lines.__contains__("money="):
+                                    f.write("money=100\n")
+                                if not lines.__contains__("first="):
+                                    f.write("first=1\n")
+                                if not lines.__contains__("night="):
+                                    f.write("night=1\n")
+                                if not lines.__contains__("phase="):
+                                    f.write("phase=1\n")
+                                f.close()
+                            break
+                        except PermissionError:
+                            continue
+                    while True:
+                        try:
+                            with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), "r") as file:
+                                replacement = ""
+                                for line in file:
+                                    line = line.strip()
+                                    if item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "stage":
+                                        if line.__contains__("stage="):
+                                            ctx.recieved_stages += 1
+                                            changes = line.replace("stage="+line[line.find("stage=")+6], "stage="+str(ctx.recieved_stages))
+                                        else:
+                                            changes = line
+                                    elif item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "cups":
+                                        if line.__contains__("cups="):
+                                            ctx.recieved_cups += 1
+                                            changes = line.replace("cups="+line[line.find("cups=")+6], "cups="+str(ctx.recieved_cups))
+                                        else:
+                                            changes = line
+                                    elif item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "speakers":
+                                        if line.__contains__("speakers="):
+                                            ctx.recieved_speakers += 1
+                                            changes = line.replace("speakers="+line[line.find("speakers=")+6], "speakers="+str(ctx.recieved_speakers))
+                                        else:
+                                            changes = line
+                                    else:
+                                        changes = line
+                                    replacement = replacement + changes + "\n"
+                                file.close()
+                            break
+                        except PermissionError:
+                            continue
                     lines_to_simplify = replacement.splitlines()
                     temp_lines = []
                     if lines_to_simplify.count("[FNAF6]") <= 0:
@@ -561,9 +595,14 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                         if temp_lines.count(ln+"\n") <= 0:
                             temp_lines.append(ln+"\n")
                     lines_to_simplify = temp_lines
-                    fout = open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), "w")
-                    fout.writelines(lines_to_simplify)
-                    fout.close()
+                    while True:
+                        try:
+                            with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), "w") as fout:
+                                fout.writelines(lines_to_simplify)
+                                fout.close()
+                            break
+                        except PermissionError:
+                            continue
                     ctx.items_received.append(NetworkItem(*item))
         ctx.watcher_event.set()
 
@@ -623,30 +662,44 @@ async def game_watcher(ctx: CommonContext):
             sending = []
             victory = False
             if os.path.exists(path):
-                await not_in_use(path)
-                with open(path, 'r') as f:
-                    filesread = f.read()
-                    for name, data in advancement_table.items():
-                        if data.setId == "stage":
-                            for i in range(int([int(s) for s in name.split() if s.isdigit()][0]), 10):
-                                if data.setId+"="+str(i) in filesread and not str(data.id)+"=sent" in filesread:
+                while True:
+                    try:
+                        with open(path, 'r') as f:
+                            filesread = f.read()
+                            for name, data in advancement_table.items():
+                                if data.setId == "stage" or data.setId == "cups" or data.setId == "speakers":
+                                    for i in range(int([int(s) for s in name.split() if s.isdigit()][0]), 10):
+                                        if data.setId+"="+str(i) in filesread and not str(data.id)+"=sent" in filesread:
+                                            sending = sending+[(int(data.id))]
+                                            break
+                                elif data.setId in filesread and not str(data.id)+"=sent" in filesread:
                                     sending = sending+[(int(data.id))]
-                                    break
-                        elif data.setId in filesread and not str(data.id)+"=sent" in filesread:
-                            sending = sending+[(int(data.id))]
-                    f.close()
-                with open(path, 'r+') as f:
-                    filesread = f.read()
-                    for itm in sending:
-                        f.write(str(itm)+"=sent\n")
-                    f.close()
+                            f.close()
+                        break
+                    except PermissionError:
+                        continue
+                while True:
+                    try:
+                        with open(path, 'r+') as f:
+                            filesread = f.read()
+                            for itm in sending:
+                                f.write(str(itm)+"=sent\n")
+                            f.close()
+                        break
+                    except PermissionError:
+                        continue
             path = os.path.expandvars(r"%appdata%/MMFApplications/VICTORYFFPS")
             if os.path.exists(path):
-                with open(path, 'r+') as f:
-                    filesread = f.readlines()
-                    if filesread.__contains__("[FIN]\n") and filesread.__contains__("fin=1\n"):
-                        victory = True
-                    f.close()
+                while True:
+                    try:
+                        with open(path, 'r+') as f:
+                            filesread = f.readlines()
+                            if filesread.__contains__("[FIN]\n") and filesread.__contains__("fin=1\n"):
+                                victory = True
+                            f.close()
+                        break
+                    except PermissionError:
+                        continue
             if victory:
                 os.remove(path)
             ctx.locations_checked = sending

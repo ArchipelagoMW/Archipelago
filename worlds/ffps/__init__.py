@@ -52,7 +52,9 @@ class FFPSWorld(World):
         # Add all required progression items
         for name, item in self.item_name_to_id.items():
             itempool += [name]
-        itempool += ["Stage Upgrade"] * 5
+        itempool += ["Stage Upgrade"] * 4
+        itempool += ["Cup Upgrade"] * 3
+        itempool += ["Speaker Upgrade"] * 1
 
         # Convert itempool into real items
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]

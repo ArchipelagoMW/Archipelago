@@ -28,7 +28,7 @@ item_table = {
     "Stage Upgrade": ItemData(55513, False, "stage"),
     "Pizza Light Decor": ItemData(55514, False, "404"),
     "Security Puppet Decor": ItemData(55515, False, "410"),
-    "Punch Clown Decor": ItemData(55516, False, "307"),
+    "Punch Clown Decor": ItemData(55516, False, "308"),
     "Prize King Decor": ItemData(55517, False, "409"),
     "Sanitation Station Decor": ItemData(55518, False, "107"),
     "Gumball Machine Decor": ItemData(55519, False, "206"),
@@ -48,7 +48,7 @@ item_table = {
     "Mr Hippo Animatronic": ItemData(55533, False, "212"),
     "Nedd Bear Animatronic": ItemData(55534, False, "213"),
     "Rockstar Bonnie Animatronic": ItemData(55535, False, "313"),
-    "Lemonade Clown Decor": ItemData(55536, False, "308"),
+    "Lemonade Clown Decor": ItemData(55536, False, "307"),
     "Funtime Chica Animatronic": ItemData(55537, False, "414"),
     "No. 1 Crate Animatronic": ItemData(55538, False, "113"),
     "Mr Can Do Animatronic": ItemData(55539, False, "111"),
@@ -66,6 +66,9 @@ item_table = {
     "Ballpit Tower Decor": ItemData(55551, False, "303"),
     "Traffic Light Decor": ItemData(55552, False, "210"),
     "Deluxe Ballpit Decor": ItemData(55553, False, "403"),
+    "Cup Upgrade": ItemData(55554, False, "cups"),
+    "Speaker Upgrade": ItemData(55555, False, "speakers"),
+    "Discount Cooling Unity Decor": ItemData(55556, False, "108"),
 }
 
 required_items = {
