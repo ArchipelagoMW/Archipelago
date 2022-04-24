@@ -48,17 +48,13 @@ class WitnessLogic(LogicMixin):
         check_name = panel_obj["checkName"]
 
         if (check_name + " Solved" in locat.EVENT_LOCATION_TABLE
-                and not self.has(
-                    logic.EVENT_ITEM_PAIRS[check_name + " Solved"],
-                    player)):
+                and not self.has(logic.EVENT_ITEM_PAIRS[check_name + " Solved"], player)):
             return False
-        if (panel not in logic.ORIGINAL_EVENT_PANELS
-                and not self.can_reach(check_name, "Location", player)):
+        if panel not in logic.ORIGINAL_EVENT_PANELS and not self.can_reach(check_name, "Location", player):
             return False
         if (panel in logic.ORIGINAL_EVENT_PANELS
                 and check_name + " Solved" not in locat.EVENT_LOCATION_TABLE
-                and not self._safe_manual_panel_check(panel, world, player,
-                                                      logic, locat)):
+                and not self._safe_manual_panel_check(panel, world, player, logic, locat)):
             return False
 
         return True
@@ -87,15 +83,10 @@ class WitnessLogic(LogicMixin):
                         valid_option = False
                         break
                 elif item in logic.NECESSARY_EVENT_PANELS:
-                    if (logic.CHECKS_BY_HEX[item]["checkName"] + " Solved"
-                            in locat.EVENT_LOCATION_TABLE):
-                        valid_option = self.has(
-                            logic.EVENT_ITEM_NAMES[item], player
-                        )
+                    if logic.CHECKS_BY_HEX[item]["checkName"] + " Solved" in locat.EVENT_LOCATION_TABLE:
+                        valid_option = self.has(logic.EVENT_ITEM_NAMES[item], player)
                     else:
-                        valid_option = self.can_reach(
-                            logic.CHECKS_BY_HEX[item]["checkName"],
-                            "Location", player)
+                        valid_option = self.can_reach(logic.CHECKS_BY_HEX[item]["checkName"], "Location", player)
                     if not valid_option:
                         break
                 elif not self.has(item, player):
