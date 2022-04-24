@@ -6,9 +6,9 @@ from Options import Toggle, DefaultOnToggle, Option
 #    "Play the randomizer in hardmode"
 #    display_name = "Hard Mode"
 
-class UnlockSymbols(DefaultOnToggle):
-    "All Puzzle symbols of a specific panel need to be unlocked before the panel can be used"
-    display_name = "Unlock Symbols"
+#class UnlockSymbols(DefaultOnToggle):
+#    "All Puzzle symbols of a specific panel need to be unlocked before the panel can be used"
+#    display_name = "Unlock Symbols"
 
 class DisableNonRandomizedPuzzles(DefaultOnToggle):
     """Disable puzzles that cannot be randomized.
@@ -41,8 +41,8 @@ class ChallengeVictoryCondition(Toggle):
     display_name = "Victory on beating the Challenge"
 
 the_witness_options: Dict[str, Option] = {
-    #"hard_mode": HardMode,
-    "unlock_symbols": UnlockSymbols,
+    # "hard_mode": HardMode,
+    # "unlock_symbols": UnlockSymbols,
     "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
     "shuffle_discarded_panels": ShuffleDiscardedPanels,
     "shuffle_vault_boxes": ShuffleVaultBoxes,
