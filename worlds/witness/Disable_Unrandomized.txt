@@ -60,12 +60,12 @@ Disabled Locations:
 0x193AA (Monastery Branch Avoid 2)
 0x193AB (Monastery Branch Follow 1)
 0x193A6 (Monastery Branch Follow 2)
+0x17CA4 (Monastery Laser) - 0x193A6 - True
 0x18590 (Tree Outlines) - True - Symmetry & Environment
 0x28AE3 (Vines Shadows Follow) - 0x18590 - Shadows Follow & Environment
 0x28938 (Four-way Apple Tree) - 0x28AE3 - Environment
 0x079DF (Triple Environmental Puzzle) - 0x28938 - Shadows Avoid & Environment & Reflection
 0x28B39 (Hexagonal Reflection) - 0x079DF & 0x2896A - Reflection
-0x28A69 (Town Square Avoid)
 0x03553 (Theater Tutorial Video)
 0x03552 (Theater Desert Video)
 0x0354E (Theater Jungle Video)
@@ -102,6 +102,3 @@ Disabled Locations:
 0x09DE0 (Bunker Laser)
 0x0A079 (Bunker Elevator Control)
 0x0042D (Mountaintop River Shape)
-
-Added Locations:
-Town Door to Church
