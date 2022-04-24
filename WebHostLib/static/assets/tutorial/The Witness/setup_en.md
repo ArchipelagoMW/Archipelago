@@ -4,7 +4,7 @@
 
 - [The Witness (Steam)](https://store.steampowered.com/app/210970/The_Witness/)
 - [The Witness Archipalego Randomizer](https://github.com/JarnoWesthof/The-Witness-Randomizer-for-Archipelago)
-- [Archipelago Common Client](https://github.com/ArchipelagoMW/Archipelago/releases)
+- [ArchipelagoTextClient](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 ## Joining a MultiWorld Game
 
@@ -21,6 +21,6 @@ It is recommended to do every single one of these steps when you connect to a wo
 
 That's it! Have fun!
 
-## Common Client
+## ArchipelagoTextClient
 
-Its recommended to have Archipelago's Common Client open on the side to keep track of what item you receive and send as The Witness has no in-game messages.
+Its recommended to have Archipelago's Text Client open on the side to keep track of what item you receive and send as The Witness has no in-game messages.
