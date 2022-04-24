@@ -6,11 +6,11 @@ import typing
 
 from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance
 from ..AutoWorld import World, WebWorld
+from .full_logic import ParsedWitnessLogic
 from .items import WitnessItems, WitnessItem
 from .locations import WitnessLocations
 from .rules import set_rules
 from .regions import WitnessRegions
-from .full_logic import ParsedWitnessLogic
 from .Options import is_option_enabled, the_witness_options
 
 
