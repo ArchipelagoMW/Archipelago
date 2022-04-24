@@ -86,7 +86,7 @@ class LootPool(Choice):
     Vanilla: Drops are the same as the base game
     Randomized: Each slot of every enemy's drop table is given a random use item or piece of equipment.
     Empty: Enemies drop nothing."""
-    display_name = "Shop Inventory"
+    display_name = "Loot Pool"
     option_vanilla = 0
     option_randomized = 1
     option_empty = 2
