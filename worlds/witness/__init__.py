@@ -2,16 +2,10 @@
 Archipelago init file for The Witness
 """
 
-from typing import NamedTuple, Union
 import typing
-import logging
-import random
 
-from BaseClasses import (
-    Region, RegionType, Location, MultiWorld, Item, Entrance
-)
-
-from ..AutoWorld import World
+from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance
+from ..AutoWorld import World, WebWorld
 from .items import WitnessItems, WitnessItem
 from .locations import WitnessLocations
 from .rules import set_rules
@@ -19,6 +13,8 @@ from .regions import WitnessRegions
 from .full_logic import ParsedWitnessLogic
 from .Options import is_option_enabled, the_witness_options
 
+class WitnessWebWorld(WebWorld):
+    theme = "jungle"
 
 class WitnessWorld(World):
     """
@@ -32,7 +28,9 @@ class WitnessWorld(World):
     locat = WitnessLocations(logic)
     items = WitnessItems(logic)
     regio = WitnessRegions(logic, locat)
+    web = WitnessWebWorld()
     options = the_witness_options
+
     item_name_to_id = {
         name: data.code for name, data in items.ITEM_TABLE.items()
     }
@@ -120,6 +118,10 @@ class WitnessWorld(World):
         new_item.trap = item.trap
         return new_item
 
+    def get_filler_item_name(self) -> str: # Used ny itemlinks
+        junk_pool = self.items.JUNK_WEIGHTS.copy()
+
+        return self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()))[0]
 
 class WitnessLocation(Location):
     """
