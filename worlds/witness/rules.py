@@ -8,6 +8,7 @@ depending on the items received
 from BaseClasses import MultiWorld
 from worlds.witness.Options import is_option_enabled
 from worlds.witness.locations import WitnessLocations
+from . import ParsedWitnessLogic
 from ..AutoWorld import LogicMixin
 from ..generic.Rules import set_rule
 
@@ -156,7 +157,7 @@ def make_lambda(check_hex, world, player, logic, locat):
     )
 
 
-def set_rules(world: MultiWorld, player: int, logic: WitnessLogic, locat: WitnessLocations):
+def set_rules(world: MultiWorld, player: int, logic: ParsedWitnessLogic, locat: WitnessLocations):
     """
     Sets all rules for all locations
     """
