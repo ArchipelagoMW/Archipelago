@@ -115,7 +115,7 @@ class WitnessWorld(World):
         new_item.trap = item.trap
         return new_item
 
-    def get_filler_item_name(self) -> str: # Used ny itemlinks
+    def get_filler_item_name(self) -> str:  # Used ny itemlinks
         junk_pool = self.items.JUNK_WEIGHTS.copy()
 
         return self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()))[0]
