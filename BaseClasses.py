@@ -1041,7 +1041,11 @@ class Location:
     shop_slot_disabled: bool = False
     event: bool = False
     locked: bool = False
+
     hidden = False
+    """Hides location from !missing, !checked lists, etc, and excludes from hint point calculations.
+    Used for games which have non-randomized items but which must come from the AP server."""
+
     game: str = "Generic"
     show_in_spoiler: bool = True
     crystal: bool = False
