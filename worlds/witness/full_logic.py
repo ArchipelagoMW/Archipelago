@@ -1,5 +1,18 @@
 """
-Parses the WitnessLogic.txt logic file into useful data structures
+Parses the WitnessLogic.txt logic file into useful data structures.
+This is the heart of the randomization.
+
+In WitnessLogic.txt we have regions defined with their connections:
+
+Region Name (Short name) - Connected Region 1 - Connection Requirement 1 - Connected Region 2...
+
+And then panels in that region with the hex code used in the game
+previous panels that are required to turn them on, as well as the symbols they require:
+
+0x##### (Panel Name) - Required Panels - Required Items
+
+On __init__, the base logic is read and all panels are given Location IDs.
+When the world has parsed its options, a second function is called to finalize the logic.
 """
 
 import pathlib
@@ -40,10 +53,6 @@ class ParsedWitnessLogic():
 
             line_split = line.split(" - ")
 
-            #TODO: Setting
-            if line_split[1] == "Squares":
-                continue
-
             current_set.add((line_split[1], int(line_split[0])))
 
     def reduce_req_within_region(self, check_obj):
@@ -70,6 +79,9 @@ class ParsedWitnessLogic():
                 dep_obj = self.CHECKS_DEPENDENT_BY_HEX.get(option_panel)
                 if option_panel in {"7 Lasers", "11 Lasers"}:
                     new_items = frozenset({frozenset([option_panel])})
+                # If a panel turns on when a panel in a different region turns on,
+                # the latter panel will be an "event panel", unless it ends up being
+                # a location itself. This prevents generation failures.
                 elif dep_obj["region"]["name"] != check_obj["region"]["name"]:
                     new_items = frozenset({frozenset([option_panel])})
                     self.EVENT_PANELS_FROM_PANELS.add(option_panel)
@@ -313,14 +325,14 @@ class ParsedWitnessLogic():
 
             for line in file.readlines():
                 line = line.strip()
-                
+
                 if len(line) == 0:
                     continue
-                
+
                 if line[-1] == ":":
                     current_adjustment_type = line[:-1]
                     continue
-                
+
                 self.make_single_adjustment(current_adjustment_type, line)
 
     def make_dependency_reduced_checklist(self):
@@ -391,16 +403,26 @@ class ParsedWitnessLogic():
         self.ALL_BOOSTS = set()
         self.EVENT_PANELS_FROM_REGIONS = set()
         self.EVENT_PANELS_FROM_PANELS = set()
+
+        # All regions with a list of panels in them and the connections to other regions
         self.ALL_REGIONS_BY_NAME = dict()
+        
         self.CHECKS_DEPENDENT_BY_HEX = dict()
+
+        # The next two are the most important.
+        # They will contain every panel in the game with its name, hex and solve requirements
         self.CHECKS_BY_HEX = dict()
         self.CHECKS_BY_NAME = dict()
+
+        # Determining which panels need to be events is a difficult process.
+        # At the end, we will have EVENT_ITEM_PAIRS for all the necessary ones.
         self.ORIGINAL_EVENT_PANELS = set()
         self.NECESSARY_EVENT_PANELS = set()
         self.EVENT_ITEM_PAIRS = dict()
         self.ALWAYS_EVENT_HEX_CODES = set()
         self.COMPLETELY_DISABLED_CHECKS = set()
         self.ADDED_CHECKS = set()
+        self.VICTORY_LOCATION = "0x0356B"
         self.EVENT_ITEM_NAMES = {
             "0x01A0F": "Keep Laser Panel (Hedge Mazes) Activates",
             "0x09D9B": "Monastery Overhead Doors Open",
@@ -448,6 +470,9 @@ class ParsedWitnessLogic():
         self.read_logic_file()
 
     def adjustments(self, world: MultiWorld, player: int):
+        """
+        Makes adjustments to the base logic as options have been determined.
+        """
         self.make_options_adjustments(world, player)
         self.make_dependency_reduced_checklist()
         self.make_event_panel_lists()
