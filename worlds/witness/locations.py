@@ -269,7 +269,7 @@ class WitnessLocations():
             for panel_hex in event_locations
         }
 
-        self.CHECK_LOCATION_TABLE = self.EVENT_LOCATION_TABLE | {
+        check_dict = {
             location:
             self.get_id(self.logic.CHECKS_BY_NAME[location]["checkHex"])
             for location in self.CHECK_LOCATIONS
@@ -277,3 +277,5 @@ class WitnessLocations():
             if self.logic.CHECKS_BY_NAME[location]["panelType"]
             in self.PANEL_TYPES_TO_SHUFFLE
         }
+
+        self.CHECK_LOCATION_TABLE = {**self.EVENT_LOCATION_TABLE, **check_dict}
