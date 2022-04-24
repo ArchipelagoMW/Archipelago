@@ -10,7 +10,6 @@ Progression:
 50 - Negative Shapers
 60 - Stars
 61 - Stars + Same Colored Symbol
-70 - Squares
 71 - Black/White Squares
 72 - Colored Squares
 

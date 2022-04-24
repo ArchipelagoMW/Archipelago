@@ -5,6 +5,7 @@ Defines progression, junk and event items for The Witness
 from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Item
+from worlds.witness.Options import is_option_enabled
 from worlds.witness.locations import WitnessLocations
 from worlds.witness.rules import WitnessLogic
 
@@ -61,8 +62,22 @@ class WitnessItems():
                                       key=lambda item: item[1].code
                                       if isinstance(item[1].code, int) else 0))
         
-    def adjust_after_options(self, locat):
+    def adjust_after_options(self, locat, world, player):
         """Adds event items after logic changes due to options"""
+
+        self.GOOD_ITEMS = [
+            "Dots", "Black/White Squares", "Stars",
+            "Shapers", "Symmetry"
+        ]
+
+        if is_option_enabled(
+            world, player, "shuffle_discarded_panels"
+        ):
+            self.GOOD_ITEMS.append("Triangles")
+        if not is_option_enabled(
+            world, player, "disable_non_randomized_puzzles"
+        ):
+            self.GOOD_ITEMS.append("Colored Squares")
 
         self.locat = locat
 

@@ -50,7 +50,7 @@ class WitnessWorld(World):
         self.locat = WitnessLocations(self.logic)
         self.locat.define_locations(self.world, self.player)
         self.items = WitnessItems(self.logic)
-        self.items.adjust_after_options(self.locat)
+        self.items.adjust_after_options(self.locat, self.world, self.player)
         self.regio = WitnessRegions(self.logic, self.locat)
 
     def generate_basic(self):
@@ -63,17 +63,15 @@ class WitnessWorld(World):
                 pool.append(witness_item)
                 items_by_name[item] = witness_item
 
-        good_items = [
-            "Dots", "Black/White Squares", "Stars",
-            "Colored Squares", "Shapers"
-        ]
-        random_good_item = self.world.random.choice(good_items)
+        # Put good item on first check
+        random_good_item = self.world.random.choice(self.items.GOOD_ITEMS)
         first_check = self.world.get_location(
             "Tutorial Gate Open", self.player
         )
         first_check.place_locked_item(items_by_name[random_good_item])
         pool.remove(items_by_name[random_good_item])
 
+        # Put in junk items to fill the rest
         junk_pool = self.items.JUNK_WEIGHTS.copy()
         junk_pool = self.world.random.choices(
             list(junk_pool.keys()), weights=list(junk_pool.values()),
@@ -83,6 +81,7 @@ class WitnessWorld(World):
 
         pool += [self.create_item(junk) for junk in junk_pool]
 
+        # Tie Event Items to Event Locations (e.g. Laser Activations)
         for event_location in self.locat.EVENT_LOCATION_TABLE:
             item_obj = self.create_item(
                 self.logic.EVENT_ITEM_PAIRS[event_location]
