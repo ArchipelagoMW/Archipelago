@@ -71,9 +71,11 @@ flowchart LR
         SM64[Super Mario 64 Ex]
         V6[VVVVVV]
         MT[Meritous]
+        TW[The Witness]
 
         APCLIENTPP <--> SOE
         APCLIENTPP <--> MT
+        APCLIENTPP <-- The Witness Randomizer --> TW
         APCPP <--> SM64
         APCPP <--> V6
     end
