@@ -14,7 +14,7 @@ It is recommended to do every single one of these steps when you connect to a wo
 1. Launch The Witness
 2. Start a fresh save (unless you have absolutely no other choice)
 3. Do not move
-4. Launch [The Witness Archipalego Randomizer](https://store.steampowered.com/app/210970/The_Witness/)
+4. Launch [The Witness Archipalego Randomizer](https://github.com/JarnoWesthof/The-Witness-Randomizer-for-Archipelago)
 5. Enter the Archipelago Adress, Slot Name and Password
 6. Press "Randomize"
 7. Wait for the randomization to fully finish before moving in-game
