@@ -3,7 +3,8 @@
 ## Required Software
 
 - [The Witness (Steam)](https://store.steampowered.com/app/210970/The_Witness/)
-- [The Witness Archipalego Randomizer](https://store.steampowered.com/app/210970/The_Witness/)
+- [The Witness Archipalego Randomizer](https://github.com/JarnoWesthof/The-Witness-Randomizer-for-Archipelago)
+- [Archipelago commen client](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 ## Joining a MultiWorld Game
 
@@ -19,3 +20,7 @@ It is recommended to do every single one of these steps when you connect to a wo
 7. Wait for the randomization to fully finish before moving in-game
 
 That's it! Have fun!
+
+## Commen client
+
+Its recommended to have have archipelago's commen client open on the side to keep track of what item you receive and send as The Witness has no in-game messages
