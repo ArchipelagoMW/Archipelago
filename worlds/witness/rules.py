@@ -26,12 +26,10 @@ class WitnessLogic(LogicMixin):
                       and self.has("Desert Laser Redirection", player))
         lasers += int(self.has("Town Laser Activation", player))
         lasers += int(self.has("Monastery Laser Activation", player))
-        lasers += int(self.has("Keep Laser Pressure Plates Activation", player)
-                      and (
+        lasers += int(self.has("Keep Laser Pressure Plates Activation", player) and (
                               is_option_enabled(world, player, "disable_non_randomized_puzzles")
                               or self.has("Keep Laser Hedges Activation", player)
-                      )
-                      )
+                      ))
         lasers += int(self.has("Quarry Laser Activation", player))
         lasers += int(self.has("Treehouse Laser Activation", player))
         lasers += int(self.has("Jungle Laser Activation", player))
@@ -175,6 +173,5 @@ def set_rules(world: MultiWorld, player: int, logic: ParsedWitnessLogic, locat: 
 
         set_rule(world.get_location(location, player), rule)
 
-    if world.logic[player] != 'nologic':
-        world.completion_condition[player] = \
-            lambda state: state.has('Victory', player)
+    world.completion_condition[player] = \
+        lambda state: state.has('Victory', player)
