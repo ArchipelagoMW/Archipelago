@@ -1145,7 +1145,8 @@ class Item():
 
     @property
     def flags(self) -> int:
-        return self.advancement + (self.never_exclude << 1) + (self.trap << 2) + (self.location.hidden << 3)
+        return self.advancement + (self.never_exclude << 1) + (self.trap << 2) + (0 if self.location is None
+                                                                                  else self.location.hidden << 3)
 
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player
