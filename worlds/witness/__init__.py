@@ -101,12 +101,12 @@ class WitnessWorld(World):
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
 
+        slot_data["hard_mode"] = False
+
         for option_name in the_witness_options:
             slot_data[option_name] = is_option_enabled(
                 self.world, self.player, option_name
             )
-
-        slot_data["hard_mode"] = False
 
         return slot_data
 
