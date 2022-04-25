@@ -39,7 +39,7 @@ class WitnessLogic(LogicMixin):
 
         return lasers >= amount
 
-    def _can_solve_panel(self, panel, world, player, logic, locat):
+    def _witness_can_solve_panel(self, panel, world, player, logic, locat):
         """
         Determines whether a panel can be solved
         """
@@ -54,12 +54,12 @@ class WitnessLogic(LogicMixin):
             return False
         if (panel in logic.ORIGINAL_EVENT_PANELS
                 and check_name + " Solved" not in locat.EVENT_LOCATION_TABLE
-                and not self._safe_manual_panel_check(panel, world, player, logic, locat)):
+                and not self._witness_safe_manual_panel_check(panel, world, player, logic, locat)):
             return False
 
         return True
 
-    def meets_item_requirements(self, panel, world, player, logic, locat):
+    def _witness_meets_item_requirements(self, panel, world, player, logic, locat):
         """
         Checks whether item and panel requirements are met for
         a panel
@@ -98,7 +98,7 @@ class WitnessLogic(LogicMixin):
 
         return False
 
-    def _safe_manual_panel_check(self, panel, world, player, logic, locat):
+    def _witness_safe_manual_panel_check(self, panel, world, player, logic, locat):
         """
         nested can_reach can cause problems, but only if the region being
         checked is neither of the two original regions from the first
@@ -112,11 +112,11 @@ class WitnessLogic(LogicMixin):
         region = logic.CHECKS_BY_HEX[panel]["region"]["name"]
 
         return (
-                self.meets_item_requirements(panel, world, player, logic, locat)
+                self._witness_meets_item_requirements(panel, world, player, logic, locat)
                 and self.can_reach(region, "Region", player)
         )
 
-    def can_solve_panels(self, panel_hex_to_solve_set, world, player, logic, locat):
+    def _witness_can_solve_panels(self, panel_hex_to_solve_set, world, player, logic, locat):
         """
         Checks whether a set of panels can be solved.
         """
@@ -128,7 +128,7 @@ class WitnessLogic(LogicMixin):
             valid_option = True
 
             for panel in option:
-                if not self._can_solve_panel(panel, world, player, logic, locat):
+                if not self._witness_can_solve_panel(panel, world, player, logic, locat):
                     valid_option = False
                     break
 
@@ -141,7 +141,7 @@ def make_lambda(check_hex, world, player, logic, locat):
     """
     Lambdas are created in a for loop so values need to be captured
     """
-    return lambda state: state.meets_item_requirements(
+    return lambda state: state._witness_meets_item_requirements(
         check_hex, world, player, logic, locat
     )
 

@@ -20,7 +20,7 @@ class WitnessRegions:
         This function is for that purpose
         """
 
-        return lambda state: state.can_solve_panels(
+        return lambda state: state._witness_can_solve_panels(
             panel_hex_to_solve_set, world, player, self.logic, self.locat
         )
 
