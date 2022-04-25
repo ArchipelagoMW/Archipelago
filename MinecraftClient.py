@@ -69,17 +69,8 @@ def replace_apmc_files(forge_dir, apmc_file):
         logging.info(f"Copied {os.path.basename(apmc_file)} to {apdata_dir}")
 
 
-def read_apmc_file(apmc_file):
-    from base64 import b64decode
-    import json
-
-    with open(apmc_file, 'r') as f:
-        data = json.loads(b64decode(f.read()))
-    return data
-
-
 # Check mod version, download new mod from GitHub releases page if needed. 
-def update_mod(forge_dir, minecraft_version, get_prereleases=False):
+def update_mod(forge_dir, minecraft_version: str, get_prereleases=False):
     ap_randomizer = find_ap_randomizer_jar(forge_dir)
 
     client_releases_endpoint = "https://api.github.com/repos/KonoTyran/Minecraft_AP_Randomizer/releases"
@@ -87,7 +78,7 @@ def update_mod(forge_dir, minecraft_version, get_prereleases=False):
     if resp.status_code == 200:  # OK
         try:
             latest_release = next(filter(lambda release: (not release['prerelease'] or get_prereleases) and
-                (apmc_file is None or minecraft_version in release['assets'][0]['name']),
+                (minecraft_version in release['assets'][0]['name']),
                 resp.json()))
             if ap_randomizer != latest_release['assets'][0]['name']:
                 logging.info(f"A new release of the Minecraft AP randomizer mod was found: "
@@ -147,7 +138,7 @@ def check_eula(forge_dir):
                 sys.exit(0)
 
 
-# get the current JDK16
+# get the specified jdk directory
 def find_jdk_dir(version: str) -> str:
     for entry in os.listdir():
         if os.path.isdir(entry) and entry.startswith(f"jdk{version}"):
@@ -206,7 +197,7 @@ def install_forge(directory: str, forge_version: str, java_version: str):
             with open(forge_install_jar, 'wb') as f:
                 f.write(resp.content)
             print(f"Installing Forge...")
-            argstring = ' '.join([jdk, "-jar", "\"" + forge_install_jar+ "\"", "--installServer", "\"" + directory + "\""])
+            argstring = ' '.join([jdk, "-jar", "\"" + forge_install_jar + "\"", "--installServer", "\"" + directory + "\""])
             install_process = Popen(argstring, shell=not is_windows)
             install_process.wait()
             os.remove(forge_install_jar)
@@ -259,8 +250,8 @@ if __name__ == '__main__':
     options = Utils.get_options()
     forge_dir = options["minecraft_options"]["forge_directory"]
     max_heap = options["minecraft_options"]["max_heap_size"]
-    forge_version = args.java or options["minecraft_options"]["forge_version"]
-    java_version = args.forge or options["minecraft_options"]["java_version"]
+    forge_version = args.forge or options["minecraft_options"]["forge_version"]
+    java_version = args.java or options["minecraft_options"]["java_version"]
 
     if args.install:
         if is_windows:
@@ -281,7 +272,7 @@ if __name__ == '__main__':
     if not max_heap_re.match(max_heap):
         raise Exception(f"Max heap size {max_heap} in incorrect format. Use a number followed by M or G, e.g. 512M or 2G.")
 
-    update_mod(forge_dir, forge_version, args.prerelease)
+    update_mod(forge_dir, forge_version.split('-')[0], args.prerelease)
     replace_apmc_files(forge_dir, apmc_file)
     check_eula(forge_dir)
     server_process = run_forge_server(forge_dir, java_version, max_heap)
