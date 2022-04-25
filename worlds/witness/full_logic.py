@@ -24,7 +24,7 @@ from worlds.witness.Options import is_option_enabled
 pathlib.Path(__file__).parent.resolve()
 
 
-class ParsedWitnessLogic():
+class ParsedWitnessLogic:
     """WITNESS LOGIC CLASS"""
 
     def parse_items(self):
@@ -105,7 +105,8 @@ class ParsedWitnessLogic():
 
         return frozenset(all_options)
 
-    def parse_lambda(self, lambda_string):
+    @staticmethod
+    def parse_lambda(lambda_string):
         """
         Turns a lambda String literal like this: a | b & c
         into a set of sets like this: {{a}, {b, c}}
