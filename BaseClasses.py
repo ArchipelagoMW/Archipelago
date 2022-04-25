@@ -6,7 +6,7 @@ import logging
 import json
 import functools
 from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable
+from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
 import secrets
 import random
 
@@ -1441,6 +1441,18 @@ class Spoiler():
 
                 outfile.write('\n'.join(path_listings))
             AutoWorld.call_all(self.world, "write_spoiler_end", outfile)
+
+
+class Tutorial(NamedTuple):
+    """Name of the tutorial as it will appear on the site. Concise description covering what the guide will entail.
+    Language it is written in. Name of the file 'multiworld_en.md'. Author or authors. Name of the link on the site.
+    Game name is filled automatically so 'setup/en' etc."""
+    tutorial_name: str
+    description: str
+    language: str
+    file_name: str
+    link: str
+    author: List[str]
 
 
 seeddigits = 20

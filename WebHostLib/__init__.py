@@ -129,6 +129,10 @@ def tutorial(game, file, lang):
 
 @app.route('/tutorial/')
 def tutorial_landing():
+    worlds = {}
+    for game, world in AutoWorldRegister.world_types.items():
+        if not world.hidden:
+            worlds[game] = world
     return render_template("tutorialLanding.html")
 
 
