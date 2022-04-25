@@ -25,7 +25,7 @@ advancement_table = {
 }
 
 for name, data in item_table.items():
-    if data.code > 55503 and data.code <= 55553 and name != "Stage Upgrade" and data.setId != "cups" and data.setId != "speakers":
+    if data.code > 55503 and data.setId != "stage" and data.setId != "cups" and data.setId != "speakers":
         advancement_table.update({"Buy "+name: AdvData(len(advancement_table)+57500, 'Pizzeria', data.setId), })
 for i in range(5):
     advancement_table.update({"Buy Stage Upgrade "+str(i+1): AdvData(len(advancement_table)+57500, 'Pizzeria', 'stage'), })

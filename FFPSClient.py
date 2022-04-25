@@ -571,13 +571,13 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                                     elif item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "cups":
                                         if line.__contains__("cups="):
                                             ctx.recieved_cups += 1
-                                            changes = line.replace("cups="+line[line.find("cups=")+6], "cups="+str(ctx.recieved_cups))
+                                            changes = line.replace("cups="+line[line.find("cups=")+5], "cups="+str(ctx.recieved_cups))
                                         else:
                                             changes = line
                                     elif item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "speakers":
                                         if line.__contains__("speakers="):
                                             ctx.recieved_speakers += 1
-                                            changes = line.replace("speakers="+line[line.find("speakers=")+6], "speakers="+str(ctx.recieved_speakers))
+                                            changes = line.replace("speakers="+line[line.find("speakers=")+9], "speakers="+str(ctx.recieved_speakers))
                                         else:
                                             changes = line
                                     else:

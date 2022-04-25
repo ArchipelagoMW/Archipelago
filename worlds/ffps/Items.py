@@ -68,7 +68,7 @@ item_table = {
     "Deluxe Ballpit Decor": ItemData(55553, False, "403"),
     "Cup Upgrade": ItemData(55554, False, "cups"),
     "Speaker Upgrade": ItemData(55555, False, "speakers"),
-    "Discount Cooling Unity Decor": ItemData(55556, False, "108"),
+    "Discount Cooling Unit Decor": ItemData(55556, False, "108"),
 }
 
 required_items = {
