@@ -6,7 +6,8 @@ import logging
 import json
 import functools
 from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, Counter as _Counter
+from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable
+import typing  # this can go away when Python 3.8 support is dropped
 import secrets
 import random
 
@@ -567,7 +568,7 @@ PathValue = Tuple[str, Optional["PathValue"]]
 
 
 class CollectionState():
-    prog_items: _Counter[Tuple[str, int]]
+    prog_items: typing.Counter[Tuple[str, int]]
     world: MultiWorld
     reachable_regions: Dict[int, Set[Region]]
     blocked_connections: Dict[int, Set[Entrance]]
@@ -614,7 +615,7 @@ class CollectionState():
             if new_region in rrp:
                 bc.remove(connection)
             elif connection.can_reach(self):
-                assert not (new_region is None)
+                assert not (new_region is None), "tried to search through an Entrance with no Region"
                 rrp.add(new_region)
                 bc.remove(connection)
                 bc.update(new_region.exits)
@@ -646,7 +647,7 @@ class CollectionState():
                   resolution_hint: Optional[str] = None,
                   player: Optional[int] = None) -> bool:
         if isinstance(spot, str):
-            assert isinstance(player, int)
+            assert isinstance(player, int), "can_reach: player is required if spot is str"
             # try to resolve a name
             if resolution_hint == 'Location':
                 spot = self.world.get_location(spot, player)
@@ -669,7 +670,7 @@ class CollectionState():
             new_locations = reachable_events - self.events
             for event in new_locations:
                 self.events.add(event)
-                assert isinstance(event.item, Item)
+                assert isinstance(event.item, Item), "tried to collect Event with no Item"
                 self.collect(event.item, True, event)
 
     def has(self, item: str, player: int, count: int = 1) -> bool:
