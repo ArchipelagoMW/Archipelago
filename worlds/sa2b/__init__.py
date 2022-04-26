@@ -30,9 +30,7 @@ def check_for_impossible_shuffle(shuffled_levels: typing.List[int], gate_0_range
 
 class SA2BWorld(World):
     """
-    J.R.R. Tolkien's The Lord of the Rings, Vol. 1 is an SNES Action-RPG brought to you by the minds that would
-    eventually bring you the original Fallout. Embark on Frodo's legendary journey to destroy the One Ring and 
-    rid Middle-Earth of the shadow of the Dark Lord Sauron forever.
+    Sonic Adventure 2 Battle is an action platforming game. Play as Sonic, Tails, Knuckles, Shadow, Rogue, and Eggman across 31 stages and prevent the destruction of the earth.
     """
     game: str = "Sonic Adventure 2 Battle"
     options = sa2b_options

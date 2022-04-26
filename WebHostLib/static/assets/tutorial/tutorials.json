@@ -575,4 +575,23 @@
       }
     ]
   }
+  {
+    "gameTitle": "Sonic Adventure 2: Battle",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Sonic Adventure 2: Battle randomizer connected to an Archipelago Multiworld",
+        "files": [
+          {
+            "language": "English",
+            "filename": "Sonic Adventure 2 Battle/setup_en.md",
+            "link": "Sonic Adventure 2 Battle/setup/en",
+            "authors": [
+              "RaspberrySpaceJam, Porygone"
+            ]
+          }
+        ]
+      }
+    ]
+  }
 ]
