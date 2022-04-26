@@ -6,6 +6,7 @@ import typing
 import random
 
 from schema import Schema, And, Or
+from thefuzz import process as fuzzy_process
 
 
 class AssembleOptions(abc.ABCMeta):
@@ -456,13 +457,17 @@ class VerifyKeys:
         if self.verify_item_name:
             for item_name in self.value:
                 if item_name not in world.item_names:
+                    picks = fuzzy_process.extract(item_name, world.item_names, limit=2)
                     raise Exception(f"Item {item_name} from option {self} "
-                                    f"is not a valid item name from {world.game}")
+                                    f"is not a valid item name from {world.game}. "
+                                    f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
         elif self.verify_location_name:
             for location_name in self.value:
                 if location_name not in world.location_names:
+                    picks = fuzzy_process.extract(location_name, world.location_names, limit=2)
                     raise Exception(f"Location {location_name} from option {self} "
-                                    f"is not a valid location name from {world.game}")
+                                    f"is not a valid location name from {world.game}. "
+                                    f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
 
 
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
