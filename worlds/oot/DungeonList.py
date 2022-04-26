@@ -122,7 +122,7 @@ def create_dungeons(ootworld):
         hint = dungeon_info['hint'] if 'hint' in dungeon_info else name
         font_color = dungeon_info['font_color'] if 'font_color' in dungeon_info else 'White'
         
-        if ootworld.logic_rules == 'glitchless':
+        if ootworld.logic_rules == 'glitchless' or ootworld.logic_rules == 'no_logic':  # ER + NL
             if not ootworld.dungeon_mq[name]:
                 dungeon_json = os.path.join(data_path('World'), name + '.json')
             else:

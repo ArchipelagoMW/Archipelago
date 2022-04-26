@@ -170,12 +170,20 @@ class OOTWorld(World):
         self.dungeon_mq = {item['name']: (item in mq_dungeons) for item in dungeon_table}
 
         # Determine tricks in logic
-        for trick in self.logic_tricks:
-            normalized_name = trick.casefold()
-            if normalized_name in normalized_name_tricks:
-                setattr(self, normalized_name_tricks[normalized_name]['name'], True)
-            else:
-                raise Exception(f'Unknown OOT logic trick for player {self.player}: {trick}')
+        if self.logic_rules == 'glitchless':
+            for trick in self.logic_tricks:
+                normalized_name = trick.casefold()
+                if normalized_name in normalized_name_tricks:
+                    setattr(self, normalized_name_tricks[normalized_name]['name'], True)
+                else:
+                    raise Exception(f'Unknown OOT logic trick for player {self.player}: {trick}')
+
+        # No Logic forces all tricks on, prog balancing off and beatable-only
+        elif self.logic_rules == 'no_logic':
+            self.world.progression_balancing[self.player].value = False
+            self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("minimal")
+            for trick in normalized_name_tricks.values():
+                setattr(self, trick['name'], True)
 
         # Not implemented for now, but needed to placate the generator. Remove as they are implemented
         self.mq_dungeons_random = False  # this will be a deprecated option later
@@ -298,8 +306,7 @@ class OOTWorld(World):
                         continue
                     new_location.parent_region = new_region
                     new_location.rule_string = rule
-                    if self.world.logic_rules != 'none':
-                        self.parser.parse_spot_rule(new_location)
+                    self.parser.parse_spot_rule(new_location)
                     if new_location.never:
                         # We still need to fill the location even if ALR is off.
                         logger.debug('Unreachable location: %s', new_location.name)
@@ -311,8 +318,7 @@ class OOTWorld(World):
                     lname = '%s from %s' % (event, new_region.name)
                     new_location = OOTLocation(self.player, lname, type='Event', parent=new_region)
                     new_location.rule_string = rule
-                    if self.world.logic_rules != 'none':
-                        self.parser.parse_spot_rule(new_location)
+                    self.parser.parse_spot_rule(new_location)
                     if new_location.never:
                         logger.debug('Dropping unreachable event: %s', new_location.name)
                     else:
@@ -436,7 +442,7 @@ class OOTWorld(World):
         return item
 
     def create_regions(self):  # create and link regions
-        if self.logic_rules == 'glitchless':
+        if self.logic_rules == 'glitchless' or self.logic_rules == 'no_logic':  # enables ER + NL
             world_type = 'World'
         else:
             world_type = 'Glitched World'
