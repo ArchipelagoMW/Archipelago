@@ -1465,6 +1465,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, reply)
 
     elif cmd == "GetDataPackage":
+        # TODO: remove exclusions behaviour around 0.5.0
         exclusions = args.get("exclusions", [])
         if exclusions:
             exclusions = set(exclusions)
@@ -1474,6 +1475,14 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             package["games"] = games
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
                                           "data": package}])
+        elif "games" in args:
+            games = set(args.get("games", []))
+            games = {name: game_data for name, game_data in network_data_package["games"].items()
+                     if name in games}
+            package = network_data_package.copy()
+            package["games"] = games
+            await ctx.send_msgs(client, [{"cmd": "DataPackage",
+                                          "data": network_data_package}])
         else:
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
                                           "data": network_data_package}])
