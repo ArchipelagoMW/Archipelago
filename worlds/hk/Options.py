@@ -4,6 +4,12 @@ from .ExtractedData import logic_options, starts, pool_options
 from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict
 from .Charms import vanilla_costs, names as charm_names
 
+if typing.TYPE_CHECKING:
+    # avoid import during runtime
+    from random import Random
+else:
+    Random = typing.Any
+
 
 class Disabled(Toggle):
     def __init__(self, value: int):
@@ -216,7 +222,7 @@ class RandomCharmCosts(Range):
     vanilla_costs: typing.List[int] = vanilla_costs
     charm_count: int = len(vanilla_costs)
 
-    def get_costs(self, random_source) -> typing.List[int]:
+    def get_costs(self, random_source: Random) -> typing.List[int]:
         charms: typing.List[int]
         if -1 == self.value:
             return self.vanilla_costs.copy()
