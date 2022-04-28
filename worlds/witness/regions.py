@@ -4,8 +4,9 @@ and connects them with the proper requirements
 """
 
 from BaseClasses import MultiWorld, Entrance
-from worlds.witness import ParsedWitnessLogic
-from worlds.witness.locations import WitnessLocations
+from . import StaticWitnessLogic
+from .locations import WitnessPlayerLocations
+from .player_logic import WitnessPlayerLogic
 
 
 class WitnessRegions:
@@ -14,17 +15,18 @@ class WitnessRegions:
     locat = None
     logic = None
 
-    def make_lambda(self, panel_hex_to_solve_set, world, player):
+    def make_lambda(self, panel_hex_to_solve_set, world, player, player_logic):
         """
         Lambdas are made in a for loop, so the values have to be captured
         This function is for that purpose
         """
 
         return lambda state: state._witness_can_solve_panels(
-            panel_hex_to_solve_set, world, player, self.logic, self.locat
+            panel_hex_to_solve_set, world, player, player_logic, self.locat
         )
 
-    def connect(self, world: MultiWorld, player: int, source: str, target: str, panel_hex_to_solve_set=None):
+    def connect(self, world: MultiWorld, player: int, source: str, target: str, player_logic: WitnessPlayerLogic,
+                panel_hex_to_solve_set=None):
         """
         connect two regions and set the corresponding requirement
         """
@@ -37,57 +39,51 @@ class WitnessRegions:
             source_region
         )
 
-        connection.access_rule = self.make_lambda(panel_hex_to_solve_set, world,
-                                                  player)
+        connection.access_rule = self.make_lambda(panel_hex_to_solve_set, world, player, player_logic)
 
         source_region.exits.append(connection)
         connection.connect(target_region)
 
-    def create_regions(self, world, player: int):
+    def create_regions(self, world, player: int, player_logic: WitnessPlayerLogic):
         """
         Creates all the regions for The Witness
         """
         from . import create_region
 
         world.regions += [
-            create_region(
-                world, player, 'Menu', self.logic,
-                self.locat, None, ["The Splashscreen?"]
-            ),
+            create_region(world, player, 'Menu', self.locat, None, ["The Splashscreen?"]),
         ]
 
         all_locations = set()
 
-        for region_name, region in self.logic.ALL_REGIONS_BY_NAME.items():
+        for region_name, region in StaticWitnessLogic.ALL_REGIONS_BY_NAME.items():
             locations_for_this_region = [
-                self.logic.CHECKS_BY_HEX[panel]["checkName"] for panel in region["panels"]
-                if self.logic.CHECKS_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
+                StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] for panel in region["panels"]
+                if StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
             ]
             locations_for_this_region += [
-                self.logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" for panel in region["panels"]
-                if self.logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" in self.locat.EVENT_LOCATION_TABLE
+                StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" for panel in region["panels"]
+                if StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" in self.locat.EVENT_LOCATION_TABLE
             ]
 
             all_locations = all_locations | set(locations_for_this_region)
 
-            world.regions += [create_region(
-                world, player, region_name, self.logic, self.locat,
-                locations_for_this_region
-            )]
+            world.regions += [
+                create_region(world, player, region_name, self.locat,locations_for_this_region)
+            ]
 
-        for region_name, region in self.logic.ALL_REGIONS_BY_NAME.items():
-            for connection in region["connections"]:
+        for region_name, region in StaticWitnessLogic.ALL_REGIONS_BY_NAME.items():
+            for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
                 if connection[0] == "Entry":
                     continue
                 self.connect(world, player, region_name,
-                             connection[0], connection[1])
+                             connection[0], player_logic, connection[1])
                 self.connect(world, player, connection[0],
-                             region_name, connection[1])
+                             region_name, player_logic, connection[1])
 
         world.get_entrance("The Splashscreen?", player).connect(
             world.get_region('First Hallway', player)
         )
 
-    def __init__(self, logic: ParsedWitnessLogic, locat: WitnessLocations):
-        self.logic = logic
+    def __init__(self, locat: WitnessPlayerLocations):
         self.locat = locat

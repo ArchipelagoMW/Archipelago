@@ -15,50 +15,17 @@ On __init__, the base logic is read and all panels are given Location IDs.
 When the world has parsed its options, a second function is called to finalize the logic.
 """
 
-import pathlib
-import os
+import copy
 from BaseClasses import MultiWorld
+from .static_logic import StaticWitnessLogic
+from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda
+from .Options import is_option_enabled
 
-from worlds.witness.Options import is_option_enabled
 
-pathlib.Path(__file__).parent.resolve()
-
-
-class ParsedWitnessLogic:
+class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
 
-    def parse_items(self):
-        """
-        Parses currently defined items from WitnessItems.txt
-        """
-
-        path = os.path.join(os.path.dirname(__file__), "WitnessItems.txt")
-        file = open(path, "r", encoding="utf-8")
-
-        current_set = self.ALL_ITEMS
-
-        for line in file.readlines():
-            line = line.strip()
-
-            if line == "Progression:":
-                current_set = self.ALL_ITEMS
-                continue
-            if line == "Boosts:":
-                current_set = self.ALL_BOOSTS
-                continue
-            if line == "Traps:":
-                current_set = self.ALL_TRAPS
-                continue
-            if line == "":
-                continue
-
-            line_split = line.split(" - ")
-
-            current_set.add((line_split[1], int(line_split[0])))
-
-        file.close()
-
-    def reduce_req_within_region(self, check_obj):
+    def reduce_req_within_region(self, panel_hex):
         """
         Panels in this game often only turn on when other panels are solved.
         Those other panels may have different item requirements.
@@ -67,19 +34,21 @@ class ParsedWitnessLogic:
         Panels outside of the same region will still be checked manually.
         """
 
-        if check_obj["requirement"]["panels"] == frozenset({frozenset()}):
-            return check_obj["requirement"]["items"]
+        if self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"] == frozenset({frozenset()}):
+            return self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
 
         all_options = set()
 
-        these_items = check_obj["requirement"]["items"]
+        these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
+        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
+        check_obj = StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]
 
-        for option in check_obj["requirement"]["panels"]:
+        for option in these_panels:
             dependent_items_for_option = frozenset({frozenset()})
 
             for option_panel in option:
                 new_items = set()
-                dep_obj = self.CHECKS_DEPENDENT_BY_HEX.get(option_panel)
+                dep_obj = StaticWitnessLogic.CHECKS_BY_HEX.get(option_panel)
                 if option_panel in {"7 Lasers", "11 Lasers"}:
                     new_items = frozenset({frozenset([option_panel])})
                 # If a panel turns on when a panel in a different region turns on,
@@ -89,7 +58,7 @@ class ParsedWitnessLogic:
                     new_items = frozenset({frozenset([option_panel])})
                     self.EVENT_PANELS_FROM_PANELS.add(option_panel)
                 else:
-                    new_items = self.reduce_req_within_region(dep_obj)
+                    new_items = self.reduce_req_within_region(option_panel)
 
                 updated_items = set()
 
@@ -104,20 +73,6 @@ class ParsedWitnessLogic:
                     all_options.add(items_option.union(dependentItem))
 
         return frozenset(all_options)
-
-    @staticmethod
-    def parse_lambda(lambda_string):
-        """
-        Turns a lambda String literal like this: a | b & c
-        into a set of sets like this: {{a}, {b, c}}
-        The lambda has to be in DNF.
-        """
-        if lambda_string == "True":
-            return frozenset([frozenset()])
-        split_ands = set(lambda_string.split(" | "))
-        lambda_set = frozenset({frozenset(a.split(" & ")) for a in split_ands})
-
-        return lambda_set
 
     def make_single_adjustment(self, adj_type, line):
         """Makes a single logic adjustment based on additional logic file"""
@@ -148,21 +103,20 @@ class ParsedWitnessLogic:
 
         if adj_type == "Requirement Changes":
             line_split = line.split(" - ")
-            panel_obj = self.CHECKS_DEPENDENT_BY_HEX[line_split[0]]
 
-            required_items = self.parse_lambda(line_split[2])
-            items_actually_in_the_game = {item[0] for item in self.ALL_ITEMS}
+            required_items = parse_lambda(line_split[2])
+            items_actually_in_the_game = {item[0] for item in StaticWitnessLogic.ALL_ITEMS}
             required_items = frozenset(
                 subset.intersection(items_actually_in_the_game)
                 for subset in required_items
             )
 
             requirement = {
-                "panels": self.parse_lambda(line_split[1]),
+                "panels": parse_lambda(line_split[1]),
                 "items": required_items
             }
 
-            panel_obj["requirement"] = requirement
+            self.DEPENDENT_REQUIREMENTS_BY_HEX[line_split[0]] = requirement
 
             return
 
@@ -172,140 +126,18 @@ class ParsedWitnessLogic:
             return
 
         if adj_type == "Region Changes":
-            new_region = self.define_new_region(line + ":")
-            old_region = self.ALL_REGIONS_BY_NAME[new_region["name"]]
-            old_region["connections"] = new_region["connections"]
+            new_region_and_options = define_new_region(line + ":")
+            
+            self.CONNECTIONS_BY_REGION_NAME[new_region_and_options[0]["name"]] = new_region_and_options[1]
 
             return
 
         if adj_type == "Added Locations":
             self.ADDED_CHECKS.add(line)
 
-    def define_new_region(self, region_string):
-        """
-        Returns a region object by parsing a line in the logic file
-        """
-
-        region_string = region_string[:-1]
-        line_split = region_string.split(" - ")
-
-        region_name_full = line_split.pop(0)
-
-        region_name_split = region_name_full.split(" (")
-
-        region_name = region_name_split[0]
-        region_name_simple = region_name_split[1][:-1]
-
-        options = set()
-
-        for _ in range(len(line_split) // 2):
-            connected_region = line_split.pop(0)
-            corresponding_lambda = line_split.pop(0)
-
-            for panel_option in self.parse_lambda(corresponding_lambda):
-                for panel_with_option in panel_option:
-                    self.EVENT_PANELS_FROM_REGIONS.add(panel_with_option)
-
-            options.add(
-                (connected_region, self.parse_lambda(corresponding_lambda))
-            )
-
-        region_obj = {
-            "name": region_name,
-            "shortName": region_name_simple,
-            "connections": options,
-            "panels": set()
-        }
-        return region_obj
-
-    def read_logic_file(self):
-        """
-        Reads the logic file and does the initial population of data structures
-        """
-        path = os.path.join(os.path.dirname(__file__), "WitnessLogic.txt")
-        file = open(path, "r", encoding="utf-8")
-
-        current_region = ""
-
-        discard_ids = 0
-        normal_panel_ids = 0
-        vault_ids = 0
-        laser_ids = 0
-
-        for line in file.readlines():
-            line = line.strip()
-
-            if line == "":
-                continue
-
-            if line[0] != "0":
-                current_region = self.define_new_region(line)
-                region_name = current_region["name"]
-                self.ALL_REGIONS_BY_NAME[region_name] = current_region
-                continue
-
-            line_split = line.split(" - ")
-
-            check_name_full = line_split.pop(0)
-
-            check_hex = check_name_full[0:7]
-            check_name = check_name_full[9:-1]
-
-            required_panel_lambda = line_split.pop(0)
-            required_item_lambda = line_split.pop(0)
-
-            laser_names = {
-                "Laser",
-                "Laser Hedges",
-                "Laser Pressure Plates",
-                "Desert Laser Redirect"
-            }
-            is_vault_or_video = "Vault" in check_name or "Video" in check_name
-
-            if "Discard" in check_name:
-                location_type = "Discard"
-                location_id = discard_ids
-                discard_ids += 1
-            elif is_vault_or_video or check_name == "Tutorial Gate Close":
-                location_type = "Vault"
-                location_id = vault_ids
-                vault_ids += 1
-            elif check_name in laser_names:
-                location_type = "Laser"
-                location_id = laser_ids
-                laser_ids += 1
-            else:
-                location_type = "General"
-                location_id = normal_panel_ids
-                normal_panel_ids += 1
-
-            required_items = self.parse_lambda(required_item_lambda)
-            items_actually_in_the_game = {item[0] for item in self.ALL_ITEMS}
-            required_items = frozenset(
-                subset.intersection(items_actually_in_the_game)
-                for subset in required_items
-            )
-
-            requirement = {
-                "panels": self.parse_lambda(required_panel_lambda),
-                "items": required_items
-            }
-
-            self.CHECKS_DEPENDENT_BY_HEX[check_hex] = {
-                "checkName": current_region["shortName"] + " " + check_name,
-                "checkHex": check_hex,
-                "region": current_region,
-                "requirement": requirement,
-                "idOffset": location_id,
-                "panelType": location_type
-            }
-
-            current_region["panels"].add(check_hex)
-        file.close()
-
     def make_options_adjustments(self, world, player):
         """Makes logic adjustments based on options"""
-        adjustment_files_in_order = []
+        adjustment_linesets_in_order = []
 
         if is_option_enabled(world, player, "challenge_victory"):
             self.VICTORY_LOCATION = "0x0356B"
@@ -317,17 +149,12 @@ class ParsedWitnessLogic:
         )
 
         if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
-            adjustment_files_in_order.append("Disable_Unrandomized.txt")
+            adjustment_linesets_in_order.append(get_disable_unrandomized_list())
 
-        for adjustment_file in adjustment_files_in_order:
-            path = os.path.join(os.path.dirname(__file__), adjustment_file)
-            file = open(path, "r", encoding="utf-8")
-
+        for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None
 
-            for line in file.readlines():
-                line = line.strip()
-
+            for line in adjustment_lineset:
                 if len(line) == 0:
                     continue
 
@@ -337,33 +164,21 @@ class ParsedWitnessLogic:
 
                 self.make_single_adjustment(current_adjustment_type, line)
 
-            file.close()
-
     def make_dependency_reduced_checklist(self):
         """
         Turns dependent check set into semi-independent check set
         """
 
-        for check_hex, check in self.CHECKS_DEPENDENT_BY_HEX.items():
-            indep_requirement = self.reduce_req_within_region(check)
+        for check_hex in self.DEPENDENT_REQUIREMENTS_BY_HEX.keys():
+            indep_requirement = self.reduce_req_within_region(check_hex)
 
-            new_check = {
-                "checkName": check["checkName"],
-                "checkHex": check["checkHex"],
-                "region": check["region"],
-                "requirement": indep_requirement,
-                "idOffset": check["idOffset"],
-                "panelType": check["panelType"]
-            }
-
-            self.CHECKS_BY_HEX[check_hex] = new_check
-            self.CHECKS_BY_NAME[new_check["checkName"]] = new_check
+            self.REQUIREMENTS_BY_HEX[check_hex] = indep_requirement
 
     def make_event_item_pair(self, panel):
         """
         Makes a pair of an event panel and its event item
         """
-        name = self.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
+        name = StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
         pair = (name, self.EVENT_ITEM_NAMES[panel])
         return pair
 
@@ -372,6 +187,12 @@ class ParsedWitnessLogic:
         Special event panel data structures
         """
 
+        for region_conn in self.CONNECTIONS_BY_REGION_NAME.values():
+            for region_and_option in region_conn:
+                for panelset in region_and_option[1]:
+                    for panel in panelset:
+                        self.EVENT_PANELS_FROM_REGIONS.add(panel)
+
         self.ALWAYS_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
 
         self.ORIGINAL_EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
@@ -379,14 +200,14 @@ class ParsedWitnessLogic:
         self.NECESSARY_EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
 
         for panel in self.EVENT_PANELS_FROM_REGIONS:
-            for region_name, region in self.ALL_REGIONS_BY_NAME.items():
-                for connection in region["connections"]:
+            for region_name, region in StaticWitnessLogic.ALL_REGIONS_BY_NAME.items():
+                for connection in self.CONNECTIONS_BY_REGION_NAME[region_name]:
                     connected_r = connection[0]
-                    if connected_r not in self.ALL_REGIONS_BY_NAME:
+                    if connected_r not in StaticWitnessLogic.ALL_REGIONS_BY_NAME:
                         continue
                     if region_name == "Boat" or connected_r == "Boat":
                         continue
-                    connected_r = self.ALL_REGIONS_BY_NAME[connected_r]
+                    connected_r = StaticWitnessLogic.ALL_REGIONS_BY_NAME[connected_r]
                     if not any([panel in option for option in connection[1]]):
                         continue
                     if panel not in region["panels"] | connected_r["panels"]:
@@ -401,22 +222,13 @@ class ParsedWitnessLogic:
             pair = self.make_event_item_pair(panel)
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
-    def __init__(self):
-        self.ALL_ITEMS = set()
-        self.ALL_TRAPS = set()
-        self.ALL_BOOSTS = set()
-        self.EVENT_PANELS_FROM_REGIONS = set()
+    def __init__(self, world: MultiWorld, player: int):
         self.EVENT_PANELS_FROM_PANELS = set()
+        self.EVENT_PANELS_FROM_REGIONS = set()
 
-        # All regions with a list of panels in them and the connections to other regions
-        self.ALL_REGIONS_BY_NAME = dict()
-
-        self.CHECKS_DEPENDENT_BY_HEX = dict()
-
-        # The next two are the most important.
-        # They will contain every panel in the game with its name, hex and solve requirements
-        self.CHECKS_BY_HEX = dict()
-        self.CHECKS_BY_NAME = dict()
+        self.CONNECTIONS_BY_REGION_NAME = copy.deepcopy(StaticWitnessLogic.STATIC_CONNECTIONS_BY_REGION_NAME)
+        self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.deepcopy(StaticWitnessLogic.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
+        self.REQUIREMENTS_BY_HEX = dict()
 
         # Determining which panels need to be events is a difficult process.
         # At the end, we will have EVENT_ITEM_PAIRS for all the necessary ones.
@@ -470,13 +282,6 @@ class ParsedWitnessLogic:
             "0x2FAF6": "Theater Walkway Video Pattern Knowledge",
         }
 
-        self.parse_items()
-        self.read_logic_file()
-
-    def adjustments(self, world: MultiWorld, player: int):
-        """
-        Makes adjustments to the base logic as options have been determined.
-        """
         self.make_options_adjustments(world, player)
         self.make_dependency_reduced_checklist()
         self.make_event_panel_lists()

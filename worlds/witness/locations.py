@@ -2,13 +2,13 @@
 Defines constants for different types of locations in the game
 """
 
-from worlds.witness.Options import is_option_enabled
-from worlds.witness.full_logic import ParsedWitnessLogic
+from .Options import is_option_enabled
+from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
 
 
-class WitnessLocations:
+class StaticWitnessLocations:
     """
-    Class that handles Witness Locations
+    Witness Location Constants that stay consistent across worlds
     """
     ID_START = 158000
 
@@ -181,48 +181,55 @@ class WitnessLocations:
         "Theater Challenge Video",
     }
 
-    def get_id(self, chex):
+    ALL_LOCATIONS_TO_ID = dict()
+
+    @staticmethod
+    def get_id(chex):
         """
         Calculates the location ID for any given location
         """
 
-        panel_offset = self.logic.CHECKS_DEPENDENT_BY_HEX[chex]["idOffset"]
-        type_offset = self.TYPE_OFFSETS[
-            self.logic.CHECKS_DEPENDENT_BY_HEX[chex]["panelType"]
+        panel_offset = StaticWitnessLogic.CHECKS_BY_HEX[chex]["idOffset"]
+        type_offset = StaticWitnessLocations.TYPE_OFFSETS[
+            StaticWitnessLogic.CHECKS_BY_HEX[chex]["panelType"]
         ]
 
-        return self.ID_START + panel_offset + type_offset
+        return StaticWitnessLocations.ID_START + panel_offset + type_offset
 
-    def get_event_name(self, panel_hex):
+    @staticmethod
+    def get_event_name(panel_hex):
         """
         Returns the event name of any given panel.
         Currently this is always "Panelname Solved"
         """
 
-        return self.logic.CHECKS_BY_HEX[panel_hex]["checkName"] + " Solved"
+        return StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]["checkName"] + " Solved"
 
-    def __init__(self, early_logic: ParsedWitnessLogic):
-        self.logic = early_logic
-        self.CHECK_LOCATIONS = None
-        self.ALL_LOCATIONS = None
-        self.EVENT_LOCATION_TABLE = None
-        self.CHECK_LOCATION_TABLE = None
-        self.ALL_LOCATIONS_TO_ID = None
-        self.CHECK_PANELHEX_TO_ID = None
-
-        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
-
-        self.ALL_LOCATIONS_TO_ID = {
+    def __init__(self):
+        all_loc_to_id = {
             panel_obj["checkName"]: self.get_id(chex)
-
-            for chex, panel_obj in self.logic.CHECKS_DEPENDENT_BY_HEX.items()
+            for chex, panel_obj in StaticWitnessLogic.CHECKS_BY_HEX.items()
         }
 
-        self.CHECK_LOCATIONS = (
-            self.GENERAL_LOCATIONS
+        all_loc_to_id = dict(
+            sorted(all_loc_to_id.items(), key=lambda loc: loc[1])
         )
 
-    def define_locations(self, world, player):
+        for key, item in all_loc_to_id.items():
+            self.ALL_LOCATIONS_TO_ID[key] = item
+
+
+class WitnessPlayerLocations:
+    """
+    Class that defines locations for a single player
+    """
+
+    def __init__(self, world, player, player_logic: WitnessPlayerLogic):
+        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
+        self.CHECK_LOCATIONS = (
+            StaticWitnessLocations.GENERAL_LOCATIONS
+        )
+
         """Defines locations AFTER logic changes due to options"""
 
         if is_option_enabled(world, player, "shuffle_discarded_panels"):
@@ -232,25 +239,20 @@ class WitnessLocations:
             self.PANEL_TYPES_TO_SHUFFLE.add("Vault")
 
         if is_option_enabled(world, player, "shuffle_uncommon"):
-            self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | self.UNCOMMON_LOCATIONS
+            self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | StaticWitnessLocations.UNCOMMON_LOCATIONS
 
         if is_option_enabled(world, player, "shuffle_hard"):
-            self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | self.HARD_LOCATIONS
+            self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | StaticWitnessLocations.HARD_LOCATIONS
 
-        self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | self.logic.ADDED_CHECKS
-
-        self.ALL_LOCATIONS_TO_ID = dict(
-            sorted(self.ALL_LOCATIONS_TO_ID.items(), key=lambda item: item[1])
-        )
+        self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | player_logic.ADDED_CHECKS
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS - {
-            self.logic.CHECKS_BY_HEX[check_hex]["checkName"]
-            for check_hex in self.logic.COMPLETELY_DISABLED_CHECKS
+            StaticWitnessLogic.CHECKS_BY_HEX[check_hex]["checkName"]
+            for check_hex in player_logic.COMPLETELY_DISABLED_CHECKS
         }
 
         self.CHECK_PANELHEX_TO_ID = {
-            self.logic.CHECKS_BY_NAME[ch]["checkHex"]:
-                self.ALL_LOCATIONS_TO_ID[ch]
+            StaticWitnessLogic.CHECKS_BY_NAME[ch]["checkHex"]: StaticWitnessLocations.ALL_LOCATIONS_TO_ID[ch]
             for ch in self.CHECK_LOCATIONS
         }
 
@@ -259,21 +261,21 @@ class WitnessLocations:
         )
 
         event_locations = {
-            p for p in self.logic.NECESSARY_EVENT_PANELS
-            if self.logic.CHECKS_BY_HEX[p]["checkName"]
-               not in self.CHECK_LOCATIONS
-               or p in self.logic.ALWAYS_EVENT_HEX_CODES
+            p for p in player_logic.NECESSARY_EVENT_PANELS
+            if StaticWitnessLogic.CHECKS_BY_HEX[p]["checkName"]
+            not in self.CHECK_LOCATIONS
+            or p in player_logic.ALWAYS_EVENT_HEX_CODES
         }
 
         self.EVENT_LOCATION_TABLE = {
-            self.get_event_name(panel_hex): None
+            StaticWitnessLocations.get_event_name(panel_hex): None
             for panel_hex in event_locations
         }
 
         check_dict = {
-            location: self.get_id(self.logic.CHECKS_BY_NAME[location]["checkHex"])
+            location: StaticWitnessLocations.get_id(StaticWitnessLogic.CHECKS_BY_NAME[location]["checkHex"])
             for location in self.CHECK_LOCATIONS
-            if self.logic.CHECKS_BY_NAME[location]["panelType"] in self.PANEL_TYPES_TO_SHUFFLE
+            if StaticWitnessLogic.CHECKS_BY_NAME[location]["panelType"] in self.PANEL_TYPES_TO_SHUFFLE
         }
 
         self.CHECK_LOCATION_TABLE = {**self.EVENT_LOCATION_TABLE, **check_dict}

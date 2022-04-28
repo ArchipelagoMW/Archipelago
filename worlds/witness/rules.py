@@ -6,9 +6,10 @@ depending on the items received
 # pylint: disable=E1101
 
 from BaseClasses import MultiWorld
-from worlds.witness.Options import is_option_enabled
-from worlds.witness.locations import WitnessLocations
-from . import ParsedWitnessLogic
+from .player_logic import WitnessPlayerLogic
+from .Options import is_option_enabled
+from .locations import WitnessPlayerLocations
+from . import StaticWitnessLogic
 from ..AutoWorld import LogicMixin
 from ..generic.Rules import set_rule
 
@@ -39,35 +40,35 @@ class WitnessLogic(LogicMixin):
 
         return lasers >= amount
 
-    def _witness_can_solve_panel(self, panel, world, player, logic, locat):
+    def _witness_can_solve_panel(self, panel, world, player, player_logic: WitnessPlayerLogic, locat):
         """
         Determines whether a panel can be solved
         """
 
-        panel_obj = logic.CHECKS_BY_HEX[panel]
+        panel_obj = StaticWitnessLogic.CHECKS_BY_HEX[panel]
         check_name = panel_obj["checkName"]
 
         if (check_name + " Solved" in locat.EVENT_LOCATION_TABLE
-                and not self.has(logic.EVENT_ITEM_PAIRS[check_name + " Solved"], player)):
+                and not self.has(player_logic.EVENT_ITEM_PAIRS[check_name + " Solved"], player)):
             return False
-        if panel not in logic.ORIGINAL_EVENT_PANELS and not self.can_reach(check_name, "Location", player):
+        if panel not in player_logic.ORIGINAL_EVENT_PANELS and not self.can_reach(check_name, "Location", player):
             return False
-        if (panel in logic.ORIGINAL_EVENT_PANELS
+        if (panel in player_logic.ORIGINAL_EVENT_PANELS
                 and check_name + " Solved" not in locat.EVENT_LOCATION_TABLE
-                and not self._witness_safe_manual_panel_check(panel, world, player, logic, locat)):
+                and not self._witness_safe_manual_panel_check(panel, world, player, player_logic, locat)):
             return False
 
         return True
 
-    def _witness_meets_item_requirements(self, panel, world, player, logic, locat):
+    def _witness_meets_item_requirements(self, panel, world, player, player_logic: WitnessPlayerLogic, locat):
         """
         Checks whether item and panel requirements are met for
         a panel
         """
 
-        panel_obj = logic.CHECKS_BY_HEX[panel]
+        panel_req = player_logic.REQUIREMENTS_BY_HEX[panel]
 
-        for option in panel_obj["requirement"]:
+        for option in panel_req:
             if len(option) == 0:
                 return True
 
@@ -82,11 +83,13 @@ class WitnessLogic(LogicMixin):
                     if not self._witness_has_lasers(world, player, 11):
                         valid_option = False
                         break
-                elif item in logic.NECESSARY_EVENT_PANELS:
-                    if logic.CHECKS_BY_HEX[item]["checkName"] + " Solved" in locat.EVENT_LOCATION_TABLE:
-                        valid_option = self.has(logic.EVENT_ITEM_NAMES[item], player)
+                elif item in player_logic.NECESSARY_EVENT_PANELS:
+                    if StaticWitnessLogic.CHECKS_BY_HEX[item]["checkName"] + " Solved" in locat.EVENT_LOCATION_TABLE:
+                        valid_option = self.has(player_logic.EVENT_ITEM_NAMES[item], player)
                     else:
-                        valid_option = self.can_reach(logic.CHECKS_BY_HEX[item]["checkName"], "Location", player)
+                        valid_option = self.can_reach(
+                            StaticWitnessLogic.CHECKS_BY_HEX[item]["checkName"], "Location", player
+                        )
                     if not valid_option:
                         break
                 elif not self.has(item, player):
@@ -98,7 +101,7 @@ class WitnessLogic(LogicMixin):
 
         return False
 
-    def _witness_safe_manual_panel_check(self, panel, world, player, logic, locat):
+    def _witness_safe_manual_panel_check(self, panel, world, player, player_logic: WitnessPlayerLogic, locat):
         """
         nested can_reach can cause problems, but only if the region being
         checked is neither of the two original regions from the first
@@ -109,14 +112,14 @@ class WitnessLogic(LogicMixin):
         The spoiler log looks so much nicer this way,
         it gets rid of a bunch of event items, only leaving a couple. :)
         """
-        region = logic.CHECKS_BY_HEX[panel]["region"]["name"]
+        region = StaticWitnessLogic.CHECKS_BY_HEX[panel]["region"]["name"]
 
         return (
-                self._witness_meets_item_requirements(panel, world, player, logic, locat)
+                self._witness_meets_item_requirements(panel, world, player, player_logic, locat)
                 and self.can_reach(region, "Region", player)
         )
 
-    def _witness_can_solve_panels(self, panel_hex_to_solve_set, world, player, logic, locat):
+    def _witness_can_solve_panels(self, panel_hex_to_solve_set, world, player, player_logic: WitnessPlayerLogic, locat):
         """
         Checks whether a set of panels can be solved.
         """
@@ -128,7 +131,7 @@ class WitnessLogic(LogicMixin):
             valid_option = True
 
             for panel in option:
-                if not self._witness_can_solve_panel(panel, world, player, logic, locat):
+                if not self._witness_can_solve_panel(panel, world, player, player_logic, locat):
                     valid_option = False
                     break
 
@@ -137,16 +140,16 @@ class WitnessLogic(LogicMixin):
         return False
 
 
-def make_lambda(check_hex, world, player, logic, locat):
+def make_lambda(check_hex, world, player, player_logic, locat):
     """
     Lambdas are created in a for loop so values need to be captured
     """
     return lambda state: state._witness_meets_item_requirements(
-        check_hex, world, player, logic, locat
+        check_hex, world, player, player_logic, locat
     )
 
 
-def set_rules(world: MultiWorld, player: int, logic: ParsedWitnessLogic, locat: WitnessLocations):
+def set_rules(world: MultiWorld, player: int, player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
     """
     Sets all rules for all locations
     """
@@ -157,10 +160,10 @@ def set_rules(world: MultiWorld, player: int, logic: ParsedWitnessLogic, locat: 
         if location in locat.EVENT_LOCATION_TABLE:
             real_location = location[:-7]
 
-        panel = logic.CHECKS_BY_NAME[real_location]
+        panel = StaticWitnessLogic.CHECKS_BY_NAME[real_location]
         check_hex = panel["checkHex"]
 
-        rule = make_lambda(check_hex, world, player, logic, locat)
+        rule = make_lambda(check_hex, world, player, player_logic, locat)
 
         set_rule(world.get_location(location, player), rule)
 

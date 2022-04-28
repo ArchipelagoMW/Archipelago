@@ -6,9 +6,9 @@ import typing
 
 from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance
 from ..AutoWorld import World, WebWorld
-from .full_logic import ParsedWitnessLogic
-from .items import WitnessItems, WitnessItem
-from .locations import WitnessLocations
+from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
+from .locations import WitnessPlayerLocations, StaticWitnessLocations
+from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems
 from .rules import set_rules
 from .regions import WitnessRegions
 from .Options import is_option_enabled, the_witness_options
@@ -26,33 +26,29 @@ class WitnessWorld(World):
     """
     game = "The Witness"
     topology_present = False
-    logic = ParsedWitnessLogic()
-    locat = WitnessLocations(logic)
-    items = WitnessItems(logic)
-    regio = WitnessRegions(logic, locat)
+    static_logic = StaticWitnessLogic()
+    static_locat = StaticWitnessLocations()
+    static_items = StaticWitnessItems()
     web = WitnessWebWorld()
     options = the_witness_options
 
     item_name_to_id = {
-        name: data.code for name, data in items.ITEM_TABLE.items()
+        name: data.code for name, data in static_items.ALL_ITEM_TABLE.items()
     }
-    location_name_to_id = locat.ALL_LOCATIONS_TO_ID
+    location_name_to_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID
 
     def _get_slot_data(self):
         return {
             'seed': self.world.random.randint(0, 1000000),
-            'victory_location': int(self.logic.VICTORY_LOCATION, 16),
+            'victory_location': int(self.player_logic.VICTORY_LOCATION, 16),
             'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID
         }
 
     def generate_early(self):
-        self.logic = ParsedWitnessLogic()
-        self.logic.adjustments(self.world, self.player)
-        self.locat = WitnessLocations(self.logic)
-        self.locat.define_locations(self.world, self.player)
-        self.items = WitnessItems(self.logic)
-        self.items.adjust_after_options(self.locat, self.world, self.player)
-        self.regio = WitnessRegions(self.logic, self.locat)
+        self.player_logic = WitnessPlayerLogic(self.world, self.player)
+        self.locat = WitnessPlayerLocations(self.world, self.player, self.player_logic)
+        self.items = WitnessPlayerItems(self.locat, self.world, self.player, self.player_logic)
+        self.regio = WitnessRegions(self.locat)
 
     def generate_basic(self):
         # Generate item pool
@@ -76,8 +72,7 @@ class WitnessWorld(World):
         junk_pool = self.items.JUNK_WEIGHTS.copy()
         junk_pool = self.world.random.choices(
             list(junk_pool.keys()), weights=list(junk_pool.values()),
-            k=len(self.locat.CHECK_LOCATION_TABLE) - len(pool)
-              - len(self.locat.EVENT_LOCATION_TABLE) - 1
+            k=len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - 1
         )
 
         pool += [self.create_item(junk) for junk in junk_pool]
@@ -85,7 +80,7 @@ class WitnessWorld(World):
         # Tie Event Items to Event Locations (e.g. Laser Activations)
         for event_location in self.locat.EVENT_LOCATION_TABLE:
             item_obj = self.create_item(
-                self.logic.EVENT_ITEM_PAIRS[event_location]
+                self.player_logic.EVENT_ITEM_PAIRS[event_location]
             )
             location_obj = self.world.get_location(event_location, self.player)
             location_obj.place_locked_item(item_obj)
@@ -93,10 +88,10 @@ class WitnessWorld(World):
         self.world.itempool += pool
 
     def create_regions(self):
-        self.regio.create_regions(self.world, self.player)
+        self.regio.create_regions(self.world, self.player, self.player_logic)
 
     def set_rules(self):
-        set_rules(self.world, self.player, self.logic, self.locat)
+        set_rules(self.world, self.player, self.player_logic, self.locat)
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
@@ -137,8 +132,7 @@ class WitnessLocation(Location):
 
 
 def create_region(world: MultiWorld, player: int, name: str,
-                  logic: ParsedWitnessLogic, locat: WitnessLocations,
-                  region_locations=None, exits=None):
+                  locat: WitnessPlayerLocations, region_locations=None, exits=None):
     """
     Create an Archipelago Region for The Witness
     """
@@ -150,9 +144,9 @@ def create_region(world: MultiWorld, player: int, name: str,
             loc_id = locat.CHECK_LOCATION_TABLE[location]
 
             check_hex = -1
-            if location in logic.CHECKS_BY_NAME:
+            if location in StaticWitnessLogic.CHECKS_BY_NAME:
                 check_hex = int(
-                    logic.CHECKS_BY_NAME[location]["checkHex"], 0
+                    StaticWitnessLogic.CHECKS_BY_NAME[location]["checkHex"], 0
                 )
             location = WitnessLocation(
                 player, location, loc_id, ret, check_hex
