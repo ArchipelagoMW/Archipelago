@@ -55,7 +55,7 @@ def snes_to_pc(value):
 
 
 def cache_argsless(function):
-    assert function.__code__.co_argcount, "Can only cache 0 argument functions with this cache."
+    assert not function.__code__.co_argcount, "Can only cache 0 argument functions with this cache."
 
     result = sentinel = object()
 
