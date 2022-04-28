@@ -569,7 +569,6 @@ Note:
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | games | dict[str, GameData] | Mapping of all Games and their respective data |
-| version | int | Sum of all per-game version numbers, for clients that don't bother with per-game caching/updating. |
 
 #### GameData
 GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of documentation.
