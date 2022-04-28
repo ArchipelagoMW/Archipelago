@@ -89,6 +89,11 @@ class OOTWorld(World):
         self.hint_data_available = threading.Event()
         super(OOTWorld, self).__init__(world, player)
 
+    @classmethod
+    def stage_can_generate(cls, world: MultiWorld):
+        rom = Rom(file=get_options()['oot_options']['rom_file'])
+        del rom
+
     def generate_early(self):
         # Player name MUST be at most 16 bytes ascii-encoded, otherwise won't write to ROM correctly
         if len(bytes(self.world.get_player_name(self.player), 'ascii')) > 16:
