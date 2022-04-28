@@ -94,7 +94,7 @@ class StaticWitnessLocations:
         "Jungle Popup Wall 6",
         "Jungle Laser",
 
-        "River Rhombic Avoid Vault Box",
+        "River Vault Box",
 
         "Bunker Drawn Squares 5",
         "Bunker Drawn Squares 9",
