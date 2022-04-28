@@ -512,6 +512,8 @@ class OOTWorld(World):
                         raise e
                     # Restore original state and delete assumed entrances
                     for entrance in self.get_shuffled_entrances():
+                        if entrance.connected_region is not None:
+                            entrance.disconnect()
                         entrance.connect(self.world.get_region(entrance.vanilla_connected_region, self.player))
                         if entrance.assumed:
                             assumed_entrance = entrance.assumed
@@ -894,14 +896,29 @@ class OOTWorld(World):
             if len(entrance) > 2:
                 hint_entrances.add(entrance[2][0])
 
+        # Get main hint entrance to region.
+        # If the region is directly adjacent to a hint-entrance, we return that one.
+        # If it's in a dungeon, scan all the entrances for all the regions in the dungeon.
+        #   This should terminate on the first region anyway, but we scan everything to be safe.
+        # If it's one of the special cases, go one level deeper.
+        # Otherwise return None.
         def get_entrance_to_region(region):
-            if region.name == 'Root':
-                return None
+            special_case_regions = {
+                "Beyond Door of Time",
+                "Kak Impas House Near Cow",
+            }
+
             for entrance in region.entrances:
                 if entrance.name in hint_entrances:
                     return entrance
-            for entrance in region.entrances:
-                return get_entrance_to_region(entrance.parent_region)
+            if region.dungeon is not None:
+                for r in region.dungeon.regions:
+                    for e in r.entrances:
+                        if e.name in hint_entrances:
+                            return e
+            if region.name in special_case_regions:
+                return get_entrance_to_region(region.entrances[0].parent_region)
+            return None
 
         # Remove undesired items from start_inventory
         for item_name in self.remove_from_start_inventory:
@@ -916,6 +933,8 @@ class OOTWorld(World):
         if self.shuffle_interior_entrances != 'off' or self.shuffle_dungeon_entrances or self.shuffle_grotto_entrances:
             er_hint_data = {}
             for region in self.regions:
+                if not any(bool(loc.address) for loc in region.locations): # check if region has any non-event locations
+                    continue
                 main_entrance = get_entrance_to_region(region)
                 if main_entrance is not None and main_entrance.shuffled:
                     for location in region.locations:
