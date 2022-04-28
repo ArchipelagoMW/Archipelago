@@ -106,7 +106,12 @@ class WitnessWorld(World):
         return slot_data
 
     def create_item(self, name: str) -> Item:
-        item = self.items.ITEM_TABLE[name]
+        # this conditional is purely for unit tests, which need to be able to create an item before generate_early
+        if hasattr(self, 'items'):
+            item = self.items.ITEM_TABLE[name]
+        else:
+            item = StaticWitnessItems.ALL_ITEM_TABLE[name]
+
         new_item = WitnessItem(
             name, item.progression, item.code, player=self.player
         )
