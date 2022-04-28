@@ -83,6 +83,8 @@ class OOTWorld(World):
 
     data_version = 1
 
+    required_client_version = (0, 3, 2)
+
     def __init__(self, world, player):
         self.hint_data_available = threading.Event()
         super(OOTWorld, self).__init__(world, player)
