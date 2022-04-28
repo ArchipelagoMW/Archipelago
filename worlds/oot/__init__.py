@@ -89,13 +89,6 @@ class OOTWorld(World):
         self.hint_data_available = threading.Event()
         super(OOTWorld, self).__init__(world, player)
 
-    @classmethod
-    def stage_generate_early(cls, world: MultiWorld):
-        # Check that an OoT ROM exists at the specified path. Raises exception on failure.
-        # We don't need the ROM until output, but we want to fail early if no ROM is provided.
-        rom = Rom(file=get_options()['oot_options']['rom_file'])
-        del rom
-
     def generate_early(self):
         # Player name MUST be at most 16 bytes ascii-encoded, otherwise won't write to ROM correctly
         if len(bytes(self.world.get_player_name(self.player), 'ascii')) > 16:
