@@ -1811,7 +1811,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             return False
 
     def _cmd_option(self, option_name: str, option: str):
-        """Set options for the server. Warning: expires on restart"""
+        """Set options for the server."""
 
         attrtype = self.ctx.simple_options.get(option_name, None)
         if attrtype:
