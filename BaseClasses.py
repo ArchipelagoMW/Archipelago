@@ -36,7 +36,7 @@ class MultiWorld():
     plando_texts: List[Dict[str, str]]
     plando_items: List[List[Dict[str, Any]]]
     plando_connections: List
-    worlds: Dict[int, Any]
+    worlds: Dict[int, auto_world]
     groups: Dict[int, Group]
     itempool: List[Item]
     is_race: bool = False
