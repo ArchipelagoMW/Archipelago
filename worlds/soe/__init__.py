@@ -176,7 +176,7 @@ class SoEWorld(World):
         return res
 
     @classmethod
-    def stage_can_generate(cls, world):
+    def stage_assert_generate(cls, world):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)

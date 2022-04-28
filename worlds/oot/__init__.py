@@ -90,7 +90,7 @@ class OOTWorld(World):
         super(OOTWorld, self).__init__(world, player)
 
     @classmethod
-    def stage_can_generate(cls, world: MultiWorld):
+    def stage_assert_generate(cls, world: MultiWorld):
         rom = Rom(file=get_options()['oot_options']['rom_file'])
         del rom
 

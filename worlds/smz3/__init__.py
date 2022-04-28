@@ -61,7 +61,7 @@ class SMZ3World(World):
         super().__init__(world, player)
 
     @classmethod
-    def stage_can_generate(cls, world):
+    def stage_assert_generate(cls, world):
         base_combined_rom = get_base_rom_bytes()
         del base_combined_rom
 

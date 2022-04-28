@@ -169,7 +169,7 @@ class World(metaclass=AutoWorldRegister):
     # in that case the MultiWorld object is passed as an argument and it gets called once for the entire multiworld.
     # An example of this can be found in alttp as stage_pre_fill
     @classmethod
-    def can_generate(cls):
+    def assert_generate(cls):
         """Checks that a game is capable of generating, usually checks for some base file like a ROM.
         Not run for unittests since they don't produce output"""
         pass

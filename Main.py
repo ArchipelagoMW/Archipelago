@@ -93,7 +93,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         f"Location IDs: {min(cls.location_id_to_name):{numlength}} - "
                         f"{max(cls.location_id_to_name):{numlength}}")
 
-    AutoWorld.call_stage(world, "can_generate")
+    AutoWorld.call_stage(world, "assert_generate")
 
     AutoWorld.call_all(world, "generate_early")
 
