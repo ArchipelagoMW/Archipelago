@@ -651,8 +651,9 @@ class OOTWorld(World):
             {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'FortressSmallKey': 1}.get(item.type, 0))
             non_dungeon_locations = [loc for loc in self.get_locations() if
                                      not loc.item and loc not in any_dungeon_locations
-                                     and loc.type != 'Shop' and (
-                                                 loc.type != 'Song' or self.shuffle_song_items != 'song')]
+                                     and loc.type != 'Shop' and 
+                                     (loc.type != 'Song' or self.shuffle_song_items != 'song') and
+                                     (loc.name not in dungeon_song_locations or self.shuffle_song_items != 'dungeon')]
             self.world.random.shuffle(non_dungeon_locations)
             fill_restrictive(self.world, self.world.get_all_state(False), non_dungeon_locations,
                              itempools['overworld'], True, True)
