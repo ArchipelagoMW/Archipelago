@@ -83,6 +83,12 @@ class SMWorld(World):
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
 
+    @classmethod
+    def stage_can_generate(cls, world):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
+
     def generate_early(self):
         Logic.factory('vanilla')
 
