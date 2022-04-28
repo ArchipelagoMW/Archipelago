@@ -157,6 +157,7 @@ class CommonContext():
         self.ready = False
         self.team = None
         self.slot = None
+        self.max_anim = 4
         self.auth = None
         self.seed_name = None
 
@@ -493,6 +494,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     elif cmd == 'Connected':
         ctx.team = args["team"]
         ctx.slot = args["slot"]
+        ctx.max_anim = args["slot_data"]["max_anim_appears"]
         ctx.consume_players_package(args["players"])
         msgs = []
         ctx.connected_success = True
@@ -536,8 +538,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                         try:
                             with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), 'r+') as f:
                                 lines = f.read()
-                                if not item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "speakers" and not item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "cups" and not item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId == "stage":
-                                    f.write(str(item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId)+"=1\n")
+                                item_got = item_table[FFPSWorld.item_id_to_name[NetworkItem(*item).item]].setId
+                                if (lines.count("m2")+lines.count("m3")+lines.count("m4")+lines.count("m5")) < ctx.max_anim and (item_got == "m2" or item_got == "m3" or item_got == "m4" or item_got == "m5"):
+                                    f.write(str(item_got)+"=1\n")
+                                if not item_got == "m2" and not item_got == "m3" and not item_got == "m4" and not item_got == "m5" and not item_got == "speakers" and not item_got == "cups" and not item_got == "stage":
+                                    f.write(str(item_got)+"=1\n")
                                 if not lines.__contains__("stage="):
                                     f.write("stage=0\n")
                                 if not lines.__contains__("cups="):

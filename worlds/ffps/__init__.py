@@ -43,6 +43,7 @@ class FFPSWorld(World):
             'player_id': self.player,
             'client_version': client_version,
             'race': self.world.is_race,
+            'max_anim_appears': int(self.world.max_animatronics_appearing[self.player]),
         }
 
     def generate_basic(self):
