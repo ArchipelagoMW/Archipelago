@@ -151,8 +151,9 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
                                                                                            state.has(ItemName.shadow_mystic_melody, player))
 
         add_rule(world.get_location(LocationName.cannon_core_3, player),     lambda state: state.has(ItemName.tails_booster, player) and \
-                                                                                           state.has(ItemName.eggman_jet_engine, player) and \
                                                                                            state.has(ItemName.eggman_mystic_melody, player) and \
+                                                                                           state.has(ItemName.eggman_jet_engine, player) and \
+                                                                                           state.has(ItemName.eggman_large_cannon, player) and \
                                                                                            state.has(ItemName.rouge_mystic_melody, player) and \
                                                                                            state.has(ItemName.knuckles_mystic_melody, player) and \
                                                                                            state.has(ItemName.knuckles_hammer_gloves, player) and \

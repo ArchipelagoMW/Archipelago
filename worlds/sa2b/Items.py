@@ -17,6 +17,9 @@ class SA2BItem(Item):
     def __init__(self, name, advancement: bool = False, code: int = None, player: int = None):
         super(SA2BItem, self).__init__(name, advancement, code, player)
 
+        if self.name == ItemName.sonic_light_shoes or self.name == ItemName.shadow_air_shoes:
+            self.pedestal_credit_text = "and the Soap Shoes"
+
 
 # Separate tables for each type of item.
 emblems_table = {
