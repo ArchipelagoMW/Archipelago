@@ -39,10 +39,15 @@ def get_app():
 
 def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]:
     import json
+
     with open(Utils.local_path("WebHostLib", "static", "assets", "tutorial", "tutorials.json")) as source:
         data = json.load(source)
+
     data = sorted(data, key=lambda entry: entry["gameTitle"].lower())
-    with open(Utils.local_path("WebHostLib", "static", "generated", "tutorials.json"), "w") as target:
+
+    folder = Utils.local_path("WebHostLib", "static", "generated")
+    os.makedirs(folder, exist_ok=True)
+    with open(os.path.join(folder, "tutorials.json"), "w") as target:
         json.dump(data, target)
     return data
 
