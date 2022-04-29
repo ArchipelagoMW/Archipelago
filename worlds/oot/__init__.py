@@ -985,4 +985,4 @@ class OOTWorld(World):
         return all_state
 
     def get_filler_item_name(self) -> str:
-        return get_junk_item(count=1)[0]
+        return get_junk_item(count=1, pool=get_junk_pool(self))[0]
