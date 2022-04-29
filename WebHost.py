@@ -1,6 +1,7 @@
 import os
 import multiprocessing
 import logging
+import typing
 
 import ModuleUpdate
 
@@ -36,13 +37,14 @@ def get_app():
     return app
 
 
-def create_ordered_tutorials_file():
+def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]:
     import json
-    with open(os.path.join("WebHostLib", "static", "assets", "tutorial", "tutorials.json")) as source:
+    with open(Utils.local_path("WebHostLib", "static", "assets", "tutorial", "tutorials.json")) as source:
         data = json.load(source)
     data = sorted(data, key=lambda entry: entry["gameTitle"].lower())
-    with open(os.path.join("WebHostLib", "static", "generated", "tutorials.json"), "w") as target:
+    with open(Utils.local_path("WebHostLib", "static", "generated", "tutorials.json"), "w") as target:
         json.dump(data, target)
+    return data
 
 
 if __name__ == "__main__":
