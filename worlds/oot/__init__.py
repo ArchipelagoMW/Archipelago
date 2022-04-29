@@ -92,7 +92,6 @@ class OOTWorld(World):
     @classmethod
     def stage_assert_generate(cls, world: MultiWorld):
         rom = Rom(file=get_options()['oot_options']['rom_file'])
-        del rom
 
     def generate_early(self):
         # Player name MUST be at most 16 bytes ascii-encoded, otherwise won't write to ROM correctly

@@ -63,7 +63,6 @@ class SMZ3World(World):
     @classmethod
     def stage_assert_generate(cls, world):
         base_combined_rom = get_base_rom_bytes()
-        del base_combined_rom
 
     def generate_early(self):
         config = Config({})
