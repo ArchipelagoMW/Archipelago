@@ -9,15 +9,19 @@
 
 ## Installation Procedures
 
-1. Install Sonic Adventure 2 Mod Loader as per its instructions.
+1. Install Sonic Adventure 2: Battle from Steam.
 
-2. The folder you installed the Sonic Adventure 2 Mod Loader into will now have a /mods directory.
+2. Launch the game at least once without mods.
 
-3. Unpack the Archipelago Mod into this folder, so that "/mods/SA2B_Archipelago" is a valid path.
+3. Install Sonic Adventure 2 Mod Loader as per its instructions.
 
-4. From the SA2B_Archipelago folder, copy the APCpp.dll, move up two folders to where the sonic2app.exe is, and paste the APCpp.dll
+4. The folder you installed the Sonic Adventure 2 Mod Loader into will now have a /mods directory.
 
-5. Launch the SA2ModManager.exe and make sure the SA2B_Archipelago mod is listed and enabled.
+5. Unpack the Archipelago Mod into this folder, so that "/mods/SA2B_Archipelago" is a valid path.
+
+6. From the SA2B_Archipelago folder, copy the APCpp.dll, move up two folders to where the sonic2app.exe is, and paste the APCpp.dll
+
+7. Launch the SA2ModManager.exe and make sure the SA2B_Archipelago mod is listed and enabled.
 
 ## Joining a MultiWorld Game
 
