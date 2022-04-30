@@ -305,9 +305,9 @@ Basic chat command which sends text to the server to be distributed to other cli
 Requests the data package from the server. Does not require client authentication.
 
 #### Arguments
-| Name | Type | Notes |
-| ------ | ----- | ------ |
-| exclusions | list\[str\]  | Optional. If specified, will not send back the specified data. Such as, \["Factorio"\] -> Datapackage without Factorio data.|
+| Name  | Type | Notes                                                                                                                           |
+|-------| ----- |---------------------------------------------------------------------------------------------------------------------------------|
+| games | list\[str\]  | Optional. If specified, will only send back the specified data. Such as, \["Factorio"\] -> Datapackage with only Factorio data. |
 
 ### Bounce
 Send this message to the server, tell it which clients should receive the message and 
@@ -569,7 +569,6 @@ Note:
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | games | dict[str, GameData] | Mapping of all Games and their respective data |
-| version | int | Sum of all per-game version numbers, for clients that don't bother with per-game caching/updating. |
 
 #### GameData
 GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of documentation.

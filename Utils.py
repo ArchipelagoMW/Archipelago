@@ -58,8 +58,7 @@ RetType = typing.TypeVar("RetType")
 
 
 def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[], RetType]:
-    if function.__code__.co_argcount:
-        raise Exception("Can only cache 0 argument functions with this cache.")
+    assert not function.__code__.co_argcount, "Can only cache 0 argument functions with this cache."
 
     sentinel = object()
     result: typing.Union[object, RetType] = sentinel
@@ -482,7 +481,8 @@ class VersionException(Exception):
     pass
 
 
-def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")):
+# noinspection PyPep8Naming
+def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")) -> str:
     n = 0
 
     while value > power:
