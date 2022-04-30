@@ -36,40 +36,44 @@ except ImportError:
     from yaml import Loader
 
 
-def int16_as_bytes(value):
+def int16_as_bytes(value: int) -> typing.List[int]:
     value = value & 0xFFFF
     return [value & 0xFF, (value >> 8) & 0xFF]
 
 
-def int32_as_bytes(value):
+def int32_as_bytes(value: int) -> typing.List[int]:
     value = value & 0xFFFFFFFF
     return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
 
 
-def pc_to_snes(value):
+def pc_to_snes(value: int) -> int:
     return ((value << 1) & 0x7F0000) | (value & 0x7FFF) | 0x8000
 
 
-def snes_to_pc(value):
+def snes_to_pc(value: int) -> int:
     return ((value & 0x7F0000) >> 1) | (value & 0x7FFF)
 
 
-def cache_argsless(function):
+RetType = typing.TypeVar("RetType")
+
+
+def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[], RetType]:
     assert not function.__code__.co_argcount, "Can only cache 0 argument functions with this cache."
 
-    result = sentinel = object()
+    sentinel = object()
+    result: typing.Union[object, RetType] = sentinel
 
-    def _wrap():
+    def _wrap() -> RetType:
         nonlocal result
         if result is sentinel:
             result = function()
-        return result
+        return typing.cast(RetType, result)
 
     return _wrap
 
 
 def is_frozen() -> bool:
-    return getattr(sys, 'frozen', False)
+    return typing.cast(bool, getattr(sys, 'frozen', False))
 
 
 def local_path(*path: str) -> str:
