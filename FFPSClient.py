@@ -102,7 +102,7 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_patch(self):
         """Patch the vanilla game."""
-        bsdiff4.file_patch(os.getcwd() + r"/FFPS Game/Pizzeria Simulator.exe", os.getcwd() + r"/FFPS Game/FFPS Mod.exe", ffps.data_path("patch.bsdiff"))
+        bsdiff4.file_patch(os.getcwd() + "/FFPS Game/Pizzeria Simulator.exe", os.getcwd() + "/FFPS Game/FFPS Mod.exe", ffps.data_path("patch.bsdiff"))
         self.output(f"Done!")
 
     def _cmd_ready(self):
@@ -515,7 +515,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # when /missing is used for the client side view of what is missing.
         ctx.missing_locations = set(args["missing_locations"])
         ctx.checked_locations = set(args["checked_locations"])
-        path = os.path.expandvars(r"%appdata%/MMFApplications/FNAF6")
+        path = os.path.expandvars("%appdata%/MMFApplications/FNAF6")
         if not os.path.exists(path):
             with open(path, "w") as f:
                 f.close()
@@ -601,7 +601,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                             temp_lines.append(ln+"\n")
                     anim_count = 0
                     for itm in ctx.items_received:
-                        if FFPSWorld.item_id_to_name[itm.item].setId == "m2" or FFPSWorld.item_id_to_name[itm.item].setId == "m3" or FFPSWorld.item_id_to_name[itm.item].setId == "m4" or FFPSWorld.item_id_to_name[itm.item].setId == "m5":
+                        if item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m2" or item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m3" or item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m4" or item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m5":
                             anim_count += 1
                     if anim_count >= 4:
                         temp_lines.append("canWin=1\n")
@@ -669,59 +669,58 @@ async def game_watcher(ctx: CommonContext):
                     sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
                 await ctx.send_msgs(sync_msg)
                 ctx.syncing = False
-            path = os.path.expandvars(r"%appdata%/MMFApplications/FNAF6BOUGHT")
+            path = os.path.expandvars("%appdata%/MMFApplications/FNAF6BOUGHT")
             sending = []
             victory = False
-            if os.path.exists(path):
-                while True:
-                    try:
-                        with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), 'r+') as f:
-                            lines = f.read()
-                            if not lines.__contains__("stage="):
-                                f.write("stage=0\n")
-                            if not lines.__contains__("cups="):
-                                f.write("cups=0\n")
-                            if not lines.__contains__("speakers="):
-                                f.write("speakers=0\n")
-                            if not lines.__contains__("money="):
-                                f.write("money=100\n")
-                            if not lines.__contains__("first="):
-                                f.write("first=1\n")
-                            if not lines.__contains__("night="):
-                                f.write("night=1\n")
-                            if not lines.__contains__("phase="):
-                                f.write("phase=1\n")
-                            f.close()
-                        break
-                    except PermissionError:
-                        continue
-                while True:
-                    try:
-                        with open(path, 'r') as f:
-                            filesread = f.read()
-                            for name, data in advancement_table.items():
-                                if data.setId == "stage" or data.setId == "cups" or data.setId == "speakers":
-                                    for i in range(int([int(s) for s in name.split() if s.isdigit()][0]), 10):
-                                        if data.setId+"="+str(i) in filesread and not str(data.id)+"=sent" in filesread:
-                                            sending = sending+[(int(data.id))]
-                                            break
-                                elif data.setId in filesread and not str(data.id)+"=sent" in filesread:
-                                    sending = sending+[(int(data.id))]
-                            f.close()
-                        break
-                    except PermissionError:
-                        continue
-                while True:
-                    try:
-                        with open(path, 'r+') as f:
-                            f.read()
-                            for itm in sending:
-                                f.write(str(itm)+"=sent\n")
-                            f.close()
-                        break
-                    except PermissionError:
-                        continue
-            path = os.path.expandvars(r"%appdata%/MMFApplications/VICTORYFFPS")
+            while True:
+                try:
+                    with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), 'r+') as f:
+                        lines = f.read()
+                        if not lines.__contains__("stage="):
+                            f.write("stage=0\n")
+                        if not lines.__contains__("cups="):
+                            f.write("cups=0\n")
+                        if not lines.__contains__("speakers="):
+                            f.write("speakers=0\n")
+                        if not lines.__contains__("money="):
+                            f.write("money=100\n")
+                        if not lines.__contains__("first="):
+                            f.write("first=1\n")
+                        if not lines.__contains__("night="):
+                            f.write("night=1\n")
+                        if not lines.__contains__("phase="):
+                            f.write("phase=1\n")
+                        f.close()
+                    break
+                except PermissionError:
+                    continue
+            while True:
+                try:
+                    with open(path, 'r') as f:
+                        filesread = f.read()
+                        for name, data in advancement_table.items():
+                            if data.setId == "stage" or data.setId == "cups" or data.setId == "speakers":
+                                for i in range(int([int(s) for s in name.split() if s.isdigit()][0]), 10):
+                                    if data.setId+"="+str(i) in filesread and not str(data.id)+"=sent" in filesread:
+                                        sending = sending+[(int(data.id))]
+                                        break
+                            elif data.setId in filesread and data.setId != "" and not str(data.id)+"=sent" in filesread:
+                                sending = sending+[(int(data.id))]
+                        f.close()
+                    break
+                except PermissionError:
+                    continue
+            while True:
+                try:
+                    with open(path, 'r+') as f:
+                        f.read()
+                        for itm in sending:
+                            f.write(str(itm)+"=sent\n")
+                        f.close()
+                    break
+                except PermissionError:
+                    continue
+            path = os.path.expandvars("%appdata%/MMFApplications/VICTORYFFPS")
             if os.path.exists(path):
                 while True:
                     try:
@@ -777,8 +776,8 @@ if __name__ == '__main__':
             ui_task = None
         if sys.stdin:
             input_task = asyncio.create_task(console_loop(ctx), name="Input")
-        if not os.path.exists(os.getcwd() + r"/FFPS Game"):
-            os.mkdir(os.getcwd() + r"/FFPS Game")
+        if not os.path.exists(os.getcwd() + "/FFPS Game"):
+            os.mkdir(os.getcwd() + "/FFPS Game")
         progression_watcher = asyncio.create_task(
             game_watcher(ctx), name="FFPSProgressionWatcher")
 
