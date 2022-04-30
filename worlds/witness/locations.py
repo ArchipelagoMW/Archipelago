@@ -150,8 +150,6 @@ class StaticWitnessLocations:
     }
 
     HARD_LOCATIONS = {
-        "Tutorial Gate Close",
-
         "Inside Mountain Secret Area Dot Grid Triangles 4",
         "Inside Mountain Secret Area Symmetry Triangles",
         "Inside Mountain Secret Area Stars & Squares and Triangles 2",
