@@ -17,5 +17,5 @@ Boosts:
 500 - Speed Boost
 
 Traps:
-600 - Slowness Trap
-610 - Power Surge Trap
+600 - Slowness
+610 - Power Surge
