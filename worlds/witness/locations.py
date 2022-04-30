@@ -51,7 +51,6 @@ class StaticWitnessLocations:
         "Quarry Mill Eraser and Dots 6",
         "Quarry Mill Eraser and Squares 8",
         "Quarry Mill Small Squares & Dots & and Eraser",
-        "Quarry Mill Big Squares & Dots & and Eraser",
         "Quarry Boathouse Intro Shapers",
         "Quarry Boathouse Eraser and Shapers 5",
         "Quarry Boathouse Stars & Eraser & and Shapers 2",
@@ -140,6 +139,7 @@ class StaticWitnessLocations:
     UNCOMMON_LOCATIONS = {
         "Mountaintop River Shape",
         "Tutorial Patio Floor",
+        "Quarry Mill Big Squares & Dots & and Eraser",
         "Theater Tutorial Video",
         "Theater Desert Video",
         "Theater Jungle Video",
