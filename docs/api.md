@@ -426,6 +426,9 @@ In addition, the following methods can be implemented and attributes can be set
 * `required_client_version: Tuple(int, int, int)`
   Client version as tuple of 3 ints to make sure the client is compatible to
   this world (e.g. implements all required features) when connecting.
+* `assert_generate(cls, world)` is a class method called at the start of
+  generation to check the existence of prerequisite files, usually a ROM for
+  games which require one.
 
 #### generate_early
 
