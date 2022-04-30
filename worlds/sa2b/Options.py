@@ -23,8 +23,8 @@ class EmblemPercentageForCannonsCore(Range):
     """
     display_name = "Emblem Percentage for Cannons Core"
     range_start = 0
-    range_end = 100
-    default = 60
+    range_end = 80
+    default = 50
 
 class NumberOfLevelGates(Range):
     """

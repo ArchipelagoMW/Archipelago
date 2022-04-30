@@ -13,15 +13,15 @@
 
 2. The folder you installed the Sonic Adventure 2 Mod Loader into will now have a /mods directory.
 
-3. Unpack the Archipelago Mod into this folder, so that "/mods/SonicAdventure2Randomizer" is a valid path.
+3. Unpack the Archipelago Mod into this folder, so that "/mods/SA2B_Archipelago" is a valid path.
 
-4. From the SonicAdventure2Randomizer folder, copy the APCpp.dll, move up two folders to where the sonic2app.exe is, and paste the APCpp.dll
+4. From the SA2B_Archipelago folder, copy the APCpp.dll, move up two folders to where the sonic2app.exe is, and paste the APCpp.dll
 
-5. Launch the SA2ModManager.exe and make sure the SonicAdventure2Randomizer mod is listed and enabled.
+5. Launch the SA2ModManager.exe and make sure the SA2B_Archipelago mod is listed and enabled.
 
 ## Joining a MultiWorld Game
 
-1. At the location where you unpacked the mod (EX: "Sonic Adventure 2/mods/SonicAdventure2Randomizer") edit the config.ini file in the SonicAdventure2Randomizer folder in a program such as Notepad.
+1. At the location where you unpacked the mod (EX: "Sonic Adventure 2/mods/SA2B_Archipelago") edit the config.ini file in the SA2B_Archipelago folder in a program such as Notepad.
 
 2. For the IP field, enter the address of the server, such as archipelago.gg:38281, your server host should be able to tell you this.
 
