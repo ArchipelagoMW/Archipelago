@@ -122,7 +122,6 @@ class StaticWitnessLocations:
         "Treehouse Right Orange Bridge 12",
         "Treehouse Laser",
 
-        "Mountaintop Trap Door Triple Exit",
         "Mountaintop Discard",
         "Mountaintop Vault Box",
 
