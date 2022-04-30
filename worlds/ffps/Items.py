@@ -69,6 +69,9 @@ item_table = {
     "Cup Upgrade": ItemData(55554, False, "cups"),
     "Speaker Upgrade": ItemData(55555, False, "speakers"),
     "Discount Cooling Unit Decor": ItemData(55556, False, "108"),
+    "Catalogue 2 Unlock": ItemData(None, True, ""),
+    "Catalogue 3 Unlock": ItemData(None, True, ""),
+    "Catalogue 4 Unlock": ItemData(None, True, ""),
 }
 
 required_items = {

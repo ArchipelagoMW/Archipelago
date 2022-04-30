@@ -22,11 +22,15 @@ advancement_table = {
     "Salvage Scrap Baby": AdvData(57501, 'Salvage', "m4"),
     "Salvage Lefty": AdvData(57502, 'Salvage', "m5"),
     "Salvage Molten Freddy": AdvData(57503, 'Salvage', "m2"),
+    "Unlocked Catalogue 2": AdvData(None, 'Pizzeria', ""),
+    "Unlocked Catalogue 3": AdvData(None, 'Pizzeria', ""),
+    "Unlocked Catalogue 4": AdvData(None, 'Pizzeria', ""),
 }
 
 for name, data in item_table.items():
-    if data.code > 55503 and data.setId != "stage" and data.setId != "cups" and data.setId != "speakers":
-        advancement_table.update({"Buy "+name: AdvData(len(advancement_table)+57500, 'Pizzeria', data.setId), })
+    if data.setId != "":
+        if data.code > 55503 and data.setId != "stage" and data.setId != "cups" and data.setId != "speakers":
+            advancement_table.update({"Buy "+name: AdvData(len(advancement_table)+57500, 'Pizzeria', data.setId), })
 for i in range(5):
     advancement_table.update({"Buy Stage Upgrade "+str(i+1): AdvData(len(advancement_table)+57500, 'Pizzeria', 'stage'), })
 for i in range(4):

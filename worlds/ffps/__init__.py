@@ -57,11 +57,16 @@ class FFPSWorld(World):
         itempool += ["Cup Upgrade"] * 3
         itempool += ["Speaker Upgrade"] * 1
 
+        self.world.random.shuffle(itempool)
+
         # Convert itempool into real items
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
 
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
+        self.world.get_location("Unlocked Catalogue 2", self.player).place_locked_item(self.create_item("Catalogue 2 Unlock"))
+        self.world.get_location("Unlocked Catalogue 3", self.player).place_locked_item(self.create_item("Catalogue 3 Unlock"))
+        self.world.get_location("Unlocked Catalogue 4", self.player).place_locked_item(self.create_item("Catalogue 4 Unlock"))
 
         self.world.itempool += itempool
 

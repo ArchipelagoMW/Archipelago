@@ -599,6 +599,12 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                     for ln in lines_to_simplify:
                         if temp_lines.count(ln+"\n") <= 0:
                             temp_lines.append(ln+"\n")
+                    anim_count = 0
+                    for itm in ctx.items_received:
+                        if FFPSWorld.item_id_to_name[itm.item].setId == "m2" or FFPSWorld.item_id_to_name[itm.item].setId == "m3" or FFPSWorld.item_id_to_name[itm.item].setId == "m4" or FFPSWorld.item_id_to_name[itm.item].setId == "m5":
+                            anim_count += 1
+                    if anim_count >= 4:
+                        temp_lines.append("canWin=1\n")
                     lines_to_simplify = temp_lines
                     while True:
                         try:
@@ -669,6 +675,28 @@ async def game_watcher(ctx: CommonContext):
             if os.path.exists(path):
                 while True:
                     try:
+                        with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), 'r+') as f:
+                            lines = f.read()
+                            if not lines.__contains__("stage="):
+                                f.write("stage=0\n")
+                            if not lines.__contains__("cups="):
+                                f.write("cups=0\n")
+                            if not lines.__contains__("speakers="):
+                                f.write("speakers=0\n")
+                            if not lines.__contains__("money="):
+                                f.write("money=100\n")
+                            if not lines.__contains__("first="):
+                                f.write("first=1\n")
+                            if not lines.__contains__("night="):
+                                f.write("night=1\n")
+                            if not lines.__contains__("phase="):
+                                f.write("phase=1\n")
+                            f.close()
+                        break
+                    except PermissionError:
+                        continue
+                while True:
+                    try:
                         with open(path, 'r') as f:
                             filesread = f.read()
                             for name, data in advancement_table.items():
@@ -686,7 +714,7 @@ async def game_watcher(ctx: CommonContext):
                 while True:
                     try:
                         with open(path, 'r+') as f:
-                            filesread = f.read()
+                            f.read()
                             for itm in sending:
                                 f.write(str(itm)+"=sent\n")
                             f.close()
