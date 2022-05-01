@@ -584,7 +584,7 @@ class OOTWorld(World):
             # only one exists
             "Bottom of the Well Lens of Truth Chest", "Bottom of the Well MQ Lens of Truth Chest",
             # only one exists
-            "Gerudo Training Grounds Maze Path Final Chest", "Gerudo Training Grounds MQ Ice Arrows Chest",
+            "Gerudo Training Ground Maze Path Final Chest", "Gerudo Training Ground MQ Ice Arrows Chest",
         ]
 
         # Place/set rules for dungeon items
@@ -620,28 +620,28 @@ class OOTWorld(World):
 
         # Now fill items that can go into any dungeon. Retrieve the Gerudo Fortress keys from the pool if necessary
         if self.shuffle_fortresskeys == 'any_dungeon':
-            fortresskeys = filter(lambda item: item.player == self.player and item.type == 'FortressSmallKey',
+            fortresskeys = filter(lambda item: item.player == self.player and item.type == 'HideoutSmallKey',
                                   self.world.itempool)
             itempools['any_dungeon'].extend(fortresskeys)
         if itempools['any_dungeon']:
             for item in itempools['any_dungeon']:
                 self.world.itempool.remove(item)
             itempools['any_dungeon'].sort(key=lambda item:
-            {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'FortressSmallKey': 1}.get(item.type, 0))
+            {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'HideoutSmallKey': 1}.get(item.type, 0))
             self.world.random.shuffle(any_dungeon_locations)
             fill_restrictive(self.world, self.world.get_all_state(False), any_dungeon_locations,
                              itempools['any_dungeon'], True, True)
 
         # If anything is overworld-only, fill into local non-dungeon locations
         if self.shuffle_fortresskeys == 'overworld':
-            fortresskeys = filter(lambda item: item.player == self.player and item.type == 'FortressSmallKey',
+            fortresskeys = filter(lambda item: item.player == self.player and item.type == 'HideoutSmallKey',
                                   self.world.itempool)
             itempools['overworld'].extend(fortresskeys)
         if itempools['overworld']:
             for item in itempools['overworld']:
                 self.world.itempool.remove(item)
             itempools['overworld'].sort(key=lambda item:
-            {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'FortressSmallKey': 1}.get(item.type, 0))
+            {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'HideoutSmallKey': 1}.get(item.type, 0))
             non_dungeon_locations = [loc for loc in self.get_locations() if
                                      not loc.item and loc not in any_dungeon_locations and
                                      (loc.type != 'Shop' or loc.name in self.shop_prices) and
@@ -845,7 +845,7 @@ class OOTWorld(World):
                     if loc.game == "Ocarina of Time" and loc.item.code and (not loc.locked or
                         (loc.item.type == 'Song' or
                             (loc.item.type == 'SmallKey'         and world.worlds[loc.player].shuffle_smallkeys     == 'any_dungeon') or
-                            (loc.item.type == 'FortressSmallKey' and world.worlds[loc.player].shuffle_fortresskeys  == 'any_dungeon') or
+                            (loc.item.type == 'HideoutSmallKey'  and world.worlds[loc.player].shuffle_fortresskeys  == 'any_dungeon') or
                             (loc.item.type == 'BossKey'          and world.worlds[loc.player].shuffle_bosskeys      == 'any_dungeon') or
                             (loc.item.type == 'GanonBossKey'     and world.worlds[loc.player].shuffle_ganon_bosskey == 'any_dungeon'))):
                         if loc.player in barren_hint_players:
@@ -977,7 +977,7 @@ class OOTWorld(World):
             return False
         if item.type == 'SmallKey' and self.shuffle_smallkeys in ['dungeon', 'vanilla']:
             return False
-        if item.type == 'FortressSmallKey' and self.shuffle_fortresskeys == 'vanilla':
+        if item.type == 'HideoutSmallKey' and self.shuffle_fortresskeys == 'vanilla':
             return False
         if item.type == 'BossKey' and self.shuffle_bosskeys in ['dungeon', 'vanilla']:
             return False

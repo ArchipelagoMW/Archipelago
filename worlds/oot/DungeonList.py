@@ -87,8 +87,8 @@ dungeon_table = [
         'dungeon_item': 1,
     },
     {
-        'name': 'Gerudo Training Grounds',
-        'hint': 'the Gerudo Training Grounds',
+        'name': 'Gerudo Training Ground',
+        'hint': 'the Gerudo Training Ground',
         'font_color': 'Yellow',
         'boss_key':     0, 
         'small_key':    9,
