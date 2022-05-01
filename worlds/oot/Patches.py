@@ -826,10 +826,6 @@ def patch_rom(world, rom):
 
     exit_table = generate_exit_lookup_table()
 
-    if world.entrance_shuffle:
-        # Disable the fog state entirely to avoid fog glitches
-        rom.write_byte(rom.sym('NO_FOG_STATE'), 1)
-
     if world.disable_trade_revert:
         # Disable trade quest timers and prevent trade items from ever reverting
         rom.write_byte(rom.sym('DISABLE_TIMERS'), 0x01)
