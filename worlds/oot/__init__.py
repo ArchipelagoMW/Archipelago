@@ -81,7 +81,7 @@ class OOTWorld(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
 
-    data_version = 1
+    data_version = 2
 
     required_client_version = (0, 3, 2)
 
