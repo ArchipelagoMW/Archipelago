@@ -338,19 +338,19 @@ location_table = OrderedDict([
     ("GV GS Behind Tent",                                            ("GS Token",     0x13,  0x08, None,                        'Gold Skulltula Token',                  ("Gerudo Valley", "Skulltulas",))),
     ("GV GS Pillar",                                                 ("GS Token",     0x13,  0x04, None,                        'Gold Skulltula Token',                  ("Gerudo Valley", "Skulltulas",))),
 
-    # Gerudo's Fortress
-    ("GF Chest",                                                     ("Chest",        0x5D,  0x00, None,                        'Piece of Heart',                        ("Gerudo's Fortress", "Gerudo",))),
-    ("GF HBA 1000 Points",                                           ("NPC",          0x5D,  0x3E, None,                        'Piece of Heart',                        ("Gerudo's Fortress", "Gerudo", "Minigames"))),
-    ("GF HBA 1500 Points",                                           ("NPC",          0x5D,  0x30, None,                        'Bow',                                   ("Gerudo's Fortress", "Gerudo", "Minigames"))),
-    ("GF GS Top Floor",                                              ("GS Token",     0x14,  0x02, None,                        'Gold Skulltula Token',                  ("Gerudo's Fortress", "Skulltulas",))),
-    ("GF GS Archery Range",                                          ("GS Token",     0x14,  0x01, None,                        'Gold Skulltula Token',                  ("Gerudo's Fortress", "Skulltulas",))),
-
     # Thieves' Hideout
     ("Hideout Jail Guard (1 Torch)",                                 ("Collectable",  0x0C,  0x0C, None,                        'Small Key (Thieves Hideout)',           ("Thieves' Hideout", "Gerudo",))),
     ("Hideout Jail Guard (2 Torches)",                               ("Collectable",  0x0C,  0x0F, None,                        'Small Key (Thieves Hideout)',           ("Thieves' Hideout", "Gerudo",))),
     ("Hideout Jail Guard (3 Torches)",                               ("Collectable",  0x0C,  0x0A, None,                        'Small Key (Thieves Hideout)',           ("Thieves' Hideout", "Gerudo",))),
     ("Hideout Jail Guard (4 Torches)",                               ("Collectable",  0x0C,  0x0E, None,                        'Small Key (Thieves Hideout)',           ("Thieves' Hideout", "Gerudo",))),
     ("Hideout Gerudo Membership Card",                               ("NPC",          0x0C,  0x3A, None,                        'Gerudo Membership Card',                ("Thieves' Hideout", "Gerudo",))),
+
+    # Gerudo's Fortress
+    ("GF Chest",                                                     ("Chest",        0x5D,  0x00, None,                        'Piece of Heart',                        ("Gerudo's Fortress", "Gerudo",))),
+    ("GF HBA 1000 Points",                                           ("NPC",          0x5D,  0x3E, None,                        'Piece of Heart',                        ("Gerudo's Fortress", "Gerudo", "Minigames"))),
+    ("GF HBA 1500 Points",                                           ("NPC",          0x5D,  0x30, None,                        'Bow',                                   ("Gerudo's Fortress", "Gerudo", "Minigames"))),
+    ("GF GS Top Floor",                                              ("GS Token",     0x14,  0x02, None,                        'Gold Skulltula Token',                  ("Gerudo's Fortress", "Skulltulas",))),
+    ("GF GS Archery Range",                                          ("GS Token",     0x14,  0x01, None,                        'Gold Skulltula Token',                  ("Gerudo's Fortress", "Skulltulas",))),
 
     # Wasteland
     ("Wasteland Bombchu Salesman",                                   ("NPC",          0x5E,  0x03, None,                        'Bombchus (10)',                         ("Haunted Wasteland",))),
