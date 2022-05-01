@@ -3,7 +3,8 @@
 ## Required Software
 
 - Sonic Adventure 2: Battle from: [Sonic Adventure 2: Battle Steam Store Page](https://store.steampowered.com/app/213610/Sonic_Adventure_2/)
-- Sonic Adventure 2 Mod Loader from: [Sonic Retro Mod Loader Page](http://info.sonicretro.org/SA2_Mod_Loader)
+- Microsoft Visual C++ 2013 from: [Sonic Retro Mod Loader Page](http://info.sonicretro.org/SA2_Mod_Loader)
+- Sonic Adventure 2 Mod Loader from: [Microsoft Visual C++ 2013 Redistributable Page](https://www.microsoft.com/en-us/download/details.aspx?id=40784)
 - Archipelago Mod for Sonic Adventure 2: Battle
   from: [Sonic Adventure 2: Battle Archipelago Randomizer Mod Releases Page](https://github.com/PoryGone/SA2B_Archipelago)
 
