@@ -18,5 +18,5 @@ class TestBase(unittest.TestCase):
                             if game_name in game:
                                 break
                         else:
-                            raise self.fail(f"{game_name} has no setup tutorial. "
-                                            f"Games with Tutorial: {games_with_tutorial}")
+                            self.fail(f"{game_name} has no setup tutorial. "
+                                      f"Games with Tutorial: {games_with_tutorial}")
