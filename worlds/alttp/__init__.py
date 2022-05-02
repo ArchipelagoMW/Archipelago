@@ -56,6 +56,12 @@ class ALTTPWorld(World):
         self.has_progressive_bows = False
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
+    @classmethod
+    def stage_assert_generate(cls, world):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
+
     def generate_early(self):
         player = self.player
         world = self.world
