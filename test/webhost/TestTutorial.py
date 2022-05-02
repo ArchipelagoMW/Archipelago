@@ -10,4 +10,13 @@ class TestBase(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             if not world_type.hidden:
                 with self.subTest(game_name):
-                    self.assertIn(game_name, games_with_tutorial)
+                    try:
+                        self.assertIn(game_name, games_with_tutorial)
+                    except AssertionError:
+                        # look for partial name in the tutorial name
+                        for game in games_with_tutorial:
+                            if game_name in game:
+                                break
+                        else:
+                            raise self.fail(f"{game_name} has no setup tutorial. "
+                                            f"Games with Tutorial: {games_with_tutorial}")
