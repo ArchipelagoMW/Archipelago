@@ -17,23 +17,24 @@
 
 3. Install Sonic Adventure 2 Mod Loader as per its instructions.
 
-4. The folder you installed the Sonic Adventure 2 Mod Loader into will now have a /mods directory.
+4. The folder you installed the Sonic Adventure 2 Mod Loader into will now have a `/mods` directory.
 
-5. Unpack the Archipelago Mod into this folder, so that "/mods/SA2B_Archipelago" is a valid path.
+5. Unpack the Archipelago Mod into this folder, so that `/mods/SA2B_Archipelago` is a valid path.
 
-6. From the SA2B_Archipelago folder, copy the APCpp.dll, move up two folders to where the sonic2app.exe is, and paste the APCpp.dll
+6. From the SA2B_Archipelago folder, copy the `APCpp.dll`, move up two folders to where the sonic2app.exe is, and paste the `APCpp.dll`
 
-7. Launch the SA2ModManager.exe and make sure the SA2B_Archipelago mod is listed and enabled.
+7. Launch the `SA2ModManager.exe` and make sure the SA2B_Archipelago mod is listed and enabled.
 
 ## Joining a MultiWorld Game
 
-1. At the location where you unpacked the mod (EX: "Sonic Adventure 2/mods/SA2B_Archipelago") edit the config.ini file in the SA2B_Archipelago folder in a program such as Notepad.
+1. At the location where you unpacked the mod (EX: `Sonic Adventure 2/mods/SA2B_Archipelago`) edit the `config.ini` file in the SA2B_Archipelago folder in a program such as Notepad.
+	- Note: The game needs to be closed while editing `config.ini` for the changes to be imported correctly.
 
-2. For the IP field, enter the address of the server, such as archipelago.gg:38281, your server host should be able to tell you this.
+2. For the `IP` field, enter the address of the server, such as archipelago.gg:38281, your server host should be able to tell you this.
 
-3. For the PlayerName field, enter your "name" field from the yaml, or website config.
+3. For the `PlayerName` field, enter your "name" field from the yaml, or website config.
 
-4. For the Password field, enter the server password if one exists, otherwise leave blank.
+4. For the `Password` field, enter the server password if one exists, otherwise leave blank.
 
 5. Save the file and launch the game. Once you create a new save file, the game will attempt to connect and the message "Connected to Archipelago" will appear if you sucessfully connect.
 
