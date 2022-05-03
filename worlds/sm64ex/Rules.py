@@ -22,7 +22,7 @@ def set_rules(world, player: int, area_connections):
     connect_regions(world, player, "Basement", sm64courses[area_connections[7]])
     connect_regions(world, player, "Basement", sm64courses[area_connections[8]], lambda state: state.has("Power Star", player, 30))
     connect_regions(world, player, "Basement", "Bowser in the Fire Sea", lambda state: state.has("Power Star", player, 30) and
-                                                                                       state.can_reach("Dire, Dire Docks", 'Region', player))
+                                                                                       state.can_reach("DDD: Board Bowser's Sub", 'Location', player))
 
     connect_regions(world, player, "Menu", "Second Floor", lambda state: state.has("Second Floor Key", player) or state.has("Progressive Key", player, 2))
 
