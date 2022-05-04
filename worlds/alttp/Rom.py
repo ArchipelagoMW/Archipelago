@@ -1723,7 +1723,9 @@ def write_custom_shops(rom, world, player):
             price_data = get_price_data(item['price'], item["price_type"])
             replacement_price_data = get_price_data(item['replacement_price'], item['replacement_price_type'])
             slot = 0 if shop.type == ShopType.TakeAny else index
-            if not item['item'] in item_table or not item.game == "A Link to the Past":  # item not native to ALTTP
+            scout_index = slot + 1 if shop.region.name == 'Potion Shop' else slot # Potion shop is a bit weird so have to make a special case
+            loc = shop.region.locations[scout_index] if len(shop.region.locations) > scout_index else None
+            if not item['item'] in item_table or (not loc.item.game == "A Link to the Past" if loc else False):  # item not native to ALTTP
                 item_code = get_nonnative_item_sprite(item['item'])
             else:
                 item_code = ItemFactory(item['item'], player).code
