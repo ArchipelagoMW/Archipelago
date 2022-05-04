@@ -262,6 +262,8 @@ class FactorioWorldGen(OptionDict):
                 }
             },
             Optional("seed"): Or(None, And(int, lambda n: n >= 0)),
+            Optional("width"): And(int, lambda n: n >= 0),
+            Optional("height"): And(int, lambda n: n >= 0),
             Optional("starting_area"): FloatRange(0.166, 6),
             Optional("peaceful_mode"): LuaBool,
             Optional("cliff_settings"): {
