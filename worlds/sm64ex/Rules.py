@@ -49,7 +49,7 @@ def set_rules(world, player: int, area_connections):
     add_rule(world.get_location("WDW: Quick Race Through Downtown!", player), lambda state: state.has("Vanish Cap", player))
     add_rule(world.get_location("RR: Somewhere Over the Rainbow", player), lambda state: state.has("Cannon Unlock RR", player))
 
-    if world.AreaRandomizer[player]:
+    if world.AreaRandomizer[player] or world.StrictCannonRequirements[player]:
         # If area rando is on, it may not be possible to modify WDW's starting water level,
         # which would make it impossible to reach downtown area without the cannon.
         add_rule(world.get_location("WDW: Quick Race Through Downtown!", player), lambda state: state.has("Cannon Unlock WDW", player))
@@ -69,8 +69,6 @@ def set_rules(world, player: int, area_connections):
         add_rule(world.get_location("JRB: Blast to the Stone Pillar", player), lambda state: state.has("Cannon Unlock JRB", player))
         add_rule(world.get_location("CCM: Wall Kicks Will Work", player), lambda state: state.has("Cannon Unlock CCM", player))
         add_rule(world.get_location("TTM: Blast to the Lonely Mushroom", player), lambda state: state.has("Cannon Unlock TTM", player))
-        add_rule(world.get_location("WDW: Quick Race Through Downtown!", player), lambda state: state.has("Cannon Unlock WDW", player))
-        add_rule(world.get_location("WDW: Go to Town for Red Coins", player), lambda state: state.has("Cannon Unlock WDW", player))
     if world.StrictCapRequirements[player] and world.StrictCannonRequirements[player]:
         # Ability to reach the floating island. Need some of those coins to get 100 coin star as well.
         add_rule(world.get_location("BoB: Find the 8 Red Coins", player), lambda state: state.has("Cannon Unlock BoB", player) or state.has("Wing Cap", player))
