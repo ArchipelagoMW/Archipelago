@@ -426,11 +426,14 @@ In addition, the following methods can be implemented and attributes can be set
 * `required_client_version: Tuple(int, int, int)`
   Client version as tuple of 3 ints to make sure the client is compatible to
   this world (e.g. implements all required features) when connecting.
+* `assert_generate(cls, world)` is a class method called at the start of
+  generation to check the existence of prerequisite files, usually a ROM for
+  games which require one.
 
 #### generate_early
 
 ```python
-def generate_early(self):
+def generate_early(self) -> None:
     # read player settings to world instance
     self.final_boss_hp = self.world.final_boss_hp[self.player].value
 ```
@@ -456,7 +459,7 @@ def create_event(self, event: str):
 #### create_items
 
 ```python
-def create_items(self):
+def create_items(self) -> None:
     # Add items to the Multiworld.
     # If there are two of the same item, the item has to be twice in the pool.
     # Which items are added to the pool may depend on player settings,
@@ -483,7 +486,7 @@ def create_items(self):
 #### create_regions
 
 ```python
-def create_regions(self):
+def create_regions(self) -> None:
     # Add regions to the multiworld. "Menu" is the required starting point.
     # Arguments to Region() are name, type, human_readable_name, player, world
     r = Region("Menu", None, "Menu", self.player, self.world)
@@ -518,7 +521,7 @@ def create_regions(self):
 #### generate_basic
 
 ```python
-def generate_basic(self):
+def generate_basic(self) -> None:
     # place "Victory" at "Final Boss" and set collection as win condition
     self.world.get_location("Final Boss", self.player)\
         .place_locked_item(self.create_event("Victory"))
@@ -539,7 +542,7 @@ def generate_basic(self):
 from ..generic.Rules import add_rule, set_rule, forbid_item
 from Items import get_item_type
 
-def set_rules(self):
+def set_rules(self) -> None:
     # For some worlds this step can be omitted if either a Logic mixin 
     # (see below) is used, it's easier to apply the rules from data during
     # location generation or everything is in generate_basic

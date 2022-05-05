@@ -574,5 +574,24 @@
         ]
       }
     ]
+  },
+  {
+    "gameTitle": "The Witness",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to playing The Witness with Archipelago.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "The Witness/setup_en.md",
+            "link": "The Witness/setup/en",
+            "authors": [
+              "NewSoupVi", "Jarno"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

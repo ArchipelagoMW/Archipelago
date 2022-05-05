@@ -2,6 +2,7 @@ import os
 import sys
 import multiprocessing
 import logging
+import typing
 
 import ModuleUpdate
 
@@ -39,11 +40,11 @@ def get_app():
     return app
 
 
-def create_ordered_tutorials_file():
+def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]:
     import json
     import shutil
     worlds = {}
-    target_path = os.path.join("WebHostLib", "static", "generated", "tutorials")
+    target_path = Utils.local_path("WebHostLib", "static", "generated", "tutorials")
     data = []
     for game, world in AutoWorldRegister.world_types.items():
         if hasattr(world.web, 'tutorials'):
@@ -75,8 +76,8 @@ def create_ordered_tutorials_file():
             else:
                 game_data['tutorials'][0] = current_tutorial
             # copy the tutorial files to the generated folder
-            source_file = os.path.join(os.path.dirname(sys.modules[world.__module__].__file__), 'docs', tutorial.file_name)
-            target_file = os.path.join(target_path, game, tutorial.file_name)
+            source_file = Utils.local_path(os.path.dirname(sys.modules[world.__module__].__file__), 'docs', tutorial.file_name)
+            target_file = Utils.local_path(target_path, game, tutorial.file_name)
             os.makedirs(os.path.dirname(target_file), exist_ok=True)
             shutil.copyfile(source_file, target_file)
         data.append(game_data)
@@ -87,7 +88,7 @@ def create_ordered_tutorials_file():
                 generic_data = data.pop(data.index(games))
         sorted_data = [generic_data] + sorted(data, key=lambda entry: entry["gameTitle"].lower())
         json.dump(sorted_data, json_target, indent=2)
-
+    return sorted_data
 
 def copy_game_info_files():
     worlds = {}
