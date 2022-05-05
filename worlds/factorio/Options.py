@@ -272,11 +272,12 @@ class FactorioWorldGen(OptionDict):
                 "richness": FloatRange(0, 6)
             },
             Optional("property_expression_names"): Schema({
-                "control-setting:moisture:bias": FloatRange(-0.5, 0.5),
-                "control-setting:moisture:frequency:multiplier": FloatRange(0.166, 6),
-                "control-setting:aux:bias": FloatRange(-0.5, 0.5),
-                "control-setting:aux:frequency:multiplier": FloatRange(0.166, 6)
-            }, ignore_extra_keys=True)
+                Optional("control-setting:moisture:bias"): FloatRange(-0.5, 0.5),
+                Optional("control-setting:moisture:frequency:multiplier"): FloatRange(0.166, 6),
+                Optional("control-setting:aux:bias"): FloatRange(-0.5, 0.5),
+                Optional("control-setting:aux:frequency:multiplier"): FloatRange(0.166, 6),
+                Optional(str): object  # allow overriding all properties
+            }),
         },
         "advanced": {
             Optional("pollution"): {
