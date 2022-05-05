@@ -27,16 +27,56 @@
 
 ## Joining a MultiWorld Game
 
-1. At the location where you unpacked the mod (EX: `Sonic Adventure 2/mods/SA2B_Archipelago`) edit the `config.ini` file in the SA2B_Archipelago folder in a program such as Notepad.
-	- Note: The game needs to be closed while editing `config.ini` for the changes to be imported correctly.
+1. Before launching the game, run the `SA2ModManager.exe`, select the SA2B_Archipelago mod, and hit the `Configure...` button.
 
-2. For the `IP` field, enter the address of the server, such as archipelago.gg:38281, your server host should be able to tell you this.
+2. For the `Server IP` field under `AP Settings`, enter the address of the server, such as archipelago.gg:38281, your server host should be able to tell you this.
 
-3. For the `PlayerName` field, enter your "name" field from the yaml, or website config.
+3. For the `PlayerName` field under `AP Settings`, enter your "name" field from the yaml, or website config.
 
-4. For the `Password` field, enter the server password if one exists, otherwise leave blank.
+4. For the `Password` field under `AP Settings`, enter the server password if one exists, otherwise leave blank.
 
-5. Save the file and launch the game. Once you create a new save file, the game will attempt to connect and the message "Connected to Archipelago" will appear if you sucessfully connect.
+5. Click The `Save` button then hit `Save & Play` to launch the game.
+
+6. Create a new save to connect to the MultiWorld game. A "Connected to Archipelago" message will appear if you sucessfully connect. If you close the game during play, you can reconnect to the MultiWorld game by selecting the same save file slot.
+
+## Additional Options
+
+Some additional settings related to the Archipelago messages in game can be adjusted in the SA2ModManager if you select `Configure...` on the SA2B_Archipelago mod. This settings will be under a `General Settings` tab.
+	
+	- Message Display Count: This is the maximum number of archipelago messages that can be displayed on screen at any given time.
+	
+	- Message Font Size: The is the size of the font used to display the messages from archipelago.
+
+## Troubleshooting
+
+- "The following mods didn't load correctly: SA2B_Archipelago: DLL error - The specified module could not be found."
+	- Make sure the `APCpp.dll` is in the same folder as the `sonic2app.exe`. (See Installation Procedures step 6)
+
+- Game is running too fast (Like Sonic).
+	- If using an NVidia graphics card:
+		1. Open the NVIDIA Control Panel.
+		2. Select `Manage 3D Settings` under `3D settings` on the left.
+		3. Select the `Program Settings` tab in the main window.
+		4. Click the `Add` button and select `sonic2app.exe` (or browse to the exe location), then click `Add Selected Program`.
+		5. Under `Specify the settings for this program:`, find the `Max Frame Rate` feature and click the Setting column for that feature.
+		6. Choose the `On` radial option and in the input box next to the slide enter a value of 60 (or 59 if 60 causes the game to crash).
+
+- Controller input is not working.
+	1. Run the Launcher.exe which should be in the same folder as the SA2ModManager.
+	2. Select the `Player` tab and reselect the controller for the player 1 input method.
+	3. Click the `Save settings and launch SONIC ADVENTURE 2` button. (Any mod manager settings will apply even if the game is launched this way rather than through the mod manager)
+	
+- Game crashes after display logos.
+	- This may be caused by a high monitor refresh rate.
+		- Change the monitor refresh rate to 60 Hz [Change display refresh rate on Windows] (https://support.microsoft.com/en-us/windows/change-your-display-refresh-rate-in-windows-c8ea729e-0678-015c-c415-f806f04aae5a)
+	- This may also be fixed by setting Windows 7 compatibility mode on the sonic app:
+		1. Right click on the sonic2app.exe and select `Properties`.
+		2. Select the `Compatibility` tab.
+		3. Check the `Run this program in compatility mode for:` box and select Windows 7 in the drop down.
+		4. Click the `Apply` button.
+		
+- No resolution options in the Launcher.exe.
+	- In the `Graphics device` dropdown, select the device and display you plan to run the game on. The `Resolution` dropdown should populate once a graphics device is selected.
 
 ## Save File Safeguard (Advanced Option)
 
