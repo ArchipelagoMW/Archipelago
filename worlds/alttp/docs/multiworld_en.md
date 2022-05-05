@@ -111,7 +111,7 @@ You only have to do these steps once.
 2. Go to Settings --> User Interface. Set "Show Advanced Settings" to ON.
 3. Go to Settings --> Network. Set "Network Commands" to ON. (It is found below Request Device 16.) Leave the default
    Network Command Port at 55355.
-![Screenshot of Network Commands setting](/static/assets/tutorial/retroarch-network-commands-en.png)
+![Screenshot of Network Commands setting](/static/generated/tutorial/A_Link_to_the_Past/retroarch-network-commands-en.png)
 4. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and select "Nintendo - SNES / SFC (bsnes-mercury
    Performance)".
 
