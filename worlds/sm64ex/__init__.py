@@ -39,6 +39,13 @@ class SM64World(World):
     def set_rules(self):
         self.area_connections = {}
         set_rules(self.world, self.player, self.area_connections)
+        if self.topology_present:
+            # Write area_connections to spoiler log
+            for painting_id, course_id in self.area_connections.items():
+                self.world.spoiler.set_entrance(
+                    sm64courses[painting_id] + " Painting",
+                    sm64courses[course_id],
+                    'entrance', self.player)
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
