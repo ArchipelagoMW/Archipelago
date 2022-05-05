@@ -41,33 +41,52 @@ def get_app():
 
 def create_ordered_tutorials_file():
     import json
+    import shutil
     worlds = {}
-    target_path = os.path.join("WebHostLib", "static", "generated")
-    data = ''
-    game_data = {}
+    target_path = os.path.join("WebHostLib", "static", "generated", "tutorials")
+    data = []
     for game, world in AutoWorldRegister.world_types.items():
-        if world.web.tutorials:
+        if hasattr(world.web, 'tutorials'):
             worlds[game] = world
-        for game in worlds:
-            game_data['gameTitle'] = game
-            game_data['tutorials'] = {}
-            for tutorial in worlds[game].web.tutorials:
-                source_path = os.path.join(os.path.dirname(sys.modules[worlds[game].__module__].__file__), 'docs')
-                game_data['tutorials'].update({'name': tutorial.tutorial_name, 'description': tutorial.description, 'files': {
-                        'language': tutorial.language, 'filename': tutorial.file_name, 'link': f'{game}/{tutorial.link}',
-                        'authors': tutorial.author}})
-                with open(os.path.join(source_path, tutorial.file_name), 'r') as source:
-                    tutorial_data = source.read()
-                with open(os.path.join(target_path, 'tutorials', tutorial.file_name), 'w') as target:
-                    target.write(tutorial_data)
-                data += json.JSONEncoder().encode(game_data)
+    for game, world in worlds.items():
+        game_data = {}
+        game_data['gameTitle'] = game
+        game_data['tutorials'] = [{}]
+        for tutorial in world.web.tutorials:
+            # build dict for the json file
+            current_tutorial = {
+                'name': tutorial.tutorial_name,
+                'description': tutorial.description,
+                'files': [{
+                    'language': tutorial.language,
+                    'filename': game + '/' + tutorial.file_name,
+                    'link': f'{game}/{tutorial.link}',
+                    'authors': tutorial.author
+                }]
+            }
+            added: bool = False
+            if 'name' in game_data['tutorials'][0]:
+                for guide in game_data['tutorials']:
+                    if tutorial.tutorial_name in guide['name']:
+                        guide['files'].append(current_tutorial['files'][0])
+                        added = True
+                if not added:
+                    game_data['tutorials'].append(current_tutorial)
+            else:
+                game_data['tutorials'][0] = current_tutorial
+            # copy the tutorial files to the generated folder
+            source_file = os.path.join(os.path.dirname(sys.modules[world.__module__].__file__), 'docs', tutorial.file_name)
+            target_file = os.path.join(target_path, game, tutorial.file_name)
+            os.makedirs(os.path.dirname(target_file), exist_ok=True)
+            shutil.copyfile(source_file, target_file)
+        data.append(game_data)
     with open(os.path.join("WebHostLib", "static", "generated", "tutorials.json"), 'w') as json_target:
-        json_target.write(data)
-    with open(os.path.join("WebHostLib", "static", "generated", "tutorials.json"), 'r') as source:
-        data = json.load(source)
-        data = sorted(data, key=lambda entry: entry["gameTitle"].lower())
-    with open(os.path.join("WebHostLib", "static", "generated", "tutorials.json"), 'w') as target:
-        json.dump(data, target)
+        generic_data = {}
+        for games in data:
+            if 'Archipelago' in games.values():
+                generic_data = data.pop(data.index(games))
+        sorted_data = [generic_data] + sorted(data, key=lambda entry: entry["gameTitle"].lower())
+        json.dump(sorted_data, json_target, indent=2)
 
 
 def copy_game_info_files():
@@ -99,6 +118,7 @@ if __name__ == "__main__":
         logging.warning("Could not update LttP sprites.")
     app = get_app()
     create_options_files()
+    # TODO create a proper hook for world documents so they don't need to be copied
     create_ordered_tutorials_file()
     copy_game_info_files()
     if app.config["SELFLAUNCH"]:

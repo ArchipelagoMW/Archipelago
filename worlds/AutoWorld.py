@@ -94,7 +94,7 @@ class WebWorld:
 
     # docs folder will also be scanned for tutorial guides given the relevant information in this list. Each Tutorial
     # class is to be used for one guide.
-    tutorials: List[Tutorial] = []
+    tutorials: List[Tutorial]
 
     # Choose a theme for your /game/* pages
     # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime

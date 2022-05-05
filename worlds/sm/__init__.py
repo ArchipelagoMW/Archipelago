@@ -17,8 +17,8 @@ from .Options import sm_options
 from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch
 import Utils
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
-from ..AutoWorld import World, AutoLogicRegister
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState, Tutorial
+from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
 from logic.smboolmanager import SMBoolManager
 from graph.vanilla.graph_locations import locationsDict
@@ -56,6 +56,17 @@ class SMCollectionState(metaclass=AutoLogicRegister):
         return tuple(player for player in multiword.get_all_ids() if multiword.game[player] == game_name)
 
 
+class SMWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Super Metroid Client on your computer. This guide covers single-player, multiworld, and related software.",
+        "English",
+        "multiworld_en.md",
+        "multiworld/en",
+        ["Farrak Kilhn"]
+    )]
+
+
 class SMWorld(World):
     game: str = "Super Metroid"
     topology_present = True
@@ -65,6 +76,7 @@ class SMWorld(World):
     location_names: Set[str] = frozenset(locations_lookup_name_to_id)
     item_name_to_id = items_lookup_name_to_id
     location_name_to_id = locations_lookup_name_to_id
+    web = SMWeb()
 
     remote_items: bool = False
     remote_start_inventory: bool = False

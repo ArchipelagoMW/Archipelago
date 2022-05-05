@@ -4,9 +4,9 @@ import os
 import threading
 import typing
 
-from BaseClasses import Item, CollectionState
+from BaseClasses import Item, CollectionState, Tutorial
 from .SubClasses import ALttPItem
-from ..AutoWorld import World, LogicMixin
+from ..AutoWorld import World, WebWorld, LogicMixin
 from .Options import alttp_options, smallkey_shuffle
 from .Items import as_dict_item_table, item_name_groups, item_table
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
@@ -22,6 +22,82 @@ from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 
 lttp_logger = logging.getLogger("A Link to the Past")
+
+
+class ALTTPWeb(WebWorld):
+    setup_en = Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago ALttP Software on your computer. This guide covers single-player, multiworld, and related software.",
+        "English",
+        "multiworld_en.md",
+        "multiworld/en",
+        ["Farrak Kilhn"]
+    )
+
+    setup_de = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "German",
+        "multiworld_de.md",
+        "multiworld/de",
+        ["Fischfilet"]
+    )
+
+    setup_es = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Spanish",
+        "multiworld_es.md",
+        "multiworld/es",
+        ["Edos"]
+    )
+
+    setup_fr = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "French",
+        "multiworld_fr.md",
+        "multiworld/fr",
+        ["Coxla"]
+    )
+
+    msu = Tutorial(
+        "MSU-1 Setup Tutorial",
+        "A guide to setting up MSU-1, which allows for custom in-game music.",
+        "English",
+        "msu1_en.md",
+        "msu1/en",
+        ["Farrak Kilhn"]
+    )
+
+    msu_es = Tutorial(
+        msu.tutorial_name,
+        msu.description,
+        "Spanish",
+        "msu1_es.md",
+        "msu1/en",
+        ["Edos"]
+    )
+
+    msu_fr = Tutorial(
+        msu.tutorial_name,
+        msu.description,
+        "French",
+        "msu1_fr.md",
+        "msu1/fr",
+        ["Coxla"]
+    )
+
+    plando = Tutorial(
+        "Plando Tutorial",
+        "A guide to creating Multiworld Plandos with LTTP",
+        "English",
+        "plando_en.md",
+        "plando/en",
+        ["Berserker"]
+    )
+
+    tutorials = [setup_en, setup_de, setup_es, setup_fr, msu, msu_es, msu_fr, plando]
 
 
 class ALTTPWorld(World):
@@ -44,6 +120,7 @@ class ALTTPWorld(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
     required_client_version = (0, 3, 2)
+    web = ALTTPWeb()
 
     set_rules = set_rules
 

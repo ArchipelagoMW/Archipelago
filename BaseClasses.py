@@ -1444,9 +1444,10 @@ class Spoiler():
 
 
 class Tutorial(NamedTuple):
-    """Name of the tutorial as it will appear on the site. Concise description covering what the guide will entail.
-    Language it is written in. Name of the file 'multiworld_en.md'. Author or authors. Name of the link on the site.
-    Game name is filled automatically so 'setup/en' etc."""
+    """Class to build website tutorial pages from a .md file in the world's /docs folder. Order is as follows.
+    Name of the tutorial as it will appear on the site. Concise description covering what the guide will entail.
+    Language the guide is written in. Name of the file ex 'setup_en.md'. Name of the link on the site; game name is
+    filled automatically so 'setup/en' etc. Author or authors."""
     tutorial_name: str
     description: str
     language: str
