@@ -46,6 +46,7 @@ class SA2BWorld(World):
 
     def _get_slot_data(self):
         return {
+            "ModVersion":                           3,
             "MusicMap":                             self.music_map,
             "MusicShuffle":                         self.world.MusicShuffle[self.player],
             "DeathLink":                            self.world.DeathLink[self.player],
