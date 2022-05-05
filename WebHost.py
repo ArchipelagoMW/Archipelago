@@ -81,7 +81,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
             os.makedirs(os.path.dirname(target_file), exist_ok=True)
             shutil.copyfile(source_file, target_file)
         data.append(game_data)
-    with open(os.path.join("WebHostLib", "static", "generated", "tutorials.json"), 'w') as json_target:
+    with open(Utils.local_path("WebHostLib", "static", "generated", "tutorials.json"), 'w') as json_target:
         generic_data = {}
         for games in data:
             if 'Archipelago' in games.values():
@@ -89,6 +89,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
         sorted_data = [generic_data] + sorted(data, key=lambda entry: entry["gameTitle"].lower())
         json.dump(sorted_data, json_target, indent=2)
     return sorted_data
+
 
 def copy_game_info_files():
     worlds = {}
