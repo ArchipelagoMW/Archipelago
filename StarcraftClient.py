@@ -84,12 +84,6 @@ class Context(CommonContext):
     async def connection_closed(self):
         await super(Context, self).connection_closed()
 
-    def event_invalid_slot(self):
-        if self.snes_socket is not None and not self.snes_socket.closed:
-            asyncio.create_task(self.snes_socket.close())
-        raise Exception('Invalid ROM detected, '
-                        'please verify that you have loaded the correct rom and reconnect your snes (/snes)')
-
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(Context, self).server_auth(password_requested)
@@ -116,34 +110,6 @@ class Context(CommonContext):
             if not noted and "item" in args:
                 if args["item"].player == self.slot:
                     self.announcements.append(args["data"])
-
-
-def launch_sni(ctx: Context):
-    sni_path = Utils.get_options()["lttp_options"]["sni"]
-
-    if not os.path.isdir(sni_path):
-        sni_path = Utils.local_path(sni_path)
-    if os.path.isdir(sni_path):
-        dir_entry: os.DirEntry
-        for dir_entry in os.scandir(sni_path):
-            if dir_entry.is_file():
-                lower_file = dir_entry.name.lower()
-                if (lower_file.startswith("sni.") and not lower_file.endswith(".proto")) or (lower_file == "sni"):
-                    sni_path = dir_entry.path
-                    break
-
-    if os.path.isfile(sni_path):
-        snes_logger.info(f"Attempting to start {sni_path}")
-        import sys
-        if not sys.stdout:  # if it spawns a visible console, may as well populate it
-            subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path))
-        else:
-            subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL,
-                             stderr=subprocess.DEVNULL)
-    else:
-        snes_logger.info(
-            f"Attempt to start SNI was aborted as path {sni_path} was not found, "
-            f"please start it yourself if it is not running")
 
 
 async def main():
