@@ -70,6 +70,7 @@ class Context(CommonContext):
     game = "Starcraft2WoL"
     items_handling = 0b111
     difficulty = -1
+    all_in_choice = 0
     items_rec_to_announce = []
     rec_announce_pos = 0
     items_sent_to_announce = []
@@ -101,6 +102,7 @@ class Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
             self.difficulty = args["slot_data"]["game_difficulty"]
+            self.all_in_choice = args["slot_data"]["all_in_map"]
 #        if cmd in {"ReceivedItems"}:
 #            self.items_rec_to_announce += args["items"]
 #        if cmd in {"LocationInfo"}:
@@ -273,9 +275,9 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
         if iteration == 0:
             start_items = calculate_items(self.ctx.items_received)
             difficulty = calc_difficulty(self.ctx.difficulty)
-            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty, start_items[0], start_items[1], start_items[2], start_items[3], start_items[4], start_items[5],
-                start_items[6], start_items[7], start_items[8], start_items[9]))
+                start_items[6], start_items[7], start_items[8], start_items[9], self.ctx.all_in_choice))
             self.last_received_update = len(self.ctx.items_received)
 
         else:
@@ -336,10 +338,15 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
 
                 if can_read_game:
                     if game_state & (1 << 1) and not self.mission_completed:
-                        print("Mission Completed")
-                        await self.ctx.send_msgs([
-                            {"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id]}])
-                        self.mission_completed = True
+                        if self.mission_id != 29:
+                            print("Mission Completed")
+                            await self.ctx.send_msgs([
+                                {"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id]}])
+                            self.mission_completed = True
+                        else:
+                            print("Game Complete")
+                            await self.ctx.send_msgs([{"cmd": 'StatusUpdate', "status": ClientStatus.CLIENT_GOAL}])
+                            self.mission_completed = True
 
                     if game_state & (1 << 2) and not self.first_bonus:
                         print("1st Bonus Collected")
