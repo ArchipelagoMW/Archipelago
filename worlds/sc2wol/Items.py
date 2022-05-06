@@ -140,8 +140,8 @@ item_table = {
     "Void Ray": ItemData (707 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 7, progression=True),
     "Carrier": ItemData (708 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 8, progression=True),
 
-    "+5 Starting Minerals": ItemData(500+SC2WOL_ITEM_ID_OFFSET, "Minerals", 5, quantity=0),
-    "+5 Starting Vespene": ItemData(501+SC2WOL_ITEM_ID_OFFSET, "Vespene", 5, quantity=0)
+    "+5 Starting Minerals": ItemData(800+SC2WOL_ITEM_ID_OFFSET, "Minerals", 5, quantity=0),
+    "+5 Starting Vespene": ItemData(801+SC2WOL_ITEM_ID_OFFSET, "Vespene", 5, quantity=0)
 }
 
 basic_unit: typing.Tuple[str, ...] = (
