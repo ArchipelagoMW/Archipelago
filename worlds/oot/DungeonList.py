@@ -87,8 +87,8 @@ dungeon_table = [
         'dungeon_item': 1,
     },
     {
-        'name': 'Gerudo Training Grounds',
-        'hint': 'the Gerudo Training Grounds',
+        'name': 'Gerudo Training Ground',
+        'hint': 'the Gerudo Training Ground',
         'font_color': 'Yellow',
         'boss_key':     0, 
         'small_key':    9,
@@ -122,7 +122,7 @@ def create_dungeons(ootworld):
         hint = dungeon_info['hint'] if 'hint' in dungeon_info else name
         font_color = dungeon_info['font_color'] if 'font_color' in dungeon_info else 'White'
         
-        if ootworld.logic_rules == 'glitchless':
+        if ootworld.logic_rules == 'glitchless' or ootworld.logic_rules == 'no_logic':  # ER + NL
             if not ootworld.dungeon_mq[name]:
                 dungeon_json = os.path.join(data_path('World'), name + '.json')
             else:
