@@ -35,7 +35,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from Utils import local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen
-from worlds.alttp.Items import ItemFactory, item_table, item_name_groups, progression_items
+from worlds.alttp.Items import item_table, item_name_groups, progression_items
 from worlds.alttp.EntranceShuffle import door_addresses
 from worlds.alttp.Options import smallkey_shuffle
 import Patch

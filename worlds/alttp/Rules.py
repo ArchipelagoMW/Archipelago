@@ -2,10 +2,9 @@ import collections
 import logging
 from worlds.alttp import OverworldGlitchRules
 from BaseClasses import RegionType, MultiWorld, Entrance
-from worlds.alttp.Items import ItemFactory, progression_items, item_name_groups
+from worlds.alttp.Items import progression_items, item_name_groups
 from worlds.alttp.OverworldGlitchRules import overworld_glitches_rules, no_logic_rules
 from worlds.alttp.UnderworldGlitchRules import underworld_glitches_rules
-from worlds.alttp.Bosses import GanonDefeatRule
 from worlds.generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations, \
     item_name
 from worlds.alttp.Options import smallkey_shuffle
