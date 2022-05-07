@@ -324,18 +324,18 @@
                 Gerudo_Membership_Card and can_ride_epona and Bow and is_adult",
             "GF HBA 1500 Points": "
                 Gerudo_Membership_Card and can_ride_epona and Bow and is_adult",
-            "GF North F1 Carpenter": "is_adult or (is_child and can_child_damage)",
-            "GF North F2 Carpenter": "is_adult or (is_child and can_child_damage)",
-            "GF South F1 Carpenter": "is_adult or (is_child and can_child_damage)",
-            "GF South F2 Carpenter": "is_adult or (is_child and can_child_damage)",
-            "GF Gerudo Membership Card": "can_finish_GerudoFortress",
+            "Hideout Jail Guard (1 Torch)": "is_adult or (is_child and can_child_damage)",
+            "Hideout Jail Guard (2 Torches)": "is_adult or (is_child and can_child_damage)",
+            "Hideout Jail Guard (3 Torches)": "is_adult or (is_child and can_child_damage)",
+            "Hideout Jail Guard (4 Torches)": "is_adult or (is_child and can_child_damage)",
+            "Hideout Gerudo Membership Card": "can_finish_GerudoFortress",
             "GF GS Archery Range": "can_use(Hookshot) and at_night",
             "GF GS Top Floor": "at_night and is_adult"
         },
         "exits": {
             "Haunted Wasteland": "is_child or 'GF Gate Open' or
                 ((Progressive_Hookshot and (Hover_Boots or can_mega)) or (can_isg and Bombs) )",
-            "Gerudo Training Grounds Lobby": "True"
+            "Gerudo Training Ground Lobby": "True"
         }
     },
     {
@@ -707,7 +707,7 @@
         },
         "exits": {
             "Graveyard Shield Grave": "True",
-            "Graveyard Composers Grave": "can_play(Zeldas_Lullaby) or at('Graveyard Warp Pad Region', True)",
+            "Graveyard Royal Familys Tomb": "can_play(Zeldas_Lullaby) or at('Graveyard Warp Pad Region', True)",
             "Graveyard Heart Piece Grave": "True",
             "Graveyard Dampes Grave": "is_adult or at('Graveyard Warp Pad Region', True)",
             "Graveyard Dampes House": "True",
@@ -728,10 +728,10 @@
         }
     },
     {
-        "region_name": "Graveyard Composers Grave",
+        "region_name": "Graveyard Royal Familys Tomb",
         "locations": {
-            "Graveyard Composers Grave Chest": "has_fire_source or (is_child and Sticks and (can_live_dmg(0.75) or can_use(Nayrus_Love)))",
-            "Song from Composers Grave": "
+            "Graveyard Royal Familys Tomb Chest": "has_fire_source or (is_child and Sticks and (can_live_dmg(0.75) or can_use(Nayrus_Love)))",
+            "Song from Royal Familys Tomb": "
                 is_adult or 
                 (Slingshot or Boomerang or Sticks or 
                     has_explosives or Kokiri_Sword)"

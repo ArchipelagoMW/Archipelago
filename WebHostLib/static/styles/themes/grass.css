@@ -1,0 +1,64 @@
+html{
+    background-image: url("../../static/backgrounds/grass.png");
+    background-repeat: repeat;
+    background-size: 400px 400px;
+}
+
+body{
+    color: #ffffff;
+}
+
+#base-header {
+    background: url('../../static/backgrounds/header/grass-header.png') repeat-x;
+}
+
+.markdown {
+    background-color: rgba(0, 0, 0, 0.30) !important;
+}
+
+h1{
+    color: #ffffff;
+}
+
+h2{
+    color: #5aff6a;
+}
+
+h3, h4, h5,h6{
+    color: #ffffff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+table th{
+
+}
+
+table td{
+
+}
+
+a{
+    color: #fff80f;
+}
+
+pre{
+    margin-top: 0;
+    padding: 0.5rem 0.25rem;
+    background-color: #b5e9a4;
+    border: 1px solid #2a6c2f;
+    border-radius: 6px;
+    color: #000000;
+}
+
+pre code{
+    border: none;
+}
+
+code{
+    background-color: #b5e9a4;
+    border-radius: 4px;
+    border: 1px solid #2a6c2f;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    color: #000000;
+}

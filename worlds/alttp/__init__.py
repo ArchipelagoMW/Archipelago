@@ -14,7 +14,7 @@ from .ItemPool import generate_itempool, difficulties
 from .Shops import create_shops, ShopSlotFill
 from .Dungeons import create_dungeons
 from .Rom import LocalRom, patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, get_hash_string, \
-    get_base_rom_path
+    get_base_rom_path, LttPDeltaPatch
 import Patch
 
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -42,6 +42,7 @@ class ALTTPWorld(World):
     data_version = 8
     remote_items: bool = False
     remote_start_inventory: bool = False
+    required_client_version = (0, 3, 2)
 
     # reassign some world functions
     set_rules = set_rules
@@ -71,6 +72,12 @@ class ALTTPWorld(World):
     def __init__(self, *args):
         super().__init__(*args)
 
+
+    @classmethod
+    def stage_assert_generate(cls, world):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def generate_early(self):
         self.difficulty = self.world.difficulty[self.player]
@@ -223,7 +230,7 @@ class ALTTPWorld(World):
                         return
                     elif state.has('Red Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 3:
                         return 'Mirror Shield'
-                    elif state.has('Blue Shield', item.player)  and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
+                    elif state.has('Blue Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
                         return 'Red Shield'
                     elif self.world.difficulty_requirements[item.player].progressive_shield_limit >= 1:
                         return 'Blue Shield'
@@ -324,15 +331,18 @@ class ALTTPWorld(World):
                                palettes_options, world, player, True,
                                reduceflashing=world.reduceflashing[player] or world.is_race,
                                triforcehud=world.triforcehud[player].current_key,
-                               deathlink=world.death_link[player])
+                               deathlink=world.death_link[player],
+                               allowcollect=world.allow_collect[player])
 
             outfilepname = f'_P{player}'
-            outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
+            outfilepname += f"_{world.get_file_safe_player_name(player).replace(' ', '_')}" \
                 if world.player_name[player] != 'Player%d' % player else ''
 
             rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
             rom.write_to_file(rompath)
-            Patch.create_patch_file(rompath, player=player, player_name=world.player_name[player])
+            patch = LttPDeltaPatch(os.path.splitext(rompath)[0]+LttPDeltaPatch.patch_file_ending, player=player,
+                                   player_name=world.player_name[player], patched_path=rompath)
+            patch.write()
             os.unlink(rompath)
             self.rom_name = rom.name
         except:
@@ -349,9 +359,6 @@ class ALTTPWorld(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
-
-    def get_required_client_version(self) -> tuple:
-        return max((0, 2, 4), super(ALTTPWorld, self).get_required_client_version())
 
     def create_item(self, name: str) -> Item:
         return ALttPItem(name, self.player, item_table[name])

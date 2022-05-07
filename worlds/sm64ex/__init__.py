@@ -1,9 +1,11 @@
 import typing
-from .Items import item_table, SM64Item
+import os
+import json
+from .Items import item_table, cannon_item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options
 from .Rules import set_rules
-from .Regions import create_regions
+from .Regions import create_regions, sm64courses
 from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld
 from ..AutoWorld import World
 
@@ -21,7 +23,7 @@ class SM64World(World):
     item_name_to_id = item_table
     location_name_to_id = location_table
 
-    data_version = 5
+    data_version = 6
     forced_auto_forfeit = False
 
     area_connections: typing.Dict[int, int]
@@ -37,10 +39,19 @@ class SM64World(World):
     def set_rules(self):
         self.area_connections = {}
         set_rules(self.world, self.player, self.area_connections)
+        if self.topology_present:
+            # Write area_connections to spoiler log
+            for painting_id, course_id in self.area_connections.items():
+                self.world.spoiler.set_entrance(
+                    sm64courses[painting_id] + " Painting",
+                    sm64courses[course_id],
+                    'entrance', self.player)
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
         item = SM64Item(name, name != "1Up Mushroom", item_id, self.player)
+        if name == "Power Star": 
+            item.skip_in_prog_balancing = True
         return item
 
     def generate_basic(self):
@@ -65,9 +76,53 @@ class SM64World(World):
         vanishcap = self.create_item("Vanish Cap")
         self.world.itempool += [wingcap,metalcap,vanishcap]
 
+        if (self.world.BuddyChecks[self.player].value):
+            self.world.itempool += [self.create_item(name) for name, id in cannon_item_table.items()]
+        else:
+            self.world.get_location("BoB: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock BoB"))
+            self.world.get_location("WF: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock WF"))
+            self.world.get_location("JRB: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock JRB"))
+            self.world.get_location("CCM: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock CCM"))
+            self.world.get_location("SSL: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock SSL"))
+            self.world.get_location("SL: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock SL"))
+            self.world.get_location("WDW: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock WDW"))
+            self.world.get_location("TTM: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock TTM"))
+            self.world.get_location("THI: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock THI"))
+            self.world.get_location("RR: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock RR"))
+
     def fill_slot_data(self):
         return {
             "AreaRando": self.area_connections,
             "StarsToFinish": self.world.StarsToFinish[self.player].value,
             "DeathLink": self.world.DeathLink[self.player].value,
         }
+
+    def generate_output(self, output_directory: str):
+        if self.world.players != 1:
+            return
+        data = {
+            "slot_data": self.fill_slot_data(),
+            "location_to_item": {self.location_name_to_id[i.name] : item_table[i.item.name] for i in self.world.get_locations()},
+            "data_package": {
+                "data": {
+                    "games": {
+                        self.game: {
+                            "item_name_to_id": self.item_name_to_id,
+                            "location_name_to_id": self.location_name_to_id
+                        }
+                    }
+                }
+            }
+        }
+        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_file_safe_player_name(self.player)}.apsm64ex"
+        with open(os.path.join(output_directory, filename), 'w') as f:
+            json.dump(data, f)
+
+    def modify_multidata(self, multidata):
+        if self.topology_present:
+            er_hint_data = {}
+            for painting_id, course_id in self.area_connections.items():
+                region = self.world.get_region(sm64courses[course_id], self.player)
+                for location in region.locations:
+                    er_hint_data[location.address] = sm64courses[painting_id]
+            multidata['er_hint_data'][self.player] = er_hint_data

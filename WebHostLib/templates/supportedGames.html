@@ -2,19 +2,29 @@
 
 {% block head %}
     <title>Player Settings</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/games.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/supportedGames.css") }}" />
 {% endblock %}
 
 {% block body %}
-    {% include 'header/grassHeader.html' %}
-    <div id="games">
+    {% include 'header/oceanHeader.html' %}
+    <div id="games" class="markdown">
         <h1>Currently Supported Games</h1>
-        {% for game, description in worlds.items() | sort %}
-        <h3><a href="{{ url_for("game_info", game=game, lang="en") }}">{{ game }}</a></h3>
+        {% for game_name, world in worlds.items() | sort(attribute=0) %}
+        <h2>{{ game_name }}</h2>
         <p>
-            <a href="{{ url_for("player_settings", game=game) }}">Settings Page</a>
-            <br />
-            {{ description }}
+            {{ world.__doc__ | default("No description provided.", true) }}<br />
+            <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>
+            <span class="link-spacer">|</span>
+            {% if world.web.settings_page is string %}
+            <a href="{{ world.web.settings_page }}">Settings Page</a>
+            {% elif world.web.settings_page %}
+            <a href="{{ url_for("player_settings", game=game_name) }}">Settings Page</a>
+            {% endif %}
+            {% if world.web.bug_report_page %}
+            <span class="link-spacer">|</span>
+            <a href="{{ world.web.bug_report_page }}">Report a Bug</a>
+            {% endif %}
         </p>
         {% endfor %}
     </div>

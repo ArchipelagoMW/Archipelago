@@ -41,6 +41,7 @@ class TestMinecraft(TestBase):
         setattr(self.world, "bee_traps", {1: BeeTraps(0)})
         setattr(self.world, "combat_difficulty", {1: CombatDifficulty(1)}) # normal
         setattr(self.world, "structure_compasses", {1: Toggle(False)})
+        setattr(self.world, "death_link", {1: Toggle(False)})
         AutoWorld.call_single(self.world, "create_regions", 1)
         AutoWorld.call_single(self.world, "generate_basic", 1)
         AutoWorld.call_single(self.world, "set_rules", 1)

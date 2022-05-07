@@ -8,8 +8,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "archipelago/setup_en.md",
-            "link": "archipelago/setup/en",
+            "filename": "Archipelago/setup_en.md",
+            "link": "Archipelago/setup/en",
             "authors": [
               "alwaysintreble"
             ]
@@ -22,8 +22,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "archipelago/using_website.md",
-            "link": "archipelago/using_website/en",
+            "filename": "Archipelago/using_website.md",
+            "link": "Archipelago/using_website/en",
             "authors": [
               "alwaysintreble"
             ]
@@ -36,8 +36,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "archipelago/commands_en.md",
-            "link": "archipelago/commands/en",
+            "filename": "Archipelago/commands_en.md",
+            "link": "Archipelago/commands/en",
             "authors": [
               "jat2980",
               "Ijwu"
@@ -51,8 +51,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "archipelago/advanced_settings_en.md",
-            "link": "archipelago/advanced_settings/en",
+            "filename": "Archipelago/advanced_settings_en.md",
+            "link": "Archipelago/advanced_settings/en",
             "authors": [
               "alwaysintreble",
               "Alchav"
@@ -66,8 +66,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "archipelago/triggers_en.md",
-            "link": "archipelago/triggers/en",
+            "filename": "Archipelago/triggers_en.md",
+            "link": "Archipelago/triggers/en",
             "authors": [
               "alwaysintreble"
             ]
@@ -80,8 +80,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "archipelago/plando_en.md",
-            "link": "archipelago/plando/en",
+            "filename": "Archipelago/plando_en.md",
+            "link": "Archipelago/plando/en",
             "authors": [
               "alwaysintreble",
               "Alchav"
@@ -100,32 +100,32 @@
         "files": [
           {
             "language": "English",
-            "filename": "zelda3/multiworld_en.md",
-            "link": "zelda3/multiworld/en",
+            "filename": "A Link to the Past/multiworld_en.md",
+            "link": "A Link to the Past/multiworld/en",
             "authors": [
               "Farrak Kilhn"
             ]
           },
           {
             "language": "Deutsch",
-            "filename": "zelda3/multiworld_de.md",
-            "link": "zelda3/multiworld/de",
+            "filename": "A Link to the Past/multiworld_de.md",
+            "link": "A Link to the Past/multiworld/de",
             "authors": [
               "Fischfilet"
             ]
           },
           {
             "language": "Español",
-            "filename": "zelda3/multiworld_es.md",
-            "link": "zelda3/multiworld/es",
+            "filename": "A Link to the Past/multiworld_es.md",
+            "link": "A Link to the Past/multiworld/es",
             "authors": [
               "Edos"
             ]
           },
           {
             "language": "Français",
-            "filename": "zelda3/multiworld_fr.md",
-            "link": "zelda3/multiworld/fr",
+            "filename": "A Link to the Past/multiworld_fr.md",
+            "link": "A Link to the Past/multiworld/fr",
             "authors": [
               "Coxla"
             ]
@@ -138,24 +138,24 @@
         "files": [
           {
             "language": "English",
-            "filename": "zelda3/msu1_en.md",
-            "link": "zelda3/msu1/en",
+            "filename": "A Link to the Past/msu1_en.md",
+            "link": "A Link to the Past/msu1/en",
             "authors": [
               "Farrak Kilhn"
             ]
           },
           {
             "language": "Español",
-            "filename": "zelda3/msu1_es.md",
-            "link": "zelda3/msu1/es",
+            "filename": "A Link to the Past/msu1_es.md",
+            "link": "A Link to the Past/msu1/es",
             "authors": [
               "Edos"
             ]
           },
           {
             "language": "Français",
-            "filename": "msu1_fr.md",
-            "link": "zelda3/msu1/fr",
+            "filename": "A Link to the Past/msu1_fr.md",
+            "link": "A Link to the Past/msu1/fr",
             "authors": [
               "Coxla"
             ]
@@ -168,8 +168,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "zelda3/plando_en.md",
-            "link": "zelda3/plando/en",
+            "filename": "A Link to the Past/plando_en.md",
+            "link": "A Link to the Past/plando/en",
             "authors": [
               "Berserker"
             ]
@@ -187,16 +187,16 @@
         "files": [
           {
             "language": "English",
-            "filename": "zelda5/setup_en.md",
-            "link": "zelda5/setup/en",
+            "filename": "Ocarina of Time/setup_en.md",
+            "link": "Ocarina of Time/setup/en",
             "authors": [
               "Edos"
             ]
           },
           {
             "language": "Spanish",
-            "filename": "zelda5/setup_es.md",
-            "link": "zelda5/setup/es",
+            "filename": "Ocarina of Time/setup_es.md",
+            "link": "Ocarina of Time/setup/es",
             "authors": [
               "Edos"
             ]
@@ -214,11 +214,30 @@
         "files": [
           {
             "language": "English",
-            "filename": "factorio/setup_en.md",
-            "link": "factorio/setup/en",
+            "filename": "Factorio/setup_en.md",
+            "link": "Factorio/setup/en",
             "authors": [
               "Berserker",
               "Farrak Kilhn"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Meritous",
+    "tutorials": [
+      {
+        "name": "Meritous Setup Tutorial",
+        "description": "A guide to setting up the Archipelago Meritous software on your computer.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "Meritous/setup_en.md",
+            "link": "Meritous/setup/en",
+            "authors": [
+              "KewlioMZX"
             ]
           }
         ]
@@ -234,24 +253,24 @@
         "files": [
           {
             "language": "English",
-            "filename": "minecraft/minecraft_en.md",
-            "link": "minecraft/minecraft/en",
+            "filename": "Minecraft/minecraft_en.md",
+            "link": "Minecraft/minecraft/en",
             "authors": [
               "Kono Tyran"
             ]
           },
           {
             "language": "Spanish",
-            "filename": "minecraft/minecraft_es.md",
-            "link": "minecraft/minecraft/es",
+            "filename": "Minecraft/minecraft_es.md",
+            "link": "Minecraft/minecraft/es",
             "authors": [
               "Edos"
             ]
           },
           {
             "language": "Swedish",
-            "filename": "minecraft/minecraft_sv.md",
-            "link": "minecraft/minecraft/sv",
+            "filename": "Minecraft/minecraft_sv.md",
+            "link": "Minecraft/minecraft/sv",
             "authors": [
               "Albinum"
             ]
@@ -269,8 +288,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "ror2/setup_en.md",
-            "link": "ror2/setup/en",
+            "filename": "Risk of Rain 2/setup_en.md",
+            "link": "Risk of Rain 2/setup/en",
             "authors": [
               "Ijwu"
             ]
@@ -288,8 +307,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "raft/setup_en.md",
-            "link": "raft/setup/en",
+            "filename": "Raft/setup_en.md",
+            "link": "Raft/setup/en",
             "authors": [
               "SunnyBat",
               "Awareqwx"
@@ -308,20 +327,39 @@
         "files": [
           {
             "language": "English",
-            "filename": "timespinner/setup_en.md",
-            "link": "timespinner/setup/en",
+            "filename": "Timespinner/setup_en.md",
+            "link": "Timespinner/setup/en",
             "authors": [
               "Jarno"
             ]
           },
           {
             "language": "German",
-            "filename": "timespinner/setup_de.md",
-            "link": "timespinner/setup/de",
+            "filename": "Timespinner/setup_de.md",
+            "link": "Timespinner/setup/de",
             "authors": [
               "Grrmo",
               "Fynxes",
               "Blaze0168"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "SMZ3",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to setting up the Archipelago Super Metroid and A Link to the Past Crossover randomizer on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "SMZ3/multiworld_en.md",
+            "link": "SMZ3/multiworld/en",
+            "authors": [
+              "lordlou"
             ]
           }
         ]
@@ -356,8 +394,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "super-metroid/multiworld_en.md",
-            "link": "super-metroid/multiworld/en",
+            "filename": "Super Metroid/multiworld_en.md",
+            "link": "Super Metroid/multiworld/en",
             "authors": [
               "Farrak Kilhn"
             ]
@@ -375,8 +413,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "secret-of-evermore/multiworld_en.md",
-            "link": "secret-of-evermore/multiworld/en",
+            "filename": "Secret of Evermore/multiworld_en.md",
+            "link": "Secret of Evermore/multiworld/en",
             "authors": [
               "Black Sliver"
             ]
@@ -394,8 +432,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "ff1/multiworld_en.md",
-            "link": "ff1/multiworld/en",
+            "filename": "Final Fantasy/multiworld_en.md",
+            "link": "Final Fantasy/multiworld/en",
             "authors": [
               "jat2980"
             ]
@@ -413,8 +451,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "rogue-legacy/rogue-legacy_en.md",
-            "link": "rogue-legacy/rogue-legacy/en",
+            "filename": "Rogue Legacy/rogue-legacy_en.md",
+            "link": "Rogue Legacy/rogue-legacy/en",
             "authors": [
               "Phar"
             ]
@@ -432,8 +470,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "slay-the-spire/slay-the-spire_en.md",
-            "link": "slay-the-spire/slay-the-spire/en",
+            "filename": "Slay the Spire/slay-the-spire_en.md",
+            "link": "Slay the Spire/slay-the-spire/en",
             "authors": [
               "Phar"
             ]
@@ -451,8 +489,8 @@
         "files": [
           {
             "language": "English",
-            "filename": "sm64ex/setup_en.md",
-            "link": "sm64ex/setup/en",
+            "filename": "Super Mario 64/setup_en.md",
+            "link": "Super Mario 64/setup/en",
             "authors": [
               "N00byKing"
             ]
@@ -470,10 +508,86 @@
         "files": [
           {
             "language": "English",
-            "filename": "v6/setup_en.md",
-            "link": "v6/setup/en",
+            "filename": "VVVVVV/setup_en.md",
+            "link": "VVVVVV/setup/en",
             "authors": [
               "N00byKing"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "ChecksFinder",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Tutorial",
+        "description": "A guide to setting up the Archipelago ChecksFinder software on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "ChecksFinder/checksfinder_en.md",
+            "link": "ChecksFinder/checksfinder/en",
+            "authors": [
+              "Mewlif"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "ArchipIDLE",
+    "tutorials": [
+      {
+        "name": "Setup Guide",
+        "description": "A guide to playing ArchipIDLE",
+        "files": [
+          {
+            "language": "English",
+            "filename": "ArchipIDLE/guide_en.md",
+            "link": "ArchipIDLE/guide/en",
+            "authors": [
+              "Farrak Kilhn"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "Hollow Knight",
+    "tutorials": [
+      {
+        "name": "Mod Setup and Use Guide",
+        "description": "A guide to playing Hollow Knight with Archipelago.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "Hollow Knight/setup_en.md",
+            "link": "Hollow Knight/setup/en",
+            "authors": [
+              "ijwu"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gameTitle": "The Witness",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Guide",
+        "description": "A guide to playing The Witness with Archipelago.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "The Witness/setup_en.md",
+            "link": "The Witness/setup/en",
+            "authors": [
+              "NewSoupVi", "Jarno"
             ]
           }
         ]

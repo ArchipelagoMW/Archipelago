@@ -5,22 +5,27 @@ from worlds.AutoWorld import AutoWorldRegister
 
 from . import setup_default_world
 
+
 class TestBase(unittest.TestCase):
     gen_steps = ["generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill"]
 
     def testAllStateCanReachEverything(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            if game_name != "Ori and the Blind Forest":  # TODO: fix Ori Logic
+            # Final Fantasy logic is controlled by finalfantasyrandomizer.com
+            if game_name != "Ori and the Blind Forest" and game_name != "Final Fantasy":  # TODO: fix Ori Logic
                 with self.subTest("Game", game=game_name):
                     world = setup_default_world(world_type)
+                    excluded = world.exclude_locations[1].value
                     state = world.get_all_state(False)
                     for location in world.get_locations():
-                        with self.subTest("Location should be reached", location=location):
-                            self.assertTrue(location.can_reach(state))
+                        if location.name not in excluded:
+                            with self.subTest("Location should be reached", location=location):
+                                self.assertTrue(location.can_reach(state))
 
     def testEmptyStateCanReachSomething(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            if game_name != "Archipelago":
+            # Final Fantasy logic is controlled by finalfantasyrandomizer.com
+            if game_name != "Archipelago" and game_name != "Final Fantasy":
                 with self.subTest("Game", game=game_name):
                     world = setup_default_world(world_type)
                     state = CollectionState(world)

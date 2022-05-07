@@ -15,6 +15,7 @@ import random
 import pickle
 import itertools
 import time
+import operator
 
 import ModuleUpdate
 
@@ -36,7 +37,26 @@ from Utils import get_item_name_from_id, get_location_name_from_id, \
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType
 
+min_client_version = Version(0, 1, 6)
 colorama.init()
+
+# functions callable on storable data on the server by clients
+modify_functions = {
+    "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
+    "mul": operator.mul,
+    "mod": operator.mod,
+    "max": max,
+    "min": min,
+    "replace": lambda old, new: new,
+    "default": lambda old, new: old,
+    "pow": operator.pow,
+    # bitwise:
+    "xor": operator.xor,
+    "or": operator.or_,
+    "and": operator.and_,
+    "left_shift": operator.lshift,
+    "right_shift": operator.rshift,
+}
 
 
 class Client(Endpoint):
@@ -100,6 +120,8 @@ class Context:
     locations: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int]]]
     groups: typing.Dict[int, typing.Set[int]]
     save_version = 2
+    stored_data: typing.Dict[str, object]
+    stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
@@ -160,7 +182,10 @@ class Context:
         self.minimum_client_versions: typing.Dict[int, Utils.Version] = {}
         self.seed_name = ""
         self.groups = {}
+        self.group_collected: typing.Dict[int, typing.Set[int]] = {}
         self.random = random.Random()
+        self.stored_data = {}
+        self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
 
     # General networking
 
@@ -278,7 +303,7 @@ class Context:
         clients_ver = decoded_obj["minimum_versions"].get("clients", {})
         self.minimum_client_versions = {}
         for player, version in clients_ver.items():
-            self.minimum_client_versions[player] = Utils.Version(*version)
+            self.minimum_client_versions[player] = max(Utils.Version(*version), min_client_version)
 
         self.clients = {}
         for team, names in enumerate(decoded_obj['names']):
@@ -319,7 +344,11 @@ class Context:
                     SlotType(int(bool(locations))))
                 for slot, locations in self.locations.items()
             }
-
+            # locations may need converting
+            for slot, locations in self.locations.items():
+                for location, item_data in locations.items():
+                    if len(item_data) < 3:
+                        locations[location] = (*item_data, 0)
         # declare slots that aren't players as done
         for slot, slot_info in self.slot_info.items():
             if slot_info.type.always_goal:
@@ -404,7 +433,14 @@ class Context:
                 (key, value.timestamp()) for key, value in self.client_activity_timers.items()),
             "client_connection_timers": tuple(
                 (key, value.timestamp()) for key, value in self.client_connection_timers.items()),
-            "random_state": self.random.getstate()
+            "random_state": self.random.getstate(),
+            "group_collected": dict(self.group_collected),
+            "stored_data": self.stored_data,
+            "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
+                             "server_password": self.server_password, "password": self.password, "forfeit_mode":
+                             self.forfeit_mode, "remaining_mode": self.remaining_mode, "collect_mode":
+                             self.collect_mode, "item_cheat": self.item_cheat, "compatibility": self.compatibility}
+
         }
 
         return d
@@ -440,11 +476,28 @@ class Context:
             {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
              in savedata["client_activity_timers"]})
         self.location_checks.update(savedata["location_checks"])
-        if "random_state" in savedata:
-            self.random.setstate(savedata["random_state"])
+        self.random.setstate(savedata["random_state"])
+
+        if "game_options" in savedata:
+            self.hint_cost = savedata["game_options"]["hint_cost"]
+            self.location_check_points = savedata["game_options"]["location_check_points"]
+            self.server_password = savedata["game_options"]["server_password"]
+            self.password = savedata["game_options"]["password"]
+            self.forfeit_mode = savedata["game_options"]["forfeit_mode"]
+            self.remaining_mode = savedata["game_options"]["remaining_mode"]
+            self.collect_mode = savedata["game_options"]["collect_mode"]
+            self.item_cheat = savedata["game_options"]["item_cheat"]
+            self.compatibility = savedata["game_options"]["compatibility"]
+
+        if "group_collected" in savedata:
+            self.group_collected = savedata["group_collected"]
+
+        if "stored_data" in savedata:
+            self.stored_data = savedata["stored_data"]
         # count items and slots from lists for item_handling = remote
-        logging.info(f'Loaded save file with {sum([len(v) for k,v in self.received_items.items() if k[2]])} received items '
-                         f'for {sum(k[2] for k in self.received_items)} players')
+        logging.info(
+            f'Loaded save file with {sum([len(v) for k, v in self.received_items.items() if k[2]])} received items '
+            f'for {sum(k[2] for k in self.received_items)} players')
 
     # rest
 
@@ -505,13 +558,21 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint]):
     concerns = collections.defaultdict(list)
     for hint in hints:
         net_msg = hint.as_network_message()
-        concerns[hint.receiving_player].append(net_msg)
-        if not hint.local:
+        if hint.receiving_player in ctx.groups:
+            for player in ctx.groups[hint.receiving_player]:
+                concerns[player].append(net_msg)
+        else:
+            concerns[hint.receiving_player].append(net_msg)
+        if not hint.local and net_msg not in concerns[hint.finding_player]:
             concerns[hint.finding_player].append(net_msg)
         # remember hints in all cases
         if not hint.found:
             ctx.hints[team, hint.finding_player].add(hint)
-            ctx.hints[team, hint.receiving_player].add(hint)
+            if hint.receiving_player in ctx.groups:
+                for player in ctx.groups[hint.receiving_player]:
+                    ctx.hints[team, player].add(hint)
+            else:
+                ctx.hints[team, hint.receiving_player].add(hint)
     for text in (format_hint(ctx, team, hint) for hint in hints):
         logging.info("Notice (Team #%d): %s" % (team + 1, text))
 
@@ -643,8 +704,10 @@ def get_players_string(ctx: Context):
     player_names = sorted(ctx.player_names.keys())
     current_team = -1
     text = ''
+    total = 0
     for team, slot in player_names:
         if ctx.slot_info[slot].type == SlotType.player:
+            total += 1
             player_name = ctx.player_names[team, slot]
             if team != current_team:
                 text += f':: Team #{team + 1}: '
@@ -653,7 +716,7 @@ def get_players_string(ctx: Context):
                 text += f'{player_name} '
             else:
                 text += f'({player_name}) '
-    return f'{len(auth_clients)} players of {len(ctx.player_names)} connected ' + text[:-1]
+    return f'{len(auth_clients)} players of {total} connected ' + text[:-1]
 
 
 def get_status_string(ctx: Context, team: int):
@@ -707,7 +770,7 @@ def forfeit_player(ctx: Context, team: int, slot: int):
     update_checked_locations(ctx, team, slot)
 
 
-def collect_player(ctx: Context, team: int, slot: int):
+def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
     """register any locations that are in the multidata, pointing towards this player"""
     all_locations = collections.defaultdict(set)
     for source_slot, location_data in ctx.locations.items():
@@ -719,6 +782,14 @@ def collect_player(ctx: Context, team: int, slot: int):
     for source_player, location_ids in all_locations.items():
         register_location_checks(ctx, team, source_player, location_ids, count_activity=False)
         update_checked_locations(ctx, team, source_player)
+
+    if not is_group:
+        for group, group_players in ctx.groups.items():
+            if slot in group_players:
+                group_collected_players = ctx.group_collected.setdefault(group, set())
+                group_collected_players.add(slot)
+                if set(group_players) == group_collected_players:
+                    collect_player(ctx, team, group, True)
 
 
 def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
@@ -769,12 +840,16 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
 
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[NetUtils.Hint]:
     hints = []
+    slots = []
+    for group_id, group in ctx.groups.items():
+        if slot in group:
+            slots.append(group_id)
     seeked_item_id = proxy_worlds[ctx.games[slot]].item_name_to_id[item]
     for finding_player, check_data in ctx.locations.items():
         for location_id, result in check_data.items():
             item_id, receiving_player, item_flags = result
 
-            if receiving_player == slot and item_id == seeked_item_id:
+            if (receiving_player == slot or receiving_player in slots) and item_id == seeked_item_id:
                 found = location_id in ctx.location_checks[team, finding_player]
                 entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
                 hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
@@ -790,7 +865,7 @@ def collect_hint_location_name(ctx: Context, team: int, slot: int, location: str
 
 def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location: int) -> typing.List[NetUtils.Hint]:
     result = ctx.locations[slot].get(seeked_location, (None, None, None))
-    if result:
+    if any(result):
         item_id, receiving_player, item_flags = result
 
         found = seeked_location in ctx.location_checks[team, slot]
@@ -985,7 +1060,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     @mark_raw
     def _cmd_admin(self, command: str = ""):
-        """Allow remote administration of the multiworld server"""
+        """Allow remote administration of the multiworld server
+        Usage: "!admin login <password>" in order to log in to the remote interface.
+        Once logged in, you can then use "!admin <command>" to issue commands.
+        If you need further help once logged in.  use "!admin /help" """
 
         output = f"!admin {command}"
         if output.lower().startswith(
@@ -1327,9 +1405,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
-            if "IgnoreGame" not in args["tags"] and args['game'] != game:
+            ignore_game = "IgnoreGame" in args["tags"] or (  # IgnoreGame is deprecated. TODO: remove after 0.3.3?
+                          ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game"))
+            if not ignore_game and args['game'] != game:
                 errors.add('InvalidGame')
-            minver = ctx.minimum_client_versions[slot]
+            minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
             if minver > args['version']:
                 errors.add('IncompatibleVersion')
             if args.get('items_handling', None) is None:
@@ -1337,6 +1417,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 client.no_items = False
                 client.remote_items = slot in ctx.remote_items
                 client.remote_start_inventory = slot in ctx.remote_start_inventory
+                await ctx.send_msgs(client, [{
+                    "cmd": "Print", "text":
+                        "Warning: Client is not sending items_handling flags, "
+                        "which will not be supported in the future."}])
             else:
                 try:
                     client.items_handling = args['items_handling']
@@ -1385,7 +1469,13 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
     elif cmd == "GetDataPackage":
         exclusions = args.get("exclusions", [])
-        if exclusions:
+        if "games" in args:
+            games = {name: game_data for name, game_data in network_data_package["games"].items()
+                     if name in set(args.get("games", []))}
+            await ctx.send_msgs(client, [{"cmd": "DataPackage",
+                                          "data": {"games": games}}])
+        # TODO: remove exclusions behaviour around 0.5.0
+        elif exclusions:
             exclusions = set(exclusions)
             games = {name: game_data for name, game_data in network_data_package["games"].items()
                      if name not in exclusions}
@@ -1393,6 +1483,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             package["games"] = games
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
                                           "data": package}])
+
         else:
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
                                           "data": network_data_package}])
@@ -1487,6 +1578,43 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                                          set(bounceclient.tags) & tags or
                                                          bounceclient.slot in slots):
                     await ctx.send_encoded_msgs(bounceclient, msg)
+
+        elif cmd == "Get":
+            if "keys" not in args or type(args["keys"]) != list:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
+                                              "text": 'Retrieve', "original_cmd": cmd}])
+                return
+            args["cmd"] = "Retrieved"
+            keys = args["keys"]
+            args["keys"] = {key: ctx.stored_data.get(key, None) for key in keys}
+            await ctx.send_msgs(client, [args])
+
+        elif cmd == "Set":
+            if "key" not in args or \
+                    "operations" not in args or not type(args["operations"]) == list:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
+                                              "text": 'Set', "original_cmd": cmd}])
+                return
+            args["cmd"] = "SetReply"
+            value = ctx.stored_data.get(args["key"], args.get("default", 0))
+            args["original_value"] = value
+            for operation in args["operations"]:
+                func = modify_functions[operation["operation"]]
+                value = func(value, operation["value"])
+            ctx.stored_data[args["key"]] = args["value"] = value
+            targets = set(ctx.stored_data_notification_clients[args["key"]])
+            if args.get("want_reply", True):
+                targets.add(client)
+            if targets:
+                ctx.broadcast(targets, [args])
+
+        elif cmd == "SetNotify":
+            if "keys" not in args or type(args["keys"]) != list:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
+                                              "text": 'SetNotify', "original_cmd": cmd}])
+                return
+            for key in args["keys"]:
+                ctx.stored_data_notification_clients[key].add(client)
 
 
 def update_client_status(ctx: Context, client: Client, new_status: ClientStatus):
@@ -1693,7 +1821,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             return False
 
     def _cmd_option(self, option_name: str, option: str):
-        """Set options for the server. Warning: expires on restart"""
+        """Set options for the server."""
 
         attrtype = self.ctx.simple_options.get(option_name, None)
         if attrtype:
@@ -1830,11 +1958,18 @@ async def main(args: argparse.Namespace):
 
     try:
         if not data_filename:
-            import tkinter
-            import tkinter.filedialog
-            root = tkinter.Tk()
-            root.withdraw()
-            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago *.zip"),))
+            try:
+                import tkinter
+                import tkinter.filedialog
+            except Exception as e:
+                logging.error("Could not load tkinter, which is likely not installed. "
+                              "This attempt was made because no .archipelago file was provided as argument. "
+                              "Either provide a file or ensure the tkinter package is installed.")
+                raise e
+            else:
+                root = tkinter.Tk()
+                root.withdraw()
+                data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago *.zip"),))
 
         ctx.load(data_filename, args.use_embedded_options)
 
