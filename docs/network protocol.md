@@ -121,7 +121,7 @@ Sent to clients when the connection handshake is successfully completed.
 | missing_locations | list\[int\] | Contains ids of remaining locations that need to be checked. Useful for trackers, among other things. |
 | checked_locations | list\[int\] | Contains ids of all locations that have been checked. Useful for trackers, among other things. Location ids are in the range of ± 2<sup>53</sup>-1. |
 | slot_data | dict | Contains a json object for slot related data, differs per game. Empty if not required. |
-| slot_info | dict\[int, NetworkSlot\] | maps each slot to a NetworkSlot information |
+| slot_info | dict\[int, [NetworkSlot](#NetworkSlot)\] | maps each slot to a [NetworkSlot](#NetworkSlot) information |
 
 ### ReceivedItems
 Sent to clients when they receive an item.

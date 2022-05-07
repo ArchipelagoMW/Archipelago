@@ -1060,7 +1060,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     @mark_raw
     def _cmd_admin(self, command: str = ""):
-        """Allow remote administration of the multiworld server"""
+        """Allow remote administration of the multiworld server
+        Usage: "!admin login <password>" in order to log in to the remote interface.
+        Once logged in, you can then use "!admin <command>" to issue commands.
+        If you need further help once logged in.  use "!admin /help" """
 
         output = f"!admin {command}"
         if output.lower().startswith(
