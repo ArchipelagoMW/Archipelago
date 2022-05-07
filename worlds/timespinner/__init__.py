@@ -22,7 +22,7 @@ class TimespinnerWebWorld(WebWorld):
     setup_de = Tutorial(
         setup.tutorial_name,
         setup.description,
-        "German",
+        "Deutsch",
         "setup_de.md",
         "setup/en",
         ["Grrmo", "Fynxes", "Blaze0168"]

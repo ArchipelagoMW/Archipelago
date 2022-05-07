@@ -34,7 +34,7 @@ class MinecraftWebWorld(WebWorld):
     setup_es = Tutorial(
         setup.tutorial_name,
         setup.description,
-        "Spanish",
+        "Español",
         "minecraft_es.md",
         "minecraft/es",
         ["Edos"]

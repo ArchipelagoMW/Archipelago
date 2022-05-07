@@ -79,7 +79,7 @@ class OOTWeb(WebWorld):
     setup_es = Tutorial(
         setup.tutorial_name,
         setup.description,
-        "Spanish",
+        "Español",
         "setup_es.md",
         "setup/es",
         setup.author

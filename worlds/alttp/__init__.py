@@ -37,7 +37,7 @@ class ALTTPWeb(WebWorld):
     setup_de = Tutorial(
         setup_en.tutorial_name,
         setup_en.description,
-        "German",
+        "Deutsch",
         "multiworld_de.md",
         "multiworld/de",
         ["Fischfilet"]
@@ -46,7 +46,7 @@ class ALTTPWeb(WebWorld):
     setup_es = Tutorial(
         setup_en.tutorial_name,
         setup_en.description,
-        "Spanish",
+        "Español",
         "multiworld_es.md",
         "multiworld/es",
         ["Edos"]
@@ -55,7 +55,7 @@ class ALTTPWeb(WebWorld):
     setup_fr = Tutorial(
         setup_en.tutorial_name,
         setup_en.description,
-        "French",
+        "Français",
         "multiworld_fr.md",
         "multiworld/fr",
         ["Coxla"]
@@ -73,7 +73,7 @@ class ALTTPWeb(WebWorld):
     msu_es = Tutorial(
         msu.tutorial_name,
         msu.description,
-        "Spanish",
+        "Español",
         "msu1_es.md",
         "msu1/en",
         ["Edos"]
@@ -82,7 +82,7 @@ class ALTTPWeb(WebWorld):
     msu_fr = Tutorial(
         msu.tutorial_name,
         msu.description,
-        "French",
+        "Français",
         "msu1_fr.md",
         "msu1/fr",
         ["Coxla"]

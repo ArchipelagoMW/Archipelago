@@ -82,13 +82,13 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
             else:
                 game_data['tutorials'][0] = current_tutorial
         data.append(game_data)
-    with open(Utils.local_path("WebHostLib", "static", "generated", "tutorials.json"), 'w') as json_target:
+    with open(Utils.local_path("WebHostLib", "static", "generated", "tutorials.json"), 'w', encoding="utf8") as json_target:
         generic_data = {}
         for games in data:
             if 'Archipelago' in games.values():
                 generic_data = data.pop(data.index(games))
         sorted_data = [generic_data] + sorted(data, key=lambda entry: entry["gameTitle"].lower())
-        json.dump(sorted_data, json_target, indent=2)
+        json.dump(sorted_data, json_target, indent=2, ensure_ascii=False)
     return sorted_data
 
 
