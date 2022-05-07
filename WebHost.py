@@ -103,7 +103,6 @@ if __name__ == "__main__":
         logging.warning("Could not update LttP sprites.")
     app = get_app()
     create_options_files()
-    # TODO create a proper hook for world documents so they don't need to be copied
     create_ordered_tutorials_file()
     if app.config["SELFLAUNCH"]:
         autohost(app.config)
