@@ -1,150 +1,123 @@
 from typing import Callable, Optional, NamedTuple
 
+from BaseClasses import Boss
 from Fill import FillError
 
 
 # TODO some of the different shuffles can be rewritten as proper functions and figure out what ';' is
-class Boss(NamedTuple):
+class ALttpBoss(Boss):
     """Class to handle necessary information for each boss."""
     # TODO look into how names are handled and see about eliminating enemizer_name variable
-    name: str
     enemizer_name: str
-    defeat_rule: Callable
-    player: int
 
-    def can_defeat(self, state) -> bool:
-        return self.defeat_rule(state, self.player)
-
-    def __repr__(self):
-        return f"Boss({self.name})"
+    def __init__(self, name: str, enemizer_name: str, defeat_rule: Optional[Callable], player: int):
+        super().__init__(name, player, defeat_rule)
+        self.enemizer_name = enemizer_name
 
 
-def boss_factory(boss: str, player: int) -> Optional[Boss]:
+def boss_factory(boss: str, player: int) -> Optional[ALttpBoss]:
     if boss in boss_table:
         enemizer_name, defeat_rule = boss_table[boss]
-        return Boss(boss, enemizer_name, defeat_rule, player)
+        return ALttpBoss(boss, enemizer_name, defeat_rule, player)
 
 
 def can_beat_armos(state, player: int):
     return (
-            state.has_melee_weapon(player) or
-            state.can_shoot_arrows(player) or
-            (state.has('Cane of Somaria', player) and state.can_extend_magic(player, 10)) or
-            (state.has('Cane of Byrna', player) and state.can_extend_magic(player, 16)) or
-            (state.has('Ice Rod', player) and state.can_extend_magic(player, 32)) or
-            (state.has('Fire Rod', player) and state.can_extend_magic(player, 32)) or
-            state.has('Blue Boomerang', player) or
-            state.has('Red Boomerang', player)
+            state.lttp_has_melee_weapon(player) or
+            state.lttp_can_shoot_arrows(player) or
+            (state.has('Cane of Somaria', player) and state.lttp_can_extend_magic(player, 10)) or
+            (state.has('Cane of Byrna', player) and state.lttp_can_extend_magic(player, 16)) or
+            (state.has('Ice Rod', player) and state.lttp_can_extend_magic(player, 32)) or
+            (state.has('Fire Rod', player) and state.lttp_can_extend_magic(player, 32)) or
+            state.has_any({'Blue Boomerang', 'Red Boomerang'}, player)
     )
 
 
 def can_beat_lanmo(state, player: int):
     return (
-            state.has_melee_weapon(player) or
-            state.has('Fire Rod', player) or
-            state.has('Ice Rod', player) or
-            state.has('Cane of Somaria', player) or
-            state.has('Cane of Byrna', player) or
-            state.can_shoot_arrows(player)
+            state.lttp_has_melee_weapon(player) or
+            state.has_any({'Fire Rod', 'Ice Rod', 'Cane of Somaria', 'Cane of Byrna'}, player) or
+            state.lttp_can_shoot_arrows(player)
     )
 
 
 def can_beat_moldorm(state, player: int):
-    return state.has_melee_weapon(player)
+    return state.lttp_has_melee_weapon(player)
 
 
 def can_beat_helma(state, player: int):
-    return state.has_sword(player, 1) or state.can_shoot_arrows(player) or (
-        state.has_hammer(player) if logic_trick.hamdorm[player] else False)
+    return state.lttp_has_swords(player) or state.lttp_can_shoot_arrows(player)
 
 
 def can_beat_arrghus(state, player: int):
     if not state.has('Hookshot', player):
         return False
-    if state.has_melee_weapon(player):
+    if state.lttp_has_melee_weapon(player):
         return True
     return (
-            (state.has('Fire Rod', player) and
-             (state.can_shoot_arrows(player) or state.can_extend_magic(player, 12))) or
-            (state.has('Ice Rod', player) and (state.can_shoot_arrows(player) or state.can_extend_magic(player, 16)))
+            (state.lttp_has('Fire Rod', player) and
+             (state.lttp_can_shoot_arrows(player) or state.lttp_can_extend_magic(player, 12))) or
+            (state.has('Ice Rod', player) and
+             (state.lttp_can_shoot_arrows(player) or state.lttp_can_extend_magic(player, 16)))
     )
 
 
 def can_beat_mothula(state, player: int):
     return (
-            state.has_melee_weapon(player) or
-            (state.has('Fire Rod', player) and state.can_extend_magic(player, 10)) or
+            state.lttp_has_melee_weapon(player) or
+            (state.has('Fire Rod', player) and state.lttp_can_extend_magic(player, 10)) or
             # TODO: Not sure how much (if any) extend magic is needed for these two, since they only apply
             # to non-vanilla locations, so are harder to test, so sticking with what VT has for now:
-            (state.has('Cane of Somaria', player) and state.can_extend_magic(player, 16)) or
-            (state.has('Cane of Byrna', player) and state.can_extend_magic(player, 16)) or
-            state.can_get_good_bee(player)
+            (state.has('Cane of Somaria', player) and state.lttp_can_extend_magic(player, 16)) or
+            (state.has('Cane of Byrna', player) and state.lttp_can_extend_magic(player, 16)) or
+            state.lttp_can_get_good_bee(player)
     )
 
 
 def can_beat_blind(state, player: int):
-    return state.has_melee_weapon(player) or state.has('Cane of Somaria', player) or state.has('Cane of Byrna', player)
+    return state.lttp_has_melee_weapon(player) or state.has_any({'Cane of Somaria', 'Cane of Byrna'}, player)
 
 
 def can_beat_kholdstare(state, player: int):
-    return (
-            (
-                    state.has('Fire Rod', player) or
-                    (
-                            state.has('Bombos', player) and
-                            (
-                                    state.has_sword(player, 1) or state.world.swordless[player]
-                            )
-                    )
-            ) and
-            (
-                    state.has_melee_weapon(player) or
-                    (
-                            state.has('Fire Rod', player) and
-                            state.can_extend_magic(player, 20)
-                    ) or
-                    (
-                            state.has('Fire Rod', player) and
-                            state.has('Bombos', player) and
-                            state.world.swordless[player] and
-                            state.can_extend_magic(player, 16)
-                    )
-            )
-    )
+    return state.lttp_can_melt_things(player) and\
+           (state.lttp_has_melee_weapon(player) or
+            (state.has('Fire Rod', player) and state.lttp_can_extend_magic(player, 20)) or
+            (state.has_all({'Fire Rod', 'Bombos'}, player) and
+             state.world.worlds[player].swordless and state.lttp_can_extend_magic(player, 16)))
 
 
 def can_beat_vitreous(state, player: int):
-    return state.can_shoot_arrows(player) or state.has_melee_weapon(player)
+    return state.lttp_can_shoot_arrows(player) or state.lttp_has_melee_weapon(player)
 
 
 def can_beat_trinexx(state, player: int):
-    if not (state.has('Fire Rod', player) and state.has('Ice Rod', player)):
+    if not state.has_all({'Fire Rod', 'Ice Rod'}, player):
         return False
 
-    return state.has('Hammer', player) or state.has_sword(player, 3) or \
-        (state.has_sword(player, 2) and state.can_extend_magic(player, 16)) or \
-        (state.has_sword(player, 1) and state.can_extend_magic(player, 32))
+    return state.has('Hammer', player) or state.lttp_has_swords(player, 3) or \
+        (state.lttp_has_swords(player, 2) and state.lttp_can_extend_magic(player, 16)) or \
+        (state.lttp_has_swords(player) and state.lttp_can_extend_magic(player, 32))
 
 
 def can_beat_agahnim(state, player: int):
-    return state.has_sword(player, 1) or state.has('Hammer', player) or state.has('Bug Catching Net', player)
+    return state.lttp_has_swords(player) or state.has_any({'Hammer', 'Bug Catching Net'}, player)
 
 
 def can_beat_ganon(state, player: int):
-    if state.world.swordless[player]:
-        return state.has('Hammer', player) and state.has_fire_source(player) and \
-               state.has('Silver Bow', player) and state.can_shoot_arrows(player)
+    if state.world.worlds[player].swordless:
+        return state.has('Hammer', player) and state.lttp_has_fire_source(player) and \
+               state.has('Silver Bow', player) and state.lttp_can_shoot_arrows(player)
 
-    can_hurt = state.has_sword(player, 2)
-    common = can_hurt and state.has_fire_source(player)
-    if state.world.logic[player] != 'noglitches':
-        return common and (state.has_sword(player, 3) or
-                           (state.has('Silver Bow', player) and state.can_shoot_arrows(player)) or
+    can_hurt = state.lttp_has_swords(player, 2)
+    common = can_hurt and state.lttp_has_fire_source(player)
+    if state.world.worlds[player].logic != 'noglitches':
+        return common and (state.lttp_has_swords(player, 3) or
+                           (state.has('Silver Bow', player) and state.lttp_can_shoot_arrows(player)) or
                            state.has('Lamp', player) or
-                           state.can_extend_magic(player, 12))
+                           state.lttp_can_extend_magic(player, 12))
 
     else:
-        return common and state.has('Silver Bow', player) and state.can_shoot_arrows(player)
+        return common and state.has('Silver Bow', player) and state.lttp_can_shoot_arrows(player)
 
 
 boss_table = {
@@ -218,7 +191,7 @@ def format_boss_location(location, level):
 
 
 def place_bosses(world, player: int):
-    if world.boss_shuffle[player] == 'none':
+    if world.boss_shuffle == 'none':
         return
     # Most restrictive to least order sort
     boss_locations = boss_location_table.copy()

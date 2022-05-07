@@ -1,5 +1,6 @@
 from ..AutoWorld import LogicMixin
 from .Regions import ALttpRegion
+from .Options import smallkey_shuffle
 
 
 class ALttPLogic(LogicMixin):
@@ -9,7 +10,7 @@ class ALttPLogic(LogicMixin):
             return True
         if self.world.worlds[player].smallkey_shuffle == smallkey_shuffle.option_universal:
             return self.lttp_can_buy_unlimited('Small Key (Universal)', player)
-        return self.prog_items[item, player] >= count
+        return self.has(item, player, count)
 
     def lttp_has_triforce_pieces(self, count: int, player: int) -> bool:
         return self.item_count('Triforce Piece', player) >= count
@@ -20,8 +21,8 @@ class ALttPLogic(LogicMixin):
             found += self.prog_items[f'Crystal {crystal + 1}', player]
         return found >= count
 
-    def lttp_can_lift_rocks(self, player: int) -> bool:
-        return self.count_group('Gloves', player)
+    def lttp_can_lift_rocks(self, player: int, count: int = 1) -> bool:
+        return self.count_group('Gloves', player) > count
 
     def lttp_bottle_count(self, player: int) -> int:
         return min(self.world.worlds[player].difficulty_requirements.progressive_bottle_limit, self.count_group('Bottles', player))
@@ -56,7 +57,7 @@ class ALttPLogic(LogicMixin):
 
     def lttp_can_shoot_arrows(self, player: int) -> bool:
         has_bow = self.has_any({'Bow', 'Silver Bow'}, player)
-        if self.world.worlds[player].retro[player]:
+        if self.world.worlds[player].retro:
             return has_bow and self.lttp_can_buy('Single Arrow', player)
         return has_bow
 

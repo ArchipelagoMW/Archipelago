@@ -2,7 +2,7 @@ import random
 import logging
 import os
 import threading
-from typing import Dict
+from typing import Dict, List
 
 from BaseClasses import Item, CollectionState
 from ..AutoWorld import World, LogicMixin
@@ -43,23 +43,49 @@ class ALTTPWorld(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
 
+    # reassign some world functions
     set_rules = set_rules
-
     create_items = generate_itempool
 
-    def __init__(self, *args, **kwargs):
-        self.dungeon_local_item_names = set()
-        self.dungeon_specific_item_names = set()
-        self.rom_name_available_event = threading.Event()
-        self.has_progressive_bows = False
-        super(ALTTPWorld, self).__init__(*args, **kwargs)
+    # typing and initialization for world specific variables
+    dungeon_local_item_names = set()
+    dungeon_specific_item_names = set()
+    rom_name_available_event = threading.Event()
+    itempool: List[ALttPItem]
+    random: random.Random
+
+    # options
+    has_progressive_bows: bool = False
+    difficulty: str = 'Normal'
+    goal: str = 'ganon'
+    mode: str = 'open'
+    timer: str = None
+    beemizer_total_chance: int = 0
+    beemizer_trap_chance: int = 0
+    shop_shuffle: str = None
+    retro: bool = False
+    boss_shuffle: str = None
+    logic: str
+    smallkey_shuffle = smallkey_shuffle
 
     def generate_early(self):
+        self.difficulty = self.world.difficulty[self.player]
+        self.goal = self.world.goal[self.player]
+        self.mode = self.world.mode[self.player]
+        self.timer = self.world.timer[self.player]
+        self.beemizer_total_chance = self.world.beemizer_total_chance[self.player]
+        self.beemizer_trap_chance = self.world.beemizer_trap_chance[self.player]
+        self.shop_shuffle = self.world.shop_shuffle[self.player]
+        self.retro = self.world.retro[self.player]
+        self.random = self.world.random
+        self.boss_shuffle = self.world.boss_shuffle[self.player]
+        self.logic = self.world.logic[self.player]
+
         player = self.player
         world = self.world
 
         # system for sharing ER layouts
-        self.er_seed = str(world.random.randint(0, 2 ** 64))
+        self.er_seed = str(self.random.randint(0, 2 ** 64))
 
         if "-" in world.shuffle[player]:
             shuffle, seed = world.shuffle[player].split("-", 1)
@@ -324,7 +350,7 @@ class ALTTPWorld(World):
         return max((0, 2, 4), super(ALTTPWorld, self).get_required_client_version())
 
     def create_item(self, name: str) -> Item:
-        return ALttPItem(name, self.player, **item_table[name])
+        return ALttPItem(name, self.player, item_table[name])
 
     @classmethod
     def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,

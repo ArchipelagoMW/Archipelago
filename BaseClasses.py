@@ -6,7 +6,7 @@ import logging
 import json
 import functools
 from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, TYPE_CHECKING
+from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, TYPE_CHECKING, Callable
 import secrets
 import random
 
@@ -677,35 +677,34 @@ class CollectionState(object):
             self.stale[item.player] = True
 
 
-@unique
 class RegionType(int, Enum):
-    Generic = 0
-    LightWorld = 1
-    DarkWorld = 2
-    Cave = 3  # Also includes Houses
-    Dungeon = 4
-
-    @property
-    def is_indoors(self) -> bool:
-        """Shorthand for checking if Cave or Dungeon"""
-        return self in (RegionType.Cave, RegionType.Dungeon)
+    pass
 
 
 class Region(object):
-    def __init__(self, name: str, type_: RegionType, hint, player: int, world: Optional[MultiWorld] = None):
+    name: str
+    entrances: List = []
+    exits: List = []
+    locations: List[Location] = []
+    world: Optional[MultiWorld] = None
+    spot_type: str = 'Region'
+    player: int
+    hint_text: str
+    type: Optional[RegionType]
+
+    def __init__(self, name: str, player: int, world: MultiWorld, type: RegionType = None, hint: str = None):
         self.name = name
-        self.type = type_
-        self.entrances = []
-        self.exits = []
-        self.locations: List[Location] = []
-        self.dungeon = None
-        self.shop = None
-        self.world = world
-        self.is_light_world = False  # will be set after making connections.
-        self.is_dark_world = False
-        self.spot_type = 'Region'
-        self.hint_text = hint
         self.player = player
+        self.type = type
+        self.world = world
+        if hint:
+            self.hint_text = hint
+
+    @property
+    def hint(self) -> str:
+        if self.hint_text:
+            return self.hint_text
+        return self.name
 
     def can_reach(self, state: CollectionState) -> bool:
         if state.stale[self.player]:
@@ -762,16 +761,36 @@ class Entrance(object):
         return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
 
 
+class Boss():
+    name: str
+    defeat_rule: Optional[Callable]
+    player: int
+
+    def __init__(self, name: str, player: int, defeat_rule: Optional[Callable] = True):
+        self.name = name
+        self.player = player
+        self.defeat_rule = defeat_rule
+
+    def can_defeat(self, state: CollectionState) -> bool:
+        return self.defeat_rule(state, self.player)
+
+    def __repr__(self):
+        return f"Boss({self.name}"
+
+
 class Dungeon(object):
-    def __init__(self, name: str, regions, big_key, small_keys, dungeon_items, player: int):
+    name: str
+    regions: List[str]
+    dungeon_items: List[Item]
+    player: int
+    world: MultiWorld = None
+    bosses: Dict = {}
+
+    def __init__(self, name: str, regions: List[str], player: int, dungeon_items):
         self.name = name
         self.regions = regions
-        self.big_key = big_key
-        self.small_keys = small_keys
         self.dungeon_items = dungeon_items
-        self.bosses = dict()
         self.player = player
-        self.world = None
 
     @property
     def boss(self) -> Optional[Boss]:

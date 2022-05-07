@@ -3,6 +3,21 @@ from typing import Optional, Union, Iterable, NamedTuple
 from BaseClasses import Item, MultiWorld
 
 
+class ItemData(NamedTuple):
+    advancement: bool
+    item_type: Optional[str]
+    item_code: Union[Optional[int], Iterable[int]]
+    pedestal_hint: Optional[str]
+    pedestal_credit: Optional[str]
+    sick_kid_credit: Optional[str]
+    zora_credit: Optional[str]
+    witch_credit: Optional[str]
+    flute_boy_credit: Optional[str]
+    hint_text: Optional[str]
+    item_id: int = None
+    trap: bool = False
+
+
 class ALttPItem(Item):
     game: str = 'A Link to the Past'
     item_type: str = None
@@ -13,25 +28,21 @@ class ALttPItem(Item):
     potion_shop_credit_text: str
     flute_boy_credit_text: str
     hint_text: str
-    hex_code: Union[Optional[int], Iterable[int]]
+    item_code: Union[Optional[int], Iterable[int]]
 
-    def __init__(self, name: str, player: int, advancement: bool, item_type,
-                 hex_code: Union[Optional[int], Iterable[int]] = None, item_code: int = None, pedestal_hint: str = None,
-                 pedestal_credit: str = 'and the Unknown Item', sick_kid_credit: str = None,
-                 zora_credit: str = None, witch_credit: str = None, flute_boy_credit: str = None, hint_text: str = None,
-                 trap: bool = False):
-        super().__init__(name, advancement, item_code, player)
-        self.pedestal_hint_text = pedestal_hint
-        self.pedestal_credit_text = pedestal_credit
-        self.sick_kid_credit_text = sick_kid_credit
-        self.zora_credit_text = zora_credit
-        self.potion_shop_credit_text = witch_credit
-        self.flute_boy_credit_text = flute_boy_credit
-        self.hint_text = hint_text
-        self.trap = trap
-        self.hex_code = hex_code
-        if item_type:
-            self.item_type = item_type
+    def __init__(self, name: str, player: int, data: ItemData):
+        super().__init__(name, data.advancement, data.item_code, player)
+        self.pedestal_hint_text = data.pedestal_hint
+        self.pedestal_credit_text = data.pedestal_credit
+        self.sick_kid_credit_text = data.sick_kid_credit
+        self.zora_credit_text = data.zora_credit
+        self.potion_shop_credit_text = data.witch_credit
+        self.flute_boy_credit_text = data.flute_boy_credit
+        self.hint_text = data.hint_text
+        self.trap = data.trap
+        self.item_code = data.item_code
+        if data.item_type:
+            self.item_type = data.item_type
 
     @property
     def crystal(self) -> bool:
@@ -67,29 +78,14 @@ def get_beemizer_item(world: MultiWorld, player: int, item: Item):
     if item.name not in trap_replaceable:
         return item
     # TODO rewrite multiworld class and implement beemizer options correctly then rewrite this accordingly
-    if not world.beemizer_total_chance[player] or world.random.random() > (world.beemizer_total_chance[player] / 100):
+    if not world.beemizer_total_chance or world.random.random() > (world.beemizer_total_chance / 100):
         return item
-    if not world.beemizer_trap_chance[player] or world.random.random() > (world.beemizer_trap_chance[player] / 100):
+    if not world.beemizer_trap_chance or world.random.random() > (world.beemizer_trap_chance / 100):
         return world.create_item('Bee', player)
     return world.create_item('Bee Trap', player)
 
 
-class ItemData(NamedTuple):
-    advancement: bool
-    type: Optional[str]
-    item_code: Union[Optional[int], Iterable[int]]
-    pedestal_hint: Optional[str]
-    pedestal_credit: Optional[str]
-    sick_kid_credit: Optional[str]
-    zora_credit: Optional[str]
-    witch_credit: Optional[str]
-    flute_boy_credit: Optional[str]
-    hint_text: Optional[str]
-    item_id: int = None
-    trap: bool = False
-
-
-# Format: Name: (Advancement, Type, ItemCode, Pedestal Hint Text, Pedestal Credit Text, Sick Kid Credit Text, Zora Credit Text, Witch Credit Text, Flute Boy Credit Text, Hint Text)
+# Format: Name: (Advancement, Type, ItemCode, Pedestal Hint Text, Pedestal Credit Text, Sick Kid Credit Text, Zora Credit Text, Witch Credit Text, Flute Boy Credit Text, Hint Text, AP Code, Trap)
 item_table = {
     'Bow': ItemData(True, None, 0x0B, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'the Bow', 0),
     'Progressive Bow': ItemData(True, None, 0x64, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'a Bow', 1),
@@ -130,20 +126,20 @@ item_table = {
     'Golden Sword': ItemData(True, 'Sword', 0x03, 'The butter\nsword rests\nhere!', 'and the butter sword', 'sword-wielding kid', 'butter for sale', 'cap churned to butter', 'sword boy fights again', 'the Golden Sword', 36),
     'Progressive Sword': ItemData(True, 'Sword', 0x5E, 'a better copy\nof your sword\nfor your time', 'the unknown sword', 'sword-wielding kid', 'sword for sale', 'fungus for some slasher', 'sword boy fights again', 'a Sword', 37),
     'Progressive Glove': ItemData(True, None, 0x61, 'a way to lift\nheavier things', 'and the lift upgrade', 'body-building kid', 'some glove for sale', 'fungus for gloves', 'body-building boy lifts again', 'a Glove', 38),
-    'Green Pendant': ItemData(True, 'Crystal', (0x04, 0x38, 0x62, 0x00, 0x69, 0x01), None, None, None, None, None, None, "the green pendant", 39),
-    'Blue Pendant': ItemData(True, 'Crystal', (0x02, 0x34, 0x60, 0x00, 0x69, 0x02), None, None, None, None, None, None, "the blue pendant", 40),
-    'Red Pendant': ItemData(True, 'Crystal', (0x01, 0x32, 0x60, 0x00, 0x69, 0x03), None, None, None, None, None, None, "the red pendant", 41),
+    'Green Pendant': ItemData(True, 'Crystal', (0x04, 0x38, 0x62, 0x00, 0x69, 0x01), None, None, None, None, None, None, "the green pendant", item_id=39),
+    'Blue Pendant': ItemData(True, 'Crystal', (0x02, 0x34, 0x60, 0x00, 0x69, 0x02), None, None, None, None, None, None, "the blue pendant", item_id=40),
+    'Red Pendant': ItemData(True, 'Crystal', (0x01, 0x32, 0x60, 0x00, 0x69, 0x03), None, None, None, None, None, None, "the red pendant", item_id=41),
     'Triforce': ItemData(True, None, 0x6A, '\n   YOU WIN!', 'and the triforce', 'victorious kid', 'victory for sale', 'fungus for the win', 'greedy boy wins game again', 'the Triforce', 42),
     'Power Star': ItemData(True, None, 0x6B, 'a small victory', 'and the power star', 'star-struck kid', 'star for sale', 'see stars with shroom', 'mario powers up again', 'a Power Star', 43),
     'Triforce Piece': ItemData(True, None, 0x6C, 'a small victory', 'and the thirdforce', 'triangular kid', 'triangle for sale', 'fungus for triangle', 'wise boy has triangle again', 'a Triforce Piece', 44),
-    'Crystal 1': ItemData(True, 'Crystal', (0x02, 0x34, 0x64, 0x40, 0x7F, 0x06), None, None, None, None, None, None, "a blue crystal", 45),
-    'Crystal 2': ItemData(True, 'Crystal', (0x10, 0x34, 0x64, 0x40, 0x79, 0x06), None, None, None, None, None, None, "a blue crystal", 46),
-    'Crystal 3': ItemData(True, 'Crystal', (0x40, 0x34, 0x64, 0x40, 0x6C, 0x06), None, None, None, None, None, None, "a blue crystal", 47),
-    'Crystal 4': ItemData(True, 'Crystal', (0x20, 0x34, 0x64, 0x40, 0x6D, 0x06), None, None, None, None, None, None, "a blue crystal", 48),
-    'Crystal 5': ItemData(True, 'Crystal', (0x04, 0x32, 0x64, 0x40, 0x6E, 0x06), None, None, None, None, None, None, "a red crystal", 49),
-    'Crystal 6': ItemData(True, 'Crystal', (0x01, 0x32, 0x64, 0x40, 0x6F, 0x06), None, None, None, None, None, None, "a red crystal", 50),
-    'Crystal 7': ItemData(True, 'Crystal', (0x08, 0x34, 0x64, 0x40, 0x7C, 0x06), None, None, None, None, None, None, "a blue crystal", 51),
-    'Single Arrow': ItemData(False, None, 0x43, 'a lonely arrow\nsits here.', 'and the arrow', 'stick-collecting kid', 'sewing needle for sale', 'fungus for arrow', 'archer boy sews again', 'an arrow', 52),
+    'Crystal 1': ItemData(True, 'Crystal', (0x02, 0x34, 0x64, 0x40, 0x7F, 0x06), None, None, None, None, None, None, "a blue crystal", item_id=45),
+    'Crystal 2': ItemData(True, 'Crystal', (0x10, 0x34, 0x64, 0x40, 0x79, 0x06), None, None, None, None, None, None, "a blue crystal", item_id=46),
+    'Crystal 3': ItemData(True, 'Crystal', (0x40, 0x34, 0x64, 0x40, 0x6C, 0x06), None, None, None, None, None, None, "a blue crystal", item_id=47),
+    'Crystal 4': ItemData(True, 'Crystal', (0x20, 0x34, 0x64, 0x40, 0x6D, 0x06), None, None, None, None, None, None, "a blue crystal", item_id=48),
+    'Crystal 5': ItemData(True, 'Crystal', (0x04, 0x32, 0x64, 0x40, 0x6E, 0x06), None, None, None, None, None, None, "a red crystal", item_id=49),
+    'Crystal 6': ItemData(True, 'Crystal', (0x01, 0x32, 0x64, 0x40, 0x6F, 0x06), None, None, None, None, None, None, "a red crystal", item_id=50),
+    'Crystal 7': ItemData(True, 'Crystal', (0x08, 0x34, 0x64, 0x40, 0x7C, 0x06), None, None, None, None, None, None, "a blue crystal", item_id=51),
+    'Single Arrow': ItemData(False, None, 0x43, 'a lonely arrow\nsits here.', 'and the arrow', 'stick-collecting kid', 'sewing needle for sale', 'fungus for arrow', 'archer boy sews again', 'an arrow', item_id=52),
     'Arrows (10)': ItemData(False, None, 0x44, 'This will give\nyou ten shots\nwith your bow!', 'and the arrow pack','stick-collecting kid', 'sewing kit for sale', 'fungus for arrows', 'archer boy sews again','ten arrows', 53),
     'Arrow Upgrade (+10)': ItemData(False, None, 0x54, 'increase arrow\nstorage, low\nlow price', 'and the quiver', 'quiver-enlarging kid', 'arrow boost for sale', 'witch and more skewers', 'upgrade boy sews more again', 'arrow capacity', 54),
     'Arrow Upgrade (+5)': ItemData(False, None, 0x53, 'increase arrow\nstorage, low\nlow price', 'and the quiver', 'quiver-enlarging kid', 'arrow boost for sale', 'witch and more skewers', 'upgrade boy sews more again', 'arrow capacity', 55),

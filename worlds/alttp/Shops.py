@@ -402,7 +402,7 @@ shop_generation_types = {
 
 def set_up_shops(world, player: int):
     # TODO: move hard+ mode changes for shields here, utilizing the new shops
-
+    world = world.world
     if world.retro[player]:
         rss = world.get_region('Red Shield Shop', player).shop
         replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
