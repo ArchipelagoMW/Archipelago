@@ -14,7 +14,7 @@ window.addEventListener('load', () => {
             }
             resolve(ajax.responseText);
         };
-        ajax.open('GET', `${window.location.origin}/static/generated/gameInfo/` +
+        ajax.open('GET', `${window.location.origin}/static/generated/docs/${gameInfo.getAttribute('data-game')}/` +
           `${gameInfo.getAttribute('data-lang')}_${gameInfo.getAttribute('data-game')}.md`, true);
         ajax.send();
     }).then((results) => {

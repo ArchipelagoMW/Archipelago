@@ -14,7 +14,7 @@ window.addEventListener('load', () => {
             }
             resolve(ajax.responseText);
         };
-        ajax.open('GET', `${window.location.origin}/static/generated/tutorials/` +
+        ajax.open('GET', `${window.location.origin}/static/generated/docs/` +
             `${tutorialWrapper.getAttribute('data-game')}/${tutorialWrapper.getAttribute('data-file')}_` +
             `${tutorialWrapper.getAttribute('data-lang')}.md`, true);
         ajax.send();

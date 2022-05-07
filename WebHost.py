@@ -49,16 +49,15 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
         if hasattr(world.web, 'tutorials'):
             worlds[game] = world
     for game, world in worlds.items():
-        # copy the tutorial files to the generated folder
+        # copy files from world's docs folder to the generated folder
         source_path = Utils.local_path(os.path.dirname(sys.modules[world.__module__].__file__), 'docs')
-        target_path = Utils.local_path("WebHostLib", "static", "generated", "tutorials", game)
+        target_path = Utils.local_path("WebHostLib", "static", "generated", "docs", game)
         files = os.listdir(source_path)
         for file in files:
             os.makedirs(os.path.dirname(Utils.local_path(target_path, file)), exist_ok=True)
             shutil.copyfile(Utils.local_path(source_path, file), Utils.local_path(target_path, file))
-        game_data = {}
-        game_data['gameTitle'] = game
-        game_data['tutorials'] = [{}]
+        # build a json tutorial dict per game
+        game_data = {'gameTitle': game, 'tutorials': [{}]}
         for tutorial in world.web.tutorials:
             # build dict for the json file
             current_tutorial = {
@@ -71,6 +70,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
                     'authors': tutorial.author
                 }]
             }
+            # probably a cleaner way to do this but this adds tutorials covering the same topics of different languages together
             added: bool = False
             if 'name' in game_data['tutorials'][0]:
                 for guide in game_data['tutorials']:
@@ -92,24 +92,6 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
     return sorted_data
 
 
-def copy_game_info_files():
-    worlds = {}
-    for game, world in AutoWorldRegister.world_types.items():
-        if not world.hidden:
-            worlds[game] = world
-    target_path = os.path.join("WebHostLib", "static", "generated", "gameInfo")
-    for game in worlds:
-        source_path = os.path.join(os.path.dirname(sys.modules[worlds[game].__module__].__file__), 'docs')
-        languages = [lang for lang in worlds[game].web.game_info_languages]
-        for lang in languages:
-            filename = f'{lang}_{game}_gameinfo.md'
-            if os.path.exists(os.path.join(source_path, filename)):
-                with open(os.path.join(source_path, filename), 'r') as source:
-                    data = source.read()
-                with open(os.path.join(target_path, filename), 'w') as target:
-                    target.write(data)
-
-
 if __name__ == "__main__":
     multiprocessing.freeze_support()
     multiprocessing.set_start_method('spawn')
@@ -123,7 +105,6 @@ if __name__ == "__main__":
     create_options_files()
     # TODO create a proper hook for world documents so they don't need to be copied
     create_ordered_tutorials_file()
-    copy_game_info_files()
     if app.config["SELFLAUNCH"]:
         autohost(app.config)
     if app.config["SELFGEN"]:
