@@ -1,6 +1,6 @@
 from typing import Dict
 from BaseClasses import MultiWorld
-from Options import Toggle, DefaultOnToggle, Option
+from Options import Toggle, DefaultOnToggle, Option, Range
 
 
 # class HardMode(Toggle):
@@ -45,6 +45,12 @@ class ChallengeVictoryCondition(Toggle):
     instead of the final elevator."""
     display_name = "Victory on beating the Challenge"
 
+class TrapPercentage(Range):
+    display_name = "Trap Percentage"
+    range_start = 0
+    range_end = 100
+    default = 20
+
 
 the_witness_options: Dict[str, Option] = {
     # "hard_mode": HardMode,
@@ -54,7 +60,8 @@ the_witness_options: Dict[str, Option] = {
     "shuffle_vault_boxes": ShuffleVaultBoxes,
     "shuffle_uncommon": ShuffleUncommonLocations,
     "shuffle_hard": ShuffleHardLocations,
-    "challenge_victory": ChallengeVictoryCondition
+    "challenge_victory": ChallengeVictoryCondition,
+    "trap_percentage": TrapPercentage
 }
 
 

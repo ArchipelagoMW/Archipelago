@@ -12,6 +12,7 @@ from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems
 from .rules import set_rules
 from .regions import WitnessRegions
 from .Options import is_option_enabled, the_witness_options
+from .utils import weighted_list
 
 
 class WitnessWebWorld(WebWorld):
@@ -69,13 +70,9 @@ class WitnessWorld(World):
         pool.remove(items_by_name[random_good_item])
 
         # Put in junk items to fill the rest
-        junk_pool = self.items.JUNK_WEIGHTS.copy()
-        junk_pool = self.world.random.choices(
-            list(junk_pool.keys()), weights=list(junk_pool.values()),
-            k=len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - 1
-        )
+        junk_size = len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - 1
 
-        pool += [self.create_item(junk) for junk in junk_pool]
+        pool += [self.create_item(junk) for junk in weighted_list(self.items.JUNK_WEIGHTS, junk_size)]
 
         # Tie Event Items to Event Locations (e.g. Laser Activations)
         for event_location in self.locat.EVENT_LOCATION_TABLE:

@@ -1,5 +1,26 @@
 import os
 from Utils import cache_argsless
+from itertools import accumulate
+from typing import *
+from fractions import Fraction
+
+
+def weighted_list(weights: Dict[Any, Fraction], length):
+    """
+    Example:
+        weights = {A: 0.3, B: 0.3, C: 0.4}
+        length = 10
+
+        returns: [A, A, A, B, B, B, C, C, C, C]
+
+    Makes sure to match length *exactly*, might approximate as a result
+    """
+    vals = accumulate(map(lambda x: x * length, weights.values()), lambda x, y: x + y)
+    output_list = []
+    for k, v in zip(weights.keys(), vals):
+        while len(output_list) < v:
+            output_list.append(k)
+    return output_list
 
 
 def define_new_region(region_string):
