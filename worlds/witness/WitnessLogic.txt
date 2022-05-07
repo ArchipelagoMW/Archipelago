@@ -370,7 +370,7 @@ Jungle (Jungle) - Main Island - True:
 
 Outside Jungle River (River) - Main Island - True - Jungle - 0x337FA:
 0x17CAA (Rhombic Avoid to Monastery Garden) - True - Environment
-0x15ADD (Rhombic Avoid Vault) - True - Environment & Black/White Squares & Dots
+0x15ADD (Vault) - True - Environment & Black/White Squares & Dots
 0x03702 (Vault Box) - 0x15ADD - True
 
 Outside Bunker (Bunker) - Main Island - True - Inside Bunker - 0x0A079:
