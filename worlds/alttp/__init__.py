@@ -5,7 +5,7 @@ import threading
 from typing import Dict, List
 
 from BaseClasses import Item, CollectionState
-from ..AutoWorld import World, LogicMixin
+from ..AutoWorld import World, MultiWorld
 from .Options import alttp_options, smallkey_shuffle
 from .Items import item_name_groups, item_table, ALttPItem
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
@@ -67,6 +67,10 @@ class ALTTPWorld(World):
     boss_shuffle: str = None
     logic: str
     smallkey_shuffle = smallkey_shuffle
+
+    def __init__(self, *args):
+        super().__init__(*args)
+
 
     def generate_early(self):
         self.difficulty = self.world.difficulty[self.player]

@@ -273,7 +273,14 @@ class MultiWorld():
             for r_location in region.locations:
                 self._location_cache[r_location.name, player] = r_location
 
-    def get_regions(self, player=None):
+    def create_region(self, name: str, player: int, locations: Dict[str: int],
+                      type: RegionType = None, hint: str = None) -> Region:
+        region = Region(name, player, self.worlds[player], type, hint)
+        for location, address in locations.items():
+            region.locations.append(self.create_location(location, player, address, region))
+        return region
+
+    def get_regions(self, player=None) -> List[Region]:
         return self.regions if player is None else self._region_cache[player].values()
 
     def get_region(self, regionname: str, player: int) -> Region:
@@ -289,6 +296,9 @@ class MultiWorld():
         except KeyError:
             self._recache()
             return self._entrance_cache[entrance, player]
+
+    def create_location(self, name: str, player: int, address: int = None, parent: Region = None) -> Location:
+        return Location(player, name, address, parent)
 
     def get_location(self, location: str, player: int) -> Location:
         try:
@@ -321,6 +331,14 @@ class MultiWorld():
         if use_cache:
             self._all_state = ret
         return ret
+
+    def get_item(self, name: str) -> Item:
+        if not (self.get_filled_locations() or self.itempool):
+            raise RuntimeError('No items currently exist to get.')
+        for item in [loc.item for loc in self.get_filled_locations()] + self.itempool:
+            if item.name == name:
+                return item
+        raise RuntimeError(f'Item {name} does not exist!')
 
     def get_items(self) -> List[Item]:
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
@@ -844,7 +862,7 @@ class Location():
     access_rule = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
 
-    def __init__(self, player: int, name: str = '', address: int = None, parent=None):
+    def __init__(self, name: str, player: int, address: int = None, parent: Region = None):
         self.name: str = name
         self.address: Optional[int] = address
         self.parent_region: Region = parent

@@ -5,7 +5,7 @@ import logging
 
 from worlds.alttp.SubClasses import ALttPLocation
 from worlds.alttp.EntranceShuffle import door_addresses
-from worlds.alttp.Items import item_name_groups, item_table, trap_replaceable
+from worlds.alttp.Items import item_name_groups, item_table, trap_replaceable, get_beemizer_item
 from worlds.alttp.Options import smallkey_shuffle
 from Utils import int16_as_bytes
 
@@ -163,7 +163,7 @@ def FillDisabledShopSlots(world):
     for location in shop_slots:
         location.shop_slot_disabled = True
         shop: Shop = location.parent_region.shop
-        location.item = ItemFactory(shop.inventory[location.shop_slot]['item'], location.player)
+        location.item = world.create_item(shop.inventory[location.shop_slot]['item'])
         location.item_rule = lambda item: item.name == location.item.name and item.player == location.player
 
 
@@ -330,10 +330,10 @@ def create_shops(world, player: int):
                         else:
                             additional_item = 'Rupees (50)'
                     else:
-                        additional_item = GetBeemizerItem(world, player, 'Nothing')
-                    loc.item = ItemFactory(additional_item, player)
+                        additional_item = get_beemizer_item(world, player, 'Nothing')
+                    loc.item = world.create_item(additional_item)
                 else:
-                    loc.item = ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player)
+                    loc.item = world.create_item(get_beemizer_item(world, player, 'Nothing'))
                     loc.shop_slot_disabled = True
                 loc.item.world = world
                 shop.region.locations.append(loc)
@@ -453,7 +453,7 @@ def shuffle_shops(world, items, player: int):
         if world.goal[player] != 'icerodhunt':
             for i, item in enumerate(items):
                 if item.name in trap_replaceable:
-                    items[i] = ItemFactory(new_items.pop(), player)
+                    items[i] = world.create_item(new_items.pop())
                     if not new_items:
                         break
             else:
@@ -467,7 +467,7 @@ def shuffle_shops(world, items, player: int):
                     capacityshop.add_inventory(1, 'Arrow Upgrade (+5)', 100, arrowupgrades)
         else:
             for item in new_items:
-                world.push_precollected(ItemFactory(item, player))
+                world.push_precollected(world.create_item(item))
 
     if any(setting in option for setting in 'ipP'):
         shops = []

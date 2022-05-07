@@ -31,7 +31,7 @@ class ALttPItem(Item):
     item_code: Union[Optional[int], Iterable[int]]
 
     def __init__(self, name: str, player: int, data: ItemData):
-        super().__init__(name, data.advancement, data.item_code, player)
+        super().__init__(name, data.advancement, data.item_id, player)
         self.pedestal_hint_text = data.pedestal_hint
         self.pedestal_credit_text = data.pedestal_credit
         self.sick_kid_credit_text = data.sick_kid_credit
@@ -77,7 +77,6 @@ class ALttPItem(Item):
 def get_beemizer_item(world: MultiWorld, player: int, item: Item):
     if item.name not in trap_replaceable:
         return item
-    # TODO rewrite multiworld class and implement beemizer options correctly then rewrite this accordingly
     if not world.beemizer_total_chance or world.random.random() > (world.beemizer_total_chance / 100):
         return item
     if not world.beemizer_trap_chance or world.random.random() > (world.beemizer_trap_chance / 100):

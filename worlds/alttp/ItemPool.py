@@ -1,7 +1,7 @@
 from typing import NamedTuple, List
 import logging
 
-from BaseClasses import Region, RegionType
+from BaseClasses import Region, RegionType, MultiWorld
 from Fill import FillError
 
 from .SubClasses import ALttPLocation
@@ -248,7 +248,7 @@ for diff in {'easy', 'normal', 'hard', 'expert'}:
     )
 
 
-def generate_itempool(world):
+def generate_itempool(world: MultiWorld):
     player = world.player
 
     if world.difficulty not in difficulties:
@@ -266,7 +266,7 @@ def generate_itempool(world):
     if world.goal in ['pedestal', 'triforcehunt', 'localtriforcehunt', 'icerodhunt']:
         world.world.push_item(world.get_location('Ganon', player), world.create_item('Nothing', player), False)
     else:
-        world.world.push_item(world.world.get_location('Ganon', player), world.create_item('Triforce'), False)
+        world.world.get_location('Ganon', player).place_locked_item(world.create_item('Triforce'), player)
 
     if world.goal == 'icerodhunt':
         world.progression_balancing.value = False
