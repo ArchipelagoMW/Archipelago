@@ -30,8 +30,8 @@ class ShuffleVaultBoxes(Toggle):
 
 
 class ShuffleUncommonLocations(Toggle):
-    """Adds the following checks to the pool:
-    Mountaintop River Shape, Tutorial Patio Floor, Theater Videos"""
+    """Adds some optional puzzles that are somewhat difficult or out of the way.
+    Examples: Mountaintop River Shape, Tutorial Patio Floor, Theater Videos"""
     display_name = "Shuffle Uncommon Locations"
 
 
@@ -45,7 +45,9 @@ class ChallengeVictoryCondition(Toggle):
     instead of the final elevator."""
     display_name = "Victory on beating the Challenge"
 
+
 class TrapPercentage(Range):
+    """Replaces junk items with traps, at the specified rate."""
     display_name = "Trap Percentage"
     range_start = 0
     range_end = 100
