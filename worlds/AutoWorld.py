@@ -8,9 +8,9 @@ from Options import Option
 
 
 class AutoWorldRegister(type):
-    world_types: Dict[str, AutoWorldRegister] = {}
+    world_types: Dict[str, type(World)] = {}
 
-    def __new__(cls, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
+    def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
             assert isinstance(dct["web"], WebWorld), "WebWorld has to be instantiated."
         # filter out any events
@@ -38,7 +38,7 @@ class AutoWorldRegister(type):
                                                          base.__dict__["required_client_version"])
 
         # construct class
-        new_class = super().__new__(cls, name, bases, dct)
+        new_class = super().__new__(mcs, name, bases, dct)
         if "game" in dct:
             AutoWorldRegister.world_types[dct["game"]] = new_class
         return new_class

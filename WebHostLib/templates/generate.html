@@ -35,86 +35,153 @@
             </p>
             <div id="generate-game-form-wrapper">
                 <form id="generate-game-form" method="post" enctype="multipart/form-data">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <label for="forfeit_mode">Forfeit Permission:</label>
-                                    <span
-                                            class="interactive"
-                                            data-tooltip="A forfeit releases all remaining items from the locations
-                                            in your world.">(?)
-                                    </span>
-                                </td>
-                                <td>
-                                    <select name="forfeit_mode" id="forfeit_mode">
-                                        <option value="auto">Automatic on goal completion</option>
-                                        <option value="goal">Allow !forfeit after goal completion</option>
-                                        <option value="auto-enabled">Automatic on goal completion and manual !forfeit</option>
-                                        <option value="enabled">Manual !forfeit</option>
-                                        <option value="disabled">Disabled</option>
-                                    </select>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <label for="collect_mode">Collect Permission:</label>
-                                    <span
-                                            class="interactive"
-                                            data-tooltip="A collect releases all of your remaining items to you
-                                            from across the multiworld.">(?)
-                                    </span>
-                                </td>
-                                <td>
-                                    <select name="collect_mode" id="collect_mode">
-                                        <option value="goal">Allow !collect after goal completion</option>
-                                        <option value="auto">Automatic on goal completion</option>
-                                        <option value="auto-enabled">Automatic on goal completion and manual !collect</option>
-                                        <option value="enabled">Manual !collect</option>
-                                        <option value="disabled">Disabled</option>
-                                    </select>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <label for="remaining_mode">Remaining Permission:</label>
-                                    <span
-                                            class="interactive"
-                                            data-tooltip="Remaining lists all items still in your world by name only.">(?)
-                                    </span>
-                                </td>
-                                <td>
-                                    <select name="remaining_mode" id="remaining_mode">
-                                        <option value="disabled">Disabled</option>
-                                        <option value="goal">Allow !remaining after goal completion</option>
-                                        <option value="enabled">Manual !remaining</option>
-                                    </select>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <label for="hint_cost"> Hint Cost:</label>
-                                    <span
-                                            class="interactive"
-                                            data-tooltip="After gathering this many checks, players can !hint <itemname>
-                                            to get the location of that hint item.">(?)
-                                    </span>
-                                </td>
-                                <td>
-                                    <select name="hint_cost" id="hint_cost">
-                                        {% for n in range(0, 110, 5) %}
-                                            <option {% if n == 10 %}selected="selected" {% endif %} value="{{ n }}">
-                                                {% if n > 100 %}Off{% else %}{{ n }}%{% endif %}
+                    <div id="generate-game-tables-container">
+                        <div class="table-wrapper">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label for="forfeit_mode">Forfeit Permission:</label>
+                                        <span
+                                                class="interactive"
+                                                data-tooltip="A forfeit releases all remaining items from the locations
+                                                in your world.">(?)
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <select name="forfeit_mode" id="forfeit_mode">
+                                            <option value="auto">Automatic on goal completion</option>
+                                            <option value="goal">Allow !forfeit after goal completion</option>
+                                            <option value="auto-enabled">
+                                                Automatic on goal completion and manual !forfeit
                                             </option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                            <option value="enabled">Manual !forfeit</option>
+                                            <option value="disabled">Disabled</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <label for="collect_mode">Collect Permission:</label>
+                                        <span
+                                                class="interactive"
+                                                data-tooltip="A collect releases all of your remaining items to you
+                                                from across the multiworld.">(?)
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <select name="collect_mode" id="collect_mode">
+                                            <option value="goal">Allow !collect after goal completion</option>
+                                            <option value="auto">Automatic on goal completion</option>
+                                            <option value="auto-enabled">
+                                                Automatic on goal completion and manual !collect
+                                            </option>
+                                            <option value="enabled">Manual !collect</option>
+                                            <option value="disabled">Disabled</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <label for="remaining_mode">Remaining Permission:</label>
+                                        <span
+                                            class="interactive"
+                                            data-tooltip="Remaining lists all items still in your world by name only."
+                                        >(?)
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <select name="remaining_mode" id="remaining_mode">
+                                            {% if race -%}
+                                                <option value="disabled">Disabled in Race mode</option>
+                                            {%- else -%}
+                                                <option value="disabled">Disabled</option>
+                                                <option value="goal">Allow !remaining after goal completion</option>
+                                                <option value="enabled">Manual !remaining</option>
+                                            {%- endif -%}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="item_cheat">Item Cheat:</label>
+                                        <span
+                                                class="interactive"
+                                                data-tooltip="Allows players to use the !getitem command.">(?)
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <select name="item_cheat" id="item_cheat">
+                                            {% if race -%}
+                                                <option value="0">Disabled in Race mode</option>
+                                            {%- else -%}
+                                                <option value="1">Enabled</option>
+                                                <option value="0">Disabled</option>
+                                            {%- endif -%}
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                        <div class="table-wrapper">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label for="hint_cost"> Hint Cost:</label>
+                                            <span
+                                                class="interactive"
+                                                data-tooltip="After gathering this many checks, players can !hint <itemname>
+                                                to get the location of that hint item.">(?)
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <select name="hint_cost" id="hint_cost">
+                                                {% for n in range(0, 110, 5) %}
+                                                    <option {% if n == 10 %}selected="selected" {% endif %} value="{{ n }}">
+                                                        {% if n > 100 %}Off{% else %}{{ n }}%{% endif %}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="server_password">Server Password:</label>
+                                            <span
+                                                class="interactive"
+                                                data-tooltip="Allows for issuing of server console commands from any text client or in-game client using the !admin command.">(?)
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <input id="server_password" name="server_password">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="plando_options">Plando Options:</label>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="plando_bosses" value="bosses" checked>
+                                            <label for="plando_bosses">Bosses</label><br>
+
+                                            <input type="checkbox" name="plando_items" value="items" checked>
+                                            <label for="plando_items">Items</label><br>
+
+                                            <input type="checkbox" name="plando_connections" value="connections" checked>
+                                            <label for="plando_connections">Connections</label><br>
+
+                                            <input type="checkbox" name="plando_texts" value="texts" checked>
+                                            <label for="plando_texts">Text</label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <div id="generate-form-button-row">
                         <input id="file-input" type="file" name="file">
                     </div>
