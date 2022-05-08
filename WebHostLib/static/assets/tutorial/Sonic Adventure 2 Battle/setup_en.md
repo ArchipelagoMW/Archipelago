@@ -43,9 +43,11 @@
 
 Some additional settings related to the Archipelago messages in game can be adjusted in the SA2ModManager if you select `Configure...` on the SA2B_Archipelago mod. This settings will be under a `General Settings` tab.
 	
-	- Message Display Count: This is the maximum number of archipelago messages that can be displayed on screen at any given time.
+	- Message Display Count: This is the maximum number of Archipelago messages that can be displayed on screen at any given time.
 	
-	- Message Font Size: The is the size of the font used to display the messages from archipelago.
+	- Message Display Duration: This dictates how long Archipelago messages are displayed on screen (in seconds).
+	
+	- Message Font Size: The is the size of the font used to display the messages from Archipelago.
 
 ## Troubleshooting
 
@@ -80,4 +82,4 @@ Some additional settings related to the Archipelago messages in game can be adju
 
 ## Save File Safeguard (Advanced Option)
 
-The mod contains a save file safeguard which associates a savefile to a specific Archipelago seed. By default, save files can only connect to archipelago servers that match their seed. The safeguard can be disabled in the mod config.ini by setting `IgnoreFileSafety` to true. This is NOT recommended for the standard user as it will allow any save file to connect and send items to the archipelago server.
+The mod contains a save file safeguard which associates a savefile to a specific Archipelago seed. By default, save files can only connect to Archipelago servers that match their seed. The safeguard can be disabled in the mod config.ini by setting `IgnoreFileSafety` to true. This is NOT recommended for the standard user as it will allow any save file to connect and send items to the Archipelago server.
