@@ -91,7 +91,7 @@ class SA2BWorld(World):
 
         if self.world.LevelGateDistribution[self.player] == 0 or self.world.LevelGateDistribution[self.player] == 2:
             early_distribution = self.world.LevelGateDistribution[self.player] == 0
-            levels_to_distribute = 7
+            levels_to_distribute = 5
             gate_index_offset = 0
             while levels_to_distribute > 0:
                 if levels_per_gate[0 + gate_index_offset] == 1 or levels_per_gate[max_gate_index - gate_index_offset] == 1:
