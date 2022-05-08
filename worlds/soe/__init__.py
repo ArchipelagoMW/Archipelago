@@ -175,6 +175,12 @@ class SoEWorld(World):
         res.trap = item.type == pyevermizer.CHECK_TRAP
         return res
 
+    @classmethod
+    def stage_assert_generate(cls, world):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
+
     def create_regions(self):
         # TODO: generate *some* regions from locations' requirements?
         r = Region('Menu', RegionType.Generic, 'Menu', self.player, self.world)
