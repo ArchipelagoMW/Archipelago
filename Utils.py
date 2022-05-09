@@ -28,6 +28,7 @@ class Version(typing.NamedTuple):
 __version__ = "0.3.2"
 version_tuple = tuplize_version(__version__)
 
+import jellyfish
 from yaml import load, load_all, dump, SafeLoader
 
 try:
@@ -492,3 +493,10 @@ def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P
         return f"{value} {power_labels[n]}"
     else:
         return f"{value:0.3f} {power_labels[n]}"
+
+
+def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str]) -> typing.List[typing.Tuple[str, int]]:
+    return sorted(
+        map(lambda candidate: (candidate, int(100*jellyfish.jaro_winkler_similarity(input_word, candidate))), wordlist),
+        key=lambda element: element[1],
+        reverse=True)
