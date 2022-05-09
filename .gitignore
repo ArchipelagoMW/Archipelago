@@ -155,6 +155,7 @@ cython_debug/
 #minecraft server stuff
 jdk*/
 minecraft*/
+minecraft_versions.json
 
 #pyenv
 .python-version
