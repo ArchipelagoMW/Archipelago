@@ -254,16 +254,16 @@ def setup_locations(world, player: int):
 
     location_table = {**first_mission_location_table}
 
-    if world.IncludeMissions[player] >= 2:
+    if world.IncludeMissions[player].value >= 2:
         location_table.update({**second_mission_location_table})
             
-    if world.IncludeMissions[player] >= 3:
+    if world.IncludeMissions[player].value >= 3:
         location_table.update({**third_mission_location_table})
 
-    if world.IncludeMissions[player] >= 4:
+    if world.IncludeMissions[player].value >= 4:
         location_table.update({**fourth_mission_location_table})
 
-    if world.IncludeMissions[player] >= 5:
+    if world.IncludeMissions[player].value >= 5:
         location_table.update({**fifth_mission_location_table})
 
     location_table.update({**upgrade_location_table})

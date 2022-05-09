@@ -43,6 +43,7 @@ class SA2BWorld(World):
     music_map: typing.Dict[int, int]
     emblems_for_cannons_core: int
     region_emblem_map: typing.Dict[int, int]
+    required_client_version = (0, 3, 2)
 
     def _get_slot_data(self):
         return {
@@ -50,9 +51,9 @@ class SA2BWorld(World):
             "MusicMap":                             self.music_map,
             "MusicShuffle":                         self.world.MusicShuffle[self.player],
             "DeathLink":                            self.world.DeathLink[self.player],
-            "IncludeMissions":                      self.world.IncludeMissions[self.player],
-            "EmblemPercentageForCannonsCore":       self.world.EmblemPercentageForCannonsCore[self.player],
-            "NumberOfLevelGates":                   self.world.NumberOfLevelGates[self.player],
+            "IncludeMissions":                      self.world.IncludeMissions[self.player].value,
+            "EmblemPercentageForCannonsCore":       self.world.EmblemPercentageForCannonsCore[self.player].value,
+            "NumberOfLevelGates":                   self.world.NumberOfLevelGates[self.player].value,
             "LevelGateDistribution":                self.world.LevelGateDistribution[self.player],
             "EmblemsForCannonsCore":                self.emblems_for_cannons_core,
             "RegionEmblemMap":                      self.region_emblem_map,
@@ -61,9 +62,6 @@ class SA2BWorld(World):
     def _create_items(self, name: str):
         data = item_table[name]
         return [self.create_item(name)] * data.quantity
-
-    def get_required_client_version(self) -> typing.Tuple[int, int, int]:
-        return max((0, 2, 5), super(SA2BWorld, self).get_required_client_version())
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
@@ -116,7 +114,7 @@ class SA2BWorld(World):
         total_required_locations = 31
 
         # Mission Locations
-        total_required_locations *= self.world.IncludeMissions[self.player]
+        total_required_locations *= self.world.IncludeMissions[self.player].value
 
         # Upgrades
         total_required_locations += 28
@@ -129,12 +127,12 @@ class SA2BWorld(World):
 
         #itempool += [self.create_item(ItemName.emblem)] * total_emblem_count
 
-        self.emblems_for_cannons_core = math.floor(total_emblem_count * (self.world.EmblemPercentageForCannonsCore[self.player] / 100.0))
+        self.emblems_for_cannons_core = math.floor(total_emblem_count * (self.world.EmblemPercentageForCannonsCore[self.player].value / 100.0))
 
         shuffled_region_list = list(range(30))
         emblem_requirement_list = list()
         self.world.random.shuffle(shuffled_region_list)
-        levels_per_gate = self.get_levels_per_gate() #30 / (self.world.NumberOfLevelGates[self.player] + 1)
+        levels_per_gate = self.get_levels_per_gate() #30 / (self.world.NumberOfLevelGates[self.player].value + 1)
 
         check_for_impossible_shuffle(shuffled_region_list, math.ceil(levels_per_gate[0]), self.world)
         levels_added_to_gate = 0
@@ -150,8 +148,8 @@ class SA2BWorld(World):
             total_levels_added += 1
             if levels_added_to_gate >= levels_per_gate[current_gate]:
                 current_gate += 1
-                if current_gate > self.world.NumberOfLevelGates[self.player]:
-                    current_gate = self.world.NumberOfLevelGates[self.player];
+                if current_gate > self.world.NumberOfLevelGates[self.player].value:
+                    current_gate = self.world.NumberOfLevelGates[self.player].value;
                 else:
                     current_gate_emblems = max(math.floor(total_emblem_count * math.pow(total_levels_added / 30.0, 2.0)), current_gate)
                     gates.append(LevelGate(current_gate_emblems))
