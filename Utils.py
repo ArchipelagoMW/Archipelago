@@ -263,8 +263,7 @@ def get_default_options() -> dict:
         "minecraft_options": {
             "forge_directory": "Minecraft Forge server",
             "max_heap_size": "2G",
-            "forge_version": "1.18.2-40.1.0",
-            "java_version": "17"
+            "release_channel": "release"
         },
         "oot_options": {
             "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
