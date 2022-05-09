@@ -495,8 +495,22 @@ def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P
         return f"{value:0.3f} {power_labels[n]}"
 
 
-def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str]) -> typing.List[typing.Tuple[str, int]]:
-    return sorted(
-        map(lambda candidate: (candidate, int(100*jellyfish.jaro_winkler_similarity(input_word, candidate))), wordlist),
-        key=lambda element: element[1],
-        reverse=True)
+def get_fuzzy_ratio(word1: str, word2: str) -> float:
+    return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
+            / max(len(word1), len(word2)))
+
+
+def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: typing.Optional[int] = None) \
+        -> typing.List[typing.Tuple[str, int]]:
+    limit: int = limit if limit else len(wordlist)
+    return list(
+        map(
+            lambda container: (container[0], int(container[1]*100)),  # convert up to limit to int %
+            sorted(
+                map(lambda candidate:
+                    (candidate,  get_fuzzy_ratio(input_word, candidate)),
+                    wordlist),
+                key=lambda element: element[1],
+                reverse=True)[0:limit]
+        )
+    )

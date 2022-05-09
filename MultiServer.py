@@ -905,7 +905,7 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
 
 
 def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bool, str]:
-    picks = Utils.get_fuzzy_results(input_text, possible_answers)
+    picks = Utils.get_fuzzy_results(input_text, possible_answers, limit=2)
     if len(picks) > 1:
         dif = picks[0][1] - picks[1][1]
         if picks[0][1] == 100:
