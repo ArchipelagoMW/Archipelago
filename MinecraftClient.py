@@ -279,6 +279,10 @@ if __name__ == '__main__':
                         help="specify java version.")
     parser.add_argument('--forge', '-f', metavar='1.18.2-40.1.0', dest='forge', type=str, default=False, action='store',
                         help="specify forge version. (Minecraft Version-Forge Version)")
+    parser.add_argument('--java', '-j', metavar='17', dest='java', type=str, default=False, action='store',
+                        help="specify java version.")
+    parser.add_argument('--forge', '-f', metavar='1.18.2-40.1.0', dest='forge', type=str, default=False, action='store',
+                        help="specify forge version. (Minecraft Version-Forge Version)")
 
     args = parser.parse_args()
     apmc_file = os.path.abspath(args.apmc_file) if args.apmc_file else None
