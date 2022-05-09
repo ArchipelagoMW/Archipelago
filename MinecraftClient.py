@@ -272,7 +272,6 @@ def is_correct_forge(forge_dir) -> bool:
     return False
 
 
-
 if __name__ == '__main__':
     Utils.init_logging("MinecraftClient")
     parser = argparse.ArgumentParser()
