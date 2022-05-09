@@ -626,7 +626,7 @@ class MyGameWorld(World):
     # ...
     def set_rules(self):
         set_rule(self.world.get_location("A Door", self.player),
-                 lamda state: state._myworld_has_key(self.world, self.player))
+                 lamda state: state._mygame_has_key(self.world, self.player))
 ```
 
 ### Generate Output
