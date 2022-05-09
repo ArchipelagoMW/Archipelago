@@ -266,6 +266,13 @@ def get_minecraft_versions(version, release_channel="release"):
         logging.error(f"No compatible mod version found for client version {version}.")
 
 
+def is_correct_forge(forge_dir) -> bool:
+    if os.path.isdir(os.path.join(forge_dir, "libraries", "net", "minecraftforge", "forge", forge_version)):
+        return True
+    return False
+
+
+
 if __name__ == '__main__':
     Utils.init_logging("MinecraftClient")
     parser = argparse.ArgumentParser()
@@ -274,10 +281,6 @@ if __name__ == '__main__':
                         help="Download and install Java and the Forge server. Does not launch the client afterwards.")
     parser.add_argument('--release_channel', '-r', dest="channel", type=str, action='store',
                         help="Specify release channel to use.")
-    parser.add_argument('--java', '-j', metavar='17', dest='java', type=str, default=False, action='store',
-                        help="specify java version.")
-    parser.add_argument('--forge', '-f', metavar='1.18.2-40.1.0', dest='forge', type=str, default=False, action='store',
-                        help="specify forge version. (Minecraft Version-Forge Version)")
     parser.add_argument('--java', '-j', metavar='17', dest='java', type=str, default=False, action='store',
                         help="specify java version.")
     parser.add_argument('--forge', '-f', metavar='1.18.2-40.1.0', dest='forge', type=str, default=False, action='store',
@@ -318,14 +321,16 @@ if __name__ == '__main__':
     if apmc_data is None:
         raise FileNotFoundError(f"APMC file does not exist or is inaccessible at the given location ({apmc_file})")
 
-    if not os.path.isdir(java_dir) and is_windows:
-        if prompt_yes_no("Did not find java directory. Download and install java now?"):
-            download_java(java_version)
-        if not os.path.isdir(java_dir):
-            raise NotADirectoryError(f"Path {java_dir} does not exist or could not be accessed.")
+    if is_windows:
+        if java_dir is None or not os.path.isdir(java_dir):
+            if prompt_yes_no("Did not find java directory. Download and install java now?"):
+                download_java(java_version)
+                java_dir = find_jdk_dir(java_version)
+            if java_dir is None or not os.path.isdir(java_dir):
+                raise NotADirectoryError(f"Path {java_dir} does not exist or could not be accessed.")
 
-    if not os.path.isdir(forge_dir):
-        if prompt_yes_no("Did not find forge directory. Download and install forge now?"):
+    if not is_correct_forge(forge_dir):
+        if prompt_yes_no(f"Did not find forge version {forge_version} download and install it now?"):
             install_forge(forge_dir, forge_version, java_version)
         if not os.path.isdir(forge_dir):
             raise NotADirectoryError(f"Path {forge_dir} does not exist or could not be accessed.")
