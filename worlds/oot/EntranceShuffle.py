@@ -93,8 +93,8 @@ entrance_shuffle_table = [
                         ('Bottom of the Well -> Kakariko Village',                          { 'index': 0x02A6 })),
     ('Dungeon',         ('ZF Ice Ledge -> Ice Cavern Beginning',                            { 'index': 0x0088 }),
                         ('Ice Cavern Beginning -> ZF Ice Ledge',                            { 'index': 0x03D4 })),
-    ('Dungeon',         ('Gerudo Fortress -> Gerudo Training Grounds Lobby',                { 'index': 0x0008 }),
-                        ('Gerudo Training Grounds Lobby -> Gerudo Fortress',                { 'index': 0x03A8 })),
+    ('Dungeon',         ('Gerudo Fortress -> Gerudo Training Ground Lobby',                 { 'index': 0x0008 }),
+                        ('Gerudo Training Ground Lobby -> Gerudo Fortress',                 { 'index': 0x03A8 })),
 
     ('Interior',        ('Kokiri Forest -> KF Midos House',                                 { 'index': 0x0433 }),
                         ('KF Midos House -> Kokiri Forest',                                 { 'index': 0x0443 })),
@@ -251,8 +251,8 @@ entrance_shuffle_table = [
                         ('Graveyard Shield Grave -> Graveyard',                             { 'index': 0x035D })),
     ('Grave',           ('Graveyard -> Graveyard Heart Piece Grave',                        { 'index': 0x031C }),
                         ('Graveyard Heart Piece Grave -> Graveyard',                        { 'index': 0x0361 })),
-    ('Grave',           ('Graveyard -> Graveyard Composers Grave',                          { 'index': 0x002D }),
-                        ('Graveyard Composers Grave -> Graveyard',                          { 'index': 0x050B })),
+    ('Grave',           ('Graveyard -> Graveyard Royal Familys Tomb',                       { 'index': 0x002D }),
+                        ('Graveyard Royal Familys Tomb -> Graveyard',                       { 'index': 0x050B })),
     ('Grave',           ('Graveyard -> Graveyard Dampes Grave',                             { 'index': 0x044F }),
                         ('Graveyard Dampes Grave -> Graveyard',                             { 'index': 0x0359 })),
 

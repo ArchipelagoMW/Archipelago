@@ -51,11 +51,18 @@ class SMZ3World(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
 
+    # first added for 0.2.6
+    required_client_version = (0, 2, 6)
+
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         self.locations = {}
         self.unreachable = []
         super().__init__(world, player)
+
+    @classmethod
+    def stage_assert_generate(cls, world):
+        base_combined_rom = get_base_rom_bytes()
 
     def generate_early(self):
         config = Config({})
@@ -134,10 +141,6 @@ class SMZ3World(World):
             exit = Entrance(self.player, 'Menu' + "->" + region.Name, startRegion)
             startRegion.exits.append(exit)
             exit.connect(currentRegion)
-
-    def get_required_client_version(self):
-        # first added for 0.2.6
-        return max(super(SMZ3World, self).get_required_client_version(), (0, 2, 6))
 
     def apply_sm_custom_sprite(self):
         itemSprites = ["off_world_prog_item.bin", "off_world_item.bin"]
@@ -290,7 +293,6 @@ class SMZ3World(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             payload = multidata["connect_names"][self.world.player_name[self.player]]
             multidata["connect_names"][new_name] = payload
-            del (multidata["connect_names"][self.world.player_name[self.player]])
 
     def fill_slot_data(self): 
         slot_data = {}

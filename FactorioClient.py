@@ -9,6 +9,9 @@ import sys
 import time
 import random
 
+import ModuleUpdate
+ModuleUpdate.update()
+
 import factorio_rcon
 import colorama
 import asyncio
@@ -118,8 +121,8 @@ class FactorioContext(CommonContext):
                     gained = int(args["original_value"] - args["value"])
                     gained_text = Utils.format_SI_prefix(gained) + "J"
                     if gained:
-                        logger.info(f"EnergyLink: Received {gained_text}. "
-                                    f"{Utils.format_SI_prefix(args['value'])}J remaining.")
+                        logger.debug(f"EnergyLink: Received {gained_text}. "
+                                     f"{Utils.format_SI_prefix(args['value'])}J remaining.")
                         self.rcon_client.send_command(f"/ap-energylink {gained}")
 
 
@@ -184,7 +187,7 @@ async def game_watcher(ctx: FactorioContext):
                                 }]))
                                 ctx.rcon_client.send_command(
                                     f"/ap-energylink -{value}")
-                                logger.info(f"EnergyLink: Sent {Utils.format_SI_prefix(value)}J")
+                                logger.debug(f"EnergyLink: Sent {Utils.format_SI_prefix(value)}J")
 
             await asyncio.sleep(0.1)
 

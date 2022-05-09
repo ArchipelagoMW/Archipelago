@@ -1,5 +1,6 @@
 import argparse
-import os, sys
+import os
+import sys
 import re
 import atexit
 import shutil

@@ -34,6 +34,9 @@ class TestGenerateMain(unittest.TestCase):
         os.chdir(self.run_dir)
         self.output_tempdir = TemporaryDirectory(prefix='AP_out_')
 
+    def tearDown(self):
+        self.output_tempdir.cleanup()
+
     def test_generate_absolute(self):
         sys.argv = [sys.argv[0], '--seed', '0',
                     '--player_files_path', str(self.abs_input_dir),

@@ -28,7 +28,7 @@ class Version(typing.NamedTuple):
 __version__ = "0.3.2"
 version_tuple = tuplize_version(__version__)
 
-from yaml import load, dump, SafeLoader
+from yaml import load, load_all, dump, SafeLoader
 
 try:
     from yaml import CLoader as Loader
@@ -36,41 +36,44 @@ except ImportError:
     from yaml import Loader
 
 
-def int16_as_bytes(value):
+def int16_as_bytes(value: int) -> typing.List[int]:
     value = value & 0xFFFF
     return [value & 0xFF, (value >> 8) & 0xFF]
 
 
-def int32_as_bytes(value):
+def int32_as_bytes(value: int) -> typing.List[int]:
     value = value & 0xFFFFFFFF
     return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
 
 
-def pc_to_snes(value):
+def pc_to_snes(value: int) -> int:
     return ((value << 1) & 0x7F0000) | (value & 0x7FFF) | 0x8000
 
 
-def snes_to_pc(value):
+def snes_to_pc(value: int) -> int:
     return ((value & 0x7F0000) >> 1) | (value & 0x7FFF)
 
 
-def cache_argsless(function):
-    if function.__code__.co_argcount:
-        raise Exception("Can only cache 0 argument functions with this cache.")
+RetType = typing.TypeVar("RetType")
 
-    result = sentinel = object()
 
-    def _wrap():
+def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[], RetType]:
+    assert not function.__code__.co_argcount, "Can only cache 0 argument functions with this cache."
+
+    sentinel = object()
+    result: typing.Union[object, RetType] = sentinel
+
+    def _wrap() -> RetType:
         nonlocal result
         if result is sentinel:
             result = function()
-        return result
+        return typing.cast(RetType, result)
 
     return _wrap
 
 
 def is_frozen() -> bool:
-    return getattr(sys, 'frozen', False)
+    return typing.cast(bool, getattr(sys, 'frozen', False))
 
 
 def local_path(*path: str) -> str:
@@ -159,6 +162,7 @@ class UniqueKeyLoader(SafeLoader):
 
 
 parse_yaml = functools.partial(load, Loader=UniqueKeyLoader)
+parse_yamls = functools.partial(load_all, Loader=UniqueKeyLoader)
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
 
@@ -416,7 +420,7 @@ loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': log
 
 
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
-                 log_format: str = "[%(name)s]: %(message)s", exception_logger: str = ""):
+                 log_format: str = "[%(name)s at %(asctime)s]: %(message)s", exception_logger: str = ""):
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
     os.makedirs(log_folder, exist_ok=True)
@@ -477,7 +481,8 @@ class VersionException(Exception):
     pass
 
 
-def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")):
+# noinspection PyPep8Naming
+def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")) -> str:
     n = 0
 
     while value > power:

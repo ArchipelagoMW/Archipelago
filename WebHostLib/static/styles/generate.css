@@ -6,7 +6,7 @@
 }
 
 #generate-game{
-    width: 700px;
+    width: 990px;
     min-height: 360px;
     text-align: center;
 }
@@ -25,9 +25,26 @@
     margin-bottom: 1rem;
 }
 
+#generate-game-tables-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.table-wrapper select {
+    width: 200px;
+}
+
+.table-wrapper input:not([type]){
+    width: 200px;
+}
+
 #generate-game-form-wrapper table td{
     text-align: left;
     padding-right: 0.5rem;
+    vertical-align: top;
+    width: 230px;
 }
 
 #generate-form-button-row{

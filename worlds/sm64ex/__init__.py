@@ -5,7 +5,7 @@ from .Items import item_table, cannon_item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options
 from .Rules import set_rules
-from .Regions import create_regions
+from .Regions import create_regions, sm64courses
 from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld
 from ..AutoWorld import World
 
@@ -39,6 +39,13 @@ class SM64World(World):
     def set_rules(self):
         self.area_connections = {}
         set_rules(self.world, self.player, self.area_connections)
+        if self.topology_present:
+            # Write area_connections to spoiler log
+            for painting_id, course_id in self.area_connections.items():
+                self.world.spoiler.set_entrance(
+                    sm64courses[painting_id] + " Painting",
+                    sm64courses[course_id],
+                    'entrance', self.player)
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
@@ -95,7 +102,7 @@ class SM64World(World):
             return
         data = {
             "slot_data": self.fill_slot_data(),
-            "location_to_item": {self.location_name_to_id[i] : item_table[self.world.get_location(i, self.player).item.name] for i in self.location_name_to_id},
+            "location_to_item": {self.location_name_to_id[i.name] : item_table[i.item.name] for i in self.world.get_locations()},
             "data_package": {
                 "data": {
                     "games": {
@@ -110,3 +117,12 @@ class SM64World(World):
         filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_file_safe_player_name(self.player)}.apsm64ex"
         with open(os.path.join(output_directory, filename), 'w') as f:
             json.dump(data, f)
+
+    def modify_multidata(self, multidata):
+        if self.topology_present:
+            er_hint_data = {}
+            for painting_id, course_id in self.area_connections.items():
+                region = self.world.get_region(sm64courses[course_id], self.player)
+                for location in region.locations:
+                    er_hint_data[location.address] = sm64courses[painting_id]
+            multidata['er_hint_data'][self.player] = er_hint_data

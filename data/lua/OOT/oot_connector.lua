@@ -1546,7 +1546,7 @@ local player_names_address  = coop_context + 20
 local player_name_length    = 8 -- 8 bytes
 local rom_name_location     = player_names_address + 0x800
 
-local master_quest_table_address = rando_context + 0xB220
+local master_quest_table_address = rando_context + 0xB5A8
 
 local save_context_addr = 0x11A5D0
 local internal_count_addr = save_context_addr + 0x90
