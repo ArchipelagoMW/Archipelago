@@ -72,7 +72,6 @@ def replace_apmc_files(forge_dir, apmc_file):
 
 def read_apmc_file(apmc_file):
     from base64 import b64decode
-    import json
 
     with open(apmc_file, 'r') as f:
         return json.loads(b64decode(f.read()))
