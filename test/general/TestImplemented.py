@@ -1,10 +1,10 @@
 import unittest
-from worlds.AutoWorld import AutoWorldRegister, World
+from worlds.AutoWorld import AutoWorldRegister
 
 from . import setup_default_world
 
 
-class TestIDs(unittest.TestCase):
+class TestImplemented(unittest.TestCase):
     def testCompletionCondition(self):
         """Ensure a completion condition is set that has requirements."""
         for gamename, world_type in AutoWorldRegister.world_types.items():
