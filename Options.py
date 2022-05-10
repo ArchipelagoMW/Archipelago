@@ -5,7 +5,7 @@ import numbers
 import typing
 import random
 
-from schema import Schema, And, Or
+from schema import Schema, And, Or, Optional
 from thefuzz import process as fuzzy_process
 
 
@@ -638,6 +638,7 @@ class ItemLinks(OptionList):
         {
             "name": And(str, len),
             "item_pool": [And(str, len)],
+            Optional("exclude"): [And(str, len)],
             "replacement_item": Or(And(str, len), None)
         }
     ])
@@ -653,6 +654,11 @@ class ItemLinks(OptionList):
                 if item_name not in world.item_names and item_name not in world.item_name_groups:
                     raise Exception(f"Item {item_name} from item link {link} "
                                     f"is not a valid item name from {world.game}")
+            if "exclude" in link:
+                for item_name in link["exclude"]:
+                    if item_name not in world.item_names and item_name not in world.item_name_groups:
+                        raise Exception(f"Item {item_name} from item link {link} "
+                                        f"is not a valid item name from {world.game}")
             if link["replacement_item"] and link["replacement_item"] not in world.item_names:
                 raise Exception(f"Item {link['replacement_item']} from item link {link} "
                                 f"is not a valid item name from {world.game}")

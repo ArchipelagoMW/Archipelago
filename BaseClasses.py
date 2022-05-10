@@ -218,12 +218,14 @@ class MultiWorld():
                         raise Exception(f"Cannot ItemLink across games. Link: {item_link['name']}")
                     item_links[item_link["name"]]["players"][player] = item_link["replacement_item"]
                     item_links[item_link["name"]]["item_pool"] &= set(item_link["item_pool"])
+                    item_links[item_link["name"]]["exclude"] |= set(item_link.get("exclude", []))
                 else:
                     if item_link["name"] in self.player_name.values():
                         raise Exception(f"Cannot name a ItemLink group the same as a player ({item_link['name']}) ({self.get_player_name(player)}).")
                     item_links[item_link["name"]] = {
                         "players": {player: item_link["replacement_item"]},
                         "item_pool": set(item_link["item_pool"]),
+                        "exclude": set(item_link.get("exclude", [])),
                         "game": self.game[player]
                     }
 
@@ -232,6 +234,8 @@ class MultiWorld():
             pool = set()
             for item in item_link["item_pool"]:
                 pool |= current_item_name_groups.get(item, {item})
+            for item in item_link["exclude"]:
+                pool -= current_item_name_groups.get(item, {item})
             item_link["item_pool"] = pool
 
         for group_name, item_link in item_links.items():
