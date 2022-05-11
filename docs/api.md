@@ -341,7 +341,7 @@ from .Options import mygame_options  # the options we defined earlier
 from .Items import mygame_items  # data used below to add items to the World
 from .Locations import mygame_locations  # same as above
 from ..AutoWorld import World
-from BaseClasses import Region, Location, Entrance, Item
+from BaseClasses import Region, Location, Entrance, Item, RegionType
 from Utils import get_options, output_path
 
 class MyGameItem(Item):  # or from Items import MyGameItem
@@ -489,20 +489,20 @@ def create_items(self) -> None:
 def create_regions(self) -> None:
     # Add regions to the multiworld. "Menu" is the required starting point.
     # Arguments to Region() are name, type, human_readable_name, player, world
-    r = Region("Menu", None, "Menu", self.player, self.world)
+    r = Region("Menu", RegionType.Generic, "Menu", self.player, self.world)
     # Set Region.exits to a list of entrances that are reachable from region
     r.exits = [Entrance(self.player, "New game", r)]  # or use r.exits.append
     # Append region to MultiWorld's regions
     self.world.regions.append(r)  # or use += [r...]
     
-    r = Region("Main Area", None, "Main Area", self.player, self.world)
+    r = Region("Main Area", RegionType.Generic, "Main Area", self.player, self.world)
     # Add main area's locations to main area (all but final boss)
     r.locations = [MyGameLocation(self.player, location.name,
                    self.location_name_to_id[location.name], r)]
     r.exits = [Entrance(self.player, "Boss Door", r)]
     self.world.regions.append(r)
     
-    r = Region("Boss Room", None, "Boss Room", self.player, self.world)
+    r = Region("Boss Room", RegionType.Generic, "Boss Room", self.player, self.world)
     # add event to Boss Room
     r.locations = [MyGameLocation(self.player, "Final Boss", None, r)]
     self.world.regions.append(r)
@@ -626,7 +626,7 @@ class MyGameWorld(World):
     # ...
     def set_rules(self):
         set_rule(self.world.get_location("A Door", self.player),
-                 lamda state: state._myworld_has_key(self.world, self.player))
+                 lamda state: state._mygame_has_key(self.world, self.player))
 ```
 
 ### Generate Output

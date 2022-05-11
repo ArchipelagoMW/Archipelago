@@ -6,7 +6,7 @@ import logging
 import json
 import functools
 from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable
+from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
 import typing  # this can go away when Python 3.8 support is dropped
 import secrets
 import random
@@ -1460,6 +1460,19 @@ class Spoiler():
 
                 outfile.write('\n'.join(path_listings))
             AutoWorld.call_all(self.world, "write_spoiler_end", outfile)
+
+
+class Tutorial(NamedTuple):
+    """Class to build website tutorial pages from a .md file in the world's /docs folder. Order is as follows.
+    Name of the tutorial as it will appear on the site. Concise description covering what the guide will entail.
+    Language the guide is written in. Name of the file ex 'setup_en.md'. Name of the link on the site; game name is
+    filled automatically so 'setup/en' etc. Author or authors."""
+    tutorial_name: str
+    description: str
+    language: str
+    file_name: str
+    link: str
+    author: List[str]
 
 
 seeddigits = 20

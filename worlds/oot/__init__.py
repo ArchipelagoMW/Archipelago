@@ -27,11 +27,11 @@ from .HintList import getRequiredHints
 from .SaveContext import SaveContext
 
 from Utils import get_options, output_path
-from BaseClasses import MultiWorld, CollectionState, RegionType
+from BaseClasses import MultiWorld, CollectionState, RegionType, Tutorial
 from Options import Range, Toggle, OptionList
 from Fill import fill_restrictive, FillError
 from worlds.generic.Rules import exclusion_rules
-from ..AutoWorld import World, AutoLogicRegister
+from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
 location_id_offset = 67000
 
@@ -66,6 +66,28 @@ class OOTCollectionState(metaclass=AutoLogicRegister):
         return ret
 
 
+class OOTWeb(WebWorld):
+    setup = Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago Ocarina of Time software on your computer.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Edos"]
+    )
+
+    setup_es = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        setup.author
+    )
+
+    tutorials = [setup, setup_es]
+
+
 class OOTWorld(World):
     """
     The Legend of Zelda: Ocarina of Time is a 3D action/adventure game. Travel through Hyrule in two time periods, 
@@ -80,6 +102,7 @@ class OOTWorld(World):
     location_name_to_id = location_name_to_id
     remote_items: bool = False
     remote_start_inventory: bool = False
+    web = OOTWeb()
 
     data_version = 2
 
