@@ -21,7 +21,7 @@
 
 5. Unpack the Archipelago Mod into this folder, so that `/mods/SA2B_Archipelago` is a valid path.
 
-6. From the SA2B_Archipelago folder, copy the `APCpp.dll`, move up two folders to where the sonic2app.exe is, and paste the `APCpp.dll`
+6. In the SA2B_Archipelago folder, run the `CopyAPCppDLL.bat` script (a window will very quickly pop up and go away).
 
 7. Launch the `SA2ModManager.exe` and make sure the SA2B_Archipelago mod is listed and enabled.
 
