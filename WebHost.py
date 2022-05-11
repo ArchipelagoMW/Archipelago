@@ -57,7 +57,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
             os.makedirs(os.path.dirname(Utils.local_path(target_path, file)), exist_ok=True)
             shutil.copyfile(Utils.local_path(source_path, file), Utils.local_path(target_path, file))
         # build a json tutorial dict per game
-        game_data = {'gameTitle': game, 'tutorials': [{}]}
+        game_data = {'gameTitle': game, 'tutorials': []}
         for tutorial in world.web.tutorials:
             # build dict for the json file
             current_tutorial = {
@@ -70,15 +70,14 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
                     'authors': tutorial.author
                 }]
             }
-            # probably a cleaner way to do this but this adds tutorials covering the same topics of different languages together
-            added: bool = False
+
             # check if the name of the current guide exists already
             for guide in game_data['tutorials']:
-                if guide.values():
-                    if tutorial.tutorial_name in guide['name']:
-                        guide['files'].append(current_tutorial['files'][0])
-                        added = True
-            if not added:
+                if guide and tutorial.tutorial_name == guide['name']:
+                    guide['files'].append(current_tutorial['files'][0])
+                    added = True
+                    break
+            else:
                 game_data['tutorials'].append(current_tutorial)
 
         data.append(game_data)
