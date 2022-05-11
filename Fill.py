@@ -404,7 +404,9 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
                     items_to_replace: typing.List[Location] = []
                     for player in balancing_players:
                         locations_to_test = unlocked_locations[player]
-                        items_to_test = candidate_items[player]
+                        items_to_test = list(candidate_items[player])
+                        items_to_test.sort()
+                        world.random.shuffle(items_to_test)
                         while items_to_test:
                             testing = items_to_test.pop()
                             reducing_state = state.copy()
