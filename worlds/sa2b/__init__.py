@@ -51,7 +51,7 @@ class SA2BWorld(World):
     game: str = "Sonic Adventure 2 Battle"
     options = sa2b_options
     topology_present = False
-    data_version = 0
+    data_version = 1
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
