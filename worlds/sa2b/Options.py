@@ -25,7 +25,7 @@ class EmblemPercentageForCannonsCore(Range):
     """
     display_name = "Emblem Percentage for Cannons Core"
     range_start = 0
-    range_end = 80
+    range_end = 75
     default = 50
 
 
