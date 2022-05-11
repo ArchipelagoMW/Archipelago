@@ -14,6 +14,21 @@ from ..AutoWorld import World
 import Patch
 
 
+class SA2BWeb(WebWorld):
+    theme = "partyTime"
+
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Sonic Adventure 2: Battle randomizer connected to an Archipelago Multiworld.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["RaspberrySpaceJam", "PoryGone"]
+    )
+    
+    tutorials = [setup_en]
+
+
 def check_for_impossible_shuffle(shuffled_levels: typing.List[int], gate_0_range: int, world: MultiWorld):
     blacklist_level_count = 0
 
