@@ -80,7 +80,7 @@ description: Template Name
 name: YourName
 game: Minecraft
 accessibility: locations
-progression_balancing: off
+progression_balancing: 0
 advancement_goal:
   few: 0
   normal: 1
