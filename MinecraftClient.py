@@ -34,8 +34,8 @@ def prompt_yes_no(prompt):
             print('Please respond with "y" or "n".')
 
 
-# Create mods folder if needed; find AP randomizer jar; return None if not found.
 def find_ap_randomizer_jar(forge_dir):
+    """Create mods folder if needed; find AP randomizer jar; return None if not found."""
     mods_dir = os.path.join(forge_dir, 'mods')
     if os.path.isdir(mods_dir):
         for entry in os.scandir(mods_dir):
@@ -49,8 +49,8 @@ def find_ap_randomizer_jar(forge_dir):
         return None
 
 
-# Create APData folder if needed; clean .apmc files from APData; copy given .apmc into directory.
 def replace_apmc_files(forge_dir, apmc_file):
+    """Create APData folder if needed; clean .apmc files from APData; copy given .apmc into directory."""
     if apmc_file is None:
         return
     apdata_dir = os.path.join(forge_dir, 'APData')
@@ -77,8 +77,8 @@ def read_apmc_file(apmc_file):
         return json.loads(b64decode(f.read()))
 
 
-# Check mod version, download new mod from GitHub releases page if needed. 
 def update_mod(forge_dir, minecraft_version: str, get_prereleases=False):
+    """Check mod version, download new mod from GitHub releases page if needed. """
     ap_randomizer = find_ap_randomizer_jar(forge_dir)
 
     client_releases_endpoint = "https://api.github.com/repos/KonoTyran/Minecraft_AP_Randomizer/releases"
@@ -122,8 +122,8 @@ def update_mod(forge_dir, minecraft_version: str, get_prereleases=False):
             sys.exit(0)
 
 
-# Check if the EULA is agreed to, and prompt the user to read and agree if necessary.
 def check_eula(forge_dir):
+    """Check if the EULA is agreed to, and prompt the user to read and agree if necessary."""
     eula_path = os.path.join(forge_dir, "eula.txt")
     if not os.path.isfile(eula_path):
         # Create eula.txt
@@ -146,15 +146,16 @@ def check_eula(forge_dir):
                 sys.exit(0)
 
 
-# get the specified jdk directory
 def find_jdk_dir(version: str) -> str:
+    """get the specified versions jdk directory"""
     for entry in os.listdir():
         if os.path.isdir(entry) and entry.startswith(f"jdk{version}"):
             return os.path.abspath(entry)
 
 
-# get the java exe location
 def find_jdk(version: str) -> str:
+    """get the java exe location"""
+
     if is_windows:
         jdk = find_jdk_dir(version)
         jdk_exe = os.path.join(jdk, "bin", "java.exe")
@@ -167,8 +168,9 @@ def find_jdk(version: str) -> str:
         return jdk_exe
 
 
-# Download Corretto (Amazon JDK)
 def download_java(java: str):
+    """Download Corretto (Amazon JDK)"""
+
     jdk = find_jdk_dir(java)
     if jdk is not None:
         print(f"Removing old JDK...")
@@ -191,8 +193,9 @@ def download_java(java: str):
             sys.exit(0)
 
 
-# download and install forge
 def install_forge(directory: str, forge_version: str, java_version: str):
+    """download and install forge"""
+
     jdk = find_jdk(java_version)
     if jdk is not None:
         print(f"Downloading Forge {forge_version}...")
