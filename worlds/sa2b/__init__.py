@@ -2,7 +2,7 @@ import os
 import typing
 import math
 
-from BaseClasses import Item, MultiWorld
+from BaseClasses import Item, MultiWorld, Tutorial
 from .Items import SA2BItem, ItemData, item_table, upgrades_table
 from .Locations import SA2BLocation, all_locations, setup_locations
 from .Options import sa2b_options
@@ -10,7 +10,7 @@ from .Regions import create_regions, shuffleable_regions, connect_regions, Level
     gate_0_blacklist_regions
 from .Rules import set_rules
 from .Names import ItemName, LocationName
-from ..AutoWorld import World
+from ..AutoWorld import WebWorld, World
 import Patch
 
 
@@ -59,6 +59,7 @@ class SA2BWorld(World):
     music_map: typing.Dict[int, int]
     emblems_for_cannons_core: int
     region_emblem_map: typing.Dict[int, int]
+    web = SA2BWeb()
 
     def _get_slot_data(self):
         return {
