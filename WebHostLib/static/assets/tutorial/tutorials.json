@@ -481,25 +481,6 @@
     ]
   },
   {
-    "gameTitle": "Sonic Adventure 2 Battle",
-    "tutorials": [
-      {
-        "name": "Multiworld Setup Guide",
-        "description": "A guide to setting up Sonic Adventure 2 Battle for Archipelago.",
-        "files": [
-          {
-            "language": "English",
-            "filename": "Sonic Adventure 2 Battle/setup_en.md",
-            "link": "Sonic Adventure 2 Battle/setup/en",
-            "authors": [
-              "RaspberrySpaceJam"
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
     "gameTitle": "Super Mario 64 EX",
     "tutorials": [
       {
@@ -614,7 +595,7 @@
     ]
   },
   {
-    "gameTitle": "Sonic Adventure 2: Battle",
+    "gameTitle": "Sonic Adventure 2 Battle",
     "tutorials": [
       {
         "name": "Multiworld Setup Guide",
@@ -625,7 +606,7 @@
             "filename": "Sonic Adventure 2 Battle/setup_en.md",
             "link": "Sonic Adventure 2 Battle/setup/en",
             "authors": [
-              "RaspberrySpaceJam, Porygone"
+              "RaspberrySpaceJam, PoryGone"
             ]
           }
         ]
