@@ -86,7 +86,6 @@ gate_0_whitelist_regions = [
 
 
 def create_regions(world, player: int, active_locations):
-
     menu_region = create_region(world, player, active_locations, 'Menu', None, None)
     gate_0_region = create_region(world, player, active_locations, 'Gate 0', None, None)
     gate_1_region = create_region(world, player, active_locations, 'Gate 1', None, None)
@@ -94,7 +93,7 @@ def create_regions(world, player: int, active_locations):
     gate_3_region = create_region(world, player, active_locations, 'Gate 3', None, None)
     gate_4_region = create_region(world, player, active_locations, 'Gate 4', None, None)
     gate_5_region = create_region(world, player, active_locations, 'Gate 5', None, None)
-    
+
     city_escape_region_locations = [
         LocationName.city_escape_1,
         LocationName.city_escape_2,
@@ -103,8 +102,9 @@ def create_regions(world, player: int, active_locations):
         LocationName.city_escape_5,
         LocationName.city_escape_upgrade,
     ]
-    city_escape_region = create_region(world, player, active_locations, LocationName.city_escape_region, city_escape_region_locations, None)
-    
+    city_escape_region = create_region(world, player, active_locations, LocationName.city_escape_region,
+                                       city_escape_region_locations, None)
+
     metal_harbor_region_locations = [
         LocationName.metal_harbor_1,
         LocationName.metal_harbor_2,
@@ -113,8 +113,9 @@ def create_regions(world, player: int, active_locations):
         LocationName.metal_harbor_5,
         LocationName.metal_harbor_upgrade,
     ]
-    metal_harbor_region = create_region(world, player, active_locations, LocationName.metal_harbor_region, metal_harbor_region_locations, None)
-    
+    metal_harbor_region = create_region(world, player, active_locations, LocationName.metal_harbor_region,
+                                        metal_harbor_region_locations, None)
+
     green_forest_region_locations = [
         LocationName.green_forest_1,
         LocationName.green_forest_2,
@@ -123,8 +124,9 @@ def create_regions(world, player: int, active_locations):
         LocationName.green_forest_5,
         LocationName.green_forest_upgrade,
     ]
-    green_forest_region = create_region(world, player, active_locations, LocationName.green_forest_region, green_forest_region_locations, None)
-    
+    green_forest_region = create_region(world, player, active_locations, LocationName.green_forest_region,
+                                        green_forest_region_locations, None)
+
     pyramid_cave_region_locations = [
         LocationName.pyramid_cave_1,
         LocationName.pyramid_cave_2,
@@ -133,7 +135,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.pyramid_cave_5,
         LocationName.pyramid_cave_upgrade,
     ]
-    pyramid_cave_region = create_region(world, player, active_locations, LocationName.pyramid_cave_region, pyramid_cave_region_locations, None)
+    pyramid_cave_region = create_region(world, player, active_locations, LocationName.pyramid_cave_region,
+                                        pyramid_cave_region_locations, None)
 
     crazy_gadget_region_locations = [
         LocationName.crazy_gadget_1,
@@ -143,7 +146,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.crazy_gadget_5,
         LocationName.crazy_gadget_upgrade,
     ]
-    crazy_gadget_region = create_region(world, player, active_locations, LocationName.crazy_gadget_region, crazy_gadget_region_locations, None)
+    crazy_gadget_region = create_region(world, player, active_locations, LocationName.crazy_gadget_region,
+                                        crazy_gadget_region_locations, None)
 
     final_rush_region_locations = [
         LocationName.final_rush_1,
@@ -153,7 +157,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.final_rush_5,
         LocationName.final_rush_upgrade,
     ]
-    final_rush_region = create_region(world, player, active_locations, LocationName.final_rush_region, final_rush_region_locations, None)
+    final_rush_region = create_region(world, player, active_locations, LocationName.final_rush_region,
+                                      final_rush_region_locations, None)
 
     prison_lane_region_locations = [
         LocationName.prison_lane_1,
@@ -163,7 +168,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.prison_lane_5,
         LocationName.prison_lane_upgrade,
     ]
-    prison_lane_region = create_region(world, player, active_locations, LocationName.prison_lane_region, prison_lane_region_locations, None)
+    prison_lane_region = create_region(world, player, active_locations, LocationName.prison_lane_region,
+                                       prison_lane_region_locations, None)
 
     mission_street_region_locations = [
         LocationName.mission_street_1,
@@ -173,7 +179,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.mission_street_5,
         LocationName.mission_street_upgrade,
     ]
-    mission_street_region = create_region(world, player, active_locations, LocationName.mission_street_region, mission_street_region_locations, None)
+    mission_street_region = create_region(world, player, active_locations, LocationName.mission_street_region,
+                                          mission_street_region_locations, None)
 
     route_101_region_locations = [
         LocationName.route_101_1,
@@ -182,7 +189,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.route_101_4,
         LocationName.route_101_5,
     ]
-    route_101_region = create_region(world, player, active_locations, LocationName.route_101_region, route_101_region_locations, None)
+    route_101_region = create_region(world, player, active_locations, LocationName.route_101_region,
+                                     route_101_region_locations, None)
 
     hidden_base_region_locations = [
         LocationName.hidden_base_1,
@@ -192,7 +200,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.hidden_base_5,
         LocationName.hidden_base_upgrade,
     ]
-    hidden_base_region = create_region(world, player, active_locations, LocationName.hidden_base_region, hidden_base_region_locations, None)
+    hidden_base_region = create_region(world, player, active_locations, LocationName.hidden_base_region,
+                                       hidden_base_region_locations, None)
 
     eternal_engine_region_locations = [
         LocationName.eternal_engine_1,
@@ -202,7 +211,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.eternal_engine_5,
         LocationName.eternal_engine_upgrade,
     ]
-    eternal_engine_region = create_region(world, player, active_locations, LocationName.eternal_engine_region, eternal_engine_region_locations, None)
+    eternal_engine_region = create_region(world, player, active_locations, LocationName.eternal_engine_region,
+                                          eternal_engine_region_locations, None)
 
     wild_canyon_region_locations = [
         LocationName.wild_canyon_1,
@@ -212,7 +222,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.wild_canyon_5,
         LocationName.wild_canyon_upgrade,
     ]
-    wild_canyon_region = create_region(world, player, active_locations, LocationName.wild_canyon_region, wild_canyon_region_locations, None)
+    wild_canyon_region = create_region(world, player, active_locations, LocationName.wild_canyon_region,
+                                       wild_canyon_region_locations, None)
 
     pumpkin_hill_region_locations = [
         LocationName.pumpkin_hill_1,
@@ -222,7 +233,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.pumpkin_hill_5,
         LocationName.pumpkin_hill_upgrade,
     ]
-    pumpkin_hill_region = create_region(world, player, active_locations, LocationName.pumpkin_hill_region, pumpkin_hill_region_locations, None)
+    pumpkin_hill_region = create_region(world, player, active_locations, LocationName.pumpkin_hill_region,
+                                        pumpkin_hill_region_locations, None)
 
     aquatic_mine_region_locations = [
         LocationName.aquatic_mine_1,
@@ -232,7 +244,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.aquatic_mine_5,
         LocationName.aquatic_mine_upgrade,
     ]
-    aquatic_mine_region = create_region(world, player, active_locations, LocationName.aquatic_mine_region, aquatic_mine_region_locations, None)
+    aquatic_mine_region = create_region(world, player, active_locations, LocationName.aquatic_mine_region,
+                                        aquatic_mine_region_locations, None)
 
     death_chamber_region_locations = [
         LocationName.death_chamber_1,
@@ -242,7 +255,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.death_chamber_5,
         LocationName.death_chamber_upgrade,
     ]
-    death_chamber_region = create_region(world, player, active_locations, LocationName.death_chamber_region, death_chamber_region_locations, None)
+    death_chamber_region = create_region(world, player, active_locations, LocationName.death_chamber_region,
+                                         death_chamber_region_locations, None)
 
     meteor_herd_region_locations = [
         LocationName.meteor_herd_1,
@@ -252,7 +266,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.meteor_herd_5,
         LocationName.meteor_herd_upgrade,
     ]
-    meteor_herd_region = create_region(world, player, active_locations, LocationName.meteor_herd_region, meteor_herd_region_locations, None)
+    meteor_herd_region = create_region(world, player, active_locations, LocationName.meteor_herd_region,
+                                       meteor_herd_region_locations, None)
 
     radical_highway_region_locations = [
         LocationName.radical_highway_1,
@@ -262,7 +277,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.radical_highway_5,
         LocationName.radical_highway_upgrade,
     ]
-    radical_highway_region = create_region(world, player, active_locations, LocationName.radical_highway_region, radical_highway_region_locations, None)
+    radical_highway_region = create_region(world, player, active_locations, LocationName.radical_highway_region,
+                                           radical_highway_region_locations, None)
 
     white_jungle_region_locations = [
         LocationName.white_jungle_1,
@@ -272,7 +288,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.white_jungle_5,
         LocationName.white_jungle_upgrade,
     ]
-    white_jungle_region = create_region(world, player, active_locations, LocationName.white_jungle_region, white_jungle_region_locations, None)
+    white_jungle_region = create_region(world, player, active_locations, LocationName.white_jungle_region,
+                                        white_jungle_region_locations, None)
 
     sky_rail_region_locations = [
         LocationName.sky_rail_1,
@@ -282,7 +299,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.sky_rail_5,
         LocationName.sky_rail_upgrade,
     ]
-    sky_rail_region = create_region(world, player, active_locations, LocationName.sky_rail_region, sky_rail_region_locations, None)
+    sky_rail_region = create_region(world, player, active_locations, LocationName.sky_rail_region,
+                                    sky_rail_region_locations, None)
 
     final_chase_region_locations = [
         LocationName.final_chase_1,
@@ -292,7 +310,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.final_chase_5,
         LocationName.final_chase_upgrade,
     ]
-    final_chase_region = create_region(world, player, active_locations, LocationName.final_chase_region, final_chase_region_locations, None)
+    final_chase_region = create_region(world, player, active_locations, LocationName.final_chase_region,
+                                       final_chase_region_locations, None)
 
     iron_gate_region_locations = [
         LocationName.iron_gate_1,
@@ -302,7 +321,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.iron_gate_5,
         LocationName.iron_gate_upgrade,
     ]
-    iron_gate_region = create_region(world, player, active_locations, LocationName.iron_gate_region, iron_gate_region_locations, None)
+    iron_gate_region = create_region(world, player, active_locations, LocationName.iron_gate_region,
+                                     iron_gate_region_locations, None)
 
     sand_ocean_region_locations = [
         LocationName.sand_ocean_1,
@@ -312,7 +332,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.sand_ocean_5,
         LocationName.sand_ocean_upgrade,
     ]
-    sand_ocean_region = create_region(world, player, active_locations, LocationName.sand_ocean_region, sand_ocean_region_locations, None)
+    sand_ocean_region = create_region(world, player, active_locations, LocationName.sand_ocean_region,
+                                      sand_ocean_region_locations, None)
 
     lost_colony_region_locations = [
         LocationName.lost_colony_1,
@@ -322,7 +343,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.lost_colony_5,
         LocationName.lost_colony_upgrade,
     ]
-    lost_colony_region = create_region(world, player, active_locations, LocationName.lost_colony_region, lost_colony_region_locations, None)
+    lost_colony_region = create_region(world, player, active_locations, LocationName.lost_colony_region,
+                                       lost_colony_region_locations, None)
 
     weapons_bed_region_locations = [
         LocationName.weapons_bed_1,
@@ -332,7 +354,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.weapons_bed_5,
         LocationName.weapons_bed_upgrade,
     ]
-    weapons_bed_region = create_region(world, player, active_locations, LocationName.weapons_bed_region, weapons_bed_region_locations, None)
+    weapons_bed_region = create_region(world, player, active_locations, LocationName.weapons_bed_region,
+                                       weapons_bed_region_locations, None)
 
     cosmic_wall_region_locations = [
         LocationName.cosmic_wall_1,
@@ -342,7 +365,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.cosmic_wall_5,
         LocationName.cosmic_wall_upgrade,
     ]
-    cosmic_wall_region = create_region(world, player, active_locations, LocationName.cosmic_wall_region, cosmic_wall_region_locations, None)
+    cosmic_wall_region = create_region(world, player, active_locations, LocationName.cosmic_wall_region,
+                                       cosmic_wall_region_locations, None)
 
     dry_lagoon_region_locations = [
         LocationName.dry_lagoon_1,
@@ -352,7 +376,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.dry_lagoon_5,
         LocationName.dry_lagoon_upgrade,
     ]
-    dry_lagoon_region = create_region(world, player, active_locations, LocationName.dry_lagoon_region, dry_lagoon_region_locations, None)
+    dry_lagoon_region = create_region(world, player, active_locations, LocationName.dry_lagoon_region,
+                                      dry_lagoon_region_locations, None)
 
     egg_quarters_region_locations = [
         LocationName.egg_quarters_1,
@@ -362,7 +387,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.egg_quarters_5,
         LocationName.egg_quarters_upgrade,
     ]
-    egg_quarters_region = create_region(world, player, active_locations, LocationName.egg_quarters_region, egg_quarters_region_locations, None)
+    egg_quarters_region = create_region(world, player, active_locations, LocationName.egg_quarters_region,
+                                        egg_quarters_region_locations, None)
 
     security_hall_region_locations = [
         LocationName.security_hall_1,
@@ -372,7 +398,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.security_hall_5,
         LocationName.security_hall_upgrade,
     ]
-    security_hall_region = create_region(world, player, active_locations, LocationName.security_hall_region, security_hall_region_locations, None)
+    security_hall_region = create_region(world, player, active_locations, LocationName.security_hall_region,
+                                         security_hall_region_locations, None)
 
     route_280_region_locations = [
         LocationName.route_280_1,
@@ -381,7 +408,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.route_280_4,
         LocationName.route_280_5,
     ]
-    route_280_region = create_region(world, player, active_locations, LocationName.route_280_region, route_280_region_locations, None)
+    route_280_region = create_region(world, player, active_locations, LocationName.route_280_region,
+                                     route_280_region_locations, None)
 
     mad_space_region_locations = [
         LocationName.mad_space_1,
@@ -391,7 +419,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.mad_space_5,
         LocationName.mad_space_upgrade,
     ]
-    mad_space_region = create_region(world, player, active_locations, LocationName.mad_space_region, mad_space_region_locations, None)
+    mad_space_region = create_region(world, player, active_locations, LocationName.mad_space_region,
+                                     mad_space_region_locations, None)
 
     cannon_core_region_locations = [
         LocationName.cannon_core_1,
@@ -400,7 +429,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.cannon_core_4,
         LocationName.cannon_core_5,
     ]
-    cannon_core_region = create_region(world, player, active_locations, LocationName.cannon_core_region, cannon_core_region_locations, None)
+    cannon_core_region = create_region(world, player, active_locations, LocationName.cannon_core_region,
+                                       cannon_core_region_locations, None)
 
     chao_garden_region_locations = [
         LocationName.chao_beginner_race,
@@ -413,12 +443,14 @@ def create_regions(world, player: int, active_locations):
         LocationName.chao_expert_karate,
         LocationName.chao_super_karate,
     ]
-    chao_garden_region = create_region(world, player, active_locations, LocationName.chao_garden_region, chao_garden_region_locations, None)
+    chao_garden_region = create_region(world, player, active_locations, LocationName.chao_garden_region,
+                                       chao_garden_region_locations, None)
 
     biolizard_region_locations = [
         LocationName.biolizard,
     ]
-    biolizard_region = create_region(world, player, active_locations, LocationName.biolizard_region, biolizard_region_locations, None)
+    biolizard_region = create_region(world, player, active_locations, LocationName.biolizard_region,
+                                     biolizard_region_locations, None)
 
     # Set up the regions correctly.
     world.regions += [
@@ -465,12 +497,12 @@ def create_regions(world, player: int, active_locations):
     ]
 
 
-def connect_regions(world, player, gates: typing.List[LevelGate], cannonCoreEmblems):
+def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_emblems):
     names: typing.Dict[str, int] = {}
 
     connect(world, player, names, 'Menu', LocationName.gate_0_region)
     connect(world, player, names, LocationName.gate_0_region, LocationName.cannon_core_region,
-            lambda state: (state.has(ItemName.emblem, player, cannonCoreEmblems)))
+            lambda state: (state.has(ItemName.emblem, player, cannon_core_emblems)))
 
     connect(world, player, names, LocationName.cannon_core_region, LocationName.biolizard_region,
             lambda state: (state.can_reach(LocationName.cannon_core_1, "Location", player)))
@@ -479,33 +511,38 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannonCoreEmbl
         connect(world, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])
 
     if len(gates) >= 2:
-        connect(world, player, names, 'Menu', LocationName.gate_1_region, lambda state: (state.has(ItemName.emblem, player, gates[1].gate_emblem_count)))
+        connect(world, player, names, 'Menu', LocationName.gate_1_region,
+                lambda state: (state.has(ItemName.emblem, player, gates[1].gate_emblem_count)))
         for i in range(len(gates[1].gate_levels)):
             connect(world, player, names, LocationName.gate_1_region, shuffleable_regions[gates[1].gate_levels[i]])
 
     if len(gates) >= 3:
-        connect(world, player, names, 'Menu', LocationName.gate_2_region, lambda state: (state.has(ItemName.emblem, player, gates[2].gate_emblem_count)))
+        connect(world, player, names, 'Menu', LocationName.gate_2_region,
+                lambda state: (state.has(ItemName.emblem, player, gates[2].gate_emblem_count)))
         for i in range(len(gates[2].gate_levels)):
             connect(world, player, names, LocationName.gate_2_region, shuffleable_regions[gates[2].gate_levels[i]])
 
     if len(gates) >= 4:
-        connect(world, player, names, 'Menu', LocationName.gate_3_region, lambda state: (state.has(ItemName.emblem, player, gates[3].gate_emblem_count)))
+        connect(world, player, names, 'Menu', LocationName.gate_3_region,
+                lambda state: (state.has(ItemName.emblem, player, gates[3].gate_emblem_count)))
         for i in range(len(gates[3].gate_levels)):
             connect(world, player, names, LocationName.gate_3_region, shuffleable_regions[gates[3].gate_levels[i]])
 
     if len(gates) >= 5:
-        connect(world, player, names, 'Menu', LocationName.gate_4_region, lambda state: (state.has(ItemName.emblem, player, gates[4].gate_emblem_count)))
+        connect(world, player, names, 'Menu', LocationName.gate_4_region,
+                lambda state: (state.has(ItemName.emblem, player, gates[4].gate_emblem_count)))
         for i in range(len(gates[4].gate_levels)):
             connect(world, player, names, LocationName.gate_4_region, shuffleable_regions[gates[4].gate_levels[i]])
 
     if len(gates) >= 6:
-        connect(world, player, names, 'Menu', LocationName.gate_5_region, lambda state: (state.has(ItemName.emblem, player, gates[5].gate_emblem_count)))
+        connect(world, player, names, 'Menu', LocationName.gate_5_region,
+                lambda state: (state.has(ItemName.emblem, player, gates[5].gate_emblem_count)))
         for i in range(len(gates[5].gate_levels)):
             connect(world, player, names, LocationName.gate_5_region, shuffleable_regions[gates[5].gate_levels[i]])
 
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
-    # Shamelessly stolen from the ROR2 definition, lol
+    # Shamelessly stolen from the ROR2 definition
     ret = Region(name, None, name, player)
     ret.world = world
     if locations:
@@ -521,9 +558,10 @@ def create_region(world: MultiWorld, player: int, active_locations, name: str, l
     return ret
 
 
-def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], source: str, target: str, rule: typing.Optional[typing.Callable] = None):
-    sourceRegion = world.get_region(source, player)
-    targetRegion = world.get_region(target, player)
+def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], source: str, target: str,
+            rule: typing.Optional[typing.Callable] = None):
+    source_region = world.get_region(source, player)
+    target_region = world.get_region(target, player)
 
     if target not in used_names:
         used_names[target] = 1
@@ -532,10 +570,10 @@ def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], s
         used_names[target] += 1
         name = target + (' ' * used_names[target])
 
-    connection = Entrance(player, name, sourceRegion)
+    connection = Entrance(player, name, source_region)
 
     if rule:
         connection.access_rule = rule
 
-    sourceRegion.exits.append(connection)
-    connection.connect(targetRegion)
+    source_region.exits.append(connection)
+    connection.connect(target_region)

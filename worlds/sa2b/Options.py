@@ -2,6 +2,7 @@ import typing
 
 from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
 
+
 class IncludeMissions(Range):
     """
     Allows logic to place items in a range of Missions for each level
@@ -17,6 +18,7 @@ class IncludeMissions(Range):
     range_end = 5
     default = 2
 
+
 class EmblemPercentageForCannonsCore(Range):
     """
     Allows logic to gate the final mission behind a number of Emblems
@@ -26,6 +28,7 @@ class EmblemPercentageForCannonsCore(Range):
     range_end = 80
     default = 50
 
+
 class NumberOfLevelGates(Range):
     """
     Allows logic to gate some levels behind emblem requirements
@@ -34,6 +37,7 @@ class NumberOfLevelGates(Range):
     range_start = 0
     range_end = 5
     default = 3
+
 
 class LevelGateDistribution(Choice):
     """
@@ -47,6 +51,7 @@ class LevelGateDistribution(Choice):
     option_even = 1
     option_late = 2
     default = 1
+
 
 class MusicShuffle(Choice):
     """
@@ -63,10 +68,10 @@ class MusicShuffle(Choice):
 
 
 sa2b_options: typing.Dict[str, type(Option)] = {
-    "DeathLink":                        DeathLink,
-    "MusicShuffle":                     MusicShuffle,
-    "IncludeMissions":                  IncludeMissions,
-    "EmblemPercentageForCannonsCore":   EmblemPercentageForCannonsCore,
-    "NumberOfLevelGates":               NumberOfLevelGates,
-    "LevelGateDistribution":            LevelGateDistribution,
+    "DeathLink": DeathLink,
+    "MusicShuffle": MusicShuffle,
+    "IncludeMissions": IncludeMissions,
+    "EmblemPercentageForCannonsCore": EmblemPercentageForCannonsCore,
+    "NumberOfLevelGates": NumberOfLevelGates,
+    "LevelGateDistribution": LevelGateDistribution,
 }

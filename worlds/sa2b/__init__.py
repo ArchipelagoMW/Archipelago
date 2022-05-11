@@ -6,7 +6,8 @@ from BaseClasses import Item, MultiWorld
 from .Items import SA2BItem, ItemData, item_table, upgrades_table
 from .Locations import SA2BLocation, all_locations, setup_locations
 from .Options import sa2b_options
-from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, gate_0_blacklist_regions
+from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
+    gate_0_blacklist_regions
 from .Rules import set_rules
 from .Names import ItemName, LocationName
 from ..AutoWorld import World
@@ -46,16 +47,16 @@ class SA2BWorld(World):
 
     def _get_slot_data(self):
         return {
-            "ModVersion":                           3,
-            "MusicMap":                             self.music_map,
-            "MusicShuffle":                         self.world.MusicShuffle[self.player],
-            "DeathLink":                            self.world.DeathLink[self.player],
-            "IncludeMissions":                      self.world.IncludeMissions[self.player].value,
-            "EmblemPercentageForCannonsCore":       self.world.EmblemPercentageForCannonsCore[self.player].value,
-            "NumberOfLevelGates":                   self.world.NumberOfLevelGates[self.player].value,
-            "LevelGateDistribution":                self.world.LevelGateDistribution[self.player],
-            "EmblemsForCannonsCore":                self.emblems_for_cannons_core,
-            "RegionEmblemMap":                      self.region_emblem_map,
+            "ModVersion": 3,
+            "MusicMap": self.music_map,
+            "MusicShuffle": self.world.MusicShuffle[self.player],
+            "DeathLink": self.world.DeathLink[self.player],
+            "IncludeMissions": self.world.IncludeMissions[self.player].value,
+            "EmblemPercentageForCannonsCore": self.world.EmblemPercentageForCannonsCore[self.player].value,
+            "NumberOfLevelGates": self.world.NumberOfLevelGates[self.player].value,
+            "LevelGateDistribution": self.world.LevelGateDistribution[self.player],
+            "EmblemsForCannonsCore": self.emblems_for_cannons_core,
+            "RegionEmblemMap": self.region_emblem_map,
         }
 
     def _create_items(self, name: str):
@@ -91,7 +92,8 @@ class SA2BWorld(World):
             levels_to_distribute = 5
             gate_index_offset = 0
             while levels_to_distribute > 0:
-                if levels_per_gate[0 + gate_index_offset] == 1 or levels_per_gate[max_gate_index - gate_index_offset] == 1:
+                if levels_per_gate[0 + gate_index_offset] == 1 or \
+                        levels_per_gate[max_gate_index - gate_index_offset] == 1:
                     break
                 if early_distribution:
                     levels_per_gate[0 + gate_index_offset] += 1
@@ -126,14 +128,15 @@ class SA2BWorld(World):
 
         total_emblem_count = total_required_locations - len(itempool)
 
-        #itempool += [self.create_item(ItemName.emblem)] * total_emblem_count
+        # itempool += [self.create_item(ItemName.emblem)] * total_emblem_count
 
-        self.emblems_for_cannons_core = math.floor(total_emblem_count * (self.world.EmblemPercentageForCannonsCore[self.player].value / 100.0))
+        self.emblems_for_cannons_core = math.floor(
+            total_emblem_count * (self.world.EmblemPercentageForCannonsCore[self.player].value / 100.0))
 
         shuffled_region_list = list(range(30))
         emblem_requirement_list = list()
         self.world.random.shuffle(shuffled_region_list)
-        levels_per_gate = self.get_levels_per_gate() #30 / (self.world.NumberOfLevelGates[self.player].value + 1)
+        levels_per_gate = self.get_levels_per_gate()
 
         check_for_impossible_shuffle(shuffled_region_list, math.ceil(levels_per_gate[0]), self.world)
         levels_added_to_gate = 0
@@ -150,9 +153,10 @@ class SA2BWorld(World):
             if levels_added_to_gate >= levels_per_gate[current_gate]:
                 current_gate += 1
                 if current_gate > self.world.NumberOfLevelGates[self.player].value:
-                    current_gate = self.world.NumberOfLevelGates[self.player].value;
+                    current_gate = self.world.NumberOfLevelGates[self.player].value
                 else:
-                    current_gate_emblems = max(math.floor(total_emblem_count * math.pow(total_levels_added / 30.0, 2.0)), current_gate)
+                    current_gate_emblems = max(
+                        math.floor(total_emblem_count * math.pow(total_levels_added / 30.0, 2.0)), current_gate)
                     gates.append(LevelGate(current_gate_emblems))
                 levels_added_to_gate = 0
 
@@ -163,7 +167,7 @@ class SA2BWorld(World):
         max_required_emblems = max(max(emblem_requirement_list), self.emblems_for_cannons_core)
         itempool += [self.create_item(ItemName.emblem)] * max_required_emblems
         itempool += [self.create_item(ItemName.emblem, True)] * (total_emblem_count - max_required_emblems)
-        
+
         self.world.itempool += itempool
 
         if self.world.MusicShuffle[self.player] == "levels":
@@ -183,12 +187,12 @@ class SA2BWorld(World):
         location_table = setup_locations(self.world, self.player)
         create_regions(self.world, self.player, location_table)
 
-    def create_item(self, name: str, forceNonProgression = False) -> Item:
+    def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
         created_item = SA2BItem(name, data.progression, data.code, self.player)
         if name == ItemName.emblem:
             created_item.skip_in_prog_balancing = True
-        if forceNonProgression:
+        if force_non_progression:
             created_item.advancement = False
         return created_item
 
