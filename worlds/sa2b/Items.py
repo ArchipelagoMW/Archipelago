@@ -62,10 +62,15 @@ upgrades_table = {
     ItemName.rouge_iron_boots:     ItemData(0xFF001C, True),
 }
 
+event_table = {
+    ItemName.maria: ItemData(0xFF001D, True),
+}
+
 # Complete item table.
 item_table = {
     **emblems_table,
     **upgrades_table,
+    **event_table,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}

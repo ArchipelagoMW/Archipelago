@@ -279,4 +279,4 @@ def set_rules(world: MultiWorld, player: int):
     #for loc in chao_garden_location_table:
     #    world.get_location(loc, player).add_item_rule(loc, lambda item: False)
 
-    world.completion_condition[player] = lambda state: state.can_reach(LocationName.cannon_core_1, "Location", player)
+    world.completion_condition[player] = lambda state: state.has(ItemName.maria, player)

@@ -234,7 +234,8 @@ chao_garden_location_table = {
 }
 
 other_location_table = {
-    LocationName.green_hill: 0xFF001F,
+   # LocationName.green_hill: 0xFF001F,
+    LocationName.biolizard: 0xFF003F,
 }
 
 all_locations = {
@@ -268,7 +269,7 @@ def setup_locations(world, player: int):
 
     location_table.update({**upgrade_location_table})
     # location_table.update(**chao_garden_location_table})
-    # location_table.update(**other_location_table})
+    location_table.update({**other_location_table})
 
     return location_table
 

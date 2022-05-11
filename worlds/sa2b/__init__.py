@@ -8,7 +8,7 @@ from .Locations import SA2BLocation, all_locations, setup_locations
 from .Options import sa2b_options
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, gate_0_blacklist_regions
 from .Rules import set_rules
-from .Names import ItemName
+from .Names import ItemName, LocationName
 from ..AutoWorld import World
 import Patch
 
@@ -43,7 +43,6 @@ class SA2BWorld(World):
     music_map: typing.Dict[int, int]
     emblems_for_cannons_core: int
     region_emblem_map: typing.Dict[int, int]
-    required_client_version = (0, 3, 2)
 
     def _get_slot_data(self):
         return {
@@ -108,6 +107,8 @@ class SA2BWorld(World):
         return levels_per_gate
 
     def generate_basic(self):
+        self.world.get_location(LocationName.biolizard, self.player).place_locked_item(self.create_item(ItemName.maria))
+
         itempool: typing.List[SA2BItem] = []
 
         # First Missions
@@ -160,11 +161,8 @@ class SA2BWorld(World):
         connect_regions(self.world, self.player, gates, self.emblems_for_cannons_core)
 
         max_required_emblems = max(max(emblem_requirement_list), self.emblems_for_cannons_core)
-        print(total_emblem_count)
-        print(max_required_emblems)
         itempool += [self.create_item(ItemName.emblem)] * max_required_emblems
         itempool += [self.create_item(ItemName.emblem, True)] * (total_emblem_count - max_required_emblems)
-        #itempool += [self.create_item(ItemName.emblem)] * (total_emblem_count)
         
         self.world.itempool += itempool
 
@@ -199,7 +197,7 @@ class SA2BWorld(World):
 
     @classmethod
     def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
-                        restitempool, fill_locations):      
+                        restitempool, fill_locations):
         if world.get_game_players("Sonic Adventure 2 Battle"):
             progitempool.sort(
-                key=lambda item: 1 if (item.name != 'Emblem') else 0)
+                key=lambda item: 0 if (item.name != 'Emblem') else 1)
