@@ -36,7 +36,7 @@ If it still crashes, recheck if you typed the launch options correctly (Describe
 # Manual Compilation (Linux/Windows)
 
 Dependencies for Linux: `sdl2 glew cmake python make`.
-Dependencies for Windows: `mingw-w64-x86_64-gcc mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 git make python3 cmake`
+Dependencies for Windows: `mingw-w64-x86_64-gcc mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 git make python3 mingw-w64-x86_64-cmake`
 SM64EX will link `jsoncpp` dynamic if installed. If not, it will compile and link statically.
 
 1. Clone `https://github.com/N00byKing/sm64ex` recursively

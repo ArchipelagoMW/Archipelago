@@ -1,6 +1,8 @@
 import typing
 from .ExtractedData import logic_options, starts, pool_options
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range
+
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict
+from .Charms import vanilla_costs, names as charm_names
 
 
 class Disabled(Toggle):
@@ -208,8 +210,7 @@ class RandomCharmCosts(Range):
     range_start = -1
     range_end = 240
     default = -1
-    vanilla_costs: typing.List[int] = [1, 1, 1, 2, 2, 2, 3, 2, 3, 1, 3, 1, 3, 1, 2, 2, 1, 2, 3, 2,
-                                       4, 2, 2, 2, 3, 1, 4, 2, 4, 1, 2, 3, 2, 4, 3, 5, 1, 3, 2, 2]
+    vanilla_costs: typing.List[int] = vanilla_costs
     charm_count: int = len(vanilla_costs)
 
     def get_costs(self, random_source) -> typing.List[int]:
@@ -223,6 +224,18 @@ class RandomCharmCosts(Range):
                     index = random_source.randint(0, self.charm_count-1)
                 charms[index] += 1
             return charms
+
+
+class PlandoCharmCosts(OptionDict):
+    """Allows setting a Charm's Notch costs directly, mapping {name: cost}.
+    This is set after any random Charm Notch costs, if applicable."""
+    display_name = "Charm Notch Cost Plando"
+    valid_keys = frozenset(charm_names)
+
+    def get_costs(self, charm_costs: typing.List[int]) -> typing.List[int]:
+        for name, cost in self.value.items():
+            charm_costs[charm_names.index(name)] = cost
+        return charm_costs
 
 
 class EggShopSlots(Range):
@@ -240,10 +253,11 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     MaximumGrubPrice.__name__: MaximumGrubPrice,
     MinimumEssencePrice.__name__: MinimumEssencePrice,
     MaximumEssencePrice.__name__: MaximumEssencePrice,
-    MinimumEggPrice.__name__: MinimumEggPrice,
-    MaximumEggPrice.__name__: MaximumEggPrice,
     MinimumCharmPrice.__name__: MinimumCharmPrice,
     MaximumCharmPrice.__name__: MaximumCharmPrice,
     RandomCharmCosts.__name__: RandomCharmCosts,
+    PlandoCharmCosts.__name__: PlandoCharmCosts,
+    MinimumEggPrice.__name__: MinimumEggPrice,
+    MaximumEggPrice.__name__: MaximumEggPrice,
     EggShopSlots.__name__: EggShopSlots,
 }

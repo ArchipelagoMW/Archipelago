@@ -12,6 +12,7 @@ from .Rules import set_rules
 from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
     event_names, item_effects, connectors, one_ways
+from .Charms import names as charm_names
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType
 from ..AutoWorld import World, LogicMixin
@@ -120,7 +121,8 @@ class HKWorld(World):
 
     def generate_early(self):
         world = self.world
-        self.charm_costs = world.RandomCharmCosts[self.player].get_costs(world.random)
+        charm_costs = world.RandomCharmCosts[self.player].get_costs(world.random)
+        self.charm_costs = world.PlandoCharmCosts[self.player].get_costs(charm_costs)
         world.exclude_locations[self.player].value.update(white_palace_locations)
         world.local_items[self.player].value.add("Mimic_Grub")
         for vendor, unit in self.shops.items():
@@ -216,7 +218,12 @@ class HKWorld(World):
         options = slot_data["options"] = {}
         for option_name in self.options:
             option = getattr(self.world, option_name)[self.player]
-            options[option_name] = int(option.value)
+            try:
+                optionvalue = int(option.value)
+            except TypeError:
+                pass  # C# side is currently typed as dict[str, int], drop what doesn't fit
+            else:
+                options[option_name] = optionvalue
 
         # 32 bit int
         slot_data["seed"] = self.world.slot_seeds[self.player].randint(-2147483647, 2147483646)
@@ -256,19 +263,20 @@ class HKWorld(World):
 
     def collect(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).collect(state, item)
-
-        for effect_name, effect_value in item_effects.get(item.name, {}).items():
-            state.prog_items[effect_name, item.player] += effect_value
+        if change:
+            for effect_name, effect_value in item_effects.get(item.name, {}).items():
+                state.prog_items[effect_name, item.player] += effect_value
 
         return change
 
     def remove(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).remove(state, item)
 
-        for effect_name, effect_value in item_effects.get(item.name, {}).items():
-            if state.prog_items[effect_name, item.player] == effect_value:
-                del state.prog_items[effect_name, item.player]
-            state.prog_items[effect_name, item.player] -= effect_value
+        if change:
+            for effect_name, effect_value in item_effects.get(item.name, {}).items():
+                if state.prog_items[effect_name, item.player] == effect_value:
+                    del state.prog_items[effect_name, item.player]
+                state.prog_items[effect_name, item.player] -= effect_value
 
         return change
 
@@ -280,8 +288,8 @@ class HKWorld(World):
             name = world.get_player_name(player)
             spoiler_handle.write(f'\n{name}\n')
             hk_world: HKWorld = world.worlds[player]
-            for charm_number, cost in enumerate(hk_world.charm_costs, start=1):
-                spoiler_handle.write(f"\n{charm_number}: {cost}")
+            for charm_number, cost in enumerate(hk_world.charm_costs):
+                spoiler_handle.write(f"\n{charm_names[charm_number]}: {cost}")
 
         spoiler_handle.write('\n\nShop Prices:')
         for player in hk_players:

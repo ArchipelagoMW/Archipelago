@@ -1,0 +1,15 @@
+#charts-wrapper{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.chart-container{
+    display: flex;
+    flex-direction: column;
+    width: calc(50% - 15px);
+    min-width: 400px;
+    margin-bottom: 30px;
+}
+

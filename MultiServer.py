@@ -24,8 +24,6 @@ ModuleUpdate.update()
 import websockets
 import colorama
 
-from thefuzz import process as fuzzy_process
-
 import NetUtils
 from worlds.AutoWorld import AutoWorldRegister
 
@@ -37,6 +35,7 @@ from Utils import get_item_name_from_id, get_location_name_from_id, \
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType
 
+min_client_version = Version(0, 1, 6)
 colorama.init()
 
 # functions callable on storable data on the server by clients
@@ -181,6 +180,7 @@ class Context:
         self.minimum_client_versions: typing.Dict[int, Utils.Version] = {}
         self.seed_name = ""
         self.groups = {}
+        self.group_collected: typing.Dict[int, typing.Set[int]] = {}
         self.random = random.Random()
         self.stored_data = {}
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
@@ -301,7 +301,7 @@ class Context:
         clients_ver = decoded_obj["minimum_versions"].get("clients", {})
         self.minimum_client_versions = {}
         for player, version in clients_ver.items():
-            self.minimum_client_versions[player] = Utils.Version(*version)
+            self.minimum_client_versions[player] = max(Utils.Version(*version), min_client_version)
 
         self.clients = {}
         for team, names in enumerate(decoded_obj['names']):
@@ -432,6 +432,7 @@ class Context:
             "client_connection_timers": tuple(
                 (key, value.timestamp()) for key, value in self.client_connection_timers.items()),
             "random_state": self.random.getstate(),
+            "group_collected": dict(self.group_collected),
             "stored_data": self.stored_data,
             "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
                              "server_password": self.server_password, "password": self.password, "forfeit_mode":
@@ -485,6 +486,9 @@ class Context:
             self.collect_mode = savedata["game_options"]["collect_mode"]
             self.item_cheat = savedata["game_options"]["item_cheat"]
             self.compatibility = savedata["game_options"]["compatibility"]
+
+        if "group_collected" in savedata:
+            self.group_collected = savedata["group_collected"]
 
         if "stored_data" in savedata:
             self.stored_data = savedata["stored_data"]
@@ -764,7 +768,7 @@ def forfeit_player(ctx: Context, team: int, slot: int):
     update_checked_locations(ctx, team, slot)
 
 
-def collect_player(ctx: Context, team: int, slot: int):
+def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
     """register any locations that are in the multidata, pointing towards this player"""
     all_locations = collections.defaultdict(set)
     for source_slot, location_data in ctx.locations.items():
@@ -776,6 +780,14 @@ def collect_player(ctx: Context, team: int, slot: int):
     for source_player, location_ids in all_locations.items():
         register_location_checks(ctx, team, source_player, location_ids, count_activity=False)
         update_checked_locations(ctx, team, source_player)
+
+    if not is_group:
+        for group, group_players in ctx.groups.items():
+            if slot in group_players:
+                group_collected_players = ctx.group_collected.setdefault(group, set())
+                group_collected_players.add(slot)
+                if set(group_players) == group_collected_players:
+                    collect_player(ctx, team, group, True)
 
 
 def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
@@ -893,7 +905,7 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
 
 
 def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bool, str]:
-    picks = fuzzy_process.extract(input_text, possible_answers, limit=2)
+    picks = Utils.get_fuzzy_results(input_text, possible_answers, limit=2)
     if len(picks) > 1:
         dif = picks[0][1] - picks[1][1]
         if picks[0][1] == 100:
@@ -1046,7 +1058,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     @mark_raw
     def _cmd_admin(self, command: str = ""):
-        """Allow remote administration of the multiworld server"""
+        """Allow remote administration of the multiworld server
+        Usage: "!admin login <password>" in order to log in to the remote interface.
+        Once logged in, you can then use "!admin <command>" to issue commands.
+        If you need further help once logged in.  use "!admin /help" """
 
         output = f"!admin {command}"
         if output.lower().startswith(
@@ -1388,9 +1403,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
-            if "IgnoreGame" not in args["tags"] and args['game'] != game:
+            ignore_game = "IgnoreGame" in args["tags"] or (  # IgnoreGame is deprecated. TODO: remove after 0.3.3?
+                          ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game"))
+            if not ignore_game and args['game'] != game:
                 errors.add('InvalidGame')
-            minver = ctx.minimum_client_versions[slot]
+            minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
             if minver > args['version']:
                 errors.add('IncompatibleVersion')
             if args.get('items_handling', None) is None:
@@ -1450,7 +1467,13 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
     elif cmd == "GetDataPackage":
         exclusions = args.get("exclusions", [])
-        if exclusions:
+        if "games" in args:
+            games = {name: game_data for name, game_data in network_data_package["games"].items()
+                     if name in set(args.get("games", []))}
+            await ctx.send_msgs(client, [{"cmd": "DataPackage",
+                                          "data": {"games": games}}])
+        # TODO: remove exclusions behaviour around 0.5.0
+        elif exclusions:
             exclusions = set(exclusions)
             games = {name: game_data for name, game_data in network_data_package["games"].items()
                      if name not in exclusions}
@@ -1458,6 +1481,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             package["games"] = games
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
                                           "data": package}])
+
         else:
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
                                           "data": network_data_package}])
@@ -1795,7 +1819,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             return False
 
     def _cmd_option(self, option_name: str, option: str):
-        """Set options for the server. Warning: expires on restart"""
+        """Set options for the server."""
 
         attrtype = self.ctx.simple_options.get(option_name, None)
         if attrtype:

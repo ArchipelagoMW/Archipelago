@@ -56,11 +56,16 @@ game.
 ### WebWorld Class
 
 A `WebWorld` class contains specific attributes and methods that can be modified
-for your world specifically on the webhost. At the moment this comprises of `settings_page`
-which can be changed to a link instead of an AP generated settings page, and a `theme` to be used for your game specific AP pages. Available themes:
+for your world specifically on the webhost.
+
+`settings_page` which can be changed to a link instead of an AP generated settings page.
+
+`theme` to be used for your game specific AP pages. Available themes:
 | dirt  | grass (default) | grassFlowers | ice  | jungle  | ocean | partyTime |
 |---|---|---|---|---|---|---|
 | <img src="img/theme_dirt.JPG" width="100"> | <img src="img/theme_grass.JPG" width="100"> | <img src="img/theme_grassFlowers.JPG" width="100"> | <img src="img/theme_ice.JPG" width="100"> | <img src="img/theme_jungle.JPG" width="100"> | <img src="img/theme_ocean.JPG" width="100"> | <img src="img/theme_partyTime.JPG" width="100"> |
+
+`bug_report_page` (optional) can be a link to a bug reporting page, most likely a GitHub issue page, that will be placed by the site to help direct users to report bugs.
 
 ### MultiWorld Object
 
@@ -398,7 +403,7 @@ The world has to provide the following things for generation
   `self.world.get_filled_locations(self.player)` will filter for this world.
   `item.player` can be used to see if it's a local item.
 
-In addition the following methods can be implemented
+In addition, the following methods can be implemented and attributes can be set
 
 * `def generate_early(self)`
   called per player before any items or locations are created. You can set
@@ -418,16 +423,17 @@ In addition the following methods can be implemented
   before, during and after the regular fill process, before `generate_output`.
 * `fill_slot_data` and `modify_multidata` can be used to modify the data that
   will be used by the server to host the MultiWorld.
-* `def get_required_client_version(self)`
-  can return a tuple of 3 ints to make sure the client is compatible to this
-  world (e.g. item IDs) when connecting.
-  Always use `return max((x,y,z), super().get_required_client_version())`
-  to catch updates in the lower layers that break compatibility.
+* `required_client_version: Tuple(int, int, int)`
+  Client version as tuple of 3 ints to make sure the client is compatible to
+  this world (e.g. implements all required features) when connecting.
+* `assert_generate(cls, world)` is a class method called at the start of
+  generation to check the existence of prerequisite files, usually a ROM for
+  games which require one.
 
 #### generate_early
 
 ```python
-def generate_early(self):
+def generate_early(self) -> None:
     # read player settings to world instance
     self.final_boss_hp = self.world.final_boss_hp[self.player].value
 ```
@@ -453,7 +459,7 @@ def create_event(self, event: str):
 #### create_items
 
 ```python
-def create_items(self):
+def create_items(self) -> None:
     # Add items to the Multiworld.
     # If there are two of the same item, the item has to be twice in the pool.
     # Which items are added to the pool may depend on player settings,
@@ -480,7 +486,7 @@ def create_items(self):
 #### create_regions
 
 ```python
-def create_regions(self):
+def create_regions(self) -> None:
     # Add regions to the multiworld. "Menu" is the required starting point.
     # Arguments to Region() are name, type, human_readable_name, player, world
     r = Region("Menu", None, "Menu", self.player, self.world)
@@ -515,7 +521,7 @@ def create_regions(self):
 #### generate_basic
 
 ```python
-def generate_basic(self):
+def generate_basic(self) -> None:
     # place "Victory" at "Final Boss" and set collection as win condition
     self.world.get_location("Final Boss", self.player)\
         .place_locked_item(self.create_event("Victory"))
@@ -536,7 +542,7 @@ def generate_basic(self):
 from ..generic.Rules import add_rule, set_rule, forbid_item
 from Items import get_item_type
 
-def set_rules(self):
+def set_rules(self) -> None:
     # For some worlds this step can be omitted if either a Logic mixin 
     # (see below) is used, it's easier to apply the rules from data during
     # location generation or everything is in generate_basic
@@ -620,7 +626,7 @@ class MyGameWorld(World):
     # ...
     def set_rules(self):
         set_rule(self.world.get_location("A Door", self.player),
-                 lamda state: state._myworld_has_key(self.world, self.player))
+                 lamda state: state._mygame_has_key(self.world, self.player))
 ```
 
 ### Generate Output

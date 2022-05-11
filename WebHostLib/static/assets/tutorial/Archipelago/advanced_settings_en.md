@@ -93,7 +93,7 @@ games you want settings for.
 
 * `triggers` is one of the more advanced options that allows you to create conditional adjustments. You can read
   more triggers in the triggers guide. Triggers
-  guide: [Archipelago Triggers Guide](/tutorial/archipelago/triggers/en)
+  guide: [Archipelago Triggers Guide](/tutorial/Archipelago/triggers/en)
 
 ### Game Options
 
@@ -110,7 +110,7 @@ Currently, these options are `start_inventory`, `start_hints`, `local_items`, `n
 , `exclude_locations`, and various plando options.
 
 See the plando guide for more info on plando options. Plando
-guide: [Archipelago Plando Guide](/tutorial/archipelago/plando/en)
+guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 
 * `start_inventory` will give any items defined here to you at the beginning of your game. The format for this must be
   the name as it appears in the game files and the amount you would like to start with. For example `Rupees(5): 6` which
@@ -125,6 +125,8 @@ guide: [Archipelago Plando Guide](/tutorial/archipelago/plando/en)
 
 * `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
   item which isn't necessary for progression to go in these locations.
+* `item_links` allows you to link up items so that when one players finds the item all other participating players also 
+  get it.
 
 ### Random numbers
 
@@ -174,6 +176,12 @@ A Link to the Past:
     - Spike Cave
   exclude_locations:
     - Cave 45
+  item_links:
+    - name: rods
+      item_pool:
+        - Fire Rod
+        - Ice Rod
+      replacement_item: "Rupee (1)"
 triggers:
   - option_category: A Link to the Past
     option_name: smallkey_shuffle
@@ -217,6 +225,8 @@ triggers:
 * `start_location_hints` gives us a starting hint for the `Spike Cave` location available at the beginning of the
   multiworld that can be used for no cost.
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
+* `item_links` causes all players with the same `item_links` settings to share a `Fire Rod` and `Ice Rod`. Extra 
+  `Rupee (1)` are put in the item pool instead of additional Rods.
 
 * `triggers` allows us to define a trigger such that if our `smallkey_shuffle` option happens to roll the `any_world`
   result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to

@@ -600,7 +600,7 @@ if __name__ == '__main__':
 
     class TextContext(CommonContext):
         tags = {"AP", "IgnoreGame", "TextOnly"}
-        game = "Archipelago"
+        game = ""  # empty matches any game since 0.3.2
         items_handling = 0  # don't receive any NetworkItems
 
         async def server_auth(self, password_requested: bool = False):

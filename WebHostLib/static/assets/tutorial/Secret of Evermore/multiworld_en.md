@@ -19,7 +19,7 @@
 ### What is a config file and why do I need one?
 
 See the guide on setting up a basic YAML at the Archipelago setup
-guide: [Basic Multiworld Setup Guide](/tutorial/archipelago/setup/en)
+guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
@@ -142,4 +142,4 @@ change to green. Congratulations on successfully joining a multiworld game!
 ## Hosting a MultiWorld game
 
 The recommended way to host a game is to use our hosting service on the [seed generation page](/generate). Or check out
-the Archipelago website guide for more information: [Archipelago Website Guide](/tutorial/archipelago/using_website/en)
+the Archipelago website guide for more information: [Archipelago Website Guide](/tutorial/Archipelago/using_website/en)

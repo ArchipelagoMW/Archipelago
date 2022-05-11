@@ -11,10 +11,16 @@ from worlds.generic.Rules import exclusion_rules
 
 from BaseClasses import Region, Entrance, Item
 from .Options import minecraft_options
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 
 client_version = 7
 minecraft_version = "1.17.1"
+
+
+class MinecraftWebWorld(WebWorld):
+    theme = "jungle"
+    bug_report_page = "https://github.com/KonoTyran/Minecraft_AP_Randomizer/issues/new?assignees=&labels=bug&template=bug_report.yaml&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
+
 
 class MinecraftWorld(World):
     """
@@ -26,6 +32,7 @@ class MinecraftWorld(World):
     game: str = "Minecraft"
     options = minecraft_options
     topology_present = True
+    web = MinecraftWebWorld()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
@@ -42,12 +49,13 @@ class MinecraftWorld(World):
             'client_version': client_version,
             'minecraft_version': minecraft_version,
             'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits},
-            'advancement_goal': self.world.advancement_goal[self.player],
-            'egg_shards_required': min(self.world.egg_shards_required[self.player], self.world.egg_shards_available[self.player]),
-            'egg_shards_available': self.world.egg_shards_available[self.player],
+            'advancement_goal': self.world.advancement_goal[self.player].value,
+            'egg_shards_required': min(self.world.egg_shards_required[self.player].value,
+                                       self.world.egg_shards_available[self.player].value),
+            'egg_shards_available': self.world.egg_shards_available[self.player].value,
             'required_bosses': self.world.required_bosses[self.player].current_key,
-            'MC35': bool(self.world.send_defeated_mobs[self.player]),
-            'death_link': bool(self.world.death_link[self.player]),
+            'MC35': bool(self.world.send_defeated_mobs[self.player].value),
+            'death_link': bool(self.world.death_link[self.player].value),
             'starting_items': str(self.world.starting_items[self.player].value),
             'race': self.world.is_race,
         }

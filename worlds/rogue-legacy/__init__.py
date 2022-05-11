@@ -21,6 +21,7 @@ class LegacyWorld(World):
     options = legacy_options
     topology_present = False
     data_version = 3
+    required_client_version = (0, 2, 3)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
@@ -53,9 +54,6 @@ class LegacyWorld(World):
     def _create_items(self, name: str):
         data = item_table[name]
         return [self.create_item(name)] * data.quantity
-
-    def get_required_client_version(self) -> typing.Tuple[int, int, int]:
-        return max((0, 2, 3), super(LegacyWorld, self).get_required_client_version())
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
