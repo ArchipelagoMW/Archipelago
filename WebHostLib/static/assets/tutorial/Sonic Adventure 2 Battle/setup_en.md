@@ -9,6 +9,9 @@
 - Archipelago Mod for Sonic Adventure 2: Battle
   from: [Sonic Adventure 2: Battle Archipelago Randomizer Mod Releases Page](https://github.com/PoryGone/SA2B_Archipelago/releases/)
 
+Optional:
+- Sonic Adventure 2: Battle Archipelago PopTracker pack from: [SA2B_AP_Tracker Releases Page](https://github.com/PoryGone/SA2B_AP_Tracker/releases/)
+
 ## Installation Procedures
 
 1. Install Sonic Adventure 2: Battle from Steam.
