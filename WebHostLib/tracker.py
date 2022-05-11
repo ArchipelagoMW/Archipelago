@@ -718,7 +718,8 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
         "Shadow Temple":            (67485, 67532),
         "Spirit Temple":            (67533, 67582),
         "Ice Cavern":               (67583, 67596),
-        "Gerudo Training Grounds":  (67597, 67635),
+        "Gerudo Training Ground":   (67597, 67635),
+        "Thieves' Hideout":         (67259, 67263),
         "Ganon's Castle":           (67636, 67673),
     }
 
@@ -726,7 +727,7 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
         full_name = lookup_any_location_id_to_name[id]
         if id == 67673:
             return full_name[13:]  # Ganons Tower Boss Key Chest
-        if area != 'Overworld':
+        if area not in ["Overworld", "Thieves' Hideout"]:
             # trim dungeon name. leaves an extra space that doesn't display, or trims fully for DC/Jabu/GC
             return full_name[len(area):]
         return full_name
@@ -737,6 +738,13 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
     checks_done = {area: len(list(filter(lambda x: x, location_info[area].values()))) for area in area_id_ranges}
     checks_in_area = {area: len([id for id in range(min_id, max_id+1) if id in locations[player]]) 
         for area, (min_id, max_id) in area_id_ranges.items()}
+
+    # Remove Thieves' Hideout checks from Overworld, since it's in the middle of the range
+    checks_in_area["Overworld"] -= checks_in_area["Thieves' Hideout"]
+    checks_done["Overworld"] -= checks_done["Thieves' Hideout"]
+    for loc in location_info["Thieves' Hideout"]:
+        del location_info["Overworld"][loc]
+
     checks_done['Total'] = sum(checks_done.values())
     checks_in_area['Total'] = sum(checks_in_area.values())
 
@@ -754,7 +762,8 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
         "Spirit Temple":            inventory[66178],
         "Shadow Temple":            inventory[66179],
         "Bottom of the Well":       inventory[66180],
-        "Gerudo Training Grounds":  inventory[66181],
+        "Gerudo Training Ground":   inventory[66181],
+        "Thieves' Hideout":         inventory[66182],
         "Ganon's Castle":           inventory[66183],
     }
     boss_key_counts = {

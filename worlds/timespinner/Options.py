@@ -81,6 +81,20 @@ class ShopMultiplier(Range):
     range_end = 10
     default = 1
 
+class LootPool(Choice):
+    """Sets the items that drop from enemies (does not apply to boss reward checks)
+    Vanilla: Drops are the same as the base game
+    Randomized: Each slot of every enemy's drop table is given a random use item or piece of equipment.
+    Empty: Enemies drop nothing."""
+    display_name = "Loot Pool"
+    option_vanilla = 0
+    option_randomized = 1
+    option_empty = 2
+
+class ShowBestiary(Toggle):
+    "All entries in the bestiary are visible, without needing to kill one of a given enemy first"
+    display_name = "Show Bestiary Entries"
+
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Option] = {
     "StartWithJewelryBox": StartWithJewelryBox,
@@ -100,6 +114,8 @@ timespinner_options: Dict[str, Option] = {
     "ShopFill": ShopFill,
     "ShopWarpShards": ShopWarpShards,
     "ShopMultiplier": ShopMultiplier,
+    "LootPool": LootPool,
+    "ShowBestiary": ShowBestiary,
     "DeathLink": DeathLink,
 }
 

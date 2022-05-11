@@ -1,6 +1,6 @@
 from ..AutoWorld import World, WebWorld
 from ..generic.Rules import set_rule
-from BaseClasses import Region, Location, Entrance, Item, RegionType
+from BaseClasses import Region, Location, Entrance, Item, RegionType, Tutorial
 from Utils import output_path
 import typing
 import os
@@ -134,6 +134,14 @@ def _get_item_grouping() -> typing.Dict[str, typing.Set[str]]:
 
 class SoEWebWorld(WebWorld):
     theme = 'jungle'
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Secret of Evermore randomizer. This guide covers single-player, multiworld and related software.",
+        "English",
+        "multiworld_en.md",
+        "multiworld/en",
+        ["Black Sliver"]
+    )]
 
 
 class SoEWorld(World):
@@ -174,6 +182,12 @@ class SoEWorld(World):
         res = SoEItem(item.name, item.progression, self.item_name_to_id[item.name], self.player)
         res.trap = item.type == pyevermizer.CHECK_TRAP
         return res
+
+    @classmethod
+    def stage_assert_generate(cls, world):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def create_regions(self):
         # TODO: generate *some* regions from locations' requirements?

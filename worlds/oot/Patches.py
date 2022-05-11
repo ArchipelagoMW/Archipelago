@@ -710,7 +710,7 @@ def patch_rom(world, rom):
         rom.write_byte(address,0x01)
 
     # Allow Warp Songs in additional places
-    rom.write_byte(0xB6D3D2, 0x00) # Gerudo Training Grounds
+    rom.write_byte(0xB6D3D2, 0x00) # Gerudo Training Ground
     rom.write_byte(0xB6D42A, 0x00) # Inside Ganon's Castle
 
     #Tell Sheik at Ice Cavern we are always an Adult
@@ -719,10 +719,10 @@ def patch_rom(world, rom):
     rom.write_int32(0xc7BCA4, 0x00000000)
 
     # Allow Farore's Wind in dungeons where it's normally forbidden
-    rom.write_byte(0xB6D3D3, 0x00) # Gerudo Training Grounds
+    rom.write_byte(0xB6D3D3, 0x00) # Gerudo Training Ground
     rom.write_byte(0xB6D42B, 0x00) # Inside Ganon's Castle
 
-    # Remove disruptive text from Gerudo Training Grounds and early Shadow Temple (vanilla)
+    # Remove disruptive text from Gerudo Training Ground and early Shadow Temple (vanilla)
     Wonder_text = [0x27C00BC, 0x27C00CC, 0x27C00DC, 0x27C00EC, 0x27C00FC, 0x27C010C, 0x27C011C, 0x27C012C, 0x27CE080,
                    0x27CE090, 0x2887070, 0x2887080, 0x2887090, 0x2897070, 0x28C7134, 0x28D91BC, 0x28A60F4, 0x28AE084,
                    0x28B9174, 0x28BF168, 0x28BF178, 0x28BF188, 0x28A1144, 0x28A6104, 0x28D0094]
@@ -825,10 +825,6 @@ def patch_rom(world, rom):
                 copy_entrance_record(replaced_entrance["index"], new_entrance["blue_warp"], 2)
 
     exit_table = generate_exit_lookup_table()
-
-    if world.entrance_shuffle:
-        # Disable the fog state entirely to avoid fog glitches
-        rom.write_byte(rom.sym('NO_FOG_STATE'), 1)
 
     if world.disable_trade_revert:
         # Disable trade quest timers and prevent trade items from ever reverting
@@ -1202,7 +1198,7 @@ def patch_rom(world, rom):
     if world.dungeon_mq['Ice Cavern']:
         mq_scenes.append(9)
     # Scene 10 has no layout changes, so it doesn't need to be patched
-    if world.dungeon_mq['Gerudo Training Grounds']:
+    if world.dungeon_mq['Gerudo Training Ground']:
         mq_scenes.append(11)
     if world.dungeon_mq['Ganons Castle']:
         mq_scenes.append(13)
@@ -1378,7 +1374,7 @@ def patch_rom(world, rom):
                 rom.write_byte(0x2E8E931, special['text_id']) #Fix text box
             elif location.name == 'Song from Malon':
                 rom.write_byte(rom.sym('MALON_TEXT_ID'), special['text_id'])
-            elif location.name == 'Song from Composers Grave':
+            elif location.name == 'Song from Royal Familys Tomb':
                 rom.write_int16(0xE09F66, bit_mask_pointer)
                 rom.write_byte(0x332A87D, special['text_id']) #Fix text box
             elif location.name == 'Song from Saria':
@@ -1685,7 +1681,7 @@ def patch_rom(world, rom):
                         'Shadow Temple':      ("the \x05\x45Shadow Temple", 'Bongo Bongo', 0x7f, 0xa3),
         }
         for dungeon in world.dungeon_mq:
-            if dungeon in ['Gerudo Training Grounds', 'Ganons Castle']:
+            if dungeon in ['Gerudo Training Ground', 'Ganons Castle']:
                 pass
             elif dungeon in ['Bottom of the Well', 'Ice Cavern']:
                 dungeon_name, boss_name, compass_id, map_id = dungeon_list[dungeon]
@@ -2184,7 +2180,7 @@ def configure_dungeon_info(rom, world):
     codes = ['Deku Tree', 'Dodongos Cavern', 'Jabu Jabus Belly', 'Forest Temple',
              'Fire Temple', 'Water Temple', 'Spirit Temple', 'Shadow Temple',
              'Bottom of the Well', 'Ice Cavern', 'Tower (N/A)',
-             'Gerudo Training Grounds', 'Hideout (N/A)', 'Ganons Castle']
+             'Gerudo Training Ground', 'Hideout (N/A)', 'Ganons Castle']
     dungeon_is_mq = [1 if world.dungeon_mq.get(c) else 0 for c in codes]
 
     rom.write_int32(rom.sym('cfg_dungeon_info_enable'), 1)

@@ -45,7 +45,7 @@ def generate_api():
                     "detail": app.config["MAX_ROLL"]}, 409
         meta = get_meta(meta_options_source)
         meta["race"] = race
-        results, gen_options = roll_options(options)
+        results, gen_options = roll_options(options, meta["plando_options"])
         if any(type(result) == str for result in results.values()):
             return {"text": str(results),
                     "detail": results}, 400
