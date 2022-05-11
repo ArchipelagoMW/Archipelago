@@ -36,4 +36,4 @@ rouge_pick_nails     = "Rouge - Pick Nails"
 rouge_treasure_scope = "Rouge - Treasure Scope"
 rouge_iron_boots     = "Rouge - Iron Boots"
 
-maria                = "Maria"
+maria                = "What Maria Wanted"
