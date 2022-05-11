@@ -72,20 +72,20 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
             }
             # probably a cleaner way to do this but this adds tutorials covering the same topics of different languages together
             added: bool = False
-            if 'name' in game_data['tutorials'][0]:
-                for guide in game_data['tutorials']:
+            # check if the name of the current guide exists already
+            for guide in game_data['tutorials']:
+                if guide.values():
                     if tutorial.tutorial_name in guide['name']:
                         guide['files'].append(current_tutorial['files'][0])
                         added = True
-                if not added:
-                    game_data['tutorials'].append(current_tutorial)
-            else:
-                game_data['tutorials'][0] = current_tutorial
+            if not added:
+                game_data['tutorials'].append(current_tutorial)
+
         data.append(game_data)
     with open(Utils.local_path("WebHostLib", "static", "generated", "tutorials.json"), 'w', encoding='utf-8-sig') as json_target:
         generic_data = {}
         for games in data:
-            if 'Archipelago' in games.values():
+            if 'Archipelago' in games['gameTitle']:
                 generic_data = data.pop(data.index(games))
         sorted_data = [generic_data] + sorted(data, key=lambda entry: entry["gameTitle"].lower())
         json.dump(sorted_data, json_target, indent=2, ensure_ascii=False)
