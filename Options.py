@@ -6,7 +6,7 @@ import typing
 import random
 
 from schema import Schema, And, Or
-from thefuzz import process as fuzzy_process
+from Utils import get_fuzzy_results
 
 
 class AssembleOptions(abc.ABCMeta):
@@ -457,14 +457,14 @@ class VerifyKeys:
         if self.verify_item_name:
             for item_name in self.value:
                 if item_name not in world.item_names:
-                    picks = fuzzy_process.extract(item_name, world.item_names, limit=2)
+                    picks = get_fuzzy_results(item_name, world.item_names, limit=1)
                     raise Exception(f"Item {item_name} from option {self} "
                                     f"is not a valid item name from {world.game}. "
                                     f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
         elif self.verify_location_name:
             for location_name in self.value:
                 if location_name not in world.location_names:
-                    picks = fuzzy_process.extract(location_name, world.location_names, limit=2)
+                    picks = get_fuzzy_results(location_name, world.location_names, limit=1)
                     raise Exception(f"Location {location_name} from option {self} "
                                     f"is not a valid location name from {world.game}. "
                                     f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
@@ -572,8 +572,12 @@ class Accessibility(Choice):
     default = 1
 
 
-class ProgressionBalancing(DefaultOnToggle):
-    """A system that moves progression earlier, to try and prevent the player from getting stuck and bored early."""
+class ProgressionBalancing(Range):
+    """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+    [0-99, default 50] A lower setting means more getting stuck. A higher setting means less getting stuck."""
+    default = 50
+    range_start = 0
+    range_end = 99
     display_name = "Progression Balancing"
 
 

@@ -2,8 +2,8 @@ import unittest
 from worlds.AutoWorld import AutoWorldRegister
 
 
-class TestBase(unittest.TestCase):
-    def testCreateItem(self):
+class TestTutorial(unittest.TestCase):
+    def testHasTutorial(self):
         import WebHost
         tutorials_data = WebHost.create_ordered_tutorials_file()
         games_with_tutorial = set(entry["gameTitle"] for entry in tutorials_data)
