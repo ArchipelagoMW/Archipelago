@@ -28,6 +28,7 @@ class Version(typing.NamedTuple):
 __version__ = "0.3.2"
 version_tuple = tuplize_version(__version__)
 
+import jellyfish
 from yaml import load, load_all, dump, SafeLoader
 
 try:
@@ -492,3 +493,24 @@ def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P
         return f"{value} {power_labels[n]}"
     else:
         return f"{value:0.3f} {power_labels[n]}"
+
+
+def get_fuzzy_ratio(word1: str, word2: str) -> float:
+    return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
+            / max(len(word1), len(word2)))
+
+
+def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: typing.Optional[int] = None) \
+        -> typing.List[typing.Tuple[str, int]]:
+    limit: int = limit if limit else len(wordlist)
+    return list(
+        map(
+            lambda container: (container[0], int(container[1]*100)),  # convert up to limit to int %
+            sorted(
+                map(lambda candidate:
+                    (candidate,  get_fuzzy_ratio(input_word, candidate)),
+                    wordlist),
+                key=lambda element: element[1],
+                reverse=True)[0:limit]
+        )
+    )

@@ -22,6 +22,9 @@ class TestBase(unittest.TestCase):
                             with self.subTest("Location should be reached", location=location):
                                 self.assertTrue(location.can_reach(state))
 
+                    with self.subTest("Completion Condition"):
+                        self.assertTrue(world.can_beat_game(state))
+
     def testEmptyStateCanReachSomething(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             # Final Fantasy logic is controlled by finalfantasyrandomizer.com
