@@ -91,7 +91,7 @@ potential conflicts with your currently-installed version of Factorio. Download 
 appropriate to your operating system, and extract the folder to a convenient location (we recommend `C:\Factorio` or
 similar).
 
-![Factorio Download Options](/static/assets/tutorial/factorio/factorio-download.png)
+![Factorio Download Options](/static/assets/tutorial/Factorio/factorio-download.png)
 
 Next, you should launch your Factorio Server by running `factorio.exe`, which is located at: `bin/x64/factorio.exe`. You
 will be asked to log in to your Factorio account using the same credentials you used on Factorio's website. After you

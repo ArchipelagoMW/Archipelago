@@ -33,8 +33,7 @@
                 is_adult and (Progressive_Strength_Upgrade or
                     (logic_forest_mq_block_puzzle and has_bombchus and can_use(Hookshot)))",
             "Forest Temple Outdoor Ledge": "
-                (logic_forest_mq_hallway_switch_jumpslash and can_use(Hover_Boots)) or
-                (logic_forest_mq_hallway_switch_hookshot and can_use(Hookshot))",
+                (logic_forest_mq_hallway_switch_jumpslash and can_use(Hover_Boots))",
             "Forest Temple Boss Region": "
                 Forest_Temple_Jo_and_Beth and Forest_Temple_Amy_and_Meg"
         }

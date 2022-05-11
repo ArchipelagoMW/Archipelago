@@ -8,7 +8,7 @@ from .Locations import SA2BLocation, all_locations, setup_locations
 from .Options import sa2b_options
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, gate_0_blacklist_regions
 from .Rules import set_rules
-from .Names import ItemName
+from .Names import ItemName, LocationName
 from ..AutoWorld import World
 import Patch
 
@@ -50,9 +50,9 @@ class SA2BWorld(World):
             "MusicMap":                             self.music_map,
             "MusicShuffle":                         self.world.MusicShuffle[self.player],
             "DeathLink":                            self.world.DeathLink[self.player],
-            "IncludeMissions":                      self.world.IncludeMissions[self.player],
-            "EmblemPercentageForCannonsCore":       self.world.EmblemPercentageForCannonsCore[self.player],
-            "NumberOfLevelGates":                   self.world.NumberOfLevelGates[self.player],
+            "IncludeMissions":                      self.world.IncludeMissions[self.player].value,
+            "EmblemPercentageForCannonsCore":       self.world.EmblemPercentageForCannonsCore[self.player].value,
+            "NumberOfLevelGates":                   self.world.NumberOfLevelGates[self.player].value,
             "LevelGateDistribution":                self.world.LevelGateDistribution[self.player],
             "EmblemsForCannonsCore":                self.emblems_for_cannons_core,
             "RegionEmblemMap":                      self.region_emblem_map,
@@ -61,9 +61,6 @@ class SA2BWorld(World):
     def _create_items(self, name: str):
         data = item_table[name]
         return [self.create_item(name)] * data.quantity
-
-    def get_required_client_version(self) -> typing.Tuple[int, int, int]:
-        return max((0, 2, 5), super(SA2BWorld, self).get_required_client_version())
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
@@ -110,13 +107,15 @@ class SA2BWorld(World):
         return levels_per_gate
 
     def generate_basic(self):
+        self.world.get_location(LocationName.biolizard, self.player).place_locked_item(self.create_item(ItemName.maria))
+
         itempool: typing.List[SA2BItem] = []
 
         # First Missions
         total_required_locations = 31
 
         # Mission Locations
-        total_required_locations *= self.world.IncludeMissions[self.player]
+        total_required_locations *= self.world.IncludeMissions[self.player].value
 
         # Upgrades
         total_required_locations += 28
@@ -127,16 +126,14 @@ class SA2BWorld(World):
 
         total_emblem_count = total_required_locations - len(itempool)
 
-        itempool += [self.create_item(ItemName.emblem)] * total_emblem_count
+        #itempool += [self.create_item(ItemName.emblem)] * total_emblem_count
 
-        self.world.itempool += itempool
-
-        self.emblems_for_cannons_core = math.floor(total_emblem_count * (self.world.EmblemPercentageForCannonsCore[self.player] / 100.0))
+        self.emblems_for_cannons_core = math.floor(total_emblem_count * (self.world.EmblemPercentageForCannonsCore[self.player].value / 100.0))
 
         shuffled_region_list = list(range(30))
         emblem_requirement_list = list()
         self.world.random.shuffle(shuffled_region_list)
-        levels_per_gate = self.get_levels_per_gate() #30 / (self.world.NumberOfLevelGates[self.player] + 1)
+        levels_per_gate = self.get_levels_per_gate() #30 / (self.world.NumberOfLevelGates[self.player].value + 1)
 
         check_for_impossible_shuffle(shuffled_region_list, math.ceil(levels_per_gate[0]), self.world)
         levels_added_to_gate = 0
@@ -152,10 +149,9 @@ class SA2BWorld(World):
             total_levels_added += 1
             if levels_added_to_gate >= levels_per_gate[current_gate]:
                 current_gate += 1
-                if current_gate > self.world.NumberOfLevelGates[self.player]:
-                    current_gate = self.world.NumberOfLevelGates[self.player];
+                if current_gate > self.world.NumberOfLevelGates[self.player].value:
+                    current_gate = self.world.NumberOfLevelGates[self.player].value;
                 else:
-                    print(total_emblem_count * math.pow(total_levels_added / 30.0, 2.0))
                     current_gate_emblems = max(math.floor(total_emblem_count * math.pow(total_levels_added / 30.0, 2.0)), current_gate)
                     gates.append(LevelGate(current_gate_emblems))
                 levels_added_to_gate = 0
@@ -163,6 +159,12 @@ class SA2BWorld(World):
         self.region_emblem_map = dict(zip(shuffled_region_list, emblem_requirement_list))
 
         connect_regions(self.world, self.player, gates, self.emblems_for_cannons_core)
+
+        max_required_emblems = max(max(emblem_requirement_list), self.emblems_for_cannons_core)
+        itempool += [self.create_item(ItemName.emblem)] * max_required_emblems
+        itempool += [self.create_item(ItemName.emblem, True)] * (total_emblem_count - max_required_emblems)
+        
+        self.world.itempool += itempool
 
         if self.world.MusicShuffle[self.player] == "levels":
             musiclist_o = list(range(0, 47))
@@ -181,12 +183,21 @@ class SA2BWorld(World):
         location_table = setup_locations(self.world, self.player)
         create_regions(self.world, self.player, location_table)
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str, forceNonProgression = False) -> Item:
         data = item_table[name]
         created_item = SA2BItem(name, data.progression, data.code, self.player)
         if name == ItemName.emblem:
             created_item.skip_in_prog_balancing = True
+        if forceNonProgression:
+            created_item.advancement = False
         return created_item
 
     def set_rules(self):
         set_rules(self.world, self.player)
+
+    @classmethod
+    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
+                        restitempool, fill_locations):
+        if world.get_game_players("Sonic Adventure 2 Battle"):
+            progitempool.sort(
+                key=lambda item: 0 if (item.name != 'Emblem') else 1)

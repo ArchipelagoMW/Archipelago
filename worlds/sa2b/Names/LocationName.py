@@ -209,6 +209,7 @@ chao_super_karate    = "Chao Garden - Super Karate"
 
 # Other Definitions
 green_hill = "Green Hill"
+biolizard  = "Biolizard"
 
 
 # Region Definitions
@@ -257,5 +258,7 @@ route_280_region     = "Route 280"
 mad_space_region     = "Mad Space"
 
 cannon_core_region = "Cannon Core"
+
+biolizard_region = "Biolizard"
 
 chao_garden_region = "Chao Garden"

@@ -43,6 +43,7 @@ class ALTTPWorld(World):
     data_version = 8
     remote_items: bool = False
     remote_start_inventory: bool = False
+    required_client_version = (0, 3, 2)
 
     set_rules = set_rules
 
@@ -54,6 +55,12 @@ class ALTTPWorld(World):
         self.rom_name_available_event = threading.Event()
         self.has_progressive_bows = False
         super(ALTTPWorld, self).__init__(*args, **kwargs)
+
+    @classmethod
+    def stage_assert_generate(cls, world):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def generate_early(self):
         player = self.player
@@ -323,9 +330,6 @@ class ALTTPWorld(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
-
-    def get_required_client_version(self) -> tuple:
-        return max((0, 3, 2), super(ALTTPWorld, self).get_required_client_version())
 
     def create_item(self, name: str) -> Item:
         return ALttPItem(name, self.player, **as_dict_item_table[name])

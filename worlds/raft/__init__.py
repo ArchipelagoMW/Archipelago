@@ -27,6 +27,7 @@ class RaftWorld(World):
     options = raft_options
 
     data_version = 1
+    required_client_version = (0, 2, 0)
 
     def generate_basic(self):
         minRPSpecified = self.world.minimum_resource_pack_amount[self.player].value
@@ -111,9 +112,6 @@ class RaftWorld(World):
 
         return super(RaftWorld, self).collect_item(state, item, remove)
 
-    def get_required_client_version(self) -> typing.Tuple[int, int, int]:
-        return max((0, 2, 0), super(RaftWorld, self).get_required_client_version())
-    
     def pre_fill(self):
         if self.world.island_frequency_locations[self.player] == 0:
             self.setLocationItem("Radio Tower Frequency to Vasagatan", "Vasagatan Frequency")
