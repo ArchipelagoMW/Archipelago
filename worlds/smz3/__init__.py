@@ -5,14 +5,14 @@ import random
 import threading
 from typing import Dict, Set, TextIO
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState, Tutorial
 from worlds.generic.Rules import set_rule
 import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
 from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
 from worlds.smz3.TotalSMZ3.Config import Config, GameMode, GanonInvincible, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic
 from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
 from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
-from ..AutoWorld import World, AutoLogicRegister
+from ..AutoWorld import World, AutoLogicRegister, WebWorld
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
 from .Options import smz3_options
@@ -34,6 +34,17 @@ class SMZ3CollectionState(metaclass=AutoLogicRegister):
         return ret
 
 
+class SMZ3Web(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Archipelago Super Metroid and A Link to the Past Crossover randomizer on your computer. This guide covers single-player, multiworld, and related software.",
+        "English",
+        "multiworld_en.md",
+        "multiworld/en",
+        ["lordlou"]
+    )]
+
+
 class SMZ3World(World):
     """
      A python port of Super Metroid & A Link To The Past Crossover Item Randomizer based on v11.2 of Total's SMZ3. 
@@ -47,6 +58,7 @@ class SMZ3World(World):
     location_names: Set[str]
     item_name_to_id = TotalSMZ3Item.lookup_name_to_id
     location_name_to_id: Dict[str, int] = {key : locations_start_id + value.Id for key, value in TotalSMZ3World(Config({}), "", 0, "").locationLookup.items()}
+    web = SMZ3Web()
 
     remote_items: bool = False
     remote_start_inventory: bool = False

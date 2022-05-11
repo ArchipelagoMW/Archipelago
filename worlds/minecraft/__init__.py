@@ -9,7 +9,7 @@ from .Regions import mc_regions, link_minecraft_structures, default_connections
 from .Rules import set_advancement_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 
-from BaseClasses import Region, Entrance, Item
+from BaseClasses import Region, Entrance, Item, Tutorial
 from .Options import minecraft_options
 from ..AutoWorld import World, WebWorld
 
@@ -18,6 +18,36 @@ client_version = 7
 class MinecraftWebWorld(WebWorld):
     theme = "jungle"
     bug_report_page = "https://github.com/KonoTyran/Minecraft_AP_Randomizer/issues/new?assignees=&labels=bug&template=bug_report.yaml&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
+
+    setup = Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago Minecraft software on your computer. This guide covers"
+        "single-player, multiworkd, and related software.",
+        "English",
+        "minecraft_en.md",
+        "minecraft/en",
+        ["Kono Tyran"]
+    )
+
+    setup_es = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Español",
+        "minecraft_es.md",
+        "minecraft/es",
+        ["Edos"]
+    )
+
+    setup_sv = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Swedish",
+        "minecraft_sv.md",
+        "minecraft/sv",
+        ["Albinum"]
+    )
+
+    tutorials = [setup, setup_es, setup_sv]
 
 
 class MinecraftWorld(World):

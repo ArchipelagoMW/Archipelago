@@ -6,10 +6,22 @@ from .Locations import location_table, SM64Location
 from .Options import sm64_options
 from .Rules import set_rules
 from .Regions import create_regions, sm64courses
-from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld
-from ..AutoWorld import World
+from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld, Tutorial
+from ..AutoWorld import World, WebWorld
 
 client_version = 1
+
+
+class SM64Web(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up SM64EX for MultiWorld.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["N00byKing"]
+    )]
+
 
 class SM64World(World):
     """ 
@@ -19,6 +31,8 @@ class SM64World(World):
 
     game: str = "Super Mario 64"
     topology_present = False
+
+    web = SM64Web()
 
     item_name_to_id = item_table
     location_name_to_id = location_table

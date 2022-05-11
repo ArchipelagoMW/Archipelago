@@ -4,7 +4,7 @@ Archipelago init file for The Witness
 
 import typing
 
-from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance
+from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance, Tutorial
 from ..AutoWorld import World, WebWorld
 from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
@@ -17,6 +17,14 @@ from .utils import best_junk_to_add_based_on_weights
 
 class WitnessWebWorld(WebWorld):
     theme = "jungle"
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing The Witness with Archipelago.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["NewSoupVi", "Jarno"]
+    )]
 
 
 class WitnessWorld(World):
