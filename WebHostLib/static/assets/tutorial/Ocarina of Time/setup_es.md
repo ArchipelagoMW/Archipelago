@@ -52,9 +52,11 @@ accessibility:
   items: 0 # Garantiza que puedes obtener todos los objetos pero no todas las localizaciones
   locations: 50 # Garantiza que puedes obtener todas las localizaciones
   none: 0 # Solo garantiza que el juego pueda completarse.
-progression_balancing:
-  on: 50 # Un sistema para reducir tiempos de espera en una partida multiworld
-  off: 0
+progression_balancing: # Un sistema para reducir tiempos de espera en una partida multiworld
+  0: 0 # Con un número más bajo, es más probable esperar objetos de otros jugadores.
+  25: 0
+  50: 50
+  99: 0 # Objetos importantes al principio del juego, para no esperar
 Ocarina of Time:
   logic_rules: # Logica usada por el randomizer.
     glitchless: 50

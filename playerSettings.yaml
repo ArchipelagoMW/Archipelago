@@ -32,9 +32,11 @@ accessibility:
   items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
   locations: 50 # Guarantees you will be able to access all locations, and therefore all items
   none: 0 # Guarantees only that the game is beatable. You may not be able to access all locations or acquire all items
-progression_balancing:
-  on: 50 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
-  off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch/sequence break around missing items.
+progression_balancing: # A system to reduce BK, as in times during which you can't do anything, by moving your items into an earlier access sphere
+  0: 0 # Choose a lower number if you don't mind a longer multiworld, or can glitch/sequence break around missing items.
+  25: 0
+  50: 50 # Make it likely you have stuff to do.
+  99: 0 # Get important items early, and stay at the front of the progression.
 A Link to the Past:
   ### Logic Section ###
   glitches_required: # Determine the logic required to complete the seed
