@@ -1,6 +1,7 @@
 from typing import Dict, Union
 from BaseClasses import MultiWorld
 from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict
+from schema import Schema, And
 
 class StartWithJewelryBox(Toggle):
     "Start with Jewelry Box unlocked"
@@ -67,6 +68,88 @@ class DamageRando(Choice):
 
 class DamageRandoOverrides(OptionDict):
     "Manual +/-/normal odds for each orb. Put 0 if you don't want a certain nerf or buff to be a possibility."
+    schema = Schema({
+        "Blue": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Blade": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Fire": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Plasma": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Iron": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Ice": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Wind": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Gun": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Umbra": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Empire": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Eye": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Blood": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "ForbiddenTome": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Shattered": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Nether": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        "Radiant": { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+    })
     display_name = "Damage Rando Overrides"
     default = {
         "Blue": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
