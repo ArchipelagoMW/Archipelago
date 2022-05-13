@@ -36,10 +36,10 @@ class ALTTPWorld(World):
     item_name_groups = item_name_groups
     hint_blacklist = {"Triforce"}
 
-    item_name_to_id = {name: data.item_code for name, data in item_table.items() if type(data.item_code) == int}
+    item_name_to_id = {name: data.item_id for name, data in item_table.items() if data.item_id}
     location_name_to_id = lookup_name_to_id
 
-    data_version = 8
+    data_version = 9
     remote_items: bool = False
     remote_start_inventory: bool = False
     required_client_version = (0, 3, 2)
@@ -56,22 +56,20 @@ class ALTTPWorld(World):
     random: random.Random
 
     # options
-    has_progressive_bows: bool = False
-    difficulty: str = 'Normal'
-    goal: str = 'ganon'
-    mode: str = 'open'
-    timer: str = None
-    beemizer_total_chance: int = 0
-    beemizer_trap_chance: int = 0
-    shop_shuffle: str = None
-    retro: bool = False
-    boss_shuffle: str = None
+    has_progressive_bows: bool
+    difficulty: str
+    goal: str
+    mode: str
+    timer: str
+    beemizer_total_chance: int
+    beemizer_trap_chance: int
+    shop_shuffle: str
+    retro: bool
+    boss_shuffle: str
     logic: str
     smallkey_shuffle = smallkey_shuffle
-
-    def __init__(self, *args):
-        super().__init__(*args)
-
+    open_pyramid: str
+    entrance_shuffle: str
 
     @classmethod
     def stage_assert_generate(cls, world):
@@ -91,6 +89,8 @@ class ALTTPWorld(World):
         self.random = self.world.random
         self.boss_shuffle = self.world.boss_shuffle[self.player]
         self.logic = self.world.logic[self.player]
+        self.open_pyramid = self.world.open_pyramid[self.player]
+        self.entrance_shuffle = self.world.shuffle[self.player]
 
         player = self.player
         world = self.world
@@ -126,14 +126,14 @@ class ALTTPWorld(World):
     def create_regions(self):
         player = self.player
         world = self.world
-        if world.open_pyramid[player] == 'goal':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
-                                                                'localganontriforcehunt', 'ganonpedestal'}
-        elif world.open_pyramid[player] == 'auto':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
+        if self.open_pyramid == 'goal':
+            self.open_pyramid = str(self.goal in {'crystals', 'ganontriforcehunt',
+                                                                'localganontriforcehunt', 'ganonpedestal'})
+        elif self.open_pyramid == 'auto':
+            self.open_pyramid = str(self.goal in {'crystals', 'ganontriforcehunt',
                                                                 'localganontriforcehunt', 'ganonpedestal'} and \
-                                         (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull',
-                                                                    'dungeonscrossed'} or not world.shuffle_ganon)
+                                         (self.entrance_shuffle in {'vanilla', 'dungeonssimple', 'dungeonsfull',
+                                                                    'dungeonscrossed'} or not world.shuffle_ganon))
         else:
             world.open_pyramid[player] = {'on': True, 'off': False, 'yes': True, 'no': False}.get(
                 world.open_pyramid[player], 'auto')

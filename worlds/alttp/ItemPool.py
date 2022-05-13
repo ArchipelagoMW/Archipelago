@@ -265,7 +265,7 @@ def generate_itempool(world: MultiWorld):
     if world.goal in ['pedestal', 'triforcehunt', 'localtriforcehunt', 'icerodhunt']:
         world.world.push_item(world.get_location('Ganon', player), world.create_item('Nothing', player), False)
     else:
-        world.world.get_location('Ganon', player).place_locked_item(world.create_item('Triforce'), player)
+        world.world.get_location('Ganon', player).place_locked_item(world.create_item('Triforce'))
 
     if world.goal == 'icerodhunt':
         world.progression_balancing.value = False

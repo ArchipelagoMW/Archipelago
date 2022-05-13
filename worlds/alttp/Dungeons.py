@@ -14,7 +14,7 @@ class ALttpDungeon(Dungeon):
 
     def __init__(self, name: str, regions: List[str], big_key: Item, small_keys: List[Item],
                  dungeon_items: List[Item], player: int):
-        super().__init__(name, regions, player, dungeon_items)
+        super().__init__(name, player, regions, dungeon_items)
         self.big_key = big_key
         self.small_keys = small_keys
 

@@ -128,6 +128,7 @@ def set_defeat_dungeon_boss_rule(location):
     # Lambda required to defer evaluation of dungeon.boss since it will change later if boss shuffle is used
     set_rule(location, lambda state: location.parent_region.dungeon.boss.can_defeat(state))
 
+
 def set_always_allow(spot, rule):
     spot.always_allow = rule
 
@@ -172,6 +173,7 @@ def dungeon_boss_rules(world, player):
     }
     for location in boss_locations:
         set_defeat_dungeon_boss_rule(world.get_location(location, player))
+
 
 def global_rules(world, player):
     # ganon can only carry triforce
@@ -408,7 +410,7 @@ def global_rules(world, player):
         add_rule(world.get_location('Ganon', player), lambda state: state.can_reach('Master Sword Pedestal', 'Location', player))
     else:
         add_rule(ganon, lambda state: state.has_crystals(state.world.crystals_needed_for_ganon[player], player))
-    set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.has_beam_sword(player))  # need to damage ganon to get tiles to drop
+    set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.lttp_has_swords(player, 2))  # need to damage ganon to get tiles to drop
 
     set_rule(world.get_location('Flute Activation Spot', player), lambda state: state.has('Flute', player))
 
@@ -675,6 +677,7 @@ def inverted_rules(world, player):
     if world.swordless[player]:
         swordless_rules(world, player)
 
+
 def no_glitches_rules(world, player):
     """"""
     if world.mode[player] == 'inverted':
@@ -700,6 +703,7 @@ def no_glitches_rules(world, player):
     set_rule(world.get_entrance('Paradox Cave Push Block Reverse', player), lambda state: False)  # no glitches does not require block override
     forbid_bomb_jump_requirements(world, player)
     add_conditional_lamps(world, player)
+
 
 def fake_flipper_rules(world, player):
     if world.mode[player] == 'inverted':
@@ -750,6 +754,7 @@ DW_Entrances = ['Bumper Cave (Bottom)',
                 'Swamp Palace',
                 'Turtle Rock',
                 'Dark Death Mountain Ledge (West)']
+
 
 def check_is_dark_world(region):
     for entrance in region.entrances:
@@ -833,6 +838,7 @@ def add_connection(parent_name, target_name, entrance_name, world, player):
     parent.exits.append(connection)
     connection.connect(target)
 
+
 def standard_rules(world, player):
     add_connection('Menu', 'Hyrule Castle Secret Entrance', 'Uncle S&Q', world, player)
     world.get_entrance('Uncle S&Q', player).hide_path = True
@@ -840,6 +846,7 @@ def standard_rules(world, player):
     set_rule(world.get_entrance('Hyrule Castle Exit (West)', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
     set_rule(world.get_entrance('Links House S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
     set_rule(world.get_entrance('Sanctuary S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
+
 
 def toss_junk_item(world, player):
     items = ['Rupees (20)', 'Bombs (3)', 'Arrows (10)', 'Rupees (5)', 'Rupee (1)', 'Bombs (10)',

@@ -76,11 +76,11 @@ class ALttPLogic(LogicMixin):
 
     def lttp_has_swords(self, player: int, count: int = 1) -> bool:
         if count == 4:
-            return self.has('Golden Sword', player)
+            return self.has('Golden Sword', player) or self.has('Progressive Sword', player, 4)
         if count == 3:
-            return self.has_any({'Tempered Sword', 'Golden Sword'}, player)
+            return self.has_any({'Tempered Sword', 'Golden Sword'}, player) or self.has('Progressive Sword', player, 3)
         if count == 2:
-            return self.has_any({'Master Sword', 'Tempered Sword', 'Golden Sword'}, player)
+            return self.has_any({'Master Sword', 'Tempered Sword', 'Golden Sword'}, player) or self.has('Progressive Sword', player, 2)
         return self.has_group('Swords', player)
 
     def lttp_has_melee_weapon(self, player: int) -> bool:

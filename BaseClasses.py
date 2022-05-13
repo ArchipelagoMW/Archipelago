@@ -295,7 +295,7 @@ class MultiWorld():
             for r_location in region.locations:
                 self._location_cache[r_location.name, player] = r_location
 
-    def create_region(self, name: str, player: int, locations: Dict[str: int],
+    def create_region(self, name: str, player: int, locations: Dict[str, int] = {},
                       type: RegionType = None, hint: str = None) -> Region:
         region = Region(name, player, self.worlds[player], type, hint)
         for location, address in locations.items():
@@ -320,7 +320,7 @@ class MultiWorld():
             return self._entrance_cache[entrance, player]
 
     def create_location(self, name: str, player: int, address: int = None, parent: Region = None) -> Location:
-        return Location(player, name, address, parent)
+        return Location(name, player, address, parent)
 
     def get_location(self, location: str, player: int) -> Location:
         try:
@@ -743,7 +743,7 @@ class CollectionState():
             self.stale[item.player] = True
 
 
-class RegionType(int, Enum):
+class RegionType(Enum):
     pass
 
 
@@ -768,7 +768,7 @@ class Region:
         self.player = player
 
     @property
-    def hint(self) -> str:
+    def hint_text(self) -> str:
         if self.hint:
             return self.hint
         return self.name
@@ -845,7 +845,7 @@ class Boss():
         return self.defeat_rule(state, self.player)
 
     def __repr__(self):
-        return f"Boss({self.name}"
+        return f"Boss({self.name})"
 
 
 class Dungeon(object):
@@ -856,7 +856,7 @@ class Dungeon(object):
     world: MultiWorld = None
     bosses: Dict = {}
 
-    def __init__(self, name: str, player: int, regions: List[Region], dungeon_items: List[Item] = []):
+    def __init__(self, name: str, player: int, regions: List[Any], dungeon_items: List[Item] = []):
         self.name = name
         self.regions = regions
         self.dungeon_items = dungeon_items
