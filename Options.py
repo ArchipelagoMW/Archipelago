@@ -642,9 +642,24 @@ class ItemLinks(OptionList):
             "name": And(str, len),
             "item_pool": [And(str, len)],
             Optional("exclude"): [And(str, len)],
-            "replacement_item": Or(And(str, len), None)
+            "replacement_item": Or(And(str, len), None),
+            Optional("local_items"): [And(str, len)],
+            Optional("non_local_items"): [And(str, len)]
         }
     ])
+
+    @staticmethod
+    def verify_items(items: typing.List[str], item_link: str, pool_name: str, world, allow_item_groups: bool = True) -> typing.Set:
+        pool = set()
+        for item_name in items:
+            if item_name not in world.item_names and (not allow_item_groups or item_name not in world.item_name_groups):
+                raise Exception(f"Item {item_name} from item link {item_link} "
+                                f"is not a valid item from {world.game} for {pool_name}")
+            if allow_item_groups:
+                pool |= world.item_name_groups.get(item_name, {item_name})
+            else:
+                pool |= {item_name}
+        return pool
 
     def verify(self, world):
         super(ItemLinks, self).verify(world)
@@ -653,18 +668,27 @@ class ItemLinks(OptionList):
             if link["name"] in existing_links:
                 raise Exception(f"You cannot have more than one link named {link['name']}.")
             existing_links.add(link["name"])
-            for item_name in link["item_pool"]:
-                if item_name not in world.item_names and item_name not in world.item_name_groups:
-                    raise Exception(f"Item {item_name} from item link {link} "
-                                    f"is not a valid item name from {world.game}")
+
+            pool = self.verify_items(link["item_pool"], link["name"], "item_pool", world)
+            local_items = set()
+            non_local_items = set()
+
             if "exclude" in link:
-                for item_name in link["exclude"]:
-                    if item_name not in world.item_names and item_name not in world.item_name_groups:
-                        raise Exception(f"Item {item_name} from item link {link} "
-                                        f"is not a valid item name from {world.game}")
-            if link["replacement_item"] and link["replacement_item"] not in world.item_names:
-                raise Exception(f"Item {link['replacement_item']} from item link {link} "
-                                f"is not a valid item name from {world.game}")
+                pool -= self.verify_items(link["exclude"], link["name"], "exclude", world)
+            if link["replacement_item"]:
+                self.verify_items([link["replacement_item"]], link["name"], "replacement_item", world, False)
+            if "local_items" in link:
+                local_items = self.verify_items([link["local_items"]], link["name"], "local_items", world)
+                local_items &= pool
+            if "non_local_items" in link:
+                non_local_items = self.verify_items([link["non_local_items"]], link["name"], "non_local_items", world)
+                non_local_items &= pool
+
+            intersection = local_items.intersection(non_local_items)
+            if intersection:
+                raise Exception(f"item_link {link['name']} has {intersection} items in both its local_items and non_local_items pool.")
+
+
 
 
 per_game_common_options = {
