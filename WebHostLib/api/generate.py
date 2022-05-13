@@ -50,6 +50,7 @@ def generate_api():
             return {"text": str(results),
                     "detail": results}, 400
         else:
+            meta["plando_options"] = list(meta.get("plando_options", []))
             gen = Generation(
                 options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
                 # convert to json compatible
