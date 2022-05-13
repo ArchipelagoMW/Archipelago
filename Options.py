@@ -409,9 +409,9 @@ class Range(NumericOption):
                 raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. Acceptable values are: random, random-high, random-middle, random-low, random-range-low-<min>-<max>, random-range-middle-<min>-<max>, random-range-high-<min>-<max>, or random-range-<min>-<max>.")
         elif text == "default" and hasattr(cls, "default"):
             return cls(cls.default)
-        elif text == "high":
+        elif text in ["high", "true"]:
             return cls(cls.range_end)
-        elif text == "low":
+        elif text in ["low", "false"]:
             return cls(cls.range_start)
         return cls(int(text))
 
