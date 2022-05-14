@@ -121,7 +121,7 @@ Sent to clients when the connection handshake is successfully completed.
 | missing_locations | list\[int\] | Contains ids of remaining locations that need to be checked. Useful for trackers, among other things. |
 | checked_locations | list\[int\] | Contains ids of all locations that have been checked. Useful for trackers, among other things. Location ids are in the range of ± 2<sup>53</sup>-1. |
 | slot_data | dict | Contains a json object for slot related data, differs per game. Empty if not required. |
-| slot_info | dict\[int, NetworkSlot\] | maps each slot to a NetworkSlot information |
+| slot_info | dict\[int, [NetworkSlot](#NetworkSlot)\] | maps each slot to a [NetworkSlot](#NetworkSlot) information |
 
 ### ReceivedItems
 Sent to clients when they receive an item.
@@ -305,9 +305,9 @@ Basic chat command which sends text to the server to be distributed to other cli
 Requests the data package from the server. Does not require client authentication.
 
 #### Arguments
-| Name | Type | Notes |
-| ------ | ----- | ------ |
-| exclusions | list\[str\]  | Optional. If specified, will not send back the specified data. Such as, \["Factorio"\] -> Datapackage without Factorio data.|
+| Name  | Type | Notes                                                                                                                           |
+|-------| ----- |---------------------------------------------------------------------------------------------------------------------------------|
+| games | list\[str\]  | Optional. If specified, will only send back the specified data. Such as, \["Factorio"\] -> Datapackage with only Factorio data. |
 
 ### Bounce
 Send this message to the server, tell it which clients should receive the message and 
@@ -569,7 +569,6 @@ Note:
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | games | dict[str, GameData] | Mapping of all Games and their respective data |
-| version | int | Sum of all per-game version numbers, for clients that don't bother with per-game caching/updating. |
 
 #### GameData
 GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of documentation.

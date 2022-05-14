@@ -102,6 +102,18 @@ class FF1Context(CommonContext):
                               f"{receiving_player_name}"
                 self._set_message(msg, item.item)
 
+    def run_gui(self):
+        from kvui import GameManager
+
+        class FF1Manager(GameManager):
+            logging_pairs = [
+                ("Client", "Archipelago")
+            ]
+            base_title = "Archipelago Final Fantasy 1 Client"
+
+        self.ui = FF1Manager(self)
+        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+
 
 def get_payload(ctx: FF1Context):
     current_time = time.time()
@@ -232,14 +244,8 @@ if __name__ == '__main__':
         ctx = FF1Context(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:
-            input_task = None
-            from kvui import FF1Manager
-            ctx.ui = FF1Manager(ctx)
-            ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
-        else:
-            input_task = asyncio.create_task(console_loop(ctx), name="Input")
-            ui_task = None
-
+            ctx.run_gui()
+        ctx.run_cli()
         ctx.nes_sync_task = asyncio.create_task(nes_sync_task(ctx), name="NES Sync")
 
         await ctx.exit_event.wait()
@@ -250,12 +256,6 @@ if __name__ == '__main__':
         if ctx.nes_sync_task:
             await ctx.nes_sync_task
 
-        if ui_task:
-            await ui_task
-
-        if input_task:
-            input_task.cancel()
-
 
     import colorama
 
@@ -263,7 +263,5 @@ if __name__ == '__main__':
     args, rest = parser.parse_known_args()
     colorama.init()
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(args))
-    loop.close()
+    asyncio.run(main(args))
     colorama.deinit()

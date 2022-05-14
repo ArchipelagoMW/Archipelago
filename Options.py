@@ -5,8 +5,8 @@ import numbers
 import typing
 import random
 
-from schema import Schema, And, Or
-
+from schema import Schema, And, Or, Optional
+from Utils import get_fuzzy_results
 
 class AssembleOptions(abc.ABCMeta):
     def __new__(mcs, name, bases, attrs):
@@ -409,9 +409,9 @@ class Range(NumericOption):
                 raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. Acceptable values are: random, random-high, random-middle, random-low, random-range-low-<min>-<max>, random-range-middle-<min>-<max>, random-range-high-<min>-<max>, or random-range-<min>-<max>.")
         elif text == "default" and hasattr(cls, "default"):
             return cls(cls.default)
-        elif text == "high":
+        elif text in ["high", "true"]:
             return cls(cls.range_end)
-        elif text == "low":
+        elif text in ["low", "false"]:
             return cls(cls.range_start)
         return cls(int(text))
 
@@ -456,13 +456,17 @@ class VerifyKeys:
         if self.verify_item_name:
             for item_name in self.value:
                 if item_name not in world.item_names:
+                    picks = get_fuzzy_results(item_name, world.item_names, limit=1)
                     raise Exception(f"Item {item_name} from option {self} "
-                                    f"is not a valid item name from {world.game}")
+                                    f"is not a valid item name from {world.game}. "
+                                    f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
         elif self.verify_location_name:
             for location_name in self.value:
                 if location_name not in world.location_names:
+                    picks = get_fuzzy_results(location_name, world.location_names, limit=1)
                     raise Exception(f"Location {location_name} from option {self} "
-                                    f"is not a valid location name from {world.game}")
+                                    f"is not a valid location name from {world.game}. "
+                                    f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
 
 
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
@@ -567,8 +571,12 @@ class Accessibility(Choice):
     default = 1
 
 
-class ProgressionBalancing(DefaultOnToggle):
-    """A system that moves progression earlier, to try and prevent the player from getting stuck and bored early."""
+class ProgressionBalancing(Range):
+    """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+    [0-99, default 50] A lower setting means more getting stuck. A higher setting means less getting stuck."""
+    default = 50
+    range_start = 0
+    range_end = 99
     display_name = "Progression Balancing"
 
 
@@ -633,6 +641,7 @@ class ItemLinks(OptionList):
         {
             "name": And(str, len),
             "item_pool": [And(str, len)],
+            Optional("exclude"): [And(str, len)],
             "replacement_item": Or(And(str, len), None)
         }
     ])
@@ -648,6 +657,11 @@ class ItemLinks(OptionList):
                 if item_name not in world.item_names and item_name not in world.item_name_groups:
                     raise Exception(f"Item {item_name} from item link {link} "
                                     f"is not a valid item name from {world.game}")
+            if "exclude" in link:
+                for item_name in link["exclude"]:
+                    if item_name not in world.item_names and item_name not in world.item_name_groups:
+                        raise Exception(f"Item {item_name} from item link {link} "
+                                        f"is not a valid item name from {world.game}")
             if link["replacement_item"] and link["replacement_item"] not in world.item_names:
                 raise Exception(f"Item {link['replacement_item']} from item link {link} "
                                 f"is not a valid item name from {world.game}")

@@ -3,11 +3,22 @@ from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import location_table, RiskOfRainLocation, base_location_table
 from .Rules import set_rules
 
-from BaseClasses import Region, Entrance, Item, MultiWorld
+from BaseClasses import Region, Entrance, Item, MultiWorld, Tutorial
 from .Options import ror2_options
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 
 client_version = 1
+
+
+class RiskOfWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Risk of Rain 2 integration for Archipelago multiworld games.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Ijwu"]
+    )]
 
 
 class RiskOfRainWorld(World):
@@ -25,6 +36,7 @@ class RiskOfRainWorld(World):
 
     data_version = 3
     forced_auto_forfeit = True
+    web = RiskOfWeb()
 
     def generate_basic(self):
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend

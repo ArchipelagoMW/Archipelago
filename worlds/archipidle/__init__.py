@@ -1,4 +1,4 @@
-from BaseClasses import Item, MultiWorld, Region, Location, Entrance
+from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial
 from .Items import item_table
 from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
@@ -6,6 +6,14 @@ from ..AutoWorld import World, WebWorld
 
 class ArchipIDLEWebWorld(WebWorld):
     theme = 'partyTime'
+    tutorials = [Tutorial(
+        "Setup Guide",
+        "A guide to playing ArchipIDLE",
+        "English",
+        "guide_en.md",
+        "guide/en",
+        ["Farrak Kilhn"]
+    )]
 
 
 class ArchipIDLEWorld(World):
