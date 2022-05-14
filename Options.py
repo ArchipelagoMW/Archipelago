@@ -653,8 +653,13 @@ class ItemLinks(OptionList):
         pool = set()
         for item_name in items:
             if item_name not in world.item_names and (not allow_item_groups or item_name not in world.item_name_groups):
+                picks = get_fuzzy_results(item_name, world.item_names, limit=1)
+                picks_group = get_fuzzy_results(item_name, world.item_name_groups.keys(), limit=1)
+                picks_group = f" or '{picks_group[0][0]}' ({picks_group[0][1]}% sure)" if allow_item_groups else ""
+
                 raise Exception(f"Item {item_name} from item link {item_link} "
-                                f"is not a valid item from {world.game} for {pool_name}")
+                                f"is not a valid item from {world.game} for {pool_name}. "
+                                f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure){picks_group}")
             if allow_item_groups:
                 pool |= world.item_name_groups.get(item_name, {item_name})
             else:
