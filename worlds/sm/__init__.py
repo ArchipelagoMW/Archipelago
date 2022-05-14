@@ -68,6 +68,12 @@ class SMWeb(WebWorld):
 
 
 class SMWorld(World):
+    """
+     This is Very Adaptive Randomizer of Items and Areas for Super Metroid (VARIA SM). It supports
+     a wide range of options to randomize Item locations, required skills and even the connections 
+     between the main Areas!
+    """
+
     game: str = "Super Metroid"
     topology_present = True
     data_version = 1
