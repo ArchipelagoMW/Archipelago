@@ -86,12 +86,12 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     numlength = 8
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
         if not cls.hidden:
-            logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} Items | "
-                        f"{len(cls.location_names):3} Locations")
-            logger.info(f"   Item IDs: {min(cls.item_id_to_name):{numlength}} - "
-                        f"{max(cls.item_id_to_name):{numlength}} | "
-                        f"Location IDs: {min(cls.location_id_to_name):{numlength}} - "
-                        f"{max(cls.location_id_to_name):{numlength}}")
+            logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} "
+                        f"Items (IDs: {min(cls.item_id_to_name):{numlength}} - "
+                        f"{max(cls.item_id_to_name):{numlength}}) | "
+                        f"{len(cls.location_names):3} "
+                        f"Locations (IDs: {min(cls.location_id_to_name):{numlength}} - "
+                        f"{max(cls.location_id_to_name):{numlength}})")
 
     AutoWorld.call_stage(world, "assert_generate")
 
