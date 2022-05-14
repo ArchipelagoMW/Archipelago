@@ -678,10 +678,10 @@ class ItemLinks(OptionList):
             if link["replacement_item"]:
                 self.verify_items([link["replacement_item"]], link["name"], "replacement_item", world, False)
             if "local_items" in link:
-                local_items = self.verify_items([link["local_items"]], link["name"], "local_items", world)
+                local_items = self.verify_items(link["local_items"], link["name"], "local_items", world)
                 local_items &= pool
             if "non_local_items" in link:
-                non_local_items = self.verify_items([link["non_local_items"]], link["name"], "non_local_items", world)
+                non_local_items = self.verify_items(link["non_local_items"], link["name"], "non_local_items", world)
                 non_local_items &= pool
 
             intersection = local_items.intersection(non_local_items)
