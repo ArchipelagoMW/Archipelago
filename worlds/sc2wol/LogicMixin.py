@@ -33,6 +33,9 @@ class SC2WoLLogic(LogicMixin):
         return (self.has_any({'Siege Tank', 'Diamondback'}, player) or
                 self.has_all({'Reaper', "G-4 Clusterbomb"}, player) or self.has_all({'Spectre', 'Psionic Lash'}, player))
 
+    def _sc2wol_able_to_rescue(self, world: MultiWorld, player: int, mission_count: int) -> bool:
+        return self.has_any({'Medivac', 'Hercules', 'Raven', 'Orbital Strike'})
+
     def _sc2wol_has_protoss_common_units(self, world: MultiWorld, player: int) -> bool:
         return self.has_any({'Zealot', 'Immortal', 'Stalker', 'Dark Templar'}, player)
 

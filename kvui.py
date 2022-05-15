@@ -395,7 +395,8 @@ class SNIManager(GameManager):
 
 class SC2Manager(GameManager):
     logging_pairs = [
-        ("Client", "Archipelago")
+        ("Client", "Archipelago"),
+        ("Starcraft2", "Starcraft 2")
     ]
     base_title = "Archipelago SC2 Client"
 

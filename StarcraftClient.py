@@ -24,6 +24,7 @@ if __name__ == "__main__":
     init_logging("SNIClient", exception_logger="Client")
 
 logger = logging.getLogger("Client")
+sc2_logger = logging.getLogger("Starcraft2")
 
 import colorama
 
@@ -38,7 +39,7 @@ nest_asyncio.apply()
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: Context
 
-    def _cmd_wol(self, mission_id: str = "") -> bool:
+    def _cmd_play(self, mission_id: str = "") -> bool:
         """Start a Starcraft 2 mission"""
 
         options = mission_id.split()
@@ -48,7 +49,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             mission_number = int(options[0])
             asyncio.create_task(starcraft_launch(self.ctx, mission_number), name="Starcraft Launch")
         else:
-            logger.info("Mission ID needs to be specified.  Use /unfinished or /available to view ids for available missions.")
+            sc2_logger.info("Mission ID needs to be specified.  Use /unfinished or /available to view ids for available missions.")
 
         return True
 
@@ -144,10 +145,10 @@ async def main():
     if input_task:
         input_task.cancel()
 
-maps_table = ["traynor01", "traynor02", "traynor03", "thanson01", "thanson02", "thanson03a", "thanson03b", "ttychus01",
-              "ttychus02", "ttychus03", "ttychus04", "ttychus05", "ttosh01", "ttosh02", "ttosh03a", "ttosh03b",
-              "thorner01", "thorner02", "thorner03", "thorner04", "thorner05s", "tzeratul01", "tzeratul02",
-              "tzeratul03", "tzeratul04", "tvalerian01", "tvalerian02a", "tvalerian02b", "tvalerian03"]
+maps_table = ["ap_traynor01", "ap_traynor02", "ap_traynor03", "ap_thanson01", "ap_thanson02", "ap_thanson03a", "ap_thanson03b", "ap_ttychus01",
+              "ap_ttychus02", "ap_ttychus03", "ap_ttychus04", "ap_ttychus05", "ap_ttosh01", "ap_ttosh02", "ap_ttosh03a", "ap_ttosh03b",
+              "ap_thorner01", "ap_thorner02", "ap_thorner03", "ap_thorner04", "ap_thorner05s", "ap_tzeratul01", "ap_tzeratul02",
+              "ap_tzeratul03", "ap_tzeratul04", "ap_tvalerian01", "ap_tvalerian02a", "ap_tvalerian02b", "ap_tvalerian03"]
 
 
 def calculate_items(items):
@@ -284,7 +285,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     game_state = int(38281 - unit.health)
                     can_read_game = True
 
-            if iteration == 10 and not game_state & 1:
+            if iteration == 80 and not game_state & 1:
                 await self.chat_send("SendMessage Warning: Archipelago unable to connect or has lost connection to " +
                                      "Starcraft 2 (This is likely a map issue)")
 
@@ -436,7 +437,7 @@ def request_unfinished_missions(locations_done, location_table):
             message += ", {}[{}] ({}/{})".format(mission, location_table[mission].id, unfinished_missions[mission],
                                                  location_table[mission].extra_locations)
 
-    logger.info(message)
+    sc2_logger.info(message)
 
 
 def calc_unfinished_missions(locations_done, locations):
@@ -473,7 +474,7 @@ def request_available_missions(locations_done, location_table):
         else:
             message += ", {}[{}]".format(mission, location_table[mission].id)
 
-    logger.info(message)
+    sc2_logger.info(message)
 
 
 def calc_available_missions(locations_done, locations):
