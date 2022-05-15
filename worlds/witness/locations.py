@@ -130,7 +130,7 @@ class StaticWitnessLocations:
         "Inside Mountain Physically Obstructed 3",
         "Inside Mountain Angled Inside Trash 2",
         "Inside Mountain Color Cycle 5",
-        "Inside Mountain Same Solution 6",
+        # "Inside Mountain Same Solution 6",
         "Inside Mountain Elevator Discard",
         "Inside Mountain Giant Puzzle",
     }
