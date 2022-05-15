@@ -17,7 +17,7 @@ from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from Utils import output_path, get_options, __version__, version_tuple
-from worlds.generic.Rules import locality_rules, exclusion_rules
+from worlds.generic.Rules import locality_rules, exclusion_rules, group_locality_rules
 from worlds import AutoWorld
 
 ordered_areas = (
@@ -127,6 +127,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     if world.players > 1:
         for player in world.player_ids:
             locality_rules(world, player)
+        group_locality_rules(world)
     else:
         world.non_local_items[1].value = set()
         world.local_items[1].value = set()
