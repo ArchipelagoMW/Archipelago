@@ -23,7 +23,7 @@ class GenericWeb(WebWorld):
     triggers = Tutorial('Archipelago Triggers Guide', 'A guide to setting up and using triggers in your game settings.',
                         'English', 'triggers_en.md', 'triggers/en', ['alwaysintreble'])
     using_website = Tutorial('Archipelago Website User Guide',
-                             'A guide to using the Archipelago website to generate multiworlds or h ost pre-generated multiworlds.',
+                             'A guide to using the Archipelago website to generate multiworlds or host pre-generated multiworlds.',
                              'English', 'using_website_en.md', 'using_website/en', ['alwaysintreble'])
     tutorials = [setup, using_website, commands, advanced_settings, triggers, plando]
 
