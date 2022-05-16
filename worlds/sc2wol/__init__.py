@@ -15,7 +15,7 @@ from ..AutoWorld import World
 class SC2WoLWorld(World):
     """
     StarCraft II: Wings of Liberty is a science fiction real-time strategy video game developed and published by Blizzard Entertainment.
-    Command the Raynor's Raiders in collecting pieces of the Keystone in order to stop the zerg threat posed by the Queen of Blades.
+    Command Raynor's Raiders in collecting pieces of the Keystone in order to stop the zerg threat posed by the Queen of Blades.
     """
 
     game = "Starcraft2WoL"
