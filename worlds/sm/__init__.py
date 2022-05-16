@@ -425,6 +425,11 @@ class SMWorld(World):
         romPatcher.writeRandoSettings(self.variaRando.randoExec.randoSettings, itemLocs)
 
     def generate_output(self, output_directory: str):
+         # Turn Nothing items into event pairs.
+        for location in self.locations.values():
+            if location.item.game == "Super Metroid" and location.item.type == "Nothing":
+                location.address = location.item.code = None
+
         outfilebase = 'AP_' + self.world.seed_name
         outfilepname = f'_P{self.player}'
         outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}"
@@ -580,11 +585,6 @@ class SMWorld(World):
                 if not world.get_location(bossLoc, player).can_reach(new_state):
                     world.state.smbm[player].onlyBossLeft = True
                     break
-
-        # Turn Nothing items into event pairs.
-        for location in world.get_locations():
-            if location.game == location.item.game == "Super Metroid" and location.item.type == "Nothing":
-                location.address = location.item.code = None
 
     def write_spoiler(self, spoiler_handle: TextIO):
         if self.world.area_randomization[self.player].value != 0:
