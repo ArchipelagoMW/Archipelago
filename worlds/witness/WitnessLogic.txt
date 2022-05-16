@@ -555,7 +555,7 @@ Inside Mountain Top Layer (Inside Mountain) - Mountaintop - 0x17C34:
 Inside Mountain Top Layer Bridge (Inside Mountain) - Inside Mountain Top Layer - 0x09E39:
 0x09E7A (Obscured Vision 1) - True - Obscured & Squares & Black/White Squares & Dots
 0x09E71 (Obscured Vision 2) - 0x09E7A - Obscured & Squares & Black/White Squares & Dots
-0x09E72 (Obscured Vision 3) - 0x09E71 - Obscured & Squares & Black/White Squares & Rotated Shapers & Dots
+0x09E72 (Obscured Vision 3) - 0x09E71 - Obscured & Squares & Black/White Squares & Shapers & Dots
 0x09E69 (Obscured Vision 4) - 0x09E72 - Obscured & Squares & Black/White Squares & Dots
 0x09E7B (Obscured Vision 5) - 0x09E69 - Obscured & Squares & Black/White Squares & Dots
 0x09E73 (Moving Background 1) - True - Moving & Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
