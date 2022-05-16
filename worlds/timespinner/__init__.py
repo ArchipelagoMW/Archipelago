@@ -1,5 +1,5 @@
 from typing import Dict, List, Set, Tuple, TextIO
-from BaseClasses import Item, MultiWorld, Location
+from BaseClasses import Item, MultiWorld, Location, Tutorial
 from ..AutoWorld import World, WebWorld
 from .LogicMixin import TimespinnerLogic
 from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
@@ -10,6 +10,25 @@ from .PyramidKeys import get_pyramid_keys_unlock
 
 class TimespinnerWebWorld(WebWorld):
     theme = "ice"
+    setup = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Timespinner randomizer connected to an Archipelago Multiworld",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Jarno"]
+    )
+
+    setup_de = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Deutsch",
+        "setup_de.md",
+        "setup/en",
+        ["Grrmo", "Fynxes", "Blaze0168"]
+    )
+
+    tutorials = [setup, setup_de]
 
 class TimespinnerWorld(World):
     """
@@ -21,7 +40,7 @@ class TimespinnerWorld(World):
     game = "Timespinner"
     topology_present = True
     remote_items = False
-    data_version = 8
+    data_version = 9
     web = TimespinnerWebWorld()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}

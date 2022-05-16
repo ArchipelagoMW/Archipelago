@@ -3,9 +3,9 @@ window.addEventListener('load', () => {
     let settingHash = localStorage.getItem('weighted-settings-hash');
     if (!settingHash) {
       // If no hash data has been set before, set it now
-      localStorage.setItem('weighted-settings-hash', md5(JSON.stringify(results)));
-      localStorage.removeItem('weighted-settings');
       settingHash = md5(JSON.stringify(results));
+      localStorage.setItem('weighted-settings-hash', settingHash);
+      localStorage.removeItem('weighted-settings');
     }
 
     if (settingHash !== md5(JSON.stringify(results))) {

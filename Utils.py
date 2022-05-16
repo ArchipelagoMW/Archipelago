@@ -25,10 +25,11 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.0"
+__version__ = "0.3.2"
 version_tuple = tuplize_version(__version__)
 
-from yaml import load, dump, SafeLoader
+import jellyfish
+from yaml import load, load_all, dump, SafeLoader
 
 try:
     from yaml import CLoader as Loader
@@ -36,41 +37,44 @@ except ImportError:
     from yaml import Loader
 
 
-def int16_as_bytes(value):
+def int16_as_bytes(value: int) -> typing.List[int]:
     value = value & 0xFFFF
     return [value & 0xFF, (value >> 8) & 0xFF]
 
 
-def int32_as_bytes(value):
+def int32_as_bytes(value: int) -> typing.List[int]:
     value = value & 0xFFFFFFFF
     return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
 
 
-def pc_to_snes(value):
+def pc_to_snes(value: int) -> int:
     return ((value << 1) & 0x7F0000) | (value & 0x7FFF) | 0x8000
 
 
-def snes_to_pc(value):
+def snes_to_pc(value: int) -> int:
     return ((value & 0x7F0000) >> 1) | (value & 0x7FFF)
 
 
-def cache_argsless(function):
-    if function.__code__.co_argcount:
-        raise Exception("Can only cache 0 argument functions with this cache.")
+RetType = typing.TypeVar("RetType")
 
-    result = sentinel = object()
 
-    def _wrap():
+def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[], RetType]:
+    assert not function.__code__.co_argcount, "Can only cache 0 argument functions with this cache."
+
+    sentinel = object()
+    result: typing.Union[object, RetType] = sentinel
+
+    def _wrap() -> RetType:
         nonlocal result
         if result is sentinel:
             result = function()
-        return result
+        return typing.cast(RetType, result)
 
     return _wrap
 
 
 def is_frozen() -> bool:
-    return getattr(sys, 'frozen', False)
+    return typing.cast(bool, getattr(sys, 'frozen', False))
 
 
 def local_path(*path: str) -> str:
@@ -159,6 +163,7 @@ class UniqueKeyLoader(SafeLoader):
 
 
 parse_yaml = functools.partial(load, Loader=UniqueKeyLoader)
+parse_yamls = functools.partial(load_all, Loader=UniqueKeyLoader)
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
 
@@ -258,7 +263,8 @@ def get_default_options() -> dict:
         },
         "minecraft_options": {
             "forge_directory": "Minecraft Forge server",
-            "max_heap_size": "2G"
+            "max_heap_size": "2G",
+            "release_channel": "release"
         },
         "oot_options": {
             "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
@@ -416,7 +422,7 @@ loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': log
 
 
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
-                 log_format: str = "[%(name)s]: %(message)s", exception_logger: str = ""):
+                 log_format: str = "[%(name)s at %(asctime)s]: %(message)s", exception_logger: str = ""):
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
     os.makedirs(log_folder, exist_ok=True)
@@ -477,7 +483,8 @@ class VersionException(Exception):
     pass
 
 
-def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")):
+# noinspection PyPep8Naming
+def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")) -> str:
     n = 0
 
     while value > power:
@@ -487,3 +494,24 @@ def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P
         return f"{value} {power_labels[n]}"
     else:
         return f"{value:0.3f} {power_labels[n]}"
+
+
+def get_fuzzy_ratio(word1: str, word2: str) -> float:
+    return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
+            / max(len(word1), len(word2)))
+
+
+def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: typing.Optional[int] = None) \
+        -> typing.List[typing.Tuple[str, int]]:
+    limit: int = limit if limit else len(wordlist)
+    return list(
+        map(
+            lambda container: (container[0], int(container[1]*100)),  # convert up to limit to int %
+            sorted(
+                map(lambda candidate:
+                    (candidate,  get_fuzzy_ratio(input_word, candidate)),
+                    wordlist),
+                key=lambda element: element[1],
+                reverse=True)[0:limit]
+        )
+    )

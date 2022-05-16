@@ -9,11 +9,24 @@ from .Regions import checksfinder_regions, link_checksfinder_structures
 from .Rules import set_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 
-from BaseClasses import Region, Entrance, Item
+from BaseClasses import Region, Entrance, Item, Tutorial
 from .Options import checksfinder_options
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 
 client_version = 7
+
+
+class ChecksFinderWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago ChecksFinder software on your computer. This guide covers "
+        "single-player, multiworld, and related software.",
+        "English",
+        "checksfinder_en.md",
+        "checksfinder/en",
+        ["Mewlif"]
+    )]
+
 
 class ChecksFinderWorld(World):
     """
@@ -23,6 +36,7 @@ class ChecksFinderWorld(World):
     game: str = "ChecksFinder"
     options = checksfinder_options
     topology_present = True
+    web = ChecksFinderWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}

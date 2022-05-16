@@ -17,7 +17,7 @@ from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from Utils import output_path, get_options, __version__, version_tuple
-from worlds.generic.Rules import locality_rules, exclusion_rules
+from worlds.generic.Rules import locality_rules, exclusion_rules, group_locality_rules
 from worlds import AutoWorld
 
 ordered_areas = (
@@ -86,12 +86,14 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     numlength = 8
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
         if not cls.hidden:
-            logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} Items | "
-                        f"{len(cls.location_names):3} Locations")
-            logger.info(f"   Item IDs: {min(cls.item_id_to_name):{numlength}} - "
-                        f"{max(cls.item_id_to_name):{numlength}} | "
-                        f"Location IDs: {min(cls.location_id_to_name):{numlength}} - "
-                        f"{max(cls.location_id_to_name):{numlength}}")
+            logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} "
+                        f"Items (IDs: {min(cls.item_id_to_name):{numlength}} - "
+                        f"{max(cls.item_id_to_name):{numlength}}) | "
+                        f"{len(cls.location_names):3} "
+                        f"Locations (IDs: {min(cls.location_id_to_name):{numlength}} - "
+                        f"{max(cls.location_id_to_name):{numlength}})")
+
+    AutoWorld.call_stage(world, "assert_generate")
 
     AutoWorld.call_all(world, "generate_early")
 
@@ -125,6 +127,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     if world.players > 1:
         for player in world.player_ids:
             locality_rules(world, player)
+        group_locality_rules(world)
     else:
         world.non_local_items[1].value = set()
         world.local_items[1].value = set()
@@ -326,11 +329,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 slot_data = {}
                 client_versions = {}
                 games = {}
-                minimum_versions = {"server": (0, 2, 4), "clients": client_versions}
+                minimum_versions = {"server": AutoWorld.World.required_server_version, "clients": client_versions}
                 slot_info = {}
                 names = [[name for player, name in sorted(world.player_name.items())]]
                 for slot in world.player_ids:
-                    client_versions[slot] = world.worlds[slot].get_required_client_version()
+                    player_world: AutoWorld.World = world.worlds[slot]
+                    minimum_versions["server"] = max(minimum_versions["server"], player_world.required_server_version)
+                    client_versions[slot] = player_world.required_client_version
                     games[slot] = world.game[slot]
                     slot_info[slot] = NetUtils.NetworkSlot(names[0][slot - 1], world.game[slot],
                                                            world.player_types[slot])

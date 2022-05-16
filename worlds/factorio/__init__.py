@@ -1,9 +1,9 @@
 import collections
 import typing
 
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 
-from BaseClasses import Region, Entrance, Location, Item, RegionType
+from BaseClasses import Region, Entrance, Location, Item, RegionType, Tutorial
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, rocket_recipes, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
@@ -14,6 +14,17 @@ from .Mod import generate_mod
 from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal
 
 import logging
+
+
+class FactorioWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago Factorio software on your computer.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Berserker, Farrak Kilhn"]
+    )]
 
 
 class FactorioItem(Item):
@@ -36,12 +47,15 @@ class Factorio(World):
     custom_recipes: typing.Dict[str, Recipe]
     advancement_technologies: typing.Set[str]
 
+    web = FactorioWeb()
+
     item_name_to_id = all_items
     location_name_to_id = base_tech_table
     item_name_groups = {
         "Progressive": set(progressive_tech_table.values()),
     }
     data_version = 5
+    required_client_version = (0, 3, 0)
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
@@ -178,9 +192,6 @@ class Factorio(World):
                         return item_name
 
         return super(Factorio, self).collect_item(state, item, remove)
-
-    def get_required_client_version(self) -> tuple:
-        return max((0, 2, 6), super(Factorio, self).get_required_client_version())
 
     options = factorio_options
 

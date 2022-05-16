@@ -12,7 +12,7 @@ ROM_PLAYER_LIMIT = 256
 class SMZ3DeltaPatch(APDeltaPatch):
     hash = "3a177ba9879e3dd04fb623a219d175b2"
     game = "SMZ3"
-    patch_file_ending = ".smz3"
+    patch_file_ending = ".apsmz3"
 
     @classmethod
     def get_source_data(cls) -> bytes:

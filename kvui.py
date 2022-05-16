@@ -369,56 +369,11 @@ class GameManager(App):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
 
-class FactorioManager(GameManager):
-    logging_pairs = [
-        ("Client", "Archipelago"),
-        ("FactorioServer", "Factorio Server Log"),
-        ("FactorioWatcher", "Bridge Data Log"),
-    ]
-    base_title = "Archipelago Factorio Client"
-
-
 class ChecksFinderManager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago")
     ]
     base_title = "Archipelago ChecksFinder Client"
-
-
-class SNIManager(GameManager):
-    logging_pairs = [
-        ("Client", "Archipelago"),
-        ("SNES", "SNES"),
-    ]
-    base_title = "Archipelago SNI Client"
-
-
-class SC2Manager(GameManager):
-    logging_pairs = [
-        ("Client", "Archipelago"),
-        ("Starcraft2", "Starcraft 2")
-    ]
-    base_title = "Archipelago SC2 Client"
-
-
-class TextManager(GameManager):
-    logging_pairs = [
-        ("Client", "Archipelago")
-    ]
-    base_title = "Archipelago Text Client"
-
-
-class FF1Manager(GameManager):
-    logging_pairs = [
-        ("Client", "Archipelago")
-    ]
-    base_title = "Archipelago Final Fantasy 1 Client"
-
-class OoTManager(GameManager):
-    logging_pairs = [
-        ("Client", "Archipelago")
-    ]
-    base_title = "Archipelago Ocarina of Time Client"
 
 
 class LogtoUI(logging.Handler):

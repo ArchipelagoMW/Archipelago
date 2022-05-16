@@ -1,6 +1,6 @@
 from ..AutoWorld import World, WebWorld
 from ..generic.Rules import set_rule
-from BaseClasses import Region, Location, Entrance, Item, RegionType
+from BaseClasses import Region, Location, Entrance, Item, RegionType, Tutorial
 from Utils import output_path
 import typing
 import os
@@ -134,6 +134,14 @@ def _get_item_grouping() -> typing.Dict[str, typing.Set[str]]:
 
 class SoEWebWorld(WebWorld):
     theme = 'jungle'
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Secret of Evermore randomizer. This guide covers single-player, multiworld and related software.",
+        "English",
+        "multiworld_en.md",
+        "multiworld/en",
+        ["Black Sliver"]
+    )]
 
 
 class SoEWorld(World):
@@ -147,6 +155,7 @@ class SoEWorld(World):
     remote_items = False
     data_version = 2
     web = SoEWebWorld()
+    required_client_version = (0, 2, 6)
 
     item_name_to_id, item_id_to_raw = _get_item_mapping()
     location_name_to_id, location_id_to_raw = _get_location_mapping()
@@ -173,6 +182,12 @@ class SoEWorld(World):
         res = SoEItem(item.name, item.progression, self.item_name_to_id[item.name], self.player)
         res.trap = item.type == pyevermizer.CHECK_TRAP
         return res
+
+    @classmethod
+    def stage_assert_generate(cls, world):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def create_regions(self):
         # TODO: generate *some* regions from locations' requirements?
@@ -271,7 +286,8 @@ class SoEWorld(World):
             if self.world.death_link[self.player].value:
                 switches.append("--death-link")
             rom_file = get_base_rom_path()
-            out_base = output_path(output_directory, f'AP_{self.world.seed_name}_P{self.player}_{player_name}')
+            out_base = output_path(output_directory, f'AP_{self.world.seed_name}_P{self.player}_'
+                                                     f'{self.world.get_file_safe_player_name(self.player)}')
             out_file = out_base + '.sfc'
             placement_file = out_base + '.txt'
             patch_file = out_base + '.apsoe'
@@ -319,10 +335,6 @@ class SoEWorld(World):
         if self.connect_name and self.connect_name != self.world.player_name[self.player]:
             payload = multidata["connect_names"][self.world.player_name[self.player]]
             multidata["connect_names"][self.connect_name] = payload
-
-    def get_required_client_version(self):
-        return max((0, 2, 6), super(SoEWorld, self).get_required_client_version())
-
 
 class SoEItem(Item):
     game: str = "Secret of Evermore"

@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import Item, MultiWorld
+from BaseClasses import Item, MultiWorld, Tutorial
 from .Items import LegacyItem, ItemData, item_table, vendors_table, static_classes_table, progressive_classes_table, \
     skill_unlocks_table, blueprints_table, runes_table, misc_items_table
 from .Locations import LegacyLocation, location_table, base_location_table
@@ -8,7 +8,18 @@ from .Options import legacy_options
 from .Regions import create_regions
 from .Rules import set_rules
 from .Names import ItemName
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
+
+
+class LegacyWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Rogue Legacy Randomizer software on your computer. This guide covers single-player, multiworld, and related software.",
+        "English",
+        "rogue-legacy_en.md",
+        "rogue-legacy/en",
+        ["Phar"]
+    )]
 
 
 class LegacyWorld(World):
@@ -21,6 +32,8 @@ class LegacyWorld(World):
     options = legacy_options
     topology_present = False
     data_version = 3
+    required_client_version = (0, 2, 3)
+    web = LegacyWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
@@ -53,9 +66,6 @@ class LegacyWorld(World):
     def _create_items(self, name: str):
         data = item_table[name]
         return [self.create_item(name)] * data.quantity
-
-    def get_required_client_version(self) -> typing.Tuple[int, int, int]:
-        return max((0, 2, 3), super(LegacyWorld, self).get_required_client_version())
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()

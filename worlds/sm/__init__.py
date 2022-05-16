@@ -5,7 +5,7 @@ import copy
 import os
 import threading
 import base64
-from typing import Set, List
+from typing import Set, List, TextIO
 
 logger = logging.getLogger("Super Metroid")
 
@@ -17,8 +17,8 @@ from .Options import sm_options
 from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch
 import Utils
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
-from ..AutoWorld import World, AutoLogicRegister
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState, Tutorial
+from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
 from logic.smboolmanager import SMBoolManager
 from graph.vanilla.graph_locations import locationsDict
@@ -56,7 +56,24 @@ class SMCollectionState(metaclass=AutoLogicRegister):
         return tuple(player for player in multiword.get_all_ids() if multiword.game[player] == game_name)
 
 
+class SMWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Super Metroid Client on your computer. This guide covers single-player, multiworld, and related software.",
+        "English",
+        "multiworld_en.md",
+        "multiworld/en",
+        ["Farrak Kilhn"]
+    )]
+
+
 class SMWorld(World):
+    """
+     This is Very Adaptive Randomizer of Items and Areas for Super Metroid (VARIA SM). It supports
+     a wide range of options to randomize Item locations, required skills and even the connections 
+     between the main Areas!
+    """
+
     game: str = "Super Metroid"
     topology_present = True
     data_version = 1
@@ -65,9 +82,14 @@ class SMWorld(World):
     location_names: Set[str] = frozenset(locations_lookup_name_to_id)
     item_name_to_id = items_lookup_name_to_id
     location_name_to_id = locations_lookup_name_to_id
+    web = SMWeb()
 
     remote_items: bool = False
     remote_start_inventory: bool = False
+
+    # changes to client DeathLink handling for 0.2.1
+    # changes to client Remote Item handling for 0.2.6
+    required_client_version = (0, 2, 6)
 
     itemManager: ItemManager
 
@@ -78,6 +100,12 @@ class SMWorld(World):
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
+
+    @classmethod
+    def stage_assert_generate(cls, world):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def generate_early(self):
         Logic.factory('vanilla')
@@ -166,11 +194,6 @@ class SMWorld(World):
     def create_regions(self):
         create_locations(self, self.player)
         create_regions(self, self.world, self.player)
-
-    def get_required_client_version(self):
-        # changes to client DeathLink handling for 0.2.1
-        # changes to client Remote Item handling for 0.2.6
-        return max(super(SMWorld, self).get_required_client_version(), (0, 2, 6))
 
     def getWord(self, w):
         return (w & 0x00FF, (w & 0xFF00) >> 8)
@@ -404,7 +427,7 @@ class SMWorld(World):
     def generate_output(self, output_directory: str):
         outfilebase = 'AP_' + self.world.seed_name
         outfilepname = f'_P{self.player}'
-        outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}"
+        outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}"
         outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
 
         try:
@@ -548,6 +571,20 @@ class SMWorld(World):
             if location.game == location.item.game == "Super Metroid" and location.item.type == "Nothing":
                 location.address = location.item.code = None
 
+    def write_spoiler(self, spoiler_handle: TextIO):
+        if self.world.area_randomization[self.player].value != 0:
+            spoiler_handle.write('\n\nArea Transitions:\n\n')
+            spoiler_handle.write('\n'.join(['%s%s %s %s' % (f'{self.world.get_player_name(self.player)}: '
+                                                            if self.world.players > 1 else '', src.Name,
+                                                            '<=>',
+                                                            dest.Name) for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions if not src.Boss]))
+
+        if self.world.boss_randomization[self.player].value != 0:
+            spoiler_handle.write('\n\nBoss Transitions:\n\n')
+            spoiler_handle.write('\n'.join(['%s%s %s %s' % (f'{self.world.get_player_name(self.player)}: '
+                                                            if self.world.players > 1 else '', src.Name,
+                                                            '<=>',
+                                                            dest.Name) for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions if src.Boss]))
 
 def create_locations(self, player: int):
     for name, id in locations_lookup_name_to_id.items():

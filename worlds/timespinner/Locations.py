@@ -32,7 +32,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Upper lake desolation', 'Upper desolation secret',  1337011, lambda state: state._timespinner_can_break_walls(world, player)),
         LocationData('Upper lake desolation', 'Upper desolation double jump cave platform',  1337012, lambda state: state._timespinner_has_doublejump(world, player)),
         LocationData('Upper lake desolation', 'Upper desolation double jump cave floor',  1337013),
-        LocationData('Upper lake desolation', 'Fire-Locked sparrow chest',  1337014),
+        LocationData('Upper lake desolation', 'Upper desolation sparrow chest',  1337014),
         LocationData('Upper lake desolation', 'Crash site pedestal',  1337015),
         LocationData('Upper lake desolation', 'Crash site chest 1',  1337016, lambda state: state.has_all({'Killed Maw'}, player)),
         LocationData('Upper lake desolation', 'Crash site chest 2',  1337017, lambda state: state.has_all({'Killed Maw'}, player)),
@@ -197,21 +197,21 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
     # 1337156 - 1337170 Downloads
     if not world or is_option_enabled(world, player, "DownloadableItems"):
         location_table += ( 
-            LocationData('Library', 'Library terminal 2',  1337156, lambda state: state.has('Tablet', player)),
-            LocationData('Library', 'Library terminal 1',  1337157, lambda state: state.has('Tablet', player)),
+            LocationData('Library', 'Library terminal 2 (Lachiem)',  1337156, lambda state: state.has('Tablet', player)),
+            LocationData('Library', 'Library terminal 1 (Windaria)',  1337157, lambda state: state.has('Tablet', player)),
             # 1337158 Is lost in time
-            LocationData('Library', 'Library terminal 3',  1337159, lambda state: state.has('Tablet', player)),
-            LocationData('Library', 'V terminal 1',  1337160, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
-            LocationData('Library', 'V terminal 2',  1337161, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
-            LocationData('Library', 'V terminal 3',  1337162, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
-            LocationData('Library top', 'Backer room terminal',  1337163, lambda state: state.has('Tablet', player)),
-            LocationData('Varndagroth tower right (elevator)', 'Medbay',  1337164, lambda state: state.has('Tablet', player) and state._timespinner_has_keycard_B(world, player)),
-            LocationData('The lab (upper)', 'Chest and download terminal',  1337165, lambda state: state.has('Tablet', player)),
-            LocationData('The lab (power off)', 'Lab terminal middle',  1337166, lambda state: state.has('Tablet', player)),
-            LocationData('The lab (power off)', 'Sentry platform terminal',  1337167, lambda state: state.has('Tablet', player)),
-            LocationData('The lab', 'Experiment 13 terminal',  1337168, lambda state: state.has('Tablet', player)),
-            LocationData('The lab', 'Lab terminal left',  1337169, lambda state: state.has('Tablet', player)),
-            LocationData('The lab (power off)', 'Lab terminal right',  1337170, lambda state: state.has('Tablet', player))
+            LocationData('Library', 'Library terminal 3 (Emporer Nuvius)',  1337159, lambda state: state.has('Tablet', player)),
+            LocationData('Library', 'V terminal 1 (War of the Sisters)',  1337160, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
+            LocationData('Library', 'V terminal 2 (Lake Desolation Map)',  1337161, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
+            LocationData('Library', 'V terminal 3 (Vilete)',  1337162, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
+            LocationData('Library top', 'Backer room terminal (Vandagray Metropolis Map)',  1337163, lambda state: state.has('Tablet', player)),
+            LocationData('Varndagroth tower right (elevator)', 'Medbay terminal (Bleakness Research)',  1337164, lambda state: state.has('Tablet', player) and state._timespinner_has_keycard_B(world, player)),
+            LocationData('The lab (upper)', 'Chest and download terminal (Experiment #13)',  1337165, lambda state: state.has('Tablet', player)),
+            LocationData('The lab (power off)', 'Lab terminal middle (Amadeus Laboratory Map)',  1337166, lambda state: state.has('Tablet', player)),
+            LocationData('The lab (power off)', 'Sentry platform terminal (Origins)',  1337167, lambda state: state.has('Tablet', player)),
+            LocationData('The lab', 'Experiment 13 terminal (W.R.E.C Farewell)',  1337168, lambda state: state.has('Tablet', player)),
+            LocationData('The lab', 'Lab terminal left (Biotechnology)',  1337169, lambda state: state.has('Tablet', player)),
+            LocationData('The lab (power off)', 'Lab terminal right (Experiment #11)',  1337170, lambda state: state.has('Tablet', player))
         )
 
     # 1337176 - 1337176 Cantoran

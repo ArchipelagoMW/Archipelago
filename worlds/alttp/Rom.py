@@ -1723,7 +1723,7 @@ def write_custom_shops(rom, world, player):
             price_data = get_price_data(item['price'], item["price_type"])
             replacement_price_data = get_price_data(item['replacement_price'], item['replacement_price_type'])
             slot = 0 if shop.type == ShopType.TakeAny else index
-            if not item['item'] in item_table:  # item not native to ALTTP
+            if item['player'] and world.game[item['player']] != "A Link to the Past":  # item not native to ALTTP
                 item_code = get_nonnative_item_sprite(item['item'])
             else:
                 item_code = ItemFactory(item['item'], player).code
@@ -1765,7 +1765,7 @@ def hud_format_text(text):
 
 def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, palettes_options,
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
-                       triforcehud: str = None, deathlink: bool = False):
+                       triforcehud: str = None, deathlink: bool = False, allowcollect: bool = False):
     local_random = random if not world else world.slot_seeds[player]
     disable_music: bool = not music
     # enable instant item menu
@@ -1899,7 +1899,9 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
         elif palettes_options['dungeon'] == 'random':
             randomize_uw_palettes(rom, local_random)
 
-    rom.write_byte(0x18008D, int(deathlink))
+    rom.write_byte(0x18008D, (0b00000001 if deathlink else 0) |
+                   #          0b00000010 is already used for death_link_allow_survive in super metroid.
+                             (0b00000100 if allowcollect else 0))
 
     apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event,
                                  world.sprite_pool[player] if world else [])

@@ -121,7 +121,7 @@ Sent to clients when the connection handshake is successfully completed.
 | missing_locations | list\[int\] | Contains ids of remaining locations that need to be checked. Useful for trackers, among other things. |
 | checked_locations | list\[int\] | Contains ids of all locations that have been checked. Useful for trackers, among other things. Location ids are in the range of ± 2<sup>53</sup>-1. |
 | slot_data | dict | Contains a json object for slot related data, differs per game. Empty if not required. |
-| slot_info | dict\[int, NetworkSlot\] | maps each slot to a NetworkSlot information |
+| slot_info | dict\[int, [NetworkSlot](#NetworkSlot)\] | maps each slot to a [NetworkSlot](#NetworkSlot) information |
 
 ### ReceivedItems
 Sent to clients when they receive an item.
@@ -305,9 +305,9 @@ Basic chat command which sends text to the server to be distributed to other cli
 Requests the data package from the server. Does not require client authentication.
 
 #### Arguments
-| Name | Type | Notes |
-| ------ | ----- | ------ |
-| exclusions | list\[str\]  | Optional. If specified, will not send back the specified data. Such as, \["Factorio"\] -> Datapackage without Factorio data.|
+| Name  | Type | Notes                                                                                                                           |
+|-------| ----- |---------------------------------------------------------------------------------------------------------------------------------|
+| games | list\[str\]  | Optional. If specified, will only send back the specified data. Such as, \["Factorio"\] -> Datapackage with only Factorio data. |
 
 ### Bounce
 Send this message to the server, tell it which clients should receive the message and 
@@ -569,7 +569,6 @@ Note:
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | games | dict[str, GameData] | Mapping of all Games and their respective data |
-| version | int | Sum of all per-game version numbers, for clients that don't bother with per-game caching/updating. |
 
 #### GameData
 GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of documentation.
@@ -583,13 +582,13 @@ GameData is a **dict** but contains these keys and values. It's broken out into 
 ### Tags
 Tags are represented as a list of strings, the common Client tags follow:
 
-| Name | Notes |
-| ----- | ---- |
-| AP | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily. |
-| IgnoreGame | Tells the server to ignore the "game" attribute in the [Connect](#Connect) packet. |
-| DeathLink | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets |
-| Tracker | Tells the server that this client is actually a Tracker, will refuse new locations from this client and send all items as if they were remote items. |
-| TextOnly | Tells the server that this client will not send locations and does not want to receive items. |
+| Name       | Notes                                                                                                                                                                                                              |
+|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| AP         | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily.                                                                                  |
+| IgnoreGame | Deprecated. See Tracker and TextOnly. Tells the server to ignore the "game" attribute in the [Connect](#Connect) packet.                                                                                           |
+| DeathLink  | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets                                                                                                            |
+| Tracker    | Tells the server that this client will not send locations and is actually a Tracker. When specified and used with empty or null `game` in [Connect](#connect), game and game's version validation will be skipped. |
+| TextOnly   | Tells the server that this client will not send locations and is intended for chat. When specified and used with empty or null `game` in [Connect](#connect), game and game's version validation will be skipped.  |
 
 ### DeathLink
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:

@@ -129,6 +129,10 @@ def tutorial(game, file, lang):
 
 @app.route('/tutorial/')
 def tutorial_landing():
+    worlds = {}
+    for game, world in AutoWorldRegister.world_types.items():
+        if not world.hidden:
+            worlds[game] = world
     return render_template("tutorialLanding.html")
 
 
@@ -207,7 +211,17 @@ def get_datapackge():
     return Response(json.dumps(network_data_package, indent=4), mimetype="text/plain")
 
 
+@app.route('/index')
+@app.route('/sitemap')
+def get_sitemap():
+    available_games = []
+    for game, world in AutoWorldRegister.world_types.items():
+        if not world.hidden:
+            available_games.append(game)
+    return render_template("siteMap.html", games=available_games)
+
+
 from WebHostLib.customserver import run_server_process
-from . import tracker, upload, landing, check, generate, downloads, api  # to trigger app routing picking up on it
+from . import tracker, upload, landing, check, generate, downloads, api, stats  # to trigger app routing picking up on it
 
 app.register_blueprint(api.api_endpoints)

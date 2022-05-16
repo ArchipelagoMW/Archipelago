@@ -9,6 +9,9 @@ import sys
 import time
 import random
 
+import ModuleUpdate
+ModuleUpdate.update()
+
 import factorio_rcon
 import colorama
 import asyncio
@@ -118,9 +121,23 @@ class FactorioContext(CommonContext):
                     gained = int(args["original_value"] - args["value"])
                     gained_text = Utils.format_SI_prefix(gained) + "J"
                     if gained:
-                        logger.info(f"EnergyLink: Received {gained_text}. "
-                                    f"{Utils.format_SI_prefix(args['value'])}J remaining.")
+                        logger.debug(f"EnergyLink: Received {gained_text}. "
+                                     f"{Utils.format_SI_prefix(args['value'])}J remaining.")
                         self.rcon_client.send_command(f"/ap-energylink {gained}")
+
+    def run_gui(self):
+        from kvui import GameManager
+
+        class FactorioManager(GameManager):
+            logging_pairs = [
+                ("Client", "Archipelago"),
+                ("FactorioServer", "Factorio Server Log"),
+                ("FactorioWatcher", "Bridge Data Log"),
+            ]
+            base_title = "Archipelago Factorio Client"
+
+        self.ui = FactorioManager(self)
+        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
 async def game_watcher(ctx: FactorioContext):
@@ -184,7 +201,7 @@ async def game_watcher(ctx: FactorioContext):
                                 }]))
                                 ctx.rcon_client.send_command(
                                     f"/ap-energylink -{value}")
-                                logger.info(f"EnergyLink: Sent {Utils.format_SI_prefix(value)}J")
+                                logger.debug(f"EnergyLink: Sent {Utils.format_SI_prefix(value)}J")
 
             await asyncio.sleep(0.1)
 
@@ -343,15 +360,11 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
 async def main(args):
     ctx = FactorioContext(args.connect, args.password)
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-    input_task = None
+
     if gui_enabled:
-        from kvui import FactorioManager
-        ctx.ui = FactorioManager(ctx)
-        ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
-    else:
-        ui_task = None
-    if sys.stdin:
-        input_task = asyncio.create_task(console_loop(ctx), name="Input")
+        ctx.run_gui()
+    ctx.run_cli()
+
     factorio_server_task = asyncio.create_task(factorio_spinup_server(ctx), name="FactorioSpinupServer")
     successful_launch = await factorio_server_task
     if successful_launch:
@@ -366,12 +379,6 @@ async def main(args):
         await factorio_server_task
 
     await ctx.shutdown()
-
-    if ui_task:
-        await ui_task
-
-    if input_task:
-        input_task.cancel()
 
 
 class FactorioJSONtoTextParser(JSONtoTextParser):
@@ -413,7 +420,5 @@ if __name__ == '__main__':
 
     server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, *rest)
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(args))
-    loop.close()
+    asyncio.run(main(args))
     colorama.deinit()

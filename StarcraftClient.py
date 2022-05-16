@@ -79,7 +79,7 @@ class Context(CommonContext):
     announcements = []
     announcement_pos = 0
 
-    def __init__(self, snes_address, server_address, password):
+    def __init__(self, server_address, password):
         super(Context, self).__init__(server_address, password)
 
     async def connection_closed(self):
@@ -112,24 +112,37 @@ class Context(CommonContext):
                 if args["item"].player == self.slot:
                     self.announcements.append(args["data"])
 
+    def run_gui(self):
+        from kvui import GameManager
+
+        class SNIManager(GameManager):
+            logging_pairs = [
+                ("Client", "Archipelago"),
+                ("SNES", "SNES"),
+            ]
+            base_title = "Archipelago SNI Client"
+
+        self.ui = SNIManager(self)
+        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+
 
 async def main():
     multiprocessing.freeze_support()
     parser = get_base_parser()
-    parser.add_argument('--snes', default='localhost:8080', help='Address of the SNI server.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
     args = parser.parse_args()
 
-    ctx = Context(args.snes, args.connect, args.password)
+    ctx = Context(args.connect, args.password)
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+
     input_task = None
     if gui_enabled:
-        from kvui import SC2Manager
-        ctx.ui = SC2Manager(ctx)
-        ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
-    else:
-        ui_task = None
+        ctx.run_gui()
+        #ctx.ui = SC2Manager(ctx)
+        #ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
+    ctx.run_cli()
+
     if sys.stdin:
         input_task = asyncio.create_task(console_loop(ctx), name="Input")
 
