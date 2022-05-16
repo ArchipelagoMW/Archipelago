@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import sys
 import multiprocessing
-import os
-import subprocess
 import logging
 import asyncio
 import nest_asyncio
@@ -13,11 +11,10 @@ import sc2
 from sc2.main import run_game
 from sc2.data import Race
 from sc2.bot_ai import BotAI
-from sc2.player import Bot, Difficulty, AbstractPlayer
+from sc2.player import Bot
 from worlds.sc2wol.Items import lookup_id_to_name, item_table
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 
-from NetUtils import NetworkItem
 from Utils import init_logging
 
 if __name__ == "__main__":
@@ -29,10 +26,7 @@ sc2_logger = logging.getLogger("Starcraft2")
 import colorama
 
 from NetUtils import *
-import Utils
 from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, get_base_parser
-
-from MultiServer import mark_raw
 
 nest_asyncio.apply()
 
@@ -47,7 +41,13 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
         if num_options > 0:
             mission_number = int(options[0])
-            asyncio.create_task(starcraft_launch(self.ctx, mission_number), name="Starcraft Launch")
+
+            if is_mission_available(mission_number, self.ctx.checked_locations, mission_req_table):
+                asyncio.create_task(starcraft_launch(self.ctx, mission_number), name="Starcraft Launch")
+            else:
+                sc2_logger.info(
+                    "This mission is not currently unlocked.  Use /unfinished or /available to see what is available.")
+
         else:
             sc2_logger.info("Mission ID needs to be specified.  Use /unfinished or /available to view ids for available missions.")
 
@@ -460,6 +460,16 @@ def calc_unfinished_missions(locations_done, locations):
     return {unfinished_missions[i]: locations_completed[i] for i in range(len(unfinished_missions))}
 
 
+def is_mission_available(mission_id_to_check, locations_done, locations):
+    unfinished_missions = calc_available_missions(locations_done, locations)
+
+    for mission in unfinished_missions:
+        if locations[mission].id == mission_id_to_check:
+            return True
+
+    return False
+
+
 def request_available_missions(locations_done, location_table):
     message = "Available Missions:"
 
@@ -501,7 +511,6 @@ def calc_available_missions(locations_done, locations):
             available_missions.append(name)
 
     return available_missions
-
 
 
 if __name__ == '__main__':
