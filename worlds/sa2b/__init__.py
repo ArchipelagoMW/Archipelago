@@ -65,12 +65,12 @@ class SA2BWorld(World):
         return {
             "ModVersion": 100,
             "MusicMap": self.music_map,
-            "MusicShuffle": self.world.MusicShuffle[self.player],
-            "DeathLink": self.world.DeathLink[self.player],
-            "IncludeMissions": self.world.IncludeMissions[self.player].value,
-            "EmblemPercentageForCannonsCore": self.world.EmblemPercentageForCannonsCore[self.player].value,
-            "NumberOfLevelGates": self.world.NumberOfLevelGates[self.player].value,
-            "LevelGateDistribution": self.world.LevelGateDistribution[self.player],
+            "MusicShuffle": self.world.music_shuffle[self.player].value,
+            "DeathLink": self.world.death_link[self.player].value,
+            "IncludeMissions": self.world.include_missions[self.player].value,
+            "EmblemPercentageForCannonsCore": self.world.emblem_percentage_for_cannons_core[self.player].value,
+            "NumberOfLevelGates": self.world.number_of_level_gates[self.player].value,
+            "LevelGateDistribution": self.world.level_gate_distribution[self.player].value,
             "EmblemsForCannonsCore": self.emblems_for_cannons_core,
             "RegionEmblemMap": self.region_emblem_map,
         }
@@ -90,7 +90,7 @@ class SA2BWorld(World):
 
     def get_levels_per_gate(self) -> list:
         levels_per_gate = list()
-        max_gate_index = self.world.NumberOfLevelGates[self.player]
+        max_gate_index = self.world.number_of_level_gates[self.player]
         average_level_count = 30 / (max_gate_index + 1)
         levels_added = 0
 
@@ -103,8 +103,8 @@ class SA2BWorld(World):
             levels_added += 1
             additional_count_iterator += 1 if additional_count_iterator < max_gate_index else -max_gate_index
 
-        if self.world.LevelGateDistribution[self.player] == 0 or self.world.LevelGateDistribution[self.player] == 2:
-            early_distribution = self.world.LevelGateDistribution[self.player] == 0
+        if self.world.level_gate_distribution[self.player] == 0 or self.world.level_gate_distribution[self.player] == 2:
+            early_distribution = self.world.level_gate_distribution[self.player] == 0
             levels_to_distribute = 5
             gate_index_offset = 0
             while levels_to_distribute > 0:
@@ -133,7 +133,7 @@ class SA2BWorld(World):
         total_required_locations = 31
 
         # Mission Locations
-        total_required_locations *= self.world.IncludeMissions[self.player].value
+        total_required_locations *= self.world.include_missions[self.player].value
 
         # Upgrades
         total_required_locations += 28
@@ -147,7 +147,7 @@ class SA2BWorld(World):
         # itempool += [self.create_item(ItemName.emblem)] * total_emblem_count
 
         self.emblems_for_cannons_core = math.floor(
-            total_emblem_count * (self.world.EmblemPercentageForCannonsCore[self.player].value / 100.0))
+            total_emblem_count * (self.world.emblem_percentage_for_cannons_core[self.player].value / 100.0))
 
         shuffled_region_list = list(range(30))
         emblem_requirement_list = list()
@@ -168,8 +168,8 @@ class SA2BWorld(World):
             total_levels_added += 1
             if levels_added_to_gate >= levels_per_gate[current_gate]:
                 current_gate += 1
-                if current_gate > self.world.NumberOfLevelGates[self.player].value:
-                    current_gate = self.world.NumberOfLevelGates[self.player].value
+                if current_gate > self.world.number_of_level_gates[self.player].value:
+                    current_gate = self.world.number_of_level_gates[self.player].value
                 else:
                     current_gate_emblems = max(
                         math.floor(total_emblem_count * math.pow(total_levels_added / 30.0, 2.0)), current_gate)
@@ -186,12 +186,12 @@ class SA2BWorld(World):
 
         self.world.itempool += itempool
 
-        if self.world.MusicShuffle[self.player] == "levels":
+        if self.world.music_shuffle[self.player] == "levels":
             musiclist_o = list(range(0, 47))
             musiclist_s = musiclist_o.copy()
             self.world.random.shuffle(musiclist_s)
             self.music_map = dict(zip(musiclist_o, musiclist_s))
-        elif self.world.MusicShuffle[self.player] == "full":
+        elif self.world.music_shuffle[self.player] == "full":
             musiclist_o = list(range(0, 78))
             musiclist_s = musiclist_o.copy()
             self.world.random.shuffle(musiclist_s)
