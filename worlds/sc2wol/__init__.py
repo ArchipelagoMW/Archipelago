@@ -1,8 +1,8 @@
 import typing
 
-
 from typing import List, Set, Tuple
-from BaseClasses import Item, MultiWorld, Location
+from BaseClasses import Item, MultiWorld, Location, Tutorial
+from ..AutoWorld import World, WebWorld
 from .Items import StarcraftWoLItem, item_table, filler_items, item_name_groups, get_full_item_list, \
     basic_unit
 from .Locations import get_locations
@@ -12,6 +12,19 @@ from .LogicMixin import SC2WoLLogic
 from ..AutoWorld import World
 
 
+class Starcraft2WoLWebWorld(WebWorld):
+    theme = "generic"
+    setup = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Starcraft 2 randomizer connected to an Archipelago Multiworld",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["TheCondor"]
+    )
+
+    tutorials = [setup]
+
 class SC2WoLWorld(World):
     """
     StarCraft II: Wings of Liberty is a science fiction real-time strategy video game developed and published by Blizzard Entertainment.
@@ -19,6 +32,7 @@ class SC2WoLWorld(World):
     """
 
     game = "Starcraft2WoL"
+    web = Starcraft2WoLWebWorld()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
