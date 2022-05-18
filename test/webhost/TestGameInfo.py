@@ -7,9 +7,10 @@ from worlds.AutoWorld import AutoWorldRegister
 class TestTutorial(unittest.TestCase):
     def testHasGameInfo(self):
         import WebHost
+        WebHost.create_ordered_tutorials_file()
         for game_name, world_type in AutoWorldRegister.world_types.items():
             if not world_type.hidden:
-                target_path = Utils.local_path("worlds", game_name, "docs")
+                target_path = Utils.local_path("WebHostLib", "static", "generated", "docs", game_name)
                 for game_info_lang in world_type.web.game_info_languages:
                     with self.subTest(game_name):
                         try:
