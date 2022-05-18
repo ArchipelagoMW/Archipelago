@@ -3,8 +3,12 @@
 ## Required Software
 
 - [The Witness (Steam)](https://store.steampowered.com/app/210970/The_Witness/)
-- [The Witness Archipalego Randomizer](https://github.com/JarnoWesthof/The-Witness-Randomizer-for-Archipelago)
+- [The Witness Archipalego Randomizer](https://github.com/JarnoWesthof/The-Witness-Randomizer-for-Archipelago/releases)
+
+## Optional Software
+
 - [ArchipelagoTextClient](https://github.com/ArchipelagoMW/Archipelago/releases)
+- [The Witness Map- and Auto-Tracker](https://github.com/NewSoupVi/witness_archipelago_tracker/releases), for use with [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
 ## Joining a MultiWorld Game
 
@@ -15,12 +19,23 @@ It is recommended to do every single one of these steps when you connect to a wo
 2. Start a fresh save (unless you have absolutely no other choice)
 3. Do not move
 4. Launch [The Witness Archipalego Randomizer](https://github.com/JarnoWesthof/The-Witness-Randomizer-for-Archipelago)
-5. Enter the Archipelago Adress, Slot Name and Password
+5. Enter the Archipelago address, slot name and password
 6. Press "Randomize"
 7. Wait for the randomization to fully finish before moving in-game
 
 That's it! Have fun!
 
-## ArchipelagoTextClient
+## Archipelago Text Client
 
-Its recommended to have Archipelago's Text Client open on the side to keep track of what item you receive and send as The Witness has no in-game messages.
+It is recommended to have Archipelago's Text Client open on the side to keep track of what items you receive and send, as The Witness has no in-game messages.
+<br/>Or use the Auto-Tracker!
+## Auto-Tracking
+
+The Witness has a fully functional map tracker that supports auto-tracking.
+
+1. Download [The Witness Map- and Auto-Tracker](https://github.com/NewSoupVi/witness_archipelago_tracker/releases) and [PopTracker](https://github.com/black-sliver/PopTracker/releases).
+2. Open PopTracker, and load the Witness pack. 
+3. Click on the "AP" symbol at the top.
+4. Enter the AP address, slot name and password. 
+
+The rest should take care of itself! Items and checks will be marked automatically, and it even knows your settings - It will hide checks & adjust logic accordingly.

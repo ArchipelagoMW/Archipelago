@@ -119,9 +119,11 @@ class CommonContext():
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
     command_processor: int = ClientCommandProcessor
-    game = None
+    game: typing.Optional[str] = None
     ui = None
-    keep_alive_task = None
+    ui_task: typing.Optional[asyncio.Task] = None
+    input_task: typing.Optional[asyncio.Task] = None
+    keep_alive_task: typing.Optional[asyncio.Task] = None
     items_handling: typing.Optional[int] = None
     current_energy_link_value = 0  # to display in UI, gets set by server
 
@@ -309,6 +311,10 @@ class CommonContext():
             self.input_queue.put_nowait(None)
             self.input_requests -= 1
         self.keep_alive_task.cancel()
+        if self.ui_task:
+            await self.ui_task
+        if self.input_task:
+            self.input_task.cancel()
 
     # DeathLink hooks
 
@@ -342,6 +348,27 @@ class CommonContext():
             self.tags -= {"DeathLink"}
         if old_tags != self.tags and self.server and not self.server.socket.closed:
             await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
+
+    def run_gui(self):
+        """Import kivy UI system and start running it as self.ui_task."""
+        from kvui import GameManager
+
+        class TextManager(GameManager):
+            logging_pairs = [
+                ("Client", "Archipelago")
+            ]
+            base_title = "Archipelago Text Client"
+
+        self.ui = TextManager(self)
+        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+
+    def run_cli(self):
+        if sys.stdin:
+            # steam overlay breaks when starting console_loop
+            if 'gameoverlayrenderer' in os.environ.get('LD_PRELOAD', ''):
+                logger.info("Skipping terminal input, due to conflicting Steam Overlay detected. Please use GUI only.")
+            else:
+                self.input_task = asyncio.create_task(console_loop(self), name="Input")
 
 
 async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
@@ -565,7 +592,6 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
 
 async def console_loop(ctx: CommonContext):
-    import sys
     commandprocessor = ctx.command_processor(ctx)
     queue = asyncio.Queue()
     stream_input(sys.stdin, queue)
@@ -620,26 +646,14 @@ if __name__ == '__main__':
     async def main(args):
         ctx = TextContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
-        input_task = None
-        steam_overlay = False
 
         if gui_enabled:
-            from kvui import TextManager
-            ctx.ui = TextManager(ctx)
-            ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
-            steam_overlay = 'gameoverlayrenderer' in os.environ.get('LD_PRELOAD', '')
-        else:
-            ui_task = None
-        if sys.stdin and not steam_overlay:  # steam overlay breaks when starting console_loop
-            input_task = asyncio.create_task(console_loop(ctx), name="Input")
+            ctx.run_gui()
+        ctx.run_cli()
+
         await ctx.exit_event.wait()
-
         await ctx.shutdown()
-        if ui_task:
-            await ui_task
 
-        if input_task:
-            input_task.cancel()
 
     import colorama
 
@@ -648,7 +662,5 @@ if __name__ == '__main__':
     args, rest = parser.parse_known_args()
     colorama.init()
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(args))
-    loop.close()
+    asyncio.run(main(args))
     colorama.deinit()
