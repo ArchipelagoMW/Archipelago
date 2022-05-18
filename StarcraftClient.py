@@ -293,8 +293,6 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                                      "Starcraft 2 (This is likely a map issue)")
 
             if self.last_received_update < len(self.ctx.items_received):
-                #for i in range(self.last_received_update, len(self.ctx.items_received))
-                #    await self.chat_send("SendMessage Received {}")
                 current_items = calculate_items(self.ctx.items_received)
                 await self.chat_send("UpdateTech {} {} {} {} {} {} {} {}".format(
                     current_items[0], current_items[1], current_items[2], current_items[3], current_items[4], current_items[5],
