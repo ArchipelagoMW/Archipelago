@@ -67,6 +67,11 @@ for your world specifically on the webhost.
 
 `bug_report_page` (optional) can be a link to a bug reporting page, most likely a GitHub issue page, that will be placed by the site to help direct users to report bugs.
 
+`tutorials` list of `Tutorial` classes where each class represents a guide to be generated on the webhost.
+
+`game_info_languages` (optional) List of strings for defining the existing gameinfo pages your game supports. The documents must be
+prefixed with the same string as defined here. Default already has 'en'.
+
 ### MultiWorld Object
 
 The `MultiWorld` object references the whole multiworld (all items and locations
