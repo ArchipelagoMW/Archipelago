@@ -92,10 +92,6 @@ class Context(CommonContext):
         if cmd in {"Connected"}:
             self.difficulty = args["slot_data"]["game_difficulty"]
             self.all_in_choice = args["slot_data"]["all_in_map"]
-#        if cmd in {"ReceivedItems"}:
-#            self.items_rec_to_announce += args["items"]
-#        if cmd in {"LocationInfo"}:
-#            self.items_sent_to_announce += args["locations"]
         if cmd in {"PrintJSON"}:
             noted = False
             if "receiving" in args:
