@@ -159,12 +159,12 @@ into any locations within the game slots named BobsSlaytheSpire and BobsRogueLeg
 ## Boss Plando
 
 As this is currently only supported by A Link to the Past instead of explaining here please refer to the
-relevant guide: [A Link to the Past Plando Guide](/tutorial/A_Link_to_the_Past/plando/en)
+relevant guide: [A Link to the Past Plando Guide](/tutorial/A%20Link%20to%20the%20Past/plando/en)
 
 ## Text Plando
 
 As this is currently only supported by A Link to the Past instead of explaining here please refer to the
-relevant guide: [A Link to the Past Plando Guide](/tutorial/A_Link_to_the_Past/plando/en)
+relevant guide: [A Link to the Past Plando Guide](/tutorial/A%20Link%20to%20the%20Past/plando/en)
 
 ## Connections Plando
 
