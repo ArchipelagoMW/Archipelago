@@ -18,7 +18,7 @@ from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 from Utils import init_logging
 
 if __name__ == "__main__":
-    init_logging("SNIClient", exception_logger="Client")
+    init_logging("SC2Client", exception_logger="Client")
 
 logger = logging.getLogger("Client")
 sc2_logger = logging.getLogger("Starcraft2")
@@ -68,7 +68,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
 class Context(CommonContext):
     command_processor = StarcraftClientProcessor
-    game = "Starcraft2WoL"
+    game = "Starcraft 2 Wings of Liberty"
     items_handling = 0b111
     difficulty = -1
     all_in_choice = 0
@@ -115,14 +115,14 @@ class Context(CommonContext):
     def run_gui(self):
         from kvui import GameManager
 
-        class SNIManager(GameManager):
+        class SC2Manager(GameManager):
             logging_pairs = [
                 ("Client", "Archipelago"),
-                ("SNES", "SNES"),
+                ("Starcraft2", "Starcraft2"),
             ]
-            base_title = "Archipelago SNI Client"
+            base_title = "Archipelago Starcraft 2 Client"
 
-        self.ui = SNIManager(self)
+        self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
