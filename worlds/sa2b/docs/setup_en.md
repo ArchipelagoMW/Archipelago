@@ -47,10 +47,10 @@
 ## Additional Options
 
 Some additional settings related to the Archipelago messages in game can be adjusted in the SA2ModManager if you select `Configure...` on the SA2B_Archipelago mod. This settings will be under a `General Settings` tab.
-
-- Message Display Count: This is the maximum number of Archipelago messages that can be displayed on screen at any given time.
-- Message Display Duration: This dictates how long Archipelago messages are displayed on screen (in seconds).
-- Message Font Size: The is the size of the font used to display the messages from Archipelago.
+	
+	- Message Display Count: This is the maximum number of Archipelago messages that can be displayed on screen at any given time.
+	- Message Display Duration: This dictates how long Archipelago messages are displayed on screen (in seconds).
+	- Message Font Size: The is the size of the font used to display the messages from Archipelago.
 
 ## Troubleshooting
 

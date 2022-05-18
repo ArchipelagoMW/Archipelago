@@ -82,6 +82,9 @@ class SA2BWorld(World):
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
         slot_data["MusicMap"] = self.music_map
+        for option_name in sa2b_options:
+            option = getattr(self.world, option_name)[self.player]
+            slot_data[option_name] = option.value
 
         return slot_data
 
