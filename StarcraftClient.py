@@ -79,12 +79,6 @@ class Context(CommonContext):
     announcements = []
     announcement_pos = 0
 
-    def __init__(self, server_address, password):
-        super(Context, self).__init__(server_address, password)
-
-    async def connection_closed(self):
-        await super(Context, self).connection_closed()
-
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(Context, self).server_auth(password_requested)
