@@ -13,7 +13,6 @@ from ..AutoWorld import World
 
 
 class Starcraft2WoLWebWorld(WebWorld):
-    theme = "generic"
     setup = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Starcraft 2 randomizer connected to an Archipelago Multiworld",
@@ -31,7 +30,7 @@ class SC2WoLWorld(World):
     Command Raynor's Raiders in collecting pieces of the Keystone in order to stop the zerg threat posed by the Queen of Blades.
     """
 
-    game = "Starcraft2WoL"
+    game = "Starcraft 2 Wings of Liberty"
     web = Starcraft2WoLWebWorld()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
