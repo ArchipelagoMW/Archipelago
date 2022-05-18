@@ -129,8 +129,6 @@ async def main():
     input_task = None
     if gui_enabled:
         ctx.run_gui()
-        #ctx.ui = SC2Manager(ctx)
-        #ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
     ctx.run_cli()
 
     if sys.stdin:
