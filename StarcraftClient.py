@@ -126,13 +126,9 @@ async def main():
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
-    input_task = None
     if gui_enabled:
         ctx.run_gui()
     ctx.run_cli()
-
-    if sys.stdin:
-        input_task = asyncio.create_task(console_loop(ctx), name="Input")
 
     await ctx.exit_event.wait()
 
@@ -140,11 +136,6 @@ async def main():
     ctx.snes_reconnect_address = None
     await ctx.shutdown()
 
-    if ui_task:
-        await ui_task
-
-    if input_task:
-        input_task.cancel()
 
 maps_table = ["ap_traynor01", "ap_traynor02", "ap_traynor03", "ap_thanson01", "ap_thanson02", "ap_thanson03a", "ap_thanson03b", "ap_ttychus01",
               "ap_ttychus02", "ap_ttychus03", "ap_ttychus04", "ap_ttychus05", "ap_ttosh01", "ap_ttosh02", "ap_ttosh03a", "ap_ttosh03b",
