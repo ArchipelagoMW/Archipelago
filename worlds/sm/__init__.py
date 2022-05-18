@@ -587,6 +587,10 @@ class SMWorld(World):
                     world.state.smbm[player].onlyBossLeft = True
                     break
 
+        for location in world.get_locations():
+            if (location.game == "Super Metroid" and location.item is None):
+                raise Exception(f"Location {location.name} is missing an item. This can be caused by a too high amount of local Nothing items.")
+
     def write_spoiler(self, spoiler_handle: TextIO):
         if self.world.area_randomization[self.player].value != 0:
             spoiler_handle.write('\n\nArea Transitions:\n\n')
