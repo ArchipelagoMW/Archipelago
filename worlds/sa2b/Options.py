@@ -68,10 +68,10 @@ class MusicShuffle(Choice):
 
 
 sa2b_options: typing.Dict[str, type(Option)] = {
-    "DeathLink": DeathLink,
-    "MusicShuffle": MusicShuffle,
-    "IncludeMissions": IncludeMissions,
-    "EmblemPercentageForCannonsCore": EmblemPercentageForCannonsCore,
-    "NumberOfLevelGates": NumberOfLevelGates,
-    "LevelGateDistribution": LevelGateDistribution,
+    "death_link": DeathLink,
+    "music_shuffle": MusicShuffle,
+    "include_missions": IncludeMissions,
+    "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
+    "number_of_level_gates": NumberOfLevelGates,
+    "level_gate_distribution": LevelGateDistribution,
 }
