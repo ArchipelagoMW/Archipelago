@@ -13,7 +13,7 @@ from BaseClasses import Region, Entrance, Item, Tutorial
 from .Options import minecraft_options
 from ..AutoWorld import World, WebWorld
 
-client_version = 7
+client_version = 8
 
 class MinecraftWebWorld(WebWorld):
     theme = "jungle"
