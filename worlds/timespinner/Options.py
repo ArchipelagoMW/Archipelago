@@ -209,6 +209,13 @@ class ShowBestiary(Toggle):
     "All entries in the bestiary are visible, without needing to kill one of a given enemy first"
     display_name = "Show Bestiary Entries"
 
+class HpCap(Range):
+    "Sets the number that Lunais's HP maxes out at."
+    display_name = "HP Cap"
+    range_start = 1
+    range_end = 999
+    default = 999
+
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Option] = {
     "StartWithJewelryBox": StartWithJewelryBox,
