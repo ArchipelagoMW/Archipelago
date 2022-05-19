@@ -257,6 +257,12 @@ def set_advancement_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Light as a Rabbit", player), lambda state: state._mc_can_adventure(player) and state._mc_has_iron_ingots(player) and state.has('Bucket', player))
     set_rule(world.get_location("Glow and Behold!", player), lambda state: state._mc_can_adventure(player))
     set_rule(world.get_location("Whatever Floats Your Goat!", player), lambda state: state._mc_can_adventure(player))
+    set_rule(world.get_location("Caves & Cliffs", player), lambda state: state._mc_has_iron_ingots(player) and state.has('Bucket', player) and state.has('Progressive Tools', player, 2))
+    set_rule(world.get_location("Feels like home", player), lambda state: state._mc_has_iron_ingots(player) and state.has('Bucket', player) and state.has('Fishing Rod', player) and
+        (state._mc_fortress_loot(player) or state._mc_complete_raid(player)) and state.has("Saddle", player))
+    set_rule(world.get_location("Sound of Music", player), lambda state: state.can_reach("Diamonds!", "Location", player) and state._mc_basic_combat(player))
+    set_rule(world.get_location("Star Trader", player), lambda state: state._mc_has_iron_ingots(player) and state.has('Bucket', player) and
+        (state.can_reach("The Nether", 'Region', player) or state.can_reach("Nether Fortress", 'Region', player) or state._mc_can_piglin_trade(player))) # soul sand
 
 # Sets rules on completion condition and postgame advancements
 def set_completion_rules(world: MultiWorld, player: int):

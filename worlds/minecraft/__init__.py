@@ -65,7 +65,7 @@ class MinecraftWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 4
+    data_version = 5
 
     def _get_mc_data(self):
         exits = [connection[0] for connection in default_connections]
