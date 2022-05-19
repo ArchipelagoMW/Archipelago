@@ -29,5 +29,5 @@ new games under default settings the first mission available will always be Libe
 
 ## Where do I get a config file?
 
-The [Player Settings](https://archipelago.gg/games/Starcraft%202%20Wings%20of%20Liberty/player-settings) page on the website allows you to
+The [Player Settings](/games/Starcraft%202%20Wings%20of%20Liberty/player-settings) page on the website allows you to
 configure your personal settings and export them into a config file
