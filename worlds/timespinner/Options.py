@@ -172,6 +172,13 @@ class DamageRandoOverrides(OptionDict):
         "Radiant": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
     }
 
+class HpCap(Range):
+    "Sets the number that Lunais's HP maxes out at."
+    display_name = "HP Cap"
+    range_start = 1
+    range_end = 999
+    default = 999
+
 class ShopFill(Choice):
     """Sets the items for sale in Merchant Crow's shops.
     Default: No sunglasses or trendy jacket, but sand vials for sale.
@@ -230,6 +237,7 @@ timespinner_options: Dict[str, Option] = {
     "LoreChecks": LoreChecks,
     "DamageRando": DamageRando,
     "DamageRandoOverrides": DamageRandoOverrides,
+    "HpCap": HpCap,
     "ShopFill": ShopFill,
     "ShopWarpShards": ShopWarpShards,
     "ShopMultiplier": ShopMultiplier,
