@@ -119,6 +119,10 @@ advancement_table = {
     "Light as a Rabbit": AdvData(42100, 'Overworld'),
     "Glow and Behold!": AdvData(42101, 'Overworld'),
     "Whatever Floats Your Goat!": AdvData(42102, 'Overworld'),
+    "Caves & Cliffs": AdvData(42103, 'Overworld'),
+    "Feels like home": AdvData(42104, 'The Nether'),
+    "Sound of Music": AdvData(42105, 'Overworld'),
+    "Star Trader": AdvData(42106, 'Village'),
 
     "Blaze Spawner": AdvData(None, 'Nether Fortress'),
     "Ender Dragon": AdvData(None, 'The End'),
@@ -139,7 +143,8 @@ exclusion_table = {
         "Cover Me in Debris",
         "A Complete Catalogue",
         "Surge Protector",
-        "Light as a Rabbit", # will be normal in 1.18
+        "Sound of Music",
+        "Star Trader",
     },
     "unreasonable": {
         "How Did We Get Here?",
