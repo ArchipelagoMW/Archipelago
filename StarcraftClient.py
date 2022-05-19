@@ -396,6 +396,8 @@ mission_req_table = {
     "All-In": MissionInfo(29, -1, [27, 28])
 }
 
+lookup_id_to_mission: typing.Dict[int, str] = {data.id: mission_name for mission_name, data in mission_req_table.items() if data.id}
+
 
 def calc_objectives_completed(mission, missions_info, locations_done):
     objectives_complete = 0
@@ -479,28 +481,35 @@ def request_available_missions(locations_done, location_table):
 
 def calc_available_missions(locations_done, locations):
     available_missions = []
-    mission_complete = 0
+    missions_complete = 0
 
     # Get number of missions completed
     for loc in locations_done:
         if loc % 100 == 0:
-            mission_complete += 1
+            missions_complete += 1
 
     for name in locations:
-        if len(locations[name].required_world) >= 1:
-            reqs_complete = True
-
-            for req_mission in locations[name].required_world:
-                if not(req_mission * 100 + SC2WOL_LOC_ID_OFFSET) in locations_done:
-                    reqs_complete = False
-                    break
-
-            if reqs_complete and mission_complete >= locations[name].number:
-                available_missions.append(name)
-        else:
+        if mission_reqs_completed(name, missions_complete, locations_done, locations):
             available_missions.append(name)
 
     return available_missions
+
+
+def mission_reqs_completed(location_to_check, missions_complete, locations_done, locations):
+    if len(locations[location_to_check].required_world) >= 1:
+
+        for req_mission in locations[location_to_check].required_world:
+            if not (req_mission * 100 + SC2WOL_LOC_ID_OFFSET) in locations_done:
+                return False
+            if not mission_reqs_completed(lookup_id_to_mission[req_mission], missions_complete, locations_done, locations):
+                return False
+
+        if missions_complete >= locations[location_to_check].number:
+            return True
+        else:
+            return False
+    else:
+        return True
 
 
 if __name__ == '__main__':
@@ -509,3 +518,4 @@ if __name__ == '__main__':
     loop.run_until_complete(main())
     loop.close()
     colorama.deinit()
+
