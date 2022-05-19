@@ -45,14 +45,13 @@ class MinecraftLogic(LogicMixin):
                     self.can_reach('Bastion Remnant', 'Region', player))
 
     def _mc_overworld_villager(self, player: int):
-        if not self.can_reach('Village', 'Region', player):
-            return False
         village_region = self.world.get_region('Village', player).entrances[0].parent_region.name
         if village_region == 'The Nether': # 2 options: cure zombie villager or build portal in village
-            return self.can_reach('Zombie Doctor', 'Location', player) or self._mc_has_diamond_pickaxe(player)
+            return (self.can_reach('Zombie Doctor', 'Location', player) or
+                    (self._mc_has_diamond_pickaxe(player) and self.can_reach('Village', 'Region', player)))
         elif village_region == 'The End':
             return self.can_reach('Zombie Doctor', 'Location', player)
-        return True
+        return self.can_reach('Village', 'Region', player)
 
     def _mc_enter_stronghold(self, player: int):
         return self.has('Blaze Rods', player) and self.has('Brewing', player) and self.has('3 Ender Pearls', player)
