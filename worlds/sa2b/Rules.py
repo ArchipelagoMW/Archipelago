@@ -15,16 +15,16 @@ def set_mission_progress_rules(world: MultiWorld, player: int):
                 sorted(fourth_mission_location_table.items()),
                 sorted(fifth_mission_location_table.items())):
 
-        if world.IncludeMissions[player].value >= 2:
+        if world.include_missions[player].value >= 2:
             set_rule(world.get_location(k2, player), lambda state, k1=k1: state.can_reach(k1, "Location", player))
 
-        if world.IncludeMissions[player].value >= 3:
+        if world.include_missions[player].value >= 3:
             set_rule(world.get_location(k3, player), lambda state, k2=k2: state.can_reach(k2, "Location", player))
 
-        if world.IncludeMissions[player].value >= 4:
+        if world.include_missions[player].value >= 4:
             set_rule(world.get_location(k4, player), lambda state, k3=k3: state.can_reach(k3, "Location", player))
 
-        if world.IncludeMissions[player].value >= 5:
+        if world.include_missions[player].value >= 5:
             set_rule(world.get_location(k5, player), lambda state, k4=k4: state.can_reach(k4, "Location", player))
 
 
@@ -83,7 +83,7 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
                            state.has(ItemName.sonic_bounce_bracelet, player))
 
     # Mission 2 Upgrade Requirements
-    if world.IncludeMissions[player].value >= 2:
+    if world.include_missions[player].value >= 2:
         add_rule(world.get_location(LocationName.metal_harbor_2, player),
                  lambda state: state.has(ItemName.sonic_light_shoes, player))
         add_rule(world.get_location(LocationName.mission_street_2, player),
@@ -116,7 +116,7 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
                                state.has(ItemName.eggman_jet_engine, player))
 
     # Mission 3 Upgrade Requirements
-    if world.IncludeMissions[player].value >= 3:
+    if world.include_missions[player].value >= 3:
         add_rule(world.get_location(LocationName.city_escape_3, player),
                  lambda state: state.has(ItemName.sonic_mystic_melody, player))
         add_rule(world.get_location(LocationName.wild_canyon_3, player),
@@ -220,7 +220,7 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
                                state.has(ItemName.sonic_light_shoes, player))
 
     # Mission 4 Upgrade Requirements
-    if world.IncludeMissions[player].value >= 4:
+    if world.include_missions[player].value >= 4:
         add_rule(world.get_location(LocationName.metal_harbor_4, player),
                  lambda state: state.has(ItemName.sonic_light_shoes, player))
         add_rule(world.get_location(LocationName.pumpkin_hill_4, player),
@@ -274,7 +274,7 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
                                state.has(ItemName.sonic_bounce_bracelet, player))
 
     # Mission 5 Upgrade Requirements
-    if world.IncludeMissions[player].value >= 5:
+    if world.include_missions[player].value >= 5:
         add_rule(world.get_location(LocationName.city_escape_5, player),
                  lambda state: state.has(ItemName.sonic_flame_ring, player))
         add_rule(world.get_location(LocationName.wild_canyon_5, player),
@@ -341,6 +341,7 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
         add_rule(world.get_location(LocationName.cannon_core_5, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
                                state.has(ItemName.eggman_jet_engine, player) and
+                               state.has(ItemName.knuckles_mystic_melody, player) and
                                state.has(ItemName.knuckles_hammer_gloves, player) and
                                state.has(ItemName.knuckles_air_necklace, player) and
                                state.has(ItemName.sonic_bounce_bracelet, player))
