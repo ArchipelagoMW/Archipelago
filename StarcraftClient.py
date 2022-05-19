@@ -514,8 +514,6 @@ def mission_reqs_completed(location_to_check, missions_complete, locations_done,
 
 if __name__ == '__main__':
     colorama.init()
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-    loop.close()
+    asyncio.run(main())
     colorama.deinit()
 
