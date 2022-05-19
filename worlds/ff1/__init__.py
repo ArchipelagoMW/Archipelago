@@ -111,6 +111,8 @@ class FF1World(World):
 
         return slot_data
 
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice(["Heal", "Pure", "Soft", "Tent", "Cabin", "House"])
 
 def get_options(world: MultiWorld, name: str, player: int):
     return getattr(world, name, None)[player].value

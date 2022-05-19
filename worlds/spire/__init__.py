@@ -90,6 +90,9 @@ class SpireWorld(World):
             slot_data[option_name] = int(option.value)
         return slot_data
 
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice(["Card Draw", "Card Draw", "Card Draw", "Relic", "Relic"])
+
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, None, name, player)
