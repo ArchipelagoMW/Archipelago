@@ -41,8 +41,18 @@ class MinecraftLogic(LogicMixin):
 
     def _mc_can_piglin_trade(self, player: int):
         return self._mc_has_gold_ingots(player) and (
-                    self.can_reach('The Nether', 'Region', player) or self.can_reach('Bastion Remnant', 'Region',
-                                                                                     player))
+                    self.can_reach('The Nether', 'Region', player) or 
+                    self.can_reach('Bastion Remnant', 'Region', player))
+
+    def _mc_overworld_villager(self, player: int):
+        if not self.can_reach('Village', 'Region', player):
+            return False
+        village_region = self.world.get_region('Village', player).entrances[0].parent_region.name
+        if village_region == 'The Nether': # 2 options: cure zombie villager or build portal in village
+            return self.can_reach('Zombie Doctor', 'Location', player) or self._mc_has_diamond_pickaxe(player)
+        elif village_region == 'The End':
+            return self.can_reach('Zombie Doctor', 'Location', player)
+        return True
 
     def _mc_enter_stronghold(self, player: int):
         return self.has('Blaze Rods', player) and self.has('Brewing', player) and self.has('3 Ender Pearls', player)
@@ -132,8 +142,8 @@ def set_advancement_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Who is Cutting Onions?", player), lambda state: state._mc_can_piglin_trade(player))
     set_rule(world.get_location("Oh Shiny", player), lambda state: state._mc_can_piglin_trade(player))
     set_rule(world.get_location("Suit Up", player), lambda state: state.has("Progressive Armor", player) and state._mc_has_iron_ingots(player))
-    set_rule(world.get_location("Very Very Frightening", player), lambda state: state.has("Channeling Book", player) and state._mc_can_use_anvil(player) and state._mc_can_enchant(player) and \
-        ((world.get_region('Village', player).entrances[0].parent_region.name != 'The End' and state.can_reach('Village', 'Region', player)) or state.can_reach('Zombie Doctor', 'Location', player))) # need villager into the overworld for lightning strike
+    set_rule(world.get_location("Very Very Frightening", player), lambda state: state.has("Channeling Book", player) and 
+        state._mc_can_use_anvil(player) and state._mc_can_enchant(player) and state._mc_overworld_villager(player))
     set_rule(world.get_location("Hot Stuff", player), lambda state: state.has("Bucket", player) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Free the End", player), lambda state: state._mc_can_respawn_ender_dragon(player) and state._mc_can_kill_ender_dragon(player))
     set_rule(world.get_location("A Furious Cocktail", player), lambda state: state._mc_can_brew_potions(player) and 
@@ -252,8 +262,8 @@ def set_advancement_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Is It a Bird?", player), lambda state: state._mc_has_spyglass(player) and state._mc_can_adventure(player))
     set_rule(world.get_location("Is It a Balloon?", player), lambda state: state._mc_has_spyglass(player))
     set_rule(world.get_location("Is It a Plane?", player), lambda state: state._mc_has_spyglass(player) and state._mc_can_respawn_ender_dragon(player))
-    set_rule(world.get_location("Surge Protector", player), lambda state: state.has("Channeling Book", player) and state._mc_can_use_anvil(player) and state._mc_can_enchant(player) and \
-        ((world.get_region('Village', player).entrances[0].parent_region.name != 'The End' and state.can_reach('Village', 'Region', player)) or state.can_reach('Zombie Doctor', 'Location', player)))
+    set_rule(world.get_location("Surge Protector", player), lambda state: state.has("Channeling Book", player) and 
+        state._mc_can_use_anvil(player) and state._mc_can_enchant(player) and state._mc_overworld_villager(player))
     set_rule(world.get_location("Light as a Rabbit", player), lambda state: state._mc_can_adventure(player) and state._mc_has_iron_ingots(player) and state.has('Bucket', player))
     set_rule(world.get_location("Glow and Behold!", player), lambda state: state._mc_can_adventure(player))
     set_rule(world.get_location("Whatever Floats Your Goat!", player), lambda state: state._mc_can_adventure(player))
@@ -262,7 +272,9 @@ def set_advancement_rules(world: MultiWorld, player: int):
         (state._mc_fortress_loot(player) or state._mc_complete_raid(player)) and state.has("Saddle", player))
     set_rule(world.get_location("Sound of Music", player), lambda state: state.can_reach("Diamonds!", "Location", player) and state._mc_basic_combat(player))
     set_rule(world.get_location("Star Trader", player), lambda state: state._mc_has_iron_ingots(player) and state.has('Bucket', player) and
-        (state.can_reach("The Nether", 'Region', player) or state.can_reach("Nether Fortress", 'Region', player) or state._mc_can_piglin_trade(player))) # soul sand
+        (state.can_reach("The Nether", 'Region', player) or state.can_reach("Nether Fortress", 'Region', player) or state._mc_can_piglin_trade(player)) and # soul sand for water elevator
+        state._mc_overworld_villager(player))
+
 
 # Sets rules on completion condition and postgame advancements
 def set_completion_rules(world: MultiWorld, player: int):
