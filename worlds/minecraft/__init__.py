@@ -22,7 +22,7 @@ class MinecraftWebWorld(WebWorld):
     setup = Tutorial(
         "Multiworld Setup Tutorial",
         "A guide to setting up the Archipelago Minecraft software on your computer. This guide covers"
-        "single-player, multiworkd, and related software.",
+        "single-player, multiworld, and related software.",
         "English",
         "minecraft_en.md",
         "minecraft/en",
