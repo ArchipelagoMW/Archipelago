@@ -307,16 +307,6 @@ class HKWorld(World):
         assert 0 < i < 18, "limited number of multi location IDs reserved."
         return f"{base}_{i}"
 
-    def get_filler_item_name(self) -> str:
-        return self.world.random.choice(["Geo_Rock-Default", "Geo_Rock-Deepnest", "Geo_Rock-Abyss",
-                                         "Geo_Rock-GreenPath01", "Geo_Rock-Outskirts", "Geo_Rock-GreenPath02",
-                                         "Geo_Rock-Fung01", "Geo_Rock-Fung02", "Geo_Rock-City", "Geo_Rock-Hive",
-                                         "Geo_Rock-Mine", "Geo_Rock-Grave02", "Geo_Rock-Grave01", "One_Geo",
-                                         "Lumafly_Escape", "Soul_Refill", "Soul_Totem-A", "Soul_Totem-B",
-                                         "Soul_Totem-C", "Soul_Totem-D", "Soul_Totem-E", "Soul_Totem-F", "Soul_Totem-G",
-                                         "Geo_Chest-Junk_Pit_1", "Geo_Chest-Junk_Pit_2", "Geo_Chest-Junk_Pit_3",
-                                         "Geo_Chest-Junk_Pit_5"])
-
 
 def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:
     ret = Region(name, RegionType.Generic, name, player)
