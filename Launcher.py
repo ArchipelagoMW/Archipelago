@@ -153,7 +153,7 @@ components: Iterable[Component] = (
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
-    Component('Starcraft 2 Client', 'StarcraftClient'),
+    Component('Starcraft 2 Client', 'Starcraft2Client'),
     # Functions
     Component('Open host.yaml', func=open_host_yaml),
     Component('Open Patch', func=open_patch),

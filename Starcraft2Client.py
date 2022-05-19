@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 import multiprocessing
 import logging
 import asyncio
@@ -26,9 +25,10 @@ sc2_logger = logging.getLogger("Starcraft2")
 import colorama
 
 from NetUtils import *
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 
 nest_asyncio.apply()
+
 
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: Context
@@ -49,7 +49,8 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                     "This mission is not currently unlocked.  Use /unfinished or /available to see what is available.")
 
         else:
-            sc2_logger.info("Mission ID needs to be specified.  Use /unfinished or /available to view ids for available missions.")
+            sc2_logger.info(
+                "Mission ID needs to be specified.  Use /unfinished or /available to view ids for available missions.")
 
         return True
 
@@ -137,10 +138,15 @@ async def main():
     await ctx.shutdown()
 
 
-maps_table = ["ap_traynor01", "ap_traynor02", "ap_traynor03", "ap_thanson01", "ap_thanson02", "ap_thanson03a", "ap_thanson03b", "ap_ttychus01",
-              "ap_ttychus02", "ap_ttychus03", "ap_ttychus04", "ap_ttychus05", "ap_ttosh01", "ap_ttosh02", "ap_ttosh03a", "ap_ttosh03b",
-              "ap_thorner01", "ap_thorner02", "ap_thorner03", "ap_thorner04", "ap_thorner05s", "ap_tzeratul01", "ap_tzeratul02",
-              "ap_tzeratul03", "ap_tzeratul04", "ap_tvalerian01", "ap_tvalerian02a", "ap_tvalerian02b", "ap_tvalerian03"]
+maps_table = [
+    "ap_traynor01", "ap_traynor02", "ap_traynor03",
+    "ap_thanson01", "ap_thanson02", "ap_thanson03a", "ap_thanson03b",
+    "ap_ttychus01", "ap_ttychus02", "ap_ttychus03", "ap_ttychus04", "ap_ttychus05",
+    "ap_ttosh01", "ap_ttosh02", "ap_ttosh03a", "ap_ttosh03b",
+    "ap_thorner01", "ap_thorner02", "ap_thorner03", "ap_thorner04", "ap_thorner05s",
+    "ap_tzeratul01", "ap_tzeratul02", "ap_tzeratul03", "ap_tzeratul04",
+    "ap_tvalerian01", "ap_tvalerian02a", "ap_tvalerian02b", "ap_tvalerian03"
+]
 
 
 def calculate_items(items):
@@ -201,7 +207,7 @@ async def starcraft_launch(ctx: Context, mission_id):
     ctx.sent_announce_pos = len(ctx.items_sent_to_announce)
     ctx.announcements_pos = len(ctx.announcements)
 
-    run_game(sc2.maps.get(maps_table[mission_id-1]), [
+    run_game(sc2.maps.get(maps_table[mission_id - 1]), [
         Bot(Race.Terran, ArchipelagoBot(ctx, mission_id), name="Archipelago")], realtime=True)
 
 
@@ -235,8 +241,10 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
             start_items = calculate_items(self.ctx.items_received)
             difficulty = calc_difficulty(self.ctx.difficulty)
             await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {}".format(
-                difficulty, start_items[0], start_items[1], start_items[2], start_items[3], start_items[4], start_items[5],
-                start_items[6], start_items[7], start_items[8], start_items[9], self.ctx.all_in_choice))
+                difficulty,
+                start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
+                start_items[5], start_items[6], start_items[7], start_items[8], start_items[9],
+                self.ctx.all_in_choice))
             self.last_received_update = len(self.ctx.items_received)
 
         else:
@@ -260,7 +268,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                         if start_rem_pos > 0:
                             temp_msg = message[:start_rem_pos]
                         if index < len(message) - 1:
-                            temp_msg += message[index+1:]
+                            temp_msg += message[index + 1:]
 
                         message = temp_msg
                         index += start_rem_pos - index
@@ -275,7 +283,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
             for unit in self.all_own_units():
                 if unit.health_max == 38281:
                     game_state = int(38281 - unit.health)
-                    can_read_game = True
+                    self.can_read_game = True
 
             if iteration == 80 and not game_state & 1:
                 await self.chat_send("SendMessage Warning: Archipelago unable to connect or has lost connection to " +
@@ -284,8 +292,8 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
             if self.last_received_update < len(self.ctx.items_received):
                 current_items = calculate_items(self.ctx.items_received)
                 await self.chat_send("UpdateTech {} {} {} {} {} {} {} {}".format(
-                    current_items[0], current_items[1], current_items[2], current_items[3], current_items[4], current_items[5],
-                    current_items[6], current_items[7]))
+                    current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
+                    current_items[5], current_items[6], current_items[7]))
                 self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:
@@ -293,7 +301,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     print("Archipelago Connected")
                     self.game_running = True
 
-                if can_read_game:
+                if self.can_read_game:
                     if game_state & (1 << 1) and not self.mission_completed:
                         if self.mission_id != 29:
                             print("Mission Completed")
@@ -308,49 +316,57 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     if game_state & (1 << 2) and not self.first_bonus:
                         print("1st Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 1]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 1]}])
                         self.first_bonus = True
 
                     if not self.second_bonus and game_state & (1 << 3):
                         print("2nd Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 2]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 2]}])
                         self.second_bonus = True
 
                     if not self.third_bonus and game_state & (1 << 4):
                         print("3rd Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 3]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 3]}])
                         self.third_bonus = True
 
                     if not self.fourth_bonus and game_state & (1 << 5):
                         print("4th Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 4]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 4]}])
                         self.fourth_bonus = True
 
                     if not self.fifth_bonus and game_state & (1 << 6):
                         print("5th Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 5]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 5]}])
                         self.fifth_bonus = True
 
                     if not self.sixth_bonus and game_state & (1 << 7):
                         print("6th Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 6]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 6]}])
                         self.sixth_bonus = True
 
                     if not self.seventh_bonus and game_state & (1 << 8):
                         print("6th Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 7]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 7]}])
                         self.seventh_bonus = True
 
                     if not self.eight_bonus and game_state & (1 << 9):
                         print("6th Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 8]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 8]}])
                         self.eight_bonus = True
 
                 else:
@@ -396,7 +412,8 @@ mission_req_table = {
     "All-In": MissionInfo(29, -1, [27, 28])
 }
 
-lookup_id_to_mission: typing.Dict[int, str] = {data.id: mission_name for mission_name, data in mission_req_table.items() if data.id}
+lookup_id_to_mission: typing.Dict[int, str] = {
+    data.id: mission_name for mission_name, data in mission_req_table.items() if data.id}
 
 
 def calc_objectives_completed(mission, missions_info, locations_done):
@@ -414,20 +431,13 @@ def calc_objectives_completed(mission, missions_info, locations_done):
 
 
 def request_unfinished_missions(locations_done, location_table):
-    message = "Unfinished Missions:"
-
-    first_item = True
+    message = "Unfinished Missions: "
 
     unfinished_missions = calc_unfinished_missions(locations_done, location_table)
 
-    for mission in unfinished_missions:
-        if first_item:
-            message += " {}[{}] ({}/{})".format(mission, location_table[mission].id, unfinished_missions[mission],
-                                                location_table[mission].extra_locations)
-            first_item = False
-        else:
-            message += ", {}[{}] ({}/{})".format(mission, location_table[mission].id, unfinished_missions[mission],
-                                                 location_table[mission].extra_locations)
+    message += ", ".join(f"{mission}[{location_table[mission].id}] "
+                         f"({unfinished_missions[mission]}/{location_table[mission].extra_locations})"
+                         for mission in unfinished_missions)
 
     sc2_logger.info(message)
 
@@ -455,26 +465,14 @@ def calc_unfinished_missions(locations_done, locations):
 def is_mission_available(mission_id_to_check, locations_done, locations):
     unfinished_missions = calc_available_missions(locations_done, locations)
 
-    for mission in unfinished_missions:
-        if locations[mission].id == mission_id_to_check:
-            return True
-
-    return False
+    return any(mission_id_to_check == locations[mission].id for mission in unfinished_missions)
 
 
 def request_available_missions(locations_done, location_table):
-    message = "Available Missions:"
-
-    first_item = True
+    message = "Available Missions: "
 
     missions = calc_available_missions(locations_done, location_table)
-
-    for mission in missions:
-        if first_item:
-            message += " {}[{}]".format(mission, location_table[mission].id)
-            first_item = False
-        else:
-            message += ", {}[{}]".format(mission, location_table[mission].id)
+    message += ", ".join(f"{mission}[{location_table[mission].id}]" for mission in missions)
 
     sc2_logger.info(message)
 
@@ -501,7 +499,8 @@ def mission_reqs_completed(location_to_check, missions_complete, locations_done,
         for req_mission in locations[location_to_check].required_world:
             if not (req_mission * 100 + SC2WOL_LOC_ID_OFFSET) in locations_done:
                 return False
-            if not mission_reqs_completed(lookup_id_to_mission[req_mission], missions_complete, locations_done, locations):
+            if not mission_reqs_completed(lookup_id_to_mission[req_mission], missions_complete, locations_done,
+                                          locations):
                 return False
 
         if missions_complete >= locations[location_to_check].number:
@@ -516,4 +515,3 @@ if __name__ == '__main__':
     colorama.init()
     asyncio.run(main())
     colorama.deinit()
-
