@@ -55,7 +55,7 @@ wish to play with.
 Typically, a single participant of the multiworld will gather the YAML files from all other players. After getting the
 YAML files of each participant for your multiworld game they can be compressed into a ZIP folder to then be uploaded to
 the multiworld generator page. Multiworld generator
-page: [Archipelago Seed Generator Page](https://archipelago.gg/generate)
+page: [Archipelago Seed Generator Page](/generate)
 
 #### Rolling a YAML Locally
 
@@ -78,7 +78,7 @@ files after generation so if rolling locally ensure this file is edited to your 
 ## Hosting an Archipelago Server
 
 The output of rolling a YAML will be a `.archipelago` file which can be subsequently uploaded to the Archipelago host
-game page. Archipelago host game page: [Archipelago Seed Upload Page](https://archipelago.gg/uploads)
+game page. Archipelago host game page: [Archipelago Seed Upload Page](/uploads)
 
 The `.archipelago` file may be run locally in order to host the multiworld on the local machine. This is done by
 running `ArchipelagoServer.exe` and pointing the resulting file selection prompt to the `.archipelago` file that was

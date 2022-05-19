@@ -29,9 +29,9 @@ except pkg_resources.ResolutionError:
 
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
-    with open("X:/pw.txt") as f:
+    with open("X:/pw.txt", encoding="utf-8-sig") as f:
         pw = f.read()
-    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p ' + pw + r' /fd sha256 /tr http://timestamp.digicert.com/ '
+    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + r'" /fd sha256 /tr http://timestamp.digicert.com/ '
 else:
     signtool = None
 
@@ -348,7 +348,7 @@ cx_Freeze.setup(
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
             "zip_include_packages": ["*"],
-            "zip_exclude_packages": ["worlds", "kivy"],
+            "zip_exclude_packages": ["worlds", "kivy", "sc2"],
             "include_files": [],
             "include_msvcr": False,
             "replace_paths": [("*", "")],
