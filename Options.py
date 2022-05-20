@@ -624,6 +624,7 @@ class StartHints(ItemSet):
 class StartLocationHints(OptionSet):
     """Start with these locations and their item prefilled into the !hint command"""
     display_name = "Start Location Hints"
+    verify_location_name = True
 
 
 class ExcludeLocations(OptionSet):

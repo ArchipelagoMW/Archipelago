@@ -379,6 +379,7 @@ class MissionInfo(typing.NamedTuple):
     required_world: list[int]
     number: int = 0  # number of worlds need beaten
     completion_critical: bool = False # missions needed to beat game
+    or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
 
 
 mission_req_table = {
@@ -410,7 +411,7 @@ mission_req_table = {
     "Gates of Hell": MissionInfo(26, 2, [12], completion_critical=True),
     "Belly of the Beast": MissionInfo(27, 4, [26], completion_critical=True),
     "Shatter the Sky": MissionInfo(28, 5, [26], completion_critical=True),
-    "All-In": MissionInfo(29, -1, [27, 28], completion_critical=True)
+    "All-In": MissionInfo(29, -1, [27, 28], completion_critical=True, or_requirements=True)
 }
 
 lookup_id_to_mission: typing.Dict[int, str] = {
@@ -515,15 +516,46 @@ def calc_available_missions(locations_done, locations):
 
 
 def mission_reqs_completed(location_to_check, missions_complete, locations_done, locations):
-    if len(locations[location_to_check].required_world) >= 1:
+    """Returns a bool signifying if the mission has all requirements complete and can be done
 
+    Keyword arguments:
+    locations_to_check -- the mission string name to check
+    missions_complete -- an int of how many missions have been completed
+    locations_done -- a list of the location ids that have been complete
+    locations -- a dict of MissionInfo for mission requirements for this world"""
+    if len(locations[location_to_check].required_world) >= 1:
+        # A check for when the requirements are being or'd
+        or_success = False
+
+        # Loop through required missions
         for req_mission in locations[location_to_check].required_world:
+            req_success = True
+
+            # Check if required mission has been completed
             if not (req_mission * 100 + SC2WOL_LOC_ID_OFFSET) in locations_done:
-                return False
+                if not locations[location_to_check].or_requirements:
+                    return False
+                else:
+                    req_success = False
+
+            # Recursively check required mission to see if it's requirements are met, in case !collect has been done
             if not mission_reqs_completed(lookup_id_to_mission[req_mission], missions_complete, locations_done,
                                           locations):
+                if not locations[location_to_check].or_requirements:
+                    return False
+                else:
+                    req_success = False
+
+            # If requirement check succeeded mark or as satisfied
+            if locations[location_to_check].or_requirements and req_success:
+                or_success = True
+
+        if locations[location_to_check].or_requirements:
+            # Return false if or requirements not met
+            if not or_success:
                 return False
 
+        # Check number of missions
         if missions_complete >= locations[location_to_check].number:
             return True
         else:
