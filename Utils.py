@@ -12,7 +12,11 @@ import io
 import collections
 import importlib
 import logging
-from tkinter import Tk
+
+if typing.TYPE_CHECKING:
+    from tkinter import Tk
+else:
+    Tk = typing.Any
 
 
 def tuplize_version(version: str) -> Version:
@@ -28,6 +32,7 @@ class Version(typing.NamedTuple):
 __version__ = "0.3.2"
 version_tuple = tuplize_version(__version__)
 
+import jellyfish
 from yaml import load, load_all, dump, SafeLoader
 
 try:
@@ -262,7 +267,8 @@ def get_default_options() -> dict:
         },
         "minecraft_options": {
             "forge_directory": "Minecraft Forge server",
-            "max_heap_size": "2G"
+            "max_heap_size": "2G",
+            "release_channel": "release"
         },
         "oot_options": {
             "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
@@ -492,3 +498,24 @@ def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P
         return f"{value} {power_labels[n]}"
     else:
         return f"{value:0.3f} {power_labels[n]}"
+
+
+def get_fuzzy_ratio(word1: str, word2: str) -> float:
+    return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
+            / max(len(word1), len(word2)))
+
+
+def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: typing.Optional[int] = None) \
+        -> typing.List[typing.Tuple[str, int]]:
+    limit: int = limit if limit else len(wordlist)
+    return list(
+        map(
+            lambda container: (container[0], int(container[1]*100)),  # convert up to limit to int %
+            sorted(
+                map(lambda candidate:
+                    (candidate,  get_fuzzy_ratio(input_word, candidate)),
+                    wordlist),
+                key=lambda element: element[1],
+                reverse=True)[0:limit]
+        )
+    )

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union
+from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, NamedTuple
 
-from BaseClasses import MultiWorld, Item, CollectionState, Location
+from BaseClasses import MultiWorld, Item, CollectionState, Location, Tutorial
 from Options import Option
 
 
@@ -89,6 +89,13 @@ class WebWorld:
     """Webhost integration"""
     # display a settings page. Can be a link to an out-of-ap settings tool too.
     settings_page: Union[bool, str] = True
+
+    # docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'
+    game_info_languages: List[str] = ['en']
+
+    # docs folder will also be scanned for tutorial guides given the relevant information in this list. Each Tutorial
+    # class is to be used for one guide.
+    tutorials: List[Tutorial]
 
     # Choose a theme for your /game/* pages
     # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime

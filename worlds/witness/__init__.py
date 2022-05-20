@@ -4,7 +4,7 @@ Archipelago init file for The Witness
 
 import typing
 
-from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance
+from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance, Tutorial
 from ..AutoWorld import World, WebWorld
 from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
@@ -12,10 +12,19 @@ from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems
 from .rules import set_rules
 from .regions import WitnessRegions
 from .Options import is_option_enabled, the_witness_options
+from .utils import best_junk_to_add_based_on_weights
 
 
 class WitnessWebWorld(WebWorld):
     theme = "jungle"
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing The Witness with Archipelago.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["NewSoupVi", "Jarno"]
+    )]
 
 
 class WitnessWorld(World):
@@ -50,6 +59,8 @@ class WitnessWorld(World):
         self.items = WitnessPlayerItems(self.locat, self.world, self.player, self.player_logic)
         self.regio = WitnessRegions(self.locat)
 
+        self.junk_items_created = {key: 0 for key in self.items.JUNK_WEIGHTS.keys()}
+
     def generate_basic(self):
         # Generate item pool
         pool = []
@@ -69,13 +80,10 @@ class WitnessWorld(World):
         pool.remove(items_by_name[random_good_item])
 
         # Put in junk items to fill the rest
-        junk_pool = self.items.JUNK_WEIGHTS.copy()
-        junk_pool = self.world.random.choices(
-            list(junk_pool.keys()), weights=list(junk_pool.values()),
-            k=len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - 1
-        )
+        junk_size = len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - 1
 
-        pool += [self.create_item(junk) for junk in junk_pool]
+        for i in range(0, junk_size):
+            pool.append(self.create_item(self.get_filler_item_name()))
 
         # Tie Event Items to Event Locations (e.g. Laser Activations)
         for event_location in self.locat.EVENT_LOCATION_TABLE:
@@ -118,10 +126,12 @@ class WitnessWorld(World):
         new_item.trap = item.trap
         return new_item
 
-    def get_filler_item_name(self) -> str:  # Used ny itemlinks
-        junk_pool = self.items.JUNK_WEIGHTS.copy()
+    def get_filler_item_name(self) -> str:  # Used by itemlinks
+        item = best_junk_to_add_based_on_weights(self.items.JUNK_WEIGHTS, self.junk_items_created)
 
-        return self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()))[0]
+        self.junk_items_created[item] += 1
+
+        return item
 
 
 class WitnessLocation(Location):

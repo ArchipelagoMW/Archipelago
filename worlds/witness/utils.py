@@ -1,5 +1,45 @@
 import os
 from Utils import cache_argsless
+from itertools import accumulate
+from typing import *
+from fractions import Fraction
+
+
+def best_junk_to_add_based_on_weights(weights: Dict[Any, Fraction], created_junk: Dict[Any, int]):
+    min_error = ("", 2)
+
+    for junk_name, instances in created_junk.items():
+        new_dist = created_junk.copy()
+        new_dist[junk_name] += 1
+        new_dist_length = sum(new_dist.values())
+        new_dist = {key: Fraction(value/1)/new_dist_length for key, value in new_dist.items()}
+
+        errors = {key: abs(new_dist[key] - weights[key]) for key in created_junk.keys()}
+
+        new_min_error = max(errors.values())
+
+        if min_error[1] > new_min_error:
+            min_error = (junk_name, new_min_error)
+
+    return min_error[0]
+
+
+def weighted_list(weights: Dict[Any, Fraction], length):
+    """
+    Example:
+        weights = {A: 0.3, B: 0.3, C: 0.4}
+        length = 10
+
+        returns: [A, A, A, B, B, B, C, C, C, C]
+
+    Makes sure to match length *exactly*, might approximate as a result
+    """
+    vals = accumulate(map(lambda x: x * length, weights.values()), lambda x, y: x + y)
+    output_list = []
+    for k, v in zip(weights.keys(), vals):
+        while len(output_list) < v:
+            output_list.append(k)
+    return output_list
 
 
 def define_new_region(region_string):
