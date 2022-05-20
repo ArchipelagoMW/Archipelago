@@ -55,7 +55,7 @@ def can_beat_arrghus(state, player: int):
     if state.lttp_has_melee_weapon(player):
         return True
     return (
-            (state.lttp_has('Fire Rod', player) and
+            (state.has('Fire Rod', player) and
              (state.lttp_can_shoot_arrows(player) or state.lttp_can_extend_magic(player, 12))) or
             (state.has('Ice Rod', player) and
              (state.lttp_can_shoot_arrows(player) or state.lttp_can_extend_magic(player, 16)))
@@ -83,7 +83,7 @@ def can_beat_kholdstare(state, player: int):
            (state.lttp_has_melee_weapon(player) or
             (state.has('Fire Rod', player) and state.lttp_can_extend_magic(player, 20)) or
             (state.has_all({'Fire Rod', 'Bombos'}, player) and
-             state.world.worlds[player].swordless and state.lttp_can_extend_magic(player, 16)))
+             state.world.swordless and state.lttp_can_extend_magic(player, 16)))
 
 
 def can_beat_vitreous(state, player: int):
@@ -104,12 +104,12 @@ def can_beat_agahnim(state, player: int):
 
 
 def can_beat_ganon(state, player: int):
-    if state.world.worlds[player].swordless:
-        return state.has('Hammer', player) and state.lttp_has_fire_source(player) and \
+    if state.world.swordless:
+        return state.has('Hammer', player) and state.lttp_has_fire(player) and \
                state.has('Silver Bow', player) and state.lttp_can_shoot_arrows(player)
 
     can_hurt = state.lttp_has_swords(player, 2)
-    common = can_hurt and state.lttp_has_fire_source(player)
+    common = can_hurt and state.lttp_has_fire(player)
     if state.world.worlds[player].logic != 'noglitches':
         return common and (state.lttp_has_swords(player, 3) or
                            (state.has('Silver Bow', player) and state.lttp_can_shoot_arrows(player)) or

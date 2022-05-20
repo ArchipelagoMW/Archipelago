@@ -760,7 +760,7 @@ def patch_rom(world, rom, player, enemized):
         if location.player != player or location.address is None or location.shop_slot is not None:
             continue
 
-        itemid = location.item.code if location.item is not None else 0x5A
+        itemid = location.item.item_code if location.item is not None else 0x5A
 
         if not location.crystal:
 
@@ -770,12 +770,12 @@ def patch_rom(world, rom, player, enemized):
                         itemid = 0x5A  # Nothing, which disguises
                     else:
                         itemid = get_nonnative_item_sprite(location.item.name)
-                # Keys in their native dungeon should use the orignal item code for keys
+                # Keys in their native dungeon should use the original item code for keys
                 elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):
-                        if location.item.bigkey:
+                        if location.item.big_key:
                             itemid = 0x32
-                        elif location.item.smallkey:
+                        elif location.item.small_key:
                             itemid = 0x24
                         elif location.item.map:
                             itemid = 0x33
@@ -790,11 +790,11 @@ def patch_rom(world, rom, player, enemized):
                         rom.write_byte(location.player_address, min(location.item.player, ROM_PLAYER_LIMIT))
                     else:
                         itemid = 0x5A
-            location_address = old_location_address_to_new_location_address.get(location.address, location.address)
+            location_address = old_location_address_to_new_location_address.get(location.lttp_address, location.lttp_address)
             rom.write_byte(location_address, itemid)
         else:
             # crystals
-            for address, value in zip(location.address, itemid):
+            for address, value in zip(location.lttp_address, itemid):
                 rom.write_byte(address, value)
 
             # patch music
@@ -940,7 +940,7 @@ def patch_rom(world, rom, player, enemized):
     rom.write_byte(0x18003A, 0x01 if world.dark_world_light_cone else 0x00)
 
     GREEN_TWENTY_RUPEES = 0x47
-    GREEN_CLOCK = world.create_item('Green Clock').item_code
+    GREEN_CLOCK = world.worlds[player].create_item('Green Clock').item_code
 
     rom.write_byte(0x18004F, 0x01)  # Byrna Invulnerability: on
 
@@ -1726,7 +1726,7 @@ def write_custom_shops(rom, world, player):
             if not item['item'] in item_table:  # item not native to ALTTP
                 item_code = get_nonnative_item_sprite(item['item'])
             else:
-                item_code = world.create_item(item['item']).code
+                item_code = world.worlds[player].create_item(item['item']).item_code
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro[player]:
                     rom.write_byte(0x186500 + shop.sram_offset + slot, arrow_mask)
 
@@ -2446,7 +2446,7 @@ def write_strings(rom, world, player):
 
     sickkiditem = world.get_location('Sick Kid', player).item
     sickkiditem_text = local_random.choice(
-        SickKid_texts) if sickkiditem is None or sickkiditem.sickkid_credit_text is None else sickkiditem.sickkid_credit_text
+        SickKid_texts) if sickkiditem is None or sickkiditem.sick_kid_credit_text is None else sickkiditem.sick_kid_credit_text
 
     zoraitem = world.get_location('King Zora', player).item
     zoraitem_text = local_random.choice(
@@ -2454,11 +2454,11 @@ def write_strings(rom, world, player):
 
     magicshopitem = world.get_location('Potion Shop', player).item
     magicshopitem_text = local_random.choice(
-        MagicShop_texts) if magicshopitem is None or magicshopitem.magicshop_credit_text is None else magicshopitem.magicshop_credit_text
+        MagicShop_texts) if magicshopitem is None or magicshopitem.potion_shop_credit_text is None else magicshopitem.potion_shop_credit_text
 
     fluteboyitem = world.get_location('Flute Spot', player).item
     fluteboyitem_text = local_random.choice(
-        FluteBoy_texts) if fluteboyitem is None or fluteboyitem.fluteboy_credit_text is None else fluteboyitem.fluteboy_credit_text
+        FluteBoy_texts) if fluteboyitem is None or fluteboyitem.flute_boy_credit_text is None else fluteboyitem.flute_boy_credit_text
 
     credits.update_credits_line('castle', 0, local_random.choice(KingsReturn_texts))
     credits.update_credits_line('sanctuary', 0, local_random.choice(Sanctuary_texts))

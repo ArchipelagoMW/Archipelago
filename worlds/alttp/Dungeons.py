@@ -95,7 +95,7 @@ def create_dungeons(world: MultiWorld, player: int):
     if world.mode[player] != 'inverted':
         AT = make_dungeon('Agahnims Tower', 'Agahnim', ['Agahnims Tower', 'Agahnim 1'], None,
                           [world.create_item('Small Key (Agahnims Tower)', player)] * 2, [])
-        GT = make_dungeon('Ganons Tower', 'Agahnim2',
+        GT = make_dungeon('Ganons Tower', 'Agahnim 2',
                           ['Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)', 'Ganons Tower (Compass Room)',
                            'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)', 'Ganons Tower (Firesnake Room)',
                            'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)', 'Ganons Tower (Top)',
@@ -106,7 +106,7 @@ def create_dungeons(world: MultiWorld, player: int):
     else:
         AT = make_dungeon('Inverted Agahnims Tower', 'Agahnim', ['Inverted Agahnims Tower', 'Agahnim 1'], None,
                           [world.create_item('Small Key (Agahnims Tower)', player)] * 2, [])
-        GT = make_dungeon('Inverted Ganons Tower', 'Agahnim2',
+        GT = make_dungeon('Inverted Ganons Tower', 'Agahnim 2',
                           ['Inverted Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)',
                            'Ganons Tower (Compass Room)', 'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)',
                            'Ganons Tower (Firesnake Room)', 'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)',

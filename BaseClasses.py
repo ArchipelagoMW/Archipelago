@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import copy
-from enum import Enum, unique
+from enum import IntEnum, unique
 import logging
 import json
 import functools
@@ -743,8 +743,16 @@ class CollectionState():
             self.stale[item.player] = True
 
 
-class RegionType(Enum):
-    pass
+class RegionType(IntEnum):
+    Generic = 0
+    LightWorld = 1
+    DarkWorld = 2
+    Cave = 3
+    Dungeon = 4
+
+    @property
+    def is_indoors(self) -> bool:
+        return self in (RegionType.Cave, RegionType.Dungeon)
 
 
 class Region:
@@ -753,9 +761,9 @@ class Region:
     hint: str
     player: int
     world: Optional[MultiWorld]
-    entrances: List[Entrance] = []
-    exits: List[Entrance] = []
-    locations: List[Location] = []
+    entrances: List[Entrance]
+    exits: List[Entrance]
+    locations: List[Location]
     dungeon: Optional[Dungeon] = None
     shop: Optional = None
 
@@ -766,6 +774,9 @@ class Region:
         if hint:
             self.hint = hint
         self.player = player
+        self.entrances = []
+        self.exits = []
+        self.locations = []
 
     @property
     def hint_text(self) -> str:
@@ -854,13 +865,14 @@ class Dungeon(object):
     dungeon_items: List[Item]
     player: int
     world: MultiWorld = None
-    bosses: Dict = {}
+    bosses: Dict
 
-    def __init__(self, name: str, player: int, regions: List[Any], dungeon_items: List[Item] = []):
+    def __init__(self, name: str, player: int, regions: List[Any], dungeon_items: List[Item]):
         self.name = name
         self.regions = regions
         self.dungeon_items = dungeon_items
         self.player = player
+        self.bosses = {}
 
     @property
     def boss(self) -> Optional[Boss]:
@@ -893,7 +905,7 @@ class Dungeon(object):
         return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
 
-class LocationProgressType(Enum):
+class LocationProgressType(IntEnum):
     DEFAULT = 1
     PRIORITY = 2
     EXCLUDED = 3
@@ -977,6 +989,7 @@ class Item():
     # change manually to ensure that a specific non-progression item never goes on an excluded location
     never_exclude = False
     hint_text: str = None
+    skip_in_prog_balancing: bool = False
 
     def __init__(self, name: str, advancement: bool, code: Optional[int], player: int):
         self.name = name

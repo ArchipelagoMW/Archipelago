@@ -328,12 +328,12 @@ def generate_itempool(world: MultiWorld):
         ('Frog', 'Get Frog'),
         ('Missing Smith', 'Return Smith'),
         ('Floodgate', 'Open Floodgate'),
-        ('Agahnim 1', 'Beat Agahnim 1'),
         ('Flute Activation Spot', 'Activated Flute')
     ]
     for location_name, event_name in event_pairs:
         location = world.world.get_location(location_name, player)
-
+        event = world.create_item(event_name)
+        location.place_locked_item(event)
 
     # set up item pool
     additional_triforce_pieces = 0
