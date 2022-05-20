@@ -5,7 +5,7 @@ import threading
 from typing import Dict, List
 
 from BaseClasses import Item, CollectionState, Tutorial
-from ..AutoWorld import World, MultiWorld, WebWorld
+from ..AutoWorld import World, WebWorld
 from .Options import alttp_options, smallkey_shuffle
 from .Items import item_name_groups, item_table, ALttPItem, get_beemizer_item
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions

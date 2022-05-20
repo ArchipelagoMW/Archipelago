@@ -268,7 +268,7 @@ def generate_itempool(world: MultiWorld):
         world.world.get_location('Ganon', player).place_locked_item(world.create_item('Triforce'))
 
     if world.goal == 'icerodhunt':
-        world.progression_balancing.value = False
+        world.progression_balancing.value = 0
         loc = world.get_location('Turtle Rock - Boss', player)
         world.push_item(loc, world.create_item('Triforce Piece', player), False)
         world.treasure_hunt_count = 1
