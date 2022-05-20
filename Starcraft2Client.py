@@ -57,13 +57,13 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_available(self) -> bool:
         """Get what missions are currently available to play"""
 
-        request_available_missions(self.ctx.checked_locations, mission_req_table)
+        request_available_missions(self.ctx.checked_locations, mission_req_table, self.ctx.ui)
         return True
 
     def _cmd_unfinished(self) -> bool:
         """Get what missions are currently available to play and have not had all locations checked"""
 
-        request_unfinished_missions(self.ctx.checked_locations, mission_req_table)
+        request_unfinished_missions(self.ctx.checked_locations, mission_req_table, self.ctx.ui)
         return True
 
 
@@ -378,21 +378,22 @@ class MissionInfo(typing.NamedTuple):
     extra_locations: int
     required_world: list[int]
     number: int = 0  # number of worlds need beaten
+    completion_critical: bool = False # missions needed to beat game
 
 
 mission_req_table = {
-    "Liberation Day": MissionInfo(1, 7, []),
-    "The Outlaws": MissionInfo(2, 2, [1]),
-    "Zero Hour": MissionInfo(3, 4, [2]),
+    "Liberation Day": MissionInfo(1, 7, [], completion_critical=True),
+    "The Outlaws": MissionInfo(2, 2, [1], completion_critical=True),
+    "Zero Hour": MissionInfo(3, 4, [2], completion_critical=True),
     "Evacuation": MissionInfo(4, 4, [3]),
     "Outbreak": MissionInfo(5, 3, [4]),
     "Safe Haven": MissionInfo(6, 1, [5], number=7),
     "Haven's Fall": MissionInfo(7, 1, [5], number=7),
-    "Smash and Grab": MissionInfo(8, 5, [3]),
-    "The Dig": MissionInfo(9, 4, [8], number=8),
-    "The Moebius Factor": MissionInfo(10, 9, [9], number=11),
-    "Supernova": MissionInfo(11, 5, [10], number=14),
-    "Maw of the Void": MissionInfo(12, 6, [11]),
+    "Smash and Grab": MissionInfo(8, 5, [3], completion_critical=True),
+    "The Dig": MissionInfo(9, 4, [8], number=8, completion_critical=True),
+    "The Moebius Factor": MissionInfo(10, 9, [9], number=11, completion_critical=True),
+    "Supernova": MissionInfo(11, 5, [10], number=14, completion_critical=True),
+    "Maw of the Void": MissionInfo(12, 6, [11], completion_critical=True),
     "Devil's Playground": MissionInfo(13, 3, [3], number=4),
     "Welcome to the Jungle": MissionInfo(14, 4, [13]),
     "Breakout": MissionInfo(15, 3, [14], number=8),
@@ -406,10 +407,10 @@ mission_req_table = {
     "A Sinister Turn": MissionInfo(23, 4, [22]),
     "Echoes of the Future": MissionInfo(24, 3, [23]),
     "In Utter Darkness": MissionInfo(25, 3, [24]),
-    "Gates of Hell": MissionInfo(26, 2, [12]),
-    "Belly of the Beast": MissionInfo(27, 4, [26]),
-    "Shatter the Sky": MissionInfo(28, 5, [26]),
-    "All-In": MissionInfo(29, -1, [27, 28])
+    "Gates of Hell": MissionInfo(26, 2, [12], completion_critical=True),
+    "Belly of the Beast": MissionInfo(27, 4, [26], completion_critical=True),
+    "Shatter the Sky": MissionInfo(28, 5, [26], completion_critical=True),
+    "All-In": MissionInfo(29, -1, [27, 28], completion_critical=True)
 }
 
 lookup_id_to_mission: typing.Dict[int, str] = {
@@ -430,16 +431,21 @@ def calc_objectives_completed(mission, missions_info, locations_done):
         return -1
 
 
-def request_unfinished_missions(locations_done, location_table):
+def request_unfinished_missions(locations_done, location_table, ui):
     message = "Unfinished Missions: "
 
     unfinished_missions = calc_unfinished_missions(locations_done, location_table)
 
-    message += ", ".join(f"{mission}[{location_table[mission].id}] "
+
+    message += ", ".join(f"{mark_critical(mission,location_table, ui)}[{location_table[mission].id}] "
                          f"({unfinished_missions[mission]}/{location_table[mission].extra_locations})"
                          for mission in unfinished_missions)
 
-    sc2_logger.info(message)
+    if ui:
+        ui.log_panels['All'].on_message_markup(message)
+        ui.log_panels['Starcraft2'].on_message_markup(message)
+    else:
+        sc2_logger.info(message)
 
 
 def calc_unfinished_missions(locations_done, locations):
@@ -468,13 +474,28 @@ def is_mission_available(mission_id_to_check, locations_done, locations):
     return any(mission_id_to_check == locations[mission].id for mission in unfinished_missions)
 
 
-def request_available_missions(locations_done, location_table):
+def mark_critical(mission, location_table, ui):
+    """Checks if the mission is required for game completion and adds '*' to the name to mark that."""
+    if location_table[mission].completion_critical:
+        if ui:
+            return "[color=AF99EF]" + mission + "[/color]"
+        else:
+            return "*" + mission + "*"
+    else:
+        return mission
+
+
+def request_available_missions(locations_done, location_table, ui):
     message = "Available Missions: "
 
     missions = calc_available_missions(locations_done, location_table)
-    message += ", ".join(f"{mission}[{location_table[mission].id}]" for mission in missions)
+    message += ", ".join(f"{mark_critical(mission,location_table, ui)}[{location_table[mission].id}]" for mission in missions)
 
-    sc2_logger.info(message)
+    if ui:
+        ui.log_panels['All'].on_message_markup(message)
+        ui.log_panels['Starcraft2'].on_message_markup(message)
+    else:
+        sc2_logger.info(message)
 
 
 def calc_available_missions(locations_done, locations):
