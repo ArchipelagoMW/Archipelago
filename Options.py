@@ -703,21 +703,6 @@ class ItemLinks(OptionList):
                 raise Exception(f"item_link {link['name']} has {intersection} items in both its local_items and non_local_items pool.")
 
 
-class CustomItemPool(OptionDict):
-    """Swap items you normally would have access to with other items."""
-    verify_item_name = True
-    schema = Schema([
-        {
-            "name": And(str, len),
-            "item_pool": [And(str, len)],
-            Optional("exclude"): [And(str, len)],
-            "replacement_item": Or(And(str, len), None),
-            Optional("local_items"): [And(str, len)],
-            Optional("non_local_items"): [And(str, len)]
-        }
-    ])
-
-
 per_game_common_options = {
     **common_options,  # can be overwritten per-game
     "local_items": LocalItems,
