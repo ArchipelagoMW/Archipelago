@@ -169,7 +169,7 @@ class StaticWitnessLocations:
         "Inside Mountain Secret Area Wooden Beam Shapers and Stars",
         "Inside Mountain Secret Area Upstairs Invisible Dots 8",
         "Inside Mountain Secret Area Upstairs Invisible Dot Symmetry 3",
-        "Inside Mountain Secret Area Upstairs Dot Grid Shapers",
+        "Inside Mountain Secret Area Upstairs Dot Grid Negative Shapers",
         "Inside Mountain Secret Area Upstairs Dot Grid Rotated Shapers",
 
         "Challenge Vault Box",
