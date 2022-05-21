@@ -1,6 +1,8 @@
 from BaseClasses import Item
 import typing
 
+item_name_groups = {}
+
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     type: typing.Optional[str]
@@ -153,13 +155,17 @@ basic_unit: typing.Tuple[str, ...] = (
 )
 
 
-item_name_groups = {"Missions":
-                        {"Beat Liberation Day", "Beat The Outlaws", "Beat Zero Hour", "Beat Evacuation",
+item_name_groups = {}
+for item, data in item_table.items():
+    if data.type not in item_name_groups:
+        item_name_groups[data.type] = []
+    item_name_groups[data.type].append(item)
+item_name_groups["Missions"] = ["Beat Liberation Day", "Beat The Outlaws", "Beat Zero Hour", "Beat Evacuation",
                          "None Outbreak", "Beat Safe Haven", "Beat Haven's Fall", "Beat Smash and Grab", "Beat The Dig",
                          "Beat The Moebius Factor", "Beat Supernova", "Beat Maw of the Void", "Beat Devil's Playground",
                          "Beat Welcome to the Jungle", "Beat Breakout", "Beat Ghost of a Chance",
                          "Beat The Great Train Robbery", "Beat Cutthroat", "Beat Engine of Destruction",
-                         "Beat Media Blitz", "Beat Piercing the Shroud"}}
+                         "Beat Media Blitz", "Beat Piercing the Shroud"]
 
 filler_items: typing.Tuple[str, ...] = (
     '+5 Starting Minerals',
