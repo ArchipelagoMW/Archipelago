@@ -263,14 +263,14 @@ def generate_itempool(world: MultiWorld):
     if world.timer in ['ohko', 'timed-ohko']:
         world.can_take_damage = False
     if world.goal in ['pedestal', 'triforcehunt', 'localtriforcehunt', 'icerodhunt']:
-        world.world.push_item(world.get_location('Ganon', player), world.create_item('Nothing', player), False)
+        world.world.push_item(world.world.get_location('Ganon', player), world.create_item('Nothing'), False)
     else:
         world.world.get_location('Ganon', player).place_locked_item(world.create_item('Triforce'))
 
     if world.goal == 'icerodhunt':
-        world.progression_balancing.value = 0
-        loc = world.get_location('Turtle Rock - Boss', player)
-        world.push_item(loc, world.create_item('Triforce Piece', player), False)
+        world.world.progression_balancing[player].value = 0
+        loc = world.world.get_location('Turtle Rock - Boss', player)
+        world.world.push_item(loc, world.create_item('Triforce Piece', player), False)
         world.treasure_hunt_count = 1
         if world.boss_shuffle != 'none':
             if 'turtle rock-' not in world.boss_shuffle:
@@ -307,15 +307,15 @@ def generate_itempool(world: MultiWorld):
             world.push_precollected(world.create_item(item, player))
 
     if world.goal in ['triforcehunt', 'localtriforcehunt', 'icerodhunt']:
-        region = world.get_region('Light World', player)
+        region = world.world.get_region('Light World', player)
 
         loc = ALttPLocation(player, "Murahdahla", parent=region)
-        loc.access_rule = lambda state: state.has_triforce_pieces(state.world.treasure_hunt_count[player], player)
+        loc.access_rule = lambda state: state.lttp_has_triforce_pieces(state.world.treasure_hunt_count[player], player)
 
         region.locations.append(loc)
-        world.clear_location_cache()
+        world.world.clear_location_cache()
 
-        world.push_item(loc, world.create_item('Triforce', player), False)
+        world.world.push_item(loc, world.create_item('Triforce'), False)
         loc.event = True
         loc.locked = True
 
@@ -346,9 +346,9 @@ def generate_itempool(world: MultiWorld):
     treasure_hunt_icon, additional_triforce_pieces = get_pool_core(world, player)
 
     for item in precollected_items:
-        world.push_precollected(world.create_item(item, player))
+        world.world.push_precollected(world.create_item(item))
 
-    if world.mode == 'standard' and not world.state.has_melee_weapon(player):
+    if world.mode == 'standard' and not world.world.state.lttp_has_melee_weapon(player):
         if "Link's Uncle" not in placed_items:
             found_sword = False
             found_bow = False
@@ -367,11 +367,11 @@ def generate_itempool(world: MultiWorld):
             starting_weapon = world.random.choice(possible_weapons)
             placed_items["Link's Uncle"] = starting_weapon
             pool.remove(starting_weapon)
-        if placed_items["Link's Uncle"] in ['Bow', 'Progressive Bow', 'Bombs (10)', 'Cane of Somaria', 'Cane of Byrna'] and world.enemy_health[player] not in ['default', 'easy']:
-            world.escape_assist.append('bombs')
+        if placed_items["Link's Uncle"] in ['Bow', 'Progressive Bow', 'Bombs (10)', 'Cane of Somaria', 'Cane of Byrna'] and world.world.enemy_health[player] not in ['default', 'easy']:
+            world.world.escape_assist.append('bombs')
 
     for (location, item) in placed_items.items():
-        world.get_location(location, player).place_locked_item(world.create_item(item, player))
+        world.world.get_location(location, player).place_locked_item(world.create_item(item))
 
     items = []
     for name in pool:
@@ -419,7 +419,7 @@ def generate_itempool(world: MultiWorld):
     # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
     if world.goal != 'icerodhunt' and world.difficulty in ['easy', 'normal', 'hard']:
         next(item for item in items if item.name == 'Boss Heart Container').advancement = True
-    elif world.goal != 'icerodhunt' and world.difficulty in ['expert'] and not (world.custom and world.customitemarray[29] < 4):
+    elif world.goal != 'icerodhunt' and world.difficulty in ['expert']:
         adv_heart_pieces = (item for item in items if item.name == 'Piece of Heart')
         for i in range(4):
             next(adv_heart_pieces).advancement = True
@@ -624,7 +624,7 @@ def get_pool_core(world, player: int):
 
     if want_progressives(world.random):
         pool.extend(diff.progressivebow)
-        world.worlds[player].has_progressive_bows = True
+        world.has_progressive_bows = True
     elif (swordless or logic == 'noglitches') and goal != 'icerodhunt':
         swordless_bows = ['Bow', 'Silver Bow']
         if difficulty == "easy":

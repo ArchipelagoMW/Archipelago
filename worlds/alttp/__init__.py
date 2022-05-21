@@ -148,6 +148,8 @@ class ALTTPWorld(World):
     smallkey_shuffle = smallkey_shuffle
     open_pyramid: str
     entrance_shuffle: str
+    shops: List
+    has_progressive_bows: bool = False
 
     @classmethod
     def stage_assert_generate(cls, world):
@@ -169,6 +171,7 @@ class ALTTPWorld(World):
         self.logic = self.world.logic[self.player]
         self.open_pyramid = self.world.open_pyramid[self.player]
         self.entrance_shuffle = self.world.shuffle[self.player]
+        self.shops = []
 
         player = self.player
         world = self.world
@@ -223,8 +226,8 @@ class ALTTPWorld(World):
             create_regions(world, player)
         else:
             create_inverted_regions(world, player)
-        create_shops(world, player)
-        create_dungeons(world, player)
+        create_shops(self, player)
+        create_dungeons(self, player)
 
         if world.logic[player] not in ["noglitches", "minorglitches"] and world.shuffle[player] in \
                 {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:

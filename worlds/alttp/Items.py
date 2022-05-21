@@ -74,14 +74,14 @@ class ALttPItem(Item):
         return self.location.locked and self.dungeon_item
 
 
-def get_beemizer_item(world: MultiWorld, player: int, item: Item):
+def get_beemizer_item(world: MultiWorld, item: Item):
     if item.name not in trap_replaceable:
         return item
     if not world.beemizer_total_chance or world.random.random() > (world.beemizer_total_chance / 100):
         return item
     if not world.beemizer_trap_chance or world.random.random() > (world.beemizer_trap_chance / 100):
-        return world.create_item('Bee', player)
-    return world.create_item('Bee Trap', player)
+        return world.create_item('Bee')
+    return world.create_item('Bee Trap')
 
 
 # Format: Name: (Advancement, Type, ItemCode, Pedestal Hint Text, Pedestal Credit Text, Sick Kid Credit Text, Zora Credit Text, Witch Credit Text, Flute Boy Credit Text, Hint Text, AP Code, Trap)
