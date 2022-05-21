@@ -24,7 +24,7 @@ import os
 
 logger = logging.getLogger("Client")
 
-# without terminal we have to use gui mode
+# without terminal, we have to use gui mode
 gui_enabled = not sys.stdout or "--nogui" not in sys.argv
 
 
@@ -125,7 +125,7 @@ class CommonContext():
     input_task: typing.Optional[asyncio.Task] = None
     keep_alive_task: typing.Optional[asyncio.Task] = None
     items_handling: typing.Optional[int] = None
-    current_energy_link_value = 0  # to display in UI, gets set by server
+    current_energy_link_value: int = 0  # to display in UI, gets set by server
 
     def __init__(self, server_address, password):
         # server state
@@ -181,14 +181,24 @@ class CommonContext():
             return len(self.checked_locations | self.missing_locations)
 
     async def connection_closed(self):
+        self.reset_server_state()
+        if self.server and self.server.socket is not None:
+            await self.server.socket.close()
+
+    def reset_server_state(self):
         self.auth = None
         self.items_received = []
         self.locations_info = {}
         self.server_version = Version(0, 0, 0)
-        if self.server and self.server.socket is not None:
-            await self.server.socket.close()
         self.server = None
         self.server_task = None
+        self.games = {}
+        self.hint_cost = None
+        self.permissions = {
+            "forfeit": "disabled",
+            "collect": "disabled",
+            "remaining": "disabled",
+        }
 
     # noinspection PyAttributeOutsideInit
     def set_getters(self, data_package: dict, network=False):
@@ -218,13 +228,6 @@ class CommonContext():
             return locations_lookup.get(address, f'Unknown location (ID:{address})')
 
         self.location_name_getter = get_location_name_from_address
-
-    @property
-    def endpoints(self):
-        if self.server:
-            return [self.server]
-        else:
-            return []
 
     async def disconnect(self):
         if self.server and not self.server.socket.closed:
@@ -385,7 +388,6 @@ async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
 
 
 async def server_loop(ctx: CommonContext, address=None):
-    cached_address = None
     if ctx.server and ctx.server.socket:
         logger.error('Already connected')
         return
@@ -413,16 +415,12 @@ async def server_loop(ctx: CommonContext, address=None):
                 await process_server_cmd(ctx, msg)
         logger.warning('Disconnected from multiworld server, type /connect to reconnect')
     except ConnectionRefusedError:
-        if cached_address:
-            logger.error('Unable to connect to multiworld server at cached address. '
-                         'Please use the connect button above.')
-        else:
-            logger.exception('Connection refused by the multiworld server')
+        logger.exception('Connection refused by the server. May not be running Archipelago on that address or port.')
     except websockets.InvalidURI:
         logger.exception('Failed to connect to the multiworld server (invalid URI)')
-    except (OSError, websockets.InvalidURI):
+    except OSError:
         logger.exception('Failed to connect to the multiworld server')
-    except Exception as e:
+    except Exception:
         logger.exception('Lost connection to the multiworld server, type /connect to reconnect')
     finally:
         await ctx.connection_closed()

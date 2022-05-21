@@ -43,7 +43,12 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             mission_number = int(options[0])
 
             if is_mission_available(mission_number, self.ctx.checked_locations, mission_req_table):
-                asyncio.create_task(starcraft_launch(self.ctx, mission_number), name="Starcraft Launch")
+                if self.ctx.sc2_run_task:
+                    if not self.ctx.sc2_run_task.done():
+                        sc2_logger.warning("Starcraft 2 Client is still running!")
+                    self.ctx.sc2_run_task.cancel()  # doesn't actually close the game, just stops the python task
+                self.ctx.sc2_run_task = asyncio.create_task(starcraft_launch(self.ctx, mission_number),
+                                                            name="Starcraft 2 Launch")
             else:
                 sc2_logger.info(
                     "This mission is not currently unlocked.  Use /unfinished or /available to see what is available.")
@@ -79,6 +84,7 @@ class Context(CommonContext):
     sent_announce_pos = 0
     announcements = []
     announcement_pos = 0
+    sc2_run_task: typing.Optional[asyncio.Task] = None
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -115,6 +121,11 @@ class Context(CommonContext):
 
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+
+    async def shutdown(self):
+        await super(Context, self).shutdown()
+        if self.sc2_run_task:
+            self.sc2_run_task.cancel()
 
 
 async def main():
