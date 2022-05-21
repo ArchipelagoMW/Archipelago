@@ -438,6 +438,25 @@ class Range(NumericOption):
         return str(self.value)
 
 
+class RangeWithSpecialMax(Range):
+    """ will display a special value for the top of the range """
+    special_max: str = "Infinity"
+    # subclass and override if you want a different label for the top value
+
+    @classmethod
+    def from_text(cls, text: str) -> RangeWithSpecialMax:
+        text = text.lower()
+        if text == cls.special_max.lower():
+            return cls(cls.range_end)
+        return cls(super(RangeWithSpecialMax, cls).from_text(text).value)
+
+    @classmethod
+    def get_option_name(cls, value: int) -> str:
+        if value == cls.range_end:
+            return cls.special_max
+        return str(value)
+
+
 class VerifyKeys:
     valid_keys = frozenset()
     valid_keys_casefold: bool = False

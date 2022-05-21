@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Any, Dict, Type
 from Utils import __version__
 from jinja2 import Template
 import yaml
@@ -42,7 +43,10 @@ def create():
 
     for game_name, world in AutoWorldRegister.world_types.items():
 
-        all_options = {**world.options, **Options.per_game_common_options}
+        all_options: Dict[str, Type[Options.Option[Any]]] = {
+            **world.options,
+            **Options.per_game_common_options
+        }
         res = Template(open(os.path.join("WebHostLib", "templates", "options.yaml")).read()).render(
             options=all_options,
             __version__=__version__, game=game_name, yaml_dump=yaml.dump,
@@ -98,6 +102,8 @@ def create():
                     "min": option.range_start,
                     "max": option.range_end,
                 }
+                if issubclass(option, Options.RangeWithSpecialMax):
+                    game_options[option_name]["specialMax"] = option.special_max
 
             elif getattr(option, "verify_item_name", False):
                 game_options[option_name] = {
