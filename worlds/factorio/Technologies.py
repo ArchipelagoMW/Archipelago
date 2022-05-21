@@ -193,9 +193,18 @@ del (raw)
 recipes = {}
 all_product_sources: Dict[str, Set[Recipe]] = {"character": set()}
 # add uranium mining to logic graph. TODO: add to automatic extractor for mod support
-raw_recipes["uranium-ore"] = {"ingredients": {"sulfuric-acid": 1}, "products": {"uranium-ore": 1}, "category": "mining",
-                              "energy": 2}
-raw_recipes["crude-oil"] = {"ingredients": {}, "products": {"crude-oil"}, "category": "basic-fluid"}
+raw_recipes["uranium-ore"] = {
+    "ingredients": {"sulfuric-acid": 1},
+    "products": {"uranium-ore": 1},
+    "category": "mining",
+    "energy": 2
+}
+raw_recipes["crude-oil"] = {
+    "ingredients": {},
+    "products": {"crude-oil": 1},
+    "category": "basic-fluid",
+    "energy": 1
+}
 
 # raw_recipes["iron-ore"] = {"ingredients": {}, "products": {"iron-ore": 1}, "category": "mining", "energy": 2}
 # raw_recipes["copper-ore"] = {"ingredients": {}, "products": {"copper-ore": 1}, "category": "mining", "energy": 2}
