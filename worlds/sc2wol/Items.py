@@ -12,7 +12,7 @@ class ItemData(typing.NamedTuple):
 
 
 class StarcraftWoLItem(Item):
-    game: str = "Starcraft2WoL"
+    game: str = "Starcraft 2 Wings of Liberty"
 
     def __init__(self, name, advancement: bool = False, code: int = None, player: int = None):
         super(StarcraftWoLItem, self).__init__(name, advancement, code, player)
@@ -156,9 +156,7 @@ basic_unit: typing.Tuple[str, ...] = (
 
 item_name_groups = {}
 for item, data in item_table.items():
-    if data.type not in item_name_groups:
-        item_name_groups[data.type] = []
-    item_name_groups[data.type].append(item)
+    item_name_groups.setdefault(data.type, []).append(item)
 item_name_groups["Missions"] = ["Beat Liberation Day", "Beat The Outlaws", "Beat Zero Hour", "Beat Evacuation",
                          "None Outbreak", "Beat Safe Haven", "Beat Haven's Fall", "Beat Smash and Grab", "Beat The Dig",
                          "Beat The Moebius Factor", "Beat Supernova", "Beat Maw of the Void", "Beat Devil's Playground",
