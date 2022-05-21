@@ -48,54 +48,71 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
 
     connect(world, player, names, 'Menu', 'Liberation Day'),
     connect(world, player, names, 'Liberation Day', 'The Outlaws',
-            lambda state: state._sc2wol_has_common_unit(world, player)),
-    connect(world, player, names, 'The Outlaws', 'Zero Hour'),
+            lambda state: state.has("Beat Liberation Day", player)),
+    connect(world, player, names, 'The Outlaws', 'Zero Hour',
+            lambda state: state.has("Beat The Outlaws", player)),
     connect(world, player, names, 'Zero Hour', 'Evacuation',
-            lambda state: state._sc2wol_has_anti_air(world, player)),
-    connect(world, player, names, 'Evacuation', 'Outbreak'),
+            lambda state: state.has("Beat Zero Hour", player)),
+    connect(world, player, names, 'Evacuation', 'Outbreak',
+            lambda state: state.has("Beat Evacuation", player)),
     connect(world, player, names, "Outbreak", "Safe Haven",
-            lambda state: state._sc2wol_has_mobile_anti_air(world, player) and
-                          state._sc2wol_cleared_missions(world, player, 7)),
+            lambda state: state._sc2wol_cleared_missions(world, player, 7) and
+                          state.has("Beat Outbreak", player)),
     connect(world, player, names, "Outbreak", "Haven's Fall",
-            lambda state: state._sc2wol_has_mobile_anti_air(world, player) and
-                          state._sc2wol_cleared_missions(world, player, 7)),
+            lambda state: state._sc2wol_cleared_missions(world, player, 7) and
+                          state.has("Beat Outbreak", player)),
     connect(world, player, names, 'Zero Hour', 'Smash and Grab',
-            lambda state: state._sc2wol_has_anti_air(world, player)),
+            lambda state: state.has("Beat Zero Hour", player)),
     connect(world, player, names, 'Smash and Grab', 'The Dig',
             lambda state: state._sc2wol_cleared_missions(world, player, 8) and
-                          state._sc2wol_has_heavy_defense(world, player)),
+                          state.has("Beat Smash and Grab", player)),
     connect(world, player, names, 'The Dig', 'The Moebius Factor',
             lambda state: state._sc2wol_cleared_missions(world, player, 11) and
-                          state._sc2wol_has_air(world, player)),
+                          state.has("Beat The Dig", player)),
     connect(world, player, names, 'The Moebius Factor', 'Supernova',
-            lambda state: state._sc2wol_cleared_missions(world, player, 14)),
-    connect(world, player, names, 'Supernova', 'Maw of the Void'),
+            lambda state: state._sc2wol_cleared_missions(world, player, 14) and
+                          state.has("Beat The Moebius Factor", player)),
+    connect(world, player, names, 'Supernova', 'Maw of the Void',
+            lambda state: state.has("Beat Supernova", player)),
     connect(world, player, names, 'Zero Hour', "Devil's Playground",
-            lambda state: state._sc2wol_cleared_missions(world, player, 4)),
-    connect(world, player, names, "Devil's Playground", 'Welcome to the Jungle'),
+            lambda state: state._sc2wol_cleared_missions(world, player, 4) and
+                          state.has("Beat Zero Hour", player)),
+    connect(world, player, names, "Devil's Playground", 'Welcome to the Jungle',
+            lambda state: state.has("Beat Devil's Playground", player)),
     connect(world, player, names, "Welcome to the Jungle", 'Breakout',
-            lambda state: state._sc2wol_cleared_missions(world, player, 8)),
+            lambda state: state._sc2wol_cleared_missions(world, player, 8) and
+                          state.has("Beat Welcome to the Jungle", player)),
     connect(world, player, names, "Welcome to the Jungle", 'Ghost of a Chance',
-            lambda state: state._sc2wol_cleared_missions(world, player, 8)),
+            lambda state: state._sc2wol_cleared_missions(world, player, 8) and
+                          state.has("Beat Welcome to the Jungle", player)),
     connect(world, player, names, "Zero Hour", 'The Great Train Robbery',
-            lambda state: state._sc2wol_cleared_missions(world, player, 6)),
+            lambda state: state._sc2wol_cleared_missions(world, player, 6) and
+                          state.has("Beat Zero Hour", player)),
     connect(world, player, names, 'The Great Train Robbery', 'Cutthroat',
             lambda state: state.has("Beat The Great Train Robbery", player)),
     connect(world, player, names, 'Cutthroat', 'Engine of Destruction',
-            lambda state: state.has("Beat The Great Train Robbery", player)),
+            lambda state: state.has("Beat Cutthroat", player)),
     connect(world, player, names, 'Engine of Destruction', 'Media Blitz',
             lambda state: state.has("Beat Engine of Destruction", player)),
-    connect(world, player, names, 'Media Blitz', 'Piercing the Shroud'),
-    connect(world, player, names, 'The Dig', 'Whispers of Doom',),
-    connect(world, player, names, 'Whispers of Doom', 'A Sinister Turn'),
+    connect(world, player, names, 'Media Blitz', 'Piercing the Shroud',
+            lambda state: state.has("Beat Media Blitz", player)),
+    connect(world, player, names, 'The Dig', 'Whispers of Doom',
+            lambda state: state.has("Beat The Dig", player)),
+    connect(world, player, names, 'Whispers of Doom', 'A Sinister Turn',
+            lambda state: state.has("Beat Whispers of Doom", player)),
     connect(world, player, names, 'A Sinister Turn', 'Echoes of the Future',
             lambda state: state.has("Beat A Sinister Turn", player)),
-    connect(world, player, names, 'Echoes of the Future', 'In Utter Darkness'),
-    connect(world, player, names, 'Maw of the Void', 'Gates of Hell'),
-    connect(world, player, names, 'Gates of Hell', 'Belly of the Beast'),
-    connect(world, player, names, 'Gates of Hell', 'Shatter the Sky'),
+    connect(world, player, names, 'Echoes of the Future', 'In Utter Darkness',
+            lambda state: state.has("Beat Echoes of the Future", player)),
+    connect(world, player, names, 'Maw of the Void', 'Gates of Hell',
+            lambda state: state.has("Beat Maw of the Void", player)),
+    connect(world, player, names, 'Gates of Hell', 'Belly of the Beast',
+            lambda state: state.has("Beat Gates of Hell", player)),
+    connect(world, player, names, 'Gates of Hell', 'Shatter the Sky',
+            lambda state: state.has("Beat Gates of Hell", player)),
     connect(world, player, names, 'Gates of Hell', 'All-In',
-            lambda state: state.has('Beat Gates of Hell', player) or state.has('Beat Shatter the Sky', player))
+            lambda state: state.has('Beat Gates of Hell', player) and (
+                    state.has('Beat Shatter the Sky', player) or state.has('Beat Belly of the Beast', player)))
 
 
 def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames: Set[str]):
@@ -105,10 +122,12 @@ def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames:
         existingRegions.add(region.name)
 
     if (regionNames - existingRegions):
-        raise Exception("Starcraft: the following regions are used in locations: {}, but no such region exists".format(regionNames - existingRegions))
+        raise Exception("Starcraft: the following regions are used in locations: {}, but no such region exists".format(
+            regionNames - existingRegions))
 
 
-def create_location(player: int, location_data: LocationData, region: Region, location_cache: List[Location]) -> Location:
+def create_location(player: int, location_data: LocationData, region: Region,
+                    location_cache: List[Location]) -> Location:
     location = Location(player, location_data.name, location_data.code, region)
     location.access_rule = location_data.rule
 
@@ -121,7 +140,8 @@ def create_location(player: int, location_data: LocationData, region: Region, lo
     return location
 
 
-def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]], location_cache: List[Location], name: str) -> Region:
+def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]],
+                  location_cache: List[Location], name: str) -> Region:
     region = Region(name, RegionType.Generic, name, player)
     region.world = world
 
@@ -133,7 +153,8 @@ def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str
     return region
 
 
-def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str, rule: Optional[Callable] = None):
+def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str,
+            rule: Optional[Callable] = None):
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
 
@@ -154,7 +175,7 @@ def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: 
 
 
 def get_locations_per_region(locations: Tuple[LocationData, ...]) -> Dict[str, List[LocationData]]:
-    per_region: Dict[str, List[LocationData]]  = {}
+    per_region: Dict[str, List[LocationData]] = {}
 
     for location in locations:
         per_region.setdefault(location.region, []).append(location)
