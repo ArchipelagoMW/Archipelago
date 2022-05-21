@@ -63,6 +63,7 @@ def get_yaml_data(file) -> Union[Dict[str, str], str]:
 
 
 def roll_options(options: Dict[str, Union[dict, str]], plando_options: set = {"bosses", "items", "connections", "texts"}) -> Tuple[Dict[str, Union[str, bool]], Dict[str, dict]]:
+    plando_options = set(plando_options)
     results = {}
     rolled_results = {}
     for filename, text in options.items():
