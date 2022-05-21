@@ -150,7 +150,7 @@ const buildOptionsTable = (settings, romOpts = false) => {
         range.addEventListener('change', (event) => {
           const v = event.target.value;
           // if at max and have specialMax, use that, else use value
-          const text = ((v === settingMax) && specialMax) || v;
+          const text = ((v == settingMax) && specialMax) || v;
           document.getElementById(`${setting}-value`).innerText = text;
           updateGameSetting(event);
         });
