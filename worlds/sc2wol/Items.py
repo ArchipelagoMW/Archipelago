@@ -1,7 +1,6 @@
 from BaseClasses import Item
 import typing
 
-item_name_groups = {}
 
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
