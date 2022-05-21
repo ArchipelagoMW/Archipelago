@@ -11,10 +11,14 @@ Items which the player would normally acquire throughout the game have been move
 always able to be completed, but because of the item shuffle the player may need to access certain areas before they
 would in the vanilla game.
 
+You can also adjust the ratios of ammo powerups for Missiles, Super Missiles, and Power Bombs so that the number of expansions for each are different than in the base game, or randomly generated using the ratios as probabilities.
+
 ## What items and locations get shuffled?
 
 All power-ups and ammunition can be shuffled, and all locations in the game which could contain any of those items may
 have their contents changed.
+
+In total, there are **100 items** to collect in a standard run.
 
 ## Which items can be in another player's world?
 
@@ -28,4 +32,3 @@ A unique item sprite has been added to the game to represent items belonging to 
 ## When the player receives an item, what happens?
 
 When the player receives an item, a text box will appear to show which item was received, and from whom.
-

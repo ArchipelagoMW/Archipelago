@@ -14,6 +14,8 @@ Shop costs are presently always randomized.
 
 This is dependent entirely upon your YAML settings. Some examples include: charms, grubs, lifeblood cocoons, geo, etc.
 
+With some common settings, there may be as many as **630 items** in the pool. This is much more than some other games currently supported by Archipelago, so if you are playing with a group of, for example, 4 players all in different games, you may find that the majority of the items in the shared item pool are yours. If this is a problem for you group, you should adjust your YAML to randomize fewer items into the pool.
+
 ## What does another world's item look like in Hollow Knight?
 
 When the Hollow Knight player picks up an item from a location and it is an item for another game it will appear in that

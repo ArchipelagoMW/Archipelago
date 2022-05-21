@@ -16,6 +16,8 @@ All the skill upgrades, class upgrades, runes packs, and equipment packs are shu
 checks, chests and fairy chests, and boss rewards. Skill upgrades are also grouped in packs of 5 to make the finding of
 stats less of a chore. Runes and Equipment are also grouped together.
 
+In total, there are **144 items** to be found in the game.
+
 ## Which items can be in another player's world?
 
 Any of the items which can be shuffled may also be placed into another player's world. It is possible to choose to limit

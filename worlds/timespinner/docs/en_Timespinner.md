@@ -21,6 +21,8 @@ The goal remains unchanged. Kill the Sandman\Nightmare!
 All main inventory items, orbs, collectables, and familiars can be shuffled, and all locations in the game which could
 contain any of those items may have their contents changed.
 
+In total, there are **166 items** to find.
+
 ## Which items can be in another player's world?
 
 Any of the items which can be shuffled may also be placed into another player's world. It is possible to choose to limit
@@ -35,4 +37,3 @@ randomizer.
 ## When the player receives an item, what happens?
 
 When the player receives an item, the same items popup will be displayed as when you would normally obtain the item.
-

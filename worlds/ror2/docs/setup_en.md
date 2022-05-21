@@ -27,7 +27,9 @@ Click on the "Start modded" button in the top left in r2modman to start the game
 
 There will be a menu button on the right side of the screen in the character select menu. Click it in order to bring up
 the in lobby mod config. From here you can expand the Archipelago sections and fill in the relevant info. Keep password
-blank if there is no password on the server.
+blank if there is no password on the server. If you are using the website, put `archipelago.gg` in the server URL field (no `https://` or anything else).
+
+In a multiplayer game, only the host needs to configure these settings.
 
 Simply check `Enable Archipelago?` and when you start the run it will automatically connect.
 

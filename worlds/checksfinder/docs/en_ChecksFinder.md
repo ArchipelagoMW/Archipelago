@@ -8,13 +8,15 @@ config file.
 ## What is considered a location check in ChecksFinder?
 
 Location checks in are completed when the player finds a spot on a board that has the archipelago logo. The bottom of
-the screen has a number next to the archipelago logo, that number is how many you can find so far. You can only get as 
+the screen has a number next to the archipelago logo, that number is how many you can find so far. You can only get as
 many checks as you have gained items, plus five to start with being available.
+
+With the default settings, there are **25 location checks (items)** to find in total.
 
 ## When the player receives an item, what happens?
 
 When the player receives an item in ChecksFinder, it either can make the future boards they play be bigger in width or
-height, or add a new bomb to the future boards, with a limit to having up to one fifth of the _current_ board being 
+height, or add a new bomb to the future boards, with a limit to having up to one fifth of the _current_ board being
 bombs. The items you have gained _before_ the current board was made will be said at the bottom of the screen as a number
 next to an icon, the number is how many you have gotten and the icon represents which item it is.
 

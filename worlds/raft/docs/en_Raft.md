@@ -13,6 +13,8 @@ The goal remains the same: To pick up the note that has the frequency for the ne
 ## Which items can be in another player's world?
 All of the craftable items from the Research Table and Blueprints, as well as frequencies. Since there are more locations in Raft than there are items to receive, Resource Packs with basic earlygame materials and/or duplicate items may be added to the item pool (configurable).
 
+In total, there are **117** items to be found (as of the current patch).
+
 ## Which notable unlocks are not randomized?
 Most of the story island quests (actions that unlock new areas on the island) remain unchanged. There are three exceptions: The Balboa Island Relay Station quest, the Caravan Island zipline parts quest, and the Caravan Island battery charger quest have all been changed to an Archipelago unlock, as the rewards from these are craftable items or frequencies.
 Craftable items like the Machete are mixed into the Archipelago item pool, however quest items like Tape or Berries will function the same.

@@ -15,6 +15,8 @@ costs, technology requirements, and science pack requirements may also be shuffl
 Factorio's technologies are removed from its tech tree and placed into other players' worlds. When those technologies
 are found, they are sent back to Factorio along with, optionally, free samples of those technologies.
 
+With the default settings, there are **183** total items to find.
+
 ## What is a free sample?
 
 A free sample is a single or stack of items in Factorio, granted by a technology received from another world. For
