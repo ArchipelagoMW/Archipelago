@@ -245,14 +245,16 @@ class Factorio(World):
             ingredient = pool.pop()
             if liquids_used == allow_liquids and ingredient in liquids:
                 continue  # can't use this ingredient as we already have maximum liquid in our recipe.
+            ingredient_raw = 0
             if ingredient in all_product_sources:
                 ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
                 ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
                 ingredient_energy = ingredient_recipe.total_energy
             else:
                 # assume simple ore TODO: remove if tree when mining data is harvested from Factorio
-                ingredient_raw = 1
                 ingredient_energy = 2
+            if not ingredient_raw:
+                ingredient_raw = 1
             if remaining_num_ingredients == 1:
                 max_raw = 1.1 * remaining_raw
                 min_raw = 0.9 * remaining_raw
