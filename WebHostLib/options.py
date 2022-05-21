@@ -43,7 +43,7 @@ def create():
 
     for game_name, world in AutoWorldRegister.world_types.items():
 
-        all_options: Dict[str, Type[Options.Option[Any]]] = {
+        all_options: Dict[str, Options.AssembleOptions] = {
             **world.options,
             **Options.per_game_common_options
         }
