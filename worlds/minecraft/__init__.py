@@ -13,7 +13,7 @@ from BaseClasses import Region, Entrance, Item, Tutorial
 from .Options import minecraft_options
 from ..AutoWorld import World, WebWorld
 
-client_version = 7
+client_version = 8
 
 class MinecraftWebWorld(WebWorld):
     theme = "jungle"
@@ -22,7 +22,7 @@ class MinecraftWebWorld(WebWorld):
     setup = Tutorial(
         "Multiworld Setup Tutorial",
         "A guide to setting up the Archipelago Minecraft software on your computer. This guide covers"
-        "single-player, multiworkd, and related software.",
+        "single-player, multiworld, and related software.",
         "English",
         "minecraft_en.md",
         "minecraft/en",
@@ -65,7 +65,7 @@ class MinecraftWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 4
+    data_version = 5
 
     def _get_mc_data(self):
         exits = [connection[0] for connection in default_connections]
@@ -127,6 +127,9 @@ class MinecraftWorld(World):
         self.world.get_location("Wither", self.player).place_locked_item(self.create_item("Defeat Wither"))
 
         self.world.itempool += itempool
+
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()))[0]
 
     def set_rules(self):
         set_advancement_rules(self.world, self.player)

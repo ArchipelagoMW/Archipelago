@@ -17,7 +17,7 @@ For more information on plando you can reference the general plando guide or the
 
 General plando guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 
-Link to the Past plando guide: [LttP Plando Guide](/tutorial/zelda3/plando/en)
+Link to the Past plando guide: [LttP Plando Guide](/tutorial/A%20Link%20to%20the%20Past/plando/en)
 
 ## Trigger use
 

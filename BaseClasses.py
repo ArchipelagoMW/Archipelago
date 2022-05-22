@@ -23,6 +23,8 @@ class Group(TypedDict, total=False):
     players: Set[int]
     item_pool: Set[str]
     replacement_items: Dict[int, Optional[str]]
+    local_items: Set[str]
+    non_local_items: Set[str]
 
 
 class MultiWorld():
@@ -218,27 +220,47 @@ class MultiWorld():
                         raise Exception(f"Cannot ItemLink across games. Link: {item_link['name']}")
                     item_links[item_link["name"]]["players"][player] = item_link["replacement_item"]
                     item_links[item_link["name"]]["item_pool"] &= set(item_link["item_pool"])
+                    item_links[item_link["name"]]["exclude"] |= set(item_link.get("exclude", []))
+                    item_links[item_link["name"]]["local_items"] &= set(item_link.get("local_items", []))
+                    item_links[item_link["name"]]["non_local_items"] &= set(item_link.get("non_local_items", []))
                 else:
                     if item_link["name"] in self.player_name.values():
                         raise Exception(f"Cannot name a ItemLink group the same as a player ({item_link['name']}) ({self.get_player_name(player)}).")
                     item_links[item_link["name"]] = {
                         "players": {player: item_link["replacement_item"]},
                         "item_pool": set(item_link["item_pool"]),
-                        "game": self.game[player]
+                        "exclude": set(item_link.get("exclude", [])),
+                        "game": self.game[player],
+                        "local_items": set(item_link.get("local_items", [])),
+                        "non_local_items": set(item_link.get("non_local_items", []))
                     }
 
         for name, item_link in item_links.items():
             current_item_name_groups = AutoWorld.AutoWorldRegister.world_types[item_link["game"]].item_name_groups
             pool = set()
+            local_items = set()
+            non_local_items = set()
             for item in item_link["item_pool"]:
                 pool |= current_item_name_groups.get(item, {item})
+            for item in item_link["exclude"]:
+                pool -= current_item_name_groups.get(item, {item})
+            for item in item_link["local_items"]:
+                local_items |= current_item_name_groups.get(item, {item})
+            for item in item_link["non_local_items"]:
+                non_local_items |= current_item_name_groups.get(item, {item})
+            local_items &= pool
+            non_local_items &= pool
             item_link["item_pool"] = pool
+            item_link["local_items"] = local_items
+            item_link["non_local_items"] = non_local_items
 
         for group_name, item_link in item_links.items():
             game = item_link["game"]
             group_id, group = self.add_group(group_name, game, set(item_link["players"]))
             group["item_pool"] = item_link["item_pool"]
             group["replacement_items"] = item_link["players"]
+            group["local_items"] = item_link["local_items"]
+            group["non_local_items"] = item_link["non_local_items"]
 
     # intended for unittests
     def set_default_common_options(self):

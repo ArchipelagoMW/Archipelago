@@ -104,6 +104,9 @@ class SM64World(World):
             self.world.get_location("THI: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock THI"))
             self.world.get_location("RR: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock RR"))
 
+    def get_filler_item_name(self) -> str:
+        return "1Up Mushroom"
+
     def fill_slot_data(self):
         return {
             "AreaRando": self.area_connections,

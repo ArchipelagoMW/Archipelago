@@ -2,6 +2,7 @@ from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial
 from .Items import item_table
 from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
+from datetime import datetime
 
 
 class ArchipIDLEWebWorld(WebWorld):
@@ -23,6 +24,7 @@ class ArchipIDLEWorld(World):
     game = "ArchipIDLE"
     topology_present = False
     data_version = 3
+    hidden = (datetime.now().month != 4)  # ArchipIDLE is only visible during April
     web = ArchipIDLEWebWorld()
 
     item_name_to_id = {}
@@ -70,6 +72,8 @@ class ArchipIDLEWorld(World):
         self.world.get_entrance('Entrance to IDLE Zone', self.player)\
             .connect(self.world.get_region('IDLE Zone', self.player))
 
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice(item_table)
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     region = Region(name, None, name, player)

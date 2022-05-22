@@ -166,7 +166,7 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     defaultlocations = locations[LocationProgressType.DEFAULT]
     excludedlocations = locations[LocationProgressType.EXCLUDED]
 
-    fill_restrictive(world, world.state, prioritylocations, progitempool)
+    fill_restrictive(world, world.state, prioritylocations, progitempool, lock=True)
     if prioritylocations:
         defaultlocations = prioritylocations + defaultlocations
 
@@ -220,15 +220,15 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     restitempool, defaultlocations = fast_fill(
         world, restitempool, defaultlocations)
     unplaced = progitempool + restitempool
-    unfilled = [location.name for location in defaultlocations]
+    unfilled = defaultlocations
 
     if unplaced or unfilled:
         logging.warning(
             f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
-        items_counter = Counter([location.item.player for location in world.get_locations() if location.item])
-        locations_counter = Counter([location.player for location in world.get_locations()])
-        items_counter.update([item.player for item in unplaced])
-        locations_counter.update([location.player for location in unfilled])
+        items_counter = Counter(location.item.player for location in world.get_locations() if location.item)
+        locations_counter = Counter(location.player for location in world.get_locations())
+        items_counter.update(item.player for item in unplaced)
+        locations_counter.update(location.player for location in unfilled)
         print_data = {"items": items_counter, "locations": locations_counter}
         logging.info(f'Per-Player counts: {print_data})')
 

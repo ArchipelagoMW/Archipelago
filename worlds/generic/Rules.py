@@ -12,6 +12,20 @@ else:
     ItemRule = typing.Callable[[object], bool]
 
 
+def group_locality_rules(world):
+    for group_id, group in world.groups.items():
+        if set(world.player_ids) == set(group["players"]):
+            continue
+        if group["local_items"]:
+            for location in world.get_locations():
+                if location.player not in group["players"]:
+                    forbid_items_for_player(location, group["local_items"], group_id)
+        if group["non_local_items"]:
+            for location in world.get_locations():
+                if location.player in group["players"]:
+                    forbid_items_for_player(location, group["non_local_items"], group_id)
+
+
 def locality_rules(world, player: int):
     if world.local_items[player].value:
         for location in world.get_locations():
