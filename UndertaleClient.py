@@ -541,7 +541,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             await ctx.send_msgs(sync_msg)
         if start_index == len(ctx.items_received):
             for item in args['items']:
-                filename = f"{str(NetworkItem(*item).location)}PLR{str(NetworkItem(*item).player)}.item"
+                id = NetworkItem(*item).location
+                while NetworkItem(*item).location < 0 and \
+                        os.path.isfile(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(id)}PLR{str(NetworkItem(*item).player)}.item")):
+                    id -= 1
+                filename = f"{str(id)}PLR{str(NetworkItem(*item).player)}.item"
                 with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
                     f.write(str(NetworkItem(*item).item-11000))
                     f.close()
