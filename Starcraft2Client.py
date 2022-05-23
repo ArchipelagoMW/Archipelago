@@ -47,6 +47,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                     if not self.ctx.sc2_run_task.done():
                         sc2_logger.warning("Starcraft 2 Client is still running!")
                     self.ctx.sc2_run_task.cancel()  # doesn't actually close the game, just stops the python task
+                if self.ctx.slot is None:
+                    sc2_logger.warning("Launching Mission without Archipelago authentication, "
+                                       "checks will not be registered to server.")
                 self.ctx.sc2_run_task = asyncio.create_task(starcraft_launch(self.ctx, mission_number),
                                                             name="Starcraft 2 Launch")
             else:

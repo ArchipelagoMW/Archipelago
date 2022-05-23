@@ -189,6 +189,8 @@ class CommonContext():
 
     def reset_server_state(self):
         self.auth = None
+        self.slot = None
+        self.team = None
         self.items_received = []
         self.locations_info = {}
         self.server_version = Version(0, 0, 0)
