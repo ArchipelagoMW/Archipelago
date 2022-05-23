@@ -263,7 +263,7 @@ if __name__ == '__main__':
     import colorama
 
     parser = get_base_parser()
-    args, rest = parser.parse_known_args()
+    args = parser.parse_args()
     colorama.init()
 
     asyncio.run(main(args))

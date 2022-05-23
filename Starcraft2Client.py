@@ -131,10 +131,11 @@ class Context(CommonContext):
 async def main():
     multiprocessing.freeze_support()
     parser = get_base_parser()
-    parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
+    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     args = parser.parse_args()
 
     ctx = Context(args.connect, args.password)
+    ctx.auth = args.name
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 

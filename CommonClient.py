@@ -17,7 +17,7 @@ if __name__ == "__main__":
     Utils.init_logging("TextClient", exception_logger="Client")
 
 from MultiServer import CommandProcessor
-from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
+from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot
 from Utils import Version, stream_input
 from worlds import network_data_package, AutoWorldRegister
 import os
@@ -125,6 +125,7 @@ class CommonContext():
     input_task: typing.Optional[asyncio.Task] = None
     keep_alive_task: typing.Optional[asyncio.Task] = None
     items_handling: typing.Optional[int] = None
+    slot_info: typing.Dict[int, NetworkSlot]
     current_energy_link_value: int = 0  # to display in UI, gets set by server
 
     def __init__(self, server_address, password):
@@ -136,6 +137,7 @@ class CommonContext():
         self.server_version = Version(0, 0, 0)
         self.hint_cost: typing.Optional[int] = None
         self.games: typing.Dict[int, str] = {}
+        self.slot_info = {}
         self.permissions = {
             "forfeit": "disabled",
             "collect": "disabled",
@@ -511,6 +513,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     elif cmd == 'Connected':
         ctx.team = args["team"]
         ctx.slot = args["slot"]
+        # int keys get lost in JSON transfer
+        ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
         ctx.consume_players_package(args["players"])
         msgs = []
         if ctx.locations_checked:
@@ -643,6 +647,7 @@ if __name__ == '__main__':
 
     async def main(args):
         ctx = TextContext(args.connect, args.password)
+        ctx.auth = args.name
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
         if gui_enabled:
@@ -656,8 +661,9 @@ if __name__ == '__main__':
     import colorama
 
     parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
+    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
 
-    args, rest = parser.parse_known_args()
+    args = parser.parse_args()
     colorama.init()
 
     asyncio.run(main(args))
