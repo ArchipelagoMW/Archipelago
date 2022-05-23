@@ -664,8 +664,15 @@ if __name__ == '__main__':
 
     parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
-
+    parser.add_argument("url", nargs="?", help="Archipelago connection url")
     args = parser.parse_args()
+
+    if args.url:
+        url = urllib.parse.urlparse(args.url)
+        args.connect = url.netloc
+        args.name = urllib.parse.unquote(url.username)
+        args.password = urllib.parse.unquote(url.password)
+
     colorama.init()
 
     asyncio.run(main(args))
