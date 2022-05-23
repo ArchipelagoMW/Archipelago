@@ -218,8 +218,10 @@ async def starcraft_launch(ctx: Context, mission_id):
     ctx.sent_announce_pos = len(ctx.items_sent_to_announce)
     ctx.announcements_pos = len(ctx.announcements)
 
+    sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
+
     run_game(sc2.maps.get(maps_table[mission_id - 1]), [
-        Bot(Race.Terran, ArchipelagoBot(ctx, mission_id), name="Archipelago")], realtime=True)
+        Bot(Race.Terran, ArchipelagoBot(ctx, mission_id), name="Archipelago", fullscreen=True)], realtime=True)
 
 
 class ArchipelagoBot(sc2.bot_ai.BotAI):
