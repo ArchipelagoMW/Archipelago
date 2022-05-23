@@ -23,6 +23,9 @@ Currently, the following games are supported:
 * ChecksFinder
 * ArchipIDLE
 * Hollow Knight
+* The Witness
+* Sonic Adventure 2: Battle
+* Starcraft 2: Wings of Liberty
 * Undertale
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).

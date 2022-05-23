@@ -67,6 +67,7 @@ Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDi
 Name: "client/oot";       Description: "Ocarina of Time"; Types: full playing
 Name: "client/ff1";       Description: "Final Fantasy 1"; Types: full playing
 Name: "client/cf";        Description: "ChecksFinder"; Types: full playing
+Name: "client/sc2";       Description: "Starcraft 2"; Types: full playing
 Name: "client/ut";        Description: "Undertale"; Types: full playing
 Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
 
@@ -93,6 +94,7 @@ Source: "{#source_path}\ArchipelagoOoTClient.exe"; DestDir: "{app}"; Flags: igno
 Source: "{#source_path}\ArchipelagoOoTAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
 Source: "{#source_path}\ArchipelagoFF1Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ff1
 Source: "{#source_path}\ArchipelagoChecksFinderClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/cf
+Source: "{#source_path}\ArchipelagoStarcraft2Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sc2
 Source: "{#source_path}\ArchipelagoUndertaleClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ut
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
@@ -106,6 +108,7 @@ Name: "{group}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinec
 Name: "{group}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\ArchipelagoOoTClient.exe"; Components: client/oot
 Name: "{group}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Components: client/ff1
 Name: "{group}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Components: client/cf
+Name: "{group}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Components: client/sc2
 Name: "{group}\{#MyAppName} Undertale Client"; Filename: "{app}\ArchipelagoUndertaleClient.exe"; Components: client/ut
 
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
@@ -116,6 +119,7 @@ Name: "{commondesktop}\{#MyAppName} Minecraft Client"; Filename: "{app}\Archipel
 Name: "{commondesktop}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\ArchipelagoOoTClient.exe"; Tasks: desktopicon; Components: client/oot
 Name: "{commondesktop}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Tasks: desktopicon; Components: client/ff1
 Name: "{commondesktop}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Tasks: desktopicon; Components: client/cf
+Name: "{commondesktop}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Tasks: desktopicon; Components: client/sc2
 Name: "{commondesktop}\{#MyAppName} Undertale Client"; Filename: "{app}\ArchipelagoUndertaleClient.exe"; Tasks: desktopicon; Components: client/ut
 
 [Run]

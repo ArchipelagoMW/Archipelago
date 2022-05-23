@@ -78,6 +78,7 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+installer.log
 
 # Unit test / coverage reports
 htmlcov/
@@ -155,6 +156,7 @@ cython_debug/
 #minecraft server stuff
 jdk*/
 minecraft*/
+minecraft_versions.json
 
 #pyenv
 .python-version
