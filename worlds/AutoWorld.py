@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, NamedTuple, TYPE_CHECKING
+from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, TYPE_CHECKING
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location, Tutorial
 from Options import Option
@@ -101,22 +101,18 @@ class WebWorld:
     # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime
     theme: str = "grass"
 
+    # display a link to a bug report page, most likely a link to a GitHub issue page.
+    bug_report_page: Optional[str]
+
     if TYPE_CHECKING:
         from WebHostLib.tracker import PlayerTracker
     else:
         PlayerTracker = object
 
-    def get_player_tracker(self, tracker_info: PlayerTracker) -> PlayerTracker:
-        """This method will create a basic 'prettier' tracker for each world using their themes automatically. This
-        can be overridden to customize how it will appear. Can provide icons and custom regions. The html used is also
-        a jinja template that can be overridden if you want your tracker to look different in certain aspects. To render
-        icons and regions add dictionaries to the relevant attributes of the tracker_info. To customize the layout of
-        your icons you can create a new html in your world and extend playerTracker.html and overwrite the icons_render
-        block then change the tracker_info template attribute to your template."""
-        return tracker_info
-
-    # display a link to a bug report page, most likely a link to a GitHub issue page.
-    bug_report_page: Optional[str]
+    def modify_tracker(self, tracker: PlayerTracker):
+        """Can use this to modify tracker data and add icons and regions dictionaries to
+        allow them to render on the game's tracker page."""
+        pass
 
 
 class World(metaclass=AutoWorldRegister):

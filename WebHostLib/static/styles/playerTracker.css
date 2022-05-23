@@ -60,6 +60,7 @@
 
 .partyTime-wrapper{
     background-color: #3a0f69;
+    color: #ffffff;
 }
 
 .partyTime-wrapper h1{}
@@ -84,15 +85,15 @@ h2 {
     padding: 5px;
 }
 
-.item-column{
-    padding: 5px;
+.item{
+
 }
 
 .image-container{
     display: absolute;
     height: 75px;
     width: 75px;
-    padding: 5px;
+    gap: 5px;
 }
 
 .bottom-text{
@@ -133,7 +134,7 @@ h2 {
     padding: 5px;
 }
 
-.acquired{
+.location.acquired{
     text-decoration: line-through;
     filter: none;
 }

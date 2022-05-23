@@ -1,35 +1,40 @@
 window.addEventListener('load', () => {
   // Reload tracker
   const update = () => {
-    const url = document.getElementById('tracker-wrapper').getAttribute('data-tracker');
+    const room = document.getElementById('tracker-wrapper').getAttribute('data-tracker');
 
-    fetch('/tracker/' + url, {
-        method: "GET"
-    }).then(function (response) {
-        return response.text()
-    }).then(function (html) {
-        document.body.innerHTML = html;
-    //    var parser = new DOMParser();
-    //    var doc = parser.parseFromString(html, "text/html");
-//
-    //const items = document.getElementsByClassName('item-column');
-    //for (let i = 0; items.length; i++){
-    //    items[i] = doc.querySelector('#' + items[i].id);
-    //}
-//
-    //const locations = document.getElementsByClassName('location-column');
-    //for (let i = 0; locations.length; i++){
-    //    locations[i] = doc.querySelector('#' + locations[i].id);
-    //}
-//
-    //const regions = document.getElementsByClassName('regions-column');
-    //for (let i = 0; regions.length; i++){
-    //    regions[i] = doc.querySelector('#' + regions[i].id);
-    //}
-    //});
-  }
+    const request = new Request('/api/tracker/' + room);
 
-  setInterval(update, 30000);
+    fetch(request)
+    .then(response => response.json())
+    .then(data => {
+        // update locations blocks
+        for (const location of data.checked_locations) {
+            document.getElementById(location).classList.add('acquired');
+        }
+        // update totals checks done
+        let total_checks_ele = document.getElementById('total-checks');
+        const total_checks = document.getElementById('locations-container').children.length;
+        let checks_done = data.checked_locations.length;
+        total_checks_ele.innerText = 'Total Checks Done: ' + checks_done + '/' + total_checks;
+        // update item and icons blocks
+        for (const item in data.items_received) {
+            if (document.getElementById(item)) {
+                let current_item = document.getElementById(item);
+                if (current_item.classList.contains('image-container')) {
+                    current_item.children[0].classList.add('acquired');
+                    current_item.children[1].innerText = item;
+                } else {
+                    current_item.innerText = item + data.items_received[item];
+                }
+            }
+        }
+    });
+    }
+
+    update()
+    setInterval(update, 30000);
+
 
   // Collapsible regions section
   const regions = document.getElementsByClassName('regions-column');
@@ -38,7 +43,7 @@ window.addEventListener('load', () => {
     if (region_name == 'Total') { continue; }
 
     const tab_header = document.getElementById(region_name+'-header');
-    const locations = document.getElementById(region_name+'-locations')
+    const locations = document.getElementById(region_name+'-locations');
     // toggle locations display
     regions[i].addEventListener('click', function(event) {
       if (tab_header.innerHTML.includes("▼")) {
@@ -52,4 +57,4 @@ window.addEventListener('load', () => {
       }
     });
   }
-  });
+});

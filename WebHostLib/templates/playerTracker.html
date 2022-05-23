@@ -6,164 +6,59 @@
 {% endblock %}
 
 {% block body %}
-    {# TODO implement button for switching to generic tracker #}
+
     <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}/{{ team }}/{{ player }}">
         <button class="change-tracker"
                 onclick="location.href='/generic_tracker/{{ room.tracker|suuid }}/{{ team }}/{{ player }}'"
                 >Go to Generic Tracker</button>
         <div class="{{ theme }}-wrapper">
-            <div class="items-container">
-            <div class="items-container">
-                {% if icons or received_items %}
 
                     {% if icons %}
 
-{# icons rendering block #}
-
                     {% block icons_render %}
 
+                    <h1>Items</h1>
                     <div class="items-container">
-
-                    {%- for column in icons|slice(4) %}
-                        {%- if loop.index < 3 %}
-                    <div class="item-column" id="icon-column-{{ loop.index }}">
-                        <h1>Item</h1>
-                        {%- for name in column -%}
-
-                        <div class="image-container"><img src="{{ icons[name] }}" class="icon {{ 'acquired' if name in received_items }}">
+                        {%- for item in icons %}
+                        <div class="image-container" id="{{ item }}"><img src="{{ icons[item] }}" class="icon {{ 'acquired' if item in received_items }}">
                             <div class="bottom-text">
                             {{ name if name in received_items else '' }}
                             </div>
                         </div>
-
-                        {%- endfor -%}
-                    </div>
-                        {%- endif %}
                         {%- endfor %}
-
-                    </div>
-                <div class="items-container">
-
-                    {%- for column in icons|slice(4) %}
-                        {%- if loop.index > 2 %}
-                    <div class="item-column" id="icon-column-{{ loop.index }}">
-                        <h1>Item</h1>
-                        {%- for name in column -%}
-
-                        <div class="image-container"><img src="{{ icons[name] }}" class="icon {{ 'acquired' if name in received_items }}">
-                            <div class="bottom-text">
-                            {{ name if name in received_items else '' }}
-                            </div>
-                        </div>
-
-                        {%- endfor -%}
-                    </div>
-                        {%- endif %}
-                    {%- endfor %}
-
                     </div>
 
                     {% endblock %}
 
                     {% else %}
 
-{# item names block - very long to wrap correctly #}
-
                     {% block item_names_render %}
-
+                    <h1 class="items-header">Items</h1>
                     <div class="items-container">
-
-                        {% for column in all_progression_items|sort|slice(4) -%}
-                        {% if loop.index < 3 -%}
-                        <div class="items-container">
-
-                        <div class="item-column" id="item-column-{{ loop.index }}">
-                            <h1>Item</h1>
-                            {%- for name in column -%}
-                            {%- if name in received_items -%}
-                            <div>{{ name }}</div>
-                            {%- else -%}
-                            <div></div>
-                            {%- endif -%}
-                            {%- endfor -%}
-                        </div>
-
-                        <div class="item-column" id="got-item-column-{{ loop.index }}">
-                            <h2></h2>
-                            {%- for name in column %}
-                            {%- if name in received_items %}
-                                {% if all_progression_items[name] > 1 %}
-                                <div> {{ received_items[name] }}</div>
+                        {%- for item in received_items|sort -%}
+                            <div class="item" id="{{ item }}">
+                                {{ item }}
+                                {% if all_progression_items[item] > 1 %}
+                                    {{ received_items[item] }}
                                 {% else %}
-                                <div>✔</div>
+                                    ✔
                                 {% endif %}
-                            {%- else %}
-                            <div></div>
-                            {%- endif %}
-                            {%- endfor %}
-                        </div>
-
-                        </div>
-                            {% endif -%}
-                            {% endfor -%}
-                    </div>
-
-                    <div class="items-container">
-                        {% for column in all_progression_items|sort|slice(4) -%}
-                        {% if loop.index > 2 -%}
-
-                        <div class="items-container">
-                        <div class="item-column" id="item-column-{{ loop.index }}">
-
-                            <h1>Item</h1>
-                            {%- for name in column %}
-                            {%- if name in received_items %}
-                            <div>{{ name }}</div>
-                            {%- else %}
-                            <div></div>
-                            {%- endif %}
-                            {%- endfor %}
-
-                        </div>
-
-                        <div class="item-column" id="got-item-column-{{ loop.index }}">
-                            <h2></h2>
-                            {%- for name in column -%}
-                            {%- if name in received_items -%}
-                                {% if all_progression_items[name] > 1 %}
-                                <div> {{ received_items[name] }}</div>
-                                {% else %}
-                                <div>✔</div>
-                                {% endif %}
-                            {%- else -%}
-                            <div></div>
-                            {%- endif -%}
-                            {%- endfor -%}
-                        </div>
-                        </div>
-                            {% endif -%}
-                            {% endfor -%}
-
+                            </div>
+                        {%- endfor -%}
                     </div>
 
                     {% endblock %}
 
                     {% endif %}
 
-                </div>
-            </div>
-
-                {% endif %}
 
 {# div for total checks done as percentage. Probably needs to be put somewhere else but I liked how it looked here #}
-            <div class="total-checks">
-                <div>Total Checks Done: {{ checked_locations|length }}/{{ locations|length }}</div>
+            <div class="total-checks" id="total-checks">
+                Total Checks Done: {{ checked_locations|length }}/{{ locations|length }}
             </div>
 
 
             {% if regions %}
-
-{# region rendering block #}
 
             {% block regions_render %}
 
@@ -175,7 +70,7 @@
                 <div class="location-column hidden" id="{{ region }}-locations">
 
                 {%- for location in regions[region] %}
-                    <div class="{{ 'acquired' if location in checked_locations }}">{{ location }}</div>
+                    <div class="location {{ 'acquired' if location in checked_locations }}" id="{{ location }}">{{ location }}</div>
                 {%- endfor %}
 
                 </div>
@@ -187,39 +82,15 @@
 
             {% else %}
 
-{# block for location text rendering #}
-
             {% block locations_render %}
 
-            <div class="locations-container">
-                <div class="locations-container">
-                    {% for column in locations|slice(4) %}
-                    {% if loop.index < 3 %}
-
-                    <div class="location-column" id="locations-column-{{ loop.index }}">
-                        <h1>Locations</h1>
-                        {%- for location in column -%}
-                        <div class="counter {{ 'acquired' if location in checked_locations }}">{{ location }}</div>
-                        {%- endfor -%}
-                    </div>
-
-                    {% endif %}
-                    {% endfor %}
+            <h1>Locations</h1>
+            <div class="locations-container" id="locations-container">
+                {% for location in locations %}
+                <div class="location {{ 'acquired' if name in checked_locations }}" id="{{ location }}">
+                    {{ location }}
                 </div>
-                <div class="locations-container">
-                    {% for column in locations|slice(4) %}
-                    {% if loop.index > 2 %}
-
-                    <div class="location-column" id="locations-column-{{ loop.index }}">
-                        <h1>Locations</h1>
-                        {%- for location in column -%}
-                        <div class="counter {{ 'acquired' if location in checked_locations }}">{{ location }}</div>
-                        {%- endfor -%}
-                    </div>
-
-                    {% endif %}
-                    {% endfor %}
-                </div>
+                {% endfor %}
             </div>
 
             {% endblock %}
