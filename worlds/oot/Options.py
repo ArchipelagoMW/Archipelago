@@ -421,8 +421,8 @@ class ShuffleKeys(Choice):
 
 
 class ShuffleGerudoKeys(Choice): 
-    """Control where to shuffle the Gerudo Fortress small keys."""
-    display_name = "Gerudo Fortress Keys"
+    """Control where to shuffle the Thieves' Hideout small keys."""
+    display_name = "Thieves' Hideout Keys"
     option_vanilla = 0
     option_overworld = 1
     option_any_dungeon = 2

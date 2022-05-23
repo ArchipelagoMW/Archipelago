@@ -6,7 +6,7 @@ def oot_data_to_ap_id(data, event):
     if event or data[2] is None or data[0] == 'Shop': 
         return None
     offset = 66000
-    if data[0] in ['Item', 'BossKey', 'Compass', 'Map', 'SmallKey', 'Token', 'GanonBossKey', 'FortressSmallKey', 'Song']:
+    if data[0] in ['Item', 'BossKey', 'Compass', 'Map', 'SmallKey', 'Token', 'GanonBossKey', 'HideoutSmallKey', 'Song']:
         return offset + data[2]
     else: 
         raise Exception(f'Unexpected OOT item type found: {data[0]}')
@@ -53,7 +53,7 @@ class OOTItem(Item):
 
     @property
     def dungeonitem(self) -> bool:
-        return self.type in ['SmallKey', 'FortressSmallKey', 'BossKey', 'GanonBossKey', 'Map', 'Compass']
+        return self.type in ['SmallKey', 'HideoutSmallKey', 'BossKey', 'GanonBossKey', 'Map', 'Compass']
 
 
 
@@ -193,8 +193,8 @@ item_table = {
     'Small Key (Spirit Temple)':                       ('SmallKey', True,  0xB2, {'progressive': float('Inf')}),
     'Small Key (Shadow Temple)':                       ('SmallKey', True,  0xB3, {'progressive': float('Inf')}),
     'Small Key (Bottom of the Well)':                  ('SmallKey', True,  0xB4, {'progressive': float('Inf')}),
-    'Small Key (Gerudo Training Grounds)':             ('SmallKey',True, 0xB5, {'progressive': float('Inf')}),
-    'Small Key (Gerudo Fortress)':                     ('FortressSmallKey',True, 0xB6, {'progressive': float('Inf')}),
+    'Small Key (Gerudo Training Ground)':              ('SmallKey',True, 0xB5, {'progressive': float('Inf')}),
+    'Small Key (Thieves Hideout)':                     ('HideoutSmallKey',True, 0xB6, {'progressive': float('Inf')}),
     'Small Key (Ganons Castle)':                       ('SmallKey', True,  0xB7, {'progressive': float('Inf')}),
     'Double Defense':                                  ('Item',     True,  0xB8, None),
     'Magic Bean Pack':                                 ('Item',     True,  0xC9, None),
