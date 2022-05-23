@@ -36,6 +36,9 @@ from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
+from kivy.animation import Animation
+
+fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
 import Utils
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
@@ -109,6 +112,7 @@ class ServerLabel(HovererableLabel):
     def on_enter(self):
         self.popuplabel.text = self.get_text()
         App.get_running_app().root.add_widget(self.layout)
+        fade_in_animation.start(self.layout)
 
     def on_leave(self):
         App.get_running_app().root.remove_widget(self.layout)
@@ -185,6 +189,7 @@ class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
             self.tooltip = FloatLayout()
             tooltip_label = ToolTip(text=text)
             self.tooltip.add_widget(tooltip_label)
+            fade_in_animation.start(self.tooltip)
             App.get_running_app().root.add_widget(self.tooltip)
 
         # handle left-side boundary to not render off-screen
