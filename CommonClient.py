@@ -114,11 +114,19 @@ class ClientCommandProcessor(CommandProcessor):
             asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]), name="send Say")
 
 
+class DeathLinkClientCommandProcessor(ClientCommandProcessor):
+    def _cmd_deathlink(self):
+        """Toggles the Deathlink state on/off."""
+        deathlink = "DeathLink" not in self.ctx.tags
+        self.output(f"DeathLink set to {deathlink}")
+        asyncio.create_task(self.ctx.update_death_link(deathlink))
+
+
 class CommonContext():
     tags: typing.Set[str] = {"AP"}
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
-    command_processor: int = ClientCommandProcessor
+    command_processor: int = DeathLinkClientCommandProcessor
     game: typing.Optional[str] = None
     ui = None
     ui_task: typing.Optional[asyncio.Task] = None
