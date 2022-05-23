@@ -12,7 +12,6 @@ class UndertaleItem(Item):
 
 
 item_table = {
-    "Plot": ItemData(77000, True),
     "Monster Candy": ItemData(77001, False),
     "Croquet Roll": ItemData(77002, False),
     "Stick": ItemData(77003, False),
@@ -72,10 +71,31 @@ item_table = {
     "Hush Puppy": ItemData(77062, False),
     "Snail Pie": ItemData(77063, False),
     "temy armor": ItemData(77064, False),
+    "Goat Plush": ItemData(77777, True),
+    "Snow Shovel": ItemData(77778, True),
+    "Complete Skeleton": ItemData(77779, True),
+    "Fish": ItemData(77780, True),
+    "Heat Suit": ItemData(77781, True),
+    "DT Extractor": ItemData(77782, True),
+    "Cooking Set": ItemData(77783, True),
+    "Microphone": ItemData(77784, True),
+    "Bridge Tools": ItemData(77785, True),
+    "Mettaton Plush": ItemData(77786, True),
+    "Determination": ItemData(77787, True),
 }
 
 required_items = {
-    "Plot": 11,
+    "Goat Plush": 1,
+    "Snow Shovel": 1,
+    "Complete Skeleton": 1,
+    "Fish": 1,
+    "Heat Suit": 1,
+    "DT Extractor": 1,
+    "Cooking Set": 1,
+    "Microphone": 1,
+    "Bridge Tools": 1,
+    "Mettaton Plush": 1,
+    "Determination": 1,
     "Cloudy Glasses": 1,
     "Torn Notebook": 1,
     "Tough Glove": 1,

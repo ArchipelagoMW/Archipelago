@@ -97,6 +97,14 @@ class ClientCommandProcessor(CommandProcessor):
         self.output(f"Syncing items.")
         self.ctx.syncing = True
 
+    def _cmd_patch(self):
+        """Patch the game."""
+        if os.path.exists(os.getcwd() + r"/Undertale/base.win"):
+            copier(os.getcwd() + r"/Undertale/base.win", os.getcwd() + r"/Undertale/data.win")
+        elif not os.path.exists(os.getcwd() + r"/Undertale"):
+            os.mkdir(os.getcwd() + r"/Undertale")
+        bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
+
     def _cmd_ready(self):
         """Send ready status to server."""
         self.ctx.ready = not self.ctx.ready
@@ -701,6 +709,8 @@ if __name__ == '__main__':
         copier(args.install+"/data.win", os.getcwd() + r"/Undertale/data.win")
         bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
         sys.exit(0)
+    if not os.path.exists(os.getcwd() + r"/Undertale"):
+        os.mkdir(os.getcwd() + r"/Undertale")
 
     colorama.init()
 
