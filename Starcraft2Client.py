@@ -47,6 +47,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                     if not self.ctx.sc2_run_task.done():
                         sc2_logger.warning("Starcraft 2 Client is still running!")
                     self.ctx.sc2_run_task.cancel()  # doesn't actually close the game, just stops the python task
+                if self.ctx.slot is None:
+                    sc2_logger.warning("Launching Mission without Archipelago authentication, "
+                                       "checks will not be registered to server.")
                 self.ctx.sc2_run_task = asyncio.create_task(starcraft_launch(self.ctx, mission_number),
                                                             name="Starcraft 2 Launch")
             else:
@@ -131,10 +134,11 @@ class Context(CommonContext):
 async def main():
     multiprocessing.freeze_support()
     parser = get_base_parser()
-    parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
+    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     args = parser.parse_args()
 
     ctx = Context(args.connect, args.password)
+    ctx.auth = args.name
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
