@@ -1,0 +1,2 @@
+#git+https://github.com/beauxq/zilliandomizer@7f5ac26#egg=zilliandomizer
+# TODO: make a release that can be referenced

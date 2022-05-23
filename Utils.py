@@ -210,8 +210,11 @@ def get_public_ipv6() -> str:
     return ip
 
 
+OptionType = typing.Dict[str, typing.Dict[str, typing.Any]]
+
+
 @cache_argsless
-def get_default_options() -> dict:
+def get_default_options() -> OptionType:
     # Refer to host.yaml for comments as to what all these options mean.
     options = {
         "general_options": {
@@ -272,13 +275,16 @@ def get_default_options() -> dict:
         },
         "oot_options": {
             "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
+        },
+        "zillion_options": {
+            "rom_file": "Zillion (UE) [!].sms",
         }
     }
 
     return options
 
 
-def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
+def update_options(src: dict, dest: dict, filename: str, keys: list) -> OptionType:
     for key, value in src.items():
         new_keys = keys.copy()
         new_keys.append(key)
@@ -298,10 +304,10 @@ def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
 
 
 @cache_argsless
-def get_options() -> dict:
+def get_options() -> OptionType:
     if not hasattr(get_options, "options"):
         filenames = ("options.yaml", "host.yaml")
-        locations = []
+        locations: typing.List[str] = []
         if os.path.join(os.getcwd()) != local_path():
             locations += filenames  # use files from cwd only if it's not the local_path
         locations += [user_path(filename) for filename in filenames]

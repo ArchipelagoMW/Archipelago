@@ -40,6 +40,7 @@ class MultiWorld():
     plando_connections: List
     worlds: Dict[int, auto_world]
     groups: Dict[int, Group]
+    regions: List[Region]
     itempool: List[Item]
     is_race: bool = False
     precollected_items: Dict[int, List[Item]]
@@ -995,7 +996,7 @@ class Entrance:
 
         return False
 
-    def connect(self, region: Region, addresses=None, target=None):
+    def connect(self, region: Region, addresses: Any = None, target: Any = None) -> None:
         self.connected_region = region
         self.target = target
         self.addresses = addresses
@@ -1083,12 +1084,12 @@ class Location:
     crystal: bool = False
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow = staticmethod(lambda item, state: False)
-    access_rule = staticmethod(lambda state: True)
+    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
     item: Optional[Item] = None
     parent_region: Optional[Region]
 
-    def __init__(self, player: int, name: str = '', address: int = None, parent=None):
+    def __init__(self, player: int, name: str = '', address: Optional[int] = None, parent: Optional[Region] = None):
         self.name: str = name
         self.address: Optional[int] = address
         self.parent_region = parent

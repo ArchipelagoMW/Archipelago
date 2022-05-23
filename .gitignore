@@ -13,6 +13,7 @@
 *.z64
 *.n64
 *.nes
+*.sms
 *.wixobj
 *.lck
 *.db3

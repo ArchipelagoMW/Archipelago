@@ -109,6 +109,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
 
 
 class NumericOption(Option[int], numbers.Integral):
+    default = 0
     # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
     # `int` is not a `numbers.Integral` according to the official typestubs
     # (even though isinstance(5, numbers.Integral) == True)
@@ -498,7 +499,7 @@ class VerifyKeys:
 
 
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
-    default = {}
+    default: typing.Dict[str, typing.Any] = {}
     supports_weighting = False
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
@@ -529,7 +530,7 @@ class ItemDict(OptionDict):
 
 
 class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
-    default = []
+    default: typing.List[typing.Any] = []
     supports_weighting = False
 
     def __init__(self, value: typing.List[typing.Any]):

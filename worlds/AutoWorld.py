@@ -4,7 +4,7 @@ import logging
 from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, NamedTuple
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location, Tutorial
-from Options import Option
+from Options import AssembleOptions
 
 
 class AutoWorldRegister(type):
@@ -109,7 +109,7 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    options: Dict[str, Option[Any]] = {}  # link your Options mapping
+    options: Dict[str, AssembleOptions] = {}  # link your Options mapping
     game: str  # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
 
