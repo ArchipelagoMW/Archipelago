@@ -4,6 +4,7 @@
     flex-wrap: wrap;
     justify-content: space-evenly;
     padding: 20px;
+    width: 600px;
     color: #000000;
 }
 
@@ -122,16 +123,11 @@ h2 {
 }
 
 .locations-container{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    padding: 5px;
-    text-align: left;
-}
-
-.location-column{
-    padding: 5px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    margin-left: 50px;
+    margin-right: 50px;
 }
 
 .location.acquired{
