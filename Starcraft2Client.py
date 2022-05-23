@@ -11,6 +11,7 @@ from sc2.main import run_game
 from sc2.data import Race
 from sc2.bot_ai import BotAI
 from sc2.player import Bot
+from worlds.sc2wol.Regions import MissionInfo
 from worlds.sc2wol.Items import lookup_id_to_name, item_table
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 
@@ -382,15 +383,6 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
 
                 else:
                     await self.chat_send("LostConnection - Lost connection to game.")
-
-
-class MissionInfo(typing.NamedTuple):
-    id: int
-    extra_locations: int
-    required_world: list[int]
-    number: int = 0  # number of worlds need beaten
-    completion_critical: bool = False # missions needed to beat game
-    or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
 
 
 mission_req_table = {

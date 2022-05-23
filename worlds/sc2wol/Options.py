@@ -35,6 +35,15 @@ class AllInMap(Choice):
     option_air = 1
 
 
+class MissionOrder(Choice):
+    """Determines the order the missions are played in.
+    Vanilla: Keeps the standard mission order and branching from the WoL Campaign.
+    Vanilla Shuffled: Keeps same branching paths from the WoL Campaign but randomizes the order of missions within"""
+    display_name = "Mission Order"
+    option_vanilla = 0
+    option_vanilla_shuffled = 1
+
+
 # noinspection PyTypeChecker
 sc2wol_options: Dict[str, Option] = {
     "game_difficulty": GameDifficulty,
