@@ -454,6 +454,7 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
 
 
 @app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
+@cache.memoize(timeout=60)
 def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
     return build_trackers(tracker, tracked_team, tracked_player)
 
