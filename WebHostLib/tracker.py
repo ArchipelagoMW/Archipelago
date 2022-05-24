@@ -26,10 +26,10 @@ class PlayerTracker:
 
     template: str = 'playerTracker.html'
     icons: Dict[str, str] = {}
-    progressive_items: List[str] = []
+    progressive_items: List[str]
     progressive_names: Dict[str, List[str]] = {}
     regions: Dict[str, List[str]] = {}
-    checks_done: Dict[str, Set[str]]
+    checks_done: Dict[str, Set[str]] = {}
     room: Any
     team: int
     player: int
@@ -350,7 +350,7 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
     # TODO move all games in game_specific_trackers to new system
     if game_name in game_specific_trackers and type != 'generic':
         specific_tracker = game_specific_trackers.get(game_name, None)
-        return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
+        return specific_tracker(multisave, room, player_tracker.all_locations, inventory, tracked_team, tracked_player, player_name,
                                 seed_checks_in_area, lttp_checks_done, slot_data[tracked_player])
     elif game_name in AutoWorldRegister.world_types and type != 'generic':
 
@@ -369,7 +369,7 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
             checks_done=player_tracker.checks_done
         )
     else:
-        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name, seed_checks_in_area, lttp_checks_done)
+        return __renderGenericTracker(multisave, room, player_tracker.all_locations, inventory, tracked_team, tracked_player, player_name, seed_checks_in_area, lttp_checks_done)
 
 
 @app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
@@ -384,9 +384,15 @@ def get_tracker_icons_and_regions(player_tracker: PlayerTracker) -> Dict[str, st
     display_icons: Dict[str, str] = {}
     if player_tracker.progressive_names and player_tracker.icons:
         for item in player_tracker.progressive_items:
-            level = min(player_tracker.items_received[item], len(player_tracker.progressive_names[item]) - 1)
-            display_name = player_tracker.progressive_names[item][level]
-            display_icons[item] = player_tracker.icons[display_name]
+            if item in player_tracker.progressive_names:
+                level = min(player_tracker.items_received[item], len(player_tracker.progressive_names[item]) - 1)
+                display_name = player_tracker.progressive_names[item][level]
+                if display_name in player_tracker.icons:
+                    display_icons[item] = player_tracker.icons[display_name]
+                else:
+                    display_icons[item] = player_tracker.icons[item]
+            else:
+                display_icons[item] = player_tracker.icons[item]
     else:
         if player_tracker.progressive_items and player_tracker.icons:
             for item in player_tracker.progressive_items:
@@ -980,6 +986,7 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
                             player=player, team=team, room=room, player_name=playerName,
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
+
 
 def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                            inventory: Counter, team: int, player: int, playerName: str,

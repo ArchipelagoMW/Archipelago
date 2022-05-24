@@ -169,28 +169,29 @@ class ALTTPWeb(WebWorld):
             "Ganons Tower": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/b9/ALttP_Ganon_Sprite.png?version=956f51f054954dfff53c1a9d4f929c74"
         }
         tracker.progressive_items = [
-            'Progressive Bow',
-            'Bottle',
             'Progressive Sword',
-            'Progressive Glove',
             'Progressive Shield',
-            'Flippers',
-            'Moon Pearl',
+            'Progressive Mail',
+            'Progressive Bow',
             'Progressive Boomerang',
             'Hookshot',
-            'Mushroom',
             'Magic Powder',
-            'Fire Rod',
-            'Ice Rod',
+            'Mushroom',
+            'Bottle',
+            'Lamp',
+            'Progressive Glove',
+            'Flippers',
+            'Moon Pearl',
             'Bombos',
             'Ether',
             'Quake',
-            'Lamp',
+            'Fire Rod',
+            'Ice Rod',
             'Hammer',
+            'Book of Mudora',
             'Shovel',
             'Flute',
             'Bug Catching Net',
-            'Book of Mudora',
             'Cane of Somaria',
             'Cane of Byrna',
             'Cape',
@@ -202,7 +203,8 @@ class ALTTPWeb(WebWorld):
             'Progressive Sword': ['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
             'Progressive Glove': ['Power Glove', 'Titans Mitts'],
             'Progressive Shield': ['Blue Shield', 'Red Shield', 'Mirror Shield'],
-            'Progressive Boomerang': ['Red Boomerang', 'Blue Boomerang']
+            'Progressive Boomerang': ['Red Boomerang', 'Blue Boomerang'],
+            'Progressive Mail': ['Green Mail', 'Blue Mail', 'Red Mail']
         }
         tracker.regions = {
             'Light World': [
