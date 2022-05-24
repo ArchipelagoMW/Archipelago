@@ -473,12 +473,13 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
         slot_data[player]
     )
 
+    # grab webworld and apply its theme to the tracker
     webworld = AutoWorldRegister.world_types[games[player]].web
+    player_tracker.theme = webworld.theme
 
     # allow the world to add information to the tracker class
     webworld.modify_tracker(player_tracker)
     display_icons = get_tracker_icons_and_regions(player_tracker)
-    player_tracker.theme = webworld.theme
 
     return player_tracker, multisave, inventory, seed_checks_in_area, lttp_checks_done, slot_data, games, player_name, display_icons
 
