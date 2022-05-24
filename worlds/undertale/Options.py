@@ -17,7 +17,21 @@ class IncludeTemy(Toggle):
     default = 1
 
 
+class OnlyFlakes(Toggle):
+    """Replaces all non-required items with Temmie Flakes."""
+    display_name = "Only Temmie Flakes"
+    default = 0
+
+
+class NoEquips(Toggle):
+    """Removes all equippable items."""
+    display_name = "No Equippables"
+    default = 0
+
+
 undertale_options: typing.Dict[str, type(Option)] = {
     "route_required":                           RouteRequired,
-    "temy_include":                              IncludeTemy,
+    "temy_include":                             IncludeTemy,
+    "no_equips":                                NoEquips,
+    "only_flakes":                              OnlyFlakes,
 }

@@ -84,7 +84,30 @@ item_table = {
     "Determination": ItemData(77787, True),
 }
 
-required_items = {
+non_key_items = {
+    "Butterscotch Pie": 1,
+    "Mystery Key": 1,
+    "Sea Tea": 1,
+}
+
+required_armor = {
+    "Cloudy Glasses": 1,
+    "Torn Notebook": 1,
+    "Tough Glove": 1,
+    "Manly Bandanna": 1,
+    "Old Tutu": 1,
+    "Ballet Shoes": 1,
+    "Burnt Pan": 1,
+    "Stained Apron": 1,
+    "Worn Dagger": 1,
+    "Heart Locket": 1,
+    "Faded Ribbon": 1,
+    "Toy Knife": 1,
+    "Cowboy Hat": 1,
+    "Empty Gun": 1,
+}
+
+key_items = {
     "Goat Plush": 1,
     "Snow Shovel": 1,
     "Complete Skeleton": 1,
@@ -96,23 +119,7 @@ required_items = {
     "Bridge Tools": 1,
     "Mettaton Plush": 1,
     "Determination": 1,
-    "Cloudy Glasses": 1,
-    "Torn Notebook": 1,
-    "Tough Glove": 1,
-    "Manly Bandanna": 1,
-    "Old Tutu": 1,
     "Punch Card": 3,
-    "Ballet Shoes": 1,
-    "Burnt Pan": 1,
-    "Stained Apron": 1,
-    "Worn Dagger": 1,
-    "Heart Locket": 1,
-    "Faded Ribbon": 1,
-    "Toy Knife": 1,
-    "Butterscotch Pie": 1,
-    "Cowboy Hat": 1,
-    "Empty Gun": 1,
-    "Mystery Key": 1,
     "Hot Dog...?": 1,
 }
 

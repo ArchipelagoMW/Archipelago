@@ -3,7 +3,7 @@ import json
 from base64 import b64encode, b64decode
 from math import ceil
 
-from .Items import UndertaleItem, item_table, required_items, junk_weights
+from .Items import UndertaleItem, item_table, required_armor, non_key_items, key_items, junk_weights
 from .Locations import UndertaleAdvancement, advancement_table, exclusion_table
 from .Regions import undertale_regions, link_undertale_structures
 from .Rules import set_rules, set_completion_rules
@@ -45,6 +45,8 @@ class UndertaleWorld(World):
             'race': self.world.is_race,
             'route': self.world.route_required[self.player].current_key,
             'temy_armor_include': bool(self.world.temy_include[self.player].value),
+            'only_flakes': bool(self.world.only_flakes[self.player].value),
+            'no_equips': bool(self.world.no_equips[self.player].value),
         }
 
     def generate_basic(self):
@@ -53,21 +55,39 @@ class UndertaleWorld(World):
         itempool = []
         junk_pool = junk_weights.copy()
         # Add all required progression items
-        for (name, num) in required_items.items():
+        for (name, num) in key_items.items():
             itempool += [name] * num
+        if self.world.only_flakes[self.player] == False:
+            for (name, num) in non_key_items.items():
+                itempool += [name] * num
+            if self.world.no_equips[self.player] == False:
+                for (name, num) in required_armor.items():
+                    itempool += [name] * num
         if self.world.route_required[self.player].current_key == "genocide":
-            itempool += ["Instant Noodles"]
+            if self.world.only_flakes[self.player] == False:
+                itempool += ["Instant Noodles"]
+                if self.world.no_equips[self.player] == False:
+                    itempool = ["Real Knife" if item == "Worn Dagger" else "The Locket" if item == "Heart Locket" else item for item in itempool]
         if self.world.route_required[self.player].current_key == "pacifist":
             itempool += ["Undyne Letter EX"]
+        else:
+            itempool.remove("Complete Skeleton")
+            itempool.remove("Fish")
+            itempool.remove("DT Extractor")
         if self.world.temy_include[self.player].value == 1:
-            itempool += ["temy armor"]
+            if self.world.only_flakes[self.player] == False:
+                if self.world.no_equips[self.player] == False:
+                    itempool += ["temy armor"]
 
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
         exclusion_pool.update(exclusion_table[self.world.route_required[self.player].current_key])
 
-        # Fill remaining items with randomly generated junk
-        itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool)-len(exclusion_pool))
+        # Fill remaining items with randomly generated junk or Temmie Flakes
+        if self.world.only_flakes[self.player] == False:
+            itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool)-len(exclusion_pool))
+        else:
+            itempool += ["Temmie Flakes"] * (len(self.location_names) - len(itempool) - len(exclusion_pool))
         # Convert itempool into real items
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
 

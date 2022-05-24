@@ -99,10 +99,6 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_patch(self):
         """Patch the game."""
-        if os.path.exists(os.getcwd() + r"/Undertale/base.win"):
-            copier(os.getcwd() + r"/Undertale/base.win", os.getcwd() + r"/Undertale/data.win")
-        elif not os.path.exists(os.getcwd() + r"/Undertale"):
-            os.mkdir(os.getcwd() + r"/Undertale")
         bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
 
     def _cmd_ready(self):
