@@ -48,6 +48,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                     if not self.ctx.sc2_run_task.done():
                         sc2_logger.warning("Starcraft 2 Client is still running!")
                     self.ctx.sc2_run_task.cancel()  # doesn't actually close the game, just stops the python task
+                if self.ctx.slot is None:
+                    sc2_logger.warning("Launching Mission without Archipelago authentication, "
+                                       "checks will not be registered to server.")
                 self.ctx.sc2_run_task = asyncio.create_task(starcraft_launch(self.ctx, mission_number),
                                                             name="Starcraft 2 Launch")
             else:
@@ -138,10 +141,11 @@ class Context(CommonContext):
 async def main():
     multiprocessing.freeze_support()
     parser = get_base_parser()
-    parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
+    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     args = parser.parse_args()
 
     ctx = Context(args.connect, args.password)
+    ctx.auth = args.name
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
@@ -225,8 +229,10 @@ async def starcraft_launch(ctx: Context, mission_id):
     ctx.sent_announce_pos = len(ctx.items_sent_to_announce)
     ctx.announcements_pos = len(ctx.announcements)
 
+    sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
+
     run_game(sc2.maps.get(maps_table[mission_id - 1]), [
-        Bot(Race.Terran, ArchipelagoBot(ctx, mission_id), name="Archipelago")], realtime=True)
+        Bot(Race.Terran, ArchipelagoBot(ctx, mission_id), name="Archipelago", fullscreen=True)], realtime=True)
 
 
 class ArchipelagoBot(sc2.bot_ai.BotAI):
