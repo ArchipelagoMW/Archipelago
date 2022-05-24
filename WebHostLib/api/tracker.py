@@ -1,13 +1,13 @@
 import collections
 
-from flask import session, jsonify
+from flask import jsonify
 from typing import Optional, Dict, Any, Tuple, List
 from Utils import restricted_loads
 from uuid import UUID
 
 from ..models import Room
 from . import api_endpoints
-from ..tracker import get_static_room_data, attribute_item_solo
+from ..tracker import fill_tracker_data, get_static_room_data
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
 from WebHostLib import cache
 
@@ -17,51 +17,34 @@ from WebHostLib import cache
 def update_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
 
     room: Optional[Room] = Room.get(tracker=tracker)
-    locations, multisave, prog_items = build_static_data(room)
-
-    # find out which locations have been checked so far
-    checked_locations: List[str] = []
-    items_received: Dict[str, Any] = dict(dict())
-    for (team, player), locations_checked in multisave.get("location_checks", {}).items():
-        player_locations: Dict[int, Tuple[int, int, int]] = locations[player]
-        if team == tracked_team:
-            for location in locations_checked:
-                item = player_locations[location][0]
-                checked_locations.append(lookup_any_location_id_to_name[location])
-                if prog_items[player][lookup_any_item_id_to_name[item]] == 1:
-                    items_received[lookup_any_item_id_to_name[item]] = '✔'
-                else:
-                    if lookup_any_item_id_to_name[item] in items_received:
-                        items_received[lookup_any_item_id_to_name[item]] += 1
-                    else:
-                        items_received[lookup_any_item_id_to_name[item]] = 1
+    locations = get_static_room_data(room)[0]
+    items_counter: Dict[int, collections.Counter] = get_item_names_counter(locations)
+    player_tracker, multisave, inventory, seed_checks_in_area, lttp_checks_done, \
+    slot_data, games, player_name, display_icons = fill_tracker_data(room, tracked_team, tracked_player)
 
     # convert numbers to string
-    for item in items_received:
-        items_received[item] = str(items_received[item])
+    for item in player_tracker.items_received:
+        if items_counter[tracked_player][item] == 1:
+            player_tracker.items_received[item] = '✔'
+        else:
+            player_tracker.items_received[item] = str(player_tracker.items_received[item])
 
     return jsonify({
-        "items_received": items_received,
-        "checked_locations": checked_locations
+        "items_received": player_tracker.items_received,
+        "checked_locations": list(sorted(player_tracker.checked_locations)),
+        "icons": display_icons,
+        "progressive_names": player_tracker.progressive_names
     })
 
 
-def build_static_data(room):
-    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
-    precollected_items, games, slot_data, groups = get_static_room_data(room)
-
-    if room.multisave:
-        multisave: Dict[str, Any] = restricted_loads(room.multisave)
-    else:
-        multisave: Dict[str, Any] = {}
-
+@cache.cached()
+def get_item_names_counter(locations: Dict[int, Dict[int, Tuple[int, int, int]]]):
     # create and fill dictionary of all progression items for players
-    prog_items: Dict[int, collections.Counter] = {}
+    items_counters: Dict[int, collections.Counter] = {}
     for player in locations:
         for location in locations[player]:
             item, recipient, flags = locations[player][location]
-            if flags & 1:
-                item_name = lookup_any_item_id_to_name[item]
-                prog_items.setdefault(recipient, collections.Counter())[item_name] += 1
+            item_name = lookup_any_item_id_to_name[item]
+            items_counters.setdefault(recipient, collections.Counter())[item_name] += 1
 
-    return locations, multisave, prog_items
+    return items_counters

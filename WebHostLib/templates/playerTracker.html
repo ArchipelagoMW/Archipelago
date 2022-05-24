@@ -22,7 +22,7 @@
                         {%- for item in icons %}
                         <div class="image-container" id="{{ item }}"><img src="{{ icons[item] }}" class="icon {{ 'acquired' if item in received_items }}">
                             <div class="bottom-text">
-                            {{ name if name in received_items else '' }}
+                            {{ item if item in received_items else '' }}
                             </div>
                         </div>
                         {%- endfor %}

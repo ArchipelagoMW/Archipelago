@@ -26,6 +26,8 @@ class PlayerTracker:
 
     template: str = 'playerTracker.html'
     icons: Dict[str, str] = {}
+    progressive_items: List[str] = []
+    progressive_names: Dict[str, List[str]] = {}
     regions: Dict[str, List[str]] = {}
     checks_done: Dict[str, Set[str]] = {}
     room: Any
@@ -41,10 +43,8 @@ class PlayerTracker:
     theme: str
 
     def __init__(self, room: Any, team: int, player: int, name: str, all_locations: Set[str],
-                 checked_locations: set,
-                 all_progression_items: Counter[str], items_received: Counter[str],
-                 received_prog_items: Counter[str],
-                 slot_data: Dict[any, any], theme: str):
+                 checked_locations: set, all_progression_items: Counter[str], items_received: Counter[str],
+                 slot_data: Dict[any, any]):
         self.room = room
         self.team = team
         self.player = player
@@ -53,9 +53,7 @@ class PlayerTracker:
         self.checked_locations = checked_locations
         self.all_prog_items = all_progression_items
         self.items_received = items_received
-        self.received_prog_items = received_prog_items
         self.slot_data = slot_data
-        self.theme = theme
 
 
 alttp_icons = {
@@ -345,16 +343,75 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
     if not room:
         abort(404)
 
+    player_tracker, multisave, inventory, seed_checks_in_area, lttp_checks_done, \
+    slot_data, games, player_name, display_icons = fill_tracker_data(room, tracked_team, tracked_player)
+
+    game_name = games[tracked_player]
+    # TODO move all games in game_specific_trackers to new system
+    if game_name in game_specific_trackers and type != 'generic':
+        specific_tracker = game_specific_trackers.get(game_name, None)
+        return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
+                                seed_checks_in_area, lttp_checks_done, slot_data[tracked_player])
+    elif game_name in AutoWorldRegister.world_types and type != 'generic':
+
+        return render_template(
+            player_tracker.template,
+            all_progression_items=player_tracker.all_prog_items,
+            player=player_tracker.player,
+            team=player_tracker.team,
+            room=player_tracker.room,
+            player_name=player_tracker.name,
+            checked_locations=sorted(player_tracker.checked_locations),
+            locations=sorted(player_tracker.all_locations),
+            theme=player_tracker.theme,
+            icons=display_icons,
+            regions=player_tracker.regions,
+            checks_done=player_tracker.checks_done
+        )
+    else:
+        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name, seed_checks_in_area, lttp_checks_done)
+
+
+@app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
+@cache.memoize(timeout=60)
+def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
+    return build_trackers(tracker, tracked_team, tracked_player)
+
+
+def get_tracker_icons_and_regions(player_tracker: PlayerTracker) -> Dict[str, str]:
+    # this function allows multiple icons to be used for the same item but it does require the world to submit both
+    # a progressive_items list and the icons dict together
+    display_icons: Dict[str, str] = {}
+    if player_tracker.progressive_names and player_tracker.icons:
+        for item in player_tracker.progressive_items:
+            level = min(player_tracker.items_received[item], len(player_tracker.progressive_names[item]) - 1)
+            display_name = player_tracker.progressive_names[item][level]
+            display_icons[item] = player_tracker.icons[display_name]
+    else:
+        if player_tracker.progressive_items and player_tracker.icons:
+            for item in player_tracker.progressive_items:
+                display_icons[item] = player_tracker.icons[item]
+
+    if player_tracker.regions:
+        for region in player_tracker.regions:
+            for location in region:
+                if location in player_tracker.checked_locations:
+                    player_tracker.checks_done.setdefault(region, set()).add(location)
+
+    return display_icons
+
+
+def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
     # Collect seed information and pare it down to a single player
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
         precollected_items, games, slot_data, groups = get_static_room_data(room)
-    player_name = names[tracked_team][tracked_player - 1]
-    location_to_area = player_location_to_area[tracked_player]
+    player_name = names[team][player - 1]
+    location_to_area = player_location_to_area[player]
     inventory = collections.Counter()
     lttp_checks_done = {loc_name: 0 for loc_name in default_locations}
 
     # Add starting items to inventory
-    starting_items = precollected_items[tracked_player]
+    starting_items = precollected_items[player]
     if starting_items:
         for item_id in starting_items:
             attribute_item_solo(inventory, item_id)
@@ -369,14 +426,14 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
     for (ms_team, ms_player), locations_checked in multisave.get("location_checks", {}).items():
         # Skip teams and players not matching the request
         player_locations = locations[ms_player]
-        if ms_team == tracked_team:
+        if ms_team == team:
             # If the player does not have the item, do nothing
             for location in locations_checked:
                 if location in player_locations:
                     item, recipient, flags = player_locations[location]
-                    if recipient == tracked_player:  # a check done for the tracked player
+                    if recipient == player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
-                    if ms_player == tracked_player:  # a check done by the tracked player
+                    if ms_player == player:  # a check done by the tracked player
                         lttp_checks_done[location_to_area[location]] += 1
                         lttp_checks_done["Total"] += 1
                         checked_locations.add(lookup_any_location_id_to_name[location])
@@ -384,79 +441,40 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
     prog_items: Dict[int, collections.Counter] = {}
     all_location_names: Dict[int, set] = {}
 
-    all_location_names[tracked_player] = {lookup_any_location_id_to_name[id] for id in locations[tracked_player]}
-    prog_items[tracked_player] = collections.Counter()
+    all_location_names[player] = {lookup_any_location_id_to_name[id] for id in locations[player]}
+    prog_items[player] = collections.Counter()
     for player in locations:
         for location in locations[player]:
             item, recipient, flags = locations[player][location]
-            if recipient == tracked_player:
+            if recipient == player:
                 if flags & 1:
                     item_name = lookup_any_item_id_to_name[item]
-                    prog_items[tracked_player][item_name] += 1
+                    prog_items[player][item_name] += 1
 
-    game_name = games[tracked_player]
-    # TODO move all games in game_specific_trackers to new system
-    if game_name in game_specific_trackers and type != 'generic':
-        specific_tracker = game_specific_trackers.get(game_name, None)
-        return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                seed_checks_in_area, lttp_checks_done, slot_data[tracked_player])
-    elif game_name in AutoWorldRegister.world_types and type != 'generic':
-        items_received = collections.Counter()
-        for id in inventory:
-            items_received[lookup_any_item_id_to_name[id]] = inventory[id]
+    items_received = collections.Counter()
+    for id in inventory:
+        items_received[lookup_any_item_id_to_name[id]] = inventory[id]
 
-        prog_items_received = collections.Counter()
-        for name in items_received:
-            if name in prog_items[tracked_player]:
-                prog_items_received[name] = items_received[name]
+    player_tracker = PlayerTracker(
+        room,
+        team,
+        player,
+        player_name,
+        all_location_names[player],
+        checked_locations,
+        prog_items[player],
+        items_received,
+        slot_data[player]
+    )
 
-        webworld = AutoWorldRegister.world_types[game_name].web
+    webworld = AutoWorldRegister.world_types[games[player]].web
 
-        player_tracker = PlayerTracker(
-            room,
-            tracked_team,
-            tracked_player,
-            player_name,
-            all_location_names[tracked_player],
-            checked_locations,
-            prog_items[tracked_player],
-            items_received,
-            prog_items_received,
-            slot_data[tracked_player],
-            webworld.theme
-        )
+    # allow the world to add information to the tracker class
+    webworld.modify_tracker(player_tracker)
+    display_icons = get_tracker_icons_and_regions(player_tracker)
+    player_tracker.theme = webworld.theme
 
-        webworld.modify_tracker(player_tracker)
-
-        if player_tracker.regions:
-            for region in player_tracker.regions:
-                for location in region:
-                    if location in player_tracker.checked_locations:
-                        player_tracker.checks_done.setdefault(region, set()).add(location)
-
-        return render_template(
-            player_tracker.template,
-            all_progression_items=player_tracker.all_prog_items,
-            player=player_tracker.player,
-            team=player_tracker.team,
-            room=player_tracker.room,
-            player_name=player_tracker.name,
-            checked_locations=sorted(player_tracker.checked_locations),
-            locations=sorted(player_tracker.all_locations),
-            received_items=player_tracker.received_prog_items,
-            theme=player_tracker.theme,
-            icons=player_tracker.icons,
-            regions=player_tracker.regions,
-            checks_done=player_tracker.checks_done
-        )
-    else:
-        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name, seed_checks_in_area, lttp_checks_done)
-
-
-@app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
-@cache.memoize(timeout=60)
-def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
-    return build_trackers(tracker, tracked_team, tracked_player)
+    return player_tracker, multisave, inventory, seed_checks_in_area, lttp_checks_done, slot_data, games, player_name, display_icons
 
 
 def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
