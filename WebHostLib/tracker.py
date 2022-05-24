@@ -483,7 +483,7 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
     return player_tracker, multisave, inventory, seed_checks_in_area, lttp_checks_done, slot_data, games, player_name, display_icons
 
 
-def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: set,
                              inventory: Counter, team: int, player: int, playerName: str,
                              seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
@@ -585,7 +585,7 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
                             **display_data)
 
 
-def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: set,
                        inventory: Counter, team: int, player: int, playerName: str,
                        seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
@@ -742,7 +742,7 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
     checks_in_area['Total'] = sum(checks_in_area.values())
 
     # Give skulltulas on non-tracked locations
-    non_tracked_locations = multisave.get("location_checks", {}).get((team, player), set()).difference(set(locations[player]))
+    non_tracked_locations = multisave.get("location_checks", {}).get((team, player), set()).difference(locations)
     for id in non_tracked_locations:
         if "GS" in lookup_and_trim(id, ''):
             display_data["token_count"] += 1
@@ -780,7 +780,7 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
                            **display_data)
 
 
-def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: set,
                                inventory: Counter, team: int, player: int, playerName: str,
                                seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict[str, Any]) -> str:
 
@@ -886,7 +886,7 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             options=options, **display_data)
 
-def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: set,
                                 inventory: Counter, team: int, player: int, playerName: str,
                                 seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
@@ -988,7 +988,7 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
                             **display_data)
 
 
-def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: set,
                            inventory: Counter, team: int, player: int, playerName: str,
                            seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
@@ -1007,7 +1007,7 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dic
                             inventory=inventory,
                             player=player, team=team, room=room, player_name=playerName,
                             checked_locations=checked_locations,
-                            not_checked_locations=set(locations[player]) - checked_locations,
+                            not_checked_locations=locations - checked_locations,
                             received_items=player_received_items)
 
 
