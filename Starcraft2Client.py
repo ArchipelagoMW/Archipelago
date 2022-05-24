@@ -43,7 +43,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if num_options > 0:
             mission_number = int(options[0])
 
-            if is_mission_available(mission_number, self.ctx.checked_locations, mission_req_table):
+            if is_mission_available(mission_number, self.ctx.checked_locations, self.ctx.mission_req_table):
                 if self.ctx.sc2_run_task:
                     if not self.ctx.sc2_run_task.done():
                         sc2_logger.warning("Starcraft 2 Client is still running!")
@@ -63,13 +63,13 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_available(self) -> bool:
         """Get what missions are currently available to play"""
 
-        request_available_missions(self.ctx.checked_locations, mission_req_table, self.ctx.ui)
+        request_available_missions(self.ctx.checked_locations, self.ctx.mission_req_table, self.ctx.ui)
         return True
 
     def _cmd_unfinished(self) -> bool:
         """Get what missions are currently available to play and have not had all locations checked"""
 
-        request_unfinished_missions(self.ctx.checked_locations, mission_req_table, self.ctx.ui)
+        request_unfinished_missions(self.ctx.checked_locations, self.ctx.mission_req_table, self.ctx.ui)
         return True
 
 
@@ -79,6 +79,7 @@ class Context(CommonContext):
     items_handling = 0b111
     difficulty = -1
     all_in_choice = 0
+    mission_req_table = None
     items_rec_to_announce = []
     rec_announce_pos = 0
     items_sent_to_announce = []
@@ -100,6 +101,11 @@ class Context(CommonContext):
         if cmd in {"Connected"}:
             self.difficulty = args["slot_data"]["game_difficulty"]
             self.all_in_choice = args["slot_data"]["all_in_map"]
+            slot_req_table = args["slot_data"]["mission_req"]
+            self.mission_req_table = {}
+            for mission in slot_req_table:
+                self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
+
         if cmd in {"PrintJSON"}:
             noted = False
             if "receiving" in args:
@@ -297,7 +303,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     game_state = int(38281 - unit.health)
                     self.can_read_game = True
 
-            if iteration == 80 and not game_state & 1:
+            if iteration == 160 and not game_state & 1:
                 await self.chat_send("SendMessage Warning: Archipelago unable to connect or has lost connection to " +
                                      "Starcraft 2 (This is likely a map issue)")
 
@@ -417,8 +423,7 @@ mission_req_table = {
     "All-In": MissionInfo(29, -1, [27, 28], completion_critical=True, or_requirements=True)
 }
 
-lookup_id_to_mission: typing.Dict[int, str] = {
-    data.id: mission_name for mission_name, data in mission_req_table.items() if data.id}
+
 
 
 def calc_objectives_completed(mission, missions_info, locations_done):
@@ -436,20 +441,22 @@ def calc_objectives_completed(mission, missions_info, locations_done):
 
 
 def request_unfinished_missions(locations_done, location_table, ui):
-    message = "Unfinished Missions: "
+    if location_table:
+        message = "Unfinished Missions: "
 
-    unfinished_missions = calc_unfinished_missions(locations_done, location_table)
+        unfinished_missions = calc_unfinished_missions(locations_done, location_table)
 
+        message += ", ".join(f"{mark_critical(mission,location_table, ui)}[{location_table[mission].id}] "
+                             f"({unfinished_missions[mission]}/{location_table[mission].extra_locations})"
+                             for mission in unfinished_missions)
 
-    message += ", ".join(f"{mark_critical(mission,location_table, ui)}[{location_table[mission].id}] "
-                         f"({unfinished_missions[mission]}/{location_table[mission].extra_locations})"
-                         for mission in unfinished_missions)
-
-    if ui:
-        ui.log_panels['All'].on_message_markup(message)
-        ui.log_panels['Starcraft2'].on_message_markup(message)
+        if ui:
+            ui.log_panels['All'].on_message_markup(message)
+            ui.log_panels['Starcraft2'].on_message_markup(message)
+        else:
+            sc2_logger.info(message)
     else:
-        sc2_logger.info(message)
+        sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
 
 def calc_unfinished_missions(locations_done, locations):
@@ -490,16 +497,19 @@ def mark_critical(mission, location_table, ui):
 
 
 def request_available_missions(locations_done, location_table, ui):
-    message = "Available Missions: "
+    if location_table:
+        message = "Available Missions: "
 
-    missions = calc_available_missions(locations_done, location_table)
-    message += ", ".join(f"{mark_critical(mission,location_table, ui)}[{location_table[mission].id}]" for mission in missions)
+        missions = calc_available_missions(locations_done, location_table)
+        message += ", ".join(f"{mark_critical(mission,location_table, ui)}[{location_table[mission].id}]" for mission in missions)
 
-    if ui:
-        ui.log_panels['All'].on_message_markup(message)
-        ui.log_panels['Starcraft2'].on_message_markup(message)
+        if ui:
+            ui.log_panels['All'].on_message_markup(message)
+            ui.log_panels['Starcraft2'].on_message_markup(message)
+        else:
+            sc2_logger.info(message)
     else:
-        sc2_logger.info(message)
+        sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
 
 def calc_available_missions(locations_done, locations):
@@ -542,7 +552,7 @@ def mission_reqs_completed(location_to_check, missions_complete, locations_done,
                     req_success = False
 
             # Recursively check required mission to see if it's requirements are met, in case !collect has been done
-            if not mission_reqs_completed(lookup_id_to_mission[req_mission], missions_complete, locations_done,
+            if not mission_reqs_completed(list(locations)[req_mission-1], missions_complete, locations_done,
                                           locations):
                 if not locations[location_to_check].or_requirements:
                     return False

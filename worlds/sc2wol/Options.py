@@ -1,6 +1,6 @@
 from typing import Dict
 from BaseClasses import MultiWorld
-from Options import Choice, Option
+from Options import Choice, Option, DefaultOnToggle
 
 
 class GameDifficulty(Choice):
@@ -43,6 +43,11 @@ class MissionOrder(Choice):
     option_vanilla = 0
     option_vanilla_shuffled = 1
 
+class ShuffleProtoss(DefaultOnToggle):
+    """Determines if the 3 protoss missions are included in the shuffle if Vanilla Shuffled is enabled.  If this is
+    not the 3 protoss missions will stay in their vanilla order in the mission order making them optional to complete
+    the game."""
+    display_name = "Shuffle Protoss Missions"
 
 # noinspection PyTypeChecker
 sc2wol_options: Dict[str, Option] = {
@@ -50,6 +55,8 @@ sc2wol_options: Dict[str, Option] = {
     "upgrade_bonus": UpgradeBonus,
     "bunker_upgrade": BunkerUpgrade,
     "all_in_map": AllInMap,
+    "mission_order": MissionOrder,
+    "shuffle_protoss": ShuffleProtoss
 }
 
 

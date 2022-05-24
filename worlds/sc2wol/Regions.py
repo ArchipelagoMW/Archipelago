@@ -1,6 +1,10 @@
 from typing import List, Set, Dict, Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Locations import LocationData
+from .Options import get_option_value
+from worlds.sc2wol.MissionTables import MissionInfo, vanilla_shuffle_order, vanilla_mission_req_table, \
+    no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list
+import random
 
 
 def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location]):
@@ -115,21 +119,86 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
                 lambda state: state.has('Beat Gates of Hell', player) and (
                         state.has('Beat Shatter the Sky', player) or state.has('Beat Belly of the Beast', player)))
 
+        return vanilla_mission_req_table
+
     elif get_option_value(world, player, "mission_order") == 1:
         missions = []
+        no_build_pool = no_build_regions_list
+        easy_pool = easy_regions_list
+        medium_pool = medium_regions_list
+        hard_pool = hard_regions_list
 
-        #initial fill out of mission list and marking all-in mission
+        # Initial fill out of mission list and marking all-in mission
         for mission in vanilla_shuffle_order:
-            if mission.type == "all-in":
+            if mission.type == "all_in":
                 missions.append("All-In")
             else:
                 missions.append(mission.type)
 
+        # Place Protoss Missions if !ProtossShuffle
+        if get_option_value(world, player, "protoss_shuffle") == 0:
+            missions[22] = "A Sinister Turn"
+            medium_pool.remove("A Sinister Turn")
+            missions[23] = "Echoes of the Future"
+            medium_pool.remove("Echoes of the Future")
+            missions[24] = "In Utter Darkness"
+            hard_pool.remove("In Utter Darkness")
 
+        # Fill in No Build missions
+        missions_to_add = no_build_pool
+        for i in range(len(missions)):
+            if missions[i] == "no_build":
+                filler = random.randint(0, len(missions_to_add)-1)
 
-        missions_to_add = no_build_regions_list
+                missions[i] = missions_to_add[filler]
+                missions_to_add.pop(filler)
 
+        # Fill in Easy missions
+        missions_to_add = missions_to_add + easy_pool
+        for i in range(len(missions)):
+            if missions[i] == "easy":
+                filler = random.randint(0, len(missions_to_add) - 1)
 
+                missions[i] = missions_to_add[filler]
+                missions_to_add.pop(filler)
+
+        # Fill in Medium missions
+        missions_to_add = missions_to_add + medium_pool
+        for i in range(len(missions)):
+            if missions[i] == "medium":
+                filler = random.randint(0, len(missions_to_add) - 1)
+
+                missions[i] = missions_to_add[filler]
+                missions_to_add.pop(filler)
+
+        # Fill in Hard missions
+        missions_to_add = missions_to_add + hard_pool
+        for i in range(len(missions)):
+            if missions[i] == "hard":
+                filler = random.randint(0, len(missions_to_add) - 1)
+
+                missions[i] = missions_to_add[filler]
+                missions_to_add.pop(filler)
+
+        # Loop through missions to create requirements table and connect regions
+        # TODO: Handle 'and' connections
+        mission_req_table = {}
+        for i in range(len(missions)):
+            connections = []
+            for connection in vanilla_shuffle_order[i].connect_to:
+                if connection == -1:
+                    connect(world, player, names, "Menu", missions[i])
+                else:
+                    connect(world, player, names, missions[connection], missions[i],
+                            (lambda name: (lambda state: state.has(f"Beat {name}", player)))(missions[connection]))
+                    connections.append(connection + 1)
+
+            mission_req_table.update({missions[i]: MissionInfo(
+                vanilla_mission_req_table[missions[i]].id, vanilla_mission_req_table[missions[i]].extra_locations,
+                connections, completion_critical=vanilla_shuffle_order[i].completion_critical,
+                or_requirements=vanilla_shuffle_order[i].or_requirements)})
+
+        return mission_req_table
 
 
 def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames: Set[str]):
@@ -198,63 +267,3 @@ def get_locations_per_region(locations: Tuple[LocationData, ...]) -> Dict[str, L
         per_region.setdefault(location.region, []).append(location)
 
     return per_region
-
-
-no_build_regions_list = ["Liberation Day", "Breakout", "Ghost of a Chance", "Piercing the Shroud", "Whispers of Doom",
-                         "Belly of the Beast"]
-easy_regions_list = ["The Outlaws", "Zero Hour", "Evacuation", "Outbreak", "Smash and Grab", "Devil's Playground"]
-medium_regions_list = ["Safe Haven", "Haven's Fall", "The Dig", "The Moebius Factor", "Supernova",
-                       "Welcome to the Jungle", "The Great Train Robbery", "Cutthroat", "Media Blitz",
-                       "A Sinister Turn", "Echoes of the Future"]
-hard_regions_list = ["Maw of the Void", "Engine of Destruction", "In Utter Darkness", "Gates of Hell",
-                     "Shatter the Sky"]
-
-
-class MissionInfo(NamedTuple):
-    id: int
-    extra_locations: int
-    required_world: list[int]
-    number: int = 0  # number of worlds need beaten
-    completion_critical: bool = False # missions needed to beat game
-    or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
-
-
-class FillMission(NamedTuple):
-    type: str
-    connect_to: list[int] # -1 connects to Menu
-    number: int = 0 # number of worlds need beaten
-    completion_critical: bool = False # missions needed to beat game
-    or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
-
-
-vanilla_shuffle_order = [
-    FillMission("no_build", [-1], completion_critical=True),
-    FillMission("easy", [0], completion_critical=True),
-    FillMission("easy", [1], completion_critical=True),
-    FillMission("easy", [2]),
-    FillMission("medium", [3]),
-    FillMission("hard", [4], number=7),
-    FillMission("hard", [4], number=7),
-    FillMission("easy", [2], completion_critical=True),
-    FillMission("medium", [7], number=8, completion_critical=True),
-    FillMission("hard", [8], number=11, completion_critical=True),
-    FillMission("hard", [9], number=14, completion_critical=True),
-    FillMission("hard", [10], completion_critical=True),
-    FillMission("medium", [2], number=4),
-    FillMission("medium", [12]),
-    FillMission("hard", [13], number=8),
-    FillMission("hard", [13], number=8),
-    FillMission("medium", [2], number=6),
-    FillMission("hard", [16]),
-    FillMission("hard", [17]),
-    FillMission("hard", [18]),
-    FillMission("hard", [19]),
-    FillMission("medium", [8]),
-    FillMission("hard", [21]),
-    FillMission("hard", [22]),
-    FillMission("hard", [23]),
-    FillMission("hard", [11], completion_critical=True),
-    FillMission("hard", [25], completion_critical=True),
-    FillMission("hard", [25], completion_critical=True),
-    FillMission("all_in", [26, 27], completion_critical=True, or_requirements=True)
-]
