@@ -29,7 +29,7 @@ class PlayerTracker:
     progressive_items: List[str] = []
     progressive_names: Dict[str, List[str]] = {}
     regions: Dict[str, List[str]] = {}
-    checks_done: Dict[str, Set[str]] = {}
+    checks_done: Dict[str, Set[str]]
     room: Any
     team: int
     player: int
@@ -475,68 +475,6 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
     player_tracker.theme = webworld.theme
 
     return player_tracker, multisave, inventory, seed_checks_in_area, lttp_checks_done, slot_data, games, player_name, display_icons
-
-
-def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
-                         inventory: Counter, team: int, player: int, player_name: str,
-                         seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
-
-    # Note the presence of the triforce item
-    game_state = multisave.get("client_game_state", {}).get((team, player), 0)
-    if game_state == 30:
-        inventory[106] = 1  # Triforce
-
-    # Progressive items need special handling for icons and class
-    progressive_items = {
-        "Progressive Sword": 94,
-        "Progressive Glove": 97,
-        "Progressive Bow": 100,
-        "Progressive Mail": 96,
-        "Progressive Shield": 95,
-    }
-    progressive_names = {
-        "Progressive Sword": [None, 'Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
-        "Progressive Glove": [None, 'Power Glove', 'Titan Mitts'],
-        "Progressive Bow": [None, "Bow", "Silver Bow"],
-        "Progressive Mail": ["Green Mail", "Blue Mail", "Red Mail"],
-        "Progressive Shield": [None, "Blue Shield", "Red Shield", "Mirror Shield"]
-    }
-
-    # Determine which icon to use
-    display_data = {}
-    for item_name, item_id in progressive_items.items():
-        level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
-        display_name = progressive_names[item_name][level]
-        acquired = True
-        if not display_name:
-            acquired = False
-            display_name = progressive_names[item_name][level + 1]
-        base_name = item_name.split(maxsplit=1)[1].lower()
-        display_data[base_name + "_acquired"] = acquired
-        display_data[base_name + "_url"] = alttp_icons[display_name]
-
-    # The single player tracker doesn't care about overworld, underworld, and total checks. Maybe it should?
-    sp_areas = ordered_areas[2:15]
-
-    player_big_key_locations = set()
-    player_small_key_locations = set()
-    for loc_data in locations.values():
-        for values in loc_data.values():
-            item_id, item_player, flags = values
-            if item_player == player:
-                if item_id in ids_big_key:
-                    player_big_key_locations.add(ids_big_key[item_id])
-                elif item_id in ids_small_key:
-                    player_small_key_locations.add(ids_small_key[item_id])
-
-    return render_template("lttpTracker.html", inventory=inventory,
-                            player_name=player_name, room=room, icons=alttp_icons, checks_done=checks_done,
-                            checks_in_area=seed_checks_in_area[player],
-                            acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
-                            small_key_ids=small_key_ids, big_key_ids=big_key_ids, sp_areas=sp_areas,
-                            key_locations=player_small_key_locations,
-                            big_key_locations=player_big_key_locations,
-                            **display_data)
 
 
 def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
@@ -1164,6 +1102,5 @@ game_specific_trackers: typing.Dict[str, typing.Callable] = {
     "Minecraft": __renderMinecraftTracker,
     "Ocarina of Time": __renderOoTTracker,
     "Timespinner": __renderTimespinnerTracker,
-    "A Link to the Past": __renderAlttpTracker,
     "Super Metroid": __renderSuperMetroidTracker
 }

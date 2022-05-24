@@ -100,6 +100,217 @@ class ALTTPWeb(WebWorld):
 
     tutorials = [setup_en, setup_de, setup_es, setup_fr, msu, msu_es, msu_fr, plando]
 
+    if typing.TYPE_CHECKING:
+        from WebHostLib.tracker import PlayerTracker
+    else:
+        PlayerTracker = object
+
+    def modify_tracker(self, tracker: PlayerTracker):
+        tracker.icons = {
+            "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
+            "Red Shield": r"https://www.zeldadungeon.net/wiki/images/5/55/Fire-Shield.png",
+            "Mirror Shield": r"https://www.zeldadungeon.net/wiki/images/8/84/Mirror-Shield.png",
+            "Fighter Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/4/40/SFighterSword.png?width=1920",
+            "Master Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/6/65/SMasterSword.png?width=1920",
+            "Tempered Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/9/92/STemperedSword.png?width=1920",
+            "Golden Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/2/28/SGoldenSword.png?width=1920",
+            "Bow": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Bow_%26_Arrows_Sprite.png?version=5f85a70e6366bf473544ef93b274f74c",
+            "Silver Bow": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/6/65/Bow.png?width=1920",
+            "Green Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/c/c9/SGreenTunic.png?width=1920",
+            "Blue Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/9/98/SBlueTunic.png?width=1920",
+            "Red Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/7/74/SRedTunic.png?width=1920",
+            "Power Glove": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/f/f5/SPowerGlove.png?width=1920",
+            "Titan Mitts": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/c/c1/STitanMitt.png?width=1920",
+            "Progressive Sword": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/c/cc/ALttP_Master_Sword_Sprite.png?version=55869db2a20e157cd3b5c8f556097725",
+            "Pegasus Boots": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/ed/ALttP_Pegasus_Shoes_Sprite.png?version=405f42f97240c9dcd2b71ffc4bebc7f9",
+            "Progressive Glove": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/c/c1/STitanMitt.png?width=1920",
+            "Flippers": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/4/4c/ZoraFlippers.png?width=1920",
+            "Moon Pearl": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/6/63/ALttP_Moon_Pearl_Sprite.png?version=d601542d5abcc3e006ee163254bea77e",
+            "Progressive Bow": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Bow_%26_Arrows_Sprite.png?version=cfb7648b3714cccc80e2b17b2adf00ed",
+            "Blue Boomerang": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/c/c3/ALttP_Boomerang_Sprite.png?version=96127d163759395eb510b81a556d500e",
+            "Red Boomerang": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/b9/ALttP_Magical_Boomerang_Sprite.png?version=47cddce7a07bc3e4c2c10727b491f400",
+            "Hookshot": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/2/24/Hookshot.png?version=c90bc8e07a52e8090377bd6ef854c18b",
+            "Mushroom": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/35/ALttP_Mushroom_Sprite.png?version=1f1acb30d71bd96b60a3491e54bbfe59",
+            "Magic Powder": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e5/ALttP_Magic_Powder_Sprite.png?version=c24e38effbd4f80496d35830ce8ff4ec",
+            "Fire Rod": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d6/FireRod.png?version=6eabc9f24d25697e2c4cd43ddc8207c0",
+            "Ice Rod": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d7/ALttP_Ice_Rod_Sprite.png?version=1f944148223d91cfc6a615c92286c3bc",
+            "Bombos": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/8/8c/ALttP_Bombos_Medallion_Sprite.png?version=f4d6aba47fb69375e090178f0fc33b26",
+            "Ether": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/3c/Ether.png?version=34027651a5565fcc5a83189178ab17b5",
+            "Quake": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/5/56/ALttP_Quake_Medallion_Sprite.png?version=efd64d451b1831bd59f7b7d6b61b5879",
+            "Lamp": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/6/63/ALttP_Lantern_Sprite.png?version=e76eaa1ec509c9a5efb2916698d5a4ce",
+            "Hammer": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d1/ALttP_Hammer_Sprite.png?version=e0adec227193818dcaedf587eba34500",
+            "Shovel": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/c/c4/ALttP_Shovel_Sprite.png?version=e73d1ce0115c2c70eaca15b014bd6f05",
+            "Flute": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/db/Flute.png?version=ec4982b31c56da2c0c010905c5c60390",
+            "Bug Catching Net": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/5/54/Bug-CatchingNet.png?version=4d40e0ee015b687ff75b333b968d8be6",
+            "Book of Mudora": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/2/22/ALttP_Book_of_Mudora_Sprite.png?version=11e4632bba54f6b9bf921df06ac93744",
+            "Bottle": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/ef/ALttP_Magic_Bottle_Sprite.png?version=fd98ab04db775270cbe79fce0235777b",
+            "Cane of Somaria": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e1/ALttP_Cane_of_Somaria_Sprite.png?version=8cc1900dfd887890badffc903bb87943",
+            "Cane of Byrna": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Cane_of_Byrna_Sprite.png?version=758b607c8cbe2cf1900d42a0b3d0fb54",
+            "Cape": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/1/1c/ALttP_Magic_Cape_Sprite.png?version=6b77f0d609aab0c751307fc124736832",
+            "Magic Mirror": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e5/ALttP_Magic_Mirror_Sprite.png?version=e035dbc9cbe2a3bd44aa6d047762b0cc",
+            "Triforce": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/4/4e/TriforceALttPTitle.png?version=dc398e1293177581c16303e4f9d12a48",
+            "Small Key": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/f/f1/ALttP_Small_Key_Sprite.png?version=4f35d92842f0de39d969181eea03774e",
+            "Big Key": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/33/ALttP_Big_Key_Sprite.png?version=136dfa418ba76c8b4e270f466fc12f4d",
+            "Chest": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/7/73/ALttP_Treasure_Chest_Sprite.png?version=5f530ecd98dcb22251e146e8049c0dda",
+            "Light World": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e7/ALttP_Soldier_Green_Sprite.png?version=d650d417934cd707a47e496489c268a6",
+            "Dark World": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/9/94/ALttP_Moblin_Sprite.png?version=ebf50e33f4657c377d1606bcc0886ddc",
+            "Hyrule Castle": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d3/ALttP_Ball_and_Chain_Trooper_Sprite.png?version=1768a87c06d29cc8e7ddd80b9fa516be",
+            "Agahnims Tower": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/1/1e/ALttP_Agahnim_Sprite.png?version=365956e61b0c2191eae4eddbe591dab5",
+            "Desert Palace": r"https://www.zeldadungeon.net/wiki/images/2/25/Lanmola-ALTTP-Sprite.png",
+            "Eastern Palace": r"https://www.zeldadungeon.net/wiki/images/d/dc/RedArmosKnight.png",
+            "Tower of Hera": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/3c/ALttP_Moldorm_Sprite.png?version=c588257bdc2543468e008a6b30f262a7",
+            "Palace of Darkness": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/ed/ALttP_Helmasaur_King_Sprite.png?version=ab8a4a1cfd91d4fc43466c56cba30022",
+            "Swamp Palace": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/7/73/ALttP_Arrghus_Sprite.png?version=b098be3122e53f751b74f4a5ef9184b5",
+            "Skull Woods": r"https://alttp-wiki.net/images/6/6a/Mothula.png",
+            "Thieves Town": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/8/86/ALttP_Blind_the_Thief_Sprite.png?version=3833021bfcd112be54e7390679047222",
+            "Ice Palace": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/33/ALttP_Kholdstare_Sprite.png?version=e5a1b0e8b2298e550d85f90bf97045c0",
+            "Misery Mire": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/8/85/ALttP_Vitreous_Sprite.png?version=92b2e9cb0aa63f831760f08041d8d8d8",
+            "Turtle Rock": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/9/91/ALttP_Trinexx_Sprite.png?version=0cc867d513952aa03edd155597a0c0be",
+            "Ganons Tower": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/b9/ALttP_Ganon_Sprite.png?version=956f51f054954dfff53c1a9d4f929c74"
+        }
+        tracker.progressive_items = [
+            'Progressive Bow',
+            'Bottle',
+            'Progressive Sword',
+            'Progressive Glove',
+            'Progressive Shield',
+            'Flippers',
+            'Moon Pearl',
+            'Progressive Boomerang',
+            'Hookshot',
+            'Mushroom',
+            'Magic Powder',
+            'Fire Rod',
+            'Ice Rod',
+            'Bombos',
+            'Ether',
+            'Quake',
+            'Lamp',
+            'Hammer',
+            'Shovel',
+            'Flute',
+            'Bug Catching Net',
+            'Book of Mudora',
+            'Cane of Somaria',
+            'Cane of Byrna',
+            'Cape',
+            'Magic Mirror',
+        ]
+        tracker.progressive_names = {
+            'Progressive Bow': ['Bow', 'Silver Arrows', 'Silver Bow', 'Progressive Bow (Alt)'],
+            'Bottle': ['Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Fairy)', 'Bottle (Bee)', 'Bottle (Good Bee)'],
+            'Progressive Sword': ['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
+            'Progressive Glove': ['Power Glove', 'Titans Mitts'],
+            'Progressive Shield': ['Blue Shield', 'Red Shield', 'Mirror Shield'],
+            'Progressive Boomerang': ['Red Boomerang', 'Blue Boomerang']
+        }
+        tracker.regions = {
+            'Light World': [
+                'Lost Woods Hideout', 'Lumberjack Tree', 'Mushroom', 'Master Sword Pedestal', 'Bottle Merchant', 'Flute Spot',
+                'Blind\'s Hideout - Top', 'Blind\'s Hideout - Left', 'Blind\'s Hideout - Right', 'Blind\'s Hideout - Far Left', 'Blind\'s Hideout - Far Right',
+                'Link\'s House', 'Link\'s Uncle', 'Secret Passage',
+                'King Zora', 'Zora\'s Ledge', 'Waterfall Fairy - Left', 'Waterfall Fairy - Right',
+                'King\'s Tomb', 'Graveyard Cave', 'Bonk Rock Cave',
+                'Sunken Treasure', 'Floodgate Chest', 'Hobo', 'Ice Rod Cave', 'Lake Hylia Island',
+                'Kakariko Tavern', 'Chicken House', 'Sick Kid',
+                'Blacksmith', 'Purple Chest', 'Magic Bat',
+                'Aginah\'s Cave', 'Cave 45', 'Checkerboard Cave',
+                'Sahasrahla\'s Hut - Left', 'Sahasrahla\'s Hut - Middle', 'Sahasrahla\'s Hut - Right', 'Sahasrahla',
+                'Kakariko Well - Top', 'Kakariko Well - Left', 'Kakariko Well - Middle', 'Kakariko Well - Right', 'Kakariko Well - Bottom',
+                'Mini Moldorm Cave - Far Left', 'Mini Moldorm Cave - Left', 'Mini Moldorm Cave - Right', 'Mini Moldorm Cave - Far Right', 'Mini Moldorm Cave - Generous Guy',
+                'Library', 'Maze Race', 'Potion Shop', 'Desert Ledge',
+                'Old Man', 'Spectacle Rock',
+                'Paradox Cave Lower - Far Left', 'Paradox Cave Lower - Left', 'Paradox Cave Lower - Right', 'Paradox Cave Lower - Far Right', 'Paradox Cave Lower - Middle',
+                'Paradox Cave Upper - Left', 'Paradox Cave Upper - Right',
+                'Spiral Cave', 'Ether Tablet'
+            ],
+            'Dark World': [
+                'Pyramid', 'Catfish', 'Pyramid Fairy - Left', 'Pyramid Fairy - Right',
+                'Stumpy', 'Digging Game',
+                'Bombos Tablet',
+                'Hype Cave - Top', 'Hype Cave - Middle Right', 'Hype Cave - Middle Left', 'Hype Cave - Bottom', 'Hype Cave - Generous Guy',
+                'Peg Cave', 'Brewery', 'C-Shaped House', 'Chest Game',
+                'Bumper Cave Ledge',
+                'Mire Shed - Left', 'Mire Shed - Right',
+                'Superbunny Cave - Top', 'Superbunny Cave - Bottom',
+                'Spike Cave', 'Floating Island', 'Mimic Cave',
+                'Hookshot Cave - Top Right', 'Hookshot Cave - Top Left', 'Hookshot Cave - Bottom Right', 'Hookshot Cave - Bottom Left',
+
+            ],
+            'Desert Palace': [
+                'Desert Palace - Big Chest', 'Desert Palace - Torch', 'Desert Palace - Map Chest',
+                'Desert Palace - Compass Chest', 'Desert Palace - Big Key Chest',
+                'Desert Palace - Boss'
+            ],
+            'Eastern Palace': [
+                'Eastern Palace - Compass Chest', 'Eastern Palace - Big Chest', 'Eastern Palace - Cannonball Chest',
+                'Eastern Palace - Big Key Chest', 'Eastern Palace - Map Chest', 'Eastern Palace - Boss'
+            ],
+            'Hyrule Castle': [
+                'Hyrule Castle - Map Chest', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Zelda\'s Chest',
+                'Sewers - Dark Cross', 'Sewers - Secret Room - Left', 'Sewers - Secret Room - Middle', 'Sewers - Secret Room - Right',
+                'Sanctuary'
+            ],
+            'Agahnims Tower': [
+                'Castle Tower - Room 03', 'Castle Tower - Dark Maze'
+            ],
+            'Tower of Hera': [
+                'Tower of Hera - Basement Cage', 'Tower of Hera - Map Chest', 'Tower of Hera - Big Key Chest',
+                'Tower of Hera - Compass Chest', 'Tower of Hera - Big Chest', 'Tower of Hera - Boss'
+            ],
+            'Swamp Palace': [
+                'Swamp Palace - Entrance', 'Swamp Palace - Map Chest',
+                'Swamp Palace - Big Chest', 'Swamp Palace - Compass Chest',
+                'Swamp Palace - Big Key Chest', 'Swamp Palace - West Chest',
+                'Swamp Palace - Flooded Room - Left', 'Swamp Palace - Flooded Room - Right',
+                'Swamp Palace - Waterfall Room', 'Swamp Palace - Boss'
+            ],
+            'Thieves Town': [
+                'Thieves\' Town - Big Key Chest', 'Thieves\' Town - Map Chest', 'Thieves\' Town - Compass Chest', 'Thieves\' Town - Ambush Chest',
+                'Thieves\' Town - Attic', 'Thieves\' Town - Big Chest', 'Thieves\' Town - Blind\'s Cell', 'Thieves\' Town - Boss'
+            ],
+            'Skull Woods': [
+                'Skull Woods - Map Chest', 'Skull Woods - Pinball Room',
+                'Skull Woods - Compass Chest', 'Skull Woods - Pot Prison',
+                'Skull Woods - Big Chest',
+                'Skull Woods - Big Key Chest',
+                'Skull Woods - Bridge Room', 'Skull Woods - Boss'
+            ],
+            'Ice Palace': [
+                'Ice Palace - Compass Chest', 'Ice Palace - Freezor Chest', 'Ice Palace - Big Chest', 'Ice Palace - Iced T Room',
+                'Ice Palace - Spike Room', 'Ice Palace - Big Key Chest', 'Ice Palace - Map Chest', 'Ice Palace - Boss'
+            ],
+            'Misery Mire': [
+                'Misery Mire - Big Chest', 'Misery Mire - Map Chest', 'Misery Mire - Main Lobby', 'Misery Mire - Bridge Chest', 'Misery Mire - Spike Chest',
+                'Misery Mire - Compass Chest', 'Misery Mire - Big Key Chest', 'Misery Mire - Boss'
+            ],
+            'Turtle Rock': [
+                'Turtle Rock - Compass Chest', 'Turtle Rock - Roller Room - Left', 'Turtle Rock - Roller Room - Right',
+                'Turtle Rock - Chain Chomps', 'Turtle Rock - Big Key Chest', 'Turtle Rock - Big Chest',
+                'Turtle Rock - Crystaroller Room',
+                'Turtle Rock - Eye Bridge - Bottom Left', 'Turtle Rock - Eye Bridge - Bottom Right', 'Turtle Rock - Eye Bridge - Top Left', 'Turtle Rock - Eye Bridge - Top Right',
+                'Turtle Rock - Boss'
+            ],
+            'Palace of Darkness': [
+                'Palace of Darkness - Shooter Room', 'Palace of Darkness - The Arena - Bridge', 'Palace of Darkness - Stalfos Basement',
+                'Palace of Darkness - Big Key Chest',
+                'Palace of Darkness - The Arena - Ledge', 'Palace of Darkness - Map Chest',
+                'Palace of Darkness - Compass Chest', 'Palace of Darkness - Dark Basement - Left', 'Palace of Darkness - Dark Basement - Right',
+                'Palace of Darkness - Dark Maze - Top', 'Palace of Darkness - Dark Maze - Bottom', 'Palace of Darkness - Big Chest',
+                'Palace of Darkness - Harmless Hellway', 'Palace of Darkness - Boss'
+            ],
+            'Ganons Tower': [
+                'Ganons Tower - Bob\'s Torch', 'Ganons Tower - Hope Room - Left', 'Ganons Tower - Hope Room - Right',
+                'Ganons Tower - Tile Room',
+                'Ganons Tower - Compass Room - Top Left', 'Ganons Tower - Compass Room - Top Right', 'Ganons Tower - Compass Room - Bottom Left', 'Ganons Tower - Compass Room - Bottom Right',
+                'Ganons Tower - DMs Room - Top Left', 'Ganons Tower - DMs Room - Top Right', 'Ganons Tower - DMs Room - Bottom Left', 'Ganons Tower - DMs Room - Bottom Right',
+                'Ganons Tower - Map Chest', 'Ganons Tower - Firesnake Room',
+                'Ganons Tower - Randomizer Room - Top Left', 'Ganons Tower - Randomizer Room - Top Right', 'Ganons Tower - Randomizer Room - Bottom Left', 'Ganons Tower - Randomizer Room - Bottom Right',
+                'Ganons Tower - Bob\'s Chest',
+                'Ganons Tower - Big Chest', 'Ganons Tower - Big Key Room - Left', 'Ganons Tower - Big Key Room - Right', 'Ganons Tower - Big Key Chest',
+            ]
+        }
+
 
 class ALTTPWorld(World):
     """
