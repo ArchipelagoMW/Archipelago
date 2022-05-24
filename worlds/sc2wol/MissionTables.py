@@ -1,4 +1,4 @@
-from typing import NamedTuple, Dict
+from typing import NamedTuple, Dict, List
 
 no_build_regions_list = ["Liberation Day", "Breakout", "Ghost of a Chance", "Piercing the Shroud", "Whispers of Doom",
                          "Belly of the Beast"]
@@ -13,7 +13,7 @@ hard_regions_list = ["Maw of the Void", "Engine of Destruction", "In Utter Darkn
 class MissionInfo(NamedTuple):
     id: int
     extra_locations: int
-    required_world: list[int]
+    required_world: List[int]
     number: int = 0  # number of worlds need beaten
     completion_critical: bool = False  # missions needed to beat game
     or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
@@ -21,7 +21,7 @@ class MissionInfo(NamedTuple):
 
 class FillMission(NamedTuple):
     type: str
-    connect_to: list[int] # -1 connects to Menu
+    connect_to: List[int]  # -1 connects to Menu
     number: int = 0 # number of worlds need beaten
     completion_critical: bool = False  # missions needed to beat game
     or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
