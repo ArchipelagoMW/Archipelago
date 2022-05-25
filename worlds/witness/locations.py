@@ -50,11 +50,11 @@ class StaticWitnessLocations:
 
         "Quarry Mill Eraser and Dots 6",
         "Quarry Mill Eraser and Squares 8",
-        "Quarry Mill Small Squares & Dots & and Eraser",
+        "Quarry Mill Small Squares & Dots & Eraser",
         "Quarry Boathouse Intro Shapers",
         "Quarry Boathouse Eraser and Shapers 5",
-        "Quarry Boathouse Stars & Eraser & and Shapers 2",
-        "Quarry Boathouse Stars & Eraser & and Shapers 5",
+        "Quarry Boathouse Stars & Eraser & Shapers 2",
+        "Quarry Boathouse Stars & Eraser & Shapers 5",
         "Quarry Discard",
         "Quarry Laser",
 
@@ -82,7 +82,7 @@ class StaticWitnessLocations:
         "Town Rooftop Discard",
         "Town Symmetry Squares 5 + Dots",
         "Town Full Dot Grid Shapers 5",
-        "Town Shapers & Dots & and Eraser",
+        "Town Shapers & Dots & Eraser",
         "Town Laser",
 
         "Theater Discard",
@@ -138,7 +138,7 @@ class StaticWitnessLocations:
     UNCOMMON_LOCATIONS = {
         "Mountaintop River Shape",
         "Tutorial Patio Floor",
-        "Quarry Mill Big Squares & Dots & and Eraser",
+        "Quarry Mill Big Squares & Dots & Eraser",
         "Theater Tutorial Video",
         "Theater Desert Video",
         "Theater Jungle Video",
@@ -165,7 +165,7 @@ class StaticWitnessLocations:
         "Inside Mountain Secret Area Lone Pillar",
         "Inside Mountain Secret Area Wooden Beam Shapers",
         "Inside Mountain Secret Area Wooden Beam Squares and Shapers",
-        "Inside Mountain Secret Area Wooden Beam Shapers and Squares",
+        "Inside Mountain Secret Area Wooden Beam Stars and Squares",
         "Inside Mountain Secret Area Wooden Beam Shapers and Stars",
         "Inside Mountain Secret Area Upstairs Invisible Dots 8",
         "Inside Mountain Secret Area Upstairs Invisible Dot Symmetry 3",

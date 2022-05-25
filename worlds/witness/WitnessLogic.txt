@@ -187,8 +187,8 @@ Quarry Mill (Quarry Mill) - Quarry - 0x01E59 & 0x01E5A:
 0x03686 (Eraser and Squares 7) - 0x3C12D - Squares & Colored Squares & Eraser
 0x014E9 (Eraser and Squares 8) - 0x03686 - Squares & Colored Squares & Eraser
 0x03677 (Stair Control) - 0x014E8 - Squares & Colored Squares & Eraser
-0x3C125 (Big Squares & Dots & and Eraser) - 0x0367C - Squares & Black/White Squares & Dots & Eraser
-0x0367C (Small Squares & Dots & and Eraser) - 0x014E9 - Squares & Colored Squares & Dots & Eraser
+0x3C125 (Big Squares & Dots & Eraser) - 0x0367C - Squares & Black/White Squares & Dots & Eraser
+0x0367C (Small Squares & Dots & Eraser) - 0x014E9 - Squares & Colored Squares & Dots & Eraser
 0x17CAC (Door to Outside Quarry Stairs) - True - True
 
 Quarry Boathouse (Quarry Boathouse) - Quarry - True:
@@ -209,13 +209,13 @@ Quarry Boathouse (Quarry Boathouse) - Quarry - True:
 0x09DB5 (Stars and Colored Eraser 5) - 0x021BB - Stars & Stars + Same Colored Symbol & Eraser
 0x09DB1 (Stars and Colored Eraser 6) - 0x09DB5 - Stars & Stars + Same Colored Symbol & Eraser
 0x3C124 (Stars and Colored Eraser 7) - 0x09DB1 - Stars & Stars + Same Colored Symbol & Eraser
-0x09DB3 (Stars & Eraser & and Shapers 1) - 0x3C124 - Stars & Eraser & Shapers
-0x09DB4 (Stars & Eraser & and Shapers 2) - 0x09DB3 - Stars & Eraser & Shapers
+0x09DB3 (Stars & Eraser & Shapers 1) - 0x3C124 - Stars & Eraser & Shapers
+0x09DB4 (Stars & Eraser & Shapers 2) - 0x09DB3 - Stars & Eraser & Shapers
 0x275FA (Hook Control) - 0x03858 - Shapers & Eraser
 0x17CA6 (Boat Spawn) - True - Boat
-0x0A3CB (Stars & Eraser & and Shapers 3) - 0x09DB4 - Stars & Eraser & Shapers
-0x0A3CC (Stars & Eraser & and Shapers 4) - 0x0A3CB - Stars & Eraser & Shapers
-0x0A3D0 (Stars & Eraser & and Shapers 5) - 0x0A3CC - Stars & Eraser & Shapers
+0x0A3CB (Stars & Eraser & Shapers 3) - 0x09DB4 - Stars & Eraser & Shapers
+0x0A3CC (Stars & Eraser & Shapers 4) - 0x0A3CB - Stars & Eraser & Shapers
+0x0A3D0 (Stars & Eraser & Shapers 5) - 0x0A3CC - Stars & Eraser & Shapers
 
 Shadows (Shadows) - Main Island - True - Keep Glass Plates - 0x09E49:
 0x334DB (Door Timer Outside) - True - True
@@ -239,8 +239,8 @@ Shadows (Shadows) - Main Island - True - Keep Glass Plates - 0x09E49:
 
 Shadows Ledge (Shadows) - Shadows - 0x334DB | 0x334DC | 0x0A8DC:
 0x334DC (Door Timer Inside) - True - True
-0x168B5 (Lower Avoid 1) - True - Shadows Avoid
-0x198BD (Lower Avoid 2) - 0x168B5 - Shadows Avoid
+0x198B5 (Lower Avoid 1) - True - Shadows Avoid
+0x198BD (Lower Avoid 2) - 0x198B5 - Shadows Avoid
 0x198BF (Lower Avoid 3) - 0x198BD & 0x334DC - Shadows Avoid
 0x19771 (Lower Avoid 4) - 0x198BF - Shadows Avoid
 0x0A8DC (Lower Avoid 5) - 0x19771 - Shadows Avoid
@@ -319,7 +319,7 @@ Town (Town) - Main Island - True - Theater - 0x0A168 | 0x33AB2:
 0x28ABF (Full Dot Grid Shapers 3) - 0x28A33 - Shapers & Rotated Shapers & Dots
 0x28AC0 (Full Dot Grid Shapers 4) - 0x28ABF - Rotated Shapers & Dots
 0x28AC1 (Full Dot Grid Shapers 5) - 0x28AC0 - Rotated Shapers & Dots
-0x28AD9 (Shapers & Dots & and Eraser) - 0x28AC1 - Rotated Shapers & Dots & Eraser
+0x28AD9 (Shapers & Dots & Eraser) - 0x28AC1 - Rotated Shapers & Dots & Eraser
 0x17F5F (Windmill Door) - True - Dots
 
 RGB House (Town) - Town - 0x28998:
@@ -361,7 +361,7 @@ Jungle (Jungle) - Main Island - True:
 0x17CAB (Popup Wall Control) - 0x002C7 - True
 0x0026D (Popup Wall 1) - 0x17CAB - Sound & Sound Dots
 0x0026E (Popup Wall 2) - 0x0026D - Sound & Sound Dots
-0x0026F (Popup Wall 3) - 0x0026E - Sound & Sound Dots
+0x0026F (Popup Wall 3) - 0x0026E - Sound & Sound DotsW
 0x00C3F (Popup Wall 4) - 0x0026F - Sound & Sound Dots
 0x00C41 (Popup Wall 5) - 0x00C3F - Sound & Sound Dots
 0x014B2 (Popup Wall 6) - 0x00C41 - Sound & Sound Dots
@@ -641,7 +641,7 @@ Inside Mountain Secret Area (Inside Mountain Secret Area) - Inside Mountain Path
 0x0A16E (Door to Challenge) - 0x09DD5 - Stars & Shapers & Colored Shapers & Stars + Same Colored Symbol
 0x288EA (Wooden Beam Shapers) - True - Environment & Shapers
 0x288FC (Wooden Beam Squares and Shapers) - True - Environment & Squares & Black/White Squares & Shapers & Rotated Shapers
-0x289E7 (Wooden Beam Shapers and Squares) - True - Environment & Stars & Squares & Black/White Squares
+0x289E7 (Wooden Beam Stars and Squares) - True - Environment & Stars & Squares & Black/White Squares
 0x288AA (Wooden Beam Shapers and Stars) - True - Environment & Stars & Shapers
 0x17FB9 (Upstairs Dot Grid Negative Shapers) - True - Shapers & Dots & Negative Shapers
 0x0A16B (Upstairs Dot Grid Squares) - True - Squares & Black/White Squares & Colored Squares & Dots
