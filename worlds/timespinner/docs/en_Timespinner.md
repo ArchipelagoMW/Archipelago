@@ -21,7 +21,7 @@ The goal remains unchanged. Kill the Sandman\Nightmare!
 All main inventory items, orbs, collectables, and familiars can be shuffled, and all locations in the game which could
 contain any of those items may have their contents changed.
 
-In total, there are **166 items** to find.
+Depending on your configuration, there are **between 166 and 212 items** to find. The default is 180 items.
 
 ## Which items can be in another player's world?
 
