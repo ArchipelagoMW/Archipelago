@@ -51,8 +51,8 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if num_options > 0:
             mission_number = int(options[0])
 
-            if is_mission_available(mission_number, self.ctx.checked_locations, self.ctx.mission_req_table) or \
-                    self.missions_unlocked:
+            if self.missions_unlocked or \
+               is_mission_available(mission_number, self.ctx.checked_locations, self.ctx.mission_req_table):
                 if self.ctx.sc2_run_task:
                     if not self.ctx.sc2_run_task.done():
                         sc2_logger.warning("Starcraft 2 Client is still running!")
