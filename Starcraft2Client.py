@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 import multiprocessing
 import logging
 import asyncio
@@ -26,9 +25,10 @@ sc2_logger = logging.getLogger("Starcraft2")
 import colorama
 
 from NetUtils import *
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 
 nest_asyncio.apply()
+
 
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: Context
@@ -43,26 +43,35 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             mission_number = int(options[0])
 
             if is_mission_available(mission_number, self.ctx.checked_locations, mission_req_table):
-                asyncio.create_task(starcraft_launch(self.ctx, mission_number), name="Starcraft Launch")
+                if self.ctx.sc2_run_task:
+                    if not self.ctx.sc2_run_task.done():
+                        sc2_logger.warning("Starcraft 2 Client is still running!")
+                    self.ctx.sc2_run_task.cancel()  # doesn't actually close the game, just stops the python task
+                if self.ctx.slot is None:
+                    sc2_logger.warning("Launching Mission without Archipelago authentication, "
+                                       "checks will not be registered to server.")
+                self.ctx.sc2_run_task = asyncio.create_task(starcraft_launch(self.ctx, mission_number),
+                                                            name="Starcraft 2 Launch")
             else:
                 sc2_logger.info(
                     "This mission is not currently unlocked.  Use /unfinished or /available to see what is available.")
 
         else:
-            sc2_logger.info("Mission ID needs to be specified.  Use /unfinished or /available to view ids for available missions.")
+            sc2_logger.info(
+                "Mission ID needs to be specified.  Use /unfinished or /available to view ids for available missions.")
 
         return True
 
     def _cmd_available(self) -> bool:
         """Get what missions are currently available to play"""
 
-        request_available_missions(self.ctx.checked_locations, mission_req_table)
+        request_available_missions(self.ctx.checked_locations, mission_req_table, self.ctx.ui)
         return True
 
     def _cmd_unfinished(self) -> bool:
         """Get what missions are currently available to play and have not had all locations checked"""
 
-        request_unfinished_missions(self.ctx.checked_locations, mission_req_table)
+        request_unfinished_missions(self.ctx.checked_locations, mission_req_table, self.ctx.ui)
         return True
 
 
@@ -78,6 +87,7 @@ class Context(CommonContext):
     sent_announce_pos = 0
     announcements = []
     announcement_pos = 0
+    sc2_run_task: typing.Optional[asyncio.Task] = None
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -115,14 +125,20 @@ class Context(CommonContext):
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+    async def shutdown(self):
+        await super(Context, self).shutdown()
+        if self.sc2_run_task:
+            self.sc2_run_task.cancel()
+
 
 async def main():
     multiprocessing.freeze_support()
     parser = get_base_parser()
-    parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
+    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     args = parser.parse_args()
 
     ctx = Context(args.connect, args.password)
+    ctx.auth = args.name
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
@@ -137,10 +153,15 @@ async def main():
     await ctx.shutdown()
 
 
-maps_table = ["ap_traynor01", "ap_traynor02", "ap_traynor03", "ap_thanson01", "ap_thanson02", "ap_thanson03a", "ap_thanson03b", "ap_ttychus01",
-              "ap_ttychus02", "ap_ttychus03", "ap_ttychus04", "ap_ttychus05", "ap_ttosh01", "ap_ttosh02", "ap_ttosh03a", "ap_ttosh03b",
-              "ap_thorner01", "ap_thorner02", "ap_thorner03", "ap_thorner04", "ap_thorner05s", "ap_tzeratul01", "ap_tzeratul02",
-              "ap_tzeratul03", "ap_tzeratul04", "ap_tvalerian01", "ap_tvalerian02a", "ap_tvalerian02b", "ap_tvalerian03"]
+maps_table = [
+    "ap_traynor01", "ap_traynor02", "ap_traynor03",
+    "ap_thanson01", "ap_thanson02", "ap_thanson03a", "ap_thanson03b",
+    "ap_ttychus01", "ap_ttychus02", "ap_ttychus03", "ap_ttychus04", "ap_ttychus05",
+    "ap_ttosh01", "ap_ttosh02", "ap_ttosh03a", "ap_ttosh03b",
+    "ap_thorner01", "ap_thorner02", "ap_thorner03", "ap_thorner04", "ap_thorner05s",
+    "ap_tzeratul01", "ap_tzeratul02", "ap_tzeratul03", "ap_tzeratul04",
+    "ap_tvalerian01", "ap_tvalerian02a", "ap_tvalerian02b", "ap_tvalerian03"
+]
 
 
 def calculate_items(items):
@@ -201,8 +222,10 @@ async def starcraft_launch(ctx: Context, mission_id):
     ctx.sent_announce_pos = len(ctx.items_sent_to_announce)
     ctx.announcements_pos = len(ctx.announcements)
 
-    run_game(sc2.maps.get(maps_table[mission_id-1]), [
-        Bot(Race.Terran, ArchipelagoBot(ctx, mission_id), name="Archipelago")], realtime=True)
+    sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
+
+    run_game(sc2.maps.get(maps_table[mission_id - 1]), [
+        Bot(Race.Terran, ArchipelagoBot(ctx, mission_id), name="Archipelago", fullscreen=True)], realtime=True)
 
 
 class ArchipelagoBot(sc2.bot_ai.BotAI):
@@ -235,8 +258,10 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
             start_items = calculate_items(self.ctx.items_received)
             difficulty = calc_difficulty(self.ctx.difficulty)
             await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {}".format(
-                difficulty, start_items[0], start_items[1], start_items[2], start_items[3], start_items[4], start_items[5],
-                start_items[6], start_items[7], start_items[8], start_items[9], self.ctx.all_in_choice))
+                difficulty,
+                start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
+                start_items[5], start_items[6], start_items[7], start_items[8], start_items[9],
+                self.ctx.all_in_choice))
             self.last_received_update = len(self.ctx.items_received)
 
         else:
@@ -260,7 +285,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                         if start_rem_pos > 0:
                             temp_msg = message[:start_rem_pos]
                         if index < len(message) - 1:
-                            temp_msg += message[index+1:]
+                            temp_msg += message[index + 1:]
 
                         message = temp_msg
                         index += start_rem_pos - index
@@ -275,7 +300,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
             for unit in self.all_own_units():
                 if unit.health_max == 38281:
                     game_state = int(38281 - unit.health)
-                    can_read_game = True
+                    self.can_read_game = True
 
             if iteration == 80 and not game_state & 1:
                 await self.chat_send("SendMessage Warning: Archipelago unable to connect or has lost connection to " +
@@ -284,8 +309,8 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
             if self.last_received_update < len(self.ctx.items_received):
                 current_items = calculate_items(self.ctx.items_received)
                 await self.chat_send("UpdateTech {} {} {} {} {} {} {} {}".format(
-                    current_items[0], current_items[1], current_items[2], current_items[3], current_items[4], current_items[5],
-                    current_items[6], current_items[7]))
+                    current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
+                    current_items[5], current_items[6], current_items[7]))
                 self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:
@@ -293,7 +318,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     print("Archipelago Connected")
                     self.game_running = True
 
-                if can_read_game:
+                if self.can_read_game:
                     if game_state & (1 << 1) and not self.mission_completed:
                         if self.mission_id != 29:
                             print("Mission Completed")
@@ -308,49 +333,57 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     if game_state & (1 << 2) and not self.first_bonus:
                         print("1st Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 1]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 1]}])
                         self.first_bonus = True
 
                     if not self.second_bonus and game_state & (1 << 3):
                         print("2nd Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 2]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 2]}])
                         self.second_bonus = True
 
                     if not self.third_bonus and game_state & (1 << 4):
                         print("3rd Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 3]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 3]}])
                         self.third_bonus = True
 
                     if not self.fourth_bonus and game_state & (1 << 5):
                         print("4th Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 4]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 4]}])
                         self.fourth_bonus = True
 
                     if not self.fifth_bonus and game_state & (1 << 6):
                         print("5th Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 5]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 5]}])
                         self.fifth_bonus = True
 
                     if not self.sixth_bonus and game_state & (1 << 7):
                         print("6th Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 6]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 6]}])
                         self.sixth_bonus = True
 
                     if not self.seventh_bonus and game_state & (1 << 8):
                         print("6th Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 7]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 7]}])
                         self.seventh_bonus = True
 
                     if not self.eight_bonus and game_state & (1 << 9):
                         print("6th Bonus Collected")
                         await self.ctx.send_msgs(
-                            [{"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 8]}])
+                            [{"cmd": 'LocationChecks',
+                              "locations": [SC2WOL_LOC_ID_OFFSET + 100 * self.mission_id + 8]}])
                         self.eight_bonus = True
 
                 else:
@@ -362,21 +395,23 @@ class MissionInfo(typing.NamedTuple):
     extra_locations: int
     required_world: list[int]
     number: int = 0  # number of worlds need beaten
+    completion_critical: bool = False # missions needed to beat game
+    or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
 
 
 mission_req_table = {
-    "Liberation Day": MissionInfo(1, 7, []),
-    "The Outlaws": MissionInfo(2, 2, [1]),
-    "Zero Hour": MissionInfo(3, 4, [2]),
+    "Liberation Day": MissionInfo(1, 7, [], completion_critical=True),
+    "The Outlaws": MissionInfo(2, 2, [1], completion_critical=True),
+    "Zero Hour": MissionInfo(3, 4, [2], completion_critical=True),
     "Evacuation": MissionInfo(4, 4, [3]),
     "Outbreak": MissionInfo(5, 3, [4]),
     "Safe Haven": MissionInfo(6, 1, [5], number=7),
     "Haven's Fall": MissionInfo(7, 1, [5], number=7),
-    "Smash and Grab": MissionInfo(8, 5, [3]),
-    "The Dig": MissionInfo(9, 4, [8], number=8),
-    "The Moebius Factor": MissionInfo(10, 9, [9], number=11),
-    "Supernova": MissionInfo(11, 5, [10], number=14),
-    "Maw of the Void": MissionInfo(12, 6, [11]),
+    "Smash and Grab": MissionInfo(8, 5, [3], completion_critical=True),
+    "The Dig": MissionInfo(9, 4, [8], number=8, completion_critical=True),
+    "The Moebius Factor": MissionInfo(10, 9, [9], number=11, completion_critical=True),
+    "Supernova": MissionInfo(11, 5, [10], number=14, completion_critical=True),
+    "Maw of the Void": MissionInfo(12, 6, [11], completion_critical=True),
     "Devil's Playground": MissionInfo(13, 3, [3], number=4),
     "Welcome to the Jungle": MissionInfo(14, 4, [13]),
     "Breakout": MissionInfo(15, 3, [14], number=8),
@@ -390,13 +425,14 @@ mission_req_table = {
     "A Sinister Turn": MissionInfo(23, 4, [22]),
     "Echoes of the Future": MissionInfo(24, 3, [23]),
     "In Utter Darkness": MissionInfo(25, 3, [24]),
-    "Gates of Hell": MissionInfo(26, 2, [12]),
-    "Belly of the Beast": MissionInfo(27, 4, [26]),
-    "Shatter the Sky": MissionInfo(28, 5, [26]),
-    "All-In": MissionInfo(29, -1, [27, 28])
+    "Gates of Hell": MissionInfo(26, 2, [12], completion_critical=True),
+    "Belly of the Beast": MissionInfo(27, 4, [26], completion_critical=True),
+    "Shatter the Sky": MissionInfo(28, 5, [26], completion_critical=True),
+    "All-In": MissionInfo(29, -1, [27, 28], completion_critical=True, or_requirements=True)
 }
 
-lookup_id_to_mission: typing.Dict[int, str] = {data.id: mission_name for mission_name, data in mission_req_table.items() if data.id}
+lookup_id_to_mission: typing.Dict[int, str] = {
+    data.id: mission_name for mission_name, data in mission_req_table.items() if data.id}
 
 
 def calc_objectives_completed(mission, missions_info, locations_done):
@@ -413,23 +449,21 @@ def calc_objectives_completed(mission, missions_info, locations_done):
         return -1
 
 
-def request_unfinished_missions(locations_done, location_table):
-    message = "Unfinished Missions:"
-
-    first_item = True
+def request_unfinished_missions(locations_done, location_table, ui):
+    message = "Unfinished Missions: "
 
     unfinished_missions = calc_unfinished_missions(locations_done, location_table)
 
-    for mission in unfinished_missions:
-        if first_item:
-            message += " {}[{}] ({}/{})".format(mission, location_table[mission].id, unfinished_missions[mission],
-                                                location_table[mission].extra_locations)
-            first_item = False
-        else:
-            message += ", {}[{}] ({}/{})".format(mission, location_table[mission].id, unfinished_missions[mission],
-                                                 location_table[mission].extra_locations)
 
-    sc2_logger.info(message)
+    message += ", ".join(f"{mark_critical(mission,location_table, ui)}[{location_table[mission].id}] "
+                         f"({unfinished_missions[mission]}/{location_table[mission].extra_locations})"
+                         for mission in unfinished_missions)
+
+    if ui:
+        ui.log_panels['All'].on_message_markup(message)
+        ui.log_panels['Starcraft2'].on_message_markup(message)
+    else:
+        sc2_logger.info(message)
 
 
 def calc_unfinished_missions(locations_done, locations):
@@ -455,28 +489,31 @@ def calc_unfinished_missions(locations_done, locations):
 def is_mission_available(mission_id_to_check, locations_done, locations):
     unfinished_missions = calc_available_missions(locations_done, locations)
 
-    for mission in unfinished_missions:
-        if locations[mission].id == mission_id_to_check:
-            return True
-
-    return False
+    return any(mission_id_to_check == locations[mission].id for mission in unfinished_missions)
 
 
-def request_available_missions(locations_done, location_table):
-    message = "Available Missions:"
+def mark_critical(mission, location_table, ui):
+    """Checks if the mission is required for game completion and adds '*' to the name to mark that."""
+    if location_table[mission].completion_critical:
+        if ui:
+            return "[color=AF99EF]" + mission + "[/color]"
+        else:
+            return "*" + mission + "*"
+    else:
+        return mission
 
-    first_item = True
+
+def request_available_missions(locations_done, location_table, ui):
+    message = "Available Missions: "
 
     missions = calc_available_missions(locations_done, location_table)
+    message += ", ".join(f"{mark_critical(mission,location_table, ui)}[{location_table[mission].id}]" for mission in missions)
 
-    for mission in missions:
-        if first_item:
-            message += " {}[{}]".format(mission, location_table[mission].id)
-            first_item = False
-        else:
-            message += ", {}[{}]".format(mission, location_table[mission].id)
-
-    sc2_logger.info(message)
+    if ui:
+        ui.log_panels['All'].on_message_markup(message)
+        ui.log_panels['Starcraft2'].on_message_markup(message)
+    else:
+        sc2_logger.info(message)
 
 
 def calc_available_missions(locations_done, locations):
@@ -496,14 +533,46 @@ def calc_available_missions(locations_done, locations):
 
 
 def mission_reqs_completed(location_to_check, missions_complete, locations_done, locations):
+    """Returns a bool signifying if the mission has all requirements complete and can be done
+
+    Keyword arguments:
+    locations_to_check -- the mission string name to check
+    missions_complete -- an int of how many missions have been completed
+    locations_done -- a list of the location ids that have been complete
+    locations -- a dict of MissionInfo for mission requirements for this world"""
     if len(locations[location_to_check].required_world) >= 1:
+        # A check for when the requirements are being or'd
+        or_success = False
 
+        # Loop through required missions
         for req_mission in locations[location_to_check].required_world:
+            req_success = True
+
+            # Check if required mission has been completed
             if not (req_mission * 100 + SC2WOL_LOC_ID_OFFSET) in locations_done:
-                return False
-            if not mission_reqs_completed(lookup_id_to_mission[req_mission], missions_complete, locations_done, locations):
+                if not locations[location_to_check].or_requirements:
+                    return False
+                else:
+                    req_success = False
+
+            # Recursively check required mission to see if it's requirements are met, in case !collect has been done
+            if not mission_reqs_completed(lookup_id_to_mission[req_mission], missions_complete, locations_done,
+                                          locations):
+                if not locations[location_to_check].or_requirements:
+                    return False
+                else:
+                    req_success = False
+
+            # If requirement check succeeded mark or as satisfied
+            if locations[location_to_check].or_requirements and req_success:
+                or_success = True
+
+        if locations[location_to_check].or_requirements:
+            # Return false if or requirements not met
+            if not or_success:
                 return False
 
+        # Check number of missions
         if missions_complete >= locations[location_to_check].number:
             return True
         else:
@@ -514,8 +583,5 @@ def mission_reqs_completed(location_to_check, missions_complete, locations_done,
 
 if __name__ == '__main__':
     colorama.init()
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-    loop.close()
+    asyncio.run(main())
     colorama.deinit()
-

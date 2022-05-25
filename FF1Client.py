@@ -187,6 +187,9 @@ async def nes_sync_task(ctx: FF1Context):
                         asyncio.create_task(parse_locations(data_decoded['locations'], ctx, False))
                     if not ctx.auth:
                         ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
+                        if ctx.auth == '':
+                            logger.info("Invalid ROM detected. No player name built into the ROM. Please regenerate"
+                                        "the ROM using the same link but adding your slot name")
                         if ctx.awaiting_rom:
                             await ctx.server_auth(False)
                 except asyncio.TimeoutError:
@@ -260,7 +263,7 @@ if __name__ == '__main__':
     import colorama
 
     parser = get_base_parser()
-    args, rest = parser.parse_known_args()
+    args = parser.parse_args()
     colorama.init()
 
     asyncio.run(main(args))

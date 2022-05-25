@@ -525,6 +525,21 @@ class SMWorld(World):
         item = next(x for x in ItemManager.Items.values() if x.Name == name)
         return SMItem(item.Name, True, item.Type, self.item_name_to_id[item.Name], player = self.player)
 
+    def get_filler_item_name(self) -> str:
+        if self.world.random.randint(0, 100) < self.world.minor_qty[self.player].value:
+            power_bombs = self.world.power_bomb_qty[self.player].value
+            missiles = self.world.missile_qty[self.player].value
+            super_missiles = self.world.super_qty[self.player].value
+            roll = self.world.random.randint(1, power_bombs + missiles + super_missiles)
+            if roll <= power_bombs:
+                return "Power Bomb"
+            elif roll <= power_bombs + missiles:
+                return "Missile"
+            else:
+                return "Super Missile"
+        else:
+            return "Nothing"
+
     def pre_fill(self):
         if (self.variaRando.args.morphPlacement == "early") and next((item for item in self.world.itempool if item.player == self.player and item.name == "Morph Ball"), False):
             viable = []
