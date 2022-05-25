@@ -832,7 +832,7 @@ class OOTWorld(World):
                     else:
                         entrance = loadzone.reverse
                     if entrance.reverse is not None:
-                        self.world.spoiler.set_entrance(entrance, entrance.replaces, 'both', self.player)
+                        self.world.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
                     else:
                         self.world.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
             else:
