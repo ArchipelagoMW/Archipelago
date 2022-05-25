@@ -154,8 +154,8 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str
         else:
             local_starter_spells = ('Lightwall',)
 
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Yo Momma 1', local_starter_melee_weapons)
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Yo Momma 2', local_starter_spells)
+    assign_starter_item(world, player, excluded_items, locked_locations, 'Tutorial: Yo Momma 1', local_starter_melee_weapons)
+    assign_starter_item(world, player, excluded_items, locked_locations, 'Tutorial: Yo Momma 2', local_starter_spells)
 
 
 def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str], 
