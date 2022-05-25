@@ -93,12 +93,11 @@ class SMWorld(World):
 
     itemManager: ItemManager
 
-    locations = {}
-
     Logic.factory('vanilla')
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
+        self.locations = {}
         super().__init__(world, player)
 
     @classmethod
@@ -142,6 +141,7 @@ class SMWorld(World):
         # Generate item pool
         pool = []
         self.locked_items = {}
+        self.NothingPool = []
         weaponCount = [0, 0, 0]
         for item in itemPool:
             isAdvancement = True
@@ -167,6 +167,8 @@ class SMWorld(World):
             smitem = SMItem(item.Name, isAdvancement, item.Type, None if itemClass == 'Boss' else self.item_name_to_id[item.Name], player = self.player)
             if itemClass == 'Boss':
                 self.locked_items[item.Name] = smitem
+            elif item.Category == 'Nothing':
+                self.NothingPool.append(smitem)
             else:
                 pool.append(smitem)
 
@@ -182,7 +184,8 @@ class SMWorld(World):
         for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions:
             src_region = self.world.get_region(src.Name, self.player)
             dest_region = self.world.get_region(dest.Name, self.player)
-            src_region.exits.append(Entrance(self.player, src.Name + "->" + dest.Name, src_region))
+            if ((src.Name + "->" + dest.Name, self.player) not in self.world._entrance_cache):
+                src_region.exits.append(Entrance(self.player, src.Name + "->" + dest.Name, src_region))
             srcDestEntrance = self.world.get_entrance(src.Name + "->" + dest.Name, self.player)
             srcDestEntrance.connect(dest_region)
             add_entrance_rule(self.world.get_entrance(src.Name + "->" + dest.Name, self.player), self.player, getAccessPoint(src.Name).traverse)
@@ -556,6 +559,28 @@ class SMWorld(World):
                                         item.player != self.player or
                                         item.name != "Morph Ball"] 
 
+        if len(self.NothingPool) > 0:
+            nonChozoLoc = []
+            chozoLoc = []
+
+            for loc in self.locations.values():
+                if loc.item is None:
+                    if locationsDict[loc.name].isChozo():
+                        chozoLoc.append(loc)
+                    else:
+                        nonChozoLoc.append(loc)
+
+            self.world.random.shuffle(nonChozoLoc)
+            self.world.random.shuffle(chozoLoc)
+            missingCount = len(self.NothingPool) - len(nonChozoLoc)
+            locations = nonChozoLoc
+            if (missingCount > 0):
+                locations += chozoLoc[:missingCount]
+            locations = locations[:len(self.NothingPool)]
+            for item, loc in zip(self.NothingPool, locations):
+                loc.place_locked_item(item)
+                loc.address = loc.item.code = None
+
     @classmethod
     def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
                         restitempool, fill_locations):      
@@ -580,11 +605,6 @@ class SMWorld(World):
                 if not world.get_location(bossLoc, player).can_reach(new_state):
                     world.state.smbm[player].onlyBossLeft = True
                     break
-
-        # Turn Nothing items into event pairs.
-        for location in world.get_locations():
-            if location.game == location.item.game == "Super Metroid" and location.item.type == "Nothing":
-                location.address = location.item.code = None
 
     def write_spoiler(self, spoiler_handle: TextIO):
         if self.world.area_randomization[self.player].value != 0:
@@ -627,8 +647,18 @@ class SMLocation(Location):
         super(SMLocation, self).__init__(player, name, address, parent)
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
+        return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or (self.can_reach(state) and self.can_comeback(state, item))))
 
+    def can_comeback(self, state: CollectionState, item: Item):
+        randoExec = state.world.worlds[self.player].variaRando.randoExec
+        for key in locationsDict[self.name].AccessFrom.keys():
+            if (randoExec.areaGraph.canAccess(  state.smbm[self.player], 
+                                                key,
+                                                randoExec.graphSettings.startAP,
+                                                state.smbm[self.player].maxDiff,
+                                                None)):
+                return True
+        return False
 
 class SMItem(Item):
     game = "Super Metroid"
