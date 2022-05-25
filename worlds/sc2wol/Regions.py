@@ -136,7 +136,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
                 missions.append(mission.type)
 
         # Place Protoss Missions if !ProtossShuffle
-        if get_option_value(world, player, "protoss_shuffle") == 0:
+        if get_option_value(world, player, "shuffle_protoss") == 0:
             missions[22] = "A Sinister Turn"
             medium_pool.remove("A Sinister Turn")
             missions[23] = "Echoes of the Future"
@@ -144,41 +144,49 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
             missions[24] = "In Utter Darkness"
             hard_pool.remove("In Utter Darkness")
 
-        # Fill in No Build missions
-        missions_to_add = no_build_pool
+        no_build_slots = []
+        easy_slots = []
+        medium_slots = []
+        hard_slots = []
+
+        # Search through missions to find slots needed to fill
         for i in range(len(missions)):
             if missions[i] == "no_build":
-                filler = random.randint(0, len(missions_to_add)-1)
+                no_build_slots.append(i)
+            elif missions[i] == "easy":
+                easy_slots.append(i)
+            elif missions[i] == "medium":
+                medium_slots.append(i)
+            elif missions[i] == "hard":
+                hard_slots.append(i)
 
-                missions[i] = missions_to_add[filler]
-                missions_to_add.pop(filler)
+        # Add no_build missions to the pool and fill in no_build slots
+        missions_to_add = no_build_pool
+        for slot in no_build_slots:
+            filler = random.randint(0, len(missions_to_add)-1)
 
-        # Fill in Easy missions
+            missions[slot] = missions_to_add.pop(filler)
+
+        # Add easy missions into pool and fill in easy slots
         missions_to_add = missions_to_add + easy_pool
-        for i in range(len(missions)):
-            if missions[i] == "easy":
-                filler = random.randint(0, len(missions_to_add) - 1)
+        for slot in easy_slots:
+            filler = random.randint(0, len(missions_to_add) - 1)
 
-                missions[i] = missions_to_add[filler]
-                missions_to_add.pop(filler)
+            missions[slot] = missions_to_add.pop(filler)
 
-        # Fill in Medium missions
+        # Add medium missions into pool and fill in medium slots
         missions_to_add = missions_to_add + medium_pool
-        for i in range(len(missions)):
-            if missions[i] == "medium":
-                filler = random.randint(0, len(missions_to_add) - 1)
+        for slot in medium_slots:
+            filler = random.randint(0, len(missions_to_add) - 1)
 
-                missions[i] = missions_to_add[filler]
-                missions_to_add.pop(filler)
+            missions[slot] = missions_to_add.pop(filler)
 
-        # Fill in Hard missions
+        # Add hard missions into pool and fill in hard slots
         missions_to_add = missions_to_add + hard_pool
-        for i in range(len(missions)):
-            if missions[i] == "hard":
-                filler = random.randint(0, len(missions_to_add) - 1)
+        for slot in hard_slots:
+            filler = random.randint(0, len(missions_to_add) - 1)
 
-                missions[i] = missions_to_add[filler]
-                missions_to_add.pop(filler)
+            missions[slot] = missions_to_add.pop(filler)
 
         # Loop through missions to create requirements table and connect regions
         # TODO: Handle 'and' connections
