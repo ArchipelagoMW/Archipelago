@@ -942,13 +942,13 @@ class OOTWorld(World):
             return None
 
         # Remove undesired items from start_inventory
+        # This is because we don't want them to show up in the autotracker,
+        # they just don't exist in-game.
         for item_name in self.remove_from_start_inventory:
             item_id = self.item_name_to_id.get(item_name, None)
-            try:
-                multidata["precollected_items"][self.player].remove(item_id)
-            except ValueError as e:
-                logger.warning(
-                    f"Attempted to remove nonexistent item id {item_id} from OoT precollected items ({item_name})")
+            if item_id is None:
+                continue
+            multidata["precollected_items"][self.player].remove(item_id)
 
         # Add ER hint data
         if self.shuffle_interior_entrances != 'off' or self.shuffle_dungeon_entrances or self.shuffle_grotto_entrances:
