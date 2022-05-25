@@ -122,14 +122,22 @@ def get_excluded_items(self: SC2WoLWorld, world: MultiWorld, player: int) -> Set
     return excluded_items
 
 
-def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
-    non_local_items = world.non_local_items[player].value
+def assign_starter_items(world: SC2WoLWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
+    non_local_items = world.world.non_local_items[player].value
 
     local_basic_unit = tuple(item for item in basic_unit if item not in non_local_items)
     if not local_basic_unit:
         raise Exception("At least one basic unit must be local")
 
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Liberation Day: First Statue',
+    # The first world should also be the starting world
+    first_location = list(world.mission_req_table)[0]
+
+    if first_location == "In Utter Darkness":
+        first_location = first_location + ": Defeat"
+    else:
+        first_location = first_location + ": Victory"
+
+    assign_starter_item(world.world, player, excluded_items, locked_locations, first_location,
                         local_basic_unit)
 
 
