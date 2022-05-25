@@ -24,6 +24,7 @@ class Starcraft2WoLWebWorld(WebWorld):
 
     tutorials = [setup]
 
+
 class SC2WoLWorld(World):
     """
     StarCraft II: Wings of Liberty is a science fiction real-time strategy video game developed and published by Blizzard Entertainment.
@@ -58,7 +59,6 @@ class SC2WoLWorld(World):
     def create_regions(self):
         self.mission_req_table = create_regions(self.world, self.player, get_locations(self.world, self.player),
                                                 self.location_cache)
-
 
     def generate_basic(self):
         excluded_items = get_excluded_items(self, self.world, self.player)
@@ -122,22 +122,22 @@ def get_excluded_items(self: SC2WoLWorld, world: MultiWorld, player: int) -> Set
     return excluded_items
 
 
-def assign_starter_items(world: SC2WoLWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
-    non_local_items = world.world.non_local_items[player].value
+def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
+    non_local_items = world.non_local_items[player].value
 
     local_basic_unit = tuple(item for item in basic_unit if item not in non_local_items)
     if not local_basic_unit:
         raise Exception("At least one basic unit must be local")
 
     # The first world should also be the starting world
-    first_location = list(world.mission_req_table)[0]
+    first_location = list(world.worlds[player].mission_req_table)[0]
 
     if first_location == "In Utter Darkness":
         first_location = first_location + ": Defeat"
     else:
         first_location = first_location + ": Victory"
 
-    assign_starter_item(world.world, player, excluded_items, locked_locations, first_location,
+    assign_starter_item(world, player, excluded_items, locked_locations, first_location,
                         local_basic_unit)
 
 
