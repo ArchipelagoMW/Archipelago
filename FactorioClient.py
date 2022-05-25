@@ -5,7 +5,6 @@ import json
 import string
 import copy
 import subprocess
-import sys
 import time
 import random
 
