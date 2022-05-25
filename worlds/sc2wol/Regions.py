@@ -135,7 +135,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
             else:
                 missions.append(mission.type)
 
-        # Place Protoss Missions if !ProtossShuffle
+        # Place Protoss Missions if we are not using ShuffleProtoss
         if get_option_value(world, player, "shuffle_protoss") == 0:
             missions[22] = "A Sinister Turn"
             medium_pool.remove("A Sinister Turn")
