@@ -26,7 +26,7 @@ Disabled Locations:
 0x00055 (Orchard Apple Tree 3)
 0x032F7 (Orchard Apple Tree 4)
 0x032FF (Orchard Apple Tree 5)
-0x168B5 (Shadows Lower Avoid 1)
+0x198B5 (Shadows Lower Avoid 1)
 0x198BD (Shadows Lower Avoid 2)
 0x198BF (Shadows Lower Avoid 3)
 0x19771 (Shadows Lower Avoid 4)
