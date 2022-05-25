@@ -114,6 +114,8 @@ class Context(CommonContext):
 
     def run_gui(self):
         from kvui import GameManager
+        from kivy.uix.tabbedpanel import TabbedPanelItem
+        from kivy.uix.gridlayout import GridLayout
 
         class SC2Manager(GameManager):
             logging_pairs = [
@@ -121,6 +123,18 @@ class Context(CommonContext):
                 ("Starcraft2", "Starcraft2"),
             ]
             base_title = "Archipelago Starcraft 2 Client"
+
+            def __init__(self, ctx):
+                super().__init__(ctx)
+
+            def build(self):
+                container = super().build()
+
+                panel = TabbedPanelItem(text="Starcraft 2 Launcher")
+
+                self.tags
+
+                return container
 
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
