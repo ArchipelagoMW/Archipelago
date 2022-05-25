@@ -567,7 +567,7 @@ class OOTWorld(World):
             self.fake_items.extend(item for item in self.itempool if item.index and self.is_major_item(item))
         if self.ice_trap_appearance in ['junk_only', 'anything']:
             self.fake_items.extend(item for item in self.itempool if
-                                   item.index and not self.is_major_item(item) and item.name != 'Ice Trap')
+                                   item.index and not self.type == 'Shop' and not self.is_major_item(item) and item.name != 'Ice Trap')
 
         # Kill unreachable events that can't be gotten even with all items
         # Make sure to only kill actual internal events, not in-game "events"
@@ -803,8 +803,8 @@ class OOTWorld(World):
             self.hint_data_available.wait()
 
         with i_o_limiter:
-            # Make ice traps appear as other random items
-            ice_traps = [loc.item for loc in self.get_locations() if loc.item.name == 'Ice Trap']
+            # Make traps appear as other random items
+            ice_traps = [loc.item for loc in self.get_locations() if loc.item.trap]
             for trap in ice_traps:
                 trap.looks_like_item = self.create_item(self.world.slot_seeds[self.player].choice(self.fake_items).name)
 

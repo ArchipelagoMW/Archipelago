@@ -1828,7 +1828,6 @@ def get_override_entry(player_id, location):
     player_id = 0 if player_id == location.item.player else min(location.item.player, 255)
     if location.item.game != 'Ocarina of Time': 
         # This is an AP sendable. It's guaranteed to not be None. 
-        looks_like_item_id = 0
         if location.item.advancement:
             item_id = 0xCB
         else:
@@ -1838,10 +1837,11 @@ def get_override_entry(player_id, location):
         if None in [scene, default, item_id]:
             return None
 
-        if location.item.looks_like_item is not None:
-            looks_like_item_id = location.item.looks_like_item.index
-        else:
-            looks_like_item_id = 0
+    if location.item.trap:
+        item_id = 0x7C  # Ice Trap ID, to get "X is a fool" message
+        looks_like_item_id = location.item.looks_like_item.index
+    else:
+        looks_like_item_id = 0
 
     if location.type in ['NPC', 'BossHeart']:
         type = 0
@@ -2078,15 +2078,15 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             shop_objs.add(location.item.special['object'])
             rom.write_int16(location.address1, location.item.index)
         else:
-            if location.item.game != "Ocarina of Time": 
+            if location.item.trap:
+                item_display = location.item.looks_like_item
+            elif location.item.game != "Ocarina of Time": 
                 item_display = location.item
                 if location.item.advancement:
                     item_display.index = 0xCB
                 else:
                     item_display.index = 0xCC
                 item_display.special = {}
-            elif location.item.looks_like_item is not None:
-                item_display = location.item.looks_like_item
             else:
                 item_display = location.item
 
@@ -2137,7 +2137,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                 else:
                     shop_item_name = item_display.name
 
-                if location.item.name == 'Ice Trap':
+                if location.item.trap:
                     shop_item_name = create_fake_name(shop_item_name)
 
                 if len(world.world.worlds) > 1:
