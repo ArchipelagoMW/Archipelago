@@ -93,12 +93,11 @@ class SMWorld(World):
 
     itemManager: ItemManager
 
-    locations = {}
-
     Logic.factory('vanilla')
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
+        self.locations = {}
         super().__init__(world, player)
 
     @classmethod
@@ -142,6 +141,7 @@ class SMWorld(World):
         # Generate item pool
         pool = []
         self.locked_items = {}
+        self.NothingPool = []
         weaponCount = [0, 0, 0]
         for item in itemPool:
             isAdvancement = True
@@ -167,6 +167,8 @@ class SMWorld(World):
             smitem = SMItem(item.Name, isAdvancement, item.Type, None if itemClass == 'Boss' else self.item_name_to_id[item.Name], player = self.player)
             if itemClass == 'Boss':
                 self.locked_items[item.Name] = smitem
+            elif item.Category == 'Nothing':
+                self.NothingPool.append(smitem)
             else:
                 pool.append(smitem)
 
@@ -426,11 +428,6 @@ class SMWorld(World):
         romPatcher.writeRandoSettings(self.variaRando.randoExec.randoSettings, itemLocs)
 
     def generate_output(self, output_directory: str):
-         # Turn Nothing items into event pairs.
-        for location in self.locations.values():
-            if location.item.game == "Super Metroid" and location.item.type == "Nothing":
-                location.address = location.item.code = None
-
         outfilebase = 'AP_' + self.world.seed_name
         outfilepname = f'_P{self.player}'
         outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}"
@@ -562,6 +559,28 @@ class SMWorld(World):
                                         item.player != self.player or
                                         item.name != "Morph Ball"] 
 
+        if len(self.NothingPool) > 0:
+            nonChozoLoc = []
+            chozoLoc = []
+
+            for loc in self.locations.values():
+                if loc.item is None:
+                    if locationsDict[loc.name].isChozo():
+                        chozoLoc.append(loc)
+                    else:
+                        nonChozoLoc.append(loc)
+
+            self.world.random.shuffle(nonChozoLoc)
+            self.world.random.shuffle(chozoLoc)
+            missingCount = len(self.NothingPool) - len(nonChozoLoc)
+            locations = nonChozoLoc
+            if (missingCount > 0):
+                locations += chozoLoc[:missingCount]
+            locations = locations[:len(self.NothingPool)]
+            for item, loc in zip(self.NothingPool, locations):
+                loc.place_locked_item(item)
+                loc.address = loc.item.code = None
+
     @classmethod
     def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
                         restitempool, fill_locations):      
@@ -586,10 +605,6 @@ class SMWorld(World):
                 if not world.get_location(bossLoc, player).can_reach(new_state):
                     world.state.smbm[player].onlyBossLeft = True
                     break
-
-        for location in world.get_locations():
-            if (location.game == "Super Metroid" and location.item is None):
-                raise Exception(f"Location {location.name} is missing an item. This can be caused by a too high amount of local Nothing items.")
 
     def write_spoiler(self, spoiler_handle: TextIO):
         if self.world.area_randomization[self.player].value != 0:
