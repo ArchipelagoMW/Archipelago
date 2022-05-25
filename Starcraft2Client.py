@@ -35,14 +35,6 @@ nest_asyncio.apply()
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: Context
 
-    def _cmd_complete(self, mission_id: str = "") -> bool:
-        options = mission_id.split()
-
-        mission_number = int(options[0])
-
-        asyncio.create_task(self.ctx.send_msgs([
-            {"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * mission_number]}]))
-
     def _cmd_play(self, mission_id: str = "") -> bool:
         """Start a Starcraft 2 mission"""
 
@@ -240,8 +232,8 @@ async def starcraft_launch(ctx: Context, mission_id):
 
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
 
-    run_game(sc2.maps.get(maps_table[mission_id - 1]), [
-        Bot(Race.Terran, ArchipelagoBot(ctx, mission_id), name="Archipelago", fullscreen=True)], realtime=True)
+    run_game(sc2.maps.get(maps_table[mission_id - 1]), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
+                                                            name="Archipelago", fullscreen=True)], realtime=True)
 
 
 class ArchipelagoBot(sc2.bot_ai.BotAI):
@@ -563,7 +555,7 @@ def request_available_missions(locations_done, location_table, ui):
         sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
 
-def calc_available_missions(locations_done, locations, unlocks):
+def calc_available_missions(locations_done, locations, unlocks=None):
     available_missions = []
     missions_complete = 0
 
@@ -574,8 +566,9 @@ def calc_available_missions(locations_done, locations, unlocks):
 
     for name in locations:
         # Go through the required missions for each mission and fill up unlock table used later for hover-over tooltips
-        for unlock in locations[name].required_world:
-            unlocks[list(locations)[unlock-1]].append(name)
+        if unlocks:
+            for unlock in locations[name].required_world:
+                unlocks[list(locations)[unlock-1]].append(name)
 
         if mission_reqs_completed(name, missions_complete, locations_done, locations):
             available_missions.append(name)
