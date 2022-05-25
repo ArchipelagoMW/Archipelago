@@ -60,14 +60,14 @@ class UndertaleWorld(World):
         if self.world.only_flakes[self.player] == False:
             for (name, num) in non_key_items.items():
                 itempool += [name] * num
-            if self.world.no_equips[self.player] == False:
-                for (name, num) in required_armor.items():
-                    itempool += [name] * num
+        if self.world.no_equips[self.player] == False:
+            for (name, num) in required_armor.items():
+                itempool += [name] * num
         if self.world.route_required[self.player].current_key == "genocide":
             if self.world.only_flakes[self.player] == False:
                 itempool += ["Instant Noodles"]
-                if self.world.no_equips[self.player] == False:
-                    itempool = ["Real Knife" if item == "Worn Dagger" else "The Locket" if item == "Heart Locket" else item for item in itempool]
+            if self.world.no_equips[self.player] == False:
+                itempool = ["Real Knife" if item == "Worn Dagger" else "The Locket" if item == "Heart Locket" else item for item in itempool]
         if self.world.route_required[self.player].current_key == "pacifist":
             itempool += ["Undyne Letter EX"]
         else:
@@ -75,13 +75,16 @@ class UndertaleWorld(World):
             itempool.remove("Fish")
             itempool.remove("DT Extractor")
         if self.world.temy_include[self.player].value == 1:
-            if self.world.only_flakes[self.player] == False:
-                if self.world.no_equips[self.player] == False:
-                    itempool += ["temy armor"]
+            itempool += ["temy armor"]
 
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
         exclusion_pool.update(exclusion_table[self.world.route_required[self.player].current_key])
+
+        # Choose locations to automatically exclude based on settings
+        exclusion_checks = set()
+        exclusion_checks.update({"Card Reward", "Hush Trade"})
+        exclusion_rules(self.world, self.player, exclusion_checks)
 
         # Fill remaining items with randomly generated junk or Temmie Flakes
         if self.world.only_flakes[self.player] == False:

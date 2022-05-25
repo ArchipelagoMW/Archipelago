@@ -100,6 +100,17 @@ class ClientCommandProcessor(CommandProcessor):
     def _cmd_patch(self):
         """Patch the game."""
         bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
+        self.output(f"Patched.")
+
+    def _cmd_enable_online(self):
+        """Make you able to see other Undertale players."""
+        self.ctx.update_online_mode(True)
+        self.output(f"Now online.")
+
+    def _cmd_disable_online(self):
+        """Make you no longer able to see other Undertale players."""
+        self.ctx.update_online_mode(False)
+        self.output(f"Now offline.")
 
     def _cmd_ready(self):
         """Send ready status to server."""
@@ -205,6 +216,8 @@ class CommonContext():
                 elif file.find(".victory") > -1:
                     os.remove(root+"/"+file)
                 elif file.find(".route") > -1:
+                    os.remove(root+"/"+file)
+                elif file.find(".playerspot") > -1:
                     os.remove(root+"/"+file)
 
     # noinspection PyAttributeOutsideInit
@@ -338,6 +351,8 @@ class CommonContext():
                     os.remove(root+"/"+file)
                 elif file.find(".route") > -1:
                     os.remove(root+"/"+file)
+                elif file.find(".playerspot") > -1:
+                    os.remove(root+"/"+file)
 
     # DeathLink hooks
 
@@ -371,6 +386,15 @@ class CommonContext():
             self.tags -= {"DeathLink"}
         if old_tags != self.tags and self.server and not self.server.socket.closed:
             await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
+
+    def update_online_mode(self, online):
+        old_tags = self.tags.copy()
+        if online:
+            self.tags.add("online")
+        else:
+            self.tags -= {"online"}
+        if old_tags != self.tags and self.server and not self.server.socket.closed:
+            asyncio.create_task(self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}]))
 
 
 async def server_loop(ctx: CommonContext, address=None):
@@ -523,6 +547,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             filename = f"check {ss-12000}.spot"
             with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
                 f.close()
+        message = []
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
@@ -589,6 +614,15 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             ctx.current_energy_link_value = args["value"]
             if ctx.ui:
                 ctx.ui.set_new_energy_link_value()
+
+    elif cmd == 'Bounced':
+        data = args["data"]
+        if data["player"] != ctx.slot:
+            filename = f"FRISK"+str(data["player"])+".playerspot"
+            with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
+                f.write(str(data["x"])+"\n"+str(data["y"])+"\n"+str(data["room"])+"\n"+str(data["spr"])+"\n"+str(data["frm"])+"\n")
+                f.close()
+
     else:
         logger.debug(f"unknown command {cmd}")
 
@@ -612,10 +646,18 @@ async def game_watcher(ctx: CommonContext):
                     st = file.split("check ", -1)[1]
                     st = st.split(".spot", -1)[0]
                     sending = sending+[(int(st))+12000]
+                if file == "spots.mine":
+                    with open(root+"/"+file) as mine:
+                        this_x = mine.readline()
+                        this_y = mine.readline()
+                        this_room = mine.readline()
+                        this_sprite = mine.readline()
+                        this_frame = mine.readline()
                 if file.find("victory") > -1 and file.find(str(ctx.route)) > -1:
                     victory = True
         ctx.locations_checked = sending
-        message = [{"cmd": 'LocationChecks', "locations": sending}]
+        message = [{"cmd": 'LocationChecks', "locations": sending},
+                   {"cmd": 'Bounce', "tags": "online", "games": "Undertale", "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room, "spr": this_sprite, "frm": this_frame}}]
         await ctx.send_msgs(message)
         if not ctx.finished_game and victory:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])

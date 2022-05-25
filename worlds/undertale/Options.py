@@ -18,7 +18,7 @@ class IncludeTemy(Toggle):
 
 
 class OnlyFlakes(Toggle):
-    """Replaces all non-required items with Temmie Flakes."""
+    """Replaces all non-required items, except equipment, with Temmie Flakes."""
     display_name = "Only Temmie Flakes"
     default = 0
 
