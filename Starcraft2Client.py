@@ -34,6 +34,13 @@ nest_asyncio.apply()
 
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: Context
+    missions_unlocked = False
+
+    def _cmd_disable_mission_check(self) -> bool:
+        """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
+        the next mission in a chain the other player is doing."""
+        self.missions_unlocked = True
+        sc2_logger.info("Mission check has been disabled")
 
     def _cmd_play(self, mission_id: str = "") -> bool:
         """Start a Starcraft 2 mission"""
@@ -44,7 +51,8 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if num_options > 0:
             mission_number = int(options[0])
 
-            if is_mission_available(mission_number, self.ctx.checked_locations, self.ctx.mission_req_table):
+            if is_mission_available(mission_number, self.ctx.checked_locations, self.ctx.mission_req_table) or \
+                    self.missions_unlocked:
                 if self.ctx.sc2_run_task:
                     if not self.ctx.sc2_run_task.done():
                         sc2_logger.warning("Starcraft 2 Client is still running!")
