@@ -123,10 +123,10 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
 
     elif get_option_value(world, player, "mission_order") == 1:
         missions = []
-        no_build_pool = no_build_regions_list
-        easy_pool = easy_regions_list
-        medium_pool = medium_regions_list
-        hard_pool = hard_regions_list
+        no_build_pool = no_build_regions_list[:]
+        easy_pool = easy_regions_list[:]
+        medium_pool = medium_regions_list[:]
+        hard_pool = hard_regions_list[:]
 
         # Initial fill out of mission list and marking all-in mission
         for mission in vanilla_shuffle_order:

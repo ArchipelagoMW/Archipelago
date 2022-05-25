@@ -12,6 +12,7 @@ from sc2.data import Race
 from sc2.bot_ai import BotAI
 from sc2.player import Bot
 from worlds.sc2wol.Regions import MissionInfo
+from worlds.sc2wol.MissionTables import lookup_id_to_mission
 from worlds.sc2wol.Items import lookup_id_to_name, item_table
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 
@@ -43,7 +44,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if num_options > 0:
             mission_number = int(options[0])
 
-            if is_mission_available(mission_number, self.ctx.checked_locations, self.ctx.mission_req_table):
+            if is_mission_available(mission_number, self.ctx.checked_locations, self.ctx.mission_req_table) or True:
                 if self.ctx.sc2_run_task:
                     if not self.ctx.sc2_run_task.done():
                         sc2_logger.warning("Starcraft 2 Client is still running!")
@@ -551,7 +552,7 @@ def mission_reqs_completed(location_to_check, missions_complete, locations_done,
             req_success = True
 
             # Check if required mission has been completed
-            if not (req_mission * 100 + SC2WOL_LOC_ID_OFFSET) in locations_done:
+            if not (locations[list(locations)[req_mission-1]].id * 100 + SC2WOL_LOC_ID_OFFSET) in locations_done:
                 if not locations[location_to_check].or_requirements:
                     return False
                 else:
