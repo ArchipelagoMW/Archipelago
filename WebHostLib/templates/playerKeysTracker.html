@@ -1,0 +1,31 @@
+{% extends 'playerTracker.html' %}
+
+{% block regions_render %}
+
+<div class="regions-container">
+    {% for region in regions %}
+        <div class="regions-column" id="{{ region }}">
+            <h1 class="regions-header" id="{{ region }}-header">
+                {{ region }} ▼ {{ checks_done[region]|length }} / {{ regions[region]|length }}
+            </h1>
+                {% if region in region_keys %}
+                {% for keys in region_keys[region] %}
+                    {% if keys in icons %}
+                        <div class="keys" id="{{ keys }}"><img src="{{ icons[keys] }}" class="icon">
+                            {{ items_received[keys] if keys in items_received else '0' }}
+                        </div>
+                    {% else %}
+                        <div class="keys" id="{{ keys }}">
+                            {{ items_received[keys] if keys in items_received else '0' }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
+        {% for location in regions[region] %}
+            <div class="location {{ 'acquired' if location in checked_locations }}" id="{{ location }}">{{ location }}</div>
+        {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

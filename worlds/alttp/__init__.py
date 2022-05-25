@@ -106,6 +106,8 @@ class ALTTPWeb(WebWorld):
         PlayerTracker = object
 
     def modify_tracker(self, tracker: PlayerTracker):
+        tracker.template = 'playerKeysTracker.html'
+
         tracker.icons = {
             "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
             "Red Shield": r"https://www.zeldadungeon.net/wiki/images/5/55/Fire-Shield.png",
@@ -168,44 +170,7 @@ class ALTTPWeb(WebWorld):
             "Turtle Rock": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/9/91/ALttP_Trinexx_Sprite.png?version=0cc867d513952aa03edd155597a0c0be",
             "Ganons Tower": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/b9/ALttP_Ganon_Sprite.png?version=956f51f054954dfff53c1a9d4f929c74"
         }
-        tracker.progressive_items = [
-            'Progressive Sword',
-            'Progressive Shield',
-            'Progressive Mail',
-            'Progressive Bow',
-            'Progressive Boomerang',
-            'Hookshot',
-            'Magic Powder',
-            'Mushroom',
-            'Bottle',
-            'Lamp',
-            'Progressive Glove',
-            'Flippers',
-            'Moon Pearl',
-            'Bombos',
-            'Ether',
-            'Quake',
-            'Fire Rod',
-            'Ice Rod',
-            'Hammer',
-            'Book of Mudora',
-            'Shovel',
-            'Flute',
-            'Bug Catching Net',
-            'Cane of Somaria',
-            'Cane of Byrna',
-            'Cape',
-            'Magic Mirror',
-        ]
-        tracker.progressive_names = {
-            'Progressive Bow': ['Bow', 'Silver Arrows', 'Silver Bow', 'Progressive Bow (Alt)'],
-            'Bottle': ['Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Fairy)', 'Bottle (Bee)', 'Bottle (Good Bee)'],
-            'Progressive Sword': ['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
-            'Progressive Glove': ['Power Glove', 'Titans Mitts'],
-            'Progressive Shield': ['Blue Shield', 'Red Shield', 'Mirror Shield'],
-            'Progressive Boomerang': ['Red Boomerang', 'Blue Boomerang'],
-            'Progressive Mail': ['Green Mail', 'Blue Mail', 'Red Mail']
-        }
+
         tracker.regions = {
             'Light World': [
                 'Lost Woods Hideout', 'Lumberjack Tree', 'Mushroom', 'Master Sword Pedestal', 'Bottle Merchant', 'Flute Spot',
@@ -311,6 +276,54 @@ class ALTTPWeb(WebWorld):
                 'Ganons Tower - Bob\'s Chest',
                 'Ganons Tower - Big Chest', 'Ganons Tower - Big Key Room - Left', 'Ganons Tower - Big Key Room - Right', 'Ganons Tower - Big Key Chest',
             ]
+        }
+
+        tracker.progressive_items = [
+            'Progressive Sword',
+            'Progressive Shield',
+            'Progressive Mail',
+            'Progressive Bow',
+            'Progressive Boomerang',
+            'Hookshot',
+            'Magic Powder',
+            'Mushroom',
+            'Bottle',
+            'Lamp',
+            'Progressive Glove',
+            'Flippers',
+            'Moon Pearl',
+            'Bombos',
+            'Ether',
+            'Quake',
+            'Fire Rod',
+            'Ice Rod',
+            'Hammer',
+            'Book of Mudora',
+            'Shovel',
+            'Flute',
+            'Bug Catching Net',
+            'Cane of Somaria',
+            'Cane of Byrna',
+            'Cape',
+            'Magic Mirror',
+            'Small Key',
+            'Big Key'
+        ]
+
+        tracker.progressive_names = {
+            'Progressive Bow': ['Bow', 'Silver Arrows', 'Silver Bow', 'Progressive Bow (Alt)'],
+            'Bottle': ['Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Fairy)', 'Bottle (Bee)', 'Bottle (Good Bee)'],
+            'Progressive Sword': ['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
+            'Progressive Glove': ['Power Glove', 'Titans Mitts'],
+            'Progressive Shield': ['Blue Shield', 'Red Shield', 'Mirror Shield'],
+            'Progressive Boomerang': ['Red Boomerang', 'Blue Boomerang'],
+            'Progressive Mail': ['Green Mail', 'Blue Mail', 'Red Mail'],
+            'Small Key': [f'Small Key ({region})' for region in tracker.regions.keys() if region not in {'Light World', 'Dark World'}],
+            'Big Key': [f'Big Key ({region})' for region in tracker.regions.keys() if region not in {'Light World', 'Dark World'}],
+        }
+
+        tracker.region_keys = {
+            region: [f'Small Key ({region})', f'Big Key ({region})'] for region in tracker.regions.keys() if region not in {'Light World', 'Dark World'}
         }
 
 
