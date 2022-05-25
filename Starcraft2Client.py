@@ -458,7 +458,7 @@ def request_unfinished_missions(locations_done, location_table, ui, ctx):
 
         message += ", ".join(f"{mark_up_mission_name(mission, location_table, ui,unlocks)}[{location_table[mission].id}] " +
                              mark_up_objectives(
-                                 f"({unfinished_missions[mission]}/{location_table[mission].extra_locations})",
+                                 f"&br;{unfinished_missions[mission]}/{location_table[mission].extra_locations}&br;",
                                  ctx, unfinished_locations, mission)
                              for mission in unfinished_missions)
 
