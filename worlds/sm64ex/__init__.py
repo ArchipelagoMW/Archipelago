@@ -111,7 +111,7 @@ class SM64World(World):
         return {
             "AreaRando": self.area_connections,
             "StarsToFinish": self.world.StarsToFinish[self.player].value,
-            "DeathLink": self.world.DeathLink[self.player].value,
+            "DeathLink": self.world.death_link[self.player].value,
         }
 
     def generate_output(self, output_directory: str):
