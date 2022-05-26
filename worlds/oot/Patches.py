@@ -1781,6 +1781,35 @@ def patch_rom(world, rom):
     save_context.equip_current_items(world.starting_age)
     save_context.write_save_table(rom)
 
+    # Write data into AP autotracking context
+    rom.write_int32(rom.sym('DUNGEON_IS_MQ_ADDRESS'), rom.sym('cfg_dungeon_is_mq'))
+    rom.write_int32(rom.sym('DUNGEON_REWARDS_ADDRESS'), rom.sym('cfg_dungeon_rewards'))
+    rom.write_byte(rom.sym('BIG_POE_COUNT'), world.big_poe_count)
+    if world.enhance_map_compass:
+        rom.write_byte(rom.sym('ENHANCE_MAP_COMPASS'), 0x01)
+    if world.enhance_map_compass or world.misc_hints:
+        rom.write_byte(rom.sym('SHOW_DUNGEON_REWARDS'), 0x01)
+    if world.shuffle_smallkeys == 'remove':
+        rom.write_byte(rom.sym('SMALL_KEY_SHUFFLE'), 0x01)
+    elif world.shuffle_smallkeys in ['overworld', 'any_dungeon', 'keysanity']:
+        rom.write_byte(rom.sym('SMALL_KEY_SHUFFLE'), 0x02)
+    if world.shuffle_scrubs != 'off':
+        rom.write_byte(rom.sym('SHUFFLE_SCRUBS'), 0x01)
+    if world.open_forest == 'closed_deku':
+        rom.write_byte(rom.sym('OPEN_FOREST'), 0x01)
+    elif world.open_forest == 'closed':
+        rom.write_byte(rom.sym('OPEN_FOREST'), 0x02)
+    if world.zora_fountain == 'adult':
+        rom.write_byte(rom.sym('OPEN_FOUNTAIN'), 0x01)
+    elif world.zora_fountain == 'closed':
+        rom.write_byte(rom.sym('OPEN_FOUNTAIN'), 0x02)
+
+    rom.write_bytes(rom.sym('SHOP_SLOTS'), [
+        sum(f'{shop} Item {idx}' in world.shop_prices for idx in ('7', '5', '8', '6'))
+        for shop in ('KF Shop', 'Market Bazaar', 'Market Potion Shop', 'Market Bombchu Shop', 
+            'Kak Bazaar', 'Kak Potion Shop', 'GC Shop', 'ZD Shop')
+    ])
+
     return rom
 
 
