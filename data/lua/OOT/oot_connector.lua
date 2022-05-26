@@ -2,7 +2,8 @@ local socket = require("socket")
 local json = require('json')
 local math = require('math')
 
-local script_version = '2022-03-22' -- Should be the last modified date
+local last_modified_date = '2022-05-25' -- Should be the last modified date
+local script_version = 1
 
 --------------------------------------------------
 -- Heavily modified form of RiptideSage's tracker
@@ -1781,6 +1782,7 @@ function receive()
     -- Determine message to send back
     local retTable = {}
     retTable["playerName"] = get_player_name()
+    retTable["scriptVersion"] = script_version
     retTable["deathlinkActive"] = deathlink_enabled()
     if InSafeState() then
         retTable["locations"] = check_all_locations(master_quest_table_address)
