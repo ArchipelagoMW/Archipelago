@@ -164,8 +164,6 @@ async def main():
 
     await ctx.exit_event.wait()
 
-    ctx.server_address = None
-    ctx.snes_reconnect_address = None
     await ctx.shutdown()
 
 
