@@ -9,8 +9,7 @@ local script_version = 1
 -- Heavily modified form of RiptideSage's tracker
 --------------------------------------------------
 
--- TODO: read this from the ROM
-local NUM_BIG_POES_REQUIRED = 1
+local NUM_BIG_POES_REQUIRED = 10
 
 -- The offset constants are all from N64 RAM start. Offsets in the check statements are relative.
 local save_context_offset = 0x11A5D0
@@ -1555,6 +1554,8 @@ local item_queue = {}
 
 local first_connect = true
 local game_complete = false
+
+NUM_BIG_POES_REQUIRED = mainmemory.read_u8(rando_context + 0x0CEE)
 
 local bytes_to_string = function(bytes)
     local string = ''

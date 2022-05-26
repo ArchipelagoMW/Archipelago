@@ -208,7 +208,6 @@ class OOTWorld(World):
         # Not implemented for now, but needed to placate the generator. Remove as they are implemented
         self.mq_dungeons_random = False  # this will be a deprecated option later
         self.ocarina_songs = False  # just need to pull in the OcarinaSongs module
-        self.big_poe_count = 1  # disabled due to client-side issues for now
         self.mix_entrance_pools = False
         self.decouple_entrances = False
 
