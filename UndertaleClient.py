@@ -137,6 +137,7 @@ class CommonContext():
     game = None
     ui = None
     route = None
+    pieces_needed = None
     keep_alive_task = None
     items_handling: typing.Optional[int] = None
     current_energy_link_value = 0  # to display in UI, gets set by server
@@ -153,6 +154,7 @@ class CommonContext():
         self.server_version = Version(0, 0, 0)
         self.hint_cost: typing.Optional[int] = None
         self.games: typing.Dict[int, str] = {}
+        self.pieces_needed = 0
         self.permissions = {
             "forfeit": "disabled",
             "collect": "disabled",
@@ -540,6 +542,9 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.missing_locations = set(args["missing_locations"])
         ctx.checked_locations = set(args["checked_locations"])
         ctx.route = args["slot_data"]['route']
+        ctx.pieces_needed = args["slot_data"]['soul_pieces']
+        if  args["slot_data"]['soul_hunt'] == False:
+            ctx.pieces_needed = 0
         filename = f"{ctx.route}.route"
         with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
             f.close()
@@ -570,6 +575,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                 with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
                     f.write(str(NetworkItem(*item).item-11000))
                     f.close()
+                if [item.item for item in ctx.items_received].count(77000) >= ctx.pieces_needed and ctx.pieces_needed > 0:
+                    filename = f"{str(-99999)}PLR{str(0)}.item"
+                    with open(os.path.expandvars(r"%localappdata%/UNDERTALE/" + filename), 'w') as f:
+                        f.write(str(77787 - 11000))
+                        f.close()
                 ctx.items_received.append(NetworkItem(*item))
         ctx.watcher_event.set()
 
@@ -605,23 +615,19 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         logger.warning(f"Invalid Packet of {args['type']}: {args['text']}")
 
     elif cmd == "Bounced":
-        tags = args.get("tags", [])
-        # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
-        if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
-            ctx.on_deathlink(args["data"])
+        if "online" in args.get("tags", []):
+            data = args.get("data", [])
+            if data["player"] != ctx.slot and data["player"] != None:
+                filename = f"FRISK" + str(data["player"]) + ".playerspot"
+                with open(os.path.expandvars(r"%localappdata%/UNDERTALE/" + filename), 'w') as f:
+                    f.write(str(data["x"]) + str(data["y"]) + str(data["room"]) + str(
+                        data["spr"]) + str(data["frm"]))
+                    f.close()
     elif cmd == "SetReply":
         if args["key"] == "EnergyLink":
             ctx.current_energy_link_value = args["value"]
             if ctx.ui:
                 ctx.ui.set_new_energy_link_value()
-
-    elif cmd == 'Bounced':
-        data = args["data"]
-        if data["player"] != ctx.slot:
-            filename = f"FRISK"+str(data["player"])+".playerspot"
-            with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
-                f.write(str(data["x"])+"\n"+str(data["y"])+"\n"+str(data["room"])+"\n"+str(data["spr"])+"\n"+str(data["frm"])+"\n")
-                f.close()
 
     else:
         logger.debug(f"unknown command {cmd}")
@@ -646,18 +652,19 @@ async def game_watcher(ctx: CommonContext):
                     st = file.split("check ", -1)[1]
                     st = st.split(".spot", -1)[0]
                     sending = sending+[(int(st))+12000]
-                if file == "spots.mine":
+                if file.find("spots.mine") > -1:
                     with open(root+"/"+file) as mine:
                         this_x = mine.readline()
                         this_y = mine.readline()
                         this_room = mine.readline()
                         this_sprite = mine.readline()
                         this_frame = mine.readline()
+                    message = [{"cmd": 'Bounce', "tags": ['online'], "games": ["Undertale"], "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room, "spr": this_sprite, "frm": this_frame}}]
+                    await ctx.send_msgs(message)
                 if file.find("victory") > -1 and file.find(str(ctx.route)) > -1:
                     victory = True
         ctx.locations_checked = sending
-        message = [{"cmd": 'LocationChecks', "locations": sending},
-                   {"cmd": 'Bounce', "tags": "online", "games": "Undertale", "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room, "spr": this_sprite, "frm": this_frame}}]
+        message = [{"cmd": 'LocationChecks', "locations": sending}]
         await ctx.send_msgs(message)
         if not ctx.finished_game and victory:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])

@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Option, Toggle
+from Options import Choice, Option, Toggle, Range
 
 
 class RouteRequired(Choice):
@@ -15,6 +15,18 @@ class IncludeTemy(Toggle):
     """Adds Temmy Armor to the item pool."""
     display_name = "Include Temy Armor"
     default = 1
+
+
+class SoulPieces(Range):
+    default = 10
+    range_start = 1
+    range_end = 20
+
+
+class SoulHunt(Toggle):
+    """Adds Soul Pieces to the item pool, you need all of them to enter the last corridor."""
+    display_name = "Soul Piece Hunt"
+    default = 0
 
 
 class OnlyFlakes(Toggle):
@@ -34,4 +46,6 @@ undertale_options: typing.Dict[str, type(Option)] = {
     "temy_include":                             IncludeTemy,
     "no_equips":                                NoEquips,
     "only_flakes":                              OnlyFlakes,
+    "soul_hunt":                                SoulHunt,
+    "soul_pieces":                              SoulPieces,
 }

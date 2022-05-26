@@ -47,6 +47,8 @@ class UndertaleWorld(World):
             'temy_armor_include': bool(self.world.temy_include[self.player].value),
             'only_flakes': bool(self.world.only_flakes[self.player].value),
             'no_equips': bool(self.world.no_equips[self.player].value),
+            'soul_hunt': bool(self.world.soul_hunt[self.player].value),
+            'soul_pieces': self.world.soul_pieces[self.player].value,
         }
 
     def generate_basic(self):
@@ -76,6 +78,10 @@ class UndertaleWorld(World):
             itempool.remove("DT Extractor")
         if self.world.temy_include[self.player].value == 1:
             itempool += ["temy armor"]
+        if self.world.soul_hunt[self.player].value == 1:
+            itempool += ["Soul Piece"] * self.world.soul_pieces[self.player].value
+        else:
+            itempool += ["Determination"]
 
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()

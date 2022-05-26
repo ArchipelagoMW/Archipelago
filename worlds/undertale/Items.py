@@ -82,6 +82,7 @@ item_table = {
     "Bridge Tools": ItemData(77785, True),
     "Mettaton Plush": ItemData(77786, True),
     "Determination": ItemData(77787, True),
+    "Soul Piece": ItemData(77000, True),
 }
 
 non_key_items = {
@@ -118,7 +119,6 @@ key_items = {
     "Microphone": 1,
     "Bridge Tools": 1,
     "Mettaton Plush": 1,
-    "Determination": 1,
     "Punch Card": 3,
     "Hot Dog...?": 1,
 }
