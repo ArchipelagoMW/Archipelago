@@ -18,9 +18,9 @@ class IncludeTemy(Toggle):
 
 
 class SoulPieces(Range):
-    default = 10
+    default = 5
     range_start = 1
-    range_end = 20
+    range_end = 10
 
 
 class SoulHunt(Toggle):
