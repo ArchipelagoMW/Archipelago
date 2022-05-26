@@ -63,6 +63,13 @@ class OoTCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, OoTContext):
             logger.info(f"N64 Status: {self.ctx.n64_status}")
 
+    def _cmd_deathlink(self):
+        """Toggle deathlink from client. Overrides default setting."""
+        if isinstance(self.ctx, OoTContext):
+            self.ctx.deathlink_client_override = True
+            self.ctx.deathlink_enabled = not self.ctx.deathlink_enabled
+            asyncio.create_task(self.ctx.update_death_link(self.ctx.deathlink_enabled), name="Update Deathlink")
+
 
 class OoTContext(CommonContext):
     command_processor = OoTCommandProcessor
@@ -79,6 +86,7 @@ class OoTContext(CommonContext):
         self.deathlink_enabled = False
         self.deathlink_pending = False
         self.deathlink_sent_this_death = False
+        self.deathlink_client_override = False
         self.version_warning = False
 
     async def server_auth(self, password_requested: bool = False):
@@ -124,8 +132,8 @@ def get_payload(ctx: OoTContext):
 
 async def parse_payload(payload: dict, ctx: OoTContext, force: bool):
 
-    # Turn on deathlink if it is on
-    if payload['deathlinkActive'] and not ctx.deathlink_enabled:
+    # Turn on deathlink if it is on, and if the client hasn't overriden it
+    if payload['deathlinkActive'] and not ctx.deathlink_enabled and not ctx.deathlink_client_override:
         await ctx.update_death_link(True)
         ctx.deathlink_enabled = True
 
