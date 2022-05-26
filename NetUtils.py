@@ -111,6 +111,7 @@ def get_any_version(data: dict) -> Version:
 whitelist = {
     "NetworkPlayer": NetworkPlayer,
     "NetworkItem": NetworkItem,
+    "NetworkSlot": NetworkSlot
 }
 
 custom_hooks = {
