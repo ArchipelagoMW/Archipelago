@@ -16,8 +16,8 @@ if __name__ == "__main__":
     Utils.init_logging("UndertaleClient", exception_logger="Client")
 
 from MultiServer import CommandProcessor
-from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
-from Utils import Version
+from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot
+from Utils import Version, stream_input
 from worlds import network_data_package, AutoWorldRegister, undertale
 from CommonClient import gui_enabled, console_loop, logger, server_autoreconnect, get_base_parser, \
     keep_alive
@@ -138,8 +138,9 @@ class CommonContext():
     ui = None
     route = None
     pieces_needed = None
-    keep_alive_task = None
+    keep_alive_task: typing.Optional[asyncio.Task] = None
     items_handling: typing.Optional[int] = None
+    slot_info: typing.Dict[int, NetworkSlot]
     current_energy_link_value = 0  # to display in UI, gets set by server
 
     def __init__(self, server_address, password):
@@ -155,6 +156,7 @@ class CommonContext():
         self.hint_cost: typing.Optional[int] = None
         self.games: typing.Dict[int, str] = {}
         self.pieces_needed = 0
+        self.slot_info = {}
         self.permissions = {
             "forfeit": "disabled",
             "collect": "disabled",
@@ -523,6 +525,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             os.mkdir(os.path.expandvars(r"%localappdata%/UNDERTALE"))
         ctx.team = args["team"]
         ctx.slot = args["slot"]
+        ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
         ctx.consume_players_package(args["players"])
         msgs = []
         if ctx.locations_checked:
