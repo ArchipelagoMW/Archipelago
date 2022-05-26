@@ -1,5 +1,3 @@
-
-
 terra_checks = {
     'Whelk': 1,
     'Lete River': 2,

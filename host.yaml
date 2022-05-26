@@ -102,6 +102,10 @@ sm_options:
   rom_start: true
 factorio_options:
   executable: "factorio\\bin\\x64\\factorio"
+ff6wc_options:
+  rom_file: "Final Fantasy III (USA).sfc"
+  sni: "SNI"
+  rom_start: true
 minecraft_options: 
   forge_directory: "Minecraft Forge server"
   max_heap_size: "2G"

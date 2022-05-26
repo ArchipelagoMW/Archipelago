@@ -183,6 +183,9 @@ def get_default_options() -> dict:
         "factorio_options": {
             "executable": os.path.join("factorio", "bin", "x64", "factorio"),
         },
+        "ff6wc_options": {
+            "rom_file": "Final Fantasy III (USA).sfc"
+        },
         "sm_options": {
             "rom_file": "Super Metroid (JU).sfc",
             "sni": "SNI",

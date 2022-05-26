@@ -1,5 +1,6 @@
 import json
 import os
+import random
 import shutil
 import threading
 from typing import NamedTuple, Union
@@ -7,12 +8,14 @@ import logging
 
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld
 from . import Logic
+from .Rom import FF6WCDeltaPatch
 from ..generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
 from ..AutoWorld import World, LogicMixin
 from NetUtils import SlotType
 from .Locations import location_table
 from .Items import item_table
 from .Options import ff6wc_options
+import Utils
 
 
 class FF6WCWorld(World):
@@ -21,7 +24,6 @@ class FF6WCWorld(World):
     topology_present = False
     data_version = 1
     base_id = 6000
-
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
@@ -58,6 +60,7 @@ class FF6WCWorld(World):
         self.starting_characters = None
         self.generator_in_use = threading.Event()
         self.wc = None
+        self.rom_name_available_event = threading.Event()
 
     def create_item(self, name: str):
         return FF6WCItem(name, True, self.item_name_to_id[name], self.player)
@@ -81,6 +84,8 @@ class FF6WCWorld(World):
 
         filtered_starting_characters = []
         for character in chosen_starting_characters:
+            if character == "RANDOM_WITH_NO_GOGO_OR_UMARO":
+                character = random.choice(Rom.characters[0:12])
             if character not in filtered_starting_characters:
                 filtered_starting_characters.append(character)
 
@@ -144,63 +149,63 @@ class FF6WCWorld(World):
             for check, id in checks.items():
                 if check_name == "TERRA":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_terra(self.player))
+                             lambda state: state._ff6wc_has_terra(self.player))
                 elif check_name == "LOCKE":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_locke(self.player))
+                             lambda state: state._ff6wc_has_locke(self.player))
                 elif check_name == "CYAN":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_cyan(self.player))
+                             lambda state: state._ff6wc_has_cyan(self.player))
                 elif check_name == "SHADOW":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_shadow(self.player))
+                             lambda state: state._ff6wc_has_shadow(self.player))
                 elif check_name == "EDGAR":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_edgar(self.player))
+                             lambda state: state._ff6wc_has_edgar(self.player))
                 elif check_name == "SABIN":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_sabin(self.player))
+                             lambda state: state._ff6wc_has_sabin(self.player))
                 elif check_name == "CELES":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_celes(self.player))
+                             lambda state: state._ff6wc_has_celes(self.player))
                 elif check_name == "STRAGO":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_strago(self.player))
+                             lambda state: state._ff6wc_has_strago(self.player))
                 elif check_name == "RELM":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_relm(self.player))
+                             lambda state: state._ff6wc_has_relm(self.player))
                 elif check_name == "SETZER":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_setzer(self.player))
+                             lambda state: state._ff6wc_has_setzer(self.player))
                 elif check_name == "GAU":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_gau(self.player))
+                             lambda state: state._ff6wc_has_gau(self.player))
                 elif check_name == "MOG":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_mog(self.player))
+                             lambda state: state._ff6wc_has_mog(self.player))
                 elif check_name == "GOGO":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_gogo(self.player))
+                             lambda state: state._ff6wc_has_gogo(self.player))
                 elif check_name == "UMARO":
                     set_rule(self.world.get_location(check, self.player),
-                        lambda state: state._ff6wc_has_umaro(self.player))
+                             lambda state: state._ff6wc_has_umaro(self.player))
 
         for check in Locations.item_only_checks:
             add_item_rule(self.world.get_location(check, self.player),
                           lambda item: item.name not in self.item_name_groups["characters"]
                                        and item.name not in self.item_name_groups['espers']
-                                        or item.player != self.player)
+                                       or item.player != self.player)
 
         for check in Locations.no_character_checks:
             add_item_rule(self.world.get_location(check, self.player),
                           lambda item: item.name not in self.item_name_groups["characters"]
-                                        or item.player != self.player)
+                                       or item.player != self.player)
 
         for check in Locations.no_item_checks:
             add_item_rule(self.world.get_location(check, self.player),
                           lambda item: item.name in self.item_name_groups["characters"]
-                                        or item.name in self.item_name_groups['espers']
-                                        or item.player != self.player)
+                                       or item.name in self.item_name_groups['espers']
+                                       or item.player != self.player)
 
         for dragon in Locations.dragons:
             dragon_event = Locations.dragon_events_link[dragon]
@@ -218,7 +223,7 @@ class FF6WCWorld(World):
                                and state._ff6wc_has_enough_espers(self.world, self.player))
         set_rule(self.world.get_location("Beat Final Kefka", self.player),
                  lambda state: state.can_reach("Kefka's Tower", 'Location', self.player)
-                                and state._ff6wc_has_enough_dragons(self.world, self.player))
+                               and state._ff6wc_has_enough_dragons(self.world, self.player))
 
     def generate_basic(self):
         self.world.get_location("Kefka's Tower", self.player).place_locked_item(
@@ -234,7 +239,7 @@ class FF6WCWorld(World):
         filler_item = self.create_item("Junk")
         filler_count = len(
             self.world.get_unfilled_locations(self.player)) - len(
-                [item for item in self.world.itempool if item.player == self.player])
+            [item for item in self.world.itempool if item.player == self.player])
         self.world.itempool += [filler_item for i in range(0, filler_count)]
 
     def generate_output(self, output_directory: str):
@@ -246,38 +251,72 @@ class FF6WCWorld(World):
                     locations[location.name] = "Archipelago"
                     if location.item.player == self.player:
                         locations[location.name] = location.item.name
+        self.rom_name_text = f'6WC{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.world.seed:11}\0'
+        self.romName = bytearray(self.rom_name_text, 'utf8')[:21]
+        self.romName.extend([0] * (21 - len(self.romName)))
+        self.rom_name = self.romName
+        locations["RomName"] = self.rom_name_text
         options = self.options
         other = self.world
         character_arg_string = ""
         for index, character in enumerate(self.starting_characters):
-            character_arg_string += f"-sc{index + 1}={str.lower(character)}"
+            character_arg_string += f"-sc{index + 1}={str.lower(character)} "
         char_c = str(self.world.CharacterCount[self.player]) + "." + str(self.world.CharacterCount[self.player])
         esper_c = str(self.world.EsperCount[self.player]) + "." + str(self.world.EsperCount[self.player])
         drag_c = str(self.world.DragonCount[self.player]) + "." + str(self.world.DragonCount[self.player])
         objective_flag = f'-oa=2.3.3.2.{char_c}.4.{esper_c}.6.{drag_c}'
-        filename = os.path.join(os.path.abspath('.'), 'output', 'ff6wc' + self.world.seed_name + str(self.player) + '.json')
-        with open(filename, "w") as file:
+        placement_file = os.path.join(output_directory,
+                                      'ff6wc' + self.world.seed_name + str(self.player) + '.json')
+        placement_file2 = os.path.join('.', 'ff6wc' + self.world.seed_name + str(self.player) + '.json')
+        with open(placement_file, "w") as file:
             json.dump(locations, file, indent=2)
-        argtest = [
-            "-i=ff3.sfc",
-            f"-ap={filename}",
+        output_file = os.path.join(output_directory,f"{self.world.seed_name}{self.player}.diff")
+        wc_args = [
+            '-i="Final Fantasy III (USA).sfc"',
+            f"-ap={placement_file}",
             objective_flag,
             "-ob=30.8.8.1.1.11.8",
             "-nro",
             "-sl",
             "-cg",
             character_arg_string,
-            "-debug"
+            f"-o={output_file}",
+            "-sal -eu -fst -brl -slr 1 5 -lmprp 75 125 -lel ",
+            "-srr 3 15 -rnl -rnc -sdr 1 1 -das -dda -dns -com 98989898989898989898989898",
+            "-rec1 28 -rec2 23 -rec3 14 -rec4 24 -rec5 26 -rec6 5 ",
+            "-xpm 3 -mpm 5 -gpm 5 -nxppd -lsced 2 -hmced 2 -xgced 2 ",
+            "-ase 2 -msl 40 -sed -bbs -bnds -be -bnu -res -fer 5 ",
+            "-escr 100 -dgne -wnz -mmnu -cmd -esr 1 5 -ebr 68 ",
+            "-emprp 75 125 -nm1 random -rnl1 -rns1 -nm2 random ",
+            "-rnl2 -rns2 -nmmi -gp 20000 -smc 3 -ieor 33 -ieror 33",
+            "-csb 1 32 -mca -stra -saw -sisr 20 -sprp 75 125 -sdm 4 ",
+            "-npi -ccsr 50 -cms ",
+            "-name Terra.Locke.Cyan.Shadow.Edgar.Sabin.Celes.Strago.Relm.Setzer.Mog.Gau.Gogo.Umaro ",
+            "-cor -crr -crvr 255 255 -ari -anca -adeh -nmc -nfps ",
+            "-nu -fs -fe -fvd -fr -fj -fbs -fedc -as -rr"
         ]
 
-        arglist = " ".join(argtest)
-        print(arglist)
+        wc_args = " ".join(wc_args)
         # -oa 2.3.3.2.4.12.4.10.26.6.1.8 is characters/espers/dragons
         # (2.4.12 is Characters, 4-12; 4.10.26 is Espers, 10-26, 6.1.8 is Dragons, 1-8)
         # -ob 30.8.8.1.1.11.8 is Get All SwdTechs after Doma.
-        os.system(f"python ./worlds/ff6wc/WorldsCollide/wc.py {arglist}")
-        os.remove(filename)
-        return "test"
+        print(self.player)
+        os.system(f"python ./worlds/ff6wc/WorldsCollide/wc.py {wc_args}")
+        print(output_file)
+        patch = FF6WCDeltaPatch(os.path.splitext(output_file)[0] + FF6WCDeltaPatch.patch_file_ending, player=self.player,
+                                player_name=self.world.player_name[self.player], patched_path=output_file)
+        self.rom_name_available_event.set()
+        patch.write()
+
+
+    def modify_multidata(self, multidata: dict):
+        import base64
+        # wait for self.rom_name to be available.
+        rom_name = getattr(self, "rom_name", None)
+        # we skip in case of error, so that the original error in the output thread is the one that gets raised
+        if rom_name:
+            new_name = base64.b64encode(bytes(self.rom_name)).decode()
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
 
 class FF6WCItem(Item):
