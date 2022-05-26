@@ -44,7 +44,7 @@ class UndertaleLogic(LogicMixin):
         return (self._reach_core_mettaton(player))
 
     def _reach_sans(self, player: int):
-        return (self._reach_new_home(player) and (self.has("Determination", player) or self.has_all("Soul Piece", player)))
+        return (self._reach_new_home(player) and (self.has("Determination", player) or self.has("Soul Piece", player, self.world.soul_pieces[player])))
 
     def _reach_true_lab(self, player: int):
         return (self._reach_undyne_hangout(player) and self._reach_sans(player) and self.has('Undyne Letter EX', player) and self.has("DT Extractor", player))
