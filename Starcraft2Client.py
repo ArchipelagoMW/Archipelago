@@ -35,17 +35,6 @@ nest_asyncio.apply()
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: Context
 
-    def _cmd_complete(self, mission_id: str = "") -> bool:
-        options = mission_id.split()
-        mission_number = int(options[0])
-
-        if mission_number < 100:
-            asyncio.create_task(self.ctx.send_msgs([
-                {"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * mission_number]}]))
-        else:
-            asyncio.create_task(self.ctx.send_msgs([
-                {"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + mission_number]}]))
-
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
         the next mission in a chain the other player is doing."""
