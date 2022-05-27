@@ -25,6 +25,15 @@ from .Options import is_option_enabled
 class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
 
+    def update_door_dict(self, panel_hex):
+        item_id = StaticWitnessLogic.ALL_DOOR_ITEM_IDS_BY_HEX.get(panel_hex)
+
+        if item_id is None:
+            return
+
+        self.DOOR_DICT_FOR_CLIENT[panel_hex] = item_id
+        self.DOOR_CONNECTIONS_TO_SEVER.update(StaticWitnessLogic.CONNECTIONS_TO_SEVER_BY_DOOR_HEX[panel_hex])
+
     def reduce_req_within_region(self, panel_hex):
         """
         Panels in this game often only turn on when other panels are solved.
@@ -46,6 +55,8 @@ class WitnessPlayerLogic:
         these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
 
         if StaticWitnessLogic.DOOR_NAMES_BY_HEX.get(panel_hex) in real_items:
+            self.update_door_dict(panel_hex)
+
             these_panels = frozenset({frozenset()})
 
         if these_panels == frozenset({frozenset()}):
@@ -253,6 +264,8 @@ class WitnessPlayerLogic:
         self.EVENT_PANELS_FROM_REGIONS = set()
 
         self.ITEMS_ACTUALLY_IN_THE_GAME = set()
+        self.DOOR_DICT_FOR_CLIENT = dict()
+        self.DOOR_CONNECTIONS_TO_SEVER = set()
 
         self.CONNECTIONS_BY_REGION_NAME = copy.copy(StaticWitnessLogic.STATIC_CONNECTIONS_BY_REGION_NAME)
         self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.copy(StaticWitnessLogic.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)

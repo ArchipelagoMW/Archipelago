@@ -50,7 +50,9 @@ class WitnessWorld(World):
         return {
             'seed': self.world.random.randint(0, 1000000),
             'victory_location': int(self.player_logic.VICTORY_LOCATION, 16),
-            'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID
+            'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID,
+            'doorhex_to_id': self.player_logic.DOOR_DICT_FOR_CLIENT,
+            'door_connections_to_sever': self.player_logic.DOOR_CONNECTIONS_TO_SEVER
         }
 
     def generate_early(self):
