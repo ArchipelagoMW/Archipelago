@@ -163,6 +163,8 @@ class MeritousItem(Item):
             self.type = name
         elif name == "Extra Life":
             self.type = "Other"
+        elif self.advancement:
+            self.type = "Important Artifact"
         else:
             self.type = "Artifact"
             self.never_exclude = True
