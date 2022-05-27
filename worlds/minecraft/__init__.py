@@ -65,7 +65,7 @@ class MinecraftWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 5
+    data_version = 6
 
     def _get_mc_data(self):
         exits = [connection[0] for connection in default_connections]
@@ -168,6 +168,8 @@ class MinecraftWorld(World):
         nonexcluded_items = ["Sharpness III Book", "Infinity Book", "Looting III Book"]
         if name in nonexcluded_items:  # prevent books from going on excluded locations
             item.never_exclude = True
+        if name == "Bee Trap":
+            item.trap = True
         return item
 
 def mc_update_output(raw_data, server, port):

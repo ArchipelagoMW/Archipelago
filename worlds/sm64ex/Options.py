@@ -45,6 +45,6 @@ sm64_options: typing.Dict[str,type(Option)] = {
     "StrictCannonRequirements": StrictCannonRequirements,
     "StarsToFinish": StarsToFinish,
     "ExtraStars": ExtraStars,
-    "DeathLink": DeathLink,
+    "death_link": DeathLink,
     "BuddyChecks": BuddyChecks,
 } 

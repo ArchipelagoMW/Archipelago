@@ -223,12 +223,12 @@ class CommonContext():
             for location_name, location_id in gamedata["location_name_to_id"].items():
                 locations_lookup[location_id] = location_name
 
-        def get_item_name_from_id(code: int):
+        def get_item_name_from_id(code: int) -> str:
             return item_lookup.get(code, f'Unknown item (ID:{code})')
 
         self.item_name_getter = get_item_name_from_id
 
-        def get_location_name_from_address(address: int):
+        def get_location_name_from_address(address: int) -> str:
             return locations_lookup.get(address, f'Unknown location (ID:{address})')
 
         self.location_name_getter = get_location_name_from_address
@@ -347,7 +347,7 @@ class CommonContext():
                 }
             }])
 
-    async def update_death_link(self, death_link):
+    async def update_death_link(self, death_link: bool):
         old_tags = self.tags.copy()
         if death_link:
             self.tags.add("DeathLink")
@@ -496,8 +496,6 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             ctx.event_invalid_slot()
         elif 'InvalidGame' in errors:
             ctx.event_invalid_game()
-        elif 'SlotAlreadyTaken' in errors:
-            raise Exception('Player slot already in use for that team')
         elif 'IncompatibleVersion' in errors:
             raise Exception('Server reported your client version as incompatible')
         elif 'InvalidItemsHandling' in errors:
@@ -670,8 +668,10 @@ if __name__ == '__main__':
     if args.url:
         url = urllib.parse.urlparse(args.url)
         args.connect = url.netloc
-        args.name = urllib.parse.unquote(url.username)
-        args.password = urllib.parse.unquote(url.password)
+        if url.username:
+            args.name = urllib.parse.unquote(url.username)
+        if url.password:
+            args.password = urllib.parse.unquote(url.password)
 
     colorama.init()
 
