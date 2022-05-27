@@ -67,7 +67,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
                     'language': tutorial.language,
                     'filename': game + '/' + tutorial.file_name,
                     'link': f'{game}/{tutorial.link}',
-                    'authors': tutorial.author
+                    'authors': tutorial.authors
                 }]
             }
 
