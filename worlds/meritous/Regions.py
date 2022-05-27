@@ -84,7 +84,8 @@ def create_regions(world: MultiWorld, player: int):
         },
         "To Merodach": {
             "to": "Merodach",
-            "rule": lambda state: state.has_group("PSI Keys", player, 3)
+            "rule": lambda state: state.has_group("PSI Keys", player, 3) and
+                                  state.has_group("Important Artifact", player, 3)
         },
         "To Last Quarter": {
             "to": "Last Quarter",
