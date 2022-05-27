@@ -116,6 +116,16 @@ class Context(CommonContext):
         from kvui import GameManager
         from kivy.uix.tabbedpanel import TabbedPanelItem
         from kivy.uix.gridlayout import GridLayout
+        from kivy.lang import Builder
+        from kivy.uix.label import Label
+
+        import Utils
+
+        class MissionLayout(GridLayout):
+            pass
+
+        class MissionCategory(GridLayout):
+            pass
 
         class SC2Manager(GameManager):
             logging_pairs = [
@@ -124,6 +134,8 @@ class Context(CommonContext):
             ]
             base_title = "Archipelago Starcraft 2 Client"
 
+            mission_panel = None
+
             def __init__(self, ctx):
                 super().__init__(ctx)
 
@@ -131,13 +143,16 @@ class Context(CommonContext):
                 container = super().build()
 
                 panel = TabbedPanelItem(text="Starcraft 2 Launcher")
+                mission_panel = panel.content = MissionLayout()
 
-                self.tags
+                self.tabs.add_widget(panel)
 
                 return container
 
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+
+        Builder.load_file(Utils.local_path("worlds/sc2wol", "Starcraft2.kv"))
 
     async def shutdown(self):
         await super(Context, self).shutdown()
