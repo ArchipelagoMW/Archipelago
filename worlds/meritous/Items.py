@@ -212,5 +212,6 @@ item_groups = {
     "Artifacts": ["Map", "Shield Boost", "Crystal Efficiency", "Circuit Booster",
                   "Metabolism", "Dodge Enhancer", "Ethereal Monocle", "Crystal Gatherer",
                   "Portable Compass"],
+    "Important Artifacts": ["Shield Boost", "Circuit Booster", "Metabolism", "Dodge Enhancer"],
     "Crystals": ["Crystals x500", "Crystals x1000", "Crystals x2000"]
 }
