@@ -1,4 +1,5 @@
 from collections import deque
+import functools
 from typing import Any, Callable, Dict, FrozenSet, Set, TextIO, Tuple, List, Optional, cast
 import os
 from BaseClasses import MultiWorld, Location, Item, CollectionState, RegionType, Entrance
@@ -11,6 +12,7 @@ from .patch import get_base_rom_path
 from .config import base_id
 from zilliandomizer.randomizer import Randomizer as ZzRandomizer
 from zilliandomizer.logic_components.items import RESCUE
+from zilliandomizer.logic_components.locations import Location as ZzLocation
 from ..AutoWorld import World
 
 
@@ -120,11 +122,19 @@ class ZillionWorld(World):
             for zz_loc in zz_here.locations:
                 # if local gun reqs didn't place item
                 if not zz_loc.item:
-                    def access_rule(cs: CollectionState) -> bool:
-                        zz_r = set_randomizer_locs(cs, self.player, self.zz_randomizer)
-                        zz_items = cs_to_zz_items(cs, self.player)
+
+                    def access_rule_wrapped(zz_loc_local: ZzLocation,
+                                            p: int,
+                                            zz_r: ZzRandomizer,
+                                            cs: CollectionState) -> bool:
+                        # print(f"checking access to {zz_loc_local}")
+                        zz_r = set_randomizer_locs(cs, p, zz_r)
+                        zz_items = cs_to_zz_items(cs, p)
                         rl = zz_r.reachable_locations(zz_items)
-                        return zz_loc in rl
+                        return zz_loc_local in rl
+
+                    access_rule = functools.partial(access_rule_wrapped,
+                                                    zz_loc, self.player, self.zz_randomizer)
 
                     loc = ZillionLocation(zz_loc, self.player, zz_loc.name, None, here)
                     loc.access_rule = access_rule  # type: ignore
@@ -231,13 +241,14 @@ class ZillionWorld(World):
         Warning: this may be called with self.world = None, for example by MultiServer"""
         code = item_map[name]
         zz_item = item_id_to_zz_item[code]
-        prog = zz_item.is_progression
+        prog = zz_item.is_progression or zz_item.required
+        skip_in_prog_bal = not zz_item.is_progression
 
         # for the rescue hint text
         start_char = self.zz_randomizer.options.start_char
 
         z_item = ZillionItem(name, prog, code, self.player, start_char)
-        z_item.never_exclude = zz_item.required
+        z_item.skip_in_prog_balancing = skip_in_prog_bal
         return z_item
 
     def get_filler_item_name(self) -> str:
