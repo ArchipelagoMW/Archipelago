@@ -1,0 +1,9 @@
+100 - 0x01A54 - Glass Factory Entry Door Powers On
+105 - 0x000B0 - Door to Symmetry Island Lower Powers On
+107 - 0x1C349 - Door to Symmetry Island Upper Powers On
+110 - 0x0C339 - Door to Desert Flood Light Room Powers On
+111 - 0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B - Desert Flood Room Flood Controls Power On
+120 - 0x03678 - Quarry Mill Ramp Control Powers On
+125 - 0x03679 - Quarry Mill Elevator Control Powers On
+200 - 0x0042D - Mountaintop River Shape Panel Powers On
+210 - 0x17CDF,0x17CC8,0x17CA6,0x09DB8,0x17C95,0x0A054 - Boat

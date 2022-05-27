@@ -34,13 +34,25 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
-        if self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"] == frozenset({frozenset()}):
-            return self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
+        these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
+
+        real_items = {item[0] for item in self.ITEMS_ACTUALLY_IN_THE_GAME}
+
+        these_items = frozenset({
+            subset.intersection(real_items)
+            for subset in these_items
+        })
+
+        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
+
+        if panel_hex in StaticWitnessLogic.ALL_DOOR_HEXES.keys() and True: # TODO!!! Make it an option
+            these_panels = frozenset({frozenset()})
+
+        if these_panels == frozenset({frozenset()}):
+            return these_items
 
         all_options = set()
 
-        these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
-        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
         check_obj = StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]
 
         for option in these_panels:
@@ -105,7 +117,7 @@ class WitnessPlayerLogic:
             line_split = line.split(" - ")
 
             required_items = parse_lambda(line_split[2])
-            items_actually_in_the_game = {item[0] for item in StaticWitnessLogic.ALL_ITEMS}
+            items_actually_in_the_game = {item[0] for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS}
             required_items = frozenset(
                 subset.intersection(items_actually_in_the_game)
                 for subset in required_items
@@ -151,8 +163,19 @@ class WitnessPlayerLogic:
         if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
             adjustment_linesets_in_order.append(get_disable_unrandomized_list())
 
+        if is_option_enabled(world, player, "shuffle_symbols"):
+            self.ITEMS_ACTUALLY_IN_THE_GAME.update(StaticWitnessLogic.ALL_SYMBOL_ITEMS)
+
+        if is_option_enabled(world, player, "shuffle_doors"):
+            self.ITEMS_ACTUALLY_IN_THE_GAME.update(StaticWitnessLogic.ALL_DOOR_ITEMS)
+
         if is_option_enabled(world, player, "early_secret_area"):
             adjustment_linesets_in_order.append(get_early_utm_list())
+        else:
+            self.ITEMS_ACTUALLY_IN_THE_GAME = {
+                item for item in self.ITEMS_ACTUALLY_IN_THE_GAME
+                if item[0] != "Mountaintop River Shape Power On"
+            }
 
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None
@@ -228,6 +251,8 @@ class WitnessPlayerLogic:
     def __init__(self, world: MultiWorld, player: int):
         self.EVENT_PANELS_FROM_PANELS = set()
         self.EVENT_PANELS_FROM_REGIONS = set()
+
+        self.ITEMS_ACTUALLY_IN_THE_GAME = set()
 
         self.CONNECTIONS_BY_REGION_NAME = copy.copy(StaticWitnessLogic.STATIC_CONNECTIONS_BY_REGION_NAME)
         self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.copy(StaticWitnessLogic.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)

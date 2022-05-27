@@ -24,6 +24,18 @@ class EarlySecretArea(Toggle):
     display_name = "Early Secret Area"
 
 
+class ShuffleSymbols(DefaultOnToggle):
+    """You will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols."""
+    display_name = "Shuffle Symbols"
+
+#
+#class ShuffleDoors(Toggle):
+#    """Many doors around the island will have their panels turned off initially.
+#    You will need to find the items that power the panels to open those doors."""
+#    display_name = "Shuffle Doors"
+#    hidden = True
+
+
 class ShuffleDiscardedPanels(Toggle):
     """Discarded Panels will have items on them.
     Solving certain Discarded Panels may still be necessary!"""
@@ -71,6 +83,8 @@ the_witness_options: Dict[str, Option] = {
     "challenge_victory": ChallengeVictoryCondition,
     "trap_percentage": TrapPercentage,
     "early_secret_area": EarlySecretArea,
+    "shuffle_symbols": ShuffleSymbols,
+#    "shuffle_doors": ShuffleDoors,
 }
 
 

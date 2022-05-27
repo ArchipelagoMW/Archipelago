@@ -71,16 +71,21 @@ class WitnessWorld(World):
                 pool.append(witness_item)
                 items_by_name[item] = witness_item
 
-        # Put good item on first check
-        random_good_item = self.world.random.choice(self.items.GOOD_ITEMS)
-        first_check = self.world.get_location(
-            "Tutorial Gate Open", self.player
-        )
-        first_check.place_locked_item(items_by_name[random_good_item])
-        pool.remove(items_by_name[random_good_item])
+        less_junk = 0
+
+        # Put good item on first check if symbol shuffle is on
+        if is_option_enabled(self.world, self.player, "shuffle_symbols"):
+            random_good_item = self.world.random.choice(self.items.GOOD_ITEMS)
+            first_check = self.world.get_location(
+                "Tutorial Gate Open", self.player
+            )
+            first_check.place_locked_item(items_by_name[random_good_item])
+            pool.remove(items_by_name[random_good_item])
+
+            less_junk = 1
 
         # Put in junk items to fill the rest
-        junk_size = len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - 1
+        junk_size = len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - less_junk
 
         for i in range(0, junk_size):
             pool.append(self.create_item(self.get_filler_item_name()))
