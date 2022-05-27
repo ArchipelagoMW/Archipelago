@@ -4,9 +4,12 @@ from .utils import define_new_region, parse_lambda
 
 
 class StaticWitnessLogic:
-    ALL_ITEMS = set()
+    ALL_SYMBOL_ITEMS = set()
     ALL_TRAPS = set()
     ALL_BOOSTS = set()
+    ALL_DOOR_HEXES = dict()
+    DOOR_NAMES_BY_HEX = dict()
+    ALL_DOOR_ITEMS = set()
 
     EVENT_PANELS_FROM_REGIONS = set()
 
@@ -25,13 +28,13 @@ class StaticWitnessLogic:
 
         path = os.path.join(os.path.dirname(__file__), "WitnessItems.txt")
         with open(path, "r", encoding="utf-8") as file:
-            current_set = self.ALL_ITEMS
+            current_set = self.ALL_SYMBOL_ITEMS
 
             for line in file.readlines():
                 line = line.strip()
 
                 if line == "Progression:":
-                    current_set = self.ALL_ITEMS
+                    current_set = self.ALL_SYMBOL_ITEMS
                     continue
                 if line == "Boosts:":
                     current_set = self.ALL_BOOSTS
@@ -45,6 +48,21 @@ class StaticWitnessLogic:
                 line_split = line.split(" - ")
 
                 current_set.add((line_split[1], int(line_split[0])))
+
+        path = os.path.join(os.path.dirname(__file__), "Door_Shuffle.txt")
+        with open(path, "r", encoding="utf-8") as file:
+            for line in file.readlines():
+                line = line.strip()
+
+                line_split = line.split(" - ")
+
+                hex_set_split = line_split[1].split(",")
+
+                for door_hex in hex_set_split:
+                    self.ALL_DOOR_HEXES[door_hex] = int(line_split[0])
+
+                    if len(line_split) > 2:
+                        self.DOOR_NAMES_BY_HEX[door_hex] = line_split[2]
         
     def read_logic_file(self):
         """
@@ -109,11 +127,28 @@ class StaticWitnessLogic:
                     normal_panel_ids += 1
 
                 required_items = parse_lambda(required_item_lambda)
-                items_actually_in_the_game = {item[0] for item in self.ALL_ITEMS}
-                required_items = frozenset(
+                items_actually_in_the_game = {item[0] for item in self.ALL_SYMBOL_ITEMS}
+                required_items = set(
                     subset.intersection(items_actually_in_the_game)
                     for subset in required_items
                 )
+
+                doors_in_the_game = self.ALL_DOOR_HEXES.keys()
+                if check_hex in doors_in_the_game:
+                    door_name = current_region["shortName"] + " " + check_name + " Power On"
+                    if check_hex in self.DOOR_NAMES_BY_HEX.keys():
+                        door_name = self.DOOR_NAMES_BY_HEX[check_hex]
+
+                    required_items = set(
+                        subset.union(frozenset({door_name}))
+                        for subset in required_items
+                    )
+
+                    self.ALL_DOOR_ITEMS.add(
+                        (door_name, self.ALL_DOOR_HEXES[check_hex])
+                    )
+
+                required_items = frozenset(required_items)
 
                 requirement = {
                     "panels": parse_lambda(required_panel_lambda),

@@ -50,7 +50,7 @@ class StaticWitnessItems:
     def __init__(self):
         item_tab = dict()
 
-        for item in StaticWitnessLogic.ALL_ITEMS:
+        for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS.union(StaticWitnessLogic.ALL_DOOR_ITEMS):
             if item[0] == "11 Lasers" or item == "7 Lasers":
                 continue
 
@@ -83,6 +83,10 @@ class WitnessPlayerItems:
         """Adds event items after logic changes due to options"""
         self.EVENT_ITEM_TABLE = dict()
         self.ITEM_TABLE = copy.copy(StaticWitnessItems.ALL_ITEM_TABLE)
+
+        for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS.union(StaticWitnessLogic.ALL_DOOR_ITEMS):
+            if item not in player_logic.ITEMS_ACTUALLY_IN_THE_GAME:
+                del self.ITEM_TABLE[item[0]]
 
         self.GOOD_ITEMS = [
             "Dots", "Black/White Squares", "Stars",
