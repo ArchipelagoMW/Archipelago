@@ -260,7 +260,8 @@ class WitnessPlayerLogic:
             "0x09ED8": "Inside Mountain Second Layer Both Light Bridges Solved",
             "0x0A3D0": "Quarry Laser Boathouse Requirement Met",
             "0x00596": "Swamp Red Water Drains",
-            "0x28B39": "Town Tower 4th Door Opens"
+            "0x28B39": "Town Tower 4th Door Opens",
+            "0x0343A": "Door to Symmetry Island Powers On"
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
