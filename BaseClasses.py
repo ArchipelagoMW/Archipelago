@@ -1490,7 +1490,7 @@ class Tutorial(NamedTuple):
     language: str
     file_name: str
     link: str
-    author: List[str]
+    authors: List[str]
 
 
 seeddigits = 20

@@ -30,6 +30,6 @@ v6_options: typing.Dict[str,type(Option)] = {
     "AreaRandomizer": AreaRandomizer,
     "DoorCost": DoorCost,
     "AreaCostRandomizer": AreaCostRandomizer,
-    "DeathLink": DeathLink,
+    "death_link": DeathLink,
     "DeathLinkAmnesty": DeathLinkAmnesty
 }

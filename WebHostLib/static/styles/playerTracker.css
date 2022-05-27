@@ -137,19 +137,18 @@ h2 {
 
 .regions-container{
     display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
     justify-content: space-evenly;
-    gap: 5px;
+    padding: 5px;
     text-align: center;
-}
-
-.regions-column{
-    text-wrap: false;
-    gap: 10px;
 }
 
 .regions-header{
     font-size: 18px;
+    padding: 15px;
     cursor: pointer;
+    text-align: center;
 }
 
 .keys{
