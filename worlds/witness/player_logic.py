@@ -18,7 +18,7 @@ When the world has parsed its options, a second function is called to finalize t
 import copy
 from BaseClasses import MultiWorld
 from .static_logic import StaticWitnessLogic
-from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda
+from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list
 from .Options import is_option_enabled
 
 
@@ -150,6 +150,9 @@ class WitnessPlayerLogic:
 
         if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
             adjustment_linesets_in_order.append(get_disable_unrandomized_list())
+
+        if is_option_enabled(world, player, "early_secret_area"):
+            adjustment_linesets_in_order.append(get_early_utm_list())
 
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None

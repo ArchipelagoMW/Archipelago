@@ -18,6 +18,12 @@ class DisableNonRandomizedPuzzles(DefaultOnToggle):
     display_name = "Disable non randomized puzzles"
 
 
+class EarlySecretArea(Toggle):
+    """Mountaintop River Shape now opens the shortcut to the Inside Mountain Secret Area,
+    otherwise known as "UTM" (Under the Mountain) or the "Challenge Area"."""
+    display_name = "Early Secret Area"
+
+
 class ShuffleDiscardedPanels(Toggle):
     """Discarded Panels will have items on them.
     Solving certain Discarded Panels may still be necessary!"""
@@ -63,7 +69,8 @@ the_witness_options: Dict[str, Option] = {
     "shuffle_uncommon": ShuffleUncommonLocations,
     "shuffle_hard": ShuffleHardLocations,
     "challenge_victory": ChallengeVictoryCondition,
-    "trap_percentage": TrapPercentage
+    "trap_percentage": TrapPercentage,
+    "early_secret_area": EarlySecretArea,
 }
 
 
