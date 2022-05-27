@@ -7,9 +7,10 @@ class StaticWitnessLogic:
     ALL_SYMBOL_ITEMS = set()
     ALL_TRAPS = set()
     ALL_BOOSTS = set()
-    ALL_DOOR_HEXES = dict()
+    ALL_DOOR_ITEM_IDS_BY_HEX = dict()
     DOOR_NAMES_BY_HEX = dict()
     ALL_DOOR_ITEMS = set()
+    CONNECTIONS_TO_SEVER_BY_DOOR_HEX = dict()
 
     EVENT_PANELS_FROM_REGIONS = set()
 
@@ -58,11 +59,15 @@ class StaticWitnessLogic:
 
                 hex_set_split = line_split[1].split(",")
 
-                for door_hex in hex_set_split:
-                    self.ALL_DOOR_HEXES[door_hex] = int(line_split[0])
+                sever_list = line_split[2].split(",")
+                sever_set = {sever_panel for sever_panel in sever_list if sever_panel != "None"}
 
-                    if len(line_split) > 2:
-                        self.DOOR_NAMES_BY_HEX[door_hex] = line_split[2]
+                for door_hex in hex_set_split:
+                    self.ALL_DOOR_ITEM_IDS_BY_HEX[door_hex] = int(line_split[0])
+                    self.CONNECTIONS_TO_SEVER_BY_DOOR_HEX[door_hex] = sever_set
+
+                    if len(line_split) > 3:
+                        self.DOOR_NAMES_BY_HEX[door_hex] = line_split[3]
         
     def read_logic_file(self):
         """
@@ -133,7 +138,7 @@ class StaticWitnessLogic:
                     for subset in required_items
                 )
 
-                doors_in_the_game = self.ALL_DOOR_HEXES.keys()
+                doors_in_the_game = self.ALL_DOOR_ITEM_IDS_BY_HEX.keys()
                 if check_hex in doors_in_the_game:
                     door_name = current_region["shortName"] + " " + check_name + " Power On"
                     if check_hex in self.DOOR_NAMES_BY_HEX.keys():
@@ -145,7 +150,7 @@ class StaticWitnessLogic:
                     )
 
                     self.ALL_DOOR_ITEMS.add(
-                        (door_name, self.ALL_DOOR_HEXES[check_hex])
+                        (door_name, self.ALL_DOOR_ITEM_IDS_BY_HEX[check_hex])
                     )
 
                 required_items = frozenset(required_items)
