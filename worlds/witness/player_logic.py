@@ -45,7 +45,7 @@ class WitnessPlayerLogic:
 
         these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
 
-        if panel_hex in StaticWitnessLogic.ALL_DOOR_HEXES.keys() and True: # TODO!!! Make it an option
+        if StaticWitnessLogic.DOOR_NAMES_BY_HEX.get(panel_hex) in real_items:
             these_panels = frozenset({frozenset()})
 
         if these_panels == frozenset({frozenset()}):
