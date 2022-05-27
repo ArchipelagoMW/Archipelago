@@ -181,7 +181,7 @@ class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
             rv, index, data)
 
     def create_tooltip(self, text, x, y):
-        text = text.replace("<br>", "\n")
+        text = text.replace("<br>", "\n").replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']')
         if self.tooltip:
             # update
             self.tooltip.children[0].text = text
@@ -240,7 +240,7 @@ class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
             else:
                 # Not a fan of the following few lines, but they work.
                 temp = MarkupLabel(text=self.text).markup
-                text = "".join(part for part in temp if not part.startswith(("[color", "[/color]")))
+                text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
                 cmdinput = App.get_running_app().textinput
                 if not cmdinput.text and " did you mean " in text:
                     for question in ("Didn't find something that closely matches, did you mean ",
@@ -253,7 +253,7 @@ class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
                 elif not cmdinput.text and text.startswith("Missing: "):
                     cmdinput.text = text.replace("Missing: ", "!hint_location ")
 
-                Clipboard.copy(text)
+                Clipboard.copy(text.replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']'))
                 return self.parent.select_with_touch(self.index, touch)
 
     def apply_selection(self, rv, index, is_selected):
