@@ -36,6 +36,17 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: Context
     missions_unlocked = False
 
+    def _cmd_complete(self, mission_id: str = "") -> bool:
+        options = mission_id.split()
+        mission_number = int(options[0])
+
+        if mission_number < 100:
+            asyncio.create_task(self.ctx.send_msgs([
+                {"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * mission_number]}]))
+        else:
+            asyncio.create_task(self.ctx.send_msgs([
+                {"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + mission_number]}]))
+
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
         the next mission in a chain the other player is doing."""
@@ -118,6 +129,9 @@ class Context(CommonContext):
             for mission in slot_req_table:
                 self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
 
+            if self.ui:
+                self.ui.build_mission_table(self.mission_req_table)
+
         if cmd in {"PrintJSON"}:
             noted = False
             if "receiving" in args:
@@ -134,8 +148,12 @@ class Context(CommonContext):
         from kivy.uix.gridlayout import GridLayout
         from kivy.lang import Builder
         from kivy.uix.label import Label
+        from kivy.uix.button import Button
 
         import Utils
+
+        class MissionButton(Button):
+            pass
 
         class MissionLayout(GridLayout):
             pass
@@ -159,11 +177,49 @@ class Context(CommonContext):
                 container = super().build()
 
                 panel = TabbedPanelItem(text="Starcraft 2 Launcher")
-                mission_panel = panel.content = MissionLayout()
+                self.mission_panel = panel.content = MissionLayout()
 
                 self.tabs.add_widget(panel)
 
                 return container
+
+            def build_mission_table(self, mission_table):
+                categories = {}
+
+                available_missions = []
+                unfinished_missions = calc_unfinished_missions(self.ctx.checked_locations, self.ctx.mission_req_table,
+                                                               self.ctx, available_missions=available_missions)
+
+
+                # separate missions into categories
+                for mission in mission_table:
+                    if not mission_table[mission].category in categories:
+                        categories[mission_table[mission].category] = []
+
+                    categories[mission_table[mission].category].append(mission)
+
+                for category in categories:
+                    category_panel = MissionCategory()
+                    category_panel.add_widget(Label(text=category, size_hint_y=None, height=50, outline_width=1))
+
+                    for mission in categories[category]:
+                        text = mission
+
+                        if mission in unfinished_missions:
+                            text = f"[color=6495ED]{text}[/color]"
+                        elif mission in available_missions:
+                            text = f"[color=FFFFFF]{text}[/color]"
+                        else:
+                            text = f"[color=EE0000]{text}[/color]"
+
+                        mission_button = MissionButton(text=text, size_hint_y=None, height=50)
+                        category_panel.add_widget(mission_button)
+
+                    category_panel.add_widget(Label(text=""))
+                    self.mission_panel.add_widget(category_panel)
+
+
+
 
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
@@ -433,39 +489,6 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     await self.chat_send("LostConnection - Lost connection to game.")
 
 
-mission_req_table = {
-    "Liberation Day": MissionInfo(1, 7, [], completion_critical=True),
-    "The Outlaws": MissionInfo(2, 2, [1], completion_critical=True),
-    "Zero Hour": MissionInfo(3, 4, [2], completion_critical=True),
-    "Evacuation": MissionInfo(4, 4, [3]),
-    "Outbreak": MissionInfo(5, 3, [4]),
-    "Safe Haven": MissionInfo(6, 1, [5], number=7),
-    "Haven's Fall": MissionInfo(7, 1, [5], number=7),
-    "Smash and Grab": MissionInfo(8, 5, [3], completion_critical=True),
-    "The Dig": MissionInfo(9, 4, [8], number=8, completion_critical=True),
-    "The Moebius Factor": MissionInfo(10, 9, [9], number=11, completion_critical=True),
-    "Supernova": MissionInfo(11, 5, [10], number=14, completion_critical=True),
-    "Maw of the Void": MissionInfo(12, 6, [11], completion_critical=True),
-    "Devil's Playground": MissionInfo(13, 3, [3], number=4),
-    "Welcome to the Jungle": MissionInfo(14, 4, [13]),
-    "Breakout": MissionInfo(15, 3, [14], number=8),
-    "Ghost of a Chance": MissionInfo(16, 6, [14], number=8),
-    "The Great Train Robbery": MissionInfo(17, 4, [3], number=6),
-    "Cutthroat": MissionInfo(18, 5, [17]),
-    "Engine of Destruction": MissionInfo(19, 6, [18]),
-    "Media Blitz": MissionInfo(20, 5, [19]),
-    "Piercing the Shroud": MissionInfo(21, 6, [20]),
-    "Whispers of Doom": MissionInfo(22, 4, [9]),
-    "A Sinister Turn": MissionInfo(23, 4, [22]),
-    "Echoes of the Future": MissionInfo(24, 3, [23]),
-    "In Utter Darkness": MissionInfo(25, 3, [24]),
-    "Gates of Hell": MissionInfo(26, 2, [12], completion_critical=True),
-    "Belly of the Beast": MissionInfo(27, 4, [26], completion_critical=True),
-    "Shatter the Sky": MissionInfo(28, 5, [26], completion_critical=True),
-    "All-In": MissionInfo(29, -1, [27, 28], completion_critical=True, or_requirements=True)
-}
-
-
 def calc_objectives_completed(mission, missions_info, locations_done, unfinished_locations, ctx):
     objectives_complete = 0
 
@@ -489,7 +512,8 @@ def request_unfinished_missions(locations_done, location_table, ui, ctx):
         unlocks = initialize_blank_mission_dict(location_table)
         unfinished_locations = initialize_blank_mission_dict(location_table)
 
-        unfinished_missions = calc_unfinished_missions(locations_done, location_table, unlocks, unfinished_locations, ctx)
+        unfinished_missions = calc_unfinished_missions(locations_done, location_table, ctx, unlocks=unlocks,
+                                                       unfinished_locations=unfinished_locations)
 
         message += ", ".join(f"{mark_up_mission_name(mission, location_table, ui,unlocks)}[{location_table[mission].id}] " +
                              mark_up_objectives(
@@ -506,10 +530,21 @@ def request_unfinished_missions(locations_done, location_table, ui, ctx):
         sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
 
-def calc_unfinished_missions(locations_done, locations, unlocks, unfinished_locations, ctx):
+def calc_unfinished_missions(locations_done, locations, ctx, unlocks=None, unfinished_locations=None,
+                             available_missions=[]):
     unfinished_missions = []
     locations_completed = []
-    available_missions = calc_available_missions(locations_done, locations, unlocks)
+
+    if not unlocks:
+        unlocks = initialize_blank_mission_dict(locations)
+
+    if not unfinished_locations:
+        unfinished_locations = initialize_blank_mission_dict(locations)
+
+    if len(available_missions) > 0:
+        available_missions = []
+
+    available_missions.extend(calc_available_missions(locations_done, locations, unlocks))
 
     for name in available_missions:
         if not locations[name].extra_locations == -1:
