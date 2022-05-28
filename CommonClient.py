@@ -17,7 +17,7 @@ if __name__ == "__main__":
     Utils.init_logging("TextClient", exception_logger="Client")
 
 from MultiServer import CommandProcessor
-from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
+from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot
 from Utils import Version, stream_input
 from worlds import network_data_package, AutoWorldRegister
 import os
@@ -133,6 +133,7 @@ class CommonContext():
     input_task: typing.Optional[asyncio.Task] = None
     keep_alive_task: typing.Optional[asyncio.Task] = None
     items_handling: typing.Optional[int] = None
+    slot_info: typing.Dict[int, NetworkSlot]
     current_energy_link_value: int = 0  # to display in UI, gets set by server
 
     def __init__(self, server_address, password):
@@ -144,6 +145,7 @@ class CommonContext():
         self.server_version = Version(0, 0, 0)
         self.hint_cost: typing.Optional[int] = None
         self.games: typing.Dict[int, str] = {}
+        self.slot_info = {}
         self.permissions = {
             "forfeit": "disabled",
             "collect": "disabled",
@@ -195,6 +197,8 @@ class CommonContext():
 
     def reset_server_state(self):
         self.auth = None
+        self.slot = None
+        self.team = None
         self.items_received = []
         self.locations_info = {}
         self.server_version = Version(0, 0, 0)
@@ -227,12 +231,12 @@ class CommonContext():
             for location_name, location_id in gamedata["location_name_to_id"].items():
                 locations_lookup[location_id] = location_name
 
-        def get_item_name_from_id(code: int):
+        def get_item_name_from_id(code: int) -> str:
             return item_lookup.get(code, f'Unknown item (ID:{code})')
 
         self.item_name_getter = get_item_name_from_id
 
-        def get_location_name_from_address(address: int):
+        def get_location_name_from_address(address: int) -> str:
             return locations_lookup.get(address, f'Unknown location (ID:{address})')
 
         self.location_name_getter = get_location_name_from_address
@@ -351,7 +355,7 @@ class CommonContext():
                 }
             }])
 
-    async def update_death_link(self, death_link):
+    async def update_death_link(self, death_link: bool):
         old_tags = self.tags.copy()
         if death_link:
             self.tags.add("DeathLink")
@@ -500,8 +504,6 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             ctx.event_invalid_slot()
         elif 'InvalidGame' in errors:
             ctx.event_invalid_game()
-        elif 'SlotAlreadyTaken' in errors:
-            raise Exception('Player slot already in use for that team')
         elif 'IncompatibleVersion' in errors:
             raise Exception('Server reported your client version as incompatible')
         elif 'InvalidItemsHandling' in errors:
@@ -519,6 +521,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     elif cmd == 'Connected':
         ctx.team = args["team"]
         ctx.slot = args["slot"]
+        # int keys get lost in JSON transfer
+        ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
         ctx.consume_players_package(args["players"])
         msgs = []
         if ctx.locations_checked:
@@ -651,6 +655,7 @@ if __name__ == '__main__':
 
     async def main(args):
         ctx = TextContext(args.connect, args.password)
+        ctx.auth = args.name
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
         if gui_enabled:
@@ -664,8 +669,18 @@ if __name__ == '__main__':
     import colorama
 
     parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
+    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
+    parser.add_argument("url", nargs="?", help="Archipelago connection url")
+    args = parser.parse_args()
 
-    args, rest = parser.parse_known_args()
+    if args.url:
+        url = urllib.parse.urlparse(args.url)
+        args.connect = url.netloc
+        if url.username:
+            args.name = urllib.parse.unquote(url.username)
+        if url.password:
+            args.password = urllib.parse.unquote(url.password)
+
     colorama.init()
 
     asyncio.run(main(args))

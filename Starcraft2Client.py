@@ -11,6 +11,8 @@ from sc2.main import run_game
 from sc2.data import Race
 from sc2.bot_ai import BotAI
 from sc2.player import Bot
+from worlds.sc2wol.Regions import MissionInfo
+from worlds.sc2wol.MissionTables import lookup_id_to_mission
 from worlds.sc2wol.Items import lookup_id_to_name, item_table
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 
@@ -32,6 +34,13 @@ nest_asyncio.apply()
 
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: Context
+    missions_unlocked = False
+
+    def _cmd_disable_mission_check(self) -> bool:
+        """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
+        the next mission in a chain the other player is doing."""
+        self.missions_unlocked = True
+        sc2_logger.info("Mission check has been disabled")
 
     def _cmd_play(self, mission_id: str = "") -> bool:
         """Start a Starcraft 2 mission"""
@@ -42,11 +51,15 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if num_options > 0:
             mission_number = int(options[0])
 
-            if is_mission_available(mission_number, self.ctx.checked_locations, mission_req_table):
+            if self.missions_unlocked or \
+               is_mission_available(mission_number, self.ctx.checked_locations, self.ctx.mission_req_table):
                 if self.ctx.sc2_run_task:
                     if not self.ctx.sc2_run_task.done():
                         sc2_logger.warning("Starcraft 2 Client is still running!")
                     self.ctx.sc2_run_task.cancel()  # doesn't actually close the game, just stops the python task
+                if self.ctx.slot is None:
+                    sc2_logger.warning("Launching Mission without Archipelago authentication, "
+                                       "checks will not be registered to server.")
                 self.ctx.sc2_run_task = asyncio.create_task(starcraft_launch(self.ctx, mission_number),
                                                             name="Starcraft 2 Launch")
             else:
@@ -62,13 +75,13 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_available(self) -> bool:
         """Get what missions are currently available to play"""
 
-        request_available_missions(self.ctx.checked_locations, mission_req_table, self.ctx.ui)
+        request_available_missions(self.ctx.checked_locations, self.ctx.mission_req_table, self.ctx.ui)
         return True
 
     def _cmd_unfinished(self) -> bool:
         """Get what missions are currently available to play and have not had all locations checked"""
 
-        request_unfinished_missions(self.ctx.checked_locations, mission_req_table, self.ctx.ui)
+        request_unfinished_missions(self.ctx.checked_locations, self.ctx.mission_req_table, self.ctx.ui, self.ctx)
         return True
 
 
@@ -78,6 +91,7 @@ class Context(CommonContext):
     items_handling = 0b111
     difficulty = -1
     all_in_choice = 0
+    mission_req_table = None
     items_rec_to_announce = []
     rec_announce_pos = 0
     items_sent_to_announce = []
@@ -99,6 +113,11 @@ class Context(CommonContext):
         if cmd in {"Connected"}:
             self.difficulty = args["slot_data"]["game_difficulty"]
             self.all_in_choice = args["slot_data"]["all_in_map"]
+            slot_req_table = args["slot_data"]["mission_req"]
+            self.mission_req_table = {}
+            for mission in slot_req_table:
+                self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
+
         if cmd in {"PrintJSON"}:
             noted = False
             if "receiving" in args:
@@ -131,10 +150,11 @@ class Context(CommonContext):
 async def main():
     multiprocessing.freeze_support()
     parser = get_base_parser()
-    parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
+    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     args = parser.parse_args()
 
     ctx = Context(args.connect, args.password)
+    ctx.auth = args.name
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
@@ -144,8 +164,6 @@ async def main():
 
     await ctx.exit_event.wait()
 
-    ctx.server_address = None
-    ctx.snes_reconnect_address = None
     await ctx.shutdown()
 
 
@@ -220,8 +238,8 @@ async def starcraft_launch(ctx: Context, mission_id):
 
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
 
-    run_game(sc2.maps.get(maps_table[mission_id - 1]), [
-        Bot(Race.Terran, ArchipelagoBot(ctx, mission_id), name="Archipelago", fullscreen=True)], realtime=True)
+    run_game(sc2.maps.get(maps_table[mission_id - 1]), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
+                                                            name="Archipelago", fullscreen=True)], realtime=True)
 
 
 class ArchipelagoBot(sc2.bot_ai.BotAI):
@@ -298,7 +316,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     game_state = int(38281 - unit.health)
                     self.can_read_game = True
 
-            if iteration == 80 and not game_state & 1:
+            if iteration == 160 and not game_state & 1:
                 await self.chat_send("SendMessage Warning: Archipelago unable to connect or has lost connection to " +
                                      "Starcraft 2 (This is likely a map issue)")
 
@@ -386,15 +404,6 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     await self.chat_send("LostConnection - Lost connection to game.")
 
 
-class MissionInfo(typing.NamedTuple):
-    id: int
-    extra_locations: int
-    required_world: list[int]
-    number: int = 0  # number of worlds need beaten
-    completion_critical: bool = False # missions needed to beat game
-    or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
-
-
 mission_req_table = {
     "Liberation Day": MissionInfo(1, 7, [], completion_critical=True),
     "The Outlaws": MissionInfo(2, 2, [1], completion_critical=True),
@@ -427,17 +436,17 @@ mission_req_table = {
     "All-In": MissionInfo(29, -1, [27, 28], completion_critical=True, or_requirements=True)
 }
 
-lookup_id_to_mission: typing.Dict[int, str] = {
-    data.id: mission_name for mission_name, data in mission_req_table.items() if data.id}
 
-
-def calc_objectives_completed(mission, missions_info, locations_done):
+def calc_objectives_completed(mission, missions_info, locations_done, unfinished_locations, ctx):
     objectives_complete = 0
 
     if missions_info[mission].extra_locations > 0:
         for i in range(missions_info[mission].extra_locations):
             if (missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i) in locations_done:
                 objectives_complete += 1
+            else:
+                unfinished_locations[mission].append(ctx.location_name_getter(
+                    missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i))
 
         return objectives_complete
 
@@ -445,31 +454,37 @@ def calc_objectives_completed(mission, missions_info, locations_done):
         return -1
 
 
-def request_unfinished_missions(locations_done, location_table, ui):
-    message = "Unfinished Missions: "
+def request_unfinished_missions(locations_done, location_table, ui, ctx):
+    if location_table:
+        message = "Unfinished Missions: "
+        unlocks = initialize_blank_mission_dict(location_table)
+        unfinished_locations = initialize_blank_mission_dict(location_table)
 
-    unfinished_missions = calc_unfinished_missions(locations_done, location_table)
+        unfinished_missions = calc_unfinished_missions(locations_done, location_table, unlocks, unfinished_locations, ctx)
 
+        message += ", ".join(f"{mark_up_mission_name(mission, location_table, ui,unlocks)}[{location_table[mission].id}] " +
+                             mark_up_objectives(
+                                 f"[{unfinished_missions[mission]}/{location_table[mission].extra_locations}]",
+                                 ctx, unfinished_locations, mission)
+                             for mission in unfinished_missions)
 
-    message += ", ".join(f"{mark_critical(mission,location_table, ui)}[{location_table[mission].id}] "
-                         f"({unfinished_missions[mission]}/{location_table[mission].extra_locations})"
-                         for mission in unfinished_missions)
-
-    if ui:
-        ui.log_panels['All'].on_message_markup(message)
-        ui.log_panels['Starcraft2'].on_message_markup(message)
+        if ui:
+            ui.log_panels['All'].on_message_markup(message)
+            ui.log_panels['Starcraft2'].on_message_markup(message)
+        else:
+            sc2_logger.info(message)
     else:
-        sc2_logger.info(message)
+        sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
 
-def calc_unfinished_missions(locations_done, locations):
+def calc_unfinished_missions(locations_done, locations, unlocks, unfinished_locations, ctx):
     unfinished_missions = []
     locations_completed = []
-    available_missions = calc_available_missions(locations_done, locations)
+    available_missions = calc_available_missions(locations_done, locations, unlocks)
 
     for name in available_missions:
         if not locations[name].extra_locations == -1:
-            objectives_completed = calc_objectives_completed(name, locations, locations_done)
+            objectives_completed = calc_objectives_completed(name, locations, locations_done, unfinished_locations, ctx)
 
             if objectives_completed < locations[name].extra_locations:
                 unfinished_missions.append(name)
@@ -488,31 +503,65 @@ def is_mission_available(mission_id_to_check, locations_done, locations):
     return any(mission_id_to_check == locations[mission].id for mission in unfinished_missions)
 
 
-def mark_critical(mission, location_table, ui):
+def mark_up_mission_name(mission, location_table, ui, unlock_table):
     """Checks if the mission is required for game completion and adds '*' to the name to mark that."""
+
     if location_table[mission].completion_critical:
         if ui:
-            return "[color=AF99EF]" + mission + "[/color]"
+            message = "[color=AF99EF]" + mission + "[/color]"
         else:
-            return "*" + mission + "*"
+            message = "*" + mission + "*"
     else:
-        return mission
+        message = mission
+
+    if ui:
+        unlocks = unlock_table[mission]
+
+        if len(unlocks) > 0:
+            pre_message = f"[ref={list(location_table).index(mission)}|Unlocks: "
+            pre_message += ", ".join(f"{unlock}({location_table[unlock].id})" for unlock in unlocks)
+            pre_message += f"]"
+            message = pre_message + message + "[/ref]"
+
+    return message
+
+
+def mark_up_objectives(message, ctx, unfinished_locations, mission):
+    formatted_message = message
+
+    if ctx.ui:
+        locations = unfinished_locations[mission]
+
+        pre_message = f"[ref={list(ctx.mission_req_table).index(mission)+30}|"
+        pre_message += "<br>".join(location for location in locations)
+        pre_message += f"]"
+        formatted_message = pre_message + message + "[/ref]"
+
+    return formatted_message
 
 
 def request_available_missions(locations_done, location_table, ui):
-    message = "Available Missions: "
+    if location_table:
+        message = "Available Missions: "
 
-    missions = calc_available_missions(locations_done, location_table)
-    message += ", ".join(f"{mark_critical(mission,location_table, ui)}[{location_table[mission].id}]" for mission in missions)
+        # Initialize mission unlock table
+        unlocks = initialize_blank_mission_dict(location_table)
 
-    if ui:
-        ui.log_panels['All'].on_message_markup(message)
-        ui.log_panels['Starcraft2'].on_message_markup(message)
+        missions = calc_available_missions(locations_done, location_table, unlocks)
+        message += \
+            ", ".join(f"{mark_up_mission_name(mission, location_table, ui, unlocks)}[{location_table[mission].id}]"
+                      for mission in missions)
+
+        if ui:
+            ui.log_panels['All'].on_message_markup(message)
+            ui.log_panels['Starcraft2'].on_message_markup(message)
+        else:
+            sc2_logger.info(message)
     else:
-        sc2_logger.info(message)
+        sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
 
-def calc_available_missions(locations_done, locations):
+def calc_available_missions(locations_done, locations, unlocks=None):
     available_missions = []
     missions_complete = 0
 
@@ -522,6 +571,11 @@ def calc_available_missions(locations_done, locations):
             missions_complete += 1
 
     for name in locations:
+        # Go through the required missions for each mission and fill up unlock table used later for hover-over tooltips
+        if unlocks:
+            for unlock in locations[name].required_world:
+                unlocks[list(locations)[unlock-1]].append(name)
+
         if mission_reqs_completed(name, missions_complete, locations_done, locations):
             available_missions.append(name)
 
@@ -545,14 +599,14 @@ def mission_reqs_completed(location_to_check, missions_complete, locations_done,
             req_success = True
 
             # Check if required mission has been completed
-            if not (req_mission * 100 + SC2WOL_LOC_ID_OFFSET) in locations_done:
+            if not (locations[list(locations)[req_mission-1]].id * 100 + SC2WOL_LOC_ID_OFFSET) in locations_done:
                 if not locations[location_to_check].or_requirements:
                     return False
                 else:
                     req_success = False
 
             # Recursively check required mission to see if it's requirements are met, in case !collect has been done
-            if not mission_reqs_completed(lookup_id_to_mission[req_mission], missions_complete, locations_done,
+            if not mission_reqs_completed(list(locations)[req_mission-1], missions_complete, locations_done,
                                           locations):
                 if not locations[location_to_check].or_requirements:
                     return False
@@ -575,6 +629,15 @@ def mission_reqs_completed(location_to_check, missions_complete, locations_done,
             return False
     else:
         return True
+
+
+def initialize_blank_mission_dict(location_table):
+    unlocks = {}
+
+    for mission in list(location_table):
+        unlocks[mission] = []
+
+    return unlocks
 
 
 if __name__ == '__main__':
