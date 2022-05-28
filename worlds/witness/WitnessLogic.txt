@@ -414,7 +414,7 @@ Swamp Entry Area (Swamp) - Outside Swamp - 0x0056E:
 0x00985 (Combinable Shapers 6) - 0x00986 - Shapers
 0x00987 (Combinable Shapers 7) - 0x00985 - Shapers
 0x181A9 (Combinable Shapers 8) - 0x00987 - Shapers
-0x00609 (Slide Bridge) - 0x181A9 - Shapers
+0x00609 (Sliding Bridge) - 0x181A9 - Shapers
 
 Swamp Near Platform (Swamp) - Swamp Entry Area - 0x00609 | 0x18488:
 0x00999 (Broken Shapers 1) - 0x00990 - Broken Shapers
@@ -446,14 +446,14 @@ Swamp Rotating Bridge Near Side (Swamp) - Swamp Near Platform - 0x009A1:
 0x014D4 (Red Underwater Negative Shapers 3) - 0x00596 - Shapers & Negative Shapers
 0x014D1 (Red Underwater Negative Shapers 4) - 0x00596 - Shapers & Negative Shapers
 
-Swamp Near Boat (Swamp) - Swamp Rotating Bridge Near Side - 0x009A1 - Swamp Platform - 0x17C0D & 0x17C0E:
+Swamp Near Boat (Swamp) - Swamp Rotating Bridge Near Side - 0x0000A - Swamp Platform - 0x17C0D & 0x17C0E:
 0x181F5 (Rotating Bridge) - True - Rotated Shapers, Shapers
 0x09DB8 (Boat Spawn) - True - Boat
 0x003B2 (More Rotated Shapers 1) - 0x0000A - Rotated Shapers
 0x00A1E (More Rotated Shapers 2) - 0x003B2 - Rotated Shapers
 0x00C2E (More Rotated Shapers 3) - 0x00A1E - Rotated Shapers
 0x00E3A (More Rotated Shapers 4) - 0x00C2E - Rotated Shapers
-0x009A6 (Underwater Back Optional) - 0x00E3A - Shapers
+0x009A6 (Underwater Back Optional) - 0x00E3A & 0x181F5 - Shapers
 0x009AB (Blue Underwater Negative Shapers 1) - 0x00E3A - Shapers & Negative Shapers
 0x009AD (Blue Underwater Negative Shapers 2) - 0x009AB - Shapers & Negative Shapers
 0x009AE (Blue Underwater Negetive Shapers 3) - 0x009AD - Shapers & Negative Shapers

@@ -88,10 +88,18 @@ class WitnessPlayerItems:
             if item not in player_logic.ITEMS_ACTUALLY_IN_THE_GAME:
                 del self.ITEM_TABLE[item[0]]
 
-        self.GOOD_ITEMS = [
-            "Dots", "Black/White Squares", "Stars",
-            "Shapers", "Symmetry"
-        ]
+        symbols = is_option_enabled(world, player, "shuffle_symbols")
+        doors = is_option_enabled(world, player, "shuffle_doors")
+
+        if doors and symbols:
+            self.GOOD_ITEMS = [
+                "Dots", "Black/White Squares", "Symmetry"
+            ]
+        elif symbols:
+            self.GOOD_ITEMS = [
+                "Dots", "Black/White Squares", "Stars",
+                "Shapers", "Symmetry"
+            ]
 
         if is_option_enabled(world, player, "shuffle_discarded_panels"):
             self.GOOD_ITEMS.append("Triangles")

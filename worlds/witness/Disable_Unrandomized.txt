@@ -53,6 +53,8 @@ Disabled Locations:
 0x019E7 (Keep Hedge Maze 3)
 0x01A0F (Keep Hedge Maze 4)
 0x0360E (Laser Hedges)
+0x00B10 (Monastery Door Open Left)
+0x00C92 (Monastery Door Open Right)
 0x00290 (Monastery Rhombic Avoid 1)
 0x00038 (Monastery Rhombic Avoid 2)
 0x00037 (Monastery Rhombic Avoid 3)
