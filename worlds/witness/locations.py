@@ -19,6 +19,12 @@ class StaticWitnessLocations:
         "Laser": 700,
     }
 
+    EXTRA_LOCATIONS = {
+        "Tutorial Front Left",
+        "Tutorial Back Left",
+        "Tutorial Back Right",
+    }
+
     GENERAL_LOCATIONS = {
         "Tutorial Gate Open",
 
@@ -240,6 +246,13 @@ class WitnessPlayerLocations:
 
         if is_option_enabled(world, player, "shuffle_hard"):
             self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | StaticWitnessLocations.HARD_LOCATIONS
+
+        if is_option_enabled(world, player, "shuffle_symbols") and is_option_enabled(world, player, "shuffle_doors"):
+            if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
+                # This particular combination of logic settings leads to logic so restrictive that generation can fail
+                # Hence, we add some extra sphere 0 locations
+
+                self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | StaticWitnessLocations.EXTRA_LOCATIONS
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | player_logic.ADDED_CHECKS
 

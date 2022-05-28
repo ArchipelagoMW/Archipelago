@@ -144,7 +144,14 @@ class WitnessPlayerLogic:
             return
 
         if adj_type == "Disabled Locations":
-            self.COMPLETELY_DISABLED_CHECKS.add(line[:7])
+            panel_hex = line[:7]
+
+            self.COMPLETELY_DISABLED_CHECKS.add(panel_hex)
+
+            self.ITEMS_ACTUALLY_IN_THE_GAME = {
+                item for item in self.ITEMS_ACTUALLY_IN_THE_GAME
+                if item[0] != StaticWitnessLogic.DOOR_NAMES_BY_HEX.get(panel_hex)
+            }
 
             return
 
