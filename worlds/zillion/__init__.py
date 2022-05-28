@@ -8,10 +8,12 @@ from .logic import cs_to_have_req, set_randomizer_locs
 from .region import ZillionLocation, ZillionRegion, make_location_map
 from .options import ZillionItemCounts, zillion_options, validate
 from .item import ZillionItem, item_name_to_id as item_map, item_id_to_zz_item
-from .patch import get_base_rom_path
+from .patch import ZillionDeltaPatch, get_base_rom_path
 from .config import base_id
+from zilliandomizer.patch import Patcher as ZzPatcher
 from zilliandomizer.randomizer import Randomizer as ZzRandomizer
-from zilliandomizer.logic_components.items import RESCUE
+from zilliandomizer.alarms import Alarms
+from zilliandomizer.logic_components.items import RESCUE, items as zz_items
 from zilliandomizer.logic_components.locations import Location as ZzLocation
 from ..AutoWorld import World
 
@@ -72,6 +74,7 @@ class ZillionWorld(World):
     hidden: bool = False
 
     zz_randomizer: ZzRandomizer
+    zz_patcher: ZzPatcher
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -87,6 +90,8 @@ class ZillionWorld(World):
     def generate_early(self) -> None:
         zz_op = validate(self.world, self.player)
 
+        rom_dir_name = os.path.dirname(get_base_rom_path())
+        self.zz_patcher = ZzPatcher(rom_dir_name)
         self.zz_randomizer = ZzRandomizer(zz_op)
 
         # just in case the options changed anything (I don't think they do)
@@ -146,12 +151,6 @@ class ZillionWorld(World):
                 exit = Entrance(p, f"{here_name}-to-{dest_name}", here)
                 here.exits.append(exit)
                 exit.connect(dest)
-                # exit.access_rule = lambda cs: any(  # type: ignore
-                #     loc in self.zz_randomizer.get_locations(
-                #         cs_to_have_req(cs, self.player, self.zz_randomizer)
-                #     )
-                #     for loc in dest.zz_r.locations
-                # )
 
                 queue.append(zz_dest)
             done.add(here.name)
@@ -204,12 +203,58 @@ class ZillionWorld(World):
 
     def post_fill(self) -> None:
         """Optional Method that is called after regular fill. Can be used to do adjustments before output generation."""
-        pass
+        zz_options = self.zz_randomizer.options
+
+        empty = zz_items[4]
+        multi_item = empty  # TODO: how to differentiate empty from ap multi item?
+        for loc in self.world.get_locations():
+            if loc.player == self.player:
+                z_loc = cast(ZillionLocation, loc)
+                if z_loc.item is None:
+                    # TODO: log a warning? I think this shouldn't happen
+                    z_loc.zz_loc.item = empty
+                elif z_loc.item.player == self.player:
+                    z_item = cast(ZillionItem, z_loc.item)
+                    z_loc.zz_loc.item = z_item.zz_item
+                else:  # another player's item
+                    z_loc.zz_loc.item = multi_item
+
+        # verify that every location got an item
+        for zz_loc in self.zz_randomizer.locations.values():
+            assert zz_loc.item, f"not every location in world {self.player} got an item"
+
+        if zz_options.randomize_alarms:
+            a = Alarms(self.zz_patcher.tc, self.zz_randomizer.logger)
+            a.choose_all()
+
+        self.zz_patcher.write_locations(self.zz_randomizer.locations, zz_options.start_char)
+        self.zz_patcher.all_fixes_and_options(zz_options)
+        self.zz_patcher.set_external_item_interface(zz_options.start_char)
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
         If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
-        pass
+        # original_rom_bytes = self.zz_patcher.rom
+        patched_rom_bytes = self.zz_patcher.get_patched_bytes()
+
+        out_file_base = 'AP_' + self.world.seed_name
+        out_file_p_name = f'_P{self.player}'
+        out_file_p_name += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}"
+
+        filename = os.path.join(
+            output_directory,
+            f'{out_file_base}{out_file_p_name}{ZillionDeltaPatch.result_file_ending}'
+        )
+        with open(filename, "wb") as binary_file:
+            binary_file.write(patched_rom_bytes)
+        patch = ZillionDeltaPatch(
+            os.path.splitext(filename)[0] + ZillionDeltaPatch.patch_file_ending,
+            player=self.player,
+            player_name=self.world.player_name[self.player],
+            patched_path=filename
+        )
+        patch.write()
+        os.remove(filename)
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
         """Fill in the slot_data field in the Connected network package."""

@@ -361,7 +361,7 @@ def persistent_load() -> typing.Dict[dict]:
     return storage
 
 
-def get_adjuster_settings(gameName: str):
+def get_adjuster_settings(gameName: str) -> typing.Dict[str, typing.Any]:
     adjuster_settings = persistent_load().get("adjuster", {}).get(gameName, {})
     return adjuster_settings
 

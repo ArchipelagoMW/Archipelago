@@ -7,13 +7,14 @@ import os
 
 # TODO: most of this file is just copied from another game and not implemented for Zillion yet
 
-USHASH = ''
+USHASH = 'd4bf9e7bcf9a48da53785d2ae7bc4270'
 
 
 class ZillionDeltaPatch(APDeltaPatch):
     hash = USHASH
     game = "Zillion"
     patch_file_ending = ".apzl"
+    result_file_ending = ".sms"
 
     @classmethod
     def get_source_data(cls) -> bytes:

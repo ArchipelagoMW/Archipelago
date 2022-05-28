@@ -154,6 +154,9 @@ components: Iterable[Component] = (
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
     Component('Starcraft 2 Client', 'Starcraft2Client'),
+    # Zillion RetroArch Interface (or Zillion Randomizer Interface, if other emulators get supported)
+    Component('Zillion Client', 'SNIClient',  # TODO: implement ZRIClient
+              file_identifier=SuffixIdentifier('.apzl')),
     # Functions
     Component('Open host.yaml', func=open_host_yaml),
     Component('Open Patch', func=open_patch),

@@ -207,7 +207,7 @@ def validate(wo: Any, p: int) -> ZzOptions:
         cast(ZzVBLR, gun_option),
         opas_per_level.value,
         max_level.value,
-        False,
+        False,  # tutorial
         wo.skill[p].value,
         start_char_name,
         floppy_req.value,
