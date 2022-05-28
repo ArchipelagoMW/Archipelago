@@ -75,6 +75,7 @@ jobs:
           "${{ env.PYTHON }}" -m pip install --upgrade pip virtualenv PyGObject setuptools==60.10.0  # setuptools same as windows
           "${{ env.PYTHON }}" -m venv venv
           source venv/bin/activate
+          pip install cachelib  # WebHost dependency that does not get pulled in for whatever reason
           pip install -r requirements.txt
           python setup.py build --yes bdist_appimage --yes
           echo -e "setup.py build output:\n `ls build`"
