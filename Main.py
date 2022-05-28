@@ -265,7 +265,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
             # collect ER hint info
             er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
-                            world.shuffle[player] != "vanilla" or world.retro[player]}
+                            world.shuffle[player] != "vanilla" or world.retro_caves[player]}
 
             for region in world.regions:
                 if region.player in er_hint_data and region.locations:
@@ -305,7 +305,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             takeanyregions = ["Old Man Sword Cave", "Take-Any #1", "Take-Any #2", "Take-Any #3", "Take-Any #4"]
             for index, take_any in enumerate(takeanyregions):
                 for region in [world.get_region(take_any, player) for player in
-                               world.get_game_players("A Link to the Past") if world.retro[player]]:
+                               world.get_game_players("A Link to the Past") if world.retro_caves[player]]:
                     item = world.create_item(
                         region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
                         region.player)
