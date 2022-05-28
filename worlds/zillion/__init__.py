@@ -1,10 +1,10 @@
 from collections import deque
 import functools
-from typing import Any, Callable, Dict, FrozenSet, Set, TextIO, Tuple, List, Optional, cast
+from typing import Any, Dict, FrozenSet, Set, TextIO, Tuple, List, Optional, cast
 import os
 from BaseClasses import MultiWorld, Location, Item, CollectionState, RegionType, Entrance
 from Options import AssembleOptions
-from .logic import cs_to_zz_items, set_randomizer_locs
+from .logic import cs_to_have_req, set_randomizer_locs
 from .region import ZillionLocation, ZillionRegion, make_location_map
 from .options import ZillionItemCounts, zillion_options, validate
 from .item import ZillionItem, item_name_to_id as item_map, item_id_to_zz_item
@@ -129,9 +129,9 @@ class ZillionWorld(World):
                                             cs: CollectionState) -> bool:
                         # print(f"checking access to {zz_loc_local}")
                         zz_r = set_randomizer_locs(cs, p, zz_r)
-                        zz_items = cs_to_zz_items(cs, p)
-                        rl = zz_r.reachable_locations(zz_items)
-                        return zz_loc_local in rl
+                        have = cs_to_have_req(cs, p, zz_r)
+                        accessible = zz_r.get_locations(have)
+                        return zz_loc_local in accessible
 
                     access_rule = functools.partial(access_rule_wrapped,
                                                     zz_loc, self.player, self.zz_randomizer)
@@ -169,7 +169,7 @@ class ZillionWorld(World):
                 self.world.itempool.append(self.create_item(zz_item.debug_name))
 
     def set_rules(self) -> None:
-        # I put logic in create_regions
+        # logic for this game is in create_regions
         pass
 
     def generate_basic(self) -> None:
