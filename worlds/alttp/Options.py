@@ -159,16 +159,30 @@ class RestrictBossItem(Toggle):
 
 
 class Hints(Choice):
-    """Vendors: King Zora and Bottle Merchant say what they're selling.
-    On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints."""
+    """On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints."""
     display_name = "Hints"
     option_off = 0
-    option_vendors = 1
     option_on = 2
     option_full = 3
     default = 2
     alias_false = 0
     alias_true = 2
+
+
+class Scams(Choice):
+    """If on, these Merchants will no longer tell you what they're selling."""
+    display_name = "Scams"
+    option_off = 0
+    option_king_zora = 1
+    option_bottle_merchant = 2
+    option_all = 3
+    alias_false = 0
+
+    def gives_king_zora_hint(self):
+        return self.value in {0, 2}
+
+    def gives_bottle_merchant_hint(self):
+        return self.value in {0, 1}
 
 
 class EnemyShuffle(Toggle):
@@ -318,6 +332,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "swordless": Swordless,
     "retro": Retro,
     "hints": Hints,
+    "scams": Scams,
     "restrict_dungeon_item_on_boss": RestrictBossItem,
     "pot_shuffle": PotShuffle,
     "enemy_shuffle": EnemyShuffle,
