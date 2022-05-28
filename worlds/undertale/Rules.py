@@ -55,12 +55,12 @@ class UndertaleLogic(LogicMixin):
 def set_rules(world: MultiWorld, player: int):
     if world.state._is_route(world, player,1):
         set_rule(world.get_location(("Chisps Machine"), player), lambda state: state._reach_true_lab(player))
-        set_rule(world.get_location(("Dog Sale 1"), player), lambda state: state._reach_hotland(player))
-        set_rule(world.get_location(("Cat Sale"), player), lambda state: state._reach_hotland(player))
-        set_rule(world.get_location(("Dog Sale 2"), player), lambda state: state._reach_hotland(player))
-        set_rule(world.get_location(("Dog Sale 3"), player), lambda state: state._reach_hotland(player))
-        set_rule(world.get_location(("Dog Sale 4"), player), lambda state: state._reach_hotland(player))
-        set_rule(world.get_location(("Hush Trade"), player), lambda state: state._reach_hotland(player) and state.has('Hot Dog...?', player, 1))
+        set_rule(world.get_location(("Dog Sale 1"), player), lambda state: state._reach_cooking_show(player))
+        set_rule(world.get_location(("Cat Sale"), player), lambda state: state._reach_cooking_show(player))
+        set_rule(world.get_location(("Dog Sale 2"), player), lambda state: state._reach_cooking_show(player))
+        set_rule(world.get_location(("Dog Sale 3"), player), lambda state: state._reach_cooking_show(player))
+        set_rule(world.get_location(("Dog Sale 4"), player), lambda state: state._reach_cooking_show(player))
+        set_rule(world.get_location(("Hush Trade"), player), lambda state: state._reach_news_show(player) and state.has('Hot Dog...?', player, 1))
         set_rule(world.get_location(("Letter Quest"), player), lambda state: state._reach_sans(player))
     if not world.state._is_route(world, player,2):
         set_rule(world.get_location(("Card Reward"), player), lambda state: state.has('Punch Card', player, 3) and state._reach_waterfall(player))
@@ -91,14 +91,14 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location(("TemmieShop 4"), player), lambda state: state._reach_waterfall(player))
     set_rule(world.get_location(("Noodles Fridge"), player), lambda state: state._reach_hotland(player))
     set_rule(world.get_location(("Pan Hidden"), player), lambda state: state._reach_hotland(player))
-    set_rule(world.get_location(("Bratty Catty 1"), player), lambda state: state._reach_hotland(player))
-    set_rule(world.get_location(("Bratty Catty 2"), player), lambda state: state._reach_hotland(player))
-    set_rule(world.get_location(("Bratty Catty 3"), player), lambda state: state._reach_hotland(player))
-    set_rule(world.get_location(("Bratty Catty 4"), player), lambda state: state._reach_hotland(player))
-    set_rule(world.get_location(("Burgerpants 1"), player), lambda state: state._reach_hotland(player))
-    set_rule(world.get_location(("Burgerpants 2"), player), lambda state: state._reach_hotland(player))
-    set_rule(world.get_location(("Burgerpants 3"), player), lambda state: state._reach_hotland(player))
-    set_rule(world.get_location(("Burgerpants 4"), player), lambda state: state._reach_hotland(player))
+    set_rule(world.get_location(("Bratty Catty 1"), player), lambda state: state._reach_news_show(player))
+    set_rule(world.get_location(("Bratty Catty 2"), player), lambda state: state._reach_news_show(player))
+    set_rule(world.get_location(("Bratty Catty 3"), player), lambda state: state._reach_news_show(player))
+    set_rule(world.get_location(("Bratty Catty 4"), player), lambda state: state._reach_news_show(player))
+    set_rule(world.get_location(("Burgerpants 1"), player), lambda state: state._reach_news_show(player))
+    set_rule(world.get_location(("Burgerpants 2"), player), lambda state: state._reach_news_show(player))
+    set_rule(world.get_location(("Burgerpants 3"), player), lambda state: state._reach_news_show(player))
+    set_rule(world.get_location(("Burgerpants 4"), player), lambda state: state._reach_news_show(player))
 
 
 # Sets rules on completion condition
