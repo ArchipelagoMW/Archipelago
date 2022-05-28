@@ -1297,7 +1297,7 @@ async def main():
             import time
             time.sleep(3)
             sys.exit()
-        elif args.diff_file.endswith((".apbp", "apz3")):
+        elif args.diff_file.endswith((".apbp", ".apz3", ".aplttp")):
             adjustedromfile, adjusted = get_alttp_settings(romfile)
             asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
         else:
