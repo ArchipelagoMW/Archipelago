@@ -115,11 +115,15 @@ class ClientCommandProcessor(CommandProcessor):
 
 
 class TextClientCommandProcessor(ClientCommandProcessor):
-    def _cmd_deathlink(self):
-        """Allows the text client to see deaths from any player with DeathLink turned on."""
-        deathlink = "DeathLink" not in self.ctx.tags
-        self.output(f"Deaths will {('now' if deathlink else 'no longer')} be shown in the log.")
-        asyncio.create_task(self.ctx.update_death_link(deathlink))
+    def _cmd_add_tag(self, tag: str):
+        """Adds a tag to the list of tags."""
+        asyncio.create_task(self.ctx.add_tags(tag))
+
+    def _cmd_remove_tag(self, tag: str):
+        """Removes a tag from the list of tags. (Will not remove 'AP', 'IgnoreGame', 'TextOnly')"""
+        if tag in {"AP", "IgnoreGame", "TextOnly"}:
+            return
+        asyncio.create_task(self.ctx.remove_tags(tag))
 
 
 class CommonContext():
@@ -355,14 +359,27 @@ class CommonContext():
                 }
             }])
 
-    async def update_death_link(self, death_link: bool):
+    async def add_tags(self, tags: typing.Union[typing.Set[str], str]):
+        if isinstance(tags, str):
+            tags = {tags}
         old_tags = self.tags.copy()
-        if death_link:
-            self.tags.add("DeathLink")
-        else:
-            self.tags -= {"DeathLink"}
+        self.tags |= tags
         if old_tags != self.tags and self.server and not self.server.socket.closed:
             await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
+
+    async def remove_tags(self, tags: typing.Union[typing.Set[str], str]):
+        if isinstance(tags, str):
+            tags = {tags}
+        old_tags = self.tags.copy()
+        self.tags -= tags
+        if old_tags != self.tags and self.server and not self.server.socket.closed:
+            await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
+
+    async def update_death_link(self, death_link: bool):
+        if death_link:
+            await self.add_tags("DeathLink")
+        else:
+            await self.remove_tags("DeathLink")
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
