@@ -25,6 +25,6 @@
 190 - 0x0056E - None - Swamp Entry Door
 192 - 0x00609,0x18488 - 0x181A9 - Swamp Sliding Bridge
 195 - 0x181F5 - None - Swamp Rotating Bridge
-197 - 0x17C04 - None - Swamp Maze Control
+197 - 0x17C0A - None - Swamp Maze Control
 300 - 0x0042D - None - Mountaintop River Shape Panel (Shortcut to Secret Area)
 310 - 0x17CDF,0x17CC8,0x17CA6,0x09DB8,0x17C95,0x0A054 - None - Boat
