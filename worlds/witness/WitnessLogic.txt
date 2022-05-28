@@ -462,8 +462,9 @@ Swamp Near Boat (Swamp) - Swamp Rotating Bridge Near Side - 0x0000A - Swamp Plat
 0x17E2B (Long Bridge Control) - True - Rotated Shapers
 
 Swamp Maze (Swamp) - Swamp Rotating Bridge Near Side - 0x00001 & 0x014D2 & 0x014D4 & 0x014D1 - Outside Swamp - 0x17C05 & 0x17C02:
-0x17C04 (Maze Control) - True - Shapers & Negative Shapers & Rotated Shapers & Environment
-0x03615 (Laser) - 0x17C04 - True
+0x17C0A (Maze Control) - True - Shapers & Negative Shapers & Rotated Shapers & Environment
+0x17E07 (Maze Control Other Side) - True - Shapers & Negative Shapers & Rotated Shapers & Environment
+0x03615 (Laser) - 0x17C0A & 0x17E07 - True
 0x17C05 (Near Laser Shortcut Door Left) - True - Rotated Shapers
 0x17C02 (Near Laser Shortcut Door Right) - 0x17C05 - Shapers & Negative Shapers & Rotated Shapers
 
