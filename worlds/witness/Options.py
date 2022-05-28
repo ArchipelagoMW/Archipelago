@@ -24,12 +24,12 @@ class EarlySecretArea(Toggle):
     display_name = "Early Secret Area"
 
 
-class ShuffleSymbols(DefaultOnToggle):
+class ShuffleSymbols(Toggle):
     """You will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols."""
     display_name = "Shuffle Symbols"
 
 
-class ShuffleDoors(Toggle):
+class ShuffleDoors(DefaultOnToggle):
     """Many doors around the island will have their panels turned off initially.
     You will need to find the items that power the panels to open those doors."""
     display_name = "Shuffle Doors"
