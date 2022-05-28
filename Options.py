@@ -8,6 +8,7 @@ import random
 from schema import Schema, And, Or, Optional
 from Utils import get_fuzzy_results
 
+
 class AssembleOptions(abc.ABCMeta):
     def __new__(mcs, name, bases, attrs):
         options = attrs["options"] = {}

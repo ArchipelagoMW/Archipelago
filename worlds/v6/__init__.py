@@ -71,7 +71,7 @@ class V6World(World):
             "AreaRando": self.area_connections,
             "DoorCost": self.world.DoorCost[self.player].value,
             "AreaCostRando": self.area_cost_map,
-            "DeathLink": self.world.DeathLink[self.player].value,
+            "DeathLink": self.world.death_link[self.player].value,
             "DeathLink_Amnesty": self.world.DeathLinkAmnesty[self.player].value
         }
 

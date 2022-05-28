@@ -36,9 +36,12 @@ from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
+from kivy.animation import Animation
+
+fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
 import Utils
-from NetUtils import JSONtoTextParser, JSONMessagePart
+from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
 
 if typing.TYPE_CHECKING:
     import CommonClient
@@ -50,7 +53,7 @@ else:
 
 # I was surprised to find this didn't already exist in kivy :(
 class HoverBehavior(object):
-    """from https://stackoverflow.com/a/605348110"""
+    """originally from https://stackoverflow.com/a/605348110"""
     hovered = BooleanProperty(False)
     border_point = ObjectProperty(None)
 
@@ -61,11 +64,11 @@ class HoverBehavior(object):
         Window.bind(on_cursor_leave=self.on_cursor_leave)
         super(HoverBehavior, self).__init__(**kwargs)
 
-    def on_mouse_pos(self, *args):
+    def on_mouse_pos(self, window, pos):
         if not self.get_root_window():
-            return  # do proceed if I'm not displayed <=> If have no parent
-        pos = args[1]
-        # Next line to_widget allow to compensate for relative layout
+            return  # Abort if not displayed
+
+        # to_widget translates window pos to within widget pos
         inside = self.collide_point(*self.to_widget(*pos))
         if self.hovered == inside:
             return  # We have already done what was needed
@@ -87,11 +90,19 @@ class HoverBehavior(object):
 Factory.register('HoverBehavior', HoverBehavior)
 
 
-class ServerToolTip(Label):
+class ToolTip(Label):
+    pass
+
+
+class ServerToolTip(ToolTip):
     pass
 
 
 class HovererableLabel(HoverBehavior, Label):
+    pass
+
+
+class ServerLabel(HovererableLabel):
     def __init__(self, *args, **kwargs):
         super(HovererableLabel, self).__init__(*args, **kwargs)
         self.layout = FloatLayout()
@@ -101,6 +112,7 @@ class HovererableLabel(HoverBehavior, Label):
     def on_enter(self):
         self.popuplabel.text = self.get_text()
         App.get_running_app().root.add_widget(self.layout)
+        fade_in_animation.start(self.layout)
 
     def on_leave(self):
         App.get_running_app().root.remove_widget(self.layout)
@@ -109,8 +121,6 @@ class HovererableLabel(HoverBehavior, Label):
     def ctx(self) -> context_type:
         return App.get_running_app().ctx
 
-
-class ServerLabel(HovererableLabel):
     def get_text(self):
         if self.ctx.server:
             ctx = self.ctx
@@ -158,16 +168,67 @@ class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
     """ Adds selection and focus behaviour to the view. """
 
 
-class SelectableLabel(RecycleDataViewBehavior, Label):
+class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
     """ Add selection support to the Label """
     index = None
     selected = BooleanProperty(False)
+    tooltip = None
 
     def refresh_view_attrs(self, rv, index, data):
         """ Catch and handle the view changes """
         self.index = index
         return super(SelectableLabel, self).refresh_view_attrs(
             rv, index, data)
+
+    def create_tooltip(self, text, x, y):
+        text = text.replace("<br>", "\n").replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']')
+        if self.tooltip:
+            # update
+            self.tooltip.children[0].text = text
+        else:
+            self.tooltip = FloatLayout()
+            tooltip_label = ToolTip(text=text)
+            self.tooltip.add_widget(tooltip_label)
+            fade_in_animation.start(self.tooltip)
+            App.get_running_app().root.add_widget(self.tooltip)
+
+        # handle left-side boundary to not render off-screen
+        x = max(x, 3+self.tooltip.children[0].texture_size[0] / 2)
+
+        # position float layout
+        self.tooltip.x = x - self.tooltip.width / 2
+        self.tooltip.y = y - self.tooltip.height / 2 + 48
+
+    def remove_tooltip(self):
+        if self.tooltip:
+            App.get_running_app().root.remove_widget(self.tooltip)
+            self.tooltip = None
+
+    def on_mouse_pos(self, window, pos):
+        if not self.get_root_window():
+            return  # Abort if not displayed
+        super().on_mouse_pos(window, pos)
+        if self.refs and self.hovered:
+
+            tx, ty = self.to_widget(*pos, relative=True)
+            # Why TF is Y flipped *within* the texture?
+            ty = self.texture_size[1] - ty
+            hit = False
+            for uid, zones in self.refs.items():
+                for zone in zones:
+                    x, y, w, h = zone
+                    if x <= tx <= w and y <= ty <= h:
+                        self.create_tooltip(uid.split("|", 1)[1], *pos)
+                        hit = True
+                        break
+            if not hit:
+                self.remove_tooltip()
+
+    def on_enter(self):
+        pass
+
+    def on_leave(self):
+        self.remove_tooltip()
 
     def on_touch_down(self, touch):
         """ Add selection on touch down """
@@ -179,7 +240,7 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
             else:
                 # Not a fan of the following few lines, but they work.
                 temp = MarkupLabel(text=self.text).markup
-                text = "".join(part for part in temp if not part.startswith(("[color", "[/color]")))
+                text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
                 cmdinput = App.get_running_app().textinput
                 if not cmdinput.text and " did you mean " in text:
                     for question in ("Didn't find something that closely matches, did you mean ",
@@ -192,7 +253,7 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
                 elif not cmdinput.text and text.startswith("Missing: "):
                     cmdinput.text = text.replace("Missing: ", "!hint_location ")
 
-                Clipboard.copy(text)
+                Clipboard.copy(text.replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']'))
                 return self.parent.select_with_touch(self.index, touch)
 
     def apply_selection(self, rv, index, is_selected):
@@ -416,6 +477,34 @@ class E(ExceptionHandler):
 
 
 class KivyJSONtoTextParser(JSONtoTextParser):
+    def __call__(self, *args, **kwargs):
+        self.ref_count = 0
+        return super(KivyJSONtoTextParser, self).__call__(*args, **kwargs)
+
+    def _handle_item_name(self, node: JSONMessagePart):
+        flags = node.get("flags", 0)
+        if flags & 0b001:  # advancement
+            itemtype = "progression"
+        elif flags & 0b010:  # never_exclude
+            itemtype = "useful"
+        elif flags & 0b100:  # trap
+            itemtype = "trap"
+        else:
+            itemtype = "normal"
+        node.setdefault("refs", []).append("Item Class: " + itemtype)
+        return super(KivyJSONtoTextParser, self)._handle_item_name(node)
+
+    def _handle_player_id(self, node: JSONMessagePart):
+        player = int(node["text"])
+        slot_info = self.ctx.slot_info.get(player, None)
+        if slot_info:
+            text = f"Game: {slot_info.game}<br>" \
+                   f"Type: {SlotType(slot_info.type).name}"
+            if slot_info.group_members:
+                text += f"<br>Members:<br> " + \
+                        '<br> '.join(self.ctx.player_names[player] for player in slot_info.group_members)
+            node.setdefault("refs", []).append(text)
+        return super(KivyJSONtoTextParser, self)._handle_player_id(node)
 
     def _handle_color(self, node: JSONMessagePart):
         colors = node["color"].split(";")
@@ -426,6 +515,12 @@ class KivyJSONtoTextParser(JSONtoTextParser):
                 node["text"] = f"[color={color_code}]{node['text']}[/color]"
                 return self._handle_text(node)
         return self._handle_text(node)
+
+    def _handle_text(self, node: JSONMessagePart):
+        for ref in node.get("refs", []):
+            node["text"] = f"[ref={self.ref_count}|{ref}]{node['text']}[/ref]"
+            self.ref_count += 1
+        return super(KivyJSONtoTextParser, self)._handle_text(node)
 
 
 ExceptionManager.add_handler(E())
