@@ -7,7 +7,7 @@ depending on the items received
 
 from BaseClasses import MultiWorld
 from .player_logic import WitnessPlayerLogic
-from .Options import is_option_enabled
+from .Options import is_option_enabled, get_option_value
 from .locations import WitnessPlayerLocations
 from . import StaticWitnessLogic
 from ..AutoWorld import LogicMixin
@@ -76,11 +76,11 @@ class WitnessLogic(LogicMixin):
 
             for item in option:
                 if item == "7 Lasers":
-                    if not self._witness_has_lasers(world, player, 7):
+                    if not self._witness_has_lasers(world, player, get_option_value(world, player, "mountain_lasers")):
                         valid_option = False
                         break
                 elif item == "11 Lasers":
-                    if not self._witness_has_lasers(world, player, 11):
+                    if not self._witness_has_lasers(world, player, get_option_value(world, player, "challenge_lasers")):
                         valid_option = False
                         break
                 elif item in player_logic.NECESSARY_EVENT_PANELS:

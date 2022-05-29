@@ -11,7 +11,7 @@ from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems
 from .rules import set_rules
 from .regions import WitnessRegions
-from .Options import is_option_enabled, the_witness_options
+from .Options import is_option_enabled, the_witness_options, get_option_value
 from .utils import best_junk_to_add_based_on_weights
 
 
@@ -116,7 +116,7 @@ class WitnessWorld(World):
         slot_data["hard_mode"] = False
 
         for option_name in the_witness_options:
-            slot_data[option_name] = is_option_enabled(
+            slot_data[option_name] = get_option_value(
                 self.world, self.player, option_name
             )
 
