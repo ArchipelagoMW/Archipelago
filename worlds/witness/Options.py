@@ -63,6 +63,22 @@ class ChallengeVictoryCondition(Toggle):
     display_name = "Victory on beating the Challenge"
 
 
+class MountainLasers(Range):
+    """Sets the amount of beams required to enter the final area."""
+    display_name = "Trap Percentage"
+    range_start = 1
+    range_end = 7
+    default = 7
+
+
+class ChallengeLasers(Range):
+    """Sets the amount of beams required to enter the secret area."""
+    display_name = "Trap Percentage"
+    range_start = 1
+    range_end = 11
+    default = 11
+
+
 class TrapPercentage(Range):
     """Replaces junk items with traps, at the specified rate."""
     display_name = "Trap Percentage"
@@ -71,7 +87,7 @@ class TrapPercentage(Range):
     default = 20
 
 
-the_witness_options: Dict[str, Option] = {
+the_witness_options: Dict[str, type] = {
     # "hard_mode": HardMode,
     # "unlock_symbols": UnlockSymbols,
     "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
@@ -83,7 +99,9 @@ the_witness_options: Dict[str, Option] = {
     "trap_percentage": TrapPercentage,
     "early_secret_area": EarlySecretArea,
     "shuffle_symbols": ShuffleSymbols,
-    "shuffle_doors": ShuffleDoors,
+    # "shuffle_doors": ShuffleDoors,
+    "mountain_lasers": MountainLasers,
+    "challenge_lasers": ChallengeLasers,
 }
 
 
@@ -91,10 +109,12 @@ def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
     return get_option_value(world, player, name) > 0
 
 
-def get_option_value(world: MultiWorld, player: int, name: str) -> int:
+def get_option_value(world: MultiWorld, player: int, name: str) -> any:
     option = getattr(world, name, None)
 
     if option is None:
         return 0
 
-    return int(option[player].value)
+    if issubclass(the_witness_options[name], Toggle) or issubclass(the_witness_options[name], DefaultOnToggle):
+        return bool(option[player].value)
+    return option[player].value
