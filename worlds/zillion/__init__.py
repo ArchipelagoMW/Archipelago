@@ -206,7 +206,8 @@ class ZillionWorld(World):
         zz_options = self.zz_randomizer.options
 
         empty = zz_items[4]
-        multi_item = empty  # TODO: how to differentiate empty from ap multi item?
+        multi_item = empty  # a different patcher method differentiates empty from ap multi item
+        multi_items: Dict[str, Tuple[str, str]] = {}
         for loc in self.world.get_locations():
             if loc.player == self.player:
                 z_loc = cast(ZillionLocation, loc)
@@ -218,6 +219,10 @@ class ZillionWorld(World):
                     z_loc.zz_loc.item = z_item.zz_item
                 else:  # another player's item
                     z_loc.zz_loc.item = multi_item
+                    multi_items[z_loc.zz_loc.name] = (
+                        z_loc.item.name,
+                        self.world.get_player_name(z_loc.item.player)
+                    )
 
         # verify that every location got an item
         for zz_loc in self.zz_randomizer.locations.values():
@@ -230,6 +235,7 @@ class ZillionWorld(World):
         self.zz_patcher.write_locations(self.zz_randomizer.locations, zz_options.start_char)
         self.zz_patcher.all_fixes_and_options(zz_options)
         self.zz_patcher.set_external_item_interface(zz_options.start_char)
+        self.zz_patcher.set_multiworld_items(multi_items)
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
