@@ -6,7 +6,7 @@ from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Item, MultiWorld
 from . import StaticWitnessLogic, WitnessPlayerLocations, WitnessPlayerLogic
-from .Options import get_option_value, is_option_enabled
+from .Options import get_option_value, is_option_enabled, the_witness_options
 from fractions import Fraction
 
 
@@ -89,6 +89,10 @@ class WitnessPlayerItems:
                 del self.ITEM_TABLE[item[0]]
 
         symbols = is_option_enabled(world, player, "shuffle_symbols")
+
+        if "shuffle_symbols" not in the_witness_options.keys():
+            symbols = True
+
         doors = is_option_enabled(world, player, "shuffle_doors")
 
         if doors and symbols:

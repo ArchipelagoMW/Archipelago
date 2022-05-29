@@ -1,6 +1,6 @@
 from typing import Dict
 from BaseClasses import MultiWorld
-from Options import Toggle, DefaultOnToggle, Option, Range
+from Options import Toggle, DefaultOnToggle, Option, Range, Choice
 
 
 # class HardMode(Toggle):
@@ -24,12 +24,12 @@ class EarlySecretArea(Toggle):
     display_name = "Early Secret Area"
 
 
-class ShuffleSymbols(Toggle):
+class ShuffleSymbols(DefaultOnToggle):
     """You will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols."""
     display_name = "Shuffle Symbols"
 
 
-class ShuffleDoors(DefaultOnToggle):
+class ShuffleDoors(Toggle):
     """Many doors around the island will have their panels turned off initially.
     You will need to find the items that power the panels to open those doors."""
     display_name = "Shuffle Doors"
@@ -57,23 +57,27 @@ class ShuffleHardLocations(Toggle):
     display_name = "Shuffle Hard Locations"
 
 
-class ChallengeVictoryCondition(Toggle):
+class VictoryCondition(Choice):
     """The victory condition now becomes beating the Challenge area,
     instead of the final elevator."""
-    display_name = "Victory on beating the Challenge"
+    display_name = "Victory Condition"
+    option_elevator = 0
+    option_challenge = 1
+    option_mountain_box_short = 2
+    option_mountain_box_long = 3
 
 
 class MountainLasers(Range):
     """Sets the amount of beams required to enter the final area."""
-    display_name = "Trap Percentage"
+    display_name = "Required Lasers for Mountain Entry"
     range_start = 1
     range_end = 7
     default = 7
 
 
 class ChallengeLasers(Range):
-    """Sets the amount of beams required to enter the secret area."""
-    display_name = "Trap Percentage"
+    """Sets the amount of beams required to enter the secret area through the Mountain Bottom Layer Discard."""
+    display_name = "Required Lasers for Challenge"
     range_start = 1
     range_end = 11
     default = 11
@@ -95,10 +99,10 @@ the_witness_options: Dict[str, type] = {
     "shuffle_vault_boxes": ShuffleVaultBoxes,
     "shuffle_uncommon": ShuffleUncommonLocations,
     "shuffle_hard": ShuffleHardLocations,
-    "challenge_victory": ChallengeVictoryCondition,
+    "victory_condition": VictoryCondition,
     "trap_percentage": TrapPercentage,
     "early_secret_area": EarlySecretArea,
-    "shuffle_symbols": ShuffleSymbols,
+    # "shuffle_symbols": ShuffleSymbols,
     # "shuffle_doors": ShuffleDoors,
     "mountain_lasers": MountainLasers,
     "challenge_lasers": ChallengeLasers,

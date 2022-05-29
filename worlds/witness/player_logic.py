@@ -19,7 +19,7 @@ import copy
 from BaseClasses import MultiWorld
 from .static_logic import StaticWitnessLogic
 from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list
-from .Options import is_option_enabled
+from .Options import is_option_enabled, get_option_value, the_witness_options
 
 
 class WitnessPlayerLogic:
@@ -169,10 +169,14 @@ class WitnessPlayerLogic:
         """Makes logic adjustments based on options"""
         adjustment_linesets_in_order = []
 
-        if is_option_enabled(world, player, "challenge_victory"):
-            self.VICTORY_LOCATION = "0x0356B"
-        else:
+        if get_option_value(world, player, "victory_condition") == 0:
             self.VICTORY_LOCATION = "0x3D9A9"
+        elif get_option_value(world, player, "victory_condition") == 1:
+            self.VICTORY_LOCATION = "0x0356B"
+        elif get_option_value(world, player, "victory_condition") == 2:
+            self.VICTORY_LOCATION = "0x09F7F"
+        elif get_option_value(world, player, "victory_condition") == 3:
+            self.VICTORY_LOCATION = "0x17FA2"
 
         self.COMPLETELY_DISABLED_CHECKS.add(
             self.VICTORY_LOCATION
@@ -181,7 +185,7 @@ class WitnessPlayerLogic:
         if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
             adjustment_linesets_in_order.append(get_disable_unrandomized_list())
 
-        if is_option_enabled(world, player, "shuffle_symbols"):
+        if is_option_enabled(world, player, "shuffle_symbols") or "shuffle_symbols" not in the_witness_options.keys():
             self.ITEMS_ACTUALLY_IN_THE_GAME.update(StaticWitnessLogic.ALL_SYMBOL_ITEMS)
 
         if is_option_enabled(world, player, "shuffle_doors"):
