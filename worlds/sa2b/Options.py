@@ -53,6 +53,19 @@ class LevelGateDistribution(Choice):
     default = 1
 
 
+class RequiredRank(Choice):
+    """
+    Determines what minimum Rank is required to send a check for a mission
+    """
+    display_name = "Required Rank"
+    option_e = 0
+    option_d = 1
+    option_c = 2
+    option_b = 3
+    option_a = 4
+    default = 0
+
+
 class MusicShuffle(Choice):
     """
     What type of Music Shuffle is used
@@ -70,6 +83,7 @@ class MusicShuffle(Choice):
 sa2b_options: typing.Dict[str, type(Option)] = {
     "death_link": DeathLink,
     "music_shuffle": MusicShuffle,
+    "required_rank": RequiredRank,
     "include_missions": IncludeMissions,
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "number_of_level_gates": NumberOfLevelGates,

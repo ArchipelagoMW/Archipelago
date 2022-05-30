@@ -66,6 +66,7 @@ class SA2BWorld(World):
             "ModVersion": 100,
             "MusicMap": self.music_map,
             "MusicShuffle": self.world.music_shuffle[self.player].value,
+            "RequiredRank": self.world.required_rank[self.player].value,
             "DeathLink": self.world.death_link[self.player].value,
             "IncludeMissions": self.world.include_missions[self.player].value,
             "EmblemPercentageForCannonsCore": self.world.emblem_percentage_for_cannons_core[self.player].value,
