@@ -3,18 +3,21 @@ from __future__ import annotations
 import multiprocessing
 import logging
 import asyncio
-import nest_asyncio
+import os.path
 
+import nest_asyncio
 import sc2
 
 from sc2.main import run_game
 from sc2.data import Race
 from sc2.bot_ai import BotAI
 from sc2.player import Bot
+
 from worlds.sc2wol.Regions import MissionInfo
 from worlds.sc2wol.MissionTables import lookup_id_to_mission
 from worlds.sc2wol.Items import lookup_id_to_name, item_table
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
+from worlds.sc2wol import SC2WoLWorld
 
 from Utils import init_logging
 
@@ -209,7 +212,7 @@ class Context(CommonContext):
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-        Builder.load_file(Utils.local_path("worlds/sc2wol", "Starcraft2.kv"))
+        Builder.load_file(Utils.local_path(os.path.dirname(SC2WoLWorld.__file__), "Starcraft2.kv"))
 
     async def shutdown(self):
         await super(Context, self).shutdown()
