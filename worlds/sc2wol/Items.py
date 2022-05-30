@@ -1,6 +1,7 @@
 from BaseClasses import Item
 import typing
 
+
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     type: typing.Optional[str]
@@ -11,7 +12,7 @@ class ItemData(typing.NamedTuple):
 
 
 class StarcraftWoLItem(Item):
-    game: str = "Starcraft2WoL"
+    game: str = "Starcraft 2 Wings of Liberty"
 
     def __init__(self, name, advancement: bool = False, code: int = None, player: int = None):
         super(StarcraftWoLItem, self).__init__(name, advancement, code, player)
@@ -62,46 +63,46 @@ item_table = {
     "Combat Shield (Marine)": ItemData (209+SC2WOL_ITEM_ID_OFFSET, "Armory 1", 9),
     "Advanced Medic Facilities (Medic)": ItemData (210+SC2WOL_ITEM_ID_OFFSET, "Armory 1", 10),
     "Stabilizer Medpacks (Medic)": ItemData (211+SC2WOL_ITEM_ID_OFFSET, "Armory 1", 11),
-    "Incinerator Gauntlets (Firebat)": ItemData (212+SC2WOL_ITEM_ID_OFFSET, "Armory 1", 12),
+    "Incinerator Gauntlets (Firebat)": ItemData (212+SC2WOL_ITEM_ID_OFFSET, "Armory 1", 12, never_exclude=False),
     "Juggernaut Plating (Firebat)": ItemData (213+SC2WOL_ITEM_ID_OFFSET, "Armory 1", 13),
     "Concussive Shells (Marauder)": ItemData (214+SC2WOL_ITEM_ID_OFFSET, "Armory 1", 14),
     "Kinetic Foam (Marauder)": ItemData (215+SC2WOL_ITEM_ID_OFFSET, "Armory 1", 15),
     "U-238 Rounds (Reaper)": ItemData (216+SC2WOL_ITEM_ID_OFFSET, "Armory 1", 16),
-    "G-4 Clusterbomb (Reaper)": ItemData (217+SC2WOL_ITEM_ID_OFFSET, "Armory 1", 17),
+    "G-4 Clusterbomb (Reaper)": ItemData (217+SC2WOL_ITEM_ID_OFFSET, "Armory 1", 17, never_exclude=False),
 
-    "Twin-Linked Flamethrower (Hellion)": ItemData(300+SC2WOL_ITEM_ID_OFFSET, "Armory 2", 0),
+    "Twin-Linked Flamethrower (Hellion)": ItemData(300+SC2WOL_ITEM_ID_OFFSET, "Armory 2", 0, never_exclude=False),
     "Thermite Filaments (Hellion)": ItemData(301+SC2WOL_ITEM_ID_OFFSET, "Armory 2", 1),
     "Cerberus Mine (Vulture)": ItemData(302 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 2),
     "Replenishable Magazine (Vulture)": ItemData(303 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 3),
     "Multi-Lock Weapons System (Goliath)": ItemData(304 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 4),
     "Ares-Class Targeting System (Goliath)": ItemData(305 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 5),
-    "Tri-Lithium Power Cell (Diamondback)": ItemData(306 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 6),
-    "Shaped Hull (Diamondback)": ItemData(307 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 7),
+    "Tri-Lithium Power Cell (Diamondback)": ItemData(306 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 6, never_exclude=False),
+    "Shaped Hull (Diamondback)": ItemData(307 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 7, never_exclude=False),
     "Maelstrom Rounds (Siege Tank)": ItemData(308 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 8),
     "Shaped Blast (Siege Tank)": ItemData(309 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 9),
-    "Rapid Deployment Tube (Medivac)": ItemData(310 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 10),
+    "Rapid Deployment Tube (Medivac)": ItemData(310 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 10, never_exclude=False),
     "Advanced Healing AI (Medivac)": ItemData(311 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 11),
-    "Tomahawk Power Cells (Wraith)": ItemData(312 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 12),
+    "Tomahawk Power Cells (Wraith)": ItemData(312 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 12, never_exclude=False),
     "Displacement Field (Wraith)": ItemData(313 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 13),
     "Ripwave Missiles (Viking)": ItemData(314 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 14),
     "Phobos-Class Weapons System (Viking)": ItemData(315 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 15),
-    "Cross-Spectrum Dampeners (Banshee)": ItemData(316 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 16),
+    "Cross-Spectrum Dampeners (Banshee)": ItemData(316 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 16, never_exclude=False),
     "Shockwave Missile Battery (Banshee)": ItemData(317 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 17),
-    "Missile Pods (Battlecruiser)": ItemData(318 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 18),
-    "Defensive Matrix (Battlecruiser)": ItemData(319 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 19),
+    "Missile Pods (Battlecruiser)": ItemData(318 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 18, never_exclude=False),
+    "Defensive Matrix (Battlecruiser)": ItemData(319 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 19, never_exclude=False),
     "Ocular Implants (Ghost)": ItemData(320 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 20),
     "Crius Suit (Ghost)": ItemData(321 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 21),
     "Psionic Lash (Spectre)": ItemData(322 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 22),
     "Nyx-Class Cloaking Module (Spectre)": ItemData(323 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 23),
-    "330mm Barrage Cannon (Thor)": ItemData(324 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 24),
-    "Immortality Protocol (Thor)": ItemData(325 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 25),
+    "330mm Barrage Cannon (Thor)": ItemData(324 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 24, never_exclude=False),
+    "Immortality Protocol (Thor)": ItemData(325 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 25, never_exclude=False),
 
     "Bunker": ItemData (400+SC2WOL_ITEM_ID_OFFSET, "Building", 0, progression=True),
     "Missile Turret": ItemData (401+SC2WOL_ITEM_ID_OFFSET, "Building", 1, progression=True),
     "Sensor Tower": ItemData (402+SC2WOL_ITEM_ID_OFFSET, "Building", 2),
 
     "War Pigs": ItemData (500 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 0),
-    "Devil Dogs": ItemData(501 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 1),
+    "Devil Dogs": ItemData(501 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 1, never_exclude=False),
     "Hammer Securities": ItemData(502 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 2),
     "Spartan Company": ItemData(503 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 3),
     "Siege Breakers": ItemData(504 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 4),
@@ -116,32 +117,32 @@ item_table = {
     "Automated Refinery": ItemData(604 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 4),
     "Command Center Reactor": ItemData(605 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 5),
     "Raven": ItemData(606 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 6),
-    "Science Vessel": ItemData(607 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 7),
+    "Science Vessel": ItemData(607 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 7, progression=True),
     "Tech Reactor": ItemData(608 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 8),
     "Orbital Strike": ItemData(609 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 9),
     "Shrike Turret": ItemData(610 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 10),
     "Fortified Bunker": ItemData(611 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 11),
     "Planetary Fortress": ItemData(612 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 12),
     "Perdition Turret": ItemData(613 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 13),
-    "Predator": ItemData(614 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 14),
+    "Predator": ItemData(614 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 14, never_exclude=False),
     "Hercules": ItemData(615 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 15, progression=True),
-    "Cellular Reactor": ItemData(616 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 16),
-    "Regenerative Bio-Steel": ItemData(617 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 17),
+    "Cellular Reactor": ItemData(616 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 16, never_exclude=False),
+    "Regenerative Bio-Steel": ItemData(617 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 17, never_exclude=False),
     "Hive Mind Emulator": ItemData(618 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 18),
-    "Psi Disrupter": ItemData(619 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 19),
+    "Psi Disrupter": ItemData(619 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 19, never_exclude=False),
 
-    "Zealot": ItemData (700 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 0, progression=True),
-    "Stalker": ItemData (701 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 1, progression=True),
-    "High Templar": ItemData (702 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 2, progression=True),
-    "Dark Templar": ItemData (703 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 3, progression=True),
-    "Immortal": ItemData (704 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 4, progression=True),
-    "Colossus": ItemData (705 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 5, progression=True),
-    "Phoenix": ItemData (706 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 6, progression=True),
-    "Void Ray": ItemData (707 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 7, progression=True),
-    "Carrier": ItemData (708 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 8, progression=True),
+    "Zealot": ItemData(700 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 0, progression=True),
+    "Stalker": ItemData(701 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 1, progression=True),
+    "High Templar": ItemData(702 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 2, progression=True),
+    "Dark Templar": ItemData(703 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 3, progression=True),
+    "Immortal": ItemData(704 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 4, progression=True),
+    "Colossus": ItemData(705 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 5, progression=True),
+    "Phoenix": ItemData(706 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 6, progression=True),
+    "Void Ray": ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 7, progression=True),
+    "Carrier": ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 8, progression=True),
 
-    "+5 Starting Minerals": ItemData(800+SC2WOL_ITEM_ID_OFFSET, "Minerals", 5, quantity=0),
-    "+5 Starting Vespene": ItemData(801+SC2WOL_ITEM_ID_OFFSET, "Vespene", 5, quantity=0)
+    "+5 Starting Minerals": ItemData(800+SC2WOL_ITEM_ID_OFFSET, "Minerals", 5, quantity=0, never_exclude=False),
+    "+5 Starting Vespene": ItemData(801+SC2WOL_ITEM_ID_OFFSET, "Vespene", 5, quantity=0, never_exclude=False)
 }
 
 basic_unit: typing.Tuple[str, ...] = (
@@ -153,13 +154,15 @@ basic_unit: typing.Tuple[str, ...] = (
 )
 
 
-item_name_groups = {"Missions":
-                        {"Beat Liberation Day", "Beat The Outlaws", "Beat Zero Hour", "Beat Evacuation",
+item_name_groups = {}
+for item, data in item_table.items():
+    item_name_groups.setdefault(data.type, []).append(item)
+item_name_groups["Missions"] = ["Beat Liberation Day", "Beat The Outlaws", "Beat Zero Hour", "Beat Evacuation",
                          "None Outbreak", "Beat Safe Haven", "Beat Haven's Fall", "Beat Smash and Grab", "Beat The Dig",
                          "Beat The Moebius Factor", "Beat Supernova", "Beat Maw of the Void", "Beat Devil's Playground",
                          "Beat Welcome to the Jungle", "Beat Breakout", "Beat Ghost of a Chance",
                          "Beat The Great Train Robbery", "Beat Cutthroat", "Beat Engine of Destruction",
-                         "Beat Media Blitz", "Beat Piercing the Shroud"}}
+                         "Beat Media Blitz", "Beat Piercing the Shroud"]
 
 filler_items: typing.Tuple[str, ...] = (
     '+5 Starting Minerals',

@@ -12,7 +12,11 @@ import io
 import collections
 import importlib
 import logging
-from tkinter import Tk
+
+if typing.TYPE_CHECKING:
+    from tkinter import Tk
+else:
+    Tk = typing.Any
 
 
 def tuplize_version(version: str) -> Version:

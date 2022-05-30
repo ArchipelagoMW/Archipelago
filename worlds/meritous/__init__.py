@@ -24,6 +24,8 @@ class MeritousWeb(WebWorld):
         "setup/en",
         ["KewlioMZX"]
     )]
+    theme = "ice"
+    bug_report_page = "https://github.com/FelicitusNeko/meritous-ap/issues"
 
 
 class MeritousWorld(World):
@@ -60,7 +62,10 @@ class MeritousWorld(World):
 
     @staticmethod
     def _is_progression(name):
-        return "PSI Key" in name or name in ["Cursed Seal", "Agate Knife"]
+        return "PSI Key" in name or name in [
+            "Cursed Seal", "Agate Knife", "Dodge Enhancer",
+            "Shield Boost", "Metabolism", "Circuit Booster"
+        ]
 
     def create_item(self, name: str) -> Item:
         return MeritousItem(name, self._is_progression(

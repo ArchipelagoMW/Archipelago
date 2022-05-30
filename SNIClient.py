@@ -28,7 +28,7 @@ from worlds.alttp.Rom import ROM_PLAYER_LIMIT
 from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
 from worlds.smz3.Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
 import Utils
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3
 
 snes_logger = logging.getLogger("SNES")
@@ -530,7 +530,8 @@ boss_locations = {Regions.lookup_name_to_id[name] for name in {'Eastern Palace -
                                                                            "Thieves' Town - Boss",
                                                                            'Ice Palace - Boss',
                                                                            'Misery Mire - Boss',
-                                                                           'Turtle Rock - Boss'}}
+                                                                           'Turtle Rock - Boss',
+                                                                           'Sahasrahla'}}
 
 location_table_uw_id = {Regions.lookup_name_to_id[name]: data for name, data in location_table_uw.items()}
 
@@ -974,8 +975,9 @@ async def track_locations(ctx: Context, roomid, roomdata):
             for location_id, mask in location_table_npc_id.items():
                 if npc_value & mask != 0 and location_id not in ctx.locations_checked:
                     new_check(location_id)
-                if ctx.allow_collect and location_id in ctx.checked_locations and location_id not in ctx.locations_checked \
-                        and location_id in ctx.locations_info and ctx.locations_info[location_id].player != ctx.slot:
+                if ctx.allow_collect and location_id not in boss_locations and location_id in ctx.checked_locations \
+                        and location_id not in ctx.locations_checked and location_id in ctx.locations_info \
+                        and ctx.locations_info[location_id].player != ctx.slot:
                     npc_value |= mask
                     npc_value_changed = True
             if npc_value_changed:
@@ -1183,7 +1185,10 @@ async def game_watcher(ctx: Context):
             if itemOutPtr < len(ctx.items_received):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
-                locationId = (item.location - locations_start_id) if item.location >= 0 and bool(ctx.items_handling & 0b010) else 0x00
+                if bool(ctx.items_handling & 0b010):
+                    locationId = (item.location - locations_start_id) if (item.location >= 0 and item.player == ctx.slot) else 0xFF
+                else:
+                    locationId = 0x00 #backward compat
 
                 playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes(

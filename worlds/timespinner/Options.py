@@ -172,6 +172,13 @@ class DamageRandoOverrides(OptionDict):
         "Radiant": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
     }
 
+class HpCap(Range):
+    "Sets the number that Lunais's HP maxes out at."
+    display_name = "HP Cap"
+    range_start = 1
+    range_end = 999
+    default = 999
+
 class ShopFill(Choice):
     """Sets the items for sale in Merchant Crow's shops.
     Default: No sunglasses or trendy jacket, but sand vials for sale.
@@ -209,6 +216,10 @@ class ShowBestiary(Toggle):
     "All entries in the bestiary are visible, without needing to kill one of a given enemy first"
     display_name = "Show Bestiary Entries"
 
+class ShowDrops(Toggle):
+    "All item drops in the bestiary are visible, without needing an enemy to drop one of a given item first"
+    display_name = "Show Bestiary Item Drops"
+
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Option] = {
     "StartWithJewelryBox": StartWithJewelryBox,
@@ -226,11 +237,13 @@ timespinner_options: Dict[str, Option] = {
     "LoreChecks": LoreChecks,
     "DamageRando": DamageRando,
     "DamageRandoOverrides": DamageRandoOverrides,
+    "HpCap": HpCap,
     "ShopFill": ShopFill,
     "ShopWarpShards": ShopWarpShards,
     "ShopMultiplier": ShopMultiplier,
     "LootPool": LootPool,
     "ShowBestiary": ShowBestiary,
+    "ShowDrops": ShowDrops,
     "DeathLink": DeathLink,
 }
 

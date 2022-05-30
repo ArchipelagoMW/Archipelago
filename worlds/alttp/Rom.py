@@ -2120,16 +2120,19 @@ def write_strings(rom, world, player):
                 hint += f" for {world.player_name[dest.player]}"
         return hint
 
-    # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
-    if world.hints[player]:
+    if world.scams[player].gives_king_zora_hint:
         # Zora hint
         zora_location = world.get_location("King Zora", player)
         tt['zora_tells_cost'] = f"You got 500 rupees to buy {hint_text(zora_location.item)}" \
                                 f"\n  ≥ Duh\n    Oh carp\n{{CHOICE}}"
+    if world.scams[player].gives_bottle_merchant_hint:
         # Bottle Vendor hint
         vendor_location = world.get_location("Bottle Merchant", player)
         tt['bottle_vendor_choice'] = f"I gots {hint_text(vendor_location.item)}\nYous gots 100 rupees?" \
                                      f"\n  ≥ I want\n    no way!\n{{CHOICE}}"
+
+    # First we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
+    if world.hints[player]:
         if world.hints[player].value >= 2:
             if world.hints[player] == "full":
                 tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles have hints!'
@@ -2280,7 +2283,7 @@ def write_strings(rom, world, player):
                 items_to_hint |= item_name_groups["Big Keys"]
 
             if world.hints[player] == "full":
-                hint_count = len(hint_locations) # fill all remaining hint locations with Item hints.
+                hint_count = len(hint_locations)  # fill all remaining hint locations with Item hints.
             else:
                 hint_count = 5 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull',
                                                                 'dungeonscrossed'] else 8

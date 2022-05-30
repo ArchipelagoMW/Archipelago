@@ -17,14 +17,14 @@ if __name__ == "__main__":
     Utils.init_logging("TextClient", exception_logger="Client")
 
 from MultiServer import CommandProcessor
-from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
+from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot
 from Utils import Version, stream_input
 from worlds import network_data_package, AutoWorldRegister
 import os
 
 logger = logging.getLogger("Client")
 
-# without terminal we have to use gui mode
+# without terminal, we have to use gui mode
 gui_enabled = not sys.stdout or "--nogui" not in sys.argv
 
 
@@ -125,7 +125,8 @@ class CommonContext():
     input_task: typing.Optional[asyncio.Task] = None
     keep_alive_task: typing.Optional[asyncio.Task] = None
     items_handling: typing.Optional[int] = None
-    current_energy_link_value = 0  # to display in UI, gets set by server
+    slot_info: typing.Dict[int, NetworkSlot]
+    current_energy_link_value: int = 0  # to display in UI, gets set by server
 
     def __init__(self, server_address, password):
         # server state
@@ -136,6 +137,7 @@ class CommonContext():
         self.server_version = Version(0, 0, 0)
         self.hint_cost: typing.Optional[int] = None
         self.games: typing.Dict[int, str] = {}
+        self.slot_info = {}
         self.permissions = {
             "forfeit": "disabled",
             "collect": "disabled",
@@ -181,14 +183,26 @@ class CommonContext():
             return len(self.checked_locations | self.missing_locations)
 
     async def connection_closed(self):
+        self.reset_server_state()
+        if self.server and self.server.socket is not None:
+            await self.server.socket.close()
+
+    def reset_server_state(self):
         self.auth = None
+        self.slot = None
+        self.team = None
         self.items_received = []
         self.locations_info = {}
         self.server_version = Version(0, 0, 0)
-        if self.server and self.server.socket is not None:
-            await self.server.socket.close()
         self.server = None
         self.server_task = None
+        self.games = {}
+        self.hint_cost = None
+        self.permissions = {
+            "forfeit": "disabled",
+            "collect": "disabled",
+            "remaining": "disabled",
+        }
 
     # noinspection PyAttributeOutsideInit
     def set_getters(self, data_package: dict, network=False):
@@ -209,22 +223,15 @@ class CommonContext():
             for location_name, location_id in gamedata["location_name_to_id"].items():
                 locations_lookup[location_id] = location_name
 
-        def get_item_name_from_id(code: int):
+        def get_item_name_from_id(code: int) -> str:
             return item_lookup.get(code, f'Unknown item (ID:{code})')
 
         self.item_name_getter = get_item_name_from_id
 
-        def get_location_name_from_address(address: int):
+        def get_location_name_from_address(address: int) -> str:
             return locations_lookup.get(address, f'Unknown location (ID:{address})')
 
         self.location_name_getter = get_location_name_from_address
-
-    @property
-    def endpoints(self):
-        if self.server:
-            return [self.server]
-        else:
-            return []
 
     async def disconnect(self):
         if self.server and not self.server.socket.closed:
@@ -340,7 +347,7 @@ class CommonContext():
                 }
             }])
 
-    async def update_death_link(self, death_link):
+    async def update_death_link(self, death_link: bool):
         old_tags = self.tags.copy()
         if death_link:
             self.tags.add("DeathLink")
@@ -385,7 +392,6 @@ async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
 
 
 async def server_loop(ctx: CommonContext, address=None):
-    cached_address = None
     if ctx.server and ctx.server.socket:
         logger.error('Already connected')
         return
@@ -413,16 +419,12 @@ async def server_loop(ctx: CommonContext, address=None):
                 await process_server_cmd(ctx, msg)
         logger.warning('Disconnected from multiworld server, type /connect to reconnect')
     except ConnectionRefusedError:
-        if cached_address:
-            logger.error('Unable to connect to multiworld server at cached address. '
-                         'Please use the connect button above.')
-        else:
-            logger.exception('Connection refused by the multiworld server')
+        logger.exception('Connection refused by the server. May not be running Archipelago on that address or port.')
     except websockets.InvalidURI:
         logger.exception('Failed to connect to the multiworld server (invalid URI)')
-    except (OSError, websockets.InvalidURI):
+    except OSError:
         logger.exception('Failed to connect to the multiworld server')
-    except Exception as e:
+    except Exception:
         logger.exception('Lost connection to the multiworld server, type /connect to reconnect')
     finally:
         await ctx.connection_closed()
@@ -494,8 +496,6 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             ctx.event_invalid_slot()
         elif 'InvalidGame' in errors:
             ctx.event_invalid_game()
-        elif 'SlotAlreadyTaken' in errors:
-            raise Exception('Player slot already in use for that team')
         elif 'IncompatibleVersion' in errors:
             raise Exception('Server reported your client version as incompatible')
         elif 'InvalidItemsHandling' in errors:
@@ -513,6 +513,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     elif cmd == 'Connected':
         ctx.team = args["team"]
         ctx.slot = args["slot"]
+        # int keys get lost in JSON transfer
+        ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
         ctx.consume_players_package(args["players"])
         msgs = []
         if ctx.locations_checked:
@@ -645,6 +647,7 @@ if __name__ == '__main__':
 
     async def main(args):
         ctx = TextContext(args.connect, args.password)
+        ctx.auth = args.name
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
         if gui_enabled:
@@ -658,8 +661,18 @@ if __name__ == '__main__':
     import colorama
 
     parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
+    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
+    parser.add_argument("url", nargs="?", help="Archipelago connection url")
+    args = parser.parse_args()
 
-    args, rest = parser.parse_known_args()
+    if args.url:
+        url = urllib.parse.urlparse(args.url)
+        args.connect = url.netloc
+        if url.username:
+            args.name = urllib.parse.unquote(url.username)
+        if url.password:
+            args.password = urllib.parse.unquote(url.password)
+
     colorama.init()
 
     asyncio.run(main(args))
