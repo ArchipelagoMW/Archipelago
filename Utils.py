@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 import typing
 import builtins
 import os
@@ -11,7 +12,11 @@ import io
 import collections
 import importlib
 import logging
-from tkinter import Tk
+
+if typing.TYPE_CHECKING:
+    from tkinter import Tk
+else:
+    Tk = typing.Any
 
 
 def tuplize_version(version: str) -> Version:
@@ -24,10 +29,11 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.2.6"
+__version__ = "0.3.2"
 version_tuple = tuplize_version(__version__)
 
-from yaml import load, dump, SafeLoader
+import jellyfish
+from yaml import load, load_all, dump, SafeLoader
 
 try:
     from yaml import CLoader as Loader
@@ -35,47 +41,50 @@ except ImportError:
     from yaml import Loader
 
 
-def int16_as_bytes(value):
+def int16_as_bytes(value: int) -> typing.List[int]:
     value = value & 0xFFFF
     return [value & 0xFF, (value >> 8) & 0xFF]
 
 
-def int32_as_bytes(value):
+def int32_as_bytes(value: int) -> typing.List[int]:
     value = value & 0xFFFFFFFF
     return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
 
 
-def pc_to_snes(value):
+def pc_to_snes(value: int) -> int:
     return ((value << 1) & 0x7F0000) | (value & 0x7FFF) | 0x8000
 
 
-def snes_to_pc(value):
+def snes_to_pc(value: int) -> int:
     return ((value & 0x7F0000) >> 1) | (value & 0x7FFF)
 
 
-def cache_argsless(function):
-    if function.__code__.co_argcount:
-        raise Exception("Can only cache 0 argument functions with this cache.")
+RetType = typing.TypeVar("RetType")
 
-    result = sentinel = object()
 
-    def _wrap():
+def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[], RetType]:
+    assert not function.__code__.co_argcount, "Can only cache 0 argument functions with this cache."
+
+    sentinel = object()
+    result: typing.Union[object, RetType] = sentinel
+
+    def _wrap() -> RetType:
         nonlocal result
         if result is sentinel:
             result = function()
-        return result
+        return typing.cast(RetType, result)
 
     return _wrap
 
 
 def is_frozen() -> bool:
-    return getattr(sys, 'frozen', False)
+    return typing.cast(bool, getattr(sys, 'frozen', False))
 
 
-def local_path(*path: str):
-    if local_path.cached_path:
-        return os.path.join(local_path.cached_path, *path)
-
+def local_path(*path: str) -> str:
+    """Returns path to a file in the local Archipelago installation or source."""
+    if hasattr(local_path, 'cached_path'):
+        pass
     elif is_frozen():
         if hasattr(sys, "_MEIPASS"):
             # we are running in a PyInstaller bundle
@@ -95,19 +104,45 @@ def local_path(*path: str):
     return os.path.join(local_path.cached_path, *path)
 
 
-local_path.cached_path = None
+def home_path(*path: str) -> str:
+    """Returns path to a file in the user home's Archipelago directory."""
+    if hasattr(home_path, 'cached_path'):
+        pass
+    elif sys.platform.startswith('linux'):
+        home_path.cached_path = os.path.expanduser('~/Archipelago')
+        os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
+    else:
+        # not implemented
+        home_path.cached_path = local_path()  # this will generate the same exceptions we got previously
+
+    return os.path.join(home_path.cached_path, *path)
 
 
-def output_path(*path):
-    if output_path.cached_path:
+def user_path(*path: str) -> str:
+    """Returns either local_path or home_path based on write permissions."""
+    if hasattr(user_path, 'cached_path'):
+        pass
+    elif os.access(local_path(), os.W_OK):
+        user_path.cached_path = local_path()
+    else:
+        user_path.cached_path = home_path()
+        # populate home from local - TODO: upgrade feature
+        if user_path.cached_path != local_path() and not os.path.exists(user_path('host.yaml')):
+            for dn in ('Players', 'data/sprites'):
+                shutil.copytree(local_path(dn), user_path(dn), dirs_exist_ok=True)
+            for fn in ('manifest.json', 'host.yaml'):
+                shutil.copy2(local_path(fn), user_path(fn))
+
+    return os.path.join(user_path.cached_path, *path)
+
+
+def output_path(*path: str):
+    if hasattr(output_path, 'cached_path'):
         return os.path.join(output_path.cached_path, *path)
-    output_path.cached_path = local_path(get_options()["general_options"]["output_path"])
+    output_path.cached_path = user_path(get_options()["general_options"]["output_path"])
     path = os.path.join(output_path.cached_path, *path)
     os.makedirs(os.path.dirname(path), exist_ok=True)
     return path
-
-
-output_path.cached_path = None
 
 
 def open_file(filename):
@@ -132,6 +167,7 @@ class UniqueKeyLoader(SafeLoader):
 
 
 parse_yaml = functools.partial(load, Loader=UniqueKeyLoader)
+parse_yamls = functools.partial(load_all, Loader=UniqueKeyLoader)
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
 
@@ -231,7 +267,8 @@ def get_default_options() -> dict:
         },
         "minecraft_options": {
             "forge_directory": "Minecraft Forge server",
-            "max_heap_size": "2G"
+            "max_heap_size": "2G",
+            "release_channel": "release"
         },
         "oot_options": {
             "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
@@ -263,8 +300,11 @@ def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
 @cache_argsless
 def get_options() -> dict:
     if not hasattr(get_options, "options"):
-        locations = ("options.yaml", "host.yaml",
-                     local_path("options.yaml"), local_path("host.yaml"))
+        filenames = ("options.yaml", "host.yaml")
+        locations = []
+        if os.path.join(os.getcwd()) != local_path():
+            locations += filenames  # use files from cwd only if it's not the local_path
+        locations += [user_path(filename) for filename in filenames]
 
         for location in locations:
             if os.path.exists(location):
@@ -274,7 +314,7 @@ def get_options() -> dict:
                 get_options.options = update_options(get_default_options(), options, location, list())
                 break
         else:
-            raise FileNotFoundError(f"Could not find {locations[1]} to load options.")
+            raise FileNotFoundError(f"Could not find {filenames[1]} to load options.")
     return get_options.options
 
 
@@ -289,7 +329,7 @@ def get_location_name_from_id(code: int) -> str:
 
 
 def persistent_store(category: str, key: typing.Any, value: typing.Any):
-    path = local_path("_persistent_storage.yaml")
+    path = user_path("_persistent_storage.yaml")
     storage: dict = persistent_load()
     category = storage.setdefault(category, {})
     category[key] = value
@@ -301,7 +341,7 @@ def persistent_load() -> typing.Dict[dict]:
     storage = getattr(persistent_load, "storage", None)
     if storage:
         return storage
-    path = local_path("_persistent_storage.yaml")
+    path = user_path("_persistent_storage.yaml")
     storage: dict = {}
     if os.path.exists(path):
         try:
@@ -386,9 +426,9 @@ loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': log
 
 
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
-                 log_format: str = "[%(name)s]: %(message)s", exception_logger: str = ""):
+                 log_format: str = "[%(name)s at %(asctime)s]: %(message)s", exception_logger: str = ""):
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
-    log_folder = local_path("logs")
+    log_folder = user_path("logs")
     os.makedirs(log_folder, exist_ok=True)
     root_logger = logging.getLogger()
     for handler in root_logger.handlers[:]:
@@ -447,7 +487,8 @@ class VersionException(Exception):
     pass
 
 
-def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")):
+# noinspection PyPep8Naming
+def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")) -> str:
     n = 0
 
     while value > power:
@@ -457,3 +498,24 @@ def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P
         return f"{value} {power_labels[n]}"
     else:
         return f"{value:0.3f} {power_labels[n]}"
+
+
+def get_fuzzy_ratio(word1: str, word2: str) -> float:
+    return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
+            / max(len(word1), len(word2)))
+
+
+def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: typing.Optional[int] = None) \
+        -> typing.List[typing.Tuple[str, int]]:
+    limit: int = limit if limit else len(wordlist)
+    return list(
+        map(
+            lambda container: (container[0], int(container[1]*100)),  # convert up to limit to int %
+            sorted(
+                map(lambda candidate:
+                    (candidate,  get_fuzzy_ratio(input_word, candidate)),
+                    wordlist),
+                key=lambda element: element[1],
+                reverse=True)[0:limit]
+        )
+    )

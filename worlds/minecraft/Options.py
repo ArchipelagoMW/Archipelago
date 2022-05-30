@@ -1,12 +1,12 @@
 import typing
-from Options import Choice, Option, Toggle, Range, OptionList, DeathLink
+from Options import Choice, Option, Toggle, DefaultOnToggle, Range, OptionList, DeathLink
 
 
 class AdvancementGoal(Range):
     """Number of advancements required to spawn bosses."""
     display_name = "Advancement Goal"
     range_start = 0
-    range_end = 92
+    range_end = 95
     default = 40
 
 
@@ -36,16 +36,14 @@ class BossGoal(Choice):
     default = 1
 
 
-class ShuffleStructures(Toggle):
+class ShuffleStructures(DefaultOnToggle):
     """Enables shuffling of villages, outposts, fortresses, bastions, and end cities."""
     display_name = "Shuffle Structures"
-    default = 1
 
 
-class StructureCompasses(Toggle):
+class StructureCompasses(DefaultOnToggle):
     """Adds structure compasses to the item pool, which point to the nearest indicated structure."""
     display_name = "Structure Compasses"
-    default = 1
 
 
 class BeeTraps(Range): 
@@ -68,25 +66,21 @@ class CombatDifficulty(Choice):
 class HardAdvancements(Toggle):
     """Enables certain RNG-reliant or tedious advancements."""
     display_name = "Include Hard Advancements"
-    default = 0
 
 
 class UnreasonableAdvancements(Toggle):
     """Enables the extremely difficult advancements "How Did We Get Here?" and "Adventuring Time.\""""
     display_name = "Include Unreasonable Advancements"
-    default = 0
 
 
 class PostgameAdvancements(Toggle):
     """Enables advancements that require spawning and defeating the required bosses."""
     display_name = "Include Postgame Advancements"
-    default = 0
 
 
 class SendDefeatedMobs(Toggle):
     """Send killed mobs to other Minecraft worlds which have this option enabled."""
     display_name = "Send Defeated Mobs"
-    default = 0
 
 
 class StartingItems(OptionList):

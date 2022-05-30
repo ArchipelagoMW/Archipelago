@@ -9,8 +9,20 @@ from .Regions import create_regions, getConnectionName
 from .Rules import set_rules
 from .Options import raft_options
 
-from BaseClasses import Region, RegionType, Entrance, Location, MultiWorld, Item
-from ..AutoWorld import World
+from BaseClasses import Region, RegionType, Entrance, Location, MultiWorld, Item, Tutorial
+from ..AutoWorld import World, WebWorld
+
+
+class RaftWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Raft integration for Archipelago multiworld games.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["SunnyBat", "Awareqwx"]
+    )]
+
 
 class RaftWorld(World):
     """
@@ -19,6 +31,7 @@ class RaftWorld(World):
     islands that you come across.
     """
     game: str = "Raft"
+    web = RaftWeb()
 
     item_name_to_id = items_lookup_name_to_id.copy()
     lastItemId = max(filter(lambda val: val is not None, item_name_to_id.values()))
@@ -27,6 +40,7 @@ class RaftWorld(World):
     options = raft_options
 
     data_version = 1
+    required_client_version = (0, 2, 0)
 
     def generate_basic(self):
         minRPSpecified = self.world.minimum_resource_pack_amount[self.player].value
@@ -111,9 +125,6 @@ class RaftWorld(World):
 
         return super(RaftWorld, self).collect_item(state, item, remove)
 
-    def get_required_client_version(self) -> typing.Tuple[int, int, int]:
-        return max((0, 2, 0), super(RaftWorld, self).get_required_client_version())
-    
     def pre_fill(self):
         if self.world.island_frequency_locations[self.player] == 0:
             self.setLocationItem("Radio Tower Frequency to Vasagatan", "Vasagatan Frequency")

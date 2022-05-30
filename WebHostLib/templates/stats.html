@@ -1,0 +1,28 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    <title>Archipelago Game Statistics</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/stats.css") }}" />
+    {{ css_resources|indent(4)|safe }}
+    {{ js_resources|indent(4)|safe }}
+    {{ chart_data|indent(4)|safe }}
+{% endblock %}
+
+{% block body %}
+    {% include 'header/grassFlowersHeader.html' %}
+    <div id="stats" class="markdown">
+        <h1>Archipelago Game Statistics</h1>
+        <h5>
+            The data on this page is updated hourly.
+        </h5>
+
+        <div id="charts-wrapper">
+        {% for chart in charts %}
+            <div class="chart-container">
+                {{ chart|indent(16)|safe }}
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}

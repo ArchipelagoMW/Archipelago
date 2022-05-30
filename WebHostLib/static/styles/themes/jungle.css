@@ -1,0 +1,64 @@
+html{
+    background-image: url("../../static/backgrounds/jungle.png");
+    background-repeat: repeat;
+    background-size: 450px 450px;
+}
+
+body{
+    color: #ffffff;
+}
+
+#base-header {
+    background: url('../../static/backgrounds/header/grass-header.png') repeat-x;
+}
+
+.markdown {
+    background-color: rgba(0, 0, 0, 0.46) !important;
+}
+
+h1{
+    color: #ffffff;
+}
+
+h2{
+    color: #7bdf27;
+}
+
+h3, h4, h5,h6{
+    color: #ffffff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+table th{
+
+}
+
+table td{
+
+}
+
+a{
+    color: #ffd438;
+}
+
+pre{
+    margin-top: 0;
+    padding: 0.5rem 0.25rem;
+    background-color: #accf90;
+    border: 1px solid #578134;
+    border-radius: 6px;
+    color: #000000;
+}
+
+pre code{
+    border: none;
+}
+
+code{
+    background-color: #accf90;
+    border-radius: 4px;
+    border: 1px solid #578134;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    color: #000000;
+}

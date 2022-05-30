@@ -42,8 +42,8 @@
     color: white;
     font-family: "Minecraftia", monospace;
     font-weight: bold;
-    bottom: 0px;
-    right: 0px;
+    bottom: 0;
+    right: 0;
 }
 
 #location-table{

@@ -105,9 +105,16 @@ factorio_options:
 minecraft_options: 
   forge_directory: "Minecraft Forge server"
   max_heap_size: "2G"
-oot_options: 
+  # release channel, currently "release", or "beta"
+  # any games played on the "beta" channel have a high likelihood of no longer working on the "release" channel.
+  release_channel: "release"
+oot_options:
   # File name of the OoT v1.0 ROM
   rom_file: "The Legend of Zelda - Ocarina of Time.z64"
+  # Set this to false to never autostart a rom (such as after patching)
+  #             true  for operating system default program
+  # Alternatively, a path to a program to open the .z64 file with
+  rom_start: true
 soe_options:
   # File name of the SoE US ROM
   rom_file: "Secret of Evermore (USA).sfc"

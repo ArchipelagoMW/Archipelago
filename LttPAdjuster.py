@@ -20,9 +20,14 @@ from tkinter.constants import DISABLED, NORMAL
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
+import ModuleUpdate
+ModuleUpdate.update()
+
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
-from Utils import output_path, local_path, open_file, get_cert_none_ssl_context, persistent_store, get_adjuster_settings, tkinter_center_window
+from Utils import output_path, local_path, user_path, open_file, get_cert_none_ssl_context, persistent_store, \
+    get_adjuster_settings, tkinter_center_window, init_logging
 from Patch import GAME_ALTTP
+
 
 class AdjusterWorld(object):
     def __init__(self, sprite_pool):
@@ -40,7 +45,7 @@ class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 def main():
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('--rom', default='ER_base.sfc', help='Path to an ALttP rom to adjust.')
+    parser.add_argument('rom', nargs="?", default='AP_LttP.sfc', help='Path to an ALttP rom to adjust.')
     parser.add_argument('--baserom', default='Zelda no Densetsu - Kamigami no Triforce (Japan).sfc',
                         help='Path to an ALttP JAP(1.0) rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?',
@@ -53,6 +58,7 @@ def main():
                              ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--deathlink', help='Enable DeathLink system.', action='store_true')
+    parser.add_argument('--allowcollect', help='Allow collection of other player items', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
     parser.add_argument('--triforcehud', default='hide_goal', const='hide_goal', nargs='?',
                         choices=['normal', 'hide_goal', 'hide_required', 'hide_both'],
@@ -127,10 +133,13 @@ def main():
 
 def adjust(args):
     start = time.perf_counter()
+    init_logging("LttP Adjuster")
     logger = logging.getLogger('Adjuster')
     logger.info('Patching ROM.')
     vanillaRom = args.baserom
-    if os.path.splitext(args.rom)[-1].lower() == '.apbp':
+    if not os.path.exists(vanillaRom) and not os.path.isabs(vanillaRom):
+        vanillaRom = local_path(vanillaRom)
+    if os.path.splitext(args.rom)[-1].lower() in {'.apbp', '.aplttp'}:
         import Patch
         meta, args.rom = Patch.create_rom_file(args.rom)
 
@@ -155,7 +164,7 @@ def adjust(args):
 
     apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.menuspeed, args.music,
                        args.sprite, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world,
-                       deathlink=args.deathlink)
+                       deathlink=args.deathlink, allowcollect=args.allowcollect)
     path = output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc')
     rom.write_to_file(path)
 
@@ -210,6 +219,7 @@ def adjustGUI():
         guiargs.music = bool(rom_vars.MusicVar.get())
         guiargs.reduceflashing = bool(rom_vars.disableFlashingVar.get())
         guiargs.deathlink = bool(rom_vars.DeathLinkVar.get())
+        guiargs.allowcollect = bool(rom_vars.AllowCollectVar.get())
         guiargs.rom = romVar2.get()
         guiargs.baserom = romVar.get()
         guiargs.sprite = rom_vars.sprite
@@ -246,6 +256,7 @@ def adjustGUI():
         guiargs.music = bool(rom_vars.MusicVar.get())
         guiargs.reduceflashing = bool(rom_vars.disableFlashingVar.get())
         guiargs.deathlink = bool(rom_vars.DeathLinkVar.get())
+        guiargs.allowcollect = bool(rom_vars.AllowCollectVar.get())
         guiargs.baserom = romVar.get()
         if isinstance(rom_vars.sprite, Sprite):
             guiargs.sprite = rom_vars.sprite.name
@@ -286,7 +297,7 @@ def run_sprite_update():
 def update_sprites(task, on_finish=None):
     resultmessage = ""
     successful = True
-    sprite_dir = local_path("data", "sprites", "alttpr")
+    sprite_dir = user_path("data", "sprites", "alttpr")
     os.makedirs(sprite_dir, exist_ok=True)
     ctx = get_cert_none_ssl_context()
     def finished():
@@ -502,24 +513,29 @@ def get_rom_frame(parent=None):
 
 def get_rom_options_frame(parent=None):
     adjuster_settings = get_adjuster_settings(GAME_ALTTP)
+    defaults = {
+        "auto_apply": 'ask',
+        "music": True,
+        "reduceflashing": True,
+        "deathlink": False,
+        "sprite": None,
+        "quickswap": True,
+        "menuspeed": 'normal',
+        "heartcolor": 'red',
+        "heartbeep": 'normal',
+        "ow_palettes": 'default',
+        "uw_palettes": 'default',
+        "hud_palettes": 'default',
+        "sword_palettes": 'default',
+        "shield_palettes": 'default',
+        "sprite_pool": [],
+        "allowcollect": False,
+    }
     if not adjuster_settings:
         adjuster_settings = Namespace()
-        adjuster_settings.auto_apply = 'ask'
-        adjuster_settings.music = True
-        adjuster_settings.reduceflashing = True
-        adjuster_settings.deathlink = False
-        adjuster_settings.sprite = None
-        adjuster_settings.quickswap = True
-        adjuster_settings.menuspeed = 'normal'
-        adjuster_settings.heartcolor = 'red'
-        adjuster_settings.heartbeep = 'normal'
-        adjuster_settings.ow_palettes = 'default'
-        adjuster_settings.uw_palettes = 'default'
-        adjuster_settings.hud_palettes = 'default'
-        adjuster_settings.sword_palettes = 'default'
-        adjuster_settings.shield_palettes = 'default'
-    if not hasattr(adjuster_settings, 'sprite_pool'):
-        adjuster_settings.sprite_pool = []
+    for key, defaultvalue in defaults.items():
+        if not hasattr(adjuster_settings, key):
+            setattr(adjuster_settings, key, defaultvalue)
 
     romOptionsFrame = LabelFrame(parent, text="Rom options")
     romOptionsFrame.columnconfigure(0, weight=1)
@@ -541,6 +557,10 @@ def get_rom_options_frame(parent=None):
     vars.DeathLinkVar = IntVar(value=adjuster_settings.deathlink)
     DeathLinkCheckbutton = Checkbutton(romOptionsFrame, text="DeathLink (Team Deaths)", variable=vars.DeathLinkVar)
     DeathLinkCheckbutton.grid(row=7, column=0, sticky=W)
+
+    vars.AllowCollectVar = IntVar(value=adjuster_settings.allowcollect)
+    AllowCollectCheckbutton = Checkbutton(romOptionsFrame, text="Allow Collect", variable=vars.AllowCollectVar)
+    AllowCollectCheckbutton.grid(row=8, column=0, sticky=W)
 
     spriteDialogFrame = Frame(romOptionsFrame)
     spriteDialogFrame.grid(row=0, column=1)
@@ -703,7 +723,7 @@ def get_rom_options_frame(parent=None):
 
     vars.auto_apply = StringVar(value=adjuster_settings.auto_apply)
     autoApplyFrame = Frame(romOptionsFrame)
-    autoApplyFrame.grid(row=8, column=0, columnspan=2, sticky=W)
+    autoApplyFrame.grid(row=9, column=0, columnspan=2, sticky=W)
     filler = Label(autoApplyFrame, text="Automatically apply last used settings on opening .apbp files")
     filler.pack(side=TOP, expand=True, fill=X)
     askRadio = Radiobutton(autoApplyFrame, text='Ask', variable=vars.auto_apply, value='ask')
@@ -1013,11 +1033,11 @@ class SpriteSelector():
 
     @property
     def alttpr_sprite_dir(self):
-        return local_path("data", "sprites", "alttpr")
+        return user_path("data", "sprites", "alttpr")
 
     @property
     def custom_sprite_dir(self):
-        return local_path("data", "sprites", "custom")
+        return user_path("data", "sprites", "custom")
 
 
 def get_image_for_sprite(sprite, gif_only: bool = False):

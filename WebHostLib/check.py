@@ -13,11 +13,11 @@ def allowed_file(filename):
 
 
 from Generate import roll_settings
-from Utils import parse_yaml
+from Utils import parse_yamls
 
 
-@app.route('/mysterycheck', methods=['GET', 'POST'])
-def mysterycheck():
+@app.route('/check', methods=['GET', 'POST'])
+def check():
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -30,8 +30,12 @@ def mysterycheck():
             else:
                 results, _ = roll_options(options)
                 return render_template("checkResult.html", results=results)
-
     return render_template("check.html")
+
+
+@app.route('/mysterycheck')
+def mysterycheck():
+    return redirect(url_for("check"), 301)
 
 
 def get_yaml_data(file) -> Union[Dict[str, str], str]:
@@ -58,21 +62,29 @@ def get_yaml_data(file) -> Union[Dict[str, str], str]:
     return options
 
 
-def roll_options(options: Dict[str, Union[dict, str]]) -> Tuple[Dict[str, Union[str, bool]], Dict[str, dict]]:
+def roll_options(options: Dict[str, Union[dict, str]],
+                 plando_options: Set[str] = frozenset({"bosses", "items", "connections", "texts"})) -> \
+        Tuple[Dict[str, Union[str, bool]], Dict[str, dict]]:
+    plando_options = set(plando_options)
     results = {}
     rolled_results = {}
     for filename, text in options.items():
         try:
             if type(text) is dict:
-                yaml_data = text
+                yaml_datas = (text, )
             else:
-                yaml_data = parse_yaml(text)
+                yaml_datas = tuple(parse_yamls(text))
         except Exception as e:
             results[filename] = f"Failed to parse YAML data in {filename}: {e}"
         else:
             try:
-                rolled_results[filename] = roll_settings(yaml_data,
-                                                         plando_options={"bosses", "items", "connections", "texts"})
+                if len(yaml_datas) == 1:
+                    rolled_results[filename] = roll_settings(yaml_datas[0],
+                                                             plando_options=plando_options)
+                else:
+                    for i, yaml_data in enumerate(yaml_datas):
+                        rolled_results[f"{filename}/{i + 1}"] = roll_settings(yaml_data,
+                                                                              plando_options=plando_options)
             except Exception as e:
                 results[filename] = f"Failed to generate mystery in {filename}: {e}"
             else:

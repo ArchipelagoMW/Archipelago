@@ -2242,7 +2242,7 @@ def crossed_shuffle_dungeons(world, player: int):
         connect_caves(world, dungeon_entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')], player)
 
     connect_caves(world, dungeon_entrances, [], dungeon_exits, player)
-    assert not dungeon_exits # make sure all exits are accounted for
+    assert not dungeon_exits , "make sure all exits are accounted for"
 
 def inverted_crossed_shuffle_dungeons(world, player: int):
 
@@ -2293,7 +2293,7 @@ def inverted_crossed_shuffle_dungeons(world, player: int):
     connect_mandatory_exits(world, dungeon_entrances, dungeon_exits, lw_dungeon_entrances_must_exit, player)
 
     connect_caves(world, dungeon_entrances, [], dungeon_exits, player)
-    assert not dungeon_exits # make sure all exits are accounted for
+    assert not dungeon_exits, "make sure all exits are accounted for"
 
 def unbias_some_entrances(world, Dungeon_Exits, Cave_Exits, Old_Man_House, Cave_Three_Exits):
     def shuffle_lists_in_list(ls):
