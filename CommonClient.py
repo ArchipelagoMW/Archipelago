@@ -16,7 +16,7 @@ import Utils
 if __name__ == "__main__":
     Utils.init_logging("TextClient", exception_logger="Client")
 
-from MultiServer import CommandProcessor
+from MultiServer import CommandProcessor, mark_raw
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot
 from Utils import Version, stream_input
 from worlds import network_data_package, AutoWorldRegister
@@ -115,10 +115,13 @@ class ClientCommandProcessor(CommandProcessor):
 
 
 class TextClientCommandProcessor(ClientCommandProcessor):
+
+    @mark_raw
     def _cmd_add_tag(self, tag: str):
         """Adds a tag to the list of tags."""
         asyncio.create_task(self.ctx.add_tags(tag))
 
+    @mark_raw
     def _cmd_remove_tag(self, tag: str):
         """Removes a tag from the list of tags. (Will not remove 'AP', 'IgnoreGame', 'TextOnly')"""
         if tag in {"AP", "IgnoreGame", "TextOnly"}:
