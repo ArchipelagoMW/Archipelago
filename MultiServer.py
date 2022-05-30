@@ -1778,7 +1778,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 if item in world.item_name_groups:
                     hints = []
                     for item in world.item_name_groups[item]:
-                        hints.extend(collect_hints(self.ctx, team, slot, item))
+                        if item in world.item_name_to_id:  # ensure item has an ID
+                            hints.extend(collect_hints(self.ctx, team, slot, item))
                 else:  # item name
                     hints = collect_hints(self.ctx, team, slot, item)
 
