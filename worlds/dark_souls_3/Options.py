@@ -1,18 +1,25 @@
 import typing
-from Options import Choice, Option
+from Options import Toggle, Option
 
 
-class SampleOption(Choice):
-    """
-    This is a sample option.
-    """
-    display_name = "Sample Option"
-    option_1 = 1
-    option_2 = 2
-    default = 0
+class AutoEquipOption(Toggle):
+    # AutoEquip
+    display_name = "Auto Equip"
+
+
+class LockEquipOption(Toggle):
+    # AutoEquip
+    display_name = "Lock Equip"
+
+
+class NoWeaponRequirementsOption(Toggle):
+    # AutoEquip
+    display_name = "No Weapon Requirements"
 
 
 dark_souls_options: typing.Dict[str, type(Option)] = {
-    "sample_option": SampleOption,
+    "auto_equip": AutoEquipOption,
+    "lock_equip": LockEquipOption,
+    "no_weapon_requirements": NoWeaponRequirementsOption,
 }
 

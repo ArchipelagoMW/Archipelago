@@ -1,6 +1,6 @@
 import typing
 from BaseClasses import Item
-from worlds.dark_souls_3.data.items_data import dictionary_table
+from worlds.dark_souls_3.data.locations_data import dictionary_table
 
 
 class ItemData(typing.NamedTuple):
