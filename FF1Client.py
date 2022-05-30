@@ -102,6 +102,18 @@ class FF1Context(CommonContext):
                               f"{receiving_player_name}"
                 self._set_message(msg, item.item)
 
+    def run_gui(self):
+        from kvui import GameManager
+
+        class FF1Manager(GameManager):
+            logging_pairs = [
+                ("Client", "Archipelago")
+            ]
+            base_title = "Archipelago Final Fantasy 1 Client"
+
+        self.ui = FF1Manager(self)
+        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+
 
 def get_payload(ctx: FF1Context):
     current_time = time.time()
@@ -175,6 +187,9 @@ async def nes_sync_task(ctx: FF1Context):
                         asyncio.create_task(parse_locations(data_decoded['locations'], ctx, False))
                     if not ctx.auth:
                         ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
+                        if ctx.auth == '':
+                            logger.info("Invalid ROM detected. No player name built into the ROM. Please regenerate"
+                                        "the ROM using the same link but adding your slot name")
                         if ctx.awaiting_rom:
                             await ctx.server_auth(False)
                 except asyncio.TimeoutError:
@@ -232,14 +247,8 @@ if __name__ == '__main__':
         ctx = FF1Context(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:
-            input_task = None
-            from kvui import FF1Manager
-            ctx.ui = FF1Manager(ctx)
-            ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
-        else:
-            input_task = asyncio.create_task(console_loop(ctx), name="Input")
-            ui_task = None
-
+            ctx.run_gui()
+        ctx.run_cli()
         ctx.nes_sync_task = asyncio.create_task(nes_sync_task(ctx), name="NES Sync")
 
         await ctx.exit_event.wait()
@@ -250,20 +259,12 @@ if __name__ == '__main__':
         if ctx.nes_sync_task:
             await ctx.nes_sync_task
 
-        if ui_task:
-            await ui_task
-
-        if input_task:
-            input_task.cancel()
-
 
     import colorama
 
     parser = get_base_parser()
-    args, rest = parser.parse_known_args()
+    args = parser.parse_args()
     colorama.init()
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(args))
-    loop.close()
+    asyncio.run(main(args))
     colorama.deinit()

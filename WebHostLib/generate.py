@@ -22,11 +22,22 @@ from .upload import upload_zip_to_db
 
 
 def get_meta(options_source: dict) -> dict:
+    plando_options = {
+        options_source.get("plando_bosses", ""),
+        options_source.get("plando_items", ""),
+        options_source.get("plando_connections", ""),
+        options_source.get("plando_texts", "")
+    }
+    plando_options -= {""}
+
     meta = {
         "hint_cost": int(options_source.get("hint_cost", 10)),
         "forfeit_mode": options_source.get("forfeit_mode", "goal"),
         "remaining_mode": options_source.get("remaining_mode", "disabled"),
         "collect_mode": options_source.get("collect_mode", "disabled"),
+        "item_cheat": bool(int(options_source.get("item_cheat", 1))),
+        "server_password": options_source.get("server_password", None),
+        "plando_options": list(plando_options)
     }
     return meta
 
@@ -44,10 +55,9 @@ def generate(race=False):
             if type(options) == str:
                 flash(options)
             else:
-                results, gen_options = roll_options(options)
-                # get form data -> server settings
                 meta = get_meta(request.form)
                 meta["race"] = race
+                results, gen_options = roll_options(options, meta["plando_options"])
 
                 if race:
                     meta["item_cheat"] = False
@@ -89,6 +99,8 @@ def gen_game(gen_options, meta: TypeOptional[Dict[str, object]] = None, owner=No
     meta.setdefault("hint_cost", 10)
     race = meta.get("race", False)
     del (meta["race"])
+    plando_options = meta.get("plando", {"bosses", "items", "connections", "texts"})
+    del (meta["plando_options"])
     try:
         target = tempfile.TemporaryDirectory()
         playercount = len(gen_options)
@@ -108,6 +120,7 @@ def gen_game(gen_options, meta: TypeOptional[Dict[str, object]] = None, owner=No
         erargs.outputname = seedname
         erargs.outputpath = target.name
         erargs.teams = 1
+        erargs.plando_options = ", ".join(plando_options)
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
