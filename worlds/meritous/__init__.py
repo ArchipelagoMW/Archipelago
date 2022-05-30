@@ -3,16 +3,27 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
-from BaseClasses import Item, MultiWorld
+from BaseClasses import Item, MultiWorld, Tutorial
 from Fill import fill_restrictive
 from .Items import item_table, item_groups, MeritousItem
 from .Locations import location_table, MeritousLocation
 from .Options import meritous_options, cost_scales
 from .Regions import create_regions
 from .Rules import set_rules
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 
 client_version = 1
+
+
+class MeritousWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Meritous Setup Tutorial",
+        "A guide to setting up the Archipelago Meritous software on your computer.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["KewlioMZX"]
+    )]
 
 
 class MeritousWorld(World):
@@ -25,12 +36,17 @@ class MeritousWorld(World):
     game: str = "Meritous"
     topology_present: False
 
+    web = MeritousWeb()
+
     item_name_to_id = item_table
     location_name_to_id = location_table
     item_name_groups = item_groups
 
     data_version = 2
     forced_auto_forfeit = False
+
+    # NOTE: Remember to change this before this game goes live
+    required_client_version = (0, 2, 4)
 
     options = meritous_options
 
@@ -149,10 +165,6 @@ class MeritousWorld(World):
         else:
             self.world.completion_condition[self.player] = lambda state: state.has(
                 "Full Victory", self.player)
-
-    def get_required_client_version(self) -> tuple:
-        # NOTE: Remember to change this before this game goes live
-        return max((0, 2, 4), super(MeritousWorld, self).get_required_client_version())
 
     def fill_slot_data(self) -> dict:
         return {

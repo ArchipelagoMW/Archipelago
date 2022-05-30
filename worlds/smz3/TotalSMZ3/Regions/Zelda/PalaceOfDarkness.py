@@ -29,7 +29,7 @@ class PalaceOfDarkness(Z3Region, IReward):
             Location(self, 256+127, 0x1EA43, LocationType.Regular, "Palace of Darkness - Compass Chest",
                 lambda items: items.KeyPD >= (4 if (items.Hammer and items.Bow and items.Lamp) or config.Keysanity else 3)),
             Location(self, 256+128, 0x1EA46, LocationType.Regular, "Palace of Darkness - Harmless Hellway",
-                lambda items: items.KeyPD >= (4 if (items.Hammer and items.Bow and items.Lamp) or config.Keysanity else 3 if 
+                lambda items: items.KeyPD >= ((4 if (items.Hammer and items.Bow and items.Lamp) or config.Keysanity else 3) if 
                         self.GetLocation("Palace of Darkness - Harmless Hellway").ItemIs(ItemType.KeyPD, self.world) else
                         6 if (items.Hammer and items.Bow and items.Lamp) or config.Keysanity else 5))
                 .AlwaysAllow(lambda item, items: item.Is(ItemType.KeyPD, self.world) and items.KeyPD >= 5),

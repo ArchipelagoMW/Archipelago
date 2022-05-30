@@ -1,9 +1,9 @@
 import collections
 import typing
 
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 
-from BaseClasses import Region, Entrance, Location, Item, RegionType
+from BaseClasses import Region, Entrance, Location, Item, RegionType, Tutorial
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, rocket_recipes, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
@@ -14,6 +14,17 @@ from .Mod import generate_mod
 from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal
 
 import logging
+
+
+class FactorioWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago Factorio software on your computer.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Berserker, Farrak Kilhn"]
+    )]
 
 
 class FactorioItem(Item):
@@ -36,12 +47,15 @@ class Factorio(World):
     custom_recipes: typing.Dict[str, Recipe]
     advancement_technologies: typing.Set[str]
 
+    web = FactorioWeb()
+
     item_name_to_id = all_items
     location_name_to_id = base_tech_table
     item_name_groups = {
         "Progressive": set(progressive_tech_table.values()),
     }
     data_version = 5
+    required_client_version = (0, 3, 0)
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
@@ -57,6 +71,7 @@ class Factorio(World):
         attack_traps_wanted = self.world.attack_traps[player].value
         traps_wanted = ["Evolution Trap"] * evolution_traps_wanted + ["Attack Trap"] * attack_traps_wanted
         self.world.random.shuffle(traps_wanted)
+
         for tech_name in base_tech_table:
             if traps_wanted and tech_name in useless_technologies:
                 self.world.itempool.append(self.create_item(traps_wanted.pop()))
@@ -71,11 +86,15 @@ class Factorio(World):
                     self.world.get_location(tech_name, player).place_locked_item(tech_item)
                 else:
                     self.world.itempool.append(tech_item)
+
         map_basic_settings = self.world.world_gen[player].value["basic"]
         if map_basic_settings.get("seed", None) is None:  # allow seed 0
             map_basic_settings["seed"] = self.world.slot_seeds[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
 
-        self.sending_visible = self.world.tech_tree_information[player] == TechTreeInformation.option_full
+        # used to be called "sending_visible"
+        if self.world.tech_tree_information[player] == TechTreeInformation.option_full:
+            # mark all locations as pre-hinted
+            self.world.start_location_hints[self.player].value.update(base_tech_table)
 
     generate_output = generate_mod
 
@@ -174,9 +193,6 @@ class Factorio(World):
 
         return super(Factorio, self).collect_item(state, item, remove)
 
-    def get_required_client_version(self) -> tuple:
-        return max((0, 2, 6), super(Factorio, self).get_required_client_version())
-
     options = factorio_options
 
     @classmethod
@@ -229,14 +245,16 @@ class Factorio(World):
             ingredient = pool.pop()
             if liquids_used == allow_liquids and ingredient in liquids:
                 continue  # can't use this ingredient as we already have maximum liquid in our recipe.
+            ingredient_raw = 0
             if ingredient in all_product_sources:
                 ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
                 ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
                 ingredient_energy = ingredient_recipe.total_energy
             else:
                 # assume simple ore TODO: remove if tree when mining data is harvested from Factorio
-                ingredient_raw = 1
                 ingredient_energy = 2
+            if not ingredient_raw:
+                ingredient_raw = 1
             if remaining_num_ingredients == 1:
                 max_raw = 1.1 * remaining_raw
                 min_raw = 0.9 * remaining_raw

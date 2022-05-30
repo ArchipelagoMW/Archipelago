@@ -10,17 +10,23 @@
     <div id="host-room">
         {% if room.owner == session["_id"] %}
             Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
-            <br>
+            <br />
         {% endif %}
         {% if room.tracker %}
             This room has a <a href="{{ url_for("getTracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.
-            <br>
+            <br />
         {% endif %}
         This room will be closed after {{ room.timeout//60//60 }} hours of inactivity. Should you wish to continue
         later,
         you can simply refresh this page and the server will be started again.<br>
         {% if room.last_port %}
-            You can connect to this room by using '/connect {{ config['PATCH_TARGET'] }}:{{ room.last_port }}'
+            You can connect to this room by using <span class="interactive"
+            data-tooltip="This means address/ip is {{ config['PATCH_TARGET'] }} and port is {{ room.last_port }}.
+            Clicking here opens the Text Client, if installed properly.">
+            <a href="archipelago://{{ config['PATCH_TARGET'] }}:{{ room.last_port }}">
+                '/connect {{ config['PATCH_TARGET'] }}:{{ room.last_port }}'
+            </a>
+            </span>
             in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>{% endif %}
         {{ macros.list_patches_room(room) }}
         {% if room.owner == session["_id"] %}
@@ -31,10 +37,8 @@
                            placeholder="Server Command. /help to list them, list gets appended to log.">
                 </div>
             </form>
-
-            Log:
         <div id="logger"></div>
-        <script>
+        <script type="application/ecmascript">
             let xmlhttp = new XMLHttpRequest();
             let url = '{{ url_for('display_log', room = room.id) }}';
 

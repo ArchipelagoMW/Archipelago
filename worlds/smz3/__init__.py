@@ -5,14 +5,14 @@ import random
 import threading
 from typing import Dict, Set, TextIO
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState, Tutorial
 from worlds.generic.Rules import set_rule
 import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
 from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
 from worlds.smz3.TotalSMZ3.Config import Config, GameMode, GanonInvincible, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic
 from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
 from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
-from ..AutoWorld import World, AutoLogicRegister
+from ..AutoWorld import World, AutoLogicRegister, WebWorld
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
 from .Options import smz3_options
@@ -34,6 +34,17 @@ class SMZ3CollectionState(metaclass=AutoLogicRegister):
         return ret
 
 
+class SMZ3Web(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Archipelago Super Metroid and A Link to the Past Crossover randomizer on your computer. This guide covers single-player, multiworld, and related software.",
+        "English",
+        "multiworld_en.md",
+        "multiworld/en",
+        ["lordlou"]
+    )]
+
+
 class SMZ3World(World):
     """
      A python port of Super Metroid & A Link To The Past Crossover Item Randomizer based on v11.2 of Total's SMZ3. 
@@ -47,15 +58,23 @@ class SMZ3World(World):
     location_names: Set[str]
     item_name_to_id = TotalSMZ3Item.lookup_name_to_id
     location_name_to_id: Dict[str, int] = {key : locations_start_id + value.Id for key, value in TotalSMZ3World(Config({}), "", 0, "").locationLookup.items()}
+    web = SMZ3Web()
 
     remote_items: bool = False
     remote_start_inventory: bool = False
+
+    # first added for 0.2.6
+    required_client_version = (0, 2, 6)
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         self.locations = {}
         self.unreachable = []
         super().__init__(world, player)
+
+    @classmethod
+    def stage_assert_generate(cls, world):
+        base_combined_rom = get_base_rom_bytes()
 
     def generate_early(self):
         config = Config({})
@@ -253,7 +272,7 @@ class SMZ3World(World):
 
             outfilebase = 'AP_' + self.world.seed_name
             outfilepname = f'_P{self.player}'
-            outfilepname += f"_{self.world.player_name[self.player].replace(' ', '_')}" \
+            outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}" \
 
             filename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
             with open(filename, "wb") as binary_file:
@@ -286,7 +305,6 @@ class SMZ3World(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             payload = multidata["connect_names"][self.world.player_name[self.player]]
             multidata["connect_names"][new_name] = payload
-            del (multidata["connect_names"][self.world.player_name[self.player]])
 
     def fill_slot_data(self): 
         slot_data = {}
