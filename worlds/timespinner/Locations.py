@@ -270,5 +270,5 @@ starter_progression_locations: Tuple[str, ...] = (
     'Lake Desolation: Starter chest 2',
     'Lake Desolation: Starter chest 3',
     'Lake Desolation: Starter chest 1',
-    'Lake Desolation: Timespinner Wheel room'
+    'Lake Desolation (Lower): Timespinner Wheel room'
 )
