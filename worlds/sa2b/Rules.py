@@ -276,7 +276,8 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
     # Mission 5 Upgrade Requirements
     if world.include_missions[player].value >= 5:
         add_rule(world.get_location(LocationName.city_escape_5, player),
-                 lambda state: state.has(ItemName.sonic_flame_ring, player))
+                 lambda state: state.has(ItemName.sonic_flame_ring, player) and
+                               state.has(ItemName.sonic_light_shoes, player))
         add_rule(world.get_location(LocationName.wild_canyon_5, player),
                  lambda state: state.has(ItemName.knuckles_shovel_claws, player) and
                                state.has(ItemName.knuckles_sunglasses, player))
@@ -328,7 +329,8 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
                                state.has(ItemName.eggman_large_cannon, player))
         add_rule(world.get_location(LocationName.security_hall_5, player),
                  lambda state: state.has(ItemName.rouge_pick_nails, player) and
-                               state.has(ItemName.rouge_treasure_scope, player))
+                               state.has(ItemName.rouge_treasure_scope, player) and
+                               state.has(ItemName.rouge_iron_boots, player))
         add_rule(world.get_location(LocationName.white_jungle_5, player),
                  lambda state: state.has(ItemName.shadow_air_shoes, player) and
                                state.has(ItemName.shadow_flame_ring, player))
