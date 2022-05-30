@@ -363,7 +363,8 @@ class GameManager(App):
         return self.container
 
     def update_texts(self, dt):
-        self.tabs.content.children[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
+        if hasattr(self.tabs.content.children[0], 'fix_heights'):
+            self.tabs.content.children[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
         if self.ctx.server:
             self.title = self.base_title + " " + Utils.__version__ + \
                          f" | Connected to: {self.ctx.server_address} " \

@@ -3,18 +3,21 @@ from __future__ import annotations
 import multiprocessing
 import logging
 import asyncio
-import nest_asyncio
+import os.path
 
+import nest_asyncio
 import sc2
 
 from sc2.main import run_game
 from sc2.data import Race
 from sc2.bot_ai import BotAI
 from sc2.player import Bot
+
 from worlds.sc2wol.Regions import MissionInfo
 from worlds.sc2wol.MissionTables import lookup_id_to_mission
 from worlds.sc2wol.Items import lookup_id_to_name, item_table
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
+from worlds.sc2wol import SC2WoLWorld
 
 from Utils import init_logging
 
@@ -34,12 +37,11 @@ nest_asyncio.apply()
 
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: Context
-    missions_unlocked = False
 
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
         the next mission in a chain the other player is doing."""
-        self.missions_unlocked = True
+        self.ctx.missions_unlocked = True
         sc2_logger.info("Mission check has been disabled")
 
     def _cmd_play(self, mission_id: str = "") -> bool:
@@ -51,20 +53,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if num_options > 0:
             mission_number = int(options[0])
 
-            if self.missions_unlocked or \
-               is_mission_available(mission_number, self.ctx.checked_locations, self.ctx.mission_req_table):
-                if self.ctx.sc2_run_task:
-                    if not self.ctx.sc2_run_task.done():
-                        sc2_logger.warning("Starcraft 2 Client is still running!")
-                    self.ctx.sc2_run_task.cancel()  # doesn't actually close the game, just stops the python task
-                if self.ctx.slot is None:
-                    sc2_logger.warning("Launching Mission without Archipelago authentication, "
-                                       "checks will not be registered to server.")
-                self.ctx.sc2_run_task = asyncio.create_task(starcraft_launch(self.ctx, mission_number),
-                                                            name="Starcraft 2 Launch")
-            else:
-                sc2_logger.info(
-                    "This mission is not currently unlocked.  Use /unfinished or /available to see what is available.")
+            self.ctx.play_mission(mission_number)
 
         else:
             sc2_logger.info(
@@ -99,6 +88,7 @@ class Context(CommonContext):
     announcements = []
     announcement_pos = 0
     sc2_run_task: typing.Optional[asyncio.Task] = None
+    missions_unlocked = False
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -130,6 +120,23 @@ class Context(CommonContext):
 
     def run_gui(self):
         from kvui import GameManager
+        from kivy.base import Clock
+        from kivy.uix.tabbedpanel import TabbedPanelItem
+        from kivy.uix.gridlayout import GridLayout
+        from kivy.lang import Builder
+        from kivy.uix.label import Label
+        from kivy.uix.button import Button
+
+        import Utils
+
+        class MissionButton(Button):
+            pass
+
+        class MissionLayout(GridLayout):
+            pass
+
+        class MissionCategory(GridLayout):
+            pass
 
         class SC2Manager(GameManager):
             logging_pairs = [
@@ -138,13 +145,96 @@ class Context(CommonContext):
             ]
             base_title = "Archipelago Starcraft 2 Client"
 
+            mission_panel = None
+            last_checked_locations = {}
+            mission_id_to_button = {}
+
+            def __init__(self, ctx):
+                super().__init__(ctx)
+
+            def build(self):
+                container = super().build()
+
+                panel = TabbedPanelItem(text="Starcraft 2 Launcher")
+                self.mission_panel = panel.content = MissionLayout()
+
+                self.tabs.add_widget(panel)
+
+                Clock.schedule_interval(self.build_mission_table, 0.5)
+
+                return container
+
+            def build_mission_table(self, dt):
+                self.mission_panel.clear_widgets()
+
+                if self.ctx.mission_req_table:
+                    self.mission_id_to_button = {}
+                    categories = {}
+                    available_missions = []
+                    unfinished_missions = calc_unfinished_missions(self.ctx.checked_locations, self.ctx.mission_req_table,
+                                                                   self.ctx, available_missions=available_missions)
+
+                    self.last_checked_locations = self.ctx.checked_locations
+
+                    # separate missions into categories
+                    for mission in self.ctx.mission_req_table:
+                        if not self.ctx.mission_req_table[mission].category in categories:
+                            categories[self.ctx.mission_req_table[mission].category] = []
+
+                        categories[self.ctx.mission_req_table[mission].category].append(mission)
+
+                    for category in categories:
+                        category_panel = MissionCategory()
+                        category_panel.add_widget(Label(text=category, size_hint_y=None, height=50, outline_width=1))
+
+                        for mission in categories[category]:
+                            text = mission
+
+                            if mission in unfinished_missions:
+                                text = f"[color=6495ED]{text}[/color]"
+                            elif mission in available_missions:
+                                text = f"[color=FFFFFF]{text}[/color]"
+                            else:
+                                text = f"[color=a9a9a9]{text}[/color]"
+
+                            mission_button = MissionButton(text=text, size_hint_y=None, height=50)
+                            mission_button.bind(on_press=self.mission_callback)
+                            self.mission_id_to_button[self.ctx.mission_req_table[mission].id] = mission_button
+                            category_panel.add_widget(mission_button)
+
+                        category_panel.add_widget(Label(text=""))
+                        self.mission_panel.add_widget(category_panel)
+
+            def mission_callback(self, button):
+                self.ctx.play_mission(list(self.mission_id_to_button.keys())
+                                      [list(self.mission_id_to_button.values()).index(button)])
+
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+
+        Builder.load_file(Utils.local_path(os.path.dirname(SC2WoLWorld.__file__), "Starcraft2.kv"))
 
     async def shutdown(self):
         await super(Context, self).shutdown()
         if self.sc2_run_task:
             self.sc2_run_task.cancel()
+
+    def play_mission(self, mission_id):
+        if self.missions_unlocked or \
+                is_mission_available(mission_id, self.checked_locations, self.mission_req_table):
+            if self.sc2_run_task:
+                if not self.sc2_run_task.done():
+                    sc2_logger.warning("Starcraft 2 Client is still running!")
+                self.sc2_run_task.cancel()  # doesn't actually close the game, just stops the python task
+            if self.slot is None:
+                sc2_logger.warning("Launching Mission without Archipelago authentication, "
+                                   "checks will not be registered to server.")
+            self.sc2_run_task = asyncio.create_task(starcraft_launch(self, mission_id),
+                                                        name="Starcraft 2 Launch")
+        else:
+            sc2_logger.info(
+                f"{lookup_id_to_mission[mission_id]} is not currently unlocked.  "
+                f"Use /unfinished or /available to see what is available.")
 
 
 async def main():
@@ -404,39 +494,6 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     await self.chat_send("LostConnection - Lost connection to game.")
 
 
-mission_req_table = {
-    "Liberation Day": MissionInfo(1, 7, [], completion_critical=True),
-    "The Outlaws": MissionInfo(2, 2, [1], completion_critical=True),
-    "Zero Hour": MissionInfo(3, 4, [2], completion_critical=True),
-    "Evacuation": MissionInfo(4, 4, [3]),
-    "Outbreak": MissionInfo(5, 3, [4]),
-    "Safe Haven": MissionInfo(6, 1, [5], number=7),
-    "Haven's Fall": MissionInfo(7, 1, [5], number=7),
-    "Smash and Grab": MissionInfo(8, 5, [3], completion_critical=True),
-    "The Dig": MissionInfo(9, 4, [8], number=8, completion_critical=True),
-    "The Moebius Factor": MissionInfo(10, 9, [9], number=11, completion_critical=True),
-    "Supernova": MissionInfo(11, 5, [10], number=14, completion_critical=True),
-    "Maw of the Void": MissionInfo(12, 6, [11], completion_critical=True),
-    "Devil's Playground": MissionInfo(13, 3, [3], number=4),
-    "Welcome to the Jungle": MissionInfo(14, 4, [13]),
-    "Breakout": MissionInfo(15, 3, [14], number=8),
-    "Ghost of a Chance": MissionInfo(16, 6, [14], number=8),
-    "The Great Train Robbery": MissionInfo(17, 4, [3], number=6),
-    "Cutthroat": MissionInfo(18, 5, [17]),
-    "Engine of Destruction": MissionInfo(19, 6, [18]),
-    "Media Blitz": MissionInfo(20, 5, [19]),
-    "Piercing the Shroud": MissionInfo(21, 6, [20]),
-    "Whispers of Doom": MissionInfo(22, 4, [9]),
-    "A Sinister Turn": MissionInfo(23, 4, [22]),
-    "Echoes of the Future": MissionInfo(24, 3, [23]),
-    "In Utter Darkness": MissionInfo(25, 3, [24]),
-    "Gates of Hell": MissionInfo(26, 2, [12], completion_critical=True),
-    "Belly of the Beast": MissionInfo(27, 4, [26], completion_critical=True),
-    "Shatter the Sky": MissionInfo(28, 5, [26], completion_critical=True),
-    "All-In": MissionInfo(29, -1, [27, 28], completion_critical=True, or_requirements=True)
-}
-
-
 def calc_objectives_completed(mission, missions_info, locations_done, unfinished_locations, ctx):
     objectives_complete = 0
 
@@ -460,7 +517,8 @@ def request_unfinished_missions(locations_done, location_table, ui, ctx):
         unlocks = initialize_blank_mission_dict(location_table)
         unfinished_locations = initialize_blank_mission_dict(location_table)
 
-        unfinished_missions = calc_unfinished_missions(locations_done, location_table, unlocks, unfinished_locations, ctx)
+        unfinished_missions = calc_unfinished_missions(locations_done, location_table, ctx, unlocks=unlocks,
+                                                       unfinished_locations=unfinished_locations)
 
         message += ", ".join(f"{mark_up_mission_name(mission, location_table, ui,unlocks)}[{location_table[mission].id}] " +
                              mark_up_objectives(
@@ -477,10 +535,21 @@ def request_unfinished_missions(locations_done, location_table, ui, ctx):
         sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
 
-def calc_unfinished_missions(locations_done, locations, unlocks, unfinished_locations, ctx):
+def calc_unfinished_missions(locations_done, locations, ctx, unlocks=None, unfinished_locations=None,
+                             available_missions=[]):
     unfinished_missions = []
     locations_completed = []
-    available_missions = calc_available_missions(locations_done, locations, unlocks)
+
+    if not unlocks:
+        unlocks = initialize_blank_mission_dict(locations)
+
+    if not unfinished_locations:
+        unfinished_locations = initialize_blank_mission_dict(locations)
+
+    if len(available_missions) > 0:
+        available_missions = []
+
+    available_missions.extend(calc_available_missions(locations_done, locations, unlocks))
 
     for name in available_missions:
         if not locations[name].extra_locations == -1:
