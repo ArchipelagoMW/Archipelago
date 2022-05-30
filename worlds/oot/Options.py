@@ -532,6 +532,14 @@ class ChickenCount(Range):
     default = 7
 
 
+class BigPoeCount(Range):
+    """Number of Big Poes required for the Poe Collector's item."""
+    display_name = "Big Poe Count"
+    range_start = 1
+    range_end = 10
+    default = 1
+
+
 timesavers_options: typing.Dict[str, type(Option)] = {
     "skip_child_zelda": SkipChildZelda, 
     "no_escape_sequence": SkipEscape, 
@@ -544,7 +552,7 @@ timesavers_options: typing.Dict[str, type(Option)] = {
     "free_scarecrow": FreeScarecrow, 
     "fast_bunny_hood": FastBunny,
     "chicken_count": ChickenCount,
-    # "big_poe_count": make_range(1, 10, 1),
+    "big_poe_count": BigPoeCount,
 }
 
 

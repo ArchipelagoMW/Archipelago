@@ -321,6 +321,7 @@ $APPDIR/$exe "$@"
         self.app_id = self.app_name.lower()
 
     def run(self):
+        import platform
         self.dist_file.parent.mkdir(parents=True, exist_ok=True)
         if self.app_dir.is_dir():
             shutil.rmtree(self.app_dir)
@@ -333,7 +334,7 @@ $APPDIR/$exe "$@"
         self.write_desktop()
         self.write_launcher(self.app_exec)
         print(f'{self.app_dir} -> {self.dist_file}')
-        subprocess.call(f'./appimagetool -n "{self.app_dir}" "{self.dist_file}"', shell=True)
+        subprocess.call(f'ARCH={platform.machine()} ./appimagetool -n "{self.app_dir}" "{self.dist_file}"', shell=True)
 
 
 cx_Freeze.setup(
