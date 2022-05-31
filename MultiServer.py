@@ -446,22 +446,9 @@ class Context:
     def set_save(self, savedata: dict):
         if self.connect_names != savedata["connect_names"]:
             raise Exception("This savegame does not appear to match the loaded multiworld.")
-        if "version" not in savedata:
-            # upgrade from version 1
-            # this is not perfect but good enough for old games to continue
-            for old, items in savedata["received_items"].items():
-                self.received_items[(*old, True)] = items
-                self.received_items[(*old, False)] = items.copy()
-            for (team, slot, remote) in self.received_items:
-                # remove start inventory from items, since this is separate now
-                start_inventory = get_start_inventory(self, slot, slot in self.remote_start_inventory)
-                if start_inventory:
-                    del self.received_items[team, slot, remote][:len(start_inventory)]
-            logging.info("Upgraded save data")
-        elif savedata["version"] > self.save_version:
+        if savedata["version"] > self.save_version:
             raise Exception("This savegame is newer than the server.")
-        else:
-            self.received_items = savedata["received_items"]
+        self.received_items = savedata["received_items"]
         self.hints_used.update(savedata["hints_used"])
         self.hints.update(savedata["hints"])
 
