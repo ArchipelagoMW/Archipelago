@@ -59,7 +59,7 @@ class BossRando(Toggle):
     "Shuffles the positions of all bosses."
     display_name = "Boss Randomization"
 
-class BossScaling(Toggle):
+class BossScaling(DefaultOnToggle):
     "When Boss Rando is enabled, scales the bosses' HP, XP, and ATK to the stats of the location they replace (Reccomended)"
     display_name = "Scale Random Boss Stats"
 
@@ -187,7 +187,7 @@ class HpCap(Range):
     range_end = 999
     default = 999
 
-class BossHealing(Toggle):
+class BossHealing(DefaultOnToggle):
     "Enables/disables healing after boss fights. NOTE: Currently only applicable when Boss Rando is enabled."
     display_name = "Heal After Bosses"
 
