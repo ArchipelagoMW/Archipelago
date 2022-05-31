@@ -128,8 +128,15 @@ class StaticWitnessLogic:
                     laser_ids += 1
                 else:
                     location_type = "General"
-                    location_id = normal_panel_ids
-                    normal_panel_ids += 1
+
+                    if check_hex == "0x012D7":  # Compatibility
+                        normal_panel_ids += 1
+
+                    if check_hex == "0x17E07":  # Compatibility
+                        location_id = 112
+                    else:
+                        location_id = normal_panel_ids
+                        normal_panel_ids += 1
 
                 required_items = parse_lambda(required_item_lambda)
                 items_actually_in_the_game = {item[0] for item in self.ALL_SYMBOL_ITEMS}
