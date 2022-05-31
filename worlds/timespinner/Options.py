@@ -55,6 +55,16 @@ class LoreChecks(Toggle):
     "Memories and journal entries contain items."
     display_name = "Lore Checks"
 
+class BossRando(Toggle):
+    "Shuffles the positions of all bosses."
+    display_name = "Boss Randomization"
+    default = False
+
+class BossScaling(Toggle):
+    "When Boss Rando is enabled, scales the bosses' HP, XP, and ATK to the stats of the location they replace (Reccomended)"
+    display_name = "Scale Random Boss Stats"
+    default = True
+
 class DamageRando(Choice):
     "Randomly nerfs and buffs some orbs and their associated spells as well as some associated rings."
     display_name = "Damage Rando"
@@ -179,6 +189,11 @@ class HpCap(Range):
     range_end = 999
     default = 999
 
+class BossHealing(Toggle):
+    "Enables/disables healing after boss fights. NOTE: Currently only applicable when Boss Rando is enabled."
+    display_name = "Heal After Bosses"
+    default = True
+
 class ShopFill(Choice):
     """Sets the items for sale in Merchant Crow's shops.
     Default: No sunglasses or trendy jacket, but sand vials for sale.
@@ -235,9 +250,12 @@ timespinner_options: Dict[str, Option] = {
     "GyreArchives": GyreArchives,
     "Cantoran": Cantoran,
     "LoreChecks": LoreChecks,
+    "BossRando": BossRando,
+    "BossScaling": BossScaling,
     "DamageRando": DamageRando,
     "DamageRandoOverrides": DamageRandoOverrides,
     "HpCap": HpCap,
+    "BossHealing": BossHealing,
     "ShopFill": ShopFill,
     "ShopWarpShards": ShopWarpShards,
     "ShopMultiplier": ShopMultiplier,
