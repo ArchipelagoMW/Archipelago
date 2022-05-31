@@ -4,7 +4,7 @@ import math
 
 from BaseClasses import Item, MultiWorld, Tutorial
 from .Items import SA2BItem, ItemData, item_table, upgrades_table
-from .Locations import SA2BLocation, all_locations, setup_locations
+from .Locations import SA2BLocation, all_locations, setup_locations, location_table
 from .Options import sa2b_options
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
     gate_0_blacklist_regions
@@ -67,6 +67,7 @@ class SA2BWorld(World):
             "MusicMap": self.music_map,
             "MusicShuffle": self.world.music_shuffle[self.player].value,
             "RequiredRank": self.world.required_rank[self.player].value,
+            "ChaoRaceChecks": self.world.chao_race_checks[self.player].value,
             "DeathLink": self.world.death_link[self.player].value,
             "IncludeMissions": self.world.include_missions[self.player].value,
             "EmblemPercentageForCannonsCore": self.world.emblem_percentage_for_cannons_core[self.player].value,
@@ -131,21 +132,14 @@ class SA2BWorld(World):
         itempool: typing.List[SA2BItem] = []
 
         # First Missions
-        total_required_locations = 31
-
-        # Mission Locations
-        total_required_locations *= self.world.include_missions[self.player].value
-
-        # Upgrades
-        total_required_locations += 28
+        total_required_locations = len(location_table)
+        total_required_locations -= 1; # Locked Victory Location
 
         # Fill item pool with all required items
         for item in {**upgrades_table}:
             itempool += self._create_items(item)
 
         total_emblem_count = total_required_locations - len(itempool)
-
-        # itempool += [self.create_item(ItemName.emblem)] * total_emblem_count
 
         self.emblems_for_cannons_core = math.floor(
             total_emblem_count * (self.world.emblem_percentage_for_cannons_core[self.player].value / 100.0))

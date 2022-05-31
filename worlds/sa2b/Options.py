@@ -66,6 +66,33 @@ class RequiredRank(Choice):
     default = 0
 
 
+class ChaoGardenDifficulty(Choice):
+    """
+    Determines up to what difficulty of Chao Garden activities serve as checks
+    """
+    display_name = "Chao Garden Difficulty"
+    option_none = 0
+    option_beginner = 1
+    option_intermediate = 2
+    option_expert = 3
+
+
+class IncludeChaoKarate(Toggle):
+    """
+    Determines whether the Chao Karate in included as checks (requires purchase of the "Battle" DLC)
+    """
+    display_name = "Include Chao Karate"
+
+
+class ChaoRaceChecks(Choice):
+    """
+    Determines whether all Chao Races grant checks, or only the Chao Races which grant Chao Toy prizes
+    """
+    display_name = "Chao Race Checks"
+    option_all = 0
+    option_prize = 1
+
+
 class MusicShuffle(Choice):
     """
     What type of Music Shuffle is used
@@ -88,4 +115,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "number_of_level_gates": NumberOfLevelGates,
     "level_gate_distribution": LevelGateDistribution,
+    "chao_garden_difficulty": ChaoGardenDifficulty,
+    "include_chao_karate": IncludeChaoKarate,
+    "chao_race_checks": ChaoRaceChecks,
 }

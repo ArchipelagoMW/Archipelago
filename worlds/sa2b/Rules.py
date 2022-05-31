@@ -2,7 +2,7 @@ from BaseClasses import MultiWorld
 from .Names import LocationName, ItemName
 from .Locations import first_mission_location_table, second_mission_location_table, third_mission_location_table, \
     fourth_mission_location_table, fifth_mission_location_table, \
-    upgrade_location_table, chao_garden_location_table
+    upgrade_location_table
 from ..AutoWorld import LogicMixin
 from ..generic.Rules import add_rule, set_rule
 
@@ -388,12 +388,5 @@ def set_rules(world: MultiWorld, player: int):
 
     # Upgrade Requirements for each location
     set_mission_upgrade_rules(world, player)
-
-    # TODO: Place Level Emblem Requirements Here
-
-    # (Edge Case)
-    # Create some reasonable arbitrary logic for Chao Races to prevent having to grind Chaos Drives in the first level
-    # for loc in chao_garden_location_table:
-    #    world.get_location(loc, player).add_item_rule(loc, lambda item: False)
 
     world.completion_condition[player] = lambda state: state.has(ItemName.maria, player)
