@@ -38,6 +38,17 @@ nest_asyncio.apply()
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: Context
 
+    def _cmd_complete(self, mission_id: str = "") -> bool:
+        options = mission_id.split()
+        mission_number = int(options[0])
+
+        if mission_number < 100:
+            asyncio.create_task(self.ctx.send_msgs([
+                {"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * mission_number]}]))
+        else:
+            asyncio.create_task(self.ctx.send_msgs([
+                {"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + mission_number]}]))
+
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
         the next mission in a chain the other player is doing."""
@@ -190,6 +201,7 @@ class Context(CommonContext):
             mission_id_to_button = {}
             launching = False
             refresh_from_launching = True
+            first_check = True
 
             def __init__(self, ctx):
                 super().__init__(ctx)
@@ -207,14 +219,16 @@ class Context(CommonContext):
                 return container
 
             def build_mission_table(self, dt):
-                if not self.launching and (not self.ctx.last_loc_list == self.ctx.checked_locations or
-                                           not self.refresh_from_launching):
+                if (not self.launching and (not self.last_checked_locations == self.ctx.checked_locations or
+                                           not self.refresh_from_launching)) or self.first_check:
                     self.refresh_from_launching = True
-                    self.ctx.last_loc_list = self.ctx.checked_locations
 
                     self.mission_panel.clear_widgets()
 
                     if self.ctx.mission_req_table:
+                        self.last_checked_locations = self.ctx.checked_locations.copy()
+                        self.first_check = False
+
                         self.mission_id_to_button = {}
                         categories = {}
                         available_missions = []
@@ -223,8 +237,6 @@ class Context(CommonContext):
                                                                        self.ctx.mission_req_table,
                                                                        self.ctx, available_missions=available_missions,
                                                                        unfinished_locations=unfinished_locations)
-
-                        self.last_checked_locations = self.ctx.checked_locations
 
                         # separate missions into categories
                         for mission in self.ctx.mission_req_table:
@@ -237,6 +249,7 @@ class Context(CommonContext):
                             category_panel = MissionCategory()
                             category_panel.add_widget(Label(text=category, size_hint_y=None, height=50, outline_width=1))
 
+                            # Map is completed
                             for mission in categories[category]:
                                 text = mission
                                 tooltip = ""
