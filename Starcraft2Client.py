@@ -89,6 +89,8 @@ class Context(CommonContext):
     announcement_pos = 0
     sc2_run_task: typing.Optional[asyncio.Task] = None
     missions_unlocked = False
+    current_tooltip = None
+    last_loc_list = None
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -123,18 +125,52 @@ class Context(CommonContext):
                     self.announcements.append(args["data"])
 
     def run_gui(self):
-        from kvui import GameManager
+        from kvui import GameManager, HoverBehavior, ServerToolTip, fade_in_animation
+        from kivy.app import App
         from kivy.base import Clock
         from kivy.uix.tabbedpanel import TabbedPanelItem
         from kivy.uix.gridlayout import GridLayout
         from kivy.lang import Builder
         from kivy.uix.label import Label
         from kivy.uix.button import Button
+        from kivy.uix.floatlayout import FloatLayout
+        from kivy.properties import StringProperty
 
         import Utils
 
-        class MissionButton(Button):
+        class HoverableButton(HoverBehavior, Button):
             pass
+
+        class MissionButton(HoverableButton):
+            tooltip_text = StringProperty("Test")
+
+            def __init__(self, *args, **kwargs):
+                super(HoverableButton, self).__init__(*args, **kwargs)
+                self.layout = FloatLayout()
+                self.popuplabel = ServerToolTip(text=self.text)
+                self.layout.add_widget(self.popuplabel)
+
+            def on_enter(self):
+                self.popuplabel.text = self.tooltip_text
+
+                if self.ctx.current_tooltip:
+                    App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
+
+                if self.tooltip_text == "":
+                    self.ctx.current_tooltip = None
+                else:
+                    App.get_running_app().root.add_widget(self.layout)
+                    self.ctx.current_tooltip = self.layout
+
+            def on_leave(self):
+                if self.ctx.current_tooltip:
+                    App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
+
+                self.ctx.current_tooltip = None
+
+            @property
+            def ctx(self) -> CommonContext:
+                return App.get_running_app().ctx
 
         class MissionLayout(GridLayout):
             pass
@@ -153,6 +189,7 @@ class Context(CommonContext):
             last_checked_locations = {}
             mission_id_to_button = {}
             launching = False
+            refresh_from_launching = True
 
             def __init__(self, ctx):
                 super().__init__(ctx)
@@ -170,17 +207,22 @@ class Context(CommonContext):
                 return container
 
             def build_mission_table(self, dt):
-                self.mission_panel.clear_widgets()
+                if not self.launching and (not self.ctx.last_loc_list == self.ctx.checked_locations or
+                                           not self.refresh_from_launching):
+                    self.refresh_from_launching = True
+                    self.ctx.last_loc_list = self.ctx.checked_locations
 
-                if not self.launching:
+                    self.mission_panel.clear_widgets()
 
                     if self.ctx.mission_req_table:
                         self.mission_id_to_button = {}
                         categories = {}
                         available_missions = []
+                        unfinished_locations = initialize_blank_mission_dict(self.ctx.mission_req_table)
                         unfinished_missions = calc_unfinished_missions(self.ctx.checked_locations,
                                                                        self.ctx.mission_req_table,
-                                                                       self.ctx, available_missions=available_missions)
+                                                                       self.ctx, available_missions=available_missions,
+                                                                       unfinished_locations=unfinished_locations)
 
                         self.last_checked_locations = self.ctx.checked_locations
 
@@ -197,15 +239,32 @@ class Context(CommonContext):
 
                             for mission in categories[category]:
                                 text = mission
+                                tooltip = ""
 
+                                # Map has uncollected locations
                                 if mission in unfinished_missions:
                                     text = f"[color=6495ED]{text}[/color]"
+
+                                    tooltip = f"Uncollected locations:\n"
+                                    tooltip += "\n".join(location for location in unfinished_locations[mission])
                                 elif mission in available_missions:
                                     text = f"[color=FFFFFF]{text}[/color]"
+                                # Map requirements not met
                                 else:
                                     text = f"[color=a9a9a9]{text}[/color]"
+                                    tooltip = f"Requires: "
+                                    if len(self.ctx.mission_req_table[mission].required_world) > 0:
+                                        tooltip += ", ".join(list(self.ctx.mission_req_table)[req_mission-1] for
+                                                             req_mission in
+                                                             self.ctx.mission_req_table[mission].required_world)
+
+                                        if self.ctx.mission_req_table[mission].number > 0:
+                                            tooltip += " and "
+                                    if self.ctx.mission_req_table[mission].number > 0:
+                                        tooltip += f"{self.ctx.mission_req_table[mission].number} missions completed"
 
                                 mission_button = MissionButton(text=text, size_hint_y=None, height=50)
+                                mission_button.tooltip_text = tooltip
                                 mission_button.bind(on_press=self.mission_callback)
                                 self.mission_id_to_button[self.ctx.mission_req_table[mission].id] = mission_button
                                 category_panel.add_widget(mission_button)
@@ -213,7 +272,10 @@ class Context(CommonContext):
                             category_panel.add_widget(Label(text=""))
                             self.mission_panel.add_widget(category_panel)
 
-                else:
+                elif self.launching:
+                    self.refresh_from_launching = False
+
+                    self.mission_panel.clear_widgets()
                     self.mission_panel.add_widget(Label(text="Launching Mission"))
 
             def mission_callback(self, button):
