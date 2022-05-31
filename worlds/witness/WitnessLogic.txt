@@ -577,7 +577,7 @@ Inside Mountain Second Layer (Inside Mountain) - Inside Mountain Top Layer Bridg
 0x09FD6 (Color Cycle 3) - 0x09FD4 - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars + Same Colored Symbol
 0x09FD7 (Color Cycle 4) - 0x09FD6 - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars + Same Colored Symbol & Shapers & Colored Shapers
 0x09FD8 (Color Cycle 5) - 0x09FD7 - Color Cycle & RGB & Squares & Colored Squares & Symmetry & Colored Dots
-0x09E86 (Light Bridge Controller 2) - 0x09FD7 - Stars & Stars + Same Colored Symbol & Colored Rotated Shapers & Eraser & Two Lines
+0x09E86 (Light Bridge Controller 2) - 0x09FD8 - Stars & Stars + Same Colored Symbol & Colored Rotated Shapers & Eraser & Two Lines
 
 Inside Mountain Second Layer Beyond Bridge (Inside Mountain) - Inside Mountain Second Layer - 0x09E86:
 0x09FCC (Same Solution 1) - True - Dots & Same Solution
