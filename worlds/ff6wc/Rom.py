@@ -12,13 +12,17 @@ bit_positions = [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80]
 esper_bit_base_address = 0xF51A69
 character_intialized_bit_base_address = 0xF51EDC
 character_recruited_bit_base_address = 0xf51EDE
+item_types_base_address = 0xF51869
+item_quantities_base_address = 0xF51969
+items_received_address = 0xF511E5
+map_index_address = 0xF5000082
 espers = [ # This is the internal order of the Espers in the game. Editing this will break things.
     "Ramuh", "Ifrit", "Shiva",
     "Siren", "Terrato", "Shoat",
     "Maduin", "Bismark", "Stray",
     "Palidor", "Tritoch", "Odin",
     "Raiden", "Bahamut", "Alexandr",
-    "Crusader", "Ragnarok", "Kirin",
+    "Crusader", "Ragnarok Esper", "Kirin",
     "ZoneSeek", "Carbunkl", "Phantom",
     "Sraphim", "Golem", "Unicorn",
     "Fenrir", "Starlet", "Phoenix"
@@ -94,11 +98,44 @@ event_flag_location_names = {
     "Gold Dragon": 0x11d
 }
 
+item_ingame_ids = {
+    'ValiantKnife': 9,
+    'Illumina': 26,
+    'Ragnarok Sword': 27,
+    'Pearl Lance': 33,
+    'Aura Lance': 35,
+    'Magus Rod': 60,
+    'Fixed Dice': 82,
+    'Aegis Shld': 94,
+    'Flame Shld': 96,
+    'Ice Shld': 97,
+    'Thunder Shld': 98,
+    'Genji Shld': 100,
+    'Paladin Shld': 103,
+    'Force Shld': 104,
+    'Red Cap': 120,
+    'Cat Hood': 128,
+    'Genji Helmet': 129,
+    'Force Armor': 148,
+    'Genji Armor': 154,
+    'Minerva': 156,
+    'BehemothSuit': 161,
+    'Snow Muffler': 162,
+    'Economizer': 206,
+    'Genji Glove': 209,
+    'Offering': 211,
+    'Gem Box': 216,
+    'Dragon Horn': 217,
+    'Marvel Shoes': 224,
+    'Exp. Egg': 228,
+    'ArchplgoItem': 231
+}
+
 
 class FF6WCDeltaPatch(APDeltaPatch):
     hash = NA10HASH
     game = "Final Fantasy 6 Worlds Collide"
-    patch_file_ending = "apff6wc"
+    patch_file_ending = ".apff6wc"
 
     @classmethod
     def get_source_data(cls) -> bytes:
@@ -145,6 +182,9 @@ def get_obtained_esper_bit(esper_name):
     esper_bit = esper_index % 8
     return esper_byte, bit_positions[esper_bit]
 
+def add_esper(initial, esper_name):
+    byte, bit = get_obtained_esper_bit(esper_name)
+    return initial | bit
 
 def get_character_bit(character, address):
     character_index = character

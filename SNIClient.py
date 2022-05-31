@@ -1049,8 +1049,7 @@ async def game_watcher(ctx: Context):
                         character_index = 0
                         esper_index = 0
                         location_names = [*FF6Rom.event_flag_location_names.keys()]
-                        check_timer = 0
-                        check_timer_theshold = 10
+                        obtained_items = []
                     else:
                         ctx.game = GAME_ALTTP
                         ctx.items_handling = 0b001  # full local
@@ -1282,49 +1281,17 @@ async def game_watcher(ctx: Context):
                     ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
         elif ctx.game == GAME_FF6WC:
-            check_timer += 1
-            if check_timer < check_timer_theshold:
-                continue
-            check_timer = 0
             location_index += 1
-            character_index += 1
-            esper_index += 1
             if location_index >= len(FF6Rom.event_flag_location_names):
                 location_index = 0
-            if character_index >= len(FF6Rom.characters):
-                character_index = 0
-            if esper_index >= len(FF6Rom.espers):
-                esper_index = 0
-            # opening reads because FF6 can't put stuff in one place in RAM.
             location_name = location_names[location_index]
             location_id = FF6Rom.event_flag_location_names[location_name]
             event_byte, event_bit = FF6Rom.get_event_flag_value(location_id)
             event_data = await snes_read(ctx, event_byte, 1)
-            trigger_byte = await snes_read(ctx, 0xF5115C, 1)
-            trigger_ready = False
-            if trigger_byte is not None:
-                trigger_data = trigger_byte[0]
-                trigger_ready = trigger_data == 0
+
             if event_data is None:
                 continue
 
-            character_init_byte, character_init_bit = FF6Rom.get_character_initialized_bit(character_index)
-            character_init_data = await snes_read(ctx, character_init_byte, 1)
-            if character_init_data is None:
-                continue
-
-            character_recruit_byte, character_recruit_bit = FF6Rom.get_character_recruited_bit(character_index)
-            character_recruit_data = await snes_read(ctx, character_recruit_byte, 1)
-            if character_recruit_data is None:
-                continue
-
-            esper_byte, esper_bit = FF6Rom.get_obtained_esper_bit(esper_index)
-            esper_data = await snes_read(ctx, esper_byte, 1)
-            if esper_data is None:
-                continue
-
-
-            # checks done
             if event_data is not None:
                 event_done = event_data[0] & event_bit
                 location_id = worlds.ff6wc.FF6WCWorld.location_name_to_id[location_name]
@@ -1334,37 +1301,93 @@ async def game_watcher(ctx: Context):
                         f'New Check: {location_name} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                     await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
-            # characters obtained
-            if character_init_data is not None and character_recruit_data is not None:
-                character_initialized = character_init_data[0] & character_init_bit
-                character_recruited = character_recruit_data[0] & character_recruit_bit
-                if not (character_initialized and character_recruited):
-                    character_name = FF6Rom.characters[character_index]
-                    character_ap_id = worlds.ff6wc.FF6WCWorld.item_name_to_id[character_name]
-                    character_item = next((item for item in ctx.items_received if item.item == character_ap_id), None)
-                    if character_item is not None and trigger_ready:
-                        snes_buffered_write(ctx, 0xF511E5, bytes([character_index]))
-                        snes_buffered_write(ctx, 0xF5115C, bytes([1]))
-                        snes_logger.info('Received %s from %s (%s)' % (
-                            color(ctx.item_name_getter(character_item.item), 'red', 'bold'),
-                            color(ctx.player_names[character_item.player], 'yellow'),
-                            ctx.location_name_getter(character_item.location)))
+            items_received_data = await snes_read(ctx, FF6Rom.items_received_address, 1)
+            if items_received_data is None:
+                continue
+            items_received_amount = items_received_data[0]
+            if items_received_amount >= len(ctx.items_received):
+                continue
+            else:
+                item = ctx.items_received[items_received_amount]
+                item_name = worlds.ff6wc.FF6WCWorld.item_id_to_name[item.item]
+                item_id = item.item
+                print(item_name)
+                print(items_received_amount)
+                print(len(ctx.items_received))
+                if item_name in FF6Rom.characters:
+                    character_index = FF6Rom.characters.index(item_name)
+                    character_init_byte, character_init_bit = FF6Rom.get_character_initialized_bit(character_index)
+                    character_init_data = await snes_read(ctx, character_init_byte, 1)
+                    if character_init_data is None:
+                        continue
 
-            # espers obtained
-            if esper_data is not None:
-                esper_obtained = esper_data[0] & esper_bit
-                if not esper_obtained:
-                    esper_name = FF6Rom.espers[esper_index]
-                    esper_ap_id = worlds.ff6wc.FF6WCWorld.item_name_to_id[esper_name]
-                    esper_item = next((item for item in ctx.items_received if item.item == esper_ap_id), None)
-                    if esper_item is not None and trigger_ready:
-                        snes_buffered_write(ctx, 0xF511E5, bytes([esper_index]))
-                        snes_buffered_write(ctx, 0xF5115C, bytes([2]))
-                        snes_logger.info('Received %s from %s (%s)' % (
-                            color(ctx.item_name_getter(esper_item.item), 'red', 'bold'),
-                            color(ctx.player_names[esper_item.player], 'yellow'),
-                            ctx.location_name_getter(esper_item.location)))
+                    character_recruit_byte, character_recruit_bit = FF6Rom.get_character_recruited_bit(character_index)
+                    character_recruit_data = await snes_read(ctx, character_recruit_byte, 1)
+                    if character_recruit_data is None:
+                        continue
 
+                    character_initialized = character_init_data[0] & character_init_bit
+                    character_recruited = character_recruit_data[0] & character_recruit_bit
+                    if not (character_initialized and character_recruited):
+                        character_name = FF6Rom.characters[character_index]
+                        character_ap_id = worlds.ff6wc.FF6WCWorld.item_name_to_id[character_name]
+                        character_item = next((item for item in ctx.items_received if item.item == character_ap_id),
+                                              None)
+                        if character_item is not None:
+                            new_init_data = character_init_data[0] | character_init_bit
+                            new_recruit_data = character_recruit_data[0] | character_recruit_bit
+                            snes_buffered_write(ctx, character_init_byte, bytes([new_init_data]))
+                            snes_buffered_write(ctx, character_recruit_byte, bytes([new_recruit_data]))
+                            snes_buffered_write(ctx, FF6Rom.items_received_address, bytes([items_received_amount + 1]))
+                            snes_logger.info('Received %s from %s (%s)' % (
+                                color(ctx.item_name_getter(character_item.item), 'red', 'bold'),
+                                color(ctx.player_names[character_item.player], 'yellow'),
+                                ctx.location_name_getter(character_item.location)))
+                elif item_name in FF6Rom.espers:
+                    esper_index = FF6Rom.espers.index(item_name)
+                    esper_byte, esper_bit = FF6Rom.get_obtained_esper_bit(esper_index)
+                    esper_data = await snes_read(ctx, esper_byte, 1)
+                    if esper_data is None:
+                        continue
+                    esper_obtained = esper_data[0] & esper_bit
+                    if esper_obtained == 0:
+                        new_data = esper_data[0] | esper_bit
+                        print("writing data")
+                        snes_buffered_write(ctx, esper_byte, bytes([new_data]))
+
+                        snes_buffered_write(ctx, FF6Rom.items_received_address, bytes([items_received_amount + 1]))
+                        snes_logger.info('Received %s from %s (%s)' % (
+                            color(ctx.item_name_getter(item.item), 'red', 'bold'),
+                            color(ctx.player_names[item.player], 'yellow'),
+                            ctx.location_name_getter(item.location)))
+
+                else:
+                    item_types_data = await snes_read(ctx, FF6Rom.item_types_base_address, 255)
+                    item_quantities_data = await snes_read(ctx, FF6Rom.item_quantities_base_address, 255)
+                    if item_types_data is None or item_quantities_data is None:
+                        continue
+                    reserved_slots = []
+                    for i in range(0, 255):
+                        slot = item_types_data[i]
+                        print("slot" + str(i) + ":" + str(slot))
+                        quantity = item_quantities_data[i]
+                        exists = False
+                        if slot == FF6Rom.item_ingame_ids[item_name]:
+                            exists = True
+                        if (slot == 255 or quantity == 0 or exists == True):
+                            reserved_slots.append(i)
+                            type_destination = FF6Rom.item_types_base_address + i
+                            amount_destination = FF6Rom.item_quantities_base_address + i
+                            type_id = FF6Rom.item_ingame_ids[item_name]
+                            amount = quantity + 1
+                            snes_buffered_write(ctx, type_destination, bytes([type_id]))
+                            snes_buffered_write(ctx, amount_destination, bytes([amount]))
+                            snes_buffered_write(ctx, FF6Rom.items_received_address, bytes([items_received_amount + 1]))
+                            snes_logger.info('Received %s from %s (%s)' % (
+                                color(item_name, 'red', 'bold'),
+                                color(ctx.player_names[item.player], 'yellow'),
+                                ctx.location_name_getter(item.location)))
+                            break
 
             await snes_flush_writes(ctx)
 

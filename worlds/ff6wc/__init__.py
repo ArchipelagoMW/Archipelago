@@ -37,7 +37,7 @@ class FF6WCWorld(World):
         'espers': [
             "Ramuh", "Ifrit", "Shiva", "Siren", "Terrato", "Shoat", "Maduin",
             "Bismark", "Stray", "Palidor", "Tritoch", "Odin", "Raiden", "Bahamut",
-            "Alexandr", "Crusader", "Ragnarok", "Kirin", "ZoneSeek", "Carbunkl",
+            "Alexandr", "Crusader", "Ragnarok Esper", "Kirin", "ZoneSeek", "Carbunkl",
             "Phantom", "Sraphim", "Golem", "Unicorn", "Fenrir", "Starlet", "Phoenix",
         ],
         "dragons": [
@@ -236,11 +236,15 @@ class FF6WCWorld(World):
             self.world.get_location(dragon_event, self.player).place_locked_item(
                 self.create_event(self.item_name_groups["dragons"][index]))
 
-        filler_item = self.create_item("Junk")
+        #filler_item = self.create_item("Junk")
         filler_count = len(
             self.world.get_unfilled_locations(self.player)) - len(
             [item for item in self.world.itempool if item.player == self.player])
-        self.world.itempool += [filler_item for i in range(0, filler_count)]
+        filler_pool = []
+        for item in Items.filler_items:
+            filler_pool.append(item)
+        print(filler_pool)
+        self.world.itempool += [self.create_item(random.choice(filler_pool)) for i in range(0, filler_count)]
 
     def generate_output(self, output_directory: str):
         locations = dict()
@@ -248,7 +252,7 @@ class FF6WCWorld(World):
         for region in self.world.regions:
             if region.player == self.player:
                 for location in region.locations:
-                    locations[location.name] = "Archipelago"
+                    locations[location.name] = "Archipelago Item"
                     if location.item.player == self.player:
                         locations[location.name] = location.item.name
         self.rom_name_text = f'6WC{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.world.seed:11}\0'
@@ -294,7 +298,7 @@ class FF6WCWorld(World):
             "-csb 1 32 -mca -stra -saw -sisr 20 -sprp 75 125 -sdm 4 ",
             "-npi -ccsr 50 -cms ",
             "-name Terra.Locke.Cyan.Shadow.Edgar.Sabin.Celes.Strago.Relm.Setzer.Mog.Gau.Gogo.Umaro ",
-            "-cor -crr -crvr 255 255 -ari -anca -adeh -nmc -nfps ",
+            "-cor -crr -crvr 255 255 -ari -anca -adeh -nmc ",
             "-nu -fs -fe -fvd -fr -fj -fbs -fedc -as -rr"
         ]
 
