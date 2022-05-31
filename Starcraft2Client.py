@@ -105,6 +105,10 @@ class Context(CommonContext):
             self.all_in_choice = args["slot_data"]["all_in_map"]
             slot_req_table = args["slot_data"]["mission_req"]
             self.mission_req_table = {}
+            # Compatibility for 0.3.2 server data.
+            if "category" not in next(iter(slot_req_table)):
+                for i, mission_data in enumerate(slot_req_table.values()):
+                    mission_data["category"] = wol_default_categories[i]
             for mission in slot_req_table:
                 self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
 
@@ -148,6 +152,7 @@ class Context(CommonContext):
             mission_panel = None
             last_checked_locations = {}
             mission_id_to_button = {}
+            launching = False
 
             def __init__(self, ctx):
                 super().__init__(ctx)
@@ -167,47 +172,59 @@ class Context(CommonContext):
             def build_mission_table(self, dt):
                 self.mission_panel.clear_widgets()
 
-                if self.ctx.mission_req_table:
-                    self.mission_id_to_button = {}
-                    categories = {}
-                    available_missions = []
-                    unfinished_missions = calc_unfinished_missions(self.ctx.checked_locations, self.ctx.mission_req_table,
-                                                                   self.ctx, available_missions=available_missions)
+                if not self.launching:
 
-                    self.last_checked_locations = self.ctx.checked_locations
+                    if self.ctx.mission_req_table:
+                        self.mission_id_to_button = {}
+                        categories = {}
+                        available_missions = []
+                        unfinished_missions = calc_unfinished_missions(self.ctx.checked_locations,
+                                                                       self.ctx.mission_req_table,
+                                                                       self.ctx, available_missions=available_missions)
 
-                    # separate missions into categories
-                    for mission in self.ctx.mission_req_table:
-                        if not self.ctx.mission_req_table[mission].category in categories:
-                            categories[self.ctx.mission_req_table[mission].category] = []
+                        self.last_checked_locations = self.ctx.checked_locations
 
-                        categories[self.ctx.mission_req_table[mission].category].append(mission)
+                        # separate missions into categories
+                        for mission in self.ctx.mission_req_table:
+                            if not self.ctx.mission_req_table[mission].category in categories:
+                                categories[self.ctx.mission_req_table[mission].category] = []
 
-                    for category in categories:
-                        category_panel = MissionCategory()
-                        category_panel.add_widget(Label(text=category, size_hint_y=None, height=50, outline_width=1))
+                            categories[self.ctx.mission_req_table[mission].category].append(mission)
 
-                        for mission in categories[category]:
-                            text = mission
+                        for category in categories:
+                            category_panel = MissionCategory()
+                            category_panel.add_widget(Label(text=category, size_hint_y=None, height=50, outline_width=1))
 
-                            if mission in unfinished_missions:
-                                text = f"[color=6495ED]{text}[/color]"
-                            elif mission in available_missions:
-                                text = f"[color=FFFFFF]{text}[/color]"
-                            else:
-                                text = f"[color=a9a9a9]{text}[/color]"
+                            for mission in categories[category]:
+                                text = mission
 
-                            mission_button = MissionButton(text=text, size_hint_y=None, height=50)
-                            mission_button.bind(on_press=self.mission_callback)
-                            self.mission_id_to_button[self.ctx.mission_req_table[mission].id] = mission_button
-                            category_panel.add_widget(mission_button)
+                                if mission in unfinished_missions:
+                                    text = f"[color=6495ED]{text}[/color]"
+                                elif mission in available_missions:
+                                    text = f"[color=FFFFFF]{text}[/color]"
+                                else:
+                                    text = f"[color=a9a9a9]{text}[/color]"
 
-                        category_panel.add_widget(Label(text=""))
-                        self.mission_panel.add_widget(category_panel)
+                                mission_button = MissionButton(text=text, size_hint_y=None, height=50)
+                                mission_button.bind(on_press=self.mission_callback)
+                                self.mission_id_to_button[self.ctx.mission_req_table[mission].id] = mission_button
+                                category_panel.add_widget(mission_button)
+
+                            category_panel.add_widget(Label(text=""))
+                            self.mission_panel.add_widget(category_panel)
+
+                else:
+                    self.mission_panel.add_widget(Label(text="Launching Mission"))
 
             def mission_callback(self, button):
-                self.ctx.play_mission(list(self.mission_id_to_button.keys())
-                                      [list(self.mission_id_to_button.values()).index(button)])
+                if not self.launching:
+                    self.ctx.play_mission(list(self.mission_id_to_button.keys())
+                                          [list(self.mission_id_to_button.values()).index(button)])
+                    self.launching = True
+                    Clock.schedule_once(self.finish_launching, 10)
+
+            def finish_launching(self, dt):
+                self.launching = False
 
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
@@ -265,6 +282,13 @@ maps_table = [
     "ap_thorner01", "ap_thorner02", "ap_thorner03", "ap_thorner04", "ap_thorner05s",
     "ap_tzeratul01", "ap_tzeratul02", "ap_tzeratul03", "ap_tzeratul04",
     "ap_tvalerian01", "ap_tvalerian02a", "ap_tvalerian02b", "ap_tvalerian03"
+]
+
+wol_default_categories = [
+    "Mar Sara", "Mar Sara", "Mar Sara", "Colonist", "Colonist", "Colonist", "Colonist",
+    "Artifact", "Artifact", "Artifact", "Artifact", "Artifact", "Covert", "Covert", "Covert", "Covert",
+    "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Prophecy", "Prophecy", "Prophecy", "Prophecy",
+    "Char", "Char", "Char", "Char"
 ]
 
 

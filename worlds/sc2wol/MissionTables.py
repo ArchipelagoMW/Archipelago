@@ -24,10 +24,9 @@ class FillMission(NamedTuple):
     type: str
     connect_to: List[int]  # -1 connects to Menu
     category: str
-    number: int = 0 # number of worlds need beaten
+    number: int = 0  # number of worlds need beaten
     completion_critical: bool = False  # missions needed to beat game
     or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
-
 
 
 vanilla_shuffle_order = [
