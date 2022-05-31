@@ -360,7 +360,7 @@ Jungle (Jungle) - Main Island - True:
 0x17CAB (Popup Wall Control) - 0x002C7 - True
 0x0026D (Popup Wall 1) - 0x17CAB - Sound & Sound Dots
 0x0026E (Popup Wall 2) - 0x0026D - Sound & Sound Dots
-0x0026F (Popup Wall 3) - 0x0026E - Sound & Sound DotsW
+0x0026F (Popup Wall 3) - 0x0026E - Sound & Sound Dots
 0x00C3F (Popup Wall 4) - 0x0026F - Sound & Sound Dots
 0x00C41 (Popup Wall 5) - 0x00C3F - Sound & Sound Dots
 0x014B2 (Popup Wall 6) - 0x00C41 - Sound & Sound Dots
@@ -447,7 +447,7 @@ Swamp Rotating Bridge Near Side (Swamp) - Swamp Near Platform - 0x009A1:
 0x014D1 (Red Underwater Negative Shapers 4) - 0x00596 - Shapers & Negative Shapers
 
 Swamp Near Boat (Swamp) - Swamp Rotating Bridge Near Side - 0x0000A - Swamp Platform - 0x17C0D & 0x17C0E:
-0x181F5 (Rotating Bridge) - True - Rotated Shapers, Shapers
+0x181F5 (Rotating Bridge) - True - Rotated Shapers & Shapers
 0x09DB8 (Boat Spawn) - True - Boat
 0x003B2 (More Rotated Shapers 1) - 0x0000A - Rotated Shapers
 0x00A1E (More Rotated Shapers 2) - 0x003B2 - Rotated Shapers
@@ -459,7 +459,7 @@ Swamp Near Boat (Swamp) - Swamp Rotating Bridge Near Side - 0x0000A - Swamp Plat
 0x009AE (Blue Underwater Negetive Shapers 3) - 0x009AD - Shapers & Negative Shapers
 0x009AF (Blue Underwater Negative Shapers 4) - 0x009AE - Shapers & Negative Shapers
 0x00006 (Blue Underwater Negative Shapers 5) - 0x009AF - Shapers & Negative Shapers & Broken Negative Shapers
-0x17E2B (Long Bridge Control) - True - Rotated Shapers
+0x17E2B (Long Bridge Control) - True - Rotated Shapers & Shapers
 
 Swamp Maze (Swamp) - Swamp Rotating Bridge Near Side - 0x00001 & 0x014D2 & 0x014D4 & 0x014D1 - Outside Swamp - 0x17C05 & 0x17C02:
 0x17C0A (Maze Control) - True - Shapers & Negative Shapers & Rotated Shapers & Environment
@@ -602,7 +602,7 @@ Inside Mountain Third Layer (Inside Mountain) - Inside Mountain Second Layer Ele
 Inside Mountain Bottom Layer (Inside Mountain) - Inside Mountain Third Layer - 0x09FDA - Inside Mountain Path to Secret Area - 0x334E1:
 0x17FA2 (Bottom Layer Discard) - 11 Lasers & 0x09F7F - Triangles & Environment
 0x01983 (Door to Final Room Left) - True - Shapers & Stars
-0x01987 (Door to Final Room Right) - True - Squares & Colored Squares
+0x01987 (Door to Final Room Right) - True - Squares & Colored Squares & Dots
 
 
 Inside Mountain Path to Secret Area (Inside Mountain) - Inside Mountain Bottom Layer - 0x17FA2:
@@ -694,11 +694,11 @@ Final Room (Inside Mountain Final Room) - Inside Mountain Bottom Layer - 0x01983
 0x0383A (Stars Pillar) - True - Stars & Pillar
 0x09E56 (Stars and Dots Pillar) - 0x0383A - Stars & Dots & Pillar
 0x09E5A (Dot Grid Pillar) - 0x09E56 - Dots & Pillar
-0x33961 (Sparse Dots Pillar) - 0x09E5A - Dots & Pillar
+0x33961 (Sparse Dots Pillar) - 0x09E5A - Dots & Symmetry & Pillar
 0x0383D (Dot Maze Pillar) - True - Dots & Pillar
 0x0383F (Squares Pillar) - 0x0383D - Squares & Black/White Squares & Pillar
 0x03859 (Shapers Pillar) - 0x0383F - Shapers & Pillar
-0x339BB (Squares and Stars) - 0x03859 - Squares & Black/White Squares & Stars & Pillar
+0x339BB (Squares and Stars) - 0x03859 - Squares & Black/White Squares & Stars & Symmetry & Pillar
 
 Elevator (Inside Mountain Final Room) - Final Room - 0x339BB & 0x33961:
 0x3D9A6 (Elevator Door Closer Left) - True - True
