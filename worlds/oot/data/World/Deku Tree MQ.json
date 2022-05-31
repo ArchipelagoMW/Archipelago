@@ -32,7 +32,7 @@
                 (can_use(Hookshot) or can_use(Boomerang)) and
                 here(has_bombchus or
                     (Bombs and (can_play(Song_of_Time) or is_adult)) or
-                    (can_use(Hammer) and (can_play(Song_of_Time) or logic_deku_mq_compass_gs)))"
+                    (can_use(Megaton_Hammer) and (can_play(Song_of_Time) or logic_deku_mq_compass_gs)))"
         },
         "exits": {
             "Deku Tree Lobby": "True"

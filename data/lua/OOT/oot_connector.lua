@@ -2,14 +2,14 @@ local socket = require("socket")
 local json = require('json')
 local math = require('math')
 
-local script_version = '2022-03-22' -- Should be the last modified date
+local last_modified_date = '2022-05-25' -- Should be the last modified date
+local script_version = 1
 
 --------------------------------------------------
 -- Heavily modified form of RiptideSage's tracker
 --------------------------------------------------
 
--- TODO: read this from the ROM
-local NUM_BIG_POES_REQUIRED = 1
+local NUM_BIG_POES_REQUIRED = 10
 
 -- The offset constants are all from N64 RAM start. Offsets in the check statements are relative.
 local save_context_offset = 0x11A5D0
@@ -464,7 +464,7 @@ local read_graveyard_checks = function()
     local checks = {}
     checks["Graveyard Shield Grave Chest"] = chest_check(0x40, 0x00)
     checks["Graveyard Heart Piece Grave Chest"] = chest_check(0x3F, 0x00)
-    checks["Graveyard Composers Grave Chest"] = chest_check(0x41, 0x00)
+    checks["Graveyard Royal Familys Tomb Chest"] = chest_check(0x41, 0x00)
     checks["Graveyard Freestanding PoH"] = on_the_ground_check(0x53, 0x4)
     checks["Graveyard Dampe Gravedigging Tour"] = on_the_ground_check(0x53, 0x8)
     checks["Graveyard Hookshot Chest"] = chest_check(0x48, 0x00)
@@ -899,11 +899,11 @@ end
 
 local read_gerudo_fortress_checks = function()
     local checks = {}
-    checks["GF North F1 Carpenter"] = on_the_ground_check(0xC, 0xC)
-    checks["GF North F2 Carpenter"] = on_the_ground_check(0xC, 0xA)
-    checks["GF South F1 Carpenter"] = on_the_ground_check(0xC, 0xE)
-    checks["GF South F2 Carpenter"] = on_the_ground_check(0xC, 0xF)
-    checks["GF Gerudo Membership Card"] = membership_card_check(0xC, 0x2)
+    checks["Hideout Jail Guard (1 Torch)"] = on_the_ground_check(0xC, 0xC)
+    checks["Hideout Jail Guard (2 Torches)"] = on_the_ground_check(0xC, 0xF)
+    checks["Hideout Jail Guard (3 Torches)"] = on_the_ground_check(0xC, 0xA)
+    checks["Hideout Jail Guard (4 Torches)"] = on_the_ground_check(0xC, 0xE)
+    checks["Hideout Gerudo Membership Card"] = membership_card_check(0xC, 0x2)
     checks["GF Chest"] = chest_check(0x5D, 0x0)
     checks["GF HBA 1000 Points"] = info_table_check(0x33, 0x0)
     checks["GF HBA 1500 Points"] = item_get_info_check(0x0, 0x7)
@@ -915,46 +915,46 @@ end
 local read_gerudo_training_ground_checks = function(mq_table_address)
     local checks = {}
     if not is_master_quest_dungeon(mq_table_address, 0xB) then
-        checks["Gerudo Training Grounds Lobby Left Chest"] = chest_check(0x0B, 0x13)
-        checks["Gerudo Training Grounds Lobby Right Chest"] = chest_check(0x0B, 0x07)
-        checks["Gerudo Training Grounds Stalfos Chest"] = chest_check(0x0B, 0x00)
-        checks["Gerudo Training Grounds Before Heavy Block Chest"] = chest_check(0x0B, 0x11)
-        checks["Gerudo Training Grounds Heavy Block First Chest"] = chest_check(0x0B, 0x0F)
-        checks["Gerudo Training Grounds Heavy Block Second Chest"] = chest_check(0x0B, 0x0E)
-        checks["Gerudo Training Grounds Heavy Block Third Chest"] = chest_check(0x0B, 0x14)
-        checks["Gerudo Training Grounds Heavy Block Fourth Chest"] = chest_check(0x0B, 0x02)
-        checks["Gerudo Training Grounds Eye Statue Chest"] = chest_check(0x0B, 0x03)
-        checks["Gerudo Training Grounds Near Scarecrow Chest"] = chest_check(0x0B, 0x04)
-        checks["Gerudo Training Grounds Hammer Room Clear Chest"] = chest_check(0x0B, 0x12)
-        checks["Gerudo Training Grounds Hammer Room Switch Chest"] = chest_check(0x0B, 0x10)
-        checks["Gerudo Training Grounds Freestanding Key"] = on_the_ground_check(0x0B, 0x1)
-        checks["Gerudo Training Grounds Maze Right Central Chest"] = chest_check(0x0B, 0x05)
-        checks["Gerudo Training Grounds Maze Right Side Chest"] = chest_check(0x0B, 0x08)
-        checks["Gerudo Training Grounds Underwater Silver Rupee Chest"] = chest_check(0x0B, 0x0D)
-        checks["Gerudo Training Grounds Beamos Chest"] = chest_check(0x0B, 0x01)
-        checks["Gerudo Training Grounds Hidden Ceiling Chest"] = chest_check(0x0B, 0x0B)
-        checks["Gerudo Training Grounds Maze Path First Chest"] = chest_check(0x0B, 0x06)
-        checks["Gerudo Training Grounds Maze Path Second Chest"] = chest_check(0x0B, 0x0A)
-        checks["Gerudo Training Grounds Maze Path Third Chest"] = chest_check(0x0B, 0x09)
-        checks["Gerudo Training Grounds Maze Path Final Chest"] = chest_check(0x0B, 0x0C)
+        checks["Gerudo Training Ground Lobby Left Chest"] = chest_check(0x0B, 0x13)
+        checks["Gerudo Training Ground Lobby Right Chest"] = chest_check(0x0B, 0x07)
+        checks["Gerudo Training Ground Stalfos Chest"] = chest_check(0x0B, 0x00)
+        checks["Gerudo Training Ground Before Heavy Block Chest"] = chest_check(0x0B, 0x11)
+        checks["Gerudo Training Ground Heavy Block First Chest"] = chest_check(0x0B, 0x0F)
+        checks["Gerudo Training Ground Heavy Block Second Chest"] = chest_check(0x0B, 0x0E)
+        checks["Gerudo Training Ground Heavy Block Third Chest"] = chest_check(0x0B, 0x14)
+        checks["Gerudo Training Ground Heavy Block Fourth Chest"] = chest_check(0x0B, 0x02)
+        checks["Gerudo Training Ground Eye Statue Chest"] = chest_check(0x0B, 0x03)
+        checks["Gerudo Training Ground Near Scarecrow Chest"] = chest_check(0x0B, 0x04)
+        checks["Gerudo Training Ground Hammer Room Clear Chest"] = chest_check(0x0B, 0x12)
+        checks["Gerudo Training Ground Hammer Room Switch Chest"] = chest_check(0x0B, 0x10)
+        checks["Gerudo Training Ground Freestanding Key"] = on_the_ground_check(0x0B, 0x1)
+        checks["Gerudo Training Ground Maze Right Central Chest"] = chest_check(0x0B, 0x05)
+        checks["Gerudo Training Ground Maze Right Side Chest"] = chest_check(0x0B, 0x08)
+        checks["Gerudo Training Ground Underwater Silver Rupee Chest"] = chest_check(0x0B, 0x0D)
+        checks["Gerudo Training Ground Beamos Chest"] = chest_check(0x0B, 0x01)
+        checks["Gerudo Training Ground Hidden Ceiling Chest"] = chest_check(0x0B, 0x0B)
+        checks["Gerudo Training Ground Maze Path First Chest"] = chest_check(0x0B, 0x06)
+        checks["Gerudo Training Ground Maze Path Second Chest"] = chest_check(0x0B, 0x0A)
+        checks["Gerudo Training Ground Maze Path Third Chest"] = chest_check(0x0B, 0x09)
+        checks["Gerudo Training Ground Maze Path Final Chest"] = chest_check(0x0B, 0x0C)
     else
-        checks["Gerudo Training Grounds MQ Lobby Left Chest"] = chest_check(0xB, 0x13)
-        checks["Gerudo Training Grounds MQ Lobby Right Chest"] = chest_check(0xB, 0x7)
-        checks["Gerudo Training Grounds MQ First Iron Knuckle Chest"] = chest_check(0xB, 0x0)
-        checks["Gerudo Training Grounds MQ Before Heavy Block Chest"] = chest_check(0xB, 0x11)
-        checks["Gerudo Training Grounds MQ Heavy Block Chest"] = chest_check(0xB, 0x2)
-        checks["Gerudo Training Grounds MQ Eye Statue Chest"] = chest_check(0xB, 0x3)
-        checks["Gerudo Training Grounds MQ Ice Arrows Chest"] = chest_check(0xB, 0x4)
-        checks["Gerudo Training Grounds MQ Second Iron Knuckle Chest"] = chest_check(0xB, 0x12)
-        checks["Gerudo Training Grounds MQ Flame Circle Chest"] = chest_check(0xB, 0xE)
-        checks["Gerudo Training Grounds MQ Maze Right Central Chest"] = chest_check(0xB, 0x5)
-        checks["Gerudo Training Grounds MQ Maze Right Side Chest"] = chest_check(0xB, 0x8)
-        checks["Gerudo Training Grounds MQ Underwater Silver Rupee Chest"] = chest_check(0xB, 0xD)
-        checks["Gerudo Training Grounds MQ Dinolfos Chest"] = chest_check(0xB, 0x1)
-        checks["Gerudo Training Grounds MQ Hidden Ceiling Chest"] = chest_check(0xB, 0xB)
-        checks["Gerudo Training Grounds MQ Maze Path First Chest"] = chest_check(0xB, 0x6)
-        checks["Gerudo Training Grounds MQ Maze Path Third Chest"] = chest_check(0xB, 0x9)
-        checks["Gerudo Training Grounds MQ Maze Path Second Chest"] = chest_check(0xB, 0xA)
+        checks["Gerudo Training Ground MQ Lobby Left Chest"] = chest_check(0xB, 0x13)
+        checks["Gerudo Training Ground MQ Lobby Right Chest"] = chest_check(0xB, 0x7)
+        checks["Gerudo Training Ground MQ First Iron Knuckle Chest"] = chest_check(0xB, 0x0)
+        checks["Gerudo Training Ground MQ Before Heavy Block Chest"] = chest_check(0xB, 0x11)
+        checks["Gerudo Training Ground MQ Heavy Block Chest"] = chest_check(0xB, 0x2)
+        checks["Gerudo Training Ground MQ Eye Statue Chest"] = chest_check(0xB, 0x3)
+        checks["Gerudo Training Ground MQ Ice Arrows Chest"] = chest_check(0xB, 0x4)
+        checks["Gerudo Training Ground MQ Second Iron Knuckle Chest"] = chest_check(0xB, 0x12)
+        checks["Gerudo Training Ground MQ Flame Circle Chest"] = chest_check(0xB, 0xE)
+        checks["Gerudo Training Ground MQ Maze Right Central Chest"] = chest_check(0xB, 0x5)
+        checks["Gerudo Training Ground MQ Maze Right Side Chest"] = chest_check(0xB, 0x8)
+        checks["Gerudo Training Ground MQ Underwater Silver Rupee Chest"] = chest_check(0xB, 0xD)
+        checks["Gerudo Training Ground MQ Dinolfos Chest"] = chest_check(0xB, 0x1)
+        checks["Gerudo Training Ground MQ Hidden Ceiling Chest"] = chest_check(0xB, 0xB)
+        checks["Gerudo Training Ground MQ Maze Path First Chest"] = chest_check(0xB, 0x6)
+        checks["Gerudo Training Ground MQ Maze Path Third Chest"] = chest_check(0xB, 0x9)
+        checks["Gerudo Training Ground MQ Maze Path Second Chest"] = chest_check(0xB, 0xA)
     end
     return checks
 end
@@ -1107,7 +1107,7 @@ local read_song_checks = function()
     checks["Song from Impa"] = event_check(0x5, 0x9) -- Zelda's Lullaby
     checks["Song from Malon"] = event_check(0x5, 0x8) -- Epona's Song
     checks["Song from Saria"] = event_check(0x5, 0x7) -- Saria's Song
-    checks["Song from Composers Grave"] = event_check(0x5, 0xA) -- Sun's Song
+    checks["Song from Royal Familys Tomb"] = event_check(0x5, 0xA) -- Sun's Song
     checks["Song from Ocarina of Time"] = event_check(0xA, 0x9) -- Song of Time
     checks["Song from Windmill"] = event_check(0x5, 0xB) -- Song of Storms
     checks["Sheik in Forest"] = event_check(0x5, 0x0) -- Minuet of Forest
@@ -1546,7 +1546,7 @@ local player_names_address  = coop_context + 20
 local player_name_length    = 8 -- 8 bytes
 local rom_name_location     = player_names_address + 0x800
 
-local master_quest_table_address = rando_context + 0xB220
+local master_quest_table_address = rando_context + (mainmemory.read_u32_be(rando_context + 0x0CE0) - 0x03480000)
 
 local save_context_addr = 0x11A5D0
 local internal_count_addr = save_context_addr + 0x90
@@ -1554,6 +1554,8 @@ local item_queue = {}
 
 local first_connect = true
 local game_complete = false
+
+NUM_BIG_POES_REQUIRED = mainmemory.read_u8(rando_context + 0x0CEE)
 
 local bytes_to_string = function(bytes)
     local string = ''
@@ -1781,6 +1783,7 @@ function receive()
     -- Determine message to send back
     local retTable = {}
     retTable["playerName"] = get_player_name()
+    retTable["scriptVersion"] = script_version
     retTable["deathlinkActive"] = deathlink_enabled()
     if InSafeState() then
         retTable["locations"] = check_all_locations(master_quest_table_address)
