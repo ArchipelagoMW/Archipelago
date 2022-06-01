@@ -1263,7 +1263,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 elif not for_location and hint_name in world.item_name_groups:  # item group name
                     hints = []
                     for item in world.item_name_groups[hint_name]:
-                        hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
+                        if item in world.item_name_to_id:  # ensure item has an ID
+                            hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
                 elif not for_location and hint_name in world.item_names:  # item name
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_name)
                 else:  # location name
@@ -1764,7 +1765,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 if item in world.item_name_groups:
                     hints = []
                     for item in world.item_name_groups[item]:
-                        hints.extend(collect_hints(self.ctx, team, slot, item))
+                        if item in world.item_name_to_id:  # ensure item has an ID
+                            hints.extend(collect_hints(self.ctx, team, slot, item))
                 else:  # item name
                     hints = collect_hints(self.ctx, team, slot, item)
 
