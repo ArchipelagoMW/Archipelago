@@ -432,19 +432,91 @@ def create_regions(world, player: int, active_locations):
     cannon_core_region = create_region(world, player, active_locations, LocationName.cannon_core_region,
                                        cannon_core_region_locations, None)
 
-    chao_garden_region_locations = [
-        LocationName.chao_beginner_race,
-        LocationName.chao_jewel_race,
-        LocationName.chao_challenge_race,
-        LocationName.chao_hero_race,
-        LocationName.chao_dark_race,
+    chao_garden_beginner_region_locations = [
+        LocationName.chao_race_crab_pool_1,
+        LocationName.chao_race_crab_pool_2,
+        LocationName.chao_race_crab_pool_3,
+        LocationName.chao_race_stump_valley_1,
+        LocationName.chao_race_stump_valley_2,
+        LocationName.chao_race_stump_valley_3,
+        LocationName.chao_race_mushroom_forest_1,
+        LocationName.chao_race_mushroom_forest_2,
+        LocationName.chao_race_mushroom_forest_3,
+        LocationName.chao_race_block_canyon_1,
+        LocationName.chao_race_block_canyon_2,
+        LocationName.chao_race_block_canyon_3,
+
         LocationName.chao_beginner_karate,
+    ]
+    chao_garden_beginner_region = create_region(world, player, active_locations, LocationName.chao_garden_beginner_region,
+                                                chao_garden_beginner_region_locations, None)
+
+    chao_garden_intermediate_region_locations = [
+        LocationName.chao_race_aquamarine_1,
+        LocationName.chao_race_aquamarine_2,
+        LocationName.chao_race_aquamarine_3,
+        LocationName.chao_race_aquamarine_4,
+        LocationName.chao_race_aquamarine_5,
+        LocationName.chao_race_topaz_1,
+        LocationName.chao_race_topaz_2,
+        LocationName.chao_race_topaz_3,
+        LocationName.chao_race_topaz_4,
+        LocationName.chao_race_topaz_5,
+        LocationName.chao_race_peridot_1,
+        LocationName.chao_race_peridot_2,
+        LocationName.chao_race_peridot_3,
+        LocationName.chao_race_peridot_4,
+        LocationName.chao_race_peridot_5,
+        LocationName.chao_race_garnet_1,
+        LocationName.chao_race_garnet_2,
+        LocationName.chao_race_garnet_3,
+        LocationName.chao_race_garnet_4,
+        LocationName.chao_race_garnet_5,
+        LocationName.chao_race_onyx_1,
+        LocationName.chao_race_onyx_2,
+        LocationName.chao_race_onyx_3,
+        LocationName.chao_race_onyx_4,
+        LocationName.chao_race_onyx_5,
+        LocationName.chao_race_diamond_1,
+        LocationName.chao_race_diamond_2,
+        LocationName.chao_race_diamond_3,
+        LocationName.chao_race_diamond_4,
+        LocationName.chao_race_diamond_5,
+
         LocationName.chao_standard_karate,
+    ]
+    chao_garden_intermediate_region = create_region(world, player, active_locations, LocationName.chao_garden_intermediate_region,
+                                                    chao_garden_intermediate_region_locations, None)
+
+    chao_garden_expert_region_locations = [
+        LocationName.chao_race_challenge_1,
+        LocationName.chao_race_challenge_2,
+        LocationName.chao_race_challenge_3,
+        LocationName.chao_race_challenge_4,
+        LocationName.chao_race_challenge_5,
+        LocationName.chao_race_challenge_6,
+        LocationName.chao_race_challenge_7,
+        LocationName.chao_race_challenge_8,
+        LocationName.chao_race_challenge_9,
+        LocationName.chao_race_challenge_10,
+        LocationName.chao_race_challenge_11,
+        LocationName.chao_race_challenge_12,
+
+        LocationName.chao_race_hero_1,
+        LocationName.chao_race_hero_2,
+        LocationName.chao_race_hero_3,
+        LocationName.chao_race_hero_4,
+
+        LocationName.chao_race_dark_1,
+        LocationName.chao_race_dark_2,
+        LocationName.chao_race_dark_3,
+        LocationName.chao_race_dark_4,
+
         LocationName.chao_expert_karate,
         LocationName.chao_super_karate,
     ]
-    chao_garden_region = create_region(world, player, active_locations, LocationName.chao_garden_region,
-                                       chao_garden_region_locations, None)
+    chao_garden_expert_region = create_region(world, player, active_locations, LocationName.chao_garden_expert_region,
+                                              chao_garden_expert_region_locations, None)
 
     biolizard_region_locations = [
         LocationName.biolizard,
@@ -492,7 +564,9 @@ def create_regions(world, player: int, active_locations):
         route_280_region,
         mad_space_region,
         cannon_core_region,
-        chao_garden_region,
+        chao_garden_beginner_region,
+        chao_garden_intermediate_region,
+        chao_garden_expert_region,
         biolizard_region,
     ]
 
@@ -539,6 +613,37 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
                 lambda state: (state.has(ItemName.emblem, player, gates[5].gate_emblem_count)))
         for i in range(len(gates[5].gate_levels)):
             connect(world, player, names, LocationName.gate_5_region, shuffleable_regions[gates[5].gate_levels[i]])
+
+    if len(gates) == 1:
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_intermediate_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_expert_region)
+
+    if len(gates) == 2:
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_intermediate_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_expert_region)
+
+    if len(gates) == 3:
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_expert_region)
+
+    if len(gates) == 4:
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
+        connect(world, player, names, LocationName.gate_3_region, LocationName.chao_garden_expert_region)
+
+    if len(gates) == 5:
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
+        connect(world, player, names, LocationName.gate_3_region, LocationName.chao_garden_expert_region)
+
+    if len(gates) >= 6:
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
+        connect(world, player, names, LocationName.gate_4_region, LocationName.chao_garden_expert_region)
+
 
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
