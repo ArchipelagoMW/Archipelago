@@ -255,7 +255,7 @@ def get_default_options() -> dict:
         },
         "generator": {
             "teams": 1,
-            "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core.exe"),
+            "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core"),
             "player_files_path": "Players",
             "players": 0,
             "weights_file_path": "weights.yaml",
