@@ -12,6 +12,7 @@ from sc2.main import run_game
 from sc2.data import Race
 from sc2.bot_ai import BotAI
 from sc2.player import Bot
+from sc2.paths import get_user_sc2_install
 
 from worlds.sc2wol.Regions import MissionInfo
 from worlds.sc2wol.MissionTables import lookup_id_to_mission
@@ -38,16 +39,10 @@ nest_asyncio.apply()
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: Context
 
-    def _cmd_complete(self, mission_id: str = "") -> bool:
-        options = mission_id.split()
-        mission_number = int(options[0])
-
-        if mission_number < 100:
-            asyncio.create_task(self.ctx.send_msgs([
-                {"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + 100 * mission_number]}]))
-        else:
-            asyncio.create_task(self.ctx.send_msgs([
-                {"cmd": 'LocationChecks', "locations": [SC2WOL_LOC_ID_OFFSET + mission_number]}]))
+    def _cmd_path(self) -> bool:
+        """Displays the path to your Starcraft 2 installation, if this is not correct that means that the client has had
+        difficulties finding your Starcraft 2 executable."""
+        sc2_logger.info(get_user_sc2_install())
 
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
