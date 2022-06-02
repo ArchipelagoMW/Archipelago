@@ -400,7 +400,8 @@ class RestrictedUnpickler(pickle.Unpickler):
         # Options and Plando are unpickled by WebHost -> Generate
         if module == "worlds.generic" and name in {"PlandoItem", "PlandoConnection"}:
             return getattr(self.generic_properties_module, name)
-        if module.endswith("Options"):
+        # pep 8 specifies that modules should have "all-lowercase names" (options, not Options)
+        if module.endswith("ptions"):
             if module == "Options":
                 mod = self.options_module
             else:

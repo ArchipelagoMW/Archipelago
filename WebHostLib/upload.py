@@ -22,7 +22,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
     if not owner:
         owner = session["_id"]
     infolist = zfile.infolist()
-    slots = set()
+    slots: typing.Set[Slot] = set()
     spoiler = ""
     multidata = None
     for file in infolist:
@@ -62,6 +62,11 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
             _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
             slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
                            player_id=int(slot_id[1:]), game="VVVVVV"))
+
+        elif file.filename.endswith(".apzl"):
+            _, _seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
+            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
+                           player_id=int(slot_id[1:]), game="Zillion"))
 
         elif file.filename.endswith(".apsm64ex"):
             _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)

@@ -2,12 +2,13 @@ from collections import deque
 import functools
 from typing import Any, Dict, FrozenSet, Set, TextIO, Tuple, List, Optional, cast
 import os
-from BaseClasses import MultiWorld, Location, Item, CollectionState, RegionType, Entrance
+from BaseClasses import MultiWorld, Location, Item, CollectionState, \
+    RegionType, Entrance, Tutorial
 from Options import AssembleOptions
 from .logic import cs_to_have_req, set_randomizer_locs
-from .region import ZillionLocation, ZillionRegion, make_location_map
+from .region import ZillionLocation, ZillionRegion
 from .options import ZillionItemCounts, zillion_options, validate
-from .item import ZillionItem, item_name_to_id as item_map, item_id_to_zz_item
+from .item import ZillionItem, item_id_to_zz_item, item_name_to_id as _item_name_to_id
 from .patch import ZillionDeltaPatch, get_base_rom_path
 from .config import base_id
 from zilliandomizer.patch import Patcher as ZzPatcher
@@ -15,10 +16,28 @@ from zilliandomizer.randomizer import Randomizer as ZzRandomizer
 from zilliandomizer.alarms import Alarms
 from zilliandomizer.logic_components.items import RESCUE, items as zz_items
 from zilliandomizer.logic_components.locations import Location as ZzLocation
-from ..AutoWorld import World
+from zilliandomizer.low_resources.loc_id_maps import loc_to_id
+from ..AutoWorld import World, WebWorld
+
+
+class ZillionWebWorld(WebWorld):
+    # theme = 'jungle'  # TODO: what themes are available?
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Zillion randomizer.",  # This guide covers single-player, multiworld and related software.",
+        "English",
+        "multiworld_en.md",
+        "multiworld/en",
+        ["beauxq"]
+    )]
 
 
 class ZillionWorld(World):
+    """
+    Zillion is a metroidvania style game released in 1987 for the 8-bit Sega Master System.
+
+    It's based on the anime Zillion (赤い光弾ジリオン, Akai Koudan Zillion).
+    """
     game = "Zillion"
 
     options: Dict[str, AssembleOptions] = zillion_options  # link your Options mapping
@@ -28,8 +47,11 @@ class ZillionWorld(World):
     all_item_and_group_names: FrozenSet[str] = frozenset()
 
     # map names to their IDs
-    item_name_to_id: Dict[str, int] = item_map
-    location_name_to_id: Dict[str, int] = make_location_map()
+    item_name_to_id: Dict[str, int] = _item_name_to_id
+    location_name_to_id: Dict[str, int] = {
+        loc: _id + base_id
+        for loc, _id in loc_to_id.items()
+    }
     # TODO: make this a static resource,
     # then in `generate_early`, use the dynamic resources to verify that it hasn't changed
 
@@ -95,11 +117,9 @@ class ZillionWorld(World):
         self.zz_randomizer = ZzRandomizer(zz_op)
 
         # just in case the options changed anything (I don't think they do)
-        self.location_name_to_id = {
-            name: i
-            for i, name in enumerate(self.zz_randomizer.locations, base_id)
-        }
-        # TODO: just verify the static resource instead of rewriting it
+        for name in self.zz_randomizer.locations:
+            if name != 'main':
+                assert name in self.location_name_to_id, f"{name} not in location map"
 
     def create_regions(self) -> None:
         p = self.player
@@ -234,7 +254,7 @@ class ZillionWorld(World):
 
         self.zz_patcher.write_locations(self.zz_randomizer.locations, zz_options.start_char)
         self.zz_patcher.all_fixes_and_options(zz_options)
-        self.zz_patcher.set_external_item_interface(zz_options.start_char)
+        self.zz_patcher.set_external_item_interface(zz_options.start_char, zz_options.max_level)
         self.zz_patcher.set_multiworld_items(multi_items)
 
     def generate_output(self, output_directory: str) -> None:
@@ -290,15 +310,15 @@ class ZillionWorld(World):
     def create_item(self, name: str) -> Item:
         """Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer"""
-        code = item_map[name]
-        zz_item = item_id_to_zz_item[code]
+        item_id = _item_name_to_id[name]
+        zz_item = item_id_to_zz_item[item_id]
         prog = zz_item.is_progression or zz_item.required
         skip_in_prog_bal = not zz_item.is_progression
 
         # for the rescue hint text
         start_char = self.zz_randomizer.options.start_char
 
-        z_item = ZillionItem(name, prog, code, self.player, start_char)
+        z_item = ZillionItem(name, prog, item_id, self.player, start_char)
         z_item.skip_in_prog_balancing = skip_in_prog_bal
         return z_item
 

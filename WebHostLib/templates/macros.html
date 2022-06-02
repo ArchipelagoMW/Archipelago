@@ -37,6 +37,9 @@
                         {% elif patch.game == "VVVVVV" and room.seed.slots|length == 1 %}
                         <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
                             Download APV6 File...</a>
+                        {% elif patch.game == "Zillion" and room.seed.slots|length == 1 %}
+                        <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
+                            Download APZL File...</a>
                         {% elif patch.game == "Super Mario 64" and room.seed.slots|length == 1 %}
                         <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
                             Download APSM64EX File...</a>

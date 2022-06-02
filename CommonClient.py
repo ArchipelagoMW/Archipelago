@@ -118,7 +118,7 @@ class CommonContext():
     tags: typing.Set[str] = {"AP"}
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
-    command_processor: int = ClientCommandProcessor
+    command_processor: typing.Type[ClientCommandProcessor] = ClientCommandProcessor
     game: typing.Optional[str] = None
     ui = None
     ui_task: typing.Optional[asyncio.Task] = None
@@ -154,7 +154,7 @@ class CommonContext():
 
         self.locations_checked: typing.Set[int] = set()  # local state
         self.locations_scouted: typing.Set[int] = set()
-        self.items_received = []
+        self.items_received: typing.List[int] = []
         self.missing_locations: typing.Set[int] = set()
         self.checked_locations: typing.Set[int] = set()  # server state
         self.locations_info: typing.Dict[int, NetworkItem] = {}
@@ -325,7 +325,7 @@ class CommonContext():
 
     # DeathLink hooks
 
-    def on_deathlink(self, data: dict):
+    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         """Gets dispatched when a new DeathLink is triggered by another linked player."""
         self.last_death_link = max(data["time"], self.last_death_link)
         text = data.get("cause", "")
@@ -391,7 +391,7 @@ async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
                 seconds_elapsed = 0
 
 
-async def server_loop(ctx: CommonContext, address=None):
+async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) -> None:
     if ctx.server and ctx.server.socket:
         logger.error('Already connected')
         return
@@ -613,7 +613,7 @@ async def console_loop(ctx: CommonContext):
             logger.exception(e)
 
 
-def get_base_parser(description=None):
+def get_base_parser(description: typing.Optional[str] = None):
     import argparse
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
