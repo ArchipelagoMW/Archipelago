@@ -1,8 +1,8 @@
 import asyncio
 import subprocess
-from typing import Any, Dict, Type
+from typing import Any, Coroutine, Dict, Type
 import colorama  # type: ignore
-
+import Utils
 from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 
@@ -29,9 +29,42 @@ class ZillionContext(CommonContext):
         super().__init__(server_address, password)
         self.to_game = to_game
 
+    # override
     def on_deathlink(self, data: Dict[str, Any]) -> None:
         self.to_game.put_nowait(events.DeathEventToGame())
         return super().on_deathlink(data)
+
+    # override
+    async def server_auth(self, password_requested: bool = False) -> None:
+        if password_requested and not self.password:
+            await super().server_auth(password_requested)
+        if not self.auth:
+            # TODO: get auth name from game
+            print("asking for slot name")
+            logger.info('Enter slot name:')
+            self.auth = await self.console_input()
+            print(f"got slot name: {self.auth}")
+
+        await self.send_connect()
+
+    # override
+    def run_gui(self) -> None:
+        from kvui import GameManager
+
+        class ZillionManager(GameManager):
+            logging_pairs = [
+                ("Client", "Archipelago")
+            ]
+            base_title = "Archipelago Zillion Client"
+
+        self.ui = ZillionManager(self)
+        run_co: Coroutine[Any, Any, None] = self.ui.async_run()  # type: ignore
+        # kivy types missing
+        self.ui_task = asyncio.create_task(run_co, name="UI")
+
+    def on_package(self, cmd: str, args: Dict[str, Any]) -> None:
+        if cmd == "Connected":
+            logger.info("connected")
 
 
 async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.EventToGame]") -> None:
@@ -105,6 +138,8 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
+    Utils.init_logging("ZillionClient", exception_logger="Client")
+
     colorama.init()
     asyncio.run(main())
     colorama.deinit()

@@ -131,7 +131,7 @@ class CommonContext():
     def __init__(self, server_address, password):
         # server state
         self.server_address = server_address
-        self.password = password
+        self.password: str = password
         self.server_task = None
         self.server: typing.Optional[Endpoint] = None
         self.server_version = Version(0, 0, 0)
@@ -260,7 +260,7 @@ class CommonContext():
             self.password = await self.console_input()
             return self.password
 
-    async def send_connect(self, **kwargs):
+    async def send_connect(self, **kwargs: typing.Any) -> None:
         payload = {
             'cmd': 'Connect',
             'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
@@ -271,7 +271,7 @@ class CommonContext():
             payload.update(kwargs)
         await self.send_msgs([payload])
 
-    async def console_input(self):
+    async def console_input(self) -> str:
         self.input_requests += 1
         return await self.input_queue.get()
 
