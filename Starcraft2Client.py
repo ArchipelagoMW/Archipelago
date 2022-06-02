@@ -4,6 +4,7 @@ import multiprocessing
 import logging
 import asyncio
 import os.path
+import os
 
 import nest_asyncio
 import sc2
@@ -12,13 +13,16 @@ from sc2.main import run_game
 from sc2.data import Race
 from sc2.bot_ai import BotAI
 from sc2.player import Bot
-from sc2.paths import get_user_sc2_install
+from sc2.paths import Paths
+
+from pathlib import Path
 
 from worlds.sc2wol.Regions import MissionInfo
 from worlds.sc2wol.MissionTables import lookup_id_to_mission
 from worlds.sc2wol.Items import lookup_id_to_name, item_table
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 from worlds.sc2wol import SC2WoLWorld
+from MultiServer import mark_raw
 
 from Utils import init_logging
 
@@ -39,10 +43,13 @@ nest_asyncio.apply()
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: Context
 
+    @mark_raw
+    def _cmd_set_path(self, path: str = "") -> bool:
+        Paths.BASEDIR["Windows"] = path
+
     def _cmd_path(self) -> bool:
-        """Displays the path to your Starcraft 2 installation, if this is not correct that means that the client has had
-        difficulties finding your Starcraft 2 executable."""
-        sc2_logger.info(get_user_sc2_install())
+        test=Paths.BASE
+        sc2_logger.info(Paths.BASE)
 
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
