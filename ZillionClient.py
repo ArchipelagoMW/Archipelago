@@ -23,6 +23,7 @@ class ZillionContext(CommonContext):
     game = "Zillion"
     command_processor: Type[ClientCommandProcessor] = ZillionCommandProcessor
     to_game: "asyncio.Queue[events.EventToGame]"
+    items_handling = 1  # receive items from other players
 
     def __init__(self,
                  server_address: str,
@@ -82,8 +83,8 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
                 server_id = event_from_game.id + base_id
                 loc_name = id_to_loc[event_from_game.id]
                 ctx.locations_checked.add(server_id)
-                logger.info(
-                    f'New Check: {loc_name}')  # ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                # TODO: progress number "(1/146)" or something like that
+                logger.info(f'New Check: {loc_name}')
                 await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [server_id]}])
             elif isinstance(event_from_game, events.DeathEventFromGame):
                 try:
