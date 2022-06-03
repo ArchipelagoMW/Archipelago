@@ -132,7 +132,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         for mission in vanilla_shuffle_order:
             if mission.type == "all_in":
                 missions.append("All-In")
-            elif get_option_value(world, player, "shuffle_protoss") and mission.relegate:
+            elif get_option_value(world, player, "relegate_no_build") and mission.relegate:
                 missions.append("no_build")
             else:
                 missions.append(mission.type)
