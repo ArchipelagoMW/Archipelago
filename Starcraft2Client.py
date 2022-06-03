@@ -41,15 +41,7 @@ nest_asyncio.apply()
 
 
 class StarcraftClientProcessor(ClientCommandProcessor):
-    ctx: Context
-
-    @mark_raw
-    def _cmd_set_path(self, path: str = "") -> bool:
-        Paths.BASEDIR["Windows"] = path
-
-    def _cmd_path(self) -> bool:
-        test=Paths.BASE
-        sc2_logger.info(Paths.BASE)
+    ctx: SC2Context
 
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
@@ -87,7 +79,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         return True
 
 
-class Context(CommonContext):
+class SC2Context(CommonContext):
     command_processor = StarcraftClientProcessor
     game = "Starcraft 2 Wings of Liberty"
     items_handling = 0b111
@@ -107,7 +99,7 @@ class Context(CommonContext):
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
-            await super(Context, self).server_auth(password_requested)
+            await super(SC2Context, self).server_auth(password_requested)
         if not self.auth:
             logger.info('Enter slot name:')
             self.auth = await self.console_input()
@@ -309,7 +301,7 @@ class Context(CommonContext):
         Builder.load_file(Utils.local_path(os.path.dirname(SC2WoLWorld.__file__), "Starcraft2.kv"))
 
     async def shutdown(self):
-        await super(Context, self).shutdown()
+        await super(SC2Context, self).shutdown()
         if self.sc2_run_task:
             self.sc2_run_task.cancel()
 
@@ -337,7 +329,7 @@ async def main():
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     args = parser.parse_args()
 
-    ctx = Context(args.connect, args.password)
+    ctx = SC2Context(args.connect, args.password)
     ctx.auth = args.name
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
@@ -422,7 +414,7 @@ def calc_difficulty(difficulty):
     return 'X'
 
 
-async def starcraft_launch(ctx: Context, mission_id):
+async def starcraft_launch(ctx: SC2Context, mission_id):
     ctx.rec_announce_pos = len(ctx.items_rec_to_announce)
     ctx.sent_announce_pos = len(ctx.items_sent_to_announce)
     ctx.announcements_pos = len(ctx.announcements)
@@ -444,14 +436,14 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     sixth_bonus = False
     seventh_bonus = False
     eight_bonus = False
-    ctx: Context = None
+    ctx: SC2Context = None
     mission_id = 0
 
     can_read_game = False
 
     last_received_update = 0
 
-    def __init__(self, ctx: Context, mission_id):
+    def __init__(self, ctx: SC2Context, mission_id):
         self.ctx = ctx
         self.mission_id = mission_id
 
