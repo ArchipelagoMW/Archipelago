@@ -4,7 +4,6 @@ import multiprocessing
 import logging
 import asyncio
 import os.path
-import os
 
 import nest_asyncio
 import sc2
