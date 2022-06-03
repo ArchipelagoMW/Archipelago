@@ -132,7 +132,7 @@ class SC2Context(CommonContext):
     def run_gui(self):
         from kvui import GameManager, HoverBehavior, ServerToolTip, fade_in_animation
         from kivy.app import App
-        from kivy.base import Clock
+        from kivy.clock import Clock
         from kivy.uix.tabbedpanel import TabbedPanelItem
         from kivy.uix.gridlayout import GridLayout
         from kivy.lang import Builder
