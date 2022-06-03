@@ -147,10 +147,15 @@ class Swordless(Toggle):
     display_name = "Swordless"
 
 
-class Retro(Toggle):
-    """Zelda-1 like mode. You have to purchase a quiver to shoot arrows using rupees
-    and there are randomly placed take-any caves that contain one Sword and choices of Heart Container/Blue Potion."""
-    display_name = "Retro"
+class RetroBow(Toggle):
+    """Zelda-1 like mode. You have to purchase a quiver to shoot arrows using rupees."""
+    display_name = "Retro Bow"
+
+
+class RetroCaves(Toggle):
+    """Zelda-1 like mode. There are randomly placed take-any caves that contain one Sword and
+    choices of Heart Container/Blue Potion."""
+    display_name = "Retro Caves"
 
 
 class RestrictBossItem(Toggle):
@@ -330,7 +335,8 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "map_shuffle": map_shuffle,
     "progressive": Progressive,
     "swordless": Swordless,
-    "retro": Retro,
+    "retro_bow": RetroBow,
+    "retro_caves": RetroCaves,
     "hints": Hints,
     "scams": Scams,
     "restrict_dungeon_item_on_boss": RestrictBossItem,
