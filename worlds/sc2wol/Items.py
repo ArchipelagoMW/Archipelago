@@ -166,8 +166,9 @@ item_name_groups["Missions"] = ["Beat Liberation Day", "Beat The Outlaws", "Beat
                          "Beat Media Blitz", "Beat Piercing the Shroud"]
 
 filler_items: typing.Tuple[str, ...] = (
-    '+5 Starting Minerals',
-    '+5 Starting Vespene'
+    '+15 Starting Minerals',
+    '+15 Starting Vespene',
+    '+2 Starting Supply'
 )
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in get_full_item_list().items() if data.code}
