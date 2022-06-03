@@ -40,7 +40,7 @@ class TimespinnerWorld(World):
     game = "Timespinner"
     topology_present = True
     remote_items = False
-    data_version = 9
+    data_version = 10
     web = TimespinnerWebWorld()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -154,8 +154,8 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str
         else:
             local_starter_spells = ('Lightwall',)
 
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Yo Momma 1', local_starter_melee_weapons)
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Yo Momma 2', local_starter_spells)
+    assign_starter_item(world, player, excluded_items, locked_locations, 'Tutorial: Yo Momma 1', local_starter_melee_weapons)
+    assign_starter_item(world, player, excluded_items, locked_locations, 'Tutorial: Yo Momma 2', local_starter_spells)
 
 
 def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str], 

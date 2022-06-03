@@ -790,7 +790,7 @@ class CollectionState():
                 or (self.has('Bombs (10)', player) and enemies < 6))
 
     def can_shoot_arrows(self, player: int) -> bool:
-        if self.world.retro[player]:
+        if self.world.retro_bow[player]:
             return (self.has('Bow', player) or self.has('Silver Bow', player)) and self.can_buy('Single Arrow', player)
         return self.has('Bow', player) or self.has('Silver Bow', player)
 

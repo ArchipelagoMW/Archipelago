@@ -219,7 +219,6 @@ class BuildExeCommand(cx_Freeze.dist.build_exe):
             host_yaml = self.buildfolder / 'host.yaml'
             with host_yaml.open('r+b') as f:
                 data = f.read()
-                data = data.replace(b'EnemizerCLI.Core.exe', b'EnemizerCLI.Core')
                 data = data.replace(b'factorio\\\\bin\\\\x64\\\\factorio', b'factorio/bin/x64/factorio')
                 f.seek(0, os.SEEK_SET)
                 f.write(data)
