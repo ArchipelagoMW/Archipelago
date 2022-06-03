@@ -13,16 +13,12 @@ from sc2.main import run_game
 from sc2.data import Race
 from sc2.bot_ai import BotAI
 from sc2.player import Bot
-from sc2.paths import Paths
-
-from pathlib import Path
 
 from worlds.sc2wol.Regions import MissionInfo
 from worlds.sc2wol.MissionTables import lookup_id_to_mission
 from worlds.sc2wol.Items import lookup_id_to_name, item_table
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 from worlds.sc2wol import SC2WoLWorld
-from MultiServer import mark_raw
 
 from Utils import init_logging
 
