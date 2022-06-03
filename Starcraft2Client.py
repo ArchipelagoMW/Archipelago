@@ -372,6 +372,7 @@ def calculate_items(items):
     protoss_unlock = 0
     minerals = 0
     vespene = 0
+    supply = 0
 
     for item in items:
         data = lookup_id_to_name[item.item]
@@ -396,9 +397,11 @@ def calculate_items(items):
             minerals += item_table[data].number
         elif item_table[data].type == "Vespene":
             vespene += item_table[data].number
+        elif item_table[data].type == "Supply":
+            supply += item_table[data].number
 
     return [unit_unlocks, upgrade_unlocks, armory1_unlocks, armory2_unlocks, building_unlocks, merc_unlocks,
-            lab_unlocks, protoss_unlock, minerals, vespene]
+            lab_unlocks, protoss_unlock, minerals, vespene, supply]
 
 
 def calc_difficulty(difficulty):
@@ -454,11 +457,11 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
         if iteration == 0:
             start_items = calculate_items(self.ctx.items_received)
             difficulty = calc_difficulty(self.ctx.difficulty)
-            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
                 start_items[5], start_items[6], start_items[7], start_items[8], start_items[9],
-                self.ctx.all_in_choice))
+                self.ctx.all_in_choice, start_items[10]))
             self.last_received_update = len(self.ctx.items_received)
 
         else:
