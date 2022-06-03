@@ -267,7 +267,7 @@ match="${{1#--executable=}}"
 if [ "${{#match}}" -lt "${{#1}}" ]; then
     exe="$match"
     shift
-elif [ "$1" == "-executable" ] || [ "$1" == "--executable" ]; then
+elif [ "$1" = "-executable" ] || [ "$1" = "--executable" ]; then
     exe="$2"
     shift; shift
 fi
@@ -355,7 +355,7 @@ cx_Freeze.setup(
             "optimize": 1,
             "build_exe": buildfolder,
             "extra_data": extra_data,
-            "bin_includes": [] if is_windows else ["libffi.so"]
+            "bin_includes": [] if is_windows else ["libffi.so", "libcrypt.so"]
         },
         "bdist_appimage": {
            "build_folder": buildfolder,
