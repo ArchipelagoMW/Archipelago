@@ -120,7 +120,7 @@ class Context(CommonContext):
 
     def run_gui(self):
         from kvui import GameManager
-        from kivy.base import Clock
+        from kivy.clock import Clock
         from kivy.uix.tabbedpanel import TabbedPanelItem
         from kivy.uix.gridlayout import GridLayout
         from kivy.lang import Builder
