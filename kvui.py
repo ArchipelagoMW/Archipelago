@@ -8,7 +8,7 @@ os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
 
-from kivy.base import Config
+from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set('kivy', 'exit_on_escape', '0')
@@ -18,7 +18,8 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
 from kivy.core.text.markup import MarkupLabel
-from kivy.base import ExceptionHandler, ExceptionManager, Clock
+from kivy.base import ExceptionHandler, ExceptionManager
+from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.uix.button import Button
