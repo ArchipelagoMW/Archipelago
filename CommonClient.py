@@ -154,7 +154,7 @@ class CommonContext():
 
         self.locations_checked: typing.Set[int] = set()  # local state
         self.locations_scouted: typing.Set[int] = set()
-        self.items_received: typing.List[int] = []
+        self.items_received: typing.List[NetworkItem] = []
         self.missing_locations: typing.Set[int] = set()
         self.checked_locations: typing.Set[int] = set()  # server state
         self.locations_info: typing.Dict[int, NetworkItem] = {}
@@ -239,7 +239,7 @@ class CommonContext():
         if self.server_task is not None:
             await self.server_task
 
-    async def send_msgs(self, msgs):
+    async def send_msgs(self, msgs: typing.List[typing.Dict[str, typing.Any]]) -> None:
         if not self.server or not self.server.socket.open or self.server.socket.closed:
             return
         await self.server.socket.send(encode(msgs))
