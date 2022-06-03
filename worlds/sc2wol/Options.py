@@ -53,7 +53,7 @@ class ShuffleProtoss(DefaultOnToggle):
 
 class RelegateNoBuildMissions(DefaultOnToggle):
     """If enabled, all no build missions besides the needed first one will be placed at the end of optional routes so
-    that none of them become required to complete the game.  Only takes affect if mission order is not set to vanilla."""
+    that none of them become required to complete the game.  Only takes effect if mission order is not set to vanilla."""
     display_name = "Relegate No-Build Missions"
 
 
