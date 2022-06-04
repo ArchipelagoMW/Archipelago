@@ -4,7 +4,7 @@
 
 ### Server Värd
 
-- [Minecraft Forge](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.5.html)
+- [Minecraft Forge](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.18.2.html)
 - [Minecraft Archipelago Randomizer Mod](https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
 
 ### Spelare
@@ -17,14 +17,14 @@
 
 Bara en person behöver göra denna uppsättning och vara värd för en server för alla andra spelare att koppla till.
 
-1. Ladda ner 1.16.5 **Minecraft Forge** installeraren från länken ovanför och se till att ladda ner den senaste
+1. Ladda ner 1.18.2 **Minecraft Forge** installeraren från länken ovanför och se till att ladda ner den senaste
    rekommenderade versionen.
 
-2. Kör `forge-1.16.5-xx.x.x-installer.jar` filen och välj **installera server**.
+2. Kör `forge-1.18.2-xx.x.x-installer.jar` filen och välj **installera server**.
     - På denna sida kommer du också välja vart du ska installera servern för att komma ihåg denna katalog. Detta är
       viktigt för nästa steg.
 
-3. Navigera till vart du har installerat servern och öppna `forge-1.16.5-xx.x.x-installer.jar`
+3. Navigera till vart du har installerat servern och öppna `forge-1.18.2-xx.x.x-installer.jar`
     - Under första serverstart så kommer den att stängas ner och fråga dig att acceptera Minecrafts EULA. En ny fil
       kommer skapas vid namn `eula.txt` som har en länk till Minecrafts EULA, och en linje som du behöver byta
       till `eula=true` för att acceptera Minecrafts EULA.
@@ -53,7 +53,7 @@ Dock så är det rekommenderat eftersom det hjälper att göra upplevelsen mer t
 
 
 1. Installera och Kör Minecraft från länken ovanför minst en gång.
-2. Kör `forge-1.16.5-xx.x.x-installer.jar` filen och välj **installera klient**.
+2. Kör `forge-1.18.2-xx.x.x-installer.jar` filen och välj **installera klient**.
     - Starta Minecraft Forge minst en gång för att skapa katalogerna som behövs för de nästa stegen.
 3. Navigera till din Minecraft installationskatalog och placera de önskade moddarna med `.jar`  i `mods` -katalogen.
     - Standardinstallationskatalogerna är som följande;
