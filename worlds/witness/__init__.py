@@ -133,6 +133,8 @@ class WitnessWorld(World):
             name, item.progression, item.code, player=self.player
         )
         new_item.trap = item.trap
+        if item.never_exclude:
+            new_item.never_exclude = True
         return new_item
 
     def get_filler_item_name(self) -> str:  # Used by itemlinks

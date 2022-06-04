@@ -272,9 +272,6 @@ class WitnessPlayerLocations:
 
         event_locations = {
             p for p in player_logic.NECESSARY_EVENT_PANELS
-            if StaticWitnessLogic.CHECKS_BY_HEX[p]["checkName"]
-            not in self.CHECK_LOCATIONS
-            or p in player_logic.ALWAYS_EVENT_HEX_CODES
         }
 
         self.EVENT_LOCATION_TABLE = {
