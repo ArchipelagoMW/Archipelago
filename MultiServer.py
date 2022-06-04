@@ -1945,18 +1945,8 @@ async def main(args: argparse.Namespace):
 
     try:
         if not data_filename:
-            try:
-                import tkinter
-                import tkinter.filedialog
-            except Exception as e:
-                logging.error("Could not load tkinter, which is likely not installed. "
-                              "This attempt was made because no .archipelago file was provided as argument. "
-                              "Either provide a file or ensure the tkinter package is installed.")
-                raise e
-            else:
-                root = tkinter.Tk()
-                root.withdraw()
-                data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago *.zip"),))
+            filetypes = (("Multiworld data", (".archipelago", ".zip")),)
+            data_filename = Utils.open_filename("Select multiworld data", filetypes)
 
         ctx.load(data_filename, args.use_embedded_options)
 

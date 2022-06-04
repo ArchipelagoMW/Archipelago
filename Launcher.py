@@ -20,7 +20,6 @@ from Utils import is_frozen, user_path, local_path, init_logging, open_filename,
 from shutil import which
 import shlex
 from enum import Enum, auto
-import logging
 
 
 def open_host_yaml():
@@ -38,22 +37,16 @@ def open_host_yaml():
 
 
 def open_patch():
+    suffixes = []
+    for c in components:
+        if isfile(get_exe(c)[-1]):
+            suffixes += c.file_identifier.suffixes if c.type == Type.CLIENT and \
+                                                      isinstance(c.file_identifier, SuffixIdentifier) else []
     try:
-        import tkinter
-        import tkinter.filedialog
+        filename = open_filename('Select patch', (('Patches', suffixes),))
     except Exception as e:
-        logging.error("Could not load tkinter, which is likely not installed. "
-                      "This attempt was made because Launcher.open_patch was used.")
-        raise e
+        messagebox('Error', str(e), error=True)
     else:
-        root = tkinter.Tk()
-        root.withdraw()
-        suffixes = []
-        for c in components:
-            if isfile(get_exe(c)[-1]):
-                suffixes += c.file_identifier.suffixes if c.type == Type.CLIENT and \
-                                                          isinstance(c.file_identifier, SuffixIdentifier) else []
-        filename = tkinter.filedialog.askopenfilename(filetypes=(('Patches', ' '.join(suffixes)),))
         file, _, component = identify(filename)
         if file and component:
             launch([*get_exe(component), file], component.cli)
