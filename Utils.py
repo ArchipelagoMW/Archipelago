@@ -525,6 +525,36 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
     )
 
 
+def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]]) \
+        -> typing.Optional[str]:
+    def run(*args: str):
+        return subprocess.run(args, capture_output=True, text=True).stdout.split('\n', 1)[0] or None
+
+    if is_linux:
+        # prefer native dialog
+        kdialog = shutil.which('kdialog')
+        if kdialog:
+            k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
+            return run(kdialog, f'--title={title}', '--getopenfilename', '.', k_filters)
+        zenity = shutil.which('zenity')
+        if zenity:
+            z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
+            return run(zenity, f'--title={title}', '--file-selection', *z_filters)
+
+    # fall back to tk
+    try:
+        import tkinter
+        import tkinter.filedialog
+    except Exception as e:
+        logging.error('Could not load tkinter, which is likely not installed. '
+                      f'This attempt was made because open_filename was used for "{title}".')
+        raise e
+    else:
+        root = tkinter.Tk()
+        root.withdraw()
+        return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes))
+
+
 def messagebox(title: str, text: str, error: bool = False) -> None:
     def is_kivy_running():
         if 'kivy' in sys.modules:
