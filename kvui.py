@@ -38,6 +38,7 @@ from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.animation import Animation
+from kivy.uix.popup import Popup
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
@@ -266,6 +267,25 @@ class ConnectBarTextInput(TextInput):
     def insert_text(self, substring, from_undo=False):
         s = substring.replace('\n', '').replace('\r', '')
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
+
+
+class MessageBox(Popup):
+    class MessageBoxLabel(Label):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self._label.refresh()
+            self.size = self._label.texture.size
+            if self.width + 50 > Window.width:
+                self.text_size[0] = Window.width - 50
+                self._label.refresh()
+                self.size = self._label.texture.size
+
+    def __init__(self, title, text, error=False, **kwargs):
+        label = MessageBox.MessageBoxLabel(text=text)
+        separator_color = [217 / 255, 129 / 255, 122 / 255, 1.] if error else [47 / 255., 167 / 255., 212 / 255, 1.]
+        super().__init__(title=title, content=label, size_hint=(None, None), width=max(100, int(label.width)+40),
+                         separator_color=separator_color, **kwargs)
+        self.height += max(0, label.height - 18)
 
 
 class GameManager(App):

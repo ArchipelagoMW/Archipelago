@@ -519,3 +519,30 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
                 reverse=True)[0:limit]
         )
     )
+
+
+def messagebox(title: str, text: str, error: bool = False) -> None:
+    def is_kivy_running():
+        if 'kivy' in sys.modules:
+            from kivy.app import App
+            return App.get_running_app() is not None
+        return False
+
+    if is_kivy_running():
+        from kvui import MessageBox
+        MessageBox(title, text, error).open()
+        return
+
+    # fall back to tk
+    try:
+        import tkinter
+        from tkinter.messagebox import showerror, showinfo
+    except Exception as e:
+        logging.error('Could not load tkinter, which is likely not installed. '
+                      f'This attempt was made because messagebox was used for "{title}".')
+        raise e
+    else:
+        root = tkinter.Tk()
+        root.withdraw()
+        showerror(title, text) if error else showinfo(title, text)
+        root.update()
