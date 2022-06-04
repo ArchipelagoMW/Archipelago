@@ -230,6 +230,17 @@ class WitnessPlayerLogic:
         pair = (name, self.EVENT_ITEM_NAMES[panel])
         return pair
 
+    def _regions_are_adjacent(self, region1, region2):
+        for connection in self.CONNECTIONS_BY_REGION_NAME[region1]:
+            if connection[0] == region2:
+                return True
+
+        for connection in self.CONNECTIONS_BY_REGION_NAME[region2]:
+            if connection[0] == region1:
+                return True
+
+        return False
+
     def make_event_panel_lists(self):
         """
         Special event panel data structures
@@ -245,7 +256,6 @@ class WitnessPlayerLogic:
 
         self.ORIGINAL_EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
         self.ORIGINAL_EVENT_PANELS.update(self.EVENT_PANELS_FROM_REGIONS)
-        self.NECESSARY_EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
 
         for panel in self.EVENT_PANELS_FROM_REGIONS:
             for region_name, region in StaticWitnessLogic.ALL_REGIONS_BY_NAME.items():
@@ -260,6 +270,15 @@ class WitnessPlayerLogic:
                         continue
                     if panel not in region["panels"] | connected_r["panels"]:
                         self.NECESSARY_EVENT_PANELS.add(panel)
+
+        for event_panel in self.EVENT_PANELS_FROM_PANELS:
+            for panel, panel_req in self.REQUIREMENTS_BY_HEX.items():
+                if any([event_panel in item_set for item_set in panel_req]):
+                    region1 = StaticWitnessLogic.CHECKS_BY_HEX[panel]["region"]["name"]
+                    region2 = StaticWitnessLogic.CHECKS_BY_HEX[event_panel]["region"]["name"]
+
+                    if not self._regions_are_adjacent(region1, region2):
+                        self.NECESSARY_EVENT_PANELS.add(event_panel)
 
         for always_hex, always_item in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
             self.ALWAYS_EVENT_HEX_CODES.add(always_hex)

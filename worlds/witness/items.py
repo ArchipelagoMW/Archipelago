@@ -18,6 +18,7 @@ class ItemData(NamedTuple):
     progression: bool
     event: bool = False
     trap: bool = False
+    never_exclude: bool = False
 
 
 class WitnessItem(Item):
@@ -63,6 +64,9 @@ class StaticWitnessItems:
 
         for item in StaticWitnessLogic.ALL_BOOSTS:
             item_tab[item[0]] = ItemData(158000 + item[1], False, False)
+
+        for item in StaticWitnessLogic.ALL_USEFULS:
+            item_tab[item[0]] = ItemData(158000 + item[1], False, False, True)
 
         item_tab = dict(sorted(
             item_tab.items(),

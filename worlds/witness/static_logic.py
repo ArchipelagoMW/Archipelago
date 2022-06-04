@@ -5,6 +5,7 @@ from .utils import define_new_region, parse_lambda
 
 class StaticWitnessLogic:
     ALL_SYMBOL_ITEMS = set()
+    ALL_USEFULS = set()
     ALL_TRAPS = set()
     ALL_BOOSTS = set()
     ALL_DOOR_ITEM_IDS_BY_HEX = dict()
@@ -43,6 +44,9 @@ class StaticWitnessLogic:
                 if line == "Traps:":
                     current_set = self.ALL_TRAPS
                     continue
+                if line == "Usefuls:":
+                    current_set = self.ALL_USEFULS
+                    continue
                 if line == "":
                     continue
 
@@ -75,7 +79,7 @@ class StaticWitnessLogic:
         """
         path = os.path.join(os.path.dirname(__file__), "WitnessLogic.txt")
         with open(path, "r", encoding="utf-8") as file:
-            current_region = ""
+            current_region = dict()
 
             discard_ids = 0
             normal_panel_ids = 0

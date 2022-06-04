@@ -54,7 +54,6 @@ class WitnessLogic(LogicMixin):
                 and check_name + " Solved" not in locat.EVENT_LOCATION_TABLE
                 and not self._witness_safe_manual_panel_check(panel, world, player, player_logic, locat)):
             return False
-
         return True
 
     def _witness_meets_item_requirements(self, panel, world, player, player_logic: WitnessPlayerLogic, locat):
@@ -80,15 +79,8 @@ class WitnessLogic(LogicMixin):
                     if not self._witness_has_lasers(world, player, get_option_value(world, player, "challenge_lasers")):
                         valid_option = False
                         break
-                elif item in player_logic.NECESSARY_EVENT_PANELS:
-                    if StaticWitnessLogic.CHECKS_BY_HEX[item]["checkName"] + " Solved" in locat.EVENT_LOCATION_TABLE:
-                        valid_option = self.has(player_logic.EVENT_ITEM_NAMES[item], player)
-                    else:
-                        valid_option = self.can_reach(
-                            StaticWitnessLogic.CHECKS_BY_HEX[item]["checkName"], "Location", player
-                        )
-                    if not valid_option:
-                        break
+                elif item in player_logic.ORIGINAL_EVENT_PANELS:
+                    valid_option = self._witness_can_solve_panel(item, world, player, player_logic, locat)
                 elif not self.has(item, player):
                     valid_option = False
                     break
