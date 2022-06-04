@@ -32,6 +32,10 @@ class Version(typing.NamedTuple):
 __version__ = "0.3.2"
 version_tuple = tuplize_version(__version__)
 
+is_linux = sys.platform.startswith('linux')
+is_macos = sys.platform == 'darwin'
+is_windows = sys.platform in ("win32", "cygwin", "msys")
+
 import jellyfish
 from yaml import load, load_all, dump, SafeLoader
 

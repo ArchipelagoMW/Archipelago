@@ -15,16 +15,12 @@ import sys
 from typing import Iterable, Sequence, Callable, Union, Optional
 import subprocess
 import itertools
-from Utils import is_frozen, user_path, local_path, init_logging
+from Utils import is_frozen, user_path, local_path, init_logging, open_filename, messagebox,\
+    is_windows, is_macos, is_linux
 from shutil import which
 import shlex
 from enum import Enum, auto
 import logging
-
-
-is_linux = sys.platform.startswith('linux')
-is_macos = sys.platform == 'darwin'
-is_windows = sys.platform in ("win32", "cygwin", "msys")
 
 
 def open_host_yaml():
