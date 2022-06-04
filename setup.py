@@ -6,7 +6,7 @@ from pathlib import Path
 from hashlib import sha3_512
 import base64
 import datetime
-from Utils import version_tuple
+from Utils import version_tuple, is_windows
 from collections.abc import Iterable
 import typing
 import setuptools
@@ -39,7 +39,6 @@ else:
 arch_folder = "exe.{platform}-{version}".format(platform=sysconfig.get_platform(),
                                                 version=sysconfig.get_python_version())
 buildfolder = Path("build", arch_folder)
-is_windows = sys.platform in ("win32", "cygwin", "msys")
 
 
 # see Launcher.py on how to add scripts to setup.py
