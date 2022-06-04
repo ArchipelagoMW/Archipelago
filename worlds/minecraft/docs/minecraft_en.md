@@ -33,7 +33,7 @@ leave this window open as this is your server console.
 
 ### Connect to the MultiServer
 
-Using minecraft 1.17.1 connect to the server `localhost`.
+Using minecraft 1.18.2 connect to the server `localhost`.
 
 Once you are in game type `/connect <AP-Address> (Port) (Password)` where `<AP-Address>` is the address of the
 Archipelago server. `(Port)` is only required if the Archipelago server is not using the default port of
@@ -54,7 +54,7 @@ the following links are the versions of the software we use.
 
 ### Manual install Software links
 
-- [Minecraft Forge Download Page](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.17.1.html)
+- [Minecraft Forge Download Page](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.18.2.html)
 - [Minecraft Archipelago Randomizer Mod Releases Page](https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
     - **DO NOT INSTALL THIS ON YOUR CLIENT**
 - [Java 16 Download Page](https://docs.aws.amazon.com/corretto/latest/corretto-16-ug/downloads-list.html)
