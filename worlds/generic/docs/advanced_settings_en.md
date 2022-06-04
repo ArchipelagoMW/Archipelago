@@ -126,7 +126,42 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 * `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
   item which isn't necessary for progression to go in these locations.
 * `item_links` allows you to link up items so that when one players finds the item all other participating players also 
-  get it.
+  get it. 
+  ### Example
+ ``` 
+ - name: Lttpall
+       item_pool:
+         - Everything
+       replacement_item: Rupees (20) 
+```
+In this item link if someone had progressive items on and another person had progressive items off then neither the progressive item or the non progressive item would be in it
+item links can also have local and non local items
+### Example 
+```
+  item_links:
+    - name: TSAll
+      item_pool: 
+        - Everything
+      local_items:
+        - Tablet
+        - Water Mask
+        - Gas Mask
+        - Twin Pyramid Key
+        - Timespinner Wheel
+        - Timespinner Spindle
+        - Security Keycard A
+        - Security Keycard B
+        - Security Keycard C
+        - Security Keycard D
+        - Library Keycard V
+        - Elevator Keycard
+        - Kobo
+        - Merchant Crow
+        - Celestial Sash
+        - Succubus Hairpin
+        - Lightwall
+      replacement_item: null 
+```
 
 ### Random numbers
 
@@ -226,39 +261,7 @@ triggers:
   multiworld that can be used for no cost.
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
 * `item_links` causes all players with the same `item_links` settings to share a `Fire Rod` and `Ice Rod`. Extra 
-  `Rupee (1)` are put in the item pool instead of additional Rods. If someone in the item link item pool has something that isn't in their item pool it won't be in the item link
-  ### Example
- ```- name: Lttpall
-      item_pool:
-        - Everything
-      replacement_item: Rupees (20```
-In this item link if someone had progressive items on and another person had progressive items off then neither the progressive item or the non progressive item would be in it
-item links can also have local and non local items
-### Example 
-``` 
-  item_links:
-    - name: TSAll
-      item_pool: 
-        - Everything
-      local_items:
-        - Tablet
-        - Water Mask
-        - Gas Mask
-        - Twin Pyramid Key
-        - Timespinner Wheel
-        - Timespinner Spindle
-        - Security Keycard A
-        - Security Keycard B
-        - Security Keycard C
-        - Security Keycard D
-        - Library Keycard V
-        - Elevator Keycard
-        - Kobo
-        - Merchant Crow
-        - Celestial Sash
-        - Succubus Hairpin
-        - Lightwall
-      replacement_item: null ```
+  `Rupee (1)` are put in the item pool instead of additional Rods. If someone in the item link item pool has something that isn't in their item pool it won't be in the 
 * `triggers` allows us to define a trigger such that if our `smallkey_shuffle` option happens to roll the `any_world`
   result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to
   the `any_world`
