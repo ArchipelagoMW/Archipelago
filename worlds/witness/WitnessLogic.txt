@@ -662,7 +662,7 @@ Inside Mountain Secret Area (Inside Mountain Secret Area) - Inside Mountain Path
 0x00029 (Upstairs Invisible Dot Symmetry 3) - 0x00028 - Dots & Invisible Dots & Symmetry
 
 Challenge (Challenge) - Inside Mountain Secret Area - 0x0A16E:
-0x0A332 (Start Timer) - True - True
+0x0A332 (Start Timer) - 11 Lasers - True
 0x0088E (Small Basic) - 0x0A332 - True
 0x00BAF (Big Basic) - 0x0088E - True
 0x00BF3 (Square) - 0x00BAF - Squares & Black/White Squares
