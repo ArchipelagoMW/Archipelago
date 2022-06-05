@@ -129,7 +129,7 @@ difficulties = {
         progressiveshield=['Progressive Shield'] * 3,
         basicshield=['Blue Shield', 'Red Shield', 'Red Shield'],
         progressivearmor=['Progressive Mail'] * 2,
-        basicarmor=['Progressive Mail'] * 2,  # neither will count
+        basicarmor=['Blue Mail', 'Blue Mail'] * 2,
         swordless=['Rupees (20)'] * 4,
         progressivemagic=['Magic Upgrade (1/2)', 'Rupees (300)'],
         basicmagic=['Magic Upgrade (1/2)', 'Rupees (300)'],
@@ -159,10 +159,9 @@ difficulties = {
         bottle_count=4,
         same_bottle=False,
         progressiveshield=['Progressive Shield'] * 3,
-        basicshield=['Progressive Shield'] * 3,
-        # only the first one will upgrade, making this equivalent to two blue shields
+        basicshield=['Blue Shield', 'Blue Shield', 'Blue Shield'],
         progressivearmor=['Progressive Mail'] * 2,  # neither will count
-        basicarmor=['Progressive Mail'] * 2,  # neither will count
+        basicarmor=['Rupees (20)'] * 2,
         swordless=['Rupees (20)'] * 4,
         progressivemagic=['Magic Upgrade (1/2)', 'Rupees (300)'],
         basicmagic=['Magic Upgrade (1/2)', 'Rupees (300)'],
@@ -246,7 +245,7 @@ def generate_itempool(world):
         world.push_item(world.get_location('Ganon', player), ItemFactory('Triforce', player), False)
 
     if world.goal[player] == 'icerodhunt':
-        world.progression_balancing[player].value = False
+        world.progression_balancing[player].value = 0
         loc = world.get_location('Turtle Rock - Boss', player)
         world.push_item(loc, ItemFactory('Triforce Piece', player), False)
         world.treasure_hunt_count[player] = 1
@@ -414,8 +413,6 @@ def generate_itempool(world):
                 world.push_precollected(item)
                 world.itempool.append(ItemFactory(world.worlds[player].get_filler_item_name(), player))
         world.itempool.extend([item for item in dungeon_items])
-
-
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
     # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
@@ -465,7 +462,7 @@ def generate_itempool(world):
 
     world.itempool += progressionitems + nonprogressionitems
 
-    if world.retro[player]:
+    if world.retro_caves[player]:
         set_up_take_anys(world, player)  # depends on world.itempool to be set
 
 
@@ -556,7 +553,7 @@ def get_pool_core(world, player: int):
     goal = world.goal[player]
     mode = world.mode[player]
     swordless = world.swordless[player]
-    retro = world.retro[player]
+    retro_bow = world.retro_bow[player]
     logic = world.logic[player]
 
     pool = []
@@ -570,7 +567,7 @@ def get_pool_core(world, player: int):
     pool.extend(diff.alwaysitems)
 
     def place_item(loc, item):
-        assert loc not in placed_items
+        assert loc not in placed_items, "cannot place item twice"
         placed_items[loc] = item
 
     # provide boots to major glitch dependent seeds
@@ -672,7 +669,7 @@ def get_pool_core(world, player: int):
         place_item('Master Sword Pedestal', 'Triforce')
         pool.remove("Rupees (20)")
 
-    if retro:
+    if retro_bow:
         replace = {'Single Arrow', 'Arrows (10)', 'Arrow Upgrade (+5)', 'Arrow Upgrade (+10)'}
         pool = ['Rupees (5)' if item in replace else item for item in pool]
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
@@ -708,7 +705,7 @@ def make_custom_item_pool(world, player):
     treasure_hunt_icon = None
 
     def place_item(loc, item):
-        assert loc not in placed_items
+        assert loc not in placed_items, "cannot place item twice"
         placed_items[loc] = item
 
     # Correct for insanely oversized item counts and take initial steps to handle undersized pools.

@@ -57,7 +57,7 @@ item_table = {
     "Shulker Box": ItemData(45042, False),
     "Dragon Egg Shard": ItemData(45043, True),
     "Spyglass": ItemData(45044, True),
-    "Bee Trap (Minecraft)": ItemData(45100, False),
+    "Bee Trap": ItemData(45100, False),
 
     "Blaze Rods": ItemData(None, True),
     "Defeat Ender Dragon": ItemData(None, True),

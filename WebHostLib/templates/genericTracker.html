@@ -25,9 +25,9 @@
                     </thead>
                     <tbody>
 
-                    {% for name, count in inventory.items() %}
+                    {% for id, count in inventory.items() %}
                     <tr>
-                        <td>{{ name | item_name }}</td>
+                        <td>{{ id | item_name }}</td>
                         <td>{{ count }}</td>
                         <td>{{received_items[name]}}</td>
                     </tr>

@@ -267,7 +267,7 @@ def ShopSlotFill(world):
                                         min(int(price * world.shop_price_modifier[location.player] / 100) * 5, 9999), 1,
                                         location.item.player if location.item.player != location.player else 0)
                     if 'P' in world.shop_shuffle[location.player]:
-                        price_to_funny_price(shop.inventory[location.shop_slot], world, location.player)
+                        price_to_funny_price(world, shop.inventory[location.shop_slot], location.player)
 
 
 def create_shops(world, player: int):
@@ -287,7 +287,7 @@ def create_shops(world, player: int):
     if 'g' in option or 'f' in option:
         default_shop_table = [i for l in
                               [shop_generation_types[x] for x in ['arrows', 'bombs', 'potions', 'shields', 'bottle'] if
-                               not world.retro[player] or x != 'arrows'] for i in l]
+                               not world.retro_bow[player] or x != 'arrows'] for i in l]
         new_basic_shop = world.random.sample(default_shop_table, k=3)
         new_dark_shop = world.random.sample(default_shop_table, k=3)
         for name, shop in player_shop_table.items():
@@ -305,7 +305,7 @@ def create_shops(world, player: int):
         # make sure that blue potion is available in inverted, special case locked = None; lock when done.
         player_shop_table["Dark Lake Hylia Shop"] = \
             player_shop_table["Dark Lake Hylia Shop"]._replace(items=_inverted_hylia_shop_defaults, locked=None)
-    chance_100 = int(world.retro[player]) * 0.25 + int(
+    chance_100 = int(world.retro_bow[player]) * 0.25 + int(
         world.smallkey_shuffle[player] == smallkey_shuffle.option_universal) * 0.5
     for region_name, (room_id, type, shopkeeper, custom, locked, inventory, sram_offset) in player_shop_table.items():
         region = world.get_region(region_name, player)
@@ -402,7 +402,7 @@ shop_generation_types = {
 def set_up_shops(world, player: int):
     # TODO: move hard+ mode changes for shields here, utilizing the new shops
 
-    if world.retro[player]:
+    if world.retro_bow[player]:
         rss = world.get_region('Red Shield Shop', player).shop
         replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
                              ['Blue Shield', 50], ['Small Heart',
@@ -413,7 +413,7 @@ def set_up_shops(world, player: int):
         rss.add_inventory(2, 'Single Arrow', 80, 1, replacement_item[0], replacement_item[1])
         rss.locked = True
 
-    if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal or world.retro[player]:
+    if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal or world.retro_bow[player]:
         for shop in world.random.sample([s for s in world.shops if
                                          s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
                                         5):
@@ -423,7 +423,7 @@ def set_up_shops(world, player: int):
             slots = iter(slots)
             if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
                 shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
-            if world.retro[player]:
+            if world.retro_bow[player]:
                 shop.push_inventory(next(slots), 'Single Arrow', 80)
 
 
@@ -436,7 +436,7 @@ def shuffle_shops(world, items, player: int):
         new_items = ["Bomb Upgrade (+5)"] * 6
         new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
 
-        if not world.retro[player]:
+        if not world.retro_bow[player]:
             new_items += ["Arrow Upgrade (+5)"] * 6
             new_items.append("Arrow Upgrade (+5)" if progressive else "Arrow Upgrade (+10)")
 
@@ -499,7 +499,7 @@ def shuffle_shops(world, items, player: int):
 
         if 'P' in option:
             for item in total_inventory:
-                price_to_funny_price(item, world, player)
+                price_to_funny_price(world, item, player)
             # Don't apply to upgrade shops
             # Upgrade shop is only one place, and will generally be too easy to
             # replenish hearts and bombs
@@ -529,14 +529,14 @@ price_blacklist = {
 
 price_chart = {
     ShopPriceType.Rupees: lambda p: p,
-    ShopPriceType.Hearts: lambda p: min(5, p // 5) * 8, # Each heart is 0x8 in memory, Max of 5 hearts (20 total??)
-    ShopPriceType.Magic: lambda p: min(15, p // 5) * 8, # Each pip is 0x8 in memory, Max of 15 pips (16 total...)
-    ShopPriceType.Bombs: lambda p: max(1, min(10, p // 5)), # 10 Bombs max
-    ShopPriceType.Arrows: lambda p: max(1, min(30, p // 5)), # 30 Arrows Max
+    ShopPriceType.Hearts: lambda p: min(5, p // 5) * 8,  # Each heart is 0x8 in memory, Max of 5 hearts (20 total??)
+    ShopPriceType.Magic: lambda p: min(15, p // 5) * 8,  # Each pip is 0x8 in memory, Max of 15 pips (16 total...)
+    ShopPriceType.Bombs: lambda p: max(1, min(10, p // 5)),  # 10 Bombs max
+    ShopPriceType.Arrows: lambda p: max(1, min(30, p // 5)),  # 30 Arrows Max
     ShopPriceType.HeartContainer: lambda p: 0x8,
     ShopPriceType.BombUpgrade: lambda p: 0x1,
     ShopPriceType.ArrowUpgrade: lambda p: 0x1,
-    ShopPriceType.Keys: lambda p: min(3, (p // 100) + 1), # Max of 3 keys for a price
+    ShopPriceType.Keys: lambda p: min(3, (p // 100) + 1),  # Max of 3 keys for a price
     ShopPriceType.Potion: lambda p: (p // 5) % 5,
 }
 
@@ -564,27 +564,27 @@ simple_price_types = [
 ]
 
 
-def price_to_funny_price(item: dict, world, player: int):
+def price_to_funny_price(world, item: dict, player: int):
     """
     Converts a raw Rupee price into a special price type
     """
     if item:
-        my_price_types = simple_price_types.copy()
-        world.random.shuffle(my_price_types)
-        for p_type in my_price_types:
-            # Ignore rupee prices, logic-based prices or Keys (if we're not on universal keys)
-            if p_type in [ShopPriceType.Rupees, ShopPriceType.BombUpgrade, ShopPriceType.ArrowUpgrade]:
+        price_types = [
+            ShopPriceType.Rupees,  # included as a chance to not change price type
+            ShopPriceType.Hearts,
+            ShopPriceType.Bombs,
+        ]
+        # don't pay in universal keys to get access to universal keys
+        if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal \
+                and not "Small Key (Universal)" == item['replacement']:
+            price_types.append(ShopPriceType.Keys)
+        if not world.retro_bow[player]:
+            price_types.append(ShopPriceType.Arrows)
+        world.random.shuffle(price_types)
+        for p_type in price_types:
+            # Ignore rupee prices
+            if p_type == ShopPriceType.Rupees:
                 return
-            # If we're using keys...
-            # Check if we're in universal, check if our replacement isn't a Small Key
-            # Check if price isn't super small... (this will ideally be handled in a future table)
-            if p_type in [ShopPriceType.Keys]:
-                if world.smallkey_shuffle[player] != smallkey_shuffle.option_universal:
-                    continue
-                elif item['replacement'] and 'Small Key' in item['replacement']:
-                    continue
-                if item['price'] < 50:
-                    continue
             if any(x in item['item'] for x in price_blacklist[p_type]):
                 continue
             else:

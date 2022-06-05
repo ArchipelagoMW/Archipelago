@@ -1,11 +1,15 @@
 from __future__ import annotations
+import abc
+import math
+import numbers
 import typing
 import random
 
-from schema import Schema, And, Or
+from schema import Schema, And, Or, Optional
+from Utils import get_fuzzy_results
 
 
-class AssembleOptions(type):
+class AssembleOptions(abc.ABCMeta):
     def __new__(mcs, name, bases, attrs):
         options = attrs["options"] = {}
         name_lookup = attrs["name_lookup"] = {}
@@ -16,8 +20,10 @@ class AssembleOptions(type):
                 name_lookup.update(base.name_lookup)
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
                        name.startswith("option_")}
-        if "random" in new_options:
-            raise Exception("Choice option 'random' cannot be manually assigned.")
+
+        assert "random" not in new_options, "Choice option 'random' cannot be manually assigned."
+        assert len(new_options) == len(set(new_options.values())), "same ID cannot be used twice. Try alias?"
+
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
 
@@ -36,6 +42,7 @@ class AssembleOptions(type):
                         return ret
 
                     return validate
+
                 attrs["__init__"] = validate_decorator(attrs["__init__"])
             else:
                 # construct an __init__ that calls parent __init__
@@ -52,9 +59,11 @@ class AssembleOptions(type):
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
 
-class Option(metaclass=AssembleOptions):
-    value: int
-    name_lookup: typing.Dict[int, str]
+T = typing.TypeVar('T')
+
+
+class Option(typing.Generic[T], metaclass=AssembleOptions):
+    value: T
     default = 0
 
     # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
@@ -64,10 +73,14 @@ class Option(metaclass=AssembleOptions):
     # can be weighted between selections
     supports_weighting = True
 
+    # filled by AssembleOptions:
+    name_lookup: typing.Dict[int, str]
+    options: typing.Dict[str, int]
+
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.get_current_option_name()})"
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.value)
 
     @property
@@ -79,35 +92,199 @@ class Option(metaclass=AssembleOptions):
         return self.get_option_name(self.value)
 
     @classmethod
-    def get_option_name(cls, value: typing.Any) -> str:
+    def get_option_name(cls, value: T) -> str:
         if cls.auto_display_name:
             return cls.name_lookup[value].replace("_", " ").title()
         else:
             return cls.name_lookup[value]
 
-    def __int__(self) -> int:
+    def __int__(self) -> T:
         return self.value
 
     def __bool__(self) -> bool:
         return bool(self.value)
 
     @classmethod
-    def from_any(cls, data: typing.Any):
+    def from_any(cls, data: typing.Any) -> Option[T]:
         raise NotImplementedError
 
 
-class Toggle(Option):
+class NumericOption(Option[int], numbers.Integral):
+    # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
+    # `int` is not a `numbers.Integral` according to the official typestubs
+    # (even though isinstance(5, numbers.Integral) == True)
+    # https://github.com/python/typing/issues/272
+    # https://github.com/python/mypy/issues/3186
+    # https://github.com/microsoft/pyright/issues/1575
+
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value == other.value
+        else:
+            return typing.cast(bool, self.value == other)
+
+    def __lt__(self, other: typing.Union[int, NumericOption]) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value < other.value
+        else:
+            return self.value < other
+
+    def __le__(self, other: typing.Union[int, NumericOption]) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value <= other.value
+        else:
+            return self.value <= other
+
+    def __gt__(self, other: typing.Union[int, NumericOption]) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value > other.value
+        else:
+            return self.value > other
+
+    def __bool__(self) -> bool:
+        return bool(self.value)
+
+    def __int__(self) -> int:
+        return self.value
+
+    def __mul__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return self.value * other.value
+        else:
+            return self.value * other
+
+    def __rmul__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return other.value * self.value
+        else:
+            return other * self.value
+
+    def __sub__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return self.value - other.value
+        else:
+            return self.value - other
+
+    def __rsub__(self, left: typing.Any) -> typing.Any:
+        if isinstance(left, NumericOption):
+            return left.value - self.value
+        else:
+            return left - self.value
+
+    def __add__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return self.value + other.value
+        else:
+            return self.value + other
+
+    def __radd__(self, left: typing.Any) -> typing.Any:
+        if isinstance(left, NumericOption):
+            return left.value + self.value
+        else:
+            return left + self.value
+
+    def __truediv__(self, other: typing.Any) -> typing.Any:
+        if isinstance(other, NumericOption):
+            return self.value / other.value
+        else:
+            return self.value / other
+
+    def __rtruediv__(self, left: typing.Any) -> typing.Any:
+        if isinstance(left, NumericOption):
+            return left.value / self.value
+        else:
+            return left / self.value
+
+    def __abs__(self) -> typing.Any:
+        return abs(self.value)
+
+    def __and__(self, other: typing.Any) -> int:
+        return self.value & int(other)
+
+    def __ceil__(self) -> int:
+        return math.ceil(self.value)
+
+    def __floor__(self) -> int:
+        return math.floor(self.value)
+
+    def __floordiv__(self, other: typing.Any) -> int:
+        return self.value // int(other)
+
+    def __invert__(self) -> int:
+        return ~(self.value)
+
+    def __lshift__(self, other: typing.Any) -> int:
+        return self.value << int(other)
+
+    def __mod__(self, other: typing.Any) -> int:
+        return self.value % int(other)
+
+    def __neg__(self) -> int:
+        return -(self.value)
+
+    def __or__(self, other: typing.Any) -> int:
+        return self.value | int(other)
+
+    def __pos__(self) -> int:
+        return +(self.value)
+
+    def __pow__(self, exponent: numbers.Complex, modulus: typing.Optional[numbers.Integral] = None) -> int:
+        if not (modulus is None):
+            assert isinstance(exponent, numbers.Integral)
+            return pow(self.value, exponent, modulus)  # type: ignore
+        return self.value ** exponent  # type: ignore
+
+    def __rand__(self, other: typing.Any) -> int:
+        return int(other) & self.value
+
+    def __rfloordiv__(self, other: typing.Any) -> int:
+        return int(other) // self.value
+
+    def __rlshift__(self, other: typing.Any) -> int:
+        return int(other) << self.value
+
+    def __rmod__(self, other: typing.Any) -> int:
+        return int(other) % self.value
+
+    def __ror__(self, other: typing.Any) -> int:
+        return int(other) | self.value
+
+    def __round__(self, ndigits: typing.Optional[int] = None) -> int:
+        return round(self.value, ndigits)
+
+    def __rpow__(self, base: typing.Any) -> typing.Any:
+        return base ** self.value
+
+    def __rrshift__(self, other: typing.Any) -> int:
+        return int(other) >> self.value
+
+    def __rshift__(self, other: typing.Any) -> int:
+        return self.value >> int(other)
+
+    def __rxor__(self, other: typing.Any) -> int:
+        return int(other) ^ self.value
+
+    def __trunc__(self) -> int:
+        return math.trunc(self.value)
+
+    def __xor__(self, other: typing.Any) -> int:
+        return self.value ^ int(other)
+
+
+class Toggle(NumericOption):
     option_false = 0
     option_true = 1
     default = 0
 
     def __init__(self, value: int):
-        assert value == 0 or value == 1
+        assert value == 0 or value == 1, "value of Toggle can only be 0 or 1"
         self.value = value
 
     @classmethod
     def from_text(cls, text: str) -> Toggle:
-        if text.lower() in {"off", "0", "false", "none", "null", "no"}:
+        if text == "random":
+            return cls(random.choice(list(cls.name_lookup)))
+        elif text.lower() in {"off", "0", "false", "none", "null", "no"}:
             return cls(0)
         else:
             return cls(1)
@@ -118,24 +295,6 @@ class Toggle(Option):
             return cls.from_text(data)
         else:
             return cls(data)
-
-    def __eq__(self, other):
-        if isinstance(other, Toggle):
-            return self.value == other.value
-        else:
-            return self.value == other
-
-    def __gt__(self, other):
-        if isinstance(other, Toggle):
-            return self.value > other.value
-        else:
-            return self.value > other
-
-    def __bool__(self):
-        return bool(self.value)
-
-    def __int__(self):
-        return int(self.value)
 
     @classmethod
     def get_option_name(cls, value):
@@ -148,7 +307,7 @@ class DefaultOnToggle(Toggle):
     default = 1
 
 
-class Choice(Option):
+class Choice(NumericOption):
     auto_display_name = True
 
     def __init__(self, value: int):
@@ -176,10 +335,10 @@ class Choice(Option):
         if isinstance(other, self.__class__):
             return other.value == self.value
         elif isinstance(other, str):
-            assert other in self.options
+            assert other in self.options, f"compared against a str that could never be equal. {self} == {other}"
             return other == self.current_key
         elif isinstance(other, int):
-            assert other in self.name_lookup
+            assert other in self.name_lookup, f"compared against an int that could never be equal. {self} == {other}"
             return other == self.value
         elif isinstance(other, bool):
             return other == bool(self.value)
@@ -190,10 +349,10 @@ class Choice(Option):
         if isinstance(other, self.__class__):
             return other.value != self.value
         elif isinstance(other, str):
-            assert other in self.options
+            assert other in self.options, f"compared against a str that could never be equal. {self} != {other}"
             return other != self.current_key
         elif isinstance(other, int):
-            assert other in self.name_lookup
+            assert other in self.name_lookup, f"compared against am int that could never be equal. {self} != {other}"
             return other != self.value
         elif isinstance(other, bool):
             return other != bool(self.value)
@@ -205,7 +364,7 @@ class Choice(Option):
     __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
-class Range(Option, int):
+class Range(NumericOption):
     range_start = 0
     range_end = 1
 
@@ -245,8 +404,25 @@ class Range(Option, int):
                     return cls(int(round(random.triangular(random_range[0], random_range[1], random_range[1]))))
                 else:
                     return cls(int(round(random.randint(random_range[0], random_range[1]))))
-            else:
+            elif text == "random":
                 return cls(random.randint(cls.range_start, cls.range_end))
+            else:
+                raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. Acceptable values are: random, random-high, random-middle, random-low, random-range-low-<min>-<max>, random-range-middle-<min>-<max>, random-range-high-<min>-<max>, or random-range-<min>-<max>.")
+        elif text == "default" and hasattr(cls, "default"):
+            return cls(cls.default)
+        elif text == "high":
+            return cls(cls.range_end)
+        elif text == "low":
+            return cls(cls.range_start)
+        elif cls.range_start == 0 \
+                and hasattr(cls, "default") \
+                and cls.default != 0 \
+                and text in ("true", "false"):
+            # these are the conditions where "true" and "false" make sense
+            if text == "true":
+                return cls(cls.default)
+            else:  # "false"
+                return cls(0)
         return cls(int(text))
 
     @classmethod
@@ -255,18 +431,20 @@ class Range(Option, int):
             return cls(data)
         return cls.from_text(str(data))
 
-    def get_option_name(self, value):
+    @classmethod
+    def get_option_name(cls, value: int) -> str:
         return str(value)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.value)
 
 
 class VerifyKeys:
     valid_keys = frozenset()
     valid_keys_casefold: bool = False
-    verify_item_name = False
-    verify_location_name = False
+    convert_name_groups: bool = False
+    verify_item_name: bool = False
+    verify_location_name: bool = False
     value: typing.Any
 
     @classmethod
@@ -280,22 +458,30 @@ class VerifyKeys:
                                 f"Allowed keys: {cls.valid_keys}.")
 
     def verify(self, world):
+        if self.convert_name_groups and self.verify_item_name:
+            new_value = type(self.value)()  # empty container of whatever value is
+            for item_name in self.value:
+                new_value |= world.item_name_groups.get(item_name, {item_name})
+            self.value = new_value
         if self.verify_item_name:
             for item_name in self.value:
                 if item_name not in world.item_names:
+                    picks = get_fuzzy_results(item_name, world.item_names, limit=1)
                     raise Exception(f"Item {item_name} from option {self} "
-                                    f"is not a valid item name from {world.game}")
+                                    f"is not a valid item name from {world.game}. "
+                                    f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
         elif self.verify_location_name:
             for location_name in self.value:
-                if location_name not in world.world_types[world.game].location_names:
+                if location_name not in world.location_names:
+                    picks = get_fuzzy_results(location_name, world.location_names, limit=1)
                     raise Exception(f"Location {location_name} from option {self} "
-                                    f"is not a valid location name from {world.game}")
+                                    f"is not a valid location name from {world.game}. "
+                                    f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
 
 
-class OptionDict(Option, VerifyKeys):
+class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
     default = {}
     supports_weighting = False
-    value: typing.Dict[str, typing.Any]
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
         self.value = value
@@ -316,7 +502,6 @@ class OptionDict(Option, VerifyKeys):
 
 
 class ItemDict(OptionDict):
-    # implemented by Generate
     verify_item_name = True
 
     def __init__(self, value: typing.Dict[str, int]):
@@ -325,10 +510,9 @@ class ItemDict(OptionDict):
         super(ItemDict, self).__init__(value)
 
 
-class OptionList(Option, VerifyKeys):
+class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     default = []
     supports_weighting = False
-    value: list
 
     def __init__(self, value: typing.List[typing.Any]):
         self.value = value or []
@@ -352,10 +536,9 @@ class OptionList(Option, VerifyKeys):
         return item in self.value
 
 
-class OptionSet(Option, VerifyKeys):
+class OptionSet(Option[typing.Set[str]], VerifyKeys):
     default = frozenset()
     supports_weighting = False
-    value: set
 
     def __init__(self, value: typing.Union[typing.Set[str, typing.Any], typing.List[str, typing.Any]]):
         self.value = set(value)
@@ -376,7 +559,7 @@ class OptionSet(Option, VerifyKeys):
         return cls.from_text(str(data))
 
     def get_option_name(self, value):
-        return ", ".join(value)
+        return ", ".join(sorted(value))
 
     def __contains__(self, item):
         return item in self.value
@@ -398,8 +581,12 @@ class Accessibility(Choice):
     default = 1
 
 
-class ProgressionBalancing(DefaultOnToggle):
-    """A system that moves progression earlier, to try and prevent the player from getting stuck and bored early."""
+class ProgressionBalancing(Range):
+    """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+    [0-99, default 50] A lower setting means more getting stuck. A higher setting means less getting stuck."""
+    default = 50
+    range_start = 0
+    range_end = 99
     display_name = "Progression Balancing"
 
 
@@ -410,8 +597,8 @@ common_options = {
 
 
 class ItemSet(OptionSet):
-    # implemented by Generate
     verify_item_name = True
+    convert_name_groups = True
 
 
 class LocalItems(ItemSet):
@@ -438,6 +625,7 @@ class StartHints(ItemSet):
 class StartLocationHints(OptionSet):
     """Start with these locations and their item prefilled into the !hint command"""
     display_name = "Start Location Hints"
+    verify_location_name = True
 
 
 class ExcludeLocations(OptionSet):
@@ -464,9 +652,30 @@ class ItemLinks(OptionList):
         {
             "name": And(str, len),
             "item_pool": [And(str, len)],
-            "replacement_item": Or(And(str, len), None)
+            Optional("exclude"): [And(str, len)],
+            "replacement_item": Or(And(str, len), None),
+            Optional("local_items"): [And(str, len)],
+            Optional("non_local_items"): [And(str, len)]
         }
     ])
+
+    @staticmethod
+    def verify_items(items: typing.List[str], item_link: str, pool_name: str, world, allow_item_groups: bool = True) -> typing.Set:
+        pool = set()
+        for item_name in items:
+            if item_name not in world.item_names and (not allow_item_groups or item_name not in world.item_name_groups):
+                picks = get_fuzzy_results(item_name, world.item_names, limit=1)
+                picks_group = get_fuzzy_results(item_name, world.item_name_groups.keys(), limit=1)
+                picks_group = f" or '{picks_group[0][0]}' ({picks_group[0][1]}% sure)" if allow_item_groups else ""
+
+                raise Exception(f"Item {item_name} from item link {item_link} "
+                                f"is not a valid item from {world.game} for {pool_name}. "
+                                f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure){picks_group}")
+            if allow_item_groups:
+                pool |= world.item_name_groups.get(item_name, {item_name})
+            else:
+                pool |= {item_name}
+        return pool
 
     def verify(self, world):
         super(ItemLinks, self).verify(world)
@@ -475,13 +684,27 @@ class ItemLinks(OptionList):
             if link["name"] in existing_links:
                 raise Exception(f"You cannot have more than one link named {link['name']}.")
             existing_links.add(link["name"])
-            for item_name in link["item_pool"]:
-                if item_name not in world.item_names and item_name not in world.item_name_groups:
-                    raise Exception(f"Item {item_name} from item link {link} "
-                                    f"is not a valid item name from {world.game}")
-            if link["replacement_item"] and link["replacement_item"] not in world.item_names:
-                raise Exception(f"Item {link['replacement_item']} from item link {link} "
-                                f"is not a valid item name from {world.game}")
+
+            pool = self.verify_items(link["item_pool"], link["name"], "item_pool", world)
+            local_items = set()
+            non_local_items = set()
+
+            if "exclude" in link:
+                pool -= self.verify_items(link["exclude"], link["name"], "exclude", world)
+            if link["replacement_item"]:
+                self.verify_items([link["replacement_item"]], link["name"], "replacement_item", world, False)
+            if "local_items" in link:
+                local_items = self.verify_items(link["local_items"], link["name"], "local_items", world)
+                local_items &= pool
+            if "non_local_items" in link:
+                non_local_items = self.verify_items(link["non_local_items"], link["name"], "non_local_items", world)
+                non_local_items &= pool
+
+            intersection = local_items.intersection(non_local_items)
+            if intersection:
+                raise Exception(f"item_link {link['name']} has {intersection} items in both its local_items and non_local_items pool.")
+
+
 
 
 per_game_common_options = {
@@ -495,7 +718,6 @@ per_game_common_options = {
     "priority_locations": PriorityLocations,
     "item_links": ItemLinks
 }
-
 
 if __name__ == "__main__":
 

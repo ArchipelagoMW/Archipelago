@@ -584,7 +584,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
 
 class TestBalanceMultiworldProgression(unittest.TestCase):
-    def assertRegionContains(self, region: Region, item: Item):
+    def assertRegionContains(self, region: Region, item: Item) -> bool:
         for location in region.locations:
             if location.item and location.item == item:
                 return True
@@ -592,7 +592,7 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
         self.fail("Expected " + region.name + " to contain " + item.name +
                   "\n Contains" + str(list(map(lambda location: location.item, region.locations))))
 
-    def setUp(self):
+    def setUp(self) -> None:
         multi_world = generate_multi_world(2)
         self.multi_world = multi_world
         player1 = generate_player_data(
@@ -628,10 +628,10 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
         items = fillRegion(multi_world, region, [
             player2.prog_items[1]] + items)
 
-        multi_world.progression_balancing[player1.id] = True
-        multi_world.progression_balancing[player2.id] = True
+    def test_balances_progression(self) -> None:
+        self.multi_world.progression_balancing[self.player1.id].value = 50
+        self.multi_world.progression_balancing[self.player2.id].value = 50
 
-    def test_balances_progression(self):
         self.assertRegionContains(
             self.player1.regions[2], self.player2.prog_items[0])
 
@@ -640,7 +640,48 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
         self.assertRegionContains(
             self.player1.regions[1], self.player2.prog_items[0])
 
-    def test_ignores_priority_locations(self):
+    def test_balances_progression_light(self) -> None:
+        self.multi_world.progression_balancing[self.player1.id].value = 1
+        self.multi_world.progression_balancing[self.player2.id].value = 1
+
+        self.assertRegionContains(
+            self.player1.regions[2], self.player2.prog_items[0])
+
+        balance_multiworld_progression(self.multi_world)
+
+        # TODO: arrange for a result that's different from the default
+        self.assertRegionContains(
+            self.player1.regions[1], self.player2.prog_items[0])
+
+    def test_balances_progression_heavy(self) -> None:
+        self.multi_world.progression_balancing[self.player1.id].value = 99
+        self.multi_world.progression_balancing[self.player2.id].value = 99
+
+        self.assertRegionContains(
+            self.player1.regions[2], self.player2.prog_items[0])
+
+        balance_multiworld_progression(self.multi_world)
+
+        # TODO: arrange for a result that's different from the default
+        self.assertRegionContains(
+            self.player1.regions[1], self.player2.prog_items[0])
+
+    def test_skips_balancing_progression(self) -> None:
+        self.multi_world.progression_balancing[self.player1.id].value = 0
+        self.multi_world.progression_balancing[self.player2.id].value = 0
+
+        self.assertRegionContains(
+            self.player1.regions[2], self.player2.prog_items[0])
+
+        balance_multiworld_progression(self.multi_world)
+
+        self.assertRegionContains(
+            self.player1.regions[2], self.player2.prog_items[0])
+
+    def test_ignores_priority_locations(self) -> None:
+        self.multi_world.progression_balancing[self.player1.id].value = 50
+        self.multi_world.progression_balancing[self.player2.id].value = 50
+
         self.player2.prog_items[0].location.progress_type = LocationProgressType.PRIORITY
 
         balance_multiworld_progression(self.multi_world)

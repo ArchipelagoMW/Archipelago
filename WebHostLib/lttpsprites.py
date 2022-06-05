@@ -2,7 +2,7 @@ import os
 import threading
 import json
 
-from Utils import local_path
+from Utils import local_path, user_path
 from worlds.alttp.Rom import Sprite
 
 
@@ -14,8 +14,8 @@ def update_sprites_lttp():
     from LttPAdjuster import update_sprites
 
     # Target directories
-    input_dir = local_path("data", "sprites", "alttpr")
-    output_dir = local_path("WebHostLib", "static", "generated")
+    input_dir = user_path("data", "sprites", "alttpr")
+    output_dir = local_path("WebHostLib", "static", "generated")  # TODO: move to user_path
 
     os.makedirs(os.path.join(output_dir, "sprites"), exist_ok=True)
     # update sprites through gui.py's functions

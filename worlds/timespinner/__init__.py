@@ -1,6 +1,6 @@
 from typing import Dict, List, Set, Tuple, TextIO
-from BaseClasses import Item, MultiWorld, Location
-from ..AutoWorld import World
+from BaseClasses import Item, MultiWorld, Location, Tutorial
+from ..AutoWorld import World, WebWorld
 from .LogicMixin import TimespinnerLogic
 from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, starter_progression_items, filler_items
 from .Locations import get_locations, starter_progression_locations, EventId
@@ -8,6 +8,27 @@ from .Regions import create_regions
 from .Options import is_option_enabled, get_option_value, timespinner_options
 from .PyramidKeys import get_pyramid_keys_unlock
 
+class TimespinnerWebWorld(WebWorld):
+    theme = "ice"
+    setup = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Timespinner randomizer connected to an Archipelago Multiworld",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Jarno"]
+    )
+
+    setup_de = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Deutsch",
+        "setup_de.md",
+        "setup/en",
+        ["Grrmo", "Fynxes", "Blaze0168"]
+    )
+
+    tutorials = [setup, setup_de]
 
 class TimespinnerWorld(World):
     """
@@ -19,7 +40,8 @@ class TimespinnerWorld(World):
     game = "Timespinner"
     topology_present = True
     remote_items = False
-    data_version = 7
+    data_version = 10
+    web = TimespinnerWebWorld()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
@@ -132,8 +154,8 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str
         else:
             local_starter_spells = ('Lightwall',)
 
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Yo Momma 1', local_starter_melee_weapons)
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Yo Momma 2', local_starter_spells)
+    assign_starter_item(world, player, excluded_items, locked_locations, 'Tutorial: Yo Momma 1', local_starter_melee_weapons)
+    assign_starter_item(world, player, excluded_items, locked_locations, 'Tutorial: Yo Momma 2', local_starter_spells)
 
 
 def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str], 

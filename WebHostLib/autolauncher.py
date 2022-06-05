@@ -53,7 +53,7 @@ else:  # unix
         def __enter__(self):
             try:
                 self.fp = open(self.lockfile, "wb")
-                fcntl.flock(self.fp.fileno(), fcntl.LOCK_EX)
+                fcntl.flock(self.fp.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
             except OSError as e:
                 raise AlreadyRunningException() from e
 

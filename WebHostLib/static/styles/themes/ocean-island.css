@@ -1,0 +1,74 @@
+html{
+    background-image: url('../../static/backgrounds/ocean.png');
+    background-repeat: repeat;
+    background-size: 250px 250px;
+    font-family: LexendDeca-Light, sans-serif;
+    font-size: 18px;
+    color: #ffffff;
+    line-height: 30px;
+}
+
+#base-header{
+    background: url('../../static/backgrounds/header/ocean-header.png') repeat-x;
+}
+
+div header{
+    font-family: LondrinaSolid-Light, sans-serif;
+    font-size: 25px;
+    margin: 20px 0;
+    text-transform: uppercase;
+}
+
+h1{
+    font-family: LondrinaSolid-Light, sans-serif;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.grass-island{
+    background:
+        url('../../static/backgrounds/cliffs/grass/cliff-top-left-corner.png') top left no-repeat,
+        url('../../static/backgrounds/cliffs/grass/cliff-top-right-corner.png') top right no-repeat,
+        url('../../static/backgrounds/cliffs/grass/cliff-bottom-left-corner.png') bottom left no-repeat,
+        url('../../static/backgrounds/cliffs/grass/cliff-bottom-right-corner.png') bottom right no-repeat,
+        url('../../static/backgrounds/cliffs/grass/cliff-top.png') top repeat-x,
+        url('../../static/backgrounds/cliffs/grass/cliff-bottom.png') bottom repeat-x,
+        url('../../static/backgrounds/cliffs/grass/cliff-left.png') left repeat-y,
+        url('../../static/backgrounds/cliffs/grass/cliff-right.png') right repeat-y,
+        url('../../static/backgrounds/grass.png') repeat;
+
+    background-size:
+        140px 120px, /* top-left */
+        140px 120px, /* top-right */
+        140px 140px, /* bottom-left */
+        140px 140px, /* bottom-right */
+        20px 71px, /* top */
+        20px 100px, /* bottom */
+        71px 20px, /* left */
+        71px 20px, /* right */
+        525px 525px; /* center */
+
+    min-width: 280px;
+    min-height: 280px;
+
+    padding: 100px 120px 120px;
+}
+
+pre{
+    margin-top: 0;
+    padding: 0.5rem 0.25rem;
+    background-color: #ffeeab;
+    border: 1px solid #9f916a;
+    border-radius: 6px;
+    color: #000000;
+}
+
+code{
+    background-color: #ffeeab;
+    border-radius: 4px;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    color: #000000;
+}

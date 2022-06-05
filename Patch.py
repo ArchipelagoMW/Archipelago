@@ -12,6 +12,9 @@ import zipfile
 import sys
 from typing import Tuple, Optional, Dict, Any, Union, BinaryIO
 
+import ModuleUpdate
+ModuleUpdate.update()
+
 import Utils
 
 current_patch_version = 4
@@ -238,8 +241,8 @@ def get_base_rom_data(game: str):
     elif game == GAME_SM:
         from worlds.sm.Rom import get_base_rom_bytes
     elif game == GAME_SOE:
-        file_name = Utils.get_options()["soe_options"]["rom_file"]
-        get_base_rom_bytes = lambda: bytes(read_rom(open(file_name, "rb")))
+        from worlds.soe.Patch import get_base_rom_path
+        get_base_rom_bytes = lambda: bytes(read_rom(open(get_base_rom_path(), "rb")))
     elif game == GAME_SMZ3:
         from worlds.smz3.Rom import get_base_rom_bytes
     else:

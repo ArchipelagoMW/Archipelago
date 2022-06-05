@@ -30,7 +30,7 @@
     size_hint_x: 1
     size_hint_y: 1
     pos: (0, 0)
-<ServerToolTip>:
+<ToolTip>:
     size: self.texture_size
     size_hint: None, None
     font_size: dp(18)
@@ -52,3 +52,5 @@
         Line:
             width: 1
             rectangle: self.x-2, self.y-2, self.width+4, self.height+4
+<ServerToolTip>:
+    pos_hint: {'center_y': 0.5, 'center_x': 0.5}

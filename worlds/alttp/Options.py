@@ -101,11 +101,13 @@ class ShopItemSlots(Range):
     range_start = 0
     range_end = 30
 
+
 class ShopPriceModifier(Range):
     """Percentage modifier for shuffled item prices in shops"""
     range_start = 0
     default = 100
     range_end = 400
+
 
 class WorldState(Choice):
     option_standard = 1
@@ -150,10 +152,15 @@ class Swordless(Toggle):
     display_name = "Swordless"
 
 
-class Retro(Toggle):
-    """Zelda-1 like mode. You have to purchase a quiver to shoot arrows using rupees
-    and there are randomly placed take-any caves that contain one Sword and choices of Heart Container/Blue Potion."""
-    display_name = "Retro"
+class RetroBow(Toggle):
+    """Zelda-1 like mode. You have to purchase a quiver to shoot arrows using rupees."""
+    display_name = "Retro Bow"
+
+
+class RetroCaves(Toggle):
+    """Zelda-1 like mode. There are randomly placed take-any caves that contain one Sword and
+    choices of Heart Container/Blue Potion."""
+    display_name = "Retro Caves"
 
 
 class RestrictBossItem(Toggle):
@@ -162,16 +169,30 @@ class RestrictBossItem(Toggle):
 
 
 class Hints(Choice):
-    """Vendors: King Zora and Bottle Merchant say what they're selling.
-    On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints."""
+    """On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints."""
     display_name = "Hints"
     option_off = 0
-    option_vendors = 1
     option_on = 2
     option_full = 3
     default = 2
     alias_false = 0
     alias_true = 2
+
+
+class Scams(Choice):
+    """If on, these Merchants will no longer tell you what they're selling."""
+    display_name = "Scams"
+    option_off = 0
+    option_king_zora = 1
+    option_bottle_merchant = 2
+    option_all = 3
+    alias_false = 0
+
+    def gives_king_zora_hint(self):
+        return self.value in {0, 2}
+
+    def gives_bottle_merchant_hint(self):
+        return self.value in {0, 1}
 
 
 class EnemyShuffle(Toggle):
@@ -273,11 +294,11 @@ class Music(DefaultOnToggle):
 
 
 class ReduceFlashing(DefaultOnToggle):
-    displayname = "Reduce Screen Flashes"
+    display_name = "Reduce Screen Flashes"
 
 
 class TriforceHud(Choice):
-    displayname = "Display Method for Triforce Hunt"
+    display_name = "Display Method for Triforce Hunt"
     option_normal = 0
     option_hide_goal = 1
     option_hide_required = 2
@@ -294,14 +315,20 @@ class BeemizerTotalChance(BeemizerRange):
     """Percentage chance for each junk-fill item (rupees, bombs, arrows) to be
     replaced with either a bee swarm trap or a single bottle-filling bee."""
     default = 0
-    displayname = "Beemizer Total Chance"
+    display_name = "Beemizer Total Chance"
 
 
 class BeemizerTrapChance(BeemizerRange):
     """Percentage chance for each replaced junk-fill item to be a bee swarm
     trap; all other replaced items are single bottle-filling bees."""
     default = 60
-    displayname = "Beemizer Trap Chance"
+    display_name = "Beemizer Trap Chance"
+
+
+class AllowCollect(Toggle):
+    """Allows for !collect / co-op to auto-open chests containing items for other players.
+    Off by default, because it currently crashes on real hardware."""
+    display_name = "Allow Collection of checks for other players"
 
 
 alttp_options: typing.Dict[str, type(Option)] = {
@@ -314,8 +341,10 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "key_drop_shuffle": key_drop_shuffle,
     "progressive": Progressive,
     "swordless": Swordless,
-    "retro": Retro,
+    "retro_bow": RetroBow,
+    "retro_caves": RetroCaves,
     "hints": Hints,
+    "scams": Scams,
     "restrict_dungeon_item_on_boss": RestrictBossItem,
     "pot_shuffle": PotShuffle,
     "enemy_shuffle": EnemyShuffle,
@@ -340,6 +369,6 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "glitch_boots": DefaultOnToggle,
     "beemizer_total_chance": BeemizerTotalChance,
     "beemizer_trap_chance": BeemizerTrapChance,
-    "death_link": DeathLink
-
+    "death_link": DeathLink,
+    "allow_collect": AllowCollect
 }

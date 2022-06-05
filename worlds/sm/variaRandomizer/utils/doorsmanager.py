@@ -254,8 +254,7 @@ class DoorsManager():
 
     @staticmethod
     def setDoorsColor(player=0):
-        if player not in DoorsManager.doorsDict.keys():
-            DoorsManager.doorsDict[player] = copy.deepcopy(DoorsManager.doors)
+        DoorsManager.doorsDict[player] = copy.deepcopy(DoorsManager.doors)
         currentDoors = DoorsManager.doorsDict[player]
 
         # depending on loaded patches, force some doors to blue, excluding them from randomization

@@ -12,6 +12,9 @@ import logging
 import asyncio
 from json import loads, dumps
 
+import ModuleUpdate
+ModuleUpdate.update()
+
 from Utils import init_logging
 
 if __name__ == "__main__":
@@ -25,7 +28,7 @@ from worlds.alttp.Rom import ROM_PLAYER_LIMIT
 from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
 from worlds.smz3.Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
 import Utils
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3
 
 snes_logger = logging.getLogger("SNES")
@@ -124,6 +127,7 @@ class Context(CommonContext):
         self.snes_connector_lock = threading.Lock()
         self.death_state = DeathState.alive  # for death link flop behaviour
         self.killing_player_task = None
+        self.allow_collect = False
 
         self.awaiting_rom = False
         self.rom = None
@@ -182,6 +186,19 @@ class Context(CommonContext):
                 # Once the games handled by SNIClient gets made to be remote items, this will no longer be needed.
                 asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": list(new_locations)}]))
 
+    def run_gui(self):
+        from kvui import GameManager
+
+        class SNIManager(GameManager):
+            logging_pairs = [
+                ("Client", "Archipelago"),
+                ("SNES", "SNES"),
+            ]
+            base_title = "Archipelago SNI Client"
+
+        self.ui = SNIManager(self)
+        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+
 
 async def deathlink_kill_player(ctx: Context):
     ctx.death_state = DeathState.killing_player
@@ -201,7 +218,8 @@ async def deathlink_kill_player(ctx: Context):
                 snes_buffered_write(ctx, WRAM_START + 0x0373,
                                     bytes([8]))  # deal 1 full heart of damage at next opportunity
         elif ctx.game == GAME_SM:
-            snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([0, 0]))  # set current health to 0
+            snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([1, 0]))  # set current health to 1 (to prevent saving with 0 energy)
+            snes_buffered_write(ctx, WRAM_START + 0x0A50, bytes([255])) # deal 255 of damage at next opportunity
             if not ctx.death_link_allow_survive:
                 snes_buffered_write(ctx, WRAM_START + 0x09D6, bytes([0, 0]))  # set current reserve to 0
         await snes_flush_writes(ctx)
@@ -255,7 +273,7 @@ SHOP_LEN = (len(Shops.shop_table) * 3) + 5
 DEATH_LINK_ACTIVE_ADDR = ROMNAME_START + 0x15       # 1 byte
 
 # SM
-SM_ROMNAME_START = 0x1C4F00
+SM_ROMNAME_START = 0x007FC0
 
 SM_INGAME_MODES = {0x07, 0x09, 0x0b}
 SM_ENDGAME_MODES = {0x26, 0x27}
@@ -266,6 +284,7 @@ SM_RECV_ITEM_ADDR = SAVEDATA_START + 0x4D2          # 1 byte
 SM_RECV_ITEM_PLAYER_ADDR = SAVEDATA_START + 0x4D3   # 1 byte
 
 SM_DEATH_LINK_ACTIVE_ADDR = ROM_START + 0x277f04    # 1 byte
+SM_REMOTE_ITEM_FLAG_ADDR = ROM_START + 0x277f06    # 1 byte
 
 # SMZ3
 SMZ3_ROMNAME_START = 0x00FFC0
@@ -502,6 +521,18 @@ location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      'Ganons Tower - Pre-Moldorm Chest': (0x3d, 0x40),
                      'Ganons Tower - Validation Chest': (0x4d, 0x10)}
 
+boss_locations = {Regions.lookup_name_to_id[name] for name in {'Eastern Palace - Boss',
+                                                                           'Desert Palace - Boss',
+                                                                           'Tower of Hera - Boss',
+                                                                           'Palace of Darkness - Boss',
+                                                                           'Swamp Palace - Boss',
+                                                                           'Skull Woods - Boss',
+                                                                           "Thieves' Town - Boss",
+                                                                           'Ice Palace - Boss',
+                                                                           'Misery Mire - Boss',
+                                                                           'Turtle Rock - Boss',
+                                                                           'Sahasrahla'}}
+
 location_table_uw_id = {Regions.lookup_name_to_id[name]: data for name, data in location_table_uw.items()}
 
 location_table_npc = {'Mushroom': 0x1000,
@@ -570,8 +601,14 @@ def launch_sni(ctx: Context):
         if not sys.stdout:  # if it spawns a visible console, may as well populate it
             subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path))
         else:
-            subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL,
-                             stderr=subprocess.DEVNULL)
+            proc = subprocess.Popen(os.path.abspath(sni_path), cwd=os.path.dirname(sni_path),
+                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            try:
+                proc.wait(.1)  # wait a bit to see if startup fails (missing dependencies)
+                snes_logger.info('Failed to start SNI. Try running it externally for error output.')
+            except subprocess.TimeoutExpired:
+                pass  # seems to be running
+
     else:
         snes_logger.info(
             f"Attempt to start SNI was aborted as path {sni_path} was not found, "
@@ -655,24 +692,24 @@ async def snes_connect(ctx: Context, address, deviceIndex=-1):
 
     try:
         devices = await get_snes_devices(ctx)
-        numDevices = len(devices)
+        device_count = len(devices)
 
-        if numDevices == 1:
+        if device_count == 1:
             device = devices[0]
         elif ctx.snes_reconnect_address:
             if ctx.snes_attached_device[1] in devices:
                 device = ctx.snes_attached_device[1]
             else:
                 device = devices[ctx.snes_attached_device[0]]
-        elif numDevices > 1:
+        elif device_count > 1:
             if deviceIndex == -1:
-                snes_logger.info(
-                    "Found " + str(numDevices) + " SNES devices; connect to one with /snes <address> <device number>:")
+                snes_logger.info(f"Found {device_count} SNES devices. "
+                                 f"Connect to one with /snes <address> <device number>. For example /snes {address} 1")
 
                 for idx, availableDevice in enumerate(devices):
                     snes_logger.info(str(idx + 1) + ": " + availableDevice)
 
-            elif (deviceIndex < 0) or (deviceIndex - 1) > numDevices:
+            elif (deviceIndex < 0) or (deviceIndex - 1) > device_count:
                 snes_logger.warning("SNES device number out of range")
 
             else:
@@ -694,8 +731,6 @@ async def snes_connect(ctx: Context, address, deviceIndex=-1):
         ctx.snes_attached_device = (devices.index(device), device)
         ctx.snes_reconnect_address = address
         recv_task = asyncio.create_task(snes_recv_loop(ctx))
-        SNES_RECONNECT_DELAY = ctx.starting_reconnect_delay
-        snes_logger.info(f"Attached to {device}")
 
     except Exception as e:
         if recv_task is not None:
@@ -713,6 +748,10 @@ async def snes_connect(ctx: Context, address, deviceIndex=-1):
             snes_logger.error(f"Error connecting to snes, attempt again in {SNES_RECONNECT_DELAY}s")
             asyncio.create_task(snes_autoreconnect(ctx))
         SNES_RECONNECT_DELAY *= 2
+
+    else:
+        SNES_RECONNECT_DELAY = ctx.starting_reconnect_delay
+        snes_logger.info(f"Attached to {device}")
 
 
 async def snes_disconnect(ctx: Context):
@@ -851,8 +890,8 @@ async def track_locations(ctx: Context, roomid, roomdata):
             location = Shops.SHOP_ID_START + cnt
             if int(b) and location not in ctx.locations_checked:
                 new_check(location)
-            if location in ctx.checked_locations and location not in ctx.locations_checked \
-                    and location in ctx.locations_info and ctx.locations_info[location][1] != ctx.slot:
+            if ctx.allow_collect and location in ctx.checked_locations and location not in ctx.locations_checked \
+                    and location in ctx.locations_info and ctx.locations_info[location].player != ctx.slot:
                 if not int(b):
                     shop_data[cnt] += 1
                     shop_data_changed = True
@@ -879,8 +918,9 @@ async def track_locations(ctx: Context, roomid, roomdata):
             uw_unchecked[location_id] = (roomid, mask)
             uw_begin = min(uw_begin, roomid)
             uw_end = max(uw_end, roomid + 1)
-        if location_id in ctx.checked_locations and location_id not in ctx.locations_checked and \
-                location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
+        if ctx.allow_collect and location_id not in boss_locations and location_id in ctx.checked_locations \
+                and location_id not in ctx.locations_checked and location_id in ctx.locations_info \
+                and ctx.locations_info[location_id].player != ctx.slot:
             uw_begin = min(uw_begin, roomid)
             uw_end = max(uw_end, roomid + 1)
             uw_checked[location_id] = (roomid, mask)
@@ -911,8 +951,8 @@ async def track_locations(ctx: Context, roomid, roomdata):
             ow_unchecked[location_id] = screenid
             ow_begin = min(ow_begin, screenid)
             ow_end = max(ow_end, screenid + 1)
-            if location_id in ctx.checked_locations and location_id in ctx.locations_info \
-                    and ctx.locations_info[location_id][1] != ctx.slot:
+            if ctx.allow_collect and location_id in ctx.checked_locations and location_id in ctx.locations_info \
+                    and ctx.locations_info[location_id].player != ctx.slot:
                 ow_checked[location_id] = screenid
 
     if ow_begin < ow_end:
@@ -935,8 +975,9 @@ async def track_locations(ctx: Context, roomid, roomdata):
             for location_id, mask in location_table_npc_id.items():
                 if npc_value & mask != 0 and location_id not in ctx.locations_checked:
                     new_check(location_id)
-                if location_id in ctx.checked_locations and location_id not in ctx.locations_checked \
-                        and location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
+                if ctx.allow_collect and location_id not in boss_locations and location_id in ctx.checked_locations \
+                        and location_id not in ctx.locations_checked and location_id in ctx.locations_info \
+                        and ctx.locations_info[location_id].player != ctx.slot:
                     npc_value |= mask
                     npc_value_changed = True
             if npc_value_changed:
@@ -952,8 +993,8 @@ async def track_locations(ctx: Context, roomid, roomdata):
                 assert (0x3c6 <= offset <= 0x3c9)
                 if misc_data[offset - 0x3c6] & mask != 0 and location_id not in ctx.locations_checked:
                     new_check(location_id)
-                if location_id in ctx.checked_locations and location_id not in ctx.locations_checked \
-                        and location_id in ctx.locations_info and ctx.locations_info[location_id][1] != ctx.slot:
+                if ctx.allow_collect and location_id in ctx.checked_locations and location_id not in ctx.locations_checked \
+                        and location_id in ctx.locations_info and ctx.locations_info[location_id].player != ctx.slot:
                     misc_data_changed = True
                     misc_data[offset - 0x3c6] |= mask
             if misc_data_changed:
@@ -978,12 +1019,18 @@ async def game_watcher(ctx: Context):
         if not ctx.rom:
             ctx.finished_game = False
             ctx.death_link_allow_survive = False
-            game_name = await snes_read(ctx, SM_ROMNAME_START, 2)
+            game_name = await snes_read(ctx, SM_ROMNAME_START, 5)
             if game_name is None:
                 continue
             elif game_name[:2] == b"SM":
                 ctx.game = GAME_SM
-                ctx.items_handling = 0b001  # full local
+                # versions lower than 0.3.0 dont have item handling flag nor remote item support
+                romVersion = int(game_name[2:5].decode('UTF-8'))
+                if romVersion < 30:
+                    ctx.items_handling = 0b001 # full local 
+                else:
+                    item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
+                    ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
             else:
                 game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
                 if game_name == b"ZSM":
@@ -1002,6 +1049,7 @@ async def game_watcher(ctx: Context):
                 death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
                                              SM_DEATH_LINK_ACTIVE_ADDR, 1)
                 if death_link:
+                    ctx.allow_collect = bool(death_link[0] & 0b100)
                     ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
                     await ctx.update_death_link(bool(death_link[0] & 0b1))
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
@@ -1077,9 +1125,9 @@ async def game_watcher(ctx: Context):
                 snes_buffered_write(ctx, SCOUTREPLY_LOCATION_ADDR,
                                     bytes([scout_location]))
                 snes_buffered_write(ctx, SCOUTREPLY_ITEM_ADDR,
-                                    bytes([ctx.locations_info[scout_location][0]]))
+                                    bytes([ctx.locations_info[scout_location].item]))
                 snes_buffered_write(ctx, SCOUTREPLY_PLAYER_ADDR,
-                                    bytes([min(ROM_PLAYER_LIMIT, ctx.locations_info[scout_location][1])]))
+                                    bytes([min(ROM_PLAYER_LIMIT, ctx.locations_info[scout_location].player)]))
 
             await snes_flush_writes(ctx)
 
@@ -1133,13 +1181,18 @@ async def game_watcher(ctx: Context):
             itemOutPtr = data[2] | (data[3] << 8)
 
             from worlds.sm.Items import items_start_id
+            from worlds.sm.Locations import locations_start_id
             if itemOutPtr < len(ctx.items_received):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
+                if bool(ctx.items_handling & 0b010):
+                    locationId = (item.location - locations_start_id) if (item.location >= 0 and item.player == ctx.slot) else 0xFF
+                else:
+                    locationId = 0x00 #backward compat
 
                 playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes(
-                    [playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
+                	[playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, locationId & 0xFF]))
                 itemOutPtr += 1
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x602,
                                     bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
@@ -1247,7 +1300,7 @@ async def main():
             import time
             time.sleep(3)
             sys.exit()
-        elif args.diff_file.endswith((".apbp", "apz3")):
+        elif args.diff_file.endswith((".apbp", ".apz3", ".aplttp")):
             adjustedromfile, adjusted = get_alttp_settings(romfile)
             asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
         else:
@@ -1256,15 +1309,10 @@ async def main():
     ctx = Context(args.snes, args.connect, args.password)
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-    input_task = None
+
     if gui_enabled:
-        from kvui import SNIManager
-        ctx.ui = SNIManager(ctx)
-        ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
-    else:
-        ui_task = None
-    if sys.stdin:
-        input_task = asyncio.create_task(console_loop(ctx), name="Input")
+        ctx.run_gui()
+    ctx.run_cli()
 
     snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address), name="SNES Connect")
     watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
@@ -1280,12 +1328,6 @@ async def main():
     await watcher_task
     await ctx.shutdown()
 
-    if ui_task:
-        await ui_task
-
-    if input_task:
-        input_task.cancel()
-
 
 def get_alttp_settings(romfile: str):
     lastSettings = Utils.get_adjuster_settings(GAME_ALTTP)
@@ -1297,7 +1339,7 @@ def get_alttp_settings(romfile: str):
 
             whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
                          "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
-                         "reduceflashing", "deathlink"}
+                         "reduceflashing", "deathlink", "allowcollect"}
             printed_options = {name: value for name, value in vars(lastSettings).items() if name in whitelist}
             if hasattr(lastSettings, "sprite_pool"):
                 sprite_pool = {}
@@ -1397,7 +1439,7 @@ def get_alttp_settings(romfile: str):
             if hasattr(lastSettings, "world"):
                 delattr(lastSettings, "world")
         else:
-            adjusted = False;
+            adjusted = False
         if adjusted:
             try:
                 shutil.move(adjustedromfile, romfile)
@@ -1411,7 +1453,5 @@ def get_alttp_settings(romfile: str):
 
 if __name__ == '__main__':
     colorama.init()
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-    loop.close()
+    asyncio.run(main())
     colorama.deinit()

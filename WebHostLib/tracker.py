@@ -316,6 +316,11 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
     else:
         multisave: Dict[str, Any] = {}
 
+    slots_aimed_at_player = {tracked_player}
+    for group_id, group_members in groups.items():
+        if tracked_player in group_members:
+            slots_aimed_at_player.add(group_id)
+
     # Add items to player inventory
     for (ms_team, ms_player), locations_checked in multisave.get("location_checks", {}).items():
         # Skip teams and players not matching the request
@@ -324,11 +329,8 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
             # If the player does not have the item, do nothing
             for location in locations_checked:
                 if location in player_locations:
-                    if len(player_locations[location]) == 3:
-                        item, recipient, flags = player_locations[location]
-                    else: # TODO: remove around version 0.2.5
-                        item, recipient = player_locations[location]
-                    if recipient == tracked_player:  # a check done for the tracked player
+                    item, recipient, flags = player_locations[location]
+                    if recipient in slots_aimed_at_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
                     if ms_player == tracked_player:  # a check done by the tracked player
                         checks_done[location_to_area[location]] += 1
@@ -392,10 +394,7 @@ def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[
     player_small_key_locations = set()
     for loc_data in locations.values():
         for values in loc_data.values():
-            if len(values) == 3:
-                item_id, item_player, flags = values
-            else: # TODO: remove around version 0.2.5
-                item_id, item_player = values
+            item_id, item_player, flags = values
             if item_player == player:
                 if item_id in ids_big_key:
                     player_big_key_locations.add(ids_big_key[item_id])
@@ -640,7 +639,8 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
         "Shadow Temple":            (67485, 67532),
         "Spirit Temple":            (67533, 67582),
         "Ice Cavern":               (67583, 67596),
-        "Gerudo Training Grounds":  (67597, 67635),
+        "Gerudo Training Ground":   (67597, 67635),
+        "Thieves' Hideout":         (67259, 67263),
         "Ganon's Castle":           (67636, 67673),
     }
 
@@ -648,7 +648,7 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
         full_name = lookup_any_location_id_to_name[id]
         if id == 67673:
             return full_name[13:]  # Ganons Tower Boss Key Chest
-        if area != 'Overworld':
+        if area not in ["Overworld", "Thieves' Hideout"]:
             # trim dungeon name. leaves an extra space that doesn't display, or trims fully for DC/Jabu/GC
             return full_name[len(area):]
         return full_name
@@ -659,6 +659,13 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
     checks_done = {area: len(list(filter(lambda x: x, location_info[area].values()))) for area in area_id_ranges}
     checks_in_area = {area: len([id for id in range(min_id, max_id+1) if id in locations[player]]) 
         for area, (min_id, max_id) in area_id_ranges.items()}
+
+    # Remove Thieves' Hideout checks from Overworld, since it's in the middle of the range
+    checks_in_area["Overworld"] -= checks_in_area["Thieves' Hideout"]
+    checks_done["Overworld"] -= checks_done["Thieves' Hideout"]
+    for loc in location_info["Thieves' Hideout"]:
+        del location_info["Overworld"][loc]
+
     checks_done['Total'] = sum(checks_done.values())
     checks_in_area['Total'] = sum(checks_in_area.values())
 
@@ -676,7 +683,8 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
         "Spirit Temple":            inventory[66178],
         "Shadow Temple":            inventory[66179],
         "Bottom of the Well":       inventory[66180],
-        "Gerudo Training Grounds":  inventory[66181],
+        "Gerudo Training Ground":   inventory[66181],
+        "Thieves' Hideout":         inventory[66182],
         "Ganon's Castle":           inventory[66183],
     }
     boss_key_counts = {
@@ -881,7 +889,6 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
 
     for item_name, item_id in multi_items.items():
         base_name = item_name.split()[0].lower()
-        count = inventory[item_id]
         display_data[base_name+"_count"] = inventory[item_id]
 
     # Victory condition
@@ -967,12 +974,10 @@ def getTracker(tracker: UUID):
             if location not in player_locations or location not in player_location_to_area[player]:
                 continue
 
-            if len(player_locations[location]) == 3:
-                item, recipient, flags = player_locations[location]
-            else: # TODO: remove around version 0.2.5
-                item, recipient = player_locations[location]
+            item, recipient, flags = player_locations[location]
 
-            attribute_item(inventory, team, recipient, item)
+            if recipient in names:
+                attribute_item(inventory, team, recipient, item)
             checks_done[team][player][player_location_to_area[player][location]] += 1
             checks_done[team][player]["Total"] += 1
 
@@ -986,10 +991,7 @@ def getTracker(tracker: UUID):
     player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1) if playernumber not in groups}
     for loc_data in locations.values():
          for values in loc_data.values():
-            if len(values) == 3:
-                item_id, item_player, flags = values
-            else: # TODO: remove around version 0.2.5
-                item_id, item_player = values
+            item_id, item_player, flags = values
 
             if item_id in ids_big_key:
                 player_big_key_locations[item_player].add(ids_big_key[item_id])
