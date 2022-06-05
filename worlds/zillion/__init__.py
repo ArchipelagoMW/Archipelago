@@ -161,7 +161,8 @@ class ZillionWorld(World):
                     access_rule = functools.partial(access_rule_wrapped,
                                                     zz_loc, self.player, self.zz_randomizer)
 
-                    loc = ZillionLocation(zz_loc, self.player, zz_loc.name, None, here)
+                    loc_id = self.location_name_to_id[zz_loc.name]
+                    loc = ZillionLocation(zz_loc, self.player, zz_loc.name, loc_id, here)
                     loc.access_rule = access_rule  # type: ignore
                     here.locations.append(loc)
 
