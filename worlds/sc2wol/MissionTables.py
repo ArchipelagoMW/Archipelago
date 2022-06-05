@@ -24,10 +24,10 @@ class FillMission(NamedTuple):
     type: str
     connect_to: List[int]  # -1 connects to Menu
     category: str
-    number: int = 0 # number of worlds need beaten
+    number: int = 0  # number of worlds need beaten
     completion_critical: bool = False  # missions needed to beat game
     or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
-
+    relegate: bool = False  # true if this is a slot no build missions should be relegated to.
 
 
 vanilla_shuffle_order = [
@@ -37,7 +37,7 @@ vanilla_shuffle_order = [
     FillMission("easy", [2], "Colonist"),
     FillMission("medium", [3], "Colonist"),
     FillMission("hard", [4], "Colonist", number=7),
-    FillMission("hard", [4], "Colonist", number=7),
+    FillMission("hard", [4], "Colonist", number=7, relegate=True),
     FillMission("easy", [2], "Artifact", completion_critical=True),
     FillMission("medium", [7], "Artifact", number=8, completion_critical=True),
     FillMission("hard", [8], "Artifact", number=11, completion_critical=True),
@@ -45,17 +45,17 @@ vanilla_shuffle_order = [
     FillMission("hard", [10], "Artifact", completion_critical=True),
     FillMission("medium", [2], "Covert", number=4),
     FillMission("medium", [12], "Covert"),
-    FillMission("hard", [13], "Covert", number=8),
-    FillMission("hard", [13], "Covert", number=8),
+    FillMission("hard", [13], "Covert", number=8, relegate=True),
+    FillMission("hard", [13], "Covert", number=8, relegate=True),
     FillMission("medium", [2], "Rebellion", number=6),
     FillMission("hard", [16], "Rebellion"),
     FillMission("hard", [17], "Rebellion"),
     FillMission("hard", [18], "Rebellion"),
-    FillMission("hard", [19], "Rebellion"),
+    FillMission("hard", [19], "Rebellion", relegate=True),
     FillMission("medium", [8], "Prophecy"),
     FillMission("hard", [21], "Prophecy"),
     FillMission("hard", [22], "Prophecy"),
-    FillMission("hard", [23], "Prophecy"),
+    FillMission("hard", [23], "Prophecy", relegate=True),
     FillMission("hard", [11], "Char", completion_critical=True),
     FillMission("hard", [25], "Char", completion_critical=True),
     FillMission("hard", [25], "Char", completion_critical=True),

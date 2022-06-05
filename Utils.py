@@ -32,6 +32,10 @@ class Version(typing.NamedTuple):
 __version__ = "0.3.2"
 version_tuple = tuplize_version(__version__)
 
+is_linux = sys.platform.startswith('linux')
+is_macos = sys.platform == 'darwin'
+is_windows = sys.platform in ("win32", "cygwin", "msys")
+
 import jellyfish
 from yaml import load, load_all, dump, SafeLoader
 
@@ -255,7 +259,7 @@ def get_default_options() -> dict:
         },
         "generator": {
             "teams": 1,
-            "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core.exe"),
+            "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core"),
             "player_files_path": "Players",
             "players": 0,
             "weights_file_path": "weights.yaml",
@@ -519,3 +523,60 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
                 reverse=True)[0:limit]
         )
     )
+
+
+def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]]) \
+        -> typing.Optional[str]:
+    def run(*args: str):
+        return subprocess.run(args, capture_output=True, text=True).stdout.split('\n', 1)[0] or None
+
+    if is_linux:
+        # prefer native dialog
+        kdialog = shutil.which('kdialog')
+        if kdialog:
+            k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
+            return run(kdialog, f'--title={title}', '--getopenfilename', '.', k_filters)
+        zenity = shutil.which('zenity')
+        if zenity:
+            z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
+            return run(zenity, f'--title={title}', '--file-selection', *z_filters)
+
+    # fall back to tk
+    try:
+        import tkinter
+        import tkinter.filedialog
+    except Exception as e:
+        logging.error('Could not load tkinter, which is likely not installed. '
+                      f'This attempt was made because open_filename was used for "{title}".')
+        raise e
+    else:
+        root = tkinter.Tk()
+        root.withdraw()
+        return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes))
+
+
+def messagebox(title: str, text: str, error: bool = False) -> None:
+    def is_kivy_running():
+        if 'kivy' in sys.modules:
+            from kivy.app import App
+            return App.get_running_app() is not None
+        return False
+
+    if is_kivy_running():
+        from kvui import MessageBox
+        MessageBox(title, text, error).open()
+        return
+
+    # fall back to tk
+    try:
+        import tkinter
+        from tkinter.messagebox import showerror, showinfo
+    except Exception as e:
+        logging.error('Could not load tkinter, which is likely not installed. '
+                      f'This attempt was made because messagebox was used for "{title}".')
+        raise e
+    else:
+        root = tkinter.Tk()
+        root.withdraw()
+        showerror(title, text) if error else showinfo(title, text)
+        root.update()

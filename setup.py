@@ -6,7 +6,7 @@ from pathlib import Path
 from hashlib import sha3_512
 import base64
 import datetime
-from Utils import version_tuple
+from Utils import version_tuple, is_windows
 from collections.abc import Iterable
 import typing
 import setuptools
@@ -16,7 +16,7 @@ from Launcher import components, icon_paths
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 import subprocess
 import pkg_resources
-requirement = 'cx-Freeze>=6.10'
+requirement = 'cx-Freeze>=6.11'
 try:
     pkg_resources.require(requirement)
     import cx_Freeze
@@ -39,7 +39,6 @@ else:
 arch_folder = "exe.{platform}-{version}".format(platform=sysconfig.get_platform(),
                                                 version=sysconfig.get_python_version())
 buildfolder = Path("build", arch_folder)
-is_windows = sys.platform in ("win32", "cygwin", "msys")
 
 
 # see Launcher.py on how to add scripts to setup.py
@@ -68,7 +67,7 @@ def _threaded_hash(filepath):
 
 
 # cx_Freeze's build command runs other commands. Override to accept --yes and store that.
-class BuildCommand(cx_Freeze.dist.build):
+class BuildCommand(cx_Freeze.command.build.Build):
     user_options = [
         ('yes', 'y', 'Answer "yes" to all questions.'),
     ]
@@ -85,8 +84,8 @@ class BuildCommand(cx_Freeze.dist.build):
 
 
 # Override cx_Freeze's build_exe command for pre and post build steps
-class BuildExeCommand(cx_Freeze.dist.build_exe):
-    user_options = cx_Freeze.dist.build_exe.user_options + [
+class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
+    user_options = cx_Freeze.command.build_exe.BuildEXE.user_options + [
         ('yes', 'y', 'Answer "yes" to all questions.'),
         ('extra-data=', None, 'Additional files to add.'),
     ]
@@ -219,7 +218,6 @@ class BuildExeCommand(cx_Freeze.dist.build_exe):
             host_yaml = self.buildfolder / 'host.yaml'
             with host_yaml.open('r+b') as f:
                 data = f.read()
-                data = data.replace(b'EnemizerCLI.Core.exe', b'EnemizerCLI.Core')
                 data = data.replace(b'factorio\\\\bin\\\\x64\\\\factorio', b'factorio/bin/x64/factorio')
                 f.seek(0, os.SEEK_SET)
                 f.write(data)
@@ -268,7 +266,7 @@ match="${{1#--executable=}}"
 if [ "${{#match}}" -lt "${{#1}}" ]; then
     exe="$match"
     shift
-elif [ "$1" == "-executable" ] || [ "$1" == "--executable" ]; then
+elif [ "$1" = "-executable" ] || [ "$1" = "--executable" ]; then
     exe="$2"
     shift; shift
 fi
@@ -356,7 +354,7 @@ cx_Freeze.setup(
             "optimize": 1,
             "build_exe": buildfolder,
             "extra_data": extra_data,
-            "bin_includes": [] if is_windows else ["libffi.so"]
+            "bin_includes": [] if is_windows else ["libffi.so", "libcrypt.so"]
         },
         "bdist_appimage": {
            "build_folder": buildfolder,

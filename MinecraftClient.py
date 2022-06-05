@@ -13,12 +13,12 @@ import logging
 import requests
 
 import Utils
+from Utils import is_windows
 
 atexit.register(input, "Press enter to exit.")
 
 # 1 or more digits followed by m or g, then optional b
 max_heap_re = re.compile(r"^\d+[mMgG][bB]?$")
-is_windows = sys.platform in ("win32", "cygwin", "msys")
 
 
 def prompt_yes_no(prompt):
