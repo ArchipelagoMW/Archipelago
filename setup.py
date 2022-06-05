@@ -6,7 +6,7 @@ from pathlib import Path
 from hashlib import sha3_512
 import base64
 import datetime
-from Utils import version_tuple, is_windows
+from Utils import version_tuple, is_windows, is_linux
 from collections.abc import Iterable
 import typing
 import setuptools
@@ -154,6 +154,11 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         # regular cx build
         self.buildtime = datetime.datetime.utcnow()
         super().run()
+
+        # include_files seems to be broken with this setup. implement here
+        for src, dst in self.include_files:
+            print('copying', src, '->', self.buildfolder / dst)
+            shutil.copyfile(src, self.buildfolder / dst, follow_symlinks=False)
 
         # post build steps
         if sys.platform == "win32":  # kivy_deps is win32 only, linux picks them up automatically
@@ -335,6 +340,63 @@ $APPDIR/$exe "$@"
         subprocess.call(f'ARCH={platform.machine()} ./appimagetool -n "{self.app_dir}" "{self.dist_file}"', shell=True)
 
 
+def find_libs(arch: typing.Optional[str], *args: str) -> typing.Sequence[typing.Tuple[str, str]]:
+    """Try to find system libraries to be included."""
+    if not arch:
+        import platform
+        arch = platform.machine()
+    arch = arch.replace('_', '-')
+    libc = 'libc6'  # we currently don't support musl
+
+    def parse(line):
+        lib, path = line.strip().split(' => ')
+        lib, typ = lib.split(' ', 1)
+        for test_arch in ('x86-64', 'i386', 'aarch64'):
+            if test_arch in typ:
+                lib_arch = test_arch
+                break
+        else:
+            lib_arch = ''
+        for test_libc in ('libc6',):
+            if test_libc in typ:
+                lib_libc = test_libc
+                break
+        else:
+            lib_libc = ''
+        return (lib, lib_arch, lib_libc), path
+
+    if not hasattr(find_libs, "cache"):
+        data = subprocess.run([shutil.which('ldconfig'), '-p'], capture_output=True, text=True).stdout.split('\n')[1:]
+        find_libs.cache = {k: v for k, v in (parse(line) for line in data if '=>' in line)}
+
+    def find_lib(lib, arch, libc):
+        for k, v in find_libs.cache.items():
+            if k == (lib, arch, libc):
+                return v
+        for k, v, in find_libs.cache.items():
+            if k[0].startswith(lib) and k[1] == arch and k[2] == libc:
+                return v
+        return None
+
+    res = []
+    for arg in args:
+        # try exact match, empty libc, empty arch, empty arch and libc
+        file = find_lib(arg, arch, libc)
+        file = file or find_lib(arg, arch, '')
+        file = file or find_lib(arg, '', libc)
+        file = file or find_lib(arg, '', '')
+        # resolve symlinks
+        for n in range(0, 5):
+            res.append((file, os.path.join('lib', os.path.basename(file))))
+            if not os.path.islink(file):
+                break
+            dirname = os.path.dirname(file)
+            file = os.readlink(file)
+            if not os.path.isabs(file):
+                file = os.path.join(dirname, file)
+    return res
+
+
 cx_Freeze.setup(
     name="Archipelago",
     version=f"{version_tuple.major}.{version_tuple.minor}.{version_tuple.build}",
@@ -348,13 +410,13 @@ cx_Freeze.setup(
                          "pandas"],
             "zip_include_packages": ["*"],
             "zip_exclude_packages": ["worlds", "kivy", "sc2"],
-            "include_files": [],
+            "include_files": find_libs(None, "libssl.so", "libcrypto.so") if is_linux else [],
             "include_msvcr": False,
             "replace_paths": [("*", "")],
             "optimize": 1,
             "build_exe": buildfolder,
             "extra_data": extra_data,
-            "bin_includes": [] if is_windows else ["libffi.so", "libcrypt.so"]
+            "bin_includes": ["libffi.so", "libcrypt.so"] if is_linux else []
         },
         "bdist_appimage": {
            "build_folder": buildfolder,
