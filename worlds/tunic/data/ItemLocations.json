@@ -1,0 +1,4707 @@
+[
+    {
+       "numericId":1,
+       "instanceId":"c17_24_83_12_174",
+       "itemName":"Piggybank L1",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Town Basement_beach",
+       "chestId":17,
+       "itemContainerName":"Chest: Piggybank L1 x 1",
+       "itemContainerPosition":{
+          "x":-83.95175,
+          "y":12,
+          "z":-175.759
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":2,
+       "instanceId":"c285_24_55_24_95",
+       "itemName":"Firecracker",
+       "itemQuantity":4,
+       "itemType":"SUPPLIES",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Changing Room_",
+       "chestId":285,
+       "itemContainerName":"Chest: Firebomb x 2",
+       "itemContainerPosition":{
+          "x":-55.9621,
+          "y":24,
+          "z":-97.171
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":3,
+       "instanceId":"c255_24_79_2_173",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Overworld Cave_",
+       "chestId":255,
+       "itemContainerName":"Chest: $48",
+       "itemContainerPosition":{
+          "x":77.42447,
+          "y":2.518,
+          "z":-173.7491
+       },
+       "moneyQuantity":48
+    },
+    {
+       "numericId":4,
+       "instanceId":"c266_24_48_54_12",
+       "itemName":"Flask Shard",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"PatrolCave_",
+       "chestId":266,
+       "itemContainerName":"Chest: Flask Shard x 1",
+       "itemContainerPosition":{
+          "x":46,
+          "y":54.10489,
+          "z":-11.99999
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":5,
+       "instanceId":"c273_24_33_0_169",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Maze Room_",
+       "chestId":273,
+       "itemContainerName":"Chest: $16",
+       "itemContainerPosition":{
+          "x":-32.87853,
+          "y":0.25,
+          "z":-171.7152
+       },
+       "moneyQuantity":16
+    },
+    {
+       "numericId":6,
+       "instanceId":"c13_24_73_40_4",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Waterfall_",
+       "chestId":13,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":-75,
+          "y":40,
+          "z":-3.999996
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":7,
+       "instanceId":"c208_24_60_9_119",
+       "itemName":"Ivy",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Changing Room_",
+       "chestId":208,
+       "itemContainerName":"Chest: Ivy x 3",
+       "itemContainerPosition":{
+          "x":-60,
+          "y":9,
+          "z":-121
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":8,
+       "instanceId":"c15_24_96_28_137",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"EastFiligreeCache_",
+       "chestId":15,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":96.25921,
+          "y":28,
+          "z":-138.9855
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":9,
+       "instanceId":"c209_24_129_20_111",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Ruined Shop_",
+       "chestId":209,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":-130.9002,
+          "y":20,
+          "z":-110.8761
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":10,
+       "instanceId":"c258_24_159_3_113",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Archipelagos Redux_lowest",
+       "chestId":258,
+       "itemContainerName":"Chest: $32",
+       "itemContainerPosition":{
+          "x":-160.9988,
+          "y":3,
+          "z":-113.4303
+       },
+       "moneyQuantity":32
+    },
+    {
+       "numericId":11,
+       "instanceId":"c1_24_68_40_29",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Windmill_",
+       "chestId":1,
+       "itemContainerName":"Chest: $15",
+       "itemContainerPosition":{
+          "x":-68.00001,
+          "y":40,
+          "z":-31.5
+       },
+       "moneyQuantity":15
+    },
+    {
+       "numericId":12,
+       "instanceId":"c90_24_26_28_116",
+       "itemName":"Piggybank L1",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Ruins Passage_west",
+       "chestId":90,
+       "itemContainerName":"Chest: Piggybank L1 x 1",
+       "itemContainerPosition":{
+          "x":26,
+          "y":28,
+          "z":-118
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":13,
+       "instanceId":"c11_24_51_28_87",
+       "itemName":"Firecracker",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Changing Room_",
+       "chestId":11,
+       "itemContainerName":"Chest: Firecracker x 2",
+       "itemContainerPosition":{
+          "x":-49,
+          "y":28,
+          "z":-87.49999
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":14,
+       "instanceId":"c2_24_119_16_110",
+       "itemName":"Trinket - Heartdrops",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Ruined Shop_",
+       "chestId":2,
+       "itemContainerName":"Chest: Trinket - Heartdrops x 1",
+       "itemContainerPosition":{
+          "x":-119.7269,
+          "y":16,
+          "z":-112.9593
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":15,
+       "instanceId":"c7_24_83_4_177",
+       "itemName":"Upgrade Offering - PotionEfficiency Swig - Ash",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Town Basement_beach",
+       "chestId":7,
+       "itemContainerName":"Chest: Upgrade Offering - PotionEfficiency Swig - Ash x 1",
+       "itemContainerPosition":{
+          "x":-82.51556,
+          "y":4,
+          "z":-175.1911
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":16,
+       "instanceId":"c6_24_67_66_22",
+       "itemName":"Berry_MP",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"PatrolCave_",
+       "chestId":6,
+       "itemContainerName":"Chest: $30",
+       "itemContainerPosition":{
+          "x":66.95113,
+          "y":66,
+          "z":23.9994
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":17,
+       "instanceId":"c16_24_111_66_38",
+       "itemName":"Upgrade Offering - Health HP - Flower",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Crypt Redux_",
+       "chestId":16,
+       "itemContainerName":"Chest: Upgrade Offering - Health HP - Flower x 1",
+       "itemContainerPosition":{
+          "x":-113.6761,
+          "y":66,
+          "z":38.19462
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":18,
+       "instanceId":"c91_24_118_28_46",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Furnace_gyro_upper_east",
+       "chestId":91,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":-118,
+          "y":28,
+          "z":-48.5
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":19,
+       "instanceId":"c207_24_19_43_21",
+       "itemName":"Upgrade Offering - Attack - Tooth",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Temple_rafters",
+       "chestId":207,
+       "itemContainerName":"Chest: Upgrade Offering - Attack - Tooth x 1",
+       "itemContainerPosition":{
+          "x":-19.80129,
+          "y":43,
+          "z":19.79114
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":20,
+       "instanceId":"c4_24_130_12_119",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Ruined Shop_",
+       "chestId":4,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":-130,
+          "y":12,
+          "z":-117
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":21,
+       "instanceId":"c3_24_101_40_40",
+       "itemName":"Berry_MP",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Furnace_gyro_upper_east",
+       "chestId":3,
+       "itemContainerName":"Chest: Berry_MP x 1",
+       "itemContainerPosition":{
+          "x":-101.8312,
+          "y":40,
+          "z":-42.01446
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":22,
+       "instanceId":"c245_24_138_28_10",
+       "itemName":"Trinket - MP Flasks",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Sewer_west_aqueduct",
+       "chestId":245,
+       "itemContainerName":"Chest: Trinket - MP Flasks x 1",
+       "itemContainerPosition":{
+          "x":-140.2197,
+          "y":28,
+          "z":10.074
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":23,
+       "instanceId":"c8_24_19_28_89",
+       "itemName":"Flask Shard",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"CubeRoom_",
+       "chestId":8,
+       "itemContainerName":"Chest: Flask Shard x 1",
+       "itemContainerPosition":{
+          "x":-19.03083,
+          "y":28,
+          "z":-91
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":24,
+       "instanceId":"c9_24_142_40_29",
+       "itemName":"Pepper",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Sewer_west_aqueduct",
+       "chestId":9,
+       "itemContainerName":"Chest: Pepper x 2",
+       "itemContainerPosition":{
+          "x":-140.034,
+          "y":40,
+          "z":28.6326
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":25,
+       "instanceId":"c12_24_25_36_110",
+       "itemName":"Pepper",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Ruins Passage_west",
+       "chestId":12,
+       "itemContainerName":"Chest: Pepper x 2",
+       "itemContainerPosition":{
+          "x":23,
+          "y":36,
+          "z":-110
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":26,
+       "instanceId":"c_24_132_28_55",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Furnace_gyro_lower",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":-132,
+          "y":28.029,
+          "z":-57.39172
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":27,
+       "instanceId":"c14_24_138_12_64",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Furnace_gyro_lower",
+       "chestId":14,
+       "itemContainerName":"Chest: $15",
+       "itemContainerPosition":{
+          "x":-138,
+          "y":12,
+          "z":-62
+       },
+       "moneyQuantity":15
+    },
+    {
+       "numericId":28,
+       "instanceId":"c267_24_178_1_78",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Archipelagos Redux_lower",
+       "chestId":267,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":-178.5,
+          "y":1.000013,
+          "z":-80.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":29,
+       "instanceId":"c18_24_161_1_72",
+       "itemName":"Bait",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Furnace_gyro_west",
+       "chestId":18,
+       "itemContainerName":"Chest: Bait x 1",
+       "itemContainerPosition":{
+          "x":-161,
+          "y":1.000013,
+          "z":-74
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":30,
+       "instanceId":"c10_24_15_1_147",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Maze Room_",
+       "chestId":10,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":13.5,
+          "y":1,
+          "z":-147.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":31,
+       "instanceId":"c5_24_65_22_138",
+       "itemQuantity":0,
+       "itemType":"OTHER",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Ruins Passage_east",
+       "chestId":5,
+       "itemContainerName":"Chest: (empty)",
+       "itemContainerPosition":{
+          "x":63,
+          "y":22,
+          "z":-138
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":32,
+       "instanceId":"c_24_64_44_40",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Fortress Courtyard_",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":64.49999,
+          "y":44.029,
+          "z":-38.10828
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":33,
+       "instanceId":"c_24_90_36_122",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Forest Belltower_",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":90.41647,
+          "y":36.029,
+          "z":-123.9488
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":34,
+       "instanceId":"c1013_24_4_11_206",
+       "itemName":"GoldenTrophy_9",
+       "itemQuantity":1,
+       "itemType":"TROPHY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Transit_teleporter_starting island",
+       "chestId":1013,
+       "itemContainerName":"Chest: GoldenTrophy_9 x 1",
+       "itemContainerPosition":{
+          "x":-6.19172,
+          "y":11.929,
+          "z":-206.4
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":35,
+       "instanceId":"c1008_24_37_28_63",
+       "itemName":"GoldenTrophy_8",
+       "itemQuantity":1,
+       "itemType":"TROPHY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Overworld Interiors_house",
+       "chestId":1008,
+       "itemContainerName":"Chest: GoldenTrophy_8 x 1",
+       "itemContainerPosition":{
+          "x":-37.2089,
+          "y":28.029,
+          "z":-65.51782
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":36,
+       "instanceId":"c1004_24_34_0_178",
+       "itemName":"GoldenTrophy_4",
+       "itemQuantity":1,
+       "itemType":"TROPHY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Transit_teleporter_starting island",
+       "chestId":1004,
+       "itemContainerName":"Chest: GoldenTrophy_4 x 1",
+       "itemContainerPosition":{
+          "x":-34,
+          "y":-0.471,
+          "z":-180.3917
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":37,
+       "instanceId":"c_24_52_2_174",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Town Basement_beach",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":-52,
+          "y":2.029,
+          "z":-176.6417
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":38,
+       "instanceId":"c_24_83_20_117",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Changing Room_",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":-83,
+          "y":20.029,
+          "z":-119.3917
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":39,
+       "instanceId":"c1003_24_62_40_40",
+       "itemName":"GoldenTrophy_3",
+       "itemQuantity":1,
+       "itemType":"TROPHY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Windmill_",
+       "chestId":1003,
+       "itemContainerName":"Chest: GoldenTrophy_3 x 1",
+       "itemContainerPosition":{
+          "x":-62,
+          "y":40.029,
+          "z":-42.39172
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":40,
+       "instanceId":"i_24_31_40_39",
+       "itemName":"Key",
+       "itemQuantity":1,
+       "itemType":"KEY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Overworld Interiors_house",
+       "chestId":-1,
+       "itemContainerName":"key twist (1)",
+       "itemContainerPosition":{
+          "x":-31.512,
+          "y":40.287,
+          "z":-39.249
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":41,
+       "instanceId":"i_24_65_12_138",
+       "itemName":"Key (House)",
+       "itemQuantity":1,
+       "itemType":"KEY",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Town Basement_beach",
+       "chestId":-1,
+       "itemContainerName":"key twist",
+       "itemContainerPosition":{
+          "x":-65,
+          "y":12.3,
+          "z":-138
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":42,
+       "instanceId":"i_24_95_73_46",
+       "itemName":"Techbow",
+       "itemQuantity":1,
+       "itemType":"EQUIPMENT",
+       "sceneId":24,
+       "sceneName":"Overworld Redux",
+       "itemNearestExit":"Crypt Redux_",
+       "chestId":-1,
+       "itemContainerName":"Wand Pickup",
+       "itemContainerPosition":{
+          "x":-95,
+          "y":73,
+          "z":46.24
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":43,
+       "instanceId":"c_49_90_515_738",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":49,
+       "sceneName":"Overworld Cave",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":-90.39529,
+          "y":515.029,
+          "z":-740.7955
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":44,
+       "instanceId":"c247_58_83_0_73",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Shop_",
+       "chestId":247,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":83.697,
+          "y":-0.016,
+          "z":-75.786
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":45,
+       "instanceId":"c235_58_47_1_33",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Shop_",
+       "chestId":235,
+       "itemContainerName":"Chest: $50",
+       "itemContainerPosition":{
+          "x":-47.28672,
+          "y":-1.5,
+          "z":-31.34842
+       },
+       "moneyQuantity":50
+    },
+    {
+       "numericId":46,
+       "instanceId":"c110_58_75_14_172",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Cathedral Redux_secret",
+       "chestId":110,
+       "itemContainerName":"Chest: $100",
+       "itemContainerPosition":{
+          "x":74.99999,
+          "y":14,
+          "z":170.625
+       },
+       "moneyQuantity":100
+    },
+    {
+       "numericId":47,
+       "instanceId":"c277_58_102_6_112",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Cathedral Arena_",
+       "chestId":277,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":102.05,
+          "y":6,
+          "z":110.82
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":48,
+       "instanceId":"c249_58_39_0_85",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Shop_",
+       "chestId":249,
+       "itemContainerName":"Chest: $128",
+       "itemContainerPosition":{
+          "x":39.18,
+          "y":-0.08,
+          "z":-87.258
+       },
+       "moneyQuantity":128
+    },
+    {
+       "numericId":49,
+       "instanceId":"c278_58_47_1_42",
+       "itemName":"Piggybank L1",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Shop_",
+       "chestId":278,
+       "itemContainerName":"Chest: Piggybank L1 x 1",
+       "itemContainerPosition":{
+          "x":47,
+          "y":-1,
+          "z":40
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":50,
+       "instanceId":"c102_58_160_12_22",
+       "itemName":"Berry_HP",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":102,
+       "itemContainerName":"Chest: Berry_HP x 2",
+       "itemContainerPosition":{
+          "x":158.5,
+          "y":12,
+          "z":22
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":51,
+       "instanceId":"c105_58_96_11_48",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Overworld Redux_conduit",
+       "chestId":105,
+       "itemContainerName":"Chest: $100",
+       "itemContainerPosition":{
+          "x":-96.00001,
+          "y":11,
+          "z":46
+       },
+       "moneyQuantity":100
+    },
+    {
+       "numericId":52,
+       "instanceId":"c104_58_147_5_33",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":104,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":147,
+          "y":5.75,
+          "z":-35
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":53,
+       "instanceId":"c101_58_145_4_23",
+       "itemName":"Flask Shard",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":101,
+       "itemContainerName":"Chest: Flask Shard x 1",
+       "itemContainerPosition":{
+          "x":143.8604,
+          "y":4,
+          "z":24.8936
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":54,
+       "instanceId":"c99_58_85_0_85",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":99,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":83,
+          "y":0,
+          "z":85.00001
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":55,
+       "instanceId":"c246_58_14_0_73",
+       "itemName":"Trinket - Fast Icedagger",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Shop_",
+       "chestId":246,
+       "itemContainerName":"Chest: Trinket - Fast Icedagger x 1",
+       "itemContainerPosition":{
+          "x":12.5,
+          "y":0,
+          "z":-73.49999
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":56,
+       "instanceId":"c106_58_160_4_63",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":106,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":160.5,
+          "y":4,
+          "z":-61
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":57,
+       "instanceId":"c97_58_36_8_62",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Shop_",
+       "chestId":97,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":34,
+          "y":8,
+          "z":-62
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":58,
+       "instanceId":"c103_58_102_6_40",
+       "itemName":"Firecracker",
+       "itemQuantity":4,
+       "itemType":"SUPPLIES",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Shop_",
+       "chestId":103,
+       "itemContainerName":"Chest: Firecracker x 4",
+       "itemContainerPosition":{
+          "x":100,
+          "y":6,
+          "z":-40
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":59,
+       "instanceId":"c107_58_38_12_29",
+       "itemName":"Trinket - Stamina Recharge Plus",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Shop_",
+       "chestId":107,
+       "itemContainerName":"Chest: $256",
+       "itemContainerPosition":{
+          "x":38,
+          "y":12.75,
+          "z":-31.75
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":60,
+       "instanceId":"c109_58_153_16_55",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":109,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":155,
+          "y":16,
+          "z":-55.00001
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":61,
+       "instanceId":"c100_58_184_15_51",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":100,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":182.75,
+          "y":15,
+          "z":51
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":62,
+       "instanceId":"c98_58_100_4_70",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Shop_",
+       "chestId":98,
+       "itemContainerName":"Chest: $50",
+       "itemContainerPosition":{
+          "x":98,
+          "y":4,
+          "z":-69.99999
+       },
+       "moneyQuantity":50
+    },
+    {
+       "numericId":63,
+       "instanceId":"c254_58_41_0_55",
+       "itemName":"Berry_MP",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Shop_",
+       "chestId":254,
+       "itemContainerName":"Chest: Berry_MP x 3",
+       "itemContainerPosition":{
+          "x":-42.92404,
+          "y":-0.59,
+          "z":53.91672
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":64,
+       "instanceId":"c108_58_166_0_82",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":108,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":166,
+          "y":0,
+          "z":-84
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":65,
+       "instanceId":"c1005_58_59_0_70",
+       "itemName":"GoldenTrophy_5",
+       "itemQuantity":1,
+       "itemType":"TROPHY",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"Shop_",
+       "chestId":1005,
+       "itemContainerName":"Chest: GoldenTrophy_5 x 1",
+       "itemContainerPosition":{
+          "x":59.27038,
+          "y":-0.05930202,
+          "z":-72.37727
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":66,
+       "instanceId":"i_58_79_5_29",
+       "itemName":"MoneySmall",
+       "itemQuantity":1,
+       "itemType":"MONEY",
+       "sceneId":58,
+       "sceneName":"Swamp Redux 2",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":-1,
+       "itemContainerName":"Coin Pickup 1",
+       "itemContainerPosition":{
+          "x":79.8,
+          "y":5.2,
+          "z":29.2
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":67,
+       "instanceId":"c19_4_8_0_9",
+       "itemName":"Stick",
+       "itemQuantity":1,
+       "itemType":"EQUIPMENT",
+       "sceneId":4,
+       "sceneName":"Sword Cave",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":19,
+       "itemContainerName":"Chest: Stick x 1",
+       "itemContainerPosition":{
+          "x":8.800001,
+          "y":0,
+          "z":7.86
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":68,
+       "instanceId":"c89_25_24_27_50",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":25,
+       "sceneName":"Overworld Interiors",
+       "itemNearestExit":"Overworld Redux_house",
+       "chestId":89,
+       "itemContainerName":"Chest: $15",
+       "itemContainerPosition":{
+          "x":-24.68934,
+          "y":27.02,
+          "z":-51.91618
+       },
+       "moneyQuantity":1
+    },
+    {
+       "numericId":69,
+       "instanceId":"c_25_28_27_50",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":25,
+       "sceneName":"Overworld Interiors",
+       "itemNearestExit":"Overworld Redux_house",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":-28.55533,
+          "y":27.029,
+          "z":-52.30837
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":70,
+       "instanceId":"i_25_7_29_30",
+       "itemName":"Shield",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":25,
+       "sceneName":"Overworld Interiors",
+       "itemNearestExit":"Overworld Redux_under_checkpoint",
+       "chestId":-1,
+       "itemContainerName":"shield (1)",
+       "itemContainerPosition":{
+          "x":7,
+          "y":29.19,
+          "z":-30
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":71,
+       "instanceId":"c68_31_38_2_106",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Library Exterior_",
+       "chestId":68,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":-38.48398,
+          "y":2.25,
+          "z":-108.1906
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":72,
+       "instanceId":"c219_31_7_2_110",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Library Exterior_",
+       "chestId":219,
+       "itemContainerName":"Chest: $15",
+       "itemContainerPosition":{
+          "x":-5.311999,
+          "y":2.235,
+          "z":-110.715
+       },
+       "moneyQuantity":15
+    },
+    {
+       "numericId":73,
+       "instanceId":"c67_31_7_16_72",
+       "itemName":"Trinket - Bloodstain MP",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Library Exterior_",
+       "chestId":67,
+       "itemContainerName":"Chest: $50",
+       "itemContainerPosition":{
+          "x":-7.019978,
+          "y":16.945,
+          "z":-70.32
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":74,
+       "instanceId":"c287_31_77_3_40",
+       "itemName":"Trinket - IFrames",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Library Exterior_",
+       "chestId":287,
+       "itemContainerName":"Chest: Trinket - IFrames x 1",
+       "itemContainerPosition":{
+          "x":-79,
+          "y":3.5,
+          "z":40.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":75,
+       "instanceId":"c76_31_71_13_44",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Library Exterior_",
+       "chestId":76,
+       "itemContainerName":"Chest: $100",
+       "itemContainerPosition":{
+          "x":72.04172,
+          "y":13,
+          "z":-46.22861
+       },
+       "moneyQuantity":100
+    },
+    {
+       "numericId":76,
+       "instanceId":"c71_31_76_16_2",
+       "itemName":"Flask Shard",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Frog Stairs_mouth",
+       "chestId":71,
+       "itemContainerName":"Chest: Flask Shard x 1",
+       "itemContainerPosition":{
+          "x":76.94999,
+          "y":16,
+          "z":0.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":77,
+       "instanceId":"c1010_31_134_1_2",
+       "itemName":"GoldenTrophy_10",
+       "itemQuantity":1,
+       "itemType":"TROPHY",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Library Exterior_",
+       "chestId":1010,
+       "itemContainerName":"Chest: GoldenTrophy_10 x 1",
+       "itemContainerPosition":{
+          "x":-134.7367,
+          "y":1.442344,
+          "z":0.8988669
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":78,
+       "instanceId":"c220_31_0_4_33",
+       "itemName":"Upgrade Offering - Magic MP - Mushroom",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Library Exterior_",
+       "chestId":220,
+       "itemContainerName":"Chest: Upgrade Offering - Magic MP - Mushroom x 1",
+       "itemContainerPosition":{
+          "x":-5.900859E-06,
+          "y":4,
+          "z":31
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":79,
+       "instanceId":"c69_31_55_2_17",
+       "itemName":"Trinket - Attack Up Defense Down",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Library Exterior_",
+       "chestId":69,
+       "itemContainerName":"Chest: Trinket - Attack Up Defense Down x 1",
+       "itemContainerPosition":{
+          "x":-57.37756,
+          "y":2,
+          "z":16.31098
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":80,
+       "instanceId":"c73_31_71_4_18",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Frog Stairs_mouth",
+       "chestId":73,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":70.99999,
+          "y":4,
+          "z":16
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":81,
+       "instanceId":"c66_31_5_0_33",
+       "itemName":"Ice Bomb",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Library Exterior_",
+       "chestId":66,
+       "itemContainerName":"Chest: Ice Bomb x 2",
+       "itemContainerPosition":{
+          "x":5.829991,
+          "y":0.25,
+          "z":31.06
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":82,
+       "instanceId":"c218_31_38_16_72",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Library Exterior_",
+       "chestId":218,
+       "itemContainerName":"Chest: $15",
+       "itemContainerPosition":{
+          "x":36,
+          "y":16.0001,
+          "z":-71.99999
+       },
+       "moneyQuantity":15
+    },
+    {
+       "numericId":83,
+       "instanceId":"c72_31_51_1_78",
+       "itemName":"Trinket - Block Plus",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Shop_",
+       "chestId":72,
+       "itemContainerName":"Chest: Trinket - Block Plus x 1",
+       "itemContainerPosition":{
+          "x":49.5,
+          "y":1,
+          "z":78.00001
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":84,
+       "instanceId":"c221_31_73_4_56",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Frog Stairs_mouth",
+       "chestId":221,
+       "itemContainerName":"Chest: $15",
+       "itemContainerPosition":{
+          "x":73.07999,
+          "y":4.014,
+          "z":54.62
+       },
+       "moneyQuantity":15
+    },
+    {
+       "numericId":85,
+       "instanceId":"c70_31_40_1_40",
+       "itemName":"Piggybank L1",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Library Exterior_",
+       "chestId":70,
+       "itemContainerName":"Chest: Piggybank L1 x 1",
+       "itemContainerPosition":{
+          "x":-41.62889,
+          "y":1,
+          "z":-41.69868
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":86,
+       "instanceId":"c75_31_72_14_29",
+       "itemName":"Upgrade Offering - DamageResist - Effigy",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Frog Stairs_mouth",
+       "chestId":75,
+       "itemContainerName":"Chest: Upgrade Offering - DamageResist - Effigy x 1",
+       "itemContainerPosition":{
+          "x":70.98,
+          "y":14,
+          "z":29.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":87,
+       "instanceId":"i_31_78_6_84",
+       "itemName":"Key",
+       "itemQuantity":1,
+       "itemType":"KEY",
+       "sceneId":31,
+       "sceneName":"Atoll Redux",
+       "itemNearestExit":"Frog Stairs_eye",
+       "chestId":-1,
+       "itemContainerName":"key pickup",
+       "itemContainerPosition":{
+          "x":78.09,
+          "y":6.304,
+          "z":84.16
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":88,
+       "instanceId":"c92_56_142_12_40",
+       "itemName":"Upgrade Offering - DamageResist - Effigy",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":56,
+       "sceneName":"Furnace",
+       "itemNearestExit":"Overworld Redux_gyro_west",
+       "chestId":92,
+       "itemContainerName":"Chest: Upgrade Offering - DamageResist - Effigy x 1",
+       "itemContainerPosition":{
+          "x":-143.9991,
+          "y":12,
+          "z":-39.94009
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":89,
+       "instanceId":"i_56_135_34_43",
+       "itemName":"Lantern",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":56,
+       "sceneName":"Furnace",
+       "itemNearestExit":"Overworld Redux_gyro_upper_east",
+       "chestId":-1,
+       "itemContainerName":"LANTERN PICKUP",
+       "itemContainerPosition":{
+          "x":-135.227,
+          "y":34.077,
+          "z":-43.226
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":90,
+       "instanceId":"c256_30_297_4_164",
+       "itemName":"Piggybank L1",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"Shop_",
+       "chestId":256,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":-297.35,
+          "y":4.04,
+          "z":162.32
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":91,
+       "instanceId":"c111_30_197_1_19",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"archipelagos_house_",
+       "chestId":111,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":-197.8145,
+          "y":1,
+          "z":17.97974
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":92,
+       "instanceId":"c93_30_166_20_165",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":93,
+       "itemContainerName":"Chest: $200",
+       "itemContainerPosition":{
+          "x":-168,
+          "y":20,
+          "z":165
+       },
+       "moneyQuantity":200
+    },
+    {
+       "numericId":93,
+       "instanceId":"c55_30_156_4_138",
+       "itemName":"Trinket - BTSR",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":55,
+       "itemContainerName":"Chest: Trinket - BTSR x 1",
+       "itemContainerPosition":{
+          "x":-156.8002,
+          "y":4,
+          "z":136.7409
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":94,
+       "instanceId":"c253_30_194_1_107",
+       "itemName":"Piggybank L1",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":253,
+       "itemContainerName":"Chest: Piggybank L1 x 1",
+       "itemContainerPosition":{
+          "x":-196.95,
+          "y":1,
+          "z":107.86
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":95,
+       "instanceId":"c94_30_240_8_24",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"Transit_teleporter_archipelagos_teleporter",
+       "chestId":94,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":-240.311,
+          "y":8,
+          "z":-26.937
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":96,
+       "instanceId":"c283_30_335_4_100",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"Shop_",
+       "chestId":283,
+       "itemContainerName":"Chest: $15",
+       "itemContainerPosition":{
+          "x":-335.4402,
+          "y":4,
+          "z":98.50089
+       },
+       "moneyQuantity":15
+    },
+    {
+       "numericId":97,
+       "instanceId":"c280_30_356_0_66",
+       "itemName":"Upgrade Offering - Health HP - Flower",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"archipelagos_house_",
+       "chestId":280,
+       "itemContainerName":"Chest: Upgrade Offering - Health HP - Flower x 1",
+       "itemContainerPosition":{
+          "x":-358.5,
+          "y":0.5,
+          "z":66.5062
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":98,
+       "instanceId":"c57_30_261_8_99",
+       "itemName":"Firecracker",
+       "itemQuantity":4,
+       "itemType":"SUPPLIES",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"Shop_",
+       "chestId":57,
+       "itemContainerName":"Chest: Firecracker x 4",
+       "itemContainerPosition":{
+          "x":-261,
+          "y":8,
+          "z":97.75
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":99,
+       "instanceId":"c56_30_244_3_118",
+       "itemName":"Berry_MP",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"Shop_",
+       "chestId":56,
+       "itemContainerName":"Chest: Berry_MP x 1",
+       "itemContainerPosition":{
+          "x":-246,
+          "y":3.999988,
+          "z":118.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":100,
+       "instanceId":"c58_30_241_0_0",
+       "itemName":"Pepper",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"Transit_teleporter_archipelagos_teleporter",
+       "chestId":58,
+       "itemContainerName":"Chest: Pepper x 2",
+       "itemContainerPosition":{
+          "x":-241.0394,
+          "y":0.961,
+          "z":2
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":101,
+       "instanceId":"c223_30_221_20_92",
+       "itemName":"Upgrade Offering - Attack - Tooth",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"archipelagos_house_",
+       "chestId":223,
+       "itemContainerName":"Chest: Upgrade Offering - Attack - Tooth x 1",
+       "itemContainerPosition":{
+          "x":-221.82,
+          "y":20,
+          "z":94.29
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":102,
+       "instanceId":"c257_30_246_1_61",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"archipelagos_house_",
+       "chestId":257,
+       "itemContainerName":"Chest: $32",
+       "itemContainerPosition":{
+          "x":-248.47,
+          "y":1.8,
+          "z":61.67
+       },
+       "moneyQuantity":32
+    },
+    {
+       "numericId":103,
+       "instanceId":"c59_30_193_8_83",
+       "itemName":"Upgrade Offering - Stamina SP - Feather",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"Overworld Redux_lowest",
+       "chestId":59,
+       "itemContainerName":"Chest: Upgrade Offering - Stamina SP - Feather x 1",
+       "itemContainerPosition":{
+          "x":-195.1937,
+          "y":8,
+          "z":83.93347
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":104,
+       "instanceId":"c206_30_257_2_6",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"Transit_teleporter_archipelagos_teleporter",
+       "chestId":206,
+       "itemContainerName":"Chest: $50",
+       "itemContainerPosition":{
+          "x":-259.8857,
+          "y":2,
+          "z":6.437943
+       },
+       "moneyQuantity":50
+    },
+    {
+       "numericId":105,
+       "instanceId":"c217_30_235_5_152",
+       "itemName":"Sword",
+       "itemQuantity":1,
+       "itemType":"EQUIPMENT",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"Shop_",
+       "chestId":217,
+       "itemContainerName":"Chest: Sword x 1",
+       "itemContainerPosition":{
+          "x":-235.7087,
+          "y":5,
+          "z":150.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":106,
+       "instanceId":"c_30_236_8_86",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"archipelagos_house_",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":-236,
+          "y":8.029,
+          "z":84.43628
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":107,
+       "instanceId":"c_30_396_1_42",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":30,
+       "sceneName":"Archipelagos Redux",
+       "itemNearestExit":"archipelagos_house_",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":-396.296,
+          "y":1.359,
+          "z":40.36428
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":108,
+       "instanceId":"c1001_7_176_16_113",
+       "itemName":"GoldenTrophy_1",
+       "itemQuantity":1,
+       "itemType":"TROPHY",
+       "sceneId":7,
+       "sceneName":"Ruins Passage",
+       "itemNearestExit":"Overworld Redux_west",
+       "chestId":1001,
+       "itemContainerName":"Chest: GoldenTrophy_1 x 1",
+       "itemContainerPosition":{
+          "x":176,
+          "y":16,
+          "z":111.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":109,
+       "instanceId":"c216_67_1_0_16",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":67,
+       "sceneName":"Maze Room",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":216,
+       "itemContainerName":"Chest: $255",
+       "itemContainerPosition":{
+          "x":0.9999895,
+          "y":0,
+          "z":14
+       },
+       "moneyQuantity":255
+    },
+    {
+       "numericId":110,
+       "instanceId":"c_67_1_0_1",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":67,
+       "sceneName":"Maze Room",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":1,
+          "y":0.029,
+          "z":-2.89172
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":111,
+       "instanceId":"c_23_14_0_42",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":23,
+       "sceneName":"Temple",
+       "itemNearestExit":"Overworld Redux_rafters",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":13.99999,
+          "y":0.129,
+          "z":40.50828
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":112,
+       "instanceId":"c37_5_22_8_24",
+       "itemName":"Firecracker",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":5,
+       "sceneName":"Ruined Shop",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":37,
+       "itemContainerName":"Treasure Chest (8)",
+       "itemContainerPosition":{
+          "x":22.25877,
+          "y":8,
+          "z":-26.66744
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":113,
+       "instanceId":"c38_5_27_8_25",
+       "itemQuantity":0,
+       "itemType":"OTHER",
+       "sceneId":5,
+       "sceneName":"Ruined Shop",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":38,
+       "itemContainerName":"Chest: (empty)",
+       "itemContainerPosition":{
+          "x":26.94829,
+          "y":8,
+          "z":-27.01512
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":114,
+       "instanceId":"c34_5_28_7_29",
+       "itemQuantity":0,
+       "itemType":"OTHER",
+       "sceneId":5,
+       "sceneName":"Ruined Shop",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":34,
+       "itemContainerName":"Chest: (empty)",
+       "itemContainerPosition":{
+          "x":26.34797,
+          "y":7.995,
+          "z":-30.1273
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":115,
+       "instanceId":"c39_5_27_8_31",
+       "itemQuantity":0,
+       "itemType":"OTHER",
+       "sceneId":5,
+       "sceneName":"Ruined Shop",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":39,
+       "itemContainerName":"Treasure Chest (10)",
+       "itemContainerPosition":{
+          "x":25.93019,
+          "y":8,
+          "z":-31.9875
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":116,
+       "instanceId":"c36_5_25_8_25",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":5,
+       "sceneName":"Ruined Shop",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":36,
+       "itemContainerName":"Chest: $40",
+       "itemContainerPosition":{
+          "x":24.91021,
+          "y":8,
+          "z":-27.28361
+       },
+       "moneyQuantity":40
+    },
+    {
+       "numericId":117,
+       "instanceId":"c35_5_27_8_34",
+       "itemName":"Upgrade Offering - Health HP - Flower",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":5,
+       "sceneName":"Ruined Shop",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":35,
+       "itemContainerName":"Treasure Chest (6)",
+       "itemContainerPosition":{
+          "x":25.92815,
+          "y":8,
+          "z":-34.16236
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":118,
+       "instanceId":"c214_66_86_46_51",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":66,
+       "sceneName":"PatrolCave",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":214,
+       "itemContainerName":"Chest: $30",
+       "itemContainerPosition":{
+          "x":84,
+          "y":46,
+          "z":-51
+       },
+       "moneyQuantity":30
+    },
+    {
+       "numericId":119,
+       "instanceId":"c_66_74_46_24",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":66,
+       "sceneName":"PatrolCave",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":73.99999,
+          "y":46.029,
+          "z":22.10828
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":120,
+       "instanceId":"c95_6_202_3_74",
+       "itemName":"SlowmoItem",
+       "itemQuantity":1,
+       "itemType":"EQUIPMENT",
+       "sceneId":6,
+       "sceneName":"Town Basement",
+       "itemNearestExit":"Overworld Redux_beach",
+       "chestId":95,
+       "itemContainerName":"Chest: SlowmoItem x 1",
+       "itemContainerPosition":{
+          "x":-202,
+          "y":3,
+          "z":72.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":121,
+       "instanceId":"c_6_202_28_150",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":6,
+       "sceneName":"Town Basement",
+       "itemNearestExit":"Overworld Redux_beach",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":-202,
+          "y":28.029,
+          "z":148.1083
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":122,
+       "instanceId":"c_65_321_3_217",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":65,
+       "sceneName":"CubeRoom",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":321.0506,
+          "y":3.029,
+          "z":215.1501
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":123,
+       "instanceId":"c60_69_33_8_27",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":69,
+       "sceneName":"Changing Room",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":60,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":31,
+          "y":8,
+          "z":27.00001
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":124,
+       "instanceId":"c47_26_406_3_174",
+       "itemName":"Piggybank L1",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":26,
+       "sceneName":"Sewer",
+       "itemNearestExit":"Overworld Redux_entrance",
+       "chestId":47,
+       "itemContainerName":"Chest: Piggybank L1 x 1",
+       "itemContainerPosition":{
+          "x":404,
+          "y":3.055634,
+          "z":174
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":125,
+       "instanceId":"c48_26_321_3_201",
+       "itemName":"Trinket - Bloodstain Plus",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":26,
+       "sceneName":"Sewer",
+       "itemNearestExit":"Sewer_Boss_",
+       "chestId":48,
+       "itemContainerName":"Chest: Trinket - Bloodstain Plus x 1",
+       "itemContainerPosition":{
+          "x":321,
+          "y":3,
+          "z":199
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":126,
+       "instanceId":"c41_26_286_0_133",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":26,
+       "sceneName":"Sewer",
+       "itemNearestExit":"Sewer_Boss_",
+       "chestId":41,
+       "itemContainerName":"Chest: Piggybank L1 x 1",
+       "itemContainerPosition":{
+          "x":284.3228,
+          "y":-0.4232941,
+          "z":133.5244
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":127,
+       "instanceId":"c51_26_296_10_89",
+       "itemName":"Ice Bomb",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":26,
+       "sceneName":"Sewer",
+       "itemNearestExit":"Sewer_Boss_",
+       "chestId":51,
+       "itemContainerName":"Chest: Ice Bomb x 3",
+       "itemContainerPosition":{
+          "x":294.1114,
+          "y":10.99998,
+          "z":89.18835
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":128,
+       "instanceId":"c264_26_294_11_109",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":26,
+       "sceneName":"Sewer",
+       "itemNearestExit":"Sewer_Boss_",
+       "chestId":264,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":294.0566,
+          "y":11,
+          "z":107.5498
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":129,
+       "instanceId":"c42_26_340_1_137",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":26,
+       "sceneName":"Sewer",
+       "itemNearestExit":"Sewer_Boss_",
+       "chestId":42,
+       "itemContainerName":"Chest: $15",
+       "itemContainerPosition":{
+          "x":340.509,
+          "y":0.8340454,
+          "z":135.9975
+       },
+       "moneyQuantity":15
+    },
+    {
+       "numericId":130,
+       "instanceId":"c46_26_347_1_115",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":26,
+       "sceneName":"Sewer",
+       "itemNearestExit":"Sewer_Boss_",
+       "chestId":46,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":349.4058,
+          "y":-1,
+          "z":115.9852
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":131,
+       "instanceId":"c43_26_368_0_21",
+       "itemName":"Berry_HP",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":26,
+       "sceneName":"Sewer",
+       "itemNearestExit":"Overworld Redux_entrance",
+       "chestId":43,
+       "itemContainerName":"Chest: Berry_HP x 1",
+       "itemContainerPosition":{
+          "x":366.871,
+          "y":-0.9999161,
+          "z":21
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":132,
+       "instanceId":"c50_26_324_11_89",
+       "itemName":"Upgrade Offering - DamageResist - Effigy",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":26,
+       "sceneName":"Sewer",
+       "itemNearestExit":"Sewer_Boss_",
+       "chestId":50,
+       "itemContainerName":"Chest: Upgrade Offering - DamageResist - Effigy x 1",
+       "itemContainerPosition":{
+          "x":324,
+          "y":11,
+          "z":87
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":133,
+       "instanceId":"c44_26_343_11_69",
+       "itemName":"Flask Shard",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":26,
+       "sceneName":"Sewer",
+       "itemNearestExit":"Sewer_Boss_",
+       "chestId":44,
+       "itemContainerName":"Chest: Flask Shard x 1",
+       "itemContainerPosition":{
+          "x":343.4993,
+          "y":11,
+          "z":71.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":134,
+       "instanceId":"c40_26_359_0_33",
+       "itemName":"Upgrade Offering - PotionEfficiency Swig - Ash",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":26,
+       "sceneName":"Sewer",
+       "itemNearestExit":"Overworld Redux_entrance",
+       "chestId":40,
+       "itemContainerName":"Chest: Upgrade Offering - PotionEfficiency Swig - Ash x 1",
+       "itemContainerPosition":{
+          "x":357.9832,
+          "y":0.2005386,
+          "z":33.51236
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":135,
+       "instanceId":"c45_26_374_7_74",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":26,
+       "sceneName":"Sewer",
+       "itemNearestExit":"Overworld Redux_entrance",
+       "chestId":45,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":372.5131,
+          "y":7,
+          "z":75.33756
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":136,
+       "instanceId":"c49_26_405_2_107",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":26,
+       "sceneName":"Sewer",
+       "itemNearestExit":"Overworld Redux_entrance",
+       "chestId":49,
+       "itemContainerName":"Chest: $30",
+       "itemContainerPosition":{
+          "x":403.6403,
+          "y":2,
+          "z":107
+       },
+       "moneyQuantity":30
+    },
+    {
+       "numericId":137,
+       "instanceId":"c96_14_18_4_130",
+       "itemName":"Bait",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":14,
+       "sceneName":"Fortress Courtyard",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":96,
+       "itemContainerName":"Chest: Bait x 1",
+       "itemContainerPosition":{
+          "x":-19.99933,
+          "y":-4.527,
+          "z":-129.9484
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":138,
+       "instanceId":"c87_14_53_0_49",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":14,
+       "sceneName":"Fortress Courtyard",
+       "itemNearestExit":"Fortress Basement_",
+       "chestId":87,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":-51.65,
+          "y":0,
+          "z":-49.00002
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":139,
+       "instanceId":"c88_14_6_0_123",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":14,
+       "sceneName":"Fortress Courtyard",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":88,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":4.375667,
+          "y":0.2499998,
+          "z":-123.6984
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":140,
+       "instanceId":"c86_14_13_4_143",
+       "itemName":"Upgrade Offering - PotionEfficiency Swig - Ash",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":14,
+       "sceneName":"Fortress Courtyard",
+       "itemNearestExit":"Forest Belltower_",
+       "chestId":86,
+       "itemContainerName":"Chest: Upgrade Offering - PotionEfficiency Swig - Ash x 1",
+       "itemContainerPosition":{
+          "x":-12.39863,
+          "y":-4,
+          "z":-145.4074
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":141,
+       "instanceId":"c271_81_7_0_5",
+       "itemName":"Trinket - Glass Cannon",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":81,
+       "sceneName":"EastFiligreeCache",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":271,
+       "itemContainerName":"Chest: Trinket - Glass Cannon x 1",
+       "itemContainerPosition":{
+          "x":7.148301,
+          "y":0,
+          "z":-6.994494
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":142,
+       "instanceId":"c272_81_2_0_5",
+       "itemName":"Berry_MP",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":81,
+       "sceneName":"EastFiligreeCache",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":272,
+       "itemContainerName":"Chest: Berry_MP x 3",
+       "itemContainerPosition":{
+          "x":2.589246,
+          "y":4.069618E-08,
+          "z":-6.911227
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":143,
+       "instanceId":"c270_81_12_0_4",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":81,
+       "sceneName":"EastFiligreeCache",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":270,
+       "itemContainerName":"Chest: $50",
+       "itemContainerPosition":{
+          "x":11.14446,
+          "y":0,
+          "z":-5.807774
+       },
+       "moneyQuantity":50
+    },
+    {
+       "numericId":144,
+       "instanceId":"c_48_47_45_10",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":48,
+       "sceneName":"Waterfall",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":-47,
+          "y":45.029,
+          "z":8.10828
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":145,
+       "instanceId":"c1007_48_47_45_0",
+       "itemName":"GoldenTrophy_7",
+       "itemQuantity":1,
+       "itemType":"TROPHY",
+       "sceneId":48,
+       "sceneName":"Waterfall",
+       "itemNearestExit":"Overworld Redux_",
+       "chestId":1007,
+       "itemContainerName":"Chest: GoldenTrophy_7 x 1",
+       "itemContainerPosition":{
+          "x":-47.49999,
+          "y":45.029,
+          "z":-2.39172
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":146,
+       "instanceId":"c212_63_63_17_54",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":63,
+       "sceneName":"Crypt Redux",
+       "itemNearestExit":"Furnace_",
+       "chestId":212,
+       "itemContainerName":"Chest: $1",
+       "itemContainerPosition":{
+          "x":-63,
+          "y":17,
+          "z":52
+       },
+       "moneyQuantity":40
+    },
+    {
+       "numericId":147,
+       "instanceId":"c213_63_120_25_45",
+       "itemName":"Firebomb",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":63,
+       "sceneName":"Crypt Redux",
+       "itemNearestExit":"Furnace_",
+       "chestId":213,
+       "itemContainerName":"Chest: $1",
+       "itemContainerPosition":{
+          "x":-118,
+          "y":25,
+          "z":45.00001
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":148,
+       "instanceId":"c53_63_118_17_89",
+       "itemName":"Flask Shard",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":63,
+       "sceneName":"Crypt Redux",
+       "itemNearestExit":"Furnace_",
+       "chestId":53,
+       "itemContainerName":"Chest: Firebomb x 2",
+       "itemContainerPosition":{
+          "x":-120.9755,
+          "y":17,
+          "z":89.98026
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":149,
+       "instanceId":"c54_63_23_17_64",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":63,
+       "sceneName":"Crypt Redux",
+       "itemNearestExit":"Furnace_",
+       "chestId":54,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":-25,
+          "y":17,
+          "z":64.98026
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":150,
+       "instanceId":"c210_63_119_17_51",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":63,
+       "sceneName":"Crypt Redux",
+       "itemNearestExit":"Furnace_",
+       "chestId":210,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":-119,
+          "y":17,
+          "z":49
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":151,
+       "instanceId":"c211_63_60_17_13",
+       "itemName":"Piggybank L1",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":63,
+       "sceneName":"Crypt Redux",
+       "itemNearestExit":"Furnace_",
+       "chestId":211,
+       "itemContainerName":"Chest: $1",
+       "itemContainerPosition":{
+          "x":-62,
+          "y":17,
+          "z":13
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":152,
+       "instanceId":"c52_63_79_61_76",
+       "itemName":"Trinket - RTSR",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":63,
+       "sceneName":"Crypt Redux",
+       "itemNearestExit":"Furnace_",
+       "chestId":52,
+       "itemContainerName":"Chest: Trinket - RTSR x 1",
+       "itemContainerPosition":{
+          "x":-79.00001,
+          "y":61,
+          "z":74
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":153,
+       "instanceId":"c20_35_582_14_86",
+       "itemName":"Flask Container",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":35,
+       "sceneName":"Forest Belltower",
+       "itemNearestExit":"Forest Boss Room_",
+       "chestId":20,
+       "itemContainerName":"Chest: Flask Container x 1",
+       "itemContainerPosition":{
+          "x":582,
+          "y":14,
+          "z":84.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":154,
+       "instanceId":"c205_35_501_38_114",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":35,
+       "sceneName":"Forest Belltower",
+       "itemNearestExit":"Fortress Courtyard_",
+       "chestId":205,
+       "itemContainerName":"Chest: $1",
+       "itemContainerPosition":{
+          "x":499.5,
+          "y":38,
+          "z":114.5
+       },
+       "moneyQuantity":15
+    },
+    {
+       "numericId":155,
+       "instanceId":"c204_35_495_59_110",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":35,
+       "sceneName":"Forest Belltower",
+       "itemNearestExit":"Fortress Courtyard_",
+       "chestId":204,
+       "itemContainerName":"Chest: $1",
+       "itemContainerPosition":{
+          "x":497.5,
+          "y":59,
+          "z":110
+       },
+       "moneyQuantity":15
+    },
+    {
+       "numericId":156,
+       "instanceId":"c19_35_512_14_51",
+       "itemName":"Stick",
+       "itemQuantity":1,
+       "itemType":"EQUIPMENT",
+       "sceneId":35,
+       "sceneName":"Forest Belltower",
+       "itemNearestExit":"East Forest Redux_",
+       "chestId":19,
+       "itemContainerName":"Chest: Stick x 1",
+       "itemContainerPosition":{
+          "x":510.6795,
+          "y":14,
+          "z":51.53138
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":157,
+       "instanceId":"i_35_494_67_162",
+       "itemName":"Seal Right",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":35,
+       "sceneName":"Forest Belltower",
+       "itemNearestExit":"Fortress Courtyard_",
+       "chestId":-1,
+       "itemContainerName":"door seal half right",
+       "itemContainerPosition":{
+          "x":494.8756,
+          "y":67,
+          "z":162.61
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":158,
+       "instanceId":"c1012_38_68_8_40",
+       "itemName":"GoldenTrophy_12",
+       "itemQuantity":1,
+       "itemType":"TROPHY",
+       "sceneId":38,
+       "sceneName":"Transit",
+       "itemNearestExit":"Atoll Redux_teleporter_atoll",
+       "chestId":1012,
+       "itemContainerName":"Chest: (empty)",
+       "itemContainerPosition":{
+          "x":-68.00001,
+          "y":8,
+          "z":-42
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":201,
+       "instanceId":"c243_68_63_20_71",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":68,
+       "sceneName":"Cathedral Redux",
+       "itemNearestExit":"Swamp Redux 2_main",
+       "chestId":243,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":61.75,
+          "y":20,
+          "z":-71.875
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":202,
+       "instanceId":"c241_68_26_20_63",
+       "itemName":"Firecracker",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":68,
+       "sceneName":"Cathedral Redux",
+       "itemNearestExit":"Swamp Redux 2_main",
+       "chestId":241,
+       "itemContainerName":"Chest: Firecracker x 2",
+       "itemContainerPosition":{
+          "x":-24.25,
+          "y":20,
+          "z":-63.62502
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":203,
+       "instanceId":"c1002_68_53_20_30",
+       "itemName":"GoldenTrophy_2",
+       "itemQuantity":1,
+       "itemType":"TROPHY",
+       "sceneId":68,
+       "sceneName":"Cathedral Redux",
+       "itemNearestExit":"Swamp Redux 2_secret",
+       "chestId":1002,
+       "itemContainerName":"Chest: GoldenTrophy_2 x 1",
+       "itemContainerPosition":{
+          "x":-53.5,
+          "y":-20,
+          "z":32
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":204,
+       "instanceId":"c238_68_55_20_63",
+       "itemName":"Flask Shard",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":68,
+       "sceneName":"Cathedral Redux",
+       "itemNearestExit":"Swamp Redux 2_main",
+       "chestId":238,
+       "itemContainerName":"Chest: Flask Shard x 1",
+       "itemContainerPosition":{
+          "x":57.16421,
+          "y":20,
+          "z":-64.66422
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":205,
+       "instanceId":"c237_68_44_0_27",
+       "itemName":"Pepper",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":68,
+       "sceneName":"Cathedral Redux",
+       "itemNearestExit":"Cathedral Arena_",
+       "chestId":237,
+       "itemContainerName":"Chest: Pepper x 2",
+       "itemContainerPosition":{
+          "x":45.39789,
+          "y":-0.125,
+          "z":-29.28712
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":206,
+       "instanceId":"c236_68_89_0_71",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":68,
+       "sceneName":"Cathedral Redux",
+       "itemNearestExit":"Swamp Redux 2_main",
+       "chestId":236,
+       "itemContainerName":"Chest: $50",
+       "itemContainerPosition":{
+          "x":87.07257,
+          "y":0,
+          "z":-71.71312
+       },
+       "moneyQuantity":50
+    },
+    {
+       "numericId":207,
+       "instanceId":"c239_68_31_20_49",
+       "itemName":"Berry_MP",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":68,
+       "sceneName":"Cathedral Redux",
+       "itemNearestExit":"Swamp Redux 2_main",
+       "chestId":239,
+       "itemContainerName":"Chest: Berry_MP x 2",
+       "itemContainerPosition":{
+          "x":31.48949,
+          "y":20.5,
+          "z":-51.74997
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":208,
+       "instanceId":"c244_68_17_0_47",
+       "itemName":"Piggybank L1",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":68,
+       "sceneName":"Cathedral Redux",
+       "itemNearestExit":"Cathedral Arena_",
+       "chestId":244,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":-17.50001,
+          "y":0,
+          "z":-49.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":209,
+       "instanceId":"c240_68_21_0_71",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":68,
+       "sceneName":"Cathedral Redux",
+       "itemNearestExit":"Swamp Redux 2_main",
+       "chestId":240,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":-19.87678,
+          "y":0,
+          "z":-72.34646
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":210,
+       "instanceId":"c242_68_20_20_30",
+       "itemName":"Berry_HP",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":68,
+       "sceneName":"Cathedral Redux",
+       "itemNearestExit":"Swamp Redux 2_secret",
+       "chestId":242,
+       "itemContainerName":"Chest: $1",
+       "itemContainerPosition":{
+          "x":-20.47701,
+          "y":20,
+          "z":28.862
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":211,
+       "instanceId":"c999_60_0_0_0",
+       "itemName":"Hyperdash",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":60,
+       "sceneName":"Cathedral Arena",
+       "itemNearestExit":"Shop_",
+       "chestId":999,
+       "itemContainerName":"Chest: Hyperdash x 1",
+       "itemContainerPosition":{
+          "x":1.430511E-06,
+          "y":0,
+          "z":-2
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":212,
+       "instanceId":"i_40_190_4_34",
+       "itemName":"Stundagger",
+       "itemQuantity":1,
+       "itemType":"EQUIPMENT",
+       "sceneId":40,
+       "sceneName":"archipelagos_house",
+       "itemNearestExit":"Archipelagos Redux_",
+       "chestId":-1,
+       "itemContainerName":"lanterndagger",
+       "itemContainerPosition":{
+          "x":-190.854,
+          "y":4.219,
+          "z":34.616
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":213,
+       "instanceId":"c289_59_52_0_2",
+       "itemName":"Berry_MP",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":289,
+       "itemContainerName":"Chest: Berry_MP x 3",
+       "itemContainerPosition":{
+          "x":52.22635,
+          "y":0,
+          "z":0.5128491
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":214,
+       "instanceId":"c119_59_81_56_25",
+       "itemName":"Trinket - Parry Window",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":119,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":79,
+          "y":56,
+          "z":25.00001
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":215,
+       "instanceId":"c126_59_80_16_13",
+       "itemName":"Berry_HP",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":126,
+       "itemContainerName":"Chest: Berry_HP x 2",
+       "itemContainerPosition":{
+          "x":82,
+          "y":16,
+          "z":12.99998
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":216,
+       "instanceId":"c117_59_23_0_7",
+       "itemName":"Berry_MP",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":117,
+       "itemContainerName":"Chest: Berry_MP x 3",
+       "itemContainerPosition":{
+          "x":-23.00001,
+          "y":0,
+          "z":5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":217,
+       "instanceId":"c116_59_55_22_48",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":116,
+       "itemContainerName":"Chest: $10",
+       "itemContainerPosition":{
+          "x":-53,
+          "y":22,
+          "z":47.99998
+       },
+       "moneyQuantity":10
+    },
+    {
+       "numericId":218,
+       "instanceId":"c288_59_49_11_21",
+       "itemName":"Bait",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":288,
+       "itemContainerName":"Chest: Bait x 2",
+       "itemContainerPosition":{
+          "x":-49.50001,
+          "y":-11.99993,
+          "z":19
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":219,
+       "instanceId":"c129_59_100_69_153",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Transit_teleporter_quarry teleporter",
+       "chestId":129,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":-100,
+          "y":-69,
+          "z":-155
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":220,
+       "instanceId":"c122_59_131_77_103",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Transit_teleporter_quarry teleporter",
+       "chestId":122,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":-130.9551,
+          "y":-77,
+          "z":-104.9995
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":221,
+       "instanceId":"c132_59_7_80_77",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Shop_",
+       "chestId":132,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":-9.43,
+          "y":-80.345,
+          "z":-77.29699
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":222,
+       "instanceId":"c121_59_140_48_6",
+       "itemName":"Berry_MP",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Shop_",
+       "chestId":121,
+       "itemContainerName":"Chest: Berry_MP x 3",
+       "itemContainerPosition":{
+          "x":-140,
+          "y":-48,
+          "z":-8
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":223,
+       "instanceId":"c124_59_62_8_15",
+       "itemName":"Ivy",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":124,
+       "itemContainerName":"Chest: Ivy x 3",
+       "itemContainerPosition":{
+          "x":61.99999,
+          "y":8,
+          "z":13
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":224,
+       "instanceId":"c127_59_71_20_40",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":127,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":-71,
+          "y":-20,
+          "z":42
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":225,
+       "instanceId":"c128_59_56_0_43",
+       "itemName":"Flask Shard",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":128,
+       "itemContainerName":"Chest: Flask Shard x 1",
+       "itemContainerPosition":{
+          "x":-58,
+          "y":0,
+          "z":43.00001
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":226,
+       "instanceId":"c130_59_80_56_57",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Shop_",
+       "chestId":130,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":-82,
+          "y":-56,
+          "z":-57.01971
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":227,
+       "instanceId":"c262_59_88_43_66",
+       "itemName":"Upgrade Offering - DamageResist - Effigy",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Shop_",
+       "chestId":262,
+       "itemContainerName":"Chest: Upgrade Offering - DamageResist - Effigy x 1",
+       "itemContainerPosition":{
+          "x":-87.92245,
+          "y":-43.5,
+          "z":-68.4985
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":228,
+       "instanceId":"c131_59_1_47_78",
+       "itemName":"Piggybank L1",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Shop_",
+       "chestId":131,
+       "itemContainerName":"Chest: Piggybank L1 x 1",
+       "itemContainerPosition":{
+          "x":-1,
+          "y":-47.558,
+          "z":-77.99999
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":229,
+       "instanceId":"c120_59_149_39_8",
+       "itemName":"Shotgun",
+       "itemQuantity":1,
+       "itemType":"EQUIPMENT",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":120,
+       "itemContainerName":"Chest: Shotgun x 1",
+       "itemContainerPosition":{
+          "x":-151.65,
+          "y":-39.72,
+          "z":8.000004
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":230,
+       "instanceId":"c265_59_78_40_38",
+       "itemName":"Flask Shard",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":265,
+       "itemContainerName":"Chest: Firecracker x 6",
+       "itemContainerPosition":{
+          "x":-78.7923,
+          "y":-40,
+          "z":36.79083
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":231,
+       "instanceId":"c268_59_13_8_21",
+       "itemName":"Bait",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":268,
+       "itemContainerName":"Chest: Bait x 1",
+       "itemContainerPosition":{
+          "x":-12.99998,
+          "y":8,
+          "z":23.59
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":232,
+       "instanceId":"c134_59_1_40_19",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":134,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":0.9999907,
+          "y":40,
+          "z":-21
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":233,
+       "instanceId":"c282_59_20_63_66",
+       "itemName":"Upgrade Offering - Magic MP - Mushroom",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":282,
+       "itemContainerName":"Chest: Upgrade Offering - Magic MP - Mushroom x 1",
+       "itemContainerPosition":{
+          "x":22.91,
+          "y":63.00041,
+          "z":66.72999
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":234,
+       "instanceId":"c125_59_38_24_28",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":125,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":38.20409,
+          "y":23.96899,
+          "z":26.71571
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":235,
+       "instanceId":"c224_59_28_0_3",
+       "itemName":"Upgrade Offering - Attack - Tooth",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":224,
+       "itemContainerName":"Chest: Upgrade Offering - Attack - Tooth x 1",
+       "itemContainerPosition":{
+          "x":28.49998,
+          "y":0,
+          "z":-5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":236,
+       "instanceId":"c118_59_125_16_14",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"ziggurat2020_0_",
+       "chestId":118,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":125.4693,
+          "y":16,
+          "z":12.79356
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":237,
+       "instanceId":"c133_59_3_8_21",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Shop_",
+       "chestId":133,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":5.43,
+          "y":-8,
+          "z":-21.00002
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":238,
+       "instanceId":"c123_59_9_12_64",
+       "itemName":"Firecracker",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Shop_",
+       "chestId":123,
+       "itemContainerName":"Chest: Firecracker x 3",
+       "itemContainerPosition":{
+          "x":-9.00001,
+          "y":-12,
+          "z":-66.68
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":239,
+       "instanceId":"c250_59_21_63_51",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":250,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":21.79876,
+          "y":63.00041,
+          "z":49.42928
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":240,
+       "instanceId":"c_59_0_68_84",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":59,
+       "sceneName":"Quarry Redux",
+       "itemNearestExit":"Monastery_front",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":0.7399991,
+          "y":68.029,
+          "z":82.84827
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":241,
+       "instanceId":"c114_47_199_0_45",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":47,
+       "sceneName":"Fortress Reliquary",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":114,
+       "itemContainerName":"Chest: $128",
+       "itemContainerPosition":{
+          "x":197.5,
+          "y":0,
+          "z":-45
+       },
+       "moneyQuantity":128
+    },
+    {
+       "numericId":242,
+       "instanceId":"c115_47_199_0_35",
+       "itemName":"Trinket - Walk Speed Plus",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":47,
+       "sceneName":"Fortress Reliquary",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":115,
+       "itemContainerName":"Chest: Trinket - Walk Speed Plus x 1",
+       "itemContainerPosition":{
+          "x":197.5,
+          "y":0,
+          "z":-35
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":243,
+       "instanceId":"c113_47_127_8_27",
+       "itemName":"Berry_MP",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":47,
+       "sceneName":"Fortress Reliquary",
+       "itemNearestExit":"Fortress Courtyard_Upper",
+       "chestId":113,
+       "itemContainerName":"Chest: Berry_MP x 1",
+       "itemContainerPosition":{
+          "x":125.1697,
+          "y":8,
+          "z":-27.02744
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":244,
+       "instanceId":"c83_12_89_7_56",
+       "itemName":"Ice Bomb",
+       "itemQuantity":5,
+       "itemType":"SUPPLIES",
+       "sceneId":12,
+       "sceneName":"Fortress Main",
+       "itemNearestExit":"Fortress Basement_",
+       "chestId":83,
+       "itemContainerName":"Chest: Firecracker x 5",
+       "itemContainerPosition":{
+          "x":-88.48237,
+          "y":7,
+          "z":54.31815
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":245,
+       "instanceId":"c84_12_82_7_48",
+       "itemName":"Upgrade Offering - Stamina SP - Feather",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":12,
+       "sceneName":"Fortress Main",
+       "itemNearestExit":"Fortress Basement_",
+       "chestId":84,
+       "itemContainerName":"Chest: Upgrade Offering - Stamina SP - Feather x 1",
+       "itemContainerPosition":{
+          "x":-84.35706,
+          "y":7,
+          "z":47.625
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":246,
+       "instanceId":"c85_12_31_10_50",
+       "itemName":"Flask Shard",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":12,
+       "sceneName":"Fortress Main",
+       "itemNearestExit":"Fortress East_upper",
+       "chestId":85,
+       "itemContainerName":"Chest: Flask Shard x 1",
+       "itemContainerPosition":{
+          "x":31.06473,
+          "y":10.96,
+          "z":48.67015
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":247,
+       "instanceId":"c_12_75_0_17",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":12,
+       "sceneName":"Fortress Main",
+       "itemNearestExit":"Fortress Basement_",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":-75.00001,
+          "y":-0.971,
+          "z":15.10828
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":248,
+       "instanceId":"c112_46_77_1_36",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":46,
+       "sceneName":"Fortress East",
+       "itemNearestExit":"Fortress Courtyard_",
+       "chestId":112,
+       "itemContainerName":"Chest: (empty)",
+       "itemContainerPosition":{
+          "x":76.99999,
+          "y":-1.000012,
+          "z":34
+       },
+       "moneyQuantity":50
+    },
+    {
+       "numericId":249,
+       "instanceId":"c62_13_7_0_6",
+       "itemName":"Berry_HP",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":13,
+       "sceneName":"Fortress Basement",
+       "itemNearestExit":"Fortress Courtyard_",
+       "chestId":62,
+       "itemContainerName":"Chest: Berry_HP x 3",
+       "itemContainerPosition":{
+          "x":5.996232,
+          "y":0,
+          "z":-7.82259
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":250,
+       "instanceId":"c61_13_101_5_27",
+       "itemName":"Upgrade Offering - Magic MP - Mushroom",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":13,
+       "sceneName":"Fortress Basement",
+       "itemNearestExit":"Fortress Main_",
+       "chestId":61,
+       "itemContainerName":"Chest: Upgrade Offering - Magic MP - Mushroom x 1",
+       "itemContainerPosition":{
+          "x":-101.1623,
+          "y":5,
+          "z":25.00659
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":251,
+       "instanceId":"c63_13_91_4_16",
+       "itemName":"Trinket - Sneaky",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":13,
+       "sceneName":"Fortress Basement",
+       "itemNearestExit":"Fortress Main_",
+       "chestId":63,
+       "itemContainerName":"Chest: Trinket - Sneaky x 1",
+       "itemContainerPosition":{
+          "x":-91.50227,
+          "y":-4,
+          "z":14.23659
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":252,
+       "instanceId":"c65_13_26_0_5",
+       "itemName":"Upgrade Offering - Health HP - Flower",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":13,
+       "sceneName":"Fortress Basement",
+       "itemNearestExit":"Fortress Main_",
+       "chestId":65,
+       "itemContainerName":"Treasure Chest in cell",
+       "itemContainerPosition":{
+          "x":24.25,
+          "y":0,
+          "z":5.125004
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":253,
+       "instanceId":"c64_13_17_0_72",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":13,
+       "sceneName":"Fortress Basement",
+       "itemNearestExit":"Fortress Main_",
+       "chestId":64,
+       "itemContainerName":"Chest: Berry_HP x 3",
+       "itemContainerPosition":{
+          "x":15.81846,
+          "y":0,
+          "z":71.08322
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":254,
+       "instanceId":"c284_52_139_26_92",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":52,
+       "sceneName":"East Forest Redux",
+       "itemNearestExit":"East Forest Redux Interior_lower",
+       "chestId":284,
+       "itemContainerName":"Chest: $50",
+       "itemContainerPosition":{
+          "x":137,
+          "y":-26,
+          "z":-92
+       },
+       "moneyQuantity":50
+    },
+    {
+       "numericId":255,
+       "instanceId":"c23_52_92_17_70",
+       "itemName":"Flask Container",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":52,
+       "sceneName":"East Forest Redux",
+       "itemNearestExit":"Forest Belltower_",
+       "chestId":23,
+       "itemContainerName":"Chest: Flask Container x 1",
+       "itemContainerPosition":{
+          "x":91.99998,
+          "y":17,
+          "z":68.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":256,
+       "instanceId":"c21_52_154_8_4",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":52,
+       "sceneName":"East Forest Redux",
+       "itemNearestExit":"East Forest Redux Interior_upper",
+       "chestId":21,
+       "itemContainerName":"Chest: $15",
+       "itemContainerPosition":{
+          "x":152,
+          "y":8,
+          "z":4
+       },
+       "moneyQuantity":15
+    },
+    {
+       "numericId":257,
+       "instanceId":"c248_52_88_30_58",
+       "itemName":"Trinket Coin",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":52,
+       "sceneName":"East Forest Redux",
+       "itemNearestExit":"East Forest Redux Interior_lower",
+       "chestId":248,
+       "itemContainerName":"Chest: Trinket Coin x 1",
+       "itemContainerPosition":{
+          "x":86.01973,
+          "y":-30.5,
+          "z":-58.97552
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":258,
+       "instanceId":"c22_52_173_8_1",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":52,
+       "sceneName":"East Forest Redux",
+       "itemNearestExit":"Sword Access_upper",
+       "chestId":22,
+       "itemContainerName":"Chest: $40",
+       "itemContainerPosition":{
+          "x":171,
+          "y":8,
+          "z":-1
+       },
+       "moneyQuantity":40
+    },
+    {
+       "numericId":259,
+       "instanceId":"c286_52_91_8_67",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":52,
+       "sceneName":"East Forest Redux",
+       "itemNearestExit":"Forest Belltower_",
+       "chestId":286,
+       "itemContainerName":"Chest: $100",
+       "itemContainerPosition":{
+          "x":89,
+          "y":8,
+          "z":67.5
+       },
+       "moneyQuantity":100
+    },
+    {
+       "numericId":260,
+       "instanceId":"c25_52_85_4_6",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":52,
+       "sceneName":"East Forest Redux",
+       "itemNearestExit":"Transit_teleporter_forest teleporter",
+       "chestId":25,
+       "itemContainerName":"Chest: $20",
+       "itemContainerPosition":{
+          "x":85,
+          "y":4,
+          "z":4.5
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":261,
+       "instanceId":"c26_52_91_26_58",
+       "itemName":"Firecracker",
+       "itemQuantity":6,
+       "itemType":"SUPPLIES",
+       "sceneId":52,
+       "sceneName":"East Forest Redux",
+       "itemNearestExit":"East Forest Redux Interior_lower",
+       "chestId":26,
+       "itemContainerName":"Chest: Firecracker x 6",
+       "itemContainerPosition":{
+          "x":93,
+          "y":-26,
+          "z":-58
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":262,
+       "instanceId":"c1006_52_104_16_23",
+       "itemName":"GoldenTrophy_6",
+       "itemQuantity":1,
+       "itemType":"TROPHY",
+       "sceneId":52,
+       "sceneName":"East Forest Redux",
+       "itemNearestExit":"Transit_teleporter_forest teleporter",
+       "chestId":1006,
+       "itemContainerName":"Chest: GoldenTrophy_6 x 1",
+       "itemContainerPosition":{
+          "x":104,
+          "y":-16,
+          "z":-25.75
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":263,
+       "instanceId":"c281_52_138_26_107",
+       "itemName":"Upgrade Offering - Health HP - Flower",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":52,
+       "sceneName":"East Forest Redux",
+       "itemNearestExit":"East Forest Redux Interior_lower",
+       "chestId":281,
+       "itemContainerName":"Chest: Upgrade Offering - Health HP - Flower x 1",
+       "itemContainerPosition":{
+          "x":138,
+          "y":-26,
+          "z":-105
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":264,
+       "instanceId":"c24_52_109_0_10",
+       "itemName":"Berry_HP",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":52,
+       "sceneName":"East Forest Redux",
+       "itemNearestExit":"Transit_teleporter_forest teleporter",
+       "chestId":24,
+       "itemContainerName":"Chest: Berry_HP x 1",
+       "itemContainerPosition":{
+          "x":107.6709,
+          "y":0,
+          "z":10.14021
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":265,
+       "instanceId":"c_52_164_24_56",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":52,
+       "sceneName":"East Forest Redux",
+       "itemNearestExit":"East Forest Redux Interior_lower",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":162.1083,
+          "y":-24.971,
+          "z":-56
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":266,
+       "instanceId":"c_52_104_16_61",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":52,
+       "sceneName":"East Forest Redux",
+       "itemNearestExit":"East Forest Redux Laddercave_upper",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":104,
+          "y":16.029,
+          "z":59.10828
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":267,
+       "instanceId":"c227_17_153_95_29",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":17,
+       "sceneName":"Library Lab",
+       "itemNearestExit":"Transit_teleporter_library teleporter",
+       "chestId":227,
+       "itemContainerName":"Chest: $128",
+       "itemContainerPosition":{
+          "x":152.1992,
+          "y":95,
+          "z":-30.51292
+       },
+       "moneyQuantity":128
+    },
+    {
+       "numericId":268,
+       "instanceId":"c226_17_163_95_41",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":17,
+       "sceneName":"Library Lab",
+       "itemNearestExit":"Transit_teleporter_library teleporter",
+       "chestId":226,
+       "itemContainerName":"Chest: $64",
+       "itemContainerPosition":{
+          "x":162.8847,
+          "y":95,
+          "z":-43.52311
+       },
+       "moneyQuantity":64
+    },
+    {
+       "numericId":269,
+       "instanceId":"c225_17_155_95_31",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":17,
+       "sceneName":"Library Lab",
+       "itemNearestExit":"Transit_teleporter_library teleporter",
+       "chestId":225,
+       "itemContainerName":"Chest: $32",
+       "itemContainerPosition":{
+          "x":154.0766,
+          "y":95,
+          "z":-32.86962
+       },
+       "moneyQuantity":32
+    },
+    {
+       "numericId":270,
+       "instanceId":"c228_17_114_95_36",
+       "itemName":"Piggybank L1",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":17,
+       "sceneName":"Library Lab",
+       "itemNearestExit":"Transit_teleporter_library teleporter",
+       "chestId":228,
+       "itemContainerName":"Chest: Piggybank L1 x 1",
+       "itemContainerPosition":{
+          "x":112.5889,
+          "y":95,
+          "z":-36.58968
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":271,
+       "instanceId":"i_15_0_1_117",
+       "itemName":"Hexagon Red",
+       "itemQuantity":1,
+       "itemType":"HEXAGON",
+       "sceneId":15,
+       "sceneName":"Fortress Arena",
+       "itemNearestExit":"Transit_teleporter_spidertank",
+       "chestId":-1,
+       "itemContainerName":"Take Questagon Interaction",
+       "itemContainerPosition":{
+          "x":0,
+          "y":1,
+          "z":117
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":272,
+       "instanceId":"c202_21_8_25_170",
+       "itemQuantity":0,
+       "itemType":"OTHER",
+       "sceneId":21,
+       "sceneName":"Monastery",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":202,
+       "itemContainerName":"Chest: Flask Container x 1",
+       "itemContainerPosition":{
+          "x":7.838285,
+          "y":25,
+          "z":168.4713
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":273,
+       "instanceId":"c200_21_0_25_175",
+       "itemName":"Mask",
+       "itemQuantity":1,
+       "itemType":"TRINKETS",
+       "sceneId":21,
+       "sceneName":"Monastery",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":200,
+       "itemContainerName":"Chest: Flask Container x 1",
+       "itemContainerPosition":{
+          "x":0.2200197,
+          "y":25,
+          "z":173.36
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":274,
+       "instanceId":"c201_21_3_25_170",
+       "itemQuantity":0,
+       "itemType":"OTHER",
+       "sceneId":21,
+       "sceneName":"Monastery",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":201,
+       "itemContainerName":"Chest: (empty)",
+       "itemContainerPosition":{
+          "x":1.484441,
+          "y":25,
+          "z":170.5834
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":275,
+       "instanceId":"c203_21_10_25_170",
+       "itemQuantity":0,
+       "itemType":"OTHER",
+       "sceneId":21,
+       "sceneName":"Monastery",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":203,
+       "itemContainerName":"Chest: (empty)",
+       "itemContainerPosition":{
+          "x":-8.979985,
+          "y":25,
+          "z":170.12
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":276,
+       "instanceId":"c31_11_25_8_172",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":11,
+       "sceneName":"Sword Access",
+       "itemNearestExit":"East Forest Redux_upper",
+       "chestId":31,
+       "itemContainerName":"Treasure Chest (bush reward)",
+       "itemContainerPosition":{
+          "x":-24.99999,
+          "y":8,
+          "z":-174
+       },
+       "moneyQuantity":20
+    },
+    {
+       "numericId":277,
+       "instanceId":"c33_11_46_8_171",
+       "itemName":"Firebomb",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":11,
+       "sceneName":"Sword Access",
+       "itemNearestExit":"East Forest Redux_upper",
+       "chestId":33,
+       "itemContainerName":"Chest: Firebomb x 2",
+       "itemContainerPosition":{
+          "x":-44.19266,
+          "y":8,
+          "z":-171.8564
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":278,
+       "instanceId":"c32_11_48_0_172",
+       "itemName":"Piggybank L1",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":11,
+       "sceneName":"Sword Access",
+       "itemNearestExit":"East Forest Redux_upper",
+       "chestId":32,
+       "itemContainerName":"Treasure Chest (garden path)",
+       "itemContainerPosition":{
+          "x":-47.99999,
+          "y":0,
+          "z":-174.5
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":279,
+       "instanceId":"c1009_11_19_4_186",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":11,
+       "sceneName":"Sword Access",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":1009,
+       "itemContainerName":"Chest: GoldenTrophy_9 x 1",
+       "itemContainerPosition":{
+          "x":19,
+          "y":4.029,
+          "z":-187.8917
+       },
+       "moneyQuantity":1
+    },
+    {
+       "numericId":280,
+       "instanceId":"i_11_28_6_190",
+       "itemName":"Sword",
+       "itemQuantity":1,
+       "itemType":"EQUIPMENT",
+       "sceneId":11,
+       "sceneName":"Sword Access",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":-1,
+       "itemContainerName":"_Sword Pickup (1)",
+       "itemContainerPosition":{
+          "x":28.174,
+          "y":6.148,
+          "z":-190
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":281,
+       "instanceId":"c_18_133_10_43",
+       "itemName":"Fairy",
+       "itemQuantity":0,
+       "itemType":"FAIRY",
+       "sceneId":18,
+       "sceneName":"Library Hall",
+       "itemNearestExit":"RelicVoid_teleporter_relic plinth",
+       "chestId":0,
+       "itemContainerName":"Chest: Fairy",
+       "itemContainerPosition":{
+          "x":133.27,
+          "y":10.029,
+          "z":-45.12172
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":282,
+       "instanceId":"c279_51_4_44_2",
+       "itemName":"Berry_MP",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":51,
+       "sceneName":"frog cave main",
+       "itemNearestExit":"Frog Stairs_Entrance",
+       "chestId":279,
+       "itemContainerName":"Chest: Berry_MP x 1",
+       "itemContainerPosition":{
+          "x":5.237813,
+          "y":44,
+          "z":0.1410668
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":283,
+       "instanceId":"c82_51_26_36_18",
+       "itemName":"Flask Shard",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":51,
+       "sceneName":"frog cave main",
+       "itemNearestExit":"Frog Stairs_Entrance",
+       "chestId":82,
+       "itemContainerName":"Chest: Flask Shard x 1",
+       "itemContainerPosition":{
+          "x":27.24249,
+          "y":36,
+          "z":20.06724
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":284,
+       "instanceId":"c77_51_20_28_9",
+       "itemName":"Firecracker",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":51,
+       "sceneName":"frog cave main",
+       "itemNearestExit":"Frog Stairs_Entrance",
+       "chestId":77,
+       "itemContainerName":"Chest: Firecracker x 3",
+       "itemContainerPosition":{
+          "x":-19.15816,
+          "y":28,
+          "z":-7.324327
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":285,
+       "instanceId":"c78_51_114_28_10",
+       "itemName":"Berry_HP",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":51,
+       "sceneName":"frog cave main",
+       "itemNearestExit":"Frog Stairs_Entrance",
+       "chestId":78,
+       "itemContainerName":"Chest: Berry_HP x 2",
+       "itemContainerPosition":{
+          "x":-114.9221,
+          "y":28,
+          "z":8.545039
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":286,
+       "instanceId":"c259_51_13_2_77",
+       "itemName":"Firecracker",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":51,
+       "sceneName":"frog cave main",
+       "itemNearestExit":"Frog Stairs_Entrance",
+       "chestId":259,
+       "itemContainerName":"Chest: Firecracker x 3",
+       "itemContainerPosition":{
+          "x":13.13147,
+          "y":-2,
+          "z":-79.04355
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":287,
+       "instanceId":"c276_51_121_29_51",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":51,
+       "sceneName":"frog cave main",
+       "itemNearestExit":"Frog Stairs_Exit",
+       "chestId":276,
+       "itemContainerName":"Chest: $32",
+       "itemContainerPosition":{
+          "x":119.7715,
+          "y":29.75,
+          "z":-51.20759
+       },
+       "moneyQuantity":32
+    },
+    {
+       "numericId":288,
+       "instanceId":"c80_51_69_36_3",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":51,
+       "sceneName":"frog cave main",
+       "itemNearestExit":"Frog Stairs_Exit",
+       "chestId":80,
+       "itemContainerName":"Chest: $25",
+       "itemContainerPosition":{
+          "x":70.99973,
+          "y":36,
+          "z":-2.966696
+       },
+       "moneyQuantity":25
+    },
+    {
+       "numericId":289,
+       "instanceId":"c79_51_75_9_25",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":51,
+       "sceneName":"frog cave main",
+       "itemNearestExit":"Frog Stairs_Entrance",
+       "chestId":79,
+       "itemContainerName":"Chest: $100",
+       "itemContainerPosition":{
+          "x":-74.39435,
+          "y":9.75,
+          "z":-26.90609
+       },
+       "moneyQuantity":100
+    },
+    {
+       "numericId":290,
+       "instanceId":"c81_51_60_36_4",
+       "itemName":"Upgrade Offering - Health HP - Flower",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":51,
+       "sceneName":"frog cave main",
+       "itemNearestExit":"Frog Stairs_Entrance",
+       "chestId":81,
+       "itemContainerName":"Chest: Upgrade Offering - Health HP - Flower x 1",
+       "itemContainerPosition":{
+          "x":61.74249,
+          "y":36,
+          "z":5.567236
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":291,
+       "instanceId":"c222_51_8_8_43",
+       "itemName":"Upgrade Offering - Attack - Tooth",
+       "itemQuantity":1,
+       "itemType":"OFFERINGS",
+       "sceneId":51,
+       "sceneName":"frog cave main",
+       "itemNearestExit":"Frog Stairs_Entrance",
+       "chestId":222,
+       "itemContainerName":"Chest: Upgrade Offering - Attack - Tooth x 1",
+       "itemContainerPosition":{
+          "x":-10.47955,
+          "y":8,
+          "z":-42.77047
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":292,
+       "instanceId":"i_51_50_22_11",
+       "itemName":"Wand",
+       "itemQuantity":1,
+       "itemType":"EQUIPMENT",
+       "sceneId":51,
+       "sceneName":"frog cave main",
+       "itemNearestExit":"Frog Stairs_Entrance",
+       "chestId":-1,
+       "itemContainerName":"Inventory items_forcewand",
+       "itemContainerPosition":{
+          "x":50.75,
+          "y":22.25,
+          "z":-11
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":293,
+       "instanceId":"c1011_82_57_26_43",
+       "itemName":"GoldenTrophy_11",
+       "itemQuantity":1,
+       "itemType":"TROPHY",
+       "sceneId":82,
+       "sceneName":"Dusty",
+       "itemNearestExit":"Fortress Reliquary_",
+       "chestId":1011,
+       "itemContainerName":"Chest: GoldenTrophy_11 x 1",
+       "itemContainerPosition":{
+          "x":57.20664,
+          "y":26.029,
+          "z":41.93533
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":294,
+       "instanceId":"c27_54_166_16_62",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":54,
+       "sceneName":"East Forest Redux Laddercave",
+       "itemNearestExit":"Forest Boss Room_",
+       "chestId":27,
+       "itemContainerName":"Treasure Chest",
+       "itemContainerPosition":{
+          "x":164.5001,
+          "y":16,
+          "z":62.4802
+       },
+       "moneyQuantity":30
+    },
+    {
+       "numericId":295,
+       "instanceId":"c28_54_147_16_77",
+       "itemName":"Flask Shard",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":54,
+       "sceneName":"East Forest Redux Laddercave",
+       "itemNearestExit":"Forest Boss Room_",
+       "chestId":28,
+       "itemContainerName":"Chest: Flask Shard x 1",
+       "itemContainerPosition":{
+          "x":147,
+          "y":16.02,
+          "z":75
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":296,
+       "instanceId":"c29_53_162_0_8",
+       "itemName":"Firebomb",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":53,
+       "sceneName":"East Forest Redux Interior",
+       "itemNearestExit":"East Forest Redux_upper",
+       "chestId":29,
+       "itemContainerName":"Chest: Firebomb x 2",
+       "itemContainerPosition":{
+          "x":161.2997,
+          "y":0.1329875,
+          "z":-10.28353
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":297,
+       "instanceId":"c30_53_193_32_23",
+       "itemName":"Ice Bomb",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":53,
+       "sceneName":"East Forest Redux Interior",
+       "itemNearestExit":"East Forest Redux_lower",
+       "chestId":30,
+       "itemContainerName":"Chest: Ice Bomb x 2",
+       "itemContainerPosition":{
+          "x":191.91,
+          "y":-32,
+          "z":-23.78515
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":298,
+       "instanceId":"i_27_0_3_0",
+       "itemName":"Hexagon Green",
+       "itemQuantity":1,
+       "itemType":"HEXAGON",
+       "sceneId":27,
+       "sceneName":"Library Arena",
+       "itemNearestExit":"Library Lab_",
+       "chestId":-1,
+       "itemContainerName":"Questagon",
+       "itemContainerPosition":{
+          "x":0.22,
+          "y":-3.31,
+          "z":0.38
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":299,
+       "instanceId":"c233_43_153_0_61",
+       "itemName":"Firecracker",
+       "itemQuantity":6,
+       "itemType":"SUPPLIES",
+       "sceneId":43,
+       "sceneName":"ziggurat2020_3",
+       "itemNearestExit":"ziggurat2020_1_zig2_skip",
+       "chestId":233,
+       "itemContainerName":"Chest: Firecracker x 6",
+       "itemContainerPosition":{
+          "x":151,
+          "y":0,
+          "z":-61
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":300,
+       "instanceId":"c261_43_129_4_27",
+       "itemName":"Ice Bomb",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":43,
+       "sceneName":"ziggurat2020_3",
+       "itemNearestExit":"ziggurat2020_1_zig2_skip",
+       "chestId":261,
+       "itemContainerName":"Chest: Ice Bomb x 3",
+       "itemContainerPosition":{
+          "x":129.1348,
+          "y":4.085,
+          "z":-29.2997
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":301,
+       "instanceId":"c230_43_74_4_5",
+       "itemName":"Firecracker",
+       "itemQuantity":5,
+       "itemType":"SUPPLIES",
+       "sceneId":43,
+       "sceneName":"ziggurat2020_3",
+       "itemNearestExit":"ziggurat2020_1_zig2_skip",
+       "chestId":230,
+       "itemContainerName":"Chest: Upgrade Offering - DamageResist - Effigy x 1",
+       "itemContainerPosition":{
+          "x":72,
+          "y":4,
+          "z":5.000004
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":302,
+       "instanceId":"c260_43_149_4_53",
+       "itemName":"Berry_MP",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":43,
+       "sceneName":"ziggurat2020_3",
+       "itemNearestExit":"ziggurat2020_1_zig2_skip",
+       "chestId":260,
+       "itemContainerName":"Chest: Firecracker x 6",
+       "itemContainerPosition":{
+          "x":147.2,
+          "y":4,
+          "z":-53.54
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":303,
+       "instanceId":"c232_43_85_3_51",
+       "itemName":"Berry_HP",
+       "itemQuantity":3,
+       "itemType":"SUPPLIES",
+       "sceneId":43,
+       "sceneName":"ziggurat2020_3",
+       "itemNearestExit":"ziggurat2020_1_zig2_skip",
+       "chestId":232,
+       "itemContainerName":"Chest: Berry_HP x 3",
+       "itemContainerPosition":{
+          "x":83.58275,
+          "y":3.999995,
+          "z":-51.93919
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":304,
+       "instanceId":"c231_43_7_3_24",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":43,
+       "sceneName":"ziggurat2020_3",
+       "itemNearestExit":"ziggurat2020_1_zig2_skip",
+       "chestId":231,
+       "itemContainerName":"Chest: $100",
+       "itemContainerPosition":{
+          "x":-4.999999,
+          "y":3.999994,
+          "z":-24
+       },
+       "moneyQuantity":1
+    },
+    {
+       "numericId":305,
+       "instanceId":"c234_43_67_4_38",
+       "itemName":"Flask Container",
+       "itemQuantity":1,
+       "itemType":"GEAR",
+       "sceneId":43,
+       "sceneName":"ziggurat2020_3",
+       "itemNearestExit":"ziggurat2020_1_zig2_skip",
+       "chestId":234,
+       "itemContainerName":"Chest: Flask Container x 1",
+       "itemContainerPosition":{
+          "x":65.59,
+          "y":4,
+          "z":-38
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":306,
+       "instanceId":"c275_42_130_106_129",
+       "itemName":"Berry_MP",
+       "itemQuantity":2,
+       "itemType":"SUPPLIES",
+       "sceneId":42,
+       "sceneName":"ziggurat2020_1",
+       "itemNearestExit":"ziggurat2020_2_",
+       "chestId":275,
+       "itemContainerName":"Chest: Berry_MP x 2",
+       "itemContainerPosition":{
+          "x":132,
+          "y":106,
+          "z":-129
+       },
+       "moneyQuantity":0
+    },
+    {
+       "numericId":307,
+       "instanceId":"c274_42_135_138_58",
+       "itemQuantity":0,
+       "itemType":"MONEY",
+       "sceneId":42,
+       "sceneName":"ziggurat2020_1",
+       "itemNearestExit":"ziggurat2020_2_",
+       "chestId":274,
+       "itemContainerName":"Chest: $30",
+       "itemContainerPosition":{
+          "x":137,
+          "y":138,
+          "z":-57.99999
+       },
+       "moneyQuantity":30
+    },
+    {
+       "numericId":308,
+       "instanceId":"c229_41_149_424_42",
+       "itemName":"Bait",
+       "itemQuantity":1,
+       "itemType":"SUPPLIES",
+       "sceneId":41,
+       "sceneName":"ziggurat2020_2",
+       "itemNearestExit":"ziggurat2020_1_",
+       "chestId":229,
+       "itemContainerName":"Chest: Bait x 1",
+       "itemContainerPosition":{
+          "x":147.9,
+          "y":424.25,
+          "z":-42.62
+       },
+       "moneyQuantity":0
+    }
+ ]

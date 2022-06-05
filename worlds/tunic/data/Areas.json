@@ -1,0 +1,1159 @@
+[
+   {
+      "sceneName":"Overworld Redux",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Cave",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Swamp Redux 2",
+            "destinationLocation":"wall"
+         },
+         {
+            "destinationSceneName":"Sword Cave",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Overworld Interiors",
+            "destinationLocation":"under_checkpoint"
+         },
+         {
+            "destinationSceneName":"Overworld Interiors",
+            "destinationLocation":"house"
+         },
+         {
+            "destinationSceneName":"Atoll Redux",
+            "destinationLocation":"lower"
+         },
+         {
+            "destinationSceneName":"Furnace",
+            "destinationLocation":"gyro_lower"
+         },
+         {
+            "destinationSceneName":"Archipelagos Redux",
+            "destinationLocation":"lower"
+         },
+         {
+            "destinationSceneName":"Furnace",
+            "destinationLocation":"gyro_upper_north"
+         },
+         {
+            "destinationSceneName":"Ruins Passage",
+            "destinationLocation":"west"
+         },
+         {
+            "destinationSceneName":"ShopSpecial",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Maze Room",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Archipelagos Redux",
+            "destinationLocation":"upper"
+         },
+         {
+            "destinationSceneName":"Temple",
+            "destinationLocation":"rafters"
+         },
+         {
+            "destinationSceneName":"Temple",
+            "destinationLocation":"main"
+         },
+         {
+            "destinationSceneName":"Ruined Shop",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Atoll Redux",
+            "destinationLocation":"upper"
+         },
+         {
+            "destinationSceneName":"PatrolCave",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Town Basement",
+            "destinationLocation":"beach"
+         },
+         {
+            "destinationSceneName":"CubeRoom",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Furnace",
+            "destinationLocation":"gyro_upper_east"
+         },
+         {
+            "destinationSceneName":"Changing Room",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Sewer",
+            "destinationLocation":"west_aqueduct"
+         },
+         {
+            "destinationSceneName":"Furnace",
+            "destinationLocation":"gyro_west"
+         },
+         {
+            "destinationSceneName":"Sewer",
+            "destinationLocation":"entrance"
+         },
+         {
+            "destinationSceneName":"Mountain",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Fortress Courtyard",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"EastFiligreeCache",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Ruins Passage",
+            "destinationLocation":"east"
+         },
+         {
+            "destinationSceneName":"Archipelagos Redux",
+            "destinationLocation":"lowest"
+         },
+         {
+            "destinationSceneName":"Windmill",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Waterfall",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Darkwoods Tunnel",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Crypt Redux",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Town_FiligreeRoom",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Swamp Redux 2",
+            "destinationLocation":"conduit"
+         },
+         {
+            "destinationSceneName":"Forest Belltower",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Transit",
+            "destinationLocation":"teleporter_town"
+         },
+         {
+            "destinationSceneName":"Transit",
+            "destinationLocation":"teleporter_starting island"
+         }
+      ]
+   },
+   {
+      "sceneName":"Overworld Cave",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Swamp Redux 2",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"conduit"
+         },
+         {
+            "destinationSceneName":"Cathedral Redux",
+            "destinationLocation":"main"
+         },
+         {
+            "destinationSceneName":"Cathedral Redux",
+            "destinationLocation":"secret"
+         },
+         {
+            "destinationSceneName":"Cathedral Arena",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Shop",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"wall"
+         },
+         {
+            "destinationSceneName":"RelicVoid",
+            "destinationLocation":"teleporter_relic plinth"
+         }
+      ]
+   },
+   {
+      "sceneName":"Sword Cave",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Overworld Interiors",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"house"
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"under_checkpoint"
+         }
+      ]
+   },
+   {
+      "sceneName":"Atoll Redux",
+      "areaExits":[
+         {
+            "destinationSceneName":"Frog Stairs",
+            "destinationLocation":"eye"
+         },
+         {
+            "destinationSceneName":"Library Exterior",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"upper"
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"lower"
+         },
+         {
+            "destinationSceneName":"Frog Stairs",
+            "destinationLocation":"mouth"
+         },
+         {
+            "destinationSceneName":"Shop",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Transit",
+            "destinationLocation":"teleporter_atoll"
+         }
+      ]
+   },
+   {
+      "sceneName":"Furnace",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"gyro_upper_north"
+         },
+         {
+            "destinationSceneName":"Crypt Redux",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"gyro_west"
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"gyro_lower"
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"gyro_upper_east"
+         }
+      ]
+   },
+   {
+      "sceneName":"Archipelagos Redux",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"lower"
+         },
+         {
+            "destinationSceneName":"archipelagos_house",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"upper"
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"lowest"
+         },
+         {
+            "destinationSceneName":"Shop",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"RelicVoid",
+            "destinationLocation":"teleporter_relic plinth"
+         },
+         {
+            "destinationSceneName":"Transit",
+            "destinationLocation":"teleporter_archipelagos_teleporter"
+         }
+      ]
+   },
+   {
+      "sceneName":"Ruins Passage",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"east"
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"west"
+         }
+      ]
+   },
+   {
+      "sceneName":"ShopSpecial",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Maze Room",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Temple",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"rafters"
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"main"
+         }
+      ]
+   },
+   {
+      "sceneName":"Ruined Shop",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"PatrolCave",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Town Basement",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"beach"
+         }
+      ]
+   },
+   {
+      "sceneName":"CubeRoom",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Changing Room",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Sewer",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"entrance"
+         },
+         {
+            "destinationSceneName":"Sewer_Boss",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"west_aqueduct"
+         }
+      ]
+   },
+   {
+      "sceneName":"Mountain",
+      "areaExits":[
+         {
+            "destinationSceneName":"Mountaintop",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Quarry Redux",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Fortress Courtyard",
+      "areaExits":[
+         {
+            "destinationSceneName":"Fortress Reliquary",
+            "destinationLocation":"Lower"
+         },
+         {
+            "destinationSceneName":"Fortress Reliquary",
+            "destinationLocation":"Upper"
+         },
+         {
+            "destinationSceneName":"Fortress Main",
+            "destinationLocation":"Big Door"
+         },
+         {
+            "destinationSceneName":"Fortress East",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Fortress Basement",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Forest Belltower",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Shop",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"EastFiligreeCache",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Windmill",
+      "areaExits":[
+         {
+            "destinationSceneName":"Shop",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Waterfall",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Darkwoods Tunnel",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Quarry Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Crypt Redux",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Furnace",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Sewer_Boss",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Town_FiligreeRoom",
+      "areaExits":[
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Forest Belltower",
+      "areaExits":[
+         {
+            "destinationSceneName":"Fortress Courtyard",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"East Forest Redux",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Forest Boss Room",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Transit",
+      "areaExits":[
+         {
+            "destinationSceneName":"Archipelagos Redux",
+            "destinationLocation":"teleporter_archipelagos_teleporter"
+         },
+         {
+            "destinationSceneName":"Library Lab",
+            "destinationLocation":"teleporter_library teleporter"
+         },
+         {
+            "destinationSceneName":"Quarry Redux",
+            "destinationLocation":"teleporter_quarry teleporter"
+         },
+         {
+            "destinationSceneName":"East Forest Redux",
+            "destinationLocation":"teleporter_forest teleporter"
+         },
+         {
+            "destinationSceneName":"Fortress Arena",
+            "destinationLocation":"teleporter_spidertank"
+         },
+         {
+            "destinationSceneName":"Atoll Redux",
+            "destinationLocation":"teleporter_atoll"
+         },
+         {
+            "destinationSceneName":"ziggurat2020_FTRoom",
+            "destinationLocation":"teleporter_ziggurat teleporter"
+         },
+         {
+            "destinationSceneName":"Spirit Arena",
+            "destinationLocation":"teleporter_spirit arena"
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"teleporter_town"
+         },
+         {
+            "destinationSceneName":"Overworld Redux",
+            "destinationLocation":"teleporter_starting island"
+         }
+      ]
+   },
+   {
+      "sceneName":"Cathedral Redux",
+      "areaExits":[
+         {
+            "destinationSceneName":"Swamp Redux 2",
+            "destinationLocation":"main"
+         },
+         {
+            "destinationSceneName":"Cathedral Arena",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Swamp Redux 2",
+            "destinationLocation":"secret"
+         }
+      ]
+   },
+   {
+      "sceneName":"Cathedral Arena",
+      "areaExits":[
+         {
+            "destinationSceneName":"Swamp Redux 2",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Cathedral Redux",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Shop",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Shop",
+      "areaExits":[
+         {
+            "destinationSceneName":"",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"RelicVoid",
+      "areaExits":[
+         {
+            "destinationSceneName":"Fortress Reliquary",
+            "destinationLocation":"teleporter_relic plinth"
+         },
+         {
+            "destinationSceneName":"Monastery",
+            "destinationLocation":"teleporter_relic plinth"
+         },
+         {
+            "destinationSceneName":"Archipelagos Redux",
+            "destinationLocation":"teleporter_relic plinth"
+         },
+         {
+            "destinationSceneName":"Sword Access",
+            "destinationLocation":"teleporter_relic plinth"
+         },
+         {
+            "destinationSceneName":"Library Hall",
+            "destinationLocation":"teleporter_relic plinth"
+         },
+         {
+            "destinationSceneName":"Swamp Redux 2",
+            "destinationLocation":"teleporter_relic plinth"
+         }
+      ]
+   },
+   {
+      "sceneName":"Frog Stairs",
+      "areaExits":[
+         {
+            "destinationSceneName":"Atoll Redux",
+            "destinationLocation":"mouth"
+         },
+         {
+            "destinationSceneName":"frog cave main",
+            "destinationLocation":"Exit"
+         },
+         {
+            "destinationSceneName":"Atoll Redux",
+            "destinationLocation":"eye"
+         },
+         {
+            "destinationSceneName":"frog cave main",
+            "destinationLocation":"Entrance"
+         }
+      ]
+   },
+   {
+      "sceneName":"Library Exterior",
+      "areaExits":[
+         {
+            "destinationSceneName":"Library Hall",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Atoll Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"archipelagos_house",
+      "areaExits":[
+         {
+            "destinationSceneName":"Archipelagos Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Sewer_Boss",
+      "areaExits":[
+         {
+            "destinationSceneName":"Sewer",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Crypt Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Mountaintop",
+      "areaExits":[
+         {
+            "destinationSceneName":"Mountain",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Quarry Redux",
+      "areaExits":[
+         {
+            "destinationSceneName":"Monastery",
+            "destinationLocation":"front"
+         },
+         {
+            "destinationSceneName":"Shop",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Monastery",
+            "destinationLocation":"back"
+         },
+         {
+            "destinationSceneName":"Mountain",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"ziggurat2020_0",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Darkwoods Tunnel",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Transit",
+            "destinationLocation":"teleporter_quarry teleporter"
+         }
+      ]
+   },
+   {
+      "sceneName":"Fortress Reliquary",
+      "areaExits":[
+         {
+            "destinationSceneName":"Fortress Courtyard",
+            "destinationLocation":"Lower"
+         },
+         {
+            "destinationSceneName":"Dusty",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Fortress Courtyard",
+            "destinationLocation":"Upper"
+         },
+         {
+            "destinationSceneName":"RelicVoid",
+            "destinationLocation":"teleporter_relic plinth"
+         }
+      ]
+   },
+   {
+      "sceneName":"Fortress Main",
+      "areaExits":[
+         {
+            "destinationSceneName":"Shop",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Fortress Basement",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Fortress Courtyard",
+            "destinationLocation":"Big Door"
+         },
+         {
+            "destinationSceneName":"Fortress Arena",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Fortress East",
+            "destinationLocation":"upper"
+         },
+         {
+            "destinationSceneName":"Fortress East",
+            "destinationLocation":"lower"
+         }
+      ]
+   },
+   {
+      "sceneName":"Fortress East",
+      "areaExits":[
+         {
+            "destinationSceneName":"Fortress Main",
+            "destinationLocation":"lower"
+         },
+         {
+            "destinationSceneName":"Fortress Courtyard",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Fortress Main",
+            "destinationLocation":"upper"
+         }
+      ]
+   },
+   {
+      "sceneName":"Fortress Basement",
+      "areaExits":[
+         {
+            "destinationSceneName":"Fortress Main",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Fortress Courtyard",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"East Forest Redux",
+      "areaExits":[
+         {
+            "destinationSceneName":"Sword Access",
+            "destinationLocation":"lower"
+         },
+         {
+            "destinationSceneName":"East Forest Redux Laddercave",
+            "destinationLocation":"upper"
+         },
+         {
+            "destinationSceneName":"East Forest Redux Interior",
+            "destinationLocation":"lower"
+         },
+         {
+            "destinationSceneName":"East Forest Redux Laddercave",
+            "destinationLocation":"gate"
+         },
+         {
+            "destinationSceneName":"Sword Access",
+            "destinationLocation":"upper"
+         },
+         {
+            "destinationSceneName":"East Forest Redux Interior",
+            "destinationLocation":"upper"
+         },
+         {
+            "destinationSceneName":"East Forest Redux Laddercave",
+            "destinationLocation":"lower"
+         },
+         {
+            "destinationSceneName":"Forest Belltower",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Transit",
+            "destinationLocation":"teleporter_forest teleporter"
+         }
+      ]
+   },
+   {
+      "sceneName":"Forest Boss Room",
+      "areaExits":[
+         {
+            "destinationSceneName":"East Forest Redux Laddercave",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Forest Belltower",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Library Lab",
+      "areaExits":[
+         {
+            "destinationSceneName":"Library Arena",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Library Rotunda",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Transit",
+            "destinationLocation":"teleporter_library teleporter"
+         }
+      ]
+   },
+   {
+      "sceneName":"Fortress Arena",
+      "areaExits":[
+         {
+            "destinationSceneName":"Fortress Main",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Transit",
+            "destinationLocation":"teleporter_spidertank"
+         }
+      ]
+   },
+   {
+      "sceneName":"ziggurat2020_FTRoom",
+      "areaExits":[
+         {
+            "destinationSceneName":"ziggurat2020_3",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Transit",
+            "destinationLocation":"teleporter_ziggurat teleporter"
+         }
+      ]
+   },
+   {
+      "sceneName":"Spirit Arena",
+      "areaExits":[
+         {
+            "destinationSceneName":"Transit",
+            "destinationLocation":"teleporter_spirit arena"
+         }
+      ]
+   },
+   {
+      "sceneName":"Monastery",
+      "areaExits":[
+         {
+            "destinationSceneName":"Quarry Redux",
+            "destinationLocation":"back"
+         },
+         {
+            "destinationSceneName":"Quarry Redux",
+            "destinationLocation":"front"
+         },
+         {
+            "destinationSceneName":"RelicVoid",
+            "destinationLocation":"teleporter_relic plinth"
+         }
+      ]
+   },
+   {
+      "sceneName":"Sword Access",
+      "areaExits":[
+         {
+            "destinationSceneName":"East Forest Redux",
+            "destinationLocation":"upper"
+         },
+         {
+            "destinationSceneName":"East Forest Redux",
+            "destinationLocation":"lower"
+         },
+         {
+            "destinationSceneName":"RelicVoid",
+            "destinationLocation":"teleporter_relic plinth"
+         }
+      ]
+   },
+   {
+      "sceneName":"Library Hall",
+      "areaExits":[
+         {
+            "destinationSceneName":"Library Rotunda",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Library Exterior",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"RelicVoid",
+            "destinationLocation":"teleporter_relic plinth"
+         }
+      ]
+   },
+   {
+      "sceneName":"frog cave main",
+      "areaExits":[
+         {
+            "destinationSceneName":"Frog Stairs",
+            "destinationLocation":"Exit"
+         },
+         {
+            "destinationSceneName":"Frog Stairs",
+            "destinationLocation":"Entrance"
+         }
+      ]
+   },
+   {
+      "sceneName":"ziggurat2020_0",
+      "areaExits":[
+         {
+            "destinationSceneName":"ziggurat2020_1",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Quarry Redux",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Dusty",
+      "areaExits":[
+         {
+            "destinationSceneName":"Fortress Reliquary",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"East Forest Redux Laddercave",
+      "areaExits":[
+         {
+            "destinationSceneName":"East Forest Redux",
+            "destinationLocation":"upper"
+         },
+         {
+            "destinationSceneName":"East Forest Redux",
+            "destinationLocation":"lower"
+         },
+         {
+            "destinationSceneName":"East Forest Redux",
+            "destinationLocation":"gate"
+         },
+         {
+            "destinationSceneName":"Forest Boss Room",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"East Forest Redux Interior",
+      "areaExits":[
+         {
+            "destinationSceneName":"East Forest Redux",
+            "destinationLocation":"lower"
+         },
+         {
+            "destinationSceneName":"East Forest Redux",
+            "destinationLocation":"upper"
+         }
+      ]
+   },
+   {
+      "sceneName":"Library Arena",
+      "areaExits":[
+         {
+            "destinationSceneName":"Library Lab",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"Library Rotunda",
+      "areaExits":[
+         {
+            "destinationSceneName":"Library Hall",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"Library Lab",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"ziggurat2020_3",
+      "areaExits":[
+         {
+            "destinationSceneName":"ziggurat2020_FTRoom",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"ziggurat2020_1",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"ziggurat2020_2",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"ziggurat2020_1",
+      "areaExits":[
+         {
+            "destinationSceneName":"ziggurat2020_3",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"ziggurat2020_0",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"ziggurat2020_2",
+            "destinationLocation":""
+         }
+      ]
+   },
+   {
+      "sceneName":"ziggurat2020_2",
+      "areaExits":[
+         {
+            "destinationSceneName":"ziggurat2020_1",
+            "destinationLocation":""
+         },
+         {
+            "destinationSceneName":"ziggurat2020_3",
+            "destinationLocation":""
+         }
+      ]
+   }
+]
