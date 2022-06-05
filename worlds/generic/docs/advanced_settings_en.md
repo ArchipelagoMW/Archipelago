@@ -147,8 +147,8 @@ Options taking a choice of a number can also use a variety of `random` options t
 description: An example using various advanced options
 name: Example Player
 game: 
-A Link to the Past 10
-Timespinner: 10
+  A Link to the Past 10
+  Timespinner: 10
 requires: 
   version: 0.2.0
 accessibility: none
