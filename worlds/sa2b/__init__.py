@@ -68,6 +68,7 @@ class SA2BWorld(World):
             "MusicShuffle": self.world.music_shuffle[self.player].value,
             "RequiredRank": self.world.required_rank[self.player].value,
             "ChaoRaceChecks": self.world.chao_race_checks[self.player].value,
+            "ChaoGardenDifficulty": self.world.chao_garden_difficulty[self.player].value,
             "DeathLink": self.world.death_link[self.player].value,
             "IncludeMissions": self.world.include_missions[self.player].value,
             "EmblemPercentageForCannonsCore": self.world.emblem_percentage_for_cannons_core[self.player].value,
