@@ -127,7 +127,41 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
   item which isn't necessary for progression to go in these locations.
 * `item_links` allows you to link up items so that when one players finds the item all other participating players also 
   get it.
-
+### Example
+ ``` 
+ - name: Lttpall
+       item_pool:
+         - Everything
+       replacement_item: Rupees (20) 
+```
+In this item link if someone had progressive items on and another person had progressive items off then neither the progressive item or the non progressive item would be in it
+item links can also have local and non local items
+### Example 
+```
+  item_links:
+    - name: TSAll
+      item_pool: 
+        - Everything
+      local_items:
+        - Tablet
+        - Water Mask
+        - Gas Mask
+        - Twin Pyramid Key
+        - Timespinner Wheel
+        - Timespinner Spindle
+        - Security Keycard A
+        - Security Keycard B
+        - Security Keycard C
+        - Security Keycard D
+        - Library Keycard V
+        - Elevator Keycard
+        - Kobo
+        - Merchant Crow
+        - Celestial Sash
+        - Succubus Hairpin
+        - Lightwall
+      replacement_item: null 
+```
 ### Random numbers
 
 Options taking a choice of a number can also use a variety of `random` options to choose a number randomly.
