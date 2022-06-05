@@ -192,93 +192,6 @@ triggers:
         map_shuffle: any_world
         compass_shuffle: any_world
 Timespinner:
-  StartWithJewelryBox: # Start with Jewelry Box unlocked
-    false: 0
-    true: 50
-  DownloadableItems: # With the tablet you will be able to download items at terminals
-    false: 0
-    true: 50
-  FacebookMode: # Requires Oculus Rift(ng) to spot the weakspots in walls and floors
-    false: 50
-    true: 0
-  StartWithMeyef: # Start with Meyef, ideal for when you want to play multiplayer.
-    false: 50
-    true: 0
-  QuickSeed: # Start with Talaria Attachment, Nyoom!
-    false: 50
-    true: 0
-  SpecificKeycards: # Keycards can only open corresponding doors
-    false: 0
-    true: 50
-  Inverted: # Start in the past
-    false: 50
-    true: 0
-  GyreArchives: # Gyre locations are in logic. New warps are gated by Merchant Crow and Kobo
-    false: 50
-    true: 0
-  Cantoran: # Cantoran's fight and check are available upon revisiting his room
-    false: 50
-    true: 0
-  LoreChecks: # Memories and journal entries contain items.
-    false: 0
-    true: 50
-  DamageRando: # Each orb has a high chance of having lower base damage and a low chance of having much higher base damage.
-    false: 0
-    true: 50
-  ShopFill: # Sets the items for sale in Merchant Crow's shops.
-    #    Default: No sunglasses or trendy jacket, but sand vials for sale.
-    #    Randomized: Up to 4 random items in each shop.
-    #    Vanilla: Keep shops the same as the base game.
-    #    Empty: Sell no items at the shop.
-    default: 50
-    randomized: 0
-    vanilla: 0
-    empty: 0
-  ShopWarpShards: # Shops always sell warp shards (when keys possessed), ignoring inventory setting.
-    false: 0
-    true: 50
-  ShopMultiplier: # Multiplier for the cost of items in the shop. Set to 0 for free shops.
-    # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    10: 0 # maximum value
-    random: 0
-    random-low: 0
-    random-high: 0
-    1: 50
-  DeathLink: # When you die, everyone dies. Of course the reverse is true too.
-    false: 50
-    true: 0
-  progression_balancing: # A system that moves progression earlier, to try and prevent the player from getting stuck and bored early.
-    false: 50
-    true: 0
-  accessibility: # Set rules for reachability of your items/locations.
-    #    Locations: ensure everything can be reached and acquired.
-    #    Items: ensure all logically relevant items can be acquired.
-    #    Minimal: ensure what is needed to reach your goal can be acquired.
-    locations: 0
-    items: 50
-    minimal: 0
-  local_items: # Forces these items to be in their native world.
-    []
-
-  non_local_items: # Forces these items to be outside their native world.
-    []
-
-  start_inventory: # Start with these items.
-    {}
-
-  start_hints: # Start with these item's locations prefilled into the !hint command.
-    []
-
-  start_location_hints: # Start with these locations and their item prefilled into the !hint command
-    []
-
-  exclude_locations: # Prevent these locations from having an important item
-    []
-
-  priority_locations: # Prevent these locations from having an unimportant item
-    []
-
   item_links: # Share part of your item pool with other players.
     - name: TSAll
       item_pool: 
@@ -338,7 +251,6 @@ Timespinner:
   multiworld that can be used for no cost.
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
 * `item_links` causes all players with the same `item_links` settings to share a `Fire Rod` and `Ice Rod`. Extra
-  `Rupee (1)` are put in the item pool instead of additional Rods. If timespinner is rolled it will also make it so that The keycards are local in someones world with the item link
 
 * `triggers` allows us to define a trigger such that if our `smallkey_shuffle` option happens to roll the `any_world`
   result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to
