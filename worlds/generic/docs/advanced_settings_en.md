@@ -125,7 +125,7 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 
 * `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
   item which isn't necessary for progression to go in these locations.
-* `item_links` allows players to link their items into a group with the same item link name and game. The items get combined and when an item link item is found all players receive it. Item links can also have local and non local items. Also if someone in the item link has something missing from the pool that someone else in the item link has and it is supposed to be linked it will not be linked.
+* `item_links` allows players to link their items into a group with the same item link name and game. The items declared in `item_pool` get combined and when an item is found for the group, all players in the group receive it. Item links can also have local and non local items, forcing the items to either be placed within the worlds of the group or in worlds outside the group. If players have a varying amount of a specific item in the link, the lowest amount from the players will be the amount put into the group.
 ### Random numbers
 
 Options taking a choice of a number can also use a variety of `random` options to choose a number randomly.
