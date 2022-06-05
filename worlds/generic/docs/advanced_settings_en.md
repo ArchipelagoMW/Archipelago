@@ -150,7 +150,7 @@ game:
   A Link to the Past: 10
   Timespinner: 10
 requires: 
-  version: 0.2.0
+  version: 0.3.2
 accessibility: none
 progression_balancing: on
 A Link to the Past:
