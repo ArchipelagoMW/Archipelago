@@ -2,6 +2,7 @@ import os
 import shutil
 import sys
 import sysconfig
+import platform
 from pathlib import Path
 from hashlib import sha3_512
 import base64
@@ -36,9 +37,11 @@ else:
     signtool = None
 
 
-arch_folder = "exe.{platform}-{version}".format(platform=sysconfig.get_platform(),
+build_platform = sysconfig.get_platform()
+arch_folder = "exe.{platform}-{version}".format(platform=build_platform,
                                                 version=sysconfig.get_python_version())
 buildfolder = Path("build", arch_folder)
+build_arch = build_platform.split('-')[-1] if '-' in build_platform else platform.machine()
 
 
 # see Launcher.py on how to add scripts to setup.py
@@ -324,7 +327,6 @@ $APPDIR/$exe "$@"
         self.app_id = self.app_name.lower()
 
     def run(self):
-        import platform
         self.dist_file.parent.mkdir(parents=True, exist_ok=True)
         if self.app_dir.is_dir():
             shutil.rmtree(self.app_dir)
@@ -337,15 +339,12 @@ $APPDIR/$exe "$@"
         self.write_desktop()
         self.write_launcher(self.app_exec)
         print(f'{self.app_dir} -> {self.dist_file}')
-        subprocess.call(f'ARCH={platform.machine()} ./appimagetool -n "{self.app_dir}" "{self.dist_file}"', shell=True)
+        subprocess.call(f'ARCH={build_arch} ./appimagetool -n "{self.app_dir}" "{self.dist_file}"', shell=True)
 
 
-def find_libs(arch: typing.Optional[str], *args: str) -> typing.Sequence[typing.Tuple[str, str]]:
+def find_libs(*args: str) -> typing.Sequence[typing.Tuple[str, str]]:
     """Try to find system libraries to be included."""
-    if not arch:
-        import platform
-        arch = platform.machine()
-    arch = arch.replace('_', '-')
+    arch = build_arch.replace('_', '-')
     libc = 'libc6'  # we currently don't support musl
 
     def parse(line):
@@ -410,7 +409,7 @@ cx_Freeze.setup(
                          "pandas"],
             "zip_include_packages": ["*"],
             "zip_exclude_packages": ["worlds", "kivy", "sc2"],
-            "include_files": find_libs(None, "libssl.so", "libcrypto.so") if is_linux else [],
+            "include_files": find_libs("libssl.so", "libcrypto.so") if is_linux else [],
             "include_msvcr": False,
             "replace_paths": [("*", "")],
             "optimize": 1,
