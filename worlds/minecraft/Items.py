@@ -58,7 +58,6 @@ item_table = {
     "Dragon Egg Shard": ItemData(45043, True),
     "Spyglass": ItemData(45044, True),
     "Bee Trap": ItemData(45100, False),
-    "Husk Trap": ItemData(45101, False),
     "Blaze Rods": ItemData(None, True),
     "Defeat Ender Dragon": ItemData(None, True),
     "Defeat Wither": ItemData(None, True),
