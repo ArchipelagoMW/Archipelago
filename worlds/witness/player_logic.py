@@ -80,6 +80,9 @@ class WitnessPlayerLogic:
                 elif dep_obj["region"]["name"] != check_obj["region"]["name"]:
                     new_items = frozenset({frozenset([option_panel])})
                     self.EVENT_PANELS_FROM_PANELS.add(option_panel)
+                elif option_panel in self.ALWAYS_EVENT_NAMES_BY_HEX.keys():
+                    new_items = frozenset({frozenset([option_panel])})
+                    self.EVENT_PANELS_FROM_PANELS.add(option_panel)
                 else:
                     new_items = self.reduce_req_within_region(option_panel)
 
@@ -176,7 +179,7 @@ class WitnessPlayerLogic:
         elif get_option_value(world, player, "victory_condition") == 2:
             self.VICTORY_LOCATION = "0x09F7F"
         elif get_option_value(world, player, "victory_condition") == 3:
-            self.VICTORY_LOCATION = "0x17FA2"
+            self.VICTORY_LOCATION = "0xFFF00"
 
         self.COMPLETELY_DISABLED_CHECKS.add(
             self.VICTORY_LOCATION
@@ -329,7 +332,8 @@ class WitnessPlayerLogic:
             "0x0A3D0": "Quarry Laser Boathouse Requirement Met",
             "0x00596": "Swamp Red Water Drains",
             "0x28B39": "Town Tower 4th Door Opens",
-            "0x0343A": "Door to Symmetry Island Powers On"
+            "0x0343A": "Door to Symmetry Island Powers On",
+            "0xFFF00": "Inside Mountain Bottom Layer Discard Turns On"
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
@@ -352,6 +356,8 @@ class WitnessPlayerLogic:
             "0x03481": "Tutorial Video Pattern Knowledge",
             "0x03702": "Jungle Video Pattern Knowledge",
             "0x2FAF6": "Theater Walkway Video Pattern Knowledge",
+            "0x09F7F": "Mountaintop Trap Door Turns On",
+            "0x17C34": "Mountain Access",
         }
 
         self.make_options_adjustments(world, player)

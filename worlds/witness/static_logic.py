@@ -138,6 +138,10 @@ class StaticWitnessLogic:
 
                     if check_hex == "0x17E07":  # Compatibility
                         location_id = 112
+
+                    elif check_hex == "0xFFF00":
+                        location_id = 800
+
                     else:
                         location_id = normal_panel_ids
                         normal_panel_ids += 1

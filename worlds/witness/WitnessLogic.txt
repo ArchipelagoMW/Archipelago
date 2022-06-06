@@ -543,7 +543,8 @@ Treehouse Bridge Platform (Treehouse) - Treehouse Beyond Yellow Bridge - 0x17DA2
 
 Mountaintop (Mountaintop) - Main Island - True:
 0x0042D (River Shape) - True - True
-0x09F7F (Box Open) - 7 Lasers - True
+0x09F7F (Box Short) - 7 Lasers - True
+0xFFF00 (Box Long) - 11 Lasers - True
 0x17C34 (Trap Door Triple Exit) - 0x09F7F - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 0x17C42 (Discard) - True - Triangles
 0x002A6 (Vault) - True - Symmetry & Colored Dots & Squares & Black/White Squares & Dots
@@ -600,10 +601,9 @@ Inside Mountain Third Layer (Inside Mountain) - Inside Mountain Second Layer Ele
 0x09FDA (Giant Puzzle) - 0x09FC1 & 0x09F8E & 0x09F01 & 0x09EFF - Shapers & Symmetry
 
 Inside Mountain Bottom Layer (Inside Mountain) - Inside Mountain Third Layer - 0x09FDA - Inside Mountain Path to Secret Area - 0x334E1:
-0x17FA2 (Bottom Layer Discard) - 11 Lasers & 0x09F7F - Triangles & Environment
+0x17FA2 (Bottom Layer Discard) - 0xFFF00 - Triangles & Environment
 0x01983 (Door to Final Room Left) - True - Shapers & Stars
 0x01987 (Door to Final Room Right) - True - Squares & Colored Squares & Dots
-
 
 Inside Mountain Path to Secret Area (Inside Mountain) - Inside Mountain Bottom Layer - 0x17FA2:
 0x00FF8 (Door to Secret Area) - True - Triangles & Black/White Squares & Squares
