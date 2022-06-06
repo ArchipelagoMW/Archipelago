@@ -1,11 +1,6 @@
 import typing
 from BaseClasses import Item
-from worlds.dark_souls_3.data.locations_data import dictionary_table
-
-
-class ItemData(typing.NamedTuple):
-    code: int
-    progression: bool
+from worlds.dark_souls_3.data.items_data import item_dictionary_table
 
 
 class DarkSouls3Item(Item):
@@ -13,4 +8,4 @@ class DarkSouls3Item(Item):
 
     @staticmethod
     def get_item_name_to_id() -> typing.Dict[str, int]:
-        return dictionary_table
+        return item_dictionary_table

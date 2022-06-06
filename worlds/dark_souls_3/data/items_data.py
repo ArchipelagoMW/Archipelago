@@ -5,17 +5,14 @@ cemetery_of_ash_table = {
 }
 
 fire_link_shrine_table = {
-    "Covetous Silver Serpent Ring": 0x20004FB0,
-    "Broken Straight Sword": 0x001EF9B0,  # Multiple
-    "East-West Shield": 0x0142B930,
-}
-
-firelink_shrine_bell_tower_table = {
     "Fire Keeper Robe": 0x140D9CE8,
     "Fire Keeper Gloves": 0x140DA0D0,
     "Fire Keeper Skirt": 0x140DA4B8,
     "Estus Ring": 0x200050DC,
-    "Fire Keeper Soul": 0x40000186
+    "Fire Keeper Soul": 0x40000186,
+    "Covetous Silver Serpent Ring": 0x20004FB0,
+    "Broken Straight Sword": 0x001EF9B0,  # Multiple
+    "East-West Shield": 0x0142B930,
 }
 
 high_wall_of_lothric = {
@@ -32,8 +29,7 @@ high_wall_of_lothric = {
     "Cell Key": 0x400007DA,
     "Rapier": 0x002E14E0,
     "Lucerne": 0x0098BD90,
-    "Small Lothric Banner": 0x40000836,
-    "Basin of Vows": 0x40000845
+    "Small Lothric Banner": 0x40000836
 }
 
 undead_settlement_table = {
@@ -47,7 +43,7 @@ undead_settlement_table = {
     "Cleric Gloves": 0x11D90D90,
     "Cleric Trousers": 0x11D91178,
 
-    "Mortician's Ashes": 0x4000083B,  #  Key item for Grave Key for Firelink Towerlocations
+    "Mortician's Ashes": 0x4000083B,  # Shop
     "Caestus": 0x00A7FFD0,
     "Plank Shield": 0x01346150,
     "Flame Stoneplate Ring": 0x20004E52,
@@ -180,11 +176,6 @@ farron_keep_table = {
     "Antiquated Dress": 0x15D76068,
     "Antiquated Gloves": 0x15D76450,
     "Antiquated Skirt": 0x15D76838,
-
-    "Nameless Knight Helm": 0x143B5FC0,
-    "Nameless Knight Armor": 0x143B63A8,
-    "Nameless Knight Gauntlets": 0x143B6790,
-    "Nameless Knight Leggings": 0x143B6B78,
 
     "Sunlight Talisman": 0x00CA54E0,
     "Wolf's Blood Swordgrass": 0x4000016E,
@@ -392,20 +383,6 @@ archdragon_peak_table = {
     "Ricard's Rapier": 0x002E3BF0,
 }
 
-key_items_list = {
-    "Small Lothric Banner",
-    "Basin of Vows",
-    "Small Doll",
-    "Path of the Dragon Gesture",
-    "Storm Ruler",
-    "Grand Archives Key",
-    "Cinders of a Lord - Abyss Watcher",
-    "Cinders of a Lord - Yhorm the Giant",
-    "Cinders of a Lord - Aldrich",
-    "Cinders of a Lord - Lothric Prince",
-    "Mortician's Ashes"
-}
-
 heals_table = {
     "Ashen Estus Flask": 0x400000BF,
     "Estus Flask Shard #1": 0x4000085D,
@@ -431,7 +408,66 @@ heals_table = {
     "Undead Bone Shard #9": 0x4000085F,
 }
 
-dictionary_table = {**cemetery_of_ash_table, **fire_link_shrine_table, **firelink_shrine_bell_tower_table, **high_wall_of_lothric, **undead_settlement_table, **road_of_sacrifice_table,
+weapons_table = {
+    0x0006AFA54,
+    0x007A1200,
+    0x005BDBA0,
+    0x00D689E0,
+    0x002DEDD0,
+    0x001ED2A0,
+    0x002E14E0,
+    0x0098BD90,
+    0x00B71B00,
+    0x007A8730,
+    0x00A7FFD0,
+    0x0089C970,
+    0x009AB960,
+    0x0020A760,
+    0x007AFC60,
+    0x00F50E60,
+    0x006BE130,
+    0x006B1DE0,
+    0x007B4A80,
+    0x005DD770,
+    0x00F42400,
+    0x00B7DE50,
+    0x005C9EF0,
+    0x0021DFE0,
+    0x00F61FD0,
+    0x0021B8D0,
+    0x00D662D0,
+    0x4000016E,
+    0x005C50D0,
+    0x00D7E970,
+    0x006B9310,
+    0x004CC070,
+    0x00D6B0F0,
+    0x005F5E10,
+    0x0060E4B0,
+    0x008C3A70,
+    0x007E30B0,
+    0x003E6890,
+    0x00CF8500,
+    0x00C83200,
+    0x007DE290,
+    0x00C91C60,
+    0x006132D0,
+    0x008A8CC0,
+    0x00D83790,
+    0x00203230,
+    0x00A7D8C0,
+    0x00D6FF10,
+    0x00C8CE40,
+    0x00F58390,
+    0x009AE070,
+    0x004C9960,
+    0x007E57C0,
+    0x00609690,
+    0x008CAFA0,
+    0x002E3BF0
+}
+
+item_dictionary_table = {**cemetery_of_ash_table, ** fire_link_shrine_table, **high_wall_of_lothric, **undead_settlement_table, **road_of_sacrifice_table,
                     **cathedral_of_the_deep_table, **farron_keep_table, **catacombs_of_carthus_table, **smouldering_lake_table, **irithyll_of_the_boreal_valley_table,
                     **irithyll_dungeon_table, **profaned_capital_table, **anor_londo_table, **lothric_castle_table, **consumed_king_garden_table,
                     **grand_archives_table, **untended_graves_table, **archdragon_peak_table}
