@@ -76,7 +76,7 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
     memory = Memory(from_game, to_game)
     next_item = 0
     while not ctx.exit_event.is_set():
-        memory.check()
+        await memory.check()
         if from_game.qsize():
             event_from_game = from_game.get_nowait()
             if isinstance(event_from_game, events.AcquireLocationEventFromGame):
@@ -84,8 +84,11 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
                 loc_name = id_to_loc[event_from_game.id]
                 ctx.locations_checked.add(server_id)
                 # TODO: progress number "(1/146)" or something like that
-                logger.info(f'New Check: {loc_name}')
-                await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [server_id]}])
+                if server_id in ctx.missing_locations:
+                    logger.info(f'New Check: {loc_name}')
+                    await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [server_id]}])
+                else:
+                    logger.info(f"DEBUG: {loc_name} not in missing")
             elif isinstance(event_from_game, events.DeathEventFromGame):
                 try:
                     await ctx.send_death()
@@ -98,14 +101,15 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
             zz_item_id = item.item - base_id
             zz_item = id_to_item[zz_item_id]
             # TODO: use zz_item.name with info on rescue changes
-            # TODO: player name and location they got it
+            # TODO: player name and location that they got it
             logger.info(f'received item {zz_item.debug_name}')
             ctx.to_game.put_nowait(
                 events.ItemEventToGame(zz_item_id)
             )
             next_item += 1
         await asyncio.sleep(0.09375)
-    memory.rai.sock.close()  # TODO: make `with`
+    if memory.rai.sock:
+        memory.rai.sock.close()  # TODO: make `with`
 
 
 async def run_game(rom_file: str) -> None:
