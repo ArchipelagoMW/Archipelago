@@ -464,8 +464,17 @@ class LogtoUI(logging.Handler):
         super(LogtoUI, self).__init__(logging.INFO)
         self.on_log = on_log
 
+    @staticmethod
+    def format_compact(record: logging.LogRecord) -> str:
+        return (f'{record.exc_info[1]}\n' if record.exc_info else '') + record.msg.split("\n")[0]
+
     def handle(self, record: logging.LogRecord) -> None:
-        self.on_log(self.format(record))
+        if getattr(record, 'skip_gui', False):
+            pass  # skip output
+        elif getattr(record, 'compact_gui', False):
+            self.on_log(self.format_compact(record))
+        else:
+            self.on_log(self.format(record))
 
 
 class UILog(RecycleView):

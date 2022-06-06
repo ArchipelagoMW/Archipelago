@@ -358,6 +358,7 @@ class CommonContext():
             await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
     def gui_error(self, title: str, text: typing.Union[Exception, str]):
+        """Displays an error messagebox"""
         if not self.ui or not title or not text:
             return
         from kvui import MessageBox
@@ -440,19 +441,19 @@ async def server_loop(ctx: CommonContext, address=None):
         logger.warning('Disconnected from multiworld server, type /connect to reconnect')
     except ConnectionRefusedError as e:
         msg = 'Connection refused by the server. May not be running Archipelago on that address or port.'
-        logger.exception(msg)
+        logger.exception(msg, extra={'compact_gui': True})
         ctx.gui_error(msg, e)
     except websockets.InvalidURI as e:
         msg = 'Failed to connect to the multiworld server (invalid URI)'
-        logger.exception(msg)
+        logger.exception(msg, extra={'compact_gui': True})
         ctx.gui_error(msg, e)
     except OSError as e:
         msg = 'Failed to connect to the multiworld server'
-        logger.exception(msg)
+        logger.exception(msg, extra={'compact_gui': True})
         ctx.gui_error(msg, e)
     except Exception as e:
         msg = 'Lost connection to the multiworld server, type /connect to reconnect'
-        logger.exception(msg)
+        logger.exception(msg, extra={'compact_gui': True})
         ctx.gui_error(msg, e)
     finally:
         await ctx.connection_closed()
@@ -477,7 +478,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     if cmd == 'RoomInfo':
         if ctx.seed_name and ctx.seed_name != args["seed_name"]:
             msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
-            logger.info(msg)
+            logger.info(msg, extra={'compact_gui': True})
             ctx.gui_error('Error', msg)
         else:
             logger.info('--------------------------------')
