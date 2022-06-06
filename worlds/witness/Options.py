@@ -58,8 +58,9 @@ class ShuffleHardLocations(Toggle):
 
 
 class VictoryCondition(Choice):
-    """The victory condition now becomes beating the Challenge area,
-    instead of the final elevator."""
+    """Change the victory condition from the original game's ending (elevator) to beating the Challenge
+    or solving the mountaintop box, either using the short solution
+    (7 lasers or whatever you've changed it to) or the long solution (11 lasers or whatever you've changed it to)."""
     display_name = "Victory Condition"
     option_elevator = 0
     option_challenge = 1
@@ -93,7 +94,6 @@ class TrapPercentage(Range):
 
 the_witness_options: Dict[str, type] = {
     # "hard_mode": HardMode,
-    # "unlock_symbols": UnlockSymbols,
     "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
     "shuffle_discarded_panels": ShuffleDiscardedPanels,
     "shuffle_vault_boxes": ShuffleVaultBoxes,
