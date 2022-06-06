@@ -150,7 +150,9 @@ async def game_watcher(ctx: FactorioContext):
                 next_bridge = time.perf_counter() + 1
                 ctx.awaiting_bridge = False
                 data = json.loads(ctx.rcon_client.send_command("/ap-sync"))
-                if data["slot_name"] != ctx.auth:
+                if not ctx.auth:
+                    pass  # auth failed, wait for new attempt
+                elif data["slot_name"] != ctx.auth:
                     bridge_logger.warning(f"Connected World is not the expected one {data['slot_name']} != {ctx.auth}")
                 elif data["seed_name"] != ctx.seed_name:
                     bridge_logger.warning(
@@ -342,8 +344,10 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
             await asyncio.sleep(0.01)
 
     except Exception as e:
-        logger.exception(e)
-        logger.error("Aborted Factorio Server Bridge")
+        logger.exception(e, extra={"compact_gui": True})
+        msg = "Aborted Factorio Server Bridge"
+        logger.error(msg)
+        ctx.gui_error(msg, e)
         ctx.exit_event.set()
 
     else:

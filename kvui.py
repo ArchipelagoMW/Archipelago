@@ -8,7 +8,7 @@ os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
 
-from kivy.base import Config
+from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set('kivy', 'exit_on_escape', '0')
@@ -18,7 +18,8 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
 from kivy.core.text.markup import MarkupLabel
-from kivy.base import ExceptionHandler, ExceptionManager, Clock
+from kivy.base import ExceptionHandler, ExceptionManager
+from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.uix.button import Button
@@ -37,6 +38,7 @@ from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.animation import Animation
+from kivy.uix.popup import Popup
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
@@ -267,6 +269,25 @@ class ConnectBarTextInput(TextInput):
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
 
 
+class MessageBox(Popup):
+    class MessageBoxLabel(Label):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self._label.refresh()
+            self.size = self._label.texture.size
+            if self.width + 50 > Window.width:
+                self.text_size[0] = Window.width - 50
+                self._label.refresh()
+                self.size = self._label.texture.size
+
+    def __init__(self, title, text, error=False, **kwargs):
+        label = MessageBox.MessageBoxLabel(text=text)
+        separator_color = [217 / 255, 129 / 255, 122 / 255, 1.] if error else [47 / 255., 167 / 255., 212 / 255, 1.]
+        super().__init__(title=title, content=label, size_hint=(None, None), width=max(100, int(label.width)+40),
+                         separator_color=separator_color, **kwargs)
+        self.height += max(0, label.height - 18)
+
+
 class GameManager(App):
     logging_pairs = [
         ("Client", "Archipelago"),
@@ -443,8 +464,19 @@ class LogtoUI(logging.Handler):
         super(LogtoUI, self).__init__(logging.INFO)
         self.on_log = on_log
 
+    @staticmethod
+    def format_compact(record: logging.LogRecord) -> str:
+        if isinstance(record.msg, Exception):
+            return str(record.msg)
+        return (f'{record.exc_info[1]}\n' if record.exc_info else '') + str(record.msg).split("\n")[0]
+
     def handle(self, record: logging.LogRecord) -> None:
-        self.on_log(self.format(record))
+        if getattr(record, 'skip_gui', False):
+            pass  # skip output
+        elif getattr(record, 'compact_gui', False):
+            self.on_log(self.format_compact(record))
+        else:
+            self.on_log(self.format(record))
 
 
 class UILog(RecycleView):

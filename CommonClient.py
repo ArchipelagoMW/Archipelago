@@ -132,6 +132,7 @@ class CommonContext:
     server: typing.Optional[Endpoint] = None
     server_version: Version = Version(0, 0, 0)
     current_energy_link_value: int = 0  # to display in UI, gets set by server
+
     last_death_link: float = time.time()  # last send/received death link on AP layer
 
     # remaining type info
@@ -148,6 +149,10 @@ class CommonContext:
     missing_locations: typing.Set[int]
     checked_locations: typing.Set[int]  # server state
     locations_info: typing.Dict[int, NetworkItem]
+      
+    # current message box through kvui
+    _messagebox = None
+
 
     def __init__(self, server_address, password):
         # server state
@@ -371,6 +376,27 @@ class CommonContext:
         if old_tags != self.tags and self.server and not self.server.socket.closed:
             await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
+    def gui_error(self, title: str, text: typing.Union[Exception, str]):
+        """Displays an error messagebox"""
+        if not self.ui:
+            return
+        title = title or "Error"
+        from kvui import MessageBox
+        if self._messagebox:
+            self._messagebox.dismiss()
+        # make "Multiple exceptions" look nice
+        text = str(text).replace('[Errno', '\n[Errno').strip()
+        # split long messages into title and text
+        parts = title.split('. ', 1)
+        if len(parts) == 1:
+            parts = title.split(', ', 1)
+        if len(parts) > 1:
+            text = parts[1] + '\n\n' + text
+            title = parts[0]
+        # display error
+        self._messagebox = MessageBox(title, text, error=True)
+        self._messagebox.open()
+
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
         from kvui import GameManager
@@ -433,14 +459,22 @@ async def server_loop(ctx: CommonContext, address=None):
             for msg in decode(data):
                 await process_server_cmd(ctx, msg)
         logger.warning('Disconnected from multiworld server, type /connect to reconnect')
-    except ConnectionRefusedError:
-        logger.exception('Connection refused by the server. May not be running Archipelago on that address or port.')
-    except websockets.InvalidURI:
-        logger.exception('Failed to connect to the multiworld server (invalid URI)')
-    except OSError:
-        logger.exception('Failed to connect to the multiworld server')
-    except Exception:
-        logger.exception('Lost connection to the multiworld server, type /connect to reconnect')
+    except ConnectionRefusedError as e:
+        msg = 'Connection refused by the server. May not be running Archipelago on that address or port.'
+        logger.exception(msg, extra={'compact_gui': True})
+        ctx.gui_error(msg, e)
+    except websockets.InvalidURI as e:
+        msg = 'Failed to connect to the multiworld server (invalid URI)'
+        logger.exception(msg, extra={'compact_gui': True})
+        ctx.gui_error(msg, e)
+    except OSError as e:
+        msg = 'Failed to connect to the multiworld server'
+        logger.exception(msg, extra={'compact_gui': True})
+        ctx.gui_error(msg, e)
+    except Exception as e:
+        msg = 'Lost connection to the multiworld server, type /connect to reconnect'
+        logger.exception(msg, extra={'compact_gui': True})
+        ctx.gui_error(msg, e)
     finally:
         await ctx.connection_closed()
         if ctx.server_address:
@@ -463,7 +497,9 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         raise
     if cmd == 'RoomInfo':
         if ctx.seed_name and ctx.seed_name != args["seed_name"]:
-            logger.info("The server is running a different multiworld than your client is. (invalid seed_name)")
+            msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
+            logger.info(msg, extra={'compact_gui': True})
+            ctx.gui_error('Error', msg)
         else:
             logger.info('--------------------------------')
             logger.info('Room Information:')

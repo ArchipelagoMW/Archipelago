@@ -141,8 +141,9 @@ item_table = {
     "Void Ray": ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 7, progression=True),
     "Carrier": ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 8, progression=True),
 
-    "+5 Starting Minerals": ItemData(800+SC2WOL_ITEM_ID_OFFSET, "Minerals", 5, quantity=0, never_exclude=False),
-    "+5 Starting Vespene": ItemData(801+SC2WOL_ITEM_ID_OFFSET, "Vespene", 5, quantity=0, never_exclude=False)
+    "+15 Starting Minerals": ItemData(800+SC2WOL_ITEM_ID_OFFSET, "Minerals", 15, quantity=0, never_exclude=False),
+    "+15 Starting Vespene": ItemData(801+SC2WOL_ITEM_ID_OFFSET, "Vespene", 15, quantity=0, never_exclude=False),
+    "+2 Starting Supply": ItemData(802+SC2WOL_ITEM_ID_OFFSET, "Supply", 2, quantity=0, never_exclude=False),
 }
 
 basic_unit: typing.Tuple[str, ...] = (
@@ -165,8 +166,8 @@ item_name_groups["Missions"] = ["Beat Liberation Day", "Beat The Outlaws", "Beat
                          "Beat Media Blitz", "Beat Piercing the Shroud"]
 
 filler_items: typing.Tuple[str, ...] = (
-    '+5 Starting Minerals',
-    '+5 Starting Vespene'
+    '+15 Starting Minerals',
+    '+15 Starting Vespene'
 )
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in get_full_item_list().items() if data.code}
