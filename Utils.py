@@ -463,6 +463,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
 
         sys.excepthook = handle_exception
 
+    logging.info(f"Archipelago ({__version__}) logging initialized.")
+
 
 def stream_input(stream, queue):
     def queuer():
