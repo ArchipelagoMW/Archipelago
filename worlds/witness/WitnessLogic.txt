@@ -636,7 +636,7 @@ Inside Mountain Secret Area (Inside Mountain Secret Area) - Inside Mountain Path
 0x32962 (Rotated Broken Shapers) - True - Rotated Shapers & Broken Rotated Shapers
 0x32966 (Stars and Squares) - True - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 0x01A31 (Rainbow Squares) - True - Color Cycle & RGB & Squares & Colored Squares
-0x00B71 (Squares & Stars and Colored Eraser) - True - Colored Eraser & Squares & Colored Squares & Stars & Stars + Same Colored Symbol
+0x00B71 (Squares & Stars and Colored Eraser) - True - Colored Eraser & Squares & Colored Squares & Stars & Stars + Same Colored Symbol & Eraser
 0x09DD5 (Lone Pillar) - True - Pillar & Triangles
 0x0A16E (Door to Challenge) - 0x09DD5 - Stars & Shapers & Colored Shapers & Stars + Same Colored Symbol
 0x288EA (Wooden Beam Shapers) - True - Environment & Shapers
