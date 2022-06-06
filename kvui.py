@@ -466,7 +466,9 @@ class LogtoUI(logging.Handler):
 
     @staticmethod
     def format_compact(record: logging.LogRecord) -> str:
-        return (f'{record.exc_info[1]}\n' if record.exc_info else '') + record.msg.split("\n")[0]
+        if isinstance(record.msg, Exception):
+            return str(record.msg)
+        return (f'{record.exc_info[1]}\n' if record.exc_info else '') + str(record.msg).split("\n")[0]
 
     def handle(self, record: logging.LogRecord) -> None:
         if getattr(record, 'skip_gui', False):
