@@ -5,7 +5,7 @@ import os
 from BaseClasses import MultiWorld, Location, Item, CollectionState, \
     RegionType, Entrance, Tutorial
 from Options import AssembleOptions
-from .logic import cs_to_have_req, set_randomizer_locs
+from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
 from .options import ZillionItemCounts, zillion_options, validate
 from .item import ZillionItem, item_id_to_zz_item, item_name_to_id as _item_name_to_id
@@ -153,9 +153,7 @@ class ZillionWorld(World):
                                             zz_r: ZzRandomizer,
                                             cs: CollectionState) -> bool:
                         # print(f"checking access to {zz_loc_local}")
-                        zz_r = set_randomizer_locs(cs, p, zz_r)
-                        have = cs_to_have_req(cs, p, zz_r)
-                        accessible = zz_r.get_locations(have)
+                        accessible = cs_to_zz_locs(cs, p, zz_r)
                         return zz_loc_local in accessible
 
                     access_rule = functools.partial(access_rule_wrapped,
