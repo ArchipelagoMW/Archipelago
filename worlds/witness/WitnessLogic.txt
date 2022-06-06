@@ -544,7 +544,7 @@ Treehouse Bridge Platform (Treehouse) - Treehouse Beyond Yellow Bridge - 0x17DA2
 Mountaintop (Mountaintop) - Main Island - True:
 0x0042D (River Shape) - True - True
 0x09F7F (Box Short) - 7 Lasers - True
-0xFFF00 (Box Long) - 11 Lasers - True
+0xFFF00 (Box Long) - 11 Lasers & 0x17C34 - True
 0x17C34 (Trap Door Triple Exit) - 0x09F7F - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 0x17C42 (Discard) - True - Triangles
 0x002A6 (Vault) - True - Symmetry & Colored Dots & Squares & Black/White Squares & Dots
