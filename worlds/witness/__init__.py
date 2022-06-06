@@ -76,7 +76,8 @@ class WitnessWorld(World):
         less_junk = 0
 
         # Put good item on first check if symbol shuffle is on
-        symbols = is_option_enabled(self.world, self.player, "shuffle_symbols")
+        # symbols = is_option_enabled(self.world, self.player, "shuffle_symbols")
+        symbols = True
 
         if symbols:
             random_good_item = self.world.random.choice(self.items.GOOD_ITEMS)
