@@ -62,6 +62,16 @@ upgrades_table = {
     ItemName.rouge_iron_boots:     ItemData(0xFF001C, True),
 }
 
+junk_table = {
+    ItemName.five_rings:      ItemData(0xFF0020, False),
+    ItemName.ten_rings:       ItemData(0xFF0021, False),
+    ItemName.twenty_rings:    ItemData(0xFF0022, False),
+    ItemName.extra_life:      ItemData(0xFF0023, False),
+    ItemName.shield:          ItemData(0xFF0024, False),
+    ItemName.magnetic_shield: ItemData(0xFF0025, False),
+    ItemName.invincibility:   ItemData(0xFF0026, False),
+}
+
 event_table = {
     ItemName.maria: ItemData(0xFF001D, True),
 }
@@ -70,6 +80,7 @@ event_table = {
 item_table = {
     **emblems_table,
     **upgrades_table,
+    **junk_table,
     **event_table,
 }
 

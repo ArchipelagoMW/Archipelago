@@ -3,7 +3,7 @@ import typing
 import math
 
 from BaseClasses import Item, MultiWorld, Tutorial
-from .Items import SA2BItem, ItemData, item_table, upgrades_table
+from .Items import SA2BItem, ItemData, item_table, upgrades_table, junk_table
 from .Locations import SA2BLocation, all_locations, setup_locations, location_table
 from .Options import sa2b_options
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
@@ -140,6 +140,7 @@ class SA2BWorld(World):
         for item in {**upgrades_table}:
             itempool += self._create_items(item)
 
+        # Cap at 180?
         total_emblem_count = total_required_locations - len(itempool)
 
         self.emblems_for_cannons_core = math.floor(
@@ -178,7 +179,19 @@ class SA2BWorld(World):
 
         max_required_emblems = max(max(emblem_requirement_list), self.emblems_for_cannons_core)
         itempool += [self.create_item(ItemName.emblem)] * max_required_emblems
-        itempool += [self.create_item(ItemName.emblem, True)] * (total_emblem_count - max_required_emblems)
+
+        non_required_emblems = (total_emblem_count - max_required_emblems)
+        junk_count = math.floor(non_required_emblems * (self.world.junk_fill_percentage[self.player].value / 100.0))
+        itempool += [self.create_item(ItemName.emblem, True)] * (non_required_emblems - junk_count)
+
+        # Carve Traps out of junk_count
+
+        junk_pool = []
+        for i in range(junk_count):
+            junk_item = self.world.random.choice(list(junk_table.keys()))
+            junk_pool += [self.create_item(junk_item)]
+
+        itempool += junk_pool
 
         self.world.itempool += itempool
 

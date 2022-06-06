@@ -29,6 +29,16 @@ class EmblemPercentageForCannonsCore(Range):
     default = 50
 
 
+class JunkFillPercentage(Range):
+    """
+    Replace a percentage of non-required emblems in the item pool with random junk items
+    """
+    display_name = "Junk Fill Percentage"
+    range_start = 0
+    range_end = 100
+    default = 50
+
+
 class NumberOfLevelGates(Range):
     """
     Allows logic to gate some levels behind emblem requirements
@@ -113,6 +123,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "required_rank": RequiredRank,
     "include_missions": IncludeMissions,
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
+    "junk_fill_percentage": JunkFillPercentage,
     "number_of_level_gates": NumberOfLevelGates,
     "level_gate_distribution": LevelGateDistribution,
     "chao_garden_difficulty": ChaoGardenDifficulty,
