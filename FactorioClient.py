@@ -344,8 +344,10 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
             await asyncio.sleep(0.01)
 
     except Exception as e:
-        logger.exception(e)
-        logger.error("Aborted Factorio Server Bridge")
+        logger.exception(e, extra={"compact_gui": True})
+        msg = "Aborted Factorio Server Bridge"
+        logger.error(msg)
+        ctx.gui_error(msg, e)
         ctx.exit_event.set()
 
     else:
