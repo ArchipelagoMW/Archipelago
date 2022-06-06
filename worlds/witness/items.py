@@ -66,7 +66,7 @@ class StaticWitnessItems:
             item_tab[item[0]] = ItemData(158000 + item[1], False, False)
 
         for item in StaticWitnessLogic.ALL_USEFULS:
-            item_tab[item[0]] = ItemData(158000 + item[1], False, False, True)
+            item_tab[item[0]] = ItemData(158000 + item[1], False, False, False, True)
 
         item_tab = dict(sorted(
             item_tab.items(),
@@ -87,10 +87,17 @@ class WitnessPlayerItems:
         """Adds event items after logic changes due to options"""
         self.EVENT_ITEM_TABLE = dict()
         self.ITEM_TABLE = copy.copy(StaticWitnessItems.ALL_ITEM_TABLE)
+        self.PROGRESSION_TABLE = dict()
+
+        self.EXTRA_AMOUNTS = {
+            "Functioning Brain": 1
+        }
 
         for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS.union(StaticWitnessLogic.ALL_DOOR_ITEMS):
-            if item not in player_logic.ITEMS_ACTUALLY_IN_THE_GAME:
+            if item not in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME:
                 del self.ITEM_TABLE[item[0]]
+            else:
+                self.PROGRESSION_TABLE[item[0]] = self.ITEM_TABLE[item[0]]
 
         symbols = is_option_enabled(world, player, "shuffle_symbols")
 

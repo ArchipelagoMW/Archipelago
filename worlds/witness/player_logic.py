@@ -45,7 +45,7 @@ class WitnessPlayerLogic:
 
         these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
 
-        real_items = {item[0] for item in self.ITEMS_ACTUALLY_IN_THE_GAME}
+        real_items = {item[0] for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME}
 
         these_items = frozenset({
             subset.intersection(real_items)
@@ -151,8 +151,8 @@ class WitnessPlayerLogic:
 
             self.COMPLETELY_DISABLED_CHECKS.add(panel_hex)
 
-            self.ITEMS_ACTUALLY_IN_THE_GAME = {
-                item for item in self.ITEMS_ACTUALLY_IN_THE_GAME
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = {
+                item for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME
                 if item[0] != StaticWitnessLogic.DOOR_NAMES_BY_HEX.get(panel_hex)
             }
 
@@ -189,16 +189,16 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append(get_disable_unrandomized_list())
 
         if is_option_enabled(world, player, "shuffle_symbols") or "shuffle_symbols" not in the_witness_options.keys():
-            self.ITEMS_ACTUALLY_IN_THE_GAME.update(StaticWitnessLogic.ALL_SYMBOL_ITEMS)
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.update(StaticWitnessLogic.ALL_SYMBOL_ITEMS)
 
         if is_option_enabled(world, player, "shuffle_doors"):
-            self.ITEMS_ACTUALLY_IN_THE_GAME.update(StaticWitnessLogic.ALL_DOOR_ITEMS)
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.update(StaticWitnessLogic.ALL_DOOR_ITEMS)
 
         if is_option_enabled(world, player, "early_secret_area"):
             adjustment_linesets_in_order.append(get_early_utm_list())
         else:
-            self.ITEMS_ACTUALLY_IN_THE_GAME = {
-                item for item in self.ITEMS_ACTUALLY_IN_THE_GAME
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = {
+                item for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME
                 if item[0] != "Mountaintop River Shape Power On"
             }
 
@@ -296,7 +296,7 @@ class WitnessPlayerLogic:
         self.EVENT_PANELS_FROM_PANELS = set()
         self.EVENT_PANELS_FROM_REGIONS = set()
 
-        self.ITEMS_ACTUALLY_IN_THE_GAME = set()
+        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
         self.DOOR_DICT_FOR_CLIENT = dict()
         self.DOOR_CONNECTIONS_TO_SEVER = set()
 

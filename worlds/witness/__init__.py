@@ -69,9 +69,12 @@ class WitnessWorld(World):
         items_by_name = dict()
         for item in self.items.ITEM_TABLE:
             witness_item = self.create_item(item)
-            if item not in self.items.EVENT_ITEM_TABLE:
+            if item in self.items.PROGRESSION_TABLE:
                 pool.append(witness_item)
                 items_by_name[item] = witness_item
+            elif item in self.items.EXTRA_AMOUNTS:
+                for i in range(0, self.items.EXTRA_AMOUNTS[item]):
+                    pool.append(witness_item)
 
         less_junk = 0
 
