@@ -359,8 +359,9 @@ class CommonContext():
 
     def gui_error(self, title: str, text: typing.Union[Exception, str]):
         """Displays an error messagebox"""
-        if not self.ui or not title or not text:
+        if not self.ui:
             return
+        title = title or "Error"
         from kvui import MessageBox
         if self._messagebox:
             self._messagebox.dismiss()
