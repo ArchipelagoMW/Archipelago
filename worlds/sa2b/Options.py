@@ -3,6 +3,65 @@ import typing
 from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
 
 
+class BaseTrapWeight(Choice):
+    """
+    Base Class for Trap Weights
+    """
+    option_none = 0
+    option_low = 1
+    option_medium = 2
+    option_high = 4
+    default = 2
+
+
+class OmochaoTrapWeight(BaseTrapWeight):
+    """
+    Trap which spawns several Omochao around the player
+    """
+    display_name = "OmoTrap Weight"
+
+
+class TimestopTrapWeight(BaseTrapWeight):
+    """
+    Trap which briefly stops time
+    """
+    display_name = "Chaos Control Trap Weight"
+
+
+class ConfusionTrapWeight(BaseTrapWeight):
+    """
+    Trap which causes the controls to be reversed for a period of time
+    """
+    display_name = "Confusion Trap Weight"
+
+
+class TinyTrapWeight(BaseTrapWeight):
+    """
+    Trap which causes the player to become tiny
+    """
+    display_name = "Tiny Trap Weight"
+
+
+class JunkFillPercentage(Range):
+    """
+    Replace a percentage of non-required emblems in the item pool with random junk items
+    """
+    display_name = "Junk Fill Percentage"
+    range_start = 0
+    range_end = 100
+    default = 50
+
+
+class TrapFillPercentage(Range):
+    """
+    Replace a percentage of junk items in the item pool with random traps
+    """
+    display_name = "Trap Fill Percentage"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
 class IncludeMissions(Range):
     """
     Allows logic to place items in a range of Missions for each level
@@ -110,12 +169,18 @@ class MusicShuffle(Choice):
 sa2b_options: typing.Dict[str, type(Option)] = {
     "death_link": DeathLink,
     "music_shuffle": MusicShuffle,
-    "required_rank": RequiredRank,
     "include_missions": IncludeMissions,
+    "required_rank": RequiredRank,
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "number_of_level_gates": NumberOfLevelGates,
     "level_gate_distribution": LevelGateDistribution,
     "chao_garden_difficulty": ChaoGardenDifficulty,
     "include_chao_karate": IncludeChaoKarate,
     "chao_race_checks": ChaoRaceChecks,
+    "junk_fill_percentage": JunkFillPercentage,
+    "trap_fill_percentage": TrapFillPercentage,
+    "omochao_trap_weight": OmochaoTrapWeight,
+    "timestop_trap_weight": TimestopTrapWeight,
+    "confusion_trap_weight": ConfusionTrapWeight,
+    "tiny_trap_weight": TinyTrapWeight,
 }
