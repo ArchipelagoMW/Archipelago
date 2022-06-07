@@ -23,6 +23,11 @@ ModuleUpdate.update()
 
 import websockets
 import colorama
+try:
+    # ponyorm is a requirement for webhost, not default server, so may not be importable
+    from pony.orm.dbapiprovider import OperationalError
+except ImportError:
+    OperationalError = ConnectionError
 
 import NetUtils
 from worlds.AutoWorld import AutoWorldRegister
@@ -404,12 +409,16 @@ class Context:
             def save_regularly():
                 import time
                 while not self.exit_event.is_set():
-                    time.sleep(self.auto_save_interval)
-                    if self.save_dirty:
-                        logging.debug("Saving via thread.")
+                    try:
+                        time.sleep(self.auto_save_interval)
+                        if self.save_dirty:
+                            logging.debug("Saving via thread.")
+                            self._save()
+                    except OperationalError as e:
+                        logging.exception(e)
+                        logging.info(f"Saving failed. Retry in {self.auto_save_interval} seconds.")
+                    else:
                         self.save_dirty = False
-                        self._save()
-
             self.auto_saver_thread = threading.Thread(target=save_regularly, daemon=True)
             self.auto_saver_thread.start()
 
