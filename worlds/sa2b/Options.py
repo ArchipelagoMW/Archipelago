@@ -59,7 +59,7 @@ class TrapFillPercentage(Range):
     display_name = "Trap Fill Percentage"
     range_start = 0
     range_end = 100
-    default = 50
+    default = 0
 
 
 class IncludeMissions(Range):
