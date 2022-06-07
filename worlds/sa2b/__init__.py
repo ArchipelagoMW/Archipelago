@@ -3,7 +3,7 @@ import typing
 import math
 
 from BaseClasses import Item, MultiWorld, Tutorial
-from .Items import SA2BItem, ItemData, item_table, upgrades_table, junk_table
+from .Items import SA2BItem, ItemData, item_table, upgrades_table, junk_table, trap_table
 from .Locations import SA2BLocation, all_locations, setup_locations, location_table
 from .Options import sa2b_options
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
@@ -140,8 +140,10 @@ class SA2BWorld(World):
         for item in {**upgrades_table}:
             itempool += self._create_items(item)
 
-        # Cap at 180?
-        total_emblem_count = total_required_locations - len(itempool)
+        # Cap at 180 Emblems
+        raw_emblem_count = total_required_locations - len(itempool)
+        total_emblem_count = min(raw_emblem_count, 180)
+        extra_junk_count = raw_emblem_count - total_emblem_count
 
         self.emblems_for_cannons_core = math.floor(
             total_emblem_count * (self.world.emblem_percentage_for_cannons_core[self.player].value / 100.0))
@@ -185,6 +187,15 @@ class SA2BWorld(World):
         itempool += [self.create_item(ItemName.emblem, True)] * (non_required_emblems - junk_count)
 
         # Carve Traps out of junk_count
+        trap_weights = []
+        trap_weights += ([ItemName.omochao_trap] * self.world.omochao_trap_weight[self.player].value)
+        trap_weights += ([ItemName.timestop_trap] * self.world.timestop_trap_weight[self.player].value)
+        trap_weights += ([ItemName.confuse_trap] * self.world.confusion_trap_weight[self.player].value)
+        trap_weights += ([ItemName.tiny_trap] * self.world.tiny_trap_weight[self.player].value)
+
+        junk_count += extra_junk_count
+        trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.world.trap_fill_percentage[self.player].value / 100.0))
+        junk_count -= trap_count
 
         junk_pool = []
         for i in range(junk_count):
@@ -193,8 +204,16 @@ class SA2BWorld(World):
 
         itempool += junk_pool
 
+        trap_pool = []
+        for i in range(trap_count):
+            trap_item = self.world.random.choice(list(trap_weights))
+            trap_pool += [self.create_item(trap_item)]
+
+        itempool += trap_pool
+
         self.world.itempool += itempool
 
+        # Music Shuffle
         if self.world.music_shuffle[self.player] == "levels":
             musiclist_o = list(range(0, 47))
             musiclist_s = musiclist_o.copy()

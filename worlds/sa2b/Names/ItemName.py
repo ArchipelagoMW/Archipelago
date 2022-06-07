@@ -44,4 +44,9 @@ shield          = "Shield"
 magnetic_shield = "Magnetic Shield"
 invincibility   = "Invincibility"
 
+omochao_trap  = "OmoTrap"
+timestop_trap = "Chaos Control Trap"
+confuse_trap  = "Confusion Trap"
+tiny_trap     = "Tiny Trap"
+
 maria = "What Maria Wanted"
