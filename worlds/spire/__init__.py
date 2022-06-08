@@ -1,12 +1,23 @@
 import string
 
-from BaseClasses import Item, MultiWorld, Region, Location, Entrance
+from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial
 from .Items import item_table, item_pool, event_item_pairs
 from .Locations import location_table
 from .Regions import create_regions
 from .Rules import set_rules
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 from .Options import spire_options
+
+
+class SpireWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Slay the Spire for Archipelago. This guide covers single-player, multiworld, and related software.",
+        "English",
+        "slay-the-spire_en.md",
+        "slay-the-spire/en",
+        ["Phar"]
+    )]
 
 
 class SpireWorld(World):
@@ -14,6 +25,7 @@ class SpireWorld(World):
     game = "Slay the Spire"
     topology_present = False
     data_version = 1
+    web = SpireWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table

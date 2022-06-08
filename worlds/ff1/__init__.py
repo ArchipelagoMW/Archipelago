@@ -1,5 +1,5 @@
 from typing import Dict
-from BaseClasses import Item, Location, MultiWorld
+from BaseClasses import Item, Location, MultiWorld, Tutorial
 from .Items import ItemData, FF1Items, FF1_STARTER_ITEMS, FF1_PROGRESSION_LIST, FF1_BRIDGE
 from .Locations import EventId, FF1Locations, generate_rule, CHAOS_TERMINATED_EVENT
 from .Options import ff1_options
@@ -8,6 +8,14 @@ from ..AutoWorld import World, WebWorld
 
 class FF1Web(WebWorld):
     settings_page = "https://finalfantasyrandomizer.com/"
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Final Fantasy multiworld. This guide only covers playing multiworld.",
+        "English",
+        "multiworld_en.md",
+        "multiworld/en",
+        ["jat2980"]
+    )]
 
 
 class FF1World(World):

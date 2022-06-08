@@ -1,11 +1,20 @@
-from BaseClasses import Item, MultiWorld, Region, Location, Entrance
+from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial
 from .Items import item_table
 from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
+from datetime import datetime
 
 
 class ArchipIDLEWebWorld(WebWorld):
     theme = 'partyTime'
+    tutorials = [Tutorial(
+        "Setup Guide",
+        "A guide to playing ArchipIDLE",
+        "English",
+        "guide_en.md",
+        "guide/en",
+        ["Farrak Kilhn"]
+    )]
 
 
 class ArchipIDLEWorld(World):
@@ -15,6 +24,7 @@ class ArchipIDLEWorld(World):
     game = "ArchipIDLE"
     topology_present = False
     data_version = 3
+    hidden = (datetime.now().month != 4)  # ArchipIDLE is only visible during April
     web = ArchipIDLEWebWorld()
 
     item_name_to_id = {}

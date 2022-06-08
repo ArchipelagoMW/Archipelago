@@ -67,6 +67,11 @@ for your world specifically on the webhost.
 
 `bug_report_page` (optional) can be a link to a bug reporting page, most likely a GitHub issue page, that will be placed by the site to help direct users to report bugs.
 
+`tutorials` list of `Tutorial` classes where each class represents a guide to be generated on the webhost.
+
+`game_info_languages` (optional) List of strings for defining the existing gameinfo pages your game supports. The documents must be
+prefixed with the same string as defined here. Default already has 'en'.
+
 ### MultiWorld Object
 
 The `MultiWorld` object references the whole multiworld (all items and locations
@@ -341,7 +346,7 @@ from .Options import mygame_options  # the options we defined earlier
 from .Items import mygame_items  # data used below to add items to the World
 from .Locations import mygame_locations  # same as above
 from ..AutoWorld import World
-from BaseClasses import Region, Location, Entrance, Item
+from BaseClasses import Region, Location, Entrance, Item, RegionType
 from Utils import get_options, output_path
 
 class MyGameItem(Item):  # or from Items import MyGameItem
@@ -426,11 +431,14 @@ In addition, the following methods can be implemented and attributes can be set
 * `required_client_version: Tuple(int, int, int)`
   Client version as tuple of 3 ints to make sure the client is compatible to
   this world (e.g. implements all required features) when connecting.
+* `assert_generate(cls, world)` is a class method called at the start of
+  generation to check the existence of prerequisite files, usually a ROM for
+  games which require one.
 
 #### generate_early
 
 ```python
-def generate_early(self):
+def generate_early(self) -> None:
     # read player settings to world instance
     self.final_boss_hp = self.world.final_boss_hp[self.player].value
 ```
@@ -456,7 +464,7 @@ def create_event(self, event: str):
 #### create_items
 
 ```python
-def create_items(self):
+def create_items(self) -> None:
     # Add items to the Multiworld.
     # If there are two of the same item, the item has to be twice in the pool.
     # Which items are added to the pool may depend on player settings,
@@ -483,23 +491,23 @@ def create_items(self):
 #### create_regions
 
 ```python
-def create_regions(self):
+def create_regions(self) -> None:
     # Add regions to the multiworld. "Menu" is the required starting point.
     # Arguments to Region() are name, type, human_readable_name, player, world
-    r = Region("Menu", None, "Menu", self.player, self.world)
+    r = Region("Menu", RegionType.Generic, "Menu", self.player, self.world)
     # Set Region.exits to a list of entrances that are reachable from region
     r.exits = [Entrance(self.player, "New game", r)]  # or use r.exits.append
     # Append region to MultiWorld's regions
     self.world.regions.append(r)  # or use += [r...]
     
-    r = Region("Main Area", None, "Main Area", self.player, self.world)
+    r = Region("Main Area", RegionType.Generic, "Main Area", self.player, self.world)
     # Add main area's locations to main area (all but final boss)
     r.locations = [MyGameLocation(self.player, location.name,
                    self.location_name_to_id[location.name], r)]
     r.exits = [Entrance(self.player, "Boss Door", r)]
     self.world.regions.append(r)
     
-    r = Region("Boss Room", None, "Boss Room", self.player, self.world)
+    r = Region("Boss Room", RegionType.Generic, "Boss Room", self.player, self.world)
     # add event to Boss Room
     r.locations = [MyGameLocation(self.player, "Final Boss", None, r)]
     self.world.regions.append(r)
@@ -518,7 +526,7 @@ def create_regions(self):
 #### generate_basic
 
 ```python
-def generate_basic(self):
+def generate_basic(self) -> None:
     # place "Victory" at "Final Boss" and set collection as win condition
     self.world.get_location("Final Boss", self.player)\
         .place_locked_item(self.create_event("Victory"))
@@ -539,7 +547,7 @@ def generate_basic(self):
 from ..generic.Rules import add_rule, set_rule, forbid_item
 from Items import get_item_type
 
-def set_rules(self):
+def set_rules(self) -> None:
     # For some worlds this step can be omitted if either a Logic mixin 
     # (see below) is used, it's easier to apply the rules from data during
     # location generation or everything is in generate_basic
@@ -623,7 +631,7 @@ class MyGameWorld(World):
     # ...
     def set_rules(self):
         set_rule(self.world.get_location("A Door", self.player),
-                 lamda state: state._myworld_has_key(self.world, self.player))
+                 lamda state: state._mygame_has_key(self.world, self.player))
 ```
 
 ### Generate Output
