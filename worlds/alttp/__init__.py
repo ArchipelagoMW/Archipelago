@@ -400,7 +400,12 @@ class ALTTPWorld(World):
         if self.world.goal[self.player] == "icerodhunt":
             item = "Nothing"
         else:
-            item = self.world.random.choice(chain(difficulties[self.world.difficulty[self.player]].extras[0:5]))
+            extras_list = difficulties[self.world.difficulty[self.player]].extras[0] \
+            + difficulties[self.world.difficulty[self.player]].extras[1] \
+            + difficulties[self.world.difficulty[self.player]].extras[2] \
+            + difficulties[self.world.difficulty[self.player]].extras[3] \
+            + difficulties[self.world.difficulty[self.player]].extras[4]
+            item = self.world.random.choice(extras_list)
         return GetBeemizerItem(self.world, self.player, item)
 
     def get_pre_fill_items(self):
