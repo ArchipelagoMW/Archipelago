@@ -128,6 +128,7 @@ class Context(CommonContext):
         self.death_state = DeathState.alive  # for death link flop behaviour
         self.killing_player_task = None
         self.allow_collect = False
+        self.slow_mode = False
 
         self.awaiting_rom = False
         self.rom = None
