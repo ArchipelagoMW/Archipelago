@@ -125,7 +125,7 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 
 * `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
   item which isn't necessary for progression to go in these locations.
-* `item_links` causes all players with the same `item_links` settings to share a `Fire Rod` and `Ice Rod`. Extra
+* `item_links` allows players to link their items into a group with the same item link name and game. The items get combined and when an item link item is found all players receive it. Item links can also have local and non local items. Also if someone in the item link has something missing from the pool that someone else in the item link has and it is supposed to be linked it will not be linked.
 ### Random numbers
 
 Options taking a choice of a number can also use a variety of `random` options to choose a number randomly.
@@ -251,7 +251,6 @@ Timespinner:
   multiworld that can be used for no cost.
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
 * `item_links` causes all players with the same `item_links` settings to share a `Fire Rod` and `Ice Rod`. Extra
-
 * `triggers` allows us to define a trigger such that if our `smallkey_shuffle` option happens to roll the `any_world`
   result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to
   the `any_world`
