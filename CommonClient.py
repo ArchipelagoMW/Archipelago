@@ -114,30 +114,52 @@ class ClientCommandProcessor(CommandProcessor):
             asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]), name="send Say")
 
 
-class CommonContext():
+class CommonContext:
+    # Should be adjusted as needed in subclasses
     tags: typing.Set[str] = {"AP"}
+    game: typing.Optional[str] = None
+    items_handling: typing.Optional[int] = None
+
+    # defaults
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
-    command_processor: int = ClientCommandProcessor
-    game: typing.Optional[str] = None
+    command_processor: type(CommandProcessor) = ClientCommandProcessor
     ui = None
     ui_task: typing.Optional[asyncio.Task] = None
     input_task: typing.Optional[asyncio.Task] = None
     keep_alive_task: typing.Optional[asyncio.Task] = None
-    items_handling: typing.Optional[int] = None
-    slot_info: typing.Dict[int, NetworkSlot]
+    server_task: typing.Optional[asyncio.Task] = None
+    server: typing.Optional[Endpoint] = None
+    server_version: Version = Version(0, 0, 0)
     current_energy_link_value: int = 0  # to display in UI, gets set by server
+
+    last_death_link: float = time.time()  # last send/received death link on AP layer
+
+    # remaining type info
+    slot_info: typing.Dict[int, NetworkSlot]
+    server_address: str
+    password: typing.Optional[str]
+    hint_cost: typing.Optional[int]
+    games: typing.Dict[int, str]
+    player_names: typing.Dict[int, str]
+
+    # locations
+    locations_checked: typing.Set[int]  # local state
+    locations_scouted: typing.Set[int]
+    missing_locations: typing.Set[int]
+    checked_locations: typing.Set[int]  # server state
+    locations_info: typing.Dict[int, NetworkItem]
+      
+    # current message box through kvui
     _messagebox = None
+
 
     def __init__(self, server_address, password):
         # server state
         self.server_address = server_address
         self.password = password
-        self.server_task = None
-        self.server: typing.Optional[Endpoint] = None
-        self.server_version = Version(0, 0, 0)
-        self.hint_cost: typing.Optional[int] = None
-        self.games: typing.Dict[int, str] = {}
+        self.hint_cost = None
+        self.games = {}
         self.slot_info = {}
         self.permissions = {
             "forfeit": "disabled",
@@ -153,24 +175,21 @@ class CommonContext():
         self.auth = None
         self.seed_name = None
 
-        self.locations_checked: typing.Set[int] = set()  # local state
-        self.locations_scouted: typing.Set[int] = set()
+        self.locations_checked = set()  # local state
+        self.locations_scouted = set()
         self.items_received = []
-        self.missing_locations: typing.Set[int] = set()
-        self.checked_locations: typing.Set[int] = set()  # server state
-        self.locations_info: typing.Dict[int, NetworkItem] = {}
+        self.missing_locations = set()
+        self.checked_locations = set()  # server state
+        self.locations_info = {}
 
         self.input_queue = asyncio.Queue()
         self.input_requests = 0
 
-        self.last_death_link: float = time.time()  # last send/received death link on AP layer
-
         # game state
-        self.player_names: typing.Dict[int: str] = {0: "Archipelago"}
+        self.player_names = {0: "Archipelago"}
         self.exit_event = asyncio.Event()
         self.watcher_event = asyncio.Event()
 
-        self.slow_mode = False
         self.jsontotextparser = JSONtoTextParser(self)
         self.set_getters(network_data_package)
 
