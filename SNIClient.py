@@ -879,7 +879,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
     def new_check(location_id):
         new_locations.append(location_id)
         ctx.locations_checked.add(location_id)
-        location = ctx.location_name_getter(location_id)
+        location = ctx.location_names[location_id]
         snes_logger.info(
             f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
 
@@ -1112,9 +1112,9 @@ async def game_watcher(ctx: Context):
                 item = ctx.items_received[recv_index]
                 recv_index += 1
                 logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                    color(ctx.item_name_getter(item.item), 'red', 'bold'),
+                    color(ctx.item_names[item.item], 'red', 'bold'),
                     color(ctx.player_names[item.player], 'yellow'),
-                    ctx.location_name_getter(item.location), recv_index, len(ctx.items_received)))
+                    ctx.location_names[item.location], recv_index, len(ctx.items_received)))
 
                 snes_buffered_write(ctx, RECV_PROGRESS_ADDR,
                                     bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
@@ -1169,7 +1169,7 @@ async def game_watcher(ctx: Context):
                 location_id = locations_start_id + itemIndex
 
                 ctx.locations_checked.add(location_id)
-                location = ctx.location_name_getter(location_id)
+                location = ctx.location_names[location_id]
                 snes_logger.info(
                     f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                 await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
@@ -1198,9 +1198,9 @@ async def game_watcher(ctx: Context):
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x602,
                                     bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
                 logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                    color(ctx.item_name_getter(item.item), 'red', 'bold'),
+                    color(ctx.item_names[item.item], 'red', 'bold'),
                     color(ctx.player_names[item.player], 'yellow'),
-                    ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
+                    ctx.location_names[item.location], itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
         elif ctx.game == GAME_SMZ3:
             currentGame = await snes_read(ctx, SRAM_START + 0x33FE, 2)
@@ -1241,7 +1241,7 @@ async def game_watcher(ctx: Context):
                 location_id = locations_start_id + itemIndex
 
                 ctx.locations_checked.add(location_id)
-                location = ctx.location_name_getter(location_id)
+                location = ctx.location_names[location_id]
                 snes_logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                 await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
@@ -1262,8 +1262,8 @@ async def game_watcher(ctx: Context):
                 itemOutPtr += 1
                 snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x602, bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
                 logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                    color(ctx.item_name_getter(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
-                    ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
+                    color(ctx.item_names[item.item], 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
+                    ctx.location_names[item.location], itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
 
 
