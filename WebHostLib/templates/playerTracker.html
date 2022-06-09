@@ -1,45 +1,98 @@
 {% block head %}
     <!--suppress XmlDuplicatedId -->
-    <title>{{ player_name }}&apos;s Tracker</title>
+<title>{{ player_name }}&apos;s Tracker</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/playerTracker.css') }}"/>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tooltip.css') }}" />
+    <script type="application/ecmascript" src="{{ url_for('static', filename='assets/playerTracker.js') }}"></script>
 {% endblock %}
 
 {% block body %}
 
-<div id="player-keys-tracker" class="{{ theme }}-wrapper">
+<div id="tracker-wrapper" class="{{ theme }}-wrapper" data-tracker="{{ room.tracker|suuid }}/{{ team }}/{{ player }}">
     <a href="/generic_tracker/{{ room.tracker|suuid }}/{{ team }}/{{ player }}" class="button-link">
-        Go to Generic Tracker
+        Go to Style Tracker
     </a>
+
+    {% if icons %}
+
+    {% block icons_render %}
+
     <h1>Items</h1>
     <div id="items-container">
-        {% for item in icons %}
-            <div class="image-container tooltip" id="{{ item }}" data-tooltip="{{ item }}">
-                <img
-                    src="{{ icons[item] }}"
-                    class="icon tooltip {{ 'acquired' if item in received_items }}"
-                />
-            </div>
-        {% endfor %}
-    </div>
-
-    <div class="keys-regions-container">
-        <h1>Locations Checked</h1>
-        {% for region in regions %}
-            <h1 class="regions-header" id="{{ region }}-header">
-                {{ region }} ▼ {{ checks_done[region] if checks_done[region] else '0' }}/{{ regions[region]|length }}
-            </h1>
-            {% for location in regions[region] %}
-                <div class="location hidden {{ 'acquired' if location in checked_locations }}" id="{{ location }}">
-                    {{ location }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-
-        <div class="total-checks" id="total-checks">
-            Total Checks Done: {{ checked_locations|length }}/{{ locations|length }}
+        {%- for item in icons %}
+        <div class="image-container tooltip" id="{{ item }}" data-tooltip="{{ item }}">
+            <img
+                src="{{ icons[item] }}"
+                class="icon tooltip {{ 'acquired' if item in received_items }}"
+            />
         </div>
+        {%- endfor %}
     </div>
+
+    {% endblock %}
+
+    {% else %}
+
+    {% block item_names_render %}
+    <h1 class="items-header">Items</h1>
+    <div class="items-container">
+        {%- for item in received_items|sort -%}
+        <div class="item" id="{{ item }}">
+            {{ item }}
+            {% if all_progression_items[item] > 1 %}
+            {{ received_items[item] }}
+            {% else %}
+            ✔
+            {% endif %}
+        </div>
+        {%- endfor -%}
+    </div>
+
+    {% endblock %}
+
+    {% endif %}
+
+
+{# div for total checks done as percentage. Probably needs to be put somewhere else but I liked how it looked here #}
+    <div class="total-checks" id="total-checks">
+        Total Checks Done: {{ checked_locations|length }}/{{ locations|length }}
+    </div>
+
+
+    {% if regions %}
+
+    {% block regions_render %}
+
+    <div class="regions-container">
+        {% for region in regions %}
+        <div class="regions-column" id="{{ region }}">
+            <h1 class="regions-header" id="{{ region }}-header">{{ region }} ▼ {{ checks_done[region]|length }} / {{ regions[region]|length }}</h1>
+                <div class="location-column hidden" id="{{ region }}-locations">
+                    {%- for location in regions[region] %}
+                        <div class="location {{ 'acquired' if location in checked_locations }}" id="{{ location }}">{{ location }}</div>
+                    {%- endfor %}
+                </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% endblock %}
+
+    {% else %}
+
+    {% block locations_render %}
+
+    <h1>Locations</h1>
+    <div class="locations-container" id="locations-container">
+        {% for location in locations %}
+        <div class="location {{ 'acquired' if name in checked_locations }}" id="{{ location }}">
+            {{ location }}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% endblock %}
+
+    {% endif %}
 </div>
 
 {% endblock %}
