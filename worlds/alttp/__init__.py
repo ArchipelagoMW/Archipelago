@@ -310,6 +310,8 @@ class ALTTPWeb(WebWorld):
             'Big Key'
         ]
 
+        tracker.key_types = ['Small Key', 'Big Key']
+
         tracker.progressive_names = {
             'Progressive Bow': ['Bow', 'Silver Arrows', 'Silver Bow', 'Progressive Bow (Alt)'],
             'Bottle': ['Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Fairy)', 'Bottle (Bee)', 'Bottle (Good Bee)'],

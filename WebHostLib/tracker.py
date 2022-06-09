@@ -26,7 +26,7 @@ class PlayerTracker:
 
     template: str = 'playerTracker.html'
     icons: Dict[str, str] = {}
-    progressive_items: List[str]
+    progressive_items: List[str] = []
     progressive_names: Dict[str, List[str]] = {}
     regions: Dict[str, List[str]] = {}
     checks_done: Dict[str, Set[str]] = {}
@@ -41,6 +41,9 @@ class PlayerTracker:
     received_prog_items: Counter[str]
     slot_data: Dict[any, any]
     theme: str
+
+    key_types: List = []
+    region_keys: Dict[str, str] = {}
 
     def __init__(self, room: Any, team: int, player: int, name: str, all_locations: Set[str],
                  checked_locations: set, all_progression_items: Counter[str], items_received: Counter[str],
@@ -367,7 +370,8 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
             icons=display_icons,
             regions=player_tracker.regions,
             checks_done=player_tracker.checks_done,
-            region_keys=player_tracker.region_keys
+            region_keys=player_tracker.region_keys,
+            key_types=player_tracker.key_types
         )
     else:
         return __renderGenericTracker(multisave, room, player_tracker.all_locations, inventory, tracked_team, tracked_player, player_name, seed_checks_in_area, lttp_checks_done)
