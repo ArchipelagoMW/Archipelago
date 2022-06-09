@@ -239,7 +239,8 @@ Timespinner:
   * For `A Link to the Past` all players in the `rods` item link group will share their fire and ice rods and the player
 items will be replaced with single rupees.
   * For `Timespinner` all players in the `TSAll` item link group will share their entire item pool and the`Twin Pyramid 
-Key` and `Timespinner Wheel` will be forced among the worlds of those in the group.
+Key` and `Timespinner Wheel` will be forced among the worlds of those in the group. The `null` replacement item instead
+of forcing a filler item will allow the generator to fill the item.
 * `triggers` allows us to define a trigger such that if our `smallkey_shuffle` option happens to roll the `any_world`
   result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to
   the `any_world`
