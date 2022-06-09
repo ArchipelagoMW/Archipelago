@@ -117,6 +117,12 @@ def create():
                     "max": option.range_end,
                 }
 
+                if hasattr(option, "special_range_names"):
+                    game_options[option_name]["type"] = 'special_range'
+                    game_options[option_name]["value_names"] = {}
+                    for key, val in option.special_range_names.items():
+                        game_options[option_name]["value_names"][key] = val
+
             elif getattr(option, "verify_item_name", False):
                 game_options[option_name] = {
                     "type": "items-list",
