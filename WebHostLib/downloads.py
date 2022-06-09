@@ -25,7 +25,7 @@ def download_patch(room_id, patch_id):
             with zipfile.ZipFile(filelike, "a") as zf:
                 with zf.open("archipelago.json", "r") as f:
                     manifest = json.load(f)
-                manifest["server"] = f"{app.config['PATCH_TARGET']}:{last_port}"
+                manifest["server"] = f"{app.config['PATCH_TARGET']}:{last_port}" if last_port else None
                 with zipfile.ZipFile(new_file, "w") as new_zip:
                     for file in zf.infolist():
                         if file.filename == "archipelago.json":
@@ -55,7 +55,7 @@ def download_spoiler(seed_id):
 def download_slot_file(room_id, player_id: int):
     room = Room.get(id=room_id)
     slot_data: Slot = select(patch for patch in room.seed.slots if
-                   patch.player_id == player_id).first()
+                             patch.player_id == player_id).first()
 
     if not slot_data:
         return "Slot Data not found"
@@ -71,7 +71,7 @@ def download_slot_file(room_id, player_id: int):
             with zipfile.ZipFile(io.BytesIO(slot_data.data)) as zf:
                 for name in zf.namelist():
                     if name.endswith("info.json"):
-                        fname = name.rsplit("/", 1)[0]+".zip"
+                        fname = name.rsplit("/", 1)[0] + ".zip"
         elif slot_data.game == "Ocarina of Time":
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_P{slot_data.player_id}_{slot_data.player_name}.apz5"
         elif slot_data.game == "VVVVVV":
@@ -81,6 +81,7 @@ def download_slot_file(room_id, player_id: int):
         else:
             return "Game download not supported."
         return send_file(io.BytesIO(slot_data.data), as_attachment=True, attachment_filename=fname)
+
 
 @app.route("/templates")
 @cache.cached()

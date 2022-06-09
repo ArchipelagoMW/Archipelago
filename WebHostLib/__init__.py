@@ -170,7 +170,9 @@ def _read_log(path: str):
 
 @app.route('/log/<suuid:room>')
 def display_log(room: UUID):
-    return Response(_read_log(os.path.join("logs", str(room) + ".txt")), mimetype="text/plain;charset=UTF-8")
+    if room.owner == session["_id"]:
+        return Response(_read_log(os.path.join("logs", str(room) + ".txt")), mimetype="text/plain;charset=UTF-8")
+    return "Access Denied", 403
 
 
 @app.route('/room/<suuid:room>', methods=['GET', 'POST'])

@@ -154,7 +154,7 @@ class ALTTPWorld(World):
                 self.er_seed = "vanilla"
             elif seed.startswith("group-") or world.is_race:
                 self.er_seed = get_same_seed(world, (
-                    shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
+                    shuffle, seed, world.retro_caves[player], world.mode[player], world.logic[player]))
             else:  # not a race or group seed, use set seed as is.
                 self.er_seed = seed
         elif world.shuffle[player] == "vanilla":
