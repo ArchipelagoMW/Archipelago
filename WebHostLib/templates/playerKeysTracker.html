@@ -1,4 +1,9 @@
-{% extends 'playerTracker.html' %}
+{% block head %}
+    <!--suppress XmlDuplicatedId -->
+    <title>{{ player_name }}&apos;s Keys Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/playerTracker.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tooltip.css') }}" />
+{% endblock %}
 
 {% block regions_render %}
 
