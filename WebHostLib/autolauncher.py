@@ -210,11 +210,15 @@ def run_guardian():
     global multiworlds
     with guardian_lock:
         if not guardian:
-            import resource
-            # Each Server is another file handle, so request as many as we can from the system
-            file_limit = resource.getrlimit(resource.RLIMIT_NOFILE)[1]
-            # set soft limit to hard limit
-            resource.setrlimit(resource.RLIMIT_NOFILE, (file_limit, file_limit))
+            try:
+                import resource
+            except ModuleNotFoundError:
+                pass  # unix only module
+            else:
+                # Each Server is another file handle, so request as many as we can from the system
+                file_limit = resource.getrlimit(resource.RLIMIT_NOFILE)[1]
+                # set soft limit to hard limit
+                resource.setrlimit(resource.RLIMIT_NOFILE, (file_limit, file_limit))
 
             def guard():
                 while 1:
