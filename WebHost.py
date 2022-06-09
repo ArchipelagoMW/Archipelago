@@ -46,7 +46,9 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
     worlds = {}
     data = []
     for game, world in AutoWorldRegister.world_types.items():
-        if hasattr(world.web, 'tutorials') and not world.hidden:
+        if hasattr(world.web, 'tutorials'):
+            if game == 'ArchipIDLE' and world.hidden:
+                continue
             worlds[game] = world
     for game, world in worlds.items():
         # copy files from world's docs folder to the generated folder
