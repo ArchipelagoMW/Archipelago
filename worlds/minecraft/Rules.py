@@ -283,14 +283,12 @@ def set_advancement_rules(world: MultiWorld, player: int):
     # craft bucket and adventure to find frog spawning biome
     set_rule(world.get_location("Bukkit Bukkit", player), lambda state: state.has("Bucket", player) and state._mc_has_iron_ingots(player) and state._mc_can_adventure(player))
     # I don't like this one its way to easy to get. just a pain to find.
-    set_rule(world.get_location("It Spreads", player), lambda state: state._mc_can_adventure(player))
+    set_rule(world.get_location("It Spreads", player), lambda state: state._mc_can_adventure(player) and state._mc_has_iron_ingots(player) and state.has("Progressive Tools", player, 2))
     # literally just a duplicate of It spreads.
-    set_rule(world.get_location("Sneak 100", player), lambda state: state._mc_can_adventure(player))
+    set_rule(world.get_location("Sneak 100", player), lambda state: state._mc_can_adventure(player) and state._mc_has_iron_ingots(player) and state.has("Progressive Tools", player, 2))
     set_rule(world.get_location("When the Squad Hops into Town", player), lambda state: state._mc_can_adventure(player) and state.has("Lead", player))
     # lead frogs to the nether and a basalt delta's biomes to find magma cubes.
     set_rule(world.get_location("With Our Powers Combined!", player), lambda state: state._mc_can_adventure(player) and state.has("Lead", player))
-
-
 
 
 # Sets rules on completion condition and postgame advancements
