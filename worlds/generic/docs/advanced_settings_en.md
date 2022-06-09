@@ -197,23 +197,8 @@ Timespinner:
       item_pool: 
         - Everything
       local_items:
-        - Tablet
-        - Water Mask
-        - Gas Mask
         - Twin Pyramid Key
         - Timespinner Wheel
-        - Timespinner Spindle
-        - Security Keycard A
-        - Security Keycard B
-        - Security Keycard C
-        - Security Keycard D
-        - Library Keycard V
-        - Elevator Keycard
-        - Kobo
-        - Merchant Crow
-        - Celestial Sash
-        - Succubus Hairpin
-        - Lightwall
       replacement_item: null 
     
 ```
@@ -222,7 +207,7 @@ Timespinner:
 
 * `description` gives us a general overview so if we pull up this file later we can understand the intent.
 * `name` is `Example Player` and this will be used in the server console when sending and receiving items.
-* `game` is set to `A Link to the Past` meaning that is what game we will play with this file.
+* `game` has an equal chance of being either `A Link to the Past` or `Timespinner` with a 10/20 chance for each.
 * `requires` is set to require release version 0.2.0 or higher.
 * `accesibility` is set to `none` which will set this seed to beatable only meaning some locations and items may be
   completely inaccessible but the seed will still be completable.
@@ -250,7 +235,11 @@ Timespinner:
 * `start_location_hints` gives us a starting hint for the `Spike Cave` location available at the beginning of the
   multiworld that can be used for no cost.
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
-* `item_links` causes all players with the same `item_links` settings to share a `Fire Rod` and `Ice Rod`. Extra
+* `item_links` 
+  * For `A Link to the Past` all players in the `rods` item link group will share their fire and ice rods and the player
+items will be replaced with single rupees.
+  * For `Timespinner` all players in the `TSAll` item link group will share their entire item pool and the`Twin Pyramid 
+Key` and `Timespinner Wheel` will be forced among the worlds of those in the group.
 * `triggers` allows us to define a trigger such that if our `smallkey_shuffle` option happens to roll the `any_world`
   result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to
   the `any_world`
