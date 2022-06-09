@@ -299,6 +299,13 @@ class CommonContext:
         await self.disconnect()
         self.server_task = asyncio.create_task(server_loop(self, address), name="server loop")
 
+    def slot_concerns_self(self, slot) -> bool:
+        if slot == self.slot:
+            return True
+        if slot in self.slot_info:
+            return self.slot in self.slot_info[slot].group_members
+        return False
+
     def on_print(self, args: dict):
         logger.info(args["text"])
 
