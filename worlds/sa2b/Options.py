@@ -167,8 +167,6 @@ class MusicShuffle(Choice):
 
 
 sa2b_options: typing.Dict[str, type(Option)] = {
-    "death_link": DeathLink,
-    "music_shuffle": MusicShuffle,
     "include_missions": IncludeMissions,
     "required_rank": RequiredRank,
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
@@ -183,4 +181,6 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "timestop_trap_weight": TimestopTrapWeight,
     "confusion_trap_weight": ConfusionTrapWeight,
     "tiny_trap_weight": TinyTrapWeight,
+    "music_shuffle": MusicShuffle,
+    "death_link": DeathLink,
 }

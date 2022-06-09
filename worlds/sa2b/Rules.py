@@ -334,9 +334,6 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
         add_rule(world.get_location(LocationName.white_jungle_5, player),
                  lambda state: state.has(ItemName.shadow_air_shoes, player) and
                                state.has(ItemName.shadow_flame_ring, player))
-        add_rule(world.get_location(LocationName.mad_space_5, player),
-                 lambda state: state.has(ItemName.rouge_pick_nails, player) and
-                               state.has(ItemName.rouge_iron_boots, player))
         add_rule(world.get_location(LocationName.cosmic_wall_5, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
