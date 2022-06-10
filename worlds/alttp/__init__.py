@@ -24,6 +24,7 @@ from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_con
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
+extras_list = sum(difficulties['normal'].extras[0:5], [])
 
 class ALTTPWorld(World):
     """
@@ -396,15 +397,11 @@ class ALTTPWorld(World):
                     fill_locations.remove(spot_to_fill)  # very slow, unfortunately
                     trash_count -= 1
 
+
     def get_filler_item_name(self) -> str:
         if self.world.goal[self.player] == "icerodhunt":
             item = "Nothing"
         else:
-            extras_list = difficulties[self.world.difficulty[self.player]].extras[0] \
-            + difficulties[self.world.difficulty[self.player]].extras[1] \
-            + difficulties[self.world.difficulty[self.player]].extras[2] \
-            + difficulties[self.world.difficulty[self.player]].extras[3] \
-            + difficulties[self.world.difficulty[self.player]].extras[4]
             item = self.world.random.choice(extras_list)
         return GetBeemizerItem(self.world, self.player, item)
 
