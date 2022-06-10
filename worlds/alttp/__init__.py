@@ -106,7 +106,7 @@ class ALTTPWeb(WebWorld):
         PlayerTracker = object
 
     def modify_tracker(self, tracker: PlayerTracker):
-        tracker.template = 'playerKeysTracker.html'
+        tracker.template = 'lttpKeysTracker.html'
 
         tracker.icons = {
             "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",

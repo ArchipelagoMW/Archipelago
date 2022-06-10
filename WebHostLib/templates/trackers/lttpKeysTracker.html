@@ -1,9 +1,13 @@
 {% block head %}
     <!--suppress XmlDuplicatedId -->
     <title>{{ player_name }}&apos;s Keys Tracker</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/playerTracker.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/trackers/playerTracker.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tooltip.css') }}" />
+    <script type="application/ecmascript" src="{{ url_for('static', filename='assets/trackers/playerTracker.js') }}"/></script>
 {% endblock %}
+
+{# this tracker is mostly similar to the generic player tracker but
+also adds a table with the key and checks counts for each region in the middle #}
 
 {% block body %}
 

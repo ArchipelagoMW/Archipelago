@@ -1,8 +1,9 @@
 {% block head %}
     <!--suppress XmlDuplicatedId -->
 <title>{{ player_name }}&apos;s Tracker</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/playerTracker.css') }}"/>
-    <script type="application/ecmascript" src="{{ url_for('static', filename='assets/playerTracker.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/trackers/playerTracker.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tooltip.css') }}"/>
+    <script type="application/ecmascript" src="{{ url_for('static', filename='assets/trackers/playerTracker.js') }}"></script>
 {% endblock %}
 
 {% block body %}
