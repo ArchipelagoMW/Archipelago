@@ -8,8 +8,8 @@ from BaseClasses import Item, CollectionState, Tutorial
 from .SubClasses import ALttPItem
 from ..AutoWorld import World, WebWorld, LogicMixin
 from .Options import alttp_options, smallkey_shuffle
-from .Items import as_dict_item_table, item_name_groups, item_table, GetBeemizerItem
-from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
+from .Items import as_dict_item_table, item_name_groups, item_table, GetBeemizerItem, ItemFactory
+from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, key_drop_data
 from .Rules import set_rules
 from .ItemPool import generate_itempool, difficulties
 from .Shops import create_shops, ShopSlotFill
@@ -494,6 +494,11 @@ class ALTTPWorld(World):
                     for item in dungeon.all_items:
                         if item.name in self.dungeon_local_item_names:
                             res.append(item)
+            if not self.world.key_drop_shuffle[player]:
+                for key_drop in key_drop_data.values():
+                    if key_drop[3] in self.dungeon_local_item_names:
+                        res.append(ItemFactory(key_drop[3], player))
+
         return res
 
 
