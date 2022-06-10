@@ -2,22 +2,19 @@
 
 ## Required Software
 
-- One of the client programs:
-  - [SNIClient](https://github.com/ArchipelagoMW/Archipelago/releases), included with the main 
-  Archipelago install. Make sure to check the box for `SNI Client - A Link to the Past Patch Setup`
-  - [SuperNintendoClient](https://github.com/ArchipelagoMW/SuperNintendoClient/releases), an alternate standalone
-  client for Super Nintendo games
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client - A Link to the Past Patch Setup`
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
       ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
        [BizHawk](http://tasvideos.org/BizHawk.html), or
        [RetroArch](https://retroarch.com?page=platforms) 1.10.1 or newer). Or,
-    - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware
+    - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware. **note: 
+modded SNES minis are currently not supported by SNI**
 - Your Japanese v1.0 ROM file, probably named `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
 
 ## Installation Procedures
 
-1. Download and install your preferred client from the link above, making sure to install the most recent version.
+1. Download and install SNIClient from the link above, making sure to install the most recent version.
    **The installer file is located in the assets section at the bottom of the version information**.
     - During setup, you will be asked to locate your base ROM file. This is your Japanese Link to the Past ROM file.
 
@@ -56,7 +53,7 @@ If you would like to validate your config file to make sure it works, you may do
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your patch file.
-5. Double-click on your patch file, and the Z3Client will launch automatically, create your ROM from the patch file, and
+5. Double-click on your patch file, and SNIClient will launch automatically, create your ROM from the patch file, and
    open your emulator for you.
 6. Since this is a single-player game, you will no longer need the client, so feel free to close it.
 
@@ -66,7 +63,7 @@ If you would like to validate your config file to make sure it works, you may do
 
 When you join a multiworld game, you will be asked to provide your config file to whoever is hosting. Once that is done,
 the host will provide you with either a link to download your patch file, or with a zip file containing everyone's patch
-files. Your patch file should have a `.apbp` extension.
+files. Your patch file should have a `.aplttp` extension.
 
 Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically launch the
 client, and will also create your ROM in the same place as your patch file.
@@ -85,9 +82,10 @@ first time launching, you may be prompted to allow it to communicate through the
 3. Click on **New Lua Script Window...**
 4. In the new window, click **Browse...**
 5. Select the connector lua file included with your client
-    - SuperNintendoClient users should download `sniConnector.lua` from the client download page
-    - SNIClient users should look in their Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
+    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
       emulator is 64-bit or 32-bit.
+6. If you see an error while loading the script that states `socket.dll missing` or similar, navigate to the folder of 
+the lua you are using in your file explorer and copy the `socket.dll` to the base folder of your snes9x install.
 
 ##### BizHawk
 
