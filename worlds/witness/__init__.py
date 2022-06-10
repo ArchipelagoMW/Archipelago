@@ -4,7 +4,7 @@ Archipelago init file for The Witness
 
 import typing
 
-from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance, Tutorial
+from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
 from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
@@ -120,10 +120,16 @@ class WitnessWorld(World):
         else:
             item = StaticWitnessItems.ALL_ITEM_TABLE[name]
 
+        if item.trap:
+            classification = ItemClassification.trap
+        elif item.progression:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+
         new_item = WitnessItem(
-            name, item.progression, item.code, player=self.player
+            name, classification, item.code, player=self.player
         )
-        new_item.trap = item.trap
         return new_item
 
     def get_filler_item_name(self) -> str:  # Used by itemlinks

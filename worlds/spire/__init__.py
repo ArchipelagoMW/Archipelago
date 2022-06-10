@@ -46,20 +46,7 @@ class SpireWorld(World):
         pool = []
         for name, data in item_table.items():
             if not data.event:
-                if name in item_pool:
-                    card_draw = 0
-                    for amount in range(item_pool[name]):
-                        item = SpireItem(name, self.player)
-
-                        # This feels wrong but it makes our failure rate drop dramatically
-                        # makes all but 7 basic card draws trash fill
-                        if item.name == "Card Draw":
-                            card_draw += 1
-                            if card_draw > 7:
-                                item.advancement = False
-
-                        pool.append(item)
-                else:
+                for amount in range(item_pool.get(name, 1)):
                     item = SpireItem(name, self.player)
                     pool.append(item)
 

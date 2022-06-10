@@ -14,7 +14,7 @@ from .ExtractedData import locations, starts, multi_locations, location_to_regio
     event_names, item_effects, connectors, one_ways
 from .Charms import names as charm_names
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, Tutorial, ItemClassification
 from ..AutoWorld import World, LogicMixin, WebWorld
 
 white_palace_locations = {
@@ -204,7 +204,7 @@ class HKWorld(World):
         if not self.allow_white_palace:
             loc = self.world.get_location("King_Fragment", self.player)
             if loc.item and loc.item.name == loc.name:
-                loc.item.advancement = False
+                loc.item.classification = ItemClassification.filler
         self.world.itempool += pool
 
         for shopname in self.shops:
@@ -348,16 +348,18 @@ class HKItem(Item):
     game = "Hollow Knight"
 
     def __init__(self, name, advancement, code, type, player: int = None):
-        super(HKItem, self).__init__(name, advancement, code if code else None, player)
-        self.type = type
         if name == "Mimic_Grub":
-            self.trap = True
-
-        if type in ("Grub", "DreamWarrior", "Root", "Egg"):
-            self.skip_in_prog_balancing = True
-
-        if type == "Charm" and name not in progression_charms:
-            self.skip_in_prog_balancing = True
+            classification = ItemClassification.trap
+        elif type in ("Grub", "DreamWarrior", "Root", "Egg"):
+            classification = ItemClassification.progression_skip_balancing
+        elif type == "Charm" and name not in progression_charms:
+            classification = ItemClassification.progression_skip_balancing
+        elif advancement:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+        super(HKItem, self).__init__(name, classification, code if code else None, player)
+        self.type = type
 
 
 class HKLogicMixin(LogicMixin):

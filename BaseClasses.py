@@ -1175,7 +1175,7 @@ class Item():
         self.name = name
         if isinstance(classification, ItemClassification):
             self.classification = classification
-        else:  # temporary compat for old bool saying advancement
+        else:  # temporary compat for old bool saying advancement TODO: remove around 0.3.4
             warnings.warn("Use of advancement bool in Item.__init__ instead of new classification.")
             self.classification = ItemClassification.progression if classification else ItemClassification.filler
         self.player = player
@@ -1192,10 +1192,6 @@ class Item():
     @property
     def advancement(self) -> bool:
         return self.classification >= ItemClassification.progression
-
-    @advancement.setter
-    def advancement(self, new: bool):
-        self.classification = ItemClassification.progression if new else ItemClassification.filler
 
     @property
     def skip_in_prog_balancing(self) -> bool:

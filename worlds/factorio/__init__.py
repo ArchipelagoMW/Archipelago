@@ -389,8 +389,6 @@ class Factorio(World):
         if name in tech_table:  # is a Technology
             if name in self.advancement_technologies:
                 classification = ItemClassification.progression
-            elif name in useless_technologies:
-                classification = ItemClassification.nothing
             else:
                 classification = ItemClassification.filler
             return FactorioItem(name,
