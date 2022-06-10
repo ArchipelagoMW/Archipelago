@@ -11,7 +11,7 @@ class ItemData(typing.NamedTuple):
 
 
 class StarcraftWoLItem(Item):
-    game: str = "Starcraft2WoL"
+    game: str = "Starcraft 2 Wings of Liberty"
 
 
 def get_full_item_list():
@@ -113,7 +113,7 @@ item_table = {
     "Automated Refinery": ItemData(604 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 4),
     "Command Center Reactor": ItemData(605 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 5),
     "Raven": ItemData(606 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 6),
-    "Science Vessel": ItemData(607 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 7),
+    "Science Vessel": ItemData(607 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 7, progression=True),
     "Tech Reactor": ItemData(608 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 8),
     "Orbital Strike": ItemData(609 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 9),
     "Shrike Turret": ItemData(610 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 10),
@@ -137,8 +137,9 @@ item_table = {
     "Void Ray": ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 7, classification=ItemClassification.progression),
     "Carrier": ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 8, classification=ItemClassification.progression),
 
-    "+5 Starting Minerals": ItemData(800 + SC2WOL_ITEM_ID_OFFSET, "Minerals", 5, quantity=0, classification=ItemClassification.never_exclude),
-    "+5 Starting Vespene": ItemData(801 + SC2WOL_ITEM_ID_OFFSET, "Vespene", 5, quantity=0, classification=ItemClassification.never_exclude)
+    "+15 Starting Minerals": ItemData(800 + SC2WOL_ITEM_ID_OFFSET, "Minerals", 15, quantity=0, classification=ItemClassification.never_exclude),
+    "+15 Starting Vespene": ItemData(801 + SC2WOL_ITEM_ID_OFFSET, "Vespene", 15, quantity=0, never_exclude=False),
+    "+2 Starting Supply": ItemData(802+SC2WOL_ITEM_ID_OFFSET, "Supply", 2, quantity=0, classification=ItemClassification.never_exclude),
 }
 
 basic_unit: typing.Tuple[str, ...] = (
@@ -149,17 +150,19 @@ basic_unit: typing.Tuple[str, ...] = (
     'Vulture'
 )
 
-item_name_groups = {"Missions":
-                        {"Beat Liberation Day", "Beat The Outlaws", "Beat Zero Hour", "Beat Evacuation",
+item_name_groups = {}
+for item, data in item_table.items():
+    item_name_groups.setdefault(data.type, []).append(item)
+item_name_groups["Missions"] = ["Beat Liberation Day", "Beat The Outlaws", "Beat Zero Hour", "Beat Evacuation",
                          "None Outbreak", "Beat Safe Haven", "Beat Haven's Fall", "Beat Smash and Grab", "Beat The Dig",
                          "Beat The Moebius Factor", "Beat Supernova", "Beat Maw of the Void", "Beat Devil's Playground",
                          "Beat Welcome to the Jungle", "Beat Breakout", "Beat Ghost of a Chance",
                          "Beat The Great Train Robbery", "Beat Cutthroat", "Beat Engine of Destruction",
-                         "Beat Media Blitz", "Beat Piercing the Shroud"}}
+                         "Beat Media Blitz", "Beat Piercing the Shroud"]
 
 filler_items: typing.Tuple[str, ...] = (
-    '+5 Starting Minerals',
-    '+5 Starting Vespene'
+    '+15 Starting Minerals',
+    '+15 Starting Vespene'
 )
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in get_full_item_list().items() if

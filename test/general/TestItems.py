@@ -10,3 +10,22 @@ class TestBase(unittest.TestCase):
                 with self.subTest("Create Item", item_name=item_name, game_name=game_name):
                     item = proxy_world.create_item(item_name)
                     self.assertEqual(item.name, item_name)
+
+    def testItemNameGroupHasValidItem(self):
+        """Test that all item name groups contain valid items. """
+        # This cannot test for Event names that you may have declared for logic, only sendable Items.
+        # In such a case, you can add your entries to this Exclusion dict. Game Name -> Group Names
+        exclusion_dict = {
+            "A Link to the Past":
+                {"Pendants", "Crystals"},
+            "Starcraft 2 Wings of Liberty":
+                {"Missions"},
+        }
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest(game_name, game_name=game_name):
+                exclusions = exclusion_dict.get(game_name, frozenset())
+                for group_name, items in world_type.item_name_groups.items():
+                    if group_name not in exclusions:
+                        with self.subTest(group_name, group_name=group_name):
+                            for item in items:
+                                self.assertIn(item, world_type.item_name_to_id)

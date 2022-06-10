@@ -4,6 +4,12 @@ from .ExtractedData import logic_options, starts, pool_options
 from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict
 from .Charms import vanilla_costs, names as charm_names
 
+if typing.TYPE_CHECKING:
+    # avoid import during runtime
+    from random import Random
+else:
+    Random = typing.Any
+
 
 class Disabled(Toggle):
     def __init__(self, value: int):
@@ -203,19 +209,27 @@ class MaximumCharmPrice(MinimumCharmPrice):
 
 
 class RandomCharmCosts(Range):
-    """Total Notch Cost of all Charms together. Set to -1 for vanilla costs. Vanilla sums to 90.
-    This value is distributed among all charms in a random fashion."""
+    """Total Notch Cost of all Charms together. Vanilla sums to 90.
+    This value is distributed among all charms in a random fashion.
+    Special Cases:
+    Set to -1 for vanilla costs.
+    Set to -2 to shuffle around the vanilla costs to different charms."""
 
     display_name = "Randomize Charm Notch Costs"
-    range_start = -1
+    range_start = -2
     range_end = 240
     default = -1
     vanilla_costs: typing.List[int] = vanilla_costs
     charm_count: int = len(vanilla_costs)
 
-    def get_costs(self, random_source) -> typing.List[int]:
+    def get_costs(self, random_source: Random) -> typing.List[int]:
+        charms: typing.List[int]
         if -1 == self.value:
-            return self.vanilla_costs
+            return self.vanilla_costs.copy()
+        elif -2 == self.value:
+            charms = self.vanilla_costs.copy()
+            random_source.shuffle(charms)
+            return charms
         else:
             charms = [0]*self.charm_count
             for x in range(self.value):

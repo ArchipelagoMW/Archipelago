@@ -2,14 +2,14 @@ local socket = require("socket")
 local json = require('json')
 local math = require('math')
 
-local script_version = '2022-03-22' -- Should be the last modified date
+local last_modified_date = '2022-05-25' -- Should be the last modified date
+local script_version = 1
 
 --------------------------------------------------
 -- Heavily modified form of RiptideSage's tracker
 --------------------------------------------------
 
--- TODO: read this from the ROM
-local NUM_BIG_POES_REQUIRED = 1
+local NUM_BIG_POES_REQUIRED = 10
 
 -- The offset constants are all from N64 RAM start. Offsets in the check statements are relative.
 local save_context_offset = 0x11A5D0
@@ -1546,7 +1546,7 @@ local player_names_address  = coop_context + 20
 local player_name_length    = 8 -- 8 bytes
 local rom_name_location     = player_names_address + 0x800
 
-local master_quest_table_address = rando_context + 0xB5A8
+local master_quest_table_address = rando_context + (mainmemory.read_u32_be(rando_context + 0x0CE0) - 0x03480000)
 
 local save_context_addr = 0x11A5D0
 local internal_count_addr = save_context_addr + 0x90
@@ -1554,6 +1554,8 @@ local item_queue = {}
 
 local first_connect = true
 local game_complete = false
+
+NUM_BIG_POES_REQUIRED = mainmemory.read_u8(rando_context + 0x0CEE)
 
 local bytes_to_string = function(bytes)
     local string = ''
@@ -1781,6 +1783,7 @@ function receive()
     -- Determine message to send back
     local retTable = {}
     retTable["playerName"] = get_player_name()
+    retTable["scriptVersion"] = script_version
     retTable["deathlinkActive"] = deathlink_enabled()
     if InSafeState() then
         retTable["locations"] = check_all_locations(master_quest_table_address)
