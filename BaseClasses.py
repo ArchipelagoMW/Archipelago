@@ -1078,11 +1078,6 @@ class Location:
     shop_slot_disabled: bool = False
     event: bool = False
     locked: bool = False
-
-    hidden = False
-    """Hides location from !missing, !checked lists, etc, and excludes from hint point calculations.
-    Used for games which have non-randomized items but which must come from the AP server."""
-
     game: str = "Generic"
     show_in_spoiler: bool = True
     crystal: bool = False
@@ -1186,8 +1181,8 @@ class Item():
 
     @property
     def flags(self) -> int:
-        return self.advancement + (self.never_exclude << 1) + (self.trap << 2) + (0 if self.location is None
-                                                                                  else self.location.hidden << 3)
+        return self.advancement + (self.never_exclude << 1) + (self.trap << 2) \
+               + ((self.location.name in self.world.exclude_locations[self.location.player]) << 3)
 
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player

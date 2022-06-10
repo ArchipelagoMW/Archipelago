@@ -794,12 +794,10 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
                     collect_player(ctx, team, group, True)
 
 
-def get_remaining(ctx: Context, team: int, slot: int, remove_hidden=False) -> typing.List[int]:
+def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
     items = []
     for location_id in ctx.locations[slot]:
         if location_id not in ctx.location_checks[team, slot]:
-            if remove_hidden and ctx.locations[slot][location_id][2] & 8:
-                continue
             items.append(ctx.locations[slot][location_id][0])  # item ID
     return sorted(items)
 
@@ -1165,10 +1163,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     " You can ask the server admin for a /collect")
                 return False
 
-    def _cmd_remaining(self, all: str = "") -> bool:
+    def _cmd_remaining(self) -> bool:
         """List remaining items in your game, but not their location or recipient"""
         if self.ctx.remaining_mode == "enabled":
-            remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot, all != "all")
+            remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
             if remaining_item_ids:
                 self.output("Remaining items: " + ", ".join(lookup_any_item_id_to_name.get(item_id, "unknown item")
                                                             for item_id in remaining_item_ids))
@@ -1181,7 +1179,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return False
         else:  # is goal
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
-                remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot, all != "all")
+                remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
                 if remaining_item_ids:
                     self.output("Remaining items: " + ", ".join(lookup_any_item_id_to_name.get(item_id, "unknown item")
                                                                 for item_id in remaining_item_ids))
@@ -1193,10 +1191,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     "Sorry, !remaining requires you to have beaten the game on this server")
                 return False
 
-    def _cmd_missing(self, all: str = "") -> bool:
+    def _cmd_missing(self) -> bool:
         """List all missing location checks from the server's perspective"""
 
-        locations = get_missing_checks(self.ctx, self.client.team, self.client.slot, remove_hidden=all != "all")
+        locations = get_missing_checks(self.ctx, self.client.team, self.client.slot)
 
         if locations:
             texts = [f'Missing: {get_location_name_from_id(location)}' for location in locations]
@@ -1206,10 +1204,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output("No missing location checks found.")
         return True
 
-    def _cmd_checked(self, all: str = "") -> bool:
+    def _cmd_checked(self) -> bool:
         """List all done location checks from the server's perspective"""
 
-        locations = get_checked_checks(self.ctx, self.client.team, self.client.slot, remove_hidden=all != "all")
+        locations = get_checked_checks(self.ctx, self.client.team, self.client.slot)
 
         if locations:
             texts = [f'Checked: {get_location_name_from_id(location)}' for location in locations]
@@ -1358,24 +1356,14 @@ class ClientMessageProcessor(CommonCommandProcessor):
         return self.get_hints(location, True)
 
 
-def get_checked_checks(ctx: Context, team: int, slot: int, remove_hidden=False) -> typing.List[int]:
-    if remove_hidden:
-        return [location_id for
-             location_id in ctx.locations[slot] if
-             location_id in ctx.location_checks[team, slot] and not ctx.locations[slot][location_id][2] & 8]
-    else:
-        return [location_id for
+def get_checked_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
+    return [location_id for
             location_id in ctx.locations[slot] if
             location_id in ctx.location_checks[team, slot]]
 
 
-def get_missing_checks(ctx: Context, team: int, slot: int, remove_hidden=False) -> typing.List[int]:
-    if remove_hidden:
-        return [location_id for
-             location_id in ctx.locations[slot] if
-             location_id not in ctx.location_checks[team, slot] and not ctx.locations[slot][location_id][2] & 8]
-    else:
-        return [location_id for
+def get_missing_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
+    return [location_id for
             location_id in ctx.locations[slot] if
             location_id not in ctx.location_checks[team, slot]]
 
@@ -1855,8 +1843,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
             if option_name in {"forfeit_mode", "remaining_mode", "collect_mode"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
             elif option_name in {"hint_cost", "location_check_points"}:
-                self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
                 self.ctx.calculate_hint_costs()
+                self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
             return True
         else:
             known = (f"{option}:{otype}" for option, otype in self.ctx.simple_options.items())

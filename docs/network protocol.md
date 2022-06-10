@@ -238,7 +238,7 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | name | str | The player name for this client. |
 | uuid | str | Unique identifier for player client. |
 | version | [NetworkVersion](#NetworkVersion) | An object representing the Archipelago version this client supports. |
-| items_handling | int | Flags configuring which items should be sent by the server. Read below for individual flags.
+| items_handling | int | Flags configuring which items should be sent by the server. Read below for individual flags. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
 
 #### items_handling flags
@@ -259,7 +259,7 @@ Update arguments from the Connect package, currently only updating tags and item
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| items_handling | int | Flags configuring which items should be sent by the server.
+| items_handling | int | Flags configuring which items should be sent by the server. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
 
 ### Sync
@@ -433,12 +433,14 @@ In JSON this may look like:
 `player` is the player slot of the world the item is located in, except when inside an [LocationInfo](#LocationInfo) Packet then it will be the slot of the player to receive the item
 
 `flags` are bit flags:
+
 | Flag | Meaning |
 | ----- | ----- |
 | 0 | Nothing special about this item |
-| 0b001 | If set, indicates the item can unlock logical advancement |
-| 0b010 | If set, indicates the item is important but not in a way that unlocks advancement |
-| 0b100 | If set, indicates the item is a trap |
+| 0b0001 | If set, indicates the item can unlock logical advancement |
+| 0b0010 | If set, indicates the item is important but not in a way that unlocks advancement |
+| 0b0100 | If set, indicates the item is a trap |
+| 0b1000 | If set, indicates the item was in an *excluded location* and will not grant the finder any hint points. |
 
 ### JSONMessagePart
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are intended to be read in the order they are listed in the packet.
