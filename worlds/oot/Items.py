@@ -35,7 +35,7 @@ class OOTItem(Item):
         self.internal = False
         self.trap = name == 'Ice Trap'
         if force_not_advancement:
-            self.never_exclude = True
+            self.useful = True
         if name == 'Gold Skulltula Token':
             self.skip_in_prog_balancing = True
     

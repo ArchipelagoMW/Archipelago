@@ -55,7 +55,7 @@ class SC2WoLWorld(World):
 
     def create_item(self, name: str) -> Item:
         data = get_full_item_list()[name]
-        return StarcraftWoLItem(name, data.progression, data.code, self.player)
+        return StarcraftWoLItem(name, data.classification, data.code, self.player)
 
     def create_regions(self):
         self.mission_req_table = create_regions(self.world, self.player, get_locations(self.world, self.player),

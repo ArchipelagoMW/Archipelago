@@ -1140,10 +1140,9 @@ class Location:
 
 
 class ItemClassification(IntEnum):
-    filler = 0  # aka trash aka nothing special
-    nothing = -1  # item that does nothing at all.
-    trap = -2  # detrimental item
-    never_exclude = 1  # Item that is generally quite useful, but not required for anything logical
+    filler = 0  # aka trash, as in filler items like ammo, currency etc,
+    trap = -1  # detrimental or entirely useless (nothing) item
+    useful = 1  # Item that is generally quite useful, but not required for anything logical
     progression = 2  # Item that is logically relevant
     # Item that is logically relevant, but progression balancing should not touch.
     # Typically currency or other counted items.
@@ -1178,6 +1177,7 @@ class Item():
             self.classification = classification
         else:  # temporary compat for old bool saying advancement
             warnings.warn("Use of advancement bool in Item.__init__ instead of new classification.")
+            raise Exception
             self.classification = ItemClassification.progression if classification else ItemClassification.filler
         self.player = player
         self.code = code
@@ -1202,29 +1202,17 @@ class Item():
     def skip_in_prog_balancing(self) -> bool:
         return self.classification == ItemClassification.progression_skip_balancing
 
-    @skip_in_prog_balancing.setter
-    def skip_in_prog_balancing(self, new: bool):
-        self.classification = ItemClassification.progression_skip_balancing if new else ItemClassification.progression
-
     @property
-    def never_exclude(self) -> bool:
-        return self.classification == ItemClassification.never_exclude
-
-    @never_exclude.setter
-    def never_exclude(self, new: bool):
-        self.classification = ItemClassification.never_exclude if new else ItemClassification.filler
+    def useful(self) -> bool:
+        return self.classification == ItemClassification.useful
 
     @property
     def trap(self) -> bool:
         return self.classification == ItemClassification.trap
 
-    @trap.setter
-    def trap(self, new: bool):
-        self.classification = ItemClassification.trap if new else ItemClassification.filler
-
     @property
     def flags(self) -> int:
-        return self.advancement + (self.never_exclude << 1) + (self.trap << 2)
+        return self.advancement + (self.useful << 1) + (self.trap << 2)
 
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player

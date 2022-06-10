@@ -167,7 +167,7 @@ class MeritousItem(Item):
             self.type = "Important Artifact"
         else:
             self.type = "Artifact"
-            self.never_exclude = True
+            self.useful = True
 
         if name in LttPCreditsText:
             lttp = LttPCreditsText[name]
