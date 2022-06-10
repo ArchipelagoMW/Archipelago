@@ -20,18 +20,9 @@ class ALttPItem(Item):
     game: str = "A Link to the Past"
     dungeon = None
 
-    def __init__(self, name, player, advancement=False, type=None, item_code=None, pedestal_hint=None,
+    def __init__(self, name, player, classification=ItemClassification.filler, type=None, item_code=None, pedestal_hint=None,
                  pedestal_credit=None, sick_kid_credit=None, zora_credit=None, witch_credit=None,
-                 flute_boy_credit=None, hint_text=None, trap=False):
-        if trap:
-            classification = ItemClassification.trap
-        elif advancement:
-            classification = ItemClassification.progression
-        elif name == "Nothing":
-            classification = ItemClassification.nothing
-        else:
-            classification = ItemClassification.filler
-
+                 flute_boy_credit=None, hint_text=None):
         super(ALttPItem, self).__init__(name, classification, item_code, player)
         self.type = type
         self._pedestal_hint_text = pedestal_hint
