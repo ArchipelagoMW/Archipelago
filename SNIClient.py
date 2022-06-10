@@ -10,6 +10,9 @@ import base64
 import shutil
 import logging
 import asyncio
+import enum
+import typing
+
 from json import loads, dumps
 
 import ModuleUpdate
@@ -21,8 +24,9 @@ if __name__ == "__main__":
     init_logging("SNIClient", exception_logger="Client")
 
 import colorama
+import websockets
 
-from NetUtils import *
+from NetUtils import ClientStatus, color
 from worlds.alttp import Regions, Shops
 from worlds.alttp.Rom import ROM_PLAYER_LIMIT
 from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
@@ -641,7 +645,7 @@ async def _snes_connect(ctx: Context, address: str):
             return snes_socket
 
 
-async def get_snes_devices(ctx: Context):
+async def get_snes_devices(ctx: Context) -> typing.List[str]:
     socket = await _snes_connect(ctx, ctx.snes_address)  # establish new connection to poll
     DeviceList_Request = {
         "Opcode": "DeviceList",
@@ -661,7 +665,7 @@ async def get_snes_devices(ctx: Context):
             devices = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else None
     await verify_snes_app(socket)
     await socket.close()
-    return devices
+    return sorted(devices)
 
 
 async def verify_snes_app(socket):
