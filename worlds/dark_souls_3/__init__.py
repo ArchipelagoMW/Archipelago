@@ -254,17 +254,33 @@ class DarkSouls3World(World):
             state.has("Cinders of a Lord - Aldrich", self.player) and\
             state.has("Cinders of a Lord - Lothric Prince", self.player)
 
+        itempool_len = self.item_name_to_id.__len__()
+        total_required_locations = self.location_name_to_id.__len__()
+
+        # Fill item pool with the remaining
+        for i in range(itempool_len, total_required_locations):
+            self.world.itempool += [self.create_item("Soul of an Intrepid Hero")]
+
     def generate_output(self, output_directory: str):
 
-        for region in self.world.get_regions(self.player):
-            print(region)
-
-        locations_dict = {}
+        itemsId = []
+        itemsAddress = []
+        locationsId = []
+        locationsAddress = []
+        locationsTarget = []
         for location in self.world.get_filled_locations(self.player):
+            locationsAddress.append(dictionary_table[location.name])
+            locationsId.append(location.address)
             if location.item.player == self.player:
-                print(location)
+                locationsTarget.append(item_dictionary_table[location.item.name])
             else:
-                locations_dict[dictionary_table[location.name]] = 0
+                locationsTarget.append(0)
+
+        for location in self.world.get_filled_locations():
+            if location.item.player == self.player:
+                itemsId.append(location.item.code)
+                itemsAddress.append(item_dictionary_table[location.item.name])
+
 
         data = {
             "options": {
@@ -275,7 +291,11 @@ class DarkSouls3World(World):
             "seed": self.world.seed_name,  # to verify the server's multiworld
             "slot": self.world.player_name[self.player],  # to connect to server
             "base_id": self.base_id,  # to merge location and items lists
-            "locations": json.dumps(locations_dict)
+            "locationsId": locationsId,
+            "locationsAddress": locationsAddress,
+            "locationsTarget": locationsTarget,
+            "itemsId": itemsId,
+            "itemsAddress": itemsAddress
         }
 
         # generate the file
@@ -302,8 +322,15 @@ class DarkSouls3World(World):
     # The following two dicts are required for the generation to know which
     # items exist. They could be generated from json or something else. They can
     # include events, but don't have to since events will be placed manually.
-    item_name_to_id = {name: id for id, name in enumerate(DarkSouls3Location.get_item_name_to_id(), base_id)}
+    item_name_to_id = {name: id for id, name in enumerate(DarkSouls3Item.get_item_name_to_id(), base_id)}
     location_name_to_id = {name: id for id, name in enumerate(DarkSouls3Location.get_item_name_to_id(), base_id)}
+
+    for name in item_dictionary_table.keys():
+        if name in weapons_table and randint(0, 100) < 33:
+            value = randint(1, 10)
+            old = item_dictionary_table[name]
+            item_dictionary_table[name] += value
+            print(name + str(" +") + str(value) + str(" - ") + str(old) + str(" - ") + str(item_dictionary_table[name]))
 
 
 

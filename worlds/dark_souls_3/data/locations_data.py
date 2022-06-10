@@ -33,7 +33,9 @@ high_wall_of_lothric = {
     "Rapier": 0x002E14E0,
     "Lucerne": 0x0098BD90,
     "Small Lothric Banner": 0x40000836,
-    "Basin of Vows": 0x40000845
+    "Basin of Vows": 0x40000845,
+    "Soul of the Dancer": 0x400002CA,
+    "Soul of Boreal Valley Vordt": 0x400002CF,
 }
 
 undead_settlement_table = {
@@ -54,7 +56,7 @@ undead_settlement_table = {
     "Caduceus Round Shield": 0x01341330,
     "Fire Clutch Ring": 0x2000501E,
     "Partizan": 0x0089C970,
-
+    "Bloodbite Ring": 0x20004E84,
 
     "Red Hilted Halberd": 0x009AB960,
     "Saint's Talisman": 0x00CACA10,
@@ -65,9 +67,11 @@ undead_settlement_table = {
     "Northern Gloves": 0x116E3DD0,
     "Northern Trousers": 0x116E41B8,
     "Flynn's Ring": 0x2000503C,
-    "Mirrah Chain Mail": 0x14B575A8,
-    "Mirrah Chain Gloves": 0x14B57990,
-    "Mirrah Chain Leggings": 0x14B57D78,
+
+    "Mirrah Vest": 0x15204568,
+    "Mirrah Gloves": 0x15204950,
+    "Mirrah Trousers": 0x15204D38,
+
     "Chloranthy Ring": 0x20004E2A,
     "Loincloth": 0x148F57D8,
     "Wargod Wooden Shield": 0x0144DC10,
@@ -128,6 +132,7 @@ road_of_sacrifice_table = {
     "Herald Trousers": 0x114FBD38,
 
     "Grass Crest Shield": 0x01437C80,
+    "Soul of a Crystal Sage": 0x400002CB,
 }
 
 cathedral_of_the_deep_table = {
@@ -170,6 +175,8 @@ cathedral_of_the_deep_table = {
     "Gauntlets of Thorns": 0x15B8DFD0,
     "Leggings of Thorns": 0x15B8E3B8,
     "Small Doll": 0x400007D5,
+    "Soul of the Deacons of the Deep": 0x400002D9,
+
 }
 
 farron_keep_table = {
@@ -206,6 +213,8 @@ farron_keep_table = {
     "Atonement": 0x4039ADA0,
     "Great Magic Weapon": 0x40140118,
     "Cinders of a Lord - Abyss Watcher": 0x4000084B,
+    "Soul of the Blood of the Wolf": 0x400002CD,
+    "Soul of a Stray Demon": 0x400002E7,
 }
 
 catacombs_of_carthus_table = {
@@ -218,6 +227,8 @@ catacombs_of_carthus_table = {
     "Old Sage's Blindfold": 0x11945BA0,
     "Witch's Ring": 0x20004F11,
     "Black Blade": 0x004CC070,
+    "Soul of High Lord Wolnir": 0x400002D6,
+    "Soul of a Demon": 0x400002E3,
 }
 
 smouldering_lake_table = {
@@ -234,6 +245,8 @@ smouldering_lake_table = {
     "Sacred Flame": 0x40284880,
     "Fume Ultra Greatsword": 0x0060E4B0,
     "Black Iron Greatshield": 0x0150EA00,
+    "Soul of the Old Demon King": 0x400002D0,
+
 }
 
 irithyll_of_the_boreal_valley_table = {
@@ -268,6 +281,8 @@ irithyll_of_the_boreal_valley_table = {
     "Brass Leggings": 0x1501C8B8,
     "Ring of Favor": 0x20004E3E,
     "Golden Ritual Spear": 0x00C83200,
+    "Soul of Pontiff Sulyvahn": 0x400002D4,
+
 }
 
 irithyll_dungeon_table = {
@@ -307,6 +322,8 @@ profaned_capital_table = {
     "Greatshield of Glory": 0x01515F30,
     "Storm Ruler": 0x006132D0,
     "Cinders of a Lord - Yhorm the Giant": 0x4000084D,
+    "Soul of Yhorm the Giant": 0x400002DC,
+
 }
 
 anor_londo_table = {
@@ -314,6 +331,8 @@ anor_londo_table = {
     "Sun Princess Ring": 0x20004FBA,
     "Aldrich's Ruby": 0x2000508C,
     "Cinders of a Lord - Aldrich": 0x4000084C,
+    "Soul of Aldrich": 0x400002D5,
+
 }
 
 lothric_castle_table = {
@@ -336,6 +355,8 @@ lothric_castle_table = {
     "Knight's Ring": 0x20004FEC,
     "Sunlight Straight Sword": 0x00203230,
     "Grand Archives Key": 0x400007DE,
+    "Soul of Dragonslayer Armour": 0x400002D1,
+
 }
 
 consumed_king_garden_table = {
@@ -345,6 +366,7 @@ consumed_king_garden_table = {
     "Shadow Gauntlets": 0x14D3FE10,
     "Shadow Leggings": 0x14D401F8,
     "Claw": 0x00A7D8C0,
+    "Soul of Consumed Oceiros": 0x400002CE,
 }
 
 grand_archives_table = {
@@ -361,6 +383,7 @@ grand_archives_table = {
     "Hunter's Ring": 0x20004FF6,
     "Divine Pillars of Light": 0x4038C340,
     "Cinders of a Lord - Lothric Prince": 0x4000084E,
+    "Soul of the Twin Princes": 0x400002DB,
 }
 
 untended_graves_table = {
@@ -371,6 +394,7 @@ untended_graves_table = {
     "Blacksmith Hammer": 0x007E57C0,
     "Eyes of a Fire Keeper": 0x4000085A,
     "Coiled Sword Fragment": 0x4000015F,
+    "Soul of Champion Gundyr": 0x400002C8,
 }
 
 archdragon_peak_table = {
@@ -390,6 +414,8 @@ archdragon_peak_table = {
     "Dragonslayer Gauntlets": 0x158B1910,
     "Dragonslayer Leggings": 0x158B1CF8,
     "Ricard's Rapier": 0x002E3BF0,
+    "Soul of the Nameless King": 0x400002D2,
+
 }
 
 key_items_list = {
