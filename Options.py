@@ -28,8 +28,12 @@ class AssembleOptions(abc.ABCMeta):
         options.update(new_options)
 
         # apply aliases, without name_lookup
-        options.update({name[6:].lower(): option_id for name, option_id in attrs.items() if
-                        name.startswith("alias_")})
+        aliases = {name[6:].lower(): option_id for name, option_id in attrs.items() if
+                   name.startswith("alias_")}
+
+        assert "random" not in aliases, "Choice option 'random' cannot be manually assigned."
+
+        options.update(aliases)
 
         # auto-validate schema on __init__
         if "schema" in attrs.keys():
