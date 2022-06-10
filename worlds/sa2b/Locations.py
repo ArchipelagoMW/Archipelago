@@ -220,6 +220,14 @@ upgrade_location_table = {
     LocationName.final_chase_upgrade: 0xFF00BD,
 }
 
+boss_gate_location_table = {
+    LocationName.gate_1_boss: 0xFF0100,
+    LocationName.gate_2_boss: 0xFF0101,
+    LocationName.gate_3_boss: 0xFF0102,
+    LocationName.gate_4_boss: 0xFF0103,
+    LocationName.gate_5_boss: 0xFF0104,
+}
+
 chao_garden_beginner_location_table = {
     LocationName.chao_race_crab_pool_1: 0xFF0200,
     LocationName.chao_race_crab_pool_2: 0xFF0201,
@@ -312,11 +320,20 @@ all_locations = {
     **fourth_mission_location_table,
     **fifth_mission_location_table,
     **upgrade_location_table,
+    **boss_gate_location_table,
     **chao_garden_beginner_location_table,
     **chao_garden_intermediate_location_table,
     **chao_garden_expert_location_table,
     **other_location_table,
 }
+
+boss_gate_set = [
+    LocationName.gate_1_boss,
+    LocationName.gate_2_boss,
+    LocationName.gate_3_boss,
+    LocationName.gate_4_boss,
+    LocationName.gate_5_boss,
+]
 
 chao_karate_set = [
     LocationName.chao_beginner_karate,
@@ -350,11 +367,9 @@ chao_race_prize_set = [
 ]
 
 
-location_table = {}
-chao_location_table = {}
-
-
 def setup_locations(world, player: int):
+    location_table = {}
+    chao_location_table = {}
     location_table.update({**first_mission_location_table})
 
     if world.include_missions[player].value >= 2:
@@ -389,6 +404,10 @@ def setup_locations(world, player: int):
                 location_table[key] = value
         else:
             location_table[key] = value
+
+    for x in range(len(boss_gate_set)):
+        if x < world.number_of_level_gates[player].value:
+            location_table[boss_gate_set[x]] = boss_gate_location_table[boss_gate_set[x]]
 
     return location_table
 

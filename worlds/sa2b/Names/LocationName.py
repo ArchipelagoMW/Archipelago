@@ -196,6 +196,13 @@ cannon_core_3 = "Cannon Core - 3"
 cannon_core_4 = "Cannon Core - 4"
 cannon_core_5 = "Cannon Core - 5"
 
+# Boss Definitions
+gate_1_boss = "Gate 1 Boss"
+gate_2_boss = "Gate 2 Boss"
+gate_3_boss = "Gate 3 Boss"
+gate_4_boss = "Gate 4 Boss"
+gate_5_boss = "Gate 5 Boss"
+
 # Chao Garden Definitions
 chao_race_crab_pool_1       = "Chao Race - Beginner - Crab Pool 1"
 chao_race_crab_pool_2       = "Chao Race - Beginner - Crab Pool 2"
@@ -282,6 +289,12 @@ gate_2_region = "Gate 2"
 gate_3_region = "Gate 3"
 gate_4_region = "Gate 4"
 gate_5_region = "Gate 5"
+
+gate_1_boss_region = "Gate 1 Boss"
+gate_2_boss_region = "Gate 2 Boss"
+gate_3_boss_region = "Gate 3 Boss"
+gate_4_boss_region = "Gate 4 Boss"
+gate_5_boss_region = "Gate 5 Boss"
 
 city_escape_region  = "City Escape"
 metal_harbor_region = "Metal Harbor"
