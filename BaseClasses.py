@@ -1177,7 +1177,6 @@ class Item():
             self.classification = classification
         else:  # temporary compat for old bool saying advancement
             warnings.warn("Use of advancement bool in Item.__init__ instead of new classification.")
-            raise Exception
             self.classification = ItemClassification.progression if classification else ItemClassification.filler
         self.player = player
         self.code = code
