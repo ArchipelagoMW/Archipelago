@@ -48,8 +48,11 @@ deathlink_sent_this_death: we interacted with the multiworld on this death, wait
 
 oot_loc_name_to_id = network_data_package["games"]["Ocarina of Time"]["location_name_to_id"]
 
+script_version: int = 1
+
 def get_item_value(ap_id):
     return ap_id - 66000
+
 
 class OoTCommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx): 
@@ -59,6 +62,13 @@ class OoTCommandProcessor(ClientCommandProcessor):
         """Check N64 Connection State"""
         if isinstance(self.ctx, OoTContext):
             logger.info(f"N64 Status: {self.ctx.n64_status}")
+
+    def _cmd_deathlink(self):
+        """Toggle deathlink from client. Overrides default setting."""
+        if isinstance(self.ctx, OoTContext):
+            self.ctx.deathlink_client_override = True
+            self.ctx.deathlink_enabled = not self.ctx.deathlink_enabled
+            asyncio.create_task(self.ctx.update_death_link(self.ctx.deathlink_enabled), name="Update Deathlink")
 
 
 class OoTContext(CommonContext):
@@ -76,6 +86,8 @@ class OoTContext(CommonContext):
         self.deathlink_enabled = False
         self.deathlink_pending = False
         self.deathlink_sent_this_death = False
+        self.deathlink_client_override = False
+        self.version_warning = False
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -90,6 +102,18 @@ class OoTContext(CommonContext):
     def on_deathlink(self, data: dict):
         self.deathlink_pending = True
         super().on_deathlink(data)
+
+    def run_gui(self):
+        from kvui import GameManager
+
+        class OoTManager(GameManager):
+            logging_pairs = [
+                ("Client", "Archipelago")
+            ]
+            base_title = "Archipelago Ocarina of Time Client"
+
+        self.ui = OoTManager(self)
+        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
 def get_payload(ctx: OoTContext):
@@ -108,8 +132,8 @@ def get_payload(ctx: OoTContext):
 
 async def parse_payload(payload: dict, ctx: OoTContext, force: bool):
 
-    # Turn on deathlink if it is on
-    if payload['deathlinkActive'] and not ctx.deathlink_enabled:
+    # Turn on deathlink if it is on, and if the client hasn't overriden it
+    if payload['deathlinkActive'] and not ctx.deathlink_enabled and not ctx.deathlink_client_override:
         await ctx.update_death_link(True)
         ctx.deathlink_enabled = True
 
@@ -152,21 +176,30 @@ async def n64_sync_task(ctx: OoTContext):
             try:
                 await asyncio.wait_for(writer.drain(), timeout=1.5)
                 try:
-                    # Data will return a dict with up to five fields:
+                    # Data will return a dict with up to six fields:
                     # 1. str: player name (always)
-                    # 2. bool: deathlink active (always)
-                    # 3. dict[str, bool]: checked locations
-                    # 4. bool: whether Link is currently at 0 HP
-                    # 5. bool: whether the game currently registers as complete
+                    # 2. int: script version (always)
+                    # 3. bool: deathlink active (always)
+                    # 4. dict[str, bool]: checked locations
+                    # 5. bool: whether Link is currently at 0 HP
+                    # 6. bool: whether the game currently registers as complete
                     data = await asyncio.wait_for(reader.readline(), timeout=10)
                     data_decoded = json.loads(data.decode())
-                    if ctx.game is not None and 'locations' in data_decoded:
-                        # Not just a keep alive ping, parse
-                        asyncio.create_task(parse_payload(data_decoded, ctx, False))
-                    if not ctx.auth:
-                        ctx.auth = data_decoded['playerName']
-                        if ctx.awaiting_rom:
-                            await ctx.server_auth(False)
+                    reported_version = data_decoded.get('scriptVersion', 0)
+                    if reported_version == script_version:
+                        if ctx.game is not None and 'locations' in data_decoded:
+                            # Not just a keep alive ping, parse
+                            asyncio.create_task(parse_payload(data_decoded, ctx, False))
+                        if not ctx.auth:
+                            ctx.auth = data_decoded['playerName']
+                            if ctx.awaiting_rom:
+                                await ctx.server_auth(False)
+                    else:
+                        if not ctx.version_warning:
+                            logger.warning(f"Your Lua script is version {reported_version}, expected {script_version}. "
+                                "Please update to the latest version. "
+                                "Your connection to the Archipelago server will not be accepted.")
+                            ctx.version_warning = True
                 except asyncio.TimeoutError:
                     logger.debug("Read Timed Out, Reconnecting")
                     error_status = CONNECTION_TIMING_OUT_STATUS
@@ -253,13 +286,8 @@ if __name__ == '__main__':
         ctx = OoTContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="Server Loop")
         if gui_enabled:
-            input_task = None
-            from kvui import OoTManager
-            ctx.ui = OoTManager(ctx)
-            ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
-        else:
-            input_task = asyncio.create_task(console_loop(ctx), name="Input")
-            ui_task = None
+            ctx.run_gui()
+        ctx.run_cli()
 
         ctx.n64_sync_task = asyncio.create_task(n64_sync_task(ctx), name="N64 Sync")
 
@@ -271,17 +299,9 @@ if __name__ == '__main__':
         if ctx.n64_sync_task:
             await ctx.n64_sync_task
 
-        if ui_task:
-            await ui_task
-
-        if input_task:
-            input_task.cancel()
-
     import colorama
 
     colorama.init()
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-    loop.close()
+    asyncio.run(main())
     colorama.deinit()

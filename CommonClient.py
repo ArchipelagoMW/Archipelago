@@ -17,14 +17,14 @@ if __name__ == "__main__":
     Utils.init_logging("TextClient", exception_logger="Client")
 
 from MultiServer import CommandProcessor
-from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission
+from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot
 from Utils import Version, stream_input
 from worlds import network_data_package, AutoWorldRegister
 import os
 
 logger = logging.getLogger("Client")
 
-# without terminal we have to use gui mode
+# without terminal, we have to use gui mode
 gui_enabled = not sys.stdout or "--nogui" not in sys.argv
 
 
@@ -114,26 +114,53 @@ class ClientCommandProcessor(CommandProcessor):
             asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]), name="send Say")
 
 
-class CommonContext():
+class CommonContext:
+    # Should be adjusted as needed in subclasses
     tags: typing.Set[str] = {"AP"}
+    game: typing.Optional[str] = None
+    items_handling: typing.Optional[int] = None
+
+    # defaults
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
-    command_processor: int = ClientCommandProcessor
-    game = None
+    command_processor: type(CommandProcessor) = ClientCommandProcessor
     ui = None
-    keep_alive_task = None
-    items_handling: typing.Optional[int] = None
-    current_energy_link_value = 0  # to display in UI, gets set by server
+    ui_task: typing.Optional[asyncio.Task] = None
+    input_task: typing.Optional[asyncio.Task] = None
+    keep_alive_task: typing.Optional[asyncio.Task] = None
+    server_task: typing.Optional[asyncio.Task] = None
+    server: typing.Optional[Endpoint] = None
+    server_version: Version = Version(0, 0, 0)
+    current_energy_link_value: int = 0  # to display in UI, gets set by server
+
+    last_death_link: float = time.time()  # last send/received death link on AP layer
+
+    # remaining type info
+    slot_info: typing.Dict[int, NetworkSlot]
+    server_address: str
+    password: typing.Optional[str]
+    hint_cost: typing.Optional[int]
+    games: typing.Dict[int, str]
+    player_names: typing.Dict[int, str]
+
+    # locations
+    locations_checked: typing.Set[int]  # local state
+    locations_scouted: typing.Set[int]
+    missing_locations: typing.Set[int]
+    checked_locations: typing.Set[int]  # server state
+    locations_info: typing.Dict[int, NetworkItem]
+      
+    # current message box through kvui
+    _messagebox = None
+
 
     def __init__(self, server_address, password):
         # server state
         self.server_address = server_address
         self.password = password
-        self.server_task = None
-        self.server: typing.Optional[Endpoint] = None
-        self.server_version = Version(0, 0, 0)
-        self.hint_cost: typing.Optional[int] = None
-        self.games: typing.Dict[int, str] = {}
+        self.hint_cost = None
+        self.games = {}
+        self.slot_info = {}
         self.permissions = {
             "forfeit": "disabled",
             "collect": "disabled",
@@ -148,24 +175,21 @@ class CommonContext():
         self.auth = None
         self.seed_name = None
 
-        self.locations_checked: typing.Set[int] = set()  # local state
-        self.locations_scouted: typing.Set[int] = set()
+        self.locations_checked = set()  # local state
+        self.locations_scouted = set()
         self.items_received = []
-        self.missing_locations: typing.Set[int] = set()
-        self.checked_locations: typing.Set[int] = set()  # server state
-        self.locations_info: typing.Dict[int, NetworkItem] = {}
+        self.missing_locations = set()
+        self.checked_locations = set()  # server state
+        self.locations_info = {}
 
         self.input_queue = asyncio.Queue()
         self.input_requests = 0
 
-        self.last_death_link: float = time.time()  # last send/received death link on AP layer
-
         # game state
-        self.player_names: typing.Dict[int: str] = {0: "Archipelago"}
+        self.player_names = {0: "Archipelago"}
         self.exit_event = asyncio.Event()
         self.watcher_event = asyncio.Event()
 
-        self.slow_mode = False
         self.jsontotextparser = JSONtoTextParser(self)
         self.set_getters(network_data_package)
 
@@ -179,14 +203,26 @@ class CommonContext():
             return len(self.checked_locations | self.missing_locations)
 
     async def connection_closed(self):
+        self.reset_server_state()
+        if self.server and self.server.socket is not None:
+            await self.server.socket.close()
+
+    def reset_server_state(self):
         self.auth = None
+        self.slot = None
+        self.team = None
         self.items_received = []
         self.locations_info = {}
         self.server_version = Version(0, 0, 0)
-        if self.server and self.server.socket is not None:
-            await self.server.socket.close()
         self.server = None
         self.server_task = None
+        self.games = {}
+        self.hint_cost = None
+        self.permissions = {
+            "forfeit": "disabled",
+            "collect": "disabled",
+            "remaining": "disabled",
+        }
 
     # noinspection PyAttributeOutsideInit
     def set_getters(self, data_package: dict, network=False):
@@ -207,22 +243,15 @@ class CommonContext():
             for location_name, location_id in gamedata["location_name_to_id"].items():
                 locations_lookup[location_id] = location_name
 
-        def get_item_name_from_id(code: int):
+        def get_item_name_from_id(code: int) -> str:
             return item_lookup.get(code, f'Unknown item (ID:{code})')
 
         self.item_name_getter = get_item_name_from_id
 
-        def get_location_name_from_address(address: int):
+        def get_location_name_from_address(address: int) -> str:
             return locations_lookup.get(address, f'Unknown location (ID:{address})')
 
         self.location_name_getter = get_location_name_from_address
-
-    @property
-    def endpoints(self):
-        if self.server:
-            return [self.server]
-        else:
-            return []
 
     async def disconnect(self):
         if self.server and not self.server.socket.closed:
@@ -309,6 +338,10 @@ class CommonContext():
             self.input_queue.put_nowait(None)
             self.input_requests -= 1
         self.keep_alive_task.cancel()
+        if self.ui_task:
+            await self.ui_task
+        if self.input_task:
+            self.input_task.cancel()
 
     # DeathLink hooks
 
@@ -334,7 +367,7 @@ class CommonContext():
                 }
             }])
 
-    async def update_death_link(self, death_link):
+    async def update_death_link(self, death_link: bool):
         old_tags = self.tags.copy()
         if death_link:
             self.tags.add("DeathLink")
@@ -342,6 +375,48 @@ class CommonContext():
             self.tags -= {"DeathLink"}
         if old_tags != self.tags and self.server and not self.server.socket.closed:
             await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
+
+    def gui_error(self, title: str, text: typing.Union[Exception, str]):
+        """Displays an error messagebox"""
+        if not self.ui:
+            return
+        title = title or "Error"
+        from kvui import MessageBox
+        if self._messagebox:
+            self._messagebox.dismiss()
+        # make "Multiple exceptions" look nice
+        text = str(text).replace('[Errno', '\n[Errno').strip()
+        # split long messages into title and text
+        parts = title.split('. ', 1)
+        if len(parts) == 1:
+            parts = title.split(', ', 1)
+        if len(parts) > 1:
+            text = parts[1] + '\n\n' + text
+            title = parts[0]
+        # display error
+        self._messagebox = MessageBox(title, text, error=True)
+        self._messagebox.open()
+
+    def run_gui(self):
+        """Import kivy UI system and start running it as self.ui_task."""
+        from kvui import GameManager
+
+        class TextManager(GameManager):
+            logging_pairs = [
+                ("Client", "Archipelago")
+            ]
+            base_title = "Archipelago Text Client"
+
+        self.ui = TextManager(self)
+        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+
+    def run_cli(self):
+        if sys.stdin:
+            # steam overlay breaks when starting console_loop
+            if 'gameoverlayrenderer' in os.environ.get('LD_PRELOAD', ''):
+                logger.info("Skipping terminal input, due to conflicting Steam Overlay detected. Please use GUI only.")
+            else:
+                self.input_task = asyncio.create_task(console_loop(self), name="Input")
 
 
 async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
@@ -358,7 +433,6 @@ async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
 
 
 async def server_loop(ctx: CommonContext, address=None):
-    cached_address = None
     if ctx.server and ctx.server.socket:
         logger.error('Already connected')
         return
@@ -385,18 +459,22 @@ async def server_loop(ctx: CommonContext, address=None):
             for msg in decode(data):
                 await process_server_cmd(ctx, msg)
         logger.warning('Disconnected from multiworld server, type /connect to reconnect')
-    except ConnectionRefusedError:
-        if cached_address:
-            logger.error('Unable to connect to multiworld server at cached address. '
-                         'Please use the connect button above.')
-        else:
-            logger.exception('Connection refused by the multiworld server')
-    except websockets.InvalidURI:
-        logger.exception('Failed to connect to the multiworld server (invalid URI)')
-    except (OSError, websockets.InvalidURI):
-        logger.exception('Failed to connect to the multiworld server')
+    except ConnectionRefusedError as e:
+        msg = 'Connection refused by the server. May not be running Archipelago on that address or port.'
+        logger.exception(msg, extra={'compact_gui': True})
+        ctx.gui_error(msg, e)
+    except websockets.InvalidURI as e:
+        msg = 'Failed to connect to the multiworld server (invalid URI)'
+        logger.exception(msg, extra={'compact_gui': True})
+        ctx.gui_error(msg, e)
+    except OSError as e:
+        msg = 'Failed to connect to the multiworld server'
+        logger.exception(msg, extra={'compact_gui': True})
+        ctx.gui_error(msg, e)
     except Exception as e:
-        logger.exception('Lost connection to the multiworld server, type /connect to reconnect')
+        msg = 'Lost connection to the multiworld server, type /connect to reconnect'
+        logger.exception(msg, extra={'compact_gui': True})
+        ctx.gui_error(msg, e)
     finally:
         await ctx.connection_closed()
         if ctx.server_address:
@@ -419,7 +497,9 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         raise
     if cmd == 'RoomInfo':
         if ctx.seed_name and ctx.seed_name != args["seed_name"]:
-            logger.info("The server is running a different multiworld than your client is. (invalid seed_name)")
+            msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
+            logger.info(msg, extra={'compact_gui': True})
+            ctx.gui_error('Error', msg)
         else:
             logger.info('--------------------------------')
             logger.info('Room Information:')
@@ -467,8 +547,6 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             ctx.event_invalid_slot()
         elif 'InvalidGame' in errors:
             ctx.event_invalid_game()
-        elif 'SlotAlreadyTaken' in errors:
-            raise Exception('Player slot already in use for that team')
         elif 'IncompatibleVersion' in errors:
             raise Exception('Server reported your client version as incompatible')
         elif 'InvalidItemsHandling' in errors:
@@ -486,6 +564,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     elif cmd == 'Connected':
         ctx.team = args["team"]
         ctx.slot = args["slot"]
+        # int keys get lost in JSON transfer
+        ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
         ctx.consume_players_package(args["players"])
         msgs = []
         if ctx.locations_checked:
@@ -565,7 +645,6 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
 
 async def console_loop(ctx: CommonContext):
-    import sys
     commandprocessor = ctx.command_processor(ctx)
     queue = asyncio.Queue()
     stream_input(sys.stdin, queue)
@@ -619,36 +698,33 @@ if __name__ == '__main__':
 
     async def main(args):
         ctx = TextContext(args.connect, args.password)
+        ctx.auth = args.name
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
-        input_task = None
-        steam_overlay = False
 
         if gui_enabled:
-            from kvui import TextManager
-            ctx.ui = TextManager(ctx)
-            ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
-            steam_overlay = 'gameoverlayrenderer' in os.environ.get('LD_PRELOAD', '')
-        else:
-            ui_task = None
-        if sys.stdin and not steam_overlay:  # steam overlay breaks when starting console_loop
-            input_task = asyncio.create_task(console_loop(ctx), name="Input")
+            ctx.run_gui()
+        ctx.run_cli()
+
         await ctx.exit_event.wait()
-
         await ctx.shutdown()
-        if ui_task:
-            await ui_task
 
-        if input_task:
-            input_task.cancel()
 
     import colorama
 
     parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
+    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
+    parser.add_argument("url", nargs="?", help="Archipelago connection url")
+    args = parser.parse_args()
 
-    args, rest = parser.parse_known_args()
+    if args.url:
+        url = urllib.parse.urlparse(args.url)
+        args.connect = url.netloc
+        if url.username:
+            args.name = urllib.parse.unquote(url.username)
+        if url.password:
+            args.password = urllib.parse.unquote(url.password)
+
     colorama.init()
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(args))
-    loop.close()
+    asyncio.run(main(args))
     colorama.deinit()

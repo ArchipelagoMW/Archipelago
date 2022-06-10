@@ -1,7 +1,7 @@
 known_logic_tricks = {
     'Fewer Tunic Requirements': {
         'name'    : 'logic_fewer_tunic_requirements',
-        'tags'    : ("General", "Fire Temple", "Water Temple", "Gerudo Training Grounds", "Zora's Fountain",),
+        'tags'    : ("General", "Fire Temple", "Water Temple", "Gerudo Training Ground", "Zora's Fountain",),
         'tooltip' : '''\
                     Allows the following possible without Tunics:
                     - Enter Water Temple. The key below the center
@@ -10,7 +10,7 @@ known_logic_tricks = {
                     accessible, and not Volvagia.
                     - Zora's Fountain Bottom Freestanding PoH.
                     Might not have enough health to resurface.
-                    - Gerudo Training Grounds Underwater
+                    - Gerudo Training Ground Underwater
                     Silver Rupee Chest. May need to make multiple
                     trips.
                     '''},
@@ -73,9 +73,9 @@ known_logic_tricks = {
                     from below, by shooting it through the vines,
                     bypassing the need to lower the staircase.
                     '''},
-    'Gerudo Fortress "Kitchen" with No Additional Items': {
+    'Thieves\' Hideout "Kitchen" with No Additional Items': {
         'name'    : 'logic_gerudo_kitchen',
-        'tags'    : ("Gerudo's Fortress",),
+        'tags'    : ("Thieves' Hideout", "Gerudo's Fortress"),
         'tooltip' : '''\
                     The logic normally guarantees one of Bow, Hookshot,
                     or Hover Boots.
@@ -185,9 +185,9 @@ known_logic_tricks = {
                     a particularly egregious example. Logic normally
                     expects Din's Fire and Song of Time.
                     '''},
-    'Gerudo Training Grounds MQ Left Side Silver Rupees with Hookshot': {
+    'Gerudo Training Ground MQ Left Side Silver Rupees with Hookshot': {
         'name'    : 'logic_gtg_mq_with_hookshot',
-        'tags'    : ("Gerudo Training Grounds",),
+        'tags'    : ("Gerudo Training Ground",),
         'tooltip' : '''\
                     The highest silver rupee can be obtained by
                     hookshotting the target and then immediately jump
@@ -238,14 +238,6 @@ known_logic_tricks = {
                     front of the switch, either use the Hover Boots
                     or hit the shortcut switch at the top of the
                     room and jump from the glass blocks that spawn.
-                    '''},
-    'Forest Temple MQ Twisted Hallway Switch with Hookshot': {
-        'name'    : 'logic_forest_mq_hallway_switch_hookshot',
-        'tags'    : ("Forest Temple",),
-        'tooltip' : '''\
-                    There's a very small gap between the glass block
-                    and the wall. Through that gap you can hookshot
-                    the target on the ceiling.
                     '''},
     'Death Mountain Trail Chest with Strength': {
         'name'    : 'logic_dmt_bombable',
@@ -907,9 +899,9 @@ known_logic_tricks = {
                     Skulltula and obtain the token by having the Boomerang
                     interact with it along the return path.
                     '''},
-    'Gerudo Training Grounds Left Side Silver Rupees without Hookshot': {
+    'Gerudo Training Ground Left Side Silver Rupees without Hookshot': {
         'name'    : 'logic_gtg_without_hookshot',
-        'tags'    : ("Gerudo Training Grounds",),
+        'tags'    : ("Gerudo Training Ground",),
         'tooltip' : '''\
                     After collecting the rest of the silver rupees in the room,
                     you can reach the final silver rupee on the ceiling by being
@@ -919,9 +911,9 @@ known_logic_tricks = {
                     the edge of a flame wall before it can rise up to block you.
                     To do so without taking damage is more precise.
                     '''},
-    'Gerudo Training Grounds MQ Left Side Silver Rupees without Hookshot': {
+    'Gerudo Training Ground MQ Left Side Silver Rupees without Hookshot': {
         'name'    : 'logic_gtg_mq_without_hookshot',
-        'tags'    : ("Gerudo Training Grounds",),
+        'tags'    : ("Gerudo Training Ground",),
         'tooltip' : '''\
                     After collecting the rest of the silver rupees in the room,
                     you can reach the final silver rupee on the ceiling by being
@@ -932,18 +924,18 @@ known_logic_tricks = {
                     Also included with this trick is that fact that the switch
                     that unbars the door to the final chest of GTG can be hit
                     without a projectile, using a precise jump slash.
-                    This trick supersedes "Gerudo Training Grounds MQ Left Side
+                    This trick supersedes "Gerudo Training Ground MQ Left Side
                     Silver Rupees with Hookshot".
                     '''},
-    'Reach Gerudo Training Grounds Fake Wall Ledge with Hover Boots': {
+    'Reach Gerudo Training Ground Fake Wall Ledge with Hover Boots': {
         'name'    : 'logic_gtg_fake_wall',
-        'tags'    : ("Gerudo Training Grounds",),
+        'tags'    : ("Gerudo Training Ground",),
         'tooltip' : '''\
                     A precise Hover Boots use from the top of the chest can allow
                     you to grab the ledge without needing the usual requirements.
                     In Master Quest, this always skips a Song of Time requirement.
                     In Vanilla, this skips a Hookshot requirement, but is only
-                    relevant if "Gerudo Training Grounds Left Side Silver Rupees
+                    relevant if "Gerudo Training Ground Left Side Silver Rupees
                     without Hookshot" is enabled.
                     '''},
     'Water Temple Cracked Wall with No Additional Items': {
@@ -1299,19 +1291,19 @@ known_logic_tricks = {
                     Removes the requirements for the Lens of Truth
                     in Ganon's Castle.
                     '''},
-    'Gerudo Training Grounds MQ without Lens of Truth': {
+    'Gerudo Training Ground MQ without Lens of Truth': {
         'name'    : 'logic_lens_gtg_mq',
-        'tags'    : ("Lens of Truth","Gerudo Training Grounds",),
+        'tags'    : ("Lens of Truth","Gerudo Training Ground",),
         'tooltip' : '''\
                     Removes the requirements for the Lens of Truth
-                    in Gerudo Training Grounds MQ.
+                    in Gerudo Training Ground MQ.
                     '''},
-    'Gerudo Training Grounds without Lens of Truth': {
+    'Gerudo Training Ground without Lens of Truth': {
         'name'    : 'logic_lens_gtg',
-        'tags'    : ("Lens of Truth","Gerudo Training Grounds",),
+        'tags'    : ("Lens of Truth","Gerudo Training Ground",),
         'tooltip' : '''\
                     Removes the requirements for the Lens of Truth
-                    in Gerudo Training Grounds.
+                    in Gerudo Training Ground.
                     '''},
     'Jabu MQ without Lens of Truth': {
         'name'    : 'logic_lens_jabu_mq',

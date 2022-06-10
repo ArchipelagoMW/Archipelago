@@ -120,7 +120,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Sealed Caves (Xarion)', 'Sealed Caves (upper)', lambda state: state._timespinner_has_doublejump(world, player))
     connect(world, player, names, 'Sealed Caves (Xarion)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Refugee Camp', 'Forest')
-    connect(world, player, names, 'Refugee Camp', 'Library', lambda state: not is_option_enabled(world, player, "Inverted"))
+    #connect(world, player, names, 'Refugee Camp', 'Library', lambda state: not is_option_enabled(world, player, "Inverted"))
     connect(world, player, names, 'Refugee Camp', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Forest', 'Refugee Camp')
     connect(world, player, names, 'Forest', 'Left Side forest Caves', lambda state: state.has('Talaria Attachment', player) or state._timespinner_has_timestop(world, player))

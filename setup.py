@@ -2,11 +2,12 @@ import os
 import shutil
 import sys
 import sysconfig
+import platform
 from pathlib import Path
 from hashlib import sha3_512
 import base64
 import datetime
-from Utils import version_tuple
+from Utils import version_tuple, is_windows, is_linux
 from collections.abc import Iterable
 import typing
 import setuptools
@@ -16,7 +17,7 @@ from Launcher import components, icon_paths
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 import subprocess
 import pkg_resources
-requirement = 'cx-Freeze>=6.10'
+requirement = 'cx-Freeze>=6.11'
 try:
     pkg_resources.require(requirement)
     import cx_Freeze
@@ -29,17 +30,18 @@ except pkg_resources.ResolutionError:
 
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
-    with open("X:/pw.txt") as f:
+    with open("X:/pw.txt", encoding="utf-8-sig") as f:
         pw = f.read()
-    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p ' + pw + r' /fd sha256 /tr http://timestamp.digicert.com/ '
+    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + r'" /fd sha256 /tr http://timestamp.digicert.com/ '
 else:
     signtool = None
 
 
-arch_folder = "exe.{platform}-{version}".format(platform=sysconfig.get_platform(),
+build_platform = sysconfig.get_platform()
+arch_folder = "exe.{platform}-{version}".format(platform=build_platform,
                                                 version=sysconfig.get_python_version())
 buildfolder = Path("build", arch_folder)
-is_windows = sys.platform in ("win32", "cygwin", "msys")
+build_arch = build_platform.split('-')[-1] if '-' in build_platform else platform.machine()
 
 
 # see Launcher.py on how to add scripts to setup.py
@@ -68,7 +70,7 @@ def _threaded_hash(filepath):
 
 
 # cx_Freeze's build command runs other commands. Override to accept --yes and store that.
-class BuildCommand(cx_Freeze.dist.build):
+class BuildCommand(cx_Freeze.command.build.Build):
     user_options = [
         ('yes', 'y', 'Answer "yes" to all questions.'),
     ]
@@ -85,8 +87,8 @@ class BuildCommand(cx_Freeze.dist.build):
 
 
 # Override cx_Freeze's build_exe command for pre and post build steps
-class BuildExeCommand(cx_Freeze.dist.build_exe):
-    user_options = cx_Freeze.dist.build_exe.user_options + [
+class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
+    user_options = cx_Freeze.command.build_exe.BuildEXE.user_options + [
         ('yes', 'y', 'Answer "yes" to all questions.'),
         ('extra-data=', None, 'Additional files to add.'),
     ]
@@ -156,6 +158,11 @@ class BuildExeCommand(cx_Freeze.dist.build_exe):
         self.buildtime = datetime.datetime.utcnow()
         super().run()
 
+        # include_files seems to be broken with this setup. implement here
+        for src, dst in self.include_files:
+            print('copying', src, '->', self.buildfolder / dst)
+            shutil.copyfile(src, self.buildfolder / dst, follow_symlinks=False)
+
         # post build steps
         if sys.platform == "win32":  # kivy_deps is win32 only, linux picks them up automatically
             from kivy_deps import sdl2, glew
@@ -219,7 +226,6 @@ class BuildExeCommand(cx_Freeze.dist.build_exe):
             host_yaml = self.buildfolder / 'host.yaml'
             with host_yaml.open('r+b') as f:
                 data = f.read()
-                data = data.replace(b'EnemizerCLI.Core.exe', b'EnemizerCLI.Core')
                 data = data.replace(b'factorio\\\\bin\\\\x64\\\\factorio', b'factorio/bin/x64/factorio')
                 f.seek(0, os.SEEK_SET)
                 f.write(data)
@@ -268,7 +274,7 @@ match="${{1#--executable=}}"
 if [ "${{#match}}" -lt "${{#1}}" ]; then
     exe="$match"
     shift
-elif [ "$1" == "-executable" ] || [ "$1" == "--executable" ]; then
+elif [ "$1" = "-executable" ] || [ "$1" = "--executable" ]; then
     exe="$2"
     shift; shift
 fi
@@ -333,7 +339,61 @@ $APPDIR/$exe "$@"
         self.write_desktop()
         self.write_launcher(self.app_exec)
         print(f'{self.app_dir} -> {self.dist_file}')
-        subprocess.call(f'./appimagetool -n "{self.app_dir}" "{self.dist_file}"', shell=True)
+        subprocess.call(f'ARCH={build_arch} ./appimagetool -n "{self.app_dir}" "{self.dist_file}"', shell=True)
+
+
+def find_libs(*args: str) -> typing.Sequence[typing.Tuple[str, str]]:
+    """Try to find system libraries to be included."""
+    arch = build_arch.replace('_', '-')
+    libc = 'libc6'  # we currently don't support musl
+
+    def parse(line):
+        lib, path = line.strip().split(' => ')
+        lib, typ = lib.split(' ', 1)
+        for test_arch in ('x86-64', 'i386', 'aarch64'):
+            if test_arch in typ:
+                lib_arch = test_arch
+                break
+        else:
+            lib_arch = ''
+        for test_libc in ('libc6',):
+            if test_libc in typ:
+                lib_libc = test_libc
+                break
+        else:
+            lib_libc = ''
+        return (lib, lib_arch, lib_libc), path
+
+    if not hasattr(find_libs, "cache"):
+        data = subprocess.run([shutil.which('ldconfig'), '-p'], capture_output=True, text=True).stdout.split('\n')[1:]
+        find_libs.cache = {k: v for k, v in (parse(line) for line in data if '=>' in line)}
+
+    def find_lib(lib, arch, libc):
+        for k, v in find_libs.cache.items():
+            if k == (lib, arch, libc):
+                return v
+        for k, v, in find_libs.cache.items():
+            if k[0].startswith(lib) and k[1] == arch and k[2] == libc:
+                return v
+        return None
+
+    res = []
+    for arg in args:
+        # try exact match, empty libc, empty arch, empty arch and libc
+        file = find_lib(arg, arch, libc)
+        file = file or find_lib(arg, arch, '')
+        file = file or find_lib(arg, '', libc)
+        file = file or find_lib(arg, '', '')
+        # resolve symlinks
+        for n in range(0, 5):
+            res.append((file, os.path.join('lib', os.path.basename(file))))
+            if not os.path.islink(file):
+                break
+            dirname = os.path.dirname(file)
+            file = os.readlink(file)
+            if not os.path.isabs(file):
+                file = os.path.join(dirname, file)
+    return res
 
 
 cx_Freeze.setup(
@@ -348,14 +408,14 @@ cx_Freeze.setup(
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
             "zip_include_packages": ["*"],
-            "zip_exclude_packages": ["worlds", "kivy"],
-            "include_files": [],
+            "zip_exclude_packages": ["worlds", "kivy", "sc2"],
+            "include_files": find_libs("libssl.so", "libcrypto.so") if is_linux else [],
             "include_msvcr": False,
             "replace_paths": [("*", "")],
             "optimize": 1,
             "build_exe": buildfolder,
             "extra_data": extra_data,
-            "bin_includes": [] if is_windows else ["libffi.so"]
+            "bin_includes": ["libffi.so", "libcrypt.so"] if is_linux else []
         },
         "bdist_appimage": {
            "build_folder": buildfolder,

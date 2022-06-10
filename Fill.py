@@ -166,7 +166,7 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     defaultlocations = locations[LocationProgressType.DEFAULT]
     excludedlocations = locations[LocationProgressType.EXCLUDED]
 
-    fill_restrictive(world, world.state, prioritylocations, progitempool)
+    fill_restrictive(world, world.state, prioritylocations, progitempool, lock=True)
     if prioritylocations:
         defaultlocations = prioritylocations + defaultlocations
 
@@ -220,15 +220,15 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     restitempool, defaultlocations = fast_fill(
         world, restitempool, defaultlocations)
     unplaced = progitempool + restitempool
-    unfilled = [location.name for location in defaultlocations]
+    unfilled = defaultlocations
 
     if unplaced or unfilled:
         logging.warning(
             f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
-        items_counter = Counter([location.item.player for location in world.get_locations() if location.item])
-        locations_counter = Counter([location.player for location in world.get_locations()])
-        items_counter.update([item.player for item in unplaced])
-        locations_counter.update([location.player for location in unfilled])
+        items_counter = Counter(location.item.player for location in world.get_locations() if location.item)
+        locations_counter = Counter(location.player for location in world.get_locations())
+        items_counter.update(item.player for item in unplaced)
+        locations_counter.update(location.player for location in unfilled)
         print_data = {"items": items_counter, "locations": locations_counter}
         logging.info(f'Per-Player counts: {print_data})')
 
@@ -305,16 +305,21 @@ def flood_items(world: MultiWorld) -> None:
 
 def balance_multiworld_progression(world: MultiWorld) -> None:
     # A system to reduce situations where players have no checks remaining, popularly known as "BK mode."
-    # Overall progression balancing algorithm: 
+    # Overall progression balancing algorithm:
     # Gather up all locations in a sphere.
     # Define a threshold value based on the player with the most available locations.
     # If other players are below the threshold value, swap progression in this sphere into earlier spheres,
     #   which gives more locations available by this sphere.
-    balanceable_players: typing.Set[int] = {player for player in world.player_ids if world.progression_balancing[player]}
+    balanceable_players: typing.Dict[int, float] = {
+        player: world.progression_balancing[player] / 100
+        for player in world.player_ids
+        if world.progression_balancing[player] > 0
+    }
     if not balanceable_players:
         logging.info('Skipping multiworld progression balancing.')
     else:
         logging.info(f'Balancing multiworld progression for {len(balanceable_players)} Players.')
+        logging.debug(balanceable_players)
         state: CollectionState = CollectionState(world)
         checked_locations: typing.Set[Location] = set()
         unchecked_locations: typing.Set[Location] = set(world.get_locations())
@@ -324,10 +329,16 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
             for player in world.player_ids
             if len(world.get_filled_locations(player)) != 0
         }
-        total_locations_count: Counter = Counter(location.player for location in world.get_locations() if
-                                                 not location.locked)
-        balanceable_players = {player for player in balanceable_players if
-                                                total_locations_count[player]}
+        total_locations_count: typing.Counter[int] = Counter(
+            location.player
+            for location in world.get_locations()
+            if not location.locked
+        )
+        balanceable_players = {
+            player: balanceable_players[player]
+            for player in balanceable_players
+            if total_locations_count[player]
+        }
         sphere_num: int = 1
         moved_item_count: int = 0
 
@@ -359,13 +370,19 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
             sphere_num += 1
 
             if checked_locations:
-                # The 10% threshold can be modified for "progression balancing strength"
-                # right now it approximates the old 20/216 bound.
-                threshold_percentage = max(map(lambda p: item_percentage(p, reachable_locations_count[p]),
-                                               reachable_locations_count)) - 0.10
-                logging.debug(f"Threshold: {threshold_percentage}")
-                balancing_players = {player for player, reachables in reachable_locations_count.items() if
-                                     item_percentage(player, reachables) < threshold_percentage and player in balanceable_players}
+                max_percentage = max(map(lambda p: item_percentage(p, reachable_locations_count[p]),
+                                         reachable_locations_count))
+                threshold_percentages = {
+                    player: max_percentage * balanceable_players[player]
+                    for player in balanceable_players
+                }
+                logging.debug(f"Thresholds: {threshold_percentages}")
+                balancing_players = {
+                    player
+                    for player, reachables in reachable_locations_count.items()
+                    if (player in threshold_percentages
+                        and item_percentage(player, reachables) < threshold_percentages[player])
+                }
                 if balancing_players:
                     balancing_state = state.copy()
                     balancing_unchecked_locations = unchecked_locations.copy()
@@ -391,8 +408,9 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
                             if not location.locked:
                                 balancing_reachables[location.player] += 1
                         if world.has_beaten_game(balancing_state) or all(
-                                item_percentage(player, reachables) >= threshold_percentage 
-                                for player, reachables in balancing_reachables.items()):
+                                item_percentage(player, reachables) >= threshold_percentages[player]
+                                for player, reachables in balancing_reachables.items()
+                                if player in threshold_percentages):
                             break
                         elif not balancing_sphere:
                             raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
@@ -404,7 +422,9 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
                     items_to_replace: typing.List[Location] = []
                     for player in balancing_players:
                         locations_to_test = unlocked_locations[player]
-                        items_to_test = candidate_items[player]
+                        items_to_test = list(candidate_items[player])
+                        items_to_test.sort()
+                        world.random.shuffle(items_to_test)
                         while items_to_test:
                             testing = items_to_test.pop()
                             reducing_state = state.copy()
@@ -422,7 +442,7 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
                             else:
                                 reduced_sphere = get_sphere_locations(reducing_state, locations_to_test)
                                 p = item_percentage(player, reachable_locations_count[player] + len(reduced_sphere))
-                                if p < threshold_percentage:
+                                if p < threshold_percentages[player]:
                                     items_to_replace.append(testing)
 
                     replaced_items = False

@@ -193,8 +193,18 @@ del (raw)
 recipes = {}
 all_product_sources: Dict[str, Set[Recipe]] = {"character": set()}
 # add uranium mining to logic graph. TODO: add to automatic extractor for mod support
-raw_recipes["uranium-ore"] = {"ingredients": {"sulfuric-acid": 1}, "products": {"uranium-ore": 1}, "category": "mining",
-                              "energy": 2}
+raw_recipes["uranium-ore"] = {
+    "ingredients": {"sulfuric-acid": 1},
+    "products": {"uranium-ore": 1},
+    "category": "mining",
+    "energy": 2
+}
+raw_recipes["crude-oil"] = {
+    "ingredients": {},
+    "products": {"crude-oil": 1},
+    "category": "basic-fluid",
+    "energy": 1
+}
 
 # raw_recipes["iron-ore"] = {"ingredients": {}, "products": {"iron-ore": 1}, "category": "mining", "energy": 2}
 # raw_recipes["copper-ore"] = {"ingredients": {}, "products": {"copper-ore": 1}, "category": "mining", "energy": 2}
@@ -225,6 +235,7 @@ for name, categories in raw_machines.items():
 
 # add electric mining drill as a crafting machine to resolve uranium-ore
 machines["electric-mining-drill"] = Machine("electric-mining-drill", {"mining"})
+machines["pumpjack"] = Machine("pumpjack", {"basic-fluid"})
 machines["assembling-machine-1"].categories.add("crafting-with-fluid")  # mod enables this
 machines["character"].categories.add("basic-crafting")  # somehow this is implied and not exported
 del (raw_machines)
@@ -300,6 +311,7 @@ for category_name, machine_name in machine_per_category.items():
 
 required_technologies: Dict[str, FrozenSet[Technology]] = Utils.KeyedDefaultDict(lambda ingredient_name: frozenset(
     recursively_get_unlocking_technologies(ingredient_name, unlock_func=unlock)))
+
 
 def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe, satellite_recipe: Recipe) -> Set[str]:
     techs = set()

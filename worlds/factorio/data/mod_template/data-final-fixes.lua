@@ -178,13 +178,13 @@ data:extend{new_tree_copy}
 {% endfor %}
 {% if recipe_time_scale %}
 {%- for recipe_name, recipe in recipes.items() %}
-{%- if recipe.category != "mining" %}
+{%- if recipe.category not in ("mining", "basic-fluid") %}
 adjust_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_scale) }})
 {%- endif %}
 {%- endfor -%}
 {% elif recipe_time_range %}
 {%- for recipe_name, recipe in recipes.items() %}
-{%- if recipe.category != "mining" %}
+{%- if recipe.category not in ("mining", "basic-fluid") %}
 set_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_range) }})
 {%- endif %}
 {%- endfor -%}

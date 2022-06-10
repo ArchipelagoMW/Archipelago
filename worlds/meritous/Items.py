@@ -163,6 +163,8 @@ class MeritousItem(Item):
             self.type = name
         elif name == "Extra Life":
             self.type = "Other"
+        elif self.advancement:
+            self.type = "Important Artifact"
         else:
             self.type = "Artifact"
             self.never_exclude = True
@@ -210,5 +212,6 @@ item_groups = {
     "Artifacts": ["Map", "Shield Boost", "Crystal Efficiency", "Circuit Booster",
                   "Metabolism", "Dodge Enhancer", "Ethereal Monocle", "Crystal Gatherer",
                   "Portable Compass"],
+    "Important Artifacts": ["Shield Boost", "Circuit Booster", "Metabolism", "Dodge Enhancer"],
     "Crystals": ["Crystals x500", "Crystals x1000", "Crystals x2000"]
 }

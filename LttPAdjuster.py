@@ -513,25 +513,29 @@ def get_rom_frame(parent=None):
 
 def get_rom_options_frame(parent=None):
     adjuster_settings = get_adjuster_settings(GAME_ALTTP)
+    defaults = {
+        "auto_apply": 'ask',
+        "music": True,
+        "reduceflashing": True,
+        "deathlink": False,
+        "sprite": None,
+        "quickswap": True,
+        "menuspeed": 'normal',
+        "heartcolor": 'red',
+        "heartbeep": 'normal',
+        "ow_palettes": 'default',
+        "uw_palettes": 'default',
+        "hud_palettes": 'default',
+        "sword_palettes": 'default',
+        "shield_palettes": 'default',
+        "sprite_pool": [],
+        "allowcollect": False,
+    }
     if not adjuster_settings:
         adjuster_settings = Namespace()
-        adjuster_settings.auto_apply = 'ask'
-        adjuster_settings.music = True
-        adjuster_settings.reduceflashing = True
-        adjuster_settings.deathlink = False
-        adjuster_settings.allowcollect = False
-        adjuster_settings.sprite = None
-        adjuster_settings.quickswap = True
-        adjuster_settings.menuspeed = 'normal'
-        adjuster_settings.heartcolor = 'red'
-        adjuster_settings.heartbeep = 'normal'
-        adjuster_settings.ow_palettes = 'default'
-        adjuster_settings.uw_palettes = 'default'
-        adjuster_settings.hud_palettes = 'default'
-        adjuster_settings.sword_palettes = 'default'
-        adjuster_settings.shield_palettes = 'default'
-    if not hasattr(adjuster_settings, 'sprite_pool'):
-        adjuster_settings.sprite_pool = []
+    for key, defaultvalue in defaults.items():
+        if not hasattr(adjuster_settings, key):
+            setattr(adjuster_settings, key, defaultvalue)
 
     romOptionsFrame = LabelFrame(parent, text="Rom options")
     romOptionsFrame.columnconfigure(0, weight=1)
