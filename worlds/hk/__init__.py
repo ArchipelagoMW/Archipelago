@@ -221,7 +221,8 @@ class HKWorld(World):
                     else:
                         self.create_location(location_name)
                         pool.append(item)
-            elif option_key not in logicless_options:
+            # elif option_key not in logicless_options:
+            else:
                 for item_name, location_name in zip(option.items, option.locations):
                     if location_name in wp_exclusions and location_name != 'King_Fragment':
                         continue

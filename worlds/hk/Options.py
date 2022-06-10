@@ -276,11 +276,19 @@ class WhitePalace(Choice):
     Whether or not to include White Palace or not.  Note: Even if excluded, the King Fragment check may still be
     required if charms are vanilla.
     """
-    display_name = "WhitePalace"
+    display_name = "White Palace"
     option_exclude = 0  # No White Palace at all
     option_kingfragment = 1  # Include King Fragment check only
     option_nopathofpain = 2  # Exclude Path of Pain locations.
     option_include = 3  # Include all White Palace locations, including Path of Pain.
+    default = 0
+
+
+class StartingGeo(Range):
+    """The amount of starting geo you have."""
+    display_name = "Starting Geo"
+    range_start = 0
+    range_end = 1000
     default = 0
 
 
@@ -301,4 +309,5 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     EggShopSlots.__name__: EggShopSlots,
     Goal.__name__: Goal,
     WhitePalace.__name__: WhitePalace,
+    StartingGeo.__name__: StartingGeo,
 }
