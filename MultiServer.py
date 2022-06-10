@@ -1370,12 +1370,12 @@ def get_missing_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
 
 def get_client_points(ctx: Context, client: Client) -> int:
     return (ctx.location_check_points * len([loc for loc in ctx.location_checks[client.team, client.slot]
-                                             if not loc.flags & 8]) - ctx.get_hint_cost(client.slot)
+                                             if not ctx.locations[client.slot][loc][2] & 8]) - ctx.get_hint_cost(client.slot)
                                              * ctx.hints_used[client.team, client.slot])
 
 
 def get_slot_points(ctx: Context, team: int, slot: int) -> int:
-    return (ctx.location_check_points * len([loc for loc in ctx.location_checks[team, slot] if not loc.flags & 8]) -
+    return (ctx.location_check_points * len([loc for loc in ctx.location_checks[team, slot] if not ctx.locations[slot][loc][2] & 8]) -
             ctx.get_hint_cost(slot) * ctx.hints_used[team, slot])
 
 
