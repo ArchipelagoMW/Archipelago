@@ -5,7 +5,7 @@
 #define MyAppExeName "ArchipelagoServer.exe"
 #define MyAppIcon "data/icon.ico"
 #dim VersionTuple[4]
-#define MyAppVersion ParseVersion(source_path + '\ArchipelagoServer.exe', VersionTuple[0], VersionTuple[1], VersionTuple[2], VersionTuple[3])
+#define MyAppVersion GetVersionComponents(source_path + '\ArchipelagoServer.exe', VersionTuple[0], VersionTuple[1], VersionTuple[2], VersionTuple[3])
 #define MyAppVersionText Str(VersionTuple[0])+"."+Str(VersionTuple[1])+"."+Str(VersionTuple[2])
 
 
@@ -67,6 +67,7 @@ Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDi
 Name: "client/oot";       Description: "Ocarina of Time"; Types: full playing
 Name: "client/ff1";       Description: "Final Fantasy 1"; Types: full playing
 Name: "client/cf";        Description: "ChecksFinder"; Types: full playing
+Name: "client/sc2";       Description: "Starcraft 2"; Types: full playing
 Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
 
 [Dirs]
@@ -92,6 +93,7 @@ Source: "{#source_path}\ArchipelagoOoTClient.exe"; DestDir: "{app}"; Flags: igno
 Source: "{#source_path}\ArchipelagoOoTAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
 Source: "{#source_path}\ArchipelagoFF1Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ff1
 Source: "{#source_path}\ArchipelagoChecksFinderClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/cf
+Source: "{#source_path}\ArchipelagoStarcraft2Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sc2
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 [Icons]
@@ -104,6 +106,7 @@ Name: "{group}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinec
 Name: "{group}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\ArchipelagoOoTClient.exe"; Components: client/oot
 Name: "{group}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Components: client/ff1
 Name: "{group}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Components: client/cf
+Name: "{group}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Components: client/sc2
 
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
 Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Components: server
@@ -113,6 +116,7 @@ Name: "{commondesktop}\{#MyAppName} Minecraft Client"; Filename: "{app}\Archipel
 Name: "{commondesktop}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\ArchipelagoOoTClient.exe"; Tasks: desktopicon; Components: client/oot
 Name: "{commondesktop}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Tasks: desktopicon; Components: client/ff1
 Name: "{commondesktop}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Tasks: desktopicon; Components: client/cf
+Name: "{commondesktop}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Tasks: desktopicon; Components: client/sc2
 
 [Run]
 
@@ -163,6 +167,10 @@ Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Arc
 Root: HKCR; Subkey: "{#MyAppName}multidata\DefaultIcon";         ValueData: "{app}\ArchipelagoServer.exe,0";                         ValueType: string;  ValueName: ""; Components: server
 Root: HKCR; Subkey: "{#MyAppName}multidata\shell\open\command";  ValueData: """{app}\ArchipelagoServer.exe"" ""%1""";                ValueType: string;  ValueName: ""; Components: server
 
+Root: HKCR; Subkey: "archipelago"; ValueType: "string"; ValueData: "Archipegalo Protocol"; Flags: uninsdeletekey; Components: client/text
+Root: HKCR; Subkey: "archipelago"; ValueType: "string"; ValueName: "URL Protocol"; ValueData: ""; Components: client/text
+Root: HKCR; Subkey: "archipelago\DefaultIcon"; ValueType: "string"; ValueData: "{app}\ArchipelagoTextClient.exe,0"; Components: client/text
+Root: HKCR; Subkey: "archipelago\shell\open\command"; ValueType: "string"; ValueData: """{app}\ArchipelagoTextClient.exe"" ""%1"""; Components: client/text
 
 [Code]
 const

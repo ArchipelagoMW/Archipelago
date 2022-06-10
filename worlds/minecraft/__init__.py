@@ -9,17 +9,45 @@ from .Regions import mc_regions, link_minecraft_structures, default_connections
 from .Rules import set_advancement_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 
-from BaseClasses import Region, Entrance, Item
+from BaseClasses import Region, Entrance, Item, Tutorial
 from .Options import minecraft_options
 from ..AutoWorld import World, WebWorld
 
-client_version = 7
-minecraft_version = "1.17.1"
-
+client_version = 8
 
 class MinecraftWebWorld(WebWorld):
     theme = "jungle"
     bug_report_page = "https://github.com/KonoTyran/Minecraft_AP_Randomizer/issues/new?assignees=&labels=bug&template=bug_report.yaml&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
+
+    setup = Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago Minecraft software on your computer. This guide covers"
+        "single-player, multiworld, and related software.",
+        "English",
+        "minecraft_en.md",
+        "minecraft/en",
+        ["Kono Tyran"]
+    )
+
+    setup_es = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Español",
+        "minecraft_es.md",
+        "minecraft/es",
+        ["Edos"]
+    )
+
+    setup_sv = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Swedish",
+        "minecraft_sv.md",
+        "minecraft/sv",
+        ["Albinum"]
+    )
+
+    tutorials = [setup, setup_es, setup_sv]
 
 
 class MinecraftWorld(World):
@@ -37,7 +65,7 @@ class MinecraftWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 4
+    data_version = 6
 
     def _get_mc_data(self):
         exits = [connection[0] for connection in default_connections]
@@ -47,7 +75,6 @@ class MinecraftWorld(World):
             'player_name': self.world.get_player_name(self.player),
             'player_id': self.player,
             'client_version': client_version,
-            'minecraft_version': minecraft_version,
             'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits},
             'advancement_goal': self.world.advancement_goal[self.player].value,
             'egg_shards_required': min(self.world.egg_shards_required[self.player].value,
@@ -78,7 +105,7 @@ class MinecraftWorld(World):
             itempool += ["Dragon Egg Shard"] * self.world.egg_shards_available[self.player]
         # Add bee traps if desired
         bee_trap_quantity = ceil(self.world.bee_traps[self.player] * (len(self.location_names)-len(itempool)) * 0.01)
-        itempool += ["Bee Trap (Minecraft)"] * bee_trap_quantity
+        itempool += ["Bee Trap"] * bee_trap_quantity
         # Fill remaining items with randomly generated junk
         itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool))
         # Convert itempool into real items
@@ -100,6 +127,9 @@ class MinecraftWorld(World):
         self.world.get_location("Wither", self.player).place_locked_item(self.create_item("Defeat Wither"))
 
         self.world.itempool += itempool
+
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()))[0]
 
     def set_rules(self):
         set_advancement_rules(self.world, self.player)
@@ -138,6 +168,8 @@ class MinecraftWorld(World):
         nonexcluded_items = ["Sharpness III Book", "Infinity Book", "Looting III Book"]
         if name in nonexcluded_items:  # prevent books from going on excluded locations
             item.never_exclude = True
+        if name == "Bee Trap":
+            item.trap = True
         return item
 
 def mc_update_output(raw_data, server, port):

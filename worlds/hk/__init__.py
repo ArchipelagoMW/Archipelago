@@ -14,8 +14,8 @@ from .ExtractedData import locations, starts, multi_locations, location_to_regio
     event_names, item_effects, connectors, one_ways
 from .Charms import names as charm_names
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType
-from ..AutoWorld import World, LogicMixin
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, Tutorial
+from ..AutoWorld import World, LogicMixin, WebWorld
 
 white_palace_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
@@ -88,6 +88,17 @@ progression_charms = {
 }
 
 
+class HKWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Mod Setup and Use Guide",
+        "A guide to playing Hollow Knight with Archipelago.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Ijwu"]
+    )]
+
+
 class HKWorld(World):
     """Beneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface, 
     searching for riches, or glory, or answers to old secrets.
@@ -96,6 +107,8 @@ class HKWorld(World):
     """  # from https://www.hollowknight.com
     game: str = "Hollow Knight"
     options = hollow_knight_options
+
+    web = HKWeb()
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {location_name: location_id for location_id, location_name in

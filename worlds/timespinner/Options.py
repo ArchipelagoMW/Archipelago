@@ -1,6 +1,7 @@
-from typing import Dict
+from typing import Dict, Union
 from BaseClasses import MultiWorld
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict
+from schema import Schema, And, Optional
 
 class StartWithJewelryBox(Toggle):
     "Start with Jewelry Box unlocked"
@@ -54,9 +55,141 @@ class LoreChecks(Toggle):
     "Memories and journal entries contain items."
     display_name = "Lore Checks"
 
-class DamageRando(Toggle):
-    "Each orb has a high chance of having lower base damage and a low chance of having much higher base damage."
+class BossRando(Toggle):
+    "Shuffles the positions of all bosses."
+    display_name = "Boss Randomization"
+
+class BossScaling(DefaultOnToggle):
+    "When Boss Rando is enabled, scales the bosses' HP, XP, and ATK to the stats of the location they replace (Reccomended)"
+    display_name = "Scale Random Boss Stats"
+
+class DamageRando(Choice):
+    "Randomly nerfs and buffs some orbs and their associated spells as well as some associated rings."
     display_name = "Damage Rando"
+    option_off = 0
+    option_allnerfs = 1
+    option_mostlynerfs = 2
+    option_balanced = 3
+    option_mostlybuffs = 4
+    option_allbuffs = 5
+    option_manual = 6
+    alias_false = 0
+    alias_true = 2
+
+class DamageRandoOverrides(OptionDict):
+    "Manual +/-/normal odds for an orb. Put 0 if you don't want a certain nerf or buff to be a possibility. Orbs that you don't specify will roll with 1/1/1 as odds"
+    schema = Schema({
+        Optional("Blue"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Blade"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Fire"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Plasma"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Iron"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Ice"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Wind"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Gun"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Umbra"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Empire"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Eye"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Blood"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("ForbiddenTome"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Shattered"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Nether"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+        Optional("Radiant"): { 
+            "MinusOdds": And(int, lambda n: n >= 0), 
+            "NormalOdds": And(int, lambda n: n >= 0), 
+            "PlusOdds": And(int, lambda n: n >= 0) 
+        },
+    })
+    display_name = "Damage Rando Overrides"
+    default = {
+        "Blue": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Blade": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Fire": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Plasma": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Iron": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Ice": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Wind": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Gun": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Umbra": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Empire": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Eye": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Blood": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "ForbiddenTome": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Shattered": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Nether": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+        "Radiant": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
+    }
+
+class HpCap(Range):
+    "Sets the number that Lunais's HP maxes out at."
+    display_name = "HP Cap"
+    range_start = 1
+    range_end = 999
+    default = 999
+
+class BossHealing(DefaultOnToggle):
+    "Enables/disables healing after boss fights. NOTE: Currently only applicable when Boss Rando is enabled."
+    display_name = "Heal After Bosses"
 
 class ShopFill(Choice):
     """Sets the items for sale in Merchant Crow's shops.
@@ -81,6 +214,24 @@ class ShopMultiplier(Range):
     range_end = 10
     default = 1
 
+class LootPool(Choice):
+    """Sets the items that drop from enemies (does not apply to boss reward checks)
+    Vanilla: Drops are the same as the base game
+    Randomized: Each slot of every enemy's drop table is given a random use item or piece of equipment.
+    Empty: Enemies drop nothing."""
+    display_name = "Loot Pool"
+    option_vanilla = 0
+    option_randomized = 1
+    option_empty = 2
+
+class ShowBestiary(Toggle):
+    "All entries in the bestiary are visible, without needing to kill one of a given enemy first"
+    display_name = "Show Bestiary Entries"
+
+class ShowDrops(Toggle):
+    "All item drops in the bestiary are visible, without needing an enemy to drop one of a given item first"
+    display_name = "Show Bestiary Item Drops"
+
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Option] = {
     "StartWithJewelryBox": StartWithJewelryBox,
@@ -96,20 +247,27 @@ timespinner_options: Dict[str, Option] = {
     "GyreArchives": GyreArchives,
     "Cantoran": Cantoran,
     "LoreChecks": LoreChecks,
+    "BossRando": BossRando,
+    "BossScaling": BossScaling,
     "DamageRando": DamageRando,
+    "DamageRandoOverrides": DamageRandoOverrides,
+    "HpCap": HpCap,
+    "BossHealing": BossHealing,
     "ShopFill": ShopFill,
     "ShopWarpShards": ShopWarpShards,
     "ShopMultiplier": ShopMultiplier,
+    "LootPool": LootPool,
+    "ShowBestiary": ShowBestiary,
+    "ShowDrops": ShowDrops,
     "DeathLink": DeathLink,
 }
 
 def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
     return get_option_value(world, player, name) > 0
 
-def get_option_value(world: MultiWorld, player: int, name: str) -> int:
+def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, dict]:
     option = getattr(world, name, None)
-
     if option == None:
         return 0
 
-    return int(option[player].value)
+    return option[player].value

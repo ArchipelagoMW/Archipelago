@@ -9,8 +9,20 @@ from .Regions import create_regions, getConnectionName
 from .Rules import set_rules
 from .Options import raft_options
 
-from BaseClasses import Region, RegionType, Entrance, Location, MultiWorld, Item
-from ..AutoWorld import World
+from BaseClasses import Region, RegionType, Entrance, Location, MultiWorld, Item, Tutorial
+from ..AutoWorld import World, WebWorld
+
+
+class RaftWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Raft integration for Archipelago multiworld games.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["SunnyBat", "Awareqwx"]
+    )]
+
 
 class RaftWorld(World):
     """
@@ -19,6 +31,7 @@ class RaftWorld(World):
     islands that you come across.
     """
     game: str = "Raft"
+    web = RaftWeb()
 
     item_name_to_id = items_lookup_name_to_id.copy()
     lastItemId = max(filter(lambda val: val is not None, item_name_to_id.values()))

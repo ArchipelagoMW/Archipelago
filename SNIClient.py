@@ -10,6 +10,9 @@ import base64
 import shutil
 import logging
 import asyncio
+import enum
+import typing
+
 from json import loads, dumps
 
 import ModuleUpdate
@@ -21,14 +24,15 @@ if __name__ == "__main__":
     init_logging("SNIClient", exception_logger="Client")
 
 import colorama
+import websockets
 
-from NetUtils import *
+from NetUtils import ClientStatus, color
 from worlds.alttp import Regions, Shops
 from worlds.alttp.Rom import ROM_PLAYER_LIMIT
 from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
 from worlds.smz3.Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
 import Utils
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3
 
 snes_logger = logging.getLogger("SNES")
@@ -128,6 +132,7 @@ class Context(CommonContext):
         self.death_state = DeathState.alive  # for death link flop behaviour
         self.killing_player_task = None
         self.allow_collect = False
+        self.slow_mode = False
 
         self.awaiting_rom = False
         self.rom = None
@@ -185,6 +190,19 @@ class Context(CommonContext):
                 # Items belonging to the player should not be marked as checked in game, since the player will likely need that item.
                 # Once the games handled by SNIClient gets made to be remote items, this will no longer be needed.
                 asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": list(new_locations)}]))
+
+    def run_gui(self):
+        from kvui import GameManager
+
+        class SNIManager(GameManager):
+            logging_pairs = [
+                ("Client", "Archipelago"),
+                ("SNES", "SNES"),
+            ]
+            base_title = "Archipelago SNI Client"
+
+        self.ui = SNIManager(self)
+        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
 async def deathlink_kill_player(ctx: Context):
@@ -517,7 +535,8 @@ boss_locations = {Regions.lookup_name_to_id[name] for name in {'Eastern Palace -
                                                                            "Thieves' Town - Boss",
                                                                            'Ice Palace - Boss',
                                                                            'Misery Mire - Boss',
-                                                                           'Turtle Rock - Boss'}}
+                                                                           'Turtle Rock - Boss',
+                                                                           'Sahasrahla'}}
 
 location_table_uw_id = {Regions.lookup_name_to_id[name]: data for name, data in location_table_uw.items()}
 
@@ -626,7 +645,7 @@ async def _snes_connect(ctx: Context, address: str):
             return snes_socket
 
 
-async def get_snes_devices(ctx: Context):
+async def get_snes_devices(ctx: Context) -> typing.List[str]:
     socket = await _snes_connect(ctx, ctx.snes_address)  # establish new connection to poll
     DeviceList_Request = {
         "Opcode": "DeviceList",
@@ -646,7 +665,7 @@ async def get_snes_devices(ctx: Context):
             devices = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else None
     await verify_snes_app(socket)
     await socket.close()
-    return devices
+    return sorted(devices)
 
 
 async def verify_snes_app(socket):
@@ -961,8 +980,9 @@ async def track_locations(ctx: Context, roomid, roomdata):
             for location_id, mask in location_table_npc_id.items():
                 if npc_value & mask != 0 and location_id not in ctx.locations_checked:
                     new_check(location_id)
-                if ctx.allow_collect and location_id in ctx.checked_locations and location_id not in ctx.locations_checked \
-                        and location_id in ctx.locations_info and ctx.locations_info[location_id].player != ctx.slot:
+                if ctx.allow_collect and location_id not in boss_locations and location_id in ctx.checked_locations \
+                        and location_id not in ctx.locations_checked and location_id in ctx.locations_info \
+                        and ctx.locations_info[location_id].player != ctx.slot:
                     npc_value |= mask
                     npc_value_changed = True
             if npc_value_changed:
@@ -1170,7 +1190,10 @@ async def game_watcher(ctx: Context):
             if itemOutPtr < len(ctx.items_received):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
-                locationId = (item.location - locations_start_id) if item.location >= 0 and bool(ctx.items_handling & 0b010) else 0x00
+                if bool(ctx.items_handling & 0b010):
+                    locationId = (item.location - locations_start_id) if (item.location >= 0 and item.player == ctx.slot) else 0xFF
+                else:
+                    locationId = 0x00 #backward compat
 
                 playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes(
@@ -1282,7 +1305,7 @@ async def main():
             import time
             time.sleep(3)
             sys.exit()
-        elif args.diff_file.endswith((".apbp", "apz3")):
+        elif args.diff_file.endswith((".apbp", ".apz3", ".aplttp")):
             adjustedromfile, adjusted = get_alttp_settings(romfile)
             asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
         else:
@@ -1291,15 +1314,10 @@ async def main():
     ctx = Context(args.snes, args.connect, args.password)
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-    input_task = None
+
     if gui_enabled:
-        from kvui import SNIManager
-        ctx.ui = SNIManager(ctx)
-        ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
-    else:
-        ui_task = None
-    if sys.stdin:
-        input_task = asyncio.create_task(console_loop(ctx), name="Input")
+        ctx.run_gui()
+    ctx.run_cli()
 
     snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address), name="SNES Connect")
     watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
@@ -1314,12 +1332,6 @@ async def main():
         snes_connect_task.cancel()
     await watcher_task
     await ctx.shutdown()
-
-    if ui_task:
-        await ui_task
-
-    if input_task:
-        input_task.cancel()
 
 
 def get_alttp_settings(romfile: str):
@@ -1432,7 +1444,7 @@ def get_alttp_settings(romfile: str):
             if hasattr(lastSettings, "world"):
                 delattr(lastSettings, "world")
         else:
-            adjusted = False;
+            adjusted = False
         if adjusted:
             try:
                 shutil.move(adjustedromfile, romfile)
@@ -1446,7 +1458,5 @@ def get_alttp_settings(romfile: str):
 
 if __name__ == '__main__':
     colorama.init()
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-    loop.close()
+    asyncio.run(main())
     colorama.deinit()

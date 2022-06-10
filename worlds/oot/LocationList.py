@@ -19,6 +19,7 @@ def shop_address(shop_id, shelf_id):
 #       LW      Lost Woods
 #       OGC     Outside Ganon's Castle
 #       SFM     Sacred Forest Meadow
+#       TH      Thieves' Hideout
 #       ToT     Temple of Time
 #       ZD      Zora's Domain
 #       ZF      Zora's Fountain
@@ -52,7 +53,7 @@ location_table = OrderedDict([
     ("Song from Impa",                                               ("Song",         0xFF,  0x26, (0x2E8E925, 0x2E8E925),      'Zeldas Lullaby',                        ("Hyrule Castle", "Market", "Songs"))),
     ("Song from Malon",                                              ("Song",         0xFF,  0x27, (0x0D7EB53, 0x0D7EBCF),      'Eponas Song',                           ("Lon Lon Ranch", "Songs",))),
     ("Song from Saria",                                              ("Song",         0xFF,  0x28, (0x20B1DB1, 0x20B1DB1),      'Sarias Song',                           ("Sacred Forest Meadow", "Forest", "Songs"))),
-    ("Song from Composers Grave",                                    ("Song",         0xFF,  0x29, (0x332A871, 0x332A871),      'Suns Song',                             ("the Graveyard", "Kakariko", "Songs"))),
+    ("Song from Royal Familys Tomb",                                 ("Song",         0xFF,  0x29, (0x332A871, 0x332A871),      'Suns Song',                             ("the Graveyard", "Kakariko", "Songs"))),
     ("Song from Ocarina of Time",                                    ("Song",         0xFF,  0x2A, (0x252FC89, 0x252FC89),      'Song of Time',                          ("Hyrule Field", "Songs", "Need Spiritual Stones"))),
     ("Song from Windmill",                                           ("Song",         0xFF,  0x2B, (0x0E42C07, 0x0E42B8B),      'Song of Storms',                        ("Kakariko Village", "Kakariko", "Songs"))),
     ("Sheik in Forest",                                              ("Song",         0xFF,  0x20, (0x20B0809, 0x20B0809),      'Minuet of Forest',                      ("Sacred Forest Meadow", "Forest", "Songs"))),
@@ -70,7 +71,7 @@ location_table = OrderedDict([
     ("KF Midos Bottom Right Chest",                                  ("Chest",        0x28,  0x03, None,                        'Recovery Heart',                        ("Kokiri Forest", "Forest",))),
     ("KF Kokiri Sword Chest",                                        ("Chest",        0x55,  0x00, None,                        'Kokiri Sword',                          ("Kokiri Forest", "Forest",))),
     ("KF Storms Grotto Chest",                                       ("Chest",        0x3E,  0x0C, None,                        'Rupees (20)',                           ("Kokiri Forest", "Forest", "Grottos"))),
-    ("KF Links House Cow",                                           ("NPC",          0x34,  0x15, None,                        'Milk',                                  ("KF Links House", "Forest", "Cow", "Minigames"))),
+    ("KF Links House Cow",                                           ("NPC",          0x34,  0x15, None,                        'Milk',                                  ("Kokiri Forest", "Forest", "Cow", "Minigames"))),
     ("KF GS Know It All House",                                      ("GS Token",     0x0C,  0x02, None,                        'Gold Skulltula Token',                  ("Kokiri Forest", "Skulltulas",))),
     ("KF GS Bean Patch",                                             ("GS Token",     0x0C,  0x01, None,                        'Gold Skulltula Token',                  ("Kokiri Forest", "Skulltulas",))),
     ("KF GS House of Twins",                                         ("GS Token",     0x0C,  0x04, None,                        'Gold Skulltula Token',                  ("Kokiri Forest", "Skulltulas",))),
@@ -163,7 +164,7 @@ location_table = OrderedDict([
     ("HC GS Storms Grotto",                                          ("GS Token",     0x0E,  0x02, None,                        'Gold Skulltula Token',                  ("Hyrule Castle", "Skulltulas", "Grottos"))),
 
     # Lon Lon Ranch
-    ("LLR Talons Chickens",                                          ("NPC",          0x4C,  0x14, None,                        'Bottle with Milk',                      ("Lon Lon Ranch", "Kakariko", "Minigames"))),
+    ("LLR Talons Chickens",                                          ("NPC",          0x4C,  0x14, None,                        'Bottle with Milk',                      ("Lon Lon Ranch", "Minigames"))),
     ("LLR Freestanding PoH",                                         ("Collectable",  0x4C,  0x01, None,                        'Piece of Heart',                        ("Lon Lon Ranch",))),
     ("LLR Deku Scrub Grotto Left",                                   ("GrottoNPC",    0xFC,  0x30, None,                        'Buy Deku Nut (5)',                      ("Lon Lon Ranch", "Deku Scrub", "Grottos"))),
     ("LLR Deku Scrub Grotto Center",                                 ("GrottoNPC",    0xFC,  0x33, None,                        'Buy Deku Seeds (30)',                   ("Lon Lon Ranch", "Deku Scrub", "Grottos"))),
@@ -218,7 +219,7 @@ location_table = OrderedDict([
     # Graveyard
     ("Graveyard Shield Grave Chest",                                 ("Chest",        0x40,  0x00, None,                        'Hylian Shield',                         ("the Graveyard", "Kakariko",))),
     ("Graveyard Heart Piece Grave Chest",                            ("Chest",        0x3F,  0x00, None,                        'Piece of Heart',                        ("the Graveyard", "Kakariko",))),
-    ("Graveyard Composers Grave Chest",                              ("Chest",        0x41,  0x00, None,                        'Bombs (5)',                             ("the Graveyard", "Kakariko",))),
+    ("Graveyard Royal Familys Tomb Chest",                           ("Chest",        0x41,  0x00, None,                        'Bombs (5)',                             ("the Graveyard", "Kakariko",))),
     ("Graveyard Freestanding PoH",                                   ("Collectable",  0x53,  0x04, None,                        'Piece of Heart',                        ("the Graveyard", "Kakariko",))),
     ("Graveyard Dampe Gravedigging Tour",                            ("Collectable",  0x53,  0x08, None,                        'Piece of Heart',                        ("the Graveyard", "Kakariko",))),
     ("Graveyard Hookshot Chest",                                     ("Chest",        0x48,  0x00, None,                        'Progressive Hookshot',                  ("the Graveyard", "Kakariko",))),
@@ -337,12 +338,14 @@ location_table = OrderedDict([
     ("GV GS Behind Tent",                                            ("GS Token",     0x13,  0x08, None,                        'Gold Skulltula Token',                  ("Gerudo Valley", "Skulltulas",))),
     ("GV GS Pillar",                                                 ("GS Token",     0x13,  0x04, None,                        'Gold Skulltula Token',                  ("Gerudo Valley", "Skulltulas",))),
 
+    # Thieves' Hideout
+    ("Hideout Jail Guard (1 Torch)",                                 ("Collectable",  0x0C,  0x0C, None,                        'Small Key (Thieves Hideout)',           ("Thieves' Hideout", "Gerudo",))),
+    ("Hideout Jail Guard (2 Torches)",                               ("Collectable",  0x0C,  0x0F, None,                        'Small Key (Thieves Hideout)',           ("Thieves' Hideout", "Gerudo",))),
+    ("Hideout Jail Guard (3 Torches)",                               ("Collectable",  0x0C,  0x0A, None,                        'Small Key (Thieves Hideout)',           ("Thieves' Hideout", "Gerudo",))),
+    ("Hideout Jail Guard (4 Torches)",                               ("Collectable",  0x0C,  0x0E, None,                        'Small Key (Thieves Hideout)',           ("Thieves' Hideout", "Gerudo",))),
+    ("Hideout Gerudo Membership Card",                               ("NPC",          0x0C,  0x3A, None,                        'Gerudo Membership Card',                ("Thieves' Hideout", "Gerudo",))),
+
     # Gerudo's Fortress
-    ("GF North F1 Carpenter",                                        ("Collectable",  0x0C,  0x0C, None,                        'Small Key (Gerudo Fortress)',           ("Gerudo's Fortress", "Gerudo",))),
-    ("GF North F2 Carpenter",                                        ("Collectable",  0x0C,  0x0A, None,                        'Small Key (Gerudo Fortress)',           ("Gerudo's Fortress", "Gerudo",))),
-    ("GF South F1 Carpenter",                                        ("Collectable",  0x0C,  0x0E, None,                        'Small Key (Gerudo Fortress)',           ("Gerudo's Fortress", "Gerudo",))),
-    ("GF South F2 Carpenter",                                        ("Collectable",  0x0C,  0x0F, None,                        'Small Key (Gerudo Fortress)',           ("Gerudo's Fortress", "Gerudo",))),
-    ("GF Gerudo Membership Card",                                    ("NPC",          0x0C,  0x3A, None,                        'Gerudo Membership Card',                ("Gerudo's Fortress", "Gerudo",))),
     ("GF Chest",                                                     ("Chest",        0x5D,  0x00, None,                        'Piece of Heart',                        ("Gerudo's Fortress", "Gerudo",))),
     ("GF HBA 1000 Points",                                           ("NPC",          0x5D,  0x3E, None,                        'Piece of Heart',                        ("Gerudo's Fortress", "Gerudo", "Minigames"))),
     ("GF HBA 1500 Points",                                           ("NPC",          0x5D,  0x30, None,                        'Bow',                                   ("Gerudo's Fortress", "Gerudo", "Minigames"))),
@@ -364,8 +367,8 @@ location_table = OrderedDict([
     ("Colossus GS Hill",                                             ("GS Token",     0x15,  0x04, None,                        'Gold Skulltula Token',                  ("Desert Colossus", "Skulltulas",))),
 
     # Outside Ganon's Castle
-    ("OGC Great Fairy Reward",                                       ("Cutscene",     0xFF,  0x15, None,                        'Double Defense',                        ("outside Ganon's Castle", "Market", "Fairies"))),
-    ("OGC GS",                                                       ("GS Token",     0x0E,  0x01, None,                        'Gold Skulltula Token',                  ("outside Ganon's Castle", "Skulltulas",))),
+    ("OGC Great Fairy Reward",                                       ("Cutscene",     0xFF,  0x15, None,                        'Double Defense',                        ("Outside Ganon's Castle", "Market", "Fairies"))),
+    ("OGC GS",                                                       ("GS Token",     0x0E,  0x01, None,                        'Gold Skulltula Token',                  ("Outside Ganon's Castle", "Skulltulas",))),
 
     ## Dungeons
     # Deku Tree vanilla
@@ -725,47 +728,47 @@ location_table = OrderedDict([
     ("Ice Cavern MQ GS Ice Block",                                   ("GS Token",     0x09,  0x04, None,                        'Gold Skulltula Token',                  ("Ice Cavern", "Master Quest", "Skulltulas",))),
     ("Ice Cavern MQ GS Scarecrow",                                   ("GS Token",     0x09,  0x01, None,                        'Gold Skulltula Token',                  ("Ice Cavern", "Master Quest", "Skulltulas",))),
 
-    # Gerudo Training Grounds vanilla
-    ("Gerudo Training Grounds Lobby Left Chest",                     ("Chest",        0x0B,  0x13, None,                        'Rupees (5)',                            ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Lobby Right Chest",                    ("Chest",        0x0B,  0x07, None,                        'Arrows (10)',                           ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Stalfos Chest",                        ("Chest",        0x0B,  0x00, None,                        'Small Key (Gerudo Training Grounds)',   ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Before Heavy Block Chest",             ("Chest",        0x0B,  0x11, None,                        'Arrows (30)',                           ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Heavy Block First Chest",              ("Chest",        0x0B,  0x0F, None,                        'Rupees (200)',                          ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Heavy Block Second Chest",             ("Chest",        0x0B,  0x0E, None,                        'Rupees (5)',                            ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Heavy Block Third Chest",              ("Chest",        0x0B,  0x14, None,                        'Small Key (Gerudo Training Grounds)',   ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Heavy Block Fourth Chest",             ("Chest",        0x0B,  0x02, None,                        'Ice Trap',                              ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Eye Statue Chest",                     ("Chest",        0x0B,  0x03, None,                        'Small Key (Gerudo Training Grounds)',   ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Near Scarecrow Chest",                 ("Chest",        0x0B,  0x04, None,                        'Small Key (Gerudo Training Grounds)',   ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Hammer Room Clear Chest",              ("Chest",        0x0B,  0x12, None,                        'Arrows (10)',                           ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Hammer Room Switch Chest",             ("Chest",        0x0B,  0x10, None,                        'Small Key (Gerudo Training Grounds)',   ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Freestanding Key",                     ("Collectable",  0x0B,  0x01, None,                        'Small Key (Gerudo Training Grounds)',   ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Maze Right Central Chest",             ("Chest",        0x0B,  0x05, None,                        'Bombchus (5)',                          ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Maze Right Side Chest",                ("Chest",        0x0B,  0x08, None,                        'Arrows (30)',                           ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Underwater Silver Rupee Chest",        ("Chest",        0x0B,  0x0D, None,                        'Small Key (Gerudo Training Grounds)',   ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Beamos Chest",                         ("Chest",        0x0B,  0x01, None,                        'Small Key (Gerudo Training Grounds)',   ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Hidden Ceiling Chest",                 ("Chest",        0x0B,  0x0B, None,                        'Small Key (Gerudo Training Grounds)',   ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Maze Path First Chest",                ("Chest",        0x0B,  0x06, None,                        'Rupees (50)',                           ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Maze Path Second Chest",               ("Chest",        0x0B,  0x0A, None,                        'Rupees (20)',                           ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Maze Path Third Chest",                ("Chest",        0x0B,  0x09, None,                        'Arrows (30)',                           ("Gerudo Training Grounds", "Vanilla",))),
-    ("Gerudo Training Grounds Maze Path Final Chest",                ("Chest",        0x0B,  0x0C, None,                        'Ice Arrows',                            ("Gerudo Training Grounds", "Vanilla",))),
-    # Gerudo Training Grounds MQ
-    ("Gerudo Training Grounds MQ Lobby Left Chest",                  ("Chest",        0x0B,  0x13, None,                        'Arrows (10)',                           ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Lobby Right Chest",                 ("Chest",        0x0B,  0x07, None,                        'Bombchus (5)',                          ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ First Iron Knuckle Chest",          ("Chest",        0x0B,  0x00, None,                        'Rupees (5)',                            ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Before Heavy Block Chest",          ("Chest",        0x0B,  0x11, None,                        'Arrows (10)',                           ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Heavy Block Chest",                 ("Chest",        0x0B,  0x02, None,                        'Rupees (50)',                           ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Eye Statue Chest",                  ("Chest",        0x0B,  0x03, None,                        'Bombchus (10)',                         ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Ice Arrows Chest",                  ("Chest",        0x0B,  0x04, None,                        'Ice Arrows',                            ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Second Iron Knuckle Chest",         ("Chest",        0x0B,  0x12, None,                        'Arrows (10)',                           ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Flame Circle Chest",                ("Chest",        0x0B,  0x0E, None,                        'Small Key (Gerudo Training Grounds)',   ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Maze Right Central Chest",          ("Chest",        0x0B,  0x05, None,                        'Rupees (5)',                            ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Maze Right Side Chest",             ("Chest",        0x0B,  0x08, None,                        'Rupee (Treasure Chest Game)',           ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Underwater Silver Rupee Chest",     ("Chest",        0x0B,  0x0D, None,                        'Small Key (Gerudo Training Grounds)',   ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Dinolfos Chest",                    ("Chest",        0x0B,  0x01, None,                        'Small Key (Gerudo Training Grounds)',   ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Hidden Ceiling Chest",              ("Chest",        0x0B,  0x0B, None,                        'Rupees (50)',                           ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Maze Path First Chest",             ("Chest",        0x0B,  0x06, None,                        'Rupee (1)',                             ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Maze Path Third Chest",             ("Chest",        0x0B,  0x09, None,                        'Rupee (Treasure Chest Game)',           ("Gerudo Training Grounds", "Master Quest",))),
-    ("Gerudo Training Grounds MQ Maze Path Second Chest",            ("Chest",        0x0B,  0x0A, None,                        'Rupees (20)',                           ("Gerudo Training Grounds", "Master Quest",))),
+    # Gerudo Training Ground vanilla
+    ("Gerudo Training Ground Lobby Left Chest",                      ("Chest",        0x0B,  0x13, None,                        'Rupees (5)',                            ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Lobby Right Chest",                     ("Chest",        0x0B,  0x07, None,                        'Arrows (10)',                           ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Stalfos Chest",                         ("Chest",        0x0B,  0x00, None,                        'Small Key (Gerudo Training Ground)',    ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Before Heavy Block Chest",              ("Chest",        0x0B,  0x11, None,                        'Arrows (30)',                           ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Heavy Block First Chest",               ("Chest",        0x0B,  0x0F, None,                        'Rupees (200)',                          ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Heavy Block Second Chest",              ("Chest",        0x0B,  0x0E, None,                        'Rupees (5)',                            ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Heavy Block Third Chest",               ("Chest",        0x0B,  0x14, None,                        'Small Key (Gerudo Training Ground)',    ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Heavy Block Fourth Chest",              ("Chest",        0x0B,  0x02, None,                        'Ice Trap',                              ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Eye Statue Chest",                      ("Chest",        0x0B,  0x03, None,                        'Small Key (Gerudo Training Ground)',    ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Near Scarecrow Chest",                  ("Chest",        0x0B,  0x04, None,                        'Small Key (Gerudo Training Ground)',    ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Hammer Room Clear Chest",               ("Chest",        0x0B,  0x12, None,                        'Arrows (10)',                           ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Hammer Room Switch Chest",              ("Chest",        0x0B,  0x10, None,                        'Small Key (Gerudo Training Ground)',    ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Freestanding Key",                      ("Collectable",  0x0B,  0x01, None,                        'Small Key (Gerudo Training Ground)',    ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Maze Right Central Chest",              ("Chest",        0x0B,  0x05, None,                        'Bombchus (5)',                          ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Maze Right Side Chest",                 ("Chest",        0x0B,  0x08, None,                        'Arrows (30)',                           ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Underwater Silver Rupee Chest",         ("Chest",        0x0B,  0x0D, None,                        'Small Key (Gerudo Training Ground)',    ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Beamos Chest",                          ("Chest",        0x0B,  0x01, None,                        'Small Key (Gerudo Training Ground)',    ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Hidden Ceiling Chest",                  ("Chest",        0x0B,  0x0B, None,                        'Small Key (Gerudo Training Ground)',    ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Maze Path First Chest",                 ("Chest",        0x0B,  0x06, None,                        'Rupees (50)',                           ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Maze Path Second Chest",                ("Chest",        0x0B,  0x0A, None,                        'Rupees (20)',                           ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Maze Path Third Chest",                 ("Chest",        0x0B,  0x09, None,                        'Arrows (30)',                           ("Gerudo Training Ground", "Vanilla",))),
+    ("Gerudo Training Ground Maze Path Final Chest",                 ("Chest",        0x0B,  0x0C, None,                        'Ice Arrows',                            ("Gerudo Training Ground", "Vanilla",))),
+    # Gerudo Training Ground MQ
+    ("Gerudo Training Ground MQ Lobby Left Chest",                   ("Chest",        0x0B,  0x13, None,                        'Arrows (10)',                           ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Lobby Right Chest",                  ("Chest",        0x0B,  0x07, None,                        'Bombchus (5)',                          ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ First Iron Knuckle Chest",           ("Chest",        0x0B,  0x00, None,                        'Rupees (5)',                            ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Before Heavy Block Chest",           ("Chest",        0x0B,  0x11, None,                        'Arrows (10)',                           ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Heavy Block Chest",                  ("Chest",        0x0B,  0x02, None,                        'Rupees (50)',                           ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Eye Statue Chest",                   ("Chest",        0x0B,  0x03, None,                        'Bombchus (10)',                         ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Ice Arrows Chest",                   ("Chest",        0x0B,  0x04, None,                        'Ice Arrows',                            ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Second Iron Knuckle Chest",          ("Chest",        0x0B,  0x12, None,                        'Arrows (10)',                           ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Flame Circle Chest",                 ("Chest",        0x0B,  0x0E, None,                        'Small Key (Gerudo Training Ground)',    ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Maze Right Central Chest",           ("Chest",        0x0B,  0x05, None,                        'Rupees (5)',                            ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Maze Right Side Chest",              ("Chest",        0x0B,  0x08, None,                        'Rupee (Treasure Chest Game)',           ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Underwater Silver Rupee Chest",      ("Chest",        0x0B,  0x0D, None,                        'Small Key (Gerudo Training Ground)',    ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Dinolfos Chest",                     ("Chest",        0x0B,  0x01, None,                        'Small Key (Gerudo Training Ground)',    ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Hidden Ceiling Chest",               ("Chest",        0x0B,  0x0B, None,                        'Rupees (50)',                           ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Maze Path First Chest",              ("Chest",        0x0B,  0x06, None,                        'Rupee (1)',                             ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Maze Path Third Chest",              ("Chest",        0x0B,  0x09, None,                        'Rupee (Treasure Chest Game)',           ("Gerudo Training Ground", "Master Quest",))),
+    ("Gerudo Training Ground MQ Maze Path Second Chest",             ("Chest",        0x0B,  0x0A, None,                        'Rupees (20)',                           ("Gerudo Training Ground", "Master Quest",))),
 
     # Ganon's Castle vanilla
     ("Ganons Castle Forest Trial Chest",                             ("Chest",        0x0D,  0x09, None,                        'Rupees (5)',                            ("Ganon's Castle", "Vanilla",))),
@@ -902,7 +905,7 @@ business_scrubs = [
     (0x79, 40,   0x10DD, ["enable you to pick up more \x05\x41Deku\x01Nuts", "sell you a \x05\x42mysterious item"]),
 ]
 
-dungeons = ('Deku Tree', 'Dodongo\'s Cavern', 'Jabu Jabu\'s Belly', 'Forest Temple', 'Fire Temple', 'Water Temple', 'Spirit Temple', 'Shadow Temple', 'Ice Cavern', 'Bottom of the Well', 'Gerudo Training Grounds', 'Ganon\'s Castle')
+dungeons = ('Deku Tree', 'Dodongo\'s Cavern', 'Jabu Jabu\'s Belly', 'Forest Temple', 'Fire Temple', 'Water Temple', 'Spirit Temple', 'Shadow Temple', 'Ice Cavern', 'Bottom of the Well', 'Gerudo Training Ground', 'Ganon\'s Castle')
 location_groups = {
     'Song': [name for (name, data) in location_table.items() if data[0] == 'Song'],
     'Chest': [name for (name, data) in location_table.items() if data[0] == 'Chest'],

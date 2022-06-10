@@ -41,7 +41,7 @@
                 (logic_dc_mq_eyes and Progressive_Strength_Upgrade and
                     (is_adult or logic_dc_mq_child_back) and
                     (here(can_use(Sticks)) or can_use(Dins_Fire) or
-                        (is_adult and (logic_dc_jump or Hammer or Hover_Boots or Hookshot))))"
+                        (is_adult and (logic_dc_jump or Megaton_Hammer or Hover_Boots or Hookshot))))"
         }
     },
     {
