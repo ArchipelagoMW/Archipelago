@@ -207,7 +207,7 @@ Timespinner:
 
 * `description` gives us a general overview so if we pull up this file later we can understand the intent.
 * `name` is `Example Player` and this will be used in the server console when sending and receiving items.
-* `game` has an equal chance of being either `A Link to the Past` or `Timespinner` with a 10/20 chance for each.
+* `game` has an equal chance of being either `A Link to the Past` or `Timespinner` with a 50% chance or 10 out 20. Because there is a weight of 10 on both games. To find the exact chance of a thing rolling you take it's weight add every other weight on the same option then it is a (option weight) out of (weight total).
 * `requires` is set to require release version 0.2.0 or higher.
 * `accesibility` is set to `none` which will set this seed to beatable only meaning some locations and items may be
   completely inaccessible but the seed will still be completable.
@@ -239,8 +239,11 @@ Timespinner:
   * For `A Link to the Past` all players in the `rods` item link group will share their fire and ice rods and the player
 items will be replaced with single rupees.
   * For `Timespinner` all players in the `TSAll` item link group will share their entire item pool and the`Twin Pyramid 
+  * For `A Link to the Past` all players in the `rods` item link group will share their fire and ice rods and the player
+items will be replaced with single rupees.
+  * For `Timespinner` all players in the `TSAll` item link group will share their entire item pool and the `Twin Pyramid 
 Key` and `Timespinner Wheel` will be forced among the worlds of those in the group. The `null` replacement item instead
-of forcing a filler item will allow the generator to fill the item.
+of forcing a specific chossen item this will allow the generator to randomaly pick a filler/junk/noraml class item in place of putting in another one of the linked item.
 * `triggers` allows us to define a trigger such that if our `smallkey_shuffle` option happens to roll the `any_world`
   result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to
   the `any_world`
