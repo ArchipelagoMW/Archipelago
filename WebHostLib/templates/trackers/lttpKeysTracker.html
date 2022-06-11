@@ -1,0 +1,75 @@
+{% block head %}
+    <!--suppress XmlDuplicatedId -->
+    <title>{{ player_name }}&apos;s Keys Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/trackers/playerTracker.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tooltip.css') }}" />
+    <script type="application/ecmascript" src="{{ url_for('static', filename='assets/trackers/playerTracker.js') }}"/></script>
+{% endblock %}
+
+{# this tracker is mostly similar to the generic player tracker but
+also adds a table with the key and checks counts for each region in the middle #}
+
+{% block body %}
+
+<div id="player-keys-tracker" class="{{ theme }}-wrapper" data-tracker="{{ room.tracker|suuid }}/{{ team }}/{{ player }}">
+    <a href="/generic_tracker/{{ room.tracker|suuid }}/{{ team }}/{{ player }}" class="button-link">
+        Go to Generic Tracker
+    </a>
+    <h1>Items</h1>
+    <div id="items-container">
+        {% for item in icons %}
+            {% if item not in key_types %}
+                <div class="image-container tooltip" id="{{ item }}" data-tooltip="{{ item }}">
+                    <img
+                        src="{{ icons[item] }}"
+                        class="icon tooltip {{ 'acquired' if item in received_items }}"
+                    />
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="keys-regions-container">
+        <h1>Keys Acquired</h1>
+        <table>
+            <thead>
+                <th></th>
+                <th><img src="{{ icons['Small Key'] }}" class="icon acquired" /></th>
+                <th><img src="{{ icons['Big Key'] }}" class="icon acquired" /></th>
+                <th><img src="{{ icons['Chest'] }}" /></th>
+            </thead>
+
+            <tbody>
+                {% for region in regions %}
+                    <tr>
+                        <td>{{ region }}</td>
+
+                        {% if region in region_keys %}
+                            {% for key in region_keys[region] %}
+                                <td>{{ received_items[key] if key in received_items else '—'}}</td>
+                            {% endfor %}
+                        {% endif %}
+
+                        <td>{{ checks_done[region]|length }} / {{ regions[region]|length }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h1>Locations Checked</h1>
+        {% for region in regions %}
+            <h1 class="regions-header" id="{{ region }}-header">{{ region }} ▼</h1>
+            {% for location in regions[region] %}
+                <div class="location hidden {{ 'acquired' if location in checked_locations }}" id="{{ location }}">
+                    {{ location }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="total-checks" id="total-checks">
+            Total Checks Done: {{ checked_locations|length }}/{{ locations|length }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
