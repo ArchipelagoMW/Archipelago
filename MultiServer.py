@@ -1562,6 +1562,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.messageprocessor(args["text"])
 
         elif cmd == "Bounce":
+            if "TextOnly" in client.tags or "Tracker" in client.tags:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
+                                              'text': "Text clients/trackers cannot send new bounce packets",
+                                              "original_cmd": cmd}])
+                return
             games = set(args.get("games", []))
             tags = set(args.get("tags", []))
             slots = set(args.get("slots", []))
@@ -1571,7 +1576,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for bounceclient in ctx.endpoints:
                 if client.team == bounceclient.team and (ctx.games[bounceclient.slot] in games or
                                                          set(bounceclient.tags) & tags or
-                                                         bounceclient.slot in slots):
+                                                         bounceclient.slot in slots or
+                                                         "BounceObserver" in bounceclient.tags):
                     await ctx.send_encoded_msgs(bounceclient, msg)
 
         elif cmd == "Get":

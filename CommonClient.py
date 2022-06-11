@@ -118,13 +118,14 @@ class TextClientCommandProcessor(ClientCommandProcessor):
 
     @mark_raw
     def _cmd_add_tag(self, tag: str):
-        """Adds a tag to the list of tags."""
+        """Adds a tag to the list of tags. This allows you to observe specific bounce packets. Use tag BounceObserver to observe ALL bounce packets."""
         asyncio.create_task(self.ctx.add_tags(tag))
 
     @mark_raw
     def _cmd_remove_tag(self, tag: str):
         """Removes a tag from the list of tags. (Will not remove 'AP', 'IgnoreGame', 'TextOnly')"""
         if tag in {"AP", "IgnoreGame", "TextOnly"}:
+            logger.info(f"Tag {tag} not removed.")
             return
         asyncio.create_task(self.ctx.remove_tags(tag))
 
@@ -729,6 +730,15 @@ if __name__ == '__main__':
         def on_package(self, cmd: str, args: dict):
             if cmd == "Connected":
                 self.game = self.games.get(self.slot, None)
+            elif cmd == "Bounced":
+                tags = args.get("tags", [])
+                games = args.get("games", [])
+                slots = [self.player_names[slot] for slot in args.get("slots", [])]
+                data = args["data"]
+                if "MC35" in tags:
+                    logger.info(f"Living entity {data['enemy']} was defeated by {self.player_names[data['player']]}")
+                elif "DeathLink" not in tags:
+                    logger.info(f"Unknown bounce packet. tags: {tags}, games: {games}, slots: {slots}")
 
 
     async def main(args):
