@@ -106,6 +106,8 @@ ff6wc_options:
   rom_file: "Final Fantasy III (USA).sfc"
   sni: "SNI"
   rom_start: true
+tloz_options:
+  rom_file: "Legend of Zelda, The (U) (PRG0) [!].nes"
 minecraft_options: 
   forge_directory: "Minecraft Forge server"
   max_heap_size: "2G"

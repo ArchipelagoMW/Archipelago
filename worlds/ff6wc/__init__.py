@@ -280,8 +280,6 @@ class FF6WCWorld(World):
             f"-ap={placement_file}",
             objective_flag,
             "-ob=30.8.8.1.1.11.8",
-            "-oc=40.0.0",
-            "-od=42.0.0",
             "-nro",
             "-sl",
             "-cg",

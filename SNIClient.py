@@ -12,6 +12,7 @@ import logging
 import asyncio
 from json import loads, dumps
 
+import TLoZClientExtension
 import worlds.ff6wc
 import ModuleUpdate
 ModuleUpdate.update()
@@ -31,9 +32,10 @@ from worlds.smz3.Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
 from worlds.ff6wc.Rom import ROM_PLAYER_LIMIT as FF6WC_ROM_PLAYER_LIMIT
 from worlds.ff6wc.Rom import ROM_NAME as FF6WC_ROM_NAME
 from worlds.ff6wc import Rom as FF6Rom
+from worlds.tloz import Rom as TLoZRom
 import Utils
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
-from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3, GAME_FF6WC
+from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3, GAME_FF6WC, GAME_TLOZ
 
 snes_logger = logging.getLogger("SNES")
 
@@ -1023,48 +1025,56 @@ async def game_watcher(ctx: Context):
         if not ctx.rom:
             ctx.finished_game = False
             ctx.death_link_allow_survive = False
-            game_name = await snes_read(ctx, SM_ROMNAME_START, 5)
-            if game_name is None:
+            console = await snes_read(ctx, 0x0, 3)
+            if console is None:
                 continue
-            elif game_name[:2] == b"SM":
-                ctx.game = GAME_SM
-                # versions lower than 0.3.0 dont have item handling flag nor remote item support
-                romVersion = int(game_name[2:5].decode('UTF-8'))
-                if romVersion < 30:
-                    ctx.items_handling = 0b001 # full local 
-                else:
-                    item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
-                    ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
+            if console == "NES":
+                ctx.game = "The Legend of Zelda"
+                ctx.items_handling = 0b001
             else:
-                game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
-                if game_name == b"ZSM":
-                    ctx.game = GAME_SMZ3
-                    ctx.items_handling = 0b101  # local items and remote start inventory
-                else:
-                    game_name = await snes_read(ctx, FF6WC_ROM_NAME, 3)
-                    if game_name == b'6WC':  # piggy backing off SMZ3 since rom name in same place
-                        ctx.game = GAME_FF6WC
-                        ctx.items_handling = 0b001
-                        location_index = 0
-                        character_index = 0
-                        esper_index = 0
-                        location_names = [*FF6Rom.event_flag_location_names.keys()]
-                        obtained_items = []
+                game_name = await snes_read(ctx, SM_ROMNAME_START, 5)
+                if game_name is None:
+                    continue
+                elif game_name[:2] == b"SM":
+                    ctx.game = GAME_SM
+                    # versions lower than 0.3.0 dont have item handling flag nor remote item support
+                    romVersion = int(game_name[2:5].decode('UTF-8'))
+                    if romVersion < 30:
+                        ctx.items_handling = 0b001 # full local
                     else:
-                        ctx.game = GAME_ALTTP
-                        ctx.items_handling = 0b001  # full local
+                        item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
+                        ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
+                else:
+                    game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
+                    if game_name == b"ZSM":
+                        ctx.game = GAME_SMZ3
+                        ctx.items_handling = 0b101  # local items and remote start inventory
+                    else:
+                        game_name = await snes_read(ctx, FF6WC_ROM_NAME, 3)
+                        if game_name == b'6WC':  # piggy backing off SMZ3 since rom name in same place
+                            ctx.game = GAME_FF6WC
+                            ctx.items_handling = 0b001
+                            location_index = 0
+                            character_index = 0
+                            esper_index = 0
+                            location_names = [*FF6Rom.event_flag_location_names.keys()]
+                            obtained_items = []
+                        else:
+                            ctx.game = GAME_ALTTP
+                            ctx.items_handling = 0b001  # full local
 
             rom = await snes_read(
                 ctx,
                 SM_ROMNAME_START if ctx.game == GAME_SM
                 else SMZ3_ROMNAME_START if ctx.game == GAME_SMZ3
                 else FF6WC_ROM_NAME if ctx.game == GAME_FF6WC
+                else TLoZRom.ROM_NAME if ctx.game == GAME_TLOZ
                 else ROMNAME_START, ROMNAME_SIZE)
             if rom is None or rom == bytes([0] * ROMNAME_SIZE):
                 continue
 
             ctx.rom = rom
-            if ctx.game != GAME_SMZ3:
+            if ctx.game != GAME_SMZ3 and ctx.game != GAME_TLOZ:
                 death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
                                              SM_DEATH_LINK_ACTIVE_ADDR, 1)
                 if death_link:
@@ -1390,6 +1400,12 @@ async def game_watcher(ctx: Context):
                             break
 
             await snes_flush_writes(ctx)
+        elif ctx.game == GAME_TLOZ:
+            data = await snes_read(ctx, 0x000000, 3)
+            if data is None:
+                continue
+            print(data)
+            #TLoZClientExtension.main_loop()
 
 
 async def run_game(romfile):

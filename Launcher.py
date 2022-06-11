@@ -137,7 +137,7 @@ components: Iterable[Component] = (
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient'),
     # SNI
     Component('SNI Client', 'SNIClient',
-              file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3')),
+              file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3', '.aptloz')),
     Component('LttP Adjuster', 'LttPAdjuster'),
     # Factorio
     Component('Factorio Client', 'FactorioClient'),
@@ -154,6 +154,8 @@ components: Iterable[Component] = (
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
     Component('Starcraft 2 Client', 'Starcraft2Client'),
+    # The Legend of Zelda
+    Component('The Legend of Zelda Client', 'Zelda1Client'),
     # Functions
     Component('Open host.yaml', func=open_host_yaml),
     Component('Open Patch', func=open_patch),

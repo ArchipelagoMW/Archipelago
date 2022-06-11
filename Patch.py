@@ -167,6 +167,7 @@ GAME_SM = "Super Metroid"
 GAME_SOE = "Secret of Evermore"
 GAME_SMZ3 = "SMZ3"
 GAME_FF6WC = "Final Fantasy 6 Worlds Collide"
+GAME_TLOZ = "The Legend of Zelda"
 supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore", "SMZ3", "Final Fantasy 6 Worlds Collide"}
 
 preferred_endings = {
@@ -174,7 +175,8 @@ preferred_endings = {
     GAME_SM: "apm3",
     GAME_SOE: "apsoe",
     GAME_SMZ3: "apsmz",
-    GAME_FF6WC: "apff6wc"
+    GAME_FF6WC: "apff6wc",
+    GAME_TLOZ: "aptloz"
 }
 
 
@@ -191,6 +193,8 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: str = GAM
         HASH = ALTTPHASH + SMHASH
     elif game == GAME_FF6WC:
         from worlds.ff6wc.Rom import NA10HASH as HASH
+    elif game == GAME_TLOZ:
+        from worlds.tloz.Rom import NA10CHECKSUM as HASH
     else:
         raise RuntimeError(f"Selected game {game} for base rom not found.")
 
@@ -220,7 +224,11 @@ def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str
                            meta,
                            game)
     target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + (
-        ".apbp" if game == GAME_ALTTP else ".apsmz" if game == GAME_SMZ3 else ".apm3" if game == GAME_SM else ".apff6wc")
+        ".apbp" if game == GAME_ALTTP else
+        ".apsmz" if game == GAME_SMZ3 else
+        ".apm3" if game == GAME_SM else
+        ".apff6wc" if game == GAME_FF6WC else
+        ".aptloz")
     write_lzma(bytes, target)
     return target
 
@@ -251,6 +259,8 @@ def get_base_rom_data(game: str):
         from worlds.smz3.Rom import get_base_rom_bytes
     elif game == GAME_FF6WC:
         from worlds.ff6wc.Rom import get_base_rom_bytes
+    elif game == GAME_TLOZ:
+        from worlds.tloz.Rom import get_base_rom_bytes
     else:
         raise RuntimeError("Selected game for base rom not found.")
     return get_base_rom_bytes()

@@ -222,6 +222,9 @@ def get_default_options() -> dict:
         "ff6wc_options": {
             "rom_file": "Final Fantasy III (USA).sfc"
         },
+        "tloz_options": {
+            "rom_file": "Legend of Zelda, The (U) (PRG0) [!].nes"
+        },
         "sm_options": {
             "rom_file": "Super Metroid (JU).sfc",
             "sni": "SNI",
