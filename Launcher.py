@@ -139,6 +139,8 @@ components: Iterable[Component] = (
     Component('OoT Adjuster', 'OoTAdjuster'),
     # FF1
     Component('FF1 Client', 'FF1Client'),
+    # The Legend of Zelda
+    Component('The Legend of Zelda Client', 'Zelda1Client'),
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
