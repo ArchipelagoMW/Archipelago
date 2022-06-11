@@ -235,7 +235,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
             node["color"] = 'cyan'
         elif flags & 0b001:  # advancement
             node["color"] = 'plum'
-        elif flags & 0b010:  # never_exclude
+        elif flags & 0b010:  # useful
             node["color"] = 'slateblue'
         elif flags & 0b100:  # trap
             node["color"] = 'salmon'

@@ -518,7 +518,7 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         flags = node.get("flags", 0)
         if flags & 0b001:  # advancement
             itemtype = "progression"
-        elif flags & 0b010:  # never_exclude
+        elif flags & 0b010:  # useful
             itemtype = "useful"
         elif flags & 0b100:  # trap
             itemtype = "trap"
