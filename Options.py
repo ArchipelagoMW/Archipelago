@@ -626,13 +626,18 @@ class Accessibility(Choice):
     default = 1
 
 
-class ProgressionBalancing(Range):
+class ProgressionBalancing(SpecialRange):
     """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
     [0-99, default 50] A lower setting means more getting stuck. A higher setting means less getting stuck."""
     default = 50
     range_start = 0
     range_end = 99
     display_name = "Progression Balancing"
+    special_range_names = {
+        "Disabled": 0,
+        "Normal": 50,
+        "Extreme": 99,
+    }
 
 
 common_options = {
