@@ -93,6 +93,11 @@ def create_regions(world, player: int, active_locations):
     gate_3_region = create_region(world, player, active_locations, 'Gate 3', None, None)
     gate_4_region = create_region(world, player, active_locations, 'Gate 4', None, None)
     gate_5_region = create_region(world, player, active_locations, 'Gate 5', None, None)
+    gate_1_boss_region = create_region(world, player, active_locations, 'Gate 1 Boss', [LocationName.gate_1_boss], None)
+    gate_2_boss_region = create_region(world, player, active_locations, 'Gate 2 Boss', [LocationName.gate_2_boss], None)
+    gate_3_boss_region = create_region(world, player, active_locations, 'Gate 3 Boss', [LocationName.gate_3_boss], None)
+    gate_4_boss_region = create_region(world, player, active_locations, 'Gate 4 Boss', [LocationName.gate_4_boss], None)
+    gate_5_boss_region = create_region(world, player, active_locations, 'Gate 5 Boss', [LocationName.gate_5_boss], None)
 
     city_escape_region_locations = [
         LocationName.city_escape_1,
@@ -533,6 +538,11 @@ def create_regions(world, player: int, active_locations):
         gate_3_region,
         gate_4_region,
         gate_5_region,
+        gate_1_boss_region,
+        gate_2_boss_region,
+        gate_3_boss_region,
+        gate_4_boss_region,
+        gate_5_boss_region,
         city_escape_region,
         metal_harbor_region,
         green_forest_region,
@@ -585,32 +595,37 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         connect(world, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])
 
     if len(gates) >= 2:
-        connect(world, player, names, 'Menu', LocationName.gate_1_region,
+        connect(world, player, names, 'Menu', LocationName.gate_1_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[1].gate_emblem_count)))
+        connect(world, player, names, LocationName.gate_1_boss_region, LocationName.gate_1_region)
         for i in range(len(gates[1].gate_levels)):
             connect(world, player, names, LocationName.gate_1_region, shuffleable_regions[gates[1].gate_levels[i]])
 
     if len(gates) >= 3:
-        connect(world, player, names, 'Menu', LocationName.gate_2_region,
+        connect(world, player, names, 'Menu', LocationName.gate_2_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[2].gate_emblem_count)))
+        connect(world, player, names, LocationName.gate_2_boss_region, LocationName.gate_2_region)
         for i in range(len(gates[2].gate_levels)):
             connect(world, player, names, LocationName.gate_2_region, shuffleable_regions[gates[2].gate_levels[i]])
 
     if len(gates) >= 4:
-        connect(world, player, names, 'Menu', LocationName.gate_3_region,
+        connect(world, player, names, 'Menu', LocationName.gate_3_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[3].gate_emblem_count)))
+        connect(world, player, names, LocationName.gate_3_boss_region, LocationName.gate_3_region)
         for i in range(len(gates[3].gate_levels)):
             connect(world, player, names, LocationName.gate_3_region, shuffleable_regions[gates[3].gate_levels[i]])
 
     if len(gates) >= 5:
-        connect(world, player, names, 'Menu', LocationName.gate_4_region,
+        connect(world, player, names, 'Menu', LocationName.gate_4_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[4].gate_emblem_count)))
+        connect(world, player, names, LocationName.gate_4_boss_region, LocationName.gate_4_region)
         for i in range(len(gates[4].gate_levels)):
             connect(world, player, names, LocationName.gate_4_region, shuffleable_regions[gates[4].gate_levels[i]])
 
     if len(gates) >= 6:
-        connect(world, player, names, 'Menu', LocationName.gate_5_region,
+        connect(world, player, names, 'Menu', LocationName.gate_5_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[5].gate_emblem_count)))
+        connect(world, player, names, LocationName.gate_5_boss_region, LocationName.gate_5_region)
         for i in range(len(gates[5].gate_levels)):
             connect(world, player, names, LocationName.gate_5_region, shuffleable_regions[gates[5].gate_levels[i]])
 

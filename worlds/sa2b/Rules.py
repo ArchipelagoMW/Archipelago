@@ -1,10 +1,13 @@
+import typing
+
 from BaseClasses import MultiWorld
 from .Names import LocationName, ItemName
 from .Locations import first_mission_location_table, second_mission_location_table, third_mission_location_table, \
     fourth_mission_location_table, fifth_mission_location_table, \
-    upgrade_location_table
+    upgrade_location_table, boss_gate_set
 from ..AutoWorld import LogicMixin
 from ..generic.Rules import add_rule, set_rule
+from .GateBosses import boss_has_requirement
 
 
 def set_mission_progress_rules(world: MultiWorld, player: int):
@@ -379,11 +382,21 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
              lambda state: state.has(ItemName.eggman_jet_engine, player))
 
 
-def set_rules(world: MultiWorld, player: int):
+def set_boss_gate_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict[int, int]):
+    for x in range(len(gate_bosses)):
+        if boss_has_requirement(gate_bosses[x + 1]):
+            add_rule(world.get_location(boss_gate_set[x], player),
+                     lambda state: state.has(ItemName.knuckles_shovel_claws, player))
+
+
+def set_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict[int, int]):
     # Mission Progression Rules (Mission 1 begets Mission 2, etc.)
     set_mission_progress_rules(world, player)
 
-    # Upgrade Requirements for each location
+    # Upgrade Requirements for each mission location
     set_mission_upgrade_rules(world, player)
+
+    # Upgrade Requirements for each boss gate
+    set_boss_gate_rules(world, player, gate_bosses)
 
     world.completion_condition[player] = lambda state: state.has(ItemName.maria, player)
