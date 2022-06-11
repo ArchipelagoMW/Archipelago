@@ -89,6 +89,9 @@ def create():
                     "value": "random",
                 })
 
+                if option.default == "random":
+                    this_option["defaultValue"] = "random"
+
             elif hasattr(option, "range_start") and hasattr(option, "range_end"):
                 game_options[option_name] = {
                     "type": "range",
