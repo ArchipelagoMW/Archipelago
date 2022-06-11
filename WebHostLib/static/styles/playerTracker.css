@@ -1,28 +1,4 @@
-#tracker-wrapper{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    padding: 20px;
-    width: 600px;
-    color: #000000;
-}
-
-.change-tracker{
-    display: inline-block;
-    text-decoration: none;
-    border: 2px solid black;
-    background: none;
-    border-radius: 4px;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.change-tracker:hover {
-    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.24), 0 4px 20px 0 rgba(0,0,0,0.19);
-    background-color: white;
-}
-
+/* CSS Overrides */
 .dirt-wrapper{
     background-color: #897249;
 }
@@ -66,6 +42,8 @@
 
 .partyTime-wrapper h1{}
 
+
+/* Actual Styles */
 h1 {
     font-size: 20px;
     color: #ffffff;
@@ -78,7 +56,11 @@ h2 {
     padding: 8px;
 }
 
-.items-container{
+#player-keys-tracker{
+    width: 600px;
+}
+
+#items-container{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -86,15 +68,15 @@ h2 {
     padding: 5px;
 }
 
-.item{
-
+#items-container div{
+    margin: 0;
+    padding: 0;
 }
 
 .image-container{
     display: absolute;
     height: 75px;
     width: 75px;
-    gap: 5px;
 }
 
 .bottom-text{
@@ -153,4 +135,16 @@ h2 {
 
 .hidden{
     display: none;
+}
+
+.button-link{
+    display: block;
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    line-height: 30px;
+    background-color: lightgrey;
+    cursor: pointer;
+    color: inherit;
 }
