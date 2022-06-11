@@ -382,14 +382,14 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
              lambda state: state.has(ItemName.eggman_jet_engine, player))
 
 
-def set_boss_gate_rules(world: MultiWorld, player: int, gate_bosses: typing.List[int]):
+def set_boss_gate_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict[int, int]):
     for x in range(len(gate_bosses)):
-        if boss_has_requirement(gate_bosses[x]):
+        if boss_has_requirement(gate_bosses[x + 1]):
             add_rule(world.get_location(boss_gate_set[x], player),
                      lambda state: state.has(ItemName.knuckles_shovel_claws, player))
 
 
-def set_rules(world: MultiWorld, player: int, gate_bosses: typing.List[int]):
+def set_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict[int, int]):
     # Mission Progression Rules (Mission 1 begets Mission 2, etc.)
     set_mission_progress_rules(world, player)
 

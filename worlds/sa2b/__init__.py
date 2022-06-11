@@ -57,12 +57,12 @@ class SA2BWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
 
-    location_table: dict[str, int]
+    location_table: typing.Dict[str, int]
 
     music_map: typing.Dict[int, int]
     emblems_for_cannons_core: int
     region_emblem_map: typing.Dict[int, int]
-    gate_bosses: typing.List[int]
+    gate_bosses: typing.Dict[int, int]
     web = SA2BWeb()
 
     def _get_slot_data(self):
@@ -256,9 +256,9 @@ class SA2BWorld(World):
         header_text = "Sonic Adventure 2 Bosses for {}:\n"
         header_text = header_text.format(self.world.player_name[self.player])
         spoiler_handle.write(header_text)
-        for x in range(len(self.gate_bosses)):
+        for x in range(len(self.gate_bosses.values())):
             text = "Gate {0} Boss: {1}\n"
-            text = text.format((x + 1), get_boss_name(self.gate_bosses[x]))
+            text = text.format((x + 1), get_boss_name(self.gate_bosses[x + 1]))
             spoiler_handle.writelines(text)
 
     @classmethod

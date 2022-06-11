@@ -50,6 +50,7 @@ def boss_has_requirement(boss: int):
 
 def get_gate_bosses(world, player: int):
     selected_bosses: typing.List[int] = []
+    boss_gates: typing.List[int] = []
     available_bosses: typing.List[str] = list(gate_bosses_no_requirements_table.keys())
     world.random.shuffle(available_bosses)
     halfway = False
@@ -60,6 +61,9 @@ def get_gate_bosses(world, player: int):
             world.random.shuffle(available_bosses)
             halfway = True
         selected_bosses.append(all_gate_bosses_table[available_bosses[0]])
+        boss_gates.append(x + 1)
         available_bosses.remove(available_bosses[0])
 
-    return selected_bosses
+    bosses: typing.Dict[int, int] = dict(zip(boss_gates, selected_bosses))
+
+    return bosses
