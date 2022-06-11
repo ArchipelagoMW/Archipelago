@@ -42,6 +42,9 @@ class PlayerTracker:
     slot_data: Dict[any, any]
     theme: str
 
+    key_types: List = []
+    region_keys: Dict[str, str] = {}
+
     def __init__(self, room: Any, team: int, player: int, name: str, all_locations: Set[str],
                  checked_locations: set, all_progression_items: Counter[str], items_received: Counter[str],
                  slot_data: Dict[any, any]):
@@ -350,7 +353,7 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
     # TODO move all games in game_specific_trackers to new system
     if game_name in game_specific_trackers and type != 'generic':
         specific_tracker = game_specific_trackers.get(game_name, None)
-        return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
+        return specific_tracker(multisave, room, player_tracker.all_locations, inventory, tracked_team, tracked_player, player_name,
                                 seed_checks_in_area, lttp_checks_done, slot_data[tracked_player])
     elif game_name in AutoWorldRegister.world_types and type != 'generic':
 
@@ -366,10 +369,12 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
             theme=player_tracker.theme,
             icons=display_icons,
             regions=player_tracker.regions,
-            checks_done=player_tracker.checks_done
+            checks_done=player_tracker.checks_done,
+            region_keys=player_tracker.region_keys,
+            key_types=player_tracker.key_types
         )
     else:
-        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name, seed_checks_in_area, lttp_checks_done)
+        return __renderGenericTracker(multisave, room, player_tracker.all_locations, inventory, tracked_team, tracked_player, player_name, seed_checks_in_area, lttp_checks_done)
 
 
 @app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
@@ -384,9 +389,15 @@ def get_tracker_icons_and_regions(player_tracker: PlayerTracker) -> Dict[str, st
     display_icons: Dict[str, str] = {}
     if player_tracker.progressive_names and player_tracker.icons:
         for item in player_tracker.progressive_items:
-            level = min(player_tracker.items_received[item], len(player_tracker.progressive_names[item]) - 1)
-            display_name = player_tracker.progressive_names[item][level]
-            display_icons[item] = player_tracker.icons[display_name]
+            if item in player_tracker.progressive_names:
+                level = min(player_tracker.items_received[item], len(player_tracker.progressive_names[item]) - 1)
+                display_name = player_tracker.progressive_names[item][level]
+                if display_name in player_tracker.icons:
+                    display_icons[item] = player_tracker.icons[display_name]
+                else:
+                    display_icons[item] = player_tracker.icons[item]
+            else:
+                display_icons[item] = player_tracker.icons[item]
     else:
         if player_tracker.progressive_items and player_tracker.icons:
             for item in player_tracker.progressive_items:
@@ -467,79 +478,18 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
         slot_data[player]
     )
 
+    # grab webworld and apply its theme to the tracker
     webworld = AutoWorldRegister.world_types[games[player]].web
+    player_tracker.theme = webworld.theme
 
     # allow the world to add information to the tracker class
     webworld.modify_tracker(player_tracker)
     display_icons = get_tracker_icons_and_regions(player_tracker)
-    player_tracker.theme = webworld.theme
 
     return player_tracker, multisave, inventory, seed_checks_in_area, lttp_checks_done, slot_data, games, player_name, display_icons
 
 
-def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
-                         inventory: Counter, team: int, player: int, player_name: str,
-                         seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
-
-    # Note the presence of the triforce item
-    game_state = multisave.get("client_game_state", {}).get((team, player), 0)
-    if game_state == 30:
-        inventory[106] = 1  # Triforce
-
-    # Progressive items need special handling for icons and class
-    progressive_items = {
-        "Progressive Sword": 94,
-        "Progressive Glove": 97,
-        "Progressive Bow": 100,
-        "Progressive Mail": 96,
-        "Progressive Shield": 95,
-    }
-    progressive_names = {
-        "Progressive Sword": [None, 'Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
-        "Progressive Glove": [None, 'Power Glove', 'Titan Mitts'],
-        "Progressive Bow": [None, "Bow", "Silver Bow"],
-        "Progressive Mail": ["Green Mail", "Blue Mail", "Red Mail"],
-        "Progressive Shield": [None, "Blue Shield", "Red Shield", "Mirror Shield"]
-    }
-
-    # Determine which icon to use
-    display_data = {}
-    for item_name, item_id in progressive_items.items():
-        level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
-        display_name = progressive_names[item_name][level]
-        acquired = True
-        if not display_name:
-            acquired = False
-            display_name = progressive_names[item_name][level + 1]
-        base_name = item_name.split(maxsplit=1)[1].lower()
-        display_data[base_name + "_acquired"] = acquired
-        display_data[base_name + "_url"] = alttp_icons[display_name]
-
-    # The single player tracker doesn't care about overworld, underworld, and total checks. Maybe it should?
-    sp_areas = ordered_areas[2:15]
-
-    player_big_key_locations = set()
-    player_small_key_locations = set()
-    for loc_data in locations.values():
-        for values in loc_data.values():
-            item_id, item_player, flags = values
-            if item_player == player:
-                if item_id in ids_big_key:
-                    player_big_key_locations.add(ids_big_key[item_id])
-                elif item_id in ids_small_key:
-                    player_small_key_locations.add(ids_small_key[item_id])
-
-    return render_template("lttpTracker.html", inventory=inventory,
-                            player_name=player_name, room=room, icons=alttp_icons, checks_done=checks_done,
-                            checks_in_area=seed_checks_in_area[player],
-                            acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
-                            small_key_ids=small_key_ids, big_key_ids=big_key_ids, sp_areas=sp_areas,
-                            key_locations=player_small_key_locations,
-                            big_key_locations=player_big_key_locations,
-                            **display_data)
-
-
-def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: set,
                              inventory: Counter, team: int, player: int, playerName: str,
                              seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
@@ -641,7 +591,7 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
                             **display_data)
 
 
-def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: set,
                        inventory: Counter, team: int, player: int, playerName: str,
                        seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
@@ -798,7 +748,7 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
     checks_in_area['Total'] = sum(checks_in_area.values())
 
     # Give skulltulas on non-tracked locations
-    non_tracked_locations = multisave.get("location_checks", {}).get((team, player), set()).difference(set(locations[player]))
+    non_tracked_locations = multisave.get("location_checks", {}).get((team, player), set()).difference(locations)
     for id in non_tracked_locations:
         if "GS" in lookup_and_trim(id, ''):
             display_data["token_count"] += 1
@@ -836,7 +786,7 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
                            **display_data)
 
 
-def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: set,
                                inventory: Counter, team: int, player: int, playerName: str,
                                seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict[str, Any]) -> str:
 
@@ -942,7 +892,7 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             options=options, **display_data)
 
-def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: set,
                                 inventory: Counter, team: int, player: int, playerName: str,
                                 seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
@@ -1043,7 +993,8 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
-def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+
+def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: set,
                            inventory: Counter, team: int, player: int, playerName: str,
                            seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
@@ -1062,7 +1013,7 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dic
                             inventory=inventory,
                             player=player, team=team, room=room, player_name=playerName,
                             checked_locations=checked_locations,
-                            not_checked_locations=set(locations[player]) - checked_locations,
+                            not_checked_locations=locations - checked_locations,
                             received_items=player_received_items)
 
 
@@ -1150,7 +1101,7 @@ def getTracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
-    return render_template("tracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
+    return render_template("multiworldTracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
                            lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=alttp_icons,
                            multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
@@ -1164,6 +1115,5 @@ game_specific_trackers: typing.Dict[str, typing.Callable] = {
     "Minecraft": __renderMinecraftTracker,
     "Ocarina of Time": __renderOoTTracker,
     "Timespinner": __renderTimespinnerTracker,
-    "A Link to the Past": __renderAlttpTracker,
     "Super Metroid": __renderSuperMetroidTracker
 }
