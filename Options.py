@@ -634,6 +634,11 @@ class ExcludeLocations(OptionSet):
     verify_location_name = True
 
 
+class ExcludedLocationHintPoints(Toggle):
+    """If disabled, excluded locations will not grant hint points, and will not count towards hint point costs"""
+    display_name = "Excluded Location Hint Points"
+    default = True
+
 class PriorityLocations(OptionSet):
     """Prevent these locations from having an unimportant item"""
     display_name = "Priority Locations"
@@ -715,6 +720,7 @@ per_game_common_options = {
     "start_hints": StartHints,
     "start_location_hints": StartLocationHints,
     "exclude_locations": ExcludeLocations,
+    "excluded_location_hint_points": ExcludedLocationHintPoints,
     "priority_locations": PriorityLocations,
     "item_links": ItemLinks
 }

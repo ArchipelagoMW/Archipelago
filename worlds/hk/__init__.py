@@ -187,7 +187,7 @@ class HKWorld(World):
                     if location_name in white_palace_locations:
                         loc = self.create_location(location_name)
                         loc.place_locked_item(item)
-                        self.world.exclude_locations[self.player].value.add(loc.name)
+                        loc.no_hint_points = True
                     elif location_name == "Start":
                         self.world.push_precollected(item)
                     else:
@@ -201,7 +201,7 @@ class HKWorld(World):
                     else:
                         loc = self.create_location(location_name)
                         loc.place_locked_item(item)
-                        self.world.exclude_locations[self.player].value.add(loc.name)
+                        loc.no_hint_points = True
         for i in range(self.world.EggShopSlots[self.player].value):
             self.create_location("Egg_Shop")
             pool.append(self.create_item("Geo_Rock-Default"))
