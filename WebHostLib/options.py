@@ -97,7 +97,8 @@ def create():
                     "type": "range",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": option.__doc__ if option.__doc__ else "Please document me!",
-                    "defaultValue": option.default if hasattr(option, "default") else option.range_start,
+                    "defaultValue": option.default if hasattr(
+                        option, "default") and option.default != "random" else option.range_start,
                     "min": option.range_start,
                     "max": option.range_end,
                 }
