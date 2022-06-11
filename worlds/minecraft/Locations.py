@@ -125,13 +125,13 @@ advancement_table = {
     "Star Trader": AdvData(42106, 'Village'),
 
     # 1.19 advancements
-    "Birthday Song": AdvData(42107, 'Overworld'),
+    "Birthday Song": AdvData(42107, 'Pillager Outpost'),
     "Bukkit Bukkit": AdvData(42108, 'Overworld'),
     "It Spreads": AdvData(42109, 'Overworld'),
     "Sneak 100": AdvData(42110, 'Overworld'),
     "When the Squad Hops into Town": AdvData(42111, 'Overworld'),
     "With Our Powers Combined!": AdvData(42112, 'The Nether'),
-    "You've Got a Friend in Me": AdvData(42113, 'Overworld'),
+    "You've Got a Friend in Me": AdvData(42113, 'Pillager Outpost'),
 
     "Blaze Spawner": AdvData(None, 'Nether Fortress'),
     "Ender Dragon": AdvData(None, 'The End'),
