@@ -1562,14 +1562,15 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.messageprocessor(args["text"])
 
         elif cmd == "Bounce":
-            if "TextOnly" in client.tags or "Tracker" in client.tags:
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                                              'text': "Text clients/trackers cannot send new bounce packets",
-                                              "original_cmd": cmd}])
-                return
             games = set(args.get("games", []))
             tags = set(args.get("tags", []))
             slots = set(args.get("slots", []))
+            data = args.get("data", {})
+            if ("TextOnly" in client.tags or "Tracker" in client.tags) and data:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
+                                              'text': "Text clients/trackers cannot send new bounce packets other than empty keep-alive packets",
+                                              "original_cmd": cmd}])
+                return
             args["cmd"] = "Bounced"
             msg = ctx.dumper([args])
 
