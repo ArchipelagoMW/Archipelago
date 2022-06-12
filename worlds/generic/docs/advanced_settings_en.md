@@ -243,7 +243,7 @@ items will be replaced with single rupees.
 items will be replaced with single rupees.
   * For `Timespinner` all players in the `TSAll` item link group will share their entire item pool and the `Twin Pyramid 
 Key` and `Timespinner Wheel` will be forced among the worlds of those in the group. The `null` replacement item will, instead
-of forcing a specific chossen item this will allow the generator to randomaly pick a filler/junk/noraml class item in place of putting in another one of the linked item.
+of forcing a specific chosen item, allow the generator to randomly pick a filler item in place of putting in another one of the linked item.
 * `triggers` allows us to define a trigger such that if our `smallkey_shuffle` option happens to roll the `any_world`
   result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to
   the `any_world`
