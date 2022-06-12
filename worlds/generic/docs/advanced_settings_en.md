@@ -208,7 +208,7 @@ Timespinner:
 * `description` gives us a general overview so if we pull up this file later we can understand the intent.
 * `name` is `Example Player` and this will be used in the server console when sending and receiving items.
 * `game` has an equal chance of being either `A Link to the Past` or `Timespinner` with a 10/20 chance for each. The reason for this is becuase each game has a weight of 10 and the toal of all weights is 20.
-* `requires` is set to require release version 0.3.2 or higher.
+* `requires` is set to required release version 0.3.2 or higher.
 * `accesibility` is set to `none` which will set this seed to beatable only meaning some locations and items may be
   completely inaccessible but the seed will still be completable.
 * `progression_balancing` is set on, giving it the default value, meaning we will likely receive important items
