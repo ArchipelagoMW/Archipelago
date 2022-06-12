@@ -99,7 +99,7 @@ Si vous voulez valider votre fichier YAML pour être sûr qu'il fonctionne, vous
 
 Quand vous rejoignez un multiworld, il vous sera demandé de fournir votre fichier YAML à celui qui héberge la partie ou
 s'occupe de la génération. Une fois cela fait, l'hôte vous fournira soit un lien pour télécharger votre patch, soit un
-fichier `.zip` contenant les patchs de tous les joueurs. Votre patch devrait avoir l'extension `.bmbp`.
+fichier `.zip` contenant les patchs de tous les joueurs. Votre patch devrait avoir l'extension `.aplttp`.
 
 Placez votre patch sur votre bureau ou dans un dossier simple d'accès, et double-cliquez dessus. Cela devrait lancer
 automatiquement le client, et devrait créer la ROM dans le même dossier que votre patch.
