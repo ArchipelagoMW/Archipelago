@@ -58,6 +58,7 @@ class StaticWitnessLocations:
         "Quarry Mill Eraser and Squares 8",
         "Quarry Mill Small Squares & Dots & Eraser",
         "Quarry Boathouse Intro Shapers",
+        "Quarry Boathouse Intro Stars",
         "Quarry Boathouse Eraser and Shapers 5",
         "Quarry Boathouse Stars & Eraser & Shapers 2",
         "Quarry Boathouse Stars & Eraser & Shapers 5",
