@@ -48,7 +48,7 @@ requires:
     {%- endfor -%}
     {% if option.default == "random" %}
     random: 50
-    {% endif %}
+    {%- endif -%}
     {%- else %}
     {{ yaml_dump(default_converter(option.default)) | indent(4, first=False) }}
   {%- endif -%}
