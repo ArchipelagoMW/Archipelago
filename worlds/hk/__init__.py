@@ -247,57 +247,18 @@ class HKWorld(World):
             for loc, price in zip(locations, prices):
                 loc.cost = price
 
-    def _can_beat_thk(self, state, player):
-        return (
-            state.has('Opened_Black_Egg_Temple', player)
-            and (state.count('FIREBALL', player) + state.count('SCREAM', player) + state.count('QUAKE', player)) > 1
-            and (  # NAILCOMBAT
-                    state.has('LEFTSLASH', player)
-                    or state.has('RIGHTSLASH', player)
-                    or state.has('UPSLASH', player)
-            )
-            and (
-                    (state.has('LEFTDASH', player) or state.has('RIGHTDASH', player))
-                    or self.world.ProficientCombat[self.player]
-            )
-        )
-
     def set_rules(self):
         world = self.world
         player = self.player
         if world.logic[player] != 'nologic':
             goal = world.Goal[player]
             if goal == Goal.option_siblings:
-                world.completion_condition[player] = lambda state: (
-                    self._can_beat_thk(state, player)
-                    and state.has('WHITEFRAGMENT', player, 3)
-                )
+                world.completion_condition[player] = lambda state: state._hk_siblings_ending(player)
             elif goal == Goal.option_radiance:
-                world.completion_condition[player] = lambda state: (
-                    state.count('Opened_Black_Egg_Temple', player)
-                    and state.has('WHITEFRAGMENT', player, 3)
-                    and state.has('DREAMNAIL', player, 1)
-                    and (
-                        (state.has('LEFTCLAW', player) and state.has('RIGHTCLAW', player))
-                        or state.has('WINGS', player)
-                    )
-                    and (
-                        state.count('FIREBALL', player) + state.count('SCREAM', player)
-                        + state.count('QUAKE', player)
-                    ) > 1
-                    and (  # NAILCOMBAT
-                        state.count('LEFTSLASH', player)
-                        or state.count('RIGHTSLASH', player)
-                        or state.count('UPSLASH', player)
-                    )
-                    and (
-                        (state.has('LEFTDASH', player, 2) and state.has('RIGHTDASH', player, 2))  # Both Shade Cloaks
-                        or (self.world.ProficientCombat[self.player] and state.has('QUAKE', player))  # or Dive
-                    )
-                )
+                world.completion_condition[player] = lambda state: state._hk_can_beat_radiance(player)
             else:
                 # Hollow Knight or Any goal.
-                world.completion_condition[player] = lambda state: self._can_beat_thk(state, player)
+                world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player)
 
         set_rules(self)
 
@@ -447,3 +408,38 @@ class HKLogicMixin(LogicMixin):
 
     def _hk_start(self, player, start_location: str) -> bool:
         return self.world.StartLocation[player] == start_location
+
+    def _hk_nail_combat(self, player: int) -> bool:
+        return self.has_any({'LFFTSLASH', 'RIGHTSLASH', 'UPSLASH'}, player)
+
+    def _hk_can_beat_thk(self, player: int) -> bool:
+        return (
+            self.has('Opened_Black_Egg_Temple', player)
+            and (self.count('FIREBALL', player) + self.count('SCREAM', player) + self.count('QUAKE', player)) > 1
+            and self._hk_nail_combat(player)
+            and (
+                self.has_any({'LEFTDASH', 'RIGHTDASH'}, player)
+                or self._hk_option(player, 'ProficientCombat')
+            )
+        )
+
+    def _hk_siblings_ending(self, player: int) -> bool:
+        return self._hk_can_beat_thk(player) and self.has('WHITEFRAGMENT', player, 3)
+
+    def _hk_can_beat_radiance(self, player: int) -> bool:
+        return (
+            self._hk_siblings_ending(player)
+            and self.has('DREAMNAIL', player, 1)
+            and (
+                (self.has('LEFTCLAW', player) and self.has('RIGHTCLAW', player))
+                or self.has('WINGS', player)
+            )
+            and (
+                self.count('FIREBALL', player) + self.count('SCREAM', player)
+                + self.count('QUAKE', player)
+            ) > 1
+            and (
+                (self.has('LEFTDASH', player, 2) and self.has('RIGHTDASH', player, 2))  # Both Shade Cloaks
+                or (self._hk_option(player, 'ProficientCombat') and self.has('QUAKE', player))  # or Dive
+            )
+        )
