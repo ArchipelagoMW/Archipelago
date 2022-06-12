@@ -506,6 +506,10 @@ class Context:
                 self.player_hint_costs[player] = 0
 
     def get_hint_cost(self, slot):
+        try:
+            return self.player_hint_costs[slot]
+        except KeyError:
+            self.calculate_hint_costs()
         return self.player_hint_costs[slot]
 
     def recheck_hints(self):
