@@ -274,6 +274,22 @@ def set_advancement_rules(world: MultiWorld, player: int):
         (state.can_reach("The Nether", 'Region', player) or state.can_reach("Nether Fortress", 'Region', player) or state._mc_can_piglin_trade(player)) and # soul sand for water elevator
         state._mc_overworld_villager(player))
 
+    # 1.19 advancements
+
+    # can make a cake, and can reach a pillager outposts for allays
+    set_rule(world.get_location("Birthday Song", player), lambda state: state.can_reach("The Lie", "Location", player))
+    # find allay and craft a noteblock
+    set_rule(world.get_location("You've Got a Friend in Me", player), lambda state: state.has("Progressive Tools", player, 2) and state._mc_has_iron_ingots(player))
+    # craft bucket and adventure to find frog spawning biome
+    set_rule(world.get_location("Bukkit Bukkit", player), lambda state: state.has("Bucket", player) and state._mc_has_iron_ingots(player) and state._mc_can_adventure(player))
+    # I don't like this one its way to easy to get. just a pain to find.
+    set_rule(world.get_location("It Spreads", player), lambda state: state._mc_can_adventure(player) and state._mc_has_iron_ingots(player) and state.has("Progressive Tools", player, 2))
+    # literally just a duplicate of It spreads.
+    set_rule(world.get_location("Sneak 100", player), lambda state: state._mc_can_adventure(player) and state._mc_has_iron_ingots(player) and state.has("Progressive Tools", player, 2))
+    set_rule(world.get_location("When the Squad Hops into Town", player), lambda state: state._mc_can_adventure(player) and state.has("Lead", player))
+    # lead frogs to the nether and a basalt delta's biomes to find magma cubes.
+    set_rule(world.get_location("With Our Powers Combined!", player), lambda state: state._mc_can_adventure(player) and state.has("Lead", player))
+
 
 # Sets rules on completion condition and postgame advancements
 def set_completion_rules(world: MultiWorld, player: int):
