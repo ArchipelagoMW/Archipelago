@@ -731,14 +731,16 @@ if __name__ == '__main__':
             if cmd == "Connected":
                 self.game = self.games.get(self.slot, None)
             elif cmd == "Bounced":
-                tags = args.get("tags", [])
-                games = args.get("games", [])
-                slots = [self.player_names[slot] for slot in args.get("slots", [])]
-                data = args["data"]
-                if "MC35" in tags:
-                    logger.info(f"Living entity {data['enemy']} was defeated by {self.player_names[data['player']]}")
-                elif "DeathLink" not in tags:
-                    logger.info(f"Unknown bounce packet. tags: {tags}, games: {games}, slots: {slots}")
+                tags = set(args.get("tags", []))
+                games = set(args.get("games", []))
+                slots = {self.player_names[slot] for slot in args.get("slots", [])}
+                data = args.get("data", {})
+                if not data and not tags and not games and slots == {self.player_names[self.slot]}:
+                    pass  # response to the bounce packet this very client sent.
+                elif tags.isdisjoint({'DeathLink', 'MC35'}):
+                    logger.info(f"Unknown bounce packet. tags: {tags}, games: {games}, slots: {slots}, data: {data}")
+                elif "MC35" in tags:
+                    logger.info(f"Living entity {data['enemy']} was defeated by {self.player_names[data['source']]}")
 
 
     async def main(args):
