@@ -459,6 +459,13 @@ class ChecksFinderManager(GameManager):
     base_title = "Archipelago ChecksFinder Client"
 
 
+class FFPSManager(GameManager):
+    logging_pairs = [
+        ("Client", "Archipelago")
+    ]
+    base_title = "Archipelago FFPS Client"
+
+
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
         super(LogtoUI, self).__init__(logging.INFO)
