@@ -60,7 +60,6 @@ item_table = {
     "Lead": ItemData(45045, True),
 
     "Bee Trap": ItemData(45100, False),
-
     "Blaze Rods": ItemData(None, True),
     "Defeat Ender Dragon": ItemData(None, True),
     "Defeat Wither": ItemData(None, True),

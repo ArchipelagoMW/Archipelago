@@ -1,7 +1,7 @@
 import typing
 from .ExtractedData import logic_options, starts, pool_options
 
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, SpecialRange
 from .Charms import vanilla_costs, names as charm_names
 
 if typing.TYPE_CHECKING:
@@ -208,12 +208,12 @@ class MaximumCharmPrice(MinimumCharmPrice):
     default = 20
 
 
-class RandomCharmCosts(Range):
+class RandomCharmCosts(SpecialRange):
     """Total Notch Cost of all Charms together. Vanilla sums to 90.
     This value is distributed among all charms in a random fashion.
     Special Cases:
-    Set to -1 for vanilla costs.
-    Set to -2 to shuffle around the vanilla costs to different charms."""
+    Set to -1 or vanilla for vanilla costs.
+    Set to -2 or shuffle to shuffle around the vanilla costs to different charms."""
 
     display_name = "Randomize Charm Notch Costs"
     range_start = -2
@@ -221,6 +221,10 @@ class RandomCharmCosts(Range):
     default = -1
     vanilla_costs: typing.List[int] = vanilla_costs
     charm_count: int = len(vanilla_costs)
+    special_range_names = {
+        "vanilla": -1,
+        "shuffle": -2
+    }
 
     def get_costs(self, random_source: Random) -> typing.List[int]:
         charms: typing.List[int]
