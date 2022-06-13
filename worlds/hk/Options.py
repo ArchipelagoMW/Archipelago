@@ -1,7 +1,7 @@
 import typing
 from .ExtractedData import logic_options, starts, pool_options
 
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, SpecialRange
 from .Charms import vanilla_costs, names as charm_names
 
 if typing.TYPE_CHECKING:
@@ -208,12 +208,12 @@ class MaximumCharmPrice(MinimumCharmPrice):
     default = 20
 
 
-class RandomCharmCosts(Range):
+class RandomCharmCosts(SpecialRange):
     """Total Notch Cost of all Charms together. Vanilla sums to 90.
     This value is distributed among all charms in a random fashion.
     Special Cases:
-    Set to -1 for vanilla costs.
-    Set to -2 to shuffle around the vanilla costs to different charms."""
+    Set to -1 or vanilla for vanilla costs.
+    Set to -2 or shuffle to shuffle around the vanilla costs to different charms."""
 
     display_name = "Randomize Charm Notch Costs"
     range_start = -2
@@ -221,6 +221,10 @@ class RandomCharmCosts(Range):
     default = -1
     vanilla_costs: typing.List[int] = vanilla_costs
     charm_count: int = len(vanilla_costs)
+    special_range_names = {
+        "vanilla": -1,
+        "shuffle": -2
+    }
 
     def get_costs(self, random_source: Random) -> typing.List[int]:
         charms: typing.List[int]
@@ -259,6 +263,39 @@ class EggShopSlots(Range):
     range_end = 16
 
 
+class Goal(Choice):
+    """The goal required of you in order to complete your run in Archipelago."""
+    display_name = "Goal"
+    option_any = 0
+    option_hollowknight = 1
+    option_siblings = 2
+    option_radiance = 3
+    # Client support exists for this, but logic is a nightmare
+    # option_godhome = 4
+    default = 0
+
+
+class WhitePalace(Choice):
+    """
+    Whether or not to include White Palace or not.  Note: Even if excluded, the King Fragment check may still be
+    required if charms are vanilla.
+    """
+    display_name = "White Palace"
+    option_exclude = 0  # No White Palace at all
+    option_kingfragment = 1  # Include King Fragment check only
+    option_nopathofpain = 2  # Exclude Path of Pain locations.
+    option_include = 3  # Include all White Palace locations, including Path of Pain.
+    default = 0
+
+
+class StartingGeo(Range):
+    """The amount of starting geo you have."""
+    display_name = "Starting Geo"
+    range_start = 0
+    range_end = 1000
+    default = 0
+
+
 hollow_knight_options: typing.Dict[str, type(Option)] = {
     **hollow_knight_randomize_options,
     **hollow_knight_logic_options,
@@ -274,4 +311,7 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     MinimumEggPrice.__name__: MinimumEggPrice,
     MaximumEggPrice.__name__: MaximumEggPrice,
     EggShopSlots.__name__: EggShopSlots,
+    Goal.__name__: Goal,
+    WhitePalace.__name__: WhitePalace,
+    StartingGeo.__name__: StartingGeo,
 }
