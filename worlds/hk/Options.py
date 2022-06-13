@@ -263,6 +263,39 @@ class EggShopSlots(Range):
     range_end = 16
 
 
+class Goal(Choice):
+    """The goal required of you in order to complete your run in Archipelago."""
+    display_name = "Goal"
+    option_any = 0
+    option_hollowknight = 1
+    option_siblings = 2
+    option_radiance = 3
+    # Client support exists for this, but logic is a nightmare
+    # option_godhome = 4
+    default = 0
+
+
+class WhitePalace(Choice):
+    """
+    Whether or not to include White Palace or not.  Note: Even if excluded, the King Fragment check may still be
+    required if charms are vanilla.
+    """
+    display_name = "White Palace"
+    option_exclude = 0  # No White Palace at all
+    option_kingfragment = 1  # Include King Fragment check only
+    option_nopathofpain = 2  # Exclude Path of Pain locations.
+    option_include = 3  # Include all White Palace locations, including Path of Pain.
+    default = 0
+
+
+class StartingGeo(Range):
+    """The amount of starting geo you have."""
+    display_name = "Starting Geo"
+    range_start = 0
+    range_end = 1000
+    default = 0
+
+
 hollow_knight_options: typing.Dict[str, type(Option)] = {
     **hollow_knight_randomize_options,
     **hollow_knight_logic_options,
@@ -278,4 +311,7 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     MinimumEggPrice.__name__: MinimumEggPrice,
     MaximumEggPrice.__name__: MaximumEggPrice,
     EggShopSlots.__name__: EggShopSlots,
+    Goal.__name__: Goal,
+    WhitePalace.__name__: WhitePalace,
+    StartingGeo.__name__: StartingGeo,
 }
