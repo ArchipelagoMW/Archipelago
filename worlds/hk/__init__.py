@@ -9,13 +9,14 @@ logger = logging.getLogger("Hollow Knight")
 from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
 from .Rules import set_rules
-from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled, Goal, WhitePalace
+from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled, Goal, WhitePalace, no_shuffle
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
     event_names, item_effects, connectors, one_ways
 from .Charms import names as charm_names
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial
 from ..AutoWorld import World, LogicMixin, WebWorld
+from Fill import fill_restrictive
 
 path_of_pain_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
@@ -208,7 +209,8 @@ class HKWorld(World):
 
         wp_exclusions = self.white_palace_exclusions()
         for option_key, option in hollow_knight_randomize_options.items():
-            if getattr(self.world, option_key)[self.player]:
+            option_choice = getattr(self.world, option_key)[self.player]
+            if option_choice:
                 for item_name, location_name in zip(option.items, option.locations):
                     if location_name in wp_exclusions:
                         continue
@@ -219,10 +221,12 @@ class HKWorld(World):
                     if location_name == "Start":
                         self.world.push_precollected(item)
                     else:
-                        self.create_location(location_name)
+                        loc = self.create_location(location_name)
+                        loc.progress_type = LocationProgressType.PRIORITY if option_choice == 2 \
+                            else LocationProgressType.EXCLUDED if option_choice == 3 else LocationProgressType.DEFAULT
                         pool.append(item)
             # elif option_key not in logicless_options:
-            else:
+            elif option_choice == 0:
                 for item_name, location_name in zip(option.items, option.locations):
                     if location_name in wp_exclusions and location_name != 'King_Fragment':
                         continue
@@ -246,6 +250,20 @@ class HKWorld(World):
             prices.sort()
             for loc, price in zip(locations, prices):
                 loc.cost = price
+
+    def pre_fill(self):
+        wp_exclusions = self.white_palace_exclusions()
+        for option_key, option in hollow_knight_randomize_options.items():
+            option_choice = getattr(self.world, option_key)[self.player]
+            if option_key not in no_shuffle and option_choice == -1:
+                locations = []
+                items = []
+                for item_name, location_name in zip(option.items, option.locations):
+                    if location_name in wp_exclusions:
+                        continue
+                    locations.append(self.create_location(location_name))
+                    items.append(self.create_item(item_name))
+                fill_restrictive(self.world, self.world.state, locations, items, True, True)
 
     def set_rules(self):
         world = self.world
