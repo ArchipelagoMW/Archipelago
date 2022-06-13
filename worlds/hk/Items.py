@@ -27,7 +27,7 @@ directionals = ('', 'Left_', 'Right_')
 
 item_name_groups.update({
     "Dreamer": {"Herrah", "Monomon", "Lurien"},
-    "Cloak": {x + 'Mantis_Claw' for x in directionals} | {'Shade_Cloak', 'Split_Shade_Cloak'},
+    "Cloak": {x + 'Mothwing_Cloak' for x in directionals} | {'Shade_Cloak', 'Split_Shade_Cloak'},
     "Claw": {x + 'Mantis_Claw' for x in directionals},
     "CDash": {x + 'Crystal_Heart' for x in directionals},
     "Fragments": {"Queen_Fragment", "King_Fragment", "Void_Heart"},
