@@ -19,8 +19,8 @@ class DisableNonRandomizedPuzzles(DefaultOnToggle):
 
 
 class EarlySecretArea(Toggle):
-    """Mountaintop River Shape now opens the shortcut to the Inside Mountain Secret Area,
-    otherwise known as "UTM" (Under the Mountain) or the "Challenge Area"."""
+    """The Mountainside shortcut to the Mountain Secret Area is open from the start.
+    (Otherwise known as "UTM", "Caves" or the "Challenge Area")"""
     display_name = "Early Secret Area"
 
 
