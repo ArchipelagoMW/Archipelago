@@ -1185,9 +1185,9 @@ class Item():
     @property
     def flags(self) -> int:
         return self.advancement + (self.never_exclude << 1) + (self.trap << 2) \
-               + (self.location.no_hint_points
-                   or (0 if self.location is None else (self.location.name in self.world.exclude_locations[self.location.player]
-                       and not self.world.excluded_location_hint_points[self.location.player])) << 3)
+               + (((False if self.location is None else self.location.no_hint_points)
+                   or (False if self.location is None else (self.location.name in self.world.exclude_locations[self.location.player]
+                       and not self.world.excluded_location_hint_points[self.location.player]))) << 3)
 
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player
