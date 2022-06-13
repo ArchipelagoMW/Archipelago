@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Union
 from BaseClasses import MultiWorld
 from Options import Toggle, DefaultOnToggle, Option, Range, Choice
 
@@ -113,7 +113,7 @@ def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
     return get_option_value(world, player, name) > 0
 
 
-def get_option_value(world: MultiWorld, player: int, name: str) -> any:
+def get_option_value(world: MultiWorld, player: int, name: str) -> Union[bool, int]:
     option = getattr(world, name, None)
 
     if option is None:
