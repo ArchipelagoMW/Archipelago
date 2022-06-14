@@ -153,7 +153,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             if world.custom_item_pool[player].value.setdefault('use_defaults', True):
                 custom_item_pool = player_item_pool.copy()
             for item_name, count in world.custom_item_pool[player].value.setdefault('set', {}).items():
-                    custom_item_pool[item_name] = count
+                custom_item_pool[item_name] = count
             for item_name, modify in world.custom_item_pool[player].value.setdefault('modify', {}).items():
                 custom_item_pool[item_name] = custom_item_pool.setdefault(item_name, 0) + modify
             for item_name, replacement in world.custom_item_pool[player].value.setdefault('replace', {}).items():
@@ -162,13 +162,17 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for item_name, custom_pool_count in custom_item_pool.items():
                 player_pool_count = player_item_pool.setdefault(item_name, 0)
                 if custom_pool_count > player_pool_count:
+                    item = world.create_item(item_name, player)
                     for _ in range(0, custom_pool_count - player_pool_count):
-                        item = world.create_item(item_name, player)
                         world.itempool.append(item)
                 elif custom_pool_count < player_pool_count:
+                    item = world.create_item(item_name, player)
                     for _ in range(0, player_pool_count - custom_pool_count):
-                        item = world.create_item(item_name, player)
-                        world.itempool.remove(item)
+                        try:
+                            world.itempool.remove(item)
+                        except ValueError:
+                            logging.warning(f"Could not remove {item.name} for {world.player_name[player]} for custom item pool, item does not exist")
+                            break
             if world.custom_item_pool[player].value.setdefault('item_pool_correction', True):
                 custom_pool_size = sum(custom_item_pool.values())
                 player_pool_size = sum(player_item_pool.values())
