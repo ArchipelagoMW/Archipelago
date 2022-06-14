@@ -138,7 +138,6 @@ class SMZ3World(World):
                     item.game != "SMZ3" or \
                     loc.allow(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World), None) and \
                         region.CanFill(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World))) and old_rule(item)
-                l.has_item_rule = True
                 set_rule(l, lambda state, loc=loc: loc.Available(state.smz3state[self.player]))
 
     def create_regions(self):

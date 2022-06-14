@@ -165,7 +165,6 @@ def FillDisabledShopSlots(world):
         shop: Shop = location.parent_region.shop
         location.item = ItemFactory(shop.inventory[location.shop_slot]['item'], location.player)
         location.item_rule = lambda item: item.name == location.item.name and item.player == location.player
-        location.has_item_rule = True
 
 
 def ShopSlotFill(world):

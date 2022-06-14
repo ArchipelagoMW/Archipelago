@@ -1085,7 +1085,6 @@ class Location:
     always_allow = staticmethod(lambda item, state: False)
     access_rule = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
-    has_item_rule = False
     item: Optional[Item] = None
     parent_region: Optional[Region]
 

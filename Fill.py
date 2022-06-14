@@ -184,7 +184,7 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     defaultlocations = defaultlocations + excludedlocations
     world.random.shuffle(defaultlocations)
 
-    itemrulelocations = [location for location in defaultlocations if location.has_item_rule]
+    itemrulelocations = [location for location in defaultlocations if location.item_rule is not location.__class__.item_rule]
     defaultlocations = [location for location in defaultlocations if location not in itemrulelocations]
     fill_restrictive(world, world.state, itemrulelocations, restitempool)
 
