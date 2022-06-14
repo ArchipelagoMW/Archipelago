@@ -206,6 +206,8 @@ class HKWorld(World):
             geo_replace.add("Shade_Soul")
             geo_replace.add("Descending_Dark")
 
+        location_types = {1: LocationProgressType.DEFAULT, 2: LocationProgressType.PRIORITY, 3:
+                          LocationProgressType.EXCLUDED}
         wp_exclusions = self.white_palace_exclusions()
         for option_key, option in hollow_knight_randomize_options.items():
             option_choice = getattr(self.world, option_key)[self.player]
@@ -221,9 +223,7 @@ class HKWorld(World):
                         self.world.push_precollected(item)
                     else:
                         pool.append(item)
-                        self.create_location(location_name).progress_type = LocationProgressType.PRIORITY if \
-                        option_choice == 2 else LocationProgressType.EXCLUDED if option_choice == 3 else \
-                        LocationProgressType.DEFAULT
+                        self.create_location(location_name).progress_type = location_types[option_choice]
             # elif option_key not in logicless_options:
             else:
                 for item_name, location_name in zip(option.items, option.locations):
