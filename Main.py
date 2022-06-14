@@ -183,8 +183,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                             if removed_items == diff:
                                 break
                     else:
-                        logging.warning(f"Unable to remove enough filler items for player {world.player_mame[player]} to correct item pool size")
-                        logging.warning(f"Player {world.player_mame[player]}'s item pool oversized by {diff - removed_items} items")
+                        logging.warning(f"Unable to remove enough filler items for player {world.player_name[player]} to correct item pool size")
+                        logging.warning(f"Player {world.player_name[player]}'s item pool oversized by {diff - removed_items} items")
                 for _ in range(diff, 0):
                     world.itempool.append(AutoWorld.call_single(world, "create_filler", player))
 
