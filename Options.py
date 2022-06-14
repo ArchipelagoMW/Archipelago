@@ -461,6 +461,7 @@ class Range(NumericOption):
 class SpecialRange(Range):
     special_range_cutoff = 0
     special_range_names: typing.Dict[str, int] = {}
+    """Special Range names have to be all lowercase as matching is done with text.lower()"""
 
     @classmethod
     def from_text(cls, text: str) -> Range:
@@ -638,9 +639,9 @@ class ProgressionBalancing(SpecialRange):
     range_end = 99
     display_name = "Progression Balancing"
     special_range_names = {
-        "Disabled": 0,
-        "Normal": 50,
-        "Extreme": 99,
+        "disabled": 0,
+        "normal": 50,
+        "extreme": 99,
     }
 
 
