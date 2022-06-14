@@ -434,13 +434,13 @@ In JSON this may look like:
 
 `flags` are bit flags:
 
-| Flag | Meaning |
-| ----- | ----- |
-| 0 | Nothing special about this item |
-| 0b0001 | If set, indicates the item can unlock logical advancement |
-| 0b0010 | If set, indicates the item is important but not in a way that unlocks advancement |
-| 0b0100 | If set, indicates the item is a trap |
-| 0b1000 | If set, indicates the item will not grant the finder any hint points. |
+| Flag | Meaning                                                                                                  |
+| ----- |----------------------------------------------------------------------------------------------------------|
+| 0 | Nothing special about this item                                                                          |
+| 0b0001 | If set, indicates the item can unlock logical advancement                                                |
+| 0b0010 | If set, indicates the item is important but not in a way that unlocks advancement                        |
+| 0b0100 | If set, indicates the item is a trap                                                                     |
+| 0b1000 | If set, indicates the item came from an excluded location and will not grant the finder any hint points. |
 
 ### JSONMessagePart
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are intended to be read in the order they are listed in the packet.

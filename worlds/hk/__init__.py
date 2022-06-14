@@ -232,7 +232,7 @@ class HKWorld(World):
                     else:
                         loc = self.create_location(location_name)
                         loc.place_locked_item(item)
-                        loc.no_hint_points = True
+                        loc.progress_type = LocationProgressType.EXCLUDED
         for i in range(self.world.EggShopSlots[self.player].value):
             self.create_location("Egg_Shop")
             pool.append(self.create_item("Geo_Rock-Default"))

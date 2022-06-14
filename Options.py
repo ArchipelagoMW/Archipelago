@@ -693,6 +693,7 @@ class ExcludedLocationHintPoints(Toggle):
     display_name = "Excluded Location Hint Points"
     default = True
 
+
 class PriorityLocations(OptionSet):
     """Prevent these locations from having an unimportant item"""
     display_name = "Priority Locations"
