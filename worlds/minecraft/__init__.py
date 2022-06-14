@@ -13,7 +13,7 @@ from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification
 from .Options import minecraft_options
 from ..AutoWorld import World, WebWorld
 
-client_version = 8
+client_version = 9
 
 class MinecraftWebWorld(WebWorld):
     theme = "jungle"
@@ -65,7 +65,7 @@ class MinecraftWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 6
+    data_version = 7
 
     def _get_mc_data(self):
         exits = [connection[0] for connection in default_connections]

@@ -452,13 +452,6 @@ class GameManager(App):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
 
-class ChecksFinderManager(GameManager):
-    logging_pairs = [
-        ("Client", "Archipelago")
-    ]
-    base_title = "Archipelago ChecksFinder Client"
-
-
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
         super(LogtoUI, self).__init__(logging.INFO)
