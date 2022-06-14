@@ -11,7 +11,7 @@ class GenericWeb(WebWorld):
     advanced_settings = Tutorial('Advanced YAML Guide',
                                  'A guide to reading YAML files and editing them to fully customize your game.',
                                  'English', 'advanced_settings_en.md', 'advanced_settings/en',
-                                 ['alwaysintreble', 'Alchav'])
+                                 ['alwaysintreble', 'Alchav', 'Ijwu'])
     commands = Tutorial('Archipelago Server and Client Commands',
                         'A guide detailing the commands available to the user when participating in an Archipelago session.',
                         'English', 'commands_en.md', 'commands/en', ['jat2980', 'Ijwu'])
