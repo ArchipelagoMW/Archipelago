@@ -472,7 +472,7 @@ class ALTTPWorld(World):
                 while gtower_locations and gt_item_pool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
                     item_to_place = gt_item_pool.pop()
-                    if spot_to_fill.can_fill(world.state, item_to_place, False):
+                    if spot_to_fill.item_rule(item_to_place):
                         if item_to_place in localrest:
                             localrest.remove(item_to_place)
                         else:
