@@ -644,9 +644,9 @@ Inside Mountain Secret Area (Inside Mountain Secret Area) - Inside Mountain Path
 0x289E7 (Wooden Beam Stars and Squares) - True - Environment & Stars & Squares & Black/White Squares
 0x288AA (Wooden Beam Shapers and Stars) - True - Environment & Stars & Shapers
 0x17FB9 (Upstairs Dot Grid Negative Shapers) - True - Shapers & Dots & Negative Shapers
-0x0A16B (Upstairs Dot Grid Squares) - True - Squares & Black/White Squares & Colored Squares & Dots
+0x0A16B (Upstairs Dot Grid Gap Dots) - True - Dots
 0x0A2CE (Upstairs Dot Grid Stars) - 0x0A16B - Stars & Dots
-0x0A2D7 (Upstairs Dot Grid Triangles) - 0x0A2CE - Triangles & Dots
+0x0A2D7 (Upstairs Dot Grid Stars & Squares) - 0x0A2CE - Dots & Black/White Squares & Stars + Same Colored Symbol & Stars
 0x0A2DD (Upstairs Dot Grid Shapers) - 0x0A2D7 - Shapers & Dots
 0x0A2EA (Upstairs Dot Grid Rotated Shapers) - 0x0A2DD - Rotated Shapers & Dots
 0x0008F (Upstairs Invisible Dots 1) - True - Dots & Invisible Dots
