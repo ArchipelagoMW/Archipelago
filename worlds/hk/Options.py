@@ -111,13 +111,30 @@ default_on = {
 }
 
 no_shuffle = {
-    "RandomizeGrubs",
-    "RandomizeRancidEggs",
-    "RandomizeMimics",
+    # "RandomizeGrubs",
+    # "RandomizeRancidEggs",
+    # "RandomizeMimics",
+    # "RandomizeMaskShards",
+    # "RandomizeVesselFragments",
+    # "RandomizeCharmNotches",
+    # "RandomizePaleOre",
+    # "RandomizeGrimmkinFlames",
+}
+
+no_logic = {
     "RandomizeMaskShards",
-    "RandomizeVesselFragments",
-    "RandomizeCharmNotches",
-    "RandomizePaleOre",
+    "RandomizeGeoChests",
+    "RandomizeJunkPits",
+    "RandomizeRelics",
+    "RandomizeArcaneEggs",
+    "RandomizeMimics",
+    #"RandomizeMaps", # Quill is labelled an advancement item?
+    "RandomizeLifebloodCocoons",
+    #"RandomizeJournals", # Hunter's Journal is an advancement item?
+    "RandomizeGeoRocks",
+    "RandomizeBossGeo",
+    "RandomizeSoulTotems",
+    "RandomizeLoreTablets"
 }
 
 # not supported at this time
@@ -129,16 +146,6 @@ disabled = {
 }
 
 
-class RandomizeOptionsWithShuffle(Choice):
-    option_off = 0
-    option_on = 1
-    option_priority = 2
-    option_exclude = 3
-    option_shuffle = -1
-    alias_true = 1
-    alias_false = 0
-
-
 class RandomizeOptions(Choice):
     option_off = 0
     option_on = 1
@@ -146,6 +153,10 @@ class RandomizeOptions(Choice):
     option_exclude = 3
     alias_true = 1
     alias_false = 0
+
+
+class RandomizeOptionsWithShuffle(RandomizeOptions):
+    option_shuffle = 4
 
 
 hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {}

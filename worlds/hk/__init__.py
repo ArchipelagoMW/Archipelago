@@ -17,6 +17,7 @@ from .Charms import names as charm_names
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial
 from ..AutoWorld import World, LogicMixin, WebWorld
 from Fill import fill_restrictive
+from ..generic.Rules import add_item_rule
 
 path_of_pain_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
@@ -221,12 +222,12 @@ class HKWorld(World):
                     if location_name == "Start":
                         self.world.push_precollected(item)
                     else:
-                        loc = self.create_location(location_name)
-                        loc.progress_type = LocationProgressType.PRIORITY if option_choice == 2 \
-                            else LocationProgressType.EXCLUDED if option_choice == 3 else LocationProgressType.DEFAULT
                         pool.append(item)
+                        self.create_location(location_name).progress_type = LocationProgressType.PRIORITY if \
+                        option_choice == 2 else LocationProgressType.EXCLUDED if option_choice == 3 else \
+                        LocationProgressType.DEFAULT
             # elif option_key not in logicless_options:
-            elif option_choice == 0:
+            else:
                 for item_name, location_name in zip(option.items, option.locations):
                     if location_name in wp_exclusions and location_name != 'King_Fragment':
                         continue
@@ -251,19 +252,47 @@ class HKWorld(World):
             for loc, price in zip(locations, prices):
                 loc.cost = price
 
-    def pre_fill(self):
-        wp_exclusions = self.white_palace_exclusions()
+    def get_pre_fill_items(self):
+        items = []
         for option_key, option in hollow_knight_randomize_options.items():
             option_choice = getattr(self.world, option_key)[self.player]
-            if option_key not in no_shuffle and option_choice == -1:
-                locations = []
-                items = []
+            if not option_choice:
+                for item_name, location_name in zip(option.items, option.locations):
+                    item = self.create_item(item_name)
+                    if item.advancement:
+                        items.append(item)
+        return items
+
+    def pre_fill(self):
+        state = self.world.get_all_state(True)
+        wp_exclusions = self.white_palace_exclusions()
+        multi_counts = {}
+        locations = []
+        items = []
+        for option_key, option in hollow_knight_randomize_options.items():
+            option_choice = getattr(self.world, option_key)[self.player]
+            if option_key not in no_shuffle and option_choice == 4:
                 for item_name, location_name in zip(option.items, option.locations):
                     if location_name in wp_exclusions:
                         continue
-                    locations.append(self.create_location(location_name))
-                    items.append(self.create_item(item_name))
-                fill_restrictive(self.world, self.world.state, locations, items, True, True)
+                    if location_name not in multi_counts:
+                        if location_name in self.created_multi_locations:
+                            multi_counts[location_name] = 0
+                    if location_name in multi_counts:
+                        multi_counts[location_name] += 1
+                        location_name += "_" + str(multi_counts[location_name])
+                    if location_name == "Seer_3":
+                        print(f"Seer_3: {item_name}")
+                    location = self.world.get_location(location_name, self.player)
+                    locations.append(location)
+                    item = self.create_item(item_name)
+                    items.append(item)
+                    state.remove(item)
+                    self.world.itempool.remove(item)
+                    add_item_rule(location, lambda i, t=item.type: i.type == t)
+        self.world.random.shuffle(locations)
+        self.world.random.shuffle(items)
+        fill_restrictive(self.world, state, locations, items, True, True)
 
     def set_rules(self):
         world = self.world
