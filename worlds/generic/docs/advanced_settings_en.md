@@ -125,6 +125,7 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 
 * `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
   item which isn't necessary for progression to go in these locations.
+* `custom_item_pool` allows players to fully customize the items that are generated for their game.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared in `item_pool` get combined and when an item is found for the group, all players in the group receive it. Item links can also have local and non local items, forcing the items to either be placed within the worlds of the group or in worlds outside the group. If players have a varying amount of a specific item in the link, the lowest amount from the players will be the amount put into the group.
 ### Random numbers
 
@@ -139,6 +140,24 @@ Options taking a choice of a number can also use a variety of `random` options t
   will choose a number between 40 and 60
 * `random-range-low-#-#`, `random-range-middle-#-#`, and `random-range-high-#-#` will choose a number at random from the
   specified numbers, but with the specified weights
+
+### Custom Item Pool
+
+`custom_item_pool` allows you to have complete control over the items generated for your game. Sub-options are:
+
+* `Modify`: Allows you to increase or decrease the number of any given items by a given amount. Example: `Power Star: 2`
+will add 2 Power Stars to your item pool, `1up Mushroom: -2` will remove 2 1up Mushrooms.
+* `Set`: Set the total number of any given items. Example: `Power Star: 125` will set the number of Power Stars to 
+exactly 125.
+* `Replace`: Replace all of a given item with another item. Example: `1up Mushroom: Power Star` will replace all
+1up Mushrooms with Power Stars.
+* `use_defaults`: `True` or `False`. Defaults to `True` if not specified. If `False`, the entire item pool will be
+discarded in favor of the items you set here in `custom_item_pool`.
+* `pool_size_correction`: `True` or `False`. Defaults to `True` if not specified. If `True`, corrections will be made
+to ensure your item pool after `custom_item_pool` modifies it matches the size of the pool beforehand. It will do so
+by adding random filler items (some games do not currently have filler items specified and will add any random items)
+or removing random non-advancement items. Setting this option to `False` will allow you to change the size of your item
+pool and no corrections will be made.
 
 ### Example
 
@@ -279,7 +298,10 @@ Super Mario 64:
   ProgressiveKeys:
     true: 1
     false: 1
-
+  custom_item_pool:
+    modify:
+      1up Mushroom: -20
+    pool_size_correction: False
 ---
 
 description: Example of generating multiple worlds. World 2 of 3
@@ -304,6 +326,11 @@ Minecraft:
     ender_dragon: 1
     wither: 0
     both: 0
+  custom_item_pool:
+    modify:
+      4 Diamond Ore: 10
+      16 Iron Ore: 10
+    item_pool_correction: False
 
 ---
 

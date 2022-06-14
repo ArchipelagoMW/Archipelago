@@ -146,20 +146,20 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     for player in world.player_ids:
         if world.custom_item_pool[player]:
             player_item_pool = {}
+            custom_item_pool = {}
             for item in world.itempool:
                 if item.player == player:
                     player_item_pool[item.name] = player_item_pool.setdefault(item.name, 0) + 1
-            custom_player_pool = {}
-            if not world.custom_item_pool[player].value.setdefault('no_defaults', False):
-                custom_player_pool = player_item_pool.copy()
+            if not world.custom_item_pool[player].value.setdefault('use_defaults', True):
+                custom_item_pool = player_item_pool.copy()
             for item_name, count in world.custom_item_pool[player].value.setdefault('set', {}).items():
-                    custom_player_pool[item_name] = count
+                    custom_item_pool[item_name] = count
             for item_name, modify in world.custom_item_pool[player].value.setdefault('modify', {}).items():
-                custom_player_pool[item_name] = custom_player_pool.setdefault(item_name, 0) + modify
+                custom_item_pool[item_name] = custom_item_pool.setdefault(item_name, 0) + modify
             for item_name, replacement in world.custom_item_pool[player].value.setdefault('replace', {}).items():
-                custom_player_pool[replacement] = custom_player_pool.setdefault(replacement, 0) + custom_player_pool.setdefault(item_name, 0)
-                custom_player_pool[item_name] = 0
-            for item_name, custom_pool_count in custom_player_pool.items():
+                custom_item_pool[replacement] = custom_item_pool.setdefault(replacement, 0) + custom_item_pool.setdefault(item_name, 0)
+                custom_item_pool[item_name] = 0
+            for item_name, custom_pool_count in custom_item_pool.items():
                 player_pool_count = player_item_pool.setdefault(item_name, 0)
                 if custom_pool_count > player_pool_count:
                     for _ in range(0, custom_pool_count - player_pool_count):
@@ -169,6 +169,25 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     for _ in range(0, player_pool_count - custom_pool_count):
                         item = world.create_item(item_name, player)
                         world.itempool.remove(item)
+            if world.custom_item_pool[player].value.setdefault('item_pool_correction', True):
+                custom_pool_size = sum(custom_item_pool.values())
+                player_pool_size = sum(player_item_pool.values())
+                world.random.shuffle(world.itempool)
+                diff = custom_pool_size - player_pool_size
+                if diff > 0:
+                    removed_items = 0
+                    for item in world.itempool:
+                        if item.player == player and not item.advancement and not item.never_exclude:
+                            world.itempool.remove(item)
+                            removed_items += 1
+                            if removed_items == diff:
+                                break
+                    else:
+                        logging.warning(f"Unable to remove enough filler items for player {world.player_mame[player]} to correct item pool size")
+                        logging.warning(f"Player {world.player_mame[player]}'s item pool oversized by {diff - removed_items} items")
+                for _ in range(diff, 0):
+                    world.itempool.append(AutoWorld.call_single(world, "create_filler", player))
+    pass
 
     for group_id, group in world.groups.items():
         def find_common_pool(players: Set[int], shared_pool: Set[str]):
