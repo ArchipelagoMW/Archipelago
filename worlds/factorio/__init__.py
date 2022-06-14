@@ -394,3 +394,6 @@ class Factorio(World):
         if "Trap" in name:
             item.trap = True
         return item
+
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice(list(useless_technologies))
