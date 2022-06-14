@@ -1140,16 +1140,20 @@ class Location:
 
 
 class ItemClassification(IntEnum):
-    filler = 0  # aka trash, as in filler items like ammo, currency etc,
-    trap = -1  # detrimental or entirely useless (nothing) item
-    useful = 1  # Item that is generally quite useful, but not required for anything logical
-    progression = 2  # Item that is logically relevant
+    filler = 0b0000  # aka trash, as in filler items like ammo, currency etc,
+    trap = 0b0100  # detrimental or entirely useless (nothing) item
+    useful = 0b0010  # Item that is generally quite useful, but not required for anything logical
+    progression = 0b0001  # Item that is logically relevant
     # Item that is logically relevant, but progression balancing should not touch.
     # Typically currency or other counted items.
-    progression_skip_balancing = 3
+    progression_skip_balancing = 0b1001
+
+    def as_flag(self) -> int:
+        """As Network API flag int."""
+        return self & 0b0111
 
 
-class Item():
+class Item:
     location: Optional[Location] = None
     world: Optional[MultiWorld] = None
     code: Optional[int] = None  # an item with ID None is called an Event, and does not get written to multidata
@@ -1173,11 +1177,7 @@ class Item():
 
     def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int):
         self.name = name
-        if isinstance(classification, ItemClassification):
-            self.classification = classification
-        else:  # temporary compat for old bool saying advancement TODO: remove around 0.3.4
-            warnings.warn("Use of advancement bool in Item.__init__ instead of new classification.")
-            self.classification = ItemClassification.progression if classification else ItemClassification.filler
+        self.classification = classification
         self.player = player
         self.code = code
 
@@ -1191,7 +1191,7 @@ class Item():
 
     @property
     def advancement(self) -> bool:
-        return self.classification >= ItemClassification.progression
+        return bool(self.classification & ItemClassification.progression)
 
     @property
     def skip_in_prog_balancing(self) -> bool:
@@ -1199,15 +1199,18 @@ class Item():
 
     @property
     def useful(self) -> bool:
-        return self.classification == ItemClassification.useful
+        return bool(self.classification & ItemClassification.useful)
 
     @property
     def trap(self) -> bool:
-        return self.classification == ItemClassification.trap
+        return bool(self.classification & ItemClassification.trap)
 
     @property
     def flags(self) -> int:
-        return self.advancement + (self.useful << 1) + (self.trap << 2)
+        new = self.classification.as_flag()
+        old = self.advancement + (self.useful << 1) + (self.trap << 2)
+        assert new == old
+        return new
 
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player
