@@ -8,6 +8,10 @@ os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
 
+import Utils
+if Utils.is_frozen():
+    os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
+
 from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
@@ -42,7 +46,7 @@ from kivy.uix.popup import Popup
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-import Utils
+
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
 
 if typing.TYPE_CHECKING:
