@@ -64,22 +64,26 @@ def add_rule(spot, rule: CollectionRule, combine='and'):
 def forbid_item(location, item: str, player: int):
     old_rule = location.item_rule
     location.item_rule = lambda i: (i.name != item or i.player != player) and old_rule(i)
+    location.has_item_rule = True
 
 
 def forbid_items_for_player(location, items: typing.Set[str], player: int):
     old_rule = location.item_rule
     location.item_rule = lambda i: (i.player != player or i.name not in items) and old_rule(i)
+    location.has_item_rule = True
 
 
 def forbid_items(location, items: typing.Set[str]):
     """unused, but kept as a debugging tool."""
     old_rule = location.item_rule
     location.item_rule = lambda i: i.name not in items and old_rule(i)
+    location.has_item_rule = True
 
 
 def add_item_rule(location, rule: ItemRule):
     old_rule = location.item_rule
     location.item_rule = lambda item: rule(item) and old_rule(item)
+    location.has_item_rule = True
 
 
 def item_in_locations(state, item: str, player: int, locations: typing.Sequence):

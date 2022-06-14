@@ -168,6 +168,7 @@ def create_shop_rule(location, parser):
 def limit_to_itemset(location, itemset):
     old_rule = location.item_rule
     location.item_rule = lambda item: item.name in itemset and old_rule(item)
+    location.has_item_rule = True
 
 
 # This function should be run once after the shop items are placed in the world.

@@ -146,10 +146,6 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
             progitempool.append(item)
         elif item.never_exclude:  # this only gets nonprogression items which should not appear in excluded locations
             nonexcludeditempool.append(item)
-        elif item.name in world.local_items[item.player].value:
-            localrestitempool[item.player].append(item)
-        elif item.name in world.non_local_items[item.player].value:
-            nonlocalrestitempool.append(item)
         else:
             restitempool.append(item)
 
@@ -187,6 +183,18 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
 
     defaultlocations = defaultlocations + excludedlocations
     world.random.shuffle(defaultlocations)
+
+    itemrulelocations = [location for location in defaultlocations if location.has_item_rule]
+    defaultlocations = [location for location in defaultlocations if location not in itemrulelocations]
+    fill_restrictive(world, world.state, itemrulelocations, restitempool)
+
+    for item in restitempool:
+        if item.name in world.local_items[item.player].value:
+            localrestitempool[item.player].append(item)
+            restitempool.remove(item)
+        elif item.name in world.non_local_items[item.player].value:
+            nonlocalrestitempool.append(item)
+            restitempool.remove(item)
 
     if any(localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
         local_locations: typing.Dict[int, typing.List[Location]] = {player: [] for player in world.player_ids}
