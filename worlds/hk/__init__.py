@@ -9,15 +9,13 @@ logger = logging.getLogger("Hollow Knight")
 from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
 from .Rules import set_rules
-from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled, Goal, WhitePalace, no_shuffle
+from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled, Goal, WhitePalace
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
     event_names, item_effects, connectors, one_ways
 from .Charms import names as charm_names
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial
 from ..AutoWorld import World, LogicMixin, WebWorld
-from Fill import fill_restrictive
-from ..generic.Rules import add_item_rule
 
 path_of_pain_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
@@ -251,48 +249,6 @@ class HKWorld(World):
             prices.sort()
             for loc, price in zip(locations, prices):
                 loc.cost = price
-
-    def get_pre_fill_items(self):
-        items = []
-        for option_key, option in hollow_knight_randomize_options.items():
-            option_choice = getattr(self.world, option_key)[self.player]
-            if not option_choice:
-                for item_name, location_name in zip(option.items, option.locations):
-                    item = self.create_item(item_name)
-                    if item.advancement:
-                        items.append(item)
-        return items
-
-    def pre_fill(self):
-        state = self.world.get_all_state(True)
-        wp_exclusions = self.white_palace_exclusions()
-        multi_counts = {}
-        locations = []
-        items = []
-        for option_key, option in hollow_knight_randomize_options.items():
-            option_choice = getattr(self.world, option_key)[self.player]
-            if option_key not in no_shuffle and option_choice == 4:
-                for item_name, location_name in zip(option.items, option.locations):
-                    if location_name in wp_exclusions:
-                        continue
-                    if location_name not in multi_counts:
-                        if location_name in self.created_multi_locations:
-                            multi_counts[location_name] = 0
-                    if location_name in multi_counts:
-                        multi_counts[location_name] += 1
-                        location_name += "_" + str(multi_counts[location_name])
-                    if location_name == "Seer_3":
-                        print(f"Seer_3: {item_name}")
-                    location = self.world.get_location(location_name, self.player)
-                    locations.append(location)
-                    item = self.create_item(item_name)
-                    items.append(item)
-                    state.remove(item)
-                    self.world.itempool.remove(item)
-                    add_item_rule(location, lambda i, t=item.type: i.type == t)
-        self.world.random.shuffle(locations)
-        self.world.random.shuffle(items)
-        fill_restrictive(self.world, state, locations, items, True, True)
 
     def set_rules(self):
         world = self.world

@@ -110,33 +110,6 @@ default_on = {
     "RandomizeRelics"
 }
 
-no_shuffle = {
-    # "RandomizeGrubs",
-    # "RandomizeRancidEggs",
-    # "RandomizeMimics",
-    # "RandomizeMaskShards",
-    # "RandomizeVesselFragments",
-    # "RandomizeCharmNotches",
-    # "RandomizePaleOre",
-    # "RandomizeGrimmkinFlames",
-}
-
-no_logic = {
-    "RandomizeMaskShards",
-    "RandomizeGeoChests",
-    "RandomizeJunkPits",
-    "RandomizeRelics",
-    "RandomizeArcaneEggs",
-    "RandomizeMimics",
-    #"RandomizeMaps", # Quill is labelled an advancement item?
-    "RandomizeLifebloodCocoons",
-    #"RandomizeJournals", # Hunter's Journal is an advancement item?
-    "RandomizeGeoRocks",
-    "RandomizeBossGeo",
-    "RandomizeSoulTotems",
-    "RandomizeLoreTablets"
-}
-
 # not supported at this time
 disabled = {
     "RandomizeFocus",
@@ -155,10 +128,6 @@ class RandomizeOptions(Choice):
     alias_false = 0
 
 
-class RandomizeOptionsWithShuffle(RandomizeOptions):
-    option_shuffle = 4
-
-
 hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {}
 
 for option_name, option_data in pool_options.items():
@@ -172,17 +141,12 @@ for option_name, option_data in pool_options.items():
         extra_data["__doc__"] +=\
             "\r\nOn fully randomizes these locations. Off leaves them in their original locations.\r\n\
 Priority and Exclude fully randomize these locations and add them to priority_locations or exclude_locations, respectively."
-        if option_name not in no_shuffle:
-            extra_data["__doc__"] += "\r\nShuffle will shuffle these items across only these locations"
     if option_name in default_on:
         extra_data['default'] = 1
     else:
         extra_data['default'] = 0
     extra_data['display_name'] = option_name[0:9] + ' ' + option_name[9:]
-    if option_name in no_shuffle:
-        option = type(option_name, (RandomizeOptions,), extra_data)
-    else:
-        option = type(option_name, (RandomizeOptionsWithShuffle,), extra_data)
+    option = type(option_name, (RandomizeOptions,), extra_data)
     globals()[option.__name__] = option
     hollow_knight_randomize_options[option.__name__] = option
 
