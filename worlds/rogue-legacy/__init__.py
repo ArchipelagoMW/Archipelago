@@ -12,6 +12,7 @@ from ..AutoWorld import World, WebWorld
 
 
 class LegacyWeb(WebWorld):
+    theme = "stone"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Rogue Legacy Randomizer software on your computer. This guide covers single-player, multiworld, and related software.",
@@ -153,7 +154,7 @@ class LegacyWorld(World):
             self.world.push_precollected(self.world.create_item(ItemName.architect, self.player))
         elif self.world.architect[self.player] != "disabled":
             itempool += [self.create_item(ItemName.architect)]
-            
+
         # Fill item pool with the remaining
         for _ in range(len(itempool), total_required_locations):
             item = self.world.random.choice(list(misc_items_table.keys()))

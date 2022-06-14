@@ -57,13 +57,11 @@ html{
     font-weight: normal;
     width: 100%;
     margin-bottom: 0.5rem;
-    color: #ffe993;
     text-transform: lowercase;
     text-shadow: 1px 1px 2px #000000;
 }
 
 #player-settings h3, #player-settings h4, #player-settings h5, #player-settings h6{
-    color: #ffffff;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
