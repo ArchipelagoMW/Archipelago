@@ -142,7 +142,34 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     AutoWorld.call_all(world, "generate_basic")
 
-    # temporary home for item links, should be moved out of Main
+    # temporary home for custom item pool and item links, should be moved out of Main
+    for player in world.player_ids:
+        if world.custom_item_pool[player]:
+            player_item_pool = {}
+            for item in world.itempool:
+                if item.player == player:
+                    player_item_pool[item.name] = player_item_pool.setdefault(item.name, 0) + 1
+            custom_player_pool = {}
+            if not world.custom_item_pool[player].value.setdefault('no_defaults', False):
+                custom_player_pool = player_item_pool.copy()
+            for item_name, count in world.custom_item_pool[player].value.setdefault('set', {}).items():
+                    custom_player_pool[item_name] = count
+            for item_name, modify in world.custom_item_pool[player].value.setdefault('modify', {}).items():
+                custom_player_pool[item_name] = custom_player_pool.setdefault(item_name, 0) + modify
+            for item_name, replacement in world.custom_item_pool[player].value.setdefault('replace', {}).items():
+                custom_player_pool[replacement] = custom_player_pool.setdefault(replacement, 0) + custom_player_pool.setdefault(item_name, 0)
+                custom_player_pool[item_name] = 0
+            for item_name, custom_pool_count in custom_player_pool.items():
+                player_pool_count = player_item_pool.setdefault(item_name, 0)
+                if custom_pool_count > player_pool_count:
+                    for _ in range(0, custom_pool_count - player_pool_count):
+                        item = world.create_item(item_name, player)
+                        world.itempool.append(item)
+                elif custom_pool_count < player_pool_count:
+                    for _ in range(0, player_pool_count - custom_pool_count):
+                        item = world.create_item(item_name, player)
+                        world.itempool.remove(item)
+
     for group_id, group in world.groups.items():
         def find_common_pool(players: Set[int], shared_pool: Set[str]):
             advancement = set()
