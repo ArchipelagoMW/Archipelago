@@ -150,7 +150,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for item in world.itempool:
                 if item.player == player:
                     player_item_pool[item.name] = player_item_pool.setdefault(item.name, 0) + 1
-            if not world.custom_item_pool[player].value.setdefault('use_defaults', True):
+            if world.custom_item_pool[player].value.setdefault('use_defaults', True):
                 custom_item_pool = player_item_pool.copy()
             for item_name, count in world.custom_item_pool[player].value.setdefault('set', {}).items():
                     custom_item_pool[item_name] = count
