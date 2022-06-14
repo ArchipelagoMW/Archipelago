@@ -77,6 +77,7 @@ const createDefaultSettings = (settingData) => {
             });
             break;
           case 'range':
+          case 'special_range':
             for (let i = setting.min; i <= setting.max; ++i){
               newSettings[game][gameSetting][i] =
                 (setting.hasOwnProperty('defaultValue') && setting.defaultValue === i) ? 25 : 0;
@@ -285,6 +286,7 @@ const buildWeightedSettingsDiv = (game, settings) => {
         break;
 
       case 'range':
+      case 'special_range':
         const rangeTable = document.createElement('table');
         const rangeTbody = document.createElement('tbody');
 
@@ -325,6 +327,14 @@ const buildWeightedSettingsDiv = (game, settings) => {
           hintText.innerHTML = 'This is a range option. You may enter a valid numerical value in the text box ' +
             `below, then press the "Add" button to add a weight for it.<br />Minimum value: ${setting.min}<br />` +
             `Maximum value: ${setting.max}`;
+
+          if (setting.hasOwnProperty('value_names')) {
+            hintText.innerHTML += '<br /><br />Certain values have special meaning:';
+            Object.keys(setting.value_names).forEach((specialName) => {
+              hintText.innerHTML += `<br />${specialName}: ${setting.value_names[specialName]}`;
+            });
+          }
+
           settingWrapper.appendChild(hintText);
 
           const addOptionDiv = document.createElement('div');
@@ -487,7 +497,7 @@ const buildWeightedSettingsDiv = (game, settings) => {
         break;
 
       default:
-        console.error(`Unknown setting type for ${game} setting ${setting}: ${settings[setting].type}`);
+        console.error(`Unknown setting type for ${game} setting ${settingName}: ${setting.type}`);
         return;
     }
 
