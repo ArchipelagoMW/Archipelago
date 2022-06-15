@@ -134,22 +134,7 @@ class ALTTPWorld(World):
     random: random.Random
 
     # options
-    has_progressive_bows: bool
-    difficulty: str
-    goal: str
-    mode: str
-    timer: str
-    beemizer_total_chance: int
-    beemizer_trap_chance: int
-    shop_shuffle: str
-    retro: bool
-    boss_shuffle: str
-    logic: str
-    smallkey_shuffle = smallkey_shuffle
-    open_pyramid: str
-    entrance_shuffle: str
-    shops: List
-    has_progressive_bows: bool = False
+    options: Dict
 
     @classmethod
     def stage_assert_generate(cls, world):
@@ -158,20 +143,7 @@ class ALTTPWorld(World):
             raise FileNotFoundError(rom_file)
 
     def generate_early(self):
-        self.difficulty = self.world.difficulty[self.player]
-        self.goal = self.world.goal[self.player]
-        self.mode = self.world.mode[self.player]
-        self.timer = self.world.timer[self.player]
-        self.beemizer_total_chance = self.world.beemizer_total_chance[self.player]
-        self.beemizer_trap_chance = self.world.beemizer_trap_chance[self.player]
-        self.shop_shuffle = self.world.shop_shuffle[self.player]
-        self.retro = self.world.retro[self.player]
-        self.random = self.world.random
-        self.boss_shuffle = self.world.boss_shuffle[self.player]
-        self.logic = self.world.logic[self.player]
-        self.open_pyramid = self.world.open_pyramid[self.player]
-        self.entrance_shuffle = self.world.shuffle[self.player]
-        self.shops = []
+        self.options = self.world.get_options(self.player)
 
         player = self.player
         world = self.world

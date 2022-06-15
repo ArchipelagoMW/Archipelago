@@ -317,7 +317,7 @@ class MultiWorld():
             for r_location in region.locations:
                 self._location_cache[r_location.name, player] = r_location
 
-    def create_region(self, name: str, player: int, locations: Dict[str, int] = {},
+    def create_region(self, name: str, player: int, locations: Dict[str, int],
                       type: RegionType = None, hint: str = None) -> Region:
         region = Region(name, player, self.worlds[player], type, hint)
         for location, address in locations.items():
@@ -375,6 +375,12 @@ class MultiWorld():
         if use_cache:
             self._all_state = ret
         return ret
+
+    def get_options(self, player) -> Dict[str, Options.Option[Any]]:
+        options = {}
+        for option_name in self.worlds[player].options:
+            options[option_name] = self.worlds[player].world.option_name[player].value
+        return options
 
     def get_item(self, name: str) -> Item:
         if not (self.get_filled_locations() or self.itempool):
