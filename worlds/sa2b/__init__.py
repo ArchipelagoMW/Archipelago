@@ -62,6 +62,7 @@ class SA2BWorld(World):
     music_map: typing.Dict[int, int]
     emblems_for_cannons_core: int
     region_emblem_map: typing.Dict[int, int]
+    gate_costs: typing.Dict[int, int]
     gate_bosses: typing.Dict[int, int]
     web = SA2BWeb()
 
@@ -80,6 +81,7 @@ class SA2BWorld(World):
             "LevelGateDistribution": self.world.level_gate_distribution[self.player].value,
             "EmblemsForCannonsCore": self.emblems_for_cannons_core,
             "RegionEmblemMap": self.region_emblem_map,
+            "GateCosts": self.gate_costs,
             "GateBosses": self.gate_bosses,
         }
 
@@ -166,6 +168,8 @@ class SA2BWorld(World):
         total_levels_added = 0
         current_gate = 0
         current_gate_emblems = 0
+        self.gate_costs = dict()
+        self.gate_costs[0] = 0
         gates = list()
         gates.append(LevelGate(0))
         for i in range(30):
@@ -181,6 +185,7 @@ class SA2BWorld(World):
                     current_gate_emblems = max(
                         math.floor(total_emblem_count * math.pow(total_levels_added / 30.0, 2.0)), current_gate)
                     gates.append(LevelGate(current_gate_emblems))
+                    self.gate_costs[current_gate] = current_gate_emblems
                 levels_added_to_gate = 0
 
         self.region_emblem_map = dict(zip(shuffled_region_list, emblem_requirement_list))
