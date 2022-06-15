@@ -158,6 +158,7 @@ def set_advancement_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Local Brewery", player), lambda state: state._mc_can_brew_potions(player))
     set_rule(world.get_location("The Next Generation", player), lambda state: state._mc_can_kill_ender_dragon(player))
     set_rule(world.get_location("Fishy Business", player), lambda state: state.has("Fishing Rod", player))
+    set_rule(world.get_location("Forged Anew", player), lambda state: state._mc_can_use_anvil(player))
     # set_rule(world.get_location("Hot Tourist Destinations", player), lambda state: True)
     set_rule(world.get_location("This Boat Has Legs", player), lambda state: (state._mc_fortress_loot(player) or state._mc_complete_raid(player)) and 
         state.has("Saddle", player) and state.has("Fishing Rod", player))

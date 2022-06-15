@@ -28,6 +28,7 @@ advancement_table = {
     "Not Today, Thank You": AdvData(42009, 'Overworld'),
     "Isn't It Iron Pick": AdvData(42010, 'Overworld'),
     "Local Brewery": AdvData(42011, 'Nether Fortress'),
+    "Forged Anew": AdvData(420114, 'Overworld'),
     "The Next Generation": AdvData(42012, 'The End'),
     "Fishy Business": AdvData(42013, 'Overworld'),
     "Hot Tourist Destinations": AdvData(42014, 'The Nether'),
