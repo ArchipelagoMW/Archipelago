@@ -7,11 +7,10 @@ from collections import Counter
 logger = logging.getLogger("Hollow Knight")
 
 from .Items import item_table, lookup_type_to_names, item_name_groups
-from .Regions import create_regions
 from .Rules import set_rules
 from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled, Goal, WhitePalace
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
-    event_names, item_effects, connectors, one_ways
+    event_names, item_effects, connectors, one_ways, exits, region_names
 from .Charms import names as charm_names
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial
@@ -136,6 +135,14 @@ class HKWorld(World):
     charm_costs: typing.List[int]
     data_version = 2
 
+    warps: typing.Dict[str, typing.Tuple[str, str]] = {
+        "Warp-Lifeblood_Core_to_Abyss": ("Abyss_08", "Abyss_06_Core"),
+        "Warp-Palace_Grounds_to_White_Palace": ("Abyss_05", "White_Palace_11"),
+        "Warp-White_Palace_Entrance_to_Palace_Grounds": ("White_Palace_11", "Abyss_05"),
+        "Warp-White_Palace_Atrium_to_Palace_Grounds": ("White_Palace_03_hub", "Abyss_05"),
+        "Warp-Path_of_Pain_Complete": ("White_Palace_20", "White_Palace_11"),
+    }
+
     def __init__(self, world, player):
         super(HKWorld, self).__init__(world, player)
         self.created_multi_locations: typing.Dict[str, int] = Counter()
@@ -174,28 +181,51 @@ class HKWorld(World):
         return exclusions
 
     def create_regions(self):
-        menu_region: Region = create_region(self.world, self.player, 'Menu')
+        menu_region: Region = create_region(self.world, self.player, 'Menu', None, ['Start'])
         self.world.regions.append(menu_region)
+        for region_name in region_names:
+            region_exits = [name for name in exits.get(region_name, []) if connectors[name]]
+            region = create_region(self.world, self.player, region_name, exits=region_exits)
+            self.world.regions.append(region)
 
-        # Link regions
+        # Connect regions
+        self.world.get_entrance('Start', self.player).connect(self.world.get_region('Tutorial_01', self.player))
+        for source_name, target_name in connectors.items():
+            if not target_name:
+                continue
+            source = self.world.get_entrance(source_name, self.player)
+            region = self.world.get_region(location_to_region_lookup.get(target_name), self.player)
+            source.connect(region)
+
+        # Create transition events
         for event_name in event_names:
-            #if event_name in wp_exclusions:
-            #    continue
-            loc = HKLocation(self.player, event_name, None, menu_region)
+            region_name = location_to_region_lookup.get(event_name, 'Menu')
+            region = self.world.get_region(region_name, self.player)
+            loc = HKLocation(self.player, event_name, None, region)
             loc.place_locked_item(HKItem(event_name,
                                          True, #event_name not in wp_exclusions,
                                          None, "Event", self.player))
-            menu_region.locations.append(loc)
+            region.locations.append(loc)
+
         for entry_transition, exit_transition in connectors.items():
-            #if entry_transition in wp_exclusions:
-            #    continue
             if exit_transition:
+                region_name = location_to_region_lookup.get(entry_transition, 'Menu')
+                region = self.world.get_region(region_name, self.player)
                 # if door logic fulfilled -> award vanilla target as event
-                loc = HKLocation(self.player, entry_transition, None, menu_region)
+                loc = HKLocation(self.player, entry_transition, None, region)
                 loc.place_locked_item(HKItem(exit_transition,
                                              True, #exit_transition not in wp_exclusions,
                                              None, "Event", self.player))
-                menu_region.locations.append(loc)
+                region.locations.append(loc)
+
+        # Create dummy entrances for warps
+        for warp, (source_name, target_name) in self.warps.items():
+            source = self.world.get_region(source_name, self.player)
+            target = self.world.get_region(target_name, self.player)
+            entrance = Entrance(self.player, warp, source)
+            source.exits.append(entrance)
+            entrance.connect(target)
+
 
     def create_items(self):
         # Generate item pool and associated locations (paired in HK)
@@ -231,9 +261,6 @@ class HKWorld(World):
                     location.place_locked_item(item)
                 else:
                     pool.append(item)
-
-                if location_name in wp_exclusions:
-                    print(f"World {self.world.player_name[self.player]} - Item {item_name} - Location {location_name} - vanilla={vanilla!r}, excluded={excluded!r}")
 
         for i in range(self.world.EggShopSlots[self.player].value):
             self.create_location("Egg_Shop")
@@ -307,7 +334,9 @@ class HKWorld(World):
             self.created_multi_locations[name] += 1
             name = self.get_multi_location_name(name, self.created_multi_locations[name])
 
-        region = self.world.get_region("Menu", self.player)
+        region_name = location_to_region_lookup.get(name, 'Menu')
+        region = self.world.get_region(region_name, self.player)
+
         loc = HKLocation(self.player, name, self.location_name_to_id[name], region)
         if unit:
             loc.unit = unit

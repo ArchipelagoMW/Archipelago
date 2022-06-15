@@ -1,6 +1,7 @@
 # This module is written by Extractor.py, do not edit manually!.
 
 from ..generic.Rules import set_rule, add_rule
+from .ExtractedData import connectors
 
 units = {
     "Egg": "RANCIDEGGS",
@@ -20,6 +21,8 @@ def hk_set_rule(hk_world, location: str, rule):
         return
     for location in locations:
         set_rule(hk_world.world.get_location(location, hk_world.player), rule)
+        if connectors.get(location) or location in hk_world.warps:
+            set_rule(hk_world.world.get_entrance(location, hk_world.player), rule)
 
 
 def set_shop_prices(hk_world):
