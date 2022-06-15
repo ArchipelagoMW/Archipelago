@@ -108,7 +108,8 @@ def main(args=None, callback=ERmain):
     player_files = {}
     for file in os.scandir(args.player_files_path):
         fname = file.name
-        if file.is_file() and os.path.join(args.player_files_path, fname) not in {args.meta_file_path, args.weights_file_path}:
+        if file.is_file() and not file.startswith(".") and \
+                os.path.join(args.player_files_path, fname) not in {args.meta_file_path, args.weights_file_path}:
             path = os.path.join(args.player_files_path, fname)
             try:
                 weights_cache[fname] = read_weights_yamls(path)
