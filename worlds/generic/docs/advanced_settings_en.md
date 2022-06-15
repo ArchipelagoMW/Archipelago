@@ -145,11 +145,11 @@ Options taking a choice of a number can also use a variety of `random` options t
 
 `custom_item_pool` allows you to have complete control over the items generated for your game. Sub-options are:
 
-* `Modify`: Allows you to increase or decrease the number of any given items by a given amount. Example: `Power Star: 2`
+* `modify`: Allows you to increase or decrease the number of any given items by a given amount. Example: `Power Star: 2`
 will add 2 Power Stars to your item pool, `1up Mushroom: -2` will remove 2 1up Mushrooms.
-* `Set`: Set the total number of any given items. Example: `Power Star: 125` will set the number of Power Stars to 
+* `set`: Set the total number of any given items. Example: `Power Star: 125` will set the number of Power Stars to 
 exactly 125.
-* `Replace`: Replace all of a given item with another item. Example: `1up Mushroom: Power Star` will replace all
+* `replace`: Replace all of a given item with another item. Example: `1up Mushroom: Power Star` will replace all
 1up Mushrooms with Power Stars.
 * `use_defaults`: `True` or `False`. Defaults to `True` if not specified. If `False`, the entire item pool will be
 discarded in favor of the items you set here in `custom_item_pool`.
@@ -158,6 +158,13 @@ to ensure your item pool after `custom_item_pool` modifies it matches the size o
 by adding random filler items (some games do not currently have filler items specified and will add any random items)
 or removing random non-advancement items. Setting this option to `False` will allow you to change the size of your item
 pool and no corrections will be made.
+
+Some special item names can be used in certain cases:
+
+* `start_inventory`: can only be used in `replace`. Allows you to replace all items in the item pool that are in your
+`start_inventory` option. Can also be specified as the "replacement" item to move items out of the item pool and into
+your `start_inventory`.
+* `null`: can be used in place of item names to create filler items (will do nothing if you try to remove `null` items).
 
 ### Example
 
@@ -195,6 +202,11 @@ A Link to the Past:
     - Spike Cave
   exclude_locations:
     - Cave 45
+  custom_item_pool:
+    replace:
+      start_inventory: null
+    modify:
+      Moon Pearl: 1
   item_links:
     - name: rods
       item_pool:
@@ -254,6 +266,11 @@ Timespinner:
 * `start_location_hints` gives us a starting hint for the `Spike Cave` location available at the beginning of the
   multiworld that can be used for no cost.
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
+* `custom_item_pool`
+  * `start_inventory: null` will remove the items specified in `start_inventory` from the item pool, and replace them
+with junk items.
+  * `modify` is used to add an extra moon pearl to the item pool. Since `item_pool_correction` is not turned off, it
+will remove a junk item to make room for it automatically.
 * `item_links` 
   * For `A Link to the Past` all players in the `rods` item link group will share their fire and ice rods and the player
 items will be replaced with single rupees.

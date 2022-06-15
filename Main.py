@@ -157,13 +157,25 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for item_name, modify in world.custom_item_pool[player].value.setdefault('modify', {}).items():
                 custom_item_pool[item_name] = custom_item_pool.setdefault(item_name, 0) + modify
             for item_name, replacement in world.custom_item_pool[player].value.setdefault('replace', {}).items():
-                custom_item_pool[replacement] = custom_item_pool.setdefault(replacement, 0) + custom_item_pool.setdefault(item_name, 0)
-                custom_item_pool[item_name] = 0
+                if item_name == "start_inventory":
+                    for starting_item, count in world.start_inventory[player].value.items():
+                        custom_item_pool[replacement] = custom_item_pool.setdefault(replacement, 0) + count
+                        custom_item_pool[starting_item] = 0
+                elif replacement == "start_inventory":
+                    for _ in range(custom_item_pool.setdefault(item_name, 0)):
+                        world.push_precollected(world.create_item(item_name, player))
+                    custom_item_pool[item_name] = 0
+                else:
+                    custom_item_pool[replacement] = custom_item_pool.setdefault(replacement, 0) + custom_item_pool.setdefault(item_name, 0)
+                    custom_item_pool[item_name] = 0
             for item_name, custom_pool_count in custom_item_pool.items():
                 player_pool_count = player_item_pool.setdefault(item_name, 0)
                 if custom_pool_count > player_pool_count:
-                    item = world.create_item(item_name, player)
                     for _ in range(0, custom_pool_count - player_pool_count):
+                        if item_name is None:
+                            item = world.worlds[player].create_filler()
+                        else:
+                            item = world.create_item(item_name, player)
                         world.itempool.append(item)
                 elif custom_pool_count < player_pool_count:
                     item = world.create_item(item_name, player)
