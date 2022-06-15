@@ -391,6 +391,18 @@ def generate_itempool(world):
                 world.push_precollected(item)
                 world.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
         world.itempool.extend([item for item in dungeon_items])
+
+    for starting_item, count in world.start_inventory[player].value.items():
+        if starting_item not in {"Single Arrow", "Arrows (10)", "Bombs (3)", "Bombs (10)"} and "Rupee" not in starting_item:
+            item = ItemFactory(starting_item, player)
+            for _ in range(count):
+                if item in items:
+                    items.remove(item)
+                    items.append(world.worlds[player].create_filler())
+                else:
+                    break
+
+
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
     # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
