@@ -214,13 +214,41 @@ class HKWorld(World):
                         continue
                     if item_name in geo_replace:
                         item_name = "Geo_Rock-Default"
-                    item = self.create_item(item_name)
-                        # self.create_location(location_name).place_locked_item(item)
-                    if location_name == "Start":
-                        self.world.push_precollected(item)
-                    else:
+                    split = None
+                    if item_name == "Crystal_Heart" and self.world.SplitCrystalHeart[self.player]:
+                        split = "Crystal_Heart"
+                    if item_name == "Mothwing_Cloak" and self.world.SplitMothwingCloak[self.player]:
+                        split = "Mothwing_Cloak"
+                    if item_name == "Mantis_Claw" and self.world.SplitMantisClaw[self.player]:
+                        split = "Mantis_Claw"
+                    if item_name == "Shade_Cloak" and self.world.SplitMothwingCloak[self.player]:
+                        split = "Shade_Cloak"
+                    if split in ["Crystal_Heart", "Mothwing_Cloak"]:
                         self.create_location(location_name)
+                        self.create_location("Split_" + location_name)
+                    if split == "Mantis_Claw":
+                        self.create_location("Left_" + location_name)
+                        self.create_location("Right_" + location_name)
+                    if split == "Shade_Cloak":
+                        self.create_location(location_name)
+                        item = self.create_item("Split_" + item_name)
+                        item.advancement = True
                         pool.append(item)
+                    if split in ["Crystal_Heart", "Mothwing_Cloak", "Mantis_Claw"]:
+                        item = self.create_item("Left_" + item_name)
+                        item.advancement = True
+                        pool.append(item)
+                        item = self.create_item("Right_" + item_name)
+                        item.advancement = True
+                        pool.append(item)
+                    if split is None:
+                        item = self.create_item(item_name)
+                            # self.create_location(location_name).place_locked_item(item)
+                        if location_name == "Start":
+                            self.world.push_precollected(item)
+                        else:
+                            self.create_location(location_name)
+                            pool.append(item)
             # elif option_key not in logicless_options:
             else:
                 for item_name, location_name in zip(option.items, option.locations):
@@ -316,7 +344,15 @@ class HKWorld(World):
         if change:
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
                 state.prog_items[effect_name, item.player] += effect_value
-
+        if item.name in ["Left_Mothwing_Cloak", "Right_Mothwing_Cloak", "Split_Shade_Cloak"]:
+            if item.name == "Right_Mothwing_Cloak":
+                state.prog_items["RIGHTDASH", item.player] += 1
+            if item.name == "Left_Mothwing_Cloak":
+                state.prog_items["LEFTDASH", item.player] += 1
+            if all(i in state.prog_items.keys() for i in [("Left_Mothwing_Cloak", item.player), ("Right_Mothwing_Cloak",
+                                                          item.player), ("Split_Shade_Cloak", item.player)]):
+                state.prog_items["RIGHTDASH", item.player] = 2
+                state.prog_items["LEFTDASH", item.player] = 2
         return change
 
     def remove(self, state, item: HKItem) -> bool:
