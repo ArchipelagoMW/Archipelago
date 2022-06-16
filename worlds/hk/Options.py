@@ -257,7 +257,7 @@ class PlandoCharmCosts(OptionDict):
 
 
 class EggShopSlots(Range):
-    """For each slot, add a location to the Egg Shop and a Geo drop to the item pool."""
+    """For each slot, add a location to the Egg Shop and a filler item to the item pool."""
 
     display_name = "Egg Shop Item Slots"
     range_end = 16

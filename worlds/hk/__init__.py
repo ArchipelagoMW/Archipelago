@@ -234,7 +234,7 @@ class HKWorld(World):
                         self.create_location(location_name).place_locked_item(item)
         for i in range(self.world.EggShopSlots[self.player].value):
             self.create_location("Egg_Shop")
-            pool.append(self.create_item("Geo_Rock-Default"))
+            pool.append(self.create_filler())
         self.world.itempool += pool
 
         for shopname in self.shops:
