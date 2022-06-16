@@ -401,6 +401,7 @@ cx_Freeze.setup(
     version=f"{version_tuple.major}.{version_tuple.minor}.{version_tuple.build}",
     description="Archipelago",
     executables=exes,
+    ext_modules=[],  # required to disable auto-discovery with setuptools>=61
     options={
         "build_exe": {
             "packages": ["websockets", "worlds", "kivy"],
