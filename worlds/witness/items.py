@@ -90,7 +90,8 @@ class WitnessPlayerItems:
         self.PROGRESSION_TABLE = dict()
 
         self.EXTRA_AMOUNTS = {
-            "Functioning Brain": 1
+            "Functioning Brain": 1,
+            "Puzzle Skip": get_option_value(world, player, "puzzle_skip_amount")
         }
 
         for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS.union(StaticWitnessLogic.ALL_DOOR_ITEMS):

@@ -72,9 +72,6 @@ class WitnessWorld(World):
             if item in self.items.PROGRESSION_TABLE:
                 pool.append(witness_item)
                 items_by_name[item] = witness_item
-            elif item in self.items.EXTRA_AMOUNTS:
-                for i in range(0, self.items.EXTRA_AMOUNTS[item]):
-                    pool.append(witness_item)
 
         less_junk = 0
 
@@ -92,8 +89,16 @@ class WitnessWorld(World):
 
             less_junk = 1
 
+        for item in self.items.EXTRA_AMOUNTS:
+            witness_item = self.create_item(item)
+            for i in range(0, self.items.EXTRA_AMOUNTS[item]):
+                if len(pool) < len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE) - less_junk:
+                    pool.append(witness_item)
+
         # Put in junk items to fill the rest
         junk_size = len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - less_junk
+
+        print(junk_size)
 
         for i in range(0, junk_size):
             pool.append(self.create_item(self.get_filler_item_name()))

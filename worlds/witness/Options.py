@@ -92,6 +92,15 @@ class TrapPercentage(Range):
     default = 20
 
 
+class PuzzleSkipAmount(Range):
+    """Adds this number of Puzzle Skips into the pool, if there is room. Puzzle Skips let you skip one panel.
+    Works on most panels in the game - The only big exception is The Challenge."""
+    display_name = "Puzzle Skips"
+    range_start = 0
+    range_end = 20
+    default = 5
+
+
 the_witness_options: Dict[str, type] = {
     # "hard_mode": HardMode,
     "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
@@ -106,6 +115,7 @@ the_witness_options: Dict[str, type] = {
     # "shuffle_doors": ShuffleDoors,
     "mountain_lasers": MountainLasers,
     "challenge_lasers": ChallengeLasers,
+    "puzzle_skip_amount": PuzzleSkipAmount,
 }
 
 
