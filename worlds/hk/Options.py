@@ -256,8 +256,80 @@ class PlandoCharmCosts(OptionDict):
         return charm_costs
 
 
+class SlyShopSlots(Range):
+    """For each extra slot, add a location to the Sly Shop and a filler item to the item pool."""
+
+    display_name = "Sly Shop Slots"
+    default = 8
+    range_start = 8
+    range_end = 16
+
+
+class SlyKeyShopSlots(Range):
+    """For each extra slot, add a location to the Sly Shop (requiring Shopkeeper's Key) and a filler item to the item pool."""
+
+    display_name = "Sly Key Shop Slots"
+    default = 6
+    range_start = 6
+    range_end = 16
+
+
+class IseldaShopSlots(Range):
+    """For each extra slot, add a location to the Iselda Shop and a filler item to the item pool."""
+
+    display_name = "Iselda Shop Slots"
+    default = 3
+    range_start = 3
+    range_end = 16
+
+
+class SalubraShopSlots(Range):
+    """For each extra slot, add a location to the Salubra Shop, and a filler item to the item pool."""
+
+    display_name = "Salubra Shop Slots"
+    default = 5
+    range_start = 5
+    range_end = 16
+
+
+class SalubraCharmShopSlots(Range):
+    """For each extra slot, add a location to the Salubra Shop (requiring Charms), and a filler item to the item pool."""
+
+    display_name = "Salubra Charm Shop Slots"
+    default = 5
+    range_start = 5
+    range_end = 16
+
+
+class LegEaterShopSlots(Range):
+    """For each extra slot, add a location to the Leg Eater Shop and a filler item to the item pool."""
+
+    display_name = "Leg Eater Shop Slots"
+    default = 3
+    range_start = 3
+    range_end = 16
+
+
+class GrubfatherRewardSlots(Range):
+    """For each extra slot, add a location to the Grubfather and a filler item to the item pool."""
+
+    display_name = "Grubfather Reward Slots"
+    default = 7
+    range_start = 7
+    range_end = 16
+
+
+class SeerRewardSlots(Range):
+    """For each extra slot, add a location to the Seer and a filler item to the item pool."""
+
+    display_name = "Seer Reward Reward Slots"
+    default = 8
+    range_start = 8
+    range_end = 16
+
+
 class EggShopSlots(Range):
-    """For each slot, add a location to the Egg Shop and a Geo drop to the item pool."""
+    """For each slot, add a location to the Egg Shop and a filler item to the item pool."""
 
     display_name = "Egg Shop Item Slots"
     range_end = 16
@@ -310,6 +382,14 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     PlandoCharmCosts.__name__: PlandoCharmCosts,
     MinimumEggPrice.__name__: MinimumEggPrice,
     MaximumEggPrice.__name__: MaximumEggPrice,
+    SlyShopSlots.__name__: SlyShopSlots,
+    SlyKeyShopSlots.__name__: SlyKeyShopSlots,
+    IseldaShopSlots.__name__: IseldaShopSlots,
+    SalubraShopSlots.__name__: SalubraShopSlots,
+    SalubraCharmShopSlots.__name__: SalubraCharmShopSlots,
+    LegEaterShopSlots.__name__: LegEaterShopSlots,
+    GrubfatherRewardSlots.__name__: GrubfatherRewardSlots,
+    SeerRewardSlots.__name__: SeerRewardSlots,
     EggShopSlots.__name__: EggShopSlots,
     Goal.__name__: Goal,
     WhitePalace.__name__: WhitePalace,

@@ -231,9 +231,33 @@ class HKWorld(World):
                         self.world.push_precollected(item)
                     else:
                         self.create_location(location_name).place_locked_item(item)
+        for i in range(8, self.world.SlyShopSlots[self.player].value):
+            self.create_location("Sly")
+            pool.append(self.create_filler())
+        for i in range(6, self.world.SlyKeyShopSlots[self.player].value):
+            self.create_location("Sly_(Key)")
+            pool.append(self.create_filler())
+        for i in range(2, self.world.IseldaShopSlots[self.player].value):
+            self.create_location("Iselda")
+            pool.append(self.create_filler())
+        for i in range(5, self.world.SalubraShopSlots[self.player].value):
+            self.create_location("Salubra")
+            pool.append(self.create_filler())
+        for i in range(5, self.world.SalubraCharmShopSlots[self.player].value):
+            self.create_location("Salubra_(Requires_Charms)")
+            pool.append(self.create_filler())
+        for i in range(3, self.world.LegEaterShopSlots[self.player].value):
+            self.create_location("Leg_Eater")
+            pool.append(self.create_filler())
+        for i in range(7, self.world.GrubfatherRewardSlots[self.player].value):
+            self.create_location("Grubfather")
+            pool.append(self.create_filler())
+        for i in range(8, self.world.SeerRewardSlots[self.player].value):
+            self.create_location("Seer")
+            pool.append(self.create_filler())
         for i in range(self.world.EggShopSlots[self.player].value):
             self.create_location("Egg_Shop")
-            pool.append(self.create_item("Geo_Rock-Default"))
+            pool.append(self.create_filler())
         self.world.itempool += pool
 
         for shopname in self.shops:
