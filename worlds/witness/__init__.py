@@ -98,8 +98,6 @@ class WitnessWorld(World):
         # Put in junk items to fill the rest
         junk_size = len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - less_junk
 
-        print(junk_size)
-
         for i in range(0, junk_size):
             pool.append(self.create_item(self.get_filler_item_name()))
 
