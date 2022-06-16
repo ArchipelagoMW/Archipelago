@@ -1,3 +1,4 @@
+import copy
 import collections
 from itertools import zip_longest, chain
 import logging
@@ -141,15 +142,66 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     AutoWorld.call_all(world, "generate_basic")
 
-    # temporary home for item links, should be moved out of Main
+    # temporary home for custom item pool and item links, should be moved out of Main
+    for player in world.player_ids:
+        if world.custom_item_pool[player]:
+            player_item_pool = {}
+            custom_item_pool = {}
+            for item in world.itempool:
+                if item.player == player:
+                    player_item_pool[item.name] = player_item_pool.setdefault(item.name, 0) + 1
+            if world.custom_item_pool[player].value.setdefault('use_defaults', True):
+                custom_item_pool = player_item_pool.copy()
+            for item_name, count in world.custom_item_pool[player].value.setdefault('set', {}).items():
+                custom_item_pool[item_name] = count
+            for item_name, modify in world.custom_item_pool[player].value.setdefault('modify', {}).items():
+                custom_item_pool[item_name] = custom_item_pool.setdefault(item_name, 0) + modify
+            for item_name, replacement in world.custom_item_pool[player].value.setdefault('replace', {}).items():
+                custom_item_pool[replacement] = custom_item_pool.setdefault(replacement, 0) + custom_item_pool.setdefault(item_name, 0)
+                custom_item_pool[item_name] = 0
+            for item_name, custom_pool_count in custom_item_pool.items():
+                player_pool_count = player_item_pool.setdefault(item_name, 0)
+                if custom_pool_count > player_pool_count:
+                    item = world.create_item(item_name, player)
+                    for _ in range(0, custom_pool_count - player_pool_count):
+                        world.itempool.append(item)
+                elif custom_pool_count < player_pool_count:
+                    item = world.create_item(item_name, player)
+                    for _ in range(0, player_pool_count - custom_pool_count):
+                        try:
+                            world.itempool.remove(item)
+                        except ValueError:
+                            logging.warning(f"Could not remove {item.name} for {world.player_name[player]} for custom item pool, item does not exist")
+                            break
+            if world.custom_item_pool[player].value.setdefault('item_pool_correction', True):
+                custom_pool_size = sum(custom_item_pool.values())
+                player_pool_size = sum(player_item_pool.values())
+                world.random.shuffle(world.itempool)
+                diff = custom_pool_size - player_pool_size
+                if diff > 0:
+                    removed_items = 0
+                    for item in world.itempool:
+                        if item.player == player and not item.advancement and not item.never_exclude:
+                            world.itempool.remove(item)
+                            removed_items += 1
+                            if removed_items == diff:
+                                break
+                    else:
+                        logging.warning(f"Unable to remove enough filler items for player {world.player_name[player]} to correct item pool size")
+                        logging.warning(f"Player {world.player_name[player]}'s item pool oversized by {diff - removed_items} items")
+                for _ in range(diff, 0):
+                    world.itempool.append(AutoWorld.call_single(world, "create_filler", player))
+        #print(f"{world.player_name[player]} - {sum(custom_item_pool.values()) - sum(player_item_pool.values())}")
+
     for group_id, group in world.groups.items():
         def find_common_pool(players: Set[int], shared_pool: Set[str]):
-            classifications = collections.defaultdict(int)
+            advancement = set()
             counters = {player: {name: 0 for name in shared_pool} for player in players}
             for item in world.itempool:
                 if item.player in counters and item.name in shared_pool:
                     counters[item.player][item.name] += 1
-                    classifications[item.name] |= item.classification
+                    if item.advancement:
+                        advancement.add(item.name)
 
             for player in players.copy():
                 if all([counters[player][item] == 0 for item in shared_pool]):
@@ -167,18 +219,18 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 else:
                     for player in players:
                         del(counters[player][item])
-            return counters, classifications
+            return counters, advancement
 
-        common_item_count, classifications = find_common_pool(group["players"], group["item_pool"])
+        common_item_count, common_advancement_items = find_common_pool(group["players"], group["item_pool"])
         if not common_item_count:
             continue
 
         new_itempool = []
         for item_name, item_count in next(iter(common_item_count.values())).items():
+            advancement = item_name in common_advancement_items
             for _ in range(item_count):
                 new_item = group["world"].create_item(item_name)
-                # mangle together all original classification bits
-                new_item.classification |= classifications[item_name]
+                new_item.advancement = advancement
                 new_itempool.append(new_item)
 
         region = Region("Menu", RegionType.Generic, "ItemLink", group_id, world)
@@ -205,10 +257,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             items_to_add = []
             for player in group["players"]:
                 if group["replacement_items"][player]:
-                    items_to_add.append(AutoWorld.call_single(world, "create_item", player,
-                                                                group["replacement_items"][player]))
+                    item_to_add = AutoWorld.call_single(world, "create_item", player,
+                                                                group["replacement_items"][player])
                 else:
-                    items_to_add.append(AutoWorld.call_single(world, "create_filler", player))
+                    item_to_add = AutoWorld.call_single(world, "create_filler", player)
+                item_to_add.never_exclude = False
+                item_to_add.advancement = False
+                items_to_add.append(item_to_add)
             world.random.shuffle(items_to_add)
             world.itempool.extend(items_to_add[:itemcount - len(world.itempool)])
 
@@ -362,7 +417,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
                 locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in world.player_ids}
                 for location in world.get_filled_locations():
-                    if type(location.address) == int:
+                    if type(location.address) == int and location.item.code is not None:
                         assert location.item.code is not None, "item code None should be event, " \
                                                                "location.address should then also be None"
                         locations_data[location.player][location.address] = \

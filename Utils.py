@@ -251,6 +251,7 @@ def get_default_options() -> dict:
             "disable_item_cheat": False,
             "location_check_points": 1,
             "hint_cost": 10,
+            "minutes_to_hint": 0,
             "forfeit_mode": "goal",
             "collect_mode": "disabled",
             "remaining_mode": "goal",
