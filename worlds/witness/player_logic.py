@@ -18,12 +18,21 @@ When the world has parsed its options, a second function is called to finalize t
 import copy
 from BaseClasses import MultiWorld
 from .static_logic import StaticWitnessLogic
-from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda
-from .Options import is_option_enabled
+from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list
+from .Options import is_option_enabled, get_option_value, the_witness_options
 
 
 class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
+
+    def update_door_dict(self, panel_hex):
+        item_id = StaticWitnessLogic.ALL_DOOR_ITEM_IDS_BY_HEX.get(panel_hex)
+
+        if item_id is None:
+            return
+
+        self.DOOR_DICT_FOR_CLIENT[panel_hex] = item_id
+        self.DOOR_CONNECTIONS_TO_SEVER.update(StaticWitnessLogic.CONNECTIONS_TO_SEVER_BY_DOOR_HEX[panel_hex])
 
     def reduce_req_within_region(self, panel_hex):
         """
@@ -34,13 +43,27 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
-        if self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"] == frozenset({frozenset()}):
-            return self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
+        these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
+
+        real_items = {item[0] for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME}
+
+        these_items = frozenset({
+            subset.intersection(real_items)
+            for subset in these_items
+        })
+
+        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
+
+        if StaticWitnessLogic.DOOR_NAMES_BY_HEX.get(panel_hex) in real_items:
+            self.update_door_dict(panel_hex)
+
+            these_panels = frozenset({frozenset()})
+
+        if these_panels == frozenset({frozenset()}):
+            return these_items
 
         all_options = set()
 
-        these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
-        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
         check_obj = StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]
 
         for option in these_panels:
@@ -55,6 +78,9 @@ class WitnessPlayerLogic:
                 # the latter panel will be an "event panel", unless it ends up being
                 # a location itself. This prevents generation failures.
                 elif dep_obj["region"]["name"] != check_obj["region"]["name"]:
+                    new_items = frozenset({frozenset([option_panel])})
+                    self.EVENT_PANELS_FROM_PANELS.add(option_panel)
+                elif option_panel in self.ALWAYS_EVENT_NAMES_BY_HEX.keys():
                     new_items = frozenset({frozenset([option_panel])})
                     self.EVENT_PANELS_FROM_PANELS.add(option_panel)
                 else:
@@ -105,7 +131,7 @@ class WitnessPlayerLogic:
             line_split = line.split(" - ")
 
             required_items = parse_lambda(line_split[2])
-            items_actually_in_the_game = {item[0] for item in StaticWitnessLogic.ALL_ITEMS}
+            items_actually_in_the_game = {item[0] for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS}
             required_items = frozenset(
                 subset.intersection(items_actually_in_the_game)
                 for subset in required_items
@@ -121,7 +147,14 @@ class WitnessPlayerLogic:
             return
 
         if adj_type == "Disabled Locations":
-            self.COMPLETELY_DISABLED_CHECKS.add(line[:7])
+            panel_hex = line[:7]
+
+            self.COMPLETELY_DISABLED_CHECKS.add(panel_hex)
+
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = {
+                item for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME
+                if item[0] != StaticWitnessLogic.DOOR_NAMES_BY_HEX.get(panel_hex)
+            }
 
             return
 
@@ -139,10 +172,14 @@ class WitnessPlayerLogic:
         """Makes logic adjustments based on options"""
         adjustment_linesets_in_order = []
 
-        if is_option_enabled(world, player, "challenge_victory"):
-            self.VICTORY_LOCATION = "0x0356B"
-        else:
+        if get_option_value(world, player, "victory_condition") == 0:
             self.VICTORY_LOCATION = "0x3D9A9"
+        elif get_option_value(world, player, "victory_condition") == 1:
+            self.VICTORY_LOCATION = "0x0356B"
+        elif get_option_value(world, player, "victory_condition") == 2:
+            self.VICTORY_LOCATION = "0x09F7F"
+        elif get_option_value(world, player, "victory_condition") == 3:
+            self.VICTORY_LOCATION = "0xFFF00"
 
         self.COMPLETELY_DISABLED_CHECKS.add(
             self.VICTORY_LOCATION
@@ -150,6 +187,20 @@ class WitnessPlayerLogic:
 
         if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
             adjustment_linesets_in_order.append(get_disable_unrandomized_list())
+
+        if is_option_enabled(world, player, "shuffle_symbols") or "shuffle_symbols" not in the_witness_options.keys():
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.update(StaticWitnessLogic.ALL_SYMBOL_ITEMS)
+
+        if is_option_enabled(world, player, "shuffle_doors"):
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.update(StaticWitnessLogic.ALL_DOOR_ITEMS)
+
+        if is_option_enabled(world, player, "early_secret_area"):
+            adjustment_linesets_in_order.append(get_early_utm_list())
+        else:
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = {
+                item for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME
+                if item[0] != "Mountaintop River Shape Power On"
+            }
 
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None
@@ -182,6 +233,17 @@ class WitnessPlayerLogic:
         pair = (name, self.EVENT_ITEM_NAMES[panel])
         return pair
 
+    def _regions_are_adjacent(self, region1, region2):
+        for connection in self.CONNECTIONS_BY_REGION_NAME[region1]:
+            if connection[0] == region2:
+                return True
+
+        for connection in self.CONNECTIONS_BY_REGION_NAME[region2]:
+            if connection[0] == region1:
+                return True
+
+        return False
+
     def make_event_panel_lists(self):
         """
         Special event panel data structures
@@ -197,7 +259,6 @@ class WitnessPlayerLogic:
 
         self.ORIGINAL_EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
         self.ORIGINAL_EVENT_PANELS.update(self.EVENT_PANELS_FROM_REGIONS)
-        self.NECESSARY_EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
 
         for panel in self.EVENT_PANELS_FROM_REGIONS:
             for region_name, region in StaticWitnessLogic.ALL_REGIONS_BY_NAME.items():
@@ -213,6 +274,15 @@ class WitnessPlayerLogic:
                     if panel not in region["panels"] | connected_r["panels"]:
                         self.NECESSARY_EVENT_PANELS.add(panel)
 
+        for event_panel in self.EVENT_PANELS_FROM_PANELS:
+            for panel, panel_req in self.REQUIREMENTS_BY_HEX.items():
+                if any([event_panel in item_set for item_set in panel_req]):
+                    region1 = StaticWitnessLogic.CHECKS_BY_HEX[panel]["region"]["name"]
+                    region2 = StaticWitnessLogic.CHECKS_BY_HEX[event_panel]["region"]["name"]
+
+                    if not self._regions_are_adjacent(region1, region2):
+                        self.NECESSARY_EVENT_PANELS.add(event_panel)
+
         for always_hex, always_item in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
             self.ALWAYS_EVENT_HEX_CODES.add(always_hex)
             self.NECESSARY_EVENT_PANELS.add(always_hex)
@@ -225,6 +295,10 @@ class WitnessPlayerLogic:
     def __init__(self, world: MultiWorld, player: int):
         self.EVENT_PANELS_FROM_PANELS = set()
         self.EVENT_PANELS_FROM_REGIONS = set()
+
+        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
+        self.DOOR_DICT_FOR_CLIENT = dict()
+        self.DOOR_CONNECTIONS_TO_SEVER = set()
 
         self.CONNECTIONS_BY_REGION_NAME = copy.copy(StaticWitnessLogic.STATIC_CONNECTIONS_BY_REGION_NAME)
         self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.copy(StaticWitnessLogic.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
@@ -257,7 +331,9 @@ class WitnessPlayerLogic:
             "0x09ED8": "Inside Mountain Second Layer Both Light Bridges Solved",
             "0x0A3D0": "Quarry Laser Boathouse Requirement Met",
             "0x00596": "Swamp Red Water Drains",
-            "0x28B39": "Town Tower 4th Door Opens"
+            "0x28B39": "Town Tower 4th Door Opens",
+            "0x0343A": "Door to Symmetry Island Powers On",
+            "0xFFF00": "Inside Mountain Bottom Layer Discard Turns On"
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
@@ -266,8 +342,8 @@ class WitnessPlayerLogic:
             "0x09F98": "Desert Laser Redirection",
             "0x03612": "Quarry Laser Activation",
             "0x19650": "Shadows Laser Activation",
-            "0x0360E": "Keep Laser Hedges Activation",
-            "0x03317": "Keep Laser Pressure Plates Activation",
+            "0x0360E": "Keep Laser Activation",
+            "0x03317": "Keep Laser Activation",
             "0x17CA4": "Monastery Laser Activation",
             "0x032F5": "Town Laser Activation",
             "0x03616": "Jungle Laser Activation",
@@ -280,6 +356,8 @@ class WitnessPlayerLogic:
             "0x03481": "Tutorial Video Pattern Knowledge",
             "0x03702": "Jungle Video Pattern Knowledge",
             "0x2FAF6": "Theater Walkway Video Pattern Knowledge",
+            "0x09F7F": "Mountaintop Trap Door Turns On",
+            "0x17C34": "Mountain Access",
         }
 
         self.make_options_adjustments(world, player)
