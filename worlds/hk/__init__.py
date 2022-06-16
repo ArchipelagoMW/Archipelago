@@ -98,26 +98,6 @@ logicless_options = {
     "RandomizeLoreTablets", "RandomizeSoulTotems",
 }
 
-geo_rock_fillers = (["Geo_Rock-Default"] * 8) + (["Geo_Rock-Deepnest"] * 4) + (["Geo_Rock-GreenPath01"] * 3) + \
-                    (["Geo_Rock-Outskirts"] * 2) + ["Geo_Rock-Abyss", "Geo_Rock-GreenPath02", "Geo_Rock-Fung01",
-                                                    "Geo_Rock-Fung02", "Geo_Rock-City", "Geo_Rock-Hive",
-                                                    "Geo_Rock-Mine", "Geo_Rock-Grave02", "Geo_Rock-Grave01"]
-soul_totem_fillers = ["Soul_Totem-A", "Soul_Totem-B", "Soul_Totem-C", "Soul_Totem-D",
-                      "Soul_Totem-E", "Soul_Totem-F", "Soul_Totem-G"]
-junk_pit_fillers = ["Geo_Chest-Junk_Pit_1", "Geo_Chest-Junk_Pit_2", "Geo_Chest-Junk_Pit_3", "Geo_Chest-Junk_Pit_5",
-                    "Lumafly_Escape"]
-lore_fillers = ['Lore_Tablet-City_Entrance', 'Lore_Tablet-Pleasure_House', 'Lore_Tablet-Sanctum_Entrance',
-                'Lore_Tablet-Sanctum_Past_Soul_Master', "Lore_Tablet-Watcher's_Spire", 'Lore_Tablet-Archives_Upper',
-                'Lore_Tablet-Archives_Left', 'Lore_Tablet-Archives_Right', "Lore_Tablet-Pilgrim's_Way_1",
-                "Lore_Tablet-Pilgrim's_Way_2", 'Lore_Tablet-Mantis_Outskirts', 'Lore_Tablet-Mantis_Village',
-                'Lore_Tablet-Greenpath_Upper_Hidden', 'Lore_Tablet-Greenpath_Below_Toll',
-                'Lore_Tablet-Greenpath_Lifeblood', 'Lore_Tablet-Greenpath_Stag', 'Lore_Tablet-Greenpath_QG',
-                'Lore_Tablet-Greenpath_Lower_Hidden', 'Lore_Tablet-Dung_Defender', 'Lore_Tablet-Spore_Shroom',
-                'Lore_Tablet-Fungal_Wastes_Hidden', 'Lore_Tablet-Fungal_Wastes_Below_Shrumal_Ogres',
-                'Lore_Tablet-Fungal_Core', 'Lore_Tablet-Ancient_Basin', "Lore_Tablet-King's_Pass_Focus",
-                "Lore_Tablet-King's_Pass_Fury", "Lore_Tablet-King's_Pass_Exit", 'Lore_Tablet-World_Sense',
-                'Lore_Tablet-Howling_Cliffs', "Lore_Tablet-Kingdom's_Edge"]
-
 
 class HKWeb(WebWorld):
     tutorials = [Tutorial(
@@ -154,6 +134,7 @@ class HKWorld(World):
         "Salubra_(Requires_Charms)": "Charm"
     }
     charm_costs: typing.List[int]
+    cached_filler_items = {}
     data_version = 2
 
     def __init__(self, world, player):
@@ -377,26 +358,20 @@ class HKWorld(World):
         assert 0 < i < 18, "limited number of multi location IDs reserved."
         return f"{base}_{i}"
 
-
     def get_filler_item_name(self) -> str:
-        fillers = ["One_Geo", "Soul_Refill"]
-        if self.world.RandomizeGeoRocks[self.player]:
-            fillers += geo_rock_fillers
-        if self.world.RandomizeSoulTotems[self.player]:
-            fillers += soul_totem_fillers
-            if self.world.WhitePalace[self.player] != WhitePalace.option_exclude:
-                fillers.append("Soul_Totem-Palace")
-        if self.world.RandomizeLoreTablets[self.player] and self.world.random.randint(0, 5) == 5:
-            fillers += lore_fillers
-            if self.world.WhitePalace[self.player] != WhitePalace.option_exclude:
-                fillers += ["Lore_Tablet-Palace_Workshop", "Lore_Tablet-Palace_Throne"]
-            if self.world.WhitePalace[self.player] == WhitePalace.option_include:
-                fillers.append("Lore_Tablet-Path_of_Pain_Entrance")
-        if self.world.RandomizeJunkPitChests[self.player]:
-            fillers += junk_pit_fillers
-        if self.world.RandomizeRancidEggs[self.player]:
-            fillers.append("Rancid_Egg")
-        return self.world.random.choice(fillers)
+        if self.player not in self.cached_filler_items:
+            fillers = ["One_Geo", "Soul_Refill"]
+            exclusions = self.white_palace_exclusions()
+            for group in (
+                    'RandomizeGeoRocks', 'RandomizeSoulTotems', 'RandomizeLoreTablets', 'RandomizeJunkPitChests',
+                    'RandomizeRancidEggs'
+            ):
+                if getattr(self.world, group):
+                    fillers.extend(item for item in hollow_knight_randomize_options[group].items if item not in
+                                   exclusions)
+            self.cached_filler_items[self.player] = fillers
+        return self.world.random.choice(self.cached_filler_items[self.player])
+
 
 def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:
     ret = Region(name, RegionType.Generic, name, player)
