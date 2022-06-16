@@ -624,6 +624,7 @@ async def on_client_connected(ctx: Context, client: Client):
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
+        # TODO remove around 0.4
         'players': players,
         # TODO remove around 0.2.5 in favor of slot_info ?
         #  Maybe convert into a list of games that are present to fetch relevant datapackage entries before Connect?

@@ -63,7 +63,6 @@ Sent to clients when they connect to an Archipelago server.
 | permissions | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "forfeit", "collect" and "remaining". |
 | hint_cost | int | The amount of points it costs to receive a hint from the server. |
 | location_check_points | int | The amount of hint points you receive per item/location check completed. ||
-| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Sent only if the client is properly authenticated (see [Archipelago Connection Handshake](#Archipelago-Connection-Handshake)). Information on the players currently connected to the server. |
 | games | list\[str\] | sorted list of game names for the players, so first player's game will be games\[0\]. Matches game names in datapackage. |
 | datapackage_version | int | Sum of individual games' datapackage version. Deprecated. Use `datapackage_versions` instead. |
 | datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. Used to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents). |
@@ -146,7 +145,7 @@ The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | hint_points | int | New argument. The client's current hint points. |
-| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Changed argument. Always sends all players, whether connected or not. |
+| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Send in the event of an alias rename. Always sends all players, whether connected or not. |
 | checked_locations | list\[int\] | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
 | missing_locations | list\[int\] | Should never be sent as an update, if needed is the inverse of checked_locations. |
 
