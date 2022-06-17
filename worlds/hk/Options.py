@@ -36,9 +36,8 @@ option_docstrings = {
                          "randomization.",
     "RandomizeSkills": "Allow for Skills, such as Mantis Claw or Shade Soul, to be randomized into the item pool. "
                        "Also opens their locations for receiving randomized items.",
-    "RandomizeFocus": "Removes the ability to heal and adds it as a randomized item.",
-    "RandomizeSwim": "All pools of water become dangerous, and a new Swim item is randomized which allows swimming in"
-                     "water normally.",
+    "RandomizeFocus": "Removes the ability to focus and randomizes it into the item pool.",
+    "RandomizeSwim": "Removes the ability to swim in water and randomizes it into the item pool.",
     "RandomizeCharms": "Allow for Charms to be randomized into the item pool and open their locations for "
                        "randomization. Includes Charms sold in shops.",
     "RandomizeKeys": "Allow for Keys to be randomized into the item pool. Includes those sold in shops.",
@@ -73,8 +72,7 @@ option_docstrings = {
     "RandomizeJournalEntries": "Randomize the Hunter's Journal as well as the findable journal entries into the item "
                                "pool, and open their locations for randomization. Does not include journal entries "
                                "gained by killing enemies.",
-    "RandomizeNail": "Adds three extra items to the pool that allow swinging the nail left, right and up; by default in"
-                     "this mode, the nail can only be swung down.",
+    "RandomizeNail": "Removes the ability to swing the nail left, right and up, and shuffles these into the item pool.",
     "RandomizeGeoRocks": "Randomize Geo Rock rewards into the item pool and open their locations for randomization.",
     "RandomizeBossGeo": "Randomize boss Geo drops into the item pool and open those locations for randomization.",
     "RandomizeSoulTotems": "Randomize Soul Refill items into the item pool and open the Soul Totem locations for"
@@ -152,23 +150,20 @@ for option_name in logic_options.values():
 
 
 class SplitMothwingCloak(Toggle):
-    """Replaces Mothwing Cloak with two items, a "Left Mothwing Cloak" that lets you dash to the left, and a
-    "Right Mothwing Cloak" that dashes to the right. Also adds a new location dropped after defeating Hornet in
-    Greenpath. Randomly adds a second left or right Mothwing cloak item which functions as the upgrade to Shade Cloak."""
+    """Splits the Mothwing Cloak into left- and right-only versions of the item. Randomly adds a second left or
+    right Mothwing cloak item which functions as the upgrade to Shade Cloak."""
     display_name = "Split Mothwing Cloak"
     default = False
 
 
 class SplitMantisClaw(Toggle):
-    """Replaces Mantis Claw with two items, a "Left Mantis Claw" that works only on left walls, and a "Right Mantis
-    Claw" that works only on the right. Replaces the Mantis Claw location with two locations in Mantis Village."""
+    """Splits the Mantis Claw into left- and right-only versions of the item."""
     display_name = "Split Mantis Claw"
     default = False
 
 
 class SplitCrystalHeart(Toggle):
-    """Replaces Crystal Heart with two items, a "Left Crystal Heart" that lets you superdash to the left, and a "Right
-    Crystal Heart" that superdashes to the right. Also adds a new location left of the bridge next to the Crystal Heart location."""
+    """Splits the Crystal Heart into left- and right-only versions of the item."""
     display_name = "Split Crystal Heart"
     default = False
 
