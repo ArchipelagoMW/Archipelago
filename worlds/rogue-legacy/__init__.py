@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import Item, MultiWorld, Tutorial
+from BaseClasses import Item, ItemClassification, Tutorial
 from .Items import LegacyItem, ItemData, item_table, vendors_table, static_classes_table, progressive_classes_table, \
     skill_unlocks_table, blueprints_table, runes_table, misc_items_table
 from .Locations import LegacyLocation, location_table, base_location_table
@@ -169,7 +169,7 @@ class LegacyWorld(World):
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
-        return LegacyItem(name, data.progression, data.code, self.player)
+        return LegacyItem(name, ItemClassification.progression if data.progression else ItemClassification.filler, data.code, self.player)
 
     def set_rules(self):
         set_rules(self.world, self.player)

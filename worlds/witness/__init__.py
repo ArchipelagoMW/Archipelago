@@ -4,7 +4,7 @@ Archipelago init file for The Witness
 
 import typing
 
-from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance, Tutorial
+from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
 from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
@@ -98,8 +98,6 @@ class WitnessWorld(World):
         # Put in junk items to fill the rest
         junk_size = len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - less_junk
 
-        print(junk_size)
-
         for i in range(0, junk_size):
             pool.append(self.create_item(self.get_filler_item_name()))
 
@@ -138,12 +136,18 @@ class WitnessWorld(World):
         else:
             item = StaticWitnessItems.ALL_ITEM_TABLE[name]
 
+        if item.trap:
+            classification = ItemClassification.trap
+        elif item.progression:
+            classification = ItemClassification.progression
+        elif item.never_exclude:
+            classification = ItemClassification.useful
+        else:
+            classification = ItemClassification.filler
+
         new_item = WitnessItem(
-            name, item.progression, item.code, player=self.player
+            name, classification, item.code, player=self.player
         )
-        new_item.trap = item.trap
-        if item.never_exclude:
-            new_item.never_exclude = True
         return new_item
 
     def get_filler_item_name(self) -> str:  # Used by itemlinks
