@@ -760,8 +760,6 @@ class ItemLinks(OptionList):
                 raise Exception(f"item_link {link['name']} has {intersection} items in both its local_items and non_local_items pool.")
 
 
-
-
 per_game_common_options = {
     **common_options,  # can be overwritten per-game
     "local_items": LocalItems,
