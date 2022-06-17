@@ -95,7 +95,7 @@ class StaticWitnessLogic:
                 if line == "":
                     continue
 
-                if line[0] != "0":
+                if not line[0].isnumeric():
                     new_region_and_connections = define_new_region(line)
                     current_region = new_region_and_connections[0]
                     region_name = current_region["name"]
@@ -104,6 +104,8 @@ class StaticWitnessLogic:
                     continue
 
                 line_split = line.split(" - ")
+
+                location_id = line_split.pop(0)
 
                 check_name_full = line_split.pop(0)
 
@@ -123,31 +125,12 @@ class StaticWitnessLogic:
 
                 if "Discard" in check_name:
                     location_type = "Discard"
-                    location_id = discard_ids
-                    discard_ids += 1
                 elif is_vault_or_video or check_name == "Tutorial Gate Close":
                     location_type = "Vault"
-                    location_id = vault_ids
-                    vault_ids += 1
                 elif check_name in laser_names:
                     location_type = "Laser"
-                    location_id = laser_ids
-                    laser_ids += 1
                 else:
                     location_type = "General"
-
-                    if check_hex == "0x012D7":  # Compatibility
-                        normal_panel_ids += 1
-
-                    if check_hex == "0x17E07":  # Compatibility
-                        location_id = 112
-
-                    elif check_hex == "0xFFF00":
-                        location_id = 800
-
-                    else:
-                        location_id = normal_panel_ids
-                        normal_panel_ids += 1
 
                 required_items = parse_lambda(required_item_lambda)
                 items_actually_in_the_game = {item[0] for item in self.ALL_SYMBOL_ITEMS}
@@ -182,7 +165,7 @@ class StaticWitnessLogic:
                     "checkName": current_region["shortName"] + " " + check_name,
                     "checkHex": check_hex,
                     "region": current_region,
-                    "idOffset": location_id,
+                    "id": location_id,
                     "panelType": location_type
                 }
 

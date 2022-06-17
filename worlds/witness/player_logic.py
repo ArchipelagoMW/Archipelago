@@ -72,6 +72,7 @@ class WitnessPlayerLogic:
             for option_panel in option:
                 new_items = set()
                 dep_obj = StaticWitnessLogic.CHECKS_BY_HEX.get(option_panel)
+
                 if option_panel in {"7 Lasers", "11 Lasers"}:
                     new_items = frozenset({frozenset([option_panel])})
                 # If a panel turns on when a panel in a different region turns on,

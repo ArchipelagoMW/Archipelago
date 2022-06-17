@@ -193,12 +193,7 @@ class StaticWitnessLocations:
         Calculates the location ID for any given location
         """
 
-        panel_offset = StaticWitnessLogic.CHECKS_BY_HEX[chex]["idOffset"]
-        type_offset = StaticWitnessLocations.TYPE_OFFSETS[
-            StaticWitnessLogic.CHECKS_BY_HEX[chex]["panelType"]
-        ]
-
-        return StaticWitnessLocations.ID_START + panel_offset + type_offset
+        return StaticWitnessLogic.CHECKS_BY_HEX[chex]["id"]
 
     @staticmethod
     def get_event_name(panel_hex):
@@ -214,6 +209,15 @@ class StaticWitnessLocations:
             panel_obj["checkName"]: self.get_id(chex)
             for chex, panel_obj in StaticWitnessLogic.CHECKS_BY_HEX.items()
         }
+
+        file = open("F:\Dokumente\Archipelago\worlds\witness/WitnessLogic.txt", "r")
+        string = file.read()
+
+        for chex in StaticWitnessLogic.CHECKS_BY_HEX.keys():
+            string = string.replace("\n" + chex, "\n" + str(self.get_id(chex)) + " - " + chex)
+
+        file2 = open ("F:\Dokumente\Archipelago\worlds\witness/WitnessLogicNew.txt", "w")
+        file2.write(string)
 
         all_loc_to_id = dict(
             sorted(all_loc_to_id.items(), key=lambda loc: loc[1])
