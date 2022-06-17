@@ -231,7 +231,10 @@ class HKWorld(World):
                         self.create_location("Right_" + location_name)
                     if split == "Shade_Cloak":
                         self.create_location(location_name)
-                        item = self.create_item("Split_" + item_name)
+                        if self.world.random.randint(0, 1):
+                            item = self.create_item("Left_Mothwing_Cloak")
+                        else:
+                            item = self.create_item("Right_Mothwing_Cloak")
                         item.advancement = True
                         pool.append(item)
                     if split in ["Crystal_Heart", "Mothwing_Cloak", "Mantis_Claw"]:
@@ -344,15 +347,15 @@ class HKWorld(World):
         if change:
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
                 state.prog_items[effect_name, item.player] += effect_value
-        if item.name in ["Left_Mothwing_Cloak", "Right_Mothwing_Cloak", "Split_Shade_Cloak"]:
+        if item.name in ["Left_Mothwing_Cloak", "Right_Mothwing_Cloak"]:
             if item.name == "Right_Mothwing_Cloak":
                 state.prog_items["RIGHTDASH", item.player] += 1
             if item.name == "Left_Mothwing_Cloak":
                 state.prog_items["LEFTDASH", item.player] += 1
-            if all(i in state.prog_items.keys() for i in [("Left_Mothwing_Cloak", item.player), ("Right_Mothwing_Cloak",
-                                                          item.player), ("Split_Shade_Cloak", item.player)]):
-                state.prog_items["RIGHTDASH", item.player] = 2
-                state.prog_items["LEFTDASH", item.player] = 2
+            if state.prog_items.get(('RIGHTDASH', item.player), 0) and \
+                    state.prog_items.get(('LEFTDASH', item.player), 0):
+                (state.prog_items["RIGHTDASH", item.player], state.prog_items["LEFTDASH", item.player]) = \
+                    ([max(state.prog_items["RIGHTDASH", item.player], state.prog_items["LEFTDASH", item.player])] * 2)
         return change
 
     def remove(self, state, item: HKItem) -> bool:
