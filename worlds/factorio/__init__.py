@@ -3,7 +3,7 @@ import typing
 
 from ..AutoWorld import World, WebWorld
 
-from BaseClasses import Region, Entrance, Location, Item, RegionType, Tutorial
+from BaseClasses import Region, Entrance, Location, Item, RegionType, Tutorial, ItemClassification
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, rocket_recipes, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
@@ -115,7 +115,7 @@ class Factorio(World):
         location = Location(player, "Rocket Launch", None, nauvis)
         nauvis.locations.append(location)
         location.game = "Factorio"
-        event = Item("Victory", True, None, player)
+        event = FactorioItem("Victory", ItemClassification.progression, None, player)
         event.game = "Factorio"
         self.world.push_item(location, event, False)
         location.event = location.locked = True
@@ -123,7 +123,7 @@ class Factorio(World):
             location = Location(player, f"Automate {ingredient}", None, nauvis)
             location.game = "Factorio"
             nauvis.locations.append(location)
-            event = Item(f"Automated {ingredient}", True, None, player)
+            event = FactorioItem(f"Automated {ingredient}", ItemClassification.progression, None, player)
             self.world.push_item(location, event, False)
             location.event = location.locked = True
         crash.connect(nauvis)
@@ -385,12 +385,17 @@ class Factorio(World):
                 prog_add.add(tech_to_progressive_lookup[tech])
         self.advancement_technologies |= prog_add
 
-    def create_item(self, name: str) -> Item:
-        if name in tech_table:
-            return FactorioItem(name, name in self.advancement_technologies,
+    def create_item(self, name: str) -> FactorioItem:
+        if name in tech_table:  # is a Technology
+            if name in self.advancement_technologies:
+                classification = ItemClassification.progression
+            else:
+                classification = ItemClassification.filler
+            return FactorioItem(name,
+                                classification,
                                 tech_table[name], self.player)
 
-        item = FactorioItem(name, False, all_items[name], self.player)
-        if "Trap" in name:
-            item.trap = True
+        item = FactorioItem(name,
+                            ItemClassification.trap if "Trap" in name else ItemClassification.filler,
+                            all_items[name], self.player)
         return item

@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import Dict, Set, NamedTuple, List
 
-from BaseClasses import Item
+from BaseClasses import Item, ItemClassification
 
 
 class ItemData(NamedTuple):
@@ -62,7 +62,8 @@ class FF1Items:
 
     def generate_item(self, name: str, player: int) -> Item:
         item = self._get_item_table_lookup().get(name)
-        return Item(name, item.progression, item.code, player)
+        return Item(name, ItemClassification.progression if item.progression else ItemClassification.filler,
+                    item.code, player)
 
     def get_item_name_to_code_dict(self) -> Dict[str, int]:
         return {name: item.code for name, item in self._get_item_table_lookup().items()}

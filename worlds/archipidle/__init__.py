@@ -1,4 +1,4 @@
-from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial
+from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification, RegionType
 from .Items import item_table
 from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
@@ -47,7 +47,7 @@ class ArchipIDLEWorld(World):
         for i in range(100):
             item = Item(
                 item_table_copy[i],
-                i < 20,
+                ItemClassification.progression if i < 20 else ItemClassification.filler,
                 self.item_name_to_id[item_table_copy[i]],
                 self.player
             )
@@ -60,7 +60,7 @@ class ArchipIDLEWorld(World):
         set_rules(self.world, self.player)
 
     def create_item(self, name: str) -> Item:
-        return Item(name, True, self.item_name_to_id[name], self.player)
+        return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
 
     def create_regions(self):
         self.world.regions += [
@@ -75,8 +75,9 @@ class ArchipIDLEWorld(World):
     def get_filler_item_name(self) -> str:
         return self.world.random.choice(item_table)
 
+
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    region = Region(name, None, name, player)
+    region = Region(name, RegionType.Generic, name, player)
     region.world = world
     if locations:
         for location_name in locations.keys():
