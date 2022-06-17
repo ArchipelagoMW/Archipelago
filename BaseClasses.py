@@ -1150,7 +1150,7 @@ class ItemClassification(IntFlag):
 
     def as_flag(self) -> int:
         """As Network API flag int."""
-        return self & 0b0111
+        return int(self & 0b0111)
 
 
 class Item:
@@ -1207,10 +1207,7 @@ class Item:
 
     @property
     def flags(self) -> int:
-        new = self.classification.as_flag()
-        old = self.advancement + (self.useful << 1) + (self.trap << 2)
-        assert new == old
-        return new
+        return self.classification.as_flag()
 
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player
