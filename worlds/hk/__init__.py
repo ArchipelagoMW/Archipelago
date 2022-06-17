@@ -201,11 +201,11 @@ class HKWorld(World):
     def create_items(self):
         # Generate item pool and associated locations (paired in HK)
         pool: typing.List[HKItem] = []
-        geo_replace: typing.Set[str] = set()
+        junk_replace: typing.Set[str] = set()
         if self.world.RemoveSpellUpgrades[self.player]:
-            geo_replace.add("Abyss_Shriek")
-            geo_replace.add("Shade_Soul")
-            geo_replace.add("Descending_Dark")
+            junk_replace.add("Abyss_Shriek")
+            junk_replace.add("Shade_Soul")
+            junk_replace.add("Descending_Dark")
 
         wp_exclusions = self.white_palace_exclusions()
         for option_key, option in hollow_knight_randomize_options.items():
@@ -213,8 +213,8 @@ class HKWorld(World):
                 for item_name, location_name in zip(option.items, option.locations):
                     if location_name in wp_exclusions:
                         continue
-                    if item_name in geo_replace:
-                        item_name = "Geo_Rock-Default"
+                    if item_name in junk_replace:
+                        item_name = self.get_filler_item_name()
                     item = self.create_item(item_name)
                         # self.create_location(location_name).place_locked_item(item)
                     if location_name == "Start":
