@@ -36,6 +36,9 @@ option_docstrings = {
                          "randomization.",
     "RandomizeSkills": "Allow for Skills, such as Mantis Claw or Shade Soul, to be randomized into the item pool. "
                        "Also opens their locations for receiving randomized items.",
+    "RandomizeFocus": "Removes the ability to heal and adds it as a randomized item.",
+    "RandomizeSwim": "All pools of water become dangerous, and a new Swim item is randomized which allows swimming in"
+                     "water normally.",
     "RandomizeCharms": "Allow for Charms to be randomized into the item pool and open their locations for "
                        "randomization. Includes Charms sold in shops.",
     "RandomizeKeys": "Allow for Keys to be randomized into the item pool. Includes those sold in shops.",
@@ -70,6 +73,8 @@ option_docstrings = {
     "RandomizeJournalEntries": "Randomize the Hunter's Journal as well as the findable journal entries into the item "
                                "pool, and open their locations for randomization. Does not include journal entries "
                                "gained by killing enemies.",
+    "RandomizeNail": "Adds three extra items to the pool that allow swinging the nail left, right and up; by default in"
+                     "this mode, the nail can only be swung down.",
     "RandomizeGeoRocks": "Randomize Geo Rock rewards into the item pool and open their locations for randomization.",
     "RandomizeBossGeo": "Randomize boss Geo drops into the item pool and open those locations for randomization.",
     "RandomizeSoulTotems": "Randomize Soul Refill items into the item pool and open the Soul Totem locations for"
