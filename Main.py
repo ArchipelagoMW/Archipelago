@@ -11,7 +11,8 @@ import tempfile
 import zipfile
 from typing import Dict, Tuple, Optional, Set
 
-from BaseClasses import MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
+from BaseClasses import MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location,\
+    ItemClassification
 from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
@@ -193,7 +194,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 if diff > 0:
                     removed_items = 0
                     for item in world.itempool:
-                        if item.player == player and not item.advancement and not item.never_exclude:
+                        if item.player == player and item.classification == ItemClassification.filler:
                             world.itempool.remove(item)
                             removed_items += 1
                             if removed_items == diff:
