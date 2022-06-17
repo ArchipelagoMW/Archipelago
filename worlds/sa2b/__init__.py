@@ -190,7 +190,7 @@ class SA2BWorld(World):
 
         self.region_emblem_map = dict(zip(shuffled_region_list, emblem_requirement_list))
 
-        connect_regions(self.world, self.player, gates, self.emblems_for_cannons_core)
+        connect_regions(self.world, self.player, gates, self.emblems_for_cannons_core, self.gate_bosses)
 
         max_required_emblems = max(max(emblem_requirement_list), self.emblems_for_cannons_core)
         itempool += [self.create_item(ItemName.emblem)] * max_required_emblems
