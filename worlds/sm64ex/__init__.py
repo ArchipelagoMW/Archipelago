@@ -6,7 +6,7 @@ from .Locations import location_table, SM64Location
 from .Options import sm64_options
 from .Rules import set_rules
 from .Regions import create_regions, sm64courses
-from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld, Tutorial
+from BaseClasses import Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
 
 client_version = 1
@@ -63,9 +63,14 @@ class SM64World(World):
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
-        item = SM64Item(name, name != "1Up Mushroom", item_id, self.player)
-        if name == "Power Star": 
-            item.skip_in_prog_balancing = True
+        if name == "1Up Mushroom":
+            classification = ItemClassification.filler
+        elif name == "Power Star":
+            classification = ItemClassification.progression_skip_balancing
+        else:
+            classification = ItemClassification.progression
+        item = SM64Item(name, classification, item_id, self.player)
+
         return item
 
     def generate_basic(self):

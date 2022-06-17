@@ -249,7 +249,7 @@ def ShopSlotFill(world):
                     if location.item.game != "A Link to the Past":
                         if location.item.advancement:
                             price = world.random.randrange(8, 56)
-                        elif location.item.never_exclude:
+                        elif location.item.useful:
                             price = world.random.randrange(4, 28)
                         else:
                             price = world.random.randrange(2, 14)
