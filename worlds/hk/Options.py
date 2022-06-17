@@ -152,19 +152,23 @@ for option_name in logic_options.values():
 
 
 class SplitMothwingCloak(Toggle):
-    """Splits the Mothwing Cloak into left- and right-only versions of the item. """
+    """Replaces Mothwing Cloak with two items, a "Left Mothwing Cloak" that lets you dash to the left, and a
+    "Right Mothwing Cloak" that dashes to the right. Also adds a new location dropped after defeating Hornet in
+    Greenpath. Randomly adds a second left or right Mothwing cloak item which functions as the upgrade to Shade Cloak."""
     display_name = "Split Mothwing Cloak"
     default = False
 
 
 class SplitMantisClaw(Toggle):
-    """Splits the Mantis Claw into left- and right-only versions of the item. """
+    """Replaces Mantis Claw with two items, a "Left Mantis Claw" that works only on left walls, and a "Right Mantis
+    Claw" that works only on the right. Replaces the Mantis Claw location with two locations in Mantis Village."""
     display_name = "Split Mantis Claw"
     default = False
 
 
 class SplitCrystalHeart(Toggle):
-    """Splits the Crystal Heart into left- and right-only versions of the item. """
+    """Replaces Crystal Heart with two items, a "Left Crystal Heart" that lets you superdash to the left, and a "Right
+    Crystal Heart" that superdashes to the right. Also adds a new location left of the bridge next to the Crystal Heart location."""
     display_name = "Split Crystal Heart"
     default = False
 
