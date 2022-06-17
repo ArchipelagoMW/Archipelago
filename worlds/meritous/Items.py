@@ -5,7 +5,7 @@
 
 import typing
 
-from BaseClasses import Item
+from BaseClasses import Item, ItemClassification
 
 
 # pedestal_credit_text: str = "and the Unknown Item"
@@ -145,12 +145,14 @@ class MeritousItem(Item):
     game: str = "Meritous"
 
     def __init__(self, name, advancement, code, player):
-        super(MeritousItem, self).__init__(name, advancement, code, player)
+        super(MeritousItem, self).__init__(name,
+                                           ItemClassification.progression if advancement else ItemClassification.filler,
+                                           code, player)
         if code is None:
             self.type = "Event"
         elif "Trap" in name:
             self.type = "Trap"
-            self.trap = True
+            self.classification = ItemClassification.trap
         elif "PSI Key" in name:
             self.type = "PSI Key"
         elif "upgrade" in name:
@@ -167,7 +169,7 @@ class MeritousItem(Item):
             self.type = "Important Artifact"
         else:
             self.type = "Artifact"
-            self.never_exclude = True
+            self.classification = ItemClassification.useful
 
         if name in LttPCreditsText:
             lttp = LttPCreditsText[name]
