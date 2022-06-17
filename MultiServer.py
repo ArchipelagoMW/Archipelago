@@ -630,6 +630,7 @@ async def on_client_connected(ctx: Context, client: Client):
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
+        # TODO remove around 0.4
         'players': players,
         # TODO convert to list of games present in 0.4
         'games': [ctx.games[x] for x in range(1, len(ctx.games) + 1)],
