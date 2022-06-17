@@ -129,6 +129,14 @@ class TextClientCommandProcessor(ClientCommandProcessor):
             return
         asyncio.create_task(self.ctx.remove_tags(tag))
 
+    def _cmd_help(self):
+        """Returns the help listing"""
+        super(TextClientCommandProcessor, self)._cmd_help()
+        logging.getLogger("BounceObserver").info(
+            "Use /add_tag BounceObserver to enable all bounce packets to be logged in the "
+            "'All' & 'Bounce Packet Watcher' tabs. If any bounce packets share a tag with what "
+            "was set by /add_tag, they will be logged in the 'All' & 'Archipelago' tabs instead.")
+
 
 class CommonContext():
     # Should be adjusted as needed in subclasses
@@ -453,7 +461,8 @@ class CommonContext():
 
         class TextManager(GameManager):
             logging_pairs = [
-                ("Client", "Archipelago")
+                ("Client", "Archipelago"),
+                ("BounceObserver", "Bounce Packet Watcher")
             ]
             base_title = "Archipelago Text Client"
 
@@ -727,9 +736,19 @@ if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
 
     class TextContext(CommonContext):
+        bounce_logger = logging.getLogger("BounceObserver")
         tags = {"AP", "IgnoreGame", "TextOnly"}
         game = ""  # empty matches any game since 0.3.2
         items_handling = 0  # don't receive any NetworkItems
+
+        def on_deathlink(self, data: dict):
+            message_logger = logger if "DeathLink" in self.tags else self.bounce_logger
+            self.last_death_link = max(data["time"], self.last_death_link)
+            text = data.get("cause", "")
+            if text:
+                message_logger.info(f"DeathLink: {text}")
+            else:
+                message_logger.info(f"DeathLink: Received from {data['source']}")
 
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:
@@ -748,12 +767,22 @@ if __name__ == '__main__':
                 games = set(args.get("games", []))
                 slots = {self.player_names[slot] for slot in args.get("slots", [])}
                 data = args.get("data", {})
+                message_logger = logger if tags.intersection(self.tags) else self.bounce_logger
                 if not data and not tags and not games and slots == {self.player_names[self.slot]}:
                     pass  # response to the bounce packet this very client sent.
                 elif tags.isdisjoint({'DeathLink', 'MC35'}):
-                    logger.info(f"Unknown bounce packet. tags: {tags}, games: {games}, slots: {slots}, data: {data}")
+                    message_data = list()
+                    if tags:
+                        message_data.append(f"tags: {tags}")
+                    if games:
+                        message_data.append(f"games: {games}")
+                    if slots:
+                        message_data.append(f"slots: {slots}")
+                    if data:
+                        message_data.append(f"data: {data}")
+                    message_logger.info(f"Unknown bounce packet. {', '.join(message_data)}")
                 elif "MC35" in tags:
-                    logger.info(f"Living entity {data['enemy']} was defeated by {self.player_names[data['source']]}")
+                    message_logger.info(f"Living entity {data['enemy']} was defeated by {self.player_names[data['source']]}")
 
 
     async def main(args):
