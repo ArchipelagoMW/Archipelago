@@ -42,16 +42,28 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
             self.output(f"Patched.")
 
     def _cmd_enable_online(self):
-        """Make you able to see other Undertale players."""
+        """Makes you able to see other Undertale players."""
         if isinstance(self.ctx, UndertaleContext):
             self.ctx.update_online_mode(True)
             self.output(f"Now online.")
 
     def _cmd_disable_online(self):
-        """Make you no longer able to see other Undertale players."""
+        """Makes you no longer able to see other Undertale players."""
         if isinstance(self.ctx, UndertaleContext):
             self.ctx.update_online_mode(False)
             self.output(f"Now offline.")
+
+    def _cmd_enable_deathlink(self):
+        """Enables deathlink"""
+        if isinstance(self.ctx, UndertaleContext):
+            self.ctx.update_death_link(True)
+            self.output(f"Deathlink enabled.")
+
+    def _cmd_disable_deathlink(self):
+        """Disables deathlink"""
+        if isinstance(self.ctx, UndertaleContext):
+            self.ctx.update_death_link(False)
+            self.output(f"Deathlink disabled.")
 
 
 class UndertaleContext(CommonContext):
@@ -64,6 +76,7 @@ class UndertaleContext(CommonContext):
         super().__init__(server_address, password)
         self.pieces_needed = 0
         self.game = 'Undertale'
+        self.got_deathlink = False
         self.syncing = False
 
     async def connection_closed(self):
@@ -81,6 +94,10 @@ class UndertaleContext(CommonContext):
                     os.remove(root+"/"+file)
                 elif file.find(".playerspot") > -1:
                     os.remove(root+"/"+file)
+                elif file.find(".mad") > -1:
+                    os.remove(root+"/"+file)
+                elif file.find(".youDied") > -1:
+                    os.remove(root+"/"+file)
 
     async def shutdown(self):
         await super().shutdown()
@@ -96,6 +113,10 @@ class UndertaleContext(CommonContext):
                 elif file.find(".route") > -1:
                     os.remove(root+"/"+file)
                 elif file.find(".playerspot") > -1:
+                    os.remove(root+"/"+file)
+                elif file.find(".mad") > -1:
+                    os.remove(root+"/"+file)
+                elif file.find(".youDied") > -1:
                     os.remove(root+"/"+file)
 
     def update_online_mode(self, online):
@@ -130,6 +151,10 @@ class UndertaleContext(CommonContext):
             self.auth = await self.console_input()
 
         await self.send_connect()
+
+    async def on_deathlink(self, data: dict):
+        self.got_deathlink = True
+        await super().on_deathlink()
 
 
 async def server_loop(ctx: CommonContext, address=None):
@@ -255,10 +280,17 @@ async def game_watcher(ctx: UndertaleContext):
                 sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
             await ctx.send_msgs(sync_msg)
             ctx.syncing = False
+        if ctx.got_deathlink:
+            ctx.got_deathlink = False
+            with open(os.path.expandvars(r"%localappdata%/UNDERTALE/WelcomeToTheDead.youDied"), 'w') as f:
+                f.close()
         sending = []
         victory = False
         for root, dirs, files in os.walk(path):
             for file in files:
+                if file.find("DontBeMad.mad"):
+                    os.remove(root+"/"+file)
+                    await ctx.send_death()
                 if file.find("check ") > -1:
                     st = file.split("check ", -1)[1]
                     st = st.split(".spot", -1)[0]
