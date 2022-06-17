@@ -14,7 +14,7 @@ The goal is to unlock and complete Cannons Core Mission 1, then complete the Bio
 
 ## What items and locations get shuffled?
 
-All 30 story stages leading up to Cannons Core will be shuffled and can be optionally placed behind emblem requirement gates. Chao Garden emblems can optionally be added to the randomizer. All emblems from the selected mission range and all 28 character upgrade items get shuffled.
+All 30 story stages leading up to Cannons Core will be shuffled and can be optionally placed behind emblem requirement gates. Chao Garden emblems can optionally be added to the randomizer. All emblems from the selected mission range and all 28 character upgrade items get shuffled. At most 180 emblems will be added to the item pool, after which remaining items added will be random collectables (rings, shields, etc). Traps can also be optionally included.
 
 ## Which items can be in another player's world?
 
