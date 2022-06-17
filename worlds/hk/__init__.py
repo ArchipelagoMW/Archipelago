@@ -235,14 +235,14 @@ class HKWorld(World):
                             item = self.create_item("Left_Mothwing_Cloak")
                         else:
                             item = self.create_item("Right_Mothwing_Cloak")
-                        item.advancement = True
+                        item.classification = ItemClassification.progression
                         pool.append(item)
                     if split in ["Crystal_Heart", "Mothwing_Cloak", "Mantis_Claw"]:
                         item = self.create_item("Left_" + item_name)
-                        item.advancement = True
+                        item.classification = ItemClassification.progression
                         pool.append(item)
                         item = self.create_item("Right_" + item_name)
-                        item.advancement = True
+                        item.classification = ItemClassification.progression
                         pool.append(item)
                     if split is None:
                         item = self.create_item(item_name)
