@@ -316,6 +316,11 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
     else:
         multisave: Dict[str, Any] = {}
 
+    slots_aimed_at_player = {tracked_player}
+    for group_id, group_members in groups.items():
+        if tracked_player in group_members:
+            slots_aimed_at_player.add(group_id)
+
     # Add items to player inventory
     for (ms_team, ms_player), locations_checked in multisave.get("location_checks", {}).items():
         # Skip teams and players not matching the request
@@ -325,7 +330,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
             for location in locations_checked:
                 if location in player_locations:
                     item, recipient, flags = player_locations[location]
-                    if recipient == tracked_player:  # a check done for the tracked player
+                    if recipient in slots_aimed_at_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
                     if ms_player == tracked_player:  # a check done by the tracked player
                         checks_done[location_to_area[location]] += 1
@@ -884,7 +889,6 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
 
     for item_name, item_id in multi_items.items():
         base_name = item_name.split()[0].lower()
-        count = inventory[item_id]
         display_data[base_name+"_count"] = inventory[item_id]
 
     # Victory condition

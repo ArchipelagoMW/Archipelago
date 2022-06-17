@@ -2,8 +2,9 @@ from __future__ import annotations
 import logging
 import json
 import multiprocessing
+import threading
 from datetime import timedelta, datetime
-import concurrent.futures
+
 import sys
 import typing
 import time
@@ -17,6 +18,7 @@ from Utils import restricted_loads
 class CommonLocker():
     """Uses a file lock to signal that something is already running"""
     lock_folder = "file_locks"
+
     def __init__(self, lockname: str, folder=None):
         if folder:
             self.lock_folder = folder
@@ -110,6 +112,7 @@ def autohost(config: dict):
     def keep_running():
         try:
             with Locker("autohost"):
+                run_guardian()
                 while 1:
                     time.sleep(0.1)
                     with db_session:
@@ -162,16 +165,15 @@ def autogen(config: dict):
     threading.Thread(target=keep_running, name="AP_Autogen").start()
 
 
-multiworlds = {}
-
-guardians = concurrent.futures.ThreadPoolExecutor(2, thread_name_prefix="Guardian")
+multiworlds: typing.Dict[type(Room.id), MultiworldInstance] = {}
 
 
 class MultiworldInstance():
     def __init__(self, room: Room, config: dict):
         self.room_id = room.id
         self.process: typing.Optional[multiprocessing.Process] = None
-        multiworlds[self.room_id] = self
+        with guardian_lock:
+            multiworlds[self.room_id] = self
         self.ponyconfig = config["PONY"]
 
     def start(self):
@@ -179,21 +181,58 @@ class MultiworldInstance():
             return False
 
         logging.info(f"Spinning up {self.room_id}")
-        self.process = multiprocessing.Process(group=None, target=run_server_process,
-                                               args=(self.room_id, self.ponyconfig),
-                                               name="MultiHost")
-        self.process.start()
-        self.guardian = guardians.submit(self._collect)
+        process = multiprocessing.Process(group=None, target=run_server_process,
+                                          args=(self.room_id, self.ponyconfig),
+                                          name="MultiHost")
+        process.start()
+        # bind after start to prevent thread sync issues with guardian.
+        self.process = process
 
     def stop(self):
         if self.process:
             self.process.terminate()
             self.process = None
 
-    def _collect(self):
+    def done(self):
+        return self.process and not self.process.is_alive()
+
+    def collect(self):
         self.process.join()  # wait for process to finish
         self.process = None
-        self.guardian = None
+
+
+guardian = None
+guardian_lock = threading.Lock()
+
+
+def run_guardian():
+    global guardian
+    global multiworlds
+    with guardian_lock:
+        if not guardian:
+            try:
+                import resource
+            except ModuleNotFoundError:
+                pass  # unix only module
+            else:
+                # Each Server is another file handle, so request as many as we can from the system
+                file_limit = resource.getrlimit(resource.RLIMIT_NOFILE)[1]
+                # set soft limit to hard limit
+                resource.setrlimit(resource.RLIMIT_NOFILE, (file_limit, file_limit))
+
+            def guard():
+                while 1:
+                    time.sleep(1)
+                    done = []
+                    with guardian_lock:
+                        for key, instance in multiworlds.items():
+                            if instance.done():
+                                instance.collect()
+                                done.append(key)
+                        for key in done:
+                            del (multiworlds[key])
+
+            guardian = threading.Thread(name="Guardian", target=guard)
 
 
 from .models import Room, Generation, STATE_QUEUED, STATE_STARTED, STATE_ERROR, db, Seed
