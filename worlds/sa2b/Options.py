@@ -16,28 +16,28 @@ class BaseTrapWeight(Choice):
 
 class OmochaoTrapWeight(BaseTrapWeight):
     """
-    Trap which spawns several Omochao around the player
+    Likelihood of a receiving a trap which spawns several Omochao around the player
     """
     display_name = "OmoTrap Weight"
 
 
 class TimestopTrapWeight(BaseTrapWeight):
     """
-    Trap which briefly stops time
+    Likelihood of a receiving a trap which briefly stops time
     """
     display_name = "Chaos Control Trap Weight"
 
 
 class ConfusionTrapWeight(BaseTrapWeight):
     """
-    Trap which causes the controls to be reversed for a period of time
+    Likelihood of a receiving a trap which causes the controls to be skewed for a period of time
     """
     display_name = "Confusion Trap Weight"
 
 
 class TinyTrapWeight(BaseTrapWeight):
     """
-    Trap which causes the player to become tiny
+    Likelihood of a receiving a trap which causes the player to become tiny
     """
     display_name = "Tiny Trap Weight"
 
@@ -90,7 +90,7 @@ class EmblemPercentageForCannonsCore(Range):
 
 class NumberOfLevelGates(Range):
     """
-    Allows logic to gate some levels behind emblem requirements
+    The number emblem-locked gates which lock sets of levels
     """
     display_name = "Number of Level Gates"
     range_start = 0
@@ -127,29 +127,37 @@ class RequiredRank(Choice):
 
 class ChaoGardenDifficulty(Choice):
     """
-    Determines up to what difficulty of Chao Garden activities serve as checks
+    Determines the number of chao garden difficulty levels included. Easier difficulty settings means fewer chao garden checks
+    None: No Chao Garden Activities have checks
+    Beginner: Beginner Races
+    Intermediate: Beginner and Jewel Races
+    Expert: Beginner, Jewel, Challenge, Hero, and Dark Races
     """
     display_name = "Chao Garden Difficulty"
     option_none = 0
     option_beginner = 1
     option_intermediate = 2
     option_expert = 3
+    default = 0
 
 
 class IncludeChaoKarate(Toggle):
     """
-    Determines whether the Chao Karate in included as checks (requires purchase of the "Battle" DLC)
+    Determines whether the Chao Karate should be included as checks (Note: This setting requires purchase of the "Battle" DLC)
     """
     display_name = "Include Chao Karate"
 
 
 class ChaoRaceChecks(Choice):
     """
-    Determines whether all Chao Races grant checks, or only the Chao Races which grant Chao Toy prizes
+    Determines which Chao Races grant checks
+    All: Each individual race grants a check
+    Prize: Only the races which grant Chao Toys grant checks (final race of each Beginner and Jewel cup, 4th, 8th, and 12th Challenge Races, 2nd and 4th Hero and Dark Races)
     """
     display_name = "Chao Race Checks"
     option_all = 0
     option_prize = 1
+    default = 0
 
 
 class MusicShuffle(Choice):
