@@ -9,11 +9,11 @@ from .Regions import mc_regions, link_minecraft_structures, default_connections
 from .Rules import set_advancement_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 
-from BaseClasses import Region, Entrance, Item, Tutorial
+from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification
 from .Options import minecraft_options
 from ..AutoWorld import World, WebWorld
 
-client_version = 8
+client_version = 9
 
 class MinecraftWebWorld(WebWorld):
     theme = "jungle"
@@ -65,7 +65,7 @@ class MinecraftWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 6
+    data_version = 7
 
     def _get_mc_data(self):
         exits = [connection[0] for connection in default_connections]
@@ -105,7 +105,7 @@ class MinecraftWorld(World):
             itempool += ["Dragon Egg Shard"] * self.world.egg_shards_available[self.player]
         # Add bee traps if desired
         bee_trap_quantity = ceil(self.world.bee_traps[self.player] * (len(self.location_names)-len(itempool)) * 0.01)
-        itempool += ["Bee Trap (Minecraft)"] * bee_trap_quantity
+        itempool += ["Bee Trap"] * bee_trap_quantity
         # Fill remaining items with randomly generated junk
         itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool))
         # Convert itempool into real items
@@ -164,12 +164,17 @@ class MinecraftWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
-        item = MinecraftItem(name, item_data.progression, item_data.code, self.player)
-        nonexcluded_items = ["Sharpness III Book", "Infinity Book", "Looting III Book"]
-        if name in nonexcluded_items:  # prevent books from going on excluded locations
-            item.never_exclude = True
         if name == "Bee Trap":
-            item.trap = True
+            classification = ItemClassification.trap
+            # prevent books from going on excluded locations
+        elif name in ("Sharpness III Book", "Infinity Book", "Looting III Book"):
+            classification = ItemClassification.useful
+        elif item_data.progression:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+        item = MinecraftItem(name, classification, item_data.code, self.player)
+
         return item
 
 def mc_update_output(raw_data, server, port):

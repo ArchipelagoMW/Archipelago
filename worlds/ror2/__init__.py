@@ -3,7 +3,7 @@ from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import location_table, RiskOfRainLocation, base_location_table
 from .Rules import set_rules
 
-from BaseClasses import Region, Entrance, Item, MultiWorld, Tutorial
+from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from .Options import ror2_options
 from ..AutoWorld import World, WebWorld
 
@@ -115,7 +115,9 @@ class RiskOfRainWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
-        item = RiskOfRainItem(name, name == "Dio's Best Friend", item_id, self.player)
+        item = RiskOfRainItem(name,
+                              ItemClassification.useful if name == "Dio's Best Friend" else ItemClassification.filler,
+                              item_id, self.player)
         return item
 
 
@@ -125,7 +127,7 @@ def create_events(world: MultiWorld, player: int, total_locations: int):
         num_of_events -= 1
     for i in range(num_of_events):
         event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world.get_region('Petrichor V', player))
-        event_loc.place_locked_item(RiskOfRainItem(f"Pickup{(i + 1) * 25}", True, None, player))
+        event_loc.place_locked_item(RiskOfRainItem(f"Pickup{(i + 1) * 25}", ItemClassification.progression, None, player))
         event_loc.access_rule(lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", player))
         world.get_region('Petrichor V', player).locations.append(event_loc)
 
@@ -140,11 +142,12 @@ def create_regions(world, player: int):
     ]
 
     world.get_entrance("Lobby", player).connect(world.get_region("Petrichor V", player))
-    world.get_location("Victory", player).place_locked_item(RiskOfRainItem("Victory", True, None, player))
+    world.get_location("Victory", player).place_locked_item(RiskOfRainItem("Victory", ItemClassification.progression,
+                                                                           None, player))
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, None, name, player)
+    ret = Region(name, RegionType.Generic, name, player)
     ret.world = world
     if locations:
         for location in locations:

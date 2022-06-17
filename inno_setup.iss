@@ -5,7 +5,7 @@
 #define MyAppExeName "ArchipelagoServer.exe"
 #define MyAppIcon "data/icon.ico"
 #dim VersionTuple[4]
-#define MyAppVersion ParseVersion(source_path + '\ArchipelagoServer.exe', VersionTuple[0], VersionTuple[1], VersionTuple[2], VersionTuple[3])
+#define MyAppVersion GetVersionComponents(source_path + '\ArchipelagoServer.exe', VersionTuple[0], VersionTuple[1], VersionTuple[2], VersionTuple[3])
 #define MyAppVersionText Str(VersionTuple[0])+"."+Str(VersionTuple[1])+"."+Str(VersionTuple[2])
 
 

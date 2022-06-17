@@ -137,6 +137,20 @@ html{
     margin-left: 0.25rem;
 }
 
+#player-settings table .special-range-container{
+    display: flex;
+    flex-direction: column;
+}
+
+#player-settings table .special-range-wrapper{
+    display: flex;
+    flex-direction: row;
+}
+
+#player-settings table .special-range-wrapper input[type=range]{
+    flex-grow: 1;
+}
+
 #player-settings table label{
     display: block;
     min-width: 200px;
@@ -148,7 +162,7 @@ html{
     border: none;
     padding: 3px;
     font-size: 17px;
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 @media all and (max-width: 1000px), all and (orientation: portrait){

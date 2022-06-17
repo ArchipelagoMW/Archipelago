@@ -169,8 +169,11 @@ A Link to the Past:
     standard: 0 # Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
     open: 50 # Begin the game from your choice of Link's House or the Sanctuary
     inverted: 0 # Begin in the Dark World. The Moon Pearl is required to avoid bunny-state in Light World, and the Light World game map is altered
-  retro:
-    on: 0 # you must buy a quiver to use the bow, take-any caves and an old-man cave are added to the world. You may need to find your sword from the old man's cave
+  retro_bow:
+    on: 0 # Zelda-1 like mode. You have to purchase a quiver to shoot arrows using rupees.
+    off: 50
+  retro_caves:
+    on: 0 # Zelda-1 like mode. There are randomly placed take-any caves that contain one Sword and choices of Heart Container/Blue Potion.
     off: 50
   hints: # Vendors: King Zora and Bottle Merchant say what they're selling.
   #    On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints.
