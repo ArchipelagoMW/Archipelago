@@ -112,10 +112,7 @@ default_on = {
 
 # not supported at this time
 disabled = {
-    "RandomizeFocus",
-    "RandomizeSwim",
     "RandomizeMimics",
-    "RandomizeNail",
 }
 
 hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {}
@@ -296,8 +293,8 @@ class IseldaShopSlots(Range):
     """For each extra slot, add a location to the Iselda Shop and a filler item to the item pool."""
 
     display_name = "Iselda Shop Slots"
-    default = 3
-    range_start = 3
+    default = 2
+    range_start = 2
     range_end = 16
 
 
