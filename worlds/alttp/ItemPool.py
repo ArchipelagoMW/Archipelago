@@ -1,7 +1,7 @@
 from collections import namedtuple
 import logging
 
-from BaseClasses import Region, RegionType
+from BaseClasses import Region, RegionType, ItemClassification
 from worlds.alttp.SubClasses import ALttPLocation
 from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops
 from worlds.alttp.Bosses import place_bosses
@@ -395,11 +395,11 @@ def generate_itempool(world):
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
     # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
     if world.goal[player] != 'icerodhunt' and world.difficulty[player] in ['easy', 'normal', 'hard'] and not (world.custom and world.customitemarray[30] == 0):
-        next(item for item in items if item.name == 'Boss Heart Container').advancement = True
+        next(item for item in items if item.name == 'Boss Heart Container').classification = ItemClassification.progression
     elif world.goal[player] != 'icerodhunt' and world.difficulty[player] in ['expert'] and not (world.custom and world.customitemarray[29] < 4):
         adv_heart_pieces = (item for item in items if item.name == 'Piece of Heart')
         for i in range(4):
-            next(adv_heart_pieces).advancement = True
+            next(adv_heart_pieces).classification = ItemClassification.progression
 
 
     progressionitems = []

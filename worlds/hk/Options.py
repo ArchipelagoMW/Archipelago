@@ -149,6 +149,24 @@ for option_name in logic_options.values():
     hollow_knight_logic_options[option.__name__] = option
 
 
+class SplitMothwingCloak(Toggle):
+    """Splits the Mothwing Cloak into left- and right-only versions of the item. """
+    display_name = "Split Mothwing Cloak"
+    default = False
+
+
+class SplitMantisClaw(Toggle):
+    """Splits the Mantis Claw into left- and right-only versions of the item. """
+    display_name = "Split Mantis Claw"
+    default = False
+
+
+class SplitCrystalHeart(Toggle):
+    """Splits the Crystal Heart into left- and right-only versions of the item. """
+    display_name = "Split Crystal Heart"
+    default = False
+
+
 class MinimumGrubPrice(Range):
     """The minimum grub price in the range of prices that an item should cost from Grubfather."""
     display_name = "Minimum Grub Price"
@@ -371,6 +389,9 @@ class StartingGeo(Range):
 hollow_knight_options: typing.Dict[str, type(Option)] = {
     **hollow_knight_randomize_options,
     **hollow_knight_logic_options,
+    SplitCrystalHeart.__name__: SplitCrystalHeart,
+    SplitMothwingCloak.__name__: SplitMothwingCloak,
+    SplitMantisClaw.__name__: SplitMantisClaw,
     StartLocation.__name__: StartLocation,
     MinimumGrubPrice.__name__: MinimumGrubPrice,
     MaximumGrubPrice.__name__: MaximumGrubPrice,

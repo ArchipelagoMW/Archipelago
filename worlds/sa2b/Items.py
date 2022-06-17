@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import Item
+from BaseClasses import Item, ItemClassification
 from .Names import ItemName
 
 
@@ -14,8 +14,8 @@ class ItemData(typing.NamedTuple):
 class SA2BItem(Item):
     game: str = "Sonic Adventure 2: Battle"
 
-    def __init__(self, name, advancement: bool = False, code: int = None, player: int = None):
-        super(SA2BItem, self).__init__(name, advancement, code, player)
+    def __init__(self, name, classification: ItemClassification, code: int = None, player: int = None):
+        super(SA2BItem, self).__init__(name, classification, code, player)
 
         if self.name == ItemName.sonic_light_shoes or self.name == ItemName.shadow_air_shoes:
             self.pedestal_credit_text = "and the Soap Shoes"

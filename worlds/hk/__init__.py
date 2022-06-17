@@ -14,7 +14,7 @@ from .ExtractedData import locations, starts, multi_locations, location_to_regio
     event_names, item_effects, connectors, one_ways
 from .Charms import names as charm_names
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial, ItemClassification
 from ..AutoWorld import World, LogicMixin, WebWorld
 
 path_of_pain_locations = {
@@ -214,13 +214,44 @@ class HKWorld(World):
                         continue
                     if item_name in geo_replace:
                         item_name = "Geo_Rock-Default"
-                    item = self.create_item(item_name)
-                        # self.create_location(location_name).place_locked_item(item)
-                    if location_name == "Start":
-                        self.world.push_precollected(item)
-                    else:
+                    split = None
+                    if item_name == "Crystal_Heart" and self.world.SplitCrystalHeart[self.player]:
+                        split = "Crystal_Heart"
+                    if item_name == "Mothwing_Cloak" and self.world.SplitMothwingCloak[self.player]:
+                        split = "Mothwing_Cloak"
+                    if item_name == "Mantis_Claw" and self.world.SplitMantisClaw[self.player]:
+                        split = "Mantis_Claw"
+                    if item_name == "Shade_Cloak" and self.world.SplitMothwingCloak[self.player]:
+                        split = "Shade_Cloak"
+                    if split in ["Crystal_Heart", "Mothwing_Cloak"]:
                         self.create_location(location_name)
+                        self.create_location("Split_" + location_name)
+                    if split == "Mantis_Claw":
+                        self.create_location("Left_" + location_name)
+                        self.create_location("Right_" + location_name)
+                    if split == "Shade_Cloak":
+                        self.create_location(location_name)
+                        if self.world.random.randint(0, 1):
+                            item = self.create_item("Left_Mothwing_Cloak")
+                        else:
+                            item = self.create_item("Right_Mothwing_Cloak")
+                        item.classification = ItemClassification.progression
                         pool.append(item)
+                    if split in ["Crystal_Heart", "Mothwing_Cloak", "Mantis_Claw"]:
+                        item = self.create_item("Left_" + item_name)
+                        item.classification = ItemClassification.progression
+                        pool.append(item)
+                        item = self.create_item("Right_" + item_name)
+                        item.classification = ItemClassification.progression
+                        pool.append(item)
+                    if split is None:
+                        item = self.create_item(item_name)
+                            # self.create_location(location_name).place_locked_item(item)
+                        if location_name == "Start":
+                            self.world.push_precollected(item)
+                        else:
+                            self.create_location(location_name)
+                            pool.append(item)
             # elif option_key not in logicless_options:
             else:
                 for item_name, location_name in zip(option.items, option.locations):
@@ -340,7 +371,15 @@ class HKWorld(World):
         if change:
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
                 state.prog_items[effect_name, item.player] += effect_value
-
+        if item.name in ["Left_Mothwing_Cloak", "Right_Mothwing_Cloak"]:
+            if item.name == "Right_Mothwing_Cloak":
+                state.prog_items["RIGHTDASH", item.player] += 1
+            if item.name == "Left_Mothwing_Cloak":
+                state.prog_items["LEFTDASH", item.player] += 1
+            if state.prog_items.get(('RIGHTDASH', item.player), 0) and \
+                    state.prog_items.get(('LEFTDASH', item.player), 0):
+                (state.prog_items["RIGHTDASH", item.player], state.prog_items["LEFTDASH", item.player]) = \
+                    ([max(state.prog_items["RIGHTDASH", item.player], state.prog_items["LEFTDASH", item.player])] * 2)
         return change
 
     def remove(self, state, item: HKItem) -> bool:
@@ -409,16 +448,18 @@ class HKItem(Item):
     game = "Hollow Knight"
 
     def __init__(self, name, advancement, code, type, player: int = None):
-        super(HKItem, self).__init__(name, advancement, code if code else None, player)
-        self.type = type
         if name == "Mimic_Grub":
-            self.trap = True
-
-        if type in ("Grub", "DreamWarrior", "Root", "Egg"):
-            self.skip_in_prog_balancing = True
-
-        if type == "Charm" and name not in progression_charms:
-            self.skip_in_prog_balancing = True
+            classification = ItemClassification.trap
+        elif type in ("Grub", "DreamWarrior", "Root", "Egg"):
+            classification = ItemClassification.progression_skip_balancing
+        elif type == "Charm" and name not in progression_charms:
+            classification = ItemClassification.progression_skip_balancing
+        elif advancement:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+        super(HKItem, self).__init__(name, classification, code if code else None, player)
+        self.type = type
 
 
 class HKLogicMixin(LogicMixin):

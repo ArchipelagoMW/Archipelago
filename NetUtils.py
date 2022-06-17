@@ -235,7 +235,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
             node["color"] = 'cyan'
         elif flags & 0b001:  # advancement
             node["color"] = 'plum'
-        elif flags & 0b010:  # never_exclude
+        elif flags & 0b010:  # useful
             node["color"] = 'slateblue'
         elif flags & 0b100:  # trap
             node["color"] = 'salmon'
@@ -245,7 +245,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_item_id(self, node: JSONMessagePart):
         item_id = int(node["text"])
-        node["text"] = self.ctx.item_name_getter(item_id)
+        node["text"] = self.ctx.item_names[item_id]
         return self._handle_item_name(node)
 
     def _handle_location_name(self, node: JSONMessagePart):
@@ -254,7 +254,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_location_id(self, node: JSONMessagePart):
         item_id = int(node["text"])
-        node["text"] = self.ctx.location_name_getter(item_id)
+        node["text"] = self.ctx.location_names[item_id]
         return self._handle_location_name(node)
 
     def _handle_entrance_name(self, node: JSONMessagePart):

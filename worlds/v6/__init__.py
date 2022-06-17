@@ -5,7 +5,7 @@ from .Locations import location_table, V6Location
 from .Options import v6_options
 from .Rules import set_rules
 from .Regions import create_regions
-from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld, Tutorial
+from BaseClasses import Item, ItemClassification, Tutorial
 from ..AutoWorld import World, WebWorld
 
 client_version = 1
@@ -53,7 +53,7 @@ class V6World(World):
         set_rules(self.world, self.player, self.area_connections, self.area_cost_map)
 
     def create_item(self, name: str) -> Item:
-        return V6Item(name, True, item_table[name], self.player)
+        return V6Item(name, ItemClassification.progression, item_table[name], self.player)
 
     def generate_basic(self):
         trinkets = [self.create_item("Trinket " + str(i+1).zfill(2)) for i in range(0,20)]
