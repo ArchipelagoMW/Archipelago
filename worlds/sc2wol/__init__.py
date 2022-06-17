@@ -1,8 +1,8 @@
 import typing
 
 from typing import List, Set, Tuple, NamedTuple
-from BaseClasses import Item, MultiWorld, Location, Tutorial
-from ..AutoWorld import World, WebWorld
+from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
+from ..AutoWorld import WebWorld
 from .Items import StarcraftWoLItem, item_table, filler_items, item_name_groups, get_full_item_list, \
     basic_unit
 from .Locations import get_locations
@@ -55,7 +55,7 @@ class SC2WoLWorld(World):
 
     def create_item(self, name: str) -> Item:
         data = get_full_item_list()[name]
-        return StarcraftWoLItem(name, data.progression, data.code, self.player)
+        return StarcraftWoLItem(name, data.classification, data.code, self.player)
 
     def create_regions(self):
         self.mission_req_table = create_regions(self.world, self.player, get_locations(self.world, self.player),
@@ -96,8 +96,8 @@ class SC2WoLWorld(World):
 
 def setup_events(world: MultiWorld, player: int, locked_locations: typing.List[str], location_cache: typing.List[Location]):
     for location in location_cache:
-        if location.address == None:
-            item = Item(location.name, True, None, player)
+        if location.address is None:
+            item = Item(location.name, ItemClassification.progression, None, player)
 
             locked_locations.append(location.name)
 
@@ -178,10 +178,6 @@ def fill_item_pool_with_dummy_items(self: SC2WoLWorld, world: MultiWorld, player
 def create_item_with_correct_settings(world: MultiWorld, player: int, name: str) -> Item:
     data = item_table[name]
 
-    item = Item(name, data.progression, data.code, player)
-    item.never_exclude = data.never_exclude
-
-    if not item.advancement:
-        return item
+    item = Item(name, data.classification, data.code, player)
 
     return item
