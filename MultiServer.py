@@ -23,6 +23,11 @@ ModuleUpdate.update()
 
 import websockets
 import colorama
+try:
+    # ponyorm is a requirement for webhost, not default server, so may not be importable
+    from pony.orm.dbapiprovider import OperationalError
+except ImportError:
+    OperationalError = ConnectionError
 
 import NetUtils
 from worlds.AutoWorld import AutoWorldRegister
@@ -404,12 +409,16 @@ class Context:
             def save_regularly():
                 import time
                 while not self.exit_event.is_set():
-                    time.sleep(self.auto_save_interval)
-                    if self.save_dirty:
-                        logging.debug("Saving via thread.")
+                    try:
+                        time.sleep(self.auto_save_interval)
+                        if self.save_dirty:
+                            logging.debug("Saving via thread.")
+                            self._save()
+                    except OperationalError as e:
+                        logging.exception(e)
+                        logging.info(f"Saving failed. Retry in {self.auto_save_interval} seconds.")
+                    else:
                         self.save_dirty = False
-                        self._save()
-
             self.auto_saver_thread = threading.Thread(target=save_regularly, daemon=True)
             self.auto_saver_thread.start()
 
@@ -446,22 +455,9 @@ class Context:
     def set_save(self, savedata: dict):
         if self.connect_names != savedata["connect_names"]:
             raise Exception("This savegame does not appear to match the loaded multiworld.")
-        if "version" not in savedata:
-            # upgrade from version 1
-            # this is not perfect but good enough for old games to continue
-            for old, items in savedata["received_items"].items():
-                self.received_items[(*old, True)] = items
-                self.received_items[(*old, False)] = items.copy()
-            for (team, slot, remote) in self.received_items:
-                # remove start inventory from items, since this is separate now
-                start_inventory = get_start_inventory(self, slot, slot in self.remote_start_inventory)
-                if start_inventory:
-                    del self.received_items[team, slot, remote][:len(start_inventory)]
-            logging.info("Upgraded save data")
-        elif savedata["version"] > self.save_version:
+        if savedata["version"] > self.save_version:
             raise Exception("This savegame is newer than the server.")
-        else:
-            self.received_items = savedata["received_items"]
+        self.received_items = savedata["received_items"]
         self.hints_used.update(savedata["hints_used"])
         self.hints.update(savedata["hints"])
 
@@ -514,6 +510,11 @@ class Context:
     def get_players_package(self):
         return [NetworkPlayer(t, p, self.get_aliased_name(t, p), n) for (t, p), n in self.player_names.items()]
 
+    def slot_set(self, slot) -> typing.Set[int]:
+        """Returns the slot IDs that concern that slot,
+        as in expands groups out and returns back the input for solo."""
+        return self.groups.get(slot, {slot})
+
     def _set_options(self, server_options: dict):
         for key, value in server_options.items():
             data_type = self.simple_options.get(key, None)
@@ -551,30 +552,31 @@ class Context:
             collect_player(self, client.team, client.slot)
 
 
-def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint]):
-    """Send and remember hints"""
-    concerns = collections.defaultdict(list)
-    for hint in hints:
-        net_msg = hint.as_network_message()
-        if hint.receiving_player in ctx.groups:
-            for player in ctx.groups[hint.receiving_player]:
-                concerns[player].append(net_msg)
-        else:
-            concerns[hint.receiving_player].append(net_msg)
-        if not hint.local and net_msg not in concerns[hint.finding_player]:
-            concerns[hint.finding_player].append(net_msg)
-        # remember hints in all cases
-        if not hint.found:
-            ctx.hints[team, hint.finding_player].add(hint)
-            if hint.receiving_player in ctx.groups:
-                for player in ctx.groups[hint.receiving_player]:
-                    ctx.hints[team, player].add(hint)
-            else:
-                ctx.hints[team, hint.receiving_player].add(hint)
-    for text in (format_hint(ctx, team, hint) for hint in hints):
-        logging.info("Notice (Team #%d): %s" % (team + 1, text))
-
+def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
+    """Send and remember hints."""
+    if only_new:
+        hints = [hint for hint in hints if hint not in ctx.hints[team, hint.finding_player]]
     if hints:
+        concerns = collections.defaultdict(list)
+        for hint in hints:
+            net_msg = hint.as_network_message()
+            for player in ctx.slot_set(hint.receiving_player):
+                concerns[player].append(net_msg)
+
+            if not hint.local and net_msg not in concerns[hint.finding_player]:
+                concerns[hint.finding_player].append(net_msg)
+            # remember hints in all cases
+            if not hint.found:
+                # since hints are bidirectional, finding player and receiving player,
+                # we can check once if hint already exists
+                if hint not in ctx.hints[team, hint.finding_player]:
+                    ctx.hints[team, hint.finding_player].add(hint)
+                    for player in ctx.slot_set(hint.receiving_player):
+                        ctx.hints[team, player].add(hint)
+
+        for text in (format_hint(ctx, team, hint) for hint in hints):
+            logging.info("Notice (Team #%d): %s" % (team + 1, text))
+
         for slot, clients in ctx.clients[team].items():
             client_hints = concerns[slot]
             if client_hints:
@@ -628,9 +630,9 @@ async def on_client_connected(ctx: Context, client: Client):
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
+        # TODO remove around 0.4
         'players': players,
-        # TODO remove around 0.2.5 in favor of slot_info ?
-        #  Maybe convert into a list of games that are present to fetch relevant datapackage entries before Connect?
+        # TODO convert to list of games present in 0.4
         'games': [ctx.games[x] for x in range(1, len(ctx.games) + 1)],
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
@@ -799,8 +801,7 @@ def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
 
 
 def send_items_to(ctx: Context, team: int, target_slot: int, *items: NetworkItem):
-    targets = ctx.groups.get(target_slot, [target_slot])
-    for target in targets:
+    for target in ctx.slot_set(target_slot):
         for item in items:
             if item.player != target_slot:
                 get_received_items(ctx, team, target, False).append(item)
@@ -838,16 +839,14 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
 
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[NetUtils.Hint]:
     hints = []
-    slots = []
+    slots: typing.Set[int] = {slot}
     for group_id, group in ctx.groups.items():
         if slot in group:
-            slots.append(group_id)
+            slots.add(group_id)
     seeked_item_id = proxy_worlds[ctx.games[slot]].item_name_to_id[item]
     for finding_player, check_data in ctx.locations.items():
-        for location_id, result in check_data.items():
-            item_id, receiving_player, item_flags = result
-
-            if (receiving_player == slot or receiving_player in slots) and item_id == seeked_item_id:
+        for location_id, (item_id, receiving_player, item_flags) in check_data.items():
+            if receiving_player in slots and item_id == seeked_item_id:
                 found = location_id in ctx.location_checks[team, finding_player]
                 entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
                 hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
@@ -1276,7 +1275,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 elif not for_location and hint_name in world.item_name_groups:  # item group name
                     hints = []
                     for item in world.item_name_groups[hint_name]:
-                        hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
+                        if item in world.item_name_to_id:  # ensure item has an ID
+                            hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
                 elif not for_location and hint_name in world.item_names:  # item name
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_name)
                 else:  # location name
@@ -1537,7 +1537,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
         elif cmd == 'LocationScouts':
             locs = []
-            create_as_hint = args.get("create_as_hint", False)
+            create_as_hint: int = int(args.get("create_as_hint", 0))
             hints = []
             for location in args["locations"]:
                 if type(location) is not int or location not in lookup_any_location_id_to_name:
@@ -1550,7 +1550,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 if create_as_hint:
                     hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
-            notify_hints(ctx, client.team, hints)
+            notify_hints(ctx, client.team, hints, only_new=create_as_hint == 2)
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 
         elif cmd == 'StatusUpdate':
@@ -1777,7 +1777,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 if item in world.item_name_groups:
                     hints = []
                     for item in world.item_name_groups[item]:
-                        hints.extend(collect_hints(self.ctx, team, slot, item))
+                        if item in world.item_name_to_id:  # ensure item has an ID
+                            hints.extend(collect_hints(self.ctx, team, slot, item))
                 else:  # item name
                     hints = collect_hints(self.ctx, team, slot, item)
 
@@ -1956,18 +1957,8 @@ async def main(args: argparse.Namespace):
 
     try:
         if not data_filename:
-            try:
-                import tkinter
-                import tkinter.filedialog
-            except Exception as e:
-                logging.error("Could not load tkinter, which is likely not installed. "
-                              "This attempt was made because no .archipelago file was provided as argument. "
-                              "Either provide a file or ensure the tkinter package is installed.")
-                raise e
-            else:
-                root = tkinter.Tk()
-                root.withdraw()
-                data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago *.zip"),))
+            filetypes = (("Multiworld data", (".archipelago", ".zip")),)
+            data_filename = Utils.open_filename("Select multiworld data", filetypes)
 
         ctx.load(data_filename, args.use_embedded_options)
 
