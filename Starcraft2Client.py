@@ -589,8 +589,8 @@ def calc_objectives_completed(mission, missions_info, locations_done, unfinished
             if (missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i) in locations_done:
                 objectives_complete += 1
             else:
-                unfinished_locations[mission].append(ctx.location_name_getter(
-                    missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i))
+                unfinished_locations[mission].append(ctx.location_names[
+                    missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i])
 
         return objectives_complete
 

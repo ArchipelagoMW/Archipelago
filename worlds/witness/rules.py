@@ -7,7 +7,7 @@ depending on the items received
 
 from BaseClasses import MultiWorld
 from .player_logic import WitnessPlayerLogic
-from .Options import is_option_enabled
+from .Options import is_option_enabled, get_option_value
 from .locations import WitnessPlayerLocations
 from . import StaticWitnessLogic
 from ..AutoWorld import LogicMixin
@@ -27,10 +27,7 @@ class WitnessLogic(LogicMixin):
                       and self.has("Desert Laser Redirection", player))
         lasers += int(self.has("Town Laser Activation", player))
         lasers += int(self.has("Monastery Laser Activation", player))
-        lasers += int(self.has("Keep Laser Pressure Plates Activation", player) and (
-                              is_option_enabled(world, player, "disable_non_randomized_puzzles")
-                              or self.has("Keep Laser Hedges Activation", player)
-                      ))
+        lasers += int(self.has("Keep Laser Activation", player))
         lasers += int(self.has("Quarry Laser Activation", player))
         lasers += int(self.has("Treehouse Laser Activation", player))
         lasers += int(self.has("Jungle Laser Activation", player))
@@ -57,7 +54,6 @@ class WitnessLogic(LogicMixin):
                 and check_name + " Solved" not in locat.EVENT_LOCATION_TABLE
                 and not self._witness_safe_manual_panel_check(panel, world, player, player_logic, locat)):
             return False
-
         return True
 
     def _witness_meets_item_requirements(self, panel, world, player, player_logic: WitnessPlayerLogic, locat):
@@ -76,22 +72,15 @@ class WitnessLogic(LogicMixin):
 
             for item in option:
                 if item == "7 Lasers":
-                    if not self._witness_has_lasers(world, player, 7):
+                    if not self._witness_has_lasers(world, player, get_option_value(world, player, "mountain_lasers")):
                         valid_option = False
                         break
                 elif item == "11 Lasers":
-                    if not self._witness_has_lasers(world, player, 11):
+                    if not self._witness_has_lasers(world, player, get_option_value(world, player, "challenge_lasers")):
                         valid_option = False
                         break
-                elif item in player_logic.NECESSARY_EVENT_PANELS:
-                    if StaticWitnessLogic.CHECKS_BY_HEX[item]["checkName"] + " Solved" in locat.EVENT_LOCATION_TABLE:
-                        valid_option = self.has(player_logic.EVENT_ITEM_NAMES[item], player)
-                    else:
-                        valid_option = self.can_reach(
-                            StaticWitnessLogic.CHECKS_BY_HEX[item]["checkName"], "Location", player
-                        )
-                    if not valid_option:
-                        break
+                elif item in player_logic.ORIGINAL_EVENT_PANELS:
+                    valid_option = self._witness_can_solve_panel(item, world, player, player_logic, locat)
                 elif not self.has(item, player):
                     valid_option = False
                     break

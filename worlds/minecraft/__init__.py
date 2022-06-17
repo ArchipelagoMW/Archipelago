@@ -9,7 +9,7 @@ from .Regions import mc_regions, link_minecraft_structures, default_connections
 from .Rules import set_advancement_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 
-from BaseClasses import Region, Entrance, Item, Tutorial
+from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification
 from .Options import minecraft_options
 from ..AutoWorld import World, WebWorld
 
@@ -164,12 +164,17 @@ class MinecraftWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
-        item = MinecraftItem(name, item_data.progression, item_data.code, self.player)
-        nonexcluded_items = ["Sharpness III Book", "Infinity Book", "Looting III Book"]
-        if name in nonexcluded_items:  # prevent books from going on excluded locations
-            item.never_exclude = True
         if name == "Bee Trap":
-            item.trap = True
+            classification = ItemClassification.trap
+            # prevent books from going on excluded locations
+        elif name in ("Sharpness III Book", "Infinity Book", "Looting III Book"):
+            classification = ItemClassification.useful
+        elif item_data.progression:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+        item = MinecraftItem(name, classification, item_data.code, self.player)
+
         return item
 
 def mc_update_output(raw_data, server, port):
