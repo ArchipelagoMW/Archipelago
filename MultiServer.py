@@ -510,6 +510,11 @@ class Context:
     def get_players_package(self):
         return [NetworkPlayer(t, p, self.get_aliased_name(t, p), n) for (t, p), n in self.player_names.items()]
 
+    def slot_set(self, slot) -> typing.Set[int]:
+        """Returns the slot IDs that concern that slot,
+        as in expands groups out and returns back the input for solo."""
+        return self.groups.get(slot, {slot})
+
     def _set_options(self, server_options: dict):
         for key, value in server_options.items():
             data_type = self.simple_options.get(key, None)
@@ -547,38 +552,34 @@ class Context:
             collect_player(self, client.team, client.slot)
 
 
-def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint]):
-    """Send and remember hints"""
+def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
+    """Send and remember hints."""
+    if only_new:
+        hints = [hint for hint in hints if hint not in ctx.hints[team, hint.finding_player]]
     if not hints:
         return
-
     concerns = collections.defaultdict(list)
     for hint in sorted(hints, key=operator.attrgetter('found'), reverse=True):
         data = (hint, hint.as_network_message())
-        if hint.receiving_player in ctx.groups:
-            for player in ctx.groups[hint.receiving_player]:
-                concerns[player].append(data)
-        else:
-            concerns[hint.receiving_player].append(data)
+        for player in ctx.slot_set(hint.receiving_player):
+            concerns[player].append(data)
         if not hint.local and data not in concerns[hint.finding_player]:
             concerns[hint.finding_player].append(data)
         # remember hints in all cases
         if not hint.found:
-            ctx.hints[team, hint.finding_player].add(hint)
-            if hint.receiving_player in ctx.groups:
-                for player in ctx.groups[hint.receiving_player]:
+            # since hints are bidirectional, finding player and receiving player,
+            # we can check once if hint already exists
+            if hint not in ctx.hints[team, hint.finding_player]:
+                ctx.hints[team, hint.finding_player].add(hint)
+                for player in ctx.slot_set(hint.receiving_player):
                     ctx.hints[team, player].add(hint)
-            else:
-                ctx.hints[team, hint.receiving_player].add(hint)
-    # for text in (format_hint(ctx, team, hint) for hint in hints):
-    #     logging.info("Notice (Team #%d): %s" % (team + 1, text))
+
         logging.info("Notice (Team #%d): %s" % (team + 1, format_hint(ctx, team, hint)))
 
     for slot, hint_data in concerns.items():
         clients = ctx.clients[team].get(slot)
         if not clients:
             continue
-
         client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
         for client in clients:
             asyncio.create_task(ctx.send_msgs(client, client_hints))
@@ -630,9 +631,9 @@ async def on_client_connected(ctx: Context, client: Client):
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
+        # TODO remove around 0.4
         'players': players,
-        # TODO remove around 0.2.5 in favor of slot_info ?
-        #  Maybe convert into a list of games that are present to fetch relevant datapackage entries before Connect?
+        # TODO convert to list of games present in 0.4
         'games': [ctx.games[x] for x in range(1, len(ctx.games) + 1)],
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
@@ -801,8 +802,7 @@ def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
 
 
 def send_items_to(ctx: Context, team: int, target_slot: int, *items: NetworkItem):
-    targets = ctx.groups.get(target_slot, [target_slot])
-    for target in targets:
+    for target in ctx.slot_set(target_slot):
         for item in items:
             if item.player != target_slot:
                 get_received_items(ctx, team, target, False).append(item)
@@ -840,16 +840,14 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
 
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[NetUtils.Hint]:
     hints = []
-    slots = []
+    slots: typing.Set[int] = {slot}
     for group_id, group in ctx.groups.items():
         if slot in group:
-            slots.append(group_id)
+            slots.add(group_id)
     seeked_item_id = proxy_worlds[ctx.games[slot]].item_name_to_id[item]
     for finding_player, check_data in ctx.locations.items():
-        for location_id, result in check_data.items():
-            item_id, receiving_player, item_flags = result
-
-            if (receiving_player == slot or receiving_player in slots) and item_id == seeked_item_id:
+        for location_id, (item_id, receiving_player, item_flags) in check_data.items():
+            if receiving_player in slots and item_id == seeked_item_id:
                 found = location_id in ctx.location_checks[team, finding_player]
                 entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
                 hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
@@ -1540,7 +1538,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
         elif cmd == 'LocationScouts':
             locs = []
-            create_as_hint = args.get("create_as_hint", False)
+            create_as_hint: int = int(args.get("create_as_hint", 0))
             hints = []
             for location in args["locations"]:
                 if type(location) is not int or location not in lookup_any_location_id_to_name:
@@ -1553,7 +1551,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 if create_as_hint:
                     hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
-            notify_hints(ctx, client.team, hints)
+            notify_hints(ctx, client.team, hints, only_new=create_as_hint == 2)
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 
         elif cmd == 'StatusUpdate':

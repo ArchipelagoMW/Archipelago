@@ -111,8 +111,10 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         self.libfolder = Path(self.buildfolder, "lib")
         self.library = Path(self.libfolder, "library.zip")
 
-    def installfile(self, path, keep_content=False):
+    def installfile(self, path, subpath=None, keep_content: bool = False):
         folder = self.buildfolder
+        if subpath:
+            folder /= subpath
         print('copying', path, '->', folder)
         if path.is_dir():
             folder /= path.name
@@ -173,6 +175,12 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         for data in self.extra_data:
             self.installfile(Path(data))
 
+        # kivi data files
+        import kivy
+        shutil.copytree(os.path.join(os.path.dirname(kivy.__file__), "data"),
+                        self.buildfolder / "data",
+                        dirs_exist_ok=True)
+
         os.makedirs(self.buildfolder / "Players" / "Templates", exist_ok=True)
         from WebHostLib.options import create
         create()
@@ -189,7 +197,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
             from maseya import z3pr
         except ImportError:
             print("Maseya Palette Shuffle not found, skipping data files.")
-            z3pr = None
         else:
             # maseya Palette Shuffle exists and needs its data files
             print("Maseya Palette Shuffle found, including data files...")
@@ -408,7 +415,7 @@ cx_Freeze.setup(
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
             "zip_include_packages": ["*"],
-            "zip_exclude_packages": ["worlds", "kivy", "sc2"],
+            "zip_exclude_packages": ["worlds", "sc2"],
             "include_files": find_libs("libssl.so", "libcrypto.so") if is_linux else [],
             "include_msvcr": False,
             "replace_paths": [("*", "")],

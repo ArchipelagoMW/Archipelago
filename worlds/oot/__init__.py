@@ -877,7 +877,7 @@ class OOTWorld(World):
                         if loc.player in barren_hint_players:
                             hint_area = get_hint_area(loc)
                             items_by_region[loc.player][hint_area]['weight'] += 1
-                            if loc.item.advancement or loc.item.never_exclude:
+                            if loc.item.advancement or loc.item.useful:
                                 items_by_region[loc.player][hint_area]['is_barren'] = False
                         if loc.player in woth_hint_players and loc.item.advancement:
                             # Skip item at location and see if game is still beatable

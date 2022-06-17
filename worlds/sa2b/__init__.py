@@ -1,8 +1,7 @@
-import os
 import typing
 import math
 
-from BaseClasses import Item, MultiWorld, Tutorial
+from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import SA2BItem, ItemData, item_table, upgrades_table
 from .Locations import SA2BLocation, all_locations, setup_locations
 from .Options import sa2b_options
@@ -11,7 +10,6 @@ from .Regions import create_regions, shuffleable_regions, connect_regions, Level
 from .Rules import set_rules
 from .Names import ItemName, LocationName
 from ..AutoWorld import WebWorld, World
-import Patch
 
 
 class SA2BWeb(WebWorld):
@@ -205,11 +203,18 @@ class SA2BWorld(World):
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
-        created_item = SA2BItem(name, data.progression, data.code, self.player)
+
         if name == ItemName.emblem:
-            created_item.skip_in_prog_balancing = True
-        if force_non_progression:
-            created_item.advancement = False
+            classification = ItemClassification.progression_skip_balancing
+        elif force_non_progression:
+            classification = ItemClassification.filler
+        elif data.progression:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+
+        created_item = SA2BItem(name, classification, data.code, self.player)
+
         return created_item
 
     def set_rules(self):
