@@ -22,3 +22,15 @@ for item, item_data in item_table.items():
 item_name_groups = {group: lookup_type_to_names[group] for group in ("Skill", "Charm", "Mask", "Vessel",
                                                                      "Relic", "Root", "Map", "Stag", "Cocoon",
                                                                      "Soul", "DreamWarrior", "DreamBoss")}
+
+directionals = ('', 'Left_', 'Right_')
+
+item_name_groups.update({
+    "Dreamer": {"Herrah", "Monomon", "Lurien"},
+    "Cloak": {x + 'Mothwing_Cloak' for x in directionals} | {'Shade_Cloak', 'Split_Shade_Cloak'},
+    "Claw": {x + 'Mantis_Claw' for x in directionals},
+    "CDash": {x + 'Crystal_Heart' for x in directionals},
+    "Fragments": {"Queen_Fragment", "King_Fragment", "Void_Heart"},
+})
+item_name_groups['Horizontal'] = item_name_groups['Cloak'] | item_name_groups['CDash']
+item_name_groups['Vertical'] = item_name_groups['Claw'] | {'Monarch_Wings'}

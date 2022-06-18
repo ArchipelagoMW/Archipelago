@@ -22,7 +22,7 @@ from WebHostLib.autolauncher import autohost, autogen
 from WebHostLib.lttpsprites import update_sprites_lttp
 from WebHostLib.options import create as create_options_files
 
-from worlds.AutoWorld import AutoWorldRegister, WebWorld
+from worlds.AutoWorld import AutoWorldRegister
 
 configpath = os.path.abspath("config.yaml")
 if not os.path.exists(configpath):  # fall back to config.yaml in home
@@ -46,7 +46,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
     worlds = {}
     data = []
     for game, world in AutoWorldRegister.world_types.items():
-        if hasattr(world.web, 'tutorials'):
+        if hasattr(world.web, 'tutorials') and (not world.hidden or game == 'Archipelago'):
             worlds[game] = world
     for game, world in worlds.items():
         # copy files from world's docs folder to the generated folder
@@ -75,7 +75,6 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
             for guide in game_data['tutorials']:
                 if guide and tutorial.tutorial_name == guide['name']:
                     guide['files'].append(current_tutorial['files'][0])
-                    added = True
                     break
             else:
                 game_data['tutorials'].append(current_tutorial)
@@ -109,7 +108,6 @@ if __name__ == "__main__":
         autogen(app.config)
     if app.config["SELFHOST"]:  # using WSGI, you just want to run get_app()
         if app.config["DEBUG"]:
-            autohost(app.config)
             app.run(debug=True, port=app.config["PORT"])
         else:
             serve(app, port=app.config["PORT"], threads=app.config["WAITRESS_THREADS"])

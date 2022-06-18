@@ -1,6 +1,6 @@
 import string
 
-from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial
+from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification, RegionType
 from .Items import item_table, item_pool, event_item_pairs
 from .Locations import location_table
 from .Regions import create_regions
@@ -12,7 +12,8 @@ from .Options import spire_options
 class SpireWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up Slay the Spire for Archipelago. This guide covers single-player, multiworld, and related software.",
+        "A guide to setting up Slay the Spire for Archipelago. "
+        "This guide covers single-player, multiworld, and related software.",
         "English",
         "slay-the-spire_en.md",
         "slay-the-spire/en",
@@ -45,20 +46,7 @@ class SpireWorld(World):
         pool = []
         for name, data in item_table.items():
             if not data.event:
-                if name in item_pool:
-                    card_draw = 0
-                    for amount in range(item_pool[name]):
-                        item = SpireItem(name, self.player)
-
-                        # This feels wrong but it makes our failure rate drop dramatically
-                        # makes all but 7 basic card draws trash fill
-                        if item.name == "Card Draw":
-                            card_draw += 1
-                            if card_draw > 7:
-                                item.advancement = False
-
-                        pool.append(item)
-                else:
+                for amount in range(item_pool.get(name, 1)):
                     item = SpireItem(name, self.player)
                     pool.append(item)
 
@@ -77,8 +65,7 @@ class SpireWorld(World):
         set_rules(self.world, self.player)
 
     def create_item(self, name: str) -> Item:
-        item_data = item_table[name]
-        return Item(name, item_data.progression, item_data.code, self.player)
+        return SpireItem(name, self.player)
 
     def create_regions(self):
         create_regions(self.world, self.player)
@@ -95,7 +82,7 @@ class SpireWorld(World):
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, None, name, player)
+    ret = Region(name, RegionType.Generic, name, player)
     ret.world = world
     if locations:
         for location in locations:
@@ -124,4 +111,8 @@ class SpireItem(Item):
 
     def __init__(self, name, player: int = None):
         item_data = item_table[name]
-        super(SpireItem, self).__init__(name, item_data.progression, item_data.code, player)
+        super(SpireItem, self).__init__(
+            name,
+            ItemClassification.progression if item_data.progression else ItemClassification.filler,
+            item_data.code, player
+        )
