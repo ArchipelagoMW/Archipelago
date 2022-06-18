@@ -9,7 +9,8 @@ logger = logging.getLogger("Hollow Knight")
 from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
 from .Rules import set_rules
-from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled, Goal, WhitePalace
+from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled, Goal, WhitePalace, \
+    shop_to_option
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
     event_names, item_effects, connectors, one_ways
 from .Charms import names as charm_names
@@ -200,25 +201,10 @@ class HKWorld(World):
                                              None, "Event", self.player))
                 menu_region.locations.append(loc)
 
-    def create_shop_item(self, needed_extra_shop_slots):
-        self.created_shop_items += 1
-        if self.created_shop_items > needed_extra_shop_slots:
-            return self.create_filler()
-        item_list = []
-        if self.world.RandomizeNail[self.player]:
-            item_list += [self.create_item("Upslash"), self.create_item("Rightslash"), self.create_item("Leftslash")]
-        if self.world.RandomizeSwim[self.player]:
-            item_list.append(self.create_item("Swim"))
-        if self.world.RandomizeFocus[self.player]:
-            item_list.append(self.create_item("Focus"))
-        return item_list[self.created_shop_items - 1]
-
     def create_items(self):
         # Generate item pool and associated locations (paired in HK)
         pool: typing.List[HKItem] = []
         junk_replace: typing.Set[str] = set()
-        needed_extra_shop_slots = (self.world.RandomizeNail[self.player] * 3) + \
-        self.world.RandomizeSwim[self.player] + self.world.RandomizeFocus[self.player]
         if self.world.RemoveSpellUpgrades[self.player]:
             junk_replace.add("Abyss_Shriek")
             junk_replace.add("Shade_Soul")
@@ -269,10 +255,11 @@ class HKWorld(World):
                 # self.create_location(location_name).place_locked_item(item)
                     if location_name == "Start":
                         if (item_name == "Focus" and self.world.RandomizeFocus[self.player]) or (item_name == "Swim"
-                                and self.world.RandomizeSwim[self.player]) or (item_name in ["Upslash","Leftslash",
+                                and self.world.RandomizeSwim[self.player]) or (item_name in ["Upslash", "Leftslash",
                                 "Rightslash"] and self.world.RandomizeNail[self.player]):
-                            continue
-                        self.world.push_precollected(item)
+                            pool.append(item)
+                        else:
+                            self.world.push_precollected(item)
                     else:
 
                         location = self.create_location(location_name)
@@ -289,39 +276,30 @@ class HKWorld(World):
                             pool.append(item)
 
                 if location_name in wp_exclusions:
-                    print(f"World {self.world.player_name[self.player]} - Item {item_name} - Location {location_name} - vanilla={vanilla!r}, excluded={excluded!r}")
+                    logging.debug(f"World {self.world.player_name[self.player]} - Item {item_name} - Location {location_name} - vanilla={vanilla!r}, excluded={excluded!r}")
 
-        for i in range(8, self.world.SlyShopSlots[self.player].value):
-            self.create_location("Sly")
-            pool.append(self.create_shop_item(needed_extra_shop_slots))
-        for i in range(6, self.world.SlyKeyShopSlots[self.player].value):
-            self.create_location("Sly_(Key)")
-            pool.append(self.create_shop_item(needed_extra_shop_slots))
-        for i in range(2, self.world.IseldaShopSlots[self.player].value):
-            self.create_location("Iselda")
-            pool.append(self.create_shop_item(needed_extra_shop_slots))
-        for i in range(5, self.world.SalubraShopSlots[self.player].value):
-            self.create_location("Salubra")
-            pool.append(self.create_shop_item(needed_extra_shop_slots))
-        for i in range(5, self.world.SalubraCharmShopSlots[self.player].value):
-            self.create_location("Salubra_(Requires_Charms)")
-            pool.append(self.create_shop_item(needed_extra_shop_slots))
-        for i in range(3, self.world.LegEaterShopSlots[self.player].value):
-            self.create_location("Leg_Eater")
-            pool.append(self.create_shop_item(needed_extra_shop_slots))
-        for i in range(7, self.world.GrubfatherRewardSlots[self.player].value):
-            self.create_location("Grubfather")
-            pool.append(self.create_shop_item(needed_extra_shop_slots))
-        for i in range(8, self.world.SeerRewardSlots[self.player].value):
-            self.create_location("Seer")
-            pool.append(self.create_shop_item(needed_extra_shop_slots))
-        for i in range(self.world.EggShopSlots[self.player].value):
-            self.create_location("Egg_Shop")
-            pool.append(self.create_shop_item(needed_extra_shop_slots))
-        while self.created_shop_items < needed_extra_shop_slots:
-            # shouldn't be possible to have hit 16 slots already without reaching the small number of extra slots needed
-            self.create_location("Sly")
-            pool.append(self.create_shop_item(needed_extra_shop_slots))
+        for shop, slots in self.created_multi_locations.items():
+            for _ in range(slots, getattr(self.world, shop_to_option[shop])[self.player].value):
+                self.create_location(shop)
+
+        item_count = len(pool)
+        location_count = len(self.world.get_unfilled_locations(self.player))
+        if location_count < item_count:  # More items than locations.
+            # We only add at maximum 5 extra items.  Even if they all get assigned to the same shop, it is not possible
+            # to exceed the 16 slots per shop limit here.  This code will need to revised if significantly more extra
+            # items get added in the future.
+            shops = list(multi_locations.keys())
+            if not self.world.EggShopSlots[self.player].value:  # No eggshop, so don't place items there
+                shops.remove('Egg_Shop')
+            while location_count < item_count:
+                # Add a location to a random shop.
+                self.create_location(self.world.random.choice(shops))
+                location_count += 1
+        elif item_count < location_count:  # More locations than items
+            for _ in range(location_count - item_count):
+                # Create enough filler items to fill all locations.
+                pool.append(self.create_item(self.get_filler_item_name()))
+
         self.world.itempool += pool
 
         for shopname in self.shops:
@@ -334,6 +312,7 @@ class HKWorld(World):
             prices.sort()
             for loc, price in zip(locations, prices):
                 loc.cost = price
+
 
     def _can_beat_thk(self, state, player):
         return (

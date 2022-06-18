@@ -118,6 +118,17 @@ disabled = {
     "RandomizeMimics",
 }
 
+shop_to_option = {
+    "Seer": "SeerRewardSlots",
+    "Grubfather": "GrubfatherRewardSlots",
+    "Sly": "SlyShopSlots",
+    "Sly_(Key)": "SlyKeyShopSlots",
+    "Iselda": "IseldaShopSlots",
+    "Salubra": "SalubraShopSlots",
+    "Leg_Eater": "LegEaterShopSlots",
+    "Salubra_(Requires_Charms)": "IseldaShopSlots"
+}
+
 hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {}
 
 for option_name, option_data in pool_options.items():
