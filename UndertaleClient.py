@@ -56,13 +56,13 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
     def _cmd_enable_deathlink(self):
         """Enables deathlink"""
         if isinstance(self.ctx, UndertaleContext):
-            self.ctx.update_death_link(True)
+            self.ctx.deathlink_status = True
             self.output(f"Deathlink enabled.")
 
     def _cmd_disable_deathlink(self):
         """Disables deathlink"""
         if isinstance(self.ctx, UndertaleContext):
-            self.ctx.update_death_link(False)
+            self.ctx.deathlink_status = False
             self.output(f"Deathlink disabled.")
 
 
@@ -78,6 +78,7 @@ class UndertaleContext(CommonContext):
         self.game = 'Undertale'
         self.got_deathlink = False
         self.syncing = False
+        self.deathlink_status = False
 
     async def connection_closed(self):
         await super().connection_closed()
@@ -269,6 +270,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
 
 async def game_watcher(ctx: UndertaleContext):
     while not ctx.exit_event.is_set():
+        await ctx.update_death_link(ctx.deathlink_status)
         path = os.path.expandvars(r"%localappdata%/UNDERTALE")
         if ctx.syncing == True:
             for root, dirs, files in os.walk(path):
@@ -288,7 +290,7 @@ async def game_watcher(ctx: UndertaleContext):
         victory = False
         for root, dirs, files in os.walk(path):
             for file in files:
-                if file.find("DontBeMad.mad"):
+                if file.find("DontBeMad.mad") > -1 and "DeathLink" in ctx.tags:
                     os.remove(root+"/"+file)
                     await ctx.send_death()
                 if file.find("check ") > -1:

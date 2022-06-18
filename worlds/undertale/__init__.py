@@ -2,14 +2,13 @@ import os
 import json
 from base64 import b64encode, b64decode
 from math import ceil
-
 from .Items import UndertaleItem, item_table, required_armor, non_key_items, key_items, junk_weights
 from .Locations import UndertaleAdvancement, advancement_table, exclusion_table
 from .Regions import undertale_regions, link_undertale_structures
 from .Rules import set_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 
-from BaseClasses import Region, Entrance, Item
+from BaseClasses import Region, Entrance, Item, ItemClassification
 from .Options import undertale_options
 from ..AutoWorld import World
 
@@ -76,9 +75,9 @@ class UndertaleWorld(World):
             itempool.remove("Complete Skeleton")
             itempool.remove("Fish")
             itempool.remove("DT Extractor")
-        if self.world.temy_include[self.player].value == 1:
+        if self.world.temy_include[self.player] == True:
             itempool += ["temy armor"]
-        if self.world.soul_hunt[self.player].value == 1:
+        if self.world.soul_hunt[self.player] == True:
             itempool += ["Soul Piece"] * self.world.soul_pieces[self.player].value
         else:
             itempool += ["Determination"]
@@ -131,5 +130,7 @@ class UndertaleWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
-        item = UndertaleItem(name, item_data.progression, item_data.code, self.player)
+        item = UndertaleItem(name,
+                                ItemClassification.progression if item_data.progression else ItemClassification.filler,
+                                item_data.code, self.player)
         return item
