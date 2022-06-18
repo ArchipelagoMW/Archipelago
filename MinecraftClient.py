@@ -196,8 +196,8 @@ def download_java(java: str):
 def install_forge(directory: str, forge_version: str, java_version: str):
     """download and install forge"""
 
-    jdk = find_jdk(java_version)
-    if jdk is not None:
+    java_exe = find_jdk(java_version)
+    if java_exe is not None:
         print(f"Downloading Forge {forge_version}...")
         forge_url = f"https://maven.minecraftforge.net/net/minecraftforge/forge/{forge_version}/forge-{forge_version}-installer.jar"
         resp = requests.get(forge_url)
@@ -208,8 +208,8 @@ def install_forge(directory: str, forge_version: str, java_version: str):
             with open(forge_install_jar, 'wb') as f:
                 f.write(resp.content)
             print(f"Installing Forge...")
-            argstring = ' '.join([jdk, "-jar", "\"" + forge_install_jar + "\"", "--installServer", "\"" + directory + "\""])
-            install_process = Popen(argstring, shell=not is_windows)
+            # argstring = ' '.join([java_exe, "-jar", "\"" + forge_install_jar + "\"", "--installServer", "\"" + directory + "\""])
+            install_process = Popen([java_exe, "-jar", forge_install_jar, "--installServer", directory], shell=not is_windows)
             install_process.wait()
             os.remove(forge_install_jar)
 
@@ -228,15 +228,15 @@ def run_forge_server(forge_dir: str, java_version: str, heap_arg: str) -> Popen:
 
     os_args = "win_args.txt" if is_windows else "unix_args.txt"
     args_file = os.path.join(forge_dir, "libraries", "net", "minecraftforge", "forge", forge_version, os_args)
-    win_args = []
+    forge_args = []
     with open(args_file) as argfile:
         for line in argfile:
-            win_args.append(line.strip())
+            forge_args.extend(line.strip().split(" "))
 
-    argstring = ' '.join([java_exe, heap_arg] + win_args + ["-nogui"])
-    logging.info(f"Running Forge server: {argstring}")
+    args = [java_exe, heap_arg, *forge_args, "-nogui"]
+    logging.info(f"Running Forge server: {args}")
     os.chdir(forge_dir)
-    return Popen(argstring, shell=not is_windows)
+    return Popen(args, shell=not is_windows)
 
 
 def get_minecraft_versions(version, release_channel="release"):
@@ -313,11 +313,13 @@ if __name__ == '__main__':
 
     if args.install:
         if is_windows:
-            print("Installing Java and Minecraft Forge")
+            print("Installing Java")
             download_java(java_version)
-        else:
+        if not is_correct_forge(forge_dir):
             print("Installing Minecraft Forge")
-        install_forge(forge_dir, forge_version, java_version)
+            install_forge(forge_dir, forge_version, java_version)
+        else:
+            print("Correct Forge version already found, skipping install.")
         sys.exit(0)
 
     if apmc_data is None:

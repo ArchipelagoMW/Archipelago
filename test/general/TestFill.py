@@ -1,8 +1,9 @@
-from typing import List
+from typing import List, Iterable
 import unittest
 from worlds.AutoWorld import World
 from Fill import FillError, balance_multiworld_progression, fill_restrictive, distribute_items_restrictive
-from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, RegionType, Item, Location
+from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, RegionType, Item, Location, \
+    ItemClassification
 from worlds.generic.Rules import CollectionRule, locality_rules, set_rule
 
 
@@ -108,14 +109,16 @@ def generate_locations(count: int, player_id: int, address: int = None, region: 
 
 def generate_items(count: int, player_id: int, advancement: bool = False, code: int = None) -> List[Item]:
     items = []
-    type = "prog" if advancement else ""
+    item_type = "prog" if advancement else ""
     for i in range(count):
-        name = "player" + str(player_id) + "_" + type + "item" + str(i)
-        items.append(Item(name, advancement, code, player_id))
+        name = "player" + str(player_id) + "_" + item_type + "item" + str(i)
+        items.append(Item(name,
+                          ItemClassification.progression if advancement else ItemClassification.filler,
+                          code, player_id))
     return items
 
 
-def names(objs: list) -> List[str]:
+def names(objs: list) -> Iterable[str]:
     return map(lambda o: o.name, objs)
 
 
@@ -185,7 +188,7 @@ class TestFillRestrictive(unittest.TestCase):
         items = player1.prog_items
         locations = player1.locations
 
-        multi_world.accessibility[player1.id] = 'minimal'
+        multi_world.accessibility[player1.id].value = multi_world.accessibility[player1.id].option_minimal
         multi_world.completion_condition[player1.id] = lambda state: state.has(
             items[1].name, player1.id)
         set_rule(locations[1], lambda state: state.has(
@@ -400,7 +403,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         basic_items = player1.basic_items
 
         locations[1].progress_type = LocationProgressType.EXCLUDED
-        basic_items[1].never_exclude = True
+        basic_items[1].classification = ItemClassification.useful
 
         distribute_items_restrictive(multi_world)
 
@@ -427,8 +430,8 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
         locations[1].progress_type = LocationProgressType.EXCLUDED
         locations[2].progress_type = LocationProgressType.EXCLUDED
-        basic_items[0].never_exclude = True
-        basic_items[1].never_exclude = True
+        basic_items[0].classification = ItemClassification.useful
+        basic_items[1].classification = ItemClassification.useful
 
         self.assertRaises(FillError, distribute_items_restrictive, multi_world)
 
@@ -569,7 +572,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
             multi_world, 2, location_count=5, basic_item_count=5)
 
         for item in multi_world.get_items():
-            item.never_exclude = True
+            item.classification = ItemClassification.useful
 
         multi_world.local_items[player1.id].value = set(names(player1.basic_items))
         multi_world.local_items[player2.id].value = set(names(player2.basic_items))
@@ -625,8 +628,7 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
         # Sphere 3
         region = player2.generate_region(
             player2.menu, 20, lambda state: state.has(player2.prog_items[0].name, player2.id))
-        items = fillRegion(multi_world, region, [
-            player2.prog_items[1]] + items)
+        fillRegion(multi_world, region, [player2.prog_items[1]] + items)
 
     def test_balances_progression(self) -> None:
         self.multi_world.progression_balancing[self.player1.id].value = 50

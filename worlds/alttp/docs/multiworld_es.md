@@ -99,7 +99,7 @@ Si quieres validar que tu fichero YAML para asegurarte que funciona correctament
 
 Cuando te unes a una partida multiworld, debes proveer tu fichero YAML a quien sea el creador de la partida. Una vez
 este hecho, el creador te devolverá un enlace para descargar el parche o un fichero zip conteniendo todos los ficheros
-de parche de la partida Tu fichero de parche debe tener la extensión `.bmbp`.
+de parche de la partida Tu fichero de parche debe tener la extensión `.aplttp`.
 
 Pon tu fichero de parche en el escritorio o en algún sitio conveniente, y haz doble click. Esto debería ejecutar
 automáticamente el cliente, y ademas creara la rom en el mismo directorio donde este el fichero de parche.

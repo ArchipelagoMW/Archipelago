@@ -14,7 +14,7 @@ from .ExtractedData import locations, starts, multi_locations, location_to_regio
     event_names, item_effects, connectors, one_ways
 from .Charms import names as charm_names
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial, ItemClassification
 from ..AutoWorld import World, LogicMixin, WebWorld
 
 path_of_pain_locations = {
@@ -165,35 +165,36 @@ class HKWorld(World):
             exclusions.update(path_of_pain_locations)
         if wp <= WhitePalace.option_kingfragment:
             exclusions.update(white_palace_checks)
-        if wp == WhitePalace.option_exclude and self.world.RandomizeCharms[self.player]:
-            # Ensure KF location is still reachable if charms are non-randomized
-            exclusions.update(white_palace_transitions)
-            exclusions.update(white_palace_events)
+        if wp == WhitePalace.option_exclude:
             exclusions.add("King_Fragment")
+            if self.world.RandomizeCharms[self.player]:
+                # If charms are randomized, this will be junk-filled -- so transitions and events are not progression
+                exclusions.update(white_palace_transitions)
+                exclusions.update(white_palace_events)
         return exclusions
 
     def create_regions(self):
         menu_region: Region = create_region(self.world, self.player, 'Menu')
         self.world.regions.append(menu_region)
-        wp_exclusions = self.white_palace_exclusions()
+        # wp_exclusions = self.white_palace_exclusions()
 
         # Link regions
         for event_name in event_names:
-            if event_name in wp_exclusions:
-                continue
+            #if event_name in wp_exclusions:
+            #    continue
             loc = HKLocation(self.player, event_name, None, menu_region)
             loc.place_locked_item(HKItem(event_name,
-                                         event_name not in wp_exclusions,
+                                         True, #event_name not in wp_exclusions,
                                          None, "Event", self.player))
             menu_region.locations.append(loc)
         for entry_transition, exit_transition in connectors.items():
-            if entry_transition in wp_exclusions:
-                continue
+            #if entry_transition in wp_exclusions:
+            #    continue
             if exit_transition:
                 # if door logic fulfilled -> award vanilla target as event
                 loc = HKLocation(self.player, entry_transition, None, menu_region)
                 loc.place_locked_item(HKItem(exit_transition,
-                                             exit_transition not in wp_exclusions,
+                                             True, #exit_transition not in wp_exclusions,
                                              None, "Event", self.player))
                 menu_region.locations.append(loc)
 
@@ -208,29 +209,33 @@ class HKWorld(World):
 
         wp_exclusions = self.white_palace_exclusions()
         for option_key, option in hollow_knight_randomize_options.items():
-            if getattr(self.world, option_key)[self.player]:
-                for item_name, location_name in zip(option.items, option.locations):
-                    if location_name in wp_exclusions:
-                        continue
-                    if item_name in geo_replace:
-                        item_name = "Geo_Rock-Default"
-                    item = self.create_item(item_name)
-                        # self.create_location(location_name).place_locked_item(item)
-                    if location_name == "Start":
-                        self.world.push_precollected(item)
+            randomized = getattr(self.world, option_key)[self.player]
+            for item_name, location_name in zip(option.items, option.locations):
+                vanilla = not randomized
+                excluded = False
+                if item_name in geo_replace:
+                    item_name = "Geo_Rock-Default"
+                item = self.create_item(item_name)
+                if location_name == "Start":
+                    self.world.push_precollected(item)
+                    continue
+
+                location = self.create_location(location_name)
+                if not vanilla and location_name in wp_exclusions:
+                    if location_name == 'King_Fragment':
+                        excluded = True
                     else:
-                        self.create_location(location_name)
-                        pool.append(item)
-            # elif option_key not in logicless_options:
-            else:
-                for item_name, location_name in zip(option.items, option.locations):
-                    if location_name in wp_exclusions and location_name != 'King_Fragment':
-                        continue
-                    item = self.create_item(item_name)
-                    if location_name == "Start":
-                        self.world.push_precollected(item)
-                    else:
-                        self.create_location(location_name).place_locked_item(item)
+                        vanilla = True
+                if excluded:
+                    location.progress_type = LocationProgressType.EXCLUDED
+                if vanilla:
+                    location.place_locked_item(item)
+                else:
+                    pool.append(item)
+
+                if location_name in wp_exclusions:
+                    print(f"World {self.world.player_name[self.player]} - Item {item_name} - Location {location_name} - vanilla={vanilla!r}, excluded={excluded!r}")
+
         for i in range(self.world.EggShopSlots[self.player].value):
             self.create_location("Egg_Shop")
             pool.append(self.create_item("Geo_Rock-Default"))
@@ -268,36 +273,12 @@ class HKWorld(World):
         if world.logic[player] != 'nologic':
             goal = world.Goal[player]
             if goal == Goal.option_siblings:
-                world.completion_condition[player] = lambda state: (
-                    self._can_beat_thk(state, player)
-                    and state.has('WHITEFRAGMENT', player, 3)
-                )
+                world.completion_condition[player] = lambda state: state._hk_siblings_ending(player)
             elif goal == Goal.option_radiance:
-                world.completion_condition[player] = lambda state: (
-                    state.count('Opened_Black_Egg_Temple', player)
-                    and state.has('WHITEFRAGMENT', player, 3)
-                    and state.has('DREAMNAIL', player, 1)
-                    and (
-                        (state.has('LEFTCLAW', player) and state.has('RIGHTCLAW', player))
-                        or state.has('WINGS', player)
-                    )
-                    and (
-                        state.count('FIREBALL', player) + state.count('SCREAM', player)
-                        + state.count('QUAKE', player)
-                    ) > 1
-                    and (  # NAILCOMBAT
-                        state.count('LEFTSLASH', player)
-                        or state.count('RIGHTSLASH', player)
-                        or state.count('UPSLASH', player)
-                    )
-                    and (
-                        (state.has('LEFTDASH', player, 2) and state.has('RIGHTDASH', player, 2))  # Both Shade Cloaks
-                        or (self.world.ProficientCombat[self.player] and state.has('QUAKE', player))  # or Dive
-                    )
-                )
+                world.completion_condition[player] = lambda state: state._hk_can_beat_radiance(player)
             else:
                 # Hollow Knight or Any goal.
-                world.completion_condition[player] = lambda state: self._can_beat_thk(state, player)
+                world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player)
 
         set_rules(self)
 
@@ -424,16 +405,18 @@ class HKItem(Item):
     game = "Hollow Knight"
 
     def __init__(self, name, advancement, code, type, player: int = None):
-        super(HKItem, self).__init__(name, advancement, code if code else None, player)
-        self.type = type
         if name == "Mimic_Grub":
-            self.trap = True
-
-        if type in ("Grub", "DreamWarrior", "Root", "Egg"):
-            self.skip_in_prog_balancing = True
-
-        if type == "Charm" and name not in progression_charms:
-            self.skip_in_prog_balancing = True
+            classification = ItemClassification.trap
+        elif type in ("Grub", "DreamWarrior", "Root", "Egg"):
+            classification = ItemClassification.progression_skip_balancing
+        elif type == "Charm" and name not in progression_charms:
+            classification = ItemClassification.progression_skip_balancing
+        elif advancement:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+        super(HKItem, self).__init__(name, classification, code if code else None, player)
+        self.type = type
 
 
 class HKLogicMixin(LogicMixin):
@@ -447,3 +430,38 @@ class HKLogicMixin(LogicMixin):
 
     def _hk_start(self, player, start_location: str) -> bool:
         return self.world.StartLocation[player] == start_location
+
+    def _hk_nail_combat(self, player: int) -> bool:
+        return self.has_any({'LFFTSLASH', 'RIGHTSLASH', 'UPSLASH'}, player)
+
+    def _hk_can_beat_thk(self, player: int) -> bool:
+        return (
+            self.has('Opened_Black_Egg_Temple', player)
+            and (self.count('FIREBALL', player) + self.count('SCREAM', player) + self.count('QUAKE', player)) > 1
+            and self._hk_nail_combat(player)
+            and (
+                self.has_any({'LEFTDASH', 'RIGHTDASH'}, player)
+                or self._hk_option(player, 'ProficientCombat')
+            )
+        )
+
+    def _hk_siblings_ending(self, player: int) -> bool:
+        return self._hk_can_beat_thk(player) and self.has('WHITEFRAGMENT', player, 3)
+
+    def _hk_can_beat_radiance(self, player: int) -> bool:
+        return (
+            self._hk_siblings_ending(player)
+            and self.has('DREAMNAIL', player, 1)
+            and (
+                (self.has('LEFTCLAW', player) and self.has('RIGHTCLAW', player))
+                or self.has('WINGS', player)
+            )
+            and (
+                self.count('FIREBALL', player) + self.count('SCREAM', player)
+                + self.count('QUAKE', player)
+            ) > 1
+            and (
+                (self.has('LEFTDASH', player, 2) and self.has('RIGHTDASH', player, 2))  # Both Shade Cloaks
+                or (self._hk_option(player, 'ProficientCombat') and self.has('QUAKE', player))  # or Dive
+            )
+        )
