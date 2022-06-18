@@ -6,7 +6,7 @@ import os
 import string
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, Set, FrozenSet, Tuple, Union, List
+from typing import Dict, Set, FrozenSet, Tuple, Union, List, Any
 
 import Utils
 from . import Options
@@ -18,7 +18,7 @@ source_folder = os.path.join(os.path.dirname(__file__), "data")
 pool = ThreadPoolExecutor(1)
 
 
-def load_json_data(data_name: str) -> dict:
+def load_json_data(data_name: str) -> Union[List[str], Dict[str, Any]]:
     with open(os.path.join(source_folder, f"{data_name}.json")) as f:
         return json.load(f)
 
@@ -26,6 +26,7 @@ def load_json_data(data_name: str) -> dict:
 techs_future = pool.submit(load_json_data, "techs")
 recipes_future = pool.submit(load_json_data, "recipes")
 machines_future = pool.submit(load_json_data, "machines")
+fluids_future = pool.submit(load_json_data, "fluids")
 items_future = pool.submit(load_json_data, "items")
 
 tech_table: Dict[str, int] = {}
@@ -310,7 +311,7 @@ machine_per_category: Dict[str: str] = {}
 for category, (cost, machine_name) in machine_tech_cost.items():
     machine_per_category[category] = machine_name
 
-del (machine_tech_cost)
+del machine_tech_cost
 
 # required technologies to be able to craft recipes from a certain category
 required_category_technologies: Dict[str, FrozenSet[FrozenSet[Technology]]] = {}
@@ -481,8 +482,9 @@ rel_cost = {
     "used-up-uranium-fuel-cell": 1000
 }
 
-blacklist: Set[str] = all_ingredient_names | {"rocket-part"}
-liquids: Set[str] = {"crude-oil", "water", "sulfuric-acid", "petroleum-gas", "light-oil", "heavy-oil", "lubricant", "steam"}
+exclusion_list: Set[str] = all_ingredient_names | {"rocket-part", "used-up-uranium-fuel-cell"}
+fluids: Set[str] = set(fluids_future.result())
+del fluids_future
 
 
 @Utils.cache_argsless
@@ -496,7 +498,7 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
         return cost
 
     science_pack_pools: Dict[str, Set[str]] = {}
-    already_taken = blacklist.copy()
+    already_taken = exclusion_list.copy()
     current_difficulty = 5
     for science_pack in Options.MaxSciencePack.get_ordered_science_packs():
         current = science_pack_pools[science_pack] = set()
@@ -504,15 +506,18 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
             if (science_pack != "automation-science-pack" or not recipe.recursive_unlocking_technologies) \
                     and get_estimated_difficulty(recipe) < current_difficulty:
                 current |= set(recipe.products)
+
         if science_pack == "automation-science-pack":
             current |= {"iron-ore", "copper-ore", "coal", "stone"}
-            # Can't hand craft automation science if liquids end up in its recipe, making the seed impossible.
-            current -= liquids
+            # Can't handcraft automation science if fluids end up in its recipe, making the seed impossible.
+            current -= fluids
         elif science_pack == "logistic-science-pack":
             current |= {"steam"}
+
         current -= already_taken
         already_taken |= current
         current_difficulty *= 2
+
     return science_pack_pools
 
 

@@ -14,7 +14,7 @@ import Patch
 from . import Options
 
 from .Technologies import tech_table, recipes, free_sample_blacklist, progressive_technology_table, \
-    base_tech_table, tech_to_progressive_lookup, liquids
+    base_tech_table, tech_to_progressive_lookup, fluids
 
 template_env: Optional[jinja2.Environment] = None
 
@@ -131,7 +131,7 @@ def generate_mod(world, output_directory: str):
                                          progressive_technology_table.values()},
         "custom_recipes": world.custom_recipes,
         "max_science_pack": multiworld.max_science_pack[player].value,
-        "liquids": liquids,
+        "liquids": fluids,
         "goal": multiworld.goal[player].value,
         "energy_link": multiworld.energy_link[player].value
     }
