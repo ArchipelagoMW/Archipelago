@@ -232,37 +232,39 @@ class HKWorld(World):
                 excluded = False
                 if item_name in junk_replace:
                     item_name = self.get_filler_item_name()
-                split = None
-                if item_name == "Crystal_Heart" and self.world.SplitCrystalHeart[self.player]:
-                    split = "Crystal_Heart"
-                if item_name == "Mothwing_Cloak" and self.world.SplitMothwingCloak[self.player]:
-                    split = "Mothwing_Cloak"
+                split = False
+                if (item_name == "Crystal_Heart" and self.world.SplitCrystalHeart[self.player]) or \
+                        (item_name == "Mothwing_Cloak" and self.world.SplitMothwingCloak[self.player]):
+                    loc1 = self.create_location(location_name)
+                    loc2 = self.create_location("Split_" + location_name)
+                    split = True
                 if item_name == "Mantis_Claw" and self.world.SplitMantisClaw[self.player]:
-                    split = "Mantis_Claw"
-                if item_name == "Shade_Cloak" and self.world.SplitMothwingCloak[self.player]:
-                    split = "Shade_Cloak"
-                if split in ["Crystal_Heart", "Mothwing_Cloak"]:
-                    self.create_location(location_name)
-                    self.create_location("Split_" + location_name)
-                if split == "Mantis_Claw":
-                    self.create_location("Left_" + location_name)
-                    self.create_location("Right_" + location_name)
-                if split == "Shade_Cloak":
-                    self.create_location(location_name)
+                    loc1 = self.create_location("Left_" + location_name)
+                    loc2 = self.create_location("Right_" + location_name)
+                    split = True
+                if split is True:
+                    item1 = self.create_item("Left_" + item_name)
+                    item1.classification = ItemClassification.progression
+                    item2 = self.create_item("Right_" + item_name)
+                    item2.classification = ItemClassification.progression
+                    if randomized:
+                        pool.append(item1)
+                        pool.append(item2)
+                    else:
+                        loc1.place_locked_item(item1)
+                        loc2.place_locked_item(item2)
+                elif item_name == "Shade_Cloak" and self.world.SplitMothwingCloak[self.player]:
+                    loc = self.create_location(location_name)
                     if self.world.random.randint(0, 1):
                         item = self.create_item("Left_Mothwing_Cloak")
                     else:
                         item = self.create_item("Right_Mothwing_Cloak")
                     item.classification = ItemClassification.progression
-                    pool.append(item)
-                if split in ["Crystal_Heart", "Mothwing_Cloak", "Mantis_Claw"]:
-                    item = self.create_item("Left_" + item_name)
-                    item.classification = ItemClassification.progression
-                    pool.append(item)
-                    item = self.create_item("Right_" + item_name)
-                    item.classification = ItemClassification.progression
-                    pool.append(item)
-                if split is None:
+                    if randomized:
+                        pool.append(item)
+                    else:
+                        loc.place_locked_item(item)
+                else:
                     item = self.create_item(item_name)
                 # self.create_location(location_name).place_locked_item(item)
                     if location_name == "Start":
@@ -275,21 +277,19 @@ class HKWorld(World):
                             continue
                         self.world.push_precollected(item)
                     else:
-                        self.create_location(location_name)
-                        pool.append(item)
 
-                location = self.create_location(location_name)
-                if not vanilla and location_name in wp_exclusions:
-                    if location_name == 'King_Fragment':
-                        excluded = True
-                    else:
-                        vanilla = True
-                if excluded:
-                    location.progress_type = LocationProgressType.EXCLUDED
-                if vanilla:
-                    location.place_locked_item(item)
-                else:
-                    pool.append(item)
+                        location = self.create_location(location_name)
+                        if not vanilla and location_name in wp_exclusions:
+                            if location_name == 'King_Fragment':
+                                excluded = True
+                            else:
+                                vanilla = True
+                        if excluded:
+                            location.progress_type = LocationProgressType.EXCLUDED
+                        if vanilla:
+                            location.place_locked_item(item)
+                        else:
+                            pool.append(item)
 
                 if location_name in wp_exclusions:
                     print(f"World {self.world.player_name[self.player]} - Item {item_name} - Location {location_name} - vanilla={vanilla!r}, excluded={excluded!r}")
