@@ -299,6 +299,9 @@ if __name__ == '__main__':
     apmc_data = None
     data_version = None
 
+    if apmc_file is None and not args.install:
+        apmc_file = Utils.open_filename('Select APMC file', (('APMC File', ('.apmc',)),))
+
     if apmc_file is not None:
         apmc_data = read_apmc_file(apmc_file)
         data_version = apmc_data.get('client_version', '')
