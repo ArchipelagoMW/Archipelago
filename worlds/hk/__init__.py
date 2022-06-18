@@ -134,6 +134,7 @@ class HKWorld(World):
         "Salubra_(Requires_Charms)": "Charm"
     }
     charm_costs: typing.List[int]
+    cached_filler_items = {}
     data_version = 2
 
     def __init__(self, world, player):
@@ -215,13 +216,13 @@ class HKWorld(World):
     def create_items(self):
         # Generate item pool and associated locations (paired in HK)
         pool: typing.List[HKItem] = []
-        geo_replace: typing.Set[str] = set()
+        junk_replace: typing.Set[str] = set()
         needed_extra_shop_slots = (self.world.RandomizeNail[self.player] * 3) + \
         self.world.RandomizeSwim[self.player] + self.world.RandomizeFocus[self.player]
         if self.world.RemoveSpellUpgrades[self.player]:
-            geo_replace.add("Abyss_Shriek")
-            geo_replace.add("Shade_Soul")
-            geo_replace.add("Descending_Dark")
+            junk_replace.add("Abyss_Shriek")
+            junk_replace.add("Shade_Soul")
+            junk_replace.add("Descending_Dark")
 
         wp_exclusions = self.white_palace_exclusions()
         for option_key, option in hollow_knight_randomize_options.items():
@@ -229,8 +230,8 @@ class HKWorld(World):
             for item_name, location_name in zip(option.items, option.locations):
                 vanilla = not randomized
                 excluded = False
-                if item_name in geo_replace:
-                    item_name = "Geo_Rock-Default"
+                if item_name in junk_replace:
+                    item_name = self.get_filler_item_name()
                 split = None
                 if item_name == "Crystal_Heart" and self.world.SplitCrystalHeart[self.player]:
                     split = "Crystal_Heart"
@@ -470,6 +471,20 @@ class HKWorld(World):
         assert 0 < i < 18, "limited number of multi location IDs reserved."
         return f"{base}_{i}"
 
+    def get_filler_item_name(self) -> str:
+        if self.player not in self.cached_filler_items:
+            fillers = ["One_Geo", "Soul_Refill"]
+            exclusions = self.white_palace_exclusions()
+            for group in (
+                    'RandomizeGeoRocks', 'RandomizeSoulTotems', 'RandomizeLoreTablets', 'RandomizeJunkPitChests',
+                    'RandomizeRancidEggs'
+            ):
+                if getattr(self.world, group):
+                    fillers.extend(item for item in hollow_knight_randomize_options[group].items if item not in
+                                   exclusions)
+            self.cached_filler_items[self.player] = fillers
+        return self.world.random.choice(self.cached_filler_items[self.player])
+
 
 def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:
     ret = Region(name, RegionType.Generic, name, player)
@@ -483,6 +498,7 @@ def create_region(world: MultiWorld, player: int, name: str, location_names=None
         for exit in exits:
             ret.exits.append(Entrance(player, exit, ret))
     return ret
+
 
 
 class HKLocation(Location):
