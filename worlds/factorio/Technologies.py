@@ -210,12 +210,6 @@ raw_recipes["uranium-ore"] = {
     "category": "mining",
     "energy": 2
 }
-raw_recipes["crude-oil"] = {
-    "ingredients": {},
-    "products": {"crude-oil": 1},
-    "category": "basic-fluid",
-    "energy": 1
-}
 
 # raw_recipes["iron-ore"] = {"ingredients": {}, "products": {"iron-ore": 1}, "category": "mining", "energy": 2}
 # raw_recipes["copper-ore"] = {"ingredients": {}, "products": {"copper-ore": 1}, "category": "mining", "energy": 2}
