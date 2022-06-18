@@ -254,10 +254,10 @@ def get_minecraft_versions(version, release_channel="release"):
         local = True
 
     if local:
-        with open(Utils.local_path("minecraft_versions.json"), 'r') as f:
+        with open(Utils.user_path("minecraft_versions.json"), 'r') as f:
             data = json.load(f)
     else:
-        with open(Utils.local_path("minecraft_versions.json"), 'w') as f:
+        with open(Utils.user_path("minecraft_versions.json"), 'w') as f:
             json.dump(data, f)
 
     try:
