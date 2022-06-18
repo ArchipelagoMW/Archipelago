@@ -206,7 +206,7 @@ class HKWorld(World):
             return self.create_filler()
         item_list = []
         if self.world.RandomizeNail[self.player]:
-            item_list += [self.create_item("Upslash"), self.create_item("Rightslash"), self.create_item("Downslash")]
+            item_list += [self.create_item("Upslash"), self.create_item("Rightslash"), self.create_item("Leftslash")]
         if self.world.RandomizeSwim[self.player]:
             item_list.append(self.create_item("Swim"))
         if self.world.RandomizeFocus[self.player]:
@@ -268,12 +268,9 @@ class HKWorld(World):
                     item = self.create_item(item_name)
                 # self.create_location(location_name).place_locked_item(item)
                     if location_name == "Start":
-                        if (item_name == "Focus" and self.world.RandomizeFocus[self.player]) or (item_name ==
-                                                                                                 "Swim" and
-                                                                                                 self.world.RandomizeSwim[
-                                                                                                     self.player]) or (
-                                item_name in ["Upslash",
-                                              "Leftslash", "Rightslash"] and self.world.RandomizeNail[self.player]):
+                        if (item_name == "Focus" and self.world.RandomizeFocus[self.player]) or (item_name == "Swim"
+                                and self.world.RandomizeSwim[self.player]) or (item_name in ["Upslash","Leftslash",
+                                "Rightslash"] and self.world.RandomizeNail[self.player]):
                             continue
                         self.world.push_precollected(item)
                     else:
