@@ -390,30 +390,20 @@ class StartingGeo(Range):
 hollow_knight_options: typing.Dict[str, type(Option)] = {
     **hollow_knight_randomize_options,
     **hollow_knight_logic_options,
-    SplitCrystalHeart.__name__: SplitCrystalHeart,
-    SplitMothwingCloak.__name__: SplitMothwingCloak,
-    SplitMantisClaw.__name__: SplitMantisClaw,
-    StartLocation.__name__: StartLocation,
-    MinimumGrubPrice.__name__: MinimumGrubPrice,
-    MaximumGrubPrice.__name__: MaximumGrubPrice,
-    MinimumEssencePrice.__name__: MinimumEssencePrice,
-    MaximumEssencePrice.__name__: MaximumEssencePrice,
-    MinimumCharmPrice.__name__: MinimumCharmPrice,
-    MaximumCharmPrice.__name__: MaximumCharmPrice,
-    RandomCharmCosts.__name__: RandomCharmCosts,
-    PlandoCharmCosts.__name__: PlandoCharmCosts,
-    MinimumEggPrice.__name__: MinimumEggPrice,
-    MaximumEggPrice.__name__: MaximumEggPrice,
-    SlyShopSlots.__name__: SlyShopSlots,
-    SlyKeyShopSlots.__name__: SlyKeyShopSlots,
-    IseldaShopSlots.__name__: IseldaShopSlots,
-    SalubraShopSlots.__name__: SalubraShopSlots,
-    SalubraCharmShopSlots.__name__: SalubraCharmShopSlots,
-    LegEaterShopSlots.__name__: LegEaterShopSlots,
-    GrubfatherRewardSlots.__name__: GrubfatherRewardSlots,
-    SeerRewardSlots.__name__: SeerRewardSlots,
-    EggShopSlots.__name__: EggShopSlots,
-    Goal.__name__: Goal,
-    WhitePalace.__name__: WhitePalace,
-    StartingGeo.__name__: StartingGeo,
+    **{
+        option.__name__: option
+        for option in (
+            StartLocation, Goal, WhitePalace, StartingGeo,
+            MinimumGrubPrice, MaximumGrubPrice,
+            MinimumEssencePrice, MaximumEssencePrice,
+            MinimumCharmPrice, MaximumCharmPrice,
+            RandomCharmCosts, PlandoCharmCosts,
+            MinimumEggPrice, MaximumEggPrice, EggShopSlots,
+            SlyShopSlots, SlyKeyShopSlots, IseldaShopSlots,
+            SalubraShopSlots, SalubraCharmShopSlots,
+            LegEaterShopSlots, GrubfatherRewardSlots,
+            SeerRewardSlots, SplitCrystalHeart,
+            SplitMothwingCloak, SplitMantisClaw
+        )
+    }
 }
