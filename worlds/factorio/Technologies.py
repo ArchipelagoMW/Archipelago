@@ -1,25 +1,33 @@
 from __future__ import annotations
-# Factorio technologies are imported from a .json document in /data
-from typing import Dict, Set, FrozenSet, Tuple, Union, List
-from collections import Counter
-import os
+
 import json
+import logging
+import os
 import string
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
+from typing import Dict, Set, FrozenSet, Tuple, Union, List
 
 import Utils
-import logging
-
 from . import Options
 
 factorio_id = factorio_base_id = 2 ** 17
+# Factorio technologies are imported from a .json document in /data
 source_folder = os.path.join(os.path.dirname(__file__), "data")
 
-with open(os.path.join(source_folder, "techs.json")) as f:
-    raw = json.load(f)
-with open(os.path.join(source_folder, "recipes.json")) as f:
-    raw_recipes = json.load(f)
-with open(os.path.join(source_folder, "machines.json")) as f:
-    raw_machines = json.load(f)
+pool = ThreadPoolExecutor(1)
+
+
+def load_json_data(data_name: str) -> dict:
+    with open(os.path.join(source_folder, f"{data_name}.json")) as f:
+        return json.load(f)
+
+
+techs_future = pool.submit(load_json_data, "techs")
+recipes_future = pool.submit(load_json_data, "recipes")
+machines_future = pool.submit(load_json_data, "machines")
+items_future = pool.submit(load_json_data, "items")
+
 tech_table: Dict[str, int] = {}
 technology_table: Dict[str, Technology] = {}
 
@@ -177,8 +185,7 @@ class Machine(FactorioElement):
 recipe_sources: Dict[str, Set[str]] = {}  # recipe_name -> technology source
 
 # recipes and technologies can share names in Factorio
-for technology_name in sorted(raw):
-    data = raw[technology_name]
+for technology_name, data in sorted(techs_future.result().items()):
     current_ingredients = set(data["ingredients"])
     technology = Technology(technology_name, current_ingredients, factorio_id,
                             has_modifier=data["has_modifier"], unlocks=set(data["unlocks"]))
@@ -188,11 +195,14 @@ for technology_name in sorted(raw):
     for recipe_name in technology.unlocks:
         recipe_sources.setdefault(recipe_name, set()).add(technology_name)
 
-del (raw)
+del techs_future
 
 recipes = {}
 all_product_sources: Dict[str, Set[Recipe]] = {"character": set()}
 # add uranium mining to logic graph. TODO: add to automatic extractor for mod support
+raw_recipes = recipes_future.result()
+del recipes_future
+
 raw_recipes["uranium-ore"] = {
     "ingredients": {"sulfuric-acid": 1},
     "products": {"uranium-ore": 1},
@@ -225,11 +235,10 @@ for recipe_name, recipe_data in raw_recipes.items():
         for product_name in recipe.products:
             all_product_sources.setdefault(product_name, set()).add(recipe)
 
-del (raw_recipes)
 
 machines: Dict[str, Machine] = {}
 
-for name, categories in raw_machines.items():
+for name, categories in machines_future.result().items():
     machine = Machine(name, set(categories))
     machines[name] = machine
 
@@ -238,7 +247,8 @@ machines["electric-mining-drill"] = Machine("electric-mining-drill", {"mining"})
 machines["pumpjack"] = Machine("pumpjack", {"basic-fluid"})
 machines["assembling-machine-1"].categories.add("crafting-with-fluid")  # mod enables this
 machines["character"].categories.add("basic-crafting")  # somehow this is implied and not exported
-del (raw_machines)
+
+del machines_future
 
 # build requirements graph for all technology ingredients
 
@@ -504,3 +514,12 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
         already_taken |= current
         current_difficulty *= 2
     return science_pack_pools
+
+
+item_stack_sizes: Dict[str, int] = items_future.result()
+non_stacking_items: Set[str] = {item for item, stack in item_stack_sizes.items() if stack == 1}
+stacking_items: Set[str] = set(item_stack_sizes) - non_stacking_items
+
+# cleanup async helpers
+pool.shutdown()
+del pool

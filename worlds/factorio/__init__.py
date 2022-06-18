@@ -8,7 +8,7 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, rocket_recipes, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
-    liquids
+    liquids, stacking_items
 from .Shapes import get_shapes
 from .Mod import generate_mod
 from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal
@@ -226,11 +226,14 @@ class Factorio(World):
         return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
                       original.products, original.energy)
 
-    def make_balanced_recipe(self, original: Recipe, pool: list, factor: float = 1, allow_liquids: int = 2) -> \
-            Recipe:
+    def make_balanced_recipe(self, original: Recipe, pool: typing.Set[str], factor: float = 1,
+                             allow_liquids: int = 2) -> Recipe:
         """Generate a recipe from pool with time and cost similar to original * factor"""
         new_ingredients = {}
-        pool = sorted(pool, key=lambda x: self.world.random.random())
+        # have to first sort for determinism, while filtering out non-stacking items
+        pool: typing.List[str] = sorted(pool & stacking_items)
+        # then sort with random data to shuffle
+        self.world.random.shuffle(pool)
         target_raw = int(sum((count for ingredient, count in original.base_cost.items())) * factor)
         target_energy = original.total_energy * factor
         target_num_ingredients = len(original.ingredients)
@@ -346,9 +349,9 @@ class Factorio(World):
 
         if self.world.silo[self.player].value == Silo.option_randomize_recipe \
                 or self.world.satellite[self.player].value == Satellite.option_randomize_recipe:
-            valid_pool = []
+            valid_pool = set()
             for pack in sorted(self.world.max_science_pack[self.player].get_allowed_packs()):
-                valid_pool += sorted(science_pack_pools[pack])
+                valid_pool |= science_pack_pools[pack]
 
             if self.world.silo[self.player].value == Silo.option_randomize_recipe:
                 new_recipe = self.make_balanced_recipe(recipes["rocket-silo"], valid_pool,
