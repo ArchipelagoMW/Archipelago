@@ -73,4 +73,4 @@ export SC2PATH="/home/user/Games/starcraft-ii/drive_c/Program Files (x86)/StarCr
 ./Archipelago_0.3.2_linux-x86_64.AppImage Starcraft2Client.py
 ```
 
-    For Lutris installs, you can run `lutris lutris:rungameid/${ID} --output-script sc2.sh` to get all of the relevant environment variables Lutris sets to run StarCraft 2, including the path to the Wine binary that Lutris uses. You can then remove the line that runs the Battle.Net launcher and copy the code above into the existing script.
+> For Lutris installs, you can run `lutris lutris:rungameid/${ID} --output-script sc2.sh` to get all of the relevant environment variables Lutris sets to run StarCraft 2, including the path to the Wine binary that Lutris uses. You can then remove the line that runs the Battle.Net launcher and copy the code above into the existing script.
