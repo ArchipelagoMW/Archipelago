@@ -234,7 +234,7 @@ def adjustGUI():
         guiargs.sprite = rom_vars.sprite
         if rom_vars.sprite_pool:
             guiargs.world = AdjusterWorld(rom_vars.sprite_pool)
-        guiargs.oof = None
+        guiargs.oof = rom_vars.oof
 
         try:
             guiargs, path = adjust(args=guiargs)
@@ -273,7 +273,7 @@ def adjustGUI():
         else:
             guiargs.sprite = rom_vars.sprite
         guiargs.sprite_pool = rom_vars.sprite_pool
-        guiargs.oof = None
+        guiargs.oof = rom_vars.oof
         persistent_store("adjuster", GAME_ALTTP, guiargs)
         messagebox.showinfo(title="Success", message="Settings saved to persistent storage")
 
@@ -489,6 +489,46 @@ class BackgroundTaskProgressNullWindow(BackgroundTask):
         self.stop()
 
 
+class ToolTip(object):
+
+    def __init__(self, widget):
+        self.widget = widget
+        self.tipwindow = None
+        self.id = None
+        self.x = self.y = 0
+
+    def showtip(self, text):
+        "Display text in tooltip window"
+        self.text = text
+        if self.tipwindow or not self.text:
+            return
+        x, y, cx, cy = self.widget.bbox("insert")
+        x = x + self.widget.winfo_rootx() + 20
+        y = y + cy + self.widget.winfo_rooty() + 20
+        self.tipwindow = tw = Toplevel(self.widget)
+        tw.wm_overrideredirect(1)
+        tw.wm_geometry("+%d+%d" % (x, y))
+        label = Label(tw, text=self.text, justify=LEFT,
+                      background="#ffffe0", borderwidth=1,
+                      font=("tahoma", "8", "normal"))
+        label.pack(ipadx=1)
+
+    def hidetip(self):
+        tw = self.tipwindow
+        self.tipwindow = None
+        if tw:
+            tw.destroy()
+
+def CreateToolTip(widget, text):
+    toolTip = ToolTip(widget)
+    def enter(event):
+        toolTip.showtip(text)
+    def leave(event):
+        toolTip.hidetip()
+    widget.bind('<Enter>', enter)
+    widget.bind('<Leave>', leave)
+
+
 def get_rom_frame(parent=None):
     adjuster_settings = get_adjuster_settings(GAME_ALTTP)
     if not adjuster_settings:
@@ -530,6 +570,7 @@ def get_rom_options_frame(parent=None):
         "reduceflashing": True,
         "deathlink": False,
         "sprite": None,
+        "oof": None,
         "quickswap": True,
         "menuspeed": 'normal',
         "heartcolor": 'red',
@@ -606,12 +647,50 @@ def get_rom_options_frame(parent=None):
     spriteEntry.pack(side=LEFT)
     spriteSelectButton.pack(side=LEFT)
 
+    oofDialogFrame = Frame(romOptionsFrame)
+    oofDialogFrame.grid(row=1, column=1)
+    baseOofLabel = Label(oofDialogFrame, text='"OOF" Sound:')
+
+    vars.oofNameVar = StringVar()
+    vars.oof = adjuster_settings.oof
+
+    def set_oof(oof_param):
+        nonlocal vars
+        if isinstance(oof_param, str) and os.path.isfile(oof_param) and os.path.getsize(oof_param) <= 2673:
+            vars.oof = oof_param
+            vars.oofNameVar.set(oof_param.rsplit('/',1)[-1])
+        else:
+            vars.oof = None
+            vars.oofNameVar.set('(unchanged)')
+
+    set_oof(adjuster_settings.oof)
+    oofEntry = Label(oofDialogFrame, textvariable=vars.oofNameVar)
+
+    def OofSelect():
+        nonlocal vars
+        oof_file = filedialog.askopenfilename(
+            filetypes=[("BRR files", ".brr"),
+                       ("All Files", "*")])
+        try:
+            set_oof(oof_file)
+        except Exception:
+            set_oof(None)
+
+    oofSelectButton = Button(oofDialogFrame, text='...', command=OofSelect)
+    CreateToolTip(oofSelectButton,
+                  text="Select a .brr file no more than 2673 bytes.\n" + \
+                  "This can be created from a <=0.394s 16-bit signed PCM .wav file at 12khz using snesbrr.")
+
+    baseOofLabel.pack(side=LEFT)
+    oofEntry.pack(side=LEFT)
+    oofSelectButton.pack(side=LEFT)
+
     vars.quickSwapVar = IntVar(value=adjuster_settings.quickswap)
     quickSwapCheckbutton = Checkbutton(romOptionsFrame, text="L/R Quickswapping", variable=vars.quickSwapVar)
     quickSwapCheckbutton.grid(row=1, column=0, sticky=E)
 
     menuspeedFrame = Frame(romOptionsFrame)
-    menuspeedFrame.grid(row=1, column=1, sticky=E)
+    menuspeedFrame.grid(row=6, column=1, sticky=E)
     menuspeedLabel = Label(menuspeedFrame, text='Menu speed')
     menuspeedLabel.pack(side=LEFT)
     vars.menuspeedVar = StringVar()
@@ -1049,7 +1128,6 @@ class SpriteSelector():
     @property
     def custom_sprite_dir(self):
         return user_path("data", "sprites", "custom")
-
 
 def get_image_for_sprite(sprite, gif_only: bool = False):
     if not sprite.valid:
