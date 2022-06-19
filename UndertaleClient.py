@@ -300,6 +300,8 @@ async def game_watcher(ctx: UndertaleContext):
                     st = file.split("check ", -1)[1]
                     st = st.split(".spot", -1)[0]
                     sending = sending+[(int(st))+12000]
+                    message = [{"cmd": 'LocationChecks', "locations": sending}]
+                    await ctx.send_msgs(message)
                 if file.find("spots.mine") > -1:
                     with open(root+"/"+file) as mine:
                         this_x = mine.readline()
@@ -307,14 +309,12 @@ async def game_watcher(ctx: UndertaleContext):
                         this_room = mine.readline()
                         this_sprite = mine.readline()
                         this_frame = mine.readline()
+                        mine.close()
                     message = [{"cmd": 'Bounce', "tags": ['online'], "games": ["Undertale"], "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room, "spr": this_sprite, "frm": this_frame}}]
                     await ctx.send_msgs(message)
-                    os.remove(root+"/"+file)
                 if file.find("victory") > -1 and file.find(str(ctx.route)) > -1:
                     victory = True
         ctx.locations_checked = sending
-        message = [{"cmd": 'LocationChecks', "locations": sending}]
-        await ctx.send_msgs(message)
         if not ctx.finished_game and victory:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
