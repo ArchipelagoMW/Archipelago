@@ -105,6 +105,12 @@ def main():
                              Alternatively, can be a ALttP Rom patched with a Link
                              sprite that will be extracted.
                              ''')
+    parser.add_argument('--oof', help='''\
+                             Path to a sound effect to replace Link's "oof" sound.
+                             Needs to be in a .brr format and have a length of no
+                             more than 2673 bytes, created from a 16-bit signed PCM
+                             .wav at 12khz. https://github.com/boldowa/snesbrr
+                             ''')
     parser.add_argument('--names', default='', type=str)
     parser.add_argument('--update_sprites', action='store_true', help='Update Sprite Database, then exit.')
     args = parser.parse_args()
@@ -123,6 +129,9 @@ def main():
     else:
         if args.sprite is not None and not os.path.isfile(args.sprite) and not Sprite.get_sprite_from_name(args.sprite):
             input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
+            sys.exit(1)
+        if args.oof is not None and not os.path.isfile(args.oof):
+            input('Could not find link oof sound effect at given location. \nPress Enter to exit.')
             sys.exit(1)
 
         args, path = adjust(args=args)
@@ -163,7 +172,7 @@ def adjust(args):
         world = getattr(args, "world")
 
     apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.menuspeed, args.music,
-                       args.sprite, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world,
+                       args.sprite, args.oof, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world,
                        deathlink=args.deathlink, allowcollect=args.allowcollect)
     path = output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc')
     rom.write_to_file(path)
@@ -225,6 +234,7 @@ def adjustGUI():
         guiargs.sprite = rom_vars.sprite
         if rom_vars.sprite_pool:
             guiargs.world = AdjusterWorld(rom_vars.sprite_pool)
+        guiargs.oof = None
 
         try:
             guiargs, path = adjust(args=guiargs)
@@ -263,6 +273,7 @@ def adjustGUI():
         else:
             guiargs.sprite = rom_vars.sprite
         guiargs.sprite_pool = rom_vars.sprite_pool
+        guiargs.oof = None
         persistent_store("adjuster", GAME_ALTTP, guiargs)
         messagebox.showinfo(title="Success", message="Settings saved to persistent storage")
 
@@ -1264,3 +1275,4 @@ class ToolTips(object):
 
 if __name__ == '__main__':
     main()
+
