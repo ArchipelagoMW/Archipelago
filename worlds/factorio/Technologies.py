@@ -25,6 +25,7 @@ def load_json_data(data_name: str) -> Union[List[str], Dict[str, Any]]:
 
 techs_future = pool.submit(load_json_data, "techs")
 recipes_future = pool.submit(load_json_data, "recipes")
+resources_future = pool.submit(load_json_data, "resources")
 machines_future = pool.submit(load_json_data, "machines")
 fluids_future = pool.submit(load_json_data, "fluids")
 items_future = pool.submit(load_json_data, "items")
@@ -154,8 +155,11 @@ class Recipe(FactorioElement):
         for ingredient, cost in self.ingredients.items():
             if ingredient in all_product_sources:
                 for recipe in all_product_sources[ingredient]:
-                    ingredients.update({name: amount * cost / recipe.products[ingredient] for name, amount in
-                                        recipe.base_cost.items()})
+                    if recipe.ingredients:
+                        ingredients.update({name: amount * cost / recipe.products[ingredient] for name, amount in
+                                            recipe.base_cost.items()})
+                    else:
+                        ingredients[ingredient] += recipe.energy * cost / recipe.products[ingredient]
             else:
                 ingredients[ingredient] += cost
         return ingredients
@@ -203,18 +207,18 @@ all_product_sources: Dict[str, Set[Recipe]] = {"character": set()}
 # add uranium mining to logic graph. TODO: add to automatic extractor for mod support
 raw_recipes = recipes_future.result()
 del recipes_future
-
-raw_recipes["uranium-ore"] = {
-    "ingredients": {"sulfuric-acid": 1},
-    "products": {"uranium-ore": 1},
-    "category": "mining",
-    "energy": 2
-}
-
-# raw_recipes["iron-ore"] = {"ingredients": {}, "products": {"iron-ore": 1}, "category": "mining", "energy": 2}
-# raw_recipes["copper-ore"] = {"ingredients": {}, "products": {"copper-ore": 1}, "category": "mining", "energy": 2}
-# raw_recipes["coal-ore"] = {"ingredients": {}, "products": {"coal": 1}, "category": "mining", "energy": 2}
-# raw_recipes["stone"] = {"ingredients": {}, "products": {"coal": 1}, "category": "mining", "energy": 2}
+for resource_name, resource_data in resources_future.result().items():
+    raw_recipes[f"mining-{resource_name}"] = current_recipe = {
+        "ingredients": {},
+        "products": {},
+        "energy": resource_data["mining_time"],
+        "category": resource_data["category"]
+    }
+    for name, data in resource_data["products"].items():
+        current_recipe["products"].update({data["name"]: data["amount"]})
+    if "required_fluid" in resource_data:
+        current_recipe["ingredients"] = {resource_data["required_fluid"]: resource_data["fluid_amount"]}
+del resources_future
 
 for recipe_name, recipe_data in raw_recipes.items():
     # example:
@@ -237,8 +241,8 @@ for name, categories in machines_future.result().items():
     machine = Machine(name, set(categories))
     machines[name] = machine
 
-# add electric mining drill as a crafting machine to resolve uranium-ore
-machines["electric-mining-drill"] = Machine("electric-mining-drill", {"mining"})
+# add electric mining drill as a crafting machine to resolve basic-solid (mining)
+machines["electric-mining-drill"] = Machine("electric-mining-drill", {"basic-solid"})
 machines["pumpjack"] = Machine("pumpjack", {"basic-fluid"})
 machines["assembling-machine-1"].categories.add("crafting-with-fluid")  # mod enables this
 machines["character"].categories.add("basic-crafting")  # somehow this is implied and not exported
@@ -332,24 +336,7 @@ def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe, satellite_
     return {tech.name for tech in techs}
 
 
-free_sample_blacklist: Set[str] = all_ingredient_names | {"rocket-part"}
-
-rocket_recipes = {
-    Options.MaxSciencePack.option_space_science_pack:
-        {"rocket-control-unit": 10, "low-density-structure": 10, "rocket-fuel": 10},
-    Options.MaxSciencePack.option_utility_science_pack:
-        {"speed-module": 10, "steel-plate": 10, "solid-fuel": 10},
-    Options.MaxSciencePack.option_production_science_pack:
-        {"speed-module": 10, "steel-plate": 10, "solid-fuel": 10},
-    Options.MaxSciencePack.option_chemical_science_pack:
-        {"advanced-circuit": 10, "steel-plate": 10, "solid-fuel": 10},
-    Options.MaxSciencePack.option_military_science_pack:
-        {"defender-capsule": 10, "stone-wall": 10, "coal": 10},
-    Options.MaxSciencePack.option_logistic_science_pack:
-        {"electronic-circuit": 10, "stone-brick": 10, "coal": 10},
-    Options.MaxSciencePack.option_automation_science_pack:
-        {"copper-cable": 10, "iron-plate": 10, "wood": 10}
-}
+free_sample_exclusions: Set[str] = all_ingredient_names | {"rocket-part"}
 
 # progressive technologies
 # auto-progressive
@@ -502,7 +489,6 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
                 current |= set(recipe.products)
 
         if science_pack == "automation-science-pack":
-            current |= {"iron-ore", "copper-ore", "coal", "stone"}
             # Can't handcraft automation science if fluids end up in its recipe, making the seed impossible.
             current -= fluids
         elif science_pack == "logistic-science-pack":
