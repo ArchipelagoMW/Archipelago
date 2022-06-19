@@ -153,9 +153,9 @@ class UndertaleContext(CommonContext):
 
         await self.send_connect()
 
-    async def on_deathlink(self, data: dict):
+    def on_deathlink(self, data: dict):
         self.got_deathlink = True
-        await super().on_deathlink()
+        super().on_deathlink(data)
 
 
 async def server_loop(ctx: CommonContext, address=None):
