@@ -112,6 +112,17 @@ class LevelGateDistribution(Choice):
     default = 1
 
 
+class LevelGateCosts(Choice):
+    """
+    Determines how many emblems are required to unlock level gates
+    """
+    display_name = "Level Gate Costs"
+    option_low = 0
+    option_medium = 1
+    option_high = 2
+    default = 2
+
+
 class RequiredRank(Choice):
     """
     Determines what minimum Rank is required to send a check for a mission
@@ -180,6 +191,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "number_of_level_gates": NumberOfLevelGates,
     "level_gate_distribution": LevelGateDistribution,
+    "level_gate_costs": LevelGateCosts,
     "chao_garden_difficulty": ChaoGardenDifficulty,
     "include_chao_karate": IncludeChaoKarate,
     "chao_race_checks": ChaoRaceChecks,
