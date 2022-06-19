@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import copy
-from enum import Enum, unique
+from enum import unique, IntEnum, IntFlag
 import logging
 import json
 import functools
@@ -911,7 +911,7 @@ class CollectionState():
 
 
 @unique
-class RegionType(int, Enum):
+class RegionType(IntEnum):
     Generic = 0
     LightWorld = 1
     DarkWorld = 2
@@ -1066,7 +1066,7 @@ class Boss():
         return f"Boss({self.name})"
 
 
-class LocationProgressType(Enum):
+class LocationProgressType(IntEnum):
     DEFAULT = 1
     PRIORITY = 2
     EXCLUDED = 3
@@ -1138,19 +1138,29 @@ class Location:
         return "at " + self.name.replace("_", " ").replace("-", " ")
 
 
-class Item():
+class ItemClassification(IntFlag):
+    filler = 0b0000  # aka trash, as in filler items like ammo, currency etc,
+    progression = 0b0001  # Item that is logically relevant
+    useful = 0b0010  # Item that is generally quite useful, but not required for anything logical
+    trap = 0b0100  # detrimental or entirely useless (nothing) item
+    skip_balancing = 0b1000  # should technically never occur on its own
+    # Item that is logically relevant, but progression balancing should not touch.
+    # Typically currency or other counted items.
+    progression_skip_balancing = 0b1001  # only progression gets balanced
+
+    def as_flag(self) -> int:
+        """As Network API flag int."""
+        return int(self & 0b0111)
+
+
+class Item:
     location: Optional[Location] = None
     world: Optional[MultiWorld] = None
     code: Optional[int] = None  # an item with ID None is called an Event, and does not get written to multidata
     name: str
     game: str = "Generic"
     type: str = None
-    # indicates if this is a negative impact item. Causes these to be handled differently by various games.
-    trap: bool = False
-    # change manually to ensure that a specific non-progression item never goes on an excluded location
-    never_exclude = False
-    # item is not considered by progression balancing despite being progression
-    skip_in_prog_balancing: bool = False
+    classification: ItemClassification
 
     # need to find a decent place for these to live and to allow other games to register texts if they want.
     pedestal_credit_text: str = "and the Unknown Item"
@@ -1165,9 +1175,9 @@ class Item():
     map: bool = False
     compass: bool = False
 
-    def __init__(self, name: str, advancement: bool, code: Optional[int], player: int):
+    def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int):
         self.name = name
-        self.advancement = advancement
+        self.classification = classification
         self.player = player
         self.code = code
 
@@ -1180,8 +1190,24 @@ class Item():
         return getattr(self, "_pedestal_hint_text", self.name.replace("_", " ").replace("-", " "))
 
     @property
+    def advancement(self) -> bool:
+        return bool(self.classification & ItemClassification.progression)
+
+    @property
+    def skip_in_prog_balancing(self) -> bool:
+        return self.classification == ItemClassification.progression_skip_balancing
+
+    @property
+    def useful(self) -> bool:
+        return bool(self.classification & ItemClassification.useful)
+
+    @property
+    def trap(self) -> bool:
+        return bool(self.classification & ItemClassification.trap)
+
+    @property
     def flags(self) -> int:
-        return self.advancement + (self.never_exclude << 1) + (self.trap << 2)
+        return self.classification.as_flag()
 
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player

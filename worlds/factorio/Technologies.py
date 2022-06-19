@@ -1,25 +1,34 @@
 from __future__ import annotations
-# Factorio technologies are imported from a .json document in /data
-from typing import Dict, Set, FrozenSet, Tuple, Union, List
-from collections import Counter
-import os
+
 import json
+import logging
+import os
 import string
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
+from typing import Dict, Set, FrozenSet, Tuple, Union, List, Any
 
 import Utils
-import logging
-
 from . import Options
 
 factorio_id = factorio_base_id = 2 ** 17
+# Factorio technologies are imported from a .json document in /data
 source_folder = os.path.join(os.path.dirname(__file__), "data")
 
-with open(os.path.join(source_folder, "techs.json")) as f:
-    raw = json.load(f)
-with open(os.path.join(source_folder, "recipes.json")) as f:
-    raw_recipes = json.load(f)
-with open(os.path.join(source_folder, "machines.json")) as f:
-    raw_machines = json.load(f)
+pool = ThreadPoolExecutor(1)
+
+
+def load_json_data(data_name: str) -> Union[List[str], Dict[str, Any]]:
+    with open(os.path.join(source_folder, f"{data_name}.json")) as f:
+        return json.load(f)
+
+
+techs_future = pool.submit(load_json_data, "techs")
+recipes_future = pool.submit(load_json_data, "recipes")
+machines_future = pool.submit(load_json_data, "machines")
+fluids_future = pool.submit(load_json_data, "fluids")
+items_future = pool.submit(load_json_data, "items")
+
 tech_table: Dict[str, int] = {}
 technology_table: Dict[str, Technology] = {}
 
@@ -177,8 +186,7 @@ class Machine(FactorioElement):
 recipe_sources: Dict[str, Set[str]] = {}  # recipe_name -> technology source
 
 # recipes and technologies can share names in Factorio
-for technology_name in sorted(raw):
-    data = raw[technology_name]
+for technology_name, data in sorted(techs_future.result().items()):
     current_ingredients = set(data["ingredients"])
     technology = Technology(technology_name, current_ingredients, factorio_id,
                             has_modifier=data["has_modifier"], unlocks=set(data["unlocks"]))
@@ -188,22 +196,19 @@ for technology_name in sorted(raw):
     for recipe_name in technology.unlocks:
         recipe_sources.setdefault(recipe_name, set()).add(technology_name)
 
-del (raw)
+del techs_future
 
 recipes = {}
 all_product_sources: Dict[str, Set[Recipe]] = {"character": set()}
 # add uranium mining to logic graph. TODO: add to automatic extractor for mod support
+raw_recipes = recipes_future.result()
+del recipes_future
+
 raw_recipes["uranium-ore"] = {
     "ingredients": {"sulfuric-acid": 1},
     "products": {"uranium-ore": 1},
     "category": "mining",
     "energy": 2
-}
-raw_recipes["crude-oil"] = {
-    "ingredients": {},
-    "products": {"crude-oil": 1},
-    "category": "basic-fluid",
-    "energy": 1
 }
 
 # raw_recipes["iron-ore"] = {"ingredients": {}, "products": {"iron-ore": 1}, "category": "mining", "energy": 2}
@@ -225,11 +230,10 @@ for recipe_name, recipe_data in raw_recipes.items():
         for product_name in recipe.products:
             all_product_sources.setdefault(product_name, set()).add(recipe)
 
-del (raw_recipes)
 
 machines: Dict[str, Machine] = {}
 
-for name, categories in raw_machines.items():
+for name, categories in machines_future.result().items():
     machine = Machine(name, set(categories))
     machines[name] = machine
 
@@ -238,7 +242,8 @@ machines["electric-mining-drill"] = Machine("electric-mining-drill", {"mining"})
 machines["pumpjack"] = Machine("pumpjack", {"basic-fluid"})
 machines["assembling-machine-1"].categories.add("crafting-with-fluid")  # mod enables this
 machines["character"].categories.add("basic-crafting")  # somehow this is implied and not exported
-del (raw_machines)
+
+del machines_future
 
 # build requirements graph for all technology ingredients
 
@@ -300,7 +305,7 @@ machine_per_category: Dict[str: str] = {}
 for category, (cost, machine_name) in machine_tech_cost.items():
     machine_per_category[category] = machine_name
 
-del (machine_tech_cost)
+del machine_tech_cost
 
 # required technologies to be able to craft recipes from a certain category
 required_category_technologies: Dict[str, FrozenSet[FrozenSet[Technology]]] = {}
@@ -471,8 +476,9 @@ rel_cost = {
     "used-up-uranium-fuel-cell": 1000
 }
 
-blacklist: Set[str] = all_ingredient_names | {"rocket-part"}
-liquids: Set[str] = {"crude-oil", "water", "sulfuric-acid", "petroleum-gas", "light-oil", "heavy-oil", "lubricant", "steam"}
+exclusion_list: Set[str] = all_ingredient_names | {"rocket-part", "used-up-uranium-fuel-cell"}
+fluids: Set[str] = set(fluids_future.result())
+del fluids_future
 
 
 @Utils.cache_argsless
@@ -486,7 +492,7 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
         return cost
 
     science_pack_pools: Dict[str, Set[str]] = {}
-    already_taken = blacklist.copy()
+    already_taken = exclusion_list.copy()
     current_difficulty = 5
     for science_pack in Options.MaxSciencePack.get_ordered_science_packs():
         current = science_pack_pools[science_pack] = set()
@@ -494,13 +500,25 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
             if (science_pack != "automation-science-pack" or not recipe.recursive_unlocking_technologies) \
                     and get_estimated_difficulty(recipe) < current_difficulty:
                 current |= set(recipe.products)
+
         if science_pack == "automation-science-pack":
             current |= {"iron-ore", "copper-ore", "coal", "stone"}
-            # Can't hand craft automation science if liquids end up in its recipe, making the seed impossible.
-            current -= liquids
+            # Can't handcraft automation science if fluids end up in its recipe, making the seed impossible.
+            current -= fluids
         elif science_pack == "logistic-science-pack":
             current |= {"steam"}
+
         current -= already_taken
         already_taken |= current
         current_difficulty *= 2
+
     return science_pack_pools
+
+
+item_stack_sizes: Dict[str, int] = items_future.result()
+non_stacking_items: Set[str] = {item for item, stack in item_stack_sizes.items() if stack == 1}
+stacking_items: Set[str] = set(item_stack_sizes) - non_stacking_items
+
+# cleanup async helpers
+pool.shutdown()
+del pool

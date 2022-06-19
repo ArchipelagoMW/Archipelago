@@ -8,6 +8,10 @@ os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
 
+import Utils
+if Utils.is_frozen():
+    os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
+
 from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
@@ -42,7 +46,7 @@ from kivy.uix.popup import Popup
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-import Utils
+
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
 
 if typing.TYPE_CHECKING:
@@ -452,20 +456,24 @@ class GameManager(App):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
 
-class ChecksFinderManager(GameManager):
-    logging_pairs = [
-        ("Client", "Archipelago")
-    ]
-    base_title = "Archipelago ChecksFinder Client"
-
-
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
         super(LogtoUI, self).__init__(logging.INFO)
         self.on_log = on_log
 
+    @staticmethod
+    def format_compact(record: logging.LogRecord) -> str:
+        if isinstance(record.msg, Exception):
+            return str(record.msg)
+        return (f'{record.exc_info[1]}\n' if record.exc_info else '') + str(record.msg).split("\n")[0]
+
     def handle(self, record: logging.LogRecord) -> None:
-        self.on_log(self.format(record))
+        if getattr(record, 'skip_gui', False):
+            pass  # skip output
+        elif getattr(record, 'compact_gui', False):
+            self.on_log(self.format_compact(record))
+        else:
+            self.on_log(self.format(record))
 
 
 class UILog(RecycleView):
@@ -507,7 +515,7 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         flags = node.get("flags", 0)
         if flags & 0b001:  # advancement
             itemtype = "progression"
-        elif flags & 0b010:  # never_exclude
+        elif flags & 0b010:  # useful
             itemtype = "useful"
         elif flags & 0b100:  # trap
             itemtype = "trap"

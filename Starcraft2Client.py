@@ -115,13 +115,12 @@ class SC2Context(CommonContext):
                 self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
 
         if cmd in {"PrintJSON"}:
-            noted = False
             if "receiving" in args:
-                if args["receiving"] == self.slot:
+                if self.slot_concerns_self(args["receiving"]):
                     self.announcements.append(args["data"])
-                    noted = True
-            if not noted and "item" in args:
-                if args["item"].player == self.slot:
+                    return
+            if "item" in args:
+                if self.slot_concerns_self(args["item"].player):
                     self.announcements.append(args["data"])
 
     def run_gui(self):
@@ -593,8 +592,8 @@ def calc_objectives_completed(mission, missions_info, locations_done, unfinished
             if (missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i) in locations_done:
                 objectives_complete += 1
             else:
-                unfinished_locations[mission].append(ctx.location_name_getter(
-                    missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i))
+                unfinished_locations[mission].append(ctx.location_names[
+                    missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i])
 
         return objectives_complete
 

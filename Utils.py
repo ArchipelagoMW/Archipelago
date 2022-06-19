@@ -29,7 +29,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith('linux')
@@ -430,7 +430,8 @@ loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': log
 
 
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
-                 log_format: str = "[%(name)s at %(asctime)s]: %(message)s", exception_logger: str = ""):
+                 log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
+                 exception_logger: typing.Optional[str] = None):
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
     os.makedirs(log_folder, exist_ok=True)
@@ -465,6 +466,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         handle_exception._wrapped = True
 
         sys.excepthook = handle_exception
+
+    logging.info(f"Archipelago ({__version__}) logging initialized.")
 
 
 def stream_input(stream, queue):
