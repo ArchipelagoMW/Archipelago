@@ -3,9 +3,9 @@ from BaseClasses import MultiWorld, Region, RegionType, Location, Item, Collecti
 from zilliandomizer.logic_components.regions import Region as ZzRegion
 from zilliandomizer.logic_components.locations import Location as ZzLocation
 from zilliandomizer.logic_components.items import RESCUE
-from zilliandomizer.utils import parse_loc_name
 
-from worlds.zillion.item import ZillionItem
+from .id_maps import loc_zz_name_to_name, loc_name_to_id
+from .item import ZillionItem
 
 
 class ZillionRegion(Region):
@@ -22,26 +22,6 @@ class ZillionRegion(Region):
         self.zz_r = zz_r
 
 
-horizontals = [
-    "in left wall",
-    "far left",
-    "left",
-    "left",
-    "left-center",  # in split rooms, this col is often occupied by a wall
-    "left-center",
-    "center-left",
-    "center",
-    "center",
-    "center-right",
-    "right-center",
-    "right-center",
-    "right",
-    "right",
-    "far right",
-    "in right wall",
-]
-
-
 class ZillionLocation(Location):
     zz_loc: ZzLocation
     game: str = "Zillion"
@@ -49,22 +29,11 @@ class ZillionLocation(Location):
     def __init__(self,
                  zz_loc: ZzLocation,
                  player: int,
-                 name: str = '',
-                 address: Optional[int] = None,
                  parent: Optional[Region] = None) -> None:
-        super().__init__(player, name, address, parent)
+        name = loc_zz_name_to_name(zz_loc.name)
+        loc_id = loc_name_to_id[name]
+        super().__init__(player, name, loc_id, parent)
         self.zz_loc = zz_loc
-        self.hint_text
-
-        # make more readable hint name
-        row, col, y, x = parse_loc_name(name)
-        vertical = "top" if y <= 0x20 \
-            else "top-mid" if y <= 0x40 \
-            else "mid" if y <= 0x60 \
-            else "bottom-mid" if y <= 0x80 \
-            else "bottom"
-        horizontal = horizontals[x >> 4]
-        self._hint_text = f"row {row} col {col} {vertical} {horizontal}"
 
     # override
     def can_fill(self, state: CollectionState, item: Item, check_access: bool = True) -> bool:

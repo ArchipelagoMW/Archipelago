@@ -1,4 +1,4 @@
-from typing import Container, Dict, FrozenSet, Tuple, cast, List, Counter as _Counter
+from typing import Dict, FrozenSet, Tuple, cast, List, Counter as _Counter
 from BaseClasses import CollectionState
 from zilliandomizer.logic_components.locations import Req, Location
 from zilliandomizer.randomizer import Randomizer
@@ -52,7 +52,7 @@ def item_counts(cs: CollectionState, p: int) -> Tuple[Tuple[str, int], ...]:
 _logic_cache: Dict[int, Tuple[_Counter[Tuple[str, int]], FrozenSet[Location]]] = {}
 
 
-def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> Container[Location]:
+def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> FrozenSet[Location]:
     """ accessible locations from this collection state """
     # caching this function because it would be slow
     _hash = set_randomizer_locs(cs, p, zz_r)
@@ -74,3 +74,7 @@ def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> Container[Lo
     _logic_cache[_hash] = (cs.prog_items.copy(), tr)
 
     return tr
+
+
+def clear_cache() -> None:
+    _logic_cache.clear()

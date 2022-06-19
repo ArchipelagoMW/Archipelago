@@ -8,8 +8,10 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
 
 from zilliandomizer.zri.memory import Memory
 from zilliandomizer.zri import events
-from zilliandomizer.low_resources.loc_id_maps import id_to_loc
-from zilliandomizer.logic_components.items import id_to_item
+from zilliandomizer.low_resources.loc_id_maps import id_to_loc as id_to_zz_loc
+from zilliandomizer.logic_components.items import id_to_item as id_to_zz_item
+
+from worlds.zillion.id_maps import loc_useful_id_to_pretty_id, item_pretty_id_to_useful_id, loc_zz_name_to_name
 from worlds.zillion.config import base_id
 
 
@@ -80,8 +82,8 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
         if from_game.qsize():
             event_from_game = from_game.get_nowait()
             if isinstance(event_from_game, events.AcquireLocationEventFromGame):
-                server_id = event_from_game.id + base_id
-                loc_name = id_to_loc[event_from_game.id]
+                server_id = loc_useful_id_to_pretty_id[event_from_game.id] + base_id
+                loc_name = loc_zz_name_to_name(id_to_zz_loc[event_from_game.id])
                 ctx.locations_checked.add(server_id)
                 # TODO: progress number "(1/146)" or something like that
                 if server_id in ctx.missing_locations:
@@ -98,8 +100,8 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
                 logger.warning(f"WARNING: unhandled event from game {event_from_game}")
         if len(ctx.items_received) > next_item:
             item = ctx.items_received[next_item]
-            zz_item_id = item.item - base_id
-            zz_item = id_to_item[zz_item_id]
+            zz_item_id = item_pretty_id_to_useful_id[item.item - base_id]
+            zz_item = id_to_zz_item[zz_item_id]
             # TODO: use zz_item.name with info on rescue changes
             # TODO: player name and location that they got it
             logger.info(f'received item {zz_item.debug_name}')

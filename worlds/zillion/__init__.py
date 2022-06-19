@@ -2,21 +2,25 @@ from collections import deque
 import functools
 from typing import Any, Dict, FrozenSet, Set, TextIO, Tuple, List, Optional, cast
 import os
+import logging
+
 from BaseClasses import MultiWorld, Location, Item, CollectionState, \
     RegionType, Entrance, Tutorial
 from Options import AssembleOptions
-from .logic import cs_to_zz_locs
+from .logic import clear_cache, cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
 from .options import ZillionItemCounts, zillion_options, validate
-from .item import ZillionItem, item_id_to_zz_item, item_name_to_id as _item_name_to_id
+from .id_maps import item_name_to_id as _item_name_to_id, \
+    loc_name_to_id as _loc_name_to_id, item_id_to_zz_item, loc_zz_name_to_name, zz_reg_name_to_reg_name
+from .item import ZillionItem
 from .patch import ZillionDeltaPatch, get_base_rom_path
-from .config import base_id
+
 from zilliandomizer.patch import Patcher as ZzPatcher
 from zilliandomizer.randomizer import Randomizer as ZzRandomizer
 from zilliandomizer.alarms import Alarms
 from zilliandomizer.logic_components.items import RESCUE, items as zz_items
 from zilliandomizer.logic_components.locations import Location as ZzLocation
-from zilliandomizer.low_resources.loc_id_maps import loc_to_id
+
 from ..AutoWorld import World, WebWorld
 
 
@@ -48,12 +52,7 @@ class ZillionWorld(World):
 
     # map names to their IDs
     item_name_to_id: Dict[str, int] = _item_name_to_id
-    location_name_to_id: Dict[str, int] = {
-        loc: _id + base_id
-        for loc, _id in loc_to_id.items()
-    }
-    # TODO: make this a static resource,
-    # then in `generate_early`, use the dynamic resources to verify that it hasn't changed
+    location_name_to_id: Dict[str, int] = _loc_name_to_id
 
     # maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"}
     item_name_groups: Dict[str, Set[str]] = {}
@@ -95,11 +94,14 @@ class ZillionWorld(World):
     # Hide World Type from various views. Does not remove functionality.
     hidden: bool = False
 
+    logger: logging.Logger
+
     zz_randomizer: ZzRandomizer
     zz_patcher: ZzPatcher
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
+        self.logger = logging.getLogger("Zillion")
 
     @classmethod
     def stage_assert_generate(cls, world: MultiWorld) -> None:
@@ -117,9 +119,10 @@ class ZillionWorld(World):
         self.zz_randomizer = ZzRandomizer(zz_op)
 
         # just in case the options changed anything (I don't think they do)
-        for name in self.zz_randomizer.locations:
-            if name != 'main':
-                assert name in self.location_name_to_id, f"{name} not in location map"
+        for zz_name in self.zz_randomizer.locations:
+            if zz_name != 'main':
+                assert loc_zz_name_to_name(zz_name) in self.location_name_to_id, \
+                    f"{loc_zz_name_to_name(zz_name)} not in location map"
 
     def create_regions(self) -> None:
         p = self.player
@@ -130,8 +133,8 @@ class ZillionWorld(World):
         start = self.zz_randomizer.start
 
         all: Dict[str, ZillionRegion] = {}
-        for here_name, zz_r in start.all.items():
-            here_name = "Menu" if here_name == "start" else here_name
+        for here_zz_name, zz_r in start.all.items():
+            here_name = "Menu" if here_zz_name == "start" else zz_reg_name_to_reg_name(here_zz_name)
             all[here_name] = ZillionRegion(zz_r, here_name, RegionType.Generic, here_name, p, w)
             self.world.regions.append(all[here_name])
 
@@ -139,7 +142,7 @@ class ZillionWorld(World):
         done: Set[str] = set()
         while len(queue):
             zz_here = queue.popleft()
-            here_name = "Menu" if zz_here.name == "start" else zz_here.name
+            here_name = "Menu" if zz_here.name == "start" else zz_reg_name_to_reg_name(zz_here.name)
             if here_name in done:
                 continue
             here = all[here_name]
@@ -159,14 +162,14 @@ class ZillionWorld(World):
                     access_rule = functools.partial(access_rule_wrapped,
                                                     zz_loc, self.player, self.zz_randomizer)
 
-                    loc = ZillionLocation(zz_loc, self.player, zz_loc.name, None, here)
+                    loc = ZillionLocation(zz_loc, self.player, here)
                     loc.access_rule = access_rule  # type: ignore
                     here.locations.append(loc)
 
             for zz_dest in zz_here.connections.keys():
-                dest_name = "Menu" if zz_dest.name == 'start' else zz_dest.name
+                dest_name = "Menu" if zz_dest.name == 'start' else zz_reg_name_to_reg_name(zz_dest.name)
                 dest = all[dest_name]
-                exit = Entrance(p, f"{here_name}-to-{dest_name}", here)
+                exit = Entrance(p, f"{here_name} to {dest_name}", here)
                 here.exits.append(exit)
                 exit.connect(dest)
 
@@ -191,7 +194,7 @@ class ZillionWorld(World):
 
     def generate_basic(self) -> None:
         # main location name is an alias
-        main_loc_name = self.zz_randomizer.locations['main'].name
+        main_loc_name = loc_zz_name_to_name(self.zz_randomizer.locations['main'].name)
 
         self.world.get_location(main_loc_name, self.player)\
             .place_locked_item(self.create_item("main"))
@@ -225,12 +228,12 @@ class ZillionWorld(World):
 
         empty = zz_items[4]
         multi_item = empty  # a different patcher method differentiates empty from ap multi item
-        multi_items: Dict[str, Tuple[str, str]] = {}
+        multi_items: Dict[str, Tuple[str, str]] = {}  # zz_loc_name to (item_name, player_name)
         for loc in self.world.get_locations():
             if loc.player == self.player:
                 z_loc = cast(ZillionLocation, loc)
                 if z_loc.item is None:
-                    # TODO: log a warning? I think this shouldn't happen
+                    self.logger.warn("post_fill location has no item - is that ok?")
                     z_loc.zz_loc.item = empty
                 elif z_loc.item.player == self.player:
                     z_item = cast(ZillionItem, z_loc.item)
@@ -279,6 +282,7 @@ class ZillionWorld(World):
         )
         patch.write()
         os.remove(filename)
+        clear_cache()
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
         """Fill in the slot_data field in the Connected network package."""
@@ -286,6 +290,10 @@ class ZillionWorld(World):
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
         """For deeper modification of server multidata."""
+        # TODO: tell client which canisters are keywords
+        # so it can open and get those when restoring doors
+        # TODO: tell client which rescues are local,
+        # so it can notify server when it gets those locations
         pass
 
     # Spoiler writing is optional, these may not get called.

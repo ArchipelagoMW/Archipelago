@@ -1,19 +1,8 @@
-from typing import Dict
 from BaseClasses import Item
 from zilliandomizer.options import Chars
-from zilliandomizer.logic_components.items import Item as ZzItem, id_to_item
-from .config import base_id
+from zilliandomizer.logic_components.items import Item as ZzItem
 
-
-item_id_to_zz_item: Dict[int, ZzItem] = {
-    i + base_id: item
-    for i, item in id_to_item.items()
-}
-
-item_name_to_id = {
-    z.debug_name: i
-    for i, z in item_id_to_zz_item.items()
-}
+from .id_maps import item_id_to_zz_item
 
 
 class ZillionItem(Item):
