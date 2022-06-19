@@ -68,7 +68,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
 
 class UndertaleContext(CommonContext):
     command_processor = UndertaleCommandProcessor
-    items_handling = 0b001  # full local
+    items_handling = 0b111
     route = None
     pieces_needed = None
 
@@ -258,7 +258,10 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                     f.close()
 
     elif cmd == "Bounced":
-        if "online" in args.get("tags", []):
+        tags = args.get("tags", [])
+        if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
+            ctx.on_deathlink(args["data"])
+        elif "online" in tags:
             data = args.get("data", [])
             if data["player"] != ctx.slot and data["player"] != None:
                 filename = f"FRISK" + str(data["player"]) + ".playerspot"
@@ -306,6 +309,7 @@ async def game_watcher(ctx: UndertaleContext):
                         this_frame = mine.readline()
                     message = [{"cmd": 'Bounce', "tags": ['online'], "games": ["Undertale"], "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room, "spr": this_sprite, "frm": this_frame}}]
                     await ctx.send_msgs(message)
+                    os.remove(root+"/"+file)
                 if file.find("victory") > -1 and file.find(str(ctx.route)) > -1:
                     victory = True
         ctx.locations_checked = sending
