@@ -275,9 +275,6 @@ class HKWorld(World):
                         else:
                             pool.append(item)
 
-                if location_name in wp_exclusions:
-                    logging.debug(f"World {self.world.player_name[self.player]} - Item {item_name} - Location {location_name} - vanilla={vanilla!r}, excluded={excluded!r}")
-
         for shop, slots in self.created_multi_locations.items():
             for _ in range(slots, getattr(self.world, shop_to_option[shop])[self.player].value):
                 self.create_location(shop)
