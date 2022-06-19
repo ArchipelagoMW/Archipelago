@@ -21,9 +21,9 @@ to a Multiworld Game.
 ## Joining a MultiWorld Game
 
 1. Run ArchipelagoStarcraft2Client.exe
-2. Type in /connect [server ip]
+2. Type in `/connect [server ip]`
 3. Insert slot name and password as prompted
-4. Once connected, use /unfinished to find what missions you can play and `/play [mission id]` to launch a mission. For
+4. Once connected, use `/unfinished` to find what missions you can play and `/play [mission id]` to launch a mission. For
 new games under default settings the first mission available will always be Liberation Day[1] playable using the command
 `/play 1`.
 
