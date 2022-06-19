@@ -101,6 +101,19 @@ class Progressives(Choice):
         return random.choice([True, False]) if self.value == self.option_grouped_random else bool(self.value)
 
 
+class BowType(Choice):
+    """Determines how receiving bow as an item functions.
+    Progressive will have two progressive
+    bows where the first will be normal and second will give silver arrows.
+    Non-Progressive will have Bow and Bow + Silvers as two separate items.
+    Requires will have Bow and Silvers as two separate items but Silvers are unusable without the Bow.
+    Retro will have your Bow in the item pool but you must buy a quiver at a shop to then spend rupees as ammo."""
+    option_progressive = 0
+    option_non_progressive = 1
+    option_requires = 2
+    option_retro = 3
+
+
 class EntranceShuffle(Choice):
     """Type of entrance shuffle to use.
     Dungeons simple shuffles dungeon locations around but keep the dungeon grouped together.
@@ -199,22 +212,36 @@ class WorldState(Choice):
     option_inverted = 2
 
 
-class Retro(Toggle):
+class RetroCaves(Toggle):
     """Zelda-1 like mode. You have to purchase a quiver to shoot arrows using rupees
     and there are randomly placed take-any caves that contain one Sword and choices of Heart Container/Blue Potion."""
 
 
 class Hints(Choice):
-    """Vendors: King Zora and Bottle Merchant say what they're selling.
-    On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints."""
+    """On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints."""
     display_name = "Hints"
     option_off = 0
-    option_vendors = 1
     option_on = 2
     option_full = 3
     default = 2
     alias_false = 0
     alias_true = 2
+
+
+class Scams(Choice):
+    """If on, these Merchants will no longer tell you what they're selling."""
+    display_name = "Scams"
+    option_off = 0
+    option_king_zora = 1
+    option_bottle_merchant = 2
+    option_all = 3
+    alias_false = 0
+
+    def gives_king_zora_hint(self):
+        return self.value in {0, 2}
+
+    def gives_bottle_merchant_hint(self):
+        return self.value in {0, 1}
 
 
 class Swordless(Toggle):
@@ -559,17 +586,18 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "glitches_required": Logic,
     "dark_room_logic": DarkRoomLogic,
     "glitch_boots": GlitchBoots,
-    
+
     "restrict_boss_item": BossItem,
     "bigkey_shuffle": BigKey,
     "smallkey_shuffle": SmallKey,
     "compass_shuffle": Compass,
     "map_shuffle": Map,
     "dungeon_counters": DungeonCounters,
-    
+
     "progressive_items": Progressives,
+    "bow_type": BowType,
     "entrance_shuffle": EntranceShuffle,
-    
+
     "goals": Goal,
     "open_pyramid": Pyramid,
     "triforce_pieces_mode": TriforceMode,
@@ -579,17 +607,18 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "triforce_pieces_required": TriforceRequired,
     "gt_crystals": CrystalsTower,
     "ganon_crystals": CrystalsGanon,
-    
+
     "mode": WorldState,
-    "retro": Retro,
+    "retro_caves": RetroCaves,
     "hints": Hints,
+    "scams": Scams,
     "swords": Swordless,
     "item_pool": ItemPool,
     "item_functionality": ItemFunctionality,
     "tile_shuffle": TileShuffle,
     "misery_mire_medallion": MireMedallions,
     "turtle_rock_medallion": TurtleMedallions,
-    
+
     "boss_shuffle": Bosses,
     "enemy_shuffle": EnemyShuffle,
     "killable_thieves": KillableThieves,
@@ -597,7 +626,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "enemy_damage": EnemyDamage,
     "enemy_health": EnemyHealth,
     "pot_shuffle": PotShuffle,
-    
+
     "beemizer_total_chance": BeemizerTotalChance,
     "beemizer_trap_chance": BeemizerTrapChance,
 
@@ -608,13 +637,13 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "capacity_upgrades": CapacityUpgrades,
     "shuffle_witch_hut": WitchHut,
     "shuffle_prizes": PrizeDrops,
-    
+
     "timer": Timer,
     "countdown_start_time": CountdownStart,
     "red_clock_time": RedClock,
     "blue_clock_time": BlueClock,
     "green_clock_time": GreenClock,
-    
+
     "sprite": Sprite,
     "music": Music,
     "quick_swap": QuickSwap,

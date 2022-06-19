@@ -6,7 +6,8 @@ import Utils
 file_path = pathlib.Path(__file__).parent.parent
 Utils.local_path.cached_path = file_path
 
-from BaseClasses import MultiWorld, CollectionState, Item
+from BaseClasses import MultiWorld, CollectionState, ItemClassification
+from worlds.alttp.Items import ItemFactory
 
 
 class TestBase(unittest.TestCase):
@@ -18,7 +19,7 @@ class TestBase(unittest.TestCase):
             return self._state_cache[self.world, tuple(items)]
         state = CollectionState(self.world)
         for item in items:
-            item.advancement = True
+            item.classification = ItemClassification.progression
             state.collect(item)
         state.sweep_for_events()
         self._state_cache[self.world, tuple(items)] = state
@@ -76,35 +77,18 @@ class TestBase(unittest.TestCase):
                         state = self._get_items_partial(item_pool, missing_item)
                         self.assertEqual(self.world.get_entrance(entrance, 1).can_reach(state), False)
 
-    def create_items(self, items, player: int):
-        world = self.world
-        ret = []
-        singleton = False
-
-        if isinstance(items, str):
-            items = [items]
-            singleton = True
-        for item in items:
-            ret.append(world.create_item(item, player))
-
-        if singleton:
-            return ret[0]
-        return ret
-
     def _get_items(self, item_pool, all_except):
         if all_except and len(all_except) > 0:
             items = self.world.itempool[:]
             items = [item for item in items if
                      item.name not in all_except and not ("Bottle" in item.name and "AnyBottle" in all_except)]
-            items.append(Item(item_pool[0], 1))
+            items.extend(ItemFactory(item_pool[0], 1))
         else:
-            items = Item(item_pool[0], 1)
+            items = ItemFactory(item_pool[0], 1)
         return self.get_state(items)
 
     def _get_items_partial(self, item_pool, missing_item):
         new_items = item_pool[0].copy()
         new_items.remove(missing_item)
-        items = []
-        for item in items:
-            items.append(Item(item, 1))
+        items = ItemFactory(new_items, 1)
         return self.get_state(items)

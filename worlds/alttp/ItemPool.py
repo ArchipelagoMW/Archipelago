@@ -417,12 +417,12 @@ def generate_itempool(world: MultiWorld):
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
     # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
-    if world.goal != 'icerodhunt' and world.difficulty in ['easy', 'normal', 'hard']:
-        next(item for item in items if item.name == 'Boss Heart Container').advancement = True
-    elif world.goal != 'icerodhunt' and world.difficulty in ['expert']:
+    if world.goal[player] != 'icerodhunt' and world.difficulty[player] in ['easy', 'normal', 'hard'] and not (world.custom and world.customitemarray[30] == 0):
+        next(item for item in items if item.name == 'Boss Heart Container').classification = ItemClassification.progression
+    elif world.goal[player] != 'icerodhunt' and world.difficulty[player] in ['expert'] and not (world.custom and world.customitemarray[29] < 4):
         adv_heart_pieces = (item for item in items if item.name == 'Piece of Heart')
         for i in range(4):
-            next(adv_heart_pieces).advancement = True
+            next(adv_heart_pieces).classification = ItemClassification.progression
 
 
     progressionitems = []
@@ -463,7 +463,7 @@ def generate_itempool(world: MultiWorld):
 
     world.world.itempool += progressionitems + nonprogressionitems
 
-    if world.retro:
+    if world.retro_caves[player]:
         set_up_take_anys(world, player)  # depends on world.itempool to be set
 
 
@@ -556,7 +556,7 @@ def get_pool_core(world, player: int):
     goal = world.goal[player]
     mode = world.mode[player]
     swordless = world.swordless[player]
-    retro = world.retro[player]
+    retro_bow = world.retro_bow[player]
     logic = world.logic[player]
 
     pool = []
@@ -672,7 +672,7 @@ def get_pool_core(world, player: int):
         place_item('Master Sword Pedestal', 'Triforce')
         pool.remove("Rupees (20)")
 
-    if retro:
+    if retro_bow:
         replace = {'Single Arrow', 'Arrows (10)', 'Arrow Upgrade (+5)', 'Arrow Upgrade (+10)'}
         pool = ['Rupees (5)' if item in replace else item for item in pool]
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
@@ -837,7 +837,7 @@ def make_custom_item_pool(world, player):
         pool.extend(['Moon Pearl'] * customitemarray[28])
 
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
-        itemtotal = itemtotal - 28  # Corrects for small keys not being in item pool in Retro Mode
+        itemtotal = itemtotal - 28  # Corrects for small keys not being in item pool in universal mode
     if itemtotal < total_items_to_place:
         pool.extend(['Nothing'] * (total_items_to_place - itemtotal))
         logging.warning(f"Pool was filled up with {total_items_to_place - itemtotal} Nothing's for player {player}")

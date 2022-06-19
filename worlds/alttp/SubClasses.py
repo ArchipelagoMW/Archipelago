@@ -1,7 +1,7 @@
 """Module extending BaseClasses.py for aLttP"""
 from typing import Optional
 
-from BaseClasses import Location, Item
+from BaseClasses import Location, Item, ItemClassification
 
 
 class ALttPLocation(Location):
