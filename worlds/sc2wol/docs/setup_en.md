@@ -13,19 +13,19 @@ Starcraft 2 AP Client launches a custom version of Starcraft 2 running modified 
 
 ## Installation Procedures
 
-Follow the installation directions at the
-[Starcraft 2 AP Maps and Data](https://github.com/TheCondor07/Starcraft2ArchipelagoData) page you can find the .zip
+Follow the installation directions at the 
+[Starcraft 2 AP Maps and Data](https://github.com/TheCondor07/Starcraft2ArchipelagoData) page you can find the .zip 
 files on the releases page. After it is installed, just run ArchipelagoStarcraft2Client.exe to start the client and connect
 to a Multiworld Game.
 
 ## Joining a MultiWorld Game
 
-1. Run ArchipelagoStarcraft2Client.exe
-2. Type in `/connect [server ip]`
-3. Insert slot name and password as prompted
-4. Once connected, use `/unfinished` to find what missions you can play and `/play [mission id]` to launch a mission. For
-new games under default settings the first mission available will always be Liberation Day[1] playable using the command
-`/play 1`.
+1. Run ArchipelagoStarcraft2Client.exe.
+2. Type in `/connect [server ip]`.
+3. Insert slot name and password as prompted.
+4. Once connected, use `/unfinished` to find what missions you can play and `/play [mission id]` to launch a mission.
+   For new games under default settings the first mission available will always be Liberation Day[1] playable using the
+   command `/play 1`.
 
 ## Where do I get a config file?
 
@@ -34,12 +34,12 @@ configure your personal settings and export them into a config file.
 
 ## Game isn't launching when I type /play
 
-First check the log file for issues (stored at [Archipelago Directory]/logs/SC2Client.txt. There is sometimes an issue
-where the client can not find Starcraft 2.  Usually 'Documents/StarCraft II/ExecuteInfo.txt' is checked to find where
-Starcraft 2 is installed. On some computers particularly if you have OneDrive running this may  fail.  The following
+First check the log file for issues (stored at [Archipelago Directory]/logs/SC2Client.txt. There is sometimes an issue 
+where the client can not find Starcraft 2.  Usually 'Documents/StarCraft II/ExecuteInfo.txt' is checked to find where 
+Starcraft 2 is installed. On some computers particularly if you have OneDrive running this may  fail.  The following 
 directions may help you in this case if you are on Windows.
 
-1. Navigate to '%userprofile%'.  Easiest way to do this is to hit Windows key+R type in `%userprofile%` and hit run or
+1. Navigate to '%userprofile%'.  Easiest way to do this is to hit Windows key+R type in `%userprofile%` and hit run or 
 type in `%userprofile%` in the navigation bar of your file explorer.
 2. If it does not exist create a folder in her named 'Documents'.
 3. Locate your 'My Documents' folder on your PC.  If you navigate to 'My PC' on the sidebar of file explorer should be a
