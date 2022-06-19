@@ -422,6 +422,18 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         rom.write_byte(0x04DE81, 6)
         rom.write_byte(0x1B0101, 0)  # Do not close boss room door on entry.
 
+    # Moblins attached to "key drop" locations crash the game when dropping their item when Key Drop Shuffle is on.
+    # Replace them with a Slime enemy if they are placed.
+    if world.key_drop_shuffle[player]:
+        key_drop_enemies = {
+            0x4DA20, 0x4DA5C, 0x4DB7F, 0x4DD73, 0x4DDC3, 0x4DE07, 0x4E201,
+            0x4E20A, 0x4E326, 0x4E4F7, 0x4E686, 0x4E70C, 0x4E7C8, 0x4E7FA
+        }
+        for enemy in key_drop_enemies:
+            if rom.read_byte(enemy) == 0x12:
+                logging.debug(f"Moblin found and replaced at {enemy} in world {player}")
+                rom.write_byte(enemy, 0x8F)
+
     for used in (randopatch_path, options_path):
         try:
             os.remove(used)

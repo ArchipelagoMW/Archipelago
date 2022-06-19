@@ -497,10 +497,6 @@ class ALTTPWorld(World):
                     for item in dungeon.all_items:
                         if item.name in self.dungeon_local_item_names:
                             res.append(item)
-            if not self.world.key_drop_shuffle[player]:
-                for key_drop in key_drop_data.values():
-                    if key_drop[3] in self.dungeon_local_item_names:
-                        res.append(ItemFactory(key_drop[3], player))
 
         return res
 
