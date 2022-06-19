@@ -50,27 +50,31 @@ link to this folder there labeled 'Documents'.
 These steps have been shown to work for some people for some people having issues with launching the game.  If you are
 still having issues check out our [Discord](https://discord.com/invite/8Z65BR2) for help.
 
-## Running StarCraft 2 AP in Linux
+## Running in Linux
 
-To run StarCraft 2 through Archipelago in Linux, you will need to install the game through Wine then run the Linux build of the StarCraft 2 AP client.
+To run StarCraft 2 through Archipelago in Linux, you will need to install the game using Wine then run the Linux build of the Archipelago client.
 
-Make sure you have StarCraft II installed using Wine and you have followed the Installation Procedures to add the Archipelago maps to the correct location. If you're having trouble installing or running StarCraft 2 on Linux, I recommend using the Lutris installer.
+Make sure you have StarCraft 2 installed using Wine and you have followed the [Installation Procedures](#installation-procedures) to add the Archipelago maps to the correct location. You will not need to copy the .dll files. If you're having trouble installing or running StarCraft 2 on Linux, I recommend using the Lutris installer.
 
-Copy the following into a .sh file, replacing the values of `WINE` and `SC2PATH` variables to the relevant locations, as well as updating the path to the Archipelago client, if it is not in the same folder as the script.
+Copy the following into a .sh file, replacing the values of **WINE** and **SC2PATH** variables to the relevant locations, as well as updating the path to the Archipelago client, if it is not in the same folder as the script.
 
 ```sh
 # Let the client know we're running SC2 in Wine
 export SC2PF=WineLinux
 export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 
-# Replace with path to Wine binary
+# FIXME Replace with path to the version of Wine used to run SC2
 export WINE="/usr/bin/wine"
 
-# Replace with path to StarCraft II install folder
+# FIXME Replace with path to StarCraft II install folder
 export SC2PATH="/home/user/Games/starcraft-ii/drive_c/Program Files (x86)/StarCraft II/"
 
 # Start the Archipelago client
-./Archipelago_0.3.2_linux-x86_64.AppImage Starcraft2Client.py
+./Archipelago_0.3.2_linux-x86_64.AppImage Starcraft2Client
 ```
 
-> For Lutris installs, you can run `lutris lutris:rungameid/${ID} --output-script sc2.sh` to get all of the relevant environment variables Lutris sets to run StarCraft 2, including the path to the Wine binary that Lutris uses. You can then remove the line that runs the Battle.Net launcher and copy the code above into the existing script.
+For Lutris installs, you can run `lutris -l` to get the numerical ID of your StarCraft II install, then run the command below, replacing **${ID}** with the numerical ID.
+
+    lutris lutris:rungameid/${ID} --output-script sc2.sh
+
+This will get all of the relevant environment variables Lutris sets to run StarCraft 2 in a script, including the path to the Wine binary that Lutris uses. You can then remove the line that runs the Battle.Net launcher and copy the code above into the existing script.
