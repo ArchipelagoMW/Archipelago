@@ -114,8 +114,8 @@ Special locations with ID `None` can hold events.
 Items are all things that can "drop" for your game. This may be RPG items like
 weapons, could as well be technologies you normally research in a research tree.
 
-Each item has a `name`, an `id` (can be known as "code"), and an `advancement`
-flag. An advancement item is an item which a player may require to advance in
+Each item has a `name`, an `id` (can be known as "code"), and a classification
+flag. An item with a classification flag that includes progression is an item which a player may require to advance in
 their world. Advancement items will be assigned to locations with higher
 priority and moved around to meet defined rules and accomplish progression
 balancing.
