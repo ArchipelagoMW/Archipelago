@@ -58,6 +58,9 @@ Some additional settings related to the Archipelago messages in game can be adju
 
 - "The following mods didn't load correctly: SA2B_Archipelago: DLL error - The specified module could not be found."
 	- Make sure the `APCpp.dll` is in the same folder as the `sonic2app.exe`. (See Installation Procedures step 6)
+	
+- "sonic2app.exe - Entry Point Not Found"
+	- Make sure the `APCpp.dll` is up to date. Follow Installation Procedures step 6 to update the dll.
 
 - Game is running too fast (Like Sonic).
 	- Limit framerate using the mod manager:
