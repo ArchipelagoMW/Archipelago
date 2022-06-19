@@ -208,16 +208,13 @@ all_product_sources: Dict[str, Set[Recipe]] = {"character": set()}
 raw_recipes = recipes_future.result()
 del recipes_future
 for resource_name, resource_data in resources_future.result().items():
-    raw_recipes[f"mining-{resource_name}"] = current_recipe = {
-        "ingredients": {},
-        "products": {},
+    raw_recipes[f"mining-{resource_name}"] = {
+        "ingredients": {resource_data["required_fluid"]: resource_data["fluid_amount"]}
+        if "required_fluid" in resource_data else {},
+        "products": {data["name"]: data["amount"] for data in resource_data["products"].values()},
         "energy": resource_data["mining_time"],
         "category": resource_data["category"]
     }
-    for name, data in resource_data["products"].items():
-        current_recipe["products"].update({data["name"]: data["amount"]})
-    if "required_fluid" in resource_data:
-        current_recipe["ingredients"] = {resource_data["required_fluid"]: resource_data["fluid_amount"]}
 del resources_future
 
 for recipe_name, recipe_data in raw_recipes.items():
