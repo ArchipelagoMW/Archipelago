@@ -115,9 +115,11 @@ class RiskOfRainWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
-        item = RiskOfRainItem(name,
-                              ItemClassification.useful if name == "Dio's Best Friend" else ItemClassification.filler,
-                              item_id, self.player)
+        item = RiskOfRainItem(name, ItemClassification.filler, item_id, self.player)
+        if name == 'Dio\'s Best Friend':
+            item.classification = ItemClassification.progression
+        elif name == 'Equipment':
+            item.classification = ItemClassification.useful
         return item
 
 
