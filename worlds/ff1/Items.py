@@ -28,9 +28,7 @@ FF1_PROGRESSION_LIST = [
 
 FF1_USEFUL_LIST = [
     "Tail", "Masamune", "Xcalber", "Katana", "Vorpal",
-    "OpalArmor", "DragonArmor", "Opal",
-    "OpalShield", "AegisShield", "OpalHelm", "Ribbon",
-    "OpalGauntlets",
+    "DragonArmor", "Opal", "AegisShield",  "Ribbon"
 ]
 
 
