@@ -23,6 +23,16 @@ all necessary dependencies as well.
 
 Click on the "Start modded" button in the top left in r2modman to start the game with the Archipelago mod installed.
 
+## Configuring your YAML File
+### What is a YAML and why do I need one?
+You can see the [basic multiworld setup guide](/tutorial/Archipelago/setup/en) here on the Archipelago website to learn 
+about why Archipelago uses YAML files and what they're for.
+
+### Where do I get a YAML?
+You can use the [game settings page for Hollow Knight](/games/Hollow%20Knight/player-settings) here on the Archipelago 
+website to generate a YAML using a graphical interface.
+
+
 ## Joining an Archipelago Session
 
 There will be a menu button on the right side of the screen in the character select menu. Click it in order to bring up
@@ -36,11 +46,6 @@ Simply check `Enable Archipelago?` and when you start the run it will automatica
 The Risk of Rain 2 players send checks by causing items to spawn in-game. That means opening chests or killing bosses,
 generally. An item check is only sent out after a certain number of items are picked up. This count is configurable in
 the player's YAML.
-
-## Where do I get a config file?
-The [Player Settings](/games/Risk%20of%20Rain%202/player-settings) page on the website allows you to
-configure your personal settings and export them into a `.yaml` file. The name entered on this page will be your 
-`Slot Name` when connecting to the multiworld.
 
 ## Commands
 While playing the multiworld you can type `say` then your message to type in the multiworld chat. All other multiworld
