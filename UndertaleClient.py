@@ -41,29 +41,23 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
             bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
             self.output(f"Patched.")
 
-    def _cmd_enable_online(self):
-        """Makes you able to see other Undertale players."""
-        if isinstance(self.ctx, UndertaleContext):
-            self.ctx.update_online_mode(True)
-            self.output(f"Now online.")
-
-    def _cmd_disable_online(self):
+    def _cmd_online(self):
         """Makes you no longer able to see other Undertale players."""
         if isinstance(self.ctx, UndertaleContext):
-            self.ctx.update_online_mode(False)
-            self.output(f"Now offline.")
+            self.ctx.update_online_mode(not ("online" in self.ctx.tags))
+            if "online" in self.ctx.tags:
+                self.output(f"Now online.")
+            else:
+                self.output(f"Now offline.")
 
-    def _cmd_enable_deathlink(self):
-        """Enables deathlink"""
+    def _cmd_deathlink(self):
+        """Toggles deathlink"""
         if isinstance(self.ctx, UndertaleContext):
-            self.ctx.deathlink_status = True
-            self.output(f"Deathlink enabled.")
-
-    def _cmd_disable_deathlink(self):
-        """Disables deathlink"""
-        if isinstance(self.ctx, UndertaleContext):
-            self.ctx.deathlink_status = False
-            self.output(f"Deathlink disabled.")
+            self.ctx.deathlink_status = not self.ctx.deathlink_status
+            if self.ctx.deathlink_status:
+                self.output(f"Deathlink enabled.")
+            else:
+                self.output(f"Deathlink disabled.")
 
 
 class UndertaleContext(CommonContext):
