@@ -275,6 +275,10 @@ class HKWorld(World):
                         else:
                             pool.append(item)
 
+        if self.world.RandomizeElevatorPass[self.player]:
+            pool.append(self.create_item("Elevator_Pass"))
+            self.create_location("Elevator_Pass")
+
         for shop, slots in self.created_multi_locations.items():
             for _ in range(slots, getattr(self.world, shop_to_option[shop])[self.player].value):
                 self.create_location(shop)

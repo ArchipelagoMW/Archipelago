@@ -160,6 +160,13 @@ for option_name in logic_options.values():
     hollow_knight_logic_options[option.__name__] = option
 
 
+class RandomizeElevatorPass(Toggle):
+    """Adds an Elevator Pass item to the item pool, which is then required to use the large elevators connecting
+    City of Tears to the Forgotten Crossroads and Resting Grounds."""
+    display_name = "Randomize Elevator Pass"
+    default = False
+
+
 class SplitMothwingCloak(Toggle):
     """Splits the Mothwing Cloak into left- and right-only versions of the item. Randomly adds a second left or
     right Mothwing cloak item which functions as the upgrade to Shade Cloak."""
@@ -400,6 +407,7 @@ class StartingGeo(Range):
 
 hollow_knight_options: typing.Dict[str, type(Option)] = {
     **hollow_knight_randomize_options,
+    RandomizeElevatorPass.__name__: RandomizeElevatorPass,
     **hollow_knight_logic_options,
     **{
         option.__name__: option
