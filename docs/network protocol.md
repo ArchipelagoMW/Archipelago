@@ -578,7 +578,6 @@ GameData is a **dict** but contains these keys and values. It's broken out into 
 | location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID.                                                                         |
 | version             | int            | Version number of this game's data. Deprecated. Used by older clients to request an updated datapackage if cache is outdated. |
 | checksum            | str            | A checksum hash of this game's data.                                                                                          |
-| cache_safe          | bool           | Tells clients if it is safe to cache this GameData.                                                                           |
 
 ### Tags
 Tags are represented as a list of strings, the common Client tags follow:

@@ -367,10 +367,6 @@ class MyGameWorld(World):
     game: str = "My Game"  # name of the game/world
     options = mygame_options  # options the player can set
     topology_present: bool = True  # show path to required location checks in spoiler
-
-    # While this is set to True in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
-    # retrieved by clients on every connection.
-    development_mode: bool = False
     
     # ID of first item and location, could be hard-coded but code may be easier
     # to read with this as a propery.

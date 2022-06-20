@@ -29,7 +29,6 @@ for world_name, world in AutoWorldRegister.world_types.items():
     games[world_name] = {
         "version": world.data_version,
         "checksum": None,
-        "cache_safe": not world.development_mode,
         "item_name_to_id": world.item_name_to_id,
         "location_name_to_id": world.location_name_to_id,
         # seems clients don't actually want this. Keeping it here in case someone changes their mind.
@@ -46,11 +45,6 @@ network_data_package = {
     "version": sum(world.data_version for world in AutoWorldRegister.world_types.values()),
     "games": games,
 }
-
-# If development_mode is enabled for any world, treat it as version 0 for legacy clients that do not check the checksum.
-for world in AutoWorldRegister.world_types.values():
-    if world.development_mode:
-        world.data_version = 0
 
 # Set entire datapackage to version 0 if any of them are set to 0
 if any(not world.data_version for world in AutoWorldRegister.world_types.values()):
