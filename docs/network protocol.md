@@ -55,19 +55,20 @@ These packets are are sent from the multiworld server to the client. They are no
 ### RoomInfo
 Sent to clients when they connect to an Archipelago server.
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| version | [NetworkVersion](#NetworkVersion) | Object denoting the version of Archipelago which the server is running. |
-| tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. Example: `WebHost` |
-| password | bool | Denoted whether a password is required to join this room.|
-| permissions | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "forfeit", "collect" and "remaining". |
-| hint_cost | int | The amount of points it costs to receive a hint from the server. |
-| location_check_points | int | The amount of hint points you receive per item/location check completed. ||
-| games | list\[str\] | List of games present in this multiworld. |
-| datapackage_version | int | Sum of individual games' datapackage version. Deprecated. Use `datapackage_versions` instead. |
-| datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. Used to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents). |
-| seed_name | str | uniquely identifying name of this generation |
-| time | float | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce. |
+| Name                  | Type                                          | Notes                                                                                                                                                                                                                  |
+|-----------------------|-----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| version               | [NetworkVersion](#NetworkVersion)             | Object denoting the version of Archipelago which the server is running.                                                                                                                                                |
+| tags                  | list\[str\]                                   | Denotes special features or capabilities that the sender is capable of. Example: `WebHost`                                                                                                                             |
+| password              | bool                                          | Denoted whether a password is required to join this room.                                                                                                                                                              |
+| permissions           | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "forfeit", "collect" and "remaining".                                                                                                               |
+| hint_cost             | int                                           | The amount of points it costs to receive a hint from the server.                                                                                                                                                       |
+| location_check_points | int                                           | The amount of hint points you receive per item/location check completed.                                                                                                                                               |
+| games                 | list\[str\]                                   | List of games present in this multiworld.                                                                                                                                                                              |
+| datapackage_version   | int                                           | Sum of individual games' datapackage version. **Deprecated. Use `datapackage_checksums` instead.**                                                                                                                     |
+| datapackage_versions  | dict\[str, int\]                              | Data versions of the individual games' data packages the server will send. Used by older clients to decide which games' caches are outdated. **Deprecated. Use `datapackage_checksums` instead.**                      |
+| datapackage_checksums | dict[str, str]                                | Checksum hash of the individual games' data packages the server will send. Used by newer clients to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents) for more information. | 
+| seed_name             | str                                           | uniquely identifying name of this generation                                                                                                                                                                           |
+| time                  | float                                         | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce.                                                                                                                |
 
 #### forfeit
 Dictates what is allowed when it comes to a player forfeiting their run. A forfeit is an action which distributes the rest of the items in a player's run to those other players awaiting them.
@@ -571,11 +572,13 @@ Note:
 #### GameData
 GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of documentation.
 
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| item_name_to_id | dict[str, int] | Mapping of all item names to their respective ID. |
-| location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID. |
-| version | int | Version number of this game's data |
+| Name                | Type           | Notes                                                                                                                         |
+|---------------------|----------------|-------------------------------------------------------------------------------------------------------------------------------|
+| item_name_to_id     | dict[str, int] | Mapping of all item names to their respective ID.                                                                             |
+| location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID.                                                                         |
+| version             | int            | Version number of this game's data. Deprecated. Used by older clients to request an updated datapackage if cache is outdated. |
+| checksum            | str            | A checksum hash of this game's data.                                                                                          |
+| cache_safe          | bool           | Tells clients if it is safe to cache this GameData.                                                                           |
 
 ### Tags
 Tags are represented as a list of strings, the common Client tags follow:
