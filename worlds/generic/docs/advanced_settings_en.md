@@ -145,19 +145,16 @@ Options taking a choice of a number can also use a variety of `random` options t
 
 `custom_item_pool` allows you to have complete control over the items generated for your game. Sub-options are:
 
-* `modify`: Allows you to increase or decrease the number of any given items by a given amount. Example: `Power Star: 2`
-will add 2 Power Stars to your item pool, `1up Mushroom: -2` will remove 2 1up Mushrooms.
-* `set`: Set the total number of any given items. Example: `Power Star: 125` will set the number of Power Stars to 
-exactly 125.
-* `replace`: Replace all of a given item with another item. Example: `1up Mushroom: Power Star` will replace all
-1up Mushrooms with Power Stars.
+* `modify`: Allows you to increase or decrease the number of any given items by a given amount.
+* `set`: Set the total number of any given items.
+* `replace`: Replace all of a given item with another item.
 * `use_defaults`: `True` or `False`. Defaults to `True` if not specified. If `False`, the entire item pool will be
 discarded in favor of the items you set here in `custom_item_pool`.
-* `pool_size_correction`: `True` or `False`. Defaults to `True` if not specified. If `True`, corrections will be made
-to ensure your item pool after `custom_item_pool` modifies it matches the size of the pool beforehand. It will do so
-by adding random filler items (some games do not currently have filler items specified and will add any random items)
-or removing random non-advancement items. Setting this option to `False` will allow you to change the size of your item
-pool and no corrections will be made.
+* `pool_size_link`: After making modifications to your item pool, if the size of your item pool has changed, corrections
+will be made by removing or adding random filler items. However, you can use `pool_size_link` to link multiple game
+worlds together by providing the same `pool_size_link` parameter, and these game worlds will have their pool sizes
+looked at and adjusted collectively. In this way, you can decrease the size of some game's item pools and increase the
+size of others. Default is `null` which results in no linking.
 
 Some special item names can be used in certain cases:
 
@@ -318,7 +315,8 @@ Super Mario 64:
   custom_item_pool:
     modify:
       1up Mushroom: -20
-    pool_size_correction: False
+    pool_size_link: bobsgames
+    
 ---
 
 description: Example of generating multiple worlds. World 2 of 3
@@ -347,8 +345,8 @@ Minecraft:
     modify:
       4 Diamond Ore: 10
       16 Iron Ore: 10
-    item_pool_correction: False
-
+    pool_size_link: bobsgames
+      
 ---
 
 description: Example of generating multiple worlds. World 3 of 3
@@ -361,5 +359,7 @@ ChecksFinder:
 ```
 
 The above example will generate 3 worlds - one Super Mario 64, one Minecraft, and one ChecksFinder.
- 
+
+All 20 1up Mushrooms will be removed from Super Mario 64 and replaced with Diamond Ore and Iron Ore in Minecraft.
+Because of the `pool_size_link`, no corrections will be made automatically to these games' item pools.
 
