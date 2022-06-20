@@ -40,6 +40,7 @@ class WitnessWorld(World):
     static_items = StaticWitnessItems()
     web = WitnessWebWorld()
     options = the_witness_options
+    data_version = 1
 
     item_name_to_id = {
         name: data.code for name, data in static_items.ALL_ITEM_TABLE.items()

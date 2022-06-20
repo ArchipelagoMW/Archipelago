@@ -49,9 +49,9 @@ def get_datapackge_versions():
 @api_endpoints.route('/datapackage_checksum')
 @cache.cached()
 def get_datapackage_checksums():
-    from worlds import network_data_package, AutoWorldRegister
+    from worlds import network_data_package
     version_package = {
-        game: network_data_package["games"][game]["checksum"] for game in AutoWorldRegister.world_types.keys()
+        game: game_data["checksum"] for game, game_data in network_data_package["games"].items()
     }
     return version_package
 
