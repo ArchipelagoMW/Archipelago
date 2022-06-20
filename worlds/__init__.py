@@ -46,6 +46,11 @@ network_data_package = {
     "games": games,
 }
 
+# If development_mode is enabled for any world, treat it as version 0 for legacy clients that do not check the checksum.
+for world in AutoWorldRegister.world_types.values():
+    if world.development_mode:
+        world.data_version = 0
+
 # Set entire datapackage to version 0 if any of them are set to 0
 if any(not world.data_version for world in AutoWorldRegister.world_types.values()):
     network_data_package["version"] = 0
