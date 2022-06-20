@@ -16,6 +16,7 @@ import typing
 from json import loads, dumps
 
 import ModuleUpdate
+
 ModuleUpdate.update()
 
 from Utils import init_logging
@@ -80,8 +81,8 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         self.ctx.snes_reconnect_address = None
         if self.ctx.snes_connect_task:
             self.ctx.snes_connect_task.cancel()
-        self.ctx.snes_connect_task =  asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number),
-                                                          name="SNES Connect")
+        self.ctx.snes_connect_task = asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number),
+                                                         name="SNES Connect")
         return True
 
     def _cmd_snes_close(self) -> bool:
@@ -232,8 +233,9 @@ async def deathlink_kill_player(ctx: Context):
                 snes_buffered_write(ctx, WRAM_START + 0x0373,
                                     bytes([8]))  # deal 1 full heart of damage at next opportunity
         elif ctx.game == GAME_SM:
-            snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([1, 0]))  # set current health to 1 (to prevent saving with 0 energy)
-            snes_buffered_write(ctx, WRAM_START + 0x0A50, bytes([255])) # deal 255 of damage at next opportunity
+            snes_buffered_write(ctx, WRAM_START + 0x09C2,
+                                bytes([1, 0]))  # set current health to 1 (to prevent saving with 0 energy)
+            snes_buffered_write(ctx, WRAM_START + 0x0A50, bytes([255]))  # deal 255 of damage at next opportunity
             if not ctx.death_link_allow_survive:
                 snes_buffered_write(ctx, WRAM_START + 0x09D6, bytes([0, 0]))  # set current reserve to 0
         await snes_flush_writes(ctx)
@@ -311,8 +313,13 @@ SMZ3_RECV_PROGRESS_ADDR = SRAM_START + 0x4000         # 2 bytes
 SMZ3_RECV_ITEM_ADDR = SAVEDATA_START + 0x4D2          # 1 byte
 SMZ3_RECV_ITEM_PLAYER_ADDR = SAVEDATA_START + 0x4D3   # 1 byte
 
-
 location_shop_ids = set([info[0] for name, info in Shops.shop_table.items()])
+
+rom_start = {
+    GAME_SM: SM_ROMNAME_START,
+    GAME_ALTTP: ROMNAME_START,
+    GAME_SMZ3: SMZ3_ROMNAME_START
+}
 
 location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      "Blind's Hideout - Left": (0x11d, 0x20),
@@ -892,10 +899,6 @@ async def track_locations(ctx: Context, roomid, roomdata):
 
     def new_check(location_id):
         new_locations.append(location_id)
-        ctx.locations_checked.add(location_id)
-        location = ctx.location_names[location_id]
-        snes_logger.info(
-            f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
 
     try:
         shop_data = await snes_read(ctx, SHOP_ADDR, SHOP_LEN)
@@ -1015,8 +1018,19 @@ async def track_locations(ctx: Context, roomid, roomdata):
             if misc_data_changed:
                 snes_buffered_write(ctx, SAVEDATA_START + 0x3c6, bytes(misc_data))
 
-
     if new_locations:
+        rom = await snes_read(ctx,
+                              rom_start[ctx.game],
+                              ROMNAME_SIZE)
+        if ctx.auth != rom:
+            snes_logger.warning("ROM change detected, please reconnect to the multiworld server")
+            await ctx.disconnect()
+        for location_id in new_locations:
+            ctx.locations_checked.add(location_id)
+            location = ctx.location_names[location_id]
+            snes_logger.info(
+                f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+
         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": new_locations}])
     await snes_flush_writes(ctx)
 
@@ -1042,7 +1056,7 @@ async def game_watcher(ctx: Context):
                 # versions lower than 0.3.0 dont have item handling flag nor remote item support
                 romVersion = int(game_name[2:5].decode('UTF-8'))
                 if romVersion < 30:
-                    ctx.items_handling = 0b001 # full local 
+                    ctx.items_handling = 0b001  # full local
                 else:
                     item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
                     ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
@@ -1055,7 +1069,9 @@ async def game_watcher(ctx: Context):
                     ctx.game = GAME_ALTTP
                     ctx.items_handling = 0b001  # full local
 
-            rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else SMZ3_ROMNAME_START if ctx.game == GAME_SMZ3 else ROMNAME_START, ROMNAME_SIZE)
+            rom = await snes_read(ctx,
+                                  rom_start[ctx.game],
+                                  ROMNAME_SIZE)
             if rom is None or rom == bytes([0] * ROMNAME_SIZE):
                 continue
 
@@ -1201,13 +1217,14 @@ async def game_watcher(ctx: Context):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
                 if bool(ctx.items_handling & 0b010):
-                    locationId = (item.location - locations_start_id) if (item.location >= 0 and item.player == ctx.slot) else 0xFF
+                    locationId = (item.location - locations_start_id) if (
+                                item.location >= 0 and item.player == ctx.slot) else 0xFF
                 else:
-                    locationId = 0x00 #backward compat
+                    locationId = 0x00  # backward compat
 
                 playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes(
-                	[playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, locationId & 0xFF]))
+                    [playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, locationId & 0xFF]))
                 itemOutPtr += 1
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x602,
                                     bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
@@ -1249,14 +1266,16 @@ async def game_watcher(ctx: Context):
                 itemIndex = ((message[4] | (maskedPart << 8)) >> 3) + (256 if isZ3Item else 0)
 
                 recv_index += 1
-                snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x680, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
+                snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x680,
+                                    bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
 
                 from worlds.smz3.TotalSMZ3.Location import locations_start_id
                 location_id = locations_start_id + itemIndex
 
                 ctx.locations_checked.add(location_id)
                 location = ctx.location_names[location_id]
-                snes_logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                snes_logger.info(
+                    f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                 await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
             data = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x600, 4)
@@ -1272,9 +1291,11 @@ async def game_watcher(ctx: Context):
                 itemId = item.item - items_start_id
 
                 playerID = item.player if item.player <= SMZ3_ROM_PLAYER_LIMIT else 0
-                snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes([playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
+                snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes(
+                    [playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
                 itemOutPtr += 1
-                snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x602, bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
+                snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x602,
+                                    bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
                 logging.info('Received %s from %s (%s) (%d/%d in list)' % (
                     color(ctx.item_names[item.item], 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
                     ctx.location_names[item.location], itemOutPtr, len(ctx.items_received)))
