@@ -4,6 +4,7 @@ import multiprocessing
 import logging
 import asyncio
 import os.path
+from os import listdir, getcwd
 
 import nest_asyncio
 import sc2
@@ -89,9 +90,17 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if not os.environ["SC2PATH"]: check_game_install_path(debug=True)
         # Then we can do the actual mod check, unless the program failed to find SC2PATH.
         if os.environ["SC2PATH"]:
-            check_mod_install()
+            check_mod_install(debug=True)
         else:
             sc2_logger.info("Failed to check mod install due to missing SC2 install directory.")
+        return True
+
+    def _cmd_check_dlls(self) -> bool:
+        """Confirm whether you've installed the .dlls in the correct place."""
+
+        # No SC2 install technically necessary here.
+        check_dlls(debug=True)
+        return True
 
 
 class SC2Context(CommonContext):
@@ -134,11 +143,12 @@ class SC2Context(CommonContext):
             for mission in slot_req_table:
                 self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
 
-            # Look for StarCraft 2 directory, warn user if StarCraft 2 can not be found; sets SC2PATH to found directory
-            check_game_install_path()
-            # Check if mod is installed at [pathname]/Mods, warn user if not
+            # If unspecified, look for and set SC2PATH; warn user if not found
+            if not os.environ["SC2PATH"]: check_game_install_path()
+            # Check if mod is installed at SC2PATH/Mods, warn user if not
             if os.environ["SC2PATH"]: check_mod_install()
-            # TODO: Check if dlls are installed, warn user if not
+            # Check if dlls are installed, warn user if not
+            check_dlls()
 
         if cmd in {"PrintJSON"}:
             if "receiving" in args:
@@ -857,12 +867,12 @@ def check_game_install_path(debug=False) -> bool:
     return False
 
 
-def check_mod_install() -> bool:
+def check_mod_install(debug=False) -> bool:
     # Pull up the SC2PATH if set. If not, encourage the user to manually run check_game_install_path and troubleshoot.
     if os.environ["SC2PATH"]:
         # Check inside the Mods folder for Archipelago.SC2Mod. If found, tell user. If not, tell user.
         if os.path.isfile(modfile := (os.environ["SC2PATH"] / Path("Mods") / Path("Archipelago.SC2Mod"))):
-            sc2_logger.info(f"Archipelago mod found at {modfile}.")
+            if debug: sc2_logger.info(f"Archipelago mod found at {modfile}.")
             return True
         else:
             sc2_logger.info(f"Archipelago mod could not be found at {modfile}. Please install the mod file there.")
@@ -874,11 +884,15 @@ def check_mod_install() -> bool:
 
 
 def check_dlls(debug=False):
-    # I guess for this one, check the Archipelago installation\lib for the following files:
-    # icudt52.dll
-    # icuin52.dll
-    # icuuc52.dll
-    pass
+    # Credit to Magnemania for the structure of this code.
+    # Check the lib folder of the Archipelago installation for the following files:
+    required_dll_names = {'icudt52.dll', 'icuin52.dll', 'icuuc52.dll'}
+    dlls = set(listdir(libdir := getcwd() / Path('lib')))
+    missing_dlls = required_dll_names - dlls
+    for missing_dll in missing_dlls:
+        sc2_logger.info(f'Could not find {missing_dll} in {libdir}, was it copied from the zip download?')
+    if (not missing_dlls) and debug:
+        sc2_logger.info(f"Found all required .dlls in {libdir}!")
 
 
 if __name__ == '__main__':
