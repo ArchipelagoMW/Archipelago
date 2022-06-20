@@ -22,7 +22,7 @@ from worlds.sc2wol import SC2WoLWorld
 
 from pathlib import Path
 import re
-from shutil import copy
+from shutil import copy2
 
 from Utils import init_logging
 
@@ -81,32 +81,32 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_check_game_install_path(self) -> bool:
         """Try to find and store the location of your SC2 installation."""
 
-        check_game_install_path(debug=True)
+        check_game_install_path(self.ctx.ui, debug=True)
         return True
 
     def _cmd_check_mod_install(self) -> bool:
         """Confirm whether you've installed Archipelago.SC2Mod in the correct place."""
 
-        # Figure out whether they've pointed us to SC2 yet. If not, find it.
-        if not os.environ["SC2PATH"]: check_game_install_path(debug=True)
+        # We must know where SC2 is first.
+        check_game_install_path(self.ctx.ui)
         # Then we can do the actual mod check, unless the program failed to find SC2PATH.
-        if os.environ["SC2PATH"]:
-            check_mod_install(debug=True)
-        else:
-            sc2_logger.info("Failed to check mod install due to missing SC2 install directory.")
+        try:
+            check_mod_install(self.ctx.ui, debug=True)
+        except KeyError:
+            display_message("Failed to check mod install due to missing SC2 install directory.", self.ctx.ui)
         return True
 
     def _cmd_check_dlls(self) -> bool:
         """Confirm whether you've installed the .dlls in the correct place."""
 
         # No SC2 install technically necessary here.
-        check_dlls(debug=True)
+        check_dlls(self.ctx.ui, debug=True)
         return True
 
     def _cmd_grab_dlls(self) -> bool:
         """If you're missing any .dlls, grab them from your SC2 install."""
 
-        grab_dlls(debug=True)
+        grab_dlls(self.ctx.ui, debug=True)
         return True
 
 
@@ -153,10 +153,13 @@ class SC2Context(CommonContext):
             # Look for and set SC2PATH; warn user if not found
             check_game_install_path()
             # Check if mod is installed at SC2PATH/Mods, warn user if not
-            if os.environ["SC2PATH"] is not None: check_mod_install()
-            # Check if dlls are installed, warn user and grab them if not
-            if not check_dlls():
-                grab_dlls()
+            # Also check if dlls are installed, warn user and grab them if not
+            try:
+                check_mod_install()
+                if not check_dlls():
+                    grab_dlls()
+            except KeyError:
+                pass
 
         if cmd in {"PrintJSON"}:
             if "receiving" in args:
@@ -843,7 +846,7 @@ def initialize_blank_mission_dict(location_table):
     return unlocks
 
 
-def check_game_install_path(debug=False) -> bool:
+def check_game_install_path(ui=None, debug=False) -> bool:
     # Go to the default location for ExecuteInfo.
     einfo = str(sc2.paths.get_home() / Path(sc2.paths.USERPATH[sc2.paths.PF]))
 
@@ -861,66 +864,100 @@ def check_game_install_path(debug=False) -> bool:
                 # Finally, check the path for an actual executable.
                 # If we find one, great. Set up the SC2PATH.
                 if os.path.isfile(executable):
-                    if debug: sc2_logger.info(f"Found an SC2 install at {base}!")
-                    if debug: sc2_logger.info(f"Latest executable at {executable}.")
+                    if debug: display_success(f"Found an SC2 install at {base}!", ui)
+                    if debug: display_message(f"Latest executable at {executable}.", ui)
                     os.environ["SC2PATH"] = base
-                    if debug: sc2_logger.info(f"SC2PATH set to {base}.")
+                    if debug: display_success(f"SC2PATH set to {base}.", ui)
                     return True
                 else:
-                    sc2_logger.info(f"We may have found an SC2 install at {base}, but couldn't find {executable}.")
+                    display_warning(f"We may have found an SC2 install at {base}, but couldn't find {executable}.", ui)
             else:
-                sc2_logger.info(f"{einfo} pointed to {base}, but we could not find an SC2 install there.")
+                display_warning(f"{einfo} pointed to {base}, but we could not find an SC2 install there.", ui)
     else:
-        sc2_logger.info(f"Couldn't find {einfo}. Is SC2 installed?")
+        display_warning(f"Couldn't find {einfo}. Is SC2 installed?", ui)
     return False
 
 
-def check_mod_install(debug=False) -> bool:
+def check_mod_install(ui=None, debug=False) -> bool:
     # Pull up the SC2PATH if set. If not, encourage the user to manually run check_game_install_path and troubleshoot.
-    if os.environ["SC2PATH"]:
+    try:
         # Check inside the Mods folder for Archipelago.SC2Mod. If found, tell user. If not, tell user.
         if os.path.isfile(modfile := (os.environ["SC2PATH"] / Path("Mods") / Path("Archipelago.SC2Mod"))):
-            if debug: sc2_logger.info(f"Archipelago mod found at {modfile}.")
+            if debug: display_success(f"Archipelago mod found at {modfile}.", ui)
             return True
         else:
-            sc2_logger.info(f"Archipelago mod could not be found at {modfile}. Please install the mod file there.")
-    else:
-        # This should actually never happen, since this function should never be called without first having
-        # called check_game_install_path. I included it just in case someone neglects that at some point.
-        sc2_logger.info(f"SC2PATH isn't set. Please run /check_game_install_path and troubleshoot.")
+            display_warning(f"Archipelago mod could not be found at {modfile}. Please install the mod file there.", ui)
+    except KeyError:
+        display_warning(f"SC2PATH isn't set. Please run /check_game_install_path and troubleshoot.", ui)
     return False
 
 
-def check_dlls(debug=False) -> bool:
+def check_dlls(ui=None, debug=False) -> bool:
     # Credit to Magnemania for the structure of this code.
     # Check the lib folder of the Archipelago installation for the following files:
     required_dll_names = {'icudt52.dll', 'icuin52.dll', 'icuuc52.dll'}
-    dlls = set(listdir(libdir := getcwd() / Path('lib')))
+    try:
+        dlls = set(listdir(libdir := getcwd() / Path('lib')))
+    except FileNotFoundError:
+        display_warning("Failed to check .dlls. Couldn't find the Archipelago/lib folder.", ui)
+        return False
     missing_dlls = required_dll_names - dlls
     if missing_dlls:
         for missing_dll in missing_dlls:
-            if debug: sc2_logger.info(f'Could not find {missing_dll} in {libdir}, was it copied from the zip download?')
+            if debug: display_warning(f"Couldn't find {missing_dll} in {libdir}.", ui)
         return False
     if (not missing_dlls) and debug:
-        sc2_logger.info(f"Found all required .dlls in {libdir}!")
+        display_success(f"Found all required .dlls in {libdir}!", ui)
     return True
 
 
-def grab_dlls(debug=False):
+def grab_dlls(ui=None, debug=False):
     required_dll_names = {'icudt52.dll', 'icuin52.dll', 'icuuc52.dll'}
-    dlls = set(listdir(libdir := getcwd() / Path('lib')))
+    try:
+        dlls = set(listdir(libdir := getcwd() / Path('lib')))
+    except FileNotFoundError:
+        display_warning("Failed to check .dlls. Couldn't find the Archipelago/lib folder.", ui)
+        return False
     missing_dlls = required_dll_names - dlls
     if missing_dlls:
-        sc2_logger.info("Missing .dlls. Attempting to grab them from your SC2 install...")
+        display_message("Missing .dlls. Attempting to grab them from your SC2 install...", ui)
         # Without writing this to allow direct download, we can't grab the .dlls without SC2 installed.
-        if os.environ["SC2PATH"]:
+        try:
             for missing_dll in missing_dlls:
-                copy(Path(os.environ["SC2PATH"]) / "Support" / missing_dll, libdir)
-                sc2_logger.info(f"Grabbed {missing_dll}.")
-        else:
-            sc2_logger.info("Failed to acquire .dlls; could not find SC2 install.")
+                copy2(Path(os.environ["SC2PATH"]) / "Support64" / missing_dll, libdir)
+                display_success(f"Grabbed {missing_dll}.", ui)
+        except KeyError:
+            display_warning("Failed to acquire .dlls; could not find SC2 install.", ui)
     else:
-        if debug: sc2_logger.info("No .dlls missing. Did not grab.")
+        if debug: display_message("No .dlls missing. Did not grab.", ui)
+
+
+def display_message(text, ui=None, tag=None):
+    # If implemented, use hex code 88CCEE for the sky blue font of paths.
+    # These colors are colorblind-accessible, found using the Tol palette at https://davidmathlogic.com/colorblind/.
+    # The grey-ish background of the client is color code 303030, for reference. It is distinguishable from these.
+    message = ""
+    if ui:
+        if tag == "warning": message += "[color=AA4499]WARNING:[/color] "
+        elif tag == "success": message += "[color=117733]SUCCESS:[/color] "
+    else:
+        if tag == "warning": message += "WARNING: "
+        elif tag == "success": message += "SUCCESS: "
+    message += text
+
+    if ui:
+        ui.log_panels['All'].on_message_markup(message)
+        ui.log_panels['Starcraft2'].on_message_markup(message)
+    else:
+        sc2_logger.info(message)
+
+
+def display_success(text, ui=None):
+    display_message(text, ui, tag="success")
+
+
+def display_warning(text, ui=None):
+    display_message(text, ui, tag="warning")
 
 
 if __name__ == '__main__':
