@@ -328,6 +328,9 @@ class CommonContext:
                                   remote_datepackage_versions: typing.Dict[str, int]):
         """Validate that all data is present for the current multiworld.
         Download, assimilate and cache missing data from the server."""
+        # by documentation any game can use Archipelago locations/items -> always relevant
+        relevant_games.add("Archipelago")
+
         cache_package = Utils.persistent_load().get("datapackage", {}).get("games", {})
         needed_updates: typing.Set[str] = set()
         for game in relevant_games:
