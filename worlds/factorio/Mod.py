@@ -13,7 +13,7 @@ import Utils
 import Patch
 from . import Options
 
-from .Technologies import tech_table, recipes, free_sample_blacklist, progressive_technology_table, \
+from .Technologies import tech_table, recipes, free_sample_exclusions, progressive_technology_table, \
     base_tech_table, tech_to_progressive_lookup, fluids
 
 template_env: Optional[jinja2.Environment] = None
@@ -126,7 +126,7 @@ def generate_mod(world, output_directory: str):
         "static_nodes": multiworld.worlds[player].static_nodes,
         "recipe_time_scale": recipe_time_scales.get(multiworld.recipe_time[player].value, None),
         "recipe_time_range": recipe_time_ranges.get(multiworld.recipe_time[player].value, None),
-        "free_sample_blacklist": {item: 1 for item in free_sample_blacklist},
+        "free_sample_blacklist": {item: 1 for item in free_sample_exclusions},
         "progressive_technology_table": {tech.name: tech.progressive for tech in
                                          progressive_technology_table.values()},
         "custom_recipes": world.custom_recipes,

@@ -51,7 +51,7 @@ class SA2BWorld(World):
     game: str = "Sonic Adventure 2 Battle"
     options = sa2b_options
     topology_present = False
-    data_version = 1
+    data_version = 2
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
@@ -157,6 +157,12 @@ class SA2BWorld(World):
         self.emblems_for_cannons_core = math.floor(
             total_emblem_count * (self.world.emblem_percentage_for_cannons_core[self.player].value / 100.0))
 
+        gate_cost_mult = 1.0
+        if self.world.level_gate_costs[self.player].value == 0:
+            gate_cost_mult = 0.6
+        elif self.world.level_gate_costs[self.player].value == 1:
+            gate_cost_mult = 0.8
+
         shuffled_region_list = list(range(30))
         emblem_requirement_list = list()
         self.world.random.shuffle(shuffled_region_list)
@@ -182,7 +188,7 @@ class SA2BWorld(World):
                     current_gate = self.world.number_of_level_gates[self.player].value
                 else:
                     current_gate_emblems = max(
-                        math.floor(total_emblem_count * math.pow(total_levels_added / 30.0, 2.0)), current_gate)
+                        math.floor(total_emblem_count * math.pow(total_levels_added / 30.0, 2.0) * gate_cost_mult), current_gate)
                     gates.append(LevelGate(current_gate_emblems))
                     self.gate_costs[current_gate] = current_gate_emblems
                 levels_added_to_gate = 0

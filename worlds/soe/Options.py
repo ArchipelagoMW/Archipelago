@@ -1,5 +1,5 @@
 import typing
-from Options import Option, Range, Choice, Toggle, DefaultOnToggle, AssembleOptions, DeathLink
+from Options import Option, Range, Choice, Toggle, DefaultOnToggle, AssembleOptions, DeathLink, ProgressionBalancing
 
 
 class EvermizerFlags:
@@ -184,28 +184,33 @@ class TrapChanceOHKO(TrapChance):
     item_name = "OHKO Trap"
 
 
+class SoEProgressionBalancing(ProgressionBalancing):
+    default = 30
+
+
 soe_options: typing.Dict[str, type(Option)] = {
-    "difficulty":           Difficulty,
-    "money_modifier":       MoneyModifier,
-    "exp_modifier":         ExpModifier,
-    "fix_sequence":         FixSequence,
-    "fix_cheats":           FixCheats,
-    "fix_infinite_ammo":    FixInfiniteAmmo,
-    "fix_atlas_glitch":     FixAtlasGlitch,
-    "fix_wings_glitch":     FixWingsGlitch,
-    "shorter_dialogs":      ShorterDialogs,
-    "short_boss_rush":      ShortBossRush,
-    "ingredienizer":        Ingredienizer,
-    "sniffamizer":          Sniffamizer,
-    "callbeadamizer":       Callbeadamizer,
-    "musicmizer":           Musicmizer,
-    "doggomizer":           Doggomizer,
-    "turdo_mode":           TurdoMode,
-    "death_link":           DeathLink,
-    "trap_count":           TrapCount,
-    "trap_chance_quake":    TrapChanceQuake,
-    "trap_chance_poison":   TrapChancePoison,
-    "trap_chance_confound": TrapChanceConfound,
-    "trap_chance_hud":      TrapChanceHUD,
-    "trap_chance_ohko":     TrapChanceOHKO,
+    "difficulty":            Difficulty,
+    "money_modifier":        MoneyModifier,
+    "exp_modifier":          ExpModifier,
+    "fix_sequence":          FixSequence,
+    "fix_cheats":            FixCheats,
+    "fix_infinite_ammo":     FixInfiniteAmmo,
+    "fix_atlas_glitch":      FixAtlasGlitch,
+    "fix_wings_glitch":      FixWingsGlitch,
+    "shorter_dialogs":       ShorterDialogs,
+    "short_boss_rush":       ShortBossRush,
+    "ingredienizer":         Ingredienizer,
+    "sniffamizer":           Sniffamizer,
+    "callbeadamizer":        Callbeadamizer,
+    "musicmizer":            Musicmizer,
+    "doggomizer":            Doggomizer,
+    "turdo_mode":            TurdoMode,
+    "death_link":            DeathLink,
+    "trap_count":            TrapCount,
+    "trap_chance_quake":     TrapChanceQuake,
+    "trap_chance_poison":    TrapChancePoison,
+    "trap_chance_confound":  TrapChanceConfound,
+    "trap_chance_hud":       TrapChanceHUD,
+    "trap_chance_ohko":      TrapChanceOHKO,
+    "progression_balancing": SoEProgressionBalancing,
 }
