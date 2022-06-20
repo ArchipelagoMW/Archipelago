@@ -29,6 +29,7 @@ for world_name, world in AutoWorldRegister.world_types.items():
     games[world_name] = {
         "version": world.data_version,
         "checksum": None,
+        "cache_safe": not world.development_mode,
         "item_name_to_id": world.item_name_to_id,
         "location_name_to_id": world.location_name_to_id,
         # seems clients don't actually want this. Keeping it here in case someone changes their mind.
