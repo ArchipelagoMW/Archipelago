@@ -77,10 +77,21 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         return True
 
     def _cmd_check_game_install_path(self) -> bool:
-        """Try to find and verify the location of your SC2 installation."""
+        """Try to find and store the location of your SC2 installation."""
 
         check_game_install_path(debug=True)
         return True
+
+    def _cmd_check_mod_install(self) -> bool:
+        """Confirm whether you've installed Archipelago.SC2Mod in the correct place."""
+
+        # Figure out whether they've pointed us to SC2 yet. If not, find it.
+        if not os.environ["SC2PATH"]: check_game_install_path(debug=True)
+        # Then we can do the actual mod check, unless the program failed to find SC2PATH.
+        if os.environ["SC2PATH"]:
+            check_mod_install()
+        else:
+            sc2_logger.info("Failed to check mod install due to missing SC2 install directory.")
 
 
 class SC2Context(CommonContext):
@@ -123,9 +134,10 @@ class SC2Context(CommonContext):
             for mission in slot_req_table:
                 self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
 
-            # Look for StarCraft 2 directory, warn user if StarCraft 2 can not be found; sets SC2PATH to the found directory
+            # Look for StarCraft 2 directory, warn user if StarCraft 2 can not be found; sets SC2PATH to found directory
             check_game_install_path()
-            # TODO: Check if mod is installed at [pathname]/Mods, warn user if not
+            # Check if mod is installed at [pathname]/Mods, warn user if not
+            if os.environ["SC2PATH"]: check_mod_install()
             # TODO: Check if dlls are installed, warn user if not
 
         if cmd in {"PrintJSON"}:
@@ -813,7 +825,7 @@ def initialize_blank_mission_dict(location_table):
     return unlocks
 
 
-def check_game_install_path(debug=False):
+def check_game_install_path(debug=False) -> bool:
     # Go to the default location for ExecuteInfo.
     einfo = str(sc2.paths.get_home() / Path(sc2.paths.USERPATH[sc2.paths.PF]))
 
@@ -835,12 +847,38 @@ def check_game_install_path(debug=False):
                     if debug: sc2_logger.info(f"Latest executable at {executable}.")
                     os.environ["SC2PATH"] = base
                     if debug: sc2_logger.info(f"SC2PATH set to {base}.")
+                    return True
                 else:
                     sc2_logger.info(f"We may have found an SC2 install at {base}, but couldn't find {executable}.")
             else:
                 sc2_logger.info(f"{einfo} pointed to {base}, but we could not find an SC2 install there.")
     else:
         sc2_logger.info(f"Couldn't find {einfo}. Is SC2 installed?")
+    return False
+
+
+def check_mod_install() -> bool:
+    # Pull up the SC2PATH if set. If not, encourage the user to manually run check_game_install_path and troubleshoot.
+    if os.environ["SC2PATH"]:
+        # Check inside the Mods folder for Archipelago.SC2Mod. If found, tell user. If not, tell user.
+        if os.path.isfile(modfile := (os.environ["SC2PATH"] / Path("Mods") / Path("Archipelago.SC2Mod"))):
+            sc2_logger.info(f"Archipelago mod found at {modfile}.")
+            return True
+        else:
+            sc2_logger.info(f"Archipelago mod could not be found at {modfile}. Please install the mod file there.")
+    else:
+        # This should actually never happen, since this function should never be called without first having
+        # called check_game_install_path. I included it just in case someone neglects that at some point.
+        sc2_logger.info(f"SC2PATH isn't set. Please run /check_game_install_path and troubleshoot.")
+    return False
+
+
+def check_dlls(debug=False):
+    # I guess for this one, check the Archipelago installation\lib for the following files:
+    # icudt52.dll
+    # icuin52.dll
+    # icuuc52.dll
+    pass
 
 
 if __name__ == '__main__':
