@@ -96,6 +96,7 @@ def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
 _encode = JSONEncoder(
     ensure_ascii=False,
     check_circular=False,
+    separators=(',', ':'),
 ).encode
 
 
