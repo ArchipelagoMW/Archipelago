@@ -225,7 +225,7 @@ class SA2BWorld(World):
 
         trap_pool = []
         for i in range(trap_count):
-            trap_item = self.world.random.choice(list(trap_weights))
+            trap_item = self.world.random.choice(trap_weights)
             trap_pool += [self.create_item(trap_item)]
 
         itempool += trap_pool

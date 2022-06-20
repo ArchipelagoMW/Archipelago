@@ -57,7 +57,7 @@ def get_gate_bosses(world, player: int):
 
     for x in range(world.number_of_level_gates[player]):
         if (not halfway) and ((x + 1) / world.number_of_level_gates[player]) > 0.5:
-            available_bosses.extend(list(gate_bosses_with_requirements_table.keys()))
+            available_bosses.extend(gate_bosses_with_requirements_table)
             world.random.shuffle(available_bosses)
             halfway = True
         selected_bosses.append(all_gate_bosses_table[available_bosses[0]])

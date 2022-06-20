@@ -595,7 +595,8 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
     for i in range(len(gates[0].gate_levels)):
         connect(world, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])
 
-    if len(gates) >= 2:
+    gates_len = len(gates)
+    if gates_len >= 2:
         connect(world, player, names, 'Menu', LocationName.gate_1_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[1].gate_emblem_count)))
 
@@ -608,7 +609,7 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         for i in range(len(gates[1].gate_levels)):
             connect(world, player, names, LocationName.gate_1_region, shuffleable_regions[gates[1].gate_levels[i]])
 
-    if len(gates) >= 3:
+    if gates_len >= 3:
         connect(world, player, names, 'Menu', LocationName.gate_2_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[2].gate_emblem_count)))
 
@@ -621,7 +622,7 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         for i in range(len(gates[2].gate_levels)):
             connect(world, player, names, LocationName.gate_2_region, shuffleable_regions[gates[2].gate_levels[i]])
 
-    if len(gates) >= 4:
+    if gates_len >= 4:
         connect(world, player, names, 'Menu', LocationName.gate_3_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[3].gate_emblem_count)))
 
@@ -634,7 +635,7 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         for i in range(len(gates[3].gate_levels)):
             connect(world, player, names, LocationName.gate_3_region, shuffleable_regions[gates[3].gate_levels[i]])
 
-    if len(gates) >= 5:
+    if gates_len >= 5:
         connect(world, player, names, 'Menu', LocationName.gate_4_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[4].gate_emblem_count)))
 
@@ -647,7 +648,7 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         for i in range(len(gates[4].gate_levels)):
             connect(world, player, names, LocationName.gate_4_region, shuffleable_regions[gates[4].gate_levels[i]])
 
-    if len(gates) >= 6:
+    if gates_len >= 6:
         connect(world, player, names, 'Menu', LocationName.gate_5_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[5].gate_emblem_count)))
 
@@ -660,27 +661,27 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         for i in range(len(gates[5].gate_levels)):
             connect(world, player, names, LocationName.gate_5_region, shuffleable_regions[gates[5].gate_levels[i]])
 
-    if len(gates) == 1:
+    if gates_len == 1:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_expert_region)
-    elif len(gates) == 2:
+    elif gates_len == 2:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_expert_region)
-    elif len(gates) == 3:
+    elif gates_len == 3:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_expert_region)
-    elif len(gates) == 4:
+    elif gates_len == 4:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_3_region, LocationName.chao_garden_expert_region)
-    elif len(gates) == 5:
+    elif gates_len == 5:
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_3_region, LocationName.chao_garden_expert_region)
-    elif len(gates) >= 6:
+    elif gates_len >= 6:
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_4_region, LocationName.chao_garden_expert_region)
