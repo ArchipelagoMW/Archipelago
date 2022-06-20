@@ -79,34 +79,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_check_game_install_path(self) -> bool:
         """Try to find and verify the location of your SC2 installation."""
 
-        # Go to the default location for ExecuteInfo.
-        # einfo = str(Path.home().expanduser() / Path("Documents\\StarCraft II\\ExecuteInfo.txt"))
-        einfo = str(sc2.paths.get_home() / Path(sc2.paths.USERPATH[sc2.paths.PF]))
-
-        # Check if the file exists.
-        if os.path.isfile(einfo):
-
-            # Open the file and read it.
-            with open(einfo) as f:
-                content = f.read()
-            if content:
-                base = re.search(r" = (.*)Versions", content).group(1)
-                if os.path.exists(base):
-                    # Finally, check the path for an actual executable.
-                    # If we find one, great. Set up the SC2PATH.
-                    try:
-                        # this next call throws the error if no executable is found
-                        sc2.paths.latest_executeble(Path(base).expanduser() / "Versions")
-                        sc2_logger.info("Found the SC2 install!")
-                        os.environ["SC2PATH"] = base
-                        sc2_logger.info(f"SC2PATH set to {base}.")
-                    # If we don't find an actual executable, log that.
-                    except:
-                        sc2_logger.info(f"Couldn't find the SC2 executable at {base}!")
-                else:
-                    sc2_logger.info(f"{einfo} pointed to {base}, but we could not find an SC2 install there.")
-        else:
-            sc2_logger.info(f"Couldn't find {einfo}. Is SC2 installed?")
+        check_game_install_path(debug=True)
         return True
 
 
@@ -149,6 +122,11 @@ class SC2Context(CommonContext):
                     mission_data["category"] = wol_default_categories[i]
             for mission in slot_req_table:
                 self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
+
+            # Look for StarCraft 2 directory, warn user if StarCraft 2 can not be found; sets SC2PATH to the found directory
+            check_game_install_path()
+            # TODO: Check if mod is installed at [pathname]/Mods, warn user if not
+            # TODO: Check if dlls are installed, warn user if not
 
         if cmd in {"PrintJSON"}:
             if "receiving" in args:
@@ -833,6 +811,36 @@ def initialize_blank_mission_dict(location_table):
         unlocks[mission] = []
 
     return unlocks
+
+
+def check_game_install_path(debug=False):
+    # Go to the default location for ExecuteInfo.
+    einfo = str(sc2.paths.get_home() / Path(sc2.paths.USERPATH[sc2.paths.PF]))
+
+    # Check if the file exists.
+    if os.path.isfile(einfo):
+
+        # Open the file and read it, picking out the latest executable's path.
+        with open(einfo) as f:
+            content = f.read()
+        if content:
+            base = re.search(r" = (.*)Versions", content).group(1)
+            if os.path.exists(base):
+                executable = sc2.paths.latest_executeble(Path(base).expanduser() / "Versions")
+
+                # Finally, check the path for an actual executable.
+                # If we find one, great. Set up the SC2PATH.
+                if os.path.isfile(executable):
+                    sc2_logger.info(f"Found an SC2 install at {base}!")
+                    if debug: sc2_logger.info(f"Latest executable at {executable}.")
+                    os.environ["SC2PATH"] = base
+                    if debug: sc2_logger.info(f"SC2PATH set to {base}.")
+                else:
+                    sc2_logger.info(f"We may have found an SC2 install at {base}, but couldn't find {executable}.")
+            else:
+                sc2_logger.info(f"{einfo} pointed to {base}, but we could not find an SC2 install there.")
+    else:
+        sc2_logger.info(f"Couldn't find {einfo}. Is SC2 installed?")
 
 
 if __name__ == '__main__':
