@@ -367,14 +367,11 @@ class MyGameWorld(World):
     game: str = "My Game"  # name of the game/world
     options = mygame_options  # options the player can set
     topology_present: bool = True  # show path to required location checks in spoiler
-    remote_items: bool = False  # True if all items come from the server
-    remote_start_inventory: bool = False  # True if start inventory comes from the server
 
-    # data_version is used to signal that items, locations or their names
-    # changed. Set this to 0 during development so other games' clients do not
-    # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 0
-
+    # While this is set to True in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
+    # retrieved by clients on every connection.
+    development_mode: bool = False
+    
     # ID of first item and location, could be hard-coded but code may be easier
     # to read with this as a propery.
     base_id = 1234

@@ -131,7 +131,7 @@ class World(metaclass=AutoWorldRegister):
     #
     # Deprecated. This is only used by older clients. Please use `development_mode` instead to indicate testing mode as
     # checksum will be referenced instead by newer clients if they need to update their DataPackage cache.
-    data_version: int = 1
+    data_version: int = 0
 
     # While this is set to True in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
     # retrieved by clients on every connection.
