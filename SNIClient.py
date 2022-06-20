@@ -1022,16 +1022,18 @@ async def track_locations(ctx: Context, roomid, roomdata):
         rom = await snes_read(ctx,
                               rom_start[ctx.game],
                               ROMNAME_SIZE)
-        if ctx.auth != rom:
+        if ctx.auth == rom:
+            for location_id in new_locations:
+                ctx.locations_checked.add(location_id)
+                location = ctx.location_names[location_id]
+                snes_logger.info(
+                    f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+
+            await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": new_locations}])
+        else:
             snes_logger.warning("ROM change detected, please reconnect to the multiworld server")
             await ctx.disconnect()
-        for location_id in new_locations:
-            ctx.locations_checked.add(location_id)
-            location = ctx.location_names[location_id]
-            snes_logger.info(
-                f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
 
-        await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": new_locations}])
     await snes_flush_writes(ctx)
 
 
