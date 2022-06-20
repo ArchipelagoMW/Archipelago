@@ -19,6 +19,9 @@ from worlds.sc2wol.Items import lookup_id_to_name, item_table
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 from worlds.sc2wol import SC2WoLWorld
 
+from pathlib import Path
+import re
+
 from Utils import init_logging
 
 if __name__ == "__main__":
@@ -71,6 +74,39 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         """Get what missions are currently available to play and have not had all locations checked"""
 
         request_unfinished_missions(self.ctx.checked_locations, self.ctx.mission_req_table, self.ctx.ui, self.ctx)
+        return True
+
+    def _cmd_check_game_install_path(self) -> bool:
+        """Try to find and verify the location of your SC2 installation."""
+
+        # Go to the default location for ExecuteInfo.
+        # einfo = str(Path.home().expanduser() / Path("Documents\\StarCraft II\\ExecuteInfo.txt"))
+        einfo = str(sc2.paths.get_home() / Path(sc2.paths.USERPATH[sc2.paths.PF]))
+
+        # Check if the file exists.
+        if os.path.isfile(einfo):
+
+            # Open the file and read it.
+            with open(einfo) as f:
+                content = f.read()
+            if content:
+                base = re.search(r" = (.*)Versions", content).group(1)
+                if os.path.exists(base):
+                    # Finally, check the path for an actual executable.
+                    # If we find one, great. Set up the SC2PATH.
+                    try:
+                        # this next call throws the error if no executable is found
+                        sc2.paths.latest_executeble(Path(base).expanduser() / "Versions")
+                        sc2_logger.info("Found the SC2 install!")
+                        os.environ["SC2PATH"] = base
+                        sc2_logger.info(f"SC2PATH set to {base}.")
+                    # If we don't find an actual executable, log that.
+                    except:
+                        sc2_logger.info(f"Couldn't find the SC2 executable at {base}!")
+                else:
+                    sc2_logger.info(f"{einfo} pointed to {base}, but we could not find an SC2 install there.")
+        else:
+            sc2_logger.info(f"Couldn't find {einfo}. Is SC2 installed?")
         return True
 
 
