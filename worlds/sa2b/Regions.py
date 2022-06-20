@@ -664,32 +664,26 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_expert_region)
-
-    if len(gates) == 2:
+    elif len(gates) == 2:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_expert_region)
-
-    if len(gates) == 3:
+    elif len(gates) == 3:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_expert_region)
-
-    if len(gates) == 4:
+    elif len(gates) == 4:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_3_region, LocationName.chao_garden_expert_region)
-
-    if len(gates) == 5:
+    elif len(gates) == 5:
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_3_region, LocationName.chao_garden_expert_region)
-
-    if len(gates) >= 6:
+    elif len(gates) >= 6:
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
         connect(world, player, names, LocationName.gate_4_region, LocationName.chao_garden_expert_region)
-
 
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):

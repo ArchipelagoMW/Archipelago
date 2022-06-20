@@ -210,8 +210,9 @@ class SA2BWorld(World):
         junk_count -= trap_count
 
         junk_pool = []
+        junk_keys = list(junk_table.keys())
         for i in range(junk_count):
-            junk_item = self.world.random.choice(list(junk_table.keys()))
+            junk_item = self.world.random.choice(junk_keys)
             junk_pool += [self.create_item(junk_item)]
 
         itempool += junk_pool
