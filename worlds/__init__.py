@@ -38,8 +38,8 @@ for world_name, world in AutoWorldRegister.world_types.items():
     lookup_any_location_id_to_name.update(world.location_id_to_name)
 
     # Calculate a checksum of the datapackage as a base64 encoded string.
-    checksum = str(base64.urlsafe_b64encode(hashlib.new("sha1", pickle.dumps(games[world_name])).digest()))
-    games[world_name]["checksum"] = checksum.lstrip("b'").rstrip("='")  # Remove python bytes __repr__ characters.
+    checksum = base64.urlsafe_b64encode(hashlib.new("sha1", pickle.dumps(games[world_name])).digest()).decode()
+    games[world_name]["checksum"] = checksum.rstrip("=")
 
 network_data_package = {
     "version": sum(world.data_version for world in AutoWorldRegister.world_types.values()),
