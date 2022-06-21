@@ -6,6 +6,7 @@ import os
 import json
 import typing
 import ast
+import re
 
 import jinja2
 
@@ -353,13 +354,16 @@ for connector_obj in connectors_logic:
     if rule != "True":
         connectors_rules[name] = rule
 
+    match = re.match(r"^(.+)\[.+\]$", connector_obj["Name"])
+    if match and match[1] in region_names:
+        location_to_region_lookup[connector_obj["Name"]] = match[1]
+
 event_rules: typing.Dict[str, str] = {}
 for event in events:
     rule = ast_parse(parser, event["logic"])
     rule = unparse(rule)
     if rule != "True":
         event_rules[event["name"]] = rule
-
 
 event_rules.update(connectors_rules)
 connectors_rules = {}
