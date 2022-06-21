@@ -12,6 +12,7 @@ import io
 import collections
 import importlib
 import logging
+import decimal
 
 if typing.TYPE_CHECKING:
     from tkinter import Tk
