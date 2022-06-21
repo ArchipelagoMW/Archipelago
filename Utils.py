@@ -506,6 +506,7 @@ def chaining_prefix(index: int, labels: typing.Tuple[str]) -> str:
 
 # noinspection PyPep8Naming
 def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")) -> str:
+    """Formats a value into a value + metric/si prefix. More info at https://en.wikipedia.org/wiki/Metric_prefix"""
     n = 0
     value = decimal.Decimal(value)
     while value >= power:
