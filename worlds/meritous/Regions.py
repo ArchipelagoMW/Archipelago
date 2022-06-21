@@ -68,7 +68,8 @@ def create_regions(world: MultiWorld, player: int):
     entrance_map = {
         "To Meridian": {
             "to": "Meridian",
-            "rule": lambda state: state.has_group("PSI Keys", player, 1)
+            "rule": lambda state: state.has_group("PSI Keys", player, 1) and
+                                  state.has_group("Important Artifacts", player, 1)
         },
         "To Second Quarter": {
             "to": "Second Quarter",
@@ -76,7 +77,8 @@ def create_regions(world: MultiWorld, player: int):
         },
         "To Ataraxia": {
             "to": "Ataraxia",
-            "rule": lambda state: state.has_group("PSI Keys", player, 2)
+            "rule": lambda state: state.has_group("PSI Keys", player, 2) and
+                                  state.has_group("Important Artifacts", player, 2)
         },
         "To Third Quarter": {
             "to": "Third Quarter",
@@ -84,7 +86,8 @@ def create_regions(world: MultiWorld, player: int):
         },
         "To Merodach": {
             "to": "Merodach",
-            "rule": lambda state: state.has_group("PSI Keys", player, 3)
+            "rule": lambda state: state.has_group("PSI Keys", player, 3) and
+                                  state.has_group("Important Artifacts", player, 3)
         },
         "To Last Quarter": {
             "to": "Last Quarter",

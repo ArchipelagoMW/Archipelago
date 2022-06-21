@@ -220,17 +220,92 @@ upgrade_location_table = {
     LocationName.final_chase_upgrade: 0xFF00BD,
 }
 
-chao_garden_location_table = {
-    LocationName.chao_beginner_race: 0xFF00C0,
-    LocationName.chao_jewel_race: 0xFF00C1,
-    LocationName.chao_challenge_race: 0xFF00C2,
-    LocationName.chao_hero_race: 0xFF00C3,
-    LocationName.chao_dark_race: 0xFF00C4,
+boss_gate_location_table = {
+    LocationName.gate_1_boss: 0xFF0100,
+    LocationName.gate_2_boss: 0xFF0101,
+    LocationName.gate_3_boss: 0xFF0102,
+    LocationName.gate_4_boss: 0xFF0103,
+    LocationName.gate_5_boss: 0xFF0104,
+}
 
-    LocationName.chao_beginner_karate: 0xFF00C5,
-    LocationName.chao_standard_karate: 0xFF00C6,
-    LocationName.chao_expert_karate: 0xFF00C7,
-    LocationName.chao_super_karate: 0xFF00C8,
+chao_garden_beginner_location_table = {
+    LocationName.chao_race_crab_pool_1: 0xFF0200,
+    LocationName.chao_race_crab_pool_2: 0xFF0201,
+    LocationName.chao_race_crab_pool_3: 0xFF0202,
+    LocationName.chao_race_stump_valley_1: 0xFF0203,
+    LocationName.chao_race_stump_valley_2: 0xFF0204,
+    LocationName.chao_race_stump_valley_3: 0xFF0205,
+    LocationName.chao_race_mushroom_forest_1: 0xFF0206,
+    LocationName.chao_race_mushroom_forest_2: 0xFF0207,
+    LocationName.chao_race_mushroom_forest_3: 0xFF0208,
+    LocationName.chao_race_block_canyon_1: 0xFF0209,
+    LocationName.chao_race_block_canyon_2: 0xFF020A,
+    LocationName.chao_race_block_canyon_3: 0xFF020B,
+
+    LocationName.chao_beginner_karate: 0xFF0300,
+}
+
+chao_garden_intermediate_location_table = {
+    LocationName.chao_race_aquamarine_1: 0xFF020C,
+    LocationName.chao_race_aquamarine_2: 0xFF020D,
+    LocationName.chao_race_aquamarine_3: 0xFF020E,
+    LocationName.chao_race_aquamarine_4: 0xFF020F,
+    LocationName.chao_race_aquamarine_5: 0xFF0210,
+    LocationName.chao_race_topaz_1: 0xFF0211,
+    LocationName.chao_race_topaz_2: 0xFF0212,
+    LocationName.chao_race_topaz_3: 0xFF0213,
+    LocationName.chao_race_topaz_4: 0xFF0214,
+    LocationName.chao_race_topaz_5: 0xFF0215,
+    LocationName.chao_race_peridot_1: 0xFF0216,
+    LocationName.chao_race_peridot_2: 0xFF0217,
+    LocationName.chao_race_peridot_3: 0xFF0218,
+    LocationName.chao_race_peridot_4: 0xFF0219,
+    LocationName.chao_race_peridot_5: 0xFF021A,
+    LocationName.chao_race_garnet_1: 0xFF021B,
+    LocationName.chao_race_garnet_2: 0xFF021C,
+    LocationName.chao_race_garnet_3: 0xFF021D,
+    LocationName.chao_race_garnet_4: 0xFF021E,
+    LocationName.chao_race_garnet_5: 0xFF021F,
+    LocationName.chao_race_onyx_1: 0xFF0220,
+    LocationName.chao_race_onyx_2: 0xFF0221,
+    LocationName.chao_race_onyx_3: 0xFF0222,
+    LocationName.chao_race_onyx_4: 0xFF0223,
+    LocationName.chao_race_onyx_5: 0xFF0224,
+    LocationName.chao_race_diamond_1: 0xFF0225,
+    LocationName.chao_race_diamond_2: 0xFF0226,
+    LocationName.chao_race_diamond_3: 0xFF0227,
+    LocationName.chao_race_diamond_4: 0xFF0228,
+    LocationName.chao_race_diamond_5: 0xFF0229,
+
+    LocationName.chao_standard_karate: 0xFF0301,
+}
+
+chao_garden_expert_location_table = {
+    LocationName.chao_race_challenge_1: 0xFF022A,
+    LocationName.chao_race_challenge_2: 0xFF022B,
+    LocationName.chao_race_challenge_3: 0xFF022C,
+    LocationName.chao_race_challenge_4: 0xFF022D,
+    LocationName.chao_race_challenge_5: 0xFF022E,
+    LocationName.chao_race_challenge_6: 0xFF022F,
+    LocationName.chao_race_challenge_7: 0xFF0230,
+    LocationName.chao_race_challenge_8: 0xFF0231,
+    LocationName.chao_race_challenge_9: 0xFF0232,
+    LocationName.chao_race_challenge_10: 0xFF0233,
+    LocationName.chao_race_challenge_11: 0xFF0234,
+    LocationName.chao_race_challenge_12: 0xFF0235,
+
+    LocationName.chao_race_hero_1: 0xFF0236,
+    LocationName.chao_race_hero_2: 0xFF0237,
+    LocationName.chao_race_hero_3: 0xFF0238,
+    LocationName.chao_race_hero_4: 0xFF0239,
+
+    LocationName.chao_race_dark_1: 0xFF023A,
+    LocationName.chao_race_dark_2: 0xFF023B,
+    LocationName.chao_race_dark_3: 0xFF023C,
+    LocationName.chao_race_dark_4: 0xFF023D,
+
+    LocationName.chao_expert_karate: 0xFF0302,
+    LocationName.chao_super_karate: 0xFF0303,
 }
 
 other_location_table = {
@@ -245,15 +320,57 @@ all_locations = {
     **fourth_mission_location_table,
     **fifth_mission_location_table,
     **upgrade_location_table,
-    **chao_garden_location_table,
+    **boss_gate_location_table,
+    **chao_garden_beginner_location_table,
+    **chao_garden_intermediate_location_table,
+    **chao_garden_expert_location_table,
     **other_location_table,
 }
 
-location_table = {}
+boss_gate_set = [
+    LocationName.gate_1_boss,
+    LocationName.gate_2_boss,
+    LocationName.gate_3_boss,
+    LocationName.gate_4_boss,
+    LocationName.gate_5_boss,
+]
+
+chao_karate_set = [
+    LocationName.chao_beginner_karate,
+    LocationName.chao_standard_karate,
+    LocationName.chao_expert_karate,
+    LocationName.chao_super_karate,
+]
+
+chao_race_prize_set = [
+    LocationName.chao_race_crab_pool_3,
+    LocationName.chao_race_stump_valley_3,
+    LocationName.chao_race_mushroom_forest_3,
+    LocationName.chao_race_block_canyon_3,
+
+    LocationName.chao_race_aquamarine_5,
+    LocationName.chao_race_topaz_5,
+    LocationName.chao_race_peridot_5,
+    LocationName.chao_race_garnet_5,
+    LocationName.chao_race_onyx_5,
+    LocationName.chao_race_diamond_5,
+
+    LocationName.chao_race_challenge_4,
+    LocationName.chao_race_challenge_8,
+    LocationName.chao_race_challenge_12,
+
+    LocationName.chao_race_hero_2,
+    LocationName.chao_race_hero_4,
+
+    LocationName.chao_race_dark_2,
+    LocationName.chao_race_dark_4,
+]
 
 
 def setup_locations(world, player: int):
-    location_table = {**first_mission_location_table}
+    location_table = {}
+    chao_location_table = {}
+    location_table.update({**first_mission_location_table})
 
     if world.include_missions[player].value >= 2:
         location_table.update({**second_mission_location_table})
@@ -268,8 +385,29 @@ def setup_locations(world, player: int):
         location_table.update({**fifth_mission_location_table})
 
     location_table.update({**upgrade_location_table})
-    # location_table.update(**chao_garden_location_table})
+
     location_table.update({**other_location_table})
+
+    if world.chao_garden_difficulty[player].value >= 1:
+        chao_location_table.update({**chao_garden_beginner_location_table})
+    if world.chao_garden_difficulty[player].value >= 2:
+        chao_location_table.update({**chao_garden_intermediate_location_table})
+    if world.chao_garden_difficulty[player].value >= 3:
+        chao_location_table.update({**chao_garden_expert_location_table})
+
+    for key, value in chao_location_table.items():
+        if key in chao_karate_set:
+            if world.include_chao_karate[player]:
+                location_table[key] = value
+        elif key not in chao_race_prize_set:
+            if world.chao_race_checks[player] == "all":
+                location_table[key] = value
+        else:
+            location_table[key] = value
+
+    for x in range(len(boss_gate_set)):
+        if x < world.number_of_level_gates[player].value:
+            location_table[boss_gate_set[x]] = boss_gate_location_table[boss_gate_set[x]]
 
     return location_table
 

@@ -83,7 +83,7 @@ tun.
 
 Wenn du an einem MultiWorld-Spiel teilnehmen möchtest, wirst du in der Regel vom Host nach deiner YAML-Datei gefragt.
 Sobald du diese weitergegeben hast, wird der Host einen Link bereitstellen, wo du deinen Patch oder eine .zip-Datei mit
-allen Patches herunterladen kannst. Die Patch-Datei hat immer die Endung `.apbp`.
+allen Patches herunterladen kannst. Die Patch-Datei hat immer die Endung `.aplttp`.
 
 ### Mit dem Client verbinden
 

@@ -9,82 +9,93 @@ logger = logging.getLogger("Hollow Knight")
 from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
 from .Rules import set_rules
-from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled
+from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled, Goal, WhitePalace
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
     event_names, item_effects, connectors, one_ways
 from .Charms import names as charm_names
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial, ItemClassification
 from ..AutoWorld import World, LogicMixin, WebWorld
 
-white_palace_locations = {
+path_of_pain_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
-    "Soul_Totem-White_Palace_Final",
     "Lore_Tablet-Path_of_Pain_Entrance",
     "Soul_Totem-Path_of_Pain_Left_of_Lever",
     "Soul_Totem-Path_of_Pain_Hidden",
     "Soul_Totem-Path_of_Pain_Entrance",
     "Soul_Totem-Path_of_Pain_Final",
-    "Soul_Totem-White_Palace_Entrance",
     "Soul_Totem-Path_of_Pain_Below_Lever",
-    "Lore_Tablet-Palace_Throne",
     "Soul_Totem-Path_of_Pain_Second",
+    "Journal_Entry-Seal_of_Binding",
+    "Warp-Path_of_Pain_Complete",
+    "Defeated_Path_of_Pain_Arena",
+    "Completed_Path_of_Pain",
+    # Path of Pain transitions
+    "White_Palace_17[right1]", "White_Palace_17[bot1]",
+    "White_Palace_18[top1]", "White_Palace_18[right1]",
+    "White_Palace_19[left1]", "White_Palace_19[top1]",
+    "White_Palace_20[bot1]",
+}
+
+white_palace_transitions = {
+    # Event-Transitions:
+    # "Grubfather_2",
+    "White_Palace_01[left1]", "White_Palace_01[right1]", "White_Palace_01[top1]",
+    "White_Palace_02[left1]",
+    "White_Palace_03_hub[bot1]", "White_Palace_03_hub[left1]", "White_Palace_03_hub[left2]",
+    "White_Palace_03_hub[right1]", "White_Palace_03_hub[top1]",
+    "White_Palace_04[right2]", "White_Palace_04[top1]",
+    "White_Palace_05[left1]", "White_Palace_05[left2]", "White_Palace_05[right1]", "White_Palace_05[right2]",
+    "White_Palace_06[bot1]", "White_Palace_06[left1]", "White_Palace_06[top1]", "White_Palace_07[bot1]",
+    "White_Palace_07[top1]", "White_Palace_08[left1]", "White_Palace_08[right1]",
+    "White_Palace_09[right1]",
+    "White_Palace_11[door2]",
+    "White_Palace_12[bot1]", "White_Palace_12[right1]",
+    "White_Palace_13[left1]", "White_Palace_13[left2]", "White_Palace_13[left3]", "White_Palace_13[right1]",
+    "White_Palace_14[bot1]", "White_Palace_14[right1]",
+    "White_Palace_15[left1]", "White_Palace_15[right1]", "White_Palace_15[right2]",
+    "White_Palace_16[left1]", "White_Palace_16[left2]",
+}
+
+white_palace_checks = {
+    "Soul_Totem-White_Palace_Final",
+    "Soul_Totem-White_Palace_Entrance",
+    "Lore_Tablet-Palace_Throne",
     "Soul_Totem-White_Palace_Left",
     "Lore_Tablet-Palace_Workshop",
     "Soul_Totem-White_Palace_Hub",
-    "Journal_Entry-Seal_of_Binding",
-    "Soul_Totem-White_Palace_Right",
-    "King_Fragment",
-    # Events:
-    "Palace_Entrance_Lantern_Lit",
-    "Palace_Left_Lantern_Lit",
-    "Palace_Right_Lantern_Lit",
-    "Warp-Path_of_Pain_Complete",
-    "Defeated_Path_of_Pain_Arena",
-    "Palace_Atrium_Gates_Opened",
-    "Completed_Path_of_Pain",
-    "Warp-White_Palace_Atrium_to_Palace_Grounds",
-    "Warp-White_Palace_Entrance_to_Palace_Grounds",
-    # Event-Regions:
+    "Soul_Totem-White_Palace_Right"
+}
+
+white_palace_events = {
     "White_Palace_03_hub",
     "White_Palace_13",
     "White_Palace_01",
-    # Event-Transitions:
-    "White_Palace_12[bot1]", "White_Palace_12[bot1]", "White_Palace_03_hub[bot1]", "White_Palace_16[left2]",
-    "White_Palace_16[left2]", "White_Palace_11[door2]", "White_Palace_11[door2]", "White_Palace_18[top1]",
-    "White_Palace_18[top1]", "White_Palace_15[left1]", "White_Palace_15[left1]", "White_Palace_05[left2]",
-    "White_Palace_05[left2]", "White_Palace_14[bot1]", "White_Palace_14[bot1]", "White_Palace_13[left2]",
-    "White_Palace_13[left2]", "White_Palace_03_hub[left1]", "White_Palace_03_hub[left1]", "White_Palace_15[right2]",
-    "White_Palace_15[right2]", "White_Palace_06[top1]", "White_Palace_06[top1]", "White_Palace_03_hub[bot1]",
-    "White_Palace_08[right1]", "White_Palace_08[right1]", "White_Palace_03_hub[right1]", "White_Palace_03_hub[right1]",
-    "White_Palace_01[right1]", "White_Palace_01[right1]", "White_Palace_08[left1]", "White_Palace_08[left1]",
-    "White_Palace_19[left1]", "White_Palace_19[left1]", "White_Palace_04[right2]", "White_Palace_04[right2]",
-    "White_Palace_01[left1]", "White_Palace_01[left1]", "White_Palace_17[right1]", "White_Palace_17[right1]",
-    "White_Palace_07[bot1]", "White_Palace_07[bot1]", "White_Palace_20[bot1]", "White_Palace_20[bot1]",
-    "White_Palace_03_hub[left2]", "White_Palace_03_hub[left2]", "White_Palace_18[right1]", "White_Palace_18[right1]",
-    "White_Palace_05[right1]", "White_Palace_05[right1]", "White_Palace_17[bot1]", "White_Palace_17[bot1]",
-    "White_Palace_09[right1]", "White_Palace_09[right1]", "White_Palace_16[left1]", "White_Palace_16[left1]",
-    "White_Palace_13[left1]", "White_Palace_13[left1]", "White_Palace_06[bot1]", "White_Palace_06[bot1]",
-    "White_Palace_15[right1]", "White_Palace_15[right1]", "White_Palace_06[left1]", "White_Palace_06[left1]",
-    "White_Palace_05[right2]", "White_Palace_05[right2]", "White_Palace_04[top1]", "White_Palace_04[top1]",
-    "White_Palace_19[top1]", "White_Palace_19[top1]", "White_Palace_14[right1]", "White_Palace_14[right1]",
-    "White_Palace_03_hub[top1]", "White_Palace_03_hub[top1]", "Grubfather_2", "White_Palace_13[left3]",
-    "White_Palace_13[left3]", "White_Palace_02[left1]", "White_Palace_02[left1]", "White_Palace_12[right1]",
-    "White_Palace_12[right1]", "White_Palace_07[top1]", "White_Palace_07[top1]", "White_Palace_05[left1]",
-    "White_Palace_05[left1]", "White_Palace_13[right1]", "White_Palace_13[right1]", "White_Palace_01[top1]",
-    "White_Palace_01[top1]",
-
+    "Palace_Entrance_Lantern_Lit",
+    "Palace_Left_Lantern_Lit",
+    "Palace_Right_Lantern_Lit",
+    "Palace_Atrium_Gates_Opened",
+    "Warp-White_Palace_Atrium_to_Palace_Grounds",
+    "Warp-White_Palace_Entrance_to_Palace_Grounds",
 }
 
 progression_charms = {
-    # Baulder Killers
+    # Baldur Killers
     "Grubberfly's_Elegy", "Weaversong", "Glowing_Womb",
-    # Spore Shroom spots in fungle wastes
+    # Spore Shroom spots in fungal wastes and elsewhere
     "Spore_Shroom",
     # Tuk gives egg,
     "Defender's_Crest",
     # Unlocks Grimm Troupe
     "Grimmchild1", "Grimmchild2"
+}
+
+# Vanilla placements of the following items have no impact on logic, thus we can avoid creating these items and
+# locations entirely when the option to randomize them is disabled.
+logicless_options = {
+    "RandomizeVesselFragments", "RandomizeGeoChests", "RandomizeJunkPitChests", "RandomizeRelics",
+    "RandomizeMaps", "RandomizeJournalEntries", "RandomizeGeoRocks", "RandomizeBossGeo",
+    "RandomizeLoreTablets", "RandomizeSoulTotems",
 }
 
 
@@ -125,8 +136,6 @@ class HKWorld(World):
     charm_costs: typing.List[int]
     data_version = 2
 
-    allow_white_palace = False
-
     def __init__(self, world, player):
         super(HKWorld, self).__init__(world, player)
         self.created_multi_locations: typing.Dict[str, int] = Counter()
@@ -136,7 +145,7 @@ class HKWorld(World):
         world = self.world
         charm_costs = world.RandomCharmCosts[self.player].get_costs(world.random)
         self.charm_costs = world.PlandoCharmCosts[self.player].get_costs(charm_costs)
-        world.exclude_locations[self.player].value.update(white_palace_locations)
+        # world.exclude_locations[self.player].value.update(white_palace_locations)
         world.local_items[self.player].value.add("Mimic_Grub")
         for vendor, unit in self.shops.items():
             mini = getattr(world, f"Minimum{unit}Price")[self.player]
@@ -149,23 +158,42 @@ class HKWorld(World):
         for option_name in disabled:
             getattr(world, option_name)[self.player].value = 0
 
+    def white_palace_exclusions(self):
+        exclusions = set()
+        wp = self.world.WhitePalace[self.player]
+        if wp <= WhitePalace.option_nopathofpain:
+            exclusions.update(path_of_pain_locations)
+        if wp <= WhitePalace.option_kingfragment:
+            exclusions.update(white_palace_checks)
+        if wp == WhitePalace.option_exclude and self.world.RandomizeCharms[self.player]:
+            # Ensure KF location is still reachable if charms are non-randomized
+            exclusions.update(white_palace_transitions)
+            exclusions.update(white_palace_events)
+            exclusions.add("King_Fragment")
+        return exclusions
+
     def create_regions(self):
         menu_region: Region = create_region(self.world, self.player, 'Menu')
         self.world.regions.append(menu_region)
+        wp_exclusions = self.white_palace_exclusions()
 
         # Link regions
         for event_name in event_names:
+            if event_name in wp_exclusions:
+                continue
             loc = HKLocation(self.player, event_name, None, menu_region)
             loc.place_locked_item(HKItem(event_name,
-                                         self.allow_white_palace or event_name not in white_palace_locations,
+                                         event_name not in wp_exclusions,
                                          None, "Event", self.player))
             menu_region.locations.append(loc)
         for entry_transition, exit_transition in connectors.items():
+            if entry_transition in wp_exclusions:
+                continue
             if exit_transition:
                 # if door logic fulfilled -> award vanilla target as event
                 loc = HKLocation(self.player, entry_transition, None, menu_region)
                 loc.place_locked_item(HKItem(exit_transition,
-                                             self.allow_white_palace or exit_transition not in white_palace_locations,
+                                             exit_transition not in wp_exclusions,
                                              None, "Event", self.player))
                 menu_region.locations.append(loc)
 
@@ -178,21 +206,26 @@ class HKWorld(World):
             geo_replace.add("Shade_Soul")
             geo_replace.add("Descending_Dark")
 
+        wp_exclusions = self.white_palace_exclusions()
         for option_key, option in hollow_knight_randomize_options.items():
             if getattr(self.world, option_key)[self.player]:
                 for item_name, location_name in zip(option.items, option.locations):
+                    if location_name in wp_exclusions:
+                        continue
                     if item_name in geo_replace:
                         item_name = "Geo_Rock-Default"
                     item = self.create_item(item_name)
-                    if location_name in white_palace_locations:
-                        self.create_location(location_name).place_locked_item(item)
-                    elif location_name == "Start":
+                        # self.create_location(location_name).place_locked_item(item)
+                    if location_name == "Start":
                         self.world.push_precollected(item)
                     else:
                         self.create_location(location_name)
                         pool.append(item)
+            # elif option_key not in logicless_options:
             else:
                 for item_name, location_name in zip(option.items, option.locations):
+                    if location_name in wp_exclusions and location_name != 'King_Fragment':
+                        continue
                     item = self.create_item(item_name)
                     if location_name == "Start":
                         self.world.push_precollected(item)
@@ -201,10 +234,6 @@ class HKWorld(World):
         for i in range(self.world.EggShopSlots[self.player].value):
             self.create_location("Egg_Shop")
             pool.append(self.create_item("Geo_Rock-Default"))
-        if not self.allow_white_palace:
-            loc = self.world.get_location("King_Fragment", self.player)
-            if loc.item and loc.item.name == loc.name:
-                loc.item.advancement = False
         self.world.itempool += pool
 
         for shopname in self.shops:
@@ -222,7 +251,15 @@ class HKWorld(World):
         world = self.world
         player = self.player
         if world.logic[player] != 'nologic':
-            world.completion_condition[player] = lambda state: state.has('DREAMER', player, 3)
+            goal = world.Goal[player]
+            if goal == Goal.option_siblings:
+                world.completion_condition[player] = lambda state: state._hk_siblings_ending(player)
+            elif goal == Goal.option_radiance:
+                world.completion_condition[player] = lambda state: state._hk_can_beat_radiance(player)
+            else:
+                # Hollow Knight or Any goal.
+                world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player)
+
         set_rules(self)
 
     def fill_slot_data(self):
@@ -348,16 +385,18 @@ class HKItem(Item):
     game = "Hollow Knight"
 
     def __init__(self, name, advancement, code, type, player: int = None):
-        super(HKItem, self).__init__(name, advancement, code if code else None, player)
-        self.type = type
         if name == "Mimic_Grub":
-            self.trap = True
-
-        if type in ("Grub", "DreamWarrior", "Root", "Egg"):
-            self.skip_in_prog_balancing = True
-
-        if type == "Charm" and name not in progression_charms:
-            self.skip_in_prog_balancing = True
+            classification = ItemClassification.trap
+        elif type in ("Grub", "DreamWarrior", "Root", "Egg"):
+            classification = ItemClassification.progression_skip_balancing
+        elif type == "Charm" and name not in progression_charms:
+            classification = ItemClassification.progression_skip_balancing
+        elif advancement:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+        super(HKItem, self).__init__(name, classification, code if code else None, player)
+        self.type = type
 
 
 class HKLogicMixin(LogicMixin):
@@ -371,3 +410,38 @@ class HKLogicMixin(LogicMixin):
 
     def _hk_start(self, player, start_location: str) -> bool:
         return self.world.StartLocation[player] == start_location
+
+    def _hk_nail_combat(self, player: int) -> bool:
+        return self.has_any({'LFFTSLASH', 'RIGHTSLASH', 'UPSLASH'}, player)
+
+    def _hk_can_beat_thk(self, player: int) -> bool:
+        return (
+            self.has('Opened_Black_Egg_Temple', player)
+            and (self.count('FIREBALL', player) + self.count('SCREAM', player) + self.count('QUAKE', player)) > 1
+            and self._hk_nail_combat(player)
+            and (
+                self.has_any({'LEFTDASH', 'RIGHTDASH'}, player)
+                or self._hk_option(player, 'ProficientCombat')
+            )
+        )
+
+    def _hk_siblings_ending(self, player: int) -> bool:
+        return self._hk_can_beat_thk(player) and self.has('WHITEFRAGMENT', player, 3)
+
+    def _hk_can_beat_radiance(self, player: int) -> bool:
+        return (
+            self._hk_siblings_ending(player)
+            and self.has('DREAMNAIL', player, 1)
+            and (
+                (self.has('LEFTCLAW', player) and self.has('RIGHTCLAW', player))
+                or self.has('WINGS', player)
+            )
+            and (
+                self.count('FIREBALL', player) + self.count('SCREAM', player)
+                + self.count('QUAKE', player)
+            ) > 1
+            and (
+                (self.has('LEFTDASH', player, 2) and self.has('RIGHTDASH', player, 2))  # Both Shade Cloaks
+                or (self._hk_option(player, 'ProficientCombat') and self.has('QUAKE', player))  # or Dive
+            )
+        )

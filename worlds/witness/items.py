@@ -6,7 +6,7 @@ from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Item, MultiWorld
 from . import StaticWitnessLogic, WitnessPlayerLocations, WitnessPlayerLogic
-from .Options import get_option_value, is_option_enabled
+from .Options import get_option_value, is_option_enabled, the_witness_options
 from fractions import Fraction
 
 
@@ -18,6 +18,7 @@ class ItemData(NamedTuple):
     progression: bool
     event: bool = False
     trap: bool = False
+    never_exclude: bool = False
 
 
 class WitnessItem(Item):
@@ -50,7 +51,7 @@ class StaticWitnessItems:
     def __init__(self):
         item_tab = dict()
 
-        for item in StaticWitnessLogic.ALL_ITEMS:
+        for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS.union(StaticWitnessLogic.ALL_DOOR_ITEMS):
             if item[0] == "11 Lasers" or item == "7 Lasers":
                 continue
 
@@ -63,6 +64,9 @@ class StaticWitnessItems:
 
         for item in StaticWitnessLogic.ALL_BOOSTS:
             item_tab[item[0]] = ItemData(158000 + item[1], False, False)
+
+        for item in StaticWitnessLogic.ALL_USEFULS:
+            item_tab[item[0]] = ItemData(158000 + item[1], False, False, False, True)
 
         item_tab = dict(sorted(
             item_tab.items(),
@@ -83,11 +87,35 @@ class WitnessPlayerItems:
         """Adds event items after logic changes due to options"""
         self.EVENT_ITEM_TABLE = dict()
         self.ITEM_TABLE = copy.copy(StaticWitnessItems.ALL_ITEM_TABLE)
+        self.PROGRESSION_TABLE = dict()
 
-        self.GOOD_ITEMS = [
-            "Dots", "Black/White Squares", "Stars",
-            "Shapers", "Symmetry"
-        ]
+        self.EXTRA_AMOUNTS = {
+            "Functioning Brain": 1,
+            "Puzzle Skip": get_option_value(world, player, "puzzle_skip_amount")
+        }
+
+        for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS.union(StaticWitnessLogic.ALL_DOOR_ITEMS):
+            if item not in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME:
+                del self.ITEM_TABLE[item[0]]
+            else:
+                self.PROGRESSION_TABLE[item[0]] = self.ITEM_TABLE[item[0]]
+
+        symbols = is_option_enabled(world, player, "shuffle_symbols")
+
+        if "shuffle_symbols" not in the_witness_options.keys():
+            symbols = True
+
+        doors = is_option_enabled(world, player, "shuffle_doors")
+
+        if doors and symbols:
+            self.GOOD_ITEMS = [
+                "Dots", "Black/White Squares", "Symmetry"
+            ]
+        elif symbols:
+            self.GOOD_ITEMS = [
+                "Dots", "Black/White Squares", "Stars",
+                "Shapers", "Symmetry"
+            ]
 
         if is_option_enabled(world, player, "shuffle_discarded_panels"):
             self.GOOD_ITEMS.append("Triangles")

@@ -36,4 +36,17 @@ rouge_pick_nails     = "Rouge - Pick Nails"
 rouge_treasure_scope = "Rouge - Treasure Scope"
 rouge_iron_boots     = "Rouge - Iron Boots"
 
-maria                = "What Maria Wanted"
+five_rings      = "Five Rings"
+ten_rings       = "Ten Rings"
+twenty_rings    = "Twenty Rings"
+extra_life      = "Extra Life"
+shield          = "Shield"
+magnetic_shield = "Magnetic Shield"
+invincibility   = "Invincibility"
+
+omochao_trap  = "OmoTrap"
+timestop_trap = "Chaos Control Trap"
+confuse_trap  = "Confusion Trap"
+tiny_trap     = "Tiny Trap"
+
+maria = "What Maria Wanted"
