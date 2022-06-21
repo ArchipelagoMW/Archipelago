@@ -494,17 +494,24 @@ class VersionException(Exception):
     pass
 
 
+def chaining_prefix(index: int, labels: typing.Tuple[str]) -> str:
+    text = ""
+    max_label = len(labels) - 1
+    while index > max_label:
+        text += labels[-1]
+        index -= max_label
+    return labels[index] + text
+
+
 # noinspection PyPep8Naming
 def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")) -> str:
     n = 0
-
-    while value > power:
+    value = decimal.Decimal(value)
+    while value >= power:
         value /= power
         n += 1
-    if type(value) == int:
-        return f"{value} {power_labels[n]}"
-    else:
-        return f"{value:0.3f} {power_labels[n]}"
+
+    return f"{value.quantize(decimal.Decimal('1.00'))} {chaining_prefix(n, power_labels)}"
 
 
 def get_fuzzy_ratio(word1: str, word2: str) -> float:
