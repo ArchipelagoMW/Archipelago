@@ -340,7 +340,7 @@ class HKWorld(World):
         location = self.create_location(location)
         location.place_locked_item(item)
         if costs:
-            location.costs = costs.popleft()
+            location.costs = costs.pop()
 
     def collect(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).collect(state, item)
