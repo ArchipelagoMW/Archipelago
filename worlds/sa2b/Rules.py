@@ -1,10 +1,13 @@
+import typing
+
 from BaseClasses import MultiWorld
 from .Names import LocationName, ItemName
 from .Locations import first_mission_location_table, second_mission_location_table, third_mission_location_table, \
     fourth_mission_location_table, fifth_mission_location_table, \
-    upgrade_location_table, chao_garden_location_table
+    upgrade_location_table, boss_gate_set
 from ..AutoWorld import LogicMixin
 from ..generic.Rules import add_rule, set_rule
+from .GateBosses import boss_has_requirement
 
 
 def set_mission_progress_rules(world: MultiWorld, player: int):
@@ -276,7 +279,8 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
     # Mission 5 Upgrade Requirements
     if world.include_missions[player].value >= 5:
         add_rule(world.get_location(LocationName.city_escape_5, player),
-                 lambda state: state.has(ItemName.sonic_flame_ring, player))
+                 lambda state: state.has(ItemName.sonic_flame_ring, player) and
+                               state.has(ItemName.sonic_light_shoes, player))
         add_rule(world.get_location(LocationName.wild_canyon_5, player),
                  lambda state: state.has(ItemName.knuckles_shovel_claws, player) and
                                state.has(ItemName.knuckles_sunglasses, player))
@@ -328,13 +332,11 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
                                state.has(ItemName.eggman_large_cannon, player))
         add_rule(world.get_location(LocationName.security_hall_5, player),
                  lambda state: state.has(ItemName.rouge_pick_nails, player) and
-                               state.has(ItemName.rouge_treasure_scope, player))
+                               state.has(ItemName.rouge_treasure_scope, player) and
+                               state.has(ItemName.rouge_iron_boots, player))
         add_rule(world.get_location(LocationName.white_jungle_5, player),
                  lambda state: state.has(ItemName.shadow_air_shoes, player) and
                                state.has(ItemName.shadow_flame_ring, player))
-        add_rule(world.get_location(LocationName.mad_space_5, player),
-                 lambda state: state.has(ItemName.rouge_pick_nails, player) and
-                               state.has(ItemName.rouge_iron_boots, player))
         add_rule(world.get_location(LocationName.cosmic_wall_5, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
@@ -380,18 +382,21 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
              lambda state: state.has(ItemName.eggman_jet_engine, player))
 
 
-def set_rules(world: MultiWorld, player: int):
+def set_boss_gate_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict[int, int]):
+    for x in range(len(gate_bosses)):
+        if boss_has_requirement(gate_bosses[x + 1]):
+            add_rule(world.get_location(boss_gate_set[x], player),
+                     lambda state: state.has(ItemName.knuckles_shovel_claws, player))
+
+
+def set_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict[int, int]):
     # Mission Progression Rules (Mission 1 begets Mission 2, etc.)
     set_mission_progress_rules(world, player)
 
-    # Upgrade Requirements for each location
+    # Upgrade Requirements for each mission location
     set_mission_upgrade_rules(world, player)
 
-    # TODO: Place Level Emblem Requirements Here
-
-    # (Edge Case)
-    # Create some reasonable arbitrary logic for Chao Races to prevent having to grind Chaos Drives in the first level
-    # for loc in chao_garden_location_table:
-    #    world.get_location(loc, player).add_item_rule(loc, lambda item: False)
+    # Upgrade Requirements for each boss gate
+    set_boss_gate_rules(world, player, gate_bosses)
 
     world.completion_condition[player] = lambda state: state.has(ItemName.maria, player)

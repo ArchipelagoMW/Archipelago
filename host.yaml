@@ -56,7 +56,7 @@ server_options:
 # Options for Generation
 generator:
   # Location of your Enemizer CLI, available here: https://github.com/Ijwu/Enemizer/releases
-  enemizer_path: "EnemizerCLI/EnemizerCLI.Core.exe"
+  enemizer_path: "EnemizerCLI/EnemizerCLI.Core" # + ".exe" is implied on Windows
   # Folder from which the player yaml files are pulled from
   player_files_path: "Players"
   #amount of players, 0 to infer from player files
