@@ -8,14 +8,15 @@ logger = logging.getLogger("Hollow Knight")
 
 from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
-from .Rules import set_rules
+from .Rules import set_rules, cost_terms
 from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled, Goal, WhitePalace
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
-    event_names, item_effects, connectors, one_ways
+    event_names, item_effects, connectors, one_ways, vanilla_location_costs, vanilla_shop_costs
 from .Charms import names as charm_names
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial, ItemClassification
 from ..AutoWorld import World, LogicMixin, WebWorld
+from copy import deepcopy
 
 path_of_pain_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
@@ -128,10 +129,15 @@ class HKWorld(World):
 
     ranges: typing.Dict[str, typing.Tuple[int, int]]
     shops: typing.Dict[str, str] = {
-        "Egg_Shop": "Egg",
-        "Grubfather": "Grub",
-        "Seer": "Essence",
-        "Salubra_(Requires_Charms)": "Charm"
+        "Egg_Shop": ("RANCIDEGGS",),
+        "Grubfather": ("GRUBS",),
+        "Seer": ("ESSENCE",),
+        "Salubra_(Requires_Charms)": ("CHARMS", "GEO"),
+        "Sly": ("GEO",),
+        "Sly_(Key)": ("GEO",),
+        "Iselda": ("GEO",),
+        "Salubra": ("GEO",),
+        "Leg_Eater": ("GEO",),
     }
     charm_costs: typing.List[int]
     data_version = 2
@@ -140,6 +146,7 @@ class HKWorld(World):
         super(HKWorld, self).__init__(world, player)
         self.created_multi_locations: typing.Dict[str, int] = Counter()
         self.ranges = {}
+        self.vanilla_shop_costs = deepcopy(vanilla_shop_costs)
 
     def generate_early(self):
         world = self.world
@@ -147,12 +154,12 @@ class HKWorld(World):
         self.charm_costs = world.PlandoCharmCosts[self.player].get_costs(charm_costs)
         # world.exclude_locations[self.player].value.update(white_palace_locations)
         world.local_items[self.player].value.add("Mimic_Grub")
-        for vendor, unit in self.shops.items():
-            mini = getattr(world, f"Minimum{unit}Price")[self.player]
-            maxi = getattr(world, f"Maximum{unit}Price")[self.player]
+        for term, data in cost_terms.items():
+            mini = getattr(world, f"Minimum{data.option}Price")[self.player]
+            maxi = getattr(world, f"Maximum{data.option}Price")[self.player]
             # if minimum > maximum, set minimum to maximum
             mini.value = min(mini.value, maxi.value)
-            self.ranges[unit] = mini.value, maxi.value
+            self.ranges[term] = mini.value, maxi.value
         world.push_precollected(HKItem(starts[world.StartLocation[self.player].current_key],
                                        True, None, "Event", self.player))
         for option_name in disabled:
@@ -219,19 +226,19 @@ class HKWorld(World):
                 if location_name == "Start":
                     self.world.push_precollected(item)
                     continue
-
-                location = self.create_location(location_name)
                 if not vanilla and location_name in wp_exclusions:
                     if location_name == 'King_Fragment':
                         excluded = True
                     else:
                         vanilla = True
+
+                if vanilla:
+                    location = self.create_vanilla_location(location_name, item)
+                else:
+                    location = self.create_location(location_name)
+                    pool.append(item)
                 if excluded:
                     location.progress_type = LocationProgressType.EXCLUDED
-                if vanilla:
-                    location.place_locked_item(item)
-                else:
-                    pool.append(item)
 
         for i in range(self.world.EggShopSlots[self.player].value):
             self.create_location("Egg_Shop")
@@ -244,10 +251,11 @@ class HKWorld(World):
             for x in range(1, self.created_multi_locations[shopname]+1):
                 loc = self.world.get_location(self.get_multi_location_name(shopname, x), self.player)
                 locations.append(loc)
-                prices.append(loc.cost)
-            prices.sort()
+                prices.append(loc.costs)
+            prices.sort(key=lambda x: tuple(x.values()))
             for loc, price in zip(locations, prices):
-                loc.cost = price
+                loc.costs = price
+
 
     def set_rules(self):
         world = self.world
@@ -280,12 +288,24 @@ class HKWorld(World):
         # 32 bit int
         slot_data["seed"] = self.world.slot_seeds[self.player].randint(-2147483647, 2147483646)
 
-        for shop, unit in self.shops.items():
+        # Backwards compatibility for shop cost data (HKAP < 0.0.4)
+        for shop, terms in self.shops.items():
+            unit = cost_terms[next(iter(terms))].option
+            if unit == "Geo":
+                continue
             slot_data[f"{unit}_costs"] = {
                 f"{shop}_{i}":
-                    self.world.get_location(f"{shop}_{i}", self.player).cost
+                    next(iter(self.world.get_location(f"{shop}_{i}", self.player).costs.values()))
                 for i in range(1, 1 + self.created_multi_locations[shop])
             }
+
+        # HKAP 0.0.4 and later cost data.
+        location_costs = {}
+        for region in self.world.get_regions(self.player):
+            for location in region.locations:
+                if location.costs:
+                    location_costs[location.name] = location.costs
+        slot_data["location_costs"] = location_costs
 
         slot_data["notch_costs"] = self.charm_costs
 
@@ -296,22 +316,31 @@ class HKWorld(World):
         return HKItem(name, item_data.advancement, item_data.id, item_data.type, self.player)
 
     def create_location(self, name: str) -> HKLocation:
-        unit = self.shops.get(name, None)
-        if unit:
-            cost = self.world.random.randint(*self.ranges[unit])
-        else:
-            cost = 0
+        costs = None
+        if name in self.shops:
+            costs = {
+                term: self.world.random.randint(*self.ranges[term])
+                for term in self.shops[name]
+            }
+        elif name in vanilla_location_costs:
+            costs = vanilla_location_costs[name]
+
         if name in multi_locations:
             self.created_multi_locations[name] += 1
             name = self.get_multi_location_name(name, self.created_multi_locations[name])
 
         region = self.world.get_region("Menu", self.player)
         loc = HKLocation(self.player, name, self.location_name_to_id[name], region)
-        if unit:
-            loc.unit = unit
-            loc.cost = cost
+        loc.costs = costs
         region.locations.append(loc)
         return loc
+
+    def create_vanilla_location(self, location: str, item: Item):
+        costs = self.vanilla_shop_costs.get((location, item.name))
+        location = self.create_location(location)
+        location.place_locked_item(item)
+        if costs:
+            location.costs = costs.popleft()
 
     def collect(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).collect(state, item)
@@ -351,7 +380,7 @@ class HKWorld(World):
             for shop_name, unit_name in cls.shops.items():
                 for x in range(1, hk_world.created_multi_locations[shop_name]+1):
                     loc = world.get_location(hk_world.get_multi_location_name(shop_name, x), player)
-                    spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost} {unit_name}")
+                    spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
 
     def get_multi_location_name(self, base: str, i: typing.Optional[int]) -> str:
         if i is None:
@@ -376,11 +405,21 @@ def create_region(world: MultiWorld, player: int, name: str, location_names=None
 
 class HKLocation(Location):
     game: str = "Hollow Knight"
-    cost: int = 0
+    costs: typing.Dict[str, int] = None
     unit: typing.Optional[str] = None
 
-    def __init__(self, player: int, name: str, code=None, parent=None):
+    def __init__(self, player: int, name: str, code=None, parent=None, costs=None):
         super(HKLocation, self).__init__(player, name, code if code else None, parent)
+        if costs:
+            self.costs = dict(costs)
+
+    def cost_text(self, seperator=" and "):
+        if self.costs is None:
+            return None
+        return seperator.join(
+            f"{value} {cost_terms[term].singular if value == 1 else cost_terms[term].plural}"
+            for term, value in self.costs.items()
+        )
 
 
 class HKItem(Item):

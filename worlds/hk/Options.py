@@ -208,6 +208,22 @@ class MaximumCharmPrice(MinimumCharmPrice):
     default = 20
 
 
+class MinimumGeoPrice(Range):
+    """The minimum geo price for items in geo shops."""
+    display_name = "Minimum Geo Price"
+    range_start = 1
+    range_end = 200
+    default = 1
+
+
+class MaximumGeoPrice(Range):
+    """The maximum geo price for items in geo shops."""
+    display_name = "Minimum Geo Price"
+    range_start = 1
+    range_end = 2000
+    default = 400
+
+
 class RandomCharmCosts(SpecialRange):
     """Total Notch Cost of all Charms together. Vanilla sums to 90.
     This value is distributed among all charms in a random fashion.
@@ -310,6 +326,8 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     PlandoCharmCosts.__name__: PlandoCharmCosts,
     MinimumEggPrice.__name__: MinimumEggPrice,
     MaximumEggPrice.__name__: MaximumEggPrice,
+    MinimumGeoPrice.__name__: MinimumGeoPrice,
+    MaximumGeoPrice.__name__: MaximumGeoPrice,
     EggShopSlots.__name__: EggShopSlots,
     Goal.__name__: Goal,
     WhitePalace.__name__: WhitePalace,
