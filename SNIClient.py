@@ -18,7 +18,7 @@ from json import loads, dumps
 import ModuleUpdate
 ModuleUpdate.update()
 
-from Utils import init_logging
+from Utils import init_logging, messagebox
 
 if __name__ == "__main__":
     init_logging("SNIClient", exception_logger="Client")
@@ -1303,7 +1303,11 @@ async def main():
     if args.diff_file:
         import Patch
         logging.info("Patch file was supplied. Creating sfc rom..")
-        meta, romfile = Patch.create_rom_file(args.diff_file)
+        try:
+            meta, romfile = Patch.create_rom_file(args.diff_file)
+        except Exception as e:
+            messagebox('Error', str(e), True)
+            raise
         if "server" in meta:
             args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
