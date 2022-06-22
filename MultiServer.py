@@ -79,7 +79,6 @@ class Client(Endpoint):
         self.tags = []
         self.messageprocessor = client_message_processor(ctx, self)
         self.ctx = weakref.ref(ctx)
-        self.all_hints = []
 
     @property
     def items_handling(self):
