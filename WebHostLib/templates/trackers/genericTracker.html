@@ -13,9 +13,9 @@
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search"/>
             <span class="info">This tracker will automatically update itself periodically.</span>
-            <button class="change-tracker"
-                    onclick="location.href='/tracker/{{ room.tracker|suuid }}/{{ team }}/{{ player }}'"
-                >Go to Styled Tracker</button>
+            <a href="/tracker/{{ room.tracker|suuid }}/{{ team }}/{{ player }}" class="button-link">
+                Go to Styled Tracker
+            </a>
         </div>
             <div class="table-wrapper">
                 <table class="table non-unique-item-table">
