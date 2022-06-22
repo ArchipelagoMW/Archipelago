@@ -9,7 +9,7 @@ logger = logging.getLogger("Hollow Knight")
 from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
 from .Rules import set_rules
-from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled, Goal, WhitePalace, \
+from .Options import hollow_knight_options, hollow_knight_randomize_options, Goal, WhitePalace, \
     shop_to_option
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
     event_names, item_effects, connectors, one_ways
@@ -158,8 +158,6 @@ class HKWorld(World):
             self.ranges[unit] = mini.value, maxi.value
         world.push_precollected(HKItem(starts[world.StartLocation[self.player].current_key],
                                        True, None, "Event", self.player))
-        for option_name in disabled:
-            getattr(world, option_name)[self.player].value = 0
 
     def white_palace_exclusions(self):
         exclusions = set()

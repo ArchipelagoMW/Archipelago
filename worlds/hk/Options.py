@@ -11,19 +11,6 @@ else:
     Random = typing.Any
 
 
-class Disabled(Toggle):
-    def __init__(self, value: int):
-        super(Disabled, self).__init__(0)
-
-    @classmethod
-    def from_text(cls, text: str) -> Toggle:
-        return cls(0)
-
-    @classmethod
-    def from_any(cls, data: typing.Any):
-        return cls(0)
-
-
 locations = {"option_" + start: i for i, start in enumerate(starts)}
 # This way the dynamic start names are picked up by the MetaClass Choice belongs to
 StartLocation = type("StartLocation", (Choice,), {"__module__": __name__, "auto_display_name": False, **locations,
@@ -61,6 +48,8 @@ option_docstrings = {
     "RandomizeBossEssence": "Randomize boss essence drops, such as those for defeating Warrior Dreams, into the item "
                             "pool and open their locations for randomization.",
     "RandomizeGrubs": "Randomize Grubs into the item pool and open their locations for randomization.",
+    "RandomizeMimics": "Randomize Mimic Grubs into the item pool and open their locations for randomization."
+                      "Mimic Grubs are always placed in your own game.",
     "RandomizeMaps": "Randomize Maps into the item pool. This causes Cornifer to give you a message allowing you to see"
                      " and buy an item that is randomized into that location as well.",
     "RandomizeStags": "Randomize Stag Stations unlocks into the item pool as well as placing randomized items "
@@ -113,11 +102,6 @@ default_on = {
     "RandomizeRelics"
 }
 
-# not supported at this time
-disabled = {
-    "RandomizeMimics",
-}
-
 shop_to_option = {
     "Seer": "SeerRewardSlots",
     "Grubfather": "GrubfatherRewardSlots",
@@ -135,9 +119,6 @@ for option_name, option_data in pool_options.items():
     extra_data = {"__module__": __name__, "items": option_data[0], "locations": option_data[1]}
     if option_name in option_docstrings:
         extra_data["__doc__"] = option_docstrings[option_name]
-    if option_name in disabled:
-        extra_data["__doc__"] = "Disabled Option. Not implemented."
-        option = type(option_name, (Disabled,), extra_data)
     if option_name in default_on:
         option = type(option_name, (DefaultOnToggle,), extra_data)
     else:
@@ -153,9 +134,6 @@ for option_name in logic_options.values():
     if option_name in option_docstrings:
         extra_data["__doc__"] = option_docstrings[option_name]
         option = type(option_name, (Toggle,), extra_data)
-    if option_name in disabled:
-        extra_data["__doc__"] = "Disabled Option. Not implemented."
-        option = type(option_name, (Disabled,), extra_data)
     globals()[option.__name__] = option
     hollow_knight_logic_options[option.__name__] = option
 
