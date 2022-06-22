@@ -333,11 +333,7 @@ def get_static_room_data(room: Room):
 
 @app.route('/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
 @cache.memoize(timeout=60)  # multisave is currently created at most every minute
-def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
-    return build_trackers(tracker, tracked_team, tracked_player, 'specific')
-
-
-def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: str = 'generic'):
+def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool = False):
     # Team and player must be positive and greater than zero
     if tracked_team < 0 or tracked_player < 1:
         abort(404)
@@ -351,12 +347,11 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
 
     game_name = games[tracked_player]
     # TODO move all games in game_specific_trackers to new system
-    if game_name in game_specific_trackers and type != 'generic':
+    if game_name in game_specific_trackers and not want_generic:
         specific_tracker = game_specific_trackers.get(game_name, None)
         return specific_tracker(multisave, room, player_tracker.all_locations, inventory, tracked_team, tracked_player, player_name,
                                 seed_checks_in_area, lttp_checks_done, slot_data[tracked_player])
-    elif game_name in AutoWorldRegister.world_types and type != 'generic':
-
+    elif game_name in AutoWorldRegister.world_types and not want_generic:
         return render_template(
             player_tracker.template,
             all_progression_items=player_tracker.all_prog_items,
@@ -380,12 +375,12 @@ def build_trackers(tracker: UUID, tracked_team: int, tracked_player: int, type: 
 @app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
 @cache.memoize(timeout=60)
 def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
-    return build_trackers(tracker, tracked_team, tracked_player)
+    return getPlayerTracker(tracker, tracked_team, tracked_player, True)
 
 
 def get_tracker_icons_and_regions(player_tracker: PlayerTracker) -> Dict[str, str]:
-    # this function allows multiple icons to be used for the same item but it does require the world to submit both
-    # a progressive_items list and the icons dict together
+    """this function allows multiple icons to be used for the same item but it does require the world to submit both
+    a progressive_items list and the icons dict together"""
     display_icons: Dict[str, str] = {}
     if player_tracker.progressive_names and player_tracker.icons:
         for item in player_tracker.progressive_items:
@@ -413,7 +408,7 @@ def get_tracker_icons_and_regions(player_tracker: PlayerTracker) -> Dict[str, st
 
 
 def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
-    # Collect seed information and pare it down to a single player
+    """Collect seed information and pare it down to a single player"""
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
         precollected_items, games, slot_data, groups = get_static_room_data(room)
     player_name = names[team][player - 1]
@@ -481,7 +476,6 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
     # grab webworld and apply its theme to the tracker
     webworld = AutoWorldRegister.world_types[games[player]].web
     player_tracker.theme = webworld.theme
-
     # allow the world to add information to the tracker class
     webworld.modify_tracker(player_tracker)
     display_icons = get_tracker_icons_and_regions(player_tracker)
