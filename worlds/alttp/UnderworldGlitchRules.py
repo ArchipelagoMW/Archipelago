@@ -68,7 +68,7 @@ def underworld_glitches_rules(world, player):
     # This is the easiest one since it's a simple internal clip.
     # Need to also add melting to freezor chest since it's otherwise assumed. 
     # Also can pick up the first jelly key from behind.
-    add_rule(world.get_entrance('Ice Palace Entrance Room', player), lambda state: state.can_bomb_clip(world.get_region('Ice Palace (Entrance)', player), player), combine='or')
+    add_rule(world.get_entrance('Ice Palace (Main)', player), lambda state: state.can_bomb_clip(world.get_region('Ice Palace (Entrance)', player), player), combine='or')
     add_rule(world.get_location('Ice Palace - Freezor Chest', player), lambda state: state.can_melt_things(player))
     add_rule(world.get_location('Ice Palace - Jelly Key Drop', player), lambda state: state.can_bomb_clip(world.get_region('Ice Palace (Entrance)', player), player), combine='or')
 

@@ -321,7 +321,7 @@ class ALTTPWorld(World):
                 prizepool = unplaced_prizes.copy()
                 prize_locs = empty_crystal_locations.copy()
                 world.random.shuffle(prize_locs)
-                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True)
+                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True, speed=5)
             except FillError as e:
                 lttp_logger.exception("Failed to place dungeon prizes (%s). Will retry %s more times", e,
                                                 attempts - attempt)
@@ -448,10 +448,15 @@ class ALTTPWorld(World):
                 loc.place_locked_item(key)
                 fill_locations.remove(loc)
             world.random.shuffle(fill_locations)
-            # TODO: investigate not creating the key in the first place
+            # TODO: investigate not creating the keys in the first place
             progitempool[:] = [item for item in progitempool if
                                item.player not in standard_keyshuffle_players or
                                item.name != "Small Key (Hyrule Castle)"]
+            # this is definitely not the best way to deal with this...
+            if world.key_drop_shuffle[player]:
+                for _ in range(3):
+                    progitempool.append(world.create_item("Small Key (Hyrule Castle)", player))
+
 
         if trash_counts:
             locations_mapping = {player: [] for player in trash_counts}

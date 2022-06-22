@@ -168,10 +168,14 @@ def fill_dungeons_restrictive(world):
                     for key_loc in key_drop_data:
                         key_data = key_drop_data[key_loc]
                         all_state_base.remove(ItemFactory(key_data[3], player))
-                        loc = world.get_location(key_loc, player)
+                        try:
+                            loc = world.get_location(key_loc, player)
+                        except:
+                            pass
+
                         if loc in all_state_base.events:
                             all_state_base.events.remove(loc)
-            fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True)
+            fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True, speed=1)
 
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],

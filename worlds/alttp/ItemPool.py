@@ -380,6 +380,11 @@ def generate_itempool(world):
                 dungeon_items.remove(drop_item)
             else:
                 dungeon = (drop_item.name.split("(")[1].split(")")[0], player)
+                if world.mode[player] == 'inverted':
+                    if dungeon[0] == "Agahnims Tower":
+                        dungeon = ("Inverted Agahnims Tower", player)
+                    if dungeon[0] == "Ganons Tower":
+                        dungeon = ("Inverted Ganons Tower", player)
                 if drop_item in world.dungeons[dungeon].small_keys:
                     world.dungeons[dungeon].small_keys.remove(drop_item)
                 elif world.dungeons[dungeon].big_key is not None and world.dungeons[dungeon].big_key == drop_item:
