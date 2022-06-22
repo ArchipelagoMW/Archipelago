@@ -353,7 +353,7 @@ def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, wa
                                 seed_checks_in_area, lttp_checks_done, slot_data[tracked_player])
     elif game_name in AutoWorldRegister.world_types and not want_generic:
         return render_template(
-            player_tracker.template,
+            "trackers/" + player_tracker.template,
             all_progression_items=player_tracker.all_prog_items,
             player=player_tracker.player,
             team=player_tracker.team,
@@ -675,7 +675,7 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: set,
     game_state = multisave.get("client_game_state", {}).get((team, player), 0)
     display_data['game_finished'] = game_state == 30
 
-    return render_template("ootTracker.html",
+    return render_template("trackers/" + "ootTracker.html",
                            inventory=inventory, player=player, team=team, room=room, player_name=playerName,
                            icons=icons, acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
                            checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
@@ -783,7 +783,7 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
     acquired_items = {lookup_any_item_id_to_name[id] for id in inventory if id in lookup_any_item_id_to_name}
     options = {k for k, v in slot_data.items() if v}
 
-    return render_template("timespinnerTracker.html",
+    return render_template("trackers/" + "timespinnerTracker.html",
                             inventory=inventory, icons=icons, acquired_items=acquired_items,
                             player=player, team=team, room=room, player_name=playerName,
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
@@ -882,7 +882,7 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
     checks_in_area = {tab_name: len(tab_locations) for tab_name, tab_locations in supermetroid_location_ids.items()}
     checks_in_area['Total'] = sum(checks_in_area.values())
 
-    return render_template("supermetroidTracker.html",
+    return render_template("trackers/" + "supermetroidTracker.html",
                             inventory=inventory, icons=icons,
                             acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
                                             id in lookup_any_item_id_to_name},
@@ -906,7 +906,7 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: set
     for order_index, networkItem in enumerate(ordered_items, start=1):
         player_received_items[networkItem.item] = order_index
 
-    return render_template("genericTracker.html",
+    return render_template("trackers/" + "genericTracker.html",
                             inventory=inventory,
                             player=player, team=team, room=room, player_name=playerName,
                             checked_locations=checked_locations,
@@ -998,7 +998,7 @@ def getTracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
-    return render_template("multiworldTracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
+    return render_template("trackers/" + "multiworldTracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
                            lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=alttp_icons,
                            multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
