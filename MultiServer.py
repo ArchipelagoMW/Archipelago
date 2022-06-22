@@ -766,7 +766,7 @@ def update_checked_locations(ctx: Context, team: int, slot: int):
 def forfeit_player(ctx: Context, team: int, slot: int):
     """register any locations that are in the multidata"""
     all_locations = set(ctx.locations[slot])
-    ctx.notify_all("%s (Team #%d) has forfeited" % (ctx.player_names[(team, slot)], team + 1))
+    ctx.notify_all("%s (Team #%d) has released all items in their world" % (ctx.player_names[(team, slot)], team + 1))
     register_location_checks(ctx, team, slot, all_locations)
     update_checked_locations(ctx, team, slot)
 
@@ -779,7 +779,7 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
             if values[1] == slot:
                 all_locations[source_slot].add(location_id)
 
-    ctx.notify_all("%s (Team #%d) has collected" % (ctx.player_names[(team, slot)], team + 1))
+    ctx.notify_all("%s (Team #%d) has collected their items from other worlds" % (ctx.player_names[(team, slot)], team + 1))
     for source_player, location_ids in all_locations.items():
         register_location_checks(ctx, team, source_player, location_ids, count_activity=False)
         update_checked_locations(ctx, team, source_player)
@@ -1117,6 +1117,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
         """Get status information about your team."""
         self.output(get_status_string(self.ctx, self.client.team))
         return True
+
+    def _cmd_release(self) -> bool:
+        """Sends remaining items in your world to their recipients"""
+        return self._cmd_forfeit()
 
     def _cmd_forfeit(self) -> bool:
         """Surrender and send your remaining items out to their recipients"""
