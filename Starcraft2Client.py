@@ -860,9 +860,21 @@ def initialize_blank_mission_dict(location_table):
 
 
 def check_game_install_path(ui=None, debug=False) -> bool:
-    # Go to the default location for ExecuteInfo.
-    # If the user is on Windows and has moved their Documents folder, this will fail.
-    einfo = str(os.path.expanduser("~") / Path(sc2.paths.USERPATH[sc2.paths.PF]))
+    # First thing: go to the default location for ExecuteInfo.
+    # An exception for Windows is included because it's very difficult to find ~\Documents if the user moved it.
+    if system() == "Windows":
+        # The next five lines of utterly inscrutable code are brought to you by copy-paste from Stack Overflow.
+        # https://stackoverflow.com/questions/6227590/finding-the-users-my-documents-path/30924555#
+        import ctypes.wintypes
+        CSIDL_PERSONAL = 5  # My Documents
+        SHGFP_TYPE_CURRENT = 0  # Get current, not default value
+
+        buf = ctypes.create_unicode_buffer(ctypes.wintypes.MAX_PATH)
+        ctypes.windll.shell32.SHGetFolderPathW(None, CSIDL_PERSONAL, None, SHGFP_TYPE_CURRENT, buf)
+        documentspath = buf.value
+        einfo = str(documentspath / Path("StarCraft II\\ExecuteInfo.txt"))
+    else:
+        einfo = str(os.path.expanduser("~") / Path(sc2.paths.USERPATH[sc2.paths.PF]))
 
     # Check if the file exists.
     if os.path.isfile(einfo):
