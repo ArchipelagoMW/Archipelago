@@ -108,6 +108,10 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("Unreadied.")
         asyncio.create_task(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
 
+    def _cmd_show_all_hints(self):
+        """Allows the player to see all hints, not just the ones that apply to them."""
+        asyncio.create_task(self.ctx.update_show_all_hints("ShowAllHints" not in self.ctx.tags))
+
     def default(self, raw: str):
         raw = self.ctx.on_user_say(raw)
         if raw:
@@ -390,6 +394,15 @@ class CommonContext:
                     "cause": death_text
                 }
             }])
+
+    async def update_show_all_hints(self, show_all_hints: bool):
+        old_tags = self.tags.copy()
+        if show_all_hints:
+            self.tags.add("ShowAllHints")
+        else:
+            self.tags -= {"ShowAllHints"}
+        if old_tags != self.tags and self.server and not self.server.socket.closed:
+            await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
     async def update_death_link(self, death_link: bool):
         old_tags = self.tags.copy()

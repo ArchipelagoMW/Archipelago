@@ -79,6 +79,7 @@ class Client(Endpoint):
         self.tags = []
         self.messageprocessor = client_message_processor(ctx, self)
         self.ctx = weakref.ref(ctx)
+        self.all_hints = []
 
     @property
     def items_handling(self):
@@ -559,12 +560,19 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], onl
     if not hints:
         return
     concerns = collections.defaultdict(list)
+    all_hints = collections.defaultdict(list)
     for hint in sorted(hints, key=operator.attrgetter('found'), reverse=True):
         data = (hint, hint.as_network_message())
         for player in ctx.slot_set(hint.receiving_player):
             concerns[player].append(data)
         if not hint.local and data not in concerns[hint.finding_player]:
             concerns[hint.finding_player].append(data)
+        for slot, clients in ctx.clients[team].items():
+            if not clients or slot == hint.finding_player or slot in ctx.slot_set(hint.receiving_player) or \
+                    all(["ShowAllHints" not in client.tags for client in clients]):
+                continue
+            for client in [client for client in clients if "ShowAllHints" in client.tags]:
+                all_hints[client].append(data)
         # remember hints in all cases
         if not hint.found:
             # since hints are bidirectional, finding player and receiving player,
@@ -583,6 +591,10 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], onl
         client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
         for client in clients:
             asyncio.create_task(ctx.send_msgs(client, client_hints))
+
+    for client, hint_data in all_hints.items():
+        client_hints = [datum[1] for datum in sorted(hint_data)]
+        asyncio.create_task(ctx.send_msgs(client, client_hints))
 
 
 def update_aliases(ctx: Context, team: int):
