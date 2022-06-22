@@ -23,6 +23,7 @@ from worlds.sc2wol import SC2WoLWorld
 from pathlib import Path
 import re
 from shutil import copy2
+from MultiServer import mark_raw
 
 from Utils import init_logging
 
@@ -108,6 +109,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
         grab_dlls(self.ctx.ui, debug=True)
         return True
+
+    @mark_raw
+    def _cmd_set_path(self, path) -> bool:
+        """Manually set the SC2 install directory (if the automatic detection fails)."""
+        os.environ["SC2PATH"] = path
 
 
 class SC2Context(CommonContext):
@@ -848,7 +854,7 @@ def initialize_blank_mission_dict(location_table):
 
 def check_game_install_path(ui=None, debug=False) -> bool:
     # Go to the default location for ExecuteInfo.
-    einfo = str(sc2.paths.get_home() / Path(sc2.paths.USERPATH[sc2.paths.PF]))
+    einfo = str(os.path.expanduser("~") / Path(sc2.paths.USERPATH[sc2.paths.PF]))
 
     # Check if the file exists.
     if os.path.isfile(einfo):
