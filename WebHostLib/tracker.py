@@ -333,7 +333,7 @@ def get_static_room_data(room: Room):
 
 @app.route('/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
 @cache.memoize(timeout=60)  # multisave is currently created at most every minute
-def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool = False):
+def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool = False):
     # Team and player must be positive and greater than zero
     if tracked_team < 0 or tracked_player < 1:
         abort(404)
@@ -375,7 +375,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
 @app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
 @cache.memoize(timeout=60)
 def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
-    return getPlayerTracker(tracker, tracked_team, tracked_player, True)
+    return get_player_tracker(tracker, tracked_team, tracked_player, True)
 
 
 def get_tracker_icons_and_regions(player_tracker: PlayerTracker) -> Dict[str, str]:
@@ -427,6 +427,11 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
     else:
         multisave: Dict[str, Any] = {}
 
+    slots_aimed_at_player = {player}
+    for group_id, group_members in groups.items():
+        if player in group_members:
+            slots_aimed_at_player.add(group_id)
+
     checked_locations = set()
     # Add items to player inventory
     for (ms_team, ms_player), locations_checked in multisave.get("location_checks", {}).items():
@@ -437,7 +442,7 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
             for location in locations_checked:
                 if location in player_locations:
                     item, recipient, flags = player_locations[location]
-                    if recipient == player:  # a check done for the tracked player
+                    if recipient in slots_aimed_at_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
                     if ms_player == player:  # a check done by the tracked player
                         lttp_checks_done[location_to_area[location]] += 1
