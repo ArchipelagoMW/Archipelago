@@ -49,6 +49,79 @@ class MinecraftWebWorld(WebWorld):
 
     tutorials = [setup, setup_es, setup_sv]
 
+    def modify_tracker(self, tracker):
+        tracker.icons = {
+            "Wooden Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d2/Wooden_Pickaxe_JE3_BE3.png",
+            "Stone Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c4/Stone_Pickaxe_JE2_BE2.png",
+            "Iron Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d1/Iron_Pickaxe_JE3_BE2.png",
+            "Diamond Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e7/Diamond_Pickaxe_JE3_BE3.png",
+            "Wooden Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d5/Wooden_Sword_JE2_BE2.png",
+            "Stone Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b1/Stone_Sword_JE2_BE2.png",
+            "Iron Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/8/8e/Iron_Sword_JE2_BE2.png",
+            "Diamond Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/4/44/Diamond_Sword_JE3_BE3.png",
+            "Leather Tunic": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b7/Leather_Tunic_JE4_BE2.png",
+            "Iron Chestplate": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/31/Iron_Chestplate_JE2_BE2.png",
+            "Diamond Chestplate": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e0/Diamond_Chestplate_JE3_BE2.png",
+            "Iron Ingot": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Iron_Ingot_JE3_BE2.png",
+            "Block of Iron": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7e/Block_of_Iron_JE4_BE3.png",
+            "Brewing": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fa/Brewing_Stand.png",
+            "Ender Pearls": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/f6/Ender_Pearl_JE3_BE2.png",
+            "Bucket": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Bucket_JE2_BE2.png",
+            "Archery": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/ab/Bow_%28Pull_2%29_JE1_BE1.png",
+            "Shield": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c6/Shield_JE2_BE1.png",
+            "Bed": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/6/6a/Red_Bed_%28N%29.png",
+            "Netherite Scrap": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/33/Netherite_Scrap_JE2_BE1.png",
+            "Flint and Steel": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/94/Flint_and_Steel_JE4_BE2.png",
+            "Enchanting": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/31/Enchanting_Table.gif",
+            "Fishing Rod": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7f/Fishing_Rod_JE2_BE2.png",
+            "Campfire": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/91/Campfire_JE2_BE2.gif",
+            "Bottle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/75/Water_Bottle_JE2_BE2.png",
+            "Spyglass": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c1/Spyglass_JE2_BE1.png",
+        }
+
+        tracker.progressive_items = [
+            "Progressive Tools", "Progressive Weapons", "Progressive Armor", "Progressive Resource Crafting",
+            "Brewing", "Ender Pearls", "Bucket", "Archery", "Shield", "Bed", "Bottle", "Netherite Scrap",
+            "Flint and Steel", "Enchanting", "Fishing Rod", "Campfire", "Spyglass"
+        ]
+
+        tracker.progressive_names = {
+            "Progressive Tools": ["Wooden Pickaxe", "Stone Pickaxe", "Iron Pickaxe", "Diamond Pickaxe"],
+            "Progressive Weapons": ["Wooden Sword", "Stone Sword", "Iron Sword", "Diamond Sword"],
+            "Progressive Armor": ["Leather Tunic", "Iron Chestplate", "Diamond Chestplate"],
+            "Progressive Resource Crafting": ["Iron Ingot", "Iron Ingot", "Block of Iron"]
+        }
+
+        tracker.regions = {
+            "Story": ["Minecraft", "Stone Age", "Getting an Upgrade", "Acquire Hardware", "Suit Up",
+                      "Not Today, Thank You", "Isn't It Iron Pick", "Diamonds!", "Cover Me With Diamonds", "Enchanter",
+                      "Hot Stuff", "Ice Bucket Challenge", "We Need to Go Deeper", "Zombie Doctor", "Eye Spy", "The End?"],
+
+            "Nether": ["Nether", "Return to Sender", "Uneasy Alliance", "Those Were the Days", "War Pigs",
+                       "Hidden in the Depths", "Country Lode, Take Me Home", "Cover Me in Debris", "Subspace Bubble",
+                       "A Terrible Fortress", "Spooky Scary SKeleton", "This Boat Has Legs", "Hot Tourist Destinations"],
+
+            "The End": ["The End", "Free the End", "The Next Generation", "Remote Getaway",
+                        "The City at the End of the Game", "Sky's the Limit", "Great View From Up Here",
+                        "The End... Again...", "You Need a Mint"],
+
+            "Adventure": ["Adventure", "Voluntary Exile", "Is It a Bird?", "Is It a Balloon?", "Is It a Plane?",
+                          "Hero of the Village", "Monster Hunter", "A Throwaway Joke", "Very Very Frightening",
+                          "Take Aim", "Sniper Duel", "Bullseye", "Monsters Hunted", "Postmortal", "What a Deal!",
+                          "Hired Help", "Sticky Situation", "Ol' Betsy", "Two Birds, One Arrow",
+                          "Who's the Pillager Now?", "Arbalistic", "Sweet Dreams", "Adventuring Time", "Surge Protector",
+                          "Light as a Rabbit"],
+
+            "Husbandry": ["Husbandry", "Bee Our Guest", "The Parrots and the Bats", "Two by Two", "Best Friends Forever",
+                          "A Complete Catalogue", "Fishy Business", "Tactical Fishing", "Total Beelocation",
+                          "A Seedy Place", "A Balanced Diet", "Serious Dedication", "Whatever Floats Your Goat!",
+                          "Glow and Behold!", "Wax On", "Wax Off", "The Cutest Predator",
+                          "The Healing Power of Friendship"],
+
+            "Archipelago": ["Getting Wood", "Time to Mine!", "Hot Topic", "Bake Bread", "The Lie", "On a Rail",
+                            "Time to Strike!", "Cow Tipper", "When Pigs Fly", "Overkill", "Librarian", "Overpowered"]
+        }
+
 
 class MinecraftWorld(World):
     """
