@@ -1366,8 +1366,13 @@ def get_alttp_settings(romfile: str):
 
             if gui_enabled:
 
-                from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
-                applyPromptWindow = Tk()
+                try:
+                    from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
+                    applyPromptWindow = Tk()
+                except Exception as e:
+                    logging.error('Could not load tkinter, which is likely not installed.')
+                    return '', False
+
                 applyPromptWindow.resizable(False, False)
                 applyPromptWindow.protocol('WM_DELETE_WINDOW', lambda: onButtonClick())
                 logo = PhotoImage(file=Utils.local_path('data', 'icon.png'))
