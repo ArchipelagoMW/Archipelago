@@ -568,9 +568,9 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], onl
             concerns[hint.finding_player].append(data)
         for slot, clients in ctx.clients[team].items():
             if not clients or slot == hint.finding_player or slot in ctx.slot_set(hint.receiving_player) or \
-                    all(["ShowAllHints" not in client.tags for client in clients]):
+                    (ctx.games[slot] != "Archipelago" and all(["ShowAllHints" not in client.tags for client in clients])):
                 continue
-            for client in [client for client in clients if "ShowAllHints" in client.tags]:
+            for client in [client for client in clients if "ShowAllHints" in client.tags or ctx.games[slot] == "Archipelago"]:
                 all_hints[client].append(data)
         # remember hints in all cases
         if not hint.found:
