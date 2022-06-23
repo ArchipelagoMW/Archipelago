@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [The Witness (Steam)](https://store.steampowered.com/app/210970/The_Witness/)
+- [The Witness, 64-bit Windows (e.g. Steam)](https://store.steampowered.com/app/210970/The_Witness/)
 - [The Witness Archipelago Randomizer](https://github.com/JarnoWesthof/The-Witness-Randomizer-for-Archipelago/releases)
 
 ## Optional Software
@@ -38,4 +38,4 @@ The Witness has a fully functional map tracker that supports auto-tracking.
 3. Click on the "AP" symbol at the top.
 4. Enter the AP address, slot name and password. 
 
-The rest should take care of itself! Items and checks will be marked automatically, and it even knows your settings - It will hide checks & adjust logic accordingly.
+The rest should take care of itself! Items and checks will be marked automatically, and it even knows your settings - It will hide checks & adjust logic accordingly. Note that the tracker may be out of date.
