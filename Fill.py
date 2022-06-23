@@ -2,6 +2,7 @@ import logging
 import typing
 import collections
 import itertools
+import time
 from collections import Counter, deque
 
 from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item
@@ -148,6 +149,7 @@ def fast_fill_restrictive(world: MultiWorld, locations: typing.List[Location],
         else:
             # we filled all reachable spots.
             # try swapping this item with previously placed items
+
             for (i, location) in enumerate(placements):
                 placed_item = location.item
                 # Unplaceable items can sometimes be swapped infinitely. Limit the
@@ -195,7 +197,7 @@ def fast_fill_restrictive(world: MultiWorld, locations: typing.List[Location],
 def distribute_items_restrictive(world: MultiWorld) -> None:
     fill_locations = sorted(world.get_unfilled_locations())
     world.random.shuffle(fill_locations)
-
+    start_time = int(time.time())
     # get items to distribute
     itempool = sorted(world.itempool)
     world.random.shuffle(itempool)
@@ -226,11 +228,13 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     defaultlocations = locations[LocationProgressType.DEFAULT]
     excludedlocations = locations[LocationProgressType.EXCLUDED]
 
+    print(f"Priority: {start_time - int(time.time())}")
     fill_restrictive(world, world.state, prioritylocations, progitempool, lock=True)
     if prioritylocations:
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
+        print(f"Advancement: {len(progitempool)} {start_time - int(time.time())}")
         fill_restrictive(world, world.state, defaultlocations, progitempool)
         if progitempool:
             raise FillError(
@@ -239,6 +243,7 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     if nonexcludeditempool:
         world.random.shuffle(defaultlocations)
         # needs logical fill to not conflict with local items
+        print(f"Useful: {len(nonexcludeditempool)} {start_time - int(time.time())}")
         fast_fill_restrictive(world, defaultlocations, nonexcludeditempool)
         if nonexcludeditempool:
             raise FillError(
@@ -255,11 +260,13 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
             restitempool.remove(item)
     local_non_local_items = nonlocalrestitempool.copy() + sum([items for items in localrestitempool.values()], [])
 
+    print(f"local/nonlocal: {len(local_non_local_items)} {start_time - int(time.time())}")
     fast_fill_restrictive(world, defaultlocations, local_non_local_items)
 
     itemrulelocations = [location for location in defaultlocations if location.item_rule is not location.__class__.item_rule]
     defaultlocations = [location for location in defaultlocations if location not in itemrulelocations]
-    fill_restrictive(world, world.state, itemrulelocations, restitempool)
+    print(f"item rule: {len(restitempool)}/{len(itemrulelocations)} {start_time - int(time.time())}")
+    fast_fill_restrictive(world, itemrulelocations, restitempool)
 
     defaultlocations += itemrulelocations
 
@@ -292,6 +299,7 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
 
     world.random.shuffle(defaultlocations)
 
+    print(f"fast: {len(restitempool)} {start_time - int(time.time())}")
     restitempool, defaultlocations = fast_fill(
         world, restitempool, defaultlocations)
     unplaced = progitempool + restitempool
@@ -306,6 +314,8 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
         locations_counter.update(location.player for location in unfilled)
         print_data = {"items": items_counter, "locations": locations_counter}
         logging.info(f'Per-Player counts: {print_data})')
+
+    print(f"{start_time - int(time.time())}")
 
 
 def fast_fill(world: MultiWorld,
