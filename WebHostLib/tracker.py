@@ -449,18 +449,18 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
                         lttp_checks_done["Total"] += 1
                         checked_locations.add(lookup_any_location_id_to_name[location])
 
-    prog_items: Dict[int, collections.Counter] = {}
-    all_location_names: Dict[int, set] = {}
+    prog_items = collections.Counter
+    all_location_names = set()
 
-    all_location_names[player] = {lookup_any_location_id_to_name[id] for id in locations[player]}
-    prog_items[player] = collections.Counter()
+    all_location_names = {lookup_any_location_id_to_name[id] for id in locations[player]}
+    prog_items = collections.Counter()
     for player in locations:
         for location in locations[player]:
             item, recipient, flags = locations[player][location]
             if recipient == player:
                 if flags & 1:
                     item_name = lookup_any_item_id_to_name[item]
-                    prog_items[player][item_name] += 1
+                    prog_items[item_name] += 1
 
     items_received = collections.Counter()
     for id in inventory:
@@ -471,9 +471,9 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
         team,
         player,
         player_name,
-        all_location_names[player],
+        all_location_names,
         checked_locations,
-        prog_items[player],
+        prog_items,
         items_received,
         slot_data[player]
     )
