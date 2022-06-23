@@ -1,4 +1,3 @@
-import copy
 import collections
 from itertools import zip_longest, chain
 import logging
@@ -145,13 +144,12 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     # temporary home for item links, should be moved out of Main
     for group_id, group in world.groups.items():
         def find_common_pool(players: Set[int], shared_pool: Set[str]):
-            advancement = set()
+            classifications = collections.defaultdict(int)
             counters = {player: {name: 0 for name in shared_pool} for player in players}
             for item in world.itempool:
                 if item.player in counters and item.name in shared_pool:
                     counters[item.player][item.name] += 1
-                    if item.advancement:
-                        advancement.add(item.name)
+                    classifications[item.name] |= item.classification
 
             for player in players.copy():
                 if all([counters[player][item] == 0 for item in shared_pool]):
@@ -169,18 +167,18 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 else:
                     for player in players:
                         del(counters[player][item])
-            return counters, advancement
+            return counters, classifications
 
-        common_item_count, common_advancement_items = find_common_pool(group["players"], group["item_pool"])
+        common_item_count, classifications = find_common_pool(group["players"], group["item_pool"])
         if not common_item_count:
             continue
 
         new_itempool = []
         for item_name, item_count in next(iter(common_item_count.values())).items():
-            advancement = item_name in common_advancement_items
             for _ in range(item_count):
                 new_item = group["world"].create_item(item_name)
-                new_item.advancement = advancement
+                # mangle together all original classification bits
+                new_item.classification |= classifications[item_name]
                 new_itempool.append(new_item)
 
         region = Region("Menu", RegionType.Generic, "ItemLink", group_id, world)
