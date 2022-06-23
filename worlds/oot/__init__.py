@@ -88,6 +88,7 @@ class OOTWeb(WebWorld):
     tutorials = [setup, setup_es]
 
     def modify_tracker(self, tracker):
+        tracker.template = 'zeldaKeysTracker.html'
         tracker.icons = {
             "Fairy Ocarina":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/OoT_Fairy_Ocarina_Icon.png",
             "Ocarina of Time":          "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/4e/OoT_Ocarina_of_Time_Icon.png",
@@ -141,7 +142,7 @@ class OOTWeb(WebWorld):
             "Nocturne of Shadow":       "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/Purple_Note.png",
             "Prelude of Light":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/90/Yellow_Note.png",
             "Small Key":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/e/e5/OoT_Small_Key_Icon.png",
-            "Boss Key":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/40/OoT_Boss_Key_Icon.png",
+            "Big Key":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/40/OoT_Boss_Key_Icon.png",
         }
 
         tracker.progressive_items = [
@@ -150,7 +151,8 @@ class OOTWeb(WebWorld):
             "Boomerang", "Lens of Truth", "Megaton Hammer", "Light Arrows", "Progressive Scale", "Iron Boots", "Hover Boots",
             "Bottles", "Din's Fire", "Farore's Wind", "Nayru's Love", "Progressive Wallet", "Magic Meter", "Gerudo Membership Card",
             "Zelda's Lullaby", "Epona's Song", "Saria's Song", "Sun's Song", "Song of Time", "Song of Storms", "Gold Skulltula Tokens",
-            "Minuet of Forest", "Bolero of Fire", "Serenade of Water", "Requiem of Spirit", "Nocturne of Shadow", "Prelude of Light", "Triforce Pieces"
+            "Minuet of Forest", "Bolero of Fire", "Serenade of Water", "Requiem of Spirit", "Nocturne of Shadow", "Prelude of Light", "Triforce Pieces",
+            "Small Key", "Big Key"
         ]
 
         tracker.progressive_names = {
@@ -162,6 +164,7 @@ class OOTWeb(WebWorld):
             "Ocarina": ["Fairy Ocarina", "Ocarina of Time"],
             "Bottles": normal_bottles + ["Rutos Letter"]
         }
+
         location_id_to_name = {}
         for name, id in location_name_to_id.items():
             location_id_to_name[id] = name
@@ -199,6 +202,17 @@ class OOTWeb(WebWorld):
                 elif id < 67674:
                     tracker.regions.setdefault("Ganon's Castle", []).append(location_id_to_name[id])
 
+        tracker.region_keys = {
+            'Forest Temple': ['Small Key (Forest Temple)', 'Boss Key (Forest Temple)'],
+            'Fire Temple': ['Small Key (Fire Temple)', 'Boss Key (Forest Temple)'],
+            'Water Temple': ['Small Key (Water Temple)', 'Boss Key (Water Temple)'],
+            'Spirit Temple': ['Small Key (Spirit Temple)', 'Boss Key (Spirit Temple)'],
+            'Shadow Temple': ['Small Key (Shadow Temple)', 'Boss Key (Shadow Temple)'],
+            'Bottom of the Well': ['Small Key (Bottom of the Well)', 'Boss Key (Bottom of the Well)'],
+            'Gerudo Training Ground': ['Small Key (Gerudo Training Ground)', 'Boss Key (Gerudo Training Ground)'],
+            'Thieves Hideout': ['Small Key (Thieves Hideout)', 'Boss Key (Thieves Hideout)'],
+            'Ganons Castle': ['Small Key (Ganons Castle)', 'Boss Key (Ganons Castle)']
+        }
 
 
 class OOTWorld(World):
