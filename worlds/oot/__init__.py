@@ -162,29 +162,43 @@ class OOTWeb(WebWorld):
             "Ocarina": ["Fairy Ocarina", "Ocarina of Time"],
             "Bottles": normal_bottles + ["Rutos Letter"]
         }
+        location_id_to_name = {}
+        for name, id in location_name_to_id.items():
+            location_id_to_name[id] = name
+        tracker.regions = {}
+        for id in location_id_to_name.keys():
+            if id in location_name_to_id.values() and location_id_to_name[id] in tracker.all_locations:
+                if id < 67259:
+                    tracker.regions.setdefault("Overworld", []).append(location_id_to_name[id])
+                elif id < 67264:
+                    tracker.regions.setdefault("Thieves' Hideout", []).append(location_id_to_name[id])
+                elif id < 67281:
+                    tracker.regions.setdefault("Overworld", []).append(location_id_to_name[id])
+                elif id < 67304:
+                    tracker.regions.setdefault("Deku Tree", []).append(location_id_to_name[id])
+                elif id < 67335:
+                    tracker.regions.setdefault("Dodongo's Cavern", []).append(location_id_to_name[id])
+                elif id < 67360:
+                    tracker.regions.setdefault("Jabu Jabu's Belly", []).append(location_id_to_name[id])
+                elif id < 67385:
+                    tracker.regions.setdefault("Bottom of the Well", []).append(location_id_to_name[id])
+                elif id < 67421:
+                    tracker.regions.setdefault("Forest Temple", []).append(location_id_to_name[id])
+                elif id < 67458:
+                    tracker.regions.setdefault("Fire Temple", []).append(location_id_to_name[id])
+                elif id < 67485:
+                    tracker.regions.setdefault("Water Temple", []).append(location_id_to_name[id])
+                elif id < 67533:
+                    tracker.regions.setdefault("Shadow Temple", []).append(location_id_to_name[id])
+                elif id < 67583:
+                    tracker.regions.setdefault("Spirit Temple", []).append(location_id_to_name[id])
+                elif id < 67597:
+                    tracker.regions.setdefault("Ice Cavern", []).append(location_id_to_name[id])
+                elif id < 67636:
+                    tracker.regions.setdefault("Gerudo Training Ground", []).append(location_id_to_name[id])
+                elif id < 67674:
+                    tracker.regions.setdefault("Ganon's Castle", []).append(location_id_to_name[id])
 
-        tracker.regions = {
-            "Overworld": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67000, 67281) if num in location_name_to_id.values()],
-            "Deku Tree": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67281, 67304) if num in location_name_to_id.values()],
-            "Dodongo's Cavern": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67304, 67335) if num in location_name_to_id.values()],
-            "Jabu Jabu's Belly": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67335, 67360) if num in location_name_to_id.values()],
-            "Bottom of the Well": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67360, 67385) if num in location_name_to_id.values()],
-            "Forest Temple": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67385, 672421) if num in location_name_to_id.values()],
-            "Fire Temple": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67421, 67458) if num in location_name_to_id.values()],
-            "Water Temple": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67458, 67485) if num in location_name_to_id.values()],
-            "Shadow Temple": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67485, 67533) if num in location_name_to_id.values()],
-            "Spirit Temple": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67533, 67583) if num in location_name_to_id.values()],
-            "Ice Cavern": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67583, 67597) if num in location_name_to_id.values()],
-            "Gerudo Training Ground": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67597, 67636) if num in location_name_to_id.values()],
-            "Thieves' Hideout": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67259, 67264) if num in location_name_to_id.values()],
-            "Ganon's Castle": [list(location_name_to_id.keys())[list(location_name_to_id.values()).index(num)] for num in range(67636, 67674) if num in location_name_to_id.values()]
-        }
-        for loc in tracker.regions["Thieves' Hideout"]:
-            tracker.regions["Overworld"].remove(loc)
-        for region in tracker.regions:
-            for location in tracker.regions[region]:
-                if location not in tracker.all_locations:
-                    tracker.regions[region].remove(location)
 
 
 class OOTWorld(World):
