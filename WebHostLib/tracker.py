@@ -42,7 +42,6 @@ class PlayerTracker:
     slot_data: Dict[any, any]
     theme: str
 
-    key_types: List = []
     region_keys: Dict[str, str] = {}
 
     def __init__(self, room: Any, team: int, player: int, name: str, all_locations: Set[str],
@@ -365,8 +364,7 @@ def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, wa
             icons=display_icons,
             regions=player_tracker.regions,
             checks_done=player_tracker.checks_done,
-            region_keys=player_tracker.region_keys,
-            key_types=player_tracker.key_types
+            region_keys=player_tracker.region_keys
         )
     else:
         return __renderGenericTracker(multisave, room, player_tracker.all_locations, inventory, tracked_team, tracked_player, player_name, seed_checks_in_area, lttp_checks_done)

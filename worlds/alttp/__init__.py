@@ -107,7 +107,7 @@ class ALTTPWeb(WebWorld):
         PlayerTracker = object
 
     def modify_tracker(self, tracker: PlayerTracker):
-        tracker.template = 'lttpKeysTracker.html'
+        tracker.template = 'zeldaKeysTracker.html'
 
         tracker.icons = {
             "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
@@ -310,8 +310,6 @@ class ALTTPWeb(WebWorld):
             'Small Key',
             'Big Key'
         ]
-
-        tracker.key_types = ['Small Key', 'Big Key']
 
         tracker.progressive_names = {
             'Progressive Bow': ['Bow', 'Silver Arrows', 'Silver Bow', 'Progressive Bow (Alt)'],
