@@ -28,7 +28,7 @@ def put_digits_at_end(text: str) -> str:
 
 
 def hk_loads(file: str) -> typing.Any:
-    with open(file) as f:
+    with open(file, encoding="utf-8-sig") as f:
         data = f.read()
     new_data = []
     for row in data.split("\n"):

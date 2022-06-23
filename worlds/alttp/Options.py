@@ -147,6 +147,8 @@ class Swordless(Toggle):
     display_name = "Swordless"
 
 
+# Might be a decent idea to split "Bow" into its own option with choices of
+# Defer to Progressive Option (default), Progressive, Non-Progressive, Bow + Silvers, Retro
 class RetroBow(Toggle):
     """Zelda-1 like mode. You have to purchase a quiver to shoot arrows using rupees."""
     display_name = "Retro Bow"
