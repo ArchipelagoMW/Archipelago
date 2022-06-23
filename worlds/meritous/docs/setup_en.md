@@ -58,7 +58,6 @@ More in-depth information about the game can be found in the game's help file, a
 
 - `Disconnected`: If the game does not reconnect automatically, you may need to save, quit, and reload the game to reconnect. Keep in mind that the game does not auto-save, and it is only possible to save the game at Save Tiles.
 - `InvalidSlot`, `InvalidGame`: Make sure the `slotname` in `meritous-ap.json` matches the name provided in your Meritous YAML file.
-- `SlotAlreadyTaken`: Make sure Meritous Gaiden is not already running and connected to the server.
 - `IncompatibleVersion`: Make sure Meritous Gaiden has been updated to the latest version.
 - `InvalidPassword`: Make sure the `password` in `meritous-ap.json` matches the password for your game. If there is no password, either set this to `null` (no quotes) or omit/remove it completely.
 - `InvalidItemsHandling`: This is a bug and shouldn't happen if you downloaded a precompiled copy of the game. If you downloaded a precompiled copy, please let KewlioMZX know over GitHub or the AP Discord.

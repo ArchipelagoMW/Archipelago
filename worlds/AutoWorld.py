@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import sys
 from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, NamedTuple
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location, Tutorial
@@ -41,6 +42,7 @@ class AutoWorldRegister(type):
         new_class = super().__new__(mcs, name, bases, dct)
         if "game" in dct:
             AutoWorldRegister.world_types[dct["game"]] = new_class
+        new_class.__file__ = sys.modules[new_class.__module__].__file__
         return new_class
 
 
@@ -98,7 +100,7 @@ class WebWorld:
     tutorials: List[Tutorial]
 
     # Choose a theme for your /game/* pages
-    # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime
+    # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone
     theme = "grass"
 
     # display a link to a bug report page, most likely a link to a GitHub issue page.

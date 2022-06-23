@@ -9,11 +9,11 @@ from .Regions import mc_regions, link_minecraft_structures, default_connections
 from .Rules import set_advancement_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 
-from BaseClasses import Region, Entrance, Item, Tutorial
+from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification
 from .Options import minecraft_options
 from ..AutoWorld import World, WebWorld
 
-client_version = 7
+client_version = 9
 
 class MinecraftWebWorld(WebWorld):
     theme = "jungle"
@@ -22,7 +22,7 @@ class MinecraftWebWorld(WebWorld):
     setup = Tutorial(
         "Multiworld Setup Tutorial",
         "A guide to setting up the Archipelago Minecraft software on your computer. This guide covers"
-        "single-player, multiworkd, and related software.",
+        "single-player, multiworld, and related software.",
         "English",
         "minecraft_en.md",
         "minecraft/en",
@@ -65,7 +65,7 @@ class MinecraftWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 4
+    data_version = 7
 
     def _get_mc_data(self):
         exits = [connection[0] for connection in default_connections]
@@ -105,7 +105,7 @@ class MinecraftWorld(World):
             itempool += ["Dragon Egg Shard"] * self.world.egg_shards_available[self.player]
         # Add bee traps if desired
         bee_trap_quantity = ceil(self.world.bee_traps[self.player] * (len(self.location_names)-len(itempool)) * 0.01)
-        itempool += ["Bee Trap (Minecraft)"] * bee_trap_quantity
+        itempool += ["Bee Trap"] * bee_trap_quantity
         # Fill remaining items with randomly generated junk
         itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool))
         # Convert itempool into real items
@@ -127,6 +127,9 @@ class MinecraftWorld(World):
         self.world.get_location("Wither", self.player).place_locked_item(self.create_item("Defeat Wither"))
 
         self.world.itempool += itempool
+
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()))[0]
 
     def set_rules(self):
         set_advancement_rules(self.world, self.player)
@@ -161,10 +164,17 @@ class MinecraftWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
-        item = MinecraftItem(name, item_data.progression, item_data.code, self.player)
-        nonexcluded_items = ["Sharpness III Book", "Infinity Book", "Looting III Book"]
-        if name in nonexcluded_items:  # prevent books from going on excluded locations
-            item.never_exclude = True
+        if name == "Bee Trap":
+            classification = ItemClassification.trap
+            # prevent books from going on excluded locations
+        elif name in ("Sharpness III Book", "Infinity Book", "Looting III Book"):
+            classification = ItemClassification.useful
+        elif item_data.progression:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+        item = MinecraftItem(name, classification, item_data.code, self.player)
+
         return item
 
 def mc_update_output(raw_data, server, port):

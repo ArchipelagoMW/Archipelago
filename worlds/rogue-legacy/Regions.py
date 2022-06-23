@@ -1,9 +1,11 @@
 import typing
 
-from BaseClasses import MultiWorld, Region, Entrance
+from BaseClasses import MultiWorld, Region, RegionType, Entrance, ItemClassification
 from .Items import LegacyItem
 from .Locations import LegacyLocation, diary_location_table, location_table, base_location_table
 from .Names import LocationName, ItemName
+
+prog = ItemClassification.progression
 
 
 def create_regions(world, player: int):
@@ -47,16 +49,16 @@ def create_regions(world, player: int):
 
     # Connect entrances and set up events.
     world.get_entrance(LocationName.outside, player).connect(world.get_region(LocationName.castle, player))
-    world.get_location(LocationName.castle, player).place_locked_item(LegacyItem(ItemName.boss_castle, True, None, player))
-    world.get_location(LocationName.garden, player).place_locked_item(LegacyItem(ItemName.boss_forest, True, None, player))
-    world.get_location(LocationName.tower, player).place_locked_item(LegacyItem(ItemName.boss_tower, True, None, player))
-    world.get_location(LocationName.dungeon, player).place_locked_item(LegacyItem(ItemName.boss_dungeon, True, None, player))
-    world.get_location(LocationName.fountain, player).place_locked_item(LegacyItem(ItemName.boss_fountain, True, None, player))
+    world.get_location(LocationName.castle, player).place_locked_item(LegacyItem(ItemName.boss_castle, prog, None, player))
+    world.get_location(LocationName.garden, player).place_locked_item(LegacyItem(ItemName.boss_forest, prog, None, player))
+    world.get_location(LocationName.tower, player).place_locked_item(LegacyItem(ItemName.boss_tower, prog, None, player))
+    world.get_location(LocationName.dungeon, player).place_locked_item(LegacyItem(ItemName.boss_dungeon, prog, None, player))
+    world.get_location(LocationName.fountain, player).place_locked_item(LegacyItem(ItemName.boss_fountain, prog, None, player))
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     # Shamelessly stolen from the ROR2 definition, lol
-    ret = Region(name, None, name, player)
+    ret = Region(name, RegionType.Generic, name, player)
     ret.world = world
     if locations:
         for location in locations:

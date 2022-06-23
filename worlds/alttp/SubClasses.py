@@ -1,7 +1,7 @@
 """Module extending BaseClasses.py for aLttP"""
 from typing import Optional
 
-from BaseClasses import Location, Item
+from BaseClasses import Location, Item, ItemClassification
 
 
 class ALttPLocation(Location):
@@ -20,10 +20,10 @@ class ALttPItem(Item):
     game: str = "A Link to the Past"
     dungeon = None
 
-    def __init__(self, name, player, advancement=False, type=None, item_code=None, pedestal_hint=None,
+    def __init__(self, name, player, classification=ItemClassification.filler, type=None, item_code=None, pedestal_hint=None,
                  pedestal_credit=None, sick_kid_credit=None, zora_credit=None, witch_credit=None,
-                 flute_boy_credit=None, hint_text=None, trap=False):
-        super(ALttPItem, self).__init__(name, advancement, item_code, player)
+                 flute_boy_credit=None, hint_text=None):
+        super(ALttPItem, self).__init__(name, classification, item_code, player)
         self.type = type
         self._pedestal_hint_text = pedestal_hint
         self.pedestal_credit_text = pedestal_credit
@@ -32,8 +32,6 @@ class ALttPItem(Item):
         self.magicshop_credit_text = witch_credit
         self.fluteboy_credit_text = flute_boy_credit
         self._hint_text = hint_text
-        if trap:
-            self.trap = trap
 
     @property
     def crystal(self) -> bool:

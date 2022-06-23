@@ -12,7 +12,12 @@ import io
 import collections
 import importlib
 import logging
-from tkinter import Tk
+import decimal
+
+if typing.TYPE_CHECKING:
+    from tkinter import Tk
+else:
+    Tk = typing.Any
 
 
 def tuplize_version(version: str) -> Version:
@@ -25,8 +30,12 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 version_tuple = tuplize_version(__version__)
+
+is_linux = sys.platform.startswith('linux')
+is_macos = sys.platform == 'darwin'
+is_windows = sys.platform in ("win32", "cygwin", "msys")
 
 import jellyfish
 from yaml import load, load_all, dump, SafeLoader
@@ -251,7 +260,7 @@ def get_default_options() -> dict:
         },
         "generator": {
             "teams": 1,
-            "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core.exe"),
+            "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core"),
             "player_files_path": "Players",
             "players": 0,
             "weights_file_path": "weights.yaml",
@@ -422,7 +431,8 @@ loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': log
 
 
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
-                 log_format: str = "[%(name)s at %(asctime)s]: %(message)s", exception_logger: str = ""):
+                 log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
+                 exception_logger: typing.Optional[str] = None):
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
     os.makedirs(log_folder, exist_ok=True)
@@ -458,6 +468,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
 
         sys.excepthook = handle_exception
 
+    logging.info(f"Archipelago ({__version__}) logging initialized.")
+
 
 def stream_input(stream, queue):
     def queuer():
@@ -483,17 +495,25 @@ class VersionException(Exception):
     pass
 
 
+def chaining_prefix(index: int, labels: typing.Tuple[str]) -> str:
+    text = ""
+    max_label = len(labels) - 1
+    while index > max_label:
+        text += labels[-1]
+        index -= max_label
+    return labels[index] + text
+
+
 # noinspection PyPep8Naming
 def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")) -> str:
+    """Formats a value into a value + metric/si prefix. More info at https://en.wikipedia.org/wiki/Metric_prefix"""
     n = 0
-
-    while value > power:
+    value = decimal.Decimal(value)
+    while value >= power:
         value /= power
         n += 1
-    if type(value) == int:
-        return f"{value} {power_labels[n]}"
-    else:
-        return f"{value:0.3f} {power_labels[n]}"
+
+    return f"{value.quantize(decimal.Decimal('1.00'))} {chaining_prefix(n, power_labels)}"
 
 
 def get_fuzzy_ratio(word1: str, word2: str) -> float:
@@ -515,3 +535,72 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
                 reverse=True)[0:limit]
         )
     )
+
+
+def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]]) \
+        -> typing.Optional[str]:
+    def run(*args: str):
+        return subprocess.run(args, capture_output=True, text=True).stdout.split('\n', 1)[0] or None
+
+    if is_linux:
+        # prefer native dialog
+        kdialog = shutil.which('kdialog')
+        if kdialog:
+            k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
+            return run(kdialog, f'--title={title}', '--getopenfilename', '.', k_filters)
+        zenity = shutil.which('zenity')
+        if zenity:
+            z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
+            return run(zenity, f'--title={title}', '--file-selection', *z_filters)
+
+    # fall back to tk
+    try:
+        import tkinter
+        import tkinter.filedialog
+    except Exception as e:
+        logging.error('Could not load tkinter, which is likely not installed. '
+                      f'This attempt was made because open_filename was used for "{title}".')
+        raise e
+    else:
+        root = tkinter.Tk()
+        root.withdraw()
+        return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes))
+
+
+def messagebox(title: str, text: str, error: bool = False) -> None:
+    def run(*args: str):
+        return subprocess.run(args, capture_output=True, text=True).stdout.split('\n', 1)[0] or None
+
+    def is_kivy_running():
+        if 'kivy' in sys.modules:
+            from kivy.app import App
+            return App.get_running_app() is not None
+        return False
+
+    if is_kivy_running():
+        from kvui import MessageBox
+        MessageBox(title, text, error).open()
+        return
+
+    if is_linux and not 'tkinter' in sys.modules:
+        # prefer native dialog
+        kdialog = shutil.which('kdialog')
+        if kdialog:
+            return run(kdialog, f'--title={title}', '--error' if error else '--msgbox', text)
+        zenity = shutil.which('zenity')
+        if zenity:
+            return run(zenity, f'--title={title}', f'--text={text}', '--error' if error else '--info')
+
+    # fall back to tk
+    try:
+        import tkinter
+        from tkinter.messagebox import showerror, showinfo
+    except Exception as e:
+        logging.error('Could not load tkinter, which is likely not installed. '
+                      f'This attempt was made because messagebox was used for "{title}".')
+        raise e
+    else:
+        root = tkinter.Tk()
+        root.withdraw()
+        showerror(title, text) if error else showinfo(title, text)
+        root.update()

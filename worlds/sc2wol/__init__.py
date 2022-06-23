@@ -1,8 +1,8 @@
 import typing
 
-from typing import List, Set, Tuple
-from BaseClasses import Item, MultiWorld, Location, Tutorial
-from ..AutoWorld import World, WebWorld
+from typing import List, Set, Tuple, NamedTuple
+from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
+from ..AutoWorld import WebWorld
 from .Items import StarcraftWoLItem, item_table, filler_items, item_name_groups, get_full_item_list, \
     basic_unit
 from .Locations import get_locations
@@ -24,6 +24,7 @@ class Starcraft2WoLWebWorld(WebWorld):
 
     tutorials = [setup]
 
+
 class SC2WoLWorld(World):
     """
     StarCraft II: Wings of Liberty is a science fiction real-time strategy video game developed and published by Blizzard Entertainment.
@@ -32,6 +33,7 @@ class SC2WoLWorld(World):
 
     game = "Starcraft 2 Wings of Liberty"
     web = Starcraft2WoLWebWorld()
+    data_version = 2
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
@@ -40,9 +42,7 @@ class SC2WoLWorld(World):
     item_name_groups = item_name_groups
     locked_locations: typing.List[str]
     location_cache: typing.List[Location]
-
-    def _get_sc2wol_data(self):
-        return {}
+    mission_req_table = {}
 
     def __init__(self, world: MultiWorld, player: int):
         super(SC2WoLWorld, self).__init__(world, player)
@@ -51,15 +51,15 @@ class SC2WoLWorld(World):
 
     def _create_items(self, name: str):
         data = get_full_item_list()[name]
-        return [self.create_item(name)] * data.quantity
+        return [self.create_item(name) for _ in range(data.quantity)]
 
     def create_item(self, name: str) -> Item:
         data = get_full_item_list()[name]
-        return StarcraftWoLItem(name, data.progression, data.code, self.player)
+        return StarcraftWoLItem(name, data.classification, data.code, self.player)
 
     def create_regions(self):
-        create_regions(self.world, self.player, get_locations(self.world, self.player),
-                        self.location_cache)
+        self.mission_req_table = create_regions(self.world, self.player, get_locations(self.world, self.player),
+                                                self.location_cache)
 
     def generate_basic(self):
         excluded_items = get_excluded_items(self, self.world, self.player)
@@ -81,18 +81,23 @@ class SC2WoLWorld(World):
         return self.world.random.choice(filler_items)
 
     def fill_slot_data(self):
-        slot_data = self._get_sc2wol_data()
+        slot_data = {}
         for option_name in sc2wol_options:
             option = getattr(self.world, option_name)[self.player]
-            if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
+            if type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
+        slot_req_table = {}
+        for mission in self.mission_req_table:
+            slot_req_table[mission] = self.mission_req_table[mission]._asdict()
+
+        slot_data["mission_req"] = slot_req_table
         return slot_data
 
 
 def setup_events(world: MultiWorld, player: int, locked_locations: typing.List[str], location_cache: typing.List[Location]):
     for location in location_cache:
-        if location.address == None:
-            item = Item(location.name, True, None, player)
+        if location.address is None:
+            item = Item(location.name, ItemClassification.progression, None, player)
 
             locked_locations.append(location.name)
 
@@ -125,7 +130,15 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str
     if not local_basic_unit:
         raise Exception("At least one basic unit must be local")
 
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Liberation Day: First Statue',
+    # The first world should also be the starting world
+    first_location = list(world.worlds[player].mission_req_table)[0]
+
+    if first_location == "In Utter Darkness":
+        first_location = first_location + ": Defeat"
+    else:
+        first_location = first_location + ": Victory"
+
+    assign_starter_item(world, player, excluded_items, locked_locations, first_location,
                         local_basic_unit)
 
 
@@ -154,6 +167,7 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> L
 
     return pool
 
+
 def fill_item_pool_with_dummy_items(self: SC2WoLWorld, world: MultiWorld, player: int, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):
     for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
@@ -164,10 +178,6 @@ def fill_item_pool_with_dummy_items(self: SC2WoLWorld, world: MultiWorld, player
 def create_item_with_correct_settings(world: MultiWorld, player: int, name: str) -> Item:
     data = item_table[name]
 
-    item = Item(name, data.progression, data.code, player)
-    item.never_exclude = data.never_exclude
-
-    if not item.advancement:
-        return item
+    item = Item(name, data.classification, data.code, player)
 
     return item

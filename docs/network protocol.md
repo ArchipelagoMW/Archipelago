@@ -63,10 +63,9 @@ Sent to clients when they connect to an Archipelago server.
 | permissions | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "forfeit", "collect" and "remaining". |
 | hint_cost | int | The amount of points it costs to receive a hint from the server. |
 | location_check_points | int | The amount of hint points you receive per item/location check completed. ||
-| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Sent only if the client is properly authenticated (see [Archipelago Connection Handshake](#Archipelago-Connection-Handshake)). Information on the players currently connected to the server. |
-| games | list\[str\] | sorted list of game names for the players, so first player's game will be games\[0\]. Matches game names in datapackage. |
-| datapackage_version | int | Data version of the [data package](#Data-Package-Contents) the server will send. Used to update the client's (optional) local cache. |
-| datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. |
+| games | list\[str\] | List of games present in this multiworld. |
+| datapackage_version | int | Sum of individual games' datapackage version. Deprecated. Use `datapackage_versions` instead. |
+| datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. Used to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents). |
 | seed_name | str | uniquely identifying name of this generation |
 | time | float | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce. |
 
@@ -101,11 +100,10 @@ Sent to clients when the server refuses connection. This is sent during the init
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| errors | list\[str\] | Optional. When provided, should contain any one of: `InvalidSlot`, `InvalidGame`, `SlotAlreadyTaken`, `IncompatibleVersion`, `InvalidPassword`, or `InvalidItemsHandling`. |
+| errors | list\[str\] | Optional. When provided, should contain any one of: `InvalidSlot`, `InvalidGame`, `IncompatibleVersion`, `InvalidPassword`, or `InvalidItemsHandling`. |
 
 InvalidSlot indicates that the sent 'name' field did not match any auth entry on the server.
 InvalidGame indicates that a correctly named slot was found, but the game for it mismatched.
-SlotAlreadyTaken indicates a connection with a different uuid is already established.
 IncompatibleVersion indicates a version mismatch.
 InvalidPassword indicates the wrong, or no password when it was required, was sent.
 InvalidItemsHandling indicates a wrong value type or flag combination was sent.
@@ -147,7 +145,7 @@ The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | hint_points | int | New argument. The client's current hint points. |
-| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Changed argument. Always sends all players, whether connected or not. |
+| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Send in the event of an alias rename. Always sends all players, whether connected or not. |
 | checked_locations | list\[int\] | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
 | missing_locations | list\[int\] | Should never be sent as an update, if needed is the inverse of checked_locations. |
 
@@ -239,7 +237,7 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | name | str | The player name for this client. |
 | uuid | str | Unique identifier for player client. |
 | version | [NetworkVersion](#NetworkVersion) | An object representing the Archipelago version this client supports. |
-| items_handling | int | Flags configuring which items should be sent by the server. Read below for individual flags.
+| items_handling | int | Flags configuring which items should be sent by the server. Read below for individual flags. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
 
 #### items_handling flags
@@ -260,7 +258,7 @@ Update arguments from the Connect package, currently only updating tags and item
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| items_handling | int | Flags configuring which items should be sent by the server.
+| items_handling | int | Flags configuring which items should be sent by the server. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
 
 ### Sync
@@ -283,7 +281,7 @@ Sent to the server to inform it of locations the client has seen, but not checke
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | locations | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server. |
-| create_as_hint | bool | If True, the scouted locations get created and broadcasted as a player-visible hint. |
+| create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
 
 ### StatusUpdate
 Sent to the server to update on the sender's status. Examples include readiness or goal completion. (Example: defeated Ganon in A Link to the Past)
@@ -345,7 +343,7 @@ Additional arguments sent in this package will also be added to the [SetReply](#
 #### DataStorageOperation
 A DataStorageOperation manipulates or alters the value of a key in the data storage. If the operation transforms the value from one state to another then the current value of the key is used as the starting point otherwise the [Set](#Set)'s package `default` is used if the key does not exist on the server already.
 DataStorageOperations consist of an object containing both the operation to be applied, provided in the form of a string, as well as the value to be used for that operation, Example:
-```js
+```json
 {"operation": "add", "value": 12}
 ```
 
@@ -400,7 +398,7 @@ class NetworkPlayer(NamedTuple):
 ```
 
 Example:
-```js
+```json
 [
     {"team": 0, "slot": 1, "alias": "Lord MeowsiePuss", "name": "Meow"}, 
     {"team": 0, "slot": 2, "alias": "Doggo", "name": "Bork"},
@@ -420,7 +418,7 @@ class NetworkItem(NamedTuple):
     flags: int
 ```
 In JSON this may look like:
-```js
+```json
 [
     {"item": 1, "location": 1, "player": 1, "flags": 1},
     {"item": 2, "location": 2, "player": 2, "flags": 2},

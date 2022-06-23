@@ -14,9 +14,6 @@ class ItemData(typing.NamedTuple):
 class LegacyItem(Item):
     game: str = "Rogue Legacy"
 
-    def __init__(self, name, advancement: bool = False, code: int = None, player: int = None):
-        super(LegacyItem, self).__init__(name, advancement, code, player)
-
 
 # Separate tables for each type of item.
 vendors_table = {

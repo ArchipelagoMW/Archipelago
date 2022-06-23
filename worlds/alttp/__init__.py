@@ -8,7 +8,7 @@ from BaseClasses import Item, CollectionState, Tutorial
 from .SubClasses import ALttPItem
 from ..AutoWorld import World, WebWorld, LogicMixin
 from .Options import alttp_options, smallkey_shuffle
-from .Items import as_dict_item_table, item_name_groups, item_table
+from .Items import as_dict_item_table, item_name_groups, item_table, GetBeemizerItem
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
 from .Rules import set_rules
 from .ItemPool import generate_itempool, difficulties
@@ -17,12 +17,14 @@ from .Dungeons import create_dungeons
 from .Rom import LocalRom, patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, get_hash_string, \
     get_base_rom_path, LttPDeltaPatch
 import Patch
+from itertools import chain
 
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
+extras_list = sum(difficulties['normal'].extras[0:5], [])
 
 class ALTTPWeb(WebWorld):
     setup_en = Tutorial(
@@ -153,7 +155,7 @@ class ALTTPWorld(World):
                 self.er_seed = "vanilla"
             elif seed.startswith("group-") or world.is_race:
                 self.er_seed = get_same_seed(world, (
-                    shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
+                    shuffle, seed, world.retro_caves[player], world.mode[player], world.logic[player]))
             else:  # not a race or group seed, use set seed as is.
                 self.er_seed = seed
         elif world.shuffle[player] == "vanilla":
@@ -470,16 +472,22 @@ class ALTTPWorld(World):
                 while gtower_locations and gt_item_pool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
                     item_to_place = gt_item_pool.pop()
-                    if item_to_place in localrest:
-                        localrest.remove(item_to_place)
-                    else:
-                        restitempool.remove(item_to_place)
-                    world.push_item(spot_to_fill, item_to_place, False)
-                    fill_locations.remove(spot_to_fill)  # very slow, unfortunately
-                    trash_count -= 1
+                    if spot_to_fill.item_rule(item_to_place):
+                        if item_to_place in localrest:
+                            localrest.remove(item_to_place)
+                        else:
+                            restitempool.remove(item_to_place)
+                        world.push_item(spot_to_fill, item_to_place, False)
+                        fill_locations.remove(spot_to_fill)  # very slow, unfortunately
+                        trash_count -= 1
+
 
     def get_filler_item_name(self) -> str:
-        return "Rupees (5)"  # temporary
+        if self.world.goal[self.player] == "icerodhunt":
+            item = "Nothing"
+        else:
+            item = self.world.random.choice(extras_list)
+        return GetBeemizerItem(self.world, self.player, item)
 
     def get_pre_fill_items(self):
         res = []
