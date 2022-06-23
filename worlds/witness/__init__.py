@@ -4,14 +4,14 @@ Archipelago init file for The Witness
 
 import typing
 
-from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance, Tutorial
+from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
 from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems
 from .rules import set_rules
 from .regions import WitnessRegions
-from .Options import is_option_enabled, the_witness_options
+from .Options import is_option_enabled, the_witness_options, get_option_value
 from .utils import best_junk_to_add_based_on_weights
 
 
@@ -50,7 +50,9 @@ class WitnessWorld(World):
         return {
             'seed': self.world.random.randint(0, 1000000),
             'victory_location': int(self.player_logic.VICTORY_LOCATION, 16),
-            'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID
+            'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID,
+            'doorhex_to_id': self.player_logic.DOOR_DICT_FOR_CLIENT,
+            'door_connections_to_sever': self.player_logic.DOOR_CONNECTIONS_TO_SEVER
         }
 
     def generate_early(self):
@@ -67,20 +69,34 @@ class WitnessWorld(World):
         items_by_name = dict()
         for item in self.items.ITEM_TABLE:
             witness_item = self.create_item(item)
-            if item not in self.items.EVENT_ITEM_TABLE:
+            if item in self.items.PROGRESSION_TABLE:
                 pool.append(witness_item)
                 items_by_name[item] = witness_item
 
-        # Put good item on first check
-        random_good_item = self.world.random.choice(self.items.GOOD_ITEMS)
-        first_check = self.world.get_location(
-            "Tutorial Gate Open", self.player
-        )
-        first_check.place_locked_item(items_by_name[random_good_item])
-        pool.remove(items_by_name[random_good_item])
+        less_junk = 0
+
+        # Put good item on first check if symbol shuffle is on
+        # symbols = is_option_enabled(self.world, self.player, "shuffle_symbols")
+        symbols = True
+
+        if symbols:
+            random_good_item = self.world.random.choice(self.items.GOOD_ITEMS)
+            first_check = self.world.get_location(
+                "Tutorial Gate Open", self.player
+            )
+            first_check.place_locked_item(items_by_name[random_good_item])
+            pool.remove(items_by_name[random_good_item])
+
+            less_junk = 1
+
+        for item in self.items.EXTRA_AMOUNTS:
+            witness_item = self.create_item(item)
+            for i in range(0, self.items.EXTRA_AMOUNTS[item]):
+                if len(pool) < len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE) - less_junk:
+                    pool.append(witness_item)
 
         # Put in junk items to fill the rest
-        junk_size = len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - 1
+        junk_size = len(self.locat.CHECK_LOCATION_TABLE) - len(pool) - len(self.locat.EVENT_LOCATION_TABLE) - less_junk
 
         for i in range(0, junk_size):
             pool.append(self.create_item(self.get_filler_item_name()))
@@ -107,7 +123,7 @@ class WitnessWorld(World):
         slot_data["hard_mode"] = False
 
         for option_name in the_witness_options:
-            slot_data[option_name] = is_option_enabled(
+            slot_data[option_name] = get_option_value(
                 self.world, self.player, option_name
             )
 
@@ -120,10 +136,18 @@ class WitnessWorld(World):
         else:
             item = StaticWitnessItems.ALL_ITEM_TABLE[name]
 
+        if item.trap:
+            classification = ItemClassification.trap
+        elif item.progression:
+            classification = ItemClassification.progression
+        elif item.never_exclude:
+            classification = ItemClassification.useful
+        else:
+            classification = ItemClassification.filler
+
         new_item = WitnessItem(
-            name, item.progression, item.code, player=self.player
+            name, classification, item.code, player=self.player
         )
-        new_item.trap = item.trap
         return new_item
 
     def get_filler_item_name(self) -> str:  # Used by itemlinks

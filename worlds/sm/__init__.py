@@ -17,7 +17,7 @@ from .Options import sm_options
 from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch
 import Utils
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, Tutorial
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
 from logic.smboolmanager import SMBoolManager
@@ -164,7 +164,8 @@ class SMWorld(World):
                 isAdvancement = False
 
             itemClass = ItemManager.Items[item.Type].Class
-            smitem = SMItem(item.Name, isAdvancement, item.Type, None if itemClass == 'Boss' else self.item_name_to_id[item.Name], player = self.player)
+            smitem = SMItem(item.Name, ItemClassification.progression if isAdvancement else ItemClassification.filler,
+                            item.Type, None if itemClass == 'Boss' else self.item_name_to_id[item.Name], player=self.player)
             if itemClass == 'Boss':
                 self.locked_items[item.Name] = smitem
             elif item.Category == 'Nothing':
@@ -526,7 +527,8 @@ class SMWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = next(x for x in ItemManager.Items.values() if x.Name == name)
-        return SMItem(item.Name, True, item.Type, self.item_name_to_id[item.Name], player = self.player)
+        return SMItem(item.Name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Name],
+                      player=self.player)
 
     def get_filler_item_name(self) -> str:
         if self.world.random.randint(0, 100) < self.world.minor_qty[self.player].value:
@@ -660,9 +662,10 @@ class SMLocation(Location):
                 return True
         return False
 
+
 class SMItem(Item):
     game = "Super Metroid"
 
-    def __init__(self, name, advancement, type, code, player: int = None):
-        super(SMItem, self).__init__(name, advancement, code, player)
+    def __init__(self, name, classification, type, code, player: int = None):
+        super(SMItem, self).__init__(name, classification, code, player)
         self.type = type

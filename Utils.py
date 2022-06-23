@@ -12,6 +12,7 @@ import io
 import collections
 import importlib
 import logging
+import decimal
 
 if typing.TYPE_CHECKING:
     from tkinter import Tk
@@ -29,7 +30,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith('linux')
@@ -494,17 +495,25 @@ class VersionException(Exception):
     pass
 
 
+def chaining_prefix(index: int, labels: typing.Tuple[str]) -> str:
+    text = ""
+    max_label = len(labels) - 1
+    while index > max_label:
+        text += labels[-1]
+        index -= max_label
+    return labels[index] + text
+
+
 # noinspection PyPep8Naming
 def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")) -> str:
+    """Formats a value into a value + metric/si prefix. More info at https://en.wikipedia.org/wiki/Metric_prefix"""
     n = 0
-
-    while value > power:
+    value = decimal.Decimal(value)
+    while value >= power:
         value /= power
         n += 1
-    if type(value) == int:
-        return f"{value} {power_labels[n]}"
-    else:
-        return f"{value:0.3f} {power_labels[n]}"
+
+    return f"{value.quantize(decimal.Decimal('1.00'))} {chaining_prefix(n, power_labels)}"
 
 
 def get_fuzzy_ratio(word1: str, word2: str) -> float:
