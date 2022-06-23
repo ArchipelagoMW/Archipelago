@@ -288,7 +288,7 @@ class HKWorld(World):
         # 32 bit int
         slot_data["seed"] = self.world.slot_seeds[self.player].randint(-2147483647, 2147483646)
 
-        # Backwards compatibility for shop cost data (HKAP < 0.0.4)
+        # Backwards compatibility for shop cost data (HKAP < 0.1.0)
         for shop, terms in self.shops.items():
             unit = cost_terms[next(iter(terms))].option
             if unit == "Geo":
@@ -299,7 +299,7 @@ class HKWorld(World):
                 for i in range(1, 1 + self.created_multi_locations[shop])
             }
 
-        # HKAP 0.0.4 and later cost data.
+        # HKAP 0.1.0 and later cost data.
         location_costs = {}
         for region in self.world.get_regions(self.player):
             for location in region.locations:
