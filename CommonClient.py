@@ -771,9 +771,18 @@ if __name__ == '__main__':
                 slots = {self.player_names[slot] for slot in args.get("slots", [])}
                 data = args.get("data", {})
                 message_logger = logger if tags.intersection(self.tags) else self.bounce_logger
+
+                args["ctx"] = self
+                decoded = ""
+                for game in {slot_info.game for slot, slot_info in self.slot_info.items()}:
+                    decoded = AutoWorldRegister.world_types[game].decode_bounce_packet(args)
+                    if decoded:
+                        message_logger.info(decoded)
+                        break
+
                 if not data and not tags and not games and slots == {self.player_names[self.slot]}:
-                    pass  # response to the bounce packet this very client sent.
-                elif tags.isdisjoint({'DeathLink', 'MC35'}):
+                    pass
+                elif not decoded and "DeathLink" not in tags:
                     message_data = list()
                     if tags:
                         message_data.append(f"tags: {tags}")
@@ -784,8 +793,6 @@ if __name__ == '__main__':
                     if data:
                         message_data.append(f"data: {data}")
                     message_logger.info(f"Unknown bounce packet. {', '.join(message_data)}")
-                elif "MC35" in tags:
-                    message_logger.info(f"Living entity {data['enemy']} was defeated by {self.player_names[data['source']]}")
 
 
     async def main(args):

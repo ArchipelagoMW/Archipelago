@@ -295,6 +295,11 @@ class World(metaclass=AutoWorldRegister):
     def create_filler(self) -> Item:
         return self.create_item(self.get_filler_item_name())
 
+    @staticmethod
+    def decode_bounce_packet(args: dict) -> str:
+        """If you need the ClientContext to decode the bounce packet, store it in args."""
+        return ""
+
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together
