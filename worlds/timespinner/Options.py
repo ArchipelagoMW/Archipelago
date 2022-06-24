@@ -234,7 +234,7 @@ class DropRateCategory(Choice):
     display_name = "Drop Rate Category"
     option_tiered = 0
     option_vanilla = 1
-    option_random = 2
+    option_randomized = 2
     option_fixed = 3
 
 class FixedDropRate(Range):
