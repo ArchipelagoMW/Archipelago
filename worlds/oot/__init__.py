@@ -1,3 +1,7 @@
+
+# Flip switch to force hint_distribution: async
+FORCE_ASYNC_HINTS = False
+
 import logging
 import threading
 import copy
@@ -238,6 +242,10 @@ class OOTWorld(World):
         # Fixes starting time spelling: "witching_hour" -> "witching-hour"
         self.starting_tod = self.starting_tod.replace('_', '-')
         self.shuffle_scrubs = self.shuffle_scrubs.replace('_prices', '')
+
+        # Force async hints
+        if FORCE_ASYNC_HINTS:
+            self.hint_dist = 'async'
 
         # Get hint distribution
         self.hint_dist_user = read_json(data_path('Hints', f'{self.hint_dist}.json'))
