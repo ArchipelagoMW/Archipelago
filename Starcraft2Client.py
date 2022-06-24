@@ -80,47 +80,41 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         request_unfinished_missions(self.ctx.checked_locations, self.ctx.mission_req_table, self.ctx.ui, self.ctx)
         return True
 
-    def _cmd_check_game_install_path(self) -> bool:
-        """Try to find and store the location of your SC2 installation."""
-        # TODO: Remove this command once debugging is complete.
-
-        check_game_install_path(self.ctx.ui, debug=True)
-        return True
-
-    def _cmd_check_mod_install(self) -> bool:
-        """Confirm whether you've installed Archipelago.SC2Mod in the correct place."""
-        # TODO: Remove this command once debugging is complete.
-
-        # We must know where SC2 is first.
-        check_game_install_path(self.ctx.ui)
-        # Then we can do the actual mod check, unless the program failed to find SC2PATH.
-        try:
-            check_mod_install(self.ctx.ui, debug=True)
-        except KeyError:
-            display_message("Failed to check mod install due to missing SC2 install directory.", self.ctx.ui)
-        return True
-
-    def _cmd_check_dlls(self) -> bool:
-        """Confirm whether you've installed the .dlls in the correct place."""
-        # TODO: Remove this command once debugging is complete.
-
-        # No SC2 install technically necessary here.
-        check_dlls(self.ctx.ui, debug=True)
-        return True
-
-    def _cmd_grab_dlls(self) -> bool:
-        """If you're missing any .dlls, grab them from your SC2 install."""
-        # TODO: Remove this command once debugging is complete.
-
-        grab_dlls(self.ctx.ui, debug=True)
-        return True
+    # def _cmd_check_game_install_path(self) -> bool:
+    #     """Try to find and store the location of your SC2 installation."""
+    #
+    #     check_game_install_path(self.ctx.ui, debug=True)
+    #     return True
+    #
+    # def _cmd_check_mod_install(self) -> bool:
+    #     """Confirm whether you've installed Archipelago.SC2Mod in the correct place."""
+    #
+    #     # We must know where SC2 is first.
+    #     check_game_install_path(self.ctx.ui)
+    #     # Then we can do the actual mod check, unless the program failed to find SC2PATH.
+    #     try:
+    #         check_mod_install(self.ctx.ui, debug=True)
+    #     except KeyError:
+    #         display_message("Failed to check mod install due to missing SC2 install directory.", self.ctx.ui)
+    #     return True
+    #
+    # def _cmd_grab_dlls(self) -> bool:
+    #     """If you're missing any .dlls, grab them from your SC2 install."""
+    #
+    #     grab_dlls(self.ctx.ui, debug=True)
+    #     return True
 
     @mark_raw
-    def _cmd_set_path(self, path) -> bool:
+    def _cmd_set_path(self, path: str = '') -> bool:
         """Manually set the SC2 install directory (if the automatic detection fails)."""
-        os.environ["SC2PATH"] = path
-        check_mod_install(self.ctx.ui, debug=True)
-        grab_dlls(self.ctx.ui, debug=True)
+        if path:
+            os.environ["SC2PATH"] = path
+            check_mod_install(self.ctx.ui, debug=True)
+            grab_dlls(self.ctx.ui, debug=True)
+            return True
+        else:
+            display_warning("When using set_path, you must type the path to your SC2 install directory.", self.ctx.ui)
+        return False
 
 
 class SC2Context(CommonContext):
@@ -169,7 +163,7 @@ class SC2Context(CommonContext):
             except KeyError:
                 # soldieroforder: "I know it's unconventional to call a function that has tangible effects other than
                 # returning a bool as part of an if clause, but this was the most elegant way I could find to code this.
-                # check_game_install_path() returns True if and only if it finds + sets SC2PATH.
+                # check_game_install_path() returns True if and only if it finds + sets SC2PATH."
                 if check_game_install_path():
                     check_mod_install()
                     grab_dlls()
@@ -874,7 +868,7 @@ def check_game_install_path(ui=None, debug=False) -> bool:
         documentspath = buf.value
         einfo = str(documentspath / Path("StarCraft II\\ExecuteInfo.txt"))
     else:
-        einfo = str(os.path.expanduser("~") / Path(sc2.paths.USERPATH[sc2.paths.PF]))
+        einfo = str(sc2.paths.get_home() / Path(sc2.paths.USERPATH[sc2.paths.PF]))
 
     # Check if the file exists.
     if os.path.isfile(einfo):
@@ -916,26 +910,6 @@ def check_mod_install(ui=None, debug=False) -> bool:
     except KeyError:
         display_warning(f"SC2PATH isn't set. Please run /check_game_install_path and troubleshoot.", ui)
     return False
-
-
-def check_dlls(ui=None, debug=False) -> bool:
-    # Credit to Magnemania for the structure of this code.
-    # Check the lib folder of the Archipelago installation for the following files:
-    # TODO: Eliminate this function once debugging is complete. grab_dlls is strictly better.
-    required_dll_names = {'icudt52.dll', 'icuin52.dll', 'icuuc52.dll'}
-    try:
-        dlls = set(listdir(libdir := getcwd() / Path('lib')))
-    except FileNotFoundError:
-        display_warning("Failed to check .dlls. Couldn't find the Archipelago/lib folder.", ui)
-        return False
-    missing_dlls = required_dll_names - dlls
-    if missing_dlls:
-        for missing_dll in missing_dlls:
-            if debug: display_warning(f"Couldn't find {missing_dll} in {libdir}.", ui)
-        return False
-    if (not missing_dlls) and debug:
-        display_success(f"Found all required .dlls in {libdir}!", ui)
-    return True
 
 
 def grab_dlls(ui=None, debug=False):
