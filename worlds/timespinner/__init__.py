@@ -228,7 +228,7 @@ def create_item_with_correct_settings(world: MultiWorld, player: int, name: str)
 
     if (name == 'Tablet' or name == 'Library Keycard V') and not is_option_enabled(world, player, "DownloadableItems"):
         item.classification = ItemClassification.filler
-    elif name == 'Oculus Ring' and not is_option_enabled(world, player, "FacebookMode"):
+    elif name == 'Oculus Ring' and not is_option_enabled(world, player, "EyeSpy"):
         item.classification = ItemClassification.filler
     elif (name == 'Kobo' or name == 'Merchant Crow') and not is_option_enabled(world, player, "GyreArchives"):
         item.classification = ItemClassification.filler
