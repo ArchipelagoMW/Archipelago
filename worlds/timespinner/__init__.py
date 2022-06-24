@@ -27,7 +27,7 @@ class TimespinnerWebWorld(WebWorld):
         setup.description,
         "Deutsch",
         "setup_de.md",
-        "setup/en",
+        "setup/de",
         ["Grrmo", "Fynxes", "Blaze0168"]
     )
 
