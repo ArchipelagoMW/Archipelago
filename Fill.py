@@ -46,7 +46,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             if not locations:
                 unplaced_items += items_to_place
                 break
-            item_to_place = items_to_place.pop()
+            item_to_place = items_to_place.pop(0)
 
             spot_to_fill: typing.Optional[Location] = None
             if world.accessibility[item_to_place.player] == 'minimal':
