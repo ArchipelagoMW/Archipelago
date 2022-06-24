@@ -250,9 +250,11 @@ class HKWorld(World):
             locations: typing.List[HKLocation] = []
             for x in range(1, self.created_multi_locations[shopname]+1):
                 loc = self.world.get_location(self.get_multi_location_name(shopname, x), self.player)
+                if loc.vanilla:
+                    continue
                 locations.append(loc)
                 prices.append(loc.costs)
-            prices.sort(key=lambda x: tuple(x.values()))
+            prices.sort(key=lambda price: (len(price),) + tuple(price.values()))
             for loc, price in zip(locations, prices):
                 loc.costs = price
 
@@ -315,7 +317,7 @@ class HKWorld(World):
         item_data = item_table[name]
         return HKItem(name, item_data.advancement, item_data.id, item_data.type, self.player)
 
-    def create_location(self, name: str) -> HKLocation:
+    def create_location(self, name: str, vanilla=False) -> HKLocation:
         costs = None
         if name in self.shops:
             costs = {
@@ -330,14 +332,13 @@ class HKWorld(World):
             name = self.get_multi_location_name(name, self.created_multi_locations[name])
 
         region = self.world.get_region("Menu", self.player)
-        loc = HKLocation(self.player, name, self.location_name_to_id[name], region)
-        loc.costs = costs
+        loc = HKLocation(self.player, name, self.location_name_to_id[name], region, costs=costs, vanilla=vanilla)
         region.locations.append(loc)
         return loc
 
     def create_vanilla_location(self, location: str, item: Item):
         costs = self.vanilla_shop_costs.get((location, item.name))
-        location = self.create_location(location)
+        location = self.create_location(location, vanilla=True)
         location.place_locked_item(item)
         if costs:
             location.costs = costs.pop()
@@ -407,9 +408,14 @@ class HKLocation(Location):
     game: str = "Hollow Knight"
     costs: typing.Dict[str, int] = None
     unit: typing.Optional[str] = None
+    vanilla = False
 
-    def __init__(self, player: int, name: str, code=None, parent=None, costs=None):
+    def __init__(
+            self, player: int, name: str, code=None, parent=None,
+            costs: typing.Dict[str, int] = None, vanilla: bool = False
+    ):
         super(HKLocation, self).__init__(player, name, code if code else None, parent)
+        self.vanilla = vanilla
         if costs:
             self.costs = dict(costs)
 
