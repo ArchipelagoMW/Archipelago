@@ -193,7 +193,7 @@ class MaximumEssencePrice(MinimumEssencePrice):
 
 
 class MinimumEggPrice(Range):
-    """The minimum rancid egg price in the range of prices that an item should cost from Ijii.
+    """The minimum rancid egg price in the range of prices that an item should cost from Jiji.
     Only takes effect if the EggSlotShops option is greater than 0."""
     display_name = "Minimum Egg Price"
     range_start = 1
@@ -202,7 +202,7 @@ class MinimumEggPrice(Range):
 
 
 class MaximumEggPrice(MinimumEggPrice):
-    """The maximum rancid egg price in the range of prices that an item should cost from Ijii.
+    """The maximum rancid egg price in the range of prices that an item should cost from Jiji.
     Only takes effect if the EggSlotShops option is greater than 0."""
     display_name = "Maximum Egg Price"
     default = 10
