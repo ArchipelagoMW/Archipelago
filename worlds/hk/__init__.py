@@ -413,10 +413,10 @@ class HKLocation(Location):
         if costs:
             self.costs = dict(costs)
 
-    def cost_text(self, seperator=" and "):
+    def cost_text(self, separator=" and "):
         if self.costs is None:
             return None
-        return seperator.join(
+        return separator.join(
             f"{value} {cost_terms[term].singular if value == 1 else cost_terms[term].plural}"
             for term, value in self.costs.items()
         )
