@@ -14,8 +14,8 @@ Progression:
 72 - Colored Squares
 
 Usefuls:
-101 - Functioning Brain
-510 - Puzzle Skip
+101 - Functioning Brain - False
+510 - Puzzle Skip - True
 
 Boosts:
 500 - Speed Boost

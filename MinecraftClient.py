@@ -208,8 +208,7 @@ def install_forge(directory: str, forge_version: str, java_version: str):
             with open(forge_install_jar, 'wb') as f:
                 f.write(resp.content)
             print(f"Installing Forge...")
-            # argstring = ' '.join([java_exe, "-jar", "\"" + forge_install_jar + "\"", "--installServer", "\"" + directory + "\""])
-            install_process = Popen([java_exe, "-jar", forge_install_jar, "--installServer", directory], shell=not is_windows)
+            install_process = Popen([java_exe, "-jar", forge_install_jar, "--installServer", directory])
             install_process.wait()
             os.remove(forge_install_jar)
 
@@ -236,7 +235,7 @@ def run_forge_server(forge_dir: str, java_version: str, heap_arg: str) -> Popen:
     args = [java_exe, heap_arg, *forge_args, "-nogui"]
     logging.info(f"Running Forge server: {args}")
     os.chdir(forge_dir)
-    return Popen(args, shell=not is_windows)
+    return Popen(args)
 
 
 def get_minecraft_versions(version, release_channel="release"):
@@ -254,10 +253,10 @@ def get_minecraft_versions(version, release_channel="release"):
         local = True
 
     if local:
-        with open(Utils.local_path("minecraft_versions.json"), 'r') as f:
+        with open(Utils.user_path("minecraft_versions.json"), 'r') as f:
             data = json.load(f)
     else:
-        with open(Utils.local_path("minecraft_versions.json"), 'w') as f:
+        with open(Utils.user_path("minecraft_versions.json"), 'w') as f:
             json.dump(data, f)
 
     try:
@@ -299,13 +298,16 @@ if __name__ == '__main__':
     apmc_data = None
     data_version = None
 
+    if apmc_file is None and not args.install:
+        apmc_file = Utils.open_filename('Select APMC file', (('APMC File', ('.apmc',)),))
+
     if apmc_file is not None:
         apmc_data = read_apmc_file(apmc_file)
         data_version = apmc_data.get('client_version', '')
 
     versions = get_minecraft_versions(data_version, channel)
 
-    forge_dir = options["minecraft_options"]["forge_directory"]
+    forge_dir = Utils.user_path(options["minecraft_options"]["forge_directory"])
     max_heap = options["minecraft_options"]["max_heap_size"]
     forge_version = args.forge or versions["forge"]
     java_version = args.java or versions["java"]
