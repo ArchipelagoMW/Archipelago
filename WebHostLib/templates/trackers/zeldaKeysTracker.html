@@ -3,7 +3,7 @@
     <title>{{ player_name }}&apos;s Keys Tracker</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/trackers/playerTracker.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tooltip.css') }}" />
-    <script type="application/ecmascript" src="{{ url_for('static', filename='assets/trackers/playerTracker.js') }}"/></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename='assets/trackers/zeldaKeysTracker.js') }}"/></script>
 {% endblock %}
 
 {# this tracker is mostly similar to the generic player tracker but
@@ -11,7 +11,7 @@ also adds a table with the key and checks counts for each region in the middle #
 
 {% block body %}
 
-<div id="player-keys-tracker" class="{{ theme }}-wrapper" data-tracker="{{ room.tracker|suuid }}/{{ team }}/{{ player }}">
+<div id="tracker-wrapper" class="{{ theme }}-wrapper" data-tracker="{{ room.tracker|suuid }}/{{ team }}/{{ player }}">
     <a href="/generic_tracker/{{ room.tracker|suuid }}/{{ team }}/{{ player }}" class="button-link">
         Go to Generic Tracker
     </a>
@@ -33,29 +33,41 @@ also adds a table with the key and checks counts for each region in the middle #
             Total Checks Done: {{ checked_locations|length }}/{{ locations|length }}
         </div>
 
-        <table id="regions-table">
+        <table id="regions-column">
             <tr class="keys-icons">
-                <img src="{{icons['Small Key']}}" class="icon tooltip acquired" id="small-key-icon"/>
-                <img src="{{icons['Big Key']}}" class="icon tooltip acquired" id="big-key-icon"/>
-                <td>Total</td>
+                <td><img src="{{icons['Small Key']}}" class="icon tooltip acquired" id="small-key-icon"/></td>
+                <td><img src="{{icons['Big Key']}}" class="icon tooltip acquired" id="big-key-icon"/></td>
+                <td class="right-align">Total</td>
             </tr>
         {% for region in regions %}
-            <tr class="regions-header" id="{{ region }}-header">
-                <td>{{ region }} ▼</td>
+            <tr class="regions-column" id="{{ region }}">
+                <td id="{{ region }}-header">{{ region }} ▼</td>
                 {% if region in region_keys %}
-                <td class="smallkeys">{{ received_items[region_keys[region][0]] if region_keys[region][0] in received_items else '-' }}</td>
-                <td class="bigkeys">{{ received_items[region_keys[region][1]] if region_keys[region][1] in received_items else '-' }}</td>
+                    {%- if region_keys[region]|length > 1 %}
+                    <td class="smallkeys">{{ received_items[region_keys[region][0]] if region_keys[region][0] in received_items else '-' }}</td>
+                    <td class="bigkeys">{{ received_items[region_keys[region][1]] if region_keys[region][1] in received_items else '-' }}</td>
+                    {%- else %}
+                        {% if 'Small Key' in region_keys[region][0] %}
+                    <td class="smallkeys">{{ received_items[region_keys[region][0]] if region_keys[region][0] in received_items else '-' }}</td>
+                    <td class="bigkeys">-</td>
+                        {% else %}
+                    <td class="smallkeys">-</td>
+                    <td class="bigkeys">{{ received_items[region_keys[region][0]] if region_keys[region][0] in received_items else '-' }}</td>
+                        {% endif %}
+                    {%- endif%}
                 {% else %}
                 <td class="smallkeys">-</td>
                 <td class="bigkeys">-</td>
                 {% endif %}
                 <td class="counter">{{ checks_done[region]|length }} / {{ regions[region]|length }}</td>
             </tr>
-            <tbody class="locations hide" id="{{ region }}">
+            <tbody class="locations hidden" id="{{ region }}-locations">
             {% for location in regions[region] %}
-                <td class="location hidden {{ 'acquired' if location in checked_locations }}" id="{{ location }}">
+                <tr>
+                    <td class="location {{ 'acquired' if location in checked_locations }}" id="{{ location }}">
                     {{ location }}
-                </td>
+                    </td>
+                </tr>
             {% endfor %}
             </tbody>
         {% endfor %}
