@@ -103,7 +103,8 @@ class CotNDContext(CommonContext):
             slot_data = args['slot_data']
             self.reduce_starting_items = slot_data['reduce_starting_items']
             self.randomize_flawless = slot_data['randomize_flawless']
-            self.free_sample_value = (1 if slot_data['prevent_bad_samples'] else 2) if slot_data['free_samples'] else 0
+            self.free_samples = slot_data['free_samples']
+            self.prevent_bad_samples = slot_data['prevent_bad_samples']
             self.char_counts = slot_data['char_counts']
             self.nonce = str(int(time.time()))
 
@@ -118,14 +119,20 @@ class CotNDContext(CommonContext):
         while not self.slot:
             await asyncio.sleep(5)
         while not self.exit_event.is_set():
-            await self.send_game_info()
+            try:
+                await self.send_game_info()
+            except Exception as e:
+                logger.error(f'Error in writer: {e}')
             await asyncio.sleep(3)
 
     async def game_reader(self):
         while not self.slot:
             await asyncio.sleep(5)
         while not self.exit_event.is_set():
-            await self.read_log_file()
+            try:
+                await self.read_log_file()
+            except Exception as e:
+                logger.error(f'Error in reader: {e}')
             await asyncio.sleep(1)
 
     # Send information to the game over a UDP connection
@@ -152,28 +159,30 @@ class CotNDContext(CommonContext):
                     del pieces[1]
                 replace_chests.add(f'{pieces[0]} {pieces[3]}')
 
-        # Item list for players to receive
+        # Characters/item list for players to receive
         pending_items = []
+        characters = []
         for item in self.items_received:
-            data = self.item_data(item)
+            item_name = self.item_name_getter(item.item)
+            data = item_table[item_name]
             if data[1] == 'Character':
-                continue
+                characters.append(item_name[7:])
             if data[1] in {'Junk', 'Trap'}:
                 pending_items.append(data[2])
-            if self.free_sample_value > 0:
-                if data[2] != 'Weapon':
-                    if data[2] in bad_items and self.free_sample_value == 1:
+            if self.free_samples:
+                if data[1] != 'Weapon':
+                    if self.item_name_getter(item.item) in bad_items and self.prevent_bad_samples:
                         continue
-                    pending_items.append(data[2] if type(data[2]) == 'str' else data[2][0])
+                    pending_items.append(data[2] if isinstance(data[2], str) else data[2][0])
                 else:
-                    pending_items.append(data[2] if type(data[2]) == 'str' else data[2][1]) # send titanium weapon
+                    pending_items.append(data[2] if isinstance(data[2], str) else data[2][1]) # send titanium weapon
 
         # prevent async deathlink problems
         previous_deathlink_state = self.deathlink_pending
         data = {
             'nonce': self.nonce,
             'item_state': item_state,
-            'characters': [self.item_name_getter(item.item)[7:] for item in self.items_received if self.item_data(item)[1] == 'Character'],
+            'characters': characters,
             'consumables': pending_items,
             'replace_chests': list(replace_chests),
             'flawless': self.randomize_flawless,
@@ -194,9 +203,13 @@ class CotNDContext(CommonContext):
 
         synchrony_dir = Utils.get_options()['cotnd_options']['synchrony']
         logfile = 'Synchrony.log'
-        reader = reverse_readline(os.path.join(synchrony_dir, logfile))
         new_last = ''
         new_items = []
+        try:
+            reader = reverse_readline(os.path.join(synchrony_dir, logfile))
+        except FileNotFoundError:
+            logger.error('Synchrony logfile not found. Make sure the path in host.yaml points to your Synchrony folder.')
+            return
 
         for line in reader:
             if new_last == '':
