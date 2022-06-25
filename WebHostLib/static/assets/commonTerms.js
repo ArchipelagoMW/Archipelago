@@ -5,11 +5,11 @@ window.addEventListener('load', () => {
         ajax.onreadystatechange = () => {
             if (ajax.readyState !== 4) { return; }
             if (ajax.status === 404) {
-                reject("Sorry, the tutorial is not available in that language yet.");
+                reject("Sorry, the terms page is not available in that language yet.");
                 return;
             }
             if (ajax.status !== 200) {
-                reject("Something went wrong while loading the tutorial.");
+                reject("Something went wrong while loading the terms page.");
                 return;
             }
             resolve(ajax.responseText);

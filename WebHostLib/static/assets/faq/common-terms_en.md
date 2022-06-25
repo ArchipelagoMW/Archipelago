@@ -64,14 +64,14 @@ or useless. These items can be very useful depending on the player but are never
 termed trash.
 
 ## Burger King / BK Mode
-A term used in multiworlds when a player is unable to continue to progress. The term came to be after a player, 
-allegedly, was unable to progress during a multiworld and went to Burger King while waiting to receive items from other 
-players.
+A term used in multiworlds when a player is unable to continue to progress and is awaiting an item. The term came to be 
+after a player, allegedly, was unable to progress during a multiworld and went to Burger King while waiting to receive
+items from other players.
 
-Logical BK is when the player is unable to progress according to the settings of their game but may still be able to do
+* "Logical BK" is when the player is unable to progress according to the settings of their game but may still be able to do
 things that would be "out of logic" by the generation.
 
-Hard / full BK is when the player is completely unable to progress even with tricks they may know and are unable to
+* "Hard / full BK" is when the player is completely unable to progress even with tricks they may know and are unable to
 continue to play, aside from doing something like killing enemies for experience or money.
 
 ## Sphere
