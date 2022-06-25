@@ -61,9 +61,9 @@ for your world specifically on the webhost.
 `settings_page` which can be changed to a link instead of an AP generated settings page.
 
 `theme` to be used for your game specific AP pages. Available themes:
-| dirt  | grass (default) | grassFlowers | ice  | jungle  | ocean | partyTime |
-|---|---|---|---|---|---|---|
-| <img src="img/theme_dirt.JPG" width="100"> | <img src="img/theme_grass.JPG" width="100"> | <img src="img/theme_grassFlowers.JPG" width="100"> | <img src="img/theme_ice.JPG" width="100"> | <img src="img/theme_jungle.JPG" width="100"> | <img src="img/theme_ocean.JPG" width="100"> | <img src="img/theme_partyTime.JPG" width="100"> |
+| dirt  | grass (default) | grassFlowers | ice  | jungle  | ocean | partyTime | stone |
+|---|---|---|---|---|---|---|---|
+| <img src="img/theme_dirt.JPG" width="100"> | <img src="img/theme_grass.JPG" width="100"> | <img src="img/theme_grassFlowers.JPG" width="100"> | <img src="img/theme_ice.JPG" width="100"> | <img src="img/theme_jungle.JPG" width="100"> | <img src="img/theme_ocean.JPG" width="100"> | <img src="img/theme_partyTime.JPG" width="100"> | <img src="img/theme_stone.JPG" width="100"> |
 
 `bug_report_page` (optional) can be a link to a bug reporting page, most likely a GitHub issue page, that will be placed by the site to help direct users to report bugs.
 
@@ -114,13 +114,20 @@ Special locations with ID `None` can hold events.
 Items are all things that can "drop" for your game. This may be RPG items like
 weapons, could as well be technologies you normally research in a research tree.
 
-Each item has a `name`, an `id` (can be known as "code"), and an `advancement`
-flag. An advancement item is an item which a player may require to advance in
-their world. Advancement items will be assigned to locations with higher
+Each item has a `name`, an `id` (can be known as "code"), and a classification.
+The most important classification is `progression` (formerly advancement).
+Progression items are items which a player may require to progress in
+their world. Progression items will be assigned to locations with higher
 priority and moved around to meet defined rules and accomplish progression
 balancing.
 
 Special items with ID `None` can mark events (read below).
+
+Other classifications include
+* filler: a regular item or trash item
+* useful: generally quite useful, but not required for anything logical
+* trap: negative impact on the player
+* skip_balancing: add to progression to skip balancing; e.g. currency or tokens
 
 ### Events
 
@@ -346,7 +353,7 @@ from .Options import mygame_options  # the options we defined earlier
 from .Items import mygame_items  # data used below to add items to the World
 from .Locations import mygame_locations  # same as above
 from ..AutoWorld import World
-from BaseClasses import Region, Location, Entrance, Item, RegionType
+from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
 from Utils import get_options, output_path
 
 class MyGameItem(Item):  # or from Items import MyGameItem
@@ -453,7 +460,9 @@ from .Items import is_progression  # this is just a dummy
 def create_item(self, item: str):
     # This is called when AP wants to create an item by name (for plando) or
     # when you call it from your own code.
-    return MyGameItem(item, is_progression(item), self.item_name_to_id[item],
+    classification = ItemClassification.progression if is_progression(item) else \
+                     ItemClassification.filler
+    return MyGameItem(item, classification, self.item_name_to_id[item],
                       self.player)
 
 def create_event(self, event: str):

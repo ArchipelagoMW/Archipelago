@@ -100,7 +100,7 @@ class WebWorld:
     tutorials: List[Tutorial]
 
     # Choose a theme for your /game/* pages
-    # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime
+    # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone
     theme = "grass"
 
     # display a link to a bug report page, most likely a link to a GitHub issue page.
