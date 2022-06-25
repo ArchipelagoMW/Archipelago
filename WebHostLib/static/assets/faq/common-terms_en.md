@@ -4,12 +4,8 @@ There are a lot of common terms used when playing in different game randomizer c
 This document serves as a lookup for common terms that may be used by users in the community or in various other
 documentation.
 
-## Check
-A check is a common term for when you "check", or pick up, a location. In terms of Archipelago this is usually used for
-when a player goes to a location and sends its item or "checks" the location.
-
 ## Item
-Items are what you will receive from the server regardless of what game you are playing. This could be a sword, a stat 
+Items are what get shuffled around in your world or other worlds that you then receive. This could be a sword, a stat 
 upgrade, a spell, or any other potential receivable for your game.
 
 ## Location
@@ -17,19 +13,23 @@ Locations are where items are placed in your game. Whenever you interact with a 
 then receive an item. A location could be a chest, an enemy drop, a shop purchase, or any other interactable that can
 contain items in your game.
 
+## Check
+A check is a common term for when you "check", or pick up, a location. In terms of Archipelago this is usually used for
+when a player goes to a location and sends its item, or "checks" the location. Players will often reference their now
+randomized locations as checks.
+
 ## Slot
-A slot is the player name and number assigned during generation. This is equal to the number of `yaml` setting files
-used to generate, or the number specified in the `host.yaml` in a local generation.
+A slot is the player name and number assigned during generation. The number of slots is equal to the number of players,
+or "worlds", created.
 
 ## World
-World in terms of Archipelago can mean multiple things and is used interchangeably in many situations. 
-* For the sake of the backend or programming side, world is usually intended to represent the world package for a game 
-integration. For example this would be the entire `worlds/factorio` directory.
+World in terms of Archipelago can mean multiple things and is used interchangeably in many situations.
 * During gameplay in multiworlds each world is a "slot" or "player." As Archipelago allows multiple players to connect
 to the same slot those players are now sharing a world and completing it cooperatively. For games with native 
 cooperative play Archipelago usually fully supports this and those players would connect to each other and only one
 of them to the multiworld but they would still be sharing the same world.
-
+* For the sake of the backend, or programming side, world is usually intended to represent the world package for a game 
+integration. For example this could be the entire `worlds/factorio` directory.
 
 ## RNG
 Acronym for "Random Number Generator." Archipelago uses its own custom Random object with a unique seed per generation,
