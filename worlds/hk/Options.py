@@ -375,6 +375,25 @@ class WhitePalace(Choice):
     default = 0
 
 
+class DeathLink(Choice):
+    """
+    When you die, everyone dies. Of course the reverse is true too.
+    When enabled, choose how incoming deathlinks are handled:
+    vanilla: DeathLink kills you and is just like any other death.  RIP your previous shade and geo.
+    shadeless: DeathLink kills you, but no shade spawns and no geo is lost.  Your previous shade, if any, is untouched.
+    shade: DeathLink functions like a normal death if you do not already have a shade, shadeless otherwise.
+    """
+    option_off = 0
+    alias_false = 0
+    alias_no = 0
+    alias_true = 1
+    alias_on = 1
+    alias_yes = 1
+    option_shadeless = 1
+    option_vanilla = 2
+    option_shade = 3
+
+
 class StartingGeo(Range):
     """The amount of starting geo you have."""
     display_name = "Starting Geo"
@@ -390,7 +409,7 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     **{
         option.__name__: option
         for option in (
-            StartLocation, Goal, WhitePalace, StartingGeo,
+            StartLocation, Goal, WhitePalace, StartingGeo, DeathLink,
             MinimumGrubPrice, MaximumGrubPrice,
             MinimumEssencePrice, MaximumEssencePrice,
             MinimumCharmPrice, MaximumCharmPrice,
