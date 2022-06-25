@@ -1,0 +1,150 @@
+/* CSS Overrides */
+.dirt-wrapper{
+    background-color: #897249;
+}
+
+.dirt-wrapper h1{}
+
+.grass-wrapper{
+    background-color: #3fb24a;
+}
+
+.grass-wrapper h1{}
+
+.grassFlowers-wrapper{
+    background-color: #3fb24a;
+}
+
+.grassFlowers-wrapper h1{}
+
+.ice-wrapper{
+    background-color: #afe0ef;
+}
+
+.ice-wrapper h1{}
+
+.jungle-wrapper{
+    background-color: #2a7808;
+}
+
+.jungle-wrapper h1{}
+
+.ocean-wrapper{
+    background-color: #3667b1;
+}
+
+.ocean-wrapper h1{}
+
+.partyTime-wrapper{
+    background-color: #3a0f69;
+    color: #ffffff;
+}
+
+.partyTime-wrapper h1{}
+
+
+/* Actual Styles */
+h1 {
+    font-size: 20px;
+    color: #ffffff;
+    padding: 5px;
+    text-align: center;
+    text-shadow: 1px 1px black;
+}
+
+h2 {
+    padding: 8px;
+}
+
+#player-keys-tracker{
+    width: 600px;
+}
+
+#items-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 5px;
+}
+
+#items-container div{
+    margin: 0;
+    padding: 0;
+}
+
+.image-container{
+    display: absolute;
+    height: 75px;
+    width: 75px;
+}
+
+.bottom-text{
+    position: relative;
+    align-items: bottom;
+    text-align: center;
+}
+
+.icon{
+    height: 100%;
+    position: relative;
+    left: 15px;
+    max-width: 45px;
+    max-height: 45px;
+    filter: grayscale(100%) contrast(75%) brightness(40%);
+}
+
+.icon.acquired{
+    filter: none;
+}
+
+.total-checks{
+    text-align: center;
+    padding: 5px;
+    font-size: 18px;
+}
+
+.locations-container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.location.acquired{
+    text-decoration: line-through;
+    filter: none;
+}
+
+.regions-container{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 5px;
+    text-align: center;
+}
+
+.regions-header{
+    font-size: 18px;
+    padding: 15px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.hidden{
+    display: none;
+}
+
+.button-link{
+    display: block;
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    line-height: 30px;
+    background-color: lightgrey;
+    cursor: pointer;
+    color: inherit;
+}

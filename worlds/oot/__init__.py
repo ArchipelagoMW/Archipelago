@@ -9,7 +9,7 @@ from .Location import OOTLocation, LocationFactory, location_name_to_id
 from .Entrance import OOTEntrance
 from .EntranceShuffle import shuffle_random_entrances, entrance_shuffle_table, EntranceShuffleError
 from .Items import OOTItem, item_table, oot_data_to_ap_id
-from .ItemPool import generate_itempool, add_dungeon_items, get_junk_item, get_junk_pool
+from .ItemPool import generate_itempool, add_dungeon_items, get_junk_item, get_junk_pool, normal_bottles
 from .Regions import OOTRegion, TimeOfDay
 from .Rules import set_rules, set_shop_rules, set_entrances_based_rules
 from .RuleParser import Rule_AST_Transformer
@@ -86,6 +86,133 @@ class OOTWeb(WebWorld):
     )
 
     tutorials = [setup, setup_es]
+
+    def modify_tracker(self, tracker):
+        tracker.template = 'zeldaKeysTracker.html'
+        tracker.icons = {
+            "Fairy Ocarina":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/OoT_Fairy_Ocarina_Icon.png",
+            "Ocarina of Time":          "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/4e/OoT_Ocarina_of_Time_Icon.png",
+            "Slingshot":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/32/OoT_Fairy_Slingshot_Icon.png",
+            "Boomerang":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/d/d5/OoT_Boomerang_Icon.png",
+            "Bottle":                   "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/f/fc/OoT_Bottle_Icon.png",
+            "Rutos Letter":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/OoT_Letter_Icon.png",
+            "Bombs":                    "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/11/OoT_Bomb_Icon.png",
+            "Bombchus":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/36/OoT_Bombchu_Icon.png",
+            "Lens of Truth":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/0/05/OoT_Lens_of_Truth_Icon.png",
+            "Bow":                      "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/9a/OoT_Fairy_Bow_Icon.png",
+            "Hookshot":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/7/77/OoT_Hookshot_Icon.png",
+            "Longshot":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/a/a4/OoT_Longshot_Icon.png",
+            "Megaton Hammer":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/93/OoT_Megaton_Hammer_Icon.png",
+            "Fire Arrows":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/1e/OoT_Fire_Arrow_Icon.png",
+            "Ice Arrows":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/3c/OoT_Ice_Arrow_Icon.png",
+            "Light Arrows":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/7/76/OoT_Light_Arrow_Icon.png",
+            "Din's Fire":                r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/d/da/OoT_Din%27s_Fire_Icon.png",
+            "Farore's Wind":             r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/7/7a/OoT_Farore%27s_Wind_Icon.png",
+            "Nayru's Love":              r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/be/OoT_Nayru%27s_Love_Icon.png",
+            "Kokiri Sword":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/5/53/OoT_Kokiri_Sword_Icon.png",
+            "Biggoron Sword":           r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/2e/OoT_Giant%27s_Knife_Icon.png",
+            "Mirror Shield":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/b0/OoT_Mirror_Shield_Icon_2.png",
+            "Goron Bracelet":           r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/b7/OoT_Goron%27s_Bracelet_Icon.png",
+            "Silver Gauntlets":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/b9/OoT_Silver_Gauntlets_Icon.png",
+            "Golden Gauntlets":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/6/6a/OoT_Golden_Gauntlets_Icon.png",
+            "Goron Tunic":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/1c/OoT_Goron_Tunic_Icon.png",
+            "Zora Tunic":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/2c/OoT_Zora_Tunic_Icon.png",
+            "Silver Scale":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/4e/OoT_Silver_Scale_Icon.png",
+            "Gold Scale":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/95/OoT_Golden_Scale_Icon.png",
+            "Iron Boots":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/34/OoT_Iron_Boots_Icon.png",
+            "Hover Boots":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/22/OoT_Hover_Boots_Icon.png",
+            "Adults Wallet":            r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/f/f9/OoT_Adult%27s_Wallet_Icon.png",
+            "Giants Wallet":            r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/8/87/OoT_Giant%27s_Wallet_Icon.png",
+            "Small Magic":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/9f/OoT3D_Magic_Jar_Icon.png",
+            "Large Magic":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/3e/OoT3D_Large_Magic_Jar_Icon.png",
+            "Gerudo Membership Card":   "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/4e/OoT_Gerudo_Token_Icon.png",
+            "Gold Skulltula Tokens":     "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/47/OoT_Token_Icon.png",
+            "Triforce Pieces":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/0/0b/SS_Triforce_Piece_Icon.png",
+            "Triforce":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/6/68/ALttP_Triforce_Title_Sprite.png",
+            "Zelda's Lullaby":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
+            "Epona's Song":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
+            "Saria's Song":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
+            "Sun's Song":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
+            "Song of Time":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
+            "Song of Storms":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
+            "Minuet of Forest":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/e/e4/Green_Note.png",
+            "Bolero of Fire":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/f/f0/Red_Note.png",
+            "Serenade of Water":        "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/0/0f/Blue_Note.png",
+            "Requiem of Spirit":        "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/a/a4/Orange_Note.png",
+            "Nocturne of Shadow":       "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/Purple_Note.png",
+            "Prelude of Light":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/90/Yellow_Note.png",
+            "Small Key":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/e/e5/OoT_Small_Key_Icon.png",
+            "Big Key":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/40/OoT_Boss_Key_Icon.png",
+        }
+
+        tracker.progressive_items = [
+            "Ocarina", "Bombs", "Bow", "Fire Arrows", "Kokiri Sword", "Biggoron Sword", "Mirror Shield",
+            "Slingshot", "Bombchus", "Progressive Hookshot", "Ice Arrows", "Progressive Strength", "Goron Tunic", "Zora Tunic",
+            "Boomerang", "Lens of Truth", "Megaton Hammer", "Light Arrows", "Progressive Scale", "Iron Boots", "Hover Boots",
+            "Bottles", "Din's Fire", "Farore's Wind", "Nayru's Love", "Progressive Wallet", "Magic Meter", "Gerudo Membership Card",
+            "Zelda's Lullaby", "Epona's Song", "Saria's Song", "Sun's Song", "Song of Time", "Song of Storms", "Gold Skulltula Tokens",
+            "Minuet of Forest", "Bolero of Fire", "Serenade of Water", "Requiem of Spirit", "Nocturne of Shadow", "Prelude of Light", "Triforce Pieces",
+            "Small Key", "Big Key"
+        ]
+
+        tracker.progressive_names = {
+            "Progressive Hookshot": ["Hookshot", "Longshot"],
+            "Progressive Strength": ["Goron Bracelet", "Golden Gauntlets"],
+            "Progressive Wallet": ["Adults Wallet", "Giants Wallet"],
+            "Progressive Scale": ["Silver Scale", "Gold Scale"],
+            "Magic Meter": ["Small Magic", "Large Magic"],
+            "Ocarina": ["Fairy Ocarina", "Ocarina of Time"],
+            "Bottles": normal_bottles + ["Rutos Letter"]
+        }
+
+        location_id_to_name = {}
+        for name, id in location_name_to_id.items():
+            location_id_to_name[id] = name
+        tracker.regions = {}
+        for id in location_id_to_name.keys():
+            if id in location_name_to_id.values() and location_id_to_name[id] in tracker.all_locations:
+                if id < 67259:
+                    tracker.regions.setdefault("Overworld", []).append(location_id_to_name[id])
+                elif id < 67264:
+                    tracker.regions.setdefault("Thieves' Hideout", []).append(location_id_to_name[id])
+                elif id < 67281:
+                    tracker.regions.setdefault("Overworld", []).append(location_id_to_name[id])
+                elif id < 67304:
+                    tracker.regions.setdefault("Deku Tree", []).append(location_id_to_name[id])
+                elif id < 67335:
+                    tracker.regions.setdefault("Dodongo's Cavern", []).append(location_id_to_name[id])
+                elif id < 67360:
+                    tracker.regions.setdefault("Jabu Jabu's Belly", []).append(location_id_to_name[id])
+                elif id < 67385:
+                    tracker.regions.setdefault("Bottom of the Well", []).append(location_id_to_name[id])
+                elif id < 67421:
+                    tracker.regions.setdefault("Forest Temple", []).append(location_id_to_name[id])
+                elif id < 67458:
+                    tracker.regions.setdefault("Fire Temple", []).append(location_id_to_name[id])
+                elif id < 67485:
+                    tracker.regions.setdefault("Water Temple", []).append(location_id_to_name[id])
+                elif id < 67533:
+                    tracker.regions.setdefault("Shadow Temple", []).append(location_id_to_name[id])
+                elif id < 67583:
+                    tracker.regions.setdefault("Spirit Temple", []).append(location_id_to_name[id])
+                elif id < 67597:
+                    tracker.regions.setdefault("Ice Cavern", []).append(location_id_to_name[id])
+                elif id < 67636:
+                    tracker.regions.setdefault("Gerudo Training Ground", []).append(location_id_to_name[id])
+                elif id < 67674:
+                    tracker.regions.setdefault("Ganon's Castle", []).append(location_id_to_name[id])
+
+        tracker.region_keys = {
+            'Forest Temple': ['Small Key (Forest Temple)', 'Boss Key (Forest Temple)'],
+            'Fire Temple': ['Small Key (Fire Temple)', 'Boss Key (Forest Temple)'],
+            'Water Temple': ['Small Key (Water Temple)', 'Boss Key (Water Temple)'],
+            'Spirit Temple': ['Small Key (Spirit Temple)', 'Boss Key (Spirit Temple)'],
+            'Shadow Temple': ['Small Key (Shadow Temple)', 'Boss Key (Shadow Temple)'],
+            'Bottom of the Well': ['Small Key (Bottom of the Well)', 'Boss Key (Bottom of the Well)'],
+            'Gerudo Training Ground': ['Small Key (Gerudo Training Ground)', 'Boss Key (Gerudo Training Ground)'],
+            'Thieves Hideout': ['Small Key (Thieves Hideout)', 'Boss Key (Thieves Hideout)'],
+            'Ganons Castle': ['Small Key (Ganons Castle)', 'Boss Key (Ganons Castle)']
+        }
 
 
 class OOTWorld(World):

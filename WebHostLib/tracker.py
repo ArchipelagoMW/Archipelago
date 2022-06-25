@@ -1,6 +1,6 @@
 import collections
 import typing
-from typing import Counter, Optional, Dict, Any, Tuple
+from typing import Counter, Optional, Dict, Any, Tuple, Set, List, TYPE_CHECKING
 
 from flask import render_template
 from werkzeug.exceptions import abort
@@ -11,8 +11,52 @@ from worlds.alttp import Items
 from WebHostLib import app, cache, Room
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
+from worlds.AutoWorld import AutoWorldRegister
 from MultiServer import get_item_name_from_id, Context
 from NetUtils import SlotType
+
+
+class PlayerTracker:
+    """This class will create a basic 'prettier' tracker for each world using their themes automatically. This
+            can be overridden to customize how it will appear. Can provide icons and custom regions. The html used is also
+            a jinja template that can be overridden if you want your tracker to look different in certain aspects. To render
+            icons and regions add dictionaries to the relevant attributes of the tracker_info. To customize the layout of
+            your icons you can create a new html in your world and extend playerTracker.html and overwrite the icons_render
+            block then change the tracker_info template attribute to your template."""
+
+    template: str = 'playerTracker.html'
+    icons: Dict[str, str] = {}
+    progressive_items: List[str] = []
+    progressive_names: Dict[str, List[str]] = {}
+    regions: Dict[str, List[str]] = {}
+    checks_done: Dict[str, Set[str]] = {}
+    room: Any
+    team: int
+    player: int
+    name: str
+    all_locations: Set[str]
+    checked_locations: Set[str]
+    all_prog_items: Counter[str]
+    items_received: Counter[str]
+    received_prog_items: Counter[str]
+    slot_data: Dict[any, any]
+    theme: str
+
+    region_keys: Dict[str, str] = {}
+
+    def __init__(self, room: Any, team: int, player: int, name: str, all_locations: Set[str],
+                 checked_locations: set, all_progression_items: Counter[str], items_received: Counter[str],
+                 slot_data: Dict[any, any]):
+        self.room = room
+        self.team = team
+        self.player = player
+        self.name = name
+        self.all_locations = all_locations
+        self.checked_locations = checked_locations
+        self.all_prog_items = all_progression_items
+        self.items_received = items_received
+        self.slot_data = slot_data
+
 
 alttp_icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
@@ -288,7 +332,7 @@ def get_static_room_data(room: Room):
 
 @app.route('/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
 @cache.memoize(timeout=60)  # multisave is currently created at most every minute
-def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool = False):
+def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool = False):
     # Team and player must be positive and greater than zero
     if tracked_team < 0 or tracked_player < 1:
         abort(404)
@@ -297,16 +341,81 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
     if not room:
         abort(404)
 
-    # Collect seed information and pare it down to a single player
+    player_tracker, multisave, inventory, seed_checks_in_area, lttp_checks_done, \
+    slot_data, games, player_name, display_icons = fill_tracker_data(room, tracked_team, tracked_player)
+
+    game_name = games[tracked_player]
+    # TODO move all games in game_specific_trackers to new system
+    if game_name in game_specific_trackers and not want_generic:
+        specific_tracker = game_specific_trackers.get(game_name, None)
+        return specific_tracker(multisave, room, player_tracker.all_locations, inventory, tracked_team, tracked_player, player_name,
+                                seed_checks_in_area, lttp_checks_done, slot_data[tracked_player])
+    elif game_name in AutoWorldRegister.world_types and not want_generic:
+        return render_template(
+            "trackers/" + player_tracker.template,
+            all_progression_items=player_tracker.all_prog_items,
+            player=player_tracker.player,
+            team=player_tracker.team,
+            room=player_tracker.room,
+            player_name=player_tracker.name,
+            checked_locations=sorted(player_tracker.checked_locations),
+            locations=sorted(player_tracker.all_locations),
+            theme=player_tracker.theme,
+            icons=display_icons,
+            regions=player_tracker.regions,
+            checks_done=player_tracker.checks_done,
+            region_keys=player_tracker.region_keys
+        )
+    else:
+        return __renderGenericTracker(multisave, room, player_tracker.all_locations, inventory, tracked_team, tracked_player, player_name, seed_checks_in_area, lttp_checks_done)
+
+
+@app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
+@cache.memoize(timeout=60)
+def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
+    return get_player_tracker(tracker, tracked_team, tracked_player, True)
+
+
+def get_tracker_icons_and_regions(player_tracker: PlayerTracker) -> Dict[str, str]:
+    """this function allows multiple icons to be used for the same item but it does require the world to submit both
+    a progressive_items list and the icons dict together"""
+    display_icons: Dict[str, str] = {}
+    if player_tracker.progressive_names and player_tracker.icons:
+        for item in player_tracker.progressive_items:
+            if item in player_tracker.progressive_names:
+                level = min(player_tracker.items_received[item], len(player_tracker.progressive_names[item]) - 1)
+                display_name = player_tracker.progressive_names[item][level]
+                if display_name in player_tracker.icons:
+                    display_icons[item] = player_tracker.icons[display_name]
+                else:
+                    display_icons[item] = player_tracker.icons[item]
+            else:
+                display_icons[item] = player_tracker.icons[item]
+    else:
+        if player_tracker.progressive_items and player_tracker.icons:
+            for item in player_tracker.progressive_items:
+                display_icons[item] = player_tracker.icons[item]
+
+    if player_tracker.regions:
+        for region in player_tracker.regions:
+            for location in region:
+                if location in player_tracker.checked_locations:
+                    player_tracker.checks_done.setdefault(region, set()).add(location)
+
+    return display_icons
+
+
+def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
+    """Collect seed information and pare it down to a single player"""
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
         precollected_items, games, slot_data, groups = get_static_room_data(room)
-    player_name = names[tracked_team][tracked_player - 1]
-    location_to_area = player_location_to_area[tracked_player]
+    player_name = names[team][player - 1]
+    location_to_area = player_location_to_area[player]
     inventory = collections.Counter()
-    checks_done = {loc_name: 0 for loc_name in default_locations}
+    lttp_checks_done = {loc_name: 0 for loc_name in default_locations}
 
     # Add starting items to inventory
-    starting_items = precollected_items[tracked_player]
+    starting_items = precollected_items[player]
     if starting_items:
         for item_id in starting_items:
             attribute_item_solo(inventory, item_id)
@@ -316,399 +425,69 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
     else:
         multisave: Dict[str, Any] = {}
 
-    slots_aimed_at_player = {tracked_player}
+    slots_aimed_at_player = {player}
     for group_id, group_members in groups.items():
-        if tracked_player in group_members:
+        if player in group_members:
             slots_aimed_at_player.add(group_id)
 
+    checked_locations = set()
     # Add items to player inventory
     for (ms_team, ms_player), locations_checked in multisave.get("location_checks", {}).items():
         # Skip teams and players not matching the request
         player_locations = locations[ms_player]
-        if ms_team == tracked_team:
+        if ms_team == team:
             # If the player does not have the item, do nothing
             for location in locations_checked:
                 if location in player_locations:
                     item, recipient, flags = player_locations[location]
                     if recipient in slots_aimed_at_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
-                    if ms_player == tracked_player:  # a check done by the tracked player
-                        checks_done[location_to_area[location]] += 1
-                        checks_done["Total"] += 1
-    specific_tracker = game_specific_trackers.get(games[tracked_player], None)
-    if specific_tracker and not want_generic:
-        return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                seed_checks_in_area, checks_done, slot_data[tracked_player])
-    else:
-        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                      seed_checks_in_area, checks_done)
+                        
+                    if ms_player == player:  # a check done by the tracked player
+                        lttp_checks_done[location_to_area[location]] += 1
+                        lttp_checks_done["Total"] += 1
+                        checked_locations.add(lookup_any_location_id_to_name[location])
+
+    prog_items = collections.Counter
+    all_location_names = set()
+
+    all_location_names = {lookup_any_location_id_to_name[id] for id in locations[player]}
+    prog_items = collections.Counter()
+    for player in locations:
+        for location in locations[player]:
+            item, recipient, flags = locations[player][location]
+            if recipient == player:
+                if flags & 1:
+                    item_name = lookup_any_item_id_to_name[item]
+                    prog_items[item_name] += 1
+
+    items_received = collections.Counter()
+    for id in inventory:
+        items_received[lookup_any_item_id_to_name[id]] = inventory[id]
+
+    player_tracker = PlayerTracker(
+        room,
+        team,
+        player,
+        player_name,
+        all_location_names,
+        checked_locations,
+        prog_items,
+        items_received,
+        slot_data[player]
+    )
+
+    # grab webworld and apply its theme to the tracker
+    webworld = AutoWorldRegister.world_types[games[player]].web
+    player_tracker.theme = webworld.theme
+    # allow the world to add information to the tracker class
+    webworld.modify_tracker(player_tracker)
+    display_icons = get_tracker_icons_and_regions(player_tracker)
+
+    return player_tracker, multisave, inventory, seed_checks_in_area, lttp_checks_done, slot_data, games, player_name, display_icons
 
 
-@app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
-def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
-    return getPlayerTracker(tracker, tracked_team, tracked_player, True)
-
-
-def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
-                         inventory: Counter, team: int, player: int, player_name: str,
-                         seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
-
-    # Note the presence of the triforce item
-    game_state = multisave.get("client_game_state", {}).get((team, player), 0)
-    if game_state == 30:
-        inventory[106] = 1  # Triforce
-
-    # Progressive items need special handling for icons and class
-    progressive_items = {
-        "Progressive Sword": 94,
-        "Progressive Glove": 97,
-        "Progressive Bow": 100,
-        "Progressive Mail": 96,
-        "Progressive Shield": 95,
-    }
-    progressive_names = {
-        "Progressive Sword": [None, 'Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
-        "Progressive Glove": [None, 'Power Glove', 'Titan Mitts'],
-        "Progressive Bow": [None, "Bow", "Silver Bow"],
-        "Progressive Mail": ["Green Mail", "Blue Mail", "Red Mail"],
-        "Progressive Shield": [None, "Blue Shield", "Red Shield", "Mirror Shield"]
-    }
-
-    # Determine which icon to use
-    display_data = {}
-    for item_name, item_id in progressive_items.items():
-        level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
-        display_name = progressive_names[item_name][level]
-        acquired = True
-        if not display_name:
-            acquired = False
-            display_name = progressive_names[item_name][level + 1]
-        base_name = item_name.split(maxsplit=1)[1].lower()
-        display_data[base_name + "_acquired"] = acquired
-        display_data[base_name + "_url"] = alttp_icons[display_name]
-
-    # The single player tracker doesn't care about overworld, underworld, and total checks. Maybe it should?
-    sp_areas = ordered_areas[2:15]
-
-    player_big_key_locations = set()
-    player_small_key_locations = set()
-    for loc_data in locations.values():
-        for values in loc_data.values():
-            item_id, item_player, flags = values
-            if item_player == player:
-                if item_id in ids_big_key:
-                    player_big_key_locations.add(ids_big_key[item_id])
-                elif item_id in ids_small_key:
-                    player_small_key_locations.add(ids_small_key[item_id])
-
-    return render_template("lttpTracker.html", inventory=inventory,
-                            player_name=player_name, room=room, icons=alttp_icons, checks_done=checks_done,
-                            checks_in_area=seed_checks_in_area[player],
-                            acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
-                            small_key_ids=small_key_ids, big_key_ids=big_key_ids, sp_areas=sp_areas,
-                            key_locations=player_small_key_locations,
-                            big_key_locations=player_big_key_locations,
-                            **display_data)
-
-
-def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
-                             inventory: Counter, team: int, player: int, playerName: str,
-                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
-
-    icons = {
-        "Wooden Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d2/Wooden_Pickaxe_JE3_BE3.png",
-        "Stone Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c4/Stone_Pickaxe_JE2_BE2.png",
-        "Iron Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d1/Iron_Pickaxe_JE3_BE2.png",
-        "Diamond Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e7/Diamond_Pickaxe_JE3_BE3.png",
-        "Wooden Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d5/Wooden_Sword_JE2_BE2.png",
-        "Stone Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b1/Stone_Sword_JE2_BE2.png",
-        "Iron Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/8/8e/Iron_Sword_JE2_BE2.png",
-        "Diamond Sword": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/4/44/Diamond_Sword_JE3_BE3.png",
-        "Leather Tunic": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b7/Leather_Tunic_JE4_BE2.png",
-        "Iron Chestplate": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/31/Iron_Chestplate_JE2_BE2.png",
-        "Diamond Chestplate": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e0/Diamond_Chestplate_JE3_BE2.png",
-        "Iron Ingot": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Iron_Ingot_JE3_BE2.png",
-        "Block of Iron": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7e/Block_of_Iron_JE4_BE3.png",
-        "Brewing Stand": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b3/Brewing_Stand_%28empty%29_JE10.png",
-        "Ender Pearl": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/f6/Ender_Pearl_JE3_BE2.png",
-        "Bucket": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Bucket_JE2_BE2.png",
-        "Bow": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/ab/Bow_%28Pull_2%29_JE1_BE1.png",
-        "Shield": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c6/Shield_JE2_BE1.png",
-        "Red Bed": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/6/6a/Red_Bed_%28N%29.png",
-        "Netherite Scrap": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/33/Netherite_Scrap_JE2_BE1.png",
-        "Flint and Steel": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/94/Flint_and_Steel_JE4_BE2.png",
-        "Enchanting Table": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/31/Enchanting_Table.gif",
-        "Fishing Rod": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7f/Fishing_Rod_JE2_BE2.png",
-        "Campfire": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/91/Campfire_JE2_BE2.gif",
-        "Water Bottle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/75/Water_Bottle_JE2_BE2.png",
-        "Spyglass": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c1/Spyglass_JE2_BE1.png",
-    }
-
-    minecraft_location_ids = {
-        "Story": [42073, 42023, 42027, 42039, 42002, 42009, 42010, 42070, 
-                  42041, 42049, 42004, 42031, 42025, 42029, 42051, 42077],
-        "Nether": [42017, 42044, 42069, 42058, 42034, 42060, 42066, 42076, 42064, 42071, 42021,
-                   42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42014],
-        "The End": [42052, 42005, 42012, 42032, 42030, 42042, 42018, 42038, 42046],
-        "Adventure": [42047, 42050, 42096, 42097, 42098, 42059, 42055, 42072, 42003, 42035, 42016, 42020,
-                      42048, 42054, 42068, 42043, 42074, 42075, 42024, 42026, 42037, 42045, 42056, 42099, 42100],
-        "Husbandry": [42065, 42067, 42078, 42022, 42007, 42079, 42013, 42028, 42036, 
-                      42057, 42063, 42053, 42102, 42101, 42092, 42093, 42094, 42095],
-        "Archipelago": [42080, 42081, 42082, 42083, 42084, 42085, 42086, 42087, 42088, 42089, 42090, 42091],
-    }
-
-    display_data = {}
-
-    # Determine display for progressive items
-    progressive_items = {
-        "Progressive Tools": 45013,
-        "Progressive Weapons": 45012,
-        "Progressive Armor": 45014,
-        "Progressive Resource Crafting": 45001
-    }
-    progressive_names = {
-        "Progressive Tools": ["Wooden Pickaxe", "Stone Pickaxe", "Iron Pickaxe", "Diamond Pickaxe"],
-        "Progressive Weapons": ["Wooden Sword", "Stone Sword", "Iron Sword", "Diamond Sword"],
-        "Progressive Armor": ["Leather Tunic", "Iron Chestplate", "Diamond Chestplate"],
-        "Progressive Resource Crafting": ["Iron Ingot", "Iron Ingot", "Block of Iron"]
-    }
-    for item_name, item_id in progressive_items.items():
-        level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
-        display_name = progressive_names[item_name][level]
-        base_name = item_name.split(maxsplit=1)[1].lower().replace(' ', '_')
-        display_data[base_name + "_url"] = icons[display_name]
-
-    # Multi-items
-    multi_items = {
-        "3 Ender Pearls": 45029,
-        "8 Netherite Scrap": 45015
-    }
-    for item_name, item_id in multi_items.items():
-        base_name = item_name.split()[-1].lower()
-        count = inventory[item_id]
-        if count >= 0:
-            display_data[base_name + "_count"] = count
-
-    # Victory condition
-    game_state = multisave.get("client_game_state", {}).get((team, player), 0)
-    display_data['game_finished'] = game_state == 30
-
-    # Turn location IDs into advancement tab counts
-    checked_locations = multisave.get("location_checks", {}).get((team, player), set())
-    lookup_name = lambda id: lookup_any_location_id_to_name[id]
-    location_info = {tab_name: {lookup_name(id): (id in checked_locations) for id in tab_locations}
-                        for tab_name, tab_locations in minecraft_location_ids.items()}
-    checks_done = {tab_name: len([id for id in tab_locations if id in checked_locations])
-                    for tab_name, tab_locations in minecraft_location_ids.items()}
-    checks_done['Total'] = len(checked_locations)
-    checks_in_area = {tab_name: len(tab_locations) for tab_name, tab_locations in minecraft_location_ids.items()}
-    checks_in_area['Total'] = sum(checks_in_area.values())
-
-    return render_template("minecraftTracker.html",
-                            inventory=inventory, icons=icons,
-                            acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
-                                            id in lookup_any_item_id_to_name},
-                            player=player, team=team, room=room, player_name=playerName,
-                            checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
-                            **display_data)
-
-
-def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
-                       inventory: Counter, team: int, player: int, playerName: str,
-                       seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
-
-    icons = {
-        "Fairy Ocarina":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/OoT_Fairy_Ocarina_Icon.png",
-        "Ocarina of Time":          "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/4e/OoT_Ocarina_of_Time_Icon.png",
-        "Slingshot":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/32/OoT_Fairy_Slingshot_Icon.png",
-        "Boomerang":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/d/d5/OoT_Boomerang_Icon.png",
-        "Bottle":                   "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/f/fc/OoT_Bottle_Icon.png",
-        "Rutos Letter":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/OoT_Letter_Icon.png",
-        "Bombs":                    "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/11/OoT_Bomb_Icon.png",
-        "Bombchus":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/36/OoT_Bombchu_Icon.png",
-        "Lens of Truth":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/0/05/OoT_Lens_of_Truth_Icon.png",
-        "Bow":                      "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/9a/OoT_Fairy_Bow_Icon.png",
-        "Hookshot":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/7/77/OoT_Hookshot_Icon.png",
-        "Longshot":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/a/a4/OoT_Longshot_Icon.png",
-        "Megaton Hammer":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/93/OoT_Megaton_Hammer_Icon.png",
-        "Fire Arrows":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/1e/OoT_Fire_Arrow_Icon.png",
-        "Ice Arrows":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/3c/OoT_Ice_Arrow_Icon.png",
-        "Light Arrows":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/7/76/OoT_Light_Arrow_Icon.png",
-        "Dins Fire":                r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/d/da/OoT_Din%27s_Fire_Icon.png",
-        "Farores Wind":             r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/7/7a/OoT_Farore%27s_Wind_Icon.png",
-        "Nayrus Love":              r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/be/OoT_Nayru%27s_Love_Icon.png",
-        "Kokiri Sword":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/5/53/OoT_Kokiri_Sword_Icon.png",
-        "Biggoron Sword":           r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/2e/OoT_Giant%27s_Knife_Icon.png",
-        "Mirror Shield":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/b0/OoT_Mirror_Shield_Icon_2.png",
-        "Goron Bracelet":           r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/b7/OoT_Goron%27s_Bracelet_Icon.png",
-        "Silver Gauntlets":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/b/b9/OoT_Silver_Gauntlets_Icon.png",
-        "Golden Gauntlets":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/6/6a/OoT_Golden_Gauntlets_Icon.png",
-        "Goron Tunic":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/1c/OoT_Goron_Tunic_Icon.png",
-        "Zora Tunic":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/2c/OoT_Zora_Tunic_Icon.png",
-        "Silver Scale":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/4e/OoT_Silver_Scale_Icon.png",
-        "Gold Scale":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/95/OoT_Golden_Scale_Icon.png",
-        "Iron Boots":               "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/34/OoT_Iron_Boots_Icon.png",
-        "Hover Boots":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/22/OoT_Hover_Boots_Icon.png",
-        "Adults Wallet":            r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/f/f9/OoT_Adult%27s_Wallet_Icon.png",
-        "Giants Wallet":            r"https://static.wikia.nocookie.net/zelda_gamepedia_en/images/8/87/OoT_Giant%27s_Wallet_Icon.png",
-        "Small Magic":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/9f/OoT3D_Magic_Jar_Icon.png",
-        "Large Magic":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/3e/OoT3D_Large_Magic_Jar_Icon.png",
-        "Gerudo Membership Card":   "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/4e/OoT_Gerudo_Token_Icon.png",
-        "Gold Skulltula Token":     "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/47/OoT_Token_Icon.png",
-        "Triforce Piece":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/0/0b/SS_Triforce_Piece_Icon.png",
-        "Triforce":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/6/68/ALttP_Triforce_Title_Sprite.png",
-        "Zeldas Lullaby":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
-        "Eponas Song":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
-        "Sarias Song":              "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
-        "Suns Song":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
-        "Song of Time":             "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
-        "Song of Storms":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/2/21/Grey_Note.png",
-        "Minuet of Forest":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/e/e4/Green_Note.png",
-        "Bolero of Fire":           "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/f/f0/Red_Note.png",
-        "Serenade of Water":        "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/0/0f/Blue_Note.png",
-        "Requiem of Spirit":        "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/a/a4/Orange_Note.png",
-        "Nocturne of Shadow":       "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/Purple_Note.png",
-        "Prelude of Light":         "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/90/Yellow_Note.png",
-        "Small Key":                "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/e/e5/OoT_Small_Key_Icon.png",
-        "Boss Key":                 "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/4/40/OoT_Boss_Key_Icon.png",
-    }
-
-    display_data = {}
-
-    # Determine display for progressive items
-    progressive_items = {
-        "Progressive Hookshot": 66128,
-        "Progressive Strength Upgrade": 66129,
-        "Progressive Wallet": 66133,
-        "Progressive Scale": 66134,
-        "Magic Meter": 66138,
-        "Ocarina": 66139,
-    }
-
-    progressive_names = {
-        "Progressive Hookshot": ["Hookshot", "Hookshot", "Longshot"],
-        "Progressive Strength Upgrade": ["Goron Bracelet", "Goron Bracelet", "Silver Gauntlets", "Golden Gauntlets"],
-        "Progressive Wallet": ["Adults Wallet", "Adults Wallet", "Giants Wallet", "Giants Wallet"],
-        "Progressive Scale": ["Silver Scale", "Silver Scale", "Gold Scale"],
-        "Magic Meter": ["Small Magic", "Small Magic", "Large Magic"],
-        "Ocarina": ["Fairy Ocarina", "Fairy Ocarina", "Ocarina of Time"]
-    }
-
-    for item_name, item_id in progressive_items.items():
-        level = min(inventory[item_id], len(progressive_names[item_name])-1)
-        display_name = progressive_names[item_name][level]
-        if item_name.startswith("Progressive"):
-            base_name = item_name.split(maxsplit=1)[1].lower().replace(' ', '_')
-        else:
-            base_name = item_name.lower().replace(' ', '_')
-        display_data[base_name+"_url"] = icons[display_name]
-
-        if base_name == "hookshot":
-            display_data['hookshot_length'] = {0: '', 1: 'H', 2: 'L'}.get(level)
-        if base_name == "wallet": 
-            display_data['wallet_size'] = {0: '99', 1: '200', 2: '500', 3: '999'}.get(level)
-
-    # Determine display for bottles. Show letter if it's obtained, determine bottle count
-    bottle_ids = [66015, 66020, 66021, 66140, 66141, 66142, 66143, 66144, 66145, 66146, 66147, 66148]
-    display_data['bottle_count'] = min(sum(map(lambda item_id: inventory[item_id], bottle_ids)), 4)
-    display_data['bottle_url'] = icons['Rutos Letter'] if inventory[66021] > 0 else icons['Bottle']
-
-    # Determine bombchu display
-    display_data['has_bombchus'] = any(map(lambda item_id: inventory[item_id] > 0, [66003, 66106, 66107, 66137]))
-
-    # Multi-items
-    multi_items = {
-        "Gold Skulltula Token": 66091,
-        "Triforce Piece": 66202,
-    }
-    for item_name, item_id in multi_items.items():
-        base_name = item_name.split()[-1].lower()
-        count = inventory[item_id]
-        display_data[base_name+"_count"] = inventory[item_id]
-
-    # Gather dungeon locations
-    area_id_ranges = {
-        "Overworld":                (67000, 67280),
-        "Deku Tree":                (67281, 67303),
-        "Dodongo's Cavern":         (67304, 67334),
-        "Jabu Jabu's Belly":        (67335, 67359),
-        "Bottom of the Well":       (67360, 67384),
-        "Forest Temple":            (67385, 67420),
-        "Fire Temple":              (67421, 67457),
-        "Water Temple":             (67458, 67484),
-        "Shadow Temple":            (67485, 67532),
-        "Spirit Temple":            (67533, 67582),
-        "Ice Cavern":               (67583, 67596),
-        "Gerudo Training Ground":   (67597, 67635),
-        "Thieves' Hideout":         (67259, 67263),
-        "Ganon's Castle":           (67636, 67673),
-    }
-
-    def lookup_and_trim(id, area):
-        full_name = lookup_any_location_id_to_name[id]
-        if id == 67673:
-            return full_name[13:]  # Ganons Tower Boss Key Chest
-        if area not in ["Overworld", "Thieves' Hideout"]:
-            # trim dungeon name. leaves an extra space that doesn't display, or trims fully for DC/Jabu/GC
-            return full_name[len(area):]
-        return full_name
-
-    checked_locations = multisave.get("location_checks", {}).get((team, player), set()).intersection(set(locations[player]))
-    location_info = {area: {lookup_and_trim(id, area): id in checked_locations for id in range(min_id, max_id+1) if id in locations[player]} 
-        for area, (min_id, max_id) in area_id_ranges.items()}
-    checks_done = {area: len(list(filter(lambda x: x, location_info[area].values()))) for area in area_id_ranges}
-    checks_in_area = {area: len([id for id in range(min_id, max_id+1) if id in locations[player]]) 
-        for area, (min_id, max_id) in area_id_ranges.items()}
-
-    # Remove Thieves' Hideout checks from Overworld, since it's in the middle of the range
-    checks_in_area["Overworld"] -= checks_in_area["Thieves' Hideout"]
-    checks_done["Overworld"] -= checks_done["Thieves' Hideout"]
-    for loc in location_info["Thieves' Hideout"]:
-        del location_info["Overworld"][loc]
-
-    checks_done['Total'] = sum(checks_done.values())
-    checks_in_area['Total'] = sum(checks_in_area.values())
-
-    # Give skulltulas on non-tracked locations
-    non_tracked_locations = multisave.get("location_checks", {}).get((team, player), set()).difference(set(locations[player]))
-    for id in non_tracked_locations:
-        if "GS" in lookup_and_trim(id, ''):
-            display_data["token_count"] += 1
-
-    # Gather small and boss key info
-    small_key_counts = {
-        "Forest Temple":            inventory[66175],
-        "Fire Temple":              inventory[66176],
-        "Water Temple":             inventory[66177],
-        "Spirit Temple":            inventory[66178],
-        "Shadow Temple":            inventory[66179],
-        "Bottom of the Well":       inventory[66180],
-        "Gerudo Training Ground":   inventory[66181],
-        "Thieves' Hideout":         inventory[66182],
-        "Ganon's Castle":           inventory[66183],
-    }
-    boss_key_counts = {
-        "Forest Temple":            '✔' if inventory[66149] else '✕',
-        "Fire Temple":              '✔' if inventory[66150] else '✕',
-        "Water Temple":             '✔' if inventory[66151] else '✕',
-        "Spirit Temple":            '✔' if inventory[66152] else '✕',
-        "Shadow Temple":            '✔' if inventory[66153] else '✕',
-        "Ganon's Castle":           '✔' if inventory[66154] else '✕',
-    }
-
-    # Victory condition
-    game_state = multisave.get("client_game_state", {}).get((team, player), 0)
-    display_data['game_finished'] = game_state == 30
-
-    return render_template("ootTracker.html",
-                           inventory=inventory, player=player, team=team, room=room, player_name=playerName,
-                           icons=icons, acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
-                           checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
-                           small_key_counts=small_key_counts, boss_key_counts=boss_key_counts,
-                           **display_data)
-
-
-def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: set,
                                inventory: Counter, team: int, player: int, playerName: str,
                                seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict[str, Any]) -> str:
 
@@ -808,13 +587,13 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
     acquired_items = {lookup_any_item_id_to_name[id] for id in inventory if id in lookup_any_item_id_to_name}
     options = {k for k, v in slot_data.items() if v}
 
-    return render_template("timespinnerTracker.html",
+    return render_template("trackers/" + "timespinnerTracker.html",
                             inventory=inventory, icons=icons, acquired_items=acquired_items,
                             player=player, team=team, room=room, player_name=playerName,
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             options=options, **display_data)
 
-def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: set,
                                 inventory: Counter, team: int, player: int, playerName: str,
                                 seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
@@ -889,6 +668,7 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
 
     for item_name, item_id in multi_items.items():
         base_name = item_name.split()[0].lower()
+        count = inventory[item_id]
         display_data[base_name+"_count"] = inventory[item_id]
 
     # Victory condition
@@ -906,7 +686,7 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
     checks_in_area = {tab_name: len(tab_locations) for tab_name, tab_locations in supermetroid_location_ids.items()}
     checks_in_area['Total'] = sum(checks_in_area.values())
 
-    return render_template("supermetroidTracker.html",
+    return render_template("trackers/" + "supermetroidTracker.html",
                             inventory=inventory, icons=icons,
                             acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
                                             id in lookup_any_item_id_to_name},
@@ -914,7 +694,8 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
-def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+
+def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: set,
                            inventory: Counter, team: int, player: int, playerName: str,
                            seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
 
@@ -929,11 +710,11 @@ def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dic
     for order_index, networkItem in enumerate(ordered_items, start=1):
         player_received_items[networkItem.item] = order_index
 
-    return render_template("genericTracker.html",
+    return render_template("trackers/" + "genericTracker.html",
                             inventory=inventory,
                             player=player, team=team, room=room, player_name=playerName,
                             checked_locations=checked_locations,
-                            not_checked_locations=set(locations[player]) - checked_locations,
+                            not_checked_locations=locations - checked_locations,
                             received_items=player_received_items)
 
 
@@ -975,9 +756,9 @@ def getTracker(tracker: UUID):
                 continue
 
             item, recipient, flags = player_locations[location]
-
             if recipient in names:
                 attribute_item(inventory, team, recipient, item)
+
             checks_done[team][player][player_location_to_area[player][location]] += 1
             checks_done[team][player]["Total"] += 1
 
@@ -1021,7 +802,7 @@ def getTracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
-    return render_template("tracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
+    return render_template("trackers/" + "multiworldTracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
                            lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=alttp_icons,
                            multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
@@ -1032,9 +813,6 @@ def getTracker(tracker: UUID):
 
 
 game_specific_trackers: typing.Dict[str, typing.Callable] = {
-    "Minecraft": __renderMinecraftTracker,
-    "Ocarina of Time": __renderOoTTracker,
     "Timespinner": __renderTimespinnerTracker,
-    "A Link to the Past": __renderAlttpTracker,
     "Super Metroid": __renderSuperMetroidTracker
 }

@@ -2,9 +2,9 @@
 {% block head %}
     {{ super() }}
     <title>Multiworld Tracker</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/tracker.css") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/trackers/tracker.css") }}"/>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/jquery.scrollsync.js") }}"></script>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/tracker.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/trackers/tracker.js") }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -44,7 +44,7 @@
                         <tbody>
                             {%- for player, items in players.items() -%}
                                 <tr>
-                                    <td><a href="{{ url_for("getPlayerTracker", tracker=room.tracker,
+                                    <td><a href="{{ url_for("get_player_tracker", tracker=room.tracker,
                                     tracked_team=team, tracked_player=player)}}">{{ loop.index }}</a></td>
                                     {%- if (team, loop.index) in video -%}
                                         {%- if video[(team, loop.index)][0] == "Twitch" -%}
@@ -121,7 +121,7 @@
                         <tbody>
                             {%- for player, checks in players.items() -%}
                                 <tr>
-                                    <td><a href="{{ url_for("getPlayerTracker", tracker=room.tracker,
+                                    <td><a href="{{ url_for("get_player_tracker", tracker=room.tracker,
                                     tracked_team=team, tracked_player=player)}}">{{ loop.index }}</a></td>
                                     <td>{{ player_names[(team, loop.index)]|e }}</td>
                                     {%- for area in ordered_areas -%}

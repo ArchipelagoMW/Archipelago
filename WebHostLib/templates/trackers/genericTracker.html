@@ -2,9 +2,9 @@
 {% block head %}
     {{ super() }}
     <title>{{ player_name }}&apos;s Tracker</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/tracker.css") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/trackers/tracker.css") }}"/>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/jquery.scrollsync.js") }}"></script>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/tracker.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/trackers/tracker.js") }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -13,6 +13,9 @@
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search"/>
             <span class="info">This tracker will automatically update itself periodically.</span>
+            <a href="/tracker/{{ room.tracker|suuid }}/{{ team }}/{{ player }}" class="button-link">
+                Go to Styled Tracker
+            </a>
         </div>
             <div class="table-wrapper">
                 <table class="table non-unique-item-table">
