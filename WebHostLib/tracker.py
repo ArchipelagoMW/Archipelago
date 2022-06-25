@@ -442,6 +442,7 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
                     item, recipient, flags = player_locations[location]
                     if recipient in slots_aimed_at_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
+                        
                     if ms_player == player:  # a check done by the tracked player
                         lttp_checks_done[location_to_area[location]] += 1
                         lttp_checks_done["Total"] += 1
