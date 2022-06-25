@@ -9,9 +9,10 @@ logger = logging.getLogger("Hollow Knight")
 from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
 from .Rules import set_rules, cost_terms
-from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled, Goal, WhitePalace
+from .Options import hollow_knight_options, hollow_knight_randomize_options, Goal, WhitePalace, \
+    shop_to_option
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
-    event_names, item_effects, connectors, one_ways, vanilla_location_costs, vanilla_shop_costs
+    event_names, item_effects, connectors, one_ways, vanilla_shop_costs, vanilla_location_costs
 from .Charms import names as charm_names
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial, ItemClassification
@@ -140,12 +141,14 @@ class HKWorld(World):
         "Leg_Eater": ("GEO",),
     }
     charm_costs: typing.List[int]
+    cached_filler_items = {}
     data_version = 2
 
     def __init__(self, world, player):
         super(HKWorld, self).__init__(world, player)
         self.created_multi_locations: typing.Dict[str, int] = Counter()
         self.ranges = {}
+        self.created_shop_items = 0
         self.vanilla_shop_costs = deepcopy(vanilla_shop_costs)
 
     def generate_early(self):
@@ -162,8 +165,6 @@ class HKWorld(World):
             self.ranges[term] = mini.value, maxi.value
         world.push_precollected(HKItem(starts[world.StartLocation[self.player].current_key],
                                        True, None, "Event", self.player))
-        for option_name in disabled:
-            getattr(world, option_name)[self.player].value = 0
 
     def white_palace_exclusions(self):
         exclusions = set()
@@ -208,11 +209,11 @@ class HKWorld(World):
     def create_items(self):
         # Generate item pool and associated locations (paired in HK)
         pool: typing.List[HKItem] = []
-        geo_replace: typing.Set[str] = set()
+        junk_replace: typing.Set[str] = set()
         if self.world.RemoveSpellUpgrades[self.player]:
-            geo_replace.add("Abyss_Shriek")
-            geo_replace.add("Shade_Soul")
-            geo_replace.add("Descending_Dark")
+            junk_replace.add("Abyss_Shriek")
+            junk_replace.add("Shade_Soul")
+            junk_replace.add("Descending_Dark")
 
         wp_exclusions = self.white_palace_exclusions()
         for option_key, option in hollow_knight_randomize_options.items():
@@ -220,29 +221,87 @@ class HKWorld(World):
             for item_name, location_name in zip(option.items, option.locations):
                 vanilla = not randomized
                 excluded = False
-                if item_name in geo_replace:
-                    item_name = "Geo_Rock-Default"
-                item = self.create_item(item_name)
-                if location_name == "Start":
-                    self.world.push_precollected(item)
-                    continue
-                if not vanilla and location_name in wp_exclusions:
-                    if location_name == 'King_Fragment':
-                        excluded = True
+                if item_name in junk_replace:
+                    item_name = self.get_filler_item_name()
+                split = False
+                if (item_name == "Crystal_Heart" and self.world.SplitCrystalHeart[self.player]) or \
+                        (item_name == "Mothwing_Cloak" and self.world.SplitMothwingCloak[self.player]):
+                    loc1 = self.create_location(location_name)
+                    loc2 = self.create_location("Split_" + location_name)
+                    split = True
+                if item_name == "Mantis_Claw" and self.world.SplitMantisClaw[self.player]:
+                    loc1 = self.create_location("Left_" + location_name)
+                    loc2 = self.create_location("Right_" + location_name)
+                    split = True
+                if split is True:
+                    item1 = self.create_item("Left_" + item_name)
+                    item1.classification = ItemClassification.progression
+                    item2 = self.create_item("Right_" + item_name)
+                    item2.classification = ItemClassification.progression
+                    if randomized:
+                        pool.append(item1)
+                        pool.append(item2)
                     else:
-                        vanilla = True
-
-                if vanilla:
-                    location = self.create_vanilla_location(location_name, item)
+                        loc1.place_locked_item(item1)
+                        loc1.vanilla = True
+                        loc2.place_locked_item(item2)
+                        loc2.vanilla = True
+                elif item_name == "Shade_Cloak" and self.world.SplitMothwingCloak[self.player]:
+                    loc = self.create_location(location_name)
+                    if self.world.random.randint(0, 1):
+                        item = self.create_item("Left_Mothwing_Cloak")
+                    else:
+                        item = self.create_item("Right_Mothwing_Cloak")
+                    item.classification = ItemClassification.progression
+                    if randomized:
+                        pool.append(item)
+                    else:
+                        loc.place_locked_item(item)
+                        loc.vanilla = True
                 else:
-                    location = self.create_location(location_name)
-                    pool.append(item)
-                if excluded:
-                    location.progress_type = LocationProgressType.EXCLUDED
+                    item = self.create_item(item_name)
+                    if location_name == "Start":
+                        if (item_name == "Focus" and self.world.RandomizeFocus[self.player]) or (item_name == "Swim"
+                                and self.world.RandomizeSwim[self.player]) or (item_name in ["Upslash", "Leftslash",
+                                "Rightslash"] and self.world.RandomizeNail[self.player]):
+                            pool.append(item)
+                        else:
+                            self.world.push_precollected(item)
+                    else:
+                        if vanilla:
+                            location = self.create_vanilla_location(location_name, item)
+                        else:
+                            location = self.create_location(location_name)
+                            pool.append(item)
+                        if excluded:
+                            location.progress_type = LocationProgressType.EXCLUDED
 
-        for i in range(self.world.EggShopSlots[self.player].value):
-            self.create_location("Egg_Shop")
-            pool.append(self.create_item("Geo_Rock-Default"))
+        if self.world.RandomizeElevatorPass[self.player]:
+            pool.append(self.create_item("Elevator_Pass"))
+            self.create_location("Elevator_Pass")
+
+        for shop, slots in self.created_multi_locations.items():
+            for _ in range(slots, getattr(self.world, shop_to_option[shop])[self.player].value):
+                self.create_location(shop)
+
+        item_count = len(pool)
+        location_count = len(self.world.get_unfilled_locations(self.player))
+        if location_count < item_count:  # More items than locations.
+            # We only add at maximum 5 extra items.  Even if they all get assigned to the same shop, it is not possible
+            # to exceed the 16 slots per shop limit here.  This code will need to revised if significantly more extra
+            # items get added in the future.
+            shops = list(multi_locations.keys())
+            if not self.world.EggShopSlots[self.player].value:  # No eggshop, so don't place items there
+                shops.remove('Egg_Shop')
+            while location_count < item_count:
+                # Add a location to a random shop.
+                self.create_location(self.world.random.choice(shops))
+                location_count += 1
+        elif item_count < location_count:  # More locations than items
+            for _ in range(location_count - item_count):
+                # Create enough filler items to fill all locations.
+                pool.append(self.create_item(self.get_filler_item_name()))
+
         self.world.itempool += pool
 
         for shopname in self.shops:
@@ -348,7 +407,15 @@ class HKWorld(World):
         if change:
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
                 state.prog_items[effect_name, item.player] += effect_value
-
+        if item.name in ["Left_Mothwing_Cloak", "Right_Mothwing_Cloak"]:
+            if item.name == "Right_Mothwing_Cloak":
+                state.prog_items["RIGHTDASH", item.player] += 1
+            if item.name == "Left_Mothwing_Cloak":
+                state.prog_items["LEFTDASH", item.player] += 1
+            if state.prog_items.get(('RIGHTDASH', item.player), 0) and \
+                    state.prog_items.get(('LEFTDASH', item.player), 0):
+                (state.prog_items["RIGHTDASH", item.player], state.prog_items["LEFTDASH", item.player]) = \
+                    ([max(state.prog_items["RIGHTDASH", item.player], state.prog_items["LEFTDASH", item.player])] * 2)
         return change
 
     def remove(self, state, item: HKItem) -> bool:
@@ -388,6 +455,20 @@ class HKWorld(World):
             i = self.created_multi_locations[base]
         assert 0 < i < 18, "limited number of multi location IDs reserved."
         return f"{base}_{i}"
+
+    def get_filler_item_name(self) -> str:
+        if self.player not in self.cached_filler_items:
+            fillers = ["One_Geo", "Soul_Refill"]
+            exclusions = self.white_palace_exclusions()
+            for group in (
+                    'RandomizeGeoRocks', 'RandomizeSoulTotems', 'RandomizeLoreTablets', 'RandomizeJunkPitChests',
+                    'RandomizeRancidEggs'
+            ):
+                if getattr(self.world, group):
+                    fillers.extend(item for item in hollow_knight_randomize_options[group].items if item not in
+                                   exclusions)
+            self.cached_filler_items[self.player] = fillers
+        return self.world.random.choice(self.cached_filler_items[self.player])
 
 
 def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:

@@ -1,5 +1,3 @@
-# This module is written by Extractor.py, do not edit manually!.
-
 from ..generic.Rules import set_rule, add_rule
 from BaseClasses import MultiWorld
 from ..AutoWorld import World

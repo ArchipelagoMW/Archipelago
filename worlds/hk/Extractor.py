@@ -74,7 +74,7 @@ class Absorber(ast.NodeTransformer):
         self.truth_values = truth_values
         self.truth_values |= {"True", "None", "ANY", "ITEMRANDO"}
         self.false_values = false_values
-        self.false_values |= {"False", "NONE", "RANDOMELEVATORS"}
+        self.false_values |= {"False", "NONE"}
 
         super(Absorber, self).__init__()
 
@@ -203,7 +203,6 @@ logic_folder = os.path.join(resources_source, "Logic")
 logic_options: typing.Dict[str, str] = hk_loads(os.path.join(data_folder, "logic_settings.json"))
 for logic_key, logic_value in logic_options.items():
     logic_options[logic_key] = logic_value.split(".", 1)[-1]
-del (logic_options["RANDOMELEVATORS"])
 
 vanilla_cost_data: typing.Dict[str, typing.Dict[str, typing.Any]] = hk_loads(os.path.join(data_folder, "costs.json"))
 vanilla_location_costs = {
