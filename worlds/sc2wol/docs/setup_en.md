@@ -56,7 +56,7 @@ To run StarCraft 2 through Archipelago in Linux, you will need to install the ga
 
 Make sure you have StarCraft 2 installed using Wine and you have followed the [Installation Procedures](#installation-procedures) to add the Archipelago maps to the correct location. You will not need to copy the .dll files. If you're having trouble installing or running StarCraft 2 on Linux, I recommend using the Lutris installer.
 
-Copy the following into a .sh file, replacing the values of **WINE** and **SC2PATH** variables to the relevant locations, as well as updating the path to the Archipelago client, if it is not in the same folder as the script.
+Copy the following into a .sh file, replacing the values of **WINE** and **SC2PATH** variables to the relevant locations, as well as setting **PATH_TO_ARCHIPELAGO** to the directory containing the AppImage if it is not in the same folder as the script.
 
 ```sh
 # Let the client know we're running SC2 in Wine
@@ -69,8 +69,16 @@ export WINE="/usr/bin/wine"
 # FIXME Replace with path to StarCraft II install folder
 export SC2PATH="/home/user/Games/starcraft-ii/drive_c/Program Files (x86)/StarCraft II/"
 
+# FIXME Set to directory which contains Archipelago AppImage file
+PATH_TO_ARCHIPELAGO=
+
+# Gets the latest version of Archipelago AppImage in PATH_TO_ARCHIPELAGO.
+# If PATH_TO_ARCHIPELAGO is not set, this defaults to the directory containing
+# this script file.
+ARCHIPELAGO="$(ls ${PATH_TO_ARCHIPELAGO:-$(dirname $0)}/Archipelago_*.AppImage | sort -r | head -1)"
+
 # Start the Archipelago client
-./Archipelago_0.3.2_linux-x86_64.AppImage Starcraft2Client
+$ARCHIPELAGO Starcraft2Client
 ```
 
 For Lutris installs, you can run `lutris -l` to get the numerical ID of your StarCraft II install, then run the command below, replacing **${ID}** with the numerical ID.
