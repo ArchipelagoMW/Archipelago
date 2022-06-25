@@ -11,7 +11,7 @@ from BaseClasses import Region, RegionType, Entrance, Item, Tutorial
 from Options import Option
 from ..AutoWorld import World, WebWorld
 from .Characters import all_chars
-from .Items import item_table, always_available_items, junk_weights, trap_weights, get_normal_items
+from .Items import item_table, always_available_items, junk_items, trap_items, get_normal_items
 from .Locations import get_char_locations, CryptLocation
 from .Options import cotnd_options
 
@@ -42,7 +42,8 @@ class CotNDWorld(World):
     # decide characters and starting character
     # remove start_inventory dupes
     def generate_early(self) -> None:
-        self.items: List[str] = get_normal_items(self)
+        self.items: List[str] = get_normal_items(self.world.available_characters[self.player].value,
+            self.world.reduce_starting_items[self.player].value)
         self.give_starting_character()
         self.remove_start_items_from_pool()
 
@@ -125,9 +126,9 @@ class CotNDWorld(World):
 
     def get_filler_item_name(self) -> str:
         if self.world.random.random()*100 < self.world.trap_percentage[self.player]:
-            return self.world.random.choices(list(trap_weights.keys()), weights=trap_weights.values())[0]
+            return self.world.random.choice(trap_items)
         else:
-            return self.world.random.choices(list(junk_weights.keys()), weights=junk_weights.values())[0]
+            return self.world.random.choice(junk_items)
 
     ### End Autoworld Methods ###
 

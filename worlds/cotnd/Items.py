@@ -212,13 +212,13 @@ item_table = {
 
     # Junk
     'Instant Health':       (0, 'Junk',     'APInstantHealth',      False),
-    'Instant Gold':         (0, 'Junk',     'APInstantGold',        False),
     'Full Heal':            (0, 'Junk',     'APFullHeal',           False),
-    'Potion':               (0, 'Junk',     'APFreePotion',         False),
+    'Instant Gold (50)':    (0, 'Junk',     'APInstantGold',        False),
+    'Instant Gold (200)':   (0, 'Junk',     'APInstantGold2',       False),
 
     # Traps
-    'Instant Damage':       (-2, 'Trap',    'APInstantDamage',      False),
     'Leprechaun!':          (-2, 'Trap',    'APLeprechaun',         False),
+    'Teleport Trap':        (-2, 'Trap',    'APTeleportTrap',       False),
     'Confusion Trap':       (-2, 'Trap',    'APConfuseTrap',        False),
     'Scatter Trap':         (-2, 'Trap',    'APScatterTrap',        False),
 }
@@ -231,19 +231,8 @@ always_available_items = [
     'Empty Heart Container',
 ]
 
-junk_weights = {
-    'Instant Health': 8,    # 40%
-    'Instant Gold': 8,      # 40%
-    'Full Heal': 3,         # 15%
-    'Potion': 1,            #  5%
-}
-
-trap_weights = {
-    'Instant Damage': 4,    # 40%
-    'Leprechaun!': 4,       # 40%
-    'Confusion Trap': 1,    # 10%
-    'Scatter Trap': 1,      # 10%
-}
+junk_items = [k for k, v in item_table.items() if v[1] == 'Junk']
+trap_items = [k for k, v in item_table.items() if v[1] == 'Trap']
 
 bad_items = [
     'Karate Gi',
@@ -257,10 +246,7 @@ bad_items = [
 ]
 
 # Gets all non-junk items in pool
-def get_normal_items(nd) -> List[str]:
-    chars = nd.world.available_characters[nd.player].value
-    reduce_start = nd.world.reduce_starting_items[nd.player].value
-
+def get_normal_items(chars, reduce_start) -> List[str]:
     # Base item pool: not Char/Junk/Trap
     items = [item for item, data in item_table.items() if (data[1] not in {'Character', 'Junk', 'Trap'}
         and (reduce_start or not data[3])
@@ -271,4 +257,3 @@ def get_normal_items(nd) -> List[str]:
         items.append(f"Unlock {char}")
 
     return items
-
