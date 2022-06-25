@@ -436,6 +436,12 @@ for event in events:
 event_rules.update(connectors_rules)
 connectors_rules = {}
 
+
+# Apply some final fixes
+item_effects.update({
+    'Left_Mothwing_Cloak': {'LEFTDASH': 1},
+    'Right_Mothwing_Cloak': {'RIGHTDASH': 1},
+})
 names = sorted({"logic_options", "starts", "pool_options", "locations", "multi_locations", "location_to_region_lookup",
                 "event_names", "item_effects", "items", "logic_items", "region_names",
                 "exits", "connectors", "one_ways", "vanilla_shop_costs", "vanilla_location_costs"})
