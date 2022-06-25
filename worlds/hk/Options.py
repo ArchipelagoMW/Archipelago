@@ -11,19 +11,6 @@ else:
     Random = typing.Any
 
 
-class Disabled(Toggle):
-    def __init__(self, value: int):
-        super(Disabled, self).__init__(0)
-
-    @classmethod
-    def from_text(cls, text: str) -> Toggle:
-        return cls(0)
-
-    @classmethod
-    def from_any(cls, data: typing.Any):
-        return cls(0)
-
-
 locations = {"option_" + start: i for i, start in enumerate(starts)}
 # This way the dynamic start names are picked up by the MetaClass Choice belongs to
 StartLocation = type("StartLocation", (Choice,), {"__module__": __name__, "auto_display_name": False, **locations,
@@ -36,6 +23,8 @@ option_docstrings = {
                          "randomization.",
     "RandomizeSkills": "Allow for Skills, such as Mantis Claw or Shade Soul, to be randomized into the item pool. "
                        "Also opens their locations for receiving randomized items.",
+    "RandomizeFocus": "Removes the ability to focus and randomizes it into the item pool.",
+    "RandomizeSwim": "Removes the ability to swim in water and randomizes it into the item pool.",
     "RandomizeCharms": "Allow for Charms to be randomized into the item pool and open their locations for "
                        "randomization. Includes Charms sold in shops.",
     "RandomizeKeys": "Allow for Keys to be randomized into the item pool. Includes those sold in shops.",
@@ -59,6 +48,8 @@ option_docstrings = {
     "RandomizeBossEssence": "Randomize boss essence drops, such as those for defeating Warrior Dreams, into the item "
                             "pool and open their locations for randomization.",
     "RandomizeGrubs": "Randomize Grubs into the item pool and open their locations for randomization.",
+    "RandomizeMimics": "Randomize Mimic Grubs into the item pool and open their locations for randomization."
+                      "Mimic Grubs are always placed in your own game.",
     "RandomizeMaps": "Randomize Maps into the item pool. This causes Cornifer to give you a message allowing you to see"
                      " and buy an item that is randomized into that location as well.",
     "RandomizeStags": "Randomize Stag Stations unlocks into the item pool as well as placing randomized items "
@@ -70,6 +61,7 @@ option_docstrings = {
     "RandomizeJournalEntries": "Randomize the Hunter's Journal as well as the findable journal entries into the item "
                                "pool, and open their locations for randomization. Does not include journal entries "
                                "gained by killing enemies.",
+    "RandomizeNail": "Removes the ability to swing the nail left, right and up, and shuffles these into the item pool.",
     "RandomizeGeoRocks": "Randomize Geo Rock rewards into the item pool and open their locations for randomization.",
     "RandomizeBossGeo": "Randomize boss Geo drops into the item pool and open those locations for randomization.",
     "RandomizeSoulTotems": "Randomize Soul Refill items into the item pool and open the Soul Totem locations for"
@@ -110,12 +102,15 @@ default_on = {
     "RandomizeRelics"
 }
 
-# not supported at this time
-disabled = {
-    "RandomizeFocus",
-    "RandomizeSwim",
-    "RandomizeMimics",
-    "RandomizeNail",
+shop_to_option = {
+    "Seer": "SeerRewardSlots",
+    "Grubfather": "GrubfatherRewardSlots",
+    "Sly": "SlyShopSlots",
+    "Sly_(Key)": "SlyKeyShopSlots",
+    "Iselda": "IseldaShopSlots",
+    "Salubra": "SalubraShopSlots",
+    "Leg_Eater": "LegEaterShopSlots",
+    "Salubra_(Requires_Charms)": "IseldaShopSlots"
 }
 
 hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {}
@@ -124,9 +119,6 @@ for option_name, option_data in pool_options.items():
     extra_data = {"__module__": __name__, "items": option_data[0], "locations": option_data[1]}
     if option_name in option_docstrings:
         extra_data["__doc__"] = option_docstrings[option_name]
-    if option_name in disabled:
-        extra_data["__doc__"] = "Disabled Option. Not implemented."
-        option = type(option_name, (Disabled,), extra_data)
     if option_name in default_on:
         option = type(option_name, (DefaultOnToggle,), extra_data)
     else:
@@ -142,11 +134,34 @@ for option_name in logic_options.values():
     if option_name in option_docstrings:
         extra_data["__doc__"] = option_docstrings[option_name]
         option = type(option_name, (Toggle,), extra_data)
-    if option_name in disabled:
-        extra_data["__doc__"] = "Disabled Option. Not implemented."
-        option = type(option_name, (Disabled,), extra_data)
     globals()[option.__name__] = option
     hollow_knight_logic_options[option.__name__] = option
+
+
+class RandomizeElevatorPass(Toggle):
+    """Adds an Elevator Pass item to the item pool, which is then required to use the large elevators connecting
+    City of Tears to the Forgotten Crossroads and Resting Grounds."""
+    display_name = "Randomize Elevator Pass"
+    default = False
+
+
+class SplitMothwingCloak(Toggle):
+    """Splits the Mothwing Cloak into left- and right-only versions of the item. Randomly adds a second left or
+    right Mothwing cloak item which functions as the upgrade to Shade Cloak."""
+    display_name = "Split Mothwing Cloak"
+    default = False
+
+
+class SplitMantisClaw(Toggle):
+    """Splits the Mantis Claw into left- and right-only versions of the item."""
+    display_name = "Split Mantis Claw"
+    default = False
+
+
+class SplitCrystalHeart(Toggle):
+    """Splits the Crystal Heart into left- and right-only versions of the item."""
+    display_name = "Split Crystal Heart"
+    default = False
 
 
 class MinimumGrubPrice(Range):
@@ -178,7 +193,7 @@ class MaximumEssencePrice(MinimumEssencePrice):
 
 
 class MinimumEggPrice(Range):
-    """The minimum rancid egg price in the range of prices that an item should cost from Ijii.
+    """The minimum rancid egg price in the range of prices that an item should cost from Jiji.
     Only takes effect if the EggSlotShops option is greater than 0."""
     display_name = "Minimum Egg Price"
     range_start = 1
@@ -187,7 +202,7 @@ class MinimumEggPrice(Range):
 
 
 class MaximumEggPrice(MinimumEggPrice):
-    """The maximum rancid egg price in the range of prices that an item should cost from Ijii.
+    """The maximum rancid egg price in the range of prices that an item should cost from Jiji.
     Only takes effect if the EggSlotShops option is greater than 0."""
     display_name = "Maximum Egg Price"
     default = 10
@@ -256,8 +271,80 @@ class PlandoCharmCosts(OptionDict):
         return charm_costs
 
 
+class SlyShopSlots(Range):
+    """For each extra slot, add a location to the Sly Shop and a filler item to the item pool."""
+
+    display_name = "Sly Shop Slots"
+    default = 8
+    range_start = 8
+    range_end = 16
+
+
+class SlyKeyShopSlots(Range):
+    """For each extra slot, add a location to the Sly Shop (requiring Shopkeeper's Key) and a filler item to the item pool."""
+
+    display_name = "Sly Key Shop Slots"
+    default = 6
+    range_start = 6
+    range_end = 16
+
+
+class IseldaShopSlots(Range):
+    """For each extra slot, add a location to the Iselda Shop and a filler item to the item pool."""
+
+    display_name = "Iselda Shop Slots"
+    default = 2
+    range_start = 2
+    range_end = 16
+
+
+class SalubraShopSlots(Range):
+    """For each extra slot, add a location to the Salubra Shop, and a filler item to the item pool."""
+
+    display_name = "Salubra Shop Slots"
+    default = 5
+    range_start = 5
+    range_end = 16
+
+
+class SalubraCharmShopSlots(Range):
+    """For each extra slot, add a location to the Salubra Shop (requiring Charms), and a filler item to the item pool."""
+
+    display_name = "Salubra Charm Shop Slots"
+    default = 5
+    range_start = 5
+    range_end = 16
+
+
+class LegEaterShopSlots(Range):
+    """For each extra slot, add a location to the Leg Eater Shop and a filler item to the item pool."""
+
+    display_name = "Leg Eater Shop Slots"
+    default = 3
+    range_start = 3
+    range_end = 16
+
+
+class GrubfatherRewardSlots(Range):
+    """For each extra slot, add a location to the Grubfather and a filler item to the item pool."""
+
+    display_name = "Grubfather Reward Slots"
+    default = 7
+    range_start = 7
+    range_end = 16
+
+
+class SeerRewardSlots(Range):
+    """For each extra slot, add a location to the Seer and a filler item to the item pool."""
+
+    display_name = "Seer Reward Reward Slots"
+    default = 8
+    range_start = 8
+    range_end = 16
+
+
 class EggShopSlots(Range):
-    """For each slot, add a location to the Egg Shop and a Geo drop to the item pool."""
+    """For each slot, add a location to the Egg Shop and a filler item to the item pool."""
 
     display_name = "Egg Shop Item Slots"
     range_end = 16
@@ -298,20 +385,22 @@ class StartingGeo(Range):
 
 hollow_knight_options: typing.Dict[str, type(Option)] = {
     **hollow_knight_randomize_options,
+    RandomizeElevatorPass.__name__: RandomizeElevatorPass,
     **hollow_knight_logic_options,
-    StartLocation.__name__: StartLocation,
-    MinimumGrubPrice.__name__: MinimumGrubPrice,
-    MaximumGrubPrice.__name__: MaximumGrubPrice,
-    MinimumEssencePrice.__name__: MinimumEssencePrice,
-    MaximumEssencePrice.__name__: MaximumEssencePrice,
-    MinimumCharmPrice.__name__: MinimumCharmPrice,
-    MaximumCharmPrice.__name__: MaximumCharmPrice,
-    RandomCharmCosts.__name__: RandomCharmCosts,
-    PlandoCharmCosts.__name__: PlandoCharmCosts,
-    MinimumEggPrice.__name__: MinimumEggPrice,
-    MaximumEggPrice.__name__: MaximumEggPrice,
-    EggShopSlots.__name__: EggShopSlots,
-    Goal.__name__: Goal,
-    WhitePalace.__name__: WhitePalace,
-    StartingGeo.__name__: StartingGeo,
+    **{
+        option.__name__: option
+        for option in (
+            StartLocation, Goal, WhitePalace, StartingGeo,
+            MinimumGrubPrice, MaximumGrubPrice,
+            MinimumEssencePrice, MaximumEssencePrice,
+            MinimumCharmPrice, MaximumCharmPrice,
+            RandomCharmCosts, PlandoCharmCosts,
+            MinimumEggPrice, MaximumEggPrice, EggShopSlots,
+            SlyShopSlots, SlyKeyShopSlots, IseldaShopSlots,
+            SalubraShopSlots, SalubraCharmShopSlots,
+            LegEaterShopSlots, GrubfatherRewardSlots,
+            SeerRewardSlots, SplitCrystalHeart,
+            SplitMothwingCloak, SplitMantisClaw
+        )
+    }
 }
