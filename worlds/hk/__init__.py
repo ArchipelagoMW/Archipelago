@@ -233,9 +233,6 @@ class HKWorld(World):
                 else:
                     pool.append(item)
 
-                if location_name in wp_exclusions:
-                    print(f"World {self.world.player_name[self.player]} - Item {item_name} - Location {location_name} - vanilla={vanilla!r}, excluded={excluded!r}")
-
         for i in range(self.world.EggShopSlots[self.player].value):
             self.create_location("Egg_Shop")
             pool.append(self.create_item("Geo_Rock-Default"))
