@@ -52,7 +52,10 @@ class StaticWitnessLogic:
 
                 line_split = line.split(" - ")
 
-                current_set.add((line_split[1], int(line_split[0])))
+                if current_set is not self.ALL_USEFULS:
+                    current_set.add((line_split[1], int(line_split[0])))
+                else:
+                    current_set.add((line_split[1], int(line_split[0]), line_split[2] == "True"))
 
         path = os.path.join(os.path.dirname(__file__), "Door_Shuffle.txt")
         with open(path, "r", encoding="utf-8") as file:

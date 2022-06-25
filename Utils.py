@@ -12,6 +12,7 @@ import io
 import collections
 import importlib
 import logging
+import decimal
 
 if typing.TYPE_CHECKING:
     from tkinter import Tk
@@ -494,17 +495,25 @@ class VersionException(Exception):
     pass
 
 
+def chaining_prefix(index: int, labels: typing.Tuple[str]) -> str:
+    text = ""
+    max_label = len(labels) - 1
+    while index > max_label:
+        text += labels[-1]
+        index -= max_label
+    return labels[index] + text
+
+
 # noinspection PyPep8Naming
 def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")) -> str:
+    """Formats a value into a value + metric/si prefix. More info at https://en.wikipedia.org/wiki/Metric_prefix"""
     n = 0
-
-    while value > power:
+    value = decimal.Decimal(value)
+    while value >= power:
         value /= power
         n += 1
-    if type(value) == int:
-        return f"{value} {power_labels[n]}"
-    else:
-        return f"{value:0.3f} {power_labels[n]}"
+
+    return f"{value.quantize(decimal.Decimal('1.00'))} {chaining_prefix(n, power_labels)}"
 
 
 def get_fuzzy_ratio(word1: str, word2: str) -> float:
@@ -559,6 +568,9 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
+    def run(*args: str):
+        return subprocess.run(args, capture_output=True, text=True).stdout.split('\n', 1)[0] or None
+
     def is_kivy_running():
         if 'kivy' in sys.modules:
             from kivy.app import App
@@ -569,6 +581,15 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         from kvui import MessageBox
         MessageBox(title, text, error).open()
         return
+
+    if is_linux and not 'tkinter' in sys.modules:
+        # prefer native dialog
+        kdialog = shutil.which('kdialog')
+        if kdialog:
+            return run(kdialog, f'--title={title}', '--error' if error else '--msgbox', text)
+        zenity = shutil.which('zenity')
+        if zenity:
+            return run(zenity, f'--title={title}', f'--text={text}', '--error' if error else '--info')
 
     # fall back to tk
     try:
