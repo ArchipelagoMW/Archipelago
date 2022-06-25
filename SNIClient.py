@@ -18,7 +18,7 @@ from json import loads, dumps
 import ModuleUpdate
 ModuleUpdate.update()
 
-from Utils import init_logging
+from Utils import init_logging, messagebox
 
 if __name__ == "__main__":
     init_logging("SNIClient", exception_logger="Client")
@@ -1303,7 +1303,11 @@ async def main():
     if args.diff_file:
         import Patch
         logging.info("Patch file was supplied. Creating sfc rom..")
-        meta, romfile = Patch.create_rom_file(args.diff_file)
+        try:
+            meta, romfile = Patch.create_rom_file(args.diff_file)
+        except Exception as e:
+            messagebox('Error', str(e), True)
+            raise
         if "server" in meta:
             args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
@@ -1366,8 +1370,13 @@ def get_alttp_settings(romfile: str):
 
             if gui_enabled:
 
-                from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
-                applyPromptWindow = Tk()
+                try:
+                    from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
+                    applyPromptWindow = Tk()
+                except Exception as e:
+                    logging.error('Could not load tkinter, which is likely not installed.')
+                    return '', False
+
                 applyPromptWindow.resizable(False, False)
                 applyPromptWindow.protocol('WM_DELETE_WINDOW', lambda: onButtonClick())
                 logo = PhotoImage(file=Utils.local_path('data', 'icon.png'))
