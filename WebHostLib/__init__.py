@@ -46,7 +46,7 @@ app.config["PONY"] = {
     'create_db': True
 }
 app.config["MAX_ROLL"] = 20
-app.config["CACHE_TYPE"] = "simple"
+app.config["CACHE_TYPE"] = "flask_caching.backends.SimpleCache"
 app.config["JSON_AS_ASCII"] = False
 app.config["PATCH_TARGET"] = "archipelago.gg"
 
@@ -170,7 +170,12 @@ def _read_log(path: str):
 
 @app.route('/log/<suuid:room>')
 def display_log(room: UUID):
-    return Response(_read_log(os.path.join("logs", str(room) + ".txt")), mimetype="text/plain;charset=UTF-8")
+    room = Room.get(id=room)
+    if room is None:
+        return abort(404)
+    if room.owner == session["_id"]:
+        return Response(_read_log(os.path.join("logs", str(room.id) + ".txt")), mimetype="text/plain;charset=UTF-8")
+    return "Access Denied", 403
 
 
 @app.route('/room/<suuid:room>', methods=['GET', 'POST'])

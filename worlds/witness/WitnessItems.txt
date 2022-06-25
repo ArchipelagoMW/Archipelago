@@ -13,6 +13,10 @@ Progression:
 71 - Black/White Squares
 72 - Colored Squares
 
+Usefuls:
+101 - Functioning Brain
+510 - Puzzle Skip
+
 Boosts:
 500 - Speed Boost
 

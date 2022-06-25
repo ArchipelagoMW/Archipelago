@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import functools
-import logging
 import websockets
 import asyncio
 import socket
@@ -9,6 +8,7 @@ import threading
 import time
 import random
 import pickle
+import logging
 
 import Utils
 from .models import *
@@ -128,15 +128,21 @@ def run_server_process(room_id, ponyconfig: dict):
                                           ping_interval=None)
 
             await ctx.server
+        port = 0
         for wssocket in ctx.server.ws_server.sockets:
             socketname = wssocket.getsockname()
             if wssocket.family == socket.AF_INET6:
                 logging.info(f'Hosting game at [{get_public_ipv6()}]:{socketname[1]}')
-                with db_session:
-                    room = Room.get(id=ctx.room_id)
-                    room.last_port = socketname[1]
+                # Prefer IPv4, as most users seem to not have working ipv6 support
+                if not port:
+                    port = socketname[1]
             elif wssocket.family == socket.AF_INET:
                 logging.info(f'Hosting game at {get_public_ipv4()}:{socketname[1]}')
+                port = socketname[1]
+        if port:
+            with db_session:
+                room = Room.get(id=ctx.room_id)
+                room.last_port = port
         with db_session:
             ctx.auto_shutdown = Room.get(id=room_id).timeout
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
@@ -146,6 +152,3 @@ def run_server_process(room_id, ponyconfig: dict):
     from .autolauncher import Locker
     with Locker(room_id):
         asyncio.run(main())
-
-
-from WebHostLib import LOGS_FOLDER
