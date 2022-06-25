@@ -7,6 +7,7 @@ from .Names import ItemName
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     progression: bool
+    trap: bool = False
     quantity: int = 1
     event: bool = False
 
@@ -62,6 +63,23 @@ upgrades_table = {
     ItemName.rouge_iron_boots:     ItemData(0xFF001C, True),
 }
 
+junk_table = {
+    ItemName.five_rings:      ItemData(0xFF0020, False),
+    ItemName.ten_rings:       ItemData(0xFF0021, False),
+    ItemName.twenty_rings:    ItemData(0xFF0022, False),
+    ItemName.extra_life:      ItemData(0xFF0023, False),
+    ItemName.shield:          ItemData(0xFF0024, False),
+    ItemName.magnetic_shield: ItemData(0xFF0025, False),
+    ItemName.invincibility:   ItemData(0xFF0026, False),
+}
+
+trap_table = {
+    ItemName.omochao_trap:  ItemData(0xFF0030, False, True),
+    ItemName.timestop_trap: ItemData(0xFF0031, False, True),
+    ItemName.confuse_trap:  ItemData(0xFF0032, False, True),
+    ItemName.tiny_trap:     ItemData(0xFF0033, False, True),
+}
+
 event_table = {
     ItemName.maria: ItemData(0xFF001D, True),
 }
@@ -70,6 +88,8 @@ event_table = {
 item_table = {
     **emblems_table,
     **upgrades_table,
+    **junk_table,
+    **trap_table,
     **event_table,
 }
 

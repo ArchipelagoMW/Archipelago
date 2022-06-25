@@ -3,7 +3,7 @@
 ## Required Software
 
 - Sonic Adventure 2: Battle from: [Sonic Adventure 2: Battle Steam Store Page](https://store.steampowered.com/app/213610/Sonic_Adventure_2/)
-	- Currently the DLC is not required for this mod, but it will be required in a future release.
+	- The Battle DLC is required if you choose to add Chao Karate locations to the randomizer
 - Sonic Adventure 2 Mod Loader from: [Sonic Retro Mod Loader Page](http://info.sonicretro.org/SA2_Mod_Loader)
 - Microsoft Visual C++ 2013 from: [Microsoft Visual C++ 2013 Redistributable Page](https://www.microsoft.com/en-us/download/details.aspx?id=40784)
 - Archipelago Mod for Sonic Adventure 2: Battle
@@ -13,6 +13,8 @@
 - Sonic Adventure 2 Tracker
 	- PopTracker from: [PopTracker Releases Page](https://github.com/black-sliver/PopTracker/releases/)
 	- Sonic Adventure 2: Battle Archipelago PopTracker pack from: [SA2B AP Tracker Releases Page](https://github.com/PoryGone/SA2B_AP_Tracker/releases/)
+- Quality of life mods
+	- SA2 Volume Controls from: [SA2 Volume Controls Release Page] (https://gamebanana.com/mods/381193)
 
 ## Installation Procedures
 
@@ -48,16 +50,24 @@
 
 Some additional settings related to the Archipelago messages in game can be adjusted in the SA2ModManager if you select `Configure...` on the SA2B_Archipelago mod. This settings will be under a `General Settings` tab.
 	
-	- Message Display Count: This is the maximum number of Archipelago messages that can be displayed on screen at any given time.
-	- Message Display Duration: This dictates how long Archipelago messages are displayed on screen (in seconds).
-	- Message Font Size: The is the size of the font used to display the messages from Archipelago.
+- Message Display Count: This is the maximum number of Archipelago messages that can be displayed on screen at any given time.
+- Message Display Duration: This dictates how long Archipelago messages are displayed on screen (in seconds).
+- Message Font Size: The is the size of the font used to display the messages from Archipelago.
 
 ## Troubleshooting
 
 - "The following mods didn't load correctly: SA2B_Archipelago: DLL error - The specified module could not be found."
 	- Make sure the `APCpp.dll` is in the same folder as the `sonic2app.exe`. (See Installation Procedures step 6)
+	
+- "sonic2app.exe - Entry Point Not Found"
+	- Make sure the `APCpp.dll` is up to date. Follow Installation Procedures step 6 to update the dll.
 
 - Game is running too fast (Like Sonic).
+	- Limit framerate using the mod manager:
+		1. Launch `SA2ModManager.exe`.
+		2. Select the `Graphics` tab.
+		3. Check the `Lock framerate` box under the Visuals section.
+		4. Press the `Save` button.
 	- If using an NVidia graphics card:
 		1. Open the NVIDIA Control Panel.
 		2. Select `Manage 3D Settings` under `3D settings` on the left.
