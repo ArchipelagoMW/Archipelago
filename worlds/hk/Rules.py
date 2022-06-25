@@ -27,7 +27,7 @@ def set_shop_prices(hk_world):
     for shop, unit in hk_world.shops.items():
         for i in range(1, 1 + hk_world.created_multi_locations[shop]):
             loc = hk_world.world.get_location(f"{shop}_{i}", hk_world.player)
-            add_rule(loc, lambda state, unit=units[unit], cost=loc.cost: state.count(unit, player) > cost)
+            add_rule(loc, lambda state, unit=units[unit], cost=loc.cost: state.count(unit, player) >= cost)
 
 
 def set_rules(hk_world):
@@ -52,8 +52,8 @@ def set_rules(hk_world):
     hk_set_rule(hk_world, "Warp-Path_of_Pain_Complete", lambda state: state.count('White_Palace_20[bot1]', player) and state.count('Completed_Path_of_Pain', player))
     hk_set_rule(hk_world, "Upper_Tram", lambda state: state.count('TRAM', player) and (state.count('Crossroads_46[left1]', player) or state.count('Crossroads_46b[right1]', player)))
     hk_set_rule(hk_world, "Lower_Tram", lambda state: state.count('TRAM', player) and (state.count('Abyss_03', player) or state.count('Abyss_03_b', player) or state.count('Abyss_03_c', player)))
-    hk_set_rule(hk_world, "Left_Elevator", lambda state: (state.count('Crossroads_49[left1]', player) or state.count('Crossroads_49[right1]', player) or state.count('Crossroads_49b[right1]', player)) and (state.count('Crossroads_49b[right1]', player) and False == 0 or state.count('Elevator_Pass', player)))
-    hk_set_rule(hk_world, "Right_Elevator", lambda state: (state.count('Ruins2_10[right1]', player) or state.count('Ruins2_10[left1]', player) or state.count('Ruins2_10b[right1]', player) or state.count('Ruins2_10b[right2]', player) or state.count('Ruins2_10b[left1]', player)) and (False == 0 or state.count('Elevator_Pass', player)))
+    hk_set_rule(hk_world, "Left_Elevator", lambda state: (state.count('Crossroads_49[left1]', player) or state.count('Crossroads_49[right1]', player) or state.count('Crossroads_49b[right1]', player)) and (state.count('Crossroads_49b[right1]', player) and state._hk_option(player, 'RandomizeElevatorPass') == 0 or state.count('Elevator_Pass', player)))
+    hk_set_rule(hk_world, "Right_Elevator", lambda state: (state.count('Ruins2_10[right1]', player) or state.count('Ruins2_10[left1]', player) or state.count('Ruins2_10b[right1]', player) or state.count('Ruins2_10b[right2]', player) or state.count('Ruins2_10b[left1]', player)) and (state._hk_option(player, 'RandomizeElevatorPass') == 0 or state.count('Elevator_Pass', player)))
     hk_set_rule(hk_world, "Defeated_Gruz_Mother", lambda state: (state.count('Crossroads_04[left1]', player) or state.count('Crossroads_04[top1]', player) or state.count('Crossroads_04[door_Mender_House]', player) or state.count('Crossroads_04[door1]', player) or state.count('Crossroads_04[door_charmshop]', player) or state.count('Crossroads_04[right1]', player)) and True)
     hk_set_rule(hk_world, "Defeated_False_Knight", lambda state: (state.count('Crossroads_10[right1]', player) or (state.count('Crossroads_10[left1]', player) and (state.count('LEFTCLAW', player) or state.count('RIGHTCLAW', player)))) and True)
     hk_set_rule(hk_world, "Defeated_Brooding_Mawlek", lambda state: (state.count('Crossroads_09[left1]', player) or state.count('Crossroads_09[right1]', player)) and ((state.count('SPELLS', player) or (state._hk_option(player, 'ProficientCombat') and state._hk_option(player, 'DifficultSkips'))) and ((state.count('LEFTSLASH', player) or state.count('RIGHTSLASH', player)) or state.count('UPSLASH', player) or ((state.count('CYCLONE', player) or state.count('Great_Slash', player)) and state._hk_option(player, 'ProficientCombat')) or (state._hk_option(player, 'ProficientCombat') and state._hk_option(player, 'DifficultSkips')))))

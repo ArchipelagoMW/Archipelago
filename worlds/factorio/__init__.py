@@ -5,7 +5,7 @@ from ..AutoWorld import World, WebWorld
 
 from BaseClasses import Region, Entrance, Location, Item, RegionType, Tutorial, ItemClassification
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
-    all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, rocket_recipes, \
+    all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
     fluids, stacking_items
