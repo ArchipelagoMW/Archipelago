@@ -17,7 +17,7 @@ from .Options import sm_options
 from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch
 import Utils
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, Tutorial
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
 from logic.smboolmanager import SMBoolManager
@@ -93,12 +93,11 @@ class SMWorld(World):
 
     itemManager: ItemManager
 
-    locations = {}
-
     Logic.factory('vanilla')
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
+        self.locations = {}
         super().__init__(world, player)
 
     @classmethod
@@ -142,6 +141,7 @@ class SMWorld(World):
         # Generate item pool
         pool = []
         self.locked_items = {}
+        self.NothingPool = []
         weaponCount = [0, 0, 0]
         for item in itemPool:
             isAdvancement = True
@@ -164,9 +164,12 @@ class SMWorld(World):
                 isAdvancement = False
 
             itemClass = ItemManager.Items[item.Type].Class
-            smitem = SMItem(item.Name, isAdvancement, item.Type, None if itemClass == 'Boss' else self.item_name_to_id[item.Name], player = self.player)
+            smitem = SMItem(item.Name, ItemClassification.progression if isAdvancement else ItemClassification.filler,
+                            item.Type, None if itemClass == 'Boss' else self.item_name_to_id[item.Name], player=self.player)
             if itemClass == 'Boss':
                 self.locked_items[item.Name] = smitem
+            elif item.Category == 'Nothing':
+                self.NothingPool.append(smitem)
             else:
                 pool.append(smitem)
 
@@ -182,7 +185,8 @@ class SMWorld(World):
         for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions:
             src_region = self.world.get_region(src.Name, self.player)
             dest_region = self.world.get_region(dest.Name, self.player)
-            src_region.exits.append(Entrance(self.player, src.Name + "->" + dest.Name, src_region))
+            if ((src.Name + "->" + dest.Name, self.player) not in self.world._entrance_cache):
+                src_region.exits.append(Entrance(self.player, src.Name + "->" + dest.Name, src_region))
             srcDestEntrance = self.world.get_entrance(src.Name + "->" + dest.Name, self.player)
             srcDestEntrance.connect(dest_region)
             add_entrance_rule(self.world.get_entrance(src.Name + "->" + dest.Name, self.player), self.player, getAccessPoint(src.Name).traverse)
@@ -523,7 +527,8 @@ class SMWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = next(x for x in ItemManager.Items.values() if x.Name == name)
-        return SMItem(item.Name, True, item.Type, self.item_name_to_id[item.Name], player = self.player)
+        return SMItem(item.Name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Name],
+                      player=self.player)
 
     def get_filler_item_name(self) -> str:
         if self.world.random.randint(0, 100) < self.world.minor_qty[self.player].value:
@@ -556,6 +561,28 @@ class SMWorld(World):
                                         item.player != self.player or
                                         item.name != "Morph Ball"] 
 
+        if len(self.NothingPool) > 0:
+            nonChozoLoc = []
+            chozoLoc = []
+
+            for loc in self.locations.values():
+                if loc.item is None:
+                    if locationsDict[loc.name].isChozo():
+                        chozoLoc.append(loc)
+                    else:
+                        nonChozoLoc.append(loc)
+
+            self.world.random.shuffle(nonChozoLoc)
+            self.world.random.shuffle(chozoLoc)
+            missingCount = len(self.NothingPool) - len(nonChozoLoc)
+            locations = nonChozoLoc
+            if (missingCount > 0):
+                locations += chozoLoc[:missingCount]
+            locations = locations[:len(self.NothingPool)]
+            for item, loc in zip(self.NothingPool, locations):
+                loc.place_locked_item(item)
+                loc.address = loc.item.code = None
+
     @classmethod
     def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
                         restitempool, fill_locations):      
@@ -580,11 +607,6 @@ class SMWorld(World):
                 if not world.get_location(bossLoc, player).can_reach(new_state):
                     world.state.smbm[player].onlyBossLeft = True
                     break
-
-        # Turn Nothing items into event pairs.
-        for location in world.get_locations():
-            if location.game == location.item.game == "Super Metroid" and location.item.type == "Nothing":
-                location.address = location.item.code = None
 
     def write_spoiler(self, spoiler_handle: TextIO):
         if self.world.area_randomization[self.player].value != 0:
@@ -627,12 +649,23 @@ class SMLocation(Location):
         super(SMLocation, self).__init__(player, name, address, parent)
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
+        return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or (self.can_reach(state) and self.can_comeback(state, item))))
+
+    def can_comeback(self, state: CollectionState, item: Item):
+        randoExec = state.world.worlds[self.player].variaRando.randoExec
+        for key in locationsDict[self.name].AccessFrom.keys():
+            if (randoExec.areaGraph.canAccess(  state.smbm[self.player], 
+                                                key,
+                                                randoExec.graphSettings.startAP,
+                                                state.smbm[self.player].maxDiff,
+                                                None)):
+                return True
+        return False
 
 
 class SMItem(Item):
     game = "Super Metroid"
 
-    def __init__(self, name, advancement, type, code, player: int = None):
-        super(SMItem, self).__init__(name, advancement, code, player)
+    def __init__(self, name, classification, type, code, player: int = None):
+        super(SMItem, self).__init__(name, classification, code, player)
         self.type = type

@@ -3,16 +3,21 @@ from __future__ import annotations
 import multiprocessing
 import logging
 import asyncio
-import nest_asyncio
+import os.path
 
+import nest_asyncio
 import sc2
 
 from sc2.main import run_game
 from sc2.data import Race
 from sc2.bot_ai import BotAI
 from sc2.player import Bot
+
+from worlds.sc2wol.Regions import MissionInfo
+from worlds.sc2wol.MissionTables import lookup_id_to_mission
 from worlds.sc2wol.Items import lookup_id_to_name, item_table
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
+from worlds.sc2wol import SC2WoLWorld
 
 from Utils import init_logging
 
@@ -31,7 +36,13 @@ nest_asyncio.apply()
 
 
 class StarcraftClientProcessor(ClientCommandProcessor):
-    ctx: Context
+    ctx: SC2Context
+
+    def _cmd_disable_mission_check(self) -> bool:
+        """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
+        the next mission in a chain the other player is doing."""
+        self.ctx.missions_unlocked = True
+        sc2_logger.info("Mission check has been disabled")
 
     def _cmd_play(self, mission_id: str = "") -> bool:
         """Start a Starcraft 2 mission"""
@@ -42,19 +53,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if num_options > 0:
             mission_number = int(options[0])
 
-            if is_mission_available(mission_number, self.ctx.checked_locations, mission_req_table):
-                if self.ctx.sc2_run_task:
-                    if not self.ctx.sc2_run_task.done():
-                        sc2_logger.warning("Starcraft 2 Client is still running!")
-                    self.ctx.sc2_run_task.cancel()  # doesn't actually close the game, just stops the python task
-                if self.ctx.slot is None:
-                    sc2_logger.warning("Launching Mission without Archipelago authentication, "
-                                       "checks will not be registered to server.")
-                self.ctx.sc2_run_task = asyncio.create_task(starcraft_launch(self.ctx, mission_number),
-                                                            name="Starcraft 2 Launch")
-            else:
-                sc2_logger.info(
-                    "This mission is not currently unlocked.  Use /unfinished or /available to see what is available.")
+            self.ctx.play_mission(mission_number)
 
         else:
             sc2_logger.info(
@@ -65,22 +64,23 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_available(self) -> bool:
         """Get what missions are currently available to play"""
 
-        request_available_missions(self.ctx.checked_locations, mission_req_table, self.ctx.ui)
+        request_available_missions(self.ctx.checked_locations, self.ctx.mission_req_table, self.ctx.ui)
         return True
 
     def _cmd_unfinished(self) -> bool:
         """Get what missions are currently available to play and have not had all locations checked"""
 
-        request_unfinished_missions(self.ctx.checked_locations, mission_req_table, self.ctx.ui)
+        request_unfinished_missions(self.ctx.checked_locations, self.ctx.mission_req_table, self.ctx.ui, self.ctx)
         return True
 
 
-class Context(CommonContext):
+class SC2Context(CommonContext):
     command_processor = StarcraftClientProcessor
     game = "Starcraft 2 Wings of Liberty"
     items_handling = 0b111
     difficulty = -1
     all_in_choice = 0
+    mission_req_table = None
     items_rec_to_announce = []
     rec_announce_pos = 0
     items_sent_to_announce = []
@@ -88,10 +88,13 @@ class Context(CommonContext):
     announcements = []
     announcement_pos = 0
     sc2_run_task: typing.Optional[asyncio.Task] = None
+    missions_unlocked = False
+    current_tooltip = None
+    last_loc_list = None
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
-            await super(Context, self).server_auth(password_requested)
+            await super(SC2Context, self).server_auth(password_requested)
         if not self.auth:
             logger.info('Enter slot name:')
             self.auth = await self.console_input()
@@ -102,18 +105,77 @@ class Context(CommonContext):
         if cmd in {"Connected"}:
             self.difficulty = args["slot_data"]["game_difficulty"]
             self.all_in_choice = args["slot_data"]["all_in_map"]
+            slot_req_table = args["slot_data"]["mission_req"]
+            self.mission_req_table = {}
+            # Compatibility for 0.3.2 server data.
+            if "category" not in next(iter(slot_req_table)):
+                for i, mission_data in enumerate(slot_req_table.values()):
+                    mission_data["category"] = wol_default_categories[i]
+            for mission in slot_req_table:
+                self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
+
         if cmd in {"PrintJSON"}:
-            noted = False
             if "receiving" in args:
-                if args["receiving"] == self.slot:
+                if self.slot_concerns_self(args["receiving"]):
                     self.announcements.append(args["data"])
-                    noted = True
-            if not noted and "item" in args:
-                if args["item"].player == self.slot:
+                    return
+            if "item" in args:
+                if self.slot_concerns_self(args["item"].player):
                     self.announcements.append(args["data"])
 
     def run_gui(self):
-        from kvui import GameManager
+        from kvui import GameManager, HoverBehavior, ServerToolTip, fade_in_animation
+        from kivy.app import App
+        from kivy.clock import Clock
+        from kivy.uix.tabbedpanel import TabbedPanelItem
+        from kivy.uix.gridlayout import GridLayout
+        from kivy.lang import Builder
+        from kivy.uix.label import Label
+        from kivy.uix.button import Button
+        from kivy.uix.floatlayout import FloatLayout
+        from kivy.properties import StringProperty
+
+        import Utils
+
+        class HoverableButton(HoverBehavior, Button):
+            pass
+
+        class MissionButton(HoverableButton):
+            tooltip_text = StringProperty("Test")
+
+            def __init__(self, *args, **kwargs):
+                super(HoverableButton, self).__init__(*args, **kwargs)
+                self.layout = FloatLayout()
+                self.popuplabel = ServerToolTip(text=self.text)
+                self.layout.add_widget(self.popuplabel)
+
+            def on_enter(self):
+                self.popuplabel.text = self.tooltip_text
+
+                if self.ctx.current_tooltip:
+                    App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
+
+                if self.tooltip_text == "":
+                    self.ctx.current_tooltip = None
+                else:
+                    App.get_running_app().root.add_widget(self.layout)
+                    self.ctx.current_tooltip = self.layout
+
+            def on_leave(self):
+                if self.ctx.current_tooltip:
+                    App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
+
+                self.ctx.current_tooltip = None
+
+            @property
+            def ctx(self) -> CommonContext:
+                return App.get_running_app().ctx
+
+        class MissionLayout(GridLayout):
+            pass
+
+        class MissionCategory(GridLayout):
+            pass
 
         class SC2Manager(GameManager):
             logging_pairs = [
@@ -122,13 +184,137 @@ class Context(CommonContext):
             ]
             base_title = "Archipelago Starcraft 2 Client"
 
+            mission_panel = None
+            last_checked_locations = {}
+            mission_id_to_button = {}
+            launching = False
+            refresh_from_launching = True
+            first_check = True
+
+            def __init__(self, ctx):
+                super().__init__(ctx)
+
+            def build(self):
+                container = super().build()
+
+                panel = TabbedPanelItem(text="Starcraft 2 Launcher")
+                self.mission_panel = panel.content = MissionLayout()
+
+                self.tabs.add_widget(panel)
+
+                Clock.schedule_interval(self.build_mission_table, 0.5)
+
+                return container
+
+            def build_mission_table(self, dt):
+                if (not self.launching and (not self.last_checked_locations == self.ctx.checked_locations or
+                                           not self.refresh_from_launching)) or self.first_check:
+                    self.refresh_from_launching = True
+
+                    self.mission_panel.clear_widgets()
+
+                    if self.ctx.mission_req_table:
+                        self.last_checked_locations = self.ctx.checked_locations.copy()
+                        self.first_check = False
+
+                        self.mission_id_to_button = {}
+                        categories = {}
+                        available_missions = []
+                        unfinished_locations = initialize_blank_mission_dict(self.ctx.mission_req_table)
+                        unfinished_missions = calc_unfinished_missions(self.ctx.checked_locations,
+                                                                       self.ctx.mission_req_table,
+                                                                       self.ctx, available_missions=available_missions,
+                                                                       unfinished_locations=unfinished_locations)
+
+                        # separate missions into categories
+                        for mission in self.ctx.mission_req_table:
+                            if not self.ctx.mission_req_table[mission].category in categories:
+                                categories[self.ctx.mission_req_table[mission].category] = []
+
+                            categories[self.ctx.mission_req_table[mission].category].append(mission)
+
+                        for category in categories:
+                            category_panel = MissionCategory()
+                            category_panel.add_widget(Label(text=category, size_hint_y=None, height=50, outline_width=1))
+
+                            # Map is completed
+                            for mission in categories[category]:
+                                text = mission
+                                tooltip = ""
+
+                                # Map has uncollected locations
+                                if mission in unfinished_missions:
+                                    text = f"[color=6495ED]{text}[/color]"
+
+                                    tooltip = f"Uncollected locations:\n"
+                                    tooltip += "\n".join(location for location in unfinished_locations[mission])
+                                elif mission in available_missions:
+                                    text = f"[color=FFFFFF]{text}[/color]"
+                                # Map requirements not met
+                                else:
+                                    text = f"[color=a9a9a9]{text}[/color]"
+                                    tooltip = f"Requires: "
+                                    if len(self.ctx.mission_req_table[mission].required_world) > 0:
+                                        tooltip += ", ".join(list(self.ctx.mission_req_table)[req_mission-1] for
+                                                             req_mission in
+                                                             self.ctx.mission_req_table[mission].required_world)
+
+                                        if self.ctx.mission_req_table[mission].number > 0:
+                                            tooltip += " and "
+                                    if self.ctx.mission_req_table[mission].number > 0:
+                                        tooltip += f"{self.ctx.mission_req_table[mission].number} missions completed"
+
+                                mission_button = MissionButton(text=text, size_hint_y=None, height=50)
+                                mission_button.tooltip_text = tooltip
+                                mission_button.bind(on_press=self.mission_callback)
+                                self.mission_id_to_button[self.ctx.mission_req_table[mission].id] = mission_button
+                                category_panel.add_widget(mission_button)
+
+                            category_panel.add_widget(Label(text=""))
+                            self.mission_panel.add_widget(category_panel)
+
+                elif self.launching:
+                    self.refresh_from_launching = False
+
+                    self.mission_panel.clear_widgets()
+                    self.mission_panel.add_widget(Label(text="Launching Mission"))
+
+            def mission_callback(self, button):
+                if not self.launching:
+                    self.ctx.play_mission(list(self.mission_id_to_button.keys())
+                                          [list(self.mission_id_to_button.values()).index(button)])
+                    self.launching = True
+                    Clock.schedule_once(self.finish_launching, 10)
+
+            def finish_launching(self, dt):
+                self.launching = False
+
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+        Builder.load_file(Utils.local_path(os.path.dirname(SC2WoLWorld.__file__), "Starcraft2.kv"))
+
     async def shutdown(self):
-        await super(Context, self).shutdown()
+        await super(SC2Context, self).shutdown()
         if self.sc2_run_task:
             self.sc2_run_task.cancel()
+
+    def play_mission(self, mission_id):
+        if self.missions_unlocked or \
+                is_mission_available(mission_id, self.checked_locations, self.mission_req_table):
+            if self.sc2_run_task:
+                if not self.sc2_run_task.done():
+                    sc2_logger.warning("Starcraft 2 Client is still running!")
+                self.sc2_run_task.cancel()  # doesn't actually close the game, just stops the python task
+            if self.slot is None:
+                sc2_logger.warning("Launching Mission without Archipelago authentication, "
+                                   "checks will not be registered to server.")
+            self.sc2_run_task = asyncio.create_task(starcraft_launch(self, mission_id),
+                                                        name="Starcraft 2 Launch")
+        else:
+            sc2_logger.info(
+                f"{lookup_id_to_mission[mission_id]} is not currently unlocked.  "
+                f"Use /unfinished or /available to see what is available.")
 
 
 async def main():
@@ -137,7 +323,7 @@ async def main():
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     args = parser.parse_args()
 
-    ctx = Context(args.connect, args.password)
+    ctx = SC2Context(args.connect, args.password)
     ctx.auth = args.name
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
@@ -148,8 +334,6 @@ async def main():
 
     await ctx.exit_event.wait()
 
-    ctx.server_address = None
-    ctx.snes_reconnect_address = None
     await ctx.shutdown()
 
 
@@ -161,6 +345,13 @@ maps_table = [
     "ap_thorner01", "ap_thorner02", "ap_thorner03", "ap_thorner04", "ap_thorner05s",
     "ap_tzeratul01", "ap_tzeratul02", "ap_tzeratul03", "ap_tzeratul04",
     "ap_tvalerian01", "ap_tvalerian02a", "ap_tvalerian02b", "ap_tvalerian03"
+]
+
+wol_default_categories = [
+    "Mar Sara", "Mar Sara", "Mar Sara", "Colonist", "Colonist", "Colonist", "Colonist",
+    "Artifact", "Artifact", "Artifact", "Artifact", "Artifact", "Covert", "Covert", "Covert", "Covert",
+    "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Prophecy", "Prophecy", "Prophecy", "Prophecy",
+    "Char", "Char", "Char", "Char"
 ]
 
 
@@ -175,6 +366,7 @@ def calculate_items(items):
     protoss_unlock = 0
     minerals = 0
     vespene = 0
+    supply = 0
 
     for item in items:
         data = lookup_id_to_name[item.item]
@@ -199,9 +391,11 @@ def calculate_items(items):
             minerals += item_table[data].number
         elif item_table[data].type == "Vespene":
             vespene += item_table[data].number
+        elif item_table[data].type == "Supply":
+            supply += item_table[data].number
 
     return [unit_unlocks, upgrade_unlocks, armory1_unlocks, armory2_unlocks, building_unlocks, merc_unlocks,
-            lab_unlocks, protoss_unlock, minerals, vespene]
+            lab_unlocks, protoss_unlock, minerals, vespene, supply]
 
 
 def calc_difficulty(difficulty):
@@ -217,15 +411,15 @@ def calc_difficulty(difficulty):
     return 'X'
 
 
-async def starcraft_launch(ctx: Context, mission_id):
+async def starcraft_launch(ctx: SC2Context, mission_id):
     ctx.rec_announce_pos = len(ctx.items_rec_to_announce)
     ctx.sent_announce_pos = len(ctx.items_sent_to_announce)
     ctx.announcements_pos = len(ctx.announcements)
 
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
 
-    run_game(sc2.maps.get(maps_table[mission_id - 1]), [
-        Bot(Race.Terran, ArchipelagoBot(ctx, mission_id), name="Archipelago", fullscreen=True)], realtime=True)
+    run_game(sc2.maps.get(maps_table[mission_id - 1]), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
+                                                            name="Archipelago", fullscreen=True)], realtime=True)
 
 
 class ArchipelagoBot(sc2.bot_ai.BotAI):
@@ -239,14 +433,14 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     sixth_bonus = False
     seventh_bonus = False
     eight_bonus = False
-    ctx: Context = None
+    ctx: SC2Context = None
     mission_id = 0
 
     can_read_game = False
 
     last_received_update = 0
 
-    def __init__(self, ctx: Context, mission_id):
+    def __init__(self, ctx: SC2Context, mission_id):
         self.ctx = ctx
         self.mission_id = mission_id
 
@@ -257,11 +451,11 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
         if iteration == 0:
             start_items = calculate_items(self.ctx.items_received)
             difficulty = calc_difficulty(self.ctx.difficulty)
-            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
                 start_items[5], start_items[6], start_items[7], start_items[8], start_items[9],
-                self.ctx.all_in_choice))
+                self.ctx.all_in_choice, start_items[10]))
             self.last_received_update = len(self.ctx.items_received)
 
         else:
@@ -302,7 +496,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     game_state = int(38281 - unit.health)
                     self.can_read_game = True
 
-            if iteration == 80 and not game_state & 1:
+            if iteration == 160 and not game_state & 1:
                 await self.chat_send("SendMessage Warning: Archipelago unable to connect or has lost connection to " +
                                      "Starcraft 2 (This is likely a map issue)")
 
@@ -390,58 +584,16 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     await self.chat_send("LostConnection - Lost connection to game.")
 
 
-class MissionInfo(typing.NamedTuple):
-    id: int
-    extra_locations: int
-    required_world: list[int]
-    number: int = 0  # number of worlds need beaten
-    completion_critical: bool = False # missions needed to beat game
-    or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
-
-
-mission_req_table = {
-    "Liberation Day": MissionInfo(1, 7, [], completion_critical=True),
-    "The Outlaws": MissionInfo(2, 2, [1], completion_critical=True),
-    "Zero Hour": MissionInfo(3, 4, [2], completion_critical=True),
-    "Evacuation": MissionInfo(4, 4, [3]),
-    "Outbreak": MissionInfo(5, 3, [4]),
-    "Safe Haven": MissionInfo(6, 1, [5], number=7),
-    "Haven's Fall": MissionInfo(7, 1, [5], number=7),
-    "Smash and Grab": MissionInfo(8, 5, [3], completion_critical=True),
-    "The Dig": MissionInfo(9, 4, [8], number=8, completion_critical=True),
-    "The Moebius Factor": MissionInfo(10, 9, [9], number=11, completion_critical=True),
-    "Supernova": MissionInfo(11, 5, [10], number=14, completion_critical=True),
-    "Maw of the Void": MissionInfo(12, 6, [11], completion_critical=True),
-    "Devil's Playground": MissionInfo(13, 3, [3], number=4),
-    "Welcome to the Jungle": MissionInfo(14, 4, [13]),
-    "Breakout": MissionInfo(15, 3, [14], number=8),
-    "Ghost of a Chance": MissionInfo(16, 6, [14], number=8),
-    "The Great Train Robbery": MissionInfo(17, 4, [3], number=6),
-    "Cutthroat": MissionInfo(18, 5, [17]),
-    "Engine of Destruction": MissionInfo(19, 6, [18]),
-    "Media Blitz": MissionInfo(20, 5, [19]),
-    "Piercing the Shroud": MissionInfo(21, 6, [20]),
-    "Whispers of Doom": MissionInfo(22, 4, [9]),
-    "A Sinister Turn": MissionInfo(23, 4, [22]),
-    "Echoes of the Future": MissionInfo(24, 3, [23]),
-    "In Utter Darkness": MissionInfo(25, 3, [24]),
-    "Gates of Hell": MissionInfo(26, 2, [12], completion_critical=True),
-    "Belly of the Beast": MissionInfo(27, 4, [26], completion_critical=True),
-    "Shatter the Sky": MissionInfo(28, 5, [26], completion_critical=True),
-    "All-In": MissionInfo(29, -1, [27, 28], completion_critical=True, or_requirements=True)
-}
-
-lookup_id_to_mission: typing.Dict[int, str] = {
-    data.id: mission_name for mission_name, data in mission_req_table.items() if data.id}
-
-
-def calc_objectives_completed(mission, missions_info, locations_done):
+def calc_objectives_completed(mission, missions_info, locations_done, unfinished_locations, ctx):
     objectives_complete = 0
 
     if missions_info[mission].extra_locations > 0:
         for i in range(missions_info[mission].extra_locations):
             if (missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i) in locations_done:
                 objectives_complete += 1
+            else:
+                unfinished_locations[mission].append(ctx.location_names[
+                    missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i])
 
         return objectives_complete
 
@@ -449,31 +601,49 @@ def calc_objectives_completed(mission, missions_info, locations_done):
         return -1
 
 
-def request_unfinished_missions(locations_done, location_table, ui):
-    message = "Unfinished Missions: "
+def request_unfinished_missions(locations_done, location_table, ui, ctx):
+    if location_table:
+        message = "Unfinished Missions: "
+        unlocks = initialize_blank_mission_dict(location_table)
+        unfinished_locations = initialize_blank_mission_dict(location_table)
 
-    unfinished_missions = calc_unfinished_missions(locations_done, location_table)
+        unfinished_missions = calc_unfinished_missions(locations_done, location_table, ctx, unlocks=unlocks,
+                                                       unfinished_locations=unfinished_locations)
 
+        message += ", ".join(f"{mark_up_mission_name(mission, location_table, ui,unlocks)}[{location_table[mission].id}] " +
+                             mark_up_objectives(
+                                 f"[{unfinished_missions[mission]}/{location_table[mission].extra_locations}]",
+                                 ctx, unfinished_locations, mission)
+                             for mission in unfinished_missions)
 
-    message += ", ".join(f"{mark_critical(mission,location_table, ui)}[{location_table[mission].id}] "
-                         f"({unfinished_missions[mission]}/{location_table[mission].extra_locations})"
-                         for mission in unfinished_missions)
-
-    if ui:
-        ui.log_panels['All'].on_message_markup(message)
-        ui.log_panels['Starcraft2'].on_message_markup(message)
+        if ui:
+            ui.log_panels['All'].on_message_markup(message)
+            ui.log_panels['Starcraft2'].on_message_markup(message)
+        else:
+            sc2_logger.info(message)
     else:
-        sc2_logger.info(message)
+        sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
 
-def calc_unfinished_missions(locations_done, locations):
+def calc_unfinished_missions(locations_done, locations, ctx, unlocks=None, unfinished_locations=None,
+                             available_missions=[]):
     unfinished_missions = []
     locations_completed = []
-    available_missions = calc_available_missions(locations_done, locations)
+
+    if not unlocks:
+        unlocks = initialize_blank_mission_dict(locations)
+
+    if not unfinished_locations:
+        unfinished_locations = initialize_blank_mission_dict(locations)
+
+    if len(available_missions) > 0:
+        available_missions = []
+
+    available_missions.extend(calc_available_missions(locations_done, locations, unlocks))
 
     for name in available_missions:
         if not locations[name].extra_locations == -1:
-            objectives_completed = calc_objectives_completed(name, locations, locations_done)
+            objectives_completed = calc_objectives_completed(name, locations, locations_done, unfinished_locations, ctx)
 
             if objectives_completed < locations[name].extra_locations:
                 unfinished_missions.append(name)
@@ -492,31 +662,65 @@ def is_mission_available(mission_id_to_check, locations_done, locations):
     return any(mission_id_to_check == locations[mission].id for mission in unfinished_missions)
 
 
-def mark_critical(mission, location_table, ui):
+def mark_up_mission_name(mission, location_table, ui, unlock_table):
     """Checks if the mission is required for game completion and adds '*' to the name to mark that."""
+
     if location_table[mission].completion_critical:
         if ui:
-            return "[color=AF99EF]" + mission + "[/color]"
+            message = "[color=AF99EF]" + mission + "[/color]"
         else:
-            return "*" + mission + "*"
+            message = "*" + mission + "*"
     else:
-        return mission
+        message = mission
+
+    if ui:
+        unlocks = unlock_table[mission]
+
+        if len(unlocks) > 0:
+            pre_message = f"[ref={list(location_table).index(mission)}|Unlocks: "
+            pre_message += ", ".join(f"{unlock}({location_table[unlock].id})" for unlock in unlocks)
+            pre_message += f"]"
+            message = pre_message + message + "[/ref]"
+
+    return message
+
+
+def mark_up_objectives(message, ctx, unfinished_locations, mission):
+    formatted_message = message
+
+    if ctx.ui:
+        locations = unfinished_locations[mission]
+
+        pre_message = f"[ref={list(ctx.mission_req_table).index(mission)+30}|"
+        pre_message += "<br>".join(location for location in locations)
+        pre_message += f"]"
+        formatted_message = pre_message + message + "[/ref]"
+
+    return formatted_message
 
 
 def request_available_missions(locations_done, location_table, ui):
-    message = "Available Missions: "
+    if location_table:
+        message = "Available Missions: "
 
-    missions = calc_available_missions(locations_done, location_table)
-    message += ", ".join(f"{mark_critical(mission,location_table, ui)}[{location_table[mission].id}]" for mission in missions)
+        # Initialize mission unlock table
+        unlocks = initialize_blank_mission_dict(location_table)
 
-    if ui:
-        ui.log_panels['All'].on_message_markup(message)
-        ui.log_panels['Starcraft2'].on_message_markup(message)
+        missions = calc_available_missions(locations_done, location_table, unlocks)
+        message += \
+            ", ".join(f"{mark_up_mission_name(mission, location_table, ui, unlocks)}[{location_table[mission].id}]"
+                      for mission in missions)
+
+        if ui:
+            ui.log_panels['All'].on_message_markup(message)
+            ui.log_panels['Starcraft2'].on_message_markup(message)
+        else:
+            sc2_logger.info(message)
     else:
-        sc2_logger.info(message)
+        sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
 
-def calc_available_missions(locations_done, locations):
+def calc_available_missions(locations_done, locations, unlocks=None):
     available_missions = []
     missions_complete = 0
 
@@ -526,6 +730,11 @@ def calc_available_missions(locations_done, locations):
             missions_complete += 1
 
     for name in locations:
+        # Go through the required missions for each mission and fill up unlock table used later for hover-over tooltips
+        if unlocks:
+            for unlock in locations[name].required_world:
+                unlocks[list(locations)[unlock-1]].append(name)
+
         if mission_reqs_completed(name, missions_complete, locations_done, locations):
             available_missions.append(name)
 
@@ -549,14 +758,14 @@ def mission_reqs_completed(location_to_check, missions_complete, locations_done,
             req_success = True
 
             # Check if required mission has been completed
-            if not (req_mission * 100 + SC2WOL_LOC_ID_OFFSET) in locations_done:
+            if not (locations[list(locations)[req_mission-1]].id * 100 + SC2WOL_LOC_ID_OFFSET) in locations_done:
                 if not locations[location_to_check].or_requirements:
                     return False
                 else:
                     req_success = False
 
             # Recursively check required mission to see if it's requirements are met, in case !collect has been done
-            if not mission_reqs_completed(lookup_id_to_mission[req_mission], missions_complete, locations_done,
+            if not mission_reqs_completed(list(locations)[req_mission-1], missions_complete, locations_done,
                                           locations):
                 if not locations[location_to_check].or_requirements:
                     return False
@@ -579,6 +788,15 @@ def mission_reqs_completed(location_to_check, missions_complete, locations_done,
             return False
     else:
         return True
+
+
+def initialize_blank_mission_dict(location_table):
+    unlocks = {}
+
+    for mission in list(location_table):
+        unlocks[mission] = []
+
+    return unlocks
 
 
 if __name__ == '__main__':

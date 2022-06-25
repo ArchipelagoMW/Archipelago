@@ -1781,6 +1781,35 @@ def patch_rom(world, rom):
     save_context.equip_current_items(world.starting_age)
     save_context.write_save_table(rom)
 
+    # Write data into AP autotracking context
+    rom.write_int32(rom.sym('DUNGEON_IS_MQ_ADDRESS'), rom.sym('cfg_dungeon_is_mq'))
+    rom.write_int32(rom.sym('DUNGEON_REWARDS_ADDRESS'), rom.sym('cfg_dungeon_rewards'))
+    rom.write_byte(rom.sym('BIG_POE_COUNT'), world.big_poe_count)
+    if world.enhance_map_compass:
+        rom.write_byte(rom.sym('ENHANCE_MAP_COMPASS'), 0x01)
+    if world.enhance_map_compass or world.misc_hints:
+        rom.write_byte(rom.sym('SHOW_DUNGEON_REWARDS'), 0x01)
+    if world.shuffle_smallkeys == 'remove':
+        rom.write_byte(rom.sym('SMALL_KEY_SHUFFLE'), 0x01)
+    elif world.shuffle_smallkeys in ['overworld', 'any_dungeon', 'keysanity']:
+        rom.write_byte(rom.sym('SMALL_KEY_SHUFFLE'), 0x02)
+    if world.shuffle_scrubs != 'off':
+        rom.write_byte(rom.sym('SHUFFLE_SCRUBS'), 0x01)
+    if world.open_forest == 'closed_deku':
+        rom.write_byte(rom.sym('OPEN_FOREST'), 0x01)
+    elif world.open_forest == 'closed':
+        rom.write_byte(rom.sym('OPEN_FOREST'), 0x02)
+    if world.zora_fountain == 'adult':
+        rom.write_byte(rom.sym('OPEN_FOUNTAIN'), 0x01)
+    elif world.zora_fountain == 'closed':
+        rom.write_byte(rom.sym('OPEN_FOUNTAIN'), 0x02)
+
+    rom.write_bytes(rom.sym('SHOP_SLOTS'), [
+        sum(f'{shop} Item {idx}' in world.shop_prices for idx in ('7', '5', '8', '6'))
+        for shop in ('KF Shop', 'Market Bazaar', 'Market Potion Shop', 'Market Bombchu Shop', 
+            'Kak Bazaar', 'Kak Potion Shop', 'GC Shop', 'ZD Shop')
+    ])
+
     return rom
 
 
@@ -1828,7 +1857,6 @@ def get_override_entry(player_id, location):
     player_id = 0 if player_id == location.item.player else min(location.item.player, 255)
     if location.item.game != 'Ocarina of Time': 
         # This is an AP sendable. It's guaranteed to not be None. 
-        looks_like_item_id = 0
         if location.item.advancement:
             item_id = 0xCB
         else:
@@ -1838,10 +1866,11 @@ def get_override_entry(player_id, location):
         if None in [scene, default, item_id]:
             return None
 
-        if location.item.looks_like_item is not None:
-            looks_like_item_id = location.item.looks_like_item.index
-        else:
-            looks_like_item_id = 0
+    if location.item.trap:
+        item_id = 0x7C  # Ice Trap ID, to get "X is a fool" message
+        looks_like_item_id = location.item.looks_like_item.index
+    else:
+        looks_like_item_id = 0
 
     if location.type in ['NPC', 'BossHeart']:
         type = 0
@@ -2078,15 +2107,15 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             shop_objs.add(location.item.special['object'])
             rom.write_int16(location.address1, location.item.index)
         else:
-            if location.item.game != "Ocarina of Time": 
+            if location.item.trap:
+                item_display = location.item.looks_like_item
+            elif location.item.game != "Ocarina of Time": 
                 item_display = location.item
                 if location.item.advancement:
                     item_display.index = 0xCB
                 else:
                     item_display.index = 0xCC
                 item_display.special = {}
-            elif location.item.looks_like_item is not None:
-                item_display = location.item.looks_like_item
             else:
                 item_display = location.item
 
@@ -2137,7 +2166,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                 else:
                     shop_item_name = item_display.name
 
-                if location.item.name == 'Ice Trap':
+                if location.item.trap:
                     shop_item_name = create_fake_name(shop_item_name)
 
                 if len(world.world.worlds) > 1:

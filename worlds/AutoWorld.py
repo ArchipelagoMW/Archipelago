@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, TYPE_CHECKING
+import sys
+from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, NamedTuple, TYPE_CHECKING
 
 from BaseClasses import MultiWorld, Item, CollectionState, Location, Tutorial
 from Options import Option
@@ -41,6 +42,7 @@ class AutoWorldRegister(type):
         new_class = super().__new__(mcs, name, bases, dct)
         if "game" in dct:
             AutoWorldRegister.world_types[dct["game"]] = new_class
+        new_class.__file__ = sys.modules[new_class.__module__].__file__
         return new_class
 
 

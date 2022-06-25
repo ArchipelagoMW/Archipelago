@@ -12,7 +12,7 @@ class StartingGender(Choice):
     option_lady = 1
     alias_male = 0
     alias_female = 1
-    default = 0
+    default = "random"
 
 
 class StartingClass(Choice):

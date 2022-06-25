@@ -8,7 +8,11 @@ os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
 
-from kivy.base import Config
+import Utils
+if Utils.is_frozen():
+    os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
+
+from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set('kivy', 'exit_on_escape', '0')
@@ -18,7 +22,8 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
 from kivy.core.text.markup import MarkupLabel
-from kivy.base import ExceptionHandler, ExceptionManager, Clock
+from kivy.base import ExceptionHandler, ExceptionManager
+from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.uix.button import Button
@@ -37,10 +42,11 @@ from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.animation import Animation
+from kivy.uix.popup import Popup
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-import Utils
+
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
 
 if typing.TYPE_CHECKING:
@@ -181,7 +187,7 @@ class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
             rv, index, data)
 
     def create_tooltip(self, text, x, y):
-        text = text.replace("<br>", "\n")
+        text = text.replace("<br>", "\n").replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']')
         if self.tooltip:
             # update
             self.tooltip.children[0].text = text
@@ -240,7 +246,7 @@ class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
             else:
                 # Not a fan of the following few lines, but they work.
                 temp = MarkupLabel(text=self.text).markup
-                text = "".join(part for part in temp if not part.startswith(("[color", "[/color]")))
+                text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
                 cmdinput = App.get_running_app().textinput
                 if not cmdinput.text and " did you mean " in text:
                     for question in ("Didn't find something that closely matches, did you mean ",
@@ -253,7 +259,7 @@ class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
                 elif not cmdinput.text and text.startswith("Missing: "):
                     cmdinput.text = text.replace("Missing: ", "!hint_location ")
 
-                Clipboard.copy(text)
+                Clipboard.copy(text.replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']'))
                 return self.parent.select_with_touch(self.index, touch)
 
     def apply_selection(self, rv, index, is_selected):
@@ -265,6 +271,25 @@ class ConnectBarTextInput(TextInput):
     def insert_text(self, substring, from_undo=False):
         s = substring.replace('\n', '').replace('\r', '')
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
+
+
+class MessageBox(Popup):
+    class MessageBoxLabel(Label):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self._label.refresh()
+            self.size = self._label.texture.size
+            if self.width + 50 > Window.width:
+                self.text_size[0] = Window.width - 50
+                self._label.refresh()
+                self.size = self._label.texture.size
+
+    def __init__(self, title, text, error=False, **kwargs):
+        label = MessageBox.MessageBoxLabel(text=text)
+        separator_color = [217 / 255, 129 / 255, 122 / 255, 1.] if error else [47 / 255., 167 / 255., 212 / 255, 1.]
+        super().__init__(title=title, content=label, size_hint=(None, None), width=max(100, int(label.width)+40),
+                         separator_color=separator_color, **kwargs)
+        self.height += max(0, label.height - 18)
 
 
 class GameManager(App):
@@ -363,7 +388,8 @@ class GameManager(App):
         return self.container
 
     def update_texts(self, dt):
-        self.tabs.content.children[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
+        if hasattr(self.tabs.content.children[0], 'fix_heights'):
+            self.tabs.content.children[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
         if self.ctx.server:
             self.title = self.base_title + " " + Utils.__version__ + \
                          f" | Connected to: {self.ctx.server_address} " \
@@ -430,20 +456,24 @@ class GameManager(App):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
 
-class ChecksFinderManager(GameManager):
-    logging_pairs = [
-        ("Client", "Archipelago")
-    ]
-    base_title = "Archipelago ChecksFinder Client"
-
-
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
         super(LogtoUI, self).__init__(logging.INFO)
         self.on_log = on_log
 
+    @staticmethod
+    def format_compact(record: logging.LogRecord) -> str:
+        if isinstance(record.msg, Exception):
+            return str(record.msg)
+        return (f'{record.exc_info[1]}\n' if record.exc_info else '') + str(record.msg).split("\n")[0]
+
     def handle(self, record: logging.LogRecord) -> None:
-        self.on_log(self.format(record))
+        if getattr(record, 'skip_gui', False):
+            pass  # skip output
+        elif getattr(record, 'compact_gui', False):
+            self.on_log(self.format_compact(record))
+        else:
+            self.on_log(self.format(record))
 
 
 class UILog(RecycleView):
@@ -485,7 +515,7 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         flags = node.get("flags", 0)
         if flags & 0b001:  # advancement
             itemtype = "progression"
-        elif flags & 0b010:  # never_exclude
+        elif flags & 0b010:  # useful
             itemtype = "useful"
         elif flags & 0b100:  # trap
             itemtype = "trap"

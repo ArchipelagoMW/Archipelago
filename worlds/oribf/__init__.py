@@ -6,7 +6,7 @@ from .Locations import lookup_name_to_id
 from .Rules import set_rules, location_rules
 from .Regions import locations_by_region, connectors
 from .Options import options
-from BaseClasses import Region, Item, Location, RegionType, Entrance
+from BaseClasses import Region, Item, Location, RegionType, Entrance, ItemClassification
 
 
 class OriBlindForest(World):
@@ -65,7 +65,9 @@ class OriBlindForest(World):
             self.world.itempool.extend([self.create_item(item_name)] * count)
 
     def create_item(self, name: str) -> Item:
-        return Item(name, not name.startswith("EX"), item_table[name], self.player)
+        return Item(name,
+                    ItemClassification.progression if not name.startswith("EX") else ItemClassification.filler,
+                    item_table[name], self.player)
 
 
 class OriBlindForestLogic(LogicMixin):

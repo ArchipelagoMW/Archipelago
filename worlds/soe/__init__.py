@@ -1,6 +1,6 @@
 from ..AutoWorld import World, WebWorld
 from ..generic.Rules import set_rule
-from BaseClasses import Region, Location, Entrance, Item, RegionType, Tutorial
+from BaseClasses import Region, Location, Entrance, Item, RegionType, Tutorial, ItemClassification
 from Utils import output_path
 import typing
 import os
@@ -173,15 +173,19 @@ class SoEWorld(World):
         super(SoEWorld, self).__init__(*args, **kwargs)
 
     def create_event(self, event: str) -> Item:
-        progression = True
-        return SoEItem(event, progression, None, self.player)
+        return SoEItem(event, ItemClassification.progression, None, self.player)
 
     def create_item(self, item: typing.Union[pyevermizer.Item, str]) -> Item:
         if type(item) is str:
             item = self.item_id_to_raw[self.item_name_to_id[item]]
-        res = SoEItem(item.name, item.progression, self.item_name_to_id[item.name], self.player)
-        res.trap = item.type == pyevermizer.CHECK_TRAP
-        return res
+        if item.type == pyevermizer.CHECK_TRAP:
+            classification = ItemClassification.trap
+        elif item.progression:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+
+        return SoEItem(item.name, classification, self.item_name_to_id[item.name], self.player)
 
     @classmethod
     def stage_assert_generate(cls, world):
@@ -338,6 +342,7 @@ class SoEWorld(World):
 
     def get_filler_item_name(self) -> str:
         return self.world.random.choice(list(self.item_name_groups["Ingredients"]))
+
 
 class SoEItem(Item):
     game: str = "Secret of Evermore"
