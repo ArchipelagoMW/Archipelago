@@ -277,6 +277,9 @@ def get_default_options() -> dict:
         },
         "oot_options": {
             "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
+        },
+        "cotnd_options": {
+            "synchrony": "Synchrony",
         }
     }
 

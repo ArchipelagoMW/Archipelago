@@ -109,7 +109,7 @@ class CotNDContext(CommonContext):
             self.nonce = str(int(time.time()))
 
     def item_data(self, networkitem):
-        return item_table[self.item_name_getter(networkitem.item)]
+        return item_table[self.item_names[networkitem.item]]
 
     def on_deathlink(self, data: dict):
         self.deathlink_pending = True
@@ -140,7 +140,7 @@ class CotNDContext(CommonContext):
 
         # Which items to spawn
         item_state = {}
-        item_names_received = always_available_items | set(map(lambda item: self.item_name_getter(item.item), self.items_received))
+        item_names_received = always_available_items | set(map(lambda item: self.item_names[item.item], self.items_received))
         for name, info in item_table.items():
             if info[1] in {'Character', 'Junk', 'Trap'}:
                 continue
@@ -152,7 +152,7 @@ class CotNDContext(CommonContext):
 
         # Chests to replace
         replace_chests = set()
-        for name in map(self.location_name_getter, self.missing_locations):
+        for name in map(lambda x: self.location_names[x], self.missing_locations):
             if 'Chest' in name:
                 pieces = name.split()  # [char] [num] - Chest [level]
                 if pieces[2] == '-':
@@ -163,7 +163,7 @@ class CotNDContext(CommonContext):
         pending_items = []
         characters = []
         for item in self.items_received:
-            item_name = self.item_name_getter(item.item)
+            item_name = self.item_names[item.item]
             data = item_table[item_name]
             if data[1] == 'Character':
                 characters.append(item_name[7:])
@@ -171,7 +171,7 @@ class CotNDContext(CommonContext):
                 pending_items.append(data[2])
             if self.free_samples:
                 if data[1] != 'Weapon':
-                    if self.item_name_getter(item.item) in bad_items and self.prevent_bad_samples:
+                    if self.item_names[item.item] in bad_items and self.prevent_bad_samples:
                         continue
                     pending_items.append(data[2] if isinstance(data[2], str) else data[2][0])
                 else:
@@ -246,7 +246,7 @@ class CotNDContext(CommonContext):
                     await self.send_death()
 
             if search_pieces:
-                possible_locs = list(filter(lambda loc: all(p in self.location_name_getter(loc) for p in search_pieces),
+                possible_locs = list(filter(lambda loc: all(p in self.location_names[loc] for p in search_pieces),
                     self.missing_locations))
                 if possible_locs:
                     new_items.append(sorted(possible_locs)[0])
@@ -259,7 +259,7 @@ class CotNDContext(CommonContext):
             }])
 
         # The game is completed once all locations of type Clear are reached.
-        clear_locs = list(filter(lambda loc: 'Clear' in self.location_name_getter(loc), self.missing_locations))
+        clear_locs = list(filter(lambda loc: 'Clear' in self.location_names[loc], self.missing_locations))
         if not clear_locs:
             await self.send_msgs([{
                 "cmd": "StatusUpdate",
