@@ -20,7 +20,7 @@ If the game you are joining requires a password, you should also add the followi
   `-v6ap_passwd secretPassword`  
 
 
-Launch options may be found by right-clicking on the game in Steam and clicking "Properties" in the context menu. From there, open the "General" tab. There is a "Launch Options" setting near the bottom wherein you should enter the above options. Note that all launch options are seperated by a space, and if there are spaces in your password, it should be surrounded with quotes.
+Launch options may be found by right-clicking on the game in Steam and clicking "Properties" in the context menu. From there, open the "General" tab. There is a "Launch Options" setting near the bottom wherein you should enter the above options. Note that all launch options are separated by a space, and if there are spaces in your slot name or password, it should be surrounded with quotes.
 If everything worked out, you will see a textbox informing you the connection has been established after the story intro.
 
 # Playing offline
