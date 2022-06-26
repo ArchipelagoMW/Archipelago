@@ -22,16 +22,17 @@ cost_terms = {x.term: x for x in (
 
 
 def hk_set_rule(hk_world: World, location: str, rule):
-    count = hk_world.created_multi_locations[location]
     player = hk_world.player
-    if count:
-        locations = [f"{location}_{x}" for x in range(1, count+1)]
-    elif (location, hk_world.player) in hk_world.world._location_cache:
-        locations = [location]
-    else:
-        return
+
+    locations = hk_world.created_multi_locations.get(location)
+    if locations is None:
+        try:
+            locations = [hk_world.world.get_location(location, player)]
+        except KeyError:
+            return
+
     for location in locations:
-        set_rule(hk_world.world.get_location(location, player), rule)
+        set_rule(location, rule)
 
 
 def set_rules(hk_world: World):

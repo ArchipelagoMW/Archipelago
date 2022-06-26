@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import typing
-from collections import Counter
 
 logger = logging.getLogger("Hollow Knight")
 
@@ -100,6 +99,25 @@ logicless_options = {
     "RandomizeLoreTablets", "RandomizeSoulTotems",
 }
 
+# Options that affect vanilla starting items
+randomizable_starting_items: typing.Dict[str, typing.Tuple[str, ...]] = {
+    "RandomizeFocus": ("Focus",),
+    "RandomizeSwim": ("Swim",),
+    "RandomizeNail": ('Upslash', 'Leftslash', 'Rightslash')
+}
+
+# Shop cost types.
+shop_cost_types: typing.Dict[str, typing.Tuple[str, ...]] = {
+    "Egg_Shop": ("RANCIDEGGS",),
+    "Grubfather": ("GRUBS",),
+    "Seer": ("ESSENCE",),
+    "Salubra_(Requires_Charms)": ("CHARMS", "GEO"),
+    "Sly": ("GEO",),
+    "Sly_(Key)": ("GEO",),
+    "Iselda": ("GEO",),
+    "Salubra": ("GEO",),
+    "Leg_Eater": ("GEO",),
+}
 
 class HKWeb(WebWorld):
     tutorials = [Tutorial(
@@ -129,24 +147,15 @@ class HKWorld(World):
     item_name_groups = item_name_groups
 
     ranges: typing.Dict[str, typing.Tuple[int, int]]
-    shops: typing.Dict[str, str] = {
-        "Egg_Shop": ("RANCIDEGGS",),
-        "Grubfather": ("GRUBS",),
-        "Seer": ("ESSENCE",),
-        "Salubra_(Requires_Charms)": ("CHARMS", "GEO"),
-        "Sly": ("GEO",),
-        "Sly_(Key)": ("GEO",),
-        "Iselda": ("GEO",),
-        "Salubra": ("GEO",),
-        "Leg_Eater": ("GEO",),
-    }
     charm_costs: typing.List[int]
     cached_filler_items = {}
     data_version = 2
 
     def __init__(self, world, player):
         super(HKWorld, self).__init__(world, player)
-        self.created_multi_locations: typing.Dict[str, int] = Counter()
+        self.created_multi_locations: typing.Dict[str, typing.List[HKLocation]] = {
+            location: list() for location in multi_locations
+        }
         self.ranges = {}
         self.created_shop_items = 0
         self.vanilla_shop_costs = deepcopy(vanilla_shop_costs)
@@ -209,113 +218,119 @@ class HKWorld(World):
     def create_items(self):
         # Generate item pool and associated locations (paired in HK)
         pool: typing.List[HKItem] = []
+        wp_exclusions = self.white_palace_exclusions()
         junk_replace: typing.Set[str] = set()
         if self.world.RemoveSpellUpgrades[self.player]:
-            junk_replace.add("Abyss_Shriek")
-            junk_replace.add("Shade_Soul")
-            junk_replace.add("Descending_Dark")
+            junk_replace.update(("Abyss_Shriek", "Shade_Soul", "Descending_Dark"))
 
-        wp_exclusions = self.white_palace_exclusions()
+        randomized_starting_items = set()
+        for attr, items in randomizable_starting_items.items():
+            if getattr(self.world, attr)[self.player]:
+                randomized_starting_items.update(items)
+
+        # noinspection PyShadowingNames
+        def _add(item_name: str, location_name: str):
+            """
+            Adds a pairing of an item and location, doing appropriate checks to see if it should be vanilla or not.
+            """
+            vanilla = not randomized
+            excluded = False
+
+            if not vanilla and location_name in wp_exclusions:
+                if location_name == 'King_Fragment':
+                    excluded = True
+                else:
+                    vanilla = True
+
+            if item_name in junk_replace:
+                item_name = self.get_filler_item_name()
+
+            item = self.create_item(item_name)
+
+            if location_name == "Start":
+                if item_name in randomized_starting_items:
+                    pool.append(item)
+                else:
+                    self.world.push_precollected(item)
+                return
+
+            if vanilla:
+                location = self.create_vanilla_location(location_name, item)
+            else:
+                pool.append(item)
+                if location_name in multi_locations:  # Create shop locations later.
+                    return
+                location = self.create_location(location_name)
+            if excluded:
+                location.progress_type = LocationProgressType.EXCLUDED
+
         for option_key, option in hollow_knight_randomize_options.items():
             randomized = getattr(self.world, option_key)[self.player]
             for item_name, location_name in zip(option.items, option.locations):
-                vanilla = not randomized
-                excluded = False
                 if item_name in junk_replace:
                     item_name = self.get_filler_item_name()
-                split = False
+
                 if (item_name == "Crystal_Heart" and self.world.SplitCrystalHeart[self.player]) or \
                         (item_name == "Mothwing_Cloak" and self.world.SplitMothwingCloak[self.player]):
-                    loc1 = self.create_location(location_name)
-                    loc2 = self.create_location("Split_" + location_name)
-                    split = True
+                    _add("Left_" + item_name, location_name)
+                    _add("Right_" + item_name, "Split_" + location_name)
+                    continue
                 if item_name == "Mantis_Claw" and self.world.SplitMantisClaw[self.player]:
-                    loc1 = self.create_location("Left_" + location_name)
-                    loc2 = self.create_location("Right_" + location_name)
-                    split = True
-                if split is True:
-                    item1 = self.create_item("Left_" + item_name)
-                    item1.classification = ItemClassification.progression
-                    item2 = self.create_item("Right_" + item_name)
-                    item2.classification = ItemClassification.progression
-                    if randomized:
-                        pool.append(item1)
-                        pool.append(item2)
-                    else:
-                        loc1.place_locked_item(item1)
-                        loc1.vanilla = True
-                        loc2.place_locked_item(item2)
-                        loc2.vanilla = True
-                elif item_name == "Shade_Cloak" and self.world.SplitMothwingCloak[self.player]:
-                    loc = self.create_location(location_name)
+                    _add("Left_" + item_name, "Left_" + location_name)
+                    _add("Right_" + item_name, "Right_" + location_name)
+                    continue
+                if item_name == "Shade_Cloak" and self.world.SplitMothwingCloak[self.player]:
                     if self.world.random.randint(0, 1):
-                        item = self.create_item("Left_Mothwing_Cloak")
+                        item_name = "Left_Mothwing_Cloak"
                     else:
-                        item = self.create_item("Right_Mothwing_Cloak")
-                    item.classification = ItemClassification.progression
-                    if randomized:
-                        pool.append(item)
-                    else:
-                        loc.place_locked_item(item)
-                        loc.vanilla = True
-                else:
-                    item = self.create_item(item_name)
-                    if location_name == "Start":
-                        if (item_name == "Focus" and self.world.RandomizeFocus[self.player]) or (item_name == "Swim"
-                                and self.world.RandomizeSwim[self.player]) or (item_name in ["Upslash", "Leftslash",
-                                "Rightslash"] and self.world.RandomizeNail[self.player]):
-                            pool.append(item)
-                        else:
-                            self.world.push_precollected(item)
-                    else:
-                        if vanilla:
-                            location = self.create_vanilla_location(location_name, item)
-                        else:
-                            location = self.create_location(location_name)
-                            pool.append(item)
-                        if excluded:
-                            location.progress_type = LocationProgressType.EXCLUDED
+                        item_name = "Right_Mothwing_Cloak"
+
+                _add(item_name, location_name)
 
         if self.world.RandomizeElevatorPass[self.player]:
-            pool.append(self.create_item("Elevator_Pass"))
-            self.create_location("Elevator_Pass")
+            randomized = True
+            _add("Elevator_Pass", "Elevator_Pass")
 
-        for shop, slots in self.created_multi_locations.items():
-            for _ in range(slots, getattr(self.world, shop_to_option[shop])[self.player].value):
+        for shop, locations in self.created_multi_locations.items():
+            for _ in range(len(locations), getattr(self.world, shop_to_option[shop])[self.player].value):
                 self.create_location(shop)
 
+        # Balance the pool
         item_count = len(pool)
         location_count = len(self.world.get_unfilled_locations(self.player))
-        if location_count < item_count:  # More items than locations.
-            # We only add at maximum 5 extra items.  Even if they all get assigned to the same shop, it is not possible
-            # to exceed the 16 slots per shop limit here.  This code will need to revised if significantly more extra
-            # items get added in the future.
-            shops = list(multi_locations.keys())
+        additional_shop_items = max(item_count - location_count, self.world.ExtraShopSlots[self.player].value)
+
+        # Add additional shop items, as needed.
+        if additional_shop_items > 0:
+            shops = list(multi_locations.keys())  # Not a set because random.choice does not work with them.
             if not self.world.EggShopSlots[self.player].value:  # No eggshop, so don't place items there
                 shops.remove('Egg_Shop')
-            while location_count < item_count:
-                # Add a location to a random shop.
-                self.create_location(self.world.random.choice(shops))
+
+            for _ in range(additional_shop_items):
+                shop = self.world.random.choice(shops)
+                self.create_location(shop)
                 location_count += 1
-        elif item_count < location_count:  # More locations than items
+                if len(self.created_multi_locations[shop]) >= 16:
+                    shops.remove(shop)
+                    if not shops:
+                        break
+
+        # Create filler items, if needed
+        if item_count < location_count:
             for _ in range(location_count - item_count):
                 # Create enough filler items to fill all locations.
                 pool.append(self.create_item(self.get_filler_item_name()))
 
         self.world.itempool += pool
 
-        for shopname in self.shops:
-            prices: typing.List[int] = []
-            locations: typing.List[HKLocation] = []
-            for x in range(1, self.created_multi_locations[shopname]+1):
-                loc = self.world.get_location(self.get_multi_location_name(shopname, x), self.player)
-                if loc.vanilla:
-                    continue
-                locations.append(loc)
-                prices.append(loc.costs)
-            prices.sort(key=lambda price: (len(price),) + tuple(price.values()))
-            for loc, price in zip(locations, prices):
-                loc.costs = price
+        for shop, locations in self.created_multi_locations.items():
+            randomized_locations = list(loc for loc in locations if not loc.vanilla)
+            prices = sorted(
+                (loc.costs for loc in randomized_locations),
+                key=lambda costs: (len(costs),) + tuple(costs.values())
+            )
+            for loc, costs in zip(randomized_locations, prices):
+                loc.costs = costs
 
 
     def set_rules(self):
@@ -350,14 +365,13 @@ class HKWorld(World):
         slot_data["seed"] = self.world.slot_seeds[self.player].randint(-2147483647, 2147483646)
 
         # Backwards compatibility for shop cost data (HKAP < 0.1.0)
-        for shop, terms in self.shops.items():
+        for shop, terms in shop_cost_types.items():
             unit = cost_terms[next(iter(terms))].option
             if unit == "Geo":
                 continue
             slot_data[f"{unit}_costs"] = {
-                f"{shop}_{i}":
-                    next(iter(self.world.get_location(f"{shop}_{i}", self.player).costs.values()))
-                for i in range(1, 1 + self.created_multi_locations[shop])
+                loc.name: next(iter(loc.costs.values()))
+                for loc in self.created_multi_locations[shop]
             }
 
         # HKAP 0.1.0 and later cost data.
@@ -378,20 +392,26 @@ class HKWorld(World):
 
     def create_location(self, name: str, vanilla=False) -> HKLocation:
         costs = None
-        if name in self.shops:
+        if name in shop_cost_types:
             costs = {
                 term: self.world.random.randint(*self.ranges[term])
-                for term in self.shops[name]
+                for term in shop_cost_types[name]
             }
         elif name in vanilla_location_costs:
             costs = vanilla_location_costs[name]
 
-        if name in multi_locations:
-            self.created_multi_locations[name] += 1
-            name = self.get_multi_location_name(name, self.created_multi_locations[name])
+        multi = self.created_multi_locations.get(name)
+
+        if multi is not None:
+            i = len(multi) + 1
+            name = f"{name}_{i}"
 
         region = self.world.get_region("Menu", self.player)
         loc = HKLocation(self.player, name, self.location_name_to_id[name], region, costs=costs, vanilla=vanilla)
+
+        if multi is not None:
+            multi.append(loc)
+
         region.locations.append(loc)
         return loc
 
@@ -407,11 +427,7 @@ class HKWorld(World):
         if change:
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
                 state.prog_items[effect_name, item.player] += effect_value
-        if item.name in ["Left_Mothwing_Cloak", "Right_Mothwing_Cloak"]:
-            if item.name == "Right_Mothwing_Cloak":
-                state.prog_items["RIGHTDASH", item.player] += 1
-            if item.name == "Left_Mothwing_Cloak":
-                state.prog_items["LEFTDASH", item.player] += 1
+        if item.name in {"Left_Mothwing_Cloak", "Right_Mothwing_Cloak"}:
             if state.prog_items.get(('RIGHTDASH', item.player), 0) and \
                     state.prog_items.get(('LEFTDASH', item.player), 0):
                 (state.prog_items["RIGHTDASH", item.player], state.prog_items["LEFTDASH", item.player]) = \
@@ -445,15 +461,15 @@ class HKWorld(World):
             name = world.get_player_name(player)
             spoiler_handle.write(f'\n{name}\n')
             hk_world: HKWorld = world.worlds[player]
-            for shop_name, unit_name in cls.shops.items():
-                for x in range(1, hk_world.created_multi_locations[shop_name]+1):
-                    loc = world.get_location(hk_world.get_multi_location_name(shop_name, x), player)
+
+            for shop_name, locations in hk_world.created_multi_locations.items():
+                for loc in locations:
                     spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
 
     def get_multi_location_name(self, base: str, i: typing.Optional[int]) -> str:
         if i is None:
-            i = self.created_multi_locations[base]
-        assert 0 < i < 18, "limited number of multi location IDs reserved."
+            i = len(self.created_multi_locations[base]) + 1
+        assert i <= 16, "limited number of multi location IDs reserved."
         return f"{base}_{i}"
 
     def get_filler_item_name(self) -> str:
