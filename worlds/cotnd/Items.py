@@ -224,12 +224,12 @@ item_table = {
 }
 
 # These items are always available at start.
-always_available_items = [
+always_available_items = {
     'Apple',
     'Heart Container',
     'Cursed Heart Container',
     'Empty Heart Container',
-]
+}
 
 junk_items = [k for k, v in item_table.items() if v[1] == 'Junk']
 trap_items = [k for k, v in item_table.items() if v[1] == 'Trap']

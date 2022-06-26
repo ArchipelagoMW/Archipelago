@@ -11,7 +11,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, 
 import Utils
 from worlds import network_data_package
 
-from worlds.cotnd.Items import item_table, bad_items
+from worlds.cotnd.Items import item_table, bad_items, always_available_items
 
 UDP_IP = "127.0.0.1"
 UDP_PORT = 8980
@@ -140,7 +140,7 @@ class CotNDContext(CommonContext):
 
         # Which items to spawn
         item_state = {}
-        item_names_received = set(map(lambda item: self.item_name_getter(item.item), self.items_received))
+        item_names_received = always_available_items | set(map(lambda item: self.item_name_getter(item.item), self.items_received))
         for name, info in item_table.items():
             if info[1] in {'Character', 'Junk', 'Trap'}:
                 continue
