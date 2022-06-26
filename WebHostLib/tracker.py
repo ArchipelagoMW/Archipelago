@@ -316,6 +316,11 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
     else:
         multisave: Dict[str, Any] = {}
 
+    slots_aimed_at_player = {tracked_player}
+    for group_id, group_members in groups.items():
+        if tracked_player in group_members:
+            slots_aimed_at_player.add(group_id)
+
     # Add items to player inventory
     for (ms_team, ms_player), locations_checked in multisave.get("location_checks", {}).items():
         # Skip teams and players not matching the request
@@ -325,7 +330,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
             for location in locations_checked:
                 if location in player_locations:
                     item, recipient, flags = player_locations[location]
-                    if recipient == tracked_player:  # a check done for the tracked player
+                    if recipient in slots_aimed_at_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
                     if ms_player == tracked_player:  # a check done by the tracked player
                         checks_done[location_to_area[location]] += 1
@@ -424,7 +429,7 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
         "Diamond Chestplate": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e0/Diamond_Chestplate_JE3_BE2.png",
         "Iron Ingot": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Iron_Ingot_JE3_BE2.png",
         "Block of Iron": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7e/Block_of_Iron_JE4_BE3.png",
-        "Brewing Stand": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fa/Brewing_Stand.png",
+        "Brewing Stand": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b3/Brewing_Stand_%28empty%29_JE10.png",
         "Ender Pearl": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/f6/Ender_Pearl_JE3_BE2.png",
         "Bucket": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Bucket_JE2_BE2.png",
         "Bow": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/ab/Bow_%28Pull_2%29_JE1_BE1.png",
@@ -884,7 +889,6 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
 
     for item_name, item_id in multi_items.items():
         base_name = item_name.split()[0].lower()
-        count = inventory[item_id]
         display_data[base_name+"_count"] = inventory[item_id]
 
     # Victory condition

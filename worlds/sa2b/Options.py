@@ -3,6 +3,65 @@ import typing
 from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
 
 
+class BaseTrapWeight(Choice):
+    """
+    Base Class for Trap Weights
+    """
+    option_none = 0
+    option_low = 1
+    option_medium = 2
+    option_high = 4
+    default = 2
+
+
+class OmochaoTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which spawns several Omochao around the player
+    """
+    display_name = "OmoTrap Weight"
+
+
+class TimestopTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which briefly stops time
+    """
+    display_name = "Chaos Control Trap Weight"
+
+
+class ConfusionTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the controls to be skewed for a period of time
+    """
+    display_name = "Confusion Trap Weight"
+
+
+class TinyTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the player to become tiny
+    """
+    display_name = "Tiny Trap Weight"
+
+
+class JunkFillPercentage(Range):
+    """
+    Replace a percentage of non-required emblems in the item pool with random junk items
+    """
+    display_name = "Junk Fill Percentage"
+    range_start = 0
+    range_end = 100
+    default = 50
+
+
+class TrapFillPercentage(Range):
+    """
+    Replace a percentage of junk items in the item pool with random traps
+    """
+    display_name = "Trap Fill Percentage"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
 class IncludeMissions(Range):
     """
     Allows logic to place items in a range of Missions for each level
@@ -31,7 +90,7 @@ class EmblemPercentageForCannonsCore(Range):
 
 class NumberOfLevelGates(Range):
     """
-    Allows logic to gate some levels behind emblem requirements
+    The number emblem-locked gates which lock sets of levels
     """
     display_name = "Number of Level Gates"
     range_start = 0
@@ -53,6 +112,65 @@ class LevelGateDistribution(Choice):
     default = 1
 
 
+class LevelGateCosts(Choice):
+    """
+    Determines how many emblems are required to unlock level gates
+    """
+    display_name = "Level Gate Costs"
+    option_low = 0
+    option_medium = 1
+    option_high = 2
+    default = 2
+
+
+class RequiredRank(Choice):
+    """
+    Determines what minimum Rank is required to send a check for a mission
+    """
+    display_name = "Required Rank"
+    option_e = 0
+    option_d = 1
+    option_c = 2
+    option_b = 3
+    option_a = 4
+    default = 0
+
+
+class ChaoGardenDifficulty(Choice):
+    """
+    Determines the number of chao garden difficulty levels included. Easier difficulty settings means fewer chao garden checks
+    None: No Chao Garden Activities have checks
+    Beginner: Beginner Races
+    Intermediate: Beginner and Jewel Races
+    Expert: Beginner, Jewel, Challenge, Hero, and Dark Races
+    """
+    display_name = "Chao Garden Difficulty"
+    option_none = 0
+    option_beginner = 1
+    option_intermediate = 2
+    option_expert = 3
+    default = 0
+
+
+class IncludeChaoKarate(Toggle):
+    """
+    Determines whether the Chao Karate should be included as checks (Note: This setting requires purchase of the "Battle" DLC)
+    """
+    display_name = "Include Chao Karate"
+
+
+class ChaoRaceChecks(Choice):
+    """
+    Determines which Chao Races grant checks
+    All: Each individual race grants a check
+    Prize: Only the races which grant Chao Toys grant checks (final race of each Beginner and Jewel cup, 4th, 8th, and 12th Challenge Races, 2nd and 4th Hero and Dark Races)
+    """
+    display_name = "Chao Race Checks"
+    option_all = 0
+    option_prize = 1
+    default = 0
+
+
 class MusicShuffle(Choice):
     """
     What type of Music Shuffle is used
@@ -68,10 +186,21 @@ class MusicShuffle(Choice):
 
 
 sa2b_options: typing.Dict[str, type(Option)] = {
-    "death_link": DeathLink,
-    "music_shuffle": MusicShuffle,
     "include_missions": IncludeMissions,
+    "required_rank": RequiredRank,
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "number_of_level_gates": NumberOfLevelGates,
     "level_gate_distribution": LevelGateDistribution,
+    "level_gate_costs": LevelGateCosts,
+    "chao_garden_difficulty": ChaoGardenDifficulty,
+    "include_chao_karate": IncludeChaoKarate,
+    "chao_race_checks": ChaoRaceChecks,
+    "junk_fill_percentage": JunkFillPercentage,
+    "trap_fill_percentage": TrapFillPercentage,
+    "omochao_trap_weight": OmochaoTrapWeight,
+    "timestop_trap_weight": TimestopTrapWeight,
+    "confusion_trap_weight": ConfusionTrapWeight,
+    "tiny_trap_weight": TinyTrapWeight,
+    "music_shuffle": MusicShuffle,
+    "death_link": DeathLink,
 }

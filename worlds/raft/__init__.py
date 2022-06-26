@@ -9,7 +9,7 @@ from .Regions import create_regions, getConnectionName
 from .Rules import set_rules
 from .Options import raft_options
 
-from BaseClasses import Region, RegionType, Entrance, Location, MultiWorld, Item, Tutorial
+from BaseClasses import Region, RegionType, Entrance, Location, MultiWorld, Item, ItemClassification, Tutorial
 from ..AutoWorld import World, WebWorld
 
 
@@ -106,10 +106,11 @@ class RaftWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = lookup_name_to_item[name]
-        return RaftItem(name, item["progression"], self.item_name_to_id[name], player=self.player)
+        return RaftItem(name, ItemClassification.progression if item["progression"] else ItemClassification.filler,
+                        self.item_name_to_id[name], player=self.player)
     
     def create_resourcePack(self, rpName: str) -> Item:
-        return RaftItem(rpName, False, self.item_name_to_id[rpName], player=self.player)
+        return RaftItem(rpName, ItemClassification.filler, self.item_name_to_id[rpName], player=self.player)
     
     def collect_item(self, state, item, remove=False):
         if item.name in progressive_item_list:
@@ -138,7 +139,7 @@ class RaftWorld(World):
             self.setLocationItemFromRegion("CaravanIsland", "Tangaroa Frequency")
         # Victory item
         self.world.get_location("Tangaroa Next Frequency", self.player).place_locked_item(
-            RaftItem("Victory", True, None, player=self.player))
+            RaftItem("Victory", ItemClassification.progression, None, player=self.player))
     
     def setLocationItem(self, location: str, itemName: str):
         itemToUse = next(filter(lambda itm: itm.name == itemName, self.world.itempool))
