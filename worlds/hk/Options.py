@@ -110,7 +110,8 @@ shop_to_option = {
     "Iselda": "IseldaShopSlots",
     "Salubra": "SalubraShopSlots",
     "Leg_Eater": "LegEaterShopSlots",
-    "Salubra_(Requires_Charms)": "IseldaShopSlots"
+    "Salubra_(Requires_Charms)": "IseldaShopSlots",
+    "Egg_Shop": "EggShopSlots",
 }
 
 hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {}
@@ -292,7 +293,6 @@ class SlyShopSlots(Range):
 
     display_name = "Sly Shop Slots"
     default = 8
-    range_start = 8
     range_end = 16
 
 
@@ -301,7 +301,6 @@ class SlyKeyShopSlots(Range):
 
     display_name = "Sly Key Shop Slots"
     default = 6
-    range_start = 6
     range_end = 16
 
 
@@ -310,7 +309,6 @@ class IseldaShopSlots(Range):
 
     display_name = "Iselda Shop Slots"
     default = 2
-    range_start = 2
     range_end = 16
 
 
@@ -319,7 +317,7 @@ class SalubraShopSlots(Range):
 
     display_name = "Salubra Shop Slots"
     default = 5
-    range_start = 5
+    range_start = 0
     range_end = 16
 
 
@@ -328,7 +326,6 @@ class SalubraCharmShopSlots(Range):
 
     display_name = "Salubra Charm Shop Slots"
     default = 5
-    range_start = 5
     range_end = 16
 
 
@@ -337,7 +334,6 @@ class LegEaterShopSlots(Range):
 
     display_name = "Leg Eater Shop Slots"
     default = 3
-    range_start = 3
     range_end = 16
 
 
@@ -346,7 +342,6 @@ class GrubfatherRewardSlots(Range):
 
     display_name = "Grubfather Reward Slots"
     default = 7
-    range_start = 7
     range_end = 16
 
 
@@ -355,7 +350,6 @@ class SeerRewardSlots(Range):
 
     display_name = "Seer Reward Reward Slots"
     default = 8
-    range_start = 8
     range_end = 16
 
 
@@ -364,6 +358,19 @@ class EggShopSlots(Range):
 
     display_name = "Egg Shop Item Slots"
     range_end = 16
+
+
+class ExtraShopSlots(Range):
+    """For each extra slot, add a location to a randomly chosen shop a filler item to the item pool.
+
+    The Egg Shop will be excluded from this list unless it has at least one item.
+
+    Shops are capped at 16 items each.
+    """
+
+    display_name = "Additional Shop Slots"
+    default = 0
+    range_end = 9 * 16  # Number of shops x max slots per shop.
 
 
 class Goal(Choice):
@@ -435,8 +442,8 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
             SlyShopSlots, SlyKeyShopSlots, IseldaShopSlots,
             SalubraShopSlots, SalubraCharmShopSlots,
             LegEaterShopSlots, GrubfatherRewardSlots,
-            SeerRewardSlots, SplitCrystalHeart,
-            SplitMothwingCloak, SplitMantisClaw
+            SeerRewardSlots, ExtraShopSlots,
+            SplitCrystalHeart, SplitMothwingCloak, SplitMantisClaw
         )
     }
 }
