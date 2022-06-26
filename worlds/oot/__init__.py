@@ -82,7 +82,7 @@ class OOTWeb(WebWorld):
         "Español",
         "setup_es.md",
         "setup/es",
-        setup.author
+        setup.authors
     )
 
     tutorials = [setup, setup_es]
@@ -90,8 +90,8 @@ class OOTWeb(WebWorld):
 
 class OOTWorld(World):
     """
-    The Legend of Zelda: Ocarina of Time is a 3D action/adventure game. Travel through Hyrule in two time periods, 
-    learn magical ocarina songs, and explore twelve dungeons on your quest. Use Link's many items and abilities 
+    The Legend of Zelda: Ocarina of Time is a 3D action/adventure game. Travel through Hyrule in two time periods,
+    learn magical ocarina songs, and explore twelve dungeons on your quest. Use Link's many items and abilities
     to rescue the Seven Sages, and then confront Ganondorf to save Hyrule!
     """
     game: str = "Ocarina of Time"
@@ -577,7 +577,7 @@ class OOTWorld(World):
                        (loc.internal or loc.type == 'Drop') and loc.event and loc.locked and loc not in reachable]
         for loc in unreachable:
             loc.parent_region.locations.remove(loc)
-        # Exception: Sell Big Poe is an event which is only reachable if Bottle with Big Poe is in the item pool. 
+        # Exception: Sell Big Poe is an event which is only reachable if Bottle with Big Poe is in the item pool.
         # We allow it to be removed only if Bottle with Big Poe is not in the itempool.
         bigpoe = self.world.get_location('Sell Big Poe from Market Guard House', self.player)
         if not all_state.has('Bottle with Big Poe', self.player) and bigpoe not in reachable:
@@ -632,7 +632,7 @@ class OOTWorld(World):
             if shufflebk in itempools:
                 itempools[shufflebk].extend(dungeon.boss_key)
 
-            # We can't put a dungeon item on the end of a dungeon if a song is supposed to go there. Make sure not to include it. 
+            # We can't put a dungeon item on the end of a dungeon if a song is supposed to go there. Make sure not to include it.
             dungeon_locations = [loc for region in dungeon.regions for loc in region.locations
                                  if loc.item is None and (
                                          self.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations)]
