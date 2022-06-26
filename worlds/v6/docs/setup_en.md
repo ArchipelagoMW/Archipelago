@@ -13,10 +13,14 @@
 
 # Joining a MultiWorld Game
 
-Launch options on steam can be found be right clicking VVVVVV and clicking properties. To join, set the following launch options: `-v6ap_name YourName -v6ap_ip ServerIP:Port`. 
-Optionally, add `-v6ap_passwd "YourPassword"` if the room you are using requires a password. All parameters without quotation marks.
-The Name in this case is the one specified in your generated .yaml file.
-In case you are using the Archipelago Website, the IP should be `archipelago.gg`.
+To join an Archipelago MultiWorld game, you must set the game's launch options. The two mandatory launch options are:
+`-v6ap_name slotName`
+`-v6ap_ip server:port`
+
+If the game you are joining requires a password, you should also add the following to your launch options:
+`-v6ap_passwd secretPassword`
+
+Launch options may be found by right-clicking on the game in Steam, and clicking "Properties" in the context menu. From there, open the "General" tab. There is a "Launch Options" setting near the bottom wherein you should enter the above options. Note that all launch options are seperated by a space, and if there are spaces in your password, it should be surrounded with quotes
 
 If everything worked out, you will see a textbox informing you the connection has been established after the story intro.
 
