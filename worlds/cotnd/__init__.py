@@ -7,7 +7,7 @@
 import logging
 from typing import Dict, List, Any
 
-from BaseClasses import Region, RegionType, Entrance, Item, Tutorial
+from BaseClasses import Region, RegionType, Entrance, Item, Tutorial, ItemClassification
 from Options import Option
 from ..AutoWorld import World, WebWorld
 from .Characters import all_chars
@@ -111,14 +111,9 @@ class CotNDWorld(World):
     def create_item(self, name: str) -> Item:
         try:
             data = item_table[name]
-            advancement = data[0] == 2
-            ret = Item(name, advancement, self.item_name_to_id[name], self.player)
+            ret = Item(name, ItemClassification(data[0]), self.item_name_to_id[name], self.player)
             ret.game = self.game
             ret.type = data[1]
-            if data[0] == 1:
-                ret.never_exclude = True
-            elif data[0] == -2:
-                ret.trap = True
             return ret
         except KeyError:
             logging.error(f"{name} not a valid item name for CotND")
