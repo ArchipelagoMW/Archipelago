@@ -13,15 +13,14 @@
 
 # Joining a MultiWorld Game
 
-To join an Archipelago MultiWorld game, you must set the game's launch options. The two mandatory launch options are:
-`-v6ap_name slotName`
-`-v6ap_ip server:port`
-
+To join an Archipelago MultiWorld game, you must set the game's launch options. The two mandatory launch options are:  
+  `-v6ap_name slotName`
+  `-v6ap_ip serverIP:port`
 If the game you are joining requires a password, you should also add the following to your launch options:
-`-v6ap_passwd secretPassword`
+  `-v6ap_passwd secretPassword`  
 
-Launch options may be found by right-clicking on the game in Steam, and clicking "Properties" in the context menu. From there, open the "General" tab. There is a "Launch Options" setting near the bottom wherein you should enter the above options. Note that all launch options are seperated by a space, and if there are spaces in your password, it should be surrounded with quotes
 
+Launch options may be found by right-clicking on the game in Steam and clicking "Properties" in the context menu. From there, open the "General" tab. There is a "Launch Options" setting near the bottom wherein you should enter the above options. Note that all launch options are seperated by a space, and if there are spaces in your password, it should be surrounded with quotes.
 If everything worked out, you will see a textbox informing you the connection has been established after the story intro.
 
 # Playing offline
