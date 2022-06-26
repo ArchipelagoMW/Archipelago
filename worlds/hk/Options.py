@@ -1,5 +1,6 @@
 import typing
 from .ExtractedData import logic_options, starts, pool_options
+from .Rules import cost_terms
 
 from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, SpecialRange
 from .Charms import vanilla_costs, names as charm_names
@@ -425,6 +426,39 @@ class StartingGeo(Range):
     default = 0
 
 
+class CostSanity(Toggle):
+    """If enabled, most locations with costs (like stag stations) will have randomly determined costs.
+
+    These costs can be in Geo (except Grubfather, Seer and Eggshop), Grubs, Charms, Essence and/or Rancid Eggs
+    """
+    display_name = "Cost Sanity"
+
+
+class CostSanityHybridChance(Range):
+    """The chance that a CostSanity cost will include two components instead of one, e.g. Grubs + Essence"""
+    range_end = 100
+    default = 10
+
+
+cost_sanity_weights: typing.Dict[str, type(Option)] = {}
+for term, cost in cost_terms.items():
+    option_name = f"CostSanity{cost.option}Weight"
+    extra_data = {
+        "__module__": __name__, "range_end": 1000,
+        "__doc__": (
+            "The likelihood of Costsanity choosing a {cost.option} cost."
+            " Chosen as a sum of all weights from other types."
+        ),
+        "default": cost.weight
+    }
+    if cost == 'GEO':
+        extra_data["__doc__"] += " Geo costs will never be chosen for Grubfather, Seer, or Egg Shop."
+
+    option = type(option_name, (Range,), extra_data)
+    globals()[option.__name__] = option
+    cost_sanity_weights[option.__name__] = option
+
+
 hollow_knight_options: typing.Dict[str, type(Option)] = {
     **hollow_knight_randomize_options,
     RandomizeElevatorPass.__name__: RandomizeElevatorPass,
@@ -443,7 +477,9 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
             SalubraShopSlots, SalubraCharmShopSlots,
             LegEaterShopSlots, GrubfatherRewardSlots,
             SeerRewardSlots, ExtraShopSlots,
-            SplitCrystalHeart, SplitMothwingCloak, SplitMantisClaw
+            SplitCrystalHeart, SplitMothwingCloak, SplitMantisClaw,
+            CostSanity, CostSanityHybridChance,
         )
-    }
+    },
+    **cost_sanity_weights
 }

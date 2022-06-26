@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import logging
 import typing
+from copy import deepcopy
+import itertools
+import operator
 
 logger = logging.getLogger("Hollow Knight")
 
@@ -16,7 +19,6 @@ from .Charms import names as charm_names
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial, ItemClassification
 from ..AutoWorld import World, LogicMixin, WebWorld
-from copy import deepcopy
 
 path_of_pain_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
@@ -323,6 +325,11 @@ class HKWorld(World):
 
         self.world.itempool += pool
 
+        self.apply_costsanity()
+
+        self.sort_shops_by_cost()
+
+    def sort_shops_by_cost(self):
         for shop, locations in self.created_multi_locations.items():
             randomized_locations = list(loc for loc in locations if not loc.vanilla)
             prices = sorted(
@@ -332,6 +339,69 @@ class HKWorld(World):
             for loc, costs in zip(randomized_locations, prices):
                 loc.costs = costs
 
+    def apply_costsanity(self):
+        if not self.world.CostSanity[self.player].value:
+            return  # noop
+
+        def _compute_weights(weights: dict, desc: str) -> typing.Dict[str, int]:
+            if all(x == 0 for x in weights.values()):
+                logger.warning(
+                    f"All {desc} weights were zero for {self.world.player_name[self.player]}."
+                    f" Setting them to one instead."
+                )
+                weights = {k: 1 for k in weights}
+
+            return {k: v for k, v in weights.items() if v}
+
+        random = self.world.random
+        hybrid_chance = getattr(self.world, f"CostSanityHybridChance")[self.player].value
+        weights = {
+            data.term: getattr(self.world, f"CostSanity{data.option}Weight")[self.player].value
+            for data in cost_terms.values()
+        }
+        weights_geoless = dict(weights)
+        del weights_geoless["GEO"]
+
+        weights = _compute_weights(weights, "CostSanity")
+        weights_geoless = _compute_weights(weights, "Geoless CostSanity")
+
+        if hybrid_chance > 0:
+            if len(weights) == 1:
+                logger.warning(
+                    f"Only one cost type is available for CostSanity in {self.world.player_name[self.player]}'s world."
+                    f" CostSanityHybridChance will not trigger."
+                )
+            if len(weights_geoless) == 1:
+                logger.warning(
+                    f"Only one cost type is available for CostSanity in {self.world.player_name[self.player]}'s world."
+                    f" CostSanityHybridChance will not trigger in geoless locations."
+                )
+
+        for region in self.world.get_regions(self.player):
+            for location in region.locations:
+                if not location.costs:
+                    continue
+
+                if location.basename in {'Grubfather', 'Seer', 'Eggshop'}:
+                    our_weights = dict(weights_geoless)
+                else:
+                    our_weights = dict(weights)
+
+                rolls = 1
+                if random.randrange(100) < hybrid_chance:
+                    rolls = 2
+
+                if rolls > len(our_weights):
+                    terms = list(our_weights.keys())  # Can't randomly choose cost types, using all of them.
+                else:
+                    terms = []
+                    for _ in range(rolls):
+                        term = random.choices(list(our_weights.keys()), list(our_weights.values()))[0]
+                        del our_weights[term]
+                        terms.append(term)
+
+                location.costs = {term: random.randint(*self.ranges[term]) for term in terms}
+                location.sort_costs()
 
     def set_rules(self):
         world = self.world
@@ -365,14 +435,15 @@ class HKWorld(World):
         slot_data["seed"] = self.world.slot_seeds[self.player].randint(-2147483647, 2147483646)
 
         # Backwards compatibility for shop cost data (HKAP < 0.1.0)
-        for shop, terms in shop_cost_types.items():
-            unit = cost_terms[next(iter(terms))].option
-            if unit == "Geo":
-                continue
-            slot_data[f"{unit}_costs"] = {
-                loc.name: next(iter(loc.costs.values()))
-                for loc in self.created_multi_locations[shop]
-            }
+        if not self.world.CostSanity[self.player]:
+            for shop, terms in shop_cost_types.items():
+                unit = cost_terms[next(iter(terms))].option
+                if unit == "Geo":
+                    continue
+                slot_data[f"{unit}_costs"] = {
+                    loc.name: next(iter(loc.costs.values()))
+                    for loc in self.created_multi_locations[shop]
+                }
 
         # HKAP 0.1.0 and later cost data.
         location_costs = {}
@@ -392,6 +463,7 @@ class HKWorld(World):
 
     def create_location(self, name: str, vanilla=False) -> HKLocation:
         costs = None
+        basename = name
         if name in shop_cost_types:
             costs = {
                 term: self.world.random.randint(*self.ranges[term])
@@ -407,7 +479,9 @@ class HKWorld(World):
             name = f"{name}_{i}"
 
         region = self.world.get_region("Menu", self.player)
-        loc = HKLocation(self.player, name, self.location_name_to_id[name], region, costs=costs, vanilla=vanilla)
+        loc = HKLocation(self.player, name,
+                         self.location_name_to_id[name], region, costs=costs, vanilla=vanilla,
+                         basename=basename)
 
         if multi is not None:
             multi.append(loc)
@@ -462,14 +536,23 @@ class HKWorld(World):
             spoiler_handle.write(f'\n{name}\n')
             hk_world: HKWorld = world.worlds[player]
 
-            for shop_name, locations in hk_world.created_multi_locations.items():
-                for loc in locations:
+            if world.CostSanity[player].value:
+                for loc in sorted(
+                    (
+                        loc for loc in itertools.chain(*(region.locations for region in world.get_regions(player)))
+                        if loc.costs
+                    ), key=operator.attrgetter('name')
+                ):
                     spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
+            else:
+                for shop_name, locations in hk_world.created_multi_locations.items():
+                    for loc in locations:
+                        spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
 
     def get_multi_location_name(self, base: str, i: typing.Optional[int]) -> str:
         if i is None:
             i = len(self.created_multi_locations[base]) + 1
-        assert i <= 16, "limited number of multi location IDs reserved."
+        assert 1 <= 16, "limited number of multi location IDs reserved."
         return f"{base}_{i}"
 
     def get_filler_item_name(self) -> str:
@@ -506,15 +589,23 @@ class HKLocation(Location):
     costs: typing.Dict[str, int] = None
     unit: typing.Optional[str] = None
     vanilla = False
+    basename: str
+
+    def sort_costs(self):
+        if self.costs is None:
+            return
+        self.costs = {k: self.costs[k] for k in sorted(self.costs.keys(), key=lambda x: cost_terms[x].sort)}
 
     def __init__(
             self, player: int, name: str, code=None, parent=None,
-            costs: typing.Dict[str, int] = None, vanilla: bool = False
+            costs: typing.Dict[str, int] = None, vanilla: bool = False, basename: str = None
     ):
+        self.basename = basename or name
         super(HKLocation, self).__init__(player, name, code if code else None, parent)
         self.vanilla = vanilla
         if costs:
             self.costs = dict(costs)
+            self.sort_costs()
 
     def cost_text(self, separator=" and "):
         if self.costs is None:
