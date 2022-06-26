@@ -469,7 +469,7 @@ class HKWorld(World):
     def get_multi_location_name(self, base: str, i: typing.Optional[int]) -> str:
         if i is None:
             i = len(self.created_multi_locations[base]) + 1
-        assert 1 <= 16, "limited number of multi location IDs reserved."
+        assert i <= 16, "limited number of multi location IDs reserved."
         return f"{base}_{i}"
 
     def get_filler_item_name(self) -> str:
