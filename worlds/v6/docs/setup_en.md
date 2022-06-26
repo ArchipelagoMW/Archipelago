@@ -3,8 +3,8 @@
 ## Required Software
 
 - VVVVVV
-- - [Steam Store Page](https://store.steampowered.com/app/70300/VVVVVV/)
-- - [GOG Store Page](https://www.gog.com/game/vvvvvv)
+  - [Steam Store Page](https://store.steampowered.com/app/70300/VVVVVV/)
+  - [GOG Store Page](https://www.gog.com/game/vvvvvv)
 - [V6AP](https://github.com/N00byKing/VVVVVV/releases)
 
 ## Installation and Game Start Procedures
