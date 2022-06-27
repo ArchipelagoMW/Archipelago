@@ -300,7 +300,6 @@ class HKWorld(World):
         for shop, locations in self.created_multi_locations.items():
             for _ in range(len(locations), getattr(self.world, shop_to_option[shop])[self.player].value):
                 loc = self.create_location(shop)
-                print(f"Created location {loc.name}")
                 unfilled_locations += 1
 
         # Balance the pool
@@ -309,16 +308,13 @@ class HKWorld(World):
 
         # Add additional shop items, as needed.
         if additional_shop_items > 0:
-            print(f"Additional shop items requested: {additional_shop_items}")
             shops = list(shop for shop, locations in self.created_multi_locations.items() if len(locations) < 16)
             if not self.world.EggShopSlots[self.player].value:  # No eggshop, so don't place items there
                 shops.remove('Egg_Shop')
 
             for _ in range(additional_shop_items):
-                print(f"Candidates: {shops}")
                 shop = self.world.random.choice(shops)
                 loc = self.create_location(shop)
-                print(f"Created location {loc.name}")
                 unfilled_locations += 1
                 if len(self.created_multi_locations[shop]) >= 16:
                     shops.remove(shop)
