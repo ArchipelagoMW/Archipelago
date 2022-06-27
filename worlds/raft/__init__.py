@@ -157,6 +157,12 @@ class RaftWorld(World):
         self.world.itempool.remove(itemToUse)
         location = random.choice(list(loc for loc in location_table if loc["region"] == region))
         self.world.get_location(location["name"], self.player).place_locked_item(itemToUse)
+    
+    def fill_slot_data(self):
+        return {
+            "IslandGenerationDistance": self.world.island_generation_distance[self.player].value,
+            "ExpensiveResearch": self.world.expensive_research[self.player].value
+        }
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, RegionType.Generic, name, player)
