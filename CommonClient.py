@@ -58,7 +58,7 @@ class ClientCommandProcessor(CommandProcessor):
         """List all received items"""
         logger.info(f'{len(self.ctx.items_received)} received items:')
         for index, item in enumerate(self.ctx.items_received, 1):
-            self.output(f"{self.ctx.item_names(item.item)} from {self.ctx.player_names[item.player]}")
+            self.output(f"{self.ctx.item_names[item.item]} from {self.ctx.player_names[item.player]}")
         return True
 
     def _cmd_missing(self) -> bool:
@@ -339,6 +339,9 @@ class CommonContext:
                                   remote_datepackage_versions: typing.Dict[str, int]):
         """Validate that all data is present for the current multiworld.
         Download, assimilate and cache missing data from the server."""
+        # by documentation any game can use Archipelago locations/items -> always relevant
+        relevant_games.add("Archipelago")
+
         cache_package = Utils.persistent_load().get("datapackage", {}).get("games", {})
         needed_updates: typing.Set[str] = set()
         for game in relevant_games:

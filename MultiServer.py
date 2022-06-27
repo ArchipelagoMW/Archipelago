@@ -556,32 +556,33 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], onl
     """Send and remember hints."""
     if only_new:
         hints = [hint for hint in hints if hint not in ctx.hints[team, hint.finding_player]]
-    if hints:
-        concerns = collections.defaultdict(list)
-        for hint in hints:
-            net_msg = hint.as_network_message()
-            for player in ctx.slot_set(hint.receiving_player):
-                concerns[player].append(net_msg)
+    if not hints:
+        return
+    concerns = collections.defaultdict(list)
+    for hint in sorted(hints, key=operator.attrgetter('found'), reverse=True):
+        data = (hint, hint.as_network_message())
+        for player in ctx.slot_set(hint.receiving_player):
+            concerns[player].append(data)
+        if not hint.local and data not in concerns[hint.finding_player]:
+            concerns[hint.finding_player].append(data)
+        # remember hints in all cases
+        if not hint.found:
+            # since hints are bidirectional, finding player and receiving player,
+            # we can check once if hint already exists
+            if hint not in ctx.hints[team, hint.finding_player]:
+                ctx.hints[team, hint.finding_player].add(hint)
+                for player in ctx.slot_set(hint.receiving_player):
+                    ctx.hints[team, player].add(hint)
 
-            if not hint.local and net_msg not in concerns[hint.finding_player]:
-                concerns[hint.finding_player].append(net_msg)
-            # remember hints in all cases
-            if not hint.found:
-                # since hints are bidirectional, finding player and receiving player,
-                # we can check once if hint already exists
-                if hint not in ctx.hints[team, hint.finding_player]:
-                    ctx.hints[team, hint.finding_player].add(hint)
-                    for player in ctx.slot_set(hint.receiving_player):
-                        ctx.hints[team, player].add(hint)
+        logging.info("Notice (Team #%d): %s" % (team + 1, format_hint(ctx, team, hint)))
 
-        for text in (format_hint(ctx, team, hint) for hint in hints):
-            logging.info("Notice (Team #%d): %s" % (team + 1, text))
-
-        for slot, clients in ctx.clients[team].items():
-            client_hints = concerns[slot]
-            if client_hints:
-                for client in clients:
-                    asyncio.create_task(ctx.send_msgs(client, client_hints))
+    for slot, hint_data in concerns.items():
+        clients = ctx.clients[team].get(slot)
+        if not clients:
+            continue
+        client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
+        for client in clients:
+            asyncio.create_task(ctx.send_msgs(client, client_hints))
 
 
 def update_aliases(ctx: Context, team: int):

@@ -57,7 +57,7 @@ If everything worked out, you will see a textbox informing you the connection ha
 # Playing offline
 
 To play offline, first generate a seed on the game's settings page.
-Create a room and download the `.apsm64ex` file, and start the game with the `--sm64ap_file FileName` launch argument.
+Create a room and download the `.apsm64ex` file, and start the game with the `--sm64ap_file "path/to/FileName"` launch argument.
 
 ## Installation Troubleshooting
 
@@ -68,6 +68,12 @@ Start the game from the command line to view helpful messages regarding SM64EX.
 Most likely you forgot to set the launch options. `--sm64ap_name YourName` and `--sm64ap_ip ServerIP:Port` are required for startup for Multiworlds, and
 `--sm64ap_file FileName` is required for (offline) singleplayer.
 If your Name or Password have spaces in them, surround them in quotes.
+
+### Game crashes upon entering Peach's Castle
+
+This happens when the game is missing the relevant randomizer data. If you are trying to connect to a server, verify the
+information entered is correct, and for a local file ensure you are using the full file path to the file in conjunction
+with its name.
 
 ## Game Troubleshooting
 
