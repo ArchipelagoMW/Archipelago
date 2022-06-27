@@ -243,8 +243,6 @@ class WitnessPlayerLogic:
             pair = self.make_event_item_pair(panel)
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
-        print(self.EVENT_ITEM_PAIRS)
-
     def __init__(self, world: MultiWorld, player: int):
         self.EVENT_PANELS_FROM_PANELS = set()
         self.EVENT_PANELS_FROM_REGIONS = set()
