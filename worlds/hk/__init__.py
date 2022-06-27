@@ -11,7 +11,7 @@ logger = logging.getLogger("Hollow Knight")
 from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
 from .Rules import set_rules, cost_terms
-from .Options import hollow_knight_options, hollow_knight_randomize_options, Goal, WhitePalace, \
+from .Options import hollow_knight_options, hollow_knight_randomize_options, Goal, WhitePalace, CostSanity, \
     shop_to_option
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
     event_names, item_effects, connectors, one_ways, vanilla_shop_costs, vanilla_location_costs
@@ -339,7 +339,8 @@ class HKWorld(World):
                 loc.costs = costs
 
     def apply_costsanity(self):
-        if not self.world.CostSanity[self.player].value:
+        setting = self.world.CostSanity[self.player].value
+        if not setting:
             return  # noop
 
         def _compute_weights(weights: dict, desc: str) -> typing.Dict[str, int]:
@@ -382,7 +383,10 @@ class HKWorld(World):
                     continue
                 if location.name == "Vessel_Fragment-Basin":
                     continue
-
+                if setting == CostSanity.option_notshops and location.basename in multi_locations:
+                    continue
+                if setting == CostSanity.option_shopsonly and location.basename not in multi_locations:
+                    continue
                 if location.basename in {'Grubfather', 'Seer', 'Eggshop'}:
                     our_weights = dict(weights_geoless)
                 else:

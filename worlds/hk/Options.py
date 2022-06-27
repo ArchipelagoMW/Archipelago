@@ -426,11 +426,21 @@ class StartingGeo(Range):
     default = 0
 
 
-class CostSanity(Toggle):
+class CostSanity(Choice):
     """If enabled, most locations with costs (like stag stations) will have randomly determined costs.
+    If set to shopsonly, CostSanity will only apply to shops (including Grubfather, Seer and Egg Shop).
+    If set to notshops, CostSanity will only apply to non-shops (e.g. Stag stations and Cornifer locations)
 
     These costs can be in Geo (except Grubfather, Seer and Eggshop), Grubs, Charms, Essence and/or Rancid Eggs
     """
+    option_off = 0
+    alias_false = 0
+    alias_no = 0
+    option_on = 1
+    alias_true = 1
+    alias_yes = 1
+    option_shopsonly = 2
+    option_notshops = 3
     display_name = "Cost Sanity"
 
 
@@ -446,7 +456,7 @@ for term, cost in cost_terms.items():
     extra_data = {
         "__module__": __name__, "range_end": 1000,
         "__doc__": (
-            "The likelihood of Costsanity choosing a {cost.option} cost."
+            f"The likelihood of Costsanity choosing a {cost.option} cost."
             " Chosen as a sum of all weights from other types."
         ),
         "default": cost.weight
