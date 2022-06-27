@@ -52,6 +52,13 @@ Once the goal has been completed, you may press F to send a forfeit, sending out
 
 More in-depth information about the game can be found in the game's help file, accessed by pressing H while playing.
 
+## Commands
+While playing the multiworld you can interact with the server using various commands listed in the 
+[commands guide](/tutorial/Archipelago/commands/en). As this game does not have an in-game text client at the moment,
+You can optionally connect to the multiworld using the text client, which can be found in the 
+[main Archipelago installation](https://github.com/ArchipelagoMW/Archipelago/releases) as Archipelago Text Client to
+enter these commands.
+
 ## Game Troubleshooting
 
 ### An error message shows up at the bottom-left
