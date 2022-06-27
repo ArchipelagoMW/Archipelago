@@ -1132,7 +1132,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return True
         elif "disabled" in self.ctx.forfeit_mode:
             self.output(
-                "Sorry, client itemreleasing has been disabled on this server. You can ask the server admin for a /release")
+                "Sorry, client item releasing has been disabled on this server. You can ask the server admin for a /release")
             return False
         else:  # is auto or goal
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
