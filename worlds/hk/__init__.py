@@ -313,7 +313,6 @@ class HKWorld(World):
                 shops.remove('Egg_Shop')
 
             for _ in range(additional_shop_items):
-                print(f"Candidates: {shops}")
                 shop = self.world.random.choice(shops)
                 loc = self.create_location(shop)
                 unfilled_locations += 1
