@@ -626,6 +626,10 @@ class HKItem(Item):
             classification = ItemClassification.progression_skip_balancing
         elif type == "Charm" and name not in progression_charms:
             classification = ItemClassification.progression_skip_balancing
+        elif type in ("Map", "Journal"):
+            classification = ItemClassification.filler
+        elif type in ("Mask", "Ore", "Vessel"):
+            classification = ItemClassification.useful
         elif advancement:
             classification = ItemClassification.progression
         else:
