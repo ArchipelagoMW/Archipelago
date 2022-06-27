@@ -218,6 +218,7 @@ class HKWorld(World):
                 menu_region.locations.append(loc)
 
     def create_items(self):
+        unfilled_locations = 0
         # Generate item pool and associated locations (paired in HK)
         pool: typing.List[HKItem] = []
         wp_exclusions = self.white_palace_exclusions()
@@ -235,6 +236,8 @@ class HKWorld(World):
             """
             Adds a pairing of an item and location, doing appropriate checks to see if it should be vanilla or not.
             """
+            nonlocal unfilled_locations
+
             vanilla = not randomized
             excluded = False
 
@@ -263,6 +266,7 @@ class HKWorld(World):
                 if location_name in multi_locations:  # Create shop locations later.
                     return
                 location = self.create_location(location_name)
+                unfilled_locations += 1
             if excluded:
                 location.progress_type = LocationProgressType.EXCLUDED
 
@@ -295,38 +299,37 @@ class HKWorld(World):
 
         for shop, locations in self.created_multi_locations.items():
             for _ in range(len(locations), getattr(self.world, shop_to_option[shop])[self.player].value):
-                self.create_location(shop)
+                loc = self.create_location(shop)
+                print(f"Created location {loc.name}")
+                unfilled_locations += 1
 
         # Balance the pool
         item_count = len(pool)
-        location_count = len(self.world.get_unfilled_locations(self.player))
-        additional_shop_items = max(item_count - location_count, self.world.ExtraShopSlots[self.player].value)
+        additional_shop_items = max(item_count - unfilled_locations, self.world.ExtraShopSlots[self.player].value)
 
         # Add additional shop items, as needed.
         if additional_shop_items > 0:
-            shops = list(multi_locations.keys())  # Not a set because random.choice does not work with them.
+            print(f"Additional shop items requested: {additional_shop_items}")
+            shops = list(shop for shop, locations in self.created_multi_locations.items() if len(locations) < 16)
             if not self.world.EggShopSlots[self.player].value:  # No eggshop, so don't place items there
                 shops.remove('Egg_Shop')
 
             for _ in range(additional_shop_items):
+                print(f"Candidates: {shops}")
                 shop = self.world.random.choice(shops)
-                self.create_location(shop)
-                location_count += 1
+                loc = self.create_location(shop)
+                print(f"Created location {loc.name}")
+                unfilled_locations += 1
                 if len(self.created_multi_locations[shop]) >= 16:
                     shops.remove(shop)
                     if not shops:
                         break
 
         # Create filler items, if needed
-        if item_count < location_count:
-            for _ in range(location_count - item_count):
-                # Create enough filler items to fill all locations.
-                pool.append(self.create_item(self.get_filler_item_name()))
-
+        if item_count < unfilled_locations:
+            pool.extend(self.create_item(self.get_filler_item_name()) for _ in range(unfilled_locations - item_count))
         self.world.itempool += pool
-
         self.apply_costsanity()
-
         self.sort_shops_by_cost()
 
     def sort_shops_by_cost(self):
@@ -363,7 +366,7 @@ class HKWorld(World):
         del weights_geoless["GEO"]
 
         weights = _compute_weights(weights, "CostSanity")
-        weights_geoless = _compute_weights(weights, "Geoless CostSanity")
+        weights_geoless = _compute_weights(weights_geoless, "Geoless CostSanity")
 
         if hybrid_chance > 0:
             if len(weights) == 1:
@@ -380,6 +383,8 @@ class HKWorld(World):
         for region in self.world.get_regions(self.player):
             for location in region.locations:
                 if not location.costs:
+                    continue
+                if location.name == "Vessel_Fragment-Basin":
                     continue
 
                 if location.basename in {'Grubfather', 'Seer', 'Eggshop'}:
