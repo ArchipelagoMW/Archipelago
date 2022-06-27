@@ -16,7 +16,6 @@ import pickle
 import itertools
 import time
 import operator
-import math
 
 import ModuleUpdate
 
@@ -165,7 +164,7 @@ class Context:
         self.player_hint_costs = {}
         self.location_check_points = location_check_points
         self.minutes_to_hint = minutes_to_hint
-        self.hint_start_time = int(time.time())
+        self.hint_start_time = 0
         self.hints_used = collections.defaultdict(int)
         self.hints: typing.Dict[team_slot, typing.Set[NetUtils.Hint]] = collections.defaultdict(set)
         self.forfeit_mode: str = forfeit_mode
@@ -509,8 +508,8 @@ class Context:
     def calculate_hint_costs(self):
         self.player_hint_costs = {}
         for player in self.games.keys():
-            if self.hint_cost:
-                self.player_hint_costs[player] = max(0, int(self.hint_cost * 0.01 * len([loc for loc in self.locations[player].values() if not loc[2] & 8])))
+            if self.hint_cost and player in self.locations:
+                self.player_hint_costs[player] = max(0, int(self.hint_cost * 0.01 * len([loc for loc in self.locations[player].values()])))
             else:
                 self.player_hint_costs[player] = 0
 
@@ -711,6 +710,8 @@ async def countdown(ctx: Context, timer):
             ctx.countdown_timer -= 1
             await asyncio.sleep(1)
         ctx.notify_all(f'[Server]: GO')
+        if ctx.len(sum([list(checks) for checks in ctx.location_checks.values()], [])) == 0:  # is there a simpler way?
+            ctx.hint_start_time = time.time()
         ctx.countdown_timer = 0
 
 
@@ -827,6 +828,8 @@ def send_items_to(ctx: Context, team: int, target_slot: int, *items: NetworkItem
 
 def register_location_checks(ctx: Context, team: int, slot: int, locations: typing.Iterable[int],
                              count_activity: bool = True):
+    if ctx.hint_start_time == 0:
+        ctx.hint_start_time = time.time()
     new_locations = set(locations) - ctx.location_checks[team, slot]
     new_locations.intersection_update(ctx.locations[slot])  # ignore location IDs unknown to this multidata
     if new_locations:
@@ -1383,14 +1386,20 @@ def get_missing_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
 
 
 def get_client_points(ctx: Context, client: Client) -> int:
-    return ((ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) +
+    if ctx.hint_start_time:
+        return ((ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) +
              (int(((time.time() - ctx.hint_start_time) / (60 * ctx.minutes_to_hint)) * ctx.get_hint_cost(client.slot)))) -
+            ctx.get_hint_cost(client.slot) * ctx.hints_used[client.team, client.slot])
+    return (ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) -
             ctx.get_hint_cost(client.slot) * ctx.hints_used[client.team, client.slot])
 
 
 def get_slot_points(ctx: Context, team: int, slot: int) -> int:
-    return ((ctx.location_check_points * len(ctx.location_checks[team, slot]) +
+    if ctx.hint_start_time:
+        return ((ctx.location_check_points * len(ctx.location_checks[team, slot]) +
              (int(((time.time() - ctx.hint_start_time) / (60 * ctx.minutes_to_hint)) * ctx.get_hint_cost(slot)))) -
+            ctx.get_hint_cost(slot) * ctx.hints_used[team, slot])
+    return (ctx.location_check_points * len(ctx.location_checks[team, slot]) -
             ctx.get_hint_cost(slot) * ctx.hints_used[team, slot])
 
 
