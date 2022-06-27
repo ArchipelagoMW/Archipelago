@@ -43,12 +43,14 @@ class ClientCommandProcessor(CommandProcessor):
     def _cmd_connect(self, address: str = "") -> bool:
         """Connect to a MultiWorld Server"""
         self.ctx.server_address = None
+        self.ctx.username = None
         asyncio.create_task(self.ctx.connect(address if address else None), name="connecting")
         return True
 
     def _cmd_disconnect(self) -> bool:
         """Disconnect from a MultiWorld Server"""
         self.ctx.server_address = None
+        self.ctx.username = None
         asyncio.create_task(self.ctx.disconnect(), name="disconnecting")
         return True
 
@@ -56,7 +58,7 @@ class ClientCommandProcessor(CommandProcessor):
         """List all received items"""
         logger.info(f'{len(self.ctx.items_received)} received items:')
         for index, item in enumerate(self.ctx.items_received, 1):
-            self.output(f"{self.ctx.item_names(item.item)} from {self.ctx.player_names[item.player]}")
+            self.output(f"{self.ctx.item_names[item.item]} from {self.ctx.player_names[item.player]}")
         return True
 
     def _cmd_missing(self) -> bool:
@@ -161,6 +163,7 @@ class CommonContext:
     def __init__(self, server_address, password):
         # server state
         self.server_address = server_address
+        self.username = None
         self.password = password
         self.hint_cost = None
         self.slot_info = {}
@@ -253,6 +256,13 @@ class CommonContext:
             self.password = await self.console_input()
             return self.password
 
+    async def get_username(self):
+        if not self.auth:
+            self.auth = self.username
+            if not self.auth:
+                logger.info('Enter slot name:')
+                self.auth = await self.console_input()
+
     async def send_connect(self, **kwargs):
         payload = {
             'cmd': 'Connect',
@@ -309,6 +319,7 @@ class CommonContext:
 
     async def shutdown(self):
         self.server_address = ""
+        self.username = None
         if self.server and not self.server.socket.closed:
             await self.server.socket.close()
         if self.server_task:
@@ -328,6 +339,9 @@ class CommonContext:
                                   remote_datepackage_versions: typing.Dict[str, int]):
         """Validate that all data is present for the current multiworld.
         Download, assimilate and cache missing data from the server."""
+        # by documentation any game can use Archipelago locations/items -> always relevant
+        relevant_games.add("Archipelago")
+
         cache_package = Utils.persistent_load().get("datapackage", {}).get("games", {})
         needed_updates: typing.Set[str] = set()
         for game in relevant_games:
@@ -466,12 +480,20 @@ async def server_loop(ctx: CommonContext, address=None):
         logger.info('Please connect to an Archipelago server.')
         return
 
-    address = f"ws://{address}" if "://" not in address else address
-    port = urllib.parse.urlparse(address).port or 38281
+    address = f"ws://{address}" if "://" not in address \
+        else address.replace("archipelago://", "ws://")
+
+    server_url = urllib.parse.urlparse(address)
+    if server_url.username:
+        ctx.username = server_url.username
+    if server_url.password:
+        ctx.password = server_url.password
+    port = server_url.port or 38281
 
     logger.info(f'Connecting to Archipelago server at {address}')
     try:
         socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None)
+        ctx.ui.update_address_bar(server_url.netloc)
         ctx.server = Endpoint(socket)
         logger.info('Connected')
         ctx.server_address = address
@@ -582,6 +604,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             raise Exception('Connection refused by the multiworld host, no reason provided')
 
     elif cmd == 'Connected':
+        ctx.username = ctx.auth
         ctx.team = args["team"]
         ctx.slot = args["slot"]
         # int keys get lost in JSON transfer
@@ -705,10 +728,7 @@ if __name__ == '__main__':
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:
                 await super(TextContext, self).server_auth(password_requested)
-            if not self.auth:
-                logger.info('Enter slot name:')
-                self.auth = await self.console_input()
-
+            await self.get_username()
             await self.send_connect()
 
         def on_package(self, cmd: str, args: dict):
@@ -719,6 +739,7 @@ if __name__ == '__main__':
     async def main(args):
         ctx = TextContext(args.connect, args.password)
         ctx.auth = args.name
+        ctx.server_address = args.connect
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
         if gui_enabled:
