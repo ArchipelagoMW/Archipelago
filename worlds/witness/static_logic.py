@@ -54,25 +54,6 @@ class StaticWitnessLogic:
                 else:
                     current_set.add((line_split[1], int(line_split[0]), line_split[2] == "True"))
 
-        path = os.path.join(os.path.dirname(__file__), "Door_Shuffle.txt")
-        with open(path, "r", encoding="utf-8") as file:
-            for line in file.readlines():
-                line = line.strip()
-
-                line_split = line.split(" - ")
-
-                hex_set_split = line_split[1].split(",")
-
-                sever_list = line_split[2].split(",")
-                sever_set = {sever_panel for sever_panel in sever_list if sever_panel != "None"}
-
-                for door_hex in hex_set_split:
-                    self.ALL_DOOR_ITEM_IDS_BY_HEX[door_hex] = int(line_split[0])
-                    self.CONNECTIONS_TO_SEVER_BY_DOOR_HEX[door_hex] = sever_set
-
-                    if len(line_split) > 3:
-                        self.DOOR_NAMES_BY_HEX[door_hex] = line_split[3]
-        
     def read_logic_file(self):
         """
         Reads the logic file and does the initial population of data structures
