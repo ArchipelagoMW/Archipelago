@@ -16,7 +16,6 @@ Tutorial (Tutorial) - Outside Tutorial - 0x03629:
 Outside Tutorial (Outside Tutorial) - Outside Tutorial Path To Outpost - 0x03BA2:
 158650 - 0x033D4 (Vault) - True - Dots & Squares & Black/White Squares
 158651 - 0x03481 (Vault Box) - 0x033D4 - True
-
 158013 - 0x0005D (Dots Introduction 1) - True - Dots
 158014 - 0x0005E (Dots Introduction 2) - 0x0005D - Dots
 158015 - 0x0005F (Dots Introduction 3) - 0x0005E - Dots
@@ -33,7 +32,7 @@ Outside Tutorial (Outside Tutorial) - Outside Tutorial Path To Outpost - 0x03BA2
 158026 - 0x00021 (Squares Introduction 9) - 0x00020 - Squares & Black/White Squares
 Door - 0x03BA2 (Optional Door 1) - 0x0A3B5
 
-Outside Tutorial Path To Outpost (Outside Tutorial) - Outside Tutorial - 0x0A170:
+Outside Tutorial Path To Outpost (Outside Tutorial) - Outside Tutorial Outpost - 0x0A170:
 158011 - 0x0A171 (Door to Outpost Panel) - True - Dots
 Door - 0x0A170 (Door to Outpost) - 0x0A171
 
@@ -367,7 +366,7 @@ Inside Monastery (Monastery):
 
 Monastery Garden (Monastery):
 
-Town (Town) - Main Island - True - Boat - 0x0A054 - Town Red Rooftop - 0x28AA2 - Town Church - True - Town Wooden Rooftop - 0x034F5 - RGB House - 0x28A61 - Windmill Interior - 0x04D37:
+Town (Town) - Main Island - True - Boat - 0x0A054 - Town Maze Rooftop - 0x28AA2 - Town Church - True - Town Wooden Rooftop - 0x034F5 - RGB House - 0x28A61 - Windmill Interior - 0x04D37:
 158218 - 0x0A054 (Boat Spawn) - 0x17CA6 | 0x17CDF | 0x09DB8 | 0x17C95 - Boat
 158219 - 0x0A0C8 (Cargo Box) - True - Squares & Black/White Squares & Shapers
 158606 - 0x17D01 (Cargo Box Discard) - 0x0A0C8 - Triangles

@@ -85,8 +85,10 @@ class WitnessRegions:
                     self.connect(world, player, region_name, connection[0], player_logic, frozenset({frozenset()}))
                     continue
 
-                if connection[1] == frozenset({frozenset()}):
-                    self.connect(world, player, connection[0], region_name, player_logic, connection[1])
+                for subset in connection[1]:
+                    if all({panel in player_logic.DOOR_ITEMS_BY_ID for panel in subset}):
+                        self.connect(world, player, connection[0], region_name, player_logic, frozenset({subset}))
+
                 self.connect(world, player, region_name, connection[0], player_logic, connection[1])
 
         world.get_entrance("The Splashscreen?", player).connect(

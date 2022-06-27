@@ -53,8 +53,8 @@ class WitnessWorld(World):
             'seed': self.world.random.randint(0, 1000000),
             'victory_location': int(self.player_logic.VICTORY_LOCATION, 16),
             'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID,
-            'doorhex_to_id': self.player_logic.DOOR_DICT_FOR_CLIENT,
-            'door_connections_to_sever': self.player_logic.DOOR_CONNECTIONS_TO_SEVER
+            'item_id_to_door_hexes': self.items.ITEM_ID_TO_DOOR_HEX,
+            'door_hexes': self.items.DOORS,
         }
 
     def generate_early(self):
@@ -83,6 +83,7 @@ class WitnessWorld(World):
 
         if symbols:
             random_good_item = self.world.random.choice(self.items.GOOD_ITEMS)
+
             first_check = self.world.get_location(
                 "Tutorial Gate Open", self.player
             )
@@ -90,6 +91,9 @@ class WitnessWorld(World):
             pool.remove(items_by_name[random_good_item])
 
             less_junk = 1
+
+        for item in self.player_logic.STARTING_INVENTORY:
+            self.world.precollected_items[self.player].append(items_by_name[item])
 
         for item in self.items.EXTRA_AMOUNTS:
             witness_item = self.create_item(item)

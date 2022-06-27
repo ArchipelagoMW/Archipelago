@@ -57,6 +57,9 @@ class StaticWitnessItems:
 
             item_tab[item[0]] = ItemData(158000 + item[1], True, False)
 
+        for item in StaticWitnessLogic.ALL_DOOR_ITEMS:
+            item_tab[item[0]] = ItemData(158000 + item[1], True, False)
+
         for item in StaticWitnessLogic.ALL_TRAPS:
             item_tab[item[0]] = ItemData(
                 158000 + item[1], False, False, True
@@ -89,16 +92,28 @@ class WitnessPlayerItems:
         self.ITEM_TABLE = copy.copy(StaticWitnessItems.ALL_ITEM_TABLE)
         self.PROGRESSION_TABLE = dict()
 
+        self.ITEM_ID_TO_DOOR_HEX = dict()
+        self.DOORS = set()
+
         self.EXTRA_AMOUNTS = {
             "Functioning Brain": 1,
             "Puzzle Skip": get_option_value(world, player, "puzzle_skip_amount")
         }
 
-        for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS:
-            if item not in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME:
+        for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS.union(StaticWitnessLogic.ALL_DOOR_ITEMS):
+            if item[0] not in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME:
                 del self.ITEM_TABLE[item[0]]
             else:
                 self.PROGRESSION_TABLE[item[0]] = self.ITEM_TABLE[item[0]]
+
+        for entity_hex, items in player_logic.DOOR_ITEMS_BY_ID.items():
+            entity_hex_int = int(entity_hex, 16)
+
+            self.DOORS.add(entity_hex_int)
+
+            for item in items:
+                item_id = StaticWitnessItems.ALL_ITEM_TABLE[item].code
+                self.ITEM_ID_TO_DOOR_HEX.setdefault(item_id, set()).add(entity_hex_int)
 
         symbols = is_option_enabled(world, player, "shuffle_symbols")
 

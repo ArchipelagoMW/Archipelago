@@ -5,6 +5,8 @@ from .utils import define_new_region, parse_lambda
 
 class StaticWitnessLogic:
     ALL_SYMBOL_ITEMS = set()
+    ALL_DOOR_ITEMS = set()
+    ALL_DOOR_ITEMS_AS_DICT = dict()
     ALL_USEFULS = set()
     ALL_TRAPS = set()
     ALL_BOOSTS = set()
@@ -44,15 +46,22 @@ class StaticWitnessLogic:
                 if line == "Usefuls:":
                     current_set = self.ALL_USEFULS
                     continue
+                if line == "Doors:":
+                    current_set = self.ALL_DOOR_ITEMS
+                    continue
                 if line == "":
                     continue
 
                 line_split = line.split(" - ")
 
-                if current_set is not self.ALL_USEFULS:
-                    current_set.add((line_split[1], int(line_split[0])))
-                else:
+                if current_set is self.ALL_USEFULS:
                     current_set.add((line_split[1], int(line_split[0]), line_split[2] == "True"))
+                elif current_set is self.ALL_DOOR_ITEMS:
+                    new_door = (line_split[1], int(line_split[0]), frozenset(line_split[2].split(",")))
+                    current_set.add(new_door)
+                    self.ALL_DOOR_ITEMS_AS_DICT[line_split[1]] = new_door
+                else:
+                    current_set.add((line_split[1], int(line_split[0])))
 
     def read_logic_file(self):
         """
@@ -130,11 +139,6 @@ class StaticWitnessLogic:
                     location_type = "General"
 
                 required_items = parse_lambda(required_item_lambda)
-                items_actually_in_the_game = {item[0] for item in self.ALL_SYMBOL_ITEMS}
-                required_items = set(
-                    subset.intersection(items_actually_in_the_game)
-                    for subset in required_items
-                )
 
                 required_items = frozenset(required_items)
 

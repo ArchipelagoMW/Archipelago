@@ -98,9 +98,14 @@ def get_adjustment_file(adjustment_file):
 
 @cache_argsless
 def get_disable_unrandomized_list():
-    return get_adjustment_file("Disable_Unrandomized.txt")
+    return get_adjustment_file("settings/Disable_Unrandomized.txt")
 
 
 @cache_argsless
 def get_early_utm_list():
-    return get_adjustment_file("Early_UTM.txt")
+    return get_adjustment_file("settings/Early_UTM.txt")
+
+
+@cache_argsless
+def get_symbol_shuffle_list():
+    return get_adjustment_file("settings/Symbol_Shuffle.txt")

@@ -101,7 +101,12 @@ class WitnessLogic(LogicMixin):
             valid_option = True
 
             for panel in option:
-                if not self._witness_can_solve_panel(panel, world, player, player_logic, locat):
+                if panel in player_logic.DOOR_ITEMS_BY_ID:
+                    if all({not self.has(item, player) for item in player_logic.DOOR_ITEMS_BY_ID[panel]}):
+                        valid_option = False
+                        break
+
+                elif not self._witness_can_solve_panel(panel, world, player, player_logic, locat):
                     valid_option = False
                     break
 

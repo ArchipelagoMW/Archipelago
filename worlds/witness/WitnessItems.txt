@@ -1,6 +1,8 @@
 Progression:
 0 - Dots
 1 - Colored Dots
+2 - Full Dots
+3 - Invisible Dots
 5 - Sound Dots
 10 - Symmetry
 20 - Triangles
@@ -12,6 +14,7 @@ Progression:
 61 - Stars + Same Colored Symbol
 71 - Black/White Squares
 72 - Colored Squares
+80 - Arrows
 
 Usefuls:
 101 - Functioning Brain - False
@@ -23,3 +26,6 @@ Boosts:
 Traps:
 600 - Slowness
 610 - Power Surge
+
+Doors:
+1100 - Caves-Mountain Shortcut - 0x2D73F

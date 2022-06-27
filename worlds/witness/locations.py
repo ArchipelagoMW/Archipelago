@@ -211,15 +211,6 @@ class StaticWitnessLocations:
             if panel_obj["id"]
         }
 
-        file = open("F:\Dokumente\Archipelago\worlds\witness/WitnessLogic.txt", "r")
-        string = file.read()
-
-        for chex in StaticWitnessLogic.CHECKS_BY_HEX.keys():
-            string = string.replace("\n" + chex, "\n" + str(self.get_id(chex)) + " - " + chex)
-
-        file2 = open ("F:\Dokumente\Archipelago\worlds\witness/WitnessLogicNew.txt", "w")
-        file2.write(string)
-
         all_loc_to_id = dict(
             sorted(all_loc_to_id.items(), key=lambda loc: loc[1])
         )

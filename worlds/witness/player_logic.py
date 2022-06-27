@@ -18,7 +18,8 @@ When the world has parsed its options, a second function is called to finalize t
 import copy
 from BaseClasses import MultiWorld
 from .static_logic import StaticWitnessLogic
-from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list
+from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list, \
+    get_symbol_shuffle_list
 from .Options import is_option_enabled, get_option_value, the_witness_options
 
 
@@ -34,6 +35,9 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
+        if panel_hex in self.DOOR_ITEMS_BY_ID:
+            return frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[panel_hex]})
+
         check_obj = StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]
 
         these_items = frozenset({frozenset()})
@@ -41,10 +45,8 @@ class WitnessPlayerLogic:
         if check_obj["id"]:
             these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
 
-        real_items = {item[0] for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME}
-
         these_items = frozenset({
-            subset.intersection(real_items)
+            subset.intersection(self.PROG_ITEMS_ACTUALLY_IN_THE_GAME)
             for subset in these_items
         })
 
@@ -92,6 +94,19 @@ class WitnessPlayerLogic:
     def make_single_adjustment(self, adj_type, line):
         """Makes a single logic adjustment based on additional logic file"""
 
+        if adj_type == "Items":
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(line)
+
+            if line in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
+                panel_hexes = StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[line][2]
+                for panel_hex in panel_hexes:
+                    self.DOOR_ITEMS_BY_ID.setdefault(panel_hex, set()).add(line)
+
+            return
+
+        if adj_type == "Starting Inventory":
+            self.STARTING_INVENTORY.add(line)
+
         if adj_type == "Event Items":
             line_split = line.split(" - ")
             hex_set = line_split[1].split(",")
@@ -119,17 +134,19 @@ class WitnessPlayerLogic:
         if adj_type == "Requirement Changes":
             line_split = line.split(" - ")
 
-            required_items = parse_lambda(line_split[2])
-            items_actually_in_the_game = {item[0] for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS}
-            required_items = frozenset(
-                subset.intersection(items_actually_in_the_game)
-                for subset in required_items
-            )
-
             requirement = {
                 "panels": parse_lambda(line_split[1]),
-                "items": required_items
             }
+
+            if len(line_split) > 2:
+                required_items = parse_lambda(line_split[2])
+                items_actually_in_the_game = {item[0] for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS}
+                required_items = frozenset(
+                    subset.intersection(items_actually_in_the_game)
+                    for subset in required_items
+                )
+
+                requirement["items"] = required_items
 
             self.DEPENDENT_REQUIREMENTS_BY_HEX[line_split[0]] = requirement
 
@@ -173,15 +190,10 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append(get_disable_unrandomized_list())
 
         if is_option_enabled(world, player, "shuffle_symbols") or "shuffle_symbols" not in the_witness_options.keys():
-            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.update(StaticWitnessLogic.ALL_SYMBOL_ITEMS)
+            adjustment_linesets_in_order.append(get_symbol_shuffle_list())
 
         if is_option_enabled(world, player, "early_secret_area"):
             adjustment_linesets_in_order.append(get_early_utm_list())
-        else:
-            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = {
-                item for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME
-                if item[0] != "Mountaintop River Shape Power On"
-            }
 
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None
@@ -248,8 +260,8 @@ class WitnessPlayerLogic:
         self.EVENT_PANELS_FROM_REGIONS = set()
 
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
-        self.DOOR_DICT_FOR_CLIENT = dict()
-        self.DOOR_CONNECTIONS_TO_SEVER = set()
+        self.DOOR_ITEMS_BY_ID = dict()
+        self.STARTING_INVENTORY = set()
 
         self.CONNECTIONS_BY_REGION_NAME = copy.copy(StaticWitnessLogic.STATIC_CONNECTIONS_BY_REGION_NAME)
         self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.copy(StaticWitnessLogic.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
