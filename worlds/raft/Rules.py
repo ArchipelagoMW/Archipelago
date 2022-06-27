@@ -119,14 +119,14 @@ class RaftLogic(LogicMixin):
     def raft_can_complete_varuna_point(self, player):
         return self.raft_can_access_varuna_point(player)
 
-    def raft_can_access_temperence(self, player):
-        return self.raft_can_complete_varuna_point(player) and self.raft_can_drive(player) and self.has("Temperence Frequency", player)
+    def raft_can_access_temperance(self, player):
+        return self.raft_can_complete_varuna_point(player) and self.raft_can_drive(player) and self.has("Temperance Frequency", player)
 
-    def raft_can_complete_temperence(self, player):
-        return self.raft_can_access_temperence(player)
+    def raft_can_complete_temperance(self, player):
+        return self.raft_can_access_temperance(player)
 
     def raft_can_access_utopia(self, player):
-        return self.raft_can_complete_temperence(player) and self.raft_can_drive(player) and self.has("Utopia Frequency", player)
+        return self.raft_can_complete_temperance(player) and self.raft_can_drive(player) and self.has("Utopia Frequency", player)
 
     def raft_can_complete_utopia(self, player):
         return self.raft_can_access_utopia(player)
@@ -141,8 +141,8 @@ def set_rules(world, player):
         "CaravanIsland": lambda state: state.raft_can_complete_balboa_island(player) and state.raft_can_access_caravan_island(player),
         "Tangaroa": lambda state: state.raft_can_complete_caravan_island(player) and state.raft_can_access_tangaroa(player),
         "Varuna Point": lambda state: state.raft_can_complete_tangaroa(player) and state.raft_can_access_varuna_point(player),
-        "Temperence": lambda state: state.raft_can_complete_varuna_point(player) and state.raft_can_access_temperence(player),
-        "Utopia": lambda state: state.raft_can_complete_temperence(player) and state.raft_can_access_utopia(player)
+        "Temperance": lambda state: state.raft_can_complete_varuna_point(player) and state.raft_can_access_temperance(player),
+        "Utopia": lambda state: state.raft_can_complete_temperance(player) and state.raft_can_access_utopia(player)
     }
     itemChecks = {
         "Plank": lambda state: True,

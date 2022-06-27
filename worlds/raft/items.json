@@ -127,7 +127,7 @@
     {
         "id": 47026,
         "progression": false,
-        "name": " Advanced medium crop plot"
+        "name": "Advanced medium crop plot"
     },
     {
         "id": 47027,
@@ -171,8 +171,8 @@
     },
     {
         "id": 47035,
-        "progression": false,
-        "name": "Simple Battery"
+        "progression": true,
+        "name": "Battery"
     },
     {
         "id": 47036,
@@ -406,8 +406,8 @@
     },
     {
         "id": 47082,
-        "progression": false,
-        "name": "Metal Spear"
+        "progression": true,
+        "name": "Metal spear"
     },
     {
         "id": 47083,

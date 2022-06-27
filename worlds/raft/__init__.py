@@ -39,8 +39,8 @@ class RaftWorld(World):
     location_name_to_id = locations_lookup_name_to_id
     options = raft_options
 
-    data_version = 1
-    required_client_version = (0, 2, 0)
+    data_version = 2
+    required_client_version = (0, 3, 4)
 
     def generate_basic(self):
         minRPSpecified = self.world.minimum_resource_pack_amount[self.player].value
@@ -133,16 +133,16 @@ class RaftWorld(World):
             self.setLocationItem("Relay Station quest", "Caravan Island Frequency")
             self.setLocationItem("Caravan Island Frequency to Tangaroa", "Tangaroa Frequency")
             self.setLocationItem("Tangaroa Frequency to Varuna Point", "Varuna Point Frequency")
-            self.setLocationItem("Varuna Point Frequency to Temperence", "Temperence Frequency")
-            self.setLocationItem("Temperence Frequency to Utopia", "Utopia Frequency")
+            self.setLocationItem("Varuna Point Frequency to Temperance", "Temperance Frequency")
+            self.setLocationItem("Temperance Frequency to Utopia", "Utopia Frequency")
         elif self.world.island_frequency_locations[self.player] == 1:
             self.setLocationItemFromRegion("RadioTower", "Vasagatan Frequency")
             self.setLocationItemFromRegion("Vasagatan", "Balboa Island Frequency")
             self.setLocationItemFromRegion("BalboaIsland", "Caravan Island Frequency")
             self.setLocationItemFromRegion("CaravanIsland", "Tangaroa Frequency")
             self.setLocationItemFromRegion("Tangaroa", "Varuna Point Frequency")
-            self.setLocationItemFromRegion("Varuna Point", "Temperence Frequency")
-            self.setLocationItemFromRegion("Temperence", "Utopia Frequency")
+            self.setLocationItemFromRegion("Varuna Point", "Temperance Frequency")
+            self.setLocationItemFromRegion("Temperance", "Utopia Frequency")
         # Victory item
         self.world.get_location("Utopia Complete", self.player).place_locked_item(
             RaftItem("Victory", ItemClassification.progression, None, player=self.player))
