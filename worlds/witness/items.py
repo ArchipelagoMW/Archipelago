@@ -51,7 +51,7 @@ class StaticWitnessItems:
     def __init__(self):
         item_tab = dict()
 
-        for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS.union(StaticWitnessLogic.ALL_DOOR_ITEMS):
+        for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS:
             if item[0] == "11 Lasers" or item == "7 Lasers":
                 continue
 
@@ -94,7 +94,7 @@ class WitnessPlayerItems:
             "Puzzle Skip": get_option_value(world, player, "puzzle_skip_amount")
         }
 
-        for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS.union(StaticWitnessLogic.ALL_DOOR_ITEMS):
+        for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS:
             if item not in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME:
                 del self.ITEM_TABLE[item[0]]
             else:

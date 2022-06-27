@@ -42,7 +42,7 @@ class StaticWitnessLocations:
         "Symmetry Island Colored Dots 6",
         "Symmetry Island Fading Lines 7",
         "Symmetry Island Scenery Outlines 5",
-        "Symmetry Island Laser",
+        "Symmetry Island Laser Panel",
 
         "Orchard Apple Tree 5",
 
@@ -52,7 +52,7 @@ class StaticWitnessLocations:
         "Desert Artificial Light Reflection 3",
         "Desert Pond Reflection 5",
         "Desert Flood Reflection 6",
-        "Desert Laser",
+        "Desert Laser Panel",
 
         "Quarry Mill Eraser and Dots 6",
         "Quarry Mill Eraser and Squares 8",
@@ -63,34 +63,34 @@ class StaticWitnessLocations:
         "Quarry Boathouse Stars & Eraser & Shapers 2",
         "Quarry Boathouse Stars & Eraser & Shapers 5",
         "Quarry Discard",
-        "Quarry Laser",
+        "Quarry Laser Panel",
 
         "Shadows Lower Avoid 8",
         "Shadows Environmental Avoid 8",
         "Shadows Follow 5",
-        "Shadows Laser",
+        "Shadows Laser Panel",
 
         "Keep Hedge Maze 4",
         "Keep Pressure Plates 4",
         "Keep Discard",
-        "Keep Laser Hedges",
-        "Keep Laser Pressure Plates",
+        "Keep Laser Panel Hedges",
+        "Keep Laser Panel Pressure Plates",
 
         "Shipwreck Vault Box",
         "Shipwreck Discard",
 
         "Monastery Rhombic Avoid 3",
         "Monastery Branch Follow 2",
-        "Monastery Laser",
+        "Monastery Laser Panel",
 
         "Town Cargo Box Discard",
         "Town Hexagonal Reflection",
-        "Town Square Avoid",
+        "Town Church Lattice",
         "Town Rooftop Discard",
         "Town Symmetry Squares 5 + Dots",
         "Town Full Dot Grid Shapers 5",
         "Town Shapers & Dots & Eraser",
-        "Town Laser",
+        "Town Laser Panel",
 
         "Theater Discard",
 
@@ -98,7 +98,7 @@ class StaticWitnessLocations:
         "Jungle Waves 3",
         "Jungle Waves 7",
         "Jungle Popup Wall 6",
-        "Jungle Laser",
+        "Jungle Laser Panel",
 
         "River Vault Box",
 
@@ -106,7 +106,7 @@ class StaticWitnessLocations:
         "Bunker Drawn Squares 9",
         "Bunker Drawn Squares through Tinted Glass 3",
         "Bunker Drop-Down Door Squares 2",
-        "Bunker Laser",
+        "Bunker Laser Panel",
 
         "Swamp Seperatable Shapers 6",
         "Swamp Combinable Shapers 8",
@@ -117,7 +117,7 @@ class StaticWitnessLocations:
         "Swamp Red Underwater Negative Shapers 4",
         "Swamp More Rotated Shapers 4",
         "Swamp Blue Underwater Negative Shapers 5",
-        "Swamp Laser",
+        "Swamp Laser Panel",
 
         "Treehouse Yellow Bridge 9",
         "Treehouse First Purple Bridge 5",
@@ -125,9 +125,9 @@ class StaticWitnessLocations:
         "Treehouse Green Bridge 7",
         "Treehouse Green Bridge Discard",
         "Treehouse Left Orange Bridge 15",
-        "Treehouse Burned House Discard",
+        "Treehouse Burnt House Discard",
         "Treehouse Right Orange Bridge 12",
-        "Treehouse Laser",
+        "Treehouse Laser Panel",
 
         "Mountaintop Discard",
         "Mountaintop Vault Box",
@@ -157,27 +157,27 @@ class StaticWitnessLocations:
     }
 
     HARD_LOCATIONS = {
-        "Inside Mountain Secret Area Dot Grid Triangles 4",
-        "Inside Mountain Secret Area Symmetry Triangles",
-        "Inside Mountain Secret Area Stars & Squares and Triangles 2",
-        "Inside Mountain Secret Area Shapers and Triangles 2",
-        "Inside Mountain Secret Area Symmetry Shapers",
-        "Inside Mountain Secret Area Broken and Negative Shapers",
-        "Inside Mountain Secret Area Broken Shapers",
+        "Inside Mountain Caves Dot Grid Triangles 4",
+        "Inside Mountain Caves Symmetry Triangles",
+        "Inside Mountain Caves Stars & Squares and Triangles 2",
+        "Inside Mountain Caves Shapers and Triangles 2",
+        "Inside Mountain Caves Symmetry Shapers",
+        "Inside Mountain Caves Broken and Negative Shapers",
+        "Inside Mountain Caves Broken Shapers",
 
-        "Inside Mountain Secret Area Rainbow Squares",
-        "Inside Mountain Secret Area Squares & Stars and Colored Eraser",
-        "Inside Mountain Secret Area Rotated Broken Shapers",
-        "Inside Mountain Secret Area Stars and Squares",
-        "Inside Mountain Secret Area Lone Pillar",
-        "Inside Mountain Secret Area Wooden Beam Shapers",
-        "Inside Mountain Secret Area Wooden Beam Squares and Shapers",
-        "Inside Mountain Secret Area Wooden Beam Stars and Squares",
-        "Inside Mountain Secret Area Wooden Beam Shapers and Stars",
-        "Inside Mountain Secret Area Upstairs Invisible Dots 8",
-        "Inside Mountain Secret Area Upstairs Invisible Dot Symmetry 3",
-        "Inside Mountain Secret Area Upstairs Dot Grid Negative Shapers",
-        "Inside Mountain Secret Area Upstairs Dot Grid Rotated Shapers",
+        "Inside Mountain Caves Rainbow Squares",
+        "Inside Mountain Caves Squares & Stars and Colored Eraser",
+        "Inside Mountain Caves Rotated Broken Shapers",
+        "Inside Mountain Caves Stars and Squares",
+        "Inside Mountain Caves Lone Pillar",
+        "Inside Mountain Caves Wooden Beam Shapers",
+        "Inside Mountain Caves Wooden Beam Squares and Shapers",
+        "Inside Mountain Caves Wooden Beam Stars and Squares",
+        "Inside Mountain Caves Wooden Beam Shapers and Stars",
+        "Inside Mountain Caves Upstairs Invisible Dots 8",
+        "Inside Mountain Caves Upstairs Invisible Dot Symmetry 3",
+        "Inside Mountain Caves Upstairs Dot Grid Negative Shapers",
+        "Inside Mountain Caves Upstairs Dot Grid Rotated Shapers",
 
         "Challenge Vault Box",
         "Theater Walkway Vault Box",
@@ -208,6 +208,7 @@ class StaticWitnessLocations:
         all_loc_to_id = {
             panel_obj["checkName"]: self.get_id(chex)
             for chex, panel_obj in StaticWitnessLogic.CHECKS_BY_HEX.items()
+            if panel_obj["id"]
         }
 
         file = open("F:\Dokumente\Archipelago\worlds\witness/WitnessLogic.txt", "r")
@@ -276,7 +277,7 @@ class WitnessPlayerLocations:
         )
 
         event_locations = {
-            p for p in player_logic.NECESSARY_EVENT_PANELS
+            p for p in player_logic.EVENT_PANELS
         }
 
         self.EVENT_LOCATION_TABLE = {
