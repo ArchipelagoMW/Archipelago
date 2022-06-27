@@ -450,7 +450,7 @@ class GameManager(App):
         if hasattr(self, "server_connect_bar"):
             self.server_connect_bar.text = text
         else:
-            print("Could not update address bar as the GUI is not yet initialized.")
+            logging.getLogger("Client").info("Could not update address bar as the GUI is not yet initialized.")
 
     def enable_energy_link(self):
         if not hasattr(self, "energy_link_label"):
