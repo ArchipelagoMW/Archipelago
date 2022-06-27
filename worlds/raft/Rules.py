@@ -12,6 +12,9 @@ class RaftLogic(LogicMixin):
 
     def raft_can_smelt_items(self, player):
         return self.has("Smelter", player)
+    
+    def raft_can_find_titanium(self, player):
+        return self.has("Metal detector", player)
 
     def raft_can_craft_bolt(self, player):
         return self.raft_can_smelt_items(player) and self.has("Bolt", player)
@@ -76,7 +79,7 @@ class RaftLogic(LogicMixin):
         return self.raft_can_craft_battery(player) and self.raft_can_craft_reciever(player) and self.raft_can_craft_antenna(player)
 
     def raft_can_drive(self, player): # The player can go wherever they want with the engine
-        return self.raft_can_craft_engine(player) and self.raft_can_craft_steeringWheel(player)
+        return (self.raft_can_craft_engine(player) and self.raft_can_craft_steeringWheel(player)) or self.raft_paddleboard_mode_enabled(player)
 
     def raft_can_access_radio_tower(self, player):
         return self.raft_can_navigate(player)
@@ -92,23 +95,41 @@ class RaftLogic(LogicMixin):
 
     def raft_can_access_balboa_island(self, player):
         return (self.raft_can_complete_vasagatan(player)
-            and (self.raft_can_drive(player) or self.raft_paddleboard_mode_enabled(player))
+            and self.raft_can_drive(player)
             and self.has("Balboa Island Frequency", player))
 
     def raft_can_complete_balboa_island(self, player):
-        return self.raft_can_access_balboa_island(player) and self.raft_can_craft_machete(player) and self.raft_can_fire_bow(player)
+        return self.raft_can_access_balboa_island(player) and self.raft_can_craft_machete(player)
 
     def raft_can_access_caravan_island(self, player):
-        return self.raft_can_complete_balboa_island(player) and (self.raft_can_drive(player) or self.raft_paddleboard_mode_enabled(player)) and self.has("Caravan Island Frequency", player)
+        return self.raft_can_complete_balboa_island(player) and self.raft_can_drive(player) and self.has("Caravan Island Frequency", player)
 
     def raft_can_complete_caravan_island(self, player):
         return self.raft_can_access_caravan_island(player) and self.raft_can_craft_ziplineTool(player)
 
     def raft_can_access_tangaroa(self, player):
-        return self.raft_can_complete_caravan_island(player) and (self.raft_can_drive(player) or self.raft_paddleboard_mode_enabled(player)) and self.has("Tangaroa Frequency", player)
+        return self.raft_can_complete_caravan_island(player) and self.raft_can_drive(player) and self.has("Tangaroa Frequency", player)
 
     def raft_can_complete_tangaroa(self, player):
         return self.raft_can_access_tangaroa(player)
+
+    def raft_can_access_varuna_point(self, player):
+        return self.raft_can_complete_tangaroa(player) and self.raft_can_drive(player) and self.has("Varuna Point Frequency", player)
+
+    def raft_can_complete_varuna_point(self, player):
+        return self.raft_can_access_varuna_point(player)
+
+    def raft_can_access_temperence(self, player):
+        return self.raft_can_complete_varuna_point(player) and self.raft_can_drive(player) and self.has("Temperence Frequency", player)
+
+    def raft_can_complete_temperence(self, player):
+        return self.raft_can_access_temperence(player)
+
+    def raft_can_access_utopia(self, player):
+        return self.raft_can_complete_temperence(player) and self.raft_can_drive(player) and self.has("Utopia Frequency", player)
+
+    def raft_can_complete_utopia(self, player):
+        return self.raft_can_access_utopia(player)
 
 def set_rules(world, player):
     regionChecks = {
@@ -118,7 +139,10 @@ def set_rules(world, player):
         "Vasagatan": lambda state: state.raft_can_complete_radio_tower(player) and state.raft_can_access_vasagatan(player),
         "BalboaIsland": lambda state: state.raft_can_complete_vasagatan(player) and state.raft_can_access_balboa_island(player),
         "CaravanIsland": lambda state: state.raft_can_complete_balboa_island(player) and state.raft_can_access_caravan_island(player),
-        "Tangaroa": lambda state: state.raft_can_complete_caravan_island(player) and state.raft_can_access_tangaroa(player)
+        "Tangaroa": lambda state: state.raft_can_complete_caravan_island(player) and state.raft_can_access_tangaroa(player),
+        "Varuna Point": lambda state: state.raft_can_complete_tangaroa(player) and state.raft_can_access_varuna_point(player),
+        "Temperence": lambda state: state.raft_can_complete_varuna_point(player) and state.raft_can_access_temperence(player),
+        "Utopia": lambda state: state.raft_can_complete_temperence(player) and state.raft_can_access_utopia(player)
     }
     itemChecks = {
         "Plank": lambda state: True,
@@ -149,9 +173,9 @@ def set_rules(world, player):
         "Jar_Bee": lambda state: state.raft_can_access_balboa_island(player) and state.raft_can_smelt_items(player),
         "Dirt": lambda state: state.raft_can_get_dirt(player),
         "Egg": lambda state: state.raft_can_capture_animals(player),
+        "TitaniumIngot": lambda state: state.raft_can_smelt_items(player) and state.raft_can_find_titanium(player),
         # Specific items for story island location checks
         "Machete": lambda state: state.raft_can_craft_machete(player),
-        "BowAndArrow": lambda state: state.raft_can_fire_bow(player),
         "Zipline tool": lambda state: state.raft_can_craft_ziplineTool(player)
     }
 
