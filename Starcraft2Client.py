@@ -60,6 +60,19 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if num_options > 0:
             mission_number = int(options[0])
 
+            if system() == "Windows":
+                # soldieroforder: "I don't understand any particular part of this code. All I know is that it runs the
+                # SetDllDirectoryW command in Windows, which (when passed a NULL Unicode character (==None)) 'resets'
+                # the DLL directory. For some reason, this allows SC2 to start normally (i.e. w/o missing the .dlls)."
+                # More info: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setdlldirectoryw
+                # FIXME: Undo this process after playing the mission.
+                from ctypes import windll, wintypes
+                SetDllDirectoryW = windll.kernel32.SetDllDirectoryW
+                SetDllDirectoryW.argtypes = (
+                    wintypes.LPCWSTR,  # LPCWSTR               lpPathName
+                )
+                SetDllDirectoryW.restype = wintypes.BOOL
+                SetDllDirectoryW(None)
             self.ctx.play_mission(mission_number)
 
         else:
@@ -110,7 +123,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if path:
             os.environ["SC2PATH"] = path
             check_mod_install(self.ctx.ui, debug=True)
-            grab_dlls(self.ctx.ui, debug=True)
+            # grab_dlls(self.ctx.ui, debug=True)
             return True
         else:
             display_warning("When using set_path, you must type the path to your SC2 install directory.", self.ctx.ui)
@@ -163,7 +176,7 @@ class SC2Context(CommonContext):
                 # check_game_install_path() returns True if and only if it finds + sets SC2PATH."
                 if check_game_install_path():
                     check_mod_install()
-                    grab_dlls()
+                    # grab_dlls()
 
         if cmd in {"PrintJSON"}:
             if "receiving" in args:
