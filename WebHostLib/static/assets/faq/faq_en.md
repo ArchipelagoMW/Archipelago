@@ -53,7 +53,7 @@ any questions you might have.
 
 As randomizers and multiworld randomizers have been around for a while now there are quite a lot of common terms
 and jargon that is used in conjunction by the communities surrounding them. For a lot of the terms that are more common
-to Archipelago and its specific systems please see the [Common Multiworld Terms Page](/common-terms/en).
+to Archipelago and its specific systems please see the [Glossary](/glossary/en).
 
 ## I want to add a game to the Archipelago randomizer. How do I do that?
 

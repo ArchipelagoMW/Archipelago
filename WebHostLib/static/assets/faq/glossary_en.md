@@ -1,4 +1,4 @@
-# Common Multiworld Terms
+# Multiworld Glossary
 
 There are a lot of common terms used when playing in different game randomizer communities and in multiworld as well.
 This document serves as a lookup for common terms that may be used by users in the community or in various other

@@ -1,21 +1,21 @@
 window.addEventListener('load', () => {
-    const tutorialWrapper = document.getElementById('common-terms-wrapper');
+    const tutorialWrapper = document.getElementById('glossary-wrapper');
     new Promise((resolve, reject) => {
         const ajax = new XMLHttpRequest();
         ajax.onreadystatechange = () => {
             if (ajax.readyState !== 4) { return; }
             if (ajax.status === 404) {
-                reject("Sorry, the terms page is not available in that language yet.");
+                reject("Sorry, the glossary page is not available in that language yet.");
                 return;
             }
             if (ajax.status !== 200) {
-                reject("Something went wrong while loading the terms page.");
+                reject("Something went wrong while loading the glossary.");
                 return;
             }
             resolve(ajax.responseText);
         };
         ajax.open('GET', `${window.location.origin}/static/assets/faq/` +
-          `common-terms_${tutorialWrapper.getAttribute('data-lang')}.md`, true);
+          `glossary_${tutorialWrapper.getAttribute('data-lang')}.md`, true);
         ajax.send();
     }).then((results) => {
         // Populate page with HTML generated from markdown

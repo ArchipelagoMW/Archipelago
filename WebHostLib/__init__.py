@@ -141,9 +141,9 @@ def faq(lang):
     return render_template("faq.html", lang=lang)
 
 
-@app.route('/common-terms/<string:lang>/')
+@app.route('/glossary/<string:lang>/')
 def terms(lang):
-    return render_template("commonterms.html", lang=lang)
+    return render_template("glossary.html", lang=lang)
 
 
 @app.route('/seed/<suuid:seed>')
