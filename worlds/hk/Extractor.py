@@ -207,7 +207,7 @@ for logic_key, logic_value in logic_options.items():
 vanilla_cost_data: typing.Dict[str, typing.Dict[str, typing.Any]] = hk_loads(os.path.join(data_folder, "costs.json"))
 vanilla_location_costs = {
     key: {
-        value["term"]: value["amount"]
+        value["term"]: int(value["amount"])
     }
     for key, value in vanilla_cost_data.items()
     if value["amount"] > 0 and value["term"] == "GEO"
@@ -270,7 +270,7 @@ for option in extra_pool_options:
                     location_name += "_(Requires_Charms)"
                 #vanilla_shop_costs[pairing["location"], pairing["item"]] = \
                 cost = {
-                    entry["term"]: entry["amount"] for entry in item_costs
+                    entry["term"]: int(entry["amount"]) for entry in item_costs
                 }
                 # Rando4 doesn't include vanilla geo costs for Salubra charms, so dirty hardcode here.
                 if 'CHARMS' in cost:
