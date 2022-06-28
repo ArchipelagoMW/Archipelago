@@ -40,12 +40,12 @@ class IslandFrequencyLocations(Choice):
 class IslandGenerationDistance(Choice):
     """Sets how far away islands spawn from you when you input their coordinates into the Receiver."""
     display_name = "Island distance"
-    option_quarter = 0.25
-    option_half = 0.5
-    option_vanilla = 1.0
-    option_double = 2.0
-    option_quadrouple = 4.0
-    default = 1.0
+    option_quarter = 2
+    option_half = 4
+    option_vanilla = 8
+    option_double = 16
+    option_quadrouple = 32
+    default = 8
 
 class ExpensiveResearch(Toggle):
     """Makes unlocking items in the Crafting Table consume the researched items."""
