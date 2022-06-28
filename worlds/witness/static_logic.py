@@ -148,7 +148,7 @@ class StaticWitnessLogic:
                     "checkName": current_region["shortName"] + " " + check_name,
                     "checkHex": check_hex,
                     "region": current_region,
-                    "id": location_id,
+                    "id": int(location_id),
                     "panelType": location_type
                 }
 
