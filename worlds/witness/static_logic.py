@@ -71,10 +71,7 @@ class StaticWitnessLogic:
         with open(path, "r", encoding="utf-8") as file:
             current_region = dict()
 
-            discard_ids = 0
-            normal_panel_ids = 0
-            vault_ids = 0
-            laser_ids = 0
+            counter = 0
 
             for line in file.readlines():
                 line = line.strip()
@@ -107,7 +104,7 @@ class StaticWitnessLogic:
                         "checkHex": check_hex,
                         "region": current_region,
                         "id": None,
-                        "panelType": location_id[0]
+                        "panelType": location_id
                     }
 
                     self.CHECKS_BY_NAME[self.CHECKS_BY_HEX[check_hex]["checkName"]] = self.CHECKS_BY_HEX[check_hex]

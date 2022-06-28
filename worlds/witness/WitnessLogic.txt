@@ -190,7 +190,7 @@ Door - 0x17C07 (Door to Quarry 2) - 0x17C09
 Quarry (Quarry) - Quarry Mill Ground Floor - 0x02010:
 158121 - 0x01E5A (Door to Mill Left) - True - Squares & Black/White Squares
 158122 - 0x01E59 (Door to Mill Right) - True - Dots
-Door - 0x02010 - 0x01E59 & 0x01E5A
+Door - 0x02010 (Door to Mill) - 0x01E59 & 0x01E5A
 
 Quarry Mill Ground Floor (Quarry Mill) - Quarry - 0x275FF - Quarry Mill Middle Floor - 0x03678 - Outside Quarry - 0x17CE8:
 158123 - 0x275ED (Ground Floor Shortcut Door Panel) - True - True
@@ -224,12 +224,14 @@ Door - 0x0368A (Stairs) - 0x03677
 158143 - 0x3C125 (Big Squares & Dots & Eraser) - 0x0367C - Squares & Black/White Squares & Dots & Eraser
 158144 - 0x0367C (Small Squares & Dots & Eraser) - 0x014E9 - Squares & Colored Squares & Dots & Eraser
 
-Quarry Boathouse (Quarry Boathouse) - Quarry - True - Quarry Boathouse Upper Front - 0x03852 - Boat - 0x2769B & 0x17CA6:
+Quarry Boathouse (Quarry Boathouse) - Quarry - True - Quarry Boathouse Upper Front - 0x03852 - Quarry Boathouse Behind Staircase - 0x2769B:
 158146 - 0x034D4 (Intro Stars) - True - Stars
 158147 - 0x021D5 (Intro Shapers) - True - Shapers & Rotated Shapers
 158148 - 0x03852 (Ramp Height Control) - 0x034D4 & 0x021D5 - Rotated Shapers
 158166 - 0x17CA6 (Boat Spawn) - True - Boat
 Door - 0x2769B (Boat Staircase) - 0x17CA6
+
+Quarry Boathouse Behind Staircase (Quarry Boathouse) - Boat - 0x17CA6:
 
 Quarry Boathouse Upper Front (Quarry Boathouse) - Quarry Boathouse Upper Back - 0x03858:
 158149 - 0x021B3 (Eraser and Shapers 1) - True - Shapers & Eraser
@@ -256,8 +258,9 @@ Door - 0x3865F (Shortcut Door) - 0x38663
 158168 - 0x0A3CC (Stars & Eraser & Shapers 4) - 0x0A3CB - Stars & Eraser & Shapers
 158169 - 0x0A3D0 (Stars & Eraser & Shapers 5) - 0x0A3CC - Stars & Eraser & Shapers
 
-Shadows (Shadows) - Main Island - True - Shadows Ledge - 0x334DB - Shadows Laser Room - 0x194B2 & 0x19665:
+Shadows (Shadows) - Main Island - True - Shadows Ledge - 0x19B24 - Shadows Laser Room - 0x194B2 & 0x19665:
 158170 - 0x334DB (Door Timer Outside) - True - True
+Door - 0x19B24 (Timed Door) - 0x334DB
 158171 - 0x0AC74 (Lower Avoid 6) - 0x0A8DC - Shadows Avoid
 158172 - 0x0AC7A (Lower Avoid 7) - 0x0AC74 - Shadows Avoid
 158173 - 0x0A8E0 (Lower Avoid 8) - 0x0AC7A - Shadows Avoid
@@ -277,7 +280,7 @@ Door - 0x194B2 (Laser Room Right Door) - 0x1972F
 158186 - 0x197E5 (Follow 5) - 0x197E8 - Shadows Follow
 Door - 0x19665 (Laser Room Left Door) - 0x197E5
 
-Shadows Ledge (Shadows) - Shadows - 0x334DC - Shadows - 0x1855B:
+Shadows Ledge (Shadows) - Shadows - 0x1855B:
 158187 - 0x334DC (Door Timer Inside) - True - True
 158188 - 0x198B5 (Lower Avoid 1) - True - Shadows Avoid
 158189 - 0x198BD (Lower Avoid 2) - 0x198B5 - Shadows Avoid
@@ -475,7 +478,7 @@ Door - 0x0CF2A (Shortcut to Monastery Garden) - 0x17CAA
 158663 - 0x15ADD (Vault) - True - Environment & Black/White Squares & Dots
 158664 - 0x03702 (Vault Box) - 0x15ADD - True
 
-Outside Bunker (Bunker) - Main Island - True - Inside Bunker - 0x17C2E:
+Outside Bunker (Bunker) - Main Island - True - Inside Bunker - 0x0C2A4:
 158268 - 0x17C2E (Bunker Entry Panel) - True - Squares & Black/White Squares
 Door - 0x0C2A4 (Bunker Entry Door) - 0x17C2E
 
@@ -512,11 +515,11 @@ Bunker Laser Platform (Bunker):
 158710 - 0x09DE0 (Laser Panel) - True - True
 Laser - 0x0C2B2 (Laser) - 0x09DE0
 
-Outside Swamp (Swamp) - Swamp Entry Area - 0x00C1C:
+Outside Swamp (Swamp) - Swamp Entry Area - 0x00C1C - Main Island - True:
 158287 - 0x0056E (Entry Panel) - True - Shapers
 Door - 0x00C1C (Entry Door) - 0x0056E
 
-Swamp Entry Area (Swamp) - Swamp Sliding Bridge - TrueOneWay - Main Island - True:
+Swamp Entry Area (Swamp) - Swamp Sliding Bridge - TrueOneWay:
 158288 - 0x00469 (Seperatable Shapers 1) - True - Shapers
 158289 - 0x00472 (Seperatable Shapers 2) - 0x00469 - Shapers
 158290 - 0x00262 (Seperatable Shapers 3) - 0x00472 - Shapers
@@ -738,13 +741,15 @@ Inside Mountain Top Layer Bridge (Inside Mountain) - Inside Mountain Second Laye
 158425 - 0x09EAF (Angled Inside Trash 2) - 0x09EAD - Squares & Black/White Squares & Shapers & Angled
 Door - 0x09E54 (Door to Second Layer) - 0x09EAF & 0x09F6E & 0x09E6B & 0x09E7B
 
-Inside Mountain Second Layer (Inside Mountain) - Inside Mountain Second Layer Light Bridge Room Near - 0x09FFB - Inside Mountain Second Layer Beyond Bridge - 0x09E86 - Inside Mountain Second Layer Elevator Room - 0x09EDD:
+Inside Mountain Second Layer (Inside Mountain) - Inside Mountain Second Layer Light Bridge Room Near - 0x09FFB - Inside Mountain Second Layer Blue Bridge - 0x09E86:
 158426 - 0x09FD3 (Color Cycle 1) - True - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars + Same Colored Symbol
 158427 - 0x09FD4 (Color Cycle 2) - 0x09FD3 - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars + Same Colored Symbol
 158428 - 0x09FD6 (Color Cycle 3) - 0x09FD4 - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars + Same Colored Symbol
 158429 - 0x09FD7 (Color Cycle 4) - 0x09FD6 - Color Cycle & RGB & Stars & Squares & Colored Squares & Stars + Same Colored Symbol & Shapers & Colored Shapers
 158430 - 0x09FD8 (Color Cycle 5) - 0x09FD7 - Color Cycle & RGB & Squares & Colored Squares & Symmetry & Colored Dots
 Door - 0x09FFB (Staircase Near) - 0x09FD8
+
+Inside Mountain Second Layer Blue Bridge (Inside Mountain) - Inside Mountain Second Layer Beyond Bridge - TrueOneWay - Inside Mountain Second Layer Elevator Room - 0x09EDD:
 Door - 0x09EDD (Door to Elevator) - 0x09ED8 & 0x09E86
 
 Inside Mountain Second Layer Light Bridge Room Near (Inside Mountain):
@@ -784,7 +789,7 @@ Inside Mountain Bottom Layer (Inside Mountain) - Inside Mountain Bottom Layer Ro
 Door - 0x0C141 (Door to Final Room) - 0x01983 & 0x01987
 
 Inside Mountain Bottom Layer Rock (Inside Mountain) - Inside Mountain Bottom Layer - 0x17F33 - Inside Mountain Path to Secret Area - 0x17F33:
-Door - 0x17F33 (Open) - True
+Door - 0x17F33 (Bottom Layer Rock Open) - True
 
 Inside Mountain Path to Secret Area (Inside Mountain) - Inside Mountain Bottom Layer Rock - 0x334E1 - Inside Mountain Caves - 0x2D77D:
 158447 - 0x00FF8 (Secret Area Entry Panel) - True - Triangles & Black/White Squares & Squares
@@ -901,4 +906,4 @@ Elevator (Inside Mountain Final Room):
 158535 - 0x3D9A8 (Back Wall Right) - 0x3D9A6 | 0x3D9A7 - True
 158536 - 0x3D9A9 (Elevator Start) - 0x3D9AA | 0x3D9A8 - True
 
-Boat (Boat) - Main Island - TrueOneWay - Swamp Near Boat - TrueOneWay - Treehouse Entry Area - TrueOneWay - Quarry Boathouse - 0x17CA6 - Inside Glass Factory Behind Back Wall - TrueOneWay:
+Boat (Boat) - Main Island - TrueOneWay - Swamp Near Boat - TrueOneWay - Treehouse Entry Area - TrueOneWay - Quarry Boathouse Behind Staircase - TrueOneWay - Inside Glass Factory Behind Back Wall - TrueOneWay:

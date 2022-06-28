@@ -109,3 +109,13 @@ def get_early_utm_list():
 @cache_argsless
 def get_symbol_shuffle_list():
     return get_adjustment_file("settings/Symbol_Shuffle.txt")
+
+
+@cache_argsless
+def get_door_panel_shuffle_list():
+    return get_adjustment_file("settings/Door_Panel_Shuffle.txt")
+
+
+@cache_argsless
+def get_doors_complex_list():
+    return get_adjustment_file("settings/Doors_Complex.txt")

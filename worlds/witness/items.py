@@ -132,10 +132,10 @@ class WitnessPlayerItems:
                 "Shapers", "Symmetry"
             ]
 
-        if is_option_enabled(world, player, "shuffle_discarded_panels"):
-            self.GOOD_ITEMS.append("Triangles")
-        if not is_option_enabled(world, player, "disable_non_randomized_puzzles"):
-            self.GOOD_ITEMS.append("Colored Squares")
+            if is_option_enabled(world, player, "shuffle_discarded_panels"):
+                self.GOOD_ITEMS.append("Triangles")
+            if not is_option_enabled(world, player, "disable_non_randomized_puzzles"):
+                self.GOOD_ITEMS.append("Colored Squares")
 
         for event_location in locat.EVENT_LOCATION_TABLE:
             location = player_logic.EVENT_ITEM_PAIRS[event_location]

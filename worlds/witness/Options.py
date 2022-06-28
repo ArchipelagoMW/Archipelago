@@ -29,10 +29,14 @@ class ShuffleSymbols(DefaultOnToggle):
     display_name = "Shuffle Symbols"
 
 
-class ShuffleDoors(Toggle):
-    """Many doors around the island will have their panels turned off initially.
-    You will need to find the items that power the panels to open those doors."""
+class ShuffleDoors(Choice):
+    """Opening doors will require "keys". In panels, those keys will unlock the panels on doors.
+    In doors_simple and doors_complex, the doors will magically open by themselves upon receiving the key."""
     display_name = "Shuffle Doors"
+    option_none = 0
+    option_panels = 1
+    option_doors_simple = 2
+    option_doors_complex = 3
 
 
 class ShuffleDiscardedPanels(Toggle):
@@ -111,8 +115,8 @@ the_witness_options: Dict[str, type] = {
     "victory_condition": VictoryCondition,
     "trap_percentage": TrapPercentage,
     "early_secret_area": EarlySecretArea,
-    # "shuffle_symbols": ShuffleSymbols,
-    # "shuffle_doors": ShuffleDoors,
+    "shuffle_symbols": ShuffleSymbols,
+    "shuffle_doors": ShuffleDoors,
     "mountain_lasers": MountainLasers,
     "challenge_lasers": ChallengeLasers,
     "puzzle_skip_amount": PuzzleSkipAmount,

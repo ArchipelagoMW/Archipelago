@@ -19,7 +19,7 @@ import copy
 from BaseClasses import MultiWorld
 from .static_logic import StaticWitnessLogic
 from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list, \
-    get_symbol_shuffle_list
+    get_symbol_shuffle_list, get_door_panel_shuffle_list, get_doors_complex_list
 from .Options import is_option_enabled, get_option_value, the_witness_options
 
 
@@ -35,9 +35,6 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
-        if panel_hex in self.DOOR_ITEMS_BY_ID:
-            return frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[panel_hex]})
-
         check_obj = StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]
 
         these_items = frozenset({frozenset()})
@@ -49,6 +46,17 @@ class WitnessPlayerLogic:
             subset.intersection(self.PROG_ITEMS_ACTUALLY_IN_THE_GAME)
             for subset in these_items
         })
+
+        if panel_hex in self.DOOR_ITEMS_BY_ID:
+            door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[panel_hex]})
+
+            all_options = set()
+
+            for items_option in these_items:
+                for dependentItem in door_items:
+                    all_options.add(items_option.union(dependentItem))
+
+            return frozenset(all_options)
 
         these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
 
@@ -194,6 +202,12 @@ class WitnessPlayerLogic:
 
         if is_option_enabled(world, player, "early_secret_area"):
             adjustment_linesets_in_order.append(get_early_utm_list())
+
+        if get_option_value(world, player, "shuffle_doors") == 1:
+            adjustment_linesets_in_order.append(get_door_panel_shuffle_list())
+
+        if get_option_value(world, player, "shuffle_doors") == 3:
+            adjustment_linesets_in_order.append(get_doors_complex_list())
 
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None
