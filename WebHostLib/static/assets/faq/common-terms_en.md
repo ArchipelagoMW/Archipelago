@@ -24,12 +24,12 @@ or "worlds", created.
 
 ## World
 World in terms of Archipelago can mean multiple things and is used interchangeably in many situations.
-* During gameplay in multiworlds each world is a "slot" or "player." As Archipelago allows multiple players to connect
-to the same slot those players are now sharing a world and completing it cooperatively. For games with native 
-cooperative play Archipelago usually fully supports this and those players would connect to each other and only one
-of them to the multiworld but they would still be sharing the same world.
-* For the sake of the backend, or programming side, world is usually intended to represent the world package for a game 
-integration. For example this could be the entire `worlds/factorio` directory.
+* During gameplay, a world is a single instance of a game, occupying one player "slot". However, 
+Archipelago allows multiple players to connect to the same slot; then those players can share a world 
+and complete it cooperatively. For games with native cooperative play, you can also play together and
+share a world that way, usually with only one player connected to the multiworld.
+* On the programming side, a world typically represents the package that integrates Archipelago with a
+particular game. For example this could be the entire `worlds/factorio` directory.
 
 ## RNG
 Acronym for "Random Number Generator." Archipelago uses its own custom Random object with a unique seed per generation,
