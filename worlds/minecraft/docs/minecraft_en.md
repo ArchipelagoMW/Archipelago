@@ -67,7 +67,7 @@ the following links are the versions of the software we use.
 
 ### Manual Installation Software Links
 
-- [Minecraft Forge Download Page](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.18.2.html)
+- [Minecraft Forge Download Page](https://files.minecraftforge.net/net/minecraftforge/forge/)
 - [Minecraft Archipelago Randomizer Mod Releases Page](https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
     - **DO NOT INSTALL THIS ON YOUR CLIENT**
 - [Amazon Corretto](https://docs.aws.amazon.com/corretto/)
