@@ -1,6 +1,7 @@
 import os
 import typing
 import math
+import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import DKC3Item, ItemData, item_table, inventory_table
@@ -44,6 +45,16 @@ class DKC3World(World):
 
     active_level_list: typing.List[str]
     web = DKC3Web()
+    
+    def __init__(self, world: MultiWorld, player: int):
+        self.rom_name_available_event = threading.Event()
+        super().__init__(world, player)
+
+    @classmethod
+    def stage_assert_generate(cls, world):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def _get_slot_data(self):
         return {
@@ -113,21 +124,37 @@ class DKC3World(World):
         self.world.itempool += itempool
 
     def generate_output(self, output_directory: str):
-        world = self.world
-        player = self.player
+        try:
+            world = self.world
+            player = self.player
 
-        rom = LocalRom(get_base_rom_path())
-        patch_rom(self.world, rom, self.player, self.active_level_list)
+            rom = LocalRom(get_base_rom_path())
+            patch_rom(self.world, rom, self.player, self.active_level_list)
         
-        outfilepname = f'_P{player}'
-        outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
-            if world.player_name[player] != 'Player%d' % player else ''
+            outfilepname = f'_P{player}'
+            outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
+                if world.player_name[player] != 'Player%d' % player else ''
 
-        rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
-        rom.write_to_file(rompath)
-        Patch.create_patch_file(rompath, player=player, player_name=world.player_name[player], game=Patch.GAME_DKC3)
-        os.unlink(rompath)
-        self.rom_name = rom.name
+            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
+            rom.write_to_file(rompath)
+            Patch.create_patch_file(rompath, player=player, player_name=world.player_name[player], game=Patch.GAME_DKC3)
+            os.unlink(rompath)
+            self.rom_name = rom.name
+        except:
+            raise
+        finally:
+            self.rom_name_available_event.set() # make sure threading continues and errors are collected
+
+    def modify_multidata(self, multidata: dict):
+        import base64
+        print("DKC3 modify_multidata")
+        # wait for self.rom_name to be available.
+        self.rom_name_available_event.wait()
+        rom_name = getattr(self, "rom_name", None)
+        # we skip in case of error, so that the original error in the output thread is the one that gets raised
+        if rom_name:
+            new_name = base64.b64encode(bytes(self.rom_name)).decode()
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
     def create_regions(self):
         location_table = setup_locations(self.world, self.player)

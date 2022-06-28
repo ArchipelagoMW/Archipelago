@@ -619,27 +619,27 @@ def create_regions(world, player: int, active_locations):
         })
 
         bramble_region_locations.update({
-            LocationName.brambles_bungalow: [0x615, 3, True],
+            LocationName.brambles_bungalow: [0x619, 2],
         })
 
-        flower_spot_region_locations.update({
-            LocationName.flower_spot: [0x615, 3, True],
-        })
+        #flower_spot_region_locations.update({
+        #    LocationName.flower_spot: [0x615, 3, True],
+        #})
 
         barter_region_locations.update({
-            LocationName.barters_swap_shop: [0x615, 3, True],
+            LocationName.barters_swap_shop: [0x61B, 3],
         })
 
         barnacle_region_locations.update({
-            LocationName.barnacles_island: [0x61D, 3, True],
+            LocationName.barnacles_island: [0x61D, 2],
         })
 
         blue_region_locations.update({
-            LocationName.blues_beach_hut: [0x615, 3, True],
+            LocationName.blues_beach_hut: [0x621, 4],
         })
 
         blizzard_region_locations.update({
-            LocationName.blizzards_basecamp: [0x615, 3, True],
+            LocationName.blizzards_basecamp: [0x625, 4, True],
         })
 
     bazaar_region = create_region(world, player, active_locations, LocationName.bazaar_region,

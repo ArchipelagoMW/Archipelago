@@ -251,7 +251,7 @@ async def deathlink_kill_player(ctx: Context):
             if not gamemode or gamemode[0] in SM_DEATH_MODES or (
                     ctx.death_link_allow_survive and health is not None and health > 0):
                 ctx.death_state = DeathState.dead
-        elif ctx.game == GAME_DKC3:
+        #elif ctx.game == GAME_DKC3:
             # DKC3_TODO: Handle Receiving Deathlink
         ctx.last_death_link = time.time()
 
@@ -826,6 +826,7 @@ async def snes_read(ctx: Context, address, size):
             "Operands": [hex(address)[2:], hex(size)[2:]]
         }
         try:
+            #print("snes_read | address: ", hex(address))
             await ctx.snes_socket.send(dumps(GetAddress_Request))
         except websockets.ConnectionClosed:
             return None
@@ -846,6 +847,7 @@ async def snes_read(ctx: Context, address, size):
                 await ctx.snes_socket.close()
             return None
 
+        #print("Returning: ", data)
         return data
     finally:
         ctx.snes_request_lock.release()
