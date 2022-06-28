@@ -97,9 +97,9 @@ the lua you are using in your file explorer and copy the `socket.dll` to the bas
 3. Click on the Tools menu and click on **Lua Console**
 4. Click Script -> Open Script...
 5. Select the `Connector.lua` file you downloaded above
-    - SuperNintendoClient users should download `sniConnector.lua` from the client download page
-    - SNIClient users should look in their Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
-      emulator is 64-bit or 32-bit.
+    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
+      emulator is 64-bit or 32-bit. Please note the most recent versions of BizHawk are 64-bit only.
+
 
 ##### RetroArch 1.10.1 or newer
 
