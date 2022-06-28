@@ -870,12 +870,12 @@ def add_conditional_lamps(world, player):
 def open_rules(world, player):
     # softlock protection as you can reach the sewers small key door with a guard drop key
     set_rule(world.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2))
+             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3))
     set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2))
+             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3))
 
     set_rule(world.get_location('Sewers - Key Rat Key Drop', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2))
+             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3))
 
     set_rule(world.get_location('Hyrule Castle - Big Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4))
