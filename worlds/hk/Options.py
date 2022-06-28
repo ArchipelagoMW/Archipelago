@@ -288,6 +288,25 @@ class WhitePalace(Choice):
     default = 0
 
 
+class DeathLink(Choice):
+    """
+    When you die, everyone dies. Of course the reverse is true too.
+    When enabled, choose how incoming deathlinks are handled:
+    vanilla: DeathLink kills you and is just like any other death.  RIP your previous shade and geo.
+    shadeless: DeathLink kills you, but no shade spawns and no geo is lost.  Your previous shade, if any, is untouched.
+    shade: DeathLink functions like a normal death if you do not already have a shade, shadeless otherwise.
+    """
+    option_off = 0
+    alias_false = 0
+    alias_no = 0
+    alias_true = 1
+    alias_on = 1
+    alias_yes = 1
+    option_shadeless = 1
+    option_vanilla = 2
+    option_shade = 3
+
+
 class StartingGeo(Range):
     """The amount of starting geo you have."""
     display_name = "Starting Geo"
@@ -299,19 +318,16 @@ class StartingGeo(Range):
 hollow_knight_options: typing.Dict[str, type(Option)] = {
     **hollow_knight_randomize_options,
     **hollow_knight_logic_options,
-    StartLocation.__name__: StartLocation,
-    MinimumGrubPrice.__name__: MinimumGrubPrice,
-    MaximumGrubPrice.__name__: MaximumGrubPrice,
-    MinimumEssencePrice.__name__: MinimumEssencePrice,
-    MaximumEssencePrice.__name__: MaximumEssencePrice,
-    MinimumCharmPrice.__name__: MinimumCharmPrice,
-    MaximumCharmPrice.__name__: MaximumCharmPrice,
-    RandomCharmCosts.__name__: RandomCharmCosts,
-    PlandoCharmCosts.__name__: PlandoCharmCosts,
-    MinimumEggPrice.__name__: MinimumEggPrice,
-    MaximumEggPrice.__name__: MaximumEggPrice,
-    EggShopSlots.__name__: EggShopSlots,
-    Goal.__name__: Goal,
-    WhitePalace.__name__: WhitePalace,
-    StartingGeo.__name__: StartingGeo,
+    **{
+        option.__name__: option
+        for option in (
+            StartLocation, Goal, WhitePalace, StartingGeo, DeathLink,
+            MinimumGrubPrice, MaximumGrubPrice,
+            MinimumEssencePrice, MaximumEssencePrice,
+            MinimumCharmPrice, MaximumCharmPrice,
+            RandomCharmCosts, PlandoCharmCosts,
+            MinimumEggPrice, MaximumEggPrice, EggShopSlots,
+            # Add your new options where it makes sense?
+        )
+    }
 }
