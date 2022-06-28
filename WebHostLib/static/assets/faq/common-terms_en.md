@@ -39,7 +39,7 @@ game worlds will have access to it.
 ## Seed
 A "seed" is a number used to initialize a pseudorandom number generator. Whenever you generate a new game on Archipelago
 this is a new "seed" as it has unique item placement, and you can create multiple "rooms" on the Archipelago site from a
-single seed.
+single seed. Using the same seed results in the random placement being the same.
 
 ## Room
 Whenever you generate a seed on the Archipelago website you will be put on a seed page that contains all the seed info
