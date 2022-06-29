@@ -334,8 +334,8 @@ class GameManager(App):
         # top part
         server_label = ServerLabel()
         self.connect_layout.add_widget(server_label)
-        self.server_connect_bar = ConnectBarTextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False,
-                                                      write_tab=False)
+        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.server_address or "archipelago.gg", size_hint_y=None,
+                                                      height=30, multiline=False, write_tab=False)
         self.server_connect_bar.bind(on_text_validate=self.connect_button_action)
         self.connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
@@ -412,6 +412,7 @@ class GameManager(App):
     def connect_button_action(self, button):
         if self.ctx.server:
             self.ctx.server_address = None
+            self.ctx.username = None
             asyncio.create_task(self.ctx.disconnect())
         else:
             asyncio.create_task(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
@@ -444,6 +445,12 @@ class GameManager(App):
         text = self.json_to_kivy_parser(data)
         self.log_panels["Archipelago"].on_message_markup(text)
         self.log_panels["All"].on_message_markup(text)
+
+    def update_address_bar(self, text: str):
+        if hasattr(self, "server_connect_bar"):
+            self.server_connect_bar.text = text
+        else:
+            logging.getLogger("Client").info("Could not update address bar as the GUI is not yet initialized.")
 
     def enable_energy_link(self):
         if not hasattr(self, "energy_link_label"):
