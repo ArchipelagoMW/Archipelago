@@ -133,7 +133,7 @@ def main():
         if args.oof is not None and not os.path.isfile(args.oof):
             input('Could not find oof sound effect at given location. \nPress Enter to exit.')
             sys.exit(1)
-        if args.oof is not None and os.path.getsize(args.oof) > 2673::
+        if args.oof is not None and os.path.getsize(args.oof) > 2673:
             input('"oof" sound effect cannot exceed 2673 bytes. \nPress Enter to exit.')
             sys.exit(1)
             
