@@ -1766,12 +1766,6 @@ def apply_oof_sfx(rom, oof: str):
     with open(oof, 'rb') as stream:
         oof_bytes = bytearray(stream.read())
 
-    max_oof_len = 2673
-
-    if len(oof_bytes) > max_oof_len:
-        logger.error('Error parsing .brr file: Sample size %d exceeds max of %d bytes', len(oof_bytes), max_oof_len)
-        return
-
     oof_len_bytes = len(oof_bytes).to_bytes(2, byteorder='little')
 
     # Credit to kan for this method, and Nyx for initial C# implementation
