@@ -488,7 +488,7 @@ class BackgroundTaskProgressNullWindow(BackgroundTask):
     def close_window(self):
         self.stop()
 
-
+# ToolTip code below is from Stack Overflow by user squareRoot17: https://stackoverflow.com/a/56749167
 class ToolTip(object):
 
     def __init__(self, widget):
