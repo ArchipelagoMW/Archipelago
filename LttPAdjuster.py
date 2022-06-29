@@ -131,8 +131,12 @@ def main():
             input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
             sys.exit(1)
         if args.oof is not None and not os.path.isfile(args.oof):
-            input('Could not find link oof sound effect at given location. \nPress Enter to exit.')
+            input('Could not find oof sound effect at given location. \nPress Enter to exit.')
             sys.exit(1)
+        if args.oof is not None and os.path.getsize(oof_param) > 2673::
+            input('"oof" sound effect cannot exceed 2673 bytes. \nPress Enter to exit.')
+            sys.exit(1)
+            
 
         args, path = adjust(args=args)
         if isinstance(args.sprite, Sprite):
