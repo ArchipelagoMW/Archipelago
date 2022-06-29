@@ -16,5 +16,5 @@ class DarkSouls3Location(Location):
         self.event = code is None
 
     @staticmethod
-    def get_item_name_to_id() -> typing.Dict[str, int]:
+    def get_location_name_to_id() -> typing.Dict[str, int]:
         return dictionary_table

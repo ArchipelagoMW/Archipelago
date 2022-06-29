@@ -6,13 +6,13 @@ from random import randint
 from .Options import dark_souls_options  # the options we defined earlier
 from .Items import DarkSouls3Item  # data used below to add items to the World
 from .Locations import DarkSouls3Location  # same as above
-from .data.items_data import weapons_table, item_dictionary_table
-from .data.locations_data import key_items_list, dictionary_table, cemetery_of_ash_table, fire_link_shrine_table, \
+from .data.items_data import weapons_upgrade_5_table, weapons_upgrade_10_table, item_dictionary_table, key_items_list
+from .data.locations_data import dictionary_table, cemetery_of_ash_table, fire_link_shrine_table, \
     high_wall_of_lothric, \
     undead_settlement_table, road_of_sacrifice_table, consumed_king_garden_table, cathedral_of_the_deep_table, \
     farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table, \
     irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, grand_archives_table, \
-    untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table
+    untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table, main_path_location_list
 from ..AutoWorld import World
 from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance
 from ..generic.Rules import set_rule
@@ -25,6 +25,7 @@ class DarkSouls3World(World):
         super().__init__(world, player)
         self.locked_items = []
         self.locked_locations = []
+        self.main_path_locations = []
 
     def create_item(self, name: str) -> Item:
         data = self.item_name_to_id[name]
@@ -34,149 +35,31 @@ class DarkSouls3World(World):
         menu_region = Region("Menu", RegionType.Generic, "Menu", self.player)
         self.world.regions.append(menu_region)
 
-        cemetery_of_ash_region = Region("Cemetery Of Ash", RegionType.Generic, "Cemetery Of Ash", self.player)
-        for name, address in self.location_name_to_id.items():
-            if cemetery_of_ash_table.get(name):
-                location = Location(self.player, name, address, cemetery_of_ash_region)
-                cemetery_of_ash_region.locations.append(location)
-        self.world.regions.append(cemetery_of_ash_region)
+        self.main_path_locations = main_path_location_list
+        cemetery_of_ash_region = self.create_region("Cemetery Of Ash", cemetery_of_ash_table)
+        firelink_shrine_region = self.create_region("Firelink Shrine", fire_link_shrine_table)
+        firelink_shrine_bell_tower_region = self.create_region("Firelink Shrine Bell Tower", firelink_shrine_bell_tower_table)
+        high_wall_of_lothric_region = self.create_region("High Wall of Lothric", high_wall_of_lothric)
+        undead_settlement_region = self.create_region("Undead Settlement", undead_settlement_table)
+        road_of_sacrifices_region = self.create_region("Road of Sacrifices", road_of_sacrifice_table)
+        consumed_king_garden_region = self.create_region("Consumed King's Garden", consumed_king_garden_table)
+        cathedral_of_the_deep_region = self.create_region("Cathedral of the Deep", cathedral_of_the_deep_table)
+        farron_keep_region = self.create_region("Farron Keep", farron_keep_table)
+        catacombs_of_carthus_region = self.create_region("Catacombs of Carthus", catacombs_of_carthus_table)
+        smouldering_lake_region = self.create_region("Smouldering Lake", smouldering_lake_table)
+        irithyll_of_the_boreal_valley_region = self.create_region("Irithyll of the Boreal Valley", irithyll_of_the_boreal_valley_table)
+        irithyll_dungeon_region = self.create_region("Irithyll Dungeon", irithyll_dungeon_table)
+        profaned_capital_region = self.create_region("Profaned Capital", profaned_capital_table)
+        anor_londo_region = self.create_region("Anor Londo", anor_londo_table)
+        lothric_castle_region = self.create_region("Lothric Castle", lothric_castle_table)
+        grand_archives_region = self.create_region("Grand Archives", grand_archives_table)
+        untended_graves_region = self.create_region("Untended Graves", untended_graves_table)
+        archdragon_peak_region = self.create_region("Archdragon Peak", archdragon_peak_table)
+        kiln_of_the_first_flame_region = self.create_region("Kiln Of The First Flame", None)
 
-        firelink_shrine_region = Region("Firelink Shrine", RegionType.Generic, "Firelink Shrine", self.player)
-        for name, address in self.location_name_to_id.items():
-            if fire_link_shrine_table.get(name):
-                location = Location(self.player, name, address, firelink_shrine_region)
-                firelink_shrine_region.locations.append(location)
-        self.world.regions.append(firelink_shrine_region)
-
-        firelink_shrine_bell_tower_region = Region("Firelink Shrine Bell Tower", RegionType.Generic, "Firelink Shrine Bell Tower", self.player)
-        for name, address in self.location_name_to_id.items():
-            if firelink_shrine_bell_tower_table.get(name):
-                location = Location(self.player, name, address, firelink_shrine_bell_tower_region)
-                firelink_shrine_bell_tower_region.locations.append(location)
-        self.world.regions.append(firelink_shrine_bell_tower_region)
-
-        high_wall_of_lothric_region = Region("High Wall of Lothric", RegionType.Generic, "High Wall of Lothric", self.player)
-        for name, address in self.location_name_to_id.items():
-            if high_wall_of_lothric.get(name):
-                location = Location(self.player, name, address, high_wall_of_lothric_region)
-                high_wall_of_lothric_region.locations.append(location)
-        self.world.regions.append(high_wall_of_lothric_region)
-
-        undead_settlement_region = Region("Undead Settlement", RegionType.Generic, "Undead Settlement", self.player)
-        for name, address in self.location_name_to_id.items():
-            if undead_settlement_table.get(name):
-                location = Location(self.player, name, address, undead_settlement_region)
-                undead_settlement_region.locations.append(location)
-        self.world.regions.append(undead_settlement_region)
-
-        road_of_sacrifices_region = Region("Road of Sacrifices", RegionType.Generic, "Road of Sacrifices", self.player)
-        for name, address in self.location_name_to_id.items():
-            if road_of_sacrifice_table.get(name):
-                location = Location(self.player, name, address, road_of_sacrifices_region)
-                road_of_sacrifices_region.locations.append(location)
-        self.world.regions.append(road_of_sacrifices_region)
-
-        consumed_king_garden_region = Region("Consumed King's Garden", RegionType.Generic, "Consumed King's Garden",
-                                             self.player)
-        for name, address in self.location_name_to_id.items():
-            if consumed_king_garden_table.get(name):
-                location = Location(self.player, name, address, consumed_king_garden_region)
-                consumed_king_garden_region.locations.append(location)
-        self.world.regions.append(consumed_king_garden_region)
-
-        cathedral_of_the_deep_region = Region("Cathedral of the Deep", RegionType.Generic, "Cathedral of the Deep",
-                                              self.player)
-        for name, address in self.location_name_to_id.items():
-            if cathedral_of_the_deep_table.get(name):
-                location = Location(self.player, name, address, cathedral_of_the_deep_region)
-                cathedral_of_the_deep_region.locations.append(location)
-        self.world.regions.append(cathedral_of_the_deep_region)
-
-        farron_keep_region = Region("Farron Keep", RegionType.Generic, "Farron Keep", self.player)
-        for name, address in self.location_name_to_id.items():
-            if farron_keep_table.get(name):
-                location = Location(self.player, name, address, farron_keep_region)
-                farron_keep_region.locations.append(location)
-        self.world.regions.append(farron_keep_region)
-
-        catacombs_of_carthus_region = Region("Catacombs of Carthus", RegionType.Generic, "Catacombs of Carthus", self.player)
-        for name, address in self.location_name_to_id.items():
-            if catacombs_of_carthus_table.get(name):
-                location = Location(self.player, name, address, catacombs_of_carthus_region)
-                catacombs_of_carthus_region.locations.append(location)
-        self.world.regions.append(catacombs_of_carthus_region)
-
-        smouldering_lake_region = Region("Smouldering Lake", RegionType.Generic, "Smouldering Lake", self.player)
-        for name, address in self.location_name_to_id.items():
-            if smouldering_lake_table.get(name):
-                location = Location(self.player, name, address, smouldering_lake_region)
-                smouldering_lake_region.locations.append(location)
-        self.world.regions.append(smouldering_lake_region)
-
-        irithyll_of_the_boreal_valley_region = Region("Irithyll of the Boreal Valley", RegionType.Generic,
-                                                      "Irithyll of the Boreal Valley", self.player)
-        for name, address in self.location_name_to_id.items():
-            if irithyll_of_the_boreal_valley_table.get(name):
-                location = Location(self.player, name, address, irithyll_of_the_boreal_valley_region)
-                irithyll_of_the_boreal_valley_region.locations.append(location)
-        self.world.regions.append(irithyll_of_the_boreal_valley_region)
-
-        irithyll_dungeon_region = Region("Irithyll Dungeon", RegionType.Generic, "Irithyll Dungeon", self.player)
-        for name, address in self.location_name_to_id.items():
-            if irithyll_dungeon_table.get(name):
-                location = Location(self.player, name, address, irithyll_dungeon_region)
-                irithyll_dungeon_region.locations.append(location)
-        self.world.regions.append(irithyll_dungeon_region)
-
-        profaned_capital_region = Region("Profaned Capital", RegionType.Generic, "Profaned Capital", self.player)
-        for name, address in self.location_name_to_id.items():
-            if profaned_capital_table.get(name):
-                location = Location(self.player, name, address, profaned_capital_region)
-                profaned_capital_region.locations.append(location)
-        self.world.regions.append(profaned_capital_region)
-
-        anor_londo_region = Region("Anor Londo", RegionType.Generic, "Anor Londo", self.player)
-        for name, address in self.location_name_to_id.items():
-            if anor_londo_table.get(name):
-                location = Location(self.player, name, address, anor_londo_region)
-                anor_londo_region.locations.append(location)
-        self.world.regions.append(anor_londo_region)
-
-        lothric_castle_region = Region("Lothric Castle", RegionType.Generic, "Lothric Castle", self.player)
-        for name, address in self.location_name_to_id.items():
-            if lothric_castle_table.get(name):
-                location = Location(self.player, name, address, lothric_castle_region)
-                lothric_castle_region.locations.append(location)
-        self.world.regions.append(lothric_castle_region)
-
-        grand_archives_region = Region("Grand Archives", RegionType.Generic, "Grand Archives", self.player)
-        for name, address in self.location_name_to_id.items():
-            if grand_archives_table.get(name):
-                location = Location(self.player, name, address, grand_archives_region)
-                grand_archives_region.locations.append(location)
-        self.world.regions.append(grand_archives_region)
-
-        untended_graves_region = Region("Untended Graves", RegionType.Generic, "Untended Graves", self.player)
-        for name, address in self.location_name_to_id.items():
-            if untended_graves_table.get(name):
-                location = Location(self.player, name, address, untended_graves_region)
-                untended_graves_region.locations.append(location)
-        self.world.regions.append(untended_graves_region)
-
-        archdragon_peak_region = Region("Archdragon Peak", RegionType.Generic, "Archdragon Peak", self.player)
-        for name, address in self.location_name_to_id.items():
-            if archdragon_peak_table.get(name):
-                location = Location(self.player, name, address, archdragon_peak_region)
-                archdragon_peak_region.locations.append(location)
-        self.world.regions.append(archdragon_peak_region)
-
-        kiln_of_the_first_flame_region = Region("Kiln Of The First Flame", RegionType.Generic,
-                                                "Kiln Of The First Flame", self.player)
-        self.world.regions.append(kiln_of_the_first_flame_region)
-
+        # Entrances
         menu_region.exits.append(Entrance(self.player, "New Game", menu_region))
         self.world.get_entrance("New Game", self.player).connect(cemetery_of_ash_region)
-
         cemetery_of_ash_region.exits.append(Entrance(self.player, "Goto Firelink Shrine", cemetery_of_ash_region))
         self.world.get_entrance("Goto Firelink Shrine", self.player).connect(firelink_shrine_region)
         firelink_shrine_region.exits.append(Entrance(self.player, "Goto High Wall of Lothric", firelink_shrine_region))
@@ -219,12 +102,24 @@ class DarkSouls3World(World):
         consumed_king_garden_region.exits.append(Entrance(self.player, "Goto Untended Graves", consumed_king_garden_region))
         self.world.get_entrance("Goto Untended Graves", self.player).connect(untended_graves_region)
 
+    def create_region(self, name, location_table) -> Region:
+        new_region = Region(name, RegionType.Generic, name, self.player)
+        if location_table is not None:
+            for name, address in self.location_name_to_id.items():
+                if location_table.get(name): # and name in self.main_path_locations:
+                    location = Location(self.player, name, address, new_region)
+                    new_region.locations.append(location)
+        self.world.regions.append(new_region)
+        return new_region
+
     def create_items(self):
         for name, address in self.item_name_to_id.items():
-            self.world.itempool += [self.create_item(name)]
+            if name != "Basin of Vows" and name != "Path of the Dragon Gesture":
+                self.world.itempool += [self.create_item(name)]
 
     def generate_early(self):
-        pass
+        if self.world.priority_locations_preset[self.player]:
+            self.world.priority_locations[self.player].value.update(main_path_location_list)
 
     def set_rules(self) -> None:
         set_rule(self.world.get_entrance("Goto Bell Tower", self.player),
@@ -233,6 +128,8 @@ class DarkSouls3World(World):
                    lambda state: state.has("Small Lothric Banner", self.player))
         set_rule(self.world.get_entrance("Goto Lothric Castle", self.player),
                   lambda state: state.has("Basin of Vows", self.player))
+        set_rule(self.world.get_location("HWL: Soul of the Dancer", self.player),
+                 lambda state: state.has("Basin of Vows", self.player))
         set_rule(self.world.get_entrance("Goto Irithyll of the boreal", self.player),
                  lambda state: state.has("Small Doll", self.player))
         set_rule(self.world.get_entrance("Goto Archdragon peak", self.player),
@@ -247,12 +144,18 @@ class DarkSouls3World(World):
             state.has("Cinders of a Lord - Aldrich", self.player) and
             state.has("Cinders of a Lord - Lothric Prince", self.player))
 
-    def generate_basic(self):
         self.world.completion_condition[self.player] = lambda state: \
-            state.has("Cinders of a Lord - Abyss Watcher", self.player) and\
-            state.has("Cinders of a Lord - Yhorm the Giant", self.player) and\
-            state.has("Cinders of a Lord - Aldrich", self.player) and\
+            state.has("Cinders of a Lord - Abyss Watcher", self.player) and \
+            state.has("Cinders of a Lord - Yhorm the Giant", self.player) and \
+            state.has("Cinders of a Lord - Aldrich", self.player) and \
             state.has("Cinders of a Lord - Lothric Prince", self.player)
+
+    def generate_basic(self):
+        item = self.create_item("Basin of Vows")
+        if self.world.late_basin_of_vows[self.player]:
+            self.world.get_location("IBV: Soul of Pontiff Sulyvahn", self.player).place_locked_item(item)
+        else:
+            self.world.itempool += item
 
         itempool_len = self.item_name_to_id.__len__()
         total_required_locations = self.location_name_to_id.__len__()
@@ -263,24 +166,38 @@ class DarkSouls3World(World):
 
     def generate_output(self, output_directory: str):
 
+        print(self.world.get_items().__len__())
+
+        item_dictionary = item_dictionary_table.copy()
+        if self.world.randomize_weapons_level[self.player]:
+            # Randomize some weapons upgrades
+            for name in weapons_upgrade_5_table.keys():
+                if randint(0, 100) < 33:
+                    value = randint(1, 5)
+                    item_dictionary[name] += value
+
+            for name in weapons_upgrade_10_table.keys():
+                if randint(0, 100) < 33:
+                    value = randint(1, 10)
+                    item_dictionary[name] += value
+
         itemsId = []
         itemsAddress = []
         locationsId = []
         locationsAddress = []
         locationsTarget = []
-        for location in self.world.get_filled_locations(self.player):
-            locationsAddress.append(dictionary_table[location.name])
-            locationsId.append(location.address)
-            if location.item.player == self.player:
-                locationsTarget.append(item_dictionary_table[location.item.name])
-            else:
-                locationsTarget.append(0)
-
         for location in self.world.get_filled_locations():
             if location.item.player == self.player:
                 itemsId.append(location.item.code)
-                itemsAddress.append(item_dictionary_table[location.item.name])
+                itemsAddress.append(item_dictionary[location.item.name])
 
+            if location.player == self.player:
+                locationsAddress.append(dictionary_table[location.name])
+                locationsId.append(location.address)
+                if location.item.player == self.player:
+                    locationsTarget.append(item_dictionary[location.item.name])
+                else:
+                    locationsTarget.append(0)
 
         data = {
             "options": {
@@ -323,14 +240,9 @@ class DarkSouls3World(World):
     # items exist. They could be generated from json or something else. They can
     # include events, but don't have to since events will be placed manually.
     item_name_to_id = {name: id for id, name in enumerate(DarkSouls3Item.get_item_name_to_id(), base_id)}
-    location_name_to_id = {name: id for id, name in enumerate(DarkSouls3Location.get_item_name_to_id(), base_id)}
+    location_name_to_id = {name: id for id, name in enumerate(DarkSouls3Location.get_location_name_to_id(), base_id)}
 
-    for name in item_dictionary_table.keys():
-        if name in weapons_table and randint(0, 100) < 33:
-            value = randint(1, 10)
-            old = item_dictionary_table[name]
-            item_dictionary_table[name] += value
-            print(name + str(" +") + str(value) + str(" - ") + str(old) + str(" - ") + str(item_dictionary_table[name]))
+
 
 
 
