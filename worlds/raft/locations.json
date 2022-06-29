@@ -1,43 +1,15 @@
 [
     {
         "id": 48001,
-        "name": "Backpack",
+        "name": "Honey",
         "region": "ResearchTable",
         "requiresAccessToItems": [
-            "Rope",
-            "Leather",
-            "Wool"
+            "HoneyComb",
+            "Glass"
         ]
     },
     {
         "id": 48002,
-        "name": "Leather helmet",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Leather",
-            "Wool"
-        ]
-    },
-    {
-        "id": 48003,
-        "name": "Leather body armor",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Leather",
-            "Wool"
-        ]
-    },
-    {
-        "id": 48004,
-        "name": "Leather greaves",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Leather",
-            "Wool"
-        ]
-    },
-    {
-        "id": 48005,
         "name": "Flippers",
         "region": "ResearchTable",
         "requiresAccessToItems": [
@@ -48,41 +20,70 @@
         ]
     },
     {
-        "id": 48006,
-        "name": "Oxygen bottle",
+        "id": 48003,
+        "name": "Birds nest",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Thatch",
+            "Plank",
+            "Placeable_GiantClam"
+        ]
+    },
+    {
+        "id": 48004,
+        "name": "Battery",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "CopperIngot",
+            "Scrap",
+            "Plastic"
+        ]
+    },
+    {
+        "id": 48005,
+        "name": "Circuit board",
         "region": "ResearchTable",
         "requiresAccessToItems": [
             "Plastic",
-            "Rope",
-            "PlasticBottle_Empty",
+            "CopperIngot",
             "VineGoo"
+        ]
+    },
+    {
+        "id": 48006,
+        "name": "Bolt",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "MetalIngot"
         ]
     },
     {
         "id": 48007,
-        "name": "Empty bottle",
+        "name": "Hinge",
         "region": "ResearchTable",
         "requiresAccessToItems": [
-            "Plastic",
-            "VineGoo"
+            "MetalIngot"
         ]
     },
     {
         "id": 48008,
-        "name": "Bucket",
+        "name": "Shear",
         "region": "ResearchTable",
         "requiresAccessToItems": [
-            "Plank",
-            "Scrap",
-            "Rope"
+            "MetalIngot",
+            "Hinge",
+            "Scrap"
         ]
     },
     {
         "id": 48009,
-        "name": "Clay bowl",
+        "name": "Net launcher",
         "region": "ResearchTable",
         "requiresAccessToItems": [
-            "Clay"
+            "Scrap",
+            "Plastic",
+            "MetalIngot",
+            "Bolt"
         ]
     },
     {
@@ -95,25 +96,76 @@
     },
     {
         "id": 48011,
-        "name": "Healing salve",
+        "name": "Clay bowl",
         "region": "ResearchTable",
         "requiresAccessToItems": [
-            "Egg",
             "Clay"
         ]
     },
     {
         "id": 48012,
-        "name": "Good healing salve",
+        "name": "Net canister",
         "region": "ResearchTable",
         "requiresAccessToItems": [
-            "Egg",
-            "Clay",
-            "HoneyComb"
+            "ExplosivePowder",
+            "Stone",
+            "Rope"
         ]
     },
     {
         "id": 48013,
+        "name": "Binoculars",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "PlasticBottle_Empty",
+            "Bolt",
+            "Glass",
+            "Rope"
+        ]
+    },
+    {
+        "id": 48014,
+        "name": "Metal fishing rod",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Scrap",
+            "Bolt",
+            "Rope"
+        ]
+    },
+    {
+        "id": 48015,
+        "name": "Oxygen bottle",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plastic",
+            "Rope",
+            "PlasticBottle_Empty",
+            "VineGoo"
+        ]
+    },
+    {
+        "id": 48016,
+        "name": "Sprinkler",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plastic",
+            "Scrap",
+            "Bolt",
+            "CircuitBoard"
+        ]
+    },
+    {
+        "id": 48017,
+        "name": "Empty bottle",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plastic",
+            "VineGoo"
+        ]
+    },
+    {
+        "id": 48018,
         "name": "Cookingpot",
         "region": "ResearchTable",
         "requiresAccessToItems": [
@@ -125,7 +177,7 @@
         ]
     },
     {
-        "id": 48014,
+        "id": 48019,
         "name": "Juicer",
         "region": "ResearchTable",
         "requiresAccessToItems": [
@@ -137,125 +189,7 @@
         ]
     },
     {
-        "id": 48015,
-        "name": "Advanced grill",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "MetalIngot",
-            "Rope",
-            "Nail"
-        ]
-    },
-    {
-        "id": 48016,
-        "name": "Advanced purifier",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Plastic",
-            "Glass"
-        ]
-    },
-    {
-        "id": 48017,
-        "name": "Grass plot",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Dirt",
-            "Plank",
-            "Plastic"
-        ]
-    },
-    {
-        "id": 48018,
-        "name": "Medium crop plot",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Scrap"
-        ]
-    },
-    {
-        "id": 48019,
-        "name": "Large crop plot",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Rope",
-            "Nail",
-            "Bolt"
-        ]
-    },
-    {
         "id": 48020,
-        "name": "Scarecrow",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Thatch",
-            "Nail",
-            "Plastic"
-        ]
-    },
-    {
-        "id": 48021,
-        "name": "Sprinkler",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plastic",
-            "Scrap",
-            "Bolt",
-            "CircuitBoard"
-        ]
-    },
-    {
-        "id": 48022,
-        "name": "Honey",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "HoneyComb",
-            "Glass"
-        ]
-    },
-    {
-        "id": 48023,
-        "name": "Simple Battery",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "CopperIngot",
-            "Scrap",
-            "Plastic"
-        ]
-    },
-    {
-        "id": 48024,
-        "name": "Bolt",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "MetalIngot"
-        ]
-    },
-    {
-        "id": 48025,
-        "name": "Circuit board",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plastic",
-            "CopperIngot",
-            "VineGoo"
-        ]
-    },
-    {
-        "id": 48026,
-        "name": "Hinge",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "MetalIngot"
-        ]
-    },
-    {
-        "id": 48027,
         "name": "Stationary anchor",
         "region": "ResearchTable",
         "requiresAccessToItems": [
@@ -266,26 +200,51 @@
         ]
     },
     {
-        "id": 48028,
-        "name": "Lantern",
+        "id": 48021,
+        "name": "Advanced grill",
         "region": "ResearchTable",
         "requiresAccessToItems": [
             "Plank",
-            "Scrap"
+            "MetalIngot",
+            "Rope",
+            "Nail"
         ]
     },
     {
-        "id": 48029,
-        "name": "Paint brush",
+        "id": 48022,
+        "name": "Metal Spear",
         "region": "ResearchTable",
         "requiresAccessToItems": [
-            "Feather",
             "Plank",
-            "Rope"
+            "Rope",
+            "MetalIngot",
+            "Bolt"
         ]
     },
     {
-        "id": 48030,
+        "id": 48023,
+        "name": "Storage",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Scrap",
+            "Rope",
+            "Hinge"
+        ]
+    },
+    {
+        "id": 48024,
+        "name": "Smelter",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Brick_Dry",
+            "Scrap",
+            "Nail"
+        ]
+    },
+    {
+        "id": 48025,
         "name": "Paint mill",
         "region": "ResearchTable",
         "requiresAccessToItems": [
@@ -296,34 +255,7 @@
         ]
     },
     {
-        "id": 48031,
-        "name": "Small trophy board",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Nail"
-        ]
-    },
-    {
-        "id": 48032,
-        "name": "Medium trophy board",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Nail"
-        ]
-    },
-    {
-        "id": 48033,
-        "name": "Large trophy board",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Nail"
-        ]
-    },
-    {
-        "id": 48034,
+        "id": 48026,
         "name": "Hammock",
         "region": "ResearchTable",
         "requiresAccessToItems": [
@@ -334,7 +266,245 @@
         ]
     },
     {
+        "id": 48027,
+        "name": "Metal axe",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Rope",
+            "Scrap",
+            "Bolt"
+        ]
+    },
+    {
+        "id": 48028,
+        "name": "Scrap hook",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Rope",
+            "Scrap",
+            "Bolt"
+        ]
+    },
+    {
+        "id": 48029,
+        "name": "Large crop plot",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Rope",
+            "Nail",
+            "Bolt"
+        ]
+    },
+    {
+        "id": 48030,
+        "name": "Sweep net",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Rope",
+            "VineGoo",
+            "Bolt"
+        ]
+    },
+    {
+        "id": 48031,
+        "name": "Basic bow",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Rope",
+            "VineGoo",
+            "Bolt"
+        ]
+    },
+    {
+        "id": 48032,
+        "name": "Scarecrow",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Thatch",
+            "Nail",
+            "Plastic"
+        ]
+    },
+    {
+        "id": 48033,
+        "name": "Metal arrow",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "MetalIngot",
+            "Feather"
+        ]
+    },
+    {
+        "id": 48034,
+        "name": "Shovel",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Bolt",
+            "MetalIngot"
+        ]
+    },
+    {
         "id": 48035,
+        "name": "Advanced collection net",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Rope",
+            "TitaniumIngot"
+        ]
+    },
+    {
+        "id": 48036,
+        "name": "Bucket",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Scrap",
+            "Rope"
+        ]
+    },
+    {
+        "id": 48037,
+        "name": "Collection net",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Rope",
+            "Nail"
+        ]
+    },
+    {
+        "id": 48038,
+        "name": "Paint brush",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Feather",
+            "Plank",
+            "Rope"
+        ]
+    },
+    {
+        "id": 48039,
+        "name": "Advanced purifier",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Plastic",
+            "Glass"
+        ]
+    },
+    {
+        "id": 48040,
+        "name": "Grass plot",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Dirt",
+            "Plank",
+            "Plastic"
+        ]
+    },
+    {
+        "id": 48041,
+        "name": "Stone arrow",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Stone",
+            "Plastic"
+        ]
+    },
+    {
+        "id": 48042,
+        "name": "Medium crop plot",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Scrap"
+        ]
+    },
+    {
+        "id": 48043,
+        "name": "Lantern",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Scrap"
+        ]
+    },
+    {
+        "id": 48044,
+        "name": "Small trophy board",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Nail"
+        ]
+    },
+    {
+        "id": 48045,
+        "name": "Medium trophy board",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Nail"
+        ]
+    },
+    {
+        "id": 48046,
+        "name": "Large trophy board",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Plank",
+            "Nail"
+        ]
+    },
+    {
+        "id": 48047,
+        "name": "Backpack",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Rope",
+            "Leather",
+            "Wool"
+        ]
+    },
+    {
+        "id": 48048,
+        "name": "Leather helmet",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Leather",
+            "Wool"
+        ]
+    },
+    {
+        "id": 48049,
+        "name": "Leather body armor",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Leather",
+            "Wool"
+        ]
+    },
+    {
+        "id": 48050,
+        "name": "Leather greaves",
+        "region": "ResearchTable",
+        "requiresAccessToItems": [
+            "Leather",
+            "Wool"
+        ]
+    },
+    {
+        "id": 48051,
         "name": "Beehive",
         "region": "ResearchTable",
         "requiresAccessToItems": [
@@ -346,192 +516,22 @@
         ]
     },
     {
-        "id": 48036,
-        "name": "Birds nest",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Thatch",
-            "Plank",
-            "Placeable_GiantClam"
-        ]
-    },
-    {
-        "id": 48037,
-        "name": "Simple collection net",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Rope",
-            "Nail"
-        ]
-    },
-    {
-        "id": 48038,
-        "name": "Advanced collection net",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Rope",
-            "TitaniumIngot"
-        ]
-    },
-    {
-        "id": 48039,
-        "name": "Smelter",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Brick_Dry",
-            "Scrap",
-            "Nail"
-        ]
-    },
-    {
-        "id": 48040,
-        "name": "Storage",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Scrap",
-            "Rope",
-            "Hinge"
-        ]
-    },
-    {
-        "id": 48041,
-        "name": "Metal axe",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Rope",
-            "Scrap",
-            "Bolt"
-        ]
-    },
-    {
-        "id": 48042,
-        "name": "Binoculars",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "PlasticBottle_Empty",
-            "Bolt",
-            "Glass",
-            "Rope"
-        ]
-    },
-    {
-        "id": 48043,
-        "name": "Metal fishing rod",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Scrap",
-            "Bolt",
-            "Rope"
-        ]
-    },
-    {
-        "id": 48044,
-        "name": "Scrap hook",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Rope",
-            "Scrap",
-            "Bolt"
-        ]
-    },
-    {
-        "id": 48045,
-        "name": "Shears",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "MetalIngot",
-            "Hinge",
-            "Scrap"
-        ]
-    },
-    {
-        "id": 48046,
-        "name": "Shovel",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Bolt",
-            "MetalIngot"
-        ]
-    },
-    {
-        "id": 48047,
-        "name": "Sweep net",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Rope",
-            "VineGoo",
-            "Bolt"
-        ]
-    },
-    {
-        "id": 48048,
-        "name": "Basic bow",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Rope",
-            "VineGoo",
-            "Bolt"
-        ]
-    },
-    {
-        "id": 48049,
-        "name": "Stone arrow",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Stone",
-            "Plastic"
-        ]
-    },
-    {
-        "id": 48050,
-        "name": "Metal arrow",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "MetalIngot",
-            "Feather"
-        ]
-    },
-    {
-        "id": 48051,
-        "name": "Metal Spear",
-        "region": "ResearchTable",
-        "requiresAccessToItems": [
-            "Plank",
-            "Rope",
-            "MetalIngot",
-            "Bolt"
-        ]
-    },
-    {
         "id": 48052,
-        "name": "Net launcher",
+        "name": "Good healing salve",
         "region": "ResearchTable",
         "requiresAccessToItems": [
-            "Scrap",
-            "Plastic",
-            "MetalIngot",
-            "Bolt"
+            "Egg",
+            "Clay",
+            "HoneyComb"
         ]
     },
     {
         "id": 48053,
-        "name": "Net canister",
+        "name": "Healing salve",
         "region": "ResearchTable",
         "requiresAccessToItems": [
-            "ExplosivePowder",
-            "Stone",
-            "Rope"
+            "Egg",
+            "Clay"
         ]
     },
     {
@@ -706,65 +706,93 @@
     {
         "id": 48086,
         "name": "Johnny (Balboa Island)",
-        "region": "BalboaIsland"
+        "region": "BalboaIsland",
+        "requiresAccessToItems": [
+            "Machete"
+        ]
     },
     {
         "id": 48087,
+        "name": "Balboa Island Doll murderer 4",
+        "region": "BalboaIsland"
+    },
+    {
+        "id": 48088,
+        "name": "Balboa Island Doll murderer 1",
+        "region": "BalboaIsland"
+    },
+    {
+        "id": 48089,
+        "name": "Balboa Island Doll murderer 3",
+        "region": "BalboaIsland"
+    },
+    {
+        "id": 48090,
+        "name": "Balboa Island Doll murderer 5",
+        "region": "BalboaIsland"
+    },
+    {
+        "id": 48091,
+        "name": "Balboa Island Doll murderer 2",
+        "region": "BalboaIsland"
+    },
+    {
+        "id": 48092,
         "name": "Caravan Island Detto journal 1",
         "region": "CaravanIsland"
     },
     {
-        "id": 48088,
+        "id": 48093,
         "name": "Caravan Island Detto journal 2",
         "region": "CaravanIsland"
     },
     {
-        "id": 48089,
+        "id": 48094,
         "name": "Caravan Island Detto journal 3",
         "region": "CaravanIsland"
     },
     {
-        "id": 48090,
+        "id": 48095,
         "name": "Caravan Island Detto journal 4",
         "region": "CaravanIsland"
     },
     {
-        "id": 48091,
+        "id": 48096,
         "name": "Caravan Island Detto journal 5",
         "region": "CaravanIsland"
     },
     {
-        "id": 48092,
+        "id": 48097,
         "name": "Caravan Island Detto journal 6",
         "region": "CaravanIsland"
     },
     {
-        "id": 48093,
+        "id": 48098,
         "name": "Caravan Island Olaf speech",
         "region": "CaravanIsland"
     },
     {
-        "id": 48094,
+        "id": 48099,
         "name": "Caravan Island Raft town article",
         "region": "CaravanIsland"
     },
     {
-        "id": 48095,
+        "id": 48100,
         "name": "Caravan Island Doctor's note",
         "region": "CaravanIsland"
     },
     {
-        "id": 48096,
+        "id": 48101,
         "name": "Firework blueprint",
         "region": "CaravanIsland"
     },
     {
-        "id": 48097,
+        "id": 48102,
         "name": "Battery Charger quest",
         "region": "CaravanIsland"
     },
     {
-        "id": 48098,
+        "id": 48103,
         "name": "Zipline quest",
         "region": "CaravanIsland",
         "requiresAccessToItems": [
@@ -772,7 +800,7 @@
         ]
     },
     {
-        "id": 48099,
+        "id": 48104,
         "name": "Caravan Island Frequency to Tangaroa",
         "region": "CaravanIsland",
         "requiresAccessToItems": [
@@ -780,212 +808,257 @@
         ]
     },
     {
-        "id": 48100,
+        "id": 48105,
         "name": "Engine controls blueprint",
         "region": "CaravanIsland"
     },
     {
-        "id": 48101,
+        "id": 48106,
         "name": "Metal detector blueprint",
         "region": "CaravanIsland"
     },
     {
-        "id": 48102,
-        "name": "Tangaroa Gardener Diary",
-        "region": "Tangaroa"
-    },
-    {
-        "id": 48103,
-        "name": "Tangaroa Riot Log",
-        "region": "Tangaroa"
-    },
-    {
-        "id": 48104,
-        "name": "Tangaroa Tulley Note",
-        "region": "Tangaroa"
-    },
-    {
-        "id": 48105,
-        "name": "Tangaroa Cipher",
-        "region": "Tangaroa"
-    },
-    {
-        "id": 48106,
-        "name": "Tangaroa Frequency to Temperance",
-        "region": "Tangaroa"
-    },
-    {
         "id": 48107,
-        "name": "Water pipe blueprint",
+        "name": "Tangaroa Ruben 1",
         "region": "Tangaroa"
     },
     {
         "id": 48108,
-        "name": "Electric purifier blueprint",
+        "name": "Tangaroa Ruben 2",
         "region": "Tangaroa"
     },
     {
         "id": 48109,
-        "name": "Water tank blueprint",
+        "name": "Tangaroa Ruben 3",
         "region": "Tangaroa"
     },
     {
         "id": 48110,
-        "name": "Large Storage blueprint",
+        "name": "Tangaroa Ruben 4",
         "region": "Tangaroa"
     },
     {
         "id": 48111,
-        "name": "Elaine (Tangaroa)",
+        "name": "Tangaroa Ruben 5",
         "region": "Tangaroa"
     },
     {
         "id": 48112,
+        "name": "Tangaroa Gardener Diary",
+        "region": "Tangaroa"
+    },
+    {
+        "id": 48113,
+        "name": "Tangaroa Riot Log",
+        "region": "Tangaroa"
+    },
+    {
+        "id": 48114,
+        "name": "Tangaroa Tulley Note",
+        "region": "Tangaroa"
+    },
+    {
+        "id": 48115,
+        "name": "Tangaroa Cipher",
+        "region": "Tangaroa"
+    },
+    {
+        "id": 48116,
+        "name": "Tangaroa Frequency to Varuna Point",
+        "region": "Tangaroa"
+    },
+    {
+        "id": 48117,
+        "name": "Water pipe blueprint",
+        "region": "Tangaroa"
+    },
+    {
+        "id": 48118,
+        "name": "Electric purifier blueprint",
+        "region": "Tangaroa"
+    },
+    {
+        "id": 48119,
+        "name": "Water tank blueprint",
+        "region": "Tangaroa"
+    },
+    {
+        "id": 48120,
+        "name": "Large Storage blueprint",
+        "region": "Tangaroa"
+    },
+    {
+        "id": 48121,
+        "name": "Elaine (Tangaroa)",
+        "region": "Tangaroa"
+    },
+    {
+        "id": 48122,
         "name": "Varuna Point Grabber diary 1",
         "region": "Varuna Point"
     },
     {
-        "id": 48113,
+        "id": 48123,
         "name": "Varuna Point Grabber diary 2",
         "region": "Varuna Point"
     },
     {
-        "id": 48114,
+        "id": 48124,
         "name": "Varuna Point Grabber diary 3",
         "region": "Varuna Point"
     },
     {
-        "id": 48115,
+        "id": 48125,
         "name": "Varuna Point Grabber diary 4",
         "region": "Varuna Point"
     },
     {
-        "id": 48116,
+        "id": 48126,
         "name": "Varuna Point Grabber diary 5",
         "region": "Varuna Point"
     },
     {
-        "id": 48117,
+        "id": 48127,
         "name": "Varuna Point Grabber diary 6",
         "region": "Varuna Point"
     },
     {
-        "id": 48118,
+        "id": 48128,
         "name": "Varuna Point Frequency to Temperance",
         "region": "Varuna Point"
     },
     {
-        "id": 48119,
+        "id": 48129,
         "name": "Wind Turbine blueprint",
         "region": "Varuna Point"
     },
     {
-        "id": 48120,
+        "id": 48130,
         "name": "Advanced Battery blueprint",
         "region": "Varuna Point"
     },
     {
-        "id": 48121,
+        "id": 48131,
         "name": "Advanced Headlight blueprint",
         "region": "Varuna Point"
     },
     {
-        "id": 48122,
+        "id": 48132,
         "name": "Electric Grill blueprint",
         "region": "Varuna Point"
     },
     {
-        "id": 48123,
+        "id": 48133,
         "name": "Temperance Bruno diary 1",
         "region": "Temperance"
     },
     {
-        "id": 48124,
+        "id": 48134,
         "name": "Temperance Bruno diary 2",
         "region": "Temperance"
     },
     {
-        "id": 48125,
+        "id": 48135,
         "name": "Temperance Bruno diary 3",
         "region": "Temperance"
     },
     {
-        "id": 48126,
+        "id": 48136,
         "name": "Temperance Bruno diary 4",
         "region": "Temperance"
     },
     {
-        "id": 48127,
+        "id": 48137,
         "name": "Temperance Bruno diary 5",
         "region": "Temperance"
     },
     {
-        "id": 48128,
+        "id": 48138,
         "name": "Temperance Sparrow note 1",
         "region": "Temperance"
     },
     {
-        "id": 48129,
+        "id": 48139,
         "name": "Temperance Sparrow note 2",
         "region": "Temperance"
     },
     {
-        "id": 48130,
+        "id": 48140,
         "name": "Temperance Frequency to Utopia",
         "region": "Temperance"
     },
     {
-        "id": 48131,
+        "id": 48141,
+        "name": "Temperance Star sign 1",
+        "region": "Temperance"
+    },
+    {
+        "id": 48142,
+        "name": "Temperance Star sign 2",
+        "region": "Temperance"
+    },
+    {
+        "id": 48143,
+        "name": "Temperance Star sign 3",
+        "region": "Temperance"
+    },
+    {
+        "id": 48144,
+        "name": "Temperance Star sign 4",
+        "region": "Temperance"
+    },
+    {
+        "id": 48145,
         "name": "Electric Smelter blueprint",
         "region": "Temperance"
     },
     {
-        "id": 48132,
+        "id": 48146,
         "name": "Advanced Biofuel Extractor blueprint",
         "region": "Temperance"
     },
     {
-        "id": 48133,
+        "id": 48147,
         "name": "Advanced Stationary Anchor blueprint",
         "region": "Temperance"
     },
     {
-        "id": 48134,
+        "id": 48148,
         "name": "Shogo (Temperance)",
         "region": "Temperance"
     },
     {
-        "id": 48135,
+        "id": 48149,
         "name": "Electric Zipline blueprint",
         "region": "Utopia"
     },
     {
-        "id": 48136,
+        "id": 48150,
         "name": "Advanced Backpack blueprint",
         "region": "Utopia"
     },
     {
-        "id": 48137,
+        "id": 48151,
         "name": "Titanium Tools blueprint",
         "region": "Utopia"
     },
     {
-        "id": 48138,
+        "id": 48152,
         "name": "Utopia Captives note",
         "region": "Utopia"
     },
     {
-        "id": 48139,
+        "id": 48153,
         "name": "Utopia Detto map",
         "region": "Utopia"
     },
     {
-        "id": 48140,
+        "id": 48154,
         "name": "Utopia Complete",
         "region": "Utopia"
     },
     {
-        "id": 48141,
+        "id": 48155,
         "name": "Relay Station quest",
         "region": "BalboaIsland"
     }
