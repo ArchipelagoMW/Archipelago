@@ -518,8 +518,9 @@ class AttachTooltip(object):
         label.pack(ipadx=1)
 
     def hide(self):
-        self._window.destroy()
-        self._window = None
+        if self._window:
+            self._window.destroy()
+            self._window = None
 
 
 def get_rom_frame(parent=None):
