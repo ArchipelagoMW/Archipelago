@@ -379,6 +379,8 @@ class HKWorld(World):
 
         for region in self.world.get_regions(self.player):
             for location in region.locations:
+                if location.vanilla:
+                    continue
                 if not location.costs:
                     continue
                 if location.name == "Vessel_Fragment-Basin":
