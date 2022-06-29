@@ -128,6 +128,24 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
     itempool.extend(unplaced_items)
 
 
+def accessibility_corrections(world: MultiWorld, state: CollectionState, defaultlocations):
+
+    minimal_players = {player for player in world.player_ids if world.accessibility[player] == "minimal"}
+    unreachable_locations = [location for location in world.get_locations() if location.player in minimal_players and not location.can_reach(state)]
+    pool = []
+    for location in unreachable_locations:
+        if location.item is not None and location.item.player not in minimal_players:
+            pool.append(location.item)
+            state.remove(location.item)
+            location.item = None
+            location.event = False
+            if location in state.events:
+                state.events.remove(location)
+            defaultlocations.append(location)
+    # don't shuffle locations again to keep the known unreachable locations at the end of the list for this
+    fill_restrictive(world, state, defaultlocations, pool)
+
+
 def distribute_items_restrictive(world: MultiWorld) -> None:
     fill_locations = sorted(world.get_unfilled_locations())
     world.random.shuffle(fill_locations)
@@ -175,6 +193,9 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
         if progitempool:
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
+
+    world.random.shuffle(defaultlocations)
+    accessibility_corrections(world, world.state, defaultlocations)
 
     if nonexcludeditempool:
         world.random.shuffle(defaultlocations)
