@@ -42,8 +42,9 @@ class CotNDWorld(World):
     # decide characters and starting character
     # remove start_inventory dupes
     def generate_early(self) -> None:
-        self.items: List[str] = get_normal_items(self.world.available_characters[self.player].value,
-            self.world.reduce_starting_items[self.player].value)
+        self.chars = sorted(list(set(self.world.available_characters[self.player].value) | 
+            {self.world.starting_character[self.player].current_key.capitalize()}))
+        self.items: List[str] = get_normal_items(self.chars, self.world.reduce_starting_items[self.player].value)
         self.give_starting_character()
         self.remove_start_items_from_pool()
 
@@ -68,14 +69,13 @@ class CotNDWorld(World):
                 instance += 1
 
         # Initial locations
-        chars = self.world.available_characters[self.player].value
         flawless = self.world.randomize_flawless[self.player].value
-        chars = sorted(list(set(chars))) # purge duplicates and ordering
-        locations = [loc for char in chars for loc in get_char_locations(char, 1, flawless)]
-        self.char_counts = {char: 1 for char in chars}
+        # Add starting char if necessary, purge duplicates and ordering
+        locations = [loc for char in self.chars for loc in get_char_locations(char, 1, flawless)]
+        self.char_counts = {char: 1 for char in self.chars}
 
         # Add locations until enough are made
-        gen = char_generator(chars)
+        gen = char_generator(self.chars)
         while len(locations) < len(self.items):
             char, instance = next(gen)
             locations += get_char_locations(char, instance, flawless)
@@ -127,15 +127,9 @@ class CotNDWorld(World):
 
     ### End Autoworld Methods ###
 
-    # if there's a character in start inventory that has items, we're fine
-    # otherwise give a random one
+    # give starting char to player
     def give_starting_character(self) -> None:
-        chars = self.world.available_characters[self.player].value
-        for char in chars:
-            if self.world.start_inventory[self.player].value.get(f"Unlock {char}", 0) > 0:
-                return
-
-        starting_char = f"Unlock {self.world.random.choice(chars)}"
+        starting_char = f"Unlock {self.world.starting_character[self.player].current_key.capitalize()}"
         self.world.push_precollected(self.create_item(starting_char))
         self.items.remove(starting_char)
 

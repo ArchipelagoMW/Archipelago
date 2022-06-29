@@ -7,6 +7,26 @@ class Characters(OptionList):
     """Characters which contain checks. Each will be represented at least once."""
     display_name = "Available Characters"
     valid_keys = frozenset(all_chars)
+    default = ['Cadence', 'Bard']
+
+
+class StartingChar(Choice):
+    """The initial starting character, unlocked from the start. Strongly recommended not to blindly randomize this, since Coda is an option."""
+    display_name = "Starting Character"
+    option_cadence = 0
+    option_melody = 1
+    option_aria = 2
+    option_dorian = 3
+    option_eli = 4
+    option_monk = 5
+    option_dove = 6
+    option_coda = 7
+    option_bolt = 8
+    option_bard = 9
+    option_nocturna = 10
+    option_diamond = 11
+    option_mary = 12
+    option_tempo = 13
 
 
 class ReduceStartingItems(Toggle):
@@ -39,6 +59,7 @@ class TrapPercentage(Range):
 
 cotnd_options = {
     'available_characters':     Characters,
+    'starting_character':       StartingChar,
     'reduce_starting_items':    ReduceStartingItems,
     'randomize_flawless':       RandomizeFlawless,
     'free_samples':             FreeSamples,
