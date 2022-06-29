@@ -175,7 +175,7 @@ A Link to the Past:
   start_location_hints:
     - Spike Cave
   priority_locations:
-    - Links House
+    - Link's House
   exclude_locations:
     - Cave 45
   item_links:
