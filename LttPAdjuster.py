@@ -492,45 +492,34 @@ class BackgroundTaskProgressNullWindow(BackgroundTask):
     def close_window(self):
         self.stop()
 
-# ToolTip code below is from Stack Overflow by user squareRoot17: https://stackoverflow.com/a/56749167
-class ToolTip(object):
 
-    def __init__(self, widget):
-        self.widget = widget
-        self.tipwindow = None
-        self.id = None
-        self.x = self.y = 0
+class AttachTooltip(object):
 
-    def showtip(self, text):
-        """Display text in tooltip window"""
-        self.text = text
-        if self.tipwindow or not self.text:
+    def __init__(self, parent, text):
+        self._parent = parent
+        self._text = text
+        self._window = None
+        parent.bind('<Enter>', lambda event : self.show())
+        parent.bind('<Leave>', lambda event : self.hide())
+
+    def show(self):
+        if self._window or not self._text:
             return
-        x, y, cx, cy = self.widget.bbox("insert")
-        x = x + self.widget.winfo_rootx() + 20
-        y = y + cy + self.widget.winfo_rooty() + 20
-        self.tipwindow = tw = Toplevel(self.widget)
-        tw.wm_overrideredirect(1)
-        tw.wm_geometry("+%d+%d" % (x, y))
-        label = Label(tw, text=self.text, justify=LEFT,
-                      background="#ffffe0", borderwidth=1,
-                      font=("tahoma", "8", "normal"))
+        self._window = Toplevel(self._parent)
+        #remove window bar controls
+        self._window.wm_overrideredirect(1)
+        #adjust positioning
+        x, y, *_ = self._parent.bbox("insert")
+        x = x + self._parent.winfo_rootx() + 20
+        y = y + self._parent.winfo_rooty() + 20
+        self._window.wm_geometry("+{0}+{1}".format(x,y))
+        #show text
+        label = Label(self._window, text=self._text, justify=LEFT)
         label.pack(ipadx=1)
 
-    def hidetip(self):
-        tw = self.tipwindow
-        self.tipwindow = None
-        if tw:
-            tw.destroy()
-
-def CreateToolTip(widget, text):
-    toolTip = ToolTip(widget)
-    def enter(event):
-        toolTip.showtip(text)
-    def leave(event):
-        toolTip.hidetip()
-    widget.bind('<Enter>', enter)
-    widget.bind('<Leave>', leave)
+    def hide(self):
+        self._window.destroy()
+        self._window = None
 
 
 def get_rom_frame(parent=None):
@@ -681,7 +670,7 @@ def get_rom_options_frame(parent=None):
             set_oof(None)
 
     oofSelectButton = Button(oofDialogFrame, text='...', command=OofSelect)
-    CreateToolTip(oofSelectButton,
+    AttachTooltip(oofSelectButton,
                   text="Select a .brr file no more than 2673 bytes.\n" + \
                   "This can be created from a <=0.394s 16-bit signed PCM .wav file at 12khz using snesbrr.")
 
