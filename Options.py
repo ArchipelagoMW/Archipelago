@@ -113,6 +113,27 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         raise NotImplementedError
 
 
+class FreeText(Option):
+    """Text option that allows users to enter strings. Needs to be validated by the world"""
+    free_text_names: set[str]
+    """set of valid prepopulated names"""
+
+    def __init__(self, value: str):
+        assert isinstance(value, str), "value of FreeText must be a string"
+        self.value = value
+
+    @classmethod
+    def from_text(cls, text: str) -> FreeText:
+        text.lower()
+        if text == "random":
+            return cls(random.choice(list(cls.free_text_names)))
+        return cls(text)
+
+    @classmethod
+    def from_any(cls, data: typing.Any) -> FreeText:
+        return cls.from_text(str(data))
+
+
 class NumericOption(Option[int], numbers.Integral):
     # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
     # `int` is not a `numbers.Integral` according to the official typestubs
@@ -366,6 +387,28 @@ class Choice(NumericOption):
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
     __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
+
+
+class TextChoice(FreeText, Choice):
+    """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string"""
+
+    def __init__(self, value: typing.Union[str, int]):
+        if type(value) == str:
+            super(FreeText, self).__init__(value)
+        elif type(value) == int:
+            super(Choice, self).__init__(value)
+        else:
+            raise TypeError(f"{value} is not a valid option for {self.__class__.__name__}")
+
+    @classmethod
+    def from_text(cls, text: str) -> TextChoice:
+        text.lower()
+        if text == "random":  # chooses a random defined option but won't use any free text options
+            return cls(random.choice(list(cls.name_lookup)))
+        for option_name, value in cls.options.items():
+            if option_name == text:
+                return cls(value)
+        return cls(text)
 
 
 class Range(NumericOption):
