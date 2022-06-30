@@ -24,11 +24,10 @@ from pathlib import Path
 import re
 from shutil import copy2
 from MultiServer import mark_raw
-from platform import system
 import ctypes
 import sys
 
-from Utils import init_logging
+from Utils import init_logging, is_windows
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -827,7 +826,7 @@ def initialize_blank_mission_dict(location_table):
 def check_game_install_path() -> bool:
     # First thing: go to the default location for ExecuteInfo.
     # An exception for Windows is included because it's very difficult to find ~\Documents if the user moved it.
-    if system() == "Windows":
+    if is_windows:
         # The next five lines of utterly inscrutable code are brought to you by copy-paste from Stack Overflow.
         # https://stackoverflow.com/questions/6227590/finding-the-users-my-documents-path/30924555#
         import ctypes.wintypes
@@ -870,7 +869,7 @@ def check_game_install_path() -> bool:
 
 
 def check_mod_install() -> bool:
-    # Pull up the SC2PATH if set. If not, encourage the user to manually run check_game_install_path and troubleshoot.
+    # Pull up the SC2PATH if set. If not, encourage the user to manually run /set_path.
     try:
         # Check inside the Mods folder for Archipelago.SC2Mod. If found, tell user. If not, tell user.
         if os.path.isfile(modfile := (os.environ["SC2PATH"] / Path("Mods") / Path("Archipelago.SC2Mod"))):
@@ -909,10 +908,6 @@ def grab_dlls():
 
 class DllDirectory:
     # Credit to Black Sliver for this code.
-    # soldieroforder: "I don't understand any particular part of this code. All I know is that it runs the
-    # SetDllDirectoryW command in Windows, which (when passed a NULL Unicode character (==None)) 'resets'
-    # the DLL directory. For some reason, this allows SC2 to start normally (i.e. w/o missing the .dlls).
-    # This change is reversible."
     # More info: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setdlldirectoryw
     _old: typing.Optional[str] = None
     _new: typing.Optional[str] = None
