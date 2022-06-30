@@ -163,6 +163,52 @@ boss_location_table = [
         ('Ganons Tower', 'bottom'),
     ]
 
+boss_shuffle_options = {None: 'none',
+                        'none': 'none',
+                        'basic': 'basic',
+                        'full': 'full',
+                        'chaos': 'chaos',
+                        'singularity': 'singularity'
+                        }
+
+
+def get_plando_bosses(boss_shuffle: str, boss_plando: bool) -> str:
+    if not boss_plando:
+        for option in boss_shuffle_options:
+            if option in boss_shuffle:
+                return boss_shuffle_options[boss_shuffle]
+            raise ValueError(f"Boss shuffle is disabled and {boss_shuffle} is not a valid option")
+    options = boss_shuffle.lower().split(";")
+    remainder_shuffle = "none"  # vanilla
+    bosses = []
+    available_boss_names: set[str] = {boss.lower() for boss in boss_table if boss not in {'Agahnim', 'Agahnim2', 'Ganon'}}
+    available_boss_locations: set[str] = {f"{loc.lower()}{f' {level}' if level else ''}" for loc, level in boss_location_table}
+    for boss in options:
+        if boss in boss_shuffle_options:
+            remainder_shuffle = boss_shuffle_options[boss]
+        elif "-" in boss:
+            loc, boss_name = boss.split("-")
+            if boss_name not in available_boss_names:
+                raise ValueError(f"Unknown Boss name {boss_name}")
+            if loc not in available_boss_locations:
+                raise ValueError(f"Unknown Boss Location {loc}")
+            level = ''
+            if loc.split(" ")[-1] in {"top", "middle", "bottom"}:
+                # split off level
+                loc = loc.split(" ")
+                level = f" {loc[-1]}"
+                loc = " ".join(loc[:-1])
+            loc = loc.title().replace("Of", "of")
+            if not can_place_boss(boss_name.title(), loc, level):
+                raise ValueError(f"Cannot place {boss_name} at {loc}{level}")
+            bosses.append(boss)
+        elif boss not in available_boss_names:
+            raise ValueError(f"Unknown Boss name or Boss shuffle option {boss}.")
+        else:
+            bosses.append(boss)
+    return ";".join(bosses + [remainder_shuffle])
+
+
 
 def can_place_boss(boss: str, dungeon_name: str, level: Optional[str] = None) -> bool:
     # blacklist approach
@@ -202,7 +248,7 @@ def format_boss_location(location, level):
     return location + (' (' + level + ')' if level else '')
 
 def place_bosses(world, player: int):
-    if world.boss_shuffle[player] == 'none':
+    if world.boss_shuffle[player] == 0:
         return
     # Most to least restrictive order
     boss_locations = boss_location_table.copy()

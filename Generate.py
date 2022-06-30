@@ -20,7 +20,6 @@ from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from BaseClasses import seeddigits, get_seed
 import Options
-from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
 import copy
@@ -301,12 +300,6 @@ def prefer_int(input_data: str) -> Union[str, int]:
         return int(input_data)
     except:
         return input_data
-
-
-available_boss_names: Set[str] = {boss.lower() for boss in Bosses.boss_table if boss not in
-                                         {'Agahnim', 'Agahnim2', 'Ganon'}}
-available_boss_locations: Set[str] = {f"{loc.lower()}{f' {level}' if level else ''}" for loc, level in
-                                             Bosses.boss_location_table}
 
 
 goals = {
