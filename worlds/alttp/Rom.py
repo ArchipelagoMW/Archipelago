@@ -19,7 +19,7 @@ import threading
 import xxtea
 import concurrent.futures
 import bsdiff4
-from typing import Optional
+from typing import Optional, List
 
 from BaseClasses import CollectionState, Region, Location
 from worlds.alttp.Shops import ShopType, ShopPriceType
@@ -199,7 +199,7 @@ def check_enemizer(enemizercli):
                 enemizer_logger.debug(f"Found Enemizer version {version}")
                 if version < wanted_version:
                     raise Exception(
-                        f"Enemizer found at {enemizercli} is outdated ({version}) < ({wanted_version}, "
+                        f"Enemizer found at {enemizercli} is outdated ({version}) < ({wanted_version}), "
                         f"please update your Enemizer. "
                         f"Such as from https://github.com/Ijwu/Enemizer/releases")
                 break
@@ -1677,7 +1677,7 @@ def patch_race_rom(rom, world, player):
     rom.encrypt(world, player)
 
 
-def get_price_data(price: int, price_type: int) -> bytes:
+def get_price_data(price: int, price_type: int) -> List[int]:
     if price_type != ShopPriceType.Rupees:
         # Set special price flag 0x8000
         # Then set the type of price we're setting 0x7F00 (this starts from Hearts, not Rupees, subtract 1)
