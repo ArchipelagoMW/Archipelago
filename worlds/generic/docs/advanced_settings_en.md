@@ -237,7 +237,7 @@ have to find it ourselves.
 * `non_local_items` forces the `Moon Pearl` to be placed in someone else's world, meaning we won't be able to find it.
 * `start_location_hints` gives us a starting hint for the `Spike Cave` location available at the beginning of the
 multiworld that can be used for no cost.
-* `priority_locations` forces a progression item to be placed on the `Links House` location.
+* `priority_locations` forces a progression item to be placed on the `Link's House` location.
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
 * `item_links` 
   * For `A Link to the Past` all players in the `rods` item link group will share their fire and ice rods and the player
