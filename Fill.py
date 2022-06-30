@@ -44,7 +44,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
         for item_to_place in items_to_place:
             spot_to_fill: typing.Optional[Location] = None
-            if world.accessibility[item_to_place.player] == 'minimal':
+            if world.accessibility[item_to_place.player] == 'minimal' and (not lock and not single_player_placement):
                 perform_access_check = not world.has_beaten_game(maximum_exploration_state,
                                                                  item_to_place.player) \
                     if single_player_placement else not has_beaten_game
@@ -134,7 +134,7 @@ def accessibility_corrections(world: MultiWorld, state: CollectionState, default
     unreachable_locations = [location for location in world.get_locations() if location.player in minimal_players and not location.can_reach(state)]
     pool = []
     for location in unreachable_locations:
-        if location.item is not None and location.item.player not in minimal_players:
+        if location.item is not None and location.address is not None and not location.locked and location.item.player not in minimal_players:
             pool.append(location.item)
             state.remove(location.item)
             location.item = None
