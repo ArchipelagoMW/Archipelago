@@ -167,16 +167,11 @@ class SC2Context(CommonContext):
             for mission in slot_req_table:
                 self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
 
-            # Look for and set SC2PATH; warn user if not found
-            try:
-                os.environ["SC2PATH"]
-            except KeyError:
-                # soldieroforder: "I know it's unconventional to call a function that has tangible effects other than
-                # returning a bool as part of an if clause, but this was the most elegant way I could find to code this.
-                # check_game_install_path() returns True if and only if it finds + sets SC2PATH."
-                if check_game_install_path():
-                    check_mod_install()
-                    # grab_dlls()
+            # Look for and set SC2PATH.
+            # check_game_install_path() returns True if and only if it finds + sets SC2PATH.
+            if "SC2PATH" in os.environ and check_game_install_path():
+                check_mod_install()
+                # grab_dlls()
 
         if cmd in {"PrintJSON"}:
             if "receiving" in args:
