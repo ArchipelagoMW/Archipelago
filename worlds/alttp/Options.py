@@ -139,8 +139,8 @@ class Progressive(Choice):
 
 
 class Swordless(Toggle):
-    """No swords. Curtains in Skull Woods and Agahnim\'s
-    Tower are removed, Agahnim\'s Tower barrier can be
+    """No swords. Curtains in Skull Woods and Agahnim's
+    Tower are removed, Agahnim's Tower barrier can be
     destroyed with hammer. Misery Mire and Turtle Rock
     can be opened without a sword. Hammer damages Ganon.
     Ether and Bombos Tablet can be activated with Hammer
