@@ -142,7 +142,6 @@ def accessibility_corrections(world: MultiWorld, state: CollectionState, default
             if location in state.events:
                 state.events.remove(location)
             defaultlocations.append(location)
-    # don't shuffle locations again to keep the known unreachable locations at the end of the list for this
     fill_restrictive(world, state, defaultlocations, pool)
 
 
@@ -194,7 +193,6 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
 
-    world.random.shuffle(defaultlocations)
     accessibility_corrections(world, world.state, defaultlocations)
 
     if nonexcludeditempool:
