@@ -142,7 +142,8 @@ def accessibility_corrections(world: MultiWorld, state: CollectionState, default
             if location in state.events:
                 state.events.remove(location)
             defaultlocations.append(location)
-    fill_restrictive(world, state, defaultlocations, pool)
+    if pool:
+        fill_restrictive(world, state, defaultlocations, pool)
 
 
 def distribute_items_restrictive(world: MultiWorld) -> None:
