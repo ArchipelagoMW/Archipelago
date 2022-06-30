@@ -4,7 +4,7 @@ import collections
 import itertools
 from collections import Counter, deque
 
-from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item
+from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item, ItemClassification
 
 from worlds.AutoWorld import call_all
 
@@ -128,22 +128,23 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
     itempool.extend(unplaced_items)
 
 
-def accessibility_corrections(world: MultiWorld, state: CollectionState, defaultlocations):
+def accessibility_corrections(world: MultiWorld, state: CollectionState, locations, pool=[]):
 
     minimal_players = {player for player in world.player_ids if world.accessibility[player] == "minimal"}
-    unreachable_locations = [location for location in world.get_locations() if location.player in minimal_players and not location.can_reach(state)]
-    pool = []
+    unreachable_locations = [location for location in world.get_locations() if location.player in minimal_players and
+                             not location.can_reach(state)]
     for location in unreachable_locations:
-        if location.item is not None and location.address is not None and not location.locked and location.item.player not in minimal_players:
+        if (location.item is not None and location.item.classification == ItemClassification.progression and
+                location.address is not None and not location.locked and location.item.player not in minimal_players):
             pool.append(location.item)
             state.remove(location.item)
             location.item = None
             location.event = False
             if location in state.events:
                 state.events.remove(location)
-            defaultlocations.append(location)
+            locations.append(location)
     if pool:
-        fill_restrictive(world, state, defaultlocations, pool)
+        fill_restrictive(world, state, locations, pool)
 
 
 def distribute_items_restrictive(world: MultiWorld) -> None:
@@ -184,7 +185,15 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     defaultlocations = locations[LocationProgressType.DEFAULT]
     excludedlocations = locations[LocationProgressType.EXCLUDED]
 
-    fill_restrictive(world, world.state, prioritylocations, progitempool, lock=True)
+    prioritylocations_lock = prioritylocations.copy()
+
+    fill_restrictive(world, world.state, prioritylocations, progitempool)
+    accessibility_corrections(world, world.state, prioritylocations, progitempool)
+
+    for location in prioritylocations_lock:
+        if location.item:
+            location.locked = True
+
     if prioritylocations:
         defaultlocations = prioritylocations + defaultlocations
 
@@ -193,8 +202,8 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
         if progitempool:
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
+        accessibility_corrections(world, world.state, defaultlocations)
 
-    accessibility_corrections(world, world.state, defaultlocations)
 
     if nonexcludeditempool:
         world.random.shuffle(defaultlocations)
