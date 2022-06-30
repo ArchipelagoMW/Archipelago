@@ -164,7 +164,8 @@ boss_location_table = [
         ('Ganons Tower', 'bottom'),
     ]
 
-boss_shuffle_options = {'none': 'none',
+boss_shuffle_options = {None: 'none',
+                        'none': 'none',
                         'basic': 'basic',
                         'full': 'full',
                         'chaos': 'chaos',
