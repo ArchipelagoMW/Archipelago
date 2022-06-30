@@ -115,12 +115,17 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
 
 class FreeText(Option):
     """Text option that allows users to enter strings. Needs to be validated by the world"""
+    auto_display_name = False
     free_text_names: set[str]
     """set of valid prepopulated names"""
 
     def __init__(self, value: str):
         assert isinstance(value, str), "value of FreeText must be a string"
         self.value = value
+
+    @property
+    def current_key(self) -> str:
+        return self.value
 
     @classmethod
     def from_text(cls, text: str) -> FreeText:
@@ -132,6 +137,10 @@ class FreeText(Option):
     @classmethod
     def from_any(cls, data: typing.Any) -> FreeText:
         return cls.from_text(str(data))
+
+    @classmethod
+    def get_option_name(cls, value: T) -> str:
+        return value
 
 
 class NumericOption(Option[int], numbers.Integral):
@@ -392,6 +401,21 @@ class Choice(NumericOption):
 class TextChoice(FreeText, Choice):
     """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string"""
 
+    def __init__(self, value: typing.Union[str, int]):
+        if isinstance(value, str):
+            self.value: str = value
+        elif isinstance(value, int):
+            self.value: int = value
+        else:
+            raise TypeError(f"{value} is not a valid option for {self.__class__.__name__}")
+
+    @property
+    def current_key(self) -> str:
+        if isinstance(self.value, str):
+            return self.value
+        else:
+            return self.name_lookup[self.value]
+
     @classmethod
     def from_text(cls, text: str) -> typing.Union[FreeText, Choice]:
         text = text.lower()
@@ -399,14 +423,21 @@ class TextChoice(FreeText, Choice):
             return Choice(random.choice(list(cls.name_lookup)))
         for option_name, value in cls.options.items():
             if option_name == text:
-                return Choice(value)
-        return FreeText(text)
+                return cls(value)
+        return cls(text)
 
     @classmethod
     def from_any(cls, data: typing.Any) -> typing.Union[FreeText, Choice]:
         if type(data) == int and data in cls.options.values():
             return cls(data)
         return cls.from_text(str(data))
+
+    @classmethod
+    def get_option_name(cls, value: T) -> str:
+        if isinstance(value, str):
+            return value
+        else:
+            return cls.name_lookup[value]
 
 
 class Range(NumericOption):

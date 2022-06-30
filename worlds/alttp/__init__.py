@@ -146,7 +146,7 @@ class ALTTPWorld(World):
         player = self.player
         world = self.world
 
-        world.boss_shuffle[player] = get_plando_bosses(world.boss_shuffle[player], world.plando_bosses)
+        world.boss_shuffle[player].value = get_plando_bosses(world.boss_shuffle[player].value, world.plando_bosses)
         # system for sharing ER layouts
         self.er_seed = str(world.random.randint(0, 2 ** 64))
 
@@ -347,7 +347,7 @@ class ALTTPWorld(World):
         world = self.world
         player = self.player
         try:
-            use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
+            use_enemizer = (world.boss_shuffle[player].value != 0 or world.enemy_shuffle[player]
                             or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
                             or world.pot_shuffle[player] or world.bush_shuffle[player]
                             or world.killable_thieves[player])

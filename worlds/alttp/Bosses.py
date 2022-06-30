@@ -1,8 +1,9 @@
 import logging
-from typing import Optional
+from typing import Optional, Union
 
 from BaseClasses import Boss
 from Fill import FillError
+from .Options import Bosses
 
 
 def BossFactory(boss: str, player: int) -> Optional[Boss]:
@@ -163,8 +164,7 @@ boss_location_table = [
         ('Ganons Tower', 'bottom'),
     ]
 
-boss_shuffle_options = {None: 'none',
-                        'none': 'none',
+boss_shuffle_options = {'none': 'none',
                         'basic': 'basic',
                         'full': 'full',
                         'chaos': 'chaos',
@@ -172,12 +172,16 @@ boss_shuffle_options = {None: 'none',
                         }
 
 
-def get_plando_bosses(boss_shuffle: str, boss_plando: bool) -> str:
+def get_plando_bosses(boss_shuffle: Union[str, int], boss_plando: bool) -> str:
+    if isinstance(boss_shuffle, int):
+        for option, value in Bosses.options.items():
+            if boss_shuffle == value:
+                return boss_shuffle_options[option]
     if not boss_plando:
         for option in boss_shuffle_options:
             if option in boss_shuffle:
-                return boss_shuffle_options[boss_shuffle]
-            raise ValueError(f"Boss shuffle is disabled and {boss_shuffle} is not a valid option")
+                return boss_shuffle
+        raise ValueError(f"Boss shuffle is disabled and {boss_shuffle} is not a valid option")
     options = boss_shuffle.lower().split(";")
     remainder_shuffle = "none"  # vanilla
     bosses = []
@@ -248,7 +252,7 @@ def format_boss_location(location, level):
     return location + (' (' + level + ')' if level else '')
 
 def place_bosses(world, player: int):
-    if world.boss_shuffle[player] == 0:
+    if world.boss_shuffle[player].value == 0:
         return
     # Most to least restrictive order
     boss_locations = boss_location_table.copy()
@@ -258,7 +262,7 @@ def place_bosses(world, player: int):
     all_bosses = sorted(boss_table.keys())  # sorted to be deterministic on older pythons
     placeable_bosses = [boss for boss in all_bosses if boss not in ['Agahnim', 'Agahnim2', 'Ganon']]
 
-    shuffle_mode = world.boss_shuffle[player]
+    shuffle_mode = world.boss_shuffle[player].value
     already_placed_bosses = []
     if ";" in shuffle_mode:
         bosses = shuffle_mode.split(";")
@@ -288,7 +292,7 @@ def place_bosses(world, player: int):
         return  # vanilla bosses come pre-placed
 
     if shuffle_mode in ["basic", "full"]:
-        if world.boss_shuffle[player] == "basic":  # vanilla bosses shuffled
+        if world.boss_shuffle[player].value == "basic":  # vanilla bosses shuffled
             bosses = placeable_bosses + ['Armos Knights', 'Lanmolas', 'Moldorm']
         else:  # all bosses present, the three duplicates chosen at random
             bosses = placeable_bosses + world.random.sample(placeable_bosses, 3)
