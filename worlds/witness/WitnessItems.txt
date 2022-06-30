@@ -82,8 +82,8 @@ Doors:
 1656 - Shadows Timed Door - 0x19B24
 1657 - Shadows Laser Room Right Door - 0x194B2
 1660 - Shadows Laser Room Left Door - 0x19665
-1663 - Shadows Barrier to Quarry - 0x0A2DF
-1666 - Shadows Barrier to Shadows - 0x1855B
+1663 - Shadows Barrier to Quarry - 0x19865,0x0A2DF
+1666 - Shadows Barrier to Shadows - 0x1855B,0x19ADE
 1669 - Keep Hedge Maze 1 Exit Door - 0x01954
 1672 - Keep Pressure Plates 1 Exit Door - 0x01BEC
 1675 - Keep Hedge Maze 2 Shortcut - 0x018CE
@@ -105,10 +105,10 @@ Doors:
 1723 - Town Tinted Door to RGB House - 0x28A61
 1726 - Town Door to Church - 0x03BB0
 1729 - Town Maze Staircase - 0x28AA2
-1732 - Town Windmill Door - 0x04D37
+1732 - Town Windmill Door - 0x1845B
 1735 - Town RGB House Staircase - 0x2897B
 1738 - Town Tower Blue Panels Door - 0x27798
-1741 - Town Tower Square Avoid Door - 0x27799
+1741 - Town Tower Lattice Door - 0x27799
 1744 - Town Tower Environmental Set Door - 0x2779A
 1747 - Town Tower Eraser Set Door - 0x2779C
 1750 - Windmill Door to Front of Theater - 0x17F88
@@ -123,12 +123,12 @@ Doors:
 1777 - Swamp Entry Door - 0x00C1C
 1780 - Swamp Door to Broken Shapers - 0x184B7
 1783 - Swamp Platform Shortcut Door - 0x38AE6
-1786 - Swamp Cyan Water Pump - 0x2FDAF
+1786 - Swamp Cyan Water Pump - 0x04B7F
 1789 - Swamp Door to Rotated Shapers - 0x18507
-1792 - Swamp Red Water Pump - 0x2FDAE
+1792 - Swamp Red Water Pump - 0x183F2
 1795 - Swamp Red Underwater Exit - 0x305D5
-1798 - Swamp Blue Water Pump - 0x2FD5E
-1801 - Swamp Purple Water Pump - 0x2FD76
+1798 - Swamp Blue Water Pump - 0x18482
+1801 - Swamp Purple Water Pump - 0x0A1D6
 1804 - Swamp Near Laser Shortcut - 0x2D880
 1807 - Treehouse First Door - 0x0C309
 1810 - Treehouse Second Door - 0x0C310
@@ -139,8 +139,7 @@ Doors:
 1825 - Inside Mountain Staircase Near - 0x09FFB
 1828 - Inside Mountain Door to Elevator - 0x09EDD
 1831 - Inside Mountain Staircase Far - 0x09E07
-1834 - Inside Mountain Left Glass Door - 0x09F89
-1837 - Inside Mountain Right Glass Door - 0x09F8A
+1834 - Inside Mountain Glass Door - 0x09F89
 1840 - Inside Mountain Door to Final Room - 0x0C141
 1843 - Inside Mountain Bottom Layer Rock Open - 0x17F33
 1846 - Inside Mountain Door to Secret Area - 0x2D77D

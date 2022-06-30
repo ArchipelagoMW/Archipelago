@@ -280,15 +280,17 @@ Door - 0x194B2 (Laser Room Right Door) - 0x1972F
 158186 - 0x197E5 (Follow 5) - 0x197E8 - Shadows Follow
 Door - 0x19665 (Laser Room Left Door) - 0x197E5
 
-Shadows Ledge (Shadows) - Shadows - 0x1855B:
+Shadows Ledge (Shadows) - Shadows - 0x1855B - Quarry - 0x19865 & 0x0A2DF:
 158187 - 0x334DC (Door Timer Inside) - True - True
 158188 - 0x198B5 (Lower Avoid 1) - True - Shadows Avoid
 158189 - 0x198BD (Lower Avoid 2) - 0x198B5 - Shadows Avoid
 158190 - 0x198BF (Lower Avoid 3) - 0x198BD & 0x334DC - Shadows Avoid
-Door - 0x0A2DF (Barrier to Quarry) - 0x198BF
+Door - 0x19865 (Barrier to Quarry) - 0x198BF
+Door - 0x0A2DF (Barrier to Quarry 2) - 0x198BF
 158191 - 0x19771 (Lower Avoid 4) - 0x198BF - Shadows Avoid
 158192 - 0x0A8DC (Lower Avoid 5) - 0x19771 - Shadows Avoid
 Door - 0x1855B (Barrier to Shadows) - 0x0A8DC
+Door - 0x19ADE (Barrier to Shadows 2) - 0x0A8DC
 
 Shadows Laser Room (Shadows):
 158703 - 0x19650 (Laser Panel) - True - Shadows Avoid & Shadows Follow
@@ -369,7 +371,7 @@ Inside Monastery (Monastery):
 
 Monastery Garden (Monastery):
 
-Town (Town) - Main Island - True - Boat - 0x0A054 - Town Maze Rooftop - 0x28AA2 - Town Church - True - Town Wooden Rooftop - 0x034F5 - RGB House - 0x28A61 - Windmill Interior - 0x04D37:
+Town (Town) - Main Island - True - Boat - 0x0A054 - Town Maze Rooftop - 0x28AA2 - Town Church - True - Town Wooden Rooftop - 0x034F5 - RGB House - 0x28A61 - Windmill Interior - 0x1845B:
 158218 - 0x0A054 (Boat Spawn) - 0x17CA6 | 0x17CDF | 0x09DB8 | 0x17C95 - Boat
 158219 - 0x0A0C8 (Cargo Box) - True - Squares & Black/White Squares & Shapers
 158606 - 0x17D01 (Cargo Box Discard) - 0x0A0C8 - Triangles
@@ -391,7 +393,7 @@ Door - 0x03BB0 (Door to Church) - 0x28A0D
 158228 - 0x28A79 (Maze Stair Control) - True - Environment
 Door - 0x28AA2 (Maze Staircase) - 0x28A79
 158241 - 0x17F5F (Windmill Door Panel) - True - Dots
-Door - 0x04D37 (Windmill Door) - 0x17F5F
+Door - 0x1845B (Windmill Door) - 0x17F5F
 
 Town Maze Rooftop (Town) - Town Red Rooftop - 0x2896A:
 158229 - 0x2896A (Maze Rooftop Bridge Control) - True - Shapers
@@ -538,7 +540,7 @@ Swamp Entry Area (Swamp) - Swamp Sliding Bridge - TrueOneWay:
 Swamp Sliding Bridge (Swamp) - Swamp Entry Area - 0x00609 - Swamp Near Platform - 0x00609:
 158302 - 0x00609 (Sliding Bridge) - True - Shapers
 
-Swamp Near Platform (Swamp) - Swamp Cyan Underwater - 0x2FDAF - Swamp Near Boat - 0x38AE6 - Swamp Broken Shapers - 0x184B7 - Swamp Sliding Bridge - TrueOneWay:
+Swamp Near Platform (Swamp) - Swamp Cyan Underwater - 0x04B7F - Swamp Near Boat - 0x38AE6 - Swamp Broken Shapers - 0x184B7 - Swamp Sliding Bridge - TrueOneWay:
 158313 - 0x00982 (Platform Shapers 1) - True - Shapers
 158314 - 0x0097F (Platform Shapers 2) - 0x00982 - Shapers
 158315 - 0x0098F (Platform Shapers 3) - 0x0097F - Shapers
@@ -547,7 +549,7 @@ Door - 0x184B7 (Door to Broken Shapers) - 0x00990
 158317 - 0x17C0D (Platform Shortcut Left Panel) - True - Shapers
 158318 - 0x17C0E (Platform Shortcut Right Panel) - True - Shapers
 Door - 0x38AE6 (Platform Shortcut Door) - 0x17C0E
-Door - 0x2FDAF (Cyan Water Pump) - 0x00006
+Door - 0x04B7F (Cyan Water Pump) - 0x00006
 
 Swamp Cyan Underwater (Swamp):
 158307 - 0x00002 (Cyan Underwater Negative Shapers 1) - True - Shapers & Negative Shapers
@@ -564,12 +566,12 @@ Swamp Broken Shapers (Swamp) - Swamp Rotated Shapers - 0x18507:
 158306 - 0x009A1 (Broken Shapers 4) - 0x009A0 - Shapers & Broken Shapers
 Door - 0x18507 (Door to Rotated Shapers) - 0x009A1
 
-Swamp Rotated Shapers (Swamp) - Swamp Red Underwater - 0x2FDAE - Swamp Rotating Bridge - TrueOneWay:
+Swamp Rotated Shapers (Swamp) - Swamp Red Underwater - 0x183F2 - Swamp Rotating Bridge - TrueOneWay:
 158319 - 0x00007 (Rotated Shapers 1) - 0x009A1 - Rotated Shapers
 158320 - 0x00008 (Rotated Shapers 2) - 0x00007 - Rotated Shapers & Shapers
 158321 - 0x00009 (Rotated Shapers 3) - 0x00008 - Rotated Shapers
 158322 - 0x0000A (Rotated Shapers 4) - 0x00009 - Rotated Shapers
-Door - 0x2FDAE (Red Water Pump) - 0x00596
+Door - 0x183F2 (Red Water Pump) - 0x00596
 
 Swamp Red Underwater (Swamp) - Swamp Maze - 0x014D1:
 158323 - 0x00001 (Red Underwater Negative Shapers 1) - True - Shapers & Negative Shapers
@@ -581,17 +583,17 @@ Door - 0x305D5 (Red Underwater Exit) - 0x014D1
 Swamp Rotating Bridge (Swamp) - Swamp Rotated Shapers - 0x181F5 - Swamp Near Boat - 0x181F5 - Swamp Purple Area - 0x181F5:
 158327 - 0x181F5 (Rotating Bridge) - True - Rotated Shapers & Shapers
 
-Swamp Near Boat (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Blue Underwater - 0x2FD5E:
+Swamp Near Boat (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Blue Underwater - 0x18482:
 158328 - 0x09DB8 (Boat Spawn) - True - Boat
 158329 - 0x003B2 (More Rotated Shapers 1) - 0x0000A - Rotated Shapers
 158330 - 0x00A1E (More Rotated Shapers 2) - 0x003B2 - Rotated Shapers
 158331 - 0x00C2E (More Rotated Shapers 3) - 0x00A1E - Rotated Shapers
 158332 - 0x00E3A (More Rotated Shapers 4) - 0x00C2E - Rotated Shapers
 158339 - 0x17E2B (Long Bridge Control) - True - Rotated Shapers & Shapers
-Door - 0x2FD5E (Blue Water Pump) - 0x00E3A
+Door - 0x18482 (Blue Water Pump) - 0x00E3A
 
-Swamp Purple Area (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Purple Underwater - 0x2FD76:
-Door - 0x2FD76 (Purple Water Pump) - 0x00E3A
+Swamp Purple Area (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Purple Underwater - 0x0A1D6:
+Door - 0x0A1D6 (Purple Water Pump) - 0x00E3A
 
 Swamp Purple Underwater (Swamp):
 158333 - 0x009A6 (Underwater Back Optional) - True - Shapers
@@ -773,14 +775,13 @@ Inside Mountain Second Layer Elevator Room (Inside Mountain) - Inside Mountain S
 Inside Mountain Second Layer Elevator (Inside Mountain) - Inside Mountain Second Layer Elevator Room - 0x09EEB - Inside Mountain Third Layer - 0x09EEB:
 158439 - 0x09EEB (Elevator Control Panel) - True - Dots
 
-Inside Mountain Third Layer (Inside Mountain) - Inside Mountain Second Layer Elevator - TrueOneWay - Inside Mountain Bottom Layer - 0x09F89 & 0x09F8A:
+Inside Mountain Third Layer (Inside Mountain) - Inside Mountain Second Layer Elevator - TrueOneWay - Inside Mountain Bottom Layer - 0x09F89:
 158440 - 0x09FC1 (Giant Puzzle Bottom Left) - True - Shapers & Eraser
 158441 - 0x09F8E (Giant Puzzle Bottom Right) - True - Shapers & Eraser
 158442 - 0x09F01 (Giant Puzzle Top Right) - True - Rotated Shapers
 158443 - 0x09EFF (Giant Puzzle Top Left) - True - Shapers & Eraser
 158444 - 0x09FDA (Giant Puzzle) - 0x09FC1 & 0x09F8E & 0x09F01 & 0x09EFF - Shapers & Symmetry
-Door - 0x09F89 (Left Glass Door) - 0x09FDA
-Door - 0x09F8A (Right Glass Door) - 0x09FDA
+Door - 0x09F89 (Glass Door) - 0x09FDA
 
 Inside Mountain Bottom Layer (Inside Mountain) - Inside Mountain Bottom Layer Rock - 0x17FA2 - Final Room - 0x0C141:
 158614 - 0x17FA2 (Bottom Layer Discard) - 0xFFF00 - Triangles & Environment
