@@ -186,7 +186,7 @@ def check_enemizer(enemizercli):
         # some time may have passed since the lock was acquired, as such a quick re-check doesn't hurt
         if getattr(check_enemizer, "done", None):
             return
-
+        wanted_version = (7, 0, 1)
         # version info is saved on the lib, for some reason
         library_info = os.path.join(os.path.dirname(enemizercli), "EnemizerCLI.Core.deps.json")
         with open(library_info) as f:
@@ -197,10 +197,11 @@ def check_enemizer(enemizercli):
                 version = lib.split("/")[-1]
                 version = tuple(int(element) for element in version.split("."))
                 enemizer_logger.debug(f"Found Enemizer version {version}")
-                if version < (6, 4, 0):
+                if version < wanted_version:
                     raise Exception(
-                        f"Enemizer found at {enemizercli} is outdated ({info}), please update your Enemizer. "
-                        f"Such as https://github.com/Ijwu/Enemizer/releases")
+                        f"Enemizer found at {enemizercli} is outdated ({version}) < ({wanted_version}, "
+                        f"please update your Enemizer. "
+                        f"Such as from https://github.com/Ijwu/Enemizer/releases")
                 break
         else:
             raise Exception(f"Could not find Enemizer library version information in {library_info}")
@@ -1645,8 +1646,7 @@ def patch_rom(world, rom, player, enemized):
     # set rom name
     # 21 bytes
     from Main import __version__
-    # TODO: Adjust Enemizer to accept AP and AD
-    rom.name = bytearray(f'BM{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
+    rom.name = bytearray(f'AP{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
 
