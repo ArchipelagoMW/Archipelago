@@ -392,23 +392,21 @@ class Choice(NumericOption):
 class TextChoice(FreeText, Choice):
     """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string"""
 
-    def __init__(self, value: typing.Union[str, int]):
-        if type(value) == str:
-            super(FreeText, self).__init__(value)
-        elif type(value) == int:
-            super(Choice, self).__init__(value)
-        else:
-            raise TypeError(f"{value} is not a valid option for {self.__class__.__name__}")
-
     @classmethod
-    def from_text(cls, text: str) -> TextChoice:
-        text.lower()
+    def from_text(cls, text: str) -> typing.Union[FreeText, Choice]:
+        text = text.lower()
         if text == "random":  # chooses a random defined option but won't use any free text options
-            return cls(random.choice(list(cls.name_lookup)))
+            return Choice(random.choice(list(cls.name_lookup)))
         for option_name, value in cls.options.items():
             if option_name == text:
-                return cls(value)
-        return cls(text)
+                return Choice(value)
+        return FreeText(text)
+
+    @classmethod
+    def from_any(cls, data: typing.Any) -> typing.Union[FreeText, Choice]:
+        if type(data) == int and data in cls.options.values():
+            return cls(data)
+        return cls.from_text(str(data))
 
 
 class Range(NumericOption):

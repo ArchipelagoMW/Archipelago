@@ -308,13 +308,6 @@ available_boss_names: Set[str] = {boss.lower() for boss in Bosses.boss_table if 
 available_boss_locations: Set[str] = {f"{loc.lower()}{f' {level}' if level else ''}" for loc, level in
                                              Bosses.boss_location_table}
 
-boss_shuffle_options = {None: 'none',
-                        'none': 'none',
-                        'basic': 'basic',
-                        'full': 'full',
-                        'chaos': 'chaos',
-                        'singularity': 'singularity'
-                        }
 
 goals = {
     'ganon': 'ganon',
@@ -398,41 +391,6 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
             raise ValueError(f"Your trigger number {i + 1} is destroyed. "
                              f"Please fix your triggers.") from e
     return weights
-
-
-def get_plando_bosses(boss_shuffle: str, plando_options: Set[str]) -> str:
-    if boss_shuffle in boss_shuffle_options:
-        return boss_shuffle_options[boss_shuffle]
-    elif "bosses" in plando_options:
-        options = boss_shuffle.lower().split(";")
-        remainder_shuffle = "none"  # vanilla
-        bosses = []
-        for boss in options:
-            if boss in boss_shuffle_options:
-                remainder_shuffle = boss_shuffle_options[boss]
-            elif "-" in boss:
-                loc, boss_name = boss.split("-")
-                if boss_name not in available_boss_names:
-                    raise ValueError(f"Unknown Boss name {boss_name}")
-                if loc not in available_boss_locations:
-                    raise ValueError(f"Unknown Boss Location {loc}")
-                level = ''
-                if loc.split(" ")[-1] in {"top", "middle", "bottom"}:
-                    # split off level
-                    loc = loc.split(" ")
-                    level = f" {loc[-1]}"
-                    loc = " ".join(loc[:-1])
-                loc = loc.title().replace("Of", "of")
-                if not Bosses.can_place_boss(boss_name.title(), loc, level):
-                    raise ValueError(f"Cannot place {boss_name} at {loc}{level}")
-                bosses.append(boss)
-            elif boss not in available_boss_names:
-                raise ValueError(f"Unknown Boss name or Boss shuffle option {boss}.")
-            else:
-                bosses.append(boss)
-        return ";".join(bosses + [remainder_shuffle])
-    else:
-        raise Exception(f"Boss Shuffle {boss_shuffle} is unknown and boss plando is turned off.")
 
 
 def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option)):
@@ -520,6 +478,7 @@ def roll_settings(weights: dict, plando_options: Set[str] = frozenset(("bosses",
                         ))
         elif ret.game == "A Link to the Past":
             roll_alttp_settings(ret, game_weights, plando_options)
+        ret.plando_bosses = "bosses" in plando_options
     else:
         raise Exception(f"Unsupported game {ret.game}")
 
@@ -589,8 +548,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     ret.item_functionality = get_choice_legacy('item_functionality', weights)
 
-    boss_shuffle = get_choice_legacy('boss_shuffle', weights)
-    ret.shufflebosses = get_plando_bosses(boss_shuffle, plando_options)
 
     ret.enemy_damage = {None: 'default',
                         'default': 'default',

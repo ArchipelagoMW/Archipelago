@@ -65,6 +65,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.shuffle_prizes = args.shuffle_prizes.copy()
     world.sprite_pool = args.sprite_pool.copy()
     world.dark_room_logic = args.dark_room_logic.copy()
+    world.plando_bosses = args.plando_bosses[1]  # world will handle the text so this just tells us if it's enabled
     world.plando_items = args.plando_items.copy()
     world.plando_texts = args.plando_texts.copy()
     world.plando_connections = args.plando_connections.copy()

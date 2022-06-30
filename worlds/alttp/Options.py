@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice
 
 
 class Logic(Choice):
@@ -110,9 +110,10 @@ class WorldState(Choice):
     option_inverted = 2
 
 
-class Bosses(Choice):
-    option_vanilla = 0
-    option_simple = 1
+class Bosses(TextChoice):
+    display_name = "Boss Shuffle"
+    option_none = 0
+    option_basic = 1
     option_full = 2
     option_chaos = 3
     option_singularity = 4
@@ -342,6 +343,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "hints": Hints,
     "scams": Scams,
     "restrict_dungeon_item_on_boss": RestrictBossItem,
+    "boss_shuffle": Bosses,
     "pot_shuffle": PotShuffle,
     "enemy_shuffle": EnemyShuffle,
     "killable_thieves": KillableThieves,
