@@ -16,6 +16,7 @@ from worlds.cotnd.Items import item_table, bad_items, always_available_items
 UDP_IP = "127.0.0.1"
 UDP_PORT = 8980
 UDP_TARGET = (UDP_IP, UDP_PORT)
+logfile = 'Synchrony.log'
 
 cotnd_loc_name_to_id = network_data_package["games"]["Crypt of the Necrodancer Synchrony"]["location_name_to_id"]
 
@@ -202,7 +203,6 @@ class CotNDContext(CommonContext):
     async def read_log_file(self):
 
         synchrony_dir = Utils.get_options()['cotnd_options']['synchrony']
-        logfile = 'Synchrony.log'
         new_last = ''
         new_items = []
         try:
