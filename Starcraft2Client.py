@@ -25,6 +25,8 @@ import re
 from shutil import copy2
 from MultiServer import mark_raw
 from platform import system
+import ctypes
+import sys
 
 from Utils import init_logging
 
@@ -60,19 +62,6 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if num_options > 0:
             mission_number = int(options[0])
 
-            if system() == "Windows":
-                # soldieroforder: "I don't understand any particular part of this code. All I know is that it runs the
-                # SetDllDirectoryW command in Windows, which (when passed a NULL Unicode character (==None)) 'resets'
-                # the DLL directory. For some reason, this allows SC2 to start normally (i.e. w/o missing the .dlls)."
-                # More info: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setdlldirectoryw
-                # FIXME: Undo this process after playing the mission.
-                from ctypes import windll, wintypes
-                SetDllDirectoryW = windll.kernel32.SetDllDirectoryW
-                SetDllDirectoryW.argtypes = (
-                    wintypes.LPCWSTR,  # LPCWSTR               lpPathName
-                )
-                SetDllDirectoryW.restype = wintypes.BOOL
-                SetDllDirectoryW(None)
             self.ctx.play_mission(mission_number)
 
         else:
@@ -477,8 +466,9 @@ async def starcraft_launch(ctx: SC2Context, mission_id):
 
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
 
-    run_game(sc2.maps.get(maps_table[mission_id - 1]), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
-                                                            name="Archipelago", fullscreen=True)], realtime=True)
+    with DllDirectory(None):
+        run_game(sc2.maps.get(maps_table[mission_id - 1]), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
+                                                                name="Archipelago", fullscreen=True)], realtime=True)
 
 
 class ArchipelagoBot(sc2.bot_ai.BotAI):
@@ -966,6 +956,54 @@ def display_success(text, ui=None):
 
 def display_warning(text, ui=None):
     display_message(text, ui, tag="warning")
+
+
+class DllDirectory:
+    # Credit to Black Sliver for this code.
+    # soldieroforder: "I don't understand any particular part of this code. All I know is that it runs the
+    # SetDllDirectoryW command in Windows, which (when passed a NULL Unicode character (==None)) 'resets'
+    # the DLL directory. For some reason, this allows SC2 to start normally (i.e. w/o missing the .dlls).
+    # This change is reversible."
+    # More info: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setdlldirectoryw
+    _old: typing.Optional[str] = None
+    _new: typing.Optional[str] = None
+
+    def __init__(self, new: typing.Optional[str]):
+        self._new = new
+
+    def __enter__(self):
+        old = self.get()
+        if self.set(self._new):
+            self._old = old
+
+    def __exit__(self, *args):
+        if self._old is not None:
+            self.set(self._old)
+
+    @staticmethod
+    def get() -> str:
+        if sys.platform == "win32":
+            n = ctypes.windll.kernel32.GetDllDirectoryW(0, None)
+            buf = ctypes.create_unicode_buffer(n)
+            ctypes.windll.kernel32.GetDllDirectoryW(n, buf)
+            return buf.value
+        # NOTE: other OS may support os.environ["LD_LIBRARY_PATH"], but this fix is windows-specific
+        return None
+
+    @staticmethod
+    def set(s: typing.Optional[str]) -> bool:
+        if sys.platform == "win32":
+            return ctypes.windll.kernel32.SetDllDirectoryW(s) != 0
+        # NOTE: other OS may support os.environ["LD_LIBRARY_PATH"], but this fix is windows-specific
+        return False
+
+    # # Usage example.
+    # print(f"DLLDirectory now '{DllDirectory.get()}'")
+    # with DllDirectory("c:\\windows\\system32"):               # set to custom path
+    #     print(f"DLLDirectory now '{DllDirectory.get()}'")
+    #     with DllDirectory(None):                              # set to default
+    #         print(f"DLLDirectory now '{DllDirectory.get()}'")
+    # print(f"DLLDirectory now '{DllDirectory.get()}'")
 
 
 if __name__ == '__main__':
