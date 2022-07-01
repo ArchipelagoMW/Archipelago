@@ -186,6 +186,8 @@ class TrapChanceOHKO(TrapChance):
 
 class SoEProgressionBalancing(ProgressionBalancing):
     default = 30
+    __doc__ = ProgressionBalancing.__doc__.replace(f"default {ProgressionBalancing.default}", f"default {default}")
+    special_range_names = {**ProgressionBalancing.special_range_names, "normal": default}
 
 
 soe_options: typing.Dict[str, type(Option)] = {
