@@ -210,44 +210,44 @@ Timespinner:
 * `description` gives us a general overview so if we pull up this file later we can understand the intent.
 * `name` is `Example Player` and this will be used in the server console when sending and receiving items.
 * `game` has an equal chance of being either `A Link to the Past` or `Timespinner` with a 10/20 chance for each. This is
-because each game has a weight of 10 and the total of all weights is 20.
+  because each game has a weight of 10 and the total of all weights is 20.
 * `requires` is set to required release version 0.3.2 or higher.
-* `accessibility` is set to `none` which will set this seed to beatable only, so some locations and items may be 
-completely inaccessible but the seed will still be completable.
+* `accessibility` is set to `none` which will set this seed to beatable only, so some locations and items may be
+  completely inaccessible but the seed will still be completable.
 * `progression_balancing` is set on, giving it the default value, meaning we will likely receive important items
-earlier increasing the chance of having things to do.
+  earlier increasing the chance of having things to do.
 * `A Link to the Past` defines a location for us to nest all the game options we would like to use for our
-game `A Link to the Past`.
+  game `A Link to the Past`.
 * `smallkey_shuffle` is an option for A Link to the Past which determines how dungeon small keys are shuffled. In this
-example we have a 1/2 chance for them to either be placed in their original dungeon and a 1/2 chance for them to be
-placed anywhere amongst the multiworld.
+  example we have a 1/2 chance for them to either be placed in their original dungeon and a 1/2 chance for them to be
+  placed anywhere amongst the multiworld.
 * `crystals_needed_for_gt` determines the number of crystals required to enter the Ganon's Tower entrance. In this
-example a random number will be chosen from the allowed range for this setting (0 through 7) but will be weighted
-towards a lower number.
+  example a random number will be chosen from the allowed range for this setting (0 through 7) but will be weighted
+  towards a lower number.
 * `crystals_needed_for_ganon` determines the number of crystals required to beat Ganon. In this example a number between
-1 and 7 will be chosen at random, weighted towards a high number.
+  1 and 7 will be chosen at random, weighted towards a high number.
 * `start_inventory` defines an area for us to determine what items we would like to start the seed with. For this
-example we have:
+  example we have:
   * `Pegasus Boots: 1` which gives us 1 copy of the Pegasus Boots
   * `Bombs (3): 2` gives us 2 packs of 3 bombs or 6 total bombs
 * `start_hints` gives us a starting hint for the hammer available at the beginning of the multiworld which we can use
-with no cost.
+  with no cost.
 * `local_items` forces the `Bombos`, `Ether`, and `Quake` medallions to all be placed within our own world, meaning we
-have to find it ourselves.
+  have to find it ourselves.
 * `non_local_items` forces the `Moon Pearl` to be placed in someone else's world, meaning we won't be able to find it.
 * `start_location_hints` gives us a starting hint for the `Spike Cave` location available at the beginning of the
-multiworld that can be used for no cost.
+  multiworld that can be used for no cost.
 * `priority_locations` forces a progression item to be placed on the `Link's House` location.
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
 * `item_links` 
   * For `A Link to the Past` all players in the `rods` item link group will share their fire and ice rods and the player
-items will be replaced with single rupees.
+    items will be replaced with single rupees.
   * For `Timespinner` all players in the `TSAll` item link group will share their entire item pool and the `Twin Pyramid 
-Key` and `Timespinner Wheel` will be forced among the worlds of those in the group. The `null` replacement item will, 
-instead of forcing a specific chosen item, allow the generator to randomly pick a filler item to replace the player items.
+    Key` and `Timespinner Wheel` will be forced among the worlds of those in the group. The `null` replacement item will, 
+    instead of forcing a specific chosen item, allow the generator to randomly pick a filler item to replace the player items.
 * `triggers` allows us to define a trigger such that if our `smallkey_shuffle` option happens to roll the `any_world`
-result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to the
-`any_world` result. More information on triggers can be found in the [triggers guide](/tutorial/Archipelago/triggers/en).
+  result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to the
+  `any_world` result. More information on triggers can be found in the [triggers guide](/tutorial/Archipelago/triggers/en).
 
 ## Generating Multiple Worlds
 
