@@ -389,7 +389,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
     return weights
 
 
-def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option), plando_options: set[str]):
+def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option), plando_options: set[str] = frozenset(("bosses",))):
     if option_key in game_weights:
         try:
             if not option.supports_weighting:
