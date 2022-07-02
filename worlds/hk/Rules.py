@@ -27,7 +27,7 @@ def set_shop_prices(hk_world):
     for shop, unit in hk_world.shops.items():
         for i in range(1, 1 + hk_world.created_multi_locations[shop]):
             loc = hk_world.world.get_location(f"{shop}_{i}", hk_world.player)
-            add_rule(loc, lambda state, unit=units[unit], cost=loc.cost: state.count(unit, player) > cost)
+            add_rule(loc, lambda state, unit=units[unit], cost=loc.cost: state.count(unit, player) >= cost)
 
 
 def set_rules(hk_world):

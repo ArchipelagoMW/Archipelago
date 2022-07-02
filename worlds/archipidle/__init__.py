@@ -7,14 +7,16 @@ from datetime import datetime
 
 class ArchipIDLEWebWorld(WebWorld):
     theme = 'partyTime'
-    tutorials = [Tutorial(
-        "Setup Guide",
-        "A guide to playing ArchipIDLE",
-        "English",
-        "guide_en.md",
-        "guide/en",
-        ["Farrak Kilhn"]
-    )]
+    tutorials = [
+        Tutorial(
+            tutorial_name='Setup Guide',
+            description='A guide to playing Archipidle',
+            language='English',
+            file_name='guide_en.md',
+            link='guide/en',
+            authors=['Farrak Kilhn']
+        )
+    ]
 
 
 class ArchipIDLEWorld(World):
