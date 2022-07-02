@@ -11,3 +11,11 @@ locGE_table = {
 "GE: Purple Coin Omelet": 170000004,
 "GE: Luigi on the Roof": 170000005,
 }
+locHH_table = {
+    "HH: Bee Mario Takes Flight": 170000006,
+    "HH: Trouble on the Tower": 170000007,
+    "HH: Big Bad Bugabooom": 170000008,
+    "HH: Honeyhive Cosmic Mario Race": 170000009,
+    "HH: Honeyhive's Purple Coins": 170000010,
+    "HH: Luigi in the Honeyhive Kingdom": 170000011,
+}
