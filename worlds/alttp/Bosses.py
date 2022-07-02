@@ -207,8 +207,9 @@ def place_plando_bosses(bosses: List[str], world, player: int):
     world.random.shuffle(boss_locations)
     boss_locations.sort(key=lambda location: -int(restrictive_boss_locations[location]))
     already_placed_bosses = []
+
     for boss in bosses:
-        if "-" in boss:
+        if "-" in boss:  # handle plando locations
             loc, boss = boss.split("-")
             boss = boss.title()
             level = None
@@ -224,9 +225,11 @@ def place_plando_bosses(bosses: List[str], world, player: int):
                 boss_locations.remove((loc, level))
             else:
                 raise Exception(f"Cannot place {boss} at {format_boss_location(loc, level)} for player {player}.")
-        else:
+        else:  # boss chosen with no specified locations
             boss = boss.title()
             boss_locations, already_placed_bosses = place_where_possible(world, player, boss, boss_locations)
+
+    return already_placed_bosses
 
 
 def can_place_boss(boss: str, dungeon_name: str, level: Optional[str] = None) -> bool:
@@ -273,10 +276,11 @@ def format_boss_location(location, level):
 def place_bosses(world, player: int):
     boss_shuffle = world.boss_shuffle[player].value
     bosses = []
+    already_placed_bosses = []
     # handle plando
     if isinstance(boss_shuffle, str):
         bosses, boss_shuffle = get_plando_bosses(boss_shuffle)
-        place_plando_bosses(bosses, world, player)
+        already_placed_bosses = place_plando_bosses(bosses, world, player)
     if boss_shuffle == Bosses.option_none:
         return
 
@@ -288,8 +292,8 @@ def place_bosses(world, player: int):
     all_bosses = sorted(boss_table.keys())  # sorted to be deterministic on older pythons
     placeable_bosses = [boss for boss in all_bosses if boss not in ['Agahnim', 'Agahnim2', 'Ganon']]
 
-    if shuffle_mode in ["basic", "full"]:
-        if world.boss_shuffle[player].value == "basic":  # vanilla bosses shuffled
+    if boss_shuffle == Bosses.option_basic or boss_shuffle == Bosses.option_full:
+        if boss_shuffle == Bosses.option_basic:  # vanilla bosses shuffled
             bosses = placeable_bosses + ['Armos Knights', 'Lanmolas', 'Moldorm']
         else:  # all bosses present, the three duplicates chosen at random
             bosses = placeable_bosses + world.random.sample(placeable_bosses, 3)
@@ -319,7 +323,7 @@ def place_bosses(world, player: int):
 
             place_boss(world, player, boss, loc, level)
 
-    elif shuffle_mode == "chaos":  # all bosses chosen at random
+    elif boss_shuffle == Bosses.option_chaos:  # all bosses chosen at random
         for loc, level in boss_locations:
             try:
                 boss = world.random.choice(
@@ -329,7 +333,7 @@ def place_bosses(world, player: int):
             else:
                 place_boss(world, player, boss, loc, level)
 
-    elif shuffle_mode == "singularity":
+    elif boss_shuffle == Bosses.option_singularity:
         primary_boss = world.random.choice(placeable_bosses)
         remaining_boss_locations, _ = place_where_possible(world, player, primary_boss, boss_locations)
         if remaining_boss_locations:
@@ -340,7 +344,7 @@ def place_bosses(world, player: int):
             if remaining_boss_locations:
                 raise Exception("Unfilled boss locations!")
     else:
-        raise FillError(f"Could not find boss shuffle mode {shuffle_mode}")
+        raise FillError(f"Could not find boss shuffle mode {boss_shuffle}")
 
 
 def place_where_possible(world, player: int, boss: str, boss_locations):
