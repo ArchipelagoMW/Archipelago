@@ -41,7 +41,7 @@ class RaftLogic(LogicMixin):
         return self.has("Basic bow", player) and self.has("Stone arrow", player)
 
     def raft_can_craft_shears(self, player):
-        return self.raft_can_smelt_items(player) and self.raft_can_craft_hinge(player) and self.has("Shears", player)
+        return self.raft_can_smelt_items(player) and self.raft_can_craft_hinge(player) and self.has("Shear", player)
 
     def raft_can_craft_birdNest(self, player):
         return self.has("Birds nest", player)

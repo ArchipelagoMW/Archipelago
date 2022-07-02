@@ -261,7 +261,7 @@
     },
     {
         "id": 47053,
-        "progression": false,
+        "progression": true,
         "name": "Birds nest"
     },
     {
@@ -366,13 +366,13 @@
     },
     {
         "id": 47074,
-        "progression": false,
+        "progression": true,
         "name": "Metal detector"
     },
     {
         "id": 47075,
         "progression": true,
-        "name": "Shears"
+        "name": "Shear"
     },
     {
         "id": 47076,
