@@ -32,6 +32,8 @@ def get_meta(options_source: dict) -> dict:
 
     meta = {
         "hint_cost": int(options_source.get("hint_cost", 10)),
+        "location_check_points": int(options_source.get("location_check_points", 1)),
+        "minutes_to_hint": int(options_source.get("minutes_to_hint", 0)),
         "forfeit_mode": options_source.get("forfeit_mode", "goal"),
         "remaining_mode": options_source.get("remaining_mode", "disabled"),
         "collect_mode": options_source.get("collect_mode", "disabled"),

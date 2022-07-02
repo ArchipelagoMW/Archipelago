@@ -104,6 +104,7 @@
                                         </select>
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <td>
                                         <label for="item_cheat">Item Cheat:</label>
@@ -123,6 +124,19 @@
                                         </select>
                                     </td>
                                 </tr>
+
+                                <tr>
+                                        <td>
+                                            <label for="server_password">Server Password:</label>
+                                            <span
+                                                class="interactive"
+                                                data-tooltip="Allows for issuing of server console commands from any text client or in-game client using the !admin command.">(?)
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <input id="server_password" name="server_password">
+                                        </td>
+                                    </tr>
                             </tbody>
                         </table>
                         </div>
@@ -131,10 +145,10 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <label for="hint_cost"> Hint Cost:</label>
+                                            <label for="hint_cost">Hint Cost:</label>
                                             <span
                                                 class="interactive"
-                                                data-tooltip="After gathering this many checks, players can !hint <itemname>
+                                                data-tooltip="After gathering hint points equal to this percentage of your total checks, players can !hint <itemname>
                                                 to get the location of that hint item.">(?)
                                             </span>
                                         </td>
@@ -150,14 +164,69 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label for="server_password">Server Password:</label>
+                                            <label for="location_check_points">Hint points per location check:</label>
                                             <span
                                                 class="interactive"
-                                                data-tooltip="Allows for issuing of server console commands from any text client or in-game client using the !admin command.">(?)
+                                                data-tooltip="Hint points to gain from each location check.">(?)
                                             </span>
                                         </td>
                                         <td>
-                                            <input id="server_password" name="server_password">
+                                            <select name="location_check_points" id="location_check_points">
+                                                {% for n in range(0, 11, 1) %}
+                                                    <option {% if n == 1 %}selected="selected" {% endif %} value="{{ n }}">
+                                                        {{ n }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="minutes_to_hint">Free hints over time:</label>
+                                            <span
+                                                class="interactive"
+                                                data-tooltip="Gain enough hint points for a full hint per chosen time interval.">(?)
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <select name="minutes_to_hint" id="minutes_to_hint">
+                                                <option selected="selected" value="0">
+                                                    Off
+                                                </option>
+                                                <option value="5">
+                                                    Every 5 minutes
+                                                </option>
+                                                <option value="10">
+                                                    Every 10 minutes
+                                                </option>
+                                                <option value="15">
+                                                    Every 15 minutes
+                                                </option>
+                                                <option value="30">
+                                                    Every 30 minutes
+                                                </option>
+                                                <option value="45">
+                                                    Every 45 minutes
+                                                </option>
+                                                <option value="60">
+                                                    Every 1 hour
+                                                </option>
+                                                <option value="120">
+                                                    Every 2 hours
+                                                </option>
+                                                <option value="12 hours">
+                                                    Every 12 hours
+                                                </option>
+                                                <option value="1440">
+                                                    Every 1 day
+                                                </option>
+                                                <option value="2880">
+                                                    Every 2 days
+                                                </option>
+                                                <option value="4320">
+                                                    Every 3 days
+                                                </option>
+                                            </select>
                                         </td>
                                     </tr>
                                     <tr>

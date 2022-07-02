@@ -717,7 +717,7 @@ async def countdown(ctx: Context, timer):
             ctx.countdown_timer -= 1
             await asyncio.sleep(1)
         ctx.notify_all(f'[Server]: GO')
-        if ctx.len(sum([list(checks) for checks in ctx.location_checks.values()], [])) == 0:  # is there a simpler way?
+        if len(sum([list(checks) for checks in ctx.location_checks.values()], [])) == 0:  # is there a simpler way?
             ctx.hint_start_time = time.time()
         ctx.countdown_timer = 0
 
