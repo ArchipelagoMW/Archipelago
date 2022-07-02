@@ -77,6 +77,9 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     # can be weighted between selections
     supports_weighting = True
 
+    # can define a required plando module to use the option in certain ways
+    plando_module: str = None
+
     # filled by AssembleOptions:
     name_lookup: typing.Dict[int, str]
     options: typing.Dict[str, int]
@@ -111,6 +114,9 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     @classmethod
     def from_any(cls, data: typing.Any) -> Option[T]:
         raise NotImplementedError
+
+    def verify(self, world):
+        pass
 
 
 class FreeText(Option):

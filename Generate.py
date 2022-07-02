@@ -218,6 +218,9 @@ def main(args=None, callback=ERmain):
                     important[option] = player_settings
                 else:
                     logging.debug(f"No player settings defined for option '{option}'")
+            if option.plando_module:
+                if option.plando_module not in args.plando:
+                    option.plando_module = False
         if args.outputpath:
             os.makedirs(args.outputpath, exist_ok=True)
         with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
@@ -386,7 +389,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
     return weights
 
 
-def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option)):
+def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option), plando_options: set[str]):
     if option_key in game_weights:
         try:
             if not option.supports_weighting:
@@ -398,6 +401,9 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
             raise Exception(f"Error generating option {option_key} in {ret.game}") from e
         else:
             if hasattr(player_option, "verify"):
+                if player_option.plando_module:
+                    if player_option.plando_module not in plando_options:
+                        player_option.plando_module = None
                 player_option.verify(AutoWorldRegister.world_types[ret.game])
     else:
         setattr(ret, option_key, option(option.default))
@@ -450,11 +456,11 @@ def roll_settings(weights: dict, plando_options: Set[str] = frozenset(("bosses",
 
     if ret.game in AutoWorldRegister.world_types:
         for option_key, option in world_type.options.items():
-            handle_option(ret, game_weights, option_key, option)
+            handle_option(ret, game_weights, option_key, option, plando_options)
         for option_key, option in Options.per_game_common_options.items():
             # skip setting this option if already set from common_options, defaulting to root option
             if not (option_key in Options.common_options and option_key not in game_weights):
-                handle_option(ret, game_weights, option_key, option)
+                handle_option(ret, game_weights, option_key, option, plando_options)
         if "items" in plando_options:
             ret.plando_items = game_weights.get("plando_items", [])
         if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
@@ -471,7 +477,6 @@ def roll_settings(weights: dict, plando_options: Set[str] = frozenset(("bosses",
                         ))
         elif ret.game == "A Link to the Past":
             roll_alttp_settings(ret, game_weights, plando_options)
-        ret.plando_bosses = "bosses" in plando_options
     else:
         raise Exception(f"Unsupported game {ret.game}")
 

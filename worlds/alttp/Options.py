@@ -118,6 +118,19 @@ class Bosses(TextChoice):
     option_chaos = 3
     option_singularity = 4
 
+    plando_module = "bosses"
+
+    def verify(self, world):
+        if isinstance(self.value, int):
+            return
+        if not self.plando_module:
+            options = self.value.split(";")
+            for option in options:
+                if option in self.options:
+                    self.value = Bosses.options[option]
+                    return
+            raise ValueError(f"Boss plando is disabled and {self.value} is not a valid option.")
+
 
 class Enemies(Choice):
     option_vanilla = 0
