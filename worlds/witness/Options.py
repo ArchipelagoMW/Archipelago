@@ -37,7 +37,7 @@ class ShuffleDoors(Toggle):
 
 class ShuffleDiscardedPanels(Toggle):
     """Discarded Panels will have items on them.
-    Solving certain Discarded Panels may still be necessary!"""
+    Solving certain Discarded Panels may still be necessary even if off!"""
     display_name = "Shuffle Discarded Panels"
 
 

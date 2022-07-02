@@ -77,7 +77,7 @@ class ALTTPWeb(WebWorld):
         msu.description,
         "Español",
         "msu1_es.md",
-        "msu1/en",
+        "msu1/es",
         ["Edos"]
     )
 

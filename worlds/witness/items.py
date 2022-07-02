@@ -66,7 +66,7 @@ class StaticWitnessItems:
             item_tab[item[0]] = ItemData(158000 + item[1], False, False)
 
         for item in StaticWitnessLogic.ALL_USEFULS:
-            item_tab[item[0]] = ItemData(158000 + item[1], False, False, False, True)
+            item_tab[item[0]] = ItemData(158000 + item[1], False, False, False, item[2])
 
         item_tab = dict(sorted(
             item_tab.items(),

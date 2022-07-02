@@ -8,7 +8,7 @@ There are two key steps to incorporating a game into Archipelago:
 
 Refer to the following documents as well:
 - [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md) for network communication between client and server.
-- [api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/api.md) for documentation on server side code and creating a world package.
+- [world api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md) for documentation on server side code and creating a world package.
 
 
 # Game Modification  
@@ -337,6 +337,7 @@ fields in the class being extended.
 This is also a good place to put game-specific quirky behavior that needs to be managed, as it tends to make things a bit
 cluttered if you put these things elsewhere.  
   
-The various methods and attributes are documented in `/worlds/AutoWorld.py[World]`, 
+The various methods and attributes are documented in `/worlds/AutoWorld.py[World]` and
+[world api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md),
 though it is also recommended to look at existing implementations to see how all this works first-hand. 
 Once you get all that, all that remains to do is test the game and publish your work.
