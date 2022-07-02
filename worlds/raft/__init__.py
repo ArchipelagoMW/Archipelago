@@ -96,6 +96,11 @@ class RaftWorld(World):
         slot_data = {}
         return slot_data
     
+    def get_pre_fill_items(self):
+        if self.world.island_frequency_locations[self.player] in [0, 1]:
+            return [loc.item for loc in self.world.get_filled_locations()]
+        return []
+    
     def create_item_replaceAsNecessary(self, name: str) -> Item:
         isFrequency = "Frequency" in name
         shouldUseProgressive = ((isFrequency and self.world.island_frequency_locations[self.player].value == 2)

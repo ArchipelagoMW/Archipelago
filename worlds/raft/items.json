@@ -136,7 +136,7 @@
     },
     {
         "id": 47028,
-        "progression": false,
+        "progression": true,
         "name": "Grass plot"
     },
     {
@@ -371,12 +371,12 @@
     },
     {
         "id": 47075,
-        "progression": false,
+        "progression": true,
         "name": "Shears"
     },
     {
         "id": 47076,
-        "progression": false,
+        "progression": true,
         "name": "Shovel"
     },
     {
@@ -421,12 +421,12 @@
     },
     {
         "id": 47085,
-        "progression": false,
+        "progression": true,
         "name": "Net launcher"
     },
     {
         "id": 47086,
-        "progression": false,
+        "progression": true,
         "name": "Net canister"
     },
     {

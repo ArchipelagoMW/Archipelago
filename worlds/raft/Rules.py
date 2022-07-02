@@ -167,7 +167,6 @@ def set_rules(world, player):
         "Hinge": lambda state: state.raft_can_craft_hinge(player),
         "CircuitBoard": lambda state: state.raft_can_craft_circuitBoard(player),
         "PlasticBottle_Empty": lambda state: state.raft_can_craft_plasticBottle(player),
-        "Shear": lambda state: state.raft_can_craft_shears(player),
         "Wool": lambda state: state.raft_can_capture_animals(player) and state.raft_can_craft_shears(player),
         "HoneyComb": lambda state: state.raft_can_access_balboa_island(player),
         "Jar_Bee": lambda state: state.raft_can_access_balboa_island(player) and state.raft_can_smelt_items(player),
