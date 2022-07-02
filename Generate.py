@@ -40,13 +40,14 @@ class PlandoSettings(enum.IntFlag):
         result = PlandoSettings(0)
         for part in option_string.split(","):
             part = part.strip().lower()
-            try:
-                part = PlandoSettings[part]
-            except Exception as e:
-                raise KeyError(f"{part} is not a recognized name for a plando module. "
-                               f"Known options: {', '.join(flag.name for flag in cls)}") from e
-            else:
-                result |= part
+            if part:
+                try:
+                    part = PlandoSettings[part]
+                except Exception as e:
+                    raise KeyError(f"{part} is not a recognized name for a plando module. "
+                                   f"Known options: {', '.join(flag.name for flag in cls)}") from e
+                else:
+                    result |= part
         return result
 
     @classmethod
@@ -500,17 +501,11 @@ def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings
         if tuplize_version(version) > version_tuple:
             raise Exception(f"Settings reports required version of generator is at least {version}, "
                             f"however generator is of version {__version__}")
-        required_plando_options = requirements.get("plando", "")
-        if required_plando_options:
-            required_plando_options = set(option.strip() for option in required_plando_options.split(","))
-            required_plando_options -= plando_options
+        required_plando_options = PlandoSettings.from_option_string(requirements.get("plando", ""))
+        if required_plando_options not in plando_options:
             if required_plando_options:
-                if len(required_plando_options) == 1:
-                    raise Exception(f"Settings reports required plando module {', '.join(required_plando_options)}, "
-                                    f"which is not enabled.")
-                else:
-                    raise Exception(f"Settings reports required plando modules {', '.join(required_plando_options)}, "
-                                    f"which are not enabled.")
+                raise Exception(f"Settings reports required plando module {required_plando_options}, "
+                                f"which is not enabled.")
 
     ret = argparse.Namespace()
     for option_key in Options.per_game_common_options:
