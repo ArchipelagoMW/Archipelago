@@ -146,7 +146,6 @@ class ALTTPWorld(World):
         player = self.player
         world = self.world
 
-        world.boss_shuffle[player].value = get_plando_bosses(world.boss_shuffle[player].value, world.plando_bosses)
         # system for sharing ER layouts
         self.er_seed = str(world.random.randint(0, 2 ** 64))
 
