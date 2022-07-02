@@ -5,7 +5,7 @@
 - [Timespinner (Steam)](https://store.steampowered.com/app/368620/Timespinner/)
   , [Timespinner (Humble)](https://www.humblebundle.com/store/timespinner)
   oder [Timespinner (GOG)](https://www.gog.com/game/timespinner) (andere Versionen werden nicht unterstützt)
-- [Timespinner Randomizer](https://github.com/JarnoWesthof/TsRandomizer)
+- [Timespinner Randomizer](https://github.com/Jarno458/TsRandomizer)
 
 ## Wie funktioniert's?
 
@@ -15,7 +15,7 @@ die Randomisierung der Gegenstände zu erlauben
 ## Installationsanweisungen
 
 1. Die aktuellsten Dateien des Randomizers findest du ganz oben auf dieser
-   Webseite: [Timespinner Randomizer Releases](https://github.com/JarnoWesthof/TsRandomizer/releases). Lade dir unter '
+   Webseite: [Timespinner Randomizer Releases](https://github.com/Jarno458/TsRandomizer/releases). Lade dir unter '
    Assets' die .zip Datei für dein Betriebssystem herunter
 2. Entpacke die .zip Datei im Ordner, in dem das Spiel Timespinner installiert ist
 
@@ -27,7 +27,7 @@ die Randomisierung der Gegenstände zu erlauben
 
 ... im Ordner in dem die Inhalte aus der .zip Datei entpackt wurden
 
-Weitere Informationen zum Randomizer findest du hier: [ReadMe](https://github.com/JarnoWesthof/TsRandomizer)
+Weitere Informationen zum Randomizer findest du hier: [ReadMe](https://github.com/Jarno458/TsRandomizer)
 
 ## An einer Multiworld teilnehmen
 
