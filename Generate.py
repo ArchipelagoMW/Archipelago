@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import argparse
 import logging
 import random
@@ -7,6 +9,7 @@ from typing import Set, Dict, Tuple, Callable, Any, Union
 import os
 from collections import Counter
 import string
+import enum
 
 import ModuleUpdate
 
@@ -25,7 +28,39 @@ from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
 import copy
 
-categories = set(AutoWorldRegister.world_types)
+
+class PlandoSettings(enum.IntFlag):
+    items = 0b0001
+    connections = 0b0010
+    texts = 0b0100
+    bosses = 0b1000
+
+    @classmethod
+    def from_option_string(cls, option_string: str) -> PlandoSettings:
+        result = PlandoSettings(0)
+        for part in option_string.split(","):
+            part = part.strip().lower()
+            try:
+                part = PlandoSettings[part]
+            except Exception as e:
+                raise KeyError(f"{part} is not a recognized name for a plando module. "
+                               f"Known options: {', '.join(flag.name for flag in cls)}") from e
+            else:
+                result |= part
+        return result
+
+    @classmethod
+    def from_set(cls, option_set: Set[str]) -> PlandoSettings:
+        result = PlandoSettings(0)
+        for part in option_set:
+            try:
+                part = PlandoSettings[part]
+            except Exception as e:
+                raise KeyError(f"{part} is not a recognized name for a plando module. "
+                               f"Known options: {', '.join(flag.name for flag in cls)}") from e
+            else:
+                result |= part
+        return result
 
 
 def mystery_argparse():
@@ -64,7 +99,7 @@ def mystery_argparse():
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
-    args.plando: Set[str] = {arg.strip().lower() for arg in args.plando.split(",")}
+    args.plando: PlandoSettings = PlandoSettings.from_option_string(args.plando)
     return args, options
 
 
@@ -127,7 +162,7 @@ def main(args=None, callback=ERmain):
 
     args.multi = max(player_id-1, args.multi)
     print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed} with plando: "
-          f"{', '.join(args.plando)}")
+          f"{args.plando}")
 
     if not weights_cache:
         raise Exception(f"No weights found. Provide a general weights file ({args.weights_file_path}) or individual player files. "
@@ -403,7 +438,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
 def get_plando_bosses(boss_shuffle: str, plando_options: Set[str]) -> str:
     if boss_shuffle in boss_shuffle_options:
         return boss_shuffle_options[boss_shuffle]
-    elif "bosses" in plando_options:
+    elif PlandoSettings.bosses in plando_options:
         options = boss_shuffle.lower().split(";")
         remainder_shuffle = "none"  # vanilla
         bosses = []
@@ -452,7 +487,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
         setattr(ret, option_key, option(option.default))
 
 
-def roll_settings(weights: dict, plando_options: Set[str] = frozenset(("bosses",))):
+def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings.bosses):
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
@@ -504,12 +539,12 @@ def roll_settings(weights: dict, plando_options: Set[str] = frozenset(("bosses",
             # skip setting this option if already set from common_options, defaulting to root option
             if not (option_key in Options.common_options and option_key not in game_weights):
                 handle_option(ret, game_weights, option_key, option)
-        if "items" in plando_options:
+        if PlandoSettings.items in plando_options:
             ret.plando_items = game_weights.get("plando_items", [])
         if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
             # bad hardcoded behavior to make this work for now
             ret.plando_connections = []
-            if "connections" in plando_options:
+            if PlandoSettings.connections in plando_options:
                 options = game_weights.get("plando_connections", [])
                 for placement in options:
                     if roll_percentage(get_choice("percentage", placement, 100)):
@@ -629,7 +664,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
             raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
 
     ret.plando_texts = {}
-    if "texts" in plando_options:
+    if PlandoSettings.texts in plando_options:
         tt = TextTable()
         tt.removeUnwantedText()
         options = weights.get("plando_texts", [])
@@ -641,7 +676,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                 ret.plando_texts[at] = str(get_choice_legacy("text", placement))
 
     ret.plando_connections = []
-    if "connections" in plando_options:
+    if PlandoSettings.connections in plando_options:
         options = weights.get("plando_connections", [])
         for placement in options:
             if roll_percentage(get_choice_legacy("percentage", placement, 100)):
