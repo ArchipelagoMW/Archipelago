@@ -12,7 +12,7 @@ from flask import request, flash, redirect, url_for, session, render_template
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from BaseClasses import seeddigits, get_seed
-from Generate import handle_name
+from Generate import handle_name, PlandoSettings
 import pickle
 
 from .models import *
@@ -120,7 +120,7 @@ def gen_game(gen_options, meta: TypeOptional[Dict[str, object]] = None, owner=No
         erargs.outputname = seedname
         erargs.outputpath = target.name
         erargs.teams = 1
-        erargs.plando_options = ", ".join(plando_options)
+        erargs.plando_options = PlandoSettings.from_set(plando_options)
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):

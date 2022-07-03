@@ -19,9 +19,9 @@ class DownloadableItems(DefaultOnToggle):
     "With the tablet you will be able to download items at terminals"
     display_name = "Downloadable items"
 
-class FacebookMode(Toggle):
-    "Requires Oculus Rift(ng) to spot the weakspots in walls and floors"
-    display_name = "Facebook mode"
+class EyeSpy(Toggle):
+    "Requires Oculus Ring in inventory to be able to break hidden walls."
+    display_name = "Eye Spy"
 
 class StartWithMeyef(Toggle):
     "Start with Meyef, ideal for when you want to play multiplayer."
@@ -224,6 +224,37 @@ class LootPool(Choice):
     option_randomized = 1
     option_empty = 2
 
+class DropRateCategory(Choice):
+    """Sets the drop rate when 'Loot Pool' is set to 'Random'
+    Tiered: Based on item rarity/value
+    Vanilla: Based on bestiary slot the item is placed into
+    Random: Assigned a random tier/drop rate
+    Fixed: Set by the 'Fixed Drop Rate' setting
+    """
+    display_name = "Drop Rate Category"
+    option_tiered = 0
+    option_vanilla = 1
+    option_randomized = 2
+    option_fixed = 3
+
+class FixedDropRate(Range):
+    "Base drop rate percentage when 'Drop Rate Category' is set to 'Fixed'"
+    display_name = "Fixed Drop Rate"
+    range_start = 0
+    range_end = 100
+    default = 5
+
+class LootTierDistro(Choice):
+    """Sets how often items of each rarity tier are placed when 'Loot Pool' is set to 'Random'
+    Default Weight: Rarer items will be assigned to enemy drop slots less frequently than common items
+    Full Random: Any item has an equal chance of being placed in an enemy's drop slot
+    Inverted Weight: Rarest items show up the most frequently, while common items are the rarest
+    """
+    display_name = "Loot Tier Distrubution"
+    option_default_weight = 0
+    option_full_random = 1
+    option_inverted_weight = 2
+
 class ShowBestiary(Toggle):
     "All entries in the bestiary are visible, without needing to kill one of a given enemy first"
     display_name = "Show Bestiary Entries"
@@ -238,7 +269,7 @@ timespinner_options: Dict[str, Option] = {
     #"ProgressiveVerticalMovement": ProgressiveVerticalMovement,
     #"ProgressiveKeycards": ProgressiveKeycards,
     "DownloadableItems": DownloadableItems,
-    "FacebookMode": FacebookMode,
+    "EyeSpy": EyeSpy,
     "StartWithMeyef": StartWithMeyef,
     "QuickSeed": QuickSeed,
     "SpecificKeycards": SpecificKeycards,
@@ -257,6 +288,9 @@ timespinner_options: Dict[str, Option] = {
     "ShopWarpShards": ShopWarpShards,
     "ShopMultiplier": ShopMultiplier,
     "LootPool": LootPool,
+    "DropRateCategory": DropRateCategory,
+    "FixedDropRate": FixedDropRate,
+    "LootTierDistro": LootTierDistro,
     "ShowBestiary": ShowBestiary,
     "ShowDrops": ShowDrops,
     "DeathLink": DeathLink,
