@@ -52,7 +52,7 @@ class TimespinnerLogic(LogicMixin):
             return self.has_any({'Security Keycard A', 'Security Keycard B', 'Security Keycard C', 'Security Keycard D'}, player)
 
     def _timespinner_can_break_walls(self, world: MultiWorld, player: int) -> bool:
-        if is_option_enabled(world, player, "FacebookMode"):
+        if is_option_enabled(world, player, "EyeSpy"):
             return self.has('Oculus Ring', player)
         else:
             return True
