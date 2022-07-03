@@ -552,7 +552,9 @@ class Context:
             collect_player(self, client.team, client.slot)
 
 
-def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
+def notify_hints(ctx: Context, team: int,
+                 hints: typing.List[NetUtils.Hint],
+                 only_new: bool = False, notify: bool = True):
     """Send and remember hints."""
     if only_new:
         hints = [hint for hint in hints if hint not in ctx.hints[team, hint.finding_player]]
@@ -576,13 +578,14 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], onl
 
         logging.info("Notice (Team #%d): %s" % (team + 1, format_hint(ctx, team, hint)))
 
-    for slot, hint_data in concerns.items():
-        clients = ctx.clients[team].get(slot)
-        if not clients:
-            continue
-        client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
-        for client in clients:
-            asyncio.create_task(ctx.send_msgs(client, client_hints))
+    if notify:
+        for slot, hint_data in concerns.items():
+            clients = ctx.clients[team].get(slot)
+            if not clients:
+                continue
+            client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
+            for client in clients:
+                asyncio.create_task(ctx.send_msgs(client, client_hints))
 
 
 def update_aliases(ctx: Context, team: int):
@@ -1555,7 +1558,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 if create_as_hint:
                     hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
-            notify_hints(ctx, client.team, hints, only_new=create_as_hint == 2)
+            notify_hints(ctx, client.team, hints, only_new=create_as_hint >= 2, notify=create_as_hint != 3)
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 
         elif cmd == 'StatusUpdate':
