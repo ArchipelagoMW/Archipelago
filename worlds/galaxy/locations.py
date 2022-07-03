@@ -19,3 +19,10 @@ locHH_table = {
     "HH: Honeyhive's Purple Coins": 170000010,
     "HH: Luigi in the Honeyhive Kingdom": 170000011,
 }
+locspecialstages_table ={
+    "LDL: Surfing 101": 170000012,
+    "FS: Painting the Planet Yellow": 170000013,
+}
+locbosses_table = {
+    "BJ: Megaleg's Moon": 170000014,
+}
