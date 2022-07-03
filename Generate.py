@@ -504,7 +504,7 @@ def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings
         required_plando_options = PlandoSettings.from_option_string(requirements.get("plando", ""))
         if required_plando_options not in plando_options:
             if required_plando_options:
-                raise Exception(f"Settings reports required plando module {required_plando_options}, "
+                raise Exception(f"Settings reports required plando module {str(required_plando_options)}, "
                                 f"which is not enabled.")
 
     ret = argparse.Namespace()
