@@ -41,27 +41,25 @@ class PlandoSettings(enum.IntFlag):
         for part in option_string.split(","):
             part = part.strip().lower()
             if part:
-                try:
-                    part = PlandoSettings[part]
-                except Exception as e:
-                    raise KeyError(f"{part} is not a recognized name for a plando module. "
-                                   f"Known options: {', '.join(flag.name for flag in cls)}") from e
-                else:
-                    result |= part
+                result = PlandoSettings._handle_part(part, result)
         return result
 
     @classmethod
     def from_set(cls, option_set: Set[str]) -> PlandoSettings:
         result = PlandoSettings(0)
         for part in option_set:
-            try:
-                part = PlandoSettings[part]
-            except Exception as e:
-                raise KeyError(f"{part} is not a recognized name for a plando module. "
-                               f"Known options: {', '.join(flag.name for flag in cls)}") from e
-            else:
-                result |= part
+            result = PlandoSettings._handle_part(part, result)
         return result
+
+    @classmethod
+    def _handle_part(cls, part: str, base: PlandoSettings) -> PlandoSettings:
+        try:
+            part = PlandoSettings[part]
+        except Exception as e:
+            raise KeyError(f"{part} is not a recognized name for a plando module. "
+                           f"Known options: {', '.join(flag.name for flag in cls)}") from e
+        else:
+            return base | part
 
 
 def mystery_argparse():
