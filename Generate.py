@@ -37,24 +37,24 @@ class PlandoSettings(enum.IntFlag):
 
     @classmethod
     def from_option_string(cls, option_string: str) -> PlandoSettings:
-        result = PlandoSettings(0)
+        result = cls(0)
         for part in option_string.split(","):
             part = part.strip().lower()
             if part:
-                result = PlandoSettings._handle_part(part, result)
+                result = cls._handle_part(part, result)
         return result
 
     @classmethod
     def from_set(cls, option_set: Set[str]) -> PlandoSettings:
-        result = PlandoSettings(0)
+        result = cls(0)
         for part in option_set:
-            result = PlandoSettings._handle_part(part, result)
+            result = cls._handle_part(part, result)
         return result
 
     @classmethod
     def _handle_part(cls, part: str, base: PlandoSettings) -> PlandoSettings:
         try:
-            part = PlandoSettings[part]
+            part = cls[part]
         except Exception as e:
             raise KeyError(f"{part} is not a recognized name for a plando module. "
                            f"Known options: {', '.join(flag.name for flag in cls)}") from e
