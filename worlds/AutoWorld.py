@@ -4,7 +4,7 @@ import logging
 import sys
 from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, NamedTuple
 
-from BaseClasses import MultiWorld, Item, CollectionState, Location, Tutorial
+from BaseClasses import MultiWorld, Item, CollectionState, Location, Tutorial, ItemClassification
 from Options import Option
 
 
@@ -293,7 +293,9 @@ class World(metaclass=AutoWorldRegister):
         return False
 
     def create_filler(self) -> Item:
-        return self.create_item(self.get_filler_item_name())
+        item = self.create_item(self.get_filler_item_name())
+        item.classification = ItemClassification.filler
+        return item
 
 
 # any methods attached to this can be used as part of CollectionState,

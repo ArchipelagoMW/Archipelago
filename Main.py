@@ -148,6 +148,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     custom_item_pool = {}
     for player in world.player_ids:
         player_item_pool[player] = {}
+        # count up everyone's items
         for item in world.itempool:
             if item.player == player:
                 player_item_pool[player][item.name] = player_item_pool[player].get(item.name, 0) + 1
@@ -156,6 +157,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             pool_size_groups[world.custom_item_pool[player].value.get('pool_size_link', None)].append(player)
             custom_item_pool[player] = {}
             if world.custom_item_pool[player].value.get('use_defaults', True):
+                # if use_defaults is not set to False, copy the items we counted earlier.
+                # otherwise, these numbers are discarded
                 custom_item_pool[player] = player_item_pool[player].copy()
             for item_name, count in world.custom_item_pool[player].value.get('set', {}).items():
                 custom_item_pool[player][item_name] = count
@@ -182,6 +185,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                             item = world.worlds[player].create_filler()
                         else:
                             item = world.create_item(item_name, player)
+                        if item.classification == ItemClassification.progression:
+                            # extra items created from custom item pool should never be necessary, and adding more
+                            # advancement items can needlessly slow down generation, so convert to useful
+                            item.classification = ItemClassification.useful
                         world.itempool.append(item)
                 elif custom_pool_count < player_pool_count:
                     item = world.create_item(item_name, player)
@@ -192,6 +199,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                             logging.warning(f"Could not remove {item.name} for {world.player_name[player]} for custom item pool, item does not exist")
                             custom_item_pool[player][item_name] -= (count - (player_pool_count - custom_pool_count))
                             break
+    # if players have set up pool_size_link, group them together with players that specified the same value
+    # so we can look at pool sizes collectively before making corrections
     pool_size_group_list = []
     for link_group, players in pool_size_groups.items():
         if link_group is None:
@@ -207,7 +216,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             custom_pool_size += sum(custom_item_pool[player].values())
             player_pool_size += sum(player_item_pool[player].values())
         diff = custom_pool_size - player_pool_size
-        if diff > 0:
+        if diff > 0:  # pool is oversized, we need to remove some filler items.
             removed_items = 0
             for item in world.itempool:
                 if item.player in link_group and item.classification == ItemClassification.filler:
@@ -219,6 +228,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 logging.warning(f"Unable to remove enough filler items for player {world.player_name[player]} to correct item pool size")
                 logging.warning(f"Player {world.player_name[player]}'s item pool oversized by {diff - removed_items} items")
         for _ in range(diff, 0):
+            # pool is too small, need to create fillers
             world.itempool.append(AutoWorld.call_single(world, "create_filler", world.random.choice(link_group)))
 
 
@@ -285,8 +295,12 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             items_to_add = []
             for player in group["players"]:
                 if group["replacement_items"][player]:
-                    items_to_add.append(AutoWorld.call_single(world, "create_item", player,
-                                                                group["replacement_items"][player]))
+                    item = AutoWorld.call_single(world, "create_item", player,
+                                                                group["replacement_items"][player])
+                    if item.classification == ItemClassification.progression:
+                        # extra items created from replacements should never be necessary, and adding more
+                        # advancement items can needlessly slow down generation, so convert to useful
+                        item.classification = ItemClassification.useful
                 else:
                     items_to_add.append(AutoWorld.call_single(world, "create_filler", player))
             world.random.shuffle(items_to_add)
