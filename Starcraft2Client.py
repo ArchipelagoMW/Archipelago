@@ -4,7 +4,6 @@ import multiprocessing
 import logging
 import asyncio
 import os.path
-from os import listdir, getcwd
 
 import nest_asyncio
 import sc2
@@ -22,7 +21,6 @@ from worlds.sc2wol import SC2WoLWorld
 
 from pathlib import Path
 import re
-from shutil import copy2
 from MultiServer import mark_raw
 import ctypes
 import sys
