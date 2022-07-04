@@ -87,7 +87,6 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if path:
             os.environ["SC2PATH"] = path
             check_mod_install()
-            # grab_dlls()
             return True
         else:
             sc2_logger.warning("When using set_path, you must type the path to your SC2 install directory.")
@@ -135,7 +134,6 @@ class SC2Context(CommonContext):
             # check_game_install_path() returns True if and only if it finds + sets SC2PATH.
             if "SC2PATH" not in os.environ and check_game_install_path():
                 check_mod_install()
-                # grab_dlls()
 
         if cmd in {"PrintJSON"}:
             if "receiving" in args:
@@ -880,30 +878,6 @@ def check_mod_install() -> bool:
     except KeyError:
         sc2_logger.warning(f"SC2PATH isn't set. Please run /set_path with the path to your SC2 install.")
     return False
-
-
-def grab_dlls():
-    # TODO: Eliminate this function if DllDirectory consistently allows Windows users to play SC2 without it.
-    # Credit to Magnemania for the structure of this code.
-    # Check the lib folder of the Archipelago installation for the following files:
-    required_dll_names = {'icudt52.dll', 'icuin52.dll', 'icuuc52.dll'}
-    try:
-        dlls = set(listdir(libdir := getcwd() / Path('lib')))
-    except FileNotFoundError:
-        sc2_logger.warning("Failed to check .dlls. Couldn't find the Archipelago/lib folder.")
-        return False
-    missing_dlls = required_dll_names - dlls
-    if missing_dlls:
-        sc2_logger.info("Missing .dlls. Attempting to grab them from your SC2 install...")
-        # Without writing this to allow direct download, we can't grab the .dlls without SC2 installed.
-        try:
-            for missing_dll in missing_dlls:
-                copy2(Path(os.environ["SC2PATH"]) / "Support64" / missing_dll, libdir)
-                sc2_logger.info(f"Grabbed {missing_dll}.")
-        except KeyError:
-            sc2_logger.warning("Failed to acquire .dlls; could not find SC2 install.")
-    else:
-        sc2_logger.info("No .dlls missing. Did not grab.")
 
 
 class DllDirectory:
