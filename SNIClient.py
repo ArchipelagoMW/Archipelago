@@ -1155,6 +1155,7 @@ async def game_watcher(ctx: Context):
             def create_hint(loc):
                 asyncio.create_task(ctx.send_msgs([{"cmd": "LocationScouts", "locations": [loc], "create_as_hint": 3}]))
 
+            # scout hints for visible shop items and items that might not be reachable
             pos = await snes_read(ctx, WRAM_START + 0x20, 4)
             (x, y) = (pos[3] * 256 + pos[2], pos[1] * 256 + pos[0])
             ow_screen = await snes_read(ctx, WRAM_START + 0x8A, 1)
@@ -1163,35 +1164,44 @@ async def game_watcher(ctx: Context):
             dungeon_room = dungeon_room[1] * 256 + dungeon_room[0]
             shop = await snes_read(ctx, WRAM_START + 0x1506C, 1)
             shop = shop[0]
+            has_boots = await snes_read(ctx, WRAM_START + 0xF355, 1)
+            has_boots = has_boots[0]
             if gamemode[0] == 0x09:  # Overworld
-                if ow_screen == 0x30:  # Desert
-                    if 0x0F00 > y > 0x03EE and x < 0xE2:
+                if ow_screen < 0x40:  # Light world
+                    if 0x0F04 > y > 0x0E34 and x < 0x00E4:  # Desert
                         create_hint(1573187)
-                elif ow_screen == 0x03:  # West Death Mountain
-                    if 0x0888 > x > 0x0799 and 0x01C9 > y > 0x00EC:
+                    if 0x0894 > x > 0x07A4 and 0x01C4 > y > 0x00F4:  # Spectacle Rock
                         create_hint(1573184)
-                elif ow_screen == 0x05:  # East Death Mountain
-                    if 0x0D6D > x > 0x0C70 and y < 0x0098:
+                    if 0x0D64 > x > 0x0C70 and y < 0x0094:  # East Death Mountain Floating Island
                         create_hint(1573185)
-                elif ow_screen == 0x35:  # Lake Hylia
-                    if 0x0C0D > x > 0x0B1F and 0x0CC1 > y > 0x0D94:
+                    if 0x0C04 > x > 0x0B34 and 0x0CC4 > y > 0x0D94:  # Lake Hylia Island
                         create_hint(1573188)
-                elif ow_screen == 0x28:  # Maze Raze
-                    if x < 0x010:
+                    if 0x0AC4 < y < 0x0BA8 and x < 0x0010:  # Maze Race
                         create_hint(1573186)
-                elif ow_screen == 0x4A:  # Bumper Cave Entrance
-                    if x > 0x04F8 and y < 0x02E4:
+                else:  # Dark World
+                    if x > 0x04F8 and y < 0x02E4:  # Bumper Cave Ledge
                         create_hint(1573190)
             elif gamemode[0] == 0x0B:  # Special Overworld
                 if ow_screen == 0x81:  # Zora
-                    if 0x0330 < x < 0x042F and 0x02DC > y > 0x01FD:
-                        create_hint(1573193)  # Zora's Ledge
+                    if 0x0330 < x < 0x042F and 0x02DC > y > 0x01FD:  # Zora's Ledge
+                        create_hint(1573193)
             elif gamemode[0] == 0x07:  # Dungeon
-                for shop_name, shop_data in shop_table.items():
-                    if shop_data.room == dungeon_room and shop_data.sram_offset == shop:
-                        for loc_id, loc_name in shop_table_by_location_id.items():
-                            if shop_name in loc_name:
-                                create_hint(loc_id)
+                if dungeon_room in (0x00FF, 0x0109, 0x010F, 0x0110, 0x0112, 0x0115, 0x011F):
+                    if not ((dungeon_room == 0x00FF and (x > 0x1F00 or y > 0x1F00))  # Light World Death Mountain Shop
+                            or (dungeon_room == 0x011F and x < 0x1F00)  # Kakariko Shop
+                            or (dungeon_room == 0x0112 and x < 0x1F00)):  # Cave Shop
+                        for shop_name, shop_data in shop_table.items():
+                            if shop_data.room == dungeon_room and shop_data.sram_offset == shop:
+                                for loc_id, loc_name in shop_table_by_location_id.items():
+                                    if shop_name in loc_name:
+                                        create_hint(loc_id)
+                elif not has_boots:
+                    if dungeon_room == 0x0073 and x < 0x1F00 and y < 0x1F00:  # Desert Torch
+                        create_hint(1573216)
+                    elif dungeon_room == 0x0107 and x < 0x1F00:  # Library
+                        create_hint(1572882)
+                    elif dungeon_room == 0x08C and x < 0x1F00 and y < 0x1F00:  # GT Bob's Torch
+                        create_hint(1573217)
 
 
         elif ctx.game == GAME_SM:
