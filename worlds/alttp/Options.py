@@ -118,12 +118,13 @@ class Bosses(TextChoice):
     option_chaos = 3
     option_singularity = 4
 
-    plando_module = "bosses"
+    requires_plando = True
 
-    def verify(self, world):
+    def verify(self, plando_options):
         if isinstance(self.value, int):
             return
-        if not self.plando_module:
+        from Generate import PlandoSettings
+        if PlandoSettings.bosses not in plando_options:
             options = self.value.split(";")
             for option in options:
                 if option in self.options:

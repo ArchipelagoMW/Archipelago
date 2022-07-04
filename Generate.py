@@ -252,9 +252,6 @@ def main(args=None, callback=ERmain):
                     important[option] = player_settings
                 else:
                     logging.debug(f"No player settings defined for option '{option}'")
-            if option.plando_module:
-                if option.plando_module not in args.plando:
-                    option.plando_module = False
         if args.outputpath:
             os.makedirs(args.outputpath, exist_ok=True)
         with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
@@ -435,10 +432,10 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
             raise Exception(f"Error generating option {option_key} in {ret.game}") from e
         else:
             if hasattr(player_option, "verify"):
-                if player_option.plando_module:
-                    if player_option.plando_module not in plando_options:
-                        player_option.plando_module = None
-                player_option.verify(AutoWorldRegister.world_types[ret.game])
+                if player_option.requires_plando:
+                    player_option.verify(plando_options)
+                else:
+                    player_option.verify(AutoWorldRegister.world_types[ret.game])
     else:
         setattr(ret, option_key, option(option.default))
 
