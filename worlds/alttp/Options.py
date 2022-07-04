@@ -124,7 +124,7 @@ class Bosses(TextChoice):
         if isinstance(self.value, int):
             return
         from Generate import PlandoSettings
-        if PlandoSettings.bosses not in plando_options:
+        if not(PlandoSettings.bosses & plando_options):
             options = self.value.split(";")
             for option in options:
                 if option in self.options:
