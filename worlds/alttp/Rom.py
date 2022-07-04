@@ -3,7 +3,7 @@ from __future__ import annotations
 import Utils
 from Patch import read_rom
 
-JAP10HASH = '03a63945398191337e896e5771f77173'
+LTTPJPN10HASH = '03a63945398191337e896e5771f77173'
 RANDOMIZERBASEHASH = '9952c2a3ec1b421e408df0d20c8f0c7f'
 ROM_PLAYER_LIMIT = 255
 
@@ -2890,7 +2890,7 @@ hash_alphabet = [
 
 
 class LttPDeltaPatch(Patch.APDeltaPatch):
-    hash = JAP10HASH
+    hash = LTTPJPN10HASH
     game = "A Link to the Past"
     patch_file_ending = ".aplttp"
 
@@ -2907,8 +2907,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if JAP10HASH != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match known MD5 for JAP(1.0) release. '
+        if LTTPJPN10HASH != basemd5.hexdigest():
+            raise Exception('Supplied Base Rom does not match known MD5 for Japan(1.0) release. '
                             'Get the correct game and version, then dump it')
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
