@@ -15,6 +15,8 @@ class GenericWeb(WebWorld):
     commands = Tutorial('Archipelago Server and Client Commands',
                         'A guide detailing the commands available to the user when participating in an Archipelago session.',
                         'English', 'commands_en.md', 'commands/en', ['jat2980', 'Ijwu'])
+    mac = Tutorial('Archipelago Setup Guide for Mac', 'A guide detailing how to run Archipelago clients on macOS.', 
+                   'English', 'RunFromSourceGuideForMac.md','mac/en', ['Bicoloursnake'])
     plando = Tutorial('Archipelago Plando Guide', 'A guide to understanding and using plando for your game.',
                       'English', 'plando_en.md', 'plando/en', ['alwaysintreble', 'Alchav'])
     setup = Tutorial('Multiworld Setup Tutorial',
