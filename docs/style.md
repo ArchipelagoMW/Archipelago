@@ -1,3 +1,25 @@
 # Style Guide
 
-Yes, we do have style.
+## Generic
+
+* This guide can be ignored for data files that are not to be viewed in an editor.
+* 120 character per line for all source files
+* Avoid white space errors like trailing spaces.
+
+
+## Python Code
+
+* We mostly follow [PEP8](https://peps.python.org/pep-0008/). Read below to see the differences.
+* 120 characters per line. PyCharm does this automatically, other editors can be configured for it.
+* Strings in core code will be `"strings"`
+* Use type annotation where possible
+
+
+## Markdown
+
+* We almost follow [Google's styleguide](https://google.github.io/styleguide/docguide/style.html).
+  Read below for differences.
+* For existing documents, try to follow its style or ask to completely reformat it.
+* 120 characters per line
+* One space between bullet/number and text
+* No lazy numbering
