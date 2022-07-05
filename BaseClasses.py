@@ -389,21 +389,25 @@ class MultiWorld():
         self.precollected_items[item.player].append(item)
         self.state.collect(item, True)
 
-    def push_item(self, location: Location, item: Item, collect: bool = True):
-        if not isinstance(location, Location):
-            raise RuntimeError(
-                'Cannot assign item %s to invalid location %s (player %d).' % (item, location, item.player))
+    if __debug__:
+        def push_item(self, location: Location, item: Item, collect: bool = True):
+            if location.can_fill(self.state, item, False):
+                location.item = item
+                item.location = location
+                item.world = self  # try to not have this here anymore
+                if collect:
+                    self.state.collect(item, location.event, location)
 
-        if location.can_fill(self.state, item, False):
+                logging.debug('Placed %s at %s', item, location)
+            else:
+                raise RuntimeError('Cannot assign item %s to location %s.' % (item, location))
+    else:
+        def push_item(self, location: Location, item: Item, collect: bool = True):
             location.item = item
             item.location = location
             item.world = self  # try to not have this here anymore
             if collect:
                 self.state.collect(item, location.event, location)
-
-            logging.debug('Placed %s at %s', item, location)
-        else:
-            raise RuntimeError('Cannot assign item %s to location %s.' % (item, location))
 
     def get_entrances(self) -> List[Entrance]:
         if self._cached_entrances is None:
