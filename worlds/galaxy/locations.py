@@ -26,3 +26,20 @@ locspecialstages_table ={
 locbosses_table = {
     "BJ: Megaleg's Moon": 170000014,
 }
+locSJ_table = {
+    "SJ: Pull Star Path": 170000015,
+    "SJ: Kamella's Airship Attack": 170000016,
+    "SJ: Tarantox's Tangled Web": 170000017,
+    "SJ: Pull Star Path Speed Run": 170000018,
+    "SJ: Purple Coin Spacewalk": 170000019,
+    "SJ: Yoshi's Unexpected Apparence": 170000020,
+}
+locBR_table = {
+    "BR: Battlerock Barrage": 170000021,
+    "BR: Breaking into the Battlerock": 170000022,
+    "BR: Topmaniac's Garbage dump": 170000023,
+    "BR: Topmanic's Dardevil Run": 170000024,
+    "BR: Topmanic's Dardevil Run": 170000025,
+    "BR: Purple Coins on the Battlerock" 170000026,
+    "BR: Luigi under the Saucer" 170000027,
+    }

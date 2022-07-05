@@ -6,6 +6,6 @@ class SMGItem(Item):
 
 
 genric_item_table = {
-"Power Star": 8010,
-"Grand Star Terrace": 8011,
+  "Power Star": 8010,
+  "Grand Star Terrace": 8011,
 }
