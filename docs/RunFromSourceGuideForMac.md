@@ -2,7 +2,7 @@
 Here is a list of software to install and source code to download.
 1. [Python](https://www.python.org/downloads/macos/), 3.8 or newer is necessary.
 2. [Xcode](https://apps.apple.com/us/app/xcode/id497799835)
-3. [Archipelago Source](https://github.com/ArchipelagoMW/Archipelago/releases), this will download the source code in a zipped format.
+3. [Archipelago Source](https://github.com/ArchipelagoMW/Archipelago/releases), download the source code in either .zip or tar.gz formats of the newest version.
 4. [SNI](https://github.com/alttpo/sni/releases), be sure to select the asset with 'darwin' in the name. This one is only necessary for SNES games (A Link to the Past, Super Metroid, and SMZ3 at time of writing).
 5. If you would like to play with Enemizer, that can be found at this [link](https://github.com/Ijwu/Enemizer/releases).
 6. An Emulator of your choosing for games that need an emulator. For SNES games, I recommend [RetroArch](https://www.retroarch.com/?page=platforms), entirely because it was the easiest for me to setup on Mac.
