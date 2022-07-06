@@ -4,12 +4,12 @@ import os
 import Utils
 from Patch import read_rom, APDeltaPatch
 
-JAP10HASH = '21f3e98df4780ee1c667b84e57d88675'
+SMJUHASH = '21f3e98df4780ee1c667b84e57d88675'
 ROM_PLAYER_LIMIT = 65535
 
 
 class SMDeltaPatch(APDeltaPatch):
-    hash = JAP10HASH
+    hash = SMJUHASH
     game = "Super Metroid"
     patch_file_ending = ".apsm"
 
@@ -26,8 +26,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if JAP10HASH != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match known MD5 for JAP(1.0) release. '
+        if SMJUHASH != basemd5.hexdigest():
+            raise Exception('Supplied Base Rom does not match known MD5 for Japan+US release. '
                             'Get the correct game and version, then dump it')
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
