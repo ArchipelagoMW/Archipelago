@@ -12,6 +12,7 @@
 * We mostly follow [PEP8](https://peps.python.org/pep-0008/). Read below to see the differences.
 * 120 characters per line. PyCharm does this automatically, other editors can be configured for it.
 * Strings in core code will be `"strings"`. In other words: double quote your strings.
+* Strings in worlds should use double quotes as well, but imported code may differ.
 * Use type annotation where possible.
 
 
