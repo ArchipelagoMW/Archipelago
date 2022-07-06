@@ -8,7 +8,6 @@ from BaseClasses import Item, CollectionState, Tutorial
 from .SubClasses import ALttPItem
 from ..AutoWorld import World, WebWorld, LogicMixin
 from .Options import alttp_options, smallkey_shuffle
-from .Bosses import get_plando_bosses
 from .Items import as_dict_item_table, item_name_groups, item_table, GetBeemizerItem
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
 from .Rules import set_rules
@@ -346,7 +345,7 @@ class ALTTPWorld(World):
         world = self.world
         player = self.player
         try:
-            use_enemizer = (world.boss_shuffle[player].value != 0 or world.enemy_shuffle[player]
+            use_enemizer = (world.boss_shuffle[player].value or world.enemy_shuffle[player]
                             or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
                             or world.pot_shuffle[player] or world.bush_shuffle[player]
                             or world.killable_thieves[player])
