@@ -40,8 +40,7 @@ locbosses_table = {
     "B: The Firery Stronghold": 170000030,
     "BJ: Sinking the Airships": 170000045,
     "BJ: King Kaliente's Spicy Return": 170000067
-    "B: The Fate of the Universe": 170000086,
-    
+    "B: The Fate of the Universe": 170000095,
 }
 locSJ_table = {
     "SJ: Pull Star Path": 170000015,
