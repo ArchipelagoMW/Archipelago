@@ -341,6 +341,8 @@ class VariaRandomizer:
             if preset == 'custom':
                 PresetLoader.factory(world.custom_preset[player].value).load(self.player)
             elif preset == 'varia_custom':
+                if len(world.varia_custom_preset[player].value) == 0:
+                    raise Exception("varia_custom was chosen but varia_custom_preset is missing.")
                 url = 'https://randommetroidsolver.pythonanywhere.com/presetWebService'
                 preset_name = next(iter(world.varia_custom_preset[player].value))
                 payload = '{{"preset": "{}"}}'.format(preset_name)
