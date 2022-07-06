@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, OptionList
 
 
 class Logic(Choice):
@@ -196,6 +196,27 @@ class EnemyShuffle(Toggle):
     """Randomize every enemy spawn.
     If mode is Standard, Hyrule Castle is left out (may result in visually wrong enemy sprites in that area.)"""
     display_name = "Enemy Shuffle"
+
+
+class PlandoEnemies(OptionList):
+    """Define a list of enemies to be placed where possible. Where they cannot be placed will be randomized enemies.
+    Only enabled when enemy shuffle is enabled. For valid enemies see
+    https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Options.py#L201"""
+    display_name = "Plando Enemies"
+    valid_keys = {
+        "Raven", "Vulture", "Flying Stalfos Head", "Chicken", "Octorok (One Way)", "Octorok (Four Way)", "Buzzblob",
+        "Snapdragon", "Octoballon", "Hinox", "Moblin", "Mini Helmasaur", "Antifairy", "Bush Hoarder", "Mini Moldorm",
+        "Poe", "Statue", "Sluggula", "Ropa", "Red Bari", "Blue Bari", "Hardhat Beetle", "Deadrock", "Rock Hoarder",
+        "Green Sword Soldier", "Red Spear Soldier", "Assault Sword Soldier", "Green Spear Soldier", "Blue Archer",
+        "Green Archer", "Red Javelin Soldier", "Red Bomb Soldiers", "Geldman", "Popo", "Armos", "WalkingZora", "Crab",
+        "Roller", "Beamos", "Devalant (Shooter)", "Devalant (NonShooter)", "Ball N' Chain Trooper", "Cannon Soldier",
+        "Rat", "Rope", "Keese", "Leever", "Bee", "Floating Stalfos Head", "Gururu Bar", "BigSpikeTrap", "Winder",
+        "Water Tektite", "Green Eyegore", "Red Eyegore", "Yellow Stalfos", "Kodongos", "SpikeTrap", "Gibdo",
+        "Terrorpin", "Slime", "Wallmaster", "Stalfos Knight", "Pengator", "Ostrich Haunted Grove",
+        "Birds Haunted Grove", "Freezor", "Falling Ice", "Blue Zazak", "Red Zazak", "Stalfos",
+        "Bomber Flying Creatures From Darkworld", "Pikit", "Thief", "Medusa", "Hokku-Bokku", "Tektite", "Chain Chomp",
+        "Swamola", "Lynel", "Bunny Beam", "Stal"
+    }
 
 
 class KillableThieves(Toggle):

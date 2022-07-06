@@ -286,6 +286,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
     options = {
         'RandomizeEnemies': world.enemy_shuffle[player].value,
         'RandomizeEnemiesType': 3,
+        'PlandoEnemies': world.plando_enemies[player].value,
         'RandomizeBushEnemyChance': world.bush_shuffle[player].value,
         'RandomizeEnemyHealthRange': world.enemy_health[player] != 'default',
         'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[
