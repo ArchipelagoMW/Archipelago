@@ -31,9 +31,9 @@ locspecialstages_table ={
     "GG: Gateway's Purple coins": 170000048,
     "BF: Kingfin's Fearsome Waters": 170000067,
     "MS: Watch Your Step": 170000095,
-    "RG: Gizmos, Gears, and Gadgets": 170000096,
-    "LD: The Galaxy's Greatest Wave": 170000097,
-    "BB: The Electric Labyrinth": 170000098,
+    "RGT: Gizmos, Gears, and Gadgets": 170000096,
+    "LDT: The Galaxy's Greatest Wave": 170000097,
+    "BBT: The Electric Labyrinth": 170000098,
 }
 locbosses_table = {
     "BJ: Megaleg's Moon": 170000014,
