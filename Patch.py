@@ -304,7 +304,6 @@ if __name__ == "__main__":
                     print(f"Creating patch for {rom}")
                     result = pool.submit(create_patch_file, rom, address)
                     result.add_done_callback(lambda task: print(f"Created patch {task.result()}"))
-                # TODO: @berserker does this if tree require updating to refer to new extensions?
                 elif rom.endswith(".apbp"):
                     print(f"Applying patch {rom}")
                     data, target = create_rom_file(rom)

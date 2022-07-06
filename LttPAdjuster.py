@@ -185,7 +185,6 @@ def adjustGUI():
     romVar2 = StringVar()
     romEntry2 = Entry(romDialogFrame, textvariable=romVar2)
 
-    # TODO: @berserker does this need an update to handle .aplttp?
     def RomSelect2():
         rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc", ".apbp")), ("All Files", "*")])
         romVar2.set(rom)
