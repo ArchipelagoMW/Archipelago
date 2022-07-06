@@ -14,31 +14,31 @@ class UndertaleLogic(LogicMixin):
         return False
 
     def _reach_snowdin(self, player: int):
-        return (self.has("Goat Plush", player))
+        return (self.has("Goat Plush", player) or self.has("Progressive Plot",player,1))
 
     def _reach_papyrus_date(self, player: int):
-        return (self._reach_snowdin(player) and self.has("Complete Skeleton", player))
+        return (self._reach_snowdin(player) and (self.has("Complete Skeleton", player) or self.has("Progressive Plot",player,8)))
 
     def _reach_waterfall(self, player: int):
-        return (self._reach_snowdin(player) and self.has("Snow Shovel", player))
+        return (self._reach_snowdin(player) and (self.has("Snow Shovel", player) or self.has("Progressive Plot",player,2)))
 
     def _reach_undyne_hangout(self, player: int):
-        return (self._reach_papyrus_date(player) and self._reach_waterfall(player) and self.has("Fish", player))
+        return (self._reach_papyrus_date(player) and self._reach_waterfall(player) and (self.has("Fish", player) or self.has("Progressive Plot",player,9)))
 
     def _reach_hotland(self, player: int):
-        return (self._reach_waterfall(player) and self.has("Heat Suit", player))
+        return (self._reach_waterfall(player) and (self.has("Heat Suit", player) or self.has("Progressive Plot",player,3)))
 
     def _reach_cooking_show(self, player: int):
-        return (self._reach_hotland(player) and self.has("Cooking Set", player))
+        return (self._reach_hotland(player) and (self.has("Cooking Set", player) or self.has("Progressive Plot",player,4)))
 
     def _reach_news_show(self, player: int):
-        return (self._reach_cooking_show(player) and self.has("Microphone", player))
+        return (self._reach_cooking_show(player) and (self.has("Microphone", player) or self.has("Progressive Plot",player,5)))
 
     def _reach_core(self, player: int):
-        return (self._reach_news_show(player) and self.has("Bridge Tools", player))
+        return (self._reach_news_show(player) and (self.has("Bridge Tools", player) or self.has("Progressive Plot",player,6)))
 
     def _reach_core_mettaton(self, player: int):
-        return (self._reach_core(player) and self.has("Mettaton Plush", player))
+        return (self._reach_core(player) and (self.has("Mettaton Plush", player) or self.has("Progressive Plot",player,7)))
 
     def _reach_new_home(self, player: int):
         return (self._reach_core_mettaton(player))
@@ -47,7 +47,7 @@ class UndertaleLogic(LogicMixin):
         return (self._reach_new_home(player) and (self.has("Determination", player) or self.has("Soul Piece", player, self.world.soul_pieces[player])))
 
     def _reach_true_lab(self, player: int):
-        return (self._reach_undyne_hangout(player) and self._reach_sans(player) and self.has('Undyne Letter EX', player) and self.has("DT Extractor", player))
+        return (self._reach_undyne_hangout(player) and self._reach_sans(player) and self.has('Undyne Letter EX', player) and (self.has("DT Extractor", player) or self.has("Progressive Plot",player,10)))
 
 
 

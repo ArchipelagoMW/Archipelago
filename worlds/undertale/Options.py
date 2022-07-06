@@ -29,6 +29,12 @@ class SoulHunt(Toggle):
     default = 0
 
 
+class ProgressivePlot(Toggle):
+    """Makes the plot items progressive."""
+    display_name = "Progressive Plot"
+    default = 0
+
+
 class OnlyFlakes(Toggle):
     """Replaces all non-required items, except equipment, with Temmie Flakes."""
     display_name = "Only Temmie Flakes"
@@ -48,4 +54,5 @@ undertale_options: typing.Dict[str, type(Option)] = {
     "only_flakes":                              OnlyFlakes,
     "soul_hunt":                                SoulHunt,
     "soul_pieces":                              SoulPieces,
+    "prog_plot":                              ProgressivePlot,
 }

@@ -227,6 +227,10 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                                  "locations": list(ctx.locations_checked)})
             await ctx.send_msgs(sync_msg)
         if start_index == len(ctx.items_received):
+            counter = -1
+            while os.path.isfile(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR-1.item")):
+                os.remove(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR-1.item"))
+                counter -= 1
             for item in args['items']:
                 id = NetworkItem(*item).location
                 while NetworkItem(*item).location < 0 and \

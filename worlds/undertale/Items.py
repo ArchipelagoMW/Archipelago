@@ -12,6 +12,7 @@ class UndertaleItem(Item):
 
 
 item_table = {
+    "Progressive Plot": ItemData(77700, True),
     "Monster Candy": ItemData(77001, False),
     "Croquet Roll": ItemData(77002, False),
     "Stick": ItemData(77003, False),
@@ -106,6 +107,19 @@ required_armor = {
     "Toy Knife": 1,
     "Cowboy Hat": 1,
     "Empty Gun": 1,
+}
+
+plot_items = {
+    "Goat Plush": 1,
+    "Snow Shovel": 1,
+    "Complete Skeleton": 1,
+    "Fish": 1,
+    "Heat Suit": 1,
+    "DT Extractor": 1,
+    "Cooking Set": 1,
+    "Microphone": 1,
+    "Bridge Tools": 1,
+    "Mettaton Plush": 1,
 }
 
 key_items = {

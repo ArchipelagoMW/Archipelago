@@ -2,7 +2,7 @@ import os
 import json
 from base64 import b64encode, b64decode
 from math import ceil
-from .Items import UndertaleItem, item_table, required_armor, non_key_items, key_items, junk_weights
+from .Items import UndertaleItem, item_table, required_armor, non_key_items, key_items, junk_weights, plot_items
 from .Locations import UndertaleAdvancement, advancement_table, exclusion_table
 from .Regions import undertale_regions, link_undertale_structures
 from .Rules import set_rules, set_completion_rules
@@ -48,6 +48,7 @@ class UndertaleWorld(World):
             'no_equips': bool(self.world.no_equips[self.player].value),
             'soul_hunt': bool(self.world.soul_hunt[self.player].value),
             'soul_pieces': self.world.soul_pieces[self.player].value,
+            'prog_plot': bool(self.world.prog_plot[self.player].value)
         }
 
     def generate_basic(self):
@@ -81,7 +82,7 @@ class UndertaleWorld(World):
             itempool += ["Soul Piece"] * self.world.soul_pieces[self.player].value
         else:
             itempool += ["Determination"]
-
+        itempool = [item if item not in plot_items else "Progressive Plot" for item in itempool]
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
         exclusion_pool.update(exclusion_table[self.world.route_required[self.player].current_key])
