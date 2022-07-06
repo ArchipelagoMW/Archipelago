@@ -1,12 +1,12 @@
 # Guide to Run Archipelago from Source Code on macOS
-Archipelago does not have a compiled release on macOS. However, it is possible to run from source code on macOS.
+Archipelago does not have a compiled release on macOS. However, it is possible to run from source code on macOS. This guide expects you to have some experience with running software from the terminal.
 ## Prerequisite Software
 Here is a list of software to install and source code to download.
 1. Python 3.8 or newer from the [macOS Python downloads page](https://www.python.org/downloads/macos/).
 2. Xcode from the [macOS App Store](https://apps.apple.com/us/app/xcode/id497799835).
-3. The source code from the [Archipelago Releases page](https://github.com/ArchipelagoMW/Archipelago/releases).
-4. The asset with darwin in the name from the [SNI Github](https://github.com/alttpo/sni/releases).
-5. If you would like to generate Enemized seeds for ALTTP locally (not on the website), you may need the EnemizerCLI from its [Github Page](https://github.com/Ijwu/Enemizer/releases).
+3. The source code from the [Archipelago releases page](https://github.com/ArchipelagoMW/Archipelago/releases).
+4. The asset with darwin in the name from the [SNI Github releases page](https://github.com/alttpo/sni/releases).
+5. If you would like to generate Enemized seeds for ALTTP locally (not on the website), you may need the EnemizerCLI from its [Github releases page](https://github.com/Ijwu/Enemizer/releases).
 6. An Emulator of your choosing for games that need an emulator. For SNES games, I recommend RetroArch, entirely because it was the easiest for me to setup on macOS. It can be downloaded at the [RetroArch downloads page](https://www.retroarch.com/?page=platforms)
 ## Extracting the Archipelago Directory
 1. Double click on the Archipelago source code zip file to extract the files to an Archipelago directory.
