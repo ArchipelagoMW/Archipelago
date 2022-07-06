@@ -116,6 +116,7 @@ locTT_table = {
     "TT: The Flipswitch Chain": 170000064,
     "TT: Luigi's Purple Coins": 170000065, 
     "TT: Fast Foes of Toy Time" 170000066,
+}
 locDD_table = {
     "DD: The Underground Ghost Ship": 170000069,
     "DD: Bubble Blastoff": 170000070,
