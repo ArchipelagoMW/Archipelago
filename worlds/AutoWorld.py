@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import logging
 import sys
-from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, NamedTuple
+from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, TYPE_CHECKING
 
-from BaseClasses import MultiWorld, Item, CollectionState, Location, Tutorial
 from Options import Option
+from BaseClasses import CollectionState
+
+if TYPE_CHECKING:
+    from BaseClasses import MultiWorld, Item, Location, Tutorial
 
 
 class AutoWorldRegister(type):
@@ -41,6 +44,8 @@ class AutoWorldRegister(type):
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
         if "game" in dct:
+            if dct["game"] in AutoWorldRegister.world_types:
+                raise RuntimeError(f"""Game {dct["game"]} already registered.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         return new_class
@@ -62,12 +67,12 @@ class AutoLogicRegister(type):
         return new_class
 
 
-def call_single(world: MultiWorld, method_name: str, player: int, *args: Any) -> Any:
+def call_single(world: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
     method = getattr(world.worlds[player], method_name)
     return method(*args)
 
 
-def call_all(world: MultiWorld, method_name: str, *args: Any) -> None:
+def call_all(world: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types: Set[AutoWorldRegister] = set()
     for player in world.player_ids:
         world_types.add(world.worlds[player].__class__)
@@ -79,7 +84,7 @@ def call_all(world: MultiWorld, method_name: str, *args: Any) -> None:
             stage_callable(world, *args)
 
 
-def call_stage(world: MultiWorld, method_name: str, *args: Any) -> None:
+def call_stage(world: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types = {world.worlds[player].__class__ for player in world.player_ids}
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
@@ -97,7 +102,7 @@ class WebWorld:
 
     # docs folder will also be scanned for tutorial guides given the relevant information in this list. Each Tutorial
     # class is to be used for one guide.
-    tutorials: List[Tutorial]
+    tutorials: List["Tutorial"]
 
     # Choose a theme for your /game/* pages
     # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone
@@ -160,7 +165,7 @@ class World(metaclass=AutoWorldRegister):
     hidden: bool = False
 
     # autoset on creation:
-    world: MultiWorld
+    world: "MultiWorld"
     player: int
 
     # automatically generated
@@ -172,7 +177,7 @@ class World(metaclass=AutoWorldRegister):
 
     web: WebWorld = WebWorld()
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, world: "MultiWorld", player: int):
         self.world = world
         self.player = player
 
@@ -207,12 +212,12 @@ class World(metaclass=AutoWorldRegister):
 
     @classmethod
     def fill_hook(cls,
-                  progitempool: List[Item],
-                  nonexcludeditempool: List[Item],
-                  localrestitempool: Dict[int, List[Item]],
-                  nonlocalrestitempool: Dict[int, List[Item]],
-                  restitempool: List[Item],
-                  fill_locations: List[Location]) -> None:
+                  progitempool: List["Item"],
+                  nonexcludeditempool: List["Item"],
+                  localrestitempool: Dict[int, List["Item"]],
+                  nonlocalrestitempool: Dict[int, List["Item"]],
+                  restitempool: List["Item"],
+                  fill_locations: List["Location"]) -> None:
         """Special method that gets called as part of distribute_items_restrictive (main fill).
         This gets called once per present world type."""
         pass
@@ -250,7 +255,7 @@ class World(metaclass=AutoWorldRegister):
 
     # end of ordered Main.py calls
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str) -> "Item":
         """Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer"""
         raise NotImplementedError
@@ -261,7 +266,7 @@ class World(metaclass=AutoWorldRegister):
         return self.world.random.choice(tuple(self.item_name_to_id.keys()))
 
     # decent place to implement progressive items, in most cases can stay as-is
-    def collect_item(self, state: CollectionState, item: Item, remove: bool = False) -> Optional[str]:
+    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
         """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
         Collect None to skip item.
         :param state: CollectionState to collect into
@@ -272,18 +277,18 @@ class World(metaclass=AutoWorldRegister):
         return None
 
     # called to create all_state, return Items that are created during pre_fill
-    def get_pre_fill_items(self) -> List[Item]:
+    def get_pre_fill_items(self) -> List["Item"]:
         return []
 
     # following methods should not need to be overridden.
-    def collect(self, state: CollectionState, item: Item) -> bool:
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item)
         if name:
             state.prog_items[name, self.player] += 1
             return True
         return False
 
-    def remove(self, state: CollectionState, item: Item) -> bool:
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item, True)
         if name:
             state.prog_items[name, self.player] -= 1
@@ -292,7 +297,7 @@ class World(metaclass=AutoWorldRegister):
             return True
         return False
 
-    def create_filler(self) -> Item:
+    def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
 
 
