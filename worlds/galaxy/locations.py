@@ -4,12 +4,12 @@ class SMGLocation(Location):
     game: str = "Super Mario Galaxy"
 
 locGE_table = {
-"GE: Dino Piranha": 170000000,
-"GE: A Snack of Cosmic Proportions": 170000001,
-"GE: King Kaliente's Battle Fleet": 170000002,
-"GE: Dino Piranha Speed Run": 170000003,
-"GE: Purple Coin Omelet": 170000004,
-"GE: Luigi on the Roof": 170000005,
+    "GE: Dino Piranha": 170000000,
+    "GE: A Snack of Cosmic Proportions": 170000001,
+    "GE: King Kaliente's Battle Fleet": 170000002,
+    "GE: Dino Piranha Speed Run": 170000003,
+    "GE: Purple Coin Omelet": 170000004,
+    "GE: Luigi on the Roof": 170000005,
 }
 locHH_table = {
     "HH: Bee Mario Takes Flight": 170000006,
@@ -22,9 +22,12 @@ locHH_table = {
 locspecialstages_table ={
     "LDL: Surfing 101": 170000012,
     "FS: Painting the Planet Yellow": 170000013,
+    "RG: Rolling in the Clouds": 170000028,
+    "HS: Shrinking Satellite": 170000029,
 }
 locbosses_table = {
     "BJ: Megaleg's Moon": 170000014,
+    "B: The Firery Stronghold": 170000030,
 }
 locSJ_table = {
     "SJ: Pull Star Path": 170000015,
