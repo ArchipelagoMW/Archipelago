@@ -41,6 +41,7 @@ locbosses_table = {
     "BJ: Sinking the Airships": 170000045,
     "BJ: King Kaliente's Spicy Return": 170000067
     "B: The Fate of the Universe": 170000086,
+    
 }
 locSJ_table = {
     "SJ: Pull Star Path": 170000015,
@@ -75,6 +76,23 @@ locGG_table = {
     "GG: Purple Coins in the Bone Pen": 170000041,
     "GG: Matter Splatter Mansion": 170000042,
 }
+locFF_table = {
+    "FF: The Frozen Peak of Baron Brr": 170000095,
+    "FF: Freezeflame's Blistering Coore": 170000096,
+    "FF: Hot and Cold Collide": 170000097,
+    "FF: Frosty Cosmic Mario race" 170000098,
+    "FF: Purple Coins on the Summit" 170000099,
+    "FF: Conquring the Summit" 170000100,
+}
+locDDune = {
+    "DDune: Soaring on the Desert Winds": 170000101,
+    "DDune: Blasting through the Sand": 170000102,
+    "DDune: Sunbaked Sand Castle": 170000103,
+    "DDune: Sandblast Speed Run": 170000104,
+    "DDune: Purple Coin in the Desert": 170000105,
+    "DDune: Bullet Bill on Your Back": 170000106,
+    "DDune: Treasure of the Pyramid": 170000107,
+} 
 locGL_table = {
     "GL: Star Bunnies on the Hunt": 170000049,
     "GL: Cataquack to the skies": 170000050,
@@ -82,6 +100,7 @@ locGL_table = {
     "GL: Cosmic Mario Forest Race": 170000052,
     "GL: Purple Coins in the Woods": 170000053,
     "GL: The Bell on the Big Trees": 170000054,
+ }
 locSS_table = {
     "SS: Going After Guppy": 170000055,
     "SS: Faster Than a Speedrunning Penguin": 170000056,
@@ -89,6 +108,7 @@ locSS_table = {
     "SS: Underwater Cosmic Mario Race": 170000058,
     "SS: Purple Coins by the Seaside": 170000059,
     "SS: Hurry, He's Hungry": 170000060,
+}
 locTT_table = {
     "TT: Heavy Metal Mecha Boswer": 170000061,
     "TT: Mario (or Luigi) Meets Mario": 170000062,
@@ -129,4 +149,3 @@ locHL_table: {
     "BB: Racing the Spooky Speedster": 170000093,
     "SC: Star Bunnies in the Snow": 170000094,
 }
-loc
