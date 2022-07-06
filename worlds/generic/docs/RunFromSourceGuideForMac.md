@@ -1,4 +1,6 @@
-# Prerequisite Software
+# Guide to Run Archipelago from Source Code on macOS
+Archipelago does not have a compiled release on macOS. However, it is possible to run from source code on macOS.
+## Prerequisite Software
 Here is a list of software to install and source code to download.
 1. Python 3.8 or newer from the [macOS Python downloads page](https://www.python.org/downloads/macos/).
 2. Xcode from the [macOS App Store](https://apps.apple.com/us/app/xcode/id497799835).
@@ -6,19 +8,21 @@ Here is a list of software to install and source code to download.
 4. The asset with darwin in the name from the [SNI Github](https://github.com/alttpo/sni/releases).
 5. If you would like to generate Enemized seeds for ALTTP locally (not on the website), you may need the EnemizerCLI from its [Github Page](https://github.com/Ijwu/Enemizer/releases).
 6. An Emulator of your choosing for games that need an emulator. For SNES games, I recommend RetroArch, entirely because it was the easiest for me to setup on macOS. It can be downloaded at the [RetroArch downloads page](https://www.retroarch.com/?page=platforms)
-## Setting up a virtual environment
+## Extracting the Archipelago Directory
+1. Double click on the Archipelago source code zip file to extract the files to an Archipelago directory.
+2. Move this Archipelago directory out of your downloads directory.
+3. Open terminal and navigate to your Archipelago directory.
+## Setting up a Virtual Environment
 It is generally recommended that you use a virtual environment to run python based software to avoid contamination that can break some software. If Archipelago is the only piece of software you use that runs from python source code however, it is not necessary to use a virtual environment. 
-1. Run the command `python3 -m venv /path` to create a virtual environment. Running this command will create a new directory at the specified path, so make sure that path is clear for a new directory to be created.
-2. Navigate to the new directory and run the command `source bin/activate` to activate the virtual environment.
-3. If you want to exit the virtual environment, run the command `deactivate`.
-# Steps to Run the Clients  
-3. Double click on the Archipelago source code zip file to extract the files to an Archipelago directory.
-4. Move this Archipelago directory out of your downloads directory.
-5. Open terminal and navigate to your Archipelago directory.
-6. If your game doesn't have a patch file, run the command `python3 SNIClient.py`, changing the filename with the file of the client you want to run.
-7. If your game does have a patch file, move the base rom to the Archipelago directory and run the command `python3 SNIClient.py 'patchfile'` with the filename extension for the patch file (apsm, aplttp, apsmz3, etc.) included and changing the filename with the file of the client you want to run.
-8. Your client should now be running and rom created (where applicable).
-## Additional Steps for SNES games
+1. Open terminal and navigate to the Archipelago directory.
+2. Run the command `python3 -m venv venv` to create a virtual environment. Running this command will create a new directory at the specified path, so make sure that path is clear for a new directory to be created.
+3. Run the command `source venv/bin/activate` to activate the virtual environment.
+4. If you want to exit the virtual environment, run the command `deactivate`.
+## Steps to Run the Clients 
+1. If your game doesn't have a patch file, run the command `python3 SNIClient.py`, changing the filename with the file of the client you want to run.
+2. If your game does have a patch file, move the base rom to the Archipelago directory and run the command `python3 SNIClient.py 'patchfile'` with the filename extension for the patch file (apsm, aplttp, apsmz3, etc.) included and changing the filename with the file of the client you want to run.
+3. Your client should now be running and rom created (where applicable).
+## Additional Steps for SNES Games
 1. If using RetroArch, the instructions to set up your emulator [here in the Link to the Past setup guide](https://archipelago.gg/tutorial/A%20Link%20to%20the%20Past/multiworld/en) also work on the macOS version of RetroArch.
 2. Double click on the SNI tar.gz download to extract the files to an SNI directory. If it isn't already, rename this directory to SNI to make some steps easier.
 3. Move the SNI directory out of the downloads directory, preferably into the Archipelago directory created earlier.
