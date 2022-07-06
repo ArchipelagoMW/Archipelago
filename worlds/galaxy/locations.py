@@ -132,7 +132,7 @@ locDN_table = {
     "DN: Battlestation's Purple Coins": 170000079,
     "DN: Dreadnought's Garbage Dump": 170000080,
 }
-locMM_table: {
+locMM_table = {
     "MM: The Sinking Lava Spire": 170000081,
     "MM: Through the Meteor Storm": 170000082,
     "MM: Fiery Dino Piranha": 170000083,
@@ -140,7 +140,7 @@ locMM_table: {
     "MM: Red-Hot Purple Coins": 170000085,
     "MM Burning Tide": 170000086,
 }
-locHL_table: {
+locHL_table = {
     "SS: Rocky Road": 170000088,
     "SP: A Very Sticky Situation": 170000089,
     "DD: Giant Eel Breakout": 170000090,
@@ -149,3 +149,11 @@ locHL_table: {
     "BB: Racing the Spooky Speedster": 170000093,
     "SC: Star Bunnies in the Snow": 170000094,
 }
+
+location_table{**locGE_table,**locHH_table, \
+               **locSJ_table,**locBR_table,**locBB_table, \
+               **locGG_table,**locFF_table,**locDDune_table, \
+               **locGL_table,**locSS_table,**locTT_table, \
+               **locDD_table,**locDN_table,**locMM_table, \
+               **locHL_table,**locspecialstages_table,**locbosses_table, \
+} 
