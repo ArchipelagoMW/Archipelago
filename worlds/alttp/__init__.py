@@ -345,7 +345,7 @@ class ALTTPWorld(World):
         world = self.world
         player = self.player
         try:
-            use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
+            use_enemizer = (world.boss_shuffle[player].value or world.enemy_shuffle[player]
                             or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
                             or world.pot_shuffle[player] or world.bush_shuffle[player]
                             or world.killable_thieves[player])

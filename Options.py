@@ -77,6 +77,9 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     # can be weighted between selections
     supports_weighting = True
 
+    # can define a required plando module to use the option in certain ways
+    requires_plando: bool = False
+
     # filled by AssembleOptions:
     name_lookup: typing.Dict[int, str]
     options: typing.Dict[str, int]
@@ -111,6 +114,36 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     @classmethod
     def from_any(cls, data: typing.Any) -> Option[T]:
         raise NotImplementedError
+
+
+class FreeText(Option):
+    """Text option that allows users to enter strings. Needs to be validated by the world"""
+    auto_display_name = False
+    free_text_names: set[str]
+    """set of valid prepopulated names"""
+
+    def __init__(self, value: str):
+        assert isinstance(value, str), "value of FreeText must be a string"
+        self.value = value
+
+    @property
+    def current_key(self) -> str:
+        return self.value
+
+    @classmethod
+    def from_text(cls, text: str) -> FreeText:
+        text.lower()
+        if text == "random":
+            return cls(random.choice(list(cls.free_text_names)))
+        return cls(text)
+
+    @classmethod
+    def from_any(cls, data: typing.Any) -> FreeText:
+        return cls.from_text(str(data))
+
+    @classmethod
+    def get_option_name(cls, value: T) -> str:
+        return value
 
 
 class NumericOption(Option[int], numbers.Integral):
@@ -366,6 +399,48 @@ class Choice(NumericOption):
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
     __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
+
+
+class TextChoice(FreeText, Choice):
+    """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string"""
+
+    def __init__(self, value: typing.Union[str, int]):
+        if isinstance(value, str):
+            self.value: str = value
+        elif isinstance(value, int):
+            self.value: int = value
+        else:
+            raise TypeError(f"{value} is not a valid option for {self.__class__.__name__}")
+
+    @property
+    def current_key(self) -> str:
+        if isinstance(self.value, str):
+            return self.value
+        else:
+            return self.name_lookup[self.value]
+
+    @classmethod
+    def from_text(cls, text: str) -> typing.Union[FreeText, Choice]:
+        text = text.lower()
+        if text == "random":  # chooses a random defined option but won't use any free text options
+            return Choice(random.choice(list(cls.name_lookup)))
+        for option_name, value in cls.options.items():
+            if option_name == text:
+                return cls(value)
+        return cls(text)
+
+    @classmethod
+    def from_any(cls, data: typing.Any) -> typing.Union[FreeText, Choice]:
+        if type(data) == int and data in cls.options.values():
+            return cls(data)
+        return cls.from_text(str(data))
+
+    @classmethod
+    def get_option_name(cls, value: T) -> str:
+        if isinstance(value, str):
+            return value
+        else:
+            return cls.name_lookup[value]
 
 
 class Range(NumericOption):

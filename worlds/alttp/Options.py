@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice
 
 
 class Logic(Choice):
@@ -110,12 +110,27 @@ class WorldState(Choice):
     option_inverted = 2
 
 
-class Bosses(Choice):
-    option_vanilla = 0
-    option_simple = 1
+class Bosses(TextChoice):
+    display_name = "Boss Shuffle"
+    option_none = 0
+    option_basic = 1
     option_full = 2
     option_chaos = 3
     option_singularity = 4
+
+    requires_plando = True
+
+    def verify(self, plando_options):
+        if isinstance(self.value, int):
+            return
+        from Generate import PlandoSettings
+        if not(PlandoSettings.bosses & plando_options):
+            options = self.value.split(";")
+            for option in options:
+                if option in self.options:
+                    self.value = Bosses.options[option]
+                    return
+            raise ValueError(f"Boss plando is disabled and {self.value} is not a valid option.")
 
 
 class Enemies(Choice):
@@ -138,8 +153,8 @@ class Progressive(Choice):
 
 
 class Swordless(Toggle):
-    """No swords. Curtains in Skull Woods and Agahnim\'s
-    Tower are removed, Agahnim\'s Tower barrier can be
+    """No swords. Curtains in Skull Woods and Agahnim's
+    Tower are removed, Agahnim's Tower barrier can be
     destroyed with hammer. Misery Mire and Turtle Rock
     can be opened without a sword. Hammer damages Ganon.
     Ether and Bombos Tablet can be activated with Hammer
@@ -342,6 +357,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "hints": Hints,
     "scams": Scams,
     "restrict_dungeon_item_on_boss": RestrictBossItem,
+    "boss_shuffle": Bosses,
     "pot_shuffle": PotShuffle,
     "enemy_shuffle": EnemyShuffle,
     "killable_thieves": KillableThieves,
