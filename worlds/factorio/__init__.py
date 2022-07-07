@@ -328,7 +328,6 @@ class Factorio(World):
 
     def set_custom_recipes(self):
         original_rocket_part = recipes["rocket-part"]
-        original_rocket_part = recipes["rocket-part"]
         science_pack_pools = get_science_pack_pools()
         valid_pool = sorted(science_pack_pools[self.world.max_science_pack[self.player].get_max_pack()] & stacking_items)
         self.world.random.shuffle(valid_pool)
