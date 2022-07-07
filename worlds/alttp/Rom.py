@@ -281,12 +281,16 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
     randopatch_path = os.path.abspath(os.path.join(output_directory, f'enemizer_randopatch_{player}.sfc'))
     options_path = os.path.abspath(os.path.join(output_directory, f'enemizer_options_{player}.json'))
     enemizer_output_path = os.path.abspath(os.path.join(output_directory, f'enemizer_output_{player}.sfc'))
+    from .Enemies import ENEMIZED_NAME_TO_ID
+    plando_enemies = []
+    for enemy in world.enemy_pool[player].value:
+        plando_enemies.append(ENEMIZED_NAME_TO_ID[enemy])
 
     # write options file for enemizer
     options = {
         'RandomizeEnemies': world.enemy_shuffle[player].value,
         'RandomizeEnemiesType': 3,
-        'PlandoEnemies': world.plando_enemies[player].value,
+        'EnemyPool': plando_enemies,
         'RandomizeBushEnemyChance': world.bush_shuffle[player].value,
         'RandomizeEnemyHealthRange': world.enemy_health[player] != 'default',
         'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[

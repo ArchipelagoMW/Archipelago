@@ -198,24 +198,23 @@ class EnemyShuffle(Toggle):
     display_name = "Enemy Shuffle"
 
 
-class PlandoEnemies(OptionList):
-    """Define a list of enemies to be placed where possible. Where they cannot be placed will be randomized enemies.
-    Only enabled when enemy shuffle is enabled. For valid enemies see
+class EnemyPool(OptionList):
+    """Limited pool of enemies that will be randomly placed where possible. Any remaining locations where these enemies
+    cannot be placed will have valid choices from the full enemy pool.
     https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Options.py#L201"""
-    display_name = "Plando Enemies"
+    display_name = "Enemy Pool"
     valid_keys = {
         "Raven", "Vulture", "Flying Stalfos Head", "Chicken", "Octorok (One Way)", "Octorok (Four Way)", "Buzzblob",
-        "Snapdragon", "Octoballon", "Hinox", "Moblin", "Mini Helmasaur", "Antifairy", "Bush Hoarder", "Mini Moldorm",
+        "Snapdragon", "Octoballoon", "Hinox", "Moblin", "Mini Helmasaur", "Antifairy", "Bush Hoarder", "Mini Moldorm",
         "Poe", "Statue", "Sluggula", "Ropa", "Red Bari", "Blue Bari", "Hardhat Beetle", "Deadrock", "Rock Hoarder",
         "Green Sword Soldier", "Red Spear Soldier", "Assault Sword Soldier", "Green Spear Soldier", "Blue Archer",
-        "Green Archer", "Red Javelin Soldier", "Red Bomb Soldiers", "Geldman", "Popo", "Armos", "WalkingZora", "Crab",
-        "Roller", "Beamos", "Devalant (Shooter)", "Devalant (NonShooter)", "Ball N' Chain Trooper", "Cannon Soldier",
-        "Rat", "Rope", "Keese", "Leever", "Bee", "Floating Stalfos Head", "Gururu Bar", "BigSpikeTrap", "Winder",
-        "Water Tektite", "Green Eyegore", "Red Eyegore", "Yellow Stalfos", "Kodongos", "SpikeTrap", "Gibdo",
-        "Terrorpin", "Slime", "Wallmaster", "Stalfos Knight", "Pengator", "Ostrich Haunted Grove",
-        "Birds Haunted Grove", "Freezor", "Falling Ice", "Blue Zazak", "Red Zazak", "Stalfos",
-        "Bomber Flying Creatures From Darkworld", "Pikit", "Thief", "Medusa", "Hokku-Bokku", "Tektite", "Chain Chomp",
-        "Swamola", "Lynel", "Bunny Beam", "Stal"
+        "Green Archer", "Red Javelin Soldier", "Red Bomb Soldiers", "Geldman", "Popo", "Armos", "Walking Zora", "Crab",
+        "Roller", "Beamos", "Devalant (Shooter)", "Devalant (Non-shooter)", "Ball N' Chain Trooper", "Cannon Soldier",
+        "Rat", "Rope", "Keese", "Leever", "Bee", "Floating Stalfos Head", "Guruguru Bar Clockwise",
+        "Guruguru Bar Counter Clockwise", "Big Spike Trap", "Winder", "Water Tektite", "Green Eyegore", "Red Eyegore",
+        "Terrorpin", "Slime", "Wallmaster", "Stalfos Knight", "Pengator", "Ostrich Haunted Grove", "Birds Haunted Grove",
+        "Freezor", "Falling Ice", "Blue Zazak", "Red Zazak", "Stalfos", "Bomber Flying Creatures From Darkworld",
+        "Pikit", "Thief", "Medusa", "Hokku-Bokku", "Tektite", "Chain Chomp", "Swamola", "Lynel", "Bunny Beam", "Stal"
     }
 
 
@@ -365,6 +364,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "restrict_dungeon_item_on_boss": RestrictBossItem,
     "pot_shuffle": PotShuffle,
     "enemy_shuffle": EnemyShuffle,
+    "enemy_pool": EnemyPool,
     "killable_thieves": KillableThieves,
     "bush_shuffle": BushShuffle,
     "shop_item_slots": ShopItemSlots,
