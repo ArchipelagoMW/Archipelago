@@ -1,10 +1,10 @@
 import importlib
 import os
 
-__all__ = {"lookup_any_item_id_to_name",
+__all__ = ["lookup_any_item_id_to_name",
            "lookup_any_location_id_to_name",
            "network_data_package",
-           "AutoWorldRegister"}
+           "AutoWorldRegister"]
 
 # import all submodules to trigger AutoWorldRegister
 world_folders = []
