@@ -6,12 +6,8 @@ required to send and receive items between the game and server.
 
 Client implementation is out of scope of this document. Please refer to an
 existing game that provides a similar API to yours.
-Refer to the following documents as well:
-- [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
-- [adding games.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/adding%20games.md)
 
 Archipelago will be abbreviated as "AP" from now on.
-
 
 ## Language
 
@@ -19,12 +15,10 @@ AP worlds are written in python3.
 Clients that connect to the server to sync items can be in any language that
 allows using WebSockets.
 
-
 ## Coding style
 
 AP follows all the PEPs. When in doubt use an IDE with coding style
 linter, for example PyCharm Community Edition.
-
 
 ## Docstrings
 
@@ -39,7 +33,6 @@ class MyGameWorld(World):
     """This is the description of My Game that will be displayed on the AP
        website."""
 ```
-
 
 ## Definitions
 
@@ -63,7 +56,7 @@ for your world specifically on the webhost.
 `theme` to be used for your game specific AP pages. Available themes:
 | dirt  | grass (default) | grassFlowers | ice  | jungle  | ocean | partyTime | stone |
 |---|---|---|---|---|---|---|---|
-| <img src="img/theme_dirt.JPG" width="100"> | <img src="img/theme_grass.JPG" width="100"> | <img src="img/theme_grassFlowers.JPG" width="100"> | <img src="img/theme_ice.JPG" width="100"> | <img src="img/theme_jungle.JPG" width="100"> | <img src="img/theme_ocean.JPG" width="100"> | <img src="img/theme_partyTime.JPG" width="100"> | <img src="img/theme_stone.JPG" width="100"> |
+| <img src="_static/theme_dirt.JPG" width="200"> | <img src="_static/theme_grass.JPG" width="200"> | <img src="_static/theme_grassFlowers.JPG" width="200"> | <img src="_static/theme_ice.JPG" width="200"> | <img src="_static/theme_jungle.JPG" width="200"> | <img src="_static/theme_ocean.JPG" width="200"> | <img src="_static/theme_partyTime.JPG" width="200"> | <img src="_static/theme_stone.JPG" width="200"> |
 
 `bug_report_page` (optional) can be a link to a bug reporting page, most likely a GitHub issue page, that will be placed by the site to help direct users to report bugs.
 

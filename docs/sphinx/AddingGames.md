@@ -1,17 +1,10 @@
-
-
-# How do I add a game to Archipelago?  
+# Adding Games to Archipelago
 This guide is going to try and be a broad summary of how you can do just that.  
 There are two key steps to incorporating a game into Archipelago:  
 - Game Modification 
 - Archipelago Server Integration
 
-Refer to the following documents as well:
-- [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md) for network communication between client and server.
-- [world api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md) for documentation on server side code and creating a world package.
-
-
-# Game Modification  
+## Game Modification  
 One half of the work required to integrate a game into Archipelago is the development of the game client. This is 
 typically done through a modding API or other modification process, described further down.
 
@@ -27,7 +20,7 @@ This is a good way to make the modding process much easier. Being able to identi
 Examples are provided below.
   
 ### Creepy Castle
-![Creepy Castle Root Directory in Window's Explorer](./img/creepy-castle-directory.png)  
+![Creepy Castle Root Directory in Window's Explorer](_static/creepy-castle-directory.png)  
   
 This is the delightful title Creepy Castle, which is a fantastic game that I highly recommend. It’s also your worst-case
 scenario as a modder. All that’s present here is an executable file and some meta-information that Steam uses. You have 
@@ -36,7 +29,7 @@ disassembly and reverse engineering work, which is outside the scope of this tut
 of game releases.  
 
 ### Heavy Bullets
-![Heavy Bullets Root Directory in Window's Explorer](./img/heavy-bullets-directory.png)  
+![Heavy Bullets Root Directory in Window's Explorer](_static/heavy-bullets-directory.png)  
   
 Here’s the release files for another game, Heavy Bullets. We see a .exe file, like expected, and a few more files. 
 “hello.txt” is a text file, which we can quickly skim in any text editor. Many games have them in some form, usually 
@@ -46,7 +39,7 @@ hurts to check. In this case, it contains some credits and a changelog for the g
 “steam_api.dll” is a file you can safely ignore, it’s just some code used to interface with Steam. 
 The directory “HEAVY_BULLETS_Data”, however, has some good news.  
   
-![Heavy Bullets Data Directory in Window's Explorer](./img/heavy-bullets-data-directory.png)  
+![Heavy Bullets Data Directory in Window's Explorer](_static/heavy-bullets-data-directory.png)  
   
 Jackpot! It might not be obvious what you’re looking at here, but I can instantly tell from this folder’s contents that 
 what we have is a game made in the Unity Engine. If you look in the sub-folders, you’ll seem some .dll files which affirm 
@@ -56,14 +49,14 @@ but for now, this is what one looks like. Also keep your eyes out for an executa
 that’s another dead giveaway.  
 
 ### Stardew Valley
-![Stardew Valley Root Directory in Window's Explorer](./img/stardew-valley-directory.png)  
+![Stardew Valley Root Directory in Window's Explorer](_static/stardew-valley-directory.png)  
   
 This is the game contents of Stardew Valley. A lot more to look at here, but some key takeaways. 
 Notice the .dll files which include “CSharp” in their name. This tells us that the game was made in C#, which is good news. 
 More on that later.  
 
 ### Gato Roboto
-![Gato Roboto Root Directory in Window's Explorer](./img/gato-roboto-directory.png)  
+![Gato Roboto Root Directory in Window's Explorer](_static/gato-roboto-directory.png)  
   
 Our last example is the game Gato Roboto. This game is made in GameMaker, which is another green flag to look out for. 
 The giveaway is the file titled "data.win". This immediately tips us off that this game was made in GameMaker.  
@@ -107,7 +100,7 @@ modify.
 
 For Unity games, the file you’ll want to open will be the file (Data Folder)/Managed/Assembly-CSharp.dll, as pictured below:  
   
-![Heavy Bullets Managed Directory in Window's Explorer](./img/heavy-bullets-managed-directory.png)  
+![Heavy Bullets Managed Directory in Window's Explorer](_static/heavy-bullets-managed-directory.png)  
   
 This file will contain the data of the actual game. 
 For other C# games, the file you want is usually just the executable itself.  
@@ -155,7 +148,7 @@ from the server in-game so players can read them, award items when the server te
 avoid double-awarding items while still maintaining game file integrity, and allow players to manually enter commands in
 case the client or server make mistakes. 
 
-Refer to the [Network Protocol documentation](./network%20protocol.md) for how to communicate with Archipelago's servers.  
+Refer to the [Network Protocol documentation](../NetworkProtocol.md) for how to communicate with Archipelago's servers.  
   
 ## But my Game is a console game. Can I still add it?  
 That depends – what console?  
@@ -244,7 +237,7 @@ checks, what options to offer for the player’s yaml file, and the code to init
 
 Here’s an example of what your world module can look like:  
   
-![Example world module directory open in Window's Explorer](./img/archipelago-world-directory-example.png)
+![Example world module directory open in Window's Explorer](_static/archipelago-world-directory-example.png)
 
 The minimum requirements for a new archipelago world are the package itself (the world folder containing a file named `__init__.py`),
 which must define a `World` class object for the game with a game name, create an equal number of items and locations with rules,
@@ -256,7 +249,7 @@ This is just one example of an Archipelago world - the way things are done below
 ### Items.py  
 This file is used to define the items which exist in a given game.  
   
-![Example Items.py file open in Notepad++](./img/example-items-py-file.png)  
+![Example Items.py file open in Notepad++](_static/example-items-py-file.png)  
   
 Some important things to note here. The center of our Items.py file is the item_table, which individually lists every
 item in the game and associates them with an ItemData.
@@ -275,7 +268,7 @@ implementation. This is how Archipelago is told about the items in your world.
 ### Locations.py
 This file lists all locations in the game.  
   
-![Example Locations.py file open in Notepad++](./img/example-locations-py-file.png)  
+![Example Locations.py file open in Notepad++](_static/example-locations-py-file.png)  
   
 First is the achievement_table. It lists each location, the region that it can be found in (more on regions later),
 and a numeric ID to associate with each location.
@@ -288,7 +281,7 @@ locations based on user settings, and the events table associates certain specif
 ### Options.py  
 This file details options to be searched for in a player's YAML settings file.  
   
-![Example Options.py file open in Notepad++](./img/example-options-py-file.png)  
+![Example Options.py file open in Notepad++](_static/example-options-py-file.png)  
   
 There are several types of option Archipelago has support for.
 In our case, we have three separate choices a player can toggle, either On or Off.
@@ -299,7 +292,7 @@ specified range.
 This file contains data which defines the world's topology.
 In other words, it details how different regions of the game connect to each other.  
   
-![Example Regions.py file open in Notepad++](./img/example-regions-py-file.png)  
+![Example Regions.py file open in Notepad++](_static/example-regions-py-file.png)  
   
 `terraria_regions` contains a list of tuples.
 The first element of the tuple is the name of the region, and the second is a list of connections that lead out of the region.
@@ -312,7 +305,7 @@ something more usable for Archipelago, but this has been left out for clarity.
 ### Rules.py  
 This is the file that details rules for what players can and cannot logically be required to do, based on items and settings.  
   
-![Example Rules.py file open in Notepad++](./img/example-rules-py-file.png)  
+![Example Rules.py file open in Notepad++](_static/example-rules-py-file.png)  
   
 This is the most complicated part of the job, and is one part of Archipelago that is likely to see some changes in the future.
 The first class, called `TerrariaLogic`, is an extension of the `LogicMixin` class.
@@ -327,7 +320,7 @@ to certain tasks, like checking locations or using entrances.
 ### \_\_init\_\_.py  
 This is the file that actually extends the `World` class, and is where you expose functionality and data to Archipelago.  
   
-![Example \_\_init\_\_.py file open in Notepad++](./img/example-init-py-file.png)  
+![Example \_\_init\_\_.py file open in Notepad++](_static/example-init-py-file.png)  
   
 This is the most important file for the implementation, and technically the only one you need, but it's best to keep this
 file as short as possible and use other script files to do most of the heavy lifting.
